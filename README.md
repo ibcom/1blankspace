@@ -1,4 +1,4 @@
 1blankspace
 ===========
 
-All 1blankspace files
+All the 1blankspace js files, that you can fork off and create your own app.
