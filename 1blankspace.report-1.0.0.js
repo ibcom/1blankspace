@@ -4,342 +4,256 @@ var gfReportSearchFunction;
 var gsReportScriptOpen;
 var gsReportScriptNewPage;
 var goFixedParameters;
+var goSelectableParameters;
+var gaReportRowParam;
+var gaAllParameterList;
+var dToday = new Date();
+var gsReturnParameters;
+var gaReportList = [];
+var gaReportDictionary = [];
+var gaSelectAttributes = [];
 
-var gaReportList =
-		[ 
+function interfaceReportInitialise()
+{
+	gaReportList =
+		[
 			{
-				name: "Client",
+				name: "Businesses",
 				method: "CONTACT_BUSINESS_SEARCH",
-				functionSearch: interfaceClientSearch,
-				scriptOpen: 'interfaceClientMasterViewport({showHome: false});interfaceClientSearch(this.id)'
+				returnParameters: 'contactbusiness,contactbusiness.relationshipbusiness,contactbusiness.customerstatuschange,contactbusiness.relationshipotherbusiness,contactbusiness.contactperson',
+				functionSearch: interfaceContactBusinessSearch,
+				scriptOpen: 'interfaceContactBusinessMasterViewport({showHome: false});interfaceContactBusinessSearch(this.id)',
 			},
 			{
-				name: "Contact",
+				name: "People",
 				method: "CONTACT_PERSON_SEARCH",
-				functionSearch: interfaceClientContactSearch,
-				scriptOpen: 'interfaceClientContactMasterViewport({showHome: false});interfaceClientContactSearch(this.id)'
+				returnParameters: 'contactperson,contactperson.contactbusiness,contactperson.contactbusiness.audititemtype',
+				functionSearch: interfaceContactPersonSearch,
+				scriptOpen: 'interfaceContactPersonMasterViewport({showHome: false});interfaceContactPersonSearch(this.id)',
+				selectableParameters:
+				{
+					fields:
+					[
+						{name: "contactperson.surname", caption: "Surname"},
+						{name: "contactperson.firstname", caption: "First Name"},
+						{name: "contactperson.titletext", caption: "Title"},
+						{name: "contactperson.gendertext", caption: "Gender"},
+						{name: "contactperson.position", caption: "Position"},
+						{name: "contactperson.workphone", caption: "Work Phone"},
+						{name: "contactperson.fax", caption: "Fax"},
+						{name: "contactperson.mobile", caption: "Mobile"},
+						{name: "contactperson.email", caption: "Email"},
+						{name: "contactperson.streetaddress1", caption: "Street Address 1"},
+						{name: "contactperson.streetaddress2", caption: "Street Address 2"},
+						{name: "contactperson.streetsuburb", caption: "Street Suburb"},
+						{name: "contactperson.streetstate", caption: "Street State"},
+						{name: "contactperson.streetpostcode", caption: "Street Postcode"},
+						{name: "contactperson.streetcountry", caption: "Street Country"},
+						{name: "contactperson.mailingtitle", caption: "Mailing Name"},
+						{name: "contactperson.mailingaddress1", caption: "Mailing Address 1"},
+						{name: "contactperson.mailingaddress2", caption: "Mailing Address 2"},
+						{name: "contactperson.mailingsuburb", caption: "Mailing Suburb"},
+						{name: "contactperson.mailingstate", caption: "Mailing State"},
+						{name: "contactperson.mailingpostcode", caption: "Mailing Postcode"},
+						{name: "contactperson.mailingcountry", caption: "Mailing Country"},
+						{name: "contactperson.customerstatustext", caption: "Status"},
+						{name: "contactperson.primarycontactfortext", caption: "Primary Contact For"},
+						{name: "contactperson.contactbusiness.tradename", caption: "Business Trading Name"},
+						{name: "contactperson.contactbusiness.legalname", caption: "Business Legal Name"},
+						{name: "contactperson.contactbusiness.customerstatustext", caption: "Business Status"},
+						{name: "contactperson.contactbusiness.mailingaddress1", caption: "Business Mailing Address 1"},
+						{name: "contactperson.contactbusiness.mailingaddress2", caption: "Business Mailing Address 2"},
+						{name: "contactperson.contactbusiness.mailingsuburb", caption: "Business Mailing Suburb"},
+						{name: "contactperson.contactbusiness.mailingstate", caption: "Business Mailing State"},
+						{name: "contactperson.contactbusiness.mailingpostcode", caption: "Business Mailing Postcode"},
+						{name: "contactperson.contactbusiness.mailingcountry", caption: "Business Mailing Country"},
+						{name: "contactperson.contactbusiness.streetaddress1", caption: "Business Street Address 1"},
+						{name: "contactperson.contactbusiness.streetaddress2", caption: "Business Street Address 2"},
+						{name: "contactperson.contactbusiness.streetsuburb", caption: "Business Street Suburb"},
+						{name: "contactperson.contactbusiness.streetstate", caption: "Business Street State"},
+						{name: "contactperson.contactbusiness.streetpostcode", caption: "Business Street Postcode"},
+						{name: "contactperson.contactbusiness.streetcountry", caption: "Business Street Country"},
+						{name: "contactperson.contactbusiness.areatext", caption: "Business Area"}
+					]
+				}
 			},
 			{
-				name: "Quotes",
+				name: "Opportunities",
 				method: "OPPORTUNITY_SEARCH",
-				functionSearch: interfaceQuoteSearch,
-				scriptOpen: 'interfaceQuoteMasterViewport({showHome: false});interfaceQuoteSearch(this.id)',
-				fixedParameters: 
-					{
-						filters:
-						[
-							{
-								name: "opportunity.type",
-								comparison: "EQUAL_TO",
-								value1: giOpportunityTypeQuote,
-								value2: ""
-							}
-						]
-					}
-			},
-			{
-				name: "Audit", 
-				method: "AUDIT_SEARCH",
-				functionSearch: interfaceAuditSearch,
-				scriptOpen: 'interfaceAuditMasterViewport({showHome: false});interfaceAuditSearch(this.id)'
-			},
-			{	
-				name: "CARs",
-				method: "ISSUE_SEARCH",
-				functionSearch: interfaceIssueSearch,
-				scriptOpen: 'interfaceIssueMasterViewport({showHome: false});interfaceIssueSearch(this.id)'
-			},
-			{	
-				name: "Client Profile",
-				summary: "This report shows the active Clients with all of their Standards, sorted by Client then Location.",
-				showFixedParameters: false,
-				method: "CONTACT_BUSINESS_SEARCH",
-				functionSearch: interfaceClientSearch,
-				scriptOpen: 'interfaceClientMasterViewport({showHome: false});interfaceClientSearch(this.id)',
-				scriptNewPage:
-					'interfaceReportNewPage({' + 
-							'sourceName: "extraID", ' + 
-							'endpoint: "audit", ' +
-							'method: "AUDIT_ITEM_TYPE_SEARCH", ' + 
-							'name: "itemtypetext", ' + 
-							'compareColumn: "objectcontext", ' + 
-							'moreFilters: {filters: [' +
-								'{' +
-									'name: "object", ' +
-									'comparison: "EQUAL_TO", ' +
-									'value1: giObjectBusiness, ' +
-									'value2: ""' +
-								'}, ' +
-								'{' +
-									'name: "itemtypecategory", ' +
-									'comparison: "EQUAL_TO", ' +
-									'value1: giItemTypeCategoryStandard, ' +
-									'value2: ""' +
-								'}' +
-								']}' +
-							'})',
-				extraIDColumnBefore: "business.streetsuburb",
-				extraIDColumnValue: gsLoadingSmallXHTML,
-				extraIDColumnHeader: "Standard(s)",
-				fixedParameters: 
-					{
-						fields:
-						[
-							{name: "business.tradename"},
-							{name: "business.legalname"},
-							{name: "business.streetsuburb"},
-							{name: "business.streetstate"}
-						],
-						filters:
-						[
-							{
-								name: "business.customerstatus",
-								comparison: "EQUAL_TO",
-								value1: "1",
-								value2: ""
-							}
-						],
-						sort:
-						{
-							name: "business.tradename",
-							direction: "asc"
-						}
-					},
-				selectableParameters: 
-					{
-						fields:
-						[
-							{name: "business.streetsuburb", caption: "Suburb", xhtmlBefore: "STREET"},
-							{name: "business.streetstate", caption: "State", xhtmlAfter: "&nbsp;"},
-							{name: "business.area"}
-						]
-					}	
-			},
-			{	
-				name: "Client List No Select",
-				summary: "This report shows the Active clients.",
-				method: "CONTACT_BUSINESS_SEARCH",
-				functionSearch: interfaceClientSearch,
-				scriptOpen: 'interfaceClientMasterViewport({showHome: false});interfaceClientSearch(this.id)',
-				fixedParameters: 
-					{
-						fields:
-						[
-							{
-								name: "business.tradename"
-							}
-						],
-						filters:
-						[
-							{
-								name: "business.tradename",
-								comparison: "TEXT_IS_LIKE",
-								value1: "Ever",
-								value2: ""
-							},
-							{
-								name: "business.customerstatus",
-								comparison: "EQUAL_TO",
-								value1: giObjectStatusActive,
-								value2: ""
-							}
-						],
-						sort:
-						{
-							name: "business.tradename",
-							direction: "asc"
-						}
-					},
-				showSelect: false
-			},
-			{	
-				name: "Certificate Register - ItemType",
-				summary: "This report shows...",
-				method: "AUDIT_ITEM_TYPE_SEARCH",
-				scriptOpen: 'interfaceClientMasterViewport({showHome: false});interfaceClientSearch(this.id)',
-				scriptNewPage:
-					'interfaceReportNewPage({sourceName: "audititem.objectcontext", method: "CONTACT_BUSINESS_SEARCH", name: "tradename"})',
-					
-				fixedParameters: 
-					{
-						fields:
-						[
-							{name: "audititem.objectcontext", value: gsLoadingSmallXHTML},
-							{name: "audititem.reference"},
-							{name: "audititem.startdate"},
-							{name: "audititem.enddate"}
-						],
-						filters:
-						[
-							{
-								name: "audititem.object",
-								comparison: "EQUAL_TO",
-								value1: "12",
-								value2: ""
-							},
-							{
-								name: "audititem.itemtypecategory",
-								comparison: "EQUAL_TO",
-								value1: giItemTypeCategoryStandard,
-								value2: ""
-							},
-							{
-								name: "audititem.enddate",
-								comparison: "IS_NULL",
-								value1: "",
-								value2: ""
-							},
-							{
-								name: "audititem.deprecated",
-								comparison: "IS_NULL",
-								value1: "",
-								value2: ""
-							}
-						],
-					},
-				selectableParameters: 
-					{
-						fields:
-						[
-							{name: "audititem.itemtypetext"}
-						]
-					}		
+				returnParameters: 'opportunity.contactbusiness,opportunity.contactperson,opportunity.audititemtype,opportunity.processingstatushistory',
+				functionSearch: interfaceOpportunitySearch,
+				scriptOpen: 'interfaceOpportunityMasterViewport({showHome: false});interfaceOpportunitySearch(this.id)',
+				selectableParameters:
+				{
+					fields:
+					[
+						{name: "opportunity.lodgeddate"},
+						{name: "opportunity.managerusertext"},
+						{name: "opportunity.sourcetext"},
+						{name: "opportunity.sourcenote"},
+						{name: "opportunity.description"},
+						{name: "opportunity.amount"},
+						{name: "opportunity.statustext"},
+						{name: "opportunity.processingstatustext"},
+						{name: "opportunity.processingdate"},
+						{name: "opportunity.closedate"},
+						{name: "opportunity.contactbusiness.tradename"},
+						{name: "opportunity.contactbusiness.legalname"},
+						{name: "opportunity.contactperson.firstname"},
+						{name: "opportunity.contactperson.surname"},
+						{name: "opportunity.contactperson.firstname"},
+						{name: "opportunity.contactperson.phone"},
+						{name: "opportunity.contactperson.mobile"},
+						{name: "opportunity.contactperson.email"},
+						{name: "opportunity.contactperson.streetaddress1"},
+						{name: "opportunity.contactperson.streetaddress2"},
+						{name: "opportunity.contactperson.streetsuburb"},
+						{name: "opportunity.contactperson.streetstate"},
+						{name: "opportunity.contactperson.streetpostcode"},
+						{name: "opportunity.contactperson.mailingaddress1"},
+						{name: "opportunity.contactperson.mailingaddress2"},
+						{name: "opportunity.contactperson.mailingsuburb"},
+						{name: "opportunity.contactperson.mailingstate"},
+						{name: "opportunity.contactperson.mailingpostcode"}
+					]
+				}
 			}
 			
 		]		
 
-var gaReportDictionary =
+	gaReportDictionary =
 		[ 
-			{name: "audit.reference", caption: "Reference"},
-			{name: "audit.title", caption: "Title"},
-			{name: "audit.typetext", caption: "Type"},
-			{name: "audit.scheduleddate", caption: "Scheduled Date"},
-			{name: "audit.actualdate", caption: "Actual Date"},
-			{name: "audit.enddate", caption: "End Date"},
-			{name: "audit.statustext", caption: "Status"},
-			{name: "audit.processingstatustext", caption: "Processing Status"},
-			{name: "audit.resultstatustext", caption: "Result Status"},
-			{name: "audit.resultstatusdate", caption: "Result Status Date"},
-			{name: "audit.contactbusinesstext", caption: "Client"},
-			{name: "audit.contactpersontext", caption: "Contact"},
-			{name: "audit.reviewtype", caption: "Review Type"},
-			{name: "audit.assessment", caption: "Assessment"},
-			{name: "audit.quotedamount", caption: "Quoted Amount"},
-			{name: "audit.amount", caption: "Actual Amount"},
-			{name: "audit.invoicereference", caption: "Invoice Reference"},
-			{name: "audit.totaltimehours", caption: "Total Hours"},
-			{name: "audit.openissuecount", caption: "Open CAR Count"},
-			{name: "audit.totalissuecount", caption: "Total CAR Count"},
-			{name: "audit.reviewtypetext", caption: "Review Type"},
-			{name: "audit.statusdate", caption: "Status Date"},
-			{name: "audit.statusnotes", caption: "Status Notes"},
-			{name: "audit.processingstatusdate", caption: "Processing Status Date"},
-			{name: "audit.processingstatusnotes", caption: "Processing Status Notes"},
-			{name: "audit.teamleadercontactpersontext", caption: "Team Leader"},
-			{name: "contact.businesstext", caption: "Client Name"},
-			{name: "business.tradename", caption: "Trading Name"},
-			{name: "business.legalname", caption: "Company Name"},
-			{name: "business.abn", caption: "ABN"},
-			{name: "business.webaddress", caption: "Website"},
-			{name: "business.phonenumber", caption: "Phone"},
-			{name: "business.faxnumber", caption: "Fax"},
-			{name: "business.contactsourcetext", caption: "Source of Contact"},
-			{name: "business.otherinfo", caption: "Source of Contact Notes"},
-			{name: "business.customerstatustext", caption: "Status"},
-			{name: "business.industrytext", caption: "Industry"},
-			{name: "business.streetaddresscombined", caption: "Street Address"},
-			{name: "business.streetaddress1", caption: "Street Address 1"},
-			{name: "business.streetaddress2", caption: "Street Address 2"},
-			{name: "business.streetsuburb", caption: "Street Suburb"},
-			{name: "business.streetstate", caption: "Street State"},
-			{name: "business.streetpostcode", caption: "Street Postcode"},
-			{name: "business.streetcountry", caption: "Street Country"},
-			{name: "business.mailingaddresscombined", caption: "Mailing Address"},
-			{name: "business.mailingaddress1", caption: "Mailing Address 1"},
-			{name: "business.mailingaddress2", caption: "Mailing Address 2"},
-			{name: "business.mailingsuburb", caption: "Mailing Suburb"},
-			{name: "business.mailingstate", caption: "Mailing State"},
-			{name: "business.mailingpostcode", caption: "Mailing Postcode"},
-			{name: "business.mailingcountry", caption: "Mailing Country"},
-			{name: "business.notes", caption: "Scope"},
-			{name: "business.reference", caption: "Client Number"},
-			{name: "business.areatext", caption: "Area"},
-			{name: "business.primarycontactpersontext", caption: "Primary Contact"},
-			{name: "business.businessgrouptext", caption: "Business Group"},
-			{name: "business.businessgroupdescription", caption: "Business Group Description"},
-			{name: "person.surname", caption: "Surname"},
-			{name: "person.titletext", caption: "Title"},
-			{name: "person.gendertext", caption: "Gender"},
-			{name: "person.contactbusinesstext", caption: "Client"},
-			{name: "person.firstname", caption: "First Name"},
-			{name: "person.position", caption: "Position"},
-			{name: "person.workphone", caption: "Work Phone"},
-			{name: "person.fax", caption: "Fax"},
-			{name: "person.mobile", caption: "Mobile"},
-			{name: "person.email", caption: "Email"},
-			{name: "person.streetaddresscombined", caption: "Street Address"},
-			{name: "person.streetaddress1", caption: "Street Address 1"},
-			{name: "person.streetaddress2", caption: "Street Address 2"},
-			{name: "person.streetsuburb", caption: "Street Suburb"},
-			{name: "person.streetstate", caption: "Street State"},
-			{name: "person.streetpostcode", caption: "Street Postcode"},
-			{name: "person.streetcountry", caption: "Street Country"},
-			{name: "person.mailingtitle", caption: "Mailing Name"},
-			{name: "person.mailingaddresscombined", caption: "Mailing Address"},
-			{name: "person.mailingaddress1", caption: "Mailing Address 1"},
-			{name: "person.mailingaddress2", caption: "Mailing Address 2"},
-			{name: "person.mailingsuburb", caption: "Mailing Suburb"},
-			{name: "person.mailingstate", caption: "Mailing State"},
-			{name: "person.mailingpostcode", caption: "Mailing Postcode"},
-			{name: "person.mailingcountry", caption: "Mailing Country"},
-			{name: "person.customerstatustext", caption: "Status"},
-			{name: "person.persongrouptext", caption: "Person Group"},
-			{name: "person.primarycontactfor", caption: "Primary Contact For"},
-			{name: "issue.reference", caption: "Reference"},
-			{name: "issue.title", caption: "Title"},
-			{name: "issue.statustext", caption: "Status"},
-			{name: "issue.raiseddate", caption: "Raised Date"},
-			{name: "issue.target", caption: "Due Date"},
-			{name: "issue.completeddate", caption: "Closed Date"},
-			{name: "issue.issuetypetext", caption: "Severity"},
-			{name: "issue.causedescription", caption: "CAR Description"},
-			{name: "issue.otherobjecttext", caption: "Standard"},
-			{name: "issue.responsiblecontactpersontext", caption: "Responsible Contact"},
-			{name: "issue.objecttitle", caption: "Audit Reference"},
-			{name: "opportunity.requestbybusinesstext", caption: "Business"},
-			{name: "opportunity.requestbypersontext", caption: "Person"},
-			{name: "opportunity.phone", caption: "Phone"},
-			{name: "opportunity.mobile", caption: "Mobile"},
-			{name: "opportunity.email", caption: "Email"},
-			{name: "opportunity.contactstreetaddresscomplete", caption: "Contact Street Address (All)"},
-			{name: "opportunity.contactstreetaddresscombined", caption: "Contact Street Address"},
-			{name: "opportunity.contactstreetaddress1", caption: "Contact Street Address 1"},
-			{name: "opportunity.contactstreetaddress2", caption: "Contact Street Address 2"},
-			{name: "opportunity.contactstreetsuburb", caption: "Contact Street Address Suburb"},
-			{name: "opportunity.contactstreetstate", caption: "Contact Street Address State"},
-			{name: "opportunity.contactstreetpostcode", caption: "Contact Street Address Postcode"},
-			{name: "opportunity.contactmailingaddresscomplete", caption: "Contact Mailing Address (All)"},
-			{name: "opportunity.contactmailingaddresscombined", caption: "Contact Mailing Address"},
-			{name: "opportunity.contactmailingaddress1", caption: "Contact Mailing Address 1"},
-			{name: "opportunity.contactmailingaddress2", caption: "Contact Mailing Address 2"},
-			{name: "opportunity.contactmailingsuburb", caption: "Contact Mailing Address Suburb"},
-			{name: "opportunity.contactmailingstate", caption: "Contact Mailing Address State"},
-			{name: "opportunity.contactmailingpostcode", caption: "Contact Mailing Address Postcode"},
-			{name: "opportunity.lodgeddate", caption: "Lodged Date"},
-			{name: "opportunity.typetext", caption: "Type"},
-			{name: "opportunity.managerusertext", caption: "Manager"},
-			{name: "opportunity.sourcetext", caption: "Source"},
-			{name: "opportunity.sourcenote", caption: "Source Notes"},
+			{name: "contactbusiness.tradename", caption: "Trading Name"},
+			{name: "contactbusiness.legalname", caption: "Company Name"},
+			{name: "contactbusiness.abn", caption: "ABN"},
+			{name: "contactbusiness.webaddress", caption: "Website"},
+			{name: "contactbusiness.phonenumber", caption: "Phone"},
+			{name: "contactbusiness.faxnumber", caption: "Fax"},
+			{name: "contactbusiness.customerstatustext", caption: "Status"},
+			{name: "contactbusiness.industrytext", caption: "Industry"},
+			{name: "contactbusiness.streetaddresscombined", caption: "Street Address"},
+			{name: "contactbusiness.streetaddress1", caption: "Street Address 1"},
+			{name: "contactbusiness.streetaddress2", caption: "Street Address 2"},
+			{name: "contactbusiness.streetsuburb", caption: "Street Suburb"},
+			{name: "contactbusiness.streetstate", caption: "Street State"},
+			{name: "contactbusiness.streetpostcode", caption: "Street Postcode"},
+			{name: "contactbusiness.streetcountry", caption: "Street Country"},
+			{name: "contactbusiness.mailingaddresscombined", caption: "Mailing Address"},
+			{name: "contactbusiness.mailingaddress1", caption: "Mailing Address 1"},
+			{name: "contactbusiness.mailingaddress2", caption: "Mailing Address 2"},
+			{name: "contactbusiness.mailingsuburb", caption: "Mailing Suburb"},
+			{name: "contactbusiness.mailingstate", caption: "Mailing State"},
+			{name: "contactbusiness.mailingpostcode", caption: "Mailing Postcode"},
+			{name: "contactbusiness.mailingcountry", caption: "Mailing Country"},
+			{name: "contactbusiness.notes", caption: "Notes"},
+			{name: "contactbusiness.reference", caption: "Reference"},
+			{name: "contactbusiness.areatext", caption: "Business Area"},
+			{name: "contactbusiness.primarycontactpersontext", caption: "Primary Contact"},
+			{name: "contactbusiness.businessgrouptext", caption: "Type"},
+			{name: "contactbusiness.relationshipbusiness.contactbusinesstext", caption: "Parent Group"},
+			{name: "contactbusiness.relationshipbusiness.othercontactbusinesstext", caption: "Parent Group Child"},
+			{name: "contactbusiness.customerstatuschange.tostatustext", caption: "Status History"},
+			{name: "contactbusiness.customerstatuschange.changedate", caption: "Status History Effective Date"},
+			{name: "contactbusiness.contactperson.firstname", caption: "Primary Contact First Name"},
+			{name: "contactbusiness.contactperson.surname", caption: "Primary Contact Surname"},
+			{name: "contactbusiness.contactperson.email", caption: "Primary Contact Email"},
+			
+			{name: "contactperson.surname", caption: "Surname"},
+			{name: "contactperson.titletext", caption: "Title"},
+			{name: "contactperson.gendertext", caption: "Gender"},
+			{name: "contactperson.contactbusinesstext", caption: "Business Name"},
+			{name: "contactperson.firstname", caption: "First Name"},
+			{name: "contactperson.position", caption: "Position"},
+			{name: "contactperson.workphone", caption: "Work Phone"},
+			{name: "contactperson.fax", caption: "Fax"},
+			{name: "contactperson.mobile", caption: "Mobile"},
+			{name: "contactperson.email", caption: "Email"},
+			{name: "contactperson.streetaddresscombined", caption: "Street Address"},
+			{name: "contactperson.streetaddress1", caption: "Street Address 1"},
+			{name: "contactperson.streetaddress2", caption: "Street Address 2"},
+			{name: "contactperson.streetsuburb", caption: "Street Suburb"},
+			{name: "contactperson.streetstate", caption: "Street State"},
+			{name: "contactperson.streetpostcode", caption: "Street Postcode"},
+			{name: "contactperson.streetcountry", caption: "Street Country"},
+			{name: "contactperson.mailingtitle", caption: "Mailing Name"},
+			{name: "contactperson.mailingaddresscombined", caption: "Mailing Address"},
+			{name: "contactperson.mailingaddress1", caption: "Mailing Address 1"},
+			{name: "contactperson.mailingaddress2", caption: "Mailing Address 2"},
+			{name: "contactperson.mailingsuburb", caption: "Mailing Suburb"},
+			{name: "contactperson.mailingstate", caption: "Mailing State"},
+			{name: "contactperson.mailingpostcode", caption: "Mailing Postcode"},
+			{name: "contactperson.mailingcountry", caption: "Mailing Country"},
+			{name: "contactperson.customerstatustext", caption: "Business Contact Status"},
+			{name: "contactperson.supplierstatustext", caption: "Auditor Status"},
+			{name: "contactperson.persongrouptext", caption: "Contact Person Type"},
+			{name: "contactperson.primarycontactfortext", caption: "Primary Contact For"},
+			{name: "contactperson.contactbusiness.tradename", caption: "Business Trading Name"},
+			{name: "contactperson.contactbusiness.legalname", caption: "Business Legal Name"},
+			{name: "contactperson.contactbusiness.customerstatustext", caption: "Business Status"},
+			{name: "contactperson.contactbusiness.mailingaddress1", caption: "Business Mailing Address 1"},
+			{name: "contactperson.contactbusiness.mailingaddress2", caption: "Business Mailing Address 2"},
+			{name: "contactperson.contactbusiness.mailingsuburb", caption: "Business Mailing Suburb"},
+			{name: "contactperson.contactbusiness.mailingstate", caption: "Business Mailing State"},
+			{name: "contactperson.contactbusiness.mailingpostcode", caption: "Business Mailing Postcode"},
+			{name: "contactperson.contactbusiness.mailingcountry", caption: "Business Mailing Country"},
+			{name: "contactperson.contactbusiness.streetaddress1", caption: "Business Street Address 1"},
+			{name: "contactperson.contactbusiness.streetaddress2", caption: "Business Street Address 2"},
+			{name: "contactperson.contactbusiness.streetsuburb", caption: "Business Street Suburb"},
+			{name: "contactperson.contactbusiness.streetstate", caption: "Business Street State"},
+			{name: "contactperson.contactbusiness.streetpostcode", caption: "Business Street Postcode"},
+			{name: "contactperson.contactbusiness.streetcountry", caption: "Business Street Country"},
+			{name: "contactperson.contactbusiness.areatext", caption: "Business Area"},
+			{name: "contactperson.contactbusiness.audititemtype.itemtypetext", caption: "Business Standard"},
+			{name: "contactperson.sq2016", caption: "Auditor Internal Manager "},
+			{name: "contactperson.sq2015", caption: "Auditor Internal Manager Id"},
+			{name: "contactperson.audititemtype.itemtypecategorytext", caption: "Choose code type"},
+			{name: "contactperson.audititemtype.itemtypetext", caption: "Standard / Code"},
+			{name: "contactperson.audititemtype.startdate", caption: "Eligible From"},
+			{name: "contactperson.audititemtype.enddate", caption: "Expires On"},
+			{name: "contactperson.audititemtype.approveddate", caption: "Expires On"},
+			{name: "contactperson.audititemtype.reference", caption: "Registration Number"},
+					
+			{name: "opportunity.lodgeddate", caption: "Date Lodged"},
+			{name: "opportunity.managerusertext", caption: "SciQual Manager"},
+			{name: "opportunity.sourcetext", caption: "Source of Contact"},
+			{name: "opportunity.sourcenote", caption: "Source of Contact - Other"},
 			{name: "opportunity.description", caption: "Description"},
-			{name: "opportunity.amount", caption: "Amount"},
-			{name: "opportunity.statustext", caption: "Status"},
+			{name: "opportunity.amount", caption: "Quoted Amount"},
+			{name: "opportunity.statustext", caption: "Quote Status"},
 			{name: "opportunity.processingstatustext", caption: "Processing Status"},
-			{name: "opportunity.processingdate", caption: "Processing Date"},
-			{name: "opportunity.closedate", caption: "Closed Date"},
-			{name: "opportunity.actionreference", caption: "Action Reference"},
-			{name: "opportunity.actiondate", caption: "Action Date"},
-			{name: "opportunity.actionstatustext", caption: "Action Status"},
-			{name: "opportunity.areatext", caption: "Area"},
+			{name: "opportunity.processingdate", caption: "Quote Processing Date"},
+			{name: "opportunity.closedate", caption: "Date Closed"},
+			{name: "opportunity.audititemtype.itemtypetext", caption: "Standard / Code"},
+			{name: "opportunity.audititemtype.itemtypecategorytext", caption: "Please select a Standard / Code type"},
+			{name: "opportunity.processingstatushistory.newstatus", caption: "Processing Status History"},
+			{name: "opportunity.processingstatushistory.createddate", caption: "Processing Status History Effective Date"},
+			
+			{name: "opportunity.contactbusiness.tradename", caption: "Business Trading Name"},
+			{name: "opportunity.contactbusiness.legalname", caption: "Business Legal Name"},
+			{name: "opportunity.contactperson.firstname", caption: "Business Contact First Name"},
+			{name: "opportunity.contactperson.surname", caption: "Business Contact Surname"},
+			{name: "opportunity.contactperson.firstname", caption: "Business Contact First Name"},
+			{name: "opportunity.contactperson.phone", caption: "Business Phone"},
+			{name: "opportunity.contactperson.mobile", caption: "Mobile Phone"},
+			{name: "opportunity.contactperson.email", caption: "Contact Email"},
+			{name: "opportunity.contactperson.streetaddresscomplete", caption: "Street Address (All)"},
+			{name: "opportunity.contactperson.streetaddresscombined", caption: "Street Address"},
+			{name: "opportunity.contactperson.streetaddress1", caption: "Street Address 1"},
+			{name: "opportunity.contactperson.streetaddress2", caption: "Street Address 2"},
+			{name: "opportunity.contactperson.streetsuburb", caption: "Street Address Suburb"},
+			{name: "opportunity.contactperson.streetstate", caption: "Street Address State"},
+			{name: "opportunity.contactperson.streetpostcode", caption: "Street Address Postcode"},
+			{name: "opportunity.contactperson.mailingaddresscomplete", caption: "Mailing Address (All)"},
+			{name: "opportunity.contactperson.mailingaddresscombined", caption: "Mailing Address"},
+			{name: "opportunity.contactperson.mailingaddress1", caption: "Mailing Address 1"},
+			{name: "opportunity.contactperson.mailingaddress2", caption: "Mailing Address 2"},
+			{name: "opportunity.contactperson.mailingsuburb", caption: "Mailing Address Suburb"},
+			{name: "opportunity.contactperson.mailingstate", caption: "Mailing Address State"},
+			{name: "opportunity.contactperson.mailingpostcode", caption: "Mailing Address Postcode"},
+
+			{name: "opportunity.phone", caption: "Business Phone"},
+			{name: "opportunity.mobile", caption: "Mobile Phone"},
+			{name: "opportunity.email", caption: "Contact Email"},
 			{name: "opportunity.businessname", caption: "Business Name"},
 			{name: "opportunity.firstname", caption: "First Name"},
 			{name: "opportunity.surname", caption: "Surname"},
@@ -349,23 +263,34 @@ var gaReportDictionary =
 			{name: "opportunity.mailingstate", caption: "Mailing State"},
 			{name: "opportunity.mailingpostcode", caption: "Mailing  Postcode"},
 			{name: "opportunity.mailingcountry", caption: "Mailing Country"},
-			{name: "audititem.objectcontext", caption: "Context"},
-			{name: "audititem.objecttext", caption: "Object"},
-			{name: "audititem.itemtypecategorytext", caption: "Category"},
-			{name: "audititem.itemtypetext", caption: "Standard / Code"},
-			{name: "audititem.itemtypeclass", caption: "ISO / Non-ISO"},
-			{name: "audititem.startdate", caption: "Start Date"},
-			{name: "audititem.enddate", caption: "End Date"},
-			{name: "audititem.approvedbytext", caption: "Approved By"},
-			{name: "audititem.approveddate", caption: "Approved Date"},
-			{name: "audititem.reference", caption: "Certificate Number"},
-			{name: "audititem.deprecated", caption: "Terminated"},
-			{name: "audititem.childcount", caption: "Sub-Standard Count"}
+			{name: "opportunity.sq1967", caption: "Business Legal Name"},
+			{name: "opportunity.sq1968", caption: "Street Address"}
 		];
-		
-$(function()
-{
-})
+
+	gaSelectAttributes = 			
+		[
+			{
+				name: "contact.businesstext", 
+				addClass: "inputInterfaceMainSelectBusiness",
+				onDemandColumns: "tradename-space-customerstatustext"
+			},
+			{
+				name: "contactbusiness.primarycontactpersontext",
+				addClass: "inputInterfaceMainSelectBusiness",
+				onDemandColumns: "tradename-space-customerstatustext"
+			},
+			{
+				name: "contactperson.contactbusinesstext",
+				addClass: "inputInterfaceMainSelectBusiness",
+				onDemandColumns: "tradename-space-customerstatustext"
+			},
+			{
+				name: "contactperson.audititemtype.itemtypetext",
+				onDemandColumns: "code-space-openbracket-categorytext-closebracket"
+				
+			}
+		];
+}
 
 function interfaceReportMasterViewport(aParam)
 {
@@ -377,8 +302,8 @@ function interfaceReportMasterViewport(aParam)
 	}
 
 	giObject = 5;
-	goObjectContextXML = '';
 	gsObjectName = 'Reporting';
+	goObjectContext = undefined;
 	giObjectContext = -1;
 	
 	if (bShowHome)
@@ -399,7 +324,7 @@ function interfaceReportMasterViewport(aParam)
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
 		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceReportingSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+        giKeyPressTimeoutId = setTimeout("interfaceReportSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -433,10 +358,13 @@ function interfaceReportMasterViewport(aParam)
 	});
 	
 	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	
+	interfaceReportInitialise()
+	
 	if (bShowHome) {interfaceReportHomeShow()};	
 }
 
-function interfaceReportHomeShow(aParam, oXML)
+function interfaceReportHomeShow(aParam, oResponse)
 {
 	
 	var aHTML = [];
@@ -505,7 +433,6 @@ function interfaceReportHomeShow(aParam, oXML)
 
 function interfaceReportDictionaryGet(aParam)
 {
-
 	var sName;
 	var sReturn;
 	var sDefaultReturn;
@@ -540,9 +467,8 @@ function interfaceReportDictionaryGet(aParam)
 	return sReturn
 } 
 
-function interfaceReportViewport(aParam, oJSON)
+function interfaceReportViewport(aParam, oResponse)
 {
-
 	var aHTML = [];
 	var h = -1;
 	var sCaption;
@@ -550,24 +476,34 @@ function interfaceReportViewport(aParam, oJSON)
 	var sComparisonValue;
 	var aDefault = [];
 	var sJSONSearch;
-	var oSelectableParameters = {};
 	var aSelectableParameterList = [];
 	var aSelectableParameters = [];
+	var oSelectableParameters = {};
 	var oFixedParameters = {};
 	var bShowSelect = true;
 	var bShowFixedParameters = true;
 	var sSummary;
+	var iSurveyId;
+	var iCategoryId;
+	var sSearchFilter;
+	var bShowSort = true;
+	var bContainsContactPerson = false;
 	
 	gsReportMethod = undefined;
 	gsReportEndpoint = undefined;
+	gsReturnParameters = undefined;
 	gfReportSearchFunction = undefined;
 	gsReportScriptOpen = undefined;
 	gsReportScriptNewPage = undefined;
-	
+	gaReportRowParam = undefined;
+	goSelectableParameters = undefined;
+	gaAllParameterList = [];
+
 	if (aParam != undefined)
 	{
 		if (aParam.endPoint != undefined) {gsReportEndpoint = aParam.endPoint}
 		if (aParam.method != undefined) {gsReportMethod = aParam.method}
+		if (aParam.returnParameters != undefined) {gsReturnParameters = aParam.returnParameters}
 		if (aParam.jsonSearch != undefined) {sJSONSearch = aParam.jsonSearch}
 		if (aParam.functionSearch != undefined) {gfReportSearchFunction = aParam.functionSearch}
 		if (aParam.scriptOpen != undefined) {gsReportScriptOpen = aParam.scriptOpen}
@@ -577,6 +513,9 @@ function interfaceReportViewport(aParam, oJSON)
 		if (aParam.showSelect != undefined) {bShowSelect = aParam.showSelect}
 		if (aParam.showFixedParameters != undefined) {bShowFixedParameters = aParam.showFixedParameters}
 		if (aParam.summary != undefined) {sSummary = aParam.summary}
+		if (aParam.survey != undefined) {iSurveyId = aParam.survey}
+		if (aParam.category != undefined) {iCategoryId = aParam.category}
+		if (aParam.showSort != undefined) {bShowSort = aParam.showSort}
 	}
 	
 	if (gsReportEndpoint == undefined && gsReportMethod != undefined)
@@ -586,11 +525,13 @@ function interfaceReportViewport(aParam, oJSON)
 	}
 	
 	goFixedParameters = oFixedParameters;
+	goSelectableParameters = oSelectableParameters;
 	
 	if (!bShowSelect)
 	{
 		aHTML[++h] = '<div id="divInterfaceMainReportHeader"></div>';
 		aHTML[++h] = '<div style="display:none;" id="divInterfaceMainReportResults"></div>';
+		aHTML[++h] = '<div style="display:none;" id="divInterfaceMainReportSend">No data.</div>';
 		$('#divInterfaceMainReport').html(aHTML.join(''));	
 			
 		var aHTML = [];
@@ -613,33 +554,38 @@ function interfaceReportViewport(aParam, oJSON)
 	}
 	else
 	{
-		if (oJSON == undefined)
+		if (oResponse == undefined)
 		{
-			aHTML[++h] = '<div id="divInterfaceMainReportHeader"></div>';
+			aHTML[++h] = '<div id="divInterfaceMainReportHeader">' + gsLoadingXHTML + '</div>';
 			aHTML[++h] = '<div id="divInterfaceMainReportSearch"></div>';
 			aHTML[++h] = '<div style="display:none;" id="divInterfaceMainReportResults">No results.</div>';
+			aHTML[++h] = '<div style="display:none;" id="divInterfaceMainReportSend">No data.</div>';
 			$('#divInterfaceMainReport').html(aHTML.join(''));	
 		}
 		
-		if (oJSON == undefined && sJSONSearch != undefined)
+		if (oResponse == undefined && sJSONSearch != undefined)
 		{
 			var oSearch = new AdvancedSearch();
-			oSearch.returnParameters = true;
+			oSearch.returnParameters = gsReturnParameters;
 			oSearch.rf = 'json';
 			oSearch.getResults(sJSONSearch, function(data) {interfaceReportViewport(aParam, data)}) ;	
 		}
 		
-		else if (oJSON == undefined && gsReportMethod != undefined)
+		else if (oResponse == undefined && gsReportMethod != undefined)
 		{
 			var oSearch = new AdvancedSearch();
 			oSearch.endPoint = gsReportEndpoint;
 			oSearch.method = gsReportMethod;
-			oSearch.returnParameters = true;
+			if (iSurveyId != undefined)
+			{	oSearch.survey = iSurveyId;}
+			if (iCategoryId != undefined)
+			{	oSearch.categoryId = iCategoryId;}
+			oSearch.returnParameters = gsReturnParameters;
 			oSearch.rf = 'json';
 			oSearch.getResults(function(data) {interfaceReportViewport(aParam, data)}) ;
 		}
 		
-		else if (oJSON != undefined)
+		else if (oResponse != undefined)
 		{
 			if (oSelectableParameters.fields != undefined)
 			{
@@ -647,40 +593,96 @@ function interfaceReportViewport(aParam, oJSON)
 				{ 
 					aSelectableParameterList.push(this.name);
 					aSelectableParameters.push(this);
+					var sCaption = this.caption;
+					if (sCaption == undefined)
+					{	
+						sCaption = interfaceReportDictionaryGet({name: this.name});
+						if (sCaption == undefined) { sCaption = this.name;	}
+					}
+					gaAllParameterList.push({name: this.name, caption: sCaption})
+					//this.name.toLowerCase().indexOf('contactperson') != -1 && 
 				});	
 			}
+			
+			if (bShowSort && goFixedParameters.fields != undefined)
+			{
+				$.each(goFixedParameters.fields, function()
+				{
+					gaAllParameterList.push({name: this.name});
+					var sCaption = this.caption;
+					if (sCaption == undefined)
+					{	
+						sCaption = interfaceReportDictionaryGet({name: this.name});
+						if (sCaption == undefined) { sCaption = this.name;	}
+					}
+					gaAllParameterList.push({name: this.name, caption: sCaption})
+				});
+			}
+			
+			var aSelectAttributesList = []
+			$.each(gaSelectAttributes, function()
+			{	aSelectAttributesList.push(this.name);	});
 			
 			var aHTML = [];
 			var h = -1;
 		
 			aHTML[++h] = '<table style="margin-bottom:0px;border-bottom-style:solid;border-width: 1px;border-color:#E8E8E8;" id="tableInterfaceReport" class="interfaceMain">';
-			aHTML[++h] = '<tr><td style="vertical-alignment:bottom;padding-top:10px;"><span id="spanReportHeaderSearch">Search</span>' +
-							'<span style="color:#B8B8B8;">&nbsp;|&nbsp;</span><span id="spanReportHeaderResults" style="cursor: pointer;">Results</span></td>';
-			aHTML[++h] = '<td style="text-align:right;font-size:0.75em;"><span id="spanInterfaceReportSearch">Search</span></td></tr>';
+			aHTML[++h] = '<tr><td style="vertical-alignment:bottom;padding-top:10px;">' + 
+								'<span id="spanReportHeaderSearch">Search</span>' +
+								'<span style="color:#B8B8B8;">&nbsp;|&nbsp;</span>' + 
+								'<span id="spanReportHeaderResults" style="cursor: pointer;">Results</span>' + 
+								'<span style="color:#B8B8B8;">&nbsp;|&nbsp;</span>' + 
+								'<span id="spanReportHeaderSend" style="cursor: pointer;">Send</span>' + 
+						 '</td>';
+			aHTML[++h] = '<td style="text-align:right;font-size:0.75em;"><span id="spanInterfaceReportSearch">Search</span></td>';
+			aHTML[++h] = '<td style="text-align:right;font-size:0.75em;"><span id="spanInterfaceReportExport">&nbsp;</span></td></tr>';
 			aHTML[++h] = '</table>';
 			
 			$('#divInterfaceMainReportHeader').html(aHTML.join(''))
 			
+			$('#spanReportHeaderSend').hide();
 			$('#spanReportHeaderSearch').addClass('Highlight')
 			
 			$('#spanReportHeaderSearch').click(function(event)
 			{
 				$('#divInterfaceMainReportSearch').show();
 				$('#divInterfaceMainReportResults').hide();
+				$('#divInterfaceMainReportSend').hide();
 				$('#spanReportHeaderSearch').css('cursor', 'auto');
 				$('#spanReportHeaderResults').css('cursor', 'pointer');
+				$('#spanReportHeaderSend').css('cursor', 'pointer');
 				$('#spanReportHeaderSearch').addClass('Highlight');
 				$('#spanReportHeaderResults').removeClass('Highlight');
+				$('#spanReportHeaderSend').removeClass('Highlight');
+				$('#spanInterfaceReportExport').button("destroy");
+				$('#spanInterfaceReportExport').html("&nbsp;");
+				$('#spanInterfaceReportExport').unbind("click");
 			});
 			
 			$('#spanReportHeaderResults').click(function(event)
 			{
 				$('#divInterfaceMainReportSearch').hide();
 				$('#divInterfaceMainReportResults').show();
+				$('#divInterfaceMainReportSend').hide();
 				$('#spanReportHeaderSearch').css('cursor', 'pointer');
 				$('#spanReportHeaderResults').css('cursor', 'auto');
+				$('#spanReportHeaderSend').css('cursor', 'pointer');
 				$('#spanReportHeaderSearch').removeClass('Highlight');
 				$('#spanReportHeaderResults').addClass('Highlight');
+				$('#spanReportHeaderSend').removeClass('Highlight');
+			});
+			
+			$('#spanReportHeaderSend').click(function(event)
+			{
+				$('#divInterfaceMainReportSearch').hide();
+				$('#divInterfaceMainReportResults').hide();
+				$('#divInterfaceMainReportSend').show();
+				$('#spanReportHeaderSearch').css('cursor', 'pointer');
+				$('#spanReportHeaderResults').css('cursor', 'pointer');
+				$('#spanReportHeaderSend').css('cursor', 'auto');
+				$('#spanReportHeaderSearch').removeClass('Highlight');
+				$('#spanReportHeaderResults').removeClass('Highlight');
+				$('#spanReportHeaderSend').addClass('Highlight');
 			});
 			
 			var aHTML = [];
@@ -713,11 +715,12 @@ function interfaceReportViewport(aParam, oJSON)
 			aHTML[++h] = '<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Select</td>' +
 							'<td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Comparison</td></tr>';
 			
-			$.each(oJSON.data.parameters, function() 
+			$.each(oResponse.data.parameters, function() 
 			{ 
 				sCaption = interfaceReportDictionaryGet({name: this.name})
 				
 				var iSelectableIndex = $.inArray(this.name, aSelectableParameterList)
+				var sSearchFilter = '';
 				
 				if (iSelectableIndex != -1)
 				{
@@ -731,12 +734,59 @@ function interfaceReportViewport(aParam, oJSON)
 						aHTML[++h] = '<tr><td colspan=4 class="interfaceMainReport">' +
 										aSelectableParameters[iSelectableIndex].xhtmlBefore +
 										'</td></tr>';
-					}			
+					}
+					
+					if (aSelectableParameters[iSelectableIndex].searchFilter != undefined)
+					{
+						sSearchFilter = aSelectableParameters[iSelectableIndex].searchFilter;
+					}
+
 				}	
 				
 				if (sCaption != undefined && (iSelectableIndex != -1 || aSelectableParameterList.length == 0))
 				{
 					var sName = (this.name).replace(/\./g,'_');
+					var iSelectAttributes = $.inArray(this.name, aSelectAttributesList);
+					var sClass = 'interfaceMainReport';
+					var sMoreAttributes = "";
+					gaAllParameterList.push({name: this.name, caption: sCaption})
+					var bSelect = false;
+					var sSearchEndPoint = this.searchendpoint;
+					var sSearchMethod = this.searchmethod;
+					var sSearchRelatedField = this.searchrelatedfield;
+					
+					if (iSelectAttributes >= 0)
+					{	
+						if (gaSelectAttributes[iSelectAttributes].addClass != undefined) {sMoreAttributes += ' data-selectClass="' + gaSelectAttributes[iSelectAttributes].addClass + '"';	}
+						if (gaSelectAttributes[iSelectAttributes].onDemandColumns != undefined) {sMoreAttributes += ' data-onDemandColumns="' + gaSelectAttributes[iSelectAttributes].onDemandColumns + '"';	}
+						if (gaSelectAttributes[iSelectAttributes].onDemandGroupFilter != undefined) {sMoreAttributes += ' data-onDemandGroupFilter="' + gaSelectAttributes[iSelectAttributes].onDemandGroupFilter + '"';	}
+						if (gaSelectAttributes[iSelectAttributes].onDemandGroupType != undefined) {sMoreAttributes += ' data-onDemandGroupType="' + gaSelectAttributes[iSelectAttributes].onDemandGroupType + '"';	}
+						if (sMoreAttributes != "") {sMoreAttributes += ' style="width:200px"';}
+					}
+					else
+					{	
+						if (iSelectableIndex != -1)
+						{
+							if (aSelectableParameters[iSelectableIndex].onDemandColumns != undefined) 
+							{	sMoreAttributes += ' data-onDemandColumns="' + aSelectableParameters[iSelectableIndex].onDemandColumns + '"'; }
+
+							if (aSelectableParameters[iSelectableIndex].onDemandClick != undefined) 
+							{	sMoreAttributes += ' data-onDemandClick="' + aSelectableParameters[iSelectableIndex].onDemandClick + '"'; }
+							
+							if (aSelectableParameters[iSelectableIndex].searchmethod != undefined)
+							{	
+								bSelect = true;
+								sSearchMethod = aSelectableParameters[iSelectableIndex].searchmethod; 
+							}
+							
+							if (aSelectableParameters[iSelectableIndex].searchendpoint != undefined)
+							{	sSearchEndPoint = aSelectableParameters[iSelectableIndex].searchendpoint; }
+							
+							if (aSelectableParameters[iSelectableIndex].searchrelatedfield != undefined)
+							{	sSearchRelatedField = aSelectableParameters[iSelectableIndex].searchrelatedfield; }
+							
+						}
+					}
 				
 					aHTML[++h] = '<tr><td style="width:15px;" id="tdInterfaceMainReport_include_' + sName + '">' +
 								'<input type="checkbox" id="checkInterfaceMainReport_include-' + sName + '"' +
@@ -750,12 +800,19 @@ function interfaceReportViewport(aParam, oJSON)
 					
 					aHTML[++h] = '<td style="width:200px;cursor: pointer;" id="tdInterfaceMainReport_comparison-' + sName + '-' + this.datatype + '"' +
 										' data-dataType="' + this.datatype + '"' +
-										' data-searchEndpoint="' + this.searchendpoint + '"' +
-										' data-searchMethod="' + this.searchmethod + '"' +
-										' data-inputType="' + this.inputtype + '"' +
+										' data-searchEndpoint="' + sSearchEndPoint + '"' +
+										' data-searchMethod="' + sSearchMethod + sSearchFilter + '"' +
+										' data-inputType="';
+					if (bSelect)
+					{	aHTML[++h] =  "select"; }
+					else
+					{	aHTML[++h] = this.inputtype; }
+					aHTML[++h] =  '"' +
+										' data-searchRelatedField="' + sSearchRelatedField + '"' +
+										sMoreAttributes + 
 										'  class="interfaceMainReportComparison"></td>';
 										
-					aHTML[++h] = '<td id="tdInterfaceMainReport_input-' + sName + '-' + this.datatype + '" class="interfaceMainReport"></td>';
+					aHTML[++h] = '<td id="tdInterfaceMainReport_input-' + sName + '-' + this.datatype + '" class="' + sClass + '"></td>';
 					
 					aHTML[++h] = '</tr>';
 					
@@ -772,11 +829,17 @@ function interfaceReportViewport(aParam, oJSON)
 				}
 			});
 
+			if (bShowSort)
+			{
+				aHTML[++h] = '<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Sort by</td>' +
+							 '<td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;" class="interfacemainSelect">' +
+							 '<input onDemandType="SELECT" id="inputInterfaceReportSort" class="inputInterfaceMainSelect"' + 
+							 'data-getSelectOptions="gaAllParameterList"></td></tr>';
+			}
+			
 			aHTML[++h] = '</table>';			
 			
 			$('#divInterfaceMainReportSearch').html(aHTML.join(''))
-			
-			$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yyyy', changeYear: true });
 			
 			$('#spanInterfaceReportSearch').button(
 			{
@@ -820,6 +883,7 @@ function interfaceReportViewport(aParam, oJSON)
 	}	
 }
 
+
 function interfaceReportComparisonShow(aParam)
 { 
 	var sXHTMLElementID;
@@ -850,7 +914,13 @@ function interfaceReportComparisonShow(aParam)
 			var sInputType = $('#' + sID).attr('data-inputType');
 			
 			var sHTML = $('#' + sID).html();
-			if (sHTML == 'None') {sHTML = ''};
+			if (sHTML == 'None') 
+			{	sHTML = ''
+				if ($('td.interfaceMultiple').length > 0)
+				{
+					$('tr.interfaceMultiple').hide();
+				}
+			};
 			
 			$('#' + sXHTMLElementID).html(sHTML);
 			$('#' + sXHTMLElementID).attr('data-code', $('#' + sID).attr('data-code'));
@@ -865,6 +935,12 @@ function interfaceReportComparisonShow(aParam)
 			var sSearchEndpoint = $('#' + sXHTMLElementID).attr('data-searchEndpoint');
 			var sSearchMethod = $('#' + sXHTMLElementID).attr('data-searchMethod');
 			var sInputType = $('#' + sXHTMLElementID).attr('data-inputType');
+			var sSelectClass = $('#' + sXHTMLElementID).attr('data-selectClass');
+			var sOnDemandColumns = $('#' + sXHTMLElementID).attr('data-onDemandColumns');
+			var sOnDemandGroupFilter = $('#' + sXHTMLElementID).attr('data-onDemandGroupFilter');
+			var sOnDemandGroupType = $('#' + sXHTMLElementID).attr('data-onDemandGroupType');
+			var sOnDemandClick = $('#' + sXHTMLElementID).attr('data-onDemandClick');
+			var sSearchRelatedField = $('#' + sXHTMLElementID).attr('data-searchrelatedfield');
 				
 			interfaceReportSetInput(
 			{
@@ -873,7 +949,14 @@ function interfaceReportComparisonShow(aParam)
 				inputType: sInputType,
 				inputCount: iInputCount,
 				searchEndpoint: sSearchEndpoint,
-				searchMethod: sSearchMethod
+				searchMethod: sSearchMethod,
+				selectClass: sSelectClass,
+				onDemandColumns: sOnDemandColumns,
+				onDemandGroupFilter: sOnDemandGroupFilter,
+				onDemandGroupType: sOnDemandGroupType,
+				comparisonID: sID,
+				onDemandClick: sOnDemandClick,
+				searchrelatedfield: sSearchRelatedField
 			});
 			
 		});
@@ -891,6 +974,14 @@ function interfaceReportSetInput(aParam)
 	var iInputCount = 0;
 	var sSearchEndpoint;
 	var sSearchMethod;
+	var sSelectClass;
+	var sOnDemandColumns;
+	var sOnDemandGroupFilter;
+	var sOnDemandGroupType;
+	var sFirstInputElementId;
+	var sComparisonID;
+	var sOnDemandClick;
+	var sSearchRelatedField;
 	
 	if (aParam != undefined)
 	{
@@ -900,6 +991,15 @@ function interfaceReportSetInput(aParam)
 		if (aParam.inputCount != undefined) {iInputCount = aParam.inputCount}
 		if (aParam.searchEndpoint != undefined) {sSearchEndpoint = aParam.searchEndpoint}
 		if (aParam.searchMethod != undefined) {sSearchMethod = aParam.searchMethod}
+		if (aParam.selectClass != undefined) {sSelectClass = aParam.selectClass}
+		if (aParam.onDemandColumns != undefined) {sOnDemandColumns = aParam.onDemandColumns}		
+		if (aParam.onDemandGroupFilter != undefined) {sOnDemandGroupFilter = aParam.onDemandGroupFilter}		
+		if (aParam.onDemandGroupType != undefined) {sOnDemandGroupType = aParam.onDemandGroupType}		
+		if (aParam.comparisonID != undefined) {sComparisonID = aParam.comparisonID}		
+		if (aParam.onDemandClick != undefined) {sOnDemandClick = aParam.onDemandClick}		
+		if (aParam.searchmethod != undefined) {sSearchMethod = aParam.searchmethod}		
+		if (aParam.searchendpoint != undefined) {sSearchEndPoint = aParam.searchendpoint}		
+		if (aParam.searchrelatedfield != undefined) {sSearchRelatedField = aParam.searchrelatedfield}		
 	}	
 		
 	if (sXHTMLElementID != undefined)
@@ -920,19 +1020,21 @@ function interfaceReportSetInput(aParam)
 					aHTML[++h] = '<br />';
 				}
 				
+				var sThisElementId = sXHTMLInputElementID;
 				if (sInputType == 'textbox' || sInputType == 'textarea')
 				{
-					sXHTMLInputElementID = sXHTMLInputElementID.replace(/-/g, '_');
-					sXHTMLInputElementID = sXHTMLInputElementID + '_' + i
+					sThisElementId = sThisElementId.replace(/-/g, '_');
+					sThisElementId = sThisElementId + '_' + i
+					if (i == 1)	{	sFirstInputElementId = sThisElementId;}
 					
 					if (sDataType == 'text' || sDataType == 'numeric')
 					{
-						aHTML[++h] = '<input id="' + sXHTMLInputElementID +  '" class="inputInterfaceMainText">';
+						aHTML[++h] = '<input id="' + sThisElementId +  '" class="inputInterfaceMainText">';
 					}	
 					
 					if (sDataType == 'date')
 					{
-						aHTML[++h] = '<input id="' + sXHTMLInputElementID + '" class="inputInterfaceMainDate">';
+						aHTML[++h] = '<input id="' + sThisElementId + '" class="inputInterfaceMainDate">';
 					}	
 				}
 				
@@ -940,26 +1042,62 @@ function interfaceReportSetInput(aParam)
 				{
 					if (sSearchEndpoint != undefined && sSearchMethod != undefined)
 					{
-						sXHTMLInputElementID = sXHTMLInputElementID.replace(/-/g, '_');
-						sXHTMLInputElementID = sXHTMLInputElementID + '_' + i
-						aHTML[++h] = '<input id="' + sXHTMLInputElementID + '"' +
-									' onDemandMethod="/ondemand/' + sSearchEndpoint + '/?method=' + sSearchMethod + '" class="inputInterfaceMainSelect">';
+						if (sSearchEndpoint == "") 	{sSearchEndpoint = sSearchMethod.substr(0, sSearchMethod.indexOf("_")) }
+						sThisElementId = sThisElementId.replace(/-/g, '_');
+						sThisElementId = sThisElementId + '_' + i
+						if (false && sComparisonID.indexOf("IN_LIST") >= 0)
+						{	aHTML[++h] = '<select multiple="multiple" '; }
+						else
+						{	aHTML[++h] = '<input '; }
+						
+						aHTML[++h] = 'id="' + sThisElementId + '"';
+						aHTML[++h] = ' onDemandMethod="/ondemand/' + sSearchEndpoint + '/?method=' + sSearchMethod + '" ' +
+									'class="' ;
+						if (sSelectClass != undefined)
+						{	aHTML[++h] = sSelectClass;	}
+						else
+						{	aHTML[++h] = 'inputInterfaceMainSelect'}
+						
+						if (sComparisonID.indexOf("IN_LIST") >= 0)
+						{
+							aHTML[++h] = ' inputInterfaceMainMultiSelect';
+						}
+						aHTML[++h] = '"';
+						
+						if (sOnDemandColumns != undefined)
+						{	aHTML[++h] = ' onDemandColumns="' + sOnDemandColumns + '"'	}
+						
+						if (sOnDemandGroupFilter != undefined)
+						{	aHTML[++h] = ' onDemandGroupFilter="' + sOnDemandGroupFilter + '"'	}
+						
+						if (sOnDemandGroupType != undefined)
+						{	aHTML[++h] = ' onDemandGroupType="' + sOnDemandGroupType + '"'	}
+						
+						if (sOnDemandClick != undefined)
+						{	aHTML[++h] = ' onDemandClick="' + sOnDemandClick + '"'	}
+						
+						aHTML[++h] = '>';
+						if (false && sComparisonID.indexOf("IN_LIST") >= 0)
+						{
+							aHTML[++h] = '</select>';
+						}
 					}
 					else
 					{
-						aHTML[++h] = 'Report configuration error!'
+						aHTML[++h] = 'Report configuration error! Please contact Support.<br />No searchEndpoint and/or searchMethod defined.'
 					}	
 				}	
 			}
 			
 			$('#' + sXHTMLElementID).html(aHTML.join(''));
-			$('#' + sXHTMLInputElementID).focus();
+			$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy', changeYear: true });
+			$('#' + sFirstInputElementId).focus();
 			
 		}	
 	}	
 }
 
-function interfaceReportSearch(aParam, oJSON)
+function interfaceReportSearch(aParam, oResponse)
 { 
 	var sXHTMLElementID;
 	var aHTML = [];
@@ -970,6 +1108,10 @@ function interfaceReportSearch(aParam, oJSON)
 	var oSearchParameters;
 	var sExtraIDColumnBefore = '';
 	var sExtraIDColumnHeader = '';
+	var aSelectableParameters;
+	var aFixedParameters;
+	var sIDColumn;
+	var bContainsContactPerson = false;
 	
 	if (aParam != undefined)
 	{
@@ -980,13 +1122,20 @@ function interfaceReportSearch(aParam, oJSON)
 		if (aParam.searchParameters != undefined) {oSearchParameters = aParam.searchParameters}
 		if (aParam.extraIDColumnBefore != undefined) {sExtraIDColumnBefore = aParam.extraIDColumnBefore}
 		if (aParam.extraIDColumnHeader != undefined) {sExtraIDColumnHeader = aParam.extraIDColumnHeader}
+		if (aParam.idColumn != undefined) {sIDColumn = aParam.idColumn}
+		if (aParam.containsContactPerson != undefined) {bContainsContactPerson = aParam.containsContactPerson }
 		if (aParam.searchParameters == undefined)
 		{
 			if (aParam.fixedParameters != undefined) {oSearchParameters = aParam.fixedParameters}
 		}	
 	}	
 	
-	if (oJSON == undefined)
+	if (bContainsContactPerson)
+	{
+		$('#spanReportHeaderSend').show();
+	}
+	
+	if (oResponse == undefined)
 	{
 		var aParameterList = [];
 		
@@ -1017,7 +1166,7 @@ function interfaceReportSearch(aParam, oJSON)
 				{
 					$.each(oSearchParameters.fields, function()
 					{
-						aFields.push(this.name);
+						aFields.push(this.name);	
 					});
 				}	
 			}
@@ -1026,24 +1175,27 @@ function interfaceReportSearch(aParam, oJSON)
 			{ 
 				var sID = this.id;
 				var aID = sID.split('-');
-				var sName = (aID[1]).replace('_','.');
+				var sName = (aID[1]).replace(/_/g, '.');
+				
 				aParameterList.push(sName);
 				aFields.push(sName);
+				if (!bContainsContactPerson &&
+				    (sName.toLowerCase().substr(sName.length - 13, 13) == "contactperson" ||
+					 sName.toLowerCase().substr(sName.length - 17, 17) == "contactpersontext" ||
+					 sName.toLowerCase().indexOf(".contactperson.") != -1  ||
+					 gsReportMethod.toUpperCase() == "CONTACT_PERSON_SEARCH")
+					)
+				{	bContainsContactPerson = true;	}
+				
 			});	
 			
-			var sFields = '';
-			for (var i = 0; i < aFields.length; i++)
+			if (sIDColumn != undefined && $.inArray(sIDColumn, aFields) == -1)
 			{
-				if (aFields[i] != 'business.id')
-				{
-					sFields += aFields[i] + ',';	}
+				aFields.push(sIDColumn);
 			}
-			if (sFields != '') 	{sFields = sFields.substr(0, sFields.length - 1); }
-			oSearch.addField(sFields);
-			//aParam.parameterList = sFields;
-			//oSearch.addField(aFields.join(','));
-			aParam.parameterList = aFields.join(',');
 			
+			aParam.parameterList = aFields.join(',');
+			oSearch.addField(aFields.join(','));
 			oSearch.endPoint = gsReportEndpoint;
 			oSearch.method = gsReportMethod;
 			
@@ -1053,7 +1205,15 @@ function interfaceReportSearch(aParam, oJSON)
 			{
 				$.each(oSearchParameters.filters, function()
 				{
-					aFilters.push(this);
+					var bInclude = true;
+					if (this.includeEval != undefined)
+					{
+						if (!eval(this.includeEval))
+						{	bInclude = false;	}
+					}
+					
+					if (bInclude)
+					{	aFilters.push(this);	}
 				});
 			}
 			
@@ -1065,39 +1225,104 @@ function interfaceReportSearch(aParam, oJSON)
 				var sInputID  = sID.replace('_comparison', '_input');
 				sInputID  = sInputID.replace('td', 'input');
 				sInputID = sInputID.replace(/-/g, '_');
-				sInputID = sInputID + '_1';
 				
-				var sName = aID[1];
+				var sName = aID[1].replace('_', '.');
 				var sComparison = $(this).attr('data-code');
 				
 				if (sComparison != '')
 				{
 					var sInputType = $('#' + sID).attr('data-inputType');
+					var sSearchRelatedField = $('#' + sID).attr('data-searchRelatedField');
+					var aValues = ["","",""];
 					
-					if (sInputType == 'select')
+					if ( sInputType != "select" || 
+					    (sInputType == "select" && sComparison.indexOf("IN_LIST") < 0) ||
+					    (sInputType == "select" && sComparison.indexOf("IN_LIST") >= 0 && $('td.interfaceMultiple').length == 0)
+					   ) 
 					{
-						var sValue = $('#' + sInputID).attr('ondemandid');
+						for (var i = 0; i < $('#' + sID).attr('data-inputCount'); i++)
+						{
+							var sThisInputID = sInputID + '_' + (i + 1);
+							var sValue = '';
+							if (sInputType == 'select')
+							{
+								if ($('#' + sThisInputID).attr('ondemandid') == undefined)
+								{	// User has typed something so compare the text field
+									sValue = $('#' + sThisInputID).val();
+								}
+								else	// User has selected an id - search on the id
+								{	
+									sValue = $('#' + sThisInputID).attr('ondemandid'); 
+									sName = sSearchRelatedField.replace('_', '.');	
+								}
+							}
+							else
+							{
+								sValue = $('#' + sThisInputID).val();
+							}
+							
+							aValues[i] = sValue;
+						}
 					}
-					else
+					else	// IN_LIST processing
 					{
-						var sValue = $('#' + sInputID).val();
+						var aValueList = [];
+						
+						$('td.interfaceMultiple').each(function()
+						{
+							var sElementId = this.id;
+							var aSearch = sElementId.split("-");
+							aValueList.push(aSearch[aSearch.length - 1]);
+						});
+						
+						if (aValueList.length == 0)
+						{
+							alert("You must choose at least one value.");
+							return false;
+						}
+						else
+						{	aValues[0] = aValueList.join(",");	}
+						sName = sSearchRelatedField.replace('_', '.');	
 					}
 					
 					aFilters.push(
 					{
 						name: sName,
 						comparison: sComparison,
-						value1: sValue,
-						value2: ""
+						value1: aValues[0],
+						value2: aValues[1],
+						value3: aValues[2]
 					});
 				}	
 			});	
 			
 			$.each(aFilters, function()
 			{
-				oSearch.addFilter(this.name, this.comparison, this.value1, this.value2);
+				if (this.bracketBefore != undefined)
+				{	oSearch.addBracket(this.bracketBefore);	}
+				if (this.operatorBefore != undefined)
+				{	oSearch.addOperator(this.operatorBefore) }
+				
+				oSearch.addFilter( this.name, this.comparison, this.value1, this.value2, this.value3);
+				
+				if (this.bracketAfter != undefined)
+				{	oSearch.addBracket(this.bracketAfter);	}
+				if (this.operatorAfter != undefined)
+				{	oSearch.addOperator(this.operatorAfter) }
 			});
 			
+			if ($('#inputInterfaceReportSort').val() != undefined)
+			{
+				if ($('#inputInterfaceReportSort').attr('OnDemandID') != undefined)
+				{	
+					//var aAllParameters = interfaceReportGetAllParameterList();
+					oSearch.sort(gaAllParameterList[$('#inputInterfaceReportSort').attr('OnDemandID')].name, 'asc');
+				}
+			}
+			
+			aParam.containsContactPerson = bContainsContactPerson;
+			
+			oSearch.addSummaryField("count(*) " + gsReportEndpoint);
 			oSearch.rows = iRows;
 			oSearch.rf = sReturnFormat;
 			oSearch.getResults(function(data){interfaceReportSearch(aParam, data)}) ;	
@@ -1107,13 +1332,12 @@ function interfaceReportSearch(aParam, oJSON)
 	else
 	{
 	
-		if (oJSON.data.rows.length == 0)
+		if (oResponse.data.rows.length == 0)
 		{
 			aHTML[++h] = '<table class="interfaceMain"">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">' +
-								'<td class="interfaceMainRowNothing">Nothing to show.</td></tr>';
-			aHTML[++h] = '</tbody></table>';
+								'<td class="interfaceMainRowNothing">Nothing to show.</td></tr>' ;
 
 			$('#divInterfaceMainReportResults').html(aHTML.join(''));
 		}
@@ -1121,7 +1345,7 @@ function interfaceReportSearch(aParam, oJSON)
 		{
 			aHTML[++h] = '<table class="interfaceMain"">';
 			aHTML[++h] = '<tbody>'
-		
+			var aColumns = [];
 			aParameter = sParameterList.split(',');
 			
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
@@ -1132,18 +1356,52 @@ function interfaceReportSearch(aParam, oJSON)
 				{
 					aHTML[++h] = '<td class="interfaceMainCaption">' + sExtraIDColumnHeader + '</td>';
 				}
-					
-				var sCaption = interfaceReportDictionaryGet({name: this})
-				aHTML[++h] = '<td class="interfaceMainCaption">' + sCaption + '</td>';
+				
+				var sName = this;
+				var sCaption;
+				if (goSelectableParameters != undefined && goSelectableParameters.fields != undefined)
+				{
+					$.each(goSelectableParameters.fields, function()
+					{
+						if (this.name == sName && this.caption != undefined)
+						{	sCaption = this.caption;	
+							return false;
+						}
+						else
+						{	return true;	}
+					});
+				}
+				
+				if (oSearchParameters != undefined && oSearchParameters.fields != undefined)
+				{
+					$.each(oSearchParameters.fields, function()
+					{
+						if (this.name == sName && this.caption != undefined)
+						{	sCaption = this.caption;	
+							return false;
+						}
+						else
+						{	return true;	}
+					});
+				}
+				
+				{	sCaption = interfaceReportDictionaryGet({name: this})	}
+				
+				if (sName != sIDColumn)
+				{	aHTML[++h] = '<td class="interfaceMainCaption">' + sCaption + '</td>';	}
+				
+				aColumns.push({name: sName, caption: sCaption});
+				
 			});
 			
 			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
 			aHTML[++h] = '</tr>'
 
-			$.each(oJSON.data.rows, function(index) 
+			$.each(oResponse.data.rows, function(index) 
 			{ 
 				aHTML[++h] = interfaceReportSearchRow(this, aParam);
 			});
+			gaReportRowParam = aParam;
 			
 			aHTML[++h] = '</tbody></table>';
 			
@@ -1152,9 +1410,9 @@ function interfaceReportSearch(aParam, oJSON)
 				xhtmlElementID: 'divInterfaceMainReportResults',
 				xhtmlContext: '',
 				xhtml: aHTML.join(''),
-				showMore: ($(oJSON).attr('morerows') == "true"),
+				showMore: ($(oResponse).attr('morerows') == "true"),
 				columns: aParameter.join('-'),
-				more: $(oJSON).attr('moreid'),
+				more: $(oResponse).attr('moreid'),
 				rows: giReturnRows,
 				functionShowRow: interfaceReportSearchRow,
 				functionSearch: gfReportSearchFunction,
@@ -1181,15 +1439,212 @@ function interfaceReportSearch(aParam, oJSON)
 			}
 			
 			eval(gsReportScriptNewPage);
+			
+			$('#spanInterfaceReportExport').button(
+			{
+				label: "Export (csv)"
+			})
+			.click(function() 
+			{
+				interfaceReportExportToCSV({moreId: $(oResponse).attr('moreid'),
+											count: eval('oResponse.summary.' + gsReportEndpoint)
+											});
+			});	
+
 			//functionSearch: interfaceMasterActions,	
 			//functionOpen: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)',
 			//functionNewPage: 'interfaceMasterAttachmentsShowBind()'	
 			//interfaceMasterAttachmentsShowBind();	
-		}		
+			
+			if (bContainsContactPerson)
+			{	// Show editor and template fields, buttons for preview & Sending
+				interfaceMasterTinyMCEInit();
+				for (edId in tinyMCE.editors) 
+					tinyMCE.editors[edId].destroy(true);
+				
+				giEditorCounter = giEditorCounter + 1;
+				$('#divInterfaceMainReportSend').attr('onDemandLoading', '');
+				
+				aHTML = [];
+				h = -1;
+				aHTML[++h] = '<table id="tableInterfaceMainReportSend" class="interfaceMain">';
+				aHTML[++h] = '<tr id="trInterfaceMainReportSendRow1" class="interfaceMain">' +
+								'<td id="tdInterfaceMainReportSendColumn1" class="interfaceMain">' +
+								'</td>' +
+								'<td id="tdInterfaceMainReportSendColumn2" class="interfaceMain">' +
+								'</td>' +
+								'</tr>';
+				aHTML[++h] = '</table>';					
+				
+				$('#divInterfaceMainReportSend').html(aHTML.join(''));
+				
+				var aHTML = [];
+				var h = -1;
+				var oMCEBookmark;
+			
+				aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+				aHTML[++h] = '<tr id="trInterfaceMainDetailsReportDetails">';	
+				aHTML[++h] = '<td id="tdInterfaceMainDetailsReportSendDetail">';			
+				
+				aHTML[++h] = '<table id="tdInterfaceMainReportDetail" class="interfaceMain">';
+				aHTML[++h] = '<tr id="trInterfaceMainDetailsReportSendSubject" class="interfaceMain">';	
+				aHTML[++h] = '<td id="tdInterfaceMainDetailsReportSendSubject" class="interfaceMain">' +
+						'Subject' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsReportSendSubject" class="interfaceMainTextMulti">' +
+						'<td id="tdInterfaceMainDetailsReportSendSubject" class="interfaceMainTextMulti">' +
+						'<input onDemandType="TEXT" id="inputInterfaceMainDetailsReportSendSubject"  class="inputInterfaceMainText">' +
+						'</td></tr>';
+						
+				aHTML[++h] = '<tr id="trInterfaceMainDetailsReportSendText">';	
+				aHTML[++h] = '<td id="tdInterfaceMainReportSendTextValue" class="interfaceMainTextMulti" width="550px">' +
+								'<div rows="550" cols="400" onDemandType="TEXTMULTI" id="inputInterfaceMainReportSendText' +
+									giEditorCounter + '" editorcount="' + giEditorCounter + '" class="inputInterfaceMainTextMulti"></textarea>' +
+								'</td>';
+				aHTML[++h] = '</td></tr></table>';					
+				aHTML[++h] = '</td>';					
+								
+				aHTML[++h] = '<td id="tdInterfaceMainReportSendEmail" class="interfaceMain">';
+
+				aHTML[++h] = '<table id="tdInterfaceMainReportOptions" class="interfaceMain">';
+				aHTML[++h] = '<tr><td id="tdInterfacemainReportSendButtons" class="interfaceMain" style="text-align:right;">' +
+							'<span id="spanInterfaceMainReportSendPreview">Preview</span>&nbsp;' +
+							'<span id="spanInterfaceMainReportSendEmail">Email</span>' +
+							'</td></tr>';		
+				aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
+				
+				aHTML[++h] = '<tr><td id="tdInterfaceManReportSendInstructions" class="interfaceMain" style="text-align:right;">' +
+							'Click to insert fields..' +
+							'</td></tr>';		
+				aHTML[++h] = '<tr><td id="tdInterfaceMainReportMergeFields" class="interfaceMain" style="text-align:right;" colspan="2">';
+				$.each(aColumns, function()
+				{
+					aHTML[++h] = '<span id="spanInterfaceMainReportColumn_' + this.name.replace(/\./g,'-') + '" ' +
+								   'class="interfaceReportColumnSelect interfaceCalculated" ' +
+								   'title="' + this.caption.replace(/ /g,'~') + '" style="cursor: pointer;">' + this.caption + '</span>' +
+								'<br />';		
+				});
+						
+				aHTML[++h] = '</td></tr></table>';					
+				aHTML[++h] = '</td></tr></table>';					
+				
+				$('#tdInterfaceMainReportSendColumn1').html(aHTML.join(''));
+
+				
+				$('#spanInterfaceMainReportSendPreview').button({
+					text: false,
+					icons: {
+						primary: "ui-icon-document"}
+				})
+				.click(function()
+				{
+					//var sText = interfaceReportReplaceMailMerge();
+					var sText = interfaceReportReplaceMergeFields({columns: aColumns, 
+																   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + giEditorCounter)).getContent()});
+					var iObject;
+					if (aParam.method != undefined)
+					{
+						var aMethod = aParam.method.split('_');
+						var sEndPoint = aMethod[0];
+						if (sEndPoint == "CONTACT")
+						{
+							if (aMethod[1] == 'BUSINESS')
+							{	iObject = giObjectBusiness;	}
+							else if (aMethod[1] == "PERSON")
+							{	iObject = giObjectPerson;	}
+						}
+						else if (sEndPoint == 'AUDIT')
+						{	
+							if (aMethod[1] == "ITEM")
+							{	iObject = giObjectAuditItemType;	}
+							else
+							{	iObject = giObjectAudit;	}
+						}
+						else if (sEndPoint == 'OPPORTUNITY')
+						{	iObject = giObjectOpportunity;	}
+						else if (sEndPoint == "ISSUE")
+						{	iObject = giObjectIssue;	}
+						else
+						{	
+							alert('Report Error. Object cannot be determined.');
+							return false;
+						}
+					}
+					
+					var aReportParam = {row: oResponse.data.rows[0],
+										moreID: oResponse.moreid,
+										parameters: aParameter,
+										object: iObject,
+										text: sText
+									   }
+					interfaceReportSendPreview(aReportParam);
+				})
+				.css('width', '30px')
+				.css('height', '30px');
+			
+				$('#spanInterfaceMainReportSendEmail').button({
+					text: false,
+					icons: {
+						primary: "ui-icon-mail-closed"}
+				})
+				.click(function()
+				{
+					var sText = interfaceReportReplaceMergeFields({columns: aColumns, 
+																   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + giEditorCounter)).getContent()});
+					var sSubject = interfaceReportReplaceMergeFields({columns: aColumns, 
+																   replace: $('#inputInterfaceMainDetailsReportSendSubject').val()});
+					interfaceReportSendEmail({moreID: oResponse.moreid,
+											  parameters: aParameter,
+											  text: sText,
+											  subject: sSubject
+											  });
+				})
+				.css('width', '30px')
+				.css('height', '30px');
+				
+				
+				$('.interfaceReportColumnSelect')
+				.hover( function()
+				{	
+					oMCEBookmark = tinyMCE.get('inputInterfaceMainReportSendText' + giEditorCounter).selection.getBookmark({type: 1, normalized: true});
+				})
+				.click( function()
+				{
+					interfaceMasterMCEAddElement({xhtmlElementId: this.id,
+												  editorId: 'inputInterfaceMainReportSendText' + giEditorCounter, 
+												  mceBookmark: oMCEBookmark})
+				})
+				
+				tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainReportSendText' + giEditorCounter);
+				
+				//var sParam = 'method=DOCUMENT_GET_DOCUMENT&noformat=1&select=' + iDocument;
+
+			}
+		}
 	}	
 }
 
-function interfaceReportSearchRow(oJSON, aParam)
+function interfaceReportReplaceMergeFields(aParam)
+{
+	var sText = "";
+	var aColumns = [];
+	
+	if (aParam != undefined)
+	{
+		if (aParam.columns != undefined) {aColumns = aParam.columns;}
+		if (aParam.replace != undefined) {sText = aParam.replace;}
+	}
+	
+	$.each(aColumns, function()
+	{
+		while (sText.indexOf("[[" + this.caption + "]]") >= 0)
+		{	sText = sText.replace("[[" + this.caption + "]]", "[[" + this.name + "]]")	}
+	});
+	
+	return sText;
+}
+
+function interfaceReportSearchRow(oResponse, aParam)
 {
 	var aHTML = [];
 	var h = -1;
@@ -1198,13 +1653,21 @@ function interfaceReportSearchRow(oJSON, aParam)
 	var	aFixedValue = [];
 	var i;
 	var sExtraIDColumnBefore;
-	var sExtraIDColumnValue
+	var sExtraIDColumnValue;
+	var bExport = false;
+	var sOutput = '';
+	var sParameterList = '';
+	var aParameters = [];
+
+	if (aParam == undefined) {aParam = gaReportRowParam }
+	
 	
 	if (aParam != undefined)
 	{
 		if (aParam.fixedParameters != undefined) {oFixedParameters = aParam.fixedParameters}
 		if (aParam.extraIDColumnBefore != undefined) {sExtraIDColumnBefore = aParam.extraIDColumnBefore}
 		if (aParam.extraIDColumnValue != undefined) {sExtraIDColumnValue = aParam.extraIDColumnValue}
+		if (aParam.parameterList != undefined) {sParameterList = aParam.parameterList}
 	}	
 	
 	if (oFixedParameters.fields != undefined)
@@ -1219,47 +1682,51 @@ function interfaceReportSearchRow(oJSON, aParam)
 		});	
 	}
 	
+	if (sParameterList != '')
+	{	aParameters = sParameterList.split(',');	}
+	
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 
-	var sLastExtraID;
-	$.each(oJSON, function(key, value) 
-	{ 
-		var sValue = value;
+	var sLastExtraID = '';
+	sIDColumn = "id";
+	if (aParam != undefined) 
+	{	if (aParam.idColumn != undefined) {sIDColumn = aParam.idColumn}	}
+	var aLastHTML = [];
+	
+	$.each(aParameters, function()
+	{
 		
-		if (key != 'id')
+		var sValue = eval('oResponse["' + this + '"]');
+		var sKey = this;
+		
+		if (sKey != sIDColumn)
 		{
-			var i = $.inArray(key, aFixedName)
-			if (i != -1) {sValue = aFixedValue[i]}
-		
-			var sKey = (key).replace(/\./g,'_')
-			if (key == sExtraIDColumnBefore)
-			{	
-				sLastExtraID = Math.floor(Math.random() * 10000000001);
-				aHTML[++h] = '<td class="interfaceMainRow extraID" ' + 
-								 'id="' + sLastExtraID + '">' + 
-							  sExtraIDColumnValue + '</td>';
-			}
-			aHTML[++h] = '<td class="interfaceMainRow ' + sKey + '" ' + 
-							 'id="' + value + '">' + 
+			aHTML[++h] = '<td class="interfaceMainRow ' + sKey.replace(/\./g,'_') + '" ' + 
+							 'id="' + sValue + '">' + 
 						  sValue + '</td>';
+			sOutput += '"' + sValue + '",';
 		}
 		else
 		{
-			aHTML[++h] = '<td class="interfaceMainRowOptionsSelect id" ' +
+			if (sKey == sIDColumn)
+			{	
+				aLastHTML.push('<td class="interfaceMainRowOptionsSelect id" ' +
 							 'id="id-' + sValue + '"' +
-							 'data-extraid="' + sLastExtraID + '"></td>';
-			
+							 'data-extraid="' + sLastExtraID + '"></td>');
+			}
 		}
-		
 	});
-
+	aHTML[++h] = aLastHTML.join('');
 	aHTML[++h] = '</tr>'; 
 	
-	return aHTML.join('');
+	if (bExport)
+	{	return sOutput.substr(0, sOutput.length - 1) + '%0D%0A';	}
+	else
+	{	return aHTML.join('');	}
 	
 }
 
-function interfaceReportNewPage(aParam, oJSON)
+function interfaceReportNewPage(aParam, oResponse)
 {
 	var sEndpoint;
 	var sMethod;
@@ -1267,6 +1734,7 @@ function interfaceReportNewPage(aParam, oJSON)
 	var sSourceName;
 	var sCompareColumn = 'id';
 	var oMoreFilters;
+	var sIDColumn = 'id';
 	
 	if (aParam != undefined)
 	{
@@ -1276,9 +1744,10 @@ function interfaceReportNewPage(aParam, oJSON)
 		if (aParam.sourceName != undefined) {sSourceName = aParam.sourceName}	
 		if (aParam.compareColumn != undefined) {sCompareColumn = aParam.compareColumn}	
 		if (aParam.moreFilters != undefined) {oMoreFilters = aParam.moreFilters}
+		if (aParam.idColumn != undefined) {sIDColumn = aParam.idColumn}
 	}
 	
-	if (oJSON == undefined)
+	if (oResponse == undefined)
 	{
 	
 		if (sEndpoint == undefined && sMethod != undefined)
@@ -1289,7 +1758,7 @@ function interfaceReportNewPage(aParam, oJSON)
 		if (sSourceName == "extraID")
 		{
 			var aID = '';
-			$('td.id').each(function()
+			$('td.id:visible').each(function()
 			{
 				aID = ($(this).attr('id')).split('-');
 				$('#' + $(this).attr('data-extraid')).attr('id', aID[1]);
@@ -1298,13 +1767,14 @@ function interfaceReportNewPage(aParam, oJSON)
 		
 		var aSourceIDs = [];
 		
-		$('td.' + (sSourceName).replace(/\./g,'_')).each(function()
+		$('td.' + (sSourceName).replace(/\./g,'_') + ':visible').each(function()
 		{
-			aSourceIDs.push($(this).attr('id'))
+			if ($.inArray($(this).attr('id'),aSourceIDs >= 0))
+			{	aSourceIDs.push($(this).attr('id'))	}
 		});
 		
 		var sFields = sName;
-		if 	(sCompareColumn != 'id')
+		if 	(sCompareColumn != sIDColumn)
 		{	sFields += ',' + sCompareColumn;	}
 		
 		var oAdvancedSearch = new AdvancedSearch();
@@ -1317,11 +1787,21 @@ function interfaceReportNewPage(aParam, oJSON)
 		{
 			$.each(oMoreFilters.filters, function()
 			{
+				if (this.bracketBefore != undefined)
+				{	oAdvancedSearch.addBracket(this.bracketBefore);	}
+				if (this.operatorBefore != undefined)
+				{	oAdvancedSearch.addOperator(this.operatorBefore) }
+				
 				oAdvancedSearch.addFilter( this.name, this.comparison, this.value1, this.value2);
+				
+				if (this.bracketAfter != undefined)
+				{	oAdvancedSearch.addBracket(this.bracketAfter);	}
+				if (this.operatorAfter != undefined)
+				{	oAdvancedSearch.addOperator(this.operatorAfter) }
 			});
 		}
 		
-		if (sCompareColumn != 'id')
+		if (sCompareColumn != sIDColumn)
 		{	
 			oAdvancedSearch.sort(sCompareColumn, 'asc');	
 			oAdvancedSearch.rows = 200;
@@ -1336,9 +1816,9 @@ function interfaceReportNewPage(aParam, oJSON)
 		var sLastPrimaryId = '';
 		var sLastId = '';
 		var sHTML = '';
-		$.each(oJSON.data.rows, function(index) 
+		$.each(oResponse.data.rows, function(index) 
 		{ 
-			if (sCompareColumn != 'id')
+			if (sCompareColumn != sIDColumn)
 			{
 				if (sLastPrimaryId == $(this).attr(sCompareColumn))
 				{
@@ -1363,3 +1843,227 @@ function interfaceReportNewPage(aParam, oJSON)
 
 }
 
+function interfaceReportFieldIsIncluded(sFieldList)
+{
+	var aFields = sFieldList.split('-');
+	var bIncluded = false;
+	
+	$.each(aFields, function()
+	{
+		var sField = this.replace(/\./g,'_');
+		if ($('#checkInterfaceMainReport_include-' + sField).attr('checked'))
+		{
+			bIncluded = true;
+			return false;
+		}
+		else
+		{	return true;	}
+	});
+	
+	return bIncluded;
+}
+
+function interfaceReportAddSearchFilter(aParam)
+{
+
+	var sValue = $('#' + gsLastShowDivID).val();
+	var sName;
+	var sParameter = '';
+	var sAttribute = '';
+	var sSearchMethod = '';
+	
+	if (aParam != undefined)
+	{
+		if (aParam.name != undefined) {sName = aParam.name}
+		if (aParam.parameter != undefined) {sParameter = aParam.parameter}
+		if (aParam.attribute != undefined) {sAttribute = aParam.attribute}
+	}
+	
+	if (sName != undefined)
+	{
+		sName = sName.replace(/\./g,'_');
+		sSearchMethod = $("#tdInterfaceMainReport_comparison-" + sName + '-text').attr('data-searchMethod');
+		if (sAttribute != '')
+		{	sValue = $('#' + gsLastShowDivID).attr(sAttribute)	}
+		
+		$("#tdInterfaceMainReport_comparison-" + sName + '-text').attr('data-searchMethod', sSearchMethod + '&' + sParameter + '=' + sValue);
+		
+	}
+	
+}
+
+function interfaceReportExportToCSV(aParam)
+{
+	var iMoreId;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.count != undefined && aParam.count != "0") 
+		{
+			iMoreId = aParam.moreId;
+			var sParam = '&method=CORE_MORE_FILE_MANAGE&more=' + iMoreId;
+			$.ajax({
+				type: 'POST',
+				url: '/ondemand/core/?rf=json' + sParam,
+				dataType: 'json',
+				success: function(oResponse)
+				{
+					if (oResponse.link != '')
+					{
+						var aHTML = [];
+						var h = -1;
+						aHTML[++h] = '<table class="interfaceMain"">';
+						aHTML[++h] = '<tbody>'
+						aHTML[++h] = '<tr class="interfaceMainCaption">';
+						aHTML[++h] = '<td class="interfaceMainCaption">File created..   ' + aParam.count + ' rows.</td></tr>';
+						aHTML[++h] = '<tr class="interfaceMainCaption">';
+						aHTML[++h] = '<td class="interfaceMainCaption"><a href="' + oResponse.link;
+						aHTML[++h] = '" target="_blank">Click here</a> to download the file.</td></tr>';
+						aHTML[++h] = '</tbody></table>';
+						$('#divInterfaceMainReportResults').html(aHTML.join(''));
+					}
+				}
+			});
+			
+		}
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		aHTML[++h] = '<table class="interfaceMain"">';
+		aHTML[++h] = '<tbody>'
+		aHTML[++h] = '<tr class="interfaceMainCaption">';
+		aHTML[++h] = '<td class="interfaceMainCaption">No results. File not created.</td></tr>';
+		aHTML[++h] = '</tbody></table>';
+		$('#divInterfaceMainReportResults').html(aHTML.join(''));
+	}
+}
+
+function interfaceReportSendPreview(aParam)
+{
+	var oRow;
+	var iMoreId;
+	var sText = "";
+	var sParam = "";
+	var aParameters = [];
+	var sTags = "";
+	var iObject;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.row != undefined) {oRow = aParam.row}
+		if (aParam.moreID != undefined) {iMoreId = aParam.moreID}		
+		if (aParam.parameters != undefined) {aParameters = aParam.parameters}		
+		if (aParam.text != undefined) {sText = aParam.text}		
+		if (aParam.object != undefined) {iObject = aParam.object}		
+	}
+	else
+	{
+		interfaceMasterConfirm({html: ['Parameters not passed to interfaceReportSendPreview. <br /><br />Preview aborted.'], title: 'System Error!'})
+		return false;
+	}
+	
+	if (false && iObject == 32)
+	{	sTags = aParameters.join('|');	}
+	else
+	{
+		$.each(aParameters, function()
+		{
+			sTags = this + "|"  + sTags;
+		});
+		if (sTags.length > 0)
+		{	sTags = sTags.substr(0, sTags.length - 1); 	}
+	}
+	
+	sParam = "&more=" + iMoreId + 
+			 "&object=" + iObject + "&objectcontext=" + oRow.id +
+			 "&templatetext=" + FormatSave(sText) + 
+			 "&tags=" + FormatSave(sTags);
+
+	$.ajax(
+	{
+		type: 'POST',
+		cache: false,
+		url: "/ondemand/core/?method=CORE_MORE_APPLY_TEMPLATE",
+		data: "rf=text" + sParam,
+		dataType: 'text',
+		async: false,
+		success: function(data)
+		{
+			if (data.substr(0,12) == "OK|RETURNED|")
+			{	
+				interfaceMasterConfirm({html: [data.substring(12)], title: "Merged content."});	}
+		}
+	});
+ 
+}
+
+function interfaceReportSendEmail(aParam)
+{
+	var iMoreId;
+	var sText = "";
+	var sParam = "";
+	var aParameters = [];
+	var sTags = "";
+	var sEmail = "";
+	var sSubject = "";
+	
+	if (aParam != undefined)
+	{
+		if (aParam.moreID != undefined) {iMoreId = aParam.moreID}		
+		if (aParam.parameters != undefined) {aParameters = aParam.parameters}		
+		if (aParam.text != undefined) {sText = aParam.text}		
+		if (aParam.subject != undefined) {sSubject = aParam.subject}		
+	}
+	else
+	{
+		interfaceMasterConfirm({html: ['Parameters not passed to interfaceReportSendEmail. <br /><br />Preview aborted.'], title: 'System Error!'})
+		return false;
+	}
+	
+	if (confirm("Are you sure you want to send an email to all of the Contacts in the report results?"))
+	{
+		sTags = aParameters.join('|');
+		
+		var oSearch = new AdvancedSearch();
+		oSearch.endPoint = "contact";
+		oSearch.method = "CONTACT_PERSON_SEARCH";
+		oSearch.addField("email");
+		oSearch.addFilter("id", "EQUAL_TO", gsUserPersonId);
+		oSearch.rf = "JSON";
+		oSearch.async = false;
+		oSearch.getResults(function(data)
+		{
+			if (data.data.rows.length > 0)
+			{	sEmail = data.data.rows[0].email;	}
+		});
+		
+		sParam = "&more=" + iMoreId + 
+				 "&title=" + FormatSave(sSubject) +
+				 "&status=1" + 
+				 "&type=2" +
+				 '&scheduletype=9' +
+				 "&schedulemaximumcount=1" + 
+				 "&responseactionfrom=" + FormatSave(sEmail) + 
+				 "&templatetext=" + FormatSave(sText) + 
+				 "&caption=" + FormatSave(sTags);
+
+		$.ajax(
+		{
+			type: 'POST',
+			cache: false,
+			url: "/ondemand/setup/?method=SETUP_AUTOMATION_MANAGE",
+			data: "rf=text" + sParam,
+			dataType: 'text',
+			async: false,
+			success: function(data)
+			{
+				interfaceMasterConfirm({title: "Bulk Email", html: ["Email(s) sent"]});
+			}
+		});
+	}
+	else
+	{	return false;	}
+
+}

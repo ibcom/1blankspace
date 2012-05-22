@@ -596,6 +596,7 @@ function interfaceHomeLogonShow()
 						'<tr id="trInterfaceMainHomeNotes" class="interfaceMainHome">' +						
 						'<td id="tdInterfaceMainHomeNotes" class="interfaceMainHome" style="color:#404040;">' +
 						'This is a example app based on mydigitalstructure.com.' +
+						'<br /><br /><a href="https://github/ibcom/1blankspace" target="_blank">github Repository</a>' +
 						'<br /><br /><a href="http://mydigitalstructure.com/examples" target="_blank">More code examples</a>' +
 						'<br /><br /><a href="http://mydigitalstructure.com/documentation" target="_blank">Documentation</a>' +
 						'<br /><br /><a href="http://mydigitalstructure.com/gettingstarted" target="_blank">Getting started</a>' +
