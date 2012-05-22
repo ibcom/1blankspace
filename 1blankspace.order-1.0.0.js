@@ -307,7 +307,7 @@ function interfaceOrderSearchShow(aParam, oResponse)
 				aHTML[++h] = '</tr>'
 				iColumn = 0;
 			}	
-		}
+		});
     	
 		aHTML[++h] = '</tbody></table>';
 
@@ -1277,7 +1277,7 @@ function interfaceOrderDeliveryPickRow(oRow)
 
 	aHTML[++h] = '<td id="tdOrderDeliveryPick_totalprice-' + oRow.id + '" class="interfaceMainRow"' +
 							' style="text-align:right;">' +
-							oRow.quantitythisdelivery") + '</td>';						
+							oRow.quantitythisdelivery + '</td>';						
 														
 	aHTML[++h] = '<td id="tdOrderDeliveryPick-' + oRow.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
 							
@@ -1417,7 +1417,7 @@ function interfaceOrderInvoicesRow(oRow)
 								
 	aHTML[++h] = '<td id="tdOrderInvoices_price-' + oRow.id + '" class="interfaceMainRow"' +
 							' style="text-align:right;">' +
-							oRow.amount") + '</td>';	
+							oRow.amount + '</td>';	
 														
 	aHTML[++h] = '<td id="tdOrderInvoices-' + oRow.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
 							
