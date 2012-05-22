@@ -377,8 +377,6 @@ function interfaceSetupProjectShow(aParam, oResponse)
 	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 	interfaceSetupProjectViewport();
 	
-	goObjectContextXML = oXML;
-	
 	var aHTML = [];
 	var h = -1;
 	
@@ -400,17 +398,6 @@ function interfaceSetupProjectShow(aParam, oResponse)
 		
 		$('#divInterfaceViewportControlContext').html(sContext);
 		
-		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
-						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';					
-		
-		$('#divInterfaceMainSummary').html(aHTML.join(''));
-		
 		interfaceSetupProjectSummary();
 	}	
 }		
@@ -429,6 +416,17 @@ function interfaceSetupProjectSummary()
 	}
 	else
 	{
+		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
+		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
+						'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
+						'</td>' +
+						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
+						'</td>' +
+						'</tr>';
+		aHTML[++h] = '</table>';					
+		
+		$('#divInterfaceMainSummary').html(aHTML.join(''));
+		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
@@ -440,19 +438,6 @@ function interfaceSetupProjectSummary()
 		
 		$('#tdInterfaceMainSummaryColumn1').html(aHTML.join(''));
 
-		var aHTML = [];
-		var h = -1;	
-		
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2">';
-								
-		//aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryViewAsTimeline" class="interfaceMainSummary">' +
-		//				'<a href="#" id="aInterfaceMainSummaryViewAsTimeline">View As Timeline</a>' +
-		//				'</td></tr>';
-						
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainSummaryColumn2').html(aHTML.join(''));	
-		
 		$('#aInterfaceMainSummaryViewAsTimeline').click(function(event)
 		{
 			interfaceSetupProjectViewAsTimeline();
@@ -488,7 +473,7 @@ function interfaceSetupProjectDescription()
 				
 		aHTML[++h] = '<tr id="trInterfaceMainDescriptionValue" class="interfaceMainTextMulti">' +
 						'<td id="tdInterfaceMainDescriptionValue" class="interfaceMainTextMulti">' +
-						'<textarea rows="30" cols="50" onDemandType="TEXTMULTI" id="inputInterfaceMainDescription" class="inputInterfaceMainTextMulti inputInterfaceMainTextMultiLarge"></textarea>' +
+						'<textarea rows="30" cols="50" id="inputInterfaceMainDescription" class="inputInterfaceMainTextMulti inputInterfaceMainTextMultiLarge"></textarea>' +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
@@ -497,7 +482,7 @@ function interfaceSetupProjectDescription()
 		
 		if (goObjectContext != undefined)
 		{
-			$('#inputInterfaceMainDescription').val(goObjectContext.description));
+			$('#inputInterfaceMainDescription').val(goObjectContext.description);
 		}
 	
 		//tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainDescription');
@@ -595,9 +580,9 @@ function interfaceSetupProjectTasks(aParam, oResponse)
 			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
 			aHTML[++h] = '</tr>';
 			
-			if (oResponse.data.rows.length == 0)
+			$.each(oResponse.data.rows, function()
 			{
-				aHTML[++h] = interfaceSetupProjectTasksRow(oRow)
+				aHTML[++h] = interfaceSetupProjectTasksRow(this)
 			});
 			
 			aHTML[++h] = '</tbody></table>';
@@ -852,7 +837,7 @@ function interfaceSetupProjectTaskDetailsAdd(aParam, oResponse)
 		{
 			if (oResponse.data.rows.length == 0)
 			{
-				$('#inputInterfaceMainProjectTaskDetailsReference').val(oResponse.data.rows[0].reference'));
+				$('#inputInterfaceMainProjectTaskDetailsReference').val(oResponse.data.rows[0].reference);
 				$('#inputInterfaceMainProjectTaskDetailsTitle').val(oResponse.data.rows[0].title);		
 			}
 		}	
