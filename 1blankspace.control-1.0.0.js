@@ -421,7 +421,7 @@ function interfaceControlOptionsBind()
 	$('#tdInterfaceViewportMasterControlMessaging').click(function(event)
 	{
 		interfaceMasterOptionsSource();
-		interfaceMessagingMasterViewport();
+		interfaceMessagingIMAPMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlMessagingConversation').click(function(event)
