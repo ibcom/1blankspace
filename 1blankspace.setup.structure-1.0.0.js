@@ -1134,46 +1134,77 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 						'<td id="tdInterfaceMainSetupSetupStructureElementAddTitleValue" class="interfaceMainText">' +
 						'<input id="inputInterfaceMainSetupSetupStructureElementAddTitle" class="inputInterfaceMainText">' +
 						'</td></tr>';
-		
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsDataType" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDetailsDataType" class="interfaceMain">' +
-						'Data Type' +
-						'</td></tr>' +
-						'<tr id="trInterfaceMainDetailsDataType" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainDetailsDataTypeValue" class="interfaceMainRadio">' +
-						'<input type="radio" id="radioDataType4" name="radioDataType" value="4"/>Text (Single Line)' +
-						'<br /><input type="radio" id="radioDataType1" name="radioDataType" value="1"/>Text (Multi Line)' +
-						'<br /><input type="radio" id="radioDataType3" name="radioDataType" value="3"/>Date' +
-						'<br /><input type="radio" id="radioDataType2" name="radioDataType" value="2"/>Numeric' +
-						'</td></tr>';
-		
+						
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsCategory" class="interfaceMain">' +
 						'<td id="tdInterfaceMainDetailsCategory" class="interfaceMain">' +
 						'Category' +
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsCategory" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainDetailsCategoryValue" class="interfaceMainRadio">';
-						
+	
 		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/setup/?method=SETUP_STRUCTURE_CATEGORY_SEARCH',
+			data: 'structure=' + giObjectContext,
+			dataType: 'json',
+			async: false,
+			success: function(oResponse)
 			{
-				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_STRUCTURE_CATEGORY_SEARCH',
-				data: 'structure=' + giObjectContext,
-				dataType: 'json',
-				async: false,
-				success: function(oResponse)
+				$.each(oResponse.data.rows, function()
 				{
-					$.each(oResponse.data.rows, function()
-					{
-						if (iDefaultCategory == undefined) {iDefaultCategory = this.id}
-						aHTML[++h] = '<input type="radio" id="radioCategory' + this.id + '" name="radioCategory" value="' + this.id + '"/>' +
-											this.title + '<br />';				
-					});
-				}
-			});
+					if (iDefaultCategory == undefined) {iDefaultCategory = this.id}
+					aHTML[++h] = '<input type="radio" id="radioCategory' + this.id + '" name="radioCategory" value="' + this.id + '"/>' +
+										this.title + '<br />';				
+				});
+			}
+		});
 		
 		aHTML[++h] = '</td></tr>';
 		
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsDataType" class="interfaceMain">' +
+							'<td id="tdInterfaceMainDetailsDataType" class="interfaceMain">' +
+							'Data Type' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainDetailsDataType" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainDetailsDataTypeValue" class="interfaceMainRadio">' +
+							'<input type="radio" id="radioDataType4" name="radioDataType" value="4"/>Text (Single Line)' +
+							'<br /><input type="radio" id="radioDataType1" name="radioDataType" value="1"/>Text (Multi Line)' +
+							'<br /><input type="radio" id="radioDataType3" name="radioDataType" value="3"/>Date' +
+							'<br /><input type="radio" id="radioDataType2" name="radioDataType" value="2"/>Select / Choice' +
+						'</td></tr>';
+					
+		aHTML[++h] = '<tr id="trInterfaceMainSetupSetupStructureElementTextColour" class="interfaceMain">' +
+							'<td id="tdInterfaceMainSetupSetupStructureElementTextColour" class="interfaceMain">' +
+							'Text Colour' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainSetupStructureElementAddTextColourValue" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainSetupStructureElementAddTextColourValue" class="interfaceMainText">' +
+							'<input id="inputInterfaceMainSetupSetupStructureElementAddTextColour" class="inputInterfaceMainText">' +
+							'</td></tr>';			
+							
+		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementBackgroundColour" class="interfaceMain">' +
+							'<td id="tdInterfaceMainSetupStructureElementBackgroundColour" class="interfaceMain">' +
+							'Background Colour' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainSetupStructureElementAddBackgroundColourValue" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainSetupStructureElementAddBackgroundColourValue" class="interfaceMainText">' +
+							'<input id="inputInterfaceMainSetupStructureElementAddBackgroundColour" class="inputInterfaceMainText">' +
+							'</td></tr>';
+										
+		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementDisplayOrder" class="interfaceMain">' +
+							'<td id="tdInterfaceMainSetupStructureElementDisplayOrder" class="interfaceMain">' +
+							'Display Order' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainSetupStructureElementAddDisplayOrderValue" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainSetupStructureElementAddDisplayOrderValue" class="interfaceMainText">' +
+							'<input id="inputInterfaceMainSetupStructureElementAddDisplayOrder" class="inputInterfaceMainText">' +
+							'</td></tr>';
+							
+		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddOptionsValue" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainSetupStructureElementAddOptionsValue" class="interfaceMainText">' +
+							'</td></tr>';
+																					
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainSetupStructureElementColumn1').html(aHTML.join(''));
@@ -1207,7 +1238,10 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddTitle').val());
 			sData += '&datatype=' + interfaceMasterFormatSave($('input[name="radioDataType"]:checked').val());
-			sData += '&category=' + interfaceMasterFormatSave($('input[name="radioCategory"]:checked').val());;
+			sData += '&category=' + interfaceMasterFormatSave($('input[name="radioCategory"]:checked').val());
+			sData += '&textcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddTextColour').val());
+			sData += '&backgroundcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddBackgroundColour').val());
+			sData += '&displayorder=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddDisplayOrder').val());
 			
 			$.ajax(
 			{
@@ -1257,9 +1291,13 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 			$('#inputInterfaceMainSetupSetupStructureElementAddTitle').val(oObjectContext.title)
 			$('[name="radioDataType"][value="' + oObjectContext.datatype + '"]').attr('checked', true);
 			$('[name="radioCategory"][value="' + oObjectContext.category + '"]').attr('checked', true);
+			$('#inputInterfaceMainSetupSetupStructureElementAddTextColour').val(oObjectContext.textcolour)
+			$('#inputInterfaceMainSetupSetupStructureElementAddBackgroundColour').val(oObjectContext.backgroundcolour)
+			$('#inputInterfaceMainSetupSetupStructureElementAddDisplayOrder').val(oObjectContext.displayorder)	
 			$('#inputInterfaceMainSetupSetupStructureElementAddTitle').focus();
+			interfaceSetupStructureElementOptionsShow({structureElementID: oObjectContext.id});
 		}
-	}		
+	}
 }
 
 function interfaceMasterSetupStructureElementRemove(aParam, oResponse)
@@ -1306,4 +1344,244 @@ function interfaceSetupStructureNew(aParam)
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	interfaceSetupStructureDetails();
+}
+
+
+function interfaceSetupStructureElementOptionsShow(aParam, oResponse)
+{
+	var aHTML = [];
+	var h = -1;
+	
+	var iStructureElementID = -1;
+
+	if (aParam != undefined)
+	{
+		if (aParam.structureElementID != undefined) {iStructureElementID = aParam.structureElementID}
+	}
+	
+	if (oResponse == undefined)
+	{	
+		var sParam = 'method=SETUP_STRUCTURE_ELEMENT_OPTION_SEARCH';
+		var sData = 'element=' + iStructureElementID;
+		
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/setup/?' + sParam,
+			data: sData,
+			dataType: 'json',
+			success: function(data){interfaceSetupStructureElementOptionsShow(aParam, data)}
+		});
+	}	
+	else
+	{	
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table style="width:100%" border="0" cellspacing="0" cellpadding="0" id="tableInterfaceElementOption"' +
+							' data-structureElement="' + iStructureElementID + '">';
+		aHTML[++h] = '<tbody>'
+		
+		aHTML[++h] = '<tr class="interfaceMainRow">';
+		aHTML[++h] = '<td class="interfaceMainCaption">Choices</td>';
+		aHTML[++h] = '<td class="interfaceMainCaption">Points</td>';
+		aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right"><span id="spanInterfaceElementOptionAdd">Add</span></td>';
+		aHTML[++h] = '</tr>';
+				
+		if (oResponse.data.rows.length == 0)
+		{
+			//aHTML[++h] = '<tr><td>No choices.</td></tr>'
+		}
+		else
+		{
+			$.each(oResponse.data.rows, function()
+			{
+				aHTML[++h] = '<tr class="interfaceMainRow">';
+						
+				aHTML[++h] = '<td id="tdElementOption-' + this.id + '" class="interfaceMainRow interfaceElementOption">' +
+								this.title + '</td>';
+								
+				aHTML[++h] = '<td id="tdElementOption-' + this.id + '" class="interfaceMainRow interfaceElementOption">' +
+								this.points + '</td>';				
+			
+				aHTML[++h] = '<td style="width:23px;text-align:right;" id="tdElementOption_delete-' + this.id + 
+								'" class="interfaceMainRowOptionsDelete"></td>';
+			
+				aHTML[++h] = '</tr>'
+			});
+    	}
+
+		aHTML[++h] = '</tbody></table>';
+
+		$('#tdInterfaceMainSetupStructureElementAddOptionsValue').html(aHTML.join(''));
+		
+		$('#spanInterfaceElementOptionAdd').button({
+				text: false,
+				 icons: {
+					 primary: "ui-icon-plus"
+				}
+			})
+			.click(function() {
+				interfaceSetupElementOptionAdd()
+			})
+			.css('width', '15px')
+			.css('height', '20px')	
+		
+		$('td.interfaceElementOption').click(function(event)
+		{
+			interfaceSetupElementEditStart(event.target.id);
+		});
+	
+		$('.interfaceMainRowOptionsDelete').button(
+			{
+				text: false,
+				 icons: {
+					 primary: "ui-icon-close"
+				}
+			})
+			.click(function() {
+				interfaceSetupElementOptionRemove(this.id)
+			})
+			.css('width', '15px')
+			.css('height', '20px')
+	}	
+}
+
+function interfaceSetupElementOptionAdd()
+{
+	var aHTML = [];
+	var h = -1;
+		
+	aHTML[++h] = '<tr class="interfaceMainRow">';
+						
+	aHTML[++h] = '<td id="tdElementOption-" class="interfaceMainRow interfaceElementOption"></td>';
+	
+	aHTML[++h] = '<td style="width:23px;text-align:right;" id="tdElementOption_delete-' + 
+					'" class="interfaceMainRowOptionsDelete"></td>';
+	
+	aHTML[++h] = '</tr>'
+			
+	$('#tableInterfaceElementOption tr:first').after(aHTML.join(''));	
+	$('#spanInterfaceMasterViewportControlNew').button({disabled: true});
+	$('#spanInterfaceElementOptionAdd').button({disabled: true});
+	
+	interfaceSetupElementOptionEditStart("tdElementOption-")
+}
+
+function interfaceSetupElementOptionRemove(sXHTMLElementId)
+{
+	var aSearch = sXHTMLElementId.split('-');
+	var sElementId = aSearch[0];
+	var sSearchContext = aSearch[1];
+	
+	if (confirm('Are you sure?'))
+	{
+		var aMethod = gsSetupMethod.split('_');
+		var sEndpoint = aMethod[0];
+		var sParam = '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_OPTION_MANAGE&remove=1';
+		var sData = 'id=' + sSearchContext;
+					
+		$.ajax(
+			{
+				type: 'POST',
+				url: sParam,
+				data: sData,
+				dataType: 'text',
+				success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
+			});
+	}
+}
+
+function interfaceSetupElementOptionEditStart(sElementId)
+{
+	var aSearch = sElementId.split('-');
+	var sActionElementId = '#' + aSearch[0] + '-options-' + aSearch[2];
+
+	var sHTML = $('#' + sElementId).html();
+	
+	var sElementInputId = sElementId.replace('td', 'input');
+	
+	sHTML = '<input style="width:300px;" onDemandType="TEXT" id="' + sElementInputId + '" class="inputInterfaceMainValue" ' +
+							'value="' + sHTML + '">'
+	
+	$('#' + sElementId).html(sHTML);
+	$('#' + sElementInputId).focus();
+	
+	$('#' + sElementInputId).blur(function(event)
+	{
+		interfaceSetupElementOptionEditStop(sElementId);
+	});
+}
+
+function interfaceSetupElementOptionEditStop(sElementId)
+{
+	
+	interfaceSetupElementOptionEditSave(sElementId);
+	
+	var aSearch = sElementId.split('-');
+	var sHTML = $('#' + sElementId.replace('td', 'input')).val();
+
+	$('#' + sElementId).html(sHTML);
+
+}
+
+function interfaceSetupElementOptionEditSave(sElementId)
+{
+	var aMethod = gsSetupMethod.split('_');
+	var sEndpoint = aMethod[0];
+	var aElement = sElementId.split('-');
+	var sParam = '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_OPTION_MANAGE'
+	
+	var sData = 'id=' + aElement[1];
+	sData += '&element=' + $('#tableInterfaceElementOption').attr('data-structureElement');
+	sData += '&title=' + $('#' + sElementId.replace('td', 'input')).val();
+	
+	if (aElement[1] == '' && $('#' + sElementId.replace('td', 'input')).val() == '')
+	{
+		$('#tableInterfaceElementOption tr:first').next().fadeOut(500);	
+		$('#spanInterfaceMasterViewportControlNew').button({disabled: false});
+		$('#spanInterfaceElementOptionAdd').button({disabled: false});
+	}
+	else
+	{
+		$.ajax(
+		{
+			type: 'POST',
+			url: sParam,
+			data: sData,
+			dataType: 'text',
+			success: function(data) 
+					{
+						var aReturn = data.split('|');
+						if (aReturn[2] == 'ADDED')
+						{
+							$('#tdElementOption-').attr('id','tdElementOption-' + aReturn[3]);
+							
+							$('td.interfaceElementOption').unbind('click');
+								
+							$('td.interfaceElementOption').click(function(event)
+								{
+									interfaceSetupElementOptionEditStart(event.target.id);
+								});
+
+							$('#tdElementOption_delete-').attr('id','tdElementOption_delete-' + aReturn[3]);
+							
+							$('.interfaceMainRowOptionsDelete').button({
+									text: false,
+									 icons: {
+										 primary: "ui-icon-close"
+									}
+								})
+								.click(function() {
+									interfaceSetupElementOptionRemove(this.id)
+								})
+								.css('width', '15px')
+								.css('height', '20px')
+						}
+						interfaceMasterStatus('Saved')
+						$('#spanInterfaceMasterViewportControlNew').button({disabled: false});
+						$('#spanInterfaceElementOptionAdd').button({disabled: false});
+					}
+		});
+	}			
 }
