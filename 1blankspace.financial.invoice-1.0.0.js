@@ -889,3 +889,105 @@ function interfaceFinancialInvoiceItems(aParam, oResponse)
 		}
 	}	
 }
+
+function interfaceMasterFinanicalInvoiceItemAdd(aParam, oResponse)
+{
+	var iStep = 1;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.step != undefined) {iStep = aParam.step}	
+	}
+	
+	if (oResponse == undefined)
+	{
+		if (iStep == 1)
+		{
+			var aHTML = [];
+			var h = -1;
+					
+			aHTML[++h] = '<table id="tableInterfaceMainInvoiceItemAddColumn2" class="interfaceMain">';
+	
+			aHTML[++h] = '<tr id="trInterfaceMainInvoiceItemAddReference" class="interfaceMain">' +
+							'<td id="tdInterfaceMainInvoiceItemAddReference" class="interfaceMain">' +
+							'Account' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainInvoiceItemAddReferenceValue" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainInvoiceItemAddReferenceValue" class="interfaceMainText">' +
+							'<input id="inputInterfaceMainInvoiceItemAddReference" class="inputInterfaceMainText">' +
+							'</td></tr>';
+			
+			aHTML[++h] = '<tr id="trInterfaceMainInvoiceItemAdd" class="interfaceMain">' +
+							'<td id="tdInterfaceMainInvoiceItemAddSearch" class="interfaceMain">' +
+							'<span id="spanInterfaceMainInvoiceItemAddSearch">Search</span>' +
+							'</td></tr>';
+			
+			aHTML[++h] = '<tr id="trInterfaceMainInvoiceItemAdd" class="interfaceMain">' +
+							'<td id="tdInterfaceMainInvoiceItemAddSearchResults" class="interfaceMain">' +
+							'Enter a code or title and click search.' +
+							'</td></tr>';
+											
+			aHTML[++h] = '</tbody></table>';		
+			
+			$('#tdInterfaceMainItemColumn2').html(aHTML.join(''));
+
+			$('#spanInterfaceMainInvoiceItemAddSearch').button(
+				{
+					label: "Search"
+				})
+				.click(function() {
+					interfaceMasterFinanicalInvoiceItemAdd($.extend(true, aParam, {step: 2}))
+				})
+				.css('width', '75px')
+		}
+		if (iStep == 2)
+		{
+			var sParam = 'method=SETEP_FINANCIAL_ITEM_SEARCH&title=' + $('inputInterfaceMainInvoiceItemAddReference').val();
+			sParam += '&includeimage=1';
+	
+			$.ajax(
+			{
+				type: 'GET',
+				url: '/ondemand/setup/?' + sParam,
+				dataType: 'json',
+				success: function(data){interfaceMasterFinanicalInvoiceItemAdd($.extend(true, aParam, {step:3}), data)}
+			});	
+		}
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+
+		if (oResponse.data.rows.length == 0)	
+		{
+			aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceActions">';
+			aHTML[++h] = '<td class="interfaceMainRowNothing">No accounts.</td>';
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</tbody></table>';
+
+			$('#tdInterfaceMainOrderProductsColumn1').html(aHTML.join(''));		
+		}
+		else
+		{	
+			$.each(oResponse.data.rows, function() 
+			{ 
+				aHTML[++h] = '<tr class="interfaceMainRow">';	
+							
+				aHTML[++h] = '<td id="tdInvoiceItems_title-' + this.id + '" class="interfaceMainRow">' +
+										this.reference + '</td>';
+														
+				aHTML[++h] = '</tr>';	
+
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+
+			$('#tdInterfaceMainInvoiceItemAddSearchResults').html(aHTML.join(''))
+			
+			//bind rows to add product to order column 1
+		}
+	}	
+}
