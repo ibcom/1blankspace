@@ -231,15 +231,15 @@ function interfaceControlOptions()
 					'</td></tr>';
 		
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlProduct" class="interfaceViewportMasterControl">' +
-					'<td id="tdInterfaceViewportMasterControlProduct" class="interfaceViewportMasterControl version2">' +
-					'<span id="spanInterfaceViewportMasterControlProduct" class="interfaceViewportMasterControl version2">' +
+					'<td id="tdInterfaceViewportMasterControlProduct" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlProduct" class="interfaceViewportMasterControl">' +
 					'Products</span>' +
 					'</td>' +
 					'</tr>'
 	
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlOrder" class="interfaceViewportMasterControl">' +
-					'<td id="tdInterfaceViewportMasterControlOrder" class="interfaceViewportMasterControl version2">' +
-					'<span id="spanInterfaceViewportMasterControlOrder" class="interfaceViewportMasterControl version2">' +
+					'<td id="tdInterfaceViewportMasterControlOrder" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlOrder" class="interfaceViewportMasterControl">' +
 					'Orders</span>' +
 					'</td></tr>';
 					

@@ -1,4 +1,4 @@
-function interfaceOrderMasterViewport(aParam)
+mailingaddressfunction interfaceOrderMasterViewport(aParam)
 {
 	var bShowHome = true
 	
@@ -218,9 +218,9 @@ function interfaceOrderSearch(sXHTMLElementId, aParam)
 		
 		oSearch.addField('reference,orderbybusinesstext,orderbybusiness,orderbypersontext,orderbyperson,billtobusinesstext,billtobusiness,billtoperson,' +
 							'salespersontext,salesperson,projecttext,project,areatext,area,' +
-							'purchaseorder,orderdate,deliverydate,statustext,status,processingstatustext,processingstatus,sourcetext,source,' +
-							'notes,deliveryaddresscombined,deliveryaddress1,deliveryaddress2,deliverysuburb,deliverystate,deliverypostcode,deliverycountry,' +
-							'billingaddresscombined,billingaddress1,billingaddress2,billingsuburb,billingstate,billingpostcode,billingcountry,' +
+							'purchaseorder,orderdate,streetdate,statustext,status,processingstatustext,processingstatus,sourcetext,source,' +
+							'notes,streetaddresscombined,streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
+							'mailingaddresscombined,mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,' +
 							'createdusertext,createduser,createddate,modifiedusertext,modifieduser,modifieddate');
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
@@ -251,14 +251,7 @@ function interfaceOrderSearch(sXHTMLElementId, aParam)
 			var oSearch = new AdvancedSearch();
 			oSearch.endPoint = 'product';
 			oSearch.method = 'PRODUCT_ORDER_SEARCH';
-			
-			oSearch.addField('reference,orderbybusinesstext,orderbybusiness,orderbypersontext,orderbyerson,billtobusinesstext,billtobusiness,billtoperson,' +
-								'salespersontext,salesperson,projecttext,project,areatext,area,' +
-								'purchaseorder,orderdate,deliverydate,statustext,status,processingstatustext,processingstatus,sourcetext,source,' +
-								'notes,deliveryaddresscombined,deliveryaddress1,deliveryaddress2,deliverysuburb,deliverystate,deliverypostcode,deliverycountry,' +
-								'billingaddresscombined,billingaddress1,billingaddress2,billingsuburb,billingstate,billingpostcode,billingcountry,' +
-								'createdusertext,createduser,createddate,modifiedusertext,modifieduser,modifieddate');
-			
+			oSearch.addField('reference,orderbybusinesstext');
 			oSearch.rf = 'json';
 			oSearch.addFilter('reference', 'STRING_IS_LIKE', sSearchText);
 					
@@ -565,9 +558,9 @@ function interfaceOrderSummary()
 						goObjectContext.orderdate +
 						'</td></tr>';
 						
-		if (goObjectContext.deliverydate != '')
+		if (goObjectContext.Deliverydate != '')
 		{				
-			var dDeliveryDate = new Date(goObjectContext.deliverydate);
+			var dDeliveryDate = new Date(goObjectContext.Deliverydate);
 			
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDeliveryDate" class="interfaceMainSummary">Delivery Date</td></tr>' +
 							'<tr><td id="tdInterfaceMainSummaryDeliveryDateValue" class="interfaceMainSummaryValue">' +
@@ -1251,7 +1244,7 @@ function interfaceOrderDeliveryPick(aParam, oResponse)
 
 	if (oReponse == undefined)
 	{
-		var sParam = 'method=PRODUCT_ORDER_DELIVERY_PRODUCT_SEARCH&order=' + giObjectContext;
+		var sParam = 'method=PRODUCT_ORDER_Delivery_PRODUCT_SEARCH&order=' + giObjectContext;
 		
 		$.ajax(
 		{
@@ -1283,20 +1276,20 @@ function interfaceOrderDeliveryPick(aParam, oResponse)
 		
 		aHTML[++h] = '<table id="tableInterfaceMainOrderDeliveryPickColumn2" class="interfaceMainColumn2">';
 		
-		aHTML[++h] = '<tr><td id="tdInterfaceMainOrderDeliveryPickPrint" class="interfaceMainAction">' +
-						'<span id="spanInterfaceMainOrderDeliveryPickPrint">Print</span>' +
+		aHTML[++h] = '<tr><td id="tdInterfaceMainOrderstreetPickPrint" class="interfaceMainAction">' +
+						'<span id="spanInterfaceMainOrderstreetPickPrint">Print</span>' +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainOrderDeliveryPickColumn2').html(aHTML.join(''));
+		$('#tdInterfaceMainOrderstreetPickColumn2').html(aHTML.join(''));
 		
-		$('#spanInterfaceMainOrderDeliveryPickPrint').button(
+		$('#spanInterfaceMainOrderstreetPickPrint').button(
 		{
 			label: "Print"
 		})
 		.click(function() {
-			alert("Show delivery docket");
+			alert("Show street docket");
 			/* interfaceContactPersonMasterViewport({
 				showHome: false,
 				contactBusiness: giObjectContext,
@@ -1312,70 +1305,70 @@ function interfaceOrderDeliveryPick(aParam, oResponse)
 		{
 			aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
 			aHTML[++h] = '<tbody>'
-			aHTML[++h] = '<tr class="interfaceOrderDeliveryPick">';
+			aHTML[++h] = '<tr class="interfaceOrderstreetPick">';
 			aHTML[++h] = '<td class="interfaceMainRowNothing">Nothing to pick.</td>';
 			aHTML[++h] = '</tr>';
 			aHTML[++h] = '</tbody></table>';
 
-			$('#tdInterfaceMaiOrderDeliveryPickColumn1').html(aHTML.join(''));	
+			$('#tdInterfaceMaiOrderstreetPickColumn1').html(aHTML.join(''));	
 		}
 		else
 		{
-			aHTML[++h] = '<table id="tableOrderDeliveryPick" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<table id="tableOrderstreetPick" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
 			aHTML[++h] = '<td class="interfaceMainCaption">Product</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Quantity Ordered</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Already Delivered</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">This Delivery</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">This street</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
 			aHTML[++h] = '</tr>';
 				
 			$.each(oResponse.data.rows, function() 
 			{ 
-				aHTML[++h] = interfaceOrderDeliveryPickRow(this);
+				aHTML[++h] = interfaceOrderstreetPickRow(this);
 			});
 			
 			aHTML[++h] = '</tbody></table>';
 
 			interfaceMasterPaginationList(
 			{
-				xhtmlElementID: 'tdInterfaceMainOrderDeliveryPickColumn1',
-				xhtmlContext: 'OrderDeliveryPick',
+				xhtmlElementID: 'tdInterfaceMainOrderstreetPickColumn1',
+				xhtmlContext: 'OrderstreetPick',
 				xhtml: aHTML.join(''),
 				showMore: ($(oRoot).attr('morerows') == "true"),
 				more: $(oRoot).attr('moreid'),
 				rows: giReturnRows,
-				functionShowRow: interfaceOrderDeliveryPickRow,
+				functionShowRow: interfaceOrderstreetPickRow,
 				type: 'json'
 			}); 	
 		}
 	}	
 }	
 
-function interfaceOrderDeliveryPickRow(oRow)
+function interfaceOrderstreetPickRow(oRow)
 {
 	var aHTML = [];
 	var h = -1;
 	
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 							
-	aHTML[++h] = '<td id="tdOrderDeliveryPick_title-' + oRow.id + '" class="interfaceMainRow">' +
+	aHTML[++h] = '<td id="tdOrderstreetPick_title-' + oRow.id + '" class="interfaceMainRow">' +
 							oRow.producttext + '</td>';
 							
-	aHTML[++h] = '<td id="tdOrderDeliveryPick_quantity-' + oRow.id + '" class="interfaceMainRow"' +
+	aHTML[++h] = '<td id="tdOrderstreetPick_quantity-' + oRow.id + '" class="interfaceMainRow"' +
 							' style="text-align:right;">' +
 							oRow.quantityordered + '</td>';						
 								
-	aHTML[++h] = '<td id="tdOrderDeliveryPick_price-' + oRow.id + '" class="interfaceMainRow"' +
+	aHTML[++h] = '<td id="tdOrderstreetPick_price-' + oRow.id + '" class="interfaceMainRow"' +
 							' style="text-align:right;">' +
 							oRow.quantityalreadydelivered + '</td>';	
 
-	aHTML[++h] = '<td id="tdOrderDeliveryPick_totalprice-' + oRow.id + '" class="interfaceMainRow"' +
+	aHTML[++h] = '<td id="tdOrderstreetPick_totalprice-' + oRow.id + '" class="interfaceMainRow"' +
 							' style="text-align:right;">' +
-							oRow.quantitythisdelivery + '</td>';						
+							oRow.quantitythisstreet + '</td>';						
 														
-	aHTML[++h] = '<td id="tdOrderDeliveryPick-' + oRow.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
+	aHTML[++h] = '<td id="tdOrderstreetPick-' + oRow.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
 							
 	aHTML[++h] = '</tr>';	
 	

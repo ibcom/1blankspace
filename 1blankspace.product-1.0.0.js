@@ -213,7 +213,10 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_SEARCH';
-		oSearch.addField('reference,title,trackinventory,status,statustext,description,quantity,quantitytype,quantitytypetext,category,currentretailprice');
+		//oSearch.addField('reference,title,trackinventory,status,statustext,description,quantity,quantitytype,quantitytypetext,category,currentretailprice');
+		oSearch.addField('reference,title,trackinventory,status,statustext,description,' +
+							'unittype,unittypetext,category,categorytext,currentretailprice');
+		
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 		oSearch.getResults(function(data){interfaceProductShow(aParam, data)});
@@ -457,7 +460,8 @@ function interfaceProductShow(aParam, oResponse)
 		goObjectContext = oResponse.data.rows[0];
 				
 		$('#divInterfaceViewportControlContext').html(goObjectContext.title +
-				'<br /><span id="spanInterfaceViewportControlSubContext">' + goObjectContext.price + '</span>');
+				'<br /><span id="spanInterfaceViewportControlSubContext">' + goObjectContext.categorytext + '</span>' +
+				'<br /><span id="spanInterfaceViewportControlSubContext">' + goObjectContext.currentretailprice + '</span>');
 		
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
@@ -529,11 +533,11 @@ function interfaceProductSummary()
 		if (goObjectContext.imageurl != '')
 		{	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryImage class="interfaceMainColumn2Action">' +
-						'<img border=0 src="' + onDemandXMLGetData(oRow, 'imageurl') + '">' +
+						'<img border=0 src="' + goObjectContext.imageurl + '">' +
 						'</td></tr>';
 		}						
 						
-		if (false && onDemandXMLGetData(oRow, 'trackinventory') != 'Y')
+		if (false && goObjectContext.trackinventory != 'Y')
 		{	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAdjustStock" class="interfaceMainColumn2Action">' +
 						'<a href="#" id="aInterfaceMainSummaryAdjustStock">Adjust&nbsp;Stock</a>' +
