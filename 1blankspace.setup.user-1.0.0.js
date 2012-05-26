@@ -1,3 +1,5 @@
+//Ability to assign secuity rights.
+
 function interfaceSetupUserMasterViewport()
 {
 	gsObjectName = 'Users';
