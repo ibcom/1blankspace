@@ -918,7 +918,7 @@ function interfaceOrderProducts(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/order/?' + sParam,
+			url: '/ondemand/product/?' + sParam,
 			dataType: 'json',
 			success: function(data){interfaceOrderProducts(aParam, data)}
 		});
@@ -958,12 +958,7 @@ function interfaceOrderProducts(aParam, oResponse)
 			label: "Add"
 		})
 		.click(function() {
-			alert("Add product");
-			/* interfaceContactPersonMasterViewport({
-				showHome: false,
-				contactBusiness: giObjectContext,
-				contactBusinessText: gsContactBusinessText,
-				showNew: true}); */
+			interfaceOrderProductsAdd()
 		})
 		.css('width', '75px')
 		
@@ -983,7 +978,6 @@ function interfaceOrderProducts(aParam, oResponse)
 		}
 		else
 		{
-		
 			aHTML[++h] = '<table id="tableOrderProductsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
@@ -1079,6 +1073,108 @@ function interfaceOrderProductsBind()
 	.css('height', '20px')
 	
 }	
+
+function interfaceOrderProductsAdd(aParam, oResponse)
+{
+	var iStep = 1;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.step != undefined) {iStep = aParam.step}	
+	}
+	
+	if (oResponse == undefined)
+	{
+		if (iStep == 1)
+		{
+			var aHTML = [];
+			var h = -1;
+					
+			aHTML[++h] = '<table id="tableInterfaceMainProductAddColumn2" class="interfaceMain">';
+	
+			aHTML[++h] = '<tr id="trInterfaceMainProductAddReference" class="interfaceMain">' +
+							'<td id="tdInterfaceMainProductAddReference" class="interfaceMain">' +
+							'Reference' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainProductAddReferenceValue" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainProductAddReferenceValue" class="interfaceMainText">' +
+							'<input id="inputInterfaceMainProductAddReference" class="inputInterfaceMainText">' +
+							'</td></tr>';
+			
+			aHTML[++h] = '<tr id="trInterfaceMainProductAdd" class="interfaceMain">' +
+							'<td id="tdInterfaceMainProductAddSearch" class="interfaceMain">' +
+							'<span id="spanInterfaceMainOrderProductsAddSearch">Search</span>' +
+							'</td></tr>';
+			
+			aHTML[++h] = '<tr id="trInterfaceMainProductAdd" class="interfaceMain">' +
+							'<td id="tdInterfaceMainProductAddSearchResults" class="interfaceMain">' +
+							'Enter a reference and click search.' +
+							'</td></tr>';
+											
+			aHTML[++h] = '</tbody></table>';		
+			
+			$('#tdInterfaceMainOrderProductsColumn2').html(aHTML.join(''));
+
+			$('#spanInterfaceMainOrderProductsAdd').button(
+				{
+					label: "Add"
+				})
+				.click(function() {
+					interfaceOrderProductsAdd($.extend(true, aParam, {step: 2}))
+				})
+				.css('width', '75px')
+		}
+		if (iStep == 2)
+		{
+			var sParam = 'method=PRODUCT_SEARCH&title=' + $('inputInterfaceMainProductAddReference').val();
+			sParam += '&includeimage=1';
+	
+			$.ajax(
+			{
+				type: 'GET',
+				url: '/ondemand/product/?' + sParam,
+				dataType: 'json',
+				success: function(data){interfaceOrderProductsAdd($.extend(true, aParam, {step:3}), data)}
+			});	
+		}
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+
+		if (oResponse.data.rows.length == 0)	
+		{
+			aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceActions">';
+			aHTML[++h] = '<td class="interfaceMainRowNothing">No products.</td>';
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</tbody></table>';
+
+			$('#tdInterfaceMainOrderProductsColumn1').html(aHTML.join(''));		
+		}
+		else
+		{	
+			$.each(oResponse.data.rows, function() 
+			{ 
+				aHTML[++h] = '<tr class="interfaceMainRow">';	
+							
+				aHTML[++h] = '<td id="tdOrderProducts_title-' + this.id + '" class="interfaceMainRow">' +
+										this.title + '</td>';
+														
+				aHTML[++h] = '</tr>';	
+
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+
+			$('#tdInterfaceMainProductAddSearchResults').html(aHTML.join(''))
+			
+			//bind rows to add product to order column 1
+		}
+	}	
+}
 
 function interfaceOrderNew()
 {
