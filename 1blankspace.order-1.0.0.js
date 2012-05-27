@@ -370,6 +370,7 @@ function interfaceOrderViewport()
 					'<td id="tdInterfaceViewportControlInvoices" class="interfaceViewportControl">Invoices</td>' +
 					'</tr>';
 					
+	/*
 	aHTML[++h] = '<tr id="trInterfaceViewportControlCredits" class="interfaceViewportControl">' +
 					'<td id="tdInterfaceViewportControlCredits" class="interfaceViewportControl">Credits</td>' +
 					'</tr>';
@@ -377,6 +378,7 @@ function interfaceOrderViewport()
 	aHTML[++h] = '<tr id="trInterfaceViewportControlSupplierOrders" class="interfaceViewportControl">' +
 					'<td id="tdInterfaceViewportControlSupplierOrders" class="interfaceViewportControl">Supplier Orders</td>' +
 					'</tr>';
+	*/
 					
 	aHTML[++h] = '</table>';					
 	
@@ -1491,19 +1493,6 @@ function interfaceOrderInvoices(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var oSearch = new AdvancedSearch();
-		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-		oSearch.addField('senttobusinesstext,senttobusiness,senttopersontext,senttoperson,projecttext,project,areatext,' +
-							'area,reference,purchaseorder,sentdate,duedate,description,amount,gst,sent');
-		oSearch.rf = 'json';
-		oSearch.rows = 2
-		oSearch.addFilter('object', 'EQUAL_TO', 43);
-		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
-		
-		oSearch.getResults(function(data) {interfaceOrderInvoices(aParam, data)});	
-	}
-	else
-	{
 		var aHTML = [];
 		var h = -1;
 		
@@ -1538,14 +1527,21 @@ function interfaceOrderInvoices(aParam, oResponse)
 		})
 		.click(function() {
 			alert("Add Invoice");
-			/* interfaceContactPersonMasterViewport({
-				showHome: false,
-				contactBusiness: giObjectContext,
-				contactBusinessText: gsContactBusinessText,
-				showNew: true}); */
 		})
 		.css('width', '75px')
 		
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+		oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,' +
+							'projecttext,project,areatext,area,' +
+							'reference,purchaseorder,sentdate,duedate,description,amount,tax,sent');
+		oSearch.addFilter('object', 'EQUAL_TO', 43);
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
+		
+		oSearch.getResults(function(data) {interfaceOrderInvoices(aParam, data)});	
+	}
+	else
+	{	
 		var aHTML = [];
 		var h = -1;
 			
@@ -1554,7 +1550,7 @@ function interfaceOrderInvoices(aParam, oResponse)
 			aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceOrderInvoicesPick">';
-			aHTML[++h] = '<td class="interfaceMainRowNothing">No invoices</td>';
+			aHTML[++h] = '<td class="interfaceMainRowNothing">No invoices for this order.</td>';
 			aHTML[++h] = '</tr>';
 			aHTML[++h] = '</tbody></table>';
 
@@ -1562,7 +1558,6 @@ function interfaceOrderInvoices(aParam, oResponse)
 		}
 		else
 		{
-		
 			aHTML[++h] = '<table id="tableOrderOrderInvoices" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
@@ -1584,8 +1579,8 @@ function interfaceOrderInvoices(aParam, oResponse)
 				xhtmlElementID: 'tdInterfaceMainOrderInvoicesColumn1',
 				xhtmlContext: 'OrderInvoices',
 				xhtml: aHTML.join(''),
-				showMore: ($(oRoot).attr('morerows') == "true"),
-				more: $(oRoot).attr('moreid'),
+				showMore: (oResponse.morerows == "true"),
+				more: oResponse.moreid,
 				rows: giReturnRows,
 				functionShowRow: interfaceOrderInvoicesRow,
 				type: 'json'
