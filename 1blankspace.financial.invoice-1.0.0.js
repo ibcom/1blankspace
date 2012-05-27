@@ -131,13 +131,9 @@ function interfaceFinancialInvoiceHomeShow(oResponse)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-		
 		oSearch.addField('reference,description,contactbusinesssenttotext,contactpersonsenttotext');
-		oSearch.async = false;
-		oSearch.rf = 'json';
 		oSearch.rows = 10;
 		oSearch.sort('modifieddate', 'desc');
-		
 		oSearch.getResults(interfaceFinancialInvoiceHomeShow);
 	}
 	else
@@ -328,8 +324,8 @@ function interfaceFinancialInvoiceViewport()
 					'<td id="tdInterfaceViewportControlContacts" class="interfaceViewportControl">Contacts</td>' +
 					'</tr>';
 		
-	aHTML[++h] = '<tr id="trInterfaceViewportControlItems" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlItems" class="interfaceViewportControl">Items</td>' +
+	aHTML[++h] = '<tr id="trInterfaceViewportControlItem" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlItem" class="interfaceViewportControl">Items</td>' +
 					'</tr>';
 	
 	aHTML[++h] = '</table>';					
@@ -375,7 +371,7 @@ function interfaceFinancialInvoiceViewport()
 	aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainContacts" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainItems" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainItem" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainCredits" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainReceipts" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainGL" class="divInterfaceViewportMain"></div>';
@@ -404,20 +400,20 @@ function interfaceFinancialInvoiceViewport()
 	
 	$('#tdInterfaceViewportControlItems').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainItems", true);
-		interfaceFinancialInvoiceItems();
+		interfaceMasterMainViewportShow("#divInterfaceMainItem", true);
+		interfaceFinancialInvoiceItem();
 	});
 	
 	$('#tdInterfaceViewportControlCredits').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainCredits", true);
-		interfaceFinancialInvoiceCredits();
+		interfaceFinancialInvoiceCredit();
 	});
 	
 	$('#tdInterfaceViewportControlReceipts').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainReceipts", true);
-		interfaceFinancialInvoiceReceipts();
+		interfaceFinancialInvoiceReceipt();
 	});
 	
 	$('#tdInterfaceViewportControlGL').click(function(event)
@@ -630,7 +626,7 @@ function interfaceFinancialInvoiceDetails()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsDueDateValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainDetailsDueDateValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainDetailsDueDate" class="inputInterfaceMainDateTime">' +
+						'<input id="inputInterfaceMainDetailsDueDate" class="inputInterfaceMainDate">' +
 						'</td></tr>';				
 			
 		aHTML[++h] = '</table>';					
@@ -727,10 +723,10 @@ function interfaceFinancialInvoiceNew(aParam)
 	interfaceFinancialInvoiceDetails();
 }
 
-function interfaceFinancialInvoiceItems(aParam, oResponse)
+function interfaceFinancialInvoiceItem(aParam, oResponse)
 {
 	var iObjectContext = giObjectContext;
-	var sXHTMLElementId = 'divInterfaceMainItems';
+	var sXHTMLElementId = 'divInterfaceMainItem';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
@@ -744,33 +740,24 @@ function interfaceFinancialInvoiceItems(aParam, oResponse)
 		
 	if (oResponse == undefined)
 	{	
-		var oSearch = new AdvancedSearch();
-		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-		oSearch.addField('invoice.lineitem.financialaccounttext,invoice.lineitem.tax,invoice.lineitem.amount');
-		oSearch.addFilter('id', 'EQUAL_TO', iObjectContext);
-		oSearch.rows = 10;
-		//oSearch.sort('lineitem.financialaccounttext', 'asc');
+		var aHTML = [];
+		var h = -1;	
+					
+		aHTML[++h] = '<table id="tableInterfaceMainItem" class="interfaceMain">' +
+					'<tr id="trInterfaceMainItemRow1" class="interfaceMainRow1">' +
+					'<td id="tdInterfaceMainItemColumn1" class="interfaceMainColumn1Large">' +
+					gsLoadingXHTML +
+					'</td>' +
+					'<td id="tdInterfaceMainItemColumn2" class="interfaceMainColumn2Action">' +
+					'</td>' +
+					'</tr>' +
+					'</table>';					
+			
+		$('#' + sXHTMLElementId).html(aHTML.join(''));
 		
-		oSearch.getResults(function(data) {interfaceFinancialInvoiceItems(aParam, data)});
-	}
-	else
-	{
 		if (oActions != undefined)
 		{
-			var aHTML = [];
-			var h = -1;	
-						
-			aHTML[++h] = '<table id="tableInterfaceMainItem" class="interfaceMain">' +
-						'<tr id="trInterfaceMainItemRow1" class="interfaceMainRow1">' +
-						'<td id="tdInterfaceMainItemColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
-						'</td>' +
-						'<td id="tdInterfaceMainItemColumn2" class="interfaceMainColumn2Action">' +
-						'</td>' +
-						'</tr>' +
-						'</table>';					
 				
-			$('#' + sXHTMLElementId).html(aHTML.join(''));
 			sXHTMLElementId = 'tdInterfaceMainItemColumn1';
 			
 			var aHTML = [];
@@ -797,8 +784,19 @@ function interfaceFinancialInvoiceItems(aParam, oResponse)
 				 interfaceMasterFinanicalInvoiceItemAdd(aParam);
 			})
 			
-		}	
-	
+		}
+		
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+		oSearch.addField('financialaccounttext,tax,issuedamount');
+		oSearch.addFilter('id', 'EQUAL_TO', iObjectContext);
+		oSearch.rows = 10;
+		oSearch.sort('financialaccounttext', 'asc');
+		
+		oSearch.getResults(function(data) {interfaceFinancialInvoiceItems(aParam, data)});
+	}
+	else
+	{
 		var aHTML = [];
 		var h = -1;
 		
@@ -811,7 +809,6 @@ function interfaceFinancialInvoiceItems(aParam, oResponse)
 			aHTML[++h] = '</tbody></table>';
 
 			$('#' + sXHTMLElementId).html(aHTML.join(''));
-		
 		}
 		else
 		{
@@ -829,24 +826,24 @@ function interfaceFinancialInvoiceItems(aParam, oResponse)
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 								
 				aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
-										this["invoice.lineitem.financialaccounttext"] + '</td>';
+										this["financialaccounttext"] + '</td>';
 										
 				aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
-										this["invoice.lineitem.tax"] + '</td>';
+										this["tax"] + '</td>';
 										
 				aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
-										this["invoice.lineitem.amount"] + '</td>';
+										this["issuedamount"] + '</td>';
 										
 				aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
 					
 				if (oOptions.remove)
 				{	
-					aHTML[++h] = '<span id="spanWebsiteURL_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+					aHTML[++h] = '<span id="spanInvoiceItem_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
 				};	
 					
 				if (oOptions.view)
 				{	
-					aHTML[++h] = '<span id="spanWebsiteURL_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+					aHTML[++h] = '<span id="spanInvoiceItem_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
 				};	
 					
 				aHTML[++h] = '</td>';				
@@ -866,7 +863,7 @@ function interfaceFinancialInvoiceItems(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterWebsiteURLsRemove({xhtmlElementID: this.id});
+					interfaceMasterInvoiceItemRemove({xhtmlElementID: this.id});
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -881,7 +878,7 @@ function interfaceFinancialInvoiceItems(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterWebsiteURLsAdd({xhtmlElementID: this.id})
+					interfaceMasterInvoiceItemAdd({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
 				.css('height', '17px')
