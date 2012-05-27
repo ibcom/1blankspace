@@ -349,9 +349,11 @@ function interfaceOrderViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
+	/*
 	aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
 					'<td id="tdInterfaceViewportControlStatus" class="interfaceViewportControl">Status</td>' +
 					'</tr>';
+	*/				
 	
 	aHTML[++h] = '<tr id="trInterfaceViewportControlDelivery" class="interfaceViewportControl">' +
 					'<td id="tdInterfaceViewportControlDelivery" class="interfaceViewportControl">Deliveries</td>' +
