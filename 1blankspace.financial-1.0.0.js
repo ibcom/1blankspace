@@ -861,3 +861,73 @@ function interfaceFinancialUnallocatedRow(oRow)
 	
 }
 
+function interfaceFinancialTransaction(aParam, oResponse)
+{
+	var iObject = giObject;
+	var iObjectContext = giObjectContext;
+	var sXHTMLElementId = 'divInterfaceMainTransaction';
+
+	if (aParam != undefined)
+	{
+		if (aParam.object != undefined) {iObject = aParam.object}
+		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
+		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+	}		
+		
+	if (oResponse == undefined)
+	{			
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
+		oSearch.addField('financialaccounttext,amount');
+		oSearch.addFilter('object', 'EQUAL_TO', giObject);
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
+		oSearch.sort('financialaccounttext', 'asc');
+		
+		oSearch.getResults(function(data) {interfaceFinancialTransaction(aParam, data)});
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableFinancialTransaction" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">' +
+							'<td class="interfaceMainRowNothing">No financial transactions.</td></tr>';
+			aHTML[++h] = '</tbody></table>';
+
+			$('#' + sXHTMLElementId).html(aHTML.join(''));
+		}
+		else
+		{
+			aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Financial Account</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			$.each(oResponse.data.rows, function()
+			{
+				aHTML[++h] = '<tr class="interfaceMainRow">';
+								
+				aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
+										this.financialaccounttext + '</td>';
+										
+				aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
+										this.amount + '</td>';
+										
+				aHTML[++h] = '</td>';				
+				aHTML[++h] = '</tr>';
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+
+			$('#' + sXHTMLElementId).html(aHTML.join(''));
+			
+		}
+	}	
+}

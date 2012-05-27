@@ -312,53 +312,60 @@ function interfaceFinancialInvoiceViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-					'</tr>';
+	if (giObjectContext == -1)
+	{
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
+						'</tr>';
+	}
+	else
+	{	
+		aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-					'</tr>';
-	
-	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlContacts" class="interfaceViewportControl">Contacts</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
+						'</tr>';
 		
-	aHTML[++h] = '<tr id="trInterfaceViewportControlItem" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlItem" class="interfaceViewportControl">Items</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControlItem" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlItem" class="interfaceViewportControl">Items</td>' +
+						'</tr>';
 	
-	aHTML[++h] = '</table>';					
+		aHTML[++h] = '</table>';					
 	
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControlCredits" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlCredits" class="interfaceViewportControl">Credits</td>' +
-					'</tr>';
+		/*
+		aHTML[++h] = '<tr id="trInterfaceViewportControlCredits" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlCredits" class="interfaceViewportControl">Credits</td>' +
+						'</tr>';
+		*/
 					
-	aHTML[++h] = '<tr id="trInterfaceViewportControlReceipts" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlReceipts" class="interfaceViewportControl">Receipts</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControlReceipts" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlReceipts" class="interfaceViewportControl">Receipts</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '</table>';					
+		aHTML[++h] = '</table>';					
 
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControlGL" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlGL" class="interfaceViewportControl">GL</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControlGL" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlGL" class="interfaceViewportControl">GL</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '</table>';					
+		aHTML[++h] = '</table>';					
 	
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControlActions" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlActions" class="interfaceViewportControl">Actions</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControlActions" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlActions" class="interfaceViewportControl">Actions</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceViewportControlAttachments" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControlAttachments" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
+						'</tr>';
+	}
 					
 	aHTML[++h] = '</table>';					
 			
@@ -370,11 +377,10 @@ function interfaceFinancialInvoiceViewport()
 	aHTML[++h] = '<div id="divInterfaceMainContext" class="divInterfaceViewportMainContext"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainContacts" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainItem" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainCredits" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainReceipts" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainGL" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainCredit" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainReceipt" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainTransaction" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainActions" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
 	
@@ -392,13 +398,7 @@ function interfaceFinancialInvoiceViewport()
 		interfaceFinancialInvoiceDetails();
 	});
 	
-	$('#tdInterfaceViewportControlContacts').click(function(event)
-	{
-		interfaceMasterMainViewportShow("#divInterfaceMainContacts", true);
-		interfaceFinancialInvoiceContacts();
-	});
-	
-	$('#tdInterfaceViewportControlItems').click(function(event)
+	$('#tdInterfaceViewportControlItem').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainItem", true);
 		interfaceFinancialInvoiceItem();
@@ -412,14 +412,15 @@ function interfaceFinancialInvoiceViewport()
 	
 	$('#tdInterfaceViewportControlReceipts').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainReceipts", true);
+		interfaceMasterMainViewportShow("#divInterfaceMainReceipt", true);
 		interfaceFinancialInvoiceReceipt();
 	});
 	
 	$('#tdInterfaceViewportControlGL').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainGL", true);
-		interfaceFinancialInvoiceGL();
+		interfaceMasterMainViewportShow("#divInterfaceMainTransaction", true);
+		interfaceFinancialTransaction();
+		//You'll find this in 1blankspace.financial-[].js
 	});
 
 	$('#tdInterfaceViewportControlActions').click(function(event)
@@ -563,7 +564,8 @@ function interfaceFinancialInvoiceSummary()
 		
 		$('#aaInterfaceMainSummaryViewPDF').click(function(event)
 		{
-			interfaceFinancialInvoiceViewPDF();
+			alert("View as PDF.  To be implemented.");
+			//interfaceFinancialInvoiceViewPDF();
 		});
 	}	
 }
@@ -748,7 +750,7 @@ function interfaceFinancialInvoiceItem(aParam, oResponse)
 					'<td id="tdInterfaceMainItemColumn1" class="interfaceMainColumn1Large">' +
 					gsLoadingXHTML +
 					'</td>' +
-					'<td id="tdInterfaceMainItemColumn2" class="interfaceMainColumn2Action">' +
+					'<td id="tdInterfaceMainItemColumn2" class="interfaceMainColumn2Action" style="width: 200px;">' +
 					'</td>' +
 					'</tr>' +
 					'</table>';					
@@ -787,13 +789,13 @@ function interfaceFinancialInvoiceItem(aParam, oResponse)
 		}
 		
 		var oSearch = new AdvancedSearch();
-		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+		oSearch.method = 'FINANCIAL_LINE_ITEM_SEARCH';
 		oSearch.addField('financialaccounttext,tax,issuedamount');
-		oSearch.addFilter('id', 'EQUAL_TO', iObjectContext);
-		oSearch.rows = 10;
+		oSearch.addFilter('object', 'EQUAL_TO', giObject);
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
 		oSearch.sort('financialaccounttext', 'asc');
 		
-		oSearch.getResults(function(data) {interfaceFinancialInvoiceItems(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialInvoiceItem(aParam, data)});
 	}
 	else
 	{
@@ -988,3 +990,160 @@ function interfaceMasterFinanicalInvoiceItemAdd(aParam, oResponse)
 		}
 	}	
 }
+
+function interfaceFinancialInvoiceReceipt(aParam, oResponse)
+{
+	var iObjectContext = giObjectContext;
+	var sXHTMLElementId = 'divInterfaceMainReceipt';
+	var oOptions = {view: true, remove: true};
+	var oActions = {add: true};
+	
+	if (aParam != undefined)
+	{
+		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
+		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (aParam.options != undefined) {oOptions = aParam.options}
+		if (aParam.actions != undefined) {oActions = aParam.actions}
+	}		
+		
+	if (oResponse == undefined)
+	{	
+		var aHTML = [];
+		var h = -1;	
+					
+		aHTML[++h] = '<table id="tableInterfaceMainReceipt" class="interfaceMain">' +
+					'<tr id="trInterfaceMainReceiptRow1" class="interfaceMainRow1">' +
+					'<td id="tdInterfaceMainReceiptColumn1" class="interfaceMainColumn1Large">' +
+					gsLoadingXHTML +
+					'</td>' +
+					'<td id="tdInterfaceMainReceiptColumn2" class="interfaceMainColumn2Action" style="width: 200px;">' +
+					'</td>' +
+					'</tr>' +
+					'</table>';					
+			
+		$('#' + sXHTMLElementId).html(aHTML.join(''));
+		
+		if (oActions != undefined)
+		{
+				
+			var aHTML = [];
+			var h = -1;	
+			
+			aHTML[++h] = '<table id="tableInterfaceMainReceiptColumn2" class="interfaceMainColumn2">';
+			
+			if (oActions.add)
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainReceiptAdd" class="interfaceMainAction">' +
+							'<span id="spanInterfaceMainReceiptAdd">Add</span>' +
+							'</td></tr>';
+			}
+			
+			aHTML[++h] = '</table>';					
+			
+			$('#tdInterfaceMainReceiptColumn2').html(aHTML.join(''));
+		
+			$('#spanInterfaceMainReceiptAdd').button(
+			{
+				label: "Add"
+			})
+			.click(function() {
+				 interfaceFinancialInvoiceReceiptAdd(aParam);
+			})
+			
+		}
+		
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
+		oSearch.addField('appliesdate,amount');
+		oSearch.addFilter('invoice', 'EQUAL_TO', iObjectContext);
+		oSearch.sort('appliesdate', 'asc');
+		oSearch.getResults(function(data) {interfaceFinancialInvoiceReceipt(aParam, data)});
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableFinancialInvoiceReceipt" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">' +
+							'<td class="interfaceMainRowNothing">No receipts.</td></tr>';
+			aHTML[++h] = '</tbody></table>';
+
+			$('#' + sXHTMLElementId).html(aHTML.join(''));
+		}
+		else
+		{
+			aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			$.each(oResponse.data.rows, function()
+			{
+				aHTML[++h] = '<tr class="interfaceMainRow">';
+								
+				aHTML[++h] = '<td id="tdWebsiteLineReceipt_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
+										this.appliesdate + '</td>';
+										
+				aHTML[++h] = '<td id="tdWebsiteLineReceipt_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
+										this.amount + '</td>';
+										
+				aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+					
+				if (oOptions.remove)
+				{	
+					aHTML[++h] = '<span id="spanInvoiceReceipt_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+				};	
+					
+				if (oOptions.view)
+				{	
+					aHTML[++h] = '<span id="spanInvoiceReceipt_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+				};	
+					
+				aHTML[++h] = '</td>';				
+				aHTML[++h] = '</tr>';
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+
+			$('#tdInterfaceMainReceiptColumn1').html(aHTML.join(''));
+			
+			if (oOptions.remove) 
+			{
+				$('.interfaceMainRowOptionsRemove').button( {
+					text: false,
+					icons: {
+						primary: "ui-icon-close"
+					}
+				})
+				.click(function() {
+					interfaceMasterInvoiceReceiptRemove({xhtmlElementID: this.id});
+				})
+				.css('width', '15px')
+				.css('height', '17px')
+			}
+			
+			if (oOptions.view) 
+			{
+				$('.interfaceMainRowOptionsView').button( {
+					text: false,
+					icons: {
+						primary: "ui-icon-play"
+					}
+				})
+				.click(function() {
+					interfaceMasterInvoiceReceiptAdd({xhtmlElementID: this.id})
+				})
+				.css('width', '15px')
+				.css('height', '17px')
+			}	
+		}
+	}	
+}
+

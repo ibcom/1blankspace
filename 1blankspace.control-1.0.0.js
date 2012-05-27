@@ -261,7 +261,7 @@ function interfaceControlOptions()
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlFinancial" class="interfaceViewportMasterControl">' +
 					'<td id="tdInterfaceViewportMasterControlFinancial" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlFinancial" class="interfaceViewportMasterControl">' +
-					'Financials</span>' +
+					'<strong>Financials</strong></span>' +
 					'</td>' +
 					'</tr>';	
 					
@@ -410,6 +410,12 @@ function interfaceControlOptionsBind()
 	{
 		interfaceMasterOptionsSource();
 		interfaceFinancialInvoiceMasterViewport();
+	});
+	
+	$('#tdInterfaceViewportMasterControlFinancialExpense').click(function(event)
+	{
+		interfaceMasterOptionsSource();
+		interfaceFinancialExpenseMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlHelp').click(function(event)
