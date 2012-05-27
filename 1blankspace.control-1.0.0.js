@@ -261,7 +261,7 @@ function interfaceControlOptions()
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlFinancial" class="interfaceViewportMasterControl">' +
 					'<td id="tdInterfaceViewportMasterControlFinancial" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlFinancial" class="interfaceViewportMasterControl">' +
-					'<strong>Financials</strong></span>' +
+					'Financials</span>' +
 					'</td>' +
 					'</tr>';	
 					
