@@ -404,8 +404,10 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 	{	
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
-		oSearch.addField('messageid,addressto,addresscc,fromname,fromemail,subject,sentdate,imapflags');
+		oSearch.addField('messageid,addressto,addresscc,fromname,fromemail,subject,sentdate,' +
+							'attachmentlist,imapflags,attach');
 		oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
+		oSearch.sort('sentdate', 'desc')
 		oSearch.rows = giMessagingRows;
 		oSearch.getResults(function(data) {interfaceMessagingInboxSearch(aParam, data)});
 	}
@@ -972,6 +974,7 @@ function interfaceMessagingShow(aParam, oResponse)
 	var bReply = false;
 	var aHTML = [];
 	var h = -1;
+	var sHTML;
 	
 	if (aParam != undefined)
 	{
