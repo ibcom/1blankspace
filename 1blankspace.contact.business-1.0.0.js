@@ -353,9 +353,9 @@ function interfaceContactBusinessSearchShow(aParam, oResponse)
 		interfaceMasterPaginationBind(
 		{
 			columns: 'tradename',
-			more: $(oRoot).attr('moreid'),
+			more: oResponse.moreid,
 			rows: 15,
-			startRow: parseInt($(oRoot).attr('startrow')) + parseInt($(oRoot).attr('rows')),
+			startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
 			functionSearch: interfaceContactBusinessSearch,
 			type: 'json'
 		});   
@@ -373,25 +373,38 @@ function interfaceContactBusinessViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-					'</tr>';
+	if (giObjectContext == -1)
+	{
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
+						'</tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
+						'</tr>';				
+	}
+	else
+	{
+		aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
+						'</tr>';
 	
-	aHTML[++h] = '</table>';					
+		aHTML[++h] = '</table>';					
 	
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlGroups" class="interfaceViewportControl">Groups</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlGroups" class="interfaceViewportControl">Groups</td>' +
+						'</tr>';
+	}
 					
 	aHTML[++h] = '</table>';		
 	
@@ -1061,7 +1074,6 @@ function interfaceContactBusinessGroups(aParam, oResponse)
 		}
 		else
 		{
-		
 			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			

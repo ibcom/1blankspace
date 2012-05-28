@@ -406,46 +406,59 @@ function interfaceContactPersonViewport()
 	aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-		
-	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-					'</tr>';
+	
+	if (giObjectContext == -1)
+	{
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
+						'</tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
+						'</tr>';				
+	}
+	else
+	{
+		aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
+						'</tr>';
 	
-	aHTML[++h] = '</table>';					
+		aHTML[++h] = '</table>';					
 	
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlGroups" class="interfaceViewportControl">Groups</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlGroups" class="interfaceViewportControl">Groups</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '</table>';				
+		aHTML[++h] = '</table>';				
 	
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlBusiness" class="interfaceViewportControl">Business</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlBusiness" class="interfaceViewportControl">Business</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '</table>';		
+		aHTML[++h] = '</table>';		
 	
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlActions" class="interfaceViewportControl">Actions</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlActions" class="interfaceViewportControl">Actions</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
+						'</tr>';
+	}
 			
 	aHTML[++h] = '</table>';					
 		

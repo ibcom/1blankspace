@@ -329,42 +329,50 @@ function interfaceOrderViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-					'</tr>';
+	if (giObjectContext == -1)
+	{
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
+						'</tr>';
+	}
+	else
+	{	
+		aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
+						'</tr>';
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
+						'</tr>';
 		
-	aHTML[++h] = '<tr id="trInterfaceViewportControlProducts" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlProducts" class="interfaceViewportControl">Items</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControlProducts" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlProducts" class="interfaceViewportControl">Items</td>' +
+						'</tr>';
 	
-	aHTML[++h] = '</table>';				
+		aHTML[++h] = '</table>';				
 	
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	/*
-	aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlStatus" class="interfaceViewportControl">Status</td>' +
-					'</tr>';
-	*/				
+		/*
+		aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlStatus" class="interfaceViewportControl">Status</td>' +
+						'</tr>';
+		*/				
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControlDelivery" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDelivery" class="interfaceViewportControl">Deliveries</td>' +
-					'</tr>';
+		aHTML[++h] = '<tr id="trInterfaceViewportControlDelivery" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDelivery" class="interfaceViewportControl">Deliveries</td>' +
+						'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceViewportControlDeliveryPick" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDeliveryPick" class="interfaceViewportControl">Pick</td>' +
-					'</tr>';				
+		aHTML[++h] = '<tr id="trInterfaceViewportControlDeliveryPick" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDeliveryPick" class="interfaceViewportControl">Pick</td>' +
+						'</tr>';				
+	}
 	
 	aHTML[++h] = '</table>';					
-	
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
