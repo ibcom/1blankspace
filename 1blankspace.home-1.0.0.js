@@ -482,7 +482,7 @@ function interfaceMasterHomeTodayActionsRow(oRow, bShowDate)
 		sDate = '&nbsp;';
 	}	
 							
-	aHTML[++h] = '<td id="tdHomeTodayActions_time-' + onDemandXMLGetData(oRow, "id") + '" class="interfaceMainRow">' +
+	aHTML[++h] = '<td id="tdHomeTodayActions_time-' + oRow.id + '" class="interfaceMainRow">' +
 							sDate + '</td>';
 							
 	aHTML[++h] = '<td id="tdHomeTodayActions_contact-' + oRow.contactperson + '" class="interfaceMainRow interfaceContact">' +
