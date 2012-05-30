@@ -21,6 +21,7 @@ var gaNetworkGroups;
 var gbDebug = true;
 var gbShowAdd = true;
 var gbReturnToLast = true;
+var gbShowBrowseBar = false;
 
 var gbMessagingEmailShowCount = false;
 var gsMessagingEmailAccount = '';

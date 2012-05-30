@@ -1242,7 +1242,22 @@ function interfaceMasterViewportShow(oResponse)
 		interfaceControlUserOptionsShow(this);
 	})
 	
-	$('#divInterfaceMasterViewportControlBrowse').html(interfaceMasterViewportBrowse());
+	if (gbShowBrowseBar)
+	{
+		$('#divInterfaceMasterViewportControlBrowse').html(interfaceMasterViewportBrowse());
+	}
+	else
+	{
+		$('#divInterfaceMasterViewportControlBrowse')
+			.css('height', '1px')
+			.css('border-width', '0px');
+			
+		$('#divInterfaceViewportControl')
+			.css('top', '90px');
+			
+		$('#divInterfaceMain')
+			.css('top', '90px');
+	}
 	
 	$("#divInterfaceMasterViewport").touchwipe({
 			wipeLeft: function() {interfaceMasterViewportDestination({instruction: 3});},
