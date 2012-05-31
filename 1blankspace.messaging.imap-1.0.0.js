@@ -1,5 +1,6 @@
 //Based on using the mydigitalstructure caching.
 //So primarily working of the cache object in the model.
+// totals & get details for messages not fully cached.  Show part of message that have and then back fill attachments and message
 
 var giMessagingAccountID = -1;
 var gaMessagingEmailRead = [];
@@ -345,7 +346,7 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 	var bNew;
 	var iStart;
 	var bRefresh = false;
-	var bRepaginate = false;
+	var bRepaginate = true;
 	
 	if (aParam != undefined)
 	{
@@ -387,7 +388,7 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 	
 		aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 		aHTML[++h] = '<tbody>'
-		aHTML[++h] = '<tr><td style="height:50px;" id="interfaceMessagingInboxHeader">' + gsLoadingXHTML + '</td></tr>';
+		aHTML[++h] = '<tr><td style="height:20px;" id="interfaceMessagingInboxHeader">' + gsLoadingXHTML + '</td></tr>';
 		aHTML[++h] = '<tr><td id="interfaceMessagingInbox"></td></tr>';
 		aHTML[++h] = '</tbody></table>';
 
@@ -405,90 +406,19 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 		oSearch.addField('messageid,addressto,addresscc,fromname,fromemail,subject,sentdate,' +
-							'attachmentlist,imapflags,attach');
+							'attachmentlist,imapflags,attachments');
 		oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
 		oSearch.sort('sentdate', 'desc')
 		oSearch.rows = giMessagingRows;
 		oSearch.getResults(function(data) {interfaceMessagingInboxSearch(aParam, data)});
 	}
-	
-	//***REPLACE WITH STANDARD REPAGINATION
-	// USING MOREID
-	
-	if (giMessagingAccountID != undefined && oResponse != undefined && bRefresh)
-	{
-		//GET THIS FROM SUMMARY
-		//giMessagingEmailCount = $(oRoot).attr('rows');
-		//giMessagingEmailNewCount = $(oRoot).attr('newemails');
-		
-		$('#tdInterfaceMessagingCount-' + giMessagingAccountID).html(giMessagingEmailCount + ' emails<br />')
-		
-		//aParam.newRows = oRoot.childNodes.length;
-		//if only new emails returned then might not need to do this killing of array - just push in.
-		gaMessagingEmailInbox.length = 0;
-		
-		if (oResponse.data.rows.length != 0)
-		{
-			$.each(oResponse.data.rows, function(index)
-			{
-				gsMessagingLastMessageID = this.messageid;
-				
-				var sDate = new Date(this.sentdate);	
-				sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
-					
-				gaMessagingEmailInbox.unshift({
-					row: index + 1,
-					messageID: this.messageid,
-					fromEmail: this.fromemail,
-					from: this.fromname,
-					subject: this.subject,
-					date: this.sentdate,
-					formattedDate: sDate,
-					flags: this.imapflags
-					});	
-			});
-		}	
-		
-		bRefresh = false;
-	}
-	
-	if (!bRefresh) {interfaceMessagingInboxSearchShow(aParam)};
-}
-
-function interfaceMessagingInboxSearchShow(aParam)
-{
-	var sXHTMLElementID;
-	var iNewRows = 0;
-	var bRepaginate = false;
-	
-	if (aParam != undefined)
-	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.newRows != undefined) {iNewRows = aParam.newRows}
-		if (aParam.repaginate != undefined) {bRepaginate = aParam.repaginate}
-	}	
-	
-	var sElementID = "divInterfaceMain";
-		
-	var aHTML = [];
-	var h = -1;
-	
-	if (gaMessagingEmailInbox.length == 0 && iNewRows == 0)
-	{
-		aHTML[++h] = '<table id="tableMessagingEmails" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-		aHTML[++h] = '<tbody>'
-		aHTML[++h] = '<tr class="interfaceMainCaption">' +
-						'<td class="interfaceMainRowNothing">No emails.</td></tr>';
-		aHTML[++h] = '</tbody></table>';
-
-		$('#divInterfaceMainInbox').html(aHTML.join(''));
-		
-	}
 	else
 	{
-	
-		if (bRepaginate)
+		if (bRepaginate) //bRefresh?
 		{
+			var aHTML = [];
+			var h = -1;
+		
 			aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainHeader">' +
@@ -527,82 +457,99 @@ function interfaceMessagingInboxSearchShow(aParam)
 			
 			aHTML[++h] = '<tr class="interfaceMainHeader" id="trInterfaceMessagingInboxPages"><td colspan=2 id="tdInterfaceMessagingInboxPages"></td></tr>';
 			aHTML[++h] = '</tbody></table>';
-		
+			
 			$('#interfaceMessagingInboxHeader').html(aHTML.join(''));
 			
-			$('#interfaceMessagingInbox').html('<div id="divInboxPage-0" class="interfaceMessagingInbox"></div>');
-			
-		}	
+			//$('#interfaceMessagingInbox').html('<div id="divInboxPage-0" class="interfaceMessagingInbox"></div>');
+		}
 	
 		$('#interfaceMainHeaderRefresh').html('Refresh (' + giMessagingEmailNewCount + ')')
-	
+		
 		var aHTML = [];
 		var h = -1;
-		sClass = '';
-		
-		aHTML[++h] = '<div id="divInboxPage-' + giMessagingEmailLastPage + '" class="interfaceMessagingInbox">';
 		
 		aHTML[++h] = '<table id="tableMessagingEmails" border="0" cellspacing="0" cellpadding="0" style="font-size:0.875em">';
 		aHTML[++h] = '<tbody>'
-			
-		//if (iNewRows != 0)
-		if (true)
-		{
-			gaMessagingEmailInboxXHTML.length = 0;
-			
-			$.each(gaMessagingEmailInbox, function() 
-			{ 
-				if ($.inArray(this.messageID, gaMessagingEmailRemoved) == -1 || gbMessagingEmailShowDeleted)
-				{
-					var sID = this.messageID
-					sID	= sID.replace(/\./g, '___');
-					
-					var sRow = '<tr class="interfaceMainRow" id="trMessagingEmails_from_id_' + sID + '">';
-					
-					sClass = '';
-					
-					//if (this.read == 'N')
-					//{
-					//	sClass = " interfaceMainBold"
-					//}
-	
-					sRow += '<td id="tdMessagingEmails_from_id_' + sID + 
-										'" style="cursor: pointer;" class="interfaceMainRowOptionsSelect interfaceMainRow' + sClass + '"' +
-										' title="' + this.fromEmail + '">' +
-										this.from + '</td>';
-										
-					sRow += '<td id="tdMessagingEmails_subject_id_' + sID + 
-										'" style="cursor: pointer;" class="interfaceMainRowOptionsSelect interfaceMainRow' + sClass + '">' +
-										this.subject + '</td>';
-					
-					sRow += '<td style="width:220px;" id="tdMessagingEmails_date_id_' + sID + '" class="interfaceMainRow' + sClass + '">' +
-											this.formattedDate + '</td>';
-					
-					sRow += '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
-					sRow += '<span id="spanMessagingEmails_reply_id_' + sID + '" class="interfaceMainRowOptionsReply"></span>';
-					
-					//if (this.removed == 'N')
-					//{
-					//	sRow += '<span id="spanMessagingEmails_delete_id_' + sID + '" class="interfaceMainRowOptionsDelete"></span>';
-					//}
-					//else
-					//{
-					//	sRow += '<span style="width: 23px;" id="tdMessagingEmails_delete_id_' + sID + '" class="interfaceMainRowOptionsDeleteDisabled">></span>';
-					//}
-					
-					sRow += '<span id="spanMessagingEmails_save_id_' + sID + '" class="interfaceMainRowOptionsSave"></span>';
-					
-					sRow += '</td></tr>'
-					
-					gaMessagingEmailInboxXHTML.push(sRow);
-				}	
-			});
-		}
-			
-		$('.interfaceMessagingInbox').hide();
-		$('.interfaceMessagingInbox:last').after(aHTML.join('') + gaMessagingEmailInboxXHTML.join('') + '</tbody></table></div>');
 		
-		$('.interfaceMainRowOptionsSelect').click(function() {
+		$.each(oResponse.data.rows, function()
+		{
+			aHTML[++h] = interfaceMessagingInboxSearchRow(this);
+		});
+		
+		aHTML[++h] = '</tbody></table>';
+		
+		interfaceMasterPaginationList(
+		{
+			xhtmlElementID: 'interfaceMessagingInbox',
+			xhtmlContext: 'EmailIMAPInbox',
+			xhtml: aHTML.join(''),
+			showMore: (oResponse.morerows == "true"),
+			more: oResponse.moreid,
+			rows: 50,
+			functionShowRow: interfaceMessagingInboxSearchRow,
+			functionNewPage: 'interfaceMessagingInboxSearchBind()',
+			type: 'json'
+		}); 	
+			
+		interfaceMessagingInboxSearchBind();
+	}
+}
+
+function interfaceMessagingInboxSearchRow(oRow)
+{
+	var aHTML = [];
+	var h = -1;
+
+	var sID = oRow.id;
+	//sID	= sID.replace(/\./g, '___');
+	//For IMAP should always be a sequenced number.
+	
+	var sDate = new Date(this.sentdate);	
+	sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
+				
+	aHTML[++h] = '<tr class="interfaceMainRow" id="trMessagingEmails_from_id_' + sID + '">';
+					
+	var sClass = '';
+	
+	if ((oRow.imapflags).indexOf('\\SEEN') == -1)
+	{
+		sClass = " interfaceMainBold"
+	}
+	
+	aHTML[++h] = '<td id="tdMessagingEmails_from_id_' + sID + 
+						'" style="cursor: pointer;" class="interfaceMainRowOptionsSelect interfaceMainRow' + sClass + '"' +
+						' title="' + oRow.fromEmail + '">' +
+						oRow.fromname + '</td>';
+						
+	aHTML[++h] = '<td id="tdMessagingEmails_subject_id_' + sID + 
+						'" style="cursor: pointer;" class="interfaceMainRowOptionsSelect interfaceMainRow' + sClass + '">' +
+						oRow.subject + '</td>';
+	
+	aHTML[++h] = '<td style="width:220px;" id="tdMessagingEmails_date_id_' + sID + '" class="interfaceMainRow' + sClass + '">' +
+							sDate + '</td>';
+	
+	aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+	aHTML[++h] = '<span id="spanMessagingEmails_reply_id_' + sID + '" class="interfaceMainRowOptionsReply"></span>';
+	
+	//if (this.removed == 'N')
+	//{
+	//	sRow += '<span id="spanMessagingEmails_delete_id_' + sID + '" class="interfaceMainRowOptionsDelete"></span>';
+	//}
+	//else
+	//{
+	//	sRow += '<span style="width: 23px;" id="tdMessagingEmails_delete_id_' + sID + '" class="interfaceMainRowOptionsDeleteDisabled">></span>';
+	//}
+	
+	aHTML[++h] = '<span id="spanMessagingEmails_save_id_' + sID + '" class="interfaceMainRowOptionsSave"></span>';
+	
+	aHTML[++h] = '</td></tr>'
+	
+	return aHTML.join('');
+}
+
+function interfaceMessagingInboxSearchBind()
+{
+	$('.interfaceMainRowOptionsSelect').click(function() {
 			$('td.interfaceViewportControl').removeClass('interfaceViewportControlHighlight');
 			$('#' + this.id).parent().find('td').removeClass('interfaceMainBold');
 			interfaceMessagingEmailRead(this.id);
@@ -693,68 +640,8 @@ function interfaceMessagingInboxSearchShow(aParam)
 			interfaceMasterOptionsPosition({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', leftOffset: -170, topOffset: -5});
 			interfaceMessagingActions({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', type: 5})
 		})
-		
-		interfaceMessagingInboxPagination();	
-		
-	}
-}
-
-function interfaceMessagingInboxPagination(aParam)
-{
-	var aHTML = [];
-	var h = -1;
 	
-	if (giMessagingEmailLastPage == 1)
-	{
-		aHTML[++h] = '<table><tr>';
-		aHTML[++h] = '<td style="width:10px;" class="interfaceMessagingSubHeader interfaceMessagingInboxPagination" id="tdInterfaceMessagingInboxPagination-">Page:</td>';
-		aHTML[++h] = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader interfaceMessagingInboxPagination"' +
-							' id="tdInterfaceMessagingInboxPagination-1" rowStart="1">1</td>';
-		aHTML[++h] = '<td></td></tr></table>';
-		
-		$('#tdInterfaceMessagingInboxPages').html(aHTML.join(''))
-		
-		$('#tdInterfaceMessagingInboxPagination-1').click(function(event)
-		{
-			interfaceMessagingInboxSearch({start: 1, refreshInbox: true});
-		});
-	}
-	
-	giMessagingEmailLastPage++;
-	
-	$('#tdInterfaceMessagingInboxPagination-' + (giMessagingEmailLastPage - 1)).html((giMessagingEmailLastPage-1))
-	
-	$('.interfaceMessagingInboxPagination').unbind('click');
-	
-	$('.interfaceMessagingInboxPagination').click(function(event)
-		{
-			var sID = event.target.id;
-			var aID = sID.split('-')
-			var sStart = $('#' + sID).attr('rowStart')
-			
-			$('.interfaceMessagingInbox').hide();
-			$('#divInboxPage-' + aID[1]).show();
-		});
-	
-	if (giMessagingEmailLastPage <= Math.ceil(giMessagingEmailCount/giMessagingRows))
-	{
-		var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader interfaceMessagingInboxPagination" id="tdInterfaceMessagingInboxPagination-' +
-							giMessagingEmailLastPage + '" rowStart="' +
-						(((giMessagingEmailLastPage-1) * giMessagingRows) + 1 + parseInt(giMessagingEmailSkippedCount)) + '">' + 'more...' + '</td>';
-						
-		$('#tdInterfaceMessagingInboxPagination-' + (giMessagingEmailLastPage - 1)).after(sHTML)
-	
-		$('#tdInterfaceMessagingInboxPagination-' + giMessagingEmailLastPage).click(function(event)
-		{
-			var sID = event.target.id;
-			var sStart = $('#' + sID).attr('rowStart')
-			$('#' + sID).html(gsLoadingSmallXHTML)
-			interfaceMessagingInboxSearch({start: sStart, refreshInbox: true});
-		});
-	
-	}
-	
-}
+}	
 
 function interfaceMessagingSearch(sXHTMLElementId, aParam)
 {
@@ -789,7 +676,8 @@ function interfaceMessagingSearch(sXHTMLElementId, aParam)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
-		oSearch.addField('subject,addressto');
+		oSearch.addField('messageid,addressto,addresscc,fromname,fromemail,subject,sentdate,' +
+							'body,attachmentlist,imapflags,attachments');
 		oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 		oSearch.rows = giMessagingRows;
@@ -977,7 +865,7 @@ function interfaceMessagingShow(aParam, oResponse)
 	var bReply = false;
 	var aHTML = [];
 	var h = -1;
-	var sHTML;
+	var sHTML = '';
 	
 	if (aParam != undefined)
 	{
@@ -1003,35 +891,43 @@ function interfaceMessagingShow(aParam, oResponse)
 				
 		$('#divInterfaceViewportControlContext').html('');
 		
-		if (goObjectContext.attachmentcount == 0)
+		if (goObjectContext.detailscached != undefined)
 		{
-			sHTML = 'No attachments';
-		}
+			if (goObjectContext.attachmentcount == 0)
+			{
+				sHTML = 'No attachments';
+			}
 
-		if (goObjectContext.attachmentcount == 1)
-		{
-			sHTML = '1 attachment';
-		}
+			if (goObjectContext.attachmentcount == 1)
+			{
+				sHTML = '1 attachment';
+			}
 
-		if (goObjectContext.attachmentcount > 1)
-		{
-			sHTML = goObjectContext.attachmentcount + ' attachments';
+			if (goObjectContext.attachmentcount > 1)
+			{
+				sHTML = goObjectContext.attachmentcount + ' attachments';
+			}
+		
+			sHTML += '<br /><br />';
+		
+			$('#interfaceMessagingAttachments').html(sHTML);
+		
+			var sAttachments = goObjectContext.attachments;
+			var aAttachments = sAttachments.split('#');
+			sAttachments = '';
+		
+			$.each(aAttachments, function() {
+				aAttachment = this.split("|");
+				sAttachments += '\r\n' + aAttachment[0];
+			});
+		
+			$('#interfaceMessagingAttachments').attr('title', sAttachments)
 		}
-		
-		sHTML += '<br /><br />';
-		
-		$('#interfaceMessagingAttachments').html(sHTML);
-		
-		var sAttachments = goObjectContext.attachments;
-		var aAttachments = sAttachments.split('#');
-		sAttachments = '';
-		
-		$.each(aAttachments, function() {
-			aAttachment = this.split("|");
-			sAttachments += '\r\n' + aAttachment[0];
-		});
-		
-		$('#interfaceMessagingAttachments').attr('title', sAttachments)
+		else
+		{
+			$('#interfaceMessagingAttachments').html('');
+			$('#interfaceMessagingAttachments').attr('title', '');
+		}	
 		
 		if (bReply)
 		{
@@ -1067,7 +963,7 @@ function interfaceMessagingSummary()
 						'<td style="text-align:left;font-weight:bold" class="interfaceMessagingHeader" id="interfaceMessagingHeader">' +
 						goObjectContext.subject + '</td>';
 		
-		var sDate = new Date(goObjectContext.date);	
+		var sDate = new Date(goObjectContext.sentdate);	
 		sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
 
 		aHTML[++h] = '<td style="text-align:right;" class="interfaceMessagingSubHeader" id="interfaceMessagingHeaderDate">' +
@@ -1082,14 +978,14 @@ function interfaceMessagingSummary()
 		
 		aHTML[++h] = '</tbody></table>';
 		
-		if (goObjectContext.to != '')
+		if (goObjectContext.addressto != '')
 		{
 			aHTML[++h] = '<table id="tableMessagingEmailsHeaderTo" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainHeaderTo">' +
 							'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
 							
-			var sTo = goObjectContext.to;
+			var sTo = goObjectContext.addressto;
 			var aTo = sTo.split('#')
 			sTo = '';
 		
@@ -1104,14 +1000,14 @@ function interfaceMessagingSummary()
 			aHTML[++h] = '</tbody></table>';
 		}
 		
-		if (goObjectContext.cc != '')
+		if (goObjectContext.addresscc != '')
 		{
 			aHTML[++h] = '<table id="tableMessagingEmailsHeaderCC" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainHeaderCC">' +
 							'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
 							
-			var sCC = goObjectContext.cc
+			var sCC = goObjectContext.addresscc
 			var aCC = sCC.split('#')
 			sCC = '';
 		
@@ -1126,7 +1022,7 @@ function interfaceMessagingSummary()
 			aHTML[++h] = '</tbody></table>';
 		}
 		
-		var sAttachments = goObjectContext.attachments;
+		var sAttachments = goObjectContext.attachmentlist;
 		
 		if (sAttachments != '')
 		{	
@@ -1164,7 +1060,7 @@ function interfaceMessagingSummary()
 				aHTML[++h] = '<tr class="interfaceMainHeader">' +
 								'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
 								
-				var sAttachments = onDemandXMLGetData(oRow, "attachments")
+				var sAttachments = goObjectContext.attachmentlist;
 				var aAttachments = sAttachments.split('#')
 				sAttachments = '';
 			
@@ -1192,7 +1088,8 @@ function interfaceMessagingSummary()
 
 function interfaceMessagingShowMessage()
 {
-	var sHTML = goObjectContext.message;
+	var sHTML = goObjectContext.body;
+	sHTML = interfaceMasterFormatXHTML(sHTML);
 
 	while ($('#ifMessage').length == 0)
 	  {
@@ -1249,7 +1146,7 @@ function interfaceMessagingEdit()
 		if (goObjectContext != undefined)
 		{
 			//tinyMCE.get('editor1').getContent()
-			$('#inputInterfaceMainEditText').val(unescape(goObjectContext.message));
+			$('#inputInterfaceMainEditText').val(unescape(goObjectContext.body));
 		}
 	
 		if (gbRichEdit)
@@ -1690,11 +1587,11 @@ function interfaceMessagingSendEmail(aParam)
 			{
 				if (bForward)
 				{
-					$('#inputInterfaceMainActionsSendEmailSubject').val('Fw: ' + onDemandXMLGetData(oRow, 'subject'))
+					$('#inputInterfaceMainActionsSendEmailSubject').val('Fw: ' + goObjectContext.subject)
 				}
 				else
 				{
-					$('#inputInterfaceMainActionsSendEmailSubject').val('Re: ' + onDemandXMLGetData(oRow, 'subject'))
+					$('#inputInterfaceMainActionsSendEmailSubject').val('Re: ' + goObjectContext.subject)
 				}	
 				
 				$('#inputInterfaceMainActionsSendEmailSubject').removeClass('interfaceMasterWatermark');
@@ -1706,7 +1603,7 @@ function interfaceMessagingSendEmail(aParam)
 				
 				aHTML[++h] = '<tr><td><strong>To:</strong> ';	
 				
-				var sOrgTo = goObjectContext.to;
+				var sOrgTo = goObjectContext.addressto;
 				var aOrgTo = sOrgTo.split('#')
 				
 				sOrgTo = '';
@@ -1718,7 +1615,7 @@ function interfaceMessagingSendEmail(aParam)
 				
 				aHTML[++h] = sOrgTo + '</td></tr>';
 				
-				var sOrgCc = goObjectContext.cc;
+				var sOrgCc = goObjectContext.addresscc;
 				
 				if (sOrgCc != '')
 				{
@@ -1753,7 +1650,7 @@ function interfaceMessagingSendEmail(aParam)
 		
 					if (goObjectContext.to != '' && bReplyAll)
 					{			
-						sTo = goObjectContext.to;
+						sTo = goObjectContext.addressto;
 						var aTo = sTo.split('#');
 						sTo = '';
 					
@@ -1961,7 +1858,7 @@ function interfaceMessagingSendEmailAttachments(aParam, oResponse)
 				$.each(oResponse.data.rows, function()
 				{
 					aHTML[++h] = '<tr class="interfaceAttachments">';
-					aHTML[++h] = '<td style="font-size:0.75em;color:black;font-weight:normal;width:100%" id="tdAttachment-filename-' + onDemandXMLGetData(oRow, "id") + '" class="interfaceMainRow">' + this.filename + '</td>';
+					aHTML[++h] = '<td style="font-size:0.75em;color:black;font-weight:normal;width:100%" id="tdAttachment-filename-' + this.id + '" class="interfaceMainRow">' + this.filename + '</td>';
 					aHTML[++h] = '<td style="width:20px;" id="tdAttachment_delete-' + this.attachment + '" class="interfaceMainRowOptionDelete">&nbsp;</td>';
 					aHTML[++h] = '</tr>'
 				});
@@ -2336,12 +2233,10 @@ function interfaceMessagingActions(aParam, oResponse)
 	{
 		var aHTML = [];
 		var h = -1;
-		
-		var oRows = oResponse.data.rows;
-		
+			
 		$('#spanInterfaceMainHeaderSentEmails').html('Sent&nbsp;emails');
 		
-		if (oRows.length == 0)
+		if (oResponse.data.rows.length == 0)
 		{
 		
 		}
@@ -2350,7 +2245,7 @@ function interfaceMessagingActions(aParam, oResponse)
 			aHTML[++h] = '<table border="0" class="interfaceSearchMedium">';
 			aHTML[++h] = '<tbody>'
 			
-			oRows.each(function() 
+			$.each(oResponse.data.rows, function() 
 			{
 				aHTML[++h] = '<tr class="interfaceSearch">';
 				aHTML[++h] = '<td id="tdAction_subject-' + this.id + '" class="interfaceSearch">' +
@@ -2547,6 +2442,4 @@ function interfaceMessagingActionSearch(aParam, oResponse)
 		
 		}
 	}
-}			
-
-
+}
