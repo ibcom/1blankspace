@@ -483,20 +483,14 @@ function interfaceFinancialCreditorsRow(oRow)
 
 function interfaceFinancialProfitLoss(aParam, oResponse)
 {
-
 	if (oResponse == undefined)
-	{
-
-		var sParam = 'method=FINANCIAL_PROFIT_LOSS_SEARCH&rf=JSON';
-	
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/financial/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceFinancialProfitLoss(aParam, data)}
-		});
-		
+	{		
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_PROFIT_LOSS_SEARCH';
+		oSearch.addField('financialaccounttext,total,percentage');
+		oSearch.sort('financialaccounttext', 'asc');
+		oSearch.rows = giMessagingRows;
+		oSearch.getResults(function(data) {interfaceFinancialProfitLoss(aParam, data)});
 	}
 	else
 	{
@@ -575,22 +569,14 @@ function interfaceFinancialProfitLossRow(oRow)
 
 function interfaceFinancialBalanceSheet(aParam, oResponse)
 {
-
 	if (oResponse == undefined)
-	{
-
-		var dEnd = Date.today();
-		var sParam = 'method=FINANCIAL_BALANCE_SHEET_SEARCH&rf=JSON';
-		sParam += '&enddate=' + interfaceMasterFormatSave($.fullCalendar.formatDate(dEnd, "dd MMM yyyy"));
-	
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/financial/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceFinancialBalanceSheet(aParam, data)}
-		});
-		
+	{	
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_BALANCE_SHEET_SEARCH';
+		oSearch.addField('financialaccounttext,amount,subtotalcount,type');
+		oSearch.sort('financialaccounttext', 'asc');
+		oSearch.rows = 100;
+		oSearch.getResults(function(data) {interfaceFinancialBalanceSheet(aParam, data)});	
 	}
 	else
 	{
@@ -607,7 +593,44 @@ function interfaceFinancialBalanceSheet(aParam, oResponse)
 		}
 		else
 		{
+			aHTML[++h] = '<table id="tableInterfaceFinancialBalanceSheet" class="interfaceMain">';
+			aHTML[++h] = '<tr id="trInterfaceMainFinancialBalanceSheetRow1" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialBalanceSheetColumn1" style="width: 70px" class="interfaceMainColumn1">' +
+						'</td>' +
+						'<td id="tdInterfaceMainFinancialBalanceSheetColumn2" class="interfaceMainColumn1Large">' +
+						'</td>' +
+						'</tr>';
+			aHTML[++h] = '</table>';					
 		
+			$('#divInterfaceMainBS').html(aHTML.join(''));
+		
+			var aHTML = [];
+			var h = -1;
+		
+			aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+	
+			aHTML[++h] = '<tr><td id="tdInterfaceMainBSAssets" class="interfaceMainSummary">Assets</td></tr>' +
+							'<tr><td id="tdInterfaceMainBSAssetsValue" class="interfaceMainSummaryValue">' +	
+							(oResponse.AssetTotal).formatMoney(2, '.', ',') +
+							'</td></tr>';
+		
+			aHTML[++h] = '<tr><td id="tdInterfaceMainBSLiability" class="interfaceMainSummary">Liability</td></tr>' +
+							'<tr><td id="tdInterfaceMainBSLiabilityValue" class="interfaceMainSummaryValue">' +
+							(oResponse.LiabilityTotal).formatMoney(2, '.', ',') +
+							'</td></tr>';
+		
+			aHTML[++h] = '<tr><td id="tdInterfaceMainBSEquity" class="interfaceMainSummary">Equity</td></tr>' +
+							'<tr><td id="tdInterfaceMainBSEquityValue" class="interfaceMainSummaryValue">' +
+							(oResponse.EquityTotal).formatMoney(2, '.', ',') +
+							'</td></tr>';
+
+			aHTML[++h] = '</table>';							
+			
+			$('#tdInterfaceMainFinancialBalanceSheetColumn1').html(aHTML.join(''));
+		
+			var aHTML = [];
+			var h = -1;
+			
 			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 			
 			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
@@ -631,7 +654,7 @@ function interfaceFinancialBalanceSheet(aParam, oResponse)
 		interfaceMasterPaginationList(
 		   {
 			type: 'JSON',
-			xhtmlElementID: 'divInterfaceMainBS',
+			xhtmlElementID: 'tdInterfaceMainFinancialBalanceSheetColumn2',
 			xhtmlContext: 'BalanceSheet',
 			xhtml: aHTML.join(''),
 			showMore: (oResponse.morerows == "true"),
@@ -668,16 +691,12 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var sParam = 'method=FINANCIAL_BANK_ACCOUNT_SEARCH&rf=JSON';
-	
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/financial/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceFinancialBankAccount(aParam, data)}
-		});
-		
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
+		oSearch.addField('title,lastreconciledbalance,lastreconcileddate,notes');
+		oSearch.sort('title', 'asc');
+		oSearch.rows = giMessagingRows;
+		oSearch.getResults(function(data) {interfaceFinancialBankAccount(aParam, data)});
 	}
 	else
 	{
@@ -693,10 +712,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 			aHTML[++h] = '</table>';
 		}
 		else
-		{
-		
-			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-			
+		{		
 			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
@@ -739,19 +755,19 @@ function interfaceFinancialBankAccountRow(oRow)
 
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 				
-	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + 'xx' + '" class="interfaceMainRow">' +
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Title-" class="interfaceMainRow"' +
+							' title="' + oRow.notes + '">' +
 							oRow.title + '</td>';
 	
-	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Balance-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Balance-" class="interfaceMainRow" style="text-align:right;">' +
 							oRow.lastreconciledbalance + '</td>';
 	
-	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Date-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Date-" class="interfaceMainRow" style="text-align:right;">' +
 							oRow.lastreconcileddate + '</td>';
-							
+													
 	aHTML[++h] = '</tr>'
 	
 	return aHTML.join('');
-	
 }
 
 function interfaceFinancialUnallocated(aParam, oResponse)
@@ -781,6 +797,20 @@ function interfaceFinancialUnallocated(aParam, oResponse)
 		}
 		else
 		{
+			var aHTML = [];
+			var h = -1;
+		
+			aHTML[++h] = '<table id="tableInterfaceFinancialUnallocated" class="interfaceMain">';
+			aHTML[++h] = '<tr id="trInterfaceMainFinancialUnallocatedRow1" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialUnallocatedColumn1" style="width: 70px" class="interfaceMainColumn1">' +
+						'</td>' +
+						'<td id="tdInterfaceMainFinancialUnallocatedColumn2" class="interfaceMainColumn1Large">' +
+						'</td>' +
+						'</tr>';
+			aHTML[++h] = '</table>';					
+		
+			$('#divInterfaceMainUnallocated').html(aHTML.join(''));
+			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 			oSearch.addField('invoice.reference,invoice.amount');
@@ -788,7 +818,6 @@ function interfaceFinancialUnallocated(aParam, oResponse)
 			oSearch.rows = 20;
 			oSearch.getResults(function(data) {interfaceFinancialUnallocated(aParam, data)});
 		}	
-		
 	}
 	else
 	{
@@ -805,15 +834,12 @@ function interfaceFinancialUnallocated(aParam, oResponse)
 		}
 		else
 		{
-		
 			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 			
 			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
 			aHTML[++h] = '<td class="interfaceMainCaption">Invoice</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
 			aHTML[++h] = '</tr>';
 			
 			var oRows = oResponse.data.rows;
@@ -829,7 +855,7 @@ function interfaceFinancialUnallocated(aParam, oResponse)
 		interfaceMasterPaginationList(
 		   {
 			type: 'JSON',
-			xhtmlElementID: 'divInterfaceMainUnallocated',
+			xhtmlElementID: 'tdInterfaceMainFinancialUnallocatedColumn1',
 			xhtmlContext: 'Unallocated',
 			xhtml: aHTML.join(''),
 			showMore: (oResponse.morerows == "true"),
@@ -849,16 +875,14 @@ function interfaceFinancialUnallocatedRow(oRow)
 
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 				
-	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_FinancialAccount-' + 'xx' + '" class="interfaceMainRow">' +
-							oRow["invoice.reference"] + '</td>';
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_FinancialAccount-' + oRow["invoice.id"] + '" class="interfaceMainRow">' +
+							oRow["invoice.reference"] + '<br />';
 	
-	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Amount-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
-							oRow["invoice.amount"] + '</td>';
+	aHTML[++h] = '<span style="color: #808080;font-size: 0.75em;">' + oRow["invoice.amount"] + '</span>';
 	
 	aHTML[++h] = '</tr>'
 	
 	return aHTML.join('');
-	
 }
 
 function interfaceFinancialTransaction(aParam, oResponse)
