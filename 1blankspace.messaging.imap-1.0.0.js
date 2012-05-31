@@ -193,7 +193,7 @@ function interfaceMessagingCheckForNew(aParam, oResponse)
 	}
 	else
 	{
-		giMessagingEmailNewCount = oResponse.newcount;
+		giMessagingEmailNewCount = oResponse.NewRows;
 		$('#interfaceMainHeaderRefresh').html('Refresh (' + giMessagingEmailNewCount + ')')	
 	}
 }			
@@ -379,6 +379,8 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		giMessagingAccountID = aXHTMLElementID[1];
 	}	
 	
+	if (bRefresh) {interfaceMessagingCheckForNew()}
+	
 	if (bRepaginate)
 	{
 		gsMessagingEmailLastPagination = undefined;
@@ -396,7 +398,7 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		$('#divInterfaceMainInbox').html(aHTML.join(''));
 		
 		if (giMessagingTimerID != 0) {clearInterval(giMessagingTimerID)};
-        //giMessagingTimerID = setInterval("interfaceMessagingCheckForNew()", giMessagingCheckForNew);
+        giMessagingTimerID = setInterval("interfaceMessagingCheckForNew()", giMessagingCheckForNew);
 	}	
 		
 	if (giMessagingAccountID != undefined && oResponse == undefined && bRefresh)
@@ -464,7 +466,30 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 			//$('#interfaceMessagingInbox').html('<div id="divInboxPage-0" class="interfaceMessagingInbox"></div>');
 		}
 	
-		$('#interfaceMainHeaderRefresh').html('Refresh (' + giMessagingEmailNewCount + ')')
+		$('#interfaceMainHeaderRefresh').html('Refresh')
+		
+		$('.interfaceMainHeaderRemovedEmailsHide').click(function() {
+			$('#interfaceMainHeaderRemovedEmailsHide').hide();
+			$('#interfaceMainHeaderRemovedEmailsShow').show();
+			gbMessagingEmailShowDeleted = false;
+			interfaceMessagingInboxSearch({xhtmlElementID: this.id, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+		})
+		
+		$('.interfaceMainHeaderRemovedEmailsShow').click(function() {
+			$('#interfaceMainHeaderRemovedEmailsShow').hide();
+			$('#interfaceMainHeaderRemovedEmailsHide').show();
+			gbMessagingEmailShowDeleted = true;
+			interfaceMessagingInboxSearch({xhtmlElementID: this.id, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+		})
+			
+		$('#interfaceMainHeaderRefresh').click(function() {
+			interfaceMessagingInboxSearch({xhtmlElementID: '-' + giMessagingAccountID, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+		})
+		
+		$('#tdInterfaceMainHeaderSentEmails').click(function() {
+			interfaceMasterOptionsPosition({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', leftOffset: -170, topOffset: -5});
+			interfaceMessagingActions({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', type: 5})
+		})
 		
 		var aHTML = [];
 		var h = -1;
@@ -505,7 +530,7 @@ function interfaceMessagingInboxSearchRow(oRow)
 	//sID	= sID.replace(/\./g, '___');
 	//For IMAP should always be a sequenced number.
 	
-	var sDate = new Date(this.sentdate);	
+	var sDate = new Date(oRow.sentdate);	
 	sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
 				
 	aHTML[++h] = '<tr class="interfaceMainRow" id="trMessagingEmails_from_id_' + sID + '">';
@@ -618,30 +643,6 @@ function interfaceMessagingInboxSearchBind()
 		})
 		.css('width', '15px')
 		.css('height', '20px')
-		
-		$('.interfaceMainHeaderRemovedEmailsHide').click(function() {
-			$('#interfaceMainHeaderRemovedEmailsHide').hide();
-			$('#interfaceMainHeaderRemovedEmailsShow').show();
-			gbMessagingEmailShowDeleted = false;
-			interfaceMessagingInboxSearch({xhtmlElementID: this.id, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
-		})
-		
-		$('.interfaceMainHeaderRemovedEmailsShow').click(function() {
-			$('#interfaceMainHeaderRemovedEmailsShow').hide();
-			$('#interfaceMainHeaderRemovedEmailsHide').show();
-			gbMessagingEmailShowDeleted = true;
-			interfaceMessagingInboxSearch({xhtmlElementID: this.id, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
-		})
-			
-		$('#interfaceMainHeaderRefresh').click(function() {
-			interfaceMessagingInboxSearch({xhtmlElementID: '-' + giMessagingAccountID, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
-		})
-		
-		$('#tdInterfaceMainHeaderSentEmails').click(function() {
-			interfaceMasterOptionsPosition({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', leftOffset: -170, topOffset: -5});
-			interfaceMessagingActions({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', type: 5})
-		})
-	
 }	
 
 function interfaceMessagingSearch(sXHTMLElementId, aParam)
