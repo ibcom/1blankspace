@@ -194,7 +194,7 @@ function interfaceMessagingCheckForNew(aParam, oResponse)
 	}
 	else
 	{
-		giMessagingEmailNewCount = oResponse.NewRows;
+		giMessagingEmailNewCount = oResponse.newrows;
 		$('#interfaceMainHeaderRefresh').html('Refresh (' + giMessagingEmailNewCount + ')')	
 	}
 }			
@@ -404,20 +404,20 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		
 	if (giMessagingAccountID != undefined && oResponse == undefined && bRefresh)
 	{	
-		
-		//ADD SUMMARY FIELDS
-		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 		oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
-							'hasattachments,attachments,imapflags');
+							'hasattachments,attachments,imapflags,detailscached');
 		oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
+		oSearch.addSummaryField('count(*) cachecount');
 		oSearch.sort('date', 'desc')
 		oSearch.rows = giMessagingRows;
 		oSearch.getResults(function(data) {interfaceMessagingInboxSearch(aParam, data)});
 	}
 	else
 	{
+		giMessagingEmailCount = oResponse.summary.cachecount;
+			
 		if (bRepaginate) //bRefresh?
 		{
 			var aHTML = [];
@@ -531,17 +531,17 @@ function interfaceMessagingInboxSearchRow(oRow)
 	//sID	= sID.replace(/\./g, '___');
 	//For IMAP should always be a sequenced number.
 	
-	var sDate = new Date(oRow.sentdate);	
+	var sDate = new Date(oRow.date);	
 	sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
-				
-	aHTML[++h] = '<tr class="interfaceMainRow" id="trMessagingEmails_from_id_' + sID + '">';
-					
+								
 	var sClass = '';
 	
 	if ((oRow.imapflags).indexOf('\\SEEN') == -1)
 	{
 		sClass = " interfaceMainBold"
 	}
+	
+	aHTML[++h] = '<tr class="interfaceMainRow' + sClass + '" data-cached="' + oRow.detailscached + '" id="trMessagingEmails_from_id_' + sID + '">';
 	
 	aHTML[++h] = '<td id="tdMessagingEmails_from_id_' + sID + 
 						'" style="cursor: pointer;" class="interfaceMainRowOptionsSelect interfaceMainRow' + sClass + '"' +
@@ -680,7 +680,7 @@ function interfaceMessagingSearch(sXHTMLElementId, aParam)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 		oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
-							'message,hasattachments,attachments,imapflags');
+							'body,hasattachments,attachments,imapflags,detailscached');
 		oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 		oSearch.rows = giMessagingRows;
@@ -891,10 +891,10 @@ function interfaceMessagingShow(aParam, oResponse)
 	else
 	{
 		goObjectContext = oResponse.data.rows[0];
-				
+								
 		$('#divInterfaceViewportControlContext').html('');
 		
-		if (goObjectContext.detailscached != undefined)
+		if (goObjectContext.detailscached == 'Y')
 		{
 			if (goObjectContext.attachmentcount == 0)
 			{
@@ -932,6 +932,8 @@ function interfaceMessagingShow(aParam, oResponse)
 			$('#interfaceMessagingAttachments').attr('title', '');
 		}	
 		
+		//IF NOT CACHED THEN GET AND DO FOLLOWING ON PROMISE
+		
 		if (bReply)
 		{
 			interfaceMasterMainViewportShow("#divInterfaceMainEdit");
@@ -946,7 +948,6 @@ function interfaceMessagingShow(aParam, oResponse)
 	
 function interfaceMessagingSummary()
 {
-
 	var aHTML = [];
 	var h = -1;
 	
@@ -1027,7 +1028,9 @@ function interfaceMessagingSummary()
 		
 		var sAttachments = goObjectContext.attachments;
 		
-		if (sAttachments != '')
+		//hasAttachments = 'Y'
+		
+		if (sAttachments != 'undefined')
 		{	
 			if (sAttachments.indexOf("/download/") == -1)
 			{
@@ -1081,11 +1084,42 @@ function interfaceMessagingSummary()
 		}
 		
 		aHTML[++h] = '<iframe style="display:block;height:10px;width:900px;" name="ifMessage" ' +
-						'id="ifMessage" frameborder="0" border="0" scrolling="no"></iframe>';
+						'id="ifMessage" frameborder="0" border="0" scrolling="no">' + gsLoadingXHTML + '</iframe>';
 						
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
-		setTimeout("interfaceMessagingShowMessage()", 300);
+		if (goObjectContext.detailscached == 'Y')
+		{
+			setTimeout("interfaceMessagingShowMessage()", 300);
+		}
+		else
+		{
+			var sParam = '/ondemand/messaging/?method=MESSAGING_EMAIL_CACHE_GET_DETAILS';
+			var sData = 'id=' + giObjectContext;
+		
+			$.ajax(
+			{
+				type: 'POST',
+				url: sParam,
+				data: sData,
+				dataType: 'json',
+				success: function(data) 
+				{
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
+					oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
+										'body,hasattachments,attachments,imapflags,detailscached');
+					oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
+					oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+					oSearch.getResults(function(oResponse) 
+						{
+							goObjectContext = oResponse.data.rows[0];
+							interfaceMessagingShowMessage();
+						})	
+				}
+			});
+			
+		}	
 	}	
 }
 
@@ -1642,7 +1676,7 @@ function interfaceMessagingSendEmail(aParam)
 				
 				aHTML[++h] = '</table>';
 				
-				$('#inputInterfaceMainActionsSendEmailMessage').val(aHTML.join('') + goObjectContext.message)
+				$('#inputInterfaceMainActionsSendEmailMessage').val(aHTML.join('') + goObjectContext.body)
 		
 				if (!bForward)
 				{
@@ -1991,23 +2025,27 @@ function interfaceMessagingEmailRead(sXHTMLElementId)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 		
-	sSearchContext = sSearchContext.replace(/\___/g, '.');	
+	if ($('#' + sXHTMLElementId).parent().hasClass('interfaceMainBold'))	
+	{
+			
+		sSearchContext = sSearchContext.replace(/\___/g, '.');	
 		
-	var sParam = 'method=MESSAGING_CACHE_EMAIL_MANAGE&read=1';
-	var sData = 'account=' + giMessagingAccountID;
-	sData += '&messageid=' + interfaceMasterFormatSave(sSearchContext);
+		var sParam = 'method=MESSAGING_EMAIL_CACHE_MANAGE&flags=(\\SEEN)';
+		var sData = 'account=' + giMessagingAccountID;
+		sData += '&id=' + interfaceMasterFormatSave(sSearchContext);
 				
-	$.ajax(
-		{
-			type: 'POST',
-			url: '/ondemand/messaging/?' + sParam,
-			data: sData,
-			dataType: 'text',
-			success: function(data)
-						{
-							gaMessagingEmailRead.push(sSearchContext);
-						}
-		});
+		$.ajax(
+			{
+				type: 'POST',
+				url: '/ondemand/messaging/?' + sParam,
+				data: sData,
+				dataType: 'text',
+				success: function(data)
+							{
+								gaMessagingEmailRead.push(sSearchContext);
+							}
+			});
+	}		
 }
 
 function interfaceMessagingNew(aParam, oResponse)
@@ -2114,7 +2152,7 @@ function interfaceMessagingNew(aParam, oResponse)
 					url: '/ondemand/messaging/?' + sParam,
 					dataType: 'json',
 					success: function(oResponse) {
-						aParam.message = oResponse.data.rows[0].message;
+						aParam.message = oResponse.data.rows[0].body;
 						aParam.subject = oResponse.data.rows[0].subject;
 						aParam.source = 3;
 						interfaceMessagingSendEmail(aParam);
