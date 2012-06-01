@@ -19,6 +19,7 @@ var giMessagingEmailSkippedCount;
 var giMessagingEmailLastPage = 1;
 var gsMessagingEmailLastPagination;
 var giMessagingEmailNewCount;
+var gbMessagingAutoCheck = false;
 
 function interfaceMessagingIMAPMasterViewport(aParam)
 {
@@ -398,7 +399,7 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		$('#divInterfaceMainInbox').html(aHTML.join(''));
 		
 		if (giMessagingTimerID != 0) {clearInterval(giMessagingTimerID)};
-        giMessagingTimerID = setInterval("interfaceMessagingCheckForNew()", giMessagingCheckForNew);
+        if (gbMessagingAutoCheck) {giMessagingTimerID = setInterval("interfaceMessagingCheckForNew()", giMessagingCheckForNew)};
 	}	
 		
 	if (giMessagingAccountID != undefined && oResponse == undefined && bRefresh)
@@ -408,10 +409,10 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
-		oSearch.addField('messageid,addressto,addresscc,fromname,fromemail,subject,sentdate,' +
-							'attachmentlist,imapflags,attachments');
+		oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
+							'hasattachments,attachments,imapflags');
 		oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
-		oSearch.sort('sentdate', 'desc')
+		oSearch.sort('date', 'desc')
 		oSearch.rows = giMessagingRows;
 		oSearch.getResults(function(data) {interfaceMessagingInboxSearch(aParam, data)});
 	}
@@ -678,8 +679,8 @@ function interfaceMessagingSearch(sXHTMLElementId, aParam)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
-		oSearch.addField('messageid,addressto,addresscc,fromname,fromemail,subject,sentdate,' +
-							'body,attachmentlist,imapflags,attachments');
+		oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
+							'message,hasattachments,attachments,imapflags');
 		oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 		oSearch.rows = giMessagingRows;
@@ -965,7 +966,7 @@ function interfaceMessagingSummary()
 						'<td style="text-align:left;font-weight:bold" class="interfaceMessagingHeader" id="interfaceMessagingHeader">' +
 						goObjectContext.subject + '</td>';
 		
-		var sDate = new Date(goObjectContext.sentdate);	
+		var sDate = new Date(goObjectContext.date);	
 		sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
 
 		aHTML[++h] = '<td style="text-align:right;" class="interfaceMessagingSubHeader" id="interfaceMessagingHeaderDate">' +
@@ -974,20 +975,20 @@ function interfaceMessagingSummary()
 		
 		aHTML[++h] = '<tr class="interfaceMainHeader">' +
 						'<td colspan=2 style="text-align:left;" class="interfaceMessagingSubHeader" id="interfaceMainHeaderFromEmail">' +
-						goObjectContext.fromemail + '</td>';
+						goObjectContext.from + '</td>';
 		
 		aHTML[++h] = '</tr>';
 		
 		aHTML[++h] = '</tbody></table>';
 		
-		if (goObjectContext.addressto != '')
+		if (goObjectContext.to != '')
 		{
 			aHTML[++h] = '<table id="tableMessagingEmailsHeaderTo" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainHeaderTo">' +
 							'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
 							
-			var sTo = goObjectContext.addressto;
+			var sTo = goObjectContext.to;
 			var aTo = sTo.split('#')
 			sTo = '';
 		
@@ -1002,14 +1003,14 @@ function interfaceMessagingSummary()
 			aHTML[++h] = '</tbody></table>';
 		}
 		
-		if (goObjectContext.addresscc != '')
+		if (goObjectContext.cc != '')
 		{
 			aHTML[++h] = '<table id="tableMessagingEmailsHeaderCC" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainHeaderCC">' +
 							'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
 							
-			var sCC = goObjectContext.addresscc
+			var sCC = goObjectContext.cc
 			var aCC = sCC.split('#')
 			sCC = '';
 		
@@ -1024,7 +1025,7 @@ function interfaceMessagingSummary()
 			aHTML[++h] = '</tbody></table>';
 		}
 		
-		var sAttachments = goObjectContext.attachmentlist;
+		var sAttachments = goObjectContext.attachments;
 		
 		if (sAttachments != '')
 		{	
@@ -1062,7 +1063,7 @@ function interfaceMessagingSummary()
 				aHTML[++h] = '<tr class="interfaceMainHeader">' +
 								'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
 								
-				var sAttachments = goObjectContext.attachmentlist;
+				var sAttachments = goObjectContext.attachments;
 				var aAttachments = sAttachments.split('#')
 				sAttachments = '';
 			
@@ -1601,11 +1602,11 @@ function interfaceMessagingSendEmail(aParam)
 				
 				aHTML[++h] = '<br />---- Original Message ----<br />';
 				aHTML[++h] = '<table style="background-color:#f5f5f5;width:100%;color:black;">';
-				aHTML[++h] = '<tr><td><strong>From:</strong> ' + goObjectContext.fromemail + '</td></tr>';
+				aHTML[++h] = '<tr><td><strong>From:</strong> ' + goObjectContext.from + '</td></tr>';
 				
 				aHTML[++h] = '<tr><td><strong>To:</strong> ';	
 				
-				var sOrgTo = goObjectContext.addressto;
+				var sOrgTo = goObjectContext.to;
 				var aOrgTo = sOrgTo.split('#')
 				
 				sOrgTo = '';
@@ -1617,7 +1618,7 @@ function interfaceMessagingSendEmail(aParam)
 				
 				aHTML[++h] = sOrgTo + '</td></tr>';
 				
-				var sOrgCc = goObjectContext.addresscc;
+				var sOrgCc = goObjectContext.cc;
 				
 				if (sOrgCc != '')
 				{
@@ -1645,14 +1646,14 @@ function interfaceMessagingSendEmail(aParam)
 		
 				if (!bForward)
 				{
-					if (goObjectContext.fromemail != '')
+					if (goObjectContext.from != '')
 					{
-						var sFrom = goObjectContext.fromemail;
+						var sFrom = goObjectContext.from;
 					}
 		
 					if (goObjectContext.to != '' && bReplyAll)
 					{			
-						sTo = goObjectContext.addressto;
+						sTo = goObjectContext.to;
 						var aTo = sTo.split('#');
 						sTo = '';
 					
