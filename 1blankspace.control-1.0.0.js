@@ -4,8 +4,8 @@ var gbRoleFinancials = false;
 var gbRoleSetup = false;
 var gbRoleSpecial1 = false;
 
-var gsLoadingXHTML = '<img src="/images/1blankspace.loading.gif">';
-var gsLoadingSmallXHTML = '<img id="imgInterfaceLoadingSmall" src="/images/1blankspace.loading.small.gif">';
+var gsLoadingXHTML = '<img class="interfaceLoading" src="/images/1blankspace.loading.gif">';
+var gsLoadingSmallXHTML = '<img class="interfaceLoadingSmall" id="imgInterfaceLoadingSmall" src="/images/1blankspace.loading.small.gif">';
 var giReturnRows = 20;
 var gsEditorCSS = '';
 var gsViewportDefault = "People";

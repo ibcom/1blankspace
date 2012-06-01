@@ -1026,9 +1026,67 @@ function interfaceMessagingSummary()
 			aHTML[++h] = '</tbody></table>';
 		}
 		
-		var sAttachments = goObjectContext.attachments;
+		if (goObjectContext.hasattachments == 'Y')
+		{
+			aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainHeader">' +
+									'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
+			aHTML[++h] = '</td></tr>';
+			aHTML[++h] = '</tbody></table>';
+		}
 		
-		//hasAttachments = 'Y'
+		aHTML[++h] = gsLoadingXHTML;
+		
+		aHTML[++h] = '<iframe style="display:block;height:10px;width:900px;" name="ifMessage" ' +
+							'id="ifMessage" frameborder="0" border="0" scrolling="no"></iframe>';
+						
+		$('#divInterfaceMainSummary').html(aHTML.join(''));
+		
+		if (goObjectContext.detailscached == 'Y')
+		{
+			setTimeout("interfaceMessagingShowMessage()", 300);
+			interfaceMessagingShowAttachments();
+		}
+		else
+		{
+			var sParam = '/ondemand/messaging/?method=MESSAGING_EMAIL_CACHE_GET_DETAILS';
+			var sData = 'id=' + giObjectContext;
+		
+			$.ajax(
+			{
+				type: 'POST',
+				url: sParam,
+				data: sData,
+				dataType: 'json',
+				success: function(data) 
+				{
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
+					oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
+										'body,hasattachments,attachments,imapflags,detailscached');
+					oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
+					oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+					oSearch.getResults(function(oResponse) 
+						{
+							goObjectContext = oResponse.data.rows[0];
+							interfaceMessagingShowAttachments();
+							interfaceMessagingShowMessage();
+						})	
+				}
+			});
+			
+		}	
+	}	
+}
+
+function interfaceMessagingShowAttachments()
+{
+	if (goObjectContext.hasattachments == 'Y')
+	{
+		var aHTML = [];
+		var h = -1;
+		var sAttachments = goObjectContext.attachments;
 		
 		if (sAttachments != 'undefined')
 		{	
@@ -1082,45 +1140,9 @@ function interfaceMessagingSummary()
 				aHTML[++h] = '</tbody></table>';
 			}
 		}
-		
-		aHTML[++h] = '<iframe style="display:block;height:10px;width:900px;" name="ifMessage" ' +
-						'id="ifMessage" frameborder="0" border="0" scrolling="no">' + gsLoadingXHTML + '</iframe>';
-						
-		$('#divInterfaceMainSummary').html(aHTML.join(''));
-		
-		if (goObjectContext.detailscached == 'Y')
-		{
-			setTimeout("interfaceMessagingShowMessage()", 300);
-		}
-		else
-		{
-			var sParam = '/ondemand/messaging/?method=MESSAGING_EMAIL_CACHE_GET_DETAILS';
-			var sData = 'id=' + giObjectContext;
-		
-			$.ajax(
-			{
-				type: 'POST',
-				url: sParam,
-				data: sData,
-				dataType: 'json',
-				success: function(data) 
-				{
-					var oSearch = new AdvancedSearch();
-					oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
-					oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
-										'body,hasattachments,attachments,imapflags,detailscached');
-					oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
-					oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
-					oSearch.getResults(function(oResponse) 
-						{
-							goObjectContext = oResponse.data.rows[0];
-							interfaceMessagingShowMessage();
-						})	
-				}
-			});
-			
-		}	
-	}	
+	
+		$('#interfaceMainHeaderAttachments').html(aHTML.join());
+	}
 }
 
 function interfaceMessagingShowMessage()
@@ -1131,7 +1153,9 @@ function interfaceMessagingShowMessage()
 	while ($('#ifMessage').length == 0)
 	  {
 	  }
-	
+
+	$('.interfaceLoading').remove()
+		
 	$('#ifMessage').contents().find('html').html(sHTML);
 	
 	if ($.browser.msie)
