@@ -1026,15 +1026,15 @@ function interfaceMessagingSummary()
 			aHTML[++h] = '</tbody></table>';
 		}
 		
-		if (goObjectContext.hasattachments == 'Y')
-		{
+		//if (goObjectContext.hasattachments == 'Y')
+		//{
 			aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainHeader">' +
 									'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
 			aHTML[++h] = '</td></tr>';
 			aHTML[++h] = '</tbody></table>';
-		}
+	//	}
 		
 		aHTML[++h] = gsLoadingXHTML;
 		
@@ -1091,12 +1091,7 @@ function interfaceMessagingShowAttachments()
 		if (sAttachments != 'undefined')
 		{	
 			if (sAttachments.indexOf("/download/") == -1)
-			{
-				aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-				aHTML[++h] = '<tbody>'
-				aHTML[++h] = '<tr class="interfaceMainHeader">' +
-								'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
-								
+			{					
 				var aAttachments = sAttachments.split('#')
 				sAttachments = '';
 			
@@ -1113,17 +1108,9 @@ function interfaceMessagingShowAttachments()
 				});	
 								
 				aHTML[++h] = '<span class="interfaceMessagingHeader">Attachments:</span> ' + sAttachments;
-
-				aHTML[++h] = '</td></tr>';
-				aHTML[++h] = '</tbody></table>';
 			}
 			else
-			{
-				aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-				aHTML[++h] = '<tbody>'
-				aHTML[++h] = '<tr class="interfaceMainHeader">' +
-								'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
-								
+			{								
 				var sAttachments = goObjectContext.attachments;
 				var aAttachments = sAttachments.split('#')
 				sAttachments = '';
@@ -1135,13 +1122,14 @@ function interfaceMessagingShowAttachments()
 				});	
 								
 				aHTML[++h] = '<span class="interfaceMessagingHeader">Attachments:</span> ' + sAttachments;
-
-				aHTML[++h] = '</td></tr>';
-				aHTML[++h] = '</tbody></table>';
 			}
 		}
 	
 		$('#interfaceMainHeaderAttachments').html(aHTML.join());
+	}
+	else
+	{
+		$('#interfaceMainHeaderAttachments').html('No attachments.');
 	}
 }
 
