@@ -597,7 +597,7 @@ function interfaceFinancialBalanceSheet(aParam, oResponse)
 			aHTML[++h] = '<tr id="trInterfaceMainFinancialBalanceSheetRow1" class="interfaceMain">' +
 						'<td id="tdInterfaceMainFinancialBalanceSheetColumn1" style="width: 70px" class="interfaceMainColumn1">' +
 						'</td>' +
-						'<td id="tdInterfaceMainFinancialBalanceSheetColumn2" class="interfaceMainColumn1Large">' +
+						'<td id="tdInterfaceMainFinancialBalanceSheetColumn2" class="interfaceMainColumn2">' +
 						'</td>' +
 						'</tr>';
 			aHTML[++h] = '</table>';					
@@ -611,17 +611,17 @@ function interfaceFinancialBalanceSheet(aParam, oResponse)
 	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainBSAssets" class="interfaceMainSummary">Assets</td></tr>' +
 							'<tr><td id="tdInterfaceMainBSAssetsValue" class="interfaceMainSummaryValue">' +	
-							(oResponse.AssetTotal).formatMoney(2, '.', ',') +
+							(oResponse.assettotal).formatMoney(2, '.', ',') +
 							'</td></tr>';
 		
-			aHTML[++h] = '<tr><td id="tdInterfaceMainBSLiability" class="interfaceMainSummary">Liability</td></tr>' +
+			aHTML[++h] = '<tr><td id="tdInterfaceMainBSLiability" class="interfaceMainSummary">Liabilities</td></tr>' +
 							'<tr><td id="tdInterfaceMainBSLiabilityValue" class="interfaceMainSummaryValue">' +
-							(oResponse.LiabilityTotal).formatMoney(2, '.', ',') +
+							(oResponse.liabilitytotal).formatMoney(2, '.', ',') +
 							'</td></tr>';
 		
 			aHTML[++h] = '<tr><td id="tdInterfaceMainBSEquity" class="interfaceMainSummary">Equity</td></tr>' +
 							'<tr><td id="tdInterfaceMainBSEquityValue" class="interfaceMainSummaryValue">' +
-							(oResponse.EquityTotal).formatMoney(2, '.', ',') +
+							(oResponse.equitytotal).formatMoney(2, '.', ',') +
 							'</td></tr>';
 
 			aHTML[++h] = '</table>';							
@@ -693,7 +693,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 	{
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-		oSearch.addField('title,lastreconciledbalance,lastreconcileddate,notes');
+		oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
 		oSearch.sort('title', 'asc');
 		oSearch.rows = giMessagingRows;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccount(aParam, data)});
@@ -744,7 +744,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 			functionShowRow: interfaceFinancialBankAccountRow,
 			functionOpen: undefined,
 			functionNewPage: ''
-		   }); 	
+		   });
 	}
 }
 
@@ -760,7 +760,7 @@ function interfaceFinancialBankAccountRow(oRow)
 							oRow.title + '</td>';
 	
 	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Balance-" class="interfaceMainRow" style="text-align:right;">' +
-							oRow.lastreconciledbalance + '</td>';
+							oRow.lastreconciledamount + '</td>';
 	
 	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Date-" class="interfaceMainRow" style="text-align:right;">' +
 							oRow.lastreconcileddate + '</td>';
@@ -804,7 +804,7 @@ function interfaceFinancialUnallocated(aParam, oResponse)
 			aHTML[++h] = '<tr id="trInterfaceMainFinancialUnallocatedRow1" class="interfaceMain">' +
 						'<td id="tdInterfaceMainFinancialUnallocatedColumn1" style="width: 70px" class="interfaceMainColumn1">' +
 						'</td>' +
-						'<td id="tdInterfaceMainFinancialUnallocatedColumn2" class="interfaceMainColumn1Large">' +
+						'<td id="tdInterfaceMainFinancialUnallocatedColumn2" class="interfaceMainColumn2">' +
 						'</td>' +
 						'</tr>';
 			aHTML[++h] = '</table>';					

@@ -1,9 +1,3 @@
-// http://mydigitalstructure.com for endpoint method documentation
-// For method paramaters do http://mydigitalstructure.com/[method name]
-// And yes this code could be optimised in a stack of different ways - but when learning, optimised code can be hard to follow.
-
-//TODO: Change the drop down selects to use data- attributes for HTML5 compliance.
-
 Number.prototype.formatMoney = function(c, d, t){
 var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
@@ -2672,7 +2666,7 @@ function interfaceMasterContactEmailSearchShow(oResponse, sElementId, aParam)
 									'---' + this.surname +
 									'---' + this.contactbusiness +
 									'---' + this.contactbusinesstext +
-									'---' + this.email +
+									'---' + this.email;
 		
 			aHTML[++h] = '<tr class="interfaceSearch">';
 			

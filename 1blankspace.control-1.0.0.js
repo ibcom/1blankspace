@@ -419,6 +419,18 @@ function interfaceControlOptionsBind()
 		interfaceFinancialExpenseMasterViewport();
 	});
 	
+	$('#tdInterfaceViewportMasterControlFinancialReceipt').click(function(event)
+	{
+		interfaceMasterOptionsSource();
+		interfaceFinancialReceiptMasterViewport();
+	});
+	
+	$('#tdInterfaceViewportMasterControlFinancialPayment').click(function(event)
+	{
+		interfaceMasterOptionsSource();
+		interfaceFinancialPaymentMasterViewport();
+	});
+	
 	$('#tdInterfaceViewportMasterControlHelp').click(function(event)
 	{
 		interfaceMasterOptionsSource();
