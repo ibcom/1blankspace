@@ -337,8 +337,8 @@ function interfaceFinancialReceiptViewport()
 	
 		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 					
-		aHTML[++h] = '<tr id="trInterfaceViewportControlReceipts" class="interfaceViewportControl">' +
-						'<td id="tdInterfaceViewportControlReceipts" class="interfaceViewportControl">Invoices</td>' +
+		aHTML[++h] = '<tr id="trInterfaceViewportControlInvoices" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlInvoices" class="interfaceViewportControl">Invoices</td>' +
 						'</tr>';
 					
 		aHTML[++h] = '</table>';					
@@ -398,10 +398,10 @@ function interfaceFinancialReceiptViewport()
 		interfaceFinancialReceiptItem();
 	});
 
-	$('#tdInterfaceViewportControlReceipts').click(function(event)
+	$('#tdInterfaceViewportControlInvoices').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainReceipt", true);
-		interfaceFinancialReceiptReceipt();
+		interfaceMasterMainViewportShow("#divInterfaceMainInvoice", true);
+		interfaceFinancialReceiptInvoice();
 	});
 	
 	$('#tdInterfaceViewportControlGL').click(function(event)
@@ -501,7 +501,7 @@ function interfaceFinancialReceiptSummary()
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPerson" class="interfaceMainSummary">Person</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryPersonValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.ccontactpersonreceivedfromtext +
+						goObjectContext.contactpersonreceivedfromtext +
 						'</td></tr>';
 		}
 		
@@ -918,7 +918,7 @@ function interfaceMasterFinancialReceiptItemAdd(aParam, oResponse)
 function interfaceFinancialReceiptInvoice(aParam, oResponse)
 {
 	var iObjectContext = giObjectContext;
-	var sXHTMLElementId = 'divInterfaceMainReceipt';
+	var sXHTMLElementId = 'divInterfaceMainInvoice';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
@@ -981,7 +981,7 @@ function interfaceFinancialReceiptInvoice(aParam, oResponse)
 		oSearch.addField('appliesdate,amount');
 		oSearch.addFilter('receipt', 'EQUAL_TO', iObjectContext);
 		oSearch.sort('appliesdate', 'asc');
-		oSearch.getResults(function(data) {interfaceFinancialReceiptReceipt(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialReceiptInvoice(aParam, data)});
 	}
 	else
 	{
@@ -993,7 +993,7 @@ function interfaceFinancialReceiptInvoice(aParam, oResponse)
 			aHTML[++h] = '<table id="tableFinancialReceiptReceipt" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">' +
-							'<td class="interfaceMainRowNothing">No receipts.</td></tr>';
+							'<td class="interfaceMainRowNothing">No invoices.</td></tr>';
 			aHTML[++h] = '</tbody></table>';
 
 			$('#' + sXHTMLElementId).html(aHTML.join(''));

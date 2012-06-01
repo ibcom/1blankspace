@@ -212,7 +212,7 @@ function interfaceFinancialPaymentSearch(sXHTMLElementId, aParam)
 		oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 		oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,' +
 								'contactpersonpaidto,projecttext,project,areatext,' +
-								'area,reference,accrueddate,description,amount,tax');
+								'area,reference,paiddate,description,amount,tax');
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 		
@@ -241,7 +241,7 @@ function interfaceFinancialPaymentSearch(sXHTMLElementId, aParam)
 			oSearch.endPoint = 'financial';
 			oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 			oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,' +
-								'reference,accrueddate,amount');
+								'reference,paiddate,amount');
 			oSearch.rf = 'json';
 			oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
 			
@@ -401,7 +401,7 @@ function interfaceFinancialPaymentViewport()
 	$('#tdInterfaceViewportControlExpenses').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainExpense", true);
-		interfaceFinancialExpensePayment();
+		interfaceFinancialPaymentExpense();
 	});
 	
 	$('#tdInterfaceViewportControlGL').click(function(event)
@@ -928,7 +928,7 @@ function interfaceMasterFinancialPaymentItemAdd(aParam, oResponse)
 function interfaceFinancialPaymentExpense(aParam, oResponse)
 {
 	var iObjectContext = giObjectContext;
-	var sXHTMLElementId = 'divInterfaceMainPayment';
+	var sXHTMLElementId = 'divInterfaceMainExpense';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
@@ -991,7 +991,7 @@ function interfaceFinancialPaymentExpense(aParam, oResponse)
 		oSearch.addField('appliesdate,amount');
 		oSearch.addFilter('payment', 'EQUAL_TO', iObjectContext);
 		oSearch.sort('appliesdate', 'asc');
-		oSearch.getResults(function(data) {interfaceFinancialPaymentPayment(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialPaymentExpense(aParam, data)});
 	}
 	else
 	{
@@ -1003,7 +1003,7 @@ function interfaceFinancialPaymentExpense(aParam, oResponse)
 			aHTML[++h] = '<table id="tableFinancialPaymentPayment" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">' +
-							'<td class="interfaceMainRowNothing">No Payments.</td></tr>';
+							'<td class="interfaceMainRowNothing">No expenses.</td></tr>';
 			aHTML[++h] = '</tbody></table>';
 
 			$('#' + sXHTMLElementId).html(aHTML.join(''));
