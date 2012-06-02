@@ -2,21 +2,29 @@
 	{
 		object: 12,
 		objectName: 'Contact Business',
+		objectCode: 'ContactBusiness',
+		objectLabel: 'Businesses',
 		showHome: true,
 		modelMethods: 
 		{
 			base: 'CONTACT_BUSINESS'
 		},
-		viewActions: true,
-		viewAttachments: true,
+		viewShowActions: true,
+		viewShowAttachments: true,
 		viewDefault: 'Summary',
 		viewHome:
 		{
 			fields:
 			[
-				name: 'tradename'
+				{name: 'tradename'}
 			]		
 		},
+		controller:
+		{
+			save: interfaceContactBusinessSave(),
+			new: interfaceContactBusinessNew(),
+			search: interfaceContactBusinessSearch()
+		}
 		viewSummary:
 		{
 			column1:
