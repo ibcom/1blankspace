@@ -181,7 +181,6 @@ function interfaceSetupStructureHomeShow(oResponse)
 			dataType: 'json',
 			success: interfaceSetupStructureHomeShow
 		});
-		
 	}
 	else
 	{

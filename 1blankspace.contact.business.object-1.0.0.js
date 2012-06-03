@@ -1,4 +1,4 @@
-[
+var objectModel = [
 	{
 		object: 12,
 		objectName: 'Contact Business',

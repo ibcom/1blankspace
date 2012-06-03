@@ -1,6 +1,4 @@
-//Ability to assign secuity rights.
-
-function interfaceSetupUserMasterViewport()
+function interfaceSetupMessagingMasterViewport()
 {
 	gsObjectName = 'Users';
 	giObjectContext = -1;
@@ -17,76 +15,76 @@ function interfaceSetupUserMasterViewport()
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
 		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupUserSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+        giKeyPressTimeoutId = setTimeout("interfaceSetupMessagingSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
 	{
-		interfaceSetupUserSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupMessagingSearch('inputInterfaceMasterViewportControlSearch');
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
 	{
-		interfaceSetupUserSearchOptions();
+		interfaceSetupMessagingSearchOptions();
 	});
 	
 	$('#spanInterfaceMasterViewportControlNew').click(function(event)
 	{
-		interfaceSetupUserNew();
+		interfaceSetupMessagingNew();
 	})
 	
 	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
 	{
-		interfaceSetupUserNewOptions();
+		interfaceSetupMessagingNewOptions();
 	});
 	
 	$('#spanInterfaceMasterViewportControlAction').click(function(event)
 	{
-		interfaceSetupUserSave();
+		interfaceSetupMessagingSave();
 	});
 	
 	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
 	{
-		interfaceSetupUserSaveOptions();
+		interfaceSetupMessagingSaveOptions();
 	});
 	
 	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
 	{
-		interfaceSetupUserSetup();
+		interfaceSetupMessagingSetup();
 	});
 	
 	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
 	{
-		interfaceSetupUserSetupOptions();
+		interfaceSetupMessagingSetupOptions();
 	});
 	
 	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
 	{
-		interfaceSetupUserHelp();
+		interfaceSetupMessagingHelp();
 	});
 	
 	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
 	{
-		interfaceSetupUserHelpOptions();
+		interfaceSetupMessagingHelpOptions();
 	});
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupUserSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupMessagingSearch(event.target.id, giSearchSource_BROWSE);
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupUserSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupMessagingSearch(event.target.id, giSearchSource_BROWSE);
 	});
 	
 	$('#inputInterfaceMasterViewportControlSearch').focus();
 	
-	interfaceSetupUserHomeShow();
+	interfaceSetupMessagingHomeShow();
 	
 }
 
-function interfaceSetupUserHomeShow(oResponse)
+function interfaceSetupMessagingHomeShow(oResponse)
 {
 	if (oResponse == undefined)
 	{
@@ -95,7 +93,7 @@ function interfaceSetupUserHomeShow(oResponse)
 					
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-						'<td id="tdInterfaceSetupUserHomeMostLikely" class="interfaceViewportMain">' +
+						'<td id="tdInterfaceSetupMessagingHomeMostLikely" class="interfaceViewportMain">' +
 						gsLoadingXHTML + 
 						'</td>' +
 						'</tr>';
@@ -108,7 +106,7 @@ function interfaceSetupUserHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportSetupUserLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="interfaceMasterViewportSetupMessagingLarge" class="interfaceMasterViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -119,11 +117,12 @@ function interfaceSetupUserHomeShow(oResponse)
 		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
-		oSearch.method = 'SETUP_USER_SEARCH';
-		oSearch.addField('username');
+		oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
+		oSearch.addField('email');
+		oSearch.addFilter('type', EQUAL_TO, 5);
 		oSearch.rows = 10;
 		oSearch.sort('modifieddate', 'desc');
-		oSearch.getResults(interfaceSetupUserHomeShow);
+		oSearch.getResults(interfaceSetupMessagingHomeShow);
 	}
 	else
 	{
@@ -139,8 +138,7 @@ function interfaceSetupUserHomeShow(oResponse)
 		}
 		else
 		{
-		
-			aHTML.push('<table id="tableInterfaceSetupUserHomeMostLikely">');
+			aHTML.push('<table id="tableInterfaceSetupMessagingHomeMostLikely">');
 			aHTML.push('<tr>');
 			aHTML.push('<td class="interfaceMain">MOST LIKELY</td>');
 			aHTML.push('</tr>');
@@ -148,37 +146,37 @@ function interfaceSetupUserHomeShow(oResponse)
 			$.each(oResponse.data.rows, function()
 			{	
 				aHTML.push('<tr class="interfaceMainRow">');
-				aHTML.push('<td id="interfaceSetupUserHomeMostLikely_Title-' + this.id + 
+				aHTML.push('<td id="interfaceSetupMessagingHomeMostLikely_Title-' + this.id + 
 										'" class="interfaceHomeMostLikely">' +
-										this.username +
+										this.email +
 										'</td>');
 				aHTML.push('</tr>');
 			});
 			
 			aHTML.push('</tbody></table>');
 			
-			aHTML.push('<table id="tableInterfaceSetupUserHomeMostLikelyMore">');
-			aHTML.push('<tr><td id="tdInterfaceSetupUserHomeMostLikelyMore">' +
-						'<a href="#" id="aInterfaceSetupUserHomeMostLikelyMore">more...</a>' +
+			aHTML.push('<table id="tableInterfaceSetupMessagingHomeMostLikelyMore">');
+			aHTML.push('<tr><td id="tdInterfaceSetupMessagingHomeMostLikelyMore">' +
+						'<a href="#" id="aInterfaceSetupMessagingHomeMostLikelyMore">more...</a>' +
 						'</td></tr>');
 			aHTML.push('</tbody></table>');
 		}
 		
-		$('#tdInterfaceSetupUserHomeMostLikely').html(aHTML.join(''));
+		$('#tdInterfaceSetupMessagingHomeMostLikely').html(aHTML.join(''));
 	
 		$('td.interfaceHomeMostLikely').click(function(event)
 		{
-			interfaceSetupUserSearch(event.target.id, {source: 1});
+			interfaceSetupMessagingSearch(event.target.id, {source: 1});
 		});
 		
-		$('#aInterfaceSetupUserHomeMostLikelyMore').click(function(event)
+		$('#aInterfaceSetupMessagingHomeMostLikelyMore').click(function(event)
 		{
-			interfaceSetupUserSearch('tdInterfaceViewportMasterControlBrowse-', {source: giSearchSource_BROWSE});
+			interfaceSetupMessagingSearch('tdInterfaceViewportMasterControlBrowse-', {source: giSearchSource_BROWSE});
 		});
 	}
 }
 
-function interfaceSetupUserSearch(sXHTMLElementId, iSource, sSearchText, sSearchContext)
+function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sSearchContext)
 {
 	
 	var aSearch = sXHTMLElementId.split('-');
@@ -200,7 +198,7 @@ function interfaceSetupUserSearch(sXHTMLElementId, iSource, sSearchText, sSearch
 		oSearch.method = 'SETUP_USER_SEARCH';
 		oSearch.addField('username,contactpersontext,lastlogon');
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
-		oSearch.getResults(function(data) {interfaceSetupUserShow(data)});
+		oSearch.getResults(function(data) {interfaceSetupMessagingShow(data)});
 	}
 	else
 	{
@@ -239,12 +237,12 @@ function interfaceSetupUserSearch(sXHTMLElementId, iSource, sSearchText, sSearch
 				oSearch.addFilter('username', 'STRING_IS_LIKE', sSearchText);
 			}	
 			
-			oSearch.getResults(interfaceSetupUserSearchShow);
+			oSearch.getResults(interfaceSetupMessagingSearchShow);
 		}
 	};	
 }
 
-function interfaceSetupUserSearchShow(oResponse)
+function interfaceSetupMessagingSearchShow(oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -291,12 +289,12 @@ function interfaceSetupUserSearchShow(oResponse)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
 			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
-			interfaceSetupUserSearch(event.target.id, 1);
+			interfaceSetupMessagingSearch(event.target.id, 1);
 		});
 	}			
 }
 
-function interfaceSetupUserViewport()
+function interfaceSetupMessagingViewport()
 {
 	var aHTML = [];
 	var h = -1;
@@ -313,12 +311,6 @@ function interfaceSetupUserViewport()
 					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
 					'</tr>';
 			
-		aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
-			
-		aHTML[++h] = '<tr id="trInterfaceViewportControlMessaging" class="interfaceViewportControl">' +
-						'<td id="tdInterfaceViewportControlMessaging" class="interfaceViewportControl">Messaging</td>' +
-						'</tr>';
-								
 	aHTML[++h] = '</table>';					
 				
 	$('#divInterfaceViewportControl').html(aHTML.join(''));
@@ -328,33 +320,26 @@ function interfaceSetupUserViewport()
 
 	aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainMessaging" class="divInterfaceViewportMain"></div>';
 			
 	$('#divInterfaceMain').html(aHTML.join(''));
 		
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
-		interfaceSetupUserSummary();
+		interfaceSetupMessagingSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-		interfaceSetupUserDetails();
-	});	
-	
-	$('#tdInterfaceViewportControlMessaging').click(function(event)
-	{
-		interfaceMasterMainViewportShow("#divInterfaceMainMessaging");
-		interfaceSetupUserDetails();
+		interfaceSetupMessagingDetails();
 	});	
 }
 
-function interfaceSetupUserShow(oResponse)
+function interfaceSetupMessagingShow(oResponse)
 {
 	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
-	interfaceSetupUserViewport();
+	interfaceSetupMessagingViewport();
 	
 	var aHTML = [];
 	var h = -1;
@@ -395,11 +380,11 @@ function interfaceSetupUserShow(oResponse)
 		
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
-		interfaceSetupUserSummary();
+		interfaceSetupMessagingSummary();
 	}	
 }		
 		
-function interfaceSetupUserSummary()
+function interfaceSetupMessagingSummary()
 {
 	var aHTML = [];
 	var h = -1;
@@ -463,12 +448,12 @@ function interfaceSetupUserSummary()
 		$('#aInterfaceMainSummaryDisable').click(function(event)
 		{
 			interfaceMasterMainViewportShow("#divInterfaceMainDisable");
-			interfaceSetupUserDisable();
+			interfaceSetupMessagingDisable();
 		});
 	}	
 }
 
-function interfaceSetupUserDetails()
+function interfaceSetupMessagingDetails()
 {
 	var aHTML = [];
 	var h = -1;
@@ -531,7 +516,7 @@ function interfaceSetupUserDetails()
 	}	
 }
 
-function interfaceSetupUserSave()
+function interfaceSetupMessagingSave()
 {
 	var sParam = 'method=SETUP_USER_MANAGE';
 	var sData = '_=1';
