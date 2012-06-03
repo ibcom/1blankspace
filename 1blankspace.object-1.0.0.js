@@ -1,4 +1,4 @@
-var objectModel = [
+var modelObject = [
 	{
 		object: 12,
 		objectName: 'Contact Business',
