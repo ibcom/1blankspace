@@ -680,7 +680,7 @@ function interfaceMessagingSearch(sXHTMLElementId, aParam)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 		oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
-							'body,hasattachments,attachments,imapflags,detailscached');
+							'message,hasattachments,attachments,imapflags,detailscached');
 		oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 		oSearch.rows = giMessagingRows;
@@ -1064,7 +1064,7 @@ function interfaceMessagingSummary()
 					var oSearch = new AdvancedSearch();
 					oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 					oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
-										'body,hasattachments,attachments,imapflags,detailscached');
+										'message,hasattachments,attachments,imapflags,detailscached');
 					oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
 					oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 					oSearch.getResults(function(oResponse) 
@@ -1135,7 +1135,7 @@ function interfaceMessagingShowAttachments()
 
 function interfaceMessagingShowMessage()
 {
-	var sHTML = goObjectContext.body;
+	var sHTML = goObjectContext.message;
 	sHTML = interfaceMasterFormatXHTML(sHTML);
 
 	while ($('#ifMessage').length == 0)
@@ -1195,7 +1195,7 @@ function interfaceMessagingEdit()
 		if (goObjectContext != undefined)
 		{
 			//tinyMCE.get('editor1').getContent()
-			$('#inputInterfaceMainEditText').val(unescape(goObjectContext.body));
+			$('#inputInterfaceMainEditText').val(unescape(goObjectContext.message));
 		}
 	
 		if (gbRichEdit)
