@@ -1,15 +1,15 @@
 function interfaceSetupMessagingMasterViewport()
 {
-	gsObjectName = 'Users';
+	gsObjectName = 'Messaging';
 	giObjectContext = -1;
-	giObject = 40;
+	giObject = -1;
 	goObjectContext = undefined;
 	
 	interfaceMasterReset();		
 			
 	$('#divInterfaceMasterViewportControlSet').button(
 	{
-		label: "Users"
+		label: "Messaging"
 	});
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
@@ -195,8 +195,8 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 		giObjectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
-		oSearch.method = 'SETUP_USER_SEARCH';
-		oSearch.addField('username,contactpersontext,lastlogon');
+		oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
+		oSearch.addField('email');
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 		oSearch.getResults(function(data) {interfaceSetupMessagingShow(data)});
 	}
@@ -225,16 +225,16 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 			interfaceMasterSearchStart(sElementId);
 			
 			var oSearch = new AdvancedSearch();
-			oSearch.method = 'SETUP_USER_SEARCH';
-			oSearch.addField('username');
+			oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
+			oSearch.addField('email');
 			
 			if (iSource == giSearchSource_BROWSE)
 			{
-				oSearch.addFilter('username', 'STRING_STARTS_WITH', sSearchText);
+				oSearch.addFilter('email', 'STRING_STARTS_WITH', sSearchText);
 			}
 			else
 			{	
-				oSearch.addFilter('username', 'STRING_IS_LIKE', sSearchText);
+				oSearch.addFilter('email', 'STRING_IS_LIKE', sSearchText);
 			}	
 			
 			oSearch.getResults(interfaceSetupMessagingSearchShow);
@@ -348,7 +348,7 @@ function interfaceSetupMessagingShow(oResponse)
 	{
 		goObjectContext = undefined;
 		
-		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find User.</td></tr>';
+		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find then message account.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
 				
 		$('#divInterfaceMain').html(aHTML.join(''));
@@ -357,7 +357,7 @@ function interfaceSetupMessagingShow(oResponse)
 	{
 		goObjectContext = oResponse.data.rows[0];
 				
-		var sContext = goObjectContext.username;
+		var sContext = goObjectContext.email;
 		var aContext = sContext.split("@");
 		
 		sContext = aContext[0];
@@ -400,30 +400,10 @@ function interfaceSetupMessagingSummary()
 	{	
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
-		var sTmpClass = ''
-		
-		if (goObjectContext.disabled == 'Y')
-		{
-			sTmpClass = ' interfaceMainDisabled';
-		}
-		
-		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummary">User</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummaryValue' + sTmpClass + '">' +
-						goObjectContext.username +
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummary">Email</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummaryValue">' +
+						goObjectContext.email +
 						'</td></tr>';
-						
-		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummary">Name</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummaryValue">' +
-						goObjectContext.contactpersontext +
-						'</td></tr>';
-		
-		if (goObjectContext.lastlogon != '')
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummary">Last Logon</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummaryValue">' +
-						goObjectContext.lastlogon +
-						'</td></tr>';
-		}
 		
 		aHTML[++h] = '</table>';					
 		
@@ -434,13 +414,6 @@ function interfaceSetupMessagingSummary()
 		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2">';
 		
-		if (1==0 && goObjectContext.disabled == 'N')
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask1" class="interfaceMainSummary">' +
-						'<a href="#" id="aInterfaceMainSummaryDisable">Disable Access</a>' +
-						'</td></tr>';
-		}				
-										
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainSummaryColumn2').html(aHTML.join(''));
@@ -478,13 +451,13 @@ function interfaceSetupMessagingDetails()
 	
 		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
 	
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsUsername" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDetailsUsername" class="interfaceMain">' +
-						'User Name / Logon Name' +
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsEmail" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsEmail" class="interfaceMain">' +
+						'Email' +
 						'</td></tr>' +
-						'<tr id="trInterfaceMainDetailsUserNameValue" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainDetailsUserNameValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainDetailsUserName" class="inputInterfaceMainText">' +
+						'<tr id="trInterfaceMainDetailsEmailValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsEmailValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsEmail" class="inputInterfaceMainText">' +
 						'</td></tr>';
 		
 		aHTML[++h] = '</table>';					
@@ -496,29 +469,46 @@ function interfaceSetupMessagingDetails()
 			
 		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
 	
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsDisabledText" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDetailsDisabledText" class="interfaceMain">' +
-						'Disabled Reason' +
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsType" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsType" class="interfaceMain">' +
+						'Tracking' +
 						'</td></tr>' +
-						'<tr id="trInterfaceMainDetailsDisabledTextValue" class="interfaceMainTextMulti">' +
-						'<td id="tdInterfaceMainDetailsDisabledTextValue" class="interfaceMainTextMulti">' +
-						'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsDisabledText" class="inputInterfaceMainTextMulti"></textarea>' +
+						'<tr id="trInterfaceMainDetailsType" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsTypeValue" class="interfaceMainText">' +
+						'<input type="radio" id="radioType5" name="radioType" value="5"/>IMAP' +
 						'</td></tr>';
 		
 		aHTML[++h] = '</table>';					
 		
-		//$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 		
 		if (goObjectContext != undefined)
 		{
-			$('#inputInterfaceMainDetailsUserName').val(goObjectContext.username);
+			$('#inputInterfaceMainDetailsEmail').val(goObjectContext.username);
+			$('[name="radioType"][value="' + goObjectContext.type + '"]').attr('checked', true);
+		}
+		else
+		{
+			$('[name="radioType"][value="5"]').attr('checked', true);
 		}
 	}	
 }
 
+function interfaceSetupMessagingNew()
+{
+	goObjectContext = undefinded;
+	giObjectContext = -1;
+	interfaceSetupMessagingViewport();
+	$('#divInterfaceMainDetails').html(gsLoadingXHTML);
+	$('#divInterfaceMainDetails').attr('onDemandLoading', '1');
+	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	interfaceSetupMessagingDetails();	
+}
+
 function interfaceSetupMessagingSave()
 {
-	var sParam = 'method=SETUP_USER_MANAGE';
+	var sParam = 'method=SETUP_MESSAGING_ACCOUNT_MANAGE';
 	var sData = '_=1';
 	
 	if (giObjectContext != -1)
@@ -528,7 +518,8 @@ function interfaceSetupMessagingSave()
 	
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		sData += '&username=' + encodeURIComponent($('#inputInterfaceMainDetailsUserName').val());
+		sData += '&email=' + encodeURIComponent($('#inputInterfaceMainDetailsEmail').val());
+		sData += '&type=' + $('input[name="radioType"]:checked').val();
 	};
 
 	$.ajax(

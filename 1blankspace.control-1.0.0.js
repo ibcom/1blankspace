@@ -477,12 +477,6 @@ function interfaceControlSetupOptions()
 		aHTML[++h] = '<td id="tdInterfaceViewportMasterSetupControlColumn1" class="interfaceViewportMasterControlColumn">';
 		aHTML[++h] = '<table id="tableInterfaceViewportMasterSetupControlColumn1" class="interfaceViewportMasterControlColumn">';
 
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
-					'<td id="tdInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
-					'<span id="spanInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
-					'Websites</span>' +
-					'</td></tr>';
-					
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupUser" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupUser" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupUser" class="interfaceViewportMasterControl">' +
@@ -494,11 +488,23 @@ function interfaceControlSetupOptions()
 					'<span id="spanInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +
 					'Network&nbsp;Groups</span>' +
 					'</td></tr>';
-	
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +	
-					'<td id="tdInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +
-					'<span id="spanInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +
-					'Automation</span>' +
+					
+		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +	
+					'<td id="tdInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +
+					'Messaging (Email)</span>' +
+					'</td></tr>';			
+					
+		aHTML[++h] = '</table>';
+		aHTML[++h] = '</td>';
+		
+		aHTML[++h] = '<td id="tdInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
+		aHTML[++h] = '<table id="tableInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
+
+		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
+					'<td id="tdInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
+					'Websites</span>' +
 					'</td></tr>';
 	
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupStructures" class="interfaceViewportMasterControl">' +	
@@ -506,7 +512,13 @@ function interfaceControlSetupOptions()
 					'<span id="spanInterfaceViewportMasterControlSetupStructures" class="interfaceViewportMasterControl">' +
 					'Structures</span>' +
 					'</td></tr>';
-	
+					
+		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +	
+					'<td id="tdInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +
+					'Automation</span>' +
+					'</td></tr>';			
+					
 		if (false)
 		{
 			aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +	
@@ -515,10 +527,10 @@ function interfaceControlSetupOptions()
 						 'Imports</span>' +
 						 '</td></tr>';
 		}
-		
+					
 		aHTML[++h] = '</table>';
 		aHTML[++h] = '</td>';
-		
+	
 		aHTML[++h] = '<td id="tdInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
 		aHTML[++h] = '<table id="tableInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
 
@@ -533,14 +545,7 @@ function interfaceControlSetupOptions()
 					'<span id="spanInterfaceViewportMasterControlSetupContactPersonGroup" class="interfaceViewportMasterControl">' +
 					'Contact&nbsp;Person&nbsp;Groups</span>' +
 					'</td></tr>';
-	
 					
-		aHTML[++h] = '</table>';
-		aHTML[++h] = '</td>';
-	
-		aHTML[++h] = '<td id="tdInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
-		aHTML[++h] = '<table id="tableInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
-
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +
@@ -601,6 +606,11 @@ function interfaceControlSetupOptionsBind()
 		interfaceSetupAutomationMasterViewport();
 	});
 	
+	$('#tdInterfaceViewportMasterControlSetupMessaging').click(function(event)
+	{
+		interfaceMasterOptionsSource();
+		interfaceSetupMessagingMasterViewport();
+	});
 	
 	$('#tdInterfaceViewportMasterControlSetupImport').click(function(event)
 	{

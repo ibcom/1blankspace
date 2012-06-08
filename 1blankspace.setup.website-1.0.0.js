@@ -592,19 +592,19 @@ function interfaceSetupWebsiteSummary()
 		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" cellpadding=6>';
 							
-		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Action" style="width:175px;">' +
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +
 						'<a href="#" id="aInterfaceMainSummarySetupWebApp"><strong>Convert to a jQuery or jQuery mobile webapp.</strong></a>' +
 						'</td></tr>';
 					
 		if (goObjectContext.primaryurl != '')
 		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask3" class="interfaceMainColumn2Action" style="width:175px;">' +
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask3" class="interfaceMainColumn2Actionx" style="width:175px;">' +
 						'<a href="' + goObjectContext.primaryurl + '" target="_blank">' + goObjectContext.primaryurl + '</a>' +
 						'</td></tr>';
 		}		
 					
 		aHTML[++h] = '<tr class="interfaceMainColumn2Action" >' +						
-						'<td tdInterfaceMainSummaryTask4" class="interfaceMainColumn2Action" style="font-size:0.75em;color:#404040;">' +
+						'<td tdInterfaceMainSummaryTask4" class="interfaceMainColumn2Actionx" style="font-size:0.75em;color:#404040;">' +
 						'<br /><hr />' +
 						'<br />Use the Attachments link to add your js scripts and the Scripts section to reference them and any other scripts you may require.' +
 						'</td>' +

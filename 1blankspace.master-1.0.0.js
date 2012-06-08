@@ -1377,7 +1377,7 @@ function interfaceMasterAttachments(aParam)
 	var iObject = giObject;
 	var iObjectContext = giObjectContext;
 	var bShowAdd = gbShowAdd;
-	var iAttachmentType = '';
+	var iAttachmentType;
 	var oActions = {add: true};
 	var sHelpNotes;
 	
@@ -1447,19 +1447,20 @@ function interfaceMasterAttachments(aParam)
 	}
 	
 	if (iObjectContext != -1)
-	{
-		var sParam = 'method=CORE_ATTACHMENT_SEARCH' +
-						'&object=' + iObject + 
-						'&objectcontext=' + iObjectContext +
-						'&type=' + iAttachmentType;
+	{	
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+		oSearch.addField('type,filename,description,download,modifieddate');
+		oSearch.addFilter('object', 'EQUAL_TO', iObject);
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 		
-		$.ajax(
+		if (iAttachmentType != undefined)
 		{
-			type: 'GET',
-			url: '/ondemand/core/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceMasterAttachmentsShow(data, sXHTMLElementID)}
-		});
+			oSearch.addFilter('type', 'EQUAL_TO', iAttachmentType);
+		}
+		
+		oSearch.sort('filename', 'asc');
+		oSearch.getResults(function(data) {interfaceMasterAttachmentsShow(data, sXHTMLElementID)});
 	}
 
 }
