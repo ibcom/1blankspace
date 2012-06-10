@@ -382,6 +382,90 @@ function interfaceSetupFinancialSummary()
 	}	
 }
 
+function interfacesSetupFinancialBankAccount(aParam, oResponse)
+{
+
+	if (oResponse == undefined)
+	{
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'SETUP_FINANCIAL_BANK_ACCOUNT_SEARCH';
+		oSearch.addField('title,notes');
+		oSearch.sort('title', 'asc');
+		oSearch.rows = giMessagingRows;
+		oSearch.getResults(function(data) {interfaceFinancialBankAccount(aParam, data)});
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
+			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No bank accounts set up.</td>';
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</table>';
+		}
+		else
+		{		
+			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Last Reconciled Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Last Reconciled</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			var oRows = oResponse.data.rows;
+			
+			$(oRows).each(function() 
+			{
+				aHTML[++h] = interfaceFinancialBankAccountRow(this);
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+		}
+		
+		interfaceMasterPaginationList(
+		   {
+			type: 'JSON',
+			xhtmlElementID: 'divInterfaceMainBankAccount',
+			xhtmlContext: 'BankAccount',
+			xhtml: aHTML.join(''),
+			showMore: (oResponse.morerows == "true"),
+			more: oResponse.moreid,
+			rows: 100,
+			functionShowRow: interfaceFinancialBankAccountRow,
+			functionOpen: undefined,
+			functionNewPage: ''
+		   });
+	}
+}
+
+function interfaceSetupFinancialBankAccountRow(oRow)
+{
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<tr class="interfaceMainRow">';
+				
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Title-" class="interfaceMainRow"' +
+							' title="' + oRow.notes + '">' +
+							oRow.title + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Balance-" class="interfaceMainRow" style="text-align:right;">' +
+							oRow.lastreconciledamount + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Date-" class="interfaceMainRow" style="text-align:right;">' +
+							oRow.lastreconcileddate + '</td>';
+													
+	aHTML[++h] = '</tr>'
+	
+	return aHTML.join('');
+}
+
 function interfaceSetupFinancialDetails()
 {
 	var aHTML = [];
@@ -407,15 +491,60 @@ function interfaceSetupFinancialDetails()
 	
 		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
 	
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsEmail" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDetailsEmail" class="interfaceMain">' +
-						'Email' +
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountCash" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialAccountCash" class="interfaceMain">' +
+						'Cash' +
 						'</td></tr>' +
-						'<tr id="trInterfaceMainDetailsEmailValue" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainDetailsEmailValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainDetailsEmail" class="inputInterfaceMainText">' +
+						'<tr id="trInterfaceMainFinancialAccountCashValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainFinancialAccountCashValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountCash" class="inputInterfaceMainText">' +
 						'</td></tr>';
 		
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountCreditors" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialAccountCreditors" class="interfaceMain">' +
+						'Creditors' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainFinancialAccountCreditorsValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainFinancialAccountCreditorsValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountCreditors" class="inputInterfaceMainText">' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountDebitors" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialAccountDebitors" class="interfaceMain">' +
+						'Creditors' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainFinancialAccountDebitorsValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainFinancialAccountDebitorsValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountDebitors" class="inputInterfaceMainText">' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountCurrentProfit" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialAccountCurrentProfit" class="interfaceMain">' +
+						'Current Profit' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainFinancialAccountCurrentProfitValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainFinancialAccountCurrentProfitValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountCurrentProfit" class="inputInterfaceMainText">' +
+						'</td></tr>';	
+						
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'Retained Profit' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
+						'</td></tr>';														
+			
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'Retained Profit' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
+						'</td></tr>';	
+										
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
