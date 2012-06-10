@@ -1,6 +1,6 @@
 function interfaceSetupFinancialMasterViewport()
 {
-	gsObjectName = 'Messaging';
+	gsObjectName = 'Financials';
 	giObjectContext = -1;
 	giObject = -1;
 	goObjectContext = undefined;
@@ -9,7 +9,7 @@ function interfaceSetupFinancialMasterViewport()
 			
 	$('#divInterfaceMasterViewportControlSet').button(
 	{
-		label: "Messaging"
+		label: "Financials"
 	});
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
@@ -460,33 +460,22 @@ function interfaceSetupFinancialFinancialAccountDefault()
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
-		
-		var aHTML = [];
-		var h = -1;
-			
-		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
-	
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsType" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDetailsType" class="interfaceMain">' +
-						'Tracking' +
-						'</td></tr>' +
-						'<tr id="trInterfaceMainDetailsType" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainDetailsTypeValue" class="interfaceMainText">' +
-						'<input type="radio" id="radioType5" name="radioType" value="5"/>IMAP' +
-						'</td></tr>';
-		
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
-		
+
 		if (goObjectContext != undefined)
 		{
-			$('#inputInterfaceMainDetailsEmail').val(goObjectContext.username);
-			$('[name="radioType"][value="' + goObjectContext.type + '"]').attr('checked', true);
+			$('#inputInterfaceMainFinancialAccountCash').val(goObjectContext.financialaccountcashtext);
+			$('#inputInterfaceMainFinancialAccountCash').attr("data-id", goObjectContext.financialaccountcash);
+			$('#inputInterfaceMainFinancialAccountCreditors').val(goObjectContext.financialaccountcreditortext);
+			$('#inputInterfaceMainFinancialAccountCreditors').attr("data-id", goObjectContext.financialaccountcreditor);
+			$('#inputInterfaceMainFinancialAccountDebitors').val(goObjectContext.financialaccountdebitortext);
+			$('#inputInterfaceMainFinancialAccountDebitors').attr("data-id", goObjectContext.financialaccountdebitor);
+			$('#inputInterfaceMainFinancialAccountCurrentProfit').val(goObjectContext.financialaccountcurrentearningstext);
+			$('#inputInterfaceMainFinancialAccountCurrentProfit').attr("data-id", goObjectContext.financialaccountcurrentearnings);
+			$('#inputInterfaceMainFinancialAccountRetainedProfit').val(goObjectContext.financialaccountretainedearningstext);
+			$('#inputInterfaceMainFinancialAccountRetainedProfit').attr("data-id", goObjectContext.financialaccountretainedearnings);
 		}
 		else
 		{
-			$('[name="radioType"][value="5"]').attr('checked', true);
 		}
 	}	
 }
@@ -503,7 +492,11 @@ function interfaceSetupFinancialSave()
 	
 	if ($('#divInterfaceMainFinancialAccount').html() != '')
 	{
-		sData += '&financialaccountcash=' + encodeURIComponent($('#inputInterfaceMainFinancialAccountCash').val());
+		sData += '&financialaccountcash=' + encodeURIComponent($('#inputInterfaceMainFinancialAccountCash').attr('data-id'));
+		sData += '&financialaccountcreditor=' + encodeURIComponent($('#inputInterfaceMainFinancialAccountCreditors').attr('data-id'));
+		sData += '&financialaccountdebitor=' + encodeURIComponent($('#inputInterfaceMainFinancialAccountDebitors').attr('data-id'));
+		sData += '&financialaccountcurrentearnings=' + encodeURIComponent($('#inputInterfaceMainFinancialAccountCurrentProfit').attr('data-id'));
+		sData += '&financialaccountretainedearnings=' + encodeURIComponent($('#inputInterfaceMainFinancialAccountRetainedProfit').attr('data-id'));	
 	};
 
 	$.ajax(
