@@ -534,6 +534,12 @@ function interfaceControlSetupOptions()
 		aHTML[++h] = '<td id="tdInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
 		aHTML[++h] = '<table id="tableInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
 
+		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +	
+					'<td id="tdInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +
+					'Financials</span>' +
+					'</td></tr>';
+					
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +
@@ -617,7 +623,13 @@ function interfaceControlSetupOptionsBind()
 		interfaceMasterOptionsSource();
 		interfaceSetupImportMasterViewport();
 	});
-	
+
+	$('#tdInterfaceViewportMasterControlSetupFinancial').click(function(event)
+	{
+		interfaceMasterOptionsSource();
+		interfaceSetupFinancialMasterViewport();
+	});
+
 	$('#tdInterfaceViewportMasterControlSetupContactBusinessGroup').click(function(event)
 	{
 		interfaceMasterOptionsSource();

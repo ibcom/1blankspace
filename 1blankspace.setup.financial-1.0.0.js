@@ -28,16 +28,6 @@ function interfaceSetupFinancialMasterViewport()
 		interfaceSetupFinancialSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
-	{
-		interfaceSetupFinancialNew();
-	})
-	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
-	{
-		interfaceSetupFinancialNewOptions();
-	});
-	
 	$('#spanInterfaceMasterViewportControlAction').click(function(event)
 	{
 		interfaceSetupFinancialSave();
@@ -103,13 +93,29 @@ function interfaceSetupFinancialHomeShow(oResponse)
 				'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl">Summary/td>' +
 				'</tr>';	
 	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlOther" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlOther" class="interfaceViewportControl">General</td>' +
+				'</tr>';	
+				
 	aHTML[++h] = '<tr id="trInterfaceViewportControlBankAccount" class="interfaceViewportControl">' +
 				'<td id="tdInterfaceViewportControlBankAccount" class="interfaceViewportControl">Bank Accounts</td>' +
 				'</tr>';	
 	
+	aHTML[++h] = '</table>';		
+	
+	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+	
 	aHTML[++h] = '<tr id="trInterfaceViewportControlFinancialAccount" class="interfaceViewportControl">' +
 				'<td id="tdInterfaceViewportControlFinancialAccount" class="interfaceViewportControl">Financial Accounts</td>' +
+				'</tr>';
+				
+	aHTML[++h] = '<tr id="trInterfaceViewportControlFinancialAccountDefault" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlFinancialAccountDefault" class="interfaceViewportControl">Defaults</td>' +
 				'</tr>';	
+	
+	aHTML[++h] = '</table>';		
+	
+	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
 	aHTML[++h] = '<tr id="trInterfaceViewportControlInvoicing" class="interfaceViewportControl">' +
 				'<td id="tdInterfaceViewportControlInvoicing class="interfaceViewportControl">Invoicing</td>' +
@@ -123,173 +129,76 @@ function interfaceSetupFinancialHomeShow(oResponse)
 				'<td id="tdInterfaceViewportControlPayroll" class="interfaceViewportControl">Payroll</td>' +
 				'</tr>';	
 	
-	aHTML[++h] = '<tr id="trInterfaceViewportControlOther" class="interfaceViewportControl">' +
-				'<td id="tdInterfaceViewportControlOther" class="interfaceViewportControl">Other</td>' +
-				'</tr>';	
-				
 	aHTML[++h] = '</table>';		
 
 	$('#divInterfaceViewportControl').html(aHTML.join(''));	
-}
-
-function interfaceSetupFinancialSearch(sXHTMLElementId, iSource, sSearchText, sSearchContext)
-{
-	
-	var aSearch = sXHTMLElementId.split('-');
-	var sElementId = aSearch[0];
-	var sSearchContext = aSearch[1];
-		
-	if (iSource == undefined)
-	{
-		iSource = giSearchSource_TEXT_INPUT;
-	}	
-		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
-	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
-		
-		giObjectContext = sSearchContext;
-		
-		var oSearch = new AdvancedSearch();
-		oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
-		oSearch.addField('email');
-		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
-		oSearch.getResults(function(data) {interfaceSetupFinancialShow(data)});
-	}
-	else
-	{
-		var iMinimumLength = 3;
-		var iMaximumColumns = 1;
-		
-		if (sSearchText == undefined)
-		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
-		}	
-		
-		if (iSource == giSearchSource_BROWSE)
-		{
-			iMinimumLength = 1;
-			iMaximumColumns = 4;
-			sSearchText = aSearch[1];
-			if (sSearchText == '#') {sSearchText = '[0-9]'}
-			sElementId = 'tableInterfaceViewportMasterBrowse';
-		}
-		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
-		{	
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
-			
-			var oSearch = new AdvancedSearch();
-			oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
-			oSearch.addField('email');
-			
-			if (iSource == giSearchSource_BROWSE)
-			{
-				oSearch.addFilter('email', 'STRING_STARTS_WITH', sSearchText);
-			}
-			else
-			{	
-				oSearch.addFilter('email', 'STRING_IS_LIKE', sSearchText);
-			}	
-			
-			oSearch.getResults(interfaceSetupFinancialSearchShow);
-		}
-	};	
-}
-
-function interfaceSetupFinancialSearchShow(oResponse)
-{
-	var iColumn = 0;
-	var aHTML = [];
-	var h = -1;
-	var	iMaximumColumns = 1;
-		
-	if (oResponse.data.rows.length == 0)
-	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
-	}
-	else
-	{	
-		aHTML[++h] = '<table class="interfaceSearchMedium">';
-		aHTML[++h] = '<tbody>'
-			
-		$.each(oResponse.data.rows, function()
-		{	
-			iColumn = iColumn + 1;
-			
-			if (iColumn == 1)
-			{
-				aHTML[++h] = '<tr class="interfaceSearch">';
-			}
-			
-			aHTML[++h] = '<td class="interfaceSearch" id="' +
-							'-' + this.id + '">' +
-							this.username + '</td>';
-			
-			if (iColumn == iMaximumColumns)
-			{
-				aHTML[++h] = '</tr>'
-				iColumn = 0;
-			}	
-		});
-    	
-		aHTML[++h] = '</tbody></table>';
-
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
-		interfaceMasterSearchStop();
-		
-		$('td.interfaceSearch').click(function(event)
-		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
-			interfaceSetupFinancialSearch(event.target.id, 1);
-		});
-	}			
-}
-
-function interfaceSetupFinancialViewport()
-{
-	var aHTML = [];
-	var h = -1;
-
-	aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
-	
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-					'</tr>';
-					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-					'</tr>';
-			
-	aHTML[++h] = '</table>';					
-				
-	$('#divInterfaceViewportControl').html(aHTML.join(''));
 	
 	var aHTML = [];
 	var h = -1;
 
 	aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-			
+	aHTML[++h] = '<div id="divInterfaceMainGeneral" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainBankAccount" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainFinancialAccount" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainFinancialAccountDefault" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainInvoicing" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainTax" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainPayroll" class="divInterfaceViewportMain"></div>';
+
 	$('#divInterfaceMain').html(aHTML.join(''));
-		
+	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
-		interfaceSetupFinancialSummary();
+		interfaceContactBusinessSummary();
 	});
 	
-	$('#tdInterfaceViewportControlDetails').click(function(event)
+	$('#tdInterfaceViewportControlGeneral').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-		interfaceSetupFinancialDetails();
-	});	
+		interfaceMasterMainViewportShow("#divInterfaceMainGeneral");
+		interfaceContactBusinessGeneral();
+	});
+	
+	$('#tdInterfaceViewportControlBankAccount').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainBankAccount");
+		interfaceContactBusinessBankAccount();
+	});
+	
+	$('#tdInterfaceViewportControlFinancialAccount').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainFinancialAccount");
+		interfaceContactBusinessFinancialAccount();
+	});
+	
+	$('#tdInterfaceViewportControlFinancialAccountDefault').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainFinancialAccountDefault");
+		interfaceContactBusinessFinancialAccountDefault();
+	});
+	
+	$('#tdInterfaceViewportControlInvoicing').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainInvoicing");
+		interfaceContactBusinessInvoicing();
+	});
+	
+	$('#tdInterfaceViewportControlTax').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainTax");
+		interfaceContactBusinessTax();
+	});
+	
+	$('#tdInterfaceViewportControlPayroll').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainPayroll");
+		interfaceContactBusinessPayroll();
+	});
+}
+
+function interfaceSetupFinancialSearch(sXHTMLElementId, iSource, sSearchText, sSearchContext)
+{
+	alert('Not applicable');
 }
 
 function interfaceSetupFinancialShow(oResponse)
@@ -325,16 +234,7 @@ function interfaceSetupFinancialShow(oResponse)
 			
 		$('#divInterfaceViewportControlContext').html(sContext);
 		
-		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
-						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';					
 		
-		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
 		interfaceSetupFinancialSummary();
 	}	
@@ -350,10 +250,22 @@ function interfaceSetupFinancialSummary()
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find user.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
 				
-		$('#divInterfaceMain').html(aHTML.join(''));
+		$('#divInterfaceMainSummary').html(aHTML.join(''));
 	}
 	else
 	{	
+		
+		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
+		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
+					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
+						'</td>' +
+						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
+						'</td>' +
+						'</tr>';
+		aHTML[++h] = '</table>';					
+		
+		$('#divInterfaceMainSummary').html(aHTML.join(''));
+		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummary">Email</td></tr>' +
@@ -466,7 +378,7 @@ function interfaceSetupFinancialBankAccountRow(oRow)
 	return aHTML.join('');
 }
 
-function interfaceSetupFinancialDetails()
+function interfaceSetupFinancialFinancialAccountDefault()
 {
 	var aHTML = [];
 	var h = -1;
@@ -579,18 +491,6 @@ function interfaceSetupFinancialDetails()
 	}	
 }
 
-function interfaceSetupFinancialNew()
-{
-	goObjectContext = undefinded;
-	giObjectContext = -1;
-	interfaceSetupFinancialViewport();
-	$('#divInterfaceMainDetails').html(gsLoadingXHTML);
-	$('#divInterfaceMainDetails').attr('onDemandLoading', '1');
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
-	interfaceSetupFinancialDetails();	
-}
-
 function interfaceSetupFinancialSave()
 {
 	var sParam = 'method=SETUP_MESSAGING_ACCOUNT_MANAGE';
@@ -601,10 +501,9 @@ function interfaceSetupFinancialSave()
 		sParam += '&id=' + giObjectContext	
 	}	
 	
-	if ($('#divInterfaceMainDetails').html() != '')
+	if ($('#divInterfaceMainFinancialAccount').html() != '')
 	{
-		sData += '&email=' + encodeURIComponent($('#inputInterfaceMainDetailsEmail').val());
-		sData += '&type=' + $('input[name="radioType"]:checked').val();
+		sData += '&financialaccountcash=' + encodeURIComponent($('#inputInterfaceMainFinancialAccountCash').val());
 	};
 
 	$.ajax(
