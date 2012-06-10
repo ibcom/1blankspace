@@ -119,7 +119,7 @@ function interfaceSetupMessagingHomeShow(oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
 		oSearch.addField('email');
-		oSearch.addFilter('type', EQUAL_TO, 5);
+		oSearch.addFilter('type', 'EQUAL_TO', 5);
 		oSearch.rows = 10;
 		oSearch.sort('modifieddate', 'desc');
 		oSearch.getResults(interfaceSetupMessagingHomeShow);
@@ -194,11 +194,25 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 		
 		giObjectContext = sSearchContext;
 		
+		var sParam = 'method=SETUP_MESSAGING_ACCOUNT_SEARCH';
+		sParam += '&type=5';
+		sParam += '&id=' + giObjectContext;
+		
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/setup/?' + sParam,
+			dataType: 'json',
+			success: function(data) {interfaceMessagingHomeShow(aParam, data)}
+		});
+		
+		/*
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
 		oSearch.addField('email');
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 		oSearch.getResults(function(data) {interfaceSetupMessagingShow(data)});
+		*/
 	}
 	else
 	{
@@ -224,6 +238,19 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
 			
+			var sParam = 'method=SETUP_MESSAGING_ACCOUNT_SEARCH';
+			sParam += '&type=5';
+			sParam += '&email=' + sSearchText;
+			
+			$.ajax(
+			{
+				type: 'POST',
+				url: '/ondemand/setup/?' + sParam,
+				dataType: 'json',
+				success: function(data) {interfaceSetupMessagingSearchShow(aParam, data)}
+			});
+			
+			/*
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
 			oSearch.addField('email');
@@ -238,6 +265,7 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 			}	
 			
 			oSearch.getResults(interfaceSetupMessagingSearchShow);
+			*/
 		}
 	};	
 }

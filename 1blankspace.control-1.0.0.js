@@ -492,7 +492,7 @@ function interfaceControlSetupOptions()
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +
-					'Messaging (Email)</span>' +
+					'Messaging</span>' +
 					'</td></tr>';			
 					
 		aHTML[++h] = '</table>';
