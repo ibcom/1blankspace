@@ -108,7 +108,7 @@ function interfaceSetupFinancialHomeShow(oResponse)
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
 	aHTML[++h] = '<tr id="trInterfaceViewportControlFinancialAccount" class="interfaceViewportControl">' +
-				'<td id="tdInterfaceViewportControlFinancialAccount" class="interfaceViewportControl">Financial Accounts</td>' +
+				'<td id="tdInterfaceViewportControlFinancialAccount" class="interfaceViewportControl">Financial&nbsp;Accounts</td>' +
 				'</tr>';
 				
 	aHTML[++h] = '<tr id="trInterfaceViewportControlFinancialAccountDefault" class="interfaceViewportControl">' +
@@ -197,7 +197,17 @@ function interfaceSetupFinancialHomeShow(oResponse)
 		interfaceSetupFinancialPayroll();
 	});
 	
-	interfaceSetupFinancialSummary();
+	$.ajax(
+	{
+		type: 'GET',
+		url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_SEARCH&all=1&includefinancialaccounttext=1',
+		dataType: 'json',
+		success: function(data) {
+									goObjectContext = data;
+									interfaceSetupFinancialSummary();
+								}
+	});
+	
 }
 
 function interfaceSetupFinancialSearch(sXHTMLElementId, iSource, sSearchText, sSearchContext)
@@ -218,13 +228,12 @@ function interfaceSetupFinancialSummary()
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 	}
 	else
-	{	
-		
+	{		
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
 						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
+						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2x">' +
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -233,9 +242,11 @@ function interfaceSetupFinancialSummary()
 		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
+		var sTaxMethod = (goObjectContext.taxreportcalculationmethod == "1") ? "Cash" : "Accrual";
+		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTaxationMethod" class="interfaceMainSummary">Taxation Method</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryTaxationMethod" class="interfaceMainSummaryValue">' +
-						goObjectContext.email +
+						sTaxMethod +
 						'</td></tr>';
 		
 		aHTML[++h] = '</table>';					
@@ -572,8 +583,46 @@ function interfaceSetupFinancialFinancialAccountDefault()
 						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
 						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
-						'</td></tr>';															
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'Tax Liabilities' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
+						'</td></tr>';																				
 										
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'Tax Credits' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
+						'</td></tr>';
+
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'Tax Payroll' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
+						'</td></tr>';
+						
+		/*
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
+						'Tax Instalments' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
+						'</td></tr>';
+		*/
+														
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainFinancialAccountColumn1').html(aHTML.join(''));
@@ -593,6 +642,55 @@ function interfaceSetupFinancialFinancialAccountDefault()
 		}
 		else
 		{
+		}
+	}	
+}
+
+function interfaceSetupFinancialInvoicing()
+{
+	var aHTML = [];
+	var h = -1;
+		
+	if ($('#divInterfaceMainInvoicing').attr('onDemandLoading') == '1')
+	{
+		$('#divInterfaceMainInvoicing').attr('onDemandLoading', '');
+		
+		aHTML[++h] = '<table id="tableInterfaceMainInvoicing" class="interfaceMainDetails">';
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialInvoicingRow1" class="interfaceMain">' +
+						'<td id="tdInterfaceMainInvoicingColumn1" class="interfaceMainColumn1">' +
+						'</td>' +
+						'<td id="tdInterfaceMainInvoicingColumn2" class="interfaceMainColumn2x">' +
+						'</td>' +
+						'</tr>';
+		aHTML[++h] = '</table>';					
+		
+		$('#divInterfaceMainInvoicing').html(aHTML.join(''));
+		
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceMainInvoicingColumn1" class="interfaceMain">';
+	
+		aHTML[++h] = '<tr id="trInterfaceMainInvoicingPaymentTermsNotes" class="interfaceMain">' +
+						'<td id="tdInterfaceMainInvoicingPaymentTermsNotes" class="interfaceMain">' +
+						'Payment Term Notes' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainInvoicingPaymentTermsNotesValue" class="interfaceMainTextMulti">' +
+						'<td id="tdInterfaceMainInvoicingPaymentTermsNotesValue" class="interfaceMainTextMulti">' +
+						'<textarea rows="3" cols="35" id="inputInterfaceMainInvoicingPaymentTermsNotes" class="inputInterfaceMainTextMulti"></textarea>' +
+						'</td></tr>';
+		
+		aHTML[++h] = '</table>';	
+		
+		$('#tdInterfaceMainInvoicingColumn1').html(aHTML.join(''));
+
+		if (goObjectContext != undefined)
+		{
+			//$('[name="radioLock"][value="' + goObjectContext.taxlock + '"]').attr('checked', true);
+		}
+		else
+		{
+			//$('[name="radioLock"][value="Y"]').attr('checked', true);			
 		}
 	}	
 }
@@ -641,8 +739,45 @@ function interfaceSetupFinancialTax()
 						'<input type="radio" id="radioTaxDefaultY" name="radioTaxDefault" value="Y"/>Yes' +
 						'<br /><input type="radio" id="radioTaxDefaultN" name="radioTaxDefault" value="N"/>No' +
 						'</td></tr>';
-														
-														
+			
+		aHTML[++h] = '<tr id="trInterfaceMainTaxReportingFrequency" class="interfaceMain">' +
+						'<td id="tdInterfaceMainTaxReportingFrequency" class="interfaceMain">' +
+						'Value Add Tax Reporting Frequencies' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainGeneralTaxTaxReportingFrequency" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainGeneralTaxReportingFrequencyValue" class="interfaceMainText">' +
+						'<input type="radio" id="radioTaxReportingFrequency4" name="radioTaxReportingFrequency" value="4"/>Never' +
+						'<br /><input type="radio" id="radioTaxReportingFrequency1" name="radioTaxReportingFrequency" value="1"/>Monthly' +
+						'<br /><input type="radio" id="radioTaxReportingFrequency2" name="radioTaxReportingFrequency" value="2"/>Quarterly' +
+						'<br /><input type="radio" id="radioTaxReportingFrequency3" name="radioTaxReportingFrequency" value="3"/>Annually' +
+						'</td></tr>';
+		
+		aHTML[++h] = '<tr id="trInterfaceMainTaxPayrollReportingFrequency" class="interfaceMain">' +
+						'<td id="tdInterfaceMainTaxPayrollReportingFrequency" class="interfaceMain">' +
+						'Payroll Tax Reporting Frequencies' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainGeneralTaxPayrollReportingFrequency" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainGeneralTaxPayrollReportingFrequencyValue" class="interfaceMainText">' +
+						'<input type="radio" id="radioTaxPayrollReportingFrequency4" name="radioTaxPayrollReportingFrequency" value="4"/>Never' +
+						'<br /><input type="radio" id="radioTaxPayrollReportingFrequency1" name="radioTaxPayrollReportingFrequency" value="1"/>Monthly' +
+						'<br /><input type="radio" id="radioTaxPayrollReportingFrequency2" name="radioTaxPayrollReportingFrequency" value="2"/>Quarterly' +
+						'<br /><input type="radio" id="radioTaxPayrollReportingFrequency3" name="radioTaxPayrollReportingFrequency" value="3"/>Annually' +
+						'</td></tr>';
+		
+		/*	
+		aHTML[++h] = '<tr id="trInterfaceMainTaxBusinessReportingFrequency" class="interfaceMain">' +
+						'<td id="tdInterfaceMainTaxBusinessReportingFrequency" class="interfaceMain">' +
+						'Business Tax Reporting Frequencies' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainGeneralTaxBusinessReportingFrequency" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainGeneralTaxBusinessReportingFrequencyValue" class="interfaceMainText">' +
+						'<input type="radio" id="radioTaxBusinessReportingFrequency4" name="radioTaxPayrollReportingFrequency" value="4"/>Never' +
+						'<br /><input type="radio" id="radioTaxBusinessReportingFrequency1" name="radioTaxBusinessReportingFrequency" value="1"/>Monthly' +
+						'<br /><input type="radio" id="radioTaxBusinessReportingFrequency2" name="radioTaxBusinessReportingFrequency" value="2"/>Quarterly' +
+						'<br /><input type="radio" id="radioTaxBusinessReportingFrequency3" name="radioTaxBusinessReportingFrequency" value="3"/>Annually' +
+						'</td></tr>';
+		*/				
+																																		
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainTaxColumn1').html(aHTML.join(''));
@@ -657,6 +792,59 @@ function interfaceSetupFinancialTax()
 		}
 	}	
 }
+
+function interfaceSetupFinancialPayroll()
+{
+	var aHTML = [];
+	var h = -1;
+		
+	if ($('#divInterfaceMainPayroll').attr('onDemandLoading') == '1')
+	{
+		$('#divInterfaceMainPayroll').attr('onDemandLoading', '');
+		
+		aHTML[++h] = '<table id="tableInterfaceMainPayroll" class="interfaceMainDetails">';
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialPayrollRow1" class="interfaceMain">' +
+						'<td id="tdInterfaceMainPayrollColumn1" class="interfaceMainColumn1">' +
+						'</td>' +
+						'<td id="tdInterfaceMainPayrollColumn2" class="interfaceMainColumn2x">' +
+						'</td>' +
+						'</tr>';
+		aHTML[++h] = '</table>';					
+		
+		$('#divInterfaceMainPayroll').html(aHTML.join(''));
+		
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceMainPayrollColumn1" class="interfaceMain">';
+	
+		aHTML[++h] = '<tr id="trInterfaceMainPayrollPeriodDefault" class="interfaceMain">' +
+						'<td id="tdInterfaceMainPayrollPeriodDefault" class="interfaceMain">' +
+						'Default Pay Period.' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainPeriodDefault class="interfaceMainText">' +
+						'<td id="tdInterfaceMainPeriodDefaultValue" class="interfaceMainText">' +
+						'<input type="radio" id="radioPeriodDefault1" name="radioPeriodDefault" value="1"/>Weekly' +
+						'<br /><input type="radio" id="radioPeriodDefault2" name="radioPeriodDefault" value="2"/>Fortnightly' +
+						'<br /><input type="radio" id="radioPeriodDefault3" name="radioPeriodDefault" value="3"/>Monthly' +
+						'<br /><input type="radio" id="radioPeriodDefault4" name="radioPeriodDefault" value="4"/>Bi-Monthly' +
+						'</td></tr>';			
+								
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainPayrollColumn1').html(aHTML.join(''));
+
+		if (goObjectContext != undefined)
+		{
+			$('[name="radioLock"][value="' + goObjectContext.taxlock + '"]').attr('checked', true);
+		}
+		else
+		{
+			$('[name="radioLock"][value="Y"]').attr('checked', true);			
+		}
+	}	
+}
+
 
 function interfaceSetupFinancialSave()
 {
