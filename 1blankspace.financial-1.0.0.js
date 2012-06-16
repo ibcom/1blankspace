@@ -703,6 +703,21 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 		var aHTML = [];
 		var h = -1;
 		
+		aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain">' +
+					'<tr id="trInterfaceMainBankAccountow1" class="interfaceMainRow1">' +
+					'<td id="tdInterfaceMainBankAccountColumn1" class="interfaceMainColumn1Large">' +
+					gsLoadingXHTML +
+					'</td>' +
+					'<td id="tdInterfaceMainBankAccountColumn2" style="width: 75px;" class="interfaceMainColumn2Action">' +
+					'</td>' +
+					'</tr>' +
+					'</table>';				
+		
+		$('#divInterfaceMainBankAccount').html(aHTML.join(''));
+		
+		var aHTML = [];
+		var h = -1;
+		
 		if (oResponse.data.rows.length == 0)
 		{
 			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
@@ -735,7 +750,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 		interfaceMasterPaginationList(
 		   {
 			type: 'JSON',
-			xhtmlElementID: 'divInterfaceMainBankAccount',
+			xhtmlElementID: 'tdInterfaceMainBankAccountColumn1',
 			xhtmlContext: 'BankAccount',
 			xhtml: aHTML.join(''),
 			showMore: (oResponse.morerows == "true"),
@@ -745,6 +760,27 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 			functionOpen: undefined,
 			functionNewPage: ''
 		   });
+		
+		var aHTML = [];
+		var h = -1;
+		
+		aHTML[++h] = '<table id="tableInterfaceMainBankAccountColumn2" class="interfaceMainColumn2">';
+		
+		aHTML[++h] = '<tr><td id="tdInterfaceMainBankAccountReconciliation" class="interfaceMainAction">' +
+						'<span id="spanInterfaceMainBankAccountReconciliation">Reconcile</span>' +
+						'</td></tr>';
+						
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainBankAccountColumn2').html(aHTML.join(''));
+		
+		$('#spanInterfaceMainBankAccountReconciliation').button(
+		{
+			label: "Reconcile"
+		})
+		.click(function() {
+			interfaceFinancialBankAccountMasterViewport();
+		});	
 	}
 }
 
