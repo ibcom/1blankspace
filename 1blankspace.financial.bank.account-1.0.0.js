@@ -97,7 +97,7 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 	if (bShowHome) {interfaceFinancialBankAccountHomeShow()};	
 }
 
-function interfaceFinancialBankAccountHomeShow(oResponse)
+function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 {	
 	if (oResponse == undefined)
 	{
@@ -172,11 +172,11 @@ function interfaceFinancialBankAccountHomeShow(oResponse)
 	
 		$('#tdInterfaceViewportControlSummary').addClass('interfaceViewportControlHighlight');
 		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
-		interfaceFinancialSummary();
+		interfaceFinancialBankAccountSummary();
 	}
 }
 
-function interfaceFinancialSummary(aParam, oResponse)
+function interfaceFinancialBankAccountSummary(aParam, oResponse)
 {
 	var aHTML = [];
 	var h = -1;
