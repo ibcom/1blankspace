@@ -439,7 +439,7 @@ function interfaceStructureShow(aParam, oResponse)
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
 						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
+						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2x">' +
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -805,6 +805,37 @@ function interfaceMasterStructureDataRemove(aParam, oResponse)
 			$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 		}	
 	}	
+	
+}
+
+function interfaceStructureReporting(aParam)
+{
+	var aHTML = [];
+	var h = -1;
+	
+	aHTML[++h] = '<table id="tableInterfaceMainReporting" class="interfaceMain">' +
+				'<tr id="trInterfaceMainReportingRow1" class="interfaceMainRow1">' +
+				'<td id="tdInterfaceMainReportingColumn1" style="width: 100px;" class="interfaceMainColumn1">' +
+				gsLoadingXHTML +
+				'</td>' +
+				'<td id="tdInterfaceMainBankAccountColumn2" class="interfaceMainColumn2">' +
+				'</td>' +
+				'</tr>' +
+				'</table>';				
+	
+	$('#divInterfaceMainReporting').html(aHTML.join(''));
+	
+	var aHTML = [];
+	var h = -1;
+	
+	aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="">';
+	
+	aHTML[++h] = '<tr><td id="tdInterfaceMainReport1" class="interfaceMainRow">Report 1</td></tr>';
+	aHTML[++h] = '<tr><td id="tdInterfaceMainReport2" class="interfaceMainRow">Report 2</td></tr>';			
+					
+	aHTML[++h] = '</table>';					
+	
+	$('#tdInterfaceMainReportingColumn1').html(aHTML.join(''));
 	
 }
 
