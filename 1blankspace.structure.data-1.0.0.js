@@ -643,7 +643,7 @@ function interfaceStructureDataElements(aParam, oResponse)
 			aHTML[++h] = '<tr id="trInterfaceMainElementRow1" class="interfaceMain">' +
 							'<td id="tdInterfaceMainElementColumn1" style="width: 70px" class="interfaceMainColumn1">' +
 							'</td>' +
-							'<td id="tdInterfaceMainElementColumn2" class="interfaceMainColumn1Large">' +
+							'<td id="tdInterfaceMainElementColumn2" class="interfaceMainColumn2">' +
 							'</td>' +
 							'</tr>';
 			aHTML[++h] = '</table>';					
@@ -675,7 +675,7 @@ function interfaceStructureDataElements(aParam, oResponse)
 				{
 					aHTML[++h] = '<tr class="interfaceMainRow">';
 									
-					aHTML[++h] = '<td id="tdStructureDataCategory_title-' + this.id + '" class="interfaceMainRow2">' +
+					aHTML[++h] = '<td id="tdStructureDataCategory_title-' + this.id + '" class="interfaceSearch">' +
 											this.title + '</td>';
 											
 					aHTML[++h] = '</tr>';
@@ -685,12 +685,12 @@ function interfaceStructureDataElements(aParam, oResponse)
 
 				$('#tdInterfaceMainElementColumn1').html(aHTML.join(''));
 	
-				$('span.interfaceMainAtoZ').click(function(event)
+				$('td.interfaceSearch').click(function(event)
 				{
 					var sXHTMLElementId = event.target.id;
 					var aId = sXHTMLElementId.split('-');
 					
-					interfaceStructureDataCategoryElements({xhtmlElementID: 'tdInterfaceMainElementColumn2', quicksearch: aId[1]});
+					interfaceStructureDataCategoryElements({xhtmlElementID: 'tdInterfaceMainElementColumn2', category: aId[1]});
 					
 				});
 			}	
@@ -698,12 +698,13 @@ function interfaceStructureDataElements(aParam, oResponse)
 	}	
 }
 
-function interfaceStructureCategoryElements(aParam, oResponse)
+function interfaceStructureDataCategoryElements(aParam, oResponse)
 {
 	var iObjectContext = giObjectContext;
 	var sXHTMLElementId = 'tdInterfaceMainElementColumn2';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
+	var iCategory;
 	
 	if (aParam != undefined)
 	{
@@ -711,6 +712,7 @@ function interfaceStructureCategoryElements(aParam, oResponse)
 		if (aParam.xhtmlElementID != undefined) {sXHTMLElementId = aParam.xhtmlElementID}
 		if (aParam.options != undefined) {oOptions = aParam.options}
 		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (aParam.category != undefined) {iCategory = aParam.category}
 	}		
 		
 	if (oResponse == undefined)
@@ -718,9 +720,10 @@ function interfaceStructureCategoryElements(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=DECISION_ELEMENT_DATA_SEARCH&structure=' + giObjectContext + '& category=' + iCategory,
+			url: '/ondemand/structure/structure.asp?method=STRUCTURE_ELEMENT_DATA_VALUE_SEARCH' +
+						'&data=' + giObjectContext + '&category=' + iCategory,
 			dataType: 'json',
-			success: function(data) {interfaceStructureCategoryElements(aParam, data)}
+			success: function(data) {interfaceStructureDataCategoryElements(aParam, data)}
 		});
 	}
 	else
@@ -743,17 +746,17 @@ function interfaceStructureCategoryElements(aParam, oResponse)
 		{
 			aHTML[++h] = '<table id="tableStructureDataCategoryElements" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
-			aHTML[++h] = '<tr class="interfaceMainCaption">';
-			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-			aHTML[++h] = '</tr>';
+			//aHTML[++h] = '<tr class="interfaceMainCaption">';
+			//aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
+			//aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			//aHTML[++h] = '</tr>';
 			
 			$.each(oResponse.data.rows, function()
 			{
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 								
 				aHTML[++h] = '<td id="tdStructureDataCategoryElement_title-' + this.id + '" class="interfaceMainRow">' +
-										this.title + '</td>';
+										this.elementtext + '</td>';
 										
 				aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
 					
