@@ -708,7 +708,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 					'<td id="tdInterfaceMainBankAccountColumn1" class="interfaceMainColumn1Large">' +
 					gsLoadingXHTML +
 					'</td>' +
-					'<td id="tdInterfaceMainBankAccountColumn2" style="width: 75px;" class="interfaceMainColumn2Action">' +
+					'<td id="tdInterfaceMainBankAccountColumn2" style="width: 150px;" class="interfaceMainColumn2Action">' +
 					'</td>' +
 					'</tr>' +
 					'</table>';				
@@ -728,11 +728,11 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 		}
 		else
 		{		
-			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<table id="tableBankAccountList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
 			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Last Reconciled Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Reconciled Amount</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Last Reconciled</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
 			aHTML[++h] = '</tr>';
@@ -762,24 +762,39 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 		   });
 		
 		var aHTML = [];
-		var h = -1;
+		var h = -1;	
 		
-		aHTML[++h] = '<table id="tableInterfaceMainBankAccountColumn2" class="interfaceMainColumn2">';
-		
-		aHTML[++h] = '<tr><td id="tdInterfaceMainBankAccountReconciliation" class="interfaceMainAction">' +
-						'<span id="spanInterfaceMainBankAccountReconciliation">Reconcile</span>' +
+		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" cellpadding=6>';
+							
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +
+						'<a href="#" id="aInterfaceMainBankAccountReco">Reconcile</a>' +
 						'</td></tr>';
 						
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +
+						'<a href="#" id="aInterfaceMainBankAccountReceipt">Receipt an Invoice</a>' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +
+						'<a href="#" id="aInterfaceMainBankAccountDeposit">Bulk Deposit</a>' +
+						'</td></tr>';								
+					
 		aHTML[++h] = '</table>';					
-		
+				
 		$('#tdInterfaceMainBankAccountColumn2').html(aHTML.join(''));
 		
-		$('#spanInterfaceMainBankAccountReconciliation').button(
+		$('#aInterfaceMainBankAccountReco').click(function()
 		{
-			label: "Reconcile"
-		})
-		.click(function() {
 			interfaceFinancialBankAccountMasterViewport();
+		});	
+		
+		$('#aInterfaceMainBankAccountReceipt').click(function()
+		{
+			interfaceFinancialReceiptMasterViewport();
+		});	
+		
+		$('#aInterfaceMainBankAccountDeposit').click(function()
+		{
+			alert("Deposting of the sweet sweet cash...")
 		});	
 	}
 }

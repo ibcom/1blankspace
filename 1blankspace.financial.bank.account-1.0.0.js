@@ -318,7 +318,7 @@ function interfaceFinancialBankAccountDetails(aParam, oResponse)
 	}
 }
 
-function interfaceFinancialBankAccountRow(oRow)
+function interfaceFinancialBankAccountRecoRow(oRow)
 {
 	var aHTML = [];
 	var h = -1;
