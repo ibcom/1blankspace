@@ -731,7 +731,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 			aHTML[++h] = '<table id="tableBankAccountList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
-			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">Name</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Reconciled Amount</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Last Reconciled</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';

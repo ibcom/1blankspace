@@ -641,9 +641,11 @@ function interfaceStructureDataElements(aParam, oResponse)
 		
 			aHTML[++h] = '<table id="tableInterfaceMainElement" class="interfaceMain">';
 			aHTML[++h] = '<tr id="trInterfaceMainElementRow1" class="interfaceMain">' +
-							'<td id="tdInterfaceMainElementColumn1" style="width: 70px" class="interfaceMainColumn1">' +
+							'<td id="tdInterfaceMainElementColumnCategory" style="width: 100px" class="interfaceMainColumn1">' +
 							'</td>' +
-							'<td id="tdInterfaceMainElementColumn2" class="interfaceMainColumn2">' +
+							'<td id="tdInterfaceMainElementColumnElement" style="width: 300px" class="interfaceMainColumn2">' +
+							'</td>' +
+							'<td id="tdInterfaceMainElementColumnEdit" class="interfaceMainColumn2">' +
 							'</td>' +
 							'</tr>';
 			aHTML[++h] = '</table>';					
@@ -683,14 +685,14 @@ function interfaceStructureDataElements(aParam, oResponse)
 				
 				aHTML[++h] = '</tbody></table>';
 
-				$('#tdInterfaceMainElementColumn1').html(aHTML.join(''));
+				$('#tdInterfaceMainElementColumnCategory').html(aHTML.join(''));
 	
 				$('td.interfaceSearch').click(function(event)
 				{
 					var sXHTMLElementId = event.target.id;
 					var aId = sXHTMLElementId.split('-');
 					
-					interfaceStructureDataCategoryElements({xhtmlElementID: 'tdInterfaceMainElementColumn2', category: aId[1]});
+					interfaceStructureDataCategoryElements({xhtmlElementID: 'tdInterfaceMainElementColumnElement', category: aId[1]});
 					
 				});
 			}	
@@ -701,8 +703,8 @@ function interfaceStructureDataElements(aParam, oResponse)
 function interfaceStructureDataCategoryElements(aParam, oResponse)
 {
 	var iObjectContext = giObjectContext;
-	var sXHTMLElementId = 'tdInterfaceMainElementColumn2';
-	var oOptions = {view: true, remove: true};
+	var sXHTMLElementId = 'tdInterfaceMainElementColumnElement';
+	var oOptions = {edit: true, remove: true};
 	var oActions = {add: true};
 	var iCategory;
 	
@@ -744,6 +746,30 @@ function interfaceStructureDataCategoryElements(aParam, oResponse)
 		}
 		else
 		{
+			aHTML[++h] = '<table id="tableStructureDataValueHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader" style="font-size:0.75em;background-color: #F8F8F8;padding:5px;">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainHeader">' +
+					'<td class="interfaceMainHeaderX" id="interfaceMainHeaderRemovedEmails" style="text-align:left;">&nbsp;</td>';	
+			
+			aHTML[++h] = '<td class="interfaceMainHeaderX" id="tdInterfaceMainHeaderAll" style="width:15px;">';
+			aHTML[++h] = '<span id="spanInterfaceMainHeaderAll" class="interfaceMainHeaderAll">All</span>';
+			aHTML[++h] = '</td>';
+			
+			aHTML[++h] = '<td class="interfaceMainHeaderX" style="width:5px;">&nbsp;|&nbsp;</td>';
+			aHTML[++h] = '<td class="interfaceMainHeaderX" id="tdInterfaceMainHeaderUnanswered" style="width:80px;">';
+			aHTML[++h] = '<span id="spanInterfaceMainHeaderUnanswered" class="interfaceMainHeaderUnanswered">Unanswered</span>';
+			aHTML[++h] = '</td>';
+			
+			aHTML[++h] = '<td class="interfaceMainHeaderX" style="width:5px;">&nbsp;|&nbsp;</td>';
+			aHTML[++h] = '<td class="interfaceMainHeaderX" id="tdInterfaceMainHeaderAnswered" style="width:60px;">';
+			aHTML[++h] = '<span id="spanInterfaceMainHeaderAnswered" class="interfaceMainHeaderAnswered">Answered</span>';
+			aHTML[++h] = '</td>';
+			
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</table>';
+						
+			aHTML[++h] = '<tr class="interfaceMainHeader" id="trInterfaceMessagingInboxPages"><td colspan=2 id="tdInterfaceMessagingInboxPages"></td></tr>';
+			aHTML[++h] = '</tbody></table>';
 			aHTML[++h] = '<table id="tableStructureDataCategoryElements" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			//aHTML[++h] = '<tr class="interfaceMainCaption">';
@@ -751,23 +777,27 @@ function interfaceStructureDataCategoryElements(aParam, oResponse)
 			//aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
 			//aHTML[++h] = '</tr>';
 			
+			var sClass;
+			
 			$.each(oResponse.data.rows, function()
 			{
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 								
-				aHTML[++h] = '<td id="tdStructureDataCategoryElement_title-' + this.id + '" class="interfaceMainRow">' +
+				sClass = (this.text != '' || this.formatted != '') ? ' answered' : ''				
+								
+				aHTML[++h] = '<td id="tdStructureDataCategoryElement_title-' + this.id + '" class="interfaceMainRow' + sClass + '">' +
 										this.elementtext + '</td>';
 										
 				aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
 					
 				if (oOptions.remove)
 				{	
-					//aHTML[++h] = '<span id="spanStructureDataCategoryoptions_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+					aHTML[++h] = '<span id="spanStructureDataCategoryoptions_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
 				};	
 					
-				if (oOptions.view)
+				if (oOptions.edit)
 				{	
-					//aHTML[++h] = '<span id="spanStructureDataCategory_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+					aHTML[++h] = '<span id="spanStructureDataCategory_options_edit-' + this.id + '" class="interfaceMainRowOptionsEdit"></span>';
 				};	
 					
 				aHTML[++h] = '</td>';
@@ -779,7 +809,7 @@ function interfaceStructureDataCategoryElements(aParam, oResponse)
 
 			$('#' + sXHTMLElementId).html(aHTML.join(''));
 			
-			if (oOptions.view) 
+			if (oOptions.remove) 
 			{
 				$('.interfaceMainRowOptionsRemove').button( {
 					text: false,
@@ -794,16 +824,16 @@ function interfaceStructureDataCategoryElements(aParam, oResponse)
 				.css('height', '17px')
 			}
 			
-			if (oOptions.remove) 
+			if (oOptions.edit) 
 			{
-				$('.interfaceMainRowOptionsView').button( {
+				$('.interfaceMainRowOptionsEdit').button( {
 					text: false,
 					icons: {
-						primary: "ui-icon-play"
+						primary: "ui-icon-pencil"
 					}
 				})
 				.click(function() {
-					interfaceMasterStructureDataCategoryAdd({xhtmlElementID: this.id})
+					interfaceMasterStructureDataCategoryElementEdit({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -812,7 +842,7 @@ function interfaceStructureDataCategoryElements(aParam, oResponse)
 	}	
 }
 
-function interfaceMasterStructureDataElementAdd(aParam, oResponse)
+function interfaceMasterStructureDataCategoryElementEdit(aParam, oResponse)
 {
 	var sID; 
 	
@@ -834,6 +864,20 @@ function interfaceMasterStructureDataElementAdd(aParam, oResponse)
 		var aHTML = [];
 		var h = -1;
 
+		aHTML[++h] = '<table style="font-size: 0.875px;">';
+				
+		aHTML[++h] = '<tr id="trInterfaceMainStructureDataElementAddSave">' +
+						'<td>' +
+						'<span id="spanInterfaceMainStructureDataCategoryElementEditSave">Save</span>' +
+						'</td></tr>';
+		/*
+		aHTML[++h] = '<td id="tdInterfaceMainStructureDataElementAddCancel" class="interfaceMainAction">' +
+						'<span id="spanInterfaceMainStructureDataCategoryElementEditCancel">Cancel</span>' +
+						'</td></tr>';
+		*/
+						
+		aHTML[++h] = '</table>';			
+			
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
 				
 		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureDataCategoryTitle" class="interfaceMain">' +
@@ -847,28 +891,9 @@ function interfaceMasterStructureDataElementAdd(aParam, oResponse)
 		
 		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainStructureDataCategoryColumn1').html(aHTML.join(''));
+		$('#tdInterfaceMainElementColumnEdit').html(aHTML.join(''));
 		
-		var aHTML = [];
-		var h = -1;
-	
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
-				
-		aHTML[++h] = '<tr id="trInterfaceMainStructureDataElementAddSave" class="interfaceMainAction">' +
-						'<td id="tdInterfaceMainStructureDataElementAddSave" class="interfaceMainAction">' +
-						'<span style="width:80px;" id="spanInterfaceMainStructureDataCategoryAddSave">Save</span>' +
-						'</td></tr>';
-	
-		aHTML[++h] = '<tr id="trInterfaceMainStructureDataElementAddCancel" class="interfaceMainAction">' +
-						'<td id="tdInterfaceMainStructureDataElementAddCancel" class="interfaceMainAction">' +
-						'<span style="width:80px;" id="spanInterfaceMainStructureDataCategoryAddCancel">Cancel</span>' +
-						'</td></tr>';
-						
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainStructureDataCategoryColumn2').html(aHTML.join(''));
-		
-		$('#spanInterfaceMainStructureDataCategoryAddSave').button(
+		$('#spanInterfaceMainStructureDataCategoryElementEditSave').button(
 		{
 			text: "Save"
 		})
@@ -881,24 +906,23 @@ function interfaceMasterStructureDataElementAdd(aParam, oResponse)
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_StructureData_CATEGORY_MANAGE',
+				url: '/ondemand/structure/structure.asp?method=STRUCTURE_DATA_VALUE_MANAGE',
 				data: sData,
 				dataType: 'json',
 				success: function() {
-					//interfaceMasterMainViewportShow("#divInterfaceMainCategory");
-					interfaceStructureDataCategory();
+					$('#tdInterfaceMainElementColumnEdit').html('');
+					$('#tdStructureDataCategoryElement_title-' + sID).addClass('answered');
 				}
 			});
 		});
 		
-		$('#spanInterfaceMainStructureDataCategoryAddCancel').button(
+		$('#spanInterfaceMainStructureDataCategoryElementEditCancel').button(
 		{
 			text: "Cancel"
 		})
 		.click(function() 
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainCategory");
-			interfaceSetupStructureDataCategory();
+			$('#tdInterfaceMainElementColumnEdit').html('');
 		});
 		
 		if (sID != undefined)
@@ -906,10 +930,10 @@ function interfaceMasterStructureDataElementAdd(aParam, oResponse)
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_StructureData_CATEGORY_SEARCH',
+				url: '/ondemand/structure/structure.asp?method=STRUCTURE_DATA_VALUE_SEARCH',
 				data: 'id=' + sID,
 				dataType: 'json',
-				success: function(data) {interfaceMasterStructureDataCategoryAdd(aParam, data)}
+				success: function(data) {interfaceMasterStructureDataCategoryElementEdit(aParam, data)}
 			});
 		}
 		else
@@ -928,7 +952,7 @@ function interfaceMasterStructureDataElementAdd(aParam, oResponse)
 	}		
 }
 
-function interfaceMasterStructureDataElementRemove(aParam, oResponse)
+function interfaceMasterStructureDataCategoryElementRemove(aParam, oResponse)
 {
 	var sXHTMLElementID;
 
@@ -942,16 +966,16 @@ function interfaceMasterStructureDataElementRemove(aParam, oResponse)
 	
 	if (oResponse == undefined)
 	{	
-		var sParam = 'method=SETUP_StructureData_CATEGORY_MANAGE&remove=1';
+		var sParam = 'method=STRUCTURE_DATA_VALUE_MANAGE&remove=1';
 		var sData = 'id=' + sID;
 		
 		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/setup/?' + sParam,
+			url: '/ondemand/structure/structure.asp?' + sParam,
 			data: sData,
 			dataType: 'json',
-			success: function(data){interfaceMasterStructureDataCategoryRemove(aParam, data)}
+			success: function(data){interfaceMasterStructureDataCategoryElementRemove(aParam, data)}
 		});
 	}	
 	else
