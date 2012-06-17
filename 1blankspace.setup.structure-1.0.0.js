@@ -389,7 +389,14 @@ function interfaceSetupStructureViewport()
 		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlElement" class="interfaceViewportControl">Elements</td>' +
 						'</tr>';
-	
+						
+		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlAutomation" class="interfaceViewportControl">Automation</td>' +
+						'</tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlScoring" class="interfaceViewportControl">Scoring</td>' +
+						'</tr>';								
 	}
 	
 	aHTML[++h] = '</table>';					
@@ -403,7 +410,9 @@ function interfaceSetupStructureViewport()
 	aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainCategory" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainElement" class="divInterfaceViewportMain"></div>';
-		
+	aHTML[++h] = '<div id="divInterfaceMainAutomation" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainScoring" class="divInterfaceViewportMain"></div>';
+				
 	$('#divInterfaceMain').html(aHTML.join(''));
 		
 	$('#tdInterfaceViewportControlSummary').click(function(event)
@@ -428,6 +437,18 @@ function interfaceSetupStructureViewport()
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainElement", true);
 		interfaceSetupStructureElement();
+	});
+	
+	$('#tdInterfaceViewportControlAutomation').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainAutomation", true);
+		interfaceSetupStructureAutomation();
+	});
+	
+	$('#tdInterfaceViewportControlScoring').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainScoring", true);
+		interfaceSetupStructureScoring();
 	});
 }
 
@@ -938,7 +959,6 @@ function interfaceMasterSetupStructureCategoryRemove(aParam, oResponse)
 	}	
 	
 }
-
 
 function interfaceSetupStructureElement(aParam, oResponse)
 {
@@ -1584,3 +1604,615 @@ function interfaceSetupElementOptionEditSave(sElementId)
 		});
 	}			
 }
+
+function interfaceSetupStructureAutomation(aParam, oResponse)
+{
+	var iObjectContext = giObjectContext;
+	var sXHTMLElementId = 'divInterfaceMainAutomation';
+	var oOptions = {view: true, remove: true};
+	var oActions = {add: true};
+	
+	if (aParam != undefined)
+	{
+		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
+		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (aParam.options != undefined) {oOptions = aParam.options}
+		if (aParam.actions != undefined) {oActions = aParam.actions}
+	}		
+		
+	if (oResponse == undefined)
+	{	
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/setup/?method=SETUP_STRUCTURE_AUTOMATION_SEARCH&structure=' + giObjectContext,
+			dataType: 'json',
+			success: function(data) {interfaceSetupStructureAutomation(aParam, data)}
+		});
+	}
+	else
+	{
+		if (oActions != undefined)
+		{
+			var aHTML = [];
+			var h = -1;	
+						
+			aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
+						'<tr id="trInterfaceMainSetupStructureAutomationRow1" class="interfaceMainRow1">' +
+						'<td id="tdInterfaceMainSetupStructureAutomationColumn1" class="interfaceMainColumn1Large">' +
+						gsLoadingXHTML +
+						'</td>' +
+						'<td id="tdInterfaceMainSetupStructureAutomationColumn2" class="interfaceMainColumn2Action">' +
+						'</td>' +
+						'</tr>' +
+						'</table>';					
+				
+			$('#' + sXHTMLElementId).html(aHTML.join(''));
+			sXHTMLElementId = 'tdInterfaceMainSetupStructureAutomationColumn1';
+			
+			var aHTML = [];
+			var h = -1;	
+			
+			aHTML[++h] = '<table id="tableInterfaceMainSetupStructureAutomationColumn2" class="interfaceMainColumn2">';
+			
+			if (oActions.add)
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSetupStructureAutomationAdd" class="interfaceMainAction">' +
+							'<span id="spanInterfaceMainSetupStructureAutomationAdd">Add</span>' +
+							'</td></tr>';
+			}
+			
+			aHTML[++h] = '</table>';					
+			
+			$('#tdInterfaceMainSetupStructureAutomationColumn2').html(aHTML.join(''));
+		
+			$('#spanInterfaceMainSetupStructureAutomationAdd').button(
+			{
+				label: "Add"
+			})
+			.click(function() {
+				 interfaceMasterSetupStructureAutomationAdd(aParam);
+			})
+			
+		}	
+	
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableSetupStructureAutomation" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">' +
+							'<td class="interfaceMainRowNothing">No automation set up.</td></tr>';
+			aHTML[++h] = '</tbody></table>';
+
+			$('#' + sXHTMLElementId).html(aHTML.join(''));
+		
+		}
+		else
+		{
+			aHTML[++h] = '<table id="tableSetupStructureCategory" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			$.each(oResponse.data.rows, function()
+			{
+				aHTML[++h] = '<tr class="interfaceMainRow">';
+								
+				aHTML[++h] = '<td id="tdSetupStructureCategory_title-' + this.id + '" class="interfaceMainRow">' +
+										this.title + '</td>';
+										
+				aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+					
+				if (oOptions.remove)
+				{	
+					aHTML[++h] = '<span id="spanSetupStructureCategoryoptions_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+				};	
+					
+				if (oOptions.view)
+				{	
+					aHTML[++h] = '<span id="spanSetupStructureCategory_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+				};	
+					
+				aHTML[++h] = '</td>';
+								
+				aHTML[++h] = '</tr>';
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+
+			$('#' + sXHTMLElementId).html(aHTML.join(''));
+			
+			if (oOptions.view) 
+			{
+				$('.interfaceMainRowOptionsRemove').button( {
+					text: false,
+					icons: {
+						primary: "ui-icon-close"
+					}
+				})
+				.click(function() {
+					interfaceMasterSetupStructureAutomationRemove({xhtmlElementID: this.id});
+				})
+				.css('width', '15px')
+				.css('height', '17px')
+			}
+			
+			if (oOptions.remove) 
+			{
+				$('.interfaceMainRowOptionsView').button( {
+					text: false,
+					icons: {
+						primary: "ui-icon-play"
+					}
+				})
+				.click(function() {
+					interfaceMasterSetupStructureAutomationAdd({xhtmlElementID: this.id})
+				})
+				.css('width', '15px')
+				.css('height', '17px')
+			}	
+		}
+	}	
+}
+
+function interfaceMasterSetupStructureAutomationAdd(aParam, oResponse)
+{
+	var sID; 
+	
+	if (oResponse == undefined)
+	{
+		var sXHTMLElementID;
+
+		if (aParam != undefined)
+		{
+			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		}
+		
+		if (sXHTMLElementID != undefined)
+		{
+			var aXHTMLElementID = sXHTMLElementID.split('-');
+			var sID = aXHTMLElementID[1];
+		}	
+	
+		var aHTML = [];
+		var h = -1;
+
+		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+				
+		aHTML[++h] = '<tr id="trInterfaceMainSetupSetupStructureAutomationTitle" class="interfaceMain">' +
+						'<td id="tdInterfaceMainSetupSetupStructureAutomationTitle" class="interfaceMain">' +
+						'Title' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainSetupSetupStructureAutomationAddTitleValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainSetupSetupStructureAutomationAddTitleValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainSetupStructureAutomationAddTitle" class="inputInterfaceMainText">' +
+						'</td></tr>';
+		
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainSetupStructureAutomationColumn1').html(aHTML.join(''));
+		
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+				
+		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
+						'<td id="tdInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
+						'<span style="width:80px;" id="spanInterfaceMainSetupStructureAutomationAddSave">Save</span>' +
+						'</td></tr>';
+	
+		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddCancel" class="interfaceMainAction">' +
+						'<td id="tdInterfaceMainSetupStructureElementAddCancel" class="interfaceMainAction">' +
+						'<span style="width:80px;" id="spanInterfaceMainSetupStructureAutomationAddCancel">Cancel</span>' +
+						'</td></tr>';
+						
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainSetupStructureAutomationColumn2').html(aHTML.join(''));
+		
+		$('#spanInterfaceMainSetupStructureAutomationAddSave').button(
+		{
+			text: "Save"
+		})
+		.click(function() 
+		{
+			var sData = 'structure=' + giObjectContext;
+			sData += '&id=' + interfaceMasterFormatSave(sID);
+			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureAutomationAddTitle').val());
+			
+			$.ajax(
+			{
+				type: 'POST',
+				url: '/ondemand/setup/?method=SETUP_STRUCTURE_AUTOMATION_MANAGE',
+				data: sData,
+				dataType: 'json',
+				success: function() {
+					interfaceSetupStructureAutomation();
+				}
+			});
+		});
+		
+		$('#spanInterfaceMainSetupStructureAutomationAddCancel').button(
+		{
+			text: "Cancel"
+		})
+		.click(function() 
+		{
+			interfaceMasterMainViewportShow("#divInterfaceMainAutomation");
+			interfaceSetupSetupStructureAutomation();
+		});
+		
+		if (sID != undefined)
+		{
+			$.ajax(
+			{
+				type: 'POST',
+				url: '/ondemand/setup/?method=SETUP_STRUCTURE_AUTOMATION_SEARCH',
+				data: 'id=' + sID,
+				dataType: 'json',
+				success: function(data) {interfaceMasterSetupStructureAutomationAdd(aParam, data)}
+			});
+		}
+		else
+		{
+			$('[name="radioDataType"][value="4"]').attr('checked', true);	
+		}
+	}
+	else
+	{
+		if (oResponse.data.rows.length != 0)
+		{
+			var oObjectContext = oResponse.data.rows[0];
+			$('#inputInterfaceMainSetupSetupStructureElementAddTitle').val(oObjectContext.title)
+			$('#inputInterfaceMainSetupSetupStructureElementAddTitle').focus();
+		}
+	}		
+}
+
+function interfaceMasterSetupStructureAutomationRemove(aParam, oResponse)
+{
+	var sXHTMLElementID;
+
+	if (aParam != undefined)
+	{
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+	}
+	
+	var aXHTMLElementID = sXHTMLElementID.split('-');
+	var sID = aXHTMLElementID[1];
+	
+	if (oResponse == undefined)
+	{	
+		var sParam = 'method=SETUP_STRUCTURE_AUTOMATION_MANAGE&remove=1';
+		var sData = 'id=' + sID;
+		
+		$.ajax(
+		{
+			type: 'DELETE',
+			url: '/ondemand/setup/?' + sParam,
+			data: sData,
+			dataType: 'json',
+			success: function(data){interfaceMasterSetupStructureAutomationRemove(aParam, data)}
+		});
+	}	
+	else
+	{
+		if (oResponse.status == 'OK')
+		{
+			$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+		}	
+	}	
+	
+}
+
+function interfaceSetupStructureScoring(aParam, oResponse)
+{
+	var iObjectContext = giObjectContext;
+	var sXHTMLElementId = 'divInterfaceMainScoring';
+	var oOptions = {view: true, remove: true};
+	var oActions = {add: true};
+	
+	if (aParam != undefined)
+	{
+		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
+		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (aParam.options != undefined) {oOptions = aParam.options}
+		if (aParam.actions != undefined) {oActions = aParam.actions}
+	}		
+		
+	if (oResponse == undefined)
+	{	
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/setup/?method=SETUP_STRUCTURE_RULE_SEARCH&structure=' + giObjectContext,
+			dataType: 'json',
+			success: function(data) {interfaceSetupStructureScoring(aParam, data)}
+		});
+	}
+	else
+	{
+		if (oActions != undefined)
+		{
+			var aHTML = [];
+			var h = -1;	
+						
+			aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
+						'<tr id="trInterfaceMainSetupStructureScoringRow1" class="interfaceMainRow1">' +
+						'<td id="tdInterfaceMainSetupStructureScoringColumn1" class="interfaceMainColumn1Large">' +
+						gsLoadingXHTML +
+						'</td>' +
+						'<td id="tdInterfaceMainSetupStructureScoringColumn2" class="interfaceMainColumn2Action">' +
+						'</td>' +
+						'</tr>' +
+						'</table>';					
+				
+			$('#' + sXHTMLElementId).html(aHTML.join(''));
+			sXHTMLElementId = 'tdInterfaceMainSetupStructureScoringColumn1';
+			
+			var aHTML = [];
+			var h = -1;	
+			
+			aHTML[++h] = '<table id="tableInterfaceMainSetupStructureScoringColumn2" class="interfaceMainColumn2">';
+			
+			if (oActions.add)
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSetupStructureScoringAdd" class="interfaceMainAction">' +
+							'<span id="spanInterfaceMainSetupStructureScoringAdd">Add</span>' +
+							'</td></tr>';
+			}
+			
+			aHTML[++h] = '</table>';					
+			
+			$('#tdInterfaceMainSetupStructureScoringColumn2').html(aHTML.join(''));
+		
+			$('#spanInterfaceMainSetupStructureScoringAdd').button(
+			{
+				label: "Add"
+			})
+			.click(function() {
+				 interfaceMasterSetupStructureScoringAdd(aParam);
+			})
+			
+		}	
+	
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableSetupStructureScoring" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">' +
+							'<td class="interfaceMainRowNothing">No Scoring set up.</td></tr>';
+			aHTML[++h] = '</tbody></table>';
+
+			$('#' + sXHTMLElementId).html(aHTML.join(''));
+		}
+		else
+		{
+			aHTML[++h] = '<table id="tableSetupStructureCategory" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			$.each(oResponse.data.rows, function()
+			{
+				aHTML[++h] = '<tr class="interfaceMainRow">';
+								
+				aHTML[++h] = '<td id="tdSetupStructureCategory_title-' + this.id + '" class="interfaceMainRow">' +
+										this.title + '</td>';
+										
+				aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+					
+				if (oOptions.remove)
+				{	
+					aHTML[++h] = '<span id="spanSetupStructureCategoryoptions_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+				};	
+					
+				if (oOptions.view)
+				{	
+					aHTML[++h] = '<span id="spanSetupStructureCategory_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+				};	
+					
+				aHTML[++h] = '</td>';
+								
+				aHTML[++h] = '</tr>';
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+
+			$('#' + sXHTMLElementId).html(aHTML.join(''));
+			
+			if (oOptions.view) 
+			{
+				$('.interfaceMainRowOptionsRemove').button( {
+					text: false,
+					icons: {
+						primary: "ui-icon-close"
+					}
+				})
+				.click(function() {
+					interfaceMasterSetupStructureScoringRemove({xhtmlElementID: this.id});
+				})
+				.css('width', '15px')
+				.css('height', '17px')
+			}
+			
+			if (oOptions.remove) 
+			{
+				$('.interfaceMainRowOptionsView').button( {
+					text: false,
+					icons: {
+						primary: "ui-icon-play"
+					}
+				})
+				.click(function() {
+					interfaceMasterSetupStructureScoringAdd({xhtmlElementID: this.id})
+				})
+				.css('width', '15px')
+				.css('height', '17px')
+			}	
+		}
+	}	
+}
+
+function interfaceMasterSetupStructureScoringAdd(aParam, oResponse)
+{
+	var sID; 
+	
+	if (oResponse == undefined)
+	{
+		var sXHTMLElementID;
+
+		if (aParam != undefined)
+		{
+			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		}
+		
+		if (sXHTMLElementID != undefined)
+		{
+			var aXHTMLElementID = sXHTMLElementID.split('-');
+			var sID = aXHTMLElementID[1];
+		}	
+	
+		var aHTML = [];
+		var h = -1;
+
+		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+				
+		aHTML[++h] = '<tr id="trInterfaceMainSetupSetupStructureScoringTitle" class="interfaceMain">' +
+						'<td id="tdInterfaceMainSetupSetupStructureScoringTitle" class="interfaceMain">' +
+						'Title' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainSetupSetupStructureScoringAddTitleValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainSetupSetupStructureScoringAddTitleValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainSetupStructureScoringAddTitle" class="inputInterfaceMainText">' +
+						'</td></tr>';
+		
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainSetupStructureScoringColumn1').html(aHTML.join(''));
+		
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+				
+		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
+						'<td id="tdInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
+						'<span style="width:80px;" id="spanInterfaceMainSetupStructureScoringAddSave">Save</span>' +
+						'</td></tr>';
+	
+		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddCancel" class="interfaceMainAction">' +
+						'<td id="tdInterfaceMainSetupStructureElementAddCancel" class="interfaceMainAction">' +
+						'<span style="width:80px;" id="spanInterfaceMainSetupStructureScoringAddCancel">Cancel</span>' +
+						'</td></tr>';
+						
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainSetupStructureScoringColumn2').html(aHTML.join(''));
+		
+		$('#spanInterfaceMainSetupStructureScoringAddSave').button(
+		{
+			text: "Save"
+		})
+		.click(function() 
+		{
+			var sData = 'structure=' + giObjectContext;
+			sData += '&id=' + interfaceMasterFormatSave(sID);
+			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureScoringAddTitle').val());
+			
+			$.ajax(
+			{
+				type: 'POST',
+				url: '/ondemand/setup/?method=SETUP_STRUCTURE_SCORING_MANAGE',
+				data: sData,
+				dataType: 'json',
+				success: function() {
+					interfaceSetupStructureScoring();
+				}
+			});
+		});
+		
+		$('#spanInterfaceMainSetupStructureScoringAddCancel').button(
+		{
+			text: "Cancel"
+		})
+		.click(function() 
+		{
+			interfaceMasterMainViewportShow("#divInterfaceMainScoring");
+			interfaceSetupSetupStructureScoring();
+		});
+		
+		if (sID != undefined)
+		{
+			$.ajax(
+			{
+				type: 'POST',
+				url: '/ondemand/setup/?method=SETUP_STRUCTURE_RULE_SEARCH',
+				data: 'id=' + sID,
+				dataType: 'json',
+				success: function(data) {interfaceMasterSetupStructureScoringAdd(aParam, data)}
+			});
+		}
+		else
+		{
+			$('[name="radioDataType"][value="4"]').attr('checked', true);	
+		}
+	}
+	else
+	{
+		if (oResponse.data.rows.length != 0)
+		{
+			var oObjectContext = oResponse.data.rows[0];
+			$('#inputInterfaceMainSetupSetupStructureElementAddTitle').val(oObjectContext.title)
+			$('#inputInterfaceMainSetupSetupStructureElementAddTitle').focus();
+		}
+	}		
+}
+
+function interfaceMasterSetupStructureScoringRemove(aParam, oResponse)
+{
+	var sXHTMLElementID;
+
+	if (aParam != undefined)
+	{
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+	}
+	
+	var aXHTMLElementID = sXHTMLElementID.split('-');
+	var sID = aXHTMLElementID[1];
+	
+	if (oResponse == undefined)
+	{	
+		var sParam = 'method=SETUP_STRUCTURE_RULE_MANAGE&remove=1';
+		var sData = 'id=' + sID;
+		
+		$.ajax(
+		{
+			type: 'DELETE',
+			url: '/ondemand/setup/?' + sParam,
+			data: sData,
+			dataType: 'json',
+			success: function(data){interfaceMasterSetupStructureScoringRemove(aParam, data)}
+		});
+	}	
+	else
+	{
+		if (oResponse.status == 'OK')
+		{
+			$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+		}	
+	}	
+	
+}
+

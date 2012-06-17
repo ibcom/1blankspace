@@ -480,10 +480,28 @@ function interfaceStructureDataSummary()
 	{
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
-		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStructureDataID" class="interfaceMainSummary">Structure Data ID</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryStructureDataID" class="interfaceMainSummaryValue">' +
-						goObjectContext.id +
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStructureDataDate" class="interfaceMainSummary">Date</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryStructureDataDate" class="interfaceMainSummaryValue">' +
+						goObjectContext.modifieddate +
 						'</td></tr>';
+		
+		if (goObjectContext.contactbusinesstext != '')
+		{			
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStructureDataBusiness" class="interfaceMainSummary">Business</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryStructureDataBusiness" class="interfaceMainSummaryValue">' +
+						goObjectContext.contactbusinesstext +
+						'</td></tr>';			
+		};
+		
+		if (goObjectContext.contactpersontext != '')
+		{			
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStructureDataPerson" class="interfaceMainSummary">Person</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryStructureDataPerson" class="interfaceMainSummaryValue">' +
+						goObjectContext.contactpersontext +
+						'</td></tr>';			
+		};
+			
+		//Specifics - old coverpage fields - type and date.	
 						
 		aHTML[++h] = '</table>';					
 		
@@ -535,6 +553,24 @@ function interfaceStructureDataDetails()
 						'<input id="inputInterfaceMainDetailsTitle" class="inputInterfaceMainText">' +
 						'</td></tr>';
 		
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsBusiness" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsBusiness" class="interfaceMain">' +
+						'Business' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsBusinesseValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsBusinessValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsBusiness" class="inputInterfaceMainText">' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsPerson" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsPerson" class="interfaceMain">' +
+						'Person' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsPersonValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsPersonValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsPerson" class="inputInterfaceMainText">' +
+						'</td></tr>';
+										
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
