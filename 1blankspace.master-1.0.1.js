@@ -1447,24 +1447,22 @@ function interfaceMasterAttachments(aParam)
 	}
 	
 	if (iObjectContext != -1)
-	{
-		var sParam = 'method=CORE_ATTACHMENT_SEARCH' +
-						'&object=' + iObject + 
-						'&objectcontext=' + iObjectContext;
-						
+	{	
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+		oSearch.addField('type,filename,description,download,modifieddate');
+		oSearch.addFilter('object', 'EQUAL_TO', iObject);
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+		
 		if (iAttachmentType != undefined)
-		{	
-			sParam = sParam + '&type=' + iAttachmentType;
+		{
+			oSearch.addFilter('type', 'EQUAL_TO', iAttachmentType);
 		}
 		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/core/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceMasterAttachmentsShow(data, sXHTMLElementID)}
-		});
+		oSearch.sort('filename', 'asc');
+		oSearch.getResults(function(data) {interfaceMasterAttachmentsShow(data, sXHTMLElementID)});
 	}
+
 }
 
 function interfaceMasterAttachmentsShow(oResponse, sXHTMLElementID)
@@ -1541,7 +1539,7 @@ function interfaceMasterAttachmentsShowRow(oRow)
 	
 	return aHTML.join('');
 }	
-	
+
 function interfaceMasterAttachmentsShowBind()
 {
 	$('.interfaceMainRowOptionsDeleteAttachment').button({
