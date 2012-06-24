@@ -2134,7 +2134,7 @@ function interfaceMasterSetupStructureScoringAdd(aParam, oResponse)
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_STRUCTURE_SCORING_MANAGE',
+				url: '/ondemand/setup/?method=SETUP_STRUCTURE_RULE_MANAGE',
 				data: sData,
 				dataType: 'json',
 				success: function() {
