@@ -392,10 +392,11 @@ function interfaceSetupStructureViewport()
 		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlElement" class="interfaceViewportControl">Elements</td>' +
 						'</tr>';
-							
+		/*					
 		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlAutomation" class="interfaceViewportControl">Automation</td>' +
 						'</tr>';
+		*/				
 	}
 	
 	aHTML[++h] = '</table>';					
@@ -1052,7 +1053,7 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 {
 	var iObjectContext = giObjectContext;
 	var sXHTMLElementId = 'divInterfaceMainElement';
-	var oOptions = {view: true, remove: true};
+	var oOptions = {view: true, remove: true, automation: true};
 	var oActions = {add: true};
 	
 	if (aParam != undefined)
@@ -1124,7 +1125,7 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
 			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Type</td>';
+			/*aHTML[++h] = '<td class="interfaceMainCaption">Type</td>';*/
 			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
 			aHTML[++h] = '</tr>';
 			
@@ -1134,11 +1135,17 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 								
 				aHTML[++h] = '<td id="tdSetupStructureElement_title-' + this.id + '" class="interfaceMainRow">' +
 										this.title + '</td>';
-										
+				/*						
 				aHTML[++h] = '<td id="tdSetupStructureElement_type-' + this.id + '" class="interfaceMainRow">' +
 										this.datatypetext + '</td>';
+				*/						
 										
 				aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+				
+				if (oOptions.automation)
+				{	
+					aHTML[++h] = '<span id="spanSetupStructureElement_options_view-' + this.id + '" class="interfaceMainRowOptionsAutomation"></span>';
+				};	
 					
 				if (oOptions.remove)
 				{	
@@ -1184,6 +1191,21 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 				})
 				.click(function() {
 					interfaceMasterSetupStructureElementAdd({xhtmlElementID: this.id})
+				})
+				.css('width', '15px')
+				.css('height', '17px')
+			}	
+			
+			if (oOptions.automation) 
+			{
+				$('.interfaceMainRowOptionsAutomation').button( {
+					text: false,
+					icons: {
+						primary: "ui-icon-gear"
+					}
+				})
+				.click(function() {
+					interfaceSetupStructureAutomation({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -1295,7 +1317,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddOptionsValue" class="interfaceMainText">' +
 							'<td id="tdInterfaceMainSetupStructureElementAddOptionsValue" class="interfaceMainText">' +
 							'</td></tr>';
-																					
+																										
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainSetupStructureElementColumnElement').html(aHTML.join(''));
