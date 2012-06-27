@@ -994,11 +994,11 @@ function interfaceSetupStructureElement(aParam, oResponse)
 					
 		aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
 					'<tr id="trInterfaceMainSetupStructureElementRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainSetupStructureElementColumnCategory" style="width: 100px;padding-right: 5px;" class="interfaceMainColumn1">' +
+					'<td id="tdInterfaceMainSetupStructureElementColumnCategory" style="width:100px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
 						gsLoadingXHTML + '</td>' +
-					'<td id="tdInterfaceMainSetupStructureElementColumnElement1" style="width: 175px;padding-right: 5px;" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainSetupStructureElementColumnElement1" style="width:175px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn2">' +
 					'</td>' +
-					'<td id="tdInterfaceMainSetupStructureElementColumnElement2" style="width: 275px;padding-right: 15px;" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainSetupStructureElementColumnElement2" style="width:305px;padding-right:15px;font-size:0.875em;" class="interfaceMainColumn2">' +
 					'</td>' +
 					'<td id="tdInterfaceMainSetupStructureElementColumnElement3" class="interfaceMainColumn2">' +
 					'</td>' +
