@@ -994,11 +994,13 @@ function interfaceSetupStructureElement(aParam, oResponse)
 					
 		aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
 					'<tr id="trInterfaceMainSetupStructureElementRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainSetupStructureElementColumnCategory" style="width: 100px" class="interfaceMainColumn1">' +
+					'<td id="tdInterfaceMainSetupStructureElementColumnCategory" style="width: 75px;padding-right: 0px;" class="interfaceMainColumn1">' +
 						gsLoadingXHTML + '</td>' +
-					'<td id="tdInterfaceMainSetupStructureElementColumnElement" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainSetupStructureElementColumnElement1" style="width: 175px" class="interfaceMainColumn2">' +
 					'</td>' +
-					'<td id="tdInterfaceMainSetupStructureElementColumnEdit" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainSetupStructureElementColumnElement2" style="width: 275px;padding-right: 15px;" class="interfaceMainColumn2">' +
+					'</td>' +
+					'<td id="tdInterfaceMainSetupStructureElementColumnElement3" class="interfaceMainColumn2">' +
 					'</td>' +
 					'</tr>' +
 					'</table>';					
@@ -1022,12 +1024,12 @@ function interfaceSetupStructureElement(aParam, oResponse)
 		{
 				aHTML[++h] = '<table id="tableStructureCategory" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 				aHTML[++h] = '<tbody>'
-				
+			
 				$.each(oResponse.data.rows, function()
 				{
 					aHTML[++h] = '<tr class="interfaceMainRow">';
 									
-					aHTML[++h] = '<td id="tdStructureCategory_title-' + this.id + '" class="interfaceSearch">' +
+					aHTML[++h] = '<td id="tdStructureCategory_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect">' +
 											this.title + '</td>';
 											
 					aHTML[++h] = '</tr>';
@@ -1037,12 +1039,12 @@ function interfaceSetupStructureElement(aParam, oResponse)
 
 				$('#tdInterfaceMainSetupStructureElementColumnCategory').html(aHTML.join(''));
 	
-				$('td.interfaceSearch').click(function(event)
+				$('td.interfaceMainRowSelect').click(function(event)
 				{
 					var sXHTMLElementId = event.target.id;
 					var aId = sXHTMLElementId.split('-');
 					
-					interfaceSetupStructureCategoryElements({xhtmlElementID: 'tdInterfaceMainSetupStructureElementColumnElement', category: aId[1]});
+					interfaceSetupStructureCategoryElements({xhtmlElementID: 'tdInterfaceMainSetupStructureElementColumnElement1', category: aId[1]});
 					
 				});
 		}
@@ -1052,7 +1054,7 @@ function interfaceSetupStructureElement(aParam, oResponse)
 function interfaceSetupStructureCategoryElements(aParam, oResponse)
 {
 	var iObjectContext = giObjectContext;
-	var sXHTMLElementId = 'divInterfaceMainElement';
+	var sXHTMLElementId = 'tdInterfaceMainSetupStructureElementColumnElement1';
 	var oOptions = {view: true, remove: true, automation: true};
 	var oActions = {add: true};
 	
@@ -1077,6 +1079,19 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 	}
 	else
 	{
+		var aHTML = [];
+		var h = -1;	
+			
+		aHTML[++h] = '<table style="margin-top:20px;">';
+			
+		aHTML[++h] = '<tr><td class="interfaceViewportControlSub">' +
+						'No element selected.' +
+						'</td></tr>';
+
+		aHTML[++h] = '</table>';		
+		
+		$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
+			
 		if (oActions != undefined)
 		{	
 			var aHTML = [];
@@ -1093,7 +1108,16 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 			
 			aHTML[++h] = '</table>';					
 			
-			$('#tdInterfaceMainSetupStructureElementColumnEdit').html(aHTML.join(''));
+			
+			aHTML[++h] = '<table style="margin-top:20px;">';
+			
+			aHTML[++h] = '<tr><td class="interfaceViewportControlSub">' +
+							'Click the gear icon to set up automation (issue creation) for an element.' +
+							'</td></tr>';
+
+			aHTML[++h] = '</table>';		
+			
+			$('#tdInterfaceMainSetupStructureElementColumnElement3').html(aHTML.join(''));
 		
 			$('#spanInterfaceMainSetupStructureAdd').button(
 			{
@@ -1116,29 +1140,20 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 							'<td class="interfaceMainRowNothing">No layout elements.</td></tr>';
 			aHTML[++h] = '</tbody></table>';
 
-			$('#' + sXHTMLElementId).html(aHTML.join(''));
+			$('#tdInterfaceMainSetupStructureElementColumnElement1').html(aHTML.join(''));
 		
 		}
 		else
 		{
 			aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
-			aHTML[++h] = '<tr class="interfaceMainCaption">';
-			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
-			/*aHTML[++h] = '<td class="interfaceMainCaption">Type</td>';*/
-			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-			aHTML[++h] = '</tr>';
 			
 			$.each(oResponse.data.rows, function()
 			{
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 								
-				aHTML[++h] = '<td id="tdSetupStructureElement_title-' + this.id + '" class="interfaceMainRow">' +
-										this.title + '</td>';
-				/*						
-				aHTML[++h] = '<td id="tdSetupStructureElement_type-' + this.id + '" class="interfaceMainRow">' +
-										this.datatypetext + '</td>';
-				*/						
+				aHTML[++h] = '<td id="tdSetupStructureElement_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect">' +
+										this.title + '</td>';				
 										
 				aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
 				
@@ -1164,9 +1179,9 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 
-			$('#tdInterfaceMainSetupStructureElementColumnElement').html(aHTML.join(''));
+			$('#tdInterfaceMainSetupStructureElementColumnElement1').html(aHTML.join(''));
 			
-			if (oOptions.view) 
+			if (oOptions.remove) 
 			{
 				$('.interfaceMainRowOptionsRemove').button( {
 					text: false,
@@ -1181,15 +1196,9 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 				.css('height', '17px')
 			}
 			
-			if (oOptions.remove) 
+			if (oOptions.view) 
 			{
-				$('.interfaceMainRowOptionsView').button( {
-					text: false,
-					icons: {
-						primary: "ui-icon-play"
-					}
-				})
-				.click(function() {
+				$('.interfaceMainRowSelect').click(function() {
 					interfaceMasterSetupStructureElementAdd({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
@@ -1320,12 +1329,12 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 																										
 		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainSetupStructureElementColumnElement').html(aHTML.join(''));
+		$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
 		
 		var aHTML = [];
 		var h = -1;
 	
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em;">';
 				
 		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
 						'<td id="tdInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
@@ -1339,7 +1348,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 						
 		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainSetupStructureElementColumnEdit').html(aHTML.join(''));
+		$('#tdInterfaceMainSetupStructureElementColumnElement3').html(aHTML.join(''));
 		
 		$('#spanInterfaceMainSetupStructureElementAddSave').button(
 		{
@@ -1702,7 +1711,7 @@ function interfaceSetupElementOptionEditSave(sElementId)
 function interfaceSetupStructureAutomation(aParam, oResponse)
 {
 	var iObjectContext = giObjectContext;
-	var sXHTMLElementId = 'divInterfaceMainAutomation';
+	var sXHTMLElementId = 'tdInterfaceMainSetupStructureElementColumnElement2';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
@@ -1719,7 +1728,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_AUTOMATION_SEARCH&structure=' + giObjectContext,
+			url: '/ondemand/setup/?method=SETUP_STRUCTURE_AUTOMATION_SEARCH&element=' + giObjectContext,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureAutomation(aParam, data)}
 		});
@@ -1741,8 +1750,8 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 						'</tr>' +
 						'</table>';					
 				
-			$('#' + sXHTMLElementId).html(aHTML.join(''));
-			sXHTMLElementId = 'tdInterfaceMainSetupStructureAutomationColumn1';
+			//$('#' + sXHTMLElementId).html(aHTML.join(''));
+			//sXHTMLElementId = 'tdInterfaceMainSetupStructureAutomationColumn1';
 			
 			var aHTML = [];
 			var h = -1;	
@@ -1758,7 +1767,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 			
 			aHTML[++h] = '</table>';					
 			
-			$('#tdInterfaceMainSetupStructureAutomationColumn2').html(aHTML.join(''));
+			$('#tdInterfaceMainSetupStructureElementColumnElement3').html(aHTML.join(''));
 		
 			$('#spanInterfaceMainSetupStructureAutomationAdd').button(
 			{
@@ -1781,8 +1790,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 							'<td class="interfaceMainRowNothing">No automation set up.</td></tr>';
 			aHTML[++h] = '</tbody></table>';
 
-			$('#' + sXHTMLElementId).html(aHTML.join(''));
-		
+			$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
 		}
 		else
 		{
@@ -1819,7 +1827,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 
-			$('#' + sXHTMLElementId).html(aHTML.join(''));
+			$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
 			
 			if (oOptions.view) 
 			{
@@ -1889,7 +1897,7 @@ function interfaceMasterSetupStructureAutomationAdd(aParam, oResponse)
 		
 		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainSetupStructureAutomationColumn1').html(aHTML.join(''));
+		$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
 		
 		var aHTML = [];
 		var h = -1;
@@ -1908,7 +1916,7 @@ function interfaceMasterSetupStructureAutomationAdd(aParam, oResponse)
 						
 		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainSetupStructureAutomationColumn2').html(aHTML.join(''));
+		$('#tdInterfaceMainSetupStructureElementColumnElement3').html(aHTML.join(''));
 		
 		$('#spanInterfaceMainSetupStructureAutomationAddSave').button(
 		{
