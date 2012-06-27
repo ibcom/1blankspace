@@ -994,9 +994,9 @@ function interfaceSetupStructureElement(aParam, oResponse)
 					
 		aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
 					'<tr id="trInterfaceMainSetupStructureElementRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainSetupStructureElementColumnCategory" style="width: 75px;padding-right: 0px;" class="interfaceMainColumn1">' +
+					'<td id="tdInterfaceMainSetupStructureElementColumnCategory" style="width: 100px;padding-right: 5px;" class="interfaceMainColumn1">' +
 						gsLoadingXHTML + '</td>' +
-					'<td id="tdInterfaceMainSetupStructureElementColumnElement1" style="width: 175px" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainSetupStructureElementColumnElement1" style="width: 175px;padding-right: 5px;" class="interfaceMainColumn2">' +
 					'</td>' +
 					'<td id="tdInterfaceMainSetupStructureElementColumnElement2" style="width: 275px;padding-right: 15px;" class="interfaceMainColumn2">' +
 					'</td>' +
@@ -1086,6 +1086,10 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 			
 		aHTML[++h] = '<tr><td class="interfaceViewportControlSub">' +
 						'No element selected.' +
+						'<br /><br/ >Click the gear icon to set up automation (issue creation) for an element.' +
+					'</td></tr>';
+
+			aHTML[++h] = '</table>';		
 						'</td></tr>';
 
 		aHTML[++h] = '</table>';		
@@ -1107,15 +1111,6 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 			}
 			
 			aHTML[++h] = '</table>';					
-			
-			
-			aHTML[++h] = '<table style="margin-top:20px;">';
-			
-			aHTML[++h] = '<tr><td class="interfaceViewportControlSub">' +
-							'Click the gear icon to set up automation (issue creation) for an element.' +
-							'</td></tr>';
-
-			aHTML[++h] = '</table>';		
 			
 			$('#tdInterfaceMainSetupStructureElementColumnElement3').html(aHTML.join(''));
 		
@@ -1155,7 +1150,7 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 				aHTML[++h] = '<td id="tdSetupStructureElement_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect">' +
 										this.title + '</td>';				
 										
-				aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+				aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
 				
 				if (oOptions.automation)
 				{	
@@ -1254,9 +1249,18 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 						'</td></tr>' +
 						'<tr id="trInterfaceMainSetupSetupStructureElementAddTitleValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainSetupSetupStructureElementAddTitleValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainSetupSetupStructureElementAddTitle" class="inputInterfaceMainText">' +
+						'<textarea rows="3" cols="35"  id="inputInterfaceMainSetupStructureElementAddTitle" class="inputInterfaceMainTextMultiSmall"></textarea>' +
 						'</td></tr>';
-						
+		
+		aHTML[++h] = '<tr id="trInterfaceMainSetupSetupStructureElementDescription" class="interfaceMain">' +
+						'<td id="tdInterfaceMainSetupSetupStructureElementDescription" class="interfaceMain">' +
+						'Description' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainSetupSetupStructureElementAddDescriptionValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainSetupSetupStructureElementAddDescriptionValue" class="interfaceMainText">' +
+						'<textarea rows="3" cols="35" id="inputInterfaceMainSetupStructureElementAddDescription" class="inputInterfaceMainTextMultiLarge" style="height: 150px;"></textarea>' +
+						'</td></tr>';
+										
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsCategory" class="interfaceMain">' +
 						'<td id="tdInterfaceMainDetailsCategory" class="interfaceMain">' +
 						'Category' +
@@ -1322,7 +1326,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 							'<td id="tdInterfaceMainSetupStructureElementAddDisplayOrderValue" class="interfaceMainText">' +
 							'<input id="inputInterfaceMainSetupStructureElementAddDisplayOrder" class="inputInterfaceMainText">' +
 							'</td></tr>';
-							
+											
 		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddOptionsValue" class="interfaceMainText">' +
 							'<td id="tdInterfaceMainSetupStructureElementAddOptionsValue" class="interfaceMainText">' +
 							'</td></tr>';
@@ -1338,12 +1342,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 				
 		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
 						'<td id="tdInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
-						'<span style="width:80px;" id="spanInterfaceMainSetupStructureElementAddSave">Save</span>' +
-						'</td></tr>';
-	
-		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddCancel" class="interfaceMainAction">' +
-						'<td id="tdInterfaceMainSetupStructureElementAddCancel" class="interfaceMainAction">' +
-						'<span style="width:80px;" id="spanInterfaceMainSetupStructureElementAddCancel">Cancel</span>' +
+						'<span style="width:70px;" id="spanInterfaceMainSetupStructureElementAddSave">Save</span>' +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
@@ -1358,12 +1357,13 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 		{
 			var sData = 'structure=' + giObjectContext;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
-			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddTitle').val());
+			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureElementAddTitle').val());
 			sData += '&datatype=' + interfaceMasterFormatSave($('input[name="radioDataType"]:checked').val());
 			sData += '&category=' + interfaceMasterFormatSave($('input[name="radioCategory"]:checked').val());
 			sData += '&textcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddTextColour').val());
 			sData += '&backgroundcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddBackgroundColour').val());
 			sData += '&displayorder=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddDisplayOrder').val());
+			sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureElementAddDescription').val());
 			
 			$.ajax(
 			{
@@ -1372,20 +1372,10 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 				data: sData,
 				dataType: 'json',
 				success: function() {
-					//interfaceMasterMainViewportShow("#divInterfaceMainStructure");
-					interfaceSetupStructureElement();
+					$('#tdSetupStructureElement_title-' + sID).html($('#inputInterfaceMainSetupStructureElementAddTitle').val());
+					$('#tdInterfaceMainSetupStructureElementColumnElement2').html('Element has been saved.');
 				}
 			});
-		});
-		
-		$('#spanInterfaceMainSetupStructureElementAddCancel').button(
-		{
-			text: "Cancel"
-		})
-		.click(function() 
-		{
-			interfaceMasterMainViewportShow("#divInterfaceMainStructure");
-			interfaceSetupStructureElement();
 		});
 		
 		if (sID != undefined)
@@ -1410,7 +1400,8 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 		if (oResponse.data.rows.length != 0)
 		{
 			var oObjectContext = oResponse.data.rows[0];
-			$('#inputInterfaceMainSetupSetupStructureElementAddTitle').val(oObjectContext.title)
+			$('#inputInterfaceMainSetupStructureElementAddTitle').val(oObjectContext.title);
+			$('#inputInterfaceMainSetupStructureElementAddDescription').val(oObjectContext.description)
 			$('[name="radioDataType"][value="' + oObjectContext.datatype + '"]').attr('checked', true);
 			$('[name="radioCategory"][value="' + oObjectContext.category + '"]').attr('checked', true);
 			$('#inputInterfaceMainSetupSetupStructureElementAddTextColour').val(oObjectContext.textcolour)
@@ -1710,17 +1701,26 @@ function interfaceSetupElementOptionEditSave(sElementId)
 
 function interfaceSetupStructureAutomation(aParam, oResponse)
 {
+	var sXHTMLElementID;	
 	var iObjectContext = giObjectContext;
-	var sXHTMLElementId = 'tdInterfaceMainSetupStructureElementColumnElement2';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
+	var iElementID;
 	
 	if (aParam != undefined)
 	{
 		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
 		if (aParam.options != undefined) {oOptions = aParam.options}
 		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (aParam.element != undefined) {iElementID = aParam.element}
+	}		
+	
+	if (sXHTMLElementID != undefined)
+	{
+		var aXHTMLElementID = sXHTMLElementID.split('-');
+		iElementID = aXHTMLElementID[1];
+		$.extend(true, aParam, {element: iElementID});
 	}		
 		
 	if (oResponse == undefined)
@@ -1728,7 +1728,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_AUTOMATION_SEARCH&element=' + giObjectContext,
+			url: '/ondemand/setup/?method=SETUP_STRUCTURE_AUTOMATION_SEARCH&element=' + iElementID,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureAutomation(aParam, data)}
 		});
@@ -1748,10 +1748,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 						'<td id="tdInterfaceMainSetupStructureAutomationColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
 						'</tr>' +
-						'</table>';					
-				
-			//$('#' + sXHTMLElementId).html(aHTML.join(''));
-			//sXHTMLElementId = 'tdInterfaceMainSetupStructureAutomationColumn1';
+						'</table>';	
 			
 			var aHTML = [];
 			var h = -1;	
@@ -1774,7 +1771,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 				label: "Add"
 			})
 			.click(function() {
-				 interfaceMasterSetupStructureAutomationAdd(aParam);
+				 interfaceMasterSetupStructureAutomationAdd({element: iElementID});
 			})
 			
 		}	
@@ -1797,7 +1794,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 			aHTML[++h] = '<table id="tableSetupStructureCategory" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
-			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">Automation</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
 			aHTML[++h] = '</tr>';
 			
@@ -1829,7 +1826,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 
 			$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
 			
-			if (oOptions.view) 
+			if (oOptions.remove) 
 			{
 				$('.interfaceMainRowOptionsRemove').button( {
 					text: false,
@@ -1844,7 +1841,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 				.css('height', '17px')
 			}
 			
-			if (oOptions.remove) 
+			if (oOptions.view) 
 			{
 				$('.interfaceMainRowOptionsView').button( {
 					text: false,
@@ -1853,7 +1850,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterSetupStructureAutomationAdd({xhtmlElementID: this.id})
+					interfaceMasterSetupStructureAutomationAdd({xhtmlElementID: this.id, element: iElementID})
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -1865,6 +1862,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 function interfaceMasterSetupStructureAutomationAdd(aParam, oResponse)
 {
 	var sID; 
+	var iElementID;
 	
 	if (oResponse == undefined)
 	{
@@ -1873,6 +1871,7 @@ function interfaceMasterSetupStructureAutomationAdd(aParam, oResponse)
 		if (aParam != undefined)
 		{
 			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+			if (aParam.element != undefined) {iElementID = aParam.element}
 		}
 		
 		if (sXHTMLElementID != undefined)
@@ -1885,7 +1884,11 @@ function interfaceMasterSetupStructureAutomationAdd(aParam, oResponse)
 		var h = -1;
 
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
-				
+		
+		aHTML[++h] = '<tr class="interfaceMainCaption">';
+		aHTML[++h] = '<td class="interfaceMainCaption">Automation</td>';
+		aHTML[++h] = '</tr>';
+					
 		aHTML[++h] = '<tr id="trInterfaceMainSetupSetupStructureAutomationTitle" class="interfaceMain">' +
 						'<td id="tdInterfaceMainSetupSetupStructureAutomationTitle" class="interfaceMain">' +
 						'Title' +
@@ -1902,16 +1905,11 @@ function interfaceMasterSetupStructureAutomationAdd(aParam, oResponse)
 		var aHTML = [];
 		var h = -1;
 	
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em">';
 				
 		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
 						'<td id="tdInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
-						'<span style="width:80px;" id="spanInterfaceMainSetupStructureAutomationAddSave">Save</span>' +
-						'</td></tr>';
-	
-		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddCancel" class="interfaceMainAction">' +
-						'<td id="tdInterfaceMainSetupStructureElementAddCancel" class="interfaceMainAction">' +
-						'<span style="width:80px;" id="spanInterfaceMainSetupStructureAutomationAddCancel">Cancel</span>' +
+						'<span style="width:70px;" id="spanInterfaceMainSetupStructureAutomationAddSave">Save</span>' +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
@@ -1925,29 +1923,20 @@ function interfaceMasterSetupStructureAutomationAdd(aParam, oResponse)
 		.click(function() 
 		{
 			var sData = 'structure=' + giObjectContext;
+			sData += '&element=' + iElementID;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureAutomationAddTitle').val());
 			
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_STRUCTURE_AUTOMATION_MANAGE',
+				url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_AUTOMATION_MANAGE',
 				data: sData,
 				dataType: 'json',
 				success: function() {
-					interfaceSetupStructureAutomation();
+					interfaceSetupStructureAutomation({element: iElementID});
 				}
 			});
-		});
-		
-		$('#spanInterfaceMainSetupStructureAutomationAddCancel').button(
-		{
-			text: "Cancel"
-		})
-		.click(function() 
-		{
-			interfaceMasterMainViewportShow("#divInterfaceMainAutomation");
-			interfaceSetupSetupStructureAutomation();
 		});
 		
 		if (sID != undefined)

@@ -722,7 +722,7 @@ function interfaceNewsDetails()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsSummaryValue" class="interfaceMainTextMulti">' +
 						'<td id="tdInterfaceMainDetailsSummaryValue" class="interfaceMainTextMulti">' +
-						'<textarea rows="10" cols="35" onDemandType="TEXTMULTI" id="inputInterfaceMainDetailsSummary" class="inputInterfaceMainTextMulti"></textarea>' +
+						'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsSummary" class="inputInterfaceMainTextMulti"></textarea>' +
 						'</td></tr>';
 		
 		aHTML[++h] = '</table>';					
