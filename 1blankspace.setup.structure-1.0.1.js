@@ -118,8 +118,36 @@ function interfaceSetupStructureMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').focus();
 	
-	interfaceSetupStructureHomeShow();
+	if (gbRichEdit)
+	{
 	
+		tinyMCE.init(
+		{
+			mode : "none",
+			height : "200px", 
+			width : "100%",
+			theme : "advanced",
+
+    		theme_advanced_buttons1 : "bold,italic,underline,link,unlink,bullist,blockquote,undo", 
+    		theme_advanced_buttons2 : "", 
+    		theme_advanced_buttons3 : "",
+		
+			font_size_style_values : "8pt,10pt,12pt,14pt,18pt,24pt,36pt",
+			
+			relative_urls : false, 
+			remove_script_host : false, 
+			convert_urls : false, 
+			visual : true, 
+			gecko_spellcheck : true,
+			content_css : gsEditorCSS,
+			
+			external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
+			external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + giObjectContext, 
+			media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + giObjectContext, 
+		});				
+	}
+	
+	if (bShowHome) {interfaceSetupStructureHomeShow()};	
 }
 
 function interfaceSetupStructureActionOptionsBind()
@@ -176,7 +204,7 @@ function interfaceSetupStructureHomeShow(oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_SEARCH&recent=1',
+			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_SEARCH&recent=1',
 			dataType: 'json',
 			success: interfaceSetupStructureHomeShow
 		});
@@ -257,7 +285,7 @@ function interfaceSetupStructureSearch(sXHTMLElementId, aParam)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?' + sParam,
+			url: '/ondemand/setup/setup_structure.asp?' + sParam,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureShow(aParam, data)}
 		});
@@ -290,7 +318,7 @@ function interfaceSetupStructureSearch(sXHTMLElementId, aParam)
 			$.ajax(
 			{
 				type: 'GET',
-				url: '/ondemand/setup/?' + sParam,
+				url: '/ondemand/setup/setup_structure.asp?' + sParam,
 				dataType: 'json',
 				success: function(data) {interfaceSetupStructureSearchShow(aParam, data)}
 			});
@@ -625,7 +653,7 @@ function interfaceSetupStructureSave(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/setup/?' + sParam,
+			url: '/ondemand/setup/setup_structure.asp?' + sParam,
 			data: sData,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureSave(aParam, data)}
@@ -672,7 +700,7 @@ function interfaceSetupStructureCategory(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + giObjectContext,
+			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + giObjectContext,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureCategory(aParam, data)}
 		});
@@ -877,7 +905,7 @@ function interfaceMasterSetupStructureCategoryAdd(aParam, oResponse)
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_STRUCTURE_CATEGORY_MANAGE',
+				url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_MANAGE',
 				data: sData,
 				dataType: 'json',
 				success: function() {
@@ -902,7 +930,7 @@ function interfaceMasterSetupStructureCategoryAdd(aParam, oResponse)
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_STRUCTURE_CATEGORY_SEARCH',
+				url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_SEARCH',
 				data: 'id=' + sID,
 				dataType: 'json',
 				success: function(data) {interfaceMasterSetupStructureCategoryAdd(aParam, data)}
@@ -944,7 +972,7 @@ function interfaceMasterSetupStructureCategoryRemove(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/setup/?' + sParam,
+			url: '/ondemand/setup/setup_structure.asp?' + sParam,
 			data: sData,
 			dataType: 'json',
 			success: function(data){interfaceMasterSetupStructureCategoryRemove(aParam, data)}
@@ -980,7 +1008,7 @@ function interfaceSetupStructureElement(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + giObjectContext,
+			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + giObjectContext,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureElement(aParam, data)}
 		});
@@ -1029,7 +1057,7 @@ function interfaceSetupStructureElement(aParam, oResponse)
 				{
 					aHTML[++h] = '<tr class="interfaceMainRow">';
 									
-					aHTML[++h] = '<td id="tdStructureCategory_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect">' +
+					aHTML[++h] = '<td id="tdStructureCategory_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect category">' +
 											this.title + '</td>';
 											
 					aHTML[++h] = '</tr>';
@@ -1039,7 +1067,7 @@ function interfaceSetupStructureElement(aParam, oResponse)
 
 				$('#tdInterfaceMainSetupStructureElementColumnCategory').html(aHTML.join(''));
 	
-				$('td.interfaceMainRowSelect').click(function(event)
+				$('td.category').click(function(event)
 				{
 					var sXHTMLElementId = event.target.id;
 					var aId = sXHTMLElementId.split('-');
@@ -1057,6 +1085,7 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 	var sXHTMLElementId = 'tdInterfaceMainSetupStructureElementColumnElement1';
 	var oOptions = {view: true, remove: true, automation: true};
 	var oActions = {add: true};
+	var iCategory;
 	
 	if (aParam != undefined)
 	{
@@ -1064,6 +1093,7 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
 		if (aParam.options != undefined) {oOptions = aParam.options}
 		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (aParam.category != undefined) {iCategory = aParam.category}
 	}		
 		
 	if (oResponse == undefined)
@@ -1071,7 +1101,7 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_SEARCH&structure=' + giObjectContext,
+			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_ELEMENT_SEARCH&category=' + iCategory,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureCategoryElements(aParam, data)}
 		});
@@ -1147,7 +1177,7 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 			{
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 								
-				aHTML[++h] = '<td id="tdSetupStructureElement_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect">' +
+				aHTML[++h] = '<td id="tdSetupStructureElement_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect element">' +
 										this.title + '</td>';				
 										
 				aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
@@ -1193,7 +1223,7 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 			
 			if (oOptions.view) 
 			{
-				$('.interfaceMainRowSelect').click(function() {
+				$('td.element').click(function() {
 					interfaceMasterSetupStructureElementAdd({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
@@ -1238,6 +1268,11 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 			var sID = aXHTMLElementID[1];
 		}	
 	
+		for (edId in tinyMCE.editors) 
+					tinyMCE.editors[edId].destroy(true);
+					
+		giEditorCounter = giEditorCounter + 1;
+	
 		var aHTML = [];
 		var h = -1;
 
@@ -1249,7 +1284,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 						'</td></tr>' +
 						'<tr id="trInterfaceMainSetupSetupStructureElementAddTitleValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainSetupSetupStructureElementAddTitleValue" class="interfaceMainText">' +
-						'<textarea rows="3" cols="35"  id="inputInterfaceMainSetupStructureElementAddTitle" class="inputInterfaceMainTextMultiSmall"></textarea>' +
+						'<textarea rows="3" cols="35"  id="inputInterfaceMainSetupStructureElementAddTitle" class="inputInterfaceMainTextMultiSmall" style="height: 80px;"></textarea>' +
 						'</td></tr>';
 		
 		aHTML[++h] = '<tr id="trInterfaceMainSetupSetupStructureElementDescription" class="interfaceMain">' +
@@ -1258,7 +1293,9 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 						'</td></tr>' +
 						'<tr id="trInterfaceMainSetupSetupStructureElementAddDescriptionValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainSetupSetupStructureElementAddDescriptionValue" class="interfaceMainText">' +
-						'<textarea rows="3" cols="35" id="inputInterfaceMainSetupStructureElementAddDescription" class="inputInterfaceMainTextMultiLarge" style="height: 150px;"></textarea>' +
+						'<textarea rows="3" cols="35" id="inputInterfaceMainSetupStructureElementAddDescription' +
+						 			giEditorCounter + '" data-editorcount="' + giEditorCounter + 
+									'" class="inputInterfaceMainTextMultiLarge" style="height: 125px;"></textarea>' +
 						'</td></tr>';
 										
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsCategory" class="interfaceMain">' +
@@ -1271,7 +1308,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_CATEGORY_SEARCH',
+			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_SEARCH',
 			data: 'structure=' + giObjectContext,
 			dataType: 'json',
 			async: false,
@@ -1335,6 +1372,11 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 		
 		$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
 		
+		if (gbRichEdit)
+		{
+			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainSetupStructureElementAddDescription' + giEditorCounter);
+		}
+	
 		var aHTML = [];
 		var h = -1;
 	
@@ -1363,12 +1405,12 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 			sData += '&textcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddTextColour').val());
 			sData += '&backgroundcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddBackgroundColour').val());
 			sData += '&displayorder=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddDisplayOrder').val());
-			sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureElementAddDescription').val());
-			
+			sData += '&description=' + interfaceMasterFormatSave(tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + giEditorCounter).getContent());
+				
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_MANAGE',
+				url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_ELEMENT_MANAGE',
 				data: sData,
 				dataType: 'json',
 				success: function() {
@@ -1383,7 +1425,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_SEARCH',
+				url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_ELEMENT_SEARCH',
 				data: 'id=' + sID,
 				dataType: 'json',
 				success: function(data) {interfaceMasterSetupStructureElementAdd(aParam, data)}
@@ -1401,7 +1443,11 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 		{
 			var oObjectContext = oResponse.data.rows[0];
 			$('#inputInterfaceMainSetupStructureElementAddTitle').val(oObjectContext.title);
-			$('#inputInterfaceMainSetupStructureElementAddDescription').val(oObjectContext.description)
+			
+			var sHTML = interfaceMasterFormatXHTML(oObjectContext.description);
+			
+			tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + giEditorCounter).setContent(sHTML)
+			
 			$('[name="radioDataType"][value="' + oObjectContext.datatype + '"]').attr('checked', true);
 			$('[name="radioCategory"][value="' + oObjectContext.category + '"]').attr('checked', true);
 			$('#inputInterfaceMainSetupSetupStructureElementAddTextColour').val(oObjectContext.textcolour)
@@ -1411,6 +1457,8 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 			interfaceSetupStructureElementOptionsShow({structureElementID: oObjectContext.id});
 		}
 	}
+	
+
 }
 
 function interfaceMasterSetupStructureElementRemove(aParam, oResponse)
@@ -1433,7 +1481,7 @@ function interfaceMasterSetupStructureElementRemove(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/setup/?' + sParam,
+			url: '/ondemand/setup/setup_structure.asp?' + sParam,
 			data: sData,
 			dataType: 'json',
 			success: function(data){interfaceMasterSetupStructureElementRemove(aParam, data)}
@@ -1480,7 +1528,7 @@ function interfaceSetupStructureElementOptionsShow(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/setup/?' + sParam,
+			url: '/ondemand/setup/setup_structure.asp?' + sParam,
 			data: sData,
 			dataType: 'json',
 			success: function(data){interfaceSetupStructureElementOptionsShow(aParam, data)}
@@ -1591,7 +1639,7 @@ function interfaceSetupElementOptionRemove(sXHTMLElementId)
 	{
 		var aMethod = gsSetupMethod.split('_');
 		var sEndpoint = aMethod[0];
-		var sParam = '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_OPTION_MANAGE&remove=1';
+		var sParam = '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_ELEMENT_OPTION_MANAGE&remove=1';
 		var sData = 'id=' + sSearchContext;
 					
 		$.ajax(
@@ -1643,7 +1691,7 @@ function interfaceSetupElementOptionEditSave(sElementId)
 	var aMethod = gsSetupMethod.split('_');
 	var sEndpoint = aMethod[0];
 	var aElement = sElementId.split('-');
-	var sParam = '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_OPTION_MANAGE'
+	var sParam = '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_ELEMENT_OPTION_MANAGE'
 	
 	var sData = 'id=' + aElement[1];
 	sData += '&element=' + $('#tableInterfaceElementOption').attr('data-structureElement');
@@ -1728,7 +1776,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_AUTOMATION_SEARCH&element=' + iElementID,
+			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_AUTOMATION_SEARCH&element=' + iElementID,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureAutomation(aParam, data)}
 		});
@@ -1944,7 +1992,7 @@ function interfaceMasterSetupStructureAutomationAdd(aParam, oResponse)
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_STRUCTURE_AUTOMATION_SEARCH',
+				url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_AUTOMATION_SEARCH',
 				data: 'id=' + sID,
 				dataType: 'json',
 				success: function(data) {interfaceMasterSetupStructureAutomationAdd(aParam, data)}
@@ -1986,7 +2034,7 @@ function interfaceMasterSetupStructureAutomationRemove(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'DELETE',
-			url: '/ondemand/setup/?' + sParam,
+			url: '/ondemand/setup/setup_structure.asp?' + sParam,
 			data: sData,
 			dataType: 'json',
 			success: function(data){interfaceMasterSetupStructureAutomationRemove(aParam, data)}
@@ -2022,7 +2070,7 @@ function interfaceSetupStructureGrouping(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_DATA_GROUP_SEARCH&structure=' + giObjectContext,
+			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_DATA_GROUP_SEARCH&structure=' + giObjectContext,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureGrouping(aParam, data)}
 		});
@@ -2251,7 +2299,7 @@ function interfaceMasterSetupStructureGroupingAdd(aParam, oResponse)
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_STRUCTURE_DATA_GROUP_SEARCH',
+				url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_DATA_GROUP_SEARCH',
 				data: 'id=' + sID,
 				dataType: 'json',
 				success: function(data) {interfaceMasterSetupStructureGroupingAdd(aParam, data)}
@@ -2293,7 +2341,7 @@ function interfaceMasterSetupStructureGroupingRemove(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'DELETE',
-			url: '/ondemand/setup/?' + sParam,
+			url: '/ondemand/setup/setup_structure.asp?' + sParam,
 			data: sData,
 			dataType: 'json',
 			success: function(data){interfaceMasterSetupStructureGroupingRemove(aParam, data)}
