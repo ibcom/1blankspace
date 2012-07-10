@@ -2375,7 +2375,8 @@ function interfaceMessagingActionSearch(aParam, oResponse)
 		oSearch.method = 'ACTION_SEARCH';
 		oSearch.addField('actionreference,duedatetime,text');
 		oSearch.rf = 'json';
-		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);		
+		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
+		oSearch.addFilter('actiontype', 'EQUAL_TO', 5);				
 		oSearch.getResults(function(data) {interfaceMessagingActionSearch(aParam, data)});
 	}
 	else

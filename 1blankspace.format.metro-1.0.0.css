@@ -419,8 +419,8 @@ td.interfaceHomeViewport
 #divInterfaceMasterViewportControlSearchStatus
 {
 	position: absolute;
-	top: 1px;
-	left: 475px;
+	top: 5px;
+	left: 461px;
 	width: 20px;	
 	z-index: 1;
 }
