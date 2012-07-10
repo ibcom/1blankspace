@@ -106,7 +106,7 @@ function interfaceSetupMessagingHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportSetupMessagingLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="interfaceMasterViewportMessagingEmailLarge" class="interfaceMasterViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -193,7 +193,8 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
 		
 		giObjectContext = sSearchContext;
-		
+	
+		/*
 		var sParam = 'method=SETUP_MESSAGING_ACCOUNT_SEARCH';
 		sParam += '&type=5';
 		sParam += '&id=' + giObjectContext;
@@ -203,16 +204,16 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 			type: 'POST',
 			url: '/ondemand/setup/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceMessagingHomeShow(aParam, data)}
+			success: function(data) {interfaceSetupMessagingShow(data)}
 		});
+		*/
 		
-		/*
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
-		oSearch.addField('email');
+		oSearch.addField('email,type,typetext,authtype,authtypetext,accountname,server,sslport,title,user,usertext');
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 		oSearch.getResults(function(data) {interfaceSetupMessagingShow(data)});
-		*/
+	
 	}
 	else
 	{
@@ -384,6 +385,8 @@ function interfaceSetupMessagingShow(oResponse)
 	else
 	{
 		goObjectContext = oResponse.data.rows[0];
+		
+		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 				
 		var sContext = goObjectContext.email;
 		var aContext = sContext.split("@");
@@ -401,7 +404,7 @@ function interfaceSetupMessagingShow(oResponse)
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
 						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
+						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2x">' +
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -432,6 +435,11 @@ function interfaceSetupMessagingSummary()
 						'<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummaryValue">' +
 						goObjectContext.email +
 						'</td></tr>';
+						
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryEmail" class="interfaceMainSummary">Server</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryServer" class="interfaceMainSummaryValue">' +
+						goObjectContext.server +
+						'</td></tr>';				
 		
 		aHTML[++h] = '</table>';					
 		
@@ -488,6 +496,33 @@ function interfaceSetupMessagingDetails()
 						'<input id="inputInterfaceMainDetailsEmail" class="inputInterfaceMainText">' +
 						'</td></tr>';
 		
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsAccountName" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsAccountName" class="interfaceMain">' +
+						'Account Name' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsAccountNameValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsAccountNameValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsAccountName" class="inputInterfaceMainText">' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsAccountPassword" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsAccountPassword" class="interfaceMain">' +
+						'Account Password' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsAccountPasswordValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsAccountPasswordValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsAccountPassword" class="inputInterfaceMainText" type="password">' +
+						'</td></tr>';				
+		
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsServer" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsServer" class="interfaceMain">' +
+						'Server' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsServerValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsServerValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsServer" class="inputInterfaceMainText">' +
+						'</td></tr>';	
+										
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
@@ -499,7 +534,7 @@ function interfaceSetupMessagingDetails()
 	
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsType" class="interfaceMain">' +
 						'<td id="tdInterfaceMainDetailsType" class="interfaceMain">' +
-						'Tracking' +
+						'Type' +
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsType" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainDetailsTypeValue" class="interfaceMainText">' +
@@ -512,8 +547,10 @@ function interfaceSetupMessagingDetails()
 		
 		if (goObjectContext != undefined)
 		{
-			$('#inputInterfaceMainDetailsEmail').val(goObjectContext.username);
+			$('#inputInterfaceMainDetailsEmail').val(goObjectContext.email);
 			$('[name="radioType"][value="' + goObjectContext.type + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsAccountName').val(goObjectContext.accountname);
+			$('#inputInterfaceMainDetailsServer').val(goObjectContext.server);
 		}
 		else
 		{
@@ -548,6 +585,9 @@ function interfaceSetupMessagingSave()
 	{
 		sData += '&email=' + encodeURIComponent($('#inputInterfaceMainDetailsEmail').val());
 		sData += '&type=' + $('input[name="radioType"]:checked').val();
+		sData += '&accountname=' + encodeURIComponent($('#inputInterfaceMainDetailsAccountName').val());
+		sData += '&accountpassword=' + encodeURIComponent($('#inputInterfaceMainDetailsAccountPassword').val());
+		sData += '&server=' + encodeURIComponent($('#inputInterfaceMainDetailsServer').val());
 	};
 
 	$.ajax(

@@ -9,7 +9,7 @@ window.onbeforeunload = function()
 
 function interfaceHelpURL()
 {
-	return 'http://help.1blankspace.com';
+	return 'http://community.mydigitalstructure.com';
 }
 
 function interfaceHelp()
