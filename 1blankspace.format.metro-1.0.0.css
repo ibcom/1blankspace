@@ -733,6 +733,7 @@ span.interfaceViewportMasterControl, tr.interfaceViewportMasterControl
 td.interfaceViewportMasterControl
 {
 	cursor: pointer;
+	padding-bottom: 5px;
 }
 
 td.interfaceViewportMasterControlColumn

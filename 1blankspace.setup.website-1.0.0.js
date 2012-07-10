@@ -145,6 +145,7 @@ function interfaceSetupWebsiteHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceWebsiteHomeMostLikely" class="interfaceMainColumn1Large">' +
+						gsLoadingXHTML +
 						'</td>' +
 						'<td id="tdInterfaceMainSummaryColumn2Action" style="width:175px;">' +
 						'</td>' +

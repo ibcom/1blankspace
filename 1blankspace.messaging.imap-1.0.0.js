@@ -284,12 +284,13 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 					var sDescription = this.email;
 					var aDescription = sDescription.split("@");
 						
-					sDescription = aDescription[0];
+					if (aDescription.length > 0) {sDescription = aDescription[0]}	
+					
 					
 					aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
 						'<td id="interfaceMessaging-' + this.id + '" ' +
 								'class="interfaceViewportControl"' +
-								' title="' + sDescription + '">' +
+								' title="' + this.email + '">' +
 								sDescription +
 								'</td>' +
 						'</tr>';

@@ -110,6 +110,7 @@ function interfaceSetupAutomationHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceHomeMostLikely" class="interfaceMainColumn1Large">' +
+						gsLoadingXHTML +
 						'</td>' +
 						'<td id="tdInterfaceHomeColumn2Action" style="width:175px;">' +
 						'</td>' +
