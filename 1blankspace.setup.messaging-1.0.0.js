@@ -536,8 +536,8 @@ function interfaceSetupMessagingDetails()
 						'<td id="tdInterfaceMainDetailsType" class="interfaceMain">' +
 						'Type' +
 						'</td></tr>' +
-						'<tr id="trInterfaceMainDetailsType" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainDetailsTypeValue" class="interfaceMainText">' +
+						'<tr id="trInterfaceMainDetailsType" class="interfaceMainRadio">' +
+						'<td id="tdInterfaceMainDetailsTypeValue" class="interfaceMainRadio">' +
 						'<input type="radio" id="radioType5" name="radioType" value="5"/>IMAP' +
 						'</td></tr>';
 		
@@ -586,8 +586,12 @@ function interfaceSetupMessagingSave()
 		sData += '&email=' + encodeURIComponent($('#inputInterfaceMainDetailsEmail').val());
 		sData += '&type=' + $('input[name="radioType"]:checked').val();
 		sData += '&accountname=' + encodeURIComponent($('#inputInterfaceMainDetailsAccountName').val());
-		sData += '&accountpassword=' + encodeURIComponent($('#inputInterfaceMainDetailsAccountPassword').val());
 		sData += '&server=' + encodeURIComponent($('#inputInterfaceMainDetailsServer').val());
+		
+		if ($('#inputInterfaceMainDetailsAccountPassword').val() != '')
+		{
+			sData += '&accountpassword=' + encodeURIComponent($('#inputInterfaceMainDetailsAccountPassword').val());
+		}
 	};
 
 	$.ajax(

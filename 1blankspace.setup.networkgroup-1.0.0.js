@@ -118,7 +118,7 @@ function interfaceSetupNetworkGroupHomeShow(aParam, oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportNetworkGroupLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="interfaceMasterViewportSetupLarge" class="interfaceMasterViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';

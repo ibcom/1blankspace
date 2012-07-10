@@ -208,6 +208,11 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 		if (aParam.autoShow != undefined) {bAutoShow = aParam.autoShow}
 	}	
 	
+	interfaceMasterViewportDestination({
+			newDestination: 'interfaceMessagingIMAPMasterViewport();',
+			move: false
+			})		
+			
 	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 	
 	if (giMessagingAccounts.length == 0)
@@ -264,7 +269,7 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 				{
 					giMessagingAccounts.push({
 						id: this.id,
-						footer: this.footer
+						footer: interfaceMasterFormatXHTML(this.footer)
 					})		
 					
 					if (index == 0) 
@@ -276,7 +281,7 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 						giMessagingAccountID = undefined;
 					}
 					
-					var sDescription = this.description;
+					var sDescription = this.email;
 					var aDescription = sDescription.split("@");
 						
 					sDescription = aDescription[0];
@@ -284,7 +289,7 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 					aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
 						'<td id="interfaceMessaging-' + this.id + '" ' +
 								'class="interfaceViewportControl"' +
-								' title="' + this.description + '">' +
+								' title="' + sDescription + '">' +
 								sDescription +
 								'</td>' +
 						'</tr>';
@@ -558,18 +563,19 @@ function interfaceMessagingInboxSearchRow(oRow)
 	aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
 	aHTML[++h] = '<span id="spanMessagingEmails_reply_id_' + sID + '" class="interfaceMainRowOptionsReply"></span>';
 	
-	//if (this.removed == 'N')
-	//{
-	//	sRow += '<span id="spanMessagingEmails_delete_id_' + sID + '" class="interfaceMainRowOptionsDelete"></span>';
-	//}
-	//else
-	//{
-	//	sRow += '<span style="width: 23px;" id="tdMessagingEmails_delete_id_' + sID + '" class="interfaceMainRowOptionsDeleteDisabled">></span>';
-	//}
-	
+	if ((oRow.imapflags).indexOf('\\DELETED') == -1)
+	{
+		aHTML[++h] = '<span id="spanMessagingEmails_delete_id_' + sID + '" class="interfaceMainRowOptionsDelete"></span>';
+	}
+	else
+	{
+		aHTML[++h] = '<span style="width: 23px;" id="tdMessagingEmails_delete_id_' + sID +
+						'" class="interfaceMainRowOptionsDeleteDisabled"></span>';
+	}
+
 	aHTML[++h] = '<span id="spanMessagingEmails_save_id_' + sID + '" class="interfaceMainRowOptionsSave"></span>';
 	
-	aHTML[++h] = '</td></tr>'
+	aHTML[++h] = '</td></tr>';
 	
 	return aHTML.join('');
 }
@@ -786,12 +792,14 @@ function interfaceMessagingViewport(aParam)
 					'</tr>';
 	}
 	
+	/*
 	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
 					'<td id="interfaceMessagingAttachments" ' +
 							' class="interfaceViewportControl interfaceViewportControlSub">' +
 							'&nbsp;' +
 							'</td>' +
 					'</tr>';		
+	*/
 	
 	if (bReply) 
 	{
@@ -990,12 +998,12 @@ function interfaceMessagingSummary()
 							'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
 							
 			var sTo = goObjectContext.to;
-			var aTo = sTo.split('#')
+			var aTo = sTo.split('|')
 			sTo = '';
 		
-			$.each(aTo, function() {
-				aTo = this.split("|");
-				sTo += aTo[1] + '; ';
+			$.each(aTo, function(i)
+			{	
+				if (i % 2 !== 0) {sTo += this + '; ';}
 			});				
 							
 			aHTML[++h] = '<span class="interfaceMessagingHeader">To:</span> ' + sTo;
@@ -1012,12 +1020,12 @@ function interfaceMessagingSummary()
 							'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
 							
 			var sCC = goObjectContext.cc
-			var aCC = sCC.split('#')
+			var aCC = sCC.split('|')
 			sCC = '';
 		
-			$.each(aCC, function() {
-				aCC = this.split("|");
-				sCC += aCC[1] + '; ';
+			$.each(aCC, function(i)
+			{
+				if (i % 2 !== 0) {sCC += this + '; ';}
 			});				
 							
 			aHTML[++h] = '<span class="interfaceMessagingHeader">Cc:</span> ' + sCC;
@@ -1034,7 +1042,7 @@ function interfaceMessagingSummary()
 									'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
 			aHTML[++h] = '</td></tr>';
 			aHTML[++h] = '</tbody></table>';
-	//	}
+		//}
 		
 		aHTML[++h] = gsLoadingXHTML;
 		
@@ -1102,7 +1110,7 @@ function interfaceMessagingShowAttachments()
 					var sLink = '/ondemand/messaging/?';
 					sLink += 'method=MESSAGING_EMAIL_ATTACHMENT_DOWNLOAD&attachmentindex=' + (iIndex);
 					sLink += '&account=' + giMessagingAccountID;
-					sLink += '&messageid=' + interfaceMasterFormatSave(giObjectContext);
+					sLink += '&messageid=' + interfaceMasterFormatSave(goObjectContext.messageid);
 					
 					sAttachments +=	'<a href="' + sLink + '" target="_blank">' + aAttachment[0] + '</a>; ';
 				});	
@@ -1653,13 +1661,13 @@ function interfaceMessagingSendEmail(aParam)
 				aHTML[++h] = '<tr><td><strong>To:</strong> ';	
 				
 				var sOrgTo = goObjectContext.to;
-				var aOrgTo = sOrgTo.split('#')
+				var aOrgTo = sOrgTo.split('|')
 				
 				sOrgTo = '';
 		
-				$.each(aOrgTo, function() {
-					aOrgTo = this.split("|");
-					sOrgTo += aOrgTo[1] + '; ';
+				$.each(aOrgTo, function(i)
+				{
+					if (i % 2 !== 0) {sOrgTo += this + '; '}		
 				});				
 				
 				aHTML[++h] = sOrgTo + '</td></tr>';
@@ -1669,12 +1677,12 @@ function interfaceMessagingSendEmail(aParam)
 				if (sOrgCc != '')
 				{
 					aHTML[++h] = '<tr><td><strong>CC:</strong> ';	
-					var aOrgCc = sOrgCc.split('#')
+					var aOrgCc = sOrgCc.split('|')
 					sOrgCc = '';
 			
-					$.each(aOrgCc, function() {
-						aOrgCc = this.split("|");
-						sOrgCc += aOrgCc[1] + '; ';
+					$.each(aOrgCc, function()
+					{
+						if (i % 2 !== 0) {sOrgCc += this + '; '}	
 					});			
 					
 					aHTML[++h] = sOrgCc + '</td></tr>';
@@ -1688,7 +1696,7 @@ function interfaceMessagingSendEmail(aParam)
 				
 				aHTML[++h] = '</table>';
 				
-				$('#inputInterfaceMainActionsSendEmailMessage').val(aHTML.join('') + goObjectContext.body)
+				$('#inputInterfaceMainActionsSendEmailMessage').val(aHTML.join('') + interfaceMasterFormatXHTML(goObjectContext.message));
 		
 				if (!bForward)
 				{
@@ -1700,19 +1708,19 @@ function interfaceMessagingSendEmail(aParam)
 					if (goObjectContext.to != '' && bReplyAll)
 					{			
 						sTo = goObjectContext.to;
-						var aTo = sTo.split('#');
+						var aTo = sTo.split('|');
 						sTo = '';
 					
-						$.each(aTo, function() {
-						
-							aTo = this.split("|");
-							
-							if (aTo[1] != gsUserEmail && aTo[1] != sFrom)
-							{	
-								sTo += aTo[1] + '; ';
-							}	
-						});
-						
+						$.each(aTo, function(i)
+						{
+							if (i % 2 !== 0) 
+							{
+								if (this != gsUserEmail && this != sFrom)
+								{	
+									sTo += this + '; ';
+								}
+							}		
+						});	
 					}
 		
 					sTo = sFrom + '; ' + sTo;
@@ -1757,7 +1765,7 @@ function interfaceMessagingSendEmail(aParam)
 							success: function(data) 
 							{
 								var aReturn = data.split('|');
-								giMessagingActionID = aReturn[1];
+								giMessagingActionID = aReturn[2];
 								interfaceMessagingSendEmailAttachments();
 							}
 						});
@@ -2008,8 +2016,7 @@ function interfaceMessagingEmailRemove(sXHTMLElementId)
 	sSearchContext = sSearchContext.replace(/\___/g, '.');	
 		
 	var sParam = 'method=MESSAGING_CACHE_EMAIL_MANAGE&remove=1';
-	var sData = 'account=' + giMessagingAccountID;
-	sData += '&messageid=' + interfaceMasterFormatSave(sSearchContext);
+	var sData = 'id=' + interfaceMasterFormatSave(sSearchContext);
 				
 	$.ajax(
 		{
@@ -2164,7 +2171,7 @@ function interfaceMessagingNew(aParam, oResponse)
 					url: '/ondemand/messaging/?' + sParam,
 					dataType: 'json',
 					success: function(oResponse) {
-						aParam.message = oResponse.data.rows[0].body;
+						aParam.message = oResponse.data.rows[0].message;
 						aParam.subject = oResponse.data.rows[0].subject;
 						aParam.source = 3;
 						interfaceMessagingSendEmail(aParam);
@@ -2364,16 +2371,12 @@ function interfaceMessagingActionSearch(aParam, oResponse)
 	{
 		giMessagingActionID = -1;
 		
-		var sParam = 'method=MESSAGING_EMAIL_ACTION_SEARCH&advanced=1&includeattachments=1';
-		sParam += '&id=' + sSearchContext;
-		
-		$.ajax(
-		{
-			type: 'POST',
-			url: '/ondemand/messaging/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceMessagingActionSearch(aParam, data)}
-		});
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'ACTION_SEARCH';
+		oSearch.addField('actionreference,duedatetime,text');
+		oSearch.rf = 'json';
+		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);		
+		oSearch.getResults(function(data) {interfaceMessagingActionSearch(aParam, data)});
 	}
 	else
 	{
@@ -2389,110 +2392,152 @@ function interfaceMessagingActionSearch(aParam, oResponse)
 		
 			var oRow = oResponse.data.rows[0];
 			
-			aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-			aHTML[++h] = '<tbody>'
+			goObjectContact = {};
 			
-			aHTML[++h] = '<tr class="interfaceMainHeader">' +
-							'<td style="text-align:left;font-weight:bold" class="interfaceMessagingHeader" id="interfaceMessagingHeader">' +
-							oRow.subject + '</td>';
+			goObjectContext.id = sSearchContext;
+			goObjectContext.subject = oRow.actionreference;
+			goObjectContext.date = oRow.duedatetime;
+			goObjectContext.message = oRow.text;
 			
-			var sDate = new Date(oRow.date);	
-			sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
-
-			aHTML[++h] = '<td style="text-align:right;" class="interfaceMessagingSubHeader" id="interfaceMessagingHeaderDate">' +
-							sDate + '</td>';
-			aHTML[++h] = '</tr>';
-			
-			aHTML[++h] = '<tr class="interfaceMainHeader">' +
-							'<td colspan=2 style="text-align:left;" class="interfaceMessagingSubHeader" id="interfaceMainHeaderFromEmail">' +
-							oRow.fromemail + '</td>';
-			
-			aHTML[++h] = '</tr>';
-			
-			aHTML[++h] = '</tbody></table>';
-			
-			if (oRow.to != '')
-			{
-				aHTML[++h] = '<table id="tableMessagingEmailsHeaderTo" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-				aHTML[++h] = '<tbody>'
-				aHTML[++h] = '<tr class="interfaceMainHeaderTo">' +
-								'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
-								
-				var sTo = oRow.to;
-				var aTo = sTo.split('#');
-				sTo = '';
-			
-				$.each(aTo, function() {
-					aTo = this.split("|");
-					sTo += aTo[0] + '; ';
-				});				
-								
-				aHTML[++h] = '<span class="interfaceMessagingHeader">To:</span> ' + sTo;
-
-				aHTML[++h] = '</td></tr>';
-				aHTML[++h] = '</tbody></table>';
-			}
-			
-			if (oRow.cc != '')
-			{
-				aHTML[++h] = '<table id="tableMessagingEmailsHeaderCC" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-				aHTML[++h] = '<tbody>'
-				aHTML[++h] = '<tr class="interfaceMainHeaderCC">' +
-								'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
-								
-				var sCC = oRow.cc;
-				var aCC = sCC.split('#');
-				sCC = '';
-			
-				$.each(aCC, function() {
-					aCC = this.split("|");
-					sCC += aCC[0] + '; ';
-				});				
-								
-				aHTML[++h] = '<span class="interfaceMessagingHeader">Cc:</span> ' + sCC;
-
-				aHTML[++h] = '</td></tr>';
-				aHTML[++h] = '</tbody></table>';
-			}
-			
-			if (oRow.attachments != '')
-			{
-				aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-				aHTML[++h] = '<tbody>'
-				aHTML[++h] = '<tr class="interfaceMainHeader">' +
-								'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
-								
-				var sAttachments = oRow.attachments;
-				var aAttachments = sAttachments.split('#');
-				sAttachments = '';
-				var i = 0;
-				
-				$.each(aAttachments, function(iIndex) 
-				{
-					i = i + 1
-					if (i == 1)
-					{
-						sAttachments +=	'<a href="' + aAttachments[iIndex+i] + '" target="_blank">' + aAttachments[iIndex + i -1] + '</a>; ';
-						i = -1;
-					}	
-				});	
-								
-				aHTML[++h] = '<span class="interfaceMessagingHeader">Attachments:</span> ' + sAttachments;
-
-				aHTML[++h] = '</td></tr>';
-				aHTML[++h] = '</tbody></table>';
-			}
-			
-			aHTML[++h] = '<iframe style="display:block;height:10px;width:900px;" name="ifMessage" ' +
-							'id="ifMessage" frameborder="0" border="0" scrolling="no"></iframe>';
-							
-			$('#' + sTargetXHTMLElementID).html(aHTML.join('')); 
-			
-			interfaceMessagingViewport(aParam);
-				
-			setTimeout("interfaceMessagingShowMessage()", 300);
-			
-		
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'ACTION_EMAIL_RECIPIENT_SEARCH';
+			oSearch.addField('type,email,name');
+			oSearch.rf = 'json';
+			oSearch.addFilter('action', 'EQUAL_TO', sSearchContext);		
+			oSearch.getResults(function(data) {interfaceMessagingActionSearchShow(aParam, data)});
 		}
 	}
+}
+	
+function interfaceMessagingActionSearchShow(aParam, oResponse)
+{	
+	var aHTML = [];
+	var h = -1;
+	var sXHTMLElementID;
+	var sTargetXHTMLElementID = 'divInterfaceMainSummary';
+	var bSetContext = true;
+
+	if (aParam != undefined)
+	{
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (aParam.targetXHTMLElementID != undefined) {sTargetXHTMLElementID = aParam.targetXHTMLElementID}
+		if (aParam.setContext != undefined) {bSetContext = aParam.setContext}
+	}	
+	
+	var aTo = [];
+	var aCC = [];
+	
+	$.each(oResponse.data.rows, function(index)
+	{	
+		if (this.type == 1) {goObjectContext.from = this.email; goObjectContext.fromname = this.name;}
+		if (this.type == 2) {aTo.push(this.name); aTo.push(this.email)}
+		if (this.type == 3) {aCC.push(this.name); aCC.push(this.email)}
+	});
+	
+	goObjectContext.to = aTo.join('|');
+	goObjectContext.cc = aCC.join('|');
+	goObjectContext.attachments = '';
+		
+	aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
+	aHTML[++h] = '<tbody>'
+	
+	aHTML[++h] = '<tr class="interfaceMainHeader">' +
+					'<td style="text-align:left;font-weight:bold" class="interfaceMessagingHeader" id="interfaceMessagingHeader">' +
+					goObjectContext.subject + '</td>';
+	
+	var sDate = new Date(goObjectContext.date);	
+	sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
+
+	aHTML[++h] = '<td style="text-align:right;" class="interfaceMessagingSubHeader" id="interfaceMessagingHeaderDate">' +
+					sDate + '</td>';
+	aHTML[++h] = '</tr>';
+	
+	aHTML[++h] = '<tr class="interfaceMainHeader">' +
+					'<td colspan=2 style="text-align:left;" class="interfaceMessagingSubHeader" id="interfaceMainHeaderFromEmail">' +
+					goObjectContext.from + '</td>';
+	
+	aHTML[++h] = '</tr>';
+	
+	aHTML[++h] = '</tbody></table>';
+	
+	if (goObjectContext.to != '')
+	{
+		aHTML[++h] = '<table id="tableMessagingEmailsHeaderTo" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
+		aHTML[++h] = '<tbody>'
+		aHTML[++h] = '<tr class="interfaceMainHeaderTo">' +
+						'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
+						
+		var sTo = goObjectContext.to;
+		var aTo = sTo.split('|');
+		sTo = '';
+	
+		$.each(aTo, function(i)
+		{
+			if (i % 2 !== 0) {sTo += this + '; ';}
+		});				
+						
+		aHTML[++h] = '<span class="interfaceMessagingHeader">To:</span> ' + sTo;
+
+		aHTML[++h] = '</td></tr>';
+		aHTML[++h] = '</tbody></table>';
+	}
+	
+	if (goObjectContext.cc != '')
+	{
+		aHTML[++h] = '<table id="tableMessagingEmailsHeaderCC" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
+		aHTML[++h] = '<tbody>'
+		aHTML[++h] = '<tr class="interfaceMainHeaderCC">' +
+						'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
+						
+		var sCC = goObjectContext.cc;
+		var aCC = sCC.split('#');
+		sCC = '';
+	
+		$.each(aCC, function(i)
+		{
+			if (i % 2 !== 0) {sCC += this + '; ';}
+		});				
+						
+		aHTML[++h] = '<span class="interfaceMessagingHeader">Cc:</span> ' + sCC;
+
+		aHTML[++h] = '</td></tr>';
+		aHTML[++h] = '</tbody></table>';
+	}
+	
+	if (goObjectContext.attachments != '')
+	{
+		aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
+		aHTML[++h] = '<tbody>'
+		aHTML[++h] = '<tr class="interfaceMainHeader">' +
+						'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
+						
+		var sAttachments = goObjectContext.attachments;
+		var aAttachments = sAttachments.split('#');
+		sAttachments = '';
+		var i = 0;
+		
+		$.each(aAttachments, function(iIndex) 
+		{
+			i = i + 1
+			if (i == 1)
+			{
+				sAttachments +=	'<a href="' + aAttachments[iIndex+i] + '" target="_blank">' + aAttachments[iIndex + i -1] + '</a>; ';
+				i = -1;
+			}	
+		});	
+						
+		aHTML[++h] = '<span class="interfaceMessagingHeader">Attachments:</span> ' + sAttachments;
+
+		aHTML[++h] = '</td></tr>';
+		aHTML[++h] = '</tbody></table>';
+	}
+	
+	aHTML[++h] = '<iframe style="display:block;height:10px;width:900px;" name="ifMessage" ' +
+					'id="ifMessage" frameborder="0" border="0" scrolling="no"></iframe>';
+					
+	$('#' + sTargetXHTMLElementID).html(aHTML.join('')); 
+	
+	interfaceMessagingViewport(aParam);
+		
+	setTimeout("interfaceMessagingShowMessage()", 300);
 }

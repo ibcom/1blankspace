@@ -108,7 +108,7 @@ function interfaceSetupUserHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportSetupUserLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="interfaceMasterViewportSetupLarge" class="interfaceMasterViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -198,7 +198,7 @@ function interfaceSetupUserSearch(sXHTMLElementId, iSource, sSearchText, sSearch
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_USER_SEARCH';
-		oSearch.addField('username,contactpersontext,lastlogon');
+		oSearch.addField('username,contactpersontext,lastlogon,disabled,disabledreason');
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 		oSearch.getResults(function(data) {interfaceSetupUserShow(data)});
 	}
@@ -313,12 +313,13 @@ function interfaceSetupUserViewport()
 					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
 					'</tr>';
 			
-		aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
-			
-		aHTML[++h] = '<tr id="trInterfaceViewportControlMessaging" class="interfaceViewportControl">' +
+	aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
+	
+	/*		
+	aHTML[++h] = '<tr id="trInterfaceViewportControlMessaging" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlMessaging" class="interfaceViewportControl">Messaging</td>' +
 						'</tr>';
-								
+	*/							
 	aHTML[++h] = '</table>';					
 				
 	$('#divInterfaceViewportControl').html(aHTML.join(''));
@@ -347,7 +348,7 @@ function interfaceSetupUserViewport()
 	$('#tdInterfaceViewportControlMessaging').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainMessaging");
-		interfaceSetupUserDetails();
+		interfaceSetupUserMessaging();
 	});	
 }
 
@@ -388,7 +389,7 @@ function interfaceSetupUserShow(oResponse)
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
 						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
+						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2x">' +
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -495,7 +496,7 @@ function interfaceSetupUserDetails()
 	
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsUsername" class="interfaceMain">' +
 						'<td id="tdInterfaceMainDetailsUsername" class="interfaceMain">' +
-						'User Name / Logon Name' +
+						'User Name (Logon Name)' +
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsUserNameValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainDetailsUserNameValue" class="interfaceMainText">' +
@@ -511,22 +512,38 @@ function interfaceSetupUserDetails()
 			
 		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
 	
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsDisabledText" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDetailsDisabledText" class="interfaceMain">' +
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsDisabled" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsDisabled" class="interfaceMain">' +
+						'Disabled' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsDisabled" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsDisabledValue" class="interfaceMainRadio">' +
+						'<input type="radio" id="radioDisabledN" name="radioDisabled" value="N"/>No' +
+						'<input type="radio" id="radioDisabledY" name="radioDisabled" value="Y"/>Yes' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsDisabledReason" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsDisabledReason" class="interfaceMain">' +
 						'Disabled Reason' +
 						'</td></tr>' +
-						'<tr id="trInterfaceMainDetailsDisabledTextValue" class="interfaceMainTextMulti">' +
-						'<td id="tdInterfaceMainDetailsDisabledTextValue" class="interfaceMainTextMulti">' +
-						'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsDisabledText" class="inputInterfaceMainTextMulti"></textarea>' +
+						'<tr id="trInterfaceMainDetailsDisabledReasonValue" class="interfaceMainTextMulti">' +
+						'<td id="tdInterfaceMainDetailsDisabledReasonValue" class="interfaceMainTextMulti">' +
+						'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsDisabledReason" class="inputInterfaceMainTextMultiSmall"></textarea>' +
 						'</td></tr>';
 		
 		aHTML[++h] = '</table>';					
 		
-		//$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 		
 		if (goObjectContext != undefined)
 		{
 			$('#inputInterfaceMainDetailsUserName').val(goObjectContext.username);
+			$('[name="radioDisabled"][value="' + goObjectContext.disabled + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsDisabledReason').val(goObjectContext.disabledreason);
+		}
+		else
+		{
+			$('[name="radioDisabled"][value="N"]').attr('checked', true);
 		}
 	}	
 }
@@ -544,6 +561,8 @@ function interfaceSetupUserSave()
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
 		sData += '&username=' + encodeURIComponent($('#inputInterfaceMainDetailsUserName').val());
+		sData += '&disabled=' + $('input[name="radioDisabled"]:checked').val();
+		sData += '&disabledreason=' + encodeURIComponent($('#inputInterfaceMainDetailsDisabledReason').val());
 	};
 
 	$.ajax(
