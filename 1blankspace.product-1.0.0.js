@@ -213,10 +213,8 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_SEARCH';
-		//oSearch.addField('reference,title,trackinventory,status,statustext,description,quantity,quantitytype,quantitytypetext,category,currentretailprice');
 		oSearch.addField('reference,title,trackinventory,status,statustext,description,' +
-							'unittype,unittypetext,category,categorytext,currentretailprice');
-		
+							'unittype,unittypetext,units,category,categorytext,currentretailprice,type,minimumstocklevel');
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 		oSearch.getResults(function(data){interfaceProductShow(aParam, data)});
@@ -356,19 +354,19 @@ function interfaceProductViewport()
 	
 		aHTML[++h] = '</table>';					
 
+/* 
 		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-		/* aHTML[++h] = '<tr id="trInterfaceViewportControlSupplier" class="interfaceViewportControl">' +
+		aHTML[++h] = '<tr id="trInterfaceViewportControlSupplier" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlSupplier" class="interfaceViewportControl">Supplier</td>' +
 						'</tr>';
-		 */
 	 
-		/* aHTML[++h] = '<tr id="trInterfaceViewportControlFinancials" class="interfaceViewportControl">' +
+		aHTML[++h] = '<tr id="trInterfaceViewportControlFinancials" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlFinancials" class="interfaceViewportControl">Financials</td>' +
-						'</tr>'; */
+						'</tr>';
 					
 		aHTML[++h] = '</table>';					
-	
+*/	
 		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
 		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
@@ -468,9 +466,19 @@ function interfaceProductShow(aParam, oResponse)
 	{
 		goObjectContext = oResponse.data.rows[0];
 				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title +
-				'<br /><span id="spanInterfaceViewportControlSubContext">' + goObjectContext.categorytext + '</span>' +
-				'<br /><span id="spanInterfaceViewportControlSubContext">' + goObjectContext.currentretailprice + '</span>');
+		aHTML[++h] = goObjectContext.title;
+		
+		if (goObjectContext.categorytext != '')
+		{
+			aHTML[++h] = '<span id="spanInterfaceViewportControlSubContext">' + goObjectContext.categorytext + '</span>'
+		}
+		
+		if (goObjectContext.currentretailprice != '')
+		{
+			aHTML[++h] = '<span id="spanInterfaceViewportControlSubContext">' + goObjectContext.currentretailprice + '</span>'
+		}
+				
+		$('#divInterfaceViewportControlContext').html(aHTML.join('<br />'));
 		
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
@@ -516,9 +524,17 @@ function interfaceProductSummary()
 		
 		if (goObjectContext.currentretailprice != '')
 		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Retail Price</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPrice" class="interfaceMainSummary">Retail Price</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryPriceValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
 			aHTML[++h] = '$' + goObjectContext.currentretailprice;
+			aHTML[++h] = '</td></tr>';
+		}	
+		
+		if (goObjectContext.units != '')
+		{
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryQuantity" class="interfaceMainSummary">Units</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryQuantityValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
+			aHTML[++h] = goObjectContext.units;
 			aHTML[++h] = '</td></tr>';
 		}	
 		
@@ -539,7 +555,7 @@ function interfaceProductSummary()
 		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action" cellspacing=0>';
 						
-		if (goObjectContext.imageurl != '')
+		if (goObjectContext.imageurl && goObjectContext.imageurl != '')
 		{	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryImage class="interfaceMainColumn2Action">' +
 						'<img border=0 src="' + goObjectContext.imageurl + '">' +
@@ -644,8 +660,9 @@ function interfaceProductDetails()
 						'<tr id="trInterfaceMainDetailsProductType" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainDetailsProductTypeValue" class="interfaceMainRadio">' +
 						'<input type="radio" id="radioProductType1" name="radioProductType" value="1"/>Standard' +
-						'<br /><input type="radio" id="radioProductType2" name="radioProductType" value="2"/>Grouped' +
 						'</td></tr>';
+						
+		//'<br /><input type="radio" id="radioProductType2" name="radioProductType" value="2"/>Grouped' +
 		
 		aHTML[++h] = '</table>';					
 			
@@ -658,6 +675,7 @@ function interfaceProductDetails()
 		
 			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
 			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
+			$('#inputInterfaceMainDetailsDescription').val(goObjectContext.description);
 			$('[name="radioStatus"][value="' + iStatus + '"]').attr('checked', true);
 			$('[name="radioProductType"][value="' + goObjectContext.type + '"]').attr('checked', true);
 		}
@@ -682,7 +700,7 @@ function interfaceProductPricing()
 		aHTML[++h] = '<tr id="trInterfaceMainPricingRow1" class="interfaceMain">' +
 						'<td id="tdInterfaceMainPricingColumn1" class="interfaceMainColumn1">' +
 						'</td>' +
-						'<td id="tdInterfaceMainPricingColumn2" class="interfaceMainColumn2">' +
+						'<td id="tdInterfaceMainPricingColumn2" class="interfaceMainColumn2x">' +
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -785,14 +803,13 @@ function interfaceProductCategory(aParam, oResponse)
 	if ($('#divInterfaceMainCategory').attr('onDemandLoading') == '1')
 	{
 		if (oResponse == undefined)
-		{
-			$.ajax(
-			{
-				type: 'GET',
-				url: '/ondemand/setup/?rows=999&method=SETUP_PRODUCT_CATEGORY_SEARCH',
-				dataType: 'json',
-				success: function(data) {interfaceProductCategory(aParam, data)}
-			});
+		{	
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_PRODUCT_CATEGORY_SEARCH';
+			oSearch.addField('title');
+			oSearch.getResults(function(data) {
+					interfaceProductCategory(aParam, data)
+					});
 		}
 		else
 		{
@@ -825,9 +842,9 @@ function interfaceProductCategory(aParam, oResponse)
 			
 			$('#divInterfaceMainCategory').html(aHTML.join(''));
 
-			if (oResponse.data.rows.length == 0)
+			if (oResponse.data.rows.length != 0)
 			{
-				$('[name="radioCategory"][value="' + oResponse.data.rows[0].category + '"]').attr('checked', true);
+				$('[name="radioCategory"][value="' + goObjectContext.category + '"]').attr('checked', true);
 			}
 		}	
 	}	
@@ -841,8 +858,6 @@ function interfaceProductStock()
 	if ($('#divInterfaceMainStock').attr('onDemandLoading') == '1')
 	{
 		$('#divInterfaceMainStock').attr('onDemandLoading', '');
-		
-		var oRow = oRoot.childNodes.item(0);
 				
 		aHTML[++h] = '<table id="tableInterfaceMainStock" class="interfaceMainStock">';
 		aHTML[++h] = '<tr id="trInterfaceMainStockRow1" class="interfaceMain">' +
@@ -910,9 +925,9 @@ function interfaceProductStock()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsTrackStock" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainDetailsTrackStockValue" class="interfaceMainRadio">' +
-						'<input type="radio" id="radioTrackStockN" name="radioTrackStock" value="N"/>No' +
-						'<br /><input type="radio" id="radioTrackStockY" name="radioTrackStock" value="Y"/>Yes' +
+						'<input type="radio" id="radioTrackStockN" name="radioTrackStock" value="N"/>No' +			
 						'</td></tr>';
+		//'<br /><input type="radio" id="radioTrackStockY" name="radioTrackStock" value="Y"/>Yes' +
 		
 		aHTML[++h] = '</table>';					
 			
@@ -920,9 +935,9 @@ function interfaceProductStock()
 
 		if (goObjectContext != undefined)
 		{
-			$('#inputInterfaceMainDetailsQuantity').val(goObjectContext.quantity);
+			$('#inputInterfaceMainDetailsQuantity').val(goObjectContext.units);
 			$('#inputInterfaceMainDetailsMinimumStockLevel').val(goObjectContext.minimumstocklevel);
-			$('[name="radioStockUnit"][value="' + goObjectContext.quantitytype + '"]').attr('checked', true);
+			$('[name="radioStockUnit"][value="' + goObjectContext.unittype + '"]').attr('checked', true);
 			$('[name="radioTrackStock"][value="' + goObjectContext.trackinventory + '"]').attr('checked', true);
 		}
 		else
@@ -946,6 +961,7 @@ function interfaceProductNew()
 
 function interfaceProductSave()
 {
+	interfaceMasterStatusWorking();
 
 	var sParam = 'method=PRODUCT_MANAGE'
 	var sData = 'id=' + ((giObjectContext == -1)?'':giObjectContext);
@@ -954,7 +970,7 @@ function interfaceProductSave()
 	{
 		sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
 		sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsTitle').val());
-		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDescription').val());
+		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
 		
 		var iStatus = $('input[name="radioStatus"]:checked').val()
 		if (iStatus == '') {iStatus = 1}
@@ -965,9 +981,8 @@ function interfaceProductSave()
 	
 	if ($('#divInterfaceMainStock').html() != '')
 	{
-		sData += '&quantity=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsQuantity').val());
 		sData += '&minimumstocklevel=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsMinimumStockLevel').val());
-		sData += '&unit=' + $('input[name="radioradioStockUnit"]:checked').val();
+		sData += '&unittype=' + $('input[name="radioStockUnit"]:checked').val();
 		sData += '&trackinventory=' + $('input[name="radioTrackStock"]:checked').val();
 	}
 	
@@ -993,20 +1008,23 @@ function interfaceProductSaveProcess(oResponse)
 {
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Product saved');
+		interfaceMasterStatus('Saved');
 		if (giObjectContext == -1) {var bNew = true}
 		giObjectContext = oResponse.id;	
 		
 		if ($('#divInterfaceMainPricing').html() != '')
 		{
 			interfaceProductPriceSave();
+		}
+			
+		if ($('#divInterfaceMainStock').html() != '')
+		{
+			interfaceProductQuantitySave();
 		}	
 	}
 	else
 	{
-		interfaceMasterStatus(oResponse.error.errornotes);
-		interfaceMasterConfirm( {html: [oResponse.error.errornotes]
-								   , title: 'Save error!'});
+		interfaceMasterError(oResponse.error.errornotes);
 	}
 }
 
@@ -1025,6 +1043,23 @@ function interfaceProductPriceSave(aParam)
 	});
 }
 
+function interfaceProductQuantitySave(aParam)
+{
+	var sParam = 'method=PRODUCT_STOCK_MANAGE&rf=JSON';
+	var sData = 'units=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsQuantity').val());
+	sData += '&product=' + giObjectContext;
+	sData += '&type=3';
+	sData += '&effectivedate=' + Date.today().toString("dd-MMM-yyyy");
+	
+	$.ajax(
+	{
+		type: 'POST',
+		url: '/ondemand/product/?' + sParam,
+		data: sData,
+		dataType: 'json'
+	});
+}
+	
 function interfaceProductStockHistory(aParam, oResponse)
 {
 	var sXHTMLElementID = 'divInterfaceMainStock';

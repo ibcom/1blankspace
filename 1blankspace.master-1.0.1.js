@@ -1875,16 +1875,24 @@ function interfaceMasterMainViewportHideLoading(asDivID)
 	$(asDivID).removeClass("loading");
 }
 
-function interfaceMasterStatus(asStatus)
-{
-	
+function interfaceMasterStatus(sStatus)
+{	
 	$('#divInterfaceMasterViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
-			'<div style="position:absolute; top:50%; height:35px; margin-top:-17px;width:180px;">' + asStatus + '</div></div>');
+			'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
 }
 
-function interfaceMasterError()
+function interfaceMasterStatusWorking()
+{	
+	$('#divInterfaceMasterViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+			'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + gsLoadingSmallXHTML + '</div></div>');
+}
+
+function interfaceMasterError(sError)
 {
-	$('#divInterfaceMasterViewportControlActionStatus').text('Error');
+	if (sError == undefined) {sError = 'Error!'};
+	
+	$('#divInterfaceMasterViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+			'<div style="display:table-cell; vertical-align:bottom; padding:5px; height:25px; color:white; background-color:red;">' + sError + '</div></div>');
 }
 
 
