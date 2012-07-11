@@ -126,6 +126,26 @@ function interfaceOrderHomeShow(oResponse)
 						'</tr>';
 		aHTML[++h] = '</table>';		
 		
+		aHTML[++h] = '<table style="margin-top:15px;">';
+	
+		aHTML[++h] = '<tr id="trInterfaceViewportControlRecent" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlRecent" class="interfaceViewportControl">Recent</td>' +
+						'</tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlStatus-4" class="interfaceViewportControl">Not Started</td>' +
+						'</tr>';				
+		
+		aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlStatus-2" class="interfaceViewportControl">To Be Processed</td>' +
+						'</tr>';
+			
+		aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlStatus-1" class="interfaceViewportControl">Completed</td>' +
+						'</tr>';
+													
+		aHTML[++h] = '</table>';
+		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
 		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
@@ -156,7 +176,7 @@ function interfaceOrderHomeShow(oResponse)
 		{
 			aHTML[++h] = '<table id="tableInterfaceOrderHomeMostLikely">';
 			aHTML[++h] = '<tr>';
-			aHTML[++h] = '<td class="interfaceMain">MOST LIKELY</td>';
+			aHTML[++h] = '<td class="interfaceMain">RECENT</td>';
 			aHTML[++h] = '</tr>';
 			
 			$.each(oResponse.data.rows, function()
@@ -352,24 +372,26 @@ function interfaceOrderViewport()
 		aHTML[++h] = '<tr id="trInterfaceViewportControlProducts" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlProducts" class="interfaceViewportControl">Items</td>' +
 						'</tr>';
-	
+		
+		/*
 		aHTML[++h] = '</table>';				
 	
 		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-		/*
+		
 		aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlStatus" class="interfaceViewportControl">Status</td>' +
 						'</tr>';
-		*/				
+					
 	
 		aHTML[++h] = '<tr id="trInterfaceViewportControlDelivery" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDelivery" class="interfaceViewportControl">Deliveries</td>' +
 						'</tr>';
-					
+				
 		aHTML[++h] = '<tr id="trInterfaceViewportControlDeliveryPick" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDeliveryPick" class="interfaceViewportControl">Pick</td>' +
-						'</tr>';				
+						'</tr>';
+		*/								
 	}
 	
 	aHTML[++h] = '</table>';					
@@ -544,9 +566,9 @@ function interfaceOrderSummary()
 	
 	aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 	aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-				'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
+				'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large" style="width:225px;">' +
 					'</td>' +
-					'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainSummaryColumn2Action" class="interfaceMainColumn2">' +
 					'</td>' +
 					'</tr>';
 	aHTML[++h] = '</table>';				
@@ -602,14 +624,6 @@ function interfaceOrderSummary()
 									
 		}
 					
-		if (goObjectContext.statustext != '')
-		{	
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStatus" class="interfaceMainSummary">Status</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryStatusValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.statustext +
-						'</td></tr>';				
-		}
-			
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
@@ -617,19 +631,30 @@ function interfaceOrderSummary()
 		var aHTML = [];
 		var h = -1;	
 		
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" style="font-size:0.75em; width: 100px;">';
+		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" style="width: 100%">';
+		
+		if (goObjectContext.statustext != '')
+		{	
+			aHTML[++h] = '<tr><td class="interfaceMainSummary" style="padding-bottom:10px;">' +
+						goObjectContext.statustext +
+						'</td></tr>';				
+		}
 		
 		if (goObjectContext.status == 7)
 		{	
 			aHTML[++h] = '<tr><td>' +
-						'<span id="spanInterfaceMainOrderAction-7" class="orderAction">Unsubmit</span>' +
+						'<span style="font-size:0.875em;" id="spanInterfaceMainOrderAction-7" class="orderAction">Unsubmit</span>' +
 						'</td></tr>';
+						
+			aHTML[++h] = '<tr><td>' +
+						'<span style="font-size:0.875em;" id="spanInterfaceMainOrderAction-8" class="orderAction">Finalise</span>' +
+						'</td></tr>';			
 		}
 		
 		if (goObjectContext.status == 2)
 		{	
 			aHTML[++h] = '<tr><td>' +
-						'<span id="spanInterfaceMainOrderAction-2" class="orderAction">Submit</span>' +
+						'<span style="font-size:0.875em;" id="spanInterfaceMainOrderAction-2" class="orderAction">Submit</span>' +
 						'</td></tr>';
 		}
 						
@@ -973,7 +998,7 @@ function interfaceOrderProductItems(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_ORDER_ITEM_SEARCH';
 		oSearch.addField('producttext,quantity,totalcost,totaltax');
-		oSearch.rf = 'json';
+		oSearch.addFilter('order', 'EQUAL_TO', giObjectContext);
 		oSearch.sort('producttext', 'desc');
 		oSearch.getResults(function(data){interfaceOrderProductItems(aParam, data)});
 	}
@@ -999,9 +1024,18 @@ function interfaceOrderProductItems(aParam, oResponse)
 		
 		aHTML[++h] = '<table id="tableInterfaceMainOrderProductItemsColumn2" class="interfaceMainColumn2">';
 		
-		aHTML[++h] = '<tr><td id="tdInterfaceMainOrderProductItemsAdd" class="interfaceMainAction">' +
+		if (goObjectContext.status == 2)
+		{
+			aHTML[++h] = '<tr><td id="tdInterfaceMainOrderProductItemsAdd" class="interfaceMainAction">' +
 						'<span id="spanInterfaceMainOrderProductItemsAdd">Add</span>' +
 						'</td></tr>';
+		}
+		else
+		{
+			aHTML[++h] = '<tr><td class="interfaceViewportControlSub">' +
+						'The order has been submitted, so items can not be added or removed.' +
+					'</td></tr>';
+		}				
 						
 		aHTML[++h] = '</table>';					
 		
@@ -1083,9 +1117,9 @@ function interfaceOrderProductItemsRow(oRow)
 							' style="text-align:right;">' +
 							oRow.totalcost + '</td>';					
 						
-	aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';	
+	aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';	
 	aHTML[++h] = '<span id="spanOrderProductItems_options_remove-' + oRow.id + '" class="interfaceMainRowOptionsRemove"></span>';
-	aHTML[++h] = '<span id="spanOrderProductItems_options_view-' + oRow.id + '" class="interfaceMainRowOptionsView"></span>';
+	//aHTML[++h] = '<span id="spanOrderProductItems_options_view-' + oRow.id + '" class="interfaceMainRowOptionsView"></span>';
 	aHTML[++h] = '</td>';
 																	
 	aHTML[++h] = '</tr>';	
@@ -1098,7 +1132,7 @@ function interfaceOrderProductItemsBind()
 	$('.interfaceMainRowOptionsView').button( {
 				text: false,
 				icons: {
-					primary: "ui-icon-play"
+					primary: "ui-icons"
 				}
 	})
 	.click(function() {
@@ -1107,17 +1141,20 @@ function interfaceOrderProductItemsBind()
 	.css('width', '15px')
 	.css('height', '17px')
 	
-	$('.interfaceMainRowOptionsRemove').button( {
-		text: false,
-		 icons: {
-			 primary: "ui-icon-close"
-		}
-	})
-	.click(function() {
-		interfaceOrderProductItemsRemove({xhtmlElementID: this.id});
-	})
-	.css('width', '15px')
-	.css('height', '17px')
+	if (goObjectContext.status == 2)
+	{
+		$('.interfaceMainRowOptionsRemove').button( {
+			text: false,
+			 icons: {
+				 primary: "ui-icon-close"
+			}
+		})
+		.click(function() {
+			interfaceOrderProductItemsRemove({xhtmlElementID: this.id});
+		})
+		.css('width', '15px')
+		.css('height', '17px')
+	}	
 }	
 
 function interfaceOrderProductItemsRemove(aParam, oResponse)
@@ -1255,7 +1292,7 @@ function interfaceOrderProductItemsAdd(aParam, oResponse)
 										this.title + '</td>';
 										
 				aHTML[++h] = '<td id="tdOrderProductItems_quantity-' + this.id + '" class="interfaceMainRow productadd">' +
-								'<input style="width:25px;" id="OrderProductItems_title-quantity-' + this.id + '" class="inputInterfaceMainText productadd"></td>';						
+								'<input style="width:25px;" id="inputOrderProductItems_title-quantity-' + this.id + '" class="inputInterfaceMainText productadd"></td>';						
 						
 				aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';	
 				aHTML[++h] = '<span id="spanOrderProductItems_options_add-' + this.id + '" class="interfaceMainRowOptionsAdd"></span>';
@@ -1275,8 +1312,27 @@ function interfaceOrderProductItemsAdd(aParam, oResponse)
 					primary: "ui-icon-plus"
 				}
 			})
-			.click(function() {
-				alert("Add product");
+			.click(function()
+			{
+				var sID = this.id;
+				var aID = sID.split('-');
+				var iProduct = aID[1];
+				var iQuantity = $('#inputOrderProductItems_title-quantity-' + iProduct).val();
+				if (iQuantity == '') {iQuantity = 1};
+				
+				var sData = 'order=' + giObjectContext;
+				sData += '&product=' + iProduct;
+				sData += '&quantity=' + iQuantity;
+				
+				$.ajax(
+				{
+					type: 'POST',
+					url: '/ondemand/product/?method=PRODUCT_ORDER_ITEM_MANAGE',
+					data: sData,
+					dataType: 'json',
+					async: false,
+					success: function(oResponse) {interfaceOrderProductItems()}
+				});
 			})
 			.css('width', '20px')
 			.css('height', '20px')
@@ -1374,7 +1430,7 @@ function interfaceOrderDelivery(aParam, oResponse)
 					'<td id="tdInterfaceMainOrderDeliveryColumn1" class="interfaceMainColumn1Large">' +
 					gsLoadingXHTML +
 					'</td>' +
-					'<td id="tdInterfaceMainOrderDeliveryColumn2" style="width: 200px;" class="interfaceMainColumn2Action">' +
+					'<td id="tdInterfaceMainOrderDeliveryColumn2" style="width: 200px;" class="interfaceMainColumn2Actionx">' +
 					'</td>' +
 					'</tr>' +
 					'</table>';				
@@ -1386,9 +1442,11 @@ function interfaceOrderDelivery(aParam, oResponse)
 		
 		aHTML[++h] = '<table id="tableInterfaceMainOrderDeliveryColumn2" class="interfaceMainColumn2">';
 		
+		/*
 		aHTML[++h] = '<tr><td id="tdInterfaceMainOrderDeliverysAdd" class="interfaceMainAction">' +
 						'<span id="spanInterfaceMainOrderDeliveryAdd">Add</span>' +
 						'</td></tr>';
+		*/
 						
 		aHTML[++h] = '</table>';					
 		
@@ -1431,9 +1489,8 @@ function interfaceOrderDelivery(aParam, oResponse)
 			aHTML[++h] = '<table id="tableOrderOrderDelivery" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
-			aHTML[++h] = '<td class="interfaceMainCaption">Reference</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Date</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Notes</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">Notes</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
 			aHTML[++h] = '</tr>';
 				
@@ -1467,15 +1524,12 @@ function interfaceOrderDeliveryRow(oRow)
 	
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 							
-	aHTML[++h] = '<td id="tdOrderDelivery_reference-' + oRow.id + '" class="interfaceMainRow">' +
-							oRow.reference + '</td>';
-							
 	aHTML[++h] = '<td id="tdOrderDelivery_deliverydate-' + oRow.id + '" class="interfaceMainRow"' +
-							' style="text-align:right;">' +
+							'>' +
 							oRow.deliverydate + '</td>';						
 								
 	aHTML[++h] = '<td id="tdOrderDelivery_notes-' + oRow.id + '" class="interfaceMainRow"' +
-							' style="text-align:right;">' +
+							'>' +
 							oRow.notes + '</td>';	
 														
 	aHTML[++h] = '<td id="tdOrderDelivery-' + oRow.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
@@ -1638,7 +1692,7 @@ function interfaceOrderInvoices(aParam, oResponse)
 					'<td id="tdInterfaceMainOrderInvoicesColumn1" class="interfaceMainColumn1Large">' +
 					gsLoadingXHTML +
 					'</td>' +
-					'<td id="tdInterfaceMainOrderInvoicesColumn2" style="width: 100px;" class="interfaceMainColumn2Action">' +
+					'<td id="tdInterfaceMainOrderInvoicesColumn2" style="width: 100px;" class="interfaceMainColumn2Actionx">' +
 					'</td>' +
 					'</tr>' +
 					'</table>';				
@@ -1649,11 +1703,11 @@ function interfaceOrderInvoices(aParam, oResponse)
 		var h = -1;
 		
 		aHTML[++h] = '<table id="tableInterfaceMainOrderInvoicesColumn2" class="interfaceMainColumn2">';
-		
+		/*
 		aHTML[++h] = '<tr><td id="tdInterfaceMainOrderInvoicesAdd" class="interfaceMainAction">' +
 						'<span id="spanInterfaceMainOrderInvoicesAdd">Add</span>' +
 						'</td></tr>';
-						
+		*/				
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainOrderInvoicesColumn2').html(aHTML.join(''));
@@ -1668,14 +1722,28 @@ function interfaceOrderInvoices(aParam, oResponse)
 		.css('width', '75px')
 		
 		var oSearch = new AdvancedSearch();
-		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-		oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,' +
-							'projecttext,project,areatext,area,' +
-							'reference,purchaseorder,sentdate,duedate,description,amount,tax,sent');
-		oSearch.addFilter('object', 'EQUAL_TO', 43);
-		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
+		oSearch.method = 'PRODUCT_ORDER_DELIVERY_SEARCH';
+		oSearch.addField('reference');
+		oSearch.addFilter('order', 'EQUAL_TO', giObjectContext);
+		oSearch.getResults(function(oResponse)
+		{	
+			var aID = [];
+			
+			$.each(oResponse.data.rows, function() 
+			{
+				aID.push(this.id);
+			});
+			
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+			oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,' +
+								'projecttext,project,areatext,area,' +
+								'reference,purchaseorder,sentdate,duedate,description,amount,tax,sent');
+			oSearch.addFilter('object', 'EQUAL_TO', 51);
+			oSearch.addFilter('objectcontext', 'IN_LIST', aID.join(','));
 		
-		oSearch.getResults(function(data) {interfaceOrderInvoices(aParam, data)});	
+			oSearch.getResults(function(data) {interfaceOrderInvoices(aParam, data)});
+		});	
 	}
 	else
 	{	
@@ -1686,8 +1754,18 @@ function interfaceOrderInvoices(aParam, oResponse)
 		{
 			aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
 			aHTML[++h] = '<tbody>'
-			aHTML[++h] = '<tr class="interfaceOrderInvoicesPick">';
-			aHTML[++h] = '<td class="interfaceMainRowNothing">No invoices for this order.</td>';
+			aHTML[++h] = '<tr class="interfaceOrderInvoices">';
+			aHTML[++h] = '<td class="interfaceMainRowNothing">No invoices for this order.<br /><br />';
+			
+			if (goObjectContext.status == 2)
+			{
+				aHTML[++h] = 'Click <strong>submit</strong> and then <strong>finalise</strong> in the summary section to create the invoice.</td>';
+			}
+			else
+			{
+				aHTML[++h] = 'Click <strong>finalise</strong> in the summary section to create the invoice.</td>';
+			}
+				
 			aHTML[++h] = '</tr>';
 			aHTML[++h] = '</tbody></table>';
 
@@ -1720,9 +1798,11 @@ function interfaceOrderInvoices(aParam, oResponse)
 				more: oResponse.moreid,
 				rows: giReturnRows,
 				functionShowRow: interfaceOrderInvoicesRow,
+				functionNewPage: 'interfaceOrderProductsBind()',
 				type: 'json'
 			}); 	
 		
+			interfaceOrderIvoicesBind();
 		}
 	}	
 }	
@@ -1745,10 +1825,30 @@ function interfaceOrderInvoicesRow(oRow)
 							' style="text-align:right;">' +
 							oRow.amount + '</td>';	
 														
-	aHTML[++h] = '<td id="tdOrderInvoices-' + oRow.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
-							
-	aHTML[++h] = '</tr>';	
+	aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';	
+	aHTML[++h] = '<span id="spanOrderInvoices_options_view-' + oRow.id + '" class="interfaceMainRowOptionsView"></span>';
+	aHTML[++h] = '</td>';
+																	
+	aHTML[++h] = '</tr>';							
 	
 	return aHTML.join('');
 }
 
+function interfaceOrderIvoicesBind()
+{
+	$('.interfaceMainRowOptionsView').button( {
+				text: false,
+				icons: {
+					primary: "ui-icon-play"
+				}
+	})
+	.click(function() {
+		var sID = this.id;
+		var aID = sID.split('-');
+			
+		interfaceFinancialInvoiceMasterViewport({showHome: false});
+		interfaceFinancialInvoiceSearch('-' + aID[1]);
+	})
+	.css('width', '15px')
+	.css('height', '17px')
+}	

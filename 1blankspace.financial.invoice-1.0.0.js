@@ -210,7 +210,9 @@ function interfaceFinancialInvoiceSearch(sXHTMLElementId, aParam)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-		oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,projecttext,project,projecttext,areatext,' +
+		oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,' +
+								'projecttext,project,projecttext,areatext,' +
+								'object,objectcontext,' +
 								'area,reference,purchaseorder,sentdate,duedate,description,amount,tax,sent');
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);

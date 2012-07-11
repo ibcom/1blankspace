@@ -1120,9 +1120,6 @@ function interfaceSetupStructureCategoryElements(aParam, oResponse)
 						'<br /><br/ >Click the gear icon to set up automation (issue creation) for an element.' +
 					'</td></tr>';
 
-			aHTML[++h] = '</table>';		
-						'</td></tr>';
-
 		aHTML[++h] = '</table>';		
 		
 		$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
