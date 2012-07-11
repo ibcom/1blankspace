@@ -99,65 +99,69 @@ function interfaceOrderMasterViewport(aParam)
 }
 
 function interfaceOrderHomeShow(oResponse)
+{	
+	$('#divInterfaceMain').html(gsLoadingXHTML);
+	
+	var aHTML = [];
+	var h = -1;
+				
+	aHTML[++h] = '<table>';
+	aHTML[++h] = '<tr>' +
+					'<td id="interfaceMasterViewportOrderLarge" class="interfaceMasterViewportImageLarge">' +
+					'&nbsp;' + 
+					'</td>' +
+					'</tr>';
+	aHTML[++h] = '</table>';		
+	
+	aHTML[++h] = '<table style="margin-top:15px;">';
+
+	aHTML[++h] = '<tr id="trInterfaceViewportControlRecent" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlRecent" class="interfaceViewportControl">Recent</td>' +
+					'</tr>';		
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlStatus-2" class="interfaceViewportControl orderStatus">To&nbsp;Be&nbsp;Submitted</td>' +
+					'</tr>';
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlStatus-7" class="interfaceViewportControl orderStatus">Processing</td>' +
+					'</tr>';
+						
+	aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlStatus-1" class="interfaceViewportControl orderStatus">Completed</td>' +
+					'</tr>';
+												
+	aHTML[++h] = '</table>';
+	
+	$('#divInterfaceViewportControl').html(aHTML.join(''));	
+	$('#tdInterfaceViewportControlRecent').addClass('interfaceViewportControlHighlight');
+	interfaceOrderHomeRecentShow();
+	
+	$('#tdInterfaceViewportControlRecent').click(function(event)
+	{
+		interfaceOrderHomeRecentShow();
+	});
+	
+	$('td.orderStatus').click(function(event)
+	{
+		var sID = this.id;
+		var aID = sID.split('-');
+		interfaceOrderHomeStatusShow({status: aID[1]});
+	});
+		
+	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+}
+
+function interfaceOrderHomeRecentShow(oResponse)
 {
 	if (oResponse == undefined)
 	{
-		var aHTML = [];
-		var h = -1;
-					
-		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-						'<td id="tdInterfaceOrderHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';					
-		
-		$('#divInterfaceMain').html(aHTML.join(''));
-		
-		var aHTML = [];
-		var h = -1;
-					
-		aHTML[++h] = '<table>';
-		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportOrderLarge" class="interfaceMasterViewportImageLarge">' +
-						'&nbsp;' + 
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';		
-		
-		aHTML[++h] = '<table style="margin-top:15px;">';
-	
-		aHTML[++h] = '<tr id="trInterfaceViewportControlRecent" class="interfaceViewportControl">' +
-						'<td id="tdInterfaceViewportControlRecent" class="interfaceViewportControl">Recent</td>' +
-						'</tr>';
-						
-		aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
-						'<td id="tdInterfaceViewportControlStatus-4" class="interfaceViewportControl">Not Started</td>' +
-						'</tr>';				
-		
-		aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
-						'<td id="tdInterfaceViewportControlStatus-2" class="interfaceViewportControl">To Be Processed</td>' +
-						'</tr>';
-			
-		aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
-						'<td id="tdInterfaceViewportControlStatus-1" class="interfaceViewportControl">Completed</td>' +
-						'</tr>';
-													
-		aHTML[++h] = '</table>';
-		
-		$('#divInterfaceViewportControl').html(aHTML.join(''));	
-		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
-		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_ORDER_SEARCH';
-		oSearch.addField('reference');
-		oSearch.async = false;
-		oSearch.rf = 'json';
-		oSearch.rows = 10;
+		oSearch.addField('reference,orderbybusinesstext,orderdate');
+		oSearch.rows = 20;
 		oSearch.sort('modifieddate', 'desc');
-		oSearch.getResults(interfaceOrderHomeShow);
+		oSearch.getResults(interfaceOrderHomeRecentShow);
 	}
 	else
 	{
@@ -175,9 +179,74 @@ function interfaceOrderHomeShow(oResponse)
 		else
 		{
 			aHTML[++h] = '<table id="tableInterfaceOrderHomeMostLikely">';
-			aHTML[++h] = '<tr>';
-			aHTML[++h] = '<td class="interfaceMain">RECENT</td>';
+		
+			$.each(oResponse.data.rows, function()
+			{
+				aHTML[++h] = '<tr class="interfaceMainRow">';
+				
+				aHTML[++h] = '<td id="interfaceOrderHomeMostLikely_Title-' + this.id + 
+										'" class="interfaceHomeMostLikely">' +
+										this.reference +
+										'</td>';
+				
+				aHTML[++h] = '<td style="width:100px;" id="interfaceOrderHomeMostLikely_OrderDate-' + this.id + '" class="interfaceHomeMostLikelySub">' +
+										this.orderdate + '</td>';
+										
+				var sContact = this.orderbybusinesstext;
+				if (sContact == '') {sContact = this.orderbypersontext}
+										
+				aHTML[++h] = '<td id="interfaceOrderHomeMostLikely_Contact-' + this.id + '" class="interfaceHomeMostLikelySub">' +
+										sContact + '</td>';
+										
+				aHTML[++h] = '</tr>'
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+		}
+		
+		$('#divInterfaceMain').html(aHTML.join(''));
+	
+		$('td.interfaceHomeMostLikely').click(function(event)
+		{
+			interfaceOrderSearch(event.target.id, {source: 1});
+		});
+	}
+}
+
+function interfaceOrderHomeStatusShow(aParam, oResponse)
+{
+	var iStatus = 1;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.status != undefined) {iStatus = aParam.status}	
+	}
+		
+	if (oResponse == undefined)
+	{
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'PRODUCT_ORDER_SEARCH';
+		oSearch.addField('reference');
+		oSearch.addFilter('status', 'EQUAL_TO', iStatus);
+		oSearch.sort('modifieddate', 'desc');
+		oSearch.getResults(function(data) {interfaceOrderHomeStatusShow(aParam, data)});
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableInterfaceOrderHomeMostLikely">';
+			aHTML[++h] = '<tr class="trInterfaceOrderHomeMostLikelyNothing">';
+			aHTML[++h] = '<td class="tdInterfaceOrderHomeMostLikelyNothing">Click New to create a order.</td>';
 			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</table>';
+		}
+		else
+		{			
+			aHTML[++h] = '<table id="tableInterfaceOrderHomeMostLikely">';
 			
 			$.each(oResponse.data.rows, function()
 			{
@@ -194,7 +263,7 @@ function interfaceOrderHomeShow(oResponse)
 			aHTML[++h] = '</tbody></table>';
 		}
 		
-		$('#tdInterfaceOrderHomeMostLikely').html(aHTML.join(''));
+		$('#divInterfaceMain').html(aHTML.join(''));
 	
 		$('td.interfaceHomeMostLikely').click(function(event)
 		{
