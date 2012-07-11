@@ -3,6 +3,70 @@ var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, 
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
  };
  
+String.prototype.formatXHTML = function(bDirection)
+{
+	var sValue = this;
+	var aFind = [
+		String.fromCharCode(8220), //“
+		String.fromCharCode(8221), //”
+		String.fromCharCode(8216), //‘
+		String.fromCharCode(8217), //‘
+		String.fromCharCode(8211), //–
+		String.fromCharCode(8212), //—
+		String.fromCharCode(189), //½
+		String.fromCharCode(188), //¼
+		String.fromCharCode(190), //¾
+		String.fromCharCode(169), //©
+		String.fromCharCode(174), //®
+		String.fromCharCode(8230) //…
+	];	
+
+	var aReplace = [
+		'"',
+		'"',
+		"'",
+		"'",
+		"-",
+		"--",
+		"1/2",
+		"1/4",
+		"3/4",
+		"(C)",
+		"(R)",
+		"..."
+	];
+
+	if (bDirection)
+	{
+		sValue= sValue.replace(/\&/g,'&amp;');
+		sValue= sValue.replace(/</g,'&lt;');
+		sValue= sValue.replace(/>/g,'&gt;');
+		//sValue = sValue.replace(/-/g, '&#45;')
+		//sValue = sValue.replace(/@/g, '&#64;')
+		//sValue = sValue.replace(/\//g, '&#47;')
+		//sValue = sValue.replace(/"/g, '&quot;')
+		//sValue = sValue.replace(/\\/g, '&#39;')
+	}
+	else
+	{
+		sValue = sValue.replace(/\&amp;/g,'&');
+		sValue = sValue.replace(/\&lt;/g,'<');
+		sValue = sValue.replace(/\&gt;/g,'>');
+		sValue = sValue.replace(/\&#45;/g, '-')
+		sValue = sValue.replace(/\&#64;/g, '@')
+		sValue = sValue.replace(/\&#47;/g, '/')
+		sValue = sValue.replace(/\&quot;/g, '"')
+		sValue = sValue.replace(/\&#39;/g, '\'')
+		for ( var i = 0; i < aFind.length; i++ ) 
+		{
+			var regex = new RegExp(aFind[i], "gi");
+			sValue = sValue.replace(regex, aReplace[i]);
+		}
+	}
+	
+	return sValue;
+};
+
 var giVersion = 2;
 
 var giShowSpeed = 0;
@@ -1061,7 +1125,7 @@ function interfaceMasterViewportShow(oResponse)
 						'<span id="spanInterfaceMasterViewportControlActionOptions" class="interfaceMasterViewport">&nbsp;</span>' +
 						'</div>';
 		
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlActionStatus" class="interfaceMasterViewport">&nbsp;</div>';
+		aHTML[++h] = '<div id="divInterfaceMasterViewportControlActionStatus" class="interfaceMasterViewport" style="z-index:99;">&nbsp;</div>';
 		
 		if (gbSetupShow) 
 		{
