@@ -158,9 +158,9 @@ function interfaceOrderHomeRecentShow(oResponse)
 	{
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_ORDER_SEARCH';
-		oSearch.addField('reference,orderbybusinesstext,orderdate');
-		oSearch.rows = 20;
-		oSearch.sort('modifieddate', 'desc');
+		oSearch.addField('reference,orderbybusinesstext,orderbypersontext,orderdate');
+		oSearch.rows = 30;
+		oSearch.sort('orderdate', 'desc');
 		oSearch.getResults(interfaceOrderHomeRecentShow);
 	}
 	else
@@ -184,7 +184,7 @@ function interfaceOrderHomeRecentShow(oResponse)
 			{
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 				
-				aHTML[++h] = '<td id="interfaceOrderHomeMostLikely_Title-' + this.id + 
+				aHTML[++h] = '<td style="width:100px;" id="interfaceOrderHomeMostLikely_Title-' + this.id + 
 										'" class="interfaceHomeMostLikely">' +
 										this.reference +
 										'</td>';
@@ -226,9 +226,10 @@ function interfaceOrderHomeStatusShow(aParam, oResponse)
 	{
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_ORDER_SEARCH';
-		oSearch.addField('reference');
+		oSearch.addField('reference,orderbybusinesstext,orderbypersontext,orderdate');
 		oSearch.addFilter('status', 'EQUAL_TO', iStatus);
-		oSearch.sort('modifieddate', 'desc');
+		oSearch.rows = 30;
+		oSearch.sort('orderdate', 'desc');
 		oSearch.getResults(function(data) {interfaceOrderHomeStatusShow(aParam, data)});
 	}
 	else
@@ -250,14 +251,7 @@ function interfaceOrderHomeStatusShow(aParam, oResponse)
 			
 			$.each(oResponse.data.rows, function()
 			{
-				aHTML[++h] = '<tr class="interfaceMainRow">';
-				
-				aHTML[++h] = '<td id="interfaceProjectHomeMostLikely_Title-' + this.id + 
-										'" class="interfaceHomeMostLikely">' +
-										this.reference +
-										'</td>';
-				
-				aHTML[++h] = '</tr>'
+				aHTML[++h] = interfaceOrderHomeStatusRow(this)
 			});
 			
 			aHTML[++h] = '</tbody></table>';
@@ -265,12 +259,56 @@ function interfaceOrderHomeStatusShow(aParam, oResponse)
 		
 		$('#divInterfaceMain').html(aHTML.join(''));
 	
-		$('td.interfaceHomeMostLikely').click(function(event)
+		interfaceMasterPaginationList(
 		{
-			interfaceOrderSearch(event.target.id, {source: 1});
-		});
+			xhtmlElementID: 'divInterfaceMain',
+			xhtmlContext: 'OrderStatus',
+			xhtml: aHTML.join(''),
+			showMore: (oResponse.morerows == "true"),
+			more: oResponse.moreid,
+			rows: 30,
+			functionShowRow: interfaceOrderHomeStatusRow,
+			functionNewPage: 'interfaceOrderHomeStatusBind()',
+			type: 'json'
+		}); 
+					
+		interfaceOrderHomeStatusBind();
 	}
 }
+
+function interfaceOrderHomeStatusRow(oRow)
+{
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<tr class="interfaceMainRow">';
+				
+	aHTML[++h] = '<td style="width:100px;" id="interfaceProjectHomeMostLikely_Title-' + oRow.id + 
+							'" class="interfaceHomeMostLikely">' +
+							oRow.reference +
+							'</td>';
+							
+	aHTML[++h] = '<td style="width:100px;" id="interfaceOrderHomeMostLikely_OrderDate-' + oRow.id + '" class="interfaceHomeMostLikelySub">' +
+							oRow.orderdate + '</td>';
+							
+	var sContact = oRow.orderbybusinesstext;
+	if (sContact == '') {sContact = oRow.orderbypersontext}
+							
+	aHTML[++h] = '<td id="interfaceOrderHomeMostLikely_Contact-' + oRow.id + '" class="interfaceHomeMostLikelySub">' +
+							sContact + '</td>';
+							
+	aHTML[++h] = '</tr>'
+
+	return aHTML.join('');
+}
+
+function interfaceOrderHomeStatusBind()
+{
+	$('td.interfaceHomeMostLikely').click(function(event)
+	{
+		interfaceOrderSearch(event.target.id, {source: 1});
+	});
+}	
 
 function interfaceOrderSearch(sXHTMLElementId, aParam)
 {
@@ -635,9 +673,9 @@ function interfaceOrderSummary()
 	
 	aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 	aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-				'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large" style="width:225px;">' +
+				'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
 					'</td>' +
-					'<td id="tdInterfaceMainSummaryColumn2Action" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainSummaryColumn2Action" class="interfaceMainColumn2" style="width:175px;">' +
 					'</td>' +
 					'</tr>';
 	aHTML[++h] = '</table>';				
@@ -712,18 +750,18 @@ function interfaceOrderSummary()
 		if (goObjectContext.status == 7)
 		{	
 			aHTML[++h] = '<tr><td>' +
-						'<span style="font-size:0.875em;" id="spanInterfaceMainOrderAction-7" class="orderAction">Unsubmit</span>' +
+						'<span style="font-size:0.75em;" id="spanInterfaceMainOrderAction-7" class="orderAction">Unsubmit</span>' +
 						'</td></tr>';
 						
 			aHTML[++h] = '<tr><td>' +
-						'<span style="font-size:0.875em;" id="spanInterfaceMainOrderAction-8" class="orderAction">Finalise</span>' +
+						'<span style="font-size:0.75em;" id="spanInterfaceMainOrderAction-8" class="orderAction">Finalise</span>' +
 						'</td></tr>';			
 		}
 		
 		if (goObjectContext.status == 2)
 		{	
 			aHTML[++h] = '<tr><td>' +
-						'<span style="font-size:0.875em;" id="spanInterfaceMainOrderAction-2" class="orderAction">Submit</span>' +
+						'<span style="font-size:0.75em;" id="spanInterfaceMainOrderAction-2" class="orderAction">Submit</span>' +
 						'</td></tr>';
 		}
 						
