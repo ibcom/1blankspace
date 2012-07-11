@@ -812,7 +812,7 @@ function interfaceFinancialInvoiceItem(aParam, oResponse)
 							'<td class="interfaceMainRowNothing">No items.</td></tr>';
 			aHTML[++h] = '</tbody></table>';
 
-			$('#' + sXHTMLElementId).html(aHTML.join(''));
+			$('#tdInterfaceMainItemColumn1').html(aHTML.join(''));
 		}
 		else
 		{
@@ -856,7 +856,7 @@ function interfaceFinancialInvoiceItem(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 
-			$('#' + sXHTMLElementId).html(aHTML.join(''));
+			$('#tdInterfaceMainItemColumn1').html(aHTML.join(''));
 			
 			if (oOptions.remove) 
 			{
@@ -1074,7 +1074,7 @@ function interfaceFinancialInvoiceReceipt(aParam, oResponse)
 							'<td class="interfaceMainRowNothing">No receipts.</td></tr>';
 			aHTML[++h] = '</tbody></table>';
 
-			$('#' + sXHTMLElementId).html(aHTML.join(''));
+			$('#tdInterfaceMainReceiptColumn1').html(aHTML.join(''));
 		}
 		else
 		{
