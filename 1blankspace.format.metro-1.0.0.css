@@ -510,7 +510,14 @@ td.interfaceHomeViewport
 
 #spanInterfaceViewportControlSubContext
 {
-	font-size: 1em;
+	font-size: 0.875em;
+	color: #A0A0A0;
+	font-weight: normal;
+}
+
+span.interfaceViewportControlSubContext
+{
+	font-size: 0.875em;
 	color: #A0A0A0;
 	font-weight: normal;
 }

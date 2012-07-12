@@ -1301,7 +1301,6 @@ function interfaceOrderProductItemsRemove(aParam, oResponse)
 			interfaceMasterError(oResponse.error.errornotes);
 		}
 	}	
-	
 }
 
 function interfaceOrderProductItemsAdd(aParam, oResponse)
@@ -1366,7 +1365,7 @@ function interfaceOrderProductItemsAdd(aParam, oResponse)
 			oSearch.method = 'PRODUCT_SEARCH';
 			oSearch.addField('reference,title');
 			oSearch.addFilter('title', 'STRING_IS_LIKE', $('#inputInterfaceMainProductAddReference').val());
-			oSearch.sort('title', 'desc');
+			oSearch.sort('title', 'asc');
 			oSearch.getResults(function(data){interfaceOrderProductItemsAdd($.extend(true, aParam, {step:3}), data)});
 		}
 	}
