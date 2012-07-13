@@ -1311,9 +1311,9 @@ function interfaceFinancialExpensePaymentAdd(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainExpensePaymentAddColumn2">';
 		
 		aHTML[++h] = '<tr id="trInterfaceMainExpensePaymentAdd" class="interfaceMain">' +
-						'<td id="tdInterfaceMainExpensePaymentAddPaymentedAmount" class="interfaceMain"' +
-						' data-Paymentedamount="' + cPaidAmount + '">' +
-						'$' + (cPaidAmount).formatMoney(2, ".", ",") + ' has been Paymented so far.'
+						'<td id="tdInterfaceMainExpensePaymentAddPaidAmount" class="interfaceMain"' +
+						' data-paidamount="' + cPaidAmount + '">' +
+						'$' + (cPaidAmount).formatMoney(2, ".", ",") + ' has been paid so far.'
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr id="trInterfaceMainExpensePaymentAdd" class="interfaceMain">' +
@@ -1365,7 +1365,7 @@ function interfaceFinancialExpensePaymentAdd(aParam, oResponse)
 			label: "Pay Full Amount"
 		})
 		.click(function() {
-			interfaceFinancialExpensePaymentAdd($.extend(true, aParam, {step: 3, paidamount: cPaymentedAmount}))
+			interfaceFinancialExpensePaymentAdd($.extend(true, aParam, {step: 3, paidamount: cPaidAmount}))
 		});
 	}
 	
