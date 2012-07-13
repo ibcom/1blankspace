@@ -463,7 +463,7 @@ function interfaceFinancialExpenseShow(aParam, oResponse)
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 					
 		$('#divInterfaceViewportControlContext').html(goObjectContext.reference +
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_duedate">' + goObjectContext.accrueddate + '</span>' +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_accrueddate">' + goObjectContext.accrueddate + '</span>' +
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">' + goObjectContext.amount + '</span>');
 			
 		interfaceMasterViewportDestination({
@@ -695,7 +695,7 @@ function interfaceFinancialExpenseSave(aParam, oResponse)
 	{
 		interfaceMasterStatusWorking();
 		
-		var sData = (giObjectContext == -1)?'':'&id=' + giObjectContext;
+		var sData = (giObjectContext == -1)?'':'id=' + giObjectContext;
 			
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
@@ -710,7 +710,7 @@ function interfaceFinancialExpenseSave(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/financial/?method=FINANCIAL_Expense_MANAGE',
+			url: '/ondemand/financial/?method=FINANCIAL_EXPENSE_MANAGE',
 			data: sData,
 			dataType: 'json',
 			success: function(data) {interfaceFinancialExpenseSave(aParam, data)}
@@ -1435,7 +1435,7 @@ function interfaceFinancialExpenseRefresh(oResponse)
 			
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-		oSearch.addField('duedate,amount,tax');
+		oSearch.addField('accrueddate,amount,tax');
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 		
@@ -1445,7 +1445,10 @@ function interfaceFinancialExpenseRefresh(oResponse)
 	{
 		var oObjectContext = oResponse.data.rows[0];
 				
-		$('#spanInterfaceViewportControlSubContext_duedate').html(oObjectContext.accrueddate);
+		goObjectContext.accrueddate = oObjectContext.accrueddate;
+		goObjectContext.amount = oObjectContext.amount;
+				
+		$('#spanInterfaceViewportControlSubContext_accrueddate').html(oObjectContext.accrueddate);
 		$('#spanInterfaceViewportControlSubContext_amount').html(oObjectContext.amount);
 	}
 }

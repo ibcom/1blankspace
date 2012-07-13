@@ -1,5 +1,7 @@
 function interfaceFinancialReceiptMasterViewport(aParam)
 {
+	interfaceFinancialMasterInitialise();
+	
 	var bShowHome = true
 	
 	if (aParam != undefined)
@@ -131,7 +133,7 @@ function interfaceFinancialReceiptHomeShow(oResponse)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
-		oSearch.addField('reference,description,contactbusinessreceivedfromtext,contactpersonreceivedfromtext');
+		oSearch.addField('reference,description,contactbusinessreceivedfromtext,contactpersonreceivedfromtext,receiveddate,amount');
 		oSearch.rows = 10;
 		oSearch.sort('modifieddate', 'desc');
 		oSearch.getResults(interfaceFinancialReceiptHomeShow);
@@ -160,6 +162,12 @@ function interfaceFinancialReceiptHomeShow(oResponse)
 				aHTML[++h] = '<td id="interfaceFinancialReceiptHomeMostLikely_Title-' + this.id + '" class="interfaceHomeMostLikely" style="width:50px;">' +
 										this.reference + '</td>';
 				
+				aHTML[++h] = '<td id="interfaceFinancialInvoiceHomeMostLikely_Amount-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:50px;text-align:right;">' +
+										'$' + this.amount + '</td>';
+														
+				aHTML[++h] = '<td id="interfaceFinancialInvoiceHomeMostLikely_DueDate-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;">' +
+										this.receiveddate + '</td>';
+																						
 				var sContact = this.contactbusinessreceivedfromtext;
 				if (sContact == '') {sContact = this.contactpersonreceivedfromtext}
 				
@@ -447,10 +455,14 @@ function interfaceFinancialReceiptShow(aParam, oResponse)
 	else
 	{
 		goObjectContext = oResponse.data.rows[0];
-				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.reference) +
-			'<br /><span id="spanInterfaceViewportControlSubContext">' + goObjectContext.receiveddate + '</span>' +
-			'<br /><span id="spanInterfaceViewportControlSubContext">' + goObjectContext.amount + '</span>';
+		
+		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+					
+		$('#divInterfaceViewportControlContext').html(goObjectContext.reference +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_receiveddate">' +
+			 		goObjectContext.receiveddate + '</span>' +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">' +
+					goObjectContext.amount + '</span>');
 			
 		interfaceMasterViewportDestination({
 			newDestination: 'interfaceFinancialReceiptMasterViewport({showHome: false});interfaceFinancialReceiptSearch("-' + giObjectContext + '")',
@@ -607,7 +619,7 @@ function interfaceFinancialReceiptDetails()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsAmountValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainDetailsAmountValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainDetailsAmount" class="inputInterfaceMain">' +
+						'<input id="inputInterfaceMainDetailsAmount" class="inputInterfaceMainText">' +
 						'</td></tr>';	
 							
 		aHTML[++h] = '</table>';					
@@ -650,35 +662,27 @@ function interfaceFinancialReceiptDetails()
 
 function interfaceFinancialReceiptSave(aParam, oResponse)
 {
-	if (oResponse == undefined)
+	interfaceMasterStatusWorking();
+	
+	var sData = (giObjectContext == -1)?'':'id=' + giObjectContext;
+		
+	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		interfaceMasterStatusWorking();
-		
-		var sData = (giObjectContext == -1)?'':'&id=' + giObjectContext;
-			
-		if ($('#divInterfaceMainDetails').html() != '')
-		{
-			sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
-			sData += '&receiveddate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReceivedDate').val());
-			sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
-			sData += '&contactbusinessreceivedfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactBusinessReceivedFrom').attr("data-id"));
-			sData += '&contactpersonreceivedfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactPersonReceivedFrom').attr("data-id"));
-		}
-		
-		$.ajax(
-		{
-			type: 'POST',
-			url: '/ondemand/financial/?method=FINANCIAL_RECEIPT_MANAGE',
-			data: sData,
-			dataType: 'json',
-			success: function(data) {interfaceFinancialReceiptSave(aParam, data)}
-		});
-		
+		sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
+		sData += '&receiveddate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReceivedDate').val());
+		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
+		sData += '&contactbusinessreceivedfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactBusinessReceivedFrom').attr("data-id"));
+		sData += '&contactpersonreceivedfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactPersonReceivedFrom').attr("data-id"));
 	}
-	else
-	{			
-		interfaceFinancialRecieptSaveProcess(oResponse);
-	}	
+	
+	$.ajax(
+	{
+		type: 'POST',
+		url: '/ondemand/financial/?method=FINANCIAL_RECEIPT_MANAGE',
+		data: sData,
+		dataType: 'json',
+		success: function(data) {interfaceFinancialRecieptSaveProcess(data)}
+	});
 }
 
 function interfaceFinancialRecieptSaveProcess(oResponse)
@@ -700,47 +704,51 @@ function interfaceFinancialRecieptSaveProcess(oResponse)
 	}
 }
 
-function interfaceProductPriceSave(aParam)
+function interfaceFinancialReceiptAmountSave(aParam)
 {
-	var iAccount = aID[1];
-				var cAmount = $('#inputInterfaceMainInvoiceItemAddAmount').val();
-				if (cAmount == '') {cAmount = 0};
-				
+	var iAccount = ns1blankspace.financial.settings.financialaccountdebtor;
+	var cAmount = $('#inputInterfaceMainDetailsAmount').val();
+	if (cAmount == '') {cAmount = 0};
+	cAmount = (cAmount - goObjectContext.amount)
+	
+	if (cAmount == 0 || iAccount == undefined)
+	{
+		alert('No debtor account set up.')
+	}
+	else
+	{
+		var sData = 'object=' + giObject;
+		sData += '&objectcontext=' + giObjectContext;
+		sData += '&financialaccount=' + iAccount;
+		sData += '&amount=' + cAmount;
+		sData += '&description=' + $('#inputInterfaceMainDetailsDescription').val();
+		
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/financial/?method=FINANCIAL_LINE_ITEM_MANAGE',
+			data: sData,
+			dataType: 'json',
+			success: function(oResponse)
+			{
 				var sData = 'object=' + giObject;
 				sData += '&objectcontext=' + giObjectContext;
-				sData += '&financialaccount=' + iAccount;
-				sData += '&amount=' + cAmount;
-				sData += '&description=' + $('#inputInterfaceMainInvoiceItemAddDescription').val();
-					
+			
 				$.ajax(
 				{
 					type: 'POST',
-					url: '/ondemand/financial/?method=FINANCIAL_LINE_ITEM_MANAGE',
+					url: '/ondemand/financial/?method=FINANCIAL_ITEM_COMPLETE',
 					data: sData,
 					dataType: 'json',
 					success: function(oResponse)
 					{
-						var sData = 'object=' + giObject;
-						sData += '&objectcontext=' + giObjectContext;
-						
-						$.ajax(
-						{
-							type: 'POST',
-							url: '/ondemand/financial/?method=FINANCIAL_ITEM_COMPLETE',
-							data: sData,
-							dataType: 'json',
-							success: function(oResponse)
-							{
-								interfaceFinancialInvoiceRefresh();
-								interfaceFinancialInvoiceItem();
-							}
-						});
+						interfaceFinancialReceiptRefresh();
 					}
 				});
+			}
+		});
+	}	
 }
-
-
-
 
 function interfaceFinancialReceiptNew(aParam)
 {
@@ -1174,3 +1182,28 @@ function interfaceFinancialReceiptInvoice(aParam, oResponse)
 	}	
 }
 
+function interfaceFinancialReceiptRefresh(oResponse)
+{
+	if (oResponse == undefined)
+	{
+		$('#spanInterfaceViewportControlSubContext_amount').html(gsLoadingSmallXHTML);
+			
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
+		oSearch.addField('receiveddate,amount,tax');
+		oSearch.rf = 'json';
+		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+		
+		oSearch.getResults(function(data) {interfaceFinancialReceiptRefresh(data)});
+	}
+	else
+	{
+		var oObjectContext = oResponse.data.rows[0];
+		
+		goObjectContext.receiveddate = oObjectContext.receiveddate;
+		goObjectContext.amount = oObjectContext.amount;
+				
+		$('#spanInterfaceViewportControlSubContext_receiveddate').html(oObjectContext.receiveddate);
+		$('#spanInterfaceViewportControlSubContext_amount').html(oObjectContext.amount);
+	}
+}

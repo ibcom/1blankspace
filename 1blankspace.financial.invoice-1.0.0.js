@@ -741,7 +741,7 @@ function interfaceFinancialInvoiceSave(aParam, oResponse)
 	{
 		interfaceMasterStatusWorking();
 		
-		var sData = (giObjectContext == -1)?'':'&id=' + giObjectContext;
+		var sData = (giObjectContext == -1)?'':'id=' + giObjectContext;
 			
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
@@ -1491,6 +1491,9 @@ function interfaceFinancialInvoiceRefresh(oResponse)
 	else
 	{
 		var oObjectContext = oResponse.data.rows[0];
+			
+		goObjectContext.sentdate = oObjectContext.sentdate;
+		goObjectContext.amount = oObjectContext.amount;
 				
 		$('#spanInterfaceViewportControlSubContext_sentdate').html(oObjectContext.sentdate);
 		$('#spanInterfaceViewportControlSubContext_amount').html(oObjectContext.amount);

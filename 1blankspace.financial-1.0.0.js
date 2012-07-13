@@ -281,7 +281,9 @@ function interfaceFinancialHomeShow()
 
 function interfaceFinancialSummary(aParam, oResponse)
 {
-
+	//if (ns1blankspace.financial.summary != undefined)
+	//	interfaceFinancialSummary(aParam, ns1blankspace.financial.summary)
+		
 	if (oResponse == undefined)
 	{
 
@@ -298,6 +300,8 @@ function interfaceFinancialSummary(aParam, oResponse)
 	}
 	else
 	{
+		ns1blankspace.financial.summary = oResponse;
+		
 		var aHTML = [];
 		var h = -1;
 		
