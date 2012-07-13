@@ -67,6 +67,8 @@ String.prototype.formatXHTML = function(bDirection)
 	return sValue;
 };
 
+var ns1blankspace = {};
+
 var giVersion = 2;
 
 var giShowSpeed = 0;
@@ -193,21 +195,25 @@ $(function()
 		
 	$('.inputInterfaceMainSelect').live('focus', function() 
 	{		
-		$(this).addClass('interfaceMasterHighlight');	
+		$(this).addClass('interfaceMasterHighlight');
+		
+		ns1blankspace.currentXHTMLElementID = this.id;
 		gsLastShowDivID = this.id;
+		
 		$('#divInterfaceMasterViewportControlOptions').html('');
 		$('#divInterfaceMasterViewportControlOptions').show();
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
+		$('#divInterfaceMasterViewportControlOptions').offset({ top: $('#' + gsLastShowDivID).offset().top, left: $('#' + gsLastShowDivID).offset().left + $('#' + gsLastShowDivID).width() - 10});
+				
 		$('#divInterfaceMasterViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
 		
-		$('#spanInterfaceMainSelectOptions').button( {
+		$('#spanInterfaceMainSelectOptions').button({
 			text: false,
 			icons: {
 				primary: "ui-icon-triangle-1-s"
 			}
 		})
 		.click(function() {
-			interfaceMasterElementOptionsSearch(gsLastShowDivID, 4);
+			interfaceMasterElementOptionsSearch({xhtmlElementID: gsLastShowDivID, source: 4});
 		})
 		.css('width', '14px')
 		.css('height', '23px')
@@ -215,7 +221,7 @@ $(function()
 		
 	$('.inputInterfaceMainSelect').live('keyup', function()
 	{
-		interfaceMasterElementOptionsSearch(gsLastShowDivID, 1, 3);	
+		interfaceMasterElementOptionsSearch({xhtmlElementID: gsLastShowDivID, source: 1, minimumLength: 3});	
 	});	
 		
 	$('.inputInterfaceMainSelect').live('blur', function() 
@@ -1088,7 +1094,7 @@ function interfaceMasterViewportShow(oResponse)
 	interfaceControlSecurity();
 	
 	gbUnloadWarning = true;
-	
+		
 	aHTML[++h] = '<div id="divInterfaceMasterViewport" class="interfaceMaster">';
 	
 	$('#tdInterfaceMasterHeaderColumn2').html('<span id="spanInterfaceMasterViewportLogonName">' + gsUserName + '</span>')
@@ -1125,7 +1131,7 @@ function interfaceMasterViewportShow(oResponse)
 						'<span id="spanInterfaceMasterViewportControlActionOptions" class="interfaceMasterViewport">&nbsp;</span>' +
 						'</div>';
 		
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlActionStatus" class="interfaceMasterViewport" style="z-index:99;">&nbsp;</div>';
+		aHTML[++h] = '<div id="divInterfaceMasterViewportControlActionStatus" class="interfaceMasterViewport">&nbsp;</div>';
 		
 		if (gbSetupShow) 
 		{
@@ -1619,10 +1625,10 @@ function interfaceMasterAttachmentsShowBind()
 	.css('height', '20px')	
 }
 
-function interfaceMasterAttachmentsRemove(sXHTMLElementId)
+function interfaceMasterAttachmentsRemove(sXHTMLElementID)
 {
 
-	var aSearch = sXHTMLElementId.split('-');
+	var aSearch = sXHTMLElementID.split('-');
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	
@@ -1635,7 +1641,7 @@ function interfaceMasterAttachmentsRemove(sXHTMLElementId)
 			url: '/ondemand/core/?' + sParam,
 			data: sData,
 			dataType: 'text',
-			success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
+			success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
 		});
 }
 
@@ -2065,171 +2071,184 @@ function interfaceMasterOptionsPosition(aParam)
 }
 
 
-function interfaceMasterElementOptionsSearch(sXHTMLElementId, iSource, iMinimumLength, sMethod, sSearchText)
+function interfaceMasterElementOptionsSearch(aParam, oResponse)
 {
-
-	var aSearch = sXHTMLElementId.split('-');
-	var sElementId = aSearch[0];
-	var lElementSearchContext = aSearch[1];
-	var sURL = '';
-	var sItemColumns = '';
-	
-	if (iSource == undefined)
-	{
-		iSource = giSearchSource_TEXT_INPUT;
-	}	
-	
-	if (sElementId != '')
-	{
-		var sMethod = $('#' + sElementId).attr("onDemandMethod")
-		sItemColumns = $('#' + sElementId).attr("onDemandColumns")
-	}	
-	
-	if (lElementSearchContext != undefined)
-	{
-		$('#' + gsLastShowDivID).val($('#' + sXHTMLElementId).html())
-		$('#' + gsLastShowDivID).attr("onDemandID", lElementSearchContext)
-		$('#divInterfaceMasterViewportControlOptions').hide();
-	}
-	else
-	{
-	
-		interfaceMasterOptionsSetPosition(sXHTMLElementId);
-		
-		var iMaximumColumns = 1;
-	
-		if (iMinimumLength == undefined)
-		{
-			iMinimumLength = 1;
-		}	
-	
-		if (sSearchText == undefined) {sSearchText = ''};
-			
-		if (sSearchText == '' && iSource == giSearchSource_TEXT_INPUT)
-		{
-			sSearchText = $('#' + sElementId).val();
-		}	
-		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_ALL)
-		{
-			
-			if (sMethod.indexOf("/") == -1)
-			{
-				var sParam = gsOnDemandSetupURL + '?rf=XML&method=' + sMethod +
-							'&xhtmlcontext=' + sElementId;
-			}
-			else
-			{
-				var sParam = sMethod +
-							'&xhtmlcontext=' + sElementId;
-			}
-				
-			if (sSearchText != '')
-			{
-				sParam = sParam + '&quicksearch=' + sSearchText;
-			}	
-			
-			$.ajax(
-			{
-				type: 'GET',
-				url: sParam,
-				dataType: 'xml',
-				async: true,
-				success: function (data, textStatus)
-				{	interfaceMasterElementOptionsSearchShow(data, sItemColumns)	}
-			});
-			
-		}
-	};	
-}
-
-function interfaceMasterElementOptionsSearchShow(oXML, sItemColumns)
-{
-
+	var sXHTMLElementID;
+	var sXHTMLInputElementID;
+	var iXHTMLElementContextID;
+	var sXHTMLParentInputElementID;
+	var iSource = giSearchSource_TEXT_INPUT;
+	var iMinimumLength = 1;
+	var iMaximumColumns = 1;
+	var sMethod;
+	var sSearchText = '';
+	var sColumns;
 	var iColumn = 0;
-	var aHTML = [];
-	var h = -1;
-	var	iMaximumColumns = 1;
-	sItemColumns = (sItemColumns == undefined)?'':sItemColumns;
-	var aColumns = sItemColumns.split('-');
-	
 		
-	var oRoot = oXML.getElementsByTagName('ondemand').item(0);
-	
-	if (oRoot.childNodes.length == 0)
+	if (aParam != undefined)
 	{
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (aParam.xhtmlInputElementID != undefined) {sXHTMLInputElementID = aParam.xhtmlInputElementID}
+		if (aParam.xhtmlParentInputElementID != undefined) {sXHTMLParentInputElementID = aParam.xhtmlParentInputElementID}
+		if (aParam.source != undefined) {iSource = aParam.source}
+		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
+		if (aParam.method != undefined) {sMethod = aParam.method}
+		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
+		if (aParam.sColumns != undefined) {sColumns = aParam.columns}
+	}
+	
+	if (sXHTMLElementID != undefined)
+	{
+		var aXHTMLElementID = sXHTMLElementID.split('-');
+		sXHTMLInputElementID = aXHTMLElementID[0];
+		iXHTMLElementContextID = aXHTMLElementID[1];
+	
+		$.extend(true, aParam, {xhtmlInputElementID: sXHTMLInputElementID});
+	
+		if (sMethod == undefined)
+		{
+			sMethod = $('#' + sXHTMLInputElementID).attr("onDemandMethod");
+			if (sMethod == undefined) {sMethod = $('#' + sXHTMLInputElementID).attr("data-method")}	
+		}
+		
+		if (sColumns == undefined)
+		{
+			sColumns = $('#' + sXHTMLInputElementID).attr("onDemandColumns");
+			if (sColumns == undefined) {sColumns = $('#' + sXHTMLInputElementID).attr("data-columns")}
+			if (sColumns != undefined) {$.extend(true, aParam, {columns: sColumns})};	
+		}
+		
+		if (sXHTMLParentInputElementID == undefined)
+		{
+			sXHTMLParentInputElementID = $('#' + sXHTMLInputElementID).attr("data-parent")
+			if (sXHTMLParentInputElementID != undefined) {$.extend(true, aParam, {xhtmlParentInputElementID: sXHTMLParentInputElementID})};	
+		}
+	}	
+	
+	if (iXHTMLElementContextID != undefined)
+	{
+		$('#' + sXHTMLInputElementID).val($('#' + sXHTMLElementID).html())
+		$('#' + sXHTMLInputElementID).attr("onDemandID", iXHTMLElementContextID)
+		$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
 		$('#divInterfaceMasterViewportControlOptions').hide();
 	}
 	else
 	{
-		var oRow = oRoot.childNodes.item(0);
-		
-		aHTML[++h] = '<table class="interfaceSearchLarge">';
-		aHTML[++h] = '<tbody>'
-			
-		for (var iRow = 0; iRow < oRoot.childNodes.length; iRow++) 
+		if (oResponse == undefined)
 		{
+			interfaceMasterOptionsSetPosition(sXHTMLInputElementID);
 			
-			var oRow = oRoot.childNodes.item(iRow);
+			if (sColumns == undefined) {sColumns = 'title'};
 			
-			iColumn = iColumn + 1;
-			
-			if (iColumn == 1)
+			if (sSearchText == '' && iSource == giSearchSource_TEXT_INPUT)
 			{
-				aHTML[++h] = '<tr class="interfaceSearch">';
-			}
-						
-			if (sItemColumns.length == 0)
+				sSearchText = $('#' + sXHTMLInputElementID).val();
+			}	
+		
+			if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_ALL)
 			{
-				aHTML[++h] = '<td class="interfaceSearch" id="' + onDemandXMLGetData(oRow, "xhtmlcontext") +
-									'-' + onDemandXMLGetData(oRow, "id") + '">' + onDemandXMLGetData(oRow, "title") + '</td>';
-			}
-			else
-			{
-			
-				aHTML[++h] = '<td class="interfaceSearch" id="' + onDemandXMLGetData(oRow, "xhtmlcontext") +
-										'-' + onDemandXMLGetData(oRow, "id") + '">' 
-										
-				for (var i = 0; i < aColumns.length; i++)
+				var aColumns = sColumns.split(',');	
+				var oSearch = new AdvancedSearch();
+				oSearch.method = sMethod;
+				oSearch.addField(sColumns);
+				oSearch.addFilter(aColumns[0], 'STRING_IS_LIKE', sSearchText);
+				
+				if (sXHTMLParentInputElementID != undefined)
 				{
+					var sParentColumnID = $('#' + sXHTMLInputElementID).attr("data-parent-search-id")
+					var sParentColumnText = $('#' + sXHTMLInputElementID).attr("data-parent-search-text")
+					var sParentContextID = $('#' + sXHTMLParentInputElementID).attr("data-id");
+					var sParentContextText = $('#' + sXHTMLParentInputElementID).val();
 					
-					switch (aColumns[i])
+					if (sParentColumnID != undefined && sParentContextID != undefined)
 					{
-					case 'space':
-						aHTML[++h] = ' ';
-						break;
-					case 'comma':
-						aHTML[++h] = ',';
-						break;
-					case 'pipe':
-						aHTML[++h] = '|';
-						break;
-					default:
-						aHTML[++h] = onDemandXMLGetData(oRow, aColumns[i]);
+						oSearch.addFilter(sParentColumnID, 'EQUAL_TO', sParentContextID);
+					}
+					else if	(sParentColumnText != undefined && sParentContextText != '')
+					{
+						oSearch.addFilter(sParentColumnText, 'STRING_STARTS_WITH', sParentContextText);
 					}
 				}
-				aHTML[++h] = '</td>';
+				
+				oSearch.sort(aColumns[0], 'asc');
+				oSearch.getResults(function(data){interfaceMasterElementOptionsSearch(aParam, data)});
 			}
+		}	
+		else
+		{
+			var aColumns = sColumns.split('-');
+			var aHTML = [];
+			var h = -1;
 			
-			if (iColumn == iMaximumColumns)
+			if (oResponse.data.rows.length == 0)
 			{
-				aHTML[++h] = '</tr>'
-				iColumn = 0;
+				$('#divInterfaceMasterViewportControlOptions').hide();
+			}
+			else
+			{
+				aHTML[++h] = '<table class="interfaceSearchLarge">';
+				aHTML[++h] = '<tbody>'
+			
+				$.each(oResponse.data.rows, function() 
+				{ 
+					iColumn = iColumn + 1;
+			
+					if (iColumn == 1)
+					{
+						aHTML[++h] = '<tr class="interfaceSearch">';
+					}
+						
+					if (sColumns.length == 0)
+					{
+						aHTML[++h] = '<td class="interfaceSearch" id="' + sXHTMLInputElementID +
+											'-' + this.id + '">' + this.title + '</td>';
+					}
+					else
+					{
+						aHTML[++h] = '<td class="interfaceSearch" id="' + sXHTMLInputElementID +
+												'-' + this.id + '">' 
+										
+						for (var i = 0; i < aColumns.length; i++)
+						{
+							switch (aColumns[i])
+							{
+							case 'space':
+								aHTML[++h] = ' ';
+								break;
+							case 'comma':
+								aHTML[++h] = ',';
+								break;
+							case 'pipe':
+								aHTML[++h] = '|';
+								break;
+							default:
+								aHTML[++h] = this[aColumns[i]];
+							}
+						}
+						aHTML[++h] = '</td>';
+					}
+			
+					if (iColumn == iMaximumColumns)
+					{
+						aHTML[++h] = '</tr>'
+						iColumn = 0;
+					}	
+				});
+    	
+				aHTML[++h] = '</tbody></table>';
+	
+				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+			
+				$('td.interfaceSearch').click(function(event)
+				{
+					$('#divInterfaceMasterViewportControlOptions').hide(200);
+					$.extend(true, aParam, {xhtmlElementID: event.target.id})
+					interfaceMasterElementOptionsSearch(aParam);
+				});
 			}	
 		}
-    	
-		aHTML[++h] = '</tbody></table>';
-	
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
-		
-		$('td.interfaceSearch').click(function(event)
-		{
-			$('#divInterfaceMasterViewportControlOptions').hide(200);
-			interfaceMasterElementOptionsSearch(event.target.id);
-		});
-	}	
-			
+	}		
 }
 
 function interfaceMasterSearchStart(sElementId)
@@ -2365,10 +2384,10 @@ function interfaceMasterFormatSave(sValue)
 
 }
 
-function interfaceMasterAddressSearch(sXHTMLElementId, aParam)
+function interfaceMasterAddressSearch(sXHTMLElementID, aParam)
 {
 	
-	var aSearch = sXHTMLElementId.split('-');
+	var aSearch = sXHTMLElementID.split('-');
 	var sElementId = aSearch[0];
 	var lElementSearchContext = aSearch[1];	
 	
@@ -2384,7 +2403,7 @@ function interfaceMasterAddressSearch(sXHTMLElementId, aParam)
 		var sParam = '/ondemand/core/?method=CORE_ADDRESS_SEARCH&rf=XML';
 		var sData = '';
 		
-		interfaceMasterOptionsSetPosition(sXHTMLElementId)
+		interfaceMasterOptionsSetPosition(sXHTMLElementID)
 		
 		//sData += '&postpcde=' + encodeURIComponent((aParam.postcode==undefined?'':aParam.postcode));
 		
@@ -2454,141 +2473,7 @@ function interfaceMasterAddressSearchShow(oResponse)
 			
 }
 
-function interfaceMasterContactSearch(sXHTMLElementId, iSource, iMinimumLength, sMethod, sSearchText)
-{
-
-	var aSearch = sXHTMLElementId.split('-');
-	var sElementId = aSearch[0];
-	var lElementSearchContext = aSearch[1];
-	var sURL = '';
-		
-	if (iSource == undefined)
-	{
-		iSource = giSearchSource_TEXT_INPUT;
-	}	
-	
-	if (sElementId != '')
-	{
-		var sMethod = $('#' + sElementId).attr("onDemandMethod")
-		var sParentElementId = $('#' + sElementId).attr("onDemandParent")
-	}	
-	
-	if (lElementSearchContext != undefined)
-	{
-		$('#' + sElementId).attr("onDemandID", aSearch[1])
-		$('#' + sElementId).val(aSearch[2] + ' ' + aSearch[3])
-		$('#' + sParentElementId).attr("onDemandID", aSearch[4])
-		$('#' + sParentElementId).val(aSearch[5])
-		$('#divInterfaceMasterViewportControlOptions').hide();
-	}
-	else
-	{
-	
-		interfaceMasterOptionsSetPosition(sXHTMLElementId);
-		
-		var iMaximumColumns = 1;
-	
-		if (iMinimumLength == undefined)
-		{
-			iMinimumLength = 1;
-		}	
-	
-		if (sSearchText == undefined) {sSearchText = ''};
-			
-		if (sSearchText == '' && iSource == giSearchSource_TEXT_INPUT)
-		{
-			sSearchText = $('#' + sElementId).val();
-		}	
-		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_ALL)
-		{
-			
-			var oSearch = new AdvancedSearch();
-			oSearch.endPoint = 'contact';
-			oSearch.method = 'CONTACT_PERSON_SEARCH';
-			oSearch.addField( 'firstname,surname,contactbusinesstext,contactbusiness');
-			oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
-			
-			if (sParentElementId != undefined)
-			{
-				var sParentSearchText = $('#' + sParentElementId).val();
-				var sParentSearchId = $('#' + sParentElementId).attr("onDemandID");
-			}	
-			
-			if (sParentSearchId != undefined)
-			{
-				oSearch.addFilter('contactbusiness', 'EQUAL_TO', sParentSearchId);
-			}
-			else if	(sParentSearchText != undefined)
-			{
-				oSearch.addFilter('contactbusinesstext', 'STRING_STARTS_WITH', sParentSearchText);
-			}
-			
-			oSearch.rf = 'JSON';
-		
-			oSearch.getResults(function (data) {interfaceMasterContactSearchShow(data, sElementId)}) 
-						
-		}
-	};	
-}
-
-function interfaceMasterContactSearchShow(oResponse, sElementId)
-{
-	var iColumn = 0;
-	var aHTML = [];
-	var h = -1;
-	var	iMaximumColumns = 1;
-		
-	if (oResponse.data.rows.length == 0)
-	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
-	}
-	else
-	{	
-		aHTML[++h] = '<table class="interfaceSearchLarge">';
-		aHTML[++h] = '<tbody>'
-			
-		$.each(oResponse.data.rows, function()
-		{	
-			aHTML[++h] = '<tr class="interfaceSearch">';
-			
-			aHTML[++h] = '<td class="interfaceSearch" id="' + sElementId +
-									'-' + this.id +
-									'-' + this.firstname +
-									'-' + this.surname +
-									'-' + this.contactbusiness +
-									'-' + this.contactbusinesstext +
-									'">' + this.firstname +
-									'&nbsp;' + this.surname +
-									'</td>';
-									
-			aHTML[++h] = '<td class="interfaceSearch" id="' + sElementId +
-									'-' + this.id +
-									'-' + this.firstname +
-									'-' + this.surname +
-									'-' + this.contactbusiness +
-									'-' + this.contactbusinesstext +
-									'">' + this.contactbusinesstext +
-									'</td>';
-									
-			aHTML[++h] = '</tr>'
-		});
-    	
-		aHTML[++h] = '</tbody></table>';
-	
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
-		
-		$('td.interfaceSearch').click(function(event)
-		{
-			$('#divInterfaceMasterViewportControlOptions').hide(200);
-			interfaceMasterContactSearch(event.target.id);
-		});
-	}	
-			
-}
-
-function interfaceMasterContactEmailSearch(sXHTMLElementId, aParam)
+function interfaceMasterContactEmailSearch(sXHTMLElementID, aParam)
 {
 
 	var iSource = giSearchSource_TEXT_INPUT;
@@ -2612,7 +2497,7 @@ function interfaceMasterContactEmailSearch(sXHTMLElementId, aParam)
 		if (aParam.setXHTMLElementID != undefined) {sSetXHTMLElementId = aParam.setXHTMLElementID}
 	}
 
-	var aSearch = sXHTMLElementId.split('---');
+	var aSearch = sXHTMLElementID.split('---');
 	var sElementId = aSearch[0];
 	var lElementSearchContext = aSearch[1];
 		
@@ -2666,7 +2551,7 @@ function interfaceMasterContactEmailSearch(sXHTMLElementId, aParam)
 	else
 	{
 	
-		interfaceMasterOptionsSetPosition(sXHTMLElementId);
+		interfaceMasterOptionsSetPosition(sXHTMLElementID);
 	
 		if (sSearchText == undefined) {sSearchText = ''};
 			
@@ -2898,7 +2783,7 @@ function interfaceMasterPaginationBind(aParam)
 function interfaceMasterPaginationShowMore(aParam, oResponse)
 {
 	
-	var sXHTMLElementId = '';
+	var sXHTMLElementID = '';
 	var iMore = -1;
 	var iStartRow = 10;
 	var iRows = 10;
@@ -2918,7 +2803,7 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 		if (aParam.more != undefined) {iMore = aParam.more}
 		if (aParam.startRow != undefined) {iStartRow = aParam.startRow}
 		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (aParam.xhtmlElementId != undefined) {sXHTMLElementID = aParam.xhtmlElementId}
 		if (aParam.columns != undefined) {sColumns = aParam.columns}
 		if (aParam.idColumns != undefined) {sIDColumns = aParam.idColumns}
 		if (aParam.functionSearch != undefined) {fFunctionSearch = aParam.functionSearch}
@@ -3015,7 +2900,7 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 						}	
 					
 						aHTML[++h] = '<td class="' + sClass + '" id="' +
-											sXHTMLElementId + '-' + this.id + sIDData + sIdAdditional + '">' 
+											sXHTMLElementID + '-' + this.id + sIDData + sIdAdditional + '">' 
 											
 						switch (aColumns[i])
 						{
@@ -3072,10 +2957,10 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 	}
 }	
 
-function interfaceMasterPaginationShowPage(sXHTMLElementId)
+function interfaceMasterPaginationShowPage(sXHTMLElementID)
 {
 
-	var aElement = sXHTMLElementId.split('-');
+	var aElement = sXHTMLElementID.split('-');
 	
 	$('.interfaceMasterSearchPage').hide();
 	$('#divInterfaceMasterSearch-' + aElement[1]).show();
@@ -3599,7 +3484,7 @@ function interfaceMasterPaginationList(aParam)
 function interfaceMasterPaginationListShowMore(aParam, oData)
 {
 	
-	var sXHTMLElementId = '';
+	var sXHTMLElementID = '';
 	var iMore = -1;
 	var iStartRow = 10;
 	var iRows = 10;
@@ -3624,7 +3509,7 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 		if (aParam.more != undefined) {iMore = aParam.more}
 		if (aParam.startRow != undefined) {iStartRow = aParam.startRow}
 		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (aParam.xhtmlElementId != undefined) {sXHTMLElementID = aParam.xhtmlElementId}
 		if (aParam.columns != undefined) {sColumns = aParam.columns}
 		if (aParam.idColumns != undefined) {sIDColumns = aParam.idColumns}
 		if (aParam.functionOpen != undefined) {sFunctionOpen = aParam.functionOpen}
@@ -3845,10 +3730,10 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 	}
 }	
 
-function interfaceMasterPaginationListShowPage(sXHTMLElementId, sXHTMLContext)
+function interfaceMasterPaginationListShowPage(sXHTMLElementID, sXHTMLContext)
 {
 
-	var aElement = sXHTMLElementId.split('-');
+	var aElement = sXHTMLElementID.split('-');
 	
 	$('.interfaceMasterPaginationListPage' + sXHTMLContext).hide();
 	$('#div' + sXHTMLContext + 'InterfaceMasterPaginationList-' + aElement[1]).show();

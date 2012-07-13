@@ -806,7 +806,7 @@ function interfaceContactPersonDetails()
 		{
 			$('#inputInterfaceMainDetailsFirstName').val(goObjectContext.firstname);
 			$('#inputInterfaceMainDetailsSurname').val(goObjectContext.surname);
-			$('#inputInterfaceMainDetailsTitle').attr('onDemandID');
+			$('#inputInterfaceMainDetailsTitle').attr('onDemandID', goObjectContext.title);
 			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.titletext);
 			$('#inputInterfaceMainDetailsPosition').val(goObjectContext.position);
 			$('#inputInterfaceMainDetailsPhone').val(goObjectContext.workphone);

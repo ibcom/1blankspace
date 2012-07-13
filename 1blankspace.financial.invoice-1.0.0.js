@@ -7,6 +7,8 @@ function interfaceFinancialInvoiceMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 
+	interfaceFinancialMasterInitialise();
+
 	giObject = 5;
 	gsObjectName = 'Financial Invoice';
 	goObjectContext = undefined;
@@ -465,6 +467,7 @@ function interfaceFinancialInvoiceShow(aParam, oResponse)
 	else
 	{
 		goObjectContext = oResponse.data.rows[0];
+		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 				
 		$('#divInterfaceViewportControlContext').html(goObjectContext.reference +
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_sentdate">' + goObjectContext.sentdate + '</span>' +
@@ -577,10 +580,16 @@ function interfaceFinancialInvoiceSummary()
 		
 		$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));	
 		
-		$('#aaInterfaceMainSummaryViewPDF').click(function(event)
+		$('#aInterfaceMainSummaryViewPDF').click(function(event)
 		{
-			alert("View as PDF.  To be implemented.");
-			//interfaceFinancialInvoiceViewPDF();
+			$.ajax(
+			{
+				type: 'GET',
+				url: '/ondemand/core/?method=CORE_PDF_CREATE',
+				data: 'object=' + giObject + '&objectcontext=' + giObjectContext,
+				dataType: 'json',
+				success: function(oResponse) {alert('PDF Created')}
+			});
 		});
 	}	
 }
@@ -627,7 +636,32 @@ function interfaceFinancialInvoiceDetails()
 						'<td id="tdInterfaceMainDetailsPurchaseOrderReferenceValue" class="interfaceMainSelect">' +
 						'<input id="inputInterfaceMainDetailsPurchaseOrderReference" class="inputInterfaceMainText">' +
 						'</td></tr>';							
-			
+		
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsSentToBusiness" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsSentToBusiness" class="interfaceMain">' +
+						'Business' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsSentToBusinessValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainDetailsSentToBusinessValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainDetailsSentToBusiness" class="inputInterfaceMainSelect"' +
+							' data-method="CONTACT_BUSINESS_SEARCH"' +
+							' data-columns="tradename">' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsSentToPerson" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsSentToPerson" class="interfaceMain">' +
+						'Person' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsSentToPersonValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainDetailsSentToPersonValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainDetailsSentToPerson" class="inputInterfaceMainSelect"' +
+							' data-method="CONTACT_PERSON_SEARCH"' +
+							' data-columns="surname"' +
+							' data-parent="inputInterfaceMainDetailsSentToBusiness"' +
+							' data-parent-search-id="contactbusiness"' +
+							' data-parent-search-text="tradename">' +
+						'</td></tr>';				
+							
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsSentDate" class="interfaceMain">' +
 						'<td id="tdInterfaceMainDetailsSentDate" class="interfaceMain">' +
 						'Sent Date' +
@@ -662,7 +696,7 @@ function interfaceFinancialInvoiceDetails()
 						'Sent' +
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsSent" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainDetailsSentValue" class="interfaceMainText" style="height:33px;">' +
+						'<td id="tdInterfaceMainDetailsSentValue" class="interfaceMainRadio" style="height:33px;">' +
 						'<input type="radio" id="radioSentN" name="radioSent" value="N"/>No' +
 						'&nbsp;&nbsp;<input type="radio" id="radioSentY" name="radioSent" value="Y"/>Yes' +
 						'</td></tr>';
@@ -682,9 +716,20 @@ function interfaceFinancialInvoiceDetails()
 
 		if (goObjectContext != undefined)
 		{
-			$('#inputInterfaceMainDetailsReference').val(this.reference);
-			$('#inputInterfaceMainDetailsPurchaseOrderReference').val(this.purchaseorder);
-			$('[name="radioSent"][value="' + this.sent + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
+			$('#inputInterfaceMainDetailsPurchaseOrderReference').val(goObjectContext.purchaseorder);
+			$('#inputInterfaceMainDetailsSentToBusiness').attr('data-id', goObjectContext.contactbusinesssentto);
+			$('#inputInterfaceMainDetailsSentToBusiness').val(goObjectContext.contactbusinesssenttotext);
+			$('#inputInterfaceMainDetailsSentToPerson').attr('data-id', goObjectContext.contactpersonsentto);
+			$('#inputInterfaceMainDetailsSentToPerson').val(goObjectContext.contactpersonsenttotext);	
+			$('[name="radioSent"][value="' + goObjectContext.sent + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsSentDate').val(goObjectContext.sentdate);
+			$('#inputInterfaceMainDetailsDueDate').val(goObjectContext.duedate);
+			$('#inputInterfaceMainDetailsDescription').val(goObjectContext.description);
+		}
+		else
+		{
+			$('[name="radioSent"][value="N"]').attr('checked', true);
 		}
 	}	
 }
@@ -693,11 +738,19 @@ function interfaceFinancialInvoiceSave(aParam, oResponse)
 {
 	if (oResponse == undefined)
 	{
+		interfaceMasterStatusWorking();
+		
 		var sData = (giObjectContext == -1)?'':'&id=' + giObjectContext;
 			
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
-			sData += '&reference=' + $('#inputInterfaceMainDetailsReference').val();
+			sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
+			sData += '&purchaseorder=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPurchaseOrderReference').val());
+			sData += '&sentdate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsSentDate').val());
+			sData += '&duedate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDueDate').val());
+			sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
+			sData += '&contactbusinesssentto=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsSentToBusiness').attr("data-id"));
+			sData += '&contactpersonsentto=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsSentToPerson').attr("data-id"));
 		}
 		
 		$.ajax(
@@ -725,7 +778,7 @@ function interfaceFinancialInvoiceSave(aParam, oResponse)
 		}
 		else
 		{
-			interfaceMasterStatus('Could not save the invoice!');
+			interfaceMasterError('Could not save the invoice!');
 		}
 	}	
 }
@@ -1232,10 +1285,10 @@ function interfaceFinancialInvoiceReceipt(aParam, oResponse)
 			{
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 								
-				aHTML[++h] = '<td id="tdWebsiteLineReceipt_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
+				aHTML[++h] = '<td id="tdFinancialLineReceipt_date-' + this.id + '" class="interfaceMainRow">' +
 										this.appliesdate + '</td>';
 										
-				aHTML[++h] = '<td id="tdWebsiteLineReceipt_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
+				aHTML[++h] = '<td id="tdFinancialLineReceipt_amount-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
 										this.amount + '</td>';
 										
 				aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
@@ -1243,11 +1296,6 @@ function interfaceFinancialInvoiceReceipt(aParam, oResponse)
 				if (oOptions.remove)
 				{	
 					aHTML[++h] = '<span id="spanInvoiceReceipt_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-				};	
-					
-				if (oOptions.view)
-				{	
-					aHTML[++h] = '<span id="spanInvoiceReceipt_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
 				};	
 					
 				aHTML[++h] = '</td>';				
@@ -1272,26 +1320,11 @@ function interfaceFinancialInvoiceReceipt(aParam, oResponse)
 				.css('width', '15px')
 				.css('height', '17px')
 			}
-			
-			if (oOptions.view) 
-			{
-				$('.interfaceMainRowOptionsView').button( {
-					text: false,
-					icons: {
-						primary: "ui-icon-play"
-					}
-				})
-				.click(function() {
-					interfaceMasterInvoiceReceiptAdd({xhtmlElementID: this.id})
-				})
-				.css('width', '15px')
-				.css('height', '17px')
-			}	
 		}
 	}	
 }
 
-function interfaceFinanicalInvoiceReceiptAdd(aParam, oResponse)
+function interfaceFinancialInvoiceReceiptAdd(aParam, oResponse)
 {
 	var iStep = 1;
 	
@@ -1300,115 +1333,142 @@ function interfaceFinanicalInvoiceReceiptAdd(aParam, oResponse)
 		if (aParam.step != undefined) {iStep = aParam.step}	
 	}
 	
-	if (oResponse == undefined)
-	{
-		if (iStep == 1)
-		{
-			var aHTML = [];
-			var h = -1;
-					
-			aHTML[++h] = '<table id="tableInterfaceMainInvoiceReceiptAddColumn2">';
-			
-			aHTML[++h] = '<tr id="trInterfaceMainInvoiceReceiptAdd" class="interfaceMain">' +
-							'<td id="tdInterfaceMainInvoiceReceiptAddFull" class="interfaceMain">' +
-							'<span id="spanInterfaceMainInvoiceReceiptAddFull">Receipt Full Amount</span>' +
-							'</td></tr>';
-			
-			aHTML[++h] = '</table>';
-			
-			aHTML[++h] = '<table style="margin-top:15px;">';
-			
-			aHTML[++h] = '<tr>' +
-							'<td id="tdInterfaceMainInvoiceReceiptAddFullResults">' +
-							'</td></tr>';
-											
-			aHTML[++h] = '</table>';		
-			
-			$('#tdInterfaceMainItemColumn2').html(aHTML.join(''));
-
-			$('#spanInterfaceMainInvoiceReceiptAddFull').button(
-			{
-				label: "Receipt Full Amount"
-			})
-			.click(function() {
-				interfaceFinanicalInvoiceReceiptAdd($.extend(true, aParam, {step: 2}))
-			})
-		}
-		if (iStep == 2)
-		{	
-			var oSearch = new AdvancedSearch();
-			oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
-			oSearch.addField('Amount');
-			oSearch.addSummaryField(sum(amount) sumamount);
-			oSearch.addFilter('invoice', 'EQUAL_TO', giObjectContenxt);
-			oSearch.rows = 0;
-			oSearch.getResults(function(data){interfaceFinanicalInvoiceReceiptAdd($.extend(true, aParam, {step:3}), data)});
-		}
+	if (ns1blankspace.financial.bankaccounts.length == 0) {alert("No bank accounts set up.");return;}
+	
+	if (iStep == 1)
+	{	
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
+		oSearch.addField('amount');
+		oSearch.addSummaryField('sum(amount) sumamount');
+		oSearch.addFilter('invoice', 'EQUAL_TO', giObjectContext);
+		oSearch.rows = 1;
+		oSearch.getResults(function(data){interfaceFinancialInvoiceReceiptAdd($.extend(true, aParam, {step:2}), data)});
 	}
-	else
+		
+	if (iStep == 2)
 	{
+		cReceiptedAmount = oResponse.summary.sumamount;
+		if (cReceiptedAmount == '') {cReceiptedAmount = 0}
+		
 		var aHTML = [];
 		var h = -1;
-
-		aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" style="margin-top:15px; margin-bottom:15px;">';
-		aHTML[++h] = '<tbody>'
-		aHTML[++h] = '<tr class="interfaceActions">';
-		aHTML[++h] = '<td class="interfaceMainRowNothing">' + oResponse.summary.sumamount + '</td>';
-		aHTML[++h] = '</tr>';
-		aHTML[++h] = '</tbody></table>';
-
-		$('#tdInterfaceMainInvoiceReceiptAddFullResults').html(aHTML.join(''));		
-	
-		$('.interfaceMainRowOptionsAdd').button({
-			text: false,
-			icons: {
-				primary: "ui-icon-plus"
-			}
-		})
-		.click(function()
-		{
-			var sID = this.id;
-			var aID = sID.split('-');
-			var iAccount = aID[1];
-			var cAmount = $('#inputInterfaceMainInvoiceItemAddAmount').val();
-			if (cAmount == '') {cAmount = 0};
-			
-			var sData = 'object=' + giObject;
-			sData += '&objectcontext=' + giObjectContext;
-			sData += '&financialaccount=' + iAccount;
-			sData += '&amount=' + cAmount;
-			sData += '&description=' + $('#inputInterfaceMainInvoiceItemAddDescription').val();
 				
-			$.ajax(
-			{
-				type: 'POST',
-				url: '/ondemand/financial/?method=FINANCIAL_LINE_ITEM_MANAGE',
-				data: sData,
-				dataType: 'json',
-				success: function(oResponse)
-				{
-					var sData = 'object=' + giObject;
-					sData += '&objectcontext=' + giObjectContext;
-					
-					$.ajax(
-					{
-						type: 'POST',
-						url: '/ondemand/financial/?method=FINANCIAL_ITEM_COMPLETE',
-						data: sData,
-						dataType: 'json',
-						success: function(oResponse)
-						{
-							interfaceFinancialInvoiceRefresh();
-							interfaceFinancialInvoiceItem();
-						}
-					});
-				}
-			});
-		})
-		.css('width', '20px')
-		.css('height', '20px')
+		aHTML[++h] = '<table id="tableInterfaceMainInvoiceReceiptAddColumn2">';
 		
-	}	
+		aHTML[++h] = '<tr id="trInterfaceMainInvoiceReceiptAdd" class="interfaceMain">' +
+						'<td id="tdInterfaceMainInvoiceReceiptAddReceiptedAmount" class="interfaceMain"' +
+						' data-receiptedamount="' + cReceiptedAmount + '">' +
+						'$' + (cReceiptedAmount).formatMoney(2, ".", ",") + ' has been receipted so far.'
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainInvoiceReceiptAdd" class="interfaceMain">' +
+						'<td id="tdInterfaceMainInvoiceReceiptAddReceiptAmount" class="interfaceMain"' +
+						'">' +
+						'$' + (parseFloat((goObjectContext.amount).replace(",","")) - cReceiptedAmount).formatMoney(2, ".", ",") + ' remaining.'
+						'</td></tr>';
+														
+		aHTML[++h] = '<tr class="interfaceMain">' +
+						'<td id="tdInterfaceMainInvoiceReceiptAddBankAccount" class="interfaceMain">' +
+						'Bank Account' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainInvoiceReceiptAddBankAccount" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainInvoiceReceiptAddBankAccountValue" class="interfaceMainRadio">';
+	
+		var iDefaultBankAccount;
+		
+		$.each(ns1blankspace.financial.bankaccounts, function()
+		{
+			if (iDefaultBankAccount == undefined) {iDefaultBankAccount = this.id}
+			aHTML[++h] = '<input type="radio" id="radioBankAccount' + this.id + '" name="radioBankAccount" value="' + this.id + '"/>' +
+								this.title + '<br />';				
+		});
+		
+		aHTML[++h] = '</td></tr>';				
+						
+						
+		aHTML[++h] = '<tr id="trInterfaceMainInvoiceReceiptAdd" class="interfaceMain">' +
+						'<td id="tdInterfaceMainInvoiceReceiptAddFull" class="interfaceMain">' +
+						'<span id="spanInterfaceMainInvoiceReceiptAddFull">Receipt</span>' +
+						'</td></tr>';
+		
+		aHTML[++h] = '</table>';
+		
+		aHTML[++h] = '<table style="margin-top:15px;">';
+		
+		aHTML[++h] = '<tr>' +
+						'<td id="tdInterfaceMainInvoiceReceiptAddFullResults">' +
+						'</td></tr>';
+										
+		aHTML[++h] = '</table>';		
+			
+		$('#tdInterfaceMainReceiptColumn2').html(aHTML.join(''));
+
+		$('[name="radioBankAccount"][value="' + iDefaultBankAccount + '"]').attr('checked', true);
+	
+		$('#spanInterfaceMainInvoiceReceiptAddFull').button(
+		{
+			label: "Receipt Full Amount"
+		})
+		.click(function() {
+			interfaceFinancialInvoiceReceiptAdd($.extend(true, aParam, {step: 3, receiptedamount: cReceiptedAmount}))
+		});
+	}
+	
+	if (iStep == 3)
+	{
+		$('#tdInterfaceMainInvoiceReceiptAddFull').html(gsLoadingSmallXHTML);
+				
+		var cAmount = goObjectContext.amount - cReceiptedAmount;
+		
+		var sData = 'bankaccount=' + interfaceMasterFormatSave($('input[name="radioBankAccount"]:checked').val());
+		sData += '&amount=' + cAmount;
+		sData += '&receiveddate=' + Date.today().toString("dd-MMM-yyyy");
+		sData += '&paymentmethod=3'; //todo
+		sData += '&contactbusinessreceivedfrom=' + goObjectContext.contactbusinesssentto;	
+		sData += '&contactpersonreceivedfrom=' + goObjectContext.contactpersonsentto;
+				
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/financial/?method=FINANCIAL_RECEIPT_MANAGE',
+			data: sData,
+			dataType: 'json',
+			success: function(data)
+			{
+				interfaceFinancialInvoiceReceiptAdd($.extend(true, aParam, {step: 4, amount: cAmount}), data)
+			}
+		});	
+	}
+	
+	if (iStep == 4)
+	{
+		var cAmount = 0;
+		
+		if (aParam != undefined)
+		{
+			if (aParam.amount != undefined) {cAmount = aParam.amount}	
+		}
+		
+		var iRecieptID = oResponse.id;
+		
+		var sData = 'invoice=' + giObjectContext;
+		sData += '&amount=' + cAmount;
+		sData += '&appliesdate=' + Date.today().toString("dd-MMM-yyyy");
+		sData += '&reciept=' + iReceiptID;
+				
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/financial/?method=FINANCIAL_RECEIPT_INVOICE_MANAGE',
+			data: sData,
+			dataType: 'json',
+			success: function(data)
+			{
+				interfaceFinancialInvoiceReceiptAdd($.extend(true, aParam, {step: 5}), data)
+			}
+		});	
+	}
 }
 
 function interfaceFinancialInvoiceRefresh(oResponse)

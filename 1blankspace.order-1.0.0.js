@@ -834,7 +834,32 @@ function interfaceOrderDetails()
 						'<tr id="trInterfaceMainDetailsStartDateValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainDetailsStartDateValue" class="interfaceMainText">' +
 						'<input id="inputInterfaceMainDetailsOrderDate" class="inputInterfaceMainDate">' +
-						'</td></tr>';			
+						'</td></tr>';
+						
+			aHTML[++h] = '<tr id="trInterfaceMainDetailsOrderByBusiness" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsOrderByBusiness" class="interfaceMain">' +
+						'Business' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsOrderByBusinessValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainDetailsOrderByBusinessValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainDetailsOrderByBusiness" class="inputInterfaceMainSelect"' +
+							' data-method="CONTACT_BUSINESS_SEARCH"' +
+							' data-columns="tradename">' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsOrderByPerson" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsOrderByPerson" class="interfaceMain">' +
+						'Person' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsOrderByPersonValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainDetailsOrderByPersonValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainDetailsOrderByPerson" class="inputInterfaceMainSelect"' +
+							' data-method="CONTACT_PERSON_SEARCH"' +
+							' data-columns="surname"' +
+							' data-parent="inputInterfaceMainDetailsOrderByBusiness"' +
+							' data-parent-search-id="contactbusiness"' +
+							' data-parent-search-text="tradename">' +
+						'</td></tr>';											
 		/*				
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsEndDate" class="interfaceMain">' +
 						'<td id="tdInterfaceMainDetailsEndDate" class="interfaceMain">' +
@@ -894,7 +919,10 @@ function interfaceOrderDetails()
 		{
 			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
 			$('#inputInterfaceMainDetailsOrderDate').val(goObjectContext.orderdate);
-			
+			$('#inputInterfaceMainDetailsOrderByBusiness').attr('data-id', goObjectContext.orderbybusiness);
+			$('#inputInterfaceMainDetailsOrderByBusiness').val(goObjectContext.orderbybusinesstext);
+			$('#inputInterfaceMainDetailsOrderByPerson').attr('data-id', goObjectContext.orderbyperson);
+			$('#inputInterfaceMainDetailsOrderByPerson').val(goObjectContext.orderbypersontext);	
 			$('[name="radioSource"][value="' + goObjectContext.source + '"]').attr('checked', true);
 			$('#inputInterfaceMainDetailsPurchaseOrderReference').val(goObjectContext.purchaseorder);
 			$('#inputInterfaceMainDetailsNotes').val(goObjectContext.notes);	
@@ -1461,6 +1489,8 @@ function interfaceOrderNew()
 
 function interfaceOrderSave()
 {
+	interfaceMasterStatusWorking();
+	
 	var sParam = 'method=PRODUCT_ORDER_MANAGE'
 	var sData = 'id=' + ((giObjectContext == -1)?'':giObjectContext);
 		
@@ -1468,7 +1498,8 @@ function interfaceOrderSave()
 	{
 		sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
 		sData += '&orderdate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsOrderDate').val());
-		
+		sData += '&orderbybusiness=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsOrderByBusiness').attr("data-id"));
+		sData += '&orderbyperson=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsOrderByPerson').attr("data-id"));
 		sData += '&purchaseorder=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPurchaseOrderReference').val());
 		sData += '&source=' + $('input[name="radioSource"]:checked').val();
 		sData += '&notes=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsNotes').val());

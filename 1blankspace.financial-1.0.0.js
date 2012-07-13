@@ -97,6 +97,34 @@ function interfaceFinancialMasterViewport(aParam)
 	if (bShowHome) {interfaceFinancialHomeShow()};	
 }
 
+function interfaceFinancialMasterInitialise(aParam, oResponse)
+{
+	var bRefresh = false;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.refresh != undefined) {bRefresh = aParam.refresh}
+	}
+
+	if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}
+	
+	if (oResponse == undefined)
+	{
+		if (ns1blankspace.financial.bankaccounts == undefined || bRefresh)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
+			oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
+			oSearch.rows = 1000;
+			oSearch.getResults(function(data) {interfaceFinancialMasterInitialise(aParam, data)});
+		}
+	}
+	else
+	{
+		ns1blankspace.financial.bankaccounts = oResponse.data.rows;
+	}
+}
+
 function interfaceFinancialHomeShow()
 {	
 	var aHTML = [];
@@ -953,7 +981,7 @@ function interfaceFinancialTransaction(aParam, oResponse)
 	{			
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
-		oSearch.addField('financialaccounttext,amount');
+		oSearch.addField('financialaccounttext,amount,date,description');
 		oSearch.addFilter('object', 'EQUAL_TO', giObject);
 		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
 		oSearch.sort('financialaccounttext', 'asc');
@@ -980,21 +1008,28 @@ function interfaceFinancialTransaction(aParam, oResponse)
 			aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
-			aHTML[++h] = '<td class="interfaceMainCaption">Financial Account</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="width:150px;">Financial Account</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="width:100px;">Date</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;width:125px;">Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
 			aHTML[++h] = '</tr>';
 			
 			$.each(oResponse.data.rows, function()
 			{
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 								
-				aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
+				aHTML[++h] = '<td id="tdFinancialATransaction_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
 										this.financialaccounttext + '</td>';
 										
-				aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
-										this.amount + '</td>';
+				aHTML[++h] = '<td id="tdFinancialATransaction_date-' + this.id + '" class="interfaceMainRow">' +
+										this.date + '</td>';
 										
+				aHTML[++h] = '<td id="tdFinancialATransaction_amount-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
+										this.amount + '</td>';
+					
+				aHTML[++h] = '<td id="tdFinancialATransaction_description-' + this.id + '" class="interfaceMainRow">' +
+										this.description + '</td>';
+																
 				aHTML[++h] = '</td>';				
 				aHTML[++h] = '</tr>';
 			});

@@ -477,7 +477,7 @@ td.interfaceHomeViewport
 
 #divInterfaceMasterViewportControlOptions
 {
-	position: relative;
+	position: absolute;
 	width: 100px; 
 	z-index: 999;
 	background-color: transparent;
