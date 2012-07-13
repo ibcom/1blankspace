@@ -467,6 +467,7 @@ function interfaceFinancialInvoiceShow(aParam, oResponse)
 	else
 	{
 		goObjectContext = oResponse.data.rows[0];
+		
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 				
 		$('#divInterfaceViewportControlContext').html(goObjectContext.reference +
@@ -773,7 +774,7 @@ function interfaceFinancialInvoiceSave(aParam, oResponse)
 			{
 				giObjectContext = oResponse.id;
 				gbInputDetected = false;
-				interfaceSetupWebsiteSearch('-' + giObjectContext, {source: 1});
+				interfaceFinancialInvoiceSearch('-' + giObjectContext, {source: 1});
 			}	
 		}
 		else
@@ -1315,7 +1316,7 @@ function interfaceFinancialInvoiceReceipt(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterInvoiceReceiptRemove({xhtmlElementID: this.id});
+					//interfaceFinancialInvoiceReceiptRemove({xhtmlElementID: this.id});
 				})
 				.css('width', '15px')
 				.css('height', '17px')
