@@ -162,10 +162,10 @@ function interfaceFinancialReceiptHomeShow(oResponse)
 				aHTML[++h] = '<td id="interfaceFinancialReceiptHomeMostLikely_Title-' + this.id + '" class="interfaceHomeMostLikely" style="width:50px;">' +
 										this.reference + '</td>';
 				
-				aHTML[++h] = '<td id="interfaceFinancialInvoiceHomeMostLikely_Amount-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:50px;text-align:right;">' +
+				aHTML[++h] = '<td id="interfaceFinancialReceiptHomeMostLikely_Amount-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:50px;text-align:right;">' +
 										'$' + this.amount + '</td>';
 														
-				aHTML[++h] = '<td id="interfaceFinancialInvoiceHomeMostLikely_DueDate-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;">' +
+				aHTML[++h] = '<td id="interfaceFinancialReceiptHomeMostLikely_DueDate-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;">' +
 										this.receiveddate + '</td>';
 																						
 				var sContact = this.contactbusinessreceivedfromtext;
@@ -713,7 +713,7 @@ function interfaceFinancialReceiptAmountSave(aParam)
 	
 	if (cAmount == 0 || iAccount == undefined)
 	{
-		alert('No debtor account set up.')
+		if (iAccount == undefined) {alert('No debitor account set up.')}
 	}
 	else
 	{

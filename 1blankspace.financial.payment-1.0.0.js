@@ -1,5 +1,7 @@
 function interfaceFinancialPaymentMasterViewport(aParam)
 {
+	interfaceFinancialMasterInitialise();
+	
 	var bShowHome = true
 	
 	if (aParam != undefined)
@@ -131,7 +133,7 @@ function interfaceFinancialPaymentHomeShow(oResponse)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
-		oSearch.addField('reference,description,contactbusinesspaidtotext,contactpersonpaidtotext');
+		oSearch.addField('reference,description,contactbusinesspaidtotext,contactpersonpaidtotext,paiddate,amount');
 		oSearch.rows = 10;
 		oSearch.sort('modifieddate', 'desc');
 		oSearch.getResults(interfaceFinancialPaymentHomeShow);
@@ -160,6 +162,12 @@ function interfaceFinancialPaymentHomeShow(oResponse)
 				aHTML[++h] = '<td id="interfaceFinancialPaymentHomeMostLikely_Title-' + this.id + '" class="interfaceHomeMostLikely" style="width:50px;">' +
 										this.reference + '</td>';
 				
+				aHTML[++h] = '<td id="interfaceFinancialPaymentHomeMostLikely_Amount-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:50px;text-align:right;">' +
+										'$' + this.amount + '</td>';
+														
+				aHTML[++h] = '<td id="interfaceFinancialPaymentHomeMostLikely_DueDate-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;">' +
+										this.paiddate + '</td>';
+										
 				var sContact = this.contactbusinesspaidtotext
 				if (sContact == '') {sContact = this.contactpersonpaidtotext}
 				
@@ -329,10 +337,12 @@ function interfaceFinancialPaymentViewport()
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
 						'</tr>';
 		
+		/*
 		aHTML[++h] = '<tr id="trInterfaceViewportControlItem" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlItem" class="interfaceViewportControl">Items</td>' +
 						'</tr>';
-	
+		*/
+						
 		aHTML[++h] = '</table>';					
 	
 		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
@@ -445,10 +455,14 @@ function interfaceFinancialPaymentShow(aParam, oResponse)
 	else
 	{
 		goObjectContext = oResponse.data.rows[0];
-				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.reference) +
-			'<br /><span id="spanInterfaceViewportControlSubContext">' + goObjectContext.paiddate + '</span>' +
-			'<br /><span id="spanInterfaceViewportControlSubContext">' + goObjectContext.amount + '</span>';
+		
+		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+					
+		$('#divInterfaceViewportControlContext').html(goObjectContext.reference +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_paiddate">' +
+			 		goObjectContext.paiddate + '</span>' +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">' +
+					goObjectContext.amount + '</span>');
 			
 		interfaceMasterViewportDestination({
 			newDestination: 'interfaceFinancialPaymentMasterViewport({showHome: false});interfaceFinancialPaymentSearch("-' + giObjectContext + '")',
@@ -488,6 +502,13 @@ function interfaceFinancialPaymentSummary()
 		var h = -1;
 	
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+		
+		if (goObjectContext.amount != '')
+		{
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAmountValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
+			aHTML[++h] = '$' + goObjectContext.amount;
+			aHTML[++h] = '</td></tr>';
+		}	
 		
 		if (goObjectContext.contactbusinesspaidtotext != '')
 		{
@@ -568,15 +589,49 @@ function interfaceFinancialPaymentDetails()
 						'<input id="inputInterfaceMainDetailsReference" class="inputInterfaceMainText">' +
 						'</td></tr>';								
 			
-		aHTML[++h] = '<tr id="trInterfaceMainDetailspaidDate" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDetailspaidDate" class="interfaceMain">' +
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsPaidDate" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsPaidDate" class="interfaceMain">' +
 						'Paid Date' +
 						'</td></tr>' +
-						'<tr id="trInterfaceMainDetailspaidDateValue" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainDetailspaidDateValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainDetailspaidDate" class="inputInterfaceMainDate">' +
+						'<tr id="trInterfaceMainDetailsPaidDateValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsPaidDateValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsPaidDate" class="inputInterfaceMainDate">' +
 						'</td></tr>';						
 			
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsContactBusinessPaidTo" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsContactBusinessPaidTo" class="interfaceMain">' +
+						'Business' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsContactBusinessPaidToValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainDetailsContactBusinessPaidToValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainDetailsContactBusinessPaidTo" class="inputInterfaceMainSelect"' +
+							' data-method="CONTACT_BUSINESS_SEARCH"' +
+							' data-columns="tradename">' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsContactPersonReceivedFrom" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsContactPersonReceivedFrom" class="interfaceMain">' +
+						'Person' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsContactPersonPaidToValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainDetailsContactPersonPaidToValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainDetailsContactPersonPaidTo" class="inputInterfaceMainSelect"' +
+							' data-method="CONTACT_PERSON_SEARCH"' +
+							' data-columns="surname"' +
+							' data-parent="inputInterfaceMainDetailsContactBusinessPaidTo"' +
+							' data-parent-search-id="contactbusiness"' +
+							' data-parent-search-text="tradename">' +
+						'</td></tr>';		
+		
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsAmount" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsAmount" class="interfaceMain">' +
+						'Amount' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsAmountValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsAmountValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsAmount" class="inputInterfaceMainText">' +
+						'</td></tr>';	
+											
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
@@ -604,48 +659,104 @@ function interfaceFinancialPaymentDetails()
 		if (goObjectContext != undefined)
 		{
 			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
+			$('#inputInterfaceMainDetailsPaidDate').val(goObjectContext.paiddate);
+			$('#inputInterfaceMainDetailsContactBusinessPaidTo').attr('data-id', goObjectContext.contactbusinesspaidto);
+			$('#inputInterfaceMainDetailsContactBusinessPaidTo').val(goObjectContext.contactbusinesspaidtotext);
+			$('#inputInterfaceMainDetailsContactPersonPaidTo').attr('data-id', goObjectContext.contactpersonpaidto);
+			$('#inputInterfaceMainDetailsContactPersonPaidTo').val(goObjectContext.contactpersonpaidtotext);	
+			$('#inputInterfaceMainDetailsAmount').val(goObjectContext.amount);		
+			$('#inputInterfaceMainDetailsDescription').val(goObjectContext.description);
 		}
 	}	
 }
 
 function interfaceFinancialPaymentSave(aParam, oResponse)
 {
-	if (oResponse == undefined)
+	interfaceMasterStatusWorking();
+		
+	var sData = (giObjectContext == -1)?'':'id=' + giObjectContext;
+		
+	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		var sData = (giObjectContext == -1)?'':'&id=' + giObjectContext;
-			
+		sData += '&reference=' + $('#inputInterfaceMainDetailsReference').val();
+		sData += '&paiddate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPaidDate').val());
+		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
+		sData += '&contactbusinesspaidfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactBusinessPaidFrom').attr("data-id"));
+		sData += '&contactpersonpaidfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactPersonPaidFrom').attr("data-id"));
+	}
+	
+	$.ajax(
+	{
+		type: 'POST',
+		url: '/ondemand/financial/?method=FINANCIAL_PAYMENT_MANAGE',
+		data: sData,
+		dataType: 'json',
+		success: function(data) {interfaceFinancialPaymentSaveProcess(data)}
+	});	
+}
+
+function interfaceFinancialPaymentSaveProcess(oResponse)
+{
+	if (oResponse.status == 'OK')
+	{
+		interfaceMasterStatus('Saved');
+		if (giObjectContext == -1) {var bNew = true}
+		giObjectContext = oResponse.id;	
+		
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
-			sData += '&reference=' + $('#inputInterfaceMainDetailsReference').val();
+			interfaceFinancialPaymentAmountSave();
 		}
+	}
+	else
+	{
+		interfaceMasterError(oResponse.error.errornotes);
+	}
+}
+
+function interfaceFinancialPaymentAmountSave(aParam)
+{
+	var iAccount = ns1blankspace.financial.settings.financialaccountcreditor;
+	var cAmount = $('#inputInterfaceMainDetailsAmount').val();
+	if (cAmount == '') {cAmount = 0};
+	cAmount = (cAmount - goObjectContext.amount)
+	
+	if (cAmount == 0 || iAccount == undefined)
+	{
+		if (iAccount == undefined) {alert('No creditor account set up.')}
+	}
+	else
+	{
+		var sData = 'object=' + giObject;
+		sData += '&objectcontext=' + giObjectContext;
+		sData += '&financialaccount=' + iAccount;
+		sData += '&amount=' + cAmount;
+		sData += '&description=' + $('#inputInterfaceMainDetailsDescription').val();
 		
 		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/financial/?method=FINANCIAL_PAYMENT_MANAGE',
+			url: '/ondemand/financial/?method=FINANCIAL_LINE_ITEM_MANAGE',
 			data: sData,
 			dataType: 'json',
-			success: function(data) {interfaceFinancialPaymentSave(aParam, data)}
-		});
-		
-	}
-	else
-	{			
-		if (oResponse.status == 'OK')
-		{	
-			interfaceMasterStatus('Saved');
-			
-			if (giObjectContext == -1)
+			success: function(oResponse)
 			{
-				giObjectContext = oResponse.id;
-				gbInputDetected = false;
-				interfaceSetupWebsiteSearch('-' + giObjectContext, {source: 1});
-			}	
-		}
-		else
-		{
-			interfaceMasterStatus('Could not save the Expense!');
-		}
+				var sData = 'object=' + giObject;
+				sData += '&objectcontext=' + giObjectContext;
+			
+				$.ajax(
+				{
+					type: 'POST',
+					url: '/ondemand/financial/?method=FINANCIAL_ITEM_COMPLETE',
+					data: sData,
+					dataType: 'json',
+					success: function(oResponse)
+					{
+						interfaceFinancialPaymentRefresh();
+					}
+				});
+			}
+		});
 	}	
 }
 
@@ -1081,3 +1192,28 @@ function interfaceFinancialPaymentExpense(aParam, oResponse)
 	}	
 }
 
+function interfaceFinancialPaymentRefresh(oResponse)
+{
+	if (oResponse == undefined)
+	{
+		$('#spanInterfaceViewportControlSubContext_amount').html(gsLoadingSmallXHTML);
+			
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
+		oSearch.addField('paiddate,amount,tax');
+		oSearch.rf = 'json';
+		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+		
+		oSearch.getResults(function(data) {interfaceFinancialPaymentRefresh(data)});
+	}
+	else
+	{
+		var oObjectContext = oResponse.data.rows[0];
+		
+		goObjectContext.paiddate = oObjectContext.paiddate;
+		goObjectContext.amount = oObjectContext.amount;
+				
+		$('#spanInterfaceViewportControlSubContext_paiddate').html(oObjectContext.receiveddate);
+		$('#spanInterfaceViewportControlSubContext_amount').html(oObjectContext.amount);
+	}
+}
