@@ -12,6 +12,8 @@ function interfaceFinancialMasterViewport(aParam)
 	gsObjectName = 'Financials';
 	giObjectContext = -1;
 	
+	interfaceFinancialMasterInitialise();
+	
 	if (bShowHome)
 	{
 		interfaceMasterViewportDestination({
@@ -100,28 +102,60 @@ function interfaceFinancialMasterViewport(aParam)
 function interfaceFinancialMasterInitialise(aParam, oResponse)
 {
 	var bRefresh = false;
+	var iStep = 1;
 	
 	if (aParam != undefined)
 	{
 		if (aParam.refresh != undefined) {bRefresh = aParam.refresh}
+		if (aParam.step != undefined) {iStep = aParam.step}
 	}
 
-	if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}
-	
-	if (oResponse == undefined)
+	if (ns1blankspace.financial == undefined)
 	{
-		if (ns1blankspace.financial.bankaccounts == undefined || bRefresh)
+		ns1blankspace.financial = {};
+		ns1blankspace.financial.status = 1;
+	}
+	
+	if (iStep == 1)
+	{
+		if (oResponse == undefined)
 		{
-			var oSearch = new AdvancedSearch();
-			oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-			oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
-			oSearch.rows = 1000;
-			oSearch.getResults(function(data) {interfaceFinancialMasterInitialise(aParam, data)});
+			if (ns1blankspace.financial.bankaccounts == undefined || bRefresh)
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
+				oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
+				oSearch.rows = 1000;
+				oSearch.getResults(function(data) {interfaceFinancialMasterInitialise(aParam, data)});
+			}
+		}
+		else
+		{
+			ns1blankspace.financial.bankaccounts = oResponse.data.rows;
+			interfaceFinancialMasterInitialise($.extend(true, aParam, {step: 2}))
 		}
 	}
-	else
+	
+	if (iStep == 2)
 	{
-		ns1blankspace.financial.bankaccounts = oResponse.data.rows;
+		if (oResponse == undefined)
+		{
+			if (ns1blankspace.financial.settings == undefined || bRefresh)
+			{
+				$.ajax(
+				{
+					type: 'GET',
+					url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_SEARCH&all=1&includefinancialaccounttext=1',
+					dataType: 'json',
+					success: function(data) {interfaceFinancialMasterInitialise(aParam, data)}
+				});
+			}
+		}
+		else
+		{
+			ns1blankspace.financial.settings = oResponse;
+			ns1blankspace.financial.status = 2;
+		}
 	}
 }
 

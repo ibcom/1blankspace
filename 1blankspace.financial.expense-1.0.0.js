@@ -1291,6 +1291,8 @@ function interfaceFinancialExpensePaymentAdd(aParam, oResponse)
 	
 	if (iStep == 1)
 	{	
+		$('#tdInterfaceMainPaymentColumn2').html(gsLoadingSmallXHTML)
+		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
 		oSearch.addField('amount');

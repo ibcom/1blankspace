@@ -329,10 +329,12 @@ function interfaceFinancialReceiptViewport()
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
 						'</tr>';			
 		
+		/*
 		aHTML[++h] = '<tr id="trInterfaceViewportControlItem" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlItem" class="interfaceViewportControl">Items</td>' +
 						'</tr>';
-	
+		*/
+						
 		aHTML[++h] = '</table>';					
 	
 		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
@@ -489,6 +491,13 @@ function interfaceFinancialReceiptSummary()
 	
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
+		if (goObjectContext.amount != '')
+		{
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAmountValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
+			aHTML[++h] = '$' + goObjectContext.amount;
+			aHTML[++h] = '</td></tr>';
+		}	
+		
 		if (goObjectContext.contactbusinessreceivedfromtext != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryBusiness" class="interfaceMainSummary">Business</td></tr>' +
@@ -566,7 +575,41 @@ function interfaceFinancialReceiptDetails()
 						'<td id="tdInterfaceMainDetailsReceivedDateValue" class="interfaceMainText">' +
 						'<input id="inputInterfaceMainDetailsReceivedDate" class="inputInterfaceMainDate">' +
 						'</td></tr>';					
-			
+		
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsContactBusinessReceivedFrom" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsContactBusinessReceivedFrom" class="interfaceMain">' +
+						'Business' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsContactBusinessReceivedFromValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainDetailsContactBusinessReceivedFromValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainDetailsContactBusinessReceivedFrom" class="inputInterfaceMainSelect"' +
+							' data-method="CONTACT_BUSINESS_SEARCH"' +
+							' data-columns="tradename">' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsContactPersonReceivedFrom" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsContactPersonReceivedFrom" class="interfaceMain">' +
+						'Person' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsContactPersonReceivedFromValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainDetailsContactPersonReceivedFromValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainDetailsContactPersonReceivedFrom" class="inputInterfaceMainSelect"' +
+							' data-method="CONTACT_PERSON_SEARCH"' +
+							' data-columns="surname"' +
+							' data-parent="inputInterfaceMainDetailsContactBusinessReceivedFrom"' +
+							' data-parent-search-id="contactbusiness"' +
+							' data-parent-search-text="tradename">' +
+						'</td></tr>';		
+							
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsAmount" class="interfaceMain">' +
+						'<td id="tdInterfaceMainDetailsAmount" class="interfaceMain">' +
+						'Amount' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsAmountValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsAmountValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsAmount" class="inputInterfaceMain">' +
+						'</td></tr>';	
+							
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
@@ -584,7 +627,7 @@ function interfaceFinancialReceiptDetails()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsDescriptionValue" class="interfaceMainTextMulti">' +
 						'<td id="tdInterfaceMainDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-						'<textarea rows="10" cols="35" onDemandType="TEXTMULTI" id="inputInterfaceMainDetailsDescription" class="inputInterfaceMainTextMulti"></textarea>' +
+						'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsDescription" class="inputInterfaceMainTextMulti"></textarea>' +
 						'</td></tr>';
 		
 		aHTML[++h] = '</table>';					
@@ -594,6 +637,13 @@ function interfaceFinancialReceiptDetails()
 		if (goObjectContext != undefined)
 		{
 			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
+			$('#inputInterfaceMainDetailsReceivedDate').val(goObjectContext.receiveddate);
+			$('#inputInterfaceMainDetailsContactBusinessReceivedFrom').attr('data-id', goObjectContext.contactbusinessreceivedfrom);
+			$('#inputInterfaceMainDetailsContactBusinessReceivedFrom').val(goObjectContext.contactbusinessreceivedfromtext);
+			$('#inputInterfaceMainDetailsContactPersonReceivedFrom').attr('data-id', goObjectContext.contactpersonreceivedfrom);
+			$('#inputInterfaceMainDetailsContactPersonReceivedFrom').val(goObjectContext.contactpersonreceivedfromtext);	
+			$('#inputInterfaceMainDetailsAmount').val(goObjectContext.amount);		
+			$('#inputInterfaceMainDetailsDescription').val(goObjectContext.description);
 		}
 	}	
 }
@@ -602,11 +652,17 @@ function interfaceFinancialReceiptSave(aParam, oResponse)
 {
 	if (oResponse == undefined)
 	{
+		interfaceMasterStatusWorking();
+		
 		var sData = (giObjectContext == -1)?'':'&id=' + giObjectContext;
 			
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
-			sData += '&reference=' + $('#inputInterfaceMainDetailsReference').val();
+			sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
+			sData += '&receiveddate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReceivedDate').val());
+			sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
+			sData += '&contactbusinessreceivedfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactBusinessReceivedFrom').attr("data-id"));
+			sData += '&contactpersonreceivedfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactPersonReceivedFrom').attr("data-id"));
 		}
 		
 		$.ajax(
@@ -621,23 +677,70 @@ function interfaceFinancialReceiptSave(aParam, oResponse)
 	}
 	else
 	{			
-		if (oResponse.status == 'OK')
-		{	
-			interfaceMasterStatus('Saved');
-			
-			if (giObjectContext == -1)
-			{
-				giObjectContext = oResponse.id;
-				gbInputDetected = false;
-				interfaceSetupWebsiteSearch('-' + giObjectContext, {source: 1});
-			}	
-		}
-		else
-		{
-			interfaceMasterStatus('Could not save the receipt!');
-		}
+		interfaceFinancialRecieptSaveProcess(oResponse);
 	}	
 }
+
+function interfaceFinancialRecieptSaveProcess(oResponse)
+{
+	if (oResponse.status == 'OK')
+	{
+		interfaceMasterStatus('Saved');
+		if (giObjectContext == -1) {var bNew = true}
+		giObjectContext = oResponse.id;	
+		
+		if ($('#divInterfaceMainDetails').html() != '')
+		{
+			interfaceFinancialReceiptAmountSave();
+		}
+	}
+	else
+	{
+		interfaceMasterError(oResponse.error.errornotes);
+	}
+}
+
+function interfaceProductPriceSave(aParam)
+{
+	var iAccount = aID[1];
+				var cAmount = $('#inputInterfaceMainInvoiceItemAddAmount').val();
+				if (cAmount == '') {cAmount = 0};
+				
+				var sData = 'object=' + giObject;
+				sData += '&objectcontext=' + giObjectContext;
+				sData += '&financialaccount=' + iAccount;
+				sData += '&amount=' + cAmount;
+				sData += '&description=' + $('#inputInterfaceMainInvoiceItemAddDescription').val();
+					
+				$.ajax(
+				{
+					type: 'POST',
+					url: '/ondemand/financial/?method=FINANCIAL_LINE_ITEM_MANAGE',
+					data: sData,
+					dataType: 'json',
+					success: function(oResponse)
+					{
+						var sData = 'object=' + giObject;
+						sData += '&objectcontext=' + giObjectContext;
+						
+						$.ajax(
+						{
+							type: 'POST',
+							url: '/ondemand/financial/?method=FINANCIAL_ITEM_COMPLETE',
+							data: sData,
+							dataType: 'json',
+							success: function(oResponse)
+							{
+								interfaceFinancialInvoiceRefresh();
+								interfaceFinancialInvoiceItem();
+							}
+						});
+					}
+				});
+}
+
+
+
 
 function interfaceFinancialReceiptNew(aParam)
 {
@@ -910,7 +1013,7 @@ function interfaceMasterFinancialReceiptItemAdd(aParam, oResponse)
 
 			$('#tdInterfaceMainInvoiceItemAddSearchResults').html(aHTML.join(''))
 			
-			//bind rows to add product to order column 1
+			//binding
 		}
 	}	
 }

@@ -515,7 +515,7 @@ function interfaceFinancialInvoiceSummary()
 		
 		if (goObjectContext.amount != '')
 		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPriceValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAmountValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
 			aHTML[++h] = '$' + goObjectContext.amount;
 			aHTML[++h] = '</td></tr>';
 		}	
@@ -1338,6 +1338,8 @@ function interfaceFinancialInvoiceReceiptAdd(aParam, oResponse)
 	
 	if (iStep == 1)
 	{	
+		$('#tdInterfaceMainPaymentColumn2').html(gsLoadingSmallXHTML)
+		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
 		oSearch.addField('amount');
