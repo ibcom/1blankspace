@@ -1,5 +1,7 @@
 function interfaceFinancialBankAccountMasterViewport(aParam)
 {
+	interfaceFinancialMasterInitialise();
+	
 	var bShowHome = true
 	
 	if (aParam != undefined)
@@ -99,83 +101,55 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 
 function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 {	
-	if (oResponse == undefined)
-	{
-		var oSearch = new AdvancedSearch();
-		oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-		oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
-		oSearch.sort('title', 'asc');
-		oSearch.rows = giMessagingRows;
-		oSearch.getResults(function(data) {interfaceFinancialBankAccountHomeShow(aParam, data)});
-	}
-	else
-	{
-		var aHTML = [];
-		var h = -1;
-				
-		aHTML[++h] = '<table>';
-		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportFinancialLarge" class="interfaceMasterViewportImageLarge">' +
-						'&nbsp;' + 
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';		
 	
-		aHTML[++h] = '<table>';
-		
-		$('#divInterfaceViewportControl').html(aHTML.join(''));	
-	
-		var aHTML = [];
-		var h = -1;
-		
-		aHTML[++h] = '<table id="tableFinancialItems" border="0" cellspacing="0" cellpadding="0" class="interfaceMain" style="font-size:0.875em;">';
-		aHTML[++h] = '<tbody>'
-		
-		$.each(oResponse.data.rows, function()
-		{
-			aHTML[++h] = '<tr class="interfaceMainRow">';
-							
-			aHTML[++h] = '<td id="tdBankAccount_title-' + this.id + '" class="interfaceMainRow">' +
-									this["title"];
-													
-			aHTML[++h] = '<br /><span id="tdBankAccount_amount-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
-									this["lastreconciledamount"];
-										
-			aHTML[++h] = ' @ ' +
-									this["lastreconcileddate"] + '</span></td>';
-									
-			aHTML[++h] = '<td style="text-align:right;font-size:0.75em;" class="interfaceMainRow">';
-				
-			aHTML[++h] = '<span id="spanBankAccount_options_import-' + this.id + '" class="interfaceMainRowOptionsImport">Import</span>';
-		
-			aHTML[++h] = '<span id="spanBankAccount_options_reconcile-' + this.id + '" class="interfaceMainRowOptionsReconcile">Reconcile</span>';
-					
-			aHTML[++h] = '</td>';				
-			aHTML[++h] = '</tr>';
-		});
-		
-		aHTML[++h] = '</tbody></table>';
+	var aHTML = [];
+	var h = -1;
+			
+	aHTML[++h] = '<table>';
+	aHTML[++h] = '<tr>' +
+					'<td id="interfaceMasterViewportFinancialLarge" class="interfaceMasterViewportImageLarge">' +
+					'&nbsp;' + 
+					'</td>' +
+					'</tr>';
+	aHTML[++h] = '</table>';		
 
-		$('#tdInterfaceMainItemColumn1').html(aHTML.join(''));
-		
-		$('#divInterfaceMain').html(aHTML.join(''));
+	aHTML[++h] = '<table>';
 	
-		$('.interfaceMainRowOptionsImport').button(
-		{
-			label: 'Import',
-		})
-		.click(function() {
-			interfaceFinancialBankAccountShow({id: this.id});
-		});
-		
-		$('.interfaceMainRowOptionsReconcile').button(
-		{
-			label: 'Reconcile',
-		})
-		.click(function() {
-			interfaceFinancialBankAccountShow({id: this.id});
-		});
-	}
+	$('#divInterfaceViewportControl').html(aHTML.join(''));	
+
+	var aHTML = [];
+	var h = -1;
+	
+	aHTML[++h] = '<table id="tableFinancialItems" border="0" cellspacing="0" cellpadding="0" class="interfaceMain" style="font-size:0.875em;">';
+	aHTML[++h] = '<tbody>'
+	
+	$.each(ns1blankspace.financial.bankaccounts, function()
+	{
+		aHTML[++h] = '<tr class="interfaceMainRow">';
+						
+		aHTML[++h] = '<td id="tdBankAccount_title-' + this.id + '" class="interfaceHomeMostLikely" style="width:150px;">' +
+								this["title"] + '</td>';
+				
+		aHTML[++h] = '<td id="interfaceFinancialInvoiceHomeMostLikely_Amount-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;text-align:right;">' +
+									this.lastreconcileddate + '</td>';
+													
+		aHTML[++h] = '<td id="interfaceFinancialInvoiceHomeMostLikely_DueDate-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;text-align:right;">' +
+									'$' + this.lastreconciledamount + '</td>';
+			
+		aHTML[++h] = '<td>&nbsp;</td>';																	
+		aHTML[++h] = '</tr>';
+	});
+	
+	aHTML[++h] = '</tbody></table>';
+
+	$('#tdInterfaceMainItemColumn1').html(aHTML.join(''));
+	
+	$('#divInterfaceMain').html(aHTML.join(''));
+
+	$('.interfaceHomeMostLikely').click(function() {
+		var aID = (event.target.id).split('-');
+		interfaceFinancialBankAccountShow({id: aID[1]});
+	});
 }
 
 function interfaceFinancialBankAccountSummary(aParam, oResponse)
@@ -278,38 +252,42 @@ function interfaceFinancialBankAccountViewport()
 
 function interfaceFinancialBankAccountShow(aParam, oResponse)
 {
+	if (aParam != undefined)
+	{
+		if (aParam.id != undefined) {giObjectContext = aParam.id}	
+	}
+	
 	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 	interfaceFinancialBankAccountViewport();
+	
+	goObjectContext == undefined;
+	goObjectContext = ($.grep(ns1blankspace.financial.bankaccounts, function (a) { return a.id == giObjectContext; }))[0];
 	
 	var aHTML = [];
 	var h = -1;
 	
-	if (oResponse.data.rows.length == 0)
+	if (goObjectContext == undefined)
 	{
-		goObjectContext = undefined;
-		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the bankaccount.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
-				
+			
 		$('#divInterfaceMain').html(aHTML.join(''));
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
-		
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.reference +
+			
+		$('#divInterfaceViewportControlContext').html(goObjectContext.title+
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_date">' + goObjectContext.lastreconcileddate + '</span>' +
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">' + goObjectContext.lastreconciledamount + '</span>');
-			
+		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceFinancialInvoiceMasterViewport({showHome: false});interfaceFinancialInvoiceSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceFinancialBankAccountMasterViewport({showHome: false});interfaceFinancialBankAccountShow({id: giObjectContext})',
 			move: false
 			})
-		
+	
 		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceFinancialInvoiceSummary()'});
-	}	
+	}		
 }	
 
 function interfaceFinancialBankAccountReconcile(aParam, oResponse)

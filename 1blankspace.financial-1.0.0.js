@@ -126,6 +126,7 @@ function interfaceFinancialMasterInitialise(aParam, oResponse)
 				oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
 				oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
 				oSearch.rows = 1000;
+				oSearch.async = false;
 				oSearch.getResults(function(data) {interfaceFinancialMasterInitialise(aParam, data)});
 			}
 		}
@@ -147,6 +148,7 @@ function interfaceFinancialMasterInitialise(aParam, oResponse)
 					type: 'GET',
 					url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_SEARCH&all=1&includefinancialaccounttext=1',
 					dataType: 'json',
+					async: false,
 					success: function(data) {interfaceFinancialMasterInitialise(aParam, data)}
 				});
 			}
