@@ -110,7 +110,6 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 	}
 	else
 	{
-	
 		var aHTML = [];
 		var h = -1;
 				
@@ -126,41 +125,31 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 	
+		var aHTML = [];
+		var h = -1;
+		
 		aHTML[++h] = '<table id="tableFinancialItems" border="0" cellspacing="0" cellpadding="0" class="interfaceMain" style="font-size:0.875em;">';
 		aHTML[++h] = '<tbody>'
-		aHTML[++h] = '<tr class="interfaceMainCaption">';
-		aHTML[++h] = '<td class="interfaceMainCaption" style="width:125px;">Account</td>';
-		aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
-		aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
-		aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-		aHTML[++h] = '</tr>';
 		
 		$.each(oResponse.data.rows, function()
 		{
 			aHTML[++h] = '<tr class="interfaceMainRow">';
 							
 			aHTML[++h] = '<td id="tdBankAccount_title-' + this.id + '" class="interfaceMainRow">' +
-									this["title"] + '</td>';
+									this["title"];
 													
-			aHTML[++h] = '<td id="tdBankAccount_amount-' + this.id + '" class="interfaceMainRow">' +
-									this["lastreconciledamount"] + '</td>';
+			aHTML[++h] = '<br /><span id="tdBankAccount_amount-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
+									this["lastreconciledamount"];
 										
-			aHTML[++h] = '<td id="tdBankAccount_date-' + this.id + '" style="text-align:right;" class="interfaceMainRow"' +
-									' title="' + this["tax"] + '">' +
-									this["lastreconcileddate"] + '</td>';
+			aHTML[++h] = ' @ ' +
+									this["lastreconcileddate"] + '</span></td>';
 									
-			aHTML[++h] = '<td style="width100px;text-align:right;" class="interfaceMainRow">';
+			aHTML[++h] = '<td style="text-align:right;font-size:0.75em;" class="interfaceMainRow">';
 				
-			if (oOptions.remove)
-			{	
-				aHTML[++h] = '<span id="spanBankAccount_options_import-' + this.id + '" class="interfaceMainRowOptionsImport"></span>';
-			};	
-				
-			if (oOptions.view)
-			{	
-				aHTML[++h] = '<span id="spanBankAccount_options_reconcile-' + this.id + '" class="interfaceMainRowOptionsReconcile"></span>';
-			};	
-				
+			aHTML[++h] = '<span id="spanBankAccount_options_import-' + this.id + '" class="interfaceMainRowOptionsImport">Import</span>';
+		
+			aHTML[++h] = '<span id="spanBankAccount_options_reconcile-' + this.id + '" class="interfaceMainRowOptionsReconcile">Reconcile</span>';
+					
 			aHTML[++h] = '</td>';				
 			aHTML[++h] = '</tr>';
 		});
@@ -173,14 +162,19 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 	
 		$('.interfaceMainRowOptionsImport').button(
 		{
-			text: 'Import',
-			
+			label: 'Import',
 		})
 		.click(function() {
-			interfaceFinancialBankAccountDetails({id: this.id});
+			interfaceFinancialBankAccountShow({id: this.id});
+		});
+		
+		$('.interfaceMainRowOptionsReconcile').button(
+		{
+			label: 'Reconcile',
 		})
-		.css('width', '15px')
-		.css('height', '17px')
+		.click(function() {
+			interfaceFinancialBankAccountShow({id: this.id});
+		});
 	}
 }
 
@@ -227,7 +221,98 @@ function interfaceFinancialBankAccountSummary(aParam, oResponse)
 	}	
 }
 
-function interfaceFinancialBankAccountDetails(aParam, oResponse)
+function interfaceFinancialBankAccountViewport()
+{
+	
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+	
+	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+					'</tr>';
+				
+	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlImport" class="interfaceViewportControl">Import</td>' +
+					'</tr>';
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlItem" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlReconcile" class="interfaceViewportControl">Reconcile</td>' +
+					'</tr>';
+
+	aHTML[++h] = '</table>';					
+			
+	$('#divInterfaceViewportControl').html(aHTML.join(''));
+	
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<div id="divInterfaceMainContext" class="divInterfaceViewportMainContext"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainImport" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainReconcile" class="divInterfaceViewportMain"></div>';
+	
+	$('#divInterfaceMain').html(aHTML.join(''));
+	
+	$('#tdInterfaceViewportControlSummary').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		interfaceFinancialInvoiceSummary();
+	});
+	
+	$('#tdInterfaceViewportControlImport').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainImport");
+		interfaceFinancialInvoiceImport();
+	});
+	
+	$('#tdInterfaceViewportControlReconcile').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainReconcile", true);
+		interfaceFinancialInvoiceReconcile();
+	});
+}
+
+function interfaceFinancialBankAccountShow(aParam, oResponse)
+{
+	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	interfaceFinancialBankAccountViewport();
+	
+	var aHTML = [];
+	var h = -1;
+	
+	if (oResponse.data.rows.length == 0)
+	{
+		goObjectContext = undefined;
+		
+		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the bankaccount.</td></tr>';
+		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+				
+		$('#divInterfaceMain').html(aHTML.join(''));
+	}
+	else
+	{
+		goObjectContext = oResponse.data.rows[0];
+		
+		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+				
+		$('#divInterfaceViewportControlContext').html(goObjectContext.reference +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_date">' + goObjectContext.lastreconcileddate + '</span>' +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">' + goObjectContext.lastreconciledamount + '</span>');
+			
+		interfaceMasterViewportDestination({
+			newDestination: 'interfaceFinancialInvoiceMasterViewport({showHome: false});interfaceFinancialInvoiceSearch("-' + giObjectContext + '")',
+			move: false
+			})
+		
+		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceFinancialInvoiceSummary()'});
+	}	
+}	
+
+function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 {
 	var iID;
 	
@@ -244,7 +329,7 @@ function interfaceFinancialBankAccountDetails(aParam, oResponse)
 		oSearch.addFilter('bankaccount', 'EQUAL_TO', iID);
 		oSearch.sort('statementdate', 'desc');
 		oSearch.rows = giMessagingRows;
-		oSearch.getResults(function(data) {interfaceFinancialBankAccountDetails(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialBankAccountReconcile(aParam, data)});
 	}
 	else
 	{
@@ -253,18 +338,18 @@ function interfaceFinancialBankAccountDetails(aParam, oResponse)
 		
 		// Bank Account type = reco from trans then add another column
 		aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain">' +
-					'<tr id="trInterfaceMainBankAccountRow1_' + iID + '" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainBankAccountColumnReco_' + iID + '" style="width: 75px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
+					'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
+					'<td id="tdInterfaceMainBankAccountColumnReco" style="width: 75px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
 					gsLoadingXHTML +
 					'</td>' +
-					'<td id="tdInterfaceMainBankAccountColumnTran_' + iID + '" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainBankAccountColumnTran" class="interfaceMainColumn2">' +
 					'</td>' +
-					'<td id="tdInterfaceMainBankAccountColumnEdit_' + iID + '" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainBankAccountColumnEdit" class="interfaceMainColumn2">' +
 					'</td>' +
 					'</tr>' +
 					'</table>';				
 		
-		$('#divInterfaceBankAccount_' + iID).html(aHTML.join(''));
+		$('#divInterfaceBankAccountReconcile').html(aHTML.join(''));
 		
 		var aHTML = [];
 		var h = -1;
@@ -277,7 +362,7 @@ function interfaceFinancialBankAccountDetails(aParam, oResponse)
 			aHTML[++h] = '</tr>';
 			aHTML[++h] = '</table>';
 			
-			$('#tdInterfaceMainBankAccountColumnReco_' + iID).html(aHTML.join(''));	
+			$('#tdInterfaceMainBankAccountColumnReconcile').html(aHTML.join(''));	
 		}
 		else
 		{		
@@ -305,7 +390,7 @@ function interfaceFinancialBankAccountDetails(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 			
-			$('#tdInterfaceMainBankAccountColumnReco_' + iID).html(aHTML.join(''));
+			$('#tdInterfaceMainBankAccountColumnReconcile').html(aHTML.join(''));
 		}
 		
 		/*
@@ -337,7 +422,7 @@ function interfaceFinancialBankAccountDetails(aParam, oResponse)
 		
 		$('#tdInterfaceMainBankAccountColumnEdit').html(aHTML.join(''));
 		
-		$('#spanInterfaceBankAccountRecoAdd-' + iID).button(
+		$('#spanInterfaceBankAccountRecoAdd').button(
 		{
 			label: "Add"
 		})
