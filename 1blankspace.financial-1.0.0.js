@@ -833,7 +833,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" cellpadding=6>';
 							
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +
-						'<a href="#" id="aInterfaceMainBankAccountReco">Reconcile</a>' +
+						'<a href="#" id="aInterfaceMainBankAccountReco">Reconcile & Import Transactions</a>' +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +

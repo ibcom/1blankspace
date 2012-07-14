@@ -124,35 +124,51 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 	
 		aHTML[++h] = '<table>';
 		
-		aHTML[++h] = '<tr id="trInterfaceViewportControlSummary" class="interfaceViewportControl">' +
-				'<td id="tdInterfaceViewportControlSummary" data-id="" class="interfaceViewportControl">Summary</td>' +
-				'</tr>';
-		
-		aHTML[++h] = '</table>';	
-			
-		aHTML[++h] = '<table>';
-					
-		$.each(oResponse.data.rows, function() 
-		{ 
-			aHTML[++h] = '<tr id="trInterfaceViewportControlSummary" class="interfaceViewportControl">' +
-				'<td id="tdInterfaceViewportControl' + this.id + '" data-id="' + this.id + '" class="interfaceViewportControl">' + this.title + '</td>' +
-				'</tr>';
-			
-		});
-			
-		aHTML[++h] = '</table>';		
-	
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 	
-		var aHTML = [];
-		var h = -1;
-	
-		aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';			
-
-		$.each(oResponse.data.rows, function() 
-		{ 
-			aHTML[++h] = '<div id="divInterfaceBankAccount_' + this.id + '" class="divInterfaceViewportMain"></div>';			
+		aHTML[++h] = '<table id="tableFinancialItems" border="0" cellspacing="0" cellpadding="0" class="interfaceMain" style="font-size:0.875em;">';
+		aHTML[++h] = '<tbody>'
+		aHTML[++h] = '<tr class="interfaceMainCaption">';
+		aHTML[++h] = '<td class="interfaceMainCaption" style="width:125px;">Account</td>';
+		aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
+		aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
+		aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+		aHTML[++h] = '</tr>';
+		
+		$.each(oResponse.data.rows, function()
+		{
+			aHTML[++h] = '<tr class="interfaceMainRow">';
+							
+			aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
+									this["financialaccounttext"] + '</td>';
+													
+			aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
+									this["description"] + '</td>';
+										
+			aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow"' +
+									' title="' + this["tax"] + '">' +
+									this["amount"] + '</td>';
+									
+			aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+				
+			if (oOptions.remove)
+			{	
+				aHTML[++h] = '<span id="spanBankAccount_options_import-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+			};	
+				
+			if (oOptions.view)
+			{	
+				aHTML[++h] = '<span id="spanBankAccount_options_reconcile-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+			};	
+				
+			aHTML[++h] = '</td>';				
+			aHTML[++h] = '</tr>';
 		});
+		
+		aHTML[++h] = '</tbody></table>';
+
+		$('#tdInterfaceMainItemColumn1').html(aHTML.join(''));
+		
 		
 		$('#divInterfaceMain').html(aHTML.join(''));
 	
