@@ -265,6 +265,13 @@ function interfaceControlOptions()
 					'Financials</span>' +
 					'</td>' +
 					'</tr>';	
+		
+			aHTML[++h] = '<tr id="trInterfaceViewportMasterControlFinancialBankAccount" class="interfaceViewportMasterControl">' +
+					'<td id="tdInterfaceViewportMasterControlFinancialBankAccount" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlFinancialBankAccount" class="interfaceViewportMasterControl">' +
+					'Bank Accounts</span>' +
+					'</td>' +
+					'</tr>';
 					
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlFinancialInvoice" class="interfaceViewportMasterControl">' +
 					'<td id="tdInterfaceViewportMasterControlFinancialInvoice" class="interfaceViewportMasterControl">' +
@@ -276,21 +283,21 @@ function interfaceControlOptions()
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlFinancialExpense" class="interfaceViewportMasterControl">' +
 					'<td id="tdInterfaceViewportMasterControlFinancialExpense" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlFinancialExpense" class="interfaceViewportMasterControl">' +
-					'Expense</span>' +
+					'Expenses</span>' +
 					'</td>' +
 					'</tr>';	
 					
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlFinancialReceipt" class="interfaceViewportMasterControl">' +
 					'<td id="tdInterfaceViewportMasterControlFinancialReceipt" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlFinancialReceipt" class="interfaceViewportMasterControl">' +
-					'Receipt</span>' +
+					'Receipts</span>' +
 					'</td>' +
 					'</tr>';	
 					
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlFinancialPayment" class="interfaceViewportMasterControl">' +
 					'<td id="tdInterfaceViewportMasterControlFinancialPayment" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlFinancialPayment" class="interfaceViewportMasterControl">' +
-					'Payment</span>' +
+					'Payments</span>' +
 					'</td>' +
 					'</tr>';	
 					
@@ -405,6 +412,12 @@ function interfaceControlOptionsBind()
 	{
 		interfaceMasterOptionsSource();
 		interfaceFinancialMasterViewport();
+	});
+	
+	$('#tdInterfaceViewportMasterControlFinancialBankAccount').click(function(event)
+	{
+		interfaceMasterOptionsSource();
+		interfaceFinancialBankAccountMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlFinancialInvoice').click(function(event)

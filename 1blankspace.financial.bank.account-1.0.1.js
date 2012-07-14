@@ -117,10 +117,12 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 	
 	$('#divInterfaceViewportControl').html(aHTML.join(''));	
 
+	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	
 	var aHTML = [];
 	var h = -1;
 	
-	aHTML[++h] = '<table id="tableFinancialItems" border="0" cellspacing="0" cellpadding="0" class="interfaceMain" style="font-size:0.875em;">';
+	aHTML[++h] = '<table id="tableFinancialBankAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 	aHTML[++h] = '<tbody>'
 	
 	$.each(ns1blankspace.financial.bankaccounts, function()
@@ -130,10 +132,10 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 		aHTML[++h] = '<td id="tdBankAccount_title-' + this.id + '" class="interfaceHomeMostLikely" style="width:150px;">' +
 								this["title"] + '</td>';
 				
-		aHTML[++h] = '<td id="interfaceFinancialInvoiceHomeMostLikely_Amount-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;text-align:right;">' +
+		aHTML[++h] = '<td id="interfaceBankAccount_lastreconcileddate-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;text-align:right;">' +
 									this.lastreconcileddate + '</td>';
 													
-		aHTML[++h] = '<td id="interfaceFinancialInvoiceHomeMostLikely_DueDate-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;text-align:right;">' +
+		aHTML[++h] = '<td id="interfaceBankAccount_lastreconciledamount-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;text-align:right;">' +
 									'$' + this.lastreconciledamount + '</td>';
 			
 		aHTML[++h] = '<td>&nbsp;</td>';																	
@@ -152,49 +154,6 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 	});
 }
 
-function interfaceFinancialBankAccountSummary(aParam, oResponse)
-{
-	if (oResponse == undefined)
-	{
-		var oSearch = new AdvancedSearch();
-		oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
-		oSearch.addField('statementdate')
-		oSearch.addSummaryField('max(statementdate) maxstatementdate')
-		oSearch.rows = 1;
-		oSearch.getResults(function(data) {interfaceFinancialBankAccountSummary(aParam, data)});
-	}
-	else
-	{	
-		var aHTML = [];
-		var h = -1;
-	
-		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
-						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';				
-	
-		$('#divInterfaceMainSummary').html(aHTML.join(''));	
-	
-		var aHTML = [];
-		var h = -1;
-
-		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
-						
-		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTotalAmount" class="interfaceMainSummary"></td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryTotalAmountValue" class="interfaceMainSummaryValue">' +
-						'Your last reconciled statement date is ' + oResponse.summary.maxstatementdate +
-						'</td></tr>';			
-		
-		aHTML[++h] = '</table>';					
-	
-		$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''))
-	}	
-}
-
 function interfaceFinancialBankAccountViewport()
 {
 	
@@ -203,11 +162,15 @@ function interfaceFinancialBankAccountViewport()
 
 	aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
 	
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+	aHTML[++h] = '<table class="interfaceViewportControl">';
 	
 	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
 					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
 					'</tr>';
+	
+	aHTML[++h] = '</table>';
+	
+	aHTML[++h] = '<table class="interfaceViewportControl">';
 				
 	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 					'<td id="tdInterfaceViewportControlImport" class="interfaceViewportControl">Import</td>' +
@@ -234,19 +197,19 @@ function interfaceFinancialBankAccountViewport()
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
-		interfaceFinancialInvoiceSummary();
+		interfaceFinancialBankAccountSummary();
 	});
 	
 	$('#tdInterfaceViewportControlImport').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainImport");
-		interfaceFinancialInvoiceImport();
+		interfaceFinancialBankAccountImport();
 	});
 	
 	$('#tdInterfaceViewportControlReconcile').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainReconcile", true);
-		interfaceFinancialInvoiceReconcile();
+		interfaceFinancialBankAccountReconcile();
 	});
 }
 
@@ -279,32 +242,56 @@ function interfaceFinancialBankAccountShow(aParam, oResponse)
 			
 		$('#divInterfaceViewportControlContext').html(goObjectContext.title+
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_date">' + goObjectContext.lastreconcileddate + '</span>' +
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">' + goObjectContext.lastreconciledamount + '</span>');
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">$' + goObjectContext.lastreconciledamount + '</span>');
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceFinancialBankAccountMasterViewport({showHome: false});interfaceFinancialBankAccountShow({id: giObjectContext})',
+			newDestination: 'interfaceFinancialBankAccountMasterViewport({showHome: false});interfaceFinancialBankAccountShow({id: ' + giObjectContext + '})',
 			move: false
 			})
 	
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceFinancialInvoiceSummary()'});
+		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceFinancialBankAccountSummary()'});
 	}		
 }	
 
+function interfaceFinancialBankAccountSummary(aParam, oResponse)
+{
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
+	aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
+				'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
+					'</td>' +
+					'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
+					'</td>' +
+					'</tr>';
+	aHTML[++h] = '</table>';				
+
+	$('#divInterfaceMainSummary').html(aHTML.join(''));	
+
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+					
+	aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTotalAmount" class="interfaceMainSummary"></td></tr>' +
+					'<tr><td id="tdInterfaceMainSummaryTotalAmountValue" class="interfaceMainSummaryValue">' +
+					'Last reconciled on the ' + goObjectContext.lastreconcileddate + '.' +
+					'</td></tr>';			
+	
+	aHTML[++h] = '</table>';					
+
+	$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''))
+}
+
 function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 {
-	var iID;
-	
-	if (aParam != undefined)
-	{
-		if (aParam.id != undefined) {iID = aParam.id}	
-	}
-
 	if (oResponse == undefined)
 	{
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
 		oSearch.addField('statementbalance,statementdate,statustext,status');
-		oSearch.addFilter('bankaccount', 'EQUAL_TO', iID);
+		oSearch.addFilter('bankaccount', 'EQUAL_TO', giObjectContext);
 		oSearch.sort('statementdate', 'desc');
 		oSearch.rows = giMessagingRows;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccountReconcile(aParam, data)});
@@ -320,15 +307,30 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 					'<td id="tdInterfaceMainBankAccountColumnReco" style="width: 75px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
 					gsLoadingXHTML +
 					'</td>' +
-					'<td id="tdInterfaceMainBankAccountColumnTran" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainBankAccountColumnItem" class="interfaceMainColumn2" style="width: 200px;font-size:0.875em;">' +
 					'</td>' +
 					'<td id="tdInterfaceMainBankAccountColumnEdit" class="interfaceMainColumn2">' +
 					'</td>' +
 					'</tr>' +
 					'</table>';				
 		
-		$('#divInterfaceBankAccountReconcile').html(aHTML.join(''));
+		$('#divInterfaceMainReconcile').html(aHTML.join(''));
 		
+		var aHTML = [];
+		var h = -1;
+		
+		
+		aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemHeader" style="width: 200px;">';
+		aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemHeaderStatement" name="radio" /><label for="interfaceMainBankAccountColumnItemHeaderStatement">Statement</label>';
+		aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemHeaderReconciled" name="radio" checked="checked" /><label for="interfaceMainBankAccountColumnItemHeaderReconciled">Reconciled</label>';
+		aHTML[++h] = '</div>';
+		
+		$('#tdInterfaceMainBankAccountColumnItem').html(aHTML.join(''));
+		
+		$('#interfaceMainBankAccountColumnItemHeader').buttonset().css('font-size', '0.75em');
+		
+		$('#interfaceMainBankAccountColumnItemHeader :radio').click(function(){alert('1')});
+			
 		var aHTML = [];
 		var h = -1;
 		
@@ -336,11 +338,11 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 		{
 			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No recos.</td>';
+			aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountRecoAdd">Add</span></td></tr>';
 			aHTML[++h] = '</tr>';
 			aHTML[++h] = '</table>';
 			
-			$('#tdInterfaceMainBankAccountColumnReconcile').html(aHTML.join(''));	
+			$('#tdInterfaceMainBankAccountColumnReco').html(aHTML.join(''));	
 		}
 		else
 		{		
@@ -359,7 +361,7 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 				{
 					if (this.status == 2)
 					{
-						aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountRecoAdd-' + iID + '">Add</span></td></tr>';
+						aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountRecoAdd">Add</span></td></tr>';
 					}
 				}
 				
@@ -368,7 +370,7 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 			
-			$('#tdInterfaceMainBankAccountColumnReconcile').html(aHTML.join(''));
+			$('#tdInterfaceMainBankAccountColumnReco').html(aHTML.join(''));
 		}
 		
 		/*
@@ -398,7 +400,7 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 						
 		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainBankAccountColumnEdit').html(aHTML.join(''));
+		$('#tdInterfaceMainBankAccountColumnEditx').html(aHTML.join(''));
 		
 		$('#spanInterfaceBankAccountRecoAdd').button(
 		{
@@ -408,6 +410,12 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 			//interfaceOrderProductItemsAdd()
 		})
 		.css("width", "75px");
+		
+		$('.reco').click(function()
+		{
+			var aID = (event.target.id).split('-');
+			interfaceFinancialBankAccountRecoItems({reconcilitation: aID[1]});
+		});
 	}
 }
 
@@ -418,7 +426,7 @@ function interfaceFinancialBankAccountRecoRow(oRow)
 
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 				
-	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Title-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect reco"' +
+	aHTML[++h] = '<td id="interfaceFinancialBankAccountReco_title-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect reco"' +
 							' title="' + oRow.notes + '">' +
 							oRow.statementdate + '<br />';
 	
@@ -640,6 +648,279 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 			interfaceSetupStructureElementOptionsShow({structureElementID: oObjectContext.id});
 		}
 	}
-	
+}
 
+function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
+{
+	var iObjectContext = giObjectContext;
+	var sXHTMLElementId = 'tdInterfaceMainSetupStructureElementColumnElement1';
+	var oOptions = {view: true, remove: true, automation: true};
+	var oActions = {add: true};
+	var iRecocilitation;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
+		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (aParam.options != undefined) {oOptions = aParam.options}
+		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (aParam.recocilitation != undefined) {iRecocilitation = aParam.recocilitation}
+	}		
+		
+	if (oResponse == undefined)
+	{	
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
+		oSearch.addField('reference,amount');
+		oSearch.addFilter('reconciliation', 'EQUAL_TO', iRecocilitation);
+		oSearch.sort('reference', 'desc');
+		oSearch.rows = giMessagingRows;
+		oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItems(aParam, data)});
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;	
+			
+		aHTML[++h] = '<table style="margin-top:20px;">';
+			
+		aHTML[++h] = '<tr><td class="interfaceViewportControlSub">' +
+						'No element selected.' +
+						'<br /><br/ >Click the gear icon to set up automation (issue creation) for an element.' +
+					'</td></tr>';
+
+		aHTML[++h] = '</table>';		
+		
+		$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
+			
+		if (oActions != undefined)
+		{	
+			var aHTML = [];
+			var h = -1;	
+			
+			aHTML[++h] = '<table id="tableInterfaceMainSetupStructureElementColumn2" class="interfaceMainColumn2">';
+			
+			if (oActions.add)
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainFormStructureAdd" class="interfaceMainAction">' +
+							'<span id="spanInterfaceMainSetupStructureAdd">Add</span>' +
+							'</td></tr>';
+			}
+			
+			aHTML[++h] = '</table>';					
+			
+			$('#tdInterfaceMainSetupStructureElementColumnElement3').html(aHTML.join(''));
+		
+			$('#spanInterfaceMainSetupStructureAdd').button(
+			{
+				label: "Add"
+			})
+			.click(function() {
+				 interfaceMasterSetupStructureElementAdd(aParam);
+			})
+			
+		}	
+	
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableSetupStructureElement" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">' +
+							'<td class="interfaceMainRowNothing">No layout elements.</td></tr>';
+			aHTML[++h] = '</tbody></table>';
+
+			$('#tdInterfaceMainSetupStructureElementColumnElement1').html(aHTML.join(''));
+		
+		}
+		else
+		{
+			aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			
+			$.each(oResponse.data.rows, function()
+			{
+				aHTML[++h] = '<tr class="interfaceMainRow">';
+								
+				aHTML[++h] = '<td id="tdSetupStructureElement_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect element">' +
+										this.title + '</td>';				
+										
+				aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+				
+				if (oOptions.automation)
+				{	
+					aHTML[++h] = '<span id="spanSetupStructureElement_options_view-' + this.id + '" class="interfaceMainRowOptionsAutomation"></span>';
+				};	
+					
+				if (oOptions.remove)
+				{	
+					aHTML[++h] = '<span id="spanSetupStructureElementoptions_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+				};	
+					
+				if (oOptions.view)
+				{	
+					aHTML[++h] = '<span id="spanSetupStructureElement_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+				};	
+					
+				aHTML[++h] = '</td>';
+								
+				aHTML[++h] = '</tr>';
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+
+			$('#tdInterfaceMainSetupStructureElementColumnElement1').html(aHTML.join(''));
+			
+			if (oOptions.remove) 
+			{
+				$('.interfaceMainRowOptionsRemove').button( {
+					text: false,
+					icons: {
+						primary: "ui-icon-close"
+					}
+				})
+				.click(function() {
+					interfaceMasterSetupStructureElementRemove({xhtmlElementID: this.id});
+				})
+				.css('width', '15px')
+				.css('height', '17px')
+			}
+			
+			if (oOptions.view) 
+			{
+				$('td.element').click(function() {
+					interfaceMasterSetupStructureElementAdd({xhtmlElementID: this.id})
+				})
+				.css('width', '15px')
+				.css('height', '17px')
+			}	
+			
+			if (oOptions.automation) 
+			{
+				$('.interfaceMainRowOptionsAutomation').button( {
+					text: false,
+					icons: {
+						primary: "ui-icon-gear"
+					}
+				})
+				.click(function() {
+					interfaceSetupStructureAutomation({xhtmlElementID: this.id})
+				})
+				.css('width', '15px')
+				.css('height', '17px')
+			}	
+		}
+	}	
+}
+
+function interfaceFinancialBankAccountImport(aParam, oResponse)
+{
+	if (oResponse == undefined)
+	{
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_SEARCH';
+		oSearch.addField('startdate,enddate');
+		oSearch.addFilter('bankaccount', 'EQUAL_TO', giObjectContext);
+		oSearch.sort('enddate', 'desc');
+		oSearch.rows = giMessagingRows;
+		oSearch.getResults(function(data) {interfaceFinancialBankAccountImport(aParam, data)});
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		aHTML[++h] = '<table id="tableInterfaceMainBankAccountImport" class="interfaceMain">' +
+					'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
+					'<td id="tdInterfaceMainBankAccountColumnImportSource" style="width: 75px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
+					gsLoadingXHTML +
+					'</td>' +
+					'<td id="tdInterfaceMainBankAccountColumnImportTran" class="interfaceMainColumn2" style="width: 225px;">' +
+					'<span class="interfaceViewportControlSubContext">Select an import.</span>' +
+					'</td>' +
+					'<td id="tdInterfaceMainBankAccountColumnImportEdit" class="interfaceMainColumn2">' +
+					'</td>' +
+					'</tr>' +
+					'</table>';				
+		
+		$('#divInterfaceMainImport').html(aHTML.join(''));
+		
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
+			aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountImportAdd">Add</span></td></tr>';
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</table>';
+			
+			$('#tdInterfaceMainBankAccountColumnImportSource').html(aHTML.join(''));	
+		}
+		else
+		{		
+			aHTML[++h] = '<table id="tableReco" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+	
+			var oRows = oResponse.data.rows;
+			
+			$(oRows).each(function(i) 
+			{
+				if (i==0)
+				{
+					if (this.status == 2)
+					{
+						aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountImportAdd">Add</span></td></tr>';
+					}
+				}
+				
+				aHTML[++h] = interfaceFinancialBankAccountRecoRow(this);
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+			
+			$('#tdInterfaceMainBankAccountColumnImportSource').html(aHTML.join(''));
+		}
+		
+		/*
+		interfaceMasterPaginationList(
+		   {
+			type: 'JSON',
+			xhtmlElementID: 'tdInterfaceMainBankAccountColumnReco' + iID,
+			xhtmlContext: 'BankAccountReco',
+			xhtml: aHTML.join(''),
+			showMore: (oResponse.morerows == "true"),
+			more: oResponse.moreid,
+			rows: 100,
+			functionShowRow: interfaceFinancialBankAccountRecoRow,
+			functionOpen: undefined,
+			functionNewPage: ''
+		   });
+		*/
+		
+		var aHTML = [];
+		var h = -1;
+		
+		aHTML[++h] = '<table id="tableInterfaceMainBankAccountColumnReco" class="interfaceMainColumn2">';
+		
+		aHTML[++h] = '<tr><td id="tdInterfaceMainBankAccountEdit" class="interfaceMainAction" style="font-size:0.875em;">' +
+						'<span id="spanInterfaceBankAccountRecoEdit">Add</span>' +
+						'</td></tr>';
+						
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainBankAccountColumnEditx').html(aHTML.join(''));
+		
+		$('#spanInterfaceBankAccountImportAdd').button(
+		{
+			label: "Add"
+		})
+		.click(function() {
+			//interfaceOrderProductItemsAdd()
+		})
+		.css("width", "75px");
+	}
 }
