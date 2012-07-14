@@ -139,26 +139,26 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 		{
 			aHTML[++h] = '<tr class="interfaceMainRow">';
 							
-			aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
-									this["financialaccounttext"] + '</td>';
+			aHTML[++h] = '<td id="tdBankAccount_title-' + this.id + '" class="interfaceMainRow">' +
+									this["title"] + '</td>';
 													
-			aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
-									this["description"] + '</td>';
+			aHTML[++h] = '<td id="tdBankAccount_amount-' + this.id + '" class="interfaceMainRow">' +
+									this["lastreconciledamount"] + '</td>';
 										
-			aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow"' +
+			aHTML[++h] = '<td id="tdBankAccount_date-' + this.id + '" style="text-align:right;" class="interfaceMainRow"' +
 									' title="' + this["tax"] + '">' +
-									this["amount"] + '</td>';
+									this["lastreconcileddate"] + '</td>';
 									
-			aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+			aHTML[++h] = '<td style="width100px;text-align:right;" class="interfaceMainRow">';
 				
 			if (oOptions.remove)
 			{	
-				aHTML[++h] = '<span id="spanBankAccount_options_import-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+				aHTML[++h] = '<span id="spanBankAccount_options_import-' + this.id + '" class="interfaceMainRowOptionsImport"></span>';
 			};	
 				
 			if (oOptions.view)
 			{	
-				aHTML[++h] = '<span id="spanBankAccount_options_reconcile-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+				aHTML[++h] = '<span id="spanBankAccount_options_reconcile-' + this.id + '" class="interfaceMainRowOptionsReconcile"></span>';
 			};	
 				
 			aHTML[++h] = '</td>';				
@@ -169,29 +169,18 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 
 		$('#tdInterfaceMainItemColumn1').html(aHTML.join(''));
 		
-		
 		$('#divInterfaceMain').html(aHTML.join(''));
 	
-		$('.interfaceViewportControl').click(function(event)
+		$('.interfaceMainRowOptionsImport').button(
 		{
+			text: 'Import',
 			
-			var sID = $('#' + event.target.id).attr('data-id');
-			
-			interfaceMasterMainViewportShow('#divInterfaceBankAccount_' + sID);
-		
-			if (sID == '')
-			{
-				interfaceFinancialBankAccountSummary();
-			}
-			else
-			{
-				interfaceFinancialBankAccountDetails({id: sID});
-			}	
-		});
-	
-		$('#tdInterfaceViewportControlSummary').addClass('interfaceViewportControlHighlight');
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
-		interfaceFinancialBankAccountSummary();
+		})
+		.click(function() {
+			interfaceFinancialBankAccountDetails({id: this.id});
+		})
+		.css('width', '15px')
+		.css('height', '17px')
 	}
 }
 
