@@ -319,17 +319,23 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 		var aHTML = [];
 		var h = -1;
 		
+		aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemSource" style="width: 200px;;margin-bottom:3px;">';
+		aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemSourceStatement" name="radioSource" checked="checked" /><label for="interfaceMainBankAccountColumnItemSourceStatement" style="width: 90px;">Statement</label>';
+		aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemSourceReconciled" name="radioSource" /><label for="interfaceMainBankAccountColumnItemSourceReconciled" style="width: 90px;">Reconciled</label>';
+		aHTML[++h] = '</div>';
 		
-		aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemHeader" style="width: 200px;">';
-		aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemHeaderStatement" name="radio" /><label for="interfaceMainBankAccountColumnItemHeaderStatement">Statement</label>';
-		aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemHeaderReconciled" name="radio" checked="checked" /><label for="interfaceMainBankAccountColumnItemHeaderReconciled">Reconciled</label>';
+		aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemType" style="width: 200px;margin-bottom:3px;">';
+		aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemTypeDebit" name="radioType" checked="checked" /><label for="interfaceMainBankAccountColumnItemTypeDebit" style="width: 90px;">Debit</label>';
+		aHTML[++h] = '<input style="width: 100px;"  type="radio" id="interfaceMainBankAccountColumnItemTypeCredit" name="radioType" /><label for="interfaceMainBankAccountColumnItemTypeCredit" style="width: 90px;">Credit</label>';
 		aHTML[++h] = '</div>';
 		
 		$('#tdInterfaceMainBankAccountColumnItem').html(aHTML.join(''));
 		
-		$('#interfaceMainBankAccountColumnItemHeader').buttonset().css('font-size', '0.75em');
-		
-		$('#interfaceMainBankAccountColumnItemHeader :radio').click(function(){alert('1')});
+		$('#interfaceMainBankAccountColumnItemType').buttonset().css('font-size', '0.75em');
+		$('#interfaceMainBankAccountColumnItemType :radio').click(function(){alert('1')});
+			
+		$('#interfaceMainBankAccountColumnItemSource').buttonset().css('font-size', '0.75em');
+		$('#interfaceMainBankAccountColumnItemSource :radio').click(function(){alert('2')});
 			
 		var aHTML = [];
 		var h = -1;
