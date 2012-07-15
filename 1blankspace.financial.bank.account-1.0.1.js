@@ -293,7 +293,7 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 		oSearch.addField('statementbalance,statementdate,statustext,status');
 		oSearch.addFilter('bankaccount', 'EQUAL_TO', giObjectContext);
 		oSearch.sort('statementdate', 'desc');
-		oSearch.rows = giMessagingRows;
+		oSearch.rows = 12;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccountReconcile(aParam, data)});
 	}
 	else
@@ -315,28 +315,7 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 					'</table>';				
 		
 		$('#divInterfaceMainReconcile').html(aHTML.join(''));
-		
-		var aHTML = [];
-		var h = -1;
-		
-		aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemSource" style="width: 200px;;margin-bottom:3px;">';
-		aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemSourceStatement" name="radioSource" checked="checked" /><label for="interfaceMainBankAccountColumnItemSourceStatement" style="width: 90px;">Statement</label>';
-		aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemSourceReconciled" name="radioSource" /><label for="interfaceMainBankAccountColumnItemSourceReconciled" style="width: 90px;">Reconciled</label>';
-		aHTML[++h] = '</div>';
-		
-		aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemType" style="width: 200px;margin-bottom:3px;">';
-		aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemTypeDebit" name="radioType" checked="checked" /><label for="interfaceMainBankAccountColumnItemTypeDebit" style="width: 90px;">Debit</label>';
-		aHTML[++h] = '<input style="width: 100px;"  type="radio" id="interfaceMainBankAccountColumnItemTypeCredit" name="radioType" /><label for="interfaceMainBankAccountColumnItemTypeCredit" style="width: 90px;">Credit</label>';
-		aHTML[++h] = '</div>';
-		
-		$('#tdInterfaceMainBankAccountColumnItem').html(aHTML.join(''));
-		
-		$('#interfaceMainBankAccountColumnItemType').buttonset().css('font-size', '0.75em');
-		$('#interfaceMainBankAccountColumnItemType :radio').click(function(){alert('1')});
-			
-		$('#interfaceMainBankAccountColumnItemSource').buttonset().css('font-size', '0.75em');
-		$('#interfaceMainBankAccountColumnItemSource :radio').click(function(){alert('2')});
-			
+				
 		var aHTML = [];
 		var h = -1;
 		
@@ -420,7 +399,7 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 		$('.reco').click(function()
 		{
 			var aID = (event.target.id).split('-');
-			interfaceFinancialBankAccountRecoItems({reconcilitation: aID[1]});
+			interfaceFinancialBankAccountRecoItems({reconciliation: aID[1]});
 		});
 	}
 }
@@ -431,14 +410,23 @@ function interfaceFinancialBankAccountRecoRow(oRow)
 	var h = -1;
 
 	aHTML[++h] = '<tr class="interfaceMainRow">';
-				
-	aHTML[++h] = '<td id="interfaceFinancialBankAccountReco_title-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect reco"' +
-							' title="' + oRow.notes + '">' +
-							oRow.statementdate + '<br />';
+		
+	if (oRow.status == 2)
+	{			
+		aHTML[++h] = '<td id="interfaceFinancialBankAccountReco_title-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect reco">' +
+						'<span class="interfaceViewportControlSubContext" id="spanInterfaceFinancialBankAccountReco_date-' +
+						oRow.id + '">' + oRow.statementdate + '</span><br />';
+	}
+	else
+	{
+		aHTML[++h] = '<td id="interfaceFinancialBankAccountReco_title-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect reco"' +
+							'">' + oRow.statementdate + '<br />';
+	}						
 	
-	aHTML[++h] = '<span class="interfaceViewportControlSubContext">' + oRow.statementbalance + '</span><br />';
-	aHTML[++h] = '<span class="interfaceViewportControlSubContext">' + oRow.statustext + '</span></td>';
-													
+	
+	aHTML[++h] = '<span class="interfaceViewportControlSubContext" id="spanInterfaceFinancialBankAccountReco_balance-' + oRow.id + '">' +
+	 					oRow.statementbalance + '</span><br />';
+				
 	aHTML[++h] = '</tr>'
 	
 	return aHTML.join('');
@@ -662,7 +650,9 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 	var sXHTMLElementId = 'tdInterfaceMainSetupStructureElementColumnElement1';
 	var oOptions = {view: true, remove: true, automation: true};
 	var oActions = {add: true};
-	var iRecocilitation;
+	var iReconciliation;
+	var iType = 1;
+	var iSource = 1;
 	
 	if (aParam != undefined)
 	{
@@ -670,16 +660,73 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
 		if (aParam.options != undefined) {oOptions = aParam.options}
 		if (aParam.actions != undefined) {oActions = aParam.actions}
-		if (aParam.recocilitation != undefined) {iRecocilitation = aParam.recocilitation}
+		if (aParam.reconciliation != undefined) {iReconciliation = aParam.reconciliation}
+		if (aParam.type != undefined) {iType = aParam.type}
+		if (aParam.source != undefined) {iSource = aParam.source}
 	}		
+	
+	$.extend(true, aParam, {source: iSource, type: iType});
 		
 	if (oResponse == undefined)
 	{	
+		if ($('#tdInterfaceMainBankAccountColumnItem').html() == '')
+		{
+			var aHTML = [];
+			var h = -1;
+		
+			aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemSource" style="width: 200px;;margin-bottom:3px;">';
+			aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemSource-1" name="radioSource" checked="checked" /><label for="interfaceMainBankAccountColumnItemSource-1" style="width: 96px;">Reconciled</label>';
+			aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemSource-2" name="radioSource" /><label for="interfaceMainBankAccountColumnItemSource-2" style="width: 96px;">Statement</label>';
+			aHTML[++h] = '</div>';
+		
+			aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemType" style="width: 200px;margin-bottom:3px;">';
+			aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemType-1" name="radioType" checked="checked" /><label for="interfaceMainBankAccountColumnItemType-1" style="width: 96px;">Debits (Out)</label>';
+			aHTML[++h] = '<input style="width: 100px;"  type="radio" id="interfaceMainBankAccountColumnItemType-2" name="radioType" /><label for="interfaceMainBankAccountColumnItemType-2" style="width: 96px;">Credits (In)</label>';
+			aHTML[++h] = '</div>';
+		
+			aHTML[++h] = '<div id="divInterfaceMainRecoItems" style="width: 200px;margin-bottom:3px;"></div>';
+		
+			$('#tdInterfaceMainBankAccountColumnItem').html(aHTML.join(''));
+		}
+	
+		$('#interfaceMainBankAccountColumnItemType').buttonset().css('font-size', '0.75em');
+		$('#interfaceMainBankAccountColumnItemSource').buttonset().css('font-size', '0.75em');
+		
+		$('#interfaceMainBankAccountColumnItemSource :radio').click(function()
+		{
+			var aID = (event.target.id).split('-');
+			$.extend(true, aParam, {source: parseInt(aID[1])});
+			interfaceFinancialBankAccountRecoItems(aParam);
+		});
+		
+		$('#interfaceMainBankAccountColumnItemType :radio').click(function()
+		{
+			var aID = (event.target.id).split('-');
+			$.extend(true, aParam, {type: parseInt(aID[1])});
+			interfaceFinancialBankAccountRecoItems(aParam);	
+		});
+		
+		$('#divInterfaceMainRecoItems').html(gsLoadingSmallXHTML);
+		
 		var oSearch = new AdvancedSearch();
-		oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
-		oSearch.addField('reference,amount');
-		oSearch.addFilter('reconciliation', 'EQUAL_TO', iRecocilitation);
-		oSearch.sort('reference', 'desc');
+		
+		if (iSource == 1)
+		{
+			if (iType == 1)
+			{
+				oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
+				oSearch.addField('reference,amount,paiddate,reconciliation');
+				oSearch.sort('paiddate', 'desc');
+			}	
+			else
+			{
+				oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
+				oSearch.addField('reference,amount,receiveddate,reconciliation');
+				oSearch.sort('receiveddate', 'desc');
+			}
+		}		
+		
+		oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
 		oSearch.rows = giMessagingRows;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItems(aParam, data)});
 	}
@@ -724,7 +771,6 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 			.click(function() {
 				 interfaceMasterSetupStructureElementAdd(aParam);
 			})
-			
 		}	
 	
 		var aHTML = [];
@@ -735,31 +781,38 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 			aHTML[++h] = '<table id="tableSetupStructureElement" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">' +
-							'<td class="interfaceMainRowNothing">No layout elements.</td></tr>';
+							'<td class="interfaceMainRowNothing">No items.</td></tr>';
 			aHTML[++h] = '</tbody></table>';
 
-			$('#tdInterfaceMainSetupStructureElementColumnElement1').html(aHTML.join(''));
+			$('#divInterfaceMainRecoItems').html(aHTML.join(''));
 		
 		}
 		else
 		{
-			aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<table id="tableRecoItems" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>'
 			
 			$.each(oResponse.data.rows, function()
 			{
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 								
-				aHTML[++h] = '<td id="tdSetupStructureElement_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect element">' +
-										this.title + '</td>';				
-										
-				aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+				if (this.paiddate)
+				{				
+					aHTML[++h] = '<td id="tdRecoItems_date-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect recoitempayment">' +
+										this.paiddate + '<br />';
+				}
+				else
+				{
+					aHTML[++h] = '<td id="tdRecoItems_date-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect recoitemreceipt">' +
+										this.receiveddate + '< br />';
+				}							
 				
-				if (oOptions.automation)
-				{	
-					aHTML[++h] = '<span id="spanSetupStructureElement_options_view-' + this.id + '" class="interfaceMainRowOptionsAutomation"></span>';
-				};	
-					
+				aHTML[++h] = '<span id="spanRecoItems_amount-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect recoitem">' +
+										this.amount + '</span>';
+				
+										
+				aHTML[++h] = '</td><td style="width:30px;text-align:right;" class="interfaceMainRow">';
+				
 				if (oOptions.remove)
 				{	
 					aHTML[++h] = '<span id="spanSetupStructureElementoptions_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
@@ -777,7 +830,7 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 
-			$('#tdInterfaceMainSetupStructureElementColumnElement1').html(aHTML.join(''));
+			$('#divInterfaceMainRecoItems').html(aHTML.join(''));
 			
 			if (oOptions.remove) 
 			{
