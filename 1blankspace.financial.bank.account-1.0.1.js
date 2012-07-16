@@ -610,11 +610,11 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 			
 			aHTML[++h] = '<table class="interfaceMain" cellspacing=0 cellpadding=0 style="font-size:0.875em;">' +
 					'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainBankAccountColumnType" style="width: 75px;font-size:0.875em;text-align:right;">' +
+					'<td id="tdInterfaceMainBankAccountColumnType" style="width: 75px;font-size:0.875em;text-align:right;padding-right:7px;">' +
 					'</td>' +
 					'<td id="tdInterfaceMainBankAccountColumnItem" class="interfaceMainColumn2" style="width: 200px;font-size:0.875em;">' +
 					'</td>' +
-					'<td id="tdInterfaceMainBankAccountColumnItemEdit" class="interfaceMainColumn2" style="width: 250px;font-size:0.875em;">' +
+					'<td id="tdInterfaceMainBankAccountColumnItemEdit" class="interfaceMainColumn2" style="font-size:0.875em;">' +
 					'</td>' +
 					'</tr>' +
 					'</table>';			
@@ -716,7 +716,7 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 		}
 		else
 		{
-			aHTML[++h] = '<table id="tableRecoItems" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<table id="tableRecoItems" border="0" cellspacing="0" cellpadding="0">';
 			aHTML[++h] = '<tbody>'
 			
 			$.each(oResponse.data.rows, function()
@@ -760,7 +760,10 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 				if (this.posteddate)
 				{					
 					aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-					aHTML[++h] = '<span id="spanSecoItems_options_search-' + this.id + '" class="interfaceMainRowOptionsMatch"></span>';
+					aHTML[++h] = '<span id="spanRecoItems_options_search-' + this.id + '"' +
+									' data-searchDate="' + this.posteddate + '"' +
+									' data-searchAmount="' + this.amount + '"' +
+									' class="interfaceMainRowOptionsMatch"></span>';
 					aHTML[++h] = '</td>';
 				};	
 						
@@ -791,7 +794,9 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 				}
 			})
 			.click(function() {
-				//interfaceMasterSetupStructureElementRemove({xhtmlElementID: this.id});
+				var aID = (this.id).split('-');
+				$.extend(true, aParam, {searchSourceID: aID[1], searchDate: $(this).attr("data-searchDate"), searchAmount: $(this).attr("data-searchAmount")});
+				interfaceFinancialBankAccountRecoItemsEdit(aParam);
 			})
 			.css('width', '15px')
 			.css('height', '17px')
@@ -809,6 +814,8 @@ function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 	var iReconciliation;
 	var iType = 1;
 	var iEditAction = 1;
+	var dSearchDate;
+	var cSearchAmount;
 	
 	if (aParam != undefined)
 	{
@@ -819,6 +826,8 @@ function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 		if (aParam.reconciliation != undefined) {iReconciliation = aParam.reconciliation}
 		if (aParam.type != undefined) {iType = aParam.type}
 		if (aParam.editAction != undefined) {iEditAction = aParam.editAction}
+		if (aParam.searchDate != undefined) {dSearchDate = aParam.searchDate}
+		if (aParam.searchAmount != undefined) {cSearchAmount = aParam.searchAmount}	
 	}		
 	
 	$.extend(true, aParam, {editAction: iEditAction, type: iType});
@@ -846,9 +855,9 @@ function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 			var h = -1;
 		
 			aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemEdit" style="width: 196;margin-bottom:3px;text-align:right;">';
-			aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemEdit-1" name="radioEdit" checked="checked" /><label for="interfaceMainBankAccountColumnItemEdit-1" style="width: 121px;">Unreconciled</label>';
+			aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemEdit-1" name="radioEdit" checked="checked" /><label for="interfaceMainBankAccountColumnItemEdit-1" style="width: 124px;">Unreconciled</label>';
 		
-			aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemEdit-2" name="radioEdit" /><label for="interfaceMainBankAccountColumnItemEdit-2" style="width: 69px;">Add</label>';
+			aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemEdit-2" name="radioEdit" /><label for="interfaceMainBankAccountColumnItemEdit-2" style="width: 50px;">Add</label>';
 			aHTML[++h] = '</div>';
 		
 			aHTML[++h] = '<div id="divInterfaceMainRecoItemsEdit"></div>';
@@ -867,6 +876,52 @@ function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 		
 		if (iEditAction == 1)
 		{
+			var aHTML = [];
+			var h = -1;	
+			
+			aHTML[++h] = '<table>';
+			
+			aHTML[++h] = '<tr id="trInterfaceMainItemsEditSearchDate">' +
+							'<td id="tdInterfaceMainItemsEditDate" class="interfaceMain">' +
+							'Date' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainItemsSearchDateValue" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainItemsSearchDateValue" class="interfaceMainText">' +
+							'<input id="inputInterfaceMainItemsEditSearchDate" class="inputInterfaceMainDate">' +
+							'</td></tr>';
+				
+			aHTML[++h] = '<tr id="trInterfaceMainItemsEditSearchAmount">' +
+							'<td id="tdInterfaceMainItemsEditAmount" class="interfaceMain">' +
+							'Amount' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainItemsSearchAmountValue" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainItemsSearchAmountValue" class="interfaceMainText">' +
+							'<input id="inputInterfaceMainItemsEditSearchAmount" class="inputInterfaceMainText">' +
+							'</td></tr>';
+											
+			aHTML[++h] = '<tr><td id="tdInterfaceMainRecoItemsEditSearch" class="interfaceMainAction">' +
+							'<span style="width:100%" id="spanInterfaceMainRecoItemsEditSearch">Search</span>' +
+							'</td></tr>';
+			
+			aHTML[++h] = '</table>';					
+			
+			$('#tdInterfaceMainBankAccountColumnRecoItemEdit2').html(aHTML.join(''));
+		
+			$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
+		
+			if (dSearchDate) {$('#inputInterfaceMainItemsEditSearchDate').val(dSearchDate)}
+			if (cSearchAmount) {$('#inputInterfaceMainItemsEditSearchAmount').val(cSearchAmount)}
+				
+			$('#spanInterfaceMainRecoItemsEditSearch').button( {
+				label: 'Search',
+				icons: {
+					primary: "ui-icon-search"
+				}
+			})
+			.click(function() {
+				 //Search based on date and amount
+			})
+			
 			$('#divInterfaceMainRecoItemsEdit').html(gsLoadingSmallXHTML);
 		
 			var oSearch = new AdvancedSearch();
@@ -875,15 +930,19 @@ function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 			{
 				oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 				oSearch.addField('reference,amount,paiddate,reconciliation');
+				if (dSearchDate) {oSearch.addFilter('paiddate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
 				oSearch.sort('paiddate', 'desc');
 			}	
 			else
 			{
 				oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 				oSearch.addField('reference,amount,receiveddate,reconciliation');
+				if (dSearchDate) {oSearch.addFilter('receiveddate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
 				oSearch.sort('receiveddate', 'desc');
 			}
 		
+			if (cSearchAmount) {oSearch.addFilter('amount', 'APPROX_EQUAL_TO', cSearchAmount)}
+			
 			oSearch.addFilter('reconciliation', 'IS_NULL');
 			oSearch.rows = giMessagingRows;
 			oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItemsEdit(aParam, data)});
@@ -958,12 +1017,9 @@ function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 			
 			aHTML[++h] = '<table>';
 			
-			if (oActions.add)
-			{
-				aHTML[++h] = '<tr><td id="tdInterfaceMainRecoItemsEditSave" class="interfaceMainAction">' +
+			aHTML[++h] = '<tr><td id="tdInterfaceMainRecoItemsEditSave" class="interfaceMainAction">' +
 							'<span id="spanInterfaceMainRecoItemsEditSave">Save</span>' +
 							'</td></tr>';
-			}
 			
 			aHTML[++h] = '</table>';					
 			
