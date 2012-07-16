@@ -1598,7 +1598,7 @@ function interfaceMasterAttachmentsShowRow(oRow)
 	aHTML[++h] = '<tr class="interfaceAttachments">';
 	
 	aHTML[++h] = '<td id="tdAttachment_filename-' + oRow.id + '" class="interfaceMainRow">' +
-						'<a href="' + oRow.link + '">' + oRow.filename + '</a></td>';
+						'<a href="' + oRow.download + '">' + oRow.filename + '</a></td>';
 						
 	aHTML[++h] = '<td id="tdAttachment_date-' + oRow.id + '" class="interfaceMainRow">' + oRow.modifieddate + '</td>';
 	
