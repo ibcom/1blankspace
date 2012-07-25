@@ -148,7 +148,7 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 	
 	$('#divInterfaceMain').html(aHTML.join(''));
 
-	$('.interfaceHomeMostLikely').click(function() {
+	$('.interfaceHomeMostLikely').click(function(event) {
 		var aID = (event.target.id).split('-');
 		interfaceFinancialBankAccountShow({id: aID[1]});
 	});
