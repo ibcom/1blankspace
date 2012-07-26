@@ -1279,16 +1279,13 @@ function interfaceContactPersonGroups(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var sParam = '&rows=999&contactperson=' + giObjectContext;
-		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/contact/?method=CONTACT_PERSON_GROUP_SEARCH',
-			data: sParam,
-			dataType: 'json',
-			success: function(data){interfaceContactPersonGroups(aParam, data)}
-		});
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'CONTACT_PERSON_GROUP_SEARCH';
+		oSearch.addField('contactperson,contactpersontext,group,grouptext');
+		oSearch.addFilter('contactperson', 'EQUAL_TO', giObjectContext);
+		oSearch.rows = 100;
+		oSearch.sort('grouptext', 'asc');
+		oSearch.getResults(function(data) {interfaceContactPersonGroups(aParam, data)});
 	}
 	else
 	{

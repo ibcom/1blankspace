@@ -1004,16 +1004,14 @@ function interfaceContactBusinessGroups(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var sParam = 'contactbusiness=' + giObjectContext;
-		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/contact/?method=CONTACT_BUSINESS_GROUP_SEARCH&rows=100',
-			data: sParam,
-			dataType: 'json',
-			success: function(data){interfaceContactBusinessGroups(aParam, data)}
-		});
+		var oSearch = new AdvancedSearch();
+		oSearch.endPoint = 'contact';
+		oSearch.method = 'CONTACT_BUSINESS_GROUP_SEARCH';
+		oSearch.addField('contactbusiness,contactbusinesstext,group,grouptext');
+		oSearch.addFilter('contactbusiness', 'EQUAL_TO', giObjectContext);
+		oSearch.rows = 100;
+		oSearch.sort('grouptext', 'asc');
+		oSearch.getResults(function(data) {interfaceContactBusinessGroups(aParam, data)});
 	}
 	else
 	{
