@@ -1476,7 +1476,7 @@ function interfaceContactBusinessByGroup(aParam, oResponse)
 			{	
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 				
-				aHTML[++h] = '<td id="tdNewsGroupsAddSelect_title-' + tbis.id +
+				aHTML[++h] = '<td id="tdNewsGroupsAddSelect_title-' + this.id +
 										'-' + this.title +
 										'" class="interfaceRowSelect interfaceContactBusinessByGroup">' +
 										this.title + '</td>';
@@ -1511,16 +1511,12 @@ function interfaceContactBusinessByGroupContacts(aParam, oResponse)
 	{
 		$('#tdInterfaceMainContactBusinessByGroupColumn2').html(gsLoadingXHTML);
 		
-		var sParam = 'method=CONTACT_BUSINESS_GROUP_SEARCH&rows=' + giReturnRows +
-						'&group=' + aXHTMLElementId[1];
-		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/contact/?' + sParam,
-			dataType: 'json',
-			success: function(data){interfaceContactBusinessByGroupContacts(aParam, data)}
-		});
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'CONTACT_BUSINESS_GROUP_SEARCH';
+		oSearch.addField('contactbusiness,contactbusiness.tradename,group,grouptext');
+		oSearch.addFilter('group', 'EQUAL_TO', aXHTMLElementId[1]);
+		oSearch.sort('contactbusiness.tradename', 'asc');
+		oSearch.getResults(function(data) {interfaceContactBusinessByGroupContacts(aParam, data)});
 	}
 	else
 	{

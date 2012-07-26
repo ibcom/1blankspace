@@ -1611,16 +1611,12 @@ function interfaceContactPersonByGroupContacts(aParam, oResponse)
 	{
 		$('#tdInterfaceMainContactPersonByGroupColumn2').html(gsLoadingXHTML);
 		
-		var sParam = 'method=CONTACT_PERSON_GROUP_SEARCH&rows=' + giReturnRows +
-						'&group=' + aXHTMLElementId[1];
-		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/contact/?' + sParam,
-			dataType: 'json',
-			success: function(data){interfaceContactPersonByGroupContacts(aParam, data)}
-		});
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'CONTACT_PERSON_GROUP_SEARCH';
+		oSearch.addField('contactperson,contactperson.firstname,contactperson.surname,group,grouptext');
+		oSearch.addFilter('group', 'EQUAL_TO', aXHTMLElementId[1]);
+		oSearch.sort('contactperson.firstname,contactperson.surname', 'asc');
+		oSearch.getResults(function(data) {interfaceContactPersonByGroupContacts(aParam, data)});
 	}
 	else
 	{

@@ -621,8 +621,9 @@ function interfaceOpportunitySummary()
 		
 		$('#aInterfaceMainSummaryViewContact').click(function(event)
 		{
+			var iContactPerson = goObjectContext.requestbyperson;	
 			interfaceContactPersonMasterViewport({showHome: false});
-			interfaceContactPersonSearch('-' + onDemandXMLGetData(oRow, 'requestbyperson'))
+			interfaceContactPersonSearch('-' + iContactPerson)
 		});
 		
 		$('#aInterfaceMainSummaryCreateContact').click(function(event)

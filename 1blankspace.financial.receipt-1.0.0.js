@@ -726,7 +726,7 @@ function interfaceFinancialReceiptAmountSave(aParam)
 		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/financial/?method=FINANCIAL_LINE_ITEM_MANAGE',
+			url: '/ondemand/financial/?method=FINANCIAL_ITEM_MANAGE',
 			data: sData,
 			dataType: 'json',
 			success: function(oResponse)
@@ -824,7 +824,7 @@ function interfaceFinancialReceiptItem(aParam, oResponse)
 		}
 		
 		var oSearch = new AdvancedSearch();
-		oSearch.method = 'FINANCIAL_LINE_ITEM_SEARCH';
+		oSearch.method = 'FINANCIAL_ITEM_SEARCH';
 		oSearch.addField('financialaccounttext,tax,issuedamount');
 		oSearch.addFilter('object', 'EQUAL_TO', giObject);
 		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
