@@ -1513,7 +1513,7 @@ function interfaceContactBusinessByGroupContacts(aParam, oResponse)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'CONTACT_BUSINESS_GROUP_SEARCH';
-		oSearch.addField('contactbusiness,contactbusiness.tradename,group,grouptext');
+		oSearch.addField('contactbusiness,businessgroup.contactbusiness.tradename,group,grouptext');
 		oSearch.addFilter('group', 'EQUAL_TO', aXHTMLElementId[1]);
 		oSearch.sort('contactbusiness.tradename', 'asc');
 		oSearch.getResults(function(data) {interfaceContactBusinessByGroupContacts(aParam, data)});

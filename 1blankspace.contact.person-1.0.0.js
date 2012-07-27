@@ -1613,7 +1613,7 @@ function interfaceContactPersonByGroupContacts(aParam, oResponse)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'CONTACT_PERSON_GROUP_SEARCH';
-		oSearch.addField('contactperson,contactperson.firstname,contactperson.surname,group,grouptext');
+		oSearch.addField('contactperson,persongroup.contactperson.firstname,persongroup.contactperson.surname,group,grouptext');
 		oSearch.addFilter('group', 'EQUAL_TO', aXHTMLElementId[1]);
 		oSearch.sort('contactperson.firstname,contactperson.surname', 'asc');
 		oSearch.getResults(function(data) {interfaceContactPersonByGroupContacts(aParam, data)});
