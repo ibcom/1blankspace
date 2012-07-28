@@ -1515,7 +1515,7 @@ function interfaceContactBusinessByGroupContacts(aParam, oResponse)
 		oSearch.method = 'CONTACT_BUSINESS_GROUP_SEARCH';
 		oSearch.addField('contactbusiness,businessgroup.contactbusiness.tradename,group,grouptext');
 		oSearch.addFilter('group', 'EQUAL_TO', aXHTMLElementId[1]);
-		oSearch.sort('contactbusiness.tradename', 'asc');
+		oSearch.sort('businessgroup.contactbusiness.tradename', 'asc');
 		oSearch.getResults(function(data) {interfaceContactBusinessByGroupContacts(aParam, data)});
 	}
 	else
@@ -1575,7 +1575,7 @@ function interfaceContactBusinessByGroupContactsRow(oRow)
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 							
 	aHTML[++h] = '<td id="tdContactBusinessGroupsContacts_contact-' + oRow.contactbusiness + '" class="interfaceMainRow">' +
-							oRow.contactbusinesstext + '</td>';
+							oRow["businessgroup.contactbusiness.tradename"]+ '</td>';
 							
 	aHTML[++h] = '<td id="tdContactBusinessGroupsContacts-' + oRow.contactbusiness + '" class="interfaceMainRowOptionsSelect interfaceContactBusinessGroupsContactsSelect">&nbsp;</td>';						
 							
