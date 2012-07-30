@@ -133,7 +133,8 @@ function interfaceFinancialTaxHomeShow(aParam, oResponse)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_TAX_REPORT_SEARCH';
-		oSearch.addField('taxstartdate,enddate,taxofficereference,statustext');
+		//oSearch.addField('taxstartdate,enddate,taxofficereference,statustext');
+		oSearch.addField('*')
 		oSearch.rows = 10;
 		oSearch.sort('enddate', 'desc');
 		oSearch.getResults(function(data){interfaceFinancialTaxHomeShow(aParam, data)});
@@ -181,10 +182,126 @@ function interfaceFinancialTaxHomeShow(aParam, oResponse)
 		$('#divInterfaceMain').html(aHTML.join(''));
 
 		$('.interfaceHomeMostLikely').click(function(event) {
-			var aID = (event.target.id).split('-');
-			interfaceFinancialTaxShow({id: aID[1]});
+			interfaceFinancialTaxSearch(event.target.id, {source: 1});
 		});
 	}	
+}
+
+
+function interfaceFinancialTaxSearch(sXHTMLElementId, aParam)
+{
+	var aSearch = sXHTMLElementId.split('-');
+	var sElementId = aSearch[0];
+	var sSearchContext = aSearch[1];
+	var iMinimumLength = 3;
+	var iSource = giSearchSource_TEXT_INPUT;
+	var sSearchText;
+	var iMaximumColumns = 1;
+	var iRows = 10;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.source != undefined) {iSource = aParam.source}
+		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
+		if (aParam.rows != undefined) {iRows = aParam.rows}
+		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
+		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
+		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+	}
+	
+	if (sSearchContext != undefined  && iSource != giSearchSource_BROWSE)
+	{
+		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		
+		giObjectContext = sSearchContext;
+		
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'FINANCIAL_TAX_REPORT_SEARCH';
+		oSearch.addField('*');
+		oSearch.rf = 'json';
+		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
+		
+		oSearch.getResults(function(data) {interfaceFinancialTaxShow(aParam, data)});
+	}
+	else
+	{
+		if (sSearchText == undefined)
+		{
+			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+		}	
+		
+		if (iSource == giSearchSource_BROWSE)
+		{
+			iMinimumLength = 1;
+			iMaximumColumns = 4;
+			var aSearch = sSearch.split('-');
+			sSearchText = aSearch[1];
+		}
+		
+		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		{
+			interfaceMasterOptionsSetPosition(sElementId);
+			
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+			oSearch.addField('enddate,taxofficereference');
+			oSearch.addFilter('taxofficereference', 'STRING_IS_LIKE', sSearchText);
+			
+			oSearch.getResults(function(data) {interfaceFinancialTaxSearchShow(aParam, data)});	
+		}
+	};	
+}
+
+function interfaceFinancialTaxSearchShow(aParam, oResponse)
+{
+
+	var iColumn = 0;
+	var aHTML = [];
+	var h = -1;
+	var	iMaximumColumns = 1;
+		
+	if (oResponse.data.rows.length == 0)
+	{
+		$('#divInterfaceMasterViewportControlOptions').hide();
+	}
+	else
+	{		
+		aHTML[++h] = '<table class="interfaceSearchMedium">';
+		aHTML[++h] = '<tbody>'
+			
+		$.each(oResponse.data.rows, function()
+		{	
+			iColumn = iColumn + 1;
+			
+			if (iColumn == 1)
+			{
+				aHTML[++h] = '<tr class="interfaceSearch">';
+			}
+		
+			aHTML[++h] = '<td class="interfaceSearch" id="' + +
+							'-' + this.id + '">' +
+							this.enddate + ' - ' + this.taxofficereference +
+							'</td>';
+			
+			if (iColumn == iMaximumColumns)
+			{
+				aHTML[++h] = '</tr>'
+				iColumn = 0;
+			}	
+		});
+    	
+		aHTML[++h] = '</tbody></table>';
+
+		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		
+		$('td.interfaceSearch').click(function(event)
+		{
+			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
+			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			interfaceFinancialTaxSearch(event.target.id, {source: 1});
+		});
+	}		
 }
 
 function interfaceFinancialTaxViewport()
@@ -206,11 +323,11 @@ function interfaceFinancialTaxViewport()
 	aHTML[++h] = '<table class="interfaceViewportControl">';
 				
 	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlImport" class="interfaceViewportControl">Import</td>' +
+					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
 					'</tr>';
 	
 	aHTML[++h] = '<tr id="trInterfaceViewportControlItem" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlReconcile" class="interfaceViewportControl">Reconcile</td>' +
+					'<td id="tdInterfaceViewportControlReporting" class="interfaceViewportControl">Report</td>' +
 					'</tr>';
 
 	aHTML[++h] = '</table>';					
@@ -222,8 +339,8 @@ function interfaceFinancialTaxViewport()
 
 	aHTML[++h] = '<div id="divInterfaceMainContext" class="divInterfaceViewportMainContext"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainImport" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainReconcile" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainReport" class="divInterfaceViewportMain"></div>';
 	
 	$('#divInterfaceMain').html(aHTML.join(''));
 	
@@ -233,49 +350,45 @@ function interfaceFinancialTaxViewport()
 		interfaceFinancialTaxSummary();
 	});
 	
-	$('#tdInterfaceViewportControlImport').click(function(event)
+	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainImport");
-		interfaceFinancialTaxImport();
+		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		interfaceFinancialTaxDetails();
 	});
 	
-	$('#tdInterfaceViewportControlReconcile').click(function(event)
+	$('#tdInterfaceViewportControlReporting').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainReconcile", true);
-		interfaceFinancialTaxReconcile();
+		interfaceMasterMainViewportShow("#divInterfaceMainReport", true);
+		interfaceFinancialTaxReport();
 	});
 }
 
 function interfaceFinancialTaxShow(aParam, oResponse)
-{
-	if (aParam != undefined)
-	{
-		if (aParam.id != undefined) {giObjectContext = aParam.id}	
-	}
-	
+{	
 	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 	interfaceFinancialTaxViewport();
-	
-	goObjectContext == undefined;
-	goObjectContext = ($.grep(ns1blankspace.financial.Taxs, function (a) { return a.id == giObjectContext; }))[0];
-	
+		
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (oResponse.data.rows.length == 0)
 	{
-		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the Tax.</td></tr>';
+		goObjectContext = undefined;
+			
+		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this tax report.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
 			
 		$('#divInterfaceMain').html(aHTML.join(''));
 	}
 	else
 	{
+		goObjectContext = oResponse.data.rows[0];
+			
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 			
 		$('#divInterfaceViewportControlContext').html(goObjectContext.title+
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_date">' + goObjectContext.lastreconcileddate + '</span>' +
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">$' + goObjectContext.lastreconciledamount + '</span>');
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_date">' + goObjectContext.enddate + '</span>' +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">$' + goObjectContext.statustext + '</span>');
 		
 		interfaceMasterViewportDestination({
 			newDestination: 'interfaceFinancialTaxMasterViewport({showHome: false});interfaceFinancialTaxShow({id: ' + giObjectContext + '})',
@@ -309,164 +422,100 @@ function interfaceFinancialTaxSummary(aParam, oResponse)
 					
 	aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTotalAmount" class="interfaceMainSummary"></td></tr>' +
 					'<tr><td id="tdInterfaceMainSummaryTotalAmountValue" class="interfaceMainSummaryValue">' +
-					'This bank account was last reconciled on the ' + goObjectContext.lastreconcileddate + '.' +
+					'This tax report was last updated on the ' + goObjectContext.modifieddate + '.' +
 					'</td></tr>';			
 	
 	aHTML[++h] = '</table>';					
 
-	$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
-	
-	var aHTML = [];
-	var h = -1;
-	
-	aHTML[++h] = '<table cellpadding=6>';
-	
-	aHTML[++h] = '<tr><td class="interfaceMainSummary" colspan=2>You have a number of options when reconciling a bank account.</td></tr>'
-				
-	aHTML[++h] = '<tr><td class="interfaceMainSummary" style="width:15px;padding-bottom:10px;">1</td><td class="interfaceViewportControlSub">' +
-						'Use a printed or PDF bank statement directly.  In this case you skip the import step and go straight to reconcile.' +
-						' You can then add a reconilication - selecting the date you want to balance up to.  You then search the system for matching payments or receipts that have already been entered or if not, add them as you go.' +
-					'</td></tr>';
-
-	aHTML[++h] = '<tr><td class="interfaceMainSummary" style="width:15px;">2</td><td class="interfaceViewportControlSub">' +
-						'You export a file from your internet banking and then import it.' +
-					'  You can then add a reconilication - selecting the date you want to balance up to.  The system will then help you then search the system for matching payments or receipts that have already been entered, based on these transactions or if not, add them as you go.' +
-					'</td></tr>';
-
-	aHTML[++h] = '</table>';
-	
-	$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''))
-		
+	$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));		
 }
 
-function interfaceFinancialTaxReconcile(aParam, oResponse)
-{
-	if (oResponse == undefined)
-	{
-		var oSearch = new AdvancedSearch();
-		oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
-		oSearch.addField('statementbalance,statementdate,statustext,status');
-		oSearch.addFilter('Tax', 'EQUAL_TO', giObjectContext);
-		oSearch.sort('statementdate', 'desc');
-		oSearch.rows = 12;
-		oSearch.getResults(function(data) {interfaceFinancialTaxReconcile(aParam, data)});
-	}
-	else
-	{
-		var aHTML = [];
-		var h = -1;
-		
-		aHTML[++h] = '<table id="tableInterfaceMainTax" class="interfaceMain">' +
-					'<tr id="trInterfaceMainTaxRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainTaxColumnReco" style="width: 85px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-					gsLoadingXHTML +
-					'</td>' +
-					'<td id="tdInterfaceMainTaxColumnReco2" class="interfaceMainColumn2">' +
-					'</td>' +
-					'</tr>' +
-					'</table>';				
-		
-		$('#divInterfaceMainReconcile').html(aHTML.join(''));
-				
-		var aHTML = [];
-		var h = -1;
-		
-		if (oResponse.data.rows.length == 0)
-		{
-			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-			aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceTaxRecoAdd">Add</span></td></tr>';
-			aHTML[++h] = '</tr>';
-			aHTML[++h] = '</table>';
-			
-			$('#tdInterfaceMainTaxColumnReco').html(aHTML.join(''));	
-		}
-		else
-		{		
-			aHTML[++h] = '<table id="tableReco" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-			aHTML[++h] = '<tbody>';
-			
-			var oRows = oResponse.data.rows;
-			
-			$(oRows).each(function(i) 
-			{
-				if (i==0)
-				{
-					if (this.status == 2)
-					{
-						aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceTaxRecoAdd">Add</span></td></tr>';
-					}
-				}
-				
-				aHTML[++h] = interfaceFinancialTaxRecoRow(this);
-			});
-			
-			aHTML[++h] = '</tbody></table>';
-			
-			$('#tdInterfaceMainTaxColumnReco').html(aHTML.join(''));
-		}
-		
-		/*
-		interfaceMasterPaginationList(
-		   {
-			type: 'JSON',
-			xhtmlElementID: 'tdInterfaceMainTaxColumnReco' + iID,
-			xhtmlContext: 'TaxReco',
-			xhtml: aHTML.join(''),
-			showMore: (oResponse.morerows == "true"),
-			more: oResponse.moreid,
-			rows: 100,
-			functionShowRow: interfaceFinancialTaxRecoRow,
-			functionOpen: undefined,
-			functionNewPage: ''
-		   });
-		*/
-		
-		$('#spanInterfaceTaxRecoAdd').button(
-		{
-			label: "Add"
-		})
-		.click(function() {
-			interfaceFinancialTaxRecoEdit()
-		})
-		.css("width", "75px");
-		
-		$('.reco').click(function()
-		{
-			var aID = (event.target.id).split('-');
-			interfaceFinancialTaxRecoItems({reconciliation: aID[1]});
-		});
-	}
-}
-
-function interfaceFinancialTaxRecoRow(oRow)
+function interfaceFinancialTaxReport()
 {
 	var aHTML = [];
 	var h = -1;
-
-	aHTML[++h] = '<tr class="interfaceMainRow">';
-		
-	if (oRow.status == 2)
-	{			
-		aHTML[++h] = '<td id="interfaceFinancialTaxReco_title-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect reco"' +
-						' style="text-align:right;">' +
-						'<span class="interfaceViewportControlSubContext" id="spanInterfaceFinancialTaxReco_date-' +
-						oRow.id + '">' + oRow.statementdate + '</span><br />';
-	}
-	else
-	{
-		aHTML[++h] = '<td id="interfaceFinancialTaxReco_title-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect reco"' +
-							' style="text-align:right;"' +
-							'>' + oRow.statementdate + '<br />';
-	}						
 	
-	aHTML[++h] = '<span class="interfaceViewportControlSubContext" id="spanInterfaceFinancialTaxReco_balance-' + oRow.id + '">$' +
-	 					oRow.statementbalance + '</span>';
+	aHTML[++h] = '<table id="tableInterfaceMainTax" class="interfaceMain">' +
+				'<tr id="trInterfaceMainTaxRow1" class="interfaceMainRow1">' +
+				'<td id="tdInterfaceMainTaxColumnReportCategory" style="width: 85px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
+				gsLoadingXHTML +
+				'</td>' +
+				'<td id="tdInterfaceMainTaxColumnReportType" class="interfaceMainColumn2">' +
+				'</td>' +
+				'<td id="tdInterfaceMainTaxColumnReportItem" class="interfaceMainColumn2">' +
+				'</td>' +
+				'</tr>' +
+				'</table>';				
+	
+	$('#divInterfaceMainReport').html(aHTML.join(''));
 				
-	aHTML[++h] = '</tr>'
-	
-	return aHTML.join('');
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<div id="interfaceMainTaxColumnCategory" style="width: 70px;margin-bottom:3px;">';
+	aHTML[++h] = '<input style="width: 70px;" type="radio" id="interfaceMainTaxColumnCategory-revenue" name="radioCategory" checked="checked" /><label for="interfaceMainTaxColumnCategory-revenue" style="width: 70px;">Supplies (In)</label>';
+	aHTML[++h] = '<input style="width: 70px;"  type="radio" id="interfaceMainTaxColumnCategory-expense" name="radioCategory" /><label for="interfaceMainTaxColumnCategory-expense" style="width: 70px;">Aquisitions (Out)</label>';
+	aHTML[++h] = '</div>';
+
+	$('#tdInterfaceMainTaxColumnReportCategory').html(aHTML.join(''));			
+		
+	$('#interfaceMainTaxColumnCategory').buttonset().css('font-size', '0.875em');
+			
+	$('#interfaceMainTaxColumnCategory :radio').click(function()
+	{
+		var aID = (event.target.id).split('-');
+		interfaceFinancialTaxReportSummary({category: aID[1]});	
+	});
 }
+
+function interfaceFinancialTaxReportSummary(aParam)	
+{	
+	var sCategory = "revenue";
+					
+	ns1blankspace.financial.reportsummary = {
+		"revenue": ["g1","g2","g3","g4","g5","g6","g7","g8","g9"],
+		"expense": ["g10","g11","g12","g13","g14","g15","g16","g17","g18","g21"],
+		"payroll": ["w1","w2"],
+		"instalments": ["t1","t2","t3","t7","t9"]
+	};
+	
+	if (aParam != undefined)
+	{
+		if (aParam.category != undefined) {sCategory = aParam.category}
+	}
+	
+	var aHTML = [];
+	var h = -1;
+		
+	aHTML[++h] = '<table id="tableReco" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+	aHTML[++h] = '<tbody>';
+	
+	$.each(ns1blankspace.financial.reportsummary[sCategory], function()
+	{
+		aHTML[++h] = '<tr class="interfaceMainRow">';
+						
+		aHTML[++h] = '<td id="tdBankAccount_type-' + this + '" class="interfaceHomeMostLikely" style="width:150px;">' +
+								this + '</td>';
+				
+		aHTML[++h] = '<td id="interfaceBankAccount_amount-' + this + '" class="interfaceHomeMostLikelySub" style="width:90px;text-align:right;">' +
+									'$' + goObjectContext[this] + '</td>';
+																													
+		aHTML[++h] = '</tr>';
+	});
+
+	aHTML[++h] = '</tbody></table>';
+	
+	$('#tdInterfaceMainTaxColumnReportType').html(aHTML.join(''));
+	
+		
+	$('.reco').click(function()
+	{
+		var aID = (event.target.id).split('-');
+		interfaceFinancialTaxRecoItems({reconciliation: aID[1]});
+	});
+	
+}
+
 
 function interfaceFinancialTaxRecoEdit(aParam, oResponse)
 {
