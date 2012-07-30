@@ -390,7 +390,7 @@ function interfaceFinancialTaxShow(aParam, oResponse)
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_status">' + goObjectContext.statustext + '</span>');
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceFinancialTaxMasterViewport({showHome: false});interfaceFinancialTaxShow("-' + giObjectContext + '")',
+			newDestination: 'interfaceFinancialTaxMasterViewport({showHome: false});interfaceFinancialTaxSearch("-' + giObjectContext + '")',
 			move: false
 			})
 	
@@ -439,7 +439,7 @@ function interfaceFinancialTaxReport()
 				'<td id="tdInterfaceMainTaxColumnReportCategory" style="width: 120px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
 				gsLoadingXHTML +
 				'</td>' +
-				'<td id="tdInterfaceMainTaxColumnReportType" style="width: 85px;padding-right:5px;" class="interfaceMainColumn2">' +
+				'<td id="tdInterfaceMainTaxColumnReportType" style="width: 125px;padding-right:5px;" class="interfaceMainColumn2">' +
 				'</td>' +
 				'<td id="tdInterfaceMainTaxColumnReportItem" class="interfaceMainColumn2">' +
 				'</td>' +
@@ -489,18 +489,21 @@ function interfaceFinancialTaxReportSummary(aParam)
 	
 	var aHTML = [];
 	var h = -1;
+	var sField;
 		
 	aHTML[++h] = '<table id="tableReco" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 	aHTML[++h] = '<tbody>';
 	
 	$.each(ns1blankspace.financial.reportsummary[sCategory], function()
 	{
+		sField = (this).toUpperCase();
+		
 		aHTML[++h] = '<tr class="interfaceMainRow">';
 						
-		aHTML[++h] = '<td id="tdBankAccount_type-' + this + '" class="interfaceMainRow interfaceMainRowSelect type" style="width:150px;">' +
-								this + '</td>';
+		aHTML[++h] = '<td id="tdBankAccount_type-' + sField + '" class="interfaceMainRow interfaceMainRowSelect type" style="width:150px;">' +
+								sField + '</td>';
 				
-		aHTML[++h] = '<td id="interfaceBankAccount_amount-' + this + '" class="interfaceMainRow interfaceMainRowSelect type" style="width:90px;text-align:right;">' +
+		aHTML[++h] = '<td id="interfaceBankAccount_amount-' + sField + '" class="interfaceMainRow interfaceMainRowSelect type" style="width:90px;text-align:right;">' +
 									'$' + goObjectContext[this] + '</td>';
 																													
 		aHTML[++h] = '</tr>';
@@ -513,17 +516,23 @@ function interfaceFinancialTaxReportSummary(aParam)
 	$('.type').click(function()
 	{
 		var aID = (event.target.id).split('-');
-		interfaceFinancialTaxReportItems({item: aID[1]});
+		interfaceFinancialTaxReportItems({field: aID[1]});
 	});
 }
 
-function interfaceFinancialTaxReportItems(aParam)
+function interfaceFinancialTaxReportItems(aParam, oResponse)
 {
 	var iStep = 1;
+	var iType = 1;
+	var iSubType = 1;
+	var sField = 'G1';
 	
 	if (aParam != undefined)
 	{
 		if (aParam.step != undefined) {iStep = aParam.step}
+		if (aParam.type != undefined) {iType = aParam.type}
+		if (aParam.subType != undefined) {iSubType = aParam.subType}
+		if (aParam.field != undefined) {sField = aParam.field}
 	}
 	else
 	{
@@ -552,7 +561,7 @@ function interfaceFinancialTaxReportItems(aParam)
 		var aHTML = [];
 		var h = -1;
 
-		aHTML[++h] = '<div id="interfaceMainTaxColumnSubType" style="width: 110px;margin-bottom:3px;">';
+		aHTML[++h] = '<div id="interfaceMainTaxColumnSubType" style="width: 115px;margin-bottom:3px;">';
 	
 		aHTML[++h] = '<input style="width: 115px;" type="radio" id="interfaceMainTaxColumnSubType-1" name="radioSubType" checked="checked" /><label for="interfaceMainTaxColumnSubType-1" style="width: 115px;">Standard</label>';
 	
@@ -571,165 +580,107 @@ function interfaceFinancialTaxReportItems(aParam)
 		$('#interfaceMainTaxColumnSubType :radio').click(function()
 		{
 			var aID = (event.target.id).split('-');
-			$.extend(true, aParam, {subType: aID[1]});
+			$.extend(true, aParam, {subType: aID[1], step: 2});
 			interfaceFinancialTaxReportItems(aParam);	
 		});
+		
+		interfaceFinancialTaxReportItems(aParam);
 	}
 	
 	if (iStep == 2)
 	{
 		$.extend(true, aParam, {step: 3});
-		oSearch.method = 'FINANCIAL_TAX_REPORT_ITEM_SEARCH';
-		oSearch.addField('description,amount,gst');
-		oSearch.sort('transactiondate', 'desc');
-		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
-		oSearch.addFilter('type', 'EQUAL_TO', iType);
-		oSearch.addFilter('subtype', 'EQUAL_TO', iSubType);
-		oSearch.rows = giMessagingRows;
-		oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItems(aParam, data)});
 		
-	//interfaceFinancialTaxReportItems();
+		var sData = 'id=' + giObjectContext +
+					'&type=' + iType +
+					'&subtype=' + iSubType +
+					'&field=' + sField;
+		
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/financial/?method=FINANCIAL_TAX_REPORT_ITEM_SEARCH',
+			data: sData,
+			dataType: 'json',
+			success: function(data) {
+				interfaceFinancialTaxReportItems(aParam, data)
+			}
+		});
 	}
-}
-
-function interfaceFinancialTaxDetails(aParam, oResponse)
-{
-	var sID; 
-	var iDefaultCategory;
 	
-	if (oResponse == undefined)
+	if (iStep == 3)
 	{
-		var sXHTMLElementID;
-
-		if (aParam != undefined)
-		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		}
-		
-		if (sXHTMLElementID != undefined)
-		{
-			var aXHTMLElementID = sXHTMLElementID.split('-');
-			var sID = aXHTMLElementID[1];
-		}	
-	
 		var aHTML = [];
 		var h = -1;
 		
-		aHTML[++h] = '<table class="interfaceMain" cellspacing=0 cellpadding=0>' +
-				'<tr>' +
-				'<td id="tdInterfaceMainTaxColumnRecoEdit" style="padding-right:15px;">' +
-				'</td>' +
-				'<td id="tdInterfaceMainTaxColumnRecoEdit2" class="interfaceMainColumn2" style="width: 250px">' +
-				'</td>' +
-				'</tr>' +
-				'</table>';			
-	
-		$('#tdInterfaceMainTaxColumnReco2').html(aHTML.join(''));
-			
-		var aHTML = [];
-		var h = -1;
-
-		aHTML[++h] = '<table class="interfaceMain">';
-				
-		aHTML[++h] = '<tr id="trInterfaceMainFinancialBanksAccountRecoStatementDate" class="interfaceMain">' +
-						'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementDate" class="interfaceMain">' +
-						'Bank Statement Date' +
-						'</td></tr>' +
-						'<tr id="trInterfaceMainFinancialBanksAccountRecoStatementDateValue" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementDateValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainFinancialBanksAccountRecoStatementDate" class="inputInterfaceMainDate">' +
-						'</td></tr>';
-					
-		aHTML[++h] = '<tr id="trInterfaceMainFinancialBanksAccountRecoStatementBalance" class="interfaceMain">' +
-						'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementBalance" class="interfaceMain">' +
-						'Bank Statement Balance' +
-						'</td></tr>' +
-						'<tr id="trInterfaceMainFinancialBanksAccountRecoStatementBalanceValue" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementBalanceValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainFinancialBanksAccountRecoStatementBalance" class="inputInterfaceMainText">' +
-						'</td></tr>';			
+		aHTML[++h] = '<table id="tableReportItems" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+		aHTML[++h] = '<tbody>'
+		
+		$.each(oResponse.data.rows, function()
+		{
+			aHTML[++h] = '<tr class="interfaceMainRow">';
 							
-		aHTML[++h] = '<tr id="trInterfaceMainFinancialBanksAccountRecoStatus" class="interfaceMain">' +
-						'<td id="tdInterfaceMainFinancialBanksAccountRecoStatus" class="interfaceMain">' +
-						'Status' +
-						'</td></tr>' +
-						'<tr id="trInterfaceMainFinancialBanksAccountRecoStatusValue">' +
-						'<td id="tdInterfaceMainFinancialBanksAccountRecoStatusValue" class="interfaceMainRadio">' +
-						'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>In Progress' +
-						'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Completed' +
-						'</td></tr>';
-																																			
-		aHTML[++h] = '</table>';					
+			aHTML[++h] = '<td id="tdReportItems_reference-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect">' +
+									this.reference + '</td>';
 		
-		$('#tdInterfaceMainTaxColumnRecoEdit').html(aHTML.join(''));
-		
-		$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
+			aHTML[++h] = '<td id="spanReportItems_amount-' + this.id + '" style="text-align:right;" class="interfaceMainRow interfaceMainRowSelect">' +
+									this.amount + '</td>';
 			
-		var aHTML = [];
-		var h = -1;
-	
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em;">';
-				
-		aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
-						'<td id="tdInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
-						'<span id="spanInterfaceMainTaxColumnRecoEditSave">Save</span>' +
-						'</td></tr>';
-						
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainTaxColumnRecoEdit2').html(aHTML.join(''));
-		
-		$('#spanInterfaceMainTaxColumnRecoEditSave').button(
-		{
-			text: "Save"
-		})
-		.click(function() 
-		{
-			interfaceMasterStatusWorking();
-					
-			var sData = 'Tax=' + giObjectContext;
-			sData += '&id=' + interfaceMasterFormatSave(sID);
-			sData += '&statementdate=' + interfaceMasterFormatSave($('#inputInterfaceMainFinancialBanksAccountRecoStatementDate').val());
-			sData += '&statementbalance=' + interfaceMasterFormatSave($('#inputInterfaceMainFinancialBanksAccountRecoStatementBalance').val());
-			sData += '&status=' + interfaceMasterFormatSave($('input[name="radioStatus"]:checked').val());
-			
-			$.ajax(
-			{
-				type: 'POST',
-				url: '/ondemand/financial/?method=FINANCIAL_RECONCILIATION_MANAGE',
-				data: sData,
-				dataType: 'json',
-				success: function() {
-					interfaceFinancialTaxReconcile();
-					interfaceMasterStatus('Reconciliation added.');
-				}
-			});
+			aHTML[++h] = '<td id="spanReportItems_tax-' + this.id + '" style="text-align:right;" class="interfaceMainRow interfaceMainRowSelect">' +
+									this.gst + '</td>';
+							
+			aHTML[++h] = '</tr>';
 		});
 		
-		if (sID != undefined)
-		{
-			$.ajax(
-			{
-				type: 'POST',
-				url: '/ondemand/financial/?method=FINANCIAL_RECONCILIATION_SEARCH',
-				data: 'id=' + sID,
-				dataType: 'json',
-				success: function(data) {interfaceFinancialTaxRecoEdit(aParam, data)}
-			});
-		}
-		else
-		{
-			$('[name="radioStatus"][value="1"]').attr('checked', true);	
-		}
-	}
-	else
-	{
-		if (oResponse.data.rows.length != 0)
-		{
-			var oObjectContext = oResponse.data.rows[0];
-			$('#inputInterfaceMainFinancialBanksAccountRecoStatementDate').val(oObjectContext.statementdate);
-			$('#inputInterfaceMainFinancialBanksAccountRecoStatementBalance').val(oObjectContext.statementbalance);
-			$('[name="radioStatus"][value="' + oObjectContext.status + '"]').attr('checked', true);
-		}
-	}
+		aHTML[++h] = '</tbody></table>';
+
+		$('#tdInterfaceMainTaxColumnReportItems').html(aHTML.join(''));
+	}	
+}
+
+function interfaceFinancialTaxDetails(aParam)
+{	
+	var aHTML = [];
+	var h = -1;
+	
+	aHTML[++h] = '<table class="interfaceMain" cellspacing=0 cellpadding=0>' +
+			'<tr>' +
+			'<td id="tdInterfaceMainDetails" style="padding-right:15px;width:200px;">' +
+			'</td>' +
+			'<td id="tdInterfaceMainDetails2" class="interfaceMainColumn2x">&nbsp;' +
+			'</td>' +
+			'</tr>' +
+			'</table>';			
+
+	$('#divInterfaceMainDetails').html(aHTML.join(''));
+		
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<table class="interfaceMain">';
+			
+	aHTML[++h] = '<tr id="trInterfaceMainFinancialBanksAccountRecoStatementDate" class="interfaceMain">' +
+					'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementDate" class="interfaceMain">' +
+					'End Date' +
+					'</td></tr>' +
+					'<tr id="trInterfaceMainFinancialBanksAccountRecoStatementDateValue" class="interfaceMainText">' +
+					'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementDateValue" class="interfaceMainText">' +
+					'<input id="inputInterfaceMainFinancialBanksAccountRecoStatementDate" class="inputInterfaceMainDate">' +
+					'</td></tr>';	
+						
+	aHTML[++h] = '<tr id="trInterfaceMainFinancialBanksAccountRecoStatus" class="interfaceMain">' +
+					'<td id="tdInterfaceMainFinancialBanksAccountRecoStatus" class="interfaceMain">' +
+					'Status' +
+					'</td></tr>' +
+					'<tr id="trInterfaceMainFinancialBanksAccountRecoStatusValue">' +
+					'<td id="tdInterfaceMainFinancialBanksAccountRecoStatusValue" class="interfaceMainRadio">' +
+					'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>In Progress' +
+					'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Completed' +
+					'</td></tr>';
+																																		
+	aHTML[++h] = '</table>';					
+	
+	$('#tdInterfaceMainDetails').html(aHTML.join(''));
+	
+	$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
 }
