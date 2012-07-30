@@ -300,7 +300,14 @@ function interfaceControlOptions()
 					'Payments</span>' +
 					'</td>' +
 					'</tr>';	
-					
+						
+		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlFinancialPayroll" class="interfaceViewportMasterControl">' +
+					'<td id="tdInterfaceViewportMasterControlFinancialPayroll" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlFinancialPayroll" class="interfaceViewportMasterControl">' +
+					'Payroll</span>' +
+					'</td>' +
+					'</tr>';	
+								
 		aHTML[++h] = '</table>'
 		aHTML[++h] = '</td>';			
 	}
@@ -322,6 +329,13 @@ function interfaceControlOptions()
 						'Reporting</span>' +
 						'</td>' +
 						'</tr>';
+		
+		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
+					'<td id="tdInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
+					'Tax</span>' +
+					'</td>' +
+					'</tr>';				
 						
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlStructure" class="interfaceViewportMasterControl">' +
 						'<td id="tdInterfaceViewportMasterControlStructure" class="interfaceViewportMasterControl">' +
@@ -442,6 +456,18 @@ function interfaceControlOptionsBind()
 	{
 		interfaceMasterOptionsSource();
 		interfaceFinancialPaymentMasterViewport();
+	});
+	
+	$('#tdInterfaceViewportMasterControlFinancialTax').click(function(event)
+	{
+		interfaceMasterOptionsSource();
+		interfaceFinancialTaxMasterViewport();
+	});
+	
+	$('#tdInterfaceViewportMasterControlFinancialPayroll').click(function(event)
+	{
+		interfaceMasterOptionsSource();
+		interfaceFinancialPayrollMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlHelp').click(function(event)

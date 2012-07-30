@@ -1,4 +1,4 @@
-function interfaceFinancialBankAccountMasterViewport(aParam)
+function interfaceFinancialPayrollMasterViewport(aParam)
 {
 	interfaceFinancialMasterInitialise();
 	
@@ -11,7 +11,7 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 
 	giObject = -1;
 	goObjectContext = undefined;
-	gsObjectName = 'Bank Accounts';
+	gsObjectName = 'Payroll';
 	giObjectContext = -1;
 	
 	if (bShowHome)
