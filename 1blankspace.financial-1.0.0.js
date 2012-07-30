@@ -751,7 +751,6 @@ function interfaceFinancialBalanceSheetRow(oRow)
 	aHTML[++h] = '</tr>'
 	
 	return aHTML.join('');
-	
 }
 
 function interfaceFinancialBankAccount(aParam, oResponse)
@@ -763,7 +762,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 		oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
 		oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
 		oSearch.sort('title', 'asc');
-		oSearch.rows = giMessagingRows;
+		oSearch.rows = giReturnRows;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccount(aParam, data)});
 	}
 	else

@@ -683,7 +683,7 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 			}
 			
 			oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
-			oSearch.rows = giMessagingRows;
+			oSearch.rows = giReturnRows;
 			oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItems(aParam, data)});
 		}		
 		else
@@ -693,7 +693,7 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 			oSearch.sort('posteddate', 'desc');
 			oSearch.addFilter('bankaccount', 'EQUAL_TO', giObjectContext);
 			oSearch.addFilter('status', 'EQUAL_TO', 1);
-			oSearch.rows = giMessagingRows;
+			oSearch.rows = giReturnRows;
 			oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItems(aParam, data)});
 		}		
 	}
@@ -744,10 +744,19 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 										' class="recoitem">' +
 										this.amount + '</td>';
 					
-					aHTML[++h] = '</tr><tr><td colspan=2 id="spanRecoItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
+					if (iSource == 1)
+					{
+						aHTML[++h] = '</tr><tr><td colspan=2 id="spanRecoItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
+										' class="recoitem">' +
+										this.reference + '</td>';
+					}
+					else
+					{
+						aHTML[++h] = '</tr><tr><td colspan=2 id="spanRecoItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
 										' class="recoitem">' +
 										this.description + '</td>';
-										
+					}
+							
 				aHTML[++h] = '</tr></table></td>';	
 					
 				if ((this.paiddate) || (this.receiveddate))
@@ -855,7 +864,7 @@ function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 			var h = -1;
 		
 			aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemEdit" style="width: 196;margin-bottom:3px;text-align:right;">';
-			aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemEdit-1" name="radioEdit" checked="checked" /><label for="interfaceMainBankAccountColumnItemEdit-1" style="width: 124px;">Unreconciled</label>';
+			aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemEdit-1" name="radioEdit" checked="checked" /><label for="interfaceMainBankAccountColumnItemEdit-1" style="width: 112px;">Unreconciled</label>';
 		
 			aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemEdit-2" name="radioEdit" /><label for="interfaceMainBankAccountColumnItemEdit-2" style="width: 50px;">Add</label>';
 			aHTML[++h] = '</div>';
@@ -944,7 +953,7 @@ function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 			if (cSearchAmount) {oSearch.addFilter('amount', 'APPROX_EQUAL_TO', cSearchAmount)}
 			
 			oSearch.addFilter('reconciliation', 'IS_NULL');
-			oSearch.rows = giMessagingRows;
+			oSearch.rows = giReturnRows;
 			oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItemsEdit(aParam, data)});
 		}
 		else
@@ -1154,7 +1163,7 @@ function interfaceFinancialBankAccountImport(aParam, oResponse)
 		oSearch.addField('startdate,enddate,processeddate');
 		oSearch.addFilter('bankaccount', 'EQUAL_TO', giObjectContext);
 		oSearch.sort('enddate', 'desc');
-		oSearch.rows = giMessagingRows;
+		oSearch.rows = giReturnRows;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccountImport(aParam, data)});
 	}
 	else
@@ -1243,11 +1252,8 @@ function interfaceFinancialBankAccountImportRow(oRow)
 							
 		if (oRow.startdate != '')
 		{		
-			aHTML[++h] = '<td id="interfaceFinancialBankAccountImport_startdate-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect import"' +
-								'">' + oRow.startdate + '<br />';
-							
 			aHTML[++h] = '<span class="interfaceViewportControlSubContext" id="spanInterfaceFinancialBankAccountImport_enddate-' + oRow.id + '">' +
-			 					oRow.enddate + '</span>';
+								oRow.startdate + '</span><br />';	
 		}
 	
 		aHTML[++h] = '</tr>';
