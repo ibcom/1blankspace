@@ -213,6 +213,10 @@ function interfaceFinancialHomeShow()
 				'<td id="tdInterfaceViewportControlBS" class="interfaceViewportControl">Balance Sheet</td>' +
 				'</tr>';	
 	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlAccounts" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlAccounts" class="interfaceViewportControl">Accounts</td>' +
+				'</tr>';
+				
 	aHTML[++h] = '<tr id="trInterfaceViewportControlUnallocated" class="interfaceViewportControl">' +
 				'<td id="tdInterfaceViewportControlUnallocated" class="interfaceViewportControl">Unallocated</td>' +
 				'</tr>';	
@@ -230,6 +234,7 @@ function interfaceFinancialHomeShow()
 	aHTML[++h] = '<div id="divInterfaceMainCreditors" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainPL" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainBS" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainAccounts" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainUnallocated" class="divInterfaceViewportMain"></div>';
 	
 	$('#divInterfaceMain').html(aHTML.join(''));
@@ -268,6 +273,12 @@ function interfaceFinancialHomeShow()
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainBS");
 		interfaceFinancialBalanceSheet();
+	});	
+	
+	$('#tdInterfaceViewportControlAccounts').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainAccounts");
+		interfaceFinancialAccounts();
 	});	
 	
 	$('#tdInterfaceViewportControlUnallocated').click(function(event)
@@ -1079,4 +1090,136 @@ function interfaceFinancialTransaction(aParam, oResponse)
 			
 		}
 	}	
+}
+
+function interfaceFinancialAccounts(aParam, oResponse)
+{
+	var iStep = 1;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.step != undefined) {iStep = aParam.step};
+	}
+	else
+	{
+		aParam = {};
+	}
+	
+	if (iStep == 1)	
+	{
+		var aHTML = [];
+		var h = -1;
+			
+		aHTML[++h] = '<table class="interfaceMainAccount" cellspacing=0 cellpadding=0>' +
+				'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
+				'<td id="tdInterfaceMainBankAccountColumn1" style="width:100px;font-size:0.875em;">' +
+				'</td>' +
+				'<td id="tdInterfaceMainBankAccountColumn2" class="interfaceMainColumn2">' +
+				'</td>' +
+				'</tr>' +
+				'</table>';			
+		
+		$('#divInterfaceMainAccounts').html(aHTML.join(''));
+			
+		var aHTML = [];
+		var h = -1;
+
+		aHTML[++h] = '<div id="interfaceMainAccountColumnCategory" style="width: 100;margin-bottom:3px;text-align:right;">';
+		aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnCategory-1" name="radioCategory" checked="checked" /><label for="interfaceMainBankAccountColumnCategory-1" style="width: 100px;">All</label>';
+
+		aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnCategory-2" name="radioCategory" /><label for="interfaceMainBankAccountColumnCategory-2" style="width: 100px;">Profit & Loss</label>';
+	
+		aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnCategory-3" name="radioCategory" /><label for="interfaceMainBankAccountColumnCategory-3" style="width: 100px;">Balance Sheet</label>';
+	
+		aHTML[++h] = '</div>';
+
+		$('#tdInterfaceMainBankAccountColumn1').html(aHTML.join(''));
+	
+		$('#interfaceMainAccountColumnCategory').buttonset().css('font-size', '0.875em');
+		
+		$('#interfaceMainAccountColumnCategory :radio').click(function()
+		{
+			var aID = (event.target.id).split('-');
+			$.extend(true, aParam, {step: 2, category: parseInt(aID[1])});
+			interfaceFinancialAccounts(aParam);
+		});
+	}
+	
+	if (iStep == 2)
+	{	
+		if (oResponse == undefined)
+		{	
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+			oSearch.addField('title,description');
+			oSearch.sort('title', 'asc');
+			//oSearch.addFilter('type', 'EQUAL_TO', iType);
+			oSearch.rows = 200;
+			oSearch.getResults(function(data) {interfaceFinancialAccounts(aParam, data)});	
+		}
+		else
+		{
+			$.extend(true, aParam, {step: 3});
+			
+			var aHTML = [];
+			var h = -1;
+		
+			if (oResponse.data.rows.length == 0)
+			{
+				aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+				aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
+				aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No Accounts</td>';
+				aHTML[++h] = '</tr>';
+				aHTML[++h] = '</table>';
+				
+				$('#tdInterfaceMainBankAccountColumn2').html(aHTML.join(''));
+			}
+			else
+			{
+				aHTML[++h] = '<table id="tableInterfaceFinancialAccountTransactions" class="interfaceMain">';
+				aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountTransactionsRow1" class="interfaceMain">' +
+							'<td id="tdInterfaceMainFinancialAccountTransactionsColumn1" style="width: 70px" class="interfaceMainColumn1">' +
+							'</td>' +
+							'<td id="tdInterfaceMainFinancialAccountTransactionsColumn2" class="interfaceMainColumn2">' +
+							'</td>' +
+							'</tr>';
+				aHTML[++h] = '</table>';					
+		
+				$('#tdInterfaceMainBankAccountColumn2').html(aHTML.join(''));
+		
+				var aHTML = [];
+				var h = -1;
+		
+				aHTML[++h] = '<table id="tableReco" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+				aHTML[++h] = '<tbody>';
+			
+				$(oResponse.data.rows).each(function(i) 
+				{
+					if (i==0)
+					{
+						aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountAll">All</span></td></tr>';	
+					}
+				
+					aHTML[++h] = '<tr><td id="interfaceFinancialBankAccountReco_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect"' +
+									'>' + this.title + '</td></tr>';
+					
+				});
+			
+				aHTML[++h] = '</tbody></table>';
+			
+				$('#tdInterfaceMainFinancialAccountTransactionsColumn1').html(aHTML.join(''));
+				
+				$('#spanInterfaceBankAccountAll').button(
+				{
+					label: "All"
+				})
+				.click(function() {
+					//interfaceFinancialBankAccountRecoEdit()
+				})
+				.css("width", "75px");
+					
+			}
+			
+		}
+	}
 }
