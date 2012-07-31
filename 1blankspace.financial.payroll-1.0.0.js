@@ -129,14 +129,14 @@ function interfaceFinancialPayrollHomeShow(aParam, oResponse)
 		
 		aHTML[++h] = '<table>';
 		
+		aHTML[++h] = '<tr id="trInterfaceViewportControlPayRuns" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlPayRuns" class="interfaceViewportControl interfaceViewportControlHighlight">Pay Runs</td>' +
+						'</tr>';
+						
 		aHTML[++h] = '<tr id="trInterfaceViewportControlEmployees" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlEmployees" class="interfaceViewportControl">Employees</td>' +
 						'</tr>';	
-						
-		aHTML[++h] = '<tr id="trInterfaceViewportControlPayRuns" class="interfaceViewportControl">' +
-						'<td id="tdInterfaceViewportControlPayRuns" class="interfaceViewportControl interfaceViewportControlHighlight">Pay Runs</td>' +
-						'</tr>';	
-	
+							
 		aHTML[++h] = '</table>';
 	
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
@@ -732,12 +732,12 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 {
 	
 	var iStep = 1;
-	var iFinancialAccount = -1;
+	var iEmployee;
 	
 	if (aParam != undefined)
 	{
 		if (aParam.step != undefined) {iStep = aParam.step};
-		if (aParam.financialAccount != undefined) {iFinancialAccount = aParam.financialAccount};
+		if (aParam.employee != undefined) {iEmployee = aParam.employee};
 	}
 	else
 	{
@@ -814,6 +814,8 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		   	}); 
 			
 			$('.employee').click(function() {
+				$('.Highlight').removeClass('Highlight');
+				$('#' + event.target.id).addClass('Highlight');
 				var aID = (event.target.id).split('-');
 				$.extend(true, aParam, {step: 2, employee: parseInt(aID[1])});
 				interfaceFinancialPayrollEmployees(aParam);
@@ -823,58 +825,110 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 	
 	if (iStep == 2)
 	{
-		var aHTML = [];
-		var h = -1;
-			
-		aHTML[++h] = '<table class="interfaceMainPayrollEmployeeDetails" cellspacing=0 cellpadding=0>' +
-				'<tr id="trInterfaceMainPayrollEmployeeDetailsRow1" class="interfaceMainRow1">' +
-				'<td id="tdInterfaceMainPayrollEmployeeDetailsColumn1" style="width:100px;font-size:0.75em;">' +
-				'</td>' +
-				'<td id="tdInterfaceMainPayrollEmployeeDetailsColumn2" class="interfaceMainColumn2">' +
-				'</td>' +
-				'</tr>' +
-				'</table>';			
-		
-		$('#tdInterfaceMainPayrollEmployeeColumn2').html(aHTML.join(''));
-			
-		var aHTML = [];
-		var h = -1;
-
-		aHTML[++h] = '<div id="interfaceMainPayrollEmployeeDetails" style="width: 125px;margin-bottom:3px;text-align:right;">';
-		aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-11" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-11" style="width: 125px;text-align:left;">Details</label>';
-
-		aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-12" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-12" style="width: 125px;text-align:left;">Payroll</label>';
-	
-		aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-13" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-13" style="width: 125px;text-align:left;">Pay Rates</label>';
-	
-		aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-14" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-14" style="width: 125px;text-align:left;">Bank&nbsp;Accounts</label>';
-		
-		aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-15" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-15" style="width: 125px;text-align:left;">Superannuation</label>';
-			
-		aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-16" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-16" style="width: 125px;text-align:left;">Leave</label>';
-			
-		aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-17" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-17" style="width: 125px;text-align:left;">Role</label>';
-				
-		aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-18" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-18" style="width: 125px;text-align:left;">Induction</label>';
-				
-		aHTML[++h] = '</div>';
-
-		$('#tdInterfaceMainPayrollEmployeeDetailsColumn1').html(aHTML.join(''));
-	
-		$('#interfaceMainPayrollEmployeeDetails').buttonset().css('font-size', '0.875em');
-		
-		$('#interfaceMainPayrollEmployeeDetails :radio').click(function()
+		if (oResponse == undefined)
 		{
-			var aID = (event.target.id).split('-');
-			$.extend(true, aParam, {step: parseInt(aID[1])});
-			interfaceFinancialPayrollEmployees(aParam);
-		});
+			$('#tdInterfaceMainPayrollEmployeeColumn2').html(gsLoadingSmallXHTML);
+			
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
+			oSearch.addField('*');
+			oSearch.rows = 50;
+			oSearch.addFilter('id', 'EQUAL_TO', iEmployee);
+			oSearch.getResults(function(data) {interfaceFinancialPayrollEmployees(aParam, data)});
+		}
+		else
+		{
+			ns1blankspace.financial.employee = oResponse.data.rows[0];
 		
+			var aHTML = [];
+			var h = -1;
+			
+			aHTML[++h] = '<table class="interfaceMainPayrollEmployeeDetails" cellspacing=0 cellpadding=0>' +
+					'<tr id="trInterfaceMainPayrollEmployeeDetailsRow1" class="interfaceMainRow1">' +
+					'<td id="tdInterfaceMainPayrollEmployeeDetailsColumn1" style="width:100px;font-size:0.75em;">' +
+					'</td>' +
+					'<td id="tdInterfaceMainPayrollEmployeeDetailsColumn2" class="interfaceMainColumn2">' +
+					'</td>' +
+					'</tr>' +
+					'</table>';			
+		
+			$('#tdInterfaceMainPayrollEmployeeColumn2').html(aHTML.join(''));
+			
+			var aHTML = [];
+			var h = -1;
+
+			aHTML[++h] = '<div id="interfaceMainPayrollEmployeeDetails" style="width: 125px;margin-bottom:3px;text-align:right;">';
+			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-11" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-11" style="width: 125px;text-align:left;">Details</label>';
+
+			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-12" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-12" style="width: 125px;text-align:left;">Payroll</label>';
+	
+			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-13" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-13" style="width: 125px;text-align:left;">Pay Rates</label>';
+	
+			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-14" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-14" style="width: 125px;text-align:left;">Bank&nbsp;Accounts</label>';
+		
+			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-15" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-15" style="width: 125px;text-align:left;">Superannuation</label>';
+			
+			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-16" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-16" style="width: 125px;text-align:left;">Leave</label>';
+			
+			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-17" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-17" style="width: 125px;text-align:left;">Role</label>';
+				
+			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-18" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-18" style="width: 125px;text-align:left;">Induction</label>';
+				
+			aHTML[++h] = '</div>';
+
+			$('#tdInterfaceMainPayrollEmployeeDetailsColumn1').html(aHTML.join(''));
+	
+			$('#interfaceMainPayrollEmployeeDetails').buttonset().css('font-size', '0.8em');
+		
+			$('#interfaceMainPayrollEmployeeDetails :radio').click(function()
+			{
+				var aID = (event.target.id).split('-');
+				$.extend(true, aParam, {step: parseInt(aID[1])});
+				interfaceFinancialPayrollEmployees(aParam);
+			});
+		}
 	}
 	
 	if (iStep == 11)
 	{
-		$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html('Display employee details.');
+		var aHTML = [];
+		var h = -1;
+			
+		aHTML[++h] = '<table id="tableInterfaceMainEmployeeDetails" class="interfaceMain">';
+		
+		aHTML[++h] = '<tr id="trInterfaceMainEmployeeDetailsStatus" class="interfaceMain">' +
+						'<td id="tdInterfaceMainEmployeeDetailsStatus" class="interfaceMain">' +
+						'Status' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainEmployeeDetailsStatus" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainEmployeeDetailsStatusValue" class="interfaceMainRadio" style="height:33px;">' +
+						'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Proposed' +
+						'&nbsp;&nbsp;<input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Active' +
+						'&nbsp;&nbsp;<input type="radio" id="radioStatus3" name="radioStatus" value="3"/>In-active' +
+						'</td></tr>';
+		
+		aHTML[++h] = '<tr id="trInterfaceMainEmployeeDetailsNotes" class="interfaceMain">' +
+						'<td id="tdInterfaceMainEmployeeDetailsNotes" class="interfaceMain">' +
+						'Notes' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainEmployeeDetailsNotesValue" class="interfaceMainTextMulti">' +
+						'<td id="tdInterfaceMainEmployeeDetailsNotesValue" class="interfaceMainTextMulti">' +
+						'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsNotes" class="inputInterfaceMainTextMulti"></textarea>' +
+						'</td></tr>';
+		
+		aHTML[++h] = '</table>';					
+			
+		$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+
+		if (ns1blankspace.financial.employee != undefined)
+		{
+			$('[name="radioStatus"][value="' + ns1blankspace.financial.employee.status + '"]').attr('checked', true);
+			$('#inputInterfaceMainEmployeeDetailsNotes').val(ns1blankspace.financial.employee.description);
+		}
+		else
+		{
+			$('[name="radioStatus"][value="1"]').attr('checked', true);
+		}
 	}
 	
 	if (iStep == 13)
