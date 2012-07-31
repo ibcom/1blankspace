@@ -27,6 +27,9 @@ var gbMessagingEmailShowCount = false;
 var gsMessagingEmailAccount = '';
 var giMessagingCheckForNew = 60000;
 
+ns1blankspace.loadingXHTML = gsLoadingXHTML;
+ns1blankspace.loadingSmallXHTML = gsLoadingSmallXHTML
+
 function interfaceControlSecurity(sUserNetworkGroups)
 {
 	//For deep in model security, refer to http://mydigitalstructure.com/gettingstarted_access_control
@@ -331,11 +334,11 @@ function interfaceControlOptions()
 						'</tr>';
 		
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
-					'<td id="tdInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
-					'<span id="spanInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
-					'Tax</span>' +
-					'</td>' +
-					'</tr>';				
+						'<td id="tdInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
+						'<span id="spanInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
+						'Tax</span>' +
+						'</td>' +
+						'</tr>';				
 						
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlStructure" class="interfaceViewportMasterControl">' +
 						'<td id="tdInterfaceViewportMasterControlStructure" class="interfaceViewportMasterControl">' +
