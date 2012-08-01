@@ -875,7 +875,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 		
 		$('#aInterfaceMainBankAccountDeposit').click(function()
 		{
-			alert("Deposting of the sweet sweet cash...")
+			alert("Depositing of the sweet sweet cash...")
 		});	
 	}
 }
@@ -923,10 +923,9 @@ function interfaceFinancialUnallocated(aParam, oResponse)
 				}
 				else
 				{
-					ns1blankspace.financial.unallocatedAccount = -1
+					ns1blankspace.financial.unallocatedAccount = -1;
 				}	
 			});	
-
 		}
 			
 		if (ns1blankspace.financial.unallocatedAccount == -1)
@@ -934,31 +933,31 @@ function interfaceFinancialUnallocated(aParam, oResponse)
 			$('#divInterfaceMainUnallocated').html("No unallocated account set up.");
 		}
 		else
-		{
-			var aHTML = [];
-			var h = -1;
-		
-			aHTML[++h] = '<table id="tableInterfaceFinancialUnallocated" class="interfaceMain">';
-			aHTML[++h] = '<tr id="trInterfaceMainFinancialUnallocatedRow1" class="interfaceMain">' +
-						'<td id="tdInterfaceMainFinancialUnallocatedColumn1" style="width: 70px" class="interfaceMainColumn1">' +
-						'</td>' +
-						'<td id="tdInterfaceMainFinancialUnallocatedColumn2" class="interfaceMainColumn2">' +
-						'</td>' +
-						'</tr>';
-			aHTML[++h] = '</table>';					
-		
-			$('#divInterfaceMainUnallocated').html(aHTML.join(''));
-			
+		{	
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 			oSearch.addField('invoice.reference,invoice.amount');
-			oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', iAllocatedAccount);
+			oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
 			oSearch.rows = 20;
 			oSearch.getResults(function(data) {interfaceFinancialUnallocated(aParam, data)});
 		}	
 	}
 	else
 	{
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceFinancialUnallocated" class="interfaceMain">';
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialUnallocatedRow1" class="interfaceMain">' +
+					'<td id="tdInterfaceMainFinancialUnallocatedColumn1" style="width: 70px" class="interfaceMainColumn1">' +
+					'</td>' +
+					'<td id="tdInterfaceMainFinancialUnallocatedColumn2" class="interfaceMainColumn2">' +
+					'</td>' +
+					'</tr>';
+		aHTML[++h] = '</table>';					
+	
+		$('#divInterfaceMainUnallocated').html(aHTML.join(''));
+
 		var aHTML = [];
 		var h = -1;
 		
@@ -1013,7 +1012,7 @@ function interfaceFinancialUnallocatedRow(oRow)
 
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 				
-	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_FinancialAccount-' + oRow["invoice.id"] + '" class="interfaceMainRow">' +
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_FinancialAccount-' + oRow["invoice.id"] + '" class="interfaceMainRow interfaceMainRowSelect">' +
 							oRow["invoice.reference"] + '<br />';
 	
 	aHTML[++h] = '<span style="color: #808080;font-size: 0.75em;">' + oRow["invoice.amount"] + '</span>';

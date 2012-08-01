@@ -3442,7 +3442,7 @@ function interfaceMasterPaginationList(aParam)
 	if (bMore)
 	{
 		aHTML[++h] = '<table><tr>';
-		aHTML[++h] = '<td style="width:10px;" class="interfaceMessagingSubHeader interfaceMasterPaginationList" id="tdInterfaceMasterPaginationList' + sXHTMLContext + '-">Page:</td>';
+		//aHTML[++h] = '<td style="width:1px;" class="interfaceMessagingSubHeader interfaceMasterPaginationList" id="tdInterfaceMasterPaginationList' + sXHTMLContext + '-"></td>';
 		aHTML[++h] = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader interfaceMasterPaginationList' + sXHTMLContext + '"' +
 							' id="td' + sXHTMLContext + 'InterfaceMasterPaginationList-0" rowStart="0">1</td>';
 		aHTML[++h] = '<td></td></tr></table>';

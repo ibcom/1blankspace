@@ -5,6 +5,8 @@ function interfaceSetupFinancialMasterViewport()
 	giObject = -1;
 	goObjectContext = undefined;
 	
+	if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}
+
 	interfaceMasterReset();		
 			
 	$('#divInterfaceMasterViewportControlSet').button(
@@ -328,109 +330,286 @@ function interfaceSetupFinancialGeneral()
 
 function interfaceSetupFinancialBankAccount(aParam, oResponse)
 {
-
-	if (oResponse == undefined)
+	var iStep = 1;
+	var sID; 
+	var sXHTMLElementID;
+		
+	if (aParam != undefined)
 	{
-		var oSearch = new AdvancedSearch();
-		oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-		oSearch.addField('title,notes');
-		oSearch.sort('title', 'asc');
-		oSearch.rows = giMessagingRows;
-		oSearch.getResults(function(data) {interfaceSetupFinancialBankAccount(aParam, data)});
+		if (aParam.step != undefined) {iStep = aParam.step}
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
 	}
 	else
 	{
-		var aHTML = [];
-		var h = -1;
+		aParam = {step: 1};
+	}
+	
+	if (sXHTMLElementID != undefined)
+	{
+		var aXHTMLElementID = sXHTMLElementID.split('-');
+		var sID = aXHTMLElementID[1];
+	}	
+
+	if (iStep == 1)
+	{
 		
-		if (oResponse.data.rows.length == 0)
+		if (oResponse == undefined)
 		{
-			aHTML[++h] = '<table id="tableInterfaceSetupFinancialBankAccount">';
-			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No bank accounts set up.</td>';
-			aHTML[++h] = '</tr>';
-			aHTML[++h] = '</table>';
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
+			oSearch.addField('title,notes');
+			oSearch.sort('title', 'asc');
+			oSearch.rows = giMessagingRows;
+			oSearch.getResults(function(data) {interfaceSetupFinancialBankAccount(aParam, data)});
 		}
 		else
-		{		
-			
+		{
 			var aHTML = [];
 			var h = -1;
-		
-			aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain">' +
-					'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainBankAccountColumn1" style="width: 200px;" class="interfaceMainColumn1">' +
-					gsLoadingXHTML +
-					'</td>' +
-					'<td id="tdInterfaceMainBankAccountColumn2" class="interfaceMainColumn2">' +
-					'</td>' +
-					'</tr>' +
-					'</table>';				
-		
-			$('#divInterfaceMainBankAccount').html(aHTML.join(''));
-		
-			var aHTML = [];
-			var h = -1;
-		
-		
-			aHTML[++h] = '<table id="tableSetupFinancialBankAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-			aHTML[++h] = '<tbody>'
-			aHTML[++h] = '<tr class="interfaceMainCaption">';
-			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-			aHTML[++h] = '</tr>';
 			
-			var oRows = oResponse.data.rows;
-			
-			$(oRows).each(function() 
+			if (oResponse.data.rows.length == 0)
 			{
-				aHTML[++h] = interfaceSetupFinancialBankAccountRow(this);
-			});
+				aHTML[++h] = '<table id="tableInterfaceSetupFinancialBankAccount">';
+				aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
+				aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No bank accounts set up.</td>';
+				aHTML[++h] = '</tr>';
+				aHTML[++h] = '</table>';
+			}
+			else
+			{			
+				var aHTML = [];
+				var h = -1;
 			
-			aHTML[++h] = '</tbody></table>';
-		}
+				aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain" style="width:100%">' +
+						'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
+						'<td id="tdInterfaceMainBankAccountColumn1" style="width:250px;" class="interfaceMainColumn1">' +
+						gsLoadingXHTML +
+						'</td>' +
+						'<td id="tdInterfaceMainBankAccountColumn2" class="interfaceMainColumn2">' +
+						'<span id="spanBankAccount_options_add" class="interfaceMainRowOptionsAdd" style="font-size:0.75em;">Add</span>'
+						'</td>' +
+						'</tr>' +
+						'</table>';				
+			
+				$('#divInterfaceMainBankAccount').html(aHTML.join(''));
+			
+				var aHTML = [];
+				var h = -1;
+			
+				aHTML[++h] = '<table id="tableSetupFinancialBankAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+				aHTML[++h] = '<tbody>'
 		
-		interfaceMasterPaginationList(
-		   {
-			type: 'JSON',
-			xhtmlElementID: 'tdInterfaceMainBankAccountColumn1',
-			xhtmlContext: 'BankAccount',
-			xhtml: aHTML.join(''),
-			showMore: (oResponse.morerows == "true"),
-			more: oResponse.moreid,
-			rows: 100,
-			functionShowRow: interfaceSetupFinancialBankAccountRow,
-			functionOpen: undefined,
-			functionNewPage: ''
-		   });
-	}
-}
-
-function interfaceSetupFinancialBankAccountRow(oRow)
-{
-	var aHTML = [];
-	var h = -1;
-
-	aHTML[++h] = '<tr class="interfaceMainRow">';
+				$(oResponse.data.rows).each(function() 
+				{
+					aHTML[++h] = '<tr class="interfaceMainRow">';
+					
+					aHTML[++h] = '<td id="interfaceSetupFinancialBankAccount_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect bankaccount "' +
+											' title="' + this.notes + '">' +
+											this.title + '</td>';
+										
+					aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+					
+					aHTML[++h] = '<span id="spanBankAccount_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+						
+					aHTML[++h] = '</td>';				
+																	
+					aHTML[++h] = '</tr>'
+				});
 				
-	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Title-" class="interfaceMainRow"' +
-							' title="' + oRow.notes + '">' +
-							oRow.title + '</td>';
-														
-	aHTML[++h] = '</tr>'
+				aHTML[++h] = '</tbody></table>';
+			}
+			
+			$('#tdInterfaceMainBankAccountColumn1').html(aHTML.join(''));
+
+			$('.interfaceMainRowOptionsRemove').button(
+			{
+				text: false,
+				icons: {
+					primary: "ui-icon-close"
+				}
+			})
+			.click(function() {
+				$.extend(true, aParam, {step: 4, xhtmlElementID: this.id});
+				interfaceSetupFinancialBankAccount(aParam);
+			})
+			.css('width', '15px')
+			.css('height', '17px');
+
+			$('#spanBankAccount_options_add').button(
+			{
+				text: "Add"
+			})
+			.click(function() {
+				$.extend(true, aParam, {step: 2, xhtmlElementID: undefined});
+				interfaceSetupFinancialBankAccount(aParam);
+			})
+			.css('font-size', '0.75em')
+
+			$('.bankaccount').click(function() {
+				$.extend(true, aParam, {step: 2, xhtmlElementID: event.target.id});
+				interfaceSetupFinancialBankAccount(aParam);
+			})
+		}	
+	}
+
+	if (iStep == 2)
+	{	
+
+		var aHTML = [];
+		var h = -1;
 	
-	return aHTML.join('');
+		aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain">' +
+				'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
+				'<td id="tdInterfaceMainBankAccountEditColumn1"  class="interfaceMainColumn1" style="width:300px;padding-right:15px;">' +
+				gsLoadingXHTML +
+				'</td>' +
+				'<td id="tdInterfaceMainBankAccountEditColumn2" class="interfaceMainColumn2">' +
+				'</td>' +
+				'</tr>' +
+				'</table>';				
+	
+		$('#tdInterfaceMainBankAccountColumn2').html(aHTML.join(''));
+
+		var aHTML = [];
+		var h = -1;
+
+		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+					
+		aHTML[++h] = '<tr id="trInterfaceMainBankAccountTitle" class="interfaceMain">' +
+						'<td id="tdInterfaceMainBankAccountTitle" class="interfaceMain">' +
+						'Title' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainBankAccountTitleValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainBankAccountTitleValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainBankAccountTitle" class="inputInterfaceMainText">' +
+						'</td></tr>';
+		
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainBankAccountEditColumn1').html(aHTML.join(''));
+		
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em">';
+				
+		aHTML[++h] = '<tr id="trInterfaceMainBankAccountEditSave" class="interfaceMainAction">' +
+						'<td id="tdInterfaceMainBankAccountEditSave" class="interfaceMainAction">' +
+						'<span style="width:70px;" id="spanInterfaceMainBankAccountEditSave">Save</span>' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceMainBankAccountEditCancel" class="interfaceMainAction">' +
+						'<td id="tdInterfaceMainBankAccountEditCancel" class="interfaceMainAction">' +
+						'<span style="width:70px;" id="spanInterfaceMainBankAccountEditCancel">Cancel</span>' +
+						'</td></tr>';
+										
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainBankAccountEditColumn2').html(aHTML.join(''));
+		
+		$('#spanInterfaceMainBankAccountEditSave').button(
+		{
+			text: "Save"
+		})
+		.click(function() 
+		{
+			interfaceMasterStatusWorking();
+
+			var sData = 'id=' + interfaceMasterFormatSave(sID);
+			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainBankAccountTitle').val());
+			
+			$.ajax(
+			{
+				type: 'POST',
+				url: '/ondemand/setup/?method=SETUP_FINANCIAL_BANK_ACCOUNT_MANAGE',
+				data: sData,
+				dataType: 'json',
+				success: function() {
+					$.extend(true, aParam, {step: 1});
+					interfaceSetupFinancialBankAccount(aParam);
+					interfaceMasterStatus('Saved');
+				}
+			});
+		})
+		
+		$('#spanInterfaceMainBankAccountEditCancel').button(
+		{
+			text: "Ca"
+		})
+		.click(function() 
+		{
+			$.extend(true, aParam, {step: 1});
+			interfaceSetupFinancialBankAccount(aParam);
+		})
+
+		if (sID != undefined)
+		{
+			interfaceMasterStatusWorking();
+
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
+			oSearch.addField('title');
+			oSearch.addFilter('id', 'EQUAL_TO', sID);
+			oSearch.getResults(function(data) {
+					$.extend(true, aParam, {step: 3});
+					interfaceSetupFinancialBankAccount(aParam, data)
+					});
+		}
+		else
+		{
+			//$('[name="radioDataType"][value="4"]').attr('checked', true);	
+		}
+	}
+		
+	if (iStep == 3 && oResponse)
+	{
+		var oObjectContext = oResponse.data.rows[0];
+		$('#inputInterfaceMainBankAccountTitle').val(oObjectContext.title);
+		$('#inputInterfaceMainBankAccountTitle').focus();
+
+		interfaceMasterStatus('');
+	}
+
+	if (iStep == 4)
+	{			
+		var sParam = 'method=SETUP_FINANCIAL_BANK_ACCOUNT_MANAGE&remove=1';
+		var sData = 'id=' + sID;
+		
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/setup/?' + sParam,
+			data: sData,
+			dataType: 'json',
+			success: function(data)
+			{
+				if (data.status == 'OK')
+				{
+					$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+					$.extend(true, aParam, {step: 1});
+					interfaceSetupFinancialBankAccount(aParam);
+					interfaceMasterStatus('Saved');
+				}
+				else
+				{
+					interfaceMasterError(data.error.errornotes);
+				}
+			}
+		});
+	}		
 }
 
 function interfaceSetupFinancialAccount(aParam, oResponse)
 {
 	var iStep = 1;
 	var iType;
-	
+	var iParentAccount;
+
 	if (aParam != undefined)
 	{
 		if (aParam.step != undefined) {iStep = aParam.step}
 		if (aParam.type != undefined) {iType = aParam.type}
+		if (aParam.parentAccount != undefined) {iParentAccount = aParam.parentAccount}
 	}
 		
 	if (iStep == 1)
@@ -453,47 +632,100 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 				
 		$('#divInterfaceMainFinancialAccount').html(aHTML.join(''));
 		
-		var aHTML = [];
-		var h = -1;	
-						
-		aHTML[++h] = '<table id="tableInterfaceMainAccountType" class="interfaceMain">' +
-						'<tr class="interfaceMainRow">' +
-						'<td id="tdInterfaceMainSetupFinancialAccountType-1" class="interfaceMainRow interfaceMainRowSelect type">' +
-						'Expenses</td>' +
-						'</tr>' +
-						'<tr class="interfaceMainRow">' +
-						'<td id="tdInterfaceMainSetupFinancialAccountType-2" class="interfaceMainRow interfaceMainRowSelect type">' +
-						'Revenue</td>' +
-						'</tr>' +
-						'<tr class="interfaceMainRow">' +
-						'<td id="tdInterfaceMainSetupFinancialAccountType-3" class="interfaceMainRow interfaceMainRowSelect type">' +
-						'Asset</td>' +
-						'</tr>' +
-						'<tr class="interfaceMainRow">' +
-						'<td id="tdInterfaceMainSetupFinancialAccountType-4" class="interfaceMainRow interfaceMainRowSelect type">' +
-						'Liability</td>' +
-						'</tr>' +
-						'<tr class="interfaceMainRow">' +
-						'<td id="tdInterfaceMainSetupFinancialAccountType-5" class="interfaceMainRow interfaceMainRowSelect type">' +
-						'Equity</td>' +
-						'</tr>' +
-						'</table>';					
-				
-		$('#tdInterfaceMainSetupAccountColumnType').html(aHTML.join(''));
-
-		$('td.type').click(function(event)
-		{
-			var sXHTMLElementId = event.target.id;
-			var aId = sXHTMLElementId.split('-');
+		if (ns1blankspace.financial.rootAccount == undefined)
+		{	
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+			oSearch.addField('title');
+			oSearch.addFilter('parentaccount', 'IS_NULL');
+			oSearch.async = false;
+			oSearch.rows = 1;
 			
-			interfaceSetupFinancialAccount({type: aId[1], step: 2});
-		});
+			oSearch.getResults(function(oResponse)
+			{
+				if (oResponse.data.rows.length != 0)
+				{
+					ns1blankspace.financial.rootAccount = oResponse.data.rows[0].id;
+				}
+				else
+				{
+					ns1blankspace.financial.rootAccount = -1;
+				}	
+			});	
+		}
+
+		if (ns1blankspace.financial.rootAccount == -1)
+		{
+			//Set up default
+		}
+		else
+		{
+			if (oResponse == undefined)
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+				oSearch.addField('title');
+				oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount);
+				oSearch.getResults(function(data) {interfaceSetupFinancialAccount(aParam, data)})	
+			}
+			else
+			{
+				var aHTML = [];
+				var h = -1;	
+				
+				ns1blankspace.financial.rootAccounts = oResponse.data.rows;
+
+				aHTML[++h] = '<table id="tableInterfaceMainAccountType" class="interfaceMain">' +
+								'<tr class="interfaceMainRow">' +
+								'<td id="tdInterfaceMainSetupFinancialAccountType-1-'+ 
+								($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Expense') != -1; }))[0].id +
+								'" class="interfaceMainRow interfaceMainRowSelect type">' +
+								'Expenses</td>' +
+								'</tr>' +
+								'<tr class="interfaceMainRow">' +
+								'<td id="tdInterfaceMainSetupFinancialAccountType-2-' +
+								($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Revenue') != -1; }))[0].id +
+								'" class="interfaceMainRow interfaceMainRowSelect type">' +
+								'Revenue</td>' +
+								'</tr>' +
+								'<tr class="interfaceMainRow">' +
+								'<td id="tdInterfaceMainSetupFinancialAccountType-3-' +
+								($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Asset') != -1; }))[0].id +
+								'" class="interfaceMainRow interfaceMainRowSelect type">' +
+								'Asset</td>' +
+								'</tr>' +
+								'<tr class="interfaceMainRow">' +
+								'<td id="tdInterfaceMainSetupFinancialAccountType-4-' +
+								($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Liability') != -1; }))[0].id +
+								'" class="interfaceMainRow interfaceMainRowSelect type">' +
+								'Liability</td>' +
+								'</tr>' +
+								'<tr class="interfaceMainRow">' +
+								'<td id="tdInterfaceMainSetupFinancialAccountType-5-' +
+								($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Equity') != -1; }))[0].id +
+								'" class="interfaceMainRow interfaceMainRowSelect type">' +
+								'Equity</td>' +
+								'</tr>' +
+								'</table>';					
+						
+				$('#tdInterfaceMainSetupAccountColumnType').html(aHTML.join(''));
+
+				$('td.type').click(function(event)
+				{
+					var sXHTMLElementId = event.target.id;
+					var aId = sXHTMLElementId.split('-');
+					
+					interfaceSetupFinancialAccount({type: aId[1], parentAccount: aId[2], step: 2});
+				});
+			}
+		}	
 	}	
 	else if (iStep == 2)
 	{
+
 		if (oResponse == undefined)
 		{
-			
+
 			$('#tdInterfaceMainSetupAccountColumnList').html(gsLoadingSmallXHTML);
 			
 			var aHTML = [];
@@ -519,9 +751,10 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-			oSearch.addField('title,description');
+			oSearch.addField('*');
 			oSearch.sort('title', 'asc');
 			oSearch.addFilter('type', 'EQUAL_TO', iType);
+			oSearch.addFilter('parentaccount', 'EQUAL_TO', iParentAccount);
 			oSearch.rows = 200;
 			oSearch.getResults(function(data) {interfaceSetupFinancialAccount(aParam, data)});
 		}
@@ -545,10 +778,6 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 		
 				aHTML[++h] = '<table id="tableSetupFinancialFinancialAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 				aHTML[++h] = '<tbody>'
-				aHTML[++h] = '<tr class="interfaceMainCaption">';
-				aHTML[++h] = '<td class="interfaceMainCaption">Account</td>';
-				aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-				aHTML[++h] = '</tr>';
 			
 				var oRows = oResponse.data.rows;
 			
