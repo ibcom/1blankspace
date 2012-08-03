@@ -152,18 +152,15 @@ function interfaceDocumentHomeShow(oResponse)
 		
 		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 		
-		/* var oSearch = new AdvancedSearch();
-		oSearch.endPoint = 'document';
+		var oSearch = new AdvancedSearch();
 		oSearch.method = 'DOCUMENT_SEARCH';
-		
 		oSearch.addField('title');
-		oSearch.async = false;
-		oSearch.rf = 'xml';
 		oSearch.rows = 10;
 		oSearch.sort('modifieddate', 'desc');
 		
-		oSearch.getResults(interfaceDocumentHomeShow); */
+		oSearch.getResults(function(data) {interfaceDocumentHomeShow(data)});
 		
+		/*
 		var sParam = 'method=DOCUMENT_SEARCH';
 		sParam += '&rows=10';
 				
@@ -174,6 +171,7 @@ function interfaceDocumentHomeShow(oResponse)
 			dataType: 'json',
 			success: function(data) {interfaceDocumentHomeShow(data)}
 		});
+*/
 		
 	}
 	else

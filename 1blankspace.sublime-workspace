@@ -3,10 +3,22 @@
 	{
 		"selected_items":
 		[
+			[
+				"st",
+				"style"
+			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "/Users/markbyers/ibCom/Admin/Billing/JUL2012/billing_procedure.txt",
+			"settings":
+			{
+				"buffer_size": 2644,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -32,10 +44,26 @@
 	},
 	"file_history":
 	[
+		"/Users/markbyers/ibCom/Operations/SQLServer/export-sql.powershell",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.financial.payroll-1.0.0.js",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.financial.invoice-1.0.0.js",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.format.metro-1.0.0.css",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.financial.bank.account-1.0.1.js",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.advancedsearch-1.0.0.json",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.rpc-1.0.0.json",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.setup.financial-1.0.0.js",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.master-1.0.1.js",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.financial-1.0.1.js",
+		"/Users/markbyers/ibCom/Marketing/Websites/1210/1210.format.008.css",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.advancedsearch-1.0.1.js",
+		"/Users/markbyers/ibCom/Marketing/Websites/1210/1210.home.004.js",
+		"/Users/markbyers/ibCom/Development/Model/UPDATE SEC_Method.sql",
+		"/Users/markbyers/ibCom/Development/ibComMYDS_1_DEV/jscripts/1blankspace/1blankspace.financial-1.0.0.js",
+		"/Users/markbyers/ibCom/Admin/sublime_licence"
 	],
 	"find":
 	{
-		"height": 0.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -49,13 +77,25 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"_MANAGE",
+			"'",
+			"tdInterfaceMainBankAccountColumn2",
+			"remove",
+			"Unallocated",
+			"interfaceFinancialAccounts",
+			"Page:",
+			"Pagination(",
+			"Page:",
+			"Page",
+			"Page:"
 		],
 		"highlight": true,
-		"in_selection": false,
+		"in_selection": true,
 		"preserve_case": false,
 		"regex": false,
 		"replace_history":
 		[
+			"\""
 		],
 		"reverse": false,
 		"show_context": true,
@@ -66,8 +106,35 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "/Users/markbyers/ibCom/Admin/Billing/JUL2012/billing_procedure.txt",
+					"settings":
+					{
+						"buffer_size": 2644,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								51,
+								51
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -104,7 +171,7 @@
 	"menu_visible": true,
 	"replace":
 	{
-		"height": 0.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":
