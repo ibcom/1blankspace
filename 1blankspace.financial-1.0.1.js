@@ -102,7 +102,7 @@ function interfaceFinancialMasterViewport(aParam)
 function interfaceFinancialMasterInitialise(aParam, oResponse)
 {
 	var bRefresh = false;
-	var iStep = 1;
+	var iStep = 0;
 	
 	if (aParam != undefined)
 	{
@@ -117,6 +117,29 @@ function interfaceFinancialMasterInitialise(aParam, oResponse)
 		ns1blankspace.financial.status = 1;
 	}
 	
+	if (iStep == 0)
+	{
+		if (oResponse == undefined)
+		{
+			if (ns1blankspace.financial.init == undefined || bRefresh)
+			{
+				$.ajax(
+				{
+					type: 'GET',
+					url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_MANAGE&setdefault=1',
+					dataType: 'json',
+					async: false,
+					success: function(data) {interfaceFinancialMasterInitialise(aParam, data)}
+				});
+			}
+		}
+		else
+		{
+			ns1blankspace.financial.init = 1;
+			interfaceFinancialMasterInitialise($.extend(true, aParam, {step: 1}))
+		}
+	}
+
 	if (iStep == 1)
 	{
 		if (oResponse == undefined)
@@ -583,7 +606,7 @@ function interfaceFinancialProfitLoss(aParam, oResponse)
 		{
 			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">Sorry nothing to report, add an invoice or expense and you will be able to see how your going.</td>';
+			aHTML[++h] = '<td class="interfaceMainRowNothing">Sorry nothing to show, add an invoice or expense<br />and you will be able to see how you are going.</td>';
 			aHTML[++h] = '</tr>';
 			aHTML[++h] = '</table>';
 		}
@@ -669,9 +692,11 @@ function interfaceFinancialBalanceSheet(aParam, oResponse)
 		{
 			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">Sorry nothing to report, add an invoice or expense and you will be able to see how your going.</td>';
+			aHTML[++h] = '<td class="interfaceMainRowNothing">Sorry nothing to show, add an invoice or expense<br />and you will be able to see how you are going.</td>';
 			aHTML[++h] = '</tr>';
 			aHTML[++h] = '</table>';
+
+			$('#divInterfaceMainBS').html(aHTML.join(''));
 		}
 		else
 		{
@@ -1141,7 +1166,7 @@ function interfaceFinancialAccounts(aParam, oResponse)
 	
 		aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnCategory-3" name="radioCategory" /><label for="interfaceMainBankAccountColumnCategory-3" style="width: 100px;">Balance Sheet</label>';
 	
-		aHTML[++h] = '</div>';Un
+		aHTML[++h] = '</div>';
 
 		$('#tdInterfaceMainAccountColumn1').html(aHTML.join(''));
 	
@@ -1180,7 +1205,7 @@ function interfaceFinancialAccounts(aParam, oResponse)
 			{
 				aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 				aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-				aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No Accounts</td>';
+				aHTML[++h] = '<td class="interfaceMainRowNothing">No Accounts</td>';
 				aHTML[++h] = '</tr>';
 				aHTML[++h] = '</table>';
 				
@@ -1266,7 +1291,7 @@ function interfaceFinancialAccounts(aParam, oResponse)
 			{
 				aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 				aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-				aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No transactions</td>';
+				aHTML[++h] = '<td class="interfaceMainRowNothing">No transactions</td>';
 				aHTML[++h] = '</tr>';
 				aHTML[++h] = '</table>';
 				

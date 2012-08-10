@@ -7,6 +7,8 @@ function interfaceSetupFinancialMasterViewport()
 	
 	if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}
 
+	interfaceFinancialMasterInitialise();
+
 	interfaceMasterReset();		
 			
 	$('#divInterfaceMasterViewportControlSet').button(
