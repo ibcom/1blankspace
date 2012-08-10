@@ -18,6 +18,22 @@
 				"buffer_size": 2644,
 				"line_ending": "Windows"
 			}
+		},
+		{
+			"file": "1blankspace.document-1.0.0.js",
+			"settings":
+			{
+				"buffer_size": 26322,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "\n\nFINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_PROCESS",
+			"settings":
+			{
+				"buffer_size": 51,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
@@ -106,7 +122,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -127,6 +143,59 @@
 						],
 						"settings":
 						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "1blankspace.document-1.0.0.js",
+					"settings":
+					{
+						"buffer_size": 26322,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3288,
+								3288
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2053.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"settings":
+					{
+						"buffer_size": 51,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2,
+								51
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -184,11 +253,11 @@
 	},
 	"select_project":
 	{
-		"height": 0.0,
+		"height": 500.0,
 		"selected_items":
 		[
 		],
-		"width": 0.0
+		"width": 380.0
 	},
 	"show_minimap": true,
 	"show_open_files": false,

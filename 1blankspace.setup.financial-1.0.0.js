@@ -830,6 +830,18 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 						'<input id="inputInterfaceMainAccountAddTitle" class="inputInterfaceMainText">' +
 						'</td></tr>';
 		
+
+		aHTML[++h] = '<tr id="trInterfaceMainAccountParent" class="interfaceMain">' +
+						'<td id="tdInterfaceMainAccountParent" class="interfaceMain">' +
+						'Parent' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainAccountParentValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainAccountParentValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainAccountParentAccount" class="inputInterfaceMainSelect"' +
+							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+							' data-columns="title">' +
+						'</td></tr>';
+
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainSetupAccountColumnEdit').html(aHTML.join(''));
@@ -857,6 +869,7 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 			var sData = 'type=' + iType;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainAccountAddTitle').val());
+			sData += '&parentaccount=' + interfaceMasterFormatSave($('#inputInterfaceMainAccountParentAccount').attr("data-id"));
 			
 			$.ajax(
 			{
@@ -874,7 +887,7 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 		{
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-			oSearch.addField('title,description');
+			oSearch.addField('title,description,parentaccount,parentaccounttext');
 			oSearch.addFilter('id', 'EQUAL_TO', sID);
 			oSearch.getResults(function(data) {
 					$.extend(true, aParam, {step: 5});
@@ -893,6 +906,8 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 			var oObjectContext = oResponse.data.rows[0];
 			$('#inputInterfaceMainAccountAddTitle').val(oObjectContext.title)
 			$('#inputInterfaceMainAccountAddTitle').focus();
+			$('#inputInterfaceMainAccountParentAccount').val(oObjectContext.parentaccounttext)
+			$('#inputInterfaceMainAccountParentAccount').attr('data-id', goObjectContext.parentaccount);
 		}		
 		
 	}	
@@ -945,7 +960,9 @@ function interfaceSetupFinancialFinancialAccountDefault()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainFinancialAccountCashValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainFinancialAccountCashValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainFinancialAccountCash" class="inputInterfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountCash" class="inputInterfaceMainSelect"' +
+							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+							' data-columns="title">' +
 						'</td></tr>';
 		
 		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountCreditors" class="interfaceMain">' +
@@ -954,7 +971,9 @@ function interfaceSetupFinancialFinancialAccountDefault()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainFinancialAccountCreditorsValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainFinancialAccountCreditorsValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainFinancialAccountCreditors" class="inputInterfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountCreditors" class="inputInterfaceMainSelect"' +
+							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+							' data-columns="title">' +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountDebitors" class="interfaceMain">' +
@@ -963,7 +982,9 @@ function interfaceSetupFinancialFinancialAccountDefault()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainFinancialAccountDebitorsValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainFinancialAccountDebitorsValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainFinancialAccountDebitors" class="inputInterfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountDebitors" class="inputInterfaceMainSelect"' +
+							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+							' data-columns="title">' +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountCurrentProfit" class="interfaceMain">' +
@@ -972,7 +993,9 @@ function interfaceSetupFinancialFinancialAccountDefault()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainFinancialAccountCurrentProfitValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainFinancialAccountCurrentProfitValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainFinancialAccountCurrentProfit" class="inputInterfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountCurrentProfit" class="inputInterfaceMainSelect"' +
+							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+							' data-columns="title">' +
 						'</td></tr>';	
 						
 		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
@@ -981,7 +1004,9 @@ function interfaceSetupFinancialFinancialAccountDefault()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText"' +
+							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+							' data-columns="title">' +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
@@ -990,7 +1015,9 @@ function interfaceSetupFinancialFinancialAccountDefault()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainSelect"' +
+							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+							' data-columns="title">' +
 						'</td></tr>';																				
 										
 		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
@@ -999,7 +1026,9 @@ function interfaceSetupFinancialFinancialAccountDefault()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainSelect"' +
+							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+							' data-columns="title">' +
 						'</td></tr>';
 
 		aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountRetainedProfit" class="interfaceMain">' +
@@ -1008,7 +1037,9 @@ function interfaceSetupFinancialFinancialAccountDefault()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainFinancialAccountRetainedProfitValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainText">' +
+						'<input id="inputInterfaceMainFinancialAccountRetainedProfit" class="inputInterfaceMainSelect"' +
+							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+							' data-columns="title">' +
 						'</td></tr>';
 						
 		/*

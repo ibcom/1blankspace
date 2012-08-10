@@ -836,7 +836,7 @@ function interfaceOrderDetails()
 						'<input id="inputInterfaceMainDetailsOrderDate" class="inputInterfaceMainDate">' +
 						'</td></tr>';
 						
-			aHTML[++h] = '<tr id="trInterfaceMainDetailsOrderByBusiness" class="interfaceMain">' +
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsOrderByBusiness" class="interfaceMain">' +
 						'<td id="tdInterfaceMainDetailsOrderByBusiness" class="interfaceMain">' +
 						'Business' +
 						'</td></tr>' +
