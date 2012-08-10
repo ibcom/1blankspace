@@ -109,36 +109,40 @@ function interfaceSetupHomeShow(aParam, oResponse)
 	var aHTML = [];
 	var h = -1;
 				
+	var aHTML = [];
+	var h = -1;
+				
+	aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
+	aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
+					'<td id="tdInterfaceSetupHomeMostLikely" class="interfaceViewportMain">' +
+					gsLoadingXHTML + 
+					'</td>' +
+					'</tr>';
+	aHTML[++h] = '</table>';					
+	
+	$('#divInterfaceMain').html(aHTML.join(''));
+	
+	var aHTML = [];
+	var h = -1;
+	
+	aHTML[++h] = '<table style="width:100%" border="0" cellspacing="0" cellpadding="0" id="tableInterfaceSetupHomeMostLikely">';
+	aHTML[++h] = '<tbody>'
+		
+	aHTML[++h] = '<tr class="interfaceMainRow">';
+	aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
+	aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right"><span id="spanInterfaceSetupAdd">Add</span></td>';
+	aHTML[++h] = '</tr>';
+	
 	if (oResponse.data.rows.length == 0)
 	{
+		aHTML[++h] = '<tr>';
+		aHTML[++h] = '<td class="interfaceMainRowNothing">Nothing to show.</td>';
+		aHTML[++h] = '<td></td>';
+		aHTML[++h] = '</tr>';	
 		$('#tdInterfaceProjectHomeMostLikely').html('Nothing to show.');
 	}
 	else
-	{
-		var aHTML = [];
-		var h = -1;
-					
-		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-						'<td id="tdInterfaceSetupHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';					
-		
-		$('#divInterfaceMain').html(aHTML.join(''));
-		
-		var aHTML = [];
-		var h = -1;
-		
-		aHTML[++h] = '<table style="width:100%" border="0" cellspacing="0" cellpadding="0" id="tableInterfaceSetupHomeMostLikely">';
-		aHTML[++h] = '<tbody>'
-			
-		aHTML[++h] = '<tr class="interfaceMainRow">';
-		aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
-		aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right"><span id="spanInterfaceSetupAdd">Add</span></td>';
-		aHTML[++h] = '</tr>';
-		
+	{	
 		$.each(oResponse.data.rows, function()
 		{
 			aHTML[++h] = '<tr class="interfaceMainRow">';
@@ -152,41 +156,41 @@ function interfaceSetupHomeShow(aParam, oResponse)
 			
 			aHTML[++h] = '</tr>'
 		});
-    	
-		aHTML[++h] = '</tbody></table>';
+	}
 
-		$('#tdInterfaceSetupHomeMostLikely').html(aHTML.join(''));
-			
-		$('#spanInterfaceSetupAdd').button({
-				text: false,
-				 icons: {
-					 primary: "ui-icon-plus"
-				}
-			})
-			.click(function() {
-				interfaceSetupAdd()
-			})
-			.css('width', '15px')
-			.css('height', '20px')	
-			
-		$('td.interfaceHomeMostLikely').click(function(event)
-		{
-			interfaceSetupElementEditStart(event.target.id);
-		});
+	aHTML[++h] = '</tbody></table>';
+
+	$('#tdInterfaceSetupHomeMostLikely').html(aHTML.join(''));
 		
-		$('.interfaceMainRowOptionsDelete').button({
-				text: false,
-				 icons: {
-					 primary: "ui-icon-close"
-				}
-			})
-			.click(function() {
-				interfaceSetupRemove(this.id)
-			})
-			.css('width', '15px')
-			.css('height', '20px')
+	$('#spanInterfaceSetupAdd').button({
+			text: false,
+			 icons: {
+				 primary: "ui-icon-plus"
+			}
+		})
+		.click(function() {
+			interfaceSetupAdd()
+		})
+		.css('width', '15px')
+		.css('height', '20px')	
 		
-	}	
+	$('td.interfaceHomeMostLikely').click(function(event)
+	{
+		interfaceSetupElementEditStart(event.target.id);
+	});
+	
+	$('.interfaceMainRowOptionsDelete').button({
+			text: false,
+			 icons: {
+				 primary: "ui-icon-close"
+			}
+		})
+		.click(function() {
+			interfaceSetupRemove(this.id)
+		})
+		.css('width', '15px')
+		.css('height', '20px')
+			
 	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 }			
 	

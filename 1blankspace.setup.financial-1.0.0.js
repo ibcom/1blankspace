@@ -364,35 +364,38 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 		}
 		else
 		{
+
+			var aHTML = [];
+			var h = -1;
+		
+			aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain" style="width:100%">' +
+					'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
+					'<td id="tdInterfaceMainBankAccountColumn1" style="width:250px;" class="interfaceMainColumn1">' +
+					gsLoadingXHTML +
+					'</td>' +
+					'<td id="tdInterfaceMainBankAccountColumn2" class="interfaceMainColumn2">' +
+					'<span id="spanBankAccount_options_add" class="interfaceMainRowOptionsAdd" style="font-size:0.75em;">Add</span>'
+					'</td>' +
+					'</tr>' +
+					'</table>';				
+		
+			$('#divInterfaceMainBankAccount').html(aHTML.join(''));
+		
 			var aHTML = [];
 			var h = -1;
 			
 			if (oResponse.data.rows.length == 0)
 			{
-				aHTML[++h] = '<table id="tableInterfaceSetupFinancialBankAccount">';
-				aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-				aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No bank accounts set up.</td>';
+				aHTML[++h] = '<table>';
+				aHTML[++h] = '<tr>';
+				aHTML[++h] = '<td class="interfaceMainRowNothing">No bank accounts have been set up.</td>';
 				aHTML[++h] = '</tr>';
 				aHTML[++h] = '</table>';
+
+				$('#tdInterfaceMainBankAccountColumn1').html(aHTML.join(''));
 			}
 			else
 			{			
-				var aHTML = [];
-				var h = -1;
-			
-				aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain" style="width:100%">' +
-						'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
-						'<td id="tdInterfaceMainBankAccountColumn1" style="width:250px;" class="interfaceMainColumn1">' +
-						gsLoadingXHTML +
-						'</td>' +
-						'<td id="tdInterfaceMainBankAccountColumn2" class="interfaceMainColumn2">' +
-						'<span id="spanBankAccount_options_add" class="interfaceMainRowOptionsAdd" style="font-size:0.75em;">Add</span>'
-						'</td>' +
-						'</tr>' +
-						'</table>';				
-			
-				$('#divInterfaceMainBankAccount').html(aHTML.join(''));
-			
 				var aHTML = [];
 				var h = -1;
 			
