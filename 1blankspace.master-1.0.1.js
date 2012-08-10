@@ -693,7 +693,11 @@ function interfaceMasterLogonShow(aParam)
 					'<span id="spanInterfaceMasterLogon"></span>' +
 					'</td>' +
 					'</tr>';
-					
+	
+	aHTML[++h] = '<tr id="trInterfaceMasterLogonNameRemember" class="interfaceMasterLogon">' +
+				    '<td id="tdInterfaceMasterLogonNameRemember" class="interfaceMasterLogon" colspan=2>' +
+					'<input type="checkbox" id="inputInterfaceMasterLogonNameRemember"/>Remember Me</td></tr>';
+
 	aHTML[++h] = '<tr id="trInterfaceMasterLogonSendPassword" class="interfaceMasterLogon">' +
 					'<td id="tdInterfaceMasterLogonSendPassword" class="interfaceMasterLogon" colspan=2>' +
 					'<a href="#" id="aInterfaceMasterLogonSendPassword">Send Password</a>' +
@@ -716,6 +720,7 @@ function interfaceMasterLogonShow(aParam)
 	if (sLogonName != '' && sLogonName != null)
 	{
 		$('#inputInterfaceMasterLogonName').val(sLogonName);
+		$('#inputInterfaceMasterLogonNameRemember').attr('checked', true);
 		$('#inputInterfaceMasterLogonPassword').focus();
 	}
 	else
@@ -776,7 +781,7 @@ function interfaceMasterLogonProcess(oResponse)
 		
 		if ($('#inputInterfaceMasterLogonNameRemember').attr('checked'))
 		{
-			$.cookie('mydigitalstucturelogon', sLogonName);
+			$.cookie('mydigitalstucturelogon', $('#inputInterfaceMasterLogonName').val(), {expires:30});
 		}
 		
 		interfaceControlSecurity();
