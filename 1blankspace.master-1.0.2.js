@@ -715,7 +715,7 @@ function interfaceMasterLogonShow(aParam)
 	$('#' + sXHTMLElementID).css("z-index", "1");
 	$('#' + sXHTMLElementID).html(aHTML.join(''));
 	
-	var sLogonName = $.cookie('mydigitalspaceidlogonname')
+	var sLogonName = $.cookie('mydigitalstucturelogon')
 	
 	if (sLogonName != '' && sLogonName != null)
 	{
