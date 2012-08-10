@@ -120,8 +120,8 @@ function interfaceSetupMessagingHomeShow(oResponse)
 		oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
 		oSearch.addField('email');
 		oSearch.addFilter('type', 'EQUAL_TO', 5);
-		oSearch.rows = 10;
-		oSearch.sort('modifieddate', 'desc');
+		oSearch.rows = 50;
+		oSearch.sort('email', 'asc');
 		oSearch.getResults(interfaceSetupMessagingHomeShow);
 	}
 	else
@@ -132,16 +132,13 @@ function interfaceSetupMessagingHomeShow(oResponse)
 		{
 			aHTML.push('<table id="tableInterfaceMessagingConversationHomeMostLikely">');
 			aHTML.push('<tr class="trInterfaceMessagingConversationHomeMostLikelyNothing">');
-			aHTML.push('<td class="tdInterfaceMessagingConversationHomeMostLikelyNothing">Click New to create a user.</td>');
+			aHTML.push('<td class="tdInterfaceMessagingConversationHomeMostLikelyNothing">Click New to add a message account.</td>');
 			aHTML.push('</tr>');
 			aHTML.push('</table>');
 		}
 		else
 		{
 			aHTML.push('<table id="tableInterfaceSetupMessagingHomeMostLikely">');
-			aHTML.push('<tr>');
-			aHTML.push('<td class="interfaceMain">MOST LIKELY</td>');
-			aHTML.push('</tr>');
 			
 			$.each(oResponse.data.rows, function()
 			{	
@@ -155,11 +152,6 @@ function interfaceSetupMessagingHomeShow(oResponse)
 			
 			aHTML.push('</tbody></table>');
 			
-			aHTML.push('<table id="tableInterfaceSetupMessagingHomeMostLikelyMore">');
-			aHTML.push('<tr><td id="tdInterfaceSetupMessagingHomeMostLikelyMore">' +
-						'<a href="#" id="aInterfaceSetupMessagingHomeMostLikelyMore">more...</a>' +
-						'</td></tr>');
-			aHTML.push('</tbody></table>');
 		}
 		
 		$('#tdInterfaceSetupMessagingHomeMostLikely').html(aHTML.join(''));
@@ -331,15 +323,25 @@ function interfaceSetupMessagingViewport()
 	aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-					'</tr>';
-					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-					'</tr>';
-			
+	
+
+	if (giObjectContext == -1)
+	{
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
+						'</tr>';
+	}
+	else
+	{				
+		aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+						'</tr>';
+						
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
+						'</tr>';
+	}
+
 	aHTML[++h] = '</table>';					
 				
 	$('#divInterfaceViewportControl').html(aHTML.join(''));
@@ -487,6 +489,18 @@ function interfaceSetupMessagingDetails()
 	
 		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
 	
+
+		aHTML[++h] = '<tr id="trInterfaceMainDetailsUser" class="interfaceMain">' +
+						'<td id="tdInterfaceMainMainDetailsUser" class="interfaceMain">' +
+						'User' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainDetailsUserValue" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainDetailsUserValue" class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsUser" class="inputInterfaceMainSelect"' +
+							' data-method="SETUP_USER_SEARCH"' +
+							' data-columns="username">' +
+						'</td></tr>';
+
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsEmail" class="interfaceMain">' +
 						'<td id="tdInterfaceMainDetailsEmail" class="interfaceMain">' +
 						'Email' +
@@ -547,6 +561,8 @@ function interfaceSetupMessagingDetails()
 		
 		if (goObjectContext != undefined)
 		{
+			$('#inputInterfaceMainDetailsUser').val(goObjectContext.usertext);
+			$('#inputInterfaceMainDetailsUser').attr('data-id', goObjectContext.user);
 			$('#inputInterfaceMainDetailsEmail').val(goObjectContext.email);
 			$('[name="radioType"][value="' + goObjectContext.type + '"]').attr('checked', true);
 			$('#inputInterfaceMainDetailsAccountName').val(goObjectContext.accountname);
@@ -561,11 +577,10 @@ function interfaceSetupMessagingDetails()
 
 function interfaceSetupMessagingNew()
 {
-	goObjectContext = undefinded;
+	goObjectContext = undefined;
 	giObjectContext = -1;
 	interfaceSetupMessagingViewport();
-	$('#divInterfaceMainDetails').html(gsLoadingXHTML);
-	$('#divInterfaceMainDetails').attr('onDemandLoading', '1');
+	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
 	interfaceSetupMessagingDetails();	
@@ -583,10 +598,15 @@ function interfaceSetupMessagingSave()
 	
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
+		sData += '&user=' + encodeURIComponent($('#inputInterfaceMainDetailsUser').attr("data-id"));
 		sData += '&email=' + encodeURIComponent($('#inputInterfaceMainDetailsEmail').val());
+		sData += '&title=' + encodeURIComponent($('#inputInterfaceMainDetailsEmail').val());
 		sData += '&type=' + $('input[name="radioType"]:checked').val();
 		sData += '&accountname=' + encodeURIComponent($('#inputInterfaceMainDetailsAccountName').val());
 		sData += '&server=' + encodeURIComponent($('#inputInterfaceMainDetailsServer').val());
+		sData += '&cachetype=1';
+		sData += '&sslport=993';
+		sData += '&authtype=0';
 		
 		if ($('#inputInterfaceMainDetailsAccountPassword').val() != '')
 		{
@@ -600,7 +620,11 @@ function interfaceSetupMessagingSave()
 		url: '/ondemand/setup/?' + sParam,
 		data: sData,
 		dataType: 'text',
-		success: interfaceMasterStatus('Saved')
+		success: function()
+		{
+				interfaceMasterStatus('Saved');
+				interfaceSetupMessagingMasterViewport();
+		}
 	});		
 }
 
