@@ -183,10 +183,41 @@ function interfaceFinancialMasterInitialise(aParam, oResponse)
 		else
 		{
 			ns1blankspace.financial.settings = oResponse;
-			ns1blankspace.financial.status = 2;
+			//interfaceFinancialMasterInitialise($.extend(true, aParam, {step: 3}))
 		}
 	}
 	
+	if (iStep == 3)
+	{
+		if (oResponse == undefined)
+		{
+			if (ns1blankspace.financial.accounts == undefined || bRefresh)
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+				oSearch.addField('title');
+				oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount);
+				oSearch.sort('parentaccount', 'asc')
+				oSearch.getResults(function(data) {interfaceFinancialMasterInitialise(aParam, data)})	
+
+				$.ajax(
+				{
+					type: 'GET',
+					url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_ACCOUNTS_SEARCH&all=1&includefinancialaccounttext=1',
+					dataType: 'json',
+					async: false,
+					success: function(data) {interfaceFinancialMasterInitialise(aParam, data)}
+				});
+			}
+		}
+		else
+		{
+			ns1blankspace.financial.accounts = oResponse.data.rows;
+			ns1blankspace.financial.accountsTree = intefaceSetupFinancialAccountsTree(ns1blankspace.financial.accounts[ns1blankspace.financial.rootaccount],ns1blankspace.financial.accounts); 
+			ns1blankspace.financial.status = 2;
+		}
+	}
+
 	interfaceMasterStatus('&nbsp;');
 }
 

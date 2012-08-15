@@ -617,6 +617,17 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 	}		
 }
 
+function interfaceSetupFinancialAccountTree()
+{
+	var oAccounts = ns1blankspace.financial.accounts;
+
+  	$(ns1blankspace.financial.accounts).each(function(i,k) 
+	{
+		var oItems = $.grep(oAccounts, function (a) { return parseInt(a.parentaccount) == parseInt(k.id); })	
+		this.items = oItems;
+	});
+}
+
 function interfaceSetupFinancialAccount(aParam, oResponse)
 {
 	var iStep = 1;
@@ -682,8 +693,10 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 			{
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-				oSearch.addField('title');
-				oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount);
+				oSearch.addField('title,parentaccount,parentaccounttext');
+				//oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount);
+				oSearch.rows = 200;
+				oSearch.sort('parentaccount', 'asc')
 				oSearch.getResults(function(data) {interfaceSetupFinancialAccount(aParam, data)})	
 			}
 			else
@@ -691,7 +704,9 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 				var aHTML = [];
 				var h = -1;	
 				
-				ns1blankspace.financial.rootAccounts = oResponse.data.rows;
+				ns1blankspace.financial.accounts = oResponse.data.rows;
+				ns1blankspace.financial.rootAccounts =  $.grep(ns1blankspace.financial.accounts, function (a) { return a.parentaccount == ns1blankspace.financial.rootAccount; })
+				interfaceSetupFinancialAccountTree(ns1blankspace.financial.rootAccount); 
 
 				aHTML[++h] = '<table id="tableInterfaceMainAccountType" class="interfaceMain">' +
 								'<tr class="interfaceMainRow">' +
@@ -766,22 +781,16 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 				$.extend(true, aParam, {step: 3});
 				interfaceSetupFinancialAccount(aParam);
 			})
-			
-			var oSearch = new AdvancedSearch();
-			oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-			oSearch.addField('*');
-			oSearch.sort('title', 'asc');
-			oSearch.addFilter('type', 'EQUAL_TO', iType);
-			oSearch.addFilter('parentaccount', 'EQUAL_TO', iParentAccount);
-			oSearch.rows = 200;
-			oSearch.getResults(function(data) {interfaceSetupFinancialAccount(aParam, data)});
+
+			var oItems = $.grep(ns1blankspace.financial.accounts, function (a) { return a.parentaccount == iParentAccount; });
+			interfaceSetupFinancialAccount(aParam, oItems);
 		}
 		else
 		{
 			var aHTML = [];
 			var h = -1;
 		
-			if (oResponse.data.rows.length == 0)
+			if (oResponse.length == 0)
 			{
 				aHTML[++h] = '<table id="tableInterfaceSetupFinancialFinancialAccount">';
 				aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
@@ -797,7 +806,7 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 				aHTML[++h] = '<table id="tableSetupFinancialFinancialAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 				aHTML[++h] = '<tbody>'
 			
-				var oRows = oResponse.data.rows;
+				var oRows = oResponse;
 			
 				$(oRows).each(function() 
 				{
