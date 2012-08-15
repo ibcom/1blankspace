@@ -445,7 +445,7 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 				text: "Add"
 			})
 			.click(function() {
-				$.extend(true, aParam, {step: 2, xhtmlElementID: undefined});
+				$.extend(true, aParam, {step: 2, xhtmlElementID: ""});
 				interfaceSetupFinancialBankAccount(aParam);
 			})
 			.css('font-size', '0.75em')
@@ -551,7 +551,7 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 		
 		$('#spanInterfaceMainBankAccountEditCancel').button(
 		{
-			text: "Ca"
+			text: "Cancel"
 		})
 		.click(function() 
 		{
@@ -574,7 +574,6 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 		}
 		else
 		{
-			//$('[name="radioDataType"][value="4"]').attr('checked', true);	
 		}
 	}
 		
