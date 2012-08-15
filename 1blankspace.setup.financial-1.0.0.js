@@ -489,6 +489,17 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 						'<input id="inputInterfaceMainBankAccountTitle" class="inputInterfaceMainText">' +
 						'</td></tr>';
 		
+		aHTML[++h] = '<tr id="trInterfaceMainBankAccountFinancialAccount" class="interfaceMain">' +
+						'<td id="tdInterfaceMainBankAccountFinancialAccount" class="interfaceMain">' +
+						'Financial Account' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainBankAccountFinancialAccountValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainBankAccountFinancialAccountValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainBankAccountFinancialAccount" class="inputInterfaceMainSelect"' +
+							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+							' data-columns="title">' +
+						'</td></tr>';
+
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainBankAccountEditColumn1').html(aHTML.join(''));
@@ -522,7 +533,8 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 
 			var sData = 'id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainBankAccountTitle').val());
-			
+			sData += '&financialaccount=' + interfaceMasterFormatSave($('#inputInterfaceMainBankAccountFinancialAccount').attr("data-id"));
+
 			$.ajax(
 			{
 				type: 'POST',
@@ -553,7 +565,7 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-			oSearch.addField('title');
+			oSearch.addField('title,financialaccount,financialaccounttext');
 			oSearch.addFilter('id', 'EQUAL_TO', sID);
 			oSearch.getResults(function(data) {
 					$.extend(true, aParam, {step: 3});
@@ -571,6 +583,8 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 		var oObjectContext = oResponse.data.rows[0];
 		$('#inputInterfaceMainBankAccountTitle').val(oObjectContext.title);
 		$('#inputInterfaceMainBankAccountTitle').focus();
+		$('#inputInterfaceMainBankAccountFinancialAccount').val(oObjectContext.financialaccounttext)
+		$('#inputInterfaceMainBankAccountFinancialAccount').attr('data-id', goObjectContext.financialaccount);
 
 		interfaceMasterStatus('');
 	}

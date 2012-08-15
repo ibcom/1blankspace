@@ -121,6 +121,9 @@ function interfaceFinancialMasterInitialise(aParam, oResponse)
 	{
 		if (oResponse == undefined)
 		{
+			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+			interfaceMasterStatus(ns1blankspace.loadingSmallXHTML + ' initalising.')
+
 			if (ns1blankspace.financial.init == undefined || bRefresh)
 			{
 				$.ajax(
