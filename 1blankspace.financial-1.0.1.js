@@ -152,7 +152,7 @@ function interfaceFinancialMasterInitialise(aParam, oResponse)
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
 				oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
-				oSearch.rows = 1000;
+				oSearch.rows = 100;
 				oSearch.async = false;
 				oSearch.getResults(function(data) {interfaceFinancialMasterInitialise(aParam, data)});
 			}

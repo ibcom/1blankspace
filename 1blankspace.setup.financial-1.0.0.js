@@ -625,6 +625,12 @@ function interfaceSetupFinancialAccountTree()
 	{
 		var oItems = $.grep(oAccounts, function (a) { return parseInt(a.parentaccount) == parseInt(k.id); })	
 		this.items = oItems;
+
+		if ((this.title).indexOf('[Outgoing (Expense)]') != -1) {this.title = 'Expenses'};
+		if ((this.title).indexOf('[Revenue (Income)]') != -1) {this.title = 'Revenue'};
+		if ((this.title).indexOf('[Asset]') != -1) {this.title = 'Assets'};
+		if ((this.title).indexOf('[Equity]') != -1) {this.title = 'Equity'};
+		if ((this.title).indexOf('[Liability]') != -1) {this.title = 'Liability'};
 	});
 }
 
@@ -650,9 +656,9 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 					'<tr id="trInterfaceMainSetupAccountRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainSetupAccountColumnType" style="width:100px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
 						gsLoadingXHTML + '</td>' +
-					'<td id="tdInterfaceMainSetupAccountColumnList" style="width:175px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainSetupAccountColumnList" style="width:200px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn2">' +
 					'</td>' +
-					'<td id="tdInterfaceMainSetupAccountColumnEdit" style="width:305px;padding-right:15px;font-size:0.875em;" class="interfaceMainColumn2">' +
+					'<td id="tdInterfaceMainSetupAccountColumnEdit" style="width:280px;padding-right:15px;font-size:0.875em;" class="interfaceMainColumn2">' +
 					'</td>' +
 					'<td id="tdInterfaceMainSetupAccountColumnAction" class="interfaceMainColumn2">' +
 					'</td>' +
@@ -693,10 +699,10 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 			{
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-				oSearch.addField('title,parentaccount,parentaccounttext');
+				oSearch.addField('title,parentaccount,parentaccounttext,postable');
 				//oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount);
 				oSearch.rows = 200;
-				oSearch.sort('parentaccount', 'asc')
+				oSearch.sort('title', 'asc');
 				oSearch.getResults(function(data) {interfaceSetupFinancialAccount(aParam, data)})	
 			}
 			else
@@ -756,18 +762,21 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 	else if (iStep == 2)
 	{
 
+		ns1blankspace.financial.currentAccount = iParentAccount;
+
 		if (oResponse == undefined)
 		{
-
 			$('#tdInterfaceMainSetupAccountColumnList').html(gsLoadingSmallXHTML);
-			
+			$('#tdInterfaceMainSetupAccountColumnEdit').html("");
+
 			var aHTML = [];
 			var h = -1;	
 			
 			aHTML[++h] = '<table id="tableInterfaceMainAccountColumnAction" class="interfaceMainColumn2">';
 			aHTML[++h] = '<tr><td id="tdInterfaceMainAccountAdd" class="interfaceMainAction">' +
 							'<span id="spanInterfaceMainAccountAdd">Add</span>' +
-							'</td></tr>';		
+							'</td></tr>';
+											
 			aHTML[++h] = '</table>';					
 			
 			$('#tdInterfaceMainSetupAccountColumnAction').html(aHTML.join(''));
@@ -778,7 +787,7 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 			})
 			.click(function()
 			{
-				$.extend(true, aParam, {step: 3});
+				$.extend(true, aParam, {step: 4, xhtmlElementID: ""});
 				interfaceSetupFinancialAccount(aParam);
 			})
 
@@ -790,27 +799,60 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 			var aHTML = [];
 			var h = -1;
 		
+		
+			var aHTML = [];
+			var h = -1;
+	
+			aHTML[++h] = '<table id="tableSetupFinancialFinancialAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>';
+		
+			//if (($.grep(ns1blankspace.financial.rootAccounts, function (a) { return a.id == iParentAccount; })).length == 0)
+			//{
+				aHTML[++h] = '<tr class="interfaceMainCaption">';
+				aHTML[++h] = '<td class="interfaceMainCaption" colspan=2>' +
+								'<div style="float:left;""><span id="spanInterfaceMainAccountParent-' +
+								($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == iParentAccount; }))[0].parentaccount +
+								 '" class="interfaceMainRow interfaceMainRowOptionsParent">Add</span></div>' +
+								'<div style="float:left;margin-left:3px;margin-top:3px;">' + ($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == iParentAccount; }))[0].title
+								+ '</div></td>';
+				aHTML[++h] = '</tr>';
+			//}
+			
 			if (oResponse.length == 0)
 			{
-				aHTML[++h] = '<table id="tableInterfaceSetupFinancialFinancialAccount">';
-				aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-				aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No accounts set up.</td>';
-				aHTML[++h] = '</tr>';
-				aHTML[++h] = '</table>';
+				aHTML[++h] = '<tr class="interfaceMainCaption">' +
+								'<td class="interfaceMainRowNothing">No sub-accounts.</td></tr>';
+				aHTML[++h] = '</tbody></table>';
 			}
 			else
 			{		
-				var aHTML = [];
-				var h = -1;
-		
-				aHTML[++h] = '<table id="tableSetupFinancialFinancialAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-				aHTML[++h] = '<tbody>'
-			
-				var oRows = oResponse;
-			
-				$(oRows).each(function() 
+
+				$(oResponse).each(function()
 				{
-					aHTML[++h] = interfaceSetupFinancialAccountRow(this);
+
+					aHTML[++h] = '<tr class="interfaceMainRow">';
+					
+					if (this.postable == 'Y')
+					{
+						aHTML[++h] = '<td id="interfaceFinancialAccount_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect account"' +
+											' title="">' +
+											this.title + '</td>';
+					}
+					else
+					{	
+						aHTML[++h] = '<td style="font-weight:600;" id="interfaceFinancialAccount_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect account"' +
+											' title="">' +
+											this.title + '</td>';
+					}						
+							
+					aHTML[++h] = '<td class="interfaceMainRow" style="width:20px;">' +
+											'<span id="spanInterfaceMainAccountChildren-' + this.id + '" class="interfaceMainRow' +
+											(this.postable != 'Y' ? ' interfaceMainRowOptionsChildren">Next' : '">') + '</span>' +
+											'</td>';						
+																								
+					aHTML[++h] = '</tr>'
+	
+					//aHTML[++h] = interfaceSetupFinancialAccountRow(this);
 				});
 			
 				aHTML[++h] = '</tbody></table>';
@@ -818,6 +860,36 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 		
 			$('#tdInterfaceMainSetupAccountColumnList').html(aHTML.join(''));
 		
+			$('.interfaceMainRowOptionsParent').button(
+			{
+				text: false,
+				icons: {
+					primary: "ui-icon-triangle-1-w"
+				}
+			})
+			.click(function() {
+				var aId = (this.id).split('-');
+				$.extend(true, aParam, {step: 2, parentAccount: aId[1]});
+				interfaceSetupFinancialAccount(aParam);
+			})
+			.css('width', '15px')
+			.css('height', '17px');
+
+			$('.interfaceMainRowOptionsChildren').button(
+			{
+				text: false,
+				icons: {
+					primary: "ui-icon-triangle-1-e"
+				}
+			})
+			.click(function() {
+				var aId = (this.id).split('-');
+				$.extend(true, aParam, {step: 2, parentAccount: aId[1]});
+				interfaceSetupFinancialAccount(aParam);
+			})
+			.css('width', '15px')
+			.css('height', '17px');
+
 			$('td.account').click(function()
 			{
 				$.extend(true, aParam, {step: 4, xhtmlElementID: event.target.id});
@@ -869,10 +941,22 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 							' data-columns="title">' +
 						'</td></tr>';
 
+		aHTML[++h] = '<tr id="trInterfaceMainAccountPostable" class="interfaceMain">' +
+							'<td id="tdInterfaceMainAccountPostable" class="interfaceMain">' +
+							'Can transactions be linked to this account?' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainAccountPostable" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainAccountPostableValue" class="interfaceMainRadio">' +
+							'<input type="radio" id="radioPostableY" name="radioPostable" value="Y"/>Yes' +
+							'<br /><input type="radio" id="radioPostableN" name="radioPostable" value="N"/>No (it is a header account)' +
+						'</td></tr>';
+
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainSetupAccountColumnEdit').html(aHTML.join(''));
 		
+		$('#inputInterfaceMainAccountAddTitle').focus();
+
 		var aHTML = [];
 		var h = -1;
 	
@@ -880,41 +964,98 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 				
 		aHTML[++h] = '<tr id="trInterfaceMainAccountAddSave" class="interfaceMainAction">' +
 						'<td id="tdInterfaceMainAccountAddSave" class="interfaceMainAction">' +
-						'<span style="width:70px;" id="spanInterfaceMainAccountAddSave">Save</span>' +
+						'<span style="width:70px;" id="spanInterfaceMainAccountEditSave">Save</span>' +
 						'</td></tr>';
 						
+		aHTML[++h] = '<tr id="trInterfaceMainBankAccountEditCancel" class="interfaceMainAction">' +
+							'<td id="tdInterfaceMainBankAccountEditCancel" class="interfaceMainAction">' +
+							'<span style="width:70px;" id="spanInterfaceMainAccountEditCancel">Cancel</span>' +
+							'</td></tr>';
+											
 		aHTML[++h] = '</table>';					
-		
+			
 		$('#tdInterfaceMainSetupAccountColumnAction').html(aHTML.join(''));
 		
-		$('#spanInterfaceMainAccountAddSave').button(
+		$('#spanInterfaceMainAccountEditSave').button(
 		{
 			text: "Save"
 		})
 		.click(function() 
 		{
+			interfaceMasterStatusWorking();
+
 			var sData = 'type=' + iType;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainAccountAddTitle').val());
 			sData += '&parentaccount=' + interfaceMasterFormatSave($('#inputInterfaceMainAccountParentAccount').attr("data-id"));
-			
+			sData += '&postable=' + interfaceMasterFormatSave($('input[name="radioPostable"]:checked').val());
+
+			var oAdd =
+					{
+						"items": [], 
+						"title": $('#inputInterfaceMainAccountAddTitle').val(),
+						"parentaccount": $('#inputInterfaceMainAccountParentAccount').attr("data-id"),
+						"postable": $('input[name="radioPostable"]:checked').val()
+					}
+
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_FINANCIAL_ACCOUNT_MANAGE',
+				url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_ACCOUNT_MANAGE',
 				data: sData,
 				dataType: 'json',
-				success: function() {
-					//interfaceSetupStructureAutomation({element: iElementID});
+				success: function(data) {
+					if (data.status == "OK")
+					{
+						interfaceMasterStatus('Saved');
+
+						$.extend(true, oAdd, {id: data.id});
+						
+						var bNew = true;
+
+						$(ns1blankspace.financial.accounts).each(function(i) 
+						{
+							if (this.id == data.id) {ns1blankspace.financial.accounts[i] = oAdd; bNew = false}
+						});
+
+						if (bNew) {(ns1blankspace.financial.accounts).unshift(oAdd)}
+
+						$.extend(true, aParam, {step: 2});
+						interfaceSetupFinancialAccount(aParam)
+					}
+					else
+					{
+						interfaceMasterError(data.error.errornotes);
+					}
 				}
 			});
 		});
-		
+
+		$('#spanInterfaceMainAccountEditCancel').button(
+		{
+			text: "Cancel"
+		})
+		.click(function() 
+		{
+			$.extend(true, aParam, {step: 2});
+			interfaceSetupFinancialAccount(aParam);
+		});
+
+		$('#spanInterfaceMainAccountAdd').button(
+			{
+				label: "Add"
+			})
+			.click(function()
+			{
+				$.extend(true, aParam, {step: 4, xhtmlElementID: ""});
+				interfaceSetupFinancialAccount(aParam);
+			})
+
 		if (sID != undefined)
 		{
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-			oSearch.addField('title,description,parentaccount,parentaccounttext');
+			oSearch.addField('title,description,parentaccount,parentaccounttext,postable');
 			oSearch.addFilter('id', 'EQUAL_TO', sID);
 			oSearch.getResults(function(data) {
 					$.extend(true, aParam, {step: 5});
@@ -923,7 +1064,9 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 		}
 		else
 		{
-			$('[name="radioDataType"][value="4"]').attr('checked', true);	
+			$('#inputInterfaceMainAccountParentAccount').val(($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == ns1blankspace.financial.currentAccount; })[0].title).formatXHTML());
+			$('#inputInterfaceMainAccountParentAccount').attr('data-id', ns1blankspace.financial.currentAccount);
+			$('[name="radioPostable"][value="Y"]').attr('checked', true);
 		}
 	}
 	else if (iStep == 5)
@@ -931,12 +1074,11 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 		if (oResponse.data.rows.length != 0)
 		{
 			var oObjectContext = oResponse.data.rows[0];
-			$('#inputInterfaceMainAccountAddTitle').val(oObjectContext.title)
-			$('#inputInterfaceMainAccountAddTitle').focus();
-			$('#inputInterfaceMainAccountParentAccount').val(oObjectContext.parentaccounttext)
-			$('#inputInterfaceMainAccountParentAccount').attr('data-id', goObjectContext.parentaccount);
-		}		
-		
+			$('#inputInterfaceMainAccountAddTitle').val((oObjectContext.title).formatXHTML());
+			$('#inputInterfaceMainAccountParentAccount').val(($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == oObjectContext.parentaccount; })[0].title).formatXHTML());
+			$('#inputInterfaceMainAccountParentAccount').attr('data-id', oObjectContext.parentaccount);
+			$('[name="radioPostable"][value="' + oObjectContext.postable + '"]').attr('checked', true);
+		}
 	}	
 }
 
@@ -948,7 +1090,7 @@ function interfaceSetupFinancialAccountRow(oRow)
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 				
 	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Title-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect account"' +
-							' title="' + oRow.notes + '">' +
+							' title="' + oRow.notes + '-' + oRow.items.length + '">' +
 							oRow.title + '</td>';
 														
 	aHTML[++h] = '</tr>'
