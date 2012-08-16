@@ -1143,6 +1143,8 @@ function interfaceFinanicalInvoiceItemAdd(aParam, oResponse)
 			})
 			.click(function()
 			{
+				interfaceMasterStatusWorking();
+
 				var sID = this.id;
 				var aID = sID.split('-');
 				var iAccount = aID[1];
@@ -1153,7 +1155,7 @@ function interfaceFinanicalInvoiceItemAdd(aParam, oResponse)
 				sData += '&objectcontext=' + giObjectContext;
 				sData += '&financialaccount=' + iAccount;
 				sData += '&amount=' + cAmount;
-				sData += '&description=' + $('#inputInterfaceMainInvoiceItemAddDescription').val();
+				sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainInvoiceItemAddDescription').val());
 					
 				$.ajax(
 				{
@@ -1163,6 +1165,8 @@ function interfaceFinanicalInvoiceItemAdd(aParam, oResponse)
 					dataType: 'json',
 					success: function(oResponse)
 					{
+						interfaceMasterStatus('Added.');
+
 						var sData = 'object=' + giObject;
 						sData += '&objectcontext=' + giObjectContext;
 						
