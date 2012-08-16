@@ -31,11 +31,15 @@ var gaTestHTML = [];
 
 function interfaceFormatTestInitialise()
 {
-	gaTestHTML.push('<table><tr><td>[[Reference]]>/td></tr></table>');
+	gaTestHTML.push('<table><tr><td>[[Reference]]</td></tr></table>');
 	gaTestHTML.push('<table>');
 	gaTestHTML.push('<tr><td>Item Reference</td><td>Amount</td></tr>');
 	gaTestHTML.push('<tr><td>[[Item Reference]]</td><td>[[Item Amount]]</td></tr>');
 	gaTestHTML.push('</table>');
+
+	interfaceFormatInitialise();
+
+	interfaceFormatRender({xhtmlTemplate: gaTestHTML.join('')});
 }
 
 function interfaceFormatInitialise()
@@ -44,20 +48,20 @@ function interfaceFormatInitialise()
 		[
 			{
 				object: 5,
-				type: 1
+				type: 1,
 				caption: "Reference",
-				source: "invoice.reference",
+				source: "invoice.reference"
 			},
 			{
 				object: 5,
-				type: 2
+				type: 2,
 				caption: "Item Reference",
 				method: "FINANCIAL_ITEM_SEARCH",
 				source: "item.reference"
 			},
 			{
 				object: 5,
-				type: 2
+				type: 2,
 				caption: "Item Amount",
 				method: "FINANCIAL_ITEM_SEARCH",
 				source: "item.amount"
@@ -78,16 +82,16 @@ function interfaceFormatRender(aParam)
 		if (aParam.object != undefined) {iObject = aParam.object}		
 	}
 
-	sXHTMLTemplate = (sXHTMLTemplate).replace(/[[/g,'<div class="template">');
-	sXHTMLTemplate = (sXHTMLTemplate).replace(/]]/g,'</div>');
+	sXHTMLTemplate = (sXHTMLTemplate).replace(/\[\[/g,'<div class="template">');
+	sXHTMLTemplate = (sXHTMLTemplate).replace(/\]\]/g,'</div>');
 
 	$('div.template', sXHTMLTemplate).each(function(i,k) 
 	{
 
-		var oTemplateTag = $.grep(gaFormatTags, function (a) { return a.caption == (k).html(); })
+		var oTemplateTag = $.grep(gaFormatTags, function (a) { return a.caption == $(k).html(); })
 
-		this.attr('data-format-tag', oTemplateTag.caption;
-		this.attr('data-format-source', oTemplateTag.source);
+		$(k).attr('data-format-tag', oTemplateTag.caption);
+		$(k).attr('data-format-source', oTemplateTag.source);
 	});
 
 	$(gaFormatTags).each(function() 
@@ -99,6 +103,8 @@ function interfaceFormatRender(aParam)
 
 		}
 	});
+
+	console.log(sXHTMLTemplate);
 }
 
 
