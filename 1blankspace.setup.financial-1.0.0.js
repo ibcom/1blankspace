@@ -806,8 +806,8 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 			aHTML[++h] = '<table id="tableSetupFinancialFinancialAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>';
 		
-			//if (($.grep(ns1blankspace.financial.rootAccounts, function (a) { return a.id == iParentAccount; })).length == 0)
-			//{
+			if (($.grep(ns1blankspace.financial.rootAccounts, function (a) { return a.id == iParentAccount; })).length == 0)
+			{
 				aHTML[++h] = '<tr class="interfaceMainCaption">';
 				aHTML[++h] = '<td class="interfaceMainCaption" colspan=2>' +
 								'<div style="float:left;""><span id="spanInterfaceMainAccountParent-' +
@@ -816,7 +816,7 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 								'<div style="float:left;margin-left:3px;margin-top:3px;">' + ($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == iParentAccount; }))[0].title
 								+ '</div></td>';
 				aHTML[++h] = '</tr>';
-			//}
+			}
 			
 			if (oResponse.length == 0)
 			{
