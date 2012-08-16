@@ -1287,7 +1287,7 @@ function interfaceMasterViewportShow(oResponse)
 					text: false,
 					label: 'Setup your system.  Once finished click on this icon again.',
 					icons: {
-						primary: "ui-icon-wrench"
+						primary: "ui-icon-gear"
 					}})
 		.css('font-size', '0.75em')			
 		.click(function() 
