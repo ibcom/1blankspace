@@ -247,15 +247,12 @@ function interfaceDocumentSearch(sXHTMLElementId, aParam)
 		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
 		
 		giObjectContext = sSearchContext;
-		var sParam = 'method=DOCUMENT_SEARCH&includecontent=1&id=' + giObjectContext;
-		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/document/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceDocumentShow(aParam, data)}
-		});
+
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'DOCUMENT_SEARCH';
+		oSearch.addField('title,summary,keywords,url,status,statustext,websitedisplay,website,websitetext,style,internal,content,type,typetext');
+		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+		oSearch.getResults(function(data) {interfaceDocumentShow(aParam, data)});
 	}
 	else
 	{

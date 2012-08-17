@@ -472,7 +472,7 @@ function interfaceFinancialInvoiceShow(aParam, oResponse)
 				
 		$('#divInterfaceViewportControlContext').html(goObjectContext.reference +
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_sentdate">' + goObjectContext.sentdate + '</span>' +
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">' + goObjectContext.amount + '</span>');
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">$' + goObjectContext.amount + '</span>');
 			
 		interfaceMasterViewportDestination({
 			newDestination: 'interfaceFinancialInvoiceMasterViewport({showHome: false});interfaceFinancialInvoiceSearch("-' + giObjectContext + '")',
@@ -484,6 +484,53 @@ function interfaceFinancialInvoiceShow(aParam, oResponse)
 }		
 		
 function interfaceFinancialInvoiceSummary()
+{
+	var aHTML = [];
+	var h = -1;
+	
+	if (goObjectContext == undefined)
+	{
+		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the invoice.</td></tr>';
+		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+				
+		$('#divInterfaceMain').html(aHTML.join(''));
+	}
+	else
+	{
+
+		if (ns1blankspace.financial.invoiceTemplateXHTML == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'DOCUMENT_SEARCH';
+			oSearch.addField('title,content');
+			oSearch.addFilter('type', 'EQUAL_TO', 10);
+
+			oSearch.getResults(function(data)
+			{
+				var oResponse = data;
+
+				if (oResponse.data.rows.length == 0)
+				{
+					ns1blankspace.financial.invoiceTemplateXHTML = '';
+				}
+				else
+				{
+					ns1blankspace.financial.invoiceTemplateXHTML = (oResponse.data.rows[0].content).formatXHTML();
+					ns1blankspace.financial.invoiceTemplateDocumentID = oResponse.data.rows[0].id;
+				}
+
+				interfaceFinancialInvoiceSummaryDefault();
+
+			});		
+		}
+		else
+		{
+			interfaceFinancialInvoiceSummaryDefault();
+		}
+	}	
+}
+
+function interfaceFinancialInvoiceSummaryDefault(aParam)
 {
 	var aHTML = [];
 	var h = -1;
@@ -511,61 +558,70 @@ function interfaceFinancialInvoiceSummary()
 		var aHTML = [];
 		var h = -1;
 	
-		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
-		
-		if (goObjectContext.amount != '')
+		if (ns1blankspace.financial.invoiceTemplateXHTML != '')
 		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAmountValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
-			aHTML[++h] = '$' + goObjectContext.amount;
-			aHTML[++h] = '</td></tr>';
-		}	
-		
-		if (goObjectContext.contactbusinesssenttotext != '')
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryBusiness" class="interfaceMainSummary">Business</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryBusinessValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.contactbusinesssenttotext +
-						'</td></tr>';
-		}
-		
-		if (goObjectContext.contactpersonsenttotext != '')
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPerson" class="interfaceMainSummary">Person</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryPersonValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.contactpersonsenttotext +
-						'</td></tr>';
-		}
-		
-		if (goObjectContext.sent == 'Y')
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySentDate" class="interfaceMainSummary">Sent Date</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummarySentDateValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.sentdate +
-						'</td></tr>';		
-
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDueDate" class="interfaceMainSummary">Due Date</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryDueDateValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.duedate +
-						'</td></tr>';		
+			aHTML[++h] = interfaceFormatRender({xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML});
+			console.log(interfaceFormatRender({xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML}));
 		}
 		else
-		{	
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySentDate" class="interfaceMainSummary">Sent Date</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummarySentDateValue" class="interfaceMainSummaryValue">' +
-						'Has not been sent.' +
-						'</td></tr>';				
-		}
-		
-		if (goObjectContext.description != '')
 		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.description +
-						'</td></tr>';
+			aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+			
+			if (goObjectContext.amount != '')
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAmountValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
+				aHTML[++h] = '$' + goObjectContext.amount;
+				aHTML[++h] = '</td></tr>';
+			}	
+			
+			if (goObjectContext.contactbusinesssenttotext != '')
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryBusiness" class="interfaceMainSummary">Business</td></tr>' +
+							'<tr><td id="tdInterfaceMainSummaryBusinessValue" class="interfaceMainSummaryValue">' +
+							goObjectContext.contactbusinesssenttotext +
+							'</td></tr>';
+			}
+			
+			if (goObjectContext.contactpersonsenttotext != '')
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPerson" class="interfaceMainSummary">Person</td></tr>' +
+							'<tr><td id="tdInterfaceMainSummaryPersonValue" class="interfaceMainSummaryValue">' +
+							goObjectContext.contactpersonsenttotext +
+							'</td></tr>';
+			}
+			
+			if (goObjectContext.sent == 'Y')
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySentDate" class="interfaceMainSummary">Sent Date</td></tr>' +
+							'<tr><td id="tdInterfaceMainSummarySentDateValue" class="interfaceMainSummaryValue">' +
+							goObjectContext.sentdate +
+							'</td></tr>';		
+
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDueDate" class="interfaceMainSummary">Due Date</td></tr>' +
+							'<tr><td id="tdInterfaceMainSummaryDueDateValue" class="interfaceMainSummaryValue">' +
+							goObjectContext.duedate +
+							'</td></tr>';		
+			}
+			else
+			{	
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySentDate" class="interfaceMainSummary">Sent Date</td></tr>' +
+							'<tr><td id="tdInterfaceMainSummarySentDateValue" class="interfaceMainSummaryValue">' +
+							'Has not been sent.' +
+							'</td></tr>';				
+			}
+			
+			if (goObjectContext.description != '')
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
+							'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
+							goObjectContext.description +
+							'</td></tr>';
+			}
+			
+			aHTML[++h] = '</table>';					
+		
 		}
-		
-		aHTML[++h] = '</table>';					
-		
+
 		$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
 
 		var aHTML = [];

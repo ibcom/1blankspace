@@ -74,8 +74,9 @@ function interfaceSetupFinancialMasterViewport()
 	
 	$('#inputInterfaceMasterViewportControlSearch').focus();
 	
+	interfaceFormatEditorInitialise({height: "500px"});
+
 	interfaceSetupFinancialHomeShow();
-	
 }
 
 function interfaceSetupFinancialHomeShow(oResponse)
@@ -128,6 +129,14 @@ function interfaceSetupFinancialHomeShow(oResponse)
 				'<td id="tdInterfaceViewportControlInvoicing" class="interfaceViewportControl">Invoicing</td>' +
 				'</tr>';	
 	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlInvoicingTemplate" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlInvoicingTemplate" class="interfaceViewportControl">Template</td>' +
+				'</tr>';	
+	
+	aHTML[++h] = '</table>';
+
+	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+	
 	aHTML[++h] = '<tr id="trInterfaceViewportControlTax" class="interfaceViewportControl">' +
 				'<td id="tdInterfaceViewportControlTax" class="interfaceViewportControl">Tax</td>' +
 				'</tr>';	
@@ -136,7 +145,7 @@ function interfaceSetupFinancialHomeShow(oResponse)
 				'<td id="tdInterfaceViewportControlPayroll" class="interfaceViewportControl">Payroll</td>' +
 				'</tr>';	
 	
-	aHTML[++h] = '</table>';		
+	aHTML[++h] = '</table>';			
 
 	$('#divInterfaceViewportControl').html(aHTML.join(''));	
 	
@@ -149,6 +158,7 @@ function interfaceSetupFinancialHomeShow(oResponse)
 	aHTML[++h] = '<div id="divInterfaceMainFinancialAccount" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainFinancialAccountDefault" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainInvoicing" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainInvoicingTemplate" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainTax" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainPayroll" class="divInterfaceViewportMain"></div>';
 
@@ -188,6 +198,12 @@ function interfaceSetupFinancialHomeShow(oResponse)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainInvoicing");
 		interfaceSetupFinancialInvoicing();
+	});
+
+	$('#tdInterfaceViewportControlInvoicingTemplate').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainInvoicingTemplate");
+		interfaceSetupFinancialInvoicingTemplate();
 	});
 	
 	$('#tdInterfaceViewportControlTax').click(function(event)
@@ -1294,6 +1310,89 @@ function interfaceSetupFinancialInvoicing()
 	}	
 }
 
+function interfaceSetupFinancialInvoicingTemplate()
+{
+	var aHTML = [];
+	var h = -1;
+	
+	if ($('#divInterfaceMainInvoicingTemplate').attr('onDemandLoading') == '1')
+	{
+		$('#divInterfaceMainInvoicingTemplate').attr('onDemandLoading', '');
+				
+		for (edId in tinyMCE.editors) 
+					tinyMCE.editors[edId].destroy(true);
+				
+		giEditorCounter = giEditorCounter + 1;		
+				
+		aHTML[++h] = '<table class="interfaceMain">';
+		aHTML[++h] = '<tr id="trInterfaceMainEditRow1" class="interfaceMain">' +
+						'<td id="tdInterfaceMainInvoicingTemplateColumn1" class="interfaceMain">' +
+						'</td>' +
+						'<td id="tdInterfaceMainInvoicingTemplateColumn2" class="interfaceMain">' +
+						'</td>' +
+						'</tr>';
+		aHTML[++h] = '</table>';					
+		
+		$('#divInterfaceMainInvoicingTemplate').html(aHTML.join(''));
+		
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+				
+		aHTML[++h] = '<tr>' +
+						'<td>' +
+						'<textarea rows="30" cols="50" id="inputInterfaceMainInvoicingTemplateText' +
+									giEditorCounter + '" editorcount="' + giEditorCounter + '" class="inputInterfaceMainTextMulti"></textarea>' +
+						'</td></tr>';
+						
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainInvoicingTemplateColumn1').html(aHTML.join(''));
+		
+		if (ns1blankspace.financial.invoiceTemplateXHTML == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'DOCUMENT_SEARCH';
+			oSearch.addField('title,content');
+			oSearch.addFilter('type', 'EQUAL_TO', 10);
+
+			oSearch.getResults(function(data)
+			{
+				var oResponse = data;
+
+				if (oResponse.data.rows.length == 0)
+				{
+					ns1blankspace.financial.invoiceTemplateXHTML = '';
+				}
+				else
+				{
+					ns1blankspace.financial.invoiceTemplateXHTML = (oResponse.data.rows[0].content).formatXHTML();
+					ns1blankspace.financial.invoiceTemplateDocumentID = oResponse.data.rows[0].id;
+				}
+
+				$('#inputInterfaceMainInvoicingTemplateText' + giEditorCounter).val(ns1blankspace.financial.invoiceTemplateXHTML);
+
+				if (gbRichEdit)
+				{
+					tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainInvoicingTemplateText' + giEditorCounter);
+				}	
+			});		
+		}
+		else
+		{
+			$('#inputInterfaceMainInvoicingTemplateText' + giEditorCounter).val(ns1blankspace.financial.invoiceTemplateXHTML);
+
+			if (gbRichEdit)
+			{
+				tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainInvoicingTemplateText' + giEditorCounter);
+			}	
+		}
+	
+		
+	}	
+}
+
 function interfaceSetupFinancialTax()
 {
 	var aHTML = [];
@@ -1442,6 +1541,8 @@ function interfaceSetupFinancialSave()
 	var sParam = 'method=SETUP_FINANCIAL_SETTINGS_MANAGE';
 	var sData = '_=1';
 	
+	interfaceMasterStatusWorking();
+
 	if ($('#divInterfaceMainFinancialAccount').html() != '')
 	{
 		sData += '&financialaccountcash=' + encodeURIComponent($('#inputInterfaceMainFinancialAccountCash').attr('data-id'));
@@ -1475,8 +1576,38 @@ function interfaceSetupFinancialSave()
 		type: 'POST',
 		url: '/ondemand/setup/setup.asp?' + sParam,
 		data: sData,
-		dataType: 'text',
-		success: interfaceMasterStatus('Saved')
+		dataType: 'json',
+		success: function()
+			{
+				interfaceMasterStatus('Saved');
+
+				if ($('#divInterfaceMainInvoicingTemplate').html() != '') {interfaceSetupFinancialSaveTemplate()}
+
+			}
 	});		
 }
 
+function interfaceSetupFinancialSaveTemplate()
+{
+	interfaceMasterStatusWorking();
+
+	var sData = 'id=' + (ns1blankspace.financial.invoiceTemplateDocumentID ? ns1blankspace.financial.invoiceTemplateDocumentID : '');
+	sData += '&content=' + encodeURIComponent(tinyMCE.get('inputInterfaceMainInvoicingTemplateText' + giEditorCounter).getContent());
+	sData += '&type=10';
+	sData += '&title=' + interfaceMasterFormatSave('Invoice Template');
+
+	$.ajax(
+	{
+		type: 'POST',
+		url: '/ondemand/document/?method=DOCUMENT_MANAGE',
+		data: sData,
+		dataType: 'json',
+		success: function(data)
+			{
+				interfaceMasterStatus('Saved');
+				ns1blankspace.financial.invoiceTemplateXHTML = tinyMCE.get('inputInterfaceMainInvoicingTemplateText' + giEditorCounter).getContent();
+				if(ns1blankspace.financial.invoiceTemplateDocumentID == undefined) {ns1blankspace.financial.invoiceTemplateDocumentID = data.id};
+			}
+	});		
+
+}	
