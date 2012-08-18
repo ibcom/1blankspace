@@ -1033,3 +1033,34 @@ function interfaceStructureDataNew(aParam)
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	interfaceStructureDataDetails();
 }
+
+function interfaceStructureTest()
+{
+	var oData = {"fields":
+					[
+						{
+							"name": "contactbusiness"
+						}
+					],
+					"filters":
+					[],
+					"options":
+					{
+						"rf": "JSON",
+						"rows": "100"
+					}
+				}
+
+	$.ajax({
+		url: "/rpc/structure/?method=STRUCTURE_DATA_SEARCH&advanced=1",
+		type: 'POST',
+		cache: false,
+		dataType: 'json',
+		data: JSON.stringify(oData),
+		success: function(response)
+		{
+					
+		}
+	});			
+
+}

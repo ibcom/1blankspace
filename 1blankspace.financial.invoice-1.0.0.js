@@ -1559,3 +1559,58 @@ function interfaceFinancialInvoiceRefresh(oResponse)
 		$('#spanInterfaceViewportControlSubContext_amount').html(oObjectContext.amount);
 	}
 }
+
+function interfaceInvoiceSent(sSent)
+{
+
+	if (sSent == undefined) {sSent = "N"}
+
+	var oData = {	"fields":
+					[
+						{
+							"name": "reference"
+						},
+						{
+							"name": "sent"
+						},
+						{
+							"name": "sentdate"
+						}
+					],
+					"filters":
+					[
+						{
+							"name": "sent",
+							"comparison": "EQUAL_TO",
+							"value1": sSent,
+							"value2": ""
+						}
+					],
+					"sorts":
+					[
+						{
+							"name": "reference",
+							"direction": "asc"
+						}
+					],
+					"options":
+					{
+						"rf": "JSON",
+						"rows": "100"
+					}
+				}
+
+	$.ajax({
+		url: "/rpc/financial/?method=FINANCIAL_INVOICE_SEARCH&advanced=1",
+		type: 'POST',
+		cache: false,
+		dataType: 'json',
+		data: JSON.stringify(oData),
+		success: function(response)
+		{
+					
+		}
+	});			
+
+}
+
