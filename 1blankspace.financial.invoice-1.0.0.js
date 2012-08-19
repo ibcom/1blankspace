@@ -560,7 +560,7 @@ function interfaceFinancialInvoiceSummaryDefault(aParam)
 	
 		if (ns1blankspace.financial.invoiceTemplateXHTML != '')
 		{
-			aHTML[++h] = interfaceFormatRender({xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML});
+			aHTML[++h] = interfaceFormatRender({object: 5, xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML});
 			console.log(interfaceFormatRender({xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML}));
 		}
 		else

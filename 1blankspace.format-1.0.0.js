@@ -95,26 +95,42 @@ function interfaceFormatRender(aParam)
 		$(this).find('div.template').each(function(i,e) 
 		{
 			var oTemplateTag = $.grep(gaFormatTags, function (a) { return a.caption == $(e).html(); })
-
-			//$(this).class()
-			//$(this).html()
 			$(e).attr('data-format-tag', oTemplateTag[0].caption);
-			//$(this).attr('data-format-source', oTemplateTag[0].source);
+			$(e).attr('data-format-source', oTemplateTag[0].source);
+
+			if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 1)
+			{
+				var sSource = oTemplateTag[0].source;
+
+				if (goObjectContext[sSource])
+				{	
+					$(e).html(goObjectContext[sSource]);
+				}
+				else (goObjectContext[oTemplateTag[0].source])
+				{
+					var aSource = (sSource).split('.');
+					sSource = aSource[aSource.length-1];
+
+					if (goObjectContext[sSource])
+					{	
+						$(e).html(goObjectContext[sSource]);
+					}
+				}	
+			}
 		});
 
 		aXHTML.push($(this).html())
 
 	});
 		
-	$(gaFormatTags).each(function() 
-	{
-		if (this.object == iObject && this.type == 2)
-		{
+	//$(gaFormatTags).each(function() 
+	//{
+	//	if (this.object == iObject && this.type == 1)
+	//	{
+	//		$('[data-format-tag="' + this.caption + '"]').html(this.source);
 
-
-
-		}
-	});
+	//	}
+	//});
 
 	return aXHTML.join('');
 }
