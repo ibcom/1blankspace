@@ -639,16 +639,38 @@ function interfaceFinancialInvoiceSummaryDefault(aParam)
 		
 		$('#aInterfaceMainSummaryViewPDF').click(function(event)
 		{
-			$.ajax(
-			{
-				type: 'GET',
-				url: '/ondemand/core/?method=CORE_PDF_CREATE',
-				data: 'object=' + giObject + '&objectcontext=' + giObjectContext,
-				dataType: 'json',
-				success: function(oResponse) {alert('PDF Created')}
-			});
+			interfaceFinancialCreatePDF();
 		});
 	}	
+}
+
+function interfaceFinancialCreatePDF(aParam, sReturn)
+{
+	if (sReturn == undefined)
+	{
+		$('#aInterfaceMainSummaryViewPDF').html(gsLoadingSmallXHTML)
+		
+		var sParam = 'method=CORE_PDF_CREATE&rf=TEXT';
+		var sData = 'object=' + giObject
+		sData += '&objectcontext=' + goObjectContext;
+		sData += '&filename=' + encodeURIComponent('invoice_' + goObjectContext.reference + '.pdf');
+		sData += '&xhtmlcontent=' + encodeURIComponent($('#tdInterfaceMainSummaryColumn1Large').html());
+		
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/core/?' + sParam,
+			data: sData,
+			dataType: 'text',
+			success: function(data) {interfaceFinancialCreatePDF(aParam, data)}
+		});
+	}	
+	else	
+	{
+		var aReturn = sReturn.split('|');
+		$('#aInterfaceMainSummaryViewPDF').html('<a href="/download/' + aReturn[1] + '" target="_blank">Open PDF.</a>');
+	}	
+
 }
 
 function interfaceFinancialInvoiceDetails()
