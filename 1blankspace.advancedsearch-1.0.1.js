@@ -60,6 +60,9 @@ function AdvancedSearch() {
 	this.filterValue2 = [];
 	this.filterValue3 = [];
 	
+	this.customOptionName = [];
+	this.customOptionValue = [];
+	
 //	this.rf = '';
 	this.sortField = [];
 	this.sortDirection = [];
@@ -72,6 +75,7 @@ function AdvancedSearch() {
 	this.addSummaryField = addSummaryField;
 	this.addFilter = addFilter;
 	this.addOperator = addOperator;
+	this.addCustomOption = addCustomOption;
 	this.sort = sort;
 	
 	this.getResults = getResults;
@@ -93,6 +97,9 @@ function reset() {
 	this.filterValue1.length = 0;
 	this.filterValue2.length = 0;
 	this.filterValue3.length = 0;
+	
+	this.customOptionName.length = 0;
+	this.customOptionValue.length = 0;
 	
 	this.rf = '';
 	this.sortField.length = 0;
@@ -166,6 +173,14 @@ function addFilter(asField, asComparison, asValue1, asValue2, asValue3) {
 function sort(asField, asDirection) {
 	this.sortField.push(asField);
 	this.sortDirection.push(asDirection);
+}
+
+function addCustomOption(asName, asValue) {
+	if (asName == undefined) asName = '';
+	if (asValue == undefined) asValue = '';
+
+	this.customOptionName.push(asName);
+	this.customOptionValue.push(asValue);
 }
 
 function getResults(aoParm1, aoParm2) {
@@ -294,6 +309,14 @@ function BuildXMLFromObject(aoThis) {
 				'<rows>' + ASXMLFormat(aoThis.rows) + '</rows>' +
 				'<returnparameters>' + aoThis.returnParameters + '</returnparameters>' +
 			'</options>';
+			
+	for(i = 0; i < aoThis.customOptionName.length; i++) {
+		sXML += 
+			'<customOption>' + 
+				'<name>' + ASXMLFormat(aoThis.customOptionName[i]) + '</name>' +
+				'<value>' + ASXMLFormat(aoThis.customOptionValue[i]) + '</value>' +
+			'</customOption>';
+	}
 			
 	sXML += '</advancedSearch>';
 
