@@ -57,14 +57,15 @@ function interfaceFormatInitialise()
 				type: 2,
 				caption: "Item Reference",
 				method: "FINANCIAL_ITEM_SEARCH",
-				source: "item.reference"
+				source: "lineitem.reference"
 			},
 			{
 				object: 5,
 				type: 2,
 				caption: "Item Amount",
 				method: "FINANCIAL_ITEM_SEARCH",
-				source: "item.amount"
+				methodSort: "lineitem.financialaccounttext",
+				source: "lineitem.amount"
 			}		
 			
 		]		
@@ -75,6 +76,7 @@ function interfaceFormatRender(aParam)
 	var sXHTMLTemplate;
 	var sXHTMLRendered;
 	var iObject;
+	var aSourceMethods = [];
 
 	if (aParam != undefined)
 	{
@@ -95,44 +97,109 @@ function interfaceFormatRender(aParam)
 		$(this).find('div.template').each(function(i,e) 
 		{
 			var oTemplateTag = $.grep(gaFormatTags, function (a) { return a.caption == $(e).html(); })
-			$(e).attr('data-format-tag', oTemplateTag[0].caption);
-			$(e).attr('data-format-source', oTemplateTag[0].source);
 
-			if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 1)
+			if (oTemplateTag[0])
 			{
-				var sSource = oTemplateTag[0].source;
+				$(e).html('');
+				$(e).attr('data-format-tag', oTemplateTag[0].caption);
+				$(e).attr('data-format-source', oTemplateTag[0].source);
 
-				if (goObjectContext[sSource])
-				{	
-					$(e).html(goObjectContext[sSource]);
-				}
-				else (goObjectContext[oTemplateTag[0].source])
+				var aSource = (oTemplateTag[0].source).split('.');
+				$(e).attr('data-format-source-group', aSource[0]); 
+
+				if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 1)
 				{
-					var aSource = (sSource).split('.');
-					sSource = aSource[aSource.length-1];
+					var sSource = oTemplateTag[0].source;
 
 					if (goObjectContext[sSource])
 					{	
 						$(e).html(goObjectContext[sSource]);
 					}
-				}	
-			}
+					else (goObjectContext[oTemplateTag[0].source])
+					{
+						var aSource = (sSource).split('.');
+						sSource = aSource[aSource.length-1];
+
+						if (goObjectContext[sSource])
+						{	
+							$(e).html(goObjectContext[sSource]);
+						}
+					}	
+				}
+
+				if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 2)
+				{
+					if ($.grep(aSourceMethods, function (a) { return a.method == oTemplateTag[0].method; }).length == 0)
+					{
+						aSourceMethods.push({method: oTemplateTag[0].method, group: aSource[0]});
+					}	
+				}
+			}			
 		});
 
 		aXHTML.push($(this).html())
 
 	});
 		
-	//$(gaFormatTags).each(function() 
-	//{
-	//	if (this.object == iObject && this.type == 1)
-	//	{
-	//		$('[data-format-tag="' + this.caption + '"]').html(this.source);
+	//TYPE = 2 - subtables - need to gather up
+	
+	$(aSourceMethods).each(function() 
+	{
+		var oSearch = new AdvancedSearch();
+		oSearch.method = this.method;
+		oSearch.addField('*');
+		oSearch.addFilter('object', 'EQUAL_TO', giObject);
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
+		//oSearch.sort('financialaccounttext', 'asc');
 
-	//	}
-	//});
+		var oTmp = {group: this.group};
+		oSearch.getResults(function(data) {interfaceFormatRenderProcess(oTmp, data)});
+	});
 
 	return aXHTML.join('');
+}
+
+function interfaceFormatRenderProcess(aParam, oResponse)
+{
+	var aTR = [];
+	var sTRID = 'template-' + aParam.group;
+
+	$('[data-format-source-group="' + aParam.group + '"]').each(function(i) 
+	{
+		$('[data-format-source-group="' + aParam.group + '"]:first').closest('tr').clone()
+
+
+		var oTR = $(this).closest('tr');
+		var sTRXHTML = $(oTR).html();
+		$(oTR).addClass(sTRID);
+
+		$(sTRXHTML).each(function()
+		{
+			$(this).find('div.template').each(function(i,e) 
+			{
+				$(e).html($(e).attr('data-format-source'));
+			});
+
+			aTR.push($(this).html());
+		});
+	});	
+
+	sTRXHTML = aTR.join('');
+
+	$(oResponse.data.rows).each(function()
+	{	
+		var oRow = this;
+
+		$('[data-format-source-group="' + aParam.group + '"]:first').closest('tr').clone()
+		.find('[data-format-source]').each(function()
+			{
+				$(this).html(oRow[$(this).attr('data-format-source')]);
+
+			}).end().appendTo($('[data-format-source-group="' + aParam.group + '"]:first').closest('tr').parent());
+			
+	});
+
+	$('[data-format-source-group="' + aParam.group + '"]:first').closest('tr').remove();
 }
 
 function interfaceFormatEditorInitialise(aParam)
