@@ -26,7 +26,123 @@ PARSE 2 - RENDER:
 	
 */
 
-var gaFormatTags;
+var gaFormatTags =
+		[
+			{
+				type: 3,
+				caption: "Today"
+			},
+			{
+				object: 5,
+				type: 1,
+				caption: "Reference",
+				source: "invoice.reference"
+			},
+			{
+				object: 5,
+				type: 1,
+				caption: "Sent Date",
+				source: "invoice.sentdate"
+			},
+			{
+				object: 5,
+				type: 1,
+				caption: "Due Date",
+				source: "invoice.duedate"
+			},
+			{
+				object: 5,
+				type: 1,
+				caption: "Description",
+				source: "invoice.description"
+			},
+			{
+				object: 5,
+				type: 1,
+				caption: "Amount",
+				source: "invoice.amount"
+			},
+			{
+				object: 5,
+				type: 1,
+				caption: "Tax",
+				source: "invoice.tax"
+			},
+			{
+				object: 5,
+				type: 1,
+				caption: "Description",
+				source: "invoice.description"
+			},			
+			{
+				object: 5,
+				type: 1,
+				caption: "Purchase Order",
+				source: "invoice.purchaseorder"
+			},			
+			{
+				object: 5,
+				type: 1,
+				caption: "Project",
+				source: "invoice.projecttext"
+			},			
+			{
+				object: 5,
+				type: 1,
+				caption: "Business",
+				source: "invoice.contactbusinesssenttotext"
+			},	
+			{
+				object: 5,
+				type: 1,
+				caption: "Person",
+				source: "invoice.contactpersonsenttotext"
+			},			
+			{
+				object: 5,
+				type: 2,
+				caption: "Item Description",
+				method: "FINANCIAL_ITEM_SEARCH",
+				source: "lineitem.description"
+			},
+			{
+				object: 5,
+				type: 2,
+				caption: "Item Account",
+				method: "FINANCIAL_ITEM_SEARCH",
+				source: "lineitem.financialaccounttext"
+			},
+			{
+				object: 5,
+				type: 2,
+				caption: "Item Amount",
+				method: "FINANCIAL_ITEM_SEARCH",
+				source: "lineitem.amount"
+			},
+			{
+				object: 5,
+				type: 2,
+				caption: "Item Tax",
+				method: "FINANCIAL_ITEM_SEARCH",
+				source: "lineitem.tax"
+			},
+			{
+				object: 5,
+				type: 2,
+				caption: "Item Tax Type",
+				method: "FINANCIAL_ITEM_SEARCH",
+				source: "lineitem.taxtyperevenuetext"
+			},
+			{
+				object: 5,
+				type: 2,
+				caption: "Item Currency",
+				method: "FINANCIAL_ITEM_SEARCH",
+				source: "lineitem.issuedcurrencytext"
+			}						
+			
+		]		
+
 var gaTestHTML = [];
 
 function interfaceFormatTestInitialise()
@@ -44,31 +160,7 @@ function interfaceFormatTestInitialise()
 
 function interfaceFormatInitialise()
 {
-	gaFormatTags =
-		[
-			{
-				object: 5,
-				type: 1,
-				caption: "Reference",
-				source: "invoice.reference"
-			},
-			{
-				object: 5,
-				type: 2,
-				caption: "Item Reference",
-				method: "FINANCIAL_ITEM_SEARCH",
-				source: "lineitem.reference"
-			},
-			{
-				object: 5,
-				type: 2,
-				caption: "Item Amount",
-				method: "FINANCIAL_ITEM_SEARCH",
-				methodSort: "lineitem.financialaccounttext",
-				source: "lineitem.amount"
-			}		
-			
-		]		
+	
 }
 
 function interfaceFormatRender(aParam)

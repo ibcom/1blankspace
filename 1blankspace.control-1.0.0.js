@@ -30,6 +30,9 @@ var giMessagingCheckForNew = 60000;
 ns1blankspace.loadingXHTML = gsLoadingXHTML;
 ns1blankspace.loadingSmallXHTML = gsLoadingSmallXHTML
 
+if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
+ns1blankspace.financial.summaryUseTemplate = false; 
+
 function interfaceControlSecurity(sUserNetworkGroups)
 {
 	//For deep in model security, refer to http://mydigitalstructure.com/gettingstarted_access_control

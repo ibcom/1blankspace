@@ -483,23 +483,31 @@ function interfaceFinancialInvoiceShow(aParam, oResponse)
 	}	
 }		
 		
-function interfaceFinancialInvoiceSummary()
+function interfaceFinancialInvoiceSummary(aParam)
 {
 	var aHTML = [];
 	var h = -1;
+	var bUseTemplate = false;
 	
+	if (aParam)
+	{
+		if (aParam.useTemplate != undefined) {bUseTemplate = aParam.useTemplate}
+	}
+
 	if (goObjectContext == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the invoice.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
 				
-		$('#divInterfaceMain').html(aHTML.join(''));
+		$('#divInterfaceMainSummary').html(aHTML.join(''));
 	}
 	else
 	{
 
-		if (ns1blankspace.financial.invoiceTemplateXHTML == undefined)
+		if (ns1blankspace.financial.invoiceTemplateXHTML == undefined && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
 		{
+			$('#divInterfaceMainSummary').html(ns1blankspace.loadingSmallXHTML);
+
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'DOCUMENT_SEARCH';
 			oSearch.addField('title,content');
@@ -519,13 +527,13 @@ function interfaceFinancialInvoiceSummary()
 					ns1blankspace.financial.invoiceTemplateDocumentID = oResponse.data.rows[0].id;
 				}
 
-				interfaceFinancialInvoiceSummaryDefault();
+				interfaceFinancialInvoiceSummaryDefault(aParam);
 
 			});		
 		}
 		else
 		{
-			interfaceFinancialInvoiceSummaryDefault();
+			interfaceFinancialInvoiceSummaryDefault(aParam);
 		}
 	}	
 }
@@ -534,19 +542,25 @@ function interfaceFinancialInvoiceSummaryDefault(aParam)
 {
 	var aHTML = [];
 	var h = -1;
+	var bUseTemplate = false;
 	
+	if (aParam)
+	{
+		if (aParam.useTemplate != undefined) {bUseTemplate = aParam.useTemplate}
+	}
+
 	if (goObjectContext == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the invoice.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
 				
-		$('#divInterfaceMain').html(aHTML.join(''));
+		$('#divInterfaceMainSummary').html(aHTML.join(''));
 	}
 	else
 	{
-		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-				'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
+		aHTML[++h] = '<table>';
+		aHTML[++h] = '<tr">' +
+				'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Largex" style="width:100%;">' +
 						'</td>' +
 						'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
 						'</td>' +
@@ -558,10 +572,9 @@ function interfaceFinancialInvoiceSummaryDefault(aParam)
 		var aHTML = [];
 		var h = -1;
 	
-		if (ns1blankspace.financial.invoiceTemplateXHTML != '')
+		if (ns1blankspace.financial.invoiceTemplateXHTML != '' && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
 		{
 			aHTML[++h] = interfaceFormatRender({object: 5, xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML});
-			console.log(interfaceFormatRender({xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML}));
 		}
 		else
 		{
@@ -627,50 +640,49 @@ function interfaceFinancialInvoiceSummaryDefault(aParam)
 		var aHTML = [];
 		var h = -1;	
 		
+
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
-								
-		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryViewPDF" class="interfaceMainColumn2Action">' +
-						'<a href="#" id="aInterfaceMainSummaryViewPDF">View&nbsp;As&nbsp;PDF</a>' +
-						'</td></tr>';
 						
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));	
-		
-		$('#aInterfaceMainSummaryViewPDF').click(function(event)
+		if (ns1blankspace.financial.invoiceTemplateXHTML != '')
 		{
-			interfaceFinancialCreatePDF();
-		});
-	}	
-}
+			if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryViewPDF" class="interfaceMainColumn2Action">' +
+							'<a href="#" id="aInterfaceMainSummaryViewPDF">Create&nbsp;PDF</a>' +
+							'</td></tr>';
+			}
+			else
+			{				
+				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryView" class="interfaceMainColumn2Action">' +
+							'<a href="#" id="aInterfaceMainSummaryView">View</a>' +
+							'</td></tr>';
+			}
 
-function interfaceFinancialCreatePDF(aParam, sReturn)
-{
-	if (sReturn == undefined)
-	{
-		$('#aInterfaceMainSummaryViewPDF').html(gsLoadingSmallXHTML)
-		
-		var sParam = 'method=CORE_PDF_CREATE&rf=TEXT';
-		var sData = 'object=' + giObject
-		sData += '&objectcontext=' + goObjectContext;
-		sData += '&filename=' + encodeURIComponent('invoice_' + goObjectContext.reference + '.pdf');
-		sData += '&xhtmlcontent=' + encodeURIComponent($('#tdInterfaceMainSummaryColumn1Large').html());
-		
-		$.ajax(
-		{
-			type: 'POST',
-			url: '/ondemand/core/?' + sParam,
-			data: sData,
-			dataType: 'text',
-			success: function(data) {interfaceFinancialCreatePDF(aParam, data)}
-		});
-	}	
-	else	
-	{
-		var aReturn = sReturn.split('|');
-		$('#aInterfaceMainSummaryViewPDF').html('<a href="/download/' + aReturn[1] + '" target="_blank">Open PDF.</a>');
-	}	
+			aHTML[++h] = '</table>';					
+			
+			$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));	
+			
+			if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
+			{
+				$('#aInterfaceMainSummaryViewPDF').click(function(event)
+				{
+					interfaceMasterCreatePDF({
+							xhtmlContent: $('#tdInterfaceMainSummaryColumn1Large').html(),
+							filename: goObjectContext.reference + '.pdf',
+							open: true
+						});
+				});
+			}		
+			else		
+			{	
+				$('#aInterfaceMainSummaryView').click(function(event)
+				{
+					interfaceFinancialInvoiceSummary({useTemplate: true});
+				});
 
+			}	
+		}	
+	}	
 }
 
 function interfaceFinancialInvoiceDetails()

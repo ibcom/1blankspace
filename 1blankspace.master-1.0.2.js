@@ -3801,3 +3801,84 @@ function interfaceMasterViewportOptionsHide()
 	$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
 	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 }
+
+
+function interfaceMasterCreatePDF(aParam, sReturn)
+{
+	var iObject = giObject;
+	var iObjectContext = giObjectContext;
+	var sFileName = goObjectContext.id + '.pdf'
+	var sXHTMLContent = '';
+	var bOpen = false;
+
+	if (aParam)
+	{
+		if (aParam.object) {iObject = aParam.object}
+		if (aParam.objectContext) {iObjectContext = aParam.objectContext}
+		if (aParam.filename) {sFileName = aParam.filename}	
+		if (aParam.xhtmlContent) {sXHTMLContent = aParam.xhtmlContent}
+		//if (aParam.open) {bOpen = aParam.open}	
+	}
+
+	if (sReturn == undefined)
+	{
+		$('#aInterfaceMainSummaryViewPDF').html(gsLoadingSmallXHTML)
+		
+		var sParam = 'method=CORE_PDF_CREATE&rf=TEXT';
+		var sData = 'object=' + iObject;
+		sData += '&objectcontext=' + iObjectContext;
+		sData += '&filename=' + encodeURIComponent(sFileName);
+		sData += '&xhtmlcontent=' + encodeURIComponent(sXHTMLContent);
+		
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/core/?' + sParam,
+			data: sData,
+			dataType: 'text',
+			success: function(data) {interfaceMasterCreatePDF(aParam, data)}
+		});
+	}	
+	else	
+	{
+		var aReturn = sReturn.split('|');
+
+		if (bOpen)
+		{
+			window.open('/download/' + aReturn[1])	
+		}
+		else
+		{
+			$('#aInterfaceMainSummaryViewPDF').html('<a href="/download/' + aReturn[1] + '" target="_blank">Open PDF</a>');
+		}	
+	}	
+
+}
+
+function interfaceMasterEditorAddTag(aParam)
+{ 
+	var sXHTMLElementID;
+	var sEditorID;
+	var oMCEBookmark;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (aParam.editorID != undefined) {sEditorID = aParam.editorID}
+		if (aParam.mceBookmark != undefined) {oMCEBookmark = aParam.mceBookmark}
+		
+		var oEditor = tinyMCE.get(sEditorID); 
+		var sInsertText = $('#' + sXHTMLElementID).attr('data-caption');
+		if (oMCEBookmark != undefined)
+		{
+			tinyMCE.get(sEditorID).selection.moveToBookmark(oMCEBookmark);
+		}
+		oEditor.execCommand('mceInsertContent', false, sInsertText); 
+	}
+	else
+	{
+		interfaceMasterConfim({title: 'Error inserting field!', html: ["An error occurred when inserting the field. Please contact support." +
+																	  "<br /><br />Details: No parameters passed to interfaceMasterEditorAddTag"]});
+		return false;
+	}
+}

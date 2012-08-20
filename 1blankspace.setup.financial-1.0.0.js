@@ -1328,13 +1328,52 @@ function interfaceSetupFinancialInvoicingTemplate()
 		aHTML[++h] = '<tr id="trInterfaceMainEditRow1" class="interfaceMain">' +
 						'<td id="tdInterfaceMainInvoicingTemplateColumn1" class="interfaceMain">' +
 						'</td>' +
-						'<td id="tdInterfaceMainInvoicingTemplateColumn2" class="interfaceMain">' +
+						'<td id="tdInterfaceMainInvoicingTemplateColumn2" style="width:100px;">' +
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
 		
 		$('#divInterfaceMainInvoicingTemplate').html(aHTML.join(''));
 		
+		var aHTML = [];
+		var h = -1;
+
+		aHTML[++h] = '<table>';
+							
+		aHTML[++h] = '<tr><td class="interfaceMainCaption" style="font-size:0.75em;">Tags</td</tr>';
+
+		$.each(gaFormatTags, function()
+		{
+			if (this.object == 5 && this.type == 1)
+			{
+				aHTML[++h] = '<tr><td class="interfaceMainRow interfaceMainRowSelect" style="font-size:0.75em;">';
+
+				aHTML[++h] = '<span id="spanInterfaceFormatTag_' + (this.caption).replace(/ /g,'-') + '"' +
+						  		 ' class="interfaceFormatTags" ' +
+						   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>';
+
+				aHTML[++h] = '</td></tr>';		   		
+			}				
+		});
+
+		$.each(gaFormatTags, function()
+		{
+			if (this.object == 5 && this.type == 2)
+			{
+				aHTML[++h] = '<tr><td class="interfaceMainRow interfaceMainRowSelect" style="font-size:0.75em;">';
+
+				aHTML[++h] = '<span id="spanInterfaceFormatTag_' + (this.caption).replace(/ /g,'-') + '"' +
+						  		 ' class="interfaceFormatTags" ' +
+						   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>';
+
+				aHTML[++h] = '</td></tr>';		   		
+			}				
+		});
+						
+		aHTML[++h] = '</table>';			
+
+		$('#tdInterfaceMainInvoicingTemplateColumn2').html(aHTML.join(''));
+
 		var aHTML = [];
 		var h = -1;
 	
@@ -1383,13 +1422,22 @@ function interfaceSetupFinancialInvoicingTemplate()
 		{
 			$('#inputInterfaceMainInvoicingTemplateText' + giEditorCounter).val(ns1blankspace.financial.invoiceTemplateXHTML);
 
-			if (gbRichEdit)
-			{
-				tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainInvoicingTemplateText' + giEditorCounter);
-			}	
+
+
+			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainInvoicingTemplateText' + giEditorCounter);	
 		}
 	
-		
+		$('.interfaceFormatTags')
+		.hover( function()
+		{	
+			oMCEBookmark = tinyMCE.get('inputInterfaceMainInvoicingTemplateText' + giEditorCounter).selection.getBookmark({type: 1, normalized: true});
+		})
+		.click( function()
+		{
+			interfaceMasterEditorAddTag({xhtmlElementID: this.id,
+										  editorID: 'inputInterfaceMainInvoicingTemplateText' + giEditorCounter, 
+										  mceBookmark: oMCEBookmark})
+		})
 	}	
 }
 
