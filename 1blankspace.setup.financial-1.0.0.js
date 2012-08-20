@@ -1394,7 +1394,7 @@ function interfaceSetupFinancialInvoicingTemplate()
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'DOCUMENT_SEARCH';
 			oSearch.addField('title,content');
-			oSearch.addFilter('type', 'EQUAL_TO', 10);
+			oSearch.addFilter('type', 'EQUAL_TO', 11);
 
 			oSearch.getResults(function(data)
 			{
@@ -1404,18 +1404,20 @@ function interfaceSetupFinancialInvoicingTemplate()
 				{
 					ns1blankspace.financial.invoiceTemplateXHTML = '';
 
-					$.ajax(
+					if (ns1blankspace.financial.defaultInvoiceTemplateXHTML)
 					{
-						type: 'GET',
-						url: '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html',
-						dataType: 'text',
-						async: false,
-						success: function(data)
+						$.ajax(
 						{
-							ns1blankspace.financial.invoiceTemplateXHTML = data;
-						}	
-					});	
-
+							type: 'GET',
+							url: ns1blankspace.financial.defaultInvoiceTemplateXHTML,
+							dataType: 'text',
+							async: false,
+							success: function(data)
+							{
+								ns1blankspace.financial.invoiceTemplateXHTML = data;
+							}	
+						});
+					}	
 				}
 				else
 				{

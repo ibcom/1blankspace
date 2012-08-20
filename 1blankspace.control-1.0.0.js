@@ -31,7 +31,9 @@ ns1blankspace.loadingXHTML = gsLoadingXHTML;
 ns1blankspace.loadingSmallXHTML = gsLoadingSmallXHTML
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
+	
 ns1blankspace.financial.summaryUseTemplate = false; 
+ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html';
 
 function interfaceControlSecurity(sUserNetworkGroups)
 {
