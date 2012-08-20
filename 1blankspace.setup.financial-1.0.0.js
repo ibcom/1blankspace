@@ -1403,6 +1403,19 @@ function interfaceSetupFinancialInvoicingTemplate()
 				if (oResponse.data.rows.length == 0)
 				{
 					ns1blankspace.financial.invoiceTemplateXHTML = '';
+
+					$.ajax(
+					{
+						type: 'GET',
+						url: '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html',
+						dataType: 'text',
+						async: false,
+						success: function(data)
+						{
+							ns1blankspace.financial.invoiceTemplateXHTML = data;
+						}	
+					});	
+
 				}
 				else
 				{
