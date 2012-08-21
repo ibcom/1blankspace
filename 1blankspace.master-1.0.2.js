@@ -1092,7 +1092,7 @@ function interfaceMasterViewportShow(oResponse)
 	var h = -1;
 
 	ns1blankspace.user = oResponse.user;
-	ns1blankspace.userUnrestricted = (oResponse.unrestrictedaccess = 'Y' ? true : false);
+	ns1blankspace.userUnrestricted = (oResponse.unrestrictedaccess = 'Y' || oResponse.unrestrictedaccess == undefined ? true : false);
 
 	gsUserName = oResponse.userlogonname;
 	gsUserID = oResponse.user;
