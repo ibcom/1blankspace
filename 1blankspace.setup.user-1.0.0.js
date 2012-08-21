@@ -120,7 +120,7 @@ function interfaceSetupUserHomeShow(oResponse)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_USER_SEARCH';
-		oSearch.addField('username');  //unrestrictedaccess
+		oSearch.addField('username,unrestrictedaccess');
 		oSearch.rows = 10;
 		oSearch.sort('modifieddate', 'desc');
 		oSearch.getResults(interfaceSetupUserHomeShow);
@@ -160,7 +160,7 @@ function interfaceSetupUserHomeShow(oResponse)
 				}
 				else
 				{
-					sRestriction = "Restrictred access"
+					sRestriction = "Restrictred access by role"
 				}
 
 				aHTML.push('<td id="interfaceUserHomeMostLikely_Restriction-' + this.id + '" class="interfaceHomeMostLikelySub">' +
@@ -213,7 +213,7 @@ function interfaceSetupUserSearch(sXHTMLElementId, iSource, sSearchText, sSearch
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_USER_SEARCH';
-		oSearch.addField('username,contactpersontext,lastlogon,disabled,disabledreason');
+		oSearch.addField('username,contactpersontext,lastlogon,disabled,disabledreason,unrestrictedaccess');
 		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
 		oSearch.getResults(function(data) {interfaceSetupUserShow(data)});
 	}
@@ -330,11 +330,11 @@ function interfaceSetupUserViewport()
 			
 	aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
 	
-	/*		
-	aHTML[++h] = '<tr id="trInterfaceViewportControlMessaging" class="interfaceViewportControl">' +
-						'<td id="tdInterfaceViewportControlMessaging" class="interfaceViewportControl">Messaging</td>' +
+		
+	aHTML[++h] = '<tr id="trInterfaceViewportControlAccess" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlAccess" class="interfaceViewportControl">Access</td>' +
 						'</tr>';
-	*/							
+							
 	aHTML[++h] = '</table>';					
 				
 	$('#divInterfaceViewportControl').html(aHTML.join(''));
@@ -344,6 +344,7 @@ function interfaceSetupUserViewport()
 
 	aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainAccess" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainMessaging" class="divInterfaceViewportMain"></div>';
 			
 	$('#divInterfaceMain').html(aHTML.join(''));
@@ -364,6 +365,12 @@ function interfaceSetupUserViewport()
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainMessaging");
 		interfaceSetupUserMessaging();
+	});
+
+	$('#tdInterfaceViewportControlAccess').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainAccess");
+		interfaceSetupUserAccess();
 	});	
 }
 
@@ -386,6 +393,8 @@ function interfaceSetupUserShow(oResponse)
 	}
 	else
 	{
+		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+
 		goObjectContext = oResponse.data.rows[0];
 				
 		var sContext = goObjectContext.username;
@@ -533,7 +542,7 @@ function interfaceSetupUserDetails()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsDisabled" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainDetailsDisabledValue" class="interfaceMainRadio">' +
-						'<input type="radio" id="radioDisabledN" name="radioDisabled" value="N"/>No' +
+						'<input type="radio" id="radioDisabledN" name="radioDisabled" value="N"/>No<br />' +
 						'<input type="radio" id="radioDisabledY" name="radioDisabled" value="Y"/>Yes' +
 						'</td></tr>';
 						
@@ -563,11 +572,301 @@ function interfaceSetupUserDetails()
 	}	
 }
 
+function interfaceSetupUserAccess()
+{
+	var aHTML = [];
+	var h = -1;
+		
+	if ($('#divInterfaceMainAccess').attr('onDemandLoading') == '1')
+	{
+		$('#divInterfaceMainAccess').attr('onDemandLoading', '');
+		
+		aHTML[++h] = '<table id="tableInterfaceMainAccess" class="interfaceMainDetails">';
+		aHTML[++h] = '<tr id="trInterfaceMainAccessRow1" class="interfaceMain">' +
+						'<td id="tdInterfaceMainAccessColumn1" class="interfaceMainColumn1" style="width:200px;">' +
+						'</td>' +
+						'<td id="tdInterfaceMainAccessColumn2" class="interfaceMainColumn2">' +
+						'</td>' +
+						'</tr>';
+		aHTML[++h] = '</table>';					
+		
+		$('#divInterfaceMainAccess').html(aHTML.join(''));
+		
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+	
+		aHTML[++h] = '<tr id="trInterfaceMainAccessUnrestricted" class="interfaceMainText">' +
+						'<td id="tdInterfaceMainAccessUnrestrictedValue" class="interfaceMainRadio">' +
+						'<input type="radio" id="radioAccessUnrestrictedY" name="radioAccessUnrestricted" value="Y"/>Access&nbsp;to&nbsp;everything<br />' +
+						'<input type="radio" id="radioAccessUnrestrictedN" name="radioAccessUnrestricted" value="N"/>Restricted by role' +
+						'</td></tr>';
+		
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainAccessColumn1').html(aHTML.join(''));
+			
+		interfaceSetupUserAccessRoles();
+
+		if (goObjectContext != undefined)
+		{
+			$('[name="radioAccessUnrestricted"][value="' + goObjectContext.unrestrictedaccess + '"]').attr('checked', true);
+		}
+		else
+		{
+			$('[name="radioAccessUnrestricted"][value="Y"]').attr('checked', true);
+		}
+	}	
+}
+
+function interfaceSetupUserAccessRoles(aParam, oResponse)
+{
+	var aHTML = [];
+	var h = -1;
+	
+	if (goObjectContext != undefined)
+	{
+		if (goObjectContext.unrestrictedaccess == 'Y')
+		{
+			aHTML[++h] = '<table lass="interfaceMain">';
+
+			aHTML[++h] = '<tr class="interfaceMainCaption">' +
+							'<td class="interfaceMainRowNothing" style="font-weight:600;">This user can access all functions within this space.</td></tr>' +
+							'<td class="interfaceMainRowNothing">If you select <em>restricted access</em> and save, you can then allocate predefined <em>users roles</em> to them.</td></tr>';
+
+			aHTML[++h] = '</table>';
+
+			$('#tdInterfaceMainAccessColumn2').html(aHTML.join(''));			
+		}
+		else
+		{
+			if (oResponse == undefined)
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_USER_ROLE_SEARCH';
+				oSearch.addField('roletext,role');
+				oSearch.rows = 50;
+				oSearch.sort('roletext', 'asc');
+				oSearch.getResults(function(data) {interfaceSetupUserAccessRoles(aParam, data)})	
+			}
+			else
+			{
+
+				var aHTML = [];
+				var h = -1;
+				
+				aHTML[++h] = '<table class="interfaceMain">' +
+							'<tr id="trInterfaceMainUserAccessRolesRow1" class="interfaceMainRow1">' +
+							'<td id="tdInterfaceMainUserAccessRolesColumn1" class="interfaceMainColumn1Large">' +
+							'</td>' +
+							'<td id="tdInterfaceMainUserAccessRolesColumn2" style="width: 100px;" class="interfaceMainColumn2Action">' +
+							'</td>' +
+							'</tr>' +
+							'</table>';				
+				
+				$('#tdInterfaceMainAccessColumn2').html(aHTML.join(''));
+
+				var aHTML = [];
+				var h = -1;
+				
+				aHTML[++h] = '<table class="interfaceMainColumn2">';
+				
+				aHTML[++h] = '<tr><td id="tdInterfaceMainUserAccessRolesAdd" class="interfaceMainAction">' +
+								'<span id="spanInterfaceMainUserAccessRolesAdd">Add Role</span>' +
+								'</td></tr>';
+				
+				aHTML[++h] = '</table>';					
+				
+				$('#tdInterfaceMainUserAccessRolesColumn2').html(aHTML.join(''));
+				
+				$('#spanInterfaceMainUserAccessRolesAdd').button(
+				{
+					label: "Add Role"
+				})
+				.click(function() {
+					interfaceMasterOptionsSetPosition('spanInterfaceMainUserAccessRolesAdd', -50, -280);
+					interfaceSetupUserAccessRoleAdd(aParam);
+				})
+				.css('width', '75px')
+
+				var aHTML = [];
+				var h = -1;	
+						
+				aHTML[++h] = '<table cellspacing="0" cellpadding="0" class="interfaceMain">';
+				aHTML[++h] = '<tbody>';
+
+				if (oResponse.data.rows.length == 0)
+				{
+					aHTML[++h] = '<tr class="interfaceMainCaption">' +
+							'<td class="interfaceMainRowNothing" >This user has no roles and thus no functional access.</td></tr>';
+				}
+
+				$(oResponse.data.rows).each(function()
+				{
+
+					aHTML[++h] = '<tr class="interfaceMainRow">';
+					
+					aHTML[++h] = '<td id="interfaceUserRole_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect role"' +
+											' title="">' +
+											this.roletext + '</td>';
+
+					aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+					aHTML[++h] = '<span id="spanUserAccessRole_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+					aHTML[++h] = '</td>';																	
+					aHTML[++h] = '</tr>';
+				});
+			
+				aHTML[++h] = '</tbody></table>';
+					
+				$('#tdInterfaceMainUserAccessRolesColumn1').html(aHTML.join(''));
+
+				$('td.role').click(function(event)
+				{
+					var sXHTMLElementId = event.target.id;
+					var aId = sXHTMLElementId.split('-');
+					
+					interfaceSetupUserRoleMethodAccess({endpoint: aId[1], step: 2});
+				});
+
+				$('.interfaceMainRowOptionsRemove').button(
+				{
+					text: false,
+				 	icons: {primary: "ui-icon-close"}
+				})
+				.click(function() {
+					interfaceSetupUserAccessRoleRemove(this.id)
+				})
+				.css('width', '15px')
+				.css('height', '20px')
+			}
+		}
+	}
+
+}
+
+
+function interfaceSetupUserAccessRoleAdd(aParam, oResponse)
+{
+		
+	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == 'spanInterfaceMainUserAccessRolesAdd')
+	{
+		$('#divInterfaceMasterViewportControlOptions').slideUp(500);
+		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+	}
+	else
+	{
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_ROLE_SEARCH';
+			oSearch.addField('title,notes')
+
+			oSearch.getResults(function(data)
+			{
+				interfaceSetupUserAccessRoleAdd(aParam, data)
+			});
+		}
+		else
+		{
+			
+			$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', 'spanInterfaceMainUserAccessRolesAdd')
+			
+			var aHTML = [];
+			var h = -1;
+			
+			if (oResponse.data.rows.length == 0)
+			{
+				aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceSearchMedium">';
+				aHTML[++h] = '<tbody>'
+				aHTML[++h] = '<tr class="interfaceMainCaption">' +
+								'<td class="interfaceMainRowNothing">No roles.</td></tr>';
+				aHTML[++h] = '</tbody></table>';
+
+				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+			}
+			else
+			{
+				aHTML[++h] = '<table id="tableContactPersonGroupsAddSelect" class="interfaceSearchMedium" style="font-size:0.725em;">';
+				aHTML[++h] = '<tbody>'
+				
+				$.each(oResponse.data.rows, function()
+				{	
+					aHTML[++h] = '<tr class="interfaceMainRow">';
+					
+					aHTML[++h] = '<td id="tdUserAccessRoleAddSelect-title-' + this.id + '" class="interfaceMainRowSelect">' +
+											this.title + '</td>';
+					
+					aHTML[++h] = '</tr>'
+				});
+				
+				aHTML[++h] = '</tbody></table>';
+
+				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+				
+				$('td.interfaceMainRowSelect').click(function(event)
+				{
+					interfaceSetupUserAccessRoleSelect(event.target.id);
+				});
+			}
+		}
+	}	
+}
+	
+	
+function interfaceSetupUserAccessRoleSelect(sXHTMLElementId)
+{
+
+	var aSearch = sXHTMLElementId.split('-');
+	var sElementId = aSearch[0];
+	var sSearchContext = aSearch[2];
+	
+	$('#' + sXHTMLElementId).fadeOut(500);
+	
+	var sParam = 'method=SETUP_USER_ROLE_MANAGE';
+	var sData = 'user=' + giObjectContext +
+				'&role=' + sSearchContext;
+				
+	$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/setup/setup.asp?' + sParam,
+			data: sData,
+			dataType: 'json',
+			success: function(data){interfaceSetupUserAccessRoles()}
+		});
+		
+}
+
+function interfaceSetupUserAccessRoleRemove(sXHTMLElementId)
+{
+
+	var aSearch = sXHTMLElementId.split('-');
+	var sElementId = aSearch[0];
+	var sSearchContext = aSearch[1];
+	
+	var sParam = 'method=SETUP_USER_ROLE_MANAGE&remove=1';
+	var sData = 'id=' + sSearchContext;
+				
+	$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/setup/setup.asp?' + sParam,
+			data: sData,
+			dataType: 'json',
+			success: function(data){$('#' + sXHTMLElementId).parent().parent().fadeOut(500)}
+		});	
+}
+
 function interfaceSetupUserSave()
 {
 	var sParam = 'method=SETUP_USER_MANAGE';
 	var sData = '_=1';
-	
+
+	interfaceMasterStatusWorking();
+
 	if (giObjectContext != -1)
 	{
 		sParam += '&id=' + giObjectContext	
@@ -580,10 +879,17 @@ function interfaceSetupUserSave()
 		sData += '&disabledreason=' + encodeURIComponent($('#inputInterfaceMainDetailsDisabledReason').val());
 	};
 
+	if ($('#divInterfaceMainAccess').html() != '')
+	{
+		sData += '&unrestrictedaccess=' + $('input[name="radioAccessUnrestricted"]:checked').val();
+		goObjectContext.unrestrictedaccess = $('input[name="radioAccessUnrestricted"]:checked').val();
+		interfaceSetupUserAccessRoles();
+	};
+
 	$.ajax(
 	{
 		type: 'POST',
-		url: '/ondemand/setup/?' + sParam,
+		url: '/ondemand/setup/setup.asp?' + sParam,
 		data: sData,
 		dataType: 'text',
 		success: interfaceMasterStatus('Saved')

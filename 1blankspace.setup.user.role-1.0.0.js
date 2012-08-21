@@ -365,6 +365,8 @@ function interfaceSetupUserRoleShow(oResponse)
 	}
 	else
 	{
+		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+		
 		goObjectContext = oResponse.data.rows[0];
 				
 		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
