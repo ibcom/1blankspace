@@ -22,7 +22,7 @@ $(function()
 		
 	}
 	
-	if (giUserID != -1 && giUserID != undefined)
+	if (ns1blankspace.user != -1 && ns1blankspace.user != undefined)
 	{
 		if (sHash != '')
 		{

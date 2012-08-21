@@ -777,6 +777,7 @@ function interfaceMasterLogonProcess(oResponse)
 	}
 	else 
 	{
+
 		$('#tdInterfaceMasterLogonStatus').html('Logon successful...');
 		
 		if ($('#inputInterfaceMasterLogonNameRemember').attr('checked'))
@@ -784,7 +785,7 @@ function interfaceMasterLogonProcess(oResponse)
 			$.cookie('mydigitalstucturelogon', $('#inputInterfaceMasterLogonName').val(), {expires:30});
 		}
 		
-		interfaceControlSecurity();
+		//interfaceControlSecurity();
 		
 		if (oResponse.passwordStatus == "PASSWORDEXPIRED")
 		{
@@ -1090,11 +1091,15 @@ function interfaceMasterViewportShow(oResponse)
 	var aHTML = [];
 	var h = -1;
 
+	ns1blankspace.user = oResponse.user;
+	ns1blankspace.userUnrestricted = (oResponse.unrestrictedaccess = 'Y' ? true : false);
+
 	gsUserName = oResponse.userlogonname;
 	gsUserID = oResponse.user;
 	gsUserContactPersonID = oResponse.contactperson;
 	gsUserEmail = oResponse.email;
 	gbSystemAdmin = oResponse.systemadmin;
+	
 	
 	interfaceControlSecurity();
 	
