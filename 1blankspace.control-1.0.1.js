@@ -175,7 +175,7 @@ ns1blankspace.viewports =
 	},
 	{
 		title: "Tax",
-		endpoint: "FINANCIAL_TAX", 
+		endpoint: "FINANCIAL_TAX",
 		show: true,
 		group: 6
 	},
@@ -655,9 +655,11 @@ function interfaceControlOptions()
 		}	
 
 		aHTML.push('</tr></table>');
+
+		ns1blankspace.viewportXHTML = aHTML.join('');
 	}
 
-	return aHTML.join('');
+	return ns1blankspace.viewportXHTML;
 		
 }
 
