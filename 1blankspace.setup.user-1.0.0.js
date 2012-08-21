@@ -114,13 +114,13 @@ function interfaceSetupUserHomeShow(oResponse)
 						'</tr>';
 		aHTML[++h] = '</table>';		
 		
-		$('#divInterfaceViewportControl').html(aHTML.join(''));	
+		$('#divInterfaceViewportControl').html(aHTML.join(''));
 		
 		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_USER_SEARCH';
-		oSearch.addField('username');
+		oSearch.addField('username');  //unrestrictedaccess
 		oSearch.rows = 10;
 		oSearch.sort('modifieddate', 'desc');
 		oSearch.getResults(interfaceSetupUserHomeShow);
@@ -128,7 +128,8 @@ function interfaceSetupUserHomeShow(oResponse)
 	else
 	{
 		var aHTML = [];
-		
+		var sRestriction;
+
 		if (oResponse.data.rows.length == 0)
 		{
 			aHTML.push('<table id="tableInterfaceMessagingConversationHomeMostLikely">');
@@ -149,10 +150,24 @@ function interfaceSetupUserHomeShow(oResponse)
 			{	
 				aHTML.push('<tr class="interfaceMainRow">');
 				aHTML.push('<td id="interfaceSetupUserHomeMostLikely_Title-' + this.id + 
-										'" class="interfaceHomeMostLikely">' +
+										'" class="interfaceHomeMostLikely" style="width:125px;">' +
 										this.username +
 										'</td>');
+				
+				if (this.unrestrictedaccess == 'Y')
+				{
+					sRestriction = "Access to everything"
+				}
+				else
+				{
+					sRestriction = "Restrictred access"
+				}
+
+				aHTML.push('<td id="interfaceUserHomeMostLikely_Restriction-' + this.id + '" class="interfaceHomeMostLikelySub">' +
+										sRestriction + '</td>');
+
 				aHTML.push('</tr>');
+
 			});
 			
 			aHTML.push('</tbody></table>');

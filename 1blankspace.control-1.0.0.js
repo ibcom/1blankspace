@@ -31,7 +31,7 @@ ns1blankspace.loadingXHTML = gsLoadingXHTML;
 ns1blankspace.loadingSmallXHTML = gsLoadingSmallXHTML
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
-	
+
 ns1blankspace.financial.summaryUseTemplate = false; 
 ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html';
 
@@ -530,6 +530,12 @@ function interfaceControlSetupOptions()
 					'Users</span>' +
 					'</td></tr>';
 	
+		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupUserRole" class="interfaceViewportMasterControl">' +	
+					'<td id="tdInterfaceViewportMasterControlSetupUserRole" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlSetupUserRole" class="interfaceViewportMasterControl">' +
+					'User Roles</span>' +
+					'</td></tr>';
+
 		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +
@@ -647,6 +653,12 @@ function interfaceControlSetupOptionsBind()
 		interfaceSetupUserMasterViewport();
 	});
 	
+	$('#tdInterfaceViewportMasterControlSetupUserRole').click(function(event)
+	{
+		interfaceMasterOptionsSource();
+		interfaceSetupUserRoleMasterViewport();
+	});
+
 	$('#tdInterfaceViewportMasterControlSetupNetworkGroup').click(function(event)
 	{
 		interfaceMasterOptionsSource();
