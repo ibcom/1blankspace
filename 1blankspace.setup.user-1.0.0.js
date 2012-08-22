@@ -171,12 +171,6 @@ function interfaceSetupUserHomeShow(oResponse)
 			});
 			
 			aHTML.push('</tbody></table>');
-			
-			aHTML.push('<table id="tableInterfaceSetupUserHomeMostLikelyMore">');
-			aHTML.push('<tr><td id="tdInterfaceSetupUserHomeMostLikelyMore">' +
-						'<a href="#" id="aInterfaceSetupUserHomeMostLikelyMore">more...</a>' +
-						'</td></tr>');
-			aHTML.push('</tbody></table>');
 		}
 		
 		$('#tdInterfaceSetupUserHomeMostLikely').html(aHTML.join(''));

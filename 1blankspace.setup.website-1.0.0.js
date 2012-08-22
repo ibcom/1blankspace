@@ -757,7 +757,7 @@ function interfaceSetupWebsiteLayout()
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'CORE_ATTACHMENT_SEARCH';
 		
-		oSearch.addField('filename');
+		oSearch.addField('filename,attachment');
 		oSearch.addFilter('filename', 'TEXT_IS_LIKE', 'css')
 		oSearch.addFilter('object', 'EQUAL_TO', 40);
 		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext)
@@ -769,7 +769,7 @@ function interfaceSetupWebsiteLayout()
 		{
 			$.each(oResponse.data.rows, function()
 			{
-				aHTML[++h] = '<input type="radio" id="radioCSSAttachment' + this.id + '" name="radioCSSAttachment" value="' + this.id + '"/>' +
+				aHTML[++h] = '<input type="radio" id="radioCSSAttachment' + this.attachment + '" name="radioCSSAttachment" value="' + this.attachment + '"/>' +
 									this.filename + '<br />';				
 			});
 		});

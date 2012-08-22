@@ -1046,7 +1046,7 @@ function interfaceControlUserOptionsShow(oElement)
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
 		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
 		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left - 22 });
+		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left + 65});
 		$('#divInterfaceMasterViewportControlOptions').html(interfaceControlUserOptions);
 			
 		interfaceControlUserOptionsBind();
