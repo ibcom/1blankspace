@@ -38,9 +38,9 @@ String.prototype.formatXHTML = function(bDirection)
 
 	if (bDirection)
 	{
-		sValue= sValue.replace(/\&/g,'&amp;');
-		sValue= sValue.replace(/</g,'&lt;');
-		sValue= sValue.replace(/>/g,'&gt;');
+		sValue = sValue.replace(/\&/g,'&amp;');
+		sValue = sValue.replace(/</g,'&lt;');
+		sValue = sValue.replace(/>/g,'&gt;');
 		//sValue = sValue.replace(/-/g, '&#45;')
 		//sValue = sValue.replace(/@/g, '&#64;')
 		//sValue = sValue.replace(/\//g, '&#47;')
@@ -1094,7 +1094,10 @@ function interfaceMasterViewportShow(oResponse)
 	ns1blankspace.user = oResponse.user;
 	ns1blankspace.userUnrestricted = (oResponse.unrestrictedaccess = 'Y' || oResponse.unrestrictedaccess == undefined ? true : false);
 	ns1blankspace.spaceText = oResponse.spacename;
-	
+	ns1blankspace.space = oResponse.space;
+	ns1blankspace.userSpace = oResponse.space;
+	ns1blankspace.userSpaceText = oResponse.spacename
+
 	gsUserName = oResponse.userlogonname;
 	gsUserID = oResponse.user;
 	gsUserContactPersonID = oResponse.contactperson;
@@ -1107,6 +1110,7 @@ function interfaceMasterViewportShow(oResponse)
 		
 	aHTML[++h] = '<div id="divInterfaceMasterViewport" class="interfaceMaster">';
 	
+	$('#tdInterfaceMasterHeaderColumn2').css('width', '250px');
 	$('#tdInterfaceMasterHeaderColumn2').html('<div id="divInterfaceMasterViewportSpaceText">' + ns1blankspace.spaceText + '</div>' +
 									'<div id="divInterfaceMasterViewportLogonName">' + gsUserName + '</div>')
 	

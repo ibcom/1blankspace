@@ -1119,19 +1119,55 @@ function interfaceControlSpaceOptionsShow(oElement, oResponse)
 		}
 		else
 		{	
-			
 			$('#divInterfaceMasterViewportControlOptions').attr('data-source', oElement.id);
 			$('#divInterfaceMasterViewportControlOptions').html('<table class="interfaceViewportMasterControl"><tr><td>' + ns1blankspace.loadingSmallXHTML + '</tr><td></table>');
 			$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
 			$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left - 22 });
 
-			$.ajax(
+			if (ns1blankspace.space == ns1blankspace.userSpace)
+			{	
+				
+				$.ajax(
+				{
+					type: 'GET',
+					url: '/ondemand/core/?method=CORE_SPACE_SEARCH&rows=10',
+					dataType: 'json',
+					success: function(data) {interfaceControlSpaceOptionsShow(oElement, data)}
+				});
+			}
+			else
 			{
-				type: 'GET',
-				url: '/ondemand/core/?method=CORE_SPACE_SEARCH&rows=10',
-				dataType: 'json',
-				success: function(data) {interfaceControlSpaceOptionsShow(oElement, data)}
-			});	
+				aHTML.push('<table id="tableInterfaceMasterSpaceOptions" class="interfaceViewportMasterControl" cellpadding=4>');
+				aHTML.push('<tr class="interfaceMasterSpaceOptions">' +
+								'<td id="tdInterfaceMasterSpaceOptionsSwitchBack" class="interfaceMasterUserOptions">' +
+								'Switch back to your space.' +
+								'</td></tr>');
+				aHTML.push('</table>');
+		
+				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+
+				$('#tdInterfaceMasterSpaceOptionsSwitchBack').click(function(event)
+				{
+					$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+
+					$.ajax(
+					{
+						type: 'GET',
+						url: '/ondemand/core/?method=CORE_SPACE_MANAGE&switchback=1',
+						dataType: 'json',
+						success: function(data)
+						{
+							if (data.status == 'OK')
+							{	
+								ns1blankspace.space = ns1blankspace.userSpace;
+								ns1blankspace.spaceText = ns1blankspace.userSpaceText;
+								$('#divInterfaceMasterViewportSpaceText').html(ns1blankspace.spaceText);
+							}
+						}
+					});	
+				});
+
+			}	
 		}
 	}	
 	else
@@ -1147,15 +1183,37 @@ function interfaceControlSpaceOptionsShow(oElement, oResponse)
 		$(oResponse.data.rows).each(function()
 		{
 			aHTML.push('<tr class="interfaceMasterSpaceOptions">' +
-					'<td id="tdInterfaceMasterSpaceOptionsSwitch-' + this.id + '" class="interfaceMasterSpaceOptions">' +
-					this.space +
+					'<td id="tdInterfaceMasterSpaceOptionsSwitch-' + this.id + '" class="interfaceMasterUserOptions">' +
+					(this.space).replace(/ /g,'&nbsp;') +
 					'</td></tr>');
 		});			
 						
 		aHTML.push('</table>');
 		
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-	}	
+	
+		$('.interfaceMasterSpaceOptions').click(function(event)
+		{
+			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+
+			var aID = (event.target.id).split('-')
+			$.ajax(
+			{
+				type: 'GET',
+				url: '/ondemand/core/?method=CORE_SPACE_MANAGE&switch=1&id=' + aID[1],
+				dataType: 'json',
+				success: function(data)
+				{
+					if (data.status == 'OK')
+					{	
+						ns1blankspace.space = aID[1];
+						ns1blankspace.spaceText = $('#' + event.target.id).html();
+						$('#divInterfaceMasterViewportSpaceText').html(ns1blankspace.spaceText);
+					}	
+				}
+			});	
+		});
+	}
 }
 
 function interfaceMasterUserOptionsChangePassword(aParam)

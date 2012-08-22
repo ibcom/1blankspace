@@ -375,8 +375,9 @@ td.interfaceHomeViewport
 	color: #999999;
 	cursor: pointer;
 	font-size: 0.875em;
-	width: 150px;
-	margin-bottom: 5px;
+	width: 250px;
+	padding-bottom: 5px;
+	text-align: right;
 }
 
 #divInterfaceMasterViewportSpaceText
@@ -385,8 +386,9 @@ td.interfaceHomeViewport
 	color: #CCCCCC;
 	cursor: pointer;
 	font-size: 1.25em;
-	width: 150px;
-	margin-bottom: 2px;
+	width: 250px;
+	padding-bottom: 2px;
+	text-align: right;
 }
 
 #divInterfaceMasterViewportControl
