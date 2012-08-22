@@ -1046,7 +1046,7 @@ function interfaceControlUserOptionsShow(oElement)
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
 		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
 		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left - 22 });
 		$('#divInterfaceMasterViewportControlOptions').html(interfaceControlUserOptions);
 			
 		interfaceControlUserOptionsBind();
@@ -1060,7 +1060,7 @@ function interfaceControlUserOptions()
 	var aHTML = [];
 	var h = -1;
 	
-	aHTML[++h] = '<table id="tableInterfaceMasterUserOptions" class="interfaceViewportMasterControl">';
+	aHTML[++h] = '<table id="tableInterfaceMasterUserOptions" class="interfaceViewportMasterControl" cellpadding=6>';
 		
 	aHTML[++h] = '<tr id="trInterfaceMasterUserOptionsLogOff" class="interfaceMasterUserOptions">' +
 					'<td id="tdInterfaceMasterUserOptionsLogOff" class="interfaceMasterUserOptions">' +
@@ -1079,6 +1079,67 @@ function interfaceControlUserOptions()
 					'Secure Access Token' +
 					'</td>' +
 					'</tr>'						
+					
+	aHTML[++h] = '</table>'
+	
+	return aHTML.join('');
+}
+
+function interfaceControlUserOptionsBind()
+{
+
+	$('#tdInterfaceMasterUserOptionsLogOff').click(function(event)
+	{
+		interfaceMasterLogoff();
+	})
+	
+	$('#tdInterfaceMasterUserOptionsChangePassword').click(function(event)
+	{
+		$(this).html(gsLoadingSmallXHTML);
+		interfaceMasterUserOptionsChangePassword();
+	});
+	
+	$('#tdInterfaceMasterUserOptionsCreateSecureKey').click(function(event)
+	{
+		$(this).html(gsLoadingSmallXHTML);
+		interfaceMasterUserOptionsCreateSecureKey();
+	});
+}
+
+function interfaceControlSpaceOptionsShow(oElement)
+{
+	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
+	{
+		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+	}
+	else
+	{	
+		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
+		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
+		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left - 22 });
+		$('#divInterfaceMasterViewportControlOptions').html(interfaceControlSpaceOptions);
+			
+		interfaceControlSpaceOptionsBind();
+	}	
+}
+
+function interfaceControlSpaceOptions(aParam, oResponse)
+{
+
+	var aHTML = [];
+	var h = -1;
+	
+	aHTML[++h] = '<table id="tableInterfaceMasterUserOptions" class="interfaceViewportMasterControl" cellpadding=6>';
+		
+	aHTML[++h] = '<tr id="trInterfaceMasterUserOptionsLogOff" class="interfaceMasterUserOptions">' +
+					'<td id="tdInterfaceMasterUserOptionsLogOff" class="interfaceMasterUserOptions">' +
+					'Log Off' +
+					'</td>' +
+					'</tr>'
+				
+					
 					
 	aHTML[++h] = '</table>'
 	

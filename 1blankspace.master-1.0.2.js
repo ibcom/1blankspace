@@ -1093,13 +1093,13 @@ function interfaceMasterViewportShow(oResponse)
 
 	ns1blankspace.user = oResponse.user;
 	ns1blankspace.userUnrestricted = (oResponse.unrestrictedaccess = 'Y' || oResponse.unrestrictedaccess == undefined ? true : false);
-
+	ns1blankspace.spaceText = oResponse.spacename;
+	
 	gsUserName = oResponse.userlogonname;
 	gsUserID = oResponse.user;
 	gsUserContactPersonID = oResponse.contactperson;
 	gsUserEmail = oResponse.email;
 	gbSystemAdmin = oResponse.systemadmin;
-	
 	
 	interfaceControlSecurity();
 	
@@ -1107,7 +1107,8 @@ function interfaceMasterViewportShow(oResponse)
 		
 	aHTML[++h] = '<div id="divInterfaceMasterViewport" class="interfaceMaster">';
 	
-	$('#tdInterfaceMasterHeaderColumn2').html('<span id="spanInterfaceMasterViewportLogonName">' + gsUserName + '</span>')
+	$('#tdInterfaceMasterHeaderColumn2').html('<div id="divInterfaceMasterViewportSpaceText">' + ns1blankspace.spaceText + '</div>' +
+									'<div id="divInterfaceMasterViewportLogonName">' + gsUserName + '</div>')
 	
 	aHTML[++h] = '<div id="divInterfaceMasterViewportControl" class="interfaceMasterViewport">';
 	
@@ -1311,9 +1312,14 @@ function interfaceMasterViewportShow(oResponse)
 			interfaceMasterHelpShow(this);
 		});		
 	
-	$('#spanInterfaceMasterViewportLogonName').click(function(event)
+	$('#divInterfaceMasterViewportLogonName').click(function(event)
 	{
 		interfaceControlUserOptionsShow(this);
+	})
+
+	$('#divInterfaceMasterViewportSpaceText').click(function(event)
+	{
+		interfaceControlSpaceOptionsShow(this);
 	})
 	
 	if (gbShowBrowseBar)

@@ -600,7 +600,7 @@ function interfaceHomeLogonShow()
 						'<br /><br /><a href="http://mydigitalstructure.com/examples" target="_blank">More code examples</a>' +
 						'<br /><br /><a href="http://mydigitalstructure.com/documentation" target="_blank">Documentation</a>' +
 						'<br /><br /><a href="http://mydigitalstructure.com/gettingstarted" target="_blank">Getting started</a>' +
-						'<br /><br /><a href="http://twitter.com/mydsondemand" target="_blank">twitter.com/mydsondemand</a>' +
+						'<br /><br /><a href="http://twitter.com/ibComMYDS" target="_blank">twitter.com/ibComMYDS</a>' +
 						'<br /><br /><hr />' +
 						'<br /><a href="https://developer.1blankspace.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>' +
 						'</td>' +
