@@ -1106,65 +1106,56 @@ function interfaceControlUserOptionsBind()
 	});
 }
 
-function interfaceControlSpaceOptionsShow(oElement)
+function interfaceControlSpaceOptionsShow(oElement, oResponse)
 {
-	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
-	{
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
-	}
-	else
-	{	
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
-		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left - 22 });
-		$('#divInterfaceMasterViewportControlOptions').html(interfaceControlSpaceOptions);
-			
-		interfaceControlSpaceOptionsBind();
-	}	
-}
-
-function interfaceControlSpaceOptions(aParam, oResponse)
-{
-
 	var aHTML = [];
-	var h = -1;
-	
-	aHTML[++h] = '<table id="tableInterfaceMasterUserOptions" class="interfaceViewportMasterControl" cellpadding=6>';
+
+	if (oResponse == undefined)	
+	{
+		if ($('#divInterfaceMasterViewportControlOptions').attr('data-source') == oElement.id)
+		{
+			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+			$('#divInterfaceMasterViewportControlOptions').attr('data-source', '');
+		}
+		else
+		{	
+			
+			$('#divInterfaceMasterViewportControlOptions').attr('data-source', oElement.id);
+			$('#divInterfaceMasterViewportControlOptions').html('<table class="interfaceViewportMasterControl"><tr><td>' + ns1blankspace.loadingSmallXHTML + '</tr><td></table>');
+			$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+			$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left - 22 });
+
+			$.ajax(
+			{
+				type: 'GET',
+				url: '/ondemand/core/?method=CORE_SPACE_SEARCH&rows=10',
+				dataType: 'json',
+				success: function(data) {interfaceControlSpaceOptionsShow(oElement, data)}
+			});	
+		}
+	}	
+	else
+	{
+		aHTML.push('<table id="tableInterfaceMasterSpaceOptions" class="interfaceViewportMasterControl" cellpadding=4>');
+
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML.push('<tr class="interfaceMainCaption">' +
+								'<td class="interfaceMainRowNothing">No methods.</td></tr>');
+		}
+
+		$(oResponse.data.rows).each(function()
+		{
+			aHTML.push('<tr class="interfaceMasterSpaceOptions">' +
+					'<td id="tdInterfaceMasterSpaceOptionsSwitch-' + this.id + '" class="interfaceMasterSpaceOptions">' +
+					this.space +
+					'</td></tr>');
+		});			
+						
+		aHTML.push('</table>');
 		
-	aHTML[++h] = '<tr id="trInterfaceMasterUserOptionsLogOff" class="interfaceMasterUserOptions">' +
-					'<td id="tdInterfaceMasterUserOptionsLogOff" class="interfaceMasterUserOptions">' +
-					'Log Off' +
-					'</td>' +
-					'</tr>'
-				
-					
-					
-	aHTML[++h] = '</table>'
-	
-	return aHTML.join('');
-}
-
-function interfaceControlUserOptionsBind()
-{
-
-	$('#tdInterfaceMasterUserOptionsLogOff').click(function(event)
-	{
-		interfaceMasterLogoff();
-	})
-	
-	$('#tdInterfaceMasterUserOptionsChangePassword').click(function(event)
-	{
-		$(this).html(gsLoadingSmallXHTML);
-		interfaceMasterUserOptionsChangePassword();
-	});
-	
-	$('#tdInterfaceMasterUserOptionsCreateSecureKey').click(function(event)
-	{
-		$(this).html(gsLoadingSmallXHTML);
-		interfaceMasterUserOptionsCreateSecureKey();
-	});
+		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+	}	
 }
 
 function interfaceMasterUserOptionsChangePassword(aParam)
