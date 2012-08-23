@@ -118,7 +118,7 @@ function interfaceSetupUserHomeShow(oResponse)
 					'</tr>';			
 				
 		aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlExternal" class="interfaceViewportControl">External</td>' +
+					'<td id="tdInterfaceViewportControlExternal" class="interfaceViewportControl" style="padding-top:10px;">Other User Access</td>' +
 					'</tr>';	
 
 		aHTML[++h] = '</table>';		
@@ -165,7 +165,7 @@ function interfaceSetupUserHomeShow(oResponse)
 		else
 		{
 		
-			aHTML.push('<table id="tableInterfaceSetupUserHomeMostLikely">');
+			aHTML.push('<table id="tableInterfaceSetupUserHomeMostLikely" cellpadding="4">');
 			aHTML.push('<tr>');
 			aHTML.push('<td class="interfaceMain">MOST LIKELY</td>');
 			aHTML.push('</tr>');
@@ -174,7 +174,7 @@ function interfaceSetupUserHomeShow(oResponse)
 			{	
 				aHTML.push('<tr class="interfaceMainRow">');
 				aHTML.push('<td id="interfaceSetupUserHomeMostLikely_Title-' + this.id + 
-										'" class="interfaceHomeMostLikely" style="width:125px;">' +
+										'" class="interfaceHomeMostLikely" style="width:250px;">' +
 										this.username +
 										'</td>');
 				
@@ -1072,7 +1072,7 @@ function interfaceSetupUserExternal(aParam, oResponse)
 						'</td></tr>' +
 						'<tr id="trInterfaceMainSetupUserExternalUsernameValue" class="interfaceMainSelect">' +
 						'<td id="tdInterfaceMainSetupUserExternalUsernameValue" class="interfaceMainSelect">' +
-						'<input id="inputInterfaceMainSetupUserExternalUsername" class="inputInterfaceMainSelect"' +
+						'<input id="inputInterfaceMainSetupUserExternalUsername" class="inputInterfaceMainSelect2"' +
 							' data-method="NETWORK_USER_SEARCH"' +
 							' data-columns="usertext">' +
 						'</td></tr>';
@@ -1081,6 +1081,43 @@ function interfaceSetupUserExternal(aParam, oResponse)
 		
 		$('#tdInterfaceMainSetupUserExternalColumn2').html(aHTML.join(''));
 		
+		$('#inputInterfaceMainSetupUserExternalUsername').focusin(function() 
+		{
+
+			$(this).addClass('interfaceMasterHighlight');
+				
+			ns1blankspace.currentXHTMLElementID = this.id;
+			gsLastShowDivID = this.id;
+				
+			$('#divInterfaceMasterViewportControlOptions').html('');
+			$('#divInterfaceMasterViewportControlOptions').show();
+			$('#divInterfaceMasterViewportControlOptions').offset({ top: $('#' + gsLastShowDivID).offset().top, left: $('#' + gsLastShowDivID).offset().left + $('#' + gsLastShowDivID).width() - 10});
+					
+			$('#divInterfaceMasterViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
+			
+			$('#spanInterfaceMainSelectOptions').button({
+				text: false,
+				icons: {
+					primary: "ui-icon-triangle-1-s"
+				}
+			})
+			.click(function() {
+				interfaceSetupUserExternalSearch({xhtmlElementID: gsLastShowDivID, source: 4});
+			})
+			.css('width', '14px')
+			.css('height', '23px')
+		});	
+
+		$('#inputInterfaceMainSetupUserExternalUsername').live('keyup', function()
+		{
+			interfaceSetupUserExternalSearch({xhtmlElementID: gsLastShowDivID, source: 1, minimumLength: 3});	
+		});	
+			
+		$('#inputInterfaceMainSetupUserExternalUsername').live('blur', function() 
+		{
+			$(this).removeClass('interfaceMasterHighlight');
+		});
+
 		var aHTML = [];
 		var h = -1;
 	
@@ -1150,7 +1187,8 @@ function interfaceSetupUserExternal(aParam, oResponse)
 		}	
 }	
 
-
-
-
+function interfaceSetupUserExternalSearch()
+{
+	
+}	
 

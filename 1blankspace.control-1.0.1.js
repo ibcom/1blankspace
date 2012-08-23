@@ -51,139 +51,183 @@ ns1blankspace.viewports =
 		title: "People",
 		endpoint: "CONTACT_PERSON",
 		show: true,
-		group: 1
+		group: 1,
+		type: 1
 	},
 	{
 		title: "Businesses",
 		endpoint: "CONTACT_BUSINESS",
 		show: true,
-		group: 1
+		group: 1,
+		type: 1
 	},
 	{
 		title: "Opportunities",
 		endpoint: "OPPORTUNITY",
 		show: true,
-		group: 1
+		group: 1,
+		type: 1
 	},
 	{
 		title: "Email",
 		endpoint: "MESSAGING_EMAIL",
 		show: true,
-		group: 1
+		group: 1,
+		type: 1
 	},
 	{
 		title: "Conversations",
 		endpoint: "MESSAGING_CONVERSATION",
 		show: true,
-		group: 1
+		group: 1,
+		type: 1
 	},
 	{
 		title: "Projects",
 		endpoint: "PROJECT",
 		show: true,
-		group: 2
+		group: 2,
+		type: 1
 	},
 	{
 		title: "Project Tasks",
 		endpoint: "PROJECT_TASK",
 		show: true,
-		group: 2
+		group: 2,
+		type: 1
 	},
 	{
 		title: "Actions",
 		endpoint: "ACTION",
 		show: true,
-		group: 2
+		group: 2,
+		type: 1
 	},
 	{
 		title: "Documents",
 		endpoint: "DOCUMENT",
 		show: true,
-		group: 3
+		group: 3,
+		type: 1
 	},
 	{
 		title: "News",
 		endpoint: "NEWS",
 		show: true,
-		group: 3
+		group: 3,
+		type: 1
 	},
 	{
 		title: "Events",
 		endpoint: "EVENT",
 		show: true,
-		group: 3
+		group: 3,
+		type: 1
 	},
 	{
 		title: "Products",
 		endpoint: "PRODUCT",
 		show: true,
-		group: 4
+		group: 4,
+		type: 1
 	},
 	{
 		title: "Orders",
 		endpoint: "PRODUCT_ORDER",
 		show: true,
-		group: 4
+		group: 4,
+		type: 1
 	},
 	{
 		title: "Financials",
 		endpoint: "FINANCIAL",
 		show: true,
-		group: 5
+		group: 5,
+		type: 1
 	},
 	{
 		title: "Bank Accounts",
 		endpoint: "FINANCIAL_BANK_ACCOUNT",
 		show: true,
-		group: 5
+		group: 5,
+		type: 1
 	},
 	{
 		title: "Invoices",
 		endpoint: "FINANCIAL_INVOICE",
 		show: true,
-		group: 5
+		group: 5,
+		type: 1
 	},
 	{
 		title: "Expenses",
 		endpoint: "FINANCIAL_EXPENSE",
 		show: true,
-		group: 5
+		group: 5,
+		type: 1
 	},
 	{
 		title: "Receipts",
 		endpoint: "FINANCIAL_RECEIPT",
 		show: true,
-		group: 5
+		group: 5,
+		type: 1
 	},
 	{
 		title: "Payments",
 		endpoint: "FINANCIAL_PAYMENT",
 		show: true,
-		group: 5
+		group: 5,
+		type: 1
 	},
 	{
 		title: "Payroll",
 		endpoint: "FINANCIAL_PAYROLL",
 		show: true,
-		group: 5
+		group: 5,
+		type: 1
 	},
 	{
 		title: "Reporting",
 		endpoint: "DASHBOARD", 
 		show: true,
-		group: 6
+		group: 6,
+		type: 1
 	},
 	{
 		title: "Tax",
 		endpoint: "FINANCIAL_TAX",
 		show: true,
-		group: 6
+		group: 6,
+		type: 1
 	},
 	{
 		title: "Structures",
 		endpoint: "STRUCTURE", 
 		show: true,
-		group: 6
+		group: 6,
+		type: 1
+	},
+	{
+		title: "Websites",
+		endpoint: "SETUP_SITE", 
+		show: true,
+		group: 2,
+		type: 2
+	},
+	{
+		title: "Automation",
+		endpoint: "SETUP_AUTOMATION", 
+		show: true,
+		group: 2,
+		type: 2
+	},
+	{
+		title: "Support",
+		endpoint: "SUPPORT", 
+		show: true,
+		group: 4,
+		type: 2
 	},
 ]
 
@@ -814,128 +858,208 @@ function interfaceControlOptionsBind()
 function interfaceControlSetupOptions()
 {
 	var aHTML = [];
-	var h = -1;
-			
-	aHTML[++h] = '<table id="tableInterfaceViewportMasterSetupControl" class="interfaceViewportMasterControl">';
-	aHTML[++h] = '<tr id="trInterfaceViewportMasterSetupControlRow1" class="interfaceViewportMasterControl">';
-	
-	if (gbRoleSetup)
-	{	
-	
-		aHTML[++h] = '<td id="tdInterfaceViewportMasterSetupControlColumn1" class="interfaceViewportMasterControlColumn">';
-		aHTML[++h] = '<table id="tableInterfaceViewportMasterSetupControlColumn1" class="interfaceViewportMasterControlColumn">';
 
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupUser" class="interfaceViewportMasterControl">' +	
+	aHTML.push('<table id="tableInterfaceViewportMasterSetupControl" class="interfaceViewportMasterControl">');
+	aHTML.push('<tr id="trInterfaceViewportMasterSetupControlRow1" class="interfaceViewportMasterControl">');
+	
+	var aHTMLViewport = [];
+
+	aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupUser" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupUser" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupUser" class="interfaceViewportMasterControl">' +
 					'Users</span>' +
-					'</td></tr>';
-	
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupUserRole" class="interfaceViewportMasterControl">' +	
+					'</td></tr>');
+
+	aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupUserRole" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupUserRole" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupUserRole" class="interfaceViewportMasterControl">' +
 					'User Roles</span>' +
-					'</td></tr>';
+					'</td></tr>');
 
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +	
+	aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +
 					'Network&nbsp;Groups</span>' +
-					'</td></tr>';
-					
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +	
+					'</td></tr>');
+
+	aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +
 					'Messaging</span>' +
-					'</td></tr>';			
-					
-		aHTML[++h] = '</table>';
-		aHTML[++h] = '</td>';
-		
-		aHTML[++h] = '<td id="tdInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
-		aHTML[++h] = '<table id="tableInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
+					'</td></tr>');
 
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
+	if (aHTMLViewport.length > 0)
+	{
+		aHTML.push('<td class="interfaceViewportMasterControlColumn">');
+		aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+
+		aHTML.push('<tr class="interfaceViewportMasterControl">' +
+					'<td id="interfaceMasterViewportContact" class="interfaceMasterViewportImage">' +
+					'&nbsp;' +
+					'</td></tr>');			
+	
+		aHTML.push(aHTMLViewport.join(''))
+
+		aHTML.push('</table>');
+		aHTML.push('</td>');
+	}	
+
+	var aHTMLViewport = [];
+
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Websites';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
 					'<td id="tdInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
-					'Websites</span>' +
-					'</td></tr>';
-	
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupStructures" class="interfaceViewportMasterControl">' +	
+					'Websites & Webapps</span>' +
+					'</td></tr>');
+	}
+
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Structures';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupStructures" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupStructures" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupStructures" class="interfaceViewportMasterControl">' +
 					'Structures</span>' +
-					'</td></tr>';
-					
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +	
+					'</td></tr>');
+	}
+
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Automation';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +
 					'Automation</span>' +
-					'</td></tr>';			
-					
-		if (false)
-		{
-			aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +	
-						 '<td id="tdInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +
-						 '<span id="spanInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +
-						 'Imports</span>' +
-						 '</td></tr>';
-		}
-					
-		aHTML[++h] = '</table>';
-		aHTML[++h] = '</td>';
-	
-		aHTML[++h] = '<td id="tdInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
-		aHTML[++h] = '<table id="tableInterfaceViewportMasterSetupControlColumn2" class="interfaceViewportMasterControlColumn">';
+					'</td></tr>');
+	}
 
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +	
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Imports';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +	
+					 '<td id="tdInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +
+					 '<span id="spanInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +
+					 'Imports</span>' +
+					 '</td></tr>');
+	}
+
+	if (aHTMLViewport.length > 0)
+	{
+		aHTML.push('<td class="interfaceViewportMasterControlColumn">');
+		aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+
+		aHTML.push('<tr class="interfaceViewportMasterControl">' +
+					'<td id="interfaceMasterViewportSetupWebsite" class="interfaceMasterViewportImage">' +
+					'&nbsp;' +
+					'</td></tr>');			
+	
+		aHTML.push(aHTMLViewport.join(''))
+
+		aHTML.push('</table>');
+		aHTML.push('</td>');
+	}		
+
+	var aHTMLViewport = [];
+
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Financials';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +
 					'Financials</span>' +
-					'</td></tr>';
-					
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +	
+					'</td></tr>');
+	}
+
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Businesses';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +
 					'Contact&nbsp;Business&nbsp;Groups</span>' +
-					'</td></tr>';
-					
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupContactPersonGroup" class="interfaceViewportMasterControl">' +	
+					'</td></tr>');
+	}
+
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'People';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupContactPersonGroup" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupContactPersonGroup" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupContactPersonGroup" class="interfaceViewportMasterControl">' +
 					'Contact&nbsp;Person&nbsp;Groups</span>' +
-					'</td></tr>';
-					
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +	
+					'</td></tr>');
+	}
+
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Projects';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +
 					'Project&nbsp;Templates</span>' +
-					'</td></tr>';
-	
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSetupProjectTask" class="interfaceViewportMasterControl">' +	
+					'</td></tr>');
+	}
+
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Project Tasks';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupProjectTask" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupProjectTask" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupProjectTask" class="interfaceViewportMasterControl">' +
 					'Project&nbsp;Template&nbsp;Tasks</span>' +
-					'</td></tr>';
+					'</td></tr>');
+	}
+
+	if (aHTMLViewport.length > 0)
+	{
+		aHTML.push('<td class="interfaceViewportMasterControlColumn">');
+		aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+
+		aHTML.push('<tr class="interfaceViewportMasterControl">' +
+					'<td id="interfaceMasterViewportFinancial" class="interfaceMasterViewportImage">' +
+					'&nbsp;' +
+					'</td></tr>');			
 	
-		aHTML[++h] = '</table>';
-		aHTML[++h] = '</td>';
+		aHTML.push(aHTMLViewport.join(''))
 
-		aHTML[++h] = '<td id="tdInterfaceViewportMasterSetupControlColumn3" class="interfaceViewportMasterControlColumn">';
-		aHTML[++h] = '<table id="tableInterfaceViewportMasterSetupControlColumn3" class="interfaceViewportMasterControlColumn">';
+		aHTML.push('</table>');
+		aHTML.push('</td>');
+	}		
+	
 
-		aHTML[++h] = '<tr id="trInterfaceViewportMasterControlSupportIssue" class="interfaceViewportMasterControl">' +	
+	var aHTMLViewport = [];
+
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Support';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSupportIssue" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSupportIssue" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSupportIssue" class="interfaceViewportMasterControl">' +
 					'Support&nbsp;Issues</span>' +
-					'</td></tr>';
-					
-		aHTML[++h] = '</table>';
-		aHTML[++h] = '</td>';
-		
+					'</td></tr>');
+	}
+
+	if (aHTMLViewport.length > 0)
+	{
+		aHTML.push('<td class="interfaceViewportMasterControlColumn">');
+		aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+
+		aHTML.push('<tr class="interfaceViewportMasterControl">' +
+					'<td id="interfaceMasterViewportHelp" class="interfaceMasterViewportImage">' +
+					'&nbsp;' +
+					'</td></tr>');			
+	
+		aHTML.push(aHTMLViewport.join(''))
+
+		aHTML.push('</table>');
+		aHTML.push('</td>');
 	}	
 	
-	aHTML[++h] = '</tr></table>'
+	aHTML.push('</tr></table>');
 	
 	return aHTML.join('');	
 }
@@ -1403,5 +1527,5 @@ function interfaceMasterUserOptionsCreateSecureKey(aParam, oResponse)
 
 function interfaceControlHelpURL()
 {
-	return 'http://help.1blankspace.com';
+	return 'http://community.mydigitalstructure.com';
 }

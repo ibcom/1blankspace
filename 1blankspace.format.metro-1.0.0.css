@@ -690,7 +690,8 @@ textarea.inputInterfaceMainTextMultiSmall
 	padding-top: 3px;
 	margin-bottom: 5px;
 }
-.inputInterfaceMainSelect, .inputInterfaceMainSelectContact, .inputInterfaceMainSelectContactEmail
+
+.inputInterfaceMainSelect, .inputInterfaceMainSelectContact, .inputInterfaceMainSelectContactEmail, .inputInterfaceMainSelectCustom
 {
 	width: 100%;
 	font-size: 0.875em;
