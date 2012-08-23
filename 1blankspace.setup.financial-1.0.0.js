@@ -475,7 +475,6 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 
 	if (iStep == 2)
 	{	
-
 		var aHTML = [];
 		var h = -1;
 	

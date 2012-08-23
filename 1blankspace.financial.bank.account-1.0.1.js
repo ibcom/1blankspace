@@ -155,8 +155,7 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 }
 
 function interfaceFinancialBankAccountViewport()
-{
-	
+{	
 	var aHTML = [];
 	var h = -1;
 
@@ -430,7 +429,7 @@ function interfaceFinancialBankAccountRecoRow(oRow)
 	aHTML[++h] = '<span class="interfaceViewportControlSubContext" id="spanInterfaceFinancialBankAccountReco_balance-' + oRow.id + '">$' +
 	 					oRow.statementbalance + '</span>';
 				
-	aHTML[++h] = '</tr>'
+	aHTML[++h] = '</td></tr>'
 	
 	return aHTML.join('');
 }

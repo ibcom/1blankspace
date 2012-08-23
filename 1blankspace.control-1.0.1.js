@@ -1130,7 +1130,7 @@ function interfaceControlSpaceOptionsShow(oElement, oResponse)
 				$.ajax(
 				{
 					type: 'GET',
-					url: '/ondemand/core/?method=CORE_SPACE_SEARCH&rows=10',
+					url: '/ondemand/core/?method=CORE_SPACE_SEARCH&rows=20',
 					dataType: 'json',
 					success: function(data) {interfaceControlSpaceOptionsShow(oElement, data)}
 				});

@@ -112,10 +112,34 @@ function interfaceSetupUserHomeShow(oResponse)
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
+
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlInternal" class="interfaceViewportControl">Internal</td>' +
+					'</tr>';			
+				
+		aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlExternal" class="interfaceViewportControl">External</td>' +
+					'</tr>';	
+
 		aHTML[++h] = '</table>';		
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));
 		
+
+		$('#tdInterfaceViewportControlInternal').click(function(event)
+		{
+			interfaceMasterMainViewportShow("#divInterfaceMain", true);
+			interfaceSetupUserHomeShow();
+		});
+			
+		$('#tdInterfaceViewportControlExternal').click(function(event)
+		{
+			interfaceMasterMainViewportShow("#divInterfaceMain", true);
+			interfaceSetupUserExternal({xhtmlElementID: "divInterfaceMain"});
+		});
+
+		$('#tdInterfaceViewportControlInternal').addClass('interfaceViewportControlHighlight');
+
 		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
@@ -889,4 +913,244 @@ function interfaceSetupUserSave()
 		success: interfaceMasterStatus('Saved')
 	});		
 }
+
+function interfaceSetupUserExternal(aParam, oResponse)
+{
+	var sXHTMLElementID = 'divInterfaceMain';
+	var iStep = 1;
+	var aXHTMLElementID = [];
+
+	if (aParam != undefined)
+	{
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (aParam.step != undefined) {iStep = aParam.step}
+	}
+	else
+	{
+		aParam = {step: 1}
+	}
+
+	aXHTMLElementID = sXHTMLElementID.split('-');
+
+	if (iStep == 1)
+	{
+		if (oResponse == undefined)
+		{
+			var sParam = 'method=SETUP_EXTERNAL_USER_ACCESS_SEARCH';
+			
+			$.ajax(
+			{
+				type: 'GET',
+				url: '/ondemand/setup/?rf=json',
+				data: sParam,
+				dataType: 'json',
+				success: function(data) {interfaceSetupUserExternal(aParam, data)}
+			});
+		}
+		else
+		{
+			var aHTML = [];
+			var h = -1;
+			
+			aHTML[++h] = '<table id="tableInterfaceMainSetupUserExternal" class="interfaceMain">' +
+						'<tr id="trInterfaceMainSetupUserExternalRow1" class="interfaceMainRow1">' +
+						'<td id="tdInterfaceMainSetupUserExternalColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;">' +
+						'</td>' +
+						'<td id="tdInterfaceMainSetupUserExternalColumn2" class="interfaceMainColumn1Large" style="padding-left:15px;">' +
+						'</td>' +
+						'<td id="tdInterfaceMainSetupUserExternalColumn3" style="width: 100px;" class="interfaceMainColumn2Action">' +
+						'</td>' +
+						'</tr>' +
+						'</table>';				
+			
+			$('#divInterfaceMain').html(aHTML.join(''));
+			
+			var aHTML = [];
+			var h = -1;
+			
+			aHTML[++h] = '<table>';
+			
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSetupUserExternalAdd" class="interfaceMainAction">' +
+							'<span id="spanInterfaceMainSetupUserExternalAdd">Add</span>' +
+							'</td></tr>';
+			
+			aHTML[++h] = '</table>';					
+			
+			$('#tdInterfaceMainSetupUserExternalColumn3').html(aHTML.join(''));
+			
+			$('#spanInterfaceMainSetupUserExternalAdd').button(
+			{
+				label: "Add"
+			})
+			.click(function()
+			{
+				aParam.step = 2;
+				aParam.xhtmlElementID = '';
+				interfaceSetupUserExternal(aParam);
+			});
+
+			var aHTML = [];
+			var h = -1;
+			
+			if (oResponse.data.rows.length == 0)
+			{
+				aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+				aHTML[++h] = '<tbody>'
+				aHTML[++h] = '<tr class="interfaceMainCaption">' +
+								'<td class="interfaceMainRowNothing">No external user access.</td></tr>';
+				aHTML[++h] = '</tbody></table>';
+
+				$('#tdInterfaceMainSetupUserExternalColumn1').html(aHTML.join(''));
+			}
+			else
+			{
+				aHTML[++h] = '<table>';
+				aHTML[++h] = '<tbody>';
+				
+				$.each(oResponse.data.rows, function()
+				{
+					aHTML[++h] = '<tr class="interfaceMainRow">';
+					
+					aHTML[++h] = '<td id="tdSetupUserExternal_title-' + this.id +
+											'" class="interfaceMainRow interfaceRowSelect interfaceSetupUserExternal">' +
+											this.userlogonname;
+					
+					aHTML[++h] = '<br /><span class="interfaceViewportControlSubContext" id="interfaceSetupUserExternal_space-' + this.id + '">' +
+	 										this.space + '</span>';
+
+					aHTML[++h] = '<br /><span class="interfaceViewportControlSubContext" id="interfaceSetupUserExternal_usercontactname-' + this.id + '">' +
+	 										this.usercontactname + '</span>';
+
+	 				aHTML[++h] = '</td>';						
+
+	 				aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+					aHTML[++h] = '<span id="spanSetupUserExternal_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+					aHTML[++h] = '</td>';		
+
+					aHTML[++h] = '</tr>';
+				});
+				
+				aHTML[++h] = '</tbody></table>';
+
+				$('#tdInterfaceMainSetupUserExternalColumn1').html(aHTML.join(''));
+							
+				$('td.interfaceSetupUserExternal').click(function(event)
+				{
+					aParam.step = 2;
+					aParam.xhtmlElementID = event.target.id;
+					interfaceSetupUserExternal(aParam);
+				});
+
+				$('.interfaceMainRowOptionsRemove').button(
+				{
+					text: false,
+				 	icons: {primary: "ui-icon-close"}
+				})
+				.click(function()
+				{
+					aParam.step = 6;
+					aParam.xhtmlElementID = this.id;
+					interfaceSetupUserExternal(aParam);
+				})
+				.css('width', '15px')
+				.css('height', '20px')
+
+			}
+		}
+	}
+
+	else if (iStep == 2)
+	{
+		var aHTML = [];
+		var h = -1;
+
+		aHTML[++h] = '<table class="interfaceMain">';
+		
+		aHTML[++h] = '<tr id="trInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
+						'<td id="tdInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
+						'User' +
+						'</td></tr>' +
+						'<tr id="trInterfaceMainSetupUserExternalUsernameValue" class="interfaceMainSelect">' +
+						'<td id="tdInterfaceMainSetupUserExternalUsernameValue" class="interfaceMainSelect">' +
+						'<input id="inputInterfaceMainSetupUserExternalUsername" class="inputInterfaceMainSelect"' +
+							' data-method="NETWORK_USER_SEARCH"' +
+							' data-columns="usertext">' +
+						'</td></tr>';
+
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainSetupUserExternalColumn2').html(aHTML.join(''));
+		
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em">';
+				
+		aHTML[++h] = '<tr class="interfaceMainAction">' +
+						'<td class="interfaceMainAction">' +
+						'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditSave">Save</span>' +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr class="interfaceMainAction">' +
+						'<td class="interfaceMainAction">' +
+						'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditCancel">Cancel</span>' +
+						'</td></tr>';
+										
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainSetupUserExternalColumn3').html(aHTML.join(''));
+
+		$('#spanInterfaceMainSetupUserExternalEditSave').button(
+		{
+			text: "Save"
+		})
+		.click(function() 
+		{
+			interfaceMasterStatusWorking();
+
+			var sData = 'id=' + interfaceMasterFormatSave(sID);
+			sData += '&user=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupUserExternalUsername').attr("data-id"));
+			sData += '&type=2';
+
+			$.ajax(
+			{
+				type: 'POST',
+				url: '/ondemand/setup/setup.asp?method=SETUP_EXTERNAL_USER_ACCESS_MANAGE',
+				data: sData,
+				dataType: 'json',
+				success: function() {
+					aParam.step = 1;
+					interfaceSetupUserExternal(aParam);
+					interfaceMasterStatus('Saved');
+				}
+			});
+		})
+		
+		$('#spanInterfaceMainSetupUserExternalEditCancel').button(
+		{
+			text: "Cancel"
+		})
+		.click(function() 
+		{
+			aParam.step = 1;
+			interfaceSetupUserExternal(aParam);
+		})
+
+	}
+	else if (iStep == 6)
+	{	
+		$.ajax(
+			{
+				type: 'POST',
+				url: '/ondemand/setup/setup.asp?method=SETUP_EXTERNAL_USER_ACCESS_MANAGE&remove=1',
+				data: 'id=' + aXHTMLElementID[1],
+				dataType: 'json',
+				success: function(data){$('#' + sXHTMLElementId).parent().parent().fadeOut(500)}
+			});	
+		}	
+}	
+
+
+
+
 
