@@ -2016,7 +2016,7 @@ function interfaceMessagingEmailRemove(sXHTMLElementId)
 		
 	sSearchContext = sSearchContext.replace(/\___/g, '.');	
 		
-	var sParam = 'method=MESSAGING_CACHE_EMAIL_MANAGE&remove=1';
+	var sParam = 'method=MESSAGING_EMAIL_CACHE_MANAGE&remove=1';
 	var sData = 'id=' + interfaceMasterFormatSave(sSearchContext);
 				
 	$.ajax(

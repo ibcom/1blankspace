@@ -1170,7 +1170,7 @@ function interfaceControlUserOptionsShow(oElement)
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
 		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
 		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left + 65});
+		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 70});
 		$('#divInterfaceMasterViewportControlOptions').html(interfaceControlUserOptions);
 			
 		interfaceControlUserOptionsBind();
@@ -1184,7 +1184,7 @@ function interfaceControlUserOptions()
 	var aHTML = [];
 	var h = -1;
 	
-	aHTML[++h] = '<table id="tableInterfaceMasterUserOptions" class="interfaceViewportMasterControl" cellpadding=6>';
+	aHTML[++h] = '<table style="width: 180px;" id="tableInterfaceMasterUserOptions" class="interfaceViewportMasterControl" cellpadding=6>';
 		
 	aHTML[++h] = '<tr id="trInterfaceMasterUserOptionsLogOff" class="interfaceMasterUserOptions">' +
 					'<td id="tdInterfaceMasterUserOptionsLogOff" class="interfaceMasterUserOptions">' +
@@ -1244,13 +1244,12 @@ function interfaceControlSpaceOptionsShow(oElement, oResponse)
 		else
 		{	
 			$('#divInterfaceMasterViewportControlOptions').attr('data-source', oElement.id);
-			$('#divInterfaceMasterViewportControlOptions').html('<table class="interfaceViewportMasterControl"><tr><td>' + ns1blankspace.loadingSmallXHTML + '</tr><td></table>');
+			$('#divInterfaceMasterViewportControlOptions').html('<table style="width: 250px;" class="interfaceViewportMasterControl"><tr><td>' + ns1blankspace.loadingSmallXHTML + '</tr><td></table>');
 			$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
-			$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left - 22 });
+			$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left});
 
 			if (ns1blankspace.space == ns1blankspace.userSpace)
 			{	
-				
 				$.ajax(
 				{
 					type: 'GET',
@@ -1261,7 +1260,7 @@ function interfaceControlSpaceOptionsShow(oElement, oResponse)
 			}
 			else
 			{
-				aHTML.push('<table id="tableInterfaceMasterSpaceOptions" class="interfaceViewportMasterControl" cellpadding=4>');
+				aHTML.push('<table style="width: 250px;" id="tableInterfaceMasterSpaceOptions" class="interfaceViewportMasterControl" cellpadding=4>');
 				aHTML.push('<tr class="interfaceMasterSpaceOptions">' +
 								'<td id="tdInterfaceMasterSpaceOptionsSwitchBack" class="interfaceMasterUserOptions">' +
 								'Switch back to your space.' +
@@ -1296,26 +1295,51 @@ function interfaceControlSpaceOptionsShow(oElement, oResponse)
 	}	
 	else
 	{
-		aHTML.push('<table id="tableInterfaceMasterSpaceOptions" class="interfaceViewportMasterControl" cellpadding=4>');
+		aHTML.push('<table style="width: 250px;" id="tableInterfaceMasterSpaceOptions" class="interfaceViewportMasterControl" cellpadding=0>');
 
 		if (oResponse.data.rows.length == 0)
 		{
 			aHTML.push('<tr class="interfaceMainCaption">' +
-								'<td class="interfaceMainRowNothing">No methods.</td></tr>');
+								'<td class="interfaceMainRowNothing">No access to other spaces.</td></tr>');
 		}
+		else
+		{
+			aHTML.push('<tr class="interfaceMainCaption">' +
+								'<td class="interfaceMainRowNothing" style="padding-left:5px;padding-right:10px;"><input id="inputInterfaceMasterSpaceSearch" class="inputInterfaceMainText"></td></tr>');
+
+			aHTML.push('<tr class="interfaceMainCaption">' +
+								'<td id="tdInterfaceMasterSpaceSearch"></td></tr>');
+
+		}	
+
+		aHTML.push('</table>');
+
+		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+
+		var aHTML = [];
+
+		aHTML.push('<table style="width: 100%;" cellpadding=4>');
 
 		$(oResponse.data.rows).each(function()
 		{
 			aHTML.push('<tr class="interfaceMasterSpaceOptions">' +
 					'<td id="tdInterfaceMasterSpaceOptionsSwitch-' + this.id + '" class="interfaceMasterUserOptions">' +
-					(this.space).replace(/ /g,'&nbsp;') +
+					this.space +
 					'</td></tr>');
 		});			
 						
 		aHTML.push('</table>');
 		
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+		$('#tdInterfaceMasterSpaceSearch').html(aHTML.join(''));
 	
+		$('#inputInterfaceMasterSpaceSearch').focus();
+
+		$('#inputInterfaceMasterSpaceSearch').keyup(function(event)
+		{
+			if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
+	        giKeyPressTimeoutId = setTimeout("interfaceControlSpaceOptionsShowSearch('inputInterfaceMasterSpaceSearch')", giWaitForStop);
+		});
+
 		$('.interfaceMasterSpaceOptions').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
@@ -1338,6 +1362,68 @@ function interfaceControlSpaceOptionsShow(oElement, oResponse)
 			});	
 		});
 	}
+}
+
+function interfaceControlSpaceOptionsShowSearch(sXHTMLElementID, oResponse)
+{	
+	var aSearch = sXHTMLElementID.split('-');
+	var sElementId = aSearch[0];
+	var sSearchText = aSearch[1];
+	var aHTML = [];
+
+	if (oResponse == undefined)
+	{	
+		if (sSearchText == undefined)
+		{
+			sSearchText = $('#' + sXHTMLElementID).val();
+		}	
+		
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/core/?method=CORE_SPACE_SEARCH&rows=20&spacetext=' + interfaceMasterFormatSave(sSearchText),
+			dataType: 'json',
+			success: function(data) {interfaceControlSpaceOptionsShowSearch(sXHTMLElementID, data)}
+		});
+	}
+	else
+	{	
+		aHTML.push('<table style="width: 100%;" cellspacing=4>');
+
+		$(oResponse.data.rows).each(function()
+		{
+			aHTML.push('<tr class="interfaceMasterSpaceOptions">' +
+					'<td id="tdInterfaceMasterSpaceOptionsSwitch-' + this.id + '" class="interfaceMasterUserOptions">' +
+					this.space +
+					'</td></tr>');
+		});			
+						
+		aHTML.push('</table>');
+		
+		$('#tdInterfaceMasterSpaceSearch').html(aHTML.join(''));
+
+		$('.interfaceMasterSpaceOptions').click(function(event)
+		{
+			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+
+			var aID = (event.target.id).split('-')
+			$.ajax(
+			{
+				type: 'GET',
+				url: '/ondemand/core/?method=CORE_SPACE_MANAGE&switch=1&id=' + aID[1],
+				dataType: 'json',
+				success: function(data)
+				{
+					if (data.status == 'OK')
+					{	
+						ns1blankspace.space = aID[1];
+						ns1blankspace.spaceText = $('#' + event.target.id).html();
+						$('#divInterfaceMasterViewportSpaceText').html(ns1blankspace.spaceText);
+					}	
+				}
+			});	
+		});
+	}	
 }
 
 function interfaceMasterUserOptionsChangePassword(aParam)
@@ -1524,6 +1610,8 @@ function interfaceMasterUserOptionsCreateSecureKey(aParam, oResponse)
 		.css('width', '150px')
 	}		
 }
+
+
 
 function interfaceControlHelpURL()
 {
