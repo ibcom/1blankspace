@@ -549,19 +549,19 @@ function interfaceMessagingInboxSearchRow(oRow)
 	
 	aHTML[++h] = '<tr class="interfaceMainRow' + sClass + '" data-cached="' + oRow.detailscached + '" id="trMessagingEmails_from_id_' + sID + '">';
 	
-	aHTML[++h] = '<td id="tdMessagingEmails_from_id_' + sID + 
+	aHTML[++h] = '<td style="padding-right:5px;" id="tdMessagingEmails_from_id_' + sID + 
 						'" style="cursor: pointer;" class="interfaceMainRowOptionsSelect interfaceMainRow' + sClass + '"' +
 						' title="' + oRow.fromEmail + '">' +
 						oRow.fromname + '</td>';
 						
-	aHTML[++h] = '<td id="tdMessagingEmails_subject_id_' + sID + 
+	aHTML[++h] = '<td style="padding-right:5px;" id="tdMessagingEmails_subject_id_' + sID + 
 						'" style="cursor: pointer;" class="interfaceMainRowOptionsSelect interfaceMainRow' + sClass + '">' +
 						oRow.subject + '</td>';
 	
-	aHTML[++h] = '<td style="width:220px;" id="tdMessagingEmails_date_id_' + sID + '" class="interfaceMainRow' + sClass + '">' +
+	aHTML[++h] = '<td style="width:150px;" id="tdMessagingEmails_date_id_' + sID + '" class="interfaceMainRow' + sClass + '">' +
 							sDate + '</td>';
 	
-	aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+	aHTML[++h] = '<td style="width:70px;text-align:right;" class="interfaceMainRow">';
 	aHTML[++h] = '<span id="spanMessagingEmails_reply_id_' + sID + '" class="interfaceMainRowOptionsReply"></span>';
 	
 	if ((oRow.imapflags).indexOf('\\DELETED') == -1)
@@ -1379,7 +1379,6 @@ function interfaceMessagingSendEmail(aParam)
 	
 	if (!bDialog)
 	{
-		
 		var aHTML = [];
 		var h = -1;	
 					
@@ -1452,7 +1451,7 @@ function interfaceMessagingSendEmail(aParam)
 							'Bcc:</td>';		
 				
 				aHTML[++h] = '<td id="tdInterfaceMainActionsSendEmailBccContact">' +
-							'<input onDemandType="TEXT" id="inputInterfaceMainActionsSendEmailBccContact" class="inputInterfaceMainSelectContactEmail interfaceMasterWatermark"' +
+							'<input id="inputInterfaceMainActionsSendEmailBccContact" class="inputInterfaceMainSelectContactEmail interfaceMasterWatermark"' +
 								' ondemandsetelementid="inputInterfaceMainActionsSendEmailBcc" value=""';
 							
 				if (iContactBusiness != undefined)

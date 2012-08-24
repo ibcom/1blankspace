@@ -1012,6 +1012,7 @@ function interfaceSetupUserExternal(aParam, oResponse)
 					aHTML[++h] = '<tr class="interfaceMainRow">';
 					
 					aHTML[++h] = '<td id="tdSetupUserExternal_title-' + this.id +
+											'" data-usertext="' + this.userlogonname +
 											'" class="interfaceMainRow interfaceRowSelect interfaceSetupUserExternal">' +
 											this.userlogonname;
 					
@@ -1061,118 +1062,116 @@ function interfaceSetupUserExternal(aParam, oResponse)
 
 	else if (iStep == 2)
 	{
-		var aHTML = [];
-		var h = -1;
-
-		aHTML[++h] = '<table class="interfaceMain">';
-		
-		aHTML[++h] = '<tr id="trInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
-						'<td id="tdInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
-						'User' +
-						'</td></tr>' +
-						'<tr id="trInterfaceMainSetupUserExternalUsernameValue" class="interfaceMainSelect">' +
-						'<td id="tdInterfaceMainSetupUserExternalUsernameValue" class="interfaceMainSelect">' +
-						'<input id="inputInterfaceMainSetupUserExternalUsername" class="inputInterfaceMainSelect2"' +
-							' data-method="NETWORK_USER_SEARCH"' +
-							' data-columns="usertext">' +
-						'</td></tr>';
-
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainSetupUserExternalColumn2').html(aHTML.join(''));
-		
-		$('#inputInterfaceMainSetupUserExternalUsername').focusin(function() 
+		if (oResponse == undefined)
 		{
+			var aHTML = [];
+			var h = -1;
 
-			$(this).addClass('interfaceMasterHighlight');
-				
-			ns1blankspace.currentXHTMLElementID = this.id;
-			gsLastShowDivID = this.id;
-				
-			$('#divInterfaceMasterViewportControlOptions').html('');
-			$('#divInterfaceMasterViewportControlOptions').show();
-			$('#divInterfaceMasterViewportControlOptions').offset({ top: $('#' + gsLastShowDivID).offset().top, left: $('#' + gsLastShowDivID).offset().left + $('#' + gsLastShowDivID).width() - 10});
-					
-			$('#divInterfaceMasterViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
+			aHTML[++h] = '<table class="interfaceMain">';
 			
-			$('#spanInterfaceMainSelectOptions').button({
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-			})
-			.click(function() {
-				interfaceSetupUserExternalSearch({xhtmlElementID: gsLastShowDivID, source: 4});
-			})
-			.css('width', '14px')
-			.css('height', '23px')
-		});	
+			aHTML[++h] = '<tr id="trInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
+							'<td id="tdInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
+							'User' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainSetupUserExternalUsernameValue" class="interfaceMainSelect">' +
+							'<td id="tdInterfaceMainSetupUserExternalUsernameValue" class="interfaceMainSelect">' +
+							'<input id="inputInterfaceMainSetupUserExternalUsername" class="inputInterfaceMainSelectCustom">' +
+							'</td></tr>';
 
-		$('#inputInterfaceMainSetupUserExternalUsername').live('keyup', function()
-		{
-			interfaceSetupUserExternalSearch({xhtmlElementID: gsLastShowDivID, source: 1, minimumLength: 3});	
-		});	
+			aHTML[++h] = '<tr class="interfaceMainCaption">' +
+									'<td class="interfaceMainRowNothing">You need to search by the surname and enter at least 3 characters.</td></tr>';
+
+			aHTML[++h] = '</table>';					
 			
-		$('#inputInterfaceMainSetupUserExternalUsername').live('blur', function() 
-		{
-			$(this).removeClass('interfaceMasterHighlight');
-		});
-
-		var aHTML = [];
-		var h = -1;
-	
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em">';
-				
-		aHTML[++h] = '<tr class="interfaceMainAction">' +
-						'<td class="interfaceMainAction">' +
-						'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditSave">Save</span>' +
-						'</td></tr>';
-						
-		aHTML[++h] = '<tr class="interfaceMainAction">' +
-						'<td class="interfaceMainAction">' +
-						'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditCancel">Cancel</span>' +
-						'</td></tr>';
-										
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainSetupUserExternalColumn3').html(aHTML.join(''));
-
-		$('#spanInterfaceMainSetupUserExternalEditSave').button(
-		{
-			text: "Save"
-		})
-		.click(function() 
-		{
-			interfaceMasterStatusWorking();
-
-			var sData = 'id=' + interfaceMasterFormatSave(sID);
-			sData += '&user=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupUserExternalUsername').attr("data-id"));
-			sData += '&type=2';
-
-			$.ajax(
+			$('#tdInterfaceMainSetupUserExternalColumn2').html(aHTML.join(''));
+			
+			$('#inputInterfaceMainSetupUserExternalUsername').keyup(function()
 			{
-				type: 'POST',
-				url: '/ondemand/setup/setup.asp?method=SETUP_EXTERNAL_USER_ACCESS_MANAGE',
-				data: sData,
-				dataType: 'json',
-				success: function() {
-					aParam.step = 1;
-					interfaceSetupUserExternal(aParam);
-					interfaceMasterStatus('Saved');
-				}
+				if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
+		        giKeyPressTimeoutId = setTimeout("interfaceSetupUserExternalSearch('inputInterfaceMainSetupUserExternalUsername')", giWaitForStop);
+			});	
+				
+			$('#inputInterfaceMainSetupUserExternalUsername').live('blur', function() 
+			{
+				$(this).removeClass('interfaceMasterHighlight');
 			});
-		})
-		
-		$('#spanInterfaceMainSetupUserExternalEditCancel').button(
-		{
-			text: "Cancel"
-		})
-		.click(function() 
-		{
-			aParam.step = 1;
-			interfaceSetupUserExternal(aParam);
-		})
 
+			var aHTML = [];
+			var h = -1;
+		
+			aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em">';
+					
+			if (aXHTMLElementID[1])
+			{
+				aHTML[++h] = '<tr class="interfaceMainCaption">' +
+									'<td class="interfaceMainRowNothing">To change this access you need to delete it and then re-add it.</td></tr>';
+
+			}	
+			else
+			{	
+				aHTML[++h] = '<tr class="interfaceMainAction">' +
+								'<td class="interfaceMainAction">' +
+								'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditSave">Save</span>' +
+								'</td></tr>';
+			}
+
+			aHTML[++h] = '<tr class="interfaceMainAction">' +
+								'<td class="interfaceMainAction">' +
+								'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditCancel">Cancel</span>' +
+								'</td></tr>';
+			
+			aHTML[++h] = '</table>';					
+			
+			$('#tdInterfaceMainSetupUserExternalColumn3').html(aHTML.join(''));
+
+			$('#spanInterfaceMainSetupUserExternalEditSave').button(
+			{
+				text: "Save"
+			})
+			.click(function() 
+			{
+				interfaceMasterStatusWorking();
+
+				var sData = 'id=' + interfaceMasterFormatSave(aXHTMLElementID[1]);
+				sData += '&user=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupUserExternalUsername').attr("data-id"));
+				sData += '&type=2';
+
+				$.ajax(
+				{
+					type: 'POST',
+					url: '/ondemand/setup/setup.asp?method=SETUP_EXTERNAL_USER_ACCESS_MANAGE',
+					data: sData,
+					dataType: 'json',
+					success: function() {
+						aParam.step = 1;
+						interfaceSetupUserExternal(aParam);
+						interfaceMasterStatus('Saved');
+					}
+				});
+			})
+			
+			$('#spanInterfaceMainSetupUserExternalEditCancel').button(
+			{
+				text: "Cancel"
+			})
+			.click(function() 
+			{
+				aParam.step = 1;
+				interfaceSetupUserExternal(aParam);
+			})
+
+			if (aXHTMLElementID[1])
+			{
+				$('#inputInterfaceMainSetupUserExternalUsername').attr("data-id", aXHTMLElementID[1])
+				$('#inputInterfaceMainSetupUserExternalUsername').val($('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-usertext"));
+			}
+		}
+		else
+		{
+
+
+
+		}	
 	}
 	else if (iStep == 6)
 	{	
@@ -1182,13 +1181,60 @@ function interfaceSetupUserExternal(aParam, oResponse)
 				url: '/ondemand/setup/setup.asp?method=SETUP_EXTERNAL_USER_ACCESS_MANAGE&remove=1',
 				data: 'id=' + aXHTMLElementID[1],
 				dataType: 'json',
-				success: function(data){$('#' + sXHTMLElementId).parent().parent().fadeOut(500)}
+				success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 			});	
 		}	
 }	
 
-function interfaceSetupUserExternalSearch()
+function interfaceSetupUserExternalSearch(sXHTMLInputElementID, oResponse)
 {
-	
+	var aHTML = [];
+	var sSearchText;
+	var iXHTMLElementContextID;
+
+	if (oResponse == undefined)
+	{	
+		sSearchText = $('#' + sXHTMLInputElementID).val();
+		
+		if (sSearchText.length > 3)
+		{
+			$.ajax(
+			{
+				type: 'GET',
+				url: '/ondemand/network/?method=NETWORK_USER_SEARCH&rows=10&scope=2&surname=' + interfaceMasterFormatSave(sSearchText),
+				dataType: 'json',
+				success: function(data) {interfaceSetupUserExternalSearch(sXHTMLInputElementID, data)}
+			});
+		}
+	}
+	else
+	{	
+		aHTML.push('<table style="width: 350px;" class="interfaceViewportMasterControl" cellpadding=4>');
+
+		$(oResponse.data.rows).each(function()
+		{
+			aHTML.push('<tr>' +
+					'<td id="tdInterfaceMasterNetworkUser-' + this.user + '" data-usertext="' + this.usertext + '" class="interfaceSearch interfaceMasterNetworkUser">' +
+					this.firstname + ' ' + this.surname + ' (' + this.contactbusinesstext + ')' +
+					'</td></tr>');
+		});			
+						
+		aHTML.push('</table>');
+		
+		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+
+		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
+
+		$('.interfaceMasterNetworkUser').click(function(event)
+		{
+			var aXHTMLElementID = (event.target.id).split('-');
+			iXHTMLElementContextID = aXHTMLElementID[1];
+
+			$('#' + sXHTMLInputElementID).val($('#' + event.target.id).attr("data-usertext"))
+			$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
+			$('#divInterfaceMasterViewportControlOptions').hide();
+		});
+	}	
 }	
 
