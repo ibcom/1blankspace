@@ -172,14 +172,12 @@ function interfaceStructureDataHomeShow(oResponse)
 		
 		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
 		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/setup/?method=DECISION_DATA_SEARCH&recent=1',
-			dataType: 'json',
-			success: interfaceStructureDataHomeShow
-		});
-		
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'STRUCTURE_DATA_SEARCH';
+		oSearch.addField('reference');
+		oSearch.rows = 10;
+		oSearch.sort('modifieddate', 'desc');
+		oSearch.getResults(interfaceStructureDataHomeShow)
 	}
 	else
 	{
