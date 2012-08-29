@@ -1505,7 +1505,6 @@ function interfaceSetupStructureNew(aParam)
 	interfaceSetupStructureDetails();
 }
 
-
 function interfaceSetupStructureElementOptionsShow(aParam, oResponse)
 {
 	var aHTML = [];

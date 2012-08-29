@@ -298,22 +298,30 @@ function interfaceSetupUserRoleViewport()
 	aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-					'</tr>';
-					
-	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-					'</tr>';
-			
-	aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
-	
 		
-	aHTML[++h] = '<tr id="trInterfaceViewportControlAccess" class="interfaceViewportControl">' +
-						'<td id="tdInterfaceViewportControlAccess" class="interfaceViewportControl">Access</td>' +
+	if (giObjectContext == -1)
+	{
+		aHTML[++h] = '<tr class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
 						'</tr>';
-								
+	}
+	else
+	{				
+		aHTML[++h] = '<tr class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+						'</tr>';
+						
+		aHTML[++h] = '<tr class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
+						'</tr>';
+				
+		aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
+		
+		aHTML[++h] = '<tr id="trInterfaceViewportControlAccess" class="interfaceViewportControl">' +
+							'<td id="tdInterfaceViewportControlAccess" class="interfaceViewportControl">Access</td>' +
+							'</tr>';
+	}
+
 	aHTML[++h] = '</table>';					
 				
 	$('#divInterfaceViewportControl').html(aHTML.join(''));
@@ -896,3 +904,12 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 	}
 }
 
+function interfaceSetupUserRoleNew(aParam)
+{
+	goObjectContext = undefined
+	giObjectContext = -1;
+	interfaceSetupUserRoleViewport();
+	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+	interfaceSetupUserRoleDetails();
+}
