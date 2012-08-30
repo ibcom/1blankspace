@@ -1806,6 +1806,8 @@ function interfaceSetupWebsiteSave(aParam, oResponse)
 			sData += '&cssattachment=' + sCSSAttachment;
 		}	
 		
+		interfaceMasterStatusWorking();
+
 		$.ajax(
 		{
 			type: 'POST',

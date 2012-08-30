@@ -581,9 +581,10 @@ function interfaceMasterViewportDestination(aParam)
 					dataType: 'text',
 					async: false,
 					success: function(data) {
+						data = data.replace('OK|RETURNED|', '')
 						if (data == '')
 						{
-							//gaMasterViewportHistory.push('interfaceMasterHomeShow()');
+							gaMasterViewportHistory.push('interfaceMasterHomeShow()');
 						}	
 						else
 						{
@@ -737,6 +738,22 @@ function interfaceMasterLogonShow(aParam)
 		interfaceMasterLogon();
 	});	
 
+	$('#inputInterfaceMasterLogonName').keypress(function(e)
+	{
+	    if (e.which == 13)
+	    {
+	        interfaceMasterLogon();
+	    }
+	});
+
+	$('#inputInterfaceMasterLogonPassword').keypress(function(e)
+	{
+	    if (e.which == 13)
+	    {
+	        interfaceMasterLogon();
+	    }
+	});
+
 	$('#' + sXHTMLElementID).show(giShowSpeed);
 	
 	$('#aInterfaceMasterLogonSendPassword').click(function()
@@ -777,7 +794,6 @@ function interfaceMasterLogonProcess(oResponse)
 	}
 	else 
 	{
-
 		$('#tdInterfaceMasterLogonStatus').html('Logon successful...');
 		
 		if ($('#inputInterfaceMasterLogonNameRemember').attr('checked'))
@@ -787,7 +803,7 @@ function interfaceMasterLogonProcess(oResponse)
 		
 		//interfaceControlSecurity();
 		
-		if (oResponse.passwordStatus == "PASSWORDEXPIRED")
+		if (oResponse.passwordStatus == "EXPIRED")
 		{
 			interfaceMasterLogonChangePasswordShow(); 
 		}
