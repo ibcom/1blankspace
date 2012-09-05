@@ -1060,8 +1060,6 @@ function interfaceContactPersonBusiness()
 
 function interfaceContactPersonSave()
 {
-
-	var sParam = 'method=CONTACT_PERSON_MANAGE'
 	var sData = 'id=';
 	
 	if (giObjectContext != -1)
@@ -1084,22 +1082,22 @@ function interfaceContactPersonSave()
 	
 	if ($('#divInterfaceMainAddress').html() != '')
 	{
-		sData += '&streetaddress1=' + $('#inputInterfaceMainAddressStreetAddress1').val();
-		sData += '&streetsuburb=' + $('#inputInterfaceMainAddressStreetSuburb').val();
-		sData += '&streetstate=' + $('#inputInterfaceMainAddressStreetState').val();
-		sData += '&streetpostcode=' + $('#inputInterfaceMainAddressStreetPostCode').val();
-		sData += '&streetcountry=' + $('#inputInterfaceMainAddressStreetCountry').val();
-		sData += '&mailingaddress1=' + $('#inputInterfaceMainAddressMailingAddress1').val();
-		sData += '&mailingsuburb=' + $('#inputInterfaceMainAddressMailingSuburb').val();
-		sData += '&mailingstate=' + $('#inputInterfaceMainAddressMailingState').val();
-		sData += '&mailingpostcode=' + $('#inputInterfaceMainAddressMailingPostCode').val();
-		sData += '&mailingcountry=' + $('#inputInterfaceMainAddressMailingCountry').val();
+		sData += '&streetaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetAddress1').val());
+		sData += '&streetsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetSuburb').val());
+		sData += '&streetstate=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetState').val());
+		sData += '&streetpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetPostCode').val());
+		sData += '&streetcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetCountry').val());
+		sData += '&mailingaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingAddress1').val());
+		sData += '&mailingsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingSuburb').val());
+		sData += '&mailingstate=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingState').val());
+		sData += '&mailingpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingPostCode').val());
+		sData += '&mailingcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingCountry').val());
 	}
 	
 	$.ajax(
 	{
 		type: 'POST',
-		url: '/ondemand/contact/?' + sParam,
+		url: interfaceMasterEndpointURL('CONTACT_PERSON_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: interfaceContactPersonSaveProcess

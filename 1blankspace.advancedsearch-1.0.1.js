@@ -476,7 +476,7 @@ function advancedSearchRPCGet()
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/jscripts/1blankspace.rpc-1.0.0.json',
+			url: '/jscripts/1blankspace.rpc-1.0.1.json',
 			dataType: 'json',
 			async: false,
 			success: function(data) {nsAdvancedSearch.rpc = data.methods}
@@ -495,7 +495,6 @@ function advancedSearchEndpointGet(asMethod)
 	else
 	{
 		return '/rpc'
-		//return '/ondemand'
 	}
 }
 
