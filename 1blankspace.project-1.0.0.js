@@ -821,8 +821,6 @@ function interfaceProjectNew()
 
 function interfaceProjectSave()
 {
-
-	var sParam = 'method=PROJECT_MANAGE'
 	var sData = 'id=' + ((giObjectContext == -1)?'':giObjectContext);
 		
 	if ($('#divInterfaceMainDetails').html() != '')
@@ -841,7 +839,7 @@ function interfaceProjectSave()
 	$.ajax(
 	{
 		type: 'POST',
-		url: '/ondemand/project/?' + sParam,
+		url: interfaceMasterEndpointURL('PROJECT_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: interfaceProjectSaveProcess

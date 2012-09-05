@@ -1505,7 +1505,7 @@ function interfaceNewsSave()
 	$.ajax(
 	{
 		type: 'POST',
-		url: '/ondemand/news/?' + sParam,
+		url: interfaceMasterEndpointURL('NEWS_MANAGE'),
 		data: sData,
 		dataType: 'text',
 		success: interfaceNewsSaveProcess

@@ -689,8 +689,6 @@ function interfaceProjectTaskNew()
 
 function interfaceProjectTaskSave()
 {
-
-	var sParam = 'method=PROJECT_TASK_MANAGE'
 	var sData = 'id=' + ((giObjectContext == -1)?'':giObjectContext);
 		
 	if ($('#divInterfaceMainDetails').html() != '')
@@ -709,7 +707,7 @@ function interfaceProjectTaskSave()
 	$.ajax(
 	{
 		type: 'POST',
-		url: '/ondemand/project/?' + sParam,
+		url: interfaceMasterEndpointURL('PROJECT_TASK_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: interfaceProjectTaskSaveProcess

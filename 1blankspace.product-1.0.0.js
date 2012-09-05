@@ -963,7 +963,6 @@ function interfaceProductSave()
 {
 	interfaceMasterStatusWorking();
 
-	var sParam = 'method=PRODUCT_MANAGE'
 	var sData = 'id=' + ((giObjectContext == -1)?'':giObjectContext);
 			
 	if ($('#divInterfaceMainDetails').html() != '')
@@ -997,7 +996,7 @@ function interfaceProductSave()
 	$.ajax(
 	{
 		type: 'POST',
-		url: '/ondemand/product/?' + sParam,
+		url: interfaceMasterEndpointURL('PRODUCT_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: interfaceProductSaveProcess

@@ -923,8 +923,6 @@ function interfaceContactBusinessAddress()
 
 function interfaceContactBusinessSave()
 {
-
-	var sParam = 'method=CONTACT_BUSINESS_MANAGE'
 	var sData = 'id=';
 	
 	if (giObjectContext != -1)
@@ -964,7 +962,7 @@ function interfaceContactBusinessSave()
 	$.ajax(
 	{
 		type: 'POST',
-		url: '/ondemand/contact/?' + sParam,
+		url: interfaceMasterEndpointURL('CONTACT_BUSINESS_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: interfaceContactBusinessSaveProcess

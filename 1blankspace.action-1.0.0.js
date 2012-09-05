@@ -1051,7 +1051,6 @@ function interfaceActionsAddNote(iObject, iObjectContext)
 
 function interfaceActionSave(aParam, oResponse)
 {
-	var sParam = '/ondemand/action/?rf=JSON&method=ACTION_MANAGE';
 	var sData = '';
 	var iType = giActionTypeMeeting;
 	
@@ -1111,7 +1110,7 @@ function interfaceActionSave(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'POST',
-			url: sParam,
+			url: interfaceMasterEndpointURL('ACTION_MANAGE'),
 			data: sData,
 			dataType: 'json',
 			success: function(data) {interfaceActionSave(aParam, data);}

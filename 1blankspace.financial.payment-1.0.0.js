@@ -688,7 +688,7 @@ function interfaceFinancialPaymentSave(aParam, oResponse)
 	$.ajax(
 	{
 		type: 'POST',
-		url: '/ondemand/financial/?method=FINANCIAL_PAYMENT_MANAGE',
+		url: interfaceMasterEndpointURL('FINANCIAL_PAYMENT_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: function(data) {interfaceFinancialPaymentSaveProcess(data)}

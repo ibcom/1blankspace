@@ -753,8 +753,6 @@ function interfaceDocumentNew(oXML)
 
 function interfaceDocumentSave()
 {
-
-	var sParam = 'method=DOCUMENT_MANAGE';
 	var sData = '_=1';
 	
 	if (giObjectContext != -1)
@@ -778,10 +776,9 @@ function interfaceDocumentSave()
 	$.ajax(
 	{
 		type: 'POST',
-		url: '/ondemand/document/?' + sParam,
+		url: interfaceMasterEndpointURL('DOCUMENT_MANAGE'),
 		data: sData,
 		dataType: 'text',
-		async: false,
 		success: interfaceDocumentSaveProcess
 	});
 		

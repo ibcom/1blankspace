@@ -710,7 +710,7 @@ function interfaceFinancialExpenseSave(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/financial/?method=FINANCIAL_EXPENSE_MANAGE',
+			url: interfaceMasterEndpointURL('FINANCIAL_EXPENSE_MANAGE'),
 			data: sData,
 			dataType: 'json',
 			success: function(data) {interfaceFinancialExpenseSave(aParam, data)}

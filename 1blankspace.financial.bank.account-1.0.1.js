@@ -538,7 +538,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/financial/?method=FINANCIAL_RECONCILIATION_MANAGE',
+				url: interfaceMasterEndpointURL('FINANCIAL_RECONCILIATION_MANAGE'),
 				data: sData,
 				dataType: 'json',
 				success: function() {

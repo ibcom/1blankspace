@@ -678,7 +678,7 @@ function interfaceFinancialReceiptSave(aParam, oResponse)
 	$.ajax(
 	{
 		type: 'POST',
-		url: '/ondemand/financial/?method=FINANCIAL_RECEIPT_MANAGE',
+		url: interfaceMasterEndpointURL('FINANCIAL_RECEIPT_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: function(data) {interfaceFinancialRecieptSaveProcess(data)}

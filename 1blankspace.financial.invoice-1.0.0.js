@@ -847,7 +847,7 @@ function interfaceFinancialInvoiceSave(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/financial/?method=FINANCIAL_INVOICE_MANAGE',
+			url: interfaceMasterEndpointURL('FINANCIAL_INVOICE_MANAGE'),
 			data: sData,
 			dataType: 'json',
 			success: function(data) {interfaceFinancialInvoiceSave(aParam, data)}
