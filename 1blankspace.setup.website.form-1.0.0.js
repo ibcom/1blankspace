@@ -116,7 +116,7 @@ function interfaceSetupWebsiteFormMasterViewport(aParam)
 		interfaceSetupWebsiteFormSearch(event.target.id, {source: giSearchSource_BROWSE});
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').focus();
+	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupWebsiteFormHomeShow();
 	

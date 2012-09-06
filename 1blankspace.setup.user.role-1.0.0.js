@@ -80,7 +80,7 @@ function interfaceSetupUserRoleMasterViewport()
 		interfaceSetupUserRoleSearch(event.target.id, giSearchSource_BROWSE);
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').focus();
+	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupUserRoleHomeShow();
 	

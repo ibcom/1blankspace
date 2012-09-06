@@ -78,7 +78,7 @@ function interfaceSetupMessagingMasterViewport()
 		interfaceSetupMessagingSearch(event.target.id, giSearchSource_BROWSE);
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').focus();
+	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupMessagingHomeShow();
 	

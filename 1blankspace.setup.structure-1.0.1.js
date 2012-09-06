@@ -116,7 +116,7 @@ function interfaceSetupStructureMasterViewport(aParam)
 		interfaceSetupStructureSearch(event.target.id, {source: giSearchSource_BROWSE});
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').focus();
+	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	if (gbRichEdit)
 	{

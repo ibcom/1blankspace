@@ -80,7 +80,7 @@ function interfaceSetupUserMasterViewport()
 		interfaceSetupUserSearch(event.target.id, giSearchSource_BROWSE);
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').focus();
+	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupUserHomeShow();
 	

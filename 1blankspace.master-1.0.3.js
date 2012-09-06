@@ -780,7 +780,7 @@ function interfaceMasterLogon()
 		url: '/ondemand/logon/',
 		data: sData,
 		dataType: 'json',
-		async: false,
+		async: true,
 		success: interfaceMasterLogonProcess
 	})
 }

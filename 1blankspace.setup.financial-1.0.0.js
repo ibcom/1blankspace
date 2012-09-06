@@ -72,7 +72,7 @@ function interfaceSetupFinancialMasterViewport()
 		interfaceSetupFinancialSearch(event.target.id, giSearchSource_BROWSE);
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').focus();
+	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceFormatEditorInitialise({height: "500px"});
 
