@@ -803,7 +803,7 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 			bCan = true;			
 			aHTML[++h] = '<tr id="trInterfaceMainUserRoleAccessCanUse" class="interfaceMain">' +
 							'<td id="tdInterfaceMainUserRoleAccessCanUse" class="interfaceMain">' +
-							'Cearch?' +
+							'Search?' +
 							'</td></tr>' +
 							'<tr id="trInterfaceMainUserRoleAccessCanUse" class="interfaceMainText">' +
 							'<td id="tdInterfaceMainUserRoleAccessCanUseValue" class="interfaceMainRadio">' +

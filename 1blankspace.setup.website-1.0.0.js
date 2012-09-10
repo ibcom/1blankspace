@@ -9,7 +9,6 @@ function interfaceSetupWebsiteMasterViewport(aParam)
 {
 
 	gsSetupName = 'Website';
-	giSetupContext = -1;
 	giObjectContext = -1;
 	giObject = 40;
 	goObjectContext = undefined;
@@ -267,9 +266,8 @@ function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
 	
 		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
 		
-		giSetupContext = sSearchContext;
 		giObjectContext = sSearchContext;
-		var sParam = 'method=SETUP_SITE_SEARCH&id=' + giSetupContext;
+		var sParam = 'method=SETUP_SITE_SEARCH&id=' + giObjectContext;
 		
 		$.ajax(
 		{
@@ -546,16 +544,16 @@ function interfaceSetupWebsiteShow(aParam, oResponse)
 		
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
+		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+
 		interfaceMasterViewportDestination({
 			newDestination: 'interfaceSetupWebsiteMasterViewport({showHome: false});interfaceSetupWebsiteSearch("-' + giObjectContext + '")',
 			move: false
 			})
 		
 		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceSetupWebsiteSummary()'})
-
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});	
 	}	
 }		
 		

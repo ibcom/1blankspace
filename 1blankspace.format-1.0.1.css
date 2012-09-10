@@ -27,6 +27,15 @@
 	height: 75px;
 }
 
+.ticked
+{
+	height: 13px;
+	width: 13px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image:url(/jscripts/images/ticked.png);
+}
+
 #interfaceMasterViewportContact
 {
 	background-image:url(/jscripts/images/1blankspace.viewport.contact.green.png);
