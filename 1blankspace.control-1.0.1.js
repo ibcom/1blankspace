@@ -220,7 +220,7 @@ ns1blankspace.viewports =
 		type: 2
 	},
 	{
-		title: "Subscription",
+		title: "My Account",
 		endpoint: "ADMIN", 
 		show: true,
 		group: 4,
@@ -229,7 +229,7 @@ ns1blankspace.viewports =
 	{
 		title: "Support",
 		endpoint: "SUPPORT", 
-		show: true,
+		show: false,
 		group: 4,
 		type: 2
 	}
@@ -1037,13 +1037,13 @@ function interfaceControlSetupOptions()
 
 	var aHTMLViewport = [];
 					
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Subscription';})[0];
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'My Account';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupSpace" class="interfaceViewportMasterControl">' +	
 					'<td id="tdInterfaceViewportMasterControlSetupSpace" class="interfaceViewportMasterControl">' +
 					'<span id="spanInterfaceViewportMasterControlSetupSpace" class="interfaceViewportMasterControl">' +
-					'My Account</span>' +
+					'My&nbsp;Account</span>' +
 					'</td></tr>');
 	}
 
@@ -1063,7 +1063,7 @@ function interfaceControlSetupOptions()
 		aHTML.push('<table class="interfaceViewportMasterControlColumn">');
 
 		aHTML.push('<tr class="interfaceViewportMasterControl">' +
-					'<td id="interfaceMasterViewportHelp" class="interfaceMasterViewportImage">' +
+					'<td id="interfaceMasterViewportSetupSpace" class="interfaceMasterViewportImage">' +
 					'&nbsp;' +
 					'</td></tr>');			
 	

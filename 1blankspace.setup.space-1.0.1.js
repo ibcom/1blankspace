@@ -128,21 +128,25 @@ function interfaceSetupSpaceHomeShow()
 					'</tr>';	
 	
 	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-				'<td id="tdInterfaceViewportControlSubscriptions" class="interfaceViewportControl">Subscriptions</td>' +
+				'<td id="tdInterfaceViewportControlSubscriptions" class="interfaceViewportControl" style="padding-top:10px;">Subscriptions</td>' +
 				'</tr>';			
 			
-	aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-				'<td id="tdInterfaceViewportControlBilling" class="interfaceViewportControl" style="padding-top:10px;">Billing</td>' +
-				'</tr>';	
+	//aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
+	//			'<td id="tdInterfaceViewportControlBilling" class="interfaceViewportControl" style="padding-top:10px;">Billing</td>' +
+	//			'</tr>';	
 
 	aHTML[++h] = '</table>';
 
 	$('#divInterfaceViewportControl').html(aHTML.join(''));	
 	
+	$('#tdInterfaceViewportControlSubscriptions').addClass('interfaceViewportControlHighlight');
+
+	interfaceSetupSpaceSubscriptions({xhtmlElementID: "divInterfaceMain"})
+
 	$('#tdInterfaceViewportControlSubscriptions').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMain", true);
-		interfaceSetupSpacetdInterfaceViewportControlSubscriptions({xhtmlElementID: "divInterfaceMain"});
+		interfaceSetupSpaceSubscriptions({xhtmlElementID: "divInterfaceMain"});
 	});
 	
 }
@@ -189,15 +193,17 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 			var h = -1;
 		
 			aHTML[++h] = '<table id="tableInterfaceMainSubscription" class="interfaceMain" style="width:100%">' +
-					'<tr id="trInterfaceMainSubscriptionRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainSubscriptionColumn1" style="width:250px;" class="interfaceMainColumn1">' +
-					gsLoadingXHTML +
-					'</td>' +
-					'<td id="tdInterfaceMainSubscriptionColumn2" class="interfaceMainColumn2">' +
-					'<span id="spanSubscription_options_add" class="interfaceMainRowOptionsAdd" style="font-size:0.75em;">Add</span>'
-					'</td>' +
-					'</tr>' +
-					'</table>';				
+							'<tr id="trInterfaceMainSubscriptionRow1" class="interfaceMainRow1">' +
+							'<td id="tdInterfaceMainSubscriptionColumn1" style="width:250px;" class="interfaceMainColumn1">' +
+							gsLoadingXHTML +
+							'</td>';
+
+			//aHTML[++h] = '<td id="tdInterfaceMainSubscriptionColumn2" class="interfaceMainColumn2">' +
+			//				'<span id="spanSubscription_options_add" class="interfaceMainRowOptionsAdd" style="font-size:0.75em;">Add</span>'
+			//				'</td>';
+
+			aHTML[++h] = '</tr>' +
+							'</table>';				
 		
 			$('#divInterfaceMain').html(aHTML.join(''));
 		
@@ -243,7 +249,7 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 			
 			$('#tdInterfaceMainSubscriptionColumn1').html(aHTML.join(''));
 
-			$('.interfaceMainRowOptionsRemove').button(
+			$('.interfaceMainRowOptionsRemoveX').button(
 			{
 				text: false,
 				icons: {
