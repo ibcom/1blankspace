@@ -1,5 +1,13 @@
-//Based on using the mydigitalstructure caching.
-//So primarily working of the cache object in the model.
+
+/*!
+ * Copyright 2010, ibCom Pty Ltd ATF ibCom Unit Trust & contributors
+ * Licensed under the MIT license.
+ * http://1blankspace.com/license
+ * 01 FEB 2010
+ */
+
+// Based on using the mydigitalstructure caching.
+// So primarily working of the cache object in the model.
 // totals & get details for messages not fully cached.  Show part of message that have and then back fill attachments and message
 // Back update flags for read.
 

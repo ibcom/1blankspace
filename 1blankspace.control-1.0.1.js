@@ -1,10 +1,8 @@
 /*!
- * 1blankspace
- * http://1blankspace.com/
- *
- * Copyright 2010, ibCom Pty Ltd
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Copyright 2010, ibCom Pty Ltd ATF ibCom Unit Trust & contributors
+ * Licensed under the MIT license.
  * http://1blankspace.com/license
+ * 01 FEB 2010
  */
 
 var gbRoleBase = false;
@@ -1042,10 +1040,10 @@ function interfaceControlSetupOptions()
 	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Subscription';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
-		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupMemberships" class="interfaceViewportMasterControl">' +	
-					'<td id="tdInterfaceViewportMasterControlSetupMemberships" class="interfaceViewportMasterControl">' +
-					'<span id="spanInterfaceViewportMasterControlSetupMemberships" class="interfaceViewportMasterControl">' +
-					'Subscription</span>' +
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupSpace" class="interfaceViewportMasterControl">' +	
+					'<td id="tdInterfaceViewportMasterControlSetupSpace" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlSetupSpace" class="interfaceViewportMasterControl">' +
+					'My Account</span>' +
 					'</td></tr>');
 	}
 
@@ -1173,10 +1171,10 @@ function interfaceControlSetupOptionsBind()
 		interfaceSetupStructureMasterViewport();
 	});
 
-	$('#tdInterfaceViewportMasterControlSetupMemberships').click(function(event)
+	$('#tdInterfaceViewportMasterControlSetupSpace').click(function(event)
 	{
 		interfaceMasterOptionsSource();
-		interfaceDeveloperMembershipMasterViewport();
+		interfaceSetupSpaceMasterViewport();
 	});
 }
 
