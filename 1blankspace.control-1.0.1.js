@@ -44,7 +44,6 @@ if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 ns1blankspace.financial.summaryUseTemplate = false; 
 ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html';
 
-
 ns1blankspace.viewports = 
 [
 	{
@@ -223,12 +222,19 @@ ns1blankspace.viewports =
 		type: 2
 	},
 	{
+		title: "Subscription",
+		endpoint: "ADMIN", 
+		show: true,
+		group: 4,
+		type: 2
+	},
+	{
 		title: "Support",
 		endpoint: "SUPPORT", 
 		show: true,
 		group: 4,
 		type: 2
-	},
+	}
 ]
 
 function interfaceControlSecurity(aParam, oResponse)
@@ -1032,6 +1038,16 @@ function interfaceControlSetupOptions()
 	
 
 	var aHTMLViewport = [];
+					
+	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Subscription';})[0];
+	if (oViewport ? oViewport.show : false)
+	{
+		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupMemberships" class="interfaceViewportMasterControl">' +	
+					'<td id="tdInterfaceViewportMasterControlSetupMemberships" class="interfaceViewportMasterControl">' +
+					'<span id="spanInterfaceViewportMasterControlSetupMemberships" class="interfaceViewportMasterControl">' +
+					'Subscription</span>' +
+					'</td></tr>');
+	}
 
 	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Support';})[0];
 	if (oViewport ? oViewport.show : false)
@@ -1155,6 +1171,12 @@ function interfaceControlSetupOptionsBind()
 	$('#tdInterfaceViewportMasterControlSetupStructures').click(function(event)
 	{
 		interfaceSetupStructureMasterViewport();
+	});
+
+	$('#tdInterfaceViewportMasterControlSetupMemberships').click(function(event)
+	{
+		interfaceMasterOptionsSource();
+		interfaceDeveloperMembershipMasterViewport();
 	});
 }
 

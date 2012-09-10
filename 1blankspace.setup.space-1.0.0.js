@@ -3,10 +3,10 @@ $(function()
 {
 })
 
-function interfaceDeveloperSpaceMasterViewport()
+function interfaceSetupSpaceMasterViewport()
 {
 
-	gsSetupName = 'Spaces';
+	gsSetupName = 'My Account';
 	goSetupContextXML = '';
 	giSetupContext = -1;
 	giObjectContext = -1;
@@ -16,100 +16,85 @@ function interfaceDeveloperSpaceMasterViewport()
 			
 	$('#divInterfaceMasterViewportControlSet').button(
 	{
-		label: "Spaces"
+		label: "My Account"
 	});
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
 		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceDeveloperSpaceSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+        giKeyPressTimeoutId = setTimeout("interfaceSetupSpaceSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
 	{
-		interfaceDeveloperSpaceSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupSpaceSearch('inputInterfaceMasterViewportControlSearch');
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
 	{
-		interfaceDeveloperSpaceSearchOptions();
+		interfaceSetupSpaceSearchOptions();
 	});
 	
 	$('#spanInterfaceMasterViewportControlNew').click(function(event)
 	{
-		interfaceDeveloperSpaceNew();
+		interfaceSetupSpaceNew();
 	})
 	
 	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
 	{
-		interfaceDeveloperSpaceNewOptions();
+		interfaceSetupSpaceNewOptions();
 	});
 	
 	$('#spanInterfaceMasterViewportControlAction').click(function(event)
 	{
-		interfaceDeveloperSpaceSave();
+		interfaceSetupSpaceSave();
 	});
 	
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
 	
 	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
 	{
-	
-		var aHTML = [];
-		var h = -1;
-		
-		aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
-						
-		aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-						'<td id="tdinterfaceActionOptionsDelete" class="interfaceActionOptions">' +
-						'Delete' +
-						'</td>' +
-						'</tr>';
-
-		aHTML[++h] = '</table>';
-
-		interfaceMasterViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
 	});
 	
 	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
 		
 	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
 	{
-		interfaceDeveloperSpaceSetup();
+		interfaceSetupSpaceSetup();
 	});
 	
 	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
 	{
-		interfaceDeveloperSpaceSetupOptions();
+		interfaceSetupSpaceSetupOptions();
 	});
 	
 	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
 	{
-		interfaceDeveloperSpaceHelp();
+		interfaceSetupSpaceHelp();
 	});
 	
 	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
 	{
-		interfaceDeveloperSpaceHelpOptions();
+		interfaceSetupSpaceHelpOptions();
 	});
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceDeveloperSpaceSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupSpaceSearch(event.target.id, {source: giSearchSource_BROWSE});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceDeveloperSpaceSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupSpaceSearch(event.target.id, {source: giSearchSource_BROWSE});
 	});
 	
 	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
-	interfaceDeveloperSpaceHomeShow();
+	interfaceSetupSpaceHomeShow();
 	
 }
 
-function interfaceDeveloperSpaceHomeShow(oResponse)
+function interfaceSetupSpaceHomeShow(oResponse)
 {
 
 	if (oResponse == undefined)
@@ -121,7 +106,7 @@ function interfaceDeveloperSpaceHomeShow(oResponse)
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceWebsiteHomeMostLikely" class="interfaceMainColumn1Large">' +
 						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2Action" style="width:175px;">' +
+						'<td id="tdInterfaceMainSummaryColumn2Actionx" style="width:175px;">' +
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';		
@@ -131,28 +116,26 @@ function interfaceDeveloperSpaceHomeShow(oResponse)
 		var aHTML = [];
 		var h = -1;
 		
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" cellspacing=0>';
-		
-		//aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask3" class="interfaceMainColumn2Action" style="width:175px;">' +
-		//				'<a href="/site/1262/mydigitalspace_attachment_loader.zip"' +
-		//				' id="aInterfaceMainSummaryAttachmentUploader">Download File Attachment Uploader</a>' +
-		//				'</td></tr>';
-										
-		aHTML[++h] = '</td></tr></table>';					
-
-		$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));
-		
 		var aHTML = [];
 		var h = -1;
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportDeveloperSpaceLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="interfaceMasterViewportSetupSpaceLarge" class="interfaceMasterViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';		
+						'</tr>';	
 		
+		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlSubscriptions" class="interfaceViewportControl">Subscriptions</td>' +
+					'</tr>';			
+				
+		aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
+					'<td id="tdInterfaceViewportControlBilling" class="interfaceViewportControl" style="padding-top:10px;">Billing</td>' +
+					'</tr>';	
+
+		aHTML[++h] = '</table>';
+
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
 		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
@@ -162,7 +145,7 @@ function interfaceDeveloperSpaceHomeShow(oResponse)
 			type: 'GET',
 			url: '/ondemand/core/?method=CORE_SPACE_SEARCH',
 			dataType: 'json',
-			success: interfaceDeveloperSpaceHomeShow
+			success: interfaceSetupSpaceHomeShow
 		});
 		
 	}
@@ -203,12 +186,12 @@ function interfaceDeveloperSpaceHomeShow(oResponse)
 	
 		$('td.interfaceHomeMostLikely').click(function(event)
 		{
-			interfaceDeveloperSpaceSearch(event.target.id, {source: 1});
+			interfaceSetupSpaceSearch(event.target.id, {source: 1});
 		});
 	}
 }
 
-function interfaceDeveloperSpaceSearch(sXHTMLElementId, aParam)
+function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
 {
 	var aSearch = sXHTMLElementId.split('-');
 	var sElementId = aSearch[0];
@@ -243,7 +226,7 @@ function interfaceDeveloperSpaceSearch(sXHTMLElementId, aParam)
 			type: 'GET',
 			url: '/ondemand/core/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceDeveloperSpaceShow(aParam, data)}
+			success: function(data) {interfaceSetupSpaceShow(aParam, data)}
 		});
 	}
 	else
@@ -277,14 +260,14 @@ function interfaceDeveloperSpaceSearch(sXHTMLElementId, aParam)
 				type: 'GET',
 				url: '/directory/ondemand/setup.asp?rf=XML&' + sParam,
 				dataType: 'xml',
-				success: function(data) {interfaceDeveloperSpaceSearchShow(aParam, data)}
+				success: function(data) {interfaceSetupSpaceSearchShow(aParam, data)}
 			});
 			
 		}
 	};	
 }
 
-function interfaceDeveloperSpaceSearchShow(aParam, oXML)
+function interfaceSetupSpaceSearchShow(aParam, oXML)
 {
 
 	var iColumn = 0;
@@ -339,13 +322,13 @@ function interfaceDeveloperSpaceSearchShow(aParam, oXML)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
 			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
-			interfaceDeveloperSpaceSearch(event.target.id, 1);
+			interfaceSetupSpaceSearch(event.target.id, 1);
 		});
 	}	
 			
 }
 
-function interfaceDeveloperSpaceViewport()
+function interfaceSetupSpaceViewport()
 {
 	
 	var aHTML = [];
@@ -378,21 +361,21 @@ function interfaceDeveloperSpaceViewport()
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
-		interfaceDeveloperSpaceSummary();
+		interfaceSetupSpaceSummary();
 	});
 	
 	$('#tdInterfaceViewportControlMembers').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainMembers");
-		interfaceDeveloperSpaceMembers();
+		interfaceSetupSpaceMembers();
 	});
 }
 
-function interfaceDeveloperSpaceShow(aParam, oResponse)
+function interfaceSetupSpaceShow(aParam, oResponse)
 {
 
 	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
-	interfaceDeveloperSpaceViewport();
+	interfaceSetupSpaceViewport();
 	
 	var aHTML = [];
 	var h = -1;
@@ -423,11 +406,11 @@ function interfaceDeveloperSpaceShow(aParam, oResponse)
 		
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
-		interfaceDeveloperSpaceSummary();
+		interfaceSetupSpaceSummary();
 	}	
 }		
 		
-function interfaceDeveloperSpaceSummary()
+function interfaceSetupSpaceSummary()
 {
 	var aHTML = [];
 	var h = -1;
@@ -474,13 +457,13 @@ function interfaceDeveloperSpaceSummary()
 		$('#aInterfaceMainSummarySwitchInto').click(function(event)
 		{
 			interfaceMasterMainViewportShow("#divInterfaceMainAddAttachment");
-			interfaceDeveloperSpaceSwitchInto();
+			interfaceSetupSpaceSwitchInto();
 		});
 			
 	}	
 }
 
-function interfaceDeveloperSpaceMembers(aParam, oResponse)
+function interfaceSetupSpaceMembers(aParam, oResponse)
 {
 	var iObjectContext = giObjectContext;
 	var sXHTMLElementId = 'divInterfaceMainMembers';
@@ -504,7 +487,7 @@ function interfaceDeveloperSpaceMembers(aParam, oResponse)
 			type: 'GET',
 			url: '/ondemand/admin/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceDeveloperSpaceMembers(aParam, data)}
+			success: function(data) {interfaceSetupSpaceMembers(aParam, data)}
 		});
 
 	}
@@ -554,7 +537,7 @@ function interfaceDeveloperSpaceMembers(aParam, oResponse)
 	}	
 }
 
-function interfaceDeveloperSpaceSave()
+function interfaceSetupSpaceSave()
 {
 
 	var sParam = 'method=CORE_SPACE_MANAGE';

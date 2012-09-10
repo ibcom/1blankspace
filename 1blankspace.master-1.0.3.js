@@ -1556,7 +1556,7 @@ function interfaceMasterAttachments(aParam)
 	{	
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-		oSearch.addField('type,filename,description,download,modifieddate');
+		oSearch.addField('type,filename,description,download,modifieddate,attachment');
 		oSearch.addFilter('object', 'EQUAL_TO', iObject);
 		oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 		
