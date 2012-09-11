@@ -1336,7 +1336,14 @@ function interfaceMasterViewportShow(oResponse)
 				}})
 		.click(function() 
 		{
-			interfaceMasterHelpShow(this);
+			if (ns1blankspace.helpURL)
+			{	
+				window.open(ns1blankspace.helpURL);
+			}
+			else
+			{
+				window.alert('No help available.  May be search the internet?')
+			}	
 		});		
 	
 	$('#divInterfaceMasterViewportLogonName').click(function(event)

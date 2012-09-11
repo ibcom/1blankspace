@@ -23,18 +23,14 @@ function interfaceSetupSpaceMasterViewport()
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupSpaceSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
 	{
-		interfaceSetupSpaceSearch('inputInterfaceMasterViewportControlSearch');
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
 	{
-		interfaceSetupSpaceSearchOptions();
 	});
 	
 	$('#spanInterfaceMasterViewportControlNew').button({disabled: true});
@@ -61,24 +57,12 @@ function interfaceSetupSpaceMasterViewport()
 		interfaceSetupSpaceSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
-	{
-		interfaceSetupSpaceHelp();
-	});
-	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
-	{
-		interfaceSetupSpaceHelpOptions();
-	});
-
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupSpaceSearch(event.target.id, {source: giSearchSource_BROWSE});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupSpaceSearch(event.target.id, {source: giSearchSource_BROWSE});
 	});
 	
 	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
@@ -424,14 +408,14 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 {
 	var iStep = 1;
-	var iEndpoint;
-	var oMethods;
+	var iID;
+	var sXHTMLElementID;
 
 	if (aParam != undefined)
 	{
 		if (aParam.step != undefined) {iStep = aParam.step}
-		if (aParam.endpoint != undefined) {iEndpoint = aParam.endpoint}
-		if (aParam.methods != undefined) {oMethods = aParam.methods}
+		if (aParam.id != undefined) {iID = aParam.id}
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
 	}
 		
 	if (iStep == 1)
@@ -452,20 +436,37 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 						'</table>';				
 					
 			$('#divInterfaceMain').html(aHTML.join(''));
+
+
+			var aHTML = [];
+			var h = -1;	
+			
+			aHTML[++h] = '<table class="interfaceMainColumn2">';
+			aHTML[++h] = '<tr><td class="interfaceMainAction">' +
+							'<span id="spanInterfaceMainAccessAdd">Add</span>' +
+							'</td></tr>';
+											
+			aHTML[++h] = '</table>';					
+			
+			$('#tdInterfaceMainSetupMethodAccessColumnAction').html(aHTML.join(''));
+		
+			$('#spanInterfaceMainAccessAdd').button(
+			{
+				label: "Add"
+			})
+			.click(function()
+			{
+				$.extend(true, aParam, {step: 4, id: ""});
+				interfaceSetupSpaceMethodAccess(aParam);
+			})
 		
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'SETUP_METHOD_ACCESS_SEARCH';
 			oSearch.addField('title,accessmethod,accessmethodtext,addavailable,removeavailable,updateavailable,useavailable');
 			oSearch.rows = 50;
-			oSearch.sort('title', 'asc');
+			oSearch.sort('accessmethodtext', 'asc');
+			oSearch.addFilter('accessmethodtext', 'TEXT_IS_NOT_EMPTY')
 			oSearch.getResults(function(data) {interfaceSetupSpaceMethodAccess(aParam, data)})	
-
-			//var oSearch = new AdvancedSearch();
-			//oSearch.method = 'SETUP_ENDPOINT_SEARCH';
-			//oSearch.addField('title');
-			//oSearch.rows = 50;
-			//oSearch.sort('title', 'asc');
-			//oSearch.getResults(function(data) {interfaceSetupUserRoleMethodAccess(aParam, data)})	
 		}
 		else
 		{
@@ -476,10 +477,11 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 
 			aHTML.push('<tr class="interfaceMainCaption">');
 			aHTML.push('<td class="interfaceMainCaption">Method</td>');
-			aHTML.push('<td class="interfaceMainCaption">Search</td>');
-			aHTML.push('<td class="interfaceMainCaption">Add</td>');
-			aHTML.push('<td class="interfaceMainCaption">Update</td>');
-			aHTML.push('<td class="interfaceMainCaption">Remove</td>');
+			aHTML.push('<td class="interfaceMainCaption" style="width:35px;text-align:center;">Search</td>');
+			aHTML.push('<td class="interfaceMainCaption" style="width:35px;text-align:center;">Add</td>');
+			aHTML.push('<td class="interfaceMainCaption" style="width:35px;text-align:center;">Update</td>');
+			aHTML.push('<td class="interfaceMainCaption" style="width:35px;text-align:center;">Remove</td>');
+			aHTML.push('<td class="interfaceMainCaption">&nbsp;</td>');
 			aHTML.push('</tr>');
 
 			$(oResponse.data.rows).each(function()
@@ -493,22 +495,22 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 										' title="">' +
 										this.accessmethodtext + '</td>');
 
-					aHTML.push('<td style="width:30px;text-align:right;" ' +
+					aHTML.push('<td style="width:35px;text-align:center;" ' +
 									'id="spanAccessMethod_options_useavailable-' + this.id + '" class="interfaceMainRow interfaceMainRowOptionsEdit' +
 										((this.useavailable == 'Y') ? ' ticked' : '') + '">&nbsp;' +
 									'</td>');		
 
-					aHTML.push('<td style="width:30px;text-align:right;" ' +
+					aHTML.push('<td style="width:35px;text-align:center;" ' +
 									'id="spanAccessMethod_options_addavailable-' + this.id + '" class="interfaceMainRow interfaceMainRowOptionsEdit' +
 										((this.addavailable == 'Y') ? ' ticked' : '') + '">&nbsp;' +
 									'</td>');
 
-					aHTML.push('<td style="width:30px;text-align:right;" ' +
+					aHTML.push('<td style="width:35px;text-align:center;" ' +
 									'id="spanAccessMethod_options_updateavailable-' + this.id + '" class="interfaceMainRow interfaceMainRowOptionsEdit' +
 										((this.updateavailable == 'Y') ? ' ticked' : '') + '">&nbsp;' +
 									'</td>');
 
-					aHTML.push('<td style="width:30px;text-align:right;" ' +
+					aHTML.push('<td style="width:35px;text-align:right;" ' +
 									'id="spanAccessMethod_options_removeavailable-' + this.id + '" class="interfaceMainRow interfaceMainRowOptionsEdit' +
 										((this.removeavailable == 'Y') ? ' ticked' : '') + '">&nbsp;' +
 									'</td>');									
@@ -531,7 +533,7 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 				var sXHTMLElementId = event.target.id;
 				var aId = sXHTMLElementId.split('-');
 				
-				interfaceSetupSpaceMethodAccess({endpoint: aId[1], step: 2});
+				interfaceSetupSpaceMethodAccess({id: aId[1], step: 3});
 			});
 
 			$('.interfaceMainRowOptionsRemove').button(
@@ -542,7 +544,7 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 				}
 			})
 			.click(function() {
-				$.extend(true, aParam, {step: 4, xhtmlElementID: this.id});
+				$.extend(true, aParam, {step: 5, xhtmlElementID: this.id});
 				interfaceSetupSpaceMethodAccess(aParam);
 			})
 			.css('width', '15px')
@@ -551,299 +553,113 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 		}
 		
 	}	
-	else if (iStep == 2)
-	{
-		var aHTML = [];
-			var h = -1;	
-			
-			aHTML[++h] = '<table>';
-			
-			aHTML[++h] = '<tr id="trInterfaceMainItemsEditSearchDate">' +
-							'<td id="tdInterfaceMainItemsEditDate" class="interfaceMain">' +
-							'Date' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainItemsSearchDateValue" class="interfaceMainText">' +
-							'<td id="tdInterfaceMainItemsSearchDateValue" class="interfaceMainText">' +
-							'<input id="inputInterfaceMainItemsEditSearchDate" class="inputInterfaceMainDate">' +
-							'</td></tr>';
-				
-			aHTML[++h] = '<tr id="trInterfaceMainItemsEditSearchAmount">' +
-							'<td id="tdInterfaceMainItemsEditAmount" class="interfaceMain">' +
-							'Amount' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainItemsSearchAmountValue" class="interfaceMainText">' +
-							'<td id="tdInterfaceMainItemsSearchAmountValue" class="interfaceMainText">' +
-							'<input id="inputInterfaceMainItemsEditSearchAmount" class="inputInterfaceMainText">' +
-							'</td></tr>';
-											
-			aHTML[++h] = '<tr><td id="tdInterfaceMainRecoItemsEditSearch" class="interfaceMainAction">' +
-							'<span style="width:100%" id="spanInterfaceMainRecoItemsEditSearch">Search</span>' +
-							'</td></tr>';
-			
-			aHTML[++h] = '</table>';					
-			
-			$('#tdInterfaceMainBankAccountColumnRecoItemEdit2').html(aHTML.join(''));
-		
-	}	
-
-
-	else if (iStep == 3x)
-	{
-		//ns1blankspace.setup.currentEndpoint = iEndpoint;
-
-		if (oResponse == undefined)
-		{
-			var oSearch = new AdvancedSearch();
-			oSearch.method = 'SETUP_METHOD_SEARCH';
-			oSearch.addField('title');
-			oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
-			oSearch.rows = 50;
-			oSearch.sort('title', 'asc');
-			oSearch.getResults(function(data) {interfaceSetupUserRoleMethodAccess(aParam, data)})	
-		}
-		else
-		{
-			$.extend(true, aParam, {step: 3, methods: oResponse.data.rows});
-			interfaceSetupUserRoleMethodAccess(aParam);	
-		}
-	}
-
 	else if (iStep == 3)
 	{
-		//ns1blankspace.setup.currentMethods = oMethods;
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'SETUP_METHOD_ACCESS_SEARCH';
+		oSearch.addField('title,accessmethod,accessmethodtext,addavailable,removeavailable,updateavailable,useavailable');
+		oSearch.addFilter('id', 'EQUAL_TO', iID);
 
-		if (oResponse == undefined)
-		{
-			$('#tdInterfaceMainSetupMethodAccessColumnMethod').html(gsLoadingSmallXHTML);
-			$('#tdInterfaceMainSetupMethodAccessColumnEdit').html("");
-
-			var aHTML = [];
-			var h = -1;	
-			
-			aHTML[++h] = '<table class="interfaceMainColumn2">';
-			aHTML[++h] = '<tr><td id="tdInterfaceMainAccesstAdd" class="interfaceMainAction">' +
-							'<span id="spanInterfaceMainAccessAdd">Add</span>' +
-							'</td></tr>';
-											
-			aHTML[++h] = '</table>';					
-			
-			$('#tdInterfaceMainSetupMethodAccessColumnAction').html(aHTML.join(''));
-		
-			$('#spanInterfaceMainAccessAdd').button(
-			{
-				label: "Add"
-			})
-			.click(function()
-			{
-				$.extend(true, aParam, {step: 4, xhtmlElementID: ""});
-				interfaceSetupUserRoleMethodAccess(aParam);
-			})
-
-			var aIDs = [];
-
-			$(oMethods).each(function()
-			{
-				aIDs.push(this.id);	
-			})
-
-			var oSearch = new AdvancedSearch();
-			oSearch.method = 'SETUP_METHOD_ACCESS_SEARCH';
-			oSearch.addField('title,accessmethod,accessmethodtext,addavailable,removeavailable,updateavailable,useavailable');
-			oSearch.addFilter('accessmethod', 'IN_LIST', aIDs.join(','))
-			oSearch.rows = 50;
-			oSearch.sort('title', 'asc');
-			oSearch.getResults(function(data) {interfaceSetupUserRoleMethodAccess(aParam, data)})	
-		}
-		else
-		{
-			var aHTML = [];
-			var h = -1;
-	
-			aHTML[++h] = '<table id="tableSetupFinancialFinancialAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-			aHTML[++h] = '<tbody>';
-			
-			if (oResponse.data.rows.length == 0)
-			{
-				aHTML[++h] = '<tr class="interfaceMainCaption">' +
-								'<td class="interfaceMainRowNothing">No methods.</td></tr>';
-				aHTML[++h] = '</tbody></table>';
-			}
-			else
-			{		
-
-				$(oResponse.data.rows).each(function()
-				{
-					aHTML[++h] = '<tr class="interfaceMainRow">';
-
-					aHTML[++h] = '<td id="interfaceUserRoleMethod_Title-' + this.id +
-										'-' + this.addavailable +
-										'-' + this.removeavailable +
-										'-' + this.updateavailable +
-										'-' + this.useavailable +
-										'" class="interfaceMainRow interfaceMainRowSelect method"' +
-										' title="">' +
-											this.accessmethodtext + '</td>';
-			
-					aHTML[++h] = '</tr>'
+		oSearch.getResults(function(data) {
+				$.extend(true, aParam, {step: 4});
+				interfaceSetupSpaceMethodAccess(aParam, data)
 				});
-			
-				aHTML[++h] = '</tbody></table>';
-			}
-		
-			$('#tdInterfaceMainSetupMethodAccessColumnMethod').html(aHTML.join(''));
-
-			$('td.method').click(function()
-			{
-				$.extend(true, aParam, {step: 4, xhtmlElementID: event.target.id});
-				interfaceSetupUserRoleMethodAccess(aParam);
-			})
-		}
 	}
 
 	else if (iStep == 4)
 	{
-		var sXHTMLElementID;
-		var aXHTMLElementID;
-
-		if (aParam != undefined)
-		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		}
-		
-		if (sXHTMLElementID != undefined)
-		{
-			aXHTMLElementID = sXHTMLElementID.split('-');
-		}	
-
-		var oSearch = new AdvancedSearch();
-		oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-		oSearch.addField('canadd,canremove,canupdate,canuse');
-		oSearch.addFilter('role', 'EQUAL_TO', giObjectContext);
-		oSearch.addFilter('access', 'EQUAL_TO', aXHTMLElementID[1]);
-
-		oSearch.getResults(function(data) {
-				$.extend(true, aParam, {step: 5});
-				interfaceSetupUserRoleMethodAccess(aParam, data)
-				});
-	}
-
-	else if (iStep == 5)
-	{
-		var sID; 
-		var sXHTMLElementID;
-		var aXHTMLElementID;
-
-		if (aParam != undefined)
-		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		}
-		
-		if (sXHTMLElementID != undefined)
-		{
-			aXHTMLElementID = sXHTMLElementID.split('-');
-		}	
-	
-		if (oResponse != undefined)
-		{
-			if (oResponse.data.rows > 0)
-			{
-				sID = oResponse.data.rows[0].id;
-			}
-		}
-
 		var aHTML = [];
 		var h = -1;
-		var bCan = false;
+		
+		if (iID == '')
+		{
+			aHTML[++h] = '<table class="interfaceMain">';
+			
+			aHTML[++h] = '<tr id="trInterfaceMainMethodAccessMethod" class="interfaceMain">' +
+							'<td id="tdInterfaceMainMethodAccessMethod" class="interfaceMain">' +
+							'Method' +
+							'</td></tr>' +
+							'<tr class="interfaceMainSelect">' +
+							'<td class="interfaceMainSelect">' +
+							'<input id="inputInterfaceMainMethodAccessMethod" class="inputInterfaceMainSelectCustom">' +
+							'</td></tr>';
+
+			aHTML[++h] = '</table>';					
+		}
 
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
 		
-		if (aXHTMLElementID[2] == 'Y')
-		{		
-			bCan = true;	
-			aHTML[++h] = '<tr id="trInterfaceMainUserRoleAccessCanAdd" class="interfaceMain">' +
-							'<td id="tdInterfaceMainUserRoleAccessCanAdd" class="interfaceMain">' +
-							'Add?' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainUserRoleAccessCanAdd" class="interfaceMainText">' +
-							'<td id="tdInterfaceMainUserRoleAccessCanAddValue" class="interfaceMainRadio">' +
-							'<input type="radio" id="radioCanAddY" name="radioCanAdd" value="Y"/>Yes' +
-							'<br /><input type="radio" id="radioCanAddN" name="radioCanAdd" value="N"/>No' +
-						'</td></tr>';
-		}
-			
-		if (aXHTMLElementID[3] == 'Y')
-		{		
-			bCan = true;	
-			aHTML[++h] = '<tr id="trInterfaceMainUserRoleAccessCanRemove" class="interfaceMain">' +
-							'<td id="tdInterfaceMainUserRoleAccessCanRemove" class="interfaceMain">' +
-							'Remove?' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainUserRoleAccessCanRemove" class="interfaceMainText">' +
-							'<td id="tdInterfaceMainUserRoleAccessCanRemoveValue" class="interfaceMainRadio">' +
-							'<input type="radio" id="radioCanRemoveY" name="radioCanRemove" value="Y"/>Yes' +
-							'<br /><input type="radio" id="radioCanRemoveN" name="radioCanRemove" value="N"/>No' +
-						'</td></tr>';
-		}
-			
-		if (aXHTMLElementID[4] == 'Y')
-		{	
-			bCan = true;		
-			aHTML[++h] = '<tr id="trInterfaceMainUserRoleAccessCanUpdate" class="interfaceMain">' +
-							'<td id="tdInterfaceMainUserRoleAccessCanUpdate" class="interfaceMain">' +
-							'Update?' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainUserRoleAccessCanUpdate" class="interfaceMainText">' +
-							'<td id="tdInterfaceMainUserRoleAccessCanUpdateValue" class="interfaceMainRadio">' +
-							'<input type="radio" id="radioCanUpdateY" name="radioCanUpdate" value="Y"/>Yes' +
-							'<br /><input type="radio" id="radioCanUpdateN" name="radioCanUpdate" value="N"/>No' +
-						'</td></tr>';
-		}
-				
-		if (aXHTMLElementID[5] == 'Y')
-		{
-			bCan = true;			
-			aHTML[++h] = '<tr id="trInterfaceMainUserRoleAccessCanUse" class="interfaceMain">' +
-							'<td id="tdInterfaceMainUserRoleAccessCanUse" class="interfaceMain">' +
-							'Search?' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainUserRoleAccessCanUse" class="interfaceMainText">' +
-							'<td id="tdInterfaceMainUserRoleAccessCanUseValue" class="interfaceMainRadio">' +
-							'<input type="radio" id="radioCanUseY" name="radioCanUse" value="Y"/>Yes' +
-							'<br /><input type="radio" id="radioCanUseN" name="radioCanUse" value="N"/>No' +
-						'</td></tr>';
-		}
-			
-		if (!bCan)
-		{
-			aHTML[++h] = '<tr class="interfaceMainCaption">' +
-								'<td class="interfaceMainRowNothing">Can not set any access on this function.</td></tr>';
+		aHTML[++h] = '<tr class="interfaceMain">' +
+						'<td class="interfaceMain">' +
+						'Search?' +
+						'</td></tr>' +
+						'<tr class="interfaceMainText">' +
+						'<td id="tdInterfaceMainMethodAccessCanUseValue" class="interfaceMainRadio">' +
+						'<input type="radio" id="radioCanUseY" name="radioCanUse" value="Y"/>Yes' +
+						'<br /><input type="radio" id="radioCanUseN" name="radioCanUse" value="N"/>No' +
+					'</td></tr>';
 
-		}
-
+		aHTML[++h] = '<tr class="interfaceMain">' +
+						'<td class="interfaceMain">' +
+						'Add?' +
+						'</td></tr>' +
+						'<tr class="interfaceMainText">' +
+						'<td id="tdInterfaceMainMethodAccessCanAddValue" class="interfaceMainRadio">' +
+						'<input type="radio" id="radioCanAddY" name="radioCanAdd" value="Y"/>Yes' +
+						'<br /><input type="radio" id="radioCanAddN" name="radioCanAdd" value="N"/>No' +
+						'</td></tr>';
+		
+		aHTML[++h] = '<tr class="interfaceMain">' +
+						'<td class="interfaceMain">' +
+						'Remove?' +
+						'</td></tr>' +
+						'<tr class="interfaceMainText">' +
+						'<td id="tdInterfaceMainMethodAccessCanRemoveValue" class="interfaceMainRadio">' +
+						'<input type="radio" id="radioCanRemoveY" name="radioCanRemove" value="Y"/>Yes' +
+						'<br /><input type="radio" id="radioCanRemoveN" name="radioCanRemove" value="N"/>No' +
+					'</td></tr>';
+	
+			
+		aHTML[++h] = '<tr class="interfaceMain">' +
+						'<td class="interfaceMain">' +
+						'Update?' +
+						'</td></tr>' +
+						'<tr class="interfaceMainText">' +
+						'<td id="tdInterfaceMainMethodAccessCanUpdateValue" class="interfaceMainRadio">' +
+						'<input type="radio" id="radioCanUpdateY" name="radioCanUpdate" value="Y"/>Yes' +
+						'<br /><input type="radio" id="radioCanUpdateN" name="radioCanUpdate" value="N"/>No' +
+					'</td></tr>';
+	
 		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainSetupMethodAccessColumnEdit').html(aHTML.join(''));
-		
-		var aHTML = [];
-		var h = -1;
-	
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em">';
+		aHTML[++h] = '<table class="interfaceMain" style="font-size:0.875em">';
 				
-		aHTML[++h] = '<tr id="trInterfaceMainUserRoleAccessSave" class="interfaceMainAction">' +
-						'<td id="tdInterfaceMainUserRoleAccessSave" class="interfaceMainAction">' +
-						'<span style="width:70px;" id="spanInterfaceMainUserRoleAccessSave">Save</span>' +
+		aHTML[++h] = '<tr iclass="interfaceMainAction">' +
+						'<td id="tdInterfaceMainMethodAccessSave" class="interfaceMainAction">' +
+						'<span style="width:70px;" id="spanInterfaceMainMethodAccessSave">Save</span>' +
 						'</td></tr>';
 						
-		aHTML[++h] = '<tr id="trInterfaceMainBankAccountEditCancel" class="interfaceMainAction">' +
-							'<td id="tdInterfaceMainUserRoleAccessCancel" class="interfaceMainAction">' +
-							'<span style="width:70px;" id="spanInterfaceMainUserRoleAccessCancel">Cancel</span>' +
+		aHTML[++h] = '<tr class="interfaceMainAction">' +
+							'<td id="tdInterfaceMainMethodAccessCancel" class="interfaceMainAction">' +
+							'<span style="width:70px;" id="spanInterfaceMainMethodAccessCancel">Cancel</span>' +
 							'</td></tr>';
 											
 		aHTML[++h] = '</table>';					
 			
 		$('#tdInterfaceMainSetupMethodAccessColumnAction').html(aHTML.join(''));
+
+		$('#inputInterfaceMainMethodAccessMethod').keyup(function()
+		{
+			if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
+	        giKeyPressTimeoutId = setTimeout("interfaceSetupSpaceMethodSearch('inputInterfaceMainMethodAccessMethod')", giWaitForStop);
+		});	
+			
+		$('#inputInterfaceMainMethodAccessMethod').live('blur', function() 
+		{
+			$(this).removeClass('interfaceMasterHighlight');
+		});
 		
-		$('#spanInterfaceMainUserRoleAccessSave').button(
+		$('#spanInterfaceMainMethodAccessSave').button(
 		{
 			text: "Save"
 		})
@@ -851,27 +667,28 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 		{
 			interfaceMasterStatusWorking();
 
-			var sData = 'id=' + interfaceMasterFormatSave(sID);
-			sData += '&role=' + interfaceMasterFormatSave(giObjectContext);
-			sData += '&access=' + interfaceMasterFormatSave(aXHTMLElementID[1]);
-			sData += '&canadd=' + interfaceMasterFormatSave($('input[name="radioCanAdd"]:checked').val());
-			sData += '&canremove=' + interfaceMasterFormatSave($('input[name="radioCanRemove"]:checked').val());
-			sData += '&canupdate=' + interfaceMasterFormatSave($('input[name="radioCanUpdate"]:checked').val());
-			sData += '&canuse=' + interfaceMasterFormatSave($('input[name="radioCanUse"]:checked').val());
+			var sData = 'id=' + interfaceMasterFormatSave(iID);
+			if (iID == '')
+			{
+				sData += '&accessmethod=' + interfaceMasterFormatSave($('#inputInterfaceMainMethodAccessMethod').attr('data-id'));
+			}	
+			sData += '&addavailable=' + interfaceMasterFormatSave($('input[name="radioCanAdd"]:checked').val());
+			sData += '&removeavailable=' + interfaceMasterFormatSave($('input[name="radioCanRemove"]:checked').val());
+			sData += '&updateavailable=' + interfaceMasterFormatSave($('input[name="radioCanUpdate"]:checked').val());
+			sData += '&useavailable=' + interfaceMasterFormatSave($('input[name="radioCanUse"]:checked').val());
 
 			$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/?method=SETUP_ROLE_METHOD_ACCESS_MANAGE',
+				url: '/ondemand/setup/?method=SETUP_METHOD_ACCESS_MANAGE',
 				data: sData,
 				dataType: 'json',
 				success: function(data) {
 					if (data.status == "OK")
 					{
 						interfaceMasterStatus('Saved');
-			
-						//$.extend(true, aParam, {step: 2});
-						//interfaceSetupFinancialAccount(aParam)
+						$.extend(true, aParam, {step: 1});
+						interfaceSetupSpaceMethodAccess(aParam);
 					}
 					else
 					{
@@ -881,31 +698,106 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 			});
 		});
 
-		$('#spanInterfaceMainUserRoleAccessCancel').button(
+		$('#spanInterfaceMainMethodAccessCancel').button(
 		{
 			text: "Cancel"
 		})
 		.click(function() 
 		{
-			$.extend(true, aParam, {step: 2});
-			interfaceSetupUserRoleMethodAccess(aParam);
+			$.extend(true, aParam, {step: 1});
+			interfaceSetupSpaceMethodAccess(aParam);
 		});
 
-		if (oResponse.data.rows.length != 0)
+		if (iID != '')
+		{	
+			if (oResponse.data.rows.length != 0)
+			{
+				var oObjectContext = oResponse.data.rows[0];
+				
+				$('[name="radioCanAdd"][value="' + oObjectContext.addavailable + '"]').attr('checked', true);
+				$('[name="radioCanRemove"][value="' + oObjectContext.removeavailable + '"]').attr('checked', true);
+				$('[name="radioCanUpdate"][value="' + oObjectContext.updateavailable + '"]').attr('checked', true);
+				$('[name="radioCanUse"][value="' + oObjectContext.useavailable + '"]').attr('checked', true);
+			}
+			else
+			{
+				$('[name="radioCanAdd"][value="Y"]').attr('checked', true);
+				$('[name="radioCanRemove"][value="Y"]').attr('checked', true);
+				$('[name="radioCanUpdate"][value="Y"]').attr('checked', true);
+				$('[name="radioCanUse"][value="Y"]').attr('checked', true);
+			}
+		}	
+	}
+
+	else if (iStep == 5)
+	{
+		var aSearch = sXHTMLElementID.split('-');
+		
+		var sParam = 'method=SETUP_METHOD_ACCESS_MANAGE';
+		var sData = 'remove=1&id=' + aSearch[1];
+					
+		$.ajax(
 		{
-			var oObjectContext = oResponse.data.rows[0];
-			
-			$('[name="radioCanAdd"][value="' + oObjectContext.canadd + '"]').attr('checked', true);
-			$('[name="radioCanRemove"][value="' + oObjectContext.canremove + '"]').attr('checked', true);
-			$('[name="radioCanUpdate"][value="' + oObjectContext.canupdate + '"]').attr('checked', true);
-			$('[name="radioCanUse"][value="' + oObjectContext.canuse + '"]').attr('checked', true);
-		}
-		else
-		{
-			$('[name="radioCanAdd"][value="Y"]').attr('checked', true);
-			$('[name="radioCanRemove"][value="Y"]').attr('checked', true);
-			$('[name="radioCanUpdate"][value="Y"]').attr('checked', true);
-			$('[name="radioCanUse"][value="Y"]').attr('checked', true);
-		}
+			type: 'POST',
+			url: '/ondemand/setup/setup.asp?' + sParam,
+			data: sData,
+			dataType: 'json',
+			success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
+		});	
 	}
 }
+
+function interfaceSetupSpaceMethodSearch(sXHTMLInputElementID, oResponse)
+{
+	var aHTML = [];
+	var sSearchText;
+	var iXHTMLElementContextID;
+
+	if (oResponse == undefined)
+	{	
+		sSearchText = $('#' + sXHTMLInputElementID).val();
+		
+		if (sSearchText.length > 2)
+		{
+
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_METHOD_SEARCH';
+			oSearch.addField('title');
+			oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText)
+			oSearch.rows = 10;
+			oSearch.sort('title', 'asc');
+			oSearch.getResults(function(data) {interfaceSetupSpaceMethodSearch(sXHTMLInputElementID, data)})	
+		}
+	}
+	else
+	{	
+		aHTML.push('<table style="width: 350px;" class="interfaceViewportMasterControl" cellpadding=4>');
+
+		$(oResponse.data.rows).each(function()
+		{
+			
+			aHTML.push('<tr>' +
+				'<td id="tdInterfaceMasterMethod-' + this.id + '" data-methodtext="' + this.title + '" class="interfaceSearch interfaceMasterMethod">' +
+				this.title +
+				'</td></tr>');
+				
+		});			
+						
+		aHTML.push('</table>');
+		
+		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+
+		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
+
+		$('.interfaceMasterMethod').click(function(event)
+		{
+			var aXHTMLElementID = (event.target.id).split('-');
+			iXHTMLElementContextID = aXHTMLElementID[1];
+
+			$('#' + sXHTMLInputElementID).val($('#' + event.target.id).attr("data-methodtext"))
+			$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
+			$('#divInterfaceMasterViewportControlOptions').hide();
+		});
+	}	
+}	

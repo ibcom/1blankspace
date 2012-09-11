@@ -756,6 +756,20 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
 		
+		if (aXHTMLElementID[5] == 'Y')
+		{
+			bCan = true;			
+			aHTML[++h] = '<tr id="trInterfaceMainUserRoleAccessCanUse" class="interfaceMain">' +
+							'<td id="tdInterfaceMainUserRoleAccessCanUse" class="interfaceMain">' +
+							'Search?' +
+							'</td></tr>' +
+							'<tr id="trInterfaceMainUserRoleAccessCanUse" class="interfaceMainText">' +
+							'<td id="tdInterfaceMainUserRoleAccessCanUseValue" class="interfaceMainRadio">' +
+							'<input type="radio" id="radioCanUseY" name="radioCanUse" value="Y"/>Yes' +
+							'<br /><input type="radio" id="radioCanUseN" name="radioCanUse" value="N"/>No' +
+						'</td></tr>';
+		}
+
 		if (aXHTMLElementID[2] == 'Y')
 		{		
 			bCan = true;	
@@ -797,21 +811,7 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 							'<br /><input type="radio" id="radioCanUpdateN" name="radioCanUpdate" value="N"/>No' +
 						'</td></tr>';
 		}
-				
-		if (aXHTMLElementID[5] == 'Y')
-		{
-			bCan = true;			
-			aHTML[++h] = '<tr id="trInterfaceMainUserRoleAccessCanUse" class="interfaceMain">' +
-							'<td id="tdInterfaceMainUserRoleAccessCanUse" class="interfaceMain">' +
-							'Search?' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainUserRoleAccessCanUse" class="interfaceMainText">' +
-							'<td id="tdInterfaceMainUserRoleAccessCanUseValue" class="interfaceMainRadio">' +
-							'<input type="radio" id="radioCanUseY" name="radioCanUse" value="Y"/>Yes' +
-							'<br /><input type="radio" id="radioCanUseN" name="radioCanUse" value="N"/>No' +
-						'</td></tr>';
-		}
-			
+					
 		if (!bCan)
 		{
 			aHTML[++h] = '<tr class="interfaceMainCaption">' +

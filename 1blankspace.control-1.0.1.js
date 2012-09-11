@@ -35,7 +35,8 @@ var gsMessagingEmailAccount = '';
 var giMessagingCheckForNew = 60000;
 
 ns1blankspace.loadingXHTML = gsLoadingXHTML;
-ns1blankspace.loadingSmallXHTML = gsLoadingSmallXHTML
+ns1blankspace.loadingSmallXHTML = gsLoadingSmallXHTML;
+ns1blankspace.helpURL = 'http://community.mydigitalstructure.com';
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 
