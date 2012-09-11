@@ -566,7 +566,7 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 				
 				aHTML[++h] = '<td id="interfaceUserRoleEndpoint_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect endpoint"' +
 										' title="">' +
-										this.title + '</td>';
+										(this.title).toUpperCase() + '</td>';
 																		
 				aHTML[++h] = '</tr>'
 
@@ -588,8 +588,6 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 	}	
 	else if (iStep == 2)
 	{
-		//ns1blankspace.setup.currentEndpoint = iEndpoint;
-
 		if (oResponse == undefined)
 		{
 			var oSearch = new AdvancedSearch();
@@ -609,8 +607,6 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 
 	else if (iStep == 3)
 	{
-		//ns1blankspace.setup.currentMethods = oMethods;
-
 		if (oResponse == undefined)
 		{
 			$('#tdInterfaceMainSetupMethodAccessColumnMethod').html(gsLoadingSmallXHTML);
@@ -650,7 +646,7 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 			oSearch.addField('title,accessmethod,accessmethodtext,addavailable,removeavailable,updateavailable,useavailable');
 			oSearch.addFilter('accessmethod', 'IN_LIST', aIDs.join(','))
 			oSearch.rows = 50;
-			oSearch.sort('title', 'asc');
+			oSearch.sort('accessmethodtext', 'asc');
 			oSearch.getResults(function(data) {interfaceSetupUserRoleMethodAccess(aParam, data)})	
 		}
 		else
@@ -731,6 +727,9 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 		var sID; 
 		var sXHTMLElementID;
 		var aXHTMLElementID;
+		var aHTML = [];
+		var h = -1;
+		var bCan = false;
 
 		if (aParam != undefined)
 		{
@@ -742,20 +741,21 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 			aXHTMLElementID = sXHTMLElementID.split('-');
 		}	
 	
+		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+
 		if (oResponse != undefined)
 		{
-			if (oResponse.data.rows > 0)
+			if (oResponse.data.rows.length > 0)
 			{
 				sID = oResponse.data.rows[0].id;
 			}
+			else
+			{
+				aHTML[++h] = '<tr class="interfaceMainCaption">' +
+									'<td class="interfaceMainRowNothing">This role doesn\'t have access to this method.  Click Save to add it.</td></tr>';
+			}
 		}
 
-		var aHTML = [];
-		var h = -1;
-		var bCan = false;
-
-		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
-		
 		if (aXHTMLElementID[5] == 'Y')
 		{
 			bCan = true;			
@@ -853,10 +853,11 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 			var sData = 'id=' + interfaceMasterFormatSave(sID);
 			sData += '&role=' + interfaceMasterFormatSave(giObjectContext);
 			sData += '&access=' + interfaceMasterFormatSave(aXHTMLElementID[1]);
-			sData += '&canadd=' + interfaceMasterFormatSave($('input[name="radioCanAdd"]:checked').val());
-			sData += '&canremove=' + interfaceMasterFormatSave($('input[name="radioCanRemove"]:checked').val());
-			sData += '&canupdate=' + interfaceMasterFormatSave($('input[name="radioCanUpdate"]:checked').val());
-			sData += '&canuse=' + interfaceMasterFormatSave($('input[name="radioCanUse"]:checked').val());
+
+			sData += '&canadd=' + (interfaceMasterFormatSave($('input[name="radioCanAdd"]:checked').val()) != '' ? interfaceMasterFormatSave($('input[name="radioCanAdd"]:checked').val()) : 'N');
+			sData += '&canremove=' + (interfaceMasterFormatSave($('input[name="radioCanRemove"]:checked').val()) != '' ? interfaceMasterFormatSave($('input[name="radioCanRemove"]:checked').val()) : 'N');
+			sData += '&canupdate=' + (interfaceMasterFormatSave($('input[name="radioCanUpdate"]:checked').val()) != '' ? interfaceMasterFormatSave($('input[name="radioCanUpdate"]:checked').val()) : 'N');
+			sData += '&canuse=' + (interfaceMasterFormatSave($('input[name="radioCanUse"]:checked').val()) != '' ? interfaceMasterFormatSave($('input[name="radioCanUse"]:checked').val()) : 'N');
 
 			$.ajax(
 			{
