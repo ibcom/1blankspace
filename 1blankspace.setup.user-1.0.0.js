@@ -441,17 +441,6 @@ function interfaceSetupUserShow(oResponse)
 			
 		$('#divInterfaceViewportControlContext').html(sContext);
 		
-		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
-						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2x">' +
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';					
-		
-		$('#divInterfaceMainSummary').html(aHTML.join(''));
-		
 		interfaceSetupUserSummary();
 	}	
 }		
@@ -461,12 +450,26 @@ function interfaceSetupUserSummary()
 	var aHTML = [];
 	var h = -1;
 	
+	aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain" style="width:100%;">';
+	aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
+					'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
+					'</td>' +
+					'<td id="tdInterfaceMainSummaryColumn2Action" class="interfaceMainColumn2" style="width:150px;">' +
+					'</td>' +
+					'</tr>';
+	aHTML[++h] = '</table>';					
+	
+	$('#divInterfaceMainSummary').html(aHTML.join(''));
+
+	var aHTML = [];
+	var h = -1;
+
 	if (goObjectContext == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find user.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
 				
-		$('#divInterfaceMain').html(aHTML.join(''));
+		$('#divInterfaceMainSummary').html(aHTML.join(''));
 	}
 	else
 	{	
@@ -499,29 +502,38 @@ function interfaceSetupUserSummary()
 		
 		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainSummaryColumn1').html(aHTML.join(''));
+		$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
 
 		var aHTML = [];
 		var h = -1;	
 		
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2">';
+		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" style="width:150px;">';
 		
-		if (1==0 && goObjectContext.disabled == 'N')
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask1" class="interfaceMainSummary">' +
-						'<a href="#" id="aInterfaceMainSummaryDisable">Disable Access</a>' +
+		aHTML[++h] = '<tr><td id="tdInterfaceMainResetPassword">' +
+						'<span style="font-size:0.75em;" id="spanInterfaceMainResetPassword">Reset Password</span>' +
 						'</td></tr>';
-		}				
-										
-		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainSummaryColumn2').html(aHTML.join(''));
+		aHTML[++h] = '</table>';								
 		
-		$('#aInterfaceMainSummaryDisable').click(function(event)
+		$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));
+		
+		$('#spanInterfaceMainResetPassword').button(
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainDisable");
-			interfaceSetupUserDisable();
-		});
+			
+		})
+		.click(function() {
+				
+			$.ajax(
+			{
+				type: 'GET',
+				url: '/ondemand/setup/?method=SETUP_USER_MANAGE&password=&passwordexpiry=' + Date.today().add(-1).days().toString("dd-MMM-yyyy") +'&id=' + giObjectContext,
+				dataType: 'json',
+				async: false,
+				success: function(data) {
+						$('#tdInterfaceMainResetPassword').html('New password is <strong>' + data.password + '</strong>.');
+					}
+			});
+		})
 	}	
 }
 
@@ -550,15 +562,36 @@ function interfaceSetupUserDetails()
 	
 		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
 	
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsUsername" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDetailsUsername" class="interfaceMain">' +
+		aHTML[++h] = '<tr class="interfaceMain">' +
+						'<td class="interfaceMain">' +
 						'User Name (Logon Name)' +
 						'</td></tr>' +
-						'<tr id="trInterfaceMainDetailsUserNameValue" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainDetailsUserNameValue" class="interfaceMainText">' +
+						'<tr class="interfaceMainText">' +
+						'<td class="interfaceMainText">' +
 						'<input id="inputInterfaceMainDetailsUserName" class="inputInterfaceMainText">' +
 						'</td></tr>';
 		
+		if (giObjectContext == -1)
+		{
+			aHTML[++h] = '<tr class="interfaceMain">' +
+							'<td class="interfaceMain">' +
+							'First Name' +
+							'</td></tr>' +
+							'<tr class="interfaceMainText">' +
+							'<td class="interfaceMainText">' +
+							'<input id="inputInterfaceMainDetailsFirstName" class="inputInterfaceMainText">' +
+							'</td></tr>';
+
+			aHTML[++h] = '<tr class="interfaceMain">' +
+							'<td class="interfaceMain">' +
+							'Last Name' +
+							'</td></tr>' +
+							'<tr class="interfaceMainText">' +
+							'<td class="interfaceMainText">' +
+							'<input id="inputInterfaceMainDetailsLastName" class="inputInterfaceMainText">' +
+							'</td></tr>';			
+		}
+
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
@@ -577,8 +610,10 @@ function interfaceSetupUserDetails()
 						'<input type="radio" id="radioDisabledN" name="radioDisabled" value="N"/>No<br />' +
 						'<input type="radio" id="radioDisabledY" name="radioDisabled" value="Y"/>Yes' +
 						'</td></tr>';
-						
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsDisabledReason" class="interfaceMain">' +
+		
+		if (giObjectContext != -1)
+		{		
+			aHTML[++h] = '<tr id="trInterfaceMainDetailsDisabledReason" class="interfaceMain">' +
 						'<td id="tdInterfaceMainDetailsDisabledReason" class="interfaceMain">' +
 						'Disabled Reason' +
 						'</td></tr>' +
@@ -586,6 +621,7 @@ function interfaceSetupUserDetails()
 						'<td id="tdInterfaceMainDetailsDisabledReasonValue" class="interfaceMainTextMulti">' +
 						'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsDisabledReason" class="inputInterfaceMainTextMultiSmall"></textarea>' +
 						'</td></tr>';
+		}				
 		
 		aHTML[++h] = '</table>';					
 		
@@ -678,6 +714,7 @@ function interfaceSetupUserAccessRoles(aParam, oResponse)
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'SETUP_USER_ROLE_SEARCH';
 				oSearch.addField('roletext,role');
+				oSearch.addFilter('user', 'EQUAL_TO', giObjectContext)
 				oSearch.rows = 50;
 				oSearch.sort('roletext', 'asc');
 				oSearch.getResults(function(data) {interfaceSetupUserAccessRoles(aParam, data)})	
@@ -892,23 +929,109 @@ function interfaceSetupUserAccessRoleRemove(sXHTMLElementId)
 		});	
 }
 
-function interfaceSetupUserSave()
+function interfaceSetupUserSave(oResponse)
 {
-	var sParam = 'method=SETUP_USER_MANAGE';
-	var sData = '_=1';
-
 	interfaceMasterStatusWorking();
 
 	if (giObjectContext != -1)
 	{
+		interfaceSetupUserSaveProcess();
+	}
+	else
+	{
+		if (oResponse == undefined)
+		{	
+			if ($('#inputInterfaceMainDetailsUserName').val() == '' ||
+				$('#inputInterfaceMainDetailsFirstName').val() == '' ||
+				$('#inputInterfaceMainDetailsLastName').val() == '')
+			{
+				interfaceMasterStatusError('Missing information.');
+			}	
+			else
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.endPoint = 'contact';
+				oSearch.method = 'CONTACT_PERSON_SEARCH';
+				oSearch.addField('firstname');
+				oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.contactBusiness);
+				oSearch.addFilter('firstname', 'EQUAL_TO', $('#inputInterfaceMainDetailsFirstName').val());
+				oSearch.addFilter('surname', 'EQUAL_TO', $('#inputInterfaceMainDetailsLastName').val());
+				oSearch.getResults(interfaceSetupUserSave);
+			}
+		}
+		else	
+		{
+			if (oResponse.data.rows.length > 0)
+			{
+				interfaceSetupUserSaveProcess(
+				{
+					contactPerson: oResponse.data.rows[0].contactperson,
+					contactBusiness: ns1blankspace.contactBusiness
+				});		
+			}
+			else
+			{
+				var sData = 'contactbusiness=' + ns1blankspace.contactBusiness;
+				sData += '&firstname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsFirstName').val());
+				sData += '&surname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsLastName').val());
+
+				$.ajax(
+				{
+					type: 'POST',
+					url: interfaceMasterEndpointURL('CONTACT_PERSON_MANAGE'),
+					data: sData,
+					dataType: 'json',
+					success: function(data)
+						{
+							if (data.status == 'OK')
+							{
+								interfaceSetupUserSaveProcess(
+								{
+									contactPerson: data.id,
+									contactBusiness: ns1blankspace.contactBusiness
+								});	
+							}
+							else
+							{
+								interfaceMasterStatusError('Could not add user.')
+							}
+						}
+				});
+
+			}	
+		}
+	}
+}
+
+function interfaceSetupUserSaveProcess(aParam)
+{
+	var sParam = 'method=SETUP_USER_MANAGE';
+	var sData = '_=1';
+	var iContactBusiness = ns1blankspace.contactBusiness;
+	var iContactPerson;
+
+	if (aParam != undefined)
+	{
+		if (aParam.contactBusiness != undefined) {iContactBusiness = aParam.contactBusiness}
+		if (aParam.contactPerson != undefined) {iContactPerson = aParam.contactPerson}
+	}		
+
+	if (giObjectContext != -1)
+	{
 		sParam += '&id=' + giObjectContext	
-	}	
+	}
+	else
+	{
+		sData += '&contactbusiness=' + iContactBusiness;
+		sData += '&contactperson=' + iContactPerson;
+		sData += '&unrestrictedaccess=N';
+	}
 	
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		sData += '&username=' + encodeURIComponent($('#inputInterfaceMainDetailsUserName').val());
+		sData += '&username=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsUserName').val());
 		sData += '&disabled=' + $('input[name="radioDisabled"]:checked').val();
-		sData += '&disabledreason=' + encodeURIComponent($('#inputInterfaceMainDetailsDisabledReason').val());
+		sData += '&disabledreason=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDisabledReason').val());
 	};
 
 	if ($('#divInterfaceMainAccess').html() != '')
@@ -923,8 +1046,18 @@ function interfaceSetupUserSave()
 		type: 'POST',
 		url: '/ondemand/setup/setup.asp?' + sParam,
 		data: sData,
-		dataType: 'text',
-		success: interfaceMasterStatus('Saved')
+		dataType: 'json',
+		success: function(data)
+		{
+			interfaceMasterStatus('Saved.');
+			if (giObjectContext == -1) {var bNew = true}
+			giObjectContext = data.id;	
+			if (bNew)
+			{
+				interfaceMasterStatus('Initial password is ' + data.password);
+				interfaceSetupUserSearch('-' + giObjectContext);
+			}
+		}	
 	});		
 }
 

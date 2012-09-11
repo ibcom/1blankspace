@@ -1120,6 +1120,8 @@ function interfaceMasterViewportShow(oResponse)
 	ns1blankspace.space = oResponse.space;
 	ns1blankspace.userSpace = oResponse.space;
 	ns1blankspace.userSpaceText = oResponse.spacename
+	ns1blankspace.contactBusiness = oResponse.contactbusiness;
+	ns1blankspace.contactPerson = oResponse.contactperson;
 
 	gsUserName = oResponse.userlogonname;
 	gsUserID = oResponse.user;
