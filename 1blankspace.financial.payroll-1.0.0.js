@@ -594,7 +594,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 			
 		aHTML[++h] = '<table class="interfaceMainAccount" cellspacing=0 cellpadding=0>' +
 				'<tr id="trInterfaceMainPayrollEmployeeRow1" class="interfaceMainRow1">' +
-				'<td id="tdInterfaceMainPayrollEmployeeColumn1" style="width:100px;font-size:0.75em;">' +
+				'<td id="tdInterfaceMainPayrollEmployeeColumn1" style="width:125px;font-size:0.875em;padding-right:10px;">' +
 				'</td>' +
 				'<td id="tdInterfaceMainPayrollEmployeeColumn2" class="interfaceMainColumn2">' +
 				'</td>' +
@@ -607,9 +607,10 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		{
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
-			oSearch.addField('contactpersontext,employmentstartdate');
+			oSearch.addField('contactpersontext,employmentstartdate,statustext,employee.contactperson.firstname,employee.contactperson.surname');
+			oSearch.addFilter('status', 'EQUAL_TO', '2')
 			oSearch.rows = 50;
-			oSearch.sort('contactpersontext', 'asc');
+			oSearch.sort('employee.contactperson.firstname', 'asc');
 			oSearch.getResults(function(data) {interfaceFinancialPayrollEmployees(aParam, data)});
 		}
 		else
@@ -627,9 +628,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 			}
 			else
 			{
-				aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-			
-				aHTML[++h] = '<table id="tablePayrollEmployees" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+				aHTML[++h] = '<table cellpadding=6>';
 				aHTML[++h] = '<tbody>'
 			
 				var oRows = oResponse.data.rows;
@@ -688,7 +687,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 			
 			aHTML[++h] = '<table class="interfaceMainPayrollEmployeeDetails" cellspacing=0 cellpadding=0>' +
 					'<tr id="trInterfaceMainPayrollEmployeeDetailsRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainPayrollEmployeeDetailsColumn1" style="width:100px;font-size:0.75em;">' +
+					'<td id="tdInterfaceMainPayrollEmployeeDetailsColumn1" style="width:50px;font-size:0.875em;padding-right:10px;">' +
 					'</td>' +
 					'<td id="tdInterfaceMainPayrollEmployeeDetailsColumn2" class="interfaceMainColumn2">' +
 					'</td>' +
@@ -700,30 +699,25 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 			var aHTML = [];
 			var h = -1;
 
-			aHTML[++h] = '<div id="interfaceMainPayrollEmployeeDetails" style="width: 125px;margin-bottom:3px;text-align:right;">';
-			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-11" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-11" style="width: 125px;text-align:left;">Details</label>';
+			aHTML[++h] = '<table cellpadding=6>';
 
-			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-12" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-12" style="width: 125px;text-align:left;">Payroll</label>';
-	
-			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-13" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-13" style="width: 125px;text-align:left;">Pay Rates</label>';
-	
-			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-14" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-14" style="width: 125px;text-align:left;">Bank&nbsp;Accounts</label>';
-		
-			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-15" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-15" style="width: 125px;text-align:left;">Superannuation</label>';
-			
-			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-16" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-16" style="width: 125px;text-align:left;">Leave</label>';
-			
-			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-17" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-17" style="width: 125px;text-align:left;">Role</label>';
-				
-			aHTML[++h] = '<input type="radio" id="interfaceMainPayrollEmployeeDetails-18" name="radioDetails" /><label for="interfaceMainPayrollEmployeeDetails-18" style="width: 125px;text-align:left;">Induction</label>';
-				
-			aHTML[++h] = '</div>';
+			aHTML[++h] = '<tr class="interfaceMainRow">';		
+			aHTML[++h] = '<td id="interfaceFinancialEmployee_details-11" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
+									'Details</td>';
+			aHTML[++h] = '</tr>';
+
+			aHTML[++h] = '<tr class="interfaceMainRow">';
+			aHTML[++h] = '<td id="interfaceFinancialEmployee_details-12" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
+									'Payroll</td>';																					
+			aHTML[++h] = '</tr>';
+
+			aHTML[++h] = '</table>';
 
 			$('#tdInterfaceMainPayrollEmployeeDetailsColumn1').html(aHTML.join(''));
 	
-			$('#interfaceMainPayrollEmployeeDetails').buttonset().css('font-size', '0.8em');
+			//$('#interfaceMainPayrollEmployeeDetails').buttonset().css('font-size', '0.8em');
 		
-			$('#interfaceMainPayrollEmployeeDetails :radio').click(function()
+			$('.employeedetails').click(function()
 			{
 				var aID = (event.target.id).split('-');
 				$.extend(true, aParam, {step: parseInt(aID[1])});
@@ -795,7 +789,7 @@ function interfaceFinancialPayrollEmployeesRow(oRow)
 		aHTML[++h] = '<tr class="interfaceMainRow">';
 				
 		aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect employee">' +
-								oRow.contactpersontext + '</td>';
+								oRow["employee.contactperson.firstname"] + ' ' + oRow["employee.contactperson.surname"] + '</td>';
 	
 		aHTML[++h] = '</tr>'
 	}
@@ -846,7 +840,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 						
 		aHTML[++h] = '<table class="interfaceMain">' +
 					'<tr class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainFinancialPayrollColumnList" style="width:150px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn">' +
+					'<td id="tdInterfaceMainFinancialPayrollColumnList" style="width:150px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumnX">' +
 					gsLoadingXHTML + '</td>' +
 					'<td id="tdInterfaceMainFinancialPayrollColumnPay" style="width:200px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn2">' +
 					'</td>' +
@@ -899,7 +893,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			var aHTML = [];
 			var h = -1;
 	
-			aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain" style="width:100%;">';
 			aHTML[++h] = '<tbody>';
 		
 			if (oResponse.data.rows.length == 0)
