@@ -188,15 +188,8 @@ function interfaceContactPersonHomeShow(oResponse)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = 'contact';
-		oSearch.method = 'CONTACT_PERSON_SEARCH';
-		
+		oSearch.method = 'CONTACT_PERSON_SEARCH';		
 		oSearch.addField('firstname,surname');
-		
-		//Could add a switch to show the users favourites only
-		//oSearch.addFilter('', 'IS_FAVOURITE', '');
-		
-		oSearch.async = false;
-		oSearch.rf = 'json';
 		oSearch.rows = 10;
 		oSearch.sort('modifieddate', 'desc');
 		
