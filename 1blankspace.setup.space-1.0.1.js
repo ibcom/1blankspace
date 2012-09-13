@@ -394,7 +394,7 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 					$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 					$.extend(true, aParam, {step: 1});
 					interfaceSetupFinancialBankAccount(aParam);
-					interfaceMasterStatus('Saved');
+					interfaceMasterStatus('Removed');
 				}
 				else
 				{

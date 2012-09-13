@@ -165,7 +165,8 @@ function interfaceFinancialPayrollHomeShow(aParam, oResponse)
 		
 		aHTML[++h] = '<div id="divInterfaceMainPayRun" class="divInterfaceViewportMain"></div>';
 		aHTML[++h] = '<div id="divInterfaceMainEmployee" class="divInterfaceViewportMain"></div>';
-	
+		aHTML[++h] = '<div id="divInterfaceMainNew" class="divInterfaceViewportMain"></div>';
+
 		$('#divInterfaceMain').html(aHTML.join(''));
 	
 		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
@@ -573,20 +574,26 @@ function interfaceFinancialPayrollDetails(aParam)
 
 function interfaceFinancialPayrollEmployees(aParam, oResponse)
 {
-	
 	var iStep = 1;
+	var iStepAction = 1;
 	var iEmployee;
-	
+	var iID;
+	var sXHTMLElementID;
+
 	if (aParam != undefined)
 	{
 		if (aParam.step != undefined) {iStep = aParam.step};
+		if (aParam.stepAction != undefined) {iStepAction = aParam.stepAction};
 		if (aParam.employee != undefined) {iEmployee = aParam.employee};
+		if (aParam.id != undefined) {iID = aParam.id};
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
 	}
 	else
 	{
-		aParam = {};
+		aParam = {step: 1};
 	}
 	
+	//EMPLOYEES
 	if (iStep == 1)	
 	{
 		var aHTML = [];
@@ -628,7 +635,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 			}
 			else
 			{
-				aHTML[++h] = '<table cellpadding=6>';
+				aHTML[++h] = '<table id="tableEmployees" cellpadding=6>';
 				aHTML[++h] = '<tbody>'
 			
 				var oRows = oResponse.data.rows;
@@ -656,7 +663,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		   	}); 
 			
 			$('.employee').click(function() {
-				$('.Highlight').removeClass('Highlight');
+				$('#tableEmployees td.Highlight').removeClass('Highlight');
 				$('#' + event.target.id).addClass('Highlight');
 				var aID = (event.target.id).split('-');
 				$.extend(true, aParam, {step: 2, employee: parseInt(aID[1])});
@@ -665,6 +672,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		}
 	}
 	
+	//EMPLOYEE DETAILS
 	if (iStep == 2)
 	{
 		if (oResponse == undefined)
@@ -699,7 +707,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 			var aHTML = [];
 			var h = -1;
 
-			aHTML[++h] = '<table cellpadding=6>';
+			aHTML[++h] = '<table id="tableEmployeeDetails" cellpadding=6>';
 
 			aHTML[++h] = '<tr class="interfaceMainRow">';		
 			aHTML[++h] = '<td id="interfaceFinancialEmployee_details-11" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
@@ -711,14 +719,41 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 									'Payroll</td>';																					
 			aHTML[++h] = '</tr>';
 
+			aHTML[++h] = '<tr class="interfaceMainRow">';
+			aHTML[++h] = '<td id="interfaceFinancialEmployee_details-13" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
+									'Pay Rates</td>';																					
+			aHTML[++h] = '</tr>';
+
+			aHTML[++h] = '<tr class="interfaceMainRow">';
+			aHTML[++h] = '<td id="interfaceFinancialEmployee_details-14" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
+									'Bank&nbsp;Accounts</td>';																					
+			aHTML[++h] = '</tr>';
+
+
+			aHTML[++h] = '<tr class="interfaceMainRow">';
+			aHTML[++h] = '<td id="interfaceFinancialEmployee_details-15" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
+									'Superannuation</td>';																					
+			aHTML[++h] = '</tr>';
+
+
+			aHTML[++h] = '<tr class="interfaceMainRow">';
+			aHTML[++h] = '<td id="interfaceFinancialEmployee_details-16" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
+									'Role</td>';																					
+			aHTML[++h] = '</tr>';
+
+			aHTML[++h] = '<tr class="interfaceMainRow">';
+			aHTML[++h] = '<td id="interfaceFinancialEmployee_details-16" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
+									'Induction</td>';																					
+			aHTML[++h] = '</tr>';
+
 			aHTML[++h] = '</table>';
 
 			$('#tdInterfaceMainPayrollEmployeeDetailsColumn1').html(aHTML.join(''));
-	
-			//$('#interfaceMainPayrollEmployeeDetails').buttonset().css('font-size', '0.8em');
 		
 			$('.employeedetails').click(function()
 			{
+				$('#tableEmployeeDetails td.Highlight').removeClass('Highlight');
+				$('#' + event.target.id).addClass('Highlight');
 				var aID = (event.target.id).split('-');
 				$.extend(true, aParam, {step: parseInt(aID[1])});
 				interfaceFinancialPayrollEmployees(aParam);
@@ -768,9 +803,272 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		}
 	}
 	
-	if (iStep == 13)
+	if (iStep == 12)
 	{
 		$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html('FINANCIAL_PAYROLL_EMPLOYEE_PAYRATE_SEARCH');
+	}
+
+	if (iStep == 13)
+	{
+		if (iStepAction == 4)
+		{
+			var aXHTMLElementID = sXHTMLElementID.split('-');
+			
+			$.ajax(
+			{
+				type: 'POST',
+				url: '/ondemand/financial/?method=FINANCIAL_PAYROLL_EMPLOYEE_PAYRATE_MANAGE',
+				data: 'remove=1&id=' + aXHTMLElementID[1],
+				dataType: 'json',
+				success: function(data)
+				{
+					if (data.status == 'OK')
+					{
+						$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+						$.extend(true, aParam, {stepAction: 1});
+						interfaceFinancialPayrollEmployees(aParam);
+						interfaceMasterStatus('Removed');
+					}
+					else
+					{
+						interfaceMasterError(data.error.errornotes);
+					}
+				}
+			});
+
+		}
+		else
+		{
+			if ((iStepAction == 1 || iStepAction == 2) && (oResponse == undefined))
+			{
+				$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(ns1blankspace.loadingSmallXHTML);
+
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_PAYRATE_SEARCH';		
+				
+				if (iStepAction == 1)
+				{	
+					oSearch.addField('employmenttype,employmenttypetext,enddate,notes,rate,startdate');
+					oSearch.addFilter('employee', 'EQUAL_TO', iEmployee)
+					oSearch.rows = 50;
+					oSearch.sort('startdate', 'desc');
+				}
+				else
+				{
+					oSearch.addField('employmenttype,employmenttypetext,enddate,notes,rate,startdate');
+					oSearch.addFilter('id', 'EQUAL_TO', iID)
+				}	
+
+				oSearch.getResults(function(data){interfaceFinancialPayrollEmployees(aParam, data)});
+			}
+			else
+			{
+				var aHTML = [];
+				var h = -1;
+			
+				aHTML[++h] = '<table style="width:100%">' +
+								'<tr>' +
+								'<td id="tdInterfaceMainPayrollEmployeeDetailsPayRateColumn1" style="font-size:0.875em;>' +
+								gsLoadingXHTML +
+								'</td>' +
+								'<td id="tdInterfaceMainPayrollEmployeeDetailsPayRateColumn2" class="interfaceMainColumn2" style="width:75px;">' +
+								'</td>' +
+								'</tr></table>';				
+			
+				$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+			
+				var aHTML = [];
+				var h = -1;
+
+				if (iStepAction == 1)
+				{
+					$('#tdInterfaceMainPayrollEmployeeDetailsPayRateColumn2').html('<span id="spanPayrollEmployee_options_add" class="interfaceMainRowOptionsAdd" style="font-size:0.75em;">Add</span>');
+
+					$('#spanPayrollEmployee_options_add').button(
+					{
+						text: "Add"
+					})
+					.click(function() {
+						$.extend(true, aParam, {stepAction: 2, xhtmlElementID: ""});
+						interfaceFinancialPayrollEmployees(aParam);
+					})
+					.css('font-size', '0.75em');
+				
+					if (oResponse.data.rows.length == 0)
+					{
+						aHTML[++h] = '<table>';
+						aHTML[++h] = '<tr>';
+						aHTML[++h] = '<td class="interfaceMainRowNothing">No pay rates.</td>';
+						aHTML[++h] = '</tr>';
+						aHTML[++h] = '</table>';
+
+						$('#ttdInterfaceMainPayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
+					}
+					else
+					{			
+						aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+						aHTML[++h] = '<tbody>'
+				
+						aHTML[++h] = '<tr class="interfaceMainCaption">';
+						aHTML[++h] = '<td class="interfaceMainCaption">Start Date</td>';
+						aHTML[++h] = '<td class="interfaceMainCaption">End Date</td>';
+						aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Rate</td>';
+						aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+						aHTML[++h] = '</tr>';
+
+						$(oResponse.data.rows).each(function() 
+						{
+							aHTML[++h] = '<tr class="interfaceMainRow">';
+							
+							aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsPayRate_StartDate-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate">' +
+													this.startdate + '</td>';
+												
+							aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsPayRate_EndDate-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate">' +
+													this.enddate + '</td>';
+									
+							aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsPayRate_EndDate-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate" style="text-align:right;">' +
+													this.rate + '</td>';
+																								
+							aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+							
+							aHTML[++h] = '<span id="spanSubscription_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+								
+							aHTML[++h] = '</td>';				
+																			
+							aHTML[++h] = '</tr>'
+						});
+						
+						aHTML[++h] = '</tbody></table>';
+					}
+					
+					$('#tdInterfaceMainPayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
+
+					$('.interfaceMainRowOptionsRemove').button(
+					{
+						text: false,
+						icons: {
+							primary: "ui-icon-close"
+						}
+					})
+					.click(function() {
+						$.extend(true, aParam, {stepAction: 4, xhtmlElementID: this.id});
+						interfaceFinancialPayrollEmployees(aParam);
+					})
+					.css('width', '15px')
+					.css('height', '17px');
+
+					$('.payrate').click(function() {
+						$.extend(true, aParam, {stepAction: 2, xhtmlElementID: event.target.id});
+						interfaceFinancialPayrollEmployees(aParam);
+					})
+				}
+				else
+				{
+					aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain" style="padding-right:15px;">';
+		
+					aHTML[++h] = '<tr><td class="interfaceMain">Start Date</td></tr>' +
+									'<tr><td>' +
+									'<input id="inputInterfacePayrollEmployeeDetailsPayRateStartDate" class="inputInterfaceMainDate">' +
+									'</td></tr>';	
+
+					aHTML[++h] = '<tr><td class="interfaceMain">End Date</td></tr>' +
+									'<tr><td>' +
+									'<input id="inputInterfacePayrollEmployeeDetailsPayRateEndDate" class="inputInterfaceMainDate">' +
+									'</td></tr>';
+
+					aHTML[++h] = '<tr><td class="interfaceMain">Rate Amount</td></tr>' +
+									'<tr><td>' +
+									'<input id="inputInterfacePayrollEmployeeDetailsPayRateAmount" class="inputInterfaceMainText">' +
+									'</td></tr>';				
+
+					aHTML[++h] = '</table>';
+
+					$('#tdInterfaceMainPayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
+
+					$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
+
+					var aHTML = [];
+					var h = -1;
+
+					aHTML[++h] = '<table class="interfaceMain" style="font-size:0.875em">' +
+									'<tr iclass="interfaceMainAction">' +
+									'<td class="interfaceMainAction">' +
+									'<span style="width:70px;" id="spanPayrollEmployee_options_save">Save</span>' +
+									'</td></tr>' +
+									'<tr class="interfaceMainAction">' +
+									'<td class="interfaceMainAction">' +
+									'<span style="width:70px;" id="spanPayrollEmployee_options_cancel">Cancel</span>' +
+									'</td></tr>' +
+									'</table>';	
+
+					$('#tdInterfaceMainPayrollEmployeeDetailsPayRateColumn2').html(aHTML.join(''));
+
+					$('#spanPayrollEmployee_options_save').button(
+					{
+						text: "Save"
+					})
+					.click(function() 
+					{
+						interfaceMasterStatusWorking();
+
+						var sData = 'id=' + interfaceMasterFormatSave(iID);
+						if (iID == undefined)
+						{
+							sData += '&employee=' + interfaceMasterFormatSave(iEmployee);
+						}	
+						sData += '&startdate=' + interfaceMasterFormatSave($('#inputInterfacePayrollEmployeeDetailsPayRateStartDate').val());
+						sData += '&enddate=' + interfaceMasterFormatSave($('#inputInterfacePayrollEmployeeDetailsPayRateEndDate').val());
+						sData += '&rate=' + interfaceMasterFormatSave($('#inputInterfacePayrollEmployeeDetailsPayRateAmount').val());
+
+						$.ajax(
+						{
+							type: 'POST',
+							url: '/ondemand/financial/?method=FINANCIAL_PAYROLL_EMPLOYEE_PAYRATE_MANAGE',
+							data: sData,
+							dataType: 'json',
+							success: function(data) {
+								if (data.status == "OK")
+								{
+									interfaceMasterStatus('Saved');
+									$.extend(true, aParam, {stepAction: 1});
+									interfaceFinancialPayrollEmployees(aParam);
+								}
+								else
+								{
+									interfaceMasterError(data.error.errornotes);
+								}
+							}
+						});
+					});
+
+					$('#spanPayrollEmployee_options_cancel').button(
+					{
+						text: "Cancel"
+					})
+					.click(function() 
+					{
+						$.extend(true, aParam, {stepAction: 1});
+						interfaceFinancialPayrollEmployees(aParam);
+					});
+					
+					if (oResponse != undefined)
+					{	
+						if (oResponse.data.rows.length != 0)
+						{
+							var oObjectContext = oResponse.data.rows[0];
+							
+							$('#inputInterfacePayrollEmployeeDetailsPayRateStartDate').val(oObjectContext.startdate);
+							$('#inputInterfacePayrollEmployeeDetailsPayRateEndDate').val(oObjectContext.enddate);
+							$('#inputInterfacePayrollEmployeeDetailsPayRateAmount').val(oObjectContext.rate);
+						}
+						else
+						{
+						}
+					}	
+
+				}
+			}
+		}			
 	}
 	
 	if (iStep == 14)
@@ -797,22 +1095,221 @@ function interfaceFinancialPayrollEmployeesRow(oRow)
 	return aHTML.join('');
 }
 
+function interfaceFinancialPayrollSave()
+{
+	if ($('#tdInterfaceViewportControlPayRuns').hasClass('interfaceViewportControlHighlight'))
+	{
+		$.ajax(
+		{
+			type: 'POST',
+			url: interfaceMasterEndpointURL('FINANCIAL_PAYROLL_PAY_PROCESS'),
+			data: 'type=1',
+			dataType: 'json',
+			success: function(data) {
+				if (data.status == 'OK')
+				{	
+					giObjectContext = data.period;
+					interfaceFinancialPayrollSearch('-' + giObjectContext);
+				}	
+			}
+		});
+	}
+	else
+	{
+
+	}	
+}
+
 function interfaceFinancialPayrollNew()
 {
+	var aHTML = [];
+	var h = -1;
+	
+	interfaceMasterMainViewportShow("#divInterfaceMainNew");
+
+	aHTML[++h] = '<table style="width:100%">' +
+					'<tr>' +
+					'<td id="tdInterfaceMainPayrollNewColumn1">' +
+					gsLoadingXHTML +
+					'</td>' +
+					'<td id="tdInterfaceMainPayrollNewColumn2" class="interfaceMainColumn2" style="font-size:0.75em">' +
+					'</td>' +
+					'</tr></table>';				
+
+	$('#divInterfaceMainNew').html(aHTML.join(''));
+
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<table class="interfaceMain" style="font-size:0.875em">' +
+						'<tr><td>' +
+						'<span style="width:70px;" id="spanPayrollNew_options_save">Next</span>' +
+						'</td></tr>' +
+						'<tr><td>' +
+						'<span style="width:70px;" id="spanPayrollNew_options_cancel">Cancel</span>' +
+						'</td></tr>' +
+						'</table>';	
+
+	$('#tdInterfaceMainPayrollNewColumn2').html(aHTML.join(''));
+
+	$('#spanPayrollNew_options_save').button(
+	{
+		text: "Next"
+	})
+	.click(function() 
+	{
+		interfaceFinancialPayrollSave();
+	});
+
+	$('#spanPayrollNew_options_cancel').button(
+	{
+		text: "Cancel"
+	})
+	.click(function() 
+	{
+		$('td.interfaceViewportControlHighlight :first').click();
+	});
+
+	var aHTML = [];
+	var h = -1;
+
+	if ($('#tdInterfaceViewportControlPayRuns').hasClass('interfaceViewportControlHighlight'))
+	{
+
+	}
+	else
+	{	
+		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain" style="padding-right:15px;">';
+
+		aHTML[++h] = '<tr class="interfaceMain">' +
+						'<td class="interfaceMain">' +
+						'First Name' +
+						'</td></tr>' +
+						'<tr class="interfaceMainText">' +
+						'<td class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsFirstName" class="inputInterfaceMainText">' +
+						'</td></tr>';
+
+		aHTML[++h] = '<tr class="interfaceMain">' +
+						'<td class="interfaceMain">' +
+						'Last Name' +
+						'</td></tr>' +
+						'<tr class="interfaceMainText">' +
+						'<td class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsLastName" class="inputInterfaceMainText">' +
+						'</td></tr>';			
+		
+		aHTML[++h] = '</table>';					
+	
+		$('#tdInterfaceMainPayrollNewColumn1').html(aHTML.join(''));
+	}
+
+}
+
+function interfaceFinancialPayrollSave(oResponse)
+{
+
+	interfaceMasterStatusWorking();
+
+	if ($('#tdInterfaceViewportControlPayRuns').hasClass('interfaceViewportControlHighlight'))
+	{
+
+	}
+	else
+	{
+		if (oResponse == undefined)
+		{	
+			if ($('#inputInterfaceMainDetailsFirstName').val() == '' ||
+				$('#inputInterfaceMainDetailsLastName').val() == '')
+			{
+				interfaceMasterError('Missing information.');
+			}	
+			else
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'CONTACT_PERSON_SEARCH';
+				oSearch.addField('firstname');
+				oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.contactBusiness);
+				oSearch.addFilter('firstname', 'EQUAL_TO', $('#inputInterfaceMainDetailsFirstName').val());
+				oSearch.addFilter('surname', 'EQUAL_TO', $('#inputInterfaceMainDetailsLastName').val());
+
+				oSearch.getResults(interfaceFinancialPayrollSave);
+			}
+		}
+		else	
+		{
+			if (oResponse.data.rows.length > 0)
+			{
+				interfaceFinancialPayrollSaveProcess(
+				{
+					contactPerson: oResponse.data.rows[0].contactperson,
+					contactBusiness: ns1blankspace.contactBusiness
+				});		
+			}
+			else
+			{
+				var sData = 'contactbusiness=' + ns1blankspace.contactBusiness;
+				sData += '&firstname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsFirstName').val());
+				sData += '&surname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsLastName').val());
+
+				$.ajax(
+				{
+					type: 'POST',
+					url: interfaceMasterEndpointURL('CONTACT_PERSON_MANAGE'),
+					data: sData,
+					dataType: 'json',
+					success: function(data)
+						{
+							if (data.status == 'OK')
+							{
+								interfaceFinancialPayrollSaveProcess(
+								{
+									contactPerson: data.id,
+									contactBusiness: ns1blankspace.contactBusiness
+								});	
+							}
+							else
+							{
+								interfaceMasterError('Could not add employee.')
+							}
+						}
+				});
+			}	
+		}
+	}
+}
+
+function interfaceFinancialPayrollSaveProcess(aParam)
+{
+	var iContactBusiness = ns1blankspace.contactBusiness;
+	var iContactPerson;
+	var iID;
+	var sData;
+
+	if (aParam != undefined)
+	{
+		if (aParam.contactBusiness != undefined) {iContactBusiness = aParam.contactBusiness}
+		if (aParam.contactPerson != undefined) {iContactPerson = aParam.contactPerson}
+	}		
+
+	sData = 'id=' + interfaceMasterFormatSave(iID);
+	sData += '&contactbusiness=' + iContactBusiness;
+	sData += '&contactperson=' + iContactPerson;
+	sData += '&status=1';
+	
 	$.ajax(
 	{
 		type: 'POST',
-		url: interfaceMasterEndpointURL('FINANCIAL_PAYROLL_PAY_PROCESS'),
-		data: 'type=1',
+		url: '/ondemand/financial/?method=FINANCIAL_PAYROLL_EMPLOYEE_MANAGE',
+		data: sData,
 		dataType: 'json',
-		success: function(data) {
-			if (data.status == 'OK')
-			{	
-				giObjectContext = data.period;
-				interfaceFinancialPayrollSearch('-' + giObjectContext);
-			}	
-		}
-	});
+		success: function(data)
+		{
+			interfaceMasterStatus('Saved.');
+			interfaceMasterMainViewportShow("#divInterfaceMainEmployee");
+			interfaceFinancialPayrollEmployees();
+		}	
+	});		
 }
 
 function interfaceFinancialPayrollPays(aParam, oResponse)
@@ -911,7 +1408,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 					aHTML[++h] = '<td id="interfaceFinancialPay_Name-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect pay"' +
 											' data-employeeText="' + this["payrecord.employee.contactpersontext"] + '">' +
 											this["payrecord.employee.contactpersontext"] + '</td>';
-									
+										
 					aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
 					aHTML[++h] = '<span id="spanFinancialPay_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
 					aHTML[++h] = '</td>';					
@@ -924,7 +1421,9 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		
 			$('#tdInterfaceMainFinancialPayrollColumnList').html(aHTML.join(''));
 
-			$('.interfaceMainRowOptionsRemove').button(
+			if (goObjectContext.status == "1")
+			{
+				$('.interfaceMainRowOptionsRemove').button(
 				{
 					text: false,
 				 	icons: {primary: "ui-icon-close"}
@@ -935,6 +1434,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 				})
 				.css('width', '15px')
 				.css('height', '20px')
+			}
 
 			$('td.pay').click(function()
 			{
@@ -1032,6 +1532,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
 			aHTML[++h] = '<td class="interfaceMainCaption">Type</td>';
 			aHTML[++h] = '<td class="interfaceMainCaption">Hours</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
 			aHTML[++h] = '</tr>';
 			
 			$(oResponse.data.rows).each(function()
@@ -1054,6 +1555,21 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			aHTML[++h] = '</tbody></table>';
 		
 			$('#tdInterfaceMainFinancialPayrollColumnItem').html(aHTML.join(''));
+
+			if (goObjectContext.status == "1")
+			{
+				$('.interfaceMainRowOptionsRemove').button(
+				{
+					text: false,
+				 	icons: {primary: "ui-icon-close"}
+				})
+				.click(function() {
+					$.extend(true, aParam, {step: 5, xhtmlElementID: event.target.id});
+					///interfaceSetupFinancialPayrollPays(this.id)
+				})
+				.css('width', '15px')
+				.css('height', '20px')
+			}
 		}
 	}
 
