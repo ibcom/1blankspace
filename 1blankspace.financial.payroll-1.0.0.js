@@ -1792,27 +1792,30 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			$('#tdInterfaceMainFinancialPayrollColumnList').html(gsLoadingSmallXHTML);
 			$('#tdInterfaceMainFinancialPayrollColumnItem').html("");
 
-			var aHTML = [];
-			var h = -1;	
-			
-			aHTML[++h] = '<table id="tableInterfaceMainFinancialPayrollColumnAction" class="interfaceMainColumn2">';
-			aHTML[++h] = '<tr><td id="tdInterfaceMainFinancialPayrollAdd" class="interfaceMainAction">' +
-							'<span id="spanInterfaceMainFinancialPayrollAdd">Add</span>' +
-							'</td></tr>';
-											
-			aHTML[++h] = '</table>';					
-			
-			$('#tdInterfaceMainFinancialPayrollColumnListAction').html(aHTML.join(''));
-		
-			$('#spanInterfaceMainFinancialPayrollAdd').button(
+			if (goObjectContext.status == "1")
 			{
-				label: "Add"
-			})
-			.click(function()
-			{
-				$.extend(true, aParam, {step: 4, xhtmlElementID: ""});
-				interfaceSetupFinancialPayrollPays(aParam);
-			})
+				var aHTML = [];
+				var h = -1;	
+				
+				aHTML[++h] = '<table id="tableInterfaceMainFinancialPayrollColumnAction" class="interfaceMainColumn2">';
+				aHTML[++h] = '<tr><td id="tdInterfaceMainFinancialPayrollAdd" class="interfaceMainAction">' +
+								'<span id="spanInterfaceMainFinancialPayrollAdd">Add</span>' +
+								'</td></tr>';
+												
+				aHTML[++h] = '</table>';					
+				
+				$('#tdInterfaceMainFinancialPayrollColumnListAction').html(aHTML.join(''));
+			
+				$('#spanInterfaceMainFinancialPayrollAdd').button(
+				{
+					label: "Add"
+				})
+				.click(function()
+				{
+					$.extend(true, aParam, {step: 4, xhtmlElementID: ""});
+					interfaceSetupFinancialPayrollPays(aParam);
+				})
+			}
 
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
@@ -1905,12 +1908,45 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			$('#tdInterfaceMainFinancialPayrollColumnListAction').html(aHTML.join(''));
 			
 			var aHTML = [];
+			var h = -1;
+		
+			if (goObjectContext.status == "2") 
+			{
+				aHTML[++h] = '<div id="divInterfaceMainFinancialPayrollColumnItemType" style="width: 200px;margin-bottom:3px;">';
+				aHTML[++h] = '<input style="width: 95px;" type="radio" id="interfaceMainFinancialPayrollColumnItemType-3" name="radioType" checked="checked" /><label for="interfaceMainFinancialPayrollColumnItemType-3" style="width: 95px;">Time</label>';
+				aHTML[++h] = '<input style="width: 95px;"  type="radio" id="interfaceMainFinancialPayrollColumnItemType-5" name="radioType" /><label for="interfaceMainFinancialPayrollColumnItemType-5" style="width: 95px;">Expenses</label>';
+				aHTML[++h] = '</div>';
+			}
+
+			aHTML[++h] = '<div id="divInterfaceMainFinancialPayrollColumnItem" style="width: 200px;margin-bottom:3px;"></div>';
+
+			$('#tdInterfaceMainFinancialPayrollColumnItem').html(aHTML.join(''));
+
+			$('#divInterfaceMainFinancialPayrollColumnItemType').buttonset().css('font-size', '0.75em');
+
+			$('#divInterfaceMainFinancialPayrollColumnItemType :radio').click(function()
+			{
+				var aID = (event.target.id).split('-');
+				$.extend(true, aParam, {step: aID[0]});
+				interfaceFinancialPayrollPays(aParam);
+			});
+
+			var aHTML = [];
 			var h = -1;	
 			
 			aHTML[++h] = '<table id="tableInterfaceMainFinancialPayrollColumnAction" class="interfaceMainColumn2">';
-			aHTML[++h] = '<tr><td id="tdInterfaceMainFinancialPayrollAdd" class="interfaceMainAction">' +
+
+			if (goObjectContext.status == "1")
+			{
+				aHTML[++h] = '<tr><td id="tdInterfaceMainFinancialPayrollAdd" class="interfaceMainAction">' +
 							'<span id="spanInterfaceMainFinancialPayrollAdd">Add</span>' +
 							'</td></tr>';
+			}
+			else
+			{
+				aHTML[++h] = '<tr class="interfaceMainCaption">' +
+								'<td class="interfaceMainRowNothing">This pay has been completed.</td></tr>';
+			}				
 											
 			aHTML[++h] = '</table>';					
 			
@@ -1989,7 +2025,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 	{	
 		if (oResponse == undefined)
 		{
-			$('#tdInterfaceMainFinancialPayrollColumnItem').html(gsLoadingSmallXHTML);
+			$('#divInterfaceMainFinancialPayrollColumnItem').html(gsLoadingSmallXHTML);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_ITEM_SEARCH';
@@ -2032,7 +2068,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 				
 			aHTML[++h] = '</tbody></table>';
 		
-			$('#tdInterfaceMainFinancialPayrollColumnItem').html(aHTML.join(''));
+			$('#divInterfaceMainFinancialPayrollColumnItem').html(aHTML.join(''));
 
 			if (goObjectContext.status == "1")
 			{
@@ -2223,7 +2259,14 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			$('[name="radioPostable"][value="Y"]').attr('checked', true);
 		}
 	}
+
+	//EXPENSES
 	else if (iStep == 5)
+	{
+	
+	}
+
+	else if (iStep == 6)
 	{
 		if (oResponse.data.rows.length != 0)
 		{

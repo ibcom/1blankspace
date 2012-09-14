@@ -818,7 +818,7 @@ function interfaceMasterLogonProcess(oResponse)
 		{	
 			if (oResponse.url == '#' || gbLogonStayOnDocument)
 			{
-				document.location.reload();
+				document.location.reload(false);
 			}	
 			else
 			{
