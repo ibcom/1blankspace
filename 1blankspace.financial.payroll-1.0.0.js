@@ -691,11 +691,27 @@ function interfaceFinancialPayrollNew()
 
 }
 
-function interfaceFinancialPayrollHomeSave(oResponse)
+function interfaceFinancialPayrollHomeSave(aParam, oResponse)
 {
+	var iType;
+	var iID;
+
+	if (aParam != undefined)
+	{
+		if (aParam.type != undefined) {iType = aParam.type};
+		if (aParam.id != undefined) {iType = aParam.id};
+	}		
+
+	if (iType == undefined)
+	{	
+		if ($('#tdInterfaceViewportControlPayRuns').hasClass('interfaceViewportControlHighlight')) {iType = 1};
+		if ($('#tdInterfaceViewportControlEmployees').hasClass('interfaceViewportControlHighlight')) {iType = 2};
+	}
+
 	interfaceMasterStatusWorking();
 
-	if ($('#tdInterfaceViewportControlPayRuns').hasClass('interfaceViewportControlHighlight'))
+	//PAYS
+	if (iType == 1)
 	{
 		$.ajax(
 		{
@@ -713,67 +729,77 @@ function interfaceFinancialPayrollHomeSave(oResponse)
 			}
 		});
 	}
-	else
+
+	//EMPLOYEES
+	if (iType == 2)
 	{
-		if (oResponse == undefined)
+		if (iID == undefined)
 		{	
-			if ($('#inputInterfaceMainDetailsFirstName').val() == '' ||
-				$('#inputInterfaceMainDetailsLastName').val() == '')
-			{
-				interfaceMasterError('Missing information.');
-			}	
-			else
-			{
-				var oSearch = new AdvancedSearch();
-				oSearch.method = 'CONTACT_PERSON_SEARCH';
-				oSearch.addField('firstname');
-				oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.contactBusiness);
-				oSearch.addFilter('firstname', 'EQUAL_TO', $('#inputInterfaceMainDetailsFirstName').val());
-				oSearch.addFilter('surname', 'EQUAL_TO', $('#inputInterfaceMainDetailsLastName').val());
-
-				oSearch.getResults(interfaceFinancialPayrollSave);
-			}
-		}
-		else	
-		{
-			if (oResponse.data.rows.length > 0)
-			{
-				interfaceFinancialPayrollSaveProcess(
+			if (oResponse == undefined)
+			{	
+				if ($('#inputInterfaceMainDetailsFirstName').val() == '' ||
+					$('#inputInterfaceMainDetailsLastName').val() == '')
 				{
-					contactPerson: oResponse.data.rows[0].contactperson,
-					contactBusiness: ns1blankspace.contactBusiness
-				});		
-			}
-			else
-			{
-				var sData = 'contactbusiness=' + ns1blankspace.contactBusiness;
-				sData += '&firstname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsFirstName').val());
-				sData += '&surname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsLastName').val());
-
-				$.ajax(
+					interfaceMasterError('Missing information.');
+				}	
+				else
 				{
-					type: 'POST',
-					url: interfaceMasterEndpointURL('CONTACT_PERSON_MANAGE'),
-					data: sData,
-					dataType: 'json',
-					success: function(data)
-						{
-							if (data.status == 'OK')
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'CONTACT_PERSON_SEARCH';
+					oSearch.addField('firstname');
+					oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.contactBusiness);
+					oSearch.addFilter('firstname', 'EQUAL_TO', $('#inputInterfaceMainDetailsFirstName').val());
+					oSearch.addFilter('surname', 'EQUAL_TO', $('#inputInterfaceMainDetailsLastName').val());
+
+					oSearch.getResults(interfaceFinancialPayrollSave);
+				}
+			}
+			else	
+			{
+				if (oResponse.data.rows.length > 0)
+				{
+					interfaceFinancialPayrollSaveProcess(
+					{
+						contactPerson: oResponse.data.rows[0].contactperson,
+						contactBusiness: ns1blankspace.contactBusiness
+					});		
+				}
+				else
+				{
+					var sData = 'contactbusiness=' + ns1blankspace.contactBusiness;
+					sData += '&firstname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsFirstName').val());
+					sData += '&surname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsLastName').val());
+
+					$.ajax(
+					{
+						type: 'POST',
+						url: interfaceMasterEndpointURL('CONTACT_PERSON_MANAGE'),
+						data: sData,
+						dataType: 'json',
+						success: function(data)
 							{
-								interfaceFinancialPayrollHomeSaveProcess(
+								if (data.status == 'OK')
 								{
-									contactPerson: data.id,
-									contactBusiness: ns1blankspace.contactBusiness
-								});	
+									interfaceFinancialPayrollHomeSaveProcess(
+									{
+										contactPerson: data.id,
+										contactBusiness: ns1blankspace.contactBusiness
+									});	
+								}
+								else
+								{
+									interfaceMasterError('Could not add employee.')
+								}
 							}
-							else
-							{
-								interfaceMasterError('Could not add employee.')
-							}
-						}
-				});
-			}	
+					});
+				}	
+			}
 		}
+		else
+		{
+			//save employee.
+
+		}	
 	}
 }
 
@@ -815,7 +841,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 	var iStep = 1;
 	var iStepAction = 1;
 	var iEmployee;
-	var iID;
+	var iID = '';
 	var sXHTMLElementID;
 
 	if (aParam != undefined)
@@ -831,6 +857,11 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		aParam = {step: 1};
 	}
 	
+	if (sXHTMLElementID != undefined)
+	{
+		var aXHTMLElementID = sXHTMLElementID.split('-');
+	}
+		
 	//EMPLOYEES LIST
 	if (iStep == 1)	
 	{
@@ -909,6 +940,34 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 			});	
 		}
 	}
+
+	if (iStep == 11)
+	{
+		var aHTML = [];
+		var h = -1;
+
+		aHTML[++h] = '<table style="width:100%">' +
+						'<tr>' +
+						'<td id="tdInterfaceMainPayrollEmployeeDetailsEditColumn1" style="font-size:0.875em;padding-right:15px;>' +
+						gsLoadingXHTML +
+						'</td>' +
+						'<td id="tdInterfaceMainPayrollEmployeeDetailsEditColumn2" class="interfaceMainColumn2" style="width:75px;font-size:0.875em;">' +
+						'<span style="width:60px;font-size:0.75em;" id="spanPayrollEmployeeEdit_options_save">Save</span>' +
+						'</td>' +
+						'</tr></table>';				
+			
+		$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+
+		$('#spanPayrollEmployeeEdit_options_save').button(
+		{
+			text: "Save"
+		})
+		.click(function() 
+		{
+			interfaceMasterStatusWorking();
+		});	
+
+	}	
 	
 	//EMPLOYEE DETAILS
 	if (iStep == 2)
@@ -1031,7 +1090,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		
 		aHTML[++h] = '</table>';					
 			
-		$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+		$('#tdInterfaceMainPayrollEmployeeDetailsEditColumn1').html(aHTML.join(''));
 
 		if (ns1blankspace.financial.employee != undefined)
 		{
@@ -1232,8 +1291,6 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 	{
 		if (iStepAction == 4)
 		{
-			var aXHTMLElementID = sXHTMLElementID.split('-');
-			
 			$.ajax(
 			{
 				type: 'POST',
@@ -1276,7 +1333,8 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 				else
 				{
 					oSearch.addField('employmenttype,employmenttypetext,enddate,notes,rate,startdate');
-					oSearch.addFilter('id', 'EQUAL_TO', iID)
+					oSearch.addFilter('id', 'EQUAL_TO', aXHTMLElementID[1]);
+					aParam.id = aXHTMLElementID[1];
 				}	
 
 				oSearch.getResults(function(data){interfaceFinancialPayrollEmployees(aParam, data)});
@@ -1309,7 +1367,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 						text: "Add"
 					})
 					.click(function() {
-						$.extend(true, aParam, {stepAction: 3, xhtmlElementID: ""});
+						$.extend(true, aParam, {stepAction: 3, xhtmlElementID: "", id: ""});
 						interfaceFinancialPayrollEmployees(aParam);
 					})
 					.css('font-size', '0.75em');
@@ -1432,7 +1490,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 						interfaceMasterStatusWorking();
 
 						var sData = 'id=' + interfaceMasterFormatSave(iID);
-						if (iID == undefined)
+						if (iID == '')
 						{
 							sData += '&employee=' + interfaceMasterFormatSave(iEmployee);
 						}	
@@ -1450,7 +1508,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 								if (data.status == "OK")
 								{
 									interfaceMasterStatus('Saved');
-									$.extend(true, aParam, {stepAction: 1});
+									$.extend(true, aParam, {stepAction: 1, id: ''});
 									interfaceFinancialPayrollEmployees(aParam);
 								}
 								else
@@ -1495,9 +1553,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 	if (iStep == 14)
 	{
 		if (iStepAction == 4)
-		{
-			var aXHTMLElementID = sXHTMLElementID.split('-');
-			
+		{	
 			$.ajax(
 			{
 				type: 'POST',
@@ -1540,7 +1596,8 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 				else
 				{
 					oSearch.addField('accountname,accountnumber,bsb,percentage');
-					oSearch.addFilter('id', 'EQUAL_TO', iID)
+					oSearch.addFilter('id', 'EQUAL_TO', aXHTMLElementID[1])
+					aParam.id = aXHTMLElementID[1];
 				}	
 
 				oSearch.getResults(function(data){interfaceFinancialPayrollEmployees(aParam, data)});
@@ -1573,7 +1630,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 						text: "Add"
 					})
 					.click(function() {
-						$.extend(true, aParam, {stepAction: 3, xhtmlElementID: ""});
+						$.extend(true, aParam, {stepAction: 3, xhtmlElementID: "", id: ""});
 						interfaceFinancialPayrollEmployees(aParam);
 					})
 					.css('font-size', '0.75em');
@@ -1605,13 +1662,13 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 						{
 							aHTML[++h] = '<tr class="interfaceMainRow">';
 							
-							aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_Name-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate">' +
+							aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_Name-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect bankaccount">' +
 													this.accountname + '</td>';
 												
-							aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_BSB-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate">' +
+							aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_BSB-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect bankaccount">' +
 													this.bsb + '</td>';
 									
-							aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_Number-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate" style="text-align:right;">' +
+							aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_Number-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect bankaccount">' +
 													this.accountnumber + '</td>';
 
 							aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_Percentage-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate" style="text-align:right;">' +
@@ -1645,7 +1702,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 					.css('width', '15px')
 					.css('height', '17px');
 
-					$('.payrate').click(function() {
+					$('.bankaccount').click(function() {
 						$.extend(true, aParam, {stepAction: 2, xhtmlElementID: event.target.id});
 						interfaceFinancialPayrollEmployees(aParam);
 					})
@@ -1705,7 +1762,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 						interfaceMasterStatusWorking();
 
 						var sData = 'id=' + interfaceMasterFormatSave(iID);
-						if (iID == undefined)
+						if (iID == '')
 						{
 							sData += '&employee=' + interfaceMasterFormatSave(iEmployee);
 						}	
@@ -1724,7 +1781,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 								if (data.status == "OK")
 								{
 									interfaceMasterStatus('Saved');
-									$.extend(true, aParam, {stepAction: 1});
+									$.extend(true, aParam, {stepAction: 1, id: ''});
 									interfaceFinancialPayrollEmployees(aParam);
 								}
 								else
@@ -1753,8 +1810,8 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 							
 							$('#inputInterfacePayrollEmployeeDetailsBankAccountName').val(oObjectContext.accountname);
 							$('#inputInterfacePayrollEmployeeDetailsBankAccountBSB').val(oObjectContext.bsb);
-							$('#iinputInterfacePayrollEmployeeDetailsBankAccountNumber').val(oObjectContext.accountnumber);
-							$('#iinputInterfacePayrollEmployeeDetailsBankAccountPercentage').val(oObjectContext.percentage);
+							$('#inputInterfacePayrollEmployeeDetailsBankAccountNumber').val(oObjectContext.accountnumber);
+							$('#inputInterfacePayrollEmployeeDetailsBankAccountPercentage').val(oObjectContext.percentage);
 						}
 						else
 						{
