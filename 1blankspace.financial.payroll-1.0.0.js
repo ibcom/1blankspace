@@ -59,17 +59,17 @@ function interfaceFinancialPayrollMasterViewport(aParam)
 	
 	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
 	{
-		interfaceFinancialNewOptions();
+		interfaceFinancialPayrollNewOptions();
 	});
 	
 	$('#spanInterfaceMasterViewportControlAction').click(function(event)
 	{
-		interfaceFinancialSave();
+		interfaceFinancialPayrollSave();
 	});
 	
 	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
 	{
-		interfaceFinancialSaveOptions();
+		interfaceFinancialPayrollSaveOptions();
 	});
 	
 	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
@@ -137,7 +137,7 @@ function interfaceFinancialPayrollHomeShow(aParam, oResponse)
 		aHTML[++h] = '<table>';
 		
 		aHTML[++h] = '<tr id="trInterfaceViewportControlPayRuns" class="interfaceViewportControl">' +
-						'<td id="tdInterfaceViewportControlPayRuns" class="interfaceViewportControl interfaceViewportControlHighlight">Pay Runs</td>' +
+						'<td id="tdInterfaceViewportControlPayRuns" class="interfaceViewportControl interfaceViewportControlHighlight">Pays</td>' +
 						'</tr>';
 						
 		aHTML[++h] = '<tr id="trInterfaceViewportControlEmployees" class="interfaceViewportControl">' +
@@ -548,7 +548,15 @@ function interfaceFinancialPayrollDetails(aParam)
 					'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>In Progress' +
 					'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Completed' +
 					'</td></tr>';
-																																		
+		
+	aHTML[++h] = '<tr><td class="interfaceMain">Frequency</td></tr>' +
+						'<tr><td class="interfaceMainRadio">' +
+						'<input type="radio" id="radioFrequency1" name="radioFrequency" value="1"/>Weekly' +
+						'<br /><input type="radio" id="radioFrequency2" name="radioFrequency" value="2"/>Fortnightly' +
+						'<br /><input type="radio" id="radioFrequency3" name="radioFrequency" value="3"/>Monthly' +
+						'<br /><input type="radio" id="radioFrequency4" name="radioFrequency" value="4"/>Bi/Semi Monthly' +
+						'</td></tr>';
+																																							
 	aHTML[++h] = '</table>';					
 	
 	$('#tdInterfaceMainDetails').html(aHTML.join(''));
@@ -560,12 +568,246 @@ function interfaceFinancialPayrollDetails(aParam)
 		$('#inputInterfaceMainDetailsStartDate').val(goObjectContext.startdate);
 		$('#inputInterfaceMainDetailsPayDate').val(goObjectContext.paydate);
 		$('[name="radioStatus"][value="' + goObjectContext.status + '"]').attr('checked', true);
+		$('[name="radioFrequency"][value="' + goObjectContext.frequency + '"]').attr('checked', true);
 		$('#inputInterfaceMainDetailsNotes').val(goObjectContext.notes);	
+	}
+}
+
+function interfaceFinancialPayrollSave(aParam)
+{
+	if (giObjectContext != -1)
+	{
+		var sData = 'id=' + giObjectContext;
+		
+		if ($('#divInterfaceMainDetails').html() != '')
+		{
+			sData += '&startdate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsStartDate').val());
+			sData += '&paydate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPayDate').val());
+			//sData += '&frequency=' + $('input[name="radioFrequency"]:checked').val();
+			sData += '&status=' + $('input[name="radioStatus"]:checked').val();
+		};
+
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/financial/?method=FINANCIAL_PAYROLL_PAY_PERIOD_MANAGE',
+			data: sData,
+			dataType: 'json',
+			success: function(data)
+			{
+				interfaceMasterStatus('Saved.');
+			}	
+		});		
+	}	
+}
+
+
+function interfaceFinancialPayrollNew()
+{
+	var aHTML = [];
+	var h = -1;
+	
+	interfaceMasterMainViewportShow("#divInterfaceMainNew");
+
+	aHTML[++h] = '<table style="width:100%">' +
+					'<tr>' +
+					'<td id="tdInterfaceMainPayrollNewColumn1" style="width:50%">' +
+					gsLoadingXHTML +
+					'</td>' +
+					'<td id="tdInterfaceMainPayrollNewColumn2" class="interfaceMainColumn2" style="font-size:0.75em">' +
+					'</td>' +
+					'</tr></table>';				
+
+	$('#divInterfaceMainNew').html(aHTML.join(''));
+
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<table class="interfaceMain" style="font-size:0.875em">' +
+						'<tr><td>' +
+						'<span style="width:70px;" id="spanPayrollNew_options_save">Next</span>' +
+						'</td></tr>' +
+						'<tr><td>' +
+						'<span style="width:70px;" id="spanPayrollNew_options_cancel">Cancel</span>' +
+						'</td></tr>' +
+						'</table>';	
+
+	$('#tdInterfaceMainPayrollNewColumn2').html(aHTML.join(''));
+
+	$('#spanPayrollNew_options_save').button(
+	{
+		text: "Next"
+	})
+	.click(function() 
+	{
+		interfaceFinancialPayrollHomeSave();
+	});
+
+	$('#spanPayrollNew_options_cancel').button(
+	{
+		text: "Cancel"
+	})
+	.click(function() 
+	{
+		$('td.interfaceViewportControlHighlight :first').click();
+	});
+
+	var aHTML = [];
+	var h = -1;
+
+	if ($('#tdInterfaceViewportControlPayRuns').hasClass('interfaceViewportControlHighlight'))
+	{
+		aHTML[++h] = '<table><tr>' + 
+						'<td class="interfaceMainRowNothing">Just check that you want to create the next pay period.<br /><br />If you do, then please click Next.</td>' + 
+						'</tr>' +
+						'</table>';
+	}
+	else
+	{	
+		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain" style="padding-right:15px;">';
+
+		aHTML[++h] = '<tr class="interfaceMain">' +
+						'<td class="interfaceMain">' +
+						'First Name' +
+						'</td></tr>' +
+						'<tr class="interfaceMainText">' +
+						'<td class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsFirstName" class="inputInterfaceMainText">' +
+						'</td></tr>';
+
+		aHTML[++h] = '<tr class="interfaceMain">' +
+						'<td class="interfaceMain">' +
+						'Last Name' +
+						'</td></tr>' +
+						'<tr class="interfaceMainText">' +
+						'<td class="interfaceMainText">' +
+						'<input id="inputInterfaceMainDetailsLastName" class="inputInterfaceMainText">' +
+						'</td></tr>';			
+		
+		aHTML[++h] = '</table>';					
+	}
+
+	$('#tdInterfaceMainPayrollNewColumn1').html(aHTML.join(''));
+
+}
+
+function interfaceFinancialPayrollHomeSave(oResponse)
+{
+	interfaceMasterStatusWorking();
+
+	if ($('#tdInterfaceViewportControlPayRuns').hasClass('interfaceViewportControlHighlight'))
+	{
+		$.ajax(
+		{
+			type: 'POST',
+			url: interfaceMasterEndpointURL('FINANCIAL_PAYROLL_PAY_PROCESS'),
+			data: 'type=1',
+			dataType: 'json',
+			success: function(data) {
+				if (data.status == 'OK')
+				{	
+					interfaceMasterStatus('New pay period created.');
+					giObjectContext = data.period;
+					interfaceFinancialPayrollSearch('-' + giObjectContext);
+				}	
+			}
+		});
 	}
 	else
 	{
-		$('[name="radioStatus"][value="1"]').attr('checked', true);
+		if (oResponse == undefined)
+		{	
+			if ($('#inputInterfaceMainDetailsFirstName').val() == '' ||
+				$('#inputInterfaceMainDetailsLastName').val() == '')
+			{
+				interfaceMasterError('Missing information.');
+			}	
+			else
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'CONTACT_PERSON_SEARCH';
+				oSearch.addField('firstname');
+				oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.contactBusiness);
+				oSearch.addFilter('firstname', 'EQUAL_TO', $('#inputInterfaceMainDetailsFirstName').val());
+				oSearch.addFilter('surname', 'EQUAL_TO', $('#inputInterfaceMainDetailsLastName').val());
+
+				oSearch.getResults(interfaceFinancialPayrollSave);
+			}
+		}
+		else	
+		{
+			if (oResponse.data.rows.length > 0)
+			{
+				interfaceFinancialPayrollSaveProcess(
+				{
+					contactPerson: oResponse.data.rows[0].contactperson,
+					contactBusiness: ns1blankspace.contactBusiness
+				});		
+			}
+			else
+			{
+				var sData = 'contactbusiness=' + ns1blankspace.contactBusiness;
+				sData += '&firstname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsFirstName').val());
+				sData += '&surname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsLastName').val());
+
+				$.ajax(
+				{
+					type: 'POST',
+					url: interfaceMasterEndpointURL('CONTACT_PERSON_MANAGE'),
+					data: sData,
+					dataType: 'json',
+					success: function(data)
+						{
+							if (data.status == 'OK')
+							{
+								interfaceFinancialPayrollHomeSaveProcess(
+								{
+									contactPerson: data.id,
+									contactBusiness: ns1blankspace.contactBusiness
+								});	
+							}
+							else
+							{
+								interfaceMasterError('Could not add employee.')
+							}
+						}
+				});
+			}	
+		}
 	}
+}
+
+function interfaceFinancialPayrollHomeSaveProcess(aParam)
+{
+	var iContactBusiness = ns1blankspace.contactBusiness;
+	var iContactPerson;
+	var iID;
+	var sData;
+
+	if (aParam != undefined)
+	{
+		if (aParam.contactBusiness != undefined) {iContactBusiness = aParam.contactBusiness}
+		if (aParam.contactPerson != undefined) {iContactPerson = aParam.contactPerson}
+	}		
+
+	sData = 'id=' + interfaceMasterFormatSave(iID);
+	sData += '&contactbusiness=' + iContactBusiness;
+	sData += '&contactperson=' + iContactPerson;
+	sData += '&status=2';
+	
+	$.ajax(
+	{
+		type: 'POST',
+		url: '/ondemand/financial/?method=FINANCIAL_PAYROLL_EMPLOYEE_MANAGE',
+		data: sData,
+		dataType: 'json',
+		success: function(data)
+		{
+			interfaceMasterStatus('Saved.');
+			interfaceMasterMainViewportShow("#divInterfaceMainEmployee");
+			interfaceFinancialPayrollEmployees();
+		}	
+	});		
 }
 
 function interfaceFinancialPayrollEmployees(aParam, oResponse)
@@ -1543,215 +1785,6 @@ function interfaceFinancialPayrollEmployeesRow(oRow)
 	return aHTML.join('');
 }
 
-
-function interfaceFinancialPayrollNew()
-{
-	var aHTML = [];
-	var h = -1;
-	
-	interfaceMasterMainViewportShow("#divInterfaceMainNew");
-
-	aHTML[++h] = '<table style="width:100%">' +
-					'<tr>' +
-					'<td id="tdInterfaceMainPayrollNewColumn1" style="width:50%">' +
-					gsLoadingXHTML +
-					'</td>' +
-					'<td id="tdInterfaceMainPayrollNewColumn2" class="interfaceMainColumn2" style="font-size:0.75em">' +
-					'</td>' +
-					'</tr></table>';				
-
-	$('#divInterfaceMainNew').html(aHTML.join(''));
-
-	var aHTML = [];
-	var h = -1;
-
-	aHTML[++h] = '<table class="interfaceMain" style="font-size:0.875em">' +
-						'<tr><td>' +
-						'<span style="width:70px;" id="spanPayrollNew_options_save">Next</span>' +
-						'</td></tr>' +
-						'<tr><td>' +
-						'<span style="width:70px;" id="spanPayrollNew_options_cancel">Cancel</span>' +
-						'</td></tr>' +
-						'</table>';	
-
-	$('#tdInterfaceMainPayrollNewColumn2').html(aHTML.join(''));
-
-	$('#spanPayrollNew_options_save').button(
-	{
-		text: "Next"
-	})
-	.click(function() 
-	{
-		interfaceFinancialPayrollSave();
-	});
-
-	$('#spanPayrollNew_options_cancel').button(
-	{
-		text: "Cancel"
-	})
-	.click(function() 
-	{
-		$('td.interfaceViewportControlHighlight :first').click();
-	});
-
-	var aHTML = [];
-	var h = -1;
-
-	if ($('#tdInterfaceViewportControlPayRuns').hasClass('interfaceViewportControlHighlight'))
-	{
-		aHTML[++h] = '<table><tr>' + 
-						'<td class="interfaceMainRowNothing">Just check that you want to create the next pay period.<br /><br />If you do, then please click Next.</td>' + 
-						'</tr>' +
-						'</table>';
-	}
-	else
-	{	
-		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain" style="padding-right:15px;">';
-
-		aHTML[++h] = '<tr class="interfaceMain">' +
-						'<td class="interfaceMain">' +
-						'First Name' +
-						'</td></tr>' +
-						'<tr class="interfaceMainText">' +
-						'<td class="interfaceMainText">' +
-						'<input id="inputInterfaceMainDetailsFirstName" class="inputInterfaceMainText">' +
-						'</td></tr>';
-
-		aHTML[++h] = '<tr class="interfaceMain">' +
-						'<td class="interfaceMain">' +
-						'Last Name' +
-						'</td></tr>' +
-						'<tr class="interfaceMainText">' +
-						'<td class="interfaceMainText">' +
-						'<input id="inputInterfaceMainDetailsLastName" class="inputInterfaceMainText">' +
-						'</td></tr>';			
-		
-		aHTML[++h] = '</table>';					
-	}
-
-	$('#tdInterfaceMainPayrollNewColumn1').html(aHTML.join(''));
-
-}
-
-function interfaceFinancialPayrollSave(oResponse)
-{
-	interfaceMasterStatusWorking();
-
-	if ($('#tdInterfaceViewportControlPayRuns').hasClass('interfaceViewportControlHighlight'))
-	{
-		$.ajax(
-		{
-			type: 'POST',
-			url: interfaceMasterEndpointURL('FINANCIAL_PAYROLL_PAY_PROCESS'),
-			data: 'type=1',
-			dataType: 'json',
-			success: function(data) {
-				if (data.status == 'OK')
-				{	
-					interfaceMasterStatus('New pay period created.');
-					giObjectContext = data.period;
-					interfaceFinancialPayrollSearch('-' + giObjectContext);
-				}	
-			}
-		});
-	}
-	else
-	{
-		if (oResponse == undefined)
-		{	
-			if ($('#inputInterfaceMainDetailsFirstName').val() == '' ||
-				$('#inputInterfaceMainDetailsLastName').val() == '')
-			{
-				interfaceMasterError('Missing information.');
-			}	
-			else
-			{
-				var oSearch = new AdvancedSearch();
-				oSearch.method = 'CONTACT_PERSON_SEARCH';
-				oSearch.addField('firstname');
-				oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.contactBusiness);
-				oSearch.addFilter('firstname', 'EQUAL_TO', $('#inputInterfaceMainDetailsFirstName').val());
-				oSearch.addFilter('surname', 'EQUAL_TO', $('#inputInterfaceMainDetailsLastName').val());
-
-				oSearch.getResults(interfaceFinancialPayrollSave);
-			}
-		}
-		else	
-		{
-			if (oResponse.data.rows.length > 0)
-			{
-				interfaceFinancialPayrollSaveProcess(
-				{
-					contactPerson: oResponse.data.rows[0].contactperson,
-					contactBusiness: ns1blankspace.contactBusiness
-				});		
-			}
-			else
-			{
-				var sData = 'contactbusiness=' + ns1blankspace.contactBusiness;
-				sData += '&firstname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsFirstName').val());
-				sData += '&surname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsLastName').val());
-
-				$.ajax(
-				{
-					type: 'POST',
-					url: interfaceMasterEndpointURL('CONTACT_PERSON_MANAGE'),
-					data: sData,
-					dataType: 'json',
-					success: function(data)
-						{
-							if (data.status == 'OK')
-							{
-								interfaceFinancialPayrollSaveProcess(
-								{
-									contactPerson: data.id,
-									contactBusiness: ns1blankspace.contactBusiness
-								});	
-							}
-							else
-							{
-								interfaceMasterError('Could not add employee.')
-							}
-						}
-				});
-			}	
-		}
-	}
-}
-
-function interfaceFinancialPayrollSaveProcess(aParam)
-{
-	var iContactBusiness = ns1blankspace.contactBusiness;
-	var iContactPerson;
-	var iID;
-	var sData;
-
-	if (aParam != undefined)
-	{
-		if (aParam.contactBusiness != undefined) {iContactBusiness = aParam.contactBusiness}
-		if (aParam.contactPerson != undefined) {iContactPerson = aParam.contactPerson}
-	}		
-
-	sData = 'id=' + interfaceMasterFormatSave(iID);
-	sData += '&contactbusiness=' + iContactBusiness;
-	sData += '&contactperson=' + iContactPerson;
-	sData += '&status=2';
-	
-	$.ajax(
-	{
-		type: 'POST',
-		url: '/ondemand/financial/?method=FINANCIAL_PAYROLL_EMPLOYEE_MANAGE',
-		data: sData,
-		dataType: 'json',
-		success: function(data)
-		{
-			interfaceMasterStatus('Saved.');
-			interfaceMasterMainViewportShow("#divInterfaceMainEmployee");
-			interfaceFinancialPayrollEmployees();
-		}	
-	});		
-}
-
 function interfaceFinancialPayrollPays(aParam, oResponse)
 {
 	var iStep = 1;
@@ -1770,6 +1803,8 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 	{
 		aParam = {};
 	}	
+
+	//PAY RECORDS
 	if (iStep == 1)
 	{
 		var aHTML = [];
@@ -1887,6 +1922,8 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			})
 		}
 	}
+
+	//PAY RECORD DETAILS
 	else if (iStep == 2)
 	{	
 		if (oResponse == undefined)
@@ -1898,7 +1935,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 						'<tr class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainFinancialPayrollColumnPay" style="width:200px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn2x">' +
 						gsLoadingSmallXHTML + '</td>' +
-						'<td id="tdInterfaceMainFinancialPayrollColumnItem" style="width:200px;padding-right:15px;font-size:0.875em;" class="interfaceMainColumn2">' +
+						'<td id="tdInterfaceMainFinancialPayrollColumnItem" style="width:200px;padding-right:15px;font-size:0.75em;" class="interfaceMainColumn2">' +
 						'</td>' +
 						'<td id="tdInterfaceMainFinancialPayrollColumnAction" class="interfaceMainColumn2">' +
 						'</td>' +
@@ -1927,7 +1964,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			$('#divInterfaceMainFinancialPayrollColumnItemType :radio').click(function()
 			{
 				var aID = (event.target.id).split('-');
-				$.extend(true, aParam, {step: aID[0]});
+				$.extend(true, aParam, {step: aID[1]});
 				interfaceFinancialPayrollPays(aParam);
 			});
 
@@ -1959,7 +1996,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			.click(function()
 			{
 				$.extend(true, aParam, {step: 4, xhtmlElementID: ""});
-				interfaceSetupFinancialPayrollPays(aParam);
+				interfaceFinancialPayrollPays(aParam);
 			})
 
 			var oSearch = new AdvancedSearch();
@@ -1971,13 +2008,16 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		}
 		else
 		{
+
+			goObjectContext.pay = oResponse.data.rows[0];
+
 			$.extend(true, aParam, {step: 3});
 			interfaceFinancialPayrollPays(aParam);
 
 			var aHTML = [];
 			var h = -1;
 	
-			aHTML[++h] = '<table id="tableSetupFinancialFinancialAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain" style="padding-right:10px;">';
+			aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain" style="padding-right:10px;">';
 			aHTML[++h] = '<tbody>';
 		
 			if (oResponse.data.rows.length != 0)
@@ -2021,6 +2061,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		}
 	}
 
+	//TIME
 	else if (iStep == 3)
 	{	
 		if (oResponse == undefined)
@@ -2029,9 +2070,9 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_ITEM_SEARCH';
-			oSearch.addFilter('id', 'EQUAL_TO', iPay)
 			oSearch.addField('type,typetext,hours');
-			oSearch.rows = 1;
+			oSearch.addFilter('id', 'EQUAL_TO', iPay);
+			oSearch.rows = 100;
 			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(aParam, data)})	
 		}
 		else
@@ -2042,29 +2083,38 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			aHTML[++h] = '<table id="tableSetupFinancialFinancialAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
 			aHTML[++h] = '<tbody>';
 		
-			aHTML[++h] = '<tr class="interfaceMainCaption">';
-			aHTML[++h] = '<td class="interfaceMainCaption">Type</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Hours</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-			aHTML[++h] = '</tr>';
-			
-			$(oResponse.data.rows).each(function()
+			if (oResponse.data.rows.length == 0)
 			{
-				aHTML[++h] = '<tr class="interfaceMainRow">';
-					
-				aHTML[++h] = '<td id="interfaceFinancialPayPeriodItem_Type-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payitem">' +
-										this["typetext"] + '</td>';
+				aHTML[++h] = '<tr class="interfaceMainCaption">' +
+								'<td class="interfaceMainRowNothing">No times.</td></tr>';
+				aHTML[++h] = '</tbody></table>';
+			}
+			else
+			{		
+				aHTML[++h] = '<tr class="interfaceMainCaption">';
+				aHTML[++h] = '<td class="interfaceMainCaption">Type</td>';
+				aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Hours</td>';
+				aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+				aHTML[++h] = '</tr>';
+				
+				$(oResponse.data.rows).each(function()
+				{
+					aHTML[++h] = '<tr class="interfaceMainRow">';
+						
+					aHTML[++h] = '<td id="interfaceFinancialPayPeriodItem_Type-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payitem">' +
+											this["typetext"] + '</td>';
 
-				var cHours = parseFloat(this["hours"]);
-				aHTML[++h] = '<td id="interfaceFinancialPayPeriodItem_Hours-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payitem" style="text-align:right;">' +
-										 cHours.toFixed(2) + '</td>';						
-								
-				aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-				aHTML[++h] = '<span id="spanFinancialPay_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-				aHTML[++h] = '</td>';					
-																							
-				aHTML[++h] = '</tr>'
-			});
+					var cHours = parseFloat(this["hours"]);
+					aHTML[++h] = '<td id="interfaceFinancialPayPeriodItem_Hours-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payitem" style="text-align:right;">' +
+											 cHours.toFixed(2) + '</td>';						
+									
+					aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+					aHTML[++h] = '<span id="spanFinancialPay_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+					aHTML[++h] = '</td>';					
+																								
+					aHTML[++h] = '</tr>'
+				});	
+			}
 				
 			aHTML[++h] = '</tbody></table>';
 		
@@ -2087,6 +2137,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		}
 	}
 
+	// TIME DETAILS
 	else if (iStep == 4)
 	{
 		var sID; 
@@ -2108,44 +2159,46 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		var aHTML = [];
 		var h = -1;
 
-		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain" style="width:200px;">';
 					
-		aHTML[++h] = '<tr id="trInterfaceMainAccountTitle" class="interfaceMain">' +
-						'<td id="tdInterfaceMainAccountTitle" class="interfaceMain">' +
-						'Title' +
-						'</td></tr>' +
-						'<tr id="trInterfaceMainAccountAddTitleValue" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainAccountAddTitleValue" class="interfaceMainText">' +
-						'<input id="inputInterfaceMainAccountAddTitle" class="inputInterfaceMainText">' +
+		aHTML[++h] = '<tr><td class="interfaceMain">Hours</td></tr>' +
+						'<tr><td>' +
+						'<input id="inputInterfaceMainPayrollItemHours" class="inputInterfaceMainText">' +
 						'</td></tr>';
 		
-
-		aHTML[++h] = '<tr id="trInterfaceMainAccountParent" class="interfaceMain">' +
-						'<td id="tdInterfaceMainAccountParent" class="interfaceMain">' +
-						'Parent' +
-						'</td></tr>' +
-						'<tr id="trInterfaceMainAccountParentValue" class="interfaceMainSelect">' +
-						'<td id="tdInterfaceMainAccountParentValue" class="interfaceMainSelect">' +
-						'<input id="inputInterfaceMainAccountParentAccount" class="inputInterfaceMainSelect"' +
-							' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
-							' data-columns="title">' +
-						'</td></tr>';
-
-		aHTML[++h] = '<tr id="trInterfaceMainAccountPostable" class="interfaceMain">' +
-							'<td id="tdInterfaceMainAccountPostable" class="interfaceMain">' +
-							'Can transactions be linked to this account?' +
+		aHTML[++h] = '<tr><td id="tdInterfaceMainAccountPostable" class="interfaceMain">' +
+							'Type' +
 							'</td></tr>' +
-							'<tr id="trInterfaceMainAccountPostable" class="interfaceMainText">' +
-							'<td id="tdInterfaceMainAccountPostableValue" class="interfaceMainRadio">' +
-							'<input type="radio" id="radioPostableY" name="radioPostable" value="Y"/>Yes' +
-							'<br /><input type="radio" id="radioPostableN" name="radioPostable" value="N"/>No (it is a header account)' +
+							'<tr><td class="interfaceMainRadio">' +
+							'<table id="tableItemType" style="width:180px;" cellspacing=2>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType1" name="radioItemType" value="1"/></td><td>Normal</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType2" name="radioItemType" value="2"/></td><td>Sick Leave</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType3" name="radioItemType" value="3"/></td><td>Annual Leave</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType4" name="radioItemType" value="4"/></td><td>Long Service Leave</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType5" name="radioItemType" value="5"/></td><td>Compensation</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType6" name="radioItemType" value="6"/></td><td>Overtime (Superannuation Exempt)</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType8" name="radioItemType" value="8"/></td><td>Allowance</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType9" name="radioItemType" value="9"/></td><td>Deduction</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType10" name="radioItemType" value="10"/></td><td>Tax Adjustment</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType11" name="radioItemType" value="11"/></td><td>Leave Loading</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType12" name="radioItemType" value="12"/></td><td>Leave Without Pay</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType14" name="radioItemType" value="14"/></td><td>Bonus</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType15" name="radioItemType" value="15"/></td><td>Rostered Day Off / Time in Lieu</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType16" name="radioItemType" value="16"/></td><td>Salary Sacrifice Superannuation</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType17" name="radioItemType" value="17"/></td><td>Additional Employee Superannuation</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType18" name="radioItemType" value="18"/></td><td>Public Holiday</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType19" name="radioItemType" value="19"/></td><td>Commission</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType20" name="radioItemType" value="20"/></td><td>Termination - Unused Annual Leave</td></tr>' +	
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType21" name="radioItemType" value="21"/></td><td>Termination - Unused Long Service Leave</td></tr>' +
+							'<tr><td style="width:15px;"><input type="radio" id="radioItemType22" name="radioItemType" value="22"/></td><td>Paid Parental Leave (Superannuation Exempt)</td></tr>' +
+							'</table>' + 
 						'</td></tr>';
 
 		aHTML[++h] = '</table>';					
 		
-		$('#tdInterfaceMainSetupAccountColumnEdit').html(aHTML.join(''));
+		$('#tdInterfaceMainFinancialPayrollColumnItem').html(aHTML.join(''));
 		
-		$('#inputInterfaceMainAccountAddTitle').focus();
+		$('#inputInterfaceMainPayrollItemHours').focus();
 
 		var aHTML = [];
 		var h = -1;
@@ -2164,7 +2217,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 											
 		aHTML[++h] = '</table>';					
 			
-		$('#tdInterfaceMainSetupAccountColumnAction').html(aHTML.join(''));
+		$('#tdInterfaceMainFinancialPayrollColumnAction').html(aHTML.join(''));
 		
 		$('#spanInterfaceMainAccountEditSave').button(
 		{
@@ -2231,16 +2284,6 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			interfaceSetupFinancialAccount(aParam);
 		});
 
-		$('#spanInterfaceMainAccountAdd').button(
-			{
-				label: "Add"
-			})
-			.click(function()
-			{
-				$.extend(true, aParam, {step: 4, xhtmlElementID: ""});
-				interfaceSetupFinancialAccount(aParam);
-			})
-
 		if (sID != undefined)
 		{
 			var oSearch = new AdvancedSearch();
@@ -2254,16 +2297,84 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		}
 		else
 		{
-			$('#inputInterfaceMainAccountParentAccount').val(($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == ns1blankspace.financial.currentAccount; })[0].title).formatXHTML());
-			$('#inputInterfaceMainAccountParentAccount').attr('data-id', ns1blankspace.financial.currentAccount);
-			$('[name="radioPostable"][value="Y"]').attr('checked', true);
+			$('[name="radioItemType"][value="1"]').attr('checked', true);
 		}
 	}
 
 	//EXPENSES
 	else if (iStep == 5)
-	{
+	{	
+		if (oResponse == undefined)
+		{
+			$('#divInterfaceMainFinancialPayrollColumnItem').html(gsLoadingSmallXHTML);
+			
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
+			oSearch.addField('description,amount');
+			oSearch.addFilter('object', 'EQUAL_TO', '37');
+			oSearch.addFilter('objectcontext', 'EQUAL_TO', goObjectContext.id);
+			oSearch.addFilter('contactpersonpaidto', 'EQUAL_TO', goObjectContext.pay["contactperson"]);
+			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(aParam, data)})	
+		}
+		else
+		{
+			var aHTML = [];
+			var h = -1;
 	
+			aHTML[++h] = '<table id="tableSetupFinancialFinancialAccount" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>';
+		
+			if (oResponse.data.rows.length == 0)
+			{
+				aHTML[++h] = '<tr class="interfaceMainCaption">' +
+								'<td class="ingterfaceMainRowNothing">No expenses.</td></tr>';
+				aHTML[++h] = '</tbody></table>';
+			}
+			else
+			{		
+				aHTML[++h] = '<tr class="interfaceMainCaption">';
+				aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
+				aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
+				aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+				aHTML[++h] = '</tr>';
+				
+				$(oResponse.data.rows).each(function()
+				{
+					aHTML[++h] = '<tr class="interfaceMainRow">';
+						
+					aHTML[++h] = '<td id="interfaceFinancialPayPeriodExpenseItem_Description-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect expenseitem">' +
+											this["description"] + '</td>';
+
+					aHTML[++h] = '<td id="interfaceFinancialPayPeriodExpenseItem_Amount-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect expenseitem" style="text-align:right;">' +
+											 parseFloat(this["amount"]).toFixed(2) + '</td>';						
+									
+					aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+					aHTML[++h] = '<span id="spanFinancialPayExpenseItem_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+					aHTML[++h] = '</td>';					
+																								
+					aHTML[++h] = '</tr>'
+				});	
+			}
+				
+			aHTML[++h] = '</tbody></table>';
+		
+			$('#divInterfaceMainFinancialPayrollColumnItem').html(aHTML.join(''));
+
+			if (goObjectContext.status == "1")
+			{
+				$('.interfaceMainRowOptionsRemove').button(
+				{
+					text: false,
+				 	icons: {primary: "ui-icon-close"}
+				})
+				.click(function() {
+					$.extend(true, aParam, {step: 5, xhtmlElementID: event.target.id});
+					///interfaceSetupFinancialPayrollPays(this.id)
+				})
+				.css('width', '15px')
+				.css('height', '20px')
+			}
+		}
 	}
 
 	else if (iStep == 6)
