@@ -960,7 +960,7 @@ function interfaceMasterLogonChangePasswordProcess(oResponse)
 		if (oResponse.url == '#' || gbLogonStayOnDocument)
 		{
 			window.location.hash = '';
-			document.location.reload();
+			document.location.reload(false);
 		}	
 		else
 		{
@@ -1070,7 +1070,7 @@ function interfaceMasterLogoff()
 	})
 	
 	gbUnloadWarning = false;
-	document.location.reload();
+	document.location.reload(false);
 }
 
 function interfaceMasterViewportUserControlShow(oElement)
