@@ -1223,7 +1223,7 @@ function interfaceSetupUserExternal(aParam, oResponse)
 							'</td></tr>';
 
 			aHTML[++h] = '<tr class="interfaceMainCaption">' +
-									'<td style="padding-bottom:10px;" class="interfaceMainRowNothing">You need to search by the surname and enter at least 3 characters.</td></tr>';
+									'<td style="padding-bottom:10px;" class="interfaceMainRowNothing">You need to search by the surname<br />and enter at least 3 characters.</td></tr>';
 	
 			aHTML[++h] = '<tr><td class="interfaceMain">Access</td></tr>' +
 							'<tr><td class="interfaceMainRadio">' +
@@ -1231,6 +1231,9 @@ function interfaceSetupUserExternal(aParam, oResponse)
 							'<input type="radio" id="radioExternalAccessUnrestrictedN" name="radioExternalAccessUnrestricted" value="N"/>Restricted by role' +
 							'</td></tr>';
 		
+			aHTML[++h] = '<tr>' +
+							'<td class="interfaceMainRowNothing" style="padding-top:10px;" id="interfaceMainExternalUserRoles">No roles.</td></tr>';
+
 			aHTML[++h] = '</table>';					
 			
 			$('#tdInterfaceMainSetupUserExternalColumn2').html(aHTML.join(''));
@@ -1271,7 +1274,7 @@ function interfaceSetupUserExternal(aParam, oResponse)
 								'</td></tr>';
 
 			aHTML[++h] = '<tr class="interfaceMainAction">' +
-								'<td style="padding-top:25px;" class="interfaceMainAction">' +
+								'<td style="padding-top:20px;" class="interfaceMainAction">' +
 								'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditRole">Add Role</span>' +
 								'</td></tr>';					
 			
