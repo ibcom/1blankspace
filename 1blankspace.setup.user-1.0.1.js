@@ -358,10 +358,7 @@ function interfaceSetupUserViewport()
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
 						'</tr>';
-				
-		aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
-		
-			
+							
 		aHTML[++h] = '<tr id="trInterfaceViewportControlAccess" class="interfaceViewportControl">' +
 							'<td id="tdInterfaceViewportControlAccess" class="interfaceViewportControl">Access</td>' +
 							'</tr>';
@@ -814,9 +811,18 @@ function interfaceSetupUserAccessRoles(aParam, oResponse)
 
 }
 
-
 function interfaceSetupUserAccessRoleAdd(aParam, oResponse)
 {
+	var iUserType = 1;
+
+	if (aParam != undefined)
+	{
+		if (aParam.userType != undefined) {iUserType = aParam.userType}
+	}	
+	else
+	{
+		aParam = {userType: 1}
+	}
 		
 	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == 'spanInterfaceMainUserAccessRolesAdd')
 	{
@@ -877,36 +883,55 @@ function interfaceSetupUserAccessRoleAdd(aParam, oResponse)
 				
 				$('td.interfaceMainRowSelect').click(function(event)
 				{
-					interfaceSetupUserAccessRoleSelect(event.target.id);
+					aParam.xhtmlElementID = event.target.id;
+					interfaceSetupUserAccessRoleSelect(aParam);
 				});
 			}
 		}
 	}	
 }
-	
-	
-function interfaceSetupUserAccessRoleSelect(sXHTMLElementId)
+		
+function interfaceSetupUserAccessRoleSelect(aParam)
 {
+	var sXHTMLElementID;
+	var iUser = giObjectContext;
+	var iUserType = 1;
 
-	var aSearch = sXHTMLElementId.split('-');
-	var sElementId = aSearch[0];
-	var sSearchContext = aSearch[2];
-	
-	$('#' + sXHTMLElementId).fadeOut(500);
-	
-	var sParam = 'method=SETUP_USER_ROLE_MANAGE';
-	var sData = 'user=' + giObjectContext +
-				'&role=' + sSearchContext;
-				
-	$.ajax(
+	if (aParam != undefined)
+	{
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (aParam.user != undefined) {iUser = aParam.user}
+	}		
+
+	if (sXHTMLElementID)
+	{
+		var aSearch = sXHTMLElementID.split('-');
+		var iRole = aSearch[2];
+		
+		$('#' + sXHTMLElementID).fadeOut(500);
+		
+		var sData = 'user=' + iUser +
+					'&role=' + iRole;
+					
+		$.ajax(
 		{
 			type: 'POST',
-			url: '/ondemand/setup/setup.asp?' + sParam,
+			url: '/ondemand/setup/?method=SETUP_USER_ROLE_MANAGE',
 			data: sData,
 			dataType: 'json',
-			success: function(data){interfaceSetupUserAccessRoles()}
+			success: function(data)
+			{
+				if (iUserType == 1)
+				{	
+					interfaceSetupUserAccessRoles()
+				}
+				else
+				{	
+					interfaceSetupExternalUserAccessRoles()
+				}	
+			}
 		});
-		
+	}	
 }
 
 function interfaceSetupUserAccessRoleRemove(sXHTMLElementId)
@@ -1085,7 +1110,7 @@ function interfaceSetupUserExternal(aParam, oResponse)
 		{
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'SETUP_EXTERNAL_USER_ACCESS_SEARCH';
-			oSearch.addField('userlogon,spacetext,usercontactpersontext,unrestrictedaccess');
+			oSearch.addField('userlogon,spacetext,usercontactpersontext,unrestrictedaccess,user');
 			oSearch.rows = 50;
 			oSearch.sort('userlogon', 'asc');
 			oSearch.getResults(function(data) {interfaceSetupUserExternal(aParam, data)});
@@ -1155,6 +1180,7 @@ function interfaceSetupUserExternal(aParam, oResponse)
 					aHTML[++h] = '<tr class="interfaceMainRow">';
 					
 					aHTML[++h] = '<td id="tdSetupUserExternal_title-' + this.id +
+											'" data-user="' + this.user +
 											'" data-usertext="' + this.userlogon +
 											'" data-unrestrictedaccess="' + this.unrestrictedaccess +	
 											'" class="interfaceMainRow interfaceRowSelect interfaceSetupUserExternal">' +
@@ -1254,7 +1280,7 @@ function interfaceSetupUserExternal(aParam, oResponse)
 		
 			aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em">';
 					
-			if (aXHTMLElementID[1])
+			if (aXHTMLElementID[1] && false)
 			{
 				aHTML[++h] = '<tr class="interfaceMainCaption">' +
 									'<td class="interfaceMainRowNothing">To change this access you need to delete it and then re-add it.</td></tr>';
@@ -1325,13 +1351,14 @@ function interfaceSetupUserExternal(aParam, oResponse)
 			})
 			.click(function() 
 			{
-				aParam.step = -1;
-				//interfaceSetupUserExternal(aParam);
+				interfaceMasterOptionsSetPosition('spanInterfaceMainSetupUserExternalEditRole', -42, -258);
+				aParam.user = $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
+				interfaceSetupUserAccessRoleAdd(aParam);
 			})
 
 			if (aXHTMLElementID[1])
 			{
-				$('#inputInterfaceMainSetupUserExternalUsername').attr("data-id", aXHTMLElementID[1])
+				$('#inputInterfaceMainSetupUserExternalUsername').attr("data-id", $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user"))
 				$('#inputInterfaceMainSetupUserExternalUsername').val($('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-usertext"));
 				$('[name="radioExternalAccessUnrestricted"][value="' + $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-unrestrictedaccess") + '"]').attr('checked', true);
 			}
@@ -1350,7 +1377,7 @@ function interfaceSetupUserExternal(aParam, oResponse)
 		$.ajax(
 			{
 				type: 'POST',
-				url: '/ondemand/setup/setup.asp?method=SETUP_EXTERNAL_USER_ACCESS_MANAGE&remove=1',
+				url: '/ondemand/setup/?method=SETUP_EXTERNAL_USER_ACCESS_MANAGE&remove=1',
 				data: 'id=' + aXHTMLElementID[1],
 				dataType: 'json',
 				success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
