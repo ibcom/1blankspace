@@ -901,6 +901,7 @@ function interfaceSetupUserAccessRoleSelect(aParam)
 	{
 		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
 		if (aParam.user != undefined) {iUser = aParam.user}
+		if (aParam.userType != undefined) {iUserType = aParam.userType}
 	}		
 
 	if (sXHTMLElementID)
@@ -927,7 +928,7 @@ function interfaceSetupUserAccessRoleSelect(aParam)
 				}
 				else
 				{	
-					interfaceSetupExternalUserAccessRoles()
+					interfaceSetupUserExternal({step:3, user: iUser});
 				}	
 			}
 		});
@@ -1091,11 +1092,13 @@ function interfaceSetupUserExternal(aParam, oResponse)
 	var sXHTMLElementID = 'divInterfaceMain';
 	var iStep = 1;
 	var aXHTMLElementID = [];
+	var iUser;
 
 	if (aParam != undefined)
 	{
 		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
 		if (aParam.step != undefined) {iStep = aParam.step}
+		if (aParam.user != undefined) {iUser = aParam.user}
 	}
 	else
 	{
@@ -1258,7 +1261,7 @@ function interfaceSetupUserExternal(aParam, oResponse)
 							'</td></tr>';
 		
 			aHTML[++h] = '<tr>' +
-							'<td class="interfaceMainRowNothing" style="padding-top:10px;" id="interfaceMainExternalUserRoles">No roles.</td></tr>';
+							'<td style="padding-top:10px;" id="interfaceMainExternalUserRoles"></td></tr>';
 
 			aHTML[++h] = '</table>';					
 			
@@ -1353,6 +1356,7 @@ function interfaceSetupUserExternal(aParam, oResponse)
 			{
 				interfaceMasterOptionsSetPosition('spanInterfaceMainSetupUserExternalEditRole', -42, -258);
 				aParam.user = $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
+				aParam.userType = 2;
 				interfaceSetupUserAccessRoleAdd(aParam);
 			})
 
@@ -1361,6 +1365,10 @@ function interfaceSetupUserExternal(aParam, oResponse)
 				$('#inputInterfaceMainSetupUserExternalUsername').attr("data-id", $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user"))
 				$('#inputInterfaceMainSetupUserExternalUsername').val($('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-usertext"));
 				$('[name="radioExternalAccessUnrestricted"][value="' + $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-unrestrictedaccess") + '"]').attr('checked', true);
+
+				aParam.user = $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
+				aParam.step = 3;
+				interfaceSetupUserExternal(aParam);
 			}
 			else
 			{
@@ -1372,6 +1380,59 @@ function interfaceSetupUserExternal(aParam, oResponse)
 
 		}	
 	}
+	else if (iStep == 3)
+	{	
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_USER_ROLE_SEARCH';
+			oSearch.addField('roletext,role');
+			oSearch.addFilter('user', 'EQUAL_TO', iUser)
+			oSearch.rows = 50;
+			oSearch.sort('roletext', 'asc');
+			oSearch.getResults(function(data) {interfaceSetupUserExternal(aParam, data)})
+		}
+		else
+		{
+			var aHTML = [];
+			var h = -1;
+
+			aHTML[++h] = '<table><tbody>';
+
+			$(oResponse.data.rows).each(function()
+			{
+				aHTML[++h] = '<tr class="interfaceMainRow">';
+				
+				aHTML[++h] = '<td id="interfaceUserRole_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect role"' +
+										' title="">' +
+										this.roletext + '</td>';
+
+				aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+				aHTML[++h] = '<span id="spanUserAccessRole_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+				aHTML[++h] = '</td>';																	
+				aHTML[++h] = '</tr>';
+			});
+		
+			if (h != 0)
+			{	
+				aHTML[++h] = '</tbody></table>';
+				
+				$('#interfaceMainExternalUserRoles').html(aHTML.join(''));
+
+				$('.interfaceMainRowOptionsRemove').button(
+				{
+					text: false,
+				 	icons: {primary: "ui-icon-close"}
+				})
+				.click(function() {
+					interfaceSetupUserAccessRoleRemove(this.id)
+				})
+				.css('width', '15px')
+				.css('height', '20px')
+			}	
+		}		
+	}			
+
 	else if (iStep == 6)
 	{	
 		$.ajax(
