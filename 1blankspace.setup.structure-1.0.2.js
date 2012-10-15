@@ -1710,8 +1710,8 @@ function interfaceSetupElementOptionEditSave(sElementId)
 	
 	var sData = 'id=' + aElement[1];
 	sData += '&element=' + $('#tableInterfaceElementOption').attr('data-structureElement');
-	sData += '&title=' + $('#tdElementOption_title-' + aElement[1]).html();
-	sData += '&points=' + $('#tdElementOption_points-' + aElement[1]).html();
+	sData += '&title=' + interfaceMasterFormatSave($('#tdElementOption_title-' + aElement[1]).html());
+	sData += '&points=' + interfaceMasterFormatSave($('#tdElementOption_points-' + aElement[1]).html());
 
 	if (aElement[1] == '' && $('#' + sElementId).html() == '')
 	{
