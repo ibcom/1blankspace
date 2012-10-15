@@ -588,6 +588,23 @@ function interfaceSetupWebsiteSummary()
 						'/site/' + goObjectContext.id + '/' +
 						'</td></tr>';		
 						
+
+		if (goObjectContext.ondemandstatustext == '')
+		{
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummary">App Status</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummaryValue">' +
+						'Not Enabled (click Advanced to enable requests to the site)' +
+						'</td></tr>';
+
+		}
+		else
+		{
+			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummary">App Status</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummaryValue">' +
+						goObjectContext.ondemandstatustext +
+						'</td></tr>';
+		}			
+
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainSummaryColumn1').html(aHTML.join(''));
@@ -862,19 +879,19 @@ function interfaceSetupWebsiteAdvanced()
 	
 		aHTML[++h] = '<tr id="trInterfaceMainAdvancedOnDemand" class="interfaceMain">' +
 						'<td id="tdInterfaceMainAdvancedOnDemand" class="interfaceMain">' +
-						'onDemand Status' +
+						'App Status' +
 						'</td></tr>' +
 						'<tr id="trInterfaceMainAdvancedOnDemandValue" class="interfaceMainSelect">' +
 						'<td id="tdInterfaceMainAdvancedOnDemandValue" class="interfaceMainRadio">' +
 						'<input type="radio" id="radioOnDemand1" name="radioOnDemand" value="1"/>Disabled' +
 						'<br /><input type="radio" id="radioOnDemand2" name="radioOnDemand" value="2"/>' +
-								'Enabled For Testing (Allow AJAX calls from any source/site)' +
+								'Enabled For Testing (Allow requests from any source/site)' +
 								'<br /><input type="radio" id="radioOnDemand3" name="radioOnDemand" value="3"/>' +
-								'Enabled (AJAX calls only from same site)' +
+								'Enabled (Requests only from same site)' +
 								'<br /><input type="radio" id="radioOnDemand4" name="radioOnDemand" value="4"/>' +
-								'Enabled For Testing (Allow AJAX calls from any source/site & access any space)' +
+								'Enabled For Testing (Allow Requests from any source/site & access to any space)' +
 								'<br /><input type="radio" id="radioOnDemand5" name="radioOnDemand" value="5"/>' +
-								'Enabled (AJAX calls only from same site & access any space)' +
+								'Enabled (Requests only from same site & access to any space)' +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr id="trInterfaceMainAdvanced" class="interfaceMain">' +

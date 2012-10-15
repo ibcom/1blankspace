@@ -667,7 +667,7 @@ function interfaceSetupElementEditStart(sElementId)
 	
 	var sElementInputId = sElementId.replace('td', 'input');
 	
-	sHTML = '<input style="width:300px;" onDemandType="TEXT" id="' + sElementInputId + '" class="inputInterfaceMainValue" ' +
+	sHTML = '<input style="width:100%;" onDemandType="TEXT" id="' + sElementInputId + '" class="inputInterfaceMainValue" ' +
 							'value="' + sHTML + '">'
 	
 	$('#' + sElementId).html(sHTML);
