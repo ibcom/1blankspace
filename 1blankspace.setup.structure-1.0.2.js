@@ -1654,7 +1654,7 @@ function interfaceSetupElementOptionRemove(sXHTMLElementId)
 	{
 		var aMethod = gsSetupMethod.split('_');
 		var sEndpoint = aMethod[0];
-		var sParam = '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_ELEMENT_OPTION_MANAGE&remove=1';
+		var sParam = '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_OPTION_MANAGE&remove=1_vfrt3';
 		var sData = 'id=' + sSearchContext;
 					
 		$.ajax(
