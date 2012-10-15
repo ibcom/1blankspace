@@ -1563,7 +1563,7 @@ function interfaceSetupStructureElementOptionsShow(aParam, oResponse)
 			{
 				aHTML[++h] = '<tr class="interfaceMainRow">';
 						
-				aHTML[++h] = '<td id="tdElementOption_title-' + this.id + '" class="interfaceMainRow interfaceElementOption" style="width:100%"altaaall>' +
+				aHTML[++h] = '<td id="tdElementOption_title-' + this.id + '" class="interfaceMainRow interfaceElementOption" style="width:100%">' +
 								this.title + '</td>';
 					
 				if (this.points == '')
