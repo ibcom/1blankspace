@@ -285,7 +285,7 @@ table
 a:link, a:visited, a:active
 {
 	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
-	color: #DA8300;
+	color: #ee8f00; 
 	text-decoration: none;
 	font-size: 0.875em;
 }
@@ -853,7 +853,7 @@ table.interfaceDialogMedium
 	
 	border-style: solid;
 	border-width: 3px;
-	border-color: #DA8300;
+	border-color: #ee8f00;
 }
 
 table.interfaceDropDown
@@ -1103,7 +1103,7 @@ td.interfaceSearch, td.interfaceHomeOptions, td.interfaceMasterUserOptions, td.i
 td.interfaceHomeMostLikely, td.interfaceRowSelect
 {
 	cursor: pointer;
-	color: #DA8300;
+	color: #ee8f00;
 	text-decoration: none;
 	font-size: 0.875em;
 }
@@ -1392,27 +1392,27 @@ td.interfaceMainBold
 td.interfaceViewportControlHighlight
 {
 	font-weight: bold;	
-	color: #DA8300;	
+	color: #ee8f00;	
 }
 
 input.interfaceMasterHighlight
 {
 	border-style:solid;
 	border-width: 1px;
-	border-color: #DA8300;	
+	border-color: #ee8f00;	
 }
 
 textarea.interfaceMasterHighlight
 {
 	border-style:solid;
 	border-width: 1px;
-	border-color: #DA8300;	
+	border-color: #ee8f00;	
 }
 
 .Highlight
 {
 	font-weight: bold;	
-	color: #DA8300;	
+	color: #ee8f00;	
 }
 
 td.interfaceMainCaptionCentre
