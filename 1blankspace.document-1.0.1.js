@@ -388,6 +388,17 @@ function interfaceDocumentViewport()
 					
 	aHTML[++h] = '</table>';					
 			
+	if (giObjectContext != -1)
+	{		
+		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					
+		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
+						'</tr>';
+
+		aHTML[++h] = '</table>';
+	}	
+
 	$('#divInterfaceViewportControl').html(aHTML.join(''));
 	
 	var aHTML = [];
@@ -396,7 +407,8 @@ function interfaceDocumentViewport()
 	aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
 	aHTML[++h] = '<div id="divInterfaceMainEdit" class="divInterfaceViewportMain"></div>';
-		
+	aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';	
+
 	$('#divInterfaceMain').html(aHTML.join(''));
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
@@ -415,6 +427,12 @@ function interfaceDocumentViewport()
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainEdit");
 		interfaceDocumentEdit();
+	});
+
+	$('#tdInterfaceViewportControlAttachments').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
+		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 }
 
@@ -470,7 +488,7 @@ function interfaceDocumentSummary()
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
 						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
+						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2x">' +
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
