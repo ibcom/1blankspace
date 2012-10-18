@@ -11,25 +11,26 @@
 // totals & get details for messages not fully cached.  Show part of message that have and then back fill attachments and message
 // Back update flags for read.
 
+//var ns1blankspace.messaging.lastMessageID = '';
+//var giMessagingLastInboxPageID = '';
+//var giMessagingEmailSkippedCount;
+
 if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
 
-var giMessagingAccountID = -1;
-var gaMessagingEmailRead = [];
-var gaMessagingEmailRemoved = [];
-var gbMessagingEmailShowDeleted = false;
-var gaMessagingEmailInbox = [];
-var gaMessagingEmailInboxXHTML = [];
-var gsMessagingLastMessageID = '';
-var giMessagingLastInboxPageID = '';
-var giMessagingActionID = -1;
-var giMessagingRows = 25;
-var giMessagingEmailCount = 0;
-var giMessagingAccounts = [];
-var giMessagingEmailSkippedCount;
-var giMessagingEmailLastPage = 1;
-var gsMessagingEmailLastPagination;
-var giMessagingEmailNewCount;
-var gbMessagingAutoCheck = false;
+ns1blankspace.messaging.autoCheck = false;
+ns1blankspace.messaging.emailAccounts = [];
+ns1blankspace.messaging.defaultRows = 25;
+ns1blankspace.messaging.account = -1;
+ns1blankspace.messaging.emailRead = [];
+ns1blankspace.messaging.emailRemoved = [];
+ns1blankspace.messaging.showRemoved = false;
+ns1blankspace.messaging.EmailInbox = [];
+ns1blankspace.messaging.EmailInboxXHTML = [];
+ns1blankspace.messaging.emailCount = 0;
+ns1blankspace.messaging.emailLastPage = 1;
+ns1blankspace.messaging.emailLastPagination;
+ns1blankspace.messaging.emailNewCount;
+ns1blankspace.messaging.action = -1;
 
 function interfaceMessagingIMAPMasterViewport(aParam)
 {
@@ -182,7 +183,7 @@ function interfaceMessagingIMAPMasterViewport(aParam)
 	
 	$('#divInterfaceMain').html(aHTML.join(''));
 	
-	giMessagingAccounts.length = 0;
+	ns1blankspace.messaging.emailAccounts.length = 0;
 	
 	if (bShowHome) {interfaceMessagingHomeShow(aParam)};
 }
@@ -192,7 +193,7 @@ function interfaceMessagingCheckForNew(aParam, oResponse)
 	if (oResponse == undefined)
 	{
 		var sParam = 'method=MESSAGING_EMAIL_CACHE_CHECK';
-		sParam += '&account=' + giMessagingAccountID;
+		sParam += '&account=' + ns1blankspace.messaging.account;
 		
 		$.ajax(
 		{
@@ -204,8 +205,8 @@ function interfaceMessagingCheckForNew(aParam, oResponse)
 	}
 	else
 	{
-		giMessagingEmailNewCount = oResponse.newrows;
-		$('#interfaceMainHeaderRefresh').html('Refresh (' + giMessagingEmailNewCount + ')')	
+		ns1blankspace.messaging.emailNewCount = oResponse.newrows;
+		$('#interfaceMainHeaderRefresh').html('Refresh (' + ns1blankspace.messaging.emailNewCount + ')')	
 	}
 }			
 
@@ -225,7 +226,7 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 			
 	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	
-	if (giMessagingAccounts.length == 0)
+	if (ns1blankspace.messaging.emailAccounts.length == 0)
 	{
 		if (oResponse == undefined)
 		{
@@ -269,7 +270,7 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 							'</tr>';
 			aHTML[++h] = '</table>';		
 			
-			giMessagingAccounts.length = 0;
+			ns1blankspace.messaging.emailAccounts.length = 0;
 			
 			if (oResponse.data.rows.length != 0)
 			{
@@ -277,18 +278,18 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 				
 				$.each(oResponse.data.rows, function(index)
 				{
-					giMessagingAccounts.push({
+					ns1blankspace.messaging.emailAccounts.push({
 						id: this.id,
 						footer: interfaceMasterFormatXHTML(this.footer)
 					})		
 					
 					if (index == 0) 
 					{
-						giMessagingAccountID = this.id;
+						ns1blankspace.messaging.account = this.id;
 					}
 					else
 					{
-						giMessagingAccountID = undefined;
+						ns1blankspace.messaging.account = undefined;
 					}
 					
 					var sDescription = this.email;
@@ -342,17 +343,17 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 				
 				var sID = event.target.id
 				var aID = sID.split('-');
-				if (giMessagingAccountID != aID[1])
+				if (ns1blankspace.messaging.account != aID[1])
 				{
 					interfaceMessagingInboxSearch({xhtmlElementID: event.target.id, source: 1, newOnly: false, repaginate:true});
 				}	
 			});
 			
-			if (giMessagingAccountID != undefined && bAutoShow)
+			if (ns1blankspace.messaging.account != undefined && bAutoShow)
 			{
-				$('#interfaceMessaging-' + giMessagingAccountID).addClass('interfaceViewportControlHighlight');
+				$('#interfaceMessaging-' + ns1blankspace.messaging.account).addClass('interfaceViewportControlHighlight');
 				interfaceMasterMainViewportShow("#divInterfaceMainInbox");
-				interfaceMessagingInboxSearch({xhtmlElementID: '-' + giMessagingAccountID, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+				interfaceMessagingInboxSearch({xhtmlElementID: '-' + ns1blankspace.messaging.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 			}	
 		}
 	}	
@@ -388,20 +389,20 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 	{
 		var aXHTMLElementID = sXHTMLElementID.split('-');
 		
-		if (giMessagingAccountID != aXHTMLElementID[1]) 
+		if (ns1blankspace.messaging.account != aXHTMLElementID[1]) 
 		{
 			bRefresh = true;
 			aParam.refreshInbox = true;
 		}
-		giMessagingAccountID = aXHTMLElementID[1];
+		ns1blankspace.messaging.account = aXHTMLElementID[1];
 	}	
 	
 	if (bRefresh) {interfaceMessagingCheckForNew()}
 	
 	if (bRepaginate)
 	{
-		gsMessagingEmailLastPagination = undefined;
-		giMessagingEmailLastPage = 1;
+		ns1blankspace.messaging.emailLastPagination = undefined;
+		ns1blankspace.messaging.emailLastPage = 1;
 		
 		var aHTML = [];
 		var h = -1;
@@ -415,24 +416,24 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		$('#divInterfaceMainInbox').html(aHTML.join(''));
 		
 		if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
-        if (gbMessagingAutoCheck) {ns1blankspace.timer.messaging = setInterval("interfaceMessagingCheckForNew()", ns1blankspace.option.messagingCheckForNew)};
+        if (ns1blankspace.messaging.autoCheck) {ns1blankspace.timer.messaging = setInterval("interfaceMessagingCheckForNew()", ns1blankspace.option.messagingCheckForNew)};
 	}	
 		
-	if (giMessagingAccountID != undefined && oResponse == undefined && bRefresh)
+	if (ns1blankspace.messaging.account != undefined && oResponse == undefined && bRefresh)
 	{	
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 		oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
 							'hasattachments,attachments,imapflags,detailscached');
-		oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
+		oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
 		oSearch.addSummaryField('count(*) cachecount');
 		oSearch.sort('date', 'desc')
-		oSearch.rows = giMessagingRows;
+		oSearch.rows = ns1blankspace.messaging.defaultRows;
 		oSearch.getResults(function(data) {interfaceMessagingInboxSearch(aParam, data)});
 	}
 	else
 	{
-		giMessagingEmailCount = oResponse.summary.cachecount;
+		ns1blankspace.messaging.emailCount = oResponse.summary.cachecount;
 			
 		if (bRepaginate) //bRefresh?
 		{
@@ -443,9 +444,9 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainHeader">' +
 					'<td class="interfaceMainHeader" id="interfaceMainHeaderRemovedEmails" style="text-align:left;">' +
-					giMessagingEmailCount + ' emails';
+					ns1blankspace.messaging.emailCount + ' emails';
 					
-			if (giMessagingEmailCount > 5000)
+			if (ns1blankspace.messaging.emailCount > 5000)
 			{	
 				aHTML[++h] = '&nbsp;<span style="font-size:0.75em;vertical-align:bottom;" class="interfaceMessagingHeader"> You should think about saving some emails.</span>';
 			}	
@@ -457,13 +458,13 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 			
 			aHTML[++h] = '<td class="interfaceMainHeader" id="interfaceMainHeaderRemovedEmails" style="width:90px;">';
 							
-			if (gbMessagingEmailShowDeleted)
+			if (ns1blankspace.messaging.showRemoved)
 			{	
-				aHTML[++h] = '<span id="interfaceMainHeaderRemovedEmailsHide-' + giMessagingAccountID + '" class="interfaceMainHeaderRemovedEmailsHide" >Hide&nbsp;removed&nbsp;emails</span>';
+				aHTML[++h] = '<span id="interfaceMainHeaderRemovedEmailsHide-' + ns1blankspace.messaging.account + '" class="interfaceMainHeaderRemovedEmailsHide" >Hide&nbsp;removed&nbsp;emails</span>';
 			}
 			else
 			{
-				aHTML[++h] = '<span id="interfaceMainHeaderRemovedEmailsShow-' + giMessagingAccountID + '" class="interfaceMainHeaderRemovedEmailsShow">Show&nbsp;removed&nbsp;emails</span>';
+				aHTML[++h] = '<span id="interfaceMainHeaderRemovedEmailsShow-' + ns1blankspace.messaging.account + '" class="interfaceMainHeaderRemovedEmailsShow">Show&nbsp;removed&nbsp;emails</span>';
 			}	
 							
 			aHTML[++h] = '</td>';
@@ -488,19 +489,19 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		$('.interfaceMainHeaderRemovedEmailsHide').click(function() {
 			$('#interfaceMainHeaderRemovedEmailsHide').hide();
 			$('#interfaceMainHeaderRemovedEmailsShow').show();
-			gbMessagingEmailShowDeleted = false;
+			ns1blankspace.messaging.showRemoved = false;
 			interfaceMessagingInboxSearch({xhtmlElementID: this.id, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 		})
 		
 		$('.interfaceMainHeaderRemovedEmailsShow').click(function() {
 			$('#interfaceMainHeaderRemovedEmailsShow').hide();
 			$('#interfaceMainHeaderRemovedEmailsHide').show();
-			gbMessagingEmailShowDeleted = true;
+			ns1blankspace.messaging.showRemoved = true;
 			interfaceMessagingInboxSearch({xhtmlElementID: this.id, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 		})
 			
 		$('#interfaceMainHeaderRefresh').click(function() {
-			interfaceMessagingInboxSearch({xhtmlElementID: '-' + giMessagingAccountID, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+			interfaceMessagingInboxSearch({xhtmlElementID: '-' + ns1blankspace.messaging.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 		})
 		
 		$('#tdInterfaceMainHeaderSentEmails').click(function() {
@@ -692,15 +693,15 @@ function interfaceMessagingSearch(sXHTMLElementId, aParam)
 		sSearchContext = sSearchContext.replace(/\___/g, '.');
 		
 		ns1blankspace.objectContext = sSearchContext;
-		giMessagingActionID = -1;
+		ns1blankspace.messaging.action = -1;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 		oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
 							'message,hasattachments,attachments,imapflags,detailscached');
-		oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
+		oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
 		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-		oSearch.rows = giMessagingRows;
+		oSearch.rows = ns1blankspace.messaging.defaultRows;
 		oSearch.getResults(function(data) {interfaceMessagingShow(aParam, data)});	
 	}
 	else
@@ -727,9 +728,9 @@ function interfaceMessagingSearch(sXHTMLElementId, aParam)
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 			oSearch.addField('subject');
-			oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
+			oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
 			oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-			oSearch.rows = giMessagingRows;
+			oSearch.rows = ns1blankspace.messaging.defaultRows;
 			oSearch.getResults(function(data) {interfaceMessagingShow(aParam, data)});
 		}
 	};	
@@ -1084,7 +1085,7 @@ function interfaceMessagingSummary()
 					oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 					oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
 										'message,hasattachments,attachments,imapflags,detailscached');
-					oSearch.addFilter('account', 'EQUAL_TO', giMessagingAccountID);
+					oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
 					oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 					oSearch.getResults(function(oResponse) 
 						{
@@ -1120,7 +1121,7 @@ function interfaceMessagingShowAttachments()
 					
 					var sLink = '/ondemand/messaging/?';
 					sLink += 'method=MESSAGING_EMAIL_ATTACHMENT_DOWNLOAD&attachmentindex=' + (iIndex);
-					sLink += '&account=' + giMessagingAccountID;
+					sLink += '&account=' + ns1blankspace.messaging.account;
 					sLink += '&messageid=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.messageid);
 					
 					sAttachments +=	'<a href="' + sLink + '" target="_blank">' + aAttachment[0] + '</a>; ';
@@ -1314,7 +1315,7 @@ function interfaceMessagingAttachments()
 				
 					var sLink = '/ondemand/messaging/?';
 					sLink += 'method=MESSAGING_EMAIL_ATTACHMENT_DOWNLOAD&attachment=' + (iIndex);
-					sLink += '&account=' + giMessagingAccountID;
+					sLink += '&account=' + ns1blankspace.messaging.account;
 					sLink += '&id=' + interfaceMasterFormatSave(ns1blankspace.objectContext);
 					
 					var aAttachment = this.split('|');
@@ -1642,9 +1643,9 @@ function interfaceMessagingSendEmail(aParam)
 		
 			aHTML[++h] = '<br />';
 			
-			$.each(giMessagingAccounts, function() 
+			$.each(ns1blankspace.messaging.emailAccounts, function() 
 			{ 
-				if (this.id == giMessagingAccountID)
+				if (this.id == ns1blankspace.messaging.account)
 				{
 					aHTML[++h] = this.footer + '<br />';
 				}
@@ -1738,12 +1739,12 @@ function interfaceMessagingSendEmail(aParam)
 	
 				$('#inputInterfaceMainActionsSendEmailTo').val(sTo)
 	
-				if (ns1blankspace.objectContextData.attachments != '' && bForward && giMessagingActionID == -1)
+				if (ns1blankspace.objectContextData.attachments != '' && bForward && ns1blankspace.messaging.action == -1)
 				{
 					if (ns1blankspace.objectContextData.sourcetypetext == "EMAIL")
 					{
 						var sParam = '/ondemand/messaging/?method=MESSAGING_EMAIL_ATTACHMENT_MANAGE&rf=TEXT';
-						var sData = 'account=' + giMessagingAccountID;
+						var sData = 'account=' + ns1blankspace.messaging.account;
 						sData += '&id=' + interfaceMasterFormatSave(ns1blankspace.objectContext);
 						
 						$.ajax(
@@ -1755,7 +1756,7 @@ function interfaceMessagingSendEmail(aParam)
 							success: function(data) 
 							{
 								var aReturn = data.split('|');
-								giMessagingActionID = aReturn[1];
+								ns1blankspace.messaging.action = aReturn[1];
 								interfaceMessagingSendEmailAttachments();
 							}
 						});
@@ -1775,7 +1776,7 @@ function interfaceMessagingSendEmail(aParam)
 							success: function(data) 
 							{
 								var aReturn = data.split('|');
-								giMessagingActionID = aReturn[2];
+								ns1blankspace.messaging.action = aReturn[2];
 								interfaceMessagingSendEmailAttachments();
 							}
 						});
@@ -1793,9 +1794,9 @@ function interfaceMessagingSendEmail(aParam)
 		{
 			var sFooter = '<br />';
 			
-			$.each(giMessagingAccounts, function() 
+			$.each(ns1blankspace.messaging.emailAccounts, function() 
 			{ 
-				if (this.id == giMessagingAccountID)
+				if (this.id == ns1blankspace.messaging.account)
 				{
 					sFooter = this.footer + '<br />';
 				}
@@ -1854,7 +1855,7 @@ function interfaceMessagingSendEmailAttachShow(aParam, sReturn)
 		
 			interfaceMasterOptionsSetPosition(sXHTMLElementID)
 		
-			giMessagingActionID = aReturn[1];
+			ns1blankspace.messaging.action = aReturn[1];
 		
 			aHTML[++h] = '<table class="interfaceDropDown" style="width:287px;">';
 			aHTML[++h] = '<tbody>';
@@ -1886,7 +1887,7 @@ function interfaceMessagingSendEmailAttachments(aParam, oResponse)
 	if (aParam != undefined)
 	{
 		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.action != undefined) {giMessagingActionID = aParam.action}
+		if (aParam.action != undefined) {ns1blankspace.messaging.action = aParam.action}
 	}
 	
 	$('#divInterfaceMasterViewportControlOptions').hide();
@@ -1894,13 +1895,13 @@ function interfaceMessagingSendEmailAttachments(aParam, oResponse)
 	$('#spanInterfaceMainSendEmailAttach').attr('checked', false)
 	$('#spanInterfaceMainSendEmailAttach').button("refresh");
 	
-	if (giMessagingActionID != -1)
+	if (ns1blankspace.messaging.action != -1)
 	{
 		if (oResponse == undefined)
 		{
 			var sParam = 'method=CORE_ATTACHMENT_SEARCH' +
 							'&object=17' + 
-							'&objectcontext=' + giMessagingActionID;
+							'&objectcontext=' + ns1blankspace.messaging.action;
 			
 			$.ajax(
 			{
@@ -2036,7 +2037,7 @@ function interfaceMessagingEmailRemove(sXHTMLElementId)
 			dataType: 'text',
 			success: function(data)
 						{
-							if (gbMessagingEmailShowDeleted)
+							if (ns1blankspace.messaging.showRemoved)
 							{
 									$('#' + sXHTMLElementId).button({disabled: true});
 							}
@@ -2060,7 +2061,7 @@ function interfaceMessagingEmailRead(sXHTMLElementId)
 		sSearchContext = sSearchContext.replace(/\___/g, '.');	
 		
 		var sParam = 'method=MESSAGING_EMAIL_CACHE_MANAGE&flags=(\\SEEN)';
-		var sData = 'account=' + giMessagingAccountID;
+		var sData = 'account=' + ns1blankspace.messaging.account;
 		sData += '&id=' + interfaceMasterFormatSave(sSearchContext);
 				
 		$.ajax(
@@ -2071,7 +2072,7 @@ function interfaceMessagingEmailRead(sXHTMLElementId)
 				dataType: 'text',
 				success: function(data)
 							{
-								gaMessagingEmailRead.push(sSearchContext);
+								ns1blankspace.messaging.emailRead.push(sSearchContext);
 							}
 			});
 	}		
@@ -2261,7 +2262,7 @@ function interfaceMessagingEmailSave(aParam)
 	if (iStep == 2)
 	{
 		var sParam = 'method=MESSAGING_EMAIL_ACTION_MANAGE';
-		sParam += '&account=' + giMessagingAccountID;
+		sParam += '&account=' + ns1blankspace.messaging.account;
 		sParam += '&messageid=' + encodeURIComponent(sMessageId);
 		
 		$.ajax(
@@ -2379,7 +2380,7 @@ function interfaceMessagingActionSearch(aParam, oResponse)
 	
 	if (oResponse == undefined)
 	{
-		giMessagingActionID = -1;
+		ns1blankspace.messaging.action = -1;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'ACTION_SEARCH';

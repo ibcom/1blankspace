@@ -5,24 +5,26 @@
  * 01 FEB 2010
  */
  
-var gsReportEndpoint;
-var gsReportMethod;
-var gfReportSearchFunction;
-var gsReportScriptOpen;
-var gsReportScriptNewPage;
-var goFixedParameters;
-var goSelectableParameters;
-var gaReportRowParam;
-var gaAllParameterList;
-var dToday = new Date();
-var gsReturnParameters;
-var gaReportList = [];
-var gaReportDictionary = [];
-var gaSelectAttributes = [];
+if (ns1blankspace.report === undefined) {ns1blankspace.report = {}}
+
+ns1blankspace.report.endpoint;
+ns1blankspace.report.method;
+ns1blankspace.report.searchFunction;
+ns1blankspace.report.scriptOpen;
+ns1blankspace.report.scriptNewPage;
+ns1blankspace.report.fixedParameters;
+ns1blankspace.report.selectableParameters;
+ns1blankspace.report.rowParameters;
+ns1blankspace.report.allParameters;
+ns1blankspace.report.today = new Date();
+ns1blankspace.report.returnParameters;
+ns1blankspace.report.reports = [];
+ns1blankspace.report.dictionary = [];
+ns1blankspace.report.selectAttributes = [];
 
 function interfaceReportInitialise()
 {
-	gaReportList =
+	ns1blankspace.report.reports =
 		[
 			{
 				name: "Businesses",
@@ -128,7 +130,7 @@ function interfaceReportInitialise()
 			
 		]		
 
-	gaReportDictionary =
+	ns1blankspace.report.dictionary =
 		[ 
 			{name: "contactbusiness.tradename", caption: "Trading Name"},
 			{name: "contactbusiness.legalname", caption: "Company Name"},
@@ -274,7 +276,7 @@ function interfaceReportInitialise()
 			{name: "opportunity.sq1968", caption: "Street Address"}
 		];
 
-	gaSelectAttributes = 			
+	ns1blankspace.report.selectAttributes = 			
 		[
 			{
 				name: "contact.businesstext", 
@@ -387,7 +389,7 @@ function interfaceReportHomeShow(aParam, oResponse)
 	
 	aHTML[++h] = '<table>';
 	
-	$.each(gaReportList, function()
+	$.each(ns1blankspace.report.reports, function()
 	{
 		var sName = (this.name).replace(/ /g,'')
 		
@@ -408,7 +410,7 @@ function interfaceReportHomeShow(aParam, oResponse)
 	
 	$('#divInterfaceMain').html(aHTML.join(''));
 	
-	$.each(gaReportList, function()
+	$.each(ns1blankspace.report.reports, function()
 	{
 		var sName = (this.name).replace(/ /g,'')
 				
@@ -458,7 +460,7 @@ function interfaceReportDictionaryGet(aParam)
 		if (sReturn == undefined) {sReturn = sName}
 	};
 	
-	$.each(gaReportDictionary, function()
+	$.each(ns1blankspace.report.dictionary, function()
 	{
 		if (this.name == sName)
 		{
@@ -496,25 +498,25 @@ function interfaceReportViewport(aParam, oResponse)
 	var bShowSort = true;
 	var bContainsContactPerson = false;
 	
-	gsReportMethod = undefined;
-	gsReportEndpoint = undefined;
-	gsReturnParameters = undefined;
-	gfReportSearchFunction = undefined;
-	gsReportScriptOpen = undefined;
-	gsReportScriptNewPage = undefined;
-	gaReportRowParam = undefined;
-	goSelectableParameters = undefined;
-	gaAllParameterList = [];
+	ns1blankspace.report.method = undefined;
+	ns1blankspace.report.endpoint = undefined;
+	ns1blankspace.report.returnParameters = undefined;
+	ns1blankspace.report.searchFunction = undefined;
+	ns1blankspace.report.scriptOpen = undefined;
+	ns1blankspace.report.scriptNewPage = undefined;
+	ns1blankspace.report.rowParameters = undefined;
+	ns1blankspace.report.selectableParameters = undefined;
+	ns1blankspace.report.allParameters = [];
 
 	if (aParam != undefined)
 	{
-		if (aParam.endPoint != undefined) {gsReportEndpoint = aParam.endPoint}
-		if (aParam.method != undefined) {gsReportMethod = aParam.method}
-		if (aParam.returnParameters != undefined) {gsReturnParameters = aParam.returnParameters}
+		if (aParam.endPoint != undefined) {ns1blankspace.report.endpoint = aParam.endPoint}
+		if (aParam.method != undefined) {ns1blankspace.report.method = aParam.method}
+		if (aParam.returnParameters != undefined) {ns1blankspace.report.returnParameters = aParam.returnParameters}
 		if (aParam.jsonSearch != undefined) {sJSONSearch = aParam.jsonSearch}
-		if (aParam.functionSearch != undefined) {gfReportSearchFunction = aParam.functionSearch}
-		if (aParam.scriptOpen != undefined) {gsReportScriptOpen = aParam.scriptOpen}
-		if (aParam.scriptNewPage != undefined) {gsReportScriptNewPage = aParam.scriptNewPage}
+		if (aParam.functionSearch != undefined) {ns1blankspace.report.searchFunction = aParam.functionSearch}
+		if (aParam.scriptOpen != undefined) {ns1blankspace.report.scriptOpen = aParam.scriptOpen}
+		if (aParam.scriptNewPage != undefined) {ns1blankspace.report.scriptNewPage = aParam.scriptNewPage}
 		if (aParam.selectableParameters != undefined) {oSelectableParameters = aParam.selectableParameters}
 		if (aParam.fixedParameters != undefined) {oFixedParameters = aParam.fixedParameters}
 		if (aParam.showSelect != undefined) {bShowSelect = aParam.showSelect}
@@ -525,14 +527,14 @@ function interfaceReportViewport(aParam, oResponse)
 		if (aParam.showSort != undefined) {bShowSort = aParam.showSort}
 	}
 	
-	if (gsReportEndpoint == undefined && gsReportMethod != undefined)
+	if (ns1blankspace.report.endpoint == undefined && ns1blankspace.report.method != undefined)
 	{
-		var aMethod = gsReportMethod.split('_');
-		gsReportEndpoint = (aMethod[0]).toLowerCase();
+		var aMethod = ns1blankspace.report.method.split('_');
+		ns1blankspace.report.endpoint = (aMethod[0]).toLowerCase();
 	}
 	
-	goFixedParameters = oFixedParameters;
-	goSelectableParameters = oSelectableParameters;
+	ns1blankspace.report.fixedParameters = oFixedParameters;
+	ns1blankspace.report.selectableParameters = oSelectableParameters;
 	
 	if (!bShowSelect)
 	{
@@ -573,21 +575,21 @@ function interfaceReportViewport(aParam, oResponse)
 		if (oResponse == undefined && sJSONSearch != undefined)
 		{
 			var oSearch = new AdvancedSearch();
-			oSearch.returnParameters = gsReturnParameters;
+			oSearch.returnParameters = ns1blankspace.report.returnParameters;
 			oSearch.rf = 'json';
 			oSearch.getResults(sJSONSearch, function(data) {interfaceReportViewport(aParam, data)}) ;	
 		}
 		
-		else if (oResponse == undefined && gsReportMethod != undefined)
+		else if (oResponse == undefined && ns1blankspace.report.method != undefined)
 		{
 			var oSearch = new AdvancedSearch();
-			oSearch.endPoint = gsReportEndpoint;
-			oSearch.method = gsReportMethod;
+			oSearch.endPoint = ns1blankspace.report.endpoint;
+			oSearch.method = ns1blankspace.report.method;
 			if (iSurveyId != undefined)
 			{	oSearch.survey = iSurveyId;}
 			if (iCategoryId != undefined)
 			{	oSearch.categoryId = iCategoryId;}
-			oSearch.returnParameters = gsReturnParameters;
+			oSearch.returnParameters = ns1blankspace.report.returnParameters;
 			oSearch.rf = 'json';
 			oSearch.getResults(function(data) {interfaceReportViewport(aParam, data)}) ;
 		}
@@ -606,28 +608,28 @@ function interfaceReportViewport(aParam, oResponse)
 						sCaption = interfaceReportDictionaryGet({name: this.name});
 						if (sCaption == undefined) { sCaption = this.name;	}
 					}
-					gaAllParameterList.push({name: this.name, caption: sCaption})
+					ns1blankspace.report.allParameters.push({name: this.name, caption: sCaption})
 					//this.name.toLowerCase().indexOf('contactperson') != -1 && 
 				});	
 			}
 			
-			if (bShowSort && goFixedParameters.fields != undefined)
+			if (bShowSort && ns1blankspace.report.fixedParameters.fields != undefined)
 			{
-				$.each(goFixedParameters.fields, function()
+				$.each(ns1blankspace.report.fixedParameters.fields, function()
 				{
-					gaAllParameterList.push({name: this.name});
+					ns1blankspace.report.allParameters.push({name: this.name});
 					var sCaption = this.caption;
 					if (sCaption == undefined)
 					{	
 						sCaption = interfaceReportDictionaryGet({name: this.name});
 						if (sCaption == undefined) { sCaption = this.name;	}
 					}
-					gaAllParameterList.push({name: this.name, caption: sCaption})
+					ns1blankspace.report.allParameters.push({name: this.name, caption: sCaption})
 				});
 			}
 			
 			var aSelectAttributesList = []
-			$.each(gaSelectAttributes, function()
+			$.each(ns1blankspace.report.selectAttributes, function()
 			{	aSelectAttributesList.push(this.name);	});
 			
 			var aHTML = [];
@@ -756,7 +758,7 @@ function interfaceReportViewport(aParam, oResponse)
 					var iSelectAttributes = $.inArray(this.name, aSelectAttributesList);
 					var sClass = 'interfaceMainReport';
 					var sMoreAttributes = "";
-					gaAllParameterList.push({name: this.name, caption: sCaption})
+					ns1blankspace.report.allParameters.push({name: this.name, caption: sCaption})
 					var bSelect = false;
 					var sSearchEndPoint = this.searchendpoint;
 					var sSearchMethod = this.searchmethod;
@@ -764,10 +766,10 @@ function interfaceReportViewport(aParam, oResponse)
 					
 					if (iSelectAttributes >= 0)
 					{	
-						if (gaSelectAttributes[iSelectAttributes].addClass != undefined) {sMoreAttributes += ' data-selectClass="' + gaSelectAttributes[iSelectAttributes].addClass + '"';	}
-						if (gaSelectAttributes[iSelectAttributes].onDemandColumns != undefined) {sMoreAttributes += ' data-onDemandColumns="' + gaSelectAttributes[iSelectAttributes].onDemandColumns + '"';	}
-						if (gaSelectAttributes[iSelectAttributes].onDemandGroupFilter != undefined) {sMoreAttributes += ' data-onDemandGroupFilter="' + gaSelectAttributes[iSelectAttributes].onDemandGroupFilter + '"';	}
-						if (gaSelectAttributes[iSelectAttributes].onDemandGroupType != undefined) {sMoreAttributes += ' data-onDemandGroupType="' + gaSelectAttributes[iSelectAttributes].onDemandGroupType + '"';	}
+						if (ns1blankspace.report.selectAttributes[iSelectAttributes].addClass != undefined) {sMoreAttributes += ' data-selectClass="' + ns1blankspace.report.selectAttributes[iSelectAttributes].addClass + '"';	}
+						if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns != undefined) {sMoreAttributes += ' data-onDemandColumns="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns + '"';	}
+						if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupFilter != undefined) {sMoreAttributes += ' data-onDemandGroupFilter="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupFilter + '"';	}
+						if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupType != undefined) {sMoreAttributes += ' data-onDemandGroupType="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupType + '"';	}
 						if (sMoreAttributes != "") {sMoreAttributes += ' style="width:200px"';}
 					}
 					else
@@ -841,7 +843,7 @@ function interfaceReportViewport(aParam, oResponse)
 				aHTML[++h] = '<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Sort by</td>' +
 							 '<td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;" class="interfacemainSelect">' +
 							 '<input onDemandType="SELECT" id="inputInterfaceReportSort" class="inputInterfaceMainSelect"' + 
-							 'data-getSelectOptions="gaAllParameterList"></td></tr>';
+							 'data-getSelectOptions="ns1blankspace.report.allParameters"></td></tr>';
 			}
 			
 			aHTML[++h] = '</table>';			
@@ -1190,7 +1192,7 @@ function interfaceReportSearch(aParam, oResponse)
 				    (sName.toLowerCase().substr(sName.length - 13, 13) == "contactperson" ||
 					 sName.toLowerCase().substr(sName.length - 17, 17) == "contactpersontext" ||
 					 sName.toLowerCase().indexOf(".contactperson.") != -1  ||
-					 gsReportMethod.toUpperCase() == "CONTACT_PERSON_SEARCH")
+					 ns1blankspace.report.method.toUpperCase() == "CONTACT_PERSON_SEARCH")
 					)
 				{	bContainsContactPerson = true;	}
 				
@@ -1203,8 +1205,8 @@ function interfaceReportSearch(aParam, oResponse)
 			
 			aParam.parameterList = aFields.join(',');
 			oSearch.addField(aFields.join(','));
-			oSearch.endPoint = gsReportEndpoint;
-			oSearch.method = gsReportMethod;
+			oSearch.endPoint = ns1blankspace.report.endpoint;
+			oSearch.method = ns1blankspace.report.method;
 			
 			var aFilters = [];
 			
@@ -1323,13 +1325,13 @@ function interfaceReportSearch(aParam, oResponse)
 				if ($('#inputInterfaceReportSort').attr('OnDemandID') != undefined)
 				{	
 					//var aAllParameters = interfaceReportGetAllParameterList();
-					oSearch.sort(gaAllParameterList[$('#inputInterfaceReportSort').attr('OnDemandID')].name, 'asc');
+					oSearch.sort(ns1blankspace.report.allParameters[$('#inputInterfaceReportSort').attr('OnDemandID')].name, 'asc');
 				}
 			}
 			
 			aParam.containsContactPerson = bContainsContactPerson;
 			
-			oSearch.addSummaryField("count(*) " + gsReportEndpoint);
+			oSearch.addSummaryField("count(*) " + ns1blankspace.report.endpoint);
 			oSearch.rows = iRows;
 			oSearch.rf = sReturnFormat;
 			oSearch.getResults(function(data){interfaceReportSearch(aParam, data)}) ;	
@@ -1366,9 +1368,9 @@ function interfaceReportSearch(aParam, oResponse)
 				
 				var sName = this;
 				var sCaption;
-				if (goSelectableParameters != undefined && goSelectableParameters.fields != undefined)
+				if (ns1blankspace.report.selectableParameters != undefined && ns1blankspace.report.selectableParameters.fields != undefined)
 				{
-					$.each(goSelectableParameters.fields, function()
+					$.each(ns1blankspace.report.selectableParameters.fields, function()
 					{
 						if (this.name == sName && this.caption != undefined)
 						{	sCaption = this.caption;	
@@ -1408,7 +1410,7 @@ function interfaceReportSearch(aParam, oResponse)
 			{ 
 				aHTML[++h] = interfaceReportSearchRow(this, aParam);
 			});
-			gaReportRowParam = aParam;
+			ns1blankspace.report.rowParameters = aParam;
 			
 			aHTML[++h] = '</tbody></table>';
 			
@@ -1422,15 +1424,15 @@ function interfaceReportSearch(aParam, oResponse)
 				more: $(oResponse).attr('moreid'),
 				rows: ns1blankspace.option.defaultRows,
 				functionShowRow: interfaceReportSearchRow,
-				functionSearch: gfReportSearchFunction,
-				functionOpen: gsReportScriptOpen,
-				functionNewPage: gsReportScriptNewPage,
+				functionSearch: ns1blankspace.report.searchFunction,
+				functionOpen: ns1blankspace.report.scriptOpen,
+				functionNewPage: ns1blankspace.report.scriptNewPage,
 				type: 'json'
 			   }); 	
 				
 			$('.interfaceMainRowOptionsSelect' + '').unbind('click');
 				
-			if (gsReportScriptOpen != undefined)
+			if (ns1blankspace.report.scriptOpen != undefined)
 			{
 				$('.interfaceMainRowOptionsSelect' + '').button({
 					text: false,
@@ -1439,13 +1441,13 @@ function interfaceReportSearch(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					eval(gsReportScriptOpen);
+					eval(ns1blankspace.report.scriptOpen);
 				})
 				.css('width', '15px')
 				.css('height', '20px')
 			}
 			
-			eval(gsReportScriptNewPage);
+			eval(ns1blankspace.report.scriptNewPage);
 			
 			$('#spanInterfaceReportExport').button(
 			{
@@ -1454,7 +1456,7 @@ function interfaceReportSearch(aParam, oResponse)
 			.click(function() 
 			{
 				interfaceReportExportToCSV({moreId: $(oResponse).attr('moreid'),
-											count: eval('oResponse.summary.' + gsReportEndpoint)
+											count: eval('oResponse.summary.' + ns1blankspace.report.endpoint)
 											});
 			});	
 
@@ -1655,7 +1657,7 @@ function interfaceReportSearchRow(oResponse, aParam)
 {
 	var aHTML = [];
 	var h = -1;
-	var oFixedParameters = goFixedParameters;
+	var oFixedParameters = ns1blankspace.report.fixedParameters;
 	var aFixedName = [];
 	var	aFixedValue = [];
 	var i;
@@ -1666,7 +1668,7 @@ function interfaceReportSearchRow(oResponse, aParam)
 	var sParameterList = '';
 	var aParameters = [];
 
-	if (aParam == undefined) {aParam = gaReportRowParam }
+	if (aParam == undefined) {aParam = ns1blankspace.report.rowParameters }
 	
 	
 	if (aParam != undefined)

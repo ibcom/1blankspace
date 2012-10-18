@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
  
-var gaOpportuntityProcessingStatus;
+ns1blankspace.opportuntityProcessingStatus;
 
 function interfaceOpportunityMasterViewport(aParam)
 {
@@ -1369,7 +1369,7 @@ function interfaceOpportuntityProcessingStatus(aParam)
 		if (aParam.find != undefined) {sFind = aParam.find}
 	}	
 
-	if (gaOpportuntityProcessingStatus == undefined)
+	if (ns1blankspace.opportuntityProcessingStatus == undefined)
 	{
 		$.ajax(
 		{
@@ -1377,13 +1377,13 @@ function interfaceOpportuntityProcessingStatus(aParam)
 			url: '/ondemand/setup/?method=SETUP_OPPORTUNITY_PROCESSING_STATUS_SEARCH&rf=JSON',
 			dataType: 'json',
 			async: false,
-			success: function(oJSON) {gaOpportuntityProcessingStatus = oJSON.data.rows}
+			success: function(oJSON) {ns1blankspace.opportuntityProcessingStatus = oJSON.data.rows}
 		})
 	}
 
 	if (sFind != undefined)
 	{
-		$.each(gaOpportuntityProcessingStatus, function() {
+		$.each(ns1blankspace.opportuntityProcessingStatus, function() {
 			if (sFind.toUpperCase() == (this.title).toUpperCase()) {iFind = parseInt(this.id); return false}
 		});
 	}

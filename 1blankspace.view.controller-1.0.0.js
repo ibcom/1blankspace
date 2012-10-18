@@ -4,10 +4,6 @@
  * http://1blankspace.com/license
  * 01 FEB 2010
  */
- 
-$(function()
-{
-})
 
 function interfaceViewControllerMasterViewport(aParam)
 {
