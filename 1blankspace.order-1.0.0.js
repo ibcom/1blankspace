@@ -14,10 +14,10 @@ function interfaceOrderMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 	
-	giObject = 43;
-	gsObjectName = 'Order';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.object = 43;
+	ns1blankspace.objectName = 'Order';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 	
 	if (bShowHome)
 	{
@@ -36,8 +36,8 @@ function interfaceOrderMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceOrderSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceOrderSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -92,22 +92,22 @@ function interfaceOrderMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceOrderSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceOrderSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceOrderSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceOrderSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	if (bShowHome) {interfaceOrderHomeShow()};	
 }
 
 function interfaceOrderHomeShow(oResponse)
 {	
-	$('#divInterfaceMain').html(gsLoadingXHTML);
+	$('#divInterfaceMain').html(ns1blankspace.xhtml.loading);
 	
 	var aHTML = [];
 	var h = -1;
@@ -156,7 +156,7 @@ function interfaceOrderHomeShow(oResponse)
 		interfaceOrderHomeStatusShow({status: aID[1]});
 	});
 		
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 }
 
 function interfaceOrderHomeRecentShow(oResponse)
@@ -324,7 +324,7 @@ function interfaceOrderSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -339,12 +339,12 @@ function interfaceOrderSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined  && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = 'product';
@@ -368,7 +368,7 @@ function interfaceOrderSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -377,7 +377,7 @@ function interfaceOrderSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -439,7 +439,7 @@ function interfaceOrderSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		var oElement = $('#inputInterfaceMasterViewportControlSearch');
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
 		interfaceMasterSearchStop();
@@ -447,7 +447,7 @@ function interfaceOrderSearchShow(aParam, oResponse)
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceOrderSearch(event.target.id, {source: 1});
 		});
 	}		
@@ -463,7 +463,7 @@ function interfaceOrderViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -641,7 +641,7 @@ function interfaceOrderViewport()
 
 function interfaceOrderShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceOrderViewport();
 	
 	var aHTML = [];
@@ -649,7 +649,7 @@ function interfaceOrderShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 	
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the order.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -658,14 +658,14 @@ function interfaceOrderShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.reference);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
 
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceOrderMasterViewport({showHome: false});interfaceOrderSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceOrderMasterViewport({showHome: false});interfaceOrderSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
@@ -692,7 +692,7 @@ function interfaceOrderSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find order.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -705,12 +705,12 @@ function interfaceOrderSummary()
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryOrderDate" class="interfaceMainSummary">Order Date</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryOrderDateValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.orderdate +
+						ns1blankspace.objectContextData.orderdate +
 						'</td></tr>';
 						
-		if (goObjectContext.deliverydate != '')
+		if (ns1blankspace.objectContextData.deliverydate != '')
 		{				
-			var dDeliveryDate = new Date(goObjectContext.deliverydate);
+			var dDeliveryDate = new Date(ns1blankspace.objectContextData.deliverydate);
 			
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDeliveryDate" class="interfaceMainSummary">Delivery Date</td></tr>' +
 							'<tr><td id="tdInterfaceMainSummaryDeliveryDateValue" class="interfaceMainSummaryValue">' +
@@ -718,20 +718,20 @@ function interfaceOrderSummary()
 							'</td></tr>';
 		}					
 			
-		if (goObjectContext.streetaddresscombined != '')
+		if (ns1blankspace.objectContextData.streetaddresscombined != '')
 		{				
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDeliveryAddress" class="interfaceMainSummary">Deliver To</td></tr>' +
 							'<tr><td id="tdInterfaceMainSummaryDeliveryAddressValue" class="interfaceMainSummaryValue">' +
-							goObjectContext.streetaddresscombined;
+							ns1blankspace.objectContextData.streetaddresscombined;
 							
-			if (goObjectContext.streetsuburb != '')
+			if (ns1blankspace.objectContextData.streetsuburb != '')
 			{				
-				aHTML[++h] = '<br />' +	goObjectContext.streetsuburb;
+				aHTML[++h] = '<br />' +	ns1blankspace.objectContextData.streetsuburb;
 			}
 							
-			if (goObjectContext.streetstate != '')
+			if (ns1blankspace.objectContextData.streetstate != '')
 			{				
-				aHTML[++h] = '<br />' +	goObjectContext.streetstate;		
+				aHTML[++h] = '<br />' +	ns1blankspace.objectContextData.streetstate;		
 			}
 			
 			aHTML[++h] = '</td></tr>';
@@ -747,14 +747,14 @@ function interfaceOrderSummary()
 		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" style="width: 100%">';
 		
-		if (goObjectContext.statustext != '')
+		if (ns1blankspace.objectContextData.statustext != '')
 		{	
 			aHTML[++h] = '<tr><td class="interfaceMainSummary" style="padding-bottom:10px;">' +
-						goObjectContext.statustext +
+						ns1blankspace.objectContextData.statustext +
 						'</td></tr>';				
 		}
 		
-		if (goObjectContext.status == 7)
+		if (ns1blankspace.objectContextData.status == 7)
 		{	
 			aHTML[++h] = '<tr><td>' +
 						'<span style="font-size:0.75em;" id="spanInterfaceMainOrderAction-7" class="orderAction">Unsubmit</span>' +
@@ -765,7 +765,7 @@ function interfaceOrderSummary()
 						'</td></tr>';			
 		}
 		
-		if (goObjectContext.status == 2)
+		if (ns1blankspace.objectContextData.status == 2)
 		{	
 			aHTML[++h] = '<tr><td>' +
 						'<span style="font-size:0.75em;" id="spanInterfaceMainOrderAction-2" class="orderAction">Submit</span>' +
@@ -789,10 +789,10 @@ function interfaceOrderSummary()
 			$.ajax(
 			{
 				type: 'GET',
-				url: '/ondemand/product/?method=PRODUCT_ORDER_MANAGE&action=' + iAction + '&id=' + giObjectContext,
+				url: '/ondemand/product/?method=PRODUCT_ORDER_MANAGE&action=' + iAction + '&id=' + ns1blankspace.objectContext,
 				dataType: 'json',
 				async: false,
-				success: function(oResponse) {interfaceOrderSearch('-' + giObjectContext)}
+				success: function(oResponse) {interfaceOrderSearch('-' + ns1blankspace.objectContext)}
 			});
 		})
 		.css('width', '100px')
@@ -922,17 +922,17 @@ function interfaceOrderDetails()
 			
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
-			$('#inputInterfaceMainDetailsOrderDate').val(goObjectContext.orderdate);
-			$('#inputInterfaceMainDetailsOrderByBusiness').attr('data-id', goObjectContext.orderbybusiness);
-			$('#inputInterfaceMainDetailsOrderByBusiness').val(goObjectContext.orderbybusinesstext);
-			$('#inputInterfaceMainDetailsOrderByPerson').attr('data-id', goObjectContext.orderbyperson);
-			$('#inputInterfaceMainDetailsOrderByPerson').val(goObjectContext.orderbypersontext);	
-			$('[name="radioSource"][value="' + goObjectContext.source + '"]').attr('checked', true);
-			$('#inputInterfaceMainDetailsPurchaseOrderReference').val(goObjectContext.purchaseorder);
-			$('#inputInterfaceMainDetailsNotes').val(goObjectContext.notes);	
+			$('#inputInterfaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
+			$('#inputInterfaceMainDetailsOrderDate').val(ns1blankspace.objectContextData.orderdate);
+			$('#inputInterfaceMainDetailsOrderByBusiness').attr('data-id', ns1blankspace.objectContextData.orderbybusiness);
+			$('#inputInterfaceMainDetailsOrderByBusiness').val(ns1blankspace.objectContextData.orderbybusinesstext);
+			$('#inputInterfaceMainDetailsOrderByPerson').attr('data-id', ns1blankspace.objectContextData.orderbyperson);
+			$('#inputInterfaceMainDetailsOrderByPerson').val(ns1blankspace.objectContextData.orderbypersontext);	
+			$('[name="radioSource"][value="' + ns1blankspace.objectContextData.source + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsPurchaseOrderReference').val(ns1blankspace.objectContextData.purchaseorder);
+			$('#inputInterfaceMainDetailsNotes').val(ns1blankspace.objectContextData.notes);	
 		}
 		else
 		{
@@ -946,7 +946,7 @@ function interfaceOrderAddress()
 	var aHTML = [];
 	var h = -1;
 	
-	gsApplicationContext = 'address';
+	ns1blankspace.debug.appContext = 'address';
 		
 	if ($('#divInterfaceMainAddress').attr('onDemandLoading') == '1')
 	{
@@ -1108,20 +1108,20 @@ function interfaceOrderAddress()
 
 		})
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainAddressStreetAddress1').val((goObjectContext.streetaddress1).formatXHTML());
-			$('#inputInterfaceMainAddressStreetAddress2').val((goObjectContext.streetaddress2).formatXHTML());
-			$('#inputInterfaceMainAddressStreetSuburb').val((goObjectContext.streetsuburb).formatXHTML());
-			$('#inputInterfaceMainAddressStreetState').val((goObjectContext.streetstate).formatXHTML());
-			$('#inputInterfaceMainAddressStreetPostCode').val((goObjectContext.streetpostcode).formatXHTML());
-			$('#inputInterfaceMainAddressStreetCountry').val((goObjectContext.streetcountry).formatXHTML());
-			$('#inputInterfaceMainAddressMailingAddress1').val((goObjectContext.mailingaddress1).formatXHTML());
-			$('#inputInterfaceMainAddressMailingAddress2').val((goObjectContext.mailingaddress2).formatXHTML());
-			$('#inputInterfaceMainAddressMailingSuburb').val((goObjectContext.mailingsuburb).formatXHTML());
-			$('#inputInterfaceMainAddressMailingState').val((goObjectContext.mailingstate).formatXHTML());
-			$('#inputInterfaceMainAddressMailingPostCode').val((goObjectContext.mailingpostcode).formatXHTML());
-			$('#inputInterfaceMainAddressMailingCountry').val((goObjectContext.mailingcountry).formatXHTML());
+			$('#inputInterfaceMainAddressStreetAddress1').val((ns1blankspace.objectContextData.streetaddress1).formatXHTML());
+			$('#inputInterfaceMainAddressStreetAddress2').val((ns1blankspace.objectContextData.streetaddress2).formatXHTML());
+			$('#inputInterfaceMainAddressStreetSuburb').val((ns1blankspace.objectContextData.streetsuburb).formatXHTML());
+			$('#inputInterfaceMainAddressStreetState').val((ns1blankspace.objectContextData.streetstate).formatXHTML());
+			$('#inputInterfaceMainAddressStreetPostCode').val((ns1blankspace.objectContextData.streetpostcode).formatXHTML());
+			$('#inputInterfaceMainAddressStreetCountry').val((ns1blankspace.objectContextData.streetcountry).formatXHTML());
+			$('#inputInterfaceMainAddressMailingAddress1').val((ns1blankspace.objectContextData.mailingaddress1).formatXHTML());
+			$('#inputInterfaceMainAddressMailingAddress2').val((ns1blankspace.objectContextData.mailingaddress2).formatXHTML());
+			$('#inputInterfaceMainAddressMailingSuburb').val((ns1blankspace.objectContextData.mailingsuburb).formatXHTML());
+			$('#inputInterfaceMainAddressMailingState').val((ns1blankspace.objectContextData.mailingstate).formatXHTML());
+			$('#inputInterfaceMainAddressMailingPostCode').val((ns1blankspace.objectContextData.mailingpostcode).formatXHTML());
+			$('#inputInterfaceMainAddressMailingCountry').val((ns1blankspace.objectContextData.mailingcountry).formatXHTML());
 		}
 	}	
 }
@@ -1140,7 +1140,7 @@ function interfaceOrderProductItems(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_ORDER_ITEM_SEARCH';
 		oSearch.addField('producttext,quantity,totalcost,totaltax');
-		oSearch.addFilter('order', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.sort('producttext', 'desc');
 		oSearch.getResults(function(data){interfaceOrderProductItems(aParam, data)});
 	}
@@ -1152,7 +1152,7 @@ function interfaceOrderProductItems(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainOrderProductItems" class="interfaceMain">' +
 					'<tr id="trInterfaceMainOrderProductItemsRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainOrderProductItemsColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainOrderProductItemsColumn2" style="width: 200px;" class="interfaceMainColumn2">' +
 					'</td>' +
@@ -1166,7 +1166,7 @@ function interfaceOrderProductItems(aParam, oResponse)
 		
 		aHTML[++h] = '<table id="tableInterfaceMainOrderProductItemsColumn2" class="interfaceMainColumn2">';
 		
-		if (goObjectContext.status == 2)
+		if (ns1blankspace.objectContextData.status == 2)
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainOrderProductItemsAdd" class="interfaceMainAction">' +
 						'<span id="spanInterfaceMainOrderProductItemsAdd">Add</span>' +
@@ -1231,7 +1231,7 @@ function interfaceOrderProductItems(aParam, oResponse)
 				xhtml: aHTML.join(''),
 				showMore: (oResponse.morerows == "true"),
 				more: oResponse.moreid,
-				rows: giReturnRows,
+				rows: ns1blankspace.option.defaultRows,
 				functionShowRow: interfaceOrderProductItemsRow,
 				functionNewPage: 'interfaceOrderProductItemsBind()',
 				type: 'json'
@@ -1283,7 +1283,7 @@ function interfaceOrderProductItemsBind()
 	.css('width', '15px')
 	.css('height', '17px')
 	
-	if (goObjectContext.status == 2)
+	if (ns1blankspace.objectContextData.status == 2)
 	{
 		$('.interfaceMainRowOptionsRemove').button( {
 			text: false,
@@ -1394,7 +1394,7 @@ function interfaceOrderProductItemsAdd(aParam, oResponse)
 		}
 		if (iStep == 2)
 		{
-			$('#tdInterfaceMainProductAddSearchResults').html(gsLoadingSmallXHTML);
+			$('#tdInterfaceMainProductAddSearchResults').html(ns1blankspace.xhtml.loadingSmall);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'PRODUCT_SEARCH';
@@ -1461,7 +1461,7 @@ function interfaceOrderProductItemsAdd(aParam, oResponse)
 				var iQuantity = $('#inputOrderProductItems_title-quantity-' + iProduct).val();
 				if (iQuantity == '') {iQuantity = 1};
 				
-				var sData = 'order=' + giObjectContext;
+				var sData = 'order=' + ns1blankspace.objectContext;
 				sData += '&product=' + iProduct;
 				sData += '&quantity=' + iQuantity;
 				
@@ -1485,8 +1485,8 @@ function interfaceOrderProductItemsAdd(aParam, oResponse)
 
 function interfaceOrderNew()
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceOrderViewport();
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
@@ -1498,7 +1498,7 @@ function interfaceOrderSave()
 {
 	interfaceMasterStatusWorking();
 	
-	var sData = 'id=' + ((giObjectContext == -1)?'':giObjectContext);
+	var sData = 'id=' + ((ns1blankspace.objectContext == -1)?'':ns1blankspace.objectContext);
 		
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
@@ -1544,8 +1544,8 @@ function interfaceOrderSaveProcess(oResponse)
 	if (oResponse.status == 'OK')
 	{
 		interfaceMasterStatus('Saved');
-		if (giObjectContext == -1) {var bNew = true}
-		giObjectContext = oResponse.id;	
+		if (ns1blankspace.objectContext == -1) {var bNew = true}
+		ns1blankspace.objectContext = oResponse.id;	
 	}
 	else
 	{
@@ -1571,7 +1571,7 @@ function interfaceOrderDelivery(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainOrderDelivery" class="interfaceMain">' +
 					'<tr id="trInterfaceMainOrderDeliveryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainOrderDeliveryColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainOrderDeliveryColumn2" style="width: 200px;" class="interfaceMainColumn2Actionx">' +
 					'</td>' +
@@ -1607,7 +1607,7 @@ function interfaceOrderDelivery(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_ORDER_DELIVERY_SEARCH';
 		oSearch.addField('reference,deliverydate,notes');
-		oSearch.addFilter('order', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.getResults(function(data) {interfaceOrderDelivery(aParam, data)});	
 	}
 	else
@@ -1651,7 +1651,7 @@ function interfaceOrderDelivery(aParam, oResponse)
 				xhtml: aHTML.join(''),
 				showMore: (oResponse.morerows == "true"),
 				more: oResponse.moreid,
-				rows: giReturnRows,
+				rows: ns1blankspace.option.defaultRows,
 				functionShowRow: interfaceOrderDeliveryRow,
 				type: 'json'
 			}); 	
@@ -1700,7 +1700,7 @@ function interfaceOrderDeliveryPick(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainOrderDeliveryPick" class="interfaceMain">' +
 					'<tr id="trInterfaceMainOrderDeliveryPickRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainOrderDeliveryPickColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainOrderDeliveryPickColumn2" style="width: 100px;" class="interfaceMainColumn2Action">' +
 					'</td>' +
@@ -1712,7 +1712,7 @@ function interfaceOrderDeliveryPick(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_ORDER_DELIVERY_ITEM_SEARCH';
 		oSearch.addField('producttext,quantity');
-		oSearch.addFilter('order', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.getResults(function(data) {interfaceOrderDeliveryPick(aParam, data)});	
 	}
 	else
@@ -1779,7 +1779,7 @@ function interfaceOrderDeliveryPick(aParam, oResponse)
 				xhtml: aHTML.join(''),
 				showMore: (oResponse.morerows == "true"),
 				more: oResponse.moreid,
-				rows: giReturnRows,
+				rows: ns1blankspace.option.defaultRows,
 				functionShowRow: interfaceOrderDeliveryPickRow,
 				type: 'json'
 			}); 	
@@ -1833,7 +1833,7 @@ function interfaceOrderInvoices(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainOrderInvoices" class="interfaceMain">' +
 					'<tr id="trInterfaceMainOrderInvoicesRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainOrderInvoicesColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainOrderInvoicesColumn2" style="width: 100px;" class="interfaceMainColumn2Actionx">' +
 					'</td>' +
@@ -1867,7 +1867,7 @@ function interfaceOrderInvoices(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_ORDER_DELIVERY_SEARCH';
 		oSearch.addField('reference');
-		oSearch.addFilter('order', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.getResults(function(oResponse)
 		{	
 			var aID = [];
@@ -1900,7 +1900,7 @@ function interfaceOrderInvoices(aParam, oResponse)
 			aHTML[++h] = '<tr class="interfaceOrderInvoices">';
 			aHTML[++h] = '<td class="interfaceMainRowNothing">No invoices for this order.<br /><br />';
 			
-			if (goObjectContext.status == 2)
+			if (ns1blankspace.objectContextData.status == 2)
 			{
 				aHTML[++h] = 'Click <strong>submit</strong> and then <strong>finalise</strong> in the summary section to create the invoice.</td>';
 			}
@@ -1939,7 +1939,7 @@ function interfaceOrderInvoices(aParam, oResponse)
 				xhtml: aHTML.join(''),
 				showMore: (oResponse.morerows == "true"),
 				more: oResponse.moreid,
-				rows: giReturnRows,
+				rows: ns1blankspace.option.defaultRows,
 				functionShowRow: interfaceOrderInvoicesRow,
 				functionNewPage: 'interfaceOrderProductsBind()',
 				type: 'json'

@@ -7,10 +7,10 @@
  
 function interfaceSetupUserRoleMasterViewport()
 {
-	gsObjectName = 'User Roles';
-	giObjectContext = -1;
-	giObject = -1;
-	goObjectContext = undefined;
+	ns1blankspace.objectName = 'User Roles';
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = -1;
+	ns1blankspace.objectContextData = undefined;
 	
 	interfaceMasterReset();		
 			
@@ -21,8 +21,8 @@ function interfaceSetupUserRoleMasterViewport()
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupUserRoleSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupUserRoleSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -77,15 +77,15 @@ function interfaceSetupUserRoleMasterViewport()
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupUserRoleSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupUserRoleSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupUserRoleSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupUserRoleSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupUserRoleHomeShow();
 	
@@ -101,7 +101,7 @@ function interfaceSetupUserRoleHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceSetupUserRoleHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -121,7 +121,7 @@ function interfaceSetupUserRoleHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_ROLE_SEARCH';
@@ -172,7 +172,7 @@ function interfaceSetupUserRoleHomeShow(oResponse)
 		
 		$('#aInterfaceSetupUserRoleHomeMostLikelyMore').click(function(event)
 		{
-			interfaceSetupUserRoleSearch('tdInterfaceViewportMasterControlBrowse-', {source: giSearchSource_BROWSE});
+			interfaceSetupUserRoleSearch('tdInterfaceViewportMasterControlBrowse-', {source: ns1blankspace.data.searchSource.browse});
 		});
 	}
 }
@@ -186,19 +186,19 @@ function interfaceSetupUserRoleSearch(sXHTMLElementId, iSource, sSearchText, sSe
 		
 	if (iSource == undefined)
 	{
-		iSource = giSearchSource_TEXT_INPUT;
+		iSource = ns1blankspace.data.searchSource.text;
 	}	
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_ROLE_SEARCH';
 		oSearch.addField('title,notes');
-		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.getResults(function(data) {interfaceSetupUserRoleShow(data)});
 	}
 	else
@@ -211,7 +211,7 @@ function interfaceSetupUserRoleSearch(sXHTMLElementId, iSource, sSearchText, sSe
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -220,7 +220,7 @@ function interfaceSetupUserRoleSearch(sXHTMLElementId, iSource, sSearchText, sSe
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{	
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -229,7 +229,7 @@ function interfaceSetupUserRoleSearch(sXHTMLElementId, iSource, sSearchText, sSe
 			oSearch.method = 'SETUP_ROLE_SEARCH';
 			oSearch.addField('title');
 			
-			if (iSource == giSearchSource_BROWSE)
+			if (iSource == ns1blankspace.data.searchSource.browse)
 			{
 				oSearch.addFilter('title', 'STRING_STARTS_WITH', sSearchText);
 			}
@@ -283,13 +283,13 @@ function interfaceSetupUserRoleSearchShow(oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupUserRoleSearch(event.target.id, 1);
 		});
 	}			
@@ -304,7 +304,7 @@ function interfaceSetupUserRoleViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 		
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -361,7 +361,7 @@ function interfaceSetupUserRoleViewport()
 
 function interfaceSetupUserRoleShow(oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupUserRoleViewport();
 	
 	var aHTML = [];
@@ -369,7 +369,7 @@ function interfaceSetupUserRoleShow(oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find user role.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -380,9 +380,9 @@ function interfaceSetupUserRoleShow(oResponse)
 	{
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 		
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
@@ -404,7 +404,7 @@ function interfaceSetupUserRoleSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find user.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -416,7 +416,7 @@ function interfaceSetupUserRoleSummary()
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryNotes" class="interfaceMainSummaryValue">' +
-						goObjectContext.notes +
+						ns1blankspace.objectContextData.notes +
 						'</td></tr>';
 		
 		aHTML[++h] = '</table>';					
@@ -472,10 +472,10 @@ function interfaceSetupUserRoleDetails()
 		
 		$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
-			$('#inputInterfaceMainDetailsNotes').val(goObjectContext.notes);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('#inputInterfaceMainDetailsNotes').val(ns1blankspace.objectContextData.notes);
 		}
 	}	
 }
@@ -485,9 +485,9 @@ function interfaceSetupUserRoleSave()
 	var sParam = 'method=SETUP_ROLE_MANAGE';
 	var sData = '_=1';
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
-		sParam += '&id=' + giObjectContext	
+		sParam += '&id=' + ns1blankspace.objectContext	
 	}	
 	
 	if ($('#divInterfaceMainDetails').html() != '')
@@ -528,7 +528,7 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainMethodAccess" class="interfaceMain">' +
 					'<tr id="trInterfaceMainSetupMethodAccessRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainSetupMethodAccessColumnEndpoint" style="width:100px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-						gsLoadingXHTML + '</td>' +
+						ns1blankspace.xhtml.loading + '</td>' +
 					'<td id="tdInterfaceMainSetupMethodAccessColumnMethod" style="width:200px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn2">' +
 					'</td>' +
 					'<td id="tdInterfaceMainSetupMethodAccessColumnEdit" style="width:280px;padding-right:15px;font-size:0.875em;" class="interfaceMainColumn2">' +
@@ -609,7 +609,7 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 	{
 		if (oResponse == undefined)
 		{
-			$('#tdInterfaceMainSetupMethodAccessColumnMethod').html(gsLoadingSmallXHTML);
+			$('#tdInterfaceMainSetupMethodAccessColumnMethod').html(ns1blankspace.xhtml.loadingSmall);
 			$('#tdInterfaceMainSetupMethodAccessColumnEdit').html("");
 
 			var aHTML = [];
@@ -713,7 +713,7 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
 		oSearch.addField('canadd,canremove,canupdate,canuse');
-		oSearch.addFilter('role', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.addFilter('access', 'EQUAL_TO', aXHTMLElementID[1]);
 
 		oSearch.getResults(function(data) {
@@ -851,7 +851,7 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 			interfaceMasterStatusWorking();
 
 			var sData = 'id=' + interfaceMasterFormatSave(sID);
-			sData += '&role=' + interfaceMasterFormatSave(giObjectContext);
+			sData += '&role=' + interfaceMasterFormatSave(ns1blankspace.objectContext);
 			sData += '&access=' + interfaceMasterFormatSave(aXHTMLElementID[1]);
 
 			sData += '&canadd=' + (interfaceMasterFormatSave($('input[name="radioCanAdd"]:checked').val()) != '' ? interfaceMasterFormatSave($('input[name="radioCanAdd"]:checked').val()) : 'N');
@@ -912,8 +912,8 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 
 function interfaceSetupUserRoleNew(aParam)
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceSetupUserRoleViewport();
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");

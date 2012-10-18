@@ -308,10 +308,10 @@ function interfaceReportMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 
-	giObject = 5;
-	gsObjectName = 'Reporting';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.object = 5;
+	ns1blankspace.objectName = 'Reporting';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 	
 	if (bShowHome)
 	{
@@ -330,8 +330,8 @@ function interfaceReportMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceReportSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceReportSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -356,15 +356,15 @@ function interfaceReportMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceReportSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceReportSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceReportSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceReportSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceReportInitialise()
 	
@@ -563,7 +563,7 @@ function interfaceReportViewport(aParam, oResponse)
 	{
 		if (oResponse == undefined)
 		{
-			aHTML[++h] = '<div id="divInterfaceMainReportHeader">' + gsLoadingXHTML + '</div>';
+			aHTML[++h] = '<div id="divInterfaceMainReportHeader">' + ns1blankspace.xhtml.loading + '</div>';
 			aHTML[++h] = '<div id="divInterfaceMainReportSearch"></div>';
 			aHTML[++h] = '<div style="display:none;" id="divInterfaceMainReportResults">No results.</div>';
 			aHTML[++h] = '<div style="display:none;" id="divInterfaceMainReportSend">No data.</div>';
@@ -1110,7 +1110,7 @@ function interfaceReportSearch(aParam, oResponse)
 	var aHTML = [];
 	var h = -1;
 	var sReturnFormat = 'json';
-	var iRows = giReturnRows;
+	var iRows = ns1blankspace.option.defaultRows;
 	var sParameterList
 	var oSearchParameters;
 	var sExtraIDColumnBefore = '';
@@ -1157,7 +1157,7 @@ function interfaceReportSearch(aParam, oResponse)
 			$('#spanReportHeaderSearch').removeClass('Highlight')
 			
 			$('#divInterfaceMainReportResults').show();
-			$('#divInterfaceMainReportResults').html(gsLoadingXHTML);
+			$('#divInterfaceMainReportResults').html(ns1blankspace.xhtml.loading);
 			$('#spanReportHeaderResults').addClass('Highlight')
 		
 			$('#spanReportHeaderSearch').css('cursor', 'pointer');
@@ -1420,7 +1420,7 @@ function interfaceReportSearch(aParam, oResponse)
 				showMore: ($(oResponse).attr('morerows') == "true"),
 				columns: aParameter.join('-'),
 				more: $(oResponse).attr('moreid'),
-				rows: giReturnRows,
+				rows: ns1blankspace.option.defaultRows,
 				functionShowRow: interfaceReportSearchRow,
 				functionSearch: gfReportSearchFunction,
 				functionOpen: gsReportScriptOpen,
@@ -1469,7 +1469,7 @@ function interfaceReportSearch(aParam, oResponse)
 				for (edId in tinyMCE.editors) 
 					tinyMCE.editors[edId].destroy(true);
 				
-				giEditorCounter = giEditorCounter + 1;
+				ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
 				$('#divInterfaceMainReportSend').attr('onDemandLoading', '');
 				
 				aHTML = [];
@@ -1506,7 +1506,7 @@ function interfaceReportSearch(aParam, oResponse)
 				aHTML[++h] = '<tr id="trInterfaceMainDetailsReportSendText">';	
 				aHTML[++h] = '<td id="tdInterfaceMainReportSendTextValue" class="interfaceMainTextMulti" width="550px">' +
 								'<div rows="550" cols="400" onDemandType="TEXTMULTI" id="inputInterfaceMainReportSendText' +
-									giEditorCounter + '" editorcount="' + giEditorCounter + '" class="inputInterfaceMainTextMulti"></textarea>' +
+									ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="inputInterfaceMainTextMulti"></textarea>' +
 								'</td>';
 				aHTML[++h] = '</td></tr></table>';					
 				aHTML[++h] = '</td>';					
@@ -1547,7 +1547,7 @@ function interfaceReportSearch(aParam, oResponse)
 				{
 					//var sText = interfaceReportReplaceMailMerge();
 					var sText = interfaceReportReplaceMergeFields({columns: aColumns, 
-																   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + giEditorCounter)).getContent()});
+																   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + ns1blankspace.counter.editor)).getContent()});
 					var iObject;
 					if (aParam.method != undefined)
 					{
@@ -1556,21 +1556,21 @@ function interfaceReportSearch(aParam, oResponse)
 						if (sEndPoint == "CONTACT")
 						{
 							if (aMethod[1] == 'BUSINESS')
-							{	iObject = giObjectBusiness;	}
+							{	iObject = ns1blankspace.data.object.contactbusiness;	}
 							else if (aMethod[1] == "PERSON")
-							{	iObject = giObjectPerson;	}
+							{	iObject = ns1blankspace.data.object.contactperson;	}
 						}
 						else if (sEndPoint == 'AUDIT')
 						{	
 							if (aMethod[1] == "ITEM")
-							{	iObject = giObjectAuditItemType;	}
+							{	iObject = ns1blankspace.objectAuditItemType;	}
 							else
-							{	iObject = giObjectAudit;	}
+							{	iObject = ns1blankspace.objectAudit;	}
 						}
 						else if (sEndPoint == 'OPPORTUNITY')
-						{	iObject = giObjectOpportunity;	}
+						{	iObject = ns1blankspace.data.object.opportunity;	}
 						else if (sEndPoint == "ISSUE")
-						{	iObject = giObjectIssue;	}
+						{	iObject = ns1blankspace.objectIssue;	}
 						else
 						{	
 							alert('Report Error. Object cannot be determined.');
@@ -1597,7 +1597,7 @@ function interfaceReportSearch(aParam, oResponse)
 				.click(function()
 				{
 					var sText = interfaceReportReplaceMergeFields({columns: aColumns, 
-																   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + giEditorCounter)).getContent()});
+																   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + ns1blankspace.counter.editor)).getContent()});
 					var sSubject = interfaceReportReplaceMergeFields({columns: aColumns, 
 																   replace: $('#inputInterfaceMainDetailsReportSendSubject').val()});
 					interfaceReportSendEmail({moreID: oResponse.moreid,
@@ -1613,16 +1613,16 @@ function interfaceReportSearch(aParam, oResponse)
 				$('.interfaceReportColumnSelect')
 				.hover( function()
 				{	
-					oMCEBookmark = tinyMCE.get('inputInterfaceMainReportSendText' + giEditorCounter).selection.getBookmark({type: 1, normalized: true});
+					oMCEBookmark = tinyMCE.get('inputInterfaceMainReportSendText' + ns1blankspace.counter.editor).selection.getBookmark({type: 1, normalized: true});
 				})
 				.click( function()
 				{
 					interfaceMasterMCEAddElement({xhtmlElementId: this.id,
-												  editorId: 'inputInterfaceMainReportSendText' + giEditorCounter, 
+												  editorId: 'inputInterfaceMainReportSendText' + ns1blankspace.counter.editor, 
 												  mceBookmark: oMCEBookmark})
 				})
 				
-				tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainReportSendText' + giEditorCounter);
+				tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainReportSendText' + ns1blankspace.counter.editor);
 				
 				//var sParam = 'method=DOCUMENT_GET_DOCUMENT&noformat=1&select=' + iDocument;
 
@@ -1873,7 +1873,7 @@ function interfaceReportFieldIsIncluded(sFieldList)
 function interfaceReportAddSearchFilter(aParam)
 {
 
-	var sValue = $('#' + gsLastShowDivID).val();
+	var sValue = $('#' + ns1blankspace.xhtml.divID).val();
 	var sName;
 	var sParameter = '';
 	var sAttribute = '';
@@ -1891,7 +1891,7 @@ function interfaceReportAddSearchFilter(aParam)
 		sName = sName.replace(/\./g,'_');
 		sSearchMethod = $("#tdInterfaceMainReport_comparison-" + sName + '-text').attr('data-searchMethod');
 		if (sAttribute != '')
-		{	sValue = $('#' + gsLastShowDivID).attr(sAttribute)	}
+		{	sValue = $('#' + ns1blankspace.xhtml.divID).attr(sAttribute)	}
 		
 		$("#tdInterfaceMainReport_comparison-" + sName + '-text').attr('data-searchMethod', sSearchMethod + '&' + sParameter + '=' + sValue);
 		

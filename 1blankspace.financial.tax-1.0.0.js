@@ -16,10 +16,10 @@ function interfaceFinancialTaxMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 
-	giObject = -1;
-	goObjectContext = undefined;
-	gsObjectName = 'Tax';
-	giObjectContext = -1;
+	ns1blankspace.object = -1;
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectName = 'Tax';
+	ns1blankspace.objectContext = -1;
 	
 	if (bShowHome)
 	{
@@ -38,8 +38,8 @@ function interfaceFinancialTaxMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -94,15 +94,15 @@ function interfaceFinancialTaxMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialTaxHomeShow()};	
 }
 
@@ -116,7 +116,7 @@ function interfaceFinancialTaxHomeShow(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -136,7 +136,7 @@ function interfaceFinancialTaxHomeShow(aParam, oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_TAX_REPORT_SEARCH';
@@ -201,7 +201,7 @@ function interfaceFinancialTaxSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -216,11 +216,11 @@ function interfaceFinancialTaxSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined  && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_TAX_REPORT_SEARCH';
@@ -237,7 +237,7 @@ function interfaceFinancialTaxSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -245,7 +245,7 @@ function interfaceFinancialTaxSearch(sXHTMLElementId, aParam)
 			sSearchText = aSearch[1];
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			
@@ -300,12 +300,12 @@ function interfaceFinancialTaxSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceFinancialTaxSearch(event.target.id, {source: 1});
 		});
 	}		
@@ -372,7 +372,7 @@ function interfaceFinancialTaxViewport()
 
 function interfaceFinancialTaxShow(aParam, oResponse)
 {	
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceFinancialTaxViewport();
 		
 	var aHTML = [];
@@ -380,7 +380,7 @@ function interfaceFinancialTaxShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 			
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this tax report.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -389,15 +389,15 @@ function interfaceFinancialTaxShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 			
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 			
-		$('#divInterfaceViewportControlContext').html(goObjectContext.enddate+
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_status">' + goObjectContext.statustext + '</span>');
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.enddate+
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_status">' + ns1blankspace.objectContextData.statustext + '</span>');
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceFinancialTaxMasterViewport({showHome: false});interfaceFinancialTaxSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceFinancialTaxMasterViewport({showHome: false});interfaceFinancialTaxSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 	
@@ -428,7 +428,7 @@ function interfaceFinancialTaxSummary(aParam, oResponse)
 					
 	aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTotalAmount" class="interfaceMainSummary"></td></tr>' +
 					'<tr><td id="tdInterfaceMainSummaryTotalAmountValue" class="interfaceMainSummaryValue">' +
-					'This tax report was last updated on the ' + goObjectContext.modifieddate + '.' +
+					'This tax report was last updated on the ' + ns1blankspace.objectContextData.modifieddate + '.' +
 					'</td></tr>';			
 	
 	aHTML[++h] = '</table>';					
@@ -444,7 +444,7 @@ function interfaceFinancialTaxReport()
 	aHTML[++h] = '<table id="tableInterfaceMainTax" class="interfaceMain">' +
 				'<tr id="trInterfaceMainTaxRow1" class="interfaceMainRow1">' +
 				'<td id="tdInterfaceMainTaxColumnReportCategory" style="width: 120px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-				gsLoadingXHTML +
+				ns1blankspace.xhtml.loading +
 				'</td>' +
 				'<td id="tdInterfaceMainTaxColumnReportType" style="width: 125px;padding-right:5px;" class="interfaceMainColumn2">' +
 				'</td>' +
@@ -492,7 +492,7 @@ function interfaceFinancialTaxReportSummary(aParam)
 		if (aParam.category != undefined) {sCategory = aParam.category}
 	}
 	
-	$('#tdInterfaceMainTaxColumnReportType').html(gsLoadingSmallXHTML);
+	$('#tdInterfaceMainTaxColumnReportType').html(ns1blankspace.xhtml.loadingSmall);
 	
 	var aHTML = [];
 	var h = -1;
@@ -511,7 +511,7 @@ function interfaceFinancialTaxReportSummary(aParam)
 								sField + '</td>';
 				
 		aHTML[++h] = '<td id="interfaceBankAccount_amount-' + sField + '" class="interfaceMainRow interfaceMainRowSelect type" style="width:90px;text-align:right;">' +
-									'$' + goObjectContext[this] + '</td>';
+									'$' + ns1blankspace.objectContextData[this] + '</td>';
 																													
 		aHTML[++h] = '</tr>';
 	});
@@ -556,7 +556,7 @@ function interfaceFinancialTaxReportItems(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainTax" class="interfaceMain">' +
 					'<tr id="trInterfaceMainTaxRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainTaxColumnReportItemSubType" style="width: 120px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainTaxColumnReportItems" class="interfaceMainColumn2">' +
 					'</td>' +
@@ -598,7 +598,7 @@ function interfaceFinancialTaxReportItems(aParam, oResponse)
 	{
 		$.extend(true, aParam, {step: 3});
 		
-		var sData = 'id=' + giObjectContext +
+		var sData = 'id=' + ns1blankspace.objectContext +
 					'&type=' + iType +
 					'&subtype=' + iSubType +
 					'&field=' + sField;

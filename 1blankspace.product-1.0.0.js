@@ -14,10 +14,10 @@ function interfaceProductMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 	
-	giObject = 16;
-	gsObjectName = 'Product';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.object = 16;
+	ns1blankspace.objectName = 'Product';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 	
 	if (bShowHome)
 	{
@@ -36,8 +36,8 @@ function interfaceProductMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceProductSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);	
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceProductSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);	
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -92,15 +92,15 @@ function interfaceProductMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceProductSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceProductSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceProductSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceProductSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	if (bShowHome) {interfaceProductHomeShow()};
 	
@@ -116,7 +116,7 @@ function interfaceProductHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceProductHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -136,7 +136,7 @@ function interfaceProductHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_SEARCH';
@@ -197,7 +197,7 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -212,11 +212,11 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined  && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_SEARCH';
@@ -233,7 +233,7 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -242,7 +242,7 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -252,7 +252,7 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 			oSearch.addField('reference,title');
 			oSearch.rf = 'json';
 		
-			if (iSource == giSearchSource_BROWSE)
+			if (iSource == ns1blankspace.data.searchSource.browse)
 			{
 				oSearch.addFilter('title', 'STRING_STARTS_WITH', sSearchText);
 			}
@@ -308,7 +308,7 @@ function interfaceProductSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		var oElement = $('#inputInterfaceMasterViewportControlSearch');
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
 		interfaceMasterSearchStop();
@@ -316,7 +316,7 @@ function interfaceProductSearchShow(aParam, oResponse)
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceProductSearch(event.target.id, {source: 1});
 		});
 	}			
@@ -331,7 +331,7 @@ function interfaceProductViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -454,7 +454,7 @@ function interfaceProductViewport()
 
 function interfaceProductShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceProductViewport();
 
 	var aHTML = [];
@@ -462,7 +462,7 @@ function interfaceProductShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the product.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -471,18 +471,18 @@ function interfaceProductShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
-		aHTML[++h] = goObjectContext.title;
+		aHTML[++h] = ns1blankspace.objectContextData.title;
 		
-		if (goObjectContext.categorytext != '')
+		if (ns1blankspace.objectContextData.categorytext != '')
 		{
-			aHTML[++h] = '<span id="spanInterfaceViewportControlSubContext">' + goObjectContext.categorytext + '</span>'
+			aHTML[++h] = '<span id="spanInterfaceViewportControlSubContext">' + ns1blankspace.objectContextData.categorytext + '</span>'
 		}
 		
-		if (goObjectContext.currentretailprice != '')
+		if (ns1blankspace.objectContextData.currentretailprice != '')
 		{
-			aHTML[++h] = '<span id="spanInterfaceViewportControlSubContext">' + goObjectContext.currentretailprice + '</span>'
+			aHTML[++h] = '<span id="spanInterfaceViewportControlSubContext">' + ns1blankspace.objectContextData.currentretailprice + '</span>'
 		}
 				
 		$('#divInterfaceViewportControlContext').html(aHTML.join('<br />'));
@@ -491,7 +491,7 @@ function interfaceProductShow(aParam, oResponse)
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceProductMasterViewport({showHome: false});interfaceProductSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceProductMasterViewport({showHome: false});interfaceProductSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 			
@@ -504,7 +504,7 @@ function interfaceProductSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find Product.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -529,27 +529,27 @@ function interfaceProductSummary()
 	
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
-		if (goObjectContext.currentretailprice != '')
+		if (ns1blankspace.objectContextData.currentretailprice != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPrice" class="interfaceMainSummary">Retail Price</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryPriceValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
-			aHTML[++h] = '$' + goObjectContext.currentretailprice;
+			aHTML[++h] = '$' + ns1blankspace.objectContextData.currentretailprice;
 			aHTML[++h] = '</td></tr>';
 		}	
 		
-		if (goObjectContext.units != '')
+		if (ns1blankspace.objectContextData.units != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryQuantity" class="interfaceMainSummary">Units</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryQuantityValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
-			aHTML[++h] = goObjectContext.units;
+			aHTML[++h] = ns1blankspace.objectContextData.units;
 			aHTML[++h] = '</td></tr>';
 		}	
 		
-		if (goObjectContext.description != '')
+		if (ns1blankspace.objectContextData.description != '')
 		{	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.description +
+						ns1blankspace.objectContextData.description +
 						'</td></tr>';
 		}
 		
@@ -562,14 +562,14 @@ function interfaceProductSummary()
 		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action" cellspacing=0>';
 						
-		if (goObjectContext.imageurl && goObjectContext.imageurl != '')
+		if (ns1blankspace.objectContextData.imageurl && ns1blankspace.objectContextData.imageurl != '')
 		{	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryImage class="interfaceMainColumn2Action">' +
-						'<img border=0 src="' + goObjectContext.imageurl + '">' +
+						'<img border=0 src="' + ns1blankspace.objectContextData.imageurl + '">' +
 						'</td></tr>';
 		}						
 						
-		if (false && goObjectContext.trackinventory != 'Y')
+		if (false && ns1blankspace.objectContextData.trackinventory != 'Y')
 		{	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAdjustStock" class="interfaceMainColumn2Action">' +
 						'<a href="#" id="aInterfaceMainSummaryAdjustStock">Adjust&nbsp;Stock</a>' +
@@ -675,16 +675,16 @@ function interfaceProductDetails()
 			
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			var iStatus = goObjectContext.status;
+			var iStatus = ns1blankspace.objectContextData.status;
 			if (iStatus == '') {iStatus = 1}
 		
-			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
-			$('#inputInterfaceMainDetailsDescription').val(goObjectContext.description);
+			$('#inputInterfaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('#inputInterfaceMainDetailsDescription').val(ns1blankspace.objectContextData.description);
 			$('[name="radioStatus"][value="' + iStatus + '"]').attr('checked', true);
-			$('[name="radioProductType"][value="' + goObjectContext.type + '"]').attr('checked', true);
+			$('[name="radioProductType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -734,9 +734,9 @@ function interfaceProductPricing()
 			
 		interfaceProductPricingGroup({xhtmlElemendID: 'tdInterfaceMainPricingColumn2'})
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainPricingPriceRetail').val(goObjectContext.currentretailprice);
+			$('#inputInterfaceMainPricingPriceRetail').val(ns1blankspace.objectContextData.currentretailprice);
 		}
 		else
 		{
@@ -851,7 +851,7 @@ function interfaceProductCategory(aParam, oResponse)
 
 			if (oResponse.data.rows.length != 0)
 			{
-				$('[name="radioCategory"][value="' + goObjectContext.category + '"]').attr('checked', true);
+				$('[name="radioCategory"][value="' + ns1blankspace.objectContextData.category + '"]').attr('checked', true);
 			}
 		}	
 	}	
@@ -940,12 +940,12 @@ function interfaceProductStock()
 			
 		$('#tdInterfaceMainStockColumn2').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsQuantity').val(goObjectContext.units);
-			$('#inputInterfaceMainDetailsMinimumStockLevel').val(goObjectContext.minimumstocklevel);
-			$('[name="radioStockUnit"][value="' + goObjectContext.unittype + '"]').attr('checked', true);
-			$('[name="radioTrackStock"][value="' + goObjectContext.trackinventory + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsQuantity').val(ns1blankspace.objectContextData.units);
+			$('#inputInterfaceMainDetailsMinimumStockLevel').val(ns1blankspace.objectContextData.minimumstocklevel);
+			$('[name="radioStockUnit"][value="' + ns1blankspace.objectContextData.unittype + '"]').attr('checked', true);
+			$('[name="radioTrackStock"][value="' + ns1blankspace.objectContextData.trackinventory + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -957,8 +957,8 @@ function interfaceProductStock()
 
 function interfaceProductNew()
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceProductViewport();
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
@@ -970,7 +970,7 @@ function interfaceProductSave()
 {
 	interfaceMasterStatusWorking();
 
-	var sData = 'id=' + ((giObjectContext == -1)?'':giObjectContext);
+	var sData = 'id=' + ((ns1blankspace.objectContext == -1)?'':ns1blankspace.objectContext);
 			
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
@@ -1015,8 +1015,8 @@ function interfaceProductSaveProcess(oResponse)
 	if (oResponse.status == 'OK')
 	{
 		interfaceMasterStatus('Saved');
-		if (giObjectContext == -1) {var bNew = true}
-		giObjectContext = oResponse.id;	
+		if (ns1blankspace.objectContext == -1) {var bNew = true}
+		ns1blankspace.objectContext = oResponse.id;	
 		
 		if ($('#divInterfaceMainPricing').html() != '')
 		{
@@ -1038,7 +1038,7 @@ function interfaceProductPriceSave(aParam)
 {
 	var sParam = 'method=PRODUCT_PRICE_MANAGE&rf=JSON';
 	var sData = 'price=' + interfaceMasterFormatSave($('#inputInterfaceMainPricingPriceRetail').val());
-	sData += '&product=' + giObjectContext;
+	sData += '&product=' + ns1blankspace.objectContext;
 	
 	$.ajax(
 	{
@@ -1053,7 +1053,7 @@ function interfaceProductQuantitySave(aParam)
 {
 	var sParam = 'method=PRODUCT_STOCK_MANAGE&rf=JSON';
 	var sData = 'units=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsQuantity').val());
-	sData += '&product=' + giObjectContext;
+	sData += '&product=' + ns1blankspace.objectContext;
 	sData += '&type=3';
 	sData += '&effectivedate=' + Date.today().toString("dd-MMM-yyyy");
 	
@@ -1097,7 +1097,7 @@ function interfaceProductStockHistory(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainOrderProducts" class="interfaceMain">' +
 					'<tr id="trInterfaceMainOrderProductsRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainOrderProductsColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainOrderProductsColumn2" style="width: 100px;" class="interfaceMainColumn2Action">' +
 					'</td>' +
@@ -1127,8 +1127,8 @@ function interfaceProductStockHistory(aParam, oResponse)
 			alert("Add product");
 			/* interfaceContactPersonMasterViewport({
 				showHome: false,
-				contactBusiness: giObjectContext,
-				contactBusinessText: gsContactBusinessText,
+				contactBusiness: ns1blankspace.objectContext,
+				contactBusinessText: ns1blankspace.contactBusinessText,
 				showNew: true}); */
 		})
 		.css('width', '75px')
@@ -1175,7 +1175,7 @@ function interfaceProductStockHistory(aParam, oResponse)
 				xhtml: aHTML.join(''),
 				showMore: ($(oRoot).attr('morerows') == "true"),
 				more: $(oRoot).attr('moreid'),
-				rows: giReturnRows,
+				rows: ns1blankspace.option.defaultRows,
 				functionShowRow: interfaceOrderProductsRow,
 				functionNewPage: 'interfaceOrderProductsBind()',
 				type: 'json'

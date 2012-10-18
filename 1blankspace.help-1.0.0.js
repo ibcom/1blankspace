@@ -35,8 +35,8 @@ function interfaceHelpMasterViewport()
 {
 
 	glObject = 32;
-	goObjectContextXML = '';
-	gsObjectName = 'Help';
+	ns1blankspace.objectContextDataXML = '';
+	ns1blankspace.objectName = 'Help';
 	glObjectContext = -1;
 			
 	$('#divInterfaceMasterViewportControlSet').button(
@@ -101,7 +101,7 @@ function interfaceHelpMasterViewport()
 	
 	$('.InterfaceMasterViewportControlBrowse').click(function(event)
 	{
-		interfaceHelpSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceHelpSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('#inputInterfaceMasterViewportControlSearch').focus();
@@ -128,7 +128,7 @@ function interfaceHelpHomeShow()
 	
 	$('#divInterfaceMain').html(aHTML.join(''));
 	
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 
 }
 
@@ -139,7 +139,7 @@ function interfaceHelpSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -157,7 +157,7 @@ function interfaceHelpSearch(sXHTMLElementId, aParam)
 	if (sSearchContext != undefined)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
 		glObjectContext = sSearchContext;
 		var sParam = 'method=SUPPORT_ISSUE_SEARCH&select=' + glObjectContext;
@@ -178,7 +178,7 @@ function interfaceHelpSearch(sXHTMLElementId, aParam)
 	
 		if (iSource == undefined)
 		{
-			iSource = giSearchSource_TEXT_INPUT;
+			iSource = ns1blankspace.data.searchSource.text;
 		}	
 		
 		if (sSearchText == undefined)
@@ -186,7 +186,7 @@ function interfaceHelpSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -194,7 +194,7 @@ function interfaceHelpSearch(sXHTMLElementId, aParam)
 			sSearchText = aSearch[1];
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
 			interfaceMasterOptionsSetPosition(sElementId);
@@ -263,12 +263,12 @@ function interfaceHelpSearchShow(aParam, oXML)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceHelpSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -299,7 +299,7 @@ function interfaceHelpViewport()
 
 	aHTML[++h] = '</table>';					
 
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
 		aHTML[++h] = '<table id="tableInterfaceViewportControl2" class="interfaceViewportControl">';
 		
@@ -359,17 +359,17 @@ function interfaceHelpViewport()
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments("divInterfaceMainAttachments", giObjectPerson, glObjectContext);
+		interfaceMasterAttachments("divInterfaceMainAttachments", ns1blankspace.data.object.contactperson, glObjectContext);
 	});
 }
 
 function interfaceHelpShow(aParam, oXML)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceClientContactViewport();
 	
-	goObjectContextXML = oXML;
+	ns1blankspace.objectContextDataXML = oXML;
 	
 	var aHTML = [];
 	var h = -1;
@@ -409,7 +409,7 @@ function interfaceHelpSummary()
 
 	var aHTML = [];
 	var h = -1;
-	var oXML = goObjectContextXML;
+	var oXML = ns1blankspace.objectContextDataXML;
 	
 	oRoot = oXML.getElementsByTagName('ondemand').item(0);
 	
@@ -472,7 +472,7 @@ function interfaceHelpDetails()
 	var aHTML = [];
 	var h = -1;
 	
-	oRoot = goObjectContextXML.getElementsByTagName('ondemand').item(0);
+	oRoot = ns1blankspace.objectContextDataXML.getElementsByTagName('ondemand').item(0);
 	
 	if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
 	{

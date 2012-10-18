@@ -9,9 +9,9 @@ function interfaceSetupWebsiteMasterViewport(aParam)
 {
 
 	gsSetupName = 'Website';
-	giObjectContext = -1;
-	giObject = 40;
-	goObjectContext = undefined;
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = 40;
+	ns1blankspace.objectContextData = undefined;
 	
 	var bShowHome = true;
 	var bNew = false;
@@ -40,8 +40,8 @@ function interfaceSetupWebsiteMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupWebsiteSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupWebsiteSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -114,15 +114,15 @@ function interfaceSetupWebsiteMasterViewport(aParam)
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupWebsiteSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupWebsiteSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupWebsiteSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupWebsiteSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	if (bShowHome)
 	{
@@ -150,7 +150,7 @@ function interfaceSetupWebsiteHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceWebsiteHomeMostLikely" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainSummaryColumn2Action" style="width:175px;">' +
 						'</td>' +
@@ -186,7 +186,7 @@ function interfaceSetupWebsiteHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		$.ajax(
 		{
@@ -246,7 +246,7 @@ function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -261,13 +261,13 @@ function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
-		var sParam = 'method=SETUP_SITE_SEARCH&id=' + giObjectContext;
+		ns1blankspace.objectContext = sSearchContext;
+		var sParam = 'method=SETUP_SITE_SEARCH&id=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -285,7 +285,7 @@ function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -294,7 +294,7 @@ function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
 			interfaceMasterOptionsSetPosition(sElementId);
@@ -355,13 +355,13 @@ function interfaceSetupWebsiteSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupWebsiteSearch(event.target.id, 1);
 		});
 	}	
@@ -378,7 +378,7 @@ function interfaceSetupWebsiteViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControlDetails" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -514,7 +514,7 @@ function interfaceSetupWebsiteViewport()
 function interfaceSetupWebsiteShow(aParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupWebsiteViewport();
 	
 	var aHTML = [];
@@ -522,7 +522,7 @@ function interfaceSetupWebsiteShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find website.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -531,7 +531,7 @@ function interfaceSetupWebsiteShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 					
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
@@ -544,12 +544,12 @@ function interfaceSetupWebsiteShow(aParam, oResponse)
 		
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceSetupWebsiteMasterViewport({showHome: false});interfaceSetupWebsiteSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceSetupWebsiteMasterViewport({showHome: false});interfaceSetupWebsiteSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
@@ -562,7 +562,7 @@ function interfaceSetupWebsiteSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find website.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -575,21 +575,21 @@ function interfaceSetupWebsiteSummary()
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummary">Site ID</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummaryValue">' +
-						goObjectContext.id +
+						ns1blankspace.objectContextData.id +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteStatus" class="interfaceMainSummary">Status</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummarySiteStatus" class="interfaceMainSummaryValue">' +
-						goObjectContext.statustext +
+						ns1blankspace.objectContextData.statustext +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteAttachmentsURL" class="interfaceMainSummary">Attachments URL</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummarySiteAttachmentsURL" class="interfaceMainSummaryValue">' +
-						'/site/' + goObjectContext.id + '/' +
+						'/site/' + ns1blankspace.objectContextData.id + '/' +
 						'</td></tr>';		
 						
 
-		if (goObjectContext.ondemandstatustext == '')
+		if (ns1blankspace.objectContextData.ondemandstatustext == '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummary">App Status</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummaryValue">' +
@@ -601,7 +601,7 @@ function interfaceSetupWebsiteSummary()
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummary">App Status</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummaryValue">' +
-						goObjectContext.ondemandstatustext +
+						ns1blankspace.objectContextData.ondemandstatustext +
 						'</td></tr>';
 		}			
 
@@ -618,10 +618,10 @@ function interfaceSetupWebsiteSummary()
 						'<a href="#" id="aInterfaceMainSummarySetupWebApp"><strong>Convert to a jQuery or jQuery mobile webapp.</strong></a>' +
 						'</td></tr>';
 					
-		if (goObjectContext.primaryurl != '')
+		if (ns1blankspace.objectContextData.primaryurl != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask3" class="interfaceMainColumn2Actionx" style="width:175px;">' +
-						'<a href="' + goObjectContext.primaryurl + '" target="_blank">' + goObjectContext.primaryurl + '</a>' +
+						'<a href="' + ns1blankspace.objectContextData.primaryurl + '" target="_blank">' + ns1blankspace.objectContextData.primaryurl + '</a>' +
 						'</td></tr>';
 		}		
 					
@@ -717,11 +717,11 @@ function interfaceSetupWebsiteDetails()
 		
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
-			$('#inputInterfaceMainDetailsEmail').val(goObjectContext.email);
-			$('[name="radioStatus"][value="' + goObjectContext.status + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('#inputInterfaceMainDetailsEmail').val(ns1blankspace.objectContextData.email);
+			$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -781,7 +781,7 @@ function interfaceSetupWebsiteLayout()
 		oSearch.addField('filename,attachment');
 		oSearch.addFilter('filename', 'TEXT_IS_LIKE', 'css')
 		oSearch.addFilter('object', 'EQUAL_TO', 40);
-		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext)
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext)
 		oSearch.async = false;
 		oSearch.rf = 'json';
 		oSearch.sort('filename', 'asc');
@@ -837,13 +837,13 @@ function interfaceSetupWebsiteLayout()
 		
 		$('#tdInterfaceMainLayoutColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainLayoutHeaderHeight').val(goObjectContext.headerheight);
-			$('#inputInterfaceMainLayoutFooterHeight').val(goObjectContext.footerheight);
-			$('#inputInterfaceMainLayoutColumns').val(goObjectContext.columns);
-			$('[name="radioLayout"][value="' + goObjectContext.layout + '"]').attr('checked', true);
-			$('[name="radioCSSAttachment"][value="' + goObjectContext.cssattachment + '"]').attr('checked', true);
+			$('#inputInterfaceMainLayoutHeaderHeight').val(ns1blankspace.objectContextData.headerheight);
+			$('#inputInterfaceMainLayoutFooterHeight').val(ns1blankspace.objectContextData.footerheight);
+			$('#inputInterfaceMainLayoutColumns').val(ns1blankspace.objectContextData.columns);
+			$('[name="radioLayout"][value="' + ns1blankspace.objectContextData.layout + '"]').attr('checked', true);
+			$('[name="radioCSSAttachment"][value="' + ns1blankspace.objectContextData.cssattachment + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -926,13 +926,13 @@ function interfaceSetupWebsiteAdvanced()
 		
 		$('#tdInterfaceMainAdvancedColumn1').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('[name="radioOnDemand"][value="' + goObjectContext.ondemandstatus + '"]').attr('checked', true);
-			$('[name="radioTitle"][value="' + goObjectContext.usekeywordsastitle + '"]').attr('checked', true);
-			$('[name="radioTitle"][value="' +goObjectContext.layout + '"]').attr('checked', true);
-			$('#inputInterfaceMainAdvancedDocumentType').val(interfaceMasterFormatXHTML(goObjectContext.documenttype));
-			$('#inputInterfaceMainBodyTag').val(interfaceMasterFormatXHTML(goObjectContext.bodytag));
+			$('[name="radioOnDemand"][value="' + ns1blankspace.objectContextData.ondemandstatus + '"]').attr('checked', true);
+			$('[name="radioTitle"][value="' + ns1blankspace.objectContextData.usekeywordsastitle + '"]').attr('checked', true);
+			$('[name="radioTitle"][value="' +ns1blankspace.objectContextData.layout + '"]').attr('checked', true);
+			$('#inputInterfaceMainAdvancedDocumentType').val(interfaceMasterFormatXHTML(ns1blankspace.objectContextData.documenttype));
+			$('#inputInterfaceMainBodyTag').val(interfaceMasterFormatXHTML(ns1blankspace.objectContextData.bodytag));
 		}
 		
 	}	
@@ -971,17 +971,17 @@ function interfaceSetupWebsiteScripts()
 		
 		$('#divInterfaceMainScripts').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainScriptHeader').val(interfaceMasterFormatXHTML(goObjectContext.headerscript));
-			$('#inputInterfaceMainScriptFooter').val(interfaceMasterFormatXHTML(goObjectContext.footerscript));
+			$('#inputInterfaceMainScriptHeader').val(interfaceMasterFormatXHTML(ns1blankspace.objectContextData.headerscript));
+			$('#inputInterfaceMainScriptFooter').val(interfaceMasterFormatXHTML(ns1blankspace.objectContextData.footerscript));
 		}
 	}	
 }
 
 function interfaceSetupWebsitePages(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainPages';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
@@ -1017,7 +1017,7 @@ function interfaceSetupWebsitePages(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
 						'<tr id="trInterfaceMainPagesRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainPagesColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainPagesColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
@@ -1242,12 +1242,12 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 			
 		aHTML[++h] = '</td></tr>';
 		
-		giEditorCounter = giEditorCounter + 1;
+		ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
 		
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti">' +
 						'<td id="tdInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti" style="padding-top:15px;">' +
 						'<textarea rows="10" cols="60" name="inputInterfaceMainEditText" id="inputInterfaceMainEditText' +
-						giEditorCounter + '" data-editorcount="' + giEditorCounter + '"' +
+						ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + '"' +
 						' class="inputInterfaceMainTextMultiLarge tinymceAdvanced"></textarea>' +
 						'</td></tr>';
 		
@@ -1280,7 +1280,7 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			var sData = 'site=' + giObjectContext;
+			var sData = 'site=' + ns1blankspace.objectContext;
 			sData += '&documenttitle=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupWebsitePageAddTitle').val());
 			sData += '&documenturl=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupWebsitePageAddURL').val());
 			sData += '&documenttype=' + interfaceMasterFormatSave($('input[name="radioDocumentType"]:checked').val());
@@ -1289,11 +1289,11 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 			
 			if (parseInt($('input[name="radioDocumentType"]:checked').val()) == 5)
 			{
-				sData += '&documentcontent=' + interfaceMasterFormatSave(tinyMCE.get('inputInterfaceMainEditText' + giEditorCounter).getContent());
+				sData += '&documentcontent=' + interfaceMasterFormatSave(tinyMCE.get('inputInterfaceMainEditText' + ns1blankspace.counter.editor).getContent());
 			}
 			else
 			{
-				sData += '&documentcontent=' + interfaceMasterFormatSave($('#inputInterfaceMainEditText' + giEditorCounter).val());
+				sData += '&documentcontent=' + interfaceMasterFormatSave($('#inputInterfaceMainEditText' + ns1blankspace.counter.editor).val());
 			}
 			
 			sData += '&id=' + interfaceMasterFormatSave(sID);
@@ -1325,11 +1325,11 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 		{
 			if (parseInt($('input[name="radioDocumentType"]:checked').val()) == 5)
 			{
-				tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + giEditorCounter);
+				tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + ns1blankspace.counter.editor);
 			}
 			else
 			{
-				tinyMCE.execCommand('mceRemoveControl', false, 'inputInterfaceMainEditText' + giEditorCounter);
+				tinyMCE.execCommand('mceRemoveControl', false, 'inputInterfaceMainEditText' + ns1blankspace.counter.editor);
 			}
 		});
 		
@@ -1373,11 +1373,11 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 			convert_urls : false, 
 			visual : true, 
 			gecko_spellcheck : true,
-			content_css : gsEditorCSS,
+			content_css : ns1blankspace.xhtml.editorCSS,
 			
 			external_link_list_url : "/jscripts/ibcom/linkList.asp", 
-			external_image_list_url : "/jscripts/ibcom/imageList.asp?LinkType=14&LinkId=" + giObjectContext, 
-			media_external_list_url : "/jscripts/ibcom/mediaList.asp?LinkType=14&LinkId=" + giObjectContext,  TemplateLinkType : "0", 
+			external_image_list_url : "/jscripts/ibcom/imageList.asp?LinkType=14&LinkId=" + ns1blankspace.objectContext, 
+			media_external_list_url : "/jscripts/ibcom/mediaList.asp?LinkType=14&LinkId=" + ns1blankspace.objectContext,  TemplateLinkType : "0", 
 
 		});
 		
@@ -1396,7 +1396,7 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 		{
 			$('[name="radioDocumentType"][value="5"]').attr('checked', true);
 			$('[name="radioType"][value="9"]').attr('checked', true);
-			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + giEditorCounter);
+			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + ns1blankspace.counter.editor);
 			$('[name="radioPublic"][value="Y"]').attr('checked', true);	
 		}
 	}
@@ -1408,12 +1408,12 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 			$('#inputInterfaceMainSetupWebsitePageAddTitle').val(oObjectContext.documenttitle);
 			$('#inputInterfaceMainSetupWebsitePageAddURL').val(oObjectContext.documenturl);
 			
-			$('#inputInterfaceMainEditText' + giEditorCounter).val(interfaceMasterFormatXHTML(oObjectContext.documentcontent));
+			$('#inputInterfaceMainEditText' + ns1blankspace.counter.editor).val(interfaceMasterFormatXHTML(oObjectContext.documentcontent));
 			
 			if (parseInt(oObjectContext.documenttype) == 5)
 			{
-				tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + giEditorCounter);
-				//tinyMCE.get('inputInterfaceMainEditText' + giEditorCounter).setContent(oObjectContext.documentcontent)
+				tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + ns1blankspace.counter.editor);
+				//tinyMCE.get('inputInterfaceMainEditText' + ns1blankspace.counter.editor).setContent(oObjectContext.documentcontent)
 			}
 			else
 			{	
@@ -1428,7 +1428,7 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 		{
 			$('[name="radioType"][value="9"]').attr('checked', true);
 			$('[name="radioDocumentType"][value="5"]').attr('checked', true);
-			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + giEditorCounter);
+			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + ns1blankspace.counter.editor);
 			$('[name="radioPublic"][value="Y"]').attr('checked', true);					
 		}
 	}		
@@ -1472,7 +1472,7 @@ function interfaceMasterWebsitePagesRemove(aParam, oResponse)
 
 function interfaceSetupWebsiteForms(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainForms';
 	var oOptions = {view: true};
 	var oActions = {};
@@ -1508,7 +1508,7 @@ function interfaceSetupWebsiteForms(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainForms" class="interfaceMain">' +
 						'<tr id="trInterfaceMainFormsRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainFormsColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainFormsColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
@@ -1539,7 +1539,7 @@ function interfaceSetupWebsiteForms(aParam, oResponse)
 				label: "Add"
 			})
 			.click(function() {
-				interfaceSetupWebsiteFormMasterViewport({showHome: false, site: giObjectContext});
+				interfaceSetupWebsiteFormMasterViewport({showHome: false, site: ns1blankspace.objectContext});
 				interfaceSetupWebsiteFormNew();
 			})
 			
@@ -1613,7 +1613,7 @@ function interfaceSetupWebsiteForms(aParam, oResponse)
 
 function interfaceSetupWebsiteURLs(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainURLs';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
@@ -1647,7 +1647,7 @@ function interfaceSetupWebsiteURLs(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
 						'<tr id="trInterfaceMainURLsRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainWebsiteURLColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainWebsiteURLColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
@@ -1783,9 +1783,9 @@ function interfaceSetupWebsiteSave(aParam, oResponse)
 		var sData = '_=1';
 		var sCSSAttachment;
 		
-		if (giObjectContext != -1)
+		if (ns1blankspace.objectContext != -1)
 		{
-			sParam += '&id=' + giObjectContext	
+			sParam += '&id=' + ns1blankspace.objectContext	
 		}
 		else
 		{
@@ -1845,11 +1845,11 @@ function interfaceSetupWebsiteSave(aParam, oResponse)
 		{	
 			interfaceMasterStatus('Saved');
 			
-			if (giObjectContext == -1)
+			if (ns1blankspace.objectContext == -1)
 			{
-				giObjectContext = oResponse.id;
-				gbInputDetected = false;
-				interfaceSetupWebsiteSearch('-' + giObjectContext, {source: 1});
+				ns1blankspace.objectContext = oResponse.id;
+				ns1blankspace.inputDetected = false;
+				interfaceSetupWebsiteSearch('-' + ns1blankspace.objectContext, {source: 1});
 			}	
 		}
 		else
@@ -2009,7 +2009,7 @@ function interfaceMasterWebsiteURLsAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			var sData = 'site=' + giObjectContext;
+			var sData = 'site=' + ns1blankspace.objectContext;
 			sData += '&url=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupWebsiteURLAddURL').val());
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			
@@ -2160,7 +2160,7 @@ function interfaceSetupWebApp(aParam, oResponse)
 			{
 				type: 'POST',
 				url: '/ondemand/setup/?method=SETUP_SITE_MANAGE',
-				data: 'id=' + giObjectContext + '&createapp=' + sAction,
+				data: 'id=' + ns1blankspace.objectContext + '&createapp=' + sAction,
 				dataType: 'json',
 				success: function(data) {interfaceSetupWebApp(aParam, data)}
 			});
@@ -2175,11 +2175,11 @@ function interfaceSetupWebApp(aParam, oResponse)
 				{
 					type: 'POST',
 					url: '/ondemand/setup/?method=SETUP_SITE_SEARCH',
-					data: 'id=' + giObjectContext,
+					data: 'id=' + ns1blankspace.objectContext,
 					dataType: 'json',
 					success: function(oResponse) {
 												$('#divInterfaceMainScripts').attr('onDemandLoading', '1');
-												goObjectContext.headerscript = (oResponse.data.rows[0]).headerscript;
+												ns1blankspace.objectContextData.headerscript = (oResponse.data.rows[0]).headerscript;
 											}
 				});
 				
@@ -2194,8 +2194,8 @@ function interfaceSetupWebApp(aParam, oResponse)
 
 function interfaceSetupWebsiteNew(aParam)
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceSetupWebsiteViewport();
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
@@ -2213,11 +2213,11 @@ function interfaceSetupWebsiteRemove(aParam, oResponse)
 		if (aParam.userVerifyCode != undefined) {sUserVerifyCode = aParam.userVerifyCode}
 	}
 	
-	if (sVerifyCode == undefined && giObjectContext != -1)
+	if (sVerifyCode == undefined && ns1blankspace.objectContext != -1)
 	{	
 		
 		var sParam = 'method=SETUP_SITE_MANAGE&remove=1';
-		var sData = 'id=' + giObjectContext;
+		var sData = 'id=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -2266,7 +2266,7 @@ function interfaceSetupWebsiteRemove(aParam, oResponse)
 	else if (sVerifyCode != undefined && sUserVerifyCode != undefined && oResponse == undefined)
 	{
 		var sParam = 'method=SETUP_SITE_MANAGE&remove=1';
-		var sData = 'id=' + giObjectContext + '&verifycode=' + sUserVerifyCode;
+		var sData = 'id=' + ns1blankspace.objectContext + '&verifycode=' + sUserVerifyCode;
 		
 		$.ajax(
 		{

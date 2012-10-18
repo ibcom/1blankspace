@@ -9,8 +9,8 @@ function interfaceSetupSpaceMasterViewport()
 	gsSetupName = 'My Account';
 	goSetupContextXML = '';
 	giSetupContext = -1;
-	giObjectContext = -1;
-	giObject = -1;
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = -1;
 	
 	interfaceMasterReset();		
 			
@@ -21,8 +21,8 @@ function interfaceSetupSpaceMasterViewport()
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupSpaceSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupSpaceSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -80,15 +80,15 @@ function interfaceSetupSpaceMasterViewport()
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupSpaceSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupSpaceSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupSpaceSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupSpaceSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupSpaceHomeShow();
 	
@@ -138,7 +138,7 @@ function interfaceSetupSpaceHomeShow(oResponse)
 
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		$.ajax(
 		{
@@ -197,7 +197,7 @@ function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -212,13 +212,13 @@ function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
 		giSetupContext = sSearchContext;
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		var sParam = 'method=CORE_SPACE_SEARCH&id=' + giSetupContext;
 		
 		$.ajax(
@@ -237,7 +237,7 @@ function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -246,7 +246,7 @@ function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
 			interfaceMasterOptionsSetPosition(sElementId);
@@ -315,13 +315,13 @@ function interfaceSetupSpaceSearchShow(aParam, oXML)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupSpaceSearch(event.target.id, 1);
 		});
 	}	
@@ -374,7 +374,7 @@ function interfaceSetupSpaceViewport()
 function interfaceSetupSpaceShow(aParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupSpaceViewport();
 	
 	var aHTML = [];
@@ -385,15 +385,15 @@ function interfaceSetupSpaceShow(aParam, oResponse)
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the space or you don\'t have rights to it.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
 				
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		$('#divInterfaceMain').html(aHTML.join(''));
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 		
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
@@ -416,7 +416,7 @@ function interfaceSetupSpaceSummary()
 	var h = -1;
 	
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find space or you don\'t have rights to it.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -429,12 +429,12 @@ function interfaceSetupSpaceSummary()
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySpaceID" class="interfaceMainSummary">Space ID</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummarySpaceID" class="interfaceMainSummaryValue">' +
-						goObjectContext.id +
+						ns1blankspace.objectContextData.id +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySpaceTitle" class="interfaceMainSummary">Title</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummarySpaceTitle" class="interfaceMainSummaryValue">' +
-						goObjectContext.space +
+						ns1blankspace.objectContextData.space +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
@@ -465,7 +465,7 @@ function interfaceSetupSpaceSummary()
 
 function interfaceSetupSpaceMembers(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainMembers';
 	var oOptions = {view: true};
 	var oActions = {};

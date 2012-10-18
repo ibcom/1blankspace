@@ -5,10 +5,6 @@
  * 01 FEB 2010
  */
  
-var glContactBusiness = '';
-var gsContactBusinessText = '';
-var gsContactPersonText = '';
-
 $(function()
 {
 })
@@ -17,20 +13,20 @@ function interfaceViewControllerMasterViewport(aParam)
 {
 	if (aParam != undefined)
 	{
-		if (aParam.object != undefined) {giObject = aParam.object}	
+		if (aParam.object != undefined) {ns1blankspace.object = aParam.object}	
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
 		if (aParam.showNew != undefined) {bNew = aParam.showNew}
-		if (aParam.contactBusiness != undefined) {glContactBusiness = aParam.contactBusiness}
-		if (aParam.contactBusinessText != undefined) {gsContactBusinessText = aParam.contactBusinessText}
+		if (aParam.contactBusiness != undefined) {ns1blankspace.contactBusiness = aParam.contactBusiness}
+		if (aParam.contactBusinessText != undefined) {ns1blankspace.contactBusinessText = aParam.contactBusinessText}
 		if (bNew) {interfaceContactPersonNew()};
 	}	
 	
 	Loop through array and set other variables
 	goObject = part of the array (json)
 	
-	gsObjectName = 'Person';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.objectName = 'Person';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 	
 	var bShowHome = true;
 	var bNew = false;
@@ -52,8 +48,8 @@ function interfaceViewControllerMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interface' + goObject.objectCode + 'Search('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interface' + goObject.objectCode + 'Search('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -116,16 +112,16 @@ function interfaceViewControllerMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceContactPersonSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceContactPersonSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceContactPersonSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceContactPersonSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('#divInterfaceViewportControl').html('');	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bNew) 
 	{
 		interfaceContactPersonNew();
@@ -146,7 +142,7 @@ function interfaceContactPersonHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -187,7 +183,7 @@ function interfaceContactPersonHomeShow(oResponse)
 			interfaceContactFavourites({xhtmlElementID: "divInterfaceMain"});
 		});
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = 'contact';
@@ -258,7 +254,7 @@ function interfaceContactPersonSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -273,11 +269,11 @@ function interfaceContactPersonSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = 'contact';
@@ -297,7 +293,7 @@ function interfaceContactPersonSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -306,7 +302,7 @@ function interfaceContactPersonSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -316,7 +312,7 @@ function interfaceContactPersonSearch(sXHTMLElementId, aParam)
 			oSearch.method = 'CONTACT_PERSON_SEARCH';
 			oSearch.addField('firstname,surname');
 			
-			if (iSource == giSearchSource_BROWSE)
+			if (iSource == ns1blankspace.data.searchSource.browse)
 			{
 				oSearch.addFilter('quicksearch', 'STRING_STARTS_WITH', sSearchText);
 			}
@@ -384,14 +380,14 @@ function interfaceContactPersonSearchShow(aParam, oResponse)
 			}) 
 		);		
 		
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceContactPersonSearch(event.target.id, {source: 1});
 		});
 		
@@ -417,7 +413,7 @@ function interfaceContactPersonViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -531,15 +527,15 @@ function interfaceContactPersonViewport()
 		
 		if ($('#inputInterfaceMainDetailsFirstName').val() != undefined)
 		{
-			gsContactPersonText = $('#inputInterfaceMainDetailsFirstName').val() + ' ' + $('#inputInterfaceMainDetailsSurname').val();
+			ns1blankspace.contactPersonText = $('#inputInterfaceMainDetailsFirstName').val() + ' ' + $('#inputInterfaceMainDetailsSurname').val();
 		}
 		
 		interfaceMasterActions({
 							xhtmlElementID: 'divInterfaceMainActions',
-							contactPerson: giObjectContext, 
-							contactPersonText: gsContactPersonText,
-							contactBusiness: glContactBusiness, 
-							contactBusinessText: gsContactBusinessText,
+							contactPerson: ns1blankspace.objectContext, 
+							contactPersonText: ns1blankspace.contactPersonText,
+							contactBusiness: ns1blankspace.contactBusiness, 
+							contactBusinessText: ns1blankspace.contactBusinessText,
 							object: '',
 							objectContext: ''
 							});
@@ -555,7 +551,7 @@ function interfaceContactPersonViewport()
 
 function interfaceContactPersonShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceContactPersonViewport();
 	
 	var aHTML = [];
@@ -563,7 +559,7 @@ function interfaceContactPersonShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find contact person.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -572,19 +568,19 @@ function interfaceContactPersonShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
-		glContactBusiness = goObjectContext.contactbusiness;
-		gsContactBusinessText = goObjectContext.contactbusinesstext
-		gsContactPersonText = goObjectContext.firstname + ' ' + goObjectContext.surname;
+		ns1blankspace.contactBusiness = ns1blankspace.objectContextData.contactbusiness;
+		ns1blankspace.contactBusinessText = ns1blankspace.objectContextData.contactbusinesstext
+		ns1blankspace.contactPersonText = ns1blankspace.objectContextData.firstname + ' ' + ns1blankspace.objectContextData.surname;
 		
-		$('#divInterfaceViewportControlContext').html(goObjectContext.firstname + 
-					'<br />' + goObjectContext.surname);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.firstname + 
+					'<br />' + ns1blankspace.objectContextData.surname);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceContactPersonMasterViewport({showHome: false});interfaceContactPersonSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceContactPersonMasterViewport({showHome: false});interfaceContactPersonSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
@@ -597,7 +593,7 @@ function interfaceContactPersonSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this contact.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -622,28 +618,28 @@ function interfaceContactPersonSummary()
 	
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
-		if (goObjectContext.workphone != '')
+		if (ns1blankspace.objectContextData.workphone != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Phone</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.workphone +
+						ns1blankspace.objectContextData.workphone +
 						'</td></tr>';
 		}
 
-		if (goObjectContext.mobile != '')
+		if (ns1blankspace.objectContextData.mobile != '')
 		{
 			aHTML[++h] =  '<tr><td id="tdInterfaceMainSummaryMobile" class="interfaceMainSummary">Mobile</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryMobileValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.mobile +
+						ns1blankspace.objectContextData.mobile +
 						'</td>' +
 						'</tr>';
 		}				
 		
-		if (goObjectContext.email != '')
+		if (ns1blankspace.objectContextData.email != '')
 		{
 			aHTML[++h] =  '<tr><td id="tdInterfaceMainSummaryEmail" class="interfaceMainSummary">Email</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryEmailValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.email +
+						ns1blankspace.objectContextData.email +
 						'</td>' +
 						'</tr>';
 		}				
@@ -812,17 +808,17 @@ function interfaceContactPersonDetails()
 			
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsFirstName').val(goObjectContext.firstname);
-			$('#inputInterfaceMainDetailsSurname').val(goObjectContext.surname);
+			$('#inputInterfaceMainDetailsFirstName').val(ns1blankspace.objectContextData.firstname);
+			$('#inputInterfaceMainDetailsSurname').val(ns1blankspace.objectContextData.surname);
 			$('#inputInterfaceMainDetailsTitle').attr('onDemandID');
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.titletext);
-			$('#inputInterfaceMainDetailsPosition').val(goObjectContext.position);
-			$('#inputInterfaceMainDetailsPhone').val(goObjectContext.workphone);
-			$('#inputInterfaceMainDetailsMobile').val(goObjectContext.mobile);
-			$('#inputInterfaceMainDetailsFax').val(goObjectContext.fax);
-			$('#inputInterfaceMainDetailsEmail').val(goObjectContext.email);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.titletext);
+			$('#inputInterfaceMainDetailsPosition').val(ns1blankspace.objectContextData.position);
+			$('#inputInterfaceMainDetailsPhone').val(ns1blankspace.objectContextData.workphone);
+			$('#inputInterfaceMainDetailsMobile').val(ns1blankspace.objectContextData.mobile);
+			$('#inputInterfaceMainDetailsFax').val(ns1blankspace.objectContextData.fax);
+			$('#inputInterfaceMainDetailsEmail').val(ns1blankspace.objectContextData.email);
 		}
 		
 		$('#inputInterfaceMainDetailsTitle').keyup(function(event)
@@ -972,18 +968,18 @@ function interfaceContactPersonAddress()
 		
 		$('#tdInterfaceMainAddressColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainAddressStreetAddress1').val(goObjectContext.streetaddress1);
-			$('#inputInterfaceMainAddressStreetSuburb').val(goObjectContext.streetsuburb);
-			$('#inputInterfaceMainAddressStreetState').val(goObjectContext.streetstate);
-			$('#inputInterfaceMainAddressStreetPostCode').val(goObjectContext.streetpostcode);
-			$('#inputInterfaceMainAddressStreetCountry').val(goObjectContext.streetcountry);
-			$('#inputInterfaceMainAddressMailingAddress1').val(goObjectContext.mailingaddress1);
-			$('#inputInterfaceMainAddressMailingSuburb').val(goObjectContext.mailingsuburb);
-			$('#inputInterfaceMainAddressMailingState').val(goObjectContext.mailingstate);
-			$('#inputInterfaceMainAddressMailingPostCode').val(goObjectContext.mailingpostcode);
-			$('#inputInterfaceMainAddressMailingCountry').val(goObjectContext.mailingcountry);
+			$('#inputInterfaceMainAddressStreetAddress1').val(ns1blankspace.objectContextData.streetaddress1);
+			$('#inputInterfaceMainAddressStreetSuburb').val(ns1blankspace.objectContextData.streetsuburb);
+			$('#inputInterfaceMainAddressStreetState').val(ns1blankspace.objectContextData.streetstate);
+			$('#inputInterfaceMainAddressStreetPostCode').val(ns1blankspace.objectContextData.streetpostcode);
+			$('#inputInterfaceMainAddressStreetCountry').val(ns1blankspace.objectContextData.streetcountry);
+			$('#inputInterfaceMainAddressMailingAddress1').val(ns1blankspace.objectContextData.mailingaddress1);
+			$('#inputInterfaceMainAddressMailingSuburb').val(ns1blankspace.objectContextData.mailingsuburb);
+			$('#inputInterfaceMainAddressMailingState').val(ns1blankspace.objectContextData.mailingstate);
+			$('#inputInterfaceMainAddressMailingPostCode').val(ns1blankspace.objectContextData.mailingpostcode);
+			$('#inputInterfaceMainAddressMailingCountry').val(ns1blankspace.objectContextData.mailingcountry);
 		}
 	}	
 }
@@ -1032,15 +1028,15 @@ function interfaceContactPersonBusiness()
 		
 		$('#tdInterfaceMainBusinessColumn1Large').html(aHTML.join(''));
 	
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsContactBusiness').attr('onDemandID', goObjectContext.contactbusiness);
-			$('#inputInterfaceMainDetailsContactBusiness').val(goObjectContext.contactbusinesstext);
+			$('#inputInterfaceMainDetailsContactBusiness').attr('onDemandID', ns1blankspace.objectContextData.contactbusiness);
+			$('#inputInterfaceMainDetailsContactBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
 		}
 		else
 		{
-			$('#inputInterfaceMainDetailsContactBusiness').attr('onDemandID', glContactBusiness);
-			$('#inputInterfaceMainDetailsContactBusiness').val(gsContactBusinessText);
+			$('#inputInterfaceMainDetailsContactBusiness').attr('onDemandID', ns1blankspace.contactBusiness);
+			$('#inputInterfaceMainDetailsContactBusiness').val(ns1blankspace.contactBusinessText);
 		}
 		
 		var aHTML = [];
@@ -1048,7 +1044,7 @@ function interfaceContactPersonBusiness()
 		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
 			
-		if (goObjectContext.contactbusiness != '')
+		if (ns1blankspace.objectContextData.contactbusiness != '')
 		{	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryViewContactBusiness" class="interfaceMainColumn2Action">' +
 						'<a href="#" id="aInterfaceMainSummaryViewContactBusiness">View&nbsp;Business</a>' +
@@ -1062,7 +1058,7 @@ function interfaceContactPersonBusiness()
 		$('#aInterfaceMainSummaryViewContactBusiness').click(function(event)
 		{
 			interfaceContactBusinessMasterViewport({showHome: false});
-			interfaceContactBusinessSearch('-' + goObjectContext.contactbusiness, {source: 1});
+			interfaceContactBusinessSearch('-' + ns1blankspace.objectContextData.contactbusiness, {source: 1});
 		});
 	}	
 }
@@ -1074,9 +1070,9 @@ function interfaceContactPersonSave()
 	var sParam = 'method=CONTACT_PERSON_MANAGE'
 	var sData = 'id=';
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
-		sData += giObjectContext;
+		sData += ns1blankspace.objectContext;
 	} 
 	
 	if ($('#divInterfaceMainDetails').html() != '')
@@ -1122,10 +1118,10 @@ function interfaceContactPersonSaveProcess(oResponse)
 	if (oResponse.status == 'OK')
 	{
 		interfaceMasterStatus('Saved');
-		if (giObjectContext == -1) {var bNew = true}
-		giObjectContext = oResponse.id;	
+		if (ns1blankspace.objectContext == -1) {var bNew = true}
+		ns1blankspace.objectContext = oResponse.id;	
 		
-		if (bNew) {interfaceContactPersonSearch('-' + giObjectContext)}
+		if (bNew) {interfaceContactPersonSearch('-' + ns1blankspace.objectContext)}
 	}
 	else
 	{
@@ -1138,8 +1134,8 @@ function interfaceContactPersonSaveProcess(oResponse)
 function interfaceContactPersonUser(aParam, oXML)
 {
 
-	var iObject = giObject;
-	var iObjectContext = giObjectContext;
+	var iObject = ns1blankspace.object;
+	var iObjectContext = ns1blankspace.objectContext;
 	
 	if (aParam != undefined)
 	{
@@ -1228,12 +1224,12 @@ function interfaceContactPersonUserRegister(sResponse)
 	if (sResponse == undefined)
 	{
 
-		$('#divInterfaceMainUser').html(gsLoadingXHTML);
+		$('#divInterfaceMainUser').html(ns1blankspace.xhtml.loading);
 		
 		var sParam = 'method=REGISTER_ADD_USER';
 		sParam += '&site=' + msOnDemandSiteId;
 		
-		var sData = 'ContactPersonperson=' + giObjectContext;
+		var sData = 'ContactPersonperson=' + ns1blankspace.objectContext;
 		//sData += '&ContactPersonbusiness=' + aResponse[4];
 		sData += '&uselogonsuffix=1&logonsuffix=' + encodeURIComponent('@' + msOnDemandSiteId);
 		sData += '&networkgroup=' + glNetworkGroupId; 
@@ -1289,7 +1285,7 @@ function interfaceContactPersonGroups(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var sParam = '&rows=999&contactperson=' + giObjectContext;
+		var sParam = '&rows=999&contactperson=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -1439,7 +1435,7 @@ function interfaceContactPersonGroupsAdd(aParam, oResponse)
 				aHTML[++h] = '</tbody></table>';
 
 				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 			}
 			else
 			{
@@ -1459,7 +1455,7 @@ function interfaceContactPersonGroupsAdd(aParam, oResponse)
 				aHTML[++h] = '</tbody></table>';
 
 				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 				
 				$('td.interfaceMainRowSelect').click(function(event)
 				{
@@ -1481,7 +1477,7 @@ function interfaceContactPersonGroupsAddSelect(sXHTMLElementId)
 	$('#' + sXHTMLElementId).fadeOut(500);
 	
 	var sParam = 'method=CONTACT_PERSON_GROUP_MANAGE';
-	var sData = 'contactperson=' + giObjectContext +
+	var sData = 'contactperson=' + ns1blankspace.objectContext +
 				'&group=' + sSearchContext;
 				
 	$.ajax(
@@ -1518,8 +1514,8 @@ function interfaceContactPersonGroupsAddRemove(sXHTMLElementId)
 
 function interfaceContactPersonNew()
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceContactPersonViewport();
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
@@ -1622,9 +1618,9 @@ function interfaceContactPersonByGroupContacts(aParam, oResponse)
 	
 	if (oResponse == undefined)
 	{
-		$('#tdInterfaceMainContactPersonByGroupColumn2').html(gsLoadingXHTML);
+		$('#tdInterfaceMainContactPersonByGroupColumn2').html(ns1blankspace.xhtml.loading);
 		
-		var sParam = 'method=CONTACT_PERSON_GROUP_SEARCH&rows=' + giReturnRows +
+		var sParam = 'method=CONTACT_PERSON_GROUP_SEARCH&rows=' + ns1blankspace.option.defaultRows +
 						'&group=' + aXHTMLElementId[1];
 		
 		$.ajax(
@@ -1674,7 +1670,7 @@ function interfaceContactPersonByGroupContacts(aParam, oResponse)
 			xhtml: aHTML.join(''),
 			showMore: (oResponse.data.morerows == "true"),
 			more: oResponse.moreid,
-			rows: giReturnRows,
+			rows: ns1blankspace.option.defaultRows,
 			functionShowRow: interfaceContactPersonByGroupContactsRow,
 			functionNewPage: 'interfaceContactPersonByGroupContactsBind()',
 			type: 'json'
@@ -1735,7 +1731,7 @@ function interfaceContactFavourites(aParam, oResponse)
 	if (oResponse == undefined)
 	{
 	
-		$('#tdInterfaceMainContactPersonByGroupColumn2').html(gsLoadingXHTML);
+		$('#tdInterfaceMainContactPersonByGroupColumn2').html(ns1blankspace.xhtml.loading);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = 'contact';
@@ -1786,7 +1782,7 @@ function interfaceContactFavourites(aParam, oResponse)
 			xhtml: aHTML.join(''),
 			showMore: (oResponse.morerows == "true"),
 			more: oResponse.moreid,
-			rows: giReturnRows,
+			rows: ns1blankspace.option.defaultRows,
 			functionShowRow: interfaceContactFavouritesRow,
 			functionNewPage: 'interfaceContactFavouritesBind()',
 			type: 'json'

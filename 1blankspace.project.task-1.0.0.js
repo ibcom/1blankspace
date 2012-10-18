@@ -14,10 +14,10 @@ function interfaceProjectTaskMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 
-	giObject = 11;
-	gsObjectName = 'Project Task';
-	giObjectContext = -1;
-	goObjectContext = undefined;
+	ns1blankspace.object = 11;
+	ns1blankspace.objectName = 'Project Task';
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.objectContextData = undefined;
 		
 	if (bShowHome)
 	{
@@ -36,8 +36,8 @@ function interfaceProjectTaskMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceProjectTaskSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);	
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceProjectTaskSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);	
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -92,15 +92,15 @@ function interfaceProjectTaskMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceProjectTaskSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceProjectTaskSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceProjectTaskSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceProjectTaskSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bShowHome) {interfaceProjectTaskHomeShow()};
 }
 
@@ -114,7 +114,7 @@ function interfaceProjectTaskHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceProjectTaskHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -134,7 +134,7 @@ function interfaceProjectTaskHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PROJECT_TASK_SEARCH';
@@ -196,7 +196,7 @@ function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -211,12 +211,12 @@ function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 		
-	if (sSearchContext != undefined  && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 	{	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
-		var sParam = 'method=PROJECT_TASK_SEARCH&id=' + giObjectContext;
+		ns1blankspace.objectContext = sSearchContext;
+		var sParam = 'method=PROJECT_TASK_SEARCH&id=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -233,7 +233,7 @@ function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
 	
 		if (iSource == undefined)
 		{
-			iSource = giSearchSource_TEXT_INPUT;
+			iSource = ns1blankspace.data.searchSource.text;
 		}	
 		
 		if (sSearchText == undefined)
@@ -241,7 +241,7 @@ function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -250,7 +250,7 @@ function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -310,14 +310,14 @@ function interfaceProjectTaskSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceProjectTaskSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -334,7 +334,7 @@ function interfaceProjectTaskViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl1" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -425,7 +425,7 @@ function interfaceProjectTaskViewport()
 
 function interfaceProjectTaskShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceProjectTaskViewport();
 	
 	var aHTML = [];
@@ -433,7 +433,7 @@ function interfaceProjectTaskShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 	
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find ProjectTask.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -442,14 +442,14 @@ function interfaceProjectTaskShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 	
-		$('#divInterfaceViewportControlContext').html(goObjectContext.reference);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceProjectTaskMasterViewport({showHome: false});interfaceProjectTaskSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceProjectTaskMasterViewport({showHome: false});interfaceProjectTaskSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 			
@@ -462,7 +462,7 @@ function interfaceProjectTaskSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find ProjectTask.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -489,23 +489,23 @@ function interfaceProjectTaskSummary()
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.description +
+						ns1blankspace.objectContextData.description +
 						'</td></tr>';
 					
-		if (goObjectContext.statustext != '')
+		if (ns1blankspace.objectContextData.statustext != '')
 		{	
 			aHTML[++h] =  '<tr><td id="tdInterfaceMainSummaryStatus" class="interfaceMainSummary">Status</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryStatusValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.statustext +
+						ns1blankspace.objectContextData.statustext +
 						'</td>' +
 						'</tr>';
 		}
 		
-		if (goObjectContext.percentagecomplete != '')
+		if (ns1blankspace.objectContextData.percentagecomplete != '')
 		{
 			aHTML[++h] =  '<tr><td id="tdInterfaceMainSummaryPercentageComplete" class="interfaceMainSummary">Percentage Complete</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryPercentageCompleteValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.percentagecomplete +
+						ns1blankspace.objectContextData.percentagecomplete +
 						'</td>' +
 						'</tr>';
 		}
@@ -623,14 +623,14 @@ function interfaceProjectTaskDetails()
 			
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 				
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.surname);
-			$('[name="radioStatus"][value="' + goObjectContext.status + '"]').attr('checked', true);
-			$('#inputInterfaceMainDetailsPercentageComplete').val(goObjectContext.percentagecomplete);
-			$('#inputInterfaceMainDetailsStartDate').val(goObjectContext.startdate);
-			$('#inputInterfaceMainDetailsEndDate').val(goObjectContext.enddate);
+			$('#inputInterfaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.surname);
+			$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsPercentageComplete').val(ns1blankspace.objectContextData.percentagecomplete);
+			$('#inputInterfaceMainDetailsStartDate').val(ns1blankspace.objectContextData.startdate);
+			$('#inputInterfaceMainDetailsEndDate').val(ns1blankspace.objectContextData.enddate);
 		}
 		else
 		{
@@ -674,9 +674,9 @@ function interfaceProjectTaskDescription()
 		
 		$('#tdInterfaceMainDescriptionColumn1').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDescription').val(unescape(goObjectContext.description));
+			$('#inputInterfaceMainDescription').val(unescape(ns1blankspace.objectContextData.description));
 		}
 	
 		//tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainDescription');
@@ -685,8 +685,8 @@ function interfaceProjectTaskDescription()
 
 function interfaceProjectTaskNew()
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceProjectTaskViewport();
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
@@ -696,7 +696,7 @@ function interfaceProjectTaskNew()
 
 function interfaceProjectTaskSave()
 {
-	var sData = 'id=' + ((giObjectContext == -1)?'':giObjectContext);
+	var sData = 'id=' + ((ns1blankspace.objectContext == -1)?'':ns1blankspace.objectContext);
 		
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
@@ -726,8 +726,8 @@ function interfaceProjectTaskSaveProcess(oResponse)
 	if (oResponse.status == 'OK')
 	{
 		interfaceMasterStatus('Project task saved');
-		if (giObjectContext == -1) {var bNew = true}
-		giObjectContext = oResponse.id;	
+		if (ns1blankspace.objectContext == -1) {var bNew = true}
+		ns1blankspace.objectContext = oResponse.id;	
 	}
 	else
 	{

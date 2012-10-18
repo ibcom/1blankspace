@@ -9,9 +9,9 @@ function interfaceSetupStructureMasterViewport(aParam)
 {
 	gsSetupName = 'Website';
 	giSetupContext = -1;
-	giObjectContext = -1;
-	giObject = 40;
-	goObjectContext = undefined;
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = 40;
+	ns1blankspace.objectContextData = undefined;
 	
 	var bShowHome = true;
 	var bNew = false;
@@ -40,8 +40,8 @@ function interfaceSetupStructureMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupStructureSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupStructureSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -114,17 +114,17 @@ function interfaceSetupStructureMasterViewport(aParam)
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupStructureSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupStructureSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupStructureSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupStructureSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
-	if (gbRichEdit)
+	if (ns1blankspace.option.richTextEditing)
 	{
 	
 		tinyMCE.init(
@@ -145,11 +145,11 @@ function interfaceSetupStructureMasterViewport(aParam)
 			convert_urls : false, 
 			visual : true, 
 			gecko_spellcheck : true,
-			content_css : gsEditorCSS,
+			content_css : ns1blankspace.xhtml.editorCSS,
 			
 			external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
-			external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + giObjectContext, 
-			media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + giObjectContext, 
+			external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
+			media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
 		});				
 	}
 	
@@ -175,7 +175,7 @@ function interfaceSetupStructureHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceWebsiteHomeMostLikely" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainSummaryColumn2Action" style="width:175px;">' +
 						'</td>' +
@@ -206,7 +206,7 @@ function interfaceSetupStructureHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		$.ajax(
 		{
@@ -265,7 +265,7 @@ function interfaceSetupStructureSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -280,13 +280,13 @@ function interfaceSetupStructureSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
 		giSetupContext = sSearchContext;
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		var sParam = 'method=SETUP_STRUCTURE_SEARCH&id=' + giSetupContext;
 		
 		$.ajax(
@@ -305,7 +305,7 @@ function interfaceSetupStructureSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -314,7 +314,7 @@ function interfaceSetupStructureSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
 			interfaceMasterOptionsSetPosition(sElementId);
@@ -375,13 +375,13 @@ function interfaceSetupStructureSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupStructureSearch(event.target.id, 1);
 		});
 	}	
@@ -398,7 +398,7 @@ function interfaceSetupStructureViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControlDetails" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -490,7 +490,7 @@ function interfaceSetupStructureViewport()
 function interfaceSetupStructureShow(aParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupStructureViewport();
 	
 	var aHTML = [];
@@ -498,7 +498,7 @@ function interfaceSetupStructureShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this structure.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -507,7 +507,7 @@ function interfaceSetupStructureShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 					
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
@@ -521,13 +521,13 @@ function interfaceSetupStructureShow(aParam, oResponse)
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceSetupStructureMasterViewport({showHome: false});interfaceSetupStructureSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceSetupStructureMasterViewport({showHome: false});interfaceSetupStructureSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
 		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceSetupStructureSummary()'})
 
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});	
 	}	
@@ -538,7 +538,7 @@ function interfaceSetupStructureSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find website.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -551,7 +551,7 @@ function interfaceSetupStructureSummary()
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStructureID" class="interfaceMainSummary">Structure ID</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryStructureID" class="interfaceMainSummaryValue">' +
-						goObjectContext.id +
+						ns1blankspace.objectContextData.id +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
@@ -627,10 +627,10 @@ function interfaceSetupStructureDetails()
 		
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
-			$('[name="radioStatus"][value="' + goObjectContext.status + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -646,9 +646,9 @@ function interfaceSetupStructureSave(aParam, oResponse)
 		var sParam = 'method=SETUP_STRUCTURE_MANAGE';
 		var sData = '_=1';
 		
-		if (giObjectContext != -1)
+		if (ns1blankspace.objectContext != -1)
 		{
-			sParam += '&id=' + giObjectContext	
+			sParam += '&id=' + ns1blankspace.objectContext	
 		}	
 		
 		if ($('#divInterfaceMainDetails').html() != '')
@@ -673,11 +673,11 @@ function interfaceSetupStructureSave(aParam, oResponse)
 		{	
 			interfaceMasterStatus('Saved');
 			
-			if (giObjectContext == -1)
+			if (ns1blankspace.objectContext == -1)
 			{
-				giObjectContext = oResponse.id;
-				gbInputDetected = false;
-				interfaceSetupStructureSearch('-' + giObjectContext, {source: 1});
+				ns1blankspace.objectContext = oResponse.id;
+				ns1blankspace.inputDetected = false;
+				interfaceSetupStructureSearch('-' + ns1blankspace.objectContext, {source: 1});
 			}	
 		}
 		else
@@ -689,7 +689,7 @@ function interfaceSetupStructureSave(aParam, oResponse)
 
 function interfaceSetupStructureCategory(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainCategory';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
@@ -707,7 +707,7 @@ function interfaceSetupStructureCategory(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + giObjectContext,
+			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + ns1blankspace.objectContext,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureCategory(aParam, data)}
 		});
@@ -723,7 +723,7 @@ function interfaceSetupStructureCategory(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
 						'<tr id="trInterfaceMainSetupStructureCategoryRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainSetupStructureCategoryColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainSetupStructureCategoryColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
@@ -905,7 +905,7 @@ function interfaceMasterSetupStructureCategoryAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			var sData = 'structure=' + giObjectContext;
+			var sData = 'structure=' + ns1blankspace.objectContext;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureCategoryAddTitle').val());
 			
@@ -997,7 +997,7 @@ function interfaceMasterSetupStructureCategoryRemove(aParam, oResponse)
 
 function interfaceSetupStructureElement(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainElement';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
@@ -1015,7 +1015,7 @@ function interfaceSetupStructureElement(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + giObjectContext,
+			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + ns1blankspace.objectContext,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureElement(aParam, data)}
 		});
@@ -1030,7 +1030,7 @@ function interfaceSetupStructureElement(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
 					'<tr id="trInterfaceMainSetupStructureElementRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainSetupStructureElementColumnCategory" style="width:100px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-						gsLoadingXHTML + '</td>' +
+						ns1blankspace.xhtml.loading + '</td>' +
 					'<td id="tdInterfaceMainSetupStructureElementColumnElement1" style="width:175px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn2">' +
 					'</td>' +
 					'<td id="tdInterfaceMainSetupStructureElementColumnElement2" style="width:305px;padding-right:15px;font-size:0.875em;" class="interfaceMainColumn2">' +
@@ -1088,7 +1088,7 @@ function interfaceSetupStructureElement(aParam, oResponse)
 
 function interfaceSetupStructureCategoryElements(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'tdInterfaceMainSetupStructureElementColumnElement1';
 	var oOptions = {view: true, remove: true, automation: true};
 	var oActions = {add: true};
@@ -1275,7 +1275,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 		for (edId in tinyMCE.editors) 
 					tinyMCE.editors[edId].destroy(true);
 					
-		giEditorCounter = giEditorCounter + 1;
+		ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
 	
 		var aHTML = [];
 		var h = -1;
@@ -1298,7 +1298,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 						'<tr id="trInterfaceMainSetupSetupStructureElementAddDescriptionValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainSetupSetupStructureElementAddDescriptionValue" class="interfaceMainText">' +
 						'<textarea rows="3" cols="35" id="inputInterfaceMainSetupStructureElementAddDescription' +
-						 			giEditorCounter + '" data-editorcount="' + giEditorCounter + 
+						 			ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + 
 									'" class="inputInterfaceMainTextMultiLarge" style="height: 125px;"></textarea>' +
 						'</td></tr>';
 										
@@ -1313,7 +1313,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 		{
 			type: 'GET',
 			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_SEARCH',
-			data: 'structure=' + giObjectContext,
+			data: 'structure=' + ns1blankspace.objectContext,
 			dataType: 'json',
 			async: false,
 			success: function(oResponse)
@@ -1376,9 +1376,9 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 		
 		$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
 		
-		if (gbRichEdit)
+		if (ns1blankspace.option.richTextEditing)
 		{
-			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainSetupStructureElementAddDescription' + giEditorCounter);
+			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainSetupStructureElementAddDescription' + ns1blankspace.counter.editor);
 		}
 	
 		var aHTML = [];
@@ -1401,7 +1401,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			var sData = 'structure=' + giObjectContext;
+			var sData = 'structure=' + ns1blankspace.objectContext;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureElementAddTitle').val());
 			sData += '&datatype=' + interfaceMasterFormatSave($('input[name="radioDataType"]:checked').val());
@@ -1409,7 +1409,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 			sData += '&textcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddTextColour').val());
 			sData += '&backgroundcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddBackgroundColour').val());
 			sData += '&displayorder=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddDisplayOrder').val());
-			sData += '&description=' + interfaceMasterFormatSave(tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + giEditorCounter).getContent());
+			sData += '&description=' + interfaceMasterFormatSave(tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + ns1blankspace.counter.editor).getContent());
 				
 			$.ajax(
 			{
@@ -1450,7 +1450,7 @@ function interfaceMasterSetupStructureElementAdd(aParam, oResponse)
 			
 			var sHTML = interfaceMasterFormatXHTML(oObjectContext.description);
 			
-			tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + giEditorCounter).setContent(sHTML)
+			tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + ns1blankspace.counter.editor).setContent(sHTML)
 			
 			$('[name="radioDataType"][value="' + oObjectContext.datatype + '"]').attr('checked', true);
 			$('[name="radioCategory"][value="' + oObjectContext.category + '"]').attr('checked', true);
@@ -1503,8 +1503,8 @@ function interfaceMasterSetupStructureElementRemove(aParam, oResponse)
 
 function interfaceSetupStructureNew(aParam)
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceSetupStructureViewport();
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
@@ -1753,7 +1753,7 @@ function interfaceSetupElementOptionEditSave(sElementId)
 function interfaceSetupStructureAutomation(aParam, oResponse)
 {
 	var sXHTMLElementID;	
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	var iElementID;
@@ -1794,7 +1794,7 @@ function interfaceSetupStructureAutomation(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
 						'<tr id="trInterfaceMainSetupStructureAutomationRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainSetupStructureAutomationColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainSetupStructureAutomationColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
@@ -1973,7 +1973,7 @@ function interfaceMasterSetupStructureAutomationAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			var sData = 'structure=' + giObjectContext;
+			var sData = 'structure=' + ns1blankspace.objectContext;
 			sData += '&element=' + iElementID;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureAutomationAddTitle').val());
@@ -2055,7 +2055,7 @@ function interfaceMasterSetupStructureAutomationRemove(aParam, oResponse)
 
 function interfaceSetupStructureGrouping(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainGrouping';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
@@ -2073,7 +2073,7 @@ function interfaceSetupStructureGrouping(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_DATA_GROUP_SEARCH&structure=' + giObjectContext,
+			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_DATA_GROUP_SEARCH&structure=' + ns1blankspace.objectContext,
 			dataType: 'json',
 			success: function(data) {interfaceSetupStructureGrouping(aParam, data)}
 		});
@@ -2088,7 +2088,7 @@ function interfaceSetupStructureGrouping(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
 						'<tr id="trInterfaceMainSetupStructureGroupingRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainSetupStructureGroupingColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainSetupStructureGroupingColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
@@ -2271,7 +2271,7 @@ function interfaceMasterSetupStructureGroupingAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			var sData = 'structure=' + giObjectContext;
+			var sData = 'structure=' + ns1blankspace.objectContext;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureGroupingAddTitle').val());
 			

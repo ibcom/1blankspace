@@ -5,8 +5,6 @@
  * 01 FEB 2010
  */
  
-var gsContactBusinessText;
-
 $(function()
 {
 })
@@ -14,10 +12,10 @@ $(function()
 function interfaceContactBusinessMasterViewport(aParam)
 {
 
-	giObject = 12;
-	gsObjectName = 'Business';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.object = 12;
+	ns1blankspace.objectName = 'Business';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 	bShowHome = true;
 			
 	if (aParam != undefined)
@@ -94,15 +92,15 @@ function interfaceContactBusinessMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceContactBusinessSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceContactBusinessSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceContactBusinessSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceContactBusinessSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	$('#divInterfaceViewportControl').html('');	
 	
 	if (bShowHome) {interfaceContactBusinessHomeShow()};
@@ -118,7 +116,7 @@ function interfaceContactBusinessHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceContactBusinessHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -149,7 +147,7 @@ function interfaceContactBusinessHomeShow(oResponse)
 			interfaceContactBusinessByGroup("divInterfaceMain");
 		});
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = 'contact';
@@ -216,7 +214,7 @@ function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -231,12 +229,12 @@ function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = 'contact';
@@ -263,7 +261,7 @@ function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -272,7 +270,7 @@ function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
 			interfaceMasterOptionsSetPosition(sElementId);
@@ -283,7 +281,7 @@ function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
 			oSearch.method = 'CONTACT_BUSINESS_SEARCH';
 			oSearch.addField('tradename');
 			
-			if (iSource == giSearchSource_BROWSE)
+			if (iSource == ns1blankspace.data.searchSource.browse)
 			{
 				oSearch.addFilter('tradename', 'STRING_STARTS_WITH', sSearchText);
 			}
@@ -346,14 +344,14 @@ function interfaceContactBusinessSearchShow(aParam, oResponse)
 			}) 
 		);		
 		
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceContactBusinessSearch(event.target.id, {source: 1});
 		});
 		
@@ -380,7 +378,7 @@ function interfaceContactBusinessViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -484,7 +482,7 @@ function interfaceContactBusinessViewport()
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
-		interfaceMasterActions({xhtmlElementID: 'divInterfaceMainActions', contactBusiness: giObjectContext, object: '', objectContext: ''});
+		interfaceMasterActions({xhtmlElementID: 'divInterfaceMainActions', contactBusiness: ns1blankspace.objectContext, object: '', objectContext: ''});
 	});
 	
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
@@ -498,7 +496,7 @@ function interfaceContactBusinessViewport()
 function interfaceContactBusinessShow(aParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceContactBusinessViewport();
 	
 	var aHTML = [];
@@ -506,7 +504,7 @@ function interfaceContactBusinessShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find ContactBusiness.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -515,16 +513,16 @@ function interfaceContactBusinessShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
-		gsContactBusinessText = goObjectContext.tradename;
+		ns1blankspace.contactBusinessText = ns1blankspace.objectContextData.tradename;
 				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.tradename);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.tradename);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceContactBusinessMasterViewport({showHome: false});interfaceContactBusinessSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceContactBusinessMasterViewport({showHome: false});interfaceContactBusinessSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
@@ -537,7 +535,7 @@ function interfaceContactBusinessSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this contact.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -562,28 +560,28 @@ function interfaceContactBusinessSummary()
 	
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
-		if (goObjectContext.phonenumber != '')
+		if (ns1blankspace.objectContextData.phonenumber != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Phone</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.phonenumber +
+						ns1blankspace.objectContextData.phonenumber +
 						'</td></tr>';
 		}
 
-		if (goObjectContext.customerstatustext != '')
+		if (ns1blankspace.objectContextData.customerstatustext != '')
 		{
 			aHTML[++h] =  '<tr><td id="tdInterfaceMainSummaryMobile" class="interfaceMainSummary">Status</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryMobileValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.customerstatustext +
+						ns1blankspace.objectContextData.customerstatustext +
 						'</td>' +
 						'</tr>';
 		}
 			
-		if (goObjectContext.notes != '')
+		if (ns1blankspace.objectContextData.notes != '')
 		{
 			aHTML[++h] =  '<tr><td id="tdInterfaceMainSummaryNotes" class="interfaceMainSummary">Notes</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryNotesValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.notes +
+						ns1blankspace.objectContextData.notes +
 						'</td>' +
 						'</tr>';
 		}
@@ -597,11 +595,11 @@ function interfaceContactBusinessSummary()
 		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
 								
-		if (goObjectContext.webaddress != '')
+		if (ns1blankspace.objectContextData.webaddress != '')
 		{ 
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryWebAddress" class="interfaceMainColumn2Action">' +
-						'<a href="' + goObjectContext.webaddress + '" id="aInterfaceMainSummaryWebAddress"' +
-							' target="_blank">' + goObjectContext.webaddress + '</a>' +
+						'<a href="' + ns1blankspace.objectContextData.webaddress + '" id="aInterfaceMainSummaryWebAddress"' +
+							' target="_blank">' + ns1blankspace.objectContextData.webaddress + '</a>' +
 						'</td></tr>';
 		}				
 						
@@ -754,20 +752,20 @@ function interfaceContactBusinessDetails()
 			
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
-			$('#inputInterfaceMainDetailsLegalName').val(goObjectContext.legalname);
-			$('#inputInterfaceMainDetailsBusinessTradingName').val(goObjectContext.tradename);
-			$('#inputInterfaceMainDetailsIndustry').attr('onDemandID', goObjectContext.industry);
-			$('#inputInterfaceMainDetailsIndustry').val(goObjectContext.industrytext);
-			$('#inputInterfaceMainDetailsABN').val(goObjectContext.abn);
-			$('#inputInterfaceMainDetailsPhone').val(goObjectContext.phonenumber);
-			$('#inputInterfaceMainDetailsFax').val(goObjectContext.faxnumber);
-			$('#inputInterfaceMainDetailsWebAddress').val(goObjectContext.webaddress);
-			$('#inputInterfaceMainDetailsStatus').attr("onDemandID", goObjectContext.customerstatus);
-			$('#inputInterfaceMainDetailsStatus').val(goObjectContext.customerstatustext);
-			$('#inputInterfaceMainDetailsDescription').val(goObjectContext.notes);
+			$('#inputInterfaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
+			$('#inputInterfaceMainDetailsLegalName').val(ns1blankspace.objectContextData.legalname);
+			$('#inputInterfaceMainDetailsBusinessTradingName').val(ns1blankspace.objectContextData.tradename);
+			$('#inputInterfaceMainDetailsIndustry').attr('onDemandID', ns1blankspace.objectContextData.industry);
+			$('#inputInterfaceMainDetailsIndustry').val(ns1blankspace.objectContextData.industrytext);
+			$('#inputInterfaceMainDetailsABN').val(ns1blankspace.objectContextData.abn);
+			$('#inputInterfaceMainDetailsPhone').val(ns1blankspace.objectContextData.phonenumber);
+			$('#inputInterfaceMainDetailsFax').val(ns1blankspace.objectContextData.faxnumber);
+			$('#inputInterfaceMainDetailsWebAddress').val(ns1blankspace.objectContextData.webaddress);
+			$('#inputInterfaceMainDetailsStatus').attr("onDemandID", ns1blankspace.objectContextData.customerstatus);
+			$('#inputInterfaceMainDetailsStatus').val(ns1blankspace.objectContextData.customerstatustext);
+			$('#inputInterfaceMainDetailsDescription').val(ns1blankspace.objectContextData.notes);
 		}
 	
 	}	
@@ -912,18 +910,18 @@ function interfaceContactBusinessAddress()
 		
 		$('#tdInterfaceMainAddressColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainAddressStreetAddress1').val(goObjectContext.streetaddress1);
-			$('#inputInterfaceMainAddressStreetSuburb').val(goObjectContext.streetsuburb);
-			$('#inputInterfaceMainAddressStreetState').val(goObjectContext.streetstate);
-			$('#inputInterfaceMainAddressStreetPostCode').val(goObjectContext.streetpostcode);
-			$('#inputInterfaceMainAddressStreetCountry').val(goObjectContext.streetcountry);
-			$('#inputInterfaceMainAddressMailingAddress1').val(goObjectContext.mailingaddress1);
-			$('#inputInterfaceMainAddressMailingSuburb').val(goObjectContext.mailingsuburb);
-			$('#inputInterfaceMainAddressMailingState').val(goObjectContext.mailingstate);
-			$('#inputInterfaceMainAddressMailingPostCode').val(goObjectContext.mailingpostcode);
-			$('#inputInterfaceMainAddressMailingCountry').val(goObjectContext.mailingcountry);
+			$('#inputInterfaceMainAddressStreetAddress1').val(ns1blankspace.objectContextData.streetaddress1);
+			$('#inputInterfaceMainAddressStreetSuburb').val(ns1blankspace.objectContextData.streetsuburb);
+			$('#inputInterfaceMainAddressStreetState').val(ns1blankspace.objectContextData.streetstate);
+			$('#inputInterfaceMainAddressStreetPostCode').val(ns1blankspace.objectContextData.streetpostcode);
+			$('#inputInterfaceMainAddressStreetCountry').val(ns1blankspace.objectContextData.streetcountry);
+			$('#inputInterfaceMainAddressMailingAddress1').val(ns1blankspace.objectContextData.mailingaddress1);
+			$('#inputInterfaceMainAddressMailingSuburb').val(ns1blankspace.objectContextData.mailingsuburb);
+			$('#inputInterfaceMainAddressMailingState').val(ns1blankspace.objectContextData.mailingstate);
+			$('#inputInterfaceMainAddressMailingPostCode').val(ns1blankspace.objectContextData.mailingpostcode);
+			$('#inputInterfaceMainAddressMailingCountry').val(ns1blankspace.objectContextData.mailingcountry);
 		}
 	}	
 }
@@ -932,9 +930,9 @@ function interfaceContactBusinessSave()
 {
 	var sData = 'id=';
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
-		sData += giObjectContext;
+		sData += ns1blankspace.objectContext;
 	} 
 	
 	if ($('#divInterfaceMainDetails').html() != '')
@@ -982,10 +980,10 @@ function interfaceContactBusinessSaveProcess(oResponse)
 	if (oResponse.status == 'OK')
 	{
 		interfaceMasterStatus('Saved');
-		if (giObjectContext == -1) {var bNew = true}
-		giObjectContext = oResponse.id;	
+		if (ns1blankspace.objectContext == -1) {var bNew = true}
+		ns1blankspace.objectContext = oResponse.id;	
 		
-		if (bNew) {interfaceContactBusinessSearch('-' + giObjectContext)}
+		if (bNew) {interfaceContactBusinessSearch('-' + ns1blankspace.objectContext)}
 	}
 	else
 	{
@@ -1013,7 +1011,7 @@ function interfaceContactBusinessGroups(aParam, oResponse)
 		oSearch.endPoint = 'contact';
 		oSearch.method = 'CONTACT_BUSINESS_GROUP_SEARCH';
 		oSearch.addField('contactbusiness,contactbusinesstext,group,grouptext');
-		oSearch.addFilter('contactbusiness', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.rows = 100;
 		oSearch.sort('grouptext', 'asc');
 		oSearch.getResults(function(data) {interfaceContactBusinessGroups(aParam, data)});
@@ -1153,7 +1151,7 @@ function interfaceContactBusinessGroupsAdd(aParam, oResponse)
 				aHTML[++h] = '</tbody></table>';
 
 				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 			}
 			else
 			{
@@ -1173,7 +1171,7 @@ function interfaceContactBusinessGroupsAdd(aParam, oResponse)
 				aHTML[++h] = '</tbody></table>';
 
 				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 				
 				$('td.interfaceMainRowSelect').click(function(event)
 				{
@@ -1193,7 +1191,7 @@ function interfaceContactBusinessGroupsAddSelect(sXHTMLElementId)
 	
 	$('#' + sXHTMLElementId).fadeOut(500);
 	
-	var sData = 'contactbusiness=' + giObjectContext +
+	var sData = 'contactbusiness=' + ns1blankspace.objectContext +
 				'&group=' + sSearchContext;
 				
 	$.ajax(
@@ -1248,8 +1246,8 @@ function interfaceContactBusinessPeople(aParam, oResponse)
 		oSearch.addField('firstname,surname,position,workphone,fax,mobile,email');
 		oSearch.async = false;
 		oSearch.rf = 'json';
-		oSearch.rows = giReturnRows;
-		oSearch.addFilter('contactbusiness', 'EQUAL_TO', giObjectContext);
+		oSearch.rows = ns1blankspace.option.defaultRows;
+		oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.sort('modifieddate', 'desc');
 		
 		oSearch.getResults(function(data) {interfaceContactBusinessPeople(aParam, data)});
@@ -1264,7 +1262,7 @@ function interfaceContactBusinessPeople(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainContactBusinessPeople" class="interfaceMain">' +
 					'<tr id="trInterfaceMainContactBusinessPeopleRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainContactBusinessPeopleColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainContactBusinessPeopleColumn2" style="width: 100px;" class="interfaceMainColumn2Action">' +
 					'</td>' +
@@ -1293,8 +1291,8 @@ function interfaceContactBusinessPeople(aParam, oResponse)
 		.click(function() {
 			interfaceContactPersonMasterViewport({
 				showHome: false,
-				contactBusiness: giObjectContext,
-				contactBusinessText: gsContactBusinessText,
+				contactBusiness: ns1blankspace.objectContext,
+				contactBusinessText: ns1blankspace.contactBusinessText,
 				showNew: true});
 		})
 		.css('width', '75px')
@@ -1341,7 +1339,7 @@ function interfaceContactBusinessPeople(aParam, oResponse)
 				xhtml: aHTML.join(''),
 				showMore: (oResponse.morerows == "true"),
 				more: oResponse.moreid,
-				rows: giReturnRows,
+				rows: ns1blankspace.option.defaultRows,
 				functionShowRow: interfaceContactBusinessPeopleRow,
 				functionNewPage: 'interfaceContactBusinessPeopleBind()',
 				type: 'json'
@@ -1412,8 +1410,8 @@ function interfaceContactBusinessPeopleBind()
 
 function interfaceContactBusinessNew()
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceContactBusinessViewport();
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
@@ -1514,7 +1512,7 @@ function interfaceContactBusinessByGroupContacts(aParam, oResponse)
 	
 	if (oResponse == undefined)
 	{
-		$('#tdInterfaceMainContactBusinessByGroupColumn2').html(gsLoadingXHTML);
+		$('#tdInterfaceMainContactBusinessByGroupColumn2').html(ns1blankspace.xhtml.loading);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'CONTACT_BUSINESS_GROUP_SEARCH';
@@ -1561,7 +1559,7 @@ function interfaceContactBusinessByGroupContacts(aParam, oResponse)
 			xhtml: aHTML.join(''),
 			showMore: (oResponse.morerows == "true"),
 			more: oResponse.moreid,
-			rows: giReturnRows,
+			rows: ns1blankspace.option.defaultRows,
 			functionShowRow: interfaceContactBusinessByGroupContactsRow,
 			functionNewPage: 'interfaceContactBusinessByGroupContactsBind()',
 			type: 'json'

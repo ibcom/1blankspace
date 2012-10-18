@@ -4,31 +4,31 @@ var gbRoleFinancials = false;
 var gbRoleSetup = false;
 var gbRoleSpecial1 = false;
 
-var gsLoadingXHTML = '<img class="interfaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">';
-var gsLoadingSmallXHTML = '<img class="interfaceLoadingSmall" id="imgInterfaceLoadingSmall" src="/jscripts/1blankspace.loading.square.10.gif">';
-var giReturnRows = 20;
-var gsEditorCSS = '';
-var gsViewportDefault = "People";
-var gsSetupViewportDefault = "Website";
+var ns1blankspace.xhtml.loading = '<img class="interfaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">';
+var ns1blankspace.xhtml.loadingSmall = '<img class="interfaceLoadingSmall" id="imgInterfaceLoadingSmall" src="/jscripts/1blankspace.loading.square.10.gif">';
+var ns1blankspace.option.defaultRows = 20;
+var ns1blankspace.xhtml.editorCSS = '';
+var ns1blankspace.option.defaultViewport = "People";
+var ns1blankspace.option.defaultSetupViewport = "Website";
 
-var giObjectPerson = 32;
-var giObjectBusiness = 12;
-var giObjectOpportunity = 35;
+var ns1blankspace.data.object.contactperson = 32;
+var ns1blankspace.data.object.contactbusiness = 12;
+var ns1blankspace.data.object.opportunity = 35;
 
-var gaAttachmentTypes = [];
-var gaNetworkGroups;
+var ns1blankspace.data.attachmentTypes = [];
+var ns1blankspace.data.networkGroups;
 
-var gbDebug = true;
+var ns1blankspace.debug.enabled = true;
 var gbShowAdd = true;
 var gbReturnToLast = true;
-var gbShowBrowseBar = false;
+var ns1blankspace.option.showBrowsing = false;
 
-var gbMessagingEmailShowCount = false;
+var ns1blankspace.option.messagingEmailShowCount = false;
 var gsMessagingEmailAccount = '';
-var giMessagingCheckForNew = 60000;
+var ns1blankspace.option.messagingCheckForNew = 60000;
 
-ns1blankspace.loadingXHTML = gsLoadingXHTML;
-ns1blankspace.loadingSmallXHTML = gsLoadingSmallXHTML
+ns1blankspace.xhtml.loading = ns1blankspace.xhtml.loading;
+ns1blankspace.xhtml.loadingSmall = ns1blankspace.xhtml.loadingSmall
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 
@@ -39,7 +39,7 @@ function interfaceControlSecurity(sUserNetworkGroups)
 {
 	//For deep in model security, refer to http://mydigitalstructure.com/gettingstarted_access_control
 	
-	if (gsUserNetworkGroups == '')
+	if (ns1blankspace.user.networkGroups == '')
 	{
 		if (sUserNetworkGroups == undefined)
 		{
@@ -54,7 +54,7 @@ function interfaceControlSecurity(sUserNetworkGroups)
 		}
 		else
 		{
-			gsUserNetworkGroups = sUserNetworkGroups
+			ns1blankspace.user.networkGroups = sUserNetworkGroups
 		}
 	}
 	
@@ -62,10 +62,10 @@ function interfaceControlSecurity(sUserNetworkGroups)
 	gbRoleBase = true;
 	gbRoleOperations = true;
 	gbRoleFinancials = true;
-	gbRoleSetup = gbSystemAdmin;
+	gbRoleSetup = ns1blankspace.systemAdmin;
 	
 	//Used if want to create greater interface role sensitivity	
-	gbRoleSpecial1 = (gsUserNetworkGroups.indexOf("Special 1") != -1);
+	gbRoleSpecial1 = (ns1blankspace.user.networkGroups.indexOf("Special 1") != -1);
 	
 	//Used for testing.
 	if (1==0)
@@ -77,12 +77,12 @@ function interfaceControlSecurity(sUserNetworkGroups)
 	}
 	
 	//Show the setup icon?
-	if (gbRoleSetup) {gbSetupShow = true};
+	if (gbRoleSetup) {ns1blankspace.setupShow = true};
 
 	//Change the default viewport control menu option
 	if (gbRoleSpecial1) 
 	{
-		gsViewportDefault = "Special 1"
+		ns1blankspace.option.defaultViewport = "Special 1"
 	}	
 	
 }
@@ -320,7 +320,7 @@ function interfaceControlOptions()
 		aHTML[++h] = '</td>';			
 	}
 	
-	if (giVersion > 1)
+	if (ns1blankspace.version > 1)
 	{
 		aHTML[++h] = '<td id="tdInterfaceViewportMasterControlcolumn6" class="interfaceViewportMasterControlColumn">';
 
@@ -737,14 +737,14 @@ function interfaceControlUserOptionsShow(oElement)
 {
 	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
 		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
 		$('#divInterfaceMasterViewportControlOptions').html(interfaceControlUserOptions);
 			
@@ -794,13 +794,13 @@ function interfaceControlUserOptionsBind()
 	
 	$('#tdInterfaceMasterUserOptionsChangePassword').click(function(event)
 	{
-		$(this).html(gsLoadingSmallXHTML);
+		$(this).html(ns1blankspace.xhtml.loadingSmall);
 		interfaceMasterUserOptionsChangePassword();
 	});
 	
 	$('#tdInterfaceMasterUserOptionsCreateSecureKey').click(function(event)
 	{
-		$(this).html(gsLoadingSmallXHTML);
+		$(this).html(ns1blankspace.xhtml.loadingSmall);
 		interfaceMasterUserOptionsCreateSecureKey();
 	});
 }

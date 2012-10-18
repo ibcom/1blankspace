@@ -8,10 +8,10 @@
 function interfaceSupportIssueMasterViewport(aParam)
 {
 
-	giObject = 8;
-	gsObjectName = 'Support Issue';
-	goObjectContextXML = '';
-	giObjectContext = -1;
+	ns1blankspace.object = 8;
+	ns1blankspace.objectName = 'Support Issue';
+	ns1blankspace.objectContextDataXML = '';
+	ns1blankspace.objectContext = -1;
 
 	var bShowHome = true;
 	var bNew = false;
@@ -40,8 +40,8 @@ function interfaceSupportIssueMasterViewport(aParam)
 
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSupportIssueSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSupportIssueSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -85,16 +85,16 @@ function interfaceSupportIssueMasterViewport(aParam)
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSupportIssueSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSupportIssueSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSupportIssueSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSupportIssueSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 
 	$('#divInterfaceViewportControl').html('');	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bNew) 
 	{
 		interfaceSupportIssueNew();
@@ -116,7 +116,7 @@ function interfaceSupportIssueHomeShow(oXML)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -147,7 +147,7 @@ function interfaceSupportIssueHomeShow(oXML)
 			interfaceSupportIssueHistory("divInterfaceMain");
 		});
 
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 
 		var sParam = 'method=SUPPORT_ISSUE_SEARCH&byme=1&status=1,2,6&rows=30';
 
@@ -215,7 +215,7 @@ function interfaceSupportIssueSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -230,11 +230,11 @@ function interfaceSupportIssueSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 
 		var sParam = 'method=SUPPORT_ISSUE_SEARCH&byme=1&id=' + sSearchContext
 
@@ -253,7 +253,7 @@ function interfaceSupportIssueSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -262,13 +262,13 @@ function interfaceSupportIssueSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
 
 			var sParam = 'method=SUPPORT_ISSUE_SEARCH&subject=' + sSearchText
-			if (iSource == giSearchSource_TEXT_INPUT)
+			if (iSource == ns1blankspace.data.searchSource.text)
 			{
 				sParam += '&byme=1&status=1,2,6';
 			}
@@ -347,14 +347,14 @@ function interfaceSupportIssueSearchShow(aParam, oXML)
 			}) 
 		);		
 
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 
 		interfaceMasterSearchStop();
 
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSupportIssueSearch(event.target.id, {source: 1});
 		});
 
@@ -394,7 +394,7 @@ function interfaceSupportIssueViewport()
 
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl';
@@ -404,10 +404,10 @@ function interfaceSupportIssueViewport()
 
 	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl '
-	aHTML[++h] = (giObjectContext==-1)?'interfaceViewportControlHighlight':'';
+	aHTML[++h] = (ns1blankspace.objectContext==-1)?'interfaceViewportControlHighlight':'';
 	aHTML[++h] = '">Details</td></tr>';
 
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
@@ -449,10 +449,10 @@ function interfaceSupportIssueViewport()
 
 function interfaceSupportIssueShow(aParam, oXML)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSupportIssueViewport();
 
-	goObjectContextXML = oXML;
+	ns1blankspace.objectContextDataXML = oXML;
 
 	var aHTML = [];
 	var h = -1;
@@ -475,7 +475,7 @@ function interfaceSupportIssueShow(aParam, oXML)
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceSupportIssueMasterViewport({showHome: false});interfaceSupportIssueSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceSupportIssueMasterViewport({showHome: false});interfaceSupportIssueSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 
@@ -488,7 +488,7 @@ function interfaceSupportIssueSummary()
 
 	var aHTML = [];
 	var h = -1;
-	var oXML = goObjectContextXML;
+	var oXML = ns1blankspace.objectContextDataXML;
 
 	oRoot = oXML.getElementsByTagName('ondemand').item(0);
 
@@ -587,7 +587,7 @@ function interfaceSupportIssueDetails()
 	var aHTML = [];
 	var h = -1;
 
-	oRoot = goObjectContextXML.getElementsByTagName('ondemand').item(0);
+	oRoot = ns1blankspace.objectContextDataXML.getElementsByTagName('ondemand').item(0);
 
 	if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
 	{
@@ -626,7 +626,7 @@ function interfaceSupportIssueDetails()
 						'</td></tr>' +
 						'<tr id="trInterfaceMainDetailsUserValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainDetailsUserValue" class="interfaceMainRadio">' +
-						gsLoadingSmallXHTML +
+						ns1blankspace.xhtml.loadingSmall +
 						'</td></tr>';	
 
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsDescription" class="interfaceMain">' +
@@ -735,9 +735,9 @@ function interfaceSupportIssueSave()
 	var sParam = 'method=SUPPORT_ISSUE_MANAGE'
 	var sData = '';
 
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
-		sData += '&id=' + giObjectContext;
+		sData += '&id=' + ns1blankspace.objectContext;
 	} 
 
 	if ($('#divInterfaceMainDetails').html() != '')
@@ -778,10 +778,10 @@ function interfaceSupportIssueSaveProcess(oResponse)
 	if (oResponse.status == 'OK')
 	{
 		interfaceMasterStatus('Saved');
-		if (giObjectContext == -1) {var bNew = true}
-		giObjectContext = oResponse.id;	
+		if (ns1blankspace.objectContext == -1) {var bNew = true}
+		ns1blankspace.objectContext = oResponse.id;	
 		
-		if (bNew) {interfaceSupportIssueSearch('-' + giObjectContext)}
+		if (bNew) {interfaceSupportIssueSearch('-' + ns1blankspace.objectContext)}
 	}
 	else
 	{
@@ -797,10 +797,10 @@ function interfaceSupportIssueSaveProcess(oResponse)
 	if (oResponse.status == 'OK')
 	{
 		interfaceMasterStatus('Saved');
-		if (giObjectContext == -1) {var bNew = true}
-		giObjectContext = oResponse.id;	
+		if (ns1blankspace.objectContext == -1) {var bNew = true}
+		ns1blankspace.objectContext = oResponse.id;	
 
-		if (bNew) {interfaceSupportIssueSearch('-' + giObjectContext)}
+		if (bNew) {interfaceSupportIssueSearch('-' + ns1blankspace.objectContext)}
 	}
 	else
 	{
@@ -826,8 +826,8 @@ function interfaceSupportIssueNew(oXML)
 	}	
 	else	
 	{
-		giObjectContext = -1;
-		goObjectContextXML = oXML;
+		ns1blankspace.objectContext = -1;
+		ns1blankspace.objectContextDataXML = oXML;
 		interfaceSupportIssueViewport();
 		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});

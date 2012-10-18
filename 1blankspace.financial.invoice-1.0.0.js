@@ -16,10 +16,10 @@ function interfaceFinancialInvoiceMasterViewport(aParam)
 
 	interfaceFinancialMasterInitialise();
 
-	giObject = 5;
-	gsObjectName = 'Financial Invoice';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.object = 5;
+	ns1blankspace.objectName = 'Financial Invoice';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 	
 	if (bShowHome)
 	{
@@ -38,8 +38,8 @@ function interfaceFinancialInvoiceMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceFinancialInvoiceSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialInvoiceSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -94,15 +94,15 @@ function interfaceFinancialInvoiceMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceFinancialInvoiceSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialInvoiceSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceFinancialInvoiceSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialInvoiceSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialInvoiceHomeShow()};	
 }
 
@@ -116,7 +116,7 @@ function interfaceFinancialInvoiceHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -136,7 +136,7 @@ function interfaceFinancialInvoiceHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
@@ -202,7 +202,7 @@ function interfaceFinancialInvoiceSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -217,11 +217,11 @@ function interfaceFinancialInvoiceSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined  && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
@@ -241,7 +241,7 @@ function interfaceFinancialInvoiceSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -249,7 +249,7 @@ function interfaceFinancialInvoiceSearch(sXHTMLElementId, aParam)
 			sSearchText = aSearch[1];
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			
@@ -307,12 +307,12 @@ function interfaceFinancialInvoiceSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceFinancialInvoiceSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -329,7 +329,7 @@ function interfaceFinancialInvoiceViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -456,7 +456,7 @@ function interfaceFinancialInvoiceViewport()
 
 function interfaceFinancialInvoiceShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceFinancialInvoiceViewport();
 	
 	var aHTML = [];
@@ -464,7 +464,7 @@ function interfaceFinancialInvoiceShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the invoice.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -473,16 +473,16 @@ function interfaceFinancialInvoiceShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.reference +
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_sentdate">' + goObjectContext.sentdate + '</span>' +
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">$' + goObjectContext.amount + '</span>');
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_sentdate">' + ns1blankspace.objectContextData.sentdate + '</span>' +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">$' + ns1blankspace.objectContextData.amount + '</span>');
 			
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceFinancialInvoiceMasterViewport({showHome: false});interfaceFinancialInvoiceSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceFinancialInvoiceMasterViewport({showHome: false});interfaceFinancialInvoiceSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
@@ -501,7 +501,7 @@ function interfaceFinancialInvoiceSummary(aParam)
 		if (aParam.useTemplate != undefined) {bUseTemplate = aParam.useTemplate}
 	}
 
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the invoice.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -513,7 +513,7 @@ function interfaceFinancialInvoiceSummary(aParam)
 
 		if (ns1blankspace.financial.invoiceTemplateXHTML == undefined && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
 		{
-			$('#divInterfaceMainSummary').html(ns1blankspace.loadingSmallXHTML);
+			$('#divInterfaceMainSummary').html(ns1blankspace.xhtml.loadingSmall);
 
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'DOCUMENT_SEARCH';
@@ -556,7 +556,7 @@ function interfaceFinancialInvoiceSummaryDefault(aParam)
 		if (aParam.useTemplate != undefined) {bUseTemplate = aParam.useTemplate}
 	}
 
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the invoice.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -587,39 +587,39 @@ function interfaceFinancialInvoiceSummaryDefault(aParam)
 		{
 			aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 			
-			if (goObjectContext.amount != '')
+			if (ns1blankspace.objectContextData.amount != '')
 			{
 				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAmountValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
-				aHTML[++h] = '$' + goObjectContext.amount;
+				aHTML[++h] = '$' + ns1blankspace.objectContextData.amount;
 				aHTML[++h] = '</td></tr>';
 			}	
 			
-			if (goObjectContext.contactbusinesssenttotext != '')
+			if (ns1blankspace.objectContextData.contactbusinesssenttotext != '')
 			{
 				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryBusiness" class="interfaceMainSummary">Business</td></tr>' +
 							'<tr><td id="tdInterfaceMainSummaryBusinessValue" class="interfaceMainSummaryValue">' +
-							goObjectContext.contactbusinesssenttotext +
+							ns1blankspace.objectContextData.contactbusinesssenttotext +
 							'</td></tr>';
 			}
 			
-			if (goObjectContext.contactpersonsenttotext != '')
+			if (ns1blankspace.objectContextData.contactpersonsenttotext != '')
 			{
 				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPerson" class="interfaceMainSummary">Person</td></tr>' +
 							'<tr><td id="tdInterfaceMainSummaryPersonValue" class="interfaceMainSummaryValue">' +
-							goObjectContext.contactpersonsenttotext +
+							ns1blankspace.objectContextData.contactpersonsenttotext +
 							'</td></tr>';
 			}
 			
-			if (goObjectContext.sent == 'Y')
+			if (ns1blankspace.objectContextData.sent == 'Y')
 			{
 				aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySentDate" class="interfaceMainSummary">Sent Date</td></tr>' +
 							'<tr><td id="tdInterfaceMainSummarySentDateValue" class="interfaceMainSummaryValue">' +
-							goObjectContext.sentdate +
+							ns1blankspace.objectContextData.sentdate +
 							'</td></tr>';		
 
 				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDueDate" class="interfaceMainSummary">Due Date</td></tr>' +
 							'<tr><td id="tdInterfaceMainSummaryDueDateValue" class="interfaceMainSummaryValue">' +
-							goObjectContext.duedate +
+							ns1blankspace.objectContextData.duedate +
 							'</td></tr>';		
 			}
 			else
@@ -630,11 +630,11 @@ function interfaceFinancialInvoiceSummaryDefault(aParam)
 							'</td></tr>';				
 			}
 			
-			if (goObjectContext.description != '')
+			if (ns1blankspace.objectContextData.description != '')
 			{
 				aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
 							'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
-							goObjectContext.description +
+							ns1blankspace.objectContextData.description +
 							'</td></tr>';
 			}
 			
@@ -675,7 +675,7 @@ function interfaceFinancialInvoiceSummaryDefault(aParam)
 				{
 					interfaceMasterCreatePDF({
 							xhtmlContent: $('#tdInterfaceMainSummaryColumn1Large').html(),
-							filename: goObjectContext.reference + '.pdf',
+							filename: ns1blankspace.objectContextData.reference + '.pdf',
 							open: true
 						});
 				});
@@ -812,18 +812,18 @@ function interfaceFinancialInvoiceDetails()
 			
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
-			$('#inputInterfaceMainDetailsPurchaseOrderReference').val(goObjectContext.purchaseorder);
-			$('#inputInterfaceMainDetailsSentToBusiness').attr('data-id', goObjectContext.contactbusinesssentto);
-			$('#inputInterfaceMainDetailsSentToBusiness').val(goObjectContext.contactbusinesssenttotext);
-			$('#inputInterfaceMainDetailsSentToPerson').attr('data-id', goObjectContext.contactpersonsentto);
-			$('#inputInterfaceMainDetailsSentToPerson').val(goObjectContext.contactpersonsenttotext);	
-			$('[name="radioSent"][value="' + goObjectContext.sent + '"]').attr('checked', true);
-			$('#inputInterfaceMainDetailsSentDate').val(goObjectContext.sentdate);
-			$('#inputInterfaceMainDetailsDueDate').val(goObjectContext.duedate);
-			$('#inputInterfaceMainDetailsDescription').val(goObjectContext.description);
+			$('#inputInterfaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
+			$('#inputInterfaceMainDetailsPurchaseOrderReference').val(ns1blankspace.objectContextData.purchaseorder);
+			$('#inputInterfaceMainDetailsSentToBusiness').attr('data-id', ns1blankspace.objectContextData.contactbusinesssentto);
+			$('#inputInterfaceMainDetailsSentToBusiness').val(ns1blankspace.objectContextData.contactbusinesssenttotext);
+			$('#inputInterfaceMainDetailsSentToPerson').attr('data-id', ns1blankspace.objectContextData.contactpersonsentto);
+			$('#inputInterfaceMainDetailsSentToPerson').val(ns1blankspace.objectContextData.contactpersonsenttotext);	
+			$('[name="radioSent"][value="' + ns1blankspace.objectContextData.sent + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsSentDate').val(ns1blankspace.objectContextData.sentdate);
+			$('#inputInterfaceMainDetailsDueDate').val(ns1blankspace.objectContextData.duedate);
+			$('#inputInterfaceMainDetailsDescription').val(ns1blankspace.objectContextData.description);
 		}
 		else
 		{
@@ -838,7 +838,7 @@ function interfaceFinancialInvoiceSave(aParam, oResponse)
 	{
 		interfaceMasterStatusWorking();
 		
-		var sData = (giObjectContext == -1)?'':'id=' + giObjectContext;
+		var sData = (ns1blankspace.objectContext == -1)?'':'id=' + ns1blankspace.objectContext;
 			
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
@@ -867,11 +867,11 @@ function interfaceFinancialInvoiceSave(aParam, oResponse)
 		{	
 			interfaceMasterStatus('Saved');
 			
-			if (giObjectContext == -1)
+			if (ns1blankspace.objectContext == -1)
 			{
-				giObjectContext = oResponse.id;
-				gbInputDetected = false;
-				interfaceFinancialInvoiceSearch('-' + giObjectContext, {source: 1});
+				ns1blankspace.objectContext = oResponse.id;
+				ns1blankspace.inputDetected = false;
+				interfaceFinancialInvoiceSearch('-' + ns1blankspace.objectContext, {source: 1});
 			}	
 		}
 		else
@@ -883,8 +883,8 @@ function interfaceFinancialInvoiceSave(aParam, oResponse)
 
 function interfaceFinancialInvoiceNew(aParam)
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceFinancialInvoiceViewport();
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
@@ -893,7 +893,7 @@ function interfaceFinancialInvoiceNew(aParam)
 
 function interfaceFinancialInvoiceItem(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainItem';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
@@ -914,7 +914,7 @@ function interfaceFinancialInvoiceItem(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainItem" class="interfaceMain">' +
 					'<tr id="trInterfaceMainItemRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainItemColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainItemColumn2" class="interfaceMainColumn2Action" style="width: 300px;">' +
 					'</td>' +
@@ -957,8 +957,8 @@ function interfaceFinancialInvoiceItem(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_ITEM_SEARCH';
 		oSearch.addField('financialaccounttext,tax,issuedamount,amount,description');
-		oSearch.addFilter('object', 'EQUAL_TO', giObject);
-		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.sort('financialaccounttext', 'asc');
 		
 		oSearch.getResults(function(data) {interfaceFinancialInvoiceItem(aParam, data)});
@@ -1081,8 +1081,8 @@ function interfaceFinancialInvoiceItemRemove(aParam, oResponse)
 			dataType: 'json',
 			success: function(data)
 			{
-				var sData = 'object=' + giObject;
-				sData += '&objectcontext=' + giObjectContext;
+				var sData = 'object=' + ns1blankspace.object;
+				sData += '&objectcontext=' + ns1blankspace.objectContext;
 				
 				$.ajax(
 				{
@@ -1248,8 +1248,8 @@ function interfaceFinanicalInvoiceItemAdd(aParam, oResponse)
 				var cAmount = $('#inputInterfaceMainInvoiceItemAddAmount').val();
 				if (cAmount == '') {cAmount = 0};
 				
-				var sData = 'object=' + giObject;
-				sData += '&objectcontext=' + giObjectContext;
+				var sData = 'object=' + ns1blankspace.object;
+				sData += '&objectcontext=' + ns1blankspace.objectContext;
 				sData += '&financialaccount=' + iAccount;
 				sData += '&amount=' + cAmount;
 				sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainInvoiceItemAddDescription').val());
@@ -1264,8 +1264,8 @@ function interfaceFinanicalInvoiceItemAdd(aParam, oResponse)
 					{
 						interfaceMasterStatus('Added.');
 
-						var sData = 'object=' + giObject;
-						sData += '&objectcontext=' + giObjectContext;
+						var sData = 'object=' + ns1blankspace.object;
+						sData += '&objectcontext=' + ns1blankspace.objectContext;
 						
 						$.ajax(
 						{
@@ -1292,7 +1292,7 @@ function interfaceFinanicalInvoiceItemAdd(aParam, oResponse)
 
 function interfaceFinancialInvoiceReceipt(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainReceipt';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
@@ -1313,7 +1313,7 @@ function interfaceFinancialInvoiceReceipt(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainReceipt" class="interfaceMain">' +
 					'<tr id="trInterfaceMainReceiptRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainReceiptColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainReceiptColumn2" class="interfaceMainColumn2Action" style="width: 300px;">' +
 					'</td>' +
@@ -1439,13 +1439,13 @@ function interfaceFinancialInvoiceReceiptAdd(aParam, oResponse)
 	
 	if (iStep == 1)
 	{	
-		$('#tdInterfaceMainPaymentColumn2').html(gsLoadingSmallXHTML)
+		$('#tdInterfaceMainPaymentColumn2').html(ns1blankspace.xhtml.loadingSmall)
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
 		oSearch.addField('amount');
 		oSearch.addSummaryField('sum(amount) sumamount');
-		oSearch.addFilter('invoice', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('invoice', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.rows = 1;
 		oSearch.getResults(function(data){interfaceFinancialInvoiceReceiptAdd($.extend(true, aParam, {step:2}), data)});
 	}
@@ -1469,7 +1469,7 @@ function interfaceFinancialInvoiceReceiptAdd(aParam, oResponse)
 		aHTML[++h] = '<tr id="trInterfaceMainInvoiceReceiptAdd" class="interfaceMain">' +
 						'<td id="tdInterfaceMainInvoiceReceiptAddReceiptAmount" class="interfaceMain"' +
 						'">' +
-						'$' + (parseFloat((goObjectContext.amount).replace(",","")) - cReceiptedAmount).formatMoney(2, ".", ",") + ' remaining.'
+						'$' + (parseFloat((ns1blankspace.objectContextData.amount).replace(",","")) - cReceiptedAmount).formatMoney(2, ".", ",") + ' remaining.'
 						'</td></tr>';
 														
 		aHTML[++h] = '<tr class="interfaceMain">' +
@@ -1521,16 +1521,16 @@ function interfaceFinancialInvoiceReceiptAdd(aParam, oResponse)
 	
 	if (iStep == 3)
 	{
-		$('#tdInterfaceMainInvoiceReceiptAddFull').html(gsLoadingSmallXHTML);
+		$('#tdInterfaceMainInvoiceReceiptAddFull').html(ns1blankspace.xhtml.loadingSmall);
 				
-		var cAmount = goObjectContext.amount - cReceiptedAmount;
+		var cAmount = ns1blankspace.objectContextData.amount - cReceiptedAmount;
 		
 		var sData = 'bankaccount=' + interfaceMasterFormatSave($('input[name="radioBankAccount"]:checked').val());
 		sData += '&amount=' + cAmount;
 		sData += '&receiveddate=' + Date.today().toString("dd-MMM-yyyy");
 		sData += '&paymentmethod=3'; //todo
-		sData += '&contactbusinessreceivedfrom=' + goObjectContext.contactbusinesssentto;	
-		sData += '&contactpersonreceivedfrom=' + goObjectContext.contactpersonsentto;
+		sData += '&contactbusinessreceivedfrom=' + ns1blankspace.objectContextData.contactbusinesssentto;	
+		sData += '&contactpersonreceivedfrom=' + ns1blankspace.objectContextData.contactpersonsentto;
 				
 		$.ajax(
 		{
@@ -1556,7 +1556,7 @@ function interfaceFinancialInvoiceReceiptAdd(aParam, oResponse)
 		
 		var iRecieptID = oResponse.id;
 		
-		var sData = 'invoice=' + giObjectContext;
+		var sData = 'invoice=' + ns1blankspace.objectContext;
 		sData += '&amount=' + cAmount;
 		sData += '&appliesdate=' + Date.today().toString("dd-MMM-yyyy");
 		sData += '&reciept=' + iReceiptID;
@@ -1579,13 +1579,13 @@ function interfaceFinancialInvoiceRefresh(oResponse)
 {
 	if (oResponse == undefined)
 	{
-		$('#spanInterfaceViewportControlSubContext_amount').html(gsLoadingSmallXHTML);
+		$('#spanInterfaceViewportControlSubContext_amount').html(ns1blankspace.xhtml.loadingSmall);
 			
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 		oSearch.addField('sentdate,amount,tax');
 		oSearch.rf = 'json';
-		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 		
 		oSearch.getResults(function(data) {interfaceFinancialInvoiceRefresh(data)});
 	}
@@ -1593,8 +1593,8 @@ function interfaceFinancialInvoiceRefresh(oResponse)
 	{
 		var oObjectContext = oResponse.data.rows[0];
 			
-		goObjectContext.sentdate = oObjectContext.sentdate;
-		goObjectContext.amount = oObjectContext.amount;
+		ns1blankspace.objectContextData.sentdate = oObjectContext.sentdate;
+		ns1blankspace.objectContextData.amount = oObjectContext.amount;
 				
 		$('#spanInterfaceViewportControlSubContext_sentdate').html(oObjectContext.sentdate);
 		$('#spanInterfaceViewportControlSubContext_amount').html(oObjectContext.amount);

@@ -5,47 +5,42 @@
  * 01 FEB 2010
  */
  
-var aActions = [];
-var d = new Date();
-var iInterfaceActionCurrentMonth = d.getMonth() + 1;
-var iInterfaceActionCurrentYear = d.getFullYear();
+if (ns1blankspace.action === undefined) {ns1blankspace.action = {}}
 
-var giActionTypeMeeting = 3;
-var giActionTypeFileNote = 4;
-var giActionTypeEmailSent = 5;
-var giActionTypeEmailReceived = 9;
-var gsActionExtendedText = '';
+ns1blankspace.action.today = new Date();
+ns1blankspace.action.currentMonth = (ns1blankspace.action.today).getMonth() + 1;
+ns1blankspace.action.currentYear = (ns1blankspace.action.today).getFullYear();
+ns1blankspace.action.contactperson;
+ns1blankspace.action.contactbusiness;
+ns1blankspace.action.contactpersontext;
+ns1blankspace.action.contactbusinesstext;
+ns1blankspace.action.calendarUsers = [];
+ns1blankspace.action.user;
+ns1blankspace.action.calendarParam = '';
 
-var giActionContactPerson;
-var giActionContactBusiness;
-var gsActionContactPersonText;
-var gsActionContactBusinessText;
-
-var gaActionCalendarUsers = [];
-var giActionUserID;
-var gsCalendarParam = '';
+ns1blankspace.data.actionType = {meeting: 3, fileNote: 4, emailSent: 5, emailReceived: 9};
 
 function interfaceActionMasterViewport(aParam)
 {
-	giObjectContext = -1;
-	giObject = 17;	
-	gsObjectName = 'Action';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = 17;	
+	ns1blankspace.objectName = 'Action';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 
 	var bShowHome = true
 	var bNew = false
 	
-	giActionUserID = gsUserID;
+	ns1blankspace.action.user = gsUserID;
 	
 	if (aParam != undefined)
 	{
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
 		if (aParam.showNew != undefined) {bNew = aParam.showNew}
-		if (aParam.contactPerson != undefined) {giActionContactPerson = aParam.contactPerson}
-		if (aParam.contactBusiness != undefined) {giActionContactBusiness = aParam.contactBusiness}
-		if (aParam.contactPersonText != undefined) {gsActionContactPersonText = aParam.contactPersonText}
-		if (aParam.contactBusinessText != undefined) {gsActionContactBusinessText = aParam.contactBusinessText}
+		if (aParam.contactPerson != undefined) {ns1blankspace.action.contactperson = aParam.contactPerson}
+		if (aParam.contactBusiness != undefined) {ns1blankspace.action.contactbusiness = aParam.contactBusiness}
+		if (aParam.contactPersonText != undefined) {ns1blankspace.action.contactpersontext = aParam.contactPersonText}
+		if (aParam.contactBusinessText != undefined) {ns1blankspace.action.contactbusinesstext = aParam.contactBusinessText}
 	}
 	
 	interfaceMasterReset();		
@@ -65,8 +60,8 @@ function interfaceActionMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceActionSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceActionSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -118,16 +113,16 @@ function interfaceActionMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceActionSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceActionSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceActionSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceActionSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('#divInterfaceViewportControl').html('');	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bNew)
 	{
 		interfaceActionNew()
@@ -147,7 +142,7 @@ function interfaceActionHomeShow(aParam)
 		if (aParam.calendar != undefined) {bCalendar = aParam.calendar}
 	}	
 	
-	$('#divInterfaceMain').html(gsLoadingXHTML);
+	$('#divInterfaceMain').html(ns1blankspace.xhtml.loading);
 	
 	var aHTML = [];
 	var h = -1;
@@ -193,7 +188,7 @@ function interfaceActionHomeShow(aParam)
 		interfaceActionNext10();
 	});
 	
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	
 	if (bCalendar)
 	{
@@ -215,7 +210,7 @@ function interfaceActionSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -230,15 +225,15 @@ function interfaceActionSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined  && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var sParam = 'method=ACTION_SEARCH' +
-								 '&id=' + giObjectContext;
+								 '&id=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -255,7 +250,7 @@ function interfaceActionSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -264,7 +259,7 @@ function interfaceActionSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -319,14 +314,14 @@ function interfaceActionSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceActionSearch(event.target.id, 1);
 		});
 	}	
@@ -334,8 +329,8 @@ function interfaceActionSearchShow(aParam, oResponse)
 
 function interfaceActionNew()
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceActionMasterViewport();
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
@@ -351,7 +346,7 @@ function interfaceActionViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
 					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
@@ -432,7 +427,7 @@ function interfaceActionViewport()
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainDescriptionExtended");
 		interfaceMessagingActionSearch({
-			xhtmlElementID: '-' + giObjectContext,
+			xhtmlElementID: '-' + ns1blankspace.objectContext,
 			targetXHTMLElementID: 'divInterfaceMainDescriptionExtended',
 			setContext: false
 			})
@@ -447,7 +442,7 @@ function interfaceActionViewport()
 
 function interfaceActionShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceActionViewport();
 		
 	var aHTML = [];
@@ -455,7 +450,7 @@ function interfaceActionShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find action.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -464,7 +459,7 @@ function interfaceActionShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
 		$('#divInterfaceViewportControlContext').html(onDemandXMLGetData(oRow, 'subject'));
 		
@@ -481,11 +476,11 @@ function interfaceActionShow(aParam, oResponse)
 		
 		var iMessageActionID;
 		
-		if (goObjectContext.type == giActionTypeEmailSent || goObjectContext.type == giActionTypeEmailReceived)
-				{iMessageActionID = goObjectContext.id}
+		if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.emailSent || ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.emailReceived)
+				{iMessageActionID = ns1blankspace.objectContextData.id}
 		
-		if (goObjectContext.type == giActionTypeFileNote && goObjectContext.object == 17)
-				{iMessageActionID = goObjectContext.objectcontext}
+		if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.fileNote && ns1blankspace.objectContextData.object == 17)
+				{iMessageActionID = ns1blankspace.objectContextData.objectcontext}
 				
 		if (iMessageActionID != undefined)
 		{
@@ -498,7 +493,7 @@ function interfaceActionShow(aParam, oResponse)
 		else
 		{
 			interfaceMasterViewportDestination({
-				newDestination: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch("-' + giObjectContext + '")',
+				newDestination: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch("-' + ns1blankspace.objectContext + '")',
 				move: false
 			})
 			
@@ -509,7 +504,7 @@ function interfaceActionShow(aParam, oResponse)
 			
 		}
 		
-		if (giObjectContext != -1) {interfaceActionSummary()}
+		if (ns1blankspace.objectContext != -1) {interfaceActionSummary()}
 	}	
 }		
 		
@@ -519,7 +514,7 @@ function interfaceActionSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find action.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -530,30 +525,30 @@ function interfaceActionSummary()
 	{
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 	
-		if (goObjectContext.contactbusinesstext != '')
+		if (ns1blankspace.objectContextData.contactbusinesstext != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryContactBusiness" class="interfaceMainSummary">Business</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryContactBusinessValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.contactbusinesstext + 
+						ns1blankspace.objectContextData.contactbusinesstext + 
 						'</td>' +
 						'</tr>';
 		}			
 	
-		if (goObjectContext.contactpersontext != '')
+		if (ns1blankspace.objectContextData.contactpersontext != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryContactPerson" class="interfaceMainSummary">Person</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryContactPersonValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.contactpersonfirstname + ' ' + goObjectContext.contactpersonsurname +
+						ns1blankspace.objectContextData.contactpersonfirstname + ' ' + ns1blankspace.objectContextData.contactpersonsurname +
 						'</td>' +
 						'</tr>';
 		}				
 			
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDate" class="interfaceMainSummary">Date</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryDateValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.actiondate +
+						ns1blankspace.objectContextData.actiondate +
 						'</td></tr>';
 	
-		var sDate = new Date(goObjectContext.actiondatetime);
+		var sDate = new Date(ns1blankspace.objectContextData.actiondatetime);
 	
 		if ($.fullCalendar.formatDate(sDate, 'H') != '0' && $.fullCalendar.formatDate(sDate, 'm') != '0')
 		{
@@ -565,20 +560,20 @@ function interfaceActionSummary()
 							'</tr>';
 		}					
 		
-		if (goObjectContext.typetext != '')
+		if (ns1blankspace.objectContextData.typetext != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryType" class="interfaceMainSummary">Type</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryTypeValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.typetext +
+						ns1blankspace.objectContextData.typetext +
 						'</td>' +
 						'</tr>';
 		}		
 		
-		if (goObjectContext.statustext != '')
+		if (ns1blankspace.objectContextData.statustext != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStatus" class="interfaceMainSummary">Status</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryStatusValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.statustext + 
+						ns1blankspace.objectContextData.statustext + 
 						'</td>' +
 						'</tr>';
 		}	
@@ -721,43 +716,43 @@ function interfaceActionDetails()
 			
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsSubject').val(goObjectContext.reference);
+			$('#inputInterfaceMainDetailsSubject').val(ns1blankspace.objectContextData.reference);
 			
-			var sDate = new Date(goObjectContext.actiondatetime);
+			var sDate = new Date(ns1blankspace.objectContextData.actiondatetime);
 			sDate = $.fullCalendar.formatDate(sDate, 'dd MMM yyyy h:mm TT')
 			$('#inputInterfaceMainDetailsDate').val(sDate);
 			
-			$('#inputInterfaceMainDetailsType').attr("onDemandID", goObjectContext.type);
-			$('#inputInterfaceMainDetailsType').val(goObjectContext.typetext);
-			$('#inputInterfaceMainDetailsActionBy').attr("onDemandID", goObjectContext.actionby);
-			$('#inputInterfaceMainDetailsActionBy').val(goObjectContext.actionbyfirstname + ' ' +
-							goObjectContext.actionbysurname);
-			$('[name="radioStatus"][value="' + goObjectContext.status + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsType').attr("onDemandID", ns1blankspace.objectContextData.type);
+			$('#inputInterfaceMainDetailsType').val(ns1blankspace.objectContextData.typetext);
+			$('#inputInterfaceMainDetailsActionBy').attr("onDemandID", ns1blankspace.objectContextData.actionby);
+			$('#inputInterfaceMainDetailsActionBy').val(ns1blankspace.objectContextData.actionbyfirstname + ' ' +
+							ns1blankspace.objectContextData.actionbysurname);
+			$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 			
-			$('#inputInterfaceMainDetailsBusiness').attr("onDemandID", goObjectContext.contactbusiness);
-			$('#inputInterfaceMainDetailsBusiness').val(goObjectContext.contactbusinesstext);
+			$('#inputInterfaceMainDetailsBusiness').attr("onDemandID", ns1blankspace.objectContextData.contactbusiness);
+			$('#inputInterfaceMainDetailsBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
 			
-			$('#inputInterfaceMainDetailsPerson').attr("onDemandID", goObjectContext.contactperson);
-			$('#inputInterfaceMainDetailsPerson').val(goObjectContext.contactpersonfirstname + 
-					' ' + goObjectContext.contactpersonsurname);
+			$('#inputInterfaceMainDetailsPerson').attr("onDemandID", ns1blankspace.objectContextData.contactperson);
+			$('#inputInterfaceMainDetailsPerson').val(ns1blankspace.objectContextData.contactpersonfirstname + 
+					' ' + ns1blankspace.objectContextData.contactpersonsurname);
 		}
 		else
 		{
 			$('[name="radioStatus"][value="1"]').attr('checked', true);
 			
-			if (giActionContactBusiness != undefined)
-			{$('#inputInterfaceMainDetailsBusiness').attr("onDemandID", giActionContactBusiness);}
+			if (ns1blankspace.action.contactbusiness != undefined)
+			{$('#inputInterfaceMainDetailsBusiness').attr("onDemandID", ns1blankspace.action.contactbusiness);}
 			
-			if (gsActionContactBusinessText != undefined)
-			{$('#inputInterfaceMainDetailsBusiness').val(gsActionContactBusinessText);}
+			if (ns1blankspace.action.contactbusinesstext != undefined)
+			{$('#inputInterfaceMainDetailsBusiness').val(ns1blankspace.action.contactbusinesstext);}
 			
-			if (giActionContactPerson != undefined)
-			{$('#inputInterfaceMainDetailsPerson').attr("onDemandID", giActionContactPerson);}
+			if (ns1blankspace.action.contactperson != undefined)
+			{$('#inputInterfaceMainDetailsPerson').attr("onDemandID", ns1blankspace.action.contactperson);}
 			
-			if (gsActionContactPersonText != undefined)
-			{$('#inputInterfaceMainDetailsPerson').val(gsActionContactPersonText);}
+			if (ns1blankspace.action.contactpersontext != undefined)
+			{$('#inputInterfaceMainDetailsPerson').val(ns1blankspace.action.contactpersontext);}
 		}
 		
 		$('#inputInterfaceMainDetailsStatus').keyup(function(event)
@@ -804,9 +799,9 @@ function interfaceActionDescription()
 		
 		$('#tdInterfaceMainDescriptionColumn1').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDescription').val(unescape(goObjectContext.description));
+			$('#inputInterfaceMainDescription').val(unescape(ns1blankspace.objectContextData.description));
 		}
 	}	
 }
@@ -819,7 +814,7 @@ function interfaceActionNext10()
 	aHTML[++h] = '<table id="tableInterfaceMainNext10" class="interfaceMain">' +
 					'<tr id="trInterfaceMainNext10Row1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainNext10Column1">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'</tr>' +
 					'</table>';					
@@ -833,8 +828,8 @@ function interfaceActionNext10()
 function interfaceActionsList(sElementId, iObject, lObjectContext, bAll, sActionType)
 {
 
-	if (iObject == undefined) {iObject = giObject};
-	if (lObjectContext == undefined) {lObjectContext = giObjectContext};
+	if (iObject == undefined) {iObject = ns1blankspace.object};
+	if (lObjectContext == undefined) {lObjectContext = ns1blankspace.objectContext};
 	if (sElementId == undefined) {sElementId = "divInterfaceMasterViewportControlOptions"};
 	if (bAll == undefined) {bAll = false};
 	if (sActionType == undefined) {sActionType = ''};
@@ -905,7 +900,7 @@ function interfaceActionsListShow(oResponse, sElementId, sActionType)
 		aHTML[++h] = '</tr>';
 		
 		$('#' + sElementId).html(aHTML.join(''));
-		$('#' + sElementId).show(giShowSpeed);
+		$('#' + sElementId).show(ns1blankspace.option.showSpeed);
 	}
 	else
 	{
@@ -994,7 +989,7 @@ function interfaceActionsListShow(oResponse, sElementId, sActionType)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#' + sElementId).html(aHTML.join(''));
-		$('#' + sElementId).show(giShowSpeed);
+		$('#' + sElementId).show(ns1blankspace.option.showSpeed);
 		
 		$('td.interfaceActions').click(function(event)
 		{
@@ -1046,7 +1041,7 @@ function interfaceActionsAddNote(iObject, iObjectContext)
 					interfaceActionQuickSave({
 						reference: '',
 						description: $('#inputInterfaceMainAddNoteDescription').val(),
-						type: ($('#inputInterfaceMainAddNoteStatus').attr('checked')?giActionTypeFileNote:giActionTypeFileNote),
+						type: ($('#inputInterfaceMainAddNoteStatus').attr('checked')?ns1blankspace.data.actionType.fileNote:ns1blankspace.data.actionType.fileNote),
 						priority: ($('#inputInterfaceMainAddNoteHighPriority').attr('checked')?3:2)
 						});
 					$( this ).dialog( "close" );
@@ -1059,15 +1054,15 @@ function interfaceActionsAddNote(iObject, iObjectContext)
 function interfaceActionSave(aParam, oResponse)
 {
 	var sData = '';
-	var iType = giActionTypeMeeting;
+	var iType = ns1blankspace.data.actionType.meeting;
 	
 	if (oResponse == undefined)
 	{
 		if (aParam != undefined)
 		{
 			if (aParam.type != undefined) {iType = aParam.type}
-			if (aParam.object == undefined) {aParam.object = giObject}
-			if (aParam.objectContext == undefined) {aParam.objectContext = giObjectContext}
+			if (aParam.object == undefined) {aParam.object = ns1blankspace.object}
+			if (aParam.objectContext == undefined) {aParam.objectContext = ns1blankspace.objectContext}
 
 			sData += 'object=' + interfaceMasterinterfaceMasterFormatSave(aParam.object);
 			sData += '&objectcontext=' + interfaceMasterinterfaceMasterFormatSave(aParam.objectContext);
@@ -1086,9 +1081,9 @@ function interfaceActionSave(aParam, oResponse)
 		}	
 		else	  
 		{
-			if (giObjectContext != -1)
+			if (ns1blankspace.objectContext != -1)
 			{
-				sData += 'id=' + giObjectContext;
+				sData += 'id=' + ns1blankspace.objectContext;
 			}
 			else
 			{
@@ -1129,7 +1124,7 @@ function interfaceActionSave(aParam, oResponse)
 		if (oResponse.status == 'OK')
 		{
 			interfaceMasterStatus('Saved');
-			giObjectContext = oResponse.id;	
+			ns1blankspace.objectContext = oResponse.id;	
 		
 			var dStartDate = new Date;
 			var dEndDate = dStartDate;
@@ -1149,7 +1144,7 @@ function interfaceActionSave(aParam, oResponse)
 			
 				$('#' + sCalendarXHTMLElementID).fullCalendar('renderEvent',
 				{
-					id: giObjectContext,
+					id: ns1blankspace.objectContext,
 					title: sTitle,
 					start: sStartDate, 
 					end: sEndDate, 
@@ -1158,8 +1153,8 @@ function interfaceActionSave(aParam, oResponse)
 				);
 			}
 			
-			gbInputDetected = false;
-			interfaceActionSearch('-' + giObjectContext, {source: 1});
+			ns1blankspace.inputDetected = false;
+			interfaceActionSearch('-' + ns1blankspace.objectContext, {source: 1});
 		
 		}
 		else
@@ -1177,7 +1172,7 @@ function interfaceActionsSummaryActions(sElementId, iObject, iObjectContext)
 
 	var sParam = '/ondemand/action/?method=ACTION_SEARCH' +
 								 '&rf=xml' +
-								 '&type=' + giActionTypeFileNote +
+								 '&type=' + ns1blankspace.data.actionType.fileNote +
 								 '&status=' + giActionStatusInProgress;
 
 	if (iObject != undefined && iObjectContext != undefined)
@@ -1242,15 +1237,15 @@ function interfaceActionCalendar(aParam)
 	
 	$('#' + sXHTMLElementID).html('');
 	
-	if (gaActionCalendarUsers.length == 0 && bEventFetch)
+	if (ns1blankspace.action.calendarUsers.length == 0 && bEventFetch)
 	{
-		if (giActionUserID != undefined)
+		if (ns1blankspace.action.user != undefined)
 		{
-			gaActionCalendarUsers.push(giActionUserID);
+			ns1blankspace.action.calendarUsers.push(ns1blankspace.action.user);
 		}
 		else
 		{	
-			gaActionCalendarUsers.push(gsUserID);
+			ns1blankspace.action.calendarUsers.push(gsUserID);
 		}	
 	}	
 	
@@ -1404,11 +1399,11 @@ function interfaceActionCalendar(aParam)
 		}
 	});	
 	
-	$.each(gaActionCalendarUsers, function() 
+	$.each(ns1blankspace.action.calendarUsers, function() 
 	{ 
 		$('#' + sXHTMLElementID).fullCalendar('addEventSource', 
 		{
-			url: '/ondemand/action/?method=ACTION_CALENDAR_SEARCH' + gsCalendarParam + '&rf=JSON&diary=1&usercolours=1&titleoption=1&actionby=' + this
+			url: '/ondemand/action/?method=ACTION_CALENDAR_SEARCH' + ns1blankspace.action.calendarParam + '&rf=JSON&diary=1&usercolours=1&titleoption=1&actionby=' + this
 		})
 	});
 	
@@ -1422,9 +1417,9 @@ function interfaceActionCalendarUnavailableShow()
 	var sNotAvailableDayClasses = aDays.join(' ')
 	var bAvailable = true;
 
-	if (gaActionCalendarUsers.length > 0) 
+	if (ns1blankspace.action.calendarUsers.length > 0) 
 	{ 
-		var sParam = 'method=SETUP_USER_SEARCH&profile=445-446-447&users=' + gaActionCalendarUsers.toString('-');
+		var sParam = 'method=SETUP_USER_SEARCH&profile=445-446-447&users=' + ns1blankspace.action.calendarUsers.toString('-');
 		
 		$.ajax(
 		{
@@ -1682,7 +1677,7 @@ function interfaceMasterHomeCalendarAction(iActionId, sActionTitle)
 		success: interfaceMasterHomeCalendarActionShow()
 	});	
 
-	$('#divInterfaceMasterViewportControlOptions').html(gsLoadingXHTML);
+	$('#divInterfaceMasterViewportControlOptions').html(ns1blankspace.xhtml.loading);
 	
 	$('#divInterfaceMasterViewportControlOptions').dialog({
 		title: sActionTitle,	
@@ -1736,7 +1731,7 @@ function interfaceActionNextSummary(aParam, oResponse)
 			aHTML[++h] = '</tr>';
 			
 			$('#' + sElementId).html(aHTML.join(''));
-			$('#' + sElementId).show(giShowSpeed);
+			$('#' + sElementId).show(ns1blankspace.option.showSpeed);
 			
 		}
 		else
@@ -1783,7 +1778,7 @@ function interfaceActionNextSummary(aParam, oResponse)
 			aHTML[++h] = '</tbody></table>';
 
 			$('#' + sElementId).html(aHTML.join(''));
-			$('#' + sElementId).show(giShowSpeed);
+			$('#' + sElementId).show(ns1blankspace.option.showSpeed);
 			
 			$('td.interfaceRowSelect').click(function(event)
 			{
@@ -1806,11 +1801,11 @@ function interfaceActionQuickSave(aParam, oResponse)
 	{
 		var sParam = '/ondemand/action/?rf=JSON&method=ACTION_MANAGE';
 		var sData = '';
-		var iType = giActionTypeMeeting;
+		var iType = ns1blankspace.data.actionType.meeting;
 		var bAsync = true;
 		var iHours;
 		var sEndDate;
-		var iActionBy = giActionUserID;
+		var iActionBy = ns1blankspace.action.user;
 		
 		if (aParam != undefined)
 		{

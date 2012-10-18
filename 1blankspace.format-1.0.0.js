@@ -210,18 +210,18 @@ function interfaceFormatRender(aParam)
 				{
 					var sSource = oTemplateTag[0].source;
 
-					if (goObjectContext[sSource])
+					if (ns1blankspace.objectContextData[sSource])
 					{	
-						$(e).html(goObjectContext[sSource]);
+						$(e).html(ns1blankspace.objectContextData[sSource]);
 					}
-					else (goObjectContext[oTemplateTag[0].source])
+					else (ns1blankspace.objectContextData[oTemplateTag[0].source])
 					{
 						var aSource = (sSource).split('.');
 						sSource = aSource[aSource.length-1];
 
-						if (goObjectContext[sSource])
+						if (ns1blankspace.objectContextData[sSource])
 						{	
-							$(e).html(goObjectContext[sSource]);
+							$(e).html(ns1blankspace.objectContextData[sSource]);
 						}
 					}	
 				}
@@ -247,8 +247,8 @@ function interfaceFormatRender(aParam)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = this.method;
 		oSearch.addField('*');
-		oSearch.addFilter('object', 'EQUAL_TO', giObject);
-		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 		//oSearch.sort('financialaccounttext', 'asc');
 
 		var oTmp = {group: this.group};
@@ -313,7 +313,7 @@ function interfaceFormatEditorInitialise(aParam)
 		if (aParam.dynamicTags != undefined) {bDynamicTags = aParam.dynamicTags}
 	}
 
-	if (gbRichEdit)
+	if (ns1blankspace.option.richTextEditing)
 	{
 	
 		if (bDynamicTags) {sAdditional = 'dynamicTags,'}
@@ -358,11 +358,11 @@ function interfaceFormatEditorInitialise(aParam)
 			visual : true, 
 			gecko_spellcheck : true,
 			TemplateLinkType : "32",
-			content_css : gsEditorCSS,
+			content_css : ns1blankspace.xhtml.editorCSS,
 			
 			external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
-			external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + giObjectContext, 
-			media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + giObjectContext, 
+			external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
+			media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
 
 		});				
 	

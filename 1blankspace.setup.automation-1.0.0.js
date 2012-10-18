@@ -20,8 +20,8 @@ function interfaceSetupAutomationMasterViewport()
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupAutomationSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupAutomationSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -93,15 +93,15 @@ function interfaceSetupAutomationMasterViewport()
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupAutomationSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupAutomationSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupAutomationSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupAutomationSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupAutomationHomeShow();
 	
@@ -117,7 +117,7 @@ function interfaceSetupAutomationHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceHomeMostLikely" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceHomeColumn2Action" style="width:175px;">' +
 						'</td>' +
@@ -153,7 +153,7 @@ function interfaceSetupAutomationHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var sParam = 'method=SETUP_AUTOMATION_SEARCH';
 
@@ -213,7 +213,7 @@ function interfaceSetupAutomationSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -228,9 +228,9 @@ function interfaceSetupAutomationSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
 		giSetupContext = sSearchContext;
 		
@@ -251,7 +251,7 @@ function interfaceSetupAutomationSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -260,7 +260,7 @@ function interfaceSetupAutomationSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -318,13 +318,13 @@ function interfaceSetupAutomationSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupAutomationSearch(event.target.id, 1);
 		});
 	}	
@@ -422,7 +422,7 @@ function interfaceSetupAutomationViewport()
 
 function interfaceSetupAutomationShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupAutomationViewport();
 	
 	var aHTML = [];
@@ -431,7 +431,7 @@ function interfaceSetupAutomationShow(aParam, oResponse)
 	if (oResponse.data.rows.length == 0)
 	{
 	
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 	
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find automation rule.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -440,9 +440,9 @@ function interfaceSetupAutomationShow(aParam, oResponse)
 	}
 	else
 	{		
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 		
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
@@ -467,7 +467,7 @@ function interfaceSetupAutomationSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find automation.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -480,12 +480,12 @@ function interfaceSetupAutomationSummary()
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryID" class="interfaceMainSummary">Automation ID</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryID" class="interfaceMainSummaryValue">' +
-						goObjectContext.id +
+						ns1blankspace.objectContextData.id +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAutomationEndpoint" class="interfaceMainSummary">Endpoint</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryAutomationEndpoint" class="interfaceMainSummaryValue">' +
-						goObjectContext.endpoint +
+						ns1blankspace.objectContextData.endpoint +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
@@ -498,7 +498,7 @@ function interfaceSetupAutomationSummary()
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2">';
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask3" class="interfaceRowSelect">' +
-						'<a href="/ondemand/setup/?method=SETUP_AUTOMATION_RUN&ct=text/html&id=' + giObjectContext + '"' +
+						'<a href="/ondemand/setup/?method=SETUP_AUTOMATION_RUN&ct=text/html&id=' + ns1blankspace.objectContext + '"' +
 						' target="_blank" id="aInterfaceMainSummaryAutomationTestRun">Test Run</a>' +
 						'</td></tr>';
 										
@@ -590,16 +590,16 @@ function interfaceSetupAutomationDetails()
 		
 		$('#divInterfaceMainDetails').html(aHTML.join(''));
 		
-		if (goObjectContext == undefined)
+		if (ns1blankspace.objectContextData == undefined)
 		{	
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
-			$('#inputInterfaceMainDetailsEndpoint').val(goObjectContext.endpoint);
-			$('#inputInterfaceMainDetailsURL').val(goObjectContext.url);
-			$('#inputInterfaceMainDetailsURLMethod').val(goObjectContext.urlmethod);
-			$('#inputInterfaceMainDetailsPostData').val(goObjectContext.postdata);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('#inputInterfaceMainDetailsEndpoint').val(ns1blankspace.objectContextData.endpoint);
+			$('#inputInterfaceMainDetailsURL').val(ns1blankspace.objectContextData.url);
+			$('#inputInterfaceMainDetailsURLMethod').val(ns1blankspace.objectContextData.urlmethod);
+			$('#inputInterfaceMainDetailsPostData').val(ns1blankspace.objectContextData.postdata);
 			
-			$('[name="radioStatus"][value="' + goObjectContext.status + '"]').attr('checked', true);
-			$('[name="radioInContext"][value="' + goObjectContext.incontext + '"]').attr('checked', true);
+			$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
+			$('[name="radioInContext"][value="' + ns1blankspace.objectContextData.incontext + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -683,11 +683,11 @@ function interfaceSetupAutomationSchedule()
 		
 		$('#tdInterfaceMainScheduleColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext == undefined)
+		if (ns1blankspace.objectContextData == undefined)
 		{
-			$('#inputInterfaceMainScheduleTimeHour').val(goObjectContext.scheduletimehour);
-			$('#inputInterfaceMainScheduleTimeMinute').val(goObjectContext.scheduletimeminute);
-			$('[name="radioScheduleType"][value="' + goObjectContext.scheduletype + '"]').attr('checked', true);
+			$('#inputInterfaceMainScheduleTimeHour').val(ns1blankspace.objectContextData.scheduletimehour);
+			$('#inputInterfaceMainScheduleTimeMinute').val(ns1blankspace.objectContextData.scheduletimeminute);
+			$('[name="radioScheduleType"][value="' + ns1blankspace.objectContextData.scheduletype + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -762,12 +762,12 @@ function interfaceSetupAutomationResponse()
 		
 		$('#tdInterfaceMainResponseColumn1').html(aHTML.join(''));
 		
-		if (goObjectContext == undefined)
+		if (ns1blankspace.objectContextData == undefined)
 		{
-			$('[name="radioResponseAction"][value="' + goObjectContext.responseaction + '"]').attr('checked', true);
-			$('#inputInterfaceMainResponseActionContext').val(goObjectContext.responseactioncontext);
-			$('#inputInterfaceMainResponseActionFrom').val(goObjectContext.responseactionfrom);
-			$('#inputInterfaceMainResponseActionURL').val(goObjectContext.responseactionurl);
+			$('[name="radioResponseAction"][value="' + ns1blankspace.objectContextData.responseaction + '"]').attr('checked', true);
+			$('#inputInterfaceMainResponseActionContext').val(ns1blankspace.objectContextData.responseactioncontext);
+			$('#inputInterfaceMainResponseActionFrom').val(ns1blankspace.objectContextData.responseactionfrom);
+			$('#inputInterfaceMainResponseActionURL').val(ns1blankspace.objectContextData.responseactionurl);
 		}
 		else
 		{
@@ -830,12 +830,12 @@ function interfaceSetupAutomationFormat()
 		
 		$('#divInterfaceMainFormat').html(aHTML.join(''));
 		
-		if (goObjectContext == undefined)
+		if (ns1blankspace.objectContextData == undefined)
 		{
-			$('#inputInterfaceMainFormatCaption').val(goObjectContext.caption);
-			$('#inputInterfaceMainFormatCSSClass').val(goObjectContext.cssclass);
-			$('#inputInterfaceMainFormatXHTMLStyle').val(goObjectContext.xhtmlstyle);
-			$('#inputInterfaceMainFormatXHTMLAHref').val(goObjectContext.xhtmlahref);
+			$('#inputInterfaceMainFormatCaption').val(ns1blankspace.objectContextData.caption);
+			$('#inputInterfaceMainFormatCSSClass').val(ns1blankspace.objectContextData.cssclass);
+			$('#inputInterfaceMainFormatXHTMLStyle').val(ns1blankspace.objectContextData.xhtmlstyle);
+			$('#inputInterfaceMainFormatXHTMLAHref').val(ns1blankspace.objectContextData.xhtmlahref);
 		}
 	}	
 }
@@ -913,7 +913,7 @@ function interfaceSetupAutomationSave(oResponse)
 		if (giSetupContext == -1)
 		{
 			giSetupContext = oResponse.id;
-			gbInputDetected = false;
+			ns1blankspace.inputDetected = false;
 			interfaceSetupAutomationSearch('-' + giSetupContext, {source: 1});
 		}	
 	}

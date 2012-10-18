@@ -7,10 +7,10 @@
  
 function interfaceSetupMessagingMasterViewport()
 {
-	gsObjectName = 'Messaging';
-	giObjectContext = -1;
-	giObject = -1;
-	goObjectContext = undefined;
+	ns1blankspace.objectName = 'Messaging';
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = -1;
+	ns1blankspace.objectContextData = undefined;
 	
 	interfaceMasterReset();		
 			
@@ -21,8 +21,8 @@ function interfaceSetupMessagingMasterViewport()
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupMessagingSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupMessagingSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -77,15 +77,15 @@ function interfaceSetupMessagingMasterViewport()
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupMessagingSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupMessagingSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupMessagingSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupMessagingSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupMessagingHomeShow();
 	
@@ -101,7 +101,7 @@ function interfaceSetupMessagingHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceSetupMessagingHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -121,7 +121,7 @@ function interfaceSetupMessagingHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
@@ -170,7 +170,7 @@ function interfaceSetupMessagingHomeShow(oResponse)
 		
 		$('#aInterfaceSetupMessagingHomeMostLikelyMore').click(function(event)
 		{
-			interfaceSetupMessagingSearch('tdInterfaceViewportMasterControlBrowse-', {source: giSearchSource_BROWSE});
+			interfaceSetupMessagingSearch('tdInterfaceViewportMasterControlBrowse-', {source: ns1blankspace.data.searchSource.browse});
 		});
 	}
 }
@@ -184,19 +184,19 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 		
 	if (iSource == undefined)
 	{
-		iSource = giSearchSource_TEXT_INPUT;
+		iSource = ns1blankspace.data.searchSource.text;
 	}	
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 	
 		/*
 		var sParam = 'method=SETUP_MESSAGING_ACCOUNT_SEARCH';
 		sParam += '&type=5';
-		sParam += '&id=' + giObjectContext;
+		sParam += '&id=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -210,7 +210,7 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
 		oSearch.addField('email,type,typetext,authtype,authtypetext,accountname,server,sslport,title,user,usertext');
-		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.getResults(function(data) {interfaceSetupMessagingShow(data)});
 	
 	}
@@ -224,7 +224,7 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -233,7 +233,7 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{	
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -255,7 +255,7 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 			oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
 			oSearch.addField('email');
 			
-			if (iSource == giSearchSource_BROWSE)
+			if (iSource == ns1blankspace.data.searchSource.browse)
 			{
 				oSearch.addFilter('email', 'STRING_STARTS_WITH', sSearchText);
 			}
@@ -310,13 +310,13 @@ function interfaceSetupMessagingSearchShow(oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupMessagingSearch(event.target.id, 1);
 		});
 	}			
@@ -332,7 +332,7 @@ function interfaceSetupMessagingViewport()
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
 
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -376,7 +376,7 @@ function interfaceSetupMessagingViewport()
 
 function interfaceSetupMessagingShow(oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupMessagingViewport();
 	
 	var aHTML = [];
@@ -384,7 +384,7 @@ function interfaceSetupMessagingShow(oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find then message account.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -393,11 +393,11 @@ function interfaceSetupMessagingShow(oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 				
-		var sContext = goObjectContext.email;
+		var sContext = ns1blankspace.objectContextData.email;
 		var aContext = sContext.split("@");
 		
 		sContext = aContext[0];
@@ -429,7 +429,7 @@ function interfaceSetupMessagingSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find user.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -442,12 +442,12 @@ function interfaceSetupMessagingSummary()
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummary">Email</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummaryValue">' +
-						goObjectContext.email +
+						ns1blankspace.objectContextData.email +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryEmail" class="interfaceMainSummary">Server</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryServer" class="interfaceMainSummaryValue">' +
-						goObjectContext.server +
+						ns1blankspace.objectContextData.server +
 						'</td></tr>';				
 		
 		aHTML[++h] = '</table>';					
@@ -566,14 +566,14 @@ function interfaceSetupMessagingDetails()
 		
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsUser').val(goObjectContext.usertext);
-			$('#inputInterfaceMainDetailsUser').attr('data-id', goObjectContext.user);
-			$('#inputInterfaceMainDetailsEmail').val(goObjectContext.email);
-			$('[name="radioType"][value="' + goObjectContext.type + '"]').attr('checked', true);
-			$('#inputInterfaceMainDetailsAccountName').val(goObjectContext.accountname);
-			$('#inputInterfaceMainDetailsServer').val(goObjectContext.server);
+			$('#inputInterfaceMainDetailsUser').val(ns1blankspace.objectContextData.usertext);
+			$('#inputInterfaceMainDetailsUser').attr('data-id', ns1blankspace.objectContextData.user);
+			$('#inputInterfaceMainDetailsEmail').val(ns1blankspace.objectContextData.email);
+			$('[name="radioType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsAccountName').val(ns1blankspace.objectContextData.accountname);
+			$('#inputInterfaceMainDetailsServer').val(ns1blankspace.objectContextData.server);
 		}
 		else
 		{
@@ -584,8 +584,8 @@ function interfaceSetupMessagingDetails()
 
 function interfaceSetupMessagingNew()
 {
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 	interfaceSetupMessagingViewport();
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
@@ -598,9 +598,9 @@ function interfaceSetupMessagingSave()
 	var sParam = 'method=SETUP_MESSAGING_ACCOUNT_MANAGE';
 	var sData = '_=1';
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
-		sParam += '&id=' + giObjectContext	
+		sParam += '&id=' + ns1blankspace.objectContext	
 	}	
 	
 	if ($('#divInterfaceMainDetails').html() != '')

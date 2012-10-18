@@ -4,8 +4,11 @@
  * http://1blankspace.com/license
  * 01 FEB 2010
  */
- 
-var gaAdvancedSearchComparison =
+
+if (ns1blankspace === undefined) {ns1blankspace = {}}
+if (ns1blankspace.data === undefined) {ns1blankspace.data = {}}
+
+ns1blankspace.data.searchComparison =
 		[ 
 			{title: "None", code: "", dataType: "all", inputCount: 0},
 			{title: "Equal to", code: "EQUAL_TO", dataType: "all", inputCount: 1},
@@ -441,7 +444,7 @@ function advancedSearchComparisonGet(aParam)
 	
 	sReturnFormat = sReturnFormat.toUpperCase();
 		
-	$.each(gaAdvancedSearchComparison, function()
+	$.each(ns1blankspace.data.searchComparison, function()
 	{
 		if (this.dataType == sDataType || (bIncludeAll && this.dataType == 'all') || (sCode == this.code))
 		{

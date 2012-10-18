@@ -16,10 +16,10 @@ function interfaceFinancialPayrollMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 
-	giObject = -1;
-	goObjectContext = undefined;
-	gsObjectName = 'Payroll';
-	giObjectContext = -1;
+	ns1blankspace.object = -1;
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectName = 'Payroll';
+	ns1blankspace.objectContext = -1;
 	
 	if (bShowHome)
 	{
@@ -38,8 +38,8 @@ function interfaceFinancialPayrollMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceFinancialPayrollSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialPayrollSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -94,15 +94,15 @@ function interfaceFinancialPayrollMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialPayrollHomeShow()};	
 }
 
@@ -116,7 +116,7 @@ function interfaceFinancialPayrollHomeShow(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -169,7 +169,7 @@ function interfaceFinancialPayrollHomeShow(aParam, oResponse)
 
 		$('#divInterfaceMain').html(aHTML.join(''));
 	
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
@@ -226,7 +226,7 @@ function interfaceFinancialPayrollSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -241,11 +241,11 @@ function interfaceFinancialPayrollSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined  && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
@@ -261,7 +261,7 @@ function interfaceFinancialPayrollSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -269,7 +269,7 @@ function interfaceFinancialPayrollSearch(sXHTMLElementId, aParam)
 			sSearchText = aSearch[1];
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			
@@ -324,12 +324,12 @@ function interfaceFinancialPayrollSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceFinancialPayrollSearch(event.target.id, {source: 1});
 		});
 	}		
@@ -392,7 +392,7 @@ function interfaceFinancialPayrollViewport()
 
 function interfaceFinancialPayrollShow(aParam, oResponse)
 {	
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceFinancialPayrollViewport();
 		
 	var aHTML = [];
@@ -400,7 +400,7 @@ function interfaceFinancialPayrollShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 			
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this pay period.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -409,15 +409,15 @@ function interfaceFinancialPayrollShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 			
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 			
-		$('#divInterfaceViewportControlContext').html(goObjectContext.paydate +
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_status">' + goObjectContext.statustext + '</span>');
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.paydate +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_status">' + ns1blankspace.objectContextData.statustext + '</span>');
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceFinancialPayrollMasterViewport({showHome: false});interfaceFinancialPayrollSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceFinancialPayrollMasterViewport({showHome: false});interfaceFinancialPayrollSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 	
@@ -448,12 +448,12 @@ function interfaceFinancialPayrollSummary(aParam, oResponse)
 					
 	aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStartDate" class="interfaceMainSummary">Start Date</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryStartDateValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.startdate +
+						ns1blankspace.objectContextData.startdate +
 						'</td></tr>';		
 										
 	aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPayDate" class="interfaceMainSummary">Pay Date</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryPayDateValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.paydate +
+						ns1blankspace.objectContextData.paydate +
 						'</td></tr>';		
 	
 	aHTML[++h] = '</table>';					
@@ -465,14 +465,14 @@ function interfaceFinancialPayrollSummary(aParam, oResponse)
 	
 	aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" style="width: 100%">';
 	
-	if (goObjectContext.statustext != '')
+	if (ns1blankspace.objectContextData.statustext != '')
 	{	
 		aHTML[++h] = '<tr><td class="interfaceMainSummary" style="padding-bottom:10px;">' +
-					goObjectContext.statustext +
+					ns1blankspace.objectContextData.statustext +
 					'</td></tr>';				
 	}
 	
-	if (goObjectContext.status == 1)
+	if (ns1blankspace.objectContextData.status == 1)
 	{	
 		aHTML[++h] = '<tr><td>' +
 					'<span style="font-size:0.75em;" id="spanInterfaceMainStatusComplete" class="orderAction">Complete</span>' +
@@ -492,9 +492,9 @@ function interfaceFinancialPayrollSummary(aParam, oResponse)
 			{
 				type: 'POST',
 				url: interfaceMasterEndpointURL('FINANCIAL_PAYROLL_PAY_PERIOD_MANAGE'),
-				data: 'status=2&id=' + giObjectContext,
+				data: 'status=2&id=' + ns1blankspace.objectContext,
 				dataType: 'json',
-				success: function() {interfaceFinancialPayrollSearch('-' + giObjectContext)}
+				success: function() {interfaceFinancialPayrollSearch('-' + ns1blankspace.objectContext)}
 			});
 	});
 		
@@ -563,21 +563,21 @@ function interfaceFinancialPayrollDetails(aParam)
 	
 	$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
 
-	if (goObjectContext != undefined)
+	if (ns1blankspace.objectContextData != undefined)
 	{
-		$('#inputInterfaceMainDetailsStartDate').val(goObjectContext.startdate);
-		$('#inputInterfaceMainDetailsPayDate').val(goObjectContext.paydate);
-		$('[name="radioStatus"][value="' + goObjectContext.status + '"]').attr('checked', true);
-		$('[name="radioFrequency"][value="' + goObjectContext.frequency + '"]').attr('checked', true);
-		$('#inputInterfaceMainDetailsNotes').val(goObjectContext.notes);	
+		$('#inputInterfaceMainDetailsStartDate').val(ns1blankspace.objectContextData.startdate);
+		$('#inputInterfaceMainDetailsPayDate').val(ns1blankspace.objectContextData.paydate);
+		$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
+		$('[name="radioFrequency"][value="' + ns1blankspace.objectContextData.frequency + '"]').attr('checked', true);
+		$('#inputInterfaceMainDetailsNotes').val(ns1blankspace.objectContextData.notes);	
 	}
 }
 
 function interfaceFinancialPayrollSave(aParam)
 {
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
-		var sData = 'id=' + giObjectContext;
+		var sData = 'id=' + ns1blankspace.objectContext;
 		
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
@@ -612,7 +612,7 @@ function interfaceFinancialPayrollNew()
 	aHTML[++h] = '<table style="width:100%">' +
 					'<tr>' +
 					'<td id="tdInterfaceMainPayrollNewColumn1" style="width:50%">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainPayrollNewColumn2" class="interfaceMainColumn2" style="font-size:0.75em">' +
 					'</td>' +
@@ -723,8 +723,8 @@ function interfaceFinancialPayrollHomeSave(aParam, oResponse)
 				if (data.status == 'OK')
 				{	
 					interfaceMasterStatus('New pay period created.');
-					giObjectContext = data.period;
-					interfaceFinancialPayrollSearch('-' + giObjectContext);
+					ns1blankspace.objectContext = data.period;
+					interfaceFinancialPayrollSearch('-' + ns1blankspace.objectContext);
 				}	
 			}
 		});
@@ -949,7 +949,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		aHTML[++h] = '<table style="width:100%">' +
 						'<tr>' +
 						'<td id="tdInterfaceMainPayrollEmployeeDetailsEditColumn1" style="font-size:0.875em;padding-right:15px;>' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainPayrollEmployeeDetailsEditColumn2" class="interfaceMainColumn2" style="width:75px;font-size:0.875em;">' +
 						'<span style="width:60px;font-size:0.75em;" id="spanPayrollEmployeeEdit_options_save">Save</span>' +
@@ -974,7 +974,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 	{
 		if (oResponse == undefined)
 		{
-			$('#tdInterfaceMainPayrollEmployeeColumn2').html(gsLoadingSmallXHTML);
+			$('#tdInterfaceMainPayrollEmployeeColumn2').html(ns1blankspace.xhtml.loadingSmall);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
@@ -1318,7 +1318,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		{
 			if ((iStepAction == 1 || iStepAction == 2) && (oResponse == undefined))
 			{
-				$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(ns1blankspace.loadingSmallXHTML);
+				$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(ns1blankspace.xhtml.loadingSmall);
 
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_PAYRATE_SEARCH';		
@@ -1347,7 +1347,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 				aHTML[++h] = '<table style="width:100%">' +
 								'<tr>' +
 								'<td id="tdInterfaceMainPayrollEmployeeDetailsPayRateColumn1" style="font-size:0.875em;>' +
-								gsLoadingXHTML +
+								ns1blankspace.xhtml.loading +
 								'</td>' +
 								'<td id="tdInterfaceMainPayrollEmployeeDetailsPayRateColumn2" class="interfaceMainColumn2" style="width:75px;">' +
 								'</td>' +
@@ -1581,7 +1581,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		{
 			if ((iStepAction == 1 || iStepAction == 2) && (oResponse == undefined))
 			{
-				$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(ns1blankspace.loadingSmallXHTML);
+				$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(ns1blankspace.xhtml.loadingSmall);
 
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_BANK_ACCOUNT_SEARCH';		
@@ -1610,7 +1610,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 				aHTML[++h] = '<table style="width:100%">' +
 								'<tr>' +
 								'<td id="tdInterfaceMainPayrollEmployeeDetailsBankAccountColumn1" style="font-size:0.875em;>' +
-								gsLoadingXHTML +
+								ns1blankspace.xhtml.loading +
 								'</td>' +
 								'<td id="tdInterfaceMainPayrollEmployeeDetailsBankAccountColumn2" class="interfaceMainColumn2" style="width:75px;">' +
 								'</td>' +
@@ -1873,7 +1873,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			aHTML[++h] = '<table class="interfaceMain">' +
 						'<tr class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainFinancialPayrollColumnList" style="width:150px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumnX">' +
-						gsLoadingXHTML + '</td>' +
+						ns1blankspace.xhtml.loading + '</td>' +
 						'<td id="tdInterfaceMainFinancialPayrollColumnListAction" class="interfaceMainColumn2">' +
 						'</td>' +
 						'</tr>' +
@@ -1881,10 +1881,10 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 					
 			$('#divInterfaceMainPays').html(aHTML.join(''));
 		
-			$('#tdInterfaceMainFinancialPayrollColumnList').html(gsLoadingSmallXHTML);
+			$('#tdInterfaceMainFinancialPayrollColumnList').html(ns1blankspace.xhtml.loadingSmall);
 			$('#tdInterfaceMainFinancialPayrollColumnItem').html("");
 
-			if (goObjectContext.status == "1")
+			if (ns1blankspace.objectContextData.status == "1")
 			{
 				var aHTML = [];
 				var h = -1;	
@@ -1912,7 +1912,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
 			oSearch.addField('grosssalary,payrecord.employee.contactpersontext');
-			oSearch.addFilter('period', 'EQUAL_TO', giObjectContext)
+			oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext)
 			oSearch.rows = 200;
 			oSearch.sort('payrecord.employee.contactpersontext', 'asc');
 			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(aParam, data)})	
@@ -1953,7 +1953,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		
 			$('#tdInterfaceMainFinancialPayrollColumnList').html(aHTML.join(''));
 
-			if (goObjectContext.status == "1")
+			if (ns1blankspace.objectContextData.status == "1")
 			{
 				$('.interfaceMainRowOptionsRemove').button(
 				{
@@ -1991,7 +1991,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			aHTML[++h] = '<table class="interfaceMain">' +
 						'<tr class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainFinancialPayrollColumnPay" style="width:200px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn2x">' +
-						gsLoadingSmallXHTML + '</td>' +
+						ns1blankspace.xhtml.loadingSmall + '</td>' +
 						'<td id="tdInterfaceMainFinancialPayrollColumnItem" style="width:200px;padding-right:15px;font-size:0.75em;" class="interfaceMainColumn2">' +
 						'</td>' +
 						'<td id="tdInterfaceMainFinancialPayrollColumnAction" class="interfaceMainColumn2">' +
@@ -2004,7 +2004,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			var aHTML = [];
 			var h = -1;
 		
-			if (goObjectContext.status == "2") 
+			if (ns1blankspace.objectContextData.status == "2") 
 			{
 				aHTML[++h] = '<div id="divInterfaceMainFinancialPayrollColumnItemType" style="width: 200px;margin-bottom:3px;">';
 				aHTML[++h] = '<input style="width: 95px;" type="radio" id="interfaceMainFinancialPayrollColumnItemType-3" name="radioType" checked="checked" /><label for="interfaceMainFinancialPayrollColumnItemType-3" style="width: 95px;">Time</label>';
@@ -2030,7 +2030,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			
 			aHTML[++h] = '<table id="tableInterfaceMainFinancialPayrollColumnAction" class="interfaceMainColumn2">';
 
-			if (goObjectContext.status == "1")
+			if (ns1blankspace.objectContextData.status == "1")
 			{
 				aHTML[++h] = '<tr><td id="tdInterfaceMainFinancialPayrollAdd" class="interfaceMainAction">' +
 							'<span id="spanInterfaceMainFinancialPayrollAdd">Add</span>' +
@@ -2066,7 +2066,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		else
 		{
 
-			goObjectContext.pay = oResponse.data.rows[0];
+			ns1blankspace.objectContextData.pay = oResponse.data.rows[0];
 
 			$.extend(true, aParam, {step: 3});
 			interfaceFinancialPayrollPays(aParam);
@@ -2123,7 +2123,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 	{	
 		if (oResponse == undefined)
 		{
-			$('#divInterfaceMainFinancialPayrollColumnItem').html(gsLoadingSmallXHTML);
+			$('#divInterfaceMainFinancialPayrollColumnItem').html(ns1blankspace.xhtml.loadingSmall);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_ITEM_SEARCH';
@@ -2177,7 +2177,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		
 			$('#divInterfaceMainFinancialPayrollColumnItem').html(aHTML.join(''));
 
-			if (goObjectContext.status == "1")
+			if (ns1blankspace.objectContextData.status == "1")
 			{
 				$('.interfaceMainRowOptionsRemove').button(
 				{
@@ -2363,14 +2363,14 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 	{	
 		if (oResponse == undefined)
 		{
-			$('#divInterfaceMainFinancialPayrollColumnItem').html(gsLoadingSmallXHTML);
+			$('#divInterfaceMainFinancialPayrollColumnItem').html(ns1blankspace.xhtml.loadingSmall);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 			oSearch.addField('description,amount');
 			oSearch.addFilter('object', 'EQUAL_TO', '37');
-			oSearch.addFilter('objectcontext', 'EQUAL_TO', goObjectContext.id);
-			oSearch.addFilter('contactpersonpaidto', 'EQUAL_TO', goObjectContext.pay["contactperson"]);
+			oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContextData.id);
+			oSearch.addFilter('contactpersonpaidto', 'EQUAL_TO', ns1blankspace.objectContextData.pay["contactperson"]);
 			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(aParam, data)})	
 		}
 		else
@@ -2417,7 +2417,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		
 			$('#divInterfaceMainFinancialPayrollColumnItem').html(aHTML.join(''));
 
-			if (goObjectContext.status == "1")
+			if (ns1blankspace.objectContextData.status == "1")
 			{
 				$('.interfaceMainRowOptionsRemove').button(
 				{

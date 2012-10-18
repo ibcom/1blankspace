@@ -8,8 +8,8 @@
 function interfaceSetupNetworkGroupMasterViewport(aParam)
 {
 	gsSetupName = 'Network Group';
-	giObjectContext = undefined;
-	giObject = -1;
+	ns1blankspace.objectContext = undefined;
+	ns1blankspace.object = -1;
 	
 	var bShowHome = true;
 	
@@ -90,16 +90,16 @@ function interfaceSetupNetworkGroupMasterViewport(aParam)
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupNetworkGroupSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupNetworkGroupSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupNetworkGroupSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupNetworkGroupSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 
 	$('#divInterfaceViewportControl').html('');		
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bShowHome) {interfaceSetupNetworkGroupHomeShow()};
 }
 
@@ -113,7 +113,7 @@ function interfaceSetupNetworkGroupHomeShow(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceNetworkGroupHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -133,7 +133,7 @@ function interfaceSetupNetworkGroupHomeShow(aParam, oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_NETWORK_GROUP_SEARCH';
@@ -195,19 +195,19 @@ function interfaceSetupNetworkGroupSearch(sXHTMLElementId, iSource, sSearchText,
 		
 	if (iSource == undefined)
 	{
-		iSource = giSearchSource_TEXT_INPUT;
+		iSource = ns1blankspace.data.searchSource.text;
 	}	
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_NETWORK_GROUP_SEARCH';
 		oSearch.addField('title');
-		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.getResults(function(data) {interfaceSetupNetworkGroupShow(data)});
 	}
 	else
@@ -220,7 +220,7 @@ function interfaceSetupNetworkGroupSearch(sXHTMLElementId, iSource, sSearchText,
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -229,7 +229,7 @@ function interfaceSetupNetworkGroupSearch(sXHTMLElementId, iSource, sSearchText,
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{	
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -288,13 +288,13 @@ function interfaceSetupNetworkGroupSearchShow(oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupNetworkGroupSearch(event.target.id, 1);
 		});
 	}
@@ -309,7 +309,7 @@ function interfaceSetupNetworkGroupViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -364,7 +364,7 @@ function interfaceSetupNetworkGroupViewport()
 
 function interfaceSetupNetworkGroupShow(oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupNetworkGroupViewport();
 	
 	var aHTML = [];
@@ -372,7 +372,7 @@ function interfaceSetupNetworkGroupShow(oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find Network Group.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -381,9 +381,9 @@ function interfaceSetupNetworkGroupShow(oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 	
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 		
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
@@ -407,7 +407,7 @@ function interfaceSetupNetworkGroupSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find Network Group.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -419,7 +419,7 @@ function interfaceSetupNetworkGroupSummary()
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryContactSynchronisation" class="interfaceMain">';
 		
-		if (goObjectContext.contactsynchronisation == 'Y')
+		if (ns1blankspace.objectContextData.contactsynchronisation == 'Y')
 		{
 			aHTML[++h] = 'Contact synchronisation is enabled.';
 			//aHTML[++h] = '<br /><br />Updated member details are automatically sent to webmaster@rotarydistrict9800.com.au';
@@ -460,7 +460,7 @@ function interfaceSetupNetworkGroupDetails()
 	var aHTML = [];
 	var h = -1;
 	
-	if ($('#divInterfaceMainDetails').html()  == gsLoadingXHTML)
+	if ($('#divInterfaceMainDetails').html()  == ns1blankspace.xhtml.loading)
 	{			
 		aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
@@ -519,10 +519,10 @@ function interfaceSetupNetworkGroupDetails()
 		
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
-			$('[name="radioContactSync"][value="' + goObjectContext.contactsynchronisation + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('[name="radioContactSync"][value="' + ns1blankspace.objectContextData.contactsynchronisation + '"]').attr('checked', true);
 		}
 		
 		$('#inputInterfaceMainDetailsStatus').keyup(function(event)
@@ -539,7 +539,7 @@ function interfaceSetupNetworkGroupMembers()
 	var aHTML = [];
 	var h = -1;
 	
-	if ($('#divInterfaceMainMembers').html() == gsLoadingXHTML)
+	if ($('#divInterfaceMainMembers').html() == ns1blankspace.xhtml.loading)
 	{			
 		aHTML[++h] = '<table id="tableInterfaceMainAttachments" class="interfaceMainDetails">';
 		aHTML[++h] = '<tr id="trInterfaceMainAttachmentsRow1" class="interfaceMain">' +
@@ -552,7 +552,7 @@ function interfaceSetupNetworkGroupMembers()
 		
 		$('#divInterfaceMainMembers').html(aHTML.join(''));
 			
-		$('#tdInterfaceMainMembersColumn1').html(gsLoadingXHTML);
+		$('#tdInterfaceMainMembersColumn1').html(ns1blankspace.xhtml.loading);
 		interfaceMasterAttachments("tdInterfaceMainMembersColumn1");
 		
 		var aHTML = [];
@@ -738,7 +738,7 @@ function interfaceSetupNetworkGroupMembersAdd(oResponse)
 					
 			aHTML[++h] = '<tr id="trInterfaceMainMembersAdd" class="interfaceMainTextMulti">' +
 							'<td id="tdInterfaceMainDetailsMembersAddStatus" class="interfaceMainTextMulti">' +
-							gsLoadingSmallXHTML +
+							ns1blankspace.xhtml.loadingSmall +
 							' &nbsp;Adding members...'
 							'</td></tr>';
 			
@@ -789,8 +789,8 @@ function interfaceSetupNetworkGroupMembersAdd(oResponse)
 
 function interfaceSetupNetworkGroupNew(oXML)
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceSetupNetworkGroupViewport();
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});

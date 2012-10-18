@@ -16,10 +16,10 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 
-	giObject = -1;
-	goObjectContext = undefined;
-	gsObjectName = 'Bank Accounts';
-	giObjectContext = -1;
+	ns1blankspace.object = -1;
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectName = 'Bank Accounts';
+	ns1blankspace.objectContext = -1;
 	
 	if (bShowHome)
 	{
@@ -38,8 +38,8 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -94,15 +94,15 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialBankAccountHomeShow()};	
 }
 
@@ -124,7 +124,7 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 	
 	$('#divInterfaceViewportControl').html(aHTML.join(''));	
 
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	
 	var aHTML = [];
 	var h = -1;
@@ -223,19 +223,19 @@ function interfaceFinancialBankAccountShow(aParam, oResponse)
 {
 	if (aParam != undefined)
 	{
-		if (aParam.id != undefined) {giObjectContext = aParam.id}	
+		if (aParam.id != undefined) {ns1blankspace.objectContext = aParam.id}	
 	}
 	
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceFinancialBankAccountViewport();
 	
-	goObjectContext == undefined;
-	goObjectContext = ($.grep(ns1blankspace.financial.bankaccounts, function (a) { return a.id == giObjectContext; }))[0];
+	ns1blankspace.objectContextData == undefined;
+	ns1blankspace.objectContextData = ($.grep(ns1blankspace.financial.bankaccounts, function (a) { return a.id == ns1blankspace.objectContext; }))[0];
 	
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the bankaccount.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -246,12 +246,12 @@ function interfaceFinancialBankAccountShow(aParam, oResponse)
 	{
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 			
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title+
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_date">' + goObjectContext.lastreconcileddate + '</span>' +
-			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">$' + goObjectContext.lastreconciledamount + '</span>');
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title+
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_date">' + ns1blankspace.objectContextData.lastreconcileddate + '</span>' +
+			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">$' + ns1blankspace.objectContextData.lastreconciledamount + '</span>');
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceFinancialBankAccountMasterViewport({showHome: false});interfaceFinancialBankAccountShow({id: ' + giObjectContext + '})',
+			newDestination: 'interfaceFinancialBankAccountMasterViewport({showHome: false});interfaceFinancialBankAccountShow({id: ' + ns1blankspace.objectContext + '})',
 			move: false
 			})
 	
@@ -282,7 +282,7 @@ function interfaceFinancialBankAccountSummary(aParam, oResponse)
 					
 	aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTotalAmount" class="interfaceMainSummary"></td></tr>' +
 					'<tr><td id="tdInterfaceMainSummaryTotalAmountValue" class="interfaceMainSummaryValue">' +
-					'This bank account was last reconciled on the ' + goObjectContext.lastreconcileddate + '.' +
+					'This bank account was last reconciled on the ' + ns1blankspace.objectContextData.lastreconcileddate + '.' +
 					'</td></tr>';			
 	
 	aHTML[++h] = '</table>';					
@@ -319,7 +319,7 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
 		oSearch.addField('statementbalance,statementdate,statustext,status');
-		oSearch.addFilter('bankaccount', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.sort('statementdate', 'desc');
 		oSearch.rows = 12;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccountReconcile(aParam, data)});
@@ -332,7 +332,7 @@ function interfaceFinancialBankAccountReconcile(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain">' +
 					'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainBankAccountColumnReco" style="width: 85px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainBankAccountColumnReco2" class="interfaceMainColumn2">' +
 					'</td>' +
@@ -536,7 +536,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 		{
 			interfaceMasterStatusWorking();
 					
-			var sData = 'bankaccount=' + giObjectContext;
+			var sData = 'bankaccount=' + ns1blankspace.objectContext;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&statementdate=' + interfaceMasterFormatSave($('#inputInterfaceMainFinancialBanksAccountRecoStatementDate').val());
 			sData += '&statementbalance=' + interfaceMasterFormatSave($('#inputInterfaceMainFinancialBanksAccountRecoStatementBalance').val());
@@ -585,7 +585,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 
 function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'tdInterfaceMainSetupStructureElementColumnElement1';
 	var oOptions = {view: true, remove: true, automation: true};
 	var oActions = {add: true};
@@ -669,7 +669,7 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 			interfaceFinancialBankAccountRecoItems(aParam);	
 		});
 		
-		$('#divInterfaceMainRecoItems').html(gsLoadingSmallXHTML);
+		$('#divInterfaceMainRecoItems').html(ns1blankspace.xhtml.loadingSmall);
 		
 		var oSearch = new AdvancedSearch();
 		
@@ -689,7 +689,7 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 			}
 			
 			oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
-			oSearch.rows = giReturnRows;
+			oSearch.rows = ns1blankspace.option.defaultRows;
 			oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItems(aParam, data)});
 		}		
 		else
@@ -697,9 +697,9 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 			oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
 			oSearch.addField('description,amount,posteddate');
 			oSearch.sort('posteddate', 'desc');
-			oSearch.addFilter('bankaccount', 'EQUAL_TO', giObjectContext);
+			oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 			oSearch.addFilter('status', 'EQUAL_TO', 1);
-			oSearch.rows = giReturnRows;
+			oSearch.rows = ns1blankspace.option.defaultRows;
 			oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItems(aParam, data)});
 		}		
 	}
@@ -822,7 +822,7 @@ function interfaceFinancialBankAccountRecoItems(aParam, oResponse)
 
 function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'tdInterfaceMainBankAccountColumnEdit';
 	var oOptions = {view: true, remove: true, automation: true};
 	var oActions = {add: true};
@@ -937,7 +937,7 @@ function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 				 //Search based on date and amount
 			})
 			
-			$('#divInterfaceMainRecoItemsEdit').html(gsLoadingSmallXHTML);
+			$('#divInterfaceMainRecoItemsEdit').html(ns1blankspace.xhtml.loadingSmall);
 		
 			var oSearch = new AdvancedSearch();
 		
@@ -959,7 +959,7 @@ function interfaceFinancialBankAccountRecoItemsEdit(aParam, oResponse)
 			if (cSearchAmount) {oSearch.addFilter('amount', 'APPROX_EQUAL_TO', cSearchAmount)}
 			
 			oSearch.addFilter('reconciliation', 'IS_NULL');
-			oSearch.rows = giReturnRows;
+			oSearch.rows = ns1blankspace.option.defaultRows;
 			oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItemsEdit(aParam, data)});
 		}
 		else
@@ -1167,9 +1167,9 @@ function interfaceFinancialBankAccountImport(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_SEARCH';
 		oSearch.addField('startdate,enddate,processeddate');
-		oSearch.addFilter('bankaccount', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.sort('enddate', 'desc');
-		oSearch.rows = giReturnRows;
+		oSearch.rows = ns1blankspace.option.defaultRows;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccountImport(aParam, data)});
 	}
 	else
@@ -1180,7 +1180,7 @@ function interfaceFinancialBankAccountImport(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainBankAccountImport" class="interfaceMain">' +
 					'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainBankAccountColumnImport1" style="width: 75px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainBankAccountColumnImport2" class="interfaceMainColumn2">' +
 					'</td>' +
@@ -1270,7 +1270,7 @@ function interfaceFinancialBankAccountImportRow(oRow)
 
 function interfaceFinancialBankAccountImportAdd(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'tdInterfaceMainBankAccountColumnImport21';
 	var oOptions = {view: true, remove: true, automation: true};
 	var oActions = {add: true};
@@ -1322,7 +1322,7 @@ function interfaceFinancialBankAccountImportAdd(aParam, oResponse)
 			else
 			{
 				var sData = 'processeddate=' + Date.today().toString("dd-MMM-yyyy");
-				sData += '&bankaccount=' + giObjectContext;
+				sData += '&bankaccount=' + ns1blankspace.objectContext;
 				
 				$.ajax(
 				{

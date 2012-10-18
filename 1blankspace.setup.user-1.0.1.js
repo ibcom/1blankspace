@@ -7,10 +7,10 @@
 
 function interfaceSetupUserMasterViewport()
 {
-	gsObjectName = 'Users';
-	giObjectContext = -1;
-	giObject = 40;
-	goObjectContext = undefined;
+	ns1blankspace.objectName = 'Users';
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = 40;
+	ns1blankspace.objectContextData = undefined;
 	
 	interfaceMasterReset();		
 			
@@ -21,8 +21,8 @@ function interfaceSetupUserMasterViewport()
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupUserSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupUserSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -77,15 +77,15 @@ function interfaceSetupUserMasterViewport()
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupUserSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupUserSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupUserSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupUserSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupUserHomeShow();
 	
@@ -101,7 +101,7 @@ function interfaceSetupUserHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceSetupUserHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -145,7 +145,7 @@ function interfaceSetupUserHomeShow(oResponse)
 
 		$('#tdInterfaceViewportControlInternal').addClass('interfaceViewportControlHighlight');
 
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_USER_SEARCH';
@@ -211,7 +211,7 @@ function interfaceSetupUserHomeShow(oResponse)
 		
 		$('#aInterfaceSetupUserHomeMostLikelyMore').click(function(event)
 		{
-			interfaceSetupUserSearch('tdInterfaceViewportMasterControlBrowse-', {source: giSearchSource_BROWSE});
+			interfaceSetupUserSearch('tdInterfaceViewportMasterControlBrowse-', {source: ns1blankspace.data.searchSource.browse});
 		});
 	}
 }
@@ -225,19 +225,19 @@ function interfaceSetupUserSearch(sXHTMLElementId, iSource, sSearchText, sSearch
 		
 	if (iSource == undefined)
 	{
-		iSource = giSearchSource_TEXT_INPUT;
+		iSource = ns1blankspace.data.searchSource.text;
 	}	
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_USER_SEARCH';
 		oSearch.addField('username,contactpersontext,lastlogon,disabled,disabledreason,unrestrictedaccess');
-		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.getResults(function(data) {interfaceSetupUserShow(data)});
 	}
 	else
@@ -250,7 +250,7 @@ function interfaceSetupUserSearch(sXHTMLElementId, iSource, sSearchText, sSearch
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -259,7 +259,7 @@ function interfaceSetupUserSearch(sXHTMLElementId, iSource, sSearchText, sSearch
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{	
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -268,7 +268,7 @@ function interfaceSetupUserSearch(sXHTMLElementId, iSource, sSearchText, sSearch
 			oSearch.method = 'SETUP_USER_SEARCH';
 			oSearch.addField('username');
 			
-			if (iSource == giSearchSource_BROWSE)
+			if (iSource == ns1blankspace.data.searchSource.browse)
 			{
 				oSearch.addFilter('username', 'STRING_STARTS_WITH', sSearchText);
 			}
@@ -322,13 +322,13 @@ function interfaceSetupUserSearchShow(oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupUserSearch(event.target.id, 1);
 		});
 	}			
@@ -343,7 +343,7 @@ function interfaceSetupUserViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 			
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -405,7 +405,7 @@ function interfaceSetupUserViewport()
 
 function interfaceSetupUserShow(oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupUserViewport();
 	
 	var aHTML = [];
@@ -413,7 +413,7 @@ function interfaceSetupUserShow(oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find User.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -424,9 +424,9 @@ function interfaceSetupUserShow(oResponse)
 	{
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
-		var sContext = goObjectContext.username;
+		var sContext = ns1blankspace.objectContextData.username;
 		var aContext = sContext.split("@");
 		
 		sContext = aContext[0];
@@ -461,7 +461,7 @@ function interfaceSetupUserSummary()
 	var aHTML = [];
 	var h = -1;
 
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find user.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -474,26 +474,26 @@ function interfaceSetupUserSummary()
 		
 		var sTmpClass = ''
 		
-		if (goObjectContext.disabled == 'Y')
+		if (ns1blankspace.objectContextData.disabled == 'Y')
 		{
 			sTmpClass = ' interfaceMainDisabled';
 		}
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummary">User</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummaryValue' + sTmpClass + '">' +
-						goObjectContext.username +
+						ns1blankspace.objectContextData.username +
 						'</td></tr>';
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummary">Name</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummaryValue">' +
-						goObjectContext.contactpersontext +
+						ns1blankspace.objectContextData.contactpersontext +
 						'</td></tr>';
 		
-		if (goObjectContext.lastlogon != '')
+		if (ns1blankspace.objectContextData.lastlogon != '')
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummary">Last Logon</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummaryValue">' +
-						goObjectContext.lastlogon +
+						ns1blankspace.objectContextData.lastlogon +
 						'</td></tr>';
 		}
 		
@@ -523,7 +523,7 @@ function interfaceSetupUserSummary()
 			$.ajax(
 			{
 				type: 'GET',
-				url: '/ondemand/setup/?method=SETUP_USER_MANAGE&password=&passwordexpiry=' + Date.today().add(-1).days().toString("dd-MMM-yyyy") +'&id=' + giObjectContext,
+				url: '/ondemand/setup/?method=SETUP_USER_MANAGE&password=&passwordexpiry=' + Date.today().add(-1).days().toString("dd-MMM-yyyy") +'&id=' + ns1blankspace.objectContext,
 				dataType: 'json',
 				async: false,
 				success: function(data) {
@@ -568,7 +568,7 @@ function interfaceSetupUserDetails()
 						'<input id="inputInterfaceMainDetailsUserName" class="inputInterfaceMainText">' +
 						'</td></tr>';
 		
-		if (giObjectContext == -1)
+		if (ns1blankspace.objectContext == -1)
 		{
 			aHTML[++h] = '<tr class="interfaceMain">' +
 							'<td class="interfaceMain">' +
@@ -608,7 +608,7 @@ function interfaceSetupUserDetails()
 						'<input type="radio" id="radioDisabledY" name="radioDisabled" value="Y"/>Yes' +
 						'</td></tr>';
 		
-		if (giObjectContext != -1)
+		if (ns1blankspace.objectContext != -1)
 		{		
 			aHTML[++h] = '<tr id="trInterfaceMainDetailsDisabledReason" class="interfaceMain">' +
 						'<td id="tdInterfaceMainDetailsDisabledReason" class="interfaceMain">' +
@@ -624,11 +624,11 @@ function interfaceSetupUserDetails()
 		
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsUserName').val(goObjectContext.username);
-			$('[name="radioDisabled"][value="' + goObjectContext.disabled + '"]').attr('checked', true);
-			$('#inputInterfaceMainDetailsDisabledReason').val(goObjectContext.disabledreason);
+			$('#inputInterfaceMainDetailsUserName').val(ns1blankspace.objectContextData.username);
+			$('[name="radioDisabled"][value="' + ns1blankspace.objectContextData.disabled + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsDisabledReason').val(ns1blankspace.objectContextData.disabledreason);
 		}
 		else
 		{
@@ -674,9 +674,9 @@ function interfaceSetupUserAccess()
 			
 		interfaceSetupUserAccessRoles();
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('[name="radioAccessUnrestricted"][value="' + goObjectContext.unrestrictedaccess + '"]').attr('checked', true);
+			$('[name="radioAccessUnrestricted"][value="' + ns1blankspace.objectContextData.unrestrictedaccess + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -690,9 +690,9 @@ function interfaceSetupUserAccessRoles(aParam, oResponse)
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext != undefined)
+	if (ns1blankspace.objectContextData != undefined)
 	{
-		if (goObjectContext.unrestrictedaccess == 'Y')
+		if (ns1blankspace.objectContextData.unrestrictedaccess == 'Y')
 		{
 			aHTML[++h] = '<table lass="interfaceMain">';
 
@@ -711,7 +711,7 @@ function interfaceSetupUserAccessRoles(aParam, oResponse)
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'SETUP_USER_ROLE_SEARCH';
 				oSearch.addField('roletext,role');
-				oSearch.addFilter('user', 'EQUAL_TO', giObjectContext)
+				oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.objectContext)
 				oSearch.rows = 50;
 				oSearch.sort('roletext', 'asc');
 				oSearch.getResults(function(data) {interfaceSetupUserAccessRoles(aParam, data)})	
@@ -859,7 +859,7 @@ function interfaceSetupUserAccessRoleAdd(aParam, oResponse)
 				aHTML[++h] = '</tbody></table>';
 
 				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 			}
 			else
 			{
@@ -879,7 +879,7 @@ function interfaceSetupUserAccessRoleAdd(aParam, oResponse)
 				aHTML[++h] = '</tbody></table>';
 
 				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 				
 				$('td.interfaceMainRowSelect').click(function(event)
 				{
@@ -894,7 +894,7 @@ function interfaceSetupUserAccessRoleAdd(aParam, oResponse)
 function interfaceSetupUserAccessRoleSelect(aParam)
 {
 	var sXHTMLElementID;
-	var iUser = giObjectContext;
+	var iUser = ns1blankspace.objectContext;
 	var iUserType = 1;
 
 	if (aParam != undefined)
@@ -959,7 +959,7 @@ function interfaceSetupUserSave(oResponse)
 {
 	interfaceMasterStatusWorking();
 
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
 		interfaceSetupUserSaveProcess();
 	}
@@ -1042,9 +1042,9 @@ function interfaceSetupUserSaveProcess(aParam)
 		if (aParam.contactPerson != undefined) {iContactPerson = aParam.contactPerson}
 	}		
 
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
-		sParam += '&id=' + giObjectContext	
+		sParam += '&id=' + ns1blankspace.objectContext	
 	}
 	else
 	{
@@ -1063,7 +1063,7 @@ function interfaceSetupUserSaveProcess(aParam)
 	if ($('#divInterfaceMainAccess').html() != '')
 	{
 		sData += '&unrestrictedaccess=' + $('input[name="radioAccessUnrestricted"]:checked').val();
-		goObjectContext.unrestrictedaccess = $('input[name="radioAccessUnrestricted"]:checked').val();
+		ns1blankspace.objectContextData.unrestrictedaccess = $('input[name="radioAccessUnrestricted"]:checked').val();
 		interfaceSetupUserAccessRoles();
 	};
 
@@ -1076,12 +1076,12 @@ function interfaceSetupUserSaveProcess(aParam)
 		success: function(data)
 		{
 			interfaceMasterStatus('Saved.');
-			if (giObjectContext == -1) {var bNew = true}
-			giObjectContext = data.id;	
+			if (ns1blankspace.objectContext == -1) {var bNew = true}
+			ns1blankspace.objectContext = data.id;	
 			if (bNew)
 			{
 				interfaceMasterStatus('Initial password is ' + data.password);
-				interfaceSetupUserSearch('-' + giObjectContext);
+				interfaceSetupUserSearch('-' + ns1blankspace.objectContext);
 			}
 		}	
 	});		
@@ -1269,8 +1269,8 @@ function interfaceSetupUserExternal(aParam, oResponse)
 			
 			$('#inputInterfaceMainSetupUserExternalUsername').keyup(function()
 			{
-				if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-		        giKeyPressTimeoutId = setTimeout("interfaceSetupUserExternalSearch('inputInterfaceMainSetupUserExternalUsername')", giWaitForStop);
+				if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+		        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupUserExternalSearch('inputInterfaceMainSetupUserExternalUsername')", ns1blankspace.option.typingWait);
 			});	
 				
 			$('#inputInterfaceMainSetupUserExternalUsername').live('blur', function() 
@@ -1483,7 +1483,7 @@ function interfaceSetupUserExternalSearch(sXHTMLInputElementID, oResponse)
 		
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
 
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
 
 		$('.interfaceMasterNetworkUser').click(function(event)
@@ -1500,8 +1500,8 @@ function interfaceSetupUserExternalSearch(sXHTMLInputElementID, oResponse)
 
 function interfaceSetupUserNew(aParam)
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceSetupUserViewport();
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");

@@ -7,10 +7,10 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 
-	giObject = -1;
-	goObjectContext = undefined;
-	gsObjectName = 'Bank Accounts';
-	giObjectContext = -1;
+	ns1blankspace.object = -1;
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectName = 'Bank Accounts';
+	ns1blankspace.objectContext = -1;
 	
 	if (bShowHome)
 	{
@@ -29,8 +29,8 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -85,15 +85,15 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialBankAccountHomeShow()};	
 }
 
@@ -250,7 +250,7 @@ function interfaceFinancialBankAccountDetails(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain">' +
 					'<tr id="trInterfaceMainBankAccountRow1_' + iID + '" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainBankAccountColumnReco_' + iID + '" style="width: 75px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainBankAccountColumnTran_' + iID + '" class="interfaceMainColumn2">' +
 					'</td>' +
@@ -386,7 +386,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 		for (edId in tinyMCE.editors) 
 					tinyMCE.editors[edId].destroy(true);
 					
-		giEditorCounter = giEditorCounter + 1;
+		ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
 	
 		var aHTML = [];
 		var h = -1;
@@ -409,7 +409,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 						'<tr id="trInterfaceMainSetupSetupStructureElementAddDescriptionValue" class="interfaceMainText">' +
 						'<td id="tdInterfaceMainSetupSetupStructureElementAddDescriptionValue" class="interfaceMainText">' +
 						'<textarea rows="3" cols="35" id="inputInterfaceMainSetupStructureElementAddDescription' +
-						 			giEditorCounter + '" data-editorcount="' + giEditorCounter + 
+						 			ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + 
 									'" class="inputInterfaceMainTextMultiLarge" style="height: 125px;"></textarea>' +
 						'</td></tr>';
 										
@@ -424,7 +424,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 		{
 			type: 'GET',
 			url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_CATEGORY_SEARCH',
-			data: 'structure=' + giObjectContext,
+			data: 'structure=' + ns1blankspace.objectContext,
 			dataType: 'json',
 			async: false,
 			success: function(oResponse)
@@ -487,9 +487,9 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 		
 		$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
 		
-		if (gbRichEdit)
+		if (ns1blankspace.option.richTextEditing)
 		{
-			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainSetupStructureElementAddDescription' + giEditorCounter);
+			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainSetupStructureElementAddDescription' + ns1blankspace.counter.editor);
 		}
 	
 		var aHTML = [];
@@ -512,7 +512,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			var sData = 'structure=' + giObjectContext;
+			var sData = 'structure=' + ns1blankspace.objectContext;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureElementAddTitle').val());
 			sData += '&datatype=' + interfaceMasterFormatSave($('input[name="radioDataType"]:checked').val());
@@ -520,7 +520,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 			sData += '&textcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddTextColour').val());
 			sData += '&backgroundcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddBackgroundColour').val());
 			sData += '&displayorder=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddDisplayOrder').val());
-			sData += '&description=' + interfaceMasterFormatSave(tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + giEditorCounter).getContent());
+			sData += '&description=' + interfaceMasterFormatSave(tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + ns1blankspace.counter.editor).getContent());
 				
 			$.ajax(
 			{
@@ -561,7 +561,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 			
 			var sHTML = interfaceMasterFormatXHTML(oObjectContext.description);
 			
-			tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + giEditorCounter).setContent(sHTML)
+			tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + ns1blankspace.counter.editor).setContent(sHTML)
 			
 			$('[name="radioDataType"][value="' + oObjectContext.datatype + '"]').attr('checked', true);
 			$('[name="radioCategory"][value="' + oObjectContext.category + '"]').attr('checked', true);

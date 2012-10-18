@@ -14,10 +14,10 @@ function interfaceSetupProjectMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 	
-	giObject = 1;	
-	gsObjectName = 'Project Template';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.object = 1;	
+	ns1blankspace.objectName = 'Project Template';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 			
 	interfaceMasterReset();
 	
@@ -83,15 +83,15 @@ function interfaceSetupProjectMasterViewport(aParam)
 	
 	$('.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupProjectSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupProjectSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupProjectSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupProjectSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	if (bShowHome) {interfaceSetupProjectHomeShow()};
 	
@@ -107,7 +107,7 @@ function interfaceSetupProjectHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -127,7 +127,7 @@ function interfaceSetupProjectHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var sParam = 'method=PROJECT_SEARCH';
 		sParam += '&template=1';
@@ -189,7 +189,7 @@ function interfaceSetupProjectSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -205,13 +205,13 @@ function interfaceSetupProjectSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
-		var sParam = 'method=PROJECT_SEARCH&id=' + giObjectContext;
+		ns1blankspace.objectContext = sSearchContext;
+		var sParam = 'method=PROJECT_SEARCH&id=' + ns1blankspace.objectContext;
 		sParam += '&template=1';
 		
 		$.ajax(
@@ -229,7 +229,7 @@ function interfaceSetupProjectSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			sSearchText = aSearch[1];
@@ -237,7 +237,7 @@ function interfaceSetupProjectSearch(sXHTMLElementId, aParam)
 			sQuickSearchType = 'start';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			
@@ -290,12 +290,12 @@ function interfaceSetupProjectSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupProjectSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -369,19 +369,19 @@ function interfaceSetupProjectViewport()
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
-		interfaceMasterActions("divInterfaceMainActions", giObjectPerson, giObjectContext);
+		interfaceMasterActions("divInterfaceMainActions", ns1blankspace.data.object.contactperson, ns1blankspace.objectContext);
 	});
 
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
 		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments("divInterfaceMainAttachments", giObjectPerson, giObjectContext);
+		interfaceMasterAttachments("divInterfaceMainAttachments", ns1blankspace.data.object.contactperson, ns1blankspace.objectContext);
 	});
 }
 
 function interfaceSetupProjectShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupProjectViewport();
 	
 	var aHTML = [];
@@ -389,7 +389,7 @@ function interfaceSetupProjectShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find project.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -398,9 +398,9 @@ function interfaceSetupProjectShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
-		var sContext = goObjectContext.reference;
+		var sContext = ns1blankspace.objectContextData.reference;
 		sContext += '<br /><span id="spanInterfaceViewportControlSubContext">(Template)</span>';		
 		
 		$('#divInterfaceViewportControlContext').html(sContext);
@@ -414,7 +414,7 @@ function interfaceSetupProjectSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find project template.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -438,7 +438,7 @@ function interfaceSetupProjectSummary()
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.description +
+						ns1blankspace.objectContextData.description +
 						'</td></tr>';
 
 		aHTML[++h] = '</table>';					
@@ -487,9 +487,9 @@ function interfaceSetupProjectDescription()
 		
 		$('#tdInterfaceMainDescriptionColumn1').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDescription').val(goObjectContext.description);
+			$('#inputInterfaceMainDescription').val(ns1blankspace.objectContextData.description);
 		}
 	
 		//tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainDescription');
@@ -511,8 +511,8 @@ function interfaceSetupProjectTasks(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var sParam = 'method=PROJECT_TASK_SEARCH&rows=' + giReturnRows +
-						'&project=' + giObjectContext;
+		var sParam = 'method=PROJECT_TASK_SEARCH&rows=' + ns1blankspace.option.defaultRows +
+						'&project=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -601,7 +601,7 @@ function interfaceSetupProjectTasks(aParam, oResponse)
 				xhtml: aHTML.join(''),
 				showMore: (oResponse.morerows == "true"),
 				more: oResponse.moreid,
-				rows: giReturnRows,
+				rows: ns1blankspace.option.defaultRows,
 				functionShowRow: interfaceSetupProjectTasksRow,
 				functionNewPage: 'interfaceSetupProjectTasksBind()',
 				type: 'json'
@@ -665,7 +665,7 @@ function interfaceSetupProjectSave()
 {
 
 	var sParam = '/ondemand/project/?method=PROJECT_MANAGE'
-	var sData = (giObjectContext == -1)?'':'&id=' + giObjectContext;
+	var sData = (ns1blankspace.objectContext == -1)?'':'&id=' + ns1blankspace.objectContext;
 		
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
@@ -796,7 +796,7 @@ function interfaceSetupProjectTaskDetailsAdd(aParam, oResponse)
 							'<tr id="trInterfaceMainProjectTaskDetailsTaskDependsOnValue" class="interfaceMainSelect">' +
 							'<td id="tdInterfaceMainProjectTaskDetailsTaskDependsOnValue" class="interfaceMainSelect">' +
 							'<input id="inputInterfaceMainProjectTaskDetailsTaskDependsOn" class="inputInterfaceMainSelect"' +
-								' onDemandMethod="/ondemand/project/?rf=XML&method=PROJECT_TASK_SEARCH&project=' + giObjectContext + '">' +
+								' onDemandMethod="/ondemand/project/?rf=XML&method=PROJECT_TASK_SEARCH&project=' + ns1blankspace.objectContext + '">' +
 							'</td></tr>';
 	
 		aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsStartBasedOn" class="interfaceMain">' +
@@ -854,7 +854,7 @@ function interfaceSetupProjectTaskDetailsAdd(aParam, oResponse)
 function interfaceSetupProjectTaskAddSave()
 {
 	var sParam = '/ondemand/project/?method=PROJECT_TASK_MANAGE'
-	var sData = 'project=' + giObjectContext;
+	var sData = 'project=' + ns1blankspace.objectContext;
 	
 	sData += '&title=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsTitle').val());
 	sData += '&type=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsType').attr('onDemandID'));

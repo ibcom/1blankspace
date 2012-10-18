@@ -3,78 +3,78 @@ var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, 
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
  };
  
-var giVersion = 2;
+var ns1blankspace.version = 2;
 
-var giShowSpeed = 0;
-var giShowSpeedOptions = 0;
-var giHideSpeed = 0;
-var giHideSpeedOptions = 0;
-var giWaitForStop = 400;
-var giMessagingTimerID = 0;
+var ns1blankspace.option.showSpeed = 0;
+var ns1blankspace.option.showSpeedOptions = 0;
+var ns1blankspace.option.hideSpeed = 0;
+var ns1blankspace.option.hideSpeedOptions = 0;
+var ns1blankspace.option.typingWait = 400;
+var ns1blankspace.timer.messaging = 0;
 
-var gbLogonStayOnDocument = true;
-var gbSetupViewport = false;
-var gbSetFocus = true;
-var gbRichEdit = true;
-var giKeyPressTimeoutId = 0;
-var gbInputDetected = false;
-var gbUnloadWarning = false;
-var gbSystemAdmin = false;
+var ns1blankspace.option.logonStayOnDocument = true;
+var ns1blankspace.setupViewport = false;
+var ns1blankspace.option.setFocus = true;
+var ns1blankspace.option.richTextEditing = true;
+var ns1blankspace.timer.delayCurrent = 0;
+var ns1blankspace.inputDetected = false;
+var ns1blankspace.unloadWarning = false;
+var ns1blankspace.systemAdmin = false;
 
 var gsSetupMethod = '';
 var gsSetupName = '';
 var giSetupContext = -1;
 var goSetupContextXML;
 var goSetupContext;
-var giOnDemandTimer;
+var ns1blankspace.timer.delay;
 
-var giObject = -1;
-var gsObjectName = '';
-var giObjectContext = -1;
-var goObjectContextXML;
-var goObjectContextJSON;
-var goObjectContext;
-var gsObjectContextLastSearch = '';
-var giObjectSaveId = -1;
-var gbOkToSave = true;
-var goObjectContext;
-var giEditorCounter = 0;
+var ns1blankspace.object = -1;
+var ns1blankspace.objectName = '';
+var ns1blankspace.objectContext = -1;
+var ns1blankspace.objectContextDataXML;
+var ns1blankspace.objectContextDataJSON;
+var ns1blankspace.objectContextData;
+var ns1blankspace.objectContextSearch = '';
+var ns1blankspace.objectSaveId = -1;
+var ns1blankspace.okToSave = true;
+var ns1blankspace.objectContextData;
+var ns1blankspace.counter.editor = 0;
 
-var gsViewportMasterControlXHTML = '';
-var gsHomeXHTML = '';
+var ns1blankspace.xhtml.masterControl = '';
+var ns1blankspace.xhtml.home = '';
 var gsHomeViewportXHTML = '';
-var gsUserName = '';
-var gsUserEmail = '';
-var gsUserNetworkGroups = '';
-var gsViewportMasterActionXHTML = '';
+var ns1blankspace.user.commonname = '';
+var ns1blankspace.user.email = '';
+var ns1blankspace.user.networkGroups = '';
+var ns1blankspace.xhtml.action = '';
 
 var gaReturn = [];
 
-var giUserID = -1;
-var giUserContactPersonID = -1;
+var ns1blankspace.user.id = -1;
+var ns1blankspace.user.contactperson = -1;
 
-var gbSetupShow = false;
+var ns1blankspace.setupShow = false;
 var giHelpOption = -1;
 	
-var giSearchSource_TEXT_INPUT = 1;
-var giSearchSource_BROWSE = 2;
-var giSearchSource_SELECT = 3;
-var giSearchSource_ALL = 4;
+var ns1blankspace.data.searchSource.text = 1;
+var ns1blankspace.data.searchSource.browse = 2;
+var ns1blankspace.data.searchSource.select = 3;
+var ns1blankspace.data.searchSource.all = 4;
 
-var gsApplicationContext = 'start';
+var ns1blankspace.debug.appContext = 'start';
 
-var gsLastShowDivID = '';
-var gsOnDemandSetupURL = '/ondemand/setup/';
-var gaParam;
+var ns1blankspace.xhtml.divID = '';
+var ns1blankspace.option.setupURI = '/ondemand/setup/';
+var ns1blankspace.param;
 
-var gaMasterViewportHistory = ['interfaceMasterHomeShow()']
-var giMasterViewportHistoryCurrentIndex = 0
-var gsLastDestinationInstructions = '';
-var gaMasterObjectViewportHistory = [];
+var ns1blankspace.history.viewport = ['interfaceMasterHomeShow()']
+var ns1blankspace.history.currentIndex = 0
+var ns1blankspace.history.lastDestinationInstruction = '';
+var ns1blankspace.history.list = [];
 
 window.onbeforeunload = function() 
 {
-	if (gbUnloadWarning)
+	if (ns1blankspace.unloadWarning)
 	{
 	      return "You potentially will lose unsaved information if you close. Press Cancel to stop the close."
 	}
@@ -83,8 +83,8 @@ window.onbeforeunload = function()
 $(function()
 {
 
-	gsUserNetworkGroups = '';
-	gbSetupShow = false;
+	ns1blankspace.user.networkGroups = '';
+	ns1blankspace.setupShow = false;
 	
 	$(document).ajaxError(
 		function(oEvent, oXMLHTTPRequest, oAjaxOptions, oError) 
@@ -100,7 +100,7 @@ $(function()
 	
 	if (navigator.platform.indexOf('iPad') != -1 || navigator.platform.indexOf('iPhone') != -1) 
 	{
-		gbSetFocus = false;
+		ns1blankspace.option.setFocus = false;
 	}	 
 	
 	$('td.interfaceViewportControl').live('click', function()
@@ -130,7 +130,7 @@ $(function()
 	$('.inputInterfaceMainSelect').live('focus', function() 
 	{		
 		$(this).addClass('interfaceMasterHighlight');	
-		gsLastShowDivID = this.id;
+		ns1blankspace.xhtml.divID = this.id;
 		$('#divInterfaceMasterViewportControlOptions').html('');
 		$('#divInterfaceMasterViewportControlOptions').show();
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
@@ -143,7 +143,7 @@ $(function()
 			}
 		})
 		.click(function() {
-			interfaceMasterElementOptionsSearch(gsLastShowDivID, 4);
+			interfaceMasterElementOptionsSearch(ns1blankspace.xhtml.divID, 4);
 		})
 		.css('width', '14px')
 		.css('height', '23px')
@@ -151,7 +151,7 @@ $(function()
 		
 	$('.inputInterfaceMainSelect').live('keyup', function()
 	{
-		interfaceMasterElementOptionsSearch(gsLastShowDivID, 1, 3);	
+		interfaceMasterElementOptionsSearch(ns1blankspace.xhtml.divID, 1, 3);	
 	});	
 		
 	$('.inputInterfaceMainSelect').live('blur', function() 
@@ -161,7 +161,7 @@ $(function()
 	
 	$('.inputInterfaceMainSelectAddress').live('focus', function() 
 	{
-		gsLastShowDivID = this.id;
+		ns1blankspace.xhtml.divID = this.id;
 		$('#divInterfaceMasterViewportControlOptions').html('');
 		$('#divInterfaceMasterViewportControlOptions').show();
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
@@ -174,7 +174,7 @@ $(function()
 			}
 		})
 		.click(function() {
-			interfaceMasterAddressSearch(gsLastShowDivID);
+			interfaceMasterAddressSearch(ns1blankspace.xhtml.divID);
 		})
 		.css('width', '14px')
 		.css('height', '23px')
@@ -187,12 +187,12 @@ $(function()
 	
 	$('.inputInterfaceMainSelectContact').live('keyup', function()
 	{
-		interfaceMasterContactSearch(gsLastShowDivID, 1, 3);	
+		interfaceMasterContactSearch(ns1blankspace.xhtml.divID, 1, 3);	
 	});	
 	
 	$('.inputInterfaceMainSelectContact').live('focus', function() 
 	{
-		gsLastShowDivID = this.id;
+		ns1blankspace.xhtml.divID = this.id;
 		$('#divInterfaceMasterViewportControlOptions').html('');
 		$('#divInterfaceMasterViewportControlOptions').show();
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
@@ -205,7 +205,7 @@ $(function()
 			}
 		})
 		.click(function() {
-			interfaceMasterContactSearch(gsLastShowDivID, 4);
+			interfaceMasterContactSearch(ns1blankspace.xhtml.divID, 4);
 		})
 		.css('width', '14px')
 		.css('height', '23px')
@@ -213,7 +213,7 @@ $(function()
 	
 	$('.inputInterfaceMainSelectContactEmail').live('focus', function() 
 	{
-		gsLastShowDivID = this.id;
+		ns1blankspace.xhtml.divID = this.id;
 		$('#divInterfaceMasterViewportControlOptions').html('');
 		$('#divInterfaceMasterViewportControlOptions').show();
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width()});
@@ -226,10 +226,10 @@ $(function()
 			}
 		})
 		.click(function() {
-			interfaceMasterContactEmailSearch(gsLastShowDivID, {
+			interfaceMasterContactEmailSearch(ns1blankspace.xhtml.divID, {
 					source: 4, 
 					emailOnly: true,
-					contactBusiness: $('#' + gsLastShowDivID).attr('ondemandcontactbusiness'),
+					contactBusiness: $('#' + ns1blankspace.xhtml.divID).attr('ondemandcontactbusiness'),
 					setXHTMLElementID: $(this).attr('ondemandsetelementid')
 					});
 		})
@@ -239,15 +239,15 @@ $(function()
 	
 	$('.inputInterfaceMainSelectContactEmail').live('keyup', function() 
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
 		
-		var sFunction = "interfaceMasterContactEmailSearch(gsLastShowDivID, {" +
+		var sFunction = "interfaceMasterContactEmailSearch(ns1blankspace.xhtml.divID, {" +
 					"source: 1," +
 					"emailOnly: true," +
 					"contactBusiness: " + $(this).attr('ondemandcontactbusiness') + "," +
 					"setXHTMLElementID: '" + $(this).attr('ondemandsetelementid') + "'});"
 		
-		giKeyPressTimeoutId = setTimeout(sFunction, giWaitForStop);
+		ns1blankspace.timer.delayCurrent = setTimeout(sFunction, ns1blankspace.option.typingWait);
 		
 	});
 	
@@ -277,7 +277,7 @@ $(function()
 
 	$('input.inputInterfaceMainText').live('keyup', function() 
 	{
-		gbInputDetected = true;
+		ns1blankspace.inputDetected = true;
 	});
 		
 	$('input.inputInterfaceMainText').live('blur', function() 
@@ -342,8 +342,8 @@ $.extend(
 function interfaceMasterObjectViewportHistory(aParam)
 {
 	var bGet = false;
-	var iObject = giObject;
-	var iObjectContext = giObjectContext;
+	var iObject = ns1blankspace.object;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementID;
 	var sFunctionDefault;
 	
@@ -355,7 +355,7 @@ function interfaceMasterObjectViewportHistory(aParam)
 		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
 	}
 	
-	$.each(gaMasterObjectViewportHistory, function(index) 
+	$.each(ns1blankspace.history.list, function(index) 
 	{ 
 		if ((this.object == iObject) && (this.objectContext ==iObjectContext))
 		{
@@ -365,14 +365,14 @@ function interfaceMasterObjectViewportHistory(aParam)
 			}
 			else
 			{
-				gaMasterObjectViewportHistory.splice(index,1)
+				ns1blankspace.history.list.splice(index,1)
 			}	
 		}
 	});
 	
 	if (sFunctionDefault == undefined)
 	{
-		gaMasterObjectViewportHistory.push(
+		ns1blankspace.history.list.push(
 			{
 				object: iObject,
 				objectContext: iObjectContext,
@@ -404,26 +404,26 @@ function interfaceMasterViewportDestination(aParam)
 	var bMove = true;
 	var bAdd = false;
 	
-	if (gbInputDetected)
+	if (ns1blankspace.inputDetected)
 	{
 		 bContinue = confirm("You have edited this page.  Do you want to continue moving to the new page?")
 	}	
 			
 	if (bContinue)
 	{	
-		gbInputDetected = false;
+		ns1blankspace.inputDetected = false;
 		
 		if (aParam != undefined)
 		{
 			if (aParam.newDestination != undefined) {sDestinationInstructions = aParam.newDestination}
 			if (aParam.instruction != undefined) {iInstruction = aParam.instruction}
 			if (aParam.instructionCount != undefined) {iInstructionCount = aParam.instructionCount}
-			if (aParam.index != undefined) {giMasterViewportHistoryCurrentIndex = aParam.index}
+			if (aParam.index != undefined) {ns1blankspace.history.currentIndex = aParam.index}
 			if (aParam.move != undefined) {bMove = aParam.move}
 			
 			if (iInstruction == 1 && sDestinationInstructions != undefined)
 			{
-				if (sDestinationInstructions == gsLastDestinationInstructions)
+				if (sDestinationInstructions == ns1blankspace.history.lastDestinationInstruction)
 				{
 					var aTmp = sDestinationInstructions.split(';');
 					
@@ -437,11 +437,11 @@ function interfaceMasterViewportDestination(aParam)
 					
 					if (aTmp.length == 1) 
 					{
-						$.each(gaMasterViewportHistory, function(index) 
+						$.each(ns1blankspace.history.viewport, function(index) 
 						{ 
 							if (this == sDestinationInstructions)
 							{
-								gaMasterViewportHistory.splice(index,1)
+								ns1blankspace.history.viewport.splice(index,1)
 								bAdd = true;
 							}
 						});
@@ -454,10 +454,10 @@ function interfaceMasterViewportDestination(aParam)
 				
 				if (bAdd)
 				{
-					gaMasterViewportHistory.push(sDestinationInstructions);
-					giMasterViewportHistoryCurrentIndex = gaMasterViewportHistory.length - 1;
+					ns1blankspace.history.viewport.push(sDestinationInstructions);
+					ns1blankspace.history.currentIndex = ns1blankspace.history.viewport.length - 1;
 					
-					var sData = 'value=' + encodeURIComponent(gaMasterViewportHistory.slice(-2).toString());
+					var sData = 'value=' + encodeURIComponent(ns1blankspace.history.viewport.slice(-2).toString());
 					
 					$.ajax(
 					{
@@ -471,30 +471,30 @@ function interfaceMasterViewportDestination(aParam)
 			
 			if (iInstruction == 2)
 			{
-				giMasterViewportHistoryCurrentIndex = giMasterViewportHistoryCurrentIndex - iInstructionCount;
-				if (giMasterViewportHistoryCurrentIndex < 0) {giMasterViewportHistoryCurrentIndex = 0}
+				ns1blankspace.history.currentIndex = ns1blankspace.history.currentIndex - iInstructionCount;
+				if (ns1blankspace.history.currentIndex < 0) {ns1blankspace.history.currentIndex = 0}
 			}
 			
 			if (iInstruction == 3)
 			{
-				giMasterViewportHistoryCurrentIndex = giMasterViewportHistoryCurrentIndex + iInstructionCount;
-				if (giMasterViewportHistoryCurrentIndex > gaMasterViewportHistory.length - 1) {giMasterViewportHistoryCurrentIndex = gaMasterViewportHistory.length - 1}
+				ns1blankspace.history.currentIndex = ns1blankspace.history.currentIndex + iInstructionCount;
+				if (ns1blankspace.history.currentIndex > ns1blankspace.history.viewport.length - 1) {ns1blankspace.history.currentIndex = ns1blankspace.history.viewport.length - 1}
 			}
 			
 			if (iInstruction == 4)
 			{
-				gaMasterViewportHistory.length = 0;
-				giMasterViewportHistoryCurrentIndex = 0;
+				ns1blankspace.history.viewport.length = 0;
+				ns1blankspace.history.currentIndex = 0;
 			}	
 			
 			if (iInstruction == 5)
 			{
-				giMasterViewportHistoryCurrentIndex = gaMasterViewportHistory.length - 1;
+				ns1blankspace.history.currentIndex = ns1blankspace.history.viewport.length - 1;
 			}	
 			
 			if (iInstruction == 6)
 			{
-				giMasterViewportHistoryCurrentIndex = 0;
+				ns1blankspace.history.currentIndex = 0;
 			}	
 			
 			if (iInstruction == 7)
@@ -513,12 +513,12 @@ function interfaceMasterViewportDestination(aParam)
 					success: function(data) {
 						if (data == '')
 						{
-							//gaMasterViewportHistory.push('interfaceMasterHomeShow()');
+							//ns1blankspace.history.viewport.push('interfaceMasterHomeShow()');
 						}	
 						else
 						{
-							gaMasterViewportHistory = data.split(',');
-							giMasterViewportHistoryCurrentIndex = gaMasterViewportHistory.length - 1
+							ns1blankspace.history.viewport = data.split(',');
+							ns1blankspace.history.currentIndex = ns1blankspace.history.viewport.length - 1
 						}	
 					}
 				})
@@ -531,12 +531,12 @@ function interfaceMasterViewportDestination(aParam)
 			var bBack = true;
 			var bForward = true;
 			
-			if (giMasterViewportHistoryCurrentIndex > 0)
+			if (ns1blankspace.history.currentIndex > 0)
 			{	
 				bBack = false;
 			};
 			
-			if (giMasterViewportHistoryCurrentIndex < gaMasterViewportHistory.length - 1)
+			if (ns1blankspace.history.currentIndex < ns1blankspace.history.viewport.length - 1)
 			{
 				bForward = false;					
 			};			
@@ -569,8 +569,8 @@ function interfaceMasterViewportDestination(aParam)
 			$('#spanInterfaceMasterViewportControlForward')
 				.button({disabled: bForward})
 	
-			sDestinationInstructions = gaMasterViewportHistory[giMasterViewportHistoryCurrentIndex]
-			gsLastDestinationInstructions = sDestinationInstructions;
+			sDestinationInstructions = ns1blankspace.history.viewport[ns1blankspace.history.currentIndex]
+			ns1blankspace.history.lastDestinationInstruction = sDestinationInstructions;
 			
 			if (bMove)
 			{
@@ -662,7 +662,7 @@ function interfaceMasterLogonShow(aParam)
 		interfaceMasterLogon();
 	});	
 
-	$('#' + sXHTMLElementID).show(giShowSpeed);
+	$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 	
 	$('#aInterfaceMasterLogonSendPassword').click(function()
 	{
@@ -680,7 +680,7 @@ function interfaceMasterLogon()
 	var sPassword = $('#inputInterfaceMasterLogonPassword').val();
 	
 	sData = 'logon=' + encodeURIComponent(sLogonName) + '&password=' + encodeURIComponent(sPassword);
-	$('#tdInterfaceMasterLogonStatus').html(gsLoadingSmallXHTML);
+	$('#tdInterfaceMasterLogonStatus').html(ns1blankspace.xhtml.loadingSmall);
 	
 	$.ajax(
 	{
@@ -717,7 +717,7 @@ function interfaceMasterLogonProcess(oResponse)
 		}
 		else
 		{	
-			if (oResponse.url == '#' || gbLogonStayOnDocument)
+			if (oResponse.url == '#' || ns1blankspace.option.logonStayOnDocument)
 			{
 				document.location.reload();
 			}	
@@ -798,7 +798,7 @@ function interfaceMasterLogonChangePasswordShow(aParam)
 		interfaceMasterLogonChangePassword();
 	});	
 	
-	$('#' + sXHTMLElementID).show(giShowSpeed);
+	$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 }
 
 function interfaceMasterLogonChangePassword()
@@ -858,7 +858,7 @@ function interfaceMasterLogonChangePasswordProcess(oResponse)
 	{
 		$('#tdInterfaceMasterLogonChangePasswordStatus').html('Password changed!');
 	
-		if (oResponse.url == '#' || gbLogonStayOnDocument)
+		if (oResponse.url == '#' || ns1blankspace.option.logonStayOnDocument)
 		{
 			window.location.hash = '';
 			document.location.reload();
@@ -916,7 +916,7 @@ function interfaceMasterLogonSendPasswordShow()
 		interfaceMasterLogonSendPassword();
 	});	
 	
-	$('#divInterfaceMasterLogon').show(giShowSpeed);
+	$('#divInterfaceMasterLogon').show(ns1blankspace.option.showSpeed);
 }
 
 function interfaceMasterLogonSendPassword()
@@ -970,7 +970,7 @@ function interfaceMasterLogoff()
 		dataType: 'json'
 	})
 	
-	gbUnloadWarning = false;
+	ns1blankspace.unloadWarning = false;
 	document.location.reload();
 }
 
@@ -979,7 +979,7 @@ function interfaceMasterViewportUserControlShow(oElement)
 
 	$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
 	$('#divInterfaceMasterViewportControlOptions').html(interfaceControlUserOptions());
-	$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 	
 	interfaceControlUserOptionsBind();
 }
@@ -1015,19 +1015,19 @@ function interfaceMasterViewportShow(oResponse)
 	var aHTML = [];
 	var h = -1;
 
-	gsUserName = oResponse.userlogonname;
+	ns1blankspace.user.commonname = oResponse.userlogonname;
 	gsUserID = oResponse.user;
 	gsUserContactPersonID = oResponse.contactperson;
-	gsUserEmail = oResponse.email;
-	gbSystemAdmin = oResponse.systemadmin;
+	ns1blankspace.user.email = oResponse.email;
+	ns1blankspace.systemAdmin = oResponse.systemadmin;
 	
 	interfaceControlSecurity();
 	
-	gbUnloadWarning = true;
+	ns1blankspace.unloadWarning = true;
 	
 	aHTML[++h] = '<div id="divInterfaceMasterViewport" class="interfaceMaster">';
 	
-	$('#tdInterfaceMasterHeaderColumn2').html('<span id="spanInterfaceMasterViewportLogonName">' + gsUserName + '</span>')
+	$('#tdInterfaceMasterHeaderColumn2').html('<span id="spanInterfaceMasterViewportLogonName">' + ns1blankspace.user.commonname + '</span>')
 	
 	aHTML[++h] = '<div id="divInterfaceMasterViewportControl" class="interfaceMasterViewport">';
 	
@@ -1063,7 +1063,7 @@ function interfaceMasterViewportShow(oResponse)
 		
 		aHTML[++h] = '<div id="divInterfaceMasterViewportControlActionStatus" class="interfaceMasterViewport">&nbsp;</div>';
 		
-		if (gbSetupShow) 
+		if (ns1blankspace.setupShow) 
 		{
 
 			aHTML[++h] = '<div id="divInterfaceMasterViewportControlSetup">' +
@@ -1155,7 +1155,7 @@ function interfaceMasterViewportShow(oResponse)
 				primary: "ui-icon-grip-dotted-vertical",
 				secondary: "ui-icon-triangle-1-s"
 			},
-			label: gsViewportDefault
+			label: ns1blankspace.option.defaultViewport
 		})
 		.click(function() 
 		{
@@ -1236,7 +1236,7 @@ function interfaceMasterViewportShow(oResponse)
 		interfaceControlUserOptionsShow(this);
 	})
 	
-	if (gbShowBrowseBar)
+	if (ns1blankspace.option.showBrowsing)
 	{
 		$('#divInterfaceMasterViewportControlBrowse').html(interfaceMasterViewportBrowse());
 	}
@@ -1294,9 +1294,9 @@ function interfaceMasterReset()
 	$('td.interfaceViewportMasterControlBrowse').unbind('click');
 	$('td.interfaceViewportMasterControlBrowseAll').unbind('click');
 	$('#divInterfaceMasterViewportControlActionStatus').text('');
-	if (giMessagingTimerID != 0) {clearInterval(giMessagingTimerID)};
-	gbInputDetected = false;
-	gsViewportMasterActionXHTML = '';
+	if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
+	ns1blankspace.inputDetected = false;
+	ns1blankspace.xhtml.action = '';
 }
 
 function interfaceMasterOptionsSource(sSource)
@@ -1309,12 +1309,12 @@ function interfaceMasterHomeShow()
 {	
 	interfaceHomeViewport();
 	
-	if (gsHomeXHTML == '')
+	if (ns1blankspace.xhtml.home == '')
 	{
-		gsHomeXHTML = interfaceHome();
+		ns1blankspace.xhtml.home = interfaceHome();
 	}
 	
-	$('#divInterfaceMain').html(gsHomeXHTML)
+	$('#divInterfaceMain').html(ns1blankspace.xhtml.home)
 	
 	interfaceHomeShow();
 }
@@ -1327,14 +1327,14 @@ function interfaceMasterHomeOptionsShow(oElement)
 	
 	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
 		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
 		$('#divInterfaceMasterViewportControlOptions').html(interfaceHomeOptions());
 		interfaceHomeOptionsBind();
@@ -1350,21 +1350,21 @@ function interfaceMasterViewportControlShow(oElement)
 
 	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
-		if (gsViewportMasterControlXHTML == '')
+		if (ns1blankspace.xhtml.masterControl == '')
 		{
-			gsViewportMasterControlXHTML = interfaceControlOptions();
+			ns1blankspace.xhtml.masterControl = interfaceControlOptions();
 		}
 
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
 		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		$('#divInterfaceMasterViewportControlOptions').html(gsViewportMasterControlXHTML);
+		$('#divInterfaceMasterViewportControlOptions').html(ns1blankspace.xhtml.masterControl);
 			
 		interfaceControlOptionsBind();
 	}	
@@ -1374,8 +1374,8 @@ function interfaceMasterAttachments(aParam)
 {
 
 	var sXHTMLElementID;
-	var iObject = giObject;
-	var iObjectContext = giObjectContext;
+	var iObject = ns1blankspace.object;
+	var iObjectContext = ns1blankspace.objectContext;
 	var bShowAdd = gbShowAdd;
 	var iAttachmentType;
 	var oActions = {add: true};
@@ -1402,7 +1402,7 @@ function interfaceMasterAttachments(aParam)
 		aHTML[++h] = '<table id="tableInterfaceMainAttachments" class="interfaceMain">' +
 					'<tr id="trInterfaceMainAttachmentsRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainAttachmentsColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainAttachmentsColumn2" class="interfaceMainColumn2Action">' +
 					'</td>' +
@@ -1481,7 +1481,7 @@ function interfaceMasterAttachmentsShow(oResponse, sXHTMLElementID)
 		aHTML[++h] = '</tr>';
 		
 		$('#' + sXHTMLElementID).html(aHTML.join(''));
-		$('#' + sXHTMLElementID).show(giShowSpeed);
+		$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 	}
 	else
 	{
@@ -1509,7 +1509,7 @@ function interfaceMasterAttachmentsShow(oResponse, sXHTMLElementID)
 			showMore: (oResponse.morerows == "true"),
 			columns: 'subject-actiondate',
 			more: oResponse.moreid,
-			rows: giReturnRows,
+			rows: ns1blankspace.option.defaultRows,
 			functionSearch: interfaceMasterActions,
 			functionShowRow: interfaceMasterAttachmentsShowRow,
 			functionOpen: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)',
@@ -1593,14 +1593,14 @@ function interfaceMasterAttachmentsAdd(aParam)
 
 function interfaceMasterAttachmentsUploadProcess(aParam)
 {
-	gaParam = {};
-	if (aParam != undefined) {gaParam = aParam};
+	ns1blankspace.param = {};
+	if (aParam != undefined) {ns1blankspace.param = aParam};
 	
 	$('#spanInterfaceMainUploadStatus').html('Uploading..');
 	var oForm = document.frmonDemandFileUpload;
   	oForm.submit();
  	interfaceMasterAttachmentsAddStatus();
-	giOnDemandTimer = setInterval('interfaceMasterAttachmentsAddStatus()', 1000);
+	ns1blankspace.timer.delay = setInterval('interfaceMasterAttachmentsAddStatus()', 1000);
 }
 
 function interfaceMasterAttachmentsAddStatus()
@@ -1612,9 +1612,9 @@ function interfaceMasterAttachmentsAddStatus()
 
 	var fFunctionPostUpdate = interfaceMasterAttachments;
 	
-	if (gaParam != undefined)
+	if (ns1blankspace.param != undefined)
 	{
-		if (gaParam.functionPostUpdate != undefined) {fFunctionPostUpdate = gaParam.functionPostUpdate}
+		if (ns1blankspace.param.functionPostUpdate != undefined) {fFunctionPostUpdate = ns1blankspace.param.functionPostUpdate}
 	}
 	
 	if (oFrame.readyState) 
@@ -1637,7 +1637,7 @@ function interfaceMasterAttachmentsAddStatus()
  
 	if (sCurrentState == 'complete') 
 	{
-		clearInterval(giOnDemandTimer);
+		clearInterval(ns1blankspace.timer.delay);
 
 		if (oDivStatus != null)
 		{
@@ -1658,8 +1658,8 @@ function interfaceMasterAttachmentsUpload(aParam)
 	var h = -1;
 
 	var iMaxFiles = 1
-	var iObject = giObject
-	var lObjectContext = giObjectContext
+	var iObject = ns1blankspace.object
+	var lObjectContext = ns1blankspace.objectContext
 	var sLabel = 'Select File';
 	var sObjectName = '';
 	var iAttachmentType = '';
@@ -1772,9 +1772,9 @@ function interfaceMasterViewportSetup()
 	$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
 	$('#divInterfaceMasterViewportControlSet').unbind('click');
 	
-	if (gbSetupViewport)
+	if (ns1blankspace.setupViewport)
 	{
-		gbSetupViewport = false;
+		ns1blankspace.setupViewport = false;
 		
 		$('#divInterfaceMasterViewportControlSet')
 		.button(
@@ -1784,7 +1784,7 @@ function interfaceMasterViewportSetup()
 				primary: "ui-icon-grip-dotted-vertical",
 				secondary: "ui-icon-triangle-1-s"
 			},
-			label: gsViewportDefault
+			label: ns1blankspace.option.defaultViewport
 		})
 		.click(function() 
 		{
@@ -1798,12 +1798,12 @@ function interfaceMasterViewportSetup()
 	}
 	else
 	{
-		gbSetupViewport = true;
+		ns1blankspace.setupViewport = true;
 
 		$('#divInterfaceMasterViewportControlSet')
 		.button(
 		{
-			label: gsSetupViewportDefault
+			label: ns1blankspace.option.defaultSetupViewport
 		})
 		.click(function() 
 		{
@@ -1826,14 +1826,14 @@ function interfaceMasterViewportControlSetupShow(oElement)
 	
 	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
 		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
 		$('#divInterfaceMasterViewportControlOptions').html(interfaceControlSetupOptions());
 			
@@ -1860,19 +1860,19 @@ function interfaceMasterMainViewportShow(asDivID, bRefresh)
 
 	$('#divInterfaceMasterViewportControlOptions').hide();
 	$('.divInterfaceViewportMain').hide();
-	$(asDivID).show(giShowSpeed);
-	gsLastShowDivID = asDivID;
+	$(asDivID).show(ns1blankspace.option.showSpeed);
+	ns1blankspace.xhtml.divID = asDivID;
 	if ($(asDivID).html() == '' || bRefresh)
 	{
 		$(asDivID).attr('onDemandLoading', '1');
-		$(asDivID).html(gsLoadingXHTML);
+		$(asDivID).html(ns1blankspace.xhtml.loading);
 	}	
 }
 
 
 function interfaceMasterMainViewportHideLoading(asDivID)
 {
-	if (asDivID == undefined) {asDivID = gsLastShowDivID};
+	if (asDivID == undefined) {asDivID = ns1blankspace.xhtml.divID};
 
 	$(asDivID).removeClass("loading");
 }
@@ -2006,7 +2006,7 @@ function interfaceMasterElementOptionsSearch(sXHTMLElementId, iSource, iMinimumL
 	
 	if (iSource == undefined)
 	{
-		iSource = giSearchSource_TEXT_INPUT;
+		iSource = ns1blankspace.data.searchSource.text;
 	}	
 	
 	if (sElementId != '')
@@ -2017,8 +2017,8 @@ function interfaceMasterElementOptionsSearch(sXHTMLElementId, iSource, iMinimumL
 	
 	if (lElementSearchContext != undefined)
 	{
-		$('#' + gsLastShowDivID).val($('#' + sXHTMLElementId).html())
-		$('#' + gsLastShowDivID).attr("onDemandID", lElementSearchContext)
+		$('#' + ns1blankspace.xhtml.divID).val($('#' + sXHTMLElementId).html())
+		$('#' + ns1blankspace.xhtml.divID).attr("onDemandID", lElementSearchContext)
 		$('#divInterfaceMasterViewportControlOptions').hide();
 	}
 	else
@@ -2035,17 +2035,17 @@ function interfaceMasterElementOptionsSearch(sXHTMLElementId, iSource, iMinimumL
 	
 		if (sSearchText == undefined) {sSearchText = ''};
 			
-		if (sSearchText == '' && iSource == giSearchSource_TEXT_INPUT)
+		if (sSearchText == '' && iSource == ns1blankspace.data.searchSource.text)
 		{
 			sSearchText = $('#' + sElementId).val();
 		}	
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_ALL)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.all)
 		{
 			
 			if (sMethod.indexOf("/") == -1)
 			{
-				var sParam = gsOnDemandSetupURL + '?rf=XML&method=' + sMethod +
+				var sParam = ns1blankspace.option.setupURI + '?rf=XML&method=' + sMethod +
 							'&xhtmlcontext=' + sElementId;
 			}
 			else
@@ -2151,7 +2151,7 @@ function interfaceMasterElementOptionsSearchShow(oXML, sItemColumns)
 		aHTML[++h] = '</tbody></table>';
 	
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
@@ -2166,7 +2166,7 @@ function interfaceMasterSearchStart(sElementId)
 {
 	sElementId = 'divInterfaceMasterViewportControlSearchStatus';
 	$('#' + sElementId).show();
-	$('#' + sElementId).html(gsLoadingSmallXHTML);
+	$('#' + sElementId).html(ns1blankspace.xhtml.loadingSmall);
 }
 
 function interfaceMasterSearchStop(sElementId)
@@ -2200,12 +2200,12 @@ function interfaceMasterSaveSuccess(data, sSuccessMessage)
 	if (oResponse.status == 'OK')
 	{
 		interfaceMasterStatus(sSuccessMessage);
-		giObjectSaveId =  oResponse.id;
+		ns1blankspace.objectSaveId =  oResponse.id;
 	}
 	else
 	{
 		interfaceMasterStatus(oResponse.error.errornotes);
-		giObjectSaveId =  -1;
+		ns1blankspace.objectSaveId =  -1;
 		return '';
 	}
 }
@@ -2304,9 +2304,9 @@ function interfaceMasterAddressSearch(sXHTMLElementId, aParam)
 	
 	if (lElementSearchContext != undefined)
 	{
-		$('#' + gsLastShowDivID).val(aSearch[2])
-		$('#' + gsLastShowDivID.replace('Suburb', 'State')).val(aSearch[3])
-		$('#' + gsLastShowDivID.replace('Suburb', 'PostCode')).val(aSearch[4])
+		$('#' + ns1blankspace.xhtml.divID).val(aSearch[2])
+		$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'State')).val(aSearch[3])
+		$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'PostCode')).val(aSearch[4])
 		$('#divInterfaceMasterViewportControlOptions').hide();
 	}
 	else
@@ -2318,7 +2318,7 @@ function interfaceMasterAddressSearch(sXHTMLElementId, aParam)
 		
 		//sData += '&postpcde=' + encodeURIComponent((aParam.postcode==undefined?'':aParam.postcode));
 		
-		sData += 'suburblike=' + encodeURIComponent($('#' + gsLastShowDivID).val());
+		sData += 'suburblike=' + encodeURIComponent($('#' + ns1blankspace.xhtml.divID).val());
 
 		$.ajax(
 		{
@@ -2373,7 +2373,7 @@ function interfaceMasterAddressSearchShow(oResponse)
 		aHTML[++h] = '</tbody></table>';
 	
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
@@ -2394,7 +2394,7 @@ function interfaceMasterContactSearch(sXHTMLElementId, iSource, iMinimumLength, 
 		
 	if (iSource == undefined)
 	{
-		iSource = giSearchSource_TEXT_INPUT;
+		iSource = ns1blankspace.data.searchSource.text;
 	}	
 	
 	if (sElementId != '')
@@ -2425,12 +2425,12 @@ function interfaceMasterContactSearch(sXHTMLElementId, iSource, iMinimumLength, 
 	
 		if (sSearchText == undefined) {sSearchText = ''};
 			
-		if (sSearchText == '' && iSource == giSearchSource_TEXT_INPUT)
+		if (sSearchText == '' && iSource == ns1blankspace.data.searchSource.text)
 		{
 			sSearchText = $('#' + sElementId).val();
 		}	
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_ALL)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.all)
 		{
 			
 			var oSearch = new AdvancedSearch();
@@ -2507,7 +2507,7 @@ function interfaceMasterContactSearchShow(oResponse, sElementId)
 		aHTML[++h] = '</tbody></table>';
 	
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
@@ -2521,7 +2521,7 @@ function interfaceMasterContactSearchShow(oResponse, sElementId)
 function interfaceMasterContactEmailSearch(sXHTMLElementId, aParam)
 {
 
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var iMinimumLength = 1;
 	var sMethod;
 	var sSearchText;
@@ -2600,12 +2600,12 @@ function interfaceMasterContactEmailSearch(sXHTMLElementId, aParam)
 	
 		if (sSearchText == undefined) {sSearchText = ''};
 			
-		if (sSearchText == '' && iSource == giSearchSource_TEXT_INPUT)
+		if (sSearchText == '' && iSource == ns1blankspace.data.searchSource.text)
 		{
 			sSearchText = $('#' + sElementId).val();
 		}	
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_ALL)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.all)
 		{
 			
 			var oSearch = new AdvancedSearch();
@@ -2707,7 +2707,7 @@ function interfaceMasterContactEmailSearchShow(oResponse, sElementId, aParam)
 			})	
 		);
 	
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
@@ -2859,7 +2859,7 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 		
 	}
 	
-	$('#tdInterfaceSearchFooterMoreStatus').html(gsLoadingSmallXHTML);
+	$('#tdInterfaceSearchFooterMoreStatus').html(ns1blankspace.xhtml.loadingSmall);
 	
 	if (iMore == -1)
 	{
@@ -2982,7 +2982,7 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 				$('td.interfaceSearch').click(function(event)
 				{
 					$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-					$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+					$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 					fFunctionSearch(event.target.id, {source: 1});
 				});
 						
@@ -3016,8 +3016,8 @@ function interfaceMasterActions(aParam)
 {
 
 	var sXHTMLElementID;
-	var iObject = giObject;
-	var iObjectContext = giObjectContext;
+	var iObject = ns1blankspace.object;
+	var iObjectContext = ns1blankspace.objectContext;
 	var bShowAdd = gbShowAdd;
 	var iActionType = '';
 	var oActions = {add: true};
@@ -3054,7 +3054,7 @@ function interfaceMasterActions(aParam)
 		aHTML[++h] = '<table id="tableInterfaceMainActions" class="interfaceMain">' +
 					'<tr id="trInterfaceMainActionsRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainActionsColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainActionsColumn2" class="interfaceMainColumn2Action">' +
 					'</td>' +
@@ -3110,7 +3110,7 @@ function interfaceMasterActions(aParam)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/action/?rows=' + giReturnRows + '&' + sParam,
+			url: '/ondemand/action/?rows=' + ns1blankspace.option.defaultRows + '&' + sParam,
 			dataType: 'json',
 			success: function(data) {interfaceMasterActionsShow(data, sXHTMLElementID, aParam)}
 		});	
@@ -3133,7 +3133,7 @@ function interfaceMasterActionsShow(oResponse, sXHTMLElementID, aParam)
 		aHTML[++h] = '</tr>';
 		
 		$('#' + sXHTMLElementID).html(aHTML.join(''));
-		$('#' + sXHTMLElementID).show(giShowSpeed);
+		$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 	}
 	else
 	{
@@ -3178,7 +3178,7 @@ function interfaceMasterActionsShow(oResponse, sXHTMLElementID, aParam)
 			showMore: (oResponse.morerows == 'true'),
 			columns: 'subject-actiondate',
 			more: this.moreid,
-			rows: giReturnRows,
+			rows: ns1blankspace.option.defaultRows,
 			functionSearch: interfaceMasterActions,
 			functionOpen: "interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)"
 		   }); 
@@ -3435,19 +3435,19 @@ function interfaceMasterViewportActionShow(oElement, sActionXHTML, sFunctionActi
 
 	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
-		if (gsViewportMasterControlXHTML == '')
+		if (ns1blankspace.xhtml.masterControl == '')
 		{
-			gsViewportMasterControlXHTML = interfaceControlOptions();
+			ns1blankspace.xhtml.masterControl = interfaceControlOptions();
 		}
 
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
 		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
 		$('#divInterfaceMasterViewportControlOptions').html(sActionXHTML);
 		
@@ -3498,7 +3498,7 @@ function interfaceMasterPaginationList(aParam)
 	aHTML[++h] = '</div>';
 
 	$('#' + sXHTMLElementID).html(aHTML.join(''));
-	if (bShowList) {$('#' + sXHTMLElementID).show(giShowSpeed)};
+	if (bShowList) {$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed)};
 		
 	if (bMore)
 	{
@@ -3513,7 +3513,7 @@ function interfaceMasterPaginationList(aParam)
 		{
 			var sID = event.target.id;
 			var sStart = $('#' + sID).attr('rowStart');
-			$('#' + sID).html(gsLoadingSmallXHTML);
+			$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
 			if (aParam != undefined) {aParam.more = iMore;aParam.startRow = sStart}else{aParam = {more: iMore, startRow: sStart}};
 			interfaceMasterPaginationListShowMore(aParam);
 		});
@@ -3760,7 +3760,7 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 					{
 						var sID = event.target.id;
 						var sStart = $('#' + sID).attr('rowStart')
-						$('#' + sID).html(gsLoadingSmallXHTML);
+						$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
 						(aParam != undefined?aParam.more = iMore:aParam = {more: iMore, startRow: sStart})
 						interfaceMasterPaginationListShowMore(aParam);
 					});
@@ -3818,14 +3818,14 @@ function interfaceMasterViewportOptionsShow(aParam)
 	{
 		if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oXHTMLElement.attr('id') && !bForceShow)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 			$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
 		}
 		else
 		{
 			$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oXHTMLElement.attr('id'));
 			$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-			$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+			$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 			$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft});
 			$('#divInterfaceMasterViewportControlOptions').html(sXHTML);
 			
@@ -3839,5 +3839,5 @@ function interfaceMasterViewportOptionsHide()
 {
 	$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
 	$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 }

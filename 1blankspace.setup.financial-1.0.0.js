@@ -7,10 +7,10 @@
 
 function interfaceSetupFinancialMasterViewport()
 {
-	gsObjectName = 'Financials';
-	giObjectContext = -1;
-	giObject = -1;
-	goObjectContext = undefined;
+	ns1blankspace.objectName = 'Financials';
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = -1;
+	ns1blankspace.objectContextData = undefined;
 	
 	if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}
 
@@ -25,8 +25,8 @@ function interfaceSetupFinancialMasterViewport()
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupFinancialSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupFinancialSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -71,15 +71,15 @@ function interfaceSetupFinancialMasterViewport()
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupFinancialSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupFinancialSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupFinancialSearch(event.target.id, giSearchSource_BROWSE);
+		interfaceSetupFinancialSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceFormatEditorInitialise({height: "500px"});
 
@@ -88,7 +88,7 @@ function interfaceSetupFinancialMasterViewport()
 
 function interfaceSetupFinancialHomeShow(oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	
 	var aHTML = [];
@@ -231,7 +231,7 @@ function interfaceSetupFinancialHomeShow(oResponse)
 		url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_SEARCH&all=1&includefinancialaccounttext=1',
 		dataType: 'json',
 		success: function(data) {
-									goObjectContext = data;
+									ns1blankspace.objectContextData = data;
 									interfaceSetupFinancialSummary();
 								}
 	});
@@ -248,7 +248,7 @@ function interfaceSetupFinancialSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find settings.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -260,7 +260,7 @@ function interfaceSetupFinancialSummary()
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2x">' +
 						'</td>' +
@@ -274,7 +274,7 @@ function interfaceSetupFinancialSummary()
 	
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
-		var sTaxMethod = (goObjectContext.taxreportcalculationmethod == "1") ? "Cash" : "Accrual";
+		var sTaxMethod = (ns1blankspace.objectContextData.taxreportcalculationmethod == "1") ? "Cash" : "Accrual";
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTaxationMethod" class="interfaceMainSummary">Taxation Method</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryTaxationMethod" class="interfaceMainSummaryValue">' +
@@ -344,10 +344,10 @@ function interfaceSetupFinancialGeneral()
 		
 		$('#tdInterfaceMainGeneralColumn1').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('[name="radioTaxationMethod"][value="' + goObjectContext.taxreportcalculationmethod + '"]').attr('checked', true);	
-			$('#inputInterfaceMainGeneralAccountingYear').val(goObjectContext.endoffinancialyear);
+			$('[name="radioTaxationMethod"][value="' + ns1blankspace.objectContextData.taxreportcalculationmethod + '"]').attr('checked', true);	
+			$('#inputInterfaceMainGeneralAccountingYear').val(ns1blankspace.objectContextData.endoffinancialyear);
 		}
 
 	}	
@@ -396,7 +396,7 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain" style="width:100%">' +
 					'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainBankAccountColumn1" style="width:250px;" class="interfaceMainColumn1">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainBankAccountColumn2" class="interfaceMainColumn2">' +
 					'<span id="spanBankAccount_options_add" class="interfaceMainRowOptionsAdd" style="font-size:0.75em;">Add</span>'
@@ -488,7 +488,7 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain">' +
 				'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
 				'<td id="tdInterfaceMainBankAccountEditColumn1"  class="interfaceMainColumn1" style="width:300px;padding-right:15px;">' +
-				gsLoadingXHTML +
+				ns1blankspace.xhtml.loading +
 				'</td>' +
 				'<td id="tdInterfaceMainBankAccountEditColumn2" class="interfaceMainColumn2">' +
 				'</td>' +
@@ -605,7 +605,7 @@ function interfaceSetupFinancialBankAccount(aParam, oResponse)
 		$('#inputInterfaceMainBankAccountTitle').val(oObjectContext.title);
 		$('#inputInterfaceMainBankAccountTitle').focus();
 		$('#inputInterfaceMainBankAccountFinancialAccount').val(oObjectContext.financialaccounttext)
-		$('#inputInterfaceMainBankAccountFinancialAccount').attr('data-id', goObjectContext.financialaccount);
+		$('#inputInterfaceMainBankAccountFinancialAccount').attr('data-id', ns1blankspace.objectContextData.financialaccount);
 
 		interfaceMasterStatus('');
 	}
@@ -677,7 +677,7 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainAccount" class="interfaceMain">' +
 					'<tr id="trInterfaceMainSetupAccountRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainSetupAccountColumnType" style="width:100px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-						gsLoadingXHTML + '</td>' +
+						ns1blankspace.xhtml.loading + '</td>' +
 					'<td id="tdInterfaceMainSetupAccountColumnList" style="width:200px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn2">' +
 					'</td>' +
 					'<td id="tdInterfaceMainSetupAccountColumnEdit" style="width:280px;padding-right:15px;font-size:0.875em;" class="interfaceMainColumn2">' +
@@ -788,7 +788,7 @@ function interfaceSetupFinancialAccount(aParam, oResponse)
 
 		if (oResponse == undefined)
 		{
-			$('#tdInterfaceMainSetupAccountColumnList').html(gsLoadingSmallXHTML);
+			$('#tdInterfaceMainSetupAccountColumnList').html(ns1blankspace.xhtml.loadingSmall);
 			$('#tdInterfaceMainSetupAccountColumnEdit').html("");
 
 			var aHTML = [];
@@ -1248,18 +1248,18 @@ function interfaceSetupFinancialFinancialAccountDefault()
 		
 		$('#tdInterfaceMainFinancialAccountColumn1').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainFinancialAccountCash').val(goObjectContext.financialaccountcashtext);
-			$('#inputInterfaceMainFinancialAccountCash').attr("data-id", goObjectContext.financialaccountcash);
-			$('#inputInterfaceMainFinancialAccountCreditors').val(goObjectContext.financialaccountcreditortext);
-			$('#inputInterfaceMainFinancialAccountCreditors').attr("data-id", goObjectContext.financialaccountcreditor);
-			$('#inputInterfaceMainFinancialAccountDebitors').val(goObjectContext.financialaccountdebitortext);
-			$('#inputInterfaceMainFinancialAccountDebitors').attr("data-id", goObjectContext.financialaccountdebitor);
-			$('#inputInterfaceMainFinancialAccountCurrentProfit').val(goObjectContext.financialaccountcurrentearningstext);
-			$('#inputInterfaceMainFinancialAccountCurrentProfit').attr("data-id", goObjectContext.financialaccountcurrentearnings);
-			$('#inputInterfaceMainFinancialAccountRetainedProfit').val(goObjectContext.financialaccountretainedearningstext);
-			$('#inputInterfaceMainFinancialAccountRetainedProfit').attr("data-id", goObjectContext.financialaccountretainedearnings);
+			$('#inputInterfaceMainFinancialAccountCash').val(ns1blankspace.objectContextData.financialaccountcashtext);
+			$('#inputInterfaceMainFinancialAccountCash').attr("data-id", ns1blankspace.objectContextData.financialaccountcash);
+			$('#inputInterfaceMainFinancialAccountCreditors').val(ns1blankspace.objectContextData.financialaccountcreditortext);
+			$('#inputInterfaceMainFinancialAccountCreditors').attr("data-id", ns1blankspace.objectContextData.financialaccountcreditor);
+			$('#inputInterfaceMainFinancialAccountDebitors').val(ns1blankspace.objectContextData.financialaccountdebitortext);
+			$('#inputInterfaceMainFinancialAccountDebitors').attr("data-id", ns1blankspace.objectContextData.financialaccountdebitor);
+			$('#inputInterfaceMainFinancialAccountCurrentProfit').val(ns1blankspace.objectContextData.financialaccountcurrentearningstext);
+			$('#inputInterfaceMainFinancialAccountCurrentProfit').attr("data-id", ns1blankspace.objectContextData.financialaccountcurrentearnings);
+			$('#inputInterfaceMainFinancialAccountRetainedProfit').val(ns1blankspace.objectContextData.financialaccountretainedearningstext);
+			$('#inputInterfaceMainFinancialAccountRetainedProfit').attr("data-id", ns1blankspace.objectContextData.financialaccountretainedearnings);
 		}
 		else
 		{
@@ -1305,9 +1305,9 @@ function interfaceSetupFinancialInvoicing()
 		
 		$('#tdInterfaceMainInvoicingColumn1').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			//$('[name="radioLock"][value="' + goObjectContext.taxlock + '"]').attr('checked', true);
+			//$('[name="radioLock"][value="' + ns1blankspace.objectContextData.taxlock + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -1328,7 +1328,7 @@ function interfaceSetupFinancialInvoicingTemplate()
 		for (edId in tinyMCE.editors) 
 					tinyMCE.editors[edId].destroy(true);
 				
-		giEditorCounter = giEditorCounter + 1;		
+		ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 				
 		aHTML[++h] = '<table class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainEditRow1" class="interfaceMain">' +
@@ -1388,7 +1388,7 @@ function interfaceSetupFinancialInvoicingTemplate()
 		aHTML[++h] = '<tr>' +
 						'<td>' +
 						'<textarea rows="30" cols="50" id="inputInterfaceMainInvoicingTemplateText' +
-									giEditorCounter + '" editorcount="' + giEditorCounter + '" class="inputInterfaceMainTextMulti"></textarea>' +
+									ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="inputInterfaceMainTextMulti"></textarea>' +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
@@ -1431,32 +1431,32 @@ function interfaceSetupFinancialInvoicingTemplate()
 					ns1blankspace.financial.invoiceTemplateDocumentID = oResponse.data.rows[0].id;
 				}
 
-				$('#inputInterfaceMainInvoicingTemplateText' + giEditorCounter).val(ns1blankspace.financial.invoiceTemplateXHTML);
+				$('#inputInterfaceMainInvoicingTemplateText' + ns1blankspace.counter.editor).val(ns1blankspace.financial.invoiceTemplateXHTML);
 
-				if (gbRichEdit)
+				if (ns1blankspace.option.richTextEditing)
 				{
-					tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainInvoicingTemplateText' + giEditorCounter);
+					tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainInvoicingTemplateText' + ns1blankspace.counter.editor);
 				}	
 			});		
 		}
 		else
 		{
-			$('#inputInterfaceMainInvoicingTemplateText' + giEditorCounter).val(ns1blankspace.financial.invoiceTemplateXHTML);
+			$('#inputInterfaceMainInvoicingTemplateText' + ns1blankspace.counter.editor).val(ns1blankspace.financial.invoiceTemplateXHTML);
 
 
 
-			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainInvoicingTemplateText' + giEditorCounter);	
+			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainInvoicingTemplateText' + ns1blankspace.counter.editor);	
 		}
 	
 		$('.interfaceFormatTags')
 		.hover( function()
 		{	
-			oMCEBookmark = tinyMCE.get('inputInterfaceMainInvoicingTemplateText' + giEditorCounter).selection.getBookmark({type: 1, normalized: true});
+			oMCEBookmark = tinyMCE.get('inputInterfaceMainInvoicingTemplateText' + ns1blankspace.counter.editor).selection.getBookmark({type: 1, normalized: true});
 		})
 		.click( function()
 		{
 			interfaceMasterEditorAddTag({xhtmlElementID: this.id,
-										  editorID: 'inputInterfaceMainInvoicingTemplateText' + giEditorCounter, 
+										  editorID: 'inputInterfaceMainInvoicingTemplateText' + ns1blankspace.counter.editor, 
 										  mceBookmark: oMCEBookmark})
 		})
 	}	
@@ -1547,12 +1547,12 @@ function interfaceSetupFinancialTax()
 		
 		$('#tdInterfaceMainTaxColumn1').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('[name="radioTaxLock"][value="' + goObjectContext.lockifincompletedtaxreport + '"]').attr('checked', true);
-			$('[name="radioTaxReportingFrequency"][value="' + goObjectContext.taxreportfrequency + '"]').attr('checked', true);
-			$('[name="radioTaxPayrollReportingFrequency"][value="' + goObjectContext.taxreportfrequencyemployee + '"]').attr('checked', true);
-			$('[name="radioTaxDefault"][value="' + goObjectContext.classicincludestax + '"]').attr('checked', true);	
+			$('[name="radioTaxLock"][value="' + ns1blankspace.objectContextData.lockifincompletedtaxreport + '"]').attr('checked', true);
+			$('[name="radioTaxReportingFrequency"][value="' + ns1blankspace.objectContextData.taxreportfrequency + '"]').attr('checked', true);
+			$('[name="radioTaxPayrollReportingFrequency"][value="' + ns1blankspace.objectContextData.taxreportfrequencyemployee + '"]').attr('checked', true);
+			$('[name="radioTaxDefault"][value="' + ns1blankspace.objectContextData.classicincludestax + '"]').attr('checked', true);	
 		}
 	}	
 }
@@ -1598,9 +1598,9 @@ function interfaceSetupFinancialPayroll()
 		
 		$('#tdInterfaceMainPayrollColumn1').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('[name="radioPeriodDefault"][value="' + goObjectContext.payrollpayperiod + '"]').attr('checked', true);
+			$('[name="radioPeriodDefault"][value="' + ns1blankspace.objectContextData.payrollpayperiod + '"]').attr('checked', true);
 		}
 	}	
 }
@@ -1661,7 +1661,7 @@ function interfaceSetupFinancialSaveTemplate()
 	interfaceMasterStatusWorking();
 
 	var sData = 'id=' + (ns1blankspace.financial.invoiceTemplateDocumentID ? ns1blankspace.financial.invoiceTemplateDocumentID : '');
-	sData += '&content=' + encodeURIComponent(tinyMCE.get('inputInterfaceMainInvoicingTemplateText' + giEditorCounter).getContent());
+	sData += '&content=' + encodeURIComponent(tinyMCE.get('inputInterfaceMainInvoicingTemplateText' + ns1blankspace.counter.editor).getContent());
 	sData += '&type=10';
 	sData += '&title=' + interfaceMasterFormatSave('Invoice Template');
 
@@ -1674,7 +1674,7 @@ function interfaceSetupFinancialSaveTemplate()
 		success: function(data)
 			{
 				interfaceMasterStatus('Saved');
-				ns1blankspace.financial.invoiceTemplateXHTML = tinyMCE.get('inputInterfaceMainInvoicingTemplateText' + giEditorCounter).getContent();
+				ns1blankspace.financial.invoiceTemplateXHTML = tinyMCE.get('inputInterfaceMainInvoicingTemplateText' + ns1blankspace.counter.editor).getContent();
 				if(ns1blankspace.financial.invoiceTemplateDocumentID == undefined) {ns1blankspace.financial.invoiceTemplateDocumentID = data.id};
 			}
 	});		

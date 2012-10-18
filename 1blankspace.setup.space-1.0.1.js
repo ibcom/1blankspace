@@ -11,8 +11,8 @@ function interfaceSetupSpaceMasterViewport()
 	gsSetupName = 'My Account';
 	goSetupContextXML = '';
 	giSetupContext = -1;
-	giObjectContext = -1;
-	giObject = -1;
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = -1;
 	
 	interfaceMasterReset();		
 			
@@ -65,7 +65,7 @@ function interfaceSetupSpaceMasterViewport()
 	{
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupSpaceHomeShow();
 	
@@ -76,7 +76,7 @@ function interfaceSetupSpaceHomeShow()
 	var aHTML = [];
 	var h = -1;
 		
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 				
 	aHTML[++h] = '<table class="interfaceMain">';
 	aHTML[++h] = '<tr class="interfaceMainRow1">' +
@@ -176,7 +176,7 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainSubscription" class="interfaceMain" style="width:100%">' +
 							'<tr id="trInterfaceMainSubscriptionRow1" class="interfaceMainRow1">' +
 							'<td id="tdInterfaceMainSubscriptionColumn1" style="width:250px;" class="interfaceMainColumn1">' +
-							gsLoadingXHTML +
+							ns1blankspace.xhtml.loading +
 							'</td>';
 
 			//aHTML[++h] = '<td id="tdInterfaceMainSubscriptionColumn2" class="interfaceMainColumn2">' +
@@ -269,7 +269,7 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 		aHTML[++h] = '<table class="interfaceMain">' +
 				'<tr id="trInterfaceMainSubscriptionRow1" class="interfaceMainRow1">' +
 				'<td id="tdInterfaceMainSubscriptionEditColumn1"  class="interfaceMainColumn1" style="width:300px;padding-right:15px;">' +
-				gsLoadingXHTML +
+				ns1blankspace.xhtml.loading +
 				'</td>' +
 				'<td id="tdInterfaceMainSubscriptionEditColumn2" class="interfaceMainColumn2">' +
 				'</td>' +
@@ -371,7 +371,7 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 		$('#inputInterfaceMainBankAccountTitle').val(oObjectContext.title);
 		$('#inputInterfaceMainBankAccountTitle').focus();
 		$('#inputInterfaceMainBankAccountFinancialAccount').val(oObjectContext.financialaccounttext)
-		$('#inputInterfaceMainBankAccountFinancialAccount').attr('data-id', goObjectContext.financialaccount);
+		$('#inputInterfaceMainBankAccountFinancialAccount').attr('data-id', ns1blankspace.objectContextData.financialaccount);
 
 		interfaceMasterStatus('');
 	}
@@ -429,7 +429,7 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainMethodAccess" class="interfaceMain">' +
 						'<tr id="trInterfaceMainSetupMethodAccessRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainSetupMethodAccessColumnAccess" style="width:450px;padding-right:5px;font-size:0.75em;" class="interfaceMainColumn1">' +
-							gsLoadingXHTML + '</td>' +
+							ns1blankspace.xhtml.loading + '</td>' +
 						'<td id="tdInterfaceMainSetupMethodAccessColumnAction" class="interfaceMainColumn2">' +
 						'</td>' +
 						'</tr>' +
@@ -650,8 +650,8 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 
 		$('#inputInterfaceMainMethodAccessMethod').keyup(function()
 		{
-			if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-	        giKeyPressTimeoutId = setTimeout("interfaceSetupSpaceMethodSearch('inputInterfaceMainMethodAccessMethod')", giWaitForStop);
+			if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+	        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupSpaceMethodSearch('inputInterfaceMainMethodAccessMethod')", ns1blankspace.option.typingWait);
 		});	
 			
 		$('#inputInterfaceMainMethodAccessMethod').live('blur', function() 
@@ -787,7 +787,7 @@ function interfaceSetupSpaceMethodSearch(sXHTMLInputElementID, oResponse)
 		
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
 
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
 
 		$('.interfaceMasterMethod').click(function(event)

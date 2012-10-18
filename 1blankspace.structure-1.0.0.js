@@ -8,10 +8,10 @@
 function interfaceStructureMasterViewport(aParam)
 {
 
-	gsObjectName = 'Structure';
-	giObjectContext = -1;
-	giObject = 26;
-	goObjectContext = undefined;
+	ns1blankspace.objectName = 'Structure';
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = 26;
+	ns1blankspace.objectContextData = undefined;
 	
 	var bShowHome = true;
 	var bNew = false;
@@ -40,8 +40,8 @@ function interfaceStructureMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceStructureSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceStructureSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -114,12 +114,12 @@ function interfaceStructureMasterViewport(aParam)
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceStructureSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceStructureSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceStructureSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceStructureSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('#inputInterfaceMasterViewportControlSearch').focus();
@@ -177,7 +177,7 @@ function interfaceStructureHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_STRUCTURE_SEARCH';
@@ -233,7 +233,7 @@ function interfaceStructureSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -248,13 +248,13 @@ function interfaceStructureSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
 		giSetupContext = sSearchContext;
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		var sParam = 'method=SETUP_STRUCTURE_SEARCH&id=' + giSetupContext;
 		
 		$.ajax(
@@ -273,7 +273,7 @@ function interfaceStructureSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -282,7 +282,7 @@ function interfaceStructureSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
 			interfaceMasterOptionsSetPosition(sElementId);
@@ -343,13 +343,13 @@ function interfaceStructureSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceStructureSearch(event.target.id, 1);
 		});
 	}	
@@ -366,7 +366,7 @@ function interfaceStructureViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 	}
 	else
@@ -420,7 +420,7 @@ function interfaceStructureViewport()
 
 function interfaceStructureShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceStructureViewport();
 	
 	var aHTML = [];
@@ -428,7 +428,7 @@ function interfaceStructureShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this structure.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -437,7 +437,7 @@ function interfaceStructureShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 					
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
@@ -451,13 +451,13 @@ function interfaceStructureShow(aParam, oResponse)
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceStructureMasterViewport({showHome: false});interfaceStructureSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceStructureMasterViewport({showHome: false});interfaceStructureSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
 		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceStructureSummary()'})
 
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});	
 	}	
@@ -468,7 +468,7 @@ function interfaceStructureSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the structure.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -481,7 +481,7 @@ function interfaceStructureSummary()
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStructureID" class="interfaceMainSummary">Structure ID</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryStructureID" class="interfaceMainSummaryValue">' +
-						goObjectContext.id +
+						ns1blankspace.objectContextData.id +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
@@ -501,7 +501,7 @@ function interfaceStructureSummary()
 				
 function interfaceStructureData(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainData';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
@@ -519,7 +519,7 @@ function interfaceStructureData(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/decision/?method=DECISION_DATA_SEARCH&structure=' + giObjectContext,
+			url: '/ondemand/decision/?method=DECISION_DATA_SEARCH&structure=' + ns1blankspace.objectContext,
 			dataType: 'json',
 			success: function(data) {interfaceStructureData(aParam, data)}
 		});
@@ -535,7 +535,7 @@ function interfaceStructureData(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainData" class="interfaceMain">' +
 						'<tr id="trInterfaceMainStructureDataRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainStructureDataColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainStructureDataColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
@@ -723,7 +723,7 @@ function interfaceMasterStructureDataAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			var sData = 'structure=' + giObjectContext;
+			var sData = 'structure=' + ns1blankspace.objectContext;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainStructureDataAddTitle').val());
 			
@@ -820,7 +820,7 @@ function interfaceStructureReporting(aParam)
 	aHTML[++h] = '<table id="tableInterfaceMainReporting" class="interfaceMain">' +
 				'<tr id="trInterfaceMainReportingRow1" class="interfaceMainRow1">' +
 				'<td id="tdInterfaceMainReportingColumn1" style="width: 100px;" class="interfaceMainColumn1">' +
-				gsLoadingXHTML +
+				ns1blankspace.xhtml.loading +
 				'</td>' +
 				'<td id="tdInterfaceMainBankAccountColumn2" class="interfaceMainColumn2">' +
 				'</td>' +

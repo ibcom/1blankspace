@@ -5,38 +5,28 @@
  * 01 FEB 2010
  */
 
-var gbRoleBase = false;
-var gbRoleOperations = false;
-var gbRoleFinancials = false;
-var gbRoleSetup = false;
-var gbRoleSpecial1 = false;
+//var gbShowAdd = true;
+//var gbReturnToLast = true;
+//var gsMessagingEmailAccount = '';
 
-var gsLoadingXHTML = '<img class="interfaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">';
-var gsLoadingSmallXHTML = '<img class="interfaceLoadingSmall" id="imgInterfaceLoadingSmall" src="/jscripts/1blankspace.loading.square.10.gif">';
-var giReturnRows = 20;
-var gsEditorCSS = '';
-var gsViewportDefault = "People";
-var gsSetupViewportDefault = "Website";
+ns1blankspace.xhtml.loading = '<img class="interfaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">';
+ns1blankspace.xhtml.loadingSmall = '<img class="interfaceLoadingSmall" id="imgInterfaceLoadingSmall" src="/jscripts/1blankspace.loading.square.10.gif">';
+ns1blankspace.xhtml.editorCSS = '';
 
-var giObjectPerson = 32;
-var giObjectBusiness = 12;
-var giObjectOpportunity = 35;
+ns1blankspace.option.defaultRows = 20;
+ns1blankspace.option.defaultViewport = "People";
+ns1blankspace.option.defaultSetupViewport = "Website";
 
-var gaAttachmentTypes = [];
-var gaNetworkGroups;
+ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
+ns1blankspace.data.attachmentTypes = [];
+ns1blankspace.data.networkGroups;
 
-var gbDebug = true;
-var gbShowAdd = true;
-var gbReturnToLast = true;
-var gbShowBrowseBar = false;
+ns1blankspace.debug.enabled = true;
 
-var gbMessagingEmailShowCount = false;
-var gsMessagingEmailAccount = '';
-var giMessagingCheckForNew = 60000;
-
-ns1blankspace.loadingXHTML = gsLoadingXHTML;
-ns1blankspace.loadingSmallXHTML = gsLoadingSmallXHTML;
-ns1blankspace.helpURL = 'http://community.mydigitalstructure.com';
+ns1blankspace.option.showBrowsing = false;
+ns1blankspace.option.messagingEmailShowCount = false;
+ns1blankspace.option.messagingCheckForNew = 60000;
+ns1blankspace.option.helpURI = 'http://community.mydigitalstructure.com';
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 
@@ -318,15 +308,15 @@ function interfaceControlSecurity(aParam, oResponse)
 
 	}	
 	
-	gbRoleSetup = gbSystemAdmin;
+	gbRoleSetup = ns1blankspace.systemAdmin;
 	
 	//Show the setup icon?
-	if (gbRoleSetup) {gbSetupShow = true};
+	if (gbRoleSetup) {ns1blankspace.setupShow = true};
 
 	//Change the default viewport control menu option
 	if (gbRoleSpecial1) 
 	{
-		gsViewportDefault = "Special 1"
+		ns1blankspace.option.defaultViewport = "Special 1"
 	}	
 	
 }
@@ -1183,14 +1173,14 @@ function interfaceControlUserOptionsShow(oElement)
 {
 	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
 		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
 		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 70});
 		$('#divInterfaceMasterViewportControlOptions').html(interfaceControlUserOptions);
 			
@@ -1240,13 +1230,13 @@ function interfaceControlUserOptionsBind()
 	
 	$('#tdInterfaceMasterUserOptionsChangePassword').click(function(event)
 	{
-		$(this).html(gsLoadingSmallXHTML);
+		$(this).html(ns1blankspace.xhtml.loadingSmall);
 		interfaceMasterUserOptionsChangePassword();
 	});
 	
 	$('#tdInterfaceMasterUserOptionsCreateSecureKey').click(function(event)
 	{
-		$(this).html(gsLoadingSmallXHTML);
+		$(this).html(ns1blankspace.xhtml.loadingSmall);
 		interfaceMasterUserOptionsCreateSecureKey();
 	});
 }
@@ -1259,14 +1249,14 @@ function interfaceControlSpaceOptionsShow(oElement, oResponse)
 	{
 		if ($('#divInterfaceMasterViewportControlOptions').attr('data-source') == oElement.id)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 			$('#divInterfaceMasterViewportControlOptions').attr('data-source', '');
 		}
 		else
 		{	
 			$('#divInterfaceMasterViewportControlOptions').attr('data-source', oElement.id);
-			$('#divInterfaceMasterViewportControlOptions').html('<table style="width: 250px;" class="interfaceViewportMasterControl"><tr><td>' + ns1blankspace.loadingSmallXHTML + '</tr><td></table>');
-			$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+			$('#divInterfaceMasterViewportControlOptions').html('<table style="width: 250px;" class="interfaceViewportMasterControl"><tr><td>' + ns1blankspace.xhtml.loadingSmall + '</tr><td></table>');
+			$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 			$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left});
 
 			if (ns1blankspace.space == ns1blankspace.userSpace)
@@ -1292,7 +1282,7 @@ function interfaceControlSpaceOptionsShow(oElement, oResponse)
 
 				$('#tdInterfaceMasterSpaceOptionsSwitchBack').click(function(event)
 				{
-					$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+					$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 
 					$.ajax(
 					{
@@ -1357,13 +1347,13 @@ function interfaceControlSpaceOptionsShow(oElement, oResponse)
 
 		$('#inputInterfaceMasterSpaceSearch').keyup(function(event)
 		{
-			if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-	        giKeyPressTimeoutId = setTimeout("interfaceControlSpaceOptionsShowSearch('inputInterfaceMasterSpaceSearch')", giWaitForStop);
+			if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+	        ns1blankspace.timer.delayCurrent = setTimeout("interfaceControlSpaceOptionsShowSearch('inputInterfaceMasterSpaceSearch')", ns1blankspace.option.typingWait);
 		});
 
 		$('.interfaceMasterSpaceOptions').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 
 			var aID = (event.target.id).split('-')
 			$.ajax(
@@ -1425,7 +1415,7 @@ function interfaceControlSpaceOptionsShowSearch(sXHTMLElementID, oResponse)
 
 		$('.interfaceMasterSpaceOptions').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 
 			var aID = (event.target.id).split('-')
 			$.ajax(

@@ -14,10 +14,10 @@ function interfaceFinancialMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 
-	giObject = -1;
-	goObjectContext = undefined;
-	gsObjectName = 'Financials';
-	giObjectContext = -1;
+	ns1blankspace.object = -1;
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectName = 'Financials';
+	ns1blankspace.objectContext = -1;
 	
 	interfaceFinancialMasterInitialise();
 	
@@ -38,8 +38,8 @@ function interfaceFinancialMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -94,15 +94,15 @@ function interfaceFinancialMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialHomeShow()};	
 }
 
@@ -128,8 +128,8 @@ function interfaceFinancialMasterInitialise(aParam, oResponse)
 	{
 		if (oResponse == undefined)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
-			interfaceMasterStatus(ns1blankspace.loadingSmallXHTML + ' initalising.')
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+			interfaceMasterStatus(ns1blankspace.xhtml.loadingSmall + ' initalising.')
 
 			if (ns1blankspace.financial.init == undefined || bRefresh)
 			{
@@ -236,7 +236,7 @@ function interfaceFinancialHomeShow()
 	aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 	aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 					'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-					gsLoadingXHTML + 
+					ns1blankspace.xhtml.loading + 
 					'</td>' +
 					'</tr>';
 	aHTML[++h] = '</table>';					
@@ -498,7 +498,7 @@ function interfaceFinancialDebtors(aParam, oResponse)
 			xhtml: aHTML.join(''),
 			showMore: (oResponse.morerows == "true"),
 			more: oResponse.moreid,
-			rows: giReturnRows,
+			rows: ns1blankspace.option.defaultRows,
 			functionShowRow: interfaceFinancialDebtorsRow,
 			functionOpen: undefined,
 			functionNewPage: ''
@@ -594,7 +594,7 @@ function interfaceFinancialCreditors(aParam, oResponse)
 			xhtml: aHTML.join(''),
 			showMore: (oResponse.morerows == "true"),
 			more: oResponse.moreid,
-			rows: giReturnRows,
+			rows: ns1blankspace.option.defaultRows,
 			functionShowRow: interfaceFinancialDebtorsRow,
 			functionOpen: undefined,
 			functionNewPage: ''
@@ -842,7 +842,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 		oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
 		oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
 		oSearch.sort('title', 'asc');
-		oSearch.rows = giReturnRows;
+		oSearch.rows = ns1blankspace.option.defaultRows;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccount(aParam, data)});
 	}
 	else
@@ -853,7 +853,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain">' +
 					'<tr id="trInterfaceMainBankAccountow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainBankAccountColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainBankAccountColumn2" style="width: 150px;" class="interfaceMainColumn2Action">' +
 					'</td>' +
@@ -1090,8 +1090,8 @@ function interfaceFinancialUnallocatedRow(oRow)
 
 function interfaceFinancialTransaction(aParam, oResponse)
 {
-	var iObject = giObject;
-	var iObjectContext = giObjectContext;
+	var iObject = ns1blankspace.object;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainTransaction';
 
 	if (aParam != undefined)
@@ -1106,8 +1106,8 @@ function interfaceFinancialTransaction(aParam, oResponse)
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
 		oSearch.addField('financialaccounttext,amount,date,description');
-		oSearch.addFilter('object', 'EQUAL_TO', giObject);
-		oSearch.addFilter('objectcontext', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.sort('financialaccounttext', 'asc');
 		
 		oSearch.getResults(function(data) {interfaceFinancialTransaction(aParam, data)});
@@ -1225,7 +1225,7 @@ function interfaceFinancialAccounts(aParam, oResponse)
 	{	
 		if (oResponse == undefined)
 		{	
-			$('#tdInterfaceMainBankAccountColumn2').html(ns1blankspace.loadingSmallXHTML);
+			$('#tdInterfaceMainBankAccountColumn2').html(ns1blankspace.xhtml.loadingSmall);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
@@ -1310,7 +1310,7 @@ function interfaceFinancialAccounts(aParam, oResponse)
 	{	
 		if (oResponse == undefined)
 		{	
-			$('#tdInterfaceMainFinancialAccountTransactionsColumn2').html(ns1blankspace.loadingSmallXHTML);
+			$('#tdInterfaceMainFinancialAccountTransactionsColumn2').html(ns1blankspace.xhtml.loadingSmall);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';

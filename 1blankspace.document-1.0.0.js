@@ -7,10 +7,10 @@
  
 function interfaceDocumentMasterViewport(aParam)
 {
-	giObject = 14;
-	gsObjectName = 'Document';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.object = 14;
+	ns1blankspace.objectName = 'Document';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 	
 	var bShowHome = true;
 	var bNew = false;
@@ -39,8 +39,8 @@ function interfaceDocumentMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceDocumentSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceDocumentSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -112,15 +112,15 @@ function interfaceDocumentMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceDocumentSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceDocumentSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceDocumentSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceDocumentSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	$('#divInterfaceViewportControl').html('');	
 		
@@ -137,7 +137,7 @@ function interfaceDocumentHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -157,7 +157,7 @@ function interfaceDocumentHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'DOCUMENT_SEARCH';
@@ -232,7 +232,7 @@ function interfaceDocumentSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -249,16 +249,16 @@ function interfaceDocumentSearch(sXHTMLElementId, aParam)
 		if (aParam.websiteOnly != undefined) {bWebsiteOnly = aParam.websiteOnly}
 	}
 	
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'DOCUMENT_SEARCH';
 		oSearch.addField('title,summary,keywords,url,status,statustext,websitedisplay,website,websitetext,style,internal,content,type,typetext');
-		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.getResults(function(data) {interfaceDocumentShow(aParam, data)});
 	}
 	else
@@ -268,7 +268,7 @@ function interfaceDocumentSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -277,7 +277,7 @@ function interfaceDocumentSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
 			interfaceMasterOptionsSetPosition(sElementId);
@@ -342,12 +342,12 @@ function interfaceDocumentSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceDocumentSearch(event.target.id, 1);
 		});
 	}	
@@ -361,7 +361,7 @@ function interfaceDocumentViewport()
 	var aHTML = [];
 	var h = -1;
 
-	if (gbRichEdit)
+	if (ns1blankspace.option.richTextEditing)
 	{	
 		if (tinyMCE.getInstanceById('inputInterfaceMainEditText'))
 		{
@@ -420,7 +420,7 @@ function interfaceDocumentViewport()
 
 function interfaceDocumentShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceDocumentViewport();
 
 	var aHTML = [];
@@ -428,7 +428,7 @@ function interfaceDocumentShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td class="interfaceMainRowNothing" valign="top">Sorry can\'t find the document.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -437,14 +437,14 @@ function interfaceDocumentShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceDocumentMasterViewport({showHome: false});interfaceDocumentSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceDocumentMasterViewport({showHome: false});interfaceDocumentSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 			
@@ -457,7 +457,7 @@ function interfaceDocumentSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top" class="interfaceMainRowNothing">Sorry can\'t find document.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -480,7 +480,7 @@ function interfaceDocumentSummary()
 		var aHTML = [];
 		var h = -1;
 	
-		if (goObjectContext.summary == '')
+		if (ns1blankspace.objectContextData.summary == '')
 		{
 			aHTML[++h] = '<table><tbody><tr><td valign="top" class="interfaceMainRowNothing">There is no document summary.</td></tr>';
 			aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -491,7 +491,7 @@ function interfaceDocumentSummary()
 		
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySummary" class="interfaceMainSummary">&nbsp;</td></tr>' +
 							'<tr><td id="tdInterfaceMainSummarySummaryValue" class="interfaceMainSummaryValue">' +
-							goObjectContext.summary +
+							ns1blankspace.objectContextData.summary +
 							'</td></tr>';
 							
 			aHTML[++h] = '</table>';					
@@ -595,12 +595,12 @@ function interfaceDocumentDetails()
 			
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
-			$('#inputInterfaceMainDetailsURL').val(goObjectContext.url);
-			$('#inputInterfaceMainDetailsSummary').val(goObjectContext.summary);
-			$('[name="radioPublic"][value="' + goObjectContext.public + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('#inputInterfaceMainDetailsURL').val(ns1blankspace.objectContextData.url);
+			$('#inputInterfaceMainDetailsSummary').val(ns1blankspace.objectContextData.summary);
+			$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
 		}
 		
 	}	
@@ -649,9 +649,9 @@ function interfaceDocumentEdit(sReturn)
 		
 		if (sReturn == undefined)
 		{
-			if (giObjectContext != -1)
+			if (ns1blankspace.objectContext != -1)
 			{
-				sParam = 'method=DOCUMENT_CONTENT_SEARCH&id=' + giObjectContext;
+				sParam = 'method=DOCUMENT_CONTENT_SEARCH&id=' + ns1blankspace.objectContext;
 
 				$.ajax(
 				{
@@ -717,11 +717,11 @@ function interfaceDocumentEdit(sReturn)
 				convert_urls : false, 
 				visual : true, 
 				gecko_spellcheck : true,
-				content_css : gsEditorCSS,
+				content_css : ns1blankspace.xhtml.editorCSS,
 				
 				external_link_list_url : "/jscripts/ibcom/linkList.asp", 
-				external_image_list_url : "/jscripts/ibcom/imageList.asp?LinkType=14&LinkId=" + giObjectContext, 
-				media_external_list_url : "/jscripts/ibcom/mediaList.asp?LinkType=14&LinkId=" + giObjectContext,  TemplateLinkType : "0", 
+				external_image_list_url : "/jscripts/ibcom/imageList.asp?LinkType=14&LinkId=" + ns1blankspace.objectContext, 
+				media_external_list_url : "/jscripts/ibcom/mediaList.asp?LinkType=14&LinkId=" + ns1blankspace.objectContext,  TemplateLinkType : "0", 
 
 			});				
 			
@@ -747,10 +747,10 @@ function interfaceDocumentNew(oXML)
 	}	
 	else	
 	{
-		giObjectContext = -1;
-		goObjectContextXML = oXML;
+		ns1blankspace.objectContext = -1;
+		ns1blankspace.objectContextDataXML = oXML;
 		interfaceDocumentViewport();
-		$('#divInterfaceMainDetails').html(gsLoadingXHTML);
+		$('#divInterfaceMainDetails').html(ns1blankspace.xhtml.loading);
 		$('#divInterfaceMainDetails').attr('onDemandLoading', '1');
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
@@ -762,9 +762,9 @@ function interfaceDocumentSave()
 {
 	var sData = '_=1';
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
-		sParam += '&select=' + giObjectContext	
+		sParam += '&select=' + ns1blankspace.objectContext	
 	}	
 		
 	if ($('#divInterfaceMainDetails').html() != '')
@@ -793,14 +793,14 @@ function interfaceDocumentSave()
 
 function interfaceDocumentSaveProcess(sReturn)
 {
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 
 		var aReturn = sReturn.split('|');
 		var sParam = 'method=DOCUMENT_FOLDER_LINK_MANAGE';
 		var sData = 'foldertitle=' + encodeURIComponent('[My Website Documents]');
 
-		giObjectContext = aReturn[3];
+		ns1blankspace.objectContext = aReturn[3];
 		sData += '&select=' + aReturn[3];	
 				
 		$.ajax(
@@ -822,7 +822,7 @@ function interfaceDocumentSaveProcess(sReturn)
 
 function interfaceDocumentPDF(aParam, sReturn)
 {
-	var sFilename = 'document_' + giObjectContext + '.pdf'
+	var sFilename = 'document_' + ns1blankspace.objectContext + '.pdf'
 	var sXHTMLElementID = '';
 	var sXHTMLContent;
 	
@@ -855,8 +855,8 @@ function interfaceDocumentPDF(aParam, sReturn)
 		if (sReturn == undefined)
 		{
 			var sParam = 'method=CORE_PDF_CREATE&rf=TEXT';
-			var sData = 'object=' + giObject
-			sData += '&objectcontext=' + giObjectContext;
+			var sData = 'object=' + ns1blankspace.object
+			sData += '&objectcontext=' + ns1blankspace.objectContext;
 			sData += '&filename=' + encodeURIComponent(sFilename);
 			sData += '&xhtmlcontent=' + encodeURIComponent(sXHTMLContent);
 			

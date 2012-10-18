@@ -14,10 +14,10 @@ function interfaceSetupProjectTaskMasterViewport(aParam)
 		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
 	}
 	
-	giObject = 11;	
-	gsObjectName = 'Project Task Template';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.object = 11;	
+	ns1blankspace.objectName = 'Project Task Template';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 			
 	interfaceMasterReset();
 	
@@ -83,15 +83,15 @@ function interfaceSetupProjectTaskMasterViewport(aParam)
 	
 	$('.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupProjectTaskSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupProjectTaskSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupProjectTaskSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupProjectTaskSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	if (bShowHome) {interfaceSetupProjectTaskHomeShow()};
 
@@ -135,7 +135,7 @@ function interfaceSetupProjectTaskMasterViewport(aParam)
 		visual : true, 
 		gecko_spellcheck : true,
 		
-		content_css : gsEditorCSS,
+		content_css : ns1blankspace.xhtml.editorCSS,
 		
 		external_link_list_url : "/jscripts/ibcom/linkList.asp", 
 		
@@ -164,7 +164,7 @@ function interfaceSetupProjectTaskHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -184,7 +184,7 @@ function interfaceSetupProjectTaskHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PROJECT_TASK_SEARCH';
@@ -245,7 +245,7 @@ function interfaceSetupProjectTaskSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -261,13 +261,13 @@ function interfaceSetupProjectTaskSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
-		var sParam = 'method=PROJECT_TASK_SEARCH&id=' + giObjectContext;
+		ns1blankspace.objectContext = sSearchContext;
+		var sParam = 'method=PROJECT_TASK_SEARCH&id=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -284,7 +284,7 @@ function interfaceSetupProjectTaskSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			sSearchText = aSearch[1];
@@ -292,7 +292,7 @@ function interfaceSetupProjectTaskSearch(sXHTMLElementId, aParam)
 			sQuickSearchType = 'start';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			
@@ -345,12 +345,12 @@ function interfaceSetupProjectTaskSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupProjectTaskSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -447,7 +447,7 @@ function interfaceSetupProjectTaskViewport()
 		{
 			bindAdd: false,
 			xhtmlElementId: 'divInterfaceMainActions',
-			object: giObjectContext
+			object: ns1blankspace.objectContext
 		});
 		
 		$('#spanInterfaceMainActionsAdd').button(
@@ -467,7 +467,7 @@ function interfaceSetupProjectTaskViewport()
 		{
 			xhtmlElementID: "divInterfaceMainAttachments", 
 			object: "11",
-			objectContext: giObjectContext
+			objectContext: ns1blankspace.objectContext
 		});
 	});
 	
@@ -480,14 +480,14 @@ function interfaceSetupProjectTaskViewport()
 
 function interfaceSetupProjectTaskShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	
 	var aHTML = [];
 	var h = -1;
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find template task.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -496,7 +496,7 @@ function interfaceSetupProjectTaskShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 			
 		interfaceSetupProjectTaskViewport();
 						
@@ -513,7 +513,7 @@ function interfaceSetupProjectTaskSummary()
 
 	var aHTML = [];
 	var h = -1;
-	var oXML = goObjectContextXML;
+	var oXML = ns1blankspace.objectContextDataXML;
 	
 	aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 	aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
@@ -529,7 +529,7 @@ function interfaceSetupProjectTaskSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find SetupProjectTask.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -540,7 +540,7 @@ function interfaceSetupProjectTaskSummary()
 	{
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
-		var sDescription = goObjectContext.description;
+		var sDescription = ns1blankspace.objectContextData.description;
 		
 		sDescription = sDescription.replace(/(\r\n|\r|\n)/g, "<br />");
 		
@@ -569,7 +569,7 @@ function interfaceSetupProjectTaskSummary()
 		$('#aInterfaceMainSummaryViewProject').click(function(event)
 		{
 			interfaceSetupProjectMasterViewport();
-			interfaceSetupProjectSearch('-' + goObjectContext.project)
+			interfaceSetupProjectSearch('-' + ns1blankspace.objectContextData.project)
 		});
 	}	
 }
@@ -691,21 +691,21 @@ function interfaceSetupProjectTaskDetails()
 			
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainProjectTaskDetailsTitle').val(goObjectContext.title);
-			$('#inputInterfaceMainProjectTaskDetailsType').attr('onDemandID', goObjectContext.type);
-			$('#inputInterfaceMainProjectTaskDetailsType').val(goObjectContext.typetext);
-			$('#inputInterfaceMainProjectTaskDetailsTaskBy').attr('onDemandID', goObjectContext.taskbyuser);
-			$('#inputInterfaceMainProjectTaskDetailsTaskBy').val(goObjectContext.taskbyusertext);
-			$('#inputInterfaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID', goObjectContext.templatedependsontask);
-			$('#inputInterfaceMainProjectTaskDetailsTaskDependsOn').val(goObjectContext.templatedependsontasktext);
+			$('#inputInterfaceMainProjectTaskDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('#inputInterfaceMainProjectTaskDetailsType').attr('onDemandID', ns1blankspace.objectContextData.type);
+			$('#inputInterfaceMainProjectTaskDetailsType').val(ns1blankspace.objectContextData.typetext);
+			$('#inputInterfaceMainProjectTaskDetailsTaskBy').attr('onDemandID', ns1blankspace.objectContextData.taskbyuser);
+			$('#inputInterfaceMainProjectTaskDetailsTaskBy').val(ns1blankspace.objectContextData.taskbyusertext);
+			$('#inputInterfaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID', ns1blankspace.objectContextData.templatedependsontask);
+			$('#inputInterfaceMainProjectTaskDetailsTaskDependsOn').val(ns1blankspace.objectContextData.templatedependsontasktext);
 			
-			$('[name="radioStartBasedOn"][value="' + goObjectContext.templateelapsedstartdatetype + '"]').attr('checked', true);
+			$('[name="radioStartBasedOn"][value="' + ns1blankspace.objectContextData.templateelapsedstartdatetype + '"]').attr('checked', true);
 		
-			$('#inputInterfaceMainProjectTaskDetailsStartDays').val(goObjectContext.templateelapsedstartdatedurationdays);
-			$('#inputInterfaceMainProjectTaskDetailsDurationDays').val(goObjectContext.templateelapseddurationdays);
-			$('#inputInterfaceMainProjectTaskDetailsDisplayOrder').val(goObjectContext.displayorder);
+			$('#inputInterfaceMainProjectTaskDetailsStartDays').val(ns1blankspace.objectContextData.templateelapsedstartdatedurationdays);
+			$('#inputInterfaceMainProjectTaskDetailsDurationDays').val(ns1blankspace.objectContextData.templateelapseddurationdays);
+			$('#inputInterfaceMainProjectTaskDetailsDisplayOrder').val(ns1blankspace.objectContextData.displayorder);
 		}
 	}	
 }
@@ -745,9 +745,9 @@ function interfaceSetupProjectTaskDescription()
 		
 		$('#tdInterfaceMainDescriptionColumn1').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDescription').val(unescape(goObjectContext.description));
+			$('#inputInterfaceMainDescription').val(unescape(ns1blankspace.objectContextData.description));
 		}
 	
 		//tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainDescription');
@@ -759,7 +759,7 @@ function interfaceSetupProjectTaskSave()
 {
 
 	var sParam = '/ondemand/project/?method=PROJECT_TASK_MANAGE'
-	var sData = (giObjectContext == -1)?'':'&id=' + giObjectContext;
+	var sData = (ns1blankspace.objectContext == -1)?'':'&id=' + ns1blankspace.objectContext;
 		
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
@@ -874,12 +874,12 @@ function interfaceSetupProjectTaskActionDetails(aParam, oResponse)
 							'<input id="inputInterfaceMainProjectTaskDetailsSubject" class="inputInterfaceMainText">' +
 							'</td></tr>';		
 							
-		giEditorCounter = + giEditorCounter + 1;
+		ns1blankspace.counter.editor = + ns1blankspace.counter.editor + 1;
 	
 		aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsDescriptionValue" class="interfaceMainTextMulti">' +
 							'<td id="tdInterfaceMainProjectTaskDetailsDescriptionValue" class="interfaceMainTextMulti">' +
 							'<textarea rows="10" cols="50" style="width:100%;" ' +
-							'id="inputInterfaceMainProjectTaskDetailsDescription' + giEditorCounter + '" class="inputInterfaceMainTextMulti"></textarea>' +
+							'id="inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor + '" class="inputInterfaceMainTextMulti"></textarea>' +
 							'</td></tr>';
 	
 		aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsType" class="interfaceMain">' +
@@ -912,7 +912,7 @@ function interfaceSetupProjectTaskActionDetails(aParam, oResponse)
 			{
 				$('#inputInterfaceMainProjectTaskDetailsSubject').val(oResponse.data.rows[0].subject);
 				
-				$('#inputInterfaceMainProjectTaskDetailsDescription' + giEditorCounter).val(interfaceMasterFormatXHTML(oResponse.data.rows[0].description));	
+				$('#inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).val(interfaceMasterFormatXHTML(oResponse.data.rows[0].description));	
 				
 				$('#inputInterfaceMainProjectTaskActionDetailsType').attr('onDemandID', oResponse.data.rows[0].type);
 				$('#inputInterfaceMainProjectTaskActionDetailsType').val(oResponse.data.rows[0].typetext);
@@ -921,7 +921,7 @@ function interfaceSetupProjectTaskActionDetails(aParam, oResponse)
 			}
 		}	
 		
-		tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainProjectTaskDetailsDescription' + giEditorCounter);
+		tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor);
 	}	
 }	
 
@@ -933,7 +933,7 @@ function interfaceSetupProjectTaskActionRemove(sXHTMLElementId)
 	var sSearchContext = aSearch[1];
 	
 	//var sParam = 'method=ACTION_MANAGE&remove=1';
-	var sParam = 'method=ACTION_MANAGE&object=' + (-1 * giObjectProjectTask);
+	var sParam = 'method=ACTION_MANAGE&object=' + (-1 * ns1blankspace.objectProjectTask);
 	var sData = 'id=' + sSearchContext;
 				
 	$.ajax(
@@ -975,12 +975,12 @@ function interfaceSetupProjectTaskActionDetailsSave(aParam)
 	}
 	else
 	{
-		sData += 'object=' + giObjectProjectTask;
-		sData += '&objectcontext=' + giObjectContext;
+		sData += 'object=' + ns1blankspace.objectProjectTask;
+		sData += '&objectcontext=' + ns1blankspace.objectContext;
 	}
 	
 	sData += '&subject=' + interfaceMasterFormatValue($('#inputInterfaceMainProjectTaskDetailsSubject').val());
-	sData += '&description=' + interfaceMasterFormatValue(tinyMCE.get('inputInterfaceMainProjectTaskDetailsDescription' + giEditorCounter).getContent());
+	sData += '&description=' + interfaceMasterFormatValue(tinyMCE.get('inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).getContent());
 	sData += '&type=' + interfaceMasterFormatValue($('#inputInterfaceMainProjectTaskActionDetailsType').attr('onDemandID'));
 	sData += '&actionby=' + interfaceMasterFormatValue($('#inputInterfaceMainProjectTaskActionDetailsTaskBy').attr('onDemandID'));
 		  
@@ -1009,8 +1009,8 @@ function interfaceSetupProjectTaskActions(aParam)
 {
 
 	var sXHTMLElementID = 'divInterfaceMainActions';
-	var iObject = giObject;
-	var iObjectContext = giObjectContext;
+	var iObject = ns1blankspace.object;
+	var iObjectContext = ns1blankspace.objectContext;
 	var bShowAdd = gbShowAdd;
 	var iActionType = '';
 	var oActions = {add: true};
@@ -1037,7 +1037,7 @@ function interfaceSetupProjectTaskActions(aParam)
 		aHTML[++h] = '<table id="tableInterfaceMainActions" class="interfaceMain">' +
 					'<tr id="trInterfaceMainActionsRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainActionsColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainActionsColumn2" class="interfaceMainColumn2Action">' +
 					'</td>' +
@@ -1107,7 +1107,7 @@ function interfaceSetupProjectTaskActionsShow(oResponse, sXHTMLElementID)
 		aHTML[++h] = '</tr>';
 		
 		$('#' + sXHTMLElementID).html(aHTML.join(''));
-		$('#' + sXHTMLElementID).show(giShowSpeed);
+		$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 	}
 	else
 	{
@@ -1142,7 +1142,7 @@ function interfaceSetupProjectTaskActionsShow(oResponse, sXHTMLElementID)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#' + sXHTMLElementID).html(aHTML.join(''));
-		$('#' + sXHTMLElementID).show(giShowSpeed);
+		$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 		
 		$('.interfaceMainRowOptionsDelete').button({
 				text: false,

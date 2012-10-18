@@ -7,10 +7,10 @@
  
 function interfaceEventMasterViewport(aParam)
 {
-	giObject = 39;
-	gsObjectName = 'Event';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.object = 39;
+	ns1blankspace.objectName = 'Event';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 			
 	var bShowHome = true;
 	var bNew = false;
@@ -39,8 +39,8 @@ function interfaceEventMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceEventSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceEventSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -113,15 +113,15 @@ function interfaceEventMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceEventSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceEventSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceEventSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceEventSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	$('#divInterfaceViewportControl').html('');	
 		
@@ -166,7 +166,7 @@ function interfaceEventMasterViewport(aParam)
 		visual : true, 
 		gecko_spellcheck : true,
 		TemplateLinkType : "32",
-		content_css : gsEditorCSS
+		content_css : ns1blankspace.xhtml.editorCSS
 	});				
 	
 	if (bShowHome) {interfaceEventHomeShow()};	
@@ -182,7 +182,7 @@ function interfaceEventHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -202,7 +202,7 @@ function interfaceEventHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'EVENT_SEARCH';
@@ -267,7 +267,7 @@ function interfaceEventSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -282,18 +282,18 @@ function interfaceEventSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'EVENT_SEARCH';
 		
 		oSearch.addField('reference,description,startdate,enddate,status,public');
 		oSearch.rf = 'json';
-		oSearch.addFilter('id', 'EQUAL_TO', giObjectContext);
+		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 		
 		oSearch.getResults(function(data) {interfaceEventShow(aParam, data)});	
 	
@@ -306,7 +306,7 @@ function interfaceEventSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -315,7 +315,7 @@ function interfaceEventSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
 			interfaceMasterOptionsSetPosition(sElementId);
@@ -377,14 +377,14 @@ function interfaceEventSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceEventSearch(event.target.id, 1);
 		});
 	}		
@@ -422,7 +422,7 @@ function interfaceEventViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControlAttendees" class="interfaceViewportControl">' +
 					'<td id="tdInterfaceViewportControlAttendees" class="interfaceViewportControl">Attendees</td>' +
@@ -478,7 +478,7 @@ function interfaceEventViewport()
 
 function interfaceEventShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceEventViewport();
 
 	var aHTML = [];
@@ -486,7 +486,7 @@ function interfaceEventShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find event.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -495,14 +495,14 @@ function interfaceEventShow(aParam, oResponse)
 	}
 	else
 	{		
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 	
-		$('#divInterfaceViewportControlContext').html(goObjectContext.reference);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceEventMasterViewport({showHome: false});interfaceEventSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceEventMasterViewport({showHome: false});interfaceEventSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 	
@@ -529,7 +529,7 @@ function interfaceEventSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find event.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -540,7 +540,7 @@ function interfaceEventSummary()
 	{
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 		
-		var sTmp = goObjectContext.startdate;
+		var sTmp = ns1blankspace.objectContextData.startdate;
 		
 		if (sTmp != '&nbsp;') 
 		{
@@ -552,7 +552,7 @@ function interfaceEventSummary()
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySummary" class="interfaceMainSummary">&nbsp;</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummarySummaryValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.description +
+						ns1blankspace.objectContextData.description +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
@@ -673,24 +673,24 @@ function interfaceEventDetails()
 
 		$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy' });
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsReference').val(goObjectContext.reference);
+			$('#inputInterfaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
 			
-			var sTmp = goObjectContext.startdate;
+			var sTmp = ns1blankspace.objectContextData.startdate;
 			if (sTmp == '&nbsp;') {sTmp = ''};
 			$('#inputInterfaceMainDetailsStartDate').val(sTmp);
 			
-			var sTmp = goObjectContext.enddate;
+			var sTmp = ns1blankspace.objectContextData.enddate;
 			if (sTmp == '&nbsp;') {sTmp = ''};
 			$('#inputInterfaceMainDetailsEndDate').val(sTmp);
 			
-			$('#inputInterfaceMainDetailsFromEmail').val(goObjectContext.fromemail);
+			$('#inputInterfaceMainDetailsFromEmail').val(ns1blankspace.objectContextData.fromemail);
 			
-			$('#inputInterfaceMainDetailsSummary').val(goObjectContext.summary);
+			$('#inputInterfaceMainDetailsSummary').val(ns1blankspace.objectContextData.summary);
 			
-			$('[name="radioStatus"][value="' + goObjectContext.status + '"]').attr('checked', true);
-			$('[name="radioPublic"][value="' + goObjectContext.public + '"]').attr('checked', true);
+			$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
+			$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
 		}
 	}	
 }
@@ -729,9 +729,9 @@ function interfaceEventDescription()
 		
 		$('#tdInterfaceMainDescriptionColumn1').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDescriptionText').val(unescape(goObjectContext.description));
+			$('#inputInterfaceMainDescriptionText').val(unescape(ns1blankspace.objectContextData.description));
 		}
 	
 		tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainDescriptionText');
@@ -864,7 +864,7 @@ function interfaceEventAttendeesSearch(aParam, oResponse)
 	{
 		if (oResponse == undefined)
 		{	
-			$('#tdInterfaceMainAttendeesColumn2').html(gsLoadingXHTML);
+			$('#tdInterfaceMainAttendeesColumn2').html(ns1blankspace.xhtml.loading);
 			
 			var aId = sXHTMLElementId.split('-');
 			var sParam = 'method=EVENT_ATTENDEE_SEARCH' +
@@ -911,7 +911,7 @@ function interfaceEventAttendeesSearch(aParam, oResponse)
 					xhtml: aHTML.join(''),
 					showMore: (oResponse.morerows == "true"),
 					more: oResponse.moreid,
-					rows: giReturnRows,
+					rows: ns1blankspace.option.defaultRows,
 					functionShowRow: interfaceEventAttendeesSearchRow,
 					functionNewPage: 'interfaceEventAttendeesSearchBind()',
 					type: 'json'
@@ -935,8 +935,8 @@ function interfaceEventAttendeesSearch(aParam, oResponse)
 
 function interfaceEventNew()
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceEventViewport();
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
@@ -950,10 +950,10 @@ function interfaceEventSave()
 	var sParam;
 	var sData = '_=1';
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
 		sParam = 'method=EVENT_UPDATE';
-		sParam += '&select=' + giObjectContext	
+		sParam += '&select=' + ns1blankspace.objectContext	
 	}
 	else
 	{
@@ -984,7 +984,7 @@ function interfaceEventSave()
 		success: function(data) 
 					{ 
 						var aReturn = data.split('|');
-						giObjectContext = aReturn[2];
+						ns1blankspace.objectContext = aReturn[2];
 						interfaceMasterStatus('Event saved.');
 					}
 	});

@@ -8,10 +8,10 @@
 function interfaceStructureDataMasterViewport(aParam)
 {
 
-	gsObjectName = 'Stucture Data';
-	giObjectContext = -1;
-	giObject = 41;
-	goObjectContext = undefined;
+	ns1blankspace.objectName = 'Stucture Data';
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = 41;
+	ns1blankspace.objectContextData = undefined;
 	
 	var bShowHome = true;
 	var bNew = false;
@@ -40,8 +40,8 @@ function interfaceStructureDataMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceStructureDataSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceStructureDataSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -114,12 +114,12 @@ function interfaceStructureDataMasterViewport(aParam)
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceStructureDataSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceStructureDataSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceStructureDataSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceStructureDataSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('#inputInterfaceMasterViewportControlSearch').focus();
@@ -177,7 +177,7 @@ function interfaceStructureDataHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'STRUCTURE_DATA_SEARCH';
@@ -235,7 +235,7 @@ function interfaceStructureDataSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -250,13 +250,13 @@ function interfaceStructureDataSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
 		giSetupContext = sSearchContext;
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		var sParam = 'method=DECISION_DATA_SEARCH&id=' + giSetupContext;
 		
 		$.ajax(
@@ -275,7 +275,7 @@ function interfaceStructureDataSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -284,7 +284,7 @@ function interfaceStructureDataSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
 			interfaceMasterOptionsSetPosition(sElementId);
@@ -345,13 +345,13 @@ function interfaceStructureDataSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceStructureDataSearch(event.target.id, 1);
 		});
 	}	
@@ -368,7 +368,7 @@ function interfaceStructureDataViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControlDetails" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -426,7 +426,7 @@ function interfaceStructureDataViewport()
 function interfaceStructureDataShow(aParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceStructureDataViewport();
 	
 	var aHTML = [];
@@ -434,7 +434,7 @@ function interfaceStructureDataShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this stuctural data.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -443,7 +443,7 @@ function interfaceStructureDataShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 					
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
@@ -457,13 +457,13 @@ function interfaceStructureDataShow(aParam, oResponse)
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceStructureDataMasterViewport({showHome: false});interfaceStructureDataSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceStructureDataMasterViewport({showHome: false});interfaceStructureDataSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
 		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceStructureDataSummary()'})
 
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});	
 	}	
@@ -474,7 +474,7 @@ function interfaceStructureDataSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find website.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -487,22 +487,22 @@ function interfaceStructureDataSummary()
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStructureDataDate" class="interfaceMainSummary">Date</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryStructureDataDate" class="interfaceMainSummaryValue">' +
-						goObjectContext.modifieddate +
+						ns1blankspace.objectContextData.modifieddate +
 						'</td></tr>';
 		
-		if (goObjectContext.contactbusinesstext != '')
+		if (ns1blankspace.objectContextData.contactbusinesstext != '')
 		{			
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStructureDataBusiness" class="interfaceMainSummary">Business</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryStructureDataBusiness" class="interfaceMainSummaryValue">' +
-						goObjectContext.contactbusinesstext +
+						ns1blankspace.objectContextData.contactbusinesstext +
 						'</td></tr>';			
 		};
 		
-		if (goObjectContext.contactpersontext != '')
+		if (ns1blankspace.objectContextData.contactpersontext != '')
 		{			
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStructureDataPerson" class="interfaceMainSummary">Person</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryStructureDataPerson" class="interfaceMainSummaryValue">' +
-						goObjectContext.contactpersontext +
+						ns1blankspace.objectContextData.contactpersontext +
 						'</td></tr>';			
 		};
 			
@@ -599,10 +599,10 @@ function interfaceStructureDataDetails()
 		
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
-			$('[name="radioStatus"][value="' + goObjectContext.status + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -618,9 +618,9 @@ function interfaceStructureDataSave(aParam, oResponse)
 		var sParam = 'method=DECISION_DATA_MANAGE';
 		var sData = '_=1';
 		
-		if (giObjectContext != -1)
+		if (ns1blankspace.objectContext != -1)
 		{
-			sParam += '&id=' + giObjectContext	
+			sParam += '&id=' + ns1blankspace.objectContext	
 		}	
 		
 		if ($('#divInterfaceMainDetails').html() != '')
@@ -645,11 +645,11 @@ function interfaceStructureDataSave(aParam, oResponse)
 		{	
 			interfaceMasterStatus('Saved');
 			
-			if (giObjectContext == -1)
+			if (ns1blankspace.objectContext == -1)
 			{
-				giObjectContext = oResponse.id;
-				gbInputDetected = false;
-				interfaceStructureDataSearch('-' + giObjectContext, {source: 1});
+				ns1blankspace.objectContext = oResponse.id;
+				ns1blankspace.inputDetected = false;
+				interfaceStructureDataSearch('-' + ns1blankspace.objectContext, {source: 1});
 			}	
 		}
 		else
@@ -669,7 +669,7 @@ function interfaceStructureDataElements(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + goObjectContext.structure,
+			url: '/ondemand/setup/?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + ns1blankspace.objectContextData.structure,
 			dataType: 'json',
 			success: function(data) {interfaceStructureDataElements(aParam, data)}
 		});
@@ -743,7 +743,7 @@ function interfaceStructureDataElements(aParam, oResponse)
 
 function interfaceStructureDataCategoryElements(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'tdInterfaceMainElementColumnElement';
 	var oOptions = {edit: true, remove: true};
 	var oActions = {add: true};
@@ -764,7 +764,7 @@ function interfaceStructureDataCategoryElements(aParam, oResponse)
 		{
 			type: 'GET',
 			url: '/ondemand/structure/structure.asp?method=STRUCTURE_ELEMENT_DATA_VALUE_SEARCH' +
-						'&data=' + giObjectContext + '&category=' + iCategory,
+						'&data=' + ns1blankspace.objectContext + '&category=' + iCategory,
 			dataType: 'json',
 			success: function(data) {interfaceStructureDataCategoryElements(aParam, data)}
 		});
@@ -940,7 +940,7 @@ function interfaceMasterStructureDataCategoryElementEdit(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			var sData = 'StructureData=' + giObjectContext;
+			var sData = 'StructureData=' + ns1blankspace.objectContext;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainStructureDataCategoryAddTitle').val());
 			
@@ -1031,8 +1031,8 @@ function interfaceMasterStructureDataCategoryElementRemove(aParam, oResponse)
 
 function interfaceStructureDataNew(aParam)
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceStructureDataViewport();
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");

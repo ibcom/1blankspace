@@ -1,7 +1,31 @@
-Number.prototype.formatMoney = function(c, d, t){
-var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
-   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
- };
+/*!
+ * Copyright 2010, ibCom Pty Ltd ATF ibCom Unit Trust & contributors
+ * Licensed under the MIT license.
+ * http://1blankspace.com/license
+ * 01 FEB 2010
+ */
+
+//???
+//var ns1blankspace.objectContextDataXML;
+//var ns1blankspace.objectContextDataJSON;
+//var ns1blankspace.objectSaveId = -1;
+//var gsHomeViewportXHTML = '';
+//var gaReturn = [];
+
+Function.prototype.method = function(name, func)
+{
+	if (!this.prototype[name])
+	{
+		this.prototype[name] = func;
+		return this;
+	}
+};
+
+Number.prototype.formatMoney = function(c, d, t)
+{
+	var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
+   	return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
  
 String.prototype.formatXHTML = function(bDirection)
 {
@@ -38,14 +62,14 @@ String.prototype.formatXHTML = function(bDirection)
 
 	if (bDirection)
 	{
-		sValue= sValue.replace(/\&/g,'&amp;');
-		sValue= sValue.replace(/</g,'&lt;');
-		sValue= sValue.replace(/>/g,'&gt;');
-		//sValue = sValue.replace(/-/g, '&#45;')
-		//sValue = sValue.replace(/@/g, '&#64;')
-		//sValue = sValue.replace(/\//g, '&#47;')
-		//sValue = sValue.replace(/"/g, '&quot;')
-		//sValue = sValue.replace(/\\/g, '&#39;')
+		sValue = sValue.replace(/\&/g,'&amp;');
+		sValue = sValue.replace(/</g,'&lt;');
+		sValue = sValue.replace(/>/g,'&gt;');
+		sValue = sValue.replace(/-/g, '&#45;')
+		sValue = sValue.replace(/@/g, '&#64;')
+		sValue = sValue.replace(/\//g, '&#47;')
+		sValue = sValue.replace(/"/g, '&quot;')
+		sValue = sValue.replace(/\\/g, '&#39;')
 	}
 	else
 	{
@@ -67,76 +91,70 @@ String.prototype.formatXHTML = function(bDirection)
 	return sValue;
 };
 
+String.method('trim', function () {return this.replace(/^\s+|\s+$/g, '');});
+
 var ns1blankspace = {};
+ns1blankspace.option = {};
+ns1blankspace.timer = {};
+ns1blankspace.counter = {};
+ns1blankspace.xhtml = {};
+ns1blankspace.user = {};
+ns1blankspace.data = {};
+ns1blankspace.debug = {};
+ns1blankspace.history = {};
 
-var ns1blankspace.version = 2;
+ns1blankspace.version = 2;
 
-var ns1blankspace.option.showSpeed = 0;
-var ns1blankspace.option.showSpeedOptions = 0;
-var ns1blankspace.option.hideSpeed = 0;
-var ns1blankspace.option.hideSpeedOptions = 0;
-var ns1blankspace.option.typingWait = 400;
-var ns1blankspace.timer.messaging = 0;
+ns1blankspace.option.showSpeed = 0;
+ns1blankspace.option.showSpeedOptions = 0;
+ns1blankspace.option.hideSpeed = 0;
+ns1blankspace.option.hideSpeedOptions = 0;
+ns1blankspace.option.typingWait = 400;
+ns1blankspace.option.logonStayOnDocument = true;
+ns1blankspace.option.setFocus = true;
+ns1blankspace.option.richTextEditing = true;
+ns1blankspace.option.setupURI = '/ondemand/setup/';
 
-var ns1blankspace.option.logonStayOnDocument = true;
-var ns1blankspace.setupViewport = false;
-var ns1blankspace.option.setFocus = true;
-var ns1blankspace.option.richTextEditing = true;
-var ns1blankspace.timer.delayCurrent = 0;
-var ns1blankspace.inputDetected = false;
-var ns1blankspace.unloadWarning = false;
-var ns1blankspace.systemAdmin = false;
+ns1blankspace.timer.messaging = 0;
+ns1blankspace.timer.delay;
 
-var gsSetupMethod = '';
-var gsSetupName = '';
-var giSetupContext = -1;
-var goSetupContextXML;
-var goSetupContext;
-var ns1blankspace.timer.delay;
+ns1blankspace.setupViewport = false;
+ns1blankspace.inputDetected = false;
+ns1blankspace.unloadWarning = false;
+ns1blankspace.systemAdmin = false;
 
-var ns1blankspace.object = -1;
-var ns1blankspace.objectName = '';
-var ns1blankspace.objectContext = -1;
-var ns1blankspace.objectContextDataXML;
-var ns1blankspace.objectContextDataJSON;
-var ns1blankspace.objectContextData;
-var ns1blankspace.objectContextSearch = '';
-var ns1blankspace.objectSaveId = -1;
-var ns1blankspace.okToSave = true;
-var ns1blankspace.objectContextData;
-var ns1blankspace.counter.editor = 0;
+ns1blankspace.object = -1;
+ns1blankspace.objectName = '';
+ns1blankspace.objectContext = -1;
+ns1blankspace.objectContextData;
+ns1blankspace.objectContextSearch = '';
 
-var ns1blankspace.xhtml.masterControl = '';
-var ns1blankspace.xhtml.home = '';
-var gsHomeViewportXHTML = '';
-var ns1blankspace.user.commonname = '';
-var ns1blankspace.user.email = '';
-var ns1blankspace.user.networkGroups = '';
-var ns1blankspace.xhtml.action = '';
+ns1blankspace.okToSave = true;
 
-var gaReturn = [];
+ns1blankspace.counter.editor = 0;
 
-var ns1blankspace.user.id = -1;
-var ns1blankspace.user.contactperson = -1;
+ns1blankspace.xhtml.masterControl = '';
+ns1blankspace.xhtml.action = '';
+ns1blankspace.xhtml.home = '';
+ns1blankspace.xhtml.divID = '';
 
-var ns1blankspace.setupShow = false;
-var giHelpOption = -1;
+ns1blankspace.user.commonname = '';
+ns1blankspace.user.email = '';
+ns1blankspace.user.networkGroups = '';
+ns1blankspace.user.id = -1;
+ns1blankspace.user.contactperson = -1;
+ns1blankspace.setupShow = false;
 	
-var ns1blankspace.data.searchSource.text = 1;
-var ns1blankspace.data.searchSource.browse = 2;
-var ns1blankspace.data.searchSource.select = 3;
-var ns1blankspace.data.searchSource.all = 4;
+ns1blankspace.data.searchSource = {text: 1, browse: 2, select: 3, all: 4}
 
-var ns1blankspace.debug.appContext = 'start';
+ns1blankspace.debug.appContext = 'start';
 
-var ns1blankspace.xhtml.divID = '';
-var ns1blankspace.option.setupURI = '/ondemand/setup/';
-var ns1blankspace.param;
+ns1blankspace.param;
 
-var ns1blankspace.history.viewport = ['interfaceMasterHomeShow()']
-var ns1blankspace.history.currentIndex = 0
-var ns1blankspace.history.lastDestinationInstruction = '';
-var ns1blankspace.history.list = [];
+ns1blankspace.history.viewport = ['interfaceMasterHomeShow()']
+ns1blankspace.history.currentIndex = 0
+ns1blankspace.history.lastDestinationInstruction = '';
+ns1blankspace.history.list = [];
 
 window.onbeforeunload = function() 
 {
@@ -581,9 +599,10 @@ function interfaceMasterViewportDestination(aParam)
 					dataType: 'text',
 					async: false,
 					success: function(data) {
+						data = data.replace('OK|RETURNED|', '')
 						if (data == '')
 						{
-							//ns1blankspace.history.viewport.push('interfaceMasterHomeShow()');
+							ns1blankspace.history.viewport.push('interfaceMasterHomeShow()');
 						}	
 						else
 						{
@@ -737,13 +756,28 @@ function interfaceMasterLogonShow(aParam)
 		interfaceMasterLogon();
 	});	
 
+	$('#inputInterfaceMasterLogonName').keypress(function(e)
+	{
+	    if (e.which == 13)
+	    {
+	        interfaceMasterLogon();
+	    }
+	});
+
+	$('#inputInterfaceMasterLogonPassword').keypress(function(e)
+	{
+	    if (e.which == 13)
+	    {
+	        interfaceMasterLogon();
+	    }
+	});
+
 	$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 	
 	$('#aInterfaceMasterLogonSendPassword').click(function()
 	{
 		interfaceMasterLogonSendPasswordShow();
 	});
-	
 }
 
 function interfaceMasterLogon()
@@ -763,7 +797,7 @@ function interfaceMasterLogon()
 		url: '/ondemand/logon/',
 		data: sData,
 		dataType: 'json',
-		async: false,
+		async: true,
 		success: interfaceMasterLogonProcess
 	})
 }
@@ -784,9 +818,9 @@ function interfaceMasterLogonProcess(oResponse)
 			$.cookie('mydigitalstucturelogon', $('#inputInterfaceMasterLogonName').val(), {expires:30});
 		}
 		
-		interfaceControlSecurity();
+		//interfaceControlSecurity();
 		
-		if (oResponse.passwordStatus == "PASSWORDEXPIRED")
+		if (oResponse.passwordStatus == "EXPIRED")
 		{
 			interfaceMasterLogonChangePasswordShow(); 
 		}
@@ -794,7 +828,7 @@ function interfaceMasterLogonProcess(oResponse)
 		{	
 			if (oResponse.url == '#' || ns1blankspace.option.logonStayOnDocument)
 			{
-				document.location.reload();
+				document.location.reload(false);
 			}	
 			else
 			{
@@ -802,7 +836,6 @@ function interfaceMasterLogonProcess(oResponse)
 			}
 		}
 	}
-	
 }
 
 function interfaceMasterLogonChangePasswordShow(aParam)
@@ -917,7 +950,6 @@ function interfaceMasterLogonChangePassword()
 	
 function interfaceMasterLogonChangePasswordProcess(oResponse)
 {	
-
 	if (oResponse.status == 'ER') 
 	{
 		if (oResponse.error.errornotes == 'PASSWORD_LESS_THAN_6_CHAR') 
@@ -936,13 +968,12 @@ function interfaceMasterLogonChangePasswordProcess(oResponse)
 		if (oResponse.url == '#' || ns1blankspace.option.logonStayOnDocument)
 		{
 			window.location.hash = '';
-			document.location.reload();
+			document.location.reload(false);
 		}	
 		else
 		{
 			document.location.href = aReturn[2];
 		}
-	
 	}
 }
 
@@ -1002,7 +1033,6 @@ function interfaceMasterLogonSendPassword()
 	}
 	else
 	{
-	
 		$('#tdInterfaceMasterLogonSendPasswordStatus').html('Sending password...');
 		
 		var sCurrentPassword = $('#inputInterfaceMasterLogonCurrentPassword').val();
@@ -1019,7 +1049,6 @@ function interfaceMasterLogonSendPassword()
 			success: interfaceMasterLogonSendPasswordProcess
 		})
 	}
-	
 }
 
 function interfaceMasterLogonSendPasswordProcess(oResponse)
@@ -1046,7 +1075,7 @@ function interfaceMasterLogoff()
 	})
 	
 	ns1blankspace.unloadWarning = false;
-	document.location.reload();
+	document.location.reload(false);
 }
 
 function interfaceMasterViewportUserControlShow(oElement)
@@ -1082,13 +1111,21 @@ function interfaceMasterViewport()
 			}	
 		}
 	})
-	
 }	
 	
 function interfaceMasterViewportShow(oResponse)	
 {
 	var aHTML = [];
 	var h = -1;
+
+	ns1blankspace.user = oResponse.user;
+	ns1blankspace.userUnrestricted = (oResponse.unrestrictedaccess = 'Y' || oResponse.unrestrictedaccess == undefined ? true : false);
+	ns1blankspace.spaceText = oResponse.spacename;
+	ns1blankspace.space = oResponse.space;
+	ns1blankspace.userSpace = oResponse.space;
+	ns1blankspace.userSpaceText = oResponse.spacename
+	ns1blankspace.contactBusiness = oResponse.contactbusiness;
+	ns1blankspace.contactPerson = oResponse.contactperson;
 
 	ns1blankspace.user.commonname = oResponse.userlogonname;
 	gsUserID = oResponse.user;
@@ -1102,7 +1139,9 @@ function interfaceMasterViewportShow(oResponse)
 		
 	aHTML[++h] = '<div id="divInterfaceMasterViewport" class="interfaceMaster">';
 	
-	$('#tdInterfaceMasterHeaderColumn2').html('<span id="spanInterfaceMasterViewportLogonName">' + ns1blankspace.user.commonname + '</span>')
+	$('#tdInterfaceMasterHeaderColumn2').css('width', '250px');
+	$('#tdInterfaceMasterHeaderColumn2').html('<div id="divInterfaceMasterViewportSpaceText">' + ns1blankspace.spaceText + '</div>' +
+									'<div id="divInterfaceMasterViewportLogonName">' + ns1blankspace.user.commonname + '</div>')
 	
 	aHTML[++h] = '<div id="divInterfaceMasterViewportControl" class="interfaceMasterViewport">';
 	
@@ -1287,7 +1326,7 @@ function interfaceMasterViewportShow(oResponse)
 					text: false,
 					label: 'Setup your system.  Once finished click on this icon again.',
 					icons: {
-						primary: "ui-icon-wrench"
+						primary: "ui-icon-gear"
 					}})
 		.css('font-size', '0.75em')			
 		.click(function() 
@@ -1303,12 +1342,24 @@ function interfaceMasterViewportShow(oResponse)
 				}})
 		.click(function() 
 		{
-			interfaceMasterHelpShow(this);
+			if (ns1blankspace.option.helpURI)
+			{	
+				window.open(ns1blankspace.option.helpURI);
+			}
+			else
+			{
+				window.alert('No help available.  May be search the internet?')
+			}	
 		});		
 	
-	$('#spanInterfaceMasterViewportLogonName').click(function(event)
+	$('#divInterfaceMasterViewportLogonName').click(function(event)
 	{
 		interfaceControlUserOptionsShow(this);
+	})
+
+	$('#divInterfaceMasterViewportSpaceText').click(function(event)
+	{
+		interfaceControlSpaceOptionsShow(this);
 	})
 	
 	if (ns1blankspace.option.showBrowsing)
@@ -1525,7 +1576,7 @@ function interfaceMasterAttachments(aParam)
 	{	
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-		oSearch.addField('type,filename,description,download,modifieddate');
+		oSearch.addField('type,filename,description,download,modifieddate,attachment');
 		oSearch.addFilter('object', 'EQUAL_TO', iObject);
 		oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 		
@@ -3801,3 +3852,121 @@ function interfaceMasterViewportOptionsHide()
 	$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
 	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 }
+
+
+function interfaceMasterCreatePDF(aParam, sReturn)
+{
+	var iObject = ns1blankspace.object;
+	var iObjectContext = ns1blankspace.objectContext;
+	var sFileName = ns1blankspace.objectContextData.id + '.pdf'
+	var sXHTMLContent = '';
+	var bOpen = false;
+
+	if (aParam)
+	{
+		if (aParam.object) {iObject = aParam.object}
+		if (aParam.objectContext) {iObjectContext = aParam.objectContext}
+		if (aParam.filename) {sFileName = aParam.filename}	
+		if (aParam.xhtmlContent) {sXHTMLContent = aParam.xhtmlContent}
+		//if (aParam.open) {bOpen = aParam.open}	
+	}
+
+	if (sReturn == undefined)
+	{
+		$('#aInterfaceMainSummaryViewPDF').html(ns1blankspace.xhtml.loadingSmall)
+		
+		var sParam = 'method=CORE_PDF_CREATE&rf=TEXT';
+		var sData = 'object=' + iObject;
+		sData += '&objectcontext=' + iObjectContext;
+		sData += '&filename=' + encodeURIComponent(sFileName);
+		sData += '&xhtmlcontent=' + encodeURIComponent(sXHTMLContent);
+		
+		$.ajax(
+		{
+			type: 'POST',
+			url: '/ondemand/core/?' + sParam,
+			data: sData,
+			dataType: 'text',
+			success: function(data) {interfaceMasterCreatePDF(aParam, data)}
+		});
+	}	
+	else	
+	{
+		var aReturn = sReturn.split('|');
+
+		if (bOpen)
+		{
+			window.open('/download/' + aReturn[1])	
+		}
+		else
+		{
+			$('#aInterfaceMainSummaryViewPDF').html('<a href="/download/' + aReturn[1] + '" target="_blank">Open PDF</a>');
+		}	
+	}	
+
+}
+
+function interfaceMasterEditorAddTag(aParam)
+{ 
+	var sXHTMLElementID;
+	var sEditorID;
+	var oMCEBookmark;
+	
+	if (aParam != undefined)
+	{
+		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (aParam.editorID != undefined) {sEditorID = aParam.editorID}
+		if (aParam.mceBookmark != undefined) {oMCEBookmark = aParam.mceBookmark}
+		
+		var oEditor = tinyMCE.get(sEditorID); 
+		var sInsertText = $('#' + sXHTMLElementID).attr('data-caption');
+		if (oMCEBookmark != undefined)
+		{
+			tinyMCE.get(sEditorID).selection.moveToBookmark(oMCEBookmark);
+		}
+		oEditor.execCommand('mceInsertContent', false, sInsertText); 
+	}
+	else
+	{
+		interfaceMasterConfim({title: 'Error inserting field!', html: ["An error occurred when inserting the field. Please contact support." +
+																	  "<br /><br />Details: No parameters passed to interfaceMasterEditorAddTag"]});
+		return false;
+	}
+}
+
+function interfaceMasterRPCGet()
+{
+	if (ns1blankspace.rpc == undefined)
+	{
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/jscripts/1blankspace.rpc-1.0.1.json',
+			dataType: 'json',
+			async: false,
+			success: function(data) {ns1blankspace.rpc = data.methods}
+		});
+	}
+}
+
+function interfaceMasterEndpointURL(asMethod)
+{
+	interfaceMasterRPCGet();
+
+	var sBaseEndpoint;
+
+	if ($.inArray(asMethod, ns1blankspace.rpc) == -1)
+	{
+		sBaseEndpoint = '/ondemand/';
+	}
+	else
+	{
+		sBaseEndpoint = '/rpc/';
+	}
+
+	aMethod = asMethod.split('_');
+	sEndpoint = aMethod[0];
+	
+	return sBaseEndpoint + (aMethod[0]).toLowerCase() + '/?method=' + asMethod;
+}
+

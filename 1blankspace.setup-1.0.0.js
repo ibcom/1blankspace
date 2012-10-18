@@ -85,7 +85,7 @@ function interfaceSetupMasterViewport(aParam)
 	
 	$('.InterfaceMasterViewportControlBrowse').click(function(event)
 	{
-		interfaceSetupSearch(giSearchSource_BROWSE, event.target.id);
+		interfaceSetupSearch(ns1blankspace.data.searchSource.browse, event.target.id);
 	});
 	
 	var aHTML = [];
@@ -122,7 +122,7 @@ function interfaceSetupHomeShow(aParam, oResponse)
 	aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 	aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 					'<td id="tdInterfaceSetupHomeMostLikely" class="interfaceViewportMain">' +
-					gsLoadingXHTML + 
+					ns1blankspace.xhtml.loading + 
 					'</td>' +
 					'</tr>';
 	aHTML[++h] = '</table>';					
@@ -198,7 +198,7 @@ function interfaceSetupHomeShow(aParam, oResponse)
 		.css('width', '15px')
 		.css('height', '20px')
 			
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 }			
 	
 function interfaceSetupAdd()
@@ -250,7 +250,7 @@ function interfaceSetupSearch(sXHTMLElementId, iSource, sSearchText, sSearchCont
 	
 		if (iSource == undefined)
 		{
-			iSource = giSearchSource_TEXT_INPUT;
+			iSource = ns1blankspace.data.searchSource.text;
 		}	
 		
 		if (sSearchText == undefined)
@@ -258,7 +258,7 @@ function interfaceSetupSearch(sXHTMLElementId, iSource, sSearchText, sSearchCont
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -266,7 +266,7 @@ function interfaceSetupSearch(sXHTMLElementId, iSource, sSearchText, sSearchCont
 			sSearchText = aSearch[1];
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
 			interfaceMasterOptionsSetPosition(sElementId);
@@ -332,12 +332,12 @@ function interfaceSetupSearchShow(oXML)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupSearch(event.target.id, 1);
 		});
 	}	
@@ -567,7 +567,7 @@ function interfaceSetupShow(aParam, oXML)
 function interfaceSetupShow2(oXML)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupViewport();
 	
 	goSetupContextXML = oXML;

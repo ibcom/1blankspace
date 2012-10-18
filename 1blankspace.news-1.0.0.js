@@ -8,10 +8,10 @@
 function interfaceNewsMasterViewport(aParam)
 {
 
-	giObject = 19;
-	gsObjectName = 'News';
-	goObjectContext = undefined;
-	giObjectContext = -1;
+	ns1blankspace.object = 19;
+	ns1blankspace.objectName = 'News';
+	ns1blankspace.objectContextData = undefined;
+	ns1blankspace.objectContext = -1;
 			
 	var bShowHome = true;
 	var bNew = false;
@@ -40,8 +40,8 @@ function interfaceNewsMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceNewsSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceNewsSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -114,18 +114,18 @@ function interfaceNewsMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceNewsSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceNewsSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceNewsSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceNewsSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	$('#divInterfaceViewportControl').html('');	
 	
-	if (gbRichEdit)
+	if (ns1blankspace.option.richTextEditing)
 	{
 	
 		tinyMCE.init(
@@ -168,11 +168,11 @@ function interfaceNewsMasterViewport(aParam)
 			visual : true, 
 			gecko_spellcheck : true,
 			TemplateLinkType : "32",
-			content_css : gsEditorCSS,
+			content_css : ns1blankspace.xhtml.editorCSS,
 			
 			external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
-			external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + giObjectContext, 
-			media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + giObjectContext, 
+			external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
+			media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
 
 		});				
 	
@@ -193,7 +193,7 @@ function interfaceNewsHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceNewsHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -213,7 +213,7 @@ function interfaceNewsHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		sParam = 'method=NEWS_SEARCH&rows=10';
 
@@ -277,7 +277,7 @@ function interfaceNewsHomeShow(oResponse)
 		
 		$('#aInterfaceNewsHomeMostLikelyMore').click(function(event)
 		{
-			interfaceNewsSearch('tdInterfaceViewportMasterControlBrowse-', {source: giSearchSource_BROWSE});
+			interfaceNewsSearch('tdInterfaceViewportMasterControlBrowse-', {source: ns1blankspace.data.searchSource.browse});
 		});
 	}
 }
@@ -289,7 +289,7 @@ function interfaceNewsSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -304,13 +304,13 @@ function interfaceNewsSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
-		var sParam = 'method=NEWS_SEARCH&advanced=1&select=' + giObjectContext;
+		ns1blankspace.objectContext = sSearchContext;
+		var sParam = 'method=NEWS_SEARCH&advanced=1&select=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -328,7 +328,7 @@ function interfaceNewsSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -337,7 +337,7 @@ function interfaceNewsSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -396,14 +396,14 @@ function interfaceNewsSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceNewsSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -425,7 +425,7 @@ function interfaceNewsViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -507,7 +507,7 @@ function interfaceNewsViewport()
 
 function interfaceNewsShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceNewsViewport();
 
 	var aHTML = [];
@@ -515,7 +515,7 @@ function interfaceNewsShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find news.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -524,14 +524,14 @@ function interfaceNewsShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.subject);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.subject);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceNewsMasterViewport({showHome: false});interfaceNewsSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceNewsMasterViewport({showHome: false});interfaceNewsSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 			
@@ -559,7 +559,7 @@ function interfaceNewsSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find news.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -568,7 +568,7 @@ function interfaceNewsSummary()
 	}
 	else
 	{
-		var sTmp = goObjectContext.startdate;
+		var sTmp = ns1blankspace.objectContextData.startdate;
 		if (sTmp == '&nbsp;') {sTmp = 'Not set.'};
 		
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Start Date</td></tr>' +
@@ -578,7 +578,7 @@ function interfaceNewsSummary()
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySummary" class="interfaceMainSummary">&nbsp;</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummarySummaryValue" class="interfaceMainSummaryValue">' +
-						interfaceMasterFormatXHTML(goObjectContext.news) +
+						interfaceMasterFormatXHTML(ns1blankspace.objectContextData.news) +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
@@ -738,23 +738,23 @@ function interfaceNewsDetails()
 
 		$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy' });
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsSubject').val(goObjectContext.subject);
+			$('#inputInterfaceMainDetailsSubject').val(ns1blankspace.objectContextData.subject);
 			
-			var sTmp = goObjectContext.startdate;
+			var sTmp = ns1blankspace.objectContextData.startdate;
 			if (sTmp == '&nbsp;') {sTmp = ''};
 			$('#inputInterfaceMainDetailsStartDate').val(sTmp);
 			
-			var sTmp = goObjectContext.enddate;
+			var sTmp = ns1blankspace.objectContextData.enddate;
 			if (sTmp == '&nbsp;') {sTmp = ''};
 			$('#inputInterfaceMainDetailsEndDate').val(sTmp);
 			
-			$('#inputInterfaceMainDetailsFromEmail').val(goObjectContext.fromemail);
-			$('#inputInterfaceMainDetailsSummary').val(goObjectContext.summary);
+			$('#inputInterfaceMainDetailsFromEmail').val(ns1blankspace.objectContextData.fromemail);
+			$('#inputInterfaceMainDetailsSummary').val(ns1blankspace.objectContextData.summary);
 			
-			$('[name="radioPublic"][value="' + goObjectContext.public + '"]').attr('checked', true);
-			$('[name="radioTracking"][value="' + goObjectContext.tracking + '"]').attr('checked', true);
+			$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
+			$('[name="radioTracking"][value="' + ns1blankspace.objectContextData.tracking + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -779,7 +779,7 @@ function interfaceNewsEdit()
 		for (edId in tinyMCE.editors) 
 					tinyMCE.editors[edId].destroy(true);
 				
-		giEditorCounter = giEditorCounter + 1;		
+		ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 				
 		aHTML[++h] = '<table id="tableInterfaceMainEdit" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainEditRow1" class="interfaceMain">' +
@@ -800,32 +800,32 @@ function interfaceNewsEdit()
 		aHTML[++h] = '<tr id="trInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti">' +
 						'<td id="tdInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti">' +
 						'<textarea rows="30" cols="50" onDemandType="TEXTMULTI" id="inputInterfaceMainEditText' +
-									giEditorCounter + '" editorcount="' + giEditorCounter + '" class="inputInterfaceMainTextMulti"></textarea>' +
+									ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="inputInterfaceMainTextMulti"></textarea>' +
 						'</td></tr>';
 						
 		aHTML[++h] = '</table>';					
 		
 		$('#tdInterfaceMainEditColumn1').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			var sHTML = interfaceMasterFormatXHTML(goObjectContext.news);
-			$('#inputInterfaceMainEditText' + giEditorCounter).val(sHTML);
+			var sHTML = interfaceMasterFormatXHTML(ns1blankspace.objectContextData.news);
+			$('#inputInterfaceMainEditText' + ns1blankspace.counter.editor).val(sHTML);
 		}
 	
-		if (gbRichEdit)
+		if (ns1blankspace.option.richTextEditing)
 		{
-			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + giEditorCounter);
+			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + ns1blankspace.counter.editor);
 		}	
 	}	
 }
 
 function interfaceNewsNew()
 {
-	goObjectContext = undefinded;
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefinded;
+	ns1blankspace.objectContext = -1;
 	interfaceNewsViewport();
-	$('#divInterfaceMainDetails').html(gsLoadingXHTML);
+	$('#divInterfaceMainDetails').html(ns1blankspace.xhtml.loading);
 	$('#divInterfaceMainDetails').attr('onDemandLoading', '1');
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
@@ -834,12 +834,12 @@ function interfaceNewsNew()
 
 function interfaceNewsCopy(aParam, oResponse)
 {
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
 		if (oReponse == undefined)
 		{
 			var sParam = 'method=NEWS_COPY';
-			sParam += '&id=' + giObjectContext;
+			sParam += '&id=' + ns1blankspace.objectContext;
 
 			$.ajax(
 			{
@@ -851,10 +851,10 @@ function interfaceNewsCopy(aParam, oResponse)
 		}	
 		else	
 		{
-			giObjectContext = oResponse.data.rows[0].id;
+			ns1blankspace.objectContext = oResponse.data.rows[0].id;
 			interfaceNewsShow(aParam, oResponse)
 			interfaceMasterStatus('Copied');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 			$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');			
 		}	
 	}	
@@ -868,7 +868,7 @@ function interfaceNewsGroups(aParam)
 	aHTML[++h] = '<table id="tableInterfaceMainGroups" class="interfaceMain">' +
 					'<tr id="trInterfaceMainGroupsRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainGroupsColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainGroupsColumn2" class="interfaceMainColumn2Action">' +
 					'</td>' +
@@ -941,7 +941,7 @@ function interfaceNewsGroupsContacts(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var sData = '&rows=30&id=' + giObjectContext;
+		var sData = '&rows=30&id=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -994,7 +994,7 @@ function interfaceNewsGroupsContacts(aParam, oResponse)
 			xhtml: aHTML.join(''),
 			showMore: (oResponse.morerows == "true"),
 			more: oResponse.moreid,
-			rows: giReturnRows,
+			rows: ns1blankspace.option.defaultRows,
 			functionShowRow: interfaceNewsGroupsContactsRow,
 			type: 'json'
 		}); 	
@@ -1039,7 +1039,7 @@ function interfaceNewsGroupsManage(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var sParam = 'rows=20&news=' + giObjectContext;
+		var sParam = 'rows=20&news=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -1204,7 +1204,7 @@ function interfaceNewsGroupsAdd(aParam, oResponse)
 				aHTML[++h] = '</tbody></table>';
 
 				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 			}
 			else
 			{
@@ -1226,7 +1226,7 @@ function interfaceNewsGroupsAdd(aParam, oResponse)
 				aHTML[++h] = '</tbody></table>';
 
 				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 				
 				$('td.interfaceMainRowSelect').click(function(event)
 				{
@@ -1248,7 +1248,7 @@ function interfaceNewsGroupsAddSelect(sXHTMLElementId)
 	$('#' + sXHTMLElementId).fadeOut(500);
 	
 	var sParam = 'method=NEWS_PERSON_GROUP_MANAGE';
-	var sData = 'news=' + giObjectContext +
+	var sData = 'news=' + ns1blankspace.objectContext +
 				'&group=' + sSearchContext;
 				
 	$.ajax(
@@ -1270,7 +1270,7 @@ function interfaceNewsGroupsAddRemove(sXHTMLElementId)
 	var sSearchContext = aSearch[1];
 	
 	var sParam = 'method=NEWS_PERSON_GROUP_MANAGE&remove=1';
-	var sData = 'news=' + giObjectContext +
+	var sData = 'news=' + ns1blankspace.objectContext +
 				'&group=' + sSearchContext;
 				
 	$.ajax(
@@ -1292,7 +1292,7 @@ function interfaceNewsTracking(aParam)
 	aHTML[++h] = '<table id="tableInterfaceMainTracking" class="interfaceMain">' +
 					'<tr id="trInterfaceMainTrackingRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainTrackingColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainTrackingColumn2" class="interfaceMainColumn2Action">' +
 					'</td>' +
@@ -1347,7 +1347,7 @@ function interfaceNewsTrackingSummary(aParam, oResponse)
 	if (oResponse == undefined)
 	{
 		var sParam = 'method=NEWS_TRACKING_SUMMARY&rows=20' +
-						'&news=' + giObjectContext;
+						'&news=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -1422,7 +1422,7 @@ function interfaceNewsTrackingDetails(aParam, oResponse)
 	if (oResponse == undefined)
 	{
 		var sParam = 'method=NEWS_TRACKING_SEARCH&rows=20' +
-						'&news=' + giObjectContext;
+						'&news=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -1488,9 +1488,9 @@ function interfaceNewsSave()
 	var sParam = 'method=NEWS_MANAGE';
 	var sData = '_=1';
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
-		sParam += '&select=' + giObjectContext	
+		sParam += '&select=' + ns1blankspace.objectContext	
 	}	
 	
 	if ($('#divInterfaceMainDetails').html() != '')
@@ -1506,7 +1506,7 @@ function interfaceNewsSave()
 	
 	if ($('#divInterfaceMainEdit').html() != '')
 	{
-		sData += '&news=' + encodeURIComponent(tinyMCE.get('inputInterfaceMainEditText' + giEditorCounter).getContent());
+		sData += '&news=' + encodeURIComponent(tinyMCE.get('inputInterfaceMainEditText' + ns1blankspace.counter.editor).getContent());
 	}
 	
 	$.ajax(
@@ -1531,7 +1531,7 @@ function interfaceNewsSaveProcess(sResponse)
 		{
 		
 			var sParam = 'method=NEWS_PERSON_GROUP_MANAGE&remove=2';
-			var sData = 'news=' + giObjectContext;
+			var sData = 'news=' + ns1blankspace.objectContext;
 				
 			$.ajax(
 				{
@@ -1548,7 +1548,7 @@ function interfaceNewsSaveProcess(sResponse)
 		{
 		
 			var sParam = 'method=NEWS_PERSON_GROUP_MANAGE';
-			var sData = 'news=' + giObjectContext +
+			var sData = 'news=' + ns1blankspace.objectContext +
 						'&group=-1';
 				
 			$.ajax(
@@ -1565,9 +1565,9 @@ function interfaceNewsSaveProcess(sResponse)
 	
 	var aResponse = sResponse.split('|');
 	if (aResponse.length == 4)	
-	{giObjectContext = aResponse[3]};
-	gbInputDetected = false;
-	interfaceNewsSearch('-' + giObjectContext, {source: 1});
+	{ns1blankspace.objectContext = aResponse[3]};
+	ns1blankspace.inputDetected = false;
+	interfaceNewsSearch('-' + ns1blankspace.objectContext, {source: 1});
 }	
 
 function interfaceNewsSendAsEmail(bPreview)
@@ -1581,10 +1581,10 @@ function interfaceNewsSendAsEmail(bPreview)
 		sParam += '&preview=1';	
 	}	
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
 		
-		sParam += '&select=' + giObjectContext	
+		sParam += '&select=' + ns1blankspace.objectContext	
 	
 		$.ajax(
 		{

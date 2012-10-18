@@ -9,9 +9,9 @@ var lWebsiteFormSiteId;
 
 function interfaceSetupWebsiteFormMasterViewport(aParam)
 {
-	giObjectContext = -1;
-	giObject = 40;
-	goObjectContext = undefined;
+	ns1blankspace.objectContext = -1;
+	ns1blankspace.object = 40;
+	ns1blankspace.objectContextData = undefined;
 	
 	var bShowHome = true;
 	var bNew = false;
@@ -41,8 +41,8 @@ function interfaceSetupWebsiteFormMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceSetupWebsiteFormSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupWebsiteFormSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -115,15 +115,15 @@ function interfaceSetupWebsiteFormMasterViewport(aParam)
 
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceSetupWebsiteFormSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupWebsiteFormSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceSetupWebsiteFormSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceSetupWebsiteFormSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	
 	interfaceSetupWebsiteFormHomeShow();
 	
@@ -178,7 +178,7 @@ function interfaceSetupWebsiteFormHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		$.ajax(
 		{
@@ -243,7 +243,7 @@ function interfaceSetupWebsiteFormSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -258,13 +258,13 @@ function interfaceSetupWebsiteFormSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 		
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
 	
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
 		giSetupContext = sSearchContext;
-		giObjectContext = sSearchContext;
+		ns1blankspace.objectContext = sSearchContext;
 		var sParam = 'method=SETUP_SITE_FORM_SEARCH&id=' + giSetupContext;
 		
 		$.ajax(
@@ -283,7 +283,7 @@ function interfaceSetupWebsiteFormSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -292,7 +292,7 @@ function interfaceSetupWebsiteFormSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{			
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -356,13 +356,13 @@ function interfaceSetupWebsiteFormSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupWebsiteFormSearch(event.target.id, 1);
 		});
 	}	
@@ -379,7 +379,7 @@ function interfaceSetupWebsiteFormViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControlDetails" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -435,7 +435,7 @@ function interfaceSetupWebsiteFormViewport()
 function interfaceSetupWebsiteFormShow(aParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupWebsiteFormViewport();
 	
 	var aHTML = [];
@@ -443,7 +443,7 @@ function interfaceSetupWebsiteFormShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find website.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -452,7 +452,7 @@ function interfaceSetupWebsiteFormShow(aParam, oResponse)
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 					
 		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
 		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
@@ -466,17 +466,17 @@ function interfaceSetupWebsiteFormShow(aParam, oResponse)
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceSetupWebsiteFormMasterViewport({showHome: false});interfaceSetupWebsiteFormSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceSetupWebsiteFormMasterViewport({showHome: false});interfaceSetupWebsiteFormSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
 		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceSetupWebsiteFormSummary()'})
 
-		var sContext = goObjectContext.title;
-		if (sContext == '') {sContext = 'Form ' + goObjectContext.id}
+		var sContext = ns1blankspace.objectContextData.title;
+		if (sContext == '') {sContext = 'Form ' + ns1blankspace.objectContextData.id}
 		
 		$('#divInterfaceViewportControlContext').html(sContext +
-				'<br /><br /><span id="spanInterfaceViewportControlSubContext">' + goObjectContext.sitetext + '</span>');
+				'<br /><br /><span id="spanInterfaceViewportControlSubContext">' + ns1blankspace.objectContextData.sitetext + '</span>');
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 
@@ -493,7 +493,7 @@ function interfaceSetupWebsiteFormSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find website.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -503,20 +503,20 @@ function interfaceSetupWebsiteFormSummary()
 	else
 	{
 	
-		lWebsiteFormSiteId = goObjectContext.site;
+		lWebsiteFormSiteId = ns1blankspace.objectContextData.site;
 		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 						
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryFormType" class="interfaceMainSummary">Type</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryFormType" class="interfaceMainSummaryValue">' +
-						goObjectContext.typetext +
+						ns1blankspace.objectContextData.typetext +
 						'</td></tr>';
 						
-		if (goObjectContext.message != '')
+		if (ns1blankspace.objectContextData.message != '')
 		{	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryFormMessage" class="interfaceMainSummary">Message</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryFormMessage" class="interfaceMainSummaryValue">' +
-						goObjectContext.message +
+						ns1blankspace.objectContextData.message +
 						'</td></tr>';
 		}				
 						
@@ -616,11 +616,11 @@ function interfaceSetupWebsiteFormDetails()
 		
 		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
-			$('#inputInterfaceMainDetailsEmail').val(goObjectContext.email);
-			$('[name="radioType"][value="' + goObjectContext.type + '"]').attr('checked', true);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('#inputInterfaceMainDetailsEmail').val(ns1blankspace.objectContextData.email);
+			$('[name="radioType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -688,12 +688,12 @@ function interfaceSetupWebsiteFormLayout()
 		
 		$('#tdInterfaceMainLayoutColumn2').html(aHTML.join(''));
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainLayoutHeaderHeight').val(goObjectContext.headerheight);
-			$('#inputInterfaceMainLayoutFooterHeight').val(goObjectContext.footerheight);
-			$('#inputInterfaceMainLayoutColumns').val(goObjectContext.columns);
-			$('[name="radioLayout"][value="' + goObjectContext.layout + '"]').attr('checked', true);
+			$('#inputInterfaceMainLayoutHeaderHeight').val(ns1blankspace.objectContextData.headerheight);
+			$('#inputInterfaceMainLayoutFooterHeight').val(ns1blankspace.objectContextData.footerheight);
+			$('#inputInterfaceMainLayoutColumns').val(ns1blankspace.objectContextData.columns);
+			$('[name="radioLayout"][value="' + ns1blankspace.objectContextData.layout + '"]').attr('checked', true);
 		}
 	
 	}	
@@ -706,9 +706,9 @@ function interfaceSetupWebsiteFormSave(aParam, oResponse)
 		var sParam = 'method=SETUP_SITE_FORM_MANAGE';
 		var sData = 'site=' + lWebsiteFormSiteId;
 		
-		if (giObjectContext != -1)
+		if (ns1blankspace.objectContext != -1)
 		{
-			sParam += '&id=' + giObjectContext	
+			sParam += '&id=' + ns1blankspace.objectContext	
 		}	
 		
 		if ($('#divInterfaceMainDetails').html() != '')
@@ -742,11 +742,11 @@ function interfaceSetupWebsiteFormSave(aParam, oResponse)
 		{	
 			interfaceMasterStatus('Saved');
 			
-			if (giObjectContext == -1)
+			if (ns1blankspace.objectContext == -1)
 			{
-				giObjectContext = oResponse.id;
-				gbInputDetected = false;
-				interfaceSetupWebsiteFormSearch('-' + giObjectContext, {source: 1});
+				ns1blankspace.objectContext = oResponse.id;
+				ns1blankspace.inputDetected = false;
+				interfaceSetupWebsiteFormSearch('-' + ns1blankspace.objectContext, {source: 1});
 			}	
 		}
 		else
@@ -758,8 +758,8 @@ function interfaceSetupWebsiteFormSave(aParam, oResponse)
 
 function interfaceSetupWebsiteFormNew(aParam)
 {
-	goObjectContext = undefined
-	giObjectContext = -1;
+	ns1blankspace.objectContextData = undefined
+	ns1blankspace.objectContext = -1;
 	interfaceSetupWebsiteFormViewport();
 	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
@@ -777,11 +777,11 @@ function interfaceSetupWebsiteFormRemove(aParam, oResponse)
 		if (aParam.userVerifyCode != undefined) {sUserVerifyCode = aParam.userVerifyCode}
 	}
 	
-	if (sVerifyCode == undefined && giObjectContext != -1)
+	if (sVerifyCode == undefined && ns1blankspace.objectContext != -1)
 	{	
 		
 		var sParam = 'method=SETUP_SITE_MANAGE&remove=1';
-		var sData = 'id=' + giObjectContext;
+		var sData = 'id=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -830,7 +830,7 @@ function interfaceSetupWebsiteFormRemove(aParam, oResponse)
 	else if (sVerifyCode != undefined && sUserVerifyCode != undefined && oResponse == undefined)
 	{
 		var sParam = 'method=SETUP_SITE_MANAGE&remove=1';
-		var sData = 'id=' + giObjectContext + '&verifycode=' + sUserVerifyCode;
+		var sData = 'id=' + ns1blankspace.objectContext + '&verifycode=' + sUserVerifyCode;
 		
 		$.ajax(
 		{
@@ -863,10 +863,10 @@ function interfaceSetupWebsiteFormRemove(aParam, oResponse)
 function interfaceSetupWebsiteFormStructureCheck(aParam)
 {
 
-	if (goObjectContext.structure == '')
+	if (ns1blankspace.objectContextData.structure == '')
 	{
 		var sParam = 'method=SETUP_SITE_FORM_MANAGE';
-		var sData = 'createstructure=1&id=' + giObjectContext
+		var sData = 'createstructure=1&id=' + ns1blankspace.objectContext
 	
 		$.ajax(
 		{
@@ -876,8 +876,8 @@ function interfaceSetupWebsiteFormStructureCheck(aParam)
 			dataType: 'json',
 			success: function(data) 
 				{
-					goObjectContext.structure = data.structure;
-					goObjectContext.structurecategory = data.structurecategory;
+					ns1blankspace.objectContextData.structure = data.structure;
+					ns1blankspace.objectContextData.structurecategory = data.structurecategory;
 					interfaceSetupWebsiteFormStructure(aParam)
 				}
 		});
@@ -890,7 +890,7 @@ function interfaceSetupWebsiteFormStructureCheck(aParam)
 
 function interfaceSetupWebsiteFormStructure(aParam, oResponse)
 {
-	var iObjectContext = giObjectContext;
+	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainStructure';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
@@ -908,7 +908,7 @@ function interfaceSetupWebsiteFormStructure(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'GET',
-			url: '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_SEARCH&structure=' + goObjectContext.structure + '&category=' + goObjectContext.structurecategory,
+			url: '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_SEARCH&structure=' + ns1blankspace.objectContextData.structure + '&category=' + ns1blankspace.objectContextData.structurecategory,
 			dataType: 'json',
 			success: function(data) {interfaceSetupWebsiteFormStructure(aParam, data)}
 		});
@@ -924,7 +924,7 @@ function interfaceSetupWebsiteFormStructure(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
 						'<tr id="trInterfaceMainWebsiteFormStructureRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainWebsiteFormStructureColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainWebsiteFormStructureColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
@@ -1123,8 +1123,8 @@ function interfaceMasterWebsiteFormStructureAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			var sData = 'structure=' + goObjectContext.structure;
-			sData += '&category=' + goObjectContext.structurecategory;
+			var sData = 'structure=' + ns1blankspace.objectContextData.structure;
+			sData += '&category=' + ns1blankspace.objectContextData.structurecategory;
 			sData += '&id=' + interfaceMasterFormatSave(sID);
 			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupWebsiteFormStructureAddTitle').val());
 			sData += '&datatype=' + interfaceMasterFormatSave($('input[name="radioDataType"]:checked').val());	

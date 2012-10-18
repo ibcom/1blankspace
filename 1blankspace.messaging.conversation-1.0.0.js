@@ -5,14 +5,14 @@
  * 01 FEB 2010
  */
  
-var gbMessagingConversationOwner
+var ns1blankspace.messagingConversationOwner
 
 function interfaceMessagingConversationMasterViewport(aParam)
 {
-	giObject = 50;
-	gsObjectName = 'Messaging Conversation';
-	goObjectContextXML = '';
-	giObjectContext = -1;
+	ns1blankspace.object = 50;
+	ns1blankspace.objectName = 'Messaging Conversation';
+	ns1blankspace.objectContextDataXML = '';
+	ns1blankspace.objectContext = -1;
 			
 	var bShowHome = true;
 	
@@ -38,8 +38,8 @@ function interfaceMessagingConversationMasterViewport(aParam)
 	
 	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
 	{
-		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-        giKeyPressTimeoutId = setTimeout("interfaceMessagingConversationSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceMessagingConversationSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
 	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
@@ -93,18 +93,18 @@ function interfaceMessagingConversationMasterViewport(aParam)
 	
 	$('td.interfaceViewportMasterControlBrowse').click(function(event)
 	{
-		interfaceMessagingConversationSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceMessagingConversationSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
 	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
 	{
-		interfaceMessagingConversationSearch(event.target.id, {source: giSearchSource_BROWSE});
+		interfaceMessagingConversationSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
 	$('#divInterfaceViewportControl').html('');	
 	
-	if (gbRichEdit)
+	if (ns1blankspace.option.richTextEditing)
 	{
 	
 		tinyMCE.init(
@@ -147,11 +147,11 @@ function interfaceMessagingConversationMasterViewport(aParam)
 			visual : true, 
 			gecko_spellcheck : true,
 			TemplateLinkType : "32",
-			content_css : gsEditorCSS,
+			content_css : ns1blankspace.xhtml.editorCSS,
 			
 			external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
-			external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + giObjectContext, 
-			media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + giObjectContext, 
+			external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
+			media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
 		});				
 	}
 	
@@ -168,7 +168,7 @@ function interfaceMessagingConversationHomeShow(oResponse)
 		aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 		aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 						'<td id="tdInterfaceMessagingConversationHomeMostLikely" class="interfaceViewportMain">' +
-						gsLoadingXHTML + 
+						ns1blankspace.xhtml.loading + 
 						'</td>' +
 						'</tr>';
 		aHTML[++h] = '</table>';					
@@ -188,7 +188,7 @@ function interfaceMessagingConversationHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		sParam = 'method=MESSAGING_CONVERSATION_SEARCH&rows=10';
 
@@ -247,7 +247,7 @@ function interfaceMessagingConversationHomeShow(oResponse)
 		
 		$('#aInterfaceMessagingConversationHomeMostLikelyMore').click(function(event)
 		{
-			interfaceMessagingConversationSearch('tdInterfaceViewportMasterControlBrowse-', {source: giSearchSource_BROWSE});
+			interfaceMessagingConversationSearch('tdInterfaceViewportMasterControlBrowse-', {source: ns1blankspace.data.searchSource.browse});
 		});
 	}
 }
@@ -258,7 +258,7 @@ function interfaceMessagingConversationSearch(sXHTMLElementId, aParam)
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	var iMinimumLength = 3;
-	var iSource = giSearchSource_TEXT_INPUT;
+	var iSource = ns1blankspace.data.searchSource.text;
 	var sSearchText;
 	var iMaximumColumns = 1;
 	var iRows = 10;
@@ -273,12 +273,12 @@ function interfaceMessagingConversationSearch(sXHTMLElementId, aParam)
 		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
 	}
 	
-	if (sSearchContext != undefined && iSource != giSearchSource_BROWSE)
+	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		$('#divInterfaceViewportControl').html(gsLoadingXHTML);
+		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 		
-		giObjectContext = sSearchContext;
-		var sData = 'id=' + giObjectContext;
+		ns1blankspace.objectContext = sSearchContext;
+		var sData = 'id=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -296,7 +296,7 @@ function interfaceMessagingConversationSearch(sXHTMLElementId, aParam)
 			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
 		}	
 		
-		if (iSource == giSearchSource_BROWSE)
+		if (iSource == ns1blankspace.data.searchSource.browse)
 		{
 			iMinimumLength = 1;
 			iMaximumColumns = 4;
@@ -305,7 +305,7 @@ function interfaceMessagingConversationSearch(sXHTMLElementId, aParam)
 			sElementId = 'tableInterfaceViewportMasterBrowse';
 		}
 		
-		if (sSearchText.length >= iMinimumLength || iSource == giSearchSource_BROWSE)
+		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			interfaceMasterOptionsSetPosition(sElementId);
 			interfaceMasterSearchStart(sElementId);
@@ -372,14 +372,14 @@ function interfaceMessagingConversationSearchShow(aParam, oResponse)
 		aHTML[++h] = '</tbody></table>';
 
 		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(giShowSpeedOptions);
+		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		interfaceMasterSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
 			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions)
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceMessagingConversationSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -400,7 +400,7 @@ function interfaceMessagingConversationViewport()
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 	
-	if (giObjectContext == -1)
+	if (ns1blankspace.objectContext == -1)
 	{
 		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
 						'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
@@ -499,7 +499,7 @@ function interfaceMessagingConversationViewport()
 
 function interfaceMessagingConversationShow(aParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(giHideSpeedOptions);
+	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceMessagingConversationViewport();
 	
 	var aHTML = [];
@@ -510,26 +510,26 @@ function interfaceMessagingConversationShow(aParam, oResponse)
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find conversation.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
 				
-		goObjectContext = undefined;
+		ns1blankspace.objectContextData = undefined;
 		
 		$('#divInterfaceMain').html(aHTML.join(''));
 		
-		gbMessagingConversationOwner = false;
+		ns1blankspace.messagingConversationOwner = false;
 	}
 	else
 	{
-		goObjectContext = oResponse.data.rows[0];
+		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
 		interfaceMasterViewportDestination({
-			newDestination: 'interfaceMessagingConversationMasterViewport({showHome: false});interfaceMessagingConversationSearch("-' + giObjectContext + '")',
+			newDestination: 'interfaceMessagingConversationMasterViewport({showHome: false});interfaceMessagingConversationSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 				
-		$('#divInterfaceViewportControlContext').html(goObjectContext.title);
+		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
 		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
 		
-		gbMessagingConversationOwner = (gsUserID == goObjectContext.user)
+		ns1blankspace.messagingConversationOwner = (gsUserID == ns1blankspace.objectContextData.user)
 		
 		interfaceMessagingConversationSummary();
 	}
@@ -555,7 +555,7 @@ function interfaceMessagingConversationSummary()
 	var aHTML = [];
 	var h = -1;
 	
-	if (goObjectContext == undefined)
+	if (ns1blankspace.objectContextData == undefined)
 	{
 		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find conversation.</td></tr>';
 		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
@@ -569,14 +569,14 @@ function interfaceMessagingConversationSummary()
 					
 		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryOwner" class="interfaceMainSummary">Owner</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryOwnerValue" class="interfaceMainSummaryValue">' +
-						goObjectContext.ownerusertext +
+						ns1blankspace.objectContextData.ownerusertext +
 						'</td></tr>';	
 						
-		if (goObjectContext.description != '')
+		if (ns1blankspace.objectContextData.description != '')
 		{	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
-						 interfaceMasterFormatXHTML(goObjectContext.description) +
+						 interfaceMasterFormatXHTML(ns1blankspace.objectContextData.description) +
 						'</td></tr>';
 		}				
 						
@@ -589,7 +589,7 @@ function interfaceMessagingConversationSummary()
 		
 		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action" cellspacing=0>';
 		
-		if (gbMessagingConversationOwner)
+		if (ns1blankspace.messagingConversationOwner)
 		{
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAddParticipant" class="interfaceMainColumn2Action">' +
 						'<a href="#" id="aInterfaceMainSummaryAddParticipant">Add&nbsp;Participant</a>' +
@@ -643,7 +643,7 @@ function interfaceMessagingConversationDetails()
 
 		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
 			
-		if (gbMessagingConversationOwner)
+		if (ns1blankspace.messagingConversationOwner)
 		{
 			aHTML[++h] = '<tr id="trInterfaceMainDetailsTitle" class="interfaceMain">' +
 							'<td id="tdInterfaceMainDetailsTitle" class="interfaceMain">' +
@@ -697,7 +697,7 @@ function interfaceMessagingConversationDetails()
 		
 		$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
 		
-		if (gbMessagingConversationOwner)
+		if (ns1blankspace.messagingConversationOwner)
 		{
 			var aHTML = [];
 			var h = -1;
@@ -718,14 +718,14 @@ function interfaceMessagingConversationDetails()
 			$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 		}	
 		
-		if (goObjectContext != undefined)
+		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainDetailsTitle').val(goObjectContext.title);
-			$('#inputInterfaceMainDetailsDescription').val(goObjectContext.description);
-			$('#inputInterfaceMainDetailsAlertURL').val(goObjectContext.alerturl);
+			$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+			$('#inputInterfaceMainDetailsDescription').val(ns1blankspace.objectContextData.description);
+			$('#inputInterfaceMainDetailsAlertURL').val(ns1blankspace.objectContextData.alerturl);
 			
-			$('[name="radioSharing"][value="' + goObjectContext.sharing + '"]').attr('checked', true);
-			$('[name="radioParticipantCan"][value="' + goObjectContext.participantcan + '"]').attr('checked', true);
+			$('[name="radioSharing"][value="' + ns1blankspace.objectContextData.sharing + '"]').attr('checked', true);
+			$('[name="radioParticipantCan"][value="' + ns1blankspace.objectContextData.participantcan + '"]').attr('checked', true);
 		}
 		else
 		{
@@ -743,7 +743,7 @@ function interfaceMessagingConversationParticipants(aParam)
 	aHTML[++h] = '<table id="tableInterfaceMainParticipants" class="interfaceMain">' +
 					'<tr id="trInterfaceMainParticipantsRow1" class="interfaceMainRow1">' +
 					'<td id="tdInterfaceMainParticipantsColumn1" class="interfaceMainColumn1Large">' +
-					gsLoadingXHTML +
+					ns1blankspace.xhtml.loading +
 					'</td>' +
 					'<td id="tdInterfaceMainParticipantsColumn2" class="interfaceMainColumn2Action">' +
 					'</td>' +
@@ -752,7 +752,7 @@ function interfaceMessagingConversationParticipants(aParam)
 					
 	$('#divInterfaceMainParticipants').html(aHTML.join(''));	
 	
-	if (gbMessagingConversationOwner)
+	if (ns1blankspace.messagingConversationOwner)
 	{	
 		var aHTML = [];
 		var h = -1;	
@@ -794,7 +794,7 @@ function interfaceMessagingConversationParticipantsManage(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var sData = 'conversation=' + giObjectContext;
+		var sData = 'conversation=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -840,7 +840,7 @@ function interfaceMessagingConversationParticipantsManage(aParam, oResponse)
 
 			$('#' + sXHTMLElementId).html(aHTML.join(''));
 			
-			if (gbMessagingConversationOwner)
+			if (ns1blankspace.messagingConversationOwner)
 			{
 				$('.interfaceMainRowOptionsSelect').button( {
 					text: false,
@@ -882,7 +882,7 @@ function interfaceMessagingConversationParticipantsAdd(aParam, oResponse)
 			aHTML[++h] = '<table id="tableInterfaceMainParticipantsAdd" class="interfaceMain">' +
 							'<tr id="trInterfaceMainParticipantsAddRow1" class="interfaceMainRow1">' +
 							'<td id="tdInterfaceMainParticipantsAddColumn1" class="interfaceMainColumn1">' +
-							gsLoadingXHTML +
+							ns1blankspace.xhtml.loading +
 							'</td>' +
 							'<td id="tdInterfaceMainParticipantsAddColumn2" class="interfaceMainColumn2Action" style="width:50%;">' +
 							'</td>' +
@@ -1079,7 +1079,7 @@ function interfaceMessagingConversationParticipantsAddSelect(sXHTMLElementId)
 	var sElementId = aSearch[0];
 	var sContext = aSearch[1];
 	
-	var sData = 'user=' + sContext + '&conversation=' + giObjectContext;
+	var sData = 'user=' + sContext + '&conversation=' + ns1blankspace.objectContext;
 				
 	$.ajax(
 	{
@@ -1097,7 +1097,7 @@ function interfaceMessagingConversationParticipantsRemove(sXHTMLElementId)
 	var sElementId = aSearch[0];
 	var sContext = aSearch[1];
 	
-	var sData = 'user=' + sContext + '&conversation=' + giObjectContext;
+	var sData = 'user=' + sContext + '&conversation=' + ns1blankspace.objectContext;
 				
 	$.ajax(
 	{
@@ -1121,7 +1121,7 @@ function interfaceMessagingConversationPosts(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var sData = 'includeme=1&dontencode=1&conversation=' + giObjectContext;
+		var sData = 'includeme=1&dontencode=1&conversation=' + ns1blankspace.objectContext;
 		
 		$.ajax(
 		{
@@ -1140,7 +1140,7 @@ function interfaceMessagingConversationPosts(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainPosts" class="interfaceMain">' +
 						'<tr id="trInterfaceMainPostsRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainPostsColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainPostsColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
@@ -1331,7 +1331,7 @@ function interfaceMessagingConversationCommentsOptions(aParam)
 	
 	if (iStep == 3)
 	{
-		$('#spanInterfaceMainCommentsSend').html(gsLoadingSmallXHTML);
+		$('#spanInterfaceMainCommentsSend').html(ns1blankspace.xhtml.loadingSmall);
 		
 		var sData = 'message=' + interfaceMasterFormatSave($('#inputInterfaceMainCommentMessage').val())
 		
@@ -1370,7 +1370,7 @@ function interfaceMessagingConversationPostsAdd(aParam, oResponse)
 	for (edId in tinyMCE.editors) 
 					tinyMCE.editors[edId].destroy(true);
 				
-	giEditorCounter = giEditorCounter + 1;		
+	ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 	
 	if (aParam != undefined)
 	{
@@ -1464,7 +1464,7 @@ function interfaceMessagingConversationPostsAdd(aParam, oResponse)
 		aHTML[++h] = '<tr id="trInterfaceMainPostDetailsMessageValue" class="interfaceMainTextMulti">' +
 							'<td id="tdInterfaceMainPostDetailsMessageValue" class="interfaceMainTextMulti">' +
 							'<textarea name="message" rows="25" cols="50" id="inputInterfaceMainPostDetailsMessage' +
-									giEditorCounter + '" editorcount="' + giEditorCounter + '" class="inputInterfaceMainTextMulti"></textarea>' +
+									ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="inputInterfaceMainTextMulti"></textarea>' +
 									
 							'</td></tr>';
 	
@@ -1478,9 +1478,9 @@ function interfaceMessagingConversationPostsAdd(aParam, oResponse)
 				})
 		);
 		
-		if (gbRichEdit)
+		if (ns1blankspace.option.richTextEditing)
 		{
-			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainPostDetailsMessage' + giEditorCounter);
+			tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainPostDetailsMessage' + ns1blankspace.counter.editor);
 		}	
 		
 		if (oResponse != undefined)
@@ -1497,10 +1497,10 @@ function interfaceMessagingConversationPostsAdd(aParam, oResponse)
 function interfaceMessagingConversationPostDetailsSend()
 {
 	var sParam = '/ondemand/messaging/?method=MESSAGING_CONVERSATION_POST_MANAGE'
-	var sData = 'conversation=' + giObjectContext;
+	var sData = 'conversation=' + ns1blankspace.objectContext;
 	
 	sData += '&subject=' + encodeURIComponent($('#inputInterfaceMainPostDetailsSubject').val());
-	sData += '&message=' + encodeURIComponent(tinyMCE.get('inputInterfaceMainPostDetailsMessage' + giEditorCounter).getContent()) 
+	sData += '&message=' + encodeURIComponent(tinyMCE.get('inputInterfaceMainPostDetailsMessage' + ns1blankspace.counter.editor).getContent()) 
 		
 	interfaceMasterSave(sParam, sData, 'Post Sent');
 	interfaceMasterMainViewportShow("#divInterfaceMainPosts", true);
@@ -1526,7 +1526,7 @@ function interfaceMessagingConversationComments(aParam, oResponse)
 
 	if (oResponse == undefined)
 	{
-		var sData = 'includeme=1&conversation=' + giObjectContext;
+		var sData = 'includeme=1&conversation=' + ns1blankspace.objectContext;
 		
 		if (iPost != undefined)
 		{
@@ -1554,7 +1554,7 @@ function interfaceMessagingConversationComments(aParam, oResponse)
 		aHTML[++h] = '<table id="tableInterfaceMainComments" class="interfaceMain">' +
 						'<tr id="trInterfaceMainCommentsRow1" class="interfaceMainRow1">' +
 						'<td id="tdInterfaceMainCommentsColumn1" class="interfaceMainColumn1Large">' +
-						gsLoadingXHTML +
+						ns1blankspace.xhtml.loading +
 						'</td>' +
 						'<td id="tdInterfaceMainCommentsColumn2" class="interfaceMainColumn2Action">' +
 						'</td>' +
@@ -1666,9 +1666,9 @@ function interfaceMessagingConversationSave()
 {
 	var sData = '_=1';
 	
-	if (giObjectContext != -1)
+	if (ns1blankspace.objectContext != -1)
 	{
-		sData += '&id=' + giObjectContext	
+		sData += '&id=' + ns1blankspace.objectContext	
 	}	
 	
 	if ($('#divInterfaceMainDetails').html() != '')
@@ -1695,9 +1695,9 @@ function interfaceMessagingConversationSaveProcess(oResponse)
 	if (oResponse.status == 'OK')
 	{
 		interfaceMasterStatus('Saved');
-		if (giObjectContext == -1) {giObjectContext = oResponse.id};	
-		gbInputDetected = false;
-		interfaceMessagingConversationSearch('-' + giObjectContext, {source: 1});
+		if (ns1blankspace.objectContext == -1) {ns1blankspace.objectContext = oResponse.id};	
+		ns1blankspace.inputDetected = false;
+		interfaceMessagingConversationSearch('-' + ns1blankspace.objectContext, {source: 1});
 	}
 	else
 	{

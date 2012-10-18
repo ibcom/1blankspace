@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
 
-var gsHomeDefaultElementId = 'tdInterfaceViewportControlActionToday';
+ns1blankspace.xhtml.defaultElementID = 'tdInterfaceViewportControlActionToday';
 
 $(function()
 {
@@ -98,8 +98,8 @@ function interfaceMasterHomeViewportBind()
 	
 	$('#tdInterfaceViewportControlActionToday').click(function(event)
 	{
-		$('#tdInterfaceMainHomeColumn1').html(gsLoadingXHTML);
-		gsHomeDefaultElementId = this.id;
+		$('#tdInterfaceMainHomeColumn1').html(ns1blankspace.xhtml.loading);
+		ns1blankspace.xhtml.defaultElementID = this.id;
 		
 		interfaceMasterHomeTodayActions({
 			show: false,
@@ -110,8 +110,8 @@ function interfaceMasterHomeViewportBind()
 
 	$('#tdInterfaceViewportControlActionTomorrow').click(function(event)
 	{
-		$('#tdInterfaceMainHomeColumn1').html(gsLoadingXHTML);
-		gsHomeDefaultElementId = this.id;
+		$('#tdInterfaceMainHomeColumn1').html(ns1blankspace.xhtml.loading);
+		ns1blankspace.xhtml.defaultElementID = this.id;
 		
 		interfaceMasterHomeTodayActions({
 			show: false,
@@ -122,8 +122,8 @@ function interfaceMasterHomeViewportBind()
 	
 	$('#tdInterfaceViewportControlActionOverdue').click(function(event)
 	{
-		$('#tdInterfaceMainHomeColumn1').html(gsLoadingXHTML);
-		gsHomeDefaultElementId = this.id;
+		$('#tdInterfaceMainHomeColumn1').html(ns1blankspace.xhtml.loading);
+		ns1blankspace.xhtml.defaultElementID = this.id;
 		
 		interfaceMasterHomeTodayActions({
 			show: false,
@@ -134,8 +134,8 @@ function interfaceMasterHomeViewportBind()
 	
 	$('#tdInterfaceViewportControlActionFuture').click(function(event)
 	{
-		$('#tdInterfaceMainHomeColumn1').html(gsLoadingXHTML);
-		gsHomeDefaultElementId = this.id;
+		$('#tdInterfaceMainHomeColumn1').html(ns1blankspace.xhtml.loading);
+		ns1blankspace.xhtml.defaultElementID = this.id;
 		
 		interfaceMasterHomeTodayActions({
 			show: false,
@@ -162,10 +162,10 @@ function interfaceHome()
 
 function interfaceHomeShow()
 {
-	if (gsHomeDefaultElementId != '')
+	if (ns1blankspace.xhtml.defaultElementID != '')
 	{
-		$('#' + gsHomeDefaultElementId).addClass('interfaceViewportControlHighlight');
-		$('#' + gsHomeDefaultElementId).click();
+		$('#' + ns1blankspace.xhtml.defaultElementID).addClass('interfaceViewportControlHighlight');
+		$('#' + ns1blankspace.xhtml.defaultElementID).click();
 	};
 }
 
@@ -249,7 +249,7 @@ function interfaceHomeOptionsNewOpportunities(sXHTMLElementId, oResponse)
 			aHTML[++h] = '</tbody></table>';
 
 			$('#' + sXHTMLElementId).html(aHTML.join(''));
-			if (bShow) {$('#' + sXHTMLElementId).show(giShowSpeedOptions)}
+			if (bShow) {$('#' + sXHTMLElementId).show(ns1blankspace.option.showSpeedOptions)}
 		}
 		else
 		{
@@ -303,7 +303,7 @@ function interfaceHomeOptionsNewOpportunities(sXHTMLElementId, oResponse)
 			aHTML[++h] = '</tbody></table>';
 
 			$('#' + sXHTMLElementId).html(aHTML.join(''));
-			if (bShow) {$('#' + sXHTMLElementId).show(giShowSpeedOptions)}
+			if (bShow) {$('#' + sXHTMLElementId).show(ns1blankspace.option.showSpeedOptions)}
 	
 			$('.interfaceHomeOptionRowOptions').button( {
 				text: false,
@@ -385,7 +385,7 @@ function interfaceMasterHomeTodayActions(aParam, oResponse)
 			aHTML[++h] = '</tbody></table>';
 
 			$('#' + sXHTMLElementId).html(aHTML.join(''));
-			if (bShow) {$('#' + sXHTMLElementId).show(giShowSpeedOptions)}	
+			if (bShow) {$('#' + sXHTMLElementId).show(ns1blankspace.option.showSpeedOptions)}	
 		}
 		else
 		{
@@ -430,7 +430,7 @@ function interfaceMasterHomeTodayActions(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 
-			if (bShow) {$('#' + sXHTMLElementId).show(giShowSpeedOptions)}	
+			if (bShow) {$('#' + sXHTMLElementId).show(ns1blankspace.option.showSpeedOptions)}	
 			
 			interfaceMasterPaginationList(
 			{
@@ -594,7 +594,7 @@ function interfaceHomeLogonShow()
 	
 	aHTML[++h] = '<tr id="trInterfaceHomeLogonNotes" class="interfaceMasterLogon" >' +
 					'<td id="tdInterfaceHomeLogon" class="interfaceMasterLogon" style="width:150px;padding-right:15px;border-right-style:solid;border-width: 1px;border-color: #B8B8B8;">' +
-					gsLoadingXHTML + 
+					ns1blankspace.xhtml.loading + 
 					'</td>';
 					
 	aHTML[++h] = '<td id="tdInterfaceMasterLogonNotes" class="interfaceMasterLogon"  style="width:150px;padding-left:15px;">';
