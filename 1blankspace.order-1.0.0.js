@@ -5,13 +5,13 @@
  * 01 FEB 2010
  */
  
-function interfaceOrderMasterViewport(aParam)
+function interfaceOrderMasterViewport(oParam)
 {
 	var bShowHome = true
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 	}
 	
 	ns1blankspace.object = 43;
@@ -21,71 +21,71 @@ function interfaceOrderMasterViewport(aParam)
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceOrderMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 	
-	interfaceMasterReset();
+	ns1blankspaceReset();
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Orders"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceOrderSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceOrderSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceOrderSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceOrderSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceOrderSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceOrderNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceOrderNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceOrderSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceOrderSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceOrderSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceOrderSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceOrderHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceOrderHelpOptions();
 	});
@@ -100,7 +100,7 @@ function interfaceOrderMasterViewport(aParam)
 		interfaceOrderSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	if (bShowHome) {interfaceOrderHomeShow()};	
 }
@@ -114,7 +114,7 @@ function interfaceOrderHomeShow(oResponse)
 				
 	aHTML[++h] = '<table>';
 	aHTML[++h] = '<tr>' +
-					'<td id="interfaceMasterViewportOrderLarge" class="interfaceMasterViewportImageLarge">' +
+					'<td id="ns1blankspaceViewportOrderLarge" class="ns1blankspaceViewportImageLarge">' +
 					'&nbsp;' + 
 					'</td>' +
 					'</tr>';
@@ -156,7 +156,7 @@ function interfaceOrderHomeShow(oResponse)
 		interfaceOrderHomeStatusShow({status: aID[1]});
 	});
 		
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 }
 
 function interfaceOrderHomeRecentShow(oResponse)
@@ -220,13 +220,13 @@ function interfaceOrderHomeRecentShow(oResponse)
 	}
 }
 
-function interfaceOrderHomeStatusShow(aParam, oResponse)
+function interfaceOrderHomeStatusShow(oParam, oResponse)
 {
 	var iStatus = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.status != undefined) {iStatus = aParam.status}	
+		if (oParam.status != undefined) {iStatus = oParam.status}	
 	}
 		
 	if (oResponse == undefined)
@@ -237,7 +237,7 @@ function interfaceOrderHomeStatusShow(aParam, oResponse)
 		oSearch.addFilter('status', 'EQUAL_TO', iStatus);
 		oSearch.rows = 30;
 		oSearch.sort('orderdate', 'desc');
-		oSearch.getResults(function(data) {interfaceOrderHomeStatusShow(aParam, data)});
+		oSearch.getResults(function(data) {interfaceOrderHomeStatusShow(oParam, data)});
 	}
 	else
 	{
@@ -266,7 +266,7 @@ function interfaceOrderHomeStatusShow(aParam, oResponse)
 		
 		$('#divInterfaceMain').html(aHTML.join(''));
 	
-		interfaceMasterPaginationList(
+		ns1blankspacePaginationList(
 		{
 			xhtmlElementID: 'divInterfaceMain',
 			xhtmlContext: 'OrderStatus',
@@ -317,7 +317,7 @@ function interfaceOrderHomeStatusBind()
 	});
 }	
 
-function interfaceOrderSearch(sXHTMLElementId, aParam)
+function interfaceOrderSearch(sXHTMLElementId, oParam)
 {
 
 	var aSearch = sXHTMLElementId.split('-');
@@ -329,14 +329,14 @@ function interfaceOrderSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
@@ -359,13 +359,13 @@ function interfaceOrderSearch(sXHTMLElementId, aParam)
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 				
-		oSearch.getResults(function(data){interfaceOrderShow(aParam, data)});	
+		oSearch.getResults(function(data){interfaceOrderShow(oParam, data)});	
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -379,8 +379,8 @@ function interfaceOrderSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.endPoint = 'product';
@@ -389,13 +389,13 @@ function interfaceOrderSearch(sXHTMLElementId, aParam)
 			oSearch.rf = 'json';
 			oSearch.addFilter('reference', 'STRING_IS_LIKE', sSearchText);
 					
-			oSearch.getResults(function(data) {interfaceOrderSearchShow(aParam, data)});
+			oSearch.getResults(function(data) {interfaceOrderSearchShow(oParam, data)});
 			
 		}
 	};	
 }
 
-function interfaceOrderSearchShow(aParam, oResponse)
+function interfaceOrderSearchShow(oParam, oResponse)
 {
 
 	var iColumn = 0;
@@ -405,7 +405,7 @@ function interfaceOrderSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -438,16 +438,16 @@ function interfaceOrderSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		var oElement = $('#inputInterfaceMasterViewportControlSearch');
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		interfaceMasterSearchStop();
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		var oElement = $('#inputns1blankspaceViewportControlSearch');
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceOrderSearch(event.target.id, {source: 1});
 		});
 	}		
@@ -562,86 +562,86 @@ function interfaceOrderViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceOrderSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceOrderDetails();
 	});
 	
 	$('#tdInterfaceViewportControlAddress').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAddress");
+		ns1blankspaceMainViewportShow("#divInterfaceMainAddress");
 		interfaceOrderAddress("divInterfaceMainAddress");
 	});
 	
 	$('#tdInterfaceViewportControlProducts').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainProducts");
+		ns1blankspaceMainViewportShow("#divInterfaceMainProducts");
 		interfaceOrderProductItems();
 	});
 	
 	$('#tdInterfaceViewportControlSupplier').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSupplier");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSupplier");
 		interfaceOrderSupplier();
 	});
 	
 	$('#tdInterfaceViewportControlStock').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainStatus");
+		ns1blankspaceMainViewportShow("#divInterfaceMainStatus");
 		interfaceOrderStatus();
 	});
 	
 	$('#tdInterfaceViewportControlDelivery').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDelivery");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDelivery");
 		interfaceOrderDelivery();
 	});
 	
 	$('#tdInterfaceViewportControlDeliveryPick').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDeliveryPick");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDeliveryPick");
 		interfaceOrderDeliveryPick();
 	});
 	
 	$('#tdInterfaceViewportControlInvoices').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainInvoices");
+		ns1blankspaceMainViewportShow("#divInterfaceMainInvoices");
 		interfaceOrderInvoices();
 	});
 	
 	$('#tdInterfaceViewportControlCredits').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainCredits");
+		ns1blankspaceMainViewportShow("#divInterfaceMainCredits");
 		interfaceOrderCredits();
 	});
 	
 	$('#tdInterfaceViewportControlSupplierOrders').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSupplierOrders");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSupplierOrders");
 		interfaceOrderSupplierOrders();
 	});
 	
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
-		interfaceMasterActions({xhtmlElementID: 'divInterfaceMainActions'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
+		ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
 	});
 
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 }
 
-function interfaceOrderShow(aParam, oResponse)
+function interfaceOrderShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceOrderViewport();
 	
 	var aHTML = [];
@@ -660,16 +660,16 @@ function interfaceOrderShow(aParam, oResponse)
 	{
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 				
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
 
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceOrderMasterViewport({showHome: false});interfaceOrderSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceOrderSummary()'});
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceOrderSummary()'});
 	}	
 }		
 		
@@ -1126,13 +1126,13 @@ function interfaceOrderAddress()
 	}	
 }
 
-function interfaceOrderProductItems(aParam, oResponse)
+function interfaceOrderProductItems(oParam, oResponse)
 {
 	var sXHTMLElementID = 'divInterfaceMainProducts';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	if (oResponse == undefined)
@@ -1142,7 +1142,7 @@ function interfaceOrderProductItems(aParam, oResponse)
 		oSearch.addField('producttext,quantity,totalcost,totaltax');
 		oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.sort('producttext', 'desc');
-		oSearch.getResults(function(data){interfaceOrderProductItems(aParam, data)});
+		oSearch.getResults(function(data){interfaceOrderProductItems(oParam, data)});
 	}
 	else
 	{
@@ -1224,7 +1224,7 @@ function interfaceOrderProductItems(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 
-			interfaceMasterPaginationList(
+			ns1blankspacePaginationList(
 			{
 				xhtmlElementID: 'tdInterfaceMainOrderProductItemsColumn1',
 				xhtmlContext: 'OrderProductItems',
@@ -1299,13 +1299,13 @@ function interfaceOrderProductItemsBind()
 	}	
 }	
 
-function interfaceOrderProductItemsRemove(aParam, oResponse)
+function interfaceOrderProductItemsRemove(oParam, oResponse)
 {
 	var sXHTMLElementID;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 	
 	var aXHTMLElementID = sXHTMLElementID.split('-');
@@ -1322,7 +1322,7 @@ function interfaceOrderProductItemsRemove(aParam, oResponse)
 			url: '/ondemand/product/?' + sParam,
 			data: sData,
 			dataType: 'json',
-			success: function(data){interfaceOrderProductItemsRemove(aParam, data)}
+			success: function(data){interfaceOrderProductItemsRemove(oParam, data)}
 		});
 	}	
 	else
@@ -1333,18 +1333,18 @@ function interfaceOrderProductItemsRemove(aParam, oResponse)
 		}
 		else
 		{
-			interfaceMasterError(oResponse.error.errornotes);
+			ns1blankspaceError(oResponse.error.errornotes);
 		}
 	}	
 }
 
-function interfaceOrderProductItemsAdd(aParam, oResponse)
+function interfaceOrderProductItemsAdd(oParam, oResponse)
 {
 	var iStep = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.step != undefined) {iStep = aParam.step}	
+		if (oParam.step != undefined) {iStep = oParam.step}	
 	}
 	
 	if (oResponse == undefined)
@@ -1387,7 +1387,7 @@ function interfaceOrderProductItemsAdd(aParam, oResponse)
 					label: "Search"
 				})
 				.click(function() {
-					interfaceOrderProductItemsAdd($.extend(true, aParam, {step: 2}))
+					interfaceOrderProductItemsAdd($.extend(true, oParam, {step: 2}))
 				})
 				
 			$('#inputInterfaceMainProductAddReference').focus();
@@ -1401,7 +1401,7 @@ function interfaceOrderProductItemsAdd(aParam, oResponse)
 			oSearch.addField('reference,title');
 			oSearch.addFilter('title', 'STRING_IS_LIKE', $('#inputInterfaceMainProductAddReference').val());
 			oSearch.sort('title', 'asc');
-			oSearch.getResults(function(data){interfaceOrderProductItemsAdd($.extend(true, aParam, {step:3}), data)});
+			oSearch.getResults(function(data){interfaceOrderProductItemsAdd($.extend(true, oParam, {step:3}), data)});
 		}
 	}
 	else
@@ -1488,50 +1488,50 @@ function interfaceOrderNew()
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceOrderViewport();
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	interfaceOrderDetails();
 }
 
 function interfaceOrderSave()
 {
-	interfaceMasterStatusWorking();
+	ns1blankspaceStatusWorking();
 	
 	var sData = 'id=' + ((ns1blankspace.objectContext == -1)?'':ns1blankspace.objectContext);
 		
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
-		sData += '&orderdate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsOrderDate').val());
-		sData += '&orderbybusiness=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsOrderByBusiness').attr("data-id"));
-		sData += '&orderbyperson=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsOrderByPerson').attr("data-id"));
-		sData += '&purchaseorder=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPurchaseOrderReference').val());
+		sData += '&reference=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsReference').val());
+		sData += '&orderdate=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsOrderDate').val());
+		sData += '&orderbybusiness=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsOrderByBusiness').attr("data-id"));
+		sData += '&orderbyperson=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsOrderByPerson').attr("data-id"));
+		sData += '&purchaseorder=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsPurchaseOrderReference').val());
 		sData += '&source=' + $('input[name="radioSource"]:checked').val();
-		sData += '&notes=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsNotes').val());
+		sData += '&notes=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsNotes').val());
 	}
 		
 	if ($('#divInterfaceMainAddress').html() != '')
 	{
-		sData += '&streetaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetAddress1').val());
-		sData += '&streetaddress2=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetAddress2').val());
-		sData += '&streetsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetSuburb').val());
-		sData += '&streetstate=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetState').val());
-		sData += '&streetpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetPostCode').val());
-		sData += '&streetcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetCountry').val());
+		sData += '&streetaddress1=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetAddress1').val());
+		sData += '&streetaddress2=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetAddress2').val());
+		sData += '&streetsuburb=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetSuburb').val());
+		sData += '&streetstate=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetState').val());
+		sData += '&streetpostcode=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetPostCode').val());
+		sData += '&streetcountry=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetCountry').val());
 		
-		sData += '&mailingaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingAddress1').val());
-		sData += '&mailingaddress2=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingAddress2').val());
-		sData += '&mailingsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingSuburb').val());
-		sData += '&mailingstate=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingState').val());
-		sData += '&mailingpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingPostCode').val());
-		sData += '&mailingcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingCountry').val());
+		sData += '&mailingaddress1=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingAddress1').val());
+		sData += '&mailingaddress2=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingAddress2').val());
+		sData += '&mailingsuburb=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingSuburb').val());
+		sData += '&mailingstate=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingState').val());
+		sData += '&mailingpostcode=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingPostCode').val());
+		sData += '&mailingcountry=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingCountry').val());
 	}
 	
 	$.ajax(
 	{
 		type: 'POST',
-		url: interfaceMasterEndpointURL('PRODUCT_ORDER_MANAGE'),
+		url: ns1blankspaceEndpointURL('PRODUCT_ORDER_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: interfaceOrderSaveProcess
@@ -1543,23 +1543,23 @@ function interfaceOrderSaveProcess(oResponse)
 	
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 		if (ns1blankspace.objectContext == -1) {var bNew = true}
 		ns1blankspace.objectContext = oResponse.id;	
 	}
 	else
 	{
-		interfaceMasterError(oResponse.error.errornotes);
+		ns1blankspaceError(oResponse.error.errornotes);
 	}
 }
 
-function interfaceOrderDelivery(aParam, oResponse)
+function interfaceOrderDelivery(oParam, oResponse)
 {
 	var sXHTMLElementID = 'divInterfaceMainDelivery';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	if (oResponse == undefined)
@@ -1608,7 +1608,7 @@ function interfaceOrderDelivery(aParam, oResponse)
 		oSearch.method = 'PRODUCT_ORDER_DELIVERY_SEARCH';
 		oSearch.addField('reference,deliverydate,notes');
 		oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
-		oSearch.getResults(function(data) {interfaceOrderDelivery(aParam, data)});	
+		oSearch.getResults(function(data) {interfaceOrderDelivery(oParam, data)});	
 	}
 	else
 	{	
@@ -1644,7 +1644,7 @@ function interfaceOrderDelivery(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 
-			interfaceMasterPaginationList(
+			ns1blankspacePaginationList(
 			{
 				xhtmlElementID: 'tdInterfaceMainOrderDeliveryColumn1',
 				xhtmlContext: 'OrderDelivery',
@@ -1682,14 +1682,14 @@ function interfaceOrderDeliveryRow(oRow)
 	return aHTML.join('');
 }
 
-function interfaceOrderDeliveryPick(aParam, oResponse)
+function interfaceOrderDeliveryPick(oParam, oResponse)
 {
 	
 	var sXHTMLElementID = 'divInterfaceMainDeliveryPick';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	if (oResponse == undefined)
@@ -1713,7 +1713,7 @@ function interfaceOrderDeliveryPick(aParam, oResponse)
 		oSearch.method = 'PRODUCT_ORDER_DELIVERY_ITEM_SEARCH';
 		oSearch.addField('producttext,quantity');
 		oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
-		oSearch.getResults(function(data) {interfaceOrderDeliveryPick(aParam, data)});	
+		oSearch.getResults(function(data) {interfaceOrderDeliveryPick(oParam, data)});	
 	}
 	else
 	{	
@@ -1772,7 +1772,7 @@ function interfaceOrderDeliveryPick(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 
-			interfaceMasterPaginationList(
+			ns1blankspacePaginationList(
 			{
 				xhtmlElementID: 'tdInterfaceMainOrderDeliveryPickColumn1',
 				xhtmlContext: 'OrderDeliveryPick',
@@ -1816,13 +1816,13 @@ function interfaceOrderDeliveryPickRow(oRow)
 	return aHTML.join('');
 }
 
-function interfaceOrderInvoices(aParam, oResponse)
+function interfaceOrderInvoices(oParam, oResponse)
 {
 	var sXHTMLElementID = 'divInterfaceMainInvoices';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	if (oResponse == undefined)
@@ -1885,7 +1885,7 @@ function interfaceOrderInvoices(aParam, oResponse)
 			oSearch.addFilter('object', 'EQUAL_TO', 51);
 			oSearch.addFilter('objectcontext', 'IN_LIST', aID.join(','));
 		
-			oSearch.getResults(function(data) {interfaceOrderInvoices(aParam, data)});
+			oSearch.getResults(function(data) {interfaceOrderInvoices(oParam, data)});
 		});	
 	}
 	else
@@ -1932,7 +1932,7 @@ function interfaceOrderInvoices(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 
-			interfaceMasterPaginationList(
+			ns1blankspacePaginationList(
 			{
 				xhtmlElementID: 'tdInterfaceMainOrderInvoicesColumn1',
 				xhtmlContext: 'OrderInvoices',

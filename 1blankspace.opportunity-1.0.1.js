@@ -7,7 +7,7 @@
  
 ns1blankspace.opportuntityProcessingStatus;
 
-function interfaceOpportunityMasterViewport(aParam)
+function interfaceOpportunityMasterViewport(oParam)
 {
 	ns1blankspace.object = ns1blankspace.data.object.opportunity;
 	ns1blankspace.objectName = 'Opportunity';
@@ -16,55 +16,55 @@ function interfaceOpportunityMasterViewport(aParam)
 		
 	var bShowHome = true;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
 	}	
 	
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 		
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceOpportunityMasterViewport({showHome: true});',
 			move: false
 			})		
 	}	
 		
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Opportunities"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceOpportunitySearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceOpportunitySearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceOpportunitySearch('inputInterfaceMasterViewportControlSearch');
+		interfaceOpportunitySearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceOpportunitySearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceOpportunityNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceOpportunitySave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 	
 		var aHTML = [];
@@ -80,27 +80,27 @@ function interfaceOpportunityMasterViewport(aParam)
 
 		aHTML[++h] = '</table>';
 
-		interfaceMasterViewportActionShow(this, aHTML.join(''), "interfaceOpportunityActionOptionsBind()");
+		ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceOpportunityActionOptionsBind()");
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceOpportunitySetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceOpportunitySetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceOpportunityHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceOpportunityHelpOptions();
 	});
@@ -115,7 +115,7 @@ function interfaceOpportunityMasterViewport(aParam)
 		interfaceOpportunitySearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	if (bShowHome) {interfaceOpportunityHomeShow()};
 	
@@ -143,7 +143,7 @@ function interfaceOpportunityHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportOpportunityLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportOpportunityLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -151,7 +151,7 @@ function interfaceOpportunityHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = 'opportunity';
@@ -216,7 +216,7 @@ function interfaceOpportunityHomeShow(oResponse)
 	}
 }
 
-function interfaceOpportunitySearch(sXHTMLElementId, aParam)
+function interfaceOpportunitySearch(sXHTMLElementId, oParam)
 {
 		
 	var aSearch = sXHTMLElementId.split('-');
@@ -229,14 +229,14 @@ function interfaceOpportunitySearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 		
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -261,13 +261,13 @@ function interfaceOpportunitySearch(sXHTMLElementId, aParam)
 		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.rf = 'json';
 	
-		oSearch.getResults(function(data){interfaceOpportunityShow(aParam, data)}) 
+		oSearch.getResults(function(data){interfaceOpportunityShow(oParam, data)}) 
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -281,8 +281,8 @@ function interfaceOpportunitySearch(sXHTMLElementId, aParam)
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'OPPORTUNITY_SEARCH';
@@ -300,13 +300,13 @@ function interfaceOpportunitySearch(sXHTMLElementId, aParam)
 			
 			oSearch.rf = 'json';
 			
-			oSearch.getResults(function(data){interfaceOpportunitySearchShow(aParam, data)}) 
+			oSearch.getResults(function(data){interfaceOpportunitySearchShow(oParam, data)}) 
 
 		}
 	};	
 }
 
-function interfaceOpportunitySearchShow(aParam, oResponse)
+function interfaceOpportunitySearchShow(oParam, oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -314,8 +314,8 @@ function interfaceOpportunitySearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();	
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();	
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -350,25 +350,25 @@ function interfaceOpportunitySearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(
-		interfaceMasterPagination(
+		$('#divns1blankspaceViewportControlOptions').html(
+		ns1blankspacePagination(
 		   {
 			html: aHTML.join(''),
 			more: (oResponse.morerows == "true"),
 			type: 'json'
 		   }) 
 		);		
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		interfaceMasterSearchStop();
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceOpportunitySearch(event.target.id, {source: 1});
 		});
 		
-		interfaceMasterPaginationBind(
+		ns1blankspacePaginationBind(
 		{
 			columns: 'businessname-firstname-surname',
 			more: oResponse.moreid,
@@ -442,42 +442,42 @@ function interfaceOpportunityViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceOpportunitySummary();
 	});	
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceOpportunityDetails();
 	});
 	
 	$('#tdInterfaceViewportControlContact').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainContact");
+		ns1blankspaceMainViewportShow("#divInterfaceMainContact");
 		interfaceOpportunityContact();
 	});
 
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainActions");
-		interfaceMasterActions({xhtmlElementID: 'divInterfaceMainActions'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainActions");
+		ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
 	});
 	
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments");
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments");
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 	
 }
 
-function interfaceOpportunityShow(aParam, oResponse)
+function interfaceOpportunityShow(oParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceOpportunityViewport();
-	interfaceMasterStatus('');
+	ns1blankspaceStatus('');
 
 	var aHTML = [];
 	var h = -1;
@@ -495,7 +495,7 @@ function interfaceOpportunityShow(aParam, oResponse)
 	{
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceOpportunityMasterViewport({showHome: false});interfaceOpportunitySearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
@@ -520,8 +520,8 @@ function interfaceOpportunityShow(aParam, oResponse)
 		
 		$('#divInterfaceViewportControlContext').html(sContext);
 		
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 		
 		interfaceOpportunitySummary();
 	}	
@@ -952,8 +952,8 @@ function interfaceOpportunityNew(oXML)
 	ns1blankspace.objectContextData = unefined;
 	ns1blankspace.objectContext = -1;
 	interfaceOpportunityViewport(true);
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	interfaceOpportunityDetails();	
 }
 
@@ -980,15 +980,15 @@ function interfaceOpportunitySave()
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
 		sData += '&type=' + giOpportunityTypeOpportunity;
-		sData += '&startdate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDateReceived').val());
+		sData += '&startdate=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsDateReceived').val());
 		
 		if ($('#inputInterfaceMainDetailsSourceOfContact').attr('onDemandID') != undefined)
-		{	sData += '&source=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsSourceOfContact').attr('onDemandID'));}
+		{	sData += '&source=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsSourceOfContact').attr('onDemandID'));}
 		
-		sData += '&sourcenote=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsSourceOfContactOther').val());
+		sData += '&sourcenote=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsSourceOfContactOther').val());
 		
 		if ($('#inputInterfaceMainDetailsManagedBy').attr('onDemandID'))
-		{	sData += '&manageruser=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsManagedBy').attr('onDemandID'));}
+		{	sData += '&manageruser=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsManagedBy').attr('onDemandID'));}
 		else
 		{	
 			if (ns1blankspace.objectContextData != undefined)	
@@ -1039,7 +1039,7 @@ function interfaceOpportunitySave()
 
 		if ($('#inputInterfaceMainDetailsStatus').attr('onDemandID') != undefined)
 		{			
-			sData += '&status=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsStatus').attr('onDemandID'));
+			sData += '&status=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsStatus').attr('onDemandID'));
 		}
 		else
 		{	
@@ -1053,7 +1053,7 @@ function interfaceOpportunitySave()
 			{	sData += '&status=' + giOpportunityStatusOpen;	}
 		}
 		
-		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
+		sData += '&description=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsDescription').val());
 		
 		if ($('#inputInterfaceMainDetailsNewProcessingStatus').attr('onDemandID') != undefined)
 		{	if (ns1blankspace.objectContext != -1)
@@ -1097,20 +1097,20 @@ function interfaceOpportunitySave()
 			alert('Surname is mandatory for a Contact.');
 			return '';	}
 			
-		sData += '&businessname=' + interfaceMasterFormatSave($('#inputInterfaceMainContactBusinessName').val());
-		sData += '&firstname=' + interfaceMasterFormatSave($('#inputInterfaceMainContactFirstName').val());
-		sData += '&surname=' + interfaceMasterFormatSave($('#inputInterfaceMainContactSurname').val());
-		sData += '&phone=' + interfaceMasterFormatSave($('#inputInterfaceMainContactPhone').val());
-		sData += '&mobile=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMobile').val());
-		sData += '&email=' + interfaceMasterFormatSave($('#inputInterfaceMainContactEmail').val());
-		sData += '&mailingaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingAddress1').val());
-		sData += '&mailingsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingSuburb').val());
-		sData += '&mailingstate=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingState').val());
-		sData += '&mailingpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingPostCode').val());
-		sData += '&mailingcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingCountry').val());
+		sData += '&businessname=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactBusinessName').val());
+		sData += '&firstname=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactFirstName').val());
+		sData += '&surname=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactSurname').val());
+		sData += '&phone=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactPhone').val());
+		sData += '&mobile=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMobile').val());
+		sData += '&email=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactEmail').val());
+		sData += '&mailingaddress1=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingAddress1').val());
+		sData += '&mailingsuburb=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingSuburb').val());
+		sData += '&mailingstate=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingState').val());
+		sData += '&mailingpostcode=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingPostCode').val());
+		sData += '&mailingcountry=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingCountry').val());
 	}
 	
-	interfaceMasterSave(sParam, sData, 'Opportunity Saved');
+	ns1blankspaceSave(sParam, sData, 'Opportunity Saved');
 	
 	if (glObjectSaveId != -1)
 	{	
@@ -1154,24 +1154,24 @@ function interfaceOpportunityManageProspect()
 		
 		if ($('#inputInterfaceMainContactBusinessName').val() != undefined)
 		{
-			sData += '&tradename=' + interfaceMasterFormatSave($('#inputInterfaceMainContactBusinessName').val());
-			sData += '&mailingaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingAddress1').val());
-			sData += '&mailingsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingSuburb').val());
-			sData += '&mailingstate=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingState').val());
-			sData += '&mailingpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingPostCode').val());
-			sData += '&mailingcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingCountry').val());
-			sData += '&phonenumber=' + interfaceMasterFormatSave($('#inputInterfaceMainContactPhone').val());
-			sData += '&faxnumber=' + interfaceMasterFormatSave($('#inputInterfaceMainContactFax').val());
+			sData += '&tradename=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactBusinessName').val());
+			sData += '&mailingaddress1=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingAddress1').val());
+			sData += '&mailingsuburb=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingSuburb').val());
+			sData += '&mailingstate=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingState').val());
+			sData += '&mailingpostcode=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingPostCode').val());
+			sData += '&mailingcountry=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingCountry').val());
+			sData += '&phonenumber=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactPhone').val());
+			sData += '&faxnumber=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactFax').val());
 		}
 		else
 		{
-			sData += '&tradename=' + interfaceMasterinterfaceMasterFormatSave(onDemandXMLGetData(oRow, 'businessname'));
-			sData += '&mailingaddress1=' + interfaceMasterinterfaceMasterFormatSave(onDemandXMLGetData(oRow, 'mailingaddress1'));
-			sData += '&mailingsuburb=' + interfaceMasterinterfaceMasterFormatSave(onDemandXMLGetData(oRow, 'mailingsuburb'));
-			sData += '&mailingstate=' + interfaceMasterinterfaceMasterFormatSave(onDemandXMLGetData(oRow, 'mailingstate'));
-			sData += '&mailingpostcode=' + interfaceMasterinterfaceMasterFormatSave(onDemandXMLGetData(oRow, 'mailingpostcode'));
-			sData += '&mailingcountry=' + interfaceMasterinterfaceMasterFormatSave(onDemandXMLGetData(oRow, 'mailingcountry'));
-			sData += '&phonenumber=' + interfaceMasterinterfaceMasterFormatSave(onDemandXMLGetData(oRow, 'phone'));
+			sData += '&tradename=' + ns1blankspacens1blankspaceFormatSave(onDemandXMLGetData(oRow, 'businessname'));
+			sData += '&mailingaddress1=' + ns1blankspacens1blankspaceFormatSave(onDemandXMLGetData(oRow, 'mailingaddress1'));
+			sData += '&mailingsuburb=' + ns1blankspacens1blankspaceFormatSave(onDemandXMLGetData(oRow, 'mailingsuburb'));
+			sData += '&mailingstate=' + ns1blankspacens1blankspaceFormatSave(onDemandXMLGetData(oRow, 'mailingstate'));
+			sData += '&mailingpostcode=' + ns1blankspacens1blankspaceFormatSave(onDemandXMLGetData(oRow, 'mailingpostcode'));
+			sData += '&mailingcountry=' + ns1blankspacens1blankspaceFormatSave(onDemandXMLGetData(oRow, 'mailingcountry'));
+			sData += '&phonenumber=' + ns1blankspacens1blankspaceFormatSave(onDemandXMLGetData(oRow, 'phone'));
 		}
 		
 		sData += '&customerstatus=' + ns1blankspace.objectStatusProspect;
@@ -1183,11 +1183,11 @@ function interfaceOpportunityManageProspect()
 		}
 		else {sSuccessMessage = 'added'}
 
-		interfaceMasterSave('/ondemand/contact/?' + sParam, sData, 'Prospect Business ' + sSuccessMessage + '.');
+		ns1blankspaceSave('/ondemand/contact/?' + sParam, sData, 'Prospect Business ' + sSuccessMessage + '.');
 		if (glObjectSaveId != -1)
 		{
 			sReturn = glObjectSaveId;
-			interfaceMasterSave('/ondemand/opportunity/?method=OPPORTUNITY_MANAGE'
+			ns1blankspaceSave('/ondemand/opportunity/?method=OPPORTUNITY_MANAGE'
 								, '&id=' + ns1blankspace.objectContext + 
 								  '&requestbybusiness=' + sReturn +
 								  '&updatecontactid=1'
@@ -1198,7 +1198,7 @@ function interfaceOpportunityManageProspect()
 				ns1blankspace.objectContext = glObjectSaveId;
 				sParam = '/ondemand/contact/?method=CONTACT_BUSINESS_GROUP_MANAGE';
 				sData += '&contactbusiness=' + sReturn + '&group=' + giGroupBusinessClient;
-				interfaceMasterSave(sParam, sData, '');
+				ns1blankspaceSave(sParam, sData, '');
 			}
 
 		}
@@ -1212,36 +1212,36 @@ function interfaceOpportunityManageProspect()
 		
 		if ($('#inputInterfaceMainContactSurname').val() != undefined)
 		{
-			sData += '&firstname=' + interfaceMasterFormatSave($('#inputInterfaceMainContactFirstName').val());
-			sData += '&surname=' + interfaceMasterFormatSave($('#inputInterfaceMainContactSurname').val());
-			sData += '&jobtitle=' + interfaceMasterFormatSave($('#inputInterfaceMainContactJobTitle').val());
-			sData += '&streetaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainContactStreetAddress1').val());
-			sData += '&streetsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainContactStreetSuburb').val());
-			sData += '&streetstate=' + interfaceMasterFormatSave($('#inputInterfaceMainContactStreetState').val());
-			sData += '&streetpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainContactStreetPostCode').val());
-			sData += '&streetcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainContactStreetCountry').val());
-			sData += '&mailingaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingAddress1').val());
-			sData += '&mailingsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingSuburb').val());
-			sData += '&mailingstate=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingState').val());
-			sData += '&mailingpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingPostCode').val());
-			sData += '&mailingcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMailingCountry').val());
-			sData += '&phone=' + interfaceMasterFormatSave($('#inputInterfaceMainContactPhone').val());
-			sData += '&mobile=' + interfaceMasterFormatSave($('#inputInterfaceMainContactMobile').val());
-			sData += '&email=' + interfaceMasterFormatSave($('#inputInterfaceMainContactEmail').val());
-			sData += '&faxnumber=' + interfaceMasterFormatSave($('#inputInterfaceMainContactFax').val());
+			sData += '&firstname=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactFirstName').val());
+			sData += '&surname=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactSurname').val());
+			sData += '&jobtitle=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactJobTitle').val());
+			sData += '&streetaddress1=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactStreetAddress1').val());
+			sData += '&streetsuburb=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactStreetSuburb').val());
+			sData += '&streetstate=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactStreetState').val());
+			sData += '&streetpostcode=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactStreetPostCode').val());
+			sData += '&streetcountry=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactStreetCountry').val());
+			sData += '&mailingaddress1=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingAddress1').val());
+			sData += '&mailingsuburb=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingSuburb').val());
+			sData += '&mailingstate=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingState').val());
+			sData += '&mailingpostcode=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingPostCode').val());
+			sData += '&mailingcountry=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMailingCountry').val());
+			sData += '&phone=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactPhone').val());
+			sData += '&mobile=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactMobile').val());
+			sData += '&email=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactEmail').val());
+			sData += '&faxnumber=' + ns1blankspaceFormatSave($('#inputInterfaceMainContactFax').val());
 		}
 		else
 		{
-			sData += '&firstname=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.firstname);
-			sData += '&surname=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.surname);
-			sData += '&mailingaddress1=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.mailingaddress1);
-			sData += '&mailingsuburb=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.mailingsuburb);
-			sData += '&mailingstate=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.mailingstate);
-			sData += '&mailingpostcode=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.mailingpostcode);
-			sData += '&mailingcountry=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.mailingcountry);
-			sData += '&phone=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.phone);
-			sData += '&mobile=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.mobile);
-			sData += '&email=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.email);
+			sData += '&firstname=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.firstname);
+			sData += '&surname=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.surname);
+			sData += '&mailingaddress1=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.mailingaddress1);
+			sData += '&mailingsuburb=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.mailingsuburb);
+			sData += '&mailingstate=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.mailingstate);
+			sData += '&mailingpostcode=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.mailingpostcode);
+			sData += '&mailingcountry=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.mailingcountry);
+			sData += '&phone=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.phone);
+			sData += '&mobile=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.mobile);
+			sData += '&email=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.email);
 		}
 		sData += '&customerstatus=' + ns1blankspace.objectStatusProspect;
 		
@@ -1252,11 +1252,11 @@ function interfaceOpportunityManageProspect()
 		}
 		else {sSuccessMessage = 'added'}
 		
-		interfaceMasterSave('/ondemand/contact/?' + sParam, sData, 'Prospect Contact ' + sSuccessMessage + '!');
+		ns1blankspaceSave('/ondemand/contact/?' + sParam, sData, 'Prospect Contact ' + sSuccessMessage + '!');
 		if (glObjectSaveId != -1)
 		{
 			sReturn = glObjectSaveId;
-			interfaceMasterSave('/ondemand/opportunity/?method=OPPORTUNITY_MANAGE'
+			ns1blankspaceSave('/ondemand/opportunity/?method=OPPORTUNITY_MANAGE'
 								, '&select=' + ns1blankspace.objectContext + 
 								  '&requestbyperson=' + sReturn +
 								  '&updatecontactid=1'
@@ -1358,15 +1358,15 @@ function GetCurrentContactStatus(oResponse, asContactType, aiContactId)
 	}	
 }
 
-function interfaceOpportuntityProcessingStatus(aParam)
+function interfaceOpportuntityProcessingStatus(oParam)
 {
 
 	var sFind;
 	var iFind = -1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.find != undefined) {sFind = aParam.find}
+		if (oParam.find != undefined) {sFind = oParam.find}
 	}	
 
 	if (ns1blankspace.opportuntityProcessingStatus == undefined)

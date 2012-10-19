@@ -5,15 +5,15 @@
  * 01 FEB 2010
  */
 
-function interfaceFinancialTaxMasterViewport(aParam)
+function interfaceFinancialTaxMasterViewport(oParam)
 {
 	interfaceFinancialMasterInitialise();
 	
 	var bShowHome = true
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 	}
 
 	ns1blankspace.object = -1;
@@ -23,71 +23,71 @@ function interfaceFinancialTaxMasterViewport(aParam)
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceFinancialTaxMasterViewport({showHome: true});',
 			move: false
 			})		
 	}	
 			
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Tax"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceFinancialSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceFinancialSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceFinancialNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceFinancialNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceFinancialSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceFinancialSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceFinancialSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceFinancialSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceFinancialHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceFinancialHelpOptions();
 	});
@@ -102,11 +102,11 @@ function interfaceFinancialTaxMasterViewport(aParam)
 		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialTaxHomeShow()};	
 }
 
-function interfaceFinancialTaxHomeShow(aParam, oResponse)
+function interfaceFinancialTaxHomeShow(oParam, oResponse)
 {		
 	if (oResponse == undefined)
 	{
@@ -128,7 +128,7 @@ function interfaceFinancialTaxHomeShow(aParam, oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportFinancialLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportFinancialLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -136,7 +136,7 @@ function interfaceFinancialTaxHomeShow(aParam, oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_TAX_REPORT_SEARCH';
@@ -144,7 +144,7 @@ function interfaceFinancialTaxHomeShow(aParam, oResponse)
 		oSearch.addField('*')
 		oSearch.rows = 10;
 		oSearch.sort('enddate', 'desc');
-		oSearch.getResults(function(data){interfaceFinancialTaxHomeShow(aParam, data)});
+		oSearch.getResults(function(data){interfaceFinancialTaxHomeShow(oParam, data)});
 	}
 	else
 	{
@@ -195,7 +195,7 @@ function interfaceFinancialTaxHomeShow(aParam, oResponse)
 }
 
 
-function interfaceFinancialTaxSearch(sXHTMLElementId, aParam)
+function interfaceFinancialTaxSearch(sXHTMLElementId, oParam)
 {
 	var aSearch = sXHTMLElementId.split('-');
 	var sElementId = aSearch[0];
@@ -206,14 +206,14 @@ function interfaceFinancialTaxSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
@@ -228,13 +228,13 @@ function interfaceFinancialTaxSearch(sXHTMLElementId, aParam)
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 		
-		oSearch.getResults(function(data) {interfaceFinancialTaxShow(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialTaxShow(oParam, data)});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -247,19 +247,19 @@ function interfaceFinancialTaxSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 			oSearch.addField('enddate,taxofficereference');
 			oSearch.addFilter('taxofficereference', 'STRING_IS_LIKE', sSearchText);
 			
-			oSearch.getResults(function(data) {interfaceFinancialTaxSearchShow(aParam, data)});	
+			oSearch.getResults(function(data) {interfaceFinancialTaxSearchShow(oParam, data)});	
 		}
 	};	
 }
 
-function interfaceFinancialTaxSearchShow(aParam, oResponse)
+function interfaceFinancialTaxSearchShow(oParam, oResponse)
 {
 
 	var iColumn = 0;
@@ -269,7 +269,7 @@ function interfaceFinancialTaxSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{		
@@ -299,13 +299,13 @@ function interfaceFinancialTaxSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceFinancialTaxSearch(event.target.id, {source: 1});
 		});
 	}		
@@ -353,26 +353,26 @@ function interfaceFinancialTaxViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceFinancialTaxSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceFinancialTaxDetails();
 	});
 	
 	$('#tdInterfaceViewportControlReporting').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainReport", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainReport", true);
 		interfaceFinancialTaxReport();
 	});
 }
 
-function interfaceFinancialTaxShow(aParam, oResponse)
+function interfaceFinancialTaxShow(oParam, oResponse)
 {	
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceFinancialTaxViewport();
 		
 	var aHTML = [];
@@ -391,21 +391,21 @@ function interfaceFinancialTaxShow(aParam, oResponse)
 	{
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 			
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 			
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.enddate+
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_status">' + ns1blankspace.objectContextData.statustext + '</span>');
 		
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceFinancialTaxMasterViewport({showHome: false});interfaceFinancialTaxSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 	
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceFinancialTaxSummary()'});
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceFinancialTaxSummary()'});
 	}		
 }	
 
-function interfaceFinancialTaxSummary(aParam, oResponse)
+function interfaceFinancialTaxSummary(oParam, oResponse)
 {
 	var aHTML = [];
 	var h = -1;
@@ -476,7 +476,7 @@ function interfaceFinancialTaxReport()
 	interfaceFinancialTaxReportSummary();
 }
 
-function interfaceFinancialTaxReportSummary(aParam)	
+function interfaceFinancialTaxReportSummary(oParam)	
 {	
 	var sCategory = "revenue";
 					
@@ -487,9 +487,9 @@ function interfaceFinancialTaxReportSummary(aParam)
 		"instalments": ["t1","t2","t3","t7","t9"]
 	};
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.category != undefined) {sCategory = aParam.category}
+		if (oParam.category != undefined) {sCategory = oParam.category}
 	}
 	
 	$('#tdInterfaceMainTaxColumnReportType').html(ns1blankspace.xhtml.loadingSmall);
@@ -527,28 +527,28 @@ function interfaceFinancialTaxReportSummary(aParam)
 	});
 }
 
-function interfaceFinancialTaxReportItems(aParam, oResponse)
+function interfaceFinancialTaxReportItems(oParam, oResponse)
 {
 	var iStep = 1;
 	var iType = 1;
 	var iSubType = 1;
 	var sField = 'G1';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.step != undefined) {iStep = aParam.step}
-		if (aParam.type != undefined) {iType = aParam.type}
-		if (aParam.subType != undefined) {iSubType = aParam.subType}
-		if (aParam.field != undefined) {sField = aParam.field}
+		if (oParam.step != undefined) {iStep = oParam.step}
+		if (oParam.type != undefined) {iType = oParam.type}
+		if (oParam.subType != undefined) {iSubType = oParam.subType}
+		if (oParam.field != undefined) {sField = oParam.field}
 	}
 	else
 	{
-		aParam = {};
+		oParam = {};
 	}
 	
 	if (iStep == 1)
 	{
-		$.extend(true, aParam, {step: 2});
+		$.extend(true, oParam, {step: 2});
 		
 		var aHTML = [];
 		var h = -1;
@@ -587,16 +587,16 @@ function interfaceFinancialTaxReportItems(aParam, oResponse)
 		$('#interfaceMainTaxColumnSubType :radio').click(function()
 		{
 			var aID = (event.target.id).split('-');
-			$.extend(true, aParam, {subType: aID[1], step: 2});
-			interfaceFinancialTaxReportItems(aParam);	
+			$.extend(true, oParam, {subType: aID[1], step: 2});
+			interfaceFinancialTaxReportItems(oParam);	
 		});
 		
-		interfaceFinancialTaxReportItems(aParam);
+		interfaceFinancialTaxReportItems(oParam);
 	}
 	
 	if (iStep == 2)
 	{
-		$.extend(true, aParam, {step: 3});
+		$.extend(true, oParam, {step: 3});
 		
 		var sData = 'id=' + ns1blankspace.objectContext +
 					'&type=' + iType +
@@ -610,7 +610,7 @@ function interfaceFinancialTaxReportItems(aParam, oResponse)
 			data: sData,
 			dataType: 'json',
 			success: function(data) {
-				interfaceFinancialTaxReportItems(aParam, data)
+				interfaceFinancialTaxReportItems(oParam, data)
 			}
 		});
 	}
@@ -645,7 +645,7 @@ function interfaceFinancialTaxReportItems(aParam, oResponse)
 	}	
 }
 
-function interfaceFinancialTaxDetails(aParam)
+function interfaceFinancialTaxDetails(oParam)
 {	
 	var aHTML = [];
 	var h = -1;

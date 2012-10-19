@@ -27,7 +27,7 @@ ns1blankspace.oauth.uri;
 ns1blankspace.oauth.state;
 ns1blankspace.oauth.space
 
-function interfaceMasterViewport()
+function ns1blankspaceViewport()
 {
 	var aHTML = [];
 	var h = -1;
@@ -86,7 +86,7 @@ function interfaceOAuth2MasterViewport()
 			{
 				if (oJSON.status == 'ER')
 				{
-					interfaceMasterLogonShow(
+					ns1blankspaceLogonShow(
 					{
 						stayOnDocument: true,
 						setSecurity: true,

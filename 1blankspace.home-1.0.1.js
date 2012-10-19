@@ -16,7 +16,7 @@ $(function()
 	switch(sHash)
 	{
 	case '#home':
-		interfaceMasterHomeShow();
+		ns1blankspaceHomeShow();
 		break;
 	
 	case '#contacts.person':
@@ -57,7 +57,7 @@ function interfaceHomeViewport()
 	aHTML[++h] = '<table id="tableInterfaceHomeViewport">';
 	
 	aHTML[++h] = '<tr>' +
-						'<td style="background-position: right center;" id="interfaceMasterViewportAction" class="interfaceMasterViewportImageLarge">' +
+						'<td style="background-position: right center;" id="ns1blankspaceViewportAction" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -90,10 +90,10 @@ function interfaceHomeViewport()
 			
 	$('#divInterfaceViewportControl').html(aHTML.join(''));
 	
-	interfaceMasterHomeViewportBind();
+	ns1blankspaceHomeViewportBind();
 }
 
-function interfaceMasterHomeViewportBind()
+function ns1blankspaceHomeViewportBind()
 {
 	
 	$('#tdInterfaceViewportControlActionToday').click(function(event)
@@ -101,7 +101,7 @@ function interfaceMasterHomeViewportBind()
 		$('#tdInterfaceMainHomeColumn1').html(ns1blankspace.xhtml.loading);
 		ns1blankspace.xhtml.defaultElementID = this.id;
 		
-		interfaceMasterHomeTodayActions({
+		ns1blankspaceHomeTodayActions({
 			show: false,
 			xhtmlElementId: 'tdInterfaceMainHomeColumn1',
 			day: 0
@@ -113,7 +113,7 @@ function interfaceMasterHomeViewportBind()
 		$('#tdInterfaceMainHomeColumn1').html(ns1blankspace.xhtml.loading);
 		ns1blankspace.xhtml.defaultElementID = this.id;
 		
-		interfaceMasterHomeTodayActions({
+		ns1blankspaceHomeTodayActions({
 			show: false,
 			xhtmlElementId: 'tdInterfaceMainHomeColumn1',
 			day: 1
@@ -125,7 +125,7 @@ function interfaceMasterHomeViewportBind()
 		$('#tdInterfaceMainHomeColumn1').html(ns1blankspace.xhtml.loading);
 		ns1blankspace.xhtml.defaultElementID = this.id;
 		
-		interfaceMasterHomeTodayActions({
+		ns1blankspaceHomeTodayActions({
 			show: false,
 			xhtmlElementId: 'tdInterfaceMainHomeColumn1',
 			overdue: true
@@ -137,7 +137,7 @@ function interfaceMasterHomeViewportBind()
 		$('#tdInterfaceMainHomeColumn1').html(ns1blankspace.xhtml.loading);
 		ns1blankspace.xhtml.defaultElementID = this.id;
 		
-		interfaceMasterHomeTodayActions({
+		ns1blankspaceHomeTodayActions({
 			show: false,
 			xhtmlElementId: 'tdInterfaceMainHomeColumn1',
 			future: true
@@ -217,10 +217,10 @@ function interfaceHomeOptionsNewOpportunities(sXHTMLElementId, oResponse)
 
 	if (sXHTMLElementId == undefined) 
 	{
-		sXHTMLElementId = 'divInterfaceMasterViewportControlOptions';
+		sXHTMLElementId = 'divns1blankspaceViewportControlOptions';
 	}
 	
-	if (sXHTMLElementId == 'divInterfaceMasterViewportControlOptions') 
+	if (sXHTMLElementId == 'divns1blankspaceViewportControlOptions') 
 	{
 		bShow = true;
 	}	
@@ -312,7 +312,7 @@ function interfaceHomeOptionsNewOpportunities(sXHTMLElementId, oResponse)
 				}
 			})
 			.click(function() {
-				$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '')
+				$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '')
 				interfaceEnquiryMasterViewport();
 				interfaceEnquirySearch(this.id)
 			})
@@ -322,7 +322,7 @@ function interfaceHomeOptionsNewOpportunities(sXHTMLElementId, oResponse)
 	}
 }
 
-function interfaceMasterHomeTodayActions(aParam, oResponse)
+function ns1blankspaceHomeTodayActions(oParam, oResponse)
 {
 
 	var bShow = false;
@@ -332,14 +332,14 @@ function interfaceMasterHomeTodayActions(aParam, oResponse)
 	var bOverdue = false;
 	var bFuture = false;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.show != undefined) {bShow = aParam.show}
-		if (aParam.overdue != undefined) {bOverdue = aParam.overdue}
-		if (aParam.future != undefined) {bFuture = aParam.future}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.day != undefined) {iDay = aParam.day}
-		if (aParam.label != undefined) {sLabel = aParam.label}
+		if (oParam.show != undefined) {bShow = oParam.show}
+		if (oParam.overdue != undefined) {bOverdue = oParam.overdue}
+		if (oParam.future != undefined) {bFuture = oParam.future}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.day != undefined) {iDay = oParam.day}
+		if (oParam.label != undefined) {sLabel = oParam.label}
 	}
 
 	var aHTML = [];
@@ -371,14 +371,14 @@ function interfaceMasterHomeTodayActions(aParam, oResponse)
 			url: '/ondemand/action/?' + sParam,
 			data: sData,
 			dataType: 'json',
-			success: function(data) {interfaceMasterHomeTodayActions(aParam, data)}
+			success: function(data) {ns1blankspaceHomeTodayActions(oParam, data)}
 		});
 	}
 	else
 	{
 		if (oResponse.data.rows.length == 0)
 		{
-			aHTML[++h] = '<table id="tableHomeTodayActions" class="interfaceMasterHomeTodayActions">';
+			aHTML[++h] = '<table id="tableHomeTodayActions" class="ns1blankspaceHomeTodayActions">';
 			aHTML[++h] = '<tbody>'
 			aHTML[++h] = '<tr class="interfaceMainCaption">' +
 							'<td class="interfaceMainRowNothing">No ' + sLabel + '</td></tr>';
@@ -391,7 +391,7 @@ function interfaceMasterHomeTodayActions(aParam, oResponse)
 		{
 			if (bShow)
 			{
-				aHTML[++h] = '<table id="tableHomeToday" class="interfaceMasterHomeOptionsHeaderLarge">';
+				aHTML[++h] = '<table id="tableHomeToday" class="ns1blankspaceHomeOptionsHeaderLarge">';
 				aHTML[++h] = '<tbody>'
 				aHTML[++h] = '<tr class="interfaceHomeTodayActions">';
 				aHTML[++h] = '<td class="interfaceHomeTodayActions">' + sLabel + '</td>';
@@ -399,7 +399,7 @@ function interfaceMasterHomeTodayActions(aParam, oResponse)
 				aHTML[++h] = '</tr>';
 				aHTML[++h] = '</tbody></table>';
 				
-				aHTML[++h] = '<table id="tableHomeOption" class="interfaceMasterHomeOptionsHeaderLarge">';
+				aHTML[++h] = '<table id="tableHomeOption" class="ns1blankspaceHomeOptionsHeaderLarge">';
 			}
 			else
 			{
@@ -410,12 +410,12 @@ function interfaceMasterHomeTodayActions(aParam, oResponse)
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
 			aHTML[++h] = '<td class="interfaceMainCaption">Subject</td>';
 			
-			var fFunctionSearch = interfaceMasterHomeTodayActionsRowStandard
+			var fFunctionSearch = ns1blankspaceHomeTodayActionsRowStandard
 			
 			if (bOverdue || bFuture)
 			{
 				aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-				var fFunctionSearch = interfaceMasterHomeTodayActionsRowShowDate
+				var fFunctionSearch = ns1blankspaceHomeTodayActionsRowShowDate
 			}
 			
 			aHTML[++h] = '<td class="interfaceMainCaption">Time</td>';
@@ -432,7 +432,7 @@ function interfaceMasterHomeTodayActions(aParam, oResponse)
 
 			if (bShow) {$('#' + sXHTMLElementId).show(ns1blankspace.option.showSpeedOptions)}	
 			
-			interfaceMasterPaginationList(
+			ns1blankspacePaginationList(
 			{
 				xhtmlElementID: sXHTMLElementId,
 				xhtmlContext: 'HomeTodayAction',
@@ -441,26 +441,26 @@ function interfaceMasterHomeTodayActions(aParam, oResponse)
 				more: oResponse.moreid,
 				rows: 10,
 				functionShowRow: fFunctionSearch,
-				functionNewPage: 'interfaceMasterHomeTodayActionsBind()',
+				functionNewPage: 'ns1blankspaceHomeTodayActionsBind()',
 				type: 'json'
 			}); 	
 			
-			interfaceMasterHomeTodayActionsBind();
+			ns1blankspaceHomeTodayActionsBind();
 		}
 	}
 }
 
-function interfaceMasterHomeTodayActionsRowShowDate(oRow)
+function ns1blankspaceHomeTodayActionsRowShowDate(oRow)
 {
-	return interfaceMasterHomeTodayActionsRow(oRow, true)
+	return ns1blankspaceHomeTodayActionsRow(oRow, true)
 }
 
-function interfaceMasterHomeTodayActionsRowStandard(oRow)
+function ns1blankspaceHomeTodayActionsRowStandard(oRow)
 {
-	return interfaceMasterHomeTodayActionsRow(oRow, false)
+	return ns1blankspaceHomeTodayActionsRow(oRow, false)
 }
 
-function interfaceMasterHomeTodayActionsRow(oRow, bShowDate)
+function ns1blankspaceHomeTodayActionsRow(oRow, bShowDate)
 {
 	var aHTML = [];
 	var h = -1;
@@ -507,7 +507,7 @@ function interfaceMasterHomeTodayActionsRow(oRow, bShowDate)
 	return aHTML.join('');
 }	
 	
-function interfaceMasterHomeTodayActionsBind()	
+function ns1blankspaceHomeTodayActionsBind()	
 {
 
 	$('.interfaceContact').click(function() {
@@ -536,7 +536,7 @@ function interfaceMasterHomeTodayActionsBind()
 		}
 	})
 	.click(function() {
-		interfaceMasterHomeTodayActionsStatus(this.id, 3)
+		ns1blankspaceHomeTodayActionsStatus(this.id, 3)
 	})
 	.css('width', '15px')
 	.css('height', '18px')
@@ -550,14 +550,14 @@ function interfaceMasterHomeTodayActionsBind()
 		}
 	})
 	.click(function() {
-		interfaceMasterHomeTodayActionsStatus(this.id, 1)
+		ns1blankspaceHomeTodayActionsStatus(this.id, 1)
 	})
 	.css('width', '15px')
 	.css('height', '18px')
 }
 		
 		
-function interfaceMasterHomeTodayActionsStatus(sXHTMLElementID, iStatus)
+function ns1blankspaceHomeTodayActionsStatus(sXHTMLElementID, iStatus)
 {
 	var sParam = '/ondemand/action/?rf=JSON&method=ACTION_MANAGE';
 	var sData = '';
@@ -571,7 +571,7 @@ function interfaceMasterHomeTodayActionsStatus(sXHTMLElementID, iStatus)
 		if (aXHTMLElementID[1] != undefined)
 		{
 			sData += 'id=' + aXHTMLElementID[1];
-			sData += '&status=' + interfaceMasterFormatSave(iStatus);
+			sData += '&status=' + ns1blankspaceFormatSave(iStatus);
 			
 			$.ajax(
 			{
@@ -590,14 +590,14 @@ function interfaceHomeLogonShow()
 	var aHTML = [];
 	var h = -1;
 	
-	aHTML[++h] = '<table id="tableInterfaceHomeLogon" class="interfaceMasterLogon" style="width:600px;">';
+	aHTML[++h] = '<table id="tableInterfaceHomeLogon" class="ns1blankspaceLogon" style="width:600px;">';
 	
-	aHTML[++h] = '<tr id="trInterfaceHomeLogonNotes" class="interfaceMasterLogon" >' +
-					'<td id="tdInterfaceHomeLogon" class="interfaceMasterLogon" style="width:150px;padding-right:15px;border-right-style:solid;border-width: 1px;border-color: #B8B8B8;">' +
+	aHTML[++h] = '<tr id="trInterfaceHomeLogonNotes" class="ns1blankspaceLogon" >' +
+					'<td id="tdInterfaceHomeLogon" class="ns1blankspaceLogon" style="width:150px;padding-right:15px;border-right-style:solid;border-width: 1px;border-color: #B8B8B8;">' +
 					ns1blankspace.xhtml.loading + 
 					'</td>';
 					
-	aHTML[++h] = '<td id="tdInterfaceMasterLogonNotes" class="interfaceMasterLogon"  style="width:150px;padding-left:15px;">';
+	aHTML[++h] = '<td id="tdns1blankspaceLogonNotes" class="ns1blankspaceLogon"  style="width:150px;padding-left:15px;">';
 	
 	aHTML[++h] = '<table id="tableInterfaceMainHomeNotes" class="interfaceMainHome">' +
 						'<tr id="trInterfaceMainHomeNotes" class="interfaceMainHome">' +						
@@ -620,5 +620,5 @@ function interfaceHomeLogonShow()
 	$('#divInterfaceBox').css("width", "600px");
 	$('#divInterfaceBox').html(aHTML.join(''));
 	
-	interfaceMasterLogonShow({xhtmlElementID: 'tdInterfaceHomeLogon'})
+	ns1blankspaceLogonShow({xhtmlElementID: 'tdInterfaceHomeLogon'})
 }

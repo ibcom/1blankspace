@@ -5,15 +5,15 @@
  * 01 FEB 2010
  */
  
-function interfaceFinancialPaymentMasterViewport(aParam)
+function interfaceFinancialPaymentMasterViewport(oParam)
 {
 	interfaceFinancialMasterInitialise();
 	
 	var bShowHome = true
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 	}
 
 	ns1blankspace.object = 3;
@@ -23,71 +23,71 @@ function interfaceFinancialPaymentMasterViewport(aParam)
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceFinancialPaymentMasterViewport({showHome: true});',
 			move: false
 			})		
 	}	
 			
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Payments"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialPaymentSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialPaymentSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceFinancialPaymentSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceFinancialPaymentSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceFinancialPaymentSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceFinancialPaymentNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceFinancialPaymentNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceFinancialPaymentSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceFinancialPaymentSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceFinancialPaymentSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceFinancialPaymentSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceFinancialPaymentHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceFinancialPaymentHelpOptions();
 	});
@@ -102,7 +102,7 @@ function interfaceFinancialPaymentMasterViewport(aParam)
 		interfaceFinancialPaymentSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialPaymentHomeShow()};	
 }
 
@@ -128,7 +128,7 @@ function interfaceFinancialPaymentHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportFinancialLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportFinancialLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -136,7 +136,7 @@ function interfaceFinancialPaymentHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
@@ -196,7 +196,7 @@ function interfaceFinancialPaymentHomeShow(oResponse)
 	}
 }
 
-function interfaceFinancialPaymentSearch(sXHTMLElementId, aParam)
+function interfaceFinancialPaymentSearch(sXHTMLElementId, oParam)
 {
 	var aSearch = sXHTMLElementId.split('-');
 	var sElementId = aSearch[0];
@@ -207,14 +207,14 @@ function interfaceFinancialPaymentSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
@@ -231,13 +231,13 @@ function interfaceFinancialPaymentSearch(sXHTMLElementId, aParam)
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 		
-		oSearch.getResults(function(data) {interfaceFinancialPaymentShow(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialPaymentShow(oParam, data)});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -250,7 +250,7 @@ function interfaceFinancialPaymentSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.endPoint = 'financial';
@@ -260,12 +260,12 @@ function interfaceFinancialPaymentSearch(sXHTMLElementId, aParam)
 			oSearch.rf = 'json';
 			oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
 			
-			oSearch.getResults(function(data) {interfaceFinancialPaymentSearchShow(aParam, data)});	
+			oSearch.getResults(function(data) {interfaceFinancialPaymentSearchShow(oParam, data)});	
 		}
 	};	
 }
 
-function interfaceFinancialPaymentSearchShow(aParam, oResponse)
+function interfaceFinancialPaymentSearchShow(oParam, oResponse)
 {
 
 	var iColumn = 0;
@@ -275,7 +275,7 @@ function interfaceFinancialPaymentSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{		
@@ -305,13 +305,13 @@ function interfaceFinancialPaymentSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceFinancialPaymentSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -399,52 +399,52 @@ function interfaceFinancialPaymentViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceFinancialPaymentSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceFinancialPaymentDetails();
 	});
 	
 	$('#tdInterfaceViewportControlItem').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainItem", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainItem", true);
 		interfaceFinancialPaymentItem();
 	});
 	
 	$('#tdInterfaceViewportControlExpenses').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainExpense", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainExpense", true);
 		interfaceFinancialPaymentExpense();
 	});
 	
 	$('#tdInterfaceViewportControlGL').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainTransaction", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainTransaction", true);
 		interfaceFinancialTransaction();
 		//You'll find this in 1blankspace.financial-[].js
 	});
 
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
-		interfaceMasterActions({xhtmlElementID: 'divInterfaceMainActions'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
+		ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
 	});
 
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 	
 }
 
-function interfaceFinancialPaymentShow(aParam, oResponse)
+function interfaceFinancialPaymentShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceFinancialPaymentViewport();
 	
 	var aHTML = [];
@@ -463,7 +463,7 @@ function interfaceFinancialPaymentShow(aParam, oResponse)
 	{
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 					
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference +
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_paiddate">' +
@@ -471,12 +471,12 @@ function interfaceFinancialPaymentShow(aParam, oResponse)
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">' +
 					ns1blankspace.objectContextData.amount + '</span>');
 			
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceFinancialPaymentMasterViewport({showHome: false});interfaceFinancialPaymentSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceFinancialPaymentSummary()'});
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceFinancialPaymentSummary()'});
 	}	
 }		
 		
@@ -677,25 +677,25 @@ function interfaceFinancialPaymentDetails()
 	}	
 }
 
-function interfaceFinancialPaymentSave(aParam, oResponse)
+function interfaceFinancialPaymentSave(oParam, oResponse)
 {
-	interfaceMasterStatusWorking();
+	ns1blankspaceStatusWorking();
 		
 	var sData = (ns1blankspace.objectContext == -1)?'':'id=' + ns1blankspace.objectContext;
 		
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
 		sData += '&reference=' + $('#inputInterfaceMainDetailsReference').val();
-		sData += '&paiddate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPaidDate').val());
-		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
-		sData += '&contactbusinesspaidfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactBusinessPaidFrom').attr("data-id"));
-		sData += '&contactpersonpaidfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactPersonPaidFrom').attr("data-id"));
+		sData += '&paiddate=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsPaidDate').val());
+		sData += '&description=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsDescription').val());
+		sData += '&contactbusinesspaidfrom=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsContactBusinessPaidFrom').attr("data-id"));
+		sData += '&contactpersonpaidfrom=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsContactPersonPaidFrom').attr("data-id"));
 	}
 	
 	$.ajax(
 	{
 		type: 'POST',
-		url: interfaceMasterEndpointURL('FINANCIAL_PAYMENT_MANAGE'),
+		url: ns1blankspaceEndpointURL('FINANCIAL_PAYMENT_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: function(data) {interfaceFinancialPaymentSaveProcess(data)}
@@ -706,7 +706,7 @@ function interfaceFinancialPaymentSaveProcess(oResponse)
 {
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 		if (ns1blankspace.objectContext == -1) {var bNew = true}
 		ns1blankspace.objectContext = oResponse.id;	
 		
@@ -717,11 +717,11 @@ function interfaceFinancialPaymentSaveProcess(oResponse)
 	}
 	else
 	{
-		interfaceMasterError(oResponse.error.errornotes);
+		ns1blankspaceError(oResponse.error.errornotes);
 	}
 }
 
-function interfaceFinancialPaymentAmountSave(aParam)
+function interfaceFinancialPaymentAmountSave(oParam)
 {
 	var iAccount = ns1blankspace.financial.settings.financialaccountcreditor;
 	var cAmount = $('#inputInterfaceMainDetailsAmount').val();
@@ -767,29 +767,29 @@ function interfaceFinancialPaymentAmountSave(aParam)
 	}	
 }
 
-function interfaceFinancialPaymentNew(aParam)
+function interfaceFinancialPaymentNew(oParam)
 {
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceFinancialPaymentViewport();
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 	interfaceFinancialPaymentDetails();
 }
 
-function interfaceFinancialPaymentItem(aParam, oResponse)
+function interfaceFinancialPaymentItem(oParam, oResponse)
 {
 	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainItem';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.options != undefined) {oOptions = aParam.options}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.options != undefined) {oOptions = oParam.options}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
 	}		
 		
 	if (oResponse == undefined)
@@ -835,7 +835,7 @@ function interfaceFinancialPaymentItem(aParam, oResponse)
 				label: "Add"
 			})
 			.click(function() {
-				 interfaceMasterFinanicalExpenseItemAdd(aParam);
+				 ns1blankspaceFinanicalExpenseItemAdd(oParam);
 			})
 			
 		}
@@ -847,7 +847,7 @@ function interfaceFinancialPaymentItem(aParam, oResponse)
 		oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.sort('financialaccounttext', 'asc');
 		
-		oSearch.getResults(function(data) {interfaceFinancialPaymentItem(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialPaymentItem(oParam, data)});
 	}
 	else
 	{
@@ -917,7 +917,7 @@ function interfaceFinancialPaymentItem(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterExpenseItemRemove({xhtmlElementID: this.id});
+					ns1blankspaceExpenseItemRemove({xhtmlElementID: this.id});
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -932,7 +932,7 @@ function interfaceFinancialPaymentItem(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterExpenseItemAdd({xhtmlElementID: this.id})
+					ns1blankspaceExpenseItemAdd({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -941,13 +941,13 @@ function interfaceFinancialPaymentItem(aParam, oResponse)
 	}	
 }
 
-function interfaceMasterFinancialPaymentItemAdd(aParam, oResponse)
+function ns1blankspaceFinancialPaymentItemAdd(oParam, oResponse)
 {
 	var iStep = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.step != undefined) {iStep = aParam.step}	
+		if (oParam.step != undefined) {iStep = oParam.step}	
 	}
 	
 	if (oResponse == undefined)
@@ -987,7 +987,7 @@ function interfaceMasterFinancialPaymentItemAdd(aParam, oResponse)
 					label: "Search"
 				})
 				.click(function() {
-					interfaceMasterFinanicalExpenseItemAdd($.extend(true, aParam, {step: 2}))
+					ns1blankspaceFinanicalExpenseItemAdd($.extend(true, oParam, {step: 2}))
 				})
 				.css('width', '75px')
 		}
@@ -1001,7 +1001,7 @@ function interfaceMasterFinancialPaymentItemAdd(aParam, oResponse)
 				type: 'GET',
 				url: '/ondemand/setup/?' + sParam,
 				dataType: 'json',
-				success: function(data){interfaceMasterFinanicalExpenseItemAdd($.extend(true, aParam, {step:3}), data)}
+				success: function(data){ns1blankspaceFinanicalExpenseItemAdd($.extend(true, oParam, {step:3}), data)}
 			});	
 		}
 	}
@@ -1043,19 +1043,19 @@ function interfaceMasterFinancialPaymentItemAdd(aParam, oResponse)
 	}	
 }
 
-function interfaceFinancialPaymentExpense(aParam, oResponse)
+function interfaceFinancialPaymentExpense(oParam, oResponse)
 {
 	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainExpense';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.options != undefined) {oOptions = aParam.options}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.options != undefined) {oOptions = oParam.options}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
 	}		
 		
 	if (oResponse == undefined)
@@ -1099,7 +1099,7 @@ function interfaceFinancialPaymentExpense(aParam, oResponse)
 				label: "Add"
 			})
 			.click(function() {
-				 interfaceFinancialPaymentPaymentAdd(aParam);
+				 interfaceFinancialPaymentPaymentAdd(oParam);
 			})
 			
 		}
@@ -1109,7 +1109,7 @@ function interfaceFinancialPaymentExpense(aParam, oResponse)
 		oSearch.addField('appliesdate,amount');
 		oSearch.addFilter('payment', 'EQUAL_TO', iObjectContext);
 		oSearch.sort('appliesdate', 'asc');
-		oSearch.getResults(function(data) {interfaceFinancialPaymentExpense(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialPaymentExpense(oParam, data)});
 	}
 	else
 	{
@@ -1175,7 +1175,7 @@ function interfaceFinancialPaymentExpense(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterExpensePaymentRemove({xhtmlElementID: this.id});
+					ns1blankspaceExpensePaymentRemove({xhtmlElementID: this.id});
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -1190,7 +1190,7 @@ function interfaceFinancialPaymentExpense(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterExpensePaymentAdd({xhtmlElementID: this.id})
+					ns1blankspaceExpensePaymentAdd({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
 				.css('height', '17px')

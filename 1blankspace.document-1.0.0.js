@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
  
-function interfaceDocumentMasterViewport(aParam)
+function interfaceDocumentMasterViewport(oParam)
 {
 	ns1blankspace.object = 14;
 	ns1blankspace.objectName = 'Document';
@@ -15,62 +15,62 @@ function interfaceDocumentMasterViewport(aParam)
 	var bShowHome = true;
 	var bNew = false;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
-		if (aParam.showNew != undefined) {bNew = aParam.showNew}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+		if (oParam.showNew != undefined) {bNew = oParam.showNew}
 		if (bNew) {interfaceDocumentNew()};
 	}	
 		
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 			
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceDocumentMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Documents"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceDocumentSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceDocumentSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceDocumentSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceDocumentSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceDocumentSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceDocumentNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceDocumentNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceDocumentSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		var aHTML = [];
 		var h = -1;
@@ -85,27 +85,27 @@ function interfaceDocumentMasterViewport(aParam)
 
 		aHTML[++h] = '</table>';
 
-		interfaceMasterViewportActionShow(this, aHTML.join(''), "interfaceDoocumentActionOptionsBind()");
+		ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceDoocumentActionOptionsBind()");
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceDocumentSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceDocumentSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceDocumentHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceDocumentHelpOptions();
 	});
@@ -120,7 +120,7 @@ function interfaceDocumentMasterViewport(aParam)
 		interfaceDocumentSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	$('#divInterfaceViewportControl').html('');	
 		
@@ -149,7 +149,7 @@ function interfaceDocumentHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportDocumentLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportDocumentLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -157,7 +157,7 @@ function interfaceDocumentHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'DOCUMENT_SEARCH';
@@ -225,7 +225,7 @@ function interfaceDocumentHomeShow(oResponse)
 	}
 }
 
-function interfaceDocumentSearch(sXHTMLElementId, aParam)
+function interfaceDocumentSearch(sXHTMLElementId, oParam)
 {
 	
 	var aSearch = sXHTMLElementId.split('-');
@@ -238,15 +238,15 @@ function interfaceDocumentSearch(sXHTMLElementId, aParam)
 	var iRows = 10;
 	var bWebsiteOnly = false;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
-		if (aParam.websiteOnly != undefined) {bWebsiteOnly = aParam.websiteOnly}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
+		if (oParam.websiteOnly != undefined) {bWebsiteOnly = oParam.websiteOnly}
 	}
 	
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -259,13 +259,13 @@ function interfaceDocumentSearch(sXHTMLElementId, aParam)
 		oSearch.method = 'DOCUMENT_SEARCH';
 		oSearch.addField('title,summary,keywords,url,status,statustext,websitedisplay,website,websitetext,style,internal,content,type,typetext');
 		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-		oSearch.getResults(function(data) {interfaceDocumentShow(aParam, data)});
+		oSearch.getResults(function(data) {interfaceDocumentShow(oParam, data)});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -280,8 +280,8 @@ function interfaceDocumentSearch(sXHTMLElementId, aParam)
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var sParam = 'method=DOCUMENT_SEARCH' +
 								'&quicksearch=' + sSearchText + 
@@ -297,13 +297,13 @@ function interfaceDocumentSearch(sXHTMLElementId, aParam)
 				type: 'GET',
 				url: '/ondemand/document/?' + sParam,
 				dataType: 'json',
-				success: function(data) {interfaceDocumentSearchShow(aParam, data)}
+				success: function(data) {interfaceDocumentSearchShow(oParam, data)}
 			});
 		}
 	};	
 }
 
-function interfaceDocumentSearchShow(aParam, oResponse)
+function interfaceDocumentSearchShow(oParam, oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -312,7 +312,7 @@ function interfaceDocumentSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -341,18 +341,18 @@ function interfaceDocumentSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceDocumentSearch(event.target.id, 1);
 		});
 	}	
 	
-	interfaceMasterSearchStop();	
+	ns1blankspaceSearchStop();	
 }
 
 function interfaceDocumentViewport()
@@ -401,26 +401,26 @@ function interfaceDocumentViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceDocumentSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceDocumentDetails();
 	});
 	
 	$('#tdInterfaceViewportControlEdit').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainEdit");
+		ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
 		interfaceDocumentEdit();
 	});
 }
 
-function interfaceDocumentShow(aParam, oResponse)
+function interfaceDocumentShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceDocumentViewport();
 
 	var aHTML = [];
@@ -440,15 +440,15 @@ function interfaceDocumentShow(aParam, oResponse)
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 		
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceDocumentMasterViewport({showHome: false});interfaceDocumentSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 			
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceDocumentSummary()'});
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceDocumentSummary()'});
 	}	
 }		
 		
@@ -752,8 +752,8 @@ function interfaceDocumentNew(oXML)
 		interfaceDocumentViewport();
 		$('#divInterfaceMainDetails').html(ns1blankspace.xhtml.loading);
 		$('#divInterfaceMainDetails').attr('onDemandLoading', '1');
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 		interfaceDocumentDetails();
 	}	
 }
@@ -783,7 +783,7 @@ function interfaceDocumentSave()
 	$.ajax(
 	{
 		type: 'POST',
-		url: interfaceMasterEndpointURL('DOCUMENT_MANAGE'),
+		url: ns1blankspaceEndpointURL('DOCUMENT_MANAGE'),
 		data: sData,
 		dataType: 'text',
 		success: interfaceDocumentSaveProcess
@@ -809,28 +809,28 @@ function interfaceDocumentSaveProcess(sReturn)
 			url: '/ondemand/document/?' + sParam,
 			data: sData,
 			dataType: 'text',
-			success: interfaceMasterStatus('Saved')
+			success: ns1blankspaceStatus('Saved')
 		});
 	
 	}	
 	else
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 	}	
 	
 }
 
-function interfaceDocumentPDF(aParam, sReturn)
+function interfaceDocumentPDF(oParam, sReturn)
 {
 	var sFilename = 'document_' + ns1blankspace.objectContext + '.pdf'
 	var sXHTMLElementID = '';
 	var sXHTMLContent;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.filename != undefined) {sFilename = aParam.filename}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.xhtmlContent != undefined) {sXHTMLContent = aParam.xhtmlContent}
+		if (oParam.filename != undefined) {sFilename = oParam.filename}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.xhtmlContent != undefined) {sXHTMLContent = oParam.xhtmlContent}
 	}		
 
 	if (sXHTMLContent == undefined)
@@ -866,7 +866,7 @@ function interfaceDocumentPDF(aParam, sReturn)
 				url: '/ondemand/core/?' + sParam,
 				data: sData,
 				dataType: 'text',
-				success: function(data) {interfaceDocumentPDF(aParam, data)}
+				success: function(data) {interfaceDocumentPDF(oParam, data)}
 			});
 		}	
 		else	

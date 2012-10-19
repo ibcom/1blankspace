@@ -12,68 +12,68 @@ function interfaceSetupSpaceMasterViewport()
 	ns1blankspace.objectContext = -1;
 	ns1blankspace.object = -1;
 	
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "My Account"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupSpaceSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupSpaceSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceSetupSpaceSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupSpaceSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceSetupSpaceSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceSetupSpaceNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceSetupSpaceNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceSetupSpaceSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 		
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceSetupSpaceSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceSetupSpaceSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceSetupSpaceHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceSetupSpaceHelpOptions();
 	});
@@ -88,7 +88,7 @@ function interfaceSetupSpaceMasterViewport()
 		interfaceSetupSpaceSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	interfaceSetupSpaceHomeShow();
 	
@@ -121,7 +121,7 @@ function interfaceSetupSpaceHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportSetupSpaceLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportSetupSpaceLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';	
@@ -138,7 +138,7 @@ function interfaceSetupSpaceHomeShow(oResponse)
 
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		$.ajax(
 		{
@@ -191,7 +191,7 @@ function interfaceSetupSpaceHomeShow(oResponse)
 	}
 }
 
-function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
+function interfaceSetupSpaceSearch(sXHTMLElementId, oParam)
 {
 	var aSearch = sXHTMLElementId.split('-');
 	var sElementId = aSearch[0];
@@ -202,14 +202,14 @@ function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 		
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -226,7 +226,7 @@ function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
 			type: 'GET',
 			url: '/ondemand/core/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceSetupSpaceShow(aParam, data)}
+			success: function(data) {interfaceSetupSpaceShow(oParam, data)}
 		});
 	}
 	else
@@ -234,7 +234,7 @@ function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -249,8 +249,8 @@ function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var sParam = 'method=SETUP_SITE_SEARCH&quicksearch=' + sSearchText + 
 								'&xhtmlcontext=' + sXHTMLElementId;
@@ -260,14 +260,14 @@ function interfaceSetupSpaceSearch(sXHTMLElementId, aParam)
 				type: 'GET',
 				url: '/directory/ondemand/setup.asp?rf=XML&' + sParam,
 				dataType: 'xml',
-				success: function(data) {interfaceSetupSpaceSearchShow(aParam, data)}
+				success: function(data) {interfaceSetupSpaceSearchShow(oParam, data)}
 			});
 			
 		}
 	};	
 }
 
-function interfaceSetupSpaceSearchShow(aParam, oXML)
+function interfaceSetupSpaceSearchShow(oParam, oXML)
 {
 
 	var iColumn = 0;
@@ -279,8 +279,8 @@ function interfaceSetupSpaceSearchShow(aParam, oXML)
 	
 	if (oRoot.childNodes.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -314,14 +314,14 @@ function interfaceSetupSpaceSearchShow(aParam, oXML)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		interfaceMasterSearchStop();
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupSpaceSearch(event.target.id, 1);
 		});
 	}	
@@ -360,21 +360,21 @@ function interfaceSetupSpaceViewport()
 		
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceSetupSpaceSummary();
 	});
 	
 	$('#tdInterfaceViewportControlMembers').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainMembers");
+		ns1blankspaceMainViewportShow("#divInterfaceMainMembers");
 		interfaceSetupSpaceMembers();
 	});
 }
 
-function interfaceSetupSpaceShow(aParam, oResponse)
+function interfaceSetupSpaceShow(oParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupSpaceViewport();
 	
 	var aHTML = [];
@@ -456,26 +456,26 @@ function interfaceSetupSpaceSummary()
 		
 		$('#aInterfaceMainSummarySwitchInto').click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainAddAttachment");
+			ns1blankspaceMainViewportShow("#divInterfaceMainAddAttachment");
 			interfaceSetupSpaceSwitchInto();
 		});
 			
 	}	
 }
 
-function interfaceSetupSpaceMembers(aParam, oResponse)
+function interfaceSetupSpaceMembers(oParam, oResponse)
 {
 	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainMembers';
 	var oOptions = {view: true};
 	var oActions = {};
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.options != undefined) {oOptions = aParam.options}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.options != undefined) {oOptions = oParam.options}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
 	}		
 		
 	if (oResponse == undefined)
@@ -487,7 +487,7 @@ function interfaceSetupSpaceMembers(aParam, oResponse)
 			type: 'GET',
 			url: '/ondemand/admin/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceSetupSpaceMembers(aParam, data)}
+			success: function(data) {interfaceSetupSpaceMembers(oParam, data)}
 		});
 
 	}
@@ -559,7 +559,7 @@ function interfaceSetupSpaceSave()
 		url: '/ondemand/core?' + sParam,
 		data: sData,
 		dataType: 'text',
-		success: interfaceMasterStatus('Saved')
+		success: ns1blankspaceStatus('Saved')
 	});
 		
 }

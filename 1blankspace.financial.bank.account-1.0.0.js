@@ -1,10 +1,10 @@
-function interfaceFinancialBankAccountMasterViewport(aParam)
+function interfaceFinancialBankAccountMasterViewport(oParam)
 {
 	var bShowHome = true
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 	}
 
 	ns1blankspace.object = -1;
@@ -14,71 +14,71 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceFinancialBankAccountMasterViewport({showHome: true});',
 			move: false
 			})		
 	}	
 			
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Bank Accounts"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceFinancialSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceFinancialSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceFinancialNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceFinancialNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceFinancialSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceFinancialSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceFinancialSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceFinancialSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceFinancialHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceFinancialHelpOptions();
 	});
@@ -93,11 +93,11 @@ function interfaceFinancialBankAccountMasterViewport(aParam)
 		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialBankAccountHomeShow()};	
 }
 
-function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
+function interfaceFinancialBankAccountHomeShow(oParam, oResponse)
 {	
 	if (oResponse == undefined)
 	{
@@ -106,7 +106,7 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 		oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
 		oSearch.sort('title', 'asc');
 		oSearch.rows = ns1blankspace.messaging.defaultRows;
-		oSearch.getResults(function(data) {interfaceFinancialBankAccountHomeShow(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialBankAccountHomeShow(oParam, data)});
 	}
 	else
 	{
@@ -116,7 +116,7 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 				
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportFinancialLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportFinancialLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -161,7 +161,7 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 			
 			var sID = $('#' + event.target.id).attr('data-id');
 			
-			interfaceMasterMainViewportShow('#divInterfaceBankAccount_' + sID);
+			ns1blankspaceMainViewportShow('#divInterfaceBankAccount_' + sID);
 		
 			if (sID == '')
 			{
@@ -174,12 +174,12 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 		});
 	
 		$('#tdInterfaceViewportControlSummary').addClass('interfaceViewportControlHighlight');
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceFinancialBankAccountSummary();
 	}
 }
 
-function interfaceFinancialBankAccountSummary(aParam, oResponse)
+function interfaceFinancialBankAccountSummary(oParam, oResponse)
 {
 	if (oResponse == undefined)
 	{
@@ -188,7 +188,7 @@ function interfaceFinancialBankAccountSummary(aParam, oResponse)
 		oSearch.addField('statementdate')
 		oSearch.addSummaryField('max(statementdate) maxstatementdate')
 		oSearch.rows = 1;
-		oSearch.getResults(function(data) {interfaceFinancialBankAccountSummary(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialBankAccountSummary(oParam, data)});
 	}
 	else
 	{	
@@ -222,13 +222,13 @@ function interfaceFinancialBankAccountSummary(aParam, oResponse)
 	}	
 }
 
-function interfaceFinancialBankAccountDetails(aParam, oResponse)
+function interfaceFinancialBankAccountDetails(oParam, oResponse)
 {
 	var iID;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.id != undefined) {iID = aParam.id}	
+		if (oParam.id != undefined) {iID = oParam.id}	
 	}
 
 	if (oResponse == undefined)
@@ -239,7 +239,7 @@ function interfaceFinancialBankAccountDetails(aParam, oResponse)
 		oSearch.addFilter('bankaccount', 'EQUAL_TO', iID);
 		oSearch.sort('statementdate', 'desc');
 		oSearch.rows = ns1blankspace.messaging.defaultRows;
-		oSearch.getResults(function(data) {interfaceFinancialBankAccountDetails(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialBankAccountDetails(oParam, data)});
 	}
 	else
 	{
@@ -304,7 +304,7 @@ function interfaceFinancialBankAccountDetails(aParam, oResponse)
 		}
 		
 		/*
-		interfaceMasterPaginationList(
+		ns1blankspacePaginationList(
 		   {
 			type: 'JSON',
 			xhtmlElementID: 'tdInterfaceMainBankAccountColumnReco' + iID,
@@ -363,7 +363,7 @@ function interfaceFinancialBankAccountRecoRow(oRow)
 }
 
 
-function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
+function interfaceFinancialBankAccountRecoEdit(oParam, oResponse)
 {
 	var sID; 
 	var iDefaultCategory;
@@ -372,9 +372,9 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 	{
 		var sXHTMLElementID;
 
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+			if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 		}
 		
 		if (sXHTMLElementID != undefined)
@@ -513,14 +513,14 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 		.click(function() 
 		{
 			var sData = 'structure=' + ns1blankspace.objectContext;
-			sData += '&id=' + interfaceMasterFormatSave(sID);
-			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupStructureElementAddTitle').val());
-			sData += '&datatype=' + interfaceMasterFormatSave($('input[name="radioDataType"]:checked').val());
-			sData += '&category=' + interfaceMasterFormatSave($('input[name="radioCategory"]:checked').val());
-			sData += '&textcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddTextColour').val());
-			sData += '&backgroundcolour=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddBackgroundColour').val());
-			sData += '&displayorder=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddDisplayOrder').val());
-			sData += '&description=' + interfaceMasterFormatSave(tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + ns1blankspace.counter.editor).getContent());
+			sData += '&id=' + ns1blankspaceFormatSave(sID);
+			sData += '&title=' + ns1blankspaceFormatSave($('#inputInterfaceMainSetupStructureElementAddTitle').val());
+			sData += '&datatype=' + ns1blankspaceFormatSave($('input[name="radioDataType"]:checked').val());
+			sData += '&category=' + ns1blankspaceFormatSave($('input[name="radioCategory"]:checked').val());
+			sData += '&textcolour=' + ns1blankspaceFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddTextColour').val());
+			sData += '&backgroundcolour=' + ns1blankspaceFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddBackgroundColour').val());
+			sData += '&displayorder=' + ns1blankspaceFormatSave($('#inputInterfaceMainSetupSetupStructureElementAddDisplayOrder').val());
+			sData += '&description=' + ns1blankspaceFormatSave(tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + ns1blankspace.counter.editor).getContent());
 				
 			$.ajax(
 			{
@@ -543,7 +543,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 				url: '/ondemand/setup/setup_structure.asp?method=SETUP_STRUCTURE_ELEMENT_SEARCH',
 				data: 'id=' + sID,
 				dataType: 'json',
-				success: function(data) {interfaceMasterSetupStructureElementAdd(aParam, data)}
+				success: function(data) {ns1blankspaceSetupStructureElementAdd(oParam, data)}
 			});
 		}
 		else
@@ -559,7 +559,7 @@ function interfaceFinancialBankAccountRecoEdit(aParam, oResponse)
 			var oObjectContext = oResponse.data.rows[0];
 			$('#inputInterfaceMainSetupStructureElementAddTitle').val(oObjectContext.title);
 			
-			var sHTML = interfaceMasterFormatXHTML(oObjectContext.description);
+			var sHTML = ns1blankspaceFormatXHTML(oObjectContext.description);
 			
 			tinyMCE.get('inputInterfaceMainSetupStructureElementAddDescription' + ns1blankspace.counter.editor).setContent(sHTML)
 			

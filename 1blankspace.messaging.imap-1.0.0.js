@@ -32,7 +32,7 @@ ns1blankspace.messaging.emailLastPagination;
 ns1blankspace.messaging.emailNewCount;
 ns1blankspace.messaging.action = -1;
 
-function interfaceMessagingIMAPMasterViewport(aParam)
+function interfaceMessagingIMAPMasterViewport(oParam)
 {
 
 	ns1blankspace.object = 10;
@@ -41,66 +41,66 @@ function interfaceMessagingIMAPMasterViewport(aParam)
 	ns1blankspace.objectContext = -1;
 	bShowHome = true;
 			
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
 	}	
 			
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Email"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceMessagingSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceMessagingSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceMessagingSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceMessagingSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceMessagingSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainEdit");
+		ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
 		interfaceMessagingNew({xhtmlElementID: 'divInterfaceMainEdit', newEmail: true});
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceMessagingSendEmail();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceMessagingSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceMessagingSaveOptions();
 	});
 		
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceMessagingSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceMessagingHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceMessagingHelpOptions();
 	});
@@ -115,7 +115,7 @@ function interfaceMessagingIMAPMasterViewport(aParam)
 		interfaceMessagingSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	$('#divInterfaceViewportControl').html('');	
 
 	if (ns1blankspace.option.richTextEditing)
@@ -185,10 +185,10 @@ function interfaceMessagingIMAPMasterViewport(aParam)
 	
 	ns1blankspace.messaging.emailAccounts.length = 0;
 	
-	if (bShowHome) {interfaceMessagingHomeShow(aParam)};
+	if (bShowHome) {interfaceMessagingHomeShow(oParam)};
 }
 
-function interfaceMessagingCheckForNew(aParam, oResponse)
+function interfaceMessagingCheckForNew(oParam, oResponse)
 {
 	if (oResponse == undefined)
 	{
@@ -200,7 +200,7 @@ function interfaceMessagingCheckForNew(aParam, oResponse)
 			type: 'POST',
 			url: '/ondemand/messaging/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceMessagingCheckForNew(aParam, data)}
+			success: function(data) {interfaceMessagingCheckForNew(oParam, data)}
 		});
 	}
 	else
@@ -210,21 +210,21 @@ function interfaceMessagingCheckForNew(aParam, oResponse)
 	}
 }			
 
-function interfaceMessagingHomeShow(aParam, oResponse)
+function interfaceMessagingHomeShow(oParam, oResponse)
 {
 	var bAutoShow = true;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.autoShow != undefined) {bAutoShow = aParam.autoShow}
+		if (oParam.autoShow != undefined) {bAutoShow = oParam.autoShow}
 	}	
 	
-	interfaceMasterViewportDestination({
+	ns1blankspaceViewportDestination({
 			newDestination: 'interfaceMessagingIMAPMasterViewport();',
 			move: false
 			})		
 			
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	
 	if (ns1blankspace.messaging.emailAccounts.length == 0)
 	{
@@ -254,7 +254,7 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 				type: 'POST',
 				url: '/ondemand/messaging/?' + sParam,
 				dataType: 'json',
-				success: function(data) {interfaceMessagingHomeShow(aParam, data)}
+				success: function(data) {interfaceMessagingHomeShow(oParam, data)}
 			});
 		}
 		else
@@ -264,7 +264,7 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 						
 			aHTML[++h] = '<table>';
 			aHTML[++h] = '<tr>' +
-							'<td id="interfaceMasterViewportMessagingEmailLarge" class="interfaceMasterViewportImageLarge">' +
+							'<td id="ns1blankspaceViewportMessagingEmailLarge" class="ns1blankspaceViewportImageLarge">' +
 							'&nbsp;' + 
 							'</td>' +
 							'</tr>';
@@ -280,7 +280,7 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 				{
 					ns1blankspace.messaging.emailAccounts.push({
 						id: this.id,
-						footer: interfaceMasterFormatXHTML(this.footer)
+						footer: ns1blankspaceFormatXHTML(this.footer)
 					})		
 					
 					if (index == 0) 
@@ -339,7 +339,7 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 		
 			$('td.interfaceViewportControl').click(function(event)
 			{
-				interfaceMasterMainViewportShow("#divInterfaceMainInbox");
+				ns1blankspaceMainViewportShow("#divInterfaceMainInbox");
 				
 				var sID = event.target.id
 				var aID = sID.split('-');
@@ -352,14 +352,14 @@ function interfaceMessagingHomeShow(aParam, oResponse)
 			if (ns1blankspace.messaging.account != undefined && bAutoShow)
 			{
 				$('#interfaceMessaging-' + ns1blankspace.messaging.account).addClass('interfaceViewportControlHighlight');
-				interfaceMasterMainViewportShow("#divInterfaceMainInbox");
+				ns1blankspaceMainViewportShow("#divInterfaceMainInbox");
 				interfaceMessagingInboxSearch({xhtmlElementID: '-' + ns1blankspace.messaging.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 			}	
 		}
 	}	
 }
 
-function interfaceMessagingInboxSearch(aParam, oResponse)
+function interfaceMessagingInboxSearch(oParam, oResponse)
 {
 	var sXHTMLElementID;
 	var bNew;
@@ -367,18 +367,18 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 	var bRefresh = false;
 	var bRepaginate = true;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.newOnly != undefined) {bNew = aParam.newOnly}
-		if (aParam.start != undefined) {iStart = aParam.start}
-		if (aParam.refreshInbox != undefined) {bRefresh = aParam.refreshInbox}
-		if (aParam.repaginate != undefined) {bRepaginate = aParam.repaginate}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.newOnly != undefined) {bNew = oParam.newOnly}
+		if (oParam.start != undefined) {iStart = oParam.start}
+		if (oParam.refreshInbox != undefined) {bRefresh = oParam.refreshInbox}
+		if (oParam.repaginate != undefined) {bRepaginate = oParam.repaginate}
 	}
 	else
 	{
-		aParam = {};
+		oParam = {};
 	}	
 	
 	if (iStart == undefined && bNew == undefined) {bNew = true}
@@ -392,7 +392,7 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		if (ns1blankspace.messaging.account != aXHTMLElementID[1]) 
 		{
 			bRefresh = true;
-			aParam.refreshInbox = true;
+			oParam.refreshInbox = true;
 		}
 		ns1blankspace.messaging.account = aXHTMLElementID[1];
 	}	
@@ -429,7 +429,7 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		oSearch.addSummaryField('count(*) cachecount');
 		oSearch.sort('date', 'desc')
 		oSearch.rows = ns1blankspace.messaging.defaultRows;
-		oSearch.getResults(function(data) {interfaceMessagingInboxSearch(aParam, data)});
+		oSearch.getResults(function(data) {interfaceMessagingInboxSearch(oParam, data)});
 	}
 	else
 	{
@@ -505,7 +505,7 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		})
 		
 		$('#tdInterfaceMainHeaderSentEmails').click(function() {
-			interfaceMasterOptionsPosition({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', leftOffset: -170, topOffset: -5});
+			ns1blankspaceOptionsPosition({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', leftOffset: -170, topOffset: -5});
 			interfaceMessagingActions({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', type: 5})
 		})
 		
@@ -522,7 +522,7 @@ function interfaceMessagingInboxSearch(aParam, oResponse)
 		
 		aHTML[++h] = '</tbody></table>';
 		
-		interfaceMasterPaginationList(
+		ns1blankspacePaginationList(
 		{
 			xhtmlElementID: 'interfaceMessagingInbox',
 			xhtmlContext: 'EmailIMAPInbox',
@@ -650,10 +650,10 @@ function interfaceMessagingInboxSearchBind()
 		})
 		.click(function() {
 		
-			if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == this.id)
+			if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == this.id)
 			{
-				$('#divInterfaceMasterViewportControlOptions').slideUp(500);
-				$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+				$('#divns1blankspaceViewportControlOptions').slideUp(500);
+				$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
 			}
 			else
 			{
@@ -664,7 +664,7 @@ function interfaceMessagingInboxSearchBind()
 		.css('height', '20px')
 }	
 
-function interfaceMessagingSearch(sXHTMLElementId, aParam)
+function interfaceMessagingSearch(sXHTMLElementId, oParam)
 {
 	
 	var aSearch = sXHTMLElementId.split('_id_');
@@ -676,19 +676,19 @@ function interfaceMessagingSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary", true);
 		
 		sSearchContext = sSearchContext.replace(/\___/g, '.');
 		
@@ -702,13 +702,13 @@ function interfaceMessagingSearch(sXHTMLElementId, aParam)
 		oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
 		oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.rows = ns1blankspace.messaging.defaultRows;
-		oSearch.getResults(function(data) {interfaceMessagingShow(aParam, data)});	
+		oSearch.getResults(function(data) {interfaceMessagingShow(oParam, data)});	
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -722,8 +722,8 @@ function interfaceMessagingSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
@@ -731,12 +731,12 @@ function interfaceMessagingSearch(sXHTMLElementId, aParam)
 			oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
 			oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 			oSearch.rows = ns1blankspace.messaging.defaultRows;
-			oSearch.getResults(function(data) {interfaceMessagingShow(aParam, data)});
+			oSearch.getResults(function(data) {interfaceMessagingShow(oParam, data)});
 		}
 	};	
 }
 
-function interfaceMessagingSearchShow(aParam, oResponse)
+function interfaceMessagingSearchShow(oParam, oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -745,8 +745,8 @@ function interfaceMessagingSearchShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -764,29 +764,29 @@ function interfaceMessagingSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
-		interfaceMasterSearchStop();
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceMessagingSearch(event.target.id, {source: 1});
 		});
 	}	
 }
 
-function interfaceMessagingViewport(aParam)
+function interfaceMessagingViewport(oParam)
 {
 	var aHTML = [];
 	var h = -1;
 	var bReply = false;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.reply != undefined) {bReply = aParam.reply}
+		if (oParam.reply != undefined) {bReply = oParam.reply}
 	}	
 	
 	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
@@ -847,57 +847,57 @@ function interfaceMessagingViewport(aParam)
 
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceMessagingSummary();
 	});
 	
 	$('#tdInterfaceViewportControlReply').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainEdit");
+		ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
 		interfaceMessagingSendEmail({xhtmlElementID: 'divInterfaceMainEdit'})
 	});
 
 	$('#tdInterfaceViewportControlReplyAll').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainEdit");
+		ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
 		interfaceMessagingSendEmail({xhtmlElementID: 'divInterfaceMainEdit', replyAll: true})
 	});
 	
 	$('#tdInterfaceViewportControlForward').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainEdit");
+		ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
 		interfaceMessagingSendEmail({xhtmlElementID: 'divInterfaceMainEdit', forward: true})
 	});
 	
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
-		interfaceMasterActions({xhtmlElementID: 'divInterfaceMainActions'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
+		ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
 	});
 	
 	$('#interfaceMessagingAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
 		interfaceMessagingAttachments();
 	});
 	
 }
 
-function interfaceMessagingShow(aParam, oResponse)
+function interfaceMessagingShow(oParam, oResponse)
 {
 	var bReply = false;
 	var aHTML = [];
 	var h = -1;
 	var sHTML = '';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.reply != undefined) {bReply = aParam.reply}
+		if (oParam.reply != undefined) {bReply = oParam.reply}
 	}	
 	
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	
-	interfaceMessagingViewport(aParam);
+	interfaceMessagingViewport(oParam);
 	
 	if (oResponse.data.rows.length == 0)
 	{
@@ -956,7 +956,7 @@ function interfaceMessagingShow(aParam, oResponse)
 		
 		if (bReply)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainEdit");
+			ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
 			interfaceMessagingSendEmail({xhtmlElementID: 'divInterfaceMainEdit'})
 		}
 		else
@@ -1122,7 +1122,7 @@ function interfaceMessagingShowAttachments()
 					var sLink = '/ondemand/messaging/?';
 					sLink += 'method=MESSAGING_EMAIL_ATTACHMENT_DOWNLOAD&attachmentindex=' + (iIndex);
 					sLink += '&account=' + ns1blankspace.messaging.account;
-					sLink += '&messageid=' + interfaceMasterFormatSave(ns1blankspace.objectContextData.messageid);
+					sLink += '&messageid=' + ns1blankspaceFormatSave(ns1blankspace.objectContextData.messageid);
 					
 					sAttachments +=	'<a href="' + sLink + '" target="_blank">' + aAttachment[0] + '</a>; ';
 				});	
@@ -1156,7 +1156,7 @@ function interfaceMessagingShowAttachments()
 function interfaceMessagingShowMessage()
 {
 	var sHTML = ns1blankspace.objectContextData.message;
-	sHTML = interfaceMasterFormatXHTML(sHTML);
+	sHTML = ns1blankspaceFormatXHTML(sHTML);
 
 	while ($('#ifMessage').length == 0)
 	  {
@@ -1225,7 +1225,7 @@ function interfaceMessagingEdit()
 	}	
 }
 
-function interfaceMessagingSave(aParam, oResponse)
+function interfaceMessagingSave(oParam, oResponse)
 {
 	if (oResponse == undefined)
 	{			
@@ -1233,8 +1233,8 @@ function interfaceMessagingSave(aParam, oResponse)
 		
 		if ($('#divInterfaceMainEdit').html() != '')
 		{
-			var sData = 'subject=' + interfaceMasterFormatSave($('#inputInterfaceMainActionsSendEmailSubject').val());
-			sData += '&message=' + interfaceMasterFormatSave(tinyMCE.get('inputInterfaceMainActionsSendEmailMessage').getContent());
+			var sData = 'subject=' + ns1blankspaceFormatSave($('#inputInterfaceMainActionsSendEmailSubject').val());
+			sData += '&message=' + ns1blankspaceFormatSave(tinyMCE.get('inputInterfaceMainActionsSendEmailMessage').getContent());
 		}
 		
 		$.ajax(
@@ -1245,7 +1245,7 @@ function interfaceMessagingSave(aParam, oResponse)
 			dataType: 'text',
 			success: function(data) 
 			{
-				interfaceMessagingSave(aParam, data)
+				interfaceMessagingSave(oParam, data)
 			}
 		});
 		
@@ -1254,15 +1254,15 @@ function interfaceMessagingSave(aParam, oResponse)
 	{	
 		/* if (oResponse.status == 'OK')
 		{
-			interfaceMasterStatus('Draft saved');
+			ns1blankspaceStatus('Draft saved');
 			//if (ns1blankspace.objectContext == -1) {var bNew = true}
 			//ns1blankspace.objectContext = oResponse.id;	
 			//if (bNew) {interfaceMessagingSearch('-' + ns1blankspace.objectContext)}
 		}
 		else
 		{
-			interfaceMasterStatus(oResponse.error.errornotes);
-			interfaceMasterConfirm( {html: [oResponse.error.errornotes]
+			ns1blankspaceStatus(oResponse.error.errornotes);
+			ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
 									   , title: 'Save error!'});
 		} */
 	}
@@ -1316,7 +1316,7 @@ function interfaceMessagingAttachments()
 					var sLink = '/ondemand/messaging/?';
 					sLink += 'method=MESSAGING_EMAIL_ATTACHMENT_DOWNLOAD&attachment=' + (iIndex);
 					sLink += '&account=' + ns1blankspace.messaging.account;
-					sLink += '&id=' + interfaceMasterFormatSave(ns1blankspace.objectContext);
+					sLink += '&id=' + ns1blankspaceFormatSave(ns1blankspace.objectContext);
 					
 					var aAttachment = this.split('|');
 					sAttachments += '\r\n' + aAttachment[0];
@@ -1336,7 +1336,7 @@ function interfaceMessagingAttachments()
 	}	
 }
 
-function interfaceMessagingSendEmail(aParam)
+function interfaceMessagingSendEmail(oParam)
 {
 
 	var iObject = ns1blankspace.object;
@@ -1354,22 +1354,22 @@ function interfaceMessagingSendEmail(aParam)
 	var sSubject = '';
 	var iSource = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.object != undefined) {iObject = aParam.object}
-		if (aParam.objectContext != undefined) {iObject = aParam.objectContext}
-		if (aParam.showTo != undefined) {bShowTo = aParam.showTo}
-		if (aParam.showPriority != undefined) {bShowPriority = aParam.showPriority}
-		if (aParam.showAll != undefined) {bShowAll = aParam.showAll}
-		if (aParam.dialog != undefined) {bDialog = aParam.dialog}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.contactBusiness != undefined) {iContactBusiness = aParam.contactBusiness}
-		if (aParam.replyAll != undefined) {bReplyAll = aParam.replyAll}
-		if (aParam.forward != undefined) {bForward = aParam.forward}
-		if (aParam.newEmail != undefined) {bNewEmail = aParam.newEmail}
-		if (aParam.message != undefined) {sMessage = aParam.message}
-		if (aParam.subject != undefined) {sSubject = aParam.subject}
-		if (aParam.source != undefined) {iSource = aParam.source}
+		if (oParam.object != undefined) {iObject = oParam.object}
+		if (oParam.objectContext != undefined) {iObject = oParam.objectContext}
+		if (oParam.showTo != undefined) {bShowTo = oParam.showTo}
+		if (oParam.showPriority != undefined) {bShowPriority = oParam.showPriority}
+		if (oParam.showAll != undefined) {bShowAll = oParam.showAll}
+		if (oParam.dialog != undefined) {bDialog = oParam.dialog}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
+		if (oParam.replyAll != undefined) {bReplyAll = oParam.replyAll}
+		if (oParam.forward != undefined) {bForward = oParam.forward}
+		if (oParam.newEmail != undefined) {bNewEmail = oParam.newEmail}
+		if (oParam.message != undefined) {sMessage = oParam.message}
+		if (oParam.subject != undefined) {sSubject = oParam.subject}
+		if (oParam.source != undefined) {iSource = oParam.source}
 	}
 
 	if (bNewEmail)
@@ -1426,7 +1426,7 @@ function interfaceMessagingSendEmail(aParam)
 							'To:</td>';		
 				
 				aHTML[++h] = '<td id="tdInterfaceMainActionsSendEmailToContact">' +
-							'<input id="inputInterfaceMainActionsSendEmailToContact" class="inputInterfaceMainSelectContactEmail interfaceMasterWatermark"' +
+							'<input id="inputInterfaceMainActionsSendEmailToContact" class="inputInterfaceMainSelectContactEmail ns1blankspaceWatermark"' +
 								' ondemandsetelementid="inputInterfaceMainActionsSendEmailTo" value="Search for contact here or type address below"';
 							
 				if (iContactBusiness != undefined)
@@ -1444,7 +1444,7 @@ function interfaceMessagingSendEmail(aParam)
 							'Cc:</td>';		
 				
 				aHTML[++h] = '<td id="tdInterfaceMainActionsSendEmailCcContact">' +
-							'<input id="inputInterfaceMainActionsSendEmailCcContact" class="inputInterfaceMainSelectContactEmail interfaceMasterWatermark"' +
+							'<input id="inputInterfaceMainActionsSendEmailCcContact" class="inputInterfaceMainSelectContactEmail ns1blankspaceWatermark"' +
 								' ondemandsetelementid="inputInterfaceMainActionsSendEmailCc" value=""';
 							
 				if (iContactBusiness != undefined)
@@ -1462,7 +1462,7 @@ function interfaceMessagingSendEmail(aParam)
 							'Bcc:</td>';		
 				
 				aHTML[++h] = '<td id="tdInterfaceMainActionsSendEmailBccContact">' +
-							'<input id="inputInterfaceMainActionsSendEmailBccContact" class="inputInterfaceMainSelectContactEmail interfaceMasterWatermark"' +
+							'<input id="inputInterfaceMainActionsSendEmailBccContact" class="inputInterfaceMainSelectContactEmail ns1blankspaceWatermark"' +
 								' ondemandsetelementid="inputInterfaceMainActionsSendEmailBcc" value=""';
 							
 				if (iContactBusiness != undefined)
@@ -1490,13 +1490,13 @@ function interfaceMessagingSendEmail(aParam)
 				aHTML[++h] = '<td id="tdInterfaceMainActionsSendEmailMessageAttach" class="interfaceMainRight">';
 			
 				aHTML[++h] = '<div id="divInterfaceMainActionsSendEmailMessageAttach">' +
-							'<input type="checkbox" id="spanInterfaceMainSendEmailAttach" class="interfaceMasterViewport"/>' +
+							'<input type="checkbox" id="spanInterfaceMainSendEmailAttach" class="ns1blankspaceViewport"/>' +
 							'<label style="font-size:0.875em;" for="spanInterfaceMainSendEmailAttach">&nbsp;</label>' +
 							'</div>';
 			
 				aHTML[++h] = '</td></tr>';				
 
-				aHTML[++h] = '<tr><td style="height:80px" colspan=2 id="tdInterfaceMainActionsSendEmailAttachments" class="interfaceMasterBorder">' +
+				aHTML[++h] = '<tr><td style="height:80px" colspan=2 id="tdInterfaceMainActionsSendEmailAttachments" class="ns1blankspaceBorder">' +
 							'</td></tr>';
 			
 				aHTML[++h] = '</table>';				
@@ -1513,7 +1513,7 @@ function interfaceMessagingSendEmail(aParam)
 		aHTML[++h] = '<table id="tableInterfaceMainActionsSendEmailSubjectOptions">';				
 							
 			aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmailSubject" class="interfaceMain">' +
-						'<input onDemandType="TEXT" id="inputInterfaceMainActionsSendEmailSubject" class="inputInterfaceMainText interfaceMasterWatermark"' +
+						'<input onDemandType="TEXT" id="inputInterfaceMainActionsSendEmailSubject" class="inputInterfaceMainText ns1blankspaceWatermark"' +
 							' value="Subject">' +
 						'</td>';	
 			
@@ -1594,18 +1594,18 @@ function interfaceMessagingSendEmail(aParam)
 		})
 		.click(function() {
 		
-			if (aParam != undefined)
+			if (oParam != undefined)
 			{
-				aParam.subject = $('#inputInterfaceMainActionsSendEmailSubject').val();
-				aParam.message = tinyMCE.get('inputInterfaceMainActionsSendEmailMessage').getContent();
-				aParam.contactPersonTo = $('#inputInterfaceMainActionsSendEmailTo').attr('onDemandID');
-				aParam.to = $('#inputInterfaceMainActionsSendEmailTo').val();
-				aParam.cc = $('#inputInterfaceMainActionsSendEmailCc').val();
-				aParam.bcc = $('#inputInterfaceMainActionsSendEmailBcc').val();
+				oParam.subject = $('#inputInterfaceMainActionsSendEmailSubject').val();
+				oParam.message = tinyMCE.get('inputInterfaceMainActionsSendEmailMessage').getContent();
+				oParam.contactPersonTo = $('#inputInterfaceMainActionsSendEmailTo').attr('onDemandID');
+				oParam.to = $('#inputInterfaceMainActionsSendEmailTo').val();
+				oParam.cc = $('#inputInterfaceMainActionsSendEmailCc').val();
+				oParam.bcc = $('#inputInterfaceMainActionsSendEmailBcc').val();
 			}
 			else
 			{
-				aParam = {
+				oParam = {
 						subject: $('#inputInterfaceMainActionsSendEmailSubject').val(),
 						message: tinyMCE.get('inputInterfaceMainActionsSendEmailMessage').getContent(),
 						contactPersonTo: $('#inputInterfaceMainActionsSendEmailTo').attr('onDemandID'),
@@ -1616,7 +1616,7 @@ function interfaceMessagingSendEmail(aParam)
 						}
 			}
 		
-			 interfaceMessagingSendEmailSend(aParam);
+			 interfaceMessagingSendEmailSend(oParam);
 		})
 	
 		$('#spanInterfaceMainSendEmailAttach').button(
@@ -1628,7 +1628,7 @@ function interfaceMessagingSendEmail(aParam)
 		})
 		.click(function() {
 		
-			interfaceMessagingSendEmailAttachShow(aParam);
+			interfaceMessagingSendEmailAttachShow(oParam);
 		})
 		.css('width', '20px')
 		.css('height', '23px')
@@ -1662,7 +1662,7 @@ function interfaceMessagingSendEmail(aParam)
 					$('#inputInterfaceMainActionsSendEmailSubject').val('Re: ' + ns1blankspace.objectContextData.subject)
 				}	
 				
-				$('#inputInterfaceMainActionsSendEmailSubject').removeClass('interfaceMasterWatermark');
+				$('#inputInterfaceMainActionsSendEmailSubject').removeClass('ns1blankspaceWatermark');
 				
 				
 				aHTML[++h] = '<br />---- Original Message ----<br />';
@@ -1707,7 +1707,7 @@ function interfaceMessagingSendEmail(aParam)
 				
 				aHTML[++h] = '</table>';
 				
-				$('#inputInterfaceMainActionsSendEmailMessage').val(aHTML.join('') + interfaceMasterFormatXHTML(ns1blankspace.objectContextData.message));
+				$('#inputInterfaceMainActionsSendEmailMessage').val(aHTML.join('') + ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.message));
 		
 				if (!bForward)
 				{
@@ -1745,7 +1745,7 @@ function interfaceMessagingSendEmail(aParam)
 					{
 						var sParam = '/ondemand/messaging/?method=MESSAGING_EMAIL_ATTACHMENT_MANAGE&rf=TEXT';
 						var sData = 'account=' + ns1blankspace.messaging.account;
-						sData += '&id=' + interfaceMasterFormatSave(ns1blankspace.objectContext);
+						sData += '&id=' + ns1blankspaceFormatSave(ns1blankspace.objectContext);
 						
 						$.ajax(
 						{
@@ -1808,7 +1808,7 @@ function interfaceMessagingSendEmail(aParam)
 		if (iSource == 3)
 		{
 			$('#inputInterfaceMainActionsSendEmailSubject').val(sSubject)
-			$('#inputInterfaceMainActionsSendEmailSubject').removeClass('interfaceMasterWatermark');
+			$('#inputInterfaceMainActionsSendEmailSubject').removeClass('ns1blankspaceWatermark');
 			$('#inputInterfaceMainActionsSendEmailMessage').val(sMessage)
 		}
 		
@@ -1819,14 +1819,14 @@ function interfaceMessagingSendEmail(aParam)
 	}
 }
 
-function interfaceMessagingSendEmailAttachShow(aParam, sReturn)
+function interfaceMessagingSendEmailAttachShow(oParam, sReturn)
 {
 	
 	sXHTMLElementID = "tdInterfaceMainActionsSendEmailAttachCaption";
 	
 	if (!$('#spanInterfaceMainSendEmailAttach').attr('checked'))
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide()
+		$('#divns1blankspaceViewportControlOptions').hide()
 	}
 	else
 	{	
@@ -1841,7 +1841,7 @@ function interfaceMessagingSendEmailAttachShow(aParam, sReturn)
 				dataType: 'text',
 				success: function(data) 
 				{
-					interfaceMessagingSendEmailAttachShow(aParam, data)
+					interfaceMessagingSendEmailAttachShow(oParam, data)
 				}
 			});
 		
@@ -1853,44 +1853,44 @@ function interfaceMessagingSendEmailAttachShow(aParam, sReturn)
 			var aHTML = [];
 			var h = -1;
 		
-			interfaceMasterOptionsSetPosition(sXHTMLElementID)
+			ns1blankspaceOptionsSetPosition(sXHTMLElementID)
 		
 			ns1blankspace.messaging.action = aReturn[1];
 		
 			aHTML[++h] = '<table class="interfaceDropDown" style="width:287px;">';
 			aHTML[++h] = '<tbody>';
 			aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmailAttachmentsUpload" class="interfaceMain">' +
-								interfaceMasterAttachmentsUpload({object: 17, objectContext: aReturn[1], label: ''})	
+								ns1blankspaceAttachmentsUpload({object: 17, objectContext: aReturn[1], label: ''})	
 							'</td></tr>';
 			aHTML[++h] = '</tbody></table>';			
 
-			$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));	
+			$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));	
 			
 			$('#spanInterfaceMainUpload').button(
 			{
 				label: "Upload"
 			})
 			.click(function() {
-				 interfaceMasterAttachmentsUploadProcess({functionPostUpdate: interfaceMessagingSendEmailAttachments});
+				 ns1blankspaceAttachmentsUploadProcess({functionPostUpdate: interfaceMessagingSendEmailAttachments});
 			})
 			
 		}					
 	}	
 }	
 
-function interfaceMessagingSendEmailAttachments(aParam, oResponse)
+function interfaceMessagingSendEmailAttachments(oParam, oResponse)
 {	
 	var aHTML = [];
 	var h = -1;
 	var sXHTMLElementID = "tdInterfaceMainActionsSendEmailAttachments";
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.action != undefined) {ns1blankspace.messaging.action = aParam.action}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.action != undefined) {ns1blankspace.messaging.action = oParam.action}
 	}
 	
-	$('#divInterfaceMasterViewportControlOptions').hide();
+	$('#divns1blankspaceViewportControlOptions').hide();
 	
 	$('#spanInterfaceMainSendEmailAttach').attr('checked', false)
 	$('#spanInterfaceMainSendEmailAttach').button("refresh");
@@ -1908,7 +1908,7 @@ function interfaceMessagingSendEmailAttachments(aParam, oResponse)
 				type: 'GET',
 				url: '/ondemand/core/?' + sParam,
 				dataType: 'json',
-				success: function(data) {interfaceMessagingSendEmailAttachments(aParam, data)}
+				success: function(data) {interfaceMessagingSendEmailAttachments(oParam, data)}
 			});
 		}
 		else
@@ -1973,33 +1973,33 @@ function interfaceMessagingSendEmailAttachmentsRemove(sXHTMLElementId)
 		
 }
 
-function interfaceMessagingSendEmailSend(aParam)
+function interfaceMessagingSendEmailSend(oParam)
 {
 	var sParam = '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND';
 	var sData = '';
 	var fFunctionPostSend;
 	var sXHTMLElementID = 'divInterfaceMainEdit';
 	
-	if (aParam.object == undefined) {aParam.object = ns1blankspace.object}
-	if (aParam.objectContext == undefined) {aParam.objectContext = ns1blankspace.objectContext}
+	if (oParam.object == undefined) {oParam.object = ns1blankspace.object}
+	if (oParam.objectContext == undefined) {oParam.objectContext = ns1blankspace.objectContext}
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.functionPostSend != undefined) {fFunctionPostSend = aParam.functionPostSend}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.functionPostSend != undefined) {fFunctionPostSend = oParam.functionPostSend}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}	
 	
-	//sData += 'object=' + aParam.object;
-	//sData += '&objectcontext=' + aParam.objectContext;
-	sData += 'subject=' + encodeURIComponent((aParam.subject==undefined?'':aParam.subject));
-	sData += '&message=' + encodeURIComponent((aParam.message==undefined?'':aParam.message));
-	//sData += '&priority=' + inferfaceMasterFormatSave((aParam.priority==undefined?'':aParam.priority));
-	sData += '&id=' + encodeURIComponent((aParam.contactPersonTo==undefined?'':aParam.contactPersonTo));
-	sData += '&to=' + encodeURIComponent((aParam.to==undefined?'':aParam.to));
-	sData += '&cc=' + encodeURIComponent((aParam.cc==undefined?'':aParam.cc));
-	sData += '&bcc=' + encodeURIComponent((aParam.bcc==undefined?'':aParam.bcc));
+	//sData += 'object=' + oParam.object;
+	//sData += '&objectcontext=' + oParam.objectContext;
+	sData += 'subject=' + encodeURIComponent((oParam.subject==undefined?'':oParam.subject));
+	sData += '&message=' + encodeURIComponent((oParam.message==undefined?'':oParam.message));
+	//sData += '&priority=' + inferfaceMasterFormatSave((oParam.priority==undefined?'':oParam.priority));
+	sData += '&id=' + encodeURIComponent((oParam.contactPersonTo==undefined?'':oParam.contactPersonTo));
+	sData += '&to=' + encodeURIComponent((oParam.to==undefined?'':oParam.to));
+	sData += '&cc=' + encodeURIComponent((oParam.cc==undefined?'':oParam.cc));
+	sData += '&bcc=' + encodeURIComponent((oParam.bcc==undefined?'':oParam.bcc));
 	
-	sData += (aParam.otherData==undefined?'':aParam.otherData)
+	sData += (oParam.otherData==undefined?'':oParam.otherData)
 		  
 	$.ajax(
 	{
@@ -2009,7 +2009,7 @@ function interfaceMessagingSendEmailSend(aParam)
 		dataType: 'text',
 		success: function(data) 
 		{
-			interfaceMasterStatus('Email sent');
+			ns1blankspaceStatus('Email sent');
 			$('#' + sXHTMLElementID).html('<span><br />Email has been sent.</span>');
 			$('#tdInterfaceMessagingEmailViewport').html('');
 			if (fFunctionPostSend != undefined) {fFunctionPostSend()};
@@ -2027,7 +2027,7 @@ function interfaceMessagingEmailRemove(sXHTMLElementId)
 	sSearchContext = sSearchContext.replace(/\___/g, '.');	
 		
 	var sParam = 'method=MESSAGING_EMAIL_CACHE_MANAGE&remove=1';
-	var sData = 'id=' + interfaceMasterFormatSave(sSearchContext);
+	var sData = 'id=' + ns1blankspaceFormatSave(sSearchContext);
 				
 	$.ajax(
 		{
@@ -2062,7 +2062,7 @@ function interfaceMessagingEmailRead(sXHTMLElementId)
 		
 		var sParam = 'method=MESSAGING_EMAIL_CACHE_MANAGE&flags=(\\SEEN)';
 		var sData = 'account=' + ns1blankspace.messaging.account;
-		sData += '&id=' + interfaceMasterFormatSave(sSearchContext);
+		sData += '&id=' + ns1blankspaceFormatSave(sSearchContext);
 				
 		$.ajax(
 			{
@@ -2078,15 +2078,15 @@ function interfaceMessagingEmailRead(sXHTMLElementId)
 	}		
 }
 
-function interfaceMessagingNew(aParam, oResponse)
+function interfaceMessagingNew(oParam, oResponse)
 {
 	var aHTML = [];
 	var h = -1;
 	var sXHTMLElementID = 'divInterfaceMain';
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}	
 	
 	$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading);
@@ -2101,14 +2101,14 @@ function interfaceMessagingNew(aParam, oResponse)
 			type: 'GET',
 			url: '/ondemand/messaging/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceMessagingNew(aParam, data)}
+			success: function(data) {interfaceMessagingNew(oParam, data)}
 		});
 	}	
 	else	
 	{		
 		if (oResponse.data.rows.length == 0)
 		{
-			interfaceMessagingSendEmail(aParam);
+			interfaceMessagingSendEmail(oParam);
 		}
 		else
 		{
@@ -2142,7 +2142,7 @@ function interfaceMessagingNew(aParam, oResponse)
 				label: "Blank"
 			})
 			.click(function() {
-				interfaceMessagingSendEmail(aParam);
+				interfaceMessagingSendEmail(oParam);
 			})
 			.css('width', '75px')
 		
@@ -2182,10 +2182,10 @@ function interfaceMessagingNew(aParam, oResponse)
 					url: '/ondemand/messaging/?' + sParam,
 					dataType: 'json',
 					success: function(oResponse) {
-						aParam.message = oResponse.data.rows[0].message;
-						aParam.subject = oResponse.data.rows[0].subject;
-						aParam.source = 3;
-						interfaceMessagingSendEmail(aParam);
+						oParam.message = oResponse.data.rows[0].message;
+						oParam.subject = oResponse.data.rows[0].subject;
+						oParam.source = 3;
+						interfaceMessagingSendEmail(oParam);
 					}
 				});
 			})
@@ -2193,20 +2193,20 @@ function interfaceMessagingNew(aParam, oResponse)
 	}	
 }
 
-function interfaceMessagingEmailSave(aParam)
+function interfaceMessagingEmailSave(oParam)
 {
 	var iStep = 1;
 	var sXHTMLElementID = '';
 	var sMessageId;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.step != undefined) {iStep = aParam.step}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.step != undefined) {iStep = oParam.step}
 	}
 	else
 	{
-		aParam = {};
+		oParam = {};
 	}
 	
 	var sID = sXHTMLElementID;
@@ -2215,12 +2215,12 @@ function interfaceMessagingEmailSave(aParam)
 	var aID = sID.split('_id_');
 	sMessageId = aID[1];
 	
-	$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', sXHTMLElementID)
+	$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', sXHTMLElementID)
 	
 	if (iStep == 1)
 	{
 	
-		interfaceMasterOptionsPosition({xhtmlElementID: sXHTMLElementID, leftOffset:-75});
+		ns1blankspaceOptionsPosition({xhtmlElementID: sXHTMLElementID, leftOffset:-75});
 		
 		var aHTML = [];
 		var h = -1;
@@ -2233,7 +2233,7 @@ function interfaceMessagingEmailSave(aParam)
 		
 		aHTML[++h] = '</table>';					
 	
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''))
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''))
 		
 		$('#spanInterfaceMessagingEmailSaveOptionJustSave').button(
 		{
@@ -2241,8 +2241,8 @@ function interfaceMessagingEmailSave(aParam)
 		})
 		.click(function() {
 			$('#spanInterfaceMessagingEmailSaveOptionJustSave').html(ns1blankspace.xhtml.loadingSmall);
-			aParam.step = 2
-			interfaceMessagingEmailSave(aParam);
+			oParam.step = 2
+			interfaceMessagingEmailSave(oParam);
 			
 		})
 		.css('width', '75px')
@@ -2252,8 +2252,8 @@ function interfaceMessagingEmailSave(aParam)
 			label: "To Do"
 		})
 		.click(function() {
-			aParam.step = 3
-			interfaceMessagingEmailSave(aParam);
+			oParam.step = 3
+			interfaceMessagingEmailSave(oParam);
 		})
 		.css('width', '75px')
 	
@@ -2273,7 +2273,7 @@ function interfaceMessagingEmailSave(aParam)
 			dataType: 'json',
 			success: function(data)
 						{
-							$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+							$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 							$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 						}
 		});	
@@ -2281,7 +2281,7 @@ function interfaceMessagingEmailSave(aParam)
 	
 }
 
-function interfaceMessagingActions(aParam, oResponse)
+function interfaceMessagingActions(oParam, oResponse)
 {
 
 	var sXHTMLElementID = 'divInterfaceMainActionsSent';
@@ -2298,7 +2298,7 @@ function interfaceMessagingActions(aParam, oResponse)
 		oSearch.rf = 'json';
 		oSearch.addFilter('actiontype', 'EQUAL_TO', iType);
 		oSearch.sort('modifieddate', 'desc');
-		oSearch.getResults(function(data) {interfaceMessagingActions(aParam, data)}); 
+		oSearch.getResults(function(data) {interfaceMessagingActions(oParam, data)}); 
 	}
 	else
 	{
@@ -2330,15 +2330,15 @@ function interfaceMessagingActions(aParam, oResponse)
     	
 			aHTML[++h] = '</tbody></table>';
 
-			$('#divInterfaceMasterViewportControlOptions').html(interfaceMasterPagination(
+			$('#divns1blankspaceViewportControlOptions').html(ns1blankspacePagination(
 				   {
 					html: aHTML.join(''),
 					more: (oResponse.morerows == "true")
 				   }) );
 		
-			$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+			$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
-			interfaceMasterPaginationBind(
+			ns1blankspacePaginationBind(
 			{
 				columns: 'actionreference-duedate',
 				more: oResponse.moreid,
@@ -2351,13 +2351,13 @@ function interfaceMessagingActions(aParam, oResponse)
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide();
+			$('#divns1blankspaceViewportControlOptions').hide();
 			interfaceMessagingActionSearch({xhtmlElementID: event.target.id});
 		});
 	}
 }
 
-function interfaceMessagingActionSearch(aParam, oResponse)
+function interfaceMessagingActionSearch(oParam, oResponse)
 {
 	var aHTML = [];
 	var h = -1;
@@ -2365,18 +2365,18 @@ function interfaceMessagingActionSearch(aParam, oResponse)
 	var sTargetXHTMLElementID = 'divInterfaceMainSummary';
 	var bSetContext = true;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.targetXHTMLElementID != undefined) {sTargetXHTMLElementID = aParam.targetXHTMLElementID}
-		if (aParam.setContext != undefined) {bSetContext = aParam.setContext}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.targetXHTMLElementID != undefined) {sTargetXHTMLElementID = oParam.targetXHTMLElementID}
+		if (oParam.setContext != undefined) {bSetContext = oParam.setContext}
 	}	
 
 	var aSearch = sXHTMLElementID.split('-');
 	var sElementId = aSearch[0];
 	var sSearchContext = aSearch[1];
 	
-	if (bSetContext) {interfaceMasterMainViewportShow("#divInterfaceMainSummary", true)};
+	if (bSetContext) {ns1blankspaceMainViewportShow("#divInterfaceMainSummary", true)};
 	
 	if (oResponse == undefined)
 	{
@@ -2388,11 +2388,11 @@ function interfaceMessagingActionSearch(aParam, oResponse)
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 		oSearch.addFilter('actiontype', 'EQUAL_TO', 5);				
-		oSearch.getResults(function(data) {interfaceMessagingActionSearch(aParam, data)});
+		oSearch.getResults(function(data) {interfaceMessagingActionSearch(oParam, data)});
 	}
 	else
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceMessagingMasterViewport({autoShow: false});interfaceMessagingActionSearch({xhtmlElementID: "-' + sSearchContext + '"})',
 			move: false
 			})
@@ -2416,12 +2416,12 @@ function interfaceMessagingActionSearch(aParam, oResponse)
 			oSearch.addField('type,email,name');
 			oSearch.rf = 'json';
 			oSearch.addFilter('action', 'EQUAL_TO', sSearchContext);		
-			oSearch.getResults(function(data) {interfaceMessagingActionSearchShow(aParam, data)});
+			oSearch.getResults(function(data) {interfaceMessagingActionSearchShow(oParam, data)});
 		}
 	}
 }
 	
-function interfaceMessagingActionSearchShow(aParam, oResponse)
+function interfaceMessagingActionSearchShow(oParam, oResponse)
 {	
 	var aHTML = [];
 	var h = -1;
@@ -2429,11 +2429,11 @@ function interfaceMessagingActionSearchShow(aParam, oResponse)
 	var sTargetXHTMLElementID = 'divInterfaceMainSummary';
 	var bSetContext = true;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.targetXHTMLElementID != undefined) {sTargetXHTMLElementID = aParam.targetXHTMLElementID}
-		if (aParam.setContext != undefined) {bSetContext = aParam.setContext}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.targetXHTMLElementID != undefined) {sTargetXHTMLElementID = oParam.targetXHTMLElementID}
+		if (oParam.setContext != undefined) {bSetContext = oParam.setContext}
 	}	
 	
 	var aTo = [];
@@ -2549,7 +2549,7 @@ function interfaceMessagingActionSearchShow(aParam, oResponse)
 					
 	$('#' + sTargetXHTMLElementID).html(aHTML.join('')); 
 	
-	interfaceMessagingViewport(aParam);
+	interfaceMessagingViewport(oParam);
 		
 	setTimeout("interfaceMessagingShowMessage()", 300);
 }

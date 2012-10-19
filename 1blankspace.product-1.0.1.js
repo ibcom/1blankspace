@@ -5,13 +5,13 @@
  * 01 FEB 2010
  */
  
-function interfaceProductMasterViewport(aParam)
+function interfaceProductMasterViewport(oParam)
 {
 	var bShowHome = true
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 	}
 	
 	ns1blankspace.object = 16;
@@ -21,71 +21,71 @@ function interfaceProductMasterViewport(aParam)
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceProductMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 	
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Products"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceProductSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);	
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceProductSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);	
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceProductSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceProductSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceProductSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceProductNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceProductNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceProductSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceProductSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceProductSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceProductSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceProductHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceProductHelpOptions();
 	});
@@ -100,7 +100,7 @@ function interfaceProductMasterViewport(aParam)
 		interfaceProductSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	if (bShowHome) {interfaceProductHomeShow()};
 	
@@ -128,7 +128,7 @@ function interfaceProductHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportProductLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportProductLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -136,7 +136,7 @@ function interfaceProductHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PRODUCT_SEARCH';
@@ -191,7 +191,7 @@ function interfaceProductHomeShow(oResponse)
 	}
 }
 
-function interfaceProductSearch(sXHTMLElementId, aParam)
+function interfaceProductSearch(sXHTMLElementId, oParam)
 {
 	var aSearch = sXHTMLElementId.split('-');
 	var sElementId = aSearch[0];
@@ -202,14 +202,14 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
@@ -224,13 +224,13 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 							'unittype,unittypetext,units,category,categorytext,currentretailprice,type,minimumstocklevel');
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
-		oSearch.getResults(function(data){interfaceProductShow(aParam, data)});
+		oSearch.getResults(function(data){interfaceProductShow(oParam, data)});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -244,8 +244,8 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'PRODUCT_SEARCH';
@@ -261,12 +261,12 @@ function interfaceProductSearch(sXHTMLElementId, aParam)
 				oSearch.addFilter('title', 'STRING_IS_LIKE', sSearchText);
 			}	
 		
-			oSearch.getResults(function(data){interfaceProductSearchShow(aParam, data)});
+			oSearch.getResults(function(data){interfaceProductSearchShow(oParam, data)});
 		}
 	};	
 }
 
-function interfaceProductSearchShow(aParam, oResponse)
+function interfaceProductSearchShow(oParam, oResponse)
 {
 
 	var iColumn = 0;
@@ -276,7 +276,7 @@ function interfaceProductSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -307,16 +307,16 @@ function interfaceProductSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		var oElement = $('#inputInterfaceMasterViewportControlSearch');
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		interfaceMasterSearchStop();
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		var oElement = $('#inputns1blankspaceViewportControlSearch');
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceProductSearch(event.target.id, {source: 1});
 		});
 	}			
@@ -405,56 +405,56 @@ function interfaceProductViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceProductSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceProductDetails();
 	});
 	
 	$('#tdInterfaceViewportControlPricing').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainPricing");
+		ns1blankspaceMainViewportShow("#divInterfaceMainPricing");
 		interfaceProductPricing();
 	});
 	
 	$('#tdInterfaceViewportControlCategory').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainCategory");
+		ns1blankspaceMainViewportShow("#divInterfaceMainCategory");
 		interfaceProductCategory();
 	});
 	
 	$('#tdInterfaceViewportControlSupplier').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSupplier");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSupplier");
 		interfaceProductSupplier();
 	});
 	
 	$('#tdInterfaceViewportControlStock').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainStock");
+		ns1blankspaceMainViewportShow("#divInterfaceMainStock");
 		interfaceProductStock("divInterfaceMainStock", true);
 	});
 	
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
-		interfaceMasterActions({xhtmlElementID: 'divInterfaceMainActions'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
+		ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
 	});
 
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 }
 
-function interfaceProductShow(aParam, oResponse)
+function interfaceProductShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceProductViewport();
 
 	var aHTML = [];
@@ -487,15 +487,15 @@ function interfaceProductShow(aParam, oResponse)
 				
 		$('#divInterfaceViewportControlContext').html(aHTML.join('<br />'));
 		
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 		
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceProductMasterViewport({showHome: false});interfaceProductSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 			
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceProductSummary()'});
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceProductSummary()'});
 	}	
 }		
 		
@@ -745,7 +745,7 @@ function interfaceProductPricing()
 	}	
 }
 
-function interfaceProductPricingGroup(aParam, oResponse)
+function interfaceProductPricingGroup(oParam, oResponse)
 {
 	var aHTML = [];
 	var h = -1;
@@ -759,15 +759,15 @@ function interfaceProductPricingGroup(aParam, oResponse)
 			url: '/ondemand/setup/?rows=999&method=SETUP_PRODUCT_PRICING_GROUP_SEARCH',
 			dataType: 'json',
 			async: false,
-			success: function(data) {interfaceProductPricingGroup(aParam, data)}
+			success: function(data) {interfaceProductPricingGroup(oParam, data)}
 		});
 	}
 	else
 	{
 		
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+			if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 		}	
 		
 		var aHTML = [];
@@ -802,7 +802,7 @@ function interfaceProductPricingGroup(aParam, oResponse)
 	}	
 }
 
-function interfaceProductCategory(aParam, oResponse)
+function interfaceProductCategory(oParam, oResponse)
 {
 	var aHTML = [];
 	var h = -1;
@@ -815,7 +815,7 @@ function interfaceProductCategory(aParam, oResponse)
 			oSearch.method = 'SETUP_PRODUCT_CATEGORY_SEARCH';
 			oSearch.addField('title');
 			oSearch.getResults(function(data) {
-					interfaceProductCategory(aParam, data)
+					interfaceProductCategory(oParam, data)
 					});
 		}
 		else
@@ -960,23 +960,23 @@ function interfaceProductNew()
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceProductViewport();
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	interfaceProductDetails();
 }
 
 function interfaceProductSave()
 {
-	interfaceMasterStatusWorking();
+	ns1blankspaceStatusWorking();
 
 	var sData = 'id=' + ((ns1blankspace.objectContext == -1)?'':ns1blankspace.objectContext);
 			
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
-		sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsTitle').val());
-		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
+		sData += '&reference=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsReference').val());
+		sData += '&title=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsTitle').val());
+		sData += '&description=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsDescription').val());
 		
 		var iStatus = $('input[name="radioStatus"]:checked').val()
 		if (iStatus == '') {iStatus = 1}
@@ -987,7 +987,7 @@ function interfaceProductSave()
 	
 	if ($('#divInterfaceMainStock').html() != '')
 	{
-		sData += '&minimumstocklevel=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsMinimumStockLevel').val());
+		sData += '&minimumstocklevel=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsMinimumStockLevel').val());
 		sData += '&unittype=' + $('input[name="radioStockUnit"]:checked').val();
 		sData += '&trackinventory=' + $('input[name="radioTrackStock"]:checked').val();
 	}
@@ -997,13 +997,13 @@ function interfaceProductSave()
 		var iCategory = $('input[name="radioCategory"]:checked').val()
 		if (iCategory == '') {iCategory = $('input[name="radioCategory"]:first').val()}
 	
-		sData += '&category=' + interfaceMasterFormatSave(iCategory);
+		sData += '&category=' + ns1blankspaceFormatSave(iCategory);
 	}
 	
 	$.ajax(
 	{
 		type: 'POST',
-		url: interfaceMasterEndpointURL('PRODUCT_MANAGE'),
+		url: ns1blankspaceEndpointURL('PRODUCT_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: interfaceProductSaveProcess
@@ -1014,7 +1014,7 @@ function interfaceProductSaveProcess(oResponse)
 {
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 		if (ns1blankspace.objectContext == -1) {var bNew = true}
 		ns1blankspace.objectContext = oResponse.id;	
 		
@@ -1030,14 +1030,14 @@ function interfaceProductSaveProcess(oResponse)
 	}
 	else
 	{
-		interfaceMasterError(oResponse.error.errornotes);
+		ns1blankspaceError(oResponse.error.errornotes);
 	}
 }
 
-function interfaceProductPriceSave(aParam)
+function interfaceProductPriceSave(oParam)
 {
 	var sParam = 'method=PRODUCT_PRICE_MANAGE&rf=JSON';
-	var sData = 'price=' + interfaceMasterFormatSave($('#inputInterfaceMainPricingPriceRetail').val());
+	var sData = 'price=' + ns1blankspaceFormatSave($('#inputInterfaceMainPricingPriceRetail').val());
 	sData += '&product=' + ns1blankspace.objectContext;
 	
 	$.ajax(
@@ -1049,10 +1049,10 @@ function interfaceProductPriceSave(aParam)
 	});
 }
 
-function interfaceProductQuantitySave(aParam)
+function interfaceProductQuantitySave(oParam)
 {
 	var sParam = 'method=PRODUCT_STOCK_MANAGE&rf=JSON';
-	var sData = 'units=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsQuantity').val());
+	var sData = 'units=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsQuantity').val());
 	sData += '&product=' + ns1blankspace.objectContext;
 	sData += '&type=3';
 	sData += '&effectivedate=' + Date.today().toString("dd-MMM-yyyy");
@@ -1066,13 +1066,13 @@ function interfaceProductQuantitySave(aParam)
 	});
 }
 	
-function interfaceProductStockHistory(aParam, oResponse)
+function interfaceProductStockHistory(oParam, oResponse)
 {
 	var sXHTMLElementID = 'divInterfaceMainStock';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	if (oResponse == undefined)
@@ -1168,7 +1168,7 @@ function interfaceProductStockHistory(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 
-			interfaceMasterPaginationList(
+			ns1blankspacePaginationList(
 			{
 				xhtmlElementID: 'tdInterfaceMainOrderProductsColumn1',
 				xhtmlContext: 'OrderProducts',

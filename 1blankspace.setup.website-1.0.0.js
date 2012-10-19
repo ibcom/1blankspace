@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
  
-function interfaceSetupWebsiteMasterViewport(aParam)
+function interfaceSetupWebsiteMasterViewport(oParam)
 {
 
 	gsSetupName = 'Website';
@@ -16,62 +16,62 @@ function interfaceSetupWebsiteMasterViewport(aParam)
 	var bShowHome = true;
 	var bNew = false;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
-		if (aParam.showNew != undefined) {bNew = aParam.showNew}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+		if (oParam.showNew != undefined) {bNew = oParam.showNew}
 		if (bNew) {interfaceSetupWebsiteNew()};
 	}	
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceSetupWebsiteMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 	
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Websites & Webapps"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupWebsiteSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupWebsiteSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceSetupWebsiteSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupWebsiteSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceSetupWebsiteSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceSetupWebsiteNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceSetupWebsiteNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceSetupWebsiteSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 	
 		var aHTML = [];
@@ -87,27 +87,27 @@ function interfaceSetupWebsiteMasterViewport(aParam)
 
 		aHTML[++h] = '</table>';
 
-		interfaceMasterViewportActionShow(this, aHTML.join(''), "interfaceSetupWebsiteActionOptionsBind()");
+		ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceSetupWebsiteActionOptionsBind()");
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 		
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceSetupWebsiteSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceSetupWebsiteSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceSetupWebsiteHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceSetupWebsiteHelpOptions();
 	});
@@ -122,7 +122,7 @@ function interfaceSetupWebsiteMasterViewport(aParam)
 		interfaceSetupWebsiteSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	if (bShowHome)
 	{
@@ -178,7 +178,7 @@ function interfaceSetupWebsiteHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportSetupWebsiteLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportSetupWebsiteLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -186,7 +186,7 @@ function interfaceSetupWebsiteHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		$.ajax(
 		{
@@ -239,7 +239,7 @@ function interfaceSetupWebsiteHomeShow(oResponse)
 	}
 }
 
-function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
+function interfaceSetupWebsiteSearch(sXHTMLElementId, oParam)
 {
 	
 	var aSearch = sXHTMLElementId.split('-');
@@ -251,14 +251,14 @@ function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 		
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -274,7 +274,7 @@ function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
 			type: 'GET',
 			url: '/ondemand/setup/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceSetupWebsiteShow(aParam, data)}
+			success: function(data) {interfaceSetupWebsiteShow(oParam, data)}
 		});
 	}
 	else
@@ -282,7 +282,7 @@ function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -297,8 +297,8 @@ function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var sParam = 'method=SETUP_SITE_SEARCH&quicksearch=' + sSearchText;
 
@@ -307,14 +307,14 @@ function interfaceSetupWebsiteSearch(sXHTMLElementId, aParam)
 				type: 'GET',
 				url: '/ondemand/setup/?' + sParam,
 				dataType: 'json',
-				success: function(data) {interfaceSetupWebsiteSearchShow(aParam, data)}
+				success: function(data) {interfaceSetupWebsiteSearchShow(oParam, data)}
 			});
 			
 		}
 	};	
 }
 
-function interfaceSetupWebsiteSearchShow(aParam, oResponse)
+function interfaceSetupWebsiteSearchShow(oParam, oResponse)
 {
 
 	var iColumn = 0;
@@ -324,8 +324,8 @@ function interfaceSetupWebsiteSearchShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -354,14 +354,14 @@ function interfaceSetupWebsiteSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		interfaceMasterSearchStop();
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupWebsiteSearch(event.target.id, 1);
 		});
 	}	
@@ -452,69 +452,69 @@ function interfaceSetupWebsiteViewport()
 		
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceSetupWebsiteSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceSetupWebsiteDetails();
 	});
 	
 	$('#tdInterfaceViewportControlLayout').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainLayout");
+		ns1blankspaceMainViewportShow("#divInterfaceMainLayout");
 		interfaceSetupWebsiteLayout();
 	});
 	
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments', label: 'Select the file attachment:', maxFiles: 1, helpNotes: 'If you upload a file with the same name as an existing attachment it will automatically be replaced.'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments', label: 'Select the file attachment:', maxFiles: 1, helpNotes: 'If you upload a file with the same name as an existing attachment it will automatically be replaced.'});
 	});
 	
 	$('#tdInterfaceViewportControlPages').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainPages");
+		ns1blankspaceMainViewportShow("#divInterfaceMainPages");
 		interfaceSetupWebsitePages({actions: {add: true}});
 	});
 	
 	$('#tdInterfaceViewportControlForms').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainForms");
+		ns1blankspaceMainViewportShow("#divInterfaceMainForms");
 		interfaceSetupWebsiteForms({actions: {add: true}});
 	});
 	
 	$('#tdInterfaceViewportControlAddAttachment').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAddAttachment");
+		ns1blankspaceMainViewportShow("#divInterfaceMainAddAttachment");
 		interfaceSetupWebsiteAddAttachment();
 	});
 	
 	$('#tdInterfaceViewportControlAdvanced').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAdvanced");
+		ns1blankspaceMainViewportShow("#divInterfaceMainAdvanced");
 		interfaceSetupWebsiteAdvanced();
 	});
 	
 	$('#tdInterfaceViewportControlScripts').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainScripts");
+		ns1blankspaceMainViewportShow("#divInterfaceMainScripts");
 		interfaceSetupWebsiteScripts();
 	});
 	
 	$('#tdInterfaceViewportControlURLs').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainURLs");
+		ns1blankspaceMainViewportShow("#divInterfaceMainURLs");
 		interfaceSetupWebsiteURLs();
 	});
 }
 
-function interfaceSetupWebsiteShow(aParam, oResponse)
+function interfaceSetupWebsiteShow(oParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupWebsiteViewport();
 	
 	var aHTML = [];
@@ -545,15 +545,15 @@ function interfaceSetupWebsiteShow(aParam, oResponse)
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceSetupWebsiteMasterViewport({showHome: false});interfaceSetupWebsiteSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceSetupWebsiteSummary()'})
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceSetupWebsiteSummary()'})
 	}	
 }		
 		
@@ -638,13 +638,13 @@ function interfaceSetupWebsiteSummary()
 		
 		$('#aInterfaceMainSummaryAddAttachment').click(function(event)
 		{
- 			interfaceMasterMainViewportShow("#divInterfaceMainAddAttachment");
+ 			ns1blankspaceMainViewportShow("#divInterfaceMainAddAttachment");
 			interfaceSetupWebsiteAddAttachment();
 		});
 		
 		$('#aInterfaceMainSummarySetupWebApp').click(function() 
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainWebapp");
+			ns1blankspaceMainViewportShow("#divInterfaceMainWebapp");
 			interfaceSetupWebApp();
 		});
 	}	
@@ -931,8 +931,8 @@ function interfaceSetupWebsiteAdvanced()
 			$('[name="radioOnDemand"][value="' + ns1blankspace.objectContextData.ondemandstatus + '"]').attr('checked', true);
 			$('[name="radioTitle"][value="' + ns1blankspace.objectContextData.usekeywordsastitle + '"]').attr('checked', true);
 			$('[name="radioTitle"][value="' +ns1blankspace.objectContextData.layout + '"]').attr('checked', true);
-			$('#inputInterfaceMainAdvancedDocumentType').val(interfaceMasterFormatXHTML(ns1blankspace.objectContextData.documenttype));
-			$('#inputInterfaceMainBodyTag').val(interfaceMasterFormatXHTML(ns1blankspace.objectContextData.bodytag));
+			$('#inputInterfaceMainAdvancedDocumentType').val(ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.documenttype));
+			$('#inputInterfaceMainBodyTag').val(ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.bodytag));
 		}
 		
 	}	
@@ -973,25 +973,25 @@ function interfaceSetupWebsiteScripts()
 		
 		if (ns1blankspace.objectContextData != undefined)
 		{
-			$('#inputInterfaceMainScriptHeader').val(interfaceMasterFormatXHTML(ns1blankspace.objectContextData.headerscript));
-			$('#inputInterfaceMainScriptFooter').val(interfaceMasterFormatXHTML(ns1blankspace.objectContextData.footerscript));
+			$('#inputInterfaceMainScriptHeader').val(ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.headerscript));
+			$('#inputInterfaceMainScriptFooter').val(ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.footerscript));
 		}
 	}	
 }
 
-function interfaceSetupWebsitePages(aParam, oResponse)
+function interfaceSetupWebsitePages(oParam, oResponse)
 {
 	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainPages';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.options != undefined) {oOptions = aParam.options}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.options != undefined) {oOptions = oParam.options}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
 	}		
 		
 	if (oResponse == undefined)
@@ -1003,7 +1003,7 @@ function interfaceSetupWebsitePages(aParam, oResponse)
 			type: 'GET',
 			url: '/ondemand/setup/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceSetupWebsitePages(aParam, data)}
+			success: function(data) {interfaceSetupWebsitePages(oParam, data)}
 		});
 
 	}
@@ -1048,7 +1048,7 @@ function interfaceSetupWebsitePages(aParam, oResponse)
 				label: "Add"
 			})
 			.click(function() {
-				 interfaceMasterWebsitePagesAdd(aParam);
+				 ns1blankspaceWebsitePagesAdd(oParam);
 			})
 			
 		}	
@@ -1140,7 +1140,7 @@ function interfaceSetupWebsitePages(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterWebsitePagesRemove({xhtmlElementID: this.id});
+					ns1blankspaceWebsitePagesRemove({xhtmlElementID: this.id});
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -1155,7 +1155,7 @@ function interfaceSetupWebsitePages(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterWebsitePagesAdd({xhtmlElementID: this.id})
+					ns1blankspaceWebsitePagesAdd({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -1164,7 +1164,7 @@ function interfaceSetupWebsitePages(aParam, oResponse)
 	}	
 }
 
-function interfaceMasterWebsitePagesAdd(aParam, oResponse)
+function ns1blankspaceWebsitePagesAdd(oParam, oResponse)
 {
 	var sID; 
 	var iDocumentType = 5;
@@ -1173,9 +1173,9 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 	{
 		var sXHTMLElementID;
 
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+			if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 		}
 		
 		if (sXHTMLElementID != undefined)
@@ -1281,22 +1281,22 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 		.click(function() 
 		{
 			var sData = 'site=' + ns1blankspace.objectContext;
-			sData += '&documenttitle=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupWebsitePageAddTitle').val());
-			sData += '&documenturl=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupWebsitePageAddURL').val());
-			sData += '&documenttype=' + interfaceMasterFormatSave($('input[name="radioDocumentType"]:checked').val());
-			sData += '&documentpublic=' + interfaceMasterFormatSave($('input[name="radioPublic"]:checked').val());
-			sData += '&location=' + interfaceMasterFormatSave($('input[name="radioType"]:checked').val());
+			sData += '&documenttitle=' + ns1blankspaceFormatSave($('#inputInterfaceMainSetupWebsitePageAddTitle').val());
+			sData += '&documenturl=' + ns1blankspaceFormatSave($('#inputInterfaceMainSetupWebsitePageAddURL').val());
+			sData += '&documenttype=' + ns1blankspaceFormatSave($('input[name="radioDocumentType"]:checked').val());
+			sData += '&documentpublic=' + ns1blankspaceFormatSave($('input[name="radioPublic"]:checked').val());
+			sData += '&location=' + ns1blankspaceFormatSave($('input[name="radioType"]:checked').val());
 			
 			if (parseInt($('input[name="radioDocumentType"]:checked').val()) == 5)
 			{
-				sData += '&documentcontent=' + interfaceMasterFormatSave(tinyMCE.get('inputInterfaceMainEditText' + ns1blankspace.counter.editor).getContent());
+				sData += '&documentcontent=' + ns1blankspaceFormatSave(tinyMCE.get('inputInterfaceMainEditText' + ns1blankspace.counter.editor).getContent());
 			}
 			else
 			{
-				sData += '&documentcontent=' + interfaceMasterFormatSave($('#inputInterfaceMainEditText' + ns1blankspace.counter.editor).val());
+				sData += '&documentcontent=' + ns1blankspaceFormatSave($('#inputInterfaceMainEditText' + ns1blankspace.counter.editor).val());
 			}
 			
-			sData += '&id=' + interfaceMasterFormatSave(sID);
+			sData += '&id=' + ns1blankspaceFormatSave(sID);
 			
 			$.ajax(
 			{
@@ -1305,7 +1305,7 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 				data: sData,
 				dataType: 'json',
 				success: function() {
-					interfaceMasterMainViewportShow("#divInterfaceMainPages");
+					ns1blankspaceMainViewportShow("#divInterfaceMainPages");
 					interfaceSetupWebsitePages();
 				}
 			});
@@ -1317,7 +1317,7 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainPages");
+			ns1blankspaceMainViewportShow("#divInterfaceMainPages");
 			interfaceSetupWebsitePages();
 		});
 		
@@ -1389,7 +1389,7 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 				url: '/ondemand/setup/?method=SETUP_SITE_DOCUMENT_SEARCH&includecontent=1',
 				data: 'id=' + sID,
 				dataType: 'json',
-				success: function(data) {interfaceMasterWebsitePagesAdd(aParam, data)}
+				success: function(data) {ns1blankspaceWebsitePagesAdd(oParam, data)}
 			});
 		}
 		else
@@ -1408,7 +1408,7 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 			$('#inputInterfaceMainSetupWebsitePageAddTitle').val(oObjectContext.documenttitle);
 			$('#inputInterfaceMainSetupWebsitePageAddURL').val(oObjectContext.documenturl);
 			
-			$('#inputInterfaceMainEditText' + ns1blankspace.counter.editor).val(interfaceMasterFormatXHTML(oObjectContext.documentcontent));
+			$('#inputInterfaceMainEditText' + ns1blankspace.counter.editor).val(ns1blankspaceFormatXHTML(oObjectContext.documentcontent));
 			
 			if (parseInt(oObjectContext.documenttype) == 5)
 			{
@@ -1434,13 +1434,13 @@ function interfaceMasterWebsitePagesAdd(aParam, oResponse)
 	}		
 }
 
-function interfaceMasterWebsitePagesRemove(aParam, oResponse)
+function ns1blankspaceWebsitePagesRemove(oParam, oResponse)
 {
 	var sXHTMLElementID;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 	
 	var aXHTMLElementID = sXHTMLElementID.split('-');
@@ -1457,7 +1457,7 @@ function interfaceMasterWebsitePagesRemove(aParam, oResponse)
 			url: '/ondemand/setup/?' + sParam,
 			data: sData,
 			dataType: 'json',
-			success: function(data){interfaceMasterWebsitePagesRemove(aParam, data)}
+			success: function(data){ns1blankspaceWebsitePagesRemove(oParam, data)}
 		});
 	}	
 	else
@@ -1470,19 +1470,19 @@ function interfaceMasterWebsitePagesRemove(aParam, oResponse)
 	
 }
 
-function interfaceSetupWebsiteForms(aParam, oResponse)
+function interfaceSetupWebsiteForms(oParam, oResponse)
 {
 	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainForms';
 	var oOptions = {view: true};
 	var oActions = {};
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.options != undefined) {oOptions = aParam.options}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.options != undefined) {oOptions = oParam.options}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
 	}		
 		
 	if (oResponse == undefined)
@@ -1494,7 +1494,7 @@ function interfaceSetupWebsiteForms(aParam, oResponse)
 			type: 'GET',
 			url: '/ondemand/setup/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceSetupWebsiteForms(aParam, data)}
+			success: function(data) {interfaceSetupWebsiteForms(oParam, data)}
 		});
 
 	}
@@ -1611,19 +1611,19 @@ function interfaceSetupWebsiteForms(aParam, oResponse)
 }
 
 
-function interfaceSetupWebsiteURLs(aParam, oResponse)
+function interfaceSetupWebsiteURLs(oParam, oResponse)
 {
 	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainURLs';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.options != undefined) {oOptions = aParam.options}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.options != undefined) {oOptions = oParam.options}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
 	}		
 		
 	if (oResponse == undefined)
@@ -1633,7 +1633,7 @@ function interfaceSetupWebsiteURLs(aParam, oResponse)
 			type: 'GET',
 			url: '/ondemand/setup/?method=SETUP_SITE_URL_SEARCH&site=' + iObjectContext,
 			dataType: 'json',
-			success: function(data) {interfaceSetupWebsiteURLs(aParam, data)}
+			success: function(data) {interfaceSetupWebsiteURLs(oParam, data)}
 		});
 
 	}
@@ -1682,7 +1682,7 @@ function interfaceSetupWebsiteURLs(aParam, oResponse)
 				label: "Add"
 			})
 			.click(function() {
-				 interfaceMasterWebsiteURLsAdd(aParam);
+				 ns1blankspaceWebsiteURLsAdd(oParam);
 			})
 			
 		}	
@@ -1751,7 +1751,7 @@ function interfaceSetupWebsiteURLs(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterWebsiteURLsRemove({xhtmlElementID: this.id});
+					ns1blankspaceWebsiteURLsRemove({xhtmlElementID: this.id});
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -1766,7 +1766,7 @@ function interfaceSetupWebsiteURLs(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterWebsiteURLsAdd({xhtmlElementID: this.id})
+					ns1blankspaceWebsiteURLsAdd({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -1775,7 +1775,7 @@ function interfaceSetupWebsiteURLs(aParam, oResponse)
 	}	
 }
 
-function interfaceSetupWebsiteSave(aParam, oResponse)
+function interfaceSetupWebsiteSave(oParam, oResponse)
 {
 	if (oResponse == undefined)
 	{
@@ -1794,32 +1794,32 @@ function interfaceSetupWebsiteSave(aParam, oResponse)
 		
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
-			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsTitle').val());
-			sData += '&email=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsEmail').val());
-			sData += '&status=' + interfaceMasterFormatSave($('input[name="radioStatus"]:checked').val());	
+			sData += '&title=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsTitle').val());
+			sData += '&email=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsEmail').val());
+			sData += '&status=' + ns1blankspaceFormatSave($('input[name="radioStatus"]:checked').val());	
 		};
 
 		if ($('#divInterfaceMainLayout').html() != '')
 		{
-			sData += '&headerheight=' + interfaceMasterFormatSave($('#inputInterfaceMainLayoutHeaderHeight').val());
-			sData += '&footerheight=' + interfaceMasterFormatSave($('#inputInterfaceMainLayoutFooterHeight').val());
-			sData += '&columns=' + interfaceMasterFormatSave($('#inputInterfaceMainLayoutColumns').val());
-			sData += '&layout=' + interfaceMasterFormatSave($('input[name="radioLayout"]:checked').val());
+			sData += '&headerheight=' + ns1blankspaceFormatSave($('#inputInterfaceMainLayoutHeaderHeight').val());
+			sData += '&footerheight=' + ns1blankspaceFormatSave($('#inputInterfaceMainLayoutFooterHeight').val());
+			sData += '&columns=' + ns1blankspaceFormatSave($('#inputInterfaceMainLayoutColumns').val());
+			sData += '&layout=' + ns1blankspaceFormatSave($('input[name="radioLayout"]:checked').val());
 			sCSSAttachment = $('input[name="radioCSSAttachment"]:checked').val();
 		};
 		
 		if ($('#divInterfaceMainAdvanced').html() != '')
 		{
-			sData += '&ondemandstatus=' + interfaceMasterFormatSave($('input[name="radioOnDemand"]:checked').val());	
-			sData += '&usekeywordsastitle=' + interfaceMasterFormatSave($('input[name="radioTitle"]:checked').val());
-			sData += '&documenttype=' + interfaceMasterFormatSave($('#inputInterfaceMainAdvancedDocumentType').val());
-			sData += '&bodytag=' + interfaceMasterFormatSave($('#inputInterfaceMainBodyTag').val());
+			sData += '&ondemandstatus=' + ns1blankspaceFormatSave($('input[name="radioOnDemand"]:checked').val());	
+			sData += '&usekeywordsastitle=' + ns1blankspaceFormatSave($('input[name="radioTitle"]:checked').val());
+			sData += '&documenttype=' + ns1blankspaceFormatSave($('#inputInterfaceMainAdvancedDocumentType').val());
+			sData += '&bodytag=' + ns1blankspaceFormatSave($('#inputInterfaceMainBodyTag').val());
 		};
 		
 		if ($('#divInterfaceMainScripts').html() != '')
 		{
-			sData += '&headerscript=' + interfaceMasterFormatSave($('#inputInterfaceMainScriptHeader').val());
-			sData += '&footerscript=' + interfaceMasterFormatSave($('#inputInterfaceMainScriptsFooter').val());
+			sData += '&headerscript=' + ns1blankspaceFormatSave($('#inputInterfaceMainScriptHeader').val());
+			sData += '&footerscript=' + ns1blankspaceFormatSave($('#inputInterfaceMainScriptsFooter').val());
 		};
 		
 		if (sCSSAttachment != undefined)
@@ -1827,7 +1827,7 @@ function interfaceSetupWebsiteSave(aParam, oResponse)
 			sData += '&cssattachment=' + sCSSAttachment;
 		}	
 		
-		interfaceMasterStatusWorking();
+		ns1blankspaceStatusWorking();
 
 		$.ajax(
 		{
@@ -1835,7 +1835,7 @@ function interfaceSetupWebsiteSave(aParam, oResponse)
 			url: '/ondemand/setup/?' + sParam,
 			data: sData,
 			dataType: 'json',
-			success: function(data) {interfaceSetupWebsiteSave(aParam, data)}
+			success: function(data) {interfaceSetupWebsiteSave(oParam, data)}
 		});
 		
 	}
@@ -1843,7 +1843,7 @@ function interfaceSetupWebsiteSave(aParam, oResponse)
 	{			
 		if (oResponse.status == 'OK')
 		{	
-			interfaceMasterStatus('Saved');
+			ns1blankspaceStatus('Saved');
 			
 			if (ns1blankspace.objectContext == -1)
 			{
@@ -1854,7 +1854,7 @@ function interfaceSetupWebsiteSave(aParam, oResponse)
 		}
 		else
 		{
-			interfaceMasterStatus('Could not save the website!');
+			ns1blankspaceStatus('Could not save the website!');
 		}
 	}
 }
@@ -1874,7 +1874,7 @@ function interfaceSetupWebsiteAddAttachment()
 	aHTML[++h] = '</table>';					
 		
 	$('#divInterfaceMainAddAttachment').html(aHTML.join(''));
-	$('#tdInterfaceMainAddAttachmentColumn1').html(interfaceMasterAttachmentsUpload(1, 40));
+	$('#tdInterfaceMainAddAttachmentColumn1').html(ns1blankspaceAttachmentsUpload(1, 40));
 	
 	$('#spanInterfaceMainUpload').button(
 		{
@@ -1947,7 +1947,7 @@ function UpdateFileUpdateStatus()
 	}
 }
 
-function interfaceMasterWebsiteURLsAdd(aParam, oResponse)
+function ns1blankspaceWebsiteURLsAdd(oParam, oResponse)
 {
 	var sID; 
 	
@@ -1955,9 +1955,9 @@ function interfaceMasterWebsiteURLsAdd(aParam, oResponse)
 	{
 		var sXHTMLElementID;
 
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+			if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 		}
 		
 		if (sXHTMLElementID != undefined)
@@ -2010,8 +2010,8 @@ function interfaceMasterWebsiteURLsAdd(aParam, oResponse)
 		.click(function() 
 		{
 			var sData = 'site=' + ns1blankspace.objectContext;
-			sData += '&url=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupWebsiteURLAddURL').val());
-			sData += '&id=' + interfaceMasterFormatSave(sID);
+			sData += '&url=' + ns1blankspaceFormatSave($('#inputInterfaceMainSetupWebsiteURLAddURL').val());
+			sData += '&id=' + ns1blankspaceFormatSave(sID);
 			
 			$.ajax(
 			{
@@ -2020,7 +2020,7 @@ function interfaceMasterWebsiteURLsAdd(aParam, oResponse)
 				data: sData,
 				dataType: 'json',
 				success: function() {
-					interfaceMasterMainViewportShow("#divInterfaceMainURLs");
+					ns1blankspaceMainViewportShow("#divInterfaceMainURLs");
 					interfaceSetupWebsiteURLs();
 				}
 			});
@@ -2032,7 +2032,7 @@ function interfaceMasterWebsiteURLsAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainURLs");
+			ns1blankspaceMainViewportShow("#divInterfaceMainURLs");
 			interfaceSetupWebsiteURLs();
 		});
 		
@@ -2044,7 +2044,7 @@ function interfaceMasterWebsiteURLsAdd(aParam, oResponse)
 				url: '/ondemand/setup/?method=SETUP_SITE_URL_SEARCH',
 				data: 'id=' + sID,
 				dataType: 'json',
-				success: function(data) {interfaceMasterWebsiteURLsAdd(aParam, data)}
+				success: function(data) {ns1blankspaceWebsiteURLsAdd(oParam, data)}
 			});
 		}
 	}
@@ -2058,13 +2058,13 @@ function interfaceMasterWebsiteURLsAdd(aParam, oResponse)
 	}		
 }
 
-function interfaceMasterWebsiteURLsRemove(aParam, oResponse)
+function ns1blankspaceWebsiteURLsRemove(oParam, oResponse)
 {
 	var sXHTMLElementID;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 	
 	var aXHTMLElementID = sXHTMLElementID.split('-');
@@ -2081,7 +2081,7 @@ function interfaceMasterWebsiteURLsRemove(aParam, oResponse)
 			url: '/ondemand/setup/?' + sParam,
 			data: sData,
 			dataType: 'json',
-			success: function(data){interfaceMasterWebsiteURLsRemove(aParam, data)}
+			success: function(data){ns1blankspaceWebsiteURLsRemove(oParam, data)}
 		});
 	}	
 	else
@@ -2094,13 +2094,13 @@ function interfaceMasterWebsiteURLsRemove(aParam, oResponse)
 	
 }
 
-function interfaceSetupWebApp(aParam, oResponse)
+function interfaceSetupWebApp(oParam, oResponse)
 {
 	var sAction; 
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.action != undefined) {sAction = (aParam.action).toLowerCase()}
+		if (oParam.action != undefined) {sAction = (oParam.action).toLowerCase()}
 	}
 	
 	if (sAction == undefined)
@@ -2162,7 +2162,7 @@ function interfaceSetupWebApp(aParam, oResponse)
 				url: '/ondemand/setup/?method=SETUP_SITE_MANAGE',
 				data: 'id=' + ns1blankspace.objectContext + '&createapp=' + sAction,
 				dataType: 'json',
-				success: function(data) {interfaceSetupWebApp(aParam, data)}
+				success: function(data) {interfaceSetupWebApp(oParam, data)}
 			});
 		}
 		else
@@ -2192,25 +2192,25 @@ function interfaceSetupWebApp(aParam, oResponse)
 	}		
 }
 
-function interfaceSetupWebsiteNew(aParam)
+function interfaceSetupWebsiteNew(oParam)
 {
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceSetupWebsiteViewport();
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 	interfaceSetupWebsiteDetails();
 }
 
-function interfaceSetupWebsiteRemove(aParam, oResponse)
+function interfaceSetupWebsiteRemove(oParam, oResponse)
 {		
 	var sVerifyCode;
 	var sUserVerifyCode;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.verifyCode != undefined) {sVerifyCode = aParam.verifyCode}
-		if (aParam.userVerifyCode != undefined) {sUserVerifyCode = aParam.userVerifyCode}
+		if (oParam.verifyCode != undefined) {sVerifyCode = oParam.verifyCode}
+		if (oParam.userVerifyCode != undefined) {sUserVerifyCode = oParam.userVerifyCode}
 	}
 	
 	if (sVerifyCode == undefined && ns1blankspace.objectContext != -1)
@@ -2251,7 +2251,7 @@ function interfaceSetupWebsiteRemove(aParam, oResponse)
 						
 		aHTML[++h] = '</table>';					
 		
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 		
 		$('#spanInterfaceMainSetupWebsiteRemoveVerify').button(
 		{
@@ -2274,7 +2274,7 @@ function interfaceSetupWebsiteRemove(aParam, oResponse)
 			url: '/ondemand/setup/?' + sParam,
 			data: sData,
 			dataType: 'json',
-			success: function(data){interfaceSetupWebsiteRemove(aParam, data)}
+			success: function(data){interfaceSetupWebsiteRemove(oParam, data)}
 		});
 
 	}

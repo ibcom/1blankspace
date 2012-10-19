@@ -301,13 +301,13 @@ function interfaceReportInitialise()
 		];
 }
 
-function interfaceReportMasterViewport(aParam)
+function interfaceReportMasterViewport(oParam)
 {
 	var bShowHome = true
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 	}
 
 	ns1blankspace.object = 5;
@@ -317,41 +317,41 @@ function interfaceReportMasterViewport(aParam)
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceReportMasterViewport({showHome: true});',
 			move: false
 			})		
 	}	
 			
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Reporting"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceReportSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceReportSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceReportSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceReportSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceReportSearchOptions();
 	});
 		
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceReportSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceReportSetupOptions();
 	});
@@ -366,14 +366,14 @@ function interfaceReportMasterViewport(aParam)
 		interfaceReportSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	interfaceReportInitialise()
 	
 	if (bShowHome) {interfaceReportHomeShow()};	
 }
 
-function interfaceReportHomeShow(aParam, oResponse)
+function interfaceReportHomeShow(oParam, oResponse)
 {
 	
 	var aHTML = [];
@@ -381,7 +381,7 @@ function interfaceReportHomeShow(aParam, oResponse)
 				
 	aHTML[++h] = '<table>';
 	aHTML[++h] = '<tr>' +
-					'<td id="interfaceMasterViewportReportLarge" class="interfaceMasterViewportImageLarge">' +
+					'<td id="ns1blankspaceViewportReportLarge" class="ns1blankspaceViewportImageLarge">' +
 					'&nbsp;' + 
 					'</td>' +
 					'</tr>';
@@ -418,13 +418,13 @@ function interfaceReportHomeShow(aParam, oResponse)
 		
 		$('#tdInterfaceViewportControl' + sName).click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainReport");
+			ns1blankspaceMainViewportShow("#divInterfaceMainReport");
 			var sMethod = $(this).attr('data-method');
 			interfaceReportViewport($(this).data('param'));
 		});				
 	});
 	
-	interfaceMasterMainViewportShow("#divInterfaceMainReport", false);
+	ns1blankspaceMainViewportShow("#divInterfaceMainReport", false);
 	
 	var aHTML = [];
 	var h = -1;
@@ -440,18 +440,18 @@ function interfaceReportHomeShow(aParam, oResponse)
 	$('#divInterfaceMainReport').html(aHTML.join(''));
 }
 
-function interfaceReportDictionaryGet(aParam)
+function interfaceReportDictionaryGet(oParam)
 {
 	var sName;
 	var sReturn;
 	var sDefaultReturn;
 	var bOnlyIfExists = true
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.name != undefined) {sName = aParam.name}
-		if (aParam.defaultReturn != undefined) {sDefaultReturn = aParam.defaultReturn}
-		if (aParam.onlyIfExists != undefined) {bOnlyIfExists = aParam.onlyIfExists}
+		if (oParam.name != undefined) {sName = oParam.name}
+		if (oParam.defaultReturn != undefined) {sDefaultReturn = oParam.defaultReturn}
+		if (oParam.onlyIfExists != undefined) {bOnlyIfExists = oParam.onlyIfExists}
 	}
 	
 	if (!bOnlyIfExists)
@@ -476,7 +476,7 @@ function interfaceReportDictionaryGet(aParam)
 	return sReturn
 } 
 
-function interfaceReportViewport(aParam, oResponse)
+function interfaceReportViewport(oParam, oResponse)
 {
 	var aHTML = [];
 	var h = -1;
@@ -508,23 +508,23 @@ function interfaceReportViewport(aParam, oResponse)
 	ns1blankspace.report.selectableParameters = undefined;
 	ns1blankspace.report.allParameters = [];
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.endPoint != undefined) {ns1blankspace.report.endpoint = aParam.endPoint}
-		if (aParam.method != undefined) {ns1blankspace.report.method = aParam.method}
-		if (aParam.returnParameters != undefined) {ns1blankspace.report.returnParameters = aParam.returnParameters}
-		if (aParam.jsonSearch != undefined) {sJSONSearch = aParam.jsonSearch}
-		if (aParam.functionSearch != undefined) {ns1blankspace.report.searchFunction = aParam.functionSearch}
-		if (aParam.scriptOpen != undefined) {ns1blankspace.report.scriptOpen = aParam.scriptOpen}
-		if (aParam.scriptNewPage != undefined) {ns1blankspace.report.scriptNewPage = aParam.scriptNewPage}
-		if (aParam.selectableParameters != undefined) {oSelectableParameters = aParam.selectableParameters}
-		if (aParam.fixedParameters != undefined) {oFixedParameters = aParam.fixedParameters}
-		if (aParam.showSelect != undefined) {bShowSelect = aParam.showSelect}
-		if (aParam.showFixedParameters != undefined) {bShowFixedParameters = aParam.showFixedParameters}
-		if (aParam.summary != undefined) {sSummary = aParam.summary}
-		if (aParam.survey != undefined) {iSurveyId = aParam.survey}
-		if (aParam.category != undefined) {iCategoryId = aParam.category}
-		if (aParam.showSort != undefined) {bShowSort = aParam.showSort}
+		if (oParam.endPoint != undefined) {ns1blankspace.report.endpoint = oParam.endPoint}
+		if (oParam.method != undefined) {ns1blankspace.report.method = oParam.method}
+		if (oParam.returnParameters != undefined) {ns1blankspace.report.returnParameters = oParam.returnParameters}
+		if (oParam.jsonSearch != undefined) {sJSONSearch = oParam.jsonSearch}
+		if (oParam.functionSearch != undefined) {ns1blankspace.report.searchFunction = oParam.functionSearch}
+		if (oParam.scriptOpen != undefined) {ns1blankspace.report.scriptOpen = oParam.scriptOpen}
+		if (oParam.scriptNewPage != undefined) {ns1blankspace.report.scriptNewPage = oParam.scriptNewPage}
+		if (oParam.selectableParameters != undefined) {oSelectableParameters = oParam.selectableParameters}
+		if (oParam.fixedParameters != undefined) {oFixedParameters = oParam.fixedParameters}
+		if (oParam.showSelect != undefined) {bShowSelect = oParam.showSelect}
+		if (oParam.showFixedParameters != undefined) {bShowFixedParameters = oParam.showFixedParameters}
+		if (oParam.summary != undefined) {sSummary = oParam.summary}
+		if (oParam.survey != undefined) {iSurveyId = oParam.survey}
+		if (oParam.category != undefined) {iCategoryId = oParam.category}
+		if (oParam.showSort != undefined) {bShowSort = oParam.showSort}
 	}
 	
 	if (ns1blankspace.report.endpoint == undefined && ns1blankspace.report.method != undefined)
@@ -559,7 +559,7 @@ function interfaceReportViewport(aParam, oResponse)
 			
 		$('#divInterfaceMainReportHeader').html(aHTML.join(''))	
 		
-		interfaceReportSearch(aParam);
+		interfaceReportSearch(oParam);
 	}
 	else
 	{
@@ -577,7 +577,7 @@ function interfaceReportViewport(aParam, oResponse)
 			var oSearch = new AdvancedSearch();
 			oSearch.returnParameters = ns1blankspace.report.returnParameters;
 			oSearch.rf = 'json';
-			oSearch.getResults(sJSONSearch, function(data) {interfaceReportViewport(aParam, data)}) ;	
+			oSearch.getResults(sJSONSearch, function(data) {interfaceReportViewport(oParam, data)}) ;	
 		}
 		
 		else if (oResponse == undefined && ns1blankspace.report.method != undefined)
@@ -591,7 +591,7 @@ function interfaceReportViewport(aParam, oResponse)
 			{	oSearch.categoryId = iCategoryId;}
 			oSearch.returnParameters = ns1blankspace.report.returnParameters;
 			oSearch.rf = 'json';
-			oSearch.getResults(function(data) {interfaceReportViewport(aParam, data)}) ;
+			oSearch.getResults(function(data) {interfaceReportViewport(oParam, data)}) ;
 		}
 		
 		else if (oResponse != undefined)
@@ -856,7 +856,7 @@ function interfaceReportViewport(aParam, oResponse)
 			})
 			.click(function() 
 			{
-				interfaceReportSearch(aParam);
+				interfaceReportSearch(oParam);
 			});	
 			
 			$('td.interfaceMainReportComparison').click(function(event)
@@ -893,13 +893,13 @@ function interfaceReportViewport(aParam, oResponse)
 }
 
 
-function interfaceReportComparisonShow(aParam)
+function interfaceReportComparisonShow(oParam)
 { 
 	var sXHTMLElementID;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}	
 	
 	if (sXHTMLElementID != undefined)
@@ -913,8 +913,8 @@ function interfaceReportComparisonShow(aParam)
 		aHTML[++h] = (advancedSearchComparisonGet({dataType: aID[2], returnFormat: 'xhtml'})).join('');
 		aHTML[++h] = '</table>';		
 		
-		interfaceMasterOptionsPosition({xhtmlElementID: sXHTMLElementID})		
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''))	
+		ns1blankspaceOptionsPosition({xhtmlElementID: sXHTMLElementID})		
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''))	
 		
 		$('td.interfaceMainReportComparisonType').click(function(event)
 		{
@@ -937,7 +937,7 @@ function interfaceReportComparisonShow(aParam)
 			//$('#' + sXHTMLElementID).attr('data-inputType', sInputType);
 			$('#' + sXHTMLElementID).attr('data-inputCount', $('#' + sID).attr('data-inputcount'));
 			
-			$('#divInterfaceMasterViewportControlOptions').hide();
+			$('#divns1blankspaceViewportControlOptions').hide();
 			
 			var sXHTMLElementInputID  = sXHTMLElementID.replace('_comparison', '_input');
 			var iInputCount = $('#' + sID).attr('data-inputCount');
@@ -973,7 +973,7 @@ function interfaceReportComparisonShow(aParam)
 	}
 }
 
-function interfaceReportSetInput(aParam)
+function interfaceReportSetInput(oParam)
 { 
 	var sXHTMLElementID;
 	var sDataType;
@@ -992,23 +992,23 @@ function interfaceReportSetInput(aParam)
 	var sOnDemandClick;
 	var sSearchRelatedField;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.dataType != undefined) {sDataType = aParam.dataType}
-		if (aParam.inputType != undefined) {sInputType = aParam.inputType}
-		if (aParam.inputCount != undefined) {iInputCount = aParam.inputCount}
-		if (aParam.searchEndpoint != undefined) {sSearchEndpoint = aParam.searchEndpoint}
-		if (aParam.searchMethod != undefined) {sSearchMethod = aParam.searchMethod}
-		if (aParam.selectClass != undefined) {sSelectClass = aParam.selectClass}
-		if (aParam.onDemandColumns != undefined) {sOnDemandColumns = aParam.onDemandColumns}		
-		if (aParam.onDemandGroupFilter != undefined) {sOnDemandGroupFilter = aParam.onDemandGroupFilter}		
-		if (aParam.onDemandGroupType != undefined) {sOnDemandGroupType = aParam.onDemandGroupType}		
-		if (aParam.comparisonID != undefined) {sComparisonID = aParam.comparisonID}		
-		if (aParam.onDemandClick != undefined) {sOnDemandClick = aParam.onDemandClick}		
-		if (aParam.searchmethod != undefined) {sSearchMethod = aParam.searchmethod}		
-		if (aParam.searchendpoint != undefined) {sSearchEndPoint = aParam.searchendpoint}		
-		if (aParam.searchrelatedfield != undefined) {sSearchRelatedField = aParam.searchrelatedfield}		
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.dataType != undefined) {sDataType = oParam.dataType}
+		if (oParam.inputType != undefined) {sInputType = oParam.inputType}
+		if (oParam.inputCount != undefined) {iInputCount = oParam.inputCount}
+		if (oParam.searchEndpoint != undefined) {sSearchEndpoint = oParam.searchEndpoint}
+		if (oParam.searchMethod != undefined) {sSearchMethod = oParam.searchMethod}
+		if (oParam.selectClass != undefined) {sSelectClass = oParam.selectClass}
+		if (oParam.onDemandColumns != undefined) {sOnDemandColumns = oParam.onDemandColumns}		
+		if (oParam.onDemandGroupFilter != undefined) {sOnDemandGroupFilter = oParam.onDemandGroupFilter}		
+		if (oParam.onDemandGroupType != undefined) {sOnDemandGroupType = oParam.onDemandGroupType}		
+		if (oParam.comparisonID != undefined) {sComparisonID = oParam.comparisonID}		
+		if (oParam.onDemandClick != undefined) {sOnDemandClick = oParam.onDemandClick}		
+		if (oParam.searchmethod != undefined) {sSearchMethod = oParam.searchmethod}		
+		if (oParam.searchendpoint != undefined) {sSearchEndPoint = oParam.searchendpoint}		
+		if (oParam.searchrelatedfield != undefined) {sSearchRelatedField = oParam.searchrelatedfield}		
 	}	
 		
 	if (sXHTMLElementID != undefined)
@@ -1106,7 +1106,7 @@ function interfaceReportSetInput(aParam)
 	}	
 }
 
-function interfaceReportSearch(aParam, oResponse)
+function interfaceReportSearch(oParam, oResponse)
 { 
 	var sXHTMLElementID;
 	var aHTML = [];
@@ -1122,20 +1122,20 @@ function interfaceReportSearch(aParam, oResponse)
 	var sIDColumn;
 	var bContainsContactPerson = false;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.returnFormat != undefined) {sReturnFormat = aParam.returnFormat}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.parameterList != undefined) {sParameterList = aParam.parameterList}
-		if (aParam.searchParameters != undefined) {oSearchParameters = aParam.searchParameters}
-		if (aParam.extraIDColumnBefore != undefined) {sExtraIDColumnBefore = aParam.extraIDColumnBefore}
-		if (aParam.extraIDColumnHeader != undefined) {sExtraIDColumnHeader = aParam.extraIDColumnHeader}
-		if (aParam.idColumn != undefined) {sIDColumn = aParam.idColumn}
-		if (aParam.containsContactPerson != undefined) {bContainsContactPerson = aParam.containsContactPerson }
-		if (aParam.searchParameters == undefined)
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.returnFormat != undefined) {sReturnFormat = oParam.returnFormat}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.parameterList != undefined) {sParameterList = oParam.parameterList}
+		if (oParam.searchParameters != undefined) {oSearchParameters = oParam.searchParameters}
+		if (oParam.extraIDColumnBefore != undefined) {sExtraIDColumnBefore = oParam.extraIDColumnBefore}
+		if (oParam.extraIDColumnHeader != undefined) {sExtraIDColumnHeader = oParam.extraIDColumnHeader}
+		if (oParam.idColumn != undefined) {sIDColumn = oParam.idColumn}
+		if (oParam.containsContactPerson != undefined) {bContainsContactPerson = oParam.containsContactPerson }
+		if (oParam.searchParameters == undefined)
 		{
-			if (aParam.fixedParameters != undefined) {oSearchParameters = aParam.fixedParameters}
+			if (oParam.fixedParameters != undefined) {oSearchParameters = oParam.fixedParameters}
 		}	
 	}	
 	
@@ -1146,7 +1146,7 @@ function interfaceReportSearch(aParam, oResponse)
 	
 	if (oResponse == undefined)
 	{
-		var aParameterList = [];
+		var oParameterList = [];
 		
 		if ($("input.interfaceMainReportInclude:checked").length == 0 && oSearchParameters == undefined)
 		{
@@ -1186,7 +1186,7 @@ function interfaceReportSearch(aParam, oResponse)
 				var aID = sID.split('-');
 				var sName = (aID[1]).replace(/_/g, '.');
 				
-				aParameterList.push(sName);
+				oParameterList.push(sName);
 				aFields.push(sName);
 				if (!bContainsContactPerson &&
 				    (sName.toLowerCase().substr(sName.length - 13, 13) == "contactperson" ||
@@ -1203,7 +1203,7 @@ function interfaceReportSearch(aParam, oResponse)
 				aFields.push(sIDColumn);
 			}
 			
-			aParam.parameterList = aFields.join(',');
+			oParam.parameterList = aFields.join(',');
 			oSearch.addField(aFields.join(','));
 			oSearch.endPoint = ns1blankspace.report.endpoint;
 			oSearch.method = ns1blankspace.report.method;
@@ -1329,12 +1329,12 @@ function interfaceReportSearch(aParam, oResponse)
 				}
 			}
 			
-			aParam.containsContactPerson = bContainsContactPerson;
+			oParam.containsContactPerson = bContainsContactPerson;
 			
 			oSearch.addSummaryField("count(*) " + ns1blankspace.report.endpoint);
 			oSearch.rows = iRows;
 			oSearch.rf = sReturnFormat;
-			oSearch.getResults(function(data){interfaceReportSearch(aParam, data)}) ;	
+			oSearch.getResults(function(data){interfaceReportSearch(oParam, data)}) ;	
 		}	
 			
 	}
@@ -1355,11 +1355,11 @@ function interfaceReportSearch(aParam, oResponse)
 			aHTML[++h] = '<table class="interfaceMain"">';
 			aHTML[++h] = '<tbody>'
 			var aColumns = [];
-			aParameter = sParameterList.split(',');
+			oParameter = sParameterList.split(',');
 			
 			aHTML[++h] = '<tr class="interfaceMainCaption">';
 			
-			$.each(aParameter, function()
+			$.each(oParameter, function()
 			{
 				if (this == sExtraIDColumnBefore)
 				{
@@ -1408,19 +1408,19 @@ function interfaceReportSearch(aParam, oResponse)
 
 			$.each(oResponse.data.rows, function(index) 
 			{ 
-				aHTML[++h] = interfaceReportSearchRow(this, aParam);
+				aHTML[++h] = interfaceReportSearchRow(this, oParam);
 			});
-			ns1blankspace.report.rowParameters = aParam;
+			ns1blankspace.report.rowParameters = oParam;
 			
 			aHTML[++h] = '</tbody></table>';
 			
-			interfaceMasterPaginationList(
+			ns1blankspacePaginationList(
 			   {
 				xhtmlElementID: 'divInterfaceMainReportResults',
 				xhtmlContext: '',
 				xhtml: aHTML.join(''),
 				showMore: ($(oResponse).attr('morerows') == "true"),
-				columns: aParameter.join('-'),
+				columns: oParameter.join('-'),
 				more: $(oResponse).attr('moreid'),
 				rows: ns1blankspace.option.defaultRows,
 				functionShowRow: interfaceReportSearchRow,
@@ -1460,14 +1460,14 @@ function interfaceReportSearch(aParam, oResponse)
 											});
 			});	
 
-			//functionSearch: interfaceMasterActions,	
+			//functionSearch: ns1blankspaceActions,	
 			//functionOpen: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)',
-			//functionNewPage: 'interfaceMasterAttachmentsShowBind()'	
-			//interfaceMasterAttachmentsShowBind();	
+			//functionNewPage: 'ns1blankspaceAttachmentsShowBind()'	
+			//ns1blankspaceAttachmentsShowBind();	
 			
 			if (bContainsContactPerson)
 			{	// Show editor and template fields, buttons for preview & Sending
-				interfaceMasterTinyMCEInit();
+				ns1blankspaceTinyMCEInit();
 				for (edId in tinyMCE.editors) 
 					tinyMCE.editors[edId].destroy(true);
 				
@@ -1551,9 +1551,9 @@ function interfaceReportSearch(aParam, oResponse)
 					var sText = interfaceReportReplaceMergeFields({columns: aColumns, 
 																   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + ns1blankspace.counter.editor)).getContent()});
 					var iObject;
-					if (aParam.method != undefined)
+					if (oParam.method != undefined)
 					{
-						var aMethod = aParam.method.split('_');
+						var aMethod = oParam.method.split('_');
 						var sEndPoint = aMethod[0];
 						if (sEndPoint == "CONTACT")
 						{
@@ -1582,7 +1582,7 @@ function interfaceReportSearch(aParam, oResponse)
 					
 					var aReportParam = {row: oResponse.data.rows[0],
 										moreID: oResponse.moreid,
-										parameters: aParameter,
+										parameters: oParameter,
 										object: iObject,
 										text: sText
 									   }
@@ -1603,7 +1603,7 @@ function interfaceReportSearch(aParam, oResponse)
 					var sSubject = interfaceReportReplaceMergeFields({columns: aColumns, 
 																   replace: $('#inputInterfaceMainDetailsReportSendSubject').val()});
 					interfaceReportSendEmail({moreID: oResponse.moreid,
-											  parameters: aParameter,
+											  parameters: oParameter,
 											  text: sText,
 											  subject: sSubject
 											  });
@@ -1619,7 +1619,7 @@ function interfaceReportSearch(aParam, oResponse)
 				})
 				.click( function()
 				{
-					interfaceMasterMCEAddElement({xhtmlElementId: this.id,
+					ns1blankspaceMCEAddElement({xhtmlElementId: this.id,
 												  editorId: 'inputInterfaceMainReportSendText' + ns1blankspace.counter.editor, 
 												  mceBookmark: oMCEBookmark})
 				})
@@ -1633,15 +1633,15 @@ function interfaceReportSearch(aParam, oResponse)
 	}	
 }
 
-function interfaceReportReplaceMergeFields(aParam)
+function interfaceReportReplaceMergeFields(oParam)
 {
 	var sText = "";
 	var aColumns = [];
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.columns != undefined) {aColumns = aParam.columns;}
-		if (aParam.replace != undefined) {sText = aParam.replace;}
+		if (oParam.columns != undefined) {aColumns = oParam.columns;}
+		if (oParam.replace != undefined) {sText = oParam.replace;}
 	}
 	
 	$.each(aColumns, function()
@@ -1653,7 +1653,7 @@ function interfaceReportReplaceMergeFields(aParam)
 	return sText;
 }
 
-function interfaceReportSearchRow(oResponse, aParam)
+function interfaceReportSearchRow(oResponse, oParam)
 {
 	var aHTML = [];
 	var h = -1;
@@ -1666,17 +1666,17 @@ function interfaceReportSearchRow(oResponse, aParam)
 	var bExport = false;
 	var sOutput = '';
 	var sParameterList = '';
-	var aParameters = [];
+	var oParameters = [];
 
-	if (aParam == undefined) {aParam = ns1blankspace.report.rowParameters }
+	if (oParam == undefined) {oParam = ns1blankspace.report.rowParameters }
 	
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.fixedParameters != undefined) {oFixedParameters = aParam.fixedParameters}
-		if (aParam.extraIDColumnBefore != undefined) {sExtraIDColumnBefore = aParam.extraIDColumnBefore}
-		if (aParam.extraIDColumnValue != undefined) {sExtraIDColumnValue = aParam.extraIDColumnValue}
-		if (aParam.parameterList != undefined) {sParameterList = aParam.parameterList}
+		if (oParam.fixedParameters != undefined) {oFixedParameters = oParam.fixedParameters}
+		if (oParam.extraIDColumnBefore != undefined) {sExtraIDColumnBefore = oParam.extraIDColumnBefore}
+		if (oParam.extraIDColumnValue != undefined) {sExtraIDColumnValue = oParam.extraIDColumnValue}
+		if (oParam.parameterList != undefined) {sParameterList = oParam.parameterList}
 	}	
 	
 	if (oFixedParameters.fields != undefined)
@@ -1692,17 +1692,17 @@ function interfaceReportSearchRow(oResponse, aParam)
 	}
 	
 	if (sParameterList != '')
-	{	aParameters = sParameterList.split(',');	}
+	{	oParameters = sParameterList.split(',');	}
 	
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 
 	var sLastExtraID = '';
 	sIDColumn = "id";
-	if (aParam != undefined) 
-	{	if (aParam.idColumn != undefined) {sIDColumn = aParam.idColumn}	}
+	if (oParam != undefined) 
+	{	if (oParam.idColumn != undefined) {sIDColumn = oParam.idColumn}	}
 	var aLastHTML = [];
 	
-	$.each(aParameters, function()
+	$.each(oParameters, function()
 	{
 		
 		var sValue = eval('oResponse["' + this + '"]');
@@ -1735,7 +1735,7 @@ function interfaceReportSearchRow(oResponse, aParam)
 	
 }
 
-function interfaceReportNewPage(aParam, oResponse)
+function interfaceReportNewPage(oParam, oResponse)
 {
 	var sEndpoint;
 	var sMethod;
@@ -1745,15 +1745,15 @@ function interfaceReportNewPage(aParam, oResponse)
 	var oMoreFilters;
 	var sIDColumn = 'id';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.endpoint != undefined) {sEndpoint = aParam.endpoint}	
-		if (aParam.method != undefined) {sMethod = aParam.method}	
-		if (aParam.name != undefined) {sName = aParam.name}	
-		if (aParam.sourceName != undefined) {sSourceName = aParam.sourceName}	
-		if (aParam.compareColumn != undefined) {sCompareColumn = aParam.compareColumn}	
-		if (aParam.moreFilters != undefined) {oMoreFilters = aParam.moreFilters}
-		if (aParam.idColumn != undefined) {sIDColumn = aParam.idColumn}
+		if (oParam.endpoint != undefined) {sEndpoint = oParam.endpoint}	
+		if (oParam.method != undefined) {sMethod = oParam.method}	
+		if (oParam.name != undefined) {sName = oParam.name}	
+		if (oParam.sourceName != undefined) {sSourceName = oParam.sourceName}	
+		if (oParam.compareColumn != undefined) {sCompareColumn = oParam.compareColumn}	
+		if (oParam.moreFilters != undefined) {oMoreFilters = oParam.moreFilters}
+		if (oParam.idColumn != undefined) {sIDColumn = oParam.idColumn}
 	}
 	
 	if (oResponse == undefined)
@@ -1818,7 +1818,7 @@ function interfaceReportNewPage(aParam, oResponse)
 
 		oAdvancedSearch.rf = 'JSON';
 
-		oAdvancedSearch.getResults(function(data) {interfaceReportNewPage(aParam, data)}) 	
+		oAdvancedSearch.getResults(function(data) {interfaceReportNewPage(oParam, data)}) 	
 	}
 	else
 	{
@@ -1872,7 +1872,7 @@ function interfaceReportFieldIsIncluded(sFieldList)
 	return bIncluded;
 }
 
-function interfaceReportAddSearchFilter(aParam)
+function interfaceReportAddSearchFilter(oParam)
 {
 
 	var sValue = $('#' + ns1blankspace.xhtml.divID).val();
@@ -1881,11 +1881,11 @@ function interfaceReportAddSearchFilter(aParam)
 	var sAttribute = '';
 	var sSearchMethod = '';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.name != undefined) {sName = aParam.name}
-		if (aParam.parameter != undefined) {sParameter = aParam.parameter}
-		if (aParam.attribute != undefined) {sAttribute = aParam.attribute}
+		if (oParam.name != undefined) {sName = oParam.name}
+		if (oParam.parameter != undefined) {sParameter = oParam.parameter}
+		if (oParam.attribute != undefined) {sAttribute = oParam.attribute}
 	}
 	
 	if (sName != undefined)
@@ -1901,15 +1901,15 @@ function interfaceReportAddSearchFilter(aParam)
 	
 }
 
-function interfaceReportExportToCSV(aParam)
+function interfaceReportExportToCSV(oParam)
 {
 	var iMoreId;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.count != undefined && aParam.count != "0") 
+		if (oParam.count != undefined && oParam.count != "0") 
 		{
-			iMoreId = aParam.moreId;
+			iMoreId = oParam.moreId;
 			var sParam = '&method=CORE_MORE_FILE_MANAGE&more=' + iMoreId;
 			$.ajax({
 				type: 'POST',
@@ -1924,7 +1924,7 @@ function interfaceReportExportToCSV(aParam)
 						aHTML[++h] = '<table class="interfaceMain"">';
 						aHTML[++h] = '<tbody>'
 						aHTML[++h] = '<tr class="interfaceMainCaption">';
-						aHTML[++h] = '<td class="interfaceMainCaption">File created..   ' + aParam.count + ' rows.</td></tr>';
+						aHTML[++h] = '<td class="interfaceMainCaption">File created..   ' + oParam.count + ' rows.</td></tr>';
 						aHTML[++h] = '<tr class="interfaceMainCaption">';
 						aHTML[++h] = '<td class="interfaceMainCaption"><a href="' + oResponse.link;
 						aHTML[++h] = '" target="_blank">Click here</a> to download the file.</td></tr>';
@@ -1949,35 +1949,35 @@ function interfaceReportExportToCSV(aParam)
 	}
 }
 
-function interfaceReportSendPreview(aParam)
+function interfaceReportSendPreview(oParam)
 {
 	var oRow;
 	var iMoreId;
 	var sText = "";
 	var sParam = "";
-	var aParameters = [];
+	var oParameters = [];
 	var sTags = "";
 	var iObject;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.row != undefined) {oRow = aParam.row}
-		if (aParam.moreID != undefined) {iMoreId = aParam.moreID}		
-		if (aParam.parameters != undefined) {aParameters = aParam.parameters}		
-		if (aParam.text != undefined) {sText = aParam.text}		
-		if (aParam.object != undefined) {iObject = aParam.object}		
+		if (oParam.row != undefined) {oRow = oParam.row}
+		if (oParam.moreID != undefined) {iMoreId = oParam.moreID}		
+		if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
+		if (oParam.text != undefined) {sText = oParam.text}		
+		if (oParam.object != undefined) {iObject = oParam.object}		
 	}
 	else
 	{
-		interfaceMasterConfirm({html: ['Parameters not passed to interfaceReportSendPreview. <br /><br />Preview aborted.'], title: 'System Error!'})
+		ns1blankspaceConfirm({html: ['Parameters not passed to interfaceReportSendPreview. <br /><br />Preview aborted.'], title: 'System Error!'})
 		return false;
 	}
 	
 	if (false && iObject == 32)
-	{	sTags = aParameters.join('|');	}
+	{	sTags = oParameters.join('|');	}
 	else
 	{
-		$.each(aParameters, function()
+		$.each(oParameters, function()
 		{
 			sTags = this + "|"  + sTags;
 		});
@@ -2002,38 +2002,38 @@ function interfaceReportSendPreview(aParam)
 		{
 			if (data.substr(0,12) == "OK|RETURNED|")
 			{	
-				interfaceMasterConfirm({html: [data.substring(12)], title: "Merged content."});	}
+				ns1blankspaceConfirm({html: [data.substring(12)], title: "Merged content."});	}
 		}
 	});
  
 }
 
-function interfaceReportSendEmail(aParam)
+function interfaceReportSendEmail(oParam)
 {
 	var iMoreId;
 	var sText = "";
 	var sParam = "";
-	var aParameters = [];
+	var oParameters = [];
 	var sTags = "";
 	var sEmail = "";
 	var sSubject = "";
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.moreID != undefined) {iMoreId = aParam.moreID}		
-		if (aParam.parameters != undefined) {aParameters = aParam.parameters}		
-		if (aParam.text != undefined) {sText = aParam.text}		
-		if (aParam.subject != undefined) {sSubject = aParam.subject}		
+		if (oParam.moreID != undefined) {iMoreId = oParam.moreID}		
+		if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
+		if (oParam.text != undefined) {sText = oParam.text}		
+		if (oParam.subject != undefined) {sSubject = oParam.subject}		
 	}
 	else
 	{
-		interfaceMasterConfirm({html: ['Parameters not passed to interfaceReportSendEmail. <br /><br />Preview aborted.'], title: 'System Error!'})
+		ns1blankspaceConfirm({html: ['Parameters not passed to interfaceReportSendEmail. <br /><br />Preview aborted.'], title: 'System Error!'})
 		return false;
 	}
 	
 	if (confirm("Are you sure you want to send an email to all of the Contacts in the report results?"))
 	{
-		sTags = aParameters.join('|');
+		sTags = oParameters.join('|');
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = "contact";
@@ -2068,7 +2068,7 @@ function interfaceReportSendEmail(aParam)
 			async: false,
 			success: function(data)
 			{
-				interfaceMasterConfirm({title: "Bulk Email", html: ["Email(s) sent"]});
+				ns1blankspaceConfirm({title: "Bulk Email", html: ["Email(s) sent"]});
 			}
 		});
 	}

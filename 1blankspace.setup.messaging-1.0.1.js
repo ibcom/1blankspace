@@ -12,65 +12,65 @@ function interfaceSetupMessagingMasterViewport()
 	ns1blankspace.object = -1;
 	ns1blankspace.objectContextData = undefined;
 	
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Messaging"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupMessagingSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupMessagingSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceSetupMessagingSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupMessagingSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceSetupMessagingSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceSetupMessagingNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceSetupMessagingNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceSetupMessagingSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceSetupMessagingSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceSetupMessagingSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceSetupMessagingSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceSetupMessagingHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceSetupMessagingHelpOptions();
 	});
@@ -85,7 +85,7 @@ function interfaceSetupMessagingMasterViewport()
 		interfaceSetupMessagingSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	interfaceSetupMessagingHomeShow();
 	
@@ -113,7 +113,7 @@ function interfaceSetupMessagingHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportMessagingEmailLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportMessagingEmailLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -121,7 +121,7 @@ function interfaceSetupMessagingHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
@@ -221,7 +221,7 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 		
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -235,8 +235,8 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{	
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var sParam = 'method=SETUP_MESSAGING_ACCOUNT_SEARCH';
 			sParam += '&type=5';
@@ -247,7 +247,7 @@ function interfaceSetupMessagingSearch(sXHTMLElementId, iSource, sSearchText, sS
 				type: 'POST',
 				url: '/ondemand/setup/?' + sParam,
 				dataType: 'json',
-				success: function(data) {interfaceSetupMessagingSearchShow(aParam, data)}
+				success: function(data) {interfaceSetupMessagingSearchShow(oParam, data)}
 			});
 			
 			/*
@@ -279,8 +279,8 @@ function interfaceSetupMessagingSearchShow(oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{	
@@ -309,14 +309,14 @@ function interfaceSetupMessagingSearchShow(oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		interfaceMasterSearchStop();
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupMessagingSearch(event.target.id, 1);
 		});
 	}			
@@ -363,20 +363,20 @@ function interfaceSetupMessagingViewport()
 		
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceSetupMessagingSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceSetupMessagingDetails();
 	});	
 }
 
 function interfaceSetupMessagingShow(oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupMessagingViewport();
 	
 	var aHTML = [];
@@ -395,7 +395,7 @@ function interfaceSetupMessagingShow(oResponse)
 	{
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 				
 		var sContext = ns1blankspace.objectContextData.email;
 		var aContext = sContext.split("@");
@@ -465,7 +465,7 @@ function interfaceSetupMessagingSummary()
 		
 		$('#aInterfaceMainSummaryDisable').click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainDisable");
+			ns1blankspaceMainViewportShow("#divInterfaceMainDisable");
 			interfaceSetupMessagingDisable();
 		});
 	}	
@@ -587,9 +587,9 @@ function interfaceSetupMessagingNew()
 	ns1blankspace.objectContextData = undefined;
 	ns1blankspace.objectContext = -1;
 	interfaceSetupMessagingViewport();
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	interfaceSetupMessagingDetails();	
 }
 
@@ -629,7 +629,7 @@ function interfaceSetupMessagingSave()
 		dataType: 'text',
 		success: function()
 		{
-				interfaceMasterStatus('Saved');
+				ns1blankspaceStatus('Saved');
 				interfaceSetupMessagingMasterViewport();
 		}
 	});		

@@ -7,7 +7,7 @@
  
 ns1blankspace.messaging.ConversationOwner
 
-function interfaceMessagingConversationMasterViewport(aParam)
+function interfaceMessagingConversationMasterViewport(oParam)
 {
 	ns1blankspace.object = 50;
 	ns1blankspace.objectName = 'Messaging Conversation';
@@ -16,77 +16,77 @@ function interfaceMessagingConversationMasterViewport(aParam)
 			
 	var bShowHome = true;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
 	}	
 		
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 			
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceMessagingConversationMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Conversations"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceMessagingConversationSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceMessagingConversationSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceMessagingConversationSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceMessagingConversationSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceMessagingConversationSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceMessagingConversationNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOption').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOption').click(function(event)
 	{
 		interfaceMessagingConversationNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceMessagingConversationSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 		
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceMessagingConversationSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceMessagingConversationSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceMessagingConversationHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceMessagingConversationHelpOptions();
 	});
@@ -101,7 +101,7 @@ function interfaceMessagingConversationMasterViewport(aParam)
 		interfaceMessagingConversationSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	$('#divInterfaceViewportControl').html('');	
 	
 	if (ns1blankspace.option.richTextEditing)
@@ -180,7 +180,7 @@ function interfaceMessagingConversationHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportMessagingConversationLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportMessagingConversationLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -188,7 +188,7 @@ function interfaceMessagingConversationHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		sParam = 'method=MESSAGING_CONVERSATION_SEARCH&rows=10';
 
@@ -252,7 +252,7 @@ function interfaceMessagingConversationHomeShow(oResponse)
 	}
 }
 
-function interfaceMessagingConversationSearch(sXHTMLElementId, aParam)
+function interfaceMessagingConversationSearch(sXHTMLElementId, oParam)
 {
 	var aSearch = sXHTMLElementId.split('-');
 	var sElementId = aSearch[0];
@@ -263,14 +263,14 @@ function interfaceMessagingConversationSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -286,14 +286,14 @@ function interfaceMessagingConversationSearch(sXHTMLElementId, aParam)
 			url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_SEARCH',
 			data: sData,
 			dataType: 'json',
-			success: function(data) {interfaceMessagingConversationShow(aParam, data)}
+			success: function(data) {interfaceMessagingConversationShow(oParam, data)}
 		});
 	}
 	else
 	{	
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -307,8 +307,8 @@ function interfaceMessagingConversationSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.endPoint = 'messaging';
@@ -317,7 +317,7 @@ function interfaceMessagingConversationSearch(sXHTMLElementId, aParam)
 			oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
 			oSearch.rows = 10;
 			oSearch.sort('title', 'asc');
-			//oSearch.getResults(function(data) {interfaceMessagingConversationSearchShow(aParam, data)});
+			//oSearch.getResults(function(data) {interfaceMessagingConversationSearchShow(oParam, data)});
 			
 			var sData = 'quicksearch=' + sSearchText;
 
@@ -327,13 +327,13 @@ function interfaceMessagingConversationSearch(sXHTMLElementId, aParam)
 				url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_SEARCH',
 				data: sData,
 				dataType: 'json',
-				success: function(data) {interfaceMessagingConversationSearchShow(aParam, data)}
+				success: function(data) {interfaceMessagingConversationSearchShow(oParam, data)}
 			});
 		}
 	};	
 }
 
-function interfaceMessagingConversationSearchShow(aParam, oResponse)
+function interfaceMessagingConversationSearchShow(oParam, oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -342,7 +342,7 @@ function interfaceMessagingConversationSearchShow(aParam, oResponse)
 			
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{	
@@ -371,15 +371,15 @@ function interfaceMessagingConversationSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
-		interfaceMasterSearchStop();
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceMessagingConversationSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -462,44 +462,44 @@ function interfaceMessagingConversationViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary", true);
 		interfaceMessagingConversationSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceMessagingConversationDetails();
 	});
 	
 	$('#tdInterfaceViewportControlParticipants').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainParticipants", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainParticipants", true);
 		interfaceMessagingConversationParticipants();
 	});
 	
 	$('#tdInterfaceViewportControlPosts').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainPosts");
+		ns1blankspaceMainViewportShow("#divInterfaceMainPosts");
 		interfaceMessagingConversationPosts();
 	});
 	
 	$('#tdInterfaceViewportControlComments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainComments");
+		ns1blankspaceMainViewportShow("#divInterfaceMainComments");
 		interfaceMessagingConversationComments();
 	});
 	
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 }
 
-function interfaceMessagingConversationShow(aParam, oResponse)
+function interfaceMessagingConversationShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceMessagingConversationViewport();
 	
 	var aHTML = [];
@@ -520,14 +520,14 @@ function interfaceMessagingConversationShow(aParam, oResponse)
 	{
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceMessagingConversationMasterViewport({showHome: false});interfaceMessagingConversationSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 				
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 		
 		ns1blankspace.messaging.ConversationOwner = (gsUserID == ns1blankspace.objectContextData.user)
 		
@@ -576,7 +576,7 @@ function interfaceMessagingConversationSummary()
 		{	
 			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
 						'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
-						 interfaceMasterFormatXHTML(ns1blankspace.objectContextData.description) +
+						 ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.description) +
 						'</td></tr>';
 		}				
 						
@@ -735,7 +735,7 @@ function interfaceMessagingConversationDetails()
 	}	
 }
 
-function interfaceMessagingConversationParticipants(aParam)
+function interfaceMessagingConversationParticipants(oParam)
 {
 	var aHTML = [];
 	var h = -1;	
@@ -779,17 +779,17 @@ function interfaceMessagingConversationParticipants(aParam)
 	interfaceMessagingConversationParticipantsManage({xhtmlElementId: 'tdInterfaceMainParticipantsColumn1'});
 }		
 
-function interfaceMessagingConversationParticipantsManage(aParam, oResponse)
+function interfaceMessagingConversationParticipantsManage(oParam, oResponse)
 {
 	
 	var sXHTMLElementId = 'divInterfaceMainParticipants';
 	var sLabel = "Participants";
 	var iOption = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.label != undefined) {sLabel = aParam.label}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (oParam.label != undefined) {sLabel = oParam.label}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
 	}
 
 	if (oResponse == undefined)
@@ -802,7 +802,7 @@ function interfaceMessagingConversationParticipantsManage(aParam, oResponse)
 			url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_PARTICIPANT_SEARCH',
 			data: sData,
 			dataType: 'json',
-			success: function(data) {interfaceMessagingConversationParticipantsManage(aParam, data)}
+			success: function(data) {interfaceMessagingConversationParticipantsManage(oParam, data)}
 		});
 	}
 	else
@@ -858,23 +858,23 @@ function interfaceMessagingConversationParticipantsManage(aParam, oResponse)
 	}	
 }	
 
-function interfaceMessagingConversationParticipantsAdd(aParam, oResponse)
+function interfaceMessagingConversationParticipantsAdd(oParam, oResponse)
 {
 	var sXHTMLElementId = 'divInterfaceMainParticipantsAdd';
 	var oSearch;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.label != undefined) {sLabel = aParam.label}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.search != undefined) {oSearch = aParam.search}
+		if (oParam.label != undefined) {sLabel = oParam.label}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.search != undefined) {oSearch = oParam.search}
 	}
 	
 	if (oResponse == undefined)
 	{		
 		if (oSearch == undefined)
 		{
-			interfaceMasterMainViewportShow('#' + sXHTMLElementId);
+			ns1blankspaceMainViewportShow('#' + sXHTMLElementId);
 			
 			var aHTML = [];
 			var h = -1;	
@@ -967,9 +967,9 @@ function interfaceMessagingConversationParticipantsAdd(aParam, oResponse)
 				{
 					oSearchSet.userText = $('#inputInterfaceMainParticipantsAddUserText').val()
 				}
-				if (aParam == undefined) {aParam = {}}
-				aParam.search = oSearchSet;
-				interfaceMessagingConversationParticipantsAdd(aParam);
+				if (oParam == undefined) {oParam = {}}
+				oParam.search = oSearchSet;
+				interfaceMessagingConversationParticipantsAdd(oParam);
 			})
 		
 		}
@@ -1000,7 +1000,7 @@ function interfaceMessagingConversationParticipantsAdd(aParam, oResponse)
 				url: '/ondemand/network/?method=NETWORK_USER_SEARCH',
 				data: sData,
 				dataType: 'json',
-				success: function(data){interfaceMessagingConversationParticipantsAdd(aParam, data)}
+				success: function(data){interfaceMessagingConversationParticipantsAdd(oParam, data)}
 			});
 		}	
 	}
@@ -1109,14 +1109,14 @@ function interfaceMessagingConversationParticipantsRemove(sXHTMLElementId)
 	});	
 }
 
-function interfaceMessagingConversationPosts(aParam, oResponse)
+function interfaceMessagingConversationPosts(oParam, oResponse)
 {
 	var sXHTMLElementId = 'divInterfaceMainPosts';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.label != undefined) {sLabel = aParam.label}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (oParam.label != undefined) {sLabel = oParam.label}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
 	}
 
 	if (oResponse == undefined)
@@ -1129,7 +1129,7 @@ function interfaceMessagingConversationPosts(aParam, oResponse)
 			url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_POST_SEARCH',
 			data: sData,
 			dataType: 'json',
-			success: function(data) {interfaceMessagingConversationPosts(aParam, data)}
+			success: function(data) {interfaceMessagingConversationPosts(oParam, data)}
 		});
 	}
 	else
@@ -1236,17 +1236,17 @@ function interfaceMessagingConversationPosts(aParam, oResponse)
 	}	
 }	
 
-function interfaceMessagingConversationCommentsOptions(aParam)
+function interfaceMessagingConversationCommentsOptions(oParam)
 {
 	var aHTML = [];
 	var h = -1;
 	var iStep = 1;
 	var sXHTMLElementID;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.step != undefined) {iStep = aParam.step}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.step != undefined) {iStep = oParam.step}
 	}
 	
 	if (iStep == 1) 
@@ -1263,7 +1263,7 @@ function interfaceMessagingConversationCommentsOptions(aParam)
 		
 		aHTML[++h] = '</table>';					
 
-		interfaceMasterViewportOptionsShow({
+		ns1blankspaceViewportOptionsShow({
 			xhtmlElementID: sXHTMLElementID,
 			offsetLeft: -75,
 			offsetTop: 6,
@@ -1275,8 +1275,8 @@ function interfaceMessagingConversationCommentsOptions(aParam)
 			label: "View"
 		})
 		.click(function() {
-			interfaceMasterViewportOptionsHide();
-			interfaceMasterMainViewportShow("#divInterfaceMainComments");
+			ns1blankspaceViewportOptionsHide();
+			ns1blankspaceMainViewportShow("#divInterfaceMainComments");
 			var aXHTMLElementID = sXHTMLElementID.split('-');
 			interfaceMessagingConversationComments({post: aXHTMLElementID[1]});
 		})
@@ -1311,7 +1311,7 @@ function interfaceMessagingConversationCommentsOptions(aParam)
 								
 		aHTML[++h] = '</table>';
 
-		interfaceMasterViewportOptionsShow({
+		ns1blankspaceViewportOptionsShow({
 			xhtmlElementID: sXHTMLElementID,
 			offsetLeft: -251,
 			offsetTop: 6,
@@ -1333,7 +1333,7 @@ function interfaceMessagingConversationCommentsOptions(aParam)
 	{
 		$('#spanInterfaceMainCommentsSend').html(ns1blankspace.xhtml.loadingSmall);
 		
-		var sData = 'message=' + interfaceMasterFormatSave($('#inputInterfaceMainCommentMessage').val())
+		var sData = 'message=' + ns1blankspaceFormatSave($('#inputInterfaceMainCommentMessage').val())
 		
 		var aXHTMLElementID = sXHTMLElementID.split('-');
 		sData += '&post=' + aXHTMLElementID[1];
@@ -1348,7 +1348,7 @@ function interfaceMessagingConversationCommentsOptions(aParam)
 				{
 					if (data.status == 'OK')
 					{
-						interfaceMasterViewportOptionsHide();
+						ns1blankspaceViewportOptionsHide();
 					}
 					else
 					{
@@ -1361,7 +1361,7 @@ function interfaceMessagingConversationCommentsOptions(aParam)
 	
 }
 
-function interfaceMessagingConversationPostsAdd(aParam, oResponse)
+function interfaceMessagingConversationPostsAdd(oParam, oResponse)
 {
 	var sXHTMLElementId = "divInterfaceMainPostDetails";
 	var sXHTMLElementContextId;
@@ -1372,12 +1372,12 @@ function interfaceMessagingConversationPostsAdd(aParam, oResponse)
 				
 	ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.label != undefined) {sLabel = aParam.label}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.xhtmlElementContextId != undefined) {sXHTMLElementContextId = aParam.xhtmlElementContextId}
-		if (aParam.post != undefined) {iPost = aParam.post}
+		if (oParam.label != undefined) {sLabel = oParam.label}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.xhtmlElementContextId != undefined) {sXHTMLElementContextId = oParam.xhtmlElementContextId}
+		if (oParam.post != undefined) {iPost = oParam.post}
 	}
 
 	if (sXHTMLElementContextId != undefined)
@@ -1387,7 +1387,7 @@ function interfaceMessagingConversationPostsAdd(aParam, oResponse)
 		var lProjectTask = aSearch[1];
 	}	
 		
-	interfaceMasterMainViewportShow("#divInterfaceMainPostDetails");	
+	ns1blankspaceMainViewportShow("#divInterfaceMainPostDetails");	
 		
 	var aHTML = [];
 	var h = -1;
@@ -1413,7 +1413,7 @@ function interfaceMessagingConversationPostsAdd(aParam, oResponse)
 			url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_POST_SEARCH',
 			data: sData,
 			dataType: 'json',
-			success: function(data) {interfaceMessagingConversationPostsAdd(aParam, data)}
+			success: function(data) {interfaceMessagingConversationPostsAdd(oParam, data)}
 		});
 	}
 	else
@@ -1443,7 +1443,7 @@ function interfaceMessagingConversationPostsAdd(aParam, oResponse)
 			}
 			else
 			{
-				interfaceMasterAttachmentsUploadProcess({functionPostUpdate: interfaceMessagingConversationPostsShow});
+				ns1blankspaceAttachmentsUploadProcess({functionPostUpdate: interfaceMessagingConversationPostsShow});
 			}	
 		})
 		
@@ -1471,7 +1471,7 @@ function interfaceMessagingConversationPostsAdd(aParam, oResponse)
 		aHTML[++h] = '</table>';						
 	
 		$('#tdInterfaceMainPostDetailsColumn1').html(
-			interfaceMasterAttachmentsUpload(
+			ns1blankspaceAttachmentsUpload(
 				{
 					xhtml: aHTML.join(''),
 					label: ''
@@ -1502,26 +1502,26 @@ function interfaceMessagingConversationPostDetailsSend()
 	sData += '&subject=' + encodeURIComponent($('#inputInterfaceMainPostDetailsSubject').val());
 	sData += '&message=' + encodeURIComponent(tinyMCE.get('inputInterfaceMainPostDetailsMessage' + ns1blankspace.counter.editor).getContent()) 
 		
-	interfaceMasterSave(sParam, sData, 'Post Sent');
-	interfaceMasterMainViewportShow("#divInterfaceMainPosts", true);
+	ns1blankspaceSave(sParam, sData, 'Post Sent');
+	ns1blankspaceMainViewportShow("#divInterfaceMainPosts", true);
 	interfaceMessagingConversationPosts();	
 }
 
 function interfaceMessagingConversationPostsShow()
 {
-	interfaceMasterMainViewportShow("#divInterfaceMainPosts", true);
+	ns1blankspaceMainViewportShow("#divInterfaceMainPosts", true);
 	interfaceMessagingConversationPosts();	
 }
 
-function interfaceMessagingConversationComments(aParam, oResponse)
+function interfaceMessagingConversationComments(oParam, oResponse)
 {
 	var sXHTMLElementId = 'divInterfaceMainComments';
 	var iPost;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.post != undefined) {iPost = aParam.post}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (oParam.post != undefined) {iPost = oParam.post}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
 	}
 
 	if (oResponse == undefined)
@@ -1543,7 +1543,7 @@ function interfaceMessagingConversationComments(aParam, oResponse)
 			url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_POST_COMMENT_SEARCH',
 			data: sData,
 			dataType: 'json',
-			success: function(data) {interfaceMessagingConversationComments(aParam, data)}
+			success: function(data) {interfaceMessagingConversationComments(oParam, data)}
 		});
 	}
 	else
@@ -1673,11 +1673,11 @@ function interfaceMessagingConversationSave()
 	
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsTitle').val());
-		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
+		sData += '&title=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsTitle').val());
+		sData += '&description=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsDescription').val());
 		sData += '&sharing=' + $('input[name="radioSharing"]:checked').val();
 		sData += '&participantcan=' + $('input[name="radioParticipantCan"]:checked').val();
-		sData += '&alerturl=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsAlertURL').val());
+		sData += '&alerturl=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsAlertURL').val());
 	}
 	
 	$.ajax(
@@ -1694,15 +1694,15 @@ function interfaceMessagingConversationSaveProcess(oResponse)
 {		
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 		if (ns1blankspace.objectContext == -1) {ns1blankspace.objectContext = oResponse.id};	
 		ns1blankspace.inputDetected = false;
 		interfaceMessagingConversationSearch('-' + ns1blankspace.objectContext, {source: 1});
 	}
 	else
 	{
-		interfaceMasterStatus(oResponse.error.errornotes);
-		interfaceMasterConfirm( {html: [oResponse.error.errornotes]
+		ns1blankspaceStatus(oResponse.error.errornotes);
+		ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
 								   , title: 'Save error!'});
 	}
 }	

@@ -11,47 +11,47 @@ function interfaceSetupAutomationMasterViewport()
 	goSetupContext = undefined;
 	giSetupContext = -1;
 	
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Automation"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupAutomationSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupAutomationSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceSetupAutomationSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupAutomationSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceSetupAutomationSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceSetupAutomationNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceSetupAutomationNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceSetupAutomationSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		var aHTML = [];
 		var h = -1;
@@ -66,27 +66,27 @@ function interfaceSetupAutomationMasterViewport()
 
 		aHTML[++h] = '</table>';
 
-		interfaceMasterViewportActionShow(this, aHTML.join(''), "interfaceSetupAutomationActionOptionsBind()");
+		ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceSetupAutomationActionOptionsBind()");
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 		
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceSetupAutomationSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceSetupAutomationSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceSetupAutomationHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceSetupAutomationHelpOptions();
 	});
@@ -101,7 +101,7 @@ function interfaceSetupAutomationMasterViewport()
 		interfaceSetupAutomationSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	interfaceSetupAutomationHomeShow();
 	
@@ -145,7 +145,7 @@ function interfaceSetupAutomationHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportAutomationLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportAutomationLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -153,7 +153,7 @@ function interfaceSetupAutomationHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var sParam = 'method=SETUP_AUTOMATION_SEARCH';
 
@@ -206,7 +206,7 @@ function interfaceSetupAutomationHomeShow(oResponse)
 	}
 }
 
-function interfaceSetupAutomationSearch(sXHTMLElementId, aParam)
+function interfaceSetupAutomationSearch(sXHTMLElementId, oParam)
 {
 	
 	var aSearch = sXHTMLElementId.split('-');
@@ -218,14 +218,14 @@ function interfaceSetupAutomationSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 		
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -241,14 +241,14 @@ function interfaceSetupAutomationSearch(sXHTMLElementId, aParam)
 			type: 'GET',
 			url: '/ondemand/setup/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceSetupAutomationShow(aParam, data)}
+			success: function(data) {interfaceSetupAutomationShow(oParam, data)}
 		});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -262,8 +262,8 @@ function interfaceSetupAutomationSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var sParam = 'method=SETUP_AUTOMATION_SEARCH&quicksearch=' + sSearchText;
 
@@ -272,13 +272,13 @@ function interfaceSetupAutomationSearch(sXHTMLElementId, aParam)
 				type: 'GET',
 				url: '/ondemand/setup/?' + sParam,
 				dataType: 'json',
-				success: function(data) {interfaceSetupAutomationSearchShow(aParam, data)}
+				success: function(data) {interfaceSetupAutomationSearchShow(oParam, data)}
 			});
 		}
 	};	
 }
 
-function interfaceSetupAutomationSearchShow(aParam, oResponse)
+function interfaceSetupAutomationSearchShow(oParam, oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -287,8 +287,8 @@ function interfaceSetupAutomationSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -317,14 +317,14 @@ function interfaceSetupAutomationSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		interfaceMasterSearchStop();
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupAutomationSearch(event.target.id, 1);
 		});
 	}	
@@ -385,44 +385,44 @@ function interfaceSetupAutomationViewport()
 		
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceSetupAutomationSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceSetupAutomationDetails();
 	});
 	
 	$('#tdInterfaceViewportControlSchedule').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSchedule");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSchedule");
 		interfaceSetupAutomationSchedule();
 	});
 	
 	$('#tdInterfaceViewportControlResponse').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainResponse", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainResponse", true);
 		interfaceSetupAutomationResponse();
 	});
 	
 	$('#tdInterfaceViewportControlFormat').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainFormat");
+		ns1blankspaceMainViewportShow("#divInterfaceMainFormat");
 		interfaceSetupAutomationFormat();
 	});
 	
 	$('#tdInterfaceViewportControlRun').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainRun");
+		ns1blankspaceMainViewportShow("#divInterfaceMainRun");
 		interfaceSetupAutomationRun();
 	});
 }
 
-function interfaceSetupAutomationShow(aParam, oResponse)
+function interfaceSetupAutomationShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupAutomationViewport();
 	
 	var aHTML = [];
@@ -455,8 +455,8 @@ function interfaceSetupAutomationShow(aParam, oResponse)
 		
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 		
 		interfaceSetupAutomationSummary();
 	}	
@@ -854,37 +854,37 @@ function interfaceSetupAutomationSave(oResponse)
 		
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
-			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsTitle').val());
-			sData += '&endpoint=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsEndpoint').val());
-			sData += '&url=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsURL').val());
-			sData += '&urlmethod=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsURLMethod').val());
-			sData += '&postdata=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPostData').val());
+			sData += '&title=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsTitle').val());
+			sData += '&endpoint=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsEndpoint').val());
+			sData += '&url=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsURL').val());
+			sData += '&urlmethod=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsURLMethod').val());
+			sData += '&postdata=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsPostData').val());
 			sData += '&status=' + $('input[name="radioStatus"]:checked').val();
 			sData += '&incontext=' + $('input[name="radioInContext"]:checked').val();
 		};
 
 		if ($('#divInterfaceMainSchedule').html() != '')
 		{
-			sData += '&scheduletimehour=' + interfaceMasterFormatSave($('#inputInterfaceMainScheduleTimeHour').val());
-			sData += '&scheduletimeminute=' + interfaceMasterFormatSave($('#inputInterfaceMainScheduleTimeMinute').val());
+			sData += '&scheduletimehour=' + ns1blankspaceFormatSave($('#inputInterfaceMainScheduleTimeHour').val());
+			sData += '&scheduletimeminute=' + ns1blankspaceFormatSave($('#inputInterfaceMainScheduleTimeMinute').val());
 			sData += '&scheduletype=' + $('input[name="radioScheduleType"]:checked').val();
 		};
 		
 		if ($('#divInterfaceMainResponse').html() != '')
 		{
-			sData += '&responseactioncontext=' + interfaceMasterFormatSave($('#inputInterfaceMainResponseActionContext').val());
-			sData += '&responseactionurl=' + interfaceMasterFormatSave($('#inputInterfaceMainResponseActionURL').val());
-			sData += '&responseactionfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainResponseActionFrom').val());
+			sData += '&responseactioncontext=' + ns1blankspaceFormatSave($('#inputInterfaceMainResponseActionContext').val());
+			sData += '&responseactionurl=' + ns1blankspaceFormatSave($('#inputInterfaceMainResponseActionURL').val());
+			sData += '&responseactionfrom=' + ns1blankspaceFormatSave($('#inputInterfaceMainResponseActionFrom').val());
 			sData += '&responseaction=' + $('input[name="radioResponseAction"]:checked').val();
 			
 		};
 
 		if ($('#divInterfaceMainFormat').html() != '')
 		{
-			sData += '&caption=' + interfaceMasterFormatSave($('#inputInterfaceMainFormatCaption').val());
-			sData += '&cssclass=' + interfaceMasterFormatSave($('#inputInterfaceMainFormatCSSClass').val());
-			sData += '&xhtmlstyle=' + interfaceMasterFormatSave($('#inputInterfaceMainFormatXHTMLStyle').val());
-			sData += '&xhtmlahref=' + interfaceMasterFormatSave($('#inputInterfaceMainFormatXHTMLAHref').val());
+			sData += '&caption=' + ns1blankspaceFormatSave($('#inputInterfaceMainFormatCaption').val());
+			sData += '&cssclass=' + ns1blankspaceFormatSave($('#inputInterfaceMainFormatCSSClass').val());
+			sData += '&xhtmlstyle=' + ns1blankspaceFormatSave($('#inputInterfaceMainFormatXHTMLStyle').val());
+			sData += '&xhtmlahref=' + ns1blankspaceFormatSave($('#inputInterfaceMainFormatXHTMLAHref').val());
 		};
 
 		if (sData != '')
@@ -903,12 +903,12 @@ function interfaceSetupAutomationSave(oResponse)
 		}
 		else
 		{
-			interfaceMasterStatus('Saved');
+			ns1blankspaceStatus('Saved');
 		}	
 	}	
 	else
 	{
-		interfaceMasterStatus('Saved')
+		ns1blankspaceStatus('Saved')
 		
 		if (giSetupContext == -1)
 		{
@@ -924,8 +924,8 @@ function interfaceSetupAutomationNew()
 	giSetupContext = -1;
 	goSetupContextXML = undefined;
 	interfaceSetupAutomationViewport();
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	interfaceSetupAutomationDetails();
 }

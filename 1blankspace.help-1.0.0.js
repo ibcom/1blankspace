@@ -39,72 +39,72 @@ function interfaceHelpMasterViewport()
 	ns1blankspace.objectName = 'Help';
 	glObjectContext = -1;
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Help"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
-		interfaceHelpSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceHelpSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#imgInterfaceMasterViewportControlSearch').click(function(event)
+	$('#imgns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceHelpSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceHelpSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#imgInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#imgns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceHelpSearchOptions();
 	});
 	
-	$('#imgInterfaceMasterViewportControlNew').click(function(event)
+	$('#imgns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceHelpNew();
 	})
 	
-	$('#imgInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#imgns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceHelpNewOptions();
 	});
 	
-	$('#divInterfaceMasterViewportControlAction').click(function(event)
+	$('#divns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceHelpave();
 	});
 	
-	$('#imgInterfaceMasterViewportControlActionMore').click(function(event)
+	$('#imgns1blankspaceViewportControlActionMore').click(function(event)
 	{
 		interfaceHelpSaveOptions();
 	});
 	
-	$('#imgInterfaceMasterViewportControlSetup').click(function(event)
+	$('#imgns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceHelpSetup();
 	});
 	
-	$('#imgInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#imgns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceHelpSetupOptions();
 	});
 	
-	$('#imgInterfaceMasterViewportControlHelp').click(function(event)
+	$('#imgns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceHelpHelp();
 	});
 	
-	$('#imgInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#imgns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceHelpHelpOptions();
 	});
 	
-	$('.InterfaceMasterViewportControlBrowse').click(function(event)
+	$('.ns1blankspaceViewportControlBrowse').click(function(event)
 	{
 		interfaceHelpSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').focus();
+	$('#inputns1blankspaceViewportControlSearch').focus();
 	
 	interfaceHelpHomeShow();
 	
@@ -128,11 +128,11 @@ function interfaceHelpHomeShow()
 	
 	$('#divInterfaceMain').html(aHTML.join(''));
 	
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 
 }
 
-function interfaceHelpSearch(sXHTMLElementId, aParam)
+function interfaceHelpSearch(sXHTMLElementId, oParam)
 {
 	
 	var aSearch = sXHTMLElementId.split('-');
@@ -144,14 +144,14 @@ function interfaceHelpSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 		
 	if (sSearchContext != undefined)
@@ -167,7 +167,7 @@ function interfaceHelpSearch(sXHTMLElementId, aParam)
 			type: 'GET',
 			url: '/directory/ondemand/support.asp?' + sParam,
 			dataType: 'xml',
-			success: function(data) {interfaceHelpShow(aParam, data)}
+			success: function(data) {interfaceHelpShow(oParam, data)}
 		});
 	}
 	else
@@ -183,7 +183,7 @@ function interfaceHelpSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -197,7 +197,7 @@ function interfaceHelpSearch(sXHTMLElementId, aParam)
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
-			interfaceMasterOptionsSetPosition(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
 			
 			var sParam = 'method=SUPPORT_ISSUE_SEARCH&quicksearch=' + sSearchText + 
 								'&xhtmlcontext=' + sXHTMLElementId;
@@ -207,14 +207,14 @@ function interfaceHelpSearch(sXHTMLElementId, aParam)
 				type: 'GET',
 				url: '/ondemand/Help/?' + sParam,
 				dataType: 'xml',
-				success: function(data) {interfaceHelpSearchShow(aParam, data)}
+				success: function(data) {interfaceHelpSearchShow(oParam, data)}
 			});
 			
 		}
 	};	
 }
 
-function interfaceHelpSearchShow(aParam, oXML)
+function interfaceHelpSearchShow(oParam, oXML)
 {
 
 	var iColumn = 0;
@@ -226,7 +226,7 @@ function interfaceHelpSearchShow(aParam, oXML)
 	
 	if (oRoot.childNodes.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -262,13 +262,13 @@ function interfaceHelpSearchShow(aParam, oXML)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceHelpSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -334,39 +334,39 @@ function interfaceHelpViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceHelpSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceHelpDetails();
 	});
 	
 	$('#tdInterfaceViewportControlScheduling').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDescription");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDescription");
 		interfaceHelpDescription("divInterfaceMainDescription", true);
 	});
 	
 	$('#tdInterfaceViewportControlSuggestion').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSuggestions", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainSuggestions", true);
 		interfaceHelpSuggestions("divInterfaceMainSuggestions", true);
 	});
 
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments("divInterfaceMainAttachments", ns1blankspace.data.object.contactperson, glObjectContext);
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments("divInterfaceMainAttachments", ns1blankspace.data.object.contactperson, glObjectContext);
 	});
 }
 
-function interfaceHelpShow(aParam, oXML)
+function interfaceHelpShow(oParam, oXML)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceClientContactViewport();
 	
 	ns1blankspace.objectContextDataXML = oXML;
@@ -597,6 +597,6 @@ function interfaceHelpSave()
 		sData += '&subject=' + $('#inputInterfaceMainDetailsSubject').val();
 	}
 	
-	interfaceMasterSave(sParam, sData, 'Support Issue Saved');
+	ns1blankspaceSave(sParam, sData, 'Support Issue Saved');
 		
 }

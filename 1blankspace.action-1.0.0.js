@@ -20,7 +20,7 @@ ns1blankspace.action.calendarParam = '';
 
 ns1blankspace.data.actionType = {meeting: 3, fileNote: 4, emailSent: 5, emailReceived: 9};
 
-function interfaceActionMasterViewport(aParam)
+function interfaceActionMasterViewport(oParam)
 {
 	ns1blankspace.objectContext = -1;
 	ns1blankspace.object = 17;	
@@ -33,80 +33,80 @@ function interfaceActionMasterViewport(aParam)
 	
 	ns1blankspace.action.user = gsUserID;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
-		if (aParam.showNew != undefined) {bNew = aParam.showNew}
-		if (aParam.contactPerson != undefined) {ns1blankspace.action.contactperson = aParam.contactPerson}
-		if (aParam.contactBusiness != undefined) {ns1blankspace.action.contactbusiness = aParam.contactBusiness}
-		if (aParam.contactPersonText != undefined) {ns1blankspace.action.contactpersontext = aParam.contactPersonText}
-		if (aParam.contactBusinessText != undefined) {ns1blankspace.action.contactbusinesstext = aParam.contactBusinessText}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+		if (oParam.showNew != undefined) {bNew = oParam.showNew}
+		if (oParam.contactPerson != undefined) {ns1blankspace.action.contactperson = oParam.contactPerson}
+		if (oParam.contactBusiness != undefined) {ns1blankspace.action.contactbusiness = oParam.contactBusiness}
+		if (oParam.contactPersonText != undefined) {ns1blankspace.action.contactpersontext = oParam.contactPersonText}
+		if (oParam.contactBusinessText != undefined) {ns1blankspace.action.contactbusinesstext = oParam.contactBusinessText}
 	}
 	
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 		
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceActionMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 		
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Actions"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceActionSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceActionSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceActionSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceActionSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceActionSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceActionNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceActionNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceActionSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceActionSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceActionSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceActionHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceActionHelpOptions();
 	});
@@ -122,24 +122,24 @@ function interfaceActionMasterViewport(aParam)
 	});
 	
 	$('#divInterfaceViewportControl').html('');	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	if (bNew)
 	{
 		interfaceActionNew()
 	}
 	else
 	{
-		if (bShowHome) {interfaceActionHomeShow(aParam)};
+		if (bShowHome) {interfaceActionHomeShow(oParam)};
 	}
 }
 
-function interfaceActionHomeShow(aParam)
+function interfaceActionHomeShow(oParam)
 {
 	var bCalendar = false;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.calendar != undefined) {bCalendar = aParam.calendar}
+		if (oParam.calendar != undefined) {bCalendar = oParam.calendar}
 	}	
 	
 	$('#divInterfaceMain').html(ns1blankspace.xhtml.loading);
@@ -150,7 +150,7 @@ function interfaceActionHomeShow(aParam)
 	aHTML[++h] = '<table>';
 
 	aHTML[++h] = '<tr>' +
-					'<td id="interfaceMasterViewportActionLarge" class="interfaceMasterViewportImageLarge">' +
+					'<td id="ns1blankspaceViewportActionLarge" class="ns1blankspaceViewportImageLarge">' +
 					'&nbsp;' + 
 					'</td>' +
 					'</tr>';
@@ -178,17 +178,17 @@ function interfaceActionHomeShow(aParam)
 	
 	$('#tdInterfaceViewportControlCalendar').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainCalendar");
+		ns1blankspaceMainViewportShow("#divInterfaceMainCalendar");
 		interfaceActionCalendar();
 	});
 	
 	$('#tdInterfaceViewportControlNext10').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainNext10");
+		ns1blankspaceMainViewportShow("#divInterfaceMainNext10");
 		interfaceActionNext10();
 	});
 	
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	
 	if (bCalendar)
 	{
@@ -203,7 +203,7 @@ function interfaceActionHomeShow(aParam)
 
 }
 
-function interfaceActionSearch(sXHTMLElementId, aParam)
+function interfaceActionSearch(sXHTMLElementId, oParam)
 {
 	
 	var aSearch = sXHTMLElementId.split('-');
@@ -215,14 +215,14 @@ function interfaceActionSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
@@ -240,14 +240,14 @@ function interfaceActionSearch(sXHTMLElementId, aParam)
 			type: 'GET',
 			url: '/ondemand/action/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceActionShow(aParam, data)}
+			success: function(data) {interfaceActionShow(oParam, data)}
 		});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -261,20 +261,20 @@ function interfaceActionSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'ACTION_SEARCH';
 			oSearch.addField('subject');
 			oSearch.rf = 'json';
 			oSearch.addFilter('quicksearch', 'EQUAL_TO', sSearchText);	
-			oSearch.getResults(function(data) {interfaceActionSearchShow(aParam, data)});
+			oSearch.getResults(function(data) {interfaceActionSearchShow(oParam, data)});
 		}
 	}	
 }
 
-function interfaceActionSearchShow(aParam, oResponse)
+function interfaceActionSearchShow(oParam, oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -283,8 +283,8 @@ function interfaceActionSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -313,15 +313,15 @@ function interfaceActionSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
-		interfaceMasterSearchStop();
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceActionSearch(event.target.id, 1);
 		});
 	}	
@@ -332,8 +332,8 @@ function interfaceActionNew()
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceActionMasterViewport();
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 	interfaceActionDetails();
 }
 
@@ -407,25 +407,25 @@ function interfaceActionViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceActionSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceActionDetails();
 	});
 	
 	$('#tdInterfaceViewportControlDescription').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDescription");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDescription");
 		interfaceActionDescription();
 	});
 	
 	$('#tdInterfaceViewportControlDescriptionExtended').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDescriptionExtended");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDescriptionExtended");
 		interfaceMessagingActionSearch({
 			xhtmlElementID: '-' + ns1blankspace.objectContext,
 			targetXHTMLElementID: 'divInterfaceMainDescriptionExtended',
@@ -435,14 +435,14 @@ function interfaceActionViewport()
 	
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 }
 
-function interfaceActionShow(aParam, oResponse)
+function interfaceActionShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceActionViewport();
 		
 	var aHTML = [];
@@ -492,15 +492,15 @@ function interfaceActionShow(aParam, oResponse)
 		}
 		else
 		{
-			interfaceMasterViewportDestination({
+			ns1blankspaceViewportDestination({
 				newDestination: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch("-' + ns1blankspace.objectContext + '")',
 				move: false
 			})
 			
 			$('#tdInterfaceViewportControlDescriptionExtended').hide();
 			$('#tdInterfaceViewportControlDescription').show();
-			$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-			$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+			$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+			$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 			
 		}
 		
@@ -757,8 +757,8 @@ function interfaceActionDetails()
 		
 		$('#inputInterfaceMainDetailsStatus').keyup(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(200);
-			interfaceMasterElementOptionsSearch(event.target.id);
+			$('#divns1blankspaceViewportControlOptions').hide(200);
+			ns1blankspaceElementOptionsSearch(event.target.id);
 		});
 		
 	}	
@@ -830,7 +830,7 @@ function interfaceActionsList(sElementId, iObject, lObjectContext, bAll, sAction
 
 	if (iObject == undefined) {iObject = ns1blankspace.object};
 	if (lObjectContext == undefined) {lObjectContext = ns1blankspace.objectContext};
-	if (sElementId == undefined) {sElementId = "divInterfaceMasterViewportControlOptions"};
+	if (sElementId == undefined) {sElementId = "divns1blankspaceViewportControlOptions"};
 	if (bAll == undefined) {bAll = false};
 	if (sActionType == undefined) {sActionType = ''};
 
@@ -993,7 +993,7 @@ function interfaceActionsListShow(oResponse, sElementId, sActionType)
 		
 		$('td.interfaceActions').click(function(event)
 		{
-			interfaceMasterElementEditStart(event.target.id);
+			ns1blankspaceElementEditStart(event.target.id);
 		});
 			
 	}
@@ -1051,33 +1051,33 @@ function interfaceActionsAddNote(iObject, iObjectContext)
 		});
 }
 
-function interfaceActionSave(aParam, oResponse)
+function interfaceActionSave(oParam, oResponse)
 {
 	var sData = '';
 	var iType = ns1blankspace.data.actionType.meeting;
 	
 	if (oResponse == undefined)
 	{
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.type != undefined) {iType = aParam.type}
-			if (aParam.object == undefined) {aParam.object = ns1blankspace.object}
-			if (aParam.objectContext == undefined) {aParam.objectContext = ns1blankspace.objectContext}
+			if (oParam.type != undefined) {iType = oParam.type}
+			if (oParam.object == undefined) {oParam.object = ns1blankspace.object}
+			if (oParam.objectContext == undefined) {oParam.objectContext = ns1blankspace.objectContext}
 
-			sData += 'object=' + interfaceMasterinterfaceMasterFormatSave(aParam.object);
-			sData += '&objectcontext=' + interfaceMasterinterfaceMasterFormatSave(aParam.objectContext);
-			sData += '&subject=' + interfaceMasterinterfaceMasterFormatSave(aParam.subject);
-			sData += '&description=' + interfaceMasterinterfaceMasterFormatSave(aParam.description);
-			sData += '&priority=' + interfaceMasterinterfaceMasterFormatSave(aParam.description);
-			sData += '&status=' + interfaceMasterinterfaceMasterFormatSave(aParam.status);
-			sData += '&type=' + interfaceMasterinterfaceMasterFormatSave(iType);
-			sData += '&date=' + interfaceMasterinterfaceMasterFormatSave(aParam.date);
-			sData += '&enddate=' + interfaceMasterinterfaceMasterFormatSave(aParam.endDate);
-			sData += '&actionby=' + interfaceMasterinterfaceMasterFormatSave(aParam.actionBy);
-			sData += '&contactbusiness=' + interfaceMasterinterfaceMasterFormatSave(aParam.contactBusiness);
-			sData += '&contactperson=' + interfaceMasterinterfaceMasterFormatSave(aParam.contactPerson);
+			sData += 'object=' + ns1blankspacens1blankspaceFormatSave(oParam.object);
+			sData += '&objectcontext=' + ns1blankspacens1blankspaceFormatSave(oParam.objectContext);
+			sData += '&subject=' + ns1blankspacens1blankspaceFormatSave(oParam.subject);
+			sData += '&description=' + ns1blankspacens1blankspaceFormatSave(oParam.description);
+			sData += '&priority=' + ns1blankspacens1blankspaceFormatSave(oParam.description);
+			sData += '&status=' + ns1blankspacens1blankspaceFormatSave(oParam.status);
+			sData += '&type=' + ns1blankspacens1blankspaceFormatSave(iType);
+			sData += '&date=' + ns1blankspacens1blankspaceFormatSave(oParam.date);
+			sData += '&enddate=' + ns1blankspacens1blankspaceFormatSave(oParam.endDate);
+			sData += '&actionby=' + ns1blankspacens1blankspaceFormatSave(oParam.actionBy);
+			sData += '&contactbusiness=' + ns1blankspacens1blankspaceFormatSave(oParam.contactBusiness);
+			sData += '&contactperson=' + ns1blankspacens1blankspaceFormatSave(oParam.contactPerson);
 			
-			sData += (aParam.otherData==undefined?'':aParam.otherData)
+			sData += (oParam.otherData==undefined?'':oParam.otherData)
 		}	
 		else	  
 		{
@@ -1092,30 +1092,30 @@ function interfaceActionSave(aParam, oResponse)
 			
 			if ($('#divInterfaceMainDetails').html() != '')
 			{
-				sData += '&subject=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsSubject').val());
-				sData += '&priority=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPriority').attr('onDemandID'));				
-				sData += '&type=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsType').attr('onDemandID'));
-				sData += '&date=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDate').val());
-				sData += '&contactbusiness=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsBusiness').attr("onDemandID"));
-				sData += '&contactperson=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPerson').attr("onDemandID"));
-				sData += '&actionby=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsActionBy').attr("onDemandID"));
+				sData += '&subject=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsSubject').val());
+				sData += '&priority=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsPriority').attr('onDemandID'));				
+				sData += '&type=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsType').attr('onDemandID'));
+				sData += '&date=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsDate').val());
+				sData += '&contactbusiness=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsBusiness').attr("onDemandID"));
+				sData += '&contactperson=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsPerson').attr("onDemandID"));
+				sData += '&actionby=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsActionBy').attr("onDemandID"));
 				sData += '&status=' + $('input[name="radioStatus"]:checked').val();
 				
 			}
 			
 			if ($('#divInterfaceMainDescription').html() != '')
 			{
-				sData += '&description=' + interfaceMasterinterfaceMasterFormatSave($('#inputInterfaceMainDescription').val());
+				sData += '&description=' + ns1blankspacens1blankspaceFormatSave($('#inputInterfaceMainDescription').val());
 			}
 		}
 		  
 		$.ajax(
 		{
 			type: 'POST',
-			url: interfaceMasterEndpointURL('ACTION_MANAGE'),
+			url: ns1blankspaceEndpointURL('ACTION_MANAGE'),
 			data: sData,
 			dataType: 'json',
-			success: function(data) {interfaceActionSave(aParam, data);}
+			success: function(data) {interfaceActionSave(oParam, data);}
 		});
 	}	
 	else
@@ -1123,7 +1123,7 @@ function interfaceActionSave(aParam, oResponse)
 
 		if (oResponse.status == 'OK')
 		{
-			interfaceMasterStatus('Saved');
+			ns1blankspaceStatus('Saved');
 			ns1blankspace.objectContext = oResponse.id;	
 		
 			var dStartDate = new Date;
@@ -1131,12 +1131,12 @@ function interfaceActionSave(aParam, oResponse)
 			var sTitle = '';
 			var sCalendarXHTMLElementID;
 			
-			if (aParam != undefined)
+			if (oParam != undefined)
 			{
-				if (aParam.date != undefined) {sStartDate = aParam.date}
-				if (aParam.endDate != undefined) {sEndDate = aParam.endDate}
-				if (aParam.title != undefined) {sTitle = aParam.title}
-				if (aParam.calendarXHTMLElementID != undefined) {sCalendarXHTMLElementID = aParam.calendarXHTMLElementID}
+				if (oParam.date != undefined) {sStartDate = oParam.date}
+				if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+				if (oParam.title != undefined) {sTitle = oParam.title}
+				if (oParam.calendarXHTMLElementID != undefined) {sCalendarXHTMLElementID = oParam.calendarXHTMLElementID}
 			}	
 		
 			if (sCalendarXHTMLElementID != undefined)
@@ -1159,8 +1159,8 @@ function interfaceActionSave(aParam, oResponse)
 		}
 		else
 		{
-			interfaceMasterStatus(oResponse.error.errornotes);
-			interfaceMasterConfirm( {html: [oResponse.error.errornotes]
+			ns1blankspaceStatus(oResponse.error.errornotes);
+			ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
 									   , title: 'Save error!'});
 		}
 	}
@@ -1221,18 +1221,18 @@ function interfaceActionsSummaryActionsShow(oResponse, asElementId)
 	
 }
 
-function interfaceActionCalendar(aParam)
+function interfaceActionCalendar(oParam)
 {
 			
 	var sXHTMLElementID = 'divInterfaceMainCalendar';		
 	var bEventFetch = true;
 	var iSourceObject = 17;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.eventFetch != undefined) {bEventFetch = aParam.eventFetch}
-		if (aParam.sourceObject != undefined) {iSourceObject = aParam.sourceObject}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.eventFetch != undefined) {bEventFetch = oParam.eventFetch}
+		if (oParam.sourceObject != undefined) {iSourceObject = oParam.sourceObject}
 	}
 	
 	$('#' + sXHTMLElementID).html('');
@@ -1249,7 +1249,7 @@ function interfaceActionCalendar(aParam)
 		}	
 	}	
 	
-	$('#divInterfaceMasterViewportControlOptions').hide(0);
+	$('#divns1blankspaceViewportControlOptions').hide(0);
 	
 	$('#' + sXHTMLElementID).fullCalendar({
 		theme: true,
@@ -1343,8 +1343,8 @@ function interfaceActionCalendar(aParam)
 				var sData = 'id=' + event.id;
 				
 				sData += '&actionby=' + event.user;
-				sData += '&daydelta=' + interfaceMasterFormatSave(dayDelta);
-				sData += '&minutedelta=' + interfaceMasterFormatSave(minuteDelta);
+				sData += '&daydelta=' + ns1blankspaceFormatSave(dayDelta);
+				sData += '&minutedelta=' + ns1blankspaceFormatSave(minuteDelta);
 				
 				$.ajax(
 				{
@@ -1359,12 +1359,12 @@ function interfaceActionCalendar(aParam)
 		
 		eventMouseover: function( event, jsEvent, view ) 
 		{
-			interfaceMasterStatus(event.contactBusinessText);
+			ns1blankspaceStatus(event.contactBusinessText);
 		},
 		
 		eventMouseout: function( event, jsEvent, view ) 
 		{
-			interfaceMasterStatus('');
+			ns1blankspaceStatus('');
 		},
 		
 		eventResize: function(event,dayDelta,minuteDelta,revertFunc) 
@@ -1380,8 +1380,8 @@ function interfaceActionCalendar(aParam)
 				var sData = 'id=' + event.id;
 				
 				sData += '&actionby=' + event.user;
-				sData += '&enddaydelta=' + interfaceMasterFormatSave(dayDelta);
-				sData += '&endminutedelta=' + interfaceMasterFormatSave(minuteDelta);
+				sData += '&enddaydelta=' + ns1blankspaceFormatSave(dayDelta);
+				sData += '&endminutedelta=' + ns1blankspaceFormatSave(minuteDelta);
 				
 				$.ajax(
 				{
@@ -1498,17 +1498,17 @@ function interfaceActionCalendarUnavailableShow()
 	}
 }
 
-function interfaceActionCalendarAddShow(aParam, oResponse)
+function interfaceActionCalendarAddShow(oParam, oResponse)
 {
 	var iActionID = -1;
 	var dStartDate = new Date();
 	var dEndDate = dStartDate;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.actionID != undefined) {iActionID = aParam.actionID};
-		if (aParam.startDate != undefined) {dStartDate = aParam.startDate};
-		if (aParam.endDate != undefined) {dEndDate = aParam.endDate};
+		if (oParam.actionID != undefined) {iActionID = oParam.actionID};
+		if (oParam.startDate != undefined) {dStartDate = oParam.startDate};
+		if (oParam.endDate != undefined) {dEndDate = oParam.endDate};
 	}	
 
 	if (iActionID != -1 && oResponse == undefined)
@@ -1520,7 +1520,7 @@ function interfaceActionCalendarAddShow(aParam, oResponse)
 			type: 'GET',
 			url: '/ondemand/action/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceActionCalendarAddShow(aParam, data)}
+			success: function(data) {interfaceActionCalendarAddShow(oParam, data)}
 		});	
 	}
 	else
@@ -1536,7 +1536,7 @@ function interfaceActionCalendarAddShow(aParam, oResponse)
 							
 		if (iActionID == -1)
 		{	
-			aHTML[++h] = ' interfaceMasterWatermark" value="Subject">';
+			aHTML[++h] = ' ns1blankspaceWatermark" value="Subject">';
 		}
 		else
 		{
@@ -1550,7 +1550,7 @@ function interfaceActionCalendarAddShow(aParam, oResponse)
 
 		if (iActionID == -1)
 		{	
-			aHTML[++h] = ' interfaceMasterWatermark">Add more text here, if required.</textarea>';
+			aHTML[++h] = ' ns1blankspaceWatermark">Add more text here, if required.</textarea>';
 		}
 		else
 		{
@@ -1602,12 +1602,12 @@ function interfaceActionCalendarAddShow(aParam, oResponse)
 			
 		aHTML[++h] = '</table>';		
 		
-		var oElement = $('#interfaceMasterViewportActionLarge')
+		var oElement = $('#ns1blankspaceViewportActionLarge')
 		
-		$('#divInterfaceMasterDialog').html('');
-		$('#divInterfaceMasterDialog').show();
-		$('#divInterfaceMasterDialog').offset({ top: $(oElement).offset().top + $(oElement).height() + 5, left: $(oElement).offset().left });
-		$('#divInterfaceMasterDialog').html(aHTML.join(''));
+		$('#divns1blankspaceDialog').html('');
+		$('#divns1blankspaceDialog').show();
+		$('#divns1blankspaceDialog').offset({ top: $(oElement).offset().top + $(oElement).height() + 5, left: $(oElement).offset().left });
+		$('#divns1blankspaceDialog').html(aHTML.join(''));
 		
 		$('#spanCancel').button(
 			{
@@ -1617,8 +1617,8 @@ function interfaceActionCalendarAddShow(aParam, oResponse)
 				}
 			})
 			.click(function() {
-				$('#divInterfaceMasterDialog').slideUp(500);
-				$('#divInterfaceMasterDialog').html('');
+				$('#divns1blankspaceDialog').slideUp(500);
+				$('#divns1blankspaceDialog').html('');
 			})
 			.css('width', '20px')
 			.css('height', '20px')
@@ -1643,8 +1643,8 @@ function interfaceActionCalendarAddShow(aParam, oResponse)
 						calendarXHTMLElementID: 'divInterfaceMainCalendar'
 						});
 				
-				$('#divInterfaceMasterDialog').slideUp(500);
-				$('#divInterfaceMasterDialog').html('');
+				$('#divns1blankspaceDialog').slideUp(500);
+				$('#divns1blankspaceDialog').html('');
 
 			})
 			.css('width', '30px')
@@ -1664,7 +1664,7 @@ function interfaceActionCalendarAddShow(aParam, oResponse)
 	}
 }
 
-function interfaceMasterHomeCalendarAction(iActionId, sActionTitle)
+function ns1blankspaceHomeCalendarAction(iActionId, sActionTitle)
 {
 
 	sParam = 'method=ACTION_SEARCH&contactperson=ALL&select=' + iActionId + '&rf=XML';
@@ -1674,12 +1674,12 @@ function interfaceMasterHomeCalendarAction(iActionId, sActionTitle)
 		type: 'GET',
 		url: '/directory/ondemand/object.asp?' + sParam,
 		dataType: 'xml',
-		success: interfaceMasterHomeCalendarActionShow()
+		success: ns1blankspaceHomeCalendarActionShow()
 	});	
 
-	$('#divInterfaceMasterViewportControlOptions').html(ns1blankspace.xhtml.loading);
+	$('#divns1blankspaceViewportControlOptions').html(ns1blankspace.xhtml.loading);
 	
-	$('#divInterfaceMasterViewportControlOptions').dialog({
+	$('#divns1blankspaceViewportControlOptions').dialog({
 		title: sActionTitle,	
 		modal: true,
 		stack: false,
@@ -1688,15 +1688,15 @@ function interfaceMasterHomeCalendarAction(iActionId, sActionTitle)
 	});
 }
 
-function interfaceActionNextSummary(aParam, oResponse)
+function interfaceActionNextSummary(oParam, oResponse)
 {	
 	var sElementId = 'divInterfaceMain';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElement != undefined)
+		if (oParam.xhtmlElement != undefined)
 		{
-			sElementId = aParam.xhtmlElement;
+			sElementId = oParam.xhtmlElement;
 		}	
 	}	
 	
@@ -1713,7 +1713,7 @@ function interfaceActionNextSummary(aParam, oResponse)
 			type: 'GET',
 			url: '/ondemand/action/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceActionNextSummary(aParam, data)}
+			success: function(data) {interfaceActionNextSummary(oParam, data)}
 		});
 	
 	}
@@ -1794,7 +1794,7 @@ function interfaceActionNextSummary(aParam, oResponse)
 	}	
 }
 
-function interfaceActionQuickSave(aParam, oResponse)
+function interfaceActionQuickSave(oParam, oResponse)
 {
 
 	if (oResponse == undefined)
@@ -1807,26 +1807,26 @@ function interfaceActionQuickSave(aParam, oResponse)
 		var sEndDate;
 		var iActionBy = ns1blankspace.action.user;
 		
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.type != undefined) {iType = aParam.type}
-			if (aParam.async != undefined) {bAsync = aParam.async}
-			if (aParam.hours != undefined) {iHours = aParam.hours}
-			if (aParam.endDate != undefined) {sEndDate = aParam.endDate}
-			if (aParam.actionBy != undefined) {iActionBy = aParam.actionBy}
+			if (oParam.type != undefined) {iType = oParam.type}
+			if (oParam.async != undefined) {bAsync = oParam.async}
+			if (oParam.hours != undefined) {iHours = oParam.hours}
+			if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+			if (oParam.actionBy != undefined) {iActionBy = oParam.actionBy}
 		}	
 		
-		sData += 'object=' + interfaceMasterFormatSave(aParam.object);
-		sData += '&objectcontext=' + interfaceMasterFormatSave(aParam.objectContext);
-		sData += '&subject=' + interfaceMasterFormatSave(aParam.subject);
-		sData += '&description=' + interfaceMasterFormatSave(aParam.description);
-		sData += '&priority=' + interfaceMasterFormatSave(aParam.description);
-		sData += '&status=' + interfaceMasterFormatSave(aParam.status);
-		sData += '&type=' + interfaceMasterFormatSave(iType);
-		sData += '&date=' + interfaceMasterFormatSave(aParam.date);
-		sData += '&actionby=' + interfaceMasterFormatSave(iActionBy);
-		sData += '&contactbusiness=' + interfaceMasterFormatSave(aParam.contactBusiness);
-		sData += '&contactperson=' + interfaceMasterFormatSave(aParam.contactPerson);
+		sData += 'object=' + ns1blankspaceFormatSave(oParam.object);
+		sData += '&objectcontext=' + ns1blankspaceFormatSave(oParam.objectContext);
+		sData += '&subject=' + ns1blankspaceFormatSave(oParam.subject);
+		sData += '&description=' + ns1blankspaceFormatSave(oParam.description);
+		sData += '&priority=' + ns1blankspaceFormatSave(oParam.description);
+		sData += '&status=' + ns1blankspaceFormatSave(oParam.status);
+		sData += '&type=' + ns1blankspaceFormatSave(iType);
+		sData += '&date=' + ns1blankspaceFormatSave(oParam.date);
+		sData += '&actionby=' + ns1blankspaceFormatSave(iActionBy);
+		sData += '&contactbusiness=' + ns1blankspaceFormatSave(oParam.contactBusiness);
+		sData += '&contactperson=' + ns1blankspaceFormatSave(oParam.contactPerson);
 		
 		if (iHours != undefined)
 		{
@@ -1835,10 +1835,10 @@ function interfaceActionQuickSave(aParam, oResponse)
 		
 		if (sEndDate != undefined)
 		{
-			sData += '&enddate=' + interfaceMasterFormatSave(sEndDate);
+			sData += '&enddate=' + ns1blankspaceFormatSave(sEndDate);
 		}
 		
-		sData += (aParam.otherData==undefined?'':aParam.otherData)
+		sData += (oParam.otherData==undefined?'':oParam.otherData)
 			  
 		$.ajax(
 		{
@@ -1847,14 +1847,14 @@ function interfaceActionQuickSave(aParam, oResponse)
 			data: sData,
 			dataType: 'json',
 			async: bAsync,
-			success: function(data) {interfaceActionQuickSave(aParam, data);}
+			success: function(data) {interfaceActionQuickSave(oParam, data);}
 		});
 	}
 	else	
 	{
 		if (oResponse.status == 'OK')
 		{
-			interfaceMasterStatus('Saved');
+			ns1blankspaceStatus('Saved');
 			var iActionID = oResponse.id;	
 		
 			var dStartDate = new Date;
@@ -1862,12 +1862,12 @@ function interfaceActionQuickSave(aParam, oResponse)
 			var sTitle = '';
 			var sCalendarXHTMLElementID;
 			
-			if (aParam != undefined)
+			if (oParam != undefined)
 			{
-				if (aParam.date != undefined) {sStartDate = aParam.date}
-				if (aParam.endDate != undefined) {sEndDate = aParam.endDate}
-				if (aParam.subject != undefined) {sTitle = aParam.subject}
-				if (aParam.calendarXHTMLElementID != undefined) {sCalendarXHTMLElementID = aParam.calendarXHTMLElementID}
+				if (oParam.date != undefined) {sStartDate = oParam.date}
+				if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+				if (oParam.subject != undefined) {sTitle = oParam.subject}
+				if (oParam.calendarXHTMLElementID != undefined) {sCalendarXHTMLElementID = oParam.calendarXHTMLElementID}
 			}	
 			
 			if (sCalendarXHTMLElementID != undefined)
@@ -1886,8 +1886,8 @@ function interfaceActionQuickSave(aParam, oResponse)
 		}
 		else
 		{
-			interfaceMasterStatus(oResponse.error.errornotes);
-			interfaceMasterConfirm( {html: [oResponse.error.errornotes]
+			ns1blankspaceStatus(oResponse.error.errornotes);
+			ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
 									   , title: 'Save error!'});
 		}
 	}

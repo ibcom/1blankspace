@@ -119,7 +119,7 @@ function interfaceControlOptions()
 		aHTML[++h] = '<table id="tableInterfaceViewportMasterControlColumn1" class="interfaceViewportMasterControlColumn">';
 
 		aHTML[++h] = '<tr class="interfaceViewportMasterControl">' +
-					'<td id="interfaceMasterViewportContact" class="interfaceMasterViewportImage">' +
+					'<td id="ns1blankspaceViewportContact" class="ns1blankspaceViewportImage">' +
 					'&nbsp;' +
 					'</td></tr>';
 	
@@ -168,7 +168,7 @@ function interfaceControlOptions()
 		aHTML[++h] = '<table id="tableInterfaceViewportMasterControlColumn2" class="interfaceViewportMasterControlColumn">';
 
 		aHTML[++h] = '<tr class="interfaceViewportMasterControl">' +
-					'<td id="interfaceMasterViewportProject" class="interfaceMasterViewportImage">' +
+					'<td id="ns1blankspaceViewportProject" class="ns1blankspaceViewportImage">' +
 					'&nbsp;' +
 					'</td></tr>';
 					
@@ -202,7 +202,7 @@ function interfaceControlOptions()
 		aHTML[++h] = '<td id="tdInterfaceViewportMasterControlcolumn3" class="interfaceViewportMasterControlColumn">';	
 		aHTML[++h] = '<table id="tableInterfaceViewportMasterControlColumn3" class="interfaceViewportMasterControlColumn">';			
 		aHTML[++h] = '<tr class="interfaceViewportMasterControl">' +
-					'<td id="interfaceMasterViewportDocument" class="interfaceMasterViewportImage">' +
+					'<td id="ns1blankspaceViewportDocument" class="ns1blankspaceViewportImage">' +
 					'&nbsp;' +
 					'</td></tr>';
 		
@@ -235,7 +235,7 @@ function interfaceControlOptions()
 		aHTML[++h] = '<table id="tableInterfaceViewportMasterControlColumn4" class="interfaceViewportMasterControlColumn">';	
 		
 		aHTML[++h] = '<tr class="interfaceViewportMasterControl">' +
-					'<td id="interfaceMasterViewportProduct" class="interfaceMasterViewportImage">' +
+					'<td id="ns1blankspaceViewportProduct" class="ns1blankspaceViewportImage">' +
 					'&nbsp;' +
 					'</td></tr>';
 		
@@ -263,7 +263,7 @@ function interfaceControlOptions()
 		aHTML[++h] = '<table id="tableInterfaceViewportMasterControlColumn5" class="interfaceViewportMasterControlColumn">';
 
 		aHTML[++h] = '<tr class="interfaceViewportMasterControl">' +
-					'<td id="interfaceMasterViewportFinancial" class="interfaceMasterViewportImage">' +
+					'<td id="ns1blankspaceViewportFinancial" class="ns1blankspaceViewportImage">' +
 					'&nbsp;' +
 					'</td></tr>';
 				
@@ -327,7 +327,7 @@ function interfaceControlOptions()
 		aHTML[++h] = '<table id="tableInterfaceViewportMasterControlColumn6" class="interfaceViewportMasterControlColumn">';
 			
 		aHTML[++h] = '<tr class="interfaceViewportMasterControl">' +
-						'<td id="interfaceMasterViewportReport" class="interfaceMasterViewportImage">' +
+						'<td id="ns1blankspaceViewportReport" class="ns1blankspaceViewportImage">' +
 						'&nbsp;' +
 						'</td></tr>';
 						
@@ -366,145 +366,145 @@ function interfaceControlOptionsBind()
 {
 	$('#tdInterfaceViewportMasterControlContactPerson').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceContactPersonMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlContactBusiness').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceContactBusinessMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlOpportunity').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceOpportunityMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlProject').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceProjectMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlProjectTask').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceProjectTaskMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlAction').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceActionMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlDocument').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceDocumentMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlNews').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceNewsMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlEvent').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceEventMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlProduct').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceProductMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlOrder').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceOrderMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlFinancial').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceFinancialMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlFinancialBankAccount').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceFinancialBankAccountMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlFinancialInvoice').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceFinancialInvoiceMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlFinancialExpense').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceFinancialExpenseMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlFinancialReceipt').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceFinancialReceiptMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlFinancialPayment').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceFinancialPaymentMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlFinancialTax').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceFinancialTaxMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlFinancialPayroll').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceFinancialPayrollMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlHelp').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceHelpMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlMessaging').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceMessagingIMAPMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlMessagingConversation').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceMessagingConversationMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlReport').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceReportMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlStructure').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceStructureMasterViewport();
 	});
 	
@@ -643,55 +643,55 @@ function interfaceControlSetupOptionsBind()
 {
 	$('#tdInterfaceViewportMasterControlSetupWebsite').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupWebsiteMasterViewport();
 	});
 		
 	$('#tdInterfaceViewportMasterControlSetupUser').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupUserMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlSetupUserRole').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupUserRoleMasterViewport();
 	});
 
 	$('#tdInterfaceViewportMasterControlSetupNetworkGroup').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupNetworkGroupMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlSetupAutomation').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupAutomationMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlSetupMessaging').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupMessagingMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlSetupImport').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupImportMasterViewport();
 	});
 
 	$('#tdInterfaceViewportMasterControlSetupFinancial').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupFinancialMasterViewport();
 	});
 
 	$('#tdInterfaceViewportMasterControlSetupContactBusinessGroup').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupMasterViewport(
 				{
 				setupName: "Contact Business Groups",
@@ -701,7 +701,7 @@ function interfaceControlSetupOptionsBind()
 	
 	$('#tdInterfaceViewportMasterControlSetupContactPersonGroup').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupMasterViewport(
 				{
 				setupName: "Contact Person Groups",
@@ -711,19 +711,19 @@ function interfaceControlSetupOptionsBind()
 	
 	$('#tdInterfaceViewportMasterControlSetupProject').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupProjectMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlSetupProjectTaak').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSetupProjectTaskMasterViewport();
 	});
 	
 	$('#tdInterfaceViewportMasterControlSupportIssue').click(function(event)
 	{
-		interfaceMasterOptionsSource();
+		ns1blankspaceOptionsSource();
 		interfaceSupportIssueMasterViewport();
 	});
 	
@@ -735,18 +735,18 @@ function interfaceControlSetupOptionsBind()
 
 function interfaceControlUserOptionsShow(oElement)
 {
-	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
+	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
-		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		$('#divInterfaceMasterViewportControlOptions').html(interfaceControlUserOptions);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oElement.id);
+		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+		$('#divns1blankspaceViewportControlOptions').html(interfaceControlUserOptions);
 			
 		interfaceControlUserOptionsBind();
 	}	
@@ -759,22 +759,22 @@ function interfaceControlUserOptions()
 	var aHTML = [];
 	var h = -1;
 	
-	aHTML[++h] = '<table id="tableInterfaceMasterUserOptions" class="interfaceViewportMasterControl">';
+	aHTML[++h] = '<table id="tablens1blankspaceUserOptions" class="interfaceViewportMasterControl">';
 		
-	aHTML[++h] = '<tr id="trInterfaceMasterUserOptionsLogOff" class="interfaceMasterUserOptions">' +
-					'<td id="tdInterfaceMasterUserOptionsLogOff" class="interfaceMasterUserOptions">' +
+	aHTML[++h] = '<tr id="trns1blankspaceUserOptionsLogOff" class="ns1blankspaceUserOptions">' +
+					'<td id="tdns1blankspaceUserOptionsLogOff" class="ns1blankspaceUserOptions">' +
 					'Log Off' +
 					'</td>' +
 					'</tr>'
 				
-	aHTML[++h] = '<tr id="trInterfaceMasterUserOptionsChangePassword" class="interfaceMasterUserOptions">' +
-					'<td id="tdInterfaceMasterUserOptionsChangePassword" class="interfaceMasterUserOptions">' +
+	aHTML[++h] = '<tr id="trns1blankspaceUserOptionsChangePassword" class="ns1blankspaceUserOptions">' +
+					'<td id="tdns1blankspaceUserOptionsChangePassword" class="ns1blankspaceUserOptions">' +
 					'Change My Password' +
 					'</td>' +
 					'</tr>'			
 				
-	aHTML[++h] = '<tr id="trInterfaceMasterUserOptionsCreateSecureKey" class="interfaceMasterUserOptions">' +
-					'<td id="tdInterfaceMasterUserOptionsCreateSecureKey" class="interfaceMasterUserOptions">' +
+	aHTML[++h] = '<tr id="trns1blankspaceUserOptionsCreateSecureKey" class="ns1blankspaceUserOptions">' +
+					'<td id="tdns1blankspaceUserOptionsCreateSecureKey" class="ns1blankspaceUserOptions">' +
 					'Secure Access Token' +
 					'</td>' +
 					'</tr>'						
@@ -787,42 +787,42 @@ function interfaceControlUserOptions()
 function interfaceControlUserOptionsBind()
 {
 
-	$('#tdInterfaceMasterUserOptionsLogOff').click(function(event)
+	$('#tdns1blankspaceUserOptionsLogOff').click(function(event)
 	{
-		interfaceMasterLogoff();
+		ns1blankspaceLogoff();
 	})
 	
-	$('#tdInterfaceMasterUserOptionsChangePassword').click(function(event)
+	$('#tdns1blankspaceUserOptionsChangePassword').click(function(event)
 	{
 		$(this).html(ns1blankspace.xhtml.loadingSmall);
-		interfaceMasterUserOptionsChangePassword();
+		ns1blankspaceUserOptionsChangePassword();
 	});
 	
-	$('#tdInterfaceMasterUserOptionsCreateSecureKey').click(function(event)
+	$('#tdns1blankspaceUserOptionsCreateSecureKey').click(function(event)
 	{
 		$(this).html(ns1blankspace.xhtml.loadingSmall);
-		interfaceMasterUserOptionsCreateSecureKey();
+		ns1blankspaceUserOptionsCreateSecureKey();
 	});
 }
 
-function interfaceMasterUserOptionsChangePassword(aParam)
+function ns1blankspaceUserOptionsChangePassword(oParam)
 {
 	var aHTML = [];
 	var h = -1;
 	var bShow = true;
-	var sXHTMLElementID = 'divInterfaceMasterViewportControlOptions'
+	var sXHTMLElementID = 'divns1blankspaceViewportControlOptions'
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.show != undefined) {bShow = aParam.show}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.show != undefined) {bShow = oParam.show}
 	}	
 	
 	aHTML[++h] = '<table id="tableInterfaceUserOptionsChangePassword" class="interfaceViewportMasterControl" style="width:350px;">';
 		
 	if (bShow)
 	{
-		interfaceMasterOptionsSetPosition(sXHTMLElementID, 0, -255)
+		ns1blankspaceOptionsSetPosition(sXHTMLElementID, 0, -255)
 		
 		aHTML[++h] = '<tr class="interfaceHomeOptionContext">';
 		aHTML[++h] = '<td class="interfaceHomeOptionContext">Change Password</td>';
@@ -849,23 +849,23 @@ function interfaceMasterUserOptionsChangePassword(aParam)
 	.css('width', '20px')
 	.css('height', '20px')
 	
-	interfaceMasterLogonChangePasswordShow({xhtmlElementID: 'tdInterfaceUserOptionsChangePassword'});
+	ns1blankspaceLogonChangePasswordShow({xhtmlElementID: 'tdInterfaceUserOptionsChangePassword'});
 	
 }
 
-function interfaceMasterUserOptionsCreateSecureKey(aParam, oResponse)
+function ns1blankspaceUserOptionsCreateSecureKey(oParam, oResponse)
 {
 	var aHTML = [];
 	var h = -1;
 	var bShow = true;
 	var bSetPosition = true;
-	var sXHTMLElementID = 'divInterfaceMasterViewportControlOptions'
+	var sXHTMLElementID = 'divns1blankspaceViewportControlOptions'
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.show != undefined) {bShow = aParam.show}
-		if (aParam.setPosition != undefined) {bSetPosition = aParam.setPosition}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.show != undefined) {bShow = oParam.show}
+		if (oParam.setPosition != undefined) {bSetPosition = oParam.setPosition}
 	}	
 	
 	if (oResponse == undefined)
@@ -875,7 +875,7 @@ function interfaceMasterUserOptionsCreateSecureKey(aParam, oResponse)
 			type: 'POST',
 			url: '/ondemand/core/?method=CORE_SECURE_TOKEN_SEARCH&rf=JSON',
 			dataType: 'json',
-			success: function(data) {interfaceMasterUserOptionsCreateSecureKey(aParam, data)}
+			success: function(data) {ns1blankspaceUserOptionsCreateSecureKey(oParam, data)}
 		})
 	}
 	else
@@ -885,7 +885,7 @@ function interfaceMasterUserOptionsCreateSecureKey(aParam, oResponse)
 
 		if (bSetPosition)
 		{
-			interfaceMasterOptionsSetPosition(sXHTMLElementID, 0, -305)
+			ns1blankspaceOptionsSetPosition(sXHTMLElementID, 0, -305)
 		}	
 	
 		if (bShow)
@@ -965,7 +965,7 @@ function interfaceMasterUserOptionsCreateSecureKey(aParam, oResponse)
 					url: '/ondemand/core/?method=CORE_SECURE_TOKEN_MANAGE&remove=1&rf=TEXT',
 					dataType: 'text',
 					async: false,
-					success: function(data) {interfaceMasterUserOptionsCreateSecureKey({setPosition: false})}
+					success: function(data) {ns1blankspaceUserOptionsCreateSecureKey({setPosition: false})}
 				})
 			}		
 		})
@@ -982,7 +982,7 @@ function interfaceMasterUserOptionsCreateSecureKey(aParam, oResponse)
 					url: '/ondemand/core/?method=CORE_SECURE_TOKEN_MANAGE&rf=TEXT',
 					dataType: 'text',
 					async: false,
-					success: function(data) {interfaceMasterUserOptionsCreateSecureKey({setPosition: false})}
+					success: function(data) {ns1blankspaceUserOptionsCreateSecureKey({setPosition: false})}
 				})
 			}		
 		})

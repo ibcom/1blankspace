@@ -133,7 +133,7 @@ var ns1blankspace.xhtml.divID = '';
 var ns1blankspace.option.setupURI = '/ondemand/setup/';
 var ns1blankspace.param;
 
-var ns1blankspace.history.viewport = ['interfaceMasterHomeShow()']
+var ns1blankspace.history.viewport = ['ns1blankspaceHomeShow()']
 var ns1blankspace.history.currentIndex = 0
 var ns1blankspace.history.lastDestinationInstruction = '';
 var ns1blankspace.history.list = [];
@@ -171,7 +171,7 @@ $(function()
 	
 	$('td.interfaceViewportControl').live('click', function()
 	{
-		interfaceMasterObjectViewportHistory({xhtmlElementID: this.id});
+		ns1blankspaceObjectViewportHistory({xhtmlElementID: this.id});
 	});
 	
 	$('.interfaceViewportControl').live('mousedown', function() 
@@ -184,27 +184,27 @@ $(function()
 		$(this).addClass('interfaceViewportControlHighlight');
 	});
 
-	$('.interfaceMasterWatermark').live('focus', function() 
+	$('.ns1blankspaceWatermark').live('focus', function() 
 	{
-		if ($(this).hasClass('interfaceMasterWatermark'))
+		if ($(this).hasClass('ns1blankspaceWatermark'))
 		{
 			$(this).val('');
-			$(this).removeClass('interfaceMasterWatermark');
+			$(this).removeClass('ns1blankspaceWatermark');
 		}	
 	});		
 		
 	$('.inputInterfaceMainSelect').live('focus', function() 
 	{		
-		$(this).addClass('interfaceMasterHighlight');
+		$(this).addClass('ns1blankspaceHighlight');
 		
 		ns1blankspace.currentXHTMLElementID = this.id;
 		ns1blankspace.xhtml.divID = this.id;
 		
-		$('#divInterfaceMasterViewportControlOptions').html('');
-		$('#divInterfaceMasterViewportControlOptions').show();
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $('#' + ns1blankspace.xhtml.divID).offset().top, left: $('#' + ns1blankspace.xhtml.divID).offset().left + $('#' + ns1blankspace.xhtml.divID).width() - 10});
+		$('#divns1blankspaceViewportControlOptions').html('');
+		$('#divns1blankspaceViewportControlOptions').show();
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $('#' + ns1blankspace.xhtml.divID).offset().top, left: $('#' + ns1blankspace.xhtml.divID).offset().left + $('#' + ns1blankspace.xhtml.divID).width() - 10});
 				
-		$('#divInterfaceMasterViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
+		$('#divns1blankspaceViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
 		
 		$('#spanInterfaceMainSelectOptions').button({
 			text: false,
@@ -213,7 +213,7 @@ $(function()
 			}
 		})
 		.click(function() {
-			interfaceMasterElementOptionsSearch({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
+			ns1blankspaceElementOptionsSearch({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
 		})
 		.css('width', '14px')
 		.css('height', '23px')
@@ -221,21 +221,21 @@ $(function()
 		
 	$('.inputInterfaceMainSelect').live('keyup', function()
 	{
-		interfaceMasterElementOptionsSearch({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
+		ns1blankspaceElementOptionsSearch({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
 	});	
 		
 	$('.inputInterfaceMainSelect').live('blur', function() 
 	{
-		$(this).removeClass('interfaceMasterHighlight');
+		$(this).removeClass('ns1blankspaceHighlight');
 	});
 	
 	$('.inputInterfaceMainSelectAddress').live('focus', function() 
 	{
 		ns1blankspace.xhtml.divID = this.id;
-		$('#divInterfaceMasterViewportControlOptions').html('');
-		$('#divInterfaceMasterViewportControlOptions').show();
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
-		$('#divInterfaceMasterViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
+		$('#divns1blankspaceViewportControlOptions').html('');
+		$('#divns1blankspaceViewportControlOptions').show();
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
+		$('#divns1blankspaceViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
 		
 		$('#spanInterfaceMainSelectOptions').button( {
 			text: false,
@@ -244,7 +244,7 @@ $(function()
 			}
 		})
 		.click(function() {
-			interfaceMasterAddressSearch(ns1blankspace.xhtml.divID);
+			ns1blankspaceAddressSearch(ns1blankspace.xhtml.divID);
 		})
 		.css('width', '14px')
 		.css('height', '23px')
@@ -252,21 +252,21 @@ $(function()
 	
 	$('.inputInterfaceMainSelectAddress').live('blur', function() 
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	});
 	
 	$('.inputInterfaceMainSelectContact').live('keyup', function()
 	{
-		interfaceMasterContactSearch(ns1blankspace.xhtml.divID, 1, 3);	
+		ns1blankspaceContactSearch(ns1blankspace.xhtml.divID, 1, 3);	
 	});	
 	
 	$('.inputInterfaceMainSelectContact').live('focus', function() 
 	{
 		ns1blankspace.xhtml.divID = this.id;
-		$('#divInterfaceMasterViewportControlOptions').html('');
-		$('#divInterfaceMasterViewportControlOptions').show();
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
-		$('#divInterfaceMasterViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
+		$('#divns1blankspaceViewportControlOptions').html('');
+		$('#divns1blankspaceViewportControlOptions').show();
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
+		$('#divns1blankspaceViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
 		
 		$('#spanInterfaceMainSelectOptions').button( {
 			text: false,
@@ -275,7 +275,7 @@ $(function()
 			}
 		})
 		.click(function() {
-			interfaceMasterContactSearch(ns1blankspace.xhtml.divID, 4);
+			ns1blankspaceContactSearch(ns1blankspace.xhtml.divID, 4);
 		})
 		.css('width', '14px')
 		.css('height', '23px')
@@ -284,10 +284,10 @@ $(function()
 	$('.inputInterfaceMainSelectContactEmail').live('focus', function() 
 	{
 		ns1blankspace.xhtml.divID = this.id;
-		$('#divInterfaceMasterViewportControlOptions').html('');
-		$('#divInterfaceMasterViewportControlOptions').show();
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width()});
-		$('#divInterfaceMasterViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
+		$('#divns1blankspaceViewportControlOptions').html('');
+		$('#divns1blankspaceViewportControlOptions').show();
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width()});
+		$('#divns1blankspaceViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
 		
 		$('#spanInterfaceMainSelectOptions').button( {
 			text: false,
@@ -296,7 +296,7 @@ $(function()
 			}
 		})
 		.click(function() {
-			interfaceMasterContactEmailSearch(ns1blankspace.xhtml.divID, {
+			ns1blankspaceContactEmailSearch(ns1blankspace.xhtml.divID, {
 					source: 4, 
 					emailOnly: true,
 					contactBusiness: $('#' + ns1blankspace.xhtml.divID).attr('ondemandcontactbusiness'),
@@ -311,7 +311,7 @@ $(function()
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
 		
-		var sFunction = "interfaceMasterContactEmailSearch(ns1blankspace.xhtml.divID, {" +
+		var sFunction = "ns1blankspaceContactEmailSearch(ns1blankspace.xhtml.divID, {" +
 					"source: 1," +
 					"emailOnly: true," +
 					"contactBusiness: " + $(this).attr('ondemandcontactbusiness') + "," +
@@ -323,8 +323,8 @@ $(function()
 	
 	$('.spanInterfaceMainOptionsClose').live('click', function() 
 	{
-		$('#divInterfaceMasterViewportControlOptions').slideUp(500);
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').slideUp(500);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
 	});
 	
 	$('.interfaceSearchHeaderPage').live('click', function() 
@@ -334,15 +334,15 @@ $(function()
 	
 	$('td.interfaceHomeOptionClose').live('click', function() 
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(1000);
-		$('#divInterfaceMasterViewportControlOptions').html(interfaceHomeOptions());
-		$('#divInterfaceMasterViewportControlOptions').show(500);
+		$('#divns1blankspaceViewportControlOptions').hide(1000);
+		$('#divns1blankspaceViewportControlOptions').html(interfaceHomeOptions());
+		$('#divns1blankspaceViewportControlOptions').show(500);
 		interfaceHomeOptionsBind();
 	});
 	
 	$('input.inputInterfaceMainText').live('focus', function() 
 	{
-		$(this).addClass('interfaceMasterHighlight');
+		$(this).addClass('ns1blankspaceHighlight');
 	});
 
 	$('input.inputInterfaceMainText').live('keyup', function() 
@@ -352,38 +352,38 @@ $(function()
 		
 	$('input.inputInterfaceMainText').live('blur', function() 
 	{
-		$(this).removeClass('interfaceMasterHighlight');
+		$(this).removeClass('ns1blankspaceHighlight');
 	});
 
 	$('input.inputInterfaceMainDate').live('focus', function() 
 	{
-		$(this).addClass('interfaceMasterHighlight');
+		$(this).addClass('ns1blankspaceHighlight');
 	});
 
 	$('input.inputInterfaceMainDate').live('blur', function() 
 	{
-		$(this).removeClass('interfaceMasterHighlight');
+		$(this).removeClass('ns1blankspaceHighlight');
 	});
 
 	$('.inputInterfaceMainTextMulti').live('focus', function()
 	{
-		$(this).addClass('interfaceMasterHighlight');
+		$(this).addClass('ns1blankspaceHighlight');
 	});
 
 	$('.inputInterfaceMainTextMulti').live('blur', function() 
 	{
-		$(this).removeClass('interfaceMasterHighlight');
+		$(this).removeClass('ns1blankspaceHighlight');
 	});		
 		
 	//MAIN	
 		
 	if (window.location.hash == '#PASSWORDEXPIRED')
 	{
-		interfaceMasterLogonChangePasswordShow();
+		ns1blankspaceLogonChangePasswordShow();
 	}
 	else
 	{
-		interfaceMasterViewport();
+		ns1blankspaceViewport();
 	}	
 	
 })
@@ -409,7 +409,7 @@ $.extend(
 	}
 });
 
-function interfaceMasterObjectViewportHistory(aParam)
+function ns1blankspaceObjectViewportHistory(oParam)
 {
 	var bGet = false;
 	var iObject = ns1blankspace.object;
@@ -417,12 +417,12 @@ function interfaceMasterObjectViewportHistory(aParam)
 	var sXHTMLElementID;
 	var sFunctionDefault;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.object != undefined) {iObject = aParam.object}
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.functionDefault != undefined) {sFunctionDefault = aParam.functionDefault}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.object != undefined) {iObject = oParam.object}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.functionDefault != undefined) {sFunctionDefault = oParam.functionDefault}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 	
 	$.each(ns1blankspace.history.list, function(index) 
@@ -465,7 +465,7 @@ function interfaceMasterObjectViewportHistory(aParam)
 	}
 }
 
-function interfaceMasterViewportDestination(aParam)
+function ns1blankspaceViewportDestination(oParam)
 {
 	var sDestinationInstructions;
 	var iInstruction = 1;
@@ -483,13 +483,13 @@ function interfaceMasterViewportDestination(aParam)
 	{	
 		ns1blankspace.inputDetected = false;
 		
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.newDestination != undefined) {sDestinationInstructions = aParam.newDestination}
-			if (aParam.instruction != undefined) {iInstruction = aParam.instruction}
-			if (aParam.instructionCount != undefined) {iInstructionCount = aParam.instructionCount}
-			if (aParam.index != undefined) {ns1blankspace.history.currentIndex = aParam.index}
-			if (aParam.move != undefined) {bMove = aParam.move}
+			if (oParam.newDestination != undefined) {sDestinationInstructions = oParam.newDestination}
+			if (oParam.instruction != undefined) {iInstruction = oParam.instruction}
+			if (oParam.instructionCount != undefined) {iInstructionCount = oParam.instructionCount}
+			if (oParam.index != undefined) {ns1blankspace.history.currentIndex = oParam.index}
+			if (oParam.move != undefined) {bMove = oParam.move}
 			
 			if (iInstruction == 1 && sDestinationInstructions != undefined)
 			{
@@ -583,7 +583,7 @@ function interfaceMasterViewportDestination(aParam)
 					success: function(data) {
 						if (data == '')
 						{
-							//ns1blankspace.history.viewport.push('interfaceMasterHomeShow()');
+							//ns1blankspace.history.viewport.push('ns1blankspaceHomeShow()');
 						}	
 						else
 						{
@@ -594,9 +594,9 @@ function interfaceMasterViewportDestination(aParam)
 				})
 			}		
 				
-			$('#spanInterfaceMasterViewportControlBack').button("destroy");	
-			$('#spanInterfaceMasterViewportControlRefresh').button("destroy");	
-			$('#spanInterfaceMasterViewportControlForward').button("destroy");	
+			$('#spanns1blankspaceViewportControlBack').button("destroy");	
+			$('#spanns1blankspaceViewportControlRefresh').button("destroy");	
+			$('#spanns1blankspaceViewportControlForward').button("destroy");	
 			
 			var bBack = true;
 			var bForward = true;
@@ -611,7 +611,7 @@ function interfaceMasterViewportDestination(aParam)
 				bForward = false;					
 			};			
 	
-			$('#spanInterfaceMasterViewportControlBack')
+			$('#spanns1blankspaceViewportControlBack')
 				.button({
 						text: false,
 						icons: {primary: "ui-icon-triangle-1-w"},
@@ -633,10 +633,10 @@ function interfaceMasterViewportDestination(aParam)
 					.parent()
 						.buttonset();
 	
-			$('#spanInterfaceMasterViewportControlBack')
+			$('#spanns1blankspaceViewportControlBack')
 				.button({disabled: bBack})
 	
-			$('#spanInterfaceMasterViewportControlForward')
+			$('#spanns1blankspaceViewportControlForward')
 				.button({disabled: bForward})
 	
 			sDestinationInstructions = ns1blankspace.history.viewport[ns1blankspace.history.currentIndex]
@@ -654,7 +654,7 @@ function interfaceMasterViewportDestination(aParam)
 	}	
 }
 
-function interfaceMasterLogonShow(aParam)
+function ns1blankspaceLogonShow(oParam)
 {
 	//In some cases home.js::interfaceHomeLogonShow() is used instead
 
@@ -662,50 +662,50 @@ function interfaceMasterLogonShow(aParam)
 	var h = -1;
 	var sXHTMLElementID = "divInterfaceBox";
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}	
 		
-	aHTML[++h] = '<table id="tableInterfaceMasterLogon" class="interfaceMasterLogon">';
+	aHTML[++h] = '<table id="tablens1blankspaceLogon" class="ns1blankspaceLogon">';
 	
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonName" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogonName" class="interfaceMasterLogon">' +
+	aHTML[++h] = '<tr id="trns1blankspaceLogonName" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspaceLogonName" class="ns1blankspaceLogon">' +
 					'Logon Name' +
 					'</td>' +
-					'<td id="tdinterfaceMasterLogonNameValue" class="interfaceMasterLogon">' +
-					'<input id="inputInterfaceMasterLogonName" class="interfaceMasterLogon">' +
+					'<td id="tdns1blankspaceLogonNameValue" class="ns1blankspaceLogon">' +
+					'<input id="inputns1blankspaceLogonName" class="ns1blankspaceLogon">' +
 					'</td>' +
 					'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonPassword" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogonPassword" class="interfaceMasterLogon">' +
+	aHTML[++h] = '<tr id="trns1blankspaceLogonPassword" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspaceLogonPassword" class="ns1blankspaceLogon">' +
 					'Password' +
 					'</td>' +
-					'<td id="tdinterfaceMasterLogonPasswordValue" class="interfaceMasterLogon">' +
-					'<input id="inputInterfaceMasterLogonPassword" class="interfaceMasterLogon" type="password">' +
+					'<td id="tdns1blankspaceLogonPasswordValue" class="ns1blankspaceLogon">' +
+					'<input id="inputns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password">' +
 					'</td>' +
 					'</tr>';
 
-	aHTML[++h] = '<tr id="trInterfaceMasterLogon" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogon" class="interfaceMasterLogon" colspan=2>' +
-					'<span id="spanInterfaceMasterLogon"></span>' +
+	aHTML[++h] = '<tr id="trns1blankspaceLogon" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspaceLogon" class="ns1blankspaceLogon" colspan=2>' +
+					'<span id="spanns1blankspaceLogon"></span>' +
 					'</td>' +
 					'</tr>';
 	
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonNameRemember" class="interfaceMasterLogon">' +
-				    '<td id="tdInterfaceMasterLogonNameRemember" class="interfaceMasterLogon" colspan=2>' +
-					'<input type="checkbox" id="inputInterfaceMasterLogonNameRemember"/>Remember Me</td></tr>';
+	aHTML[++h] = '<tr id="trns1blankspaceLogonNameRemember" class="ns1blankspaceLogon">' +
+				    '<td id="tdns1blankspaceLogonNameRemember" class="ns1blankspaceLogon" colspan=2>' +
+					'<input type="checkbox" id="inputns1blankspaceLogonNameRemember"/>Remember Me</td></tr>';
 
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonSendPassword" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogonSendPassword" class="interfaceMasterLogon" colspan=2>' +
-					'<a href="#" id="aInterfaceMasterLogonSendPassword">Send Password</a>' +
+	aHTML[++h] = '<tr id="trns1blankspace.logon.getPassword.send" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspace.logon.getPassword.send" class="ns1blankspaceLogon" colspan=2>' +
+					'<a href="#" id="ans1blankspace.logon.getPassword.send">Send Password</a>' +
 					'</td>' +
 					'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonStatus" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogonStatus" class="interfaceMasterLogon" colspan=2>' +
+	aHTML[++h] = '<tr id="trns1blankspaceLogonStatus" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspaceLogonStatus" class="ns1blankspaceLogon" colspan=2>' +
 					'&nbsp;' +
 					'</td>' +
 					'</tr>';
@@ -719,43 +719,43 @@ function interfaceMasterLogonShow(aParam)
 	
 	if (sLogonName != '' && sLogonName != null)
 	{
-		$('#inputInterfaceMasterLogonName').val(sLogonName);
-		$('#inputInterfaceMasterLogonNameRemember').attr('checked', true);
-		$('#inputInterfaceMasterLogonPassword').focus();
+		$('#inputns1blankspaceLogonName').val(sLogonName);
+		$('#inputns1blankspaceLogonNameRemember').attr('checked', true);
+		$('#inputns1blankspaceLogonPassword').focus();
 	}
 	else
 	{
-		$('#inputInterfaceMasterLogonName').focus();
+		$('#inputns1blankspaceLogonName').focus();
 	}
 	
-	$('#spanInterfaceMasterLogon').button(
+	$('#spanns1blankspaceLogon').button(
 	{
 		label: "Logon"
 	})
 	.click(function() 
 	{
-		interfaceMasterLogon();
+		ns1blankspaceLogon();
 	});	
 
 	$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 	
-	$('#aInterfaceMasterLogonSendPassword').click(function()
+	$('#ans1blankspace.logon.getPassword.send').click(function()
 	{
-		interfaceMasterLogonSendPasswordShow();
+		ns1blankspace.logon.getPassword.show();
 	});
 	
 }
 
-function interfaceMasterLogon()
+function ns1blankspaceLogon()
 {
 	var sReturn;
 	var sData;
 
-	var sLogonName = $('#inputInterfaceMasterLogonName').val();
-	var sPassword = $('#inputInterfaceMasterLogonPassword').val();
+	var sLogonName = $('#inputns1blankspaceLogonName').val();
+	var sPassword = $('#inputns1blankspaceLogonPassword').val();
 	
 	sData = 'logon=' + encodeURIComponent(sLogonName) + '&password=' + encodeURIComponent(sPassword);
-	$('#tdInterfaceMasterLogonStatus').html(ns1blankspace.xhtml.loadingSmall);
+	$('#tdns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loadingSmall);
 	
 	$.ajax(
 	{
@@ -764,31 +764,31 @@ function interfaceMasterLogon()
 		data: sData,
 		dataType: 'json',
 		async: false,
-		success: interfaceMasterLogonProcess
+		success: ns1blankspaceLogonProcess
 	})
 }
 
-function interfaceMasterLogonProcess(oResponse)	
+function ns1blankspaceLogonProcess(oResponse)	
 {		
 	if (oResponse.status == 'ER')
 	{
-		$('#tdInterfaceMasterLogonStatus').html('Logon Name or password is incorrect.');
+		$('#tdns1blankspaceLogonStatus').html('Logon Name or password is incorrect.');
 		$('#divInterface').effect("shake", { times:2 }, 100);
 	}
 	else 
 	{
-		$('#tdInterfaceMasterLogonStatus').html('Logon successful...');
+		$('#tdns1blankspaceLogonStatus').html('Logon successful...');
 		
-		if ($('#inputInterfaceMasterLogonNameRemember').attr('checked'))
+		if ($('#inputns1blankspaceLogonNameRemember').attr('checked'))
 		{
-			$.cookie('mydigitalstucturelogon', $('#inputInterfaceMasterLogonName').val(), {expires:30});
+			$.cookie('mydigitalstucturelogon', $('#inputns1blankspaceLogonName').val(), {expires:30});
 		}
 		
 		interfaceControlSecurity();
 		
 		if (oResponse.passwordStatus == "PASSWORDEXPIRED")
 		{
-			interfaceMasterLogonChangePasswordShow(); 
+			ns1blankspaceLogonChangePasswordShow(); 
 		}
 		else
 		{	
@@ -805,55 +805,55 @@ function interfaceMasterLogonProcess(oResponse)
 	
 }
 
-function interfaceMasterLogonChangePasswordShow(aParam)
+function ns1blankspaceLogonChangePasswordShow(oParam)
 {
 
 	var aHTML = [];
 	var h = -1;
 	var sXHTMLElementID = 'divInterfaceBox';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}	
 	
-	aHTML[++h] = '<table id="tableInterfaceMasterLogonChangePassword" class="interfaceMasterLogon">';
+	aHTML[++h] = '<table id="tablens1blankspaceLogonChangePassword" class="ns1blankspaceLogon">';
 	
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonCurrentPassword" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterCurrentPassword" class="interfaceMasterLogon">' +
+	aHTML[++h] = '<tr id="trns1blankspaceLogonCurrentPassword" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspaceCurrentPassword" class="ns1blankspaceLogon">' +
 					'Current Password' +
 					'</td>' +
-					'<td id="tdinterfaceMasterLogonCurrentPasswordValue" class="interfaceMasterLogon">' +
-					'<input id="inputInterfaceMasterLogonCurrentPassword" class="interfaceMasterLogon" type="password">' +
+					'<td id="tdns1blankspaceLogonCurrentPasswordValue" class="ns1blankspaceLogon">' +
+					'<input id="inputns1blankspaceLogonCurrentPassword" class="ns1blankspaceLogon" type="password">' +
 					'</td>' +
 					'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonNewPassword" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogonNewPassword" class="interfaceMasterLogon">' +
+	aHTML[++h] = '<tr id="trns1blankspaceLogonNewPassword" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspaceLogonNewPassword" class="ns1blankspaceLogon">' +
 					'New Password' +
 					'</td>' +
-					'<td id="tdinterfaceMasterLogonNewPasswordValue" class="interfaceMasterLogon">' +
-					'<input id="inputInterfaceMasterLogonNewPassword" class="interfaceMasterLogon" type="password">' +
+					'<td id="tdns1blankspaceLogonNewPasswordValue" class="ns1blankspaceLogon">' +
+					'<input id="inputns1blankspaceLogonNewPassword" class="ns1blankspaceLogon" type="password">' +
 					'</td>' +
 					'</tr>';
 
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonNewPasswordConfirm" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogonNewPasswordConfirm" class="interfaceMasterLogon">' +
+	aHTML[++h] = '<tr id="trns1blankspaceLogonNewPasswordConfirm" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspaceLogonNewPasswordConfirm" class="ns1blankspaceLogon">' +
 					'Confirm Password' +
 					'</td>' +
-					'<td id="tdinterfaceMasterLogonNewPasswordConfirmValue" class="interfaceMasterLogon">' +
-					'<input id="inputInterfaceMasterLogonNewPasswordConfirm" class="interfaceMasterLogon" type="password">' +
+					'<td id="tdns1blankspaceLogonNewPasswordConfirmValue" class="ns1blankspaceLogon">' +
+					'<input id="inputns1blankspaceLogonNewPasswordConfirm" class="ns1blankspaceLogon" type="password">' +
 					'</td>' +
 					'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonChangePassword" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogonChangePassword" class="interfaceMasterLogon" colspan=2>' +
-					'<span id="spanInterfaceMasterLogonChangePassword" class="interfaceMasterLogon">Change Password</span>' +
+	aHTML[++h] = '<tr id="trns1blankspaceLogonChangePassword" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspaceLogonChangePassword" class="ns1blankspaceLogon" colspan=2>' +
+					'<span id="spanns1blankspaceLogonChangePassword" class="ns1blankspaceLogon">Change Password</span>' +
 					'</td>' +
 					'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonChangePasswordStatus" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogonChangePasswordStatus" class="interfaceMasterLogon" colspan=2>' +
+	aHTML[++h] = '<tr id="trns1blankspaceLogonChangePasswordStatus" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspaceLogonChangePasswordStatus" class="ns1blankspaceLogon" colspan=2>' +
 					'&nbsp;' +
 					'</td>' +
 					'</tr>';
@@ -862,41 +862,41 @@ function interfaceMasterLogonChangePasswordShow(aParam)
 	
 	$('#' + sXHTMLElementID).html(aHTML.join(''));
 	
-	$('#inputInterfaceMasterLogonCurrentPassword').focus();
+	$('#inputns1blankspaceLogonCurrentPassword').focus();
 	
-	$('#spanInterfaceMasterLogonChangePassword').button(
+	$('#spanns1blankspaceLogonChangePassword').button(
 	{
 		label: "Change Password"
 	})
 	.click(function()
 	{
-		interfaceMasterLogonChangePassword();
+		ns1blankspaceLogonChangePassword();
 	});	
 	
 	$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 }
 
-function interfaceMasterLogonChangePassword()
+function ns1blankspaceLogonChangePassword()
 {
 		
-	var sNewPassword = $('#inputInterfaceMasterLogonNewPassword').val();
-	var sNewPasswordConfirm = $('#inputInterfaceMasterLogonNewPasswordConfirm').val();
+	var sNewPassword = $('#inputns1blankspaceLogonNewPassword').val();
+	var sNewPasswordConfirm = $('#inputns1blankspaceLogonNewPasswordConfirm').val();
 	
 	if (sNewPassword != sNewPasswordConfirm)
 	{
-		$('#tdInterfaceMasterLogonChangePasswordStatus').html('New passwords do not match.');
+		$('#tdns1blankspaceLogonChangePasswordStatus').html('New passwords do not match.');
 	}
 	
 	else if (sNewPassword == '')
 	{
-		$('#tdInterfaceMasterLogonChangePasswordStatus').html('New password can not be blank.');
+		$('#tdns1blankspaceLogonChangePasswordStatus').html('New password can not be blank.');
 	}
 	else
 	{
 	
-		$('#tdInterfaceMasterLogonChangePasswordStatus').html('Updating password...');
+		$('#tdns1blankspaceLogonChangePasswordStatus').html('Updating password...');
 		
-		var sCurrentPassword = $('#inputInterfaceMasterLogonCurrentPassword').val();
+		var sCurrentPassword = $('#inputns1blankspaceLogonCurrentPassword').val();
 	
 		var sParam = 'method=SITE_USER_PASSWORD_MANAGE&expiredays=36500' +
 					'&site=' + msOnDemandSiteId +
@@ -910,28 +910,28 @@ function interfaceMasterLogonChangePassword()
 			url: '/ondemand/site/?' + sParam,
 			dataType: 'json',
 			async: false,
-			success: interfaceMasterLogonChangePasswordProcess
+			success: ns1blankspaceLogonChangePasswordProcess
 		})
 	}
 }
 	
-function interfaceMasterLogonChangePasswordProcess(oResponse)
+function ns1blankspaceLogonChangePasswordProcess(oResponse)
 {	
 
 	if (oResponse.status == 'ER') 
 	{
 		if (oResponse.error.errornotes == 'PASSWORD_LESS_THAN_6_CHAR') 
 		{
-			$('#tdInterfaceMasterLogonChangePasswordStatus').html('New password needs to be at least 6 characters.');
+			$('#tdns1blankspaceLogonChangePasswordStatus').html('New password needs to be at least 6 characters.');
 		}
 		else
 		{
-			$('#tdInterfaceMasterLogonChangePasswordStatus').html('Incorrect current password or your not logged on.');
+			$('#tdns1blankspaceLogonChangePasswordStatus').html('Incorrect current password or your not logged on.');
 		}
 	}
 	else
 	{
-		$('#tdInterfaceMasterLogonChangePasswordStatus').html('Password changed!');
+		$('#tdns1blankspaceLogonChangePasswordStatus').html('Password changed!');
 	
 		if (oResponse.url == '#' || ns1blankspace.option.logonStayOnDocument)
 		{
@@ -946,31 +946,31 @@ function interfaceMasterLogonChangePasswordProcess(oResponse)
 	}
 }
 
-function interfaceMasterLogonSendPasswordShow()
+function ns1blankspace.logon.getPassword.show()
 {
 
 	var aHTML = [];
 	var h = -1;
 
-	aHTML[++h] = '<table id="tableInterfaceMasterLogonSendPassword" class="interfaceMasterLogon">';
+	aHTML[++h] = '<table id="tablens1blankspace.logon.getPassword.send" class="ns1blankspaceLogon">';
 	
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonSendPassword" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterSendPassword" class="interfaceMasterLogon">' +
+	aHTML[++h] = '<tr id="trns1blankspace.logon.getPassword.send" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspaceSendPassword" class="ns1blankspaceLogon">' +
 					'Logon Name' +
 					'</td>' +
-					'<td id="tdinterfaceMasterLogonSendPasswordValue" class="interfaceMasterLogon">' +
-					'<input id="inputInterfaceMasterLogonSendPassword" class="interfaceMasterLogon">' +
+					'<td id="tdns1blankspace.logon.getPassword.sendValue" class="ns1blankspaceLogon">' +
+					'<input id="inputns1blankspace.logon.getPassword.send" class="ns1blankspaceLogon">' +
 					'</td>' +
 					'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonSendPassword" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogonSendPassword" class="interfaceMasterLogon" colspan=2>' +
-					'<span id="spanInterfaceMasterLogonSendPassword" class="interfaceMasterLogon">Send Password</span>' +
+	aHTML[++h] = '<tr id="trns1blankspace.logon.getPassword.send" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspace.logon.getPassword.send" class="ns1blankspaceLogon" colspan=2>' +
+					'<span id="spanns1blankspace.logon.getPassword.send" class="ns1blankspaceLogon">Send Password</span>' +
 					'</td>' +
 					'</tr>';
 					
-	aHTML[++h] = '<tr id="trInterfaceMasterLogonChangePasswordStatus" class="interfaceMasterLogon">' +
-					'<td id="tdInterfaceMasterLogonSendPasswordStatus" class="interfaceMasterLogon" colspan=2>' +
+	aHTML[++h] = '<tr id="trns1blankspaceLogonChangePasswordStatus" class="ns1blankspaceLogon">' +
+					'<td id="tdns1blankspace.logon.getPassword.sendStatus" class="ns1blankspaceLogon" colspan=2>' +
 					'&nbsp;' +
 					'</td>' +
 					'</tr>';
@@ -980,35 +980,35 @@ function interfaceMasterLogonSendPasswordShow()
 	$('#divInterfaceBox').css("z-index", "1");
 	$('#divInterfaceBox').html(aHTML.join(''));
 	
-	$('#inputInterfaceMasterLogonSendPassword').focus();
+	$('#inputns1blankspace.logon.getPassword.send').focus();
 	
-	$('#spanInterfaceMasterLogonSendPassword').button(
+	$('#spanns1blankspace.logon.getPassword.send').button(
 	{
 		label: "Send Password"
 	})
 	.click(function()
 	{
-		interfaceMasterLogonSendPassword();
+		ns1blankspace.logon.getPassword.send();
 	});	
 	
-	$('#divInterfaceMasterLogon').show(ns1blankspace.option.showSpeed);
+	$('#divns1blankspaceLogon').show(ns1blankspace.option.showSpeed);
 }
 
-function interfaceMasterLogonSendPassword()
+function ns1blankspace.logon.getPassword.send()
 {	
-	if ($('#inputInterfaceMasterLogonSendPassword').val() == '')
+	if ($('#inputns1blankspace.logon.getPassword.send').val() == '')
 	{
-		$('#tdInterfaceMasterLogonSendPasswordStatus').html('Logon name is blank, please enter logon name.');
+		$('#tdns1blankspace.logon.getPassword.sendStatus').html('Logon name is blank, please enter logon name.');
 	}
 	else
 	{
 	
-		$('#tdInterfaceMasterLogonSendPasswordStatus').html('Sending password...');
+		$('#tdns1blankspace.logon.getPassword.sendStatus').html('Sending password...');
 		
-		var sCurrentPassword = $('#inputInterfaceMasterLogonCurrentPassword').val();
+		var sCurrentPassword = $('#inputns1blankspaceLogonCurrentPassword').val();
 					
 		var sParam = 'method=SITE_SEND_PASSWORD&site=' + msOnDemandSiteId +
-					'&logon=' + $('#inputInterfaceMasterLogonSendPassword').val();	
+					'&logon=' + $('#inputns1blankspace.logon.getPassword.send').val();	
 		
 		$.ajax(
 		{
@@ -1016,26 +1016,26 @@ function interfaceMasterLogonSendPassword()
 			url: '/ondemand/site/?' + sParam,
 			dataType: 'json',
 			async: false,
-			success: interfaceMasterLogonSendPasswordProcess
+			success: ns1blankspace.logon.getPassword.sendProcess
 		})
 	}
 	
 }
 
-function interfaceMasterLogonSendPasswordProcess(oResponse)
+function ns1blankspace.logon.getPassword.sendProcess(oResponse)
 {
 	if (oResponse.status == 'OK')
 	{
-		$('#tdInterfaceMasterLogonSendPasswordStatus').html('Your password has been emailed to you.');
+		$('#tdns1blankspace.logon.getPassword.sendStatus').html('Your password has been emailed to you.');
 	
 	}
 	else
 	{
-		$('#tdInterfaceMasterLogonSendPasswordStatus').html('Can not find this logon name!');
+		$('#tdns1blankspace.logon.getPassword.sendStatus').html('Can not find this logon name!');
 	}
 }
 
-function interfaceMasterLogoff()
+function ns1blankspaceLogoff()
 {
 	$.ajax(
 	{
@@ -1049,17 +1049,17 @@ function interfaceMasterLogoff()
 	document.location.reload();
 }
 
-function interfaceMasterViewportUserControlShow(oElement)
+function ns1blankspaceViewportUserControlShow(oElement)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-	$('#divInterfaceMasterViewportControlOptions').html(interfaceControlUserOptions());
-	$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+	$('#divns1blankspaceViewportControlOptions').html(interfaceControlUserOptions());
+	$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 	
 	interfaceControlUserOptionsBind();
 }
 
-function interfaceMasterViewport()
+function ns1blankspaceViewport()
 {
 	var sParam = 'method=CORE_GET_USER_NAME';
 	
@@ -1078,14 +1078,14 @@ function interfaceMasterViewport()
 			}
 			else
 			{
-				interfaceMasterViewportShow(data);
+				ns1blankspaceViewportShow(data);
 			}	
 		}
 	})
 	
 }	
 	
-function interfaceMasterViewportShow(oResponse)	
+function ns1blankspaceViewportShow(oResponse)	
 {
 	var aHTML = [];
 	var h = -1;
@@ -1100,69 +1100,69 @@ function interfaceMasterViewportShow(oResponse)
 	
 	ns1blankspace.unloadWarning = true;
 		
-	aHTML[++h] = '<div id="divInterfaceMasterViewport" class="interfaceMaster">';
+	aHTML[++h] = '<div id="divns1blankspaceViewport" class="ns1blankspace">';
 	
-	$('#tdInterfaceMasterHeaderColumn2').html('<span id="spanInterfaceMasterViewportLogonName">' + ns1blankspace.user.commonname + '</span>')
+	$('#tdns1blankspaceHeaderColumn2').html('<span id="spanns1blankspaceViewportLogonName">' + ns1blankspace.user.commonname + '</span>')
 	
-	aHTML[++h] = '<div id="divInterfaceMasterViewportControl" class="interfaceMasterViewport">';
+	aHTML[++h] = '<div id="divns1blankspaceViewportControl" class="ns1blankspaceViewport">';
 	
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlHome">' +
-						'<span id="spanInterfaceMasterViewportControlHome" class="interfaceMasterViewport">&nbsp;</span>' +
-						'<span id="spanInterfaceMasterViewportControlHomeOptions" class="interfaceMasterViewport">&nbsp;</span>' +
+		aHTML[++h] = '<div id="divns1blankspaceViewportControlHome">' +
+						'<span id="spanns1blankspaceViewportControlHome" class="ns1blankspaceViewport">&nbsp;</span>' +
+						'<span id="spanns1blankspaceViewportControlHomeOptions" class="ns1blankspaceViewport">&nbsp;</span>' +
 						'</div>';
 						
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlDestination">' +
-						'<span id="spanInterfaceMasterViewportControlBack" class="interfaceMasterViewport">&nbsp;</span>' +
-						'<span id="spanInterfaceMasterViewportControlRefresh" class="interfaceMasterViewport">&nbsp;</span>' +
-						'<span id="spanInterfaceMasterViewportControlForward" class="interfaceMasterViewport">&nbsp;</span>' +
+		aHTML[++h] = '<div id="divns1blankspaceViewportControlDestination">' +
+						'<span id="spanns1blankspaceViewportControlBack" class="ns1blankspaceViewport">&nbsp;</span>' +
+						'<span id="spanns1blankspaceViewportControlRefresh" class="ns1blankspaceViewport">&nbsp;</span>' +
+						'<span id="spanns1blankspaceViewportControlForward" class="ns1blankspaceViewport">&nbsp;</span>' +
 						'</div>';				
 				
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlSet" class="interfaceMasterViewport">' +
-						'<span id="spanInterfaceMasterViewportControlSet" class="interfaceMasterViewport">&nbsp;</span>' +
+		aHTML[++h] = '<div id="divns1blankspaceViewportControlSet" class="ns1blankspaceViewport">' +
+						'<span id="spanns1blankspaceViewportControlSet" class="ns1blankspaceViewport">&nbsp;</span>' +
 						'</div>';
 						
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlSearch">' +
-						'<input id="inputInterfaceMasterViewportControlSearch" class="interfaceMasterViewport">' +
+		aHTML[++h] = '<div id="divns1blankspaceViewportControlSearch">' +
+						'<input id="inputns1blankspaceViewportControlSearch" class="ns1blankspaceViewport">' +
 						'</div>';
 						
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlSearchStatus"></div>';
+		aHTML[++h] = '<div id="divns1blankspaceViewportControlSearchStatus"></div>';
 						
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlNew">' +
-						'<span id="spanInterfaceMasterViewportControlNew" class="interfaceMasterViewport">New</span>' +
+		aHTML[++h] = '<div id="divns1blankspaceViewportControlNew">' +
+						'<span id="spanns1blankspaceViewportControlNew" class="ns1blankspaceViewport">New</span>' +
 						'</div>';
 						
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlAction">' +
-						'<span id="spanInterfaceMasterViewportControlAction" class="interfaceMasterViewport"></span>' +
-						'<span id="spanInterfaceMasterViewportControlActionOptions" class="interfaceMasterViewport">&nbsp;</span>' +
+		aHTML[++h] = '<div id="divns1blankspaceViewportControlAction">' +
+						'<span id="spanns1blankspaceViewportControlAction" class="ns1blankspaceViewport"></span>' +
+						'<span id="spanns1blankspaceViewportControlActionOptions" class="ns1blankspaceViewport">&nbsp;</span>' +
 						'</div>';
 		
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlActionStatus" class="interfaceMasterViewport">&nbsp;</div>';
+		aHTML[++h] = '<div id="divns1blankspaceViewportControlActionStatus" class="ns1blankspaceViewport">&nbsp;</div>';
 		
 		if (ns1blankspace.setupShow) 
 		{
 
-			aHTML[++h] = '<div id="divInterfaceMasterViewportControlSetup">' +
-							'<input type="checkbox" id="spanInterfaceMasterViewportControlSetupSwitch" class="interfaceMasterViewport"/>' +
-							'<label style="font-size:0.875em;" for="spanInterfaceMasterViewportControlSetupSwitch">&nbsp;</label>' +
+			aHTML[++h] = '<div id="divns1blankspaceViewportControlSetup">' +
+							'<input type="checkbox" id="spanns1blankspaceViewportControlSetupSwitch" class="ns1blankspaceViewport"/>' +
+							'<label style="font-size:0.875em;" for="spanns1blankspaceViewportControlSetupSwitch">&nbsp;</label>' +
 							'</div>';
 		}				
 		
-		aHTML[++h] = '<div id="divInterfaceMasterViewportControlHelp">' + 
-						'<span id="spanInterfaceMasterViewportControlHelpHome" class="interfaceMasterViewport">&nbsp;</span>' +
+		aHTML[++h] = '<div id="divns1blankspaceViewportControlHelp">' + 
+						'<span id="spanns1blankspaceViewportControlHelpHome" class="ns1blankspaceViewport">&nbsp;</span>' +
 						'</div>';
 	
 	aHTML[++h] = '</div>';
 	
 	aHTML[++h] = '</div>';
 	
-	aHTML[++h] = '<div id="divInterfaceMasterViewportControlBrowse" class="interfaceMasterViewport">&nbsp;</div>';
+	aHTML[++h] = '<div id="divns1blankspaceViewportControlBrowse" class="ns1blankspaceViewport">&nbsp;</div>';
 	
-	aHTML[++h] = '<div id="divInterfaceMasterViewportControlOptions" class="interfaceMasterViewportOptions">&nbsp;</div>';
-	aHTML[++h] = '<div id="divInterfaceMasterDialog" class="divInterfaceMasterDialog">&nbsp;</div>';
+	aHTML[++h] = '<div id="divns1blankspaceViewportControlOptions" class="ns1blankspaceViewportOptions">&nbsp;</div>';
+	aHTML[++h] = '<div id="divns1blankspaceDialog" class="divns1blankspaceDialog">&nbsp;</div>';
 	
-	$('#divInterfaceMasterViewportControl').html(aHTML.join(''));
+	$('#divns1blankspaceViewportControl').html(aHTML.join(''));
 	
-	$('#spanInterfaceMasterViewportControlHome')
+	$('#spanns1blankspaceViewportControlHome')
 		.button({
 				text: false,
 				icons: {
@@ -1170,7 +1170,7 @@ function interfaceMasterViewportShow(oResponse)
 				}})
 		.click(function(event)
 		{
-			interfaceMasterHomeShow();
+			ns1blankspaceHomeShow();
 		})
 				
 		.next()
@@ -1181,20 +1181,20 @@ function interfaceMasterViewportShow(oResponse)
 				}
 			})
 			.click(function() {
-				interfaceMasterHomeOptionsShow(this);
+				ns1blankspaceHomeOptionsShow(this);
 			})
 			.css('width', '12px')
 			.parent()
 				.buttonset();
 	
-	$('#spanInterfaceMasterViewportControlBack')
+	$('#spanns1blankspaceViewportControlBack')
 		.button({
 				text: false,
 				icons: {}
 				})
 		.click(function(event)
 		{
-			interfaceMasterViewportDestination({instruction: 2});
+			ns1blankspaceViewportDestination({instruction: 2});
 		})
 		.css('width', '19px')
 		.next()
@@ -1205,7 +1205,7 @@ function interfaceMasterViewportShow(oResponse)
 				}
 			})
 			.click(function() {
-				interfaceMasterViewportDestination({instruction: 7});
+				ns1blankspaceViewportDestination({instruction: 7});
 			})
 			.css('width', '25px')
 			.css('margin-left', '2px')
@@ -1215,14 +1215,14 @@ function interfaceMasterViewportShow(oResponse)
 				icons: {}
 			})
 			.click(function() {
-				interfaceMasterViewportDestination({instruction: 3});
+				ns1blankspaceViewportDestination({instruction: 3});
 			})
 			.css('width', '19px')
 			.css('margin-left', '2px')
 			.parent()
 				.buttonset();
 	
-	$('#divInterfaceMasterViewportControlSet')
+	$('#divns1blankspaceViewportControlSet')
 		.button(
 		{
 			icons: 
@@ -1234,11 +1234,11 @@ function interfaceMasterViewportShow(oResponse)
 		})
 		.click(function() 
 		{
-			interfaceMasterViewportControlShow(this);
+			ns1blankspaceViewportControlShow(this);
 		})
 		.css('text-align', 'left');
 	
-	$('#spanInterfaceMasterViewportControlNew')
+	$('#spanns1blankspaceViewportControlNew')
 		.button({
 				label: "New"
 				})
@@ -1254,7 +1254,7 @@ function interfaceMasterViewportShow(oResponse)
 			.parent()
 				.buttonset();
 	
-	$('#spanInterfaceMasterViewportControlAction')
+	$('#spanns1blankspaceViewportControlAction')
 		.button({
 				label: "Save"
 				})
@@ -1271,7 +1271,7 @@ function interfaceMasterViewportShow(oResponse)
 			.parent()
 				.buttonset();	
 				
-	$('#spanInterfaceMasterViewportControlDashboard')
+	$('#spanns1blankspaceViewportControlDashboard')
 		.button({
 				text: false,
 				icons: {
@@ -1279,10 +1279,10 @@ function interfaceMasterViewportShow(oResponse)
 				}})
 		.click(function() 
 		{
-			interfaceMasterDashboardShow(this);
+			ns1blankspaceDashboardShow(this);
 		});					
 	
-	$('#spanInterfaceMasterViewportControlSetupSwitch')
+	$('#spanns1blankspaceViewportControlSetupSwitch')
 		.button({
 					text: false,
 					label: 'Setup your system.  Once finished click on this icon again.',
@@ -1292,10 +1292,10 @@ function interfaceMasterViewportShow(oResponse)
 		.css('font-size', '0.75em')			
 		.click(function() 
 		{
-			interfaceMasterViewportSetup(this);
+			ns1blankspaceViewportSetup(this);
 		});	
 	
-	$('#spanInterfaceMasterViewportControlHelpHome')
+	$('#spanns1blankspaceViewportControlHelpHome')
 		.button({
 				text: false,
 				icons: {
@@ -1303,21 +1303,21 @@ function interfaceMasterViewportShow(oResponse)
 				}})
 		.click(function() 
 		{
-			interfaceMasterHelpShow(this);
+			ns1blankspaceHelpShow(this);
 		});		
 	
-	$('#spanInterfaceMasterViewportLogonName').click(function(event)
+	$('#spanns1blankspaceViewportLogonName').click(function(event)
 	{
 		interfaceControlUserOptionsShow(this);
 	})
 	
 	if (ns1blankspace.option.showBrowsing)
 	{
-		$('#divInterfaceMasterViewportControlBrowse').html(interfaceMasterViewportBrowse());
+		$('#divns1blankspaceViewportControlBrowse').html(ns1blankspaceViewportBrowse());
 	}
 	else
 	{
-		$('#divInterfaceMasterViewportControlBrowse')
+		$('#divns1blankspaceViewportControlBrowse')
 			.css('height', '1px')
 			.css('border-width', '0px');
 			
@@ -1328,9 +1328,9 @@ function interfaceMasterViewportShow(oResponse)
 			.css('top', '90px');
 	}
 	
-	$("#divInterfaceMasterViewport").touchwipe({
-			wipeLeft: function() {interfaceMasterViewportDestination({instruction: 3});},
-			wipeRight: function() {interfaceMasterViewportDestination({instruction: 2});},
+	$("#divns1blankspaceViewport").touchwipe({
+			wipeLeft: function() {ns1blankspaceViewportDestination({instruction: 3});},
+			wipeRight: function() {ns1blankspaceViewportDestination({instruction: 2});},
 			min_move_x: 35,
 			min_move_y: 35,
 			preventDefaultEvents: true
@@ -1340,47 +1340,47 @@ function interfaceMasterViewportShow(oResponse)
 	
 	if (gbReturnToLast) 
 	{
-		interfaceMasterViewportDestination({instruction: 8})
+		ns1blankspaceViewportDestination({instruction: 8})
 	}
 	else
 	{
-		interfaceMasterHomeShow();
+		ns1blankspaceHomeShow();
 	}	
 	
-	$('#inputInterfaceMasterViewportControlSearch').focus();
+	$('#inputns1blankspaceViewportControlSearch').focus();
 	
 }
 
-function interfaceMasterReset()
+function ns1blankspaceReset()
 {
 	
-	$('#inputInterfaceMasterViewportControlSearch').unbind('keyup');
-	$('#inputInterfaceMasterViewportControlSearch').unbind('click');
-	$('#spanInterfaceMasterViewportControlSearch').unbind('click');
-	$('#spanInterfaceMasterViewportControlSearchOptions').unbind('click');
-	$('#spanInterfaceMasterViewportControlNew').unbind('click');
-	$('#spanInterfaceMasterViewportControlNewOptions').unbind('click');
-	$('#spanInterfaceMasterViewportControlAction').unbind('click');
-	$('#spanInterfaceMasterViewportControlActionOptions').unbind('click');
-	$('#spanInterfaceMasterViewportControlSetup').unbind('click');
-	$('#spanInterfaceMasterViewportControlSetupOptions').unbind('click');
-	$('#spanInterfaceMasterViewportControlHelp').unbind('click');
-	$('#spanInterfaceMasterViewportControlHelpOptions').unbind('click');
+	$('#inputns1blankspaceViewportControlSearch').unbind('keyup');
+	$('#inputns1blankspaceViewportControlSearch').unbind('click');
+	$('#spanns1blankspaceViewportControlSearch').unbind('click');
+	$('#spanns1blankspaceViewportControlSearchOptions').unbind('click');
+	$('#spanns1blankspaceViewportControlNew').unbind('click');
+	$('#spanns1blankspaceViewportControlNewOptions').unbind('click');
+	$('#spanns1blankspaceViewportControlAction').unbind('click');
+	$('#spanns1blankspaceViewportControlActionOptions').unbind('click');
+	$('#spanns1blankspaceViewportControlSetup').unbind('click');
+	$('#spanns1blankspaceViewportControlSetupOptions').unbind('click');
+	$('#spanns1blankspaceViewportControlHelp').unbind('click');
+	$('#spanns1blankspaceViewportControlHelpOptions').unbind('click');
 	$('td.interfaceViewportMasterControlBrowse').unbind('click');
 	$('td.interfaceViewportMasterControlBrowseAll').unbind('click');
-	$('#divInterfaceMasterViewportControlActionStatus').text('');
+	$('#divns1blankspaceViewportControlActionStatus').text('');
 	if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
 	ns1blankspace.inputDetected = false;
 	ns1blankspace.xhtml.action = '';
 }
 
-function interfaceMasterOptionsSource(sSource)
+function ns1blankspaceOptionsSource(sSource)
 {
 	if (sSource == undefined) {sSource = ''}
-	$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', sSource);
+	$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', sSource);
 }
 
-function interfaceMasterHomeShow()
+function ns1blankspaceHomeShow()
 {	
 	interfaceHomeViewport();
 	
@@ -1394,39 +1394,39 @@ function interfaceMasterHomeShow()
 	interfaceHomeShow();
 }
 
-function interfaceMasterHomeOptionsShow(oElement)
+function ns1blankspaceHomeOptionsShow(oElement)
 {
 
 	var aHTML = [];
 	var h = -1;
 	
-	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
+	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
-		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		$('#divInterfaceMasterViewportControlOptions').html(interfaceHomeOptions());
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oElement.id);
+		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+		$('#divns1blankspaceViewportControlOptions').html(interfaceHomeOptions());
 		interfaceHomeOptionsBind();
 	}	
 	
 }
 
-function interfaceMasterViewportControlShow(oElement)
+function ns1blankspaceViewportControlShow(oElement)
 {
 
 	var aHTML = [];
 	var h = -1;
 
-	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
+	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
@@ -1435,17 +1435,17 @@ function interfaceMasterViewportControlShow(oElement)
 			ns1blankspace.xhtml.masterControl = interfaceControlOptions();
 		}
 
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
-		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		$('#divInterfaceMasterViewportControlOptions').html(ns1blankspace.xhtml.masterControl);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oElement.id);
+		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+		$('#divns1blankspaceViewportControlOptions').html(ns1blankspace.xhtml.masterControl);
 			
 		interfaceControlOptionsBind();
 	}	
 }
 
-function interfaceMasterAttachments(aParam)
+function ns1blankspaceAttachments(oParam)
 {
 
 	var sXHTMLElementID;
@@ -1456,16 +1456,16 @@ function interfaceMasterAttachments(aParam)
 	var oActions = {add: true};
 	var sHelpNotes;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.object != undefined) {iObject = aParam.object}
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.objectName != undefined) {sObjectName = aParam.objectName}
-		if (aParam.showAdd != undefined) {bShowAdd = aParam.showAdd}
-		if (aParam.attachmentType != undefined ) {iAttachmentType = aParam.attachmentType}
-		if (aParam.xhtmlElementID != undefined ) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
-		if (aParam.helpNotes != undefined) {sHelpNotes = aParam.helpNotes}
+		if (oParam.object != undefined) {iObject = oParam.object}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
+		if (oParam.showAdd != undefined) {bShowAdd = oParam.showAdd}
+		if (oParam.attachmentType != undefined ) {iAttachmentType = oParam.attachmentType}
+		if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
+		if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
 	}
 	
 	if (oActions.add)
@@ -1515,7 +1515,7 @@ function interfaceMasterAttachments(aParam)
 			label: "Add"
 		})
 		.click(function() {
-			 interfaceMasterAttachmentsAdd(aParam);
+			 ns1blankspaceAttachmentsAdd(oParam);
 		})
 	
 		sXHTMLElementID = 'tdInterfaceMainAttachmentsColumn1';
@@ -1535,12 +1535,12 @@ function interfaceMasterAttachments(aParam)
 		}
 		
 		oSearch.sort('filename', 'asc');
-		oSearch.getResults(function(data) {interfaceMasterAttachmentsShow(data, sXHTMLElementID)});
+		oSearch.getResults(function(data) {ns1blankspaceAttachmentsShow(data, sXHTMLElementID)});
 	}
 
 }
 
-function interfaceMasterAttachmentsShow(oResponse, sXHTMLElementID)
+function ns1blankspaceAttachmentsShow(oResponse, sXHTMLElementID)
 {	
 	var aHTML = [];
 	var h = -1;
@@ -1569,12 +1569,12 @@ function interfaceMasterAttachmentsShow(oResponse, sXHTMLElementID)
 
 		$.each(oResponse.data.rows, function()
 		{
-			aHTML[++h] = interfaceMasterAttachmentsShowRow(this);
+			aHTML[++h] = ns1blankspaceAttachmentsShowRow(this);
 		});
     	
 		aHTML[++h] = '</tbody></table>';
 
-		interfaceMasterPaginationList(
+		ns1blankspacePaginationList(
 		   {
 			xhtmlElementID: sXHTMLElementID,
 			xhtmlContext: 'Attachment',
@@ -1583,19 +1583,19 @@ function interfaceMasterAttachmentsShow(oResponse, sXHTMLElementID)
 			columns: 'subject-actiondate',
 			more: oResponse.moreid,
 			rows: ns1blankspace.option.defaultRows,
-			functionSearch: interfaceMasterActions,
-			functionShowRow: interfaceMasterAttachmentsShowRow,
+			functionSearch: ns1blankspaceActions,
+			functionShowRow: ns1blankspaceAttachmentsShowRow,
 			functionOpen: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)',
-			functionNewPage: 'interfaceMasterAttachmentsShowBind()',
+			functionNewPage: 'ns1blankspaceAttachmentsShowBind()',
 			type: 'json'
 		   }); 	
 			
-		interfaceMasterAttachmentsShowBind();
+		ns1blankspaceAttachmentsShowBind();
 	}
 	
 }
 
-function interfaceMasterAttachmentsShowRow(oRow)
+function ns1blankspaceAttachmentsShowRow(oRow)
 {
 	var aHTML = [];
 	var h = -1;
@@ -1615,7 +1615,7 @@ function interfaceMasterAttachmentsShowRow(oRow)
 	return aHTML.join('');
 }	
 
-function interfaceMasterAttachmentsShowBind()
+function ns1blankspaceAttachmentsShowBind()
 {
 	$('.interfaceMainRowOptionsDeleteAttachment').button({
 				text: false,
@@ -1624,13 +1624,13 @@ function interfaceMasterAttachmentsShowBind()
 		}
 	})
 	.click(function() {
-		interfaceMasterAttachmentsRemove(this.id)
+		ns1blankspaceAttachmentsRemove(this.id)
 	})
 	.css('width', '15px')
 	.css('height', '20px')	
 }
 
-function interfaceMasterAttachmentsRemove(sXHTMLElementID)
+function ns1blankspaceAttachmentsRemove(sXHTMLElementID)
 {
 
 	var aSearch = sXHTMLElementID.split('-');
@@ -1650,40 +1650,40 @@ function interfaceMasterAttachmentsRemove(sXHTMLElementID)
 		});
 }
 
-function interfaceMasterAttachmentsAdd(aParam)
+function ns1blankspaceAttachmentsAdd(oParam)
 {
 
-	$('#tdInterfaceMainAttachmentsColumn1').html(interfaceMasterAttachmentsUpload(aParam));
+	$('#tdInterfaceMainAttachmentsColumn1').html(ns1blankspaceAttachmentsUpload(oParam));
 	
 	$('#spanInterfaceMainUpload').button(
 		{
 			label: "Upload"
 		})
 		.click(function() {
-			 interfaceMasterAttachmentsUploadProcess();
+			 ns1blankspaceAttachmentsUploadProcess();
 		})
 }
 
-function interfaceMasterAttachmentsUploadProcess(aParam)
+function ns1blankspaceAttachmentsUploadProcess(oParam)
 {
 	ns1blankspace.param = {};
-	if (aParam != undefined) {ns1blankspace.param = aParam};
+	if (oParam != undefined) {ns1blankspace.param = oParam};
 	
 	$('#spanInterfaceMainUploadStatus').html('Uploading..');
 	var oForm = document.frmonDemandFileUpload;
   	oForm.submit();
- 	interfaceMasterAttachmentsAddStatus();
-	ns1blankspace.timer.delay = setInterval('interfaceMasterAttachmentsAddStatus()', 1000);
+ 	ns1blankspaceAttachmentsAddStatus();
+	ns1blankspace.timer.delay = setInterval('ns1blankspaceAttachmentsAddStatus()', 1000);
 }
 
-function interfaceMasterAttachmentsAddStatus()
+function ns1blankspaceAttachmentsAddStatus()
 {
 	var oDivStatus = document.getElementById('divonDemandFileUploadStatus');
 	var oFrame = document.getElementById('ifonDemandUpload');
 	var sStatus;
 	var sCurrentState;
 
-	var fFunctionPostUpdate = interfaceMasterAttachments;
+	var fFunctionPostUpdate = ns1blankspaceAttachments;
 	
 	if (ns1blankspace.param != undefined)
 	{
@@ -1724,7 +1724,7 @@ function interfaceMasterAttachmentsAddStatus()
 	}
 }
 
-function interfaceMasterAttachmentsUpload(aParam)
+function ns1blankspaceAttachmentsUpload(oParam)
 {
 
 	var aHTML = [];
@@ -1740,17 +1740,17 @@ function interfaceMasterAttachmentsUpload(aParam)
 	var sXHTML = '';
 	var sHelpNotes;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.maxFiles != undefined) {iMaxFiles = aParam.maxFiles}
-		if (aParam.object != undefined || iObject == '') {iObject = aParam.object}
-		if (aParam.objectName != undefined) {sObjectName = aParam.objectName}
-		if (aParam.objectContext != undefined ) {lObjectContext = aParam.objectContext}
-		if (aParam.label != undefined) {sLabel = aParam.label}
-		if (aParam.attachmentType != undefined) {iAttachmentType = aParam.attachmentType}
-		if (aParam.showUpload != undefined) {bShowUpload = aParam.showUpload}
-		if (aParam.xhtml != undefined) {sXHTML = aParam.xhtml}
-		if (aParam.helpNotes != undefined) {sHelpNotes = aParam.helpNotes}
+		if (oParam.maxFiles != undefined) {iMaxFiles = oParam.maxFiles}
+		if (oParam.object != undefined || iObject == '') {iObject = oParam.object}
+		if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
+		if (oParam.objectContext != undefined ) {lObjectContext = oParam.objectContext}
+		if (oParam.label != undefined) {sLabel = oParam.label}
+		if (oParam.attachmentType != undefined) {iAttachmentType = oParam.attachmentType}
+		if (oParam.showUpload != undefined) {bShowUpload = oParam.showUpload}
+		if (oParam.xhtml != undefined) {sXHTML = oParam.xhtml}
+		if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
 	}	
 
 	aHTML[++h] = '<form name="frmonDemandFileUpload" action="/ondemand/attach/" ' +
@@ -1768,12 +1768,12 @@ function interfaceMasterAttachmentsUpload(aParam)
 	
 	if (sLabel != '') 
 	{
-		aHTML[++h] = '<div id="interfaceUploadLabel" class="interfaceMasterViewport">' + sLabel + '</div>';
+		aHTML[++h] = '<div id="interfaceUploadLabel" class="ns1blankspaceViewport">' + sLabel + '</div>';
 	}	
 		
 	for (var i = 0; i < iMaxFiles; i++) 	
 	{
-		aHTML[++h] = '<div id="interfaceUploadFile' + i + '" class="interfaceMasterUpload">' +
+		aHTML[++h] = '<div id="interfaceUploadFile' + i + '" class="ns1blankspaceUpload">' +
 						'<input class="interfaceMainUpload" type="file" name="oFile' + i + '" id="oFile' + i + '">' +
 						'</div>';
 	}
@@ -1781,7 +1781,7 @@ function interfaceMasterAttachmentsUpload(aParam)
 	if (bShowUpload)
 	{
 		aHTML[++h] = '<span id="spanInterfaceMainUpload" class="interfaceMainAction interfaceMainMarginTop"></span>';
-		aHTML[++h] = '<br /><br /><span id="spanInterfaceMainUploadStatus" class="interfaceMasterUpload"></span>';
+		aHTML[++h] = '<br /><br /><span id="spanInterfaceMainUploadStatus" class="ns1blankspaceUpload"></span>';
 	}	
 		
 	aHTML[++h] = '<iframe style="display:none;" name="ifonDemandUpload" id="ifonDemandUpload" class="interfaceUpload" frameborder="0"></iframe>' +
@@ -1791,7 +1791,7 @@ function interfaceMasterAttachmentsUpload(aParam)
 	
 }						
 
-function interfaceMasterViewportBrowse()
+function ns1blankspaceViewportBrowse()
 {
 
 	var aHTML = [];
@@ -1836,20 +1836,20 @@ function interfaceMasterViewportBrowse()
 	
 }
 
-function interfaceMasterViewportSetup()
+function ns1blankspaceViewportSetup()
 {
 
 	var aHTML = [];
 	var h = -1;
 	
-	$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
-	$('#divInterfaceMasterViewportControlSet').unbind('click');
+	$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+	$('#divns1blankspaceViewportControlSet').unbind('click');
 	
 	if (ns1blankspace.setupViewport)
 	{
 		ns1blankspace.setupViewport = false;
 		
-		$('#divInterfaceMasterViewportControlSet')
+		$('#divns1blankspaceViewportControlSet')
 		.button(
 		{
 			icons: 
@@ -1861,61 +1861,61 @@ function interfaceMasterViewportSetup()
 		})
 		.click(function() 
 		{
-			interfaceMasterViewportControlShow(this);
+			ns1blankspaceViewportControlShow(this);
 		});
 		
 		interfaceControlSetMasterViewport();
-		interfaceMasterHomeShow();
+		ns1blankspaceHomeShow();
 		
-		interfaceMasterStatus("")	
+		ns1blankspaceStatus("")	
 	}
 	else
 	{
 		ns1blankspace.setupViewport = true;
 
-		$('#divInterfaceMasterViewportControlSet')
+		$('#divns1blankspaceViewportControlSet')
 		.button(
 		{
 			label: ns1blankspace.option.defaultSetupViewport
 		})
 		.click(function() 
 		{
-			interfaceMasterViewportControlSetupShow(this);
+			ns1blankspaceViewportControlSetupShow(this);
 		});
 	
 		$('.divInterfaceViewportMain').html(interfaceControlSetupOptions);
 		
 		interfaceControlSetSetupMasterViewport();
 		
-		interfaceMasterStatus("Click icon again to return.")		
+		ns1blankspaceStatus("Click icon again to return.")		
 	}		
 }
 
-function interfaceMasterViewportControlSetupShow(oElement)
+function ns1blankspaceViewportControlSetupShow(oElement)
 {
 
 	var aHTML = [];
 	var h = -1;
 	
-	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
+	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
-		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		$('#divInterfaceMasterViewportControlOptions').html(interfaceControlSetupOptions());
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oElement.id);
+		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+		$('#divns1blankspaceViewportControlOptions').html(interfaceControlSetupOptions());
 			
 		interfaceControlSetupOptionsBind();
 	}	
 
 }
 
-function interfaceMasterHelpShow()
+function ns1blankspaceHelpShow()
 {
 	if (interfaceControlHelpURL() != '')
 	{
@@ -1927,11 +1927,11 @@ function interfaceMasterHelpShow()
 	}	
 }
 
-function interfaceMasterMainViewportShow(asDivID, bRefresh)
+function ns1blankspaceMainViewportShow(asDivID, bRefresh)
 {
 	if (bRefresh == undefined) {bRefresh = false}
 
-	$('#divInterfaceMasterViewportControlOptions').hide();
+	$('#divns1blankspaceViewportControlOptions').hide();
 	$('.divInterfaceViewportMain').hide();
 	$(asDivID).show(ns1blankspace.option.showSpeed);
 	ns1blankspace.xhtml.divID = asDivID;
@@ -1943,35 +1943,35 @@ function interfaceMasterMainViewportShow(asDivID, bRefresh)
 }
 
 
-function interfaceMasterMainViewportHideLoading(asDivID)
+function ns1blankspaceMainViewportHideLoading(asDivID)
 {
 	if (asDivID == undefined) {asDivID = ns1blankspace.xhtml.divID};
 
 	$(asDivID).removeClass("loading");
 }
 
-function interfaceMasterStatus(sStatus)
+function ns1blankspaceStatus(sStatus)
 {	
-	$('#divInterfaceMasterViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+	$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
 			'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
 }
 
-function interfaceMasterStatusWorking()
+function ns1blankspaceStatusWorking()
 {	
-	$('#divInterfaceMasterViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+	$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
 			'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + ns1blankspace.xhtml.loadingSmall + '</div></div>');
 }
 
-function interfaceMasterError(sError)
+function ns1blankspaceError(sError)
 {
 	if (sError == undefined) {sError = 'Error!'};
 	
-	$('#divInterfaceMasterViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+	$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
 			'<div style="display:table-cell; vertical-align:bottom; padding:5px; height:25px; color:white; background-color:red;">' + sError + '</div></div>');
 }
 
 
-function interfaceMasterElementEditStart(sElementId)
+function ns1blankspaceElementEditStart(sElementId)
 {
 	
 	var aSearch = sElementId.split('-');
@@ -2002,15 +2002,15 @@ function interfaceMasterElementEditStart(sElementId)
 	
 	$('#' + sElementInputId).blur(function(event)
 	{
-		interfaceMasterElementEditStop(sElementId);
+		ns1blankspaceElementEditStop(sElementId);
 	});
 	
 }
 
-function interfaceMasterElementEditStop(sElementId)
+function ns1blankspaceElementEditStop(sElementId)
 {
 	
-	interfaceMasterElementEditSave(sElementId);
+	ns1blankspaceElementEditSave(sElementId);
 	
 	var aSearch = sElementId.split('-');
 	var sHTML = $('#' + sElementId.replace('td', 'input')).val();
@@ -2019,7 +2019,7 @@ function interfaceMasterElementEditStop(sElementId)
 
 }
 
-function interfaceMasterElementEditSave(sElementId)
+function ns1blankspaceElementEditSave(sElementId)
 {
 
 	var aSearch = sElementId.split('-');
@@ -2037,46 +2037,46 @@ function interfaceMasterElementEditSave(sElementId)
 		type: 'GET',
 		url: '/directory/ondemand/object.asp?' + sParam,
 		dataType: 'text',
-		success: interfaceMasterStatus('Saved')
+		success: ns1blankspaceStatus('Saved')
 	});
 		
 }
 
-function interfaceMasterOptionsSetPosition(sElementId, iOffsetTop, iOffsetLeft)
+function ns1blankspaceOptionsSetPosition(sElementId, iOffsetTop, iOffsetLeft)
 {
 	var oElement = $('#' + sElementId)
 	
 	if (iOffsetTop == undefined) {iOffsetTop = 5}
 	if (iOffsetLeft == undefined) {iOffsetLeft = 0}
 	
-	$('#divInterfaceMasterViewportControlOptions').html('');
-	$('#divInterfaceMasterViewportControlOptions').show();
-	$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() + iOffsetTop, left: $(oElement).offset().left + iOffsetLeft});
+	$('#divns1blankspaceViewportControlOptions').html('');
+	$('#divns1blankspaceViewportControlOptions').show();
+	$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() + iOffsetTop, left: $(oElement).offset().left + iOffsetLeft});
 }
 
-function interfaceMasterOptionsPosition(aParam)
+function ns1blankspaceOptionsPosition(oParam)
 {
 
 	var sXHTMLElementID = '';
 	var iLeftOffset = 0;
 	var iTopOffset = 7;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.leftOffset != undefined) {iLeftOffset = aParam.leftOffset}
-		if (aParam.topOffset != undefined) {iTopOffset = aParam.topOffset}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.leftOffset != undefined) {iLeftOffset = oParam.leftOffset}
+		if (oParam.topOffset != undefined) {iTopOffset = oParam.topOffset}
 	}
 	
 	var oElement = $('#' + sXHTMLElementID)
 	
-	$('#divInterfaceMasterViewportControlOptions').html('');
-	$('#divInterfaceMasterViewportControlOptions').show();
-	$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
+	$('#divns1blankspaceViewportControlOptions').html('');
+	$('#divns1blankspaceViewportControlOptions').show();
+	$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
 }
 
 
-function interfaceMasterElementOptionsSearch(aParam, oResponse)
+function ns1blankspaceElementOptionsSearch(oParam, oResponse)
 {
 	var sXHTMLElementID;
 	var sXHTMLInputElementID;
@@ -2090,16 +2090,16 @@ function interfaceMasterElementOptionsSearch(aParam, oResponse)
 	var sColumns;
 	var iColumn = 0;
 		
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.xhtmlInputElementID != undefined) {sXHTMLInputElementID = aParam.xhtmlInputElementID}
-		if (aParam.xhtmlParentInputElementID != undefined) {sXHTMLParentInputElementID = aParam.xhtmlParentInputElementID}
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.method != undefined) {sMethod = aParam.method}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.sColumns != undefined) {sColumns = aParam.columns}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.xhtmlInputElementID != undefined) {sXHTMLInputElementID = oParam.xhtmlInputElementID}
+		if (oParam.xhtmlParentInputElementID != undefined) {sXHTMLParentInputElementID = oParam.xhtmlParentInputElementID}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.method != undefined) {sMethod = oParam.method}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.sColumns != undefined) {sColumns = oParam.columns}
 	}
 	
 	if (sXHTMLElementID != undefined)
@@ -2108,7 +2108,7 @@ function interfaceMasterElementOptionsSearch(aParam, oResponse)
 		sXHTMLInputElementID = aXHTMLElementID[0];
 		iXHTMLElementContextID = aXHTMLElementID[1];
 	
-		$.extend(true, aParam, {xhtmlInputElementID: sXHTMLInputElementID});
+		$.extend(true, oParam, {xhtmlInputElementID: sXHTMLInputElementID});
 	
 		if (sMethod == undefined)
 		{
@@ -2120,13 +2120,13 @@ function interfaceMasterElementOptionsSearch(aParam, oResponse)
 		{
 			sColumns = $('#' + sXHTMLInputElementID).attr("onDemandColumns");
 			if (sColumns == undefined) {sColumns = $('#' + sXHTMLInputElementID).attr("data-columns")}
-			if (sColumns != undefined) {$.extend(true, aParam, {columns: sColumns})};	
+			if (sColumns != undefined) {$.extend(true, oParam, {columns: sColumns})};	
 		}
 		
 		if (sXHTMLParentInputElementID == undefined)
 		{
 			sXHTMLParentInputElementID = $('#' + sXHTMLInputElementID).attr("data-parent")
-			if (sXHTMLParentInputElementID != undefined) {$.extend(true, aParam, {xhtmlParentInputElementID: sXHTMLParentInputElementID})};	
+			if (sXHTMLParentInputElementID != undefined) {$.extend(true, oParam, {xhtmlParentInputElementID: sXHTMLParentInputElementID})};	
 		}
 	}	
 	
@@ -2135,13 +2135,13 @@ function interfaceMasterElementOptionsSearch(aParam, oResponse)
 		$('#' + sXHTMLInputElementID).val($('#' + sXHTMLElementID).html())
 		$('#' + sXHTMLInputElementID).attr("onDemandID", iXHTMLElementContextID)
 		$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
 		if (oResponse == undefined)
 		{
-			interfaceMasterOptionsSetPosition(sXHTMLInputElementID);
+			ns1blankspaceOptionsSetPosition(sXHTMLInputElementID);
 			
 			if (sColumns == undefined) {sColumns = 'title'};
 			
@@ -2176,7 +2176,7 @@ function interfaceMasterElementOptionsSearch(aParam, oResponse)
 				}
 				
 				oSearch.sort(aColumns[0], 'asc');
-				oSearch.getResults(function(data){interfaceMasterElementOptionsSearch(aParam, data)});
+				oSearch.getResults(function(data){ns1blankspaceElementOptionsSearch(oParam, data)});
 			}
 		}	
 		else
@@ -2187,7 +2187,7 @@ function interfaceMasterElementOptionsSearch(aParam, oResponse)
 			
 			if (oResponse.data.rows.length == 0)
 			{
-				$('#divInterfaceMasterViewportControlOptions').hide();
+				$('#divns1blankspaceViewportControlOptions').hide();
 			}
 			else
 			{
@@ -2242,35 +2242,35 @@ function interfaceMasterElementOptionsSearch(aParam, oResponse)
     	
 				aHTML[++h] = '</tbody></table>';
 	
-				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+				$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+				$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 			
 				$('td.interfaceSearch').click(function(event)
 				{
-					$('#divInterfaceMasterViewportControlOptions').hide(200);
-					$.extend(true, aParam, {xhtmlElementID: event.target.id})
-					interfaceMasterElementOptionsSearch(aParam);
+					$('#divns1blankspaceViewportControlOptions').hide(200);
+					$.extend(true, oParam, {xhtmlElementID: event.target.id})
+					ns1blankspaceElementOptionsSearch(oParam);
 				});
 			}	
 		}
 	}		
 }
 
-function interfaceMasterSearchStart(sElementId)
+function ns1blankspaceSearchStart(sElementId)
 {
-	sElementId = 'divInterfaceMasterViewportControlSearchStatus';
+	sElementId = 'divns1blankspaceViewportControlSearchStatus';
 	$('#' + sElementId).show();
 	$('#' + sElementId).html(ns1blankspace.xhtml.loadingSmall);
 }
 
-function interfaceMasterSearchStop(sElementId)
+function ns1blankspaceSearchStop(sElementId)
 {
-	sElementId = 'divInterfaceMasterViewportControlSearchStatus';
+	sElementId = 'divns1blankspaceViewportControlSearchStatus';
 	$('#' + sElementId).hide()
 	$('#' + sElementId).html('');
 }
 
-function interfaceMasterSave(sParam, sData, sSuccessMessage)
+function ns1blankspaceSave(sParam, sData, sSuccessMessage)
 {
 	if (sParam == undefined) {sParam = ''};
 	
@@ -2283,28 +2283,28 @@ function interfaceMasterSave(sParam, sData, sSuccessMessage)
 		data: sData,
 		dataType: 'json',
 		async: false,
-		success: function(data) { interfaceMasterSaveSuccess(data, sSuccessMessage)}
+		success: function(data) { ns1blankspaceSaveSuccess(data, sSuccessMessage)}
 	});
 }
 
-function interfaceMasterSaveSuccess(data, sSuccessMessage)
+function ns1blankspaceSaveSuccess(data, sSuccessMessage)
 {
 	oResponse = data;
 	
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus(sSuccessMessage);
+		ns1blankspaceStatus(sSuccessMessage);
 		ns1blankspace.objectSaveId =  oResponse.id;
 	}
 	else
 	{
-		interfaceMasterStatus(oResponse.error.errornotes);
+		ns1blankspaceStatus(oResponse.error.errornotes);
 		ns1blankspace.objectSaveId =  -1;
 		return '';
 	}
 }
 
-function interfaceMasterJSONGetData(aoJSON, asElement, aiRow)
+function ns1blankspaceJSONGetData(aoJSON, asElement, aiRow)
 {
 	aoJSON = (aoJSON == undefined)?'':aoJSON;
 	asElement = (asElement == undefined)?'':asElement;
@@ -2320,7 +2320,7 @@ function interfaceMasterJSONGetData(aoJSON, asElement, aiRow)
 	{	return '';}
 }
 
-function interfaceMasterTF2OnOff(bValue)
+function ns1blankspaceTF2OnOff(bValue)
 {
 	if (bValue == undefined) {bValue = false}
 	
@@ -2335,7 +2335,7 @@ function interfaceMasterTF2OnOff(bValue)
 	
 }
 
-function interfaceMasterOnOff2TF(sValue)
+function ns1blankspaceOnOff2TF(sValue)
 {
 	if (sValue == undefined) {sValue = '0'}
 	
@@ -2350,7 +2350,7 @@ function interfaceMasterOnOff2TF(sValue)
 	
 }
 
-function interfaceMasterTF2YN(bValue)
+function ns1blankspaceTF2YN(bValue)
 {
 	if (bValue == undefined) {bValue = false}
 	
@@ -2365,7 +2365,7 @@ function interfaceMasterTF2YN(bValue)
 	
 }
 
-function interfaceMasterYN2TF(sValue)
+function ns1blankspaceYN2TF(sValue)
 {
 	if (sValue == undefined) {sValue = 'N'}
 	
@@ -2380,7 +2380,7 @@ function interfaceMasterYN2TF(sValue)
 	
 }
 
-function interfaceMasterFormatSave(sValue)
+function ns1blankspaceFormatSave(sValue)
 {
 
 	if (sValue == undefined || sValue == 'undefined') { sValue = ''; }
@@ -2389,7 +2389,7 @@ function interfaceMasterFormatSave(sValue)
 
 }
 
-function interfaceMasterAddressSearch(sXHTMLElementID, aParam)
+function ns1blankspaceAddressSearch(sXHTMLElementID, oParam)
 {
 	
 	var aSearch = sXHTMLElementID.split('-');
@@ -2401,16 +2401,16 @@ function interfaceMasterAddressSearch(sXHTMLElementID, aParam)
 		$('#' + ns1blankspace.xhtml.divID).val(aSearch[2])
 		$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'State')).val(aSearch[3])
 		$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'PostCode')).val(aSearch[4])
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
 		var sParam = '/ondemand/core/?method=CORE_ADDRESS_SEARCH&rf=XML';
 		var sData = '';
 		
-		interfaceMasterOptionsSetPosition(sXHTMLElementID)
+		ns1blankspaceOptionsSetPosition(sXHTMLElementID)
 		
-		//sData += '&postpcde=' + encodeURIComponent((aParam.postcode==undefined?'':aParam.postcode));
+		//sData += '&postpcde=' + encodeURIComponent((oParam.postcode==undefined?'':oParam.postcode));
 		
 		sData += 'suburblike=' + encodeURIComponent($('#' + ns1blankspace.xhtml.divID).val());
 
@@ -2420,12 +2420,12 @@ function interfaceMasterAddressSearch(sXHTMLElementID, aParam)
 			url: sParam,
 			data: sData,
 			dataType: 'json',
-			success: interfaceMasterAddressSearchShow
+			success: ns1blankspaceAddressSearchShow
 		});
 	}
 }
 
-function interfaceMasterAddressSearchShow(oResponse)
+function ns1blankspaceAddressSearchShow(oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -2434,7 +2434,7 @@ function interfaceMasterAddressSearchShow(oResponse)
 			
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -2466,19 +2466,19 @@ function interfaceMasterAddressSearchShow(oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 	
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(200);
-			interfaceMasterAddressSearch(event.target.id);
+			$('#divns1blankspaceViewportControlOptions').hide(200);
+			ns1blankspaceAddressSearch(event.target.id);
 		});
 	}	
 			
 }
 
-function interfaceMasterContactEmailSearch(sXHTMLElementID, aParam)
+function ns1blankspaceContactEmailSearch(sXHTMLElementID, oParam)
 {
 
 	var iSource = ns1blankspace.data.searchSource.text;
@@ -2490,16 +2490,16 @@ function interfaceMasterContactEmailSearch(sXHTMLElementID, aParam)
 	var sParentSearchId;
 	var sSetXHTMLElementId;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.method != undefined) {sMethod = aParam.method}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
-		if (aParam.emailOnly != undefined) {bEmailOnly = aParam.emailOnly}
-		if (aParam.contactBusiness != undefined) {sParentSearchId = aParam.contactBusiness}
-		if (aParam.setXHTMLElementID != undefined) {sSetXHTMLElementId = aParam.setXHTMLElementID}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.method != undefined) {sMethod = oParam.method}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
+		if (oParam.emailOnly != undefined) {bEmailOnly = oParam.emailOnly}
+		if (oParam.contactBusiness != undefined) {sParentSearchId = oParam.contactBusiness}
+		if (oParam.setXHTMLElementID != undefined) {sSetXHTMLElementId = oParam.setXHTMLElementID}
 	}
 
 	var aSearch = sXHTMLElementID.split('---');
@@ -2551,12 +2551,12 @@ function interfaceMasterContactEmailSearch(sXHTMLElementID, aParam)
 		
 		$('#' + sParentElementId).attr("onDemandID", aSearch[4])
 		$('#' + sParentElementId).val(aSearch[5])
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
 	
-		interfaceMasterOptionsSetPosition(sXHTMLElementID);
+		ns1blankspaceOptionsSetPosition(sXHTMLElementID);
 	
 		if (sSearchText == undefined) {sSearchText = ''};
 			
@@ -2598,13 +2598,13 @@ function interfaceMasterContactEmailSearch(sXHTMLElementID, aParam)
 			
 			oSearch.rf = 'JSON';
 		
-			oSearch.getResults(function (data) {interfaceMasterContactEmailSearchShow(data, sElementId, aParam)}) 
+			oSearch.getResults(function (data) {ns1blankspaceContactEmailSearchShow(data, sElementId, oParam)}) 
 						
 		}
 	};	
 }
 
-function interfaceMasterContactEmailSearchShow(oResponse, sElementId, aParam)
+function ns1blankspaceContactEmailSearchShow(oResponse, sElementId, oParam)
 {
 
 	var iColumn = 0;
@@ -2615,7 +2615,7 @@ function interfaceMasterContactEmailSearchShow(oResponse, sElementId, aParam)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -2658,7 +2658,7 @@ function interfaceMasterContactEmailSearchShow(oResponse, sElementId, aParam)
     	
 		aHTML[++h] = '</tbody></table>';
 	
-		$('#divInterfaceMasterViewportControlOptions').html(interfaceMasterPagination(
+		$('#divns1blankspaceViewportControlOptions').html(ns1blankspacePagination(
 			{
 				html: aHTML.join(''),
 				more: (oResponse.morerows == 'true'),
@@ -2667,21 +2667,21 @@ function interfaceMasterContactEmailSearchShow(oResponse, sElementId, aParam)
 			})	
 		);
 	
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(200);
-			interfaceMasterContactEmailSearch(event.target.id, aParam);
+			$('#divns1blankspaceViewportControlOptions').hide(200);
+			ns1blankspaceContactEmailSearch(event.target.id, oParam);
 		});
 		
-		interfaceMasterPaginationBind(
+		ns1blankspacePaginationBind(
 		{
 			columns: 'firstname-surname-email-contactbusinesstext',
 			idColumns: 'firstname-surname-contactbusiness-contactbusinesstext-email',
 			more: oResponse.moreid, 
 			bodyClass: 'interfaceSearchLarge',
-			functionSearch: interfaceMasterContactEmailSearch,
+			functionSearch: ns1blankspaceContactEmailSearch,
 			xhtmlElementId: sElementId,
 			idSeperator: '---',
 			type: 'JSON'
@@ -2690,7 +2690,7 @@ function interfaceMasterContactEmailSearchShow(oResponse, sElementId, aParam)
 			
 }
 
-function interfaceMasterPagination(aParam)
+function ns1blankspacePagination(oParam)
 {
 
 	var aHTML = [];
@@ -2699,10 +2699,10 @@ function interfaceMasterPagination(aParam)
 	var sHTML = '';
 	var bMore = false;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.html != undefined) {sHTML = aParam.html}
-		if (aParam.more != undefined) {bMore = aParam.more}
+		if (oParam.html != undefined) {sHTML = oParam.html}
+		if (oParam.more != undefined) {bMore = oParam.more}
 	}
 
 	
@@ -2719,7 +2719,7 @@ function interfaceMasterPagination(aParam)
 	aHTML[++h] = '</tr>';
 	aHTML[++h] = '</tbody></table>';
 		
-	aHTML[++h] = '<div id="divInterfaceMasterSearch-0" class="interfaceMasterSearchPage">';
+	aHTML[++h] = '<div id="divns1blankspaceSearch-0" class="ns1blankspaceSearchPage">';
 				
 	aHTML[++h] = sHTML;
 
@@ -2742,15 +2742,15 @@ function interfaceMasterPagination(aParam)
 		
 }
 
-function interfaceMasterPaginationBind(aParam)
+function ns1blankspacePaginationBind(oParam)
 {
-	var fFunctionMore = interfaceMasterPaginationShowMore;
+	var fFunctionMore = ns1blankspacePaginationShowMore;
 	var iMore;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.functionMore != undefined) {fFunctionMore = aParam.functionMore}
-		if (aParam.more != undefined) {iMore = aParam.more}
+		if (oParam.functionMore != undefined) {fFunctionMore = oParam.functionMore}
+		if (oParam.more != undefined) {iMore = oParam.more}
 	}
 	
 	$('#spanInterfaceSearchHeaderClose').button( {
@@ -2760,8 +2760,8 @@ function interfaceMasterPaginationBind(aParam)
 				}
 			})
 			.click(function() {
-				$('#divInterfaceMasterViewportControlOptions').slideUp(1000);
-				$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
+				$('#divns1blankspaceViewportControlOptions').slideUp(1000);
+				$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
 			})
 			.css('width', '15px')
 			.css('height', '16px')
@@ -2773,19 +2773,19 @@ function interfaceMasterPaginationBind(aParam)
 				}
 			})
 			.click(function() {
-				(aParam != undefined?aParam.more = iMore:aParam = {more: iMore})
-				fFunctionMore(aParam);
+				(oParam != undefined?oParam.more = iMore:oParam = {more: iMore})
+				fFunctionMore(oParam);
 			})
 			.css('width', '15px')
 			.css('height', '16px')
 		
 	$('.interfaceSearchFooterPage').click(function(event)
 	{
-		interfaceMasterPaginationShowPage(this.id);
+		ns1blankspacePaginationShowPage(this.id);
 	});
 }
 
-function interfaceMasterPaginationShowMore(aParam, oResponse)
+function ns1blankspacePaginationShowMore(oParam, oResponse)
 {
 	
 	var sXHTMLElementID = '';
@@ -2803,19 +2803,19 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 	var sBodyClass = 'interfaceSearchMedium';
 	var sIDSeperator = '-';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.more != undefined) {iMore = aParam.more}
-		if (aParam.startRow != undefined) {iStartRow = aParam.startRow}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementID = aParam.xhtmlElementId}
-		if (aParam.columns != undefined) {sColumns = aParam.columns}
-		if (aParam.idColumns != undefined) {sIDColumns = aParam.idColumns}
-		if (aParam.functionSearch != undefined) {fFunctionSearch = aParam.functionSearch}
-		if (aParam.functionClass != undefined) {fFunctionClass = aParam.functionClass}
-		if (aParam.idAdditional != undefined) {sIdAdditional = aParam.idAdditional}
-		if (aParam.bodyClass != undefined) {sBodyClass = aParam.bodyClass}
-		if (aParam.idSeperator != undefined) {sIDSeperator = aParam.idSeperator}
+		if (oParam.more != undefined) {iMore = oParam.more}
+		if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementID = oParam.xhtmlElementId}
+		if (oParam.columns != undefined) {sColumns = oParam.columns}
+		if (oParam.idColumns != undefined) {sIDColumns = oParam.idColumns}
+		if (oParam.functionSearch != undefined) {fFunctionSearch = oParam.functionSearch}
+		if (oParam.functionClass != undefined) {fFunctionClass = oParam.functionClass}
+		if (oParam.idAdditional != undefined) {sIdAdditional = oParam.idAdditional}
+		if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
+		if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
 		
 	}
 	
@@ -2840,7 +2840,7 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 				url: '/ondemand/core/?' + sParam,
 				data: sData,
 				dataType: 'json',
-				success: function(data){interfaceMasterPaginationShowMore(aParam, data)}
+				success: function(data){ns1blankspacePaginationShowMore(oParam, data)}
 			});
 		}
 		else
@@ -2848,9 +2848,9 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 			var aHTML = [];
 			var h = -1;
 		
-			if ($('#divInterfaceMasterSearch-' + iStartRow).length == 0)
+			if ($('#divns1blankspaceSearch-' + iStartRow).length == 0)
 			{
-				aHTML[++h] = '<div id="divInterfaceMasterSearch-' + iStartRow + '" class="interfaceMasterSearchPage">';
+				aHTML[++h] = '<div id="divns1blankspaceSearch-' + iStartRow + '" class="ns1blankspaceSearchPage">';
 			
 				aHTML[++h] = '<table border="0" class="' + sBodyClass + '">';
 				aHTML[++h] = '<tbody>'
@@ -2868,13 +2868,13 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 					$('#spanInterfaceSearchHeaderMore').hide();
 				}	
 				
-				aParam.startRow = iStartRow + iRows;	
+				oParam.startRow = iStartRow + iRows;	
 					
 				$('#tdInterfaceSearchFooterMore').unbind('click');
 					
 				$('#tdInterfaceSearchFooterMore').click(function(event)
 				{
-					interfaceAuditSearchAdd(aParam);
+					interfaceAuditSearchAdd(oParam);
 				});	
 						
 				$.each(oResponse.data.rows, function()
@@ -2936,13 +2936,13 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 				
 				aHTML[++h] = '</div>';
 				
-				$('.interfaceMasterSearchPage').hide();
-				$('.interfaceMasterSearchPage:last').after(aHTML.join(''));
+				$('.ns1blankspaceSearchPage').hide();
+				$('.ns1blankspaceSearchPage:last').after(aHTML.join(''));
 				
 				$('td.interfaceSearch').click(function(event)
 				{
-					$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-					$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+					$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 					fFunctionSearch(event.target.id, {source: 1});
 				});
 						
@@ -2955,24 +2955,24 @@ function interfaceMasterPaginationShowMore(aParam, oResponse)
 		
 			$('.interfaceSearchFooterPage').click(function(event)
 			{
-				interfaceMasterPaginationShowPage(this.id);
+				ns1blankspacePaginationShowPage(this.id);
 			});
 		
 		}
 	}
 }	
 
-function interfaceMasterPaginationShowPage(sXHTMLElementID)
+function ns1blankspacePaginationShowPage(sXHTMLElementID)
 {
 
 	var aElement = sXHTMLElementID.split('-');
 	
-	$('.interfaceMasterSearchPage').hide();
-	$('#divInterfaceMasterSearch-' + aElement[1]).show();
+	$('.ns1blankspaceSearchPage').hide();
+	$('#divns1blankspaceSearch-' + aElement[1]).show();
 	
 }
 
-function interfaceMasterActions(aParam)
+function ns1blankspaceActions(oParam)
 {
 
 	var sXHTMLElementID;
@@ -2986,23 +2986,23 @@ function interfaceMasterActions(aParam)
 	var sContactBusinessText;
 	var sContactPersonText;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.object != undefined) {iObject = aParam.object}
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.objectName != undefined) {sObjectName = aParam.objectName}
-		if (aParam.showAdd != undefined) {bShowAdd = aParam.showAdd}
-		if (aParam.actionType != undefined ) {iActionType = aParam.actionType}
-		if (aParam.xhtmlElementID != undefined ) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
-		if (aParam.contactBusiness != undefined) {iContactBusiness = aParam.contactBusiness}
-		if (aParam.contactPerson != undefined) {iContactPerson = aParam.contactPerson}
-		if (aParam.contactBusinessText != undefined) {sContactBusinessText = aParam.contactBusinessText}
-		if (aParam.contactPersonText != undefined) {sContactPersonText = aParam.contactPersonText}
+		if (oParam.object != undefined) {iObject = oParam.object}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
+		if (oParam.showAdd != undefined) {bShowAdd = oParam.showAdd}
+		if (oParam.actionType != undefined ) {iActionType = oParam.actionType}
+		if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
+		if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
+		if (oParam.contactPerson != undefined) {iContactPerson = oParam.contactPerson}
+		if (oParam.contactBusinessText != undefined) {sContactBusinessText = oParam.contactBusinessText}
+		if (oParam.contactPersonText != undefined) {sContactPersonText = oParam.contactPersonText}
 	}	
 	else
 	{
-		aParam = {};
+		oParam = {};
 	}
 	
 	if (oActions.add)
@@ -3036,9 +3036,9 @@ function interfaceMasterActions(aParam)
 		
 		$('#tdInterfaceMainActionsColumn2').html(aHTML.join(''));
 	
-		aParam.xhtmlElementID = 'spanInterfaceMainActionsAdd';
-		aParam.offsetHeight = -30;
-		aParam.offsetLeft = -305;
+		oParam.xhtmlElementID = 'spanInterfaceMainActionsAdd';
+		oParam.offsetHeight = -30;
+		oParam.offsetLeft = -305;
 		
 		$('#spanInterfaceMainActionsAdd').button(
 		{
@@ -3072,13 +3072,13 @@ function interfaceMasterActions(aParam)
 			type: 'GET',
 			url: '/ondemand/action/?rows=' + ns1blankspace.option.defaultRows + '&' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceMasterActionsShow(data, sXHTMLElementID, aParam)}
+			success: function(data) {ns1blankspaceActionsShow(data, sXHTMLElementID, oParam)}
 		});	
 	}
 
 }
 
-function interfaceMasterActionsShow(oResponse, sXHTMLElementID, aParam)
+function ns1blankspaceActionsShow(oResponse, sXHTMLElementID, oParam)
 {	
 	var aHTML = [];
 	var h = -1;
@@ -3130,7 +3130,7 @@ function interfaceMasterActionsShow(oResponse, sXHTMLElementID, aParam)
     	
 		aHTML[++h] = '</tbody></table>';
 		
-		interfaceMasterPaginationList(
+		ns1blankspacePaginationList(
 		   {
 			xhtmlElementID: sXHTMLElementID,
 			xhtmlContext: 'Action',
@@ -3139,7 +3139,7 @@ function interfaceMasterActionsShow(oResponse, sXHTMLElementID, aParam)
 			columns: 'subject-actiondate',
 			more: this.moreid,
 			rows: ns1blankspace.option.defaultRows,
-			functionSearch: interfaceMasterActions,
+			functionSearch: ns1blankspaceActions,
 			functionOpen: "interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)"
 		   }); 
 		
@@ -3159,16 +3159,16 @@ function interfaceMasterActionsShow(oResponse, sXHTMLElementID, aParam)
 	}
 }
 
-function interfaceMasterConfirm(aParam)
+function ns1blankspaceConfirm(oParam)
 {
 
 	var aHTML = [];
 	var sTitle = '';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.html != undefined) {aHTML = aParam.html}
-		if (aParam.title != undefined) {sTitle = aParam.title}
+		if (oParam.html != undefined) {aHTML = oParam.html}
+		if (oParam.title != undefined) {sTitle = oParam.title}
 	}	
 	
 	$('#divInterfaceDialog').html(aHTML.join(''));
@@ -3188,7 +3188,7 @@ function interfaceMasterConfirm(aParam)
 		});
 }
 
-function interfaceMasterActionAddShow(aParam, oResponse)
+function ns1blankspaceActionAddShow(oParam, oResponse)
 {
 	var iActionID = -1;
 	var dStartDate = new Date();
@@ -3197,24 +3197,24 @@ function interfaceMasterActionAddShow(aParam, oResponse)
 	var iOffsetHeight = 5;
 	var iOffsetLeft = 0;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.actionID != undefined) {iActionID = aParam.actionID};
-		if (aParam.startDate != undefined) {dStartDate = aParam.startDate};
-		if (aParam.endDate != undefined) {dEndDate = aParam.endDate};
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID};
-		if (aParam.offsetHeight != undefined) {iOffsetHeight = aParam.offsetHeight};
-		if (aParam.offsetLeft != undefined) {iOffsetLeft = aParam.offsetLeft};
+		if (oParam.actionID != undefined) {iActionID = oParam.actionID};
+		if (oParam.startDate != undefined) {dStartDate = oParam.startDate};
+		if (oParam.endDate != undefined) {dEndDate = oParam.endDate};
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID};
+		if (oParam.offsetHeight != undefined) {iOffsetHeight = oParam.offsetHeight};
+		if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft};
 	}	
 
-	if ($('#divInterfaceMasterDialog').attr('onDemandSource') == sXHTMLElementID)
+	if ($('#divns1blankspaceDialog').attr('onDemandSource') == sXHTMLElementID)
 	{
-		$('#divInterfaceMasterDialog').hide("slide", { direction: "right" }, 500);
-		$('#divInterfaceMasterDialog').attr('onDemandSource', '');
+		$('#divns1blankspaceDialog').hide("slide", { direction: "right" }, 500);
+		$('#divns1blankspaceDialog').attr('onDemandSource', '');
 	}
 	else
 	{
-		$('#divInterfaceMasterDialog').attr('onDemandSource', sXHTMLElementID);
+		$('#divns1blankspaceDialog').attr('onDemandSource', sXHTMLElementID);
 	
 		if (iActionID != -1 && oResponse == undefined)
 		{
@@ -3225,7 +3225,7 @@ function interfaceMasterActionAddShow(aParam, oResponse)
 				type: 'GET',
 				url: '/ondemand/action/?' + sParam,
 				dataType: 'json',
-				success: function(data) {interfaceMasterActionAddShow(aParam, data)}
+				success: function(data) {ns1blankspaceActionAddShow(oParam, data)}
 			});	
 		}
 		else
@@ -3233,7 +3233,7 @@ function interfaceMasterActionAddShow(aParam, oResponse)
 			var aHTML = [];
 			var h = -1;
 			
-			aHTML[++h] = '<table id="tableInterfaceMasterActionAdd" class="interfaceDialogMedium">';
+			aHTML[++h] = '<table id="tablens1blankspaceActionAdd" class="interfaceDialogMedium">';
 			
 			aHTML[++h] = '<tr id="trInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
 								'<td id="tdInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
@@ -3241,7 +3241,7 @@ function interfaceMasterActionAddShow(aParam, oResponse)
 								
 			if (iActionID == -1)
 			{	
-				aHTML[++h] = ' interfaceMasterWatermark" value="Subject">';
+				aHTML[++h] = ' ns1blankspaceWatermark" value="Subject">';
 			}
 			else
 			{
@@ -3250,12 +3250,12 @@ function interfaceMasterActionAddShow(aParam, oResponse)
 			
 			aHTML[++h] = '</td></tr>';
 			
-			aHTML[++h] = '<tr><td id="tdInterfaceMasterActionAddDescriptionValue" class="interfaceMain">' +
-								'<textarea rows="5" cols="35" id="inputInterfaceMasterActionAddDescription" class="inputInterfaceMainTextMultiSmall';
+			aHTML[++h] = '<tr><td id="tdns1blankspaceActionAddDescriptionValue" class="interfaceMain">' +
+								'<textarea rows="5" cols="35" id="inputns1blankspaceActionAddDescription" class="inputInterfaceMainTextMultiSmall';
 
 			if (iActionID == -1)
 			{	
-				aHTML[++h] = ' interfaceMasterWatermark">Add more text here, if required.</textarea>';
+				aHTML[++h] = ' ns1blankspaceWatermark">Add more text here, if required.</textarea>';
 			}
 			else
 			{
@@ -3264,32 +3264,32 @@ function interfaceMasterActionAddShow(aParam, oResponse)
 
 			aHTML[++h] = '</td></tr>';
 
-			aHTML[++h] = '<tr id="trInterfaceMasterActionAddBusiness" class="interfaceMain">' +
-								'<td id="tdInterfaceMasterActionAddBusiness" class="interfaceMain">' +
+			aHTML[++h] = '<tr id="trns1blankspaceActionAddBusiness" class="interfaceMain">' +
+								'<td id="tdns1blankspaceActionAddBusiness" class="interfaceMain">' +
 								'Business' +
 								'</td></tr>' +
-								'<tr id="trInterfaceMasterActionAddBusinessValue" class="interfaceMainSelect">' +
-								'<td id="tdInterfaceMasterActionAddBusinessValue" class="interfaceMainSelect">' +
-								'<input id="inputInterfaceMasterActionAddBusiness" class="inputInterfaceMainSelect"' +
+								'<tr id="trns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
+								'<td id="tdns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
+								'<input id="inputns1blankspaceActionAddBusiness" class="inputInterfaceMainSelect"' +
 									' onDemandMethod="/ondemand/contact/?method=CONTACT_BUSINESS_SEARCH"' +
 									' onDemandColumns="tradename">' +
 								'</td></tr>';
 								
 			
-			aHTML[++h] = '<tr id="trInterfaceMasterActionAddPerson" class="interfaceMain">' +
-								'<td id="tdInterfaceMasterActionAddPerson" class="interfaceMain">' +
+			aHTML[++h] = '<tr id="trns1blankspaceActionAddPerson" class="interfaceMain">' +
+								'<td id="tdns1blankspaceActionAddPerson" class="interfaceMain">' +
 								'Person' +
 								'</td></tr>' +
-								'<tr id="trInterfaceMasterActionAddPersonValue" class="interfaceMainSelect">' +
-								'<td id="tdInterfaceMasterActionAddPersonValue" class="interfaceMainSelect">' +
-								'<input id="inputInterfaceMasterActionAddPerson" class="inputInterfaceMainSelectContact"' +
+								'<tr id="trns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
+								'<td id="tdns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
+								'<input id="inputns1blankspaceActionAddPerson" class="inputInterfaceMainSelectContact"' +
 									' onDemandMethod="/ondemand/contact/?method=CONTACT_PERSON_SEARCH"' +
-									' onDemandParent="inputInterfaceMasterActionAddBusiness">' +
+									' onDemandParent="inputns1blankspaceActionAddBusiness">' +
 								'</td></tr>';									
 								
 								
-			aHTML[++h] = '<tr><td id="tdInterfaceMasterActionAddHighPriority" class="interfaceMain">' +
-								'<input type="checkbox" id="inputInterfaceMasterActionAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>';
+			aHTML[++h] = '<tr><td id="tdns1blankspaceActionAddHighPriority" class="interfaceMain">' +
+								'<input type="checkbox" id="inputns1blankspaceActionAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>';
 								
 				
 			aHTML[++h] = '<tr><td>';
@@ -3309,14 +3309,14 @@ function interfaceMasterActionAddShow(aParam, oResponse)
 			
 			var oElement = $('#' + sXHTMLElementID)
 			
-			$('#divInterfaceMasterDialog').html('');
-			$('#divInterfaceMasterDialog').show();
-			$('#divInterfaceMasterDialog').offset(
+			$('#divns1blankspaceDialog').html('');
+			$('#divns1blankspaceDialog').show();
+			$('#divns1blankspaceDialog').offset(
 				{
 					top: $(oElement).offset().top + $(oElement).height() + iOffsetHeight,
 					left: $(oElement).offset().left + iOffsetLeft
 				});
-			$('#divInterfaceMasterDialog').html(aHTML.join(''));
+			$('#divns1blankspaceDialog').html(aHTML.join(''));
 			
 			$('#spanCancel').button(
 				{
@@ -3326,8 +3326,8 @@ function interfaceMasterActionAddShow(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					$('#divInterfaceMasterDialog').slideUp(500);
-					$('#divInterfaceMasterDialog').html('');
+					$('#divns1blankspaceDialog').slideUp(500);
+					$('#divns1blankspaceDialog').html('');
 				})
 				.css('width', '20px')
 				.css('height', '20px')
@@ -3352,8 +3352,8 @@ function interfaceMasterActionAddShow(aParam, oResponse)
 							calendarXHTMLElementID: 'divInterfaceMainCalendar'
 							});
 					
-					$('#divInterfaceMasterDialog').slideUp(500);
-					$('#divInterfaceMasterDialog').html('');
+					$('#divns1blankspaceDialog').slideUp(500);
+					$('#divns1blankspaceDialog').html('');
 
 				})
 				.css('width', '30px')
@@ -3371,7 +3371,7 @@ function interfaceMasterActionAddShow(aParam, oResponse)
 	}
 }
 
-function interfaceMasterFormatXHTML(sXHTML)
+function ns1blankspaceFormatXHTML(sXHTML)
 {
 	var sTmp = sXHTML;
 	
@@ -3387,16 +3387,16 @@ function interfaceMasterFormatXHTML(sXHTML)
 	return sTmp
 }
 
-function interfaceMasterViewportActionShow(oElement, sActionXHTML, sFunctionActionBind)
+function ns1blankspaceViewportActionShow(oElement, sActionXHTML, sFunctionActionBind)
 {
 
 	var aHTML = [];
 	var h = -1;
 
-	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oElement.id)
+	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oElement.id)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{	
@@ -3405,18 +3405,18 @@ function interfaceMasterViewportActionShow(oElement, sActionXHTML, sFunctionActi
 			ns1blankspace.xhtml.masterControl = interfaceControlOptions();
 		}
 
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oElement.id);
-		$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		$('#divInterfaceMasterViewportControlOptions').html(sActionXHTML);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oElement.id);
+		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+		$('#divns1blankspaceViewportControlOptions').html(sActionXHTML);
 		
 		if (sFunctionActionBind != undefined)
 			{eval(sFunctionActionBind)}
 	}	
 }
 
-function interfaceMasterPaginationList(aParam)
+function ns1blankspacePaginationList(oParam)
 {
 	var aHTML = [];
 	var h = -1;
@@ -3430,30 +3430,30 @@ function interfaceMasterPaginationList(aParam)
 	var bShowList = true;
 	var sXHTMLContext = '';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtml != undefined) {sHTML = aParam.xhtml}
-		if (aParam.showMore != undefined) {bMore = aParam.showMore}
-		if (aParam.more != undefined) {iMore = aParam.more}
-		if (aParam.startRow != undefined) {iStartRow = aParam.startRow}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.showList != undefined) {bShowList = aParam.showList}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.xhtmlContext != undefined) {sXHTMLContext = aParam.xhtmlContext}
+		if (oParam.xhtml != undefined) {sHTML = oParam.xhtml}
+		if (oParam.showMore != undefined) {bMore = oParam.showMore}
+		if (oParam.more != undefined) {iMore = oParam.more}
+		if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.showList != undefined) {bShowList = oParam.showList}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
 	}
 
-	aParam.xhtmlFirstRow = $('tr:first', sHTML).html();
+	oParam.xhtmlFirstRow = $('tr:first', sHTML).html();
 	
 	if (bMore)
 	{
 		aHTML[++h] = '<table><tr>';
-		//aHTML[++h] = '<td style="width:1px;" class="interfaceMessagingSubHeader interfaceMasterPaginationList" id="tdInterfaceMasterPaginationList' + sXHTMLContext + '-"></td>';
-		aHTML[++h] = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader interfaceMasterPaginationList' + sXHTMLContext + '"' +
-							' id="td' + sXHTMLContext + 'InterfaceMasterPaginationList-0" rowStart="0">1</td>';
+		//aHTML[++h] = '<td style="width:1px;" class="interfaceMessagingSubHeader ns1blankspacePaginationList" id="tdns1blankspacePaginationList' + sXHTMLContext + '-"></td>';
+		aHTML[++h] = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + '"' +
+							' id="td' + sXHTMLContext + 'ns1blankspacePaginationList-0" rowStart="0">1</td>';
 		aHTML[++h] = '<td></td></tr></table>';
 	}
 		
-	aHTML[++h] = '<div id="div' + sXHTMLContext + 'InterfaceMasterPaginationList-0" class="interfaceMasterPaginationListPage' + sXHTMLContext + '">';
+	aHTML[++h] = '<div id="div' + sXHTMLContext + 'ns1blankspacePaginationList-0" class="ns1blankspacePaginationListPage' + sXHTMLContext + '">';
 	aHTML[++h] = sHTML;
 	aHTML[++h] = '</div>';
 
@@ -3462,31 +3462,31 @@ function interfaceMasterPaginationList(aParam)
 		
 	if (bMore)
 	{
-		var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader interfaceMasterPaginationList' + sXHTMLContext + 
-							'" id="td' + sXHTMLContext + 'InterfaceMasterPaginationList-' +
+		var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + 
+							'" id="td' + sXHTMLContext + 'ns1blankspacePaginationList-' +
 							(iStartRow + iRows - 1) + '" rowStart="' +
 							(iStartRow + iRows - 1) + '">' + 'more...' + '</td>';
 						
-		$('#td' + sXHTMLContext + 'InterfaceMasterPaginationList-' + (iStartRow)).after(sHTML);
+		$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow)).after(sHTML);
 	
-		$('#td' + sXHTMLContext + 'InterfaceMasterPaginationList-' + (iStartRow + iRows - 1)).click(function(event)
+		$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow + iRows - 1)).click(function(event)
 		{
 			var sID = event.target.id;
 			var sStart = $('#' + sID).attr('rowStart');
 			$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
-			if (aParam != undefined) {aParam.more = iMore;aParam.startRow = sStart}else{aParam = {more: iMore, startRow: sStart}};
-			interfaceMasterPaginationListShowMore(aParam);
+			if (oParam != undefined) {oParam.more = iMore;oParam.startRow = sStart}else{oParam = {more: iMore, startRow: sStart}};
+			ns1blankspacePaginationListShowMore(oParam);
 		});
 	}
 	
-	$('.interfaceMasterPaginationListPage' + sXHTMLContext).click(function(event)
+	$('.ns1blankspacePaginationListPage' + sXHTMLContext).click(function(event)
 	{
-		interfaceMasterPaginationListShowPage(this.id, sXHTMLContext);
+		ns1blankspacePaginationListShowPage(this.id, sXHTMLContext);
 	});
 		
 }
 
-function interfaceMasterPaginationListShowMore(aParam, oData)
+function ns1blankspacePaginationListShowMore(oParam, oData)
 {
 	
 	var sXHTMLElementID = '';
@@ -3509,24 +3509,24 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 	var fFunctionShowRow;
 	var sType = 'XML';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.more != undefined) {iMore = aParam.more}
-		if (aParam.startRow != undefined) {iStartRow = aParam.startRow}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementID = aParam.xhtmlElementId}
-		if (aParam.columns != undefined) {sColumns = aParam.columns}
-		if (aParam.idColumns != undefined) {sIDColumns = aParam.idColumns}
-		if (aParam.functionOpen != undefined) {sFunctionOpen = aParam.functionOpen}
-		if (aParam.functionClass != undefined) {fFunctionClass = aParam.functionClass}
-		if (aParam.functionShowRow != undefined) {fFunctionShowRow = aParam.functionShowRow}
-		if (aParam.idAdditional != undefined) {sIdAdditional = aParam.idAdditional}
-		if (aParam.bodyClass != undefined) {sBodyClass = aParam.bodyClass}
-		if (aParam.idSeperator != undefined) {sIDSeperator = aParam.idSeperator}
-		if (aParam.xhtmlFirstRow != undefined) {sXHTMLlFirstRow = aParam.xhtmlFirstRow}
-		if (aParam.functionNewPage != undefined) {sFunctionNewPage = aParam.functionNewPage}
-		if (aParam.xhtmlContext != undefined) {sXHTMLContext = aParam.xhtmlContext}
-		if (aParam.type != undefined) {sType = aParam.type}
+		if (oParam.more != undefined) {iMore = oParam.more}
+		if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementID = oParam.xhtmlElementId}
+		if (oParam.columns != undefined) {sColumns = oParam.columns}
+		if (oParam.idColumns != undefined) {sIDColumns = oParam.idColumns}
+		if (oParam.functionOpen != undefined) {sFunctionOpen = oParam.functionOpen}
+		if (oParam.functionClass != undefined) {fFunctionClass = oParam.functionClass}
+		if (oParam.functionShowRow != undefined) {fFunctionShowRow = oParam.functionShowRow}
+		if (oParam.idAdditional != undefined) {sIdAdditional = oParam.idAdditional}
+		if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
+		if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
+		if (oParam.xhtmlFirstRow != undefined) {sXHTMLlFirstRow = oParam.xhtmlFirstRow}
+		if (oParam.functionNewPage != undefined) {sFunctionNewPage = oParam.functionNewPage}
+		if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
+		if (oParam.type != undefined) {sType = oParam.type}
 	}
 
 	sType = sType.toUpperCase();
@@ -3550,7 +3550,7 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 				url: '/ondemand/core/?rf=' + sType + '&' + sParam,
 				data: sData,
 				dataType: sType.toLowerCase(),
-				success: function(data){interfaceMasterPaginationListShowMore(aParam, data)}
+				success: function(data){ns1blankspacePaginationListShowMore(oParam, data)}
 			});
 		}
 		else
@@ -3559,11 +3559,11 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 			var aHTML = [];
 			var h = -1;
 		
-			if ($('#div' + sXHTMLContext + 'InterfaceMasterPaginationList-' + iStartRow).length == 0)
+			if ($('#div' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).length == 0)
 			{
 			
-				aHTML[++h] = '<div id="div' + sXHTMLContext + 'InterfaceMasterPaginationList-' + iStartRow + 
-								'" class="interfaceMasterPaginationListPage' + sXHTMLContext + '">';
+				aHTML[++h] = '<div id="div' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow + 
+								'" class="ns1blankspacePaginationListPage' + sXHTMLContext + '">';
 			
 				aHTML[++h] = '<table border="0" class="' + sBodyClass + '">';
 				aHTML[++h] = '<tbody>'
@@ -3582,7 +3582,7 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 					var iRows = parseInt($(oRoot).attr('rows'));
 					var bMoreRows = ($(oRoot).attr('morerows') == "true");
 									
-					aParam.startRow = iStartRow + iRows;	
+					oParam.startRow = iStartRow + iRows;	
 				
 					for (var iRow = 0; iRow < oRoot.childNodes.length; iRow++) 
 					{
@@ -3663,7 +3663,7 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 					var iRows = parseInt(oData.rows);
 					var bMoreRows = (oData.morerows == "true");
 									
-					aParam.startRow = iStartRow + iRows;	
+					oParam.startRow = iStartRow + iRows;	
 					
 					var oRows = oData.data.rows;
 			
@@ -3678,8 +3678,8 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 				
 				aHTML[++h] = '</div>';
 				
-				$('.interfaceMasterPaginationListPage' + sXHTMLContext).hide();
-				$('.interfaceMasterPaginationListPage' + sXHTMLContext + ':last').after(aHTML.join(''));
+				$('.ns1blankspacePaginationListPage' + sXHTMLContext).hide();
+				$('.ns1blankspacePaginationListPage' + sXHTMLContext + ':last').after(aHTML.join(''));
 				
 				$('.interfaceMainRowOptionsSelect' + sXHTMLContext).unbind('click');
 				
@@ -3698,31 +3698,31 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 					.css('height', '20px')
 				}
 				
-				$('#td' + sXHTMLContext + 'InterfaceMasterPaginationList-' + iStartRow).html(((iStartRow+1)/iRows)+1);
+				$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).html(((iStartRow+1)/iRows)+1);
 
-				$('td.interfaceMasterPaginationList' + sXHTMLContext).unbind('click');
+				$('td.ns1blankspacePaginationList' + sXHTMLContext).unbind('click');
 				
-				$('td.interfaceMasterPaginationList' + sXHTMLContext).click(function(event)
+				$('td.ns1blankspacePaginationList' + sXHTMLContext).click(function(event)
 				{
-					interfaceMasterPaginationListShowPage(this.id, sXHTMLContext);
+					ns1blankspacePaginationListShowPage(this.id, sXHTMLContext);
 				});
 			
 				if (bMoreRows)
 				{
-					var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader interfaceMasterPaginationList' + sXHTMLContext + 
-							'" id="td' + sXHTMLContext + 'InterfaceMasterPaginationList-' +
+					var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + 
+							'" id="td' + sXHTMLContext + 'ns1blankspacePaginationList-' +
 							(iStartRow + iRows) + '" rowStart="' +
 							(iStartRow + iRows) + '">' + 'more...' + '</td>';
 						
-					$('#td' + sXHTMLContext + 'InterfaceMasterPaginationList-' + iStartRow).after(sHTML);
+					$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).after(sHTML);
 					
-					$('#td' + sXHTMLContext + 'InterfaceMasterPaginationList-' + (iStartRow + iRows)).click(function(event)
+					$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow + iRows)).click(function(event)
 					{
 						var sID = event.target.id;
 						var sStart = $('#' + sID).attr('rowStart')
 						$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
-						(aParam != undefined?aParam.more = iMore:aParam = {more: iMore, startRow: sStart})
-						interfaceMasterPaginationListShowMore(aParam);
+						(oParam != undefined?oParam.more = iMore:oParam = {more: iMore, startRow: sStart})
+						ns1blankspacePaginationListShowMore(oParam);
 					});
 				}	
 				
@@ -3735,17 +3735,17 @@ function interfaceMasterPaginationListShowMore(aParam, oData)
 	}
 }	
 
-function interfaceMasterPaginationListShowPage(sXHTMLElementID, sXHTMLContext)
+function ns1blankspacePaginationListShowPage(sXHTMLElementID, sXHTMLContext)
 {
 
 	var aElement = sXHTMLElementID.split('-');
 	
-	$('.interfaceMasterPaginationListPage' + sXHTMLContext).hide();
-	$('#div' + sXHTMLContext + 'InterfaceMasterPaginationList-' + aElement[1]).show();
+	$('.ns1blankspacePaginationListPage' + sXHTMLContext).hide();
+	$('#div' + sXHTMLContext + 'ns1blankspacePaginationList-' + aElement[1]).show();
 	
 }
 
-function interfaceMasterViewportOptionsShow(aParam)
+function ns1blankspaceViewportOptionsShow(oParam)
 {
 
 	var aHTML = [];
@@ -3758,15 +3758,15 @@ function interfaceMasterViewportOptionsShow(aParam)
 	var iOffsetLeft = 0;
 	var bForceShow = false;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElement != undefined) {oXHTMLElement = aParam.xhtmlElement}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.xhtml != undefined) {sXHTML = aParam.xhtml}
-		if (aParam.functionBind != undefined) {sFunctionBind = aParam.functionBind}
-		if (aParam.offsetTop != undefined) {iOffsetTop = aParam.offsetTop}
-		if (aParam.offsetLeft != undefined) {iOffsetLeft = aParam.offsetLeft}
-		if (aParam.forceShow != undefined) {bForceShow = aParam.forceShow}
+		if (oParam.xhtmlElement != undefined) {oXHTMLElement = oParam.xhtmlElement}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.xhtml != undefined) {sXHTML = oParam.xhtml}
+		if (oParam.functionBind != undefined) {sFunctionBind = oParam.functionBind}
+		if (oParam.offsetTop != undefined) {iOffsetTop = oParam.offsetTop}
+		if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft}
+		if (oParam.forceShow != undefined) {bForceShow = oParam.forceShow}
 	}
 	
 	if (oXHTMLElement == undefined)
@@ -3776,18 +3776,18 @@ function interfaceMasterViewportOptionsShow(aParam)
 	
 	if (oXHTMLElement != undefined)
 	{
-		if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == oXHTMLElement.attr('id') && !bForceShow)
+		if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oXHTMLElement.attr('id') && !bForceShow)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-			$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+			$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
 		}
 		else
 		{
-			$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', oXHTMLElement.attr('id'));
-			$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-			$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-			$('#divInterfaceMasterViewportControlOptions').offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft});
-			$('#divInterfaceMasterViewportControlOptions').html(sXHTML);
+			$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oXHTMLElement.attr('id'));
+			$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+			$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+			$('#divns1blankspaceViewportControlOptions').offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft});
+			$('#divns1blankspaceViewportControlOptions').html(sXHTML);
 			
 			if (sFunctionBind != undefined)
 				{eval(sFunctionBind)}
@@ -3795,9 +3795,9 @@ function interfaceMasterViewportOptionsShow(aParam)
 	}	
 }
 
-function interfaceMasterViewportOptionsHide()
+function ns1blankspaceViewportOptionsHide()
 {
-	$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
-	$('#divInterfaceMasterViewportControlOptions').html("&nbsp;");
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+	$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 }

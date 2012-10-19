@@ -14,45 +14,45 @@ function interfaceSetupSpaceMasterViewport()
 	ns1blankspace.objectContext = -1;
 	ns1blankspace.object = -1;
 	
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "My Account"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').button({disabled: true});
+	$('#spanns1blankspaceViewportControlNew').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 		
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceSetupSpaceSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceSetupSpaceSetupOptions();
 	});
@@ -65,7 +65,7 @@ function interfaceSetupSpaceMasterViewport()
 	{
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	interfaceSetupSpaceHomeShow();
 	
@@ -76,7 +76,7 @@ function interfaceSetupSpaceHomeShow()
 	var aHTML = [];
 	var h = -1;
 		
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 				
 	aHTML[++h] = '<table class="interfaceMain">';
 	aHTML[++h] = '<tr class="interfaceMainRow1">' +
@@ -97,7 +97,7 @@ function interfaceSetupSpaceHomeShow()
 				
 	aHTML[++h] = '<table>';
 	aHTML[++h] = '<tr>' +
-					'<td id="interfaceMasterViewportSetupSpaceLarge" class="interfaceMasterViewportImageLarge">' +
+					'<td id="ns1blankspaceViewportSetupSpaceLarge" class="ns1blankspaceViewportImageLarge">' +
 					'&nbsp;' + 
 					'</td>' +
 					'</tr>';	
@@ -120,32 +120,32 @@ function interfaceSetupSpaceHomeShow()
 
 	$('#tdInterfaceViewportControlSubscriptions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMain", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMain", true);
 		interfaceSetupSpaceSubscriptions({xhtmlElementID: "divInterfaceMain"});
 	});
 
 	$('#tdInterfaceViewportControlAccess').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMain", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMain", true);
 		interfaceSetupSpaceMethodAccess({xhtmlElementID: "divInterfaceMain"});
 	});
 	
 }
 
-function interfaceSetupSpaceSubscriptions(aParam, oResponse)
+function interfaceSetupSpaceSubscriptions(oParam, oResponse)
 {
 	var iStep = 1;
 	var sID; 
 	var sXHTMLElementID;
 		
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.step != undefined) {iStep = aParam.step}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.step != undefined) {iStep = oParam.step}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 	else
 	{
-		aParam = {step: 1};
+		oParam = {step: 1};
 	}
 	
 	if (sXHTMLElementID != undefined)
@@ -165,7 +165,7 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 				url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH',
 				data: '',
 				dataType: 'json',
-				success: function(data){interfaceSetupSpaceSubscriptions(aParam, data)}
+				success: function(data){interfaceSetupSpaceSubscriptions(oParam, data)}
 			});	
 		}
 		else
@@ -238,8 +238,8 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 				}
 			})
 			.click(function() {
-				$.extend(true, aParam, {step: 4, xhtmlElementID: this.id});
-				interfaceSetupSpaceSubscriptions(aParam);
+				$.extend(true, oParam, {step: 4, xhtmlElementID: this.id});
+				interfaceSetupSpaceSubscriptions(oParam);
 			})
 			.css('width', '15px')
 			.css('height', '17px');
@@ -249,14 +249,14 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 				text: "Add"
 			})
 			.click(function() {
-				$.extend(true, aParam, {step: 2, xhtmlElementID: ""});
-				interfaceSetupSpaceSubscriptions(aParam);
+				$.extend(true, oParam, {step: 2, xhtmlElementID: ""});
+				interfaceSetupSpaceSubscriptions(oParam);
 			})
 			.css('font-size', '0.75em')
 
 			$('.bankaccount').click(function() {
-				$.extend(true, aParam, {step: 2, xhtmlElementID: event.target.id});
-				interfaceSetupSpaceSubscriptions(aParam);
+				$.extend(true, oParam, {step: 2, xhtmlElementID: event.target.id});
+				interfaceSetupSpaceSubscriptions(oParam);
 			})
 		}	
 	}
@@ -317,11 +317,11 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			interfaceMasterStatusWorking();
+			ns1blankspaceStatusWorking();
 
-			var sData = 'id=' + interfaceMasterFormatSave(sID);
-			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSubscriptionTitle').val());
-			sData += '&financialaccount=' + interfaceMasterFormatSave($('#inputInterfaceMainBankAccountFinancialAccount').attr("data-id"));
+			var sData = 'id=' + ns1blankspaceFormatSave(sID);
+			sData += '&title=' + ns1blankspaceFormatSave($('#inputInterfaceMainSubscriptionTitle').val());
+			sData += '&financialaccount=' + ns1blankspaceFormatSave($('#inputInterfaceMainBankAccountFinancialAccount').attr("data-id"));
 
 			$.ajax(
 			{
@@ -330,9 +330,9 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 				data: sData,
 				dataType: 'json',
 				success: function() {
-					$.extend(true, aParam, {step: 1});
-					interfaceSetupFinancialBankAccount(aParam);
-					interfaceMasterStatus('Saved');
+					$.extend(true, oParam, {step: 1});
+					interfaceSetupFinancialBankAccount(oParam);
+					ns1blankspaceStatus('Saved');
 				}
 			});
 		})
@@ -343,21 +343,21 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			$.extend(true, aParam, {step: 1});
-			interfaceSetupSpaceSubscriptions(aParam);
+			$.extend(true, oParam, {step: 1});
+			interfaceSetupSpaceSubscriptions(oParam);
 		})
 
 		if (sID != undefined)
 		{
-			interfaceMasterStatusWorking();
+			ns1blankspaceStatusWorking();
 
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
 			oSearch.addField('title,financialaccount,financialaccounttext');
 			oSearch.addFilter('id', 'EQUAL_TO', sID);
 			oSearch.getResults(function(data) {
-					$.extend(true, aParam, {step: 3});
-					interfaceSetupFinancialBankAccount(aParam, data)
+					$.extend(true, oParam, {step: 3});
+					interfaceSetupFinancialBankAccount(oParam, data)
 					});
 		}
 		else
@@ -373,7 +373,7 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 		$('#inputInterfaceMainBankAccountFinancialAccount').val(oObjectContext.financialaccounttext)
 		$('#inputInterfaceMainBankAccountFinancialAccount').attr('data-id', ns1blankspace.objectContextData.financialaccount);
 
-		interfaceMasterStatus('');
+		ns1blankspaceStatus('');
 	}
 
 	if (iStep == 4)
@@ -392,30 +392,30 @@ function interfaceSetupSpaceSubscriptions(aParam, oResponse)
 				if (data.status == 'OK')
 				{
 					$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-					$.extend(true, aParam, {step: 1});
-					interfaceSetupFinancialBankAccount(aParam);
-					interfaceMasterStatus('Removed');
+					$.extend(true, oParam, {step: 1});
+					interfaceSetupFinancialBankAccount(oParam);
+					ns1blankspaceStatus('Removed');
 				}
 				else
 				{
-					interfaceMasterError(data.error.errornotes);
+					ns1blankspaceError(data.error.errornotes);
 				}
 			}
 		});
 	}		
 }
 
-function interfaceSetupSpaceMethodAccess(aParam, oResponse)
+function interfaceSetupSpaceMethodAccess(oParam, oResponse)
 {
 	var iStep = 1;
 	var iID;
 	var sXHTMLElementID;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.step != undefined) {iStep = aParam.step}
-		if (aParam.id != undefined) {iID = aParam.id}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.step != undefined) {iStep = oParam.step}
+		if (oParam.id != undefined) {iID = oParam.id}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 		
 	if (iStep == 1)
@@ -456,8 +456,8 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 			})
 			.click(function()
 			{
-				$.extend(true, aParam, {step: 4, id: ""});
-				interfaceSetupSpaceMethodAccess(aParam);
+				$.extend(true, oParam, {step: 4, id: ""});
+				interfaceSetupSpaceMethodAccess(oParam);
 			})
 		
 			var oSearch = new AdvancedSearch();
@@ -466,7 +466,7 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 			oSearch.rows = 50;
 			oSearch.sort('accessmethodtext', 'asc');
 			oSearch.addFilter('accessmethodtext', 'TEXT_IS_NOT_EMPTY')
-			oSearch.getResults(function(data) {interfaceSetupSpaceMethodAccess(aParam, data)})	
+			oSearch.getResults(function(data) {interfaceSetupSpaceMethodAccess(oParam, data)})	
 		}
 		else
 		{
@@ -544,8 +544,8 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 				}
 			})
 			.click(function() {
-				$.extend(true, aParam, {step: 5, xhtmlElementID: this.id});
-				interfaceSetupSpaceMethodAccess(aParam);
+				$.extend(true, oParam, {step: 5, xhtmlElementID: this.id});
+				interfaceSetupSpaceMethodAccess(oParam);
 			})
 			.css('width', '15px')
 			.css('height', '17px');
@@ -561,8 +561,8 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 		oSearch.addFilter('id', 'EQUAL_TO', iID);
 
 		oSearch.getResults(function(data) {
-				$.extend(true, aParam, {step: 4});
-				interfaceSetupSpaceMethodAccess(aParam, data)
+				$.extend(true, oParam, {step: 4});
+				interfaceSetupSpaceMethodAccess(oParam, data)
 				});
 	}
 
@@ -656,7 +656,7 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 			
 		$('#inputInterfaceMainMethodAccessMethod').live('blur', function() 
 		{
-			$(this).removeClass('interfaceMasterHighlight');
+			$(this).removeClass('ns1blankspaceHighlight');
 		});
 		
 		$('#spanInterfaceMainMethodAccessSave').button(
@@ -665,17 +665,17 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			interfaceMasterStatusWorking();
+			ns1blankspaceStatusWorking();
 
-			var sData = 'id=' + interfaceMasterFormatSave(iID);
+			var sData = 'id=' + ns1blankspaceFormatSave(iID);
 			if (iID == '')
 			{
-				sData += '&accessmethod=' + interfaceMasterFormatSave($('#inputInterfaceMainMethodAccessMethod').attr('data-id'));
+				sData += '&accessmethod=' + ns1blankspaceFormatSave($('#inputInterfaceMainMethodAccessMethod').attr('data-id'));
 			}	
-			sData += '&addavailable=' + interfaceMasterFormatSave($('input[name="radioCanAdd"]:checked').val());
-			sData += '&removeavailable=' + interfaceMasterFormatSave($('input[name="radioCanRemove"]:checked').val());
-			sData += '&updateavailable=' + interfaceMasterFormatSave($('input[name="radioCanUpdate"]:checked').val());
-			sData += '&useavailable=' + interfaceMasterFormatSave($('input[name="radioCanUse"]:checked').val());
+			sData += '&addavailable=' + ns1blankspaceFormatSave($('input[name="radioCanAdd"]:checked').val());
+			sData += '&removeavailable=' + ns1blankspaceFormatSave($('input[name="radioCanRemove"]:checked').val());
+			sData += '&updateavailable=' + ns1blankspaceFormatSave($('input[name="radioCanUpdate"]:checked').val());
+			sData += '&useavailable=' + ns1blankspaceFormatSave($('input[name="radioCanUse"]:checked').val());
 
 			$.ajax(
 			{
@@ -686,13 +686,13 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 				success: function(data) {
 					if (data.status == "OK")
 					{
-						interfaceMasterStatus('Saved');
-						$.extend(true, aParam, {step: 1});
-						interfaceSetupSpaceMethodAccess(aParam);
+						ns1blankspaceStatus('Saved');
+						$.extend(true, oParam, {step: 1});
+						interfaceSetupSpaceMethodAccess(oParam);
 					}
 					else
 					{
-						interfaceMasterError(data.error.errornotes);
+						ns1blankspaceError(data.error.errornotes);
 					}
 				}
 			});
@@ -704,8 +704,8 @@ function interfaceSetupSpaceMethodAccess(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			$.extend(true, aParam, {step: 1});
-			interfaceSetupSpaceMethodAccess(aParam);
+			$.extend(true, oParam, {step: 1});
+			interfaceSetupSpaceMethodAccess(oParam);
 		});
 
 		if (iID != '')
@@ -777,7 +777,7 @@ function interfaceSetupSpaceMethodSearch(sXHTMLInputElementID, oResponse)
 		{
 			
 			aHTML.push('<tr>' +
-				'<td id="tdInterfaceMasterMethod-' + this.id + '" data-methodtext="' + this.title + '" class="interfaceSearch interfaceMasterMethod">' +
+				'<td id="tdns1blankspaceMethod-' + this.id + '" data-methodtext="' + this.title + '" class="interfaceSearch ns1blankspaceMethod">' +
 				this.title +
 				'</td></tr>');
 				
@@ -785,19 +785,19 @@ function interfaceSetupSpaceMethodSearch(sXHTMLInputElementID, oResponse)
 						
 		aHTML.push('</table>');
 		
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		$('#divInterfaceMasterViewportControlOptions').offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
 
-		$('.interfaceMasterMethod').click(function(event)
+		$('.ns1blankspaceMethod').click(function(event)
 		{
 			var aXHTMLElementID = (event.target.id).split('-');
 			iXHTMLElementContextID = aXHTMLElementID[1];
 
 			$('#' + sXHTMLInputElementID).val($('#' + event.target.id).attr("data-methodtext"))
 			$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
-			$('#divInterfaceMasterViewportControlOptions').hide();
+			$('#divns1blankspaceViewportControlOptions').hide();
 		});
 	}	
 }	

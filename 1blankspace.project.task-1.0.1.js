@@ -5,13 +5,13 @@
  * 01 FEB 2010
  */
  
-function interfaceProjectTaskMasterViewport(aParam)
+function interfaceProjectTaskMasterViewport(oParam)
 {
 	var bShowHome = true
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 	}
 
 	ns1blankspace.object = 11;
@@ -21,71 +21,71 @@ function interfaceProjectTaskMasterViewport(aParam)
 		
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceProjectTaskMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 	
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Project Tasks"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceProjectTaskSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);	
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceProjectTaskSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);	
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceProjectTaskSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceProjectTaskSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceProjectTaskSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceProjectTaskNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceProjectTaskNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceProjectTaskSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceProjectTaskSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceProjectTaskSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceProjectTaskSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceProjectTaskHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceProjectTaskHelpOptions();
 	});
@@ -100,7 +100,7 @@ function interfaceProjectTaskMasterViewport(aParam)
 		interfaceProjectTaskSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	if (bShowHome) {interfaceProjectTaskHomeShow()};
 }
 
@@ -126,7 +126,7 @@ function interfaceProjectTaskHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportProjectLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportProjectLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -134,7 +134,7 @@ function interfaceProjectTaskHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PROJECT_TASK_SEARCH';
@@ -190,7 +190,7 @@ function interfaceProjectTaskHomeShow(oResponse)
 	}
 }
 
-function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
+function interfaceProjectTaskSearch(sXHTMLElementId, oParam)
 {
 	var aSearch = sXHTMLElementId.split('-');
 	var sElementId = aSearch[0];
@@ -201,14 +201,14 @@ function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 		
 	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
@@ -223,7 +223,7 @@ function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
 			type: 'GET',
 			url: '/ondemand/project/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceProjectTaskShow(aParam, data)}
+			success: function(data) {interfaceProjectTaskShow(oParam, data)}
 		});
 	}
 	else
@@ -238,7 +238,7 @@ function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -252,8 +252,8 @@ function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var sParam = 'method=PROJECT_TASK_SEARCH&quicksearch=' + sSearchText;
 
@@ -262,13 +262,13 @@ function interfaceProjectTaskSearch(sXHTMLElementId, aParam)
 				type: 'GET',
 				url: '/ondemand/project/?' + sParam,
 				dataType: 'json',
-				success: function(data) {interfaceProjectTaskSearchShow(aParam, data)}
+				success: function(data) {interfaceProjectTaskSearchShow(oParam, data)}
 			});
 		}
 	};	
 }
 
-function interfaceProjectTaskSearchShow(aParam, oResponse)
+function interfaceProjectTaskSearchShow(oParam, oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -277,8 +277,8 @@ function interfaceProjectTaskSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -309,15 +309,15 @@ function interfaceProjectTaskSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
-		interfaceMasterSearchStop();
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceProjectTaskSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -388,44 +388,44 @@ function interfaceProjectTaskViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceProjectTaskSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceProjectTaskDetails();
 	});
 	
 	$('#tdInterfaceViewportControlDescription').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDescription");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDescription");
 		interfaceProjectTaskDescription();
 	});
 	
 	$('#tdInterfaceViewportControlScheduling').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainScheduling");
+		ns1blankspaceMainViewportShow("#divInterfaceMainScheduling");
 		interfaceProjectTaskScheduling("divInterfaceMainScheduling", true);
 	});
 	
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
-		interfaceMasterActions({xhtmlElementID: 'divInterfaceMainActions'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
+		ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
 	});
 
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 }
 
-function interfaceProjectTaskShow(aParam, oResponse)
+function interfaceProjectTaskShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceProjectTaskViewport();
 	
 	var aHTML = [];
@@ -445,10 +445,10 @@ function interfaceProjectTaskShow(aParam, oResponse)
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 	
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 		
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceProjectTaskMasterViewport({showHome: false});interfaceProjectTaskSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
@@ -688,9 +688,9 @@ function interfaceProjectTaskNew()
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceProjectTaskViewport();
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	interfaceProjecttaskDetails();	
 }
 
@@ -700,21 +700,21 @@ function interfaceProjectTaskSave()
 		
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
-		sData += '&startdate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsStartDate').val());
-		sData += '&enddate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsEndDate').val());
-		sData += '&status=' + interfaceMasterFormatSave($('input[name="radioStatus"]:checked').val());
+		sData += '&reference=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsReference').val());
+		sData += '&startdate=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsStartDate').val());
+		sData += '&enddate=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsEndDate').val());
+		sData += '&status=' + ns1blankspaceFormatSave($('input[name="radioStatus"]:checked').val());
 	}
 	
 	if ($('#divInterfaceMainDescription').html() != '')
 	{
-		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDescription').val());
+		sData += '&description=' + ns1blankspaceFormatSave($('#inputInterfaceMainDescription').val());
 	}
 	
 	$.ajax(
 	{
 		type: 'POST',
-		url: interfaceMasterEndpointURL('PROJECT_TASK_MANAGE'),
+		url: ns1blankspaceEndpointURL('PROJECT_TASK_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: interfaceProjectTaskSaveProcess
@@ -725,14 +725,14 @@ function interfaceProjectTaskSaveProcess(oResponse)
 {
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Project task saved');
+		ns1blankspaceStatus('Project task saved');
 		if (ns1blankspace.objectContext == -1) {var bNew = true}
 		ns1blankspace.objectContext = oResponse.id;	
 	}
 	else
 	{
-		interfaceMasterStatus(oResponse.error.errornotes);
-		interfaceMasterConfirm( {html: [oResponse.error.errornotes]
+		ns1blankspaceStatus(oResponse.error.errornotes);
+		ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
 								   , title: 'Save error!'});
 	}
 }

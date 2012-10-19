@@ -423,7 +423,7 @@ function getResultsComplete(asData, afCallbackFunction) {
 	afCallbackFunction(asData);
 }
 
-function advancedSearchComparisonGet(aParam)
+function advancedSearchComparisonGet(oParam)
 {
 	var aReturn = [];
 	var sReturnFormat = 'JSON';
@@ -432,13 +432,13 @@ function advancedSearchComparisonGet(aParam)
 	var sInputType = '';
 	var sCode = '';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.returnFormat != undefined) {sReturnFormat = aParam.returnFormat}
-		if (aParam.dataType != undefined) {sDataType = aParam.dataType}
-		if (aParam.inputType != undefined) {sInputType = aParam.inputType}
-		if (aParam.includeAll != undefined) {bIncludeAll = aParam.includeAll}
-		if (aParam.code != undefined) {sCode = aParam.code}
+		if (oParam.returnFormat != undefined) {sReturnFormat = oParam.returnFormat}
+		if (oParam.dataType != undefined) {sDataType = oParam.dataType}
+		if (oParam.inputType != undefined) {sInputType = oParam.inputType}
+		if (oParam.includeAll != undefined) {bIncludeAll = oParam.includeAll}
+		if (oParam.code != undefined) {sCode = oParam.code}
 	}
 	
 	sReturnFormat = sReturnFormat.toUpperCase();

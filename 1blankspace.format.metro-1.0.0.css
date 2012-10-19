@@ -8,7 +8,7 @@
 	margin-top: -8px;
 }
 
-.interfaceMasterViewportImage
+.ns1blankspaceViewportImage
 {
 	background-repeat: no-repeat;
 	background-position: left center;
@@ -19,7 +19,7 @@
 	border-color: white;
 }
 
-.interfaceMasterViewportImageLarge
+.ns1blankspaceViewportImageLarge
 {
 	background-repeat: no-repeat;
 	background-position: right center;
@@ -27,207 +27,207 @@
 	height: 75px;
 }
 
-#interfaceMasterViewportContact
+#ns1blankspaceViewportContact
 {
 	background-image:url(/images/1blankspace.viewport.contact.green.png);
 }
 
-#interfaceMasterViewportContactLarge
+#ns1blankspaceViewportContactLarge
 {
 	background-image:url(/images/1blankspace.viewport.contact.green.large.png);
 }
 
-#interfaceMasterViewportOpportunityLarge
+#ns1blankspaceViewportOpportunityLarge
 {
 	background-image:url(/images/1blankspace.viewport.opportunity.large.png);
 }
 
-#interfaceMasterViewportProject
+#ns1blankspaceViewportProject
 {
 	background-image:url(/images/1blankspace.viewport.project.png);
 }
 
-#interfaceMasterViewportProjectLarge
+#ns1blankspaceViewportProjectLarge
 {
 	background-image:url(/images/1blankspace.viewport.project.large.png);
 }
 
-#interfaceMasterViewportAction
+#ns1blankspaceViewportAction
 {
 	background-image:url(/images/1blankspace.viewport.action.png);
 }
 
-#interfaceMasterViewportActionLarge
+#ns1blankspaceViewportActionLarge
 {
 	background-image:url(/images/1blankspace.viewport.action.large.png);
 }
 
-#interfaceMasterViewportDocument
+#ns1blankspaceViewportDocument
 {
 	background-image:url(/images/1blankspace.viewport.document.png);
 }
 
-#interfaceMasterViewportDocumentLarge
+#ns1blankspaceViewportDocumentLarge
 {
 	background-image:url(/images/1blankspace.viewport.document.large.png);
 }
 
-#interfaceMasterViewportNews
+#ns1blankspaceViewportNews
 {
 	background-image:url(/images/1blankspace.viewport.news.png);
 }
 
-#interfaceMasterViewportEvent
+#ns1blankspaceViewportEvent
 {
 	background-image:url(/images/1blankspace.viewport.event.png);
 }
 
-#interfaceMasterViewportEventLarge
+#ns1blankspaceViewportEventLarge
 {
 	background-image:url(/images/1blankspace.viewport.event.large.png);
 }
 
-#interfaceMasterViewportNewsLarge
+#ns1blankspaceViewportNewsLarge
 {
 	background-image:url(/images/1blankspace.viewport.news.large.png);
 }
 
-#interfaceMasterViewportProduct
+#ns1blankspaceViewportProduct
 {
 	background-image:url(/images/1blankspace.viewport.product.png);
 }
 
-#interfaceMasterViewportProductLarge
+#ns1blankspaceViewportProductLarge
 {
 	background-image:url(/images/1blankspace.viewport.product.large.png);
 }
 
-#interfaceMasterViewportOrder
+#ns1blankspaceViewportOrder
 {
 	background-image:url(/images/1blankspace.viewport.order.png);
 }
 
-#interfaceMasterViewportOrderLarge
+#ns1blankspaceViewportOrderLarge
 {
 	background-image:url(/images/1blankspace.viewport.order.large.png);
 }
 
-#interfaceMasterViewportFinancial
+#ns1blankspaceViewportFinancial
 {
 	background-image:url(/images/1blankspace.viewport.financial.png);
 }
 
-#interfaceMasterViewportFinancialLarge
+#ns1blankspaceViewportFinancialLarge
 {
 	background-image:url(/images/1blankspace.viewport.financial.large.png);
 }
 
-#interfaceMasterViewportHelp
+#ns1blankspaceViewportHelp
 {
 	background-image:url(/images/1blankspace.viewport.help.png);
 }
 
-#interfaceMasterViewportHelpLarge
+#ns1blankspaceViewportHelpLarge
 {
 	background-image:url(/images/1blankspace.viewport.help.large.png);
 }
 
-#interfaceMasterViewportSetup
+#ns1blankspaceViewportSetup
 {
 	background-image:url(/images/1blankspace.viewport.setup.png);
 }
 
-#interfaceMasterViewportSetupLarge
+#ns1blankspaceViewportSetupLarge
 {
 	background-image:url(/images/1blankspace.viewport.setup.large.png);
 }
 
-#interfaceMasterViewportSetupWebsite
+#ns1blankspaceViewportSetupWebsite
 {
 	background-image:url(/images/1blankspace.viewport.setup.website.png);
 }
 
-#interfaceMasterViewportSetupWebsiteLarge
+#ns1blankspaceViewportSetupWebsiteLarge
 {
 	background-image:url(/images/1blankspace.viewport.setup.website.large.png);
 }
 
-#interfaceMasterViewportSetupUser
+#ns1blankspaceViewportSetupUser
 {
 	background-image:url(/images/1blankspace.viewport.setup.website.png);
 }
 
-#interfaceMasterViewportSetupUserLarge
+#ns1blankspaceViewportSetupUserLarge
 {
 	background-image:url(/images/1blankspace.viewport.setup.website.large.png);
 }
 
-#interfaceMasterViewportMessagingEmail
+#ns1blankspaceViewportMessagingEmail
 {
 	background-image:url(/images/1blankspace.viewport.messaging.email.png);
 }
 
-#interfaceMasterViewportMessagingEmailLarge
+#ns1blankspaceViewportMessagingEmailLarge
 {
 	background-image:url(/images/1blankspace.viewport.messaging.email.large.png);
 }
 
-#interfaceMasterViewportReport
+#ns1blankspaceViewportReport
 {
 	background-image:url(/images/1blankspace.viewport.report.png);
 }
 
-#interfaceMasterViewportMessagingConversation
+#ns1blankspaceViewportMessagingConversation
 {
 	background-image:url(/images/1blankspace.viewport.messaging.conversation.png);
 }
 
-#interfaceMasterViewportMessagingConversationLarge
+#ns1blankspaceViewportMessagingConversationLarge
 {
 	background-image:url(/images/1blankspace.viewport.messaging.conversation.large.png);
 }
 
-#interfaceMasterViewportReportLarge
+#ns1blankspaceViewportReportLarge
 {
 	background-image:url(/images/1blankspace.viewport.report.large.png);
 }
 
-#interfaceMasterViewportAutomation
+#ns1blankspaceViewportAutomation
 {
 	background-image:url(/images/1blankspace.viewport.automation.png);
 }
 
-#interfaceMasterViewportAutomationLarge
+#ns1blankspaceViewportAutomationLarge
 {
 	background-image:url(/images/1blankspace.viewport.automation.large.png);
 }
 
-#interfaceMasterViewportDeveloper
+#ns1blankspaceViewportDeveloper
 {
 	background-image:url(/images/1blankspace.viewport.developer.png);
 }
 
-#interfaceMasterViewportDeveloperLarge
+#ns1blankspaceViewportDeveloperLarge
 {
 	background-image:url(/images/1blankspace.viewport.developer.large.png);
 }
 
-#interfaceMasterViewportDeveloperSpace
+#ns1blankspaceViewportDeveloperSpace
 {
 	background-image:url(/images/1blankspace.viewport.developer.space.png);
 }
 
-#interfaceMasterViewportDeveloperSpaceLarge
+#ns1blankspaceViewportDeveloperSpaceLarge
 {
 	background-image:url(/images/1blankspace.viewport.developer.space.large.png);
 }
 
-#interfaceMasterViewportDeveloperBilling
+#ns1blankspaceViewportDeveloperBilling
 {
 	background-image:url(/images/1blankspace.viewport.developer.billing.png);
 }
 
-#interfaceMasterViewportDeveloperBillingLarge
+#ns1blankspaceViewportDeveloperBillingLarge
 {
 	background-image:url(/images/1blankspace.viewport.developer.billing.large.png);
 }
@@ -327,7 +327,7 @@ td.interfaceHomeViewport
 	margin-top: 20px;
 }
 
-#divInterfaceMasterViewportControlBrowse
+#divns1blankspaceViewportControlBrowse
 {
 	position: absolute;
 	width: 900px;
@@ -362,14 +362,14 @@ td.interfaceHomeViewport
 	bottom: 25px;
 }
 
-#divInterfaceMasterViewport
+#divns1blankspaceViewport
 {
 	position: relative;
 	width: 900px;
 	top: 0px;
 }
 
-#divInterfaceMasterViewportLogonName
+#divns1blankspaceViewportLogonName
 {
 	font-weight: bold;
 	color: #999999;
@@ -380,7 +380,7 @@ td.interfaceHomeViewport
 	text-align: right;
 }
 
-#divInterfaceMasterViewportSpaceText
+#divns1blankspaceViewportSpaceText
 {
 	font-weight: 100;
 	color: #CCCCCC;
@@ -391,28 +391,28 @@ td.interfaceHomeViewport
 	text-align: right;
 }
 
-#divInterfaceMasterViewportControl
+#divns1blankspaceViewportControl
 {
 	position: absolute;
 	top: 35px;
 	width: 800px;
 }
 
-#divInterfaceMasterViewportControlHome
+#divns1blankspaceViewportControlHome
 {
 	position: absolute;
 	top: 0px;
 	left: 0px;	
 }
 
-#divInterfaceMasterViewportControlDestination
+#divns1blankspaceViewportControlDestination
 {
 	position: absolute;
 	top: 0px;
 	left: 48px;	
 }
 
-#divInterfaceMasterViewportControlSet
+#divns1blankspaceViewportControlSet
 {
 	position: absolute;
 	top: 0px;
@@ -420,7 +420,7 @@ td.interfaceHomeViewport
 	width: 225px;
 }
 
-#divInterfaceMasterViewportControlSearch
+#divns1blankspaceViewportControlSearch
 {
 	position: absolute;
 	top: 1px;
@@ -428,7 +428,7 @@ td.interfaceHomeViewport
 	width: 45px;	
 }
 
-#divInterfaceMasterViewportControlSearchStatus
+#divns1blankspaceViewportControlSearchStatus
 {
 	position: absolute;
 	top: 5px;
@@ -437,21 +437,21 @@ td.interfaceHomeViewport
 	z-index: 1;
 }
 
-#divInterfaceMasterViewportControlNew
+#divns1blankspaceViewportControlNew
 {
 	position: absolute;
 	top: 0px;
 	left: 502px;	
 }
 
-#divInterfaceMasterViewportControlAction
+#divns1blankspaceViewportControlAction
 {
 	position: absolute;
 	top: 0px;
 	left: 564px;
 }
 
-#divInterfaceMasterViewportControlActionStatus
+#divns1blankspaceViewportControlActionStatus
 {
 	position: absolute;
 	top: 0px;
@@ -466,28 +466,28 @@ td.interfaceHomeViewport
 	border-color: #f3f3f3;
 }
 
-#divInterfaceMasterViewportControlDashboard
+#divns1blankspaceViewportControlDashboard
 {
 	position: absolute;
 	top: 0px;
 	right: 60px;
 }
 
-#divInterfaceMasterViewportControlSetup
+#divns1blankspaceViewportControlSetup
 {
 	position: absolute;
 	top: 0px;
 	left: 838px;
 }
 
-#divInterfaceMasterViewportControlHelp
+#divns1blankspaceViewportControlHelp
 {
 	position: absolute;
 	top: 0px;
 	left: 870px;
 }
 
-#divInterfaceMasterViewportControlOptions
+#divns1blankspaceViewportControlOptions
 {
 	position: absolute;
 	width: 100px; 
@@ -503,7 +503,7 @@ td.interfaceHomeViewport
 	background-color: transparent;
 }
 
-#divInterfaceMasterDialog
+#divns1blankspaceDialog
 {
 	position: relative;
 	width: 100px; 
@@ -552,7 +552,7 @@ table.interfaceViewportControl
 	padding-right: 0px;
 }
 
-span.interfaceMasterViewport
+span.ns1blankspaceViewport
 {
 	font-size: 0.875em;
 }	
@@ -567,17 +567,17 @@ span.interfaceMessagingHeader
 	color: #808080;
 }
 
-div.interfaceMasterViewport
+div.ns1blankspaceViewport
 {
 	font-size: 0.875em;
 }	
 
-div.interfaceMasterViewportOptions
+div.ns1blankspaceViewportOptions
 {
 	background-color: transparent;
 }
 
-input.interfaceMasterViewport
+input.ns1blankspaceViewport
 {
 	font-size: 1em;
 	height: 22px;
@@ -950,7 +950,7 @@ table.interfaceSearchFull, table.interfaceHomeOptionsFull
 	margin-left: 1px;
 }
 
-table.interfaceHomeOptions, table.interfaceMasterUserOptions
+table.interfaceHomeOptions, table.ns1blankspaceUserOptions
 {
 	font-size: 0.875em;
 	background-color: #F8F8F8;
@@ -1072,7 +1072,7 @@ table.interfaceMainShow
 	margin-left:5px;
 }
 
-td.interfaceSearch, td.interfaceHomeOptions, td.interfaceMasterUserOptions, td.interfaceSearchSub, td.interfaceActionOptions
+td.interfaceSearch, td.interfaceHomeOptions, td.ns1blankspaceUserOptions, td.interfaceSearchSub, td.interfaceActionOptions
 {
 	border-top-style: solid;
 	border-width: 0px;
@@ -1242,7 +1242,7 @@ table.interfaceMainColumn1
 	width: 100%;
 }
 
-#inputInterfaceMasterViewportControlSearch
+#inputns1blankspaceViewportControlSearch
 {
 	width: 130px;
 	font-size: 0.875em;
@@ -1251,7 +1251,7 @@ table.interfaceMainColumn1
 	margin:0px;
 }	
 
-#divInterfaceMasterViewportControlSearchStatus
+#divns1blankspaceViewportControlSearchStatus
 {
 	padding-top: 5px;
 }
@@ -1264,26 +1264,26 @@ table.interfaceMainColumn1
 	top: 60px;
 }
 
-#divInterfaceMasterViewportSpaceName
+#divns1blankspaceViewportSpaceName
 {
 	top: 0;
 	left: 0;
 	height: 75px;
 }
 
-#tdInterfaceMasterHeaderColumn1
+#tdns1blankspaceHeaderColumn1
 {
 	text-align: left;
 	vertical-align: bottom;
 }
 
-#tdInterfaceMasterHeaderColumn2
+#tdns1blankspaceHeaderColumn2
 {
 	text-align: right;
 	vertical-align: bottom;
 }
 
-#tableInterfaceMasterHeader
+#tablens1blankspaceHeader
 {
 	width: 900px;
 	margin-top: 5px;
@@ -1376,14 +1376,14 @@ td.interfaceViewportControlHighlight
 	color: #DA8300;	
 }
 
-input.interfaceMasterHighlight
+input.ns1blankspaceHighlight
 {
 	border-style:solid;
 	border-width: 1px;
 	border-color: #DA8300;	
 }
 
-textarea.interfaceMasterHighlight
+textarea.ns1blankspaceHighlight
 {
 	border-style:solid;
 	border-width: 1px;
@@ -1529,7 +1529,7 @@ td.interfaceViewportMasterCalendar
 	font-size: 0.875em;
 }
 
-.interfaceMasterWatermark
+.ns1blankspaceWatermark
 {
 	color: #BCBCBC;
 	font-style: italic;
@@ -1554,7 +1554,7 @@ table.interfaceDropDown
 	margin-left:0px;
 }
 
-.interfaceMasterBorder
+.ns1blankspaceBorder
 {
 	border-style:solid;
 	border-width: 1px;

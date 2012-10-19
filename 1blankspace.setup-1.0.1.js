@@ -5,54 +5,54 @@
  * 01 FEB 2010
  */
  
-function interfaceSetupMasterViewport(aParam)
+function interfaceSetupMasterViewport(oParam)
 {
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.setupMethod != undefined) {gsSetupMethod = aParam.setupMethod}
-		if (aParam.setupName != undefined) {gsSetupName = aParam.setupName}
+		if (oParam.setupMethod != undefined) {gsSetupMethod = oParam.setupMethod}
+		if (oParam.setupName != undefined) {gsSetupName = oParam.setupName}
 	}
 
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: gsSetupName
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
-		interfaceSetupSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#imgInterfaceMasterViewportControlSearch').click(function(event)
+	$('#imgns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceSetupSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceSetupSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceSetupAdd();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceSetupNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceSetupSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 	
 		var aHTML = [];
@@ -68,22 +68,22 @@ function interfaceSetupMasterViewport(aParam)
 
 		aHTML[++h] = '</table>';
 
-		interfaceMasterViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
+		ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceSetupHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceSetupHelpOptions();
 	});
 	
-	$('.InterfaceMasterViewportControlBrowse').click(function(event)
+	$('.ns1blankspaceViewportControlBrowse').click(function(event)
 	{
 		interfaceSetupSearch(ns1blankspace.data.searchSource.browse, event.target.id);
 	});
@@ -93,7 +93,7 @@ function interfaceSetupMasterViewport(aParam)
 				
 	aHTML[++h] = '<table>';
 	aHTML[++h] = '<tr>' +
-					'<td id="interfaceMasterViewportSetupLarge" class="interfaceMasterViewportImageLarge">' +
+					'<td id="ns1blankspaceViewportSetupLarge" class="ns1blankspaceViewportImageLarge">' +
 					'&nbsp;' + 
 					'</td>' +
 					'</tr>';
@@ -101,17 +101,17 @@ function interfaceSetupMasterViewport(aParam)
 	
 	$('#divInterfaceViewportControl').html(aHTML.join(''));	
 	
-	interfaceMasterStatus('Click value to edit.')
+	ns1blankspaceStatus('Click value to edit.')
 	
 	var oSearch = new AdvancedSearch();
 	oSearch.method = gsSetupMethod + '_SEARCH';
 	oSearch.addField('title');
 	oSearch.rows = 100;
 	oSearch.sort('title', 'asc');
-	oSearch.getResults(function(data) {interfaceSetupHomeShow(aParam, data)});
+	oSearch.getResults(function(data) {interfaceSetupHomeShow(oParam, data)});
 }
 
-function interfaceSetupHomeShow(aParam, oResponse)
+function interfaceSetupHomeShow(oParam, oResponse)
 {
 	var aHTML = [];
 	var h = -1;
@@ -198,7 +198,7 @@ function interfaceSetupHomeShow(aParam, oResponse)
 		.css('width', '15px')
 		.css('height', '20px')
 			
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 }			
 	
 function interfaceSetupAdd()
@@ -216,7 +216,7 @@ function interfaceSetupAdd()
 	aHTML[++h] = '</tr>'
 			
 	$('#tableInterfaceSetupHomeMostLikely tr:first').after(aHTML.join(''));	
-	$('#spanInterfaceMasterViewportControlNew').button({disabled: true});
+	$('#spanns1blankspaceViewportControlNew').button({disabled: true});
 	$('#spanInterfaceSetupAdd').button({disabled: true});
 	
 	interfaceSetupElementEditStart("tdSetup-")
@@ -255,7 +255,7 @@ function interfaceSetupSearch(sXHTMLElementId, iSource, sSearchText, sSearchCont
 		
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -269,7 +269,7 @@ function interfaceSetupSearch(sXHTMLElementId, iSource, sSearchText, sSearchCont
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
-			interfaceMasterOptionsSetPosition(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
 			
 			var sParam = gsSetupMethod + '_SEARCH&rf=XMLtitle=' + sSearchText;
 								
@@ -297,7 +297,7 @@ function interfaceSetupSearchShow(oXML)
 	
 	if (oRoot.childNodes.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -331,13 +331,13 @@ function interfaceSetupSearchShow(oXML)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupSearch(event.target.id, 1);
 		});
 	}	
@@ -371,13 +371,13 @@ function interfaceSetupViewport()
 		
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceSetupDetails();
 	})
 	
 }
 
-function interfaceSetupShow(aParam, oXML)
+function interfaceSetupShow(oParam, oXML)
 {
 
 	var iActionID = -1;
@@ -387,22 +387,22 @@ function interfaceSetupShow(aParam, oXML)
 	var iOffsetHeight = 5;
 	var iOffsetLeft = 0;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.setupObjectContextID != undefined) {iSetupObjectContextID = aParam.setupObjectContextID};
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID};
-		if (aParam.offsetHeight != undefined) {iOffsetHeight = aParam.offsetHeight};
-		if (aParam.offsetLeft != undefined) {iOffsetLeft = aParam.offsetLeft};
+		if (oParam.setupObjectContextID != undefined) {iSetupObjectContextID = oParam.setupObjectContextID};
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID};
+		if (oParam.offsetHeight != undefined) {iOffsetHeight = oParam.offsetHeight};
+		if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft};
 	}	
 
-	if ($('#divInterfaceMasterDialog').attr('onDemandSource') == sXHTMLElementID)
+	if ($('#divns1blankspaceDialog').attr('onDemandSource') == sXHTMLElementID)
 	{
-		$('#divInterfaceMasterDialog').hide("slide", { direction: "up" }, 500);
-		$('#divInterfaceMasterDialog').attr('onDemandSource', '');
+		$('#divns1blankspaceDialog').hide("slide", { direction: "up" }, 500);
+		$('#divns1blankspaceDialog').attr('onDemandSource', '');
 	}
 	else
 	{
-		$('#divInterfaceMasterDialog').attr('onDemandSource', sXHTMLElementID);
+		$('#divns1blankspaceDialog').attr('onDemandSource', sXHTMLElementID);
 	
 		if (iActionID != -1 && oXML == undefined)
 		{
@@ -414,7 +414,7 @@ function interfaceSetupShow(aParam, oXML)
 				type: 'GET',
 				url: '/ondemand/setup/?' + sParam,
 				dataType: 'xml',
-				success: function(data) {interfaceSetupShow(aParam, data)}
+				success: function(data) {interfaceSetupShow(oParam, data)}
 			});	
 		}
 		else
@@ -422,7 +422,7 @@ function interfaceSetupShow(aParam, oXML)
 			var aHTML = [];
 			var h = -1;
 			
-			aHTML[++h] = '<table id="tableInterfaceMasterActionAdd" class="interfaceDialogMedium">';
+			aHTML[++h] = '<table id="tablens1blankspaceActionAdd" class="interfaceDialogMedium">';
 			
 			aHTML[++h] = '<tr id="trInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
 								'<td id="tdInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
@@ -430,7 +430,7 @@ function interfaceSetupShow(aParam, oXML)
 								
 			if (iActionID == -1)
 			{	
-				aHTML[++h] = ' interfaceMasterWatermark" value="Subject">';
+				aHTML[++h] = ' ns1blankspaceWatermark" value="Subject">';
 			}
 			else
 			{
@@ -439,12 +439,12 @@ function interfaceSetupShow(aParam, oXML)
 			
 			aHTML[++h] = '</td></tr>';
 			
-			aHTML[++h] = '<tr><td id="tdInterfaceMasterActionAddDescriptionValue" class="interfaceMain">' +
-								'<textarea rows="5" cols="35" onDemandType="TEXTMULTI" id="inputInterfaceMasterActionAddDescription" class="inputInterfaceMainTextMultiSmall';
+			aHTML[++h] = '<tr><td id="tdns1blankspaceActionAddDescriptionValue" class="interfaceMain">' +
+								'<textarea rows="5" cols="35" onDemandType="TEXTMULTI" id="inputns1blankspaceActionAddDescription" class="inputInterfaceMainTextMultiSmall';
 
 			if (iActionID == -1)
 			{	
-				aHTML[++h] = ' interfaceMasterWatermark">Add more text here, if required.</textarea>';
+				aHTML[++h] = ' ns1blankspaceWatermark">Add more text here, if required.</textarea>';
 			}
 			else
 			{
@@ -453,32 +453,32 @@ function interfaceSetupShow(aParam, oXML)
 
 			aHTML[++h] = '</td></tr>';
 
-			aHTML[++h] = '<tr id="trInterfaceMasterActionAddBusiness" class="interfaceMain">' +
-								'<td id="tdInterfaceMasterActionAddBusiness" class="interfaceMain">' +
+			aHTML[++h] = '<tr id="trns1blankspaceActionAddBusiness" class="interfaceMain">' +
+								'<td id="tdns1blankspaceActionAddBusiness" class="interfaceMain">' +
 								'Business' +
 								'</td></tr>' +
-								'<tr id="trInterfaceMasterActionAddBusinessValue" class="interfaceMainSelect">' +
-								'<td id="tdInterfaceMasterActionAddBusinessValue" class="interfaceMainSelect">' +
-								'<input onDemandType="SELECT" id="inputInterfaceMasterActionAddBusiness" class="inputInterfaceMainSelect"' +
+								'<tr id="trns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
+								'<td id="tdns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
+								'<input onDemandType="SELECT" id="inputns1blankspaceActionAddBusiness" class="inputInterfaceMainSelect"' +
 									' onDemandMethod="/ondemand/contact/?method=CONTACT_BUSINESS_SEARCH"' +
 									' onDemandColumns="tradename">' +
 								'</td></tr>';
 								
 			
-			aHTML[++h] = '<tr id="trInterfaceMasterActionAddPerson" class="interfaceMain">' +
-								'<td id="tdInterfaceMasterActionAddPerson" class="interfaceMain">' +
+			aHTML[++h] = '<tr id="trns1blankspaceActionAddPerson" class="interfaceMain">' +
+								'<td id="tdns1blankspaceActionAddPerson" class="interfaceMain">' +
 								'Person' +
 								'</td></tr>' +
-								'<tr id="trInterfaceMasterActionAddPersonValue" class="interfaceMainSelect">' +
-								'<td id="tdInterfaceMasterActionAddPersonValue" class="interfaceMainSelect">' +
-								'<input onDemandType="SELECT" id="inputInterfaceMasterActionAddPerson" class="inputInterfaceMainSelectContact"' +
+								'<tr id="trns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
+								'<td id="tdns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
+								'<input onDemandType="SELECT" id="inputns1blankspaceActionAddPerson" class="inputInterfaceMainSelectContact"' +
 									' onDemandMethod="/ondemand/contact/?method=CONTACT_PERSON_SEARCH"' +
-									' onDemandParent="inputInterfaceMasterActionAddBusiness">' +
+									' onDemandParent="inputns1blankspaceActionAddBusiness">' +
 								'</td></tr>';									
 								
 								
-			aHTML[++h] = '<tr><td id="tdInterfaceMasterActionAddHighPriority" class="interfaceMain">' +
-								'<input type="checkbox" id="inputInterfaceMasterActionAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>';
+			aHTML[++h] = '<tr><td id="tdns1blankspaceActionAddHighPriority" class="interfaceMain">' +
+								'<input type="checkbox" id="inputns1blankspaceActionAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>';
 								
 				
 			aHTML[++h] = '<tr><td>';
@@ -498,14 +498,14 @@ function interfaceSetupShow(aParam, oXML)
 			
 			var oElement = $('#' + sXHTMLElementID)
 			
-			$('#divInterfaceMasterDialog').html('');
-			$('#divInterfaceMasterDialog').show();
-			$('#divInterfaceMasterDialog').offset(
+			$('#divns1blankspaceDialog').html('');
+			$('#divns1blankspaceDialog').show();
+			$('#divns1blankspaceDialog').offset(
 				{
 					top: $(oElement).offset().top + $(oElement).height() + iOffsetHeight,
 					left: $(oElement).offset().left + iOffsetLeft
 				});
-			$('#divInterfaceMasterDialog').html(aHTML.join(''));
+			$('#divns1blankspaceDialog').html(aHTML.join(''));
 			
 			$('#spanCancel').button(
 				{
@@ -515,8 +515,8 @@ function interfaceSetupShow(aParam, oXML)
 					}
 				})
 				.click(function() {
-					$('#divInterfaceMasterDialog').slideUp(500);
-					$('#divInterfaceMasterDialog').html('');
+					$('#divns1blankspaceDialog').slideUp(500);
+					$('#divns1blankspaceDialog').html('');
 				})
 				.css('width', '20px')
 				.css('height', '20px')
@@ -541,8 +541,8 @@ function interfaceSetupShow(aParam, oXML)
 							calendarXHTMLElementID: 'divInterfaceMainCalendar'
 							});
 					
-					$('#divInterfaceMasterDialog').slideUp(500);
-					$('#divInterfaceMasterDialog').html('');
+					$('#divns1blankspaceDialog').slideUp(500);
+					$('#divns1blankspaceDialog').html('');
 
 				})
 				.css('width', '30px')
@@ -567,7 +567,7 @@ function interfaceSetupShow(aParam, oXML)
 function interfaceSetupShow2(oXML)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupViewport();
 	
 	goSetupContextXML = oXML;
@@ -702,7 +702,7 @@ function interfaceSetupElementEditSave(sElementId)
 	if (aElement[1] == '' && $('#' + sElementId.replace('td', 'input')).val() == '')
 	{
 		$('#tableInterfaceSetupHomeMostLikely tr:first').next().fadeOut(500);	
-		$('#spanInterfaceMasterViewportControlNew').button({disabled: false});
+		$('#spanns1blankspaceViewportControlNew').button({disabled: false});
 		$('#spanInterfaceSetupAdd').button({disabled: false});
 	}
 	else
@@ -740,8 +740,8 @@ function interfaceSetupElementEditSave(sElementId)
 								.css('width', '15px')
 								.css('height', '20px')
 						}
-						interfaceMasterStatus('Saved')
-						$('#spanInterfaceMasterViewportControlNew').button({disabled: false});
+						ns1blankspaceStatus('Saved')
+						$('#spanns1blankspaceViewportControlNew').button({disabled: false});
 						$('#spanInterfaceSetupAdd').button({disabled: false});
 					}
 		});

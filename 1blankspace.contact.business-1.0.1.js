@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
  
-function interfaceContactBusinessMasterViewport(aParam)
+function interfaceContactBusinessMasterViewport(oParam)
 {
 
 	ns1blankspace.object = 12;
@@ -14,74 +14,74 @@ function interfaceContactBusinessMasterViewport(aParam)
 	ns1blankspace.objectContext = -1;
 	bShowHome = true;
 			
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
 	}	
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceContactBusinessMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 	
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Businesses"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
-		interfaceContactBusinessSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceContactBusinessSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceContactBusinessSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceContactBusinessSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceContactBusinessSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceContactBusinessNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceContactBusinessNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceContactBusinessSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceContactBusinessSaveOptions();
 	});
 		
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 		
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceContactBusinessSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceContactBusinessHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceContactBusinessHelpOptions();
 	});
@@ -96,7 +96,7 @@ function interfaceContactBusinessMasterViewport(aParam)
 		interfaceContactBusinessSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	$('#divInterfaceViewportControl').html('');	
 	
 	if (bShowHome) {interfaceContactBusinessHomeShow()};
@@ -124,7 +124,7 @@ function interfaceContactBusinessHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportContactLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportContactLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -139,11 +139,11 @@ function interfaceContactBusinessHomeShow(oResponse)
 		
 		$('#tdInterfaceViewportControlByGroup').click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMain", true);
+			ns1blankspaceMainViewportShow("#divInterfaceMain", true);
 			interfaceContactBusinessByGroup("divInterfaceMain");
 		});
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = 'contact';
@@ -203,7 +203,7 @@ function interfaceContactBusinessHomeShow(oResponse)
 }
 
 
-function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
+function interfaceContactBusinessSearch(sXHTMLElementId, oParam)
 {
 	
 	var aSearch = sXHTMLElementId.split('-');
@@ -215,14 +215,14 @@ function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -243,7 +243,7 @@ function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
 							'notes,primarycontactperson');
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 		oSearch.rf = 'json';
-		oSearch.getResults(function(data) {interfaceContactBusinessShow(aParam, data)}) 
+		oSearch.getResults(function(data) {interfaceContactBusinessShow(oParam, data)}) 
 		
 	}
 	else
@@ -254,7 +254,7 @@ function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
 
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -269,8 +269,8 @@ function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
 			
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.endPoint = 'contact';
@@ -287,12 +287,12 @@ function interfaceContactBusinessSearch(sXHTMLElementId, aParam)
 			}	
 			
 			oSearch.rf = 'json';
-			oSearch.getResults(function(data) {interfaceContactBusinessSearchShow(aParam, data)}) 
+			oSearch.getResults(function(data) {interfaceContactBusinessSearchShow(oParam, data)}) 
 		}
 	};	
 }
 
-function interfaceContactBusinessSearchShow(aParam, oResponse)
+function interfaceContactBusinessSearchShow(oParam, oResponse)
 {
 
 	var iColumn = 0;
@@ -302,8 +302,8 @@ function interfaceContactBusinessSearchShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -332,26 +332,26 @@ function interfaceContactBusinessSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(
-			interfaceMasterPagination(
+		$('#divns1blankspaceViewportControlOptions').html(
+			ns1blankspacePagination(
 			{
 				html: aHTML.join(''),
 				more: (oResponse.morerows == "true")
 			}) 
 		);		
 		
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
-		interfaceMasterSearchStop();
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceContactBusinessSearch(event.target.id, {source: 1});
 		});
 		
-		interfaceMasterPaginationBind(
+		ns1blankspacePaginationBind(
 		{
 			columns: 'tradename',
 			more: oResponse.moreid,
@@ -446,53 +446,53 @@ function interfaceContactBusinessViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceContactBusinessSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceContactBusinessDetails();
 	});
 	
 	
 	$('#tdInterfaceViewportControlAddress').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAddress");
+		ns1blankspaceMainViewportShow("#divInterfaceMainAddress");
 		interfaceContactBusinessAddress();
 	});
 	
 	$('#tdInterfaceViewportControlGroups').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainGroups", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainGroups", true);
 		interfaceContactBusinessGroups();
 	});
 	
 	$('#tdInterfaceViewportControlPeople').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainPeople", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainPeople", true);
 		interfaceContactBusinessPeople();
 	});
 	
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
-		interfaceMasterActions({xhtmlElementID: 'divInterfaceMainActions', contactBusiness: ns1blankspace.objectContext, object: '', objectContext: ''});
+		ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
+		ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions', contactBusiness: ns1blankspace.objectContext, object: '', objectContext: ''});
 	});
 	
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 	
 }
 
-function interfaceContactBusinessShow(aParam, oResponse)
+function interfaceContactBusinessShow(oParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceContactBusinessViewport();
 	
 	var aHTML = [];
@@ -514,15 +514,15 @@ function interfaceContactBusinessShow(aParam, oResponse)
 		ns1blankspace.contactBusinessText = ns1blankspace.objectContextData.tradename;
 				
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.tradename);
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 		
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceContactBusinessMasterViewport({showHome: false});interfaceContactBusinessSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceContactBusinessSummary()'})
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceContactBusinessSummary()'})
 	}	
 }		
 		
@@ -933,37 +933,37 @@ function interfaceContactBusinessSave()
 	
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
-		sData += '&legalname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsLegalName').val());
-		sData += '&tradename=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsBusinessTradingName').val());
-		sData += '&industry=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsIndustry').attr('onDemandID'));
-		sData += '&abn=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsABN').val());
-		sData += '&phonenumber=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPhone').val());
-		sData += '&faxnumber=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsFax').val());
-		sData += '&webaddress=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsWebAddress').val());
-		//sData += '&area=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsArea').val());
-		sData += '&customerstatus=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsStatus').attr('onDemandID'));
-		sData += '&notes=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
+		sData += '&reference=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsReference').val());
+		sData += '&legalname=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsLegalName').val());
+		sData += '&tradename=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsBusinessTradingName').val());
+		sData += '&industry=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsIndustry').attr('onDemandID'));
+		sData += '&abn=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsABN').val());
+		sData += '&phonenumber=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsPhone').val());
+		sData += '&faxnumber=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsFax').val());
+		sData += '&webaddress=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsWebAddress').val());
+		//sData += '&area=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsArea').val());
+		sData += '&customerstatus=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsStatus').attr('onDemandID'));
+		sData += '&notes=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsDescription').val());
 	}
 	
 	if ($('#divInterfaceMainAddress').html() != '')
 	{
-		sData += '&streetaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetAddress1').val());
-		sData += '&streetsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetSuburb').val());
-		sData += '&streetstate=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetState').val());
-		sData += '&streetpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetPostCode').val());
-		sData += '&streetcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetCountry').val());
-		sData += '&mailingaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingAddress1').val());
-		sData += '&mailingsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingSuburb').val());
-		sData += '&mailingstate=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingState').val());
-		sData += '&mailingpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingPostCode').val());
-		sData += '&mailingcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingCountry').val());
+		sData += '&streetaddress1=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetAddress1').val());
+		sData += '&streetsuburb=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetSuburb').val());
+		sData += '&streetstate=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetState').val());
+		sData += '&streetpostcode=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetPostCode').val());
+		sData += '&streetcountry=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetCountry').val());
+		sData += '&mailingaddress1=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingAddress1').val());
+		sData += '&mailingsuburb=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingSuburb').val());
+		sData += '&mailingstate=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingState').val());
+		sData += '&mailingpostcode=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingPostCode').val());
+		sData += '&mailingcountry=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingCountry').val());
 	}
 	
 	$.ajax(
 	{
 		type: 'POST',
-		url: interfaceMasterEndpointURL('CONTACT_BUSINESS_MANAGE'),
+		url: ns1blankspaceEndpointURL('CONTACT_BUSINESS_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: interfaceContactBusinessSaveProcess
@@ -975,7 +975,7 @@ function interfaceContactBusinessSaveProcess(oResponse)
 {
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 		if (ns1blankspace.objectContext == -1) {var bNew = true}
 		ns1blankspace.objectContext = oResponse.id;	
 		
@@ -983,22 +983,22 @@ function interfaceContactBusinessSaveProcess(oResponse)
 	}
 	else
 	{
-		interfaceMasterStatus(oResponse.error.errornotes);
-		interfaceMasterConfirm( {html: [oResponse.error.errornotes]
+		ns1blankspaceStatus(oResponse.error.errornotes);
+		ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
 								   , title: 'Save error!'});
 	}
 }
 
-function interfaceContactBusinessGroups(aParam, oResponse)
+function interfaceContactBusinessGroups(oParam, oResponse)
 {	
 	var sXHTMLElementID = 'divInterfaceMainGroups';
 	var sLabel = "groups";
 	var iOption = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.label != undefined) {sLabel = aParam.label}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.label != undefined) {sLabel = oParam.label}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	if (oResponse == undefined)
@@ -1010,7 +1010,7 @@ function interfaceContactBusinessGroups(aParam, oResponse)
 		oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.rows = 100;
 		oSearch.sort('grouptext', 'asc');
-		oSearch.getResults(function(data) {interfaceContactBusinessGroups(aParam, data)});
+		oSearch.getResults(function(data) {interfaceContactBusinessGroups(oParam, data)});
 	}
 	else
 	{
@@ -1050,8 +1050,8 @@ function interfaceContactBusinessGroups(aParam, oResponse)
 			label: "Add Group"
 		})
 		.click(function() {
-			interfaceMasterOptionsSetPosition('spanInterfaceMainContactBusinessGroupsAdd', -50, -280);
-			interfaceContactBusinessGroupsAdd(aParam);
+			ns1blankspaceOptionsSetPosition('spanInterfaceMainContactBusinessGroupsAdd', -50, -280);
+			interfaceContactBusinessGroupsAdd(oParam);
 		})
 		.css('width', '75px')
 		
@@ -1110,13 +1110,13 @@ function interfaceContactBusinessGroups(aParam, oResponse)
 	}	
 }	
 
-function interfaceContactBusinessGroupsAdd(aParam, oResponse)
+function interfaceContactBusinessGroupsAdd(oParam, oResponse)
 {
 		
-	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == 'spanInterfaceMainContactPersonGroupsAdd')
+	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == 'spanInterfaceMainContactPersonGroupsAdd')
 	{
-		$('#divInterfaceMasterViewportControlOptions').slideUp(500);
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').slideUp(500);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{
@@ -1127,13 +1127,13 @@ function interfaceContactBusinessGroupsAdd(aParam, oResponse)
 				type: 'GET',
 				url: '/ondemand/setup/?method=SETUP_CONTACT_BUSINESS_GROUP_SEARCH',
 				dataType: 'json',
-				success: function(data){interfaceContactBusinessGroupsAdd(aParam, data)}
+				success: function(data){interfaceContactBusinessGroupsAdd(oParam, data)}
 			});
 		}
 		else
 		{
 			
-			$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', 'spanInterfaceMainContactPersonGroupsAdd')
+			$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', 'spanInterfaceMainContactPersonGroupsAdd')
 			
 			var aHTML = [];
 			var h = -1;
@@ -1146,8 +1146,8 @@ function interfaceContactBusinessGroupsAdd(aParam, oResponse)
 								'<td class="interfaceMainRowNothing">No groups.</td></tr>';
 				aHTML[++h] = '</tbody></table>';
 
-				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+				$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+				$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 			}
 			else
 			{
@@ -1166,8 +1166,8 @@ function interfaceContactBusinessGroupsAdd(aParam, oResponse)
 				
 				aHTML[++h] = '</tbody></table>';
 
-				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+				$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+				$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 				
 				$('td.interfaceMainRowSelect').click(function(event)
 				{
@@ -1219,17 +1219,17 @@ function interfaceContactBusinessGroupsAddRemove(sXHTMLElementId)
 	});	
 }
 
-function interfaceContactBusinessPeople(aParam, oResponse)
+function interfaceContactBusinessPeople(oParam, oResponse)
 {
 	
 	var sXHTMLElementID = 'divInterfaceMainPeople';
 	var sLabel = "people";
 	var iOption = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.label != undefined) {sLabel = aParam.label}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.label != undefined) {sLabel = oParam.label}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	if (oResponse == undefined)
@@ -1246,7 +1246,7 @@ function interfaceContactBusinessPeople(aParam, oResponse)
 		oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.sort('modifieddate', 'desc');
 		
-		oSearch.getResults(function(data) {interfaceContactBusinessPeople(aParam, data)});
+		oSearch.getResults(function(data) {interfaceContactBusinessPeople(oParam, data)});
 		
 	}
 	else
@@ -1328,7 +1328,7 @@ function interfaceContactBusinessPeople(aParam, oResponse)
 			
 			aHTML[++h] = '</tbody></table>';
 			
-			interfaceMasterPaginationList(
+			ns1blankspacePaginationList(
 			{
 				xhtmlElementID: 'tdInterfaceMainContactBusinessPeopleColumn1',
 				xhtmlContext: 'ContactBusinessPeople',
@@ -1409,21 +1409,21 @@ function interfaceContactBusinessNew()
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceContactBusinessViewport();
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	interfaceContactBusinessDetails();
 }
 
-function interfaceContactBusinessByGroup(aParam, oResponse)
+function interfaceContactBusinessByGroup(oParam, oResponse)
 {	
 	var sXHTMLElementID = 'divInterfaceMain';
 	var sLabel = "groups";
 	var iOption = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	if (oResponse == undefined)
@@ -1433,7 +1433,7 @@ function interfaceContactBusinessByGroup(aParam, oResponse)
 			type: 'GET',
 			url: '/ondemand/setup/?method=SETUP_CONTACT_BUSINESS_GROUP_SEARCH',
 			dataType: 'json',
-			success: function(data) {interfaceContactBusinessByGroup(aParam, data)}
+			success: function(data) {interfaceContactBusinessByGroup(oParam, data)}
 		});
 	}
 	else
@@ -1495,13 +1495,13 @@ function interfaceContactBusinessByGroup(aParam, oResponse)
 	}	
 }	
 
-function interfaceContactBusinessByGroupContacts(aParam, oResponse)
+function interfaceContactBusinessByGroupContacts(oParam, oResponse)
 {
 	var sXHTMLElementID;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	var aXHTMLElementId = sXHTMLElementID.split('-')
@@ -1515,7 +1515,7 @@ function interfaceContactBusinessByGroupContacts(aParam, oResponse)
 		oSearch.addField('contactbusiness,businessgroup.contactbusiness.tradename,group,grouptext');
 		oSearch.addFilter('group', 'EQUAL_TO', aXHTMLElementId[1]);
 		oSearch.sort('businessgroup.contactbusiness.tradename', 'asc');
-		oSearch.getResults(function(data) {interfaceContactBusinessByGroupContacts(aParam, data)});
+		oSearch.getResults(function(data) {interfaceContactBusinessByGroupContacts(oParam, data)});
 	}
 	else
 	{
@@ -1548,7 +1548,7 @@ function interfaceContactBusinessByGroupContacts(aParam, oResponse)
 			aHTML[++h] = '</tbody></table>';
 		}
 		
-		interfaceMasterPaginationList(
+		ns1blankspacePaginationList(
 		{
 			xhtmlElementID: "tdInterfaceMainContactBusinessByGroupColumn2",
 			xhtmlContext: 'ContactBusinessGroupsContacts',

@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
  
-function interfaceSetupNetworkGroupMasterViewport(aParam)
+function interfaceSetupNetworkGroupMasterViewport(oParam)
 {
 	gsSetupName = 'Network Group';
 	ns1blankspace.objectContext = undefined;
@@ -13,52 +13,52 @@ function interfaceSetupNetworkGroupMasterViewport(aParam)
 	
 	var bShowHome = true;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
-		if (aParam.showNew != undefined) {bNew = aParam.showNew}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+		if (oParam.showNew != undefined) {bNew = oParam.showNew}
 	}	
 	
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Network Groups"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
-		interfaceSetupNetworkGroupSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupNetworkGroupSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceSetupNetworkGroupSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupNetworkGroupSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceSetupNetworkGroupSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceSetupNetworkGroupNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceSetupNetworkGroupNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceSetupNetworkGroupSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		var aHTML = [];
 		var h = -1;
@@ -73,17 +73,17 @@ function interfaceSetupNetworkGroupMasterViewport(aParam)
 
 		aHTML[++h] = '</table>';
 
-		interfaceMasterViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
+		ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceSetupNetworkGroupSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceSetupNetworkGroupHelp();
 	});
@@ -99,11 +99,11 @@ function interfaceSetupNetworkGroupMasterViewport(aParam)
 	});
 
 	$('#divInterfaceViewportControl').html('');		
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	if (bShowHome) {interfaceSetupNetworkGroupHomeShow()};
 }
 
-function interfaceSetupNetworkGroupHomeShow(aParam, oResponse)
+function interfaceSetupNetworkGroupHomeShow(oParam, oResponse)
 {
 	if (oResponse == undefined)
 	{
@@ -125,7 +125,7 @@ function interfaceSetupNetworkGroupHomeShow(aParam, oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportSetupLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportSetupLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -133,7 +133,7 @@ function interfaceSetupNetworkGroupHomeShow(aParam, oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_NETWORK_GROUP_SEARCH';
@@ -141,7 +141,7 @@ function interfaceSetupNetworkGroupHomeShow(aParam, oResponse)
 		oSearch.rows = 10;
 		oSearch.addSummaryField('count networkgroupcount')
 		oSearch.sort('modifieddate', 'desc');
-		oSearch.getResults(function(data) {interfaceSetupNetworkGroupHomeShow(aParam, data)});	
+		oSearch.getResults(function(data) {interfaceSetupNetworkGroupHomeShow(oParam, data)});	
 	}
 	else
 	{
@@ -217,7 +217,7 @@ function interfaceSetupNetworkGroupSearch(sXHTMLElementId, iSource, sSearchText,
 		
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -231,8 +231,8 @@ function interfaceSetupNetworkGroupSearch(sXHTMLElementId, iSource, sSearchText,
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{	
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var sParam = 'method=SETUP_NETWORK_GROUP_SEARCH&quicksearch=' + sSearchText;
 
@@ -257,8 +257,8 @@ function interfaceSetupNetworkGroupSearchShow(oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -287,14 +287,14 @@ function interfaceSetupNetworkGroupSearchShow(oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		interfaceMasterSearchStop();
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupNetworkGroupSearch(event.target.id, 1);
 		});
 	}
@@ -345,26 +345,26 @@ function interfaceSetupNetworkGroupViewport()
 		
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceSetupNetworkGroupSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceSetupNetworkGroupDetails();
 	});
 	
 	$('#tdInterfaceViewportControlMembersAdd').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainMembersAdd", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainMembersAdd", true);
 		interfaceSetupNetworkGroupMembersAdd();
 	});	
 }
 
 function interfaceSetupNetworkGroupShow(oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupNetworkGroupViewport();
 	
 	var aHTML = [];
@@ -395,8 +395,8 @@ function interfaceSetupNetworkGroupShow(oResponse)
 		aHTML[++h] = '</table>';					
 		
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 		
 		interfaceSetupNetworkGroupSummary();
 	}	
@@ -448,7 +448,7 @@ function interfaceSetupNetworkGroupSummary()
 		
 		$('#aInterfaceMainSummaryAddAttachment').click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainAddMember");
+			ns1blankspaceMainViewportShow("#divInterfaceMainAddMember");
 			interfaceSetupNetworkGroupAddMember();
 		});
 			
@@ -527,8 +527,8 @@ function interfaceSetupNetworkGroupDetails()
 		
 		$('#inputInterfaceMainDetailsStatus').keyup(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(200);
-			interfaceMasterElementOptionsSearch(event.target.id);
+			$('#divns1blankspaceViewportControlOptions').hide(200);
+			ns1blankspaceElementOptionsSearch(event.target.id);
 		});		
 		
 	}	
@@ -553,7 +553,7 @@ function interfaceSetupNetworkGroupMembers()
 		$('#divInterfaceMainMembers').html(aHTML.join(''));
 			
 		$('#tdInterfaceMainMembersColumn1').html(ns1blankspace.xhtml.loading);
-		interfaceMasterAttachments("tdInterfaceMainMembersColumn1");
+		ns1blankspaceAttachments("tdInterfaceMainMembersColumn1");
 		
 		var aHTML = [];
 		var h = -1;
@@ -574,7 +574,7 @@ function interfaceSetupNetworkGroupMembers()
 			text: "Add"
 		})
 		.click(function() {
-			interfaceMasterMainViewportShow("#divInterfaceMainAddAttachment");
+			ns1blankspaceMainViewportShow("#divInterfaceMainAddAttachment");
 			interfaceSetupNetworkGroupAddMember();
 		})
 		
@@ -609,7 +609,7 @@ function interfaceSetupNetworkGroupSave()
 						var aReturn = data.split('|');
 						glObjectContext = aReturn[2];
 						glSetupContext = aReturn[2];
-						interfaceMasterStatus('Network Group Saved.');
+						ns1blankspaceStatus('Network Group Saved.');
 						
 						if ($('input[name="radioContactSync"]:checked').val() == 'Y')
 						{
@@ -638,7 +638,7 @@ function interfaceSetupNetworkGroupMembersAddSyncProcess(gsParentWebMasterLogonN
 		url: '/ondemand/setup/?' + sParam,
 		data: sData,
 		dataType: 'text',
-		success: interfaceMasterStatus('Network Group Saved.')
+		success: ns1blankspaceStatus('Network Group Saved.')
 	});
 	
 }
@@ -780,7 +780,7 @@ function interfaceSetupNetworkGroupMembersAdd(oResponse)
 					url: '/ondemand/setup/?' + sParam,
 					data: sData,
 					dataType: 'text',
-					success: interfaceMasterStatus('Users added.')
+					success: ns1blankspaceStatus('Users added.')
 				});
 			}
 		}	
@@ -792,8 +792,8 @@ function interfaceSetupNetworkGroupNew(oXML)
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceSetupNetworkGroupViewport();
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	interfaceSetupNetworkGroupDetails();
 }

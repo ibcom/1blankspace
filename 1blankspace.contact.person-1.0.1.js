@@ -9,7 +9,7 @@ $(function()
 {
 })
 
-function interfaceContactPersonMasterViewport(aParam)
+function interfaceContactPersonMasterViewport(oParam)
 {
 	ns1blankspace.object = 32;	
 	ns1blankspace.objectName = 'Person';
@@ -19,64 +19,64 @@ function interfaceContactPersonMasterViewport(aParam)
 	var bShowHome = true;
 	var bNew = false;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
-		if (aParam.showNew != undefined) {bNew = aParam.showNew}
-		if (aParam.contactBusiness != undefined) {ns1blankspace.contactBusiness = aParam.contactBusiness}
-		if (aParam.contactBusinessText != undefined) {ns1blankspace.contactBusinessText = aParam.contactBusinessText}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+		if (oParam.showNew != undefined) {bNew = oParam.showNew}
+		if (oParam.contactBusiness != undefined) {ns1blankspace.contactBusiness = oParam.contactBusiness}
+		if (oParam.contactBusinessText != undefined) {ns1blankspace.contactBusinessText = oParam.contactBusinessText}
 		if (bNew) {interfaceContactPersonNew()};
 	}	
 			
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceContactPersonMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "People"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceContactPersonSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceContactPersonSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceContactPersonSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceContactPersonSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceContactPersonSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceContactPersonNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceContactPersonNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceContactPersonSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 	
 		var aHTML = [];
@@ -92,17 +92,17 @@ function interfaceContactPersonMasterViewport(aParam)
 
 		aHTML[++h] = '</table>';
 
-		interfaceMasterViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
+		ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 		
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceContactPersonSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceContactPersonHelp();
 	});
@@ -118,7 +118,7 @@ function interfaceContactPersonMasterViewport(aParam)
 	});
 	
 	$('#divInterfaceViewportControl').html('');	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	if (bNew) 
 	{
 		interfaceContactPersonNew();
@@ -151,7 +151,7 @@ function interfaceContactPersonHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportContactLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportContactLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -170,17 +170,17 @@ function interfaceContactPersonHomeShow(oResponse)
 		
 		$('#tdInterfaceViewportControlByGroup').click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMain", true);
+			ns1blankspaceMainViewportShow("#divInterfaceMain", true);
 			interfaceContactPersonByGroup("divInterfaceMain");
 		});
 			
 		$('#tdInterfaceViewportControlFavourites').click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMain", true);
+			ns1blankspaceMainViewportShow("#divInterfaceMain", true);
 			interfaceContactFavourites({xhtmlElementID: "divInterfaceMain"});
 		});
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.endPoint = 'contact';
@@ -237,7 +237,7 @@ function interfaceContactPersonHomeShow(oResponse)
 	}
 }
 
-function interfaceContactPersonSearch(sXHTMLElementId, aParam)
+function interfaceContactPersonSearch(sXHTMLElementId, oParam)
 {
 	
 	var aSearch = sXHTMLElementId.split('-');
@@ -249,14 +249,14 @@ function interfaceContactPersonSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -274,13 +274,13 @@ function interfaceContactPersonSearch(sXHTMLElementId, aParam)
 								 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry');
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 		oSearch.rf = 'json';
-		oSearch.getResults(function(data) {interfaceContactPersonShow(aParam, data)});
+		oSearch.getResults(function(data) {interfaceContactPersonShow(oParam, data)});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -294,8 +294,8 @@ function interfaceContactPersonSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.endPoint = 'contact';
@@ -313,12 +313,12 @@ function interfaceContactPersonSearch(sXHTMLElementId, aParam)
 			
 			oSearch.rows = 15;
 			oSearch.rf = 'json';
-			oSearch.getResults(function(data) {interfaceContactPersonSearchShow(aParam, data)});
+			oSearch.getResults(function(data) {interfaceContactPersonSearchShow(oParam, data)});
 		}
 	};	
 }
 
-function interfaceContactPersonSearchShow(aParam, oResponse)
+function interfaceContactPersonSearchShow(oParam, oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -327,8 +327,8 @@ function interfaceContactPersonSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{	
@@ -362,26 +362,26 @@ function interfaceContactPersonSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 		
-		$('#divInterfaceMasterViewportControlOptions').html(
-			interfaceMasterPagination(
+		$('#divns1blankspaceViewportControlOptions').html(
+			ns1blankspacePagination(
 			{
 				html: aHTML.join(''),
 				more: (oResponse.morerows == "true")
 			}) 
 		);		
 		
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
-		interfaceMasterSearchStop();
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceContactPersonSearch(event.target.id, {source: 1});
 		});
 		
-		interfaceMasterPaginationBind(
+		ns1blankspacePaginationBind(
 		{
 			columns: 'firstname-surname',
 			more: oResponse.moreid,
@@ -476,51 +476,51 @@ function interfaceContactPersonViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceContactPersonSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceContactPersonDetails();
 	});
 	
 	
 	$('#tdInterfaceViewportControlAddress').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAddress");
+		ns1blankspaceMainViewportShow("#divInterfaceMainAddress");
 		interfaceContactPersonAddress();
 	});
 	
 	$('#tdInterfaceViewportControlUser').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainUser", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainUser", true);
 		interfaceContactPersonUser();
 	});
 	
 	$('#tdInterfaceViewportControlGroups').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainGroups", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainGroups", true);
 		interfaceContactPersonGroups();
 	});
 	
 	$('#tdInterfaceViewportControlBusiness').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainBusiness", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainBusiness", true);
 		interfaceContactPersonBusiness();
 	});
 	
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
 		
 		if ($('#inputInterfaceMainDetailsFirstName').val() != undefined)
 		{
 			ns1blankspace.contactPersonText = $('#inputInterfaceMainDetailsFirstName').val() + ' ' + $('#inputInterfaceMainDetailsSurname').val();
 		}
 		
-		interfaceMasterActions({
+		ns1blankspaceActions({
 							xhtmlElementID: 'divInterfaceMainActions',
 							contactPerson: ns1blankspace.objectContext, 
 							contactPersonText: ns1blankspace.contactPersonText,
@@ -533,15 +533,15 @@ function interfaceContactPersonViewport()
 	
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 	
 }
 
-function interfaceContactPersonShow(aParam, oResponse)
+function interfaceContactPersonShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceContactPersonViewport();
 	
 	var aHTML = [];
@@ -566,15 +566,15 @@ function interfaceContactPersonShow(aParam, oResponse)
 		
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.firstname + 
 					'<br />' + ns1blankspace.objectContextData.surname);
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 		
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceContactPersonMasterViewport({showHome: false});interfaceContactPersonSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceContactPersonSummary()'})
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceContactPersonSummary()'})
 	}	
 }		
 		
@@ -666,7 +666,7 @@ function interfaceContactPersonSummary()
 		
 		$('#aInterfaceMainSummarySignUpUser').click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainUser", true);
+			ns1blankspaceMainViewportShow("#divInterfaceMainUser", true);
 			interfaceContactPersonUser();
 		});
 	 
@@ -813,8 +813,8 @@ function interfaceContactPersonDetails()
 		
 		$('#inputInterfaceMainDetailsTitle').keyup(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').hide(200);
-			interfaceMasterElementOptionsSearch(event.target.id);
+			$('#divns1blankspaceViewportControlOptions').hide(200);
+			ns1blankspaceElementOptionsSearch(event.target.id);
 		});
 	}	
 }
@@ -1065,35 +1065,35 @@ function interfaceContactPersonSave()
 	
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		sData += '&firstname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsFirstName').val());
-		sData += '&surname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsSurname').val());
-		sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsTitle').attr('onDemandID'));
-		sData += '&jobtitle=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPosition').val());
-		sData += '&phone=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPhone').val());
-		sData += '&fax=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsFax').val());
-		sData += '&mobile=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsMobile').val());
-		sData += '&email=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsEmail').val());
-		sData += '&notes=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
+		sData += '&firstname=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsFirstName').val());
+		sData += '&surname=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsSurname').val());
+		sData += '&title=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsTitle').attr('onDemandID'));
+		sData += '&jobtitle=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsPosition').val());
+		sData += '&phone=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsPhone').val());
+		sData += '&fax=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsFax').val());
+		sData += '&mobile=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsMobile').val());
+		sData += '&email=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsEmail').val());
+		sData += '&notes=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsDescription').val());
 	}
 	
 	if ($('#divInterfaceMainAddress').html() != '')
 	{
-		sData += '&streetaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetAddress1').val());
-		sData += '&streetsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetSuburb').val());
-		sData += '&streetstate=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetState').val());
-		sData += '&streetpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetPostCode').val());
-		sData += '&streetcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressStreetCountry').val());
-		sData += '&mailingaddress1=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingAddress1').val());
-		sData += '&mailingsuburb=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingSuburb').val());
-		sData += '&mailingstate=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingState').val());
-		sData += '&mailingpostcode=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingPostCode').val());
-		sData += '&mailingcountry=' + interfaceMasterFormatSave($('#inputInterfaceMainAddressMailingCountry').val());
+		sData += '&streetaddress1=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetAddress1').val());
+		sData += '&streetsuburb=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetSuburb').val());
+		sData += '&streetstate=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetState').val());
+		sData += '&streetpostcode=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetPostCode').val());
+		sData += '&streetcountry=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressStreetCountry').val());
+		sData += '&mailingaddress1=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingAddress1').val());
+		sData += '&mailingsuburb=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingSuburb').val());
+		sData += '&mailingstate=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingState').val());
+		sData += '&mailingpostcode=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingPostCode').val());
+		sData += '&mailingcountry=' + ns1blankspaceFormatSave($('#inputInterfaceMainAddressMailingCountry').val());
 	}
 	
 	$.ajax(
 	{
 		type: 'POST',
-		url: interfaceMasterEndpointURL('CONTACT_PERSON_MANAGE'),
+		url: ns1blankspaceEndpointURL('CONTACT_PERSON_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: interfaceContactPersonSaveProcess
@@ -1105,7 +1105,7 @@ function interfaceContactPersonSaveProcess(oResponse)
 {	
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 		if (ns1blankspace.objectContext == -1) {var bNew = true}
 		ns1blankspace.objectContext = oResponse.id;	
 		
@@ -1113,22 +1113,22 @@ function interfaceContactPersonSaveProcess(oResponse)
 	}
 	else
 	{
-		interfaceMasterStatus(oResponse.error.errornotes);
-		interfaceMasterConfirm( {html: [oResponse.error.errornotes]
+		ns1blankspaceStatus(oResponse.error.errornotes);
+		ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
 								   , title: 'Save error!'});
 	}
 }
 
-function interfaceContactPersonUser(aParam, oXML)
+function interfaceContactPersonUser(oParam, oXML)
 {
 
 	var iObject = ns1blankspace.object;
 	var iObjectContext = ns1blankspace.objectContext;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.object != undefined || iObject == '') {iObject = aParam.object}
-		if (aParam.objectName != undefined) {sObjectName = aParam.objectName}
+		if (oParam.object != undefined || iObject == '') {iObject = oParam.object}
+		if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
 	}
 
 	if (oXML == undefined)
@@ -1142,7 +1142,7 @@ function interfaceContactPersonUser(aParam, oXML)
 			url: '/ondemand/setup/?rf=json&' + sParam,
 			dataType: 'json',
 			data: sData,
-			success: function(data) {interfaceContactPersonUser(aParam, data)}
+			success: function(data) {interfaceContactPersonUser(oParam, data)}
 		});
 
 	}
@@ -1258,17 +1258,17 @@ function interfaceContactPersonUserRegister(sResponse)
 	}	
 }	
 
-function interfaceContactPersonGroups(aParam, oResponse)
+function interfaceContactPersonGroups(oParam, oResponse)
 {
 	
 	var sXHTMLElementID = 'divInterfaceMainGroups';
 	var sLabel = "groups";
 	var iOption = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.label != undefined) {sLabel = aParam.label}
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.label != undefined) {sLabel = oParam.label}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	if (oResponse == undefined)
@@ -1279,7 +1279,7 @@ function interfaceContactPersonGroups(aParam, oResponse)
 		oSearch.addFilter('contactperson', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.rows = 100;
 		oSearch.sort('grouptext', 'asc');
-		oSearch.getResults(function(data) {interfaceContactPersonGroups(aParam, data)});
+		oSearch.getResults(function(data) {interfaceContactPersonGroups(oParam, data)});
 	}
 	else
 	{
@@ -1320,8 +1320,8 @@ function interfaceContactPersonGroups(aParam, oResponse)
 			label: "Add Group"
 		})
 		.click(function() {
-			interfaceMasterOptionsSetPosition('spanInterfaceMainContactPersonGroupsAdd', -50, -280);
-			interfaceContactPersonGroupsAdd(aParam);
+			ns1blankspaceOptionsSetPosition('spanInterfaceMainContactPersonGroupsAdd', -50, -280);
+			interfaceContactPersonGroupsAdd(oParam);
 		})
 		.css('width', '75px')
 		
@@ -1381,13 +1381,13 @@ function interfaceContactPersonGroups(aParam, oResponse)
 	}	
 }	
 
-function interfaceContactPersonGroupsAdd(aParam, oResponse)
+function interfaceContactPersonGroupsAdd(oParam, oResponse)
 {
 		
-	if ($('#divInterfaceMasterViewportControlOptions').attr('onDemandSource') == 'spanInterfaceMainContactPersonGroupsAdd')
+	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == 'spanInterfaceMainContactPersonGroupsAdd')
 	{
-		$('#divInterfaceMasterViewportControlOptions').slideUp(500);
-		$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').slideUp(500);
+		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
 	}
 	else
 	{
@@ -1400,13 +1400,13 @@ function interfaceContactPersonGroupsAdd(aParam, oResponse)
 				type: 'GET',
 				url: '/ondemand/setup/?method=SETUP_CONTACT_PERSON_GROUP_SEARCH',
 				dataType: 'json',
-				success: function(data){interfaceContactPersonGroupsAdd(aParam, data)}
+				success: function(data){interfaceContactPersonGroupsAdd(oParam, data)}
 			});
 		}
 		else
 		{
 			
-			$('#divInterfaceMasterViewportControlOptions').attr('onDemandSource', 'spanInterfaceMainContactPersonGroupsAdd')
+			$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', 'spanInterfaceMainContactPersonGroupsAdd')
 			
 			var aHTML = [];
 			var h = -1;
@@ -1419,8 +1419,8 @@ function interfaceContactPersonGroupsAdd(aParam, oResponse)
 								'<td class="interfaceMainRowNothing">No groups.</td></tr>';
 				aHTML[++h] = '</tbody></table>';
 
-				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+				$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+				$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 			}
 			else
 			{
@@ -1439,8 +1439,8 @@ function interfaceContactPersonGroupsAdd(aParam, oResponse)
 				
 				aHTML[++h] = '</tbody></table>';
 
-				$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-				$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+				$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+				$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 				
 				$('td.interfaceMainRowSelect').click(function(event)
 				{
@@ -1502,21 +1502,21 @@ function interfaceContactPersonNew()
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceContactPersonViewport();
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 	interfaceContactPersonDetails();
 }
 
-function interfaceContactPersonByGroup(aParam, oResponse)
+function interfaceContactPersonByGroup(oParam, oResponse)
 {
 	var sXHTMLElementID = 'divInterfaceMain';
 	var sLabel = "groups";
 	var iOption = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	if (oResponse == undefined)
@@ -1529,7 +1529,7 @@ function interfaceContactPersonByGroup(aParam, oResponse)
 			url: '/ondemand/setup/?rf=json',
 			data: sParam,
 			dataType: 'json',
-			success: function(data) {interfaceContactPersonByGroup(aParam, data)}
+			success: function(data) {interfaceContactPersonByGroup(oParam, data)}
 		});
 	}
 	else
@@ -1590,13 +1590,13 @@ function interfaceContactPersonByGroup(aParam, oResponse)
 	}	
 }	
 
-function interfaceContactPersonByGroupContacts(aParam, oResponse)
+function interfaceContactPersonByGroupContacts(oParam, oResponse)
 {
 	var sXHTMLElementID;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	var aXHTMLElementId = sXHTMLElementID.split('-')
@@ -1611,7 +1611,7 @@ function interfaceContactPersonByGroupContacts(aParam, oResponse)
 		oSearch.addFilter('group', 'EQUAL_TO', aXHTMLElementId[1]);
 		oSearch.sort('persongroup.contactperson.firstname', 'asc');
 		oSearch.sort('persongroup.contactperson.surname', 'asc');
-		oSearch.getResults(function(data) {interfaceContactPersonByGroupContacts(aParam, data)});
+		oSearch.getResults(function(data) {interfaceContactPersonByGroupContacts(oParam, data)});
 	}
 	else
 	{
@@ -1645,7 +1645,7 @@ function interfaceContactPersonByGroupContacts(aParam, oResponse)
 			aHTML[++h] = '</tbody></table>';
 		}
 		
-		interfaceMasterPaginationList(
+		ns1blankspacePaginationList(
 		{
 			xhtmlElementID: "tdInterfaceMainContactPersonByGroupColumn2",
 			xhtmlContext: 'ContactPersonGroupsContacts',
@@ -1699,13 +1699,13 @@ function interfaceContactPersonByGroupContactsBind()
 	
 }	
 
-function interfaceContactFavourites(aParam, oResponse)
+function interfaceContactFavourites(oParam, oResponse)
 {
 	var sXHTMLElementID;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 
 	var aXHTMLElementId = sXHTMLElementID.split('-')
@@ -1722,7 +1722,7 @@ function interfaceContactFavourites(aParam, oResponse)
 		oSearch.addFilter('', 'IS_FAVOURITE', '');
 		oSearch.rows = 20;
 		oSearch.sort('firstname', 'asc');
-		oSearch.getResults(function(data) {interfaceContactFavourites(aParam, data)});
+		oSearch.getResults(function(data) {interfaceContactFavourites(oParam, data)});
 		
 	}
 	else
@@ -1757,7 +1757,7 @@ function interfaceContactFavourites(aParam, oResponse)
 			aHTML.push('</tbody></table>');
 		}
 		
-		interfaceMasterPaginationList(
+		ns1blankspacePaginationList(
 		{
 			xhtmlElementID: sXHTMLElementID,
 			xhtmlContext: 'ContactFavourites',

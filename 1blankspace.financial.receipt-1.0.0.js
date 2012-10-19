@@ -5,15 +5,15 @@
  * 01 FEB 2010
  */
 
-function interfaceFinancialReceiptMasterViewport(aParam)
+function interfaceFinancialReceiptMasterViewport(oParam)
 {
 	interfaceFinancialMasterInitialise();
 	
 	var bShowHome = true
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 	}
 
 	ns1blankspace.object = 6;
@@ -23,71 +23,71 @@ function interfaceFinancialReceiptMasterViewport(aParam)
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceFinancialReceiptMasterViewport({showHome: true});',
 			move: false
 			})		
 	}	
 			
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Receipts"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialReceiptSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialReceiptSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceFinancialReceiptSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceFinancialReceiptSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceFinancialReceiptSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceFinancialReceiptNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceFinancialReceiptNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceFinancialReceiptSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceFinancialReceiptSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceFinancialReceiptSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceFinancialReceiptSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceFinancialReceiptHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceFinancialReceiptHelpOptions();
 	});
@@ -102,7 +102,7 @@ function interfaceFinancialReceiptMasterViewport(aParam)
 		interfaceFinancialReceiptSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialReceiptHomeShow()};	
 }
 
@@ -128,7 +128,7 @@ function interfaceFinancialReceiptHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportFinancialLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportFinancialLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -136,7 +136,7 @@ function interfaceFinancialReceiptHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
@@ -196,7 +196,7 @@ function interfaceFinancialReceiptHomeShow(oResponse)
 	}
 }
 
-function interfaceFinancialReceiptSearch(sXHTMLElementId, aParam)
+function interfaceFinancialReceiptSearch(sXHTMLElementId, oParam)
 {
 	var aSearch = sXHTMLElementId.split('-');
 	var sElementId = aSearch[0];
@@ -207,14 +207,14 @@ function interfaceFinancialReceiptSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
@@ -232,13 +232,13 @@ function interfaceFinancialReceiptSearch(sXHTMLElementId, aParam)
 		oSearch.rf = 'json';
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 		
-		oSearch.getResults(function(data) {interfaceFinancialReceiptShow(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialReceiptShow(oParam, data)});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -251,7 +251,7 @@ function interfaceFinancialReceiptSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
@@ -261,12 +261,12 @@ function interfaceFinancialReceiptSearch(sXHTMLElementId, aParam)
 			oSearch.rf = 'json';
 			oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
 			
-			oSearch.getResults(function(data) {interfaceFinancialReceiptSearchShow(aParam, data)});	
+			oSearch.getResults(function(data) {interfaceFinancialReceiptSearchShow(oParam, data)});	
 		}
 	};	
 }
 
-function interfaceFinancialReceiptSearchShow(aParam, oResponse)
+function interfaceFinancialReceiptSearchShow(oParam, oResponse)
 {
 
 	var iColumn = 0;
@@ -276,7 +276,7 @@ function interfaceFinancialReceiptSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{		
@@ -306,13 +306,13 @@ function interfaceFinancialReceiptSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceFinancialReceiptSearch(event.target.id, {source: 1});
 		});
 	}				
@@ -399,52 +399,52 @@ function interfaceFinancialReceiptViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceFinancialReceiptSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceFinancialReceiptDetails();
 	});
 	
 	$('#tdInterfaceViewportControlItem').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainItem", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainItem", true);
 		interfaceFinancialReceiptItem();
 	});
 
 	$('#tdInterfaceViewportControlInvoices').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainInvoice", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainInvoice", true);
 		interfaceFinancialReceiptInvoice();
 	});
 	
 	$('#tdInterfaceViewportControlGL').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainTransaction", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainTransaction", true);
 		interfaceFinancialTransaction();
 		//You'll find this in 1blankspace.financial-[].js
 	});
 
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
-		interfaceMasterActions({xhtmlElementID: 'divInterfaceMainActions'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
+		ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
 	});
 
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 	
 }
 
-function interfaceFinancialReceiptShow(aParam, oResponse)
+function interfaceFinancialReceiptShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceFinancialReceiptViewport();
 	
 	var aHTML = [];
@@ -463,7 +463,7 @@ function interfaceFinancialReceiptShow(aParam, oResponse)
 	{
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 		
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 					
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference +
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_receiveddate">' +
@@ -471,12 +471,12 @@ function interfaceFinancialReceiptShow(aParam, oResponse)
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">' +
 					ns1blankspace.objectContextData.amount + '</span>');
 			
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceFinancialReceiptMasterViewport({showHome: false});interfaceFinancialReceiptSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceFinancialReceiptSummary()'});
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceFinancialReceiptSummary()'});
 	}	
 }		
 		
@@ -667,25 +667,25 @@ function interfaceFinancialReceiptDetails()
 	}	
 }
 
-function interfaceFinancialReceiptSave(aParam, oResponse)
+function interfaceFinancialReceiptSave(oParam, oResponse)
 {
-	interfaceMasterStatusWorking();
+	ns1blankspaceStatusWorking();
 	
 	var sData = (ns1blankspace.objectContext == -1)?'':'id=' + ns1blankspace.objectContext;
 		
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		sData += '&reference=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReference').val());
-		sData += '&receiveddate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsReceivedDate').val());
-		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
-		sData += '&contactbusinessreceivedfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactBusinessReceivedFrom').attr("data-id"));
-		sData += '&contactpersonreceivedfrom=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsContactPersonReceivedFrom').attr("data-id"));
+		sData += '&reference=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsReference').val());
+		sData += '&receiveddate=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsReceivedDate').val());
+		sData += '&description=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsDescription').val());
+		sData += '&contactbusinessreceivedfrom=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsContactBusinessReceivedFrom').attr("data-id"));
+		sData += '&contactpersonreceivedfrom=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsContactPersonReceivedFrom').attr("data-id"));
 	}
 	
 	$.ajax(
 	{
 		type: 'POST',
-		url: interfaceMasterEndpointURL('FINANCIAL_RECEIPT_MANAGE'),
+		url: ns1blankspaceEndpointURL('FINANCIAL_RECEIPT_MANAGE'),
 		data: sData,
 		dataType: 'json',
 		success: function(data) {interfaceFinancialRecieptSaveProcess(data)}
@@ -696,7 +696,7 @@ function interfaceFinancialRecieptSaveProcess(oResponse)
 {
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 		if (ns1blankspace.objectContext == -1) {var bNew = true}
 		ns1blankspace.objectContext = oResponse.id;	
 		
@@ -707,11 +707,11 @@ function interfaceFinancialRecieptSaveProcess(oResponse)
 	}
 	else
 	{
-		interfaceMasterError(oResponse.error.errornotes);
+		ns1blankspaceError(oResponse.error.errornotes);
 	}
 }
 
-function interfaceFinancialReceiptAmountSave(aParam)
+function interfaceFinancialReceiptAmountSave(oParam)
 {
 	var iAccount = ns1blankspace.financial.settings.financialaccountdebtor;
 	var cAmount = $('#inputInterfaceMainDetailsAmount').val();
@@ -757,29 +757,29 @@ function interfaceFinancialReceiptAmountSave(aParam)
 	}	
 }
 
-function interfaceFinancialReceiptNew(aParam)
+function interfaceFinancialReceiptNew(oParam)
 {
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceFinancialReceiptViewport();
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 	interfaceFinancialReceiptDetails();
 }
 
-function interfaceFinancialReceiptItem(aParam, oResponse)
+function interfaceFinancialReceiptItem(oParam, oResponse)
 {
 	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainItem';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.options != undefined) {oOptions = aParam.options}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.options != undefined) {oOptions = oParam.options}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
 	}		
 		
 	if (oResponse == undefined)
@@ -825,7 +825,7 @@ function interfaceFinancialReceiptItem(aParam, oResponse)
 				label: "Add"
 			})
 			.click(function() {
-				 interfaceMasterFinanicalInvoiceItemAdd(aParam);
+				 ns1blankspaceFinanicalInvoiceItemAdd(oParam);
 			})
 			
 		}
@@ -837,7 +837,7 @@ function interfaceFinancialReceiptItem(aParam, oResponse)
 		oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 		oSearch.sort('financialaccounttext', 'asc');
 		
-		oSearch.getResults(function(data) {interfaceFinancialReceiptItem(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialReceiptItem(oParam, data)});
 	}
 	else
 	{
@@ -907,7 +907,7 @@ function interfaceFinancialReceiptItem(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterInvoiceItemRemove({xhtmlElementID: this.id});
+					ns1blankspaceInvoiceItemRemove({xhtmlElementID: this.id});
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -922,7 +922,7 @@ function interfaceFinancialReceiptItem(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterInvoiceItemAdd({xhtmlElementID: this.id})
+					ns1blankspaceInvoiceItemAdd({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -931,13 +931,13 @@ function interfaceFinancialReceiptItem(aParam, oResponse)
 	}	
 }
 
-function interfaceMasterFinancialReceiptItemAdd(aParam, oResponse)
+function ns1blankspaceFinancialReceiptItemAdd(oParam, oResponse)
 {
 	var iStep = 1;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.step != undefined) {iStep = aParam.step}	
+		if (oParam.step != undefined) {iStep = oParam.step}	
 	}
 	
 	if (oResponse == undefined)
@@ -977,7 +977,7 @@ function interfaceMasterFinancialReceiptItemAdd(aParam, oResponse)
 					label: "Search"
 				})
 				.click(function() {
-					interfaceMasterFinanicalInvoiceItemAdd($.extend(true, aParam, {step: 2}))
+					ns1blankspaceFinanicalInvoiceItemAdd($.extend(true, oParam, {step: 2}))
 				})
 				.css('width', '75px')
 		}
@@ -991,7 +991,7 @@ function interfaceMasterFinancialReceiptItemAdd(aParam, oResponse)
 				type: 'GET',
 				url: '/ondemand/setup/?' + sParam,
 				dataType: 'json',
-				success: function(data){interfaceMasterFinanicalInvoiceItemAdd($.extend(true, aParam, {step:3}), data)}
+				success: function(data){ns1blankspaceFinanicalInvoiceItemAdd($.extend(true, oParam, {step:3}), data)}
 			});	
 		}
 	}
@@ -1033,19 +1033,19 @@ function interfaceMasterFinancialReceiptItemAdd(aParam, oResponse)
 	}	
 }
 
-function interfaceFinancialReceiptInvoice(aParam, oResponse)
+function interfaceFinancialReceiptInvoice(oParam, oResponse)
 {
 	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainInvoice';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.options != undefined) {oOptions = aParam.options}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.options != undefined) {oOptions = oParam.options}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
 	}		
 		
 	if (oResponse == undefined)
@@ -1089,7 +1089,7 @@ function interfaceFinancialReceiptInvoice(aParam, oResponse)
 				label: "Add"
 			})
 			.click(function() {
-				 interfaceFinancialReceiptReceiptAdd(aParam);
+				 interfaceFinancialReceiptReceiptAdd(oParam);
 			})
 			
 		}
@@ -1099,7 +1099,7 @@ function interfaceFinancialReceiptInvoice(aParam, oResponse)
 		oSearch.addField('appliesdate,amount');
 		oSearch.addFilter('receipt', 'EQUAL_TO', iObjectContext);
 		oSearch.sort('appliesdate', 'asc');
-		oSearch.getResults(function(data) {interfaceFinancialReceiptInvoice(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialReceiptInvoice(oParam, data)});
 	}
 	else
 	{
@@ -1165,7 +1165,7 @@ function interfaceFinancialReceiptInvoice(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterInvoiceReceiptRemove({xhtmlElementID: this.id});
+					ns1blankspaceInvoiceReceiptRemove({xhtmlElementID: this.id});
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -1180,7 +1180,7 @@ function interfaceFinancialReceiptInvoice(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterInvoiceReceiptAdd({xhtmlElementID: this.id})
+					ns1blankspaceInvoiceReceiptAdd({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
 				.css('height', '17px')

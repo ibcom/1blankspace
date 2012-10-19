@@ -5,13 +5,13 @@
  * 01 FEB 2010
  */
  
-function interfaceSetupProjectTaskMasterViewport(aParam)
+function interfaceSetupProjectTaskMasterViewport(oParam)
 {
 	var bShowHome = true;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 	}
 	
 	ns1blankspace.object = 11;	
@@ -19,64 +19,64 @@ function interfaceSetupProjectTaskMasterViewport(aParam)
 	ns1blankspace.objectContextData = undefined;
 	ns1blankspace.objectContext = -1;
 			
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Template Tasks"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
-		interfaceSetupProjectTaskSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupProjectTaskSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#imgInterfaceMasterViewportControlSearch').click(function(event)
+	$('#imgns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceSetupProjectTaskSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupProjectTaskSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#imgInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#imgns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceSetupProjectTaskSearchOptions();
 	});
 	
-	$('#imgInterfaceMasterViewportControlNew').click(function(event)
+	$('#imgns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceSetupProjectTaskNew();
 	})
 	
-	$('#imgInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#imgns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceSetupProjectTaskNewOptions();
 	});
 	
-	$('#divInterfaceMasterViewportControlAction').click(function(event)
+	$('#divns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceSetupProjectTaskSave();
 	});
 	
-	$('#imgInterfaceMasterViewportControlActionMore').click(function(event)
+	$('#imgns1blankspaceViewportControlActionMore').click(function(event)
 	{
 		interfaceSetupProjectTaskSaveOptions();
 	});
 	
-	$('#imgInterfaceMasterViewportControlSetup').click(function(event)
+	$('#imgns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceSetupProjectTaskSetup();
 	});
 	
-	$('#imgInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#imgns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceSetupProjectTaskSetupOptions();
 	});
 	
-	$('#imgInterfaceMasterViewportControlHelp').click(function(event)
+	$('#imgns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceSetupProjectTaskHelp();
 	});
 	
-	$('#imgInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#imgns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceSetupProjectTaskHelpOptions();
 	});
@@ -91,7 +91,7 @@ function interfaceSetupProjectTaskMasterViewport(aParam)
 		interfaceSetupProjectTaskSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	if (bShowHome) {interfaceSetupProjectTaskHomeShow()};
 
@@ -176,7 +176,7 @@ function interfaceSetupProjectTaskHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportProjectLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportProjectLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -184,7 +184,7 @@ function interfaceSetupProjectTaskHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'PROJECT_TASK_SEARCH';
@@ -238,7 +238,7 @@ function interfaceSetupProjectTaskHomeShow(oResponse)
 	}
 }
 
-function interfaceSetupProjectTaskSearch(sXHTMLElementId, aParam)
+function interfaceSetupProjectTaskSearch(sXHTMLElementId, oParam)
 {
 	
 	var aSearch = sXHTMLElementId.split('-');
@@ -251,14 +251,14 @@ function interfaceSetupProjectTaskSearch(sXHTMLElementId, aParam)
 	var iRows = 10;
 	var sQuickSearchType = '';
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 		
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -274,14 +274,14 @@ function interfaceSetupProjectTaskSearch(sXHTMLElementId, aParam)
 			type: 'GET',
 			url: '/ondemand/project/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceSetupProjectTaskShow(aParam, data)}
+			success: function(data) {interfaceSetupProjectTaskShow(oParam, data)}
 		});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -294,7 +294,7 @@ function interfaceSetupProjectTaskSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
 			
 			var sParam = 'method=PROJECT_TASK_SEARCH&quicksearch' + sQuickSearchType + '=' + sSearchText;
 
@@ -303,13 +303,13 @@ function interfaceSetupProjectTaskSearch(sXHTMLElementId, aParam)
 				type: 'GET',
 				url: '/ondemand/project/?' + sParam,
 				dataType: 'json',
-				success: function(data) {interfaceSetupProjectTaskSearchShow(aParam, data)}
+				success: function(data) {interfaceSetupProjectTaskSearchShow(oParam, data)}
 			});
 		}
 	};	
 }
 
-function interfaceSetupProjectTaskSearchShow(aParam, oResponse)
+function interfaceSetupProjectTaskSearchShow(oParam, oResponse)
 {
 	var iColumn = 0;
 	var aHTML = [];
@@ -318,7 +318,7 @@ function interfaceSetupProjectTaskSearchShow(aParam, oResponse)
 			
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -344,13 +344,13 @@ function interfaceSetupProjectTaskSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupProjectTaskSearch(event.target.id, {source: 1});
 		});
 	}	
@@ -418,31 +418,31 @@ function interfaceSetupProjectTaskViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceSetupProjectTaskSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceSetupProjectTaskDetails();
 	});
 	
 	$('#tdInterfaceViewportControlDescription').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDescription");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDescription");
 		interfaceSetupProjectTaskDescription();
 	});
 	
 	$('#tdInterfaceViewportControlScheduling').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainScheduling");
+		ns1blankspaceMainViewportShow("#divInterfaceMainScheduling");
 		interfaceSetupProjectTaskScheduling("divInterfaceMainScheduling", true);
 	});
 	
 	$('#tdInterfaceViewportControlActions').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainActions", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
 		interfaceSetupProjectTaskActions(
 		{
 			bindAdd: false,
@@ -462,8 +462,8 @@ function interfaceSetupProjectTaskViewport()
 
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments(
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments(
 		{
 			xhtmlElementID: "divInterfaceMainAttachments", 
 			object: "11",
@@ -478,9 +478,9 @@ function interfaceSetupProjectTaskViewport()
 	});
 }
 
-function interfaceSetupProjectTaskShow(aParam, oResponse)
+function interfaceSetupProjectTaskShow(oParam, oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	
 	var aHTML = [];
 	var h = -1;
@@ -778,23 +778,23 @@ function interfaceSetupProjectTaskSave()
 		sData += '&description=' + encodeURIComponent($('#inputInterfaceMainDescription').val());
 	}
 	
-	interfaceMasterSave(sParam, sData, 'Template Task Saved');
+	ns1blankspaceSave(sParam, sData, 'Template Task Saved');
 		
 }
 
-function interfaceSetupProjectTaskActionDetails(aParam, oResponse)
+function interfaceSetupProjectTaskActionDetails(oParam, oResponse)
 {
 
 	var sXHTMLElementId = "divInterfaceMainActionDetails";
 	var sXHTMLElementContextId;
 	var lProjectTask;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.label != undefined) {sLabel = aParam.label}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.xhtmlElementContextId != undefined) {sXHTMLElementContextId = aParam.xhtmlElementContextId}
-		if (aParam.action != undefined) {lAction = aParam.action}
+		if (oParam.label != undefined) {sLabel = oParam.label}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.xhtmlElementContextId != undefined) {sXHTMLElementContextId = oParam.xhtmlElementContextId}
+		if (oParam.action != undefined) {lAction = oParam.action}
 	}
 
 	if (sXHTMLElementContextId != undefined)
@@ -804,7 +804,7 @@ function interfaceSetupProjectTaskActionDetails(aParam, oResponse)
 		var lAction = aSearch[1];
 	}	
 		
-	interfaceMasterMainViewportShow('#' + sXHTMLElementId);	
+	ns1blankspaceMainViewportShow('#' + sXHTMLElementId);	
 		
 	var aHTML = [];
 	var h = -1;
@@ -831,7 +831,7 @@ function interfaceSetupProjectTaskActionDetails(aParam, oResponse)
 			url: '/ondemand/action/',
 			data: sParam,
 			dataType: 'json',
-			success: function(data){interfaceSetupProjectTaskActionDetails(aParam, data)}
+			success: function(data){interfaceSetupProjectTaskActionDetails(oParam, data)}
 		});
 	}
 	else
@@ -857,7 +857,7 @@ function interfaceSetupProjectTaskActionDetails(aParam, oResponse)
 			label: "Save"
 		})
 		.click(function() {
-			interfaceSetupProjectTaskActionDetailsSave(aParam);
+			interfaceSetupProjectTaskActionDetailsSave(oParam);
 		})
 		
 		var aHTML = [];
@@ -912,7 +912,7 @@ function interfaceSetupProjectTaskActionDetails(aParam, oResponse)
 			{
 				$('#inputInterfaceMainProjectTaskDetailsSubject').val(oResponse.data.rows[0].subject);
 				
-				$('#inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).val(interfaceMasterFormatXHTML(oResponse.data.rows[0].description));	
+				$('#inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).val(ns1blankspaceFormatXHTML(oResponse.data.rows[0].description));	
 				
 				$('#inputInterfaceMainProjectTaskActionDetailsType').attr('onDemandID', oResponse.data.rows[0].type);
 				$('#inputInterfaceMainProjectTaskActionDetailsType').val(oResponse.data.rows[0].typetext);
@@ -947,7 +947,7 @@ function interfaceSetupProjectTaskActionRemove(sXHTMLElementId)
 		
 }
 
-function interfaceSetupProjectTaskActionDetailsSave(aParam)
+function interfaceSetupProjectTaskActionDetailsSave(oParam)
 {
 	var sParam = '/ondemand/action/?rf=JSON&method=ACTION_MANAGE';
 	var sData = '';
@@ -957,10 +957,10 @@ function interfaceSetupProjectTaskActionDetailsSave(aParam)
 	var iAction;
 	var sXHTMLElementContextId;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.action != undefined) {iAction = aParam.action}
-		if (aParam.xhtmlElementContextId != undefined) {sXHTMLElementContextId = aParam.xhtmlElementContextId}
+		if (oParam.action != undefined) {iAction = oParam.action}
+		if (oParam.xhtmlElementContextId != undefined) {sXHTMLElementContextId = oParam.xhtmlElementContextId}
 	}	
 	
 	if (sXHTMLElementContextId != undefined)
@@ -979,10 +979,10 @@ function interfaceSetupProjectTaskActionDetailsSave(aParam)
 		sData += '&objectcontext=' + ns1blankspace.objectContext;
 	}
 	
-	sData += '&subject=' + interfaceMasterFormatValue($('#inputInterfaceMainProjectTaskDetailsSubject').val());
-	sData += '&description=' + interfaceMasterFormatValue(tinyMCE.get('inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).getContent());
-	sData += '&type=' + interfaceMasterFormatValue($('#inputInterfaceMainProjectTaskActionDetailsType').attr('onDemandID'));
-	sData += '&actionby=' + interfaceMasterFormatValue($('#inputInterfaceMainProjectTaskActionDetailsTaskBy').attr('onDemandID'));
+	sData += '&subject=' + ns1blankspaceFormatValue($('#inputInterfaceMainProjectTaskDetailsSubject').val());
+	sData += '&description=' + ns1blankspaceFormatValue(tinyMCE.get('inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).getContent());
+	sData += '&type=' + ns1blankspaceFormatValue($('#inputInterfaceMainProjectTaskActionDetailsType').attr('onDemandID'));
+	sData += '&actionby=' + ns1blankspaceFormatValue($('#inputInterfaceMainProjectTaskActionDetailsTaskBy').attr('onDemandID'));
 		  
 	$.ajax(
 	{
@@ -992,8 +992,8 @@ function interfaceSetupProjectTaskActionDetailsSave(aParam)
 		dataType: 'json',
 		async: bAsync,
 		success: function(data) {
-				interfaceMasterStatus('Action saved');
-				interfaceMasterMainViewportShow("#divInterfaceMainActions");
+				ns1blankspaceStatus('Action saved');
+				ns1blankspaceMainViewportShow("#divInterfaceMainActions");
 				interfaceSetupProjectTaskActions(
 					{
 						actions: {add: false},
@@ -1005,7 +1005,7 @@ function interfaceSetupProjectTaskActionDetailsSave(aParam)
 	
 }
 
-function interfaceSetupProjectTaskActions(aParam)
+function interfaceSetupProjectTaskActions(oParam)
 {
 
 	var sXHTMLElementID = 'divInterfaceMainActions';
@@ -1016,16 +1016,16 @@ function interfaceSetupProjectTaskActions(aParam)
 	var oActions = {add: true};
 	var bBindAdd = true;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.object != undefined) {iObject = aParam.object}
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.objectName != undefined) {sObjectName = aParam.objectName}
-		if (aParam.showAdd != undefined) {bShowAdd = aParam.showAdd}
-		if (aParam.actionType != undefined ) {iActionType = aParam.actionType}
-		if (aParam.xhtmlElementID != undefined ) {sXHTMLElementID = aParam.xhtmlElementID}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
-		if (aParam.bindAdd != undefined) {bBindAdd = aParam.bindAdd}
+		if (oParam.object != undefined) {iObject = oParam.object}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
+		if (oParam.showAdd != undefined) {bShowAdd = oParam.showAdd}
+		if (oParam.actionType != undefined ) {iActionType = oParam.actionType}
+		if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
+		if (oParam.bindAdd != undefined) {bBindAdd = oParam.bindAdd}
 	}
 	
 	if (oActions.add)
@@ -1066,7 +1066,7 @@ function interfaceSetupProjectTaskActions(aParam)
 				label: "Add"
 			})	
 			.click(function() {
-				 interfaceMasterActionsAdd(aParam);
+				 ns1blankspaceActionsAdd(oParam);
 			})
 		}
 		
@@ -1131,7 +1131,7 @@ function interfaceSetupProjectTaskActionsShow(oResponse, sXHTMLElementID)
 							this.subject + '</td>';
 			
 			aHTML[++h] = '<td id="tdAction_description-' + this.id + '" class="interfaceMainRow">' +
-								interfaceMasterFormatXHTML(this.description) + '</td>';
+								ns1blankspaceFormatXHTML(this.description) + '</td>';
 			
 			aHTML[++h] = '<td class="interfaceMainRow" style="width: 40px;text-align:right;"><span id="tdSetupProjectTaskActions_delete-' + this.id + '" class="interfaceMainRowOptionsDelete">&nbsp;</span>';
 			aHTML[++h] = '<span id="tdSetupProjectTaskActions_select-' + this.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</span></td>';

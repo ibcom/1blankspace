@@ -12,65 +12,65 @@ function interfaceSetupUserRoleMasterViewport()
 	ns1blankspace.object = -1;
 	ns1blankspace.objectContextData = undefined;
 	
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "User Roles"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupUserRoleSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupUserRoleSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceSetupUserRoleSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupUserRoleSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceSetupUserRoleSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceSetupUserRoleNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceSetupUserRoleNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceSetupUserRoleSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceSetupUserRoleSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceSetupUserRoleSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceSetupUserRoleSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceSetupUserRoleHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceSetupUserRoleHelpOptions();
 	});
@@ -85,7 +85,7 @@ function interfaceSetupUserRoleMasterViewport()
 		interfaceSetupUserRoleSearch(event.target.id, ns1blankspace.data.searchSource.browse);
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	interfaceSetupUserRoleHomeShow();
 	
@@ -113,7 +113,7 @@ function interfaceSetupUserRoleHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportSetupLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportSetupLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -121,7 +121,7 @@ function interfaceSetupUserRoleHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'SETUP_ROLE_SEARCH';
@@ -208,7 +208,7 @@ function interfaceSetupUserRoleSearch(sXHTMLElementId, iSource, sSearchText, sSe
 		
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -222,8 +222,8 @@ function interfaceSetupUserRoleSearch(sXHTMLElementId, iSource, sSearchText, sSe
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{	
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'SETUP_ROLE_SEARCH';
@@ -252,8 +252,8 @@ function interfaceSetupUserRoleSearchShow(oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{	
@@ -282,14 +282,14 @@ function interfaceSetupUserRoleSearchShow(oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		interfaceMasterSearchStop();
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupUserRoleSearch(event.target.id, 1);
 		});
 	}			
@@ -342,26 +342,26 @@ function interfaceSetupUserRoleViewport()
 		
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceSetupUserRoleSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceSetupUserRoleDetails();
 	});	
 	
 	$('#tdInterfaceViewportControlAccess').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAccess");
+		ns1blankspaceMainViewportShow("#divInterfaceMainAccess");
 		interfaceSetupUserRoleMethodAccess();
 	});	
 }
 
 function interfaceSetupUserRoleShow(oResponse)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupUserRoleViewport();
 	
 	var aHTML = [];
@@ -378,7 +378,7 @@ function interfaceSetupUserRoleShow(oResponse)
 	}
 	else
 	{
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 		
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 				
@@ -502,22 +502,22 @@ function interfaceSetupUserRoleSave()
 		url: '/ondemand/setup/?' + sParam,
 		data: sData,
 		dataType: 'text',
-		success: interfaceMasterStatus('Saved')
+		success: ns1blankspaceStatus('Saved')
 	});		
 }
 
 
-function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
+function interfaceSetupUserRoleMethodAccess(oParam, oResponse)
 {
 	var iStep = 1;
 	var iEndpoint;
 	var oMethods;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.step != undefined) {iStep = aParam.step}
-		if (aParam.endpoint != undefined) {iEndpoint = aParam.endpoint}
-		if (aParam.methods != undefined) {oMethods = aParam.methods}
+		if (oParam.step != undefined) {iStep = oParam.step}
+		if (oParam.endpoint != undefined) {iEndpoint = oParam.endpoint}
+		if (oParam.methods != undefined) {oMethods = oParam.methods}
 	}
 		
 	if (iStep == 1)
@@ -547,7 +547,7 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 			oSearch.addField('title');
 			oSearch.rows = 50;
 			oSearch.sort('title', 'asc');
-			oSearch.getResults(function(data) {interfaceSetupUserRoleMethodAccess(aParam, data)})	
+			oSearch.getResults(function(data) {interfaceSetupUserRoleMethodAccess(oParam, data)})	
 		}
 		else
 		{
@@ -596,12 +596,12 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 			oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
 			oSearch.rows = 50;
 			oSearch.sort('title', 'asc');
-			oSearch.getResults(function(data) {interfaceSetupUserRoleMethodAccess(aParam, data)})	
+			oSearch.getResults(function(data) {interfaceSetupUserRoleMethodAccess(oParam, data)})	
 		}
 		else
 		{
-			$.extend(true, aParam, {step: 3, methods: oResponse.data.rows});
-			interfaceSetupUserRoleMethodAccess(aParam);	
+			$.extend(true, oParam, {step: 3, methods: oResponse.data.rows});
+			interfaceSetupUserRoleMethodAccess(oParam);	
 		}
 	}
 
@@ -630,8 +630,8 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 			})
 			.click(function()
 			{
-				$.extend(true, aParam, {step: 4, xhtmlElementID: ""});
-				interfaceSetupUserRoleMethodAccess(aParam);
+				$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
+				interfaceSetupUserRoleMethodAccess(oParam);
 			})
 
 			var aIDs = [];
@@ -647,7 +647,7 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 			oSearch.addFilter('accessmethod', 'IN_LIST', aIDs.join(','))
 			oSearch.rows = 50;
 			oSearch.sort('accessmethodtext', 'asc');
-			oSearch.getResults(function(data) {interfaceSetupUserRoleMethodAccess(aParam, data)})	
+			oSearch.getResults(function(data) {interfaceSetupUserRoleMethodAccess(oParam, data)})	
 		}
 		else
 		{
@@ -689,8 +689,8 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 
 			$('td.method').click(function()
 			{
-				$.extend(true, aParam, {step: 4, xhtmlElementID: event.target.id});
-				interfaceSetupUserRoleMethodAccess(aParam);
+				$.extend(true, oParam, {step: 4, xhtmlElementID: event.target.id});
+				interfaceSetupUserRoleMethodAccess(oParam);
 			})
 		}
 	}
@@ -700,9 +700,9 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 		var sXHTMLElementID;
 		var aXHTMLElementID;
 
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+			if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 		}
 		
 		if (sXHTMLElementID != undefined)
@@ -717,8 +717,8 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 		oSearch.addFilter('access', 'EQUAL_TO', aXHTMLElementID[1]);
 
 		oSearch.getResults(function(data) {
-				$.extend(true, aParam, {step: 5});
-				interfaceSetupUserRoleMethodAccess(aParam, data)
+				$.extend(true, oParam, {step: 5});
+				interfaceSetupUserRoleMethodAccess(oParam, data)
 				});
 	}
 
@@ -731,9 +731,9 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 		var h = -1;
 		var bCan = false;
 
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+			if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 		}
 		
 		if (sXHTMLElementID != undefined)
@@ -848,16 +848,16 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			interfaceMasterStatusWorking();
+			ns1blankspaceStatusWorking();
 
-			var sData = 'id=' + interfaceMasterFormatSave(sID);
-			sData += '&role=' + interfaceMasterFormatSave(ns1blankspace.objectContext);
-			sData += '&access=' + interfaceMasterFormatSave(aXHTMLElementID[1]);
+			var sData = 'id=' + ns1blankspaceFormatSave(sID);
+			sData += '&role=' + ns1blankspaceFormatSave(ns1blankspace.objectContext);
+			sData += '&access=' + ns1blankspaceFormatSave(aXHTMLElementID[1]);
 
-			sData += '&canadd=' + (interfaceMasterFormatSave($('input[name="radioCanAdd"]:checked').val()) != '' ? interfaceMasterFormatSave($('input[name="radioCanAdd"]:checked').val()) : 'N');
-			sData += '&canremove=' + (interfaceMasterFormatSave($('input[name="radioCanRemove"]:checked').val()) != '' ? interfaceMasterFormatSave($('input[name="radioCanRemove"]:checked').val()) : 'N');
-			sData += '&canupdate=' + (interfaceMasterFormatSave($('input[name="radioCanUpdate"]:checked').val()) != '' ? interfaceMasterFormatSave($('input[name="radioCanUpdate"]:checked').val()) : 'N');
-			sData += '&canuse=' + (interfaceMasterFormatSave($('input[name="radioCanUse"]:checked').val()) != '' ? interfaceMasterFormatSave($('input[name="radioCanUse"]:checked').val()) : 'N');
+			sData += '&canadd=' + (ns1blankspaceFormatSave($('input[name="radioCanAdd"]:checked').val()) != '' ? ns1blankspaceFormatSave($('input[name="radioCanAdd"]:checked').val()) : 'N');
+			sData += '&canremove=' + (ns1blankspaceFormatSave($('input[name="radioCanRemove"]:checked').val()) != '' ? ns1blankspaceFormatSave($('input[name="radioCanRemove"]:checked').val()) : 'N');
+			sData += '&canupdate=' + (ns1blankspaceFormatSave($('input[name="radioCanUpdate"]:checked').val()) != '' ? ns1blankspaceFormatSave($('input[name="radioCanUpdate"]:checked').val()) : 'N');
+			sData += '&canuse=' + (ns1blankspaceFormatSave($('input[name="radioCanUse"]:checked').val()) != '' ? ns1blankspaceFormatSave($('input[name="radioCanUse"]:checked').val()) : 'N');
 
 			$.ajax(
 			{
@@ -868,14 +868,14 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 				success: function(data) {
 					if (data.status == "OK")
 					{
-						interfaceMasterStatus('Saved');
+						ns1blankspaceStatus('Saved');
 			
-						//$.extend(true, aParam, {step: 2});
-						//interfaceSetupFinancialAccount(aParam)
+						//$.extend(true, oParam, {step: 2});
+						//interfaceSetupFinancialAccount(oParam)
 					}
 					else
 					{
-						interfaceMasterError(data.error.errornotes);
+						ns1blankspaceError(data.error.errornotes);
 					}
 				}
 			});
@@ -887,8 +887,8 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			$.extend(true, aParam, {step: 2});
-			interfaceSetupUserRoleMethodAccess(aParam);
+			$.extend(true, oParam, {step: 2});
+			interfaceSetupUserRoleMethodAccess(oParam);
 		});
 
 		if (oResponse.data.rows.length != 0)
@@ -910,12 +910,12 @@ function interfaceSetupUserRoleMethodAccess(aParam, oResponse)
 	}
 }
 
-function interfaceSetupUserRoleNew(aParam)
+function interfaceSetupUserRoleNew(oParam)
 {
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceSetupUserRoleViewport();
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 	interfaceSetupUserRoleDetails();
 }

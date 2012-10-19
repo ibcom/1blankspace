@@ -170,17 +170,17 @@ function interfaceFormatInitialise()
 	
 }
 
-function interfaceFormatRender(aParam)
+function interfaceFormatRender(oParam)
 {
 	var sXHTMLTemplate;
 	var sXHTMLRendered;
 	var iObject;
 	var aSourceMethods = [];
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlTemplate != undefined) {sXHTMLTemplate = aParam.xhtmlTemplate}
-		if (aParam.object != undefined) {iObject = aParam.object}		
+		if (oParam.xhtmlTemplate != undefined) {sXHTMLTemplate = oParam.xhtmlTemplate}
+		if (oParam.object != undefined) {iObject = oParam.object}		
 	}
 
 	interfaceFormatInitialise();
@@ -258,14 +258,14 @@ function interfaceFormatRender(aParam)
 	return aXHTML.join('');
 }
 
-function interfaceFormatRenderProcess(aParam, oResponse)
+function interfaceFormatRenderProcess(oParam, oResponse)
 {
 	var aTR = [];
-	var sTRID = 'template-' + aParam.group;
+	var sTRID = 'template-' + oParam.group;
 
-	$('[data-format-source-group="' + aParam.group + '"]').each(function(i) 
+	$('[data-format-source-group="' + oParam.group + '"]').each(function(i) 
 	{
-		$('[data-format-source-group="' + aParam.group + '"]:first').closest('tr').clone()
+		$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').clone()
 
 
 		var oTR = $(this).closest('tr');
@@ -289,28 +289,28 @@ function interfaceFormatRenderProcess(aParam, oResponse)
 	{	
 		var oRow = this;
 
-		$('[data-format-source-group="' + aParam.group + '"]:first').closest('tr').clone()
+		$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').clone()
 		.find('[data-format-source]').each(function()
 			{
 				$(this).html(oRow[$(this).attr('data-format-source')]);
 
-			}).end().appendTo($('[data-format-source-group="' + aParam.group + '"]:first').closest('tr').parent());
+			}).end().appendTo($('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').parent());
 			
 	});
 
-	$('[data-format-source-group="' + aParam.group + '"]:first').closest('tr').remove();
+	$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').remove();
 }
 
-function interfaceFormatEditorInitialise(aParam)
+function interfaceFormatEditorInitialise(oParam)
 {
 	var sHeight = "370px";
 	var bDynamicTags = false;
 	var sAdditional = '';
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.height != undefined) {sHeight = aParam.height}
-		if (aParam.dynamicTags != undefined) {bDynamicTags = aParam.dynamicTags}
+		if (oParam.height != undefined) {sHeight = oParam.height}
+		if (oParam.dynamicTags != undefined) {bDynamicTags = oParam.dynamicTags}
 	}
 
 	if (ns1blankspace.option.richTextEditing)

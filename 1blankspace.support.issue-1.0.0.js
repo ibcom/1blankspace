@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
  
-function interfaceSupportIssueMasterViewport(aParam)
+function interfaceSupportIssueMasterViewport(oParam)
 {
 
 	ns1blankspace.object = 8;
@@ -16,69 +16,69 @@ function interfaceSupportIssueMasterViewport(aParam)
 	var bShowHome = true;
 	var bNew = false;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
-		if (aParam.showNew != undefined) {bNew = aParam.showNew}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+		if (oParam.showNew != undefined) {bNew = oParam.showNew}
 		if (bNew) {interfaceSupportIssueNew()};
 	}	
 
-	interfaceMasterReset();
+	ns1blankspaceReset();
 
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceSupportIssueMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Support Issue"
 	});
 
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSupportIssueSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSupportIssueSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceSupportIssueSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSupportIssueSearch('inputns1blankspaceViewportControlSearch');
 	});
 
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceSupportIssueSearchOptions();
 	});
 
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceSupportIssueNew();
 	})
 
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceSupportIssueNewOptions();
 	});
 
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceSupportIssueSave();
 	});
 
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceSupportIssueSetupOptions();
 	});
 
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceSupportIssueHelp();
 	});
@@ -94,7 +94,7 @@ function interfaceSupportIssueMasterViewport(aParam)
 	});
 
 	$('#divInterfaceViewportControl').html('');	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	if (bNew) 
 	{
 		interfaceSupportIssueNew();
@@ -128,7 +128,7 @@ function interfaceSupportIssueHomeShow(oXML)
 
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportHelpLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportHelpLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -143,11 +143,11 @@ function interfaceSupportIssueHomeShow(oXML)
 
 		$('#tdInterfaceViewportControlByHistory').click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMain", true);
+			ns1blankspaceMainViewportShow("#divInterfaceMain", true);
 			interfaceSupportIssueHistory("divInterfaceMain");
 		});
 
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 
 		var sParam = 'method=SUPPORT_ISSUE_SEARCH&byme=1&status=1,2,6&rows=30';
 
@@ -208,7 +208,7 @@ function interfaceSupportIssueHomeShow(oXML)
 	}
 }
 
-function interfaceSupportIssueSearch(sXHTMLElementId, aParam)
+function interfaceSupportIssueSearch(sXHTMLElementId, oParam)
 {
 
 	var aSearch = sXHTMLElementId.split('-');
@@ -220,14 +220,14 @@ function interfaceSupportIssueSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -243,14 +243,14 @@ function interfaceSupportIssueSearch(sXHTMLElementId, aParam)
 			type: 'GET',
 			url: '/ondemand/support/?rf=XML&' + sParam,
 			dataType: 'xml',
-			success: function(data) {interfaceSupportIssueShow(aParam, data)}
+			success: function(data) {interfaceSupportIssueShow(oParam, data)}
 		});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -264,8 +264,8 @@ function interfaceSupportIssueSearch(sXHTMLElementId, aParam)
 
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 
 			var sParam = 'method=SUPPORT_ISSUE_SEARCH&subject=' + sSearchText
 			if (iSource == ns1blankspace.data.searchSource.text)
@@ -278,13 +278,13 @@ function interfaceSupportIssueSearch(sXHTMLElementId, aParam)
 				type: 'GET',
 				url: '/ondemand/support/?rf=XML&' + sParam,
 				dataType: 'xml',
-				success: function(data) {interfaceSupportIssueSearchShow(aParam, data)}
+				success: function(data) {interfaceSupportIssueSearchShow(oParam, data)}
 			});
 		}
 	};	
 }
 
-function interfaceSupportIssueSearchShow(aParam, oXML)
+function interfaceSupportIssueSearchShow(oParam, oXML)
 {
 
 	var iColumn = 0;
@@ -295,8 +295,8 @@ function interfaceSupportIssueSearchShow(aParam, oXML)
 
 	if (oRoot.childNodes.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -339,26 +339,26 @@ function interfaceSupportIssueSearchShow(aParam, oXML)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(
-			interfaceMasterPagination(
+		$('#divns1blankspaceViewportControlOptions').html(
+			ns1blankspacePagination(
 			{
 				html: aHTML.join(''),
 				more: ($(oRoot).attr('morerows') == "true")
 			}) 
 		);		
 
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 
-		interfaceMasterSearchStop();
+		ns1blankspaceSearchStop();
 
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSupportIssueSearch(event.target.id, {source: 1});
 		});
 
-		interfaceMasterPaginationBind(
+		ns1blankspacePaginationBind(
 		{
 			columns: 'firstname-surname',
 			more: $(oRoot).attr('moreid'),
@@ -429,27 +429,27 @@ function interfaceSupportIssueViewport()
 
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceSupportIssueSummary();
 	});
 
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceSupportIssueDetails();
 	});
 
 	$('#tdInterfaceViewportControlAttachments').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainAttachments", true);
-		interfaceMasterAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
 	});
 
 }
 
-function interfaceSupportIssueShow(aParam, oXML)
+function interfaceSupportIssueShow(oParam, oXML)
 {
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSupportIssueViewport();
 
 	ns1blankspace.objectContextDataXML = oXML;
@@ -471,15 +471,15 @@ function interfaceSupportIssueShow(aParam, oXML)
 		var oRow = oRoot.childNodes.item(0);
 
 		$('#divInterfaceViewportControlContext').html(onDemandXMLGetData(oRow, 'reference'));
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceSupportIssueMasterViewport({showHome: false});interfaceSupportIssueSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceSupportIssueSummary()'})
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceSupportIssueSummary()'})
 	}	
 }		
 
@@ -742,11 +742,11 @@ function interfaceSupportIssueSave()
 
 	if ($('#divInterfaceMainDetails').html() != '')
 	{
-		sData += '&subject=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsSubject').val());
-		sData += '&description=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsDescription').val());
-		sData += '&name=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsName').val());
-		sData += '&email=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsEmail').val());
-		sData += '&phone=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPhone').val());
+		sData += '&subject=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsSubject').val());
+		sData += '&description=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsDescription').val());
+		sData += '&name=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsName').val());
+		sData += '&email=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsEmail').val());
+		sData += '&phone=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsPhone').val());
 		sData += '&user=' + $('input[name="radioUser"]:checked').val();
 		sData += '&type=' + $('input[name="radioType"]:checked').val();
 		sData += '&severity=' + $('input[name="radioSeverity"]:checked').val();
@@ -768,7 +768,7 @@ function interfaceSupportIssueSave()
 	}
 	else
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 	}	
 		
 }
@@ -777,7 +777,7 @@ function interfaceSupportIssueSaveProcess(oResponse)
 {
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 		if (ns1blankspace.objectContext == -1) {var bNew = true}
 		ns1blankspace.objectContext = oResponse.id;	
 		
@@ -785,8 +785,8 @@ function interfaceSupportIssueSaveProcess(oResponse)
 	}
 	else
 	{
-		interfaceMasterStatus(oResponse.error.errornotes);
-		interfaceMasterConfirm( {html: [oResponse.error.errornotes]
+		ns1blankspaceStatus(oResponse.error.errornotes);
+		ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
 								   , title: 'Save error!'});
 	}
 }
@@ -796,7 +796,7 @@ function interfaceSupportIssueSaveProcess(oResponse)
 {
 	if (oResponse.status == 'OK')
 	{
-		interfaceMasterStatus('Saved');
+		ns1blankspaceStatus('Saved');
 		if (ns1blankspace.objectContext == -1) {var bNew = true}
 		ns1blankspace.objectContext = oResponse.id;	
 
@@ -804,8 +804,8 @@ function interfaceSupportIssueSaveProcess(oResponse)
 	}
 	else
 	{
-		interfaceMasterStatus(oResponse.error.errornotes);
-		interfaceMasterConfirm( {html: [oResponse.error.errornotes]
+		ns1blankspaceStatus(oResponse.error.errornotes);
+		ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
 								   , title: 'Save error!'});
 	}
 }
@@ -829,20 +829,20 @@ function interfaceSupportIssueNew(oXML)
 		ns1blankspace.objectContext = -1;
 		ns1blankspace.objectContextDataXML = oXML;
 		interfaceSupportIssueViewport();
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 		interfaceSupportIssueDetails();
 	}	
 }
 
-function interfaceSupportIssueGetUsers(aParam, oXML)
+function interfaceSupportIssueGetUsers(oParam, oXML)
 {
 	var sXHTMLElementId = 'tdInterfaceMainDetailsUserValue';
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
 	}
 
 	if (oXML == undefined)
@@ -856,7 +856,7 @@ function interfaceSupportIssueGetUsers(aParam, oXML)
 			data: sParam,
 			dataType: 'xml',
 			async: false,
-			success: function(data){interfaceSupportIssueGetUsers(aParam, data)}
+			success: function(data){interfaceSupportIssueGetUsers(oParam, data)}
 		});
 	}
 	else
@@ -893,15 +893,15 @@ function interfaceSupportIssueGetUsers(aParam, oXML)
 	}	
 }	
 
-function interfaceSupportIssueGetContact(aParam, oResponse)
+function interfaceSupportIssueGetContact(oParam, oResponse)
 {
 	var sXHTMLElementNameID = 'inputInterfaceMainDetailsName';
 	var sXHTMLElementEmailID = 'inputInterfaceMainDetailsEmail';
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementNameID != undefined) {sXHTMLElementNameID = aParam.xhtmlElementNameID}
-		if (aParam.xhtmlElementEmailID != undefined) {sXHTMLElementEmailID = aParam.xhtmlElementEmailID}
+		if (oParam.xhtmlElementNameID != undefined) {sXHTMLElementNameID = oParam.xhtmlElementNameID}
+		if (oParam.xhtmlElementEmailID != undefined) {sXHTMLElementEmailID = oParam.xhtmlElementEmailID}
 	}
 
 	if (oResponse == undefined)
@@ -914,7 +914,7 @@ function interfaceSupportIssueGetContact(aParam, oResponse)
 			url: '/ondemand/core/?rf=JSON',
 			data: sParam,
 			dataType: 'json',
-			success: function(data){interfaceSupportIssueGetContact(aParam, data)}
+			success: function(data){interfaceSupportIssueGetContact(oParam, data)}
 		});
 	}
 	else

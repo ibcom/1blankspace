@@ -7,7 +7,7 @@
  
 ns1blankspace.websiteFormSite;
 
-function interfaceSetupWebsiteFormMasterViewport(aParam)
+function interfaceSetupWebsiteFormMasterViewport(oParam)
 {
 	ns1blankspace.objectContext = -1;
 	ns1blankspace.object = 40;
@@ -16,63 +16,63 @@ function interfaceSetupWebsiteFormMasterViewport(aParam)
 	var bShowHome = true;
 	var bNew = false;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}
-		if (aParam.showNew != undefined) {bNew = aParam.showNew}
-		if (aParam.site != undefined) {ns1blankspace.websiteFormSite = aParam.site}
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+		if (oParam.showNew != undefined) {bNew = oParam.showNew}
+		if (oParam.site != undefined) {ns1blankspace.websiteFormSite = oParam.site}
 		if (bNew) {interfaceSetupWebsiteFormNew()};
 	}	
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceSetupWebsiteFormMasterViewport({showHome: true});',
 			move: false
 			})		
 	}
 	
-	interfaceMasterReset();		
+	ns1blankspaceReset();		
 			
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Website Forms"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupWebsiteFormSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupWebsiteFormSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceSetupWebsiteFormSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceSetupWebsiteFormSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceSetupWebsiteFormSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceSetupWebsiteFormNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceSetupWebsiteFormNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceSetupWebsiteFormSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: true});
+	$('#spanns1blankspaceViewportControlAction').button({disabled: true});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 	
 		var aHTML = [];
@@ -88,27 +88,27 @@ function interfaceSetupWebsiteFormMasterViewport(aParam)
 
 		aHTML[++h] = '</table>';
 
-		interfaceMasterViewportActionShow(this, aHTML.join(''), "interfaceSetupWebsiteFormActionOptionsBind()");
+		ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceSetupWebsiteFormActionOptionsBind()");
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: true});
+	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
 		
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceSetupWebsiteFormSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceSetupWebsiteFormSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceSetupWebsiteFormHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceSetupWebsiteFormHelpOptions();
 	});
@@ -123,7 +123,7 @@ function interfaceSetupWebsiteFormMasterViewport(aParam)
 		interfaceSetupWebsiteFormSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	
 	interfaceSetupWebsiteFormHomeShow();
 	
@@ -170,7 +170,7 @@ function interfaceSetupWebsiteFormHomeShow(oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportSetupWebsiteLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportSetupWebsiteLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -178,7 +178,7 @@ function interfaceSetupWebsiteFormHomeShow(oResponse)
 		
 		$('#divInterfaceViewportControl').html(aHTML.join(''));	
 		
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		$.ajax(
 		{
@@ -236,7 +236,7 @@ function interfaceSetupWebsiteFormHomeShow(oResponse)
 	}
 }
 
-function interfaceSetupWebsiteFormSearch(sXHTMLElementId, aParam)
+function interfaceSetupWebsiteFormSearch(sXHTMLElementId, oParam)
 {
 	
 	var aSearch = sXHTMLElementId.split('-');
@@ -248,14 +248,14 @@ function interfaceSetupWebsiteFormSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 		
 	if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
@@ -272,7 +272,7 @@ function interfaceSetupWebsiteFormSearch(sXHTMLElementId, aParam)
 			type: 'GET',
 			url: '/ondemand/setup/?' + sParam,
 			dataType: 'json',
-			success: function(data) {interfaceSetupWebsiteFormShow(aParam, data)}
+			success: function(data) {interfaceSetupWebsiteFormShow(oParam, data)}
 		});
 	}
 	else
@@ -280,7 +280,7 @@ function interfaceSetupWebsiteFormSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -294,8 +294,8 @@ function interfaceSetupWebsiteFormSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{			
-			interfaceMasterOptionsSetPosition(sElementId);
-			interfaceMasterSearchStart(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
+			ns1blankspaceSearchStart(sElementId);
 			
 			var sParam = 'method=SETUP_SITE_FORM_SEARCH&quicksearch=' + sSearchText;
 
@@ -304,13 +304,13 @@ function interfaceSetupWebsiteFormSearch(sXHTMLElementId, aParam)
 				type: 'GET',
 				url: '/ondemand/setup/?' + sParam,
 				dataType: 'json',
-				success: function(data) {interfaceSetupWebsiteFormSearchShow(aParam, data)}
+				success: function(data) {interfaceSetupWebsiteFormSearchShow(oParam, data)}
 			});			
 		}
 	};	
 }
 
-function interfaceSetupWebsiteFormSearchShow(aParam, oResponse)
+function interfaceSetupWebsiteFormSearchShow(oParam, oResponse)
 {
 
 	var iColumn = 0;
@@ -320,8 +320,8 @@ function interfaceSetupWebsiteFormSearchShow(aParam, oResponse)
 	
 	if (oResponse.data.rows.length == 0)
 	{
-		interfaceMasterSearchStop();
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		ns1blankspaceSearchStop();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{
@@ -355,14 +355,14 @@ function interfaceSetupWebsiteFormSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		interfaceMasterSearchStop();
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		ns1blankspaceSearchStop();
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceSetupWebsiteFormSearch(event.target.id, 1);
 		});
 	}	
@@ -415,27 +415,27 @@ function interfaceSetupWebsiteFormViewport()
 		
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceSetupWebsiteFormSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceSetupWebsiteFormDetails();
 	});
 	
 	$('#tdInterfaceViewportControlLayout').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainStructure");
+		ns1blankspaceMainViewportShow("#divInterfaceMainStructure");
 		interfaceSetupWebsiteFormStructureCheck();
 	});
 }
 
-function interfaceSetupWebsiteFormShow(aParam, oResponse)
+function interfaceSetupWebsiteFormShow(oParam, oResponse)
 {
 
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceSetupWebsiteFormViewport();
 	
 	var aHTML = [];
@@ -465,20 +465,20 @@ function interfaceSetupWebsiteFormShow(aParam, oResponse)
 		
 		$('#divInterfaceMainSummary').html(aHTML.join(''));
 		
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceSetupWebsiteFormMasterViewport({showHome: false});interfaceSetupWebsiteFormSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 		
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceSetupWebsiteFormSummary()'})
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceSetupWebsiteFormSummary()'})
 
 		var sContext = ns1blankspace.objectContextData.title;
 		if (sContext == '') {sContext = 'Form ' + ns1blankspace.objectContextData.id}
 		
 		$('#divInterfaceViewportControlContext').html(sContext +
 				'<br /><br /><span id="spanInterfaceViewportControlSubContext">' + ns1blankspace.objectContextData.sitetext + '</span>');
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-		$('#spanInterfaceMasterViewportControlActionOptions').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 
 		$('#divInterfaceViewportControlContext').click(function(event)
 		{
@@ -539,7 +539,7 @@ function interfaceSetupWebsiteFormSummary()
 		
 		$('#aInterfaceMainSummaryAddAttachment').click(function(event)
 		{
- 			interfaceMasterMainViewportShow("#divInterfaceMainAddAttachment");
+ 			ns1blankspaceMainViewportShow("#divInterfaceMainAddAttachment");
 			interfaceSetupWebsiteFormAddAttachment();
 		});
 		
@@ -699,7 +699,7 @@ function interfaceSetupWebsiteFormLayout()
 	}	
 }
 
-function interfaceSetupWebsiteFormSave(aParam, oResponse)
+function interfaceSetupWebsiteFormSave(oParam, oResponse)
 {
 	if (oResponse == undefined)
 	{
@@ -713,17 +713,17 @@ function interfaceSetupWebsiteFormSave(aParam, oResponse)
 		
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
-			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsTitle').val());
-			sData += '&email=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsEmail').val());
-			sData += '&type=' + interfaceMasterFormatSave($('input[name="radioType"]:checked').val());	
+			sData += '&title=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsTitle').val());
+			sData += '&email=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsEmail').val());
+			sData += '&type=' + ns1blankspaceFormatSave($('input[name="radioType"]:checked').val());	
 		};
 
 		if ($('#divInterfaceMainLayout').html() != '')
 		{
-			sData += '&headerheight=' + interfaceMasterFormatSave($('#inputInterfaceMainLayoutHeaderHeight').val());
-			sData += '&footerheight=' + interfaceMasterFormatSave($('#inputInterfaceMainLayoutFooterHeight').val());
-			sData += '&columns=' + interfaceMasterFormatSave($('#inputInterfaceMainLayoutColumns').val());
-			sData += '&layout=' + interfaceMasterFormatSave($('input[name="radioLayout"]:checked').val());	
+			sData += '&headerheight=' + ns1blankspaceFormatSave($('#inputInterfaceMainLayoutHeaderHeight').val());
+			sData += '&footerheight=' + ns1blankspaceFormatSave($('#inputInterfaceMainLayoutFooterHeight').val());
+			sData += '&columns=' + ns1blankspaceFormatSave($('#inputInterfaceMainLayoutColumns').val());
+			sData += '&layout=' + ns1blankspaceFormatSave($('input[name="radioLayout"]:checked').val());	
 		};	
 		
 		$.ajax(
@@ -732,7 +732,7 @@ function interfaceSetupWebsiteFormSave(aParam, oResponse)
 			url: '/ondemand/setup/?' + sParam,
 			data: sData,
 			dataType: 'json',
-			success: function(data) {interfaceSetupWebsiteFormSave(aParam, data)}
+			success: function(data) {interfaceSetupWebsiteFormSave(oParam, data)}
 		});
 		
 	}
@@ -740,7 +740,7 @@ function interfaceSetupWebsiteFormSave(aParam, oResponse)
 	{			
 		if (oResponse.status == 'OK')
 		{	
-			interfaceMasterStatus('Saved');
+			ns1blankspaceStatus('Saved');
 			
 			if (ns1blankspace.objectContext == -1)
 			{
@@ -751,30 +751,30 @@ function interfaceSetupWebsiteFormSave(aParam, oResponse)
 		}
 		else
 		{
-			interfaceMasterStatus('Could not save the website form!');
+			ns1blankspaceStatus('Could not save the website form!');
 		}
 	}
 }
 
-function interfaceSetupWebsiteFormNew(aParam)
+function interfaceSetupWebsiteFormNew(oParam)
 {
 	ns1blankspace.objectContextData = undefined
 	ns1blankspace.objectContext = -1;
 	interfaceSetupWebsiteFormViewport();
-	$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
-	interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 	interfaceSetupWebsiteFormDetails();
 }
 
-function interfaceSetupWebsiteFormRemove(aParam, oResponse)
+function interfaceSetupWebsiteFormRemove(oParam, oResponse)
 {		
 	var sVerifyCode;
 	var sUserVerifyCode;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.verifyCode != undefined) {sVerifyCode = aParam.verifyCode}
-		if (aParam.userVerifyCode != undefined) {sUserVerifyCode = aParam.userVerifyCode}
+		if (oParam.verifyCode != undefined) {sVerifyCode = oParam.verifyCode}
+		if (oParam.userVerifyCode != undefined) {sUserVerifyCode = oParam.userVerifyCode}
 	}
 	
 	if (sVerifyCode == undefined && ns1blankspace.objectContext != -1)
@@ -815,7 +815,7 @@ function interfaceSetupWebsiteFormRemove(aParam, oResponse)
 						
 		aHTML[++h] = '</table>';					
 		
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 		
 		$('#spanInterfaceMainSetupWebsiteFormRemoveVerify').button(
 		{
@@ -838,7 +838,7 @@ function interfaceSetupWebsiteFormRemove(aParam, oResponse)
 			url: '/ondemand/setup/?' + sParam,
 			data: sData,
 			dataType: 'json',
-			success: function(data){interfaceSetupWebsiteFormRemove(aParam, data)}
+			success: function(data){interfaceSetupWebsiteFormRemove(oParam, data)}
 		});
 
 	}
@@ -860,7 +860,7 @@ function interfaceSetupWebsiteFormRemove(aParam, oResponse)
 	
 }
 
-function interfaceSetupWebsiteFormStructureCheck(aParam)
+function interfaceSetupWebsiteFormStructureCheck(oParam)
 {
 
 	if (ns1blankspace.objectContextData.structure == '')
@@ -878,29 +878,29 @@ function interfaceSetupWebsiteFormStructureCheck(aParam)
 				{
 					ns1blankspace.objectContextData.structure = data.structure;
 					ns1blankspace.objectContextData.structurecategory = data.structurecategory;
-					interfaceSetupWebsiteFormStructure(aParam)
+					interfaceSetupWebsiteFormStructure(oParam)
 				}
 		});
 	}
 	else
 	{
-		interfaceSetupWebsiteFormStructure(aParam);
+		interfaceSetupWebsiteFormStructure(oParam);
 	}
 }
 
-function interfaceSetupWebsiteFormStructure(aParam, oResponse)
+function interfaceSetupWebsiteFormStructure(oParam, oResponse)
 {
 	var iObjectContext = ns1blankspace.objectContext;
 	var sXHTMLElementId = 'divInterfaceMainStructure';
 	var oOptions = {view: true, remove: true};
 	var oActions = {add: true};
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.objectContext != undefined) {iObjectContext = aParam.objectContext}
-		if (aParam.xhtmlElementId != undefined) {sXHTMLElementId = aParam.xhtmlElementId}
-		if (aParam.options != undefined) {oOptions = aParam.options}
-		if (aParam.actions != undefined) {oActions = aParam.actions}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+		if (oParam.options != undefined) {oOptions = oParam.options}
+		if (oParam.actions != undefined) {oActions = oParam.actions}
 	}		
 		
 	if (oResponse == undefined)
@@ -910,7 +910,7 @@ function interfaceSetupWebsiteFormStructure(aParam, oResponse)
 			type: 'GET',
 			url: '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_SEARCH&structure=' + ns1blankspace.objectContextData.structure + '&category=' + ns1blankspace.objectContextData.structurecategory,
 			dataType: 'json',
-			success: function(data) {interfaceSetupWebsiteFormStructure(aParam, data)}
+			success: function(data) {interfaceSetupWebsiteFormStructure(oParam, data)}
 		});
 
 	}
@@ -955,7 +955,7 @@ function interfaceSetupWebsiteFormStructure(aParam, oResponse)
 				label: "Add"
 			})
 			.click(function() {
-				 interfaceMasterWebsiteFormStructureAdd(aParam);
+				 ns1blankspaceWebsiteFormStructureAdd(oParam);
 			})
 			
 		}	
@@ -1024,7 +1024,7 @@ function interfaceSetupWebsiteFormStructure(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterWebsiteFormStructureRemove({xhtmlElementID: this.id});
+					ns1blankspaceWebsiteFormStructureRemove({xhtmlElementID: this.id});
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -1039,7 +1039,7 @@ function interfaceSetupWebsiteFormStructure(aParam, oResponse)
 					}
 				})
 				.click(function() {
-					interfaceMasterWebsiteFormStructureAdd({xhtmlElementID: this.id})
+					ns1blankspaceWebsiteFormStructureAdd({xhtmlElementID: this.id})
 				})
 				.css('width', '15px')
 				.css('height', '17px')
@@ -1048,7 +1048,7 @@ function interfaceSetupWebsiteFormStructure(aParam, oResponse)
 	}	
 }
 
-function interfaceMasterWebsiteFormStructureAdd(aParam, oResponse)
+function ns1blankspaceWebsiteFormStructureAdd(oParam, oResponse)
 {
 	var sID; 
 	
@@ -1056,9 +1056,9 @@ function interfaceMasterWebsiteFormStructureAdd(aParam, oResponse)
 	{
 		var sXHTMLElementID;
 
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+			if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 		}
 		
 		if (sXHTMLElementID != undefined)
@@ -1125,9 +1125,9 @@ function interfaceMasterWebsiteFormStructureAdd(aParam, oResponse)
 		{
 			var sData = 'structure=' + ns1blankspace.objectContextData.structure;
 			sData += '&category=' + ns1blankspace.objectContextData.structurecategory;
-			sData += '&id=' + interfaceMasterFormatSave(sID);
-			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainSetupWebsiteFormStructureAddTitle').val());
-			sData += '&datatype=' + interfaceMasterFormatSave($('input[name="radioDataType"]:checked').val());	
+			sData += '&id=' + ns1blankspaceFormatSave(sID);
+			sData += '&title=' + ns1blankspaceFormatSave($('#inputInterfaceMainSetupWebsiteFormStructureAddTitle').val());
+			sData += '&datatype=' + ns1blankspaceFormatSave($('input[name="radioDataType"]:checked').val());	
 			
 			$.ajax(
 			{
@@ -1136,7 +1136,7 @@ function interfaceMasterWebsiteFormStructureAdd(aParam, oResponse)
 				data: sData,
 				dataType: 'json',
 				success: function() {
-					interfaceMasterMainViewportShow("#divInterfaceMainStructure");
+					ns1blankspaceMainViewportShow("#divInterfaceMainStructure");
 					interfaceSetupWebsiteFormStructure();
 				}
 			});
@@ -1148,7 +1148,7 @@ function interfaceMasterWebsiteFormStructureAdd(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainStructure");
+			ns1blankspaceMainViewportShow("#divInterfaceMainStructure");
 			interfaceSetupWebsiteFormStructure();
 		});
 		
@@ -1160,7 +1160,7 @@ function interfaceMasterWebsiteFormStructureAdd(aParam, oResponse)
 				url: '/ondemand/setup/?method=SETUP_STRUCTURE_ELEMENT_SEARCH',
 				data: 'id=' + sID,
 				dataType: 'json',
-				success: function(data) {interfaceMasterWebsiteFormStructureAdd(aParam, data)}
+				success: function(data) {ns1blankspaceWebsiteFormStructureAdd(oParam, data)}
 			});
 		}
 		else
@@ -1180,13 +1180,13 @@ function interfaceMasterWebsiteFormStructureAdd(aParam, oResponse)
 	}		
 }
 
-function interfaceMasterWebsiteFormStructureRemove(aParam, oResponse)
+function ns1blankspaceWebsiteFormStructureRemove(oParam, oResponse)
 {
 	var sXHTMLElementID;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 	
 	var aXHTMLElementID = sXHTMLElementID.split('-');
@@ -1203,7 +1203,7 @@ function interfaceMasterWebsiteFormStructureRemove(aParam, oResponse)
 			url: '/ondemand/setup/?' + sParam,
 			data: sData,
 			dataType: 'json',
-			success: function(data){interfaceMasterWebsiteFormStructureRemove(aParam, data)}
+			success: function(data){ns1blankspaceWebsiteFormStructureRemove(oParam, data)}
 		});
 	}	
 	else

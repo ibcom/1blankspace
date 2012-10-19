@@ -5,15 +5,15 @@
  * 01 FEB 2010
  */
 
-function interfaceFinancialPayrollMasterViewport(aParam)
+function interfaceFinancialPayrollMasterViewport(oParam)
 {
 	interfaceFinancialMasterInitialise();
 	
 	var bShowHome = true
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 	}
 
 	ns1blankspace.object = -1;
@@ -23,71 +23,71 @@ function interfaceFinancialPayrollMasterViewport(aParam)
 	
 	if (bShowHome)
 	{
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceFinancialPayrollMasterViewport({showHome: true});',
 			move: false
 			})		
 	}	
 			
-	interfaceMasterReset();
+	ns1blankspaceReset();
 	
-	$('#divInterfaceMasterViewportControlSet').button(
+	$('#divns1blankspaceViewportControlSet').button(
 	{
 		label: "Payroll"
 	});
 	
-	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
 	{
 		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialPayrollSearch('inputInterfaceMasterViewportControlSearch')", ns1blankspace.option.typingWait);
+        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialPayrollSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	$('#spanns1blankspaceViewportControlSearch').click(function(event)
 	{
-		interfaceFinancialPayrollSearch('inputInterfaceMasterViewportControlSearch');
+		interfaceFinancialPayrollSearch('inputns1blankspaceViewportControlSearch');
 	});
 	
-	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
 	{
 		interfaceFinancialPayrollSearchOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	$('#spanns1blankspaceViewportControlNew').click(function(event)
 	{
 		interfaceFinancialPayrollNew();
 	})
 	
-	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
 	{
 		interfaceFinancialPayrollNewOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	$('#spanns1blankspaceViewportControlAction').click(function(event)
 	{
 		interfaceFinancialPayrollSave();
 	});
 	
-	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
 	{
 		interfaceFinancialPayrollSaveOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	$('#spanns1blankspaceViewportControlSetup').click(function(event)
 	{
 		interfaceFinancialSetup();
 	});
 	
-	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
 	{
 		interfaceFinancialSetupOptions();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	$('#spanns1blankspaceViewportControlHelp').click(function(event)
 	{
 		interfaceFinancialHelp();
 	});
 	
-	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
 	{
 		interfaceFinancialHelpOptions();
 	});
@@ -102,11 +102,11 @@ function interfaceFinancialPayrollMasterViewport(aParam)
 		interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
 	});
 	
-	if (ns1blankspace.option.setFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
 	if (bShowHome) {interfaceFinancialPayrollHomeShow()};	
 }
 
-function interfaceFinancialPayrollHomeShow(aParam, oResponse)
+function interfaceFinancialPayrollHomeShow(oParam, oResponse)
 {		
 	if (oResponse == undefined)
 	{
@@ -128,7 +128,7 @@ function interfaceFinancialPayrollHomeShow(aParam, oResponse)
 					
 		aHTML[++h] = '<table>';
 		aHTML[++h] = '<tr>' +
-						'<td id="interfaceMasterViewportFinancialLarge" class="interfaceMasterViewportImageLarge">' +
+						'<td id="ns1blankspaceViewportFinancialLarge" class="ns1blankspaceViewportImageLarge">' +
 						'&nbsp;' + 
 						'</td>' +
 						'</tr>';
@@ -150,13 +150,13 @@ function interfaceFinancialPayrollHomeShow(aParam, oResponse)
 		
 		$('#tdInterfaceViewportControlPayRuns').click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainPayRun");
+			ns1blankspaceMainViewportShow("#divInterfaceMainPayRun");
 			interfaceFinancialPayrollHomeShow();
 		});
 	
 		$('#tdInterfaceViewportControlEmployees').click(function(event)
 		{
-			interfaceMasterMainViewportShow("#divInterfaceMainEmployee");
+			ns1blankspaceMainViewportShow("#divInterfaceMainEmployee");
 			interfaceFinancialPayrollEmployees();
 		});
 		
@@ -169,14 +169,14 @@ function interfaceFinancialPayrollHomeShow(aParam, oResponse)
 
 		$('#divInterfaceMain').html(aHTML.join(''));
 	
-		$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 		
 		var oSearch = new AdvancedSearch();
 		oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
 		oSearch.addField('startdate,paydate,statustext');
 		oSearch.rows = 10;
 		oSearch.sort('paydate', 'desc');
-		oSearch.getResults(function(data){interfaceFinancialPayrollHomeShow(aParam, data)});		
+		oSearch.getResults(function(data){interfaceFinancialPayrollHomeShow(oParam, data)});		
 	}
 	else
 	{
@@ -220,7 +220,7 @@ function interfaceFinancialPayrollHomeShow(aParam, oResponse)
 	}	
 }
 
-function interfaceFinancialPayrollSearch(sXHTMLElementId, aParam)
+function interfaceFinancialPayrollSearch(sXHTMLElementId, oParam)
 {
 	var aSearch = sXHTMLElementId.split('-');
 	var sElementId = aSearch[0];
@@ -231,14 +231,14 @@ function interfaceFinancialPayrollSearch(sXHTMLElementId, aParam)
 	var iMaximumColumns = 1;
 	var iRows = 10;
 	
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.source != undefined) {iSource = aParam.source}
-		if (aParam.searchText != undefined) {sSearchText = aParam.searchText}
-		if (aParam.rows != undefined) {iRows = aParam.rows}
-		if (aParam.searchContext != undefined) {sSearchContext = aParam.searchContext}
-		if (aParam.minimumLength != undefined) {iMinimumLength = aParam.minimumLength}
-		if (aParam.maximumColumns != undefined) {iMaximumColumns = aParam.maximumColumns}
+		if (oParam.source != undefined) {iSource = oParam.source}
+		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+		if (oParam.rows != undefined) {iRows = oParam.rows}
+		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 	}
 	
 	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
@@ -252,13 +252,13 @@ function interfaceFinancialPayrollSearch(sXHTMLElementId, aParam)
 		oSearch.addField('startdate,paydate,statustext,status,notes,modifieddate');
 		oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 		
-		oSearch.getResults(function(data) {interfaceFinancialPayrollShow(aParam, data)});
+		oSearch.getResults(function(data) {interfaceFinancialPayrollShow(oParam, data)});
 	}
 	else
 	{
 		if (sSearchText == undefined)
 		{
-			sSearchText = $('#inputInterfaceMasterViewportControlSearch').val();
+			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
 		}	
 		
 		if (iSource == ns1blankspace.data.searchSource.browse)
@@ -271,19 +271,19 @@ function interfaceFinancialPayrollSearch(sXHTMLElementId, aParam)
 		
 		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 		{
-			interfaceMasterOptionsSetPosition(sElementId);
+			ns1blankspaceOptionsSetPosition(sElementId);
 			
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
 			oSearch.addField('notes,paydate');
 			oSearch.addFilter('notes', 'TEXT_IS_LIKE', sSearchText);
 			
-			oSearch.getResults(function(data) {interfaceFinancialPayrollSearchShow(aParam, data)});	
+			oSearch.getResults(function(data) {interfaceFinancialPayrollSearchShow(oParam, data)});	
 		}
 	};	
 }
 
-function interfaceFinancialPayrollSearchShow(aParam, oResponse)
+function interfaceFinancialPayrollSearchShow(oParam, oResponse)
 {
 
 	var iColumn = 0;
@@ -293,7 +293,7 @@ function interfaceFinancialPayrollSearchShow(aParam, oResponse)
 		
 	if (oResponse.data.rows.length == 0)
 	{
-		$('#divInterfaceMasterViewportControlOptions').hide();
+		$('#divns1blankspaceViewportControlOptions').hide();
 	}
 	else
 	{		
@@ -323,13 +323,13 @@ function interfaceFinancialPayrollSearchShow(aParam, oResponse)
     	
 		aHTML[++h] = '</tbody></table>';
 
-		$('#divInterfaceMasterViewportControlOptions').html(aHTML.join(''));
-		$('#divInterfaceMasterViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		
 		$('td.interfaceSearch').click(function(event)
 		{
-			$('#divInterfaceMasterViewportControlOptions').html('&nbsp;');
-			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
 			interfaceFinancialPayrollSearch(event.target.id, {source: 1});
 		});
 	}		
@@ -373,26 +373,26 @@ function interfaceFinancialPayrollViewport()
 	
 	$('#tdInterfaceViewportControlSummary').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
 		interfaceFinancialPayrollSummary();
 	});
 	
 	$('#tdInterfaceViewportControlDetails').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainDetails");
+		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
 		interfaceFinancialPayrollDetails();
 	});
 	
 	$('#tdInterfaceViewportControlPays').click(function(event)
 	{
-		interfaceMasterMainViewportShow("#divInterfaceMainPays", true);
+		ns1blankspaceMainViewportShow("#divInterfaceMainPays", true);
 		interfaceFinancialPayrollPays();
 	});
 }
 
-function interfaceFinancialPayrollShow(aParam, oResponse)
+function interfaceFinancialPayrollShow(oParam, oResponse)
 {	
-	$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 	interfaceFinancialPayrollViewport();
 		
 	var aHTML = [];
@@ -411,21 +411,21 @@ function interfaceFinancialPayrollShow(aParam, oResponse)
 	{
 		ns1blankspace.objectContextData = oResponse.data.rows[0];
 			
-		$('#spanInterfaceMasterViewportControlAction').button({disabled: false});
+		$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 			
 		$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.paydate +
 			'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_status">' + ns1blankspace.objectContextData.statustext + '</span>');
 		
-		interfaceMasterViewportDestination({
+		ns1blankspaceViewportDestination({
 			newDestination: 'interfaceFinancialPayrollMasterViewport({showHome: false});interfaceFinancialPayrollSearch("-' + ns1blankspace.objectContext + '")',
 			move: false
 			})
 	
-		interfaceMasterObjectViewportHistory({functionDefault: 'interfaceFinancialPayrollSummary()'});
+		ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceFinancialPayrollSummary()'});
 	}		
 }	
 
-function interfaceFinancialPayrollSummary(aParam, oResponse)
+function interfaceFinancialPayrollSummary(oParam, oResponse)
 {
 	var aHTML = [];
 	var h = -1;
@@ -491,7 +491,7 @@ function interfaceFinancialPayrollSummary(aParam, oResponse)
 			$.ajax(
 			{
 				type: 'POST',
-				url: interfaceMasterEndpointURL('FINANCIAL_PAYROLL_PAY_PERIOD_MANAGE'),
+				url: ns1blankspaceEndpointURL('FINANCIAL_PAYROLL_PAY_PERIOD_MANAGE'),
 				data: 'status=2&id=' + ns1blankspace.objectContext,
 				dataType: 'json',
 				success: function() {interfaceFinancialPayrollSearch('-' + ns1blankspace.objectContext)}
@@ -500,7 +500,7 @@ function interfaceFinancialPayrollSummary(aParam, oResponse)
 		
 }
 
-function interfaceFinancialPayrollDetails(aParam)
+function interfaceFinancialPayrollDetails(oParam)
 {	
 	var aHTML = [];
 	var h = -1;
@@ -573,7 +573,7 @@ function interfaceFinancialPayrollDetails(aParam)
 	}
 }
 
-function interfaceFinancialPayrollSave(aParam)
+function interfaceFinancialPayrollSave(oParam)
 {
 	if (ns1blankspace.objectContext != -1)
 	{
@@ -581,8 +581,8 @@ function interfaceFinancialPayrollSave(aParam)
 		
 		if ($('#divInterfaceMainDetails').html() != '')
 		{
-			sData += '&startdate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsStartDate').val());
-			sData += '&paydate=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsPayDate').val());
+			sData += '&startdate=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsStartDate').val());
+			sData += '&paydate=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsPayDate').val());
 			//sData += '&frequency=' + $('input[name="radioFrequency"]:checked').val();
 			sData += '&status=' + $('input[name="radioStatus"]:checked').val();
 		};
@@ -595,7 +595,7 @@ function interfaceFinancialPayrollSave(aParam)
 			dataType: 'json',
 			success: function(data)
 			{
-				interfaceMasterStatus('Saved.');
+				ns1blankspaceStatus('Saved.');
 			}	
 		});		
 	}	
@@ -607,7 +607,7 @@ function interfaceFinancialPayrollNew()
 	var aHTML = [];
 	var h = -1;
 	
-	interfaceMasterMainViewportShow("#divInterfaceMainNew");
+	ns1blankspaceMainViewportShow("#divInterfaceMainNew");
 
 	aHTML[++h] = '<table style="width:100%">' +
 					'<tr>' +
@@ -691,15 +691,15 @@ function interfaceFinancialPayrollNew()
 
 }
 
-function interfaceFinancialPayrollHomeSave(aParam, oResponse)
+function interfaceFinancialPayrollHomeSave(oParam, oResponse)
 {
 	var iType;
 	var iID;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.type != undefined) {iType = aParam.type};
-		if (aParam.id != undefined) {iType = aParam.id};
+		if (oParam.type != undefined) {iType = oParam.type};
+		if (oParam.id != undefined) {iType = oParam.id};
 	}		
 
 	if (iType == undefined)
@@ -708,7 +708,7 @@ function interfaceFinancialPayrollHomeSave(aParam, oResponse)
 		if ($('#tdInterfaceViewportControlEmployees').hasClass('interfaceViewportControlHighlight')) {iType = 2};
 	}
 
-	interfaceMasterStatusWorking();
+	ns1blankspaceStatusWorking();
 
 	//PAYS
 	if (iType == 1)
@@ -716,13 +716,13 @@ function interfaceFinancialPayrollHomeSave(aParam, oResponse)
 		$.ajax(
 		{
 			type: 'POST',
-			url: interfaceMasterEndpointURL('FINANCIAL_PAYROLL_PAY_PROCESS'),
+			url: ns1blankspaceEndpointURL('FINANCIAL_PAYROLL_PAY_PROCESS'),
 			data: 'type=1',
 			dataType: 'json',
 			success: function(data) {
 				if (data.status == 'OK')
 				{	
-					interfaceMasterStatus('New pay period created.');
+					ns1blankspaceStatus('New pay period created.');
 					ns1blankspace.objectContext = data.period;
 					interfaceFinancialPayrollSearch('-' + ns1blankspace.objectContext);
 				}	
@@ -740,7 +740,7 @@ function interfaceFinancialPayrollHomeSave(aParam, oResponse)
 				if ($('#inputInterfaceMainDetailsFirstName').val() == '' ||
 					$('#inputInterfaceMainDetailsLastName').val() == '')
 				{
-					interfaceMasterError('Missing information.');
+					ns1blankspaceError('Missing information.');
 				}	
 				else
 				{
@@ -767,13 +767,13 @@ function interfaceFinancialPayrollHomeSave(aParam, oResponse)
 				else
 				{
 					var sData = 'contactbusiness=' + ns1blankspace.contactBusiness;
-					sData += '&firstname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsFirstName').val());
-					sData += '&surname=' + interfaceMasterFormatSave($('#inputInterfaceMainDetailsLastName').val());
+					sData += '&firstname=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsFirstName').val());
+					sData += '&surname=' + ns1blankspaceFormatSave($('#inputInterfaceMainDetailsLastName').val());
 
 					$.ajax(
 					{
 						type: 'POST',
-						url: interfaceMasterEndpointURL('CONTACT_PERSON_MANAGE'),
+						url: ns1blankspaceEndpointURL('CONTACT_PERSON_MANAGE'),
 						data: sData,
 						dataType: 'json',
 						success: function(data)
@@ -788,7 +788,7 @@ function interfaceFinancialPayrollHomeSave(aParam, oResponse)
 								}
 								else
 								{
-									interfaceMasterError('Could not add employee.')
+									ns1blankspaceError('Could not add employee.')
 								}
 							}
 					});
@@ -803,20 +803,20 @@ function interfaceFinancialPayrollHomeSave(aParam, oResponse)
 	}
 }
 
-function interfaceFinancialPayrollHomeSaveProcess(aParam)
+function interfaceFinancialPayrollHomeSaveProcess(oParam)
 {
 	var iContactBusiness = ns1blankspace.contactBusiness;
 	var iContactPerson;
 	var iID;
 	var sData;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.contactBusiness != undefined) {iContactBusiness = aParam.contactBusiness}
-		if (aParam.contactPerson != undefined) {iContactPerson = aParam.contactPerson}
+		if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
+		if (oParam.contactPerson != undefined) {iContactPerson = oParam.contactPerson}
 	}		
 
-	sData = 'id=' + interfaceMasterFormatSave(iID);
+	sData = 'id=' + ns1blankspaceFormatSave(iID);
 	sData += '&contactbusiness=' + iContactBusiness;
 	sData += '&contactperson=' + iContactPerson;
 	sData += '&status=2';
@@ -829,14 +829,14 @@ function interfaceFinancialPayrollHomeSaveProcess(aParam)
 		dataType: 'json',
 		success: function(data)
 		{
-			interfaceMasterStatus('Saved.');
-			interfaceMasterMainViewportShow("#divInterfaceMainEmployee");
+			ns1blankspaceStatus('Saved.');
+			ns1blankspaceMainViewportShow("#divInterfaceMainEmployee");
 			interfaceFinancialPayrollEmployees();
 		}	
 	});		
 }
 
-function interfaceFinancialPayrollEmployees(aParam, oResponse)
+function interfaceFinancialPayrollEmployees(oParam, oResponse)
 {
 	var iStep = 1;
 	var iStepAction = 1;
@@ -844,17 +844,17 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 	var iID = '';
 	var sXHTMLElementID;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.step != undefined) {iStep = aParam.step};
-		if (aParam.stepAction != undefined) {iStepAction = aParam.stepAction};
-		if (aParam.employee != undefined) {iEmployee = aParam.employee};
-		if (aParam.id != undefined) {iID = aParam.id};
-		if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
+		if (oParam.step != undefined) {iStep = oParam.step};
+		if (oParam.stepAction != undefined) {iStepAction = oParam.stepAction};
+		if (oParam.employee != undefined) {iEmployee = oParam.employee};
+		if (oParam.id != undefined) {iID = oParam.id};
+		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 	}
 	else
 	{
-		aParam = {step: 1};
+		oParam = {step: 1};
 	}
 	
 	if (sXHTMLElementID != undefined)
@@ -887,7 +887,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 			oSearch.addFilter('status', 'EQUAL_TO', '2')
 			oSearch.rows = 50;
 			oSearch.sort('employee.contactperson.firstname', 'asc');
-			oSearch.getResults(function(data) {interfaceFinancialPayrollEmployees(aParam, data)});
+			oSearch.getResults(function(data) {interfaceFinancialPayrollEmployees(oParam, data)});
 		}
 		else
 		{
@@ -917,7 +917,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 				aHTML[++h] = '</tbody></table>';
 			}
 		
-			interfaceMasterPaginationList(
+			ns1blankspacePaginationList(
 			{
 				type: 'JSON',
 				xhtmlElementID: 'tdInterfaceMainPayrollEmployeeColumn1',
@@ -935,8 +935,8 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 				$('#tableEmployees td.Highlight').removeClass('Highlight');
 				$('#' + event.target.id).addClass('Highlight');
 				var aID = (event.target.id).split('-');
-				$.extend(true, aParam, {step: 2, employee: parseInt(aID[1])});
-				interfaceFinancialPayrollEmployees(aParam);
+				$.extend(true, oParam, {step: 2, employee: parseInt(aID[1])});
+				interfaceFinancialPayrollEmployees(oParam);
 			});	
 		}
 	}
@@ -964,7 +964,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			interfaceMasterStatusWorking();
+			ns1blankspaceStatusWorking();
 		});	
 
 	}	
@@ -980,7 +980,7 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 			oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
 			oSearch.addField('*');
 			oSearch.addFilter('id', 'EQUAL_TO', iEmployee);
-			oSearch.getResults(function(data) {interfaceFinancialPayrollEmployees(aParam, data)});
+			oSearch.getResults(function(data) {interfaceFinancialPayrollEmployees(oParam, data)});
 		}
 		else
 		{
@@ -1051,13 +1051,13 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 				$('#tableEmployeeDetails td.Highlight').removeClass('Highlight');
 				$('#' + event.target.id).addClass('Highlight');
 				var aID = (event.target.id).split('-');
-				$.extend(true, aParam, {step: parseInt(aID[1]), stepAction: 1});
-				interfaceFinancialPayrollEmployees(aParam);
+				$.extend(true, oParam, {step: parseInt(aID[1]), stepAction: 1});
+				interfaceFinancialPayrollEmployees(oParam);
 			});
 
 			$('#interfaceFinancialEmployee_details-11').addClass('Highlight');
-			$.extend(true, aParam, {step: 11});
-			interfaceFinancialPayrollEmployees(aParam);
+			$.extend(true, oParam, {step: 11});
+			interfaceFinancialPayrollEmployees(oParam);
 		}
 	}
 	
@@ -1302,13 +1302,13 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 					if (data.status == 'OK')
 					{
 						$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-						$.extend(true, aParam, {stepAction: 1});
-						interfaceFinancialPayrollEmployees(aParam);
-						interfaceMasterStatus('Removed');
+						$.extend(true, oParam, {stepAction: 1});
+						interfaceFinancialPayrollEmployees(oParam);
+						ns1blankspaceStatus('Removed');
 					}
 					else
 					{
-						interfaceMasterError(data.error.errornotes);
+						ns1blankspaceError(data.error.errornotes);
 					}
 				}
 			});
@@ -1334,10 +1334,10 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 				{
 					oSearch.addField('employmenttype,employmenttypetext,enddate,notes,rate,startdate');
 					oSearch.addFilter('id', 'EQUAL_TO', aXHTMLElementID[1]);
-					aParam.id = aXHTMLElementID[1];
+					oParam.id = aXHTMLElementID[1];
 				}	
 
-				oSearch.getResults(function(data){interfaceFinancialPayrollEmployees(aParam, data)});
+				oSearch.getResults(function(data){interfaceFinancialPayrollEmployees(oParam, data)});
 			}
 			else
 			{
@@ -1367,8 +1367,8 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 						text: "Add"
 					})
 					.click(function() {
-						$.extend(true, aParam, {stepAction: 3, xhtmlElementID: "", id: ""});
-						interfaceFinancialPayrollEmployees(aParam);
+						$.extend(true, oParam, {stepAction: 3, xhtmlElementID: "", id: ""});
+						interfaceFinancialPayrollEmployees(oParam);
 					})
 					.css('font-size', '0.75em');
 				
@@ -1429,15 +1429,15 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 						}
 					})
 					.click(function() {
-						$.extend(true, aParam, {stepAction: 4, xhtmlElementID: this.id});
-						interfaceFinancialPayrollEmployees(aParam);
+						$.extend(true, oParam, {stepAction: 4, xhtmlElementID: this.id});
+						interfaceFinancialPayrollEmployees(oParam);
 					})
 					.css('width', '15px')
 					.css('height', '17px');
 
 					$('.payrate').click(function() {
-						$.extend(true, aParam, {stepAction: 2, xhtmlElementID: event.target.id});
-						interfaceFinancialPayrollEmployees(aParam);
+						$.extend(true, oParam, {stepAction: 2, xhtmlElementID: event.target.id});
+						interfaceFinancialPayrollEmployees(oParam);
 					})
 				}
 				else
@@ -1487,16 +1487,16 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 					})
 					.click(function() 
 					{
-						interfaceMasterStatusWorking();
+						ns1blankspaceStatusWorking();
 
-						var sData = 'id=' + interfaceMasterFormatSave(iID);
+						var sData = 'id=' + ns1blankspaceFormatSave(iID);
 						if (iID == '')
 						{
-							sData += '&employee=' + interfaceMasterFormatSave(iEmployee);
+							sData += '&employee=' + ns1blankspaceFormatSave(iEmployee);
 						}	
-						sData += '&startdate=' + interfaceMasterFormatSave($('#inputInterfacePayrollEmployeeDetailsPayRateStartDate').val());
-						sData += '&enddate=' + interfaceMasterFormatSave($('#inputInterfacePayrollEmployeeDetailsPayRateEndDate').val());
-						sData += '&rate=' + interfaceMasterFormatSave($('#inputInterfacePayrollEmployeeDetailsPayRateAmount').val());
+						sData += '&startdate=' + ns1blankspaceFormatSave($('#inputInterfacePayrollEmployeeDetailsPayRateStartDate').val());
+						sData += '&enddate=' + ns1blankspaceFormatSave($('#inputInterfacePayrollEmployeeDetailsPayRateEndDate').val());
+						sData += '&rate=' + ns1blankspaceFormatSave($('#inputInterfacePayrollEmployeeDetailsPayRateAmount').val());
 
 						$.ajax(
 						{
@@ -1507,13 +1507,13 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 							success: function(data) {
 								if (data.status == "OK")
 								{
-									interfaceMasterStatus('Saved');
-									$.extend(true, aParam, {stepAction: 1, id: ''});
-									interfaceFinancialPayrollEmployees(aParam);
+									ns1blankspaceStatus('Saved');
+									$.extend(true, oParam, {stepAction: 1, id: ''});
+									interfaceFinancialPayrollEmployees(oParam);
 								}
 								else
 								{
-									interfaceMasterError(data.error.errornotes);
+									ns1blankspaceError(data.error.errornotes);
 								}
 							}
 						});
@@ -1525,8 +1525,8 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 					})
 					.click(function() 
 					{
-						$.extend(true, aParam, {stepAction: 1});
-						interfaceFinancialPayrollEmployees(aParam);
+						$.extend(true, oParam, {stepAction: 1});
+						interfaceFinancialPayrollEmployees(oParam);
 					});
 					
 					if (oResponse != undefined)
@@ -1565,13 +1565,13 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 					if (data.status == 'OK')
 					{
 						$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-						$.extend(true, aParam, {stepAction: 1});
-						interfaceFinancialPayrollEmployees(aParam);
-						interfaceMasterStatus('Removed');
+						$.extend(true, oParam, {stepAction: 1});
+						interfaceFinancialPayrollEmployees(oParam);
+						ns1blankspaceStatus('Removed');
 					}
 					else
 					{
-						interfaceMasterError(data.error.errornotes);
+						ns1blankspaceError(data.error.errornotes);
 					}
 				}
 			});
@@ -1597,10 +1597,10 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 				{
 					oSearch.addField('accountname,accountnumber,bsb,percentage');
 					oSearch.addFilter('id', 'EQUAL_TO', aXHTMLElementID[1])
-					aParam.id = aXHTMLElementID[1];
+					oParam.id = aXHTMLElementID[1];
 				}	
 
-				oSearch.getResults(function(data){interfaceFinancialPayrollEmployees(aParam, data)});
+				oSearch.getResults(function(data){interfaceFinancialPayrollEmployees(oParam, data)});
 			}
 			else
 			{
@@ -1630,8 +1630,8 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 						text: "Add"
 					})
 					.click(function() {
-						$.extend(true, aParam, {stepAction: 3, xhtmlElementID: "", id: ""});
-						interfaceFinancialPayrollEmployees(aParam);
+						$.extend(true, oParam, {stepAction: 3, xhtmlElementID: "", id: ""});
+						interfaceFinancialPayrollEmployees(oParam);
 					})
 					.css('font-size', '0.75em');
 				
@@ -1696,15 +1696,15 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 						}
 					})
 					.click(function() {
-						$.extend(true, aParam, {stepAction: 4, xhtmlElementID: this.id});
-						interfaceFinancialPayrollEmployees(aParam);
+						$.extend(true, oParam, {stepAction: 4, xhtmlElementID: this.id});
+						interfaceFinancialPayrollEmployees(oParam);
 					})
 					.css('width', '15px')
 					.css('height', '17px');
 
 					$('.bankaccount').click(function() {
-						$.extend(true, aParam, {stepAction: 2, xhtmlElementID: event.target.id});
-						interfaceFinancialPayrollEmployees(aParam);
+						$.extend(true, oParam, {stepAction: 2, xhtmlElementID: event.target.id});
+						interfaceFinancialPayrollEmployees(oParam);
 					})
 				}
 				else
@@ -1759,17 +1759,17 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 					})
 					.click(function() 
 					{
-						interfaceMasterStatusWorking();
+						ns1blankspaceStatusWorking();
 
-						var sData = 'id=' + interfaceMasterFormatSave(iID);
+						var sData = 'id=' + ns1blankspaceFormatSave(iID);
 						if (iID == '')
 						{
-							sData += '&employee=' + interfaceMasterFormatSave(iEmployee);
+							sData += '&employee=' + ns1blankspaceFormatSave(iEmployee);
 						}	
-						sData += '&accountname=' + interfaceMasterFormatSave($('#inputInterfacePayrollEmployeeDetailsBankAccountName').val());
-						sData += '&bsb=' + interfaceMasterFormatSave($('#inputInterfacePayrollEmployeeDetailsBankAccountBSB').val());
-						sData += '&accountnumber=' + interfaceMasterFormatSave($('#inputInterfacePayrollEmployeeDetailsBankAccountNumber').val());
-						sData += '&percentage=' + interfaceMasterFormatSave($('#inputInterfacePayrollEmployeeDetailsBankAccountPercentage').val());
+						sData += '&accountname=' + ns1blankspaceFormatSave($('#inputInterfacePayrollEmployeeDetailsBankAccountName').val());
+						sData += '&bsb=' + ns1blankspaceFormatSave($('#inputInterfacePayrollEmployeeDetailsBankAccountBSB').val());
+						sData += '&accountnumber=' + ns1blankspaceFormatSave($('#inputInterfacePayrollEmployeeDetailsBankAccountNumber').val());
+						sData += '&percentage=' + ns1blankspaceFormatSave($('#inputInterfacePayrollEmployeeDetailsBankAccountPercentage').val());
 
 						$.ajax(
 						{
@@ -1780,13 +1780,13 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 							success: function(data) {
 								if (data.status == "OK")
 								{
-									interfaceMasterStatus('Saved');
-									$.extend(true, aParam, {stepAction: 1, id: ''});
-									interfaceFinancialPayrollEmployees(aParam);
+									ns1blankspaceStatus('Saved');
+									$.extend(true, oParam, {stepAction: 1, id: ''});
+									interfaceFinancialPayrollEmployees(oParam);
 								}
 								else
 								{
-									interfaceMasterError(data.error.errornotes);
+									ns1blankspaceError(data.error.errornotes);
 								}
 							}
 						});
@@ -1798,8 +1798,8 @@ function interfaceFinancialPayrollEmployees(aParam, oResponse)
 					})
 					.click(function() 
 					{
-						$.extend(true, aParam, {stepAction: 1});
-						interfaceFinancialPayrollEmployees(aParam);
+						$.extend(true, oParam, {stepAction: 1});
+						interfaceFinancialPayrollEmployees(oParam);
 					});
 					
 					if (oResponse != undefined)
@@ -1842,23 +1842,23 @@ function interfaceFinancialPayrollEmployeesRow(oRow)
 	return aHTML.join('');
 }
 
-function interfaceFinancialPayrollPays(aParam, oResponse)
+function interfaceFinancialPayrollPays(oParam, oResponse)
 {
 	var iStep = 1;
 	var iEmployee;
 	var iPay;
 	var sEmployeeText;
 
-	if (aParam != undefined)
+	if (oParam != undefined)
 	{
-		if (aParam.step != undefined) {iStep = aParam.step};
-		if (aParam.employee != undefined) {iEmployee = aParam.employee};
-		if (aParam.pay != undefined) {iPay = aParam.pay};
-		if (aParam.employeeText != undefined) {sEmployeeText = aParam.employeeText};
+		if (oParam.step != undefined) {iStep = oParam.step};
+		if (oParam.employee != undefined) {iEmployee = oParam.employee};
+		if (oParam.pay != undefined) {iPay = oParam.pay};
+		if (oParam.employeeText != undefined) {sEmployeeText = oParam.employeeText};
 	}
 	else
 	{
-		aParam = {};
+		oParam = {};
 	}	
 
 	//PAY RECORDS
@@ -1904,8 +1904,8 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 				})
 				.click(function()
 				{
-					$.extend(true, aParam, {step: 4, xhtmlElementID: ""});
-					interfaceSetupFinancialPayrollPays(aParam);
+					$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
+					interfaceSetupFinancialPayrollPays(oParam);
 				})
 			}
 
@@ -1915,7 +1915,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext)
 			oSearch.rows = 200;
 			oSearch.sort('payrecord.employee.contactpersontext', 'asc');
-			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(aParam, data)})	
+			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(oParam, data)})	
 		}
 		else
 		{
@@ -1961,7 +1961,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 				 	icons: {primary: "ui-icon-close"}
 				})
 				.click(function() {
-					$.extend(true, aParam, {step: 5, xhtmlElementID: event.target.id});
+					$.extend(true, oParam, {step: 5, xhtmlElementID: event.target.id});
 					///interfaceSetupFinancialPayrollPays(this.id)
 				})
 				.css('width', '15px')
@@ -1974,8 +1974,8 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 				$('#' + event.target.id).addClass('Highlight');
 				var aXHTMLElementID = (event.target.id).split('-');
 				var sData = $('#' + event.target.id).attr('data-employeeText');
-				$.extend(true, aParam, {step: 2, pay: aXHTMLElementID[1], employeeText: sData});
-				interfaceFinancialPayrollPays(aParam);
+				$.extend(true, oParam, {step: 2, pay: aXHTMLElementID[1], employeeText: sData});
+				interfaceFinancialPayrollPays(oParam);
 			})
 		}
 	}
@@ -2021,8 +2021,8 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			$('#divInterfaceMainFinancialPayrollColumnItemType :radio').click(function()
 			{
 				var aID = (event.target.id).split('-');
-				$.extend(true, aParam, {step: aID[1]});
-				interfaceFinancialPayrollPays(aParam);
+				$.extend(true, oParam, {step: aID[1]});
+				interfaceFinancialPayrollPays(oParam);
 			});
 
 			var aHTML = [];
@@ -2052,8 +2052,8 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			})
 			.click(function()
 			{
-				$.extend(true, aParam, {step: 4, xhtmlElementID: ""});
-				interfaceFinancialPayrollPays(aParam);
+				$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
+				interfaceFinancialPayrollPays(oParam);
 			})
 
 			var oSearch = new AdvancedSearch();
@@ -2061,15 +2061,15 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			oSearch.addFilter('id', 'EQUAL_TO', iPay)
 			oSearch.addField('grosssalary,calculations,netsalary,deductions,superannuation,calculations,taxbeforerebate');
 			oSearch.rows = 1;
-			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(aParam, data)})	
+			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(oParam, data)})	
 		}
 		else
 		{
 
 			ns1blankspace.objectContextData.pay = oResponse.data.rows[0];
 
-			$.extend(true, aParam, {step: 3});
-			interfaceFinancialPayrollPays(aParam);
+			$.extend(true, oParam, {step: 3});
+			interfaceFinancialPayrollPays(oParam);
 
 			var aHTML = [];
 			var h = -1;
@@ -2130,7 +2130,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			oSearch.addField('type,typetext,hours');
 			oSearch.addFilter('id', 'EQUAL_TO', iPay);
 			oSearch.rows = 100;
-			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(aParam, data)})	
+			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(oParam, data)})	
 		}
 		else
 		{
@@ -2185,7 +2185,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 				 	icons: {primary: "ui-icon-close"}
 				})
 				.click(function() {
-					$.extend(true, aParam, {step: 5, xhtmlElementID: event.target.id});
+					$.extend(true, oParam, {step: 5, xhtmlElementID: event.target.id});
 					///interfaceSetupFinancialPayrollPays(this.id)
 				})
 				.css('width', '15px')
@@ -2201,10 +2201,10 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		var iType;
 		var sXHTMLElementID;
 
-		if (aParam != undefined)
+		if (oParam != undefined)
 		{
-			if (aParam.xhtmlElementID != undefined) {sXHTMLElementID = aParam.xhtmlElementID}
-			if (aParam.type != undefined) {iType = aParam.type}
+			if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+			if (oParam.type != undefined) {iType = oParam.type}
 		}
 		
 		if (sXHTMLElementID != undefined)
@@ -2282,13 +2282,13 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			interfaceMasterStatusWorking();
+			ns1blankspaceStatusWorking();
 
 			var sData = 'type=' + iType;
-			sData += '&id=' + interfaceMasterFormatSave(sID);
-			sData += '&title=' + interfaceMasterFormatSave($('#inputInterfaceMainAccountAddTitle').val());
-			sData += '&parentaccount=' + interfaceMasterFormatSave($('#inputInterfaceMainAccountParentAccount').attr("data-id"));
-			sData += '&postable=' + interfaceMasterFormatSave($('input[name="radioPostable"]:checked').val());
+			sData += '&id=' + ns1blankspaceFormatSave(sID);
+			sData += '&title=' + ns1blankspaceFormatSave($('#inputInterfaceMainAccountAddTitle').val());
+			sData += '&parentaccount=' + ns1blankspaceFormatSave($('#inputInterfaceMainAccountParentAccount').attr("data-id"));
+			sData += '&postable=' + ns1blankspaceFormatSave($('input[name="radioPostable"]:checked').val());
 
 			var oAdd =
 					{
@@ -2307,7 +2307,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 				success: function(data) {
 					if (data.status == "OK")
 					{
-						interfaceMasterStatus('Saved');
+						ns1blankspaceStatus('Saved');
 
 						$.extend(true, oAdd, {id: data.id});
 						
@@ -2320,12 +2320,12 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 
 						if (bNew) {(ns1blankspace.financial.accounts).unshift(oAdd)}
 
-						$.extend(true, aParam, {step: 2});
-						interfaceFinancialPayrollPays(aParam)
+						$.extend(true, oParam, {step: 2});
+						interfaceFinancialPayrollPays(oParam)
 					}
 					else
 					{
-						interfaceMasterError(data.error.errornotes);
+						ns1blankspaceError(data.error.errornotes);
 					}
 				}
 			});
@@ -2337,8 +2337,8 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 		})
 		.click(function() 
 		{
-			$.extend(true, aParam, {step: 2});
-			interfaceSetupFinancialAccount(aParam);
+			$.extend(true, oParam, {step: 2});
+			interfaceSetupFinancialAccount(oParam);
 		});
 
 		if (sID != undefined)
@@ -2348,8 +2348,8 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			oSearch.addField('title,description,parentaccount,parentaccounttext,postable');
 			oSearch.addFilter('id', 'EQUAL_TO', sID);
 			oSearch.getResults(function(data) {
-					$.extend(true, aParam, {step: 5});
-					interfaceSetupFinancialAccount(aParam, data)
+					$.extend(true, oParam, {step: 5});
+					interfaceSetupFinancialAccount(oParam, data)
 					});
 		}
 		else
@@ -2371,7 +2371,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 			oSearch.addFilter('object', 'EQUAL_TO', '37');
 			oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContextData.id);
 			oSearch.addFilter('contactpersonpaidto', 'EQUAL_TO', ns1blankspace.objectContextData.pay["contactperson"]);
-			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(aParam, data)})	
+			oSearch.getResults(function(data) {interfaceFinancialPayrollPays(oParam, data)})	
 		}
 		else
 		{
@@ -2425,7 +2425,7 @@ function interfaceFinancialPayrollPays(aParam, oResponse)
 				 	icons: {primary: "ui-icon-close"}
 				})
 				.click(function() {
-					$.extend(true, aParam, {step: 5, xhtmlElementID: event.target.id});
+					$.extend(true, oParam, {step: 5, xhtmlElementID: event.target.id});
 					///interfaceSetupFinancialPayrollPays(this.id)
 				})
 				.css('width', '15px')
