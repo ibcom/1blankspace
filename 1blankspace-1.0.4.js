@@ -2090,7 +2090,7 @@ ns1blankspace.dialog =
 					$('#div1blankspaceViewportControlOptions').attr('data-initiator', sSource);
 				},
 
-	show: 		function ns1blankspaceViewportControlShow(oElement)
+	show2: 		function (oElement)
 				{
 
 					var aHTML = [];
@@ -2117,10 +2117,66 @@ ns1blankspace.dialog =
 						interfaceControlOptionsBind();
 					}	
 				},
+
+	show:		function (oParam)
+				{
+
+					var aHTML = [];
+					var h = -1;
+					var sXHTMLElementID;
+					var oXHTMLElement;
+					var sXHTML;
+					var sFunctionBind;
+					var iOffsetTop = 0;
+					var iOffsetLeft = 0;
+					var bForceShow = false;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElement != undefined) {oXHTMLElement = oParam.xhtmlElement}
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.xhtml != undefined) {sXHTML = oParam.xhtml}
+						if (oParam.functionBind != undefined) {sFunctionBind = oParam.functionBind}
+						if (oParam.offsetTop != undefined) {iOffsetTop = oParam.offsetTop}
+						if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft}
+						if (oParam.forceShow != undefined) {bForceShow = oParam.forceShow}
+					}
+					
+					if (oXHTMLElement == undefined)
+					{
+						oXHTMLElement = $('#' + sXHTMLElementID)
+					}
+					
+					if (oXHTMLElement != undefined)
+					{
+						if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oXHTMLElement.attr('id') && !bForceShow)
+						{
+							$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+							$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+						}
+						else
+						{
+							$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oXHTMLElement.attr('id'));
+							$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+							$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+							$('#divns1blankspaceViewportControlOptions').offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft});
+							$('#divns1blankspaceViewportControlOptions').html(sXHTML);
+							
+							if (sFunctionBind != undefined)
+								{eval(sFunctionBind)}
+						}
+					}	
+				},
+
+	hide:		function ns1blankspaceViewportOptionsHide()
+				{
+					$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+					$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+				},
 				
 	position:	function (oParam)
 				{
-
 					var sXHTMLElementID = '';
 					var iLeftOffset = 0;
 					var iTopOffset = 7;
@@ -2138,6 +2194,35 @@ ns1blankspace.dialog =
 					$('#divns1blankspaceViewportControlOptions').show();
 					$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
 				},
+
+	confirm:	function ns1blankspaceConfirm(oParam)
+				{
+
+					var aHTML = [];
+					var sTitle = '';
+					
+					if (oParam != undefined)
+					{
+						if (oParam.html != undefined) {aHTML = oParam.html}
+						if (oParam.title != undefined) {sTitle = oParam.title}
+					}	
+					
+					$('#divInterfaceDialog').html(aHTML.join(''));
+					
+					$('#divInterfaceDialog').dialog(
+						{
+							resizable: false,
+							modal: true,
+							title: sTitle,
+							buttons: 
+							{
+								"Ok": function() 
+								{
+									$( this ).dialog( "close" );
+								}
+							}
+						});
+				}
 }
 
 ns1blankspace.search =
@@ -2461,12 +2546,47 @@ ns1blankspace.util =
 
 				},
 
-	fs:			function (sValue) {return this.formatSave(sValue)}
+	fs:			function (sValue) {return this.formatSave(sValue)},
+
+	getRPC:		function ()
+				{
+					if (ns1blankspace.rpc == undefined)
+					{
+						$.ajax(
+						{
+							type: 'GET',
+							url: '/jscripts/1blankspace.rpc-1.0.1.json',
+							dataType: 'json',
+							async: false,
+							success: function(data) {ns1blankspace.rpc = data.methods}
+						});
+					}
+				},
+
+	endpointURI:function (asMethod)
+				{
+					ns1blankspaceRPCGet();
+
+					var sBaseEndpoint;
+
+					if ($.inArray(asMethod, ns1blankspace.rpc) == -1)
+					{
+						sBaseEndpoint = '/ondemand/';
+					}
+					else
+					{
+						sBaseEndpoint = '/rpc/';
+					}
+
+					aMethod = asMethod.split('_');
+					sEndpoint = aMethod[0];
+					
+					return sBaseEndpoint + (aMethod[0]).toLowerCase() + '/?method=' + asMethod;
+				}
 }
 
 ns1blankspace.search.address =
 {
-
 	show:		function ns1blankspaceAddressSearch(sXHTMLElementID, oParam)
 				{
 					
@@ -2557,1444 +2677,1319 @@ ns1blankspace.search.address =
 				}
 }				
 
-function ns1blankspaceContactEmailSearch(sXHTMLElementID, oParam)
+ns1blankspace.search.email =
 {
-
-	var iSource = ns1blankspace.data.searchSource.text;
-	var iMinimumLength = 1;
-	var sMethod;
-	var sSearchText;
-	var iMaximumColumns = 1;
-	var bEmailOnly = false;
-	var sParentSearchId;
-	var sSetXHTMLElementId;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.source != undefined) {iSource = oParam.source}
-		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
-		if (oParam.method != undefined) {sMethod = oParam.method}
-		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
-		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
-		if (oParam.emailOnly != undefined) {bEmailOnly = oParam.emailOnly}
-		if (oParam.contactBusiness != undefined) {sParentSearchId = oParam.contactBusiness}
-		if (oParam.setXHTMLElementID != undefined) {sSetXHTMLElementId = oParam.setXHTMLElementID}
-	}
-
-	var aSearch = sXHTMLElementID.split('---');
-	var sElementId = aSearch[0];
-	var lElementSearchContext = aSearch[1];
-		
-	if (sElementId != '')
-	{
-		var sMethod = $('#' + sElementId).attr("onDemandMethod")
-		var sParentElementId = $('#' + sElementId).attr("onDemandParent")
-	}	
-	
-	if (lElementSearchContext != undefined)
-	{
-		if (sSetXHTMLElementId == undefined) {sSetXHTMLElementId = sElementId}
-	
-		var lOnDemandID = $('#' + sSetXHTMLElementId).attr("onDemandID")
-		
-		if (lOnDemandID == undefined) 
-		{
-			lOnDemandID = aSearch[1];
-		}
-		else
-		{	
-			lOnDemandID += '-' + aSearch[1]
-		}	
-		
-		$('#' + sSetXHTMLElementId).attr("onDemandID", lOnDemandID)
-		
-		var sValue = $('#' + sSetXHTMLElementId).val()
-		
-		if (bEmailOnly) 
-		{
-			if (sValue == '') 
-			{
-				sValue = aSearch[6]
-			}
-			else
-			{
-				sValue += ';' + aSearch[6]
-			}		
-				
-			$('#' + sSetXHTMLElementId).val(sValue)	
-		}
-		else
-		{
-			$('#' + sSetXHTMLElementId).val(aSearch[2] + ' ' + aSearch[3])
-		}	
-		
-		$('#' + sParentElementId).attr("onDemandID", aSearch[4])
-		$('#' + sParentElementId).val(aSearch[5])
-		$('#divns1blankspaceViewportControlOptions').hide();
-	}
-	else
-	{
-	
-		ns1blankspaceOptionsSetPosition(sXHTMLElementID);
-	
-		if (sSearchText == undefined) {sSearchText = ''};
-			
-		if (sSearchText == '' && iSource == ns1blankspace.data.searchSource.text)
-		{
-			sSearchText = $('#' + sElementId).val();
-		}	
-		
-		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.all)
-		{
-			
-			var oSearch = new AdvancedSearch();
-			oSearch.endPoint = 'contact';
-			oSearch.rows = 10;
-			oSearch.method = 'CONTACT_PERSON_SEARCH';
-			oSearch.addField( 'firstname,surname,contactbusinesstext,contactbusiness,email');
-			oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
-			
-			if (sParentElementId != undefined)
-			{
-				var sParentSearchText = $('#' + sParentElementId).val();
-				sParentSearchId = $('#' + sParentElementId).attr("onDemandID");
-			}	
-			
-			if (sParentSearchId != undefined)
-			{
-				oSearch.addFilter('contactbusiness', 'EQUAL_TO', sParentSearchId);
-			}
-			else if	(sParentSearchText != undefined)
-			{
-				oSearch.addFilter('contactbusinesstext', 'STRING_STARTS_WITH', sParentSearchText);
-			}
-			
-			if (bEmailOnly)
-			{
-				oSearch.addFilter('email', 'IS_NOT_NULL', sParentSearchText);
-				oSearch.addFilter('email', 'STRING_IS_LIKE', '@');
-			}	
-			
-			oSearch.rf = 'JSON';
-		
-			oSearch.getResults(function (data) {ns1blankspaceContactEmailSearchShow(data, sElementId, oParam)}) 
-						
-		}
-	};	
-}
-
-function ns1blankspaceContactEmailSearchShow(oResponse, sElementId, oParam)
-{
-
-	var iColumn = 0;
-	var aHTML = [];
-	var h = -1;
-	var	iMaximumColumns = 1;
-	var sElementIDSuffix;
-	
-	if (oResponse.data.rows.length == 0)
-	{
-		$('#divns1blankspaceViewportControlOptions').hide();
-	}
-	else
-	{
-		aHTML[++h] = '<table class="interfaceSearchLarge">';
-		aHTML[++h] = '<tbody>'
-			
-		$.each(oResponse.data.rows, function()
-		{	
-			sElementIDSuffix = '---' + this.id +
-									'---' + this.firstname +
-									'---' + this.surname +
-									'---' + this.contactbusiness +
-									'---' + this.contactbusinesstext +
-									'---' + this.email;
-		
-			aHTML[++h] = '<tr class="interfaceSearch">';
-			
-			aHTML[++h] = '<td class="interfaceSearch" id="' + sElementId +
-									sElementIDSuffix +
-									'">' + onDemandXMLGetData(oRow, "firstname")
-									'</td>';
-									
-			aHTML[++h] = '<td class="interfaceSearch" id="' + sElementId +
-									sElementIDSuffix +
-									'">' + onDemandXMLGetData(oRow, "surname")
-									'</td>';
-															
-			aHTML[++h] = '<td class="interfaceSearch" id="' + sElementId +
-									sElementIDSuffix +
-									'">' + onDemandXMLGetData(oRow, "email") +
-									'</td>';
-									
-			aHTML[++h] = '<td class="interfaceSearch" id="' + sElementId +
-									sElementIDSuffix +
-									'">' + onDemandXMLGetData(oRow, "contactbusinesstext") +
-									'</td>';
-									
-			aHTML[++h] = '</tr>'
-		});
-    	
-		aHTML[++h] = '</tbody></table>';
-	
-		$('#divns1blankspaceViewportControlOptions').html(ns1blankspacePagination(
-			{
-				html: aHTML.join(''),
-				more: (oResponse.morerows == 'true'),
-				headerClass: 'interfaceSearchHeaderLarge',
-				footerClass: 'interfaceSearchFooterLarge'
-			})	
-		);
-	
-		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		
-		$('td.interfaceSearch').click(function(event)
-		{
-			$('#divns1blankspaceViewportControlOptions').hide(200);
-			ns1blankspaceContactEmailSearch(event.target.id, oParam);
-		});
-		
-		ns1blankspacePaginationBind(
-		{
-			columns: 'firstname-surname-email-contactbusinesstext',
-			idColumns: 'firstname-surname-contactbusiness-contactbusinesstext-email',
-			more: oResponse.moreid, 
-			bodyClass: 'interfaceSearchLarge',
-			functionSearch: ns1blankspaceContactEmailSearch,
-			xhtmlElementId: sElementId,
-			idSeperator: '---',
-			type: 'JSON'
-		})	
-	}	
-			
-}
-
-function ns1blankspacePagination(oParam)
-{
-
-	var aHTML = [];
-	var h = -1;
-	
-	var sHTML = '';
-	var bMore = false;
-
-	if (oParam != undefined)
-	{
-		if (oParam.html != undefined) {sHTML = oParam.html}
-		if (oParam.more != undefined) {bMore = oParam.more}
-	}
-
-	
-	aHTML[++h] = '<table border="0" id="tableInterfaceSearchHeader" class="interfaceSearchHeaderMedium"><tbody>';
-	aHTML[++h] = '<tr class="interfaceSearchHeader">';
-	aHTML[++h] = '<td id="tdInterfaceSearchHeaderClose" class="interfaceSearchHeaderClose">' +
-							'<span id="spanInterfaceSearchHeaderClose"></span></td>'
-	if (bMore)
-	{
-		aHTML[++h] = '<td id="tdInterfaceSearchHeaderMore" class="interfaceSearchHeaderMore">' +
-							'<span id="spanInterfaceSearchHeaderMore"></span></td>';
-	}
-	
-	aHTML[++h] = '</tr>';
-	aHTML[++h] = '</tbody></table>';
-		
-	aHTML[++h] = '<div id="divns1blankspaceSearch-0" class="ns1blankspaceSearchPage">';
-				
-	aHTML[++h] = sHTML;
-
-	aHTML[++h] = '</div>';
-
-	if (bMore)
-	{
-		aHTML[++h] = '<table border="0" class="interfaceSearchFooterMedium"><tbody>';
-		aHTML[++h] = '<tr class="interfaceSearchFooter">';
-		
-		aHTML[++h] = '<td id="tdInterfaceSearchFooterPage" class="interfaceSearchHeader">' +
-					'<span id="spanInterfaceSearchFooterPage-0" class="interfaceSearchFooterPage">' +
-					'1</span></td>';
-		
-		aHTML[++h] = '</tr>';
-		aHTML[++h] = '</tbody></table>';
-	}	
-	
-	return aHTML.join('');
-		
-}
-
-function ns1blankspacePaginationBind(oParam)
-{
-	var fFunctionMore = ns1blankspacePaginationShowMore;
-	var iMore;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.functionMore != undefined) {fFunctionMore = oParam.functionMore}
-		if (oParam.more != undefined) {iMore = oParam.more}
-	}
-	
-	$('#spanInterfaceSearchHeaderClose').button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-close"
-				}
-			})
-			.click(function() {
-				$('#divns1blankspaceViewportControlOptions').slideUp(1000);
-				$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-			})
-			.css('width', '15px')
-			.css('height', '16px')
-		
-	$('#spanInterfaceSearchHeaderMore').button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-play"
-				}
-			})
-			.click(function() {
-				(oParam != undefined?oParam.more = iMore:oParam = {more: iMore})
-				fFunctionMore(oParam);
-			})
-			.css('width', '15px')
-			.css('height', '16px')
-		
-	$('.interfaceSearchFooterPage').click(function(event)
-	{
-		ns1blankspacePaginationShowPage(this.id);
-	});
-}
-
-function ns1blankspacePaginationShowMore(oParam, oResponse)
-{
-	
-	var sXHTMLElementID = '';
-	var iMore = -1;
-	var iStartRow = 10;
-	var iRows = 10;
-	var iColumn = 0;
-	var iMaximumColumns = 1;
-	var sColumns = "title";
-	var sIDColumns = '';
-	var fFunctionSearch;
-	var fFunctionClass;
-	var sClass;
-	var sIdAdditional = '';
-	var sBodyClass = 'interfaceSearchMedium';
-	var sIDSeperator = '-';
-	
-	if (oParam != undefined)
-	{
-		if (oParam.more != undefined) {iMore = oParam.more}
-		if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
-		if (oParam.rows != undefined) {iRows = oParam.rows}
-		if (oParam.xhtmlElementId != undefined) {sXHTMLElementID = oParam.xhtmlElementId}
-		if (oParam.columns != undefined) {sColumns = oParam.columns}
-		if (oParam.idColumns != undefined) {sIDColumns = oParam.idColumns}
-		if (oParam.functionSearch != undefined) {fFunctionSearch = oParam.functionSearch}
-		if (oParam.functionClass != undefined) {fFunctionClass = oParam.functionClass}
-		if (oParam.idAdditional != undefined) {sIdAdditional = oParam.idAdditional}
-		if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
-		if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
-		
-	}
-	
-	$('#tdInterfaceSearchFooterMoreStatus').html(ns1blankspace.xhtml.loadingSmall);
-	
-	if (iMore == -1)
-	{
-		alert('No more!')
-	}
-	else
-	{
-		if (oResponse == undefined)
-		{
-			var sParam = 'method=CORE_SEARCH_MORE';
-			var sData =	'id=' + iMore +
-							'&startrow=' + iStartRow + 
-							'&rows=' + iRows;
-			
-			$.ajax(
-			{
-				type: 'GET',
-				url: '/ondemand/core/?' + sParam,
-				data: sData,
-				dataType: 'json',
-				success: function(data){ns1blankspacePaginationShowMore(oParam, data)}
-			});
-		}
-		else
-		{	
-			var aHTML = [];
-			var h = -1;
-		
-			if ($('#divns1blankspaceSearch-' + iStartRow).length == 0)
-			{
-				aHTML[++h] = '<div id="divns1blankspaceSearch-' + iStartRow + '" class="ns1blankspaceSearchPage">';
-			
-				aHTML[++h] = '<table border="0" class="' + sBodyClass + '">';
-				aHTML[++h] = '<tbody>'
-						
-				var iStartRow = parseInt(oResponse.startrow);
-				var iRows = parseInt(oResponse.rows);
-				var bMoreRows = (oResponse.morerows == 'true');
-								
-				if (bMoreRows)
-				{				
-					$('#spanInterfaceSearchHeaderMore').show();
-				}
-				else
+	show: 		function (sXHTMLElementID, oParam)
 				{
-					$('#spanInterfaceSearchHeaderMore').hide();
-				}	
-				
-				oParam.startRow = iStartRow + iRows;	
+
+					var iSource = ns1blankspace.data.searchSource.text;
+					var iMinimumLength = 1;
+					var sMethod;
+					var sSearchText;
+					var iMaximumColumns = 1;
+					var bEmailOnly = false;
+					var sParentSearchId;
+					var sSetXHTMLElementId;
 					
-				$('#tdInterfaceSearchFooterMore').unbind('click');
-					
-				$('#tdInterfaceSearchFooterMore').click(function(event)
-				{
-					interfaceAuditSearchAdd(oParam);
-				});	
+					if (oParam != undefined)
+					{
+						if (oParam.source != undefined) {iSource = oParam.source}
+						if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+						if (oParam.method != undefined) {sMethod = oParam.method}
+						if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+						if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
+						if (oParam.emailOnly != undefined) {bEmailOnly = oParam.emailOnly}
+						if (oParam.contactBusiness != undefined) {sParentSearchId = oParam.contactBusiness}
+						if (oParam.setXHTMLElementID != undefined) {sSetXHTMLElementId = oParam.setXHTMLElementID}
+					}
+
+					var aSearch = sXHTMLElementID.split('---');
+					var sElementId = aSearch[0];
+					var lElementSearchContext = aSearch[1];
 						
-				$.each(oResponse.data.rows, function()
-				{		
-					iColumn = iColumn + 1;
-					
-					if (iColumn == 1)
+					if (sElementId != '')
 					{
-						aHTML[++h] = '<tr class="interfaceSearch">';
-					}
-					
-					var aIDColumns = sIDColumns.split("-");
-					
-					var sIDData = '';
-					for (var i = 0; i < aIDColumns.length; i++)
-					{
-						sIDData += '-' + onDemandXMLGetData(oRow, aIDColumns[i]);
-					}
-					
-					var aColumns = sColumns.split("-");
-					
-					for (var i = 0; i < aColumns.length; i++)
-					{
-						sClass = 'interfaceSearch'
-						if (fFunctionClass != undefined)
-						{
-							sClass = sClass + fFunctionClass(oRow);
-						}	
-					
-						aHTML[++h] = '<td class="' + sClass + '" id="' +
-											sXHTMLElementID + '-' + this.id + sIDData + sIdAdditional + '">' 
-											
-						switch (aColumns[i])
-						{
-						case 'space':
-							aHTML[++h] = ' ';
-							break;
-						case 'comma':
-							aHTML[++h] = ',';
-							break;
-						case 'pipe':
-							aHTML[++h] = '|';
-							break;
-						default:
-							aHTML[++h] = this[aColumns[i]];
-						}
-						
-						aHTML[++h] = '</td>';
-					}
-					
-					if (iColumn == iMaximumColumns)
-					{
-						aHTML[++h] = '</tr>'
-						iColumn = 0;
+						var sMethod = $('#' + sElementId).attr("onDemandMethod")
+						var sParentElementId = $('#' + sElementId).attr("onDemandParent")
 					}	
-				});
-			
-				aHTML[++h] = '</tbody></table>';
-				
-				aHTML[++h] = '</div>';
-				
-				$('.ns1blankspaceSearchPage').hide();
-				$('.ns1blankspaceSearchPage:last').after(aHTML.join(''));
-				
-				$('td.interfaceSearch').click(function(event)
-				{
-					$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-					fFunctionSearch(event.target.id, {source: 1});
-				});
-						
-				$('#tdInterfaceSearchFooterPage').append(
-						' | <span id="spanInterfaceSearchFooterPage-' + iStartRow + '" class="interfaceSearchFooterPage">' +
-							(parseInt(iStartRow/iRows) + 1) + '</span>');
-							
-				$('#tdInterfaceSearchFooterMoreStatus').html('&nbsp;');			
-			}
-		
-			$('.interfaceSearchFooterPage').click(function(event)
-			{
-				ns1blankspacePaginationShowPage(this.id);
-			});
-		
-		}
-	}
-}	
-
-function ns1blankspacePaginationShowPage(sXHTMLElementID)
-{
-
-	var aElement = sXHTMLElementID.split('-');
-	
-	$('.ns1blankspaceSearchPage').hide();
-	$('#divns1blankspaceSearch-' + aElement[1]).show();
-	
-}
-
-function ns1blankspaceActions(oParam)
-{
-
-	var sXHTMLElementID;
-	var iObject = ns1blankspace.object;
-	var iObjectContext = ns1blankspace.objectContext;
-	var bShowAdd = gbShowAdd;
-	var iActionType = '';
-	var oActions = {add: true};
-	var iContactBusiness;
-	var iContactPerson;
-	var sContactBusinessText;
-	var sContactPersonText;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.object != undefined) {iObject = oParam.object}
-		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-		if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
-		if (oParam.showAdd != undefined) {bShowAdd = oParam.showAdd}
-		if (oParam.actionType != undefined ) {iActionType = oParam.actionType}
-		if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
-		if (oParam.actions != undefined) {oActions = oParam.actions}
-		if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
-		if (oParam.contactPerson != undefined) {iContactPerson = oParam.contactPerson}
-		if (oParam.contactBusinessText != undefined) {sContactBusinessText = oParam.contactBusinessText}
-		if (oParam.contactPersonText != undefined) {sContactPersonText = oParam.contactPersonText}
-	}	
-	else
-	{
-		oParam = {};
-	}
-	
-	if (oActions.add)
-	{
-	
-		var aHTML = [];
-		var h = -1;	
 					
-		aHTML[++h] = '<table id="tableInterfaceMainActions" class="interfaceMain">' +
-					'<tr id="trInterfaceMainActionsRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainActionsColumn1" class="interfaceMainColumn1Large">' +
-					ns1blankspace.xhtml.loading +
-					'</td>' +
-					'<td id="tdInterfaceMainActionsColumn2" class="interfaceMainColumn2Action">' +
-					'</td>' +
-					'</tr>' +
-					'</table>';					
-			
-		$('#' + sXHTMLElementID).html(aHTML.join(''));
-		
-		var aHTML = [];
-		var h = -1;	
-		
-		aHTML[++h] = '<table id="tableInterfaceMainActionsColumn2" class="interfaceMainColumn2">';
-		
-		aHTML[++h] = '<tr><td id="tdInterfaceMainActionsAdd" class="interfaceMainAction">' +
-						'<span id="spanInterfaceMainActionsAdd">Add</span>' +
-						'</td></tr>';
-								
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainActionsColumn2').html(aHTML.join(''));
-	
-		oParam.xhtmlElementID = 'spanInterfaceMainActionsAdd';
-		oParam.offsetHeight = -30;
-		oParam.offsetLeft = -305;
-		
-		$('#spanInterfaceMainActionsAdd').button(
-		{
-			label: "Add"
-		})
-		.click(function() {
-			interfaceActionMasterViewport({
-											showHome: false, 
-											showNew: true,
-											contactPerson: iContactPerson,
-											contactBusiness: iContactBusiness,
-											contactPersonText: sContactPersonText,
-											contactBusinessText: sContactBusinessText
-											})
-		})
-	
-		sXHTMLElementID = 'tdInterfaceMainActionsColumn1';
-	}
-	
-	if (iObjectContext != -1)
-	{
-		var sParam = 'method=ACTION_SEARCH&lastfirst=1' +
-						'&object=' + iObject + 
-						'&objectcontext=' + iObjectContext +
-						'&type=' + iActionType +
-						'&contactbusiness=' + iContactBusiness + 
-						'&contactperson=' + iContactPerson;
-		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/action/?rows=' + ns1blankspace.option.defaultRows + '&' + sParam,
-			dataType: 'json',
-			success: function(data) {ns1blankspaceActionsShow(data, sXHTMLElementID, oParam)}
-		});	
-	}
-
-}
-
-function ns1blankspaceActionsShow(oResponse, sXHTMLElementID, oParam)
-{	
-	var aHTML = [];
-	var h = -1;
-	var bDescription = false;
-	
-	if (oResponse.data.rows.length == 0)
-	{
-		aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-		aHTML[++h] = '<tbody>'
-		aHTML[++h] = '<tr class="interfaceActions">';
-		aHTML[++h] = '<td class="interfaceMainRowNothing">No actions.</td>';
-		aHTML[++h] = '</tr>';
-		
-		$('#' + sXHTMLElementID).html(aHTML.join(''));
-		$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
-	}
-	else
-	{
-		aHTML[++h] = '<table class="interfaceMain">';
-		aHTML[++h] = '<tbody>'
-	
-		aHTML[++h] = '<tr class="interfaceMainCaption">';
-		aHTML[++h] = '<td class="interfaceMainCaption">Subject</td>';
-		aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-		if (bDescription)
-		{
-			aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
-		}
-		aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-		aHTML[++h] = '</tr>';
-
-		$.each(oResponse.data.rows, function()
-		{	
-			aHTML[++h] = '<tr class="interfaceAttachments">';
-			aHTML[++h] = '<td id="tdAction_subject-' + this.id + '" class="interfaceMainRow">' +
-							this.subject + '</td>';
-			aHTML[++h] = '<td id="tdAction_date-' + this.id + '" class="interfaceMainRow">' +
-							this.actiondate + '</td>';
-			
-			if (bDescription)
-			{
-				aHTML[++h] = '<td id="tdAction_description-' + this.id + '" class="interfaceMainRow">' +
-								this.description + '</td>';
-			}					
-			
-			aHTML[++h] = '<td id="tdAction_options-' + this.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
-			aHTML[++h] = '</tr>'
-		});
-    	
-		aHTML[++h] = '</tbody></table>';
-		
-		ns1blankspacePaginationList(
-		   {
-			xhtmlElementID: sXHTMLElementID,
-			xhtmlContext: 'Action',
-			xhtml: aHTML.join(''),
-			showMore: (oResponse.morerows == 'true'),
-			columns: 'subject-actiondate',
-			more: this.moreid,
-			rows: ns1blankspace.option.defaultRows,
-			functionSearch: ns1blankspaceActions,
-			functionOpen: "interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)"
-		   }); 
-		
-		$('.interfaceMainRowOptionsSelect').button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-play"
-				}
-			})
-			.click(function()
-			{
-				interfaceActionMasterViewport({showHome: false});
-				interfaceActionSearch(this.id)
-			})
-			.css('width', '15px')
-			.css('height', '20px')
-	}
-}
-
-function ns1blankspaceConfirm(oParam)
-{
-
-	var aHTML = [];
-	var sTitle = '';
-	
-	if (oParam != undefined)
-	{
-		if (oParam.html != undefined) {aHTML = oParam.html}
-		if (oParam.title != undefined) {sTitle = oParam.title}
-	}	
-	
-	$('#divInterfaceDialog').html(aHTML.join(''));
-	
-	$('#divInterfaceDialog').dialog(
-		{
-			resizable: false,
-			modal: true,
-			title: sTitle,
-			buttons: 
-			{
-				"Ok": function() 
-				{
-					$( this ).dialog( "close" );
-				}
-			}
-		});
-}
-
-function ns1blankspaceActionAddShow(oParam, oResponse)
-{
-	var iActionID = -1;
-	var dStartDate = new Date();
-	var dEndDate = dStartDate;
-	var sXHTMLElementID = 'spanInterfaceMainActionsAdd';
-	var iOffsetHeight = 5;
-	var iOffsetLeft = 0;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.actionID != undefined) {iActionID = oParam.actionID};
-		if (oParam.startDate != undefined) {dStartDate = oParam.startDate};
-		if (oParam.endDate != undefined) {dEndDate = oParam.endDate};
-		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID};
-		if (oParam.offsetHeight != undefined) {iOffsetHeight = oParam.offsetHeight};
-		if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft};
-	}	
-
-	if ($('#divns1blankspaceDialog').attr('data-initiator') == sXHTMLElementID)
-	{
-		$('#divns1blankspaceDialog').hide("slide", { direction: "right" }, 500);
-		$('#divns1blankspaceDialog').attr('data-initiator', '');
-	}
-	else
-	{
-		$('#divns1blankspaceDialog').attr('data-initiator', sXHTMLElementID);
-	
-		if (iActionID != -1 && oResponse == undefined)
-		{
-			sParam = 'method=ACTION_SEARCH&rf=XML&contactperson=ALL&select=' + iActionID;
-		
-			$.ajax(
-			{
-				type: 'GET',
-				url: '/ondemand/action/?' + sParam,
-				dataType: 'json',
-				success: function(data) {ns1blankspaceActionAddShow(oParam, data)}
-			});	
-		}
-		else
-		{
-			var aHTML = [];
-			var h = -1;
-			
-			aHTML[++h] = '<table id="tablens1blankspaceActionAdd" class="interfaceDialogMedium">';
-			
-			aHTML[++h] = '<tr id="trInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
-								'<td id="tdInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
-								'<input id="inputMasterActionAddSubject" class="inputInterfaceMainText';
-								
-			if (iActionID == -1)
-			{	
-				aHTML[++h] = ' ns1blankspaceWatermark" value="Subject">';
-			}
-			else
-			{
-				aHTML[++h] = '">'
-			}
-			
-			aHTML[++h] = '</td></tr>';
-			
-			aHTML[++h] = '<tr><td id="tdns1blankspaceActionAddDescriptionValue" class="interfaceMain">' +
-								'<textarea rows="5" cols="35" id="inputns1blankspaceActionAddDescription" class="inputInterfaceMainTextMultiSmall';
-
-			if (iActionID == -1)
-			{	
-				aHTML[++h] = ' ns1blankspaceWatermark">Add more text here, if required.</textarea>';
-			}
-			else
-			{
-				aHTML[++h] = '"></textarea>'
-			}
-
-			aHTML[++h] = '</td></tr>';
-
-			aHTML[++h] = '<tr id="trns1blankspaceActionAddBusiness" class="interfaceMain">' +
-								'<td id="tdns1blankspaceActionAddBusiness" class="interfaceMain">' +
-								'Business' +
-								'</td></tr>' +
-								'<tr id="trns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
-								'<td id="tdns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
-								'<input id="inputns1blankspaceActionAddBusiness" class="inputInterfaceMainSelect"' +
-									' onDemandMethod="/ondemand/contact/?method=CONTACT_BUSINESS_SEARCH"' +
-									' onDemandColumns="tradename">' +
-								'</td></tr>';
-								
-			
-			aHTML[++h] = '<tr id="trns1blankspaceActionAddPerson" class="interfaceMain">' +
-								'<td id="tdns1blankspaceActionAddPerson" class="interfaceMain">' +
-								'Person' +
-								'</td></tr>' +
-								'<tr id="trns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
-								'<td id="tdns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
-								'<input id="inputns1blankspaceActionAddPerson" class="inputInterfaceMainSelectContact"' +
-									' onDemandMethod="/ondemand/contact/?method=CONTACT_PERSON_SEARCH"' +
-									' onDemandParent="inputns1blankspaceActionAddBusiness">' +
-								'</td></tr>';									
-								
-								
-			aHTML[++h] = '<tr><td id="tdns1blankspaceActionAddHighPriority" class="interfaceMain">' +
-								'<input type="checkbox" id="inputns1blankspaceActionAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>';
-								
-				
-			aHTML[++h] = '<tr><td>';
-			
-				aHTML[++h] = '<table class="interfaceSearchFooterMedium">';
-				
-				aHTML[++h] = '<tr><td style="text-align: right;">' +
-									'<span id="spanSave">Save</span>' +
-									'<span id="spanCancel">Cancel</span>' +
-									'<td></tr>';
-				
-				aHTML[++h] = '</table>';						
-
-			aHTML[++h] = '</td></tr>';	
-				
-			aHTML[++h] = '</table>';		
-			
-			var oElement = $('#' + sXHTMLElementID)
-			
-			$('#divns1blankspaceDialog').html('');
-			$('#divns1blankspaceDialog').show();
-			$('#divns1blankspaceDialog').offset(
-				{
-					top: $(oElement).offset().top + $(oElement).height() + iOffsetHeight,
-					left: $(oElement).offset().left + iOffsetLeft
-				});
-			$('#divns1blankspaceDialog').html(aHTML.join(''));
-			
-			$('#spanCancel').button(
-				{
-					text: false,
-					 icons: {
-						 primary: "ui-icon-close"
-					}
-				})
-				.click(function() {
-					$('#divns1blankspaceDialog').slideUp(500);
-					$('#divns1blankspaceDialog').html('');
-				})
-				.css('width', '20px')
-				.css('height', '20px')
-
-			$('#spanSave').button(
-				{
-					text: false,
-					 icons: {
-						 primary: "ui-icon-check"
-					}
-				})
-				.click(function() {
-					interfaceActionQuickSave({
-							id: iActionID,
-							date: $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
-										' ' + $.fullCalendar.formatDate(dStartDate, "HH:mm"),
-							endDate: $.fullCalendar.formatDate(dEndDate, "dd MMM yyyy") + 
-										' ' + $.fullCalendar.formatDate(dEndDate, "HH:mm"),
-							subject: $('#inputActionCalendarAddSubject').val(),
-							description: $('#inputActionCalendarAddDescription').val(),
-							priority: ($('#inputActionCalendarAddHighPriority').attr('checked')?3:2),
-							calendarXHTMLElementID: 'divInterfaceMainCalendar'
-							});
-					
-					$('#divns1blankspaceDialog').slideUp(500);
-					$('#divns1blankspaceDialog').html('');
-
-				})
-				.css('width', '30px')
-				.css('height', '20px')
-			
-			if (oResponse != undefined)
-			{	
-				if (oResponse.data.rows.length == 0)
-				{	
-					$('#inputActionCalendarAddSubject').val(oResponse.data.rows[0].subject);
-					$('#inputActionCalendarAddDescription').val(oResponse.data.rows[0].description);
-				}	
-			}	
-		}
-	}
-}
-
-function ns1blankspaceFormatXHTML(sXHTML)
-{
-	var sTmp = sXHTML;
-	
-	sTmp = sTmp.replace(/&amp;/g, '&')
-	sTmp = sTmp.replace(/&lt;/g, '<')
-	sTmp = sTmp.replace(/&gt;/g, '>')
-	sTmp = sTmp.replace(/&#45;/g, '-')
-	sTmp = sTmp.replace(/&#64;/g, '@')
-	sTmp = sTmp.replace(/&#47;/g, '/')
-	sTmp = sTmp.replace(/&quot;/g, '"')
-	sTmp = sTmp.replace(/&#39;/g, '\'')
-	
-	return sTmp
-}
-
-function ns1blankspaceViewportActionShow(oElement, sActionXHTML, sFunctionActionBind)
-{
-
-	var aHTML = [];
-	var h = -1;
-
-	if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
-	{
-		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
-	}
-	else
-	{	
-		if (ns1blankspace.xhtml.masterControl == '')
-		{
-			ns1blankspace.xhtml.masterControl = interfaceControlOptions();
-		}
-
-		$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
-		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		$('#divns1blankspaceViewportControlOptions').html(sActionXHTML);
-		
-		if (sFunctionActionBind != undefined)
-			{eval(sFunctionActionBind)}
-	}	
-}
-
-function ns1blankspacePaginationList(oParam)
-{
-	var aHTML = [];
-	var h = -1;
-	var sXHTMLElementID;
-	
-	var sHTML = '';
-	var bMore = false;
-	var iMore;
-	var iStartRow = 0;
-	var iRows = 30;
-	var bShowList = true;
-	var sXHTMLContext = '';
-	
-	if (oParam != undefined)
-	{
-		if (oParam.xhtml != undefined) {sHTML = oParam.xhtml}
-		if (oParam.showMore != undefined) {bMore = oParam.showMore}
-		if (oParam.more != undefined) {iMore = oParam.more}
-		if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
-		if (oParam.rows != undefined) {iRows = oParam.rows}
-		if (oParam.showList != undefined) {bShowList = oParam.showList}
-		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-		if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
-	}
-
-	oParam.xhtmlFirstRow = $('tr:first', sHTML).html();
-	
-	if (bMore)
-	{
-		aHTML[++h] = '<table><tr>';
-		//aHTML[++h] = '<td style="width:1px;" class="interfaceMessagingSubHeader ns1blankspacePaginationList" id="tdns1blankspacePaginationList' + sXHTMLContext + '-"></td>';
-		aHTML[++h] = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + '"' +
-							' id="td' + sXHTMLContext + 'ns1blankspacePaginationList-0" rowStart="0">1</td>';
-		aHTML[++h] = '<td></td></tr></table>';
-	}
-		
-	aHTML[++h] = '<div id="div' + sXHTMLContext + 'ns1blankspacePaginationList-0" class="ns1blankspacePaginationListPage' + sXHTMLContext + '">';
-	aHTML[++h] = sHTML;
-	aHTML[++h] = '</div>';
-
-	$('#' + sXHTMLElementID).html(aHTML.join(''));
-	if (bShowList) {$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed)};
-		
-	if (bMore)
-	{
-		var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + 
-							'" id="td' + sXHTMLContext + 'ns1blankspacePaginationList-' +
-							(iStartRow + iRows - 1) + '" rowStart="' +
-							(iStartRow + iRows - 1) + '">' + 'more...' + '</td>';
-						
-		$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow)).after(sHTML);
-	
-		$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow + iRows - 1)).click(function(event)
-		{
-			var sID = event.target.id;
-			var sStart = $('#' + sID).attr('rowStart');
-			$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
-			if (oParam != undefined) {oParam.more = iMore;oParam.startRow = sStart}else{oParam = {more: iMore, startRow: sStart}};
-			ns1blankspacePaginationListShowMore(oParam);
-		});
-	}
-	
-	$('.ns1blankspacePaginationListPage' + sXHTMLContext).click(function(event)
-	{
-		ns1blankspacePaginationListShowPage(this.id, sXHTMLContext);
-	});
-		
-}
-
-function ns1blankspacePaginationListShowMore(oParam, oData)
-{
-	
-	var sXHTMLElementID = '';
-	var iMore = -1;
-	var iStartRow = 10;
-	var iRows = 10;
-	var iColumn = 0;
-	var iMaximumColumns = 1;
-	var sColumns = "title";
-	var sIDColumns = '';
-	var sFunctionOpen;
-	var fFunctionClass;
-	var sFunctionNewPage;
-	var sClass;
-	var sIdAdditional = '';
-	var sIDSeperator = '-';
-	var sBodyClass = '';
-	var sXHTMLlFirstRow;
-	var sXHTMLContext = '';
-	var fFunctionShowRow;
-	var sType = 'XML';
-	
-	if (oParam != undefined)
-	{
-		if (oParam.more != undefined) {iMore = oParam.more}
-		if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
-		if (oParam.rows != undefined) {iRows = oParam.rows}
-		if (oParam.xhtmlElementId != undefined) {sXHTMLElementID = oParam.xhtmlElementId}
-		if (oParam.columns != undefined) {sColumns = oParam.columns}
-		if (oParam.idColumns != undefined) {sIDColumns = oParam.idColumns}
-		if (oParam.functionOpen != undefined) {sFunctionOpen = oParam.functionOpen}
-		if (oParam.functionClass != undefined) {fFunctionClass = oParam.functionClass}
-		if (oParam.functionShowRow != undefined) {fFunctionShowRow = oParam.functionShowRow}
-		if (oParam.idAdditional != undefined) {sIdAdditional = oParam.idAdditional}
-		if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
-		if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
-		if (oParam.xhtmlFirstRow != undefined) {sXHTMLlFirstRow = oParam.xhtmlFirstRow}
-		if (oParam.functionNewPage != undefined) {sFunctionNewPage = oParam.functionNewPage}
-		if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
-		if (oParam.type != undefined) {sType = oParam.type}
-	}
-
-	sType = sType.toUpperCase();
-	
-	if (iMore == -1)
-	{
-		alert('No more!')
-	}
-	else
-	{
-		if (oData == undefined)
-		{
-			var sParam = 'method=CORE_SEARCH_MORE';
-			var sData =	'id=' + iMore +
-							'&startrow=' + iStartRow + 
-							'&rows=' + iRows;
-			
-			$.ajax(
-			{
-				type: 'GET',
-				url: '/ondemand/core/?rf=' + sType + '&' + sParam,
-				data: sData,
-				dataType: sType.toLowerCase(),
-				success: function(data){ns1blankspacePaginationListShowMore(oParam, data)}
-			});
-		}
-		else
-		{
-		
-			var aHTML = [];
-			var h = -1;
-		
-			if ($('#div' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).length == 0)
-			{
-			
-				aHTML[++h] = '<div id="div' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow + 
-								'" class="ns1blankspacePaginationListPage' + sXHTMLContext + '">';
-			
-				aHTML[++h] = '<table border="0" class="' + sBodyClass + '">';
-				aHTML[++h] = '<tbody>'
-				
-				if (sXHTMLlFirstRow != undefined)
-				{
-					aHTML[++h] = sXHTMLlFirstRow;
-				}
-				
-				if (sType == 'XML')
-				{
-				
-					var oRoot = oXML.getElementsByTagName('ondemand').item(0);	
-					
-					var iStartRow = parseInt($(oRoot).attr('startrow'));
-					var iRows = parseInt($(oRoot).attr('rows'));
-					var bMoreRows = ($(oRoot).attr('morerows') == "true");
-									
-					oParam.startRow = iStartRow + iRows;	
-				
-					for (var iRow = 0; iRow < oRoot.childNodes.length; iRow++) 
+					if (lElementSearchContext != undefined)
 					{
+						if (sSetXHTMLElementId == undefined) {sSetXHTMLElementId = sElementId}
+					
+						var lOnDemandID = $('#' + sSetXHTMLElementId).attr("onDemandID")
 						
-						var oRow = oRoot.childNodes.item(iRow);
-						
-						if (fFunctionShowRow != undefined)
+						if (lOnDemandID == undefined) 
 						{
-							aHTML[++h] = fFunctionShowRow(oRow);
+							lOnDemandID = aSearch[1];
+						}
+						else
+						{	
+							lOnDemandID += '-' + aSearch[1]
+						}	
+						
+						$('#' + sSetXHTMLElementId).attr("onDemandID", lOnDemandID)
+						
+						var sValue = $('#' + sSetXHTMLElementId).val()
+						
+						if (bEmailOnly) 
+						{
+							if (sValue == '') 
+							{
+								sValue = aSearch[6]
+							}
+							else
+							{
+								sValue += ';' + aSearch[6]
+							}		
+								
+							$('#' + sSetXHTMLElementId).val(sValue)	
+						}
+						else
+						{
+							$('#' + sSetXHTMLElementId).val(aSearch[2] + ' ' + aSearch[3])
+						}	
+						
+						$('#' + sParentElementId).attr("onDemandID", aSearch[4])
+						$('#' + sParentElementId).val(aSearch[5])
+						$('#divns1blankspaceViewportControlOptions').hide();
+					}
+					else
+					{
+					
+						ns1blankspaceOptionsSetPosition(sXHTMLElementID);
+					
+						if (sSearchText == undefined) {sSearchText = ''};
+							
+						if (sSearchText == '' && iSource == ns1blankspace.data.searchSource.text)
+						{
+							sSearchText = $('#' + sElementId).val();
+						}	
+						
+						if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.all)
+						{
+							
+							var oSearch = new AdvancedSearch();
+							oSearch.endPoint = 'contact';
+							oSearch.rows = 10;
+							oSearch.method = 'CONTACT_PERSON_SEARCH';
+							oSearch.addField( 'firstname,surname,contactbusinesstext,contactbusiness,email');
+							oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
+							
+							if (sParentElementId != undefined)
+							{
+								var sParentSearchText = $('#' + sParentElementId).val();
+								sParentSearchId = $('#' + sParentElementId).attr("onDemandID");
+							}	
+							
+							if (sParentSearchId != undefined)
+							{
+								oSearch.addFilter('contactbusiness', 'EQUAL_TO', sParentSearchId);
+							}
+							else if	(sParentSearchText != undefined)
+							{
+								oSearch.addFilter('contactbusinesstext', 'STRING_STARTS_WITH', sParentSearchText);
+							}
+							
+							if (bEmailOnly)
+							{
+								oSearch.addFilter('email', 'IS_NOT_NULL', sParentSearchText);
+								oSearch.addFilter('email', 'STRING_IS_LIKE', '@');
+							}	
+							
+							oSearch.rf = 'JSON';
+						
+							oSearch.getResults(function (data) {this.process(data, sElementId, oParam)}) 
+										
+						}
+					};	
+				},
+
+	process: 	function (oResponse, sElementId, oParam)
+				{
+
+					var iColumn = 0;
+					var aHTML = [];
+					var h = -1;
+					var	iMaximumColumns = 1;
+					var sElementIDSuffix;
+					
+					if (oResponse.data.rows.length == 0)
+					{
+						$('#divns1blankspaceViewportControlOptions').hide();
+					}
+					else
+					{
+						aHTML[++h] = '<table class="interfaceSearchLarge">';
+						aHTML[++h] = '<tbody>'
+							
+						$.each(oResponse.data.rows, function()
+						{	
+							sElementIDSuffix = '---' + this.id +
+													'---' + this.firstname +
+													'---' + this.surname +
+													'---' + this.contactbusiness +
+													'---' + this.contactbusinesstext +
+													'---' + this.email;
+						
+							aHTML[++h] = '<tr class="interfaceSearch">';
+							
+							aHTML[++h] = '<td class="interfaceSearch" id="' + sElementId +
+													sElementIDSuffix +
+													'">' + onDemandXMLGetData(oRow, "firstname")
+													'</td>';
+													
+							aHTML[++h] = '<td class="interfaceSearch" id="' + sElementId +
+													sElementIDSuffix +
+													'">' + onDemandXMLGetData(oRow, "surname")
+													'</td>';
+																			
+							aHTML[++h] = '<td class="interfaceSearch" id="' + sElementId +
+													sElementIDSuffix +
+													'">' + onDemandXMLGetData(oRow, "email") +
+													'</td>';
+													
+							aHTML[++h] = '<td class="interfaceSearch" id="' + sElementId +
+													sElementIDSuffix +
+													'">' + onDemandXMLGetData(oRow, "contactbusinesstext") +
+													'</td>';
+													
+							aHTML[++h] = '</tr>'
+						});
+				    	
+						aHTML[++h] = '</tbody></table>';
+					
+						$('#divns1blankspaceViewportControlOptions').html(ns1blankspacePagination(
+							{
+								html: aHTML.join(''),
+								more: (oResponse.morerows == 'true'),
+								headerClass: 'interfaceSearchHeaderLarge',
+								footerClass: 'interfaceSearchFooterLarge'
+							})	
+						);
+					
+						$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+						
+						$('td.interfaceSearch').click(function(event)
+						{
+							$('#divns1blankspaceViewportControlOptions').hide(200);
+							ns1blankspaceContactEmailSearch(event.target.id, oParam);
+						});
+						
+						ns1blankspacePaginationBind(
+						{
+							columns: 'firstname-surname-email-contactbusinesstext',
+							idColumns: 'firstname-surname-contactbusiness-contactbusinesstext-email',
+							more: oResponse.moreid, 
+							bodyClass: 'interfaceSearchLarge',
+							functionSearch: ns1blankspaceContactEmailSearch,
+							xhtmlElementId: sElementId,
+							idSeperator: '---',
+							type: 'JSON'
+						})	
+					}	
+							
+				}
+}				
+
+ns1blankspace.pagination =
+{
+	init: 		function ns1blankspacePagination(oParam)
+				{
+
+					var aHTML = [];
+					var h = -1;
+					
+					var sHTML = '';
+					var bMore = false;
+
+					if (oParam != undefined)
+					{
+						if (oParam.html != undefined) {sHTML = oParam.html}
+						if (oParam.more != undefined) {bMore = oParam.more}
+					}
+
+					
+					aHTML[++h] = '<table border="0" id="tableInterfaceSearchHeader" class="interfaceSearchHeaderMedium"><tbody>';
+					aHTML[++h] = '<tr class="interfaceSearchHeader">';
+					aHTML[++h] = '<td id="tdInterfaceSearchHeaderClose" class="interfaceSearchHeaderClose">' +
+											'<span id="spanInterfaceSearchHeaderClose"></span></td>'
+					if (bMore)
+					{
+						aHTML[++h] = '<td id="tdInterfaceSearchHeaderMore" class="interfaceSearchHeaderMore">' +
+											'<span id="spanInterfaceSearchHeaderMore"></span></td>';
+					}
+					
+					aHTML[++h] = '</tr>';
+					aHTML[++h] = '</tbody></table>';
+						
+					aHTML[++h] = '<div id="divns1blankspaceSearch-0" class="ns1blankspaceSearchPage">';
+								
+					aHTML[++h] = sHTML;
+
+					aHTML[++h] = '</div>';
+
+					if (bMore)
+					{
+						aHTML[++h] = '<table border="0" class="interfaceSearchFooterMedium"><tbody>';
+						aHTML[++h] = '<tr class="interfaceSearchFooter">';
+						
+						aHTML[++h] = '<td id="tdInterfaceSearchFooterPage" class="interfaceSearchHeader">' +
+									'<span id="spanInterfaceSearchFooterPage-0" class="interfaceSearchFooterPage">' +
+									'1</span></td>';
+						
+						aHTML[++h] = '</tr>';
+						aHTML[++h] = '</tbody></table>';
+					}	
+					
+					return aHTML.join('');
+				},
+
+	bind:		function (oParam)
+				{
+					var fFunctionMore = ns1blankspacePaginationShowMore;
+					var iMore;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.functionMore != undefined) {fFunctionMore = oParam.functionMore}
+						if (oParam.more != undefined) {iMore = oParam.more}
+					}
+					
+					$('#spanInterfaceSearchHeaderClose').button( {
+								text: false,
+								icons: {
+									primary: "ui-icon-close"
+								}
+							})
+							.click(function() {
+								$('#divns1blankspaceViewportControlOptions').slideUp(1000);
+								$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+							})
+							.css('width', '15px')
+							.css('height', '16px')
+						
+					$('#spanInterfaceSearchHeaderMore').button( {
+								text: false,
+								icons: {
+									primary: "ui-icon-play"
+								}
+							})
+							.click(function() {
+								(oParam != undefined?oParam.more = iMore:oParam = {more: iMore})
+								fFunctionMore(oParam);
+							})
+							.css('width', '15px')
+							.css('height', '16px')
+						
+					$('.interfaceSearchFooterPage').click(function(event)
+					{
+						ns1blankspacePaginationShowPage(this.id);
+					});
+				},
+
+	showMore:	function (oParam, oResponse)
+				{
+					
+					var sXHTMLElementID = '';
+					var iMore = -1;
+					var iStartRow = 10;
+					var iRows = 10;
+					var iColumn = 0;
+					var iMaximumColumns = 1;
+					var sColumns = "title";
+					var sIDColumns = '';
+					var fFunctionSearch;
+					var fFunctionClass;
+					var sClass;
+					var sIdAdditional = '';
+					var sBodyClass = 'interfaceSearchMedium';
+					var sIDSeperator = '-';
+					
+					if (oParam != undefined)
+					{
+						if (oParam.more != undefined) {iMore = oParam.more}
+						if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
+						if (oParam.rows != undefined) {iRows = oParam.rows}
+						if (oParam.xhtmlElementId != undefined) {sXHTMLElementID = oParam.xhtmlElementId}
+						if (oParam.columns != undefined) {sColumns = oParam.columns}
+						if (oParam.idColumns != undefined) {sIDColumns = oParam.idColumns}
+						if (oParam.functionSearch != undefined) {fFunctionSearch = oParam.functionSearch}
+						if (oParam.functionClass != undefined) {fFunctionClass = oParam.functionClass}
+						if (oParam.idAdditional != undefined) {sIdAdditional = oParam.idAdditional}
+						if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
+						if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
+						
+					}
+					
+					$('#tdInterfaceSearchFooterMoreStatus').html(ns1blankspace.xhtml.loadingSmall);
+					
+					if (iMore == -1)
+					{
+						alert('No more!')
+					}
+					else
+					{
+						if (oResponse == undefined)
+						{
+							var sParam = 'method=CORE_SEARCH_MORE';
+							var sData =	'id=' + iMore +
+											'&startrow=' + iStartRow + 
+											'&rows=' + iRows;
+							
+							$.ajax(
+							{
+								type: 'GET',
+								url: '/ondemand/core/?' + sParam,
+								data: sData,
+								dataType: 'json',
+								success: function(data){ns1blankspacePaginationShowMore(oParam, data)}
+							});
+						}
+						else
+						{	
+							var aHTML = [];
+							var h = -1;
+						
+							if ($('#divns1blankspaceSearch-' + iStartRow).length == 0)
+							{
+								aHTML[++h] = '<div id="divns1blankspaceSearch-' + iStartRow + '" class="ns1blankspaceSearchPage">';
+							
+								aHTML[++h] = '<table border="0" class="' + sBodyClass + '">';
+								aHTML[++h] = '<tbody>'
+										
+								var iStartRow = parseInt(oResponse.startrow);
+								var iRows = parseInt(oResponse.rows);
+								var bMoreRows = (oResponse.morerows == 'true');
+												
+								if (bMoreRows)
+								{				
+									$('#spanInterfaceSearchHeaderMore').show();
+								}
+								else
+								{
+									$('#spanInterfaceSearchHeaderMore').hide();
+								}	
+								
+								oParam.startRow = iStartRow + iRows;	
+									
+								$('#tdInterfaceSearchFooterMore').unbind('click');
+									
+								$('#tdInterfaceSearchFooterMore').click(function(event)
+								{
+									interfaceAuditSearchAdd(oParam);
+								});	
+										
+								$.each(oResponse.data.rows, function()
+								{		
+									iColumn = iColumn + 1;
+									
+									if (iColumn == 1)
+									{
+										aHTML[++h] = '<tr class="interfaceSearch">';
+									}
+									
+									var aIDColumns = sIDColumns.split("-");
+									
+									var sIDData = '';
+									for (var i = 0; i < aIDColumns.length; i++)
+									{
+										sIDData += '-' + onDemandXMLGetData(oRow, aIDColumns[i]);
+									}
+									
+									var aColumns = sColumns.split("-");
+									
+									for (var i = 0; i < aColumns.length; i++)
+									{
+										sClass = 'interfaceSearch'
+										if (fFunctionClass != undefined)
+										{
+											sClass = sClass + fFunctionClass(oRow);
+										}	
+									
+										aHTML[++h] = '<td class="' + sClass + '" id="' +
+															sXHTMLElementID + '-' + this.id + sIDData + sIdAdditional + '">' 
+															
+										switch (aColumns[i])
+										{
+										case 'space':
+											aHTML[++h] = ' ';
+											break;
+										case 'comma':
+											aHTML[++h] = ',';
+											break;
+										case 'pipe':
+											aHTML[++h] = '|';
+											break;
+										default:
+											aHTML[++h] = this[aColumns[i]];
+										}
+										
+										aHTML[++h] = '</td>';
+									}
+									
+									if (iColumn == iMaximumColumns)
+									{
+										aHTML[++h] = '</tr>'
+										iColumn = 0;
+									}	
+								});
+							
+								aHTML[++h] = '</tbody></table>';
+								
+								aHTML[++h] = '</div>';
+								
+								$('.ns1blankspaceSearchPage').hide();
+								$('.ns1blankspaceSearchPage:last').after(aHTML.join(''));
+								
+								$('td.interfaceSearch').click(function(event)
+								{
+									$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
+									$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+									fFunctionSearch(event.target.id, {source: 1});
+								});
+										
+								$('#tdInterfaceSearchFooterPage').append(
+										' | <span id="spanInterfaceSearchFooterPage-' + iStartRow + '" class="interfaceSearchFooterPage">' +
+											(parseInt(iStartRow/iRows) + 1) + '</span>');
+											
+								$('#tdInterfaceSearchFooterMoreStatus').html('&nbsp;');			
+							}
+						
+							$('.interfaceSearchFooterPage').click(function(event)
+							{
+								ns1blankspacePaginationShowPage(this.id);
+							});
+						
+						}
+					}
+				},
+
+	showPage:	function ns1blankspacePaginationShowPage(sXHTMLElementID)
+				{
+
+					var aElement = sXHTMLElementID.split('-');
+					
+					$('.ns1blankspaceSearchPage').hide();
+					$('#divns1blankspaceSearch-' + aElement[1]).show();
+					
+				}
+}				
+
+ns1blankspace.actions =
+{
+	show: function (oParam)
+				{
+
+					var sXHTMLElementID;
+					var iObject = ns1blankspace.object;
+					var iObjectContext = ns1blankspace.objectContext;
+					var bShowAdd = gbShowAdd;
+					var iActionType = '';
+					var oActions = {add: true};
+					var iContactBusiness;
+					var iContactPerson;
+					var sContactBusinessText;
+					var sContactPersonText;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.object != undefined) {iObject = oParam.object}
+						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+						if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
+						if (oParam.showAdd != undefined) {bShowAdd = oParam.showAdd}
+						if (oParam.actionType != undefined ) {iActionType = oParam.actionType}
+						if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.actions != undefined) {oActions = oParam.actions}
+						if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
+						if (oParam.contactPerson != undefined) {iContactPerson = oParam.contactPerson}
+						if (oParam.contactBusinessText != undefined) {sContactBusinessText = oParam.contactBusinessText}
+						if (oParam.contactPersonText != undefined) {sContactPersonText = oParam.contactPersonText}
+					}	
+					else
+					{
+						oParam = {};
+					}
+					
+					if (oActions.add)
+					{
+					
+						var aHTML = [];
+						var h = -1;	
+									
+						aHTML[++h] = '<table id="tableInterfaceMainActions" class="interfaceMain">' +
+									'<tr id="trInterfaceMainActionsRow1" class="interfaceMainRow1">' +
+									'<td id="tdInterfaceMainActionsColumn1" class="interfaceMainColumn1Large">' +
+									ns1blankspace.xhtml.loading +
+									'</td>' +
+									'<td id="tdInterfaceMainActionsColumn2" class="interfaceMainColumn2Action">' +
+									'</td>' +
+									'</tr>' +
+									'</table>';					
+							
+						$('#' + sXHTMLElementID).html(aHTML.join(''));
+						
+						var aHTML = [];
+						var h = -1;	
+						
+						aHTML[++h] = '<table id="tableInterfaceMainActionsColumn2" class="interfaceMainColumn2">';
+						
+						aHTML[++h] = '<tr><td id="tdInterfaceMainActionsAdd" class="interfaceMainAction">' +
+										'<span id="spanInterfaceMainActionsAdd">Add</span>' +
+										'</td></tr>';
+												
+						aHTML[++h] = '</table>';					
+						
+						$('#tdInterfaceMainActionsColumn2').html(aHTML.join(''));
+					
+						oParam.xhtmlElementID = 'spanInterfaceMainActionsAdd';
+						oParam.offsetHeight = -30;
+						oParam.offsetLeft = -305;
+						
+						$('#spanInterfaceMainActionsAdd').button(
+						{
+							label: "Add"
+						})
+						.click(function() {
+							interfaceActionMasterViewport({
+															showHome: false, 
+															showNew: true,
+															contactPerson: iContactPerson,
+															contactBusiness: iContactBusiness,
+															contactPersonText: sContactPersonText,
+															contactBusinessText: sContactBusinessText
+															})
+						})
+					
+						sXHTMLElementID = 'tdInterfaceMainActionsColumn1';
+					}
+					
+					if (iObjectContext != -1)
+					{
+						var sParam = 'method=ACTION_SEARCH&lastfirst=1' +
+										'&object=' + iObject + 
+										'&objectcontext=' + iObjectContext +
+										'&type=' + iActionType +
+										'&contactbusiness=' + iContactBusiness + 
+										'&contactperson=' + iContactPerson;
+						
+						$.ajax(
+						{
+							type: 'GET',
+							url: '/ondemand/action/?rows=' + ns1blankspace.option.defaultRows + '&' + sParam,
+							dataType: 'json',
+							success: function(data) {this.process(data, sXHTMLElementID, oParam)}
+						});	
+					}
+
+				}
+
+	process: 	function (oResponse, sXHTMLElementID, oParam)
+				{	
+					var aHTML = [];
+					var h = -1;
+					var bDescription = false;
+					
+					if (oResponse.data.rows.length == 0)
+					{
+						aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
+						aHTML[++h] = '<tbody>'
+						aHTML[++h] = '<tr class="interfaceActions">';
+						aHTML[++h] = '<td class="interfaceMainRowNothing">No actions.</td>';
+						aHTML[++h] = '</tr>';
+						
+						$('#' + sXHTMLElementID).html(aHTML.join(''));
+						$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
+					}
+					else
+					{
+						aHTML[++h] = '<table class="interfaceMain">';
+						aHTML[++h] = '<tbody>'
+					
+						aHTML[++h] = '<tr class="interfaceMainCaption">';
+						aHTML[++h] = '<td class="interfaceMainCaption">Subject</td>';
+						aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
+						if (bDescription)
+						{
+							aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
+						}
+						aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+						aHTML[++h] = '</tr>';
+
+						$.each(oResponse.data.rows, function()
+						{	
+							aHTML[++h] = '<tr class="interfaceAttachments">';
+							aHTML[++h] = '<td id="tdAction_subject-' + this.id + '" class="interfaceMainRow">' +
+											this.subject + '</td>';
+							aHTML[++h] = '<td id="tdAction_date-' + this.id + '" class="interfaceMainRow">' +
+											this.actiondate + '</td>';
+							
+							if (bDescription)
+							{
+								aHTML[++h] = '<td id="tdAction_description-' + this.id + '" class="interfaceMainRow">' +
+												this.description + '</td>';
+							}					
+							
+							aHTML[++h] = '<td id="tdAction_options-' + this.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
+							aHTML[++h] = '</tr>'
+						});
+				    	
+						aHTML[++h] = '</tbody></table>';
+						
+						ns1blankspacePaginationList(
+						   {
+							xhtmlElementID: sXHTMLElementID,
+							xhtmlContext: 'Action',
+							xhtml: aHTML.join(''),
+							showMore: (oResponse.morerows == 'true'),
+							columns: 'subject-actiondate',
+							more: this.moreid,
+							rows: ns1blankspace.option.defaultRows,
+							functionSearch: ns1blankspaceActions,
+							functionOpen: "interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)"
+						   }); 
+						
+						$('.interfaceMainRowOptionsSelect').button( {
+								text: false,
+								icons: {
+									primary: "ui-icon-play"
+								}
+							})
+							.click(function()
+							{
+								interfaceActionMasterViewport({showHome: false});
+								interfaceActionSearch(this.id)
+							})
+							.css('width', '15px')
+							.css('height', '20px')
+					}
+				}
+
+	add:		function (oParam, oResponse)
+				{
+					var iActionID = -1;
+					var dStartDate = new Date();
+					var dEndDate = dStartDate;
+					var sXHTMLElementID = 'spanInterfaceMainActionsAdd';
+					var iOffsetHeight = 5;
+					var iOffsetLeft = 0;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.actionID != undefined) {iActionID = oParam.actionID};
+						if (oParam.startDate != undefined) {dStartDate = oParam.startDate};
+						if (oParam.endDate != undefined) {dEndDate = oParam.endDate};
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID};
+						if (oParam.offsetHeight != undefined) {iOffsetHeight = oParam.offsetHeight};
+						if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft};
+					}	
+
+					if ($('#divns1blankspaceDialog').attr('data-initiator') == sXHTMLElementID)
+					{
+						$('#divns1blankspaceDialog').hide("slide", { direction: "right" }, 500);
+						$('#divns1blankspaceDialog').attr('data-initiator', '');
+					}
+					else
+					{
+						$('#divns1blankspaceDialog').attr('data-initiator', sXHTMLElementID);
+					
+						if (iActionID != -1 && oResponse == undefined)
+						{
+							sParam = 'method=ACTION_SEARCH&rf=XML&contactperson=ALL&select=' + iActionID;
+						
+							$.ajax(
+							{
+								type: 'GET',
+								url: '/ondemand/action/?' + sParam,
+								dataType: 'json',
+								success: function(data) {ns1blankspaceActionAddShow(oParam, data)}
+							});	
+						}
+						else
+						{
+							var aHTML = [];
+							var h = -1;
+							
+							aHTML[++h] = '<table id="tablens1blankspaceActionAdd" class="interfaceDialogMedium">';
+							
+							aHTML[++h] = '<tr id="trInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
+												'<td id="tdInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
+												'<input id="inputMasterActionAddSubject" class="inputInterfaceMainText';
+												
+							if (iActionID == -1)
+							{	
+								aHTML[++h] = ' ns1blankspaceWatermark" value="Subject">';
+							}
+							else
+							{
+								aHTML[++h] = '">'
+							}
+							
+							aHTML[++h] = '</td></tr>';
+							
+							aHTML[++h] = '<tr><td id="tdns1blankspaceActionAddDescriptionValue" class="interfaceMain">' +
+												'<textarea rows="5" cols="35" id="inputns1blankspaceActionAddDescription" class="inputInterfaceMainTextMultiSmall';
+
+							if (iActionID == -1)
+							{	
+								aHTML[++h] = ' ns1blankspaceWatermark">Add more text here, if required.</textarea>';
+							}
+							else
+							{
+								aHTML[++h] = '"></textarea>'
+							}
+
+							aHTML[++h] = '</td></tr>';
+
+							aHTML[++h] = '<tr id="trns1blankspaceActionAddBusiness" class="interfaceMain">' +
+												'<td id="tdns1blankspaceActionAddBusiness" class="interfaceMain">' +
+												'Business' +
+												'</td></tr>' +
+												'<tr id="trns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
+												'<td id="tdns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
+												'<input id="inputns1blankspaceActionAddBusiness" class="inputInterfaceMainSelect"' +
+													' onDemandMethod="/ondemand/contact/?method=CONTACT_BUSINESS_SEARCH"' +
+													' onDemandColumns="tradename">' +
+												'</td></tr>';
+												
+							
+							aHTML[++h] = '<tr id="trns1blankspaceActionAddPerson" class="interfaceMain">' +
+												'<td id="tdns1blankspaceActionAddPerson" class="interfaceMain">' +
+												'Person' +
+												'</td></tr>' +
+												'<tr id="trns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
+												'<td id="tdns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
+												'<input id="inputns1blankspaceActionAddPerson" class="inputInterfaceMainSelectContact"' +
+													' onDemandMethod="/ondemand/contact/?method=CONTACT_PERSON_SEARCH"' +
+													' onDemandParent="inputns1blankspaceActionAddBusiness">' +
+												'</td></tr>';									
+												
+												
+							aHTML[++h] = '<tr><td id="tdns1blankspaceActionAddHighPriority" class="interfaceMain">' +
+												'<input type="checkbox" id="inputns1blankspaceActionAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>';
+												
+								
+							aHTML[++h] = '<tr><td>';
+							
+								aHTML[++h] = '<table class="interfaceSearchFooterMedium">';
+								
+								aHTML[++h] = '<tr><td style="text-align: right;">' +
+													'<span id="spanSave">Save</span>' +
+													'<span id="spanCancel">Cancel</span>' +
+													'<td></tr>';
+								
+								aHTML[++h] = '</table>';						
+
+							aHTML[++h] = '</td></tr>';	
+								
+							aHTML[++h] = '</table>';		
+							
+							var oElement = $('#' + sXHTMLElementID)
+							
+							$('#divns1blankspaceDialog').html('');
+							$('#divns1blankspaceDialog').show();
+							$('#divns1blankspaceDialog').offset(
+								{
+									top: $(oElement).offset().top + $(oElement).height() + iOffsetHeight,
+									left: $(oElement).offset().left + iOffsetLeft
+								});
+							$('#divns1blankspaceDialog').html(aHTML.join(''));
+							
+							$('#spanCancel').button(
+								{
+									text: false,
+									 icons: {
+										 primary: "ui-icon-close"
+									}
+								})
+								.click(function() {
+									$('#divns1blankspaceDialog').slideUp(500);
+									$('#divns1blankspaceDialog').html('');
+								})
+								.css('width', '20px')
+								.css('height', '20px')
+
+							$('#spanSave').button(
+								{
+									text: false,
+									 icons: {
+										 primary: "ui-icon-check"
+									}
+								})
+								.click(function() {
+									interfaceActionQuickSave({
+											id: iActionID,
+											date: $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
+														' ' + $.fullCalendar.formatDate(dStartDate, "HH:mm"),
+											endDate: $.fullCalendar.formatDate(dEndDate, "dd MMM yyyy") + 
+														' ' + $.fullCalendar.formatDate(dEndDate, "HH:mm"),
+											subject: $('#inputActionCalendarAddSubject').val(),
+											description: $('#inputActionCalendarAddDescription').val(),
+											priority: ($('#inputActionCalendarAddHighPriority').attr('checked')?3:2),
+											calendarXHTMLElementID: 'divInterfaceMainCalendar'
+											});
+									
+									$('#divns1blankspaceDialog').slideUp(500);
+									$('#divns1blankspaceDialog').html('');
+
+								})
+								.css('width', '30px')
+								.css('height', '20px')
+							
+							if (oResponse != undefined)
+							{	
+								if (oResponse.data.rows.length == 0)
+								{	
+									$('#inputActionCalendarAddSubject').val(oResponse.data.rows[0].subject);
+									$('#inputActionCalendarAddDescription').val(oResponse.data.rows[0].description);
+								}	
+							}	
+						}
+					}
+				},
+
+	dialog:		function ns1blankspaceViewportActionShow(oElement, sActionXHTML, sFunctionActionBind)
+				{
+
+					var aHTML = [];
+					var h = -1;
+
+					if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
+					{
+						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+					}
+					else
+					{	
+						if (ns1blankspace.xhtml.masterControl == '')
+						{
+							ns1blankspace.xhtml.masterControl = interfaceControlOptions();
+						}
+
+						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
+						$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+						$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+						$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+						$('#divns1blankspaceViewportControlOptions').html(sActionXHTML);
+						
+						if (sFunctionActionBind != undefined)
+							{eval(sFunctionActionBind)}
+					}	
+				}
+}
+
+ns1blankspace.pagination.list = 
+{
+	show: 		function ns1blankspacePaginationList(oParam)
+				{
+					var aHTML = [];
+					var h = -1;
+					var sXHTMLElementID;
+					
+					var sHTML = '';
+					var bMore = false;
+					var iMore;
+					var iStartRow = 0;
+					var iRows = 30;
+					var bShowList = true;
+					var sXHTMLContext = '';
+					
+					if (oParam != undefined)
+					{
+						if (oParam.xhtml != undefined) {sHTML = oParam.xhtml}
+						if (oParam.showMore != undefined) {bMore = oParam.showMore}
+						if (oParam.more != undefined) {iMore = oParam.more}
+						if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
+						if (oParam.rows != undefined) {iRows = oParam.rows}
+						if (oParam.showList != undefined) {bShowList = oParam.showList}
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
+					}
+
+					oParam.xhtmlFirstRow = $('tr:first', sHTML).html();
+					
+					if (bMore)
+					{
+						aHTML[++h] = '<table><tr>';
+						//aHTML[++h] = '<td style="width:1px;" class="interfaceMessagingSubHeader ns1blankspacePaginationList" id="tdns1blankspacePaginationList' + sXHTMLContext + '-"></td>';
+						aHTML[++h] = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + '"' +
+											' id="td' + sXHTMLContext + 'ns1blankspacePaginationList-0" rowStart="0">1</td>';
+						aHTML[++h] = '<td></td></tr></table>';
+					}
+						
+					aHTML[++h] = '<div id="div' + sXHTMLContext + 'ns1blankspacePaginationList-0" class="ns1blankspacePaginationListPage' + sXHTMLContext + '">';
+					aHTML[++h] = sHTML;
+					aHTML[++h] = '</div>';
+
+					$('#' + sXHTMLElementID).html(aHTML.join(''));
+					if (bShowList) {$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed)};
+						
+					if (bMore)
+					{
+						var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + 
+											'" id="td' + sXHTMLContext + 'ns1blankspacePaginationList-' +
+											(iStartRow + iRows - 1) + '" rowStart="' +
+											(iStartRow + iRows - 1) + '">' + 'more...' + '</td>';
+										
+						$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow)).after(sHTML);
+					
+						$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow + iRows - 1)).click(function(event)
+						{
+							var sID = event.target.id;
+							var sStart = $('#' + sID).attr('rowStart');
+							$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
+							if (oParam != undefined) {oParam.more = iMore;oParam.startRow = sStart}else{oParam = {more: iMore, startRow: sStart}};
+							ns1blankspacePaginationListShowMore(oParam);
+						});
+					}
+					
+					$('.ns1blankspacePaginationListPage' + sXHTMLContext).click(function(event)
+					{
+						ns1blankspacePaginationListShowPage(this.id, sXHTMLContext);
+					});
+						
+				},
+
+	showMore:	function (oParam, oData)
+				{
+					
+					var sXHTMLElementID = '';
+					var iMore = -1;
+					var iStartRow = 10;
+					var iRows = 10;
+					var iColumn = 0;
+					var iMaximumColumns = 1;
+					var sColumns = "title";
+					var sIDColumns = '';
+					var sFunctionOpen;
+					var fFunctionClass;
+					var sFunctionNewPage;
+					var sClass;
+					var sIdAdditional = '';
+					var sIDSeperator = '-';
+					var sBodyClass = '';
+					var sXHTMLlFirstRow;
+					var sXHTMLContext = '';
+					var fFunctionShowRow;
+					var sType = 'XML';
+					
+					if (oParam != undefined)
+					{
+						if (oParam.more != undefined) {iMore = oParam.more}
+						if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
+						if (oParam.rows != undefined) {iRows = oParam.rows}
+						if (oParam.xhtmlElementId != undefined) {sXHTMLElementID = oParam.xhtmlElementId}
+						if (oParam.columns != undefined) {sColumns = oParam.columns}
+						if (oParam.idColumns != undefined) {sIDColumns = oParam.idColumns}
+						if (oParam.functionOpen != undefined) {sFunctionOpen = oParam.functionOpen}
+						if (oParam.functionClass != undefined) {fFunctionClass = oParam.functionClass}
+						if (oParam.functionShowRow != undefined) {fFunctionShowRow = oParam.functionShowRow}
+						if (oParam.idAdditional != undefined) {sIdAdditional = oParam.idAdditional}
+						if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
+						if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
+						if (oParam.xhtmlFirstRow != undefined) {sXHTMLlFirstRow = oParam.xhtmlFirstRow}
+						if (oParam.functionNewPage != undefined) {sFunctionNewPage = oParam.functionNewPage}
+						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
+						if (oParam.type != undefined) {sType = oParam.type}
+					}
+
+					sType = sType.toUpperCase();
+					
+					if (iMore == -1)
+					{
+						alert('No more!')
+					}
+					else
+					{
+						if (oData == undefined)
+						{
+							var sParam = 'method=CORE_SEARCH_MORE';
+							var sData =	'id=' + iMore +
+											'&startrow=' + iStartRow + 
+											'&rows=' + iRows;
+							
+							$.ajax(
+							{
+								type: 'GET',
+								url: '/ondemand/core/?rf=' + sType + '&' + sParam,
+								data: sData,
+								dataType: sType.toLowerCase(),
+								success: function(data){ns1blankspacePaginationListShowMore(oParam, data)}
+							});
 						}
 						else
 						{
 						
-							iColumn = iColumn + 1;
-							
-							if (iColumn == 1)
-							{
-								aHTML[++h] = '<tr class=interfaceMainRow" id="tr' + sXHTMLContext + '-' + onDemandXMLGetData(oRow, "id") + sIDData + sIdAdditional + '">';
-							}
-							
-							var aIDColumns = sIDColumns.split("-");
-							
-							var sIDData = '';
-							for (var i = 0; i < aIDColumns.length; i++)
-							{
-								sIDData += '-' + onDemandXMLGetData(oRow, aIDColumns[i]);
-							}
-							
-							var aColumns = sColumns.split("-");
-							
-							for (var i = 0; i < aColumns.length; i++)
-							{
-								sClass = 'interfaceMainRow'
-								if (fFunctionClass != undefined)
-								{
-									sClass = sClass + fFunctionClass(oRow);
-								}	
-							
-								aHTML[++h] = '<td class="' + sClass + '" id="td' + sXHTMLContext + '_' +
-													aColumns[i] + '-' + onDemandXMLGetData(oRow, "id") + sIDData + sIdAdditional + '">' 
-													
-								switch (aColumns[i])
-								{
-								case 'space':
-									aHTML[++h] = ' ';
-									break;
-								case 'comma':
-									aHTML[++h] = ',';
-									break;
-								case 'pipe':
-									aHTML[++h] = '|';
-									break;
-								default:
-									aHTML[++h] = onDemandXMLGetData(oRow, aColumns[i]);
-								}
-								
-								aHTML[++h] = '</td>';
-								
-								if (i == (aColumns.length-1) && (sFunctionOpen != undefined))
-								{
-									aHTML[++h] = '<td id="td' + sXHTMLContext + '_options-' + onDemandXMLGetData(oRow, "id") + 
-														'" class="interfaceMainRowOptionsSelect interfaceMainRowOptionsSelect' + sXHTMLContext + '">&nbsp;</td>';
-								}
-								
-							}
-							
-							if (iColumn == iMaximumColumns)
-							{
-								aHTML[++h] = '</tr>'
-								iColumn = 0;
-							}	
-						}	
-					}
-				}	
-				else if (sType == 'JSON')
-				{
-					var iStartRow = parseInt(oData.startrow)
-					var iRows = parseInt(oData.rows);
-					var bMoreRows = (oData.morerows == "true");
-									
-					oParam.startRow = iStartRow + iRows;	
-					
-					var oRows = oData.data.rows;
-			
-					$(oRows).each(function() 
-					{
-						aHTML[++h] = fFunctionShowRow(this);
-					})
-					
-				}
-				
-				aHTML[++h] = '</tbody></table>';
-				
-				aHTML[++h] = '</div>';
-				
-				$('.ns1blankspacePaginationListPage' + sXHTMLContext).hide();
-				$('.ns1blankspacePaginationListPage' + sXHTMLContext + ':last').after(aHTML.join(''));
-				
-				$('.interfaceMainRowOptionsSelect' + sXHTMLContext).unbind('click');
-				
-				if (sFunctionOpen != undefined)
-				{
-					$('.interfaceMainRowOptionsSelect' + sXHTMLContext).button({
-						text: false,
-						icons: {
-							primary: "ui-icon-play"
-						}
-					})
-					.click(function() {
-						eval(sFunctionOpen);
-					})
-					.css('width', '15px')
-					.css('height', '20px')
-				}
-				
-				$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).html(((iStartRow+1)/iRows)+1);
-
-				$('td.ns1blankspacePaginationList' + sXHTMLContext).unbind('click');
-				
-				$('td.ns1blankspacePaginationList' + sXHTMLContext).click(function(event)
-				{
-					ns1blankspacePaginationListShowPage(this.id, sXHTMLContext);
-				});
-			
-				if (bMoreRows)
-				{
-					var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + 
-							'" id="td' + sXHTMLContext + 'ns1blankspacePaginationList-' +
-							(iStartRow + iRows) + '" rowStart="' +
-							(iStartRow + iRows) + '">' + 'more...' + '</td>';
+							var aHTML = [];
+							var h = -1;
 						
-					$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).after(sHTML);
-					
-					$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow + iRows)).click(function(event)
-					{
-						var sID = event.target.id;
-						var sStart = $('#' + sID).attr('rowStart')
-						$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
-						(oParam != undefined?oParam.more = iMore:oParam = {more: iMore, startRow: sStart})
-						ns1blankspacePaginationListShowMore(oParam);
-					});
-				}	
-				
-				if (sFunctionNewPage != undefined)
+							if ($('#div' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).length == 0)
+							{
+							
+								aHTML[++h] = '<div id="div' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow + 
+												'" class="ns1blankspacePaginationListPage' + sXHTMLContext + '">';
+							
+								aHTML[++h] = '<table border="0" class="' + sBodyClass + '">';
+								aHTML[++h] = '<tbody>'
+								
+								if (sXHTMLlFirstRow != undefined)
+								{
+									aHTML[++h] = sXHTMLlFirstRow;
+								}
+								
+								if (sType == 'XML')
+								{
+								
+									var oRoot = oXML.getElementsByTagName('ondemand').item(0);	
+									
+									var iStartRow = parseInt($(oRoot).attr('startrow'));
+									var iRows = parseInt($(oRoot).attr('rows'));
+									var bMoreRows = ($(oRoot).attr('morerows') == "true");
+													
+									oParam.startRow = iStartRow + iRows;	
+								
+									for (var iRow = 0; iRow < oRoot.childNodes.length; iRow++) 
+									{
+										
+										var oRow = oRoot.childNodes.item(iRow);
+										
+										if (fFunctionShowRow != undefined)
+										{
+											aHTML[++h] = fFunctionShowRow(oRow);
+										}
+										else
+										{
+										
+											iColumn = iColumn + 1;
+											
+											if (iColumn == 1)
+											{
+												aHTML[++h] = '<tr class=interfaceMainRow" id="tr' + sXHTMLContext + '-' + onDemandXMLGetData(oRow, "id") + sIDData + sIdAdditional + '">';
+											}
+											
+											var aIDColumns = sIDColumns.split("-");
+											
+											var sIDData = '';
+											for (var i = 0; i < aIDColumns.length; i++)
+											{
+												sIDData += '-' + onDemandXMLGetData(oRow, aIDColumns[i]);
+											}
+											
+											var aColumns = sColumns.split("-");
+											
+											for (var i = 0; i < aColumns.length; i++)
+											{
+												sClass = 'interfaceMainRow'
+												if (fFunctionClass != undefined)
+												{
+													sClass = sClass + fFunctionClass(oRow);
+												}	
+											
+												aHTML[++h] = '<td class="' + sClass + '" id="td' + sXHTMLContext + '_' +
+																	aColumns[i] + '-' + onDemandXMLGetData(oRow, "id") + sIDData + sIdAdditional + '">' 
+																	
+												switch (aColumns[i])
+												{
+												case 'space':
+													aHTML[++h] = ' ';
+													break;
+												case 'comma':
+													aHTML[++h] = ',';
+													break;
+												case 'pipe':
+													aHTML[++h] = '|';
+													break;
+												default:
+													aHTML[++h] = onDemandXMLGetData(oRow, aColumns[i]);
+												}
+												
+												aHTML[++h] = '</td>';
+												
+												if (i == (aColumns.length-1) && (sFunctionOpen != undefined))
+												{
+													aHTML[++h] = '<td id="td' + sXHTMLContext + '_options-' + onDemandXMLGetData(oRow, "id") + 
+																		'" class="interfaceMainRowOptionsSelect interfaceMainRowOptionsSelect' + sXHTMLContext + '">&nbsp;</td>';
+												}
+												
+											}
+											
+											if (iColumn == iMaximumColumns)
+											{
+												aHTML[++h] = '</tr>'
+												iColumn = 0;
+											}	
+										}	
+									}
+								}	
+								else if (sType == 'JSON')
+								{
+									var iStartRow = parseInt(oData.startrow)
+									var iRows = parseInt(oData.rows);
+									var bMoreRows = (oData.morerows == "true");
+													
+									oParam.startRow = iStartRow + iRows;	
+									
+									var oRows = oData.data.rows;
+							
+									$(oRows).each(function() 
+									{
+										aHTML[++h] = fFunctionShowRow(this);
+									})
+									
+								}
+								
+								aHTML[++h] = '</tbody></table>';
+								
+								aHTML[++h] = '</div>';
+								
+								$('.ns1blankspacePaginationListPage' + sXHTMLContext).hide();
+								$('.ns1blankspacePaginationListPage' + sXHTMLContext + ':last').after(aHTML.join(''));
+								
+								$('.interfaceMainRowOptionsSelect' + sXHTMLContext).unbind('click');
+								
+								if (sFunctionOpen != undefined)
+								{
+									$('.interfaceMainRowOptionsSelect' + sXHTMLContext).button({
+										text: false,
+										icons: {
+											primary: "ui-icon-play"
+										}
+									})
+									.click(function() {
+										eval(sFunctionOpen);
+									})
+									.css('width', '15px')
+									.css('height', '20px')
+								}
+								
+								$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).html(((iStartRow+1)/iRows)+1);
+
+								$('td.ns1blankspacePaginationList' + sXHTMLContext).unbind('click');
+								
+								$('td.ns1blankspacePaginationList' + sXHTMLContext).click(function(event)
+								{
+									ns1blankspacePaginationListShowPage(this.id, sXHTMLContext);
+								});
+							
+								if (bMoreRows)
+								{
+									var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + 
+											'" id="td' + sXHTMLContext + 'ns1blankspacePaginationList-' +
+											(iStartRow + iRows) + '" rowStart="' +
+											(iStartRow + iRows) + '">' + 'more...' + '</td>';
+										
+									$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).after(sHTML);
+									
+									$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow + iRows)).click(function(event)
+									{
+										var sID = event.target.id;
+										var sStart = $('#' + sID).attr('rowStart')
+										$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
+										(oParam != undefined?oParam.more = iMore:oParam = {more: iMore, startRow: sStart})
+										ns1blankspacePaginationListShowMore(oParam);
+									});
+								}	
+								
+								if (sFunctionNewPage != undefined)
+								{
+									eval(sFunctionNewPage);
+								}
+							}
+						}
+					}
+				},
+
+	showPage:	function (sXHTMLElementID, sXHTMLContext)
 				{
-					eval(sFunctionNewPage);
+					var aElement = sXHTMLElementID.split('-');
+					
+					$('.ns1blankspacePaginationListPage' + sXHTMLContext).hide();
+					$('#div' + sXHTMLContext + 'ns1blankspacePaginationList-' + aElement[1]).show();
 				}
-			}
-		}
-	}
-}	
+}
 
-function ns1blankspacePaginationListShowPage(sXHTMLElementID, sXHTMLContext)
+ns1blankspace.pdf = 
 {
+	create:		function (oParam, sReturn)
+				{
+					var iObject = ns1blankspace.object;
+					var iObjectContext = ns1blankspace.objectContext;
+					var sFileName = ns1blankspace.objectContextData.id + '.pdf'
+					var sXHTMLContent = '';
+					var bOpen = false;
 
-	var aElement = sXHTMLElementID.split('-');
-	
-	$('.ns1blankspacePaginationListPage' + sXHTMLContext).hide();
-	$('#div' + sXHTMLContext + 'ns1blankspacePaginationList-' + aElement[1]).show();
-	
-}
+					if (oParam)
+					{
+						if (oParam.object) {iObject = oParam.object}
+						if (oParam.objectContext) {iObjectContext = oParam.objectContext}
+						if (oParam.filename) {sFileName = oParam.filename}	
+						if (oParam.xhtmlContent) {sXHTMLContent = oParam.xhtmlContent}
+						//if (oParam.open) {bOpen = oParam.open}	
+					}
 
-function ns1blankspaceViewportOptionsShow(oParam)
+					if (sReturn == undefined)
+					{
+						$('#aInterfaceMainSummaryViewPDF').html(ns1blankspace.xhtml.loadingSmall)
+						
+						var sParam = 'method=CORE_PDF_CREATE&rf=TEXT';
+						var sData = 'object=' + iObject;
+						sData += '&objectcontext=' + iObjectContext;
+						sData += '&filename=' + encodeURIComponent(sFileName);
+						sData += '&xhtmlcontent=' + encodeURIComponent(sXHTMLContent);
+						
+						$.ajax(
+						{
+							type: 'POST',
+							url: '/ondemand/core/?' + sParam,
+							data: sData,
+							dataType: 'text',
+							success: function(data) {ns1blankspaceCreatePDF(oParam, data)}
+						});
+					}	
+					else	
+					{
+						var aReturn = sReturn.split('|');
+
+						if (bOpen)
+						{
+							window.open('/download/' + aReturn[1])	
+						}
+						else
+						{
+							$('#aInterfaceMainSummaryViewPDF').html('<a href="/download/' + aReturn[1] + '" target="_blank">Open PDF</a>');
+						}	
+					}	
+
+				}
+}				
+
+ns1blankspace.edit.editor = 
 {
-
-	var aHTML = [];
-	var h = -1;
-	var sXHTMLElementID;
-	var oXHTMLElement;
-	var sXHTML;
-	var sFunctionBind;
-	var iOffsetTop = 0;
-	var iOffsetLeft = 0;
-	var bForceShow = false;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.xhtmlElement != undefined) {oXHTMLElement = oParam.xhtmlElement}
-		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-		if (oParam.xhtml != undefined) {sXHTML = oParam.xhtml}
-		if (oParam.functionBind != undefined) {sFunctionBind = oParam.functionBind}
-		if (oParam.offsetTop != undefined) {iOffsetTop = oParam.offsetTop}
-		if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft}
-		if (oParam.forceShow != undefined) {bForceShow = oParam.forceShow}
-	}
-	
-	if (oXHTMLElement == undefined)
-	{
-		oXHTMLElement = $('#' + sXHTMLElementID)
-	}
-	
-	if (oXHTMLElement != undefined)
-	{
-		if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oXHTMLElement.attr('id') && !bForceShow)
-		{
-			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-			$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
-		}
-		else
-		{
-			$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oXHTMLElement.attr('id'));
-			$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-			$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-			$('#divns1blankspaceViewportControlOptions').offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft});
-			$('#divns1blankspaceViewportControlOptions').html(sXHTML);
-			
-			if (sFunctionBind != undefined)
-				{eval(sFunctionBind)}
-		}
-	}	
-}
-
-function ns1blankspaceViewportOptionsHide()
-{
-	$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
-	$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-}
-
-
-function ns1blankspaceCreatePDF(oParam, sReturn)
-{
-	var iObject = ns1blankspace.object;
-	var iObjectContext = ns1blankspace.objectContext;
-	var sFileName = ns1blankspace.objectContextData.id + '.pdf'
-	var sXHTMLContent = '';
-	var bOpen = false;
-
-	if (oParam)
-	{
-		if (oParam.object) {iObject = oParam.object}
-		if (oParam.objectContext) {iObjectContext = oParam.objectContext}
-		if (oParam.filename) {sFileName = oParam.filename}	
-		if (oParam.xhtmlContent) {sXHTMLContent = oParam.xhtmlContent}
-		//if (oParam.open) {bOpen = oParam.open}	
-	}
-
-	if (sReturn == undefined)
-	{
-		$('#aInterfaceMainSummaryViewPDF').html(ns1blankspace.xhtml.loadingSmall)
-		
-		var sParam = 'method=CORE_PDF_CREATE&rf=TEXT';
-		var sData = 'object=' + iObject;
-		sData += '&objectcontext=' + iObjectContext;
-		sData += '&filename=' + encodeURIComponent(sFileName);
-		sData += '&xhtmlcontent=' + encodeURIComponent(sXHTMLContent);
-		
-		$.ajax(
-		{
-			type: 'POST',
-			url: '/ondemand/core/?' + sParam,
-			data: sData,
-			dataType: 'text',
-			success: function(data) {ns1blankspaceCreatePDF(oParam, data)}
-		});
-	}	
-	else	
-	{
-		var aReturn = sReturn.split('|');
-
-		if (bOpen)
-		{
-			window.open('/download/' + aReturn[1])	
-		}
-		else
-		{
-			$('#aInterfaceMainSummaryViewPDF').html('<a href="/download/' + aReturn[1] + '" target="_blank">Open PDF</a>');
-		}	
-	}	
-
-}
-
-function ns1blankspaceEditorAddTag(oParam)
-{ 
-	var sXHTMLElementID;
-	var sEditorID;
-	var oMCEBookmark;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-		if (oParam.editorID != undefined) {sEditorID = oParam.editorID}
-		if (oParam.mceBookmark != undefined) {oMCEBookmark = oParam.mceBookmark}
-		
-		var oEditor = tinyMCE.get(sEditorID); 
-		var sInsertText = $('#' + sXHTMLElementID).attr('data-caption');
-		if (oMCEBookmark != undefined)
-		{
-			tinyMCE.get(sEditorID).selection.moveToBookmark(oMCEBookmark);
-		}
-		oEditor.execCommand('mceInsertContent', false, sInsertText); 
-	}
-	else
-	{
-		ns1blankspaceConfim({title: 'Error inserting field!', html: ["An error occurred when inserting the field. Please contact support." +
-																	  "<br /><br />Details: No parameters passed to ns1blankspaceEditorAddTag"]});
-		return false;
-	}
-}
-
-function ns1blankspaceRPCGet()
-{
-	if (ns1blankspace.rpc == undefined)
-	{
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/jscripts/1blankspace.rpc-1.0.1.json',
-			dataType: 'json',
-			async: false,
-			success: function(data) {ns1blankspace.rpc = data.methods}
-		});
-	}
-}
-
-function ns1blankspaceEndpointURL(asMethod)
-{
-	ns1blankspaceRPCGet();
-
-	var sBaseEndpoint;
-
-	if ($.inArray(asMethod, ns1blankspace.rpc) == -1)
-	{
-		sBaseEndpoint = '/ondemand/';
-	}
-	else
-	{
-		sBaseEndpoint = '/rpc/';
-	}
-
-	aMethod = asMethod.split('_');
-	sEndpoint = aMethod[0];
-	
-	return sBaseEndpoint + (aMethod[0]).toLowerCase() + '/?method=' + asMethod;
-}
-
+	addTag:		function (oParam)
+				{ 
+					var sXHTMLElementID;
+					var sEditorID;
+					var oMCEBookmark;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.editorID != undefined) {sEditorID = oParam.editorID}
+						if (oParam.mceBookmark != undefined) {oMCEBookmark = oParam.mceBookmark}
+						
+						var oEditor = tinyMCE.get(sEditorID); 
+						var sInsertText = $('#' + sXHTMLElementID).attr('data-caption');
+						if (oMCEBookmark != undefined)
+						{
+							tinyMCE.get(sEditorID).selection.moveToBookmark(oMCEBookmark);
+						}
+						oEditor.execCommand('mceInsertContent', false, sInsertText); 
+					}
+					else
+					{
+						ns1blankspaceConfim({title: 'Error inserting field!', html: ["An error occurred when inserting the field. Please contact support." +
+																					  "<br /><br />Details: No parameters passed to ns1blankspaceEditorAddTag"]});
+						return false;
+					}
+				}
+}				
