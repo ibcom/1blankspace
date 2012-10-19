@@ -5,6 +5,8 @@
  * 01 FEB 2010
  */
  
+if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
+ 
 ns1blankspace.messaging.ConversationOwner
 
 function interfaceMessagingConversationMasterViewport(aParam)

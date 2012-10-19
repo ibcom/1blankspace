@@ -1,3 +1,10 @@
+/*!
+ * Copyright 2010, ibCom Pty Ltd ATF ibCom Unit Trust & contributors
+ * Licensed under the MIT license.
+ * http://1blankspace.com/license
+ * 01 FEB 2010
+ */
+ 
 function interfaceFinancialMasterViewport(aParam)
 {
 	var bShowHome = true
@@ -102,7 +109,7 @@ function interfaceFinancialMasterViewport(aParam)
 function interfaceFinancialMasterInitialise(aParam, oResponse)
 {
 	var bRefresh = false;
-	var iStep = 1;
+	var iStep = 0;
 	
 	if (aParam != undefined)
 	{
@@ -117,6 +124,32 @@ function interfaceFinancialMasterInitialise(aParam, oResponse)
 		ns1blankspace.financial.status = 1;
 	}
 	
+	if (iStep == 0)
+	{
+		if (oResponse == undefined)
+		{
+			$('#divInterfaceMasterViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+			interfaceMasterStatus(ns1blankspace.xhtml.loadingSmall + ' initalising.')
+
+			if (ns1blankspace.financial.init == undefined || bRefresh)
+			{
+				$.ajax(
+				{
+					type: 'GET',
+					url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_MANAGE&setdefault=1',
+					dataType: 'json',
+					async: false,
+					success: function(data) {interfaceFinancialMasterInitialise(aParam, data)}
+				});
+			}
+		}
+		else
+		{
+			ns1blankspace.financial.init = 1;
+			interfaceFinancialMasterInitialise($.extend(true, aParam, {step: 1}))
+		}
+	}
+
 	if (iStep == 1)
 	{
 		if (oResponse == undefined)
@@ -126,7 +159,7 @@ function interfaceFinancialMasterInitialise(aParam, oResponse)
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
 				oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
-				oSearch.rows = 1000;
+				oSearch.rows = 100;
 				oSearch.async = false;
 				oSearch.getResults(function(data) {interfaceFinancialMasterInitialise(aParam, data)});
 			}
@@ -157,10 +190,41 @@ function interfaceFinancialMasterInitialise(aParam, oResponse)
 		else
 		{
 			ns1blankspace.financial.settings = oResponse;
-			ns1blankspace.financial.status = 2;
+			//interfaceFinancialMasterInitialise($.extend(true, aParam, {step: 3}))
 		}
 	}
 	
+	if (iStep == 3)
+	{
+		if (oResponse == undefined)
+		{
+			if (ns1blankspace.financial.accounts == undefined || bRefresh)
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+				oSearch.addField('title');
+				oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount);
+				oSearch.sort('parentaccount', 'asc')
+				oSearch.getResults(function(data) {interfaceFinancialMasterInitialise(aParam, data)})	
+
+				$.ajax(
+				{
+					type: 'GET',
+					url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_ACCOUNTS_SEARCH&all=1&includefinancialaccounttext=1',
+					dataType: 'json',
+					async: false,
+					success: function(data) {interfaceFinancialMasterInitialise(aParam, data)}
+				});
+			}
+		}
+		else
+		{
+			ns1blankspace.financial.accounts = oResponse.data.rows;
+			ns1blankspace.financial.accountsTree = intefaceSetupFinancialAccountsTree(ns1blankspace.financial.accounts[ns1blankspace.financial.rootaccount],ns1blankspace.financial.accounts); 
+			ns1blankspace.financial.status = 2;
+		}
+	}
+
 	interfaceMasterStatus('&nbsp;');
 }
 
@@ -583,7 +647,7 @@ function interfaceFinancialProfitLoss(aParam, oResponse)
 		{
 			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">Sorry nothing to report, add an invoice or expense and you will be able to see how your going.</td>';
+			aHTML[++h] = '<td class="interfaceMainRowNothing">Sorry nothing to show, add an invoice or expense<br />and you will be able to see how you are going.</td>';
 			aHTML[++h] = '</tr>';
 			aHTML[++h] = '</table>';
 		}
@@ -669,9 +733,11 @@ function interfaceFinancialBalanceSheet(aParam, oResponse)
 		{
 			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">Sorry nothing to report, add an invoice or expense and you will be able to see how your going.</td>';
+			aHTML[++h] = '<td class="interfaceMainRowNothing">Sorry nothing to show, add an invoice or expense<br />and you will be able to see how you are going.</td>';
 			aHTML[++h] = '</tr>';
 			aHTML[++h] = '</table>';
+
+			$('#divInterfaceMainBS').html(aHTML.join(''));
 		}
 		else
 		{
@@ -875,7 +941,7 @@ function interfaceFinancialBankAccount(aParam, oResponse)
 		
 		$('#aInterfaceMainBankAccountDeposit').click(function()
 		{
-			alert("Deposting of the sweet sweet cash...")
+			alert("Depositing of the sweet sweet cash...")
 		});	
 	}
 }
@@ -923,10 +989,9 @@ function interfaceFinancialUnallocated(aParam, oResponse)
 				}
 				else
 				{
-					ns1blankspace.financial.unallocatedAccount = -1
+					ns1blankspace.financial.unallocatedAccount = -1;
 				}	
 			});	
-
 		}
 			
 		if (ns1blankspace.financial.unallocatedAccount == -1)
@@ -934,31 +999,31 @@ function interfaceFinancialUnallocated(aParam, oResponse)
 			$('#divInterfaceMainUnallocated').html("No unallocated account set up.");
 		}
 		else
-		{
-			var aHTML = [];
-			var h = -1;
-		
-			aHTML[++h] = '<table id="tableInterfaceFinancialUnallocated" class="interfaceMain">';
-			aHTML[++h] = '<tr id="trInterfaceMainFinancialUnallocatedRow1" class="interfaceMain">' +
-						'<td id="tdInterfaceMainFinancialUnallocatedColumn1" style="width: 70px" class="interfaceMainColumn1">' +
-						'</td>' +
-						'<td id="tdInterfaceMainFinancialUnallocatedColumn2" class="interfaceMainColumn2">' +
-						'</td>' +
-						'</tr>';
-			aHTML[++h] = '</table>';					
-		
-			$('#divInterfaceMainUnallocated').html(aHTML.join(''));
-			
+		{	
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 			oSearch.addField('invoice.reference,invoice.amount');
-			oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', iAllocatedAccount);
+			oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
 			oSearch.rows = 20;
 			oSearch.getResults(function(data) {interfaceFinancialUnallocated(aParam, data)});
 		}	
 	}
 	else
 	{
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceFinancialUnallocated" class="interfaceMain">';
+		aHTML[++h] = '<tr id="trInterfaceMainFinancialUnallocatedRow1" class="interfaceMain">' +
+					'<td id="tdInterfaceMainFinancialUnallocatedColumn1" style="width: 70px" class="interfaceMainColumn1">' +
+					'</td>' +
+					'<td id="tdInterfaceMainFinancialUnallocatedColumn2" class="interfaceMainColumn2">' +
+					'</td>' +
+					'</tr>';
+		aHTML[++h] = '</table>';					
+	
+		$('#divInterfaceMainUnallocated').html(aHTML.join(''));
+
 		var aHTML = [];
 		var h = -1;
 		
@@ -1013,7 +1078,7 @@ function interfaceFinancialUnallocatedRow(oRow)
 
 	aHTML[++h] = '<tr class="interfaceMainRow">';
 				
-	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_FinancialAccount-' + oRow["invoice.id"] + '" class="interfaceMainRow">' +
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_FinancialAccount-' + oRow["invoice.id"] + '" class="interfaceMainRow interfaceMainRowSelect">' +
 							oRow["invoice.reference"] + '<br />';
 	
 	aHTML[++h] = '<span style="color: #808080;font-size: 0.75em;">' + oRow["invoice.amount"] + '</span>';
@@ -1142,7 +1207,7 @@ function interfaceFinancialAccounts(aParam, oResponse)
 	
 		aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnCategory-3" name="radioCategory" /><label for="interfaceMainBankAccountColumnCategory-3" style="width: 100px;">Balance Sheet</label>';
 	
-		aHTML[++h] = '</div>';Un
+		aHTML[++h] = '</div>';
 
 		$('#tdInterfaceMainAccountColumn1').html(aHTML.join(''));
 	
@@ -1181,7 +1246,7 @@ function interfaceFinancialAccounts(aParam, oResponse)
 			{
 				aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 				aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-				aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No Accounts</td>';
+				aHTML[++h] = '<td class="interfaceMainRowNothing">No Accounts</td>';
 				aHTML[++h] = '</tr>';
 				aHTML[++h] = '</table>';
 				
@@ -1267,7 +1332,7 @@ function interfaceFinancialAccounts(aParam, oResponse)
 			{
 				aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
 				aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-				aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No transactions</td>';
+				aHTML[++h] = '<td class="interfaceMainRowNothing">No transactions</td>';
 				aHTML[++h] = '</tr>';
 				aHTML[++h] = '</table>';
 				

@@ -5,7 +5,6 @@
  * 01 FEB 2010
  */
  
-
 if (ns1blankspace === undefined) {ns1blankspace = {}}
 if (ns1blankspace.oauth === undefined) {ns1blankspace.oauth = {}}
 

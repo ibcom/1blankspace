@@ -105,7 +105,7 @@ function interfaceFinancialBankAccountHomeShow(aParam, oResponse)
 		oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
 		oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
 		oSearch.sort('title', 'asc');
-		oSearch.rows = giMessagingRows;
+		oSearch.rows = ns1blankspace.messaging.defaultRows;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccountHomeShow(aParam, data)});
 	}
 	else
@@ -238,7 +238,7 @@ function interfaceFinancialBankAccountDetails(aParam, oResponse)
 		oSearch.addField('statementbalance,statementdate,statustext,status');
 		oSearch.addFilter('bankaccount', 'EQUAL_TO', iID);
 		oSearch.sort('statementdate', 'desc');
-		oSearch.rows = giMessagingRows;
+		oSearch.rows = ns1blankspace.messaging.defaultRows;
 		oSearch.getResults(function(data) {interfaceFinancialBankAccountDetails(aParam, data)});
 	}
 	else

@@ -780,62 +780,65 @@ function interfaceMasterLogonShow(aParam)
 	});
 }
 
-function interfaceMasterLogon()
+ns1blankspace.logon = 
 {
-	var sReturn;
-	var sData;
+	"" : 		function ()
+				{
+					var sReturn;
+					var sData;
 
-	var sLogonName = $('#inputInterfaceMasterLogonName').val();
-	var sPassword = $('#inputInterfaceMasterLogonPassword').val();
-	
-	sData = 'logon=' + encodeURIComponent(sLogonName) + '&password=' + encodeURIComponent(sPassword);
-	$('#tdInterfaceMasterLogonStatus').html(ns1blankspace.xhtml.loadingSmall);
-	
-	$.ajax(
-	{
-		type: 'POST',
-		url: '/ondemand/logon/',
-		data: sData,
-		dataType: 'json',
-		async: true,
-		success: interfaceMasterLogonProcess
-	})
-}
+					var sLogonName = $('#inputInterfaceMasterLogonName').val();
+					var sPassword = $('#inputInterfaceMasterLogonPassword').val();
+					
+					sData = 'logon=' + encodeURIComponent(sLogonName) + '&password=' + encodeURIComponent(sPassword);
+					$('#tdInterfaceMasterLogonStatus').html(ns1blankspace.xhtml.loadingSmall);
+					
+					$.ajax(
+					{
+						type: 'POST',
+						url: '/ondemand/logon/',
+						data: sData,
+						dataType: 'json',
+						async: true,
+						success: this.process
+					})
+				},
 
-function interfaceMasterLogonProcess(oResponse)	
-{		
-	if (oResponse.status == 'ER')
-	{
-		$('#tdInterfaceMasterLogonStatus').html('Logon Name or password is incorrect.');
-		$('#divInterface').effect("shake", { times:2 }, 100);
-	}
-	else 
-	{
-		$('#tdInterfaceMasterLogonStatus').html('Logon successful...');
-		
-		if ($('#inputInterfaceMasterLogonNameRemember').attr('checked'))
-		{
-			$.cookie('mydigitalstucturelogon', $('#inputInterfaceMasterLogonName').val(), {expires:30});
-		}
-		
-		//interfaceControlSecurity();
-		
-		if (oResponse.passwordStatus == "EXPIRED")
-		{
-			interfaceMasterLogonChangePasswordShow(); 
-		}
-		else
-		{	
-			if (oResponse.url == '#' || ns1blankspace.option.logonStayOnDocument)
-			{
-				document.location.reload(false);
-			}	
-			else
-			{
-				document.location.href = oResponse.url;
-			}
-		}
-	}
+	process: 	function (oResponse)	
+				{		
+					if (oResponse.status == 'ER')
+					{
+						$('#tdInterfaceMasterLogonStatus').html('Logon Name or password is incorrect.');
+						$('#divInterface').effect("shake", { times:2 }, 100);
+					}
+					else 
+					{
+						$('#tdInterfaceMasterLogonStatus').html('Logon successful...');
+						
+						if ($('#inputInterfaceMasterLogonNameRemember').attr('checked'))
+						{
+							$.cookie('mydigitalstucturelogon', $('#inputInterfaceMasterLogonName').val(), {expires:30});
+						}
+						
+						//interfaceControlSecurity();
+						
+						if (oResponse.passwordStatus == "EXPIRED")
+						{
+							interfaceMasterLogonChangePasswordShow(); 
+						}
+						else
+						{	
+							if (oResponse.url == '#' || ns1blankspace.option.logonStayOnDocument)
+							{
+								document.location.reload(false);
+							}	
+							else
+							{
+								document.location.href = oResponse.url;
+							}
+						}
+					}
+				}
 }
 
 function interfaceMasterLogonChangePasswordShow(aParam)
