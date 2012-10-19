@@ -312,7 +312,7 @@ function interfaceHomeOptionsNewOpportunities(sXHTMLElementId, oResponse)
 				}
 			})
 			.click(function() {
-				$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '')
+				$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '')
 				interfaceEnquiryMasterViewport();
 				interfaceEnquirySearch(this.id)
 			})

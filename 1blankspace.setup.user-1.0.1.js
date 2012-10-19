@@ -824,10 +824,10 @@ function interfaceSetupUserAccessRoleAdd(oParam, oResponse)
 		oParam = {userType: 1}
 	}
 		
-	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == 'spanInterfaceMainUserAccessRolesAdd')
+	if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == 'spanInterfaceMainUserAccessRolesAdd')
 	{
 		$('#divns1blankspaceViewportControlOptions').slideUp(500);
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
 	}
 	else
 	{
@@ -845,7 +845,7 @@ function interfaceSetupUserAccessRoleAdd(oParam, oResponse)
 		else
 		{
 			
-			$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', 'spanInterfaceMainUserAccessRolesAdd')
+			$('#divns1blankspaceViewportControlOptions').attr('data-initiator', 'spanInterfaceMainUserAccessRolesAdd')
 			
 			var aHTML = [];
 			var h = -1;

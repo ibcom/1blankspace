@@ -855,7 +855,7 @@ function interfaceNewsCopy(oParam, oResponse)
 			interfaceNewsShow(oParam, oResponse)
 			ns1blankspaceStatus('Copied');
 			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-			$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');			
+			$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');			
 		}	
 	}	
 }
@@ -1171,10 +1171,10 @@ function interfaceNewsGroupsManage(oParam, oResponse)
 
 function interfaceNewsGroupsAdd(oParam, oResponse)
 {		
-	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == 'spanInterfaceMainNewsGroupsAdd')
+	if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == 'spanInterfaceMainNewsGroupsAdd')
 	{
 		$('#divns1blankspaceViewportControlOptions').slideUp(500);
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
 	}
 	else
 	{
@@ -1190,7 +1190,7 @@ function interfaceNewsGroupsAdd(oParam, oResponse)
 		}
 		else
 		{
-			$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', 'spanInterfaceMainNewsGroupsAdd')
+			$('#divns1blankspaceViewportControlOptions').attr('data-initiator', 'spanInterfaceMainNewsGroupsAdd')
 			
 			var aHTML = [];
 			var h = -1;

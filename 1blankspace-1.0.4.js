@@ -429,7 +429,7 @@ ns1blankspace.app =
 						$('.spanInterfaceMainOptionsClose').live('click', function() 
 						{
 							$('#divns1blankspaceViewportControlOptions').slideUp(500);
-							$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+							$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
 						});
 						
 						$('.interfaceSearchHeaderPage').live('click', function() 
@@ -1476,561 +1476,491 @@ ns1blankspace.logoff = function ()
 					document.location.reload(false);
 				}
 
-
-
-
-function ns1blankspaceOptionsSource(sSource)
+ns1blankspace.home = 
 {
-	if (sSource == undefined) {sSource = ''}
-	$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', sSource);
-}
-
-function ns1blankspaceHomeShow()
-{	
-	interfaceHomeViewport();
-	
-	if (ns1blankspace.xhtml.home == '')
-	{
-		ns1blankspace.xhtml.home = interfaceHome();
-	}
-	
-	$('#divInterfaceMain').html(ns1blankspace.xhtml.home)
-	
-	interfaceHomeShow();
-}
-
-function ns1blankspaceHomeOptionsShow(oElement)
-{
-
-	var aHTML = [];
-	var h = -1;
-	
-	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oElement.id)
-	{
-		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
-	}
-	else
-	{	
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oElement.id);
-		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		$('#divns1blankspaceViewportControlOptions').html(interfaceHomeOptions());
-		interfaceHomeOptionsBind();
-	}	
-	
-}
-
-function ns1blankspaceViewportControlShow(oElement)
-{
-
-	var aHTML = [];
-	var h = -1;
-
-	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oElement.id)
-	{
-		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
-	}
-	else
-	{	
-		if (ns1blankspace.xhtml.masterControl == '')
-		{
-			ns1blankspace.xhtml.masterControl = interfaceControlOptions();
-		}
-
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oElement.id);
-		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		$('#divns1blankspaceViewportControlOptions').html(ns1blankspace.xhtml.masterControl);
-			
-		interfaceControlOptionsBind();
-	}	
-}
-
-function ns1blankspaceAttachments(oParam)
-{
-
-	var sXHTMLElementID;
-	var iObject = ns1blankspace.object;
-	var iObjectContext = ns1blankspace.objectContext;
-	var bShowAdd = gbShowAdd;
-	var iAttachmentType;
-	var oActions = {add: true};
-	var sHelpNotes;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.object != undefined) {iObject = oParam.object}
-		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-		if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
-		if (oParam.showAdd != undefined) {bShowAdd = oParam.showAdd}
-		if (oParam.attachmentType != undefined ) {iAttachmentType = oParam.attachmentType}
-		if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
-		if (oParam.actions != undefined) {oActions = oParam.actions}
-		if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
-	}
-	
-	if (oActions.add)
-	{
-	
-		var aHTML = [];
-		var h = -1;	
+	init: 		function ()
+				{	
+					interfaceHomeViewport();
 					
-		aHTML[++h] = '<table id="tableInterfaceMainAttachments" class="interfaceMain">' +
-					'<tr id="trInterfaceMainAttachmentsRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainAttachmentsColumn1" class="interfaceMainColumn1Large">' +
-					ns1blankspace.xhtml.loading +
-					'</td>' +
-					'<td id="tdInterfaceMainAttachmentsColumn2" class="interfaceMainColumn2Action">' +
-					'</td>' +
-					'</tr>' +
-					'</table>';					
-			
-		$('#' + sXHTMLElementID).html(aHTML.join(''));
-		
-		var aHTML = [];
-		var h = -1;	
-		
-		aHTML[++h] = '<table id="tableInterfaceMainAttachmentsColumn2" class="interfaceMainColumn2">';
-		
-		aHTML[++h] = '<tr><td id="tdInterfaceMainAttachmentsAdd" class="interfaceMainAction">' +
-						'<span id="spanInterfaceMainAttachmentsAdd">Add</span>' +
-						'</td></tr>';
-			
-		if (sHelpNotes != undefined)
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainAttachmentsAddHelpNotes" class="interfaceMainAction">' +
-						'<hr />' +
-						'</td></tr>';
+					if (ns1blankspace.xhtml.home == '')
+					{
+						ns1blankspace.xhtml.home = interfaceHome();
+					}
+					
+					$('#divInterfaceMain').html(ns1blankspace.xhtml.home)
+					
+					interfaceHomeShow();
+				},
+
+	show: 		function (oElement)
+				{
+
+					var aHTML = [];
+					var h = -1;
+					
+					if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
+					{
+						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+					}
+					else
+					{	
+						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
+						$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+						$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+						$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+						$('#divns1blankspaceViewportControlOptions').html(interfaceHomeOptions());
+						interfaceHomeOptionsBind();
+					}	
+				}
+}				
+
+ns1blankspace.attachments = 
+{
+	show: 		function (oParam)
+				{
+
+					var sXHTMLElementID;
+					var iObject = ns1blankspace.object;
+					var iObjectContext = ns1blankspace.objectContext;
+					var bShowAdd = gbShowAdd;
+					var iAttachmentType;
+					var oActions = {add: true};
+					var sHelpNotes;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.object != undefined) {iObject = oParam.object}
+						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+						if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
+						if (oParam.showAdd != undefined) {bShowAdd = oParam.showAdd}
+						if (oParam.attachmentType != undefined ) {iAttachmentType = oParam.attachmentType}
+						if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.actions != undefined) {oActions = oParam.actions}
+						if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
+					}
+					
+					if (oActions.add)
+					{
+					
+						var aHTML = [];
+						var h = -1;	
+									
+						aHTML[++h] = '<table id="tableInterfaceMainAttachments" class="interfaceMain">' +
+									'<tr id="trInterfaceMainAttachmentsRow1" class="interfaceMainRow1">' +
+									'<td id="tdInterfaceMainAttachmentsColumn1" class="interfaceMainColumn1Large">' +
+									ns1blankspace.xhtml.loading +
+									'</td>' +
+									'<td id="tdInterfaceMainAttachmentsColumn2" class="interfaceMainColumn2Action">' +
+									'</td>' +
+									'</tr>' +
+									'</table>';					
+							
+						$('#' + sXHTMLElementID).html(aHTML.join(''));
 						
-			aHTML[++h] = '<tr><td id="tdInterfaceMainAttachmentsAddHelpNotes" class="interfaceMainAction" style="font-size:0.75em;color:#404040;">' +
-						sHelpNotes +
-						'</td></tr>';
-		}
-		
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainAttachmentsColumn2').html(aHTML.join(''));
-	
-		$('#spanInterfaceMainAttachmentsAdd').button(
-		{
-			label: "Add"
-		})
-		.click(function() {
-			 ns1blankspaceAttachmentsAdd(oParam);
-		})
-	
-		sXHTMLElementID = 'tdInterfaceMainAttachmentsColumn1';
-	}
-	
-	if (iObjectContext != -1)
-	{	
-		var oSearch = new AdvancedSearch();
-		oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-		oSearch.addField('type,filename,description,download,modifieddate,attachment');
-		oSearch.addFilter('object', 'EQUAL_TO', iObject);
-		oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
-		
-		if (iAttachmentType != undefined)
-		{
-			oSearch.addFilter('type', 'EQUAL_TO', iAttachmentType);
-		}
-		
-		oSearch.sort('filename', 'asc');
-		oSearch.getResults(function(data) {ns1blankspaceAttachmentsShow(data, sXHTMLElementID)});
-	}
-
-}
-
-function ns1blankspaceAttachmentsShow(oResponse, sXHTMLElementID)
-{	
-	var aHTML = [];
-	var h = -1;
-		
-	if (oResponse.data.rows.length == 0)
-	{
-		aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-		aHTML[++h] = '<tbody>'
-		aHTML[++h] = '<tr class="interfaceAttachments">';
-		aHTML[++h] = '<td class="interfaceMainRowNothing">No attachments.</td>';
-		aHTML[++h] = '</tr>';
-		
-		$('#' + sXHTMLElementID).html(aHTML.join(''));
-		$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
-	}
-	else
-	{
-		aHTML[++h] = '<table class="interfaceMain"">';
-		aHTML[++h] = '<tbody>'
-	
-		aHTML[++h] = '<tr class="interfaceMainCaption">';
-		aHTML[++h] = '<td class="interfaceMainCaption">Filename</td>';
-		aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-		aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-		aHTML[++h] = '</tr>';
-
-		$.each(oResponse.data.rows, function()
-		{
-			aHTML[++h] = ns1blankspaceAttachmentsShowRow(this);
-		});
-    	
-		aHTML[++h] = '</tbody></table>';
-
-		ns1blankspacePaginationList(
-		   {
-			xhtmlElementID: sXHTMLElementID,
-			xhtmlContext: 'Attachment',
-			xhtml: aHTML.join(''),
-			showMore: (oResponse.morerows == "true"),
-			columns: 'subject-actiondate',
-			more: oResponse.moreid,
-			rows: ns1blankspace.option.defaultRows,
-			functionSearch: ns1blankspaceActions,
-			functionShowRow: ns1blankspaceAttachmentsShowRow,
-			functionOpen: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)',
-			functionNewPage: 'ns1blankspaceAttachmentsShowBind()',
-			type: 'json'
-		   }); 	
-			
-		ns1blankspaceAttachmentsShowBind();
-	}
-	
-}
-
-function ns1blankspaceAttachmentsShowRow(oRow)
-{
-	var aHTML = [];
-	var h = -1;
-	
-	aHTML[++h] = '<tr class="interfaceAttachments">';
-	
-	aHTML[++h] = '<td id="tdAttachment_filename-' + oRow.id + '" class="interfaceMainRow">' +
-						'<a href="' + oRow.download + '">' + oRow.filename + '</a></td>';
+						var aHTML = [];
+						var h = -1;	
 						
-	aHTML[++h] = '<td id="tdAttachment_date-' + oRow.id + '" class="interfaceMainRow">' + oRow.modifieddate + '</td>';
-	
-	aHTML[++h] = '<td id="tdAttachment_options_delete-' + oRow.attachment + 
-					'" class="interfaceMainRowOptionsDelete interfaceMainRowOptionsDeleteAttachment">&nbsp;</td>';
-	
-	aHTML[++h] = '</tr>';
-	
-	return aHTML.join('');
-}	
+						aHTML[++h] = '<table id="tableInterfaceMainAttachmentsColumn2" class="interfaceMainColumn2">';
+						
+						aHTML[++h] = '<tr><td id="tdInterfaceMainAttachmentsAdd" class="interfaceMainAction">' +
+										'<span id="spanInterfaceMainAttachmentsAdd">Add</span>' +
+										'</td></tr>';
+							
+						if (sHelpNotes != undefined)
+						{
+							aHTML[++h] = '<tr><td id="tdInterfaceMainAttachmentsAddHelpNotes" class="interfaceMainAction">' +
+										'<hr />' +
+										'</td></tr>';
+										
+							aHTML[++h] = '<tr><td id="tdInterfaceMainAttachmentsAddHelpNotes" class="interfaceMainAction" style="font-size:0.75em;color:#404040;">' +
+										sHelpNotes +
+										'</td></tr>';
+						}
+						
+						aHTML[++h] = '</table>';					
+						
+						$('#tdInterfaceMainAttachmentsColumn2').html(aHTML.join(''));
+					
+						$('#spanInterfaceMainAttachmentsAdd').button(
+						{
+							label: "Add"
+						})
+						.click(function() {
+							 ns1blankspaceAttachmentsAdd(oParam);
+						})
+					
+						sXHTMLElementID = 'tdInterfaceMainAttachmentsColumn1';
+					}
+					
+					if (iObjectContext != -1)
+					{	
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+						oSearch.addField('type,filename,description,download,modifieddate,attachment');
+						oSearch.addFilter('object', 'EQUAL_TO', iObject);
+						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+						
+						if (iAttachmentType != undefined)
+						{
+							oSearch.addFilter('type', 'EQUAL_TO', iAttachmentType);
+						}
+						
+						oSearch.sort('filename', 'asc');
+						oSearch.getResults(function(data) {this.process(data, sXHTMLElementID)});
+					}
 
-function ns1blankspaceAttachmentsShowBind()
-{
-	$('.interfaceMainRowOptionsDeleteAttachment').button({
-				text: false,
-				 icons: {
-					 primary: "ui-icon-close"
-		}
-	})
-	.click(function() {
-		ns1blankspaceAttachmentsRemove(this.id)
-	})
-	.css('width', '15px')
-	.css('height', '20px')	
-}
+				},
 
-function ns1blankspaceAttachmentsRemove(sXHTMLElementID)
-{
+	process: 	function (oResponse, sXHTMLElementID)
+				{	
+					var aHTML = [];
+					var h = -1;
+						
+					if (oResponse.data.rows.length == 0)
+					{
+						aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
+						aHTML[++h] = '<tbody>'
+						aHTML[++h] = '<tr class="interfaceAttachments">';
+						aHTML[++h] = '<td class="interfaceMainRowNothing">No attachments.</td>';
+						aHTML[++h] = '</tr>';
+						
+						$('#' + sXHTMLElementID).html(aHTML.join(''));
+						$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
+					}
+					else
+					{
+						aHTML[++h] = '<table class="interfaceMain"">';
+						aHTML[++h] = '<tbody>'
+					
+						aHTML[++h] = '<tr class="interfaceMainCaption">';
+						aHTML[++h] = '<td class="interfaceMainCaption">Filename</td>';
+						aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
+						aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+						aHTML[++h] = '</tr>';
 
-	var aSearch = sXHTMLElementID.split('-');
-	var sElementId = aSearch[0];
-	var sSearchContext = aSearch[1];
-	
-	var sParam = 'method=CORE_ATTACHMENT_MANAGE&remove=1';
-	var sData = 'id=' + sSearchContext;
+						$.each(oResponse.data.rows, function()
+						{
+							aHTML[++h] = ns1blankspaceAttachmentsShowRow(this);
+						});
+				    	
+						aHTML[++h] = '</tbody></table>';
+
+						ns1blankspacePaginationList(
+						   {
+							xhtmlElementID: sXHTMLElementID,
+							xhtmlContext: 'Attachment',
+							xhtml: aHTML.join(''),
+							showMore: (oResponse.morerows == "true"),
+							columns: 'subject-actiondate',
+							more: oResponse.moreid,
+							rows: ns1blankspace.option.defaultRows,
+							functionSearch: ns1blankspaceActions,
+							functionShowRow: ns1blankspaceAttachmentsShowRow,
+							functionOpen: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)',
+							functionNewPage: 'ns1blankspaceAttachmentsShowBind()',
+							type: 'json'
+						   }); 	
+							
+						ns1blankspaceAttachmentsShowBind();
+					}
+					
+				}
 				
-	$.ajax(
-		{
-			type: 'POST',
-			url: '/ondemand/core/?' + sParam,
-			data: sData,
-			dataType: 'text',
-			success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
-		});
-}
-
-function ns1blankspaceAttachmentsAdd(oParam)
-{
-
-	$('#tdInterfaceMainAttachmentsColumn1').html(ns1blankspaceAttachmentsUpload(oParam));
-	
-	$('#spanInterfaceMainUpload').button(
-		{
-			label: "Upload"
-		})
-		.click(function() {
-			 ns1blankspaceAttachmentsUploadProcess();
-		})
-}
-
-function ns1blankspaceAttachmentsUploadProcess(oParam)
-{
-	ns1blankspace.param = {};
-	if (oParam != undefined) {ns1blankspace.param = oParam};
-	
-	$('#spanInterfaceMainUploadStatus').html('Uploading..');
-	var oForm = document.frmonDemandFileUpload;
-  	oForm.submit();
- 	ns1blankspaceAttachmentsAddStatus();
-	ns1blankspace.timer.delay = setInterval('ns1blankspaceAttachmentsAddStatus()', 1000);
-}
-
-function ns1blankspaceAttachmentsAddStatus()
-{
-	var oDivStatus = document.getElementById('divonDemandFileUploadStatus');
-	var oFrame = document.getElementById('ifonDemandUpload');
-	var sStatus;
-	var sCurrentState;
-
-	var fFunctionPostUpdate = ns1blankspaceAttachments;
-	
-	if (ns1blankspace.param != undefined)
-	{
-		if (ns1blankspace.param.functionPostUpdate != undefined) {fFunctionPostUpdate = ns1blankspace.param.functionPostUpdate}
-	}
-	
-	if (oFrame.readyState) 
-	{
-		//IE
-		sCurrentState = oFrame.readyState;
-	}
-	else 
-	{
-		//FF
-		if (oFrame.contentDocument.body.innerHTML == 'OK') 
-		{
-			sCurrentState = 'complete';
-		}
-		else 
-		{
-			sCurrentState = oFrame.contentDocument.body.innerHTML;
-		}
-	}
- 
-	if (sCurrentState == 'complete') 
-	{
-		clearInterval(ns1blankspace.timer.delay);
-
-		if (oDivStatus != null)
-		{
-			oDivStatus.setAttribute("class", "");
-			oDivStatus.style.display = 'none';
-		}
-		
-		$('#spanInterfaceMainUploadStatus').html('File Upload Complete...');
-		fFunctionPostUpdate();
-		
-	}
-}
-
-function ns1blankspaceAttachmentsUpload(oParam)
-{
-
-	var aHTML = [];
-	var h = -1;
-
-	var iMaxFiles = 1
-	var iObject = ns1blankspace.object
-	var lObjectContext = ns1blankspace.objectContext
-	var sLabel = 'Select File';
-	var sObjectName = '';
-	var iAttachmentType = '';
-	var bShowUpload = true;
-	var sXHTML = '';
-	var sHelpNotes;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.maxFiles != undefined) {iMaxFiles = oParam.maxFiles}
-		if (oParam.object != undefined || iObject == '') {iObject = oParam.object}
-		if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
-		if (oParam.objectContext != undefined ) {lObjectContext = oParam.objectContext}
-		if (oParam.label != undefined) {sLabel = oParam.label}
-		if (oParam.attachmentType != undefined) {iAttachmentType = oParam.attachmentType}
-		if (oParam.showUpload != undefined) {bShowUpload = oParam.showUpload}
-		if (oParam.xhtml != undefined) {sXHTML = oParam.xhtml}
-		if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
-	}	
-
-	aHTML[++h] = '<form name="frmonDemandFileUpload" action="/ondemand/attach/" ' +
-					'enctype="multipart/form-data" method="POST" target="ifonDemandUpload">' +
-					'<input type="hidden" name="maxfiles" id="maxfiles" value="' + iMaxFiles + '">' +
-					'<input type="hidden" name="object" id="object" value="' + iObject + '">' +
-					'<input type="hidden" name="objectcontext" id="objectcontext" value="' + lObjectContext + '">';
-			
-	for (var i = 0; i < iMaxFiles; i++) 	
-	{
-		aHTML[++h] = '<input type="hidden" name="filetype' + i + '" id="filetype' + i + '" value="' + iAttachmentType + '">';
-	}
-
-	aHTML[++h] = sXHTML;
-	
-	if (sLabel != '') 
-	{
-		aHTML[++h] = '<div id="interfaceUploadLabel" class="ns1blankspaceViewport">' + sLabel + '</div>';
-	}	
-		
-	for (var i = 0; i < iMaxFiles; i++) 	
-	{
-		aHTML[++h] = '<div id="interfaceUploadFile' + i + '" class="ns1blankspaceUpload">' +
-						'<input class="interfaceMainUpload" type="file" name="oFile' + i + '" id="oFile' + i + '">' +
-						'</div>';
-	}
-	
-	if (bShowUpload)
-	{
-		aHTML[++h] = '<span id="spanInterfaceMainUpload" class="interfaceMainAction interfaceMainMarginTop"></span>';
-		aHTML[++h] = '<br /><br /><span id="spanInterfaceMainUploadStatus" class="ns1blankspaceUpload"></span>';
-	}	
-		
-	aHTML[++h] = '<iframe style="display:none;" name="ifonDemandUpload" id="ifonDemandUpload" class="interfaceUpload" frameborder="0"></iframe>' +
-					'</form>';
-	
-	return aHTML.join('');
-	
-}						
-
-function ns1blankspaceViewportBrowse()
-{
-
-	var aHTML = [];
-	var h = -1;
-
-	aHTML[++h] = '<table id="tableInterfaceViewportMasterBrowse" class="interfaceViewportMasterBrowse">';
-		
-	aHTML[++h] = '<tr id="trInterfaceViewportMasterBrowse" class="interfaceViewportMasterBrowse">' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-#" class="interfaceViewportMasterControlBrowse">#</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-A" class="interfaceViewportMasterControlBrowse">A</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-B" class="interfaceViewportMasterControlBrowse">B</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-C" class="interfaceViewportMasterControlBrowse">C</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-D" class="interfaceViewportMasterControlBrowse">D</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-E" class="interfaceViewportMasterControlBrowse">E</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-F" class="interfaceViewportMasterControlBrowse">F</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-G" class="interfaceViewportMasterControlBrowse">G</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-H" class="interfaceViewportMasterControlBrowse">H</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-I" class="interfaceViewportMasterControlBrowse">I</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-J" class="interfaceViewportMasterControlBrowse">J</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-K" class="interfaceViewportMasterControlBrowse">K</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-L" class="interfaceViewportMasterControlBrowse">L</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-M" class="interfaceViewportMasterControlBrowse">M</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-N" class="interfaceViewportMasterControlBrowse">N</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-O" class="interfaceViewportMasterControlBrowse">O</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-P" class="interfaceViewportMasterControlBrowse">P</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-Q" class="interfaceViewportMasterControlBrowse">Q</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-R" class="interfaceViewportMasterControlBrowse">R</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-S" class="interfaceViewportMasterControlBrowse">S</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-T" class="interfaceViewportMasterControlBrowse">T</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-U" class="interfaceViewportMasterControlBrowse">U</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-V" class="interfaceViewportMasterControlBrowse">V</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-W" class="interfaceViewportMasterControlBrowse">W</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-X" class="interfaceViewportMasterControlBrowse">X</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-Y" class="interfaceViewportMasterControlBrowse">Y</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-Z" class="interfaceViewportMasterControlBrowse">Z</td>' +
-						'<td id="tdInterfaceViewportMasterControlBrowse-" class="interfaceViewportMasterControlBrowseAll">ALL</td>' +
-					'</tr>'
+	row:		function (oRow)
+				{
+					var aHTML = [];
 					
-	aHTML[++h] = '</table>'				
+					aHTML.push('<tr class="interfaceAttachments">');
+					
+					aHTML.push('<td id="tdAttachment_filename-' + oRow.id + '" class="interfaceMainRow">' +
+										'<a href="' + oRow.download + '">' + oRow.filename + '</a></td>');
+										
+					aHTML.push('<td id="tdAttachment_date-' + oRow.id + '" class="interfaceMainRow">' + oRow.modifieddate + '</td>');
+					
+					aHTML.push('<td id="tdAttachment_options_delete-' + oRow.attachment + 
+									'" class="interfaceMainRowOptionsDelete interfaceMainRowOptionsDeleteAttachment">&nbsp;</td>');
+					
+					aHTML.push('</tr>');
+					
+					return aHTML.join('');
+				},
 
-	return aHTML.join('');
-	
+
+	bind:		function ()
+				{
+					$('.interfaceMainRowOptionsDeleteAttachment').button({
+								text: false,
+								 icons: {
+									 primary: "ui-icon-close"
+						}
+					})
+					.click(function() {
+						this.remove(this.id)
+					})
+					.css('width', '15px')
+					.css('height', '20px')	
+				},
+
+	remove: 	function (sXHTMLElementID)
+				{
+
+					var aSearch = sXHTMLElementID.split('-');
+					var sElementId = aSearch[0];
+					var sSearchContext = aSearch[1];
+					
+					var sParam = 'method=CORE_ATTACHMENT_MANAGE&remove=1';
+					var sData = 'id=' + sSearchContext;
+								
+					$.ajax(
+						{
+							type: 'POST',
+							url: '/ondemand/core/?' + sParam,
+							data: sData,
+							dataType: 'text',
+							success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
+						});
+				},
+
+	add: 		function (oParam)
+				{
+
+					$('#tdInterfaceMainAttachmentsColumn1').html(this.upload.show(oParam));
+					
+					$('#spanInterfaceMainUpload').button(
+						{
+							label: "Upload"
+						})
+						.click(function() {
+							 ns1blankspaceAttachmentsUploadProcess();
+						})
+				}
+
+	upload: 	{ 
+						show: 	function (oParam)
+								{
+									var aHTML = [];
+									var h = -1;
+
+									var iMaxFiles = 1
+									var iObject = ns1blankspace.object
+									var lObjectContext = ns1blankspace.objectContext
+									var sLabel = 'Select File';
+									var sObjectName = '';
+									var iAttachmentType = '';
+									var bShowUpload = true;
+									var sXHTML = '';
+									var sHelpNotes;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.maxFiles != undefined) {iMaxFiles = oParam.maxFiles}
+										if (oParam.object != undefined || iObject == '') {iObject = oParam.object}
+										if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
+										if (oParam.objectContext != undefined ) {lObjectContext = oParam.objectContext}
+										if (oParam.label != undefined) {sLabel = oParam.label}
+										if (oParam.attachmentType != undefined) {iAttachmentType = oParam.attachmentType}
+										if (oParam.showUpload != undefined) {bShowUpload = oParam.showUpload}
+										if (oParam.xhtml != undefined) {sXHTML = oParam.xhtml}
+										if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
+									}	
+
+									aHTML[++h] = '<form name="frmonDemandFileUpload" action="/ondemand/attach/" ' +
+													'enctype="multipart/form-data" method="POST" target="ifonDemandUpload">' +
+													'<input type="hidden" name="maxfiles" id="maxfiles" value="' + iMaxFiles + '">' +
+													'<input type="hidden" name="object" id="object" value="' + iObject + '">' +
+													'<input type="hidden" name="objectcontext" id="objectcontext" value="' + lObjectContext + '">';
+											
+									for (var i = 0; i < iMaxFiles; i++) 	
+									{
+										aHTML[++h] = '<input type="hidden" name="filetype' + i + '" id="filetype' + i + '" value="' + iAttachmentType + '">';
+									}
+
+									aHTML[++h] = sXHTML;
+									
+									if (sLabel != '') 
+									{
+										aHTML[++h] = '<div id="interfaceUploadLabel" class="ns1blankspaceViewport">' + sLabel + '</div>';
+									}	
+										
+									for (var i = 0; i < iMaxFiles; i++) 	
+									{
+										aHTML[++h] = '<div id="interfaceUploadFile' + i + '" class="ns1blankspaceUpload">' +
+														'<input class="interfaceMainUpload" type="file" name="oFile' + i + '" id="oFile' + i + '">' +
+														'</div>';
+									}
+									
+									if (bShowUpload)
+									{
+										aHTML[++h] = '<span id="spanInterfaceMainUpload" class="interfaceMainAction interfaceMainMarginTop"></span>';
+										aHTML[++h] = '<br /><br /><span id="spanInterfaceMainUploadStatus" class="ns1blankspaceUpload"></span>';
+									}	
+										
+									aHTML[++h] = '<iframe style="display:none;" name="ifonDemandUpload" id="ifonDemandUpload" class="interfaceUpload" frameborder="0"></iframe>' +
+													'</form>';
+									
+									return aHTML.join('');
+									
+								},
+
+
+					process:	function (oParam)
+								{
+									ns1blankspace.param = {};
+									if (oParam != undefined) {ns1blankspace.param = oParam};
+									
+									$('#spanInterfaceMainUploadStatus').html('Uploading..');
+									var oForm = document.frmonDemandFileUpload;
+								  	oForm.submit();
+								 	this.upload.status();
+									ns1blankspace.timer.delay = setInterval('ns1blankspace.attachments.upload.status()', 1000);
+								},
+
+					status:		function ()
+								{
+									var oDivStatus = document.getElementById('divonDemandFileUploadStatus');
+									var oFrame = document.getElementById('ifonDemandUpload');
+									var sStatus;
+									var sCurrentState;
+
+									var fFunctionPostUpdate = ns1blankspaceAttachments;
+									
+									if (ns1blankspace.param != undefined)
+									{
+										if (ns1blankspace.param.functionPostUpdate != undefined) {fFunctionPostUpdate = ns1blankspace.param.functionPostUpdate}
+									}
+									
+									if (oFrame.readyState) 
+									{
+										//IE
+										sCurrentState = oFrame.readyState;
+									}
+									else 
+									{
+										//FF
+										if (oFrame.contentDocument.body.innerHTML == 'OK') 
+										{
+											sCurrentState = 'complete';
+										}
+										else 
+										{
+											sCurrentState = oFrame.contentDocument.body.innerHTML;
+										}
+									}
+								 
+									if (sCurrentState == 'complete') 
+									{
+										clearInterval(ns1blankspace.timer.delay);
+
+										if (oDivStatus != null)
+										{
+											oDivStatus.setAttribute("class", "");
+											oDivStatus.style.display = 'none';
+										}
+										
+										$('#spanInterfaceMainUploadStatus').html('File Upload Complete...');
+										fFunctionPostUpdate();
+										
+									}
+								}
+				}						
 }
 
-function ns1blankspaceViewportSetup()
+ns1blankspace.setup = 
 {
+	switch:		function ()
+				{
+					var aHTML = [];
+					var h = -1;
+					
+					$('#div1blankspaceViewportControlOptions').attr('data-initiator', '');
+					$('#div1blankspaceViewportControlSet').unbind('click');
+					
+					if (ns1blankspace.setupViewport)
+					{
+						ns1blankspace.setupViewport = false;
+						
+						$('#divns1blankspaceViewportControlSet')
+						.button(
+						{
+							icons: 
+							{
+								primary: "ui-icon-grip-dotted-vertical",
+								secondary: "ui-icon-triangle-1-s"
+							},
+							label: ns1blankspace.option.defaultViewport
+						})
+						.click(function() 
+						{
+							ns1blankspaceViewportControlShow(this);
+						});
+						
+						interfaceControlSetMasterViewport();
+						ns1blankspaceHomeShow();
+						
+						ns1blankspaceStatus("")	
+					}
+					else
+					{
+						ns1blankspace.setupViewport = true;
 
-	var aHTML = [];
-	var h = -1;
-	
-	$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
-	$('#divns1blankspaceViewportControlSet').unbind('click');
-	
-	if (ns1blankspace.setupViewport)
-	{
-		ns1blankspace.setupViewport = false;
-		
-		$('#divns1blankspaceViewportControlSet')
-		.button(
-		{
-			icons: 
-			{
-				primary: "ui-icon-grip-dotted-vertical",
-				secondary: "ui-icon-triangle-1-s"
-			},
-			label: ns1blankspace.option.defaultViewport
-		})
-		.click(function() 
-		{
-			ns1blankspaceViewportControlShow(this);
-		});
-		
-		interfaceControlSetMasterViewport();
-		ns1blankspaceHomeShow();
-		
-		ns1blankspaceStatus("")	
-	}
-	else
-	{
-		ns1blankspace.setupViewport = true;
+						$('#divns1blankspaceViewportControlSet')
+						.button(
+						{
+							label: ns1blankspace.option.defaultSetupViewport
+						})
+						.click(function() 
+						{
+							ns1blankspace.setup.show(this);
+						});
+					
+						$('.divInterfaceViewportMain').html(interfaceControlSetupOptions);
+						
+						interfaceControlSetSetupMasterViewport();
+						
+						ns1blankspaceStatus("Click icon again to return.")		
+					}		
+				},
 
-		$('#divns1blankspaceViewportControlSet')
-		.button(
-		{
-			label: ns1blankspace.option.defaultSetupViewport
-		})
-		.click(function() 
-		{
-			ns1blankspaceViewportControlSetupShow(this);
-		});
-	
-		$('.divInterfaceViewportMain').html(interfaceControlSetupOptions);
-		
-		interfaceControlSetSetupMasterViewport();
-		
-		ns1blankspaceStatus("Click icon again to return.")		
-	}		
-}
+	show:		function (oElement)
+				{
 
-function ns1blankspaceViewportControlSetupShow(oElement)
+					var aHTML = [];
+					var h = -1;
+					
+					if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
+					{
+						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+					}
+					else
+					{	
+						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
+						$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+						$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+						$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+						$('#divns1blankspaceViewportControlOptions').html(interfaceControlSetupOptions());
+							
+						interfaceControlSetupOptionsBind();
+					}	
+
+				}
+}				
+
+ns1blankspace.help =
 {
-
-	var aHTML = [];
-	var h = -1;
-	
-	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oElement.id)
-	{
-		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
-	}
-	else
-	{	
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oElement.id);
-		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-		$('#divns1blankspaceViewportControlOptions').html(interfaceControlSetupOptions());
-			
-		interfaceControlSetupOptionsBind();
-	}	
-
-}
-
-function ns1blankspaceHelpShow()
-{
-	if (interfaceControlHelpURL() != '')
-	{
-		window.open(interfaceControlHelpURL());
-	}
-	else	
-	{
-		$('#divInterfaceMain').html(interfaceHelp());
-	}	
-}
+	show: 		function ()
+				{
+					if (interfaceControlHelpURL() != '')
+					{
+						window.open(interfaceControlHelpURL());
+					}
+					else	
+					{
+						$('#divInterfaceMain').html(interfaceHelp());
+					}	
+				}
+}				
 
 function ns1blankspaceMainViewportShow(asDivID, bRefresh)
 {
@@ -2055,533 +1985,577 @@ function ns1blankspaceMainViewportHideLoading(asDivID)
 	$(asDivID).removeClass("loading");
 }
 
-function ns1blankspaceStatus(sStatus)
-{	
-	$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
-			'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
-}
-
-function ns1blankspaceStatusWorking()
-{	
-	$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
-			'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + ns1blankspace.xhtml.loadingSmall + '</div></div>');
-}
-
-function ns1blankspaceError(sError)
+ns1blankspace.status =
 {
-	if (sError == undefined) {sError = 'Error!'};
-	
-	$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
-			'<div style="display:table-cell; vertical-align:bottom; padding:5px; height:25px; color:white; background-color:red;">' + sError + '</div></div>');
-}
+	set: 		function (sStatus)
+				{	
+					$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
+				},
 
-
-function ns1blankspaceElementEditStart(sElementId)
-{
-	
-	var aSearch = sElementId.split('-');
-	var sActionElementId = '#' + aSearch[0] + '-options-' + aSearch[2];
-
-	if (1==0)
-	{
-		$('td.interfaceActionsOptions').button('destroy');
-		
-		$(sActionElementId).button(
-		{
-			icons: 
-			{
-				primary: "ui-icon-disk"
-			}
-		});
-	}
-	
-	var sHTML = $('#' + sElementId).html();
-	
-	var sElementInputId = sElementId.replace('td', 'input');
-	
-	sHTML = '<input id="' + sElementInputId + '" class="inputInterfaceMainValue" ' +
-							'value="' + sHTML + '">'
-	
-	$('#' + sElementId).html(sHTML);
-	$('#' + sElementInputId).focus();
-	
-	$('#' + sElementInputId).blur(function(event)
-	{
-		ns1blankspaceElementEditStop(sElementId);
-	});
-	
-}
-
-function ns1blankspaceElementEditStop(sElementId)
-{
-	
-	ns1blankspaceElementEditSave(sElementId);
-	
-	var aSearch = sElementId.split('-');
-	var sHTML = $('#' + sElementId.replace('td', 'input')).val();
-
-	$('#' + sElementId).html(sHTML);
-
-}
-
-function ns1blankspaceElementEditSave(sElementId)
-{
-
-	var aSearch = sElementId.split('-');
-
-	var sMethod = aSearch[0];
-	sMethod = sMethod.replace('td', '');
-	sMethod = sMethod.toUpperCase();
-	sMethod = sMethod + '_MANAGE';
-	
-	var sParam = 'method=' + sMethod + '&select=' + aSearch[2];
-	sParam += '&' + aSearch[1] + '=' + $('#' + sElementId.replace('td', 'input')).val();
-	
-	$.ajax(
-	{
-		type: 'GET',
-		url: '/directory/ondemand/object.asp?' + sParam,
-		dataType: 'text',
-		success: ns1blankspaceStatus('Saved')
-	});
-		
-}
-
-function ns1blankspaceOptionsSetPosition(sElementId, iOffsetTop, iOffsetLeft)
-{
-	var oElement = $('#' + sElementId)
-	
-	if (iOffsetTop == undefined) {iOffsetTop = 5}
-	if (iOffsetLeft == undefined) {iOffsetLeft = 0}
-	
-	$('#divns1blankspaceViewportControlOptions').html('');
-	$('#divns1blankspaceViewportControlOptions').show();
-	$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() + iOffsetTop, left: $(oElement).offset().left + iOffsetLeft});
-}
-
-function ns1blankspaceOptionsPosition(oParam)
-{
-
-	var sXHTMLElementID = '';
-	var iLeftOffset = 0;
-	var iTopOffset = 7;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-		if (oParam.leftOffset != undefined) {iLeftOffset = oParam.leftOffset}
-		if (oParam.topOffset != undefined) {iTopOffset = oParam.topOffset}
-	}
-	
-	var oElement = $('#' + sXHTMLElementID)
-	
-	$('#divns1blankspaceViewportControlOptions').html('');
-	$('#divns1blankspaceViewportControlOptions').show();
-	$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
-}
-
-
-function ns1blankspaceElementOptionsSearch(oParam, oResponse)
-{
-	var sXHTMLElementID;
-	var sXHTMLInputElementID;
-	var iXHTMLElementContextID;
-	var sXHTMLParentInputElementID;
-	var iSource = ns1blankspace.data.searchSource.text;
-	var iMinimumLength = 1;
-	var iMaximumColumns = 1;
-	var sMethod;
-	var sSearchText = '';
-	var sColumns;
-	var iColumn = 0;
-		
-	if (oParam != undefined)
-	{
-		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-		if (oParam.xhtmlInputElementID != undefined) {sXHTMLInputElementID = oParam.xhtmlInputElementID}
-		if (oParam.xhtmlParentInputElementID != undefined) {sXHTMLParentInputElementID = oParam.xhtmlParentInputElementID}
-		if (oParam.source != undefined) {iSource = oParam.source}
-		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
-		if (oParam.method != undefined) {sMethod = oParam.method}
-		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
-		if (oParam.sColumns != undefined) {sColumns = oParam.columns}
-	}
-	
-	if (sXHTMLElementID != undefined)
-	{
-		var aXHTMLElementID = sXHTMLElementID.split('-');
-		sXHTMLInputElementID = aXHTMLElementID[0];
-		iXHTMLElementContextID = aXHTMLElementID[1];
-	
-		$.extend(true, oParam, {xhtmlInputElementID: sXHTMLInputElementID});
-	
-		if (sMethod == undefined)
-		{
-			sMethod = $('#' + sXHTMLInputElementID).attr("onDemandMethod");
-			if (sMethod == undefined) {sMethod = $('#' + sXHTMLInputElementID).attr("data-method")}	
-		}
-		
-		if (sColumns == undefined)
-		{
-			sColumns = $('#' + sXHTMLInputElementID).attr("onDemandColumns");
-			if (sColumns == undefined) {sColumns = $('#' + sXHTMLInputElementID).attr("data-columns")}
-			if (sColumns != undefined) {$.extend(true, oParam, {columns: sColumns})};	
-		}
-		
-		if (sXHTMLParentInputElementID == undefined)
-		{
-			sXHTMLParentInputElementID = $('#' + sXHTMLInputElementID).attr("data-parent")
-			if (sXHTMLParentInputElementID != undefined) {$.extend(true, oParam, {xhtmlParentInputElementID: sXHTMLParentInputElementID})};	
-		}
-	}	
-	
-	if (iXHTMLElementContextID != undefined)
-	{
-		$('#' + sXHTMLInputElementID).val($('#' + sXHTMLElementID).html())
-		$('#' + sXHTMLInputElementID).attr("onDemandID", iXHTMLElementContextID)
-		$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
-		$('#divns1blankspaceViewportControlOptions').hide();
-	}
-	else
-	{
-		if (oResponse == undefined)
-		{
-			ns1blankspaceOptionsSetPosition(sXHTMLInputElementID);
-			
-			if (sColumns == undefined) {sColumns = 'title'};
-			
-			if (sSearchText == '' && iSource == ns1blankspace.data.searchSource.text)
-			{
-				sSearchText = $('#' + sXHTMLInputElementID).val();
-			}	
-		
-			if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.all)
-			{
-				var aColumns = sColumns.split(',');	
-				var oSearch = new AdvancedSearch();
-				oSearch.method = sMethod;
-				oSearch.addField(sColumns);
-				oSearch.addFilter(aColumns[0], 'STRING_IS_LIKE', sSearchText);
-				
-				if (sXHTMLParentInputElementID != undefined)
-				{
-					var sParentColumnID = $('#' + sXHTMLInputElementID).attr("data-parent-search-id")
-					var sParentColumnText = $('#' + sXHTMLInputElementID).attr("data-parent-search-text")
-					var sParentContextID = $('#' + sXHTMLParentInputElementID).attr("data-id");
-					var sParentContextText = $('#' + sXHTMLParentInputElementID).val();
-					
-					if (sParentColumnID != undefined && sParentContextID != undefined)
-					{
-						oSearch.addFilter(sParentColumnID, 'EQUAL_TO', sParentContextID);
-					}
-					else if	(sParentColumnText != undefined && sParentContextText != '')
-					{
-						oSearch.addFilter(sParentColumnText, 'STRING_STARTS_WITH', sParentContextText);
-					}
+	working:	function ()
+				{	
+					$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + ns1blankspace.xhtml.loadingSmall + '</div></div>');
 				}
-				
-				oSearch.sort(aColumns[0], 'asc');
-				oSearch.getResults(function(data){ns1blankspaceElementOptionsSearch(oParam, data)});
-			}
-		}	
-		else
-		{
-			var aColumns = sColumns.split('-');
-			var aHTML = [];
-			var h = -1;
-			
-			if (oResponse.data.rows.length == 0)
-			{
-				$('#divns1blankspaceViewportControlOptions').hide();
-			}
-			else
-			{
-				aHTML[++h] = '<table class="interfaceSearchLarge">';
-				aHTML[++h] = '<tbody>'
-			
-				$.each(oResponse.data.rows, function() 
-				{ 
-					iColumn = iColumn + 1;
-			
-					if (iColumn == 1)
+
+	error: 		function ns1blankspaceError(sError)
+				{
+					if (sError == undefined) {sError = 'Error!'};
+					
+					$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+							'<div style="display:table-cell; vertical-align:bottom; padding:5px; height:25px; color:white; background-color:red;">' + sError + '</div></div>');
+				}
+}
+
+ns1blankspace.edit =
+{
+	start: 		function (sElementId)
+				{
+					
+					var aSearch = sElementId.split('-');
+					var sActionElementId = '#' + aSearch[0] + '-options-' + aSearch[2];
+
+					if (1==0)
 					{
-						aHTML[++h] = '<tr class="interfaceSearch">';
-					}
+						$('td.interfaceActionsOptions').button('destroy');
 						
-					if (sColumns.length == 0)
+						$(sActionElementId).button(
+						{
+							icons: 
+							{
+								primary: "ui-icon-disk"
+							}
+						});
+					}
+					
+					var sHTML = $('#' + sElementId).html();
+					
+					var sElementInputId = sElementId.replace('td', 'input');
+					
+					sHTML = '<input id="' + sElementInputId + '" class="inputInterfaceMainValue" ' +
+											'value="' + sHTML + '">'
+					
+					$('#' + sElementId).html(sHTML);
+					$('#' + sElementInputId).focus();
+					
+					$('#' + sElementInputId).blur(function(event)
 					{
-						aHTML[++h] = '<td class="interfaceSearch" id="' + sXHTMLInputElementID +
-											'-' + this.id + '">' + this.title + '</td>';
+						ns1blankspaceElementEditStop(sElementId);
+					});
+					
+				},
+
+	stop:		function (sElementId)
+				{
+					
+					ns1blankspaceElementEditSave(sElementId);
+					
+					var aSearch = sElementId.split('-');
+					var sHTML = $('#' + sElementId.replace('td', 'input')).val();
+
+					$('#' + sElementId).html(sHTML);
+
+				},
+
+	save:		function (sElementId)
+				{
+
+					var aSearch = sElementId.split('-');
+
+					var sMethod = aSearch[0];
+					sMethod = sMethod.replace('td', '');
+					sMethod = sMethod.toUpperCase();
+					sMethod = sMethod + '_MANAGE';
+					
+					var sParam = 'method=' + sMethod + '&select=' + aSearch[2];
+					sParam += '&' + aSearch[1] + '=' + $('#' + sElementId.replace('td', 'input')).val();
+					
+					$.ajax(
+					{
+						type: 'GET',
+						url: '/directory/ondemand/object.asp?' + sParam,
+						dataType: 'text',
+						success: ns1blankspaceStatus('Saved')
+					});
+						
+				}
+}				
+
+ns1blankspace.dialog = 
+{
+	init: 		function(sSource)
+				{
+					if (sSource == undefined) {sSource = ''}
+					$('#div1blankspaceViewportControlOptions').attr('data-initiator', sSource);
+				},
+
+	show: 		function ns1blankspaceViewportControlShow(oElement)
+				{
+
+					var aHTML = [];
+					var h = -1;
+
+					if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
+					{
+						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+					}
+					else
+					{	
+						if (ns1blankspace.xhtml.masterControl == '')
+						{
+							ns1blankspace.xhtml.masterControl = interfaceControlOptions();
+						}
+
+						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
+						$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
+						$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+						$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+						$('#divns1blankspaceViewportControlOptions').html(ns1blankspace.xhtml.masterControl);
+							
+						interfaceControlOptionsBind();
+					}	
+				},
+				
+	position:	function (oParam)
+				{
+
+					var sXHTMLElementID = '';
+					var iLeftOffset = 0;
+					var iTopOffset = 7;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.leftOffset != undefined) {iLeftOffset = oParam.leftOffset}
+						if (oParam.topOffset != undefined) {iTopOffset = oParam.topOffset}
+					}
+					
+					var oElement = $('#' + sXHTMLElementID)
+					
+					$('#divns1blankspaceViewportControlOptions').html('');
+					$('#divns1blankspaceViewportControlOptions').show();
+					$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
+				},
+}
+
+ns1blankspace.search =
+{
+	show: 	function (oParam, oResponse)
+				{
+					var sXHTMLElementID;
+					var sXHTMLInputElementID;
+					var iXHTMLElementContextID;
+					var sXHTMLParentInputElementID;
+					var iSource = ns1blankspace.data.searchSource.text;
+					var iMinimumLength = 1;
+					var iMaximumColumns = 1;
+					var sMethod;
+					var sSearchText = '';
+					var sColumns;
+					var iColumn = 0;
+						
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.xhtmlInputElementID != undefined) {sXHTMLInputElementID = oParam.xhtmlInputElementID}
+						if (oParam.xhtmlParentInputElementID != undefined) {sXHTMLParentInputElementID = oParam.xhtmlParentInputElementID}
+						if (oParam.source != undefined) {iSource = oParam.source}
+						if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+						if (oParam.method != undefined) {sMethod = oParam.method}
+						if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+						if (oParam.sColumns != undefined) {sColumns = oParam.columns}
+					}
+					
+					if (sXHTMLElementID != undefined)
+					{
+						var aXHTMLElementID = sXHTMLElementID.split('-');
+						sXHTMLInputElementID = aXHTMLElementID[0];
+						iXHTMLElementContextID = aXHTMLElementID[1];
+					
+						$.extend(true, oParam, {xhtmlInputElementID: sXHTMLInputElementID});
+					
+						if (sMethod == undefined)
+						{
+							sMethod = $('#' + sXHTMLInputElementID).attr("onDemandMethod");
+							if (sMethod == undefined) {sMethod = $('#' + sXHTMLInputElementID).attr("data-method")}	
+						}
+						
+						if (sColumns == undefined)
+						{
+							sColumns = $('#' + sXHTMLInputElementID).attr("onDemandColumns");
+							if (sColumns == undefined) {sColumns = $('#' + sXHTMLInputElementID).attr("data-columns")}
+							if (sColumns != undefined) {$.extend(true, oParam, {columns: sColumns})};	
+						}
+						
+						if (sXHTMLParentInputElementID == undefined)
+						{
+							sXHTMLParentInputElementID = $('#' + sXHTMLInputElementID).attr("data-parent")
+							if (sXHTMLParentInputElementID != undefined) {$.extend(true, oParam, {xhtmlParentInputElementID: sXHTMLParentInputElementID})};	
+						}
+					}	
+					
+					if (iXHTMLElementContextID != undefined)
+					{
+						$('#' + sXHTMLInputElementID).val($('#' + sXHTMLElementID).html())
+						$('#' + sXHTMLInputElementID).attr("onDemandID", iXHTMLElementContextID)
+						$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
+						$('#divns1blankspaceViewportControlOptions').hide();
 					}
 					else
 					{
-						aHTML[++h] = '<td class="interfaceSearch" id="' + sXHTMLInputElementID +
-												'-' + this.id + '">' 
-										
-						for (var i = 0; i < aColumns.length; i++)
+						if (oResponse == undefined)
 						{
-							switch (aColumns[i])
+							ns1blankspaceOptionsSetPosition(sXHTMLInputElementID);
+							
+							if (sColumns == undefined) {sColumns = 'title'};
+							
+							if (sSearchText == '' && iSource == ns1blankspace.data.searchSource.text)
 							{
-							case 'space':
-								aHTML[++h] = ' ';
-								break;
-							case 'comma':
-								aHTML[++h] = ',';
-								break;
-							case 'pipe':
-								aHTML[++h] = '|';
-								break;
-							default:
-								aHTML[++h] = this[aColumns[i]];
-							}
-						}
-						aHTML[++h] = '</td>';
-					}
-			
-					if (iColumn == iMaximumColumns)
-					{
-						aHTML[++h] = '</tr>'
-						iColumn = 0;
-					}	
-				});
-    	
-				aHTML[++h] = '</tbody></table>';
-	
-				$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-				$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-			
-				$('td.interfaceSearch').click(function(event)
-				{
-					$('#divns1blankspaceViewportControlOptions').hide(200);
-					$.extend(true, oParam, {xhtmlElementID: event.target.id})
-					ns1blankspaceElementOptionsSearch(oParam);
-				});
-			}	
-		}
-	}		
-}
-
-function ns1blankspaceSearchStart(sElementId)
-{
-	sElementId = 'divns1blankspaceViewportControlSearchStatus';
-	$('#' + sElementId).show();
-	$('#' + sElementId).html(ns1blankspace.xhtml.loadingSmall);
-}
-
-function ns1blankspaceSearchStop(sElementId)
-{
-	sElementId = 'divns1blankspaceViewportControlSearchStatus';
-	$('#' + sElementId).hide()
-	$('#' + sElementId).html('');
-}
-
-function ns1blankspaceSave(sParam, sData, sSuccessMessage)
-{
-	if (sParam == undefined) {sParam = ''};
-	
-	if (sData != '' && sData.indexOf('&') == 0) {sData = sData.substr(1)};
-	
-	$.ajax(
-	{
-		type: 'POST',
-		url: sParam + '&rf=JSON',
-		data: sData,
-		dataType: 'json',
-		async: false,
-		success: function(data) { ns1blankspaceSaveSuccess(data, sSuccessMessage)}
-	});
-}
-
-function ns1blankspaceSaveSuccess(data, sSuccessMessage)
-{
-	oResponse = data;
-	
-	if (oResponse.status == 'OK')
-	{
-		ns1blankspaceStatus(sSuccessMessage);
-		ns1blankspace.objectSaveId =  oResponse.id;
-	}
-	else
-	{
-		ns1blankspaceStatus(oResponse.error.errornotes);
-		ns1blankspace.objectSaveId =  -1;
-		return '';
-	}
-}
-
-function ns1blankspaceJSONGetData(aoJSON, asElement, aiRow)
-{
-	aoJSON = (aoJSON == undefined)?'':aoJSON;
-	asElement = (asElement == undefined)?'':asElement;
-	aiRow = (aiRow == undefined)?0:aiRow;
-	
-	if (aoJSON.length == 0) return '';
-	
-	if (asElement == '' || aiRow < 0) return '';
-	
-	if (aoJSON.data.rows.length > 0)
-	{	return eval( 'aoJSON.data.rows[' + aiRow + '].' + asElement);	}
-	else
-	{	return '';}
-}
-
-function ns1blankspaceTF2OnOff(bValue)
-{
-	if (bValue == undefined) {bValue = false}
-	
-	if (bValue)
-	{ 
-		return '1';
-	}
-	else
-	{
-		return '0';
-	}	
-	
-}
-
-function ns1blankspaceOnOff2TF(sValue)
-{
-	if (sValue == undefined) {sValue = '0'}
-	
-	if (sValue == '1')
-	{ 
-		return true;
-	}
-	else
-	{
-		return false;
-	}	
-	
-}
-
-function ns1blankspaceTF2YN(bValue)
-{
-	if (bValue == undefined) {bValue = false}
-	
-	if (bValue)
-	{ 
-		return 'Y';
-	}
-	else
-	{
-		return 'N';
-	}	
-	
-}
-
-function ns1blankspaceYN2TF(sValue)
-{
-	if (sValue == undefined) {sValue = 'N'}
-	
-	if (sValue == 'Y')
-	{ 
-		return true;
-	}
-	else
-	{
-		return false;
-	}	
-	
-}
-
-function ns1blankspaceFormatSave(sValue)
-{
-
-	if (sValue == undefined || sValue == 'undefined') { sValue = ''; }
-	
-	return encodeURIComponent(sValue)
-
-}
-
-function ns1blankspaceAddressSearch(sXHTMLElementID, oParam)
-{
-	
-	var aSearch = sXHTMLElementID.split('-');
-	var sElementId = aSearch[0];
-	var lElementSearchContext = aSearch[1];	
-	
-	if (lElementSearchContext != undefined)
-	{
-		$('#' + ns1blankspace.xhtml.divID).val(aSearch[2])
-		$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'State')).val(aSearch[3])
-		$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'PostCode')).val(aSearch[4])
-		$('#divns1blankspaceViewportControlOptions').hide();
-	}
-	else
-	{
-		var sParam = '/ondemand/core/?method=CORE_ADDRESS_SEARCH&rf=XML';
-		var sData = '';
-		
-		ns1blankspaceOptionsSetPosition(sXHTMLElementID)
-		
-		//sData += '&postpcde=' + encodeURIComponent((oParam.postcode==undefined?'':oParam.postcode));
-		
-		sData += 'suburblike=' + encodeURIComponent($('#' + ns1blankspace.xhtml.divID).val());
-
-		$.ajax(
-		{
-			type: 'POST',
-			url: sParam,
-			data: sData,
-			dataType: 'json',
-			success: ns1blankspaceAddressSearchShow
-		});
-	}
-}
-
-function ns1blankspaceAddressSearchShow(oResponse)
-{
-	var iColumn = 0;
-	var aHTML = [];
-	var h = -1;
-	var	iMaximumColumns = 1;
-			
-	if (oResponse.data.rows.length == 0)
-	{
-		$('#divns1blankspaceViewportControlOptions').hide();
-	}
-	else
-	{
-		aHTML[++h] = '<table class="interfaceSearchLarge">';
-		aHTML[++h] = '<tbody>'
-			
-		$.each(oResponse.data.rows, function()
-		{
-			aHTML[++h] = '<tr class="interfaceSearch">';
+								sSearchText = $('#' + sXHTMLInputElementID).val();
+							}	
 						
-			aHTML[++h] = '<td class="interfaceSearch" id="interfaceMainAddressSearch' +
-									'-' + this.id +
-									'-' + this.suburb +
-									'-' + this.state +
-									'-' + this.postcode +
-									'">' +
-									this.suburb + '</td>';
+							if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.all)
+							{
+								var aColumns = sColumns.split(',');	
+								var oSearch = new AdvancedSearch();
+								oSearch.method = sMethod;
+								oSearch.addField(sColumns);
+								oSearch.addFilter(aColumns[0], 'STRING_IS_LIKE', sSearchText);
+								
+								if (sXHTMLParentInputElementID != undefined)
+								{
+									var sParentColumnID = $('#' + sXHTMLInputElementID).attr("data-parent-search-id")
+									var sParentColumnText = $('#' + sXHTMLInputElementID).attr("data-parent-search-text")
+									var sParentContextID = $('#' + sXHTMLParentInputElementID).attr("data-id");
+									var sParentContextText = $('#' + sXHTMLParentInputElementID).val();
 									
-			aHTML[++h] = '<td class="interfaceSearchSub" id="interfaceMainAddressSearchState' +
-									'-' + this.id + '">' +
-									this.state + '</td>';
-			
-			aHTML[++h] = '<td class="interfaceSearchSub" id="interfaceMainAddressSearchPostCode' +
-									'-' + this.id + '">' +
-									this.postcode + '</td>';
-			
-			aHTML[++h] = '</tr>'
-		});
-    	
-		aHTML[++h] = '</tbody></table>';
-	
-		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		
-		$('td.interfaceSearch').click(function(event)
-		{
-			$('#divns1blankspaceViewportControlOptions').hide(200);
-			ns1blankspaceAddressSearch(event.target.id);
-		});
-	}	
-			
+									if (sParentColumnID != undefined && sParentContextID != undefined)
+									{
+										oSearch.addFilter(sParentColumnID, 'EQUAL_TO', sParentContextID);
+									}
+									else if	(sParentColumnText != undefined && sParentContextText != '')
+									{
+										oSearch.addFilter(sParentColumnText, 'STRING_STARTS_WITH', sParentContextText);
+									}
+								}
+								
+								oSearch.sort(aColumns[0], 'asc');
+								oSearch.getResults(function(data){this.search(oParam, data)});
+							}
+						}	
+						else
+						{
+							var aColumns = sColumns.split('-');
+							var aHTML = [];
+							var h = -1;
+							
+							if (oResponse.data.rows.length == 0)
+							{
+								$('#divns1blankspaceViewportControlOptions').hide();
+							}
+							else
+							{
+								aHTML[++h] = '<table class="interfaceSearchLarge">';
+								aHTML[++h] = '<tbody>'
+							
+								$.each(oResponse.data.rows, function() 
+								{ 
+									iColumn = iColumn + 1;
+							
+									if (iColumn == 1)
+									{
+										aHTML[++h] = '<tr class="interfaceSearch">';
+									}
+										
+									if (sColumns.length == 0)
+									{
+										aHTML[++h] = '<td class="interfaceSearch" id="' + sXHTMLInputElementID +
+															'-' + this.id + '">' + this.title + '</td>';
+									}
+									else
+									{
+										aHTML[++h] = '<td class="interfaceSearch" id="' + sXHTMLInputElementID +
+																'-' + this.id + '">' 
+														
+										for (var i = 0; i < aColumns.length; i++)
+										{
+											switch (aColumns[i])
+											{
+											case 'space':
+												aHTML[++h] = ' ';
+												break;
+											case 'comma':
+												aHTML[++h] = ',';
+												break;
+											case 'pipe':
+												aHTML[++h] = '|';
+												break;
+											default:
+												aHTML[++h] = this[aColumns[i]];
+											}
+										}
+										aHTML[++h] = '</td>';
+									}
+							
+									if (iColumn == iMaximumColumns)
+									{
+										aHTML[++h] = '</tr>'
+										iColumn = 0;
+									}	
+								});
+				    	
+								aHTML[++h] = '</tbody></table>';
+					
+								$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+								$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+							
+								$('td.interfaceSearch').click(function(event)
+								{
+									$('#divns1blankspaceViewportControlOptions').hide(200);
+									$.extend(true, oParam, {xhtmlElementID: event.target.id})
+									ns1blankspaceElementOptionsSearch(oParam);
+								});
+							}	
+						}
+					}		
+				},
+
+	start: 		function (sElementId)
+				{
+					sElementId = 'divns1blankspaceViewportControlSearchStatus';
+					$('#' + sElementId).show();
+					$('#' + sElementId).html(ns1blankspace.xhtml.loadingSmall);
+				},
+
+
+	stop:		function (sElementId)
+				{
+					sElementId = 'divns1blankspaceViewportControlSearchStatus';
+					$('#' + sElementId).hide()
+					$('#' + sElementId).html('');
+				}
 }
+
+ns1blankspace.save =
+{
+	send: 		function (sParam, sData, sSuccessMessage)
+				{
+					if (sParam == undefined) {sParam = ''};
+					
+					if (sData != '' && sData.indexOf('&') == 0) {sData = sData.substr(1)};
+					
+					$.ajax(
+					{
+						type: 'POST',
+						url: sParam + '&rf=JSON',
+						data: sData,
+						dataType: 'json',
+						async: false,
+						success: function(data) {this.process(data, sSuccessMessage)}
+					});
+				},
+
+	process: 	function (data, sSuccessMessage)
+				{
+					oResponse = data;
+					
+					if (oResponse.status == 'OK')
+					{
+						ns1blankspaceStatus(sSuccessMessage);
+						ns1blankspace.objectSaveId =  oResponse.id;
+					}
+					else
+					{
+						ns1blankspaceStatus(oResponse.error.errornotes);
+						ns1blankspace.objectSaveId =  -1;
+						return '';
+					}
+				}
+}
+
+ns1blankspace.util =
+{
+	json: 		function (oJSON, sElement, iRow)
+				{
+					oJSON = (oJSON == undefined)?'':oJSON;
+					sElement = (sElement == undefined)?'':asElement;
+					iRow = (iRow == undefined)?0:iRow;
+					
+					if (oJSON.length == 0) return '';
+					
+					if (sElement == '' || aiRow < 0) return '';
+					
+					if (oJSON.data.rows.length > 0)
+					{	return oJSON.data.rows[iRow][sElement];	}
+					else
+					{	return '';}
+				},
+
+	tf2OnOff:	function (bValue)
+				{
+					if (bValue == undefined) {bValue = false}
+					
+					if (bValue)
+					{ 
+						return '1';
+					}
+					else
+					{
+						return '0';
+					}	
+					
+				},
+
+	onOff2TF:	function (sValue)
+				{
+					if (sValue == undefined) {sValue = '0'}
+					
+					if (sValue == '1')
+					{ 
+						return true;
+					}
+					else
+					{
+						return false;
+					}	
+					
+				},
+
+	tf2YN:		function ns1blankspaceTF2YN(bValue)
+				{
+					if (bValue == undefined) {bValue = false}
+					
+					if (bValue)
+					{ 
+						return 'Y';
+					}
+					else
+					{
+						return 'N';
+					}	
+					
+				},
+
+	yn2tf:		function ns1blankspaceYN2TF(sValue)
+				{
+					if (sValue == undefined) {sValue = 'N'}
+					
+					if (sValue == 'Y')
+					{ 
+						return true;
+					}
+					else
+					{
+						return false;
+					}	
+					
+				}
+
+	formatSave:	function (sValue)
+				{
+					if (sValue == undefined || sValue == 'undefined') { sValue = ''; }
+					
+					return encodeURIComponent(sValue)
+
+				},
+
+	fs:			function (sValue) {return this.formatSave(sValue)}
+}
+
+ns1blankspace.search.address =
+{
+
+	show:		function ns1blankspaceAddressSearch(sXHTMLElementID, oParam)
+				{
+					
+					var aSearch = sXHTMLElementID.split('-');
+					var sElementId = aSearch[0];
+					var lElementSearchContext = aSearch[1];	
+					
+					if (lElementSearchContext != undefined)
+					{
+						$('#' + ns1blankspace.xhtml.divID).val(aSearch[2])
+						$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'State')).val(aSearch[3])
+						$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'PostCode')).val(aSearch[4])
+						$('#divns1blankspaceViewportControlOptions').hide();
+					}
+					else
+					{
+						var sParam = '/ondemand/core/?method=CORE_ADDRESS_SEARCH&rf=XML';
+						var sData = '';
+						
+						ns1blankspaceOptionsSetPosition(sXHTMLElementID)
+						
+						//sData += '&postpcde=' + encodeURIComponent((oParam.postcode==undefined?'':oParam.postcode));
+						
+						sData += 'suburblike=' + encodeURIComponent($('#' + ns1blankspace.xhtml.divID).val());
+
+						$.ajax(
+						{
+							type: 'POST',
+							url: sParam,
+							data: sData,
+							dataType: 'json',
+							success: this.process
+						});
+					}
+				},
+
+	process:	function (oResponse)
+				{
+					var iColumn = 0;
+					var aHTML = [];
+					var h = -1;
+					var	iMaximumColumns = 1;
+							
+					if (oResponse.data.rows.length == 0)
+					{
+						$('#divns1blankspaceViewportControlOptions').hide();
+					}
+					else
+					{
+						aHTML[++h] = '<table class="interfaceSearchLarge">';
+						aHTML[++h] = '<tbody>'
+							
+						$.each(oResponse.data.rows, function()
+						{
+							aHTML[++h] = '<tr class="interfaceSearch">';
+										
+							aHTML[++h] = '<td class="interfaceSearch" id="interfaceMainAddressSearch' +
+													'-' + this.id +
+													'-' + this.suburb +
+													'-' + this.state +
+													'-' + this.postcode +
+													'">' +
+													this.suburb + '</td>';
+													
+							aHTML[++h] = '<td class="interfaceSearchSub" id="interfaceMainAddressSearchState' +
+													'-' + this.id + '">' +
+													this.state + '</td>';
+							
+							aHTML[++h] = '<td class="interfaceSearchSub" id="interfaceMainAddressSearchPostCode' +
+													'-' + this.id + '">' +
+													this.postcode + '</td>';
+							
+							aHTML[++h] = '</tr>'
+						});
+				    	
+						aHTML[++h] = '</tbody></table>';
+					
+						$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+						$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+						
+						$('td.interfaceSearch').click(function(event)
+						{
+							$('#divns1blankspaceViewportControlOptions').hide(200);
+							ns1blankspaceAddressSearch(event.target.id);
+						});
+					}	
+							
+				}
+}				
 
 function ns1blankspaceContactEmailSearch(sXHTMLElementID, oParam)
 {
@@ -3312,14 +3286,14 @@ function ns1blankspaceActionAddShow(oParam, oResponse)
 		if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft};
 	}	
 
-	if ($('#divns1blankspaceDialog').attr('onDemandSource') == sXHTMLElementID)
+	if ($('#divns1blankspaceDialog').attr('data-initiator') == sXHTMLElementID)
 	{
 		$('#divns1blankspaceDialog').hide("slide", { direction: "right" }, 500);
-		$('#divns1blankspaceDialog').attr('onDemandSource', '');
+		$('#divns1blankspaceDialog').attr('data-initiator', '');
 	}
 	else
 	{
-		$('#divns1blankspaceDialog').attr('onDemandSource', sXHTMLElementID);
+		$('#divns1blankspaceDialog').attr('data-initiator', sXHTMLElementID);
 	
 		if (iActionID != -1 && oResponse == undefined)
 		{
@@ -3498,10 +3472,10 @@ function ns1blankspaceViewportActionShow(oElement, sActionXHTML, sFunctionAction
 	var aHTML = [];
 	var h = -1;
 
-	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oElement.id)
+	if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
 	{
 		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
 	}
 	else
 	{	
@@ -3510,7 +3484,7 @@ function ns1blankspaceViewportActionShow(oElement, sActionXHTML, sFunctionAction
 			ns1blankspace.xhtml.masterControl = interfaceControlOptions();
 		}
 
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oElement.id);
+		$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
 		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
 		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
@@ -3881,14 +3855,14 @@ function ns1blankspaceViewportOptionsShow(oParam)
 	
 	if (oXHTMLElement != undefined)
 	{
-		if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oXHTMLElement.attr('id') && !bForceShow)
+		if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oXHTMLElement.attr('id') && !bForceShow)
 		{
 			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-			$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+			$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
 		}
 		else
 		{
-			$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oXHTMLElement.attr('id'));
+			$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oXHTMLElement.attr('id'));
 			$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
 			$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 			$('#divns1blankspaceViewportControlOptions').offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft});
@@ -3902,7 +3876,7 @@ function ns1blankspaceViewportOptionsShow(oParam)
 
 function ns1blankspaceViewportOptionsHide()
 {
-	$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+	$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
 	$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
 	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 }

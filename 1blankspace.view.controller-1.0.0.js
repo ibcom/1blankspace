@@ -1395,10 +1395,10 @@ function interfaceContactPersonGroups(oParam, oResponse)
 function interfaceContactPersonGroupsAdd(oParam, oResponse)
 {
 		
-	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == 'spanInterfaceMainContactPersonGroupsAdd')
+	if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == 'spanInterfaceMainContactPersonGroupsAdd')
 	{
 		$('#divns1blankspaceViewportControlOptions').slideUp(500);
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
 	}
 	else
 	{
@@ -1417,7 +1417,7 @@ function interfaceContactPersonGroupsAdd(oParam, oResponse)
 		else
 		{
 			
-			$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', 'spanInterfaceMainContactPersonGroupsAdd')
+			$('#divns1blankspaceViewportControlOptions').attr('data-initiator', 'spanInterfaceMainContactPersonGroupsAdd')
 			
 			var aHTML = [];
 			var h = -1;

@@ -650,10 +650,10 @@ function interfaceMessagingInboxSearchBind()
 		})
 		.click(function() {
 		
-			if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == this.id)
+			if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == this.id)
 			{
 				$('#divns1blankspaceViewportControlOptions').slideUp(500);
-				$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+				$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
 			}
 			else
 			{
@@ -2215,7 +2215,7 @@ function interfaceMessagingEmailSave(oParam)
 	var aID = sID.split('_id_');
 	sMessageId = aID[1];
 	
-	$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', sXHTMLElementID)
+	$('#divns1blankspaceViewportControlOptions').attr('data-initiator', sXHTMLElementID)
 	
 	if (iStep == 1)
 	{

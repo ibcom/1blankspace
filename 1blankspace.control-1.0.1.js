@@ -1171,14 +1171,14 @@ function interfaceControlSetupOptionsBind()
 
 function interfaceControlUserOptionsShow(oElement)
 {
-	if ($('#divns1blankspaceViewportControlOptions').attr('onDemandSource') == oElement.id)
+	if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
 	{
 		$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', '');
+		$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
 	}
 	else
 	{	
-		$('#divns1blankspaceViewportControlOptions').attr('onDemandSource', oElement.id);
+		$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
 		$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
 		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 		$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 70});
@@ -1476,7 +1476,7 @@ function ns1blankspaceUserOptionsChangePassword(oParam)
 	.click(function() {
 		$('#' + sXHTMLElementID).slideUp(500);
 		$('#' + sXHTMLElementID).html('');
-		$('#' + sXHTMLElementID).attr('onDemandSource', '');
+		$('#' + sXHTMLElementID).attr('data-initiator', '');
 	})
 	.css('width', '20px')
 	.css('height', '20px')
@@ -1581,7 +1581,7 @@ function ns1blankspaceUserOptionsCreateSecureKey(oParam, oResponse)
 		.click(function() {
 			$('#' + sXHTMLElementID).slideUp(500);
 			$('#' + sXHTMLElementID).html('');
-			$('#' + sXHTMLElementID).attr('onDemandSource', '');
+			$('#' + sXHTMLElementID).attr('data-initiator', '');
 		})
 		.css('width', '20px')
 		.css('height', '20px')

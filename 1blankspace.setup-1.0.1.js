@@ -395,14 +395,14 @@ function interfaceSetupShow(oParam, oXML)
 		if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft};
 	}	
 
-	if ($('#divns1blankspaceDialog').attr('onDemandSource') == sXHTMLElementID)
+	if ($('#divns1blankspaceDialog').attr('data-initiator') == sXHTMLElementID)
 	{
 		$('#divns1blankspaceDialog').hide("slide", { direction: "up" }, 500);
-		$('#divns1blankspaceDialog').attr('onDemandSource', '');
+		$('#divns1blankspaceDialog').attr('data-initiator', '');
 	}
 	else
 	{
-		$('#divns1blankspaceDialog').attr('onDemandSource', sXHTMLElementID);
+		$('#divns1blankspaceDialog').attr('data-initiator', sXHTMLElementID);
 	
 		if (iActionID != -1 && oXML == undefined)
 		{
