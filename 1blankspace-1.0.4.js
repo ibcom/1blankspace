@@ -95,29 +95,6 @@ String.method('trim', function () {return this.replace(/^\s+|\s+$/g, '');});
 
 var ns1blankspace = {};
 
-ns1blankspace.url = 
-{
-	parameters: function()
-					{
-						var vars = [], hash;
-						var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-						
-						for (var i = 0; i < hashes.length; i++)
-						{
-							hash = hashes[i].split('=');
-							vars.push(hash[0]);
-							vars[hash[0]] = hash[1];
-						};
-						
-						return vars;
-					},
-
-	parameter: 		function(sName)
-					{
-						return $.urlParameters()[sName];
-					}
-}
-
 window.onbeforeunload = function() 
 {
 	if (ns1blankspace.unloadWarning)
@@ -1462,7 +1439,7 @@ ns1blankspace.logon.getPassword =
 }
 
 
-ns1blankspace.logoff = function ()
+ns1blankspace.logOff = function ()
 				{
 					$.ajax(
 					{
@@ -1868,7 +1845,7 @@ ns1blankspace.attachments =
 
 ns1blankspace.setup = 
 {
-	switch:		function ()
+	toggle:		function ()
 				{
 					var aHTML = [];
 					var h = -1;
@@ -1987,7 +1964,7 @@ function ns1blankspaceMainViewportHideLoading(asDivID)
 
 ns1blankspace.status =
 {
-	set: 		function (sStatus)
+	message: 		function (sStatus)
 				{	
 					$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
 							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
@@ -2582,7 +2559,30 @@ ns1blankspace.util =
 					sEndpoint = aMethod[0];
 					
 					return sBaseEndpoint + (aMethod[0]).toLowerCase() + '/?method=' + asMethod;
-				}
+				},
+
+	uri: 
+				{
+					parameters: 	function()
+									{
+										var vars = [], hash;
+										var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+										
+										for (var i = 0; i < hashes.length; i++)
+										{
+											hash = hashes[i].split('=');
+											vars.push(hash[0]);
+											vars[hash[0]] = hash[1];
+										};
+										
+										return vars;
+									},
+
+					parameter: 		function(sName)
+									{
+										return $.urlParameters()[sName];
+									}
+				}			
 }
 
 ns1blankspace.search.address =

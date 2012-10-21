@@ -1668,117 +1668,119 @@ ns1blankspace.contactPerson =
 								}
 				},								
 
-	favourites: 	{
+	favourites: {
 						search: {
 									show: 		function interfaceContactFavourites(oParam, oResponse)
-						{
-							var sXHTMLElementID;
-							
-							if (oParam != undefined)
-							{
-								if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-							}
+												{
+													var sXHTMLElementID;
+													
+													if (oParam != undefined)
+													{
+														if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+													}
 
-							var aXHTMLElementId = sXHTMLElementID.split('-')
-							
-							if (oResponse == undefined)
-							{
-							
-								$('#tdInterfaceMainContactPersonByGroupColumn2').html(ns1blankspace.xhtml.loading);
-								
-								var oSearch = new AdvancedSearch();
-								oSearch.endPoint = 'contact';
-								oSearch.method = 'CONTACT_PERSON_SEARCH';
-								oSearch.addField('firstname,surname');
-								oSearch.addFilter('', 'IS_FAVOURITE', '');
-								oSearch.rows = 20;
-								oSearch.sort('firstname', 'asc');
-								oSearch.getResults(function(data) {interfaceContactFavourites(oParam, data)});
-								
-							}
-							else
-							{
-								var aHTML = [];
-								
-								if (oResponse.data.rows.length == 0)
-								{
-									aHTML.push('<table id="tableInterfaceNewsHomeMostLikely">');
-									aHTML.push('<tr class="interfaceMainCaption">' +
-														'<td class="interfaceMainRowNothing">No contacts.</td></tr>');
-									aHTML.push('</tbody></table>');
+													var aXHTMLElementId = sXHTMLElementID.split('-')
+													
+													if (oResponse == undefined)
+													{
+													
+														$('#tdInterfaceMainContactPersonByGroupColumn2').html(ns1blankspace.xhtml.loading);
+														
+														var oSearch = new AdvancedSearch();
+														oSearch.endPoint = 'contact';
+														oSearch.method = 'CONTACT_PERSON_SEARCH';
+														oSearch.addField('firstname,surname');
+														oSearch.addFilter('', 'IS_FAVOURITE', '');
+														oSearch.rows = 20;
+														oSearch.sort('firstname', 'asc');
+														oSearch.getResults(function(data) {interfaceContactFavourites(oParam, data)});
+														
+													}
+													else
+													{
+														var aHTML = [];
+														
+														if (oResponse.data.rows.length == 0)
+														{
+															aHTML.push('<table id="tableInterfaceNewsHomeMostLikely">');
+															aHTML.push('<tr class="interfaceMainCaption">' +
+																				'<td class="interfaceMainRowNothing">No contacts.</td></tr>');
+															aHTML.push('</tbody></table>');
+														}
+														else
+														{		
+															
+															aHTML.push('<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">');
+																
+															aHTML.push('<table id="tableContactsFavouritesList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">');
+															aHTML.push('<tbody>');
+															
+															aHTML.push('<tr class="interfaceMainCaption">');
+															aHTML.push('<td class="interfaceMainCaption">First Name</td>');
+															aHTML.push('<td class="interfaceMainCaption">Last Name</td>');
+															aHTML.push('</tr>');
+															
+															$.each(oResponse.data.rows, function() {
+															
+																aHTML.push(interfaceContactFavouritesRow(this));
+															});
+															
+															aHTML.push('</tbody></table>');
+														}
+														
+														ns1blankspacePaginationList(
+														{
+															xhtmlElementID: sXHTMLElementID,
+															xhtmlContext: 'ContactFavourites',
+															xhtml: aHTML.join(''),
+															showMore: (oResponse.morerows == "true"),
+															more: oResponse.moreid,
+															rows: ns1blankspace.option.defaultRows,
+															functionShowRow: interfaceContactFavouritesRow,
+															functionNewPage: 'interfaceContactFavouritesBind()',
+															type: 'json'
+														}); 	
+														
+														interfaceContactFavouritesBind();
+													}	
+												},	
+
+									row: 		function interfaceContactFavouritesRow(oRow)
+												{
+													var aHTML = [];
+													var h = -1;
+													
+													aHTML[++h] = '<tr class="interfaceMainRow">';
+																			
+													aHTML[++h] = '<td id="tdNewsGroupsList_contact-' + oRow.id + '" class="interfaceMainRow">' +
+																			oRow.firstname + '</td>';
+																			
+													aHTML[++h] = '<td id="tdNewsGroupsList_activity-' + oRow.id + '" class="interfaceMainRow">' +
+																			oRow.surname + '</td>';
+																			
+													aHTML[++h] = '<td id="tdContactFavourites-' + oRow.id + '" class="interfaceMainRowOptionsSelect interfaceContactFavouritesSelect">&nbsp;</td>';						
+													
+													aHTML[++h] = '</tr>';
+																
+													return aHTML.join('');
+												},
+
+									bind: 		function interfaceContactFavouritesBind()
+												{
+													$('.interfaceContactFavouritesSelect').button( {
+																text: false,
+																icons: {
+																	primary: "ui-icon-play"
+																}
+													})
+													.click(function() {
+														interfaceContactPersonMasterViewport({showHome: false});
+														interfaceContactPersonSearch(this.id)
+													})
+													.css('width', '15px')
+													.css('height', '20px')
+													
+												}	
 								}
-								else
-								{		
-									
-									aHTML.push('<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">');
-										
-									aHTML.push('<table id="tableContactsFavouritesList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">');
-									aHTML.push('<tbody>');
-									
-									aHTML.push('<tr class="interfaceMainCaption">');
-									aHTML.push('<td class="interfaceMainCaption">First Name</td>');
-									aHTML.push('<td class="interfaceMainCaption">Last Name</td>');
-									aHTML.push('</tr>');
-									
-									$.each(oResponse.data.rows, function() {
-									
-										aHTML.push(interfaceContactFavouritesRow(this));
-									});
-									
-									aHTML.push('</tbody></table>');
-								}
-								
-								ns1blankspacePaginationList(
-								{
-									xhtmlElementID: sXHTMLElementID,
-									xhtmlContext: 'ContactFavourites',
-									xhtml: aHTML.join(''),
-									showMore: (oResponse.morerows == "true"),
-									more: oResponse.moreid,
-									rows: ns1blankspace.option.defaultRows,
-									functionShowRow: interfaceContactFavouritesRow,
-									functionNewPage: 'interfaceContactFavouritesBind()',
-									type: 'json'
-								}); 	
-								
-								interfaceContactFavouritesBind();
-							}	
-						}	
-
-favorites.search.show.row: function interfaceContactFavouritesRow(oRow)
-{
-	var aHTML = [];
-	var h = -1;
-	
-	aHTML[++h] = '<tr class="interfaceMainRow">';
-							
-	aHTML[++h] = '<td id="tdNewsGroupsList_contact-' + oRow.id + '" class="interfaceMainRow">' +
-							oRow.firstname + '</td>';
-							
-	aHTML[++h] = '<td id="tdNewsGroupsList_activity-' + oRow.id + '" class="interfaceMainRow">' +
-							oRow.surname + '</td>';
-							
-	aHTML[++h] = '<td id="tdContactFavourites-' + oRow.id + '" class="interfaceMainRowOptionsSelect interfaceContactFavouritesSelect">&nbsp;</td>';						
-	
-	aHTML[++h] = '</tr>';
-				
-	return aHTML.join('');
-}	
-
-favorites.search.show.bind: function interfaceContactFavouritesBind()
-{
-	$('.interfaceContactFavouritesSelect').button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-play"
 				}
-	})
-	.click(function() {
-		interfaceContactPersonMasterViewport({showHome: false});
-		interfaceContactPersonSearch(this.id)
-	})
-	.css('width', '15px')
-	.css('height', '20px')
-	
-}	
-
+}														

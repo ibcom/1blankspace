@@ -1,0 +1,52 @@
+ns1blankspace
+
+	.version
+
+	.inputDetected
+	.unloadWarning
+	.systemAdmin
+	.okToSave
+	.setupShow
+	.param
+
+	.object
+	.objectName
+	.objectContext
+	.objectContextData
+	.objectContextSearch
+
+	.option.showSpeed
+	.option.hideSpeed
+	.option.typingWait
+	.option.logonStayOnDocument
+	.option.setFocus 
+	.option.richTextEditing
+	.option.setupURI
+
+	.timer.messaging
+	.timer.delay
+
+	.counter.editor
+
+	.xhtml.masterControl
+	.xhtml.action
+	.xhtml.home
+	.xhtml.divID
+
+	.user.commonname
+	.user.email
+	.user.networkGroups
+	.user.id
+	.user.contactperson
+	.user.networkGroups
+		
+	.data.searchSource
+
+	.debug.appContext
+
+	.history.viewport 
+	.history.currentIndex
+	.history.lastDestinationInstruction
+	.history.list
+	
+	
