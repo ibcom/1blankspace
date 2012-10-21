@@ -237,7 +237,7 @@ ns1blankspace.contactPerson =
 				},
 
 	search: 	{
-					show: 	function (sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementId, oParam)
 								{
 									
 									var aSearch = sXHTMLElementId.split('-');

@@ -8,8 +8,8 @@ var ns1blankspace.xhtml.loading = '<img class="interfaceLoading" src="/jscripts/
 var ns1blankspace.xhtml.loadingSmall = '<img class="interfaceLoadingSmall" id="imgInterfaceLoadingSmall" src="/jscripts/1blankspace.loading.square.10.gif">';
 var ns1blankspace.option.defaultRows = 20;
 var ns1blankspace.xhtml.editorCSS = '';
-var ns1blankspace.option.defaultViewport = "People";
-var ns1blankspace.option.defaultSetupViewport = "Website";
+var ns1blankspace.option.defaultView = "People";
+var ns1blankspace.option.defaultSetupView = "Website";
 
 var ns1blankspace.data.object.contactperson = 32;
 var ns1blankspace.data.object.contactbusiness = 12;
@@ -82,7 +82,7 @@ function interfaceControlSecurity(sUserNetworkGroups)
 	//Change the default viewport control menu option
 	if (gbRoleSpecial1) 
 	{
-		ns1blankspace.option.defaultViewport = "Special 1"
+		ns1blankspace.option.defaultView = "Special 1"
 	}	
 	
 }

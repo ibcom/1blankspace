@@ -1269,7 +1269,7 @@ function ns1blankspaceViewportShow(oResponse)
 				primary: "ui-icon-grip-dotted-vertical",
 				secondary: "ui-icon-triangle-1-s"
 			},
-			label: ns1blankspace.option.defaultViewport
+			label: ns1blankspace.option.defaultView
 		})
 		.click(function() 
 		{
@@ -1908,7 +1908,7 @@ function ns1blankspaceViewportSetup()
 				primary: "ui-icon-grip-dotted-vertical",
 				secondary: "ui-icon-triangle-1-s"
 			},
-			label: ns1blankspace.option.defaultViewport
+			label: ns1blankspace.option.defaultView
 		})
 		.click(function() 
 		{
@@ -1927,7 +1927,7 @@ function ns1blankspaceViewportSetup()
 		$('#divns1blankspaceViewportControlSet')
 		.button(
 		{
-			label: ns1blankspace.option.defaultSetupViewport
+			label: ns1blankspace.option.defaultSetupView
 		})
 		.click(function() 
 		{

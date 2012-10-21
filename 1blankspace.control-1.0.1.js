@@ -14,8 +14,8 @@ ns1blankspace.xhtml.loadingSmall = '<img class="interfaceLoadingSmall" id="imgIn
 ns1blankspace.xhtml.editorCSS = '';
 
 ns1blankspace.option.defaultRows = 20;
-ns1blankspace.option.defaultViewport = "People";
-ns1blankspace.option.defaultSetupViewport = "Website";
+ns1blankspace.option.defaultView = "People";
+ns1blankspace.option.defaultSetupView = "Website";
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];
@@ -33,7 +33,7 @@ if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 ns1blankspace.financial.summaryUseTemplate = false; 
 ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html';
 
-ns1blankspace.viewports = 
+ns1blankspace.views = 
 [
 	{
 		title: "People",
@@ -295,7 +295,7 @@ function interfaceControlSecurity(oParam, oResponse)
 
 	else if (iStep == 3)
 	{
-		$(ns1blankspace.viewports).each(function(i, k)
+		$(ns1blankspace.views).each(function(i, k)
 		{
 			var oMethods = $.grep(ns1blankspace.userMethods, function (a) {return (a.accessmethodtext).indexOf(k.endpoint) != -1;})	
 			if (oMethods.length == 0) {this.show = false};
@@ -304,7 +304,7 @@ function interfaceControlSecurity(oParam, oResponse)
 
 	else if (iStep == 4)
 	{
-		//manipulate ns1blankspace.viewports
+		//manipulate ns1blankspace.views
 
 	}	
 	
@@ -316,7 +316,7 @@ function interfaceControlSecurity(oParam, oResponse)
 	//Change the default viewport control menu option
 	if (gbRoleSpecial1) 
 	{
-		ns1blankspace.option.defaultViewport = "Special 1"
+		ns1blankspace.option.defaultView = "Special 1"
 	}	
 	
 }
@@ -350,7 +350,7 @@ function interfaceControlOptions()
 
 		var aHTMLViewport = [];
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'People';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'People';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlContactPerson" class="interfaceViewportMasterControl">' +
@@ -360,7 +360,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}			
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Businesses';})[0];	
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Businesses';})[0];	
 		if (oViewport ? oViewport.show : false)
 		{	
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlContactBusiness" class="interfaceViewportMasterControl">' +
@@ -370,7 +370,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}	
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Opportunities';})[0];	
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Opportunities';})[0];	
 		if (oViewport ? oViewport.show : false)
 		{	
 				aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlOpportunity" class="interfaceViewportMasterControl">' +	
@@ -381,7 +381,7 @@ function interfaceControlOptions()
 					'</tr>');	
 		}
 		
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Email';})[0];		
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Email';})[0];		
 		if (oViewport ? oViewport.show : false)
 		{	
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlMessaging" class="interfaceViewportMasterControl">' +	
@@ -392,7 +392,7 @@ function interfaceControlOptions()
 					'</tr>');
 		}
 		
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Conversations';})[0];	
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Conversations';})[0];	
 		if (oViewport ? oViewport.show : false)
 		{
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlMessagingConversation" class="interfaceViewportMasterControl">' +	
@@ -421,7 +421,7 @@ function interfaceControlOptions()
 
 		var aHTMLViewport = [];
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Projects';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Projects';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlProject" class="interfaceViewportMasterControl">' +
@@ -431,7 +431,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}		
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Project Tasks';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Tasks';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlProjectTask" class="interfaceViewportMasterControl">' +
@@ -441,7 +441,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}		
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Actions';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Actions';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlAction" class="interfaceViewportMasterControl">' +				
@@ -470,7 +470,7 @@ function interfaceControlOptions()
 					
 		var aHTMLViewport = [];
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Documents';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Documents';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlDocument" class="interfaceViewportMasterControl">' +
@@ -480,7 +480,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}		
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'News';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'News';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlNews" class="interfaceViewportMasterControl">' +
@@ -490,7 +490,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}		
 		
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Events';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Events';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlEvent" class="interfaceViewportMasterControl">' +
@@ -518,7 +518,7 @@ function interfaceControlOptions()
 		
 		var aHTMLViewport = [];
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Products';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Products';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlProduct" class="interfaceViewportMasterControl">' +
@@ -528,7 +528,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}		
 		
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Orders';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Orders';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlOrder" class="interfaceViewportMasterControl">' +
@@ -556,7 +556,7 @@ function interfaceControlOptions()
 
 		var aHTMLViewport = [];
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Financials';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Financials';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancial" class="interfaceViewportMasterControl">' +
@@ -566,7 +566,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}		
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Bank Accounts';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Bank Accounts';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialBankAccount" class="interfaceViewportMasterControl">' +
@@ -576,7 +576,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}	
 		
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Invoices';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Invoices';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialInvoice" class="interfaceViewportMasterControl">' +
@@ -586,7 +586,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Expenses';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Expenses';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialExpense" class="interfaceViewportMasterControl">' +
@@ -596,7 +596,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Receipts';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Receipts';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialReceipt" class="interfaceViewportMasterControl">' +
@@ -606,7 +606,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}	
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Payments';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Payments';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialPayment" class="interfaceViewportMasterControl">' +
@@ -616,7 +616,7 @@ function interfaceControlOptions()
 					'</td></tr>');
 		}	
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Payroll';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Payroll';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialPayroll" class="interfaceViewportMasterControl">' +
@@ -644,7 +644,7 @@ function interfaceControlOptions()
 
 		var aHTMLViewport = [];
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Reporting';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Reporting';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlReport" class="interfaceViewportMasterControl">' +
@@ -655,7 +655,7 @@ function interfaceControlOptions()
 						'</tr>');
 		}		
 		
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Tax';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Tax';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
@@ -666,7 +666,7 @@ function interfaceControlOptions()
 						'</tr>');
 		}
 
-		var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Structures';})[0];
+		var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures';})[0];
 		if (oViewport ? oViewport.show : false)
 		{		
 			aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlStructure" class="interfaceViewportMasterControl">' +
@@ -901,7 +901,7 @@ function interfaceControlSetupOptions()
 
 	var aHTMLViewport = [];
 
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Websites';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Websites';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
@@ -911,7 +911,7 @@ function interfaceControlSetupOptions()
 					'</td></tr>');
 	}
 
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Structures';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupStructures" class="interfaceViewportMasterControl">' +	
@@ -921,7 +921,7 @@ function interfaceControlSetupOptions()
 					'</td></tr>');
 	}
 
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Automation';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Automation';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +	
@@ -931,7 +931,7 @@ function interfaceControlSetupOptions()
 					'</td></tr>');
 	}
 
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Imports';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Imports';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +	
@@ -959,7 +959,7 @@ function interfaceControlSetupOptions()
 
 	var aHTMLViewport = [];
 
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Financials';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Financials';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +	
@@ -969,7 +969,7 @@ function interfaceControlSetupOptions()
 					'</td></tr>');
 	}
 
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Businesses';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Businesses';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +	
@@ -979,7 +979,7 @@ function interfaceControlSetupOptions()
 					'</td></tr>');
 	}
 
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'People';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'People';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupContactPersonGroup" class="interfaceViewportMasterControl">' +	
@@ -989,7 +989,7 @@ function interfaceControlSetupOptions()
 					'</td></tr>');
 	}
 
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Projects';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Projects';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +	
@@ -999,7 +999,7 @@ function interfaceControlSetupOptions()
 					'</td></tr>');
 	}
 
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Project Tasks';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Tasks';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupProjectTask" class="interfaceViewportMasterControl">' +	
@@ -1028,7 +1028,7 @@ function interfaceControlSetupOptions()
 
 	var aHTMLViewport = [];
 					
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'My Account';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'My Account';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupSpace" class="interfaceViewportMasterControl">' +	
@@ -1038,7 +1038,7 @@ function interfaceControlSetupOptions()
 					'</td></tr>');
 	}
 
-	var oViewport = $.grep(ns1blankspace.viewports, function (a) {return a.title == 'Support';})[0];
+	var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Support';})[0];
 	if (oViewport ? oViewport.show : false)
 	{
 		aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSupportIssue" class="interfaceViewportMasterControl">' +	
