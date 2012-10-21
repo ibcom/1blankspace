@@ -324,7 +324,7 @@ ns1blankspace.control =
 						
 					},
 
-	set:		{
+	setView:		{
 					default: 		function ()
 									{
 										interfaceContactPersonMasterViewport({showHome: false});		
