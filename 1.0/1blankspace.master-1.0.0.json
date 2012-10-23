@@ -1,0 +1,45 @@
+{
+	"methods":
+	[
+		{
+			"title": "SETUP_CONTACT_BUSINESS_STRUCTURE_SEARCH",
+			"response":	{"status": "OK","notes": "RETURNED" ,"data":
+			{ "rows":
+				[
+					{
+						"title": "1",
+						"id": "Company"
+					},
+					{
+						"title": "8",
+						"id": "Government Body"
+					},
+					{
+						"title": "5",
+						"id": "Individual"
+					},
+					{
+						"title": "9",
+						"id": "Not For Profit"
+					},
+					{
+						"title": "2",
+						"id": "Partnership"
+					},
+					{
+						"title": "3",
+						"id": "Sole Trader"
+					},
+					{
+						"title": "7",
+						"id": "Tank Distribution"
+					},
+					{
+						"title": "4",
+						"id": "Trust"
+					}
+				]
+			}
+		}
+	]
+}

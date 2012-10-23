@@ -1,0 +1,863 @@
+function interfaceFinancialMasterViewport(aParam)
+{
+	var bShowHome = true
+	
+	if (aParam != undefined)
+	{
+		if (aParam.showHome != undefined) {bShowHome = aParam.showHome}	
+	}
+
+	giObject = -1;
+	goObjectContext = undefined;
+	gsObjectName = 'Financials';
+	giObjectContext = -1;
+	
+	if (bShowHome)
+	{
+		interfaceMasterViewportDestination({
+			newDestination: 'interfaceFinancialMasterViewport({showHome: true});',
+			move: false
+			})		
+	}	
+			
+	interfaceMasterReset();
+	
+	$('#divInterfaceMasterViewportControlSet').button(
+	{
+		label: "Financials"
+	});
+	
+	$('#inputInterfaceMasterViewportControlSearch').keyup(function(event)
+	{
+		if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
+        giKeyPressTimeoutId = setTimeout("interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch')", giWaitForStop);
+	});
+	
+	$('#spanInterfaceMasterViewportControlSearch').click(function(event)
+	{
+		interfaceFinancialSearch('inputInterfaceMasterViewportControlSearch');
+	});
+	
+	$('#spanInterfaceMasterViewportControlSearchOptions').click(function(event)
+	{
+		interfaceFinancialSearchOptions();
+	});
+	
+	$('#spanInterfaceMasterViewportControlNew').click(function(event)
+	{
+		interfaceFinancialNew();
+	})
+	
+	$('#spanInterfaceMasterViewportControlNewOptions').click(function(event)
+	{
+		interfaceFinancialNewOptions();
+	});
+	
+	$('#spanInterfaceMasterViewportControlAction').click(function(event)
+	{
+		interfaceFinancialSave();
+	});
+	
+	$('#spanInterfaceMasterViewportControlActionOptions').click(function(event)
+	{
+		interfaceFinancialSaveOptions();
+	});
+	
+	$('#spanInterfaceMasterViewportControlSetup').click(function(event)
+	{
+		interfaceFinancialSetup();
+	});
+	
+	$('#spanInterfaceMasterViewportControlSetupOptions').click(function(event)
+	{
+		interfaceFinancialSetupOptions();
+	});
+	
+	$('#spanInterfaceMasterViewportControlHelp').click(function(event)
+	{
+		interfaceFinancialHelp();
+	});
+	
+	$('#spanInterfaceMasterViewportControlHelpOptions').click(function(event)
+	{
+		interfaceFinancialHelpOptions();
+	});
+	
+	$('td.interfaceViewportMasterControlBrowse').click(function(event)
+	{
+		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+	});
+	
+	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
+	{
+		interfaceFinancialSearch(event.target.id, {source: giSearchSource_BROWSE});
+	});
+	
+	if (gbSetFocus) {$('#inputInterfaceMasterViewportControlSearch').focus()};
+	if (bShowHome) {interfaceFinancialHomeShow()};	
+}
+
+function interfaceFinancialHomeShow()
+{	
+	var aHTML = [];
+	var h = -1;
+				
+	aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
+	aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
+					'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
+					gsLoadingXHTML + 
+					'</td>' +
+					'</tr>';
+	aHTML[++h] = '</table>';					
+	
+	$('#divInterfaceMain').html(aHTML.join(''));
+	
+	var aHTML = [];
+	var h = -1;
+				
+	aHTML[++h] = '<table>';
+	aHTML[++h] = '<tr>' +
+					'<td id="interfaceMasterViewportFinancialLarge" class="interfaceMasterViewportImageLarge">' +
+					'&nbsp;' + 
+					'</td>' +
+					'</tr>';
+	aHTML[++h] = '</table>';		
+	
+	aHTML[++h] = '<table>';
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlSummary" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl">Summary</td>' +
+				'</tr>';	
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlBankAccount" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlBankAccount" class="interfaceViewportControl">Bank Accounts</td>' +
+				'</tr>';	
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlDebtors" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlDebtors" class="interfaceViewportControl">Debtors</td>' +
+				'</tr>';	
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlCreditors" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlCreditors" class="interfaceViewportControl">Creditors</td>' +
+				'</tr>';	
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlPL" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlPL" class="interfaceViewportControl">Profit & Loss</td>' +
+				'</tr>';	
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlBS" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlBS" class="interfaceViewportControl">Balance Sheet</td>' +
+				'</tr>';	
+	
+	aHTML[++h] = '<tr id="trInterfaceViewportControlUnallocated" class="interfaceViewportControl">' +
+				'<td id="tdInterfaceViewportControlUnallocated" class="interfaceViewportControl">Unallocated</td>' +
+				'</tr>';	
+				
+	aHTML[++h] = '</table>';		
+	
+	$('#divInterfaceViewportControl').html(aHTML.join(''));	
+	
+	var aHTML = [];
+	var h = -1;
+	
+	aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainBankAccount" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainDebtors" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainCreditors" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainPL" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainBS" class="divInterfaceViewportMain"></div>';
+	aHTML[++h] = '<div id="divInterfaceMainUnallocated" class="divInterfaceViewportMain"></div>';
+	
+	$('#divInterfaceMain').html(aHTML.join(''));
+	
+	$('#tdInterfaceViewportControlSummary').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+		interfaceFinancialSummary();
+	});
+	
+	$('#tdInterfaceViewportControlBankAccount').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainBankAccount");
+		interfaceFinancialBankAccount();
+	});	
+	
+	$('#tdInterfaceViewportControlDebtors').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainDebtors");
+		interfaceFinancialDebtors();
+	});	
+		
+	$('#tdInterfaceViewportControlCreditors').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainCreditors");
+		interfaceFinancialCreditors();
+	});	
+	
+	$('#tdInterfaceViewportControlPL').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainPL");
+		interfaceFinancialProfitLoss();
+	});	
+	
+	$('#tdInterfaceViewportControlBS').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainBS");
+		interfaceFinancialBalanceSheet();
+	});	
+	
+	$('#tdInterfaceViewportControlUnallocated').click(function(event)
+	{
+		interfaceMasterMainViewportShow("#divInterfaceMainUnallocated");
+		interfaceFinancialUnallocated();
+	});	
+	
+	$('#tdInterfaceViewportControlSummary').addClass('interfaceViewportControlHighlight');
+	interfaceMasterMainViewportShow("#divInterfaceMainSummary");
+	interfaceFinancialSummary();
+}
+
+function interfaceFinancialSummary(aParam, oResponse)
+{
+
+	if (oResponse == undefined)
+	{
+
+		var sParam = 'method=FINANCIAL_PROFIT_LOSS_SEARCH&rf=JSON&rows=1';
+	
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/financial/?' + sParam,
+			dataType: 'json',
+			success: function(data) {interfaceFinancialSummary(aParam, data)}
+		});
+		
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
+		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
+					'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
+						'</td>' +
+						'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
+						'</td>' +
+						'</tr>';
+		aHTML[++h] = '</table>';				
+		
+		$('#divInterfaceMainSummary').html(aHTML.join(''));	
+		
+		var aHTML = [];
+		var h = -1;
+	
+		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+		
+		//parseFloat(oResponse.TotalSales).toFixed(2) +
+		
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Sales</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +	
+						(oResponse.TotalSales).formatMoney(2, '.', ',') +
+						'</td></tr>';
+		
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Cost of Sales</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
+						(oResponse.TotalCostOfSales).formatMoney(2, '.', ',') +
+						'</td></tr>';
+		
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Gross Margin</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
+						(oResponse.GrossMargin).formatMoney(2, '.', ',') +
+						'</td></tr>';
+		
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Operating Expenses</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
+						(oResponse.TotalOperationalExpenses).formatMoney(2, '.', ',') +
+						'</td></tr>';
+						
+		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Net Margin</td></tr>' +
+						'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
+						(oResponse.NetMargin).formatMoney(2, '.', ',') +
+						'</td></tr>';			
+			
+		aHTML[++h] = '</table>';					
+		
+		$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''))
+	
+	}
+}
+
+function interfaceFinancialDebtors(aParam, oResponse)
+{
+
+	if (oResponse == undefined)
+	{
+
+		var sParam = 'method=FINANCIAL_DEBTOR_SEARCH&rf=JSON';
+	
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/financial/?' + sParam,
+			dataType: 'json',
+			success: function(data) {interfaceFinancialDebtors(aParam, data)}
+		});
+		
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
+			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">Good news and band news, in that no debtors.  So good that no one owes you money, but bad in that no one owes you money.</td>';
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</table>';
+		}
+		else
+		{
+		
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			
+			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Debtor</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount Owed</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Date</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			var oRows = oResponse.data.rows;
+			
+			$(oRows).each(function() 
+			{
+				aHTML[++h] = interfaceFinancialDebtorsRow(this);
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+		}
+		
+		interfaceMasterPaginationList(
+		   {
+			type: 'JSON',
+			xhtmlElementID: 'divInterfaceMainDebtors',
+			xhtmlContext: 'Debtors',
+			xhtml: aHTML.join(''),
+			showMore: (oResponse.morerows == "true"),
+			more: oResponse.moreid,
+			rows: giReturnRows,
+			functionShowRow: interfaceFinancialDebtorsRow,
+			functionOpen: undefined,
+			functionNewPage: ''
+		   }); 	
+	}
+}
+
+function interfaceFinancialDebtorsRow(oRow)
+{
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<tr class="interfaceMainRow">';
+				
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + 'xx' + '" class="interfaceMainRow">' +
+							oRow.debtorname + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Total-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
+							oRow.total + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_LastReceiptDate-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;color:#A0A0A0;">' +
+							oRow.lastreceiptdate + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_LastReceiptAmount-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;color:#A0A0A0;">' +
+							oRow.lastreceiptamount + '</td>';
+	
+	aHTML[++h] = '</tr>'
+	
+	return aHTML.join('');
+	
+}
+
+function interfaceFinancialCreditors(aParam, oResponse)
+{
+
+	if (oResponse == undefined)
+	{
+
+		var sParam = 'method=FINANCIAL_CREDITOR_SEARCH&rf=JSON';
+	
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/financial/?' + sParam,
+			dataType: 'json',
+			success: function(data) {interfaceFinancialCreditors(aParam, data)}
+		});
+		
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
+			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">You don\'t owe anyone any money.</td>';
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</table>';
+		}
+		else
+		{
+		
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			
+			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Creditor</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount To Be Paid</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;color:#A0A0A0;">Last Payment Date</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;color:#A0A0A0;">Last Payment Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			var oRows = oResponse.data.rows;
+			
+			$(oRows).each(function() 
+			{
+				aHTML[++h] = interfaceFinancialCreditorsRow(this);
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+		}
+		
+		interfaceMasterPaginationList(
+		   {
+			type: 'JSON',
+			xhtmlElementID: 'divInterfaceMainCreditors',
+			xhtmlContext: 'Creditors',
+			xhtml: aHTML.join(''),
+			showMore: (oResponse.morerows == "true"),
+			more: oResponse.moreid,
+			rows: giReturnRows,
+			functionShowRow: interfaceFinancialDebtorsRow,
+			functionOpen: undefined,
+			functionNewPage: ''
+		   }); 	
+	}
+}
+
+function interfaceFinancialCreditorsRow(oRow)
+{
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<tr class="interfaceMainRow">';
+				
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + 'xx' + '" class="interfaceMainRow">' +
+							oRow.creditorname + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Total-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
+							oRow.total + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_LastReceiptDate-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;color:#A0A0A0;">' +
+							oRow.lastpaymentdate + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_LastReceiptAmount-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;color:#A0A0A0;">' +
+							oRow.lastpaymentamount + '</td>';
+	
+	aHTML[++h] = '</tr>'
+	
+	return aHTML.join('');
+	
+}
+
+function interfaceFinancialProfitLoss(aParam, oResponse)
+{
+
+	if (oResponse == undefined)
+	{
+
+		var sParam = 'method=FINANCIAL_PROFIT_LOSS_SEARCH&rf=JSON';
+	
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/financial/?' + sParam,
+			dataType: 'json',
+			success: function(data) {interfaceFinancialProfitLoss(aParam, data)}
+		});
+		
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
+			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">Sorry nothing to report, add an invoice or expense and you will be able to see how your going.</td>';
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</table>';
+		}
+		else
+		{
+		
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			
+			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Account</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;color:#A0A0A0;">Percentage</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			var oRows = oResponse.data.rows;
+			
+			$(oRows).each(function() 
+			{
+				aHTML[++h] = interfaceFinancialProfitLossRow(this);
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+		}
+		
+		interfaceMasterPaginationList(
+		   {
+			type: 'JSON',
+			xhtmlElementID: 'divInterfaceMainPL',
+			xhtmlContext: 'Creditors',
+			xhtml: aHTML.join(''),
+			showMore: (oResponse.morerows == "true"),
+			more: oResponse.moreid,
+			rows: 100,
+			functionShowRow: interfaceFinancialProfitLossRow,
+			functionOpen: undefined,
+			functionNewPage: ''
+		   }); 	
+	}
+}
+
+function interfaceFinancialProfitLossRow(oRow)
+{
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<tr class="interfaceMainRow">';
+				
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + 'xx' + '" class="interfaceMainRow">' +
+							oRow.financialaccounttext + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Total-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
+							oRow.total + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_LastReceiptDate-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;color:#A0A0A0;">' +
+							oRow.percentage + '</td>';
+	
+	aHTML[++h] = '</tr>'
+	
+	return aHTML.join('');
+	
+}
+
+function interfaceFinancialBalanceSheet(aParam, oResponse)
+{
+
+	if (oResponse == undefined)
+	{
+
+		var dEnd = Date.today();
+		var sParam = 'method=FINANCIAL_BALANCE_SHEET_SEARCH&rf=JSON';
+		sParam += '&enddate=' + interfaceMasterFormatSave($.fullCalendar.formatDate(dEnd, "dd MMM yyyy"));
+	
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/financial/?' + sParam,
+			dataType: 'json',
+			success: function(data) {interfaceFinancialBalanceSheet(aParam, data)}
+		});
+		
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
+			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">Sorry nothing to report, add an invoice or expense and you will be able to see how your going.</td>';
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</table>';
+		}
+		else
+		{
+		
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			
+			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Account</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			var oRows = oResponse.data.rows;
+			
+			$(oRows).each(function() 
+			{
+				aHTML[++h] = interfaceFinancialBalanceSheetRow(this);
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+		}
+		
+		interfaceMasterPaginationList(
+		   {
+			type: 'JSON',
+			xhtmlElementID: 'divInterfaceMainBS',
+			xhtmlContext: 'BalanceSheet',
+			xhtml: aHTML.join(''),
+			showMore: (oResponse.morerows == "true"),
+			more: oResponse.moreid,
+			rows: 100,
+			functionShowRow: interfaceFinancialBalanceSheetRow,
+			functionOpen: undefined,
+			functionNewPage: ''
+		   }); 	
+	}
+}
+
+function interfaceFinancialBalanceSheetRow(oRow)
+{
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<tr class="interfaceMainRow">';
+				
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + 'xx' + '" class="interfaceMainRow">' +
+							oRow.financialaccounttext + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Total-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
+							oRow.amount + '</td>';
+	
+	aHTML[++h] = '</tr>'
+	
+	return aHTML.join('');
+	
+}
+
+function interfaceFinancialBankAccount(aParam, oResponse)
+{
+
+	if (oResponse == undefined)
+	{
+		var sParam = 'method=FINANCIAL_BANK_ACCOUNT_SEARCH&rf=JSON';
+	
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/financial/?' + sParam,
+			dataType: 'json',
+			success: function(data) {interfaceFinancialBankAccount(aParam, data)}
+		});
+		
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
+			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No bank accounts set up.</td>';
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</table>';
+		}
+		else
+		{
+		
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			
+			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Last Reconciled Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Last Reconciled</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			var oRows = oResponse.data.rows;
+			
+			$(oRows).each(function() 
+			{
+				aHTML[++h] = interfaceFinancialBankAccountRow(this);
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+		}
+		
+		interfaceMasterPaginationList(
+		   {
+			type: 'JSON',
+			xhtmlElementID: 'divInterfaceMainBankAccount',
+			xhtmlContext: 'BankAccount',
+			xhtml: aHTML.join(''),
+			showMore: (oResponse.morerows == "true"),
+			more: oResponse.moreid,
+			rows: 100,
+			functionShowRow: interfaceFinancialBankAccountRow,
+			functionOpen: undefined,
+			functionNewPage: ''
+		   }); 	
+	}
+}
+
+function interfaceFinancialBankAccountRow(oRow)
+{
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<tr class="interfaceMainRow">';
+				
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + 'xx' + '" class="interfaceMainRow">' +
+							oRow.title + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Balance-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
+							oRow.lastreconciledbalance + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Date-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
+							oRow.lastreconcileddate + '</td>';
+							
+	aHTML[++h] = '</tr>'
+	
+	return aHTML.join('');
+	
+}
+
+function interfaceFinancialUnallocated(aParam, oResponse)
+{
+	var iAllocatedAccount;
+
+	if (oResponse == undefined)
+	{
+		var oSearch = new AdvancedSearch();
+		oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+		oSearch.addField('title');
+		oSearch.addFilter('title', 'TEXT_IS_LIKE', 'Unallocated');
+		oSearch.async = false;
+		oSearch.rows = 1;
+		
+		oSearch.getResults(function(oResponse)
+		{
+			if (oResponse.data.rows.length != 0)
+			{
+				iAllocatedAccount = oResponse.data.rows[0].id;
+			}
+		});	
+
+		if (iAllocatedAccount == undefined)
+		{
+			$('#divInterfaceMainUnallocated').html("No unallocated account set up.");
+		}
+		else
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+			oSearch.addField('invoice.reference,invoice.amount');
+			oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', iAllocatedAccount);
+			oSearch.rows = 20;
+			oSearch.getResults(function(data) {interfaceFinancialUnallocated(aParam, data)});
+		}	
+		
+	}
+	else
+	{
+		var aHTML = [];
+		var h = -1;
+		
+		if (oResponse.data.rows.length == 0)
+		{
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
+			aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No unallocated accounts.</td>';
+			aHTML[++h] = '</tr>';
+			aHTML[++h] = '</table>';
+		}
+		else
+		{
+		
+			aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+			
+			aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+			aHTML[++h] = '<tbody>'
+			aHTML[++h] = '<tr class="interfaceMainCaption">';
+			aHTML[++h] = '<td class="interfaceMainCaption">Invoice</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
+			aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+			aHTML[++h] = '</tr>';
+			
+			var oRows = oResponse.data.rows;
+			
+			$(oRows).each(function() 
+			{
+				aHTML[++h] = interfaceFinancialUnallocatedRow(this);
+			});
+			
+			aHTML[++h] = '</tbody></table>';
+		}
+		
+		interfaceMasterPaginationList(
+		   {
+			type: 'JSON',
+			xhtmlElementID: 'divInterfaceMainUnallocated',
+			xhtmlContext: 'Unallocated',
+			xhtml: aHTML.join(''),
+			showMore: (oResponse.morerows == "true"),
+			more: oResponse.moreid,
+			rows: 100,
+			functionShowRow: interfaceFinancialUnallocatedRow,
+			functionOpen: undefined,
+			functionNewPage: ''
+		   }); 	
+	}
+}
+
+function interfaceFinancialUnallocatedRow(oRow)
+{
+	var aHTML = [];
+	var h = -1;
+
+	aHTML[++h] = '<tr class="interfaceMainRow">';
+				
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_FinancialAccount-' + 'xx' + '" class="interfaceMainRow">' +
+							oRow["invoice.reference"] + '</td>';
+	
+	aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Amount-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
+							oRow["invoice.amount"] + '</td>';
+	
+	aHTML[++h] = '</tr>'
+	
+	return aHTML.join('');
+	
+}
+
