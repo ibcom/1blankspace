@@ -169,66 +169,45 @@ ns1blankspace.financial.bankAccount =
 	summary:	function (oParam, oResponse)
 				{
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-					aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-								'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
-									'</td>' +
-									'<td id="tdInterfaceMainSummaryColumn2Action" style="width:400px;" class="interfaceMainColumn2">' +
-									'</td>' +
-									'</tr>';
-					aHTML[++h] = '</table>';				
-
-					$('#divInterfaceMainSummary').html(aHTML.join(''));	
-
-					aHTML.push('<table class="ns1blankspaceMain"><tbody>' +
+					aHTML.push('<table class="ns1blankspace"><tbody>' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceSummaryColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
 									'</tr>' +
 									'</tbody></table>');				
 						
-						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+					$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
 					var aHTML = [];
-					var h = -1;
+				
+					aHTML.push('<table class="ns1blankspace">' +
+									'<tr><td class="ns1blankspace">' +
+									'This bank account was last reconciled on the ' +
+									 ns1blankspace.objectContextData.lastreconcileddate + '.' +
+									'</td></tr></table>');					
 
-					aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
-									
-					aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTotalAmount" class="interfaceMainSummary"></td></tr>' +
-									'<tr><td id="tdInterfaceMainSummaryTotalAmountValue" class="interfaceMainSummaryValue">' +
-									'This bank account was last reconciled on the ' + ns1blankspace.objectContextData.lastreconcileddate + '.' +
-									'</td></tr>';			
-					
-					aHTML[++h] = '</table>';					
-
-					$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
+					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 					
-					aHTML[++h] = '<table cellpadding=6>';
-					
-					aHTML[++h] = '<tr><td class="interfaceMainSummary" colspan=2>You have a number of options when reconciling a bank account.</td></tr>'
-								
-					aHTML[++h] = '<tr><td class="interfaceMainSummary" style="width:15px;padding-bottom:10px;">1</td><td class="interfaceViewportControlSub">' +
-										'Use a printed or PDF bank statement directly.  In this case you skip the import step and go straight to reconcile.' +
-										' You can then add a reconilication - selecting the date you want to balance up to.  You then search the system for matching payments or receipts that have already been entered or if not, add them as you go.' +
-									'</td></tr>';
-
-					aHTML[++h] = '<tr><td class="interfaceMainSummary" style="width:15px;">2</td><td class="interfaceViewportControlSub">' +
-										'You export a file from your internet banking and then import it.' +
+					aHTML.push('<table cellpadding=6>' +
+									'<tr><td class="ns1blankspaceSummary" colspan=2>You have a number of options when reconciling a bank account.</td></tr>' + 
+									'<tr><td class="ns1blankspaceSummary" style="width:15px;padding-bottom:10px;">1</td><td class="ns1blankspaceSub">' +
+									'Use a printed or PDF bank statement directly.  In this case you skip the import step and go straight to reconcile.' +
+									' You can then add a reconilication - selecting the date you want to balance up to.  You then search the system for matching payments or receipts that have already been entered or if not, add them as you go.' +
+									'</td></tr>' + 
+									'<tr><td class="ns1blankspaceSummary" style="width:15px;">2</td><td class="ns1blankspaceSub">' +
+									'You export a file from your internet banking and then import it.' +
 									'  You can then add a reconilication - selecting the date you want to balance up to.  The system will then help you then search the system for matching payments or receipts that have already been entered, based on these transactions or if not, add them as you go.' +
-									'</td></tr>';
-
-					aHTML[++h] = '</table>';
+									'</td></tr>' + 
+									'</table>');
 					
-					$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''))	
+					$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''))	
 				},
 
 	reconcile: 	{
-					show: 		function interfaceFinancialBankAccountReconcile(oParam, oResponse)
+					show: 		function (oParam, oResponse)
 								{
 									if (oResponse == undefined)
 									{
@@ -238,42 +217,37 @@ ns1blankspace.financial.bankAccount =
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('statementdate', 'desc');
 										oSearch.rows = 12;
-										oSearch.getResults(function(data) {interfaceFinancialBankAccountReconcile(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.show(oParam, data)});
 									}
 									else
 									{
 										var aHTML = [];
-										var h = -1;
+
+										aHTML.push('<table class="interfaceMain">' +
+														'<tr class="ns1blankspaceRow">' +
+														'<td id="ns1blankspaceBankAccountColumnReco1" style="width: 85px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
+														ns1blankspace.xhtml.loading +
+														'</td>' +
+														'<td id="ns1blankspaceBankAccountColumnReco2" class="interfaceMainColumn2">' +
+														'</td>' +
+														'</tr>' +
+														'</table>';				
 										
-										aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain">' +
-													'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainBankAccountColumnReco" style="width: 85px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="tdInterfaceMainBankAccountColumnReco2" class="interfaceMainColumn2">' +
-													'</td>' +
-													'</tr>' +
-													'</table>';				
-										
-										$('#divInterfaceMainReconcile').html(aHTML.join(''));
+										$('#ns1blankspaceMainReconcile').html(aHTML.join(''));
 												
 										var aHTML = [];
-										var h = -1;
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-											aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-											aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountRecoAdd">Add</span></td></tr>';
-											aHTML[++h] = '</tr>';
-											aHTML[++h] = '</table>';
+											aHTML.push('<table><tr><td style="font-size:0.75em;">' +
+															'<span id="ns1blankspaceBankAccountRecoAdd">Add</span>' +
+															'</td></tr></table>';
 											
-											$('#tdInterfaceMainBankAccountColumnReco').html(aHTML.join(''));	
+											$('#ns1blankspaceBankAccountColumnReco1').html(aHTML.join(''));	
 										}
 										else
 										{		
-											aHTML[++h] = '<table id="tableReco" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '';
+											aHTML.push('<table class="ns1blankspace">');
 											
 											var oRows = oResponse.data.rows;
 											
@@ -283,81 +257,64 @@ ns1blankspace.financial.bankAccount =
 												{
 													if (this.status == 2)
 													{
-														aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountRecoAdd">Add</span></td></tr>';
+														aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountRecoAdd">Add</span></td></tr>';
 													}
 												}
 												
-												aHTML[++h] = interfaceFinancialBankAccountRecoRow(this);
+												aHTML.push(ns1blankspace.financial.bankAccount.reconcile.row(this));
 											});
 											
-											aHTML[++h] = '</table>';
+											aHTML.push('</table>');
 											
-											$('#tdInterfaceMainBankAccountColumnReco').html(aHTML.join(''));
+											$('#ns1blankspaceBankAccountColumnReco1').html(aHTML.join(''));
 										}
 										
-										/*
-										ns1blankspacePaginationList(
-										   {
-											type: 'JSON',
-											xhtmlElementID: 'tdInterfaceMainBankAccountColumnReco' + iID,
-											xhtmlContext: 'BankAccountReco',
-											xhtml: aHTML.join(''),
-											showMore: (oResponse.morerows == "true"),
-											more: oResponse.moreid,
-											rows: 100,
-											functionShowRow: interfaceFinancialBankAccountRecoRow,
-											functionOpen: undefined,
-											functionNewPage: ''
-										   });
-										*/
-										
-										$('#spanInterfaceBankAccountRecoAdd').button(
+										$('#ns1blankspaceBankAccountRecoAdd').button(
 										{
 											label: "Add"
 										})
 										.click(function() {
-											interfaceFinancialBankAccountRecoEdit()
+											 ns1blankspace.financial.bankAccount.reconcile.edit()
 										})
 										.css("width", "75px");
 										
-										$('.reco').click(function()
+										$('.ns1blankspaceBankAccountReconcileRowSelect').click(function()
 										{
 											var aID = (event.target.id).split('-');
-											interfaceFinancialBankAccountRecoItems({reconciliation: aID[1]});
+											ns1blankspace.financial.bankAccount.reconcile.items.show({reconciliation: aID[1]});
 										});
 									}
 								},
 
-					row:		function interfaceFinancialBankAccountRecoRow(oRow)
+					row:		function (oRow)
 								{
 									var aHTML = [];
-									var h = -1;
-
-									aHTML[++h] = '<tr class="interfaceMainRow">';
+								
+									aHTML.push('<tr class="ns1blankspaceRow">');
 										
 									if (oRow.status == 2)
 									{			
-										aHTML[++h] = '<td id="interfaceFinancialBankAccountReco_title-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect reco"' +
+										aHTML.push('<td id="ns1blankspaceFinancialBankAccountReconcile_title-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountReconcileRowSelect"' +
 														' style="text-align:right;">' +
-														'<span class="interfaceViewportControlSubContext" id="spanInterfaceFinancialBankAccountReco_date-' +
-														oRow.id + '">' + oRow.statementdate + '</span><br />';
+														'<span id="ns1blankspaceFinancialBankAccountReconcile_date-' +
+														oRow.id + '" class="ns1blankspaceSub">' + oRow.statementdate + '</span><br />');
 									}
 									else
 									{
-										aHTML[++h] = '<td id="interfaceFinancialBankAccountReco_title-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect reco"' +
+										aHTML.push('<td id="ns1blankspaceFinancialBankAccountReconcile_title-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountReconcileRowSelect"' +
 															' style="text-align:right;"' +
-															'>' + oRow.statementdate + '<br />';
+															'>' + oRow.statementdate + '<br />)';
 									}						
 									
-									aHTML[++h] = '<span class="interfaceViewportControlSubContext" id="spanInterfaceFinancialBankAccountReco_balance-' + oRow.id + '">$' +
-									 					oRow.statementbalance + '</span>';
+									aHTML.push('<span id="ns1blankspaceFinancialBankAccountReconcile_balance-' + oRow.id + '" class="ns1blankspaceSub">$' +
+									 					oRow.statementbalance + '</span>');
 												
-									aHTML[++h] = '</td></tr>'
+									aHTML.push('</td></tr>');
 									
 									return aHTML.join('');
 								},
 
-					edit:		function interfaceFinancialBankAccountRecoEdit(oParam, oResponse)
+					edit:		function (oParam, oResponse)
 								{
 									var sID; 
 									var iDefaultCategory;

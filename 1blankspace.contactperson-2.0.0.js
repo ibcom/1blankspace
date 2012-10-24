@@ -464,7 +464,7 @@ ns1blankspace.contactPerson =
 						aHTML.push('<table class="ns1blankspaceMain"><tbody>' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1Large" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2Action" class="ns1blankspaceSummaryColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2Action" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
 									'</tr>' +
 									'</tbody></table>');				
 						

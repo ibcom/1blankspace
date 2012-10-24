@@ -10,7 +10,7 @@ ns1blankspaceDialog
 # HTML5 Key Elements, id=:
 
 ns1blankspaceControlContext
-ns1blankspaceViewControlAction
+ns1blankspaceViewControlAction - Save etc
 
 # Attributes:
 
@@ -54,6 +54,8 @@ ns1blankspaceRowRemove
 ns1blankspaceSearchMedium
 
 ns1blankspaceControl
+ns1blankspaceSubContext
+ns1blankspaceSub
 
 # HTML5 attributes:
 
