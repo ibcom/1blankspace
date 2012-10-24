@@ -909,7 +909,7 @@ ns1blankspace.financial.bankAccount =
 				},
 
 	import: 	{
-					show:		function interfaceFinancialBankAccountImport(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
 									if (oResponse == undefined)
 									{
@@ -919,76 +919,71 @@ ns1blankspace.financial.bankAccount =
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('enddate', 'desc');
 										oSearch.rows = ns1blankspace.option.defaultRows;
-										oSearch.getResults(function(data) {interfaceFinancialBankAccountImport(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import(oParam, data)});
 									}
 									else
 									{
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainBankAccountImport" class="interfaceMain">' +
-													'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainBankAccountColumnImport1" style="width: 75px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+													'<tr class="ns1blankspaceContainer>' +
+													'<td id="ns1blankspaceBankAccountImportColumn1" style="width: 75px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
 													ns1blankspace.xhtml.loading +
 													'</td>' +
-													'<td id="tdInterfaceMainBankAccountColumnImport2" class="interfaceMainColumn2">' +
+													'<td id="ns1blankspaceBankAccountImportColumn2" class="ns1blankspaceColumn2">' +
 													'</td>' +
 													'</tr>' +
-													'</table>';				
+													'</table>');				
 										
-										$('#divInterfaceMainImport').html(aHTML.join(''));
+										$('#ns1blankspaceMainImport').html(aHTML.join(''));
 										
 										var aHTML = [];
 										var h = -1;
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+											aHTML.push('<table id="tableInterfaceFinancialHomeMostLikely">';
 											
-											aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountImportAdd">Add</span></td></tr>';
+											aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountImportAdd">Add</span></td></tr>';
 
-											aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-											aHTML[++h] = '<td class="trInterfaceFinancialHomeMostLikelyNothing">No existing imports.</td>';
-											aHTML[++h] = '</tr>';
-											aHTML[++h] = '</table>';
+											aHTML.push('<tr><td class="ns1blankspaceNothing">No existing imports.</td></tr>');
+
+											aHTML.push('</table>');
 											
-											$('#tdInterfaceMainBankAccountColumnImport1').html(aHTML.join(''));	
+											$('#ns1blankspaceBankAccountImportColumn1').html(aHTML.join(''));	
 										}
 										else
 										{		
-											aHTML[++h] = '<table id="tableImport" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = ''
-									
-											var oRows = oResponse.data.rows;
+											aHTML.push('<table class="ns1blankspace">');
 											
-											$(oRows).each(function(i) 
+											$(oResponse.data.rows).each(function(i) 
 											{
 												if (i==0)
 												{
-													aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountImportAdd">Add</span></td></tr>';
+													aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountImportAdd">Add</span></td></tr>');
 												}
 												
-												aHTML[++h] = interfaceFinancialBankAccountImportRow(this);
+												aHTML.push(ns1blankspace.financial.bankAccount.import.row(this));
 											});
 											
-											aHTML[++h] = '</table>';
+											aHTML.push('</table>');
 											
-											$('#tdInterfaceMainBankAccountColumnImport1').html(aHTML.join(''));
+											$('#ns1blankspaceBankAccountImportColumn1').html(aHTML.join(''));
 										}
 											
-										$('#spanInterfaceBankAccountImportAdd').button(
+										$('#ns1blankspaceBankAccountImportAdd').button(
 										{
 											label: "Add"
 										})
 										.click(function() {
-											interfaceFinancialBankAccountImportAdd();
+											ns1blankspace.financial.bankAccount.import.add();
 										})
 										.css("width", "75px");
 										
-										$('.import').click(function()
+										$('.ns1blankspaceBankAccountImportRowSelect').click(function()
 										{
 											var aID = (event.target.id).split('-');
-											interfaceFinancialBankAccountImportTransactions({fileSource: aID[1]});
+											ns1blankspace.financial.bankAccount.import.transactions({fileSource: aID[1]});
 										});
 									}
 								},
@@ -996,31 +991,29 @@ ns1blankspace.financial.bankAccount =
 					row:		function interfaceFinancialBankAccountImportRow(oRow)
 								{
 									var aHTML = [];
-									var h = -1;
 
 									if (oRow.processeddate != '')
 									{
-										aHTML[++h] = '<tr class="interfaceMainRow">';
+										aHTML.push('<tr class="ns1blankspaceRow">');
 
-										aHTML[++h] = '<td id="interfaceFinancialBankAccountImport_processeddate-' + oRow.id + '" class="interfaceMainRow interfaceMainRowSelect import"' +
-																'">' + oRow.processeddate + '<br />';
+										aHTML.push('<td id="ns1blankspaceBankAccountImport_processeddate-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountImportRowSelect"' +
+																'">' + oRow.processeddate + '<br />');
 															
 										if (oRow.startdate != '')
 										{		
-											aHTML[++h] = '<span class="interfaceViewportControlSubContext" id="spanInterfaceFinancialBankAccountImport_enddate-' + oRow.id + '">' +
-																oRow.startdate + '</span><br />';	
+											aHTML.push('<span class="ns1blankspaceSub" id="ns1blankspaceBankAccountImport_startdate-' + oRow.id + '">' +
+																oRow.startdate + '</span><br />');	
 										}
 									
-										aHTML[++h] = '</tr>';
+										aHTML.push('</tr>');
 									}
 										
 									return aHTML.join('');
 								},
 
-					add:		function interfaceFinancialBankAccountImportAdd(oParam, oResponse)
+					add:		function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.objectContext;
-									var sXHTMLElementId = 'tdInterfaceMainBankAccountColumnImport21';
 									var oOptions = {view: true, remove: true, automation: true};
 									var oActions = {add: true};
 
@@ -1037,14 +1030,14 @@ ns1blankspace.financial.bankAccount =
 										var aHTML = [];
 										var h = -1;
 																		
-										aHTML[++h] = ns1blankspaceAttachmentsUpload(
+										aHTML.push(ns1blankspace.attachments.upload(
 														{	
 															object: 28,
 															objectContext: -1,
 															label: ''
-														});
+														}));
 																				
-										$('#tdInterfaceMainBankAccountColumnImport2').html(aHTML.join(''));
+										$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
 										
 										$('#spanInterfaceMainUpload').button(
 										{
@@ -1054,7 +1047,7 @@ ns1blankspace.financial.bankAccount =
 										{
 											if ($('#oFile0').val() == '')
 											{
-												ns1blankspaceError("Need to select a file.");
+												ns1blankspace.status.error("Need to select a file.");
 											}
 											else
 											{
@@ -1064,11 +1057,11 @@ ns1blankspace.financial.bankAccount =
 												$.ajax(
 												{
 													type: 'POST',
-													url: '/ondemand/financial/?method=FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_MANAGE',
+													url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_MANAGE'),
 													data: sData,
 													dataType: 'json',
 													success: function(data) {
-														interfaceFinancialBankAccountImportAdd(oParam, data);
+														ns1blankspace.financial.bankAccount.import.add(oParam, data);
 													}
 												});
 											}
@@ -1079,12 +1072,12 @@ ns1blankspace.financial.bankAccount =
 										if (oResponse.status == 'OK')
 										{
 											$('#objectcontext').val(oResponse.id);	
-											ns1blankspaceAttachmentsUploadProcess({functionPostUpdate: interfaceFinancialBankAccountImportAddProcess});
+											ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.financial.bankAccount.import.process});
 										}	
 									}	
 								},
 
-					process:	function interfaceFinancialBankAccountImportAddProcess(oResponse)
+					process:	function (oResponse)
 								{
 									if (oResponse == undefined)
 									{
@@ -1093,7 +1086,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.addField('type,filename,description,download,modifieddate');
 										oSearch.addFilter('object', 'EQUAL_TO', 28);
 										oSearch.addFilter('objectcontext', 'EQUAL_TO', $('#objectcontext').val());
-										oSearch.getResults(function(data) {interfaceFinancialBankAccountImportAddProcess(data)});
+										oSearch.getResults(function(data) {ins1blankspace.financial.bankAccount.import.process(data)});
 									}
 									else
 									{
@@ -1104,7 +1097,7 @@ ns1blankspace.financial.bankAccount =
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/financial/?method=FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_PROCESS',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_PROCESS'),
 												data: sData,
 												dataType: 'json',
 												success: function(data) {
