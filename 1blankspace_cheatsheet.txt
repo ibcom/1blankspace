@@ -1,0 +1,87 @@
+# HTML5 Containers, id=:
+
+ns1blankspaceViewControl
+ns1blankspaceControl
+ns1blankspaceMain
+ns1blankspaceFooter
+ns1blankspaceBox
+ns1blankspaceDialog
+
+# HTML5 Key Elements, id=:
+
+ns1blankspaceControlContext
+ns1blankspaceViewControlAction
+
+# Attributes:
+
+ns1blankspace.xhtml.container
+ns1blankspace.xhtml.loading
+
+# Methods:
+
+ns1blankspace.show({selector: ,refresh: true});
+ns1blankspace.util.fs();
+ns1blankspace.util.endpointURI();
+ns1blankspace.status.message();
+ns1blankspace.status.error();
+ns1blankspace.dialog.confirm();
+ns1blankspace.dialog.position(
+	{
+		xhtmlElementID: 'ns1blankspaceContactPersonGroupsAdd',
+		leftOffset: -50,
+		topOffset: -280
+	});
+
+# Classes (live):
+
+ns1blankspaceText
+ns1blankspaceTextMulti
+ns1blankspaceSelect
+ns1blankspaceDate
+
+# Classes:
+
+ns1blankspace
+ns1blankspaceContainer
+ns1blankspaceColumn1
+ns1blankspaceColumn2
+ns1blankspaceColumn1Large
+ns1blankspaceColumn2Action
+ns1blankspaceCaption
+ns1blankspaceRow
+ns1blankspaceRowSelect
+ns1blankspaceRowRemove
+ns1blankspaceSearchMedium
+
+ns1blankspaceControl
+
+# HTML5 attributes:
+
+data-method
+data-columns
+data-loading ('1')
+data-id [onDemandID]
+
+# Javascript:
+
+aHTML.push( )
+
+# HTML5:
+
+aHTML.push('<table class="ns1blankspaceContainer"><tbody>' +
+				'<tr class="ns1blankspaceContainer">' +
+				'<td id="ns1blankspaceAddressColumn1" class="ns1blankspaceColumn1"></td>' +
+				'<td id="ns1blankspaceAddressColumn2" class="ns1blankspaceColumn2"></td>' +
+				'</tr>' +
+				'</tbody></table>');
+
+# Coding:
+
+- Minimise HTML - remove unused ids and classes
+- Remove blank lines - presentation is important
+- Intent using tabs - 4 tab columns
+- Remove sParam and just use sData - SSL
+- Replace aHTML[++h] with aHTML.push()
+- AdvancedSearch remove .endpoint
+- ; to end statements
+- Use ns1blankspace.util.endpointURI() with $.ajax(url:)

@@ -5,13 +5,6 @@
  * 01 FEB 2010
  */
 
-//???
-//var ns1blankspace.objectContextDataXML;
-//var ns1blankspace.objectContextDataJSON;
-//var ns1blankspace.objectSaveId = -1;
-//var gsHomeViewportXHTML = '';
-//var gaReturn = [];
-
 Function.prototype.method = function(name, func)
 {
 	if (!this.prototype[name])
@@ -130,16 +123,16 @@ ns1blankspace.app =
 
 	init: 			function ()
 					{
-						if $('#divInterface').length == 0
+						if $('#ns1blankspace').length == 0
 						{
-							$('body').append('<div id="divInterface" class="interface">' +
-												'<div id="divInterfaceMasterViewportControl" class="interfaceMasterViewportControl"></div>' +
-												'<div id="divInterfaceViewportControl" class="interfaceViewportControl"></div>' +
-												'<div id="divInterfaceMain" class="interfaceMain"></div>' +
-												'<div id="divInterfaceFooter" class="interfaceFooter"></div>' +
-												'<div id="divInterfaceBox" class="interfaceBox"></div>' +
-												'<div id="divInterfaceDialog"></div>' +
-												'</div>';
+							$('body').append('<div id="ns1blankspace" class="interface">' +
+												'<div id="ns1blankspaceViewControl" class="ns1blankspaceViewControl"></div>' +
+												'<div id="ns1blankspaceControl" class="ns1blankspaceControl"></div>' +
+												'<div id="ns1blankspaceMain" class="ns1blankspaceMain"></div>' +
+												'<div id="ns1blankspaceFooter" class="ns1blankspaceFooter"></div>' +
+												'<div id="ns1blankspaceBox" class="ns1blankspaceBox"></div>' +
+												'<div id="ns1blankspaceDialog"></div>' +
+												'</div>');
 						}		
 
 						$('#divInterfaceMasterViewportControl').html('Loading...')
@@ -187,6 +180,7 @@ ns1blankspace.app =
 						ns1blankspace.xhtml.action = '';
 						ns1blankspace.xhtml.home = '';
 						ns1blankspace.xhtml.divID = '';
+						ns1blankspace.xhtml.container = '#ns1blankspaceOptionsContainer'
 
 						ns1blankspace.user.commonname = '';
 						ns1blankspace.user.email = '';
@@ -251,19 +245,19 @@ ns1blankspace.app =
 							this.loadScript('/jscripts/1blankspace.setup.networkgroup-1.0.0.js');
 						}
 
-						$('td.interfaceViewportControl').live('click', function()
+						$('td.ns1blankspaceControl').live('click', function()
 						{
-							ns1blankspaceObjectViewportHistory({xhtmlElementID: this.id});
+							ns1blankspace.history.instruction({xhtmlElementID: this.id});
 						});
 						
-						$('.interfaceViewportControl').live('mousedown', function() 
+						$('.ns1blankspaceControl').live('mousedown', function() 
 						{
-							$('td.interfaceViewportControlHighlight').removeClass('interfaceViewportControlHighlight');
+							$('td.ns1blankspaceControlHighlight').removeClass('ns1blankspaceControlHighlight');
 						});
 
-						$('.interfaceViewportControl').live('mouseup', function() 
+						$('.ns1blankspaceControl').live('mouseup', function() 
 						{
-							$(this).addClass('interfaceViewportControlHighlight');
+							$(this).addClass('ns1blankspaceControlHighlight');
 						});
 
 						$('.ns1blankspaceWatermark').live('focus', function() 
@@ -275,184 +269,179 @@ ns1blankspace.app =
 							}	
 						});		
 							
-						$('.inputInterfaceMainSelect').live('focus', function() 
+						$('.ns1blankspaceSearch').live('focus', function() 
 						{		
 							$(this).addClass('ns1blankspaceHighlight');
 							
-							ns1blankspace.xhtml.elementID = this.id; //???
 							ns1blankspace.xhtml.divID = this.id;
 							
-							$('#divns1blankspaceViewportControlOptions').html('');
-							$('#divns1blankspaceViewportControlOptions').show();
-							$('#divns1blankspaceViewportControlOptions').offset({ top: $('#' + ns1blankspace.xhtml.divID).offset().top, left: $('#' + ns1blankspace.xhtml.divID).offset().left + $('#' + ns1blankspace.xhtml.divID).width() - 10});
+							$(ns1blankspace.xhtml.container).html('');
+							$(ns1blankspace.xhtml.container).show();
+							$(ns1blankspace.xhtml.container).offset(
+							{ 
+								top: $('#' + ns1blankspace.xhtml.divID).offset().top,
+								left: $('#' + ns1blankspace.xhtml.divID).offset().left + $('#' + ns1blankspace.xhtml.divID).width() - 10
+							});
 									
-							$('#divns1blankspaceViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
 							
-							$('#spanInterfaceMainSelectOptions').button({
+							$('#ns1blankspaceSearchOptions').button({
 								text: false,
 								icons: {
 									primary: "ui-icon-triangle-1-s"
 								}
 							})
 							.click(function() {
-								ns1blankspaceElementOptionsSearch({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
+								ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
 							})
 							.css('width', '14px')
 							.css('height', '23px')
 						});
 							
-						$('.inputInterfaceMainSelect').live('keyup', function()
+						$('.ns1blankspaceSearch').live('keyup', function()
 						{
-							ns1blankspaceElementOptionsSearch({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
+							ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
 						});	
 							
-						$('.inputInterfaceMainSelect').live('blur', function() 
+						$('.ns1blankspaceSearch').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 						
-						$('.inputInterfaceMainSelectAddress').live('focus', function() 
+						$('.ns1blankspaceSearchAddress').live('focus', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
-							$('#divns1blankspaceViewportControlOptions').html('');
-							$('#divns1blankspaceViewportControlOptions').show();
-							$('#divns1blankspaceViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
-							$('#divns1blankspaceViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
+							$(ns1blankspace.xhtml.container).html('');
+							$(ns1blankspace.xhtml.container).show();
+							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
 							
-							$('#spanInterfaceMainSelectOptions').button( {
+							$('#ns1blankspaceSearchOptions').button( {
 								text: false,
 								icons: {
 									primary: "ui-icon-triangle-1-s"
 								}
 							})
 							.click(function() {
-								ns1blankspaceAddressSearch(ns1blankspace.xhtml.divID);
+								ns1blankspace.search.address.show(ns1blankspace.xhtml.divID);
 							})
 							.css('width', '14px')
 							.css('height', '23px')
 						});
 						
-						$('.inputInterfaceMainSelectAddress').live('blur', function() 
+						$('.ns1blankspaceSearchAddress').live('blur', function() 
 						{
-							$('#divns1blankspaceViewportControlOptions').hide();
+							$(ns1blankspace.xhtml.container).hide();
 						});
 						
-						$('.inputInterfaceMainSelectContact').live('keyup', function()
+						$('.ns1blankspaceSearchContact').live('keyup', function()
 						{
-							ns1blankspaceContactSearch(ns1blankspace.xhtml.divID, 1, 3);	
+							ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 1, 3);	
 						});	
 						
-						$('.inputInterfaceMainSelectContact').live('focus', function() 
+						$('.ns1blankspaceSearchContact').live('focus', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
-							$('#divns1blankspaceViewportControlOptions').html('');
-							$('#divns1blankspaceViewportControlOptions').show();
-							$('#divns1blankspaceViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
-							$('#divns1blankspaceViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
+							$(ns1blankspace.xhtml.container).html('');
+							$(ns1blankspace.xhtml.container).show();
+							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ins1blankspaceSearchOptions"></span>');
 							
-							$('#spanInterfaceMainSelectOptions').button( {
+							$('#ns1blankspaceSearchOptions').button( {
 								text: false,
 								icons: {
 									primary: "ui-icon-triangle-1-s"
 								}
 							})
 							.click(function() {
-								ns1blankspaceContactSearch(ns1blankspace.xhtml.divID, 4);
+								ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 4);
 							})
 							.css('width', '14px')
 							.css('height', '23px')
 						});
 						
-						$('.inputInterfaceMainSelectContactEmail').live('focus', function() 
+						$('.ns1blankspaceSearchContactEmail').live('focus', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
-							$('#divns1blankspaceViewportControlOptions').html('');
-							$('#divns1blankspaceViewportControlOptions').show();
-							$('#divns1blankspaceViewportControlOptions').offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width()});
-							$('#divns1blankspaceViewportControlOptions').html('<span id="spanInterfaceMainSelectOptions" class="interfaceMainSelectOptions"></span>');
+							$(ns1blankspace.xhtml.container).html('');
+							$(ns1blankspace.xhtml.container).show();
+							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width()});
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
 							
-							$('#spanInterfaceMainSelectOptions').button( {
+							$('#ns1blankspaceSearchOptions').button( {
 								text: false,
 								icons: {
 									primary: "ui-icon-triangle-1-s"
 								}
 							})
 							.click(function() {
-								ns1blankspaceContactEmailSearch(ns1blankspace.xhtml.divID, {
+								ns1blankspace.contact.email.search(ns1blankspace.xhtml.divID, {
 										source: 4, 
 										emailOnly: true,
-										contactBusiness: $('#' + ns1blankspace.xhtml.divID).attr('ondemandcontactbusiness'),
-										setXHTMLElementID: $(this).attr('ondemandsetelementid')
+										contactBusiness: $('#' + ns1blankspace.xhtml.divID).attr('data-contactbusiness'),
+										setXHTMLElementID: $(this).attr('data-setelementid')
 										});
 							})
 							.css('width', '14px')
 							.css('height', '23px')
 						});
 						
-						$('.inputInterfaceMainSelectContactEmail').live('keyup', function() 
+						$('.ns1blankspaceSearchContactEmail').live('keyup', function() 
 						{
 							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
 							
-							var sFunction = "ns1blankspaceContactEmailSearch(ns1blankspace.xhtml.divID, {" +
+							var sFunction = "ns1blankspace.contact.email.search(ns1blankspace.xhtml.divID, {" +
 										"source: 1," +
 										"emailOnly: true," +
-										"contactBusiness: " + $(this).attr('ondemandcontactbusiness') + "," +
-										"setXHTMLElementID: '" + $(this).attr('ondemandsetelementid') + "'});"
+										"contactBusiness: " + $(this).attr('data-contactbusiness') + "," +
+										"setXHTMLElementID: '" + $(this).attr('data-setelementid') + "'});"
 							
 							ns1blankspace.timer.delayCurrent = setTimeout(sFunction, ns1blankspace.option.typingWait);
 							
 						});
 						
-						$('.spanInterfaceMainOptionsClose').live('click', function() 
+						$('.ns1blankspaceOptionsClose').live('click', function() 
 						{
-							$('#divns1blankspaceViewportControlOptions').slideUp(500);
-							$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+							$(ns1blankspace.xhtml.container).slideUp(500);
+							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						});
 						
-						$('.interfaceSearchHeaderPage').live('click', function() 
+						$('.ns1blankspaceSearchHeaderPage').live('click', function() 
 						{
 							interfaceAuditSearchShowPage(this.id);
-						});
-						
-						$('td.interfaceHomeOptionClose').live('click', function() 
-						{
-							$('#divns1blankspaceViewportControlOptions').hide(1000);
-							$('#divns1blankspaceViewportControlOptions').html(interfaceHomeOptions());
-							$('#divns1blankspaceViewportControlOptions').show(500);
-							interfaceHomeOptionsBind();
-						});
-						
-						$('input.inputInterfaceMainText').live('focus', function() 
+						}); //???
+								
+						$('input.ns1blankspaceText').live('focus', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 						});
 
-						$('input.inputInterfaceMainText').live('keyup', function() 
+						$('input.ns1blankspaceText').live('keyup', function() 
 						{
 							ns1blankspace.inputDetected = true;
 						});
 							
-						$('input.inputInterfaceMainText').live('blur', function() 
+						$('input.ns1blankspaceText').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 
-						$('input.inputInterfaceMainDate').live('focus', function() 
+						$('input.ns1blankspaceDate').live('focus', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 						});
 
-						$('input.inputInterfaceMainDate').live('blur', function() 
+						$('input.ns1blankspaceDate').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 
-						$('.inputInterfaceMainTextMulti').live('focus', function()
+						$('.ns1blankspaceTextMulti').live('focus', function()
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 						});
 
-						$('.inputInterfaceMainTextMulti').live('blur', function() 
+						$('.ns1blankspaceTextMulti').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});	
@@ -504,71 +493,71 @@ ns1blankspace.app =
 						
 						ns1blankspace.unloadWarning = true;
 							
-						aHTML[++h] = '<div id="divns1blankspaceViewport" class="ns1blankspace">';
+						aHTML[++h] = '<div id="ns1blankspaceContainer" class="ns1blankspace">';
 						
-						$('#tdns1blankspaceHeaderColumn2').css('width', '250px');
-						$('#tdns1blankspaceHeaderColumn2').html('<div id="divns1blankspaceViewportSpaceText">' + ns1blankspace.spaceText + '</div>' +
-														'<div id="divns1blankspaceViewportLogonName">' + ns1blankspace.user.commonname + '</div>')
+						$('#ns1blankspaceHeaderColumn2').css('width', '250px');
+						$('#ns1blankspaceHeaderColumn2').html('<div id="ns1blankspaceSpaceText">' + ns1blankspace.spaceText + '</div>' +
+														'<div id="ns1blankspaceLogonName">' + ns1blankspace.user.commonname + '</div>')
 						
-						aHTML[++h] = '<div id="divns1blankspaceViewportControl" class="ns1blankspaceViewport">';
+						aHTML[++h] = '<div id="ns1blankspaceViewControlContainer" class="ns1blankspaceControl">';
 						
-							aHTML[++h] = '<div id="divns1blankspaceViewportControlHome">' +
-											'<span id="spanns1blankspaceViewportControlHome" class="ns1blankspaceViewport">&nbsp;</span>' +
-											'<span id="spanns1blankspaceViewportControlHomeOptions" class="ns1blankspaceViewport">&nbsp;</span>' +
+							aHTML[++h] = '<div id="ns1blankspaceViewControlHomeContainer">' +
+											'<span id="ns1blankspaceViewControlHome" class="ns1blankspaceControl">&nbsp;</span>' +
+											'<span id="ns1blankspaceViewControlHomeOptions" class="ns1blankspaceControl">&nbsp;</span>' +
 											'</div>';
 											
-							aHTML[++h] = '<div id="divns1blankspaceViewportControlDestination">' +
-											'<span id="spanns1blankspaceViewportControlBack" class="ns1blankspaceViewport">&nbsp;</span>' +
-											'<span id="spanns1blankspaceViewportControlRefresh" class="ns1blankspaceViewport">&nbsp;</span>' +
-											'<span id="spanns1blankspaceViewportControlForward" class="ns1blankspaceViewport">&nbsp;</span>' +
+							aHTML[++h] = '<div id="ns1blankspaceViewControlHistoryContainer">' +
+											'<span id="ns1blankspaceViewControlBack" class="ns1blankspaceControl">&nbsp;</span>' +
+											'<span id="ns1blankspaceViewControlRefresh" class="ns1blankspaceControl">&nbsp;</span>' +
+											'<span id="ns1blankspaceViewControlForward" class="ns1blankspaceControl">&nbsp;</span>' +
 											'</div>';				
 									
-							aHTML[++h] = '<div id="divns1blankspaceViewportControlSet" class="ns1blankspaceViewport">' +
-											'<span id="spanns1blankspaceViewportControlSet" class="ns1blankspaceViewport">&nbsp;</span>' +
+							aHTML[++h] = '<div id="ns1blankspaceViewControlSetContainer" class="ns1blankspaceControl">' +
+											'<span id="ns1blankspaceViewControlSet" class="ns1blankspaceControl">&nbsp;</span>' +
 											'</div>';
 											
-							aHTML[++h] = '<div id="divns1blankspaceViewportControlSearch">' +
-											'<input id="inputns1blankspaceViewportControlSearch" class="ns1blankspaceViewport">' +
+							aHTML[++h] = '<div id="ns1blankspaceViewControlSearchContainer">' +
+											'<input id="ns1blankspaceViewControlSearch" class="ns1blankspaceControl">' +
 											'</div>';
 											
-							aHTML[++h] = '<div id="divns1blankspaceViewportControlSearchStatus"></div>';
+							aHTML[++h] = '<div id="ns1blankspaceViewControlSearchStatus"></div>';
 											
-							aHTML[++h] = '<div id="divns1blankspaceViewportControlNew">' +
-											'<span id="spanns1blankspaceViewportControlNew" class="ns1blankspaceViewport">New</span>' +
+							aHTML[++h] = '<div id="ns1blankspaceViewControlNewContainer">' +
+											'<span id="ns1blankspaceViewControlNew" class="ns1blankspaceControl">New</span>' +
 											'</div>';
 											
-							aHTML[++h] = '<div id="divns1blankspaceViewportControlAction">' +
-											'<span id="spanns1blankspaceViewportControlAction" class="ns1blankspaceViewport"></span>' +
-											'<span id="spanns1blankspaceViewportControlActionOptions" class="ns1blankspaceViewport">&nbsp;</span>' +
+							aHTML[++h] = '<div id="ns1blankspaceViewControlActionContainer">' +
+											'<span id="ns1blankspaceViewControlAction" class="ns1blankspaceControl"></span>' +
+											'<span id="ns1blankspaceViewControlActionOptions" class="ns1blankspaceControl">&nbsp;</span>' +
 											'</div>';
 							
-							aHTML[++h] = '<div id="divns1blankspaceViewportControlActionStatus" class="ns1blankspaceViewport">&nbsp;</div>';
+							aHTML[++h] = '<div id="ns1blankspaceViewControlActionStatus" class="ns1blankspaceControl">&nbsp;</div>';
 							
 							if (ns1blankspace.setupShow) 
 							{
 
-								aHTML[++h] = '<div id="divns1blankspaceViewportControlSetup">' +
-												'<input type="checkbox" id="spanns1blankspaceViewportControlSetupSwitch" class="ns1blankspaceViewport"/>' +
-												'<label style="font-size:0.875em;" for="spanns1blankspaceViewportControlSetupSwitch">&nbsp;</label>' +
+								aHTML[++h] = '<div id="ns1blankspaceViewControlSetupContainer">' +
+												'<input type="checkbox" id="ns1blankspaceViewControlSetupSwitch" class="ns1blankspaceControl"/>' +
+												'<label style="font-size:0.875em;" for="ns1blankspaceControlSetupSwitch">&nbsp;</label>' +
 												'</div>';
 							}				
 							
-							aHTML[++h] = '<div id="divns1blankspaceViewportControlHelp">' + 
-											'<span id="spanns1blankspaceViewportControlHelpHome" class="ns1blankspaceViewport">&nbsp;</span>' +
+							aHTML[++h] = '<div id="ns1blankspaceViewControlHelpContainer">' + 
+											'<span id="ns1blankspaceViewControlHelp" class="ns1blankspaceControl">&nbsp;</span>' +
 											'</div>';
 						
 						aHTML[++h] = '</div>';
 						
 						aHTML[++h] = '</div>';
 						
-						aHTML[++h] = '<div id="divns1blankspaceViewportControlBrowse" class="ns1blankspaceViewport">&nbsp;</div>';
+						aHTML[++h] = '<div id="ns1blankspaceViewportControlBrowse" class="ns1blankspaceControl">&nbsp;</div>';
 						
-						aHTML[++h] = '<div id="divns1blankspaceViewportControlOptions" class="ns1blankspaceViewportOptions">&nbsp;</div>';
-						aHTML[++h] = '<div id="divns1blankspaceDialog" class="divns1blankspaceDialog">&nbsp;</div>';
+						aHTML[++h] = '<div id="ns1blankspaceOptionsContainer" class="ns1blankspaceOptionsContainer">&nbsp;</div>';
+						aHTML[++h] = '<div id="ns1blankspaceDialog" class="divns1blankspaceDialog">&nbsp;</div>';
 						
-						$('#divns1blankspaceViewportControl').html(aHTML.join(''));
+						$('#ns1blankspaceViewControlContainer').html(aHTML.join(''));
 						
-						$('#spanns1blankspaceViewportControlHome')
+						$('#ns1blankspaceControlHome')
 							.button({
 									text: false,
 									icons: {
@@ -576,7 +565,7 @@ ns1blankspace.app =
 									}})
 							.click(function(event)
 							{
-								ns1blankspaceHomeShow();
+								ns1blankspace.home.show();
 							})
 									
 							.next()
@@ -587,20 +576,20 @@ ns1blankspace.app =
 									}
 								})
 								.click(function() {
-									ns1blankspaceHomeOptionsShow(this);
+									ns1blankspace.home.options.show(this);
 								})
 								.css('width', '12px')
 								.parent()
 									.buttonset();
 						
-						$('#spanns1blankspaceViewportControlBack')
+						$('#ns1blankspaceControlBack')
 							.button({
 									text: false,
 									icons: {}
 									})
 							.click(function(event)
 							{
-								ns1blankspaceViewportDestination({instruction: 2});
+								ns1blankspace.history.view({instruction: 2});
 							})
 							.css('width', '19px')
 							.next()
@@ -611,7 +600,7 @@ ns1blankspace.app =
 									}
 								})
 								.click(function() {
-									ns1blankspaceViewportDestination({instruction: 7});
+									ns1blankspace.history.view({instruction: 7});
 								})
 								.css('width', '25px')
 								.css('margin-left', '2px')
@@ -621,14 +610,14 @@ ns1blankspace.app =
 									icons: {}
 								})
 								.click(function() {
-									ns1blankspaceViewportDestination({instruction: 3});
+									ns1blankspace.history.view({instruction: 3});
 								})
 								.css('width', '19px')
 								.css('margin-left', '2px')
 								.parent()
 									.buttonset();
 						
-						$('#divns1blankspaceViewportControlSet')
+						$('#ns1blankspaceControlView')
 							.button(
 							{
 								icons: 
@@ -640,7 +629,7 @@ ns1blankspace.app =
 							})
 							.click(function() 
 							{
-								ns1blankspaceViewportControlShow(this);
+								ns1blankspace.control.views.show(this);
 							})
 							.css('text-align', 'left');
 						
@@ -676,32 +665,21 @@ ns1blankspace.app =
 								.css('margin-left', '2px')
 								.parent()
 									.buttonset();	
-									
-						$('#spanns1blankspaceViewportControlDashboard')
-							.button({
-									text: false,
-									icons: {
-										primary: "ui-icon-calculator"
-									}})
-							.click(function() 
-							{
-								ns1blankspaceDashboardShow(this);
-							});					
-						
-						$('#spanns1blankspaceViewportControlSetupSwitch')
+															
+						$('#ns1blankspaceControlSetupSwitch')
 							.button({
 										text: false,
-										label: 'Setup your system.  Once finished click on this icon again.',
+										label: 'Set up your system.  Once finished click on this icon again.',
 										icons: {
 											primary: "ui-icon-gear"
 										}})
 							.css('font-size', '0.75em')			
 							.click(function() 
 							{
-								ns1blankspaceViewportSetup(this);
+								ns1blankspace.setup.switch(this);
 							});	
 						
-						$('#spanns1blankspaceViewportControlHelpHome')
+						$('#ns1blankspaceControlHelp')
 							.button({
 									text: false,
 									icons: {
@@ -719,14 +697,14 @@ ns1blankspace.app =
 								}	
 							});		
 						
-						$('#divns1blankspaceViewportLogonName').click(function(event)
+						$('#ns1blankspaceLogonName').click(function(event)
 						{
-							interfaceControlUserOptionsShow(this);
+							ns1blankspace.control.user.show(this);
 						})
 
-						$('#divns1blankspaceViewportSpaceText').click(function(event)
+						$('#ns1blankspaceViewportSpaceText').click(function(event)
 						{
-							interfaceControlSpaceOptionsShow(this);
+							ns1blankspace.control.space.show(this);
 						})
 						
 						if (ns1blankspace.option.showBrowsing)
@@ -746,9 +724,9 @@ ns1blankspace.app =
 								.css('top', '90px');
 						}
 						
-						$("#divns1blankspaceViewport").touchwipe({
-								wipeLeft: function() {ns1blankspaceViewportDestination({instruction: 3});},
-								wipeRight: function() {ns1blankspaceViewportDestination({instruction: 2});},
+						$("#ns1blankspaceControlContainer").touchwipe({
+								wipeLeft: function() {ns1blankspace.history.view({instruction: 3});},
+								wipeRight: function() {ns1blankspace.history.view({instruction: 2});},
 								min_move_x: 35,
 								min_move_y: 35,
 								preventDefaultEvents: true
@@ -758,44 +736,139 @@ ns1blankspace.app =
 						
 						if (gbReturnToLast) 
 						{
-							ns1blankspaceViewportDestination({instruction: 8})
+							ns1blankspace.history.view({instruction: 8})
 						}
 						else
 						{
-							ns1blankspaceHomeShow();
+							ns1blankspace.home.show();  //??? .init()
 						}	
 						
-						$('#inputns1blankspaceViewportControlSearch').focus();
-						
+						$('#ns1blankspaceControlSearch').focus();	
 					},
 
-	reset:			function ()
+	reset:		function ()
+				{				
+					$('#ns1blankspaceControlSearch').unbind('keyup');
+					$('#ns1blankspaceControlSearch').unbind('click');
+					$('#ns1blankspaceControlSearch').unbind('click');
+					$('#ns1blankspaceControlSearchOptions').unbind('click');
+					$('#ns1blankspaceControlNew').unbind('click');
+					$('#ns1blankspaceControlNewOptions').unbind('click');
+					$('#ns1blankspaceControlAction').unbind('click');
+					$('#ns1blankspaceControlActionOptions').unbind('click');
+					$('#ns1blankspaceControlSetup').unbind('click');
+					$('#ns1blankspaceControlSetupOptions').unbind('click');
+					$('#ns1blankspaceControlHelp').unbind('click');
+					$('#ns1blankspaceControlHelpOptions').unbind('click');
+					$('td.interfaceViewportMasterControlBrowse').unbind('click');
+					$('td.interfaceViewportMasterControlBrowseAll').unbind('click');
+					$('#divns1blankspaceViewportControlActionStatus').text('');
+					if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
+					ns1blankspace.inputDetected = false;
+					ns1blankspace.xhtml.action = '';
+				},
+
+	set: 		function (oParam)
+				{
+					var bShowHome;
+					var sNamespace = ns1blankspace.objectName;
+					var bNew;
+
+					if (oParam != undefined)
 					{
+						if (oParam.namespace != undefined) {bNamespace = oParam.namespace}
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+						if (oParam.new != undefined) {bNew = oParam.new}	
+					}	
+
+					if (sNamespace)
+					{
+						if (bShowHome)
+						{
+							ns1blankspace.history.view({
+								newDestination: 'ns1blankspace["' + sNamespace + '"].init({showHome: true});',
+								move: false
+								})		
+						}
 						
-						$('#inputns1blankspaceViewportControlSearch').unbind('keyup');
-						$('#inputns1blankspaceViewportControlSearch').unbind('click');
-						$('#spanns1blankspaceViewportControlSearch').unbind('click');
-						$('#spanns1blankspaceViewportControlSearchOptions').unbind('click');
-						$('#spanns1blankspaceViewportControlNew').unbind('click');
-						$('#spanns1blankspaceViewportControlNewOptions').unbind('click');
-						$('#spanns1blankspaceViewportControlAction').unbind('click');
-						$('#spanns1blankspaceViewportControlActionOptions').unbind('click');
-						$('#spanns1blankspaceViewportControlSetup').unbind('click');
-						$('#spanns1blankspaceViewportControlSetupOptions').unbind('click');
-						$('#spanns1blankspaceViewportControlHelp').unbind('click');
-						$('#spanns1blankspaceViewportControlHelpOptions').unbind('click');
-						$('td.interfaceViewportMasterControlBrowse').unbind('click');
-						$('td.interfaceViewportMasterControlBrowseAll').unbind('click');
-						$('#divns1blankspaceViewportControlActionStatus').text('');
-						if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
-						ns1blankspace.inputDetected = false;
-						ns1blankspace.xhtml.action = '';
-					}
+						$('#ns1blankspaceViewControlSet').button(
+						{
+							label: ns1blankspace.viewName
+						});
+						
+						$('#ns1blankspaceViewControlSearch').keyup(function(event)
+						{
+							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+					        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace["' + sNamespace + '"].search.show("ns1blankspaceViewControlSearch")', ns1blankspace.option.typingWait);
+						});
+						
+						$('#ns1blankspaceViewControlSearch').click(function(event)
+						{
+							ns1blankspace["' + sNamespace + '"].search.show('inputns1blankspaceViewportControlSearch')
+						});
+						
+						$('#ns1blankspaceViewControlSearchOptions').click(function(event)
+						{
+							ns1blankspace["' + sNamespace + '"].search.options.show();
+						});
+						
+						$('#ns1blankspaceViewControlNew').click(function(event)
+						{
+							ns1blankspace["' + sNamespace + '"].new();
+						})
+						
+						$('#ns1blankspaceViewControlNewOptions').click(function(event)
+						{
+							ns1blankspace["' + sNamespace + '"].new.options();
+						});
+						
+						$('#ns1blankspaceViewportControlAction').click(function(event)
+						{
+							ns1blankspace["' + sNamespace + '"].save.send();
+						});
+						
+						$('ns1blankspaceViewportControlAction').button({disabled: true});
+						
+						$('#ns1blankspaceViewportControlActionOptions').click(function(event)
+						{
+							var aHTML = [];
+							var h = -1;
+							
+							aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
+											
+							aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
+											'<td id="tdinterfaceActionOptionsDelete" class="interfaceActionOptions">' +
+											'Delete' +
+											'</td>' +
+											'</tr>';
+
+							aHTML[++h] = '</table>';
+
+							ns1blankspace["' + sNamespace + '"].save.action.show();
+
+							//ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
+						});
+						
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
+							
+						$('#ns1blankspaceControl').html('');	
+
+						if (ns1blankspace.option.setFocus) {$('#ns1blankspaceViewControlSearch').focus()};
+
+						if (bNew) 
+						{
+							ns1blankspace["' + sNamespace + '"].new();
+						}
+						else
+						{
+							if (bShowHome) {ns1blankspace["' + sNamespace + '"].home()};
+						}
+				}				
 }
 
 ns1blankspace.history =
 {
-	add: 		function (oParam)
+	control: 		function (oParam)
 				{
 					var bGet = false;
 					var iObject = ns1blankspace.object;
@@ -813,7 +886,7 @@ ns1blankspace.history =
 					
 					$.each(ns1blankspace.history.list, function(index) 
 					{ 
-						if ((this.object == iObject) && (this.objectContext ==iObjectContext))
+						if ((this.object == iObject) && (this.objectContext == iObjectContext))
 						{
 							if (sFunctionDefault != undefined)
 							{
@@ -844,14 +917,14 @@ ns1blankspace.history =
 						}
 						else
 						{
-							$('.interfaceViewportControl').removeClass('interfaceViewportControlHighlight')
-							$('#' + sXHTMLElementID).addClass('interfaceViewportControlHighlight')
+							$('.ns1blankspaceControl').removeClass('ns1blankspaceControlHighlight')
+							$('#' + sXHTMLElementID).addClass('ns1blankspaceControlHighlight')
 							$('#' + sXHTMLElementID).click()
 						}
 					}
 				},
 
-	instruction:function (oParam)
+	view: 		function (oParam)
 				{
 					var sDestinationInstructions;
 					var iInstruction = 1;
@@ -913,7 +986,7 @@ ns1blankspace.history =
 									ns1blankspace.history.viewport.push(sDestinationInstructions);
 									ns1blankspace.history.currentIndex = ns1blankspace.history.viewport.length - 1;
 									
-									var sData = 'value=' + encodeURIComponent(ns1blankspace.history.viewport.slice(-2).toString());
+									var sData = 'value=' + ns1blankspace.util.fs(ns1blankspace.history.viewport.slice(-2).toString());
 									
 									$.ajax(
 									{
@@ -998,7 +1071,7 @@ ns1blankspace.history =
 								bForward = false;					
 							};			
 					
-							$('#spanns1blankspaceViewportControlBack')
+							$('#ns1blankspaceControlBack')
 								.button({
 										text: false,
 										icons: {primary: "ui-icon-triangle-1-w"},
@@ -1020,10 +1093,10 @@ ns1blankspace.history =
 									.parent()
 										.buttonset();
 					
-							$('#spanns1blankspaceViewportControlBack')
+							$('#ns1blankspaceControlBack')
 								.button({disabled: bBack})
 					
-							$('#spanns1blankspaceViewportControlForward')
+							$('#ns1blankspaceControlForward')
 								.button({disabled: bForward})
 					
 							sDestinationInstructions = ns1blankspace.history.viewport[ns1blankspace.history.currentIndex]
@@ -1036,7 +1109,6 @@ ns1blankspace.history =
 									eval(sDestinationInstructions)
 								}	
 							}	
-							
 						}
 					}	
 				}
@@ -1046,8 +1118,6 @@ ns1blankspace.logon =
 {
 	show: 		function (oParam)
 				{
-					
-
 					var aHTML = [];
 					var h = -1;
 					var sXHTMLElementID = "divInterfaceBox";
@@ -1058,44 +1128,44 @@ ns1blankspace.logon =
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 					}	
 						
-					aHTML[++h] = '<table id="tablens1blankspaceLogon" class="ns1blankspaceLogon">';
+					aHTML[++h] = '<table id="ns1blankspaceLogonContainer" class="ns1blankspaceLogon">';
 					
-					aHTML[++h] = '<tr id="trns1blankspaceLogonName" class="ns1blankspaceLogon">' +
-									'<td id="tdns1blankspaceLogonName" class="ns1blankspaceLogon">' +
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogon">' +
 									'Logon Name' +
 									'</td>' +
-									'<td id="tdns1blankspaceLogonNameValue" class="ns1blankspaceLogon">' +
-									'<input id="inputns1blankspaceLogonName" class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogonInput">' +
+									'<input id="ns1blankspaceLogonName" class="ns1blankspaceLogon">' +
 									'</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '<tr id="trns1blankspaceLogonPassword" class="ns1blankspaceLogon">' +
-									'<td id="tdns1blankspaceLogonPassword" class="ns1blankspaceLogon">' +
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogon">' +
 									'Password' +
 									'</td>' +
-									'<td id="tdns1blankspaceLogonPasswordValue" class="ns1blankspaceLogon">' +
-									'<input id="inputns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password">' +
+									'<td class="ns1blankspaceLogonInput">' +
+									'<input id="ns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password">' +
 									'</td>' +
 									'</tr>';
 
-					aHTML[++h] = '<tr id="trns1blankspaceLogon" class="ns1blankspaceLogon">' +
-									'<td id="tdns1blankspaceLogon" class="ns1blankspaceLogon" colspan=2>' +
-									'<span id="spanns1blankspaceLogon"></span>' +
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogon" colspan=2>' +
+									'<span id="ns1blankspaceLogon"></span>' +
 									'</td>' +
 									'</tr>';
 					
-					aHTML[++h] = '<tr id="trns1blankspaceLogonNameRemember" class="ns1blankspaceLogon">' +
-								    '<td id="tdns1blankspaceLogonNameRemember" class="ns1blankspaceLogon" colspan=2>' +
-									'<input type="checkbox" id="inputns1blankspaceLogonNameRemember"/>Remember Me</td></tr>';
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+								    '<td class="ns1blankspaceLogon" colspan=2>' +
+									'<input type="checkbox" id="ns1blankspaceLogonNameRemember"/>Remember Me</td></tr>';
 
-					aHTML[++h] = '<tr id="trns1blankspace.logon.getPassword.send" class="ns1blankspaceLogon">' +
-									'<td id="tdns1blankspace.logon.getPassword.send" class="ns1blankspaceLogon" colspan=2>' +
-									'<a href="#" id="ans1blankspace.logon.getPassword.send">Send Password</a>' +
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogon" colspan=2>' +
+									'<a href="#" id="ns1blankspaceLogonGetPassword">Get Password</a>' +
 									'</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '<tr id="trns1blankspaceLogonStatus" class="ns1blankspaceLogon">' +
-									'<td id="tdns1blankspaceLogonStatus" class="ns1blankspaceLogon" colspan=2>' +
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+									'<td id="ns1blankspaceLogonStatus" class="ns1blankspaceLogon" colspan=2>' +
 									'&nbsp;' +
 									'</td>' +
 									'</tr>';
@@ -1105,47 +1175,47 @@ ns1blankspace.logon =
 					$('#' + sXHTMLElementID).css("z-index", "1");
 					$('#' + sXHTMLElementID).html(aHTML.join(''));
 					
-					var sLogonName = $.cookie('mydigitalstucturelogon')
+					$('#' + sXHTMLElementID).show();
+
+					var sLogonName = $.cookie('mydigitalstucturelogonname')
 					
 					if (sLogonName != '' && sLogonName != null)
 					{
-						$('#inputns1blankspaceLogonName').val(sLogonName);
-						$('#inputns1blankspaceLogonNameRemember').attr('checked', true);
-						$('#inputns1blankspaceLogonPassword').focus();
+						$('#ns1blankspaceLogonName').val(sLogonName);
+						$('#ns1blankspaceLogonNameRemember').attr('checked', true);
+						$('#ns1blankspaceLogonPassword').focus();
 					}
 					else
 					{
-						$('#inputns1blankspaceLogonName').focus();
+						$('#ins1blankspaceLogonName').focus();
 					}
 					
-					$('#spanns1blankspaceLogon').button(
+					$('#ns1blankspaceLogon').button(
 					{
 						label: "Logon"
 					})
 					.click(function() 
 					{
-						ns1blankspaceLogon();
+						ns1blankspace.logon.send();
 					});	
 
-					$('#inputns1blankspaceLogonName').keypress(function(e)
+					$('#ns1blankspaceLogonName').keypress(function(e)
 					{
 					    if (e.which == 13)
 					    {
-					        ns1blankspaceLogon();
+					        ns1blankspace.logon.send();
 					    }
 					});
 
-					$('#inputns1blankspaceLogonPassword').keypress(function(e)
+					$('#ns1blankspaceLogonPassword').keypress(function(e)
 					{
 					    if (e.which == 13)
 					    {
-					        ns1blankspaceLogon();
+					        ns1blankspace.logon.send();
 					    }
 					});
 
-					$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
-					
-					$('#ans1blankspace.logon.getPassword.send').click(function()
+					$('#ns1blankspaceLogonGetPassword').click(function()
 					{
 						ns1blankspace.logon.getPassword.show();
 					});
@@ -1153,13 +1223,10 @@ ns1blankspace.logon =
 
 	send: 		function ()
 				{
-					var sData;
+					var sData = 'logon=' + ns1blankspace.util.fs($('#inputns1blankspaceLogonName').val()) +
+								'&password=' + ns1blankspace.util.fs($('#inputns1blankspaceLogonPassword').val());
 
-					var sLogonName = $('#inputns1blankspaceLogonName').val();
-					var sPassword = $('#inputns1blankspaceLogonPassword').val();
-					
-					sData = 'logon=' + encodeURIComponent(sLogonName) + '&password=' + encodeURIComponent(sPassword);
-					$('#tdns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loadingSmall);
+					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loadingSmall);
 					
 					$.ajax(
 					{
@@ -1167,7 +1234,6 @@ ns1blankspace.logon =
 						url: '/ondemand/logon/',
 						data: sData,
 						dataType: 'json',
-						async: true,
 						success: this.process
 					})
 				},
@@ -1176,23 +1242,21 @@ ns1blankspace.logon =
 				{		
 					if (oResponse.status == 'ER')
 					{
-						$('#tdns1blankspaceLogonStatus').html('Logon Name or password is incorrect.');
-						$('#divInterface').effect("shake", { times:2 }, 100);
+						$('#ns1blankspaceLogonStatus').html('Logon Name or password is incorrect.');
+						$('#ns1blankspaceContainer').effect("shake", { times:2 }, 100);
 					}
 					else 
 					{
-						$('#tdns1blankspaceLogonStatus').html('Logon successful...');
+						$('#ns1blankspaceLogonStatus').html('Logon successful, loading app...');
 						
-						if ($('#inputns1blankspaceLogonNameRemember').attr('checked'))
+						if ($('#ns1blankspaceLogonNameRemember').attr('checked'))
 						{
-							$.cookie('mydigitalstucturelogon', $('#inputns1blankspaceLogonName').val(), {expires:30});
+							$.cookie('mydigitalstucturelogonname', $('#inputns1blankspaceLogonName').val(), {expires:30});
 						}
-						
-						//interfaceControlSecurity();
 						
 						if (oResponse.passwordStatus == "EXPIRED")
 						{
-							ns1blankspaceLogonChangePasswordShow(); 
+							ns1blankspace.logon.changePassword.show(); 
 						}
 						else
 						{	
@@ -1215,50 +1279,50 @@ ns1blankspace.logon.changePassword =
 				{
 					var aHTML = [];
 					var h = -1;
-					var sXHTMLElementID = 'divInterfaceBox';
+					var sXHTMLElementID = 'ns1blankspaceBox';
 					
 					if (oParam != undefined)
 					{
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 					}	
 					
-					aHTML[++h] = '<table id="tablens1blankspaceLogonChangePassword" class="ns1blankspaceLogon">';
+					aHTML[++h] = '<table id="ns1blankspaceLogonChangePasswordContainer" class="ns1blankspaceLogon">';
 					
-					aHTML[++h] = '<tr id="trns1blankspaceLogonCurrentPassword" class="ns1blankspaceLogon">' +
-									'<td id="tdns1blankspaceCurrentPassword" class="ns1blankspaceLogon">' +
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogon">' +
 									'Current Password' +
 									'</td>' +
-									'<td id="tdns1blankspaceLogonCurrentPasswordValue" class="ns1blankspaceLogon">' +
-									'<input id="inputns1blankspaceLogonCurrentPassword" class="ns1blankspaceLogon" type="password">' +
+									'<td class="ns1blankspaceLogonInput">' +
+									'<input id="ns1blankspaceLogonCurrentPassword" class="ns1blankspaceLogon" type="password">' +
 									'</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '<tr id="trns1blankspaceLogonNewPassword" class="ns1blankspaceLogon">' +
-									'<td id="tdns1blankspaceLogonNewPassword" class="ns1blankspaceLogon">' +
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogon">' +
 									'New Password' +
 									'</td>' +
-									'<td id="tdns1blankspaceLogonNewPasswordValue" class="ns1blankspaceLogon">' +
-									'<input id="inputns1blankspaceLogonNewPassword" class="ns1blankspaceLogon" type="password">' +
+									'<td class="ns1blankspaceLogonInput">' +
+									'<input id="ns1blankspaceLogonNewPassword" class="ns1blankspaceLogon" type="password">' +
 									'</td>' +
 									'</tr>';
 
-					aHTML[++h] = '<tr id="trns1blankspaceLogonNewPasswordConfirm" class="ns1blankspaceLogon">' +
-									'<td id="tdns1blankspaceLogonNewPasswordConfirm" class="ns1blankspaceLogon">' +
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogon">' +
 									'Confirm Password' +
 									'</td>' +
-									'<td id="tdns1blankspaceLogonNewPasswordConfirmValue" class="ns1blankspaceLogon">' +
-									'<input id="inputns1blankspaceLogonNewPasswordConfirm" class="ns1blankspaceLogon" type="password">' +
+									'<td class="ns1blankspaceLogonInput">' +
+									'<input id="ns1blankspaceLogonNewPasswordConfirm" class="ns1blankspaceLogon" type="password">' +
 									'</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '<tr id="trns1blankspaceLogonChangePassword" class="ns1blankspaceLogon">' +
-									'<td id="tdns1blankspaceLogonChangePassword" class="ns1blankspaceLogon" colspan=2>' +
-									'<span id="spanns1blankspaceLogonChangePassword" class="ns1blankspaceLogon">Change Password</span>' +
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogon" colspan=2>' +
+									'<span id="ns1blankspaceLogonChangePassword" class="ns1blankspaceLogon">Change Password</span>' +
 									'</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '<tr id="trns1blankspaceLogonChangePasswordStatus" class="ns1blankspaceLogon">' +
-									'<td id="tdns1blankspaceLogonChangePasswordStatus" class="ns1blankspaceLogon" colspan=2>' +
+					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+									'<td id="ns1blankspaceLogonChangePasswordStatus" class="ns1blankspaceLogon" colspan=2>' +
 									'&nbsp;' +
 									'</td>' +
 									'</tr>';
@@ -1267,15 +1331,15 @@ ns1blankspace.logon.changePassword =
 					
 					$('#' + sXHTMLElementID).html(aHTML.join(''));
 					
-					$('#inputns1blankspaceLogonCurrentPassword').focus();
+					$('#ns1blankspaceLogonCurrentPassword').focus();
 					
-					$('#spanns1blankspaceLogonChangePassword').button(
+					$('#ns1blankspaceLogonChangePassword').button(
 					{
 						label: "Change Password"
 					})
 					.click(function()
 					{
-						ns1blankspaceLogonChangePassword();
+						ns1blankspace.logon.changePassword.send();
 					});	
 					
 					$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
@@ -1284,37 +1348,36 @@ ns1blankspace.logon.changePassword =
 	send: 		function() 
 				{
 					
-				var sNewPassword = $('#inputns1blankspaceLogonNewPassword').val();
-				var sNewPasswordConfirm = $('#inputns1blankspaceLogonNewPasswordConfirm').val();
+				var sNewPassword = $('#ns1blankspaceLogonNewPassword').val();
+				var sNewPasswordConfirm = $('#ns1blankspaceLogonNewPasswordConfirm').val();
 
 				if (sNewPassword != sNewPasswordConfirm)
 				{
-					$('#tdns1blankspaceLogonChangePasswordStatus').html('New passwords do not match.');
+					$('#ns1blankspaceLogonChangePasswordStatus').html('New passwords do not match.');
 				}
 
 				else if (sNewPassword == '')
 				{
-					$('#tdns1blankspaceLogonChangePasswordStatus').html('New password can not be blank.');
+					$('#ns1blankspaceLogonChangePasswordStatus').html('New password can not be blank.');
 				}
 				else
 				{
-
-					$('#tdns1blankspaceLogonChangePasswordStatus').html('Updating password...');
+					$('#ns1blankspaceLogonChangePasswordStatus').html('Updating password...');
 					
-					var sCurrentPassword = $('#inputns1blankspaceLogonCurrentPassword').val();
+					var sCurrentPassword = $('#ns1blankspaceLogonCurrentPassword').val();
 
-					var sParam = 'method=SITE_USER_PASSWORD_MANAGE&expiredays=36500' +
-								'&site=' + msOnDemandSiteId +
-								'&currentpassword=' + sCurrentPassword + 
-								'&newpassword=' + sNewPassword +
-								'&newpasswordconfirm=' + sNewPasswordConfirm;
+					var sData = 'expiredays=36500' +
+									'&site=' + msOnDemandSiteId +
+									'&currentpassword=' + sCurrentPassword + 
+									'&newpassword=' + sNewPassword +
+									'&newpasswordconfirm=' + sNewPasswordConfirm;
 					
 					$.ajax(
 					{
 						type: 'POST',
-						url: '/ondemand/site/?' + sParam,
+						url: '/ondemand/site/?method=SITE_USER_PASSWORD_MANAGE',
+						data: sData,
 						dataType: 'json',
-						async: false,
 						success: this.process
 					})
 				},
@@ -1325,16 +1388,16 @@ ns1blankspace.logon.changePassword =
 					{
 						if (oResponse.error.errornotes == 'PASSWORD_LESS_THAN_6_CHAR') 
 						{
-							$('#tdns1blankspaceLogonChangePasswordStatus').html('New password needs to be at least 6 characters.');
+							$('#ns1blankspaceLogonChangePasswordStatus').html('New password needs to be at least 6 characters.');
 						}
 						else
 						{
-							$('#tdns1blankspaceLogonChangePasswordStatus').html('Incorrect current password or your not logged on.');
+							$('#ns1blankspaceLogonChangePasswordStatus').html('Incorrect current password or you are not logged on.');
 						}
 					}
 					else
 					{
-						$('#tdns1blankspaceLogonChangePasswordStatus').html('Password changed!');
+						$('#ns1blankspaceLogonChangePasswordStatus').html('Password changed!');
 					
 						if (oResponse.url == '#' || ns1blankspace.option.logonStayOnDocument)
 						{
@@ -1364,30 +1427,30 @@ ns1blankspace.logon.getPassword =
 									'Logon Name' +
 									'</td>' +
 									'<td class="ns1blankspaceLogon">' +
-									'<input id="input1blankspaceGetPasswordLogon" class="ns1blankspaceLogon">' +
+									'<input id="ns1blankspaceGetPasswordLogonName" class="ns1blankspaceLogon">' +
 									'</td>' +
 									'</tr>';
 									
 					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
 									'<td class="ns1blankspaceLogon" colspan=2>' +
-									'<span id="span1blankspaceGetPassword" class="ns1blankspaceLogon">Send Password</span>' +
+									'<span id="ns1blankspaceGetPassword" class="ns1blankspaceLogon">Send Password</span>' +
 									'</td>' +
 									'</tr>';
 									
 					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
-									'<td id="td1blankspaceGetPasswordStatus" class="ns1blankspaceLogon" colspan=2>' +
+									'<td id="ns1blankspaceGetPasswordStatus" class="ns1blankspaceLogon" colspan=2>' +
 									'&nbsp;' +
 									'</td>' +
 									'</tr>';
 									
 					aHTML[++h] = '</table>';					
 					
-					$('#divInterfaceBox').css("z-index", "1");
-					$('#divInterfaceBox').html(aHTML.join(''));
+					$('#ns1blankspaceBox').css("z-index", "1");
+					$('#ns1blankspaceBox').html(aHTML.join(''));
 					
-					$('#input1blankspaceGetPassword').focus();
+					$('#ns1blankspaceGetPasswordLogon').focus();
 					
-					$('#span1blankspaceGetPassword').button(
+					$('#ns1blankspaceGetPassword').button(
 					{
 						label: "Get Password"
 					})
@@ -1401,18 +1464,16 @@ ns1blankspace.logon.getPassword =
 
 	send: 		function ()
 				{	
-					if ($('#input1blankspaceLogon').val() == '')
+					if ($('#ns1blankspaceGetPasswordLogonName').val() == '')
 					{
-						$('#td1blankspaceGetPasswordStatus').html('Logon name is blank, please enter a logon name.');
+						$('#ns1blankspaceGetPasswordStatus').html('Logon name is blank, please enter a logon name.');
 					}
 					else
 					{
-						$('#td1blankspaceGetPasswordStatus').html('Sending password...');
-						
-						var sCurrentPassword = $('#input1blankspaceLogonCurrentPassword').val();
-									
+						$('#tns1blankspaceGetPasswordStatus').html('Sending password...');
+										
 						var sData = 'site=' + msOnDemandSiteId +
-										'&logon=' + $('#input1blankspaceGetPasswordLogon').val();	
+										'&logon=' + $('#ns1blankspaceGetPasswordLogonName').val();	
 						
 						$.ajax(
 						{
@@ -1429,15 +1490,14 @@ ns1blankspace.logon.getPassword =
 				{
 					if (oResponse.status == 'OK')
 					{
-						$('#td1blankspaceGetPasswordStatus').html('Your password has been emailed to you.');
+						$('#ns1blankspaceGetPasswordStatus').html('Your password has been emailed to you.');
 					}
 					else
 					{
-						$('#td1blankspaceGetPasswordStatus').html('Can not find this logon name!');
+						$('#ns1blankspaceGetPasswordStatus').html('Can not find this logon name!');
 					}
 				}
 }
-
 
 ns1blankspace.logOff = function ()
 				{
@@ -1453,50 +1513,10 @@ ns1blankspace.logOff = function ()
 					document.location.reload(false);
 				}
 
-ns1blankspace.home = 
-{
-	init: 		function ()
-				{	
-					interfaceHomeViewport();
-					
-					if (ns1blankspace.xhtml.home == '')
-					{
-						ns1blankspace.xhtml.home = interfaceHome();
-					}
-					
-					$('#divInterfaceMain').html(ns1blankspace.xhtml.home)
-					
-					interfaceHomeShow();
-				},
-
-	show: 		function (oElement)
-				{
-
-					var aHTML = [];
-					var h = -1;
-					
-					if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
-					{
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
-					}
-					else
-					{	
-						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
-						$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-						$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-						$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-						$('#divns1blankspaceViewportControlOptions').html(interfaceHomeOptions());
-						interfaceHomeOptionsBind();
-					}	
-				}
-}				
-
 ns1blankspace.attachments = 
 {
 	show: 		function (oParam)
 				{
-
 					var sXHTMLElementID;
 					var iObject = ns1blankspace.object;
 					var iObjectContext = ns1blankspace.objectContext;
@@ -1519,16 +1539,15 @@ ns1blankspace.attachments =
 					
 					if (oActions.add)
 					{
-					
 						var aHTML = [];
 						var h = -1;	
 									
-						aHTML[++h] = '<table id="tableInterfaceMainAttachments" class="interfaceMain">' +
-									'<tr id="trInterfaceMainAttachmentsRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainAttachmentsColumn1" class="interfaceMainColumn1Large">' +
+						aHTML[++h] = '<table>' +
+									'<tr>' +
+									'<td id="ns1blankspaceAttachmentsColumn1" class="ns1blankspaceColumn1Large">' +
 									ns1blankspace.xhtml.loading +
 									'</td>' +
-									'<td id="tdInterfaceMainAttachmentsColumn2" class="interfaceMainColumn2Action">' +
+									'<td id="ns1blankspaceAttachmentsColumn2" class="ns1blankspaceColumn2Action">' +
 									'</td>' +
 									'</tr>' +
 									'</table>';					
@@ -1538,36 +1557,36 @@ ns1blankspace.attachments =
 						var aHTML = [];
 						var h = -1;	
 						
-						aHTML[++h] = '<table id="tableInterfaceMainAttachmentsColumn2" class="interfaceMainColumn2">';
+						aHTML[++h] = '<table class="ns1blankspaceColumn2">';
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainAttachmentsAdd" class="interfaceMainAction">' +
-										'<span id="spanInterfaceMainAttachmentsAdd">Add</span>' +
+						aHTML[++h] = '<tr><td class="ns1blankspaceAction">' +
+										'<span id="ns1blankspaceAttachmentsAdd">Add</span>' +
 										'</td></tr>';
 							
 						if (sHelpNotes != undefined)
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainAttachmentsAddHelpNotes" class="interfaceMainAction">' +
+							aHTML[++h] = '<tr><td class="ns1blankspaceAction">' +
 										'<hr />' +
 										'</td></tr>';
 										
-							aHTML[++h] = '<tr><td id="tdInterfaceMainAttachmentsAddHelpNotes" class="interfaceMainAction" style="font-size:0.75em;color:#404040;">' +
+							aHTML[++h] = '<tr><td id="ns1blankspaceAttachmentsAddHelpNotes" class="ns1blankspaceAction" style="font-size:0.75em;color:#404040;">' +
 										sHelpNotes +
 										'</td></tr>';
 						}
 						
 						aHTML[++h] = '</table>';					
 						
-						$('#tdInterfaceMainAttachmentsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceAttachmentsColumn2').html(aHTML.join(''));
 					
-						$('#spanInterfaceMainAttachmentsAdd').button(
+						$('#ns1blankspaceAttachmentsAdd').button(
 						{
 							label: "Add"
 						})
 						.click(function() {
-							 ns1blankspaceAttachmentsAdd(oParam);
+							 ns1blankspace.attachments.add(oParam);
 						})
 					
-						sXHTMLElementID = 'tdInterfaceMainAttachmentsColumn1';
+						sXHTMLElementID = 'ns1blankspaceAttachmentsColumn1';
 					}
 					
 					if (iObjectContext != -1)
@@ -1596,34 +1615,33 @@ ns1blankspace.attachments =
 						
 					if (oResponse.data.rows.length == 0)
 					{
-						aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-						aHTML[++h] = '<tbody>'
-						aHTML[++h] = '<tr class="interfaceAttachments">';
-						aHTML[++h] = '<td class="interfaceMainRowNothing">No attachments.</td>';
+						aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;"><tbody>';
+						aHTML[++h] = '<tr class="ns1blankspaceAttachments">';
+						aHTML[++h] = '<td class="ns1blankspaceNothing">No attachments.</td>';
 						aHTML[++h] = '</tr>';
+						aHTML[++h] = '</tbody></table>';
 						
 						$('#' + sXHTMLElementID).html(aHTML.join(''));
 						$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 					}
 					else
 					{
-						aHTML[++h] = '<table class="interfaceMain"">';
-						aHTML[++h] = '<tbody>'
+						aHTML[++h] = '<table><tbody>'
 					
-						aHTML[++h] = '<tr class="interfaceMainCaption">';
-						aHTML[++h] = '<td class="interfaceMainCaption">Filename</td>';
-						aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-						aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
+						aHTML[++h] = '<tr class="ns1blankspaceCaption">';
+						aHTML[++h] = '<td class="ns1blankspaceCaption">File Name</td>';
+						aHTML[++h] = '<td class="ns1blankspaceCaption">Date</td>';
+						aHTML[++h] = '<td class="ns1blankspaceCaption">&nbsp;</td>';
 						aHTML[++h] = '</tr>';
 
 						$.each(oResponse.data.rows, function()
 						{
-							aHTML[++h] = ns1blankspaceAttachmentsShowRow(this);
+							aHTML[++h] = ns1blankspace.attachments.row(this);
 						});
 				    	
 						aHTML[++h] = '</tbody></table>';
 
-						ns1blankspacePaginationList(
+						ns1blankspace.pagination.list(
 						   {
 							xhtmlElementID: sXHTMLElementID,
 							xhtmlContext: 'Attachment',
@@ -1632,31 +1650,30 @@ ns1blankspace.attachments =
 							columns: 'subject-actiondate',
 							more: oResponse.moreid,
 							rows: ns1blankspace.option.defaultRows,
-							functionSearch: ns1blankspaceActions,
-							functionShowRow: ns1blankspaceAttachmentsShowRow,
-							functionOpen: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)',
-							functionNewPage: 'ns1blankspaceAttachmentsShowBind()',
+							functionSearch: ns1blankspace.actions.show(),
+							functionShowRow: ns1blankspace.attachments.row,
+							functionNewPage: 'ns1blankspace.attachments.bind()',
 							type: 'json'
 						   }); 	
 							
-						ns1blankspaceAttachmentsShowBind();
+						ns1blankspace.attachments.bind();
 					}
-					
 				}
 				
 	row:		function (oRow)
 				{
 					var aHTML = [];
 					
-					aHTML.push('<tr class="interfaceAttachments">');
+					aHTML.push('<tr class="ns1blankspaceAttachments">');
 					
-					aHTML.push('<td id="tdAttachment_filename-' + oRow.id + '" class="interfaceMainRow">' +
+					aHTML.push('<td id="ns1blankspaceAttachment_filename-' + oRow.id + '" class="ns1blankspaceRow">' +
 										'<a href="' + oRow.download + '">' + oRow.filename + '</a></td>');
 										
-					aHTML.push('<td id="tdAttachment_date-' + oRow.id + '" class="interfaceMainRow">' + oRow.modifieddate + '</td>');
+					aHTML.push('<td id="ns1blankspaceAttachment_date-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.modifieddate + '</td>');
 					
-					aHTML.push('<td id="tdAttachment_options_delete-' + oRow.attachment + 
-									'" class="interfaceMainRowOptionsDelete interfaceMainRowOptionsDeleteAttachment">&nbsp;</td>');
+					aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+									'<span id="ns1blankspaceAttachment_options_remove-' + oRow.attachment + 
+									'" class="ns1blankspaceAttachmentOptionsRemove">&nbsp;</span></td>');
 					
 					aHTML.push('</tr>');
 					
@@ -1666,7 +1683,7 @@ ns1blankspace.attachments =
 
 	bind:		function ()
 				{
-					$('.interfaceMainRowOptionsDeleteAttachment').button({
+					$('td.ns1blankspaceAttachmentOptionsRemove').button({
 								text: false,
 								 icons: {
 									 primary: "ui-icon-close"
@@ -1681,7 +1698,6 @@ ns1blankspace.attachments =
 
 	remove: 	function (sXHTMLElementID)
 				{
-
 					var aSearch = sXHTMLElementID.split('-');
 					var sElementId = aSearch[0];
 					var sSearchContext = aSearch[1];
@@ -1694,24 +1710,23 @@ ns1blankspace.attachments =
 							type: 'POST',
 							url: '/ondemand/core/?' + sParam,
 							data: sData,
-							dataType: 'text',
+							dataType: 'json',
 							success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
 						});
 				},
 
 	add: 		function (oParam)
 				{
-
-					$('#tdInterfaceMainAttachmentsColumn1').html(this.upload.show(oParam));
+					$('#ns1blankspaceAttachmentsColumn1').html(ns1blankspace.attachments.upload.show(oParam));
 					
 					$('#spanInterfaceMainUpload').button(
 						{
 							label: "Upload"
 						})
 						.click(function() {
-							 ns1blankspaceAttachmentsUploadProcess();
+							 ns1blankspace.attachments.upload.process();
 						})
-				}
+				},
 
 	upload: 	{ 
 						show: 	function (oParam)
@@ -1757,7 +1772,7 @@ ns1blankspace.attachments =
 									
 									if (sLabel != '') 
 									{
-										aHTML[++h] = '<div id="interfaceUploadLabel" class="ns1blankspaceViewport">' + sLabel + '</div>';
+										aHTML[++h] = '<div id="interfaceUploadLabel" class="ns1blankspaceControl">' + sLabel + '</div>';
 									}	
 										
 									for (var i = 0; i < iMaxFiles; i++) 	
@@ -1845,12 +1860,12 @@ ns1blankspace.attachments =
 
 ns1blankspace.setup = 
 {
-	toggle:		function ()
+	switch:		function ()
 				{
 					var aHTML = [];
 					var h = -1;
 					
-					$('#div1blankspaceViewportControlOptions').attr('data-initiator', '');
+					$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 					$('#div1blankspaceViewportControlSet').unbind('click');
 					
 					if (ns1blankspace.setupViewport)
@@ -1872,10 +1887,10 @@ ns1blankspace.setup =
 							ns1blankspaceViewportControlShow(this);
 						});
 						
-						interfaceControlSetMasterViewport();
-						ns1blankspaceHomeShow();
+						ns1blankspace.control.setView.default();
+						ns1blankspace.home.show();
 						
-						ns1blankspaceStatus("")	
+						ns1blankspace.status.message("")	
 					}
 					else
 					{
@@ -1893,34 +1908,10 @@ ns1blankspace.setup =
 					
 						$('.divInterfaceViewportMain').html(interfaceControlSetupOptions);
 						
-						interfaceControlSetSetupMasterViewport();
+						ns1blankspace.control.setView.setup();
 						
-						ns1blankspaceStatus("Click icon again to return.")		
+						ns1blankspace.status.message("Click icon again to return.")		
 					}		
-				},
-
-	show:		function (oElement)
-				{
-
-					var aHTML = [];
-					var h = -1;
-					
-					if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
-					{
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
-					}
-					else
-					{	
-						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
-						$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-						$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-						$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-						$('#divns1blankspaceViewportControlOptions').html(interfaceControlSetupOptions());
-							
-						interfaceControlSetupOptionsBind();
-					}	
-
 				}
 }				
 
@@ -1928,59 +1919,36 @@ ns1blankspace.help =
 {
 	show: 		function ()
 				{
-					if (interfaceControlHelpURL() != '')
+					if (ns1blankspace.help.uri != '')
 					{
-						window.open(interfaceControlHelpURL());
+						window.open(ns1blankspace.help.uri);
 					}
 					else	
 					{
-						$('#divInterfaceMain').html(interfaceHelp());
+						$('#ns1blankspaceMain').html(ns1blankspace.help.show());
 					}	
 				}
 }				
-
-function ns1blankspaceMainViewportShow(asDivID, bRefresh)
-{
-	if (bRefresh == undefined) {bRefresh = false}
-
-	$('#divns1blankspaceViewportControlOptions').hide();
-	$('.divInterfaceViewportMain').hide();
-	$(asDivID).show(ns1blankspace.option.showSpeed);
-	ns1blankspace.xhtml.divID = asDivID;
-	if ($(asDivID).html() == '' || bRefresh)
-	{
-		$(asDivID).attr('onDemandLoading', '1');
-		$(asDivID).html(ns1blankspace.xhtml.loading);
-	}	
-}
-
-
-function ns1blankspaceMainViewportHideLoading(asDivID)
-{
-	if (asDivID == undefined) {asDivID = ns1blankspace.xhtml.divID};
-
-	$(asDivID).removeClass("loading");
-}
 
 ns1blankspace.status =
 {
 	message: 		function (sStatus)
 				{	
-					$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
 							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
 				},
 
 	working:	function ()
 				{	
-					$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
 							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + ns1blankspace.xhtml.loadingSmall + '</div></div>');
-				}
+				},
 
 	error: 		function ns1blankspaceError(sError)
 				{
 					if (sError == undefined) {sError = 'Error!'};
 					
-					$('#divns1blankspaceViewportControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
 							'<div style="display:table-cell; vertical-align:bottom; padding:5px; height:25px; color:white; background-color:red;">' + sError + '</div></div>');
 				}
 }
@@ -1988,8 +1956,7 @@ ns1blankspace.status =
 ns1blankspace.edit =
 {
 	start: 		function (sElementId)
-				{
-					
+				{	
 					var aSearch = sElementId.split('-');
 					var sActionElementId = '#' + aSearch[0] + '-options-' + aSearch[2];
 
@@ -2018,26 +1985,22 @@ ns1blankspace.edit =
 					
 					$('#' + sElementInputId).blur(function(event)
 					{
-						ns1blankspaceElementEditStop(sElementId);
+						ns1blankspace.edit.stop(sElementId);
 					});
-					
 				},
 
 	stop:		function (sElementId)
 				{
-					
-					ns1blankspaceElementEditSave(sElementId);
+					ns1blankspace.edit.save(sElementId);
 					
 					var aSearch = sElementId.split('-');
 					var sHTML = $('#' + sElementId.replace('td', 'input')).val();
 
 					$('#' + sElementId).html(sHTML);
-
 				},
 
 	save:		function (sElementId)
 				{
-
 					var aSearch = sElementId.split('-');
 
 					var sMethod = aSearch[0];
@@ -2064,40 +2027,11 @@ ns1blankspace.dialog =
 	init: 		function(sSource)
 				{
 					if (sSource == undefined) {sSource = ''}
-					$('#div1blankspaceViewportControlOptions').attr('data-initiator', sSource);
-				},
-
-	show2: 		function (oElement)
-				{
-
-					var aHTML = [];
-					var h = -1;
-
-					if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
-					{
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
-					}
-					else
-					{	
-						if (ns1blankspace.xhtml.masterControl == '')
-						{
-							ns1blankspace.xhtml.masterControl = interfaceControlOptions();
-						}
-
-						$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
-						$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-						$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-						$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-						$('#divns1blankspaceViewportControlOptions').html(ns1blankspace.xhtml.masterControl);
-							
-						interfaceControlOptionsBind();
-					}	
+					$(ns1blankspace.xhtml.container).attr('data-initiator', sSource);
 				},
 
 	show:		function (oParam)
 				{
-
 					var aHTML = [];
 					var h = -1;
 					var sXHTMLElementID;
@@ -2126,18 +2060,18 @@ ns1blankspace.dialog =
 					
 					if (oXHTMLElement != undefined)
 					{
-						if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oXHTMLElement.attr('id') && !bForceShow)
+						if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oXHTMLElement.attr('id') && !bForceShow)
 						{
-							$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-							$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						}
 						else
 						{
-							$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oXHTMLElement.attr('id'));
-							$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-							$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-							$('#divns1blankspaceViewportControlOptions').offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft});
-							$('#divns1blankspaceViewportControlOptions').html(sXHTML);
+							$(ns1blankspace.xhtml.container).attr('data-initiator', oXHTMLElement.attr('id'))
+								.html("&nbsp;")
+								.show(ns1blankspace.option.showSpeedOptions)
+								.offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft})
+								.html(sXHTML);
 							
 							if (sFunctionBind != undefined)
 								{eval(sFunctionBind)}
@@ -2145,11 +2079,11 @@ ns1blankspace.dialog =
 					}	
 				},
 
-	hide:		function ns1blankspaceViewportOptionsHide()
+	hide:		function ()
 				{
-					$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
-					$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+					$(ns1blankspace.xhtml.container).attr('data-initiator', '')
+						.html("&nbsp;")
+						.hide(ns1blankspace.option.hideSpeedOptions);
 				},
 				
 	position:	function (oParam)
@@ -2167,14 +2101,13 @@ ns1blankspace.dialog =
 					
 					var oElement = $('#' + sXHTMLElementID)
 					
-					$('#divns1blankspaceViewportControlOptions').html('');
-					$('#divns1blankspaceViewportControlOptions').show();
-					$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
+					$(ns1blankspace.xhtml.container).html('')
+						.show();
+						.offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
 				},
 
-	confirm:	function ns1blankspaceConfirm(oParam)
+	confirm:	function (oParam)
 				{
-
 					var aHTML = [];
 					var sTitle = '';
 					
@@ -2184,9 +2117,9 @@ ns1blankspace.dialog =
 						if (oParam.title != undefined) {sTitle = oParam.title}
 					}	
 					
-					$('#divInterfaceDialog').html(aHTML.join(''));
+					$('#ns1blankspaceDialog').html(aHTML.join(''));
 					
-					$('#divInterfaceDialog').dialog(
+					$('#ns1blankspaceDialog').dialog(
 						{
 							resizable: false,
 							modal: true,
@@ -2195,7 +2128,7 @@ ns1blankspace.dialog =
 							{
 								"Ok": function() 
 								{
-									$( this ).dialog( "close" );
+									$(this).dialog("close");
 								}
 							}
 						});
@@ -2261,15 +2194,14 @@ ns1blankspace.search =
 					if (iXHTMLElementContextID != undefined)
 					{
 						$('#' + sXHTMLInputElementID).val($('#' + sXHTMLElementID).html())
-						$('#' + sXHTMLInputElementID).attr("onDemandID", iXHTMLElementContextID)
 						$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
-						$('#divns1blankspaceViewportControlOptions').hide();
+						$(ns1blankspace).hide();
 					}
 					else
 					{
 						if (oResponse == undefined)
 						{
-							ns1blankspaceOptionsSetPosition(sXHTMLInputElementID);
+							ns1blankspace.dialog.position(sXHTMLInputElementID);
 							
 							if (sColumns == undefined) {sColumns = 'title'};
 							
@@ -2315,7 +2247,7 @@ ns1blankspace.search =
 							
 							if (oResponse.data.rows.length == 0)
 							{
-								$('#divns1blankspaceViewportControlOptions').hide();
+								$(ns1blankspace).hide();
 							}
 							else
 							{
@@ -2370,32 +2302,32 @@ ns1blankspace.search =
 				    	
 								aHTML[++h] = '</tbody></table>';
 					
-								$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-								$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+								$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+								$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 							
 								$('td.interfaceSearch').click(function(event)
 								{
-									$('#divns1blankspaceViewportControlOptions').hide(200);
+									$(ns1blankspace.xhtml.container).hide(200);
 									$.extend(true, oParam, {xhtmlElementID: event.target.id})
-									ns1blankspaceElementOptionsSearch(oParam);
+									ns1blankspace.search.show(oParam);
 								});
 							}	
 						}
 					}		
 				},
 
-	start: 		function (sElementId)
+	start: 		function ()
 				{
-					sElementId = 'divns1blankspaceViewportControlSearchStatus';
+					var sElementId = 'ns1blankspaceViewControlSearchStatus';
 					$('#' + sElementId).show();
 					$('#' + sElementId).html(ns1blankspace.xhtml.loadingSmall);
 				},
 
 
-	stop:		function (sElementId)
+	stop:		function ()
 				{
-					sElementId = 'divns1blankspaceViewportControlSearchStatus';
-					$('#' + sElementId).hide()
+					var sElementId = 'ns1blankspaceViewControlSearchStatus';
+					$('#' + sElementId).hide(
 					$('#' + sElementId).html('');
 				}
 }
@@ -2425,17 +2357,19 @@ ns1blankspace.save =
 					
 					if (oResponse.status == 'OK')
 					{
-						ns1blankspaceStatus(sSuccessMessage);
-						ns1blankspace.objectSaveId =  oResponse.id;
+						ns1blankspace.status.message(sSuccessMessage);
+						ns1blankspace.objectSaveId =  oResponse.id;  //???
 					}
 					else
 					{
-						ns1blankspaceStatus(oResponse.error.errornotes);
-						ns1blankspace.objectSaveId =  -1;
+						ns1blankspace.status.error(oResponse.error.errornotes);
+						ns1blankspace.objectSaveId =  -1; //???
 						return '';
 					}
 				}
 }
+
+//TODO
 
 ns1blankspace.util =
 {
@@ -3992,4 +3926,33 @@ ns1blankspace.edit.editor =
 						return false;
 					}
 				}
-}				
+}	
+
+ns1blankspace.show = 
+				function (oParam)
+				{
+					var bRefresh = false;
+					var sSelector = '#ns1blankspaceMain';
+					var sClassSelector = '.ns1blankspaceControl';
+
+					if (oParam)
+					{
+						if (oParam.refresh) {bRefresh = oParam.refresh}
+						if (oParam.selector) {sSelector = oParam.selector}
+						if (oParam.classSelector) {sClassSelector = oParam.classSelector}
+					}
+							
+					$(ns1blankspace.xhtml.container).hide();
+
+					$(sClassSelector).hide();
+
+					$(sSelector).show(giShowSpeed);
+
+					ns1blankspace.xhtml.divID = sDivSelector;
+					
+					if ($(sSelector).html() == '' || bRefresh)
+					{
+						$(sSelector).attr('data-loading', '1');
+						$(sSelector).html(ns1blankspace.xhtml.loading);
+					}	
+				}			

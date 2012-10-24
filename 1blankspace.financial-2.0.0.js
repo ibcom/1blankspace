@@ -231,150 +231,141 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 ns1blankspace.financial.showHome = function interfaceFinancialHomeShow()
 					{	
 						var aHTML = [];
-						var h = -1;
-									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
+						
+						aHTML.push('<table id="tableInterfaceViewportMain" class="interfaceViewportMain">');
+						aHTML.push('<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 										'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
 										ns1blankspace.xhtml.loading + 
 										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+										'</tr>');
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
-										'<td id="ns1blankspaceViewportFinancialLarge" class="ns1blankspaceViewportImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';		
+						aHTML.push('<table>');
+						aHTML.push('<tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>';
+						aHTML.push('</table>');		
 						
-						aHTML[++h] = '<table>';
+						aHTML.push('<table>');
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlSummary" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl">Summary</td>' +
-									'</tr>';	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="tns1blankspaceControlSummary" class="ns1blankspaceControl">Summary</td>' +
+									'</tr>');	
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlBankAccount" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlBankAccount" class="interfaceViewportControl">Bank Accounts</td>' +
-									'</tr>';	
+						aHTML.push('<tr class="interfaceViewportControl">' +
+									'<td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">Bank Accounts</td>' +
+									'</tr>');	
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlDebtors" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDebtors" class="interfaceViewportControl">Debtors</td>' +
-									'</tr>';	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlDebtors" class="ns1blankspaceControl">Debtors</td>' +
+									'</tr>');	
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlCreditors" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlCreditors" class="interfaceViewportControl">Creditors</td>' +
-									'</tr>';	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlCreditors" class="ns1blankspaceControl">Creditors</td>' +
+									'</tr>');	
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlPL" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlPL" class="interfaceViewportControl">Profit & Loss</td>' +
-									'</tr>';	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlPL" class="ns1blankspaceControl">Profit & Loss</td>' +
+									'</tr>');	
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlBS" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlBS" class="interfaceViewportControl">Balance Sheet</td>' +
-									'</tr>';	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlBS" class="ns1blankspaceControl">Balance Sheet</td>' +
+									'</tr>');	
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlAccounts" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlAccounts" class="interfaceViewportControl">Accounts</td>' +
-									'</tr>';
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlAccounts" class="ns1blankspaceControl">Accounts</td>' +
+									'</tr>');
 									
-						aHTML[++h] = '<tr id="trInterfaceViewportControlUnallocated" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlUnallocated" class="interfaceViewportControl">Unallocated</td>' +
-									'</tr>';	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlUnallocated" class="ns1blankspaceControl">Unallocated</td>' +
+									'</tr>');	
 									
-						aHTML[++h] = '</table>';		
+						aHTML.push('</table>');		
 						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));	
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
 						var aHTML = [];
 						var h = -1;
 						
-						aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-						aHTML[++h] = '<div id="divInterfaceMainBankAccount" class="divInterfaceViewportMain"></div>';
-						aHTML[++h] = '<div id="divInterfaceMainDebtors" class="divInterfaceViewportMain"></div>';
-						aHTML[++h] = '<div id="divInterfaceMainCreditors" class="divInterfaceViewportMain"></div>';
-						aHTML[++h] = '<div id="divInterfaceMainPL" class="divInterfaceViewportMain"></div>';
-						aHTML[++h] = '<div id="divInterfaceMainBS" class="divInterfaceViewportMain"></div>';
-						aHTML[++h] = '<div id="divInterfaceMainAccounts" class="divInterfaceViewportMain"></div>';
-						aHTML[++h] = '<div id="divInterfaceMainUnallocated" class="divInterfaceViewportMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainSummary" class="ns1blankspaceViewportMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainBankAccount" class="ns1blankspaceViewportMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainDebtors" class="ns1blankspaceViewportMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainCreditors" class="ns1blankspaceViewportMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainPL" class="ns1blankspaceViewportMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainBS" class="ns1blankspaceViewportMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainAccounts" class="ns1blankspaceViewportMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainUnallocated" class="ns1blankspaceViewportMain"></div>';
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
-						$('#tdInterfaceViewportControlSummary').click(function(event)
+						$('#ns1blankspaceControlSummary').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-							interfaceFinancialSummary();
+							ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+							ns1blankspace.financial.summary.show();
 						});
 						
-						$('#tdInterfaceViewportControlBankAccount').click(function(event)
+						$('#ns1blankspaceControlBankAccount').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMainBankAccount");
-							interfaceFinancialBankAccount();
+							ns1blankspace.show({selector: '#ns1blankspaceMainBankAccount'});
+							ns1blankspace.financial.bankaccounts.show();
 						});	
 						
-						$('#tdInterfaceViewportControlDebtors').click(function(event)
+						$('#ns1blankspaceControlDebtors').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMainDebtors");
-							interfaceFinancialDebtors();
+							ns1blankspace.show({selector: '#ns1blankspaceMainDebtors'});
+							ns1blankspace.financial.debtors.show()();
 						});	
 							
-						$('#tdInterfaceViewportControlCreditors').click(function(event)
+						$('#ns1blankspaceControlCreditors').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMainCreditors");
-							interfaceFinancialCreditors();
+							ns1blankspace.show({selector: '#ns1blankspaceMainCreditors'});
+							ns1blankspace.financial.creditors.show()();
 						});	
 						
-						$('#tdInterfaceViewportControlPL').click(function(event)
+						$('#ns1blankspaceControlPL').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMainPL");
-							interfaceFinancialProfitLoss();
+							ns1blankspace.show({selector: '#ns1blankspaceMainPL'});
+							ns1blankspace.financial.profitLoss.show()();
 						});	
 						
-						$('#tdInterfaceViewportControlBS').click(function(event)
+						$('#ns1blankspaceControlBS').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMainBS");
-							interfaceFinancialBalanceSheet();
+							ns1blankspace.show({selector: '#ns1blankspaceMainBS'});
+							ins1blankspace.financial.balancesheet.show();
 						});	
 						
-						$('#tdInterfaceViewportControlAccounts').click(function(event)
+						$('#ns1blankspaceControlAccounts').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMainAccounts");
-							interfaceFinancialAccounts();
+							nns1blankspace.show({selector: '#ns1blankspaceMainAccounts'});
+							ns1blankspace.financial.accounts.show()();
 						});	
 						
-						$('#tdInterfaceViewportControlUnallocated').click(function(event)
+						$('#ns1blankspaceControlUnallocated').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMainUnallocated");
-							interfaceFinancialUnallocated();
+							ns1blankspace.show({selector: '#ns1blankspaceMainUnallocated'});
+							ns1blankspace.financial.unallocated.show();
 						});	
 						
-						$('#tdInterfaceViewportControlSummary').addClass('interfaceViewportControlHighlight');
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceFinancialSummary();
+						$('#ns1blankspaceControlSummary').addClass('interfaceViewportControlHighlight');
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.financial.summary.show();
 					}
 
 ns1blankspace.financial.summary = function (oParam, oResponse)
 				{
 					if (ns1blankspace.financial.data == undefined) {ns1blankspace.financial.data = {}}
-					//	interfaceFinancialSummary(oParam, ns1blankspace.financial.summary)
 						
 					if (oResponse == undefined)
 					{
-
-						var sParam = 'method=FINANCIAL_PROFIT_LOSS_SEARCH&rf=JSON&rows=1';
-					
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/ondemand/financial/?' + sParam,
+							url: ns1blankspace.util.endpointURI('FINANCIAL_PROFIT_LOSS_SEARCH'),
+							data: 'rows=1'
 							dataType: 'json',
-							success: function(data) {interfaceFinancialSummary(oParam, data)}
+							success: function(data) {ns1blankspace.financial.summary(oParam, data)}
 						});
 					}
 					else
@@ -382,222 +373,190 @@ ns1blankspace.financial.summary = function (oParam, oResponse)
 						ns1blankspace.financial.data.summary = oResponse;
 						
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large">' +
 										'</td>' +
-										'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;">' +
 										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';				
+										'</tr>' +
+										'</table>');				
 						
-						$('#divInterfaceMainSummary').html(aHTML.join(''));	
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 						
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Sales</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +	
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Sales</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryTotalSales" class="ns1blankspaceSummary">' +	
 										(oResponse.TotalSales).formatMoney(2, '.', ',') +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Cost of Sales</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Cost of Sales</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryTotalCostOfSales" class="ns1blankspaceSummary">' +
 										(oResponse.TotalCostOfSales).formatMoney(2, '.', ',') +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Gross Margin</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Gross Margin</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryGrossMargin" class="ns1blankspaceSummary">' +
 										(oResponse.GrossMargin).formatMoney(2, '.', ',') +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Operating Expenses</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Operating Expenses</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryTotalOperationalExpenses" class="ns1blankspaceSummary">' +
 										(oResponse.TotalOperationalExpenses).formatMoney(2, '.', ',') +
-										'</td></tr>';
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Net Margin</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Net Margin</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryNetMargin" class="ns1blankspaceSummary">' +
 										(oResponse.NetMargin).formatMoney(2, '.', ',') +
-										'</td></tr>';			
+										'</td></tr>');			
 							
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''))
-					
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''))
 					}
 				}
 
 ns1blankspace.financial.debtors =
 {
-	show: 		function interfaceFinancialDebtors(oParam, oResponse)
+	show: 		function (oParam, oResponse)
 				{
-
 					if (oResponse == undefined)
 					{
-
-						var sParam = 'method=FINANCIAL_DEBTOR_SEARCH&rf=JSON';
-					
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/ondemand/financial/?' + sParam,
+							url: ns1blankspace.util.endpointURI('FINANCIAL_DEBTOR_SEARCH'),
 							dataType: 'json',
-							success: function(data) {interfaceFinancialDebtors(oParam, data)}
-						});
-						
+							success: function(data) {ns1blankspace.financial.debtors(oParam, data)}
+						});			
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">Good news and band news, in that no debtors.  So good that no one owes you money, but bad in that no one owes you money.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table><tbody>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">Good news and band news, in that no debtors.  So good that no one owes you money, but bad in that no one owes you money.</td>' +
+											'</tr>' +
+											'</tbody></table>');
 						}
 						else
 						{
-						
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+							aHTML.push('<table class="ns1blankspace">';
+											'<tbody>' +
+											'<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">Debtor</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount Owed</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Date</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Amount</td>' +
+											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'</tr>');
 							
-							aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption">Debtor</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount Owed</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Date</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Amount</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-							aHTML[++h] = '</tr>';
-							
-							var oRows = oResponse.data.rows;
-							
-							$(oRows).each(function() 
+							$(oResponse.data.rows).each(function() 
 							{
-								aHTML[++h] = interfaceFinancialDebtorsRow(this);
+								aHTML.push(ns1blankspace.financial.debtors.row(this));
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</tbody></table>');
 						}
 						
-						ns1blankspacePaginationList(
+						ns1blankspace.pagination.list(
 						   {
 							type: 'JSON',
-							xhtmlElementID: 'divInterfaceMainDebtors',
+							xhtmlElementID: 'ns1blankspaceDebtors',
 							xhtmlContext: 'Debtors',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
 							rows: ns1blankspace.option.defaultRows,
-							functionShowRow: interfaceFinancialDebtorsRow,
+							functionShowRow: ns1blankspace.financial.debtors.row,
 							functionOpen: undefined,
 							functionNewPage: ''
 						   }); 	
 					}
 				},
 
-	row: 		function interfaceFinancialDebtorsRow(oRow)
+	row: 		function (oRow)
 				{
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<tr class="interfaceMainRow">';
-								
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + 'xx' + '" class="interfaceMainRow">' +
-											oRow.debtorname + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Total-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
-											oRow.total + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_LastReceiptDate-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;color:#A0A0A0;">' +
-											oRow.lastreceiptdate + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_LastReceiptAmount-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;color:#A0A0A0;">' +
-											oRow.lastreceiptamount + '</td>';
-					
-					aHTML[++h] = '</tr>'
+					aHTML.push('<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceDebtors_Contact-" class="ns1blankspaceRow">' +
+									oRow.debtorname + '</td>' +
+									'<td id="ns1blankspaceDebtors_Total-" class="ns1blankspaceRow" style="text-align:right;">' +
+									oRow.total + '</td>' +
+									'<td id="ns1blankspaceDebtors_LastReceiptDate-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow.lastreceiptdate + '</td>' +				
+									'<td id="ns1blankspaceDebtors_LastReceiptAmount-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow.lastreceiptamount + '</td>' +				
+									'</tr>');
 					
 					return aHTML.join('');
-					
 				}
 }
 
 ns1blankspace.financial.creditors =				
 {
-	sgow:		function (oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
-
 					if (oResponse == undefined)
-					{
-
-						var sParam = 'method=FINANCIAL_CREDITOR_SEARCH&rf=JSON';
-					
+					{				
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/ondemand/financial/?' + sParam,
+							url: ns1blankspace.util.endpointURI('FINANCIAL_CREDITOR_SEARCH'),
 							dataType: 'json',
-							success: function(data) {this.creditors(oParam, data)}
+							success: function(data) {ns1blankspace.financial.creditors.show(oParam, data)}
 						});
-						
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">You don\'t owe anyone any money.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table><tbody>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">You don\'t owe anyone any money.</td>' +
+											'</tr>' +
+											'</tbody></table>');
 						}
 						else
 						{
-						
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+							aHTML.push('<table class="ns1blankspace">';
+											'<tbody>' +
+											'<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">Creditor</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount To Be Paid</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Payment Date</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Payment Amoun</td>' +
+											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'</tr>');	
 							
-							aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption">Creditor</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount To Be Paid</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;color:#A0A0A0;">Last Payment Date</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;color:#A0A0A0;">Last Payment Amount</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-							aHTML[++h] = '</tr>';
-							
-							var oRows = oResponse.data.rows;
-							
-							$(oRows).each(function() 
+							$(oResponse.data.rows).each(function() 
 							{
-								aHTML[++h] = this.row(this);
+								aHTML.push(ns1blankspace.financial.creditors.row(this));
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</tbody></table>');
 						}
 						
-						ns1blankspacePaginationList(
+						ns1blankspace.pagination.list(
 						   {
 							type: 'JSON',
-							xhtmlElementID: 'divInterfaceMainCreditors',
+							xhtmlElementID: 'ns1blankspaceCreditors',
 							xhtmlContext: 'Creditors',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
 							rows: ns1blankspace.option.defaultRows,
-							functionShowRow: interfaceFinancialDebtorsRow,
+							functionShowRow: ns1blankspace.financial.creditors.row,
 							functionOpen: undefined,
 							functionNewPage: ''
 						   }); 	
@@ -607,24 +566,18 @@ ns1blankspace.financial.creditors =
 	row:		function (oRow)
 				{
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<tr class="interfaceMainRow">';
-								
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + 'xx' + '" class="interfaceMainRow">' +
-											oRow.creditorname + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Total-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
-											oRow.total + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_LastReceiptDate-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;color:#A0A0A0;">' +
-											oRow.lastpaymentdate + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_LastReceiptAmount-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;color:#A0A0A0;">' +
-											oRow.lastpaymentamount + '</td>';
-					
-					aHTML[++h] = '</tr>'
-					
+					aHTML.push('<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceDebtors_Contact-" class="ns1blankspaceRow">' +
+									oRow.creditorname + '</td>' +
+									'<td id="ns1blankspaceDebtors_Total-" class="ns1blankspaceRow" style="text-align:right;">' +
+									oRow.total + '</td>' +
+									'<td id="ns1blankspaceDebtors_LastPaymentDate-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow.lastpaymentdate + '</td>' +				
+									'<td id="ns1blankspaceDebtors_LastPaymentAmount-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow.lastpaymentamount + '</td>' +				
+									'</tr>');
+
 					return aHTML.join('');
 				}
 }
@@ -640,55 +593,51 @@ ns1blankspace.financial.profitLoss =
 						oSearch.addField('financialaccounttext,total,percentage');
 						oSearch.sort('financialaccounttext', 'asc');
 						oSearch.rows = ns1blankspace.messaging.defaultRows;
-						oSearch.getResults(function(data) {interfaceFinancialProfitLoss(oParam, data)});
+						oSearch.getResults(function(data) {ns1blankspace.financial.profitLoss.show(oParam, data)});
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
+
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="interfaceMainRowNothing">Sorry nothing to show, add an invoice or expense<br />and you will be able to see how you are going.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table><tbody>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">Sorry nothing to show, add an invoice or expense<br />and you will be able to see how you are going.</td>' +
+											'</tr>' +
+											'</tbody></table>');
 						}
 						else
 						{
 						
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+							aHTML.push('<table class="ns1blankspace">';
+											'<tbody>' +
+											'<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">Account</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Percentage</td>' +
+											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'</tr>');	
 							
-							aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption">Account</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;color:#A0A0A0;">Percentage</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-							aHTML[++h] = '</tr>';
-							
-							var oRows = oResponse.data.rows;
-							
-							$(oRows).each(function() 
+							$(oResponse.data.rows).each(function() 
 							{
-								aHTML[++h] = this.row(this);
+								aHTML.push(ns1blankspace.financial.profitLoss.row(this));
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</tbody></table>');
 						}
 						
-						ns1blankspacePaginationList(
+						ns1blankspace.pagination.list(
 						   {
 							type: 'JSON',
-							xhtmlElementID: 'divInterfaceMainPL',
+							xhtmlElementID: 'ns1blankspacePL',
 							xhtmlContext: 'Creditors',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
 							rows: 100,
-							functionShowRow: interfaceFinancialProfitLossRow,
+							functionShowRow: ns1blankspace.financial.profitLoss.row,
 							functionOpen: undefined,
 							functionNewPage: ''
 						   }); 	
@@ -698,23 +647,17 @@ ns1blankspace.financial.profitLoss =
 	row:		function (oRow)
 				{
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<tr class="interfaceMainRow">';
-								
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + 'xx' + '" class="interfaceMainRow">' +
-											oRow.financialaccounttext + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Total-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
-											oRow.total + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_LastReceiptDate-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;color:#A0A0A0;">' +
-											oRow.percentage + '</td>';
-					
-					aHTML[++h] = '</tr>'
-					
+					aHTML.push('<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceDebtors_Contact-" class="ns1blankspaceRow">' +
+									oRow.financialaccounttext + '</td>' +
+									'<td id="ns1blankspaceDebtors_Total-" class="ns1blankspaceRow" style="text-align:right;">' +
+									oRow.total + '</td>' +
+									'<td id="ns1blankspaceDebtors_Percentage-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow.percentage + '</td>' +							
+									'</tr>');
+
 					return aHTML.join('');
-
 				}
 }
 
@@ -729,7 +672,7 @@ ns1blankspace.financial.balanceSheet =
 						oSearch.addField('financialaccounttext,amount,subtotalcount,type');
 						oSearch.sort('financialaccounttext', 'asc');
 						oSearch.rows = 100;
-						oSearch.getResults(function(data) {interfaceFinancialBalanceSheet(oParam, data)});	
+						oSearch.getResults(function(data) {ns1blankspace.financial.balanceSheet.show(oParam, data)});	
 					}
 					else
 					{
@@ -738,84 +681,77 @@ ns1blankspace.financial.balanceSheet =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="interfaceMainRowNothing">Sorry nothing to show, add an invoice or expense<br />and you will be able to see how you are going.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table><tbody>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">Sorry nothing to show, add an invoice or expense<br />and you will be able to see how you are going.</td>' +
+											'</tr>' +
+											'</tbody></table>');
 
-							$('#divInterfaceMainBS').html(aHTML.join(''));
+							$('#ns1blankspaceMainBS').html(aHTML.join(''));
 						}
 						else
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialBalanceSheet" class="interfaceMain">';
-							aHTML[++h] = '<tr id="trInterfaceMainFinancialBalanceSheetRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainFinancialBalanceSheetColumn1" style="width: 70px" class="interfaceMainColumn1">' +
+							aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceBalanceSheetColumn1" class="ns1blankspaceColumn1" style="width: 70px;">' +
 										'</td>' +
-										'<td id="tdInterfaceMainFinancialBalanceSheetColumn2" class="interfaceMainColumn2">' +
+										'<td id="ns1blankspaceBalanceSheetColumn2" class="ns1blankspaceColumn2">' +
 										'</td>' +
-										'</tr>';
-							aHTML[++h] = '</table>';					
-						
-							$('#divInterfaceMainBS').html(aHTML.join(''));
-						
-							var aHTML = [];
-							var h = -1;
-						
-							aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
-					
-							aHTML[++h] = '<tr><td id="tdInterfaceMainBSAssets" class="interfaceMainSummary">Assets</td></tr>' +
-											'<tr><td id="tdInterfaceMainBSAssetsValue" class="interfaceMainSummaryValue">' +	
-											(oResponse.assettotal).formatMoney(2, '.', ',') +
-											'</td></tr>';
-						
-							aHTML[++h] = '<tr><td id="tdInterfaceMainBSLiability" class="interfaceMainSummary">Liabilities</td></tr>' +
-											'<tr><td id="tdInterfaceMainBSLiabilityValue" class="interfaceMainSummaryValue">' +
-											(oResponse.liabilitytotal).formatMoney(2, '.', ',') +
-											'</td></tr>';
-						
-							aHTML[++h] = '<tr><td id="tdInterfaceMainBSEquity" class="interfaceMainSummary">Equity</td></tr>' +
-											'<tr><td id="tdInterfaceMainBSEquityValue" class="interfaceMainSummaryValue">' +
-											(oResponse.equitytotal).formatMoney(2, '.', ',') +
-											'</td></tr>';
+										'</tr>' +
+										'</table>');	
 
-							aHTML[++h] = '</table>';							
-							
-							$('#tdInterfaceMainFinancialBalanceSheetColumn1').html(aHTML.join(''));
+							$('#ns1blankspaceMainBS').html(aHTML.join(''));
 						
 							var aHTML = [];
-							var h = -1;
 							
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
+							aHTML.push('<table class="ns1blankspaceContainer">' +
+											'<tr><td class="ns1blankspaceSummaryCaption">Assets</td></tr>' +
+											'<tr><td id="ns1blankspaceBalanceSheetAssetTotal" class="ns1blankspaceSummary">' +	
+											(oResponse.assettotal).formatMoney(2, '.', ',') +
+											'</td></tr>' +
+											'<tr><td class="ns1blankspaceSummaryCaption">Liabilities</td></tr>' +
+											'<tr><td id="ns1blankspaceBalanceSheetLiabilityTotal" class="ns1blankspaceSummary">' +
+											(oResponse.liabilitytotal).formatMoney(2, '.', ',') +
+											'</td></tr>' +
+											'<tr><td class="ns1blankspaceSummaryCaption">Equity</td></tr>' +
+											'<tr><td id="ns1blankspaceBalanceSheetEquityTotal" class="ns1blankspaceSummary">' +
+											(oResponse.equitytotal).formatMoney(2, '.', ',') +
+											'</td></tr>');
+
+							aHTML.push('</table>');							
 							
-							aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption">Account</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-							aHTML[++h] = '</tr>';
-							
-							var oRows = oResponse.data.rows;
-							
-							$(oRows).each(function() 
-							{
-								aHTML[++h] = interfaceFinancialBalanceSheetRow(this);
-							});
+							$('#ns1blankspaceBalanceSheetColumn1').html(aHTML.join(''));
+						
+							var aHTML = [];
 							
 							aHTML[++h] = '</tbody></table>';
+
+							aHTML.push('<table class="ns1blankspace">';
+											'<tbody>' +
+											'<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">Account</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>' +
+											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'</tr>');	
+							
+							$(oResponse.data.rows).each(function() 
+							{
+								aHTML.push(ns1blankspace.financial.balancesheet.row(this));
+							});
+							
+							aHTML.push('</tbody></table>');
 						}
 						
-						ns1blankspacePaginationList(
+						ns1blankspace.pagination.list(
 						   {
 							type: 'JSON',
-							xhtmlElementID: 'tdInterfaceMainFinancialBalanceSheetColumn2',
+							xhtmlElementID: 'ns1blankspaceBalanceSheetColumn2',
 							xhtmlContext: 'BalanceSheet',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
 							rows: 100,
-							functionShowRow: interfaceFinancialBalanceSheetRow,
+							functionShowRow: ns1blankspace.financial.balancesheet.row,
 							functionOpen: undefined,
 							functionNewPage: ''
 						   }); 	
@@ -825,18 +761,14 @@ ns1blankspace.financial.balanceSheet =
 	row:		function (oRow)
 				{
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<tr class="interfaceMainRow">';
-								
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Contact-' + 'xx' + '" class="interfaceMainRow">' +
-											oRow.financialaccounttext + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Total-' + 'xx' + '" class="interfaceMainRow" style="text-align:right;">' +
-											oRow.amount + '</td>';
-					
-					aHTML[++h] = '</tr>'
-					
+					aHTML.push('<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceDebtors_AccountText-" class="ns1blankspaceRow">' +
+									oRow.financialaccounttext + '</td>' +
+									'<td id="ns1blankspaceDebtors_Amount-" class="ns1blankspaceRow" style="text-align:right;">' +
+									oRow.amount + '</td>' + 						
+									'</tr>');
+
 					return aHTML.join('');
 				}
 }
@@ -845,7 +777,6 @@ ns1blankspace.financial.bankAccounts =
 {
 	show: 		function (oParam, oResponse)
 				{
-
 					if (oResponse == undefined)
 					{
 						var oSearch = new AdvancedSearch();
@@ -858,62 +789,55 @@ ns1blankspace.financial.bankAccounts =
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainBankAccount" class="interfaceMain">' +
-									'<tr id="trInterfaceMainBankAccountow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainBankAccountColumn1" class="interfaceMainColumn1Large">' +
-									ns1blankspace.xhtml.loading +
-									'</td>' +
-									'<td id="tdInterfaceMainBankAccountColumn2" style="width: 150px;" class="interfaceMainColumn2Action">' +
-									'</td>' +
-									'</tr>' +
-									'</table>';				
-						
-						$('#divInterfaceMainBankAccount').html(aHTML.join(''));
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceBankAccountsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceBankAccountsColumn2" class="ns1blankspaceColumn2" style="width: 150px;"></td>' +
+										'</tr>' +
+										'</table>');	
+
+						$('#ns1blankspaceMainBankAccount').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
-						
+					
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No bank accounts set up.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table><tbody>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">No bank accounts set up.</td>' +
+											'</tr>' +
+											'</tbody></table>');
 						}
 						else
 						{		
-							aHTML[++h] = '<table id="tableBankAccountList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption">Name</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Reconciled Amount</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Last Reconciled</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-							aHTML[++h] = '</tr>';
+							aHTML.push('<table class="ns1blankspace">';
+											'<tbody>' +
+											'<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">Name</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;">Reconciled Amount</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;">Last Reconciled</td>' +
+											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'</tr>');	
 							
-							var oRows = oResponse.data.rows;
-							
-							$(oRows).each(function() 
+							$(oResponse.data.rows).each(function() 
 							{
-								aHTML[++h] = interfaceFinancialBankAccountRow(this);
+								aHTML.push(ns1blankspace.financial.bankaccounts.row(this));
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</tbody></table>');
 						}
 						
 						ns1blankspacePaginationList(
 						   {
 							type: 'JSON',
-							xhtmlElementID: 'tdInterfaceMainBankAccountColumn1',
+							xhtmlElementID: 'ns1blankspaceBankAccountsColumn1',
 							xhtmlContext: 'BankAccount',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
 							rows: 100,
-							functionShowRow: interfaceFinancialBankAccountRow,
+							functionShowRow: ns1blankspace.financial.bankaccounts.row,
 							functionOpen: undefined,
 							functionNewPage: ''
 						   });
@@ -921,35 +845,35 @@ ns1blankspace.financial.bankAccounts =
 						var aHTML = [];
 						var h = -1;	
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" cellpadding=6>';
+						aHTML[++h] = '<table class="ns1blankspace" cellpadding=6>';
 											
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +
-										'<a href="#" id="aInterfaceMainBankAccountReco">Reconcile & Import Transactions</a>' +
+						aHTML[++h] = '<tr><td class="ns1blankspace" style="width:175px;">' +
+										'<a href="#" id="ns1blankspaceBankAccountReco">Reconcile & Import Transactions</a>' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +
-										'<a href="#" id="aInterfaceMainBankAccountReceipt">Receipt an Invoice</a>' +
+						aHTML[++h] = '<tr><td class="ns1blankspace" style="width:175px;">' +
+										'<a href="#" id="ns1blankspaceBankAccountReceipt">Receipt an Invoice</a>' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +
-										'<a href="#" id="aInterfaceMainBankAccountDeposit">Bulk Deposit</a>' +
+						aHTML[++h] = '<tr><td class="ns1blankspace" style="width:175px;">' +
+										'<a href="#" id="ns1blankspaceBankAccountDeposit">Bulk Deposit</a>' +
 										'</td></tr>';								
 									
 						aHTML[++h] = '</table>';					
 								
-						$('#tdInterfaceMainBankAccountColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceBankAccountsColumn2').html(aHTML.join(''));
 						
-						$('#aInterfaceMainBankAccountReco').click(function()
+						$('#ns1blankspaceBankAccountReco').click(function()
 						{
-							interfaceFinancialBankAccountMasterViewport();
+							ns1blankspace.financial.bankaccount.init();
 						});	
 						
-						$('#aInterfaceMainBankAccountReceipt').click(function()
+						$('#ns1blankspaceBankAccountReceipt').click(function()
 						{
-							interfaceFinancialReceiptMasterViewport();
+							ns1blankspace.financial.receipt.init();
 						});	
 						
-						$('#aInterfaceMainBankAccountDeposit').click(function()
+						$('#ans1blankspaceBankAccountDeposit').click(function()
 						{
 							alert("Depositing of the sweet sweet cash...")
 						});	
@@ -959,22 +883,16 @@ ns1blankspace.financial.bankAccounts =
 	row:		function (oRow)
 				{
 					var aHTML = [];
-					var h = -1;
+					
+					aHTML.push('<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceBalanceSheet_Title-" class="ns1blankspaceRow" title="' + oRow.notes + '">' +
+									oRow.title + '</td>' +
+									'<td id="ns1blankspaceBalanceSheet_Balance-" class="ns1blankspaceRow" style="text-align:right;">' +
+									oRow.lastreconciledamount + '</td>' +
+									'<td id="ns1blankspaceBalanceSheet_Date-" class="ns1blankspaceRow" style="text-align:right;">' +
+									oRow.lastreconcileddate + '</td>' +					
+									'</tr>');
 
-					aHTML[++h] = '<tr class="interfaceMainRow">';
-								
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Title-" class="interfaceMainRow"' +
-											' title="' + oRow.notes + '">' +
-											oRow.title + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Balance-" class="interfaceMainRow" style="text-align:right;">' +
-											oRow.lastreconciledamount + '</td>';
-					
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_Date-" class="interfaceMainRow" style="text-align:right;">' +
-											oRow.lastreconcileddate + '</td>';
-																	
-					aHTML[++h] = '</tr>'
-					
 					return aHTML.join('');
 				}
 }
@@ -1009,7 +927,7 @@ ns1blankspace.financial.unallocated =
 							
 						if (ns1blankspace.financial.unallocatedAccount == -1)
 						{
-							$('#divInterfaceMainUnallocated').html("No unallocated account set up.");
+							$('#ns1blankspaceMainUnallocated').html("No unallocated account set up.");
 						}
 						else
 						{	
@@ -1018,66 +936,59 @@ ns1blankspace.financial.unallocated =
 							oSearch.addField('invoice.reference,invoice.amount');
 							oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
 							oSearch.rows = 20;
-							oSearch.getResults(function(data) {interfaceFinancialUnallocated(oParam, data)});
+							oSearch.getResults(function(data) {ns1blankspace.financial.unallocated.show(oParam, data)});
 						}	
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
-					
-						aHTML[++h] = '<table id="tableInterfaceFinancialUnallocated" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainFinancialUnallocatedRow1" class="interfaceMain">' +
-									'<td id="tdInterfaceMainFinancialUnallocatedColumn1" style="width: 70px" class="interfaceMainColumn1">' +
-									'</td>' +
-									'<td id="tdInterfaceMainFinancialUnallocatedColumn2" class="interfaceMainColumn2">' +
-									'</td>' +
-									'</tr>';
-						aHTML[++h] = '</table>';					
-					
-						$('#divInterfaceMainUnallocated').html(aHTML.join(''));
+			
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceUnallocatedColumn1" class="ns1blankspaceColumn1" style="width: 70px"></td>' +
+										'<td id="ns1blankspaceUnallocatedColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' +
+										'</table>');	
+
+						$('#ns1blankspaceMainUnallocated').html(aHTML.join(''));
 
 						var aHTML = [];
 						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceFinancialHomeMostLikelyNothing">No unallocated accounts.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table><tbody>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">No unallocated accounts.</td>' +
+											'</tr>' +
+											'</tbody></table>');
 						}
 						else
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-							
-							aHTML[++h] = '<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption">Invoice</td>';
-							aHTML[++h] = '</tr>';
-							
-							var oRows = oResponse.data.rows;
-							
-							$(oRows).each(function() 
+							aHTML.push('<table class="ns1blankspace">';
+											'<tbody>' +
+											'<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">Invoice</td>' +
+											'</tr>');
+
+							$(oResponse.data.rows).each(function() 
 							{
-								aHTML[++h] = interfaceFinancialUnallocatedRow(this);
+								aHTML.push(ns1blankspace.financial.unallocated.row(this));
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</tbody></table>');
 						}
 						
-						ns1blankspacePaginationList(
+						ns1blankspace.pagination.list(
 						   {
 							type: 'JSON',
-							xhtmlElementID: 'tdInterfaceMainFinancialUnallocatedColumn1',
+							xhtmlElementID: 'ns1blankspaceUnallocatedColumn1',
 							xhtmlContext: 'Unallocated',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
 							rows: 100,
-							functionShowRow: interfaceFinancialUnallocatedRow,
+							functionShowRow: ns1blankspace.financial.unallocated.row,
 							functionOpen: undefined,
 							functionNewPage: ''
 						   }); 	
@@ -1087,17 +998,13 @@ ns1blankspace.financial.unallocated =
 	row:		function (oRow)
 				{
 					var aHTML = [];
-					var h = -1;
+					
+					aHTML.push('<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceBalanceSheet_Title-' + oRow["invoice.id"] + '" class="ns1blankspaceRow">' +
+									oRow["invoice.reference"] + '<br />' + 
+									'<span style="color: #808080;font-size: 0.75em;">' + oRow["invoice.amount"] + '</span>' +
+									'</td></tr>');
 
-					aHTML[++h] = '<tr class="interfaceMainRow">';
-								
-					aHTML[++h] = '<td id="interfaceFinancialHomeMostLikely_FinancialAccount-' + oRow["invoice.id"] + '" class="interfaceMainRow interfaceMainRowSelect">' +
-											oRow["invoice.reference"] + '<br />';
-					
-					aHTML[++h] = '<span style="color: #808080;font-size: 0.75em;">' + oRow["invoice.amount"] + '</span>';
-					
-					aHTML[++h] = '</tr>'
-					
 					return aHTML.join('');
 				}
 }
@@ -1108,13 +1015,13 @@ ns1blankspace.financial.transactions =
 				{
 					var iObject = ns1blankspace.object;
 					var iObjectContext = ns1blankspace.objectContext;
-					var sXHTMLElementId = 'divInterfaceMainTransaction';
+					var sXHTMLElementID = 'ns1blankspaceMainTransaction';
 
 					if (oParam != undefined)
 					{
 						if (oParam.object != undefined) {iObject = oParam.object}
 						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-						if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 					}		
 						
 					if (oResponse == undefined)
@@ -1126,58 +1033,56 @@ ns1blankspace.financial.transactions =
 						oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 						oSearch.sort('financialaccounttext', 'asc');
 						
-						oSearch.getResults(function(data) {interfaceFinancialTransaction(oParam, data)});
+						oSearch.getResults(function(data) {ns1blankspace.financial.transactions.show(oParam, data)});
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableFinancialTransaction" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">' +
-											'<td class="interfaceMainRowNothing">No financial transactions.</td></tr>';
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('<table><tbody>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">No financial transactions.</td>' +
+											'</tr>' +
+											'</tbody></table>');
 
-							$('#' + sXHTMLElementId).html(aHTML.join(''));
+							$('#' + sXHTMLElementID).html(aHTML.join(''));
 						}
 						else
 						{
-							aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="width:150px;">Financial Account</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="width:100px;">Date</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;width:125px;">Amount</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
-							aHTML[++h] = '</tr>';
-							
+							aHTML.push('<table class="ns1blankspace">';
+											'<tbody>' +
+											'<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption" style="width:150px;">Account</td>' +
+											'<td class="ns1blankspaceCaption" style="width:100px;">Reconciled Amount</td>' +
+											'<td class="ns1blankspaceCaption" style="text-align:right;width:125px;">Last Reconciled</td>' +
+											'<td class="ns1blankspaceCaption">Description</td>' +
+											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'</tr>');
+
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+								aHTML.push('<tr class="interfaceMainRow">');
 												
-								aHTML[++h] = '<td id="tdFinancialATransaction_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
-														this.financialaccounttext + '</td>';
+								aHTML.push('<td id="tdFinancialTransaction_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
+														this.financialaccounttext + '</td>');
 														
-								aHTML[++h] = '<td id="tdFinancialATransaction_date-' + this.id + '" class="interfaceMainRow">' +
-														this.date + '</td>';
+								aHTML.push('<td id="tdFinancialTransaction_date-' + this.id + '" class="interfaceMainRow">' +
+														this.date + '</td>');
 														
-								aHTML[++h] = '<td id="tdFinancialATransaction_amount-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
-														this.amount + '</td>';
+								aHTML.push('<td id="tdFinancialTransaction_amount-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
+														this.amount + '</td>');
 									
-								aHTML[++h] = '<td id="tdFinancialATransaction_description-' + this.id + '" class="interfaceMainRow">' +
-														this.description + '</td>';
+								aHTML.push('<td id="tdFinancialTransaction_description-' + this.id + '" class="interfaceMainRow">' +
+														this.description + '</td>');
 																				
-								aHTML[++h] = '</td>';				
-								aHTML[++h] = '</tr>';
+								aHTML.push('</td></tr>');
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</tbody></table>');
 
 							$('#' + sXHTMLElementId).html(aHTML.join(''));
-							
 						}
 					}	
 				}
@@ -1203,40 +1108,33 @@ ns1blankspace.financial.accounts =
 					if (iStep == 1)	
 					{
 						var aHTML = [];
-						var h = -1;
-							
-						aHTML[++h] = '<table class="interfaceMainAccount" cellspacing=0 cellpadding=0>' +
-								'<tr id="trInterfaceMainAccountRow1" class="interfaceMainRow1">' +
-								'<td id="tdInterfaceMainAccountColumn1" style="width:100px;font-size:0.75em;">' +
-								'</td>' +
-								'<td id="tdInterfaceMainAccountColumn2" class="interfaceMainColumn2">' +
-								'</td>' +
-								'</tr>' +
-								'</table>';			
 						
-						$('#divInterfaceMainAccounts').html(aHTML.join(''));
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceAccountColumn1" class="ns1blankspaceColumn1" style="width:100px;font-size:0.75em;"></td>' +
+										'<td id="ns1blankspaceAccountColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' +
+										'</table>');				
+						
+						$('#ns1blankspaceMainAccounts').html(aHTML.join(''));
 							
 						var aHTML = [];
-						var h = -1;
 
-						aHTML[++h] = '<div id="interfaceMainAccountColumnCategory" style="width: 100;margin-bottom:3px;text-align:right;">';
-						aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnCategory-1" name="radioCategory" /><label for="interfaceMainBankAccountColumnCategory-1" style="width: 100px;">All</label>';
+						aHTML.push('<div id="ns1blankspaceAccountColumnCategory" style="width: 100;margin-bottom:3px;text-align:right;">');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-1" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-1" style="width: 100px;">All</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-2" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-2" style="width: 100px;">Profit & Loss</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-3" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-3" style="width: 100px;">Balance Sheet</label>');
+						aHTML.push('</div>');
 
-						aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnCategory-2" name="radioCategory" /><label for="interfaceMainBankAccountColumnCategory-2" style="width: 100px;">Profit & Loss</label>';
+						$('#ns1blankspaceAccountColumn1').html(aHTML.join(''));
 					
-						aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnCategory-3" name="radioCategory" /><label for="interfaceMainBankAccountColumnCategory-3" style="width: 100px;">Balance Sheet</label>';
-					
-						aHTML[++h] = '</div>';
-
-						$('#tdInterfaceMainAccountColumn1').html(aHTML.join(''));
-					
-						$('#interfaceMainAccountColumnCategory').buttonset().css('font-size', '0.875em');
+						$('#ns1blankspaceAccountColumnCategory').buttonset().css('font-size', '0.875em');
 						
-						$('#interfaceMainAccountColumnCategory :radio').click(function()
+						$('#ns1blankspaceAccountColumnCategory :radio').click(function()
 						{
 							var aID = (event.target.id).split('-');
 							$.extend(true, oParam, {step: 2, category: parseInt(aID[1])});
-							interfaceFinancialAccounts(oParam);
+							ns1blankspace.financial.accounts.show(oParam);
 						});
 					}
 					
@@ -1244,7 +1142,7 @@ ns1blankspace.financial.accounts =
 					{	
 						if (oResponse == undefined)
 						{	
-							$('#tdInterfaceMainBankAccountColumn2').html(ns1blankspace.xhtml.loadingSmall);
+							$('#ns1blankspaceAccountColumn2').html(ns1blankspace.xhtml.loadingSmall);
 							
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
@@ -1252,73 +1150,68 @@ ns1blankspace.financial.accounts =
 							oSearch.sort('title', 'asc');
 							//oSearch.addFilter('type', 'EQUAL_TO', iType);
 							oSearch.rows = 200;
-							oSearch.getResults(function(data) {interfaceFinancialAccounts(oParam, data)});	
+							oSearch.getResults(function(data) {ns1blankspace.financial.accounts.show(oParam, data)});	
 						}
 						else
 						{
 							$.extend(true, oParam, {step: 3});
 							
 							var aHTML = [];
-							var h = -1;
 						
 							if (oResponse.data.rows.length == 0)
 							{
-								aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-								aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-								aHTML[++h] = '<td class="interfaceMainRowNothing">No Accounts</td>';
-								aHTML[++h] = '</tr>';
-								aHTML[++h] = '</table>';
+								aHTML.push('<table><tbody>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">No accounts.</td>' +
+											'</tr>' +
+											'</tbody></table>');
 								
-								$('#tdInterfaceMainAccountColumn2').html(aHTML.join(''));
+								$('#ns1blankspaceAccountColumn2').html(aHTML.join(''));
 							}
 							else
 							{
-								aHTML[++h] = '<table id="tableInterfaceFinancialAccountTransactions" class="interfaceMain">';
-								aHTML[++h] = '<tr id="trInterfaceMainFinancialAccountTransactionsRow1" class="interfaceMain">' +
-											'<td id="tdInterfaceMainFinancialAccountTransactionsColumn1" style="width: 70px;font-size:0.875em;" class="interfaceMainColumn1">' +
-											'</td>' +
-											'<td id="tdInterfaceMainFinancialAccountTransactionsColumn2" class="interfaceMainColumn2">' +
-											'</td>' +
-											'</tr>';
-								aHTML[++h] = '</table>';					
-						
-								$('#tdInterfaceMainAccountColumn2').html(aHTML.join(''));
+								aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceAccountTransactionsColumn1" class="ns1blankspaceColumn1" style="width: 70px;font-size:0.875em;"></td>' +
+										'<td id="ns1blankspaceAccountTransactionsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' +
+										'</table>');
+
+								$('#ns1blankspaceAccountColumn2').html(aHTML.join(''));
 						
 								var aHTML = [];
-								var h = -1;
-						
-								aHTML[++h] = '<table id="tableReco" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-								aHTML[++h] = '<tbody>';
+								
+								aHTML.push('<table id="ns1blankspaceReco" class="ns1blankspace"><tbody>');
 							
 								$(oResponse.data.rows).each(function(i) 
 								{
 									if (i==0)
 									{
-										aHTML[++h] = '<tr><td style="font-size:0.75em;"><span id="spanInterfaceBankAccountAll">All</span></td></tr>';	
+										aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceAccountTransactionsAll">All</span></td></tr>');	
 									}
 								
-									aHTML[++h] = '<tr><td id="interfaceFinancialAccountReco_title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect financialaccount"' +
-													'>' + this.title + '</td></tr>';
+									aHTML.push('<tr><td id="ns1blankspaceAccountTransactions_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceFinancialAccountRowSelect"' +
+													'>' + this.title + '</td></tr>');
 								});
 							
-								aHTML[++h] = '</tbody></table>';
+								aHTML.push('</tbody></table>';
 							
 								$('#tdInterfaceMainFinancialAccountTransactionsColumn1').html(aHTML.join(''));
 								
-								$('#spanInterfaceBankAccountAll').button(
+								$('#ns1blankspaceAccountTransactionsAll').button(
 								{
 									label: "All"
 								})
 								.click(function() {
 										$.extend(true, oParam, {step: 3, financialAccount: -1});
-										interfaceFinancialAccounts(oParam);
+										ns1blankspace.financial.accounts.show(oParam);
 								})
 								.css("width", "75px");
 								
-								$('.financialaccount').click(function() {
+								$('.s1blankspaceFinancialAccountRowSelect').click(function() {
 										var aID = (event.target.id).split('-');
 										$.extend(true, oParam, {step: 3, financialAccount: parseInt(aID[1])});
-										interfaceFinancialAccounts(oParam);
+										ns1blankspace.financial.accounts.show(oParam);
 								});
 							}
 							
@@ -1329,7 +1222,7 @@ ns1blankspace.financial.accounts =
 					{	
 						if (oResponse == undefined)
 						{	
-							$('#tdInterfaceMainFinancialAccountTransactionsColumn2').html(ns1blankspace.xhtml.loadingSmall);
+							$('#ns1blankspaceAccountTransactionsColumn2').html(ns1blankspace.xhtml.loadingSmall);
 							
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
@@ -1338,7 +1231,7 @@ ns1blankspace.financial.accounts =
 							oSearch.sort('date', 'desc');
 							if (iFinancialAccount != -1) {oSearch.addFilter('financialaccount', 'EQUAL_TO', iFinancialAccount)};
 							oSearch.rows = 200;
-							oSearch.getResults(function(data) {interfaceFinancialAccounts(oParam, data)});	
+							oSearch.getResults(function(data) {ns1blankspace.financial.accounts.show(oParam, data)});	
 						}
 						else
 						{
@@ -1349,45 +1242,43 @@ ns1blankspace.financial.accounts =
 						
 							if (oResponse.data.rows.length == 0)
 							{
-								aHTML[++h] = '<table id="tableInterfaceFinancialHomeMostLikely">';
-								aHTML[++h] = '<tr class="trInterfaceFinancialHomeMostLikelyNothing">';
-								aHTML[++h] = '<td class="interfaceMainRowNothing">No transactions</td>';
-								aHTML[++h] = '</tr>';
-								aHTML[++h] = '</table>';
+								aHTML.push('<table><tbody>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">No transactions.</td>' +
+											'</tr>' +
+											'</tbody></table>');
 								
-								$('#tdInterfaceMainFinancialAccountTransactionsColumn2').html(aHTML.join(''));
+								$('#ns1blankspaceAccountTransactionsColumn2').html(aHTML.join(''));
 							}
 							else
 							{
 								var aHTML = [];
-								var h = -1;
 						
-								aHTML[++h] = '<table id="tableAccountTransactions" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-								aHTML[++h] = '<tbody>';
+								aHTML.push('<table class="ns1blankspace"><tbody>';
 							
-								aHTML[++h] = '<tr class="interfaceMainCaption">';
-								aHTML[++h] = '<td class="interfaceMainCaption">TOTAL</td>';
-								aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-								aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">' + oResponse.summary.sumamount + '</td>';
-								aHTML[++h] = '</tr>';
+								aHTML.push('<tr class="ns1blankspaceCaption">';
+								aHTML.push('<td class="ns1blankspaceCaption">TOTAL</td>';
+								aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>';
+								aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">' + oResponse.summary.sumamount + '</td>';
+								aHTML.push('</tr>';
 								
 								$(oResponse.data.rows).each(function(i) 
 								{
-									aHTML[++h] = '<tr><td id="interfaceFinancialAccountTransactions_date-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect"' +
-													'>' + this.date + '</td>';
+									aHTML.push('<tr><td id="ns1blankspaceFinancialAccountTransactions_date-' + this.id + '" class="ns1blankspaceMainRow ns1blankspaceRowSelect"' +
+													'>' + this.date + '</td>');
 									
-									aHTML[++h] = '<td id="interfaceFinancialAccountTransactions_description-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect"' +
-													'>' + this.description + '</td>';
+									aHTML.push('<td id="ns1blankspaceFinancialAccountTransactions_description-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
+													'>' + this.description + '</td>');
 													
-									aHTML[++h] = '<td id="interfaceFinancialAccountTransactions_amount-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect"' +
-													' style="text-align:right;">' + this.amount + '</td>';				
+									aHTML.push('<td id="ns1blankspaceFinancialAccountTransactions_amount-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSelect"' +
+													' style="text-align:right;">' + this.amount + '</td>');				
 																	
-									aHTML[++h] = '</tr>';
+									aHTML.push('</tr>');
 								});
 							
-								aHTML[++h] = '</tbody></table>';
+								aHTML.push('</tbody></table>');
 							
-								$('#tdInterfaceMainFinancialAccountTransactionsColumn2').html(aHTML.join(''));		
+								$('#ns1blankspaceAccountTransactionsColumn2').html(aHTML.join(''));		
 							}
 							
 						}

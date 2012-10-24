@@ -7,13 +7,13 @@
  
 ns1blankspace.contactPerson = 
 {
-
-		init: 	function (oParam)
+	init: 		function (oParam)
 				{
 					ns1blankspace.object = 32;	
-					ns1blankspace.objectName = 'Person';
+					ns1blankspace.objectName = 'ContactPerson';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'People';
 					
 					var bShowHome = true;
 					var bNew = false;
@@ -22,224 +22,123 @@ ns1blankspace.contactPerson =
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
 						if (oParam.showNew != undefined) {bNew = oParam.showNew}
-						if (oParam.contactBusiness != undefined) {ns1blankspace.contactBusiness = oParam.contactBusiness}
-						if (oParam.contactBusinessText != undefined) {ns1blankspace.contactBusinessText = oParam.contactBusinessText}
-						if (bNew) {interfaceContactPersonNew()};
+						if (oParam.contactBusiness != undefined) {ns1blankspace.data.contactBusiness = oParam.contactBusiness}
+						if (oParam.contactBusinessText != undefined) {ns1blankspace.data.contactBusinessText = oParam.contactBusinessText}
+						if (bNew) {ns1blankspace.contactPerson.new()};
 					}	
 							
-					ns1blankspaceReset();
-					
-					if (bShowHome)
-					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceContactPersonMasterViewport({showHome: true});',
-							move: false
-							})		
-					}
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "People"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceContactPersonSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceContactPersonSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceContactPersonSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceContactPersonNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceContactPersonNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceContactPersonSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-					
-						var aHTML = [];
-						var h = -1;
-						
-						aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
-										
-						aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-										'<td id="tdinterfaceActionOptionsDelete" class="interfaceActionOptions">' +
-										'Delete' +
-										'</td>' +
-										'</tr>';
-
-						aHTML[++h] = '</table>';
-
-						ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-						
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceContactPersonSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceContactPersonHelp();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceContactPersonSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceContactPersonSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('#divInterfaceViewportControl').html('');	
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					if (bNew) 
-					{
-						interfaceContactPersonNew();
-					}
-					else
-					{
-						if (bShowHome) {this.home()};
-					}
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
-		home: 	function (oResponse)
+	home: 		function (oResponse)
 				{
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-										'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-										ns1blankspace.xhtml.loading + 
+						aHTML.push('<table class="ns1blankspaceMain">');
+						aHTML.push('<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										ns1blankspace.xhtml.loading +
 										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+										'</tr>');
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
-										'<td id="ns1blankspaceViewportContactLarge" class="ns1blankspaceViewportImageLarge">' +
+						aHTML.push('<table>');
+
+						aHTML.push('<tr>' +
+										'<td id="ns1blankspaceViewContactLarge" class="ns1blankspaceViewImageLarge">' +
 										'&nbsp;' + 
 										'</td>' +
-										'</tr>';
+										'</tr>');
 								
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlFavourites" class="interfaceViewportControl">Favourites</td>' +
-									'</tr>';			
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControlFavourites" class="ns1blankspaceControl">Favourites</td>' +
+										'</tr>');			
 								
-						aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlByGroup" class="interfaceViewportControl">Groups</td>' +
-									'</tr>';	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControlByGroup" class="ns1blankspaceControl">Groups</td>' +
+										'</tr>');	
 									
-						aHTML[++h] = '</table>';		
+						aHTML.push('</table>');		
 						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));	
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
-						$('#tdInterfaceViewportControlByGroup').click(function(event)
+						$('#ns1blankspaceControlByGroup').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMain", true);
-							interfaceContactPersonByGroup("divInterfaceMain");
+							ns1blankspace.show(refresh: true});
+							ns1blankspace.contactPerson.groups.show();
+							//interfaceContactPersonByGroup("divInterfaceMain");
 						});
 							
-						$('#tdInterfaceViewportControlFavourites').click(function(event)
+						$('#ns1blankspaceControlFavourites').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMain", true);
-							interfaceContactFavourites({xhtmlElementID: "divInterfaceMain"});
+							ns1blankspace.show({refresh: true});
+							ns1blankspace.contactPerson.favourites.show({xhtmlElementID: "divInterfaceMain"});
 						});
 						
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
-						oSearch.endPoint = 'contact';
 						oSearch.method = 'CONTACT_PERSON_SEARCH';		
 						oSearch.addField('firstname,surname');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						
-						oSearch.getResults(interfaceContactPersonHomeShow);
-						
+						oSearch.getResults(ns1blankspace.contactPerson.home());	
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceContactPersonHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceProjectHomeMostLikely">';
-							aHTML[++h] = '<td class="tdInterfaceProjectHomeMostLikelyNothing">Click New to create a person contact.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr>');
+							aHTML.push('<td class="ns1blankspaceNothing">Click New to create a person contact.</td>');
+							aHTML.push('</tr>');
+							aHTML.push('</table>');
 						}
 						else
 						{
-							aHTML[++h] = '<table id="tableInterfaceContactPersonHomeMostLikely">';
-							aHTML[++h] = '<tr>';
-							aHTML[++h] = '<td class="interfaceMain">MOST LIKELY</td>';
-							aHTML[++h] = '</tr>';
+							aHTML.push('<table id="ns1blankspaceMostLikely"><tbody>');
+							aHTML.push('<tr>');
+							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>');
+							aHTML.push('</tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+								aHTML.push('<tr class="interfaceMainRow">');
 								
-								aHTML[++h] = '<td id="interfaceProjectHomeMostLikely_Title-' + this.id + 
-														'" class="interfaceHomeMostLikely">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+														'" class="ns1blankspaceMostLikely">' +
 														this.firstname + ' ' +
 														this.surname +
-														'</td>';
+														'</td>');
 								
-								aHTML[++h] = '</tr>'
+								aHTML.push('</tr>');
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</tbody></table>');
 						}
 						
-						$('#tdInterfaceProjectHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.interfaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							this.search(event.target.id, {source: 1});
+							ns1blankspace.contactPerson.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
 
 	search: 	{
 					send: 		function (sXHTMLElementId, oParam)
-								{
-									
+								{v
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
@@ -266,21 +165,19 @@ ns1blankspace.contactPerson =
 										ns1blankspace.objectContext = sSearchContext;
 										
 										var oSearch = new AdvancedSearch();
-										oSearch.endPoint = 'contact';
 										oSearch.method = 'CONTACT_PERSON_SEARCH';
 										oSearch.addField('firstname,surname,contactbusiness,contactbusinesstext,title,titletext,position,workphone,fax,mobile,email,' +
 																 'customerstatus,customerstatustext,primarycontactfor,gender,gendertext,' +
 																 'streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
 																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry');
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
-										oSearch.rf = 'json';
-										oSearch.getResults(function(data) {interfaceContactPersonShow(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.contactPerson.show(oParam, data)});
 									}
 									else
 									{
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -289,16 +186,15 @@ ns1blankspace.contactPerson =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											sElementId = 'ns1blankspaceViewBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspaceOptionsSetPosition(sElementId);
-											ns1blankspaceSearchStart(sElementId);
+											ns1blankspace.dialog.position({xhtmlElementID: sElementId});
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
-											oSearch.endPoint = 'contact';
 											oSearch.method = 'CONTACT_PERSON_SEARCH';
 											oSearch.addField('firstname,surname');
 											
@@ -313,7 +209,7 @@ ns1blankspace.contactPerson =
 											
 											oSearch.rows = 15;
 											oSearch.rf = 'json';
-											oSearch.getResults(function(data) {this.process(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.search.process(oParam, data)});
 										}
 									};	
 								},
@@ -322,18 +218,17 @@ ns1blankspace.contactPerson =
 								{
 									var iColumn = 0;
 									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
 										
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspaceSearchStop();
-										$('#divns1blankspaceViewportControlOptions').hide();
+										ns1blankspace.search.stop();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{	
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('<tbody>');
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -341,53 +236,53 @@ ns1blankspace.contactPerson =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
-											aHTML[++h] = '<td class="interfaceSearch" id="contactperson' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="contactperson' +
 															'-' + this.id + '">' +
 															this.firstname + 
-															'</td>';
+															'</td>');
 											
-											aHTML[++h] = '<td class="interfaceSearch" id="contactperson' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="contactperson' +
 															'-' + this.id + '">' +
-															this.surname + '</td>';
+															this.surname + '</td>');
 															
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</tbody></table>');
 										
-										$('#divns1blankspaceViewportControlOptions').html(
-											ns1blankspacePagination(
+										$(ns1blankspace.xhtml.container).html(
+											ns1blankspace.pagination.init(
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true")
 											}) 
 										);		
 										
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
-										ns1blankspaceSearchStop();
+										ns1blankspace.search.stop();
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
 											interfaceContactPersonSearch(event.target.id, {source: 1});
 										});
 										
-										ns1blankspacePaginationBind(
+										ns1blankspace.pagination.bind(
 										{
 											columns: 'firstname-surname',
 											more: oResponse.moreid,
 											rows: 15,
-											startRow: parseInt($(oRoot).attr('startrow')) + parseInt($(oRoot).attr('rows')),
-											functionSearch: interfaceContactPersonSearch
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: oResponse.contactPerson.search.send
 										});   
 										
 									}	
@@ -400,129 +295,106 @@ ns1blankspace.contactPerson =
 					var aHTML = [];
 					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">Details</td></tr>');
 										
-						aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
-										'</tr>';				
+						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">Address</td></tr>');				
 					}
 					else
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">Summary</td></tr>');
 									
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">Details</td></tr>');
 									
-						aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceAddress" class="ns1blankspaceControl">Address</td></tr>');
 					
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 					
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+						aHTML.push('<table class="ns1blankspaceControl">');
 					
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlGroups" class="interfaceViewportControl">Groups</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlGroups" class="ns1blankspaceControl">Groups</td></tr>');
+											
+						aHTML.push('<tr><td id="ns1blankspaceControlBusiness" class="ns1blankspaceControl">Business</td></tr>');
 									
-						aHTML[++h] = '</table>';				
+						aHTML.push('</table>');		
 					
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+						aHTML.push('<table class="ns1blankspaceControl">');
 					
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlBusiness" class="interfaceViewportControl">Business</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">Actions</td></tr>');
 									
-						aHTML[++h] = '</table>';		
-					
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-					
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlActions" class="interfaceViewportControl">Actions</td>' +
-										'</tr>';
-									
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">Attachments</td></tr>');
 					}
 							
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>');					
 						
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAddress" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainUser" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainGroups" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainBusiness" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainActions" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAddress" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainGroups" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainBusiness" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainUser" class="ns1blankspaceControlMain"></div>');
 					
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceContactPersonSummary();
+						ns1blankspace.show({selector: '#divInterfaceMainSummary'});
+						ns1blankspace.contactPerson.summary();
 					});
 					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceContactPersonDetails();
+						ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+						ns1blankspace.contactPerson.details();
 					});
 					
 					
-					$('#tdInterfaceViewportControlAddress').click(function(event)
+					$('#ns1blankspaceControlAddress').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAddress");
-						interfaceContactPersonAddress();
+						ns1blankspace.show({selector: '#divInterfaceMainAddress'});
+						ns1blankspace.contactPerson.address();
 					});
 					
-					$('#tdInterfaceViewportControlUser').click(function(event)
+					$('#ns1blankspaceControlUser').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainUser", true);
-						interfaceContactPersonUser();
+						ns1blankspace.show({selector: '#divInterfaceMainUser', refresh: true});
+						ns1blankspace.contactPerson.user();
 					});
 					
-					$('#tdInterfaceViewportControlGroups').click(function(event)
+					$('#ns1blankspaceControlGroups').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainGroups", true);
-						interfaceContactPersonGroups();
+						ns1blankspace.show({selector: '#divInterfaceMainGroups', refresh: true});
+						ns1blankspace.contactPerson.groups.show();
 					});
 					
-					$('#tdInterfaceViewportControlBusiness').click(function(event)
+					$('#ns1blankspaceControlBusiness').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainBusiness", true);
-						interfaceContactPersonBusiness();
+						ns1blankspace.show({selector: '#divInterfaceMainBusiness'}, refresh: true});
+						ns1blankspace.contactPerson.groups.business();
 					});
 					
-					$('#tdInterfaceViewportControlActions').click(function(event)
+					$('#ns1blankspaceControlActions').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
+						ns1blankspace.show({selector: '#ns1blankspaceActions', refresh: true});
 						
-						if ($('#inputInterfaceMainDetailsFirstName').val() != undefined)
+						if ($('#ns1blankspaceDetailsFirstName').val() != undefined)
 						{
-							ns1blankspace.contactPersonText = $('#inputInterfaceMainDetailsFirstName').val() + ' ' + $('#inputInterfaceMainDetailsSurname').val();
+							ns1blankspace.contactPersonText = $('#ns1blankspaceDetailsFirstName').val() + ' ' + $('#ins1blankspaceDetailsSurname').val();
 						}
 						
-						ns1blankspaceActions({
-											xhtmlElementID: 'divInterfaceMainActions',
+						ns1blankspace.actions.show({
+											xhtmlElementID: 'ns1blankspaceActions',
 											contactPerson: ns1blankspace.objectContext, 
 											contactPersonText: ns1blankspace.contactPersonText,
 											contactBusiness: ns1blankspace.contactBusiness, 
@@ -532,30 +404,28 @@ ns1blankspace.contactPerson =
 											});
 					});
 					
-					$('#tdInterfaceViewportControlAttachments').click(function(event)
+					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
-						ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+						ns1blankspace.show({selector: '#divInterfaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show({xhtmlElementID: 'divInterfaceMainAttachments'});
 					});
 					
 				},
 
-	show: 		function interfaceContactPersonShow(oParam, oResponse)
+	show: 		function (oParam, oResponse)
 				{
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceContactPersonViewport();
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.contactPerson.layout();
 					
 					var aHTML = [];
-					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find contact person.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find contact person.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
@@ -565,470 +435,447 @@ ns1blankspace.contactPerson =
 						ns1blankspace.contactBusinessText = ns1blankspace.objectContextData.contactbusinesstext
 						ns1blankspace.contactPersonText = ns1blankspace.objectContextData.firstname + ' ' + ns1blankspace.objectContextData.surname;
 						
-						$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.firstname + 
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.firstname + 
 									'<br />' + ns1blankspace.objectContextData.surname);
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-						$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceContactPersonMasterViewport({showHome: false});interfaceContactPersonSearch("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.contactPerson.init({showHome: false});ns1blankspace.contactPerson.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
 						
-						ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceContactPersonSummary()'})
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.contactPerson.summary()'})
 					}	
 				},	
 		
-	summary: 	function interfaceContactPersonSummary()
+	summary: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this contact.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find this contact.</td></tr></tbody></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
-										'</td>' +
-										'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';				
+						aHTML.push('<table class="ns1blankspaceMain"><tbody>' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1Large" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2Action" class="ns1blankspaceSummaryColumn2Action" style="width:100px;"></td>' +
+									'</tr>' +
+									'</tbody></table>');				
 						
-						$('#divInterfaceMainSummary').html(aHTML.join(''));	
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 					
 						var aHTML = [];
 						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML.push('<table class="ns1blankspaceColumn1">';
 						
 						if (ns1blankspace.objectContextData.workphone != '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPhone" class="interfaceMainSummary">Phone</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryPhoneValue" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryPhone" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.workphone +
 										'</td></tr>';
 						}
 
 						if (ns1blankspace.objectContextData.mobile != '')
 						{
-							aHTML[++h] =  '<tr><td id="tdInterfaceMainSummaryMobile" class="interfaceMainSummary">Mobile</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryMobileValue" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Mobile</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryMobile" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.mobile +
-										'</td>' +
-										'</tr>';
+										'</td></tr>';
 						}				
 						
 						if (ns1blankspace.objectContextData.email != '')
 						{
-							aHTML[++h] =  '<tr><td id="tdInterfaceMainSummaryEmail" class="interfaceMainSummary">Email</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryEmailValue" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Email</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.email +
-										'</td>' +
-										'</tr>';
+										'</td></tr>';
 						}				
 								
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));		 
+						$('#ns1blankspaceSummaryColumn1Large').html(aHTML.join(''));		 
 					}	
 				},
 
-	details: 	function interfaceContactPersonDetails()
+	details: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
 					
-					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>');
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMainDetails').html(aHTML.join(''));
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsFirstName" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsFirstName" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'First Name' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsFirstNameValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsFirstNameValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsFirstName" class="inputInterfaceMainText">' +
-										'</td></tr>';			
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsFirstName" class="ns1blankspaceText">' +
+										'</td></tr>');			
 
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsSurname" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsSurname" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Surname' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsSurnameValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsSurnameValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsSurname" class="inputInterfaceMainText">' +
-										'</td></tr>';			
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsSurname" class="ns1blankspaceText">' +
+										'</td></tr>');			
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsTitle" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsTitle" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Title' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsTitleValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainDetailsTitleValue" class="interfaceMainSelect">' +
-										'<input id="inputInterfaceMainDetailsTitle" class="inputInterfaceMainSelect"' +
-											' onDemandMethod="SETUP_CONTACT_TITLE_SEARCH">' +
-										'</td></tr>';							
+										'<tr class="ns1blankspaceSelect">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceSelect"' +
+											' data-method="SETUP_CONTACT_TITLE_SEARCH">' +
+										'</td></tr>');							
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsPosition" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsPosition" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Position' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsPositionValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsPositionValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsPosition" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsPosition" class="ns1blankspaceText">' +
+										'</td></tr>');
 
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsPhone" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsPhone" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Phone' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsPhoneValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsPhoneValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsPhone" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsPhone" class="ns1blankspaceText">' +
+										'</td></tr>');
 
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsMobile" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsMobile" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Mobile' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsMobileValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsMobileValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsMobile" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsMobile" class="ns1blankspaceText">' +
+										'</td></tr>');
 
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsFax" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsFax" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Fax' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsFaxValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsFaxValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsFax" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsFax" class="ns1blankspaceText">' +
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsEmail" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsEmail" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Email' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsEmailValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsEmailValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsEmail" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsEmail" class="ns1blankspaceText">' +
+										'</td></tr>');
 							
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 							
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspace"><tbody>');
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsDescription" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsDescription" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Description / Notes' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-										'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsDescription" class="inputInterfaceMainTextMulti"></textarea>' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceTextMulti">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="10" cols="35" id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti"></textarea>' +
+										'</td></tr>');
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 							
-						$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsFirstName').val(ns1blankspace.objectContextData.firstname);
-							$('#inputInterfaceMainDetailsSurname').val(ns1blankspace.objectContextData.surname);
-							$('#inputInterfaceMainDetailsTitle').attr('onDemandID', ns1blankspace.objectContextData.title);
-							$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.titletext);
-							$('#inputInterfaceMainDetailsPosition').val(ns1blankspace.objectContextData.position);
-							$('#inputInterfaceMainDetailsPhone').val(ns1blankspace.objectContextData.workphone);
-							$('#inputInterfaceMainDetailsMobile').val(ns1blankspace.objectContextData.mobile);
-							$('#inputInterfaceMainDetailsFax').val(ns1blankspace.objectContextData.fax);
-							$('#inputInterfaceMainDetailsEmail').val(ns1blankspace.objectContextData.email);
+							$('#ns1blankspaceDetailsFirstName').val(ns1blankspace.objectContextData.firstname);
+							$('#ns1blankspaceDetailsSurname').val(ns1blankspace.objectContextData.surname);
+							$('#ns1blankspaceDetailsTitle').attr('data-id', ns1blankspace.objectContextData.title);
+							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.titletext);
+							$('#ns1blankspaceDetailsPosition').val(ns1blankspace.objectContextData.position);
+							$('#ns1blankspaceDetailsPhone').val(ns1blankspace.objectContextData.workphone);
+							$('#ns1blankspaceDetailsMobile').val(ns1blankspace.objectContextData.mobile);
+							$('#ns1blankspaceDetailsFax').val(ns1blankspace.objectContextData.fax);
+							$('#ns1blankspaceDetailsEmail').val(ns1blankspace.objectContextData.email);
 						}
 						
-						$('#inputInterfaceMainDetailsTitle').keyup(function(event)
+						$('#ns1blankspaceDetailsTitle').keyup(function(event)
 						{
-							$('#divns1blankspaceViewportControlOptions').hide(200);
-							ns1blankspaceElementOptionsSearch(event.target.id);
+							$(ns1blankspace.xhtml.container).hide(200);
+							ns1blankspace.search.send(event.target.id);
 						});
 					}	
 				}
 
-	address: 	function interfaceContactPersonAddress()
+	address: 	function ()
 				{
-
 					var aHTML = [];
-					var h = -1;
-					
-					if ($('#divInterfaceMainAddress').attr('onDemandLoading') == '1')
+			
+					if ($('#ns1blankspaceMainAddress').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainAddress').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainAddress').attr('data-loading', '');
 							
-						aHTML[++h] = '<table id="tableInterfaceMainAddress" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainAddressRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressColumn1" class="interfaceMain">' +
-										'</td>' +
-										'<td id="tdInterfaceMainAddressColumn2" class="interfaceMain">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceContainer"><tbody>' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceAddressColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceAddressColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' +
+										'</tbody></table>');					
 						
-						$('#divInterfaceMainAddress').html(aHTML.join(''));
+						$('#ns1blankspaceMainAddress').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+		
+						aHTML.push('<table class="ns1blankspace"><tbody>');
 						
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreet" class="interfaceMainSectionLabel">' +
-										'<td id="tdInterfaceMainAddressStreet" class="interfaceMainSectionLabel">' +
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 										'Street' +
-										'</td></tr>';
+										'</td></tr>');
 								
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetAddress1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetAddress1" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Address' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetAddress1Value" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetAddress1Value" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainAddressStreetAddress1" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetAddress1" class="ns1blankspaceText">' +
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetSuburb" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetSuburb" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Suburb' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetSuburbValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetSuburbValue" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainAddressStreetSuburb" class="inputInterfaceMainText">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetSuburb" class="ns1blankspaceText">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetState" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetState" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'State' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetStateValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetStateValue" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainAddressStreetState" class="inputInterfaceMainText">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetState" class="ns1blankspaceText">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetPostCode" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetPostCode" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Post Code' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetPostCodeValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetPostCodeValue" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainAddressStreetPostCode" class="inputInterfaceMainText">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetPostCode" class="ns1blankspaceText">' +
 										'</td></tr>';				
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetCountry" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetCountry" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspace">' +
 										'Country' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetCountryValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetCountryValue" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainAddressStreetCountry" class="inputInterfaceMainText">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetCountry" class="ns1blankspaceText">' +
 										'</td></tr>';						
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</tbody></table>';					
 						
-						$('#tdInterfaceMainAddressColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceAddressColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspace"><tbody>');
 						
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailing" class="interfaceMainSectionLabel">' +
-										'<td id="tdInterfaceMainAddressMailing" class="interfaceMainSectionLabel">' +
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 										'Mailing' +
-										'</td></tr>';
+										'</td></tr>');
 								
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingAddress1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingAddress1" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Address' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingAddress1Value" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingAddress1Value" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainAddressStreetAddress1" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetAddress1" class="ns1blankspaceText">' +
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingSuburb" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingSuburb" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Suburb' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingSuburbValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingSuburbValue" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainAddressMailingSuburb" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingSuburb" class="ns1blankspaceText">' +
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingState" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingState" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'State' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingStateValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingStateValue" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainAddressMailingState" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingState" class="ns1blankspaceText">' +
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingPostCode" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingPostCode" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Post Code' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingPostCodeValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingPostCodeValue" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainAddressMailingPostCode" class="inputInterfaceMainText">' +
-										'</td></tr>';				
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingPostCode" class="ns1blankspaceText">' +
+										'</td></tr>');				
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingCountry" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingCountry" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Country' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingCountryValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingCountryValue" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainAddressMailingCountry" class="inputInterfaceMainText">' +
-										'</td></tr>';						
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingCountry" class="ns1blankspaceText">' +
+										'</td></tr>');						
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</tbody></table>');					
 						
-						$('#tdInterfaceMainAddressColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceAddressColumn2').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainAddressStreetAddress1').val(ns1blankspace.objectContextData.streetaddress1);
-							$('#inputInterfaceMainAddressStreetSuburb').val(ns1blankspace.objectContextData.streetsuburb);
-							$('#inputInterfaceMainAddressStreetState').val(ns1blankspace.objectContextData.streetstate);
-							$('#inputInterfaceMainAddressStreetPostCode').val(ns1blankspace.objectContextData.streetpostcode);
-							$('#inputInterfaceMainAddressStreetCountry').val(ns1blankspace.objectContextData.streetcountry);
-							$('#inputInterfaceMainAddressMailingAddress1').val(ns1blankspace.objectContextData.mailingaddress1);
-							$('#inputInterfaceMainAddressMailingSuburb').val(ns1blankspace.objectContextData.mailingsuburb);
-							$('#inputInterfaceMainAddressMailingState').val(ns1blankspace.objectContextData.mailingstate);
-							$('#inputInterfaceMainAddressMailingPostCode').val(ns1blankspace.objectContextData.mailingpostcode);
-							$('#inputInterfaceMainAddressMailingCountry').val(ns1blankspace.objectContextData.mailingcountry);
+							$('#ns1blankspaceAddressStreetAddress1').val(ns1blankspace.objectContextData.streetaddress1);
+							$('#ns1blankspaceAddressStreetSuburb').val(ns1blankspace.objectContextData.streetsuburb);
+							$('#ns1blankspaceAddressStreetState').val(ns1blankspace.objectContextData.streetstate);
+							$('#ns1blankspaceAddressStreetPostCode').val(ns1blankspace.objectContextData.streetpostcode);
+							$('#ns1blankspaceAddressStreetCountry').val(ns1blankspace.objectContextData.streetcountry);
+							$('#ns1blankspaceAddressMailingAddress1').val(ns1blankspace.objectContextData.mailingaddress1);
+							$('#ns1blankspaceAddressMailingSuburb').val(ns1blankspace.objectContextData.mailingsuburb);
+							$('#ns1blankspaceAddressMailingState').val(ns1blankspace.objectContextData.mailingstate);
+							$('#ns1blankspaceAddressMailingPostCode').val(ns1blankspace.objectContextData.mailingpostcode);
+							$('#ns1blankspaceAddressMailingCountry').val(ns1blankspace.objectContextData.mailingcountry);
 						}
 					}	
 				},
 
-	contactBusiness: function interfaceContactPersonBusiness()
+	contactBusiness: function ()
 				{
 					var aHTML = [];
-					var h = -1;
 					
-					if ($('#divInterfaceMainBusiness').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainBusiness').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainBusiness').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainBusiness').attr('data-loading', '');
 						
-						aHTML[++h] = '<table id="tableInterfaceMainBusiness" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainBusinessRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainBusinessColumn1Large" class="interfaceMainColumn1Large">' +
-										'</td>' +
-										'<td id="tdInterfaceMainBusinessColumn2Action" style="width:100px;">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';				
+						aHTML.push('<table class="ns1blankspaceContainer">';
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceBusinessColumn1" class="ns1blankspaceColumn1Large"></td>' +
+										'<td id="ns1blankspaceBusinessColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+										'</tr>' +
+										'</tbody></table>');				
 						
-						$('#divInterfaceMainBusiness').html(aHTML.join(''));
+						$('#ns1blankspaceMainBusiness').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspace"><tbody>');
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsContactBusiness" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsContactBusiness" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Trading Name' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsContactBusinessValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainDetailsContactBusinessValue" class="interfaceMainSelect">' +
-										'<input onDemandType="SELECT" id="inputInterfaceMainDetailsContactBusiness" class="inputInterfaceMainSelect"' +
-											' onDemandMethod="/ondemand/contact/?rf=XML&method=CONTACT_BUSINESS_SEARCH"' +
-											' onDemandColumns="tradename">' +
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceBusiness" class="ns1blankspaceSelect"' +
+											' data-method="/ondemand/contact/?rf=XML&method=CONTACT_BUSINESS_SEARCH"' +
+											' data-columns="tradename">' +
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsBusinessSummary" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsBusinessSummary" class="interfaceMain">' +
-										'</td></tr>';
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td id="ns1blankspaceBusinessSummary" class="ns1blankspace">' +
+										'</td></tr>');
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</tbody></table>');					
 						
-						$('#tdInterfaceMainBusinessColumn1Large').html(aHTML.join(''));
+						$('#ns1blankspaceBusinessColumn1').html(aHTML.join(''));
 					
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsContactBusiness').attr('onDemandID', ns1blankspace.objectContextData.contactbusiness);
-							$('#inputInterfaceMainDetailsContactBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
+							$('#ns1blankspaceBusiness').attr('data-id', ns1blankspace.objectContextData.contactbusiness);
+							$('#ns1blankspaceBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
 						}
 						else
 						{
-							$('#inputInterfaceMainDetailsContactBusiness').attr('onDemandID', ns1blankspace.contactBusiness);
-							$('#inputInterfaceMainDetailsContactBusiness').val(ns1blankspace.contactBusinessText);
+							$('#ns1blankspaceBusiness').attr('data-id', ns1blankspace.contactBusiness);
+							$('#ns1blankspaceBusiness').val(ns1blankspace.contactBusinessText);
 						}
 						
 						var aHTML = [];
-						var h = -1;	
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
+						aHTML.push('<table class="ns1blankspace"><tbody>');
 							
 						if (ns1blankspace.objectContextData.contactbusiness != '')
 						{	
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryViewContactBusiness" class="interfaceMainColumn2Action">' +
-										'<a href="#" id="aInterfaceMainSummaryViewContactBusiness">View&nbsp;Business</a>' +
-										'</td></tr>';
+							aHTML.push('<tr><td class="ns1blankspace">' +
+										'<a href="#" id="ns1blankspaceBusinessView">View&nbsp;Business</a>' +
+										'</td></tr>');
 						}
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</tbody></table>');					
 						
-						$('#tdInterfaceMainBusinessColumn2Action').html(aHTML.join(''));	
+						$('#ns1blankspaceBusinessColumn2').html(aHTML.join(''));	
 						
-						$('#aInterfaceMainSummaryViewContactBusiness').click(function(event)
+						$('#ns1blankspaceBusinessColumn2BusinessView').click(function(event)
 						{
-							interfaceContactBusinessMasterViewport({showHome: false});
-							interfaceContactBusinessSearch('-' + ns1blankspace.objectContextData.contactbusiness, {source: 1});
+							ns1blankspace.contactBusiness.init({showHome: false});
+							ns1blankspace.contactBusiness.search.show('-' + ns1blankspace.objectContextData.contactbusiness, {source: 1});
 						});
 					}	
 				},
 
-	new: 		function interfaceContactPersonNew()
+	new: 		function ()
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
-					interfaceContactPersonViewport();
-					ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					this.details();
+					ns1blankspace.contactPerson.init();
+					ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
+					ns1blankspace.contactPerson.details();
 				},
 
 	save: 		{
-					send: 		function interfaceContactPersonSave()
+					send: 		function ()
 								{
 									var sData = 'id=';
 									
@@ -1037,65 +884,63 @@ ns1blankspace.contactPerson =
 										sData += ns1blankspace.objectContext;
 									} 
 									
-									if ($('#divInterfaceMainDetails').html() != '')
+									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&firstname=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsFirstName').val());
-										sData += '&surname=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSurname').val());
-										sData += '&title=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsTitle').attr('onDemandID'));
-										sData += '&jobtitle=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPosition').val());
-										sData += '&phone=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPhone').val());
-										sData += '&fax=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsFax').val());
-										sData += '&mobile=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsMobile').val());
-										sData += '&email=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsEmail').val());
-										sData += '&notes=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDescription').val());
+										sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFirstName').val());
+										sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSurname').val());
+										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').attr('onDemandID'));
+										sData += '&jobtitle=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPosition').val());
+										sData += '&phone=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPhone').val());
+										sData += '&fax=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFax').val());
+										sData += '&mobile=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsMobile').val());
+										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
+										sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 									}
 									
-									if ($('#divInterfaceMainAddress').html() != '')
+									if ($('#ns1blankspaceMainAddress').html() != '')
 									{
-										sData += '&streetaddress1=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetAddress1').val());
-										sData += '&streetsuburb=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetSuburb').val());
-										sData += '&streetstate=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetState').val());
-										sData += '&streetpostcode=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetPostCode').val());
-										sData += '&streetcountry=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetCountry').val());
-										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingAddress1').val());
-										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingSuburb').val());
-										sData += '&mailingstate=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingState').val());
-										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingPostCode').val());
-										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingCountry').val());
+										sData += '&streetaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetAddress1').val());
+										sData += '&streetsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetSuburb').val());
+										sData += '&streetstate=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetState').val());
+										sData += '&streetpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetPostCode').val());
+										sData += '&streetcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetCountry').val());
+										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingAddress1').val());
+										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingSuburb').val());
+										sData += '&mailingstate=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingState').val());
+										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingPostCode').val());
+										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingCountry').val());
 									}
 									
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspaceEndpointURL('CONTACT_PERSON_MANAGE'),
+										url: ns1blankspace.util.endpointURI('CONTACT_PERSON_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: interfaceContactPersonSaveProcess
+										success: this.process
 									});
 										
 								},
 
-					process: 	function interfaceContactPersonSaveProcess(oResponse)
+					process: 	function (oResponse)
 								{	
 									if (oResponse.status == 'OK')
 									{
-										ns1blankspaceStatus('Saved');
+										ns1blankspace.status.message('Saved');
 										if (ns1blankspace.objectContext == -1) {var bNew = true}
 										ns1blankspace.objectContext = oResponse.id;	
 										
-										if (bNew) {interfaceContactPersonSearch('-' + ns1blankspace.objectContext)}
+										if (bNew) {ns1blankspace.contactPerson.search.send('-' + ns1blankspace.objectContext)}
 									}
 									else
 									{
-										ns1blankspaceStatus(oResponse.error.errornotes);
-										ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
-																   , title: 'Save error!'});
+										ns1blankspace.status.error(oResponse.error.errornotes);
 									}
 								}
 				},				
 
 	user: 		{
-					show: 		function interfaceContactPersonUser(oParam, oXML)
+					show: 		function (oParam, oResponse)
 								{
 
 									var iObject = ns1blankspace.object;
@@ -1107,88 +952,83 @@ ns1blankspace.contactPerson =
 										if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
 									}
 
-									if (oXML == undefined)
+									if (oResponse == undefined)
 									{
-										var sParam = 'method=SETUP_USER_SEARCH';
 										var sData = 'contactperson=' + iObjectContext;
 									
 										$.ajax(
 										{
 											type: 'POST',
-											url: '/ondemand/setup/?rf=json&' + sParam,
+											url: '/ondemand/setup/?method=SETUP_USER_SEARCH',
 											dataType: 'json',
 											data: sData,
-											success: function(data) {interfaceContactPersonUser(oParam, data)}
+											success: function(data) {this.show(oParam, data)}
 										});
 
 									}
 									else
 									{	
 										var aHTML = [];
-										var h = -1;
 									
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+											aHTML.push('<table class="ns1blankspace">');
 												
 											var sUserName = oResponse.username;
 											sUserName = sUserName.replace('@' + msOnDemandSiteId, '');
 											
-											aHTML[++h] = '<tr id="trInterfaceMainDetailsRegistrationImport" class="interfaceMainTextMulti">' +
-														'<td id="tdInterfaceMainDetailsRegistrationImport" class="interfaceMainTextMulti">' +
+											aHTML.push('<tr>' +
+														'<td class="ns1blankspace">' +
 														'This person already has access as ' +
-														sUserName;
+														sUserName);
 														
 											if (oResponse.lastlogondatetime != '&nbsp;')
 											{	
-												aHTML[++h] = ' and last logged on ' +
+												aHTML.push(' and last logged on ' +
 														oResponse.lastlogondatetime +
-														'.</td></tr>';
+														'.</td></tr>');
 											}
 											else
 											{
-												aHTML[++h] = '.</td></tr>';
+												aHTML.push('.</td></tr>');
 											}	
 														
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>');					
 										
-											$('#divInterfaceMainUser').html(aHTML.join(''));
+											$('#ns1blankspaceMainUser').html(aHTML.join(''));
 										}
 										else
 										{
 										
 											var aHTML = [];
-											var h = -1;
 
-											aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+											aHTML.push('<table class="ns1blankspace">');
 													
-											aHTML[++h] = '<tr id="trInterfaceMainUserRegister" class="interfaceMainTextMulti">' +
-															'<td id="tdInterfaceMainUserRegister" class="interfaceMainTextMulti">' +
-															'<span id="spanInterfaceMainUserRegister">Register As User Now</span>' +
-															'</td></tr>';
+											aHTML.push('<tr>' +
+															'<td>' +
+															'<span id="ns1blankspaceUserRegister">Register As User Now</span>' +
+															'</td></tr>');
 															
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>');					
 											
-											$('#divInterfaceMainUser').html(aHTML.join(''));
+											$('#ns1blankspaceMainUser').html(aHTML.join(''));
 											
-											$('#spanInterfaceMainUserRegister').button(
+											$('#ns1blankspaceUserRegister').button(
 											{
 												text: "Register As User Now"
 											})
 											.click(function() {
-												interfaceContactPersonUserRegister();
+												ns1blankspace.contactPerson.user.add();
 											});
 										}
 									}
 								},	
 
-					add: 		function interfaceContactPersonUserRegister(sResponse)
+					add: 		function (sResponse)
 								{
-
 									if (sResponse == undefined)
 									{
-
-										$('#divInterfaceMainUser').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceUser').html(ns1blankspace.xhtml.loading);
 										
 										var sParam = 'method=REGISTER_ADD_USER';
 										sParam += '&site=' + msOnDemandSiteId;
@@ -1203,43 +1043,38 @@ ns1blankspace.contactPerson =
 											type: 'POST',
 											url: '/ondemand/register/?' + sParam,
 											data: sData,
-											dataType: 'text',
-											success: interfaceContactPersonUserRegister
+											dataType: 'json',
+											success: ns1blankspace.contactPerson.user.add
 										});
 									}		
 									else
 									{
-										//NEED TO CONVRT TO JSON
-										var aResponse = sResponse.split('|');
-										
 										var aHTML = [];
-										var h = -1;
 
-										aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+										aHTML.push('<table class="ns1blankspace"><tbody>');
 												
-										var sUserName = aResponse[2];
+										var sUserName = oResponse.username;
 										sUserName = sUserName.replace('@' + msOnDemandSiteId, '');
 											
-										aHTML[++h] = '<tr id="trInterfaceMainUserRegister" class="interfaceMainTextMulti">' +
-														'<td id="tdInterfaceMainUserRegister" class="interfaceMainTextMulti">' +
+										aHTML.push('<tr><td>' +
 														'User set up as ' +
 														sUserName +
 														' with initial password of ' +
-														aResponse[3] +
-														'.</td></tr>';
+														oResponse.initialpassword +
+														'.</td></tr>');
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</tbody></table>');					
 										
-										$('#divInterfaceMainUser').html(aHTML.join(''));
+										$('#ns1blankspaceMainUser').html(aHTML.join(''));
 									}	
 								}
 				},				
 
 	groups: 	{ 
-					show: 		function interfaceContactPersonGroups(oParam, oResponse)
+					show: 		function (oParam, oResponse)
 								{
 									
-									var sXHTMLElementID = 'divInterfaceMainGroups';
+									var sXHTMLElementID = 'ns1blankspaceMainGroups';
 									var sLabel = "groups";
 									var iOption = 1;
 									
@@ -1257,225 +1092,204 @@ ns1blankspace.contactPerson =
 										oSearch.addFilter('contactperson', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.rows = 100;
 										oSearch.sort('grouptext', 'asc');
-										oSearch.getResults(function(data) {interfaceContactPersonGroups(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.contactPerson.groups.show(oParam, data)});
 									}
 									else
 									{
-									
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainContactPersonGroups" class="interfaceMain">' +
-													'<tr id="trInterfaceMainContactPersonGroupsRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainContactPersonGroupsColumn1" class="interfaceMainColumn1Large">' +
-													'</td>' +
-													'<td id="tdInterfaceMainContactPersonGroupsColumn2" style="width: 100px;" class="interfaceMainColumn2Action">' +
-													'</td>' +
+										aHTML.push('<table class="ns1blankspaceContainer"><tbody>' +
+													'<tr class="ns1blankspaceContainer">' +
+													'<td id="ns1blankspaceContactPersonGroupsColumn1" class="ns1blankspaceColumn1Large"></td>' +
+													'<td id="ns1blankspaceContactPersonGroupsColumn2" style="width: 100px;" class="ns1blankspaceColumn2Action"></td>' +
 													'</tr>' +
-													'</table>';				
+													'</tbody></table>');				
 										
-										$('#divInterfaceMainGroups').html(aHTML.join(''));
+										$('#ns1blankspaceMainGroups').html(aHTML.join(''));
 										
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainNewsGroupsColumn2" class="interfaceMainColumn2">';
+										aHTML.push('<table class="ns1blankspace"><tbody>');
 										
-										aHTML[++h] = '<tr><td id="tdInterfaceMainContactPersonGroupsAdd" class="interfaceMainAction">' +
-														'<span id="spanInterfaceMainContactPersonGroupsAdd">Add Group</span>' +
-														'</td></tr>';
+										aHTML.push('<tr><td class="ns1blankspace">' +
+														'<span id="ns1blankspaceContactPersonGroupsAdd">Add Group</span>' +
+														'</td></tr>');
+															
+										aHTML.push('</table>');					
 										
-										aHTML[++h] = '<tr><td>' +
-														'&nbsp;' +
-														'</td></tr>';
-														
-										aHTML[++h] = '</table>';					
+										$('#ns1blankspaceContactPersonGroupsColumn2').html(aHTML.join(''));
 										
-										$('#tdInterfaceMainContactPersonGroupsColumn2').html(aHTML.join(''));
-										
-										$('#spanInterfaceMainContactPersonGroupsAdd').button(
+										$('#ns1blankspaceContactPersonGroupsAdd').button(
 										{
 											label: "Add Group"
 										})
 										.click(function() {
-											ns1blankspaceOptionsSetPosition('spanInterfaceMainContactPersonGroupsAdd', -50, -280);
-											interfaceContactPersonGroupsAdd(oParam);
+											ns1blankspace.dialog.position(
+											{
+												xhtmlElementID: 'ns1blankspaceContactPersonGroupsAdd',
+												leftOffset: -50,
+												topOffset: -280
+											});
+											ns1blankspace.contactPerson.groups.add(oParam);
 										})
 										.css('width', '75px')
 										
 										var aHTML = [];
-										var h = -1;
 									
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceActions">';
-											aHTML[++h] = '<td class="interfaceMainRowNothing">No groups.</td>';
-											aHTML[++h] = '</tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">' +
+															'<tbody>' +
+															'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' +
+															'</tbody></table>');
 
-											$('#tdInterfaceMainContactPersonGroupsColumn1').html(aHTML.join(''));		
+											$('#ns1blankspaceContactPersonGroupsColumn1').html(aHTML.join(''));		
 										}
 										else
 										{
-											aHTML[++h] = '<table id="tableContacPersonGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
+											aHTML.push('<table class="ns1blankspace"><tbody>');
 											
 											$.each(oResponse.data.rows, function()
 											{	
 												if (this.grouptext != '')
 												{
-													aHTML[++h] = '<tr class="interfaceMainRow">';
+													aHTML.push('<tr class="ns1blankspaceRow">');
 																	
-													aHTML[++h] = '<td id="tdNewsGroupsList-title-' + this.id + '" class="interfaceMainRow">' +
-																			this.grouptext + '</td>';
-																			
-																			
-													aHTML[++h] = '<td id="tdNewsGroupsList-' + this.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
-																			
-													aHTML[++h] = '</tr>';
+													aHTML.push('<td id="ns1blankspaceGroups-title-' + this.id + '" class="ns1blankspaceRow">' +
+																			this.grouptext + '</td>');
+													
+													aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+																	'<span id="ns1blankspaceGroups_remove-' + this.id + 
+																	'" class="ns1blankspaceRow ns1blankspaceGroupsRemove">&nbsp;</span></td>');
+								
+													aHTML.push('</tr>');
 												}					
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>');
 
-											$('#tdInterfaceMainContactPersonGroupsColumn1').html(aHTML.join(''));
+											$('#ns1blankspaceContactPersonGroupsColumn1').html(aHTML.join(''));
 											
-											$('.interfaceMainRowOptionsSelect').button( {
+											$('.ns1blankspaceGroupsRemove').button( {
 												text: false,
 												 icons: {
 													 primary: "ui-icon-close"
 												}
 											})
 											.click(function() {
-												interfaceContactPersonGroupsAddRemove(this.id)
+												ns1blankspace.contactPerson.groups.remove(this.id)
 											})
 											.css('width', '15px')
 											.css('height', '20px')
-										
 										}
 										
 									}	
 								},
 
-					add: 		function interfaceContactPersonGroupsAdd(oParam, oResponse)
+					add: 		function (oParam, oResponse)
 								{
 										
-									if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == 'spanInterfaceMainContactPersonGroupsAdd')
+									if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceContactPersonGroupsAdd')
 									{
-										$('#divns1blankspaceViewportControlOptions').slideUp(500);
-										$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+										$(ns1blankspace.xhtml.container).slideUp(500);
+										$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 									}
 									else
 									{
 										if (oResponse == undefined)
 										{
-											var sParam = 'method=SETUP_CONTACT_PERSON_GROUP_SEARCH';
-										
 											$.ajax(
 											{
 												type: 'GET',
 												url: '/ondemand/setup/?method=SETUP_CONTACT_PERSON_GROUP_SEARCH',
 												dataType: 'json',
-												success: function(data){interfaceContactPersonGroupsAdd(oParam, data)}
+												success: function(data){ns1blankspace.contactPerson.groups.add(oParam, data)}
 											});
 										}
 										else
 										{
 											
-											$('#divns1blankspaceViewportControlOptions').attr('data-initiator', 'spanInterfaceMainContactPersonGroupsAdd')
+											$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceContactPersonGroupsAdd')
 											
 											var aHTML = [];
-											var h = -1;
 											
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML[++h] = '<table id="tableContactPersonGroupsAddSelect" border="0" cellspacing="0" cellpadding="0" class="interfaceSearchMedium">';
-												aHTML[++h] = '<tbody>'
-												aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																'<td class="interfaceMainRowNothing">No groups.</td></tr>';
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('<table class="ns1blankspaceSearchMedium"><tbody>' + 
+																'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' + 
+																'</tbody></table>');
 
-												$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-												$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 											}
 											else
 											{
-												aHTML[++h] = '<table id="tableContactPersonGroupsAddSelect" class="interfaceSearchMedium" style="font-size:0.725em;">';
-												aHTML[++h] = '<tbody>'
+												aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.725em;"><tbody>');
 												
 												$.each(oResponse.data.rows, function()
 												{	
-													aHTML[++h] = '<tr class="interfaceMainRow">';
+													aHTML.push('<tr class="ns1blankspaceRow">' +
+																	'<td id="ns1blankspaceGroupsAdd-title-' + this.id + '" class="ns1blankspaceRowSelect ns1blankspaceGroupsAddRowSelect">' +
+																			this.title + '</td>');
 													
-													aHTML[++h] = '<td id="tdNewsGroupsAddSelect-title-' + this.id + '" class="interfaceMainRowSelect">' +
-																			this.title + '</td>';
-													
-													aHTML[++h] = '</tr>'
+													aHTML.push('</tr>');
 												});
 												
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('</tbody></table>');
 
-												$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-												$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 												
-												$('td.interfaceMainRowSelect').click(function(event)
+												$('td.ns1blankspaceGroupsAddRowSelect').click(function(event)
 												{
-													interfaceContactPersonGroupsAddSelect(event.target.id);
+													ns1blankspace.contactPerson.groups.select(event.target.id);
 												});
 											}
 										}
 									}	
 								},
 	
-					select: 	function interfaceContactPersonGroupsAddSelect(sXHTMLElementId)
+					select: 	function (sXHTMLElementId)
 								{
-
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[2];
 									
 									$('#' + sXHTMLElementId).fadeOut(500);
 									
-									var sParam = 'method=CONTACT_PERSON_GROUP_MANAGE';
 									var sData = 'contactperson=' + ns1blankspace.objectContext +
 												'&group=' + sSearchContext;
 												
 									$.ajax(
-										{
-											type: 'POST',
-											url: '/ondemand/contact/?' + sParam,
-											data: sData,
-											dataType: 'json',
-											success: function(data){interfaceContactPersonGroups()}
-										});
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('CONTACT_PERSON_GROUP_MANAGE'),
+										data: sData,
+										dataType: 'json',
+										success: function(data){ns1blankspace.contactPerson.groups.search.show()}
+									});
 										
 								}
 
-					remove: 	function interfaceContactPersonGroupsAddRemove(sXHTMLElementId)
+					remove: 	function (sXHTMLElementID)
 								{
-
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
 									var sSearchContext = aSearch[1];
-									
-									var sParam = 'method=CONTACT_PERSON_GROUP_MANAGE&remove=1';
-									var sData = 'id=' + sSearchContext;
+									var sData = 'remove=1&id=' + sSearchContext;
 												
 									$.ajax(
-										{
-											type: 'POST',
-											url: '/ondemand/contact/?' + sParam,
-											data: sData,
-											dataType: 'json',
-											success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
-										});
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('CONTACT_PERSON_GROUP_MANAGE'),
+										data: sData,
+										dataType: 'json',
+										success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
+									});
 										
 								},					
 
 					search: 	{
-									show: 	function interfaceContactPersonByGroup(oParam, oResponse)
+									show: 		function (oParam, oResponse)
 												{
 													var sXHTMLElementID = 'divInterfaceMain';
 													var sLabel = "groups";
@@ -1488,76 +1302,65 @@ ns1blankspace.contactPerson =
 
 													if (oResponse == undefined)
 													{
-														var sParam = 'method=SETUP_CONTACT_PERSON_GROUP_SEARCH';
-														
 														$.ajax(
 														{
 															type: 'GET',
-															url: '/ondemand/setup/?rf=json',
-															data: sParam,
+															url: ns1blankspace.util.endpointURI('SETUP_CONTACT_PERSON_GROUP_SEARCH'),
 															dataType: 'json',
-															success: function(data) {interfaceContactPersonByGroup(oParam, data)}
+															success: function(data) {ns1blankspace.contactPerson.search.show(oParam, data)}
 														});
 													}
 													else
 													{
 														var aHTML = [];
-														var h = -1;
 														
-														aHTML[++h] = '<table id="tableInterfaceMainContactPersonByGroup" class="interfaceMain">' +
-																	'<tr id="trInterfaceMainContactPersonByGroupRow1" class="interfaceMainRow1">' +
-																	'<td id="tdInterfaceMainContactPersonByGroupColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;">' +
+														aHTML.push('<table class="ns1blankspaceContainer">' +
+																	'<tr class="ns1blankspaceContainer">' +
+																	'<td id="ns1blankspaceContactPersonByGroupColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;">' +
 																	'</td>' +
-																	'<td id="tdInterfaceMainContactPersonByGroupColumn2" class="interfaceMainColumn1Large" style="padding-left:15px;">' +
+																	'<td id="ns1blankspaceContactPersonByGroupColumn2" class="ns1blankspaceColumn1Large" style="padding-left:15px;">' +
 																	'</td>' +
 																	'</tr>' +
-																	'</table>';				
+																	'</table>');				
 														
-														$('#divInterfaceMain').html(aHTML.join(''));
+														$('#ns1blankspaceMain').html(aHTML.join(''));
 														
 														var aHTML = [];
-														var h = -1;
 														
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML[++h] = '<table id="tableContactPersonByGroupSelect" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-															aHTML[++h] = '<tbody>'
-															aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																			'<td class="interfaceMainRowNothing">No groups.</td></tr>';
-															aHTML[++h] = '</tbody></table>';
+															aHTML.push('<table class="ns1blankspace"><tbody>' +
+																			'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' + 
+																			'</tbody></table>');
 
-															$('#tdInterfaceMainContactPersonByGroupColumn1').html(aHTML.join(''));
+															$('#ns1blankspaceContactPersonByGroupColumn1').html(aHTML.join(''));
 														}
 														else
 														{
-															aHTML[++h] = '<table id="tableContactPersonByGroupSelect">';
-															aHTML[++h] = '<tbody>'
+															aHTML.push('<table><tbody>');
 															
 															$.each(oResponse.data.rows, function()
 															{
-																aHTML[++h] = '<tr class="interfaceMainRow">';
-																
-																aHTML[++h] = '<td id="tdNewsGroupsAddSelect_title-' + this.id +
-																						'-' + this.title +
-																						'" class="interfaceRowSelect interfaceContactPersonByGroup">' +
-																						this.title + '</td>';
-																
-																aHTML[++h] = '</tr>'
+																aHTML.push('<tr class="interfaceMainRow">' +
+																				'<td id="ns1blankspaceContactPersonByGroup_title-' + this.id +
+																				'-' + this.title +
+																				'" class="ns1blankspaceRowSelect ns1blankspaceRowSelectByGroup">' +
+																				this.title + '</td></tr>');
 															});
 															
-															aHTML[++h] = '</tbody></table>';
+															aHTML.push('</tbody></table>');
 
-															$('#tdInterfaceMainContactPersonByGroupColumn1').html(aHTML.join(''));
+															$('#ns1blankspaceContactPersonByGroupColumn1').html(aHTML.join(''));
 																		
-															$('td.interfaceContactPersonByGroup').click(function(event)
+															$('td.ns1blankspaceRowSelectByGroup').click(function(event)
 															{
-																interfaceContactPersonByGroupContacts({xhtmlElementID: event.target.id});
+																ns1blankspace.contactPerson.groups.search.process({xhtmlElementID: event.target.id});
 															});
 														}
 													}	
 												},	
 
-									process: 	function interfaceContactPersonByGroupContacts(oParam, oResponse)
+									process: 	function (oParam, oResponse)
 												{
 													var sXHTMLElementID;
 													
@@ -1570,7 +1373,7 @@ ns1blankspace.contactPerson =
 													
 													if (oResponse == undefined)
 													{
-														$('#tdInterfaceMainContactPersonByGroupColumn2').html(ns1blankspace.xhtml.loading);
+														$('#ns1blankspaceContactPersonByGroupColumn2').html(ns1blankspace.xhtml.loading);
 														
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'CONTACT_PERSON_GROUP_SEARCH';
@@ -1578,99 +1381,91 @@ ns1blankspace.contactPerson =
 														oSearch.addFilter('group', 'EQUAL_TO', aXHTMLElementId[1]);
 														oSearch.sort('persongroup.contactperson.firstname', 'asc');
 														oSearch.sort('persongroup.contactperson.surname', 'asc');
-														oSearch.getResults(function(data) {interfaceContactPersonByGroupContacts(oParam, data)});
+														oSearch.getResults(function(data) {ns1blankspace.contactPerson.groups.search.process(oParam, data)});
 													}
 													else
 													{
-													
 														var aHTML = [];
-														var h = -1;
 														
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML[++h] = '<table id="tableInterfaceNewsHomeMostLikely">';
-															aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																				'<td class="interfaceMainRowNothing">No contacts.</td></tr>';
-															aHTML[++h] = '</tbody></table>';
+															aHTML.push('<table><tbody><tr>' +
+																				'<td class="ns1blankspaceNothing">No contacts.</td></tr>' +
+																				'</tbody></table>');
 														}
 														else
 														{		
-															aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
-																
-															aHTML[++h] = '<table id="tableNewsGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-															aHTML[++h] = '<tbody>'
-															
-															aHTML[++h] = '<tr class="interfaceMainCaption">';
-															aHTML[++h] = '<td colspan=2 class="interfaceMainCaption">' + aXHTMLElementId[2] + '</td>';
-															aHTML[++h] = '</tr>';
+															aHTML.push('<table class="ns1blankspace"><tbody>');
+										
+															aHTML.push('<tr class="ns1blankspaceCaption">' + 
+																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementId[2] + '</td>';
+																			'</tr>');
 															
 															$.each(oResponse.data.rows, function()
 															{
-																aHTML[++h] = interfaceContactPersonByGroupContactsRow(this);
+																aHTML.push(ns1blankspace.contactPerson.groups.search.row(this));
 															});
 															
-															aHTML[++h] = '</tbody></table>';
+															aHTML.push('</tbody></table>');
 														}
 														
-														ns1blankspacePaginationList(
+														ns1blankspace.pagination.list(
 														{
-															xhtmlElementID: "tdInterfaceMainContactPersonByGroupColumn2",
+															xhtmlElementID: 'ns1blankspaceContactPersonByGroupColumn2',
 															xhtmlContext: 'ContactPersonGroupsContacts',
 															xhtml: aHTML.join(''),
 															showMore: (oResponse.data.morerows == "true"),
 															more: oResponse.moreid,
 															rows: ns1blankspace.option.defaultRows,
-															functionShowRow: interfaceContactPersonByGroupContactsRow,
-															functionNewPage: 'interfaceContactPersonByGroupContactsBind()',
+															functionShowRow: ns1blankspace.contactPerson.groups.search.row,
+															functionNewPage: 'ns1blankspace.contactPerson.groups.search.bind()',
 															type: 'json'
 														}); 	
 														
-														interfaceContactPersonByGroupContactsBind();
+														ns1blankspace.contactPerson.groups.search.bind();
 													}	
 												},	
 
-									row: 		function interfaceContactPersonByGroupContactsRow(oRow)
+									row: 		function (oRow)
 												{
 													var aHTML = [];
-													var h = -1;
 													
-													aHTML[++h] = '<tr class="interfaceMainRow">';
+													aHTML.push('<tr class="ns1blankspaceRow">');
+										
+													aHTML.push('<td id="ns1blankspaceContactPersonGroup_firstname-' + oRow.contactperson + '" class="ns1blankspaceRow">' +
+																			oRow["persongroup.contactperson.firstname"] + '</td>');
 																			
-													aHTML[++h] = '<td id="tdNewsGroupsList_contact-' + oRow.contactperson + '" class="interfaceMainRow">' +
-																			oRow["persongroup.contactperson.firstname"] + '</td>';
+													aHTML.push('<td id="ns1blankspaceContactPersonGroup_surname-' + oRow.contactperson + '" class="ns1blankspaceRow">' +
+																			oRow["persongroup.contactperson.surname"]+ '</td>');
 																			
-													aHTML[++h] = '<td id="tdNewsGroupsList_activity-' + oRow.contactperson + '" class="interfaceMainRow">' +
-																			oRow["persongroup.contactperson.surname"]+ '</td>';
-																			
-													aHTML[++h] = '<td id="tdContactBusinessGroupsContacts-' + oRow.contactperson + '" class="interfaceMainRowOptionsSelect interfaceContactPersonGroupsContactsSelect">&nbsp;</td>';						
+													aHTML.push('<td id="ns1blankspaceContactPersonGroup-' + oRow.contactperson + '" class="ns1blankspaceRowSelect ns1blankspaceContactPersonGroupRowSelect">&nbsp;</td>');						
 													
-													aHTML[++h] = '</tr>';
+													aHTML.push('</tr>');
 																
 													return aHTML.join('');
 												},
 
-									bind: 		function interfaceContactPersonByGroupContactsBind()
+									bind: 		function ()
 												{
-													$('.interfaceContactPersonGroupsContactsSelect').button( {
+													$('.ns1blankspaceContactPersonGroupRowSelect').button( {
 																text: false,
 																icons: {
 																	primary: "ui-icon-play"
 																}
 													})
 													.click(function() {
-														interfaceContactPersonMasterViewport({showHome: false});
-														interfaceContactPersonSearch(this.id)
+														ns1blankspace.contactPerson.init({showHome: false});
+														ins1blankspace.contactPerson.search.send(this.id)
 													})
 													.css('width', '15px')
 													.css('height', '20px')
-													
 												}
 								}
 				},								
 
 	favourites: {
 						search: {
-									show: 		function interfaceContactFavourites(oParam, oResponse)
+									show: 		function (oParam, oResponse)
 												{
 													var sXHTMLElementID;
 													
@@ -1683,18 +1478,28 @@ ns1blankspace.contactPerson =
 													
 													if (oResponse == undefined)
 													{
-													
-														$('#tdInterfaceMainContactPersonByGroupColumn2').html(ns1blankspace.xhtml.loading);
+														var aHTML = [];
+														
+														aHTML.push('<table class="ns1blankspaceContainer">' +
+																	'<tr class="ns1blankspaceContainer">' +
+																	'<td id="ns1blankspaceContactPersonFavouriteColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;">' +
+																	'</td>' +
+																	'<td id="ns1blankspaceContactPersonFavouriteColumn2" class="ns1blankspaceColumn1Large" style="padding-left:15px;">' +
+																	'</td>' +
+																	'</tr>' +
+																	'</table>');				
+														
+														$('#ns1blankspaceMain').html(aHTML.join(''));
+
+														$('#ns1blankspaceContactPersonFavouriteColumn2').html(ns1blankspace.xhtml.loading);
 														
 														var oSearch = new AdvancedSearch();
-														oSearch.endPoint = 'contact';
 														oSearch.method = 'CONTACT_PERSON_SEARCH';
 														oSearch.addField('firstname,surname');
 														oSearch.addFilter('', 'IS_FAVOURITE', '');
 														oSearch.rows = 20;
 														oSearch.sort('firstname', 'asc');
-														oSearch.getResults(function(data) {interfaceContactFavourites(oParam, data)});
-														
+														oSearch.getResults(function(data) {ns1blankspace.contactPerson.favourites.search.show(oParam, data)});	
 													}
 													else
 													{
@@ -1702,27 +1507,23 @@ ns1blankspace.contactPerson =
 														
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML.push('<table id="tableInterfaceNewsHomeMostLikely">');
-															aHTML.push('<tr class="interfaceMainCaption">' +
-																				'<td class="interfaceMainRowNothing">No contacts.</td></tr>');
-															aHTML.push('</tbody></table>');
+															aHTML.push('<table><tbody><tr>' +
+																				'<td class="ns1blankspaceNothing">No contacts.</td></tr>' +
+																				'</tbody></table>');
 														}
 														else
 														{		
-															
-															aHTML.push('<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">');
-																
-															aHTML.push('<table id="tableContactsFavouritesList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">');
+															aHTML.push('<table class="ns1blankspace">');
 															aHTML.push('<tbody>');
 															
-															aHTML.push('<tr class="interfaceMainCaption">');
-															aHTML.push('<td class="interfaceMainCaption">First Name</td>');
-															aHTML.push('<td class="interfaceMainCaption">Last Name</td>');
+															aHTML.push('<tr class="ns1blankspaceCaption">');
+															aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
+															aHTML.push('<td class="ns1blankspaceCaption">Last Name</td>');
 															aHTML.push('</tr>');
 															
 															$.each(oResponse.data.rows, function() {
 															
-																aHTML.push(interfaceContactFavouritesRow(this));
+																aHTML.push(ns1blankspace.contactPerson.favourites.row(this));
 															});
 															
 															aHTML.push('</tbody></table>');
@@ -1736,50 +1537,48 @@ ns1blankspace.contactPerson =
 															showMore: (oResponse.morerows == "true"),
 															more: oResponse.moreid,
 															rows: ns1blankspace.option.defaultRows,
-															functionShowRow: interfaceContactFavouritesRow,
-															functionNewPage: 'interfaceContactFavouritesBind()',
+															functionShowRow: ns1blankspace.contactPerson.favourites.row,
+															functionNewPage: 'ns1blankspace.contactPerson.favourites.bind()',
 															type: 'json'
 														}); 	
 														
-														interfaceContactFavouritesBind();
+														ns1blankspace.contactPerson.favourites.bindd();
 													}	
 												},	
 
-									row: 		function interfaceContactFavouritesRow(oRow)
+									row: 		function (oRow)
 												{
 													var aHTML = [];
-													var h = -1;
+												
+													aHTML.push('<tr class="ns1blankspace">');
+																			
+													aHTML.push('<td id="ns1blankspaceFavourites_firstname-' + oRow.id + '" class="ns1blankspaceRow">' +
+																			oRow.firstname + '</td>');
+																			
+													aHTML.push('<td id="ns1blankspaceFavourites_firstname-' + oRow.id + '" class="ns1blankspaceRow">' +
+																			oRow.surname + '</td>');
+																			
+													aHTML.push('<td id="ns1blankspaceFavourites-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceFavouritesRowSelect">&nbsp;</td>');						
 													
-													aHTML[++h] = '<tr class="interfaceMainRow">';
-																			
-													aHTML[++h] = '<td id="tdNewsGroupsList_contact-' + oRow.id + '" class="interfaceMainRow">' +
-																			oRow.firstname + '</td>';
-																			
-													aHTML[++h] = '<td id="tdNewsGroupsList_activity-' + oRow.id + '" class="interfaceMainRow">' +
-																			oRow.surname + '</td>';
-																			
-													aHTML[++h] = '<td id="tdContactFavourites-' + oRow.id + '" class="interfaceMainRowOptionsSelect interfaceContactFavouritesSelect">&nbsp;</td>';						
-													
-													aHTML[++h] = '</tr>';
+													aHTML.push('</tr>');
 																
 													return aHTML.join('');
 												},
 
-									bind: 		function interfaceContactFavouritesBind()
+									bind: 		function ()
 												{
-													$('.interfaceContactFavouritesSelect').button( {
+													$('.ns1blankspaceFavouritesRowSelect').button( {
 																text: false,
 																icons: {
 																	primary: "ui-icon-play"
 																}
 													})
 													.click(function() {
-														interfaceContactPersonMasterViewport({showHome: false});
-														interfaceContactPersonSearch(this.id)
+														ns1blankspace.contactPerson.init({showHome: false});
+														ns1blankspace.contactPerson.search.send(this.id)
 													})
 													.css('width', '15px')
 													.css('height', '20px')
-													
 												}	
 								}
 				}
