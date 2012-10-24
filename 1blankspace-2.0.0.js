@@ -157,6 +157,7 @@ ns1blankspace.app =
 						ns1blankspace.option.setFocus = true;
 						ns1blankspace.option.richTextEditing = true;
 						ns1blankspace.option.setupURI = '/ondemand/setup/';
+						ns1blankspace.option.dateFormat = 'dd M yy';
 
 						ns1blankspace.timer.messaging = 0;
 						ns1blankspace.timer.delay;

@@ -11,6 +11,7 @@ ns1blankspaceDialog
 
 ns1blankspaceControlContext
 ns1blankspaceViewControlAction - Save etc
+ns1blankspace.option.dateFormat
 
 # Attributes:
 
@@ -56,6 +57,7 @@ ns1blankspaceSearchMedium
 ns1blankspaceControl
 ns1blankspaceSubContext
 ns1blankspaceSub
+ns1blankspaceAction
 
 # HTML5 attributes:
 
@@ -63,6 +65,8 @@ data-method
 data-columns
 data-loading ('1')
 data-id [onDemandID]
+data-searchDate
+data-searchAmount
 
 # Javascript:
 

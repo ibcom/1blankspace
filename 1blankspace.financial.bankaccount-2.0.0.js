@@ -225,10 +225,10 @@ ns1blankspace.financial.bankAccount =
 
 										aHTML.push('<table class="interfaceMain">' +
 														'<tr class="ns1blankspaceRow">' +
-														'<td id="ns1blankspaceBankAccountColumnReco1" style="width: 85px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
+														'<td id="ns1blankspaceBankAccountColumnReconcile1" style="width: 85px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
 														ns1blankspace.xhtml.loading +
 														'</td>' +
-														'<td id="ns1blankspaceBankAccountColumnReco2" class="interfaceMainColumn2">' +
+														'<td id="ns1blankspaceBankAccountColumnReconcile2" class="interfaceMainColumn2">' +
 														'</td>' +
 														'</tr>' +
 														'</table>';				
@@ -243,7 +243,7 @@ ns1blankspace.financial.bankAccount =
 															'<span id="ns1blankspaceBankAccountRecoAdd">Add</span>' +
 															'</td></tr></table>';
 											
-											$('#ns1blankspaceBankAccountColumnReco1').html(aHTML.join(''));	
+											$('#ns1blankspaceBankAccountColumnReconcile1').html(aHTML.join(''));	
 										}
 										else
 										{		
@@ -266,7 +266,7 @@ ns1blankspace.financial.bankAccount =
 											
 											aHTML.push('</table>');
 											
-											$('#ns1blankspaceBankAccountColumnReco1').html(aHTML.join(''));
+											$('#ns1blankspaceBankAccountColumnReconcile1').html(aHTML.join(''));
 										}
 										
 										$('#ns1blankspaceBankAccountRecoAdd').button(
@@ -335,95 +335,88 @@ ns1blankspace.financial.bankAccount =
 										}	
 									
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML[++h] = '<table class="interfaceMain" cellspacing=0 cellpadding=0>' +
-												'<tr>' +
-												'<td id="tdInterfaceMainBankAccountColumnRecoEdit" style="padding-right:15px;">' +
-												'</td>' +
-												'<td id="tdInterfaceMainBankAccountColumnRecoEdit2" class="interfaceMainColumn2" style="width: 250px">' +
-												'</td>' +
-												'</tr>' +
-												'</table>';			
+										aHTML.push('<table class="ns1blankspace"><tr>' +
+														'<td id="ns1blankspaceBankAccountColumnReconcileEdit1" style="padding-right:15px;"></td>' +
+														'<td id="ns1blankspaceBankAccountColumnReconcileEdit2" class="interfaceMainColumn2" style="width: 250px"></td>' +
+														'</tr></table>');			
 									
-										$('#tdInterfaceMainBankAccountColumnReco2').html(aHTML.join(''));
+										$('#ns1blankspaceBankAccountColumnReconcile2').html(aHTML.join(''));
 											
 										var aHTML = [];
-										var h = -1;
 
-										aHTML[++h] = '<table class="interfaceMain">';
+										aHTML.push('<table class="ns1blankspace">');
 												
-										aHTML[++h] = '<tr id="trInterfaceMainFinancialBanksAccountRecoStatementDate" class="interfaceMain">' +
-														'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementDate" class="interfaceMain">' +
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Bank Statement Date' +
 														'</td></tr>' +
-														'<tr id="trInterfaceMainFinancialBanksAccountRecoStatementDateValue" class="interfaceMainText">' +
-														'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementDateValue" class="interfaceMainText">' +
-														'<input id="inputInterfaceMainFinancialBanksAccountRecoStatementDate" class="inputInterfaceMainDate">' +
-														'</td></tr>';
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceReconcileEditStatementDate" class="ns1blankspaceDate">' +
+														'</td></tr>');
 													
-										aHTML[++h] = '<tr id="trInterfaceMainFinancialBanksAccountRecoStatementBalance" class="interfaceMain">' +
-														'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementBalance" class="interfaceMain">' +
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Bank Statement Balance' +
 														'</td></tr>' +
-														'<tr id="trInterfaceMainFinancialBanksAccountRecoStatementBalanceValue" class="interfaceMainText">' +
-														'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementBalanceValue" class="interfaceMainText">' +
-														'<input id="inputInterfaceMainFinancialBanksAccountRecoStatementBalance" class="inputInterfaceMainText">' +
-														'</td></tr>';			
+														'<tr class="ns1blankspace">' +
+														'<td class="ins1blankspaceText">' +
+														'<input id="ns1blankspaceReconcileEditStatementBalance" class="ns1blankspaceText">' +
+														'</td></tr>');			
 															
-										aHTML[++h] = '<tr id="trInterfaceMainFinancialBanksAccountRecoStatus" class="interfaceMain">' +
-														'<td id="tdInterfaceMainFinancialBanksAccountRecoStatus" class="interfaceMain">' +
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Status' +
 														'</td></tr>' +
-														'<tr id="trInterfaceMainFinancialBanksAccountRecoStatusValue">' +
-														'<td id="tdInterfaceMainFinancialBanksAccountRecoStatusValue" class="interfaceMainRadio">' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceRadio">' +
 														'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>In Progress' +
 														'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Completed' +
-														'</td></tr>';
+														'</td></tr>');
 																																											
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>');					
 										
-										$('#tdInterfaceMainBankAccountColumnRecoEdit').html(aHTML.join(''));
+										$('#ns1blankspaceBankAccountColumnReconcileEdit1').html(aHTML.join(''));
 										
-										$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
+										$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
 											
 										var aHTML = [];
-										var h = -1;
 									
-										aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em;">';
+										aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">)';
 												
-										aHTML[++h] = '<tr id="trInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
-														'<td id="tdInterfaceMainSetupStructureElementAddSave" class="interfaceMainAction">' +
-														'<span id="spanInterfaceMainBankAccountColumnRecoEditSave">Save</span>' +
-														'</td></tr>';
+										aHTML.push('<tr class="ns1blankspaceAction">' +
+														'<td class="ns1blankspaceAction">' +
+														'<span id="ns1blankspaceReconcileEditSave">Save</span>' +
+														'</td></tr>');
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>');					
 										
-										$('#tdInterfaceMainBankAccountColumnRecoEdit2').html(aHTML.join(''));
+										$('#ns1blankspaceBankAccountColumnReconcileEdit2').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainBankAccountColumnRecoEditSave').button(
+										$('#ns1blankspaceReconcileEditSave').button(
 										{
 											text: "Save"
 										})
-										.click(function() 
+										.click(function()
 										{
-											ns1blankspaceStatusWorking();
+											ns1blankspace.status.working();
 													
 											var sData = 'bankaccount=' + ns1blankspace.objectContext;
 											sData += '&id=' + ns1blankspace.util.fs(sID);
-											sData += '&statementdate=' + ns1blankspace.util.fs($('#inputInterfaceMainFinancialBanksAccountRecoStatementDate').val());
-											sData += '&statementbalance=' + ns1blankspace.util.fs($('#inputInterfaceMainFinancialBanksAccountRecoStatementBalance').val());
+											sData += '&statementdate=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementDate').val());
+											sData += '&statementbalance=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementBalance').val());
 											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
 											
 											$.ajax(
 											{
 												type: 'POST',
-												url: ns1blankspaceEndpointURL('FINANCIAL_RECONCILIATION_MANAGE'),
+												url: ns1blankspace.util.endpointURI('FINANCIAL_RECONCILIATION_MANAGE'),
 												data: sData,
 												dataType: 'json',
 												success: function() {
-													interfaceFinancialBankAccountReconcile();
-													ns1blankspaceStatus('Reconciliation added.');
+													ns1blankspace.financial.bankAccount.reconcile.show();
+													ns1blankspace.status.message('Reconciliation added.');
 												}
 											});
 										});
@@ -433,10 +426,10 @@ ns1blankspace.financial.bankAccount =
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/financial/?method=FINANCIAL_RECONCILIATION_SEARCH',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_RECONCILIATION_SEARCH'),
 												data: 'id=' + sID,
 												dataType: 'json',
-												success: function(data) {interfaceFinancialBankAccountRecoEdit(oParam, data)}
+												success: function(data) {ns1blankspace.financial.bankAccount.reconcile.edit(oParam, data)}
 											});
 										}
 										else
@@ -449,18 +442,17 @@ ns1blankspace.financial.bankAccount =
 										if (oResponse.data.rows.length != 0)
 										{
 											var oObjectContext = oResponse.data.rows[0];
-											$('#inputInterfaceMainFinancialBanksAccountRecoStatementDate').val(oObjectContext.statementdate);
-											$('#inputInterfaceMainFinancialBanksAccountRecoStatementBalance').val(oObjectContext.statementbalance);
+											$('#ns1blankspaceReconcileEditStatementDate').val(oObjectContext.statementdate);
+											$('#ns1blankspaceReconcileEditStatementBalance').val(oObjectContext.statementbalance);
 											$('[name="radioStatus"][value="' + oObjectContext.status + '"]').attr('checked', true);
 										}
 									}
 								},
 
 					items: 		{		
-									show:		function interfaceFinancialBankAccountRecoItems(oParam, oResponse)
+									show:		function (oParam, oResponse)
 												{
 													var iObjectContext = ns1blankspace.objectContext;
-													var sXHTMLElementId = 'tdInterfaceMainSetupStructureElementColumnElement1';
 													var oOptions = {view: true, remove: true, automation: true};
 													var oActions = {add: true};
 													var iReconciliation;
@@ -482,68 +474,63 @@ ns1blankspace.financial.bankAccount =
 														
 													if (oResponse == undefined)
 													{	
-														if ($('#tdInterfaceMainBankAccountColumnReco2').html() == '')
+														if ($('#ns1blankspaceBankAccountColumnReconcile2').html() == '')
 														{
 														
 															var aHTML = [];
-															var h = -1;
 															
-															aHTML[++h] = '<table class="interfaceMain" cellspacing=0 cellpadding=0 style="font-size:0.875em;">' +
-																	'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
-																	'<td id="tdInterfaceMainBankAccountColumnType" style="width: 75px;font-size:0.875em;text-align:right;padding-right:7px;">' +
-																	'</td>' +
-																	'<td id="tdInterfaceMainBankAccountColumnItem" class="interfaceMainColumn2" style="width: 200px;font-size:0.875em;">' +
-																	'</td>' +
-																	'<td id="tdInterfaceMainBankAccountColumnItemEdit" class="interfaceMainColumn2" style="font-size:0.875em;">' +
-																	'</td>' +
-																	'</tr>' +
-																	'</table>';			
+															aHTML.push('<table class="ns1blankspaceContainer" style="font-size:0.875em;">' +
+																			'<tr class="ns1blankspaceContainer">' +
+																			'<td id="ns1blankspaceBankAccountReconcileColumnType" style="width: 75px;font-size:0.875em;text-align:right;padding-right:7px;"></td>' +
+																			'<td id="ns1blankspaceBankAccountReconcileColumnItem" class="ns1blankspaceColumn2" style="width: 200px;font-size:0.875em;"></td>' +
+																			'<td id="ns1blankspaceBankAccountReconcileColumnItemEdit" class="ns1blankspaceColumn2" style="font-size:0.875em;"></td>' +
+																			'</tr></table>');			
 														
-															$('#tdInterfaceMainBankAccountColumnReco2').html(aHTML.join(''));
+															$('#ns1blankspaceBankAccountColumnReconcile2').html(aHTML.join(''));
 															
 															var aHTML = [];
 															var h = -1;
 														
-															aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemType" style="width: 70px;margin-bottom:3px;">';
-															aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemType-1" name="radioType" checked="checked" /><label for="interfaceMainBankAccountColumnItemType-1" style="width: 70px;">Debits (Out)</label>';
-															aHTML[++h] = '<input style="width: 100px;"  type="radio" id="interfaceMainBankAccountColumnItemType-2" name="radioType" /><label for="interfaceMainBankAccountColumnItemType-2" style="width: 70px;">Credits (In)</label>';
+															aHTML[++h] = '<div id="ns1blankspaceBankAccountColumnItemType" style="width: 70px;margin-bottom:3px;">';
+															aHTML[++h] = '<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemType-1" name="radioType" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemType-1" style="width: 70px;">Debits (Out)</label>';
+															aHTML[++h] = '<input style="width: 100px;"  type="radio" id="ns1blankspaceBankAccountColumnItemType-2" name="radioType" /><label for="ns1blankspaceBankAccountColumnItemType-2" style="width: 70px;">Credits (In)</label>';
 															aHTML[++h] = '</div>';
 														
-															$('#tdInterfaceMainBankAccountColumnType').html(aHTML.join(''));
+															$('#ns1blankspaceBankAccountReconcileColumnType').html(aHTML.join(''));
 														
 															var aHTML = [];
 															var h = -1;
 															
-															aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemSource" style="width: 200px;;margin-bottom:3px;">';
-															aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemSource-1" name="radioSource" checked="checked" /><label for="interfaceMainBankAccountColumnItemSource-1" style="width: 96px;">Reconciled</label>';
-															aHTML[++h] = '<input style="width: 100px;" type="radio" id="interfaceMainBankAccountColumnItemSource-2" name="radioSource" /><label for="interfaceMainBankAccountColumnItemSource-2" style="width: 96px;">Statement</label>';
+															aHTML[++h] = '<div id="ns1blankspaceBankAccountColumnItemSource" style="width: 200px;;margin-bottom:3px;">';
+															aHTML[++h] = '<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-1" name="radioSource" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemSource-1" style="width: 96px;">Reconciled</label>';
+															aHTML[++h] = '<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-2" name="radioSource" /><label for="ns1blankspaceBankAccountColumnItemSource-2" style="width: 96px;">Statement</label>';
 															aHTML[++h] = '</div>';
 														
-															aHTML[++h] = '<div id="divInterfaceMainRecoItems" style="width: 200px;margin-bottom:3px;"></div>';
+															aHTML[++h] = '<div id="ns1blankspaceBankAccountReconcileItems" style="width: 200px;margin-bottom:3px;"></div>';
 															
-															$('#tdInterfaceMainBankAccountColumnItem').html(aHTML.join(''));
+															$('#ns1blankspaceBankAccountReconcileColumnItem').html(aHTML.join(''));
 															
-															interfaceFinancialBankAccountRecoItemsEdit(oParam);
+															ns1blankspace.financial.bankAccount.items.edit(oParam);
 														}
 													
-														$('#interfaceMainBankAccountColumnItemType').buttonset().css('font-size', '0.875em');
-														$('#interfaceMainBankAccountColumnItemSource').buttonset().css('font-size', '0.875em');
+														$('#ns1blankspaceBankAccountColumnItemType').buttonset().css('font-size', '0.875em');
+														$('#ns1blankspaceBankAccountColumnItemSource').buttonset().css('font-size', '0.875em');
 														
-														$('#interfaceMainBankAccountColumnItemSource :radio').click(function()
-														{
-															var aID = (event.target.id).split('-');
-															$.extend(true, oParam, {source: parseInt(aID[1])});
-															interfaceFinancialBankAccountRecoItems(oParam);
-														});
-														
-														$('#interfaceMainBankAccountColumnItemType :radio').click(function()
+														$('#ins1blankspaceBankAccountColumnItemType :radio').click(function()
 														{
 															var aID = (event.target.id).split('-');
 															$.extend(true, oParam, {type: parseInt(aID[1])});
-															interfaceFinancialBankAccountRecoItems(oParam);	
+															ns1blankspace.financial.bankAccount.items.show(oParam);	
 														});
-														
-														$('#divInterfaceMainRecoItems').html(ns1blankspace.xhtml.loadingSmall);
+
+														$('#ns1blankspaceBankAccountColumnItemSource :radio').click(function()
+														{
+															var aID = (event.target.id).split('-');
+															$.extend(true, oParam, {source: parseInt(aID[1])});
+															ns1blankspace.financial.bankAccount.items.show(oParam);
+														});
+	
+														$('#ns1blankspaceBankAccountReconcileItems').html(ns1blankspace.xhtml.loadingSmall);
 														
 														var oSearch = new AdvancedSearch();
 														
@@ -564,7 +551,7 @@ ns1blankspace.financial.bankAccount =
 															
 															oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
 															oSearch.rows = ns1blankspace.option.defaultRows;
-															oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItems(oParam, data)});
+															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.items.show(oParam, data)});
 														}		
 														else
 														{
@@ -574,7 +561,7 @@ ns1blankspace.financial.bankAccount =
 															oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 															oSearch.addFilter('status', 'EQUAL_TO', 1);
 															oSearch.rows = ns1blankspace.option.defaultRows;
-															oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItems(oParam, data)});
+															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.items.show(oParam, data)});
 														}		
 													}
 													else
@@ -585,98 +572,96 @@ ns1blankspace.financial.bankAccount =
 														
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML[++h] = '<table id="tableSetupStructureElement" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-															aHTML[++h] = ''
-															aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																			'<td class="interfaceMainRowNothing">No items.</td></tr>';
-															aHTML[++h] = '</table>';
+															aHTML.push('<table><tr class="ns1blankspace">' +
+																			'<td class="ns1blankspaceNothing">No items.</td>' +
+																			'</tr></table>');
 
-															$('#divInterfaceMainRecoItems').html(aHTML.join(''));
+															$('#ns1blankspaceBankAccountReconcileItems').html(aHTML.join(''));
 														
 														}
 														else
 														{
-															aHTML[++h] = '<table id="tableRecoItems" border="0" cellspacing="0" cellpadding="0">';
-															aHTML[++h] = ''
+															aHTML.push('<table>');
 															
 															$.each(oResponse.data.rows, function()
 															{
-																aHTML[++h] = '<tr class="interfaceMainRow"><td class="interfaceMainRow interfaceMainRowSelect">' +
-																	'<table cellspacing=0 cellpadding=0><tr>';
+																aHTML.push(
+																	'<tr class="ns1blankspaceRow">' +
+																	'<td class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																	'<table cellspacing=0 cellpadding=0><tr>');
 																				
 																	if (this.paiddate)
 																	{				
-																		aHTML[++h] = '<td id="tdRecoItems_date-' + this.id + '" class="recoitempayment">' +
-																							this.paiddate + '</td>';
+																		aHTML.push('<td id="ns1blankspaceRecocileItems_date-' + this.id + '" class="recoitempayment">' +
+																							this.paiddate + '</td>');
 																	}
 																	else if (this.receiveddate)
 																	{
-																		aHTML[++h] = '<td id="tdRecoItems_date-' + this.id + '" class="recoitemreceipt">' +
-																							this.receiveddate + '</td>';
+																		aHTML.push('<td id="tdRecoItems_date-' + this.id + '" class="recoitemreceipt">' +
+																							this.receiveddate + '</td>');
 																	}							
 																	else if (this.posteddate)
 																	{
-																		aHTML[++h] = '<td id="tdRecoItems_date-' + this.id + '" class="recoitemstatement">' +
-																							this.posteddate + '</td>';
+																		aHTML.push('<td id="ns1blankspaceRecocileItems_date-' + this.id + '" class="recoitemstatement">' +
+																							this.posteddate + '</td>');
 																	}
 																
-																	aHTML[++h] = '<td id="spanRecoItems_amount-' + this.id + '" style="text-align:right;"' +
+																	aHTML.push('<td id="ns1blankspaceRecocileItems_amount-' + this.id + '" style="text-align:right;"' +
 																						' class="recoitem">' +
-																						this.amount + '</td>';
+																						this.amount + '</td>');
 																	
 																	if (iSource == 1)
 																	{
-																		aHTML[++h] = '</tr><tr><td colspan=2 id="spanRecoItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
+																		aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceRecocileItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
 																						' class="recoitem">' +
-																						this.reference + '</td>';
+																						this.reference + '</td>');
 																	}
 																	else
 																	{
-																		aHTML[++h] = '</tr><tr><td colspan=2 id="spanRecoItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
+																		aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceRecocileItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
 																						' class="recoitem">' +
-																						this.description + '</td>';
+																						this.description + '</td>');
 																	}
 																			
-																aHTML[++h] = '</tr></table></td>';	
+																aHTML.push('</tr></table></td>');	
 																	
 																if ((this.paiddate) || (this.receiveddate))
 																{					
-																	aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-																	aHTML[++h] = '<span id="spanRecoItems_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-																	aHTML[++h] = '</td>';
+																	aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+																	aHTML.push('<span id="ns1blankspaceReconcileItems_options_remove-' + this.id + '" class="ns1blankspaceReconcileItemsRemove"></span>');
+																	aHTML.push('</td>');
 																};	
 																
 																if (this.posteddate)
 																{					
-																	aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-																	aHTML[++h] = '<span id="spanRecoItems_options_search-' + this.id + '"' +
+																	aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+																	aHTML.push('<span id="spanRecoItems_options_search-' + this.id + '"' +
 																					' data-searchDate="' + this.posteddate + '"' +
 																					' data-searchAmount="' + this.amount + '"' +
-																					' class="interfaceMainRowOptionsMatch"></span>';
-																	aHTML[++h] = '</td>';
+																					' class="ns1blankspaceReconcileItemsMatch"></span>');
+																	aHTML.push('</td>');
 																};	
 																		
-																aHTML[++h] = '</tr>';
-																
+																aHTML.push('</tr>');
 															});
 															
-															aHTML[++h] = '</table>';
+															aHTML.push('</table>';
 
-															$('#divInterfaceMainRecoItems').html(aHTML.join(''));
+															$('#ns1blankspaceBankAccountReconcileItems').html(aHTML.join(''));
 														
-															$('.interfaceMainRowOptionsRemove').button( {
+															$('.ns1blankspaceReconcileItemsRemovev').button( {
 																text: false,
 																icons: {
 																	primary: "ui-icon-close"
 																}
 															})
 															.click(function() {
-																//ns1blankspaceSetupStructureElementRemove({xhtmlElementID: this.id});
+																ns1blankspace.financial.bankAccount.items.remove({xhtmlElementID: this.id});
 															})
 															.css('width', '15px')
 															.css('height', '17px')
 															
-															$('.interfaceMainRowOptionsMatch').button( {
+															$('.ns1blankspaceReconcileItemsMatch').button( {
 																text: false,
 																icons: {
 																	primary: "ui-icon-play"
@@ -685,16 +670,15 @@ ns1blankspace.financial.bankAccount =
 															.click(function() {
 																var aID = (this.id).split('-');
 																$.extend(true, oParam, {searchSourceID: aID[1], searchDate: $(this).attr("data-searchDate"), searchAmount: $(this).attr("data-searchAmount")});
-																interfaceFinancialBankAccountRecoItemsEdit(oParam);
+																ns1blankspace.financial.bankAccount.items.edit(oParam);
 															})
 															.css('width', '15px')
 															.css('height', '17px')
-															
 														}
 													}	
 												},
 
-									edit:		function interfaceFinancialBankAccountRecoItemsEdit(oParam, oResponse)
+									edit:		function (oParam, oResponse)
 												{
 													var iObjectContext = ns1blankspace.objectContext;
 													var sXHTMLElementId = 'tdInterfaceMainBankAccountColumnEdit';
@@ -723,85 +707,78 @@ ns1blankspace.financial.bankAccount =
 														
 													if (oResponse == undefined)
 													{	
-														if ($('#tdInterfaceMainBankAccountColumnItemEdit').html() == '')
+														if ($('#ns1blankspaceBankAccountReconcileColumnItemEdit').html() == '')
 														{
-														
 															var aHTML = [];
-															var h = -1;
 															
-															aHTML[++h] = '<table class="interfaceMainRecoItemEdit" cellspacing=0 cellpadding=0>' +
-																	'<tr id="trInterfaceMainBankAccountRow1" class="interfaceMainRow1">' +
-																	'<td id="tdInterfaceMainBankAccountColumnRecoItemEdit1" style="width:200px;">' +
-																	'</td>' +
-																	'<td id="tdInterfaceMainBankAccountColumnRecoItemEdit2" class="interfaceMainColumn2" style="width:50px;">' +
-																	'</td>' +
-																	'</tr>' +
-																	'</table>';			
+															aHTML.push('<table class="ns1blankspaceContainer">' +
+																			'<tr class="ns1blankspaceContainer">' +
+																			'<td id="ns1blankspaceReconcileItemEdit1" style="width:200px;"></td>' +
+																			'<td id="ns1blankspaceReconcileItemEdit2" class="ns1blankspaceColumn2" style="width:50px;"></td>' +
+																			'</tr>' +
+																			'</table>');			
 														
-															$('#tdInterfaceMainBankAccountColumnItemEdit').html(aHTML.join(''));
+															$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html(aHTML.join(''));
 															
 															var aHTML = [];
-															var h = -1;
-														
-															aHTML[++h] = '<div id="interfaceMainBankAccountColumnItemEdit" style="width: 196;margin-bottom:3px;text-align:right;">';
-															aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemEdit-1" name="radioEdit" checked="checked" /><label for="interfaceMainBankAccountColumnItemEdit-1" style="width: 112px;">Unreconciled</label>';
-														
-															aHTML[++h] = '<input type="radio" id="interfaceMainBankAccountColumnItemEdit-2" name="radioEdit" /><label for="interfaceMainBankAccountColumnItemEdit-2" style="width: 50px;">Add</label>';
-															aHTML[++h] = '</div>';
-														
-															aHTML[++h] = '<div id="divInterfaceMainRecoItemsEdit"></div>';
 															
-															$('#tdInterfaceMainBankAccountColumnRecoItemEdit1').html(aHTML.join(''));
+															aHTML.push('<div id="ns1blankspaceReconcileItemEdit" style="width: 196;margin-bottom:3px;text-align:right;">');
+															aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemEdit-1" name="radioEdit" checked="checked" /><label for="ns1blankspaceReconcileItemEdit-1" style="width: 112px;">Unreconciled</label>');
+															aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemEdit-2" name="radioEdit" /><label for="ns1blankspaceReconcileItemEdit-2" style="width: 50px;">Add</label>');
+															aHTML.push('</div>');
+														
+															aHTML.push('<div id="ns1blankspaceReconcileItemsEdit"></div>');
+															
+															$('#ns1blankspaceReconcileItemEdit1').html(aHTML.join(''));
 														}
 													
-														$('#interfaceMainBankAccountColumnItemEdit').buttonset().css('font-size', '0.875em');
+														$('#ns1blankspaceReconcileItemEdit').buttonset().css('font-size', '0.875em');
 														
-														$('#interfaceMainBankAccountColumnItemEdit :radio').click(function()
+														$('#ns1blankspaceReconcileItemEdit :radio').click(function()
 														{
 															var aID = (event.target.id).split('-');
 															$.extend(true, oParam, {editAction: parseInt(aID[1])});
-															interfaceFinancialBankAccountRecoItemsEdit(oParam);
+															ns1blankspace.financial.bankAccount.items.edit(oParam);
 														});
 														
 														if (iEditAction == 1)
 														{
 															var aHTML = [];
-															var h = -1;	
 															
-															aHTML[++h] = '<table>';
+															aHTML.push('<table>');
 															
-															aHTML[++h] = '<tr id="trInterfaceMainItemsEditSearchDate">' +
-																			'<td id="tdInterfaceMainItemsEditDate" class="interfaceMain">' +
+															aHTML.push('<tr>' +
+																			'<td class="ns1blankspaceCaption">' +
 																			'Date' +
 																			'</td></tr>' +
-																			'<tr id="trInterfaceMainItemsSearchDateValue" class="interfaceMainText">' +
-																			'<td id="tdInterfaceMainItemsSearchDateValue" class="interfaceMainText">' +
-																			'<input id="inputInterfaceMainItemsEditSearchDate" class="inputInterfaceMainDate">' +
-																			'</td></tr>';
+																			'<tr class="ns1blankspaceText">' +
+																			'<td class="ns1blankspaceText">' +
+																			'<input id="ns1blankspaceItemsEditSearchDate" class="ns1blankspaceDate">' +
+																			'</td></tr>');
 																
-															aHTML[++h] = '<tr id="trInterfaceMainItemsEditSearchAmount">' +
-																			'<td id="tdInterfaceMainItemsEditAmount" class="interfaceMain">' +
+															aHTML.push('<tr>' +
+																			'<td class="ns1blankspaceCaption">' +
 																			'Amount' +
 																			'</td></tr>' +
-																			'<tr id="trInterfaceMainItemsSearchAmountValue" class="interfaceMainText">' +
-																			'<td id="tdInterfaceMainItemsSearchAmountValue" class="interfaceMainText">' +
-																			'<input id="inputInterfaceMainItemsEditSearchAmount" class="inputInterfaceMainText">' +
-																			'</td></tr>';
+																			'<tr class="ns1blankspaceText">' +
+																			'<td class="ns1blankspaceText">' +
+																			'<input id="ns1blankspaceItemsEditSearchAmount" class="ns1blankspaceText">' +
+																			'</td></tr>');
 																							
-															aHTML[++h] = '<tr><td id="tdInterfaceMainRecoItemsEditSearch" class="interfaceMainAction">' +
-																			'<span style="width:100%" id="spanInterfaceMainRecoItemsEditSearch">Search</span>' +
-																			'</td></tr>';
+															aHTML.push('<tr><td class="ns1blankspaceAction">' +
+																			'<span style="width:100%" id="ns1blankspaceItemsEditSearch">Search</span>' +
+																			'</td></tr>');
 															
-															aHTML[++h] = '</table>';					
+															aHTML.push('</table>');					
 															
-															$('#tdInterfaceMainBankAccountColumnRecoItemEdit2').html(aHTML.join(''));
+															$('#ns1blankspaceReconcileItemEdit2').html(aHTML.join(''));
 														
-															$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
+															$('input.ns1blankspacenDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
 														
-															if (dSearchDate) {$('#inputInterfaceMainItemsEditSearchDate').val(dSearchDate)}
-															if (cSearchAmount) {$('#inputInterfaceMainItemsEditSearchAmount').val(cSearchAmount)}
+															if (dSearchDate) {$('#ns1blankspaceItemsEditSearchDate').val(dSearchDate)}
+															if (cSearchAmount) {$('#ns1blankspaceItemsEditSearchAmount').val(cSearchAmount)}
 																
-															$('#spanInterfaceMainRecoItemsEditSearch').button( {
+															$('#ns1blankspaceItemsEditSearch').button( {
 																label: 'Search',
 																icons: {
 																	primary: "ui-icon-search"
@@ -811,7 +788,7 @@ ns1blankspace.financial.bankAccount =
 																 //Search based on date and amount
 															})
 															
-															$('#divInterfaceMainRecoItemsEdit').html(ns1blankspace.xhtml.loadingSmall);
+															$('#ns1blankspaceReconcileItemsEdit').html(ns1blankspace.xhtml.loadingSmall);
 														
 															var oSearch = new AdvancedSearch();
 														
@@ -834,87 +811,85 @@ ns1blankspace.financial.bankAccount =
 															
 															oSearch.addFilter('reconciliation', 'IS_NULL');
 															oSearch.rows = ns1blankspace.option.defaultRows;
-															oSearch.getResults(function(data) {interfaceFinancialBankAccountRecoItemsEdit(oParam, data)});
+															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam, data)});
 														}
 														else
 														{
 															var aHTML = [];
-															var h = -1;
 															
-															aHTML[++h] = '<table class="interfaceMain" style="width:190px;">';							
+															aHTML.push('<table class="ns1blankspace" style="width:190px;">');							
 															
-															aHTML[++h] = '<tr id="trInterfaceMainItemsEditDate" class="interfaceMain">' +
-																			'<td id="tdInterfaceMainItemsEditDate" class="interfaceMain">' +
+															aHTML.push('<tr class="ns1blankspaceCaption">' +
+																			'<td class="ns1blankspaceCaption">' +
 																			'Date' +
 																			'</td></tr>' +
-																			'<tr id="trInterfaceMainItemsEditDateValue" class="interfaceMainText">' +
-																			'<td id="tdInterfaceMainItemsEditDateValue" class="interfaceMainText">' +
-																			'<input id="inputInterfaceMainItemsEditDate" class="inputInterfaceMainDate">' +
-																			'</td></tr>';						
+																			'<tr class="ns1blankspace">' +
+																			'<td class="ns1blankspaceText">' +
+																			'<input id="ns1blankspaceItemsEditDate" class="ns1blankspaceDate">' +
+																			'</td></tr>');						
 															
-															aHTML[++h] = '<tr id="trInterfaceMainItemsEditContactBusiness" class="interfaceMain">' +
-																			'<td id="tdInterfaceMainItemsEditContactBusiness" class="interfaceMain">' +
+															aHTML.push('<tr class="ns1blankspaceCaption">' +
+																			'<td class="ns1blankspaceCaption">' +
 																			'Business' +
 																			'</td></tr>' +
-																			'<tr id="trInterfaceMainItemsEditContactBusinessValue" class="interfaceMainSelect">' +
-																			'<td id="tdInterfaceMainItemsEditContactBusinessValue" class="interfaceMainSelect">' +
-																			'<input id="inputInterfaceMainItemsEditContactBusiness" class="inputInterfaceMainSelect"' +
+																			'<tr class="ns1blankspace">' +
+																			'<td class="ns1blankspaceSelect">' +
+																			'<input id="ns1blankspaceItemsEditContactBusiness" class="ns1blankspaceSelect"' +
 																				' data-method="CONTACT_BUSINESS_SEARCH"' +
 																				' data-columns="tradename">' +
-																			'</td></tr>';
+																			'</td></tr>');
 																		
-															aHTML[++h] = '<tr id="trInterfaceMainItemsEditContactPerson" class="interfaceMain">' +
-																			'<td id="tdInterfaceMainItemsEditContactPerson" class="interfaceMain">' +
+															aHTML.push('<tr class="ns1blankspaceCaption">' +
+																			'<td class="ns1blankspaceCaption">' +
 																			'Person' +
 																			'</td></tr>' +
-																			'<tr id="trInterfaceMainItemsEditContactPersonValue" class="interfaceMainSelect">' +
-																			'<td id="tdInterfaceMainItemsEditContactPersonValue" class="interfaceMainSelect">' +
-																			'<input id="inputInterfaceMainItemsEditContactPerson" class="inputInterfaceMainSelect"' +
+																			'<tr class="ns1blankspace">' +
+																			'<td class="ns1blankspaceSelect">' +
+																			'<input id="ns1blankspaceItemsEditContactPerson" class="ns1blankspaceSelect"' +
 																				' data-method="CONTACT_PERSON_SEARCH"' +
 																				' data-columns="surname"' +
-																				' data-parent="inputInterfaceMainItemsEditContactBusiness"' +
+																				' data-parent="ns1blankspaceItemsEditContactBusiness"' +
 																				' data-parent-search-id="contactbusiness"' +
 																				' data-parent-search-text="tradename">' +
-																			'</td></tr>';		
+																			'</td></tr>');		
 														
-															aHTML[++h] = '<tr id="trInterfaceMainItemsEditAmount" class="interfaceMain">' +
-																			'<td id="tdInterfaceMainItemsEditAmount" class="interfaceMain">' +
+															aHTML.push('<tr class="ns1blankspaceCaption">' +
+																			'<td class="ns1blankspaceCaption">' +
 																			'Amount' +
 																			'</td></tr>' +
-																			'<tr id="trInterfaceMainItemsEditAmountValue" class="interfaceMainText">' +
-																			'<td id="tdInterfaceMainItemsEditAmountValue" class="interfaceMainText">' +
-																			'<input id="inputInterfaceMainItemsEditAmount" class="inputInterfaceMainText">' +
-																			'</td></tr>';	
+																			'<tr class="ns1blankspaceText">' +
+																			'<td class="ns1blankspaceText">' +
+																			'<input id="ns1blankspaceItemsEditAmount" class="ns1blankspaceText">' +
+																			'</td></tr>');	
 															
-															aHTML[++h] = '<tr id="trInterfaceMainItemsEditDescription" class="interfaceMain">' +
-																		'<td id="tdInterfaceMainItemsEditDescription" class="interfaceMain">' +
-																		'Description' +
-																		'</td></tr>' +
-																		'<tr id="trInterfaceMainItemsEditDescriptionValue" class="interfaceMainTextMulti">' +
-																		'<td id="tdInterfaceMainItemsEditDescriptionValue" class="interfaceMainTextMulti">' +
-																		'<textarea rows="5" cols="35" id="inputInterfaceMainItemsEditDescription" class="inputInterfaceMainTextMultiSmall"></textarea>' +
-																		'</td></tr>';
+															aHTML.push('<tr class="ns1blankspaceCaption">' +
+																			'<td class="ns1blankspaceCaption">' +
+																			'Description' +
+																			'</td></tr>' +
+																			'<tr class="ns1blankspaceTextMulti">' +
+																			'<td class="ns1blankspaceTextMulti">' +
+																			'<textarea rows="5" cols="35" id="ns1blankspaceItemsEditDescription" class="ns1blankspaceTextMultiSmall"></textarea>' +
+																			'</td></tr>');
 																										
-															aHTML[++h] = '</table>';					
+															aHTML.push('</table>');					
 														
-															$('#divInterfaceMainRecoItemsEdit').html(aHTML.join(''));
+															$('#ns1blankspaceReconcileItemsEdit').html(aHTML.join(''));
 														
-															$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
+															$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
 														
 															var aHTML = [];
-															var h = -1;	
 															
-															aHTML[++h] = '<table>';
+															aHTML.push('<table>');
 															
-															aHTML[++h] = '<tr><td id="tdInterfaceMainRecoItemsEditSave" class="interfaceMainAction">' +
-																			'<span id="spanInterfaceMainRecoItemsEditSave">Save</span>' +
-																			'</td></tr>';
+															aHTML.push('<tr><td id="ns1blankspaceReconcileItemsEditSave" class="interfaceMainAction">' +
+																			'<span id="ns1blankspaceReconcileItemsEditSave">Save</span>' +
+																			'</td></tr>');
 															
-															aHTML[++h] = '</table>';					
+															aHTML.push('</table>');					
 															
-															$('#tdInterfaceMainBankAccountColumnRecoItemEdit2').html(aHTML.join(''));
+															$('#ns1blankspaceReconcileItemEdit2').html(aHTML.join(''));
 														
-															$('#spanInterfaceMainRecoItemsEditSave').button( {
+															$('#ns1blankspaceReconcileItemsEditSave').button( {
 																text: false,
 																icons: {
 																	primary: "ui-icon-check"
@@ -927,110 +902,7 @@ ns1blankspace.financial.bankAccount =
 													}
 													else
 													{
-														var aHTML = [];
-														var h = -1;	
-															
-														aHTML[++h] = '<table style="margin-top:20px;">';
-															
-														aHTML[++h] = '<tr><td class="interfaceViewportControlSub">' +
-																		'No element selected.' +
-																		'<br /><br/ >Click the gear icon to set up automation (issue creation) for an element.' +
-																	'</td></tr>';
-
-														aHTML[++h] = '</table>';		
 														
-														$('#tdInterfaceMainSetupStructureElementColumnElement2').html(aHTML.join(''));
-															
-														if (oActions != undefined)
-														{	
-															var aHTML = [];
-															var h = -1;	
-															
-															aHTML[++h] = '<table id="tableInterfaceMainSetupStructureElementColumn2" class="interfaceMainColumn2">';
-															
-															if (oActions.add)
-															{
-																aHTML[++h] = '<tr><td id="tdInterfaceMainFormStructureAdd" class="interfaceMainAction">' +
-																			'<span id="spanInterfaceMainSetupStructureAdd">Add</span>' +
-																			'</td></tr>';
-															}
-															
-															aHTML[++h] = '</table>';					
-															
-															$('#tdInterfaceMainSetupStructureElementColumnElement3').html(aHTML.join(''));
-														
-															$('#spanInterfaceMainSetupStructureAdd').button(
-															{
-																label: "Add"
-															})
-															.click(function() {
-																 ns1blankspaceSetupStructureElementAdd(oParam);
-															})
-														}	
-													
-														var aHTML = [];
-														var h = -1;
-														
-														if (oResponse.data.rows.length == 0)
-														{
-															aHTML[++h] = '<table id="tableSetupStructureElement" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-															aHTML[++h] = ''
-															aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																			'<td class="interfaceMainRowNothing">No items.</td></tr>';
-															aHTML[++h] = '</table>';
-
-															$('#divInterfaceMainRecoItemsEdit').html(aHTML.join(''));
-														
-														}
-														else
-														{
-															aHTML[++h] = '<table id="tableRecoItems" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-															aHTML[++h] = ''
-															
-															$.each(oResponse.data.rows, function()
-															{
-																aHTML[++h] = '<tr class="interfaceMainRow">';
-																				
-																if (this.paiddate)
-																{				
-																	aHTML[++h] = '<td id="tdRecoItems_date-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect recoitempayment">' +
-																						this.paiddate + '</td>';
-																}
-																else
-																{
-																	aHTML[++h] = '<td id="tdRecoItems_date-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect recoitemreceipt">' +
-																						this.receiveddate + '</td>';
-																}							
-																
-																aHTML[++h] = '<td id="spanRecoItems_amount-' + this.id + '" style="text-align:right;" class="interfaceMainRow interfaceMainRowSelect recoitem">' +
-																						this.amount + '</td>';
-																
-																						
-																aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-																	
-																aHTML[++h] = '<span id="spanSetupStructureElement_options_view-' + this.id + '" class="interfaceMainRowOptionsItemAdd"></span>';
-														
-																aHTML[++h] = '</td>';
-																				
-																aHTML[++h] = '</tr>';
-															});
-															
-															aHTML[++h] = '</table>';
-
-															$('#divInterfaceMainRecoItemsEdit').html(aHTML.join(''));
-															
-															$('.interfaceMainRowOptionsItemAdd').button( {
-																text: false,
-																icons: {
-																	primary: "ui-icon-check"
-																}
-															})
-															.click(function() {
-																//ns1blankspaceSetupStructureElementRemove({xhtmlElementID: this.id});
-															})
-															.css('width', '15px')
-															.css('height', '17px')
-														}
 													}	
 												}
 								}
