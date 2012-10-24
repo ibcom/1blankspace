@@ -26,8 +26,8 @@ ns1blankspace.financial.bankAccount =
 					
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceFinancialBankAccountMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.financial.bankAccount.init({showHome: true});',
 							move: false
 							})		
 					}	
