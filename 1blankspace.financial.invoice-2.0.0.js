@@ -268,66 +268,49 @@ ns1blankspace.financial.invoice =
 
 	layout: 	function ()
 				{
-					
 					var aHTML = [];
-					var h = -1;
-
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
+					
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">Details</td></tr>');
 					}
 					else
 					{	
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">Summary</td></tr>');
 									
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">Details</td></tr>');
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlItem" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlItem" class="interfaceViewportControl">Items</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlItem" class="ns1blankspaceControl">Items</td></tr>');
 					
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 					
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+						aHTML.push('<table class="ns1blankspaceControl">';
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlReceipts" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlReceipts" class="interfaceViewportControl">Receipts</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlReceipts" class="ns1blankspaceControl">Receipts</td></tr>');
 									
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+						aHTML.push('<table class="ns1blankspaceControl">');
 					
-						aHTML[++h] = '<tr id="trInterfaceViewportControlGL" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlGL" class="interfaceViewportControl">GL</td>' +
+						aHTML.push('<tr><td id="ns1blankspaceControlGL" class="ns1blankspaceControl">GL</td></tr>');
+									
+						aHTML.push('</table>';					
+					
+						aHTML.push('<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					
+						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">Actions</td>' +
 										'</tr>';
 									
-						aHTML[++h] = '</table>';					
-					
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-					
-						aHTML[++h] = '<tr id="trInterfaceViewportControlActions" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlActions" class="interfaceViewportControl">Actions</td>' +
-										'</tr>';
-									
-						aHTML[++h] = '<tr id="trInterfaceViewportControlAttachments" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">Attachments</td></tr>');
 					}
 									
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>');					
 							
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 					var h = -1;
