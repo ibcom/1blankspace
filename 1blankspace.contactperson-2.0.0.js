@@ -455,8 +455,8 @@ ns1blankspace.contactPerson =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1Large" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2Action" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -472,7 +472,7 @@ ns1blankspace.contactPerson =
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryPhone" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.workphone +
-										'</td></tr>';
+										'</td></tr>');
 						}
 
 						if (ns1blankspace.objectContextData.mobile != '')
@@ -480,7 +480,7 @@ ns1blankspace.contactPerson =
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Mobile</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryMobile" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.mobile +
-										'</td></tr>';
+										'</td></tr>');
 						}				
 						
 						if (ns1blankspace.objectContextData.email != '')
@@ -488,12 +488,12 @@ ns1blankspace.contactPerson =
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Email</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.email +
-										'</td></tr>';
+										'</td></tr>');
 						}				
 								
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceSummaryColumn1Large').html(aHTML.join(''));		 
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));		 
 					}	
 				},
 
@@ -1506,8 +1506,6 @@ ns1blankspace.contactPerson =
 														else
 														{		
 															aHTML.push('<table class="ns1blankspace">');
-															aHTML.push('');
-															
 															aHTML.push('<tr class="ns1blankspaceCaption">');
 															aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
 															aHTML.push('<td class="ns1blankspaceCaption">Last Name</td>');
@@ -1542,7 +1540,7 @@ ns1blankspace.contactPerson =
 												{
 													var aHTML = [];
 												
-													aHTML.push('<tr class="ns1blankspace">');
+													aHTML.push('<tr class="ns1blankspaceRow">');
 																			
 													aHTML.push('<td id="ns1blankspaceFavourites_firstname-' + oRow.id + '" class="ns1blankspaceRow">' +
 																			oRow.firstname + '</td>');
