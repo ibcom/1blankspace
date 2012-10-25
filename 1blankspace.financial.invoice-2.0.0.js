@@ -313,74 +313,73 @@ ns1blankspace.financial.invoice =
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceMainContext" class="divInterfaceViewportMainContext"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainItem" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainCredit" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainReceipt" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainTransaction" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainActions" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainItem" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainCredit" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainReceipt" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTransaction" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
 					$('#divInterfaceMain').html(aHTML.join(''));
 					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceFinancialInvoiceSummary();
+						ns1blankspace.show({selector: '#divInterfaceMainSummary'});
+						ns1blankspace.financial.invoice.summary.show();
+					});
+
+					
+					$('#ns1blankspaceControlDetails').click(function(event)
+					{
+						ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+						ns1blankspace.financial.invoice.details();
 					});
 					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+					$('#ns1blankspaceControlItem').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceFinancialInvoiceDetails();
+						ns1blankspace.show({selector: '#divInterfaceMainItem', refresh: true});
+						ns1blankspace.financial.invoice.item.show();
 					});
 					
-					$('#tdInterfaceViewportControlItem').click(function(event)
+					$('#ns1blankspaceControlCredits').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainItem", true);
-						interfaceFinancialInvoiceItem();
+						ns1blankspace.show({selector: '#divInterfaceMainCredits'}, refresh: true});
+						ns1blankspace.financial.invoice.credit();
 					});
 					
-					$('#tdInterfaceViewportControlCredits').click(function(event)
+					$('#ns1blankspaceControlReceipts').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainCredits", true);
-						interfaceFinancialInvoiceCredit();
+						ns1blankspace.show({selector: '#divInterfaceMainReceipt', refresh: true});
+						ns1blankspace.financial.invoice.receipt();
 					});
 					
-					$('#tdInterfaceViewportControlReceipts').click(function(event)
+					$('#ns1blankspaceControlGL').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainReceipt", true);
-						interfaceFinancialInvoiceReceipt();
-					});
-					
-					$('#tdInterfaceViewportControlGL').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainTransaction", true);
-						interfaceFinancialTransaction();
+						ns1blankspace.show({selector: '#divInterfaceMainTransaction', refresh: true});
+						ns1blankspace.financial.invoice.transaction();
 						//You'll find this in 1blankspace.financial-[].js
 					});
 
-					$('#tdInterfaceViewportControlActions').click(function(event)
+					$('#ns1blankspaceControlActions').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
-						ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
+						ns1blankspace.show({selector: '#divInterfaceMainActions', refresh: true});
+						ns1blankspace.actions.show({xhtmlElementID: 'divInterfaceMainActions'});
 					});
 
-					$('#tdInterfaceViewportControlAttachments').click(function(event)
+					$('#ns1blankspaceControlControlAttachments').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
-						ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+						ns1blankspace.show({selector: '#divInterfaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show({xhtmlElementID: 'divInterfaceMainAttachments'});
 					});			
 				},
 
-	show:		function interfaceFinancialInvoiceShow(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceFinancialInvoiceViewport();
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.financial.invoice.layout();
 					
 					var aHTML = [];
 					var h = -1;
@@ -389,35 +388,33 @@ ns1blankspace.financial.invoice =
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML[++h] = '<table><tr><td valign="top">Sorry can\'t find the invoice.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></table>';
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the invoice.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
 								
-						$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference +
-							'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_sentdate">' + ns1blankspace.objectContextData.sentdate + '</span>' +
-							'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">$' + ns1blankspace.objectContextData.amount + '</span>');
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
+							'<br /><span id="ns1blankspaceControlContext_sentdate" class="ns1blankspaceControlSubContext">' + ns1blankspace.objectContextData.sentdate + '</span>' +
+							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceControlSubContext">$' + ns1blankspace.objectContextData.amount + '</span>');
 							
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceFinancialInvoiceMasterViewport({showHome: false});interfaceFinancialInvoiceSearch("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.financial.invoice.init({showHome: false});ins1blankspace.financial.invoice.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
 						
-						ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceFinancialInvoiceSummary()'});
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.financial.invoice.summary()'});
 					}	
 				},		
 		
 	summary: 	{
-					show: 		function interfaceFinancialInvoiceSummary(oParam)
+					show: 		function (oParam)
 								{
 									var aHTML = [];
-									var h = -1;
 									var bUseTemplate = false;
 									
 									if (oParam)
@@ -427,17 +424,16 @@ ns1blankspace.financial.invoice =
 
 									if (ns1blankspace.objectContextData == undefined)
 									{
-										aHTML[++h] = '<table><tr><td valign="top">Sorry can\'t find the invoice.</td></tr>';
-										aHTML[++h] = '<tr>&nbsp;</tr></table>';
+										aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the invoice.</td></tr></table>');
 												
-										$('#divInterfaceMainSummary').html(aHTML.join(''));
+										$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 									}
 									else
 									{
 
 										if (ns1blankspace.financial.invoiceTemplateXHTML == undefined && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
 										{
-											$('#divInterfaceMainSummary').html(ns1blankspace.xhtml.loadingSmall);
+											$('#ns1blankspaceMainSummary').html(ns1blankspace.xhtml.loadingSmall);
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'DOCUMENT_SEARCH';
@@ -458,18 +454,18 @@ ns1blankspace.financial.invoice =
 													ns1blankspace.financial.invoiceTemplateDocumentID = oResponse.data.rows[0].id;
 												}
 
-												interfaceFinancialInvoiceSummaryDefault(oParam);
+												ns1blankspace.financial.invoice.summary.default(oParam);
 
 											});		
 										}
 										else
 										{
-											interfaceFinancialInvoiceSummaryDefault(oParam);
+											ns1blankspace.financial.invoice.summary.default(oParam);
 										}
 									}	
 								},
 
-					default:	function interfaceFinancialInvoiceSummaryDefault(oParam)
+					default:	function (oParam)
 								{
 									var aHTML = [];
 									var h = -1;
@@ -482,30 +478,27 @@ ns1blankspace.financial.invoice =
 
 									if (ns1blankspace.objectContextData == undefined)
 									{
-										aHTML[++h] = '<table><tr><td valign="top">Sorry can\'t find the invoice.</td></tr>';
-										aHTML[++h] = '<tr>&nbsp;</tr></table>';
+										aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the invoice.</td></tr></table>');
 												
-										$('#divInterfaceMainSummary').html(aHTML.join(''));
+										$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 									}
 									else
 									{
-										aHTML[++h] = '<table>';
-										aHTML[++h] = '<tr">' +
-												'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Largex" style="width:100%;">' +
-														'</td>' +
-														'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
-														'</td>' +
-														'</tr>';
-										aHTML[++h] = '</table>';					
-										
-										$('#divInterfaceMainSummary').html(aHTML.join(''));
-										
+
+										aHTML.push('<table class="ns1blankspaceMain">' +
+														'<tr class="ns1blankspaceRow">' +
+														'<td id="ns1blankspaceSummaryColumn1Large" class="ns1blankspaceColumn1Large"></td>' +
+														'<td id="ns1blankspaceSummaryColumn2Action" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+														'</tr>' +
+														'</table>');				
+						
+										$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
+				
 										var aHTML = [];
-										var h = -1;
 									
 										if (ns1blankspace.financial.invoiceTemplateXHTML != '' && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
 										{
-											aHTML[++h] = interfaceFormatRender({object: 5, xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML});
+											aHTML[++h] = ns1blankspace.format.render({object: 5, xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML});
 										}
 										else
 										{
