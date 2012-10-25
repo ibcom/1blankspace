@@ -1131,7 +1131,6 @@ ns1blankspace.contactPerson =
 										if (oResponse.data.rows.length == 0)
 										{
 											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">' +
-															'' +
 															'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' +
 															'</table>');
 
