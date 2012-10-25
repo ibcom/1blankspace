@@ -51,11 +51,7 @@ ns1blankspace.contactPerson =
 									
 						aHTML.push('<table>');
 
-						aHTML.push('<tr>' +
-										'<td id="ns1blankspaceViewContactLarge" class="ns1blankspaceViewImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>');
+						aHTML.push('<tr><td id="ns1blankspaceViewContactLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 								
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 										'<td id="ns1blankspaceControlFavourites" class="ns1blankspaceControl">Favourites</td>' +
@@ -99,21 +95,17 @@ ns1blankspace.contactPerson =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceNothing">Click New to create a person contact.</td>');
-							aHTML.push('</tr>');
+							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to create a person contact.</td></tr>');
 							aHTML.push('</table>');
 						}
 						else
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely"><tbody>');
-							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>');
-							aHTML.push('</tr>');
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML.push('<tr class="interfaceMainRow">');
+								aHTML.push('<tr class="ns1blankspaceRow">');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
 														'" class="ns1blankspaceMostLikely">' +
@@ -124,7 +116,7 @@ ns1blankspace.contactPerson =
 								aHTML.push('</tr>');
 							});
 							
-							aHTML.push('</tbody></table>');
+							aHTML.push('</table>');
 						}
 						
 						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
@@ -228,7 +220,7 @@ ns1blankspace.contactPerson =
 									else
 									{	
 										aHTML.push('<table class="ns1blankspaceSearchMedium">');
-										aHTML.push('<tbody>');
+										aHTML.push('');
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -255,7 +247,7 @@ ns1blankspace.contactPerson =
 											}	
 										});
 								    	
-										aHTML.push('</tbody></table>');
+										aHTML.push('</table>');
 										
 										$(ns1blankspace.xhtml.container).html(
 											ns1blankspace.pagination.init(
@@ -455,18 +447,18 @@ ns1blankspace.contactPerson =
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find this contact.</td></tr></tbody></table>');
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this contact.</td></tr></table>');
 								
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML.push('<table class="ns1blankspaceMain"><tbody>' +
+						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1Large" class="ns1blankspaceColumn1Large"></td>' +
 									'<td id="ns1blankspaceSummaryColumn2Action" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
 									'</tr>' +
-									'</tbody></table>');				
+									'</table>');				
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 					
@@ -605,7 +597,7 @@ ns1blankspace.contactPerson =
 						
 						var aHTML = [];
 							
-						aHTML.push('<table class="ns1blankspace"><tbody>');
+						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -649,19 +641,19 @@ ns1blankspace.contactPerson =
 					{
 						$('#ns1blankspaceMainAddress').attr('data-loading', '');
 							
-						aHTML.push('<table class="ns1blankspaceContainer"><tbody>' +
+						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
 										'<td id="ns1blankspaceAddressColumn1" class="ns1blankspaceColumn1"></td>' +
 										'<td id="ns1blankspaceAddressColumn2" class="ns1blankspaceColumn2"></td>' +
 										'</tr>' +
-										'</tbody></table>');					
+										'</table>');					
 						
 						$('#ns1blankspaceMainAddress').html(aHTML.join(''));
 						
 						var aHTML = [];
 					
 		
-						aHTML.push('<table class="ns1blankspace"><tbody>');
+						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 										'Street' +
@@ -712,13 +704,13 @@ ns1blankspace.contactPerson =
 										'<input id="ns1blankspaceAddressStreetCountry" class="ns1blankspaceText">' +
 										'</td></tr>';						
 						
-						aHTML.push('</tbody></table>';					
+						aHTML.push('</table>';					
 						
 						$('#ns1blankspaceAddressColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspace"><tbody>');
+						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 										'Mailing' +
@@ -769,7 +761,7 @@ ns1blankspace.contactPerson =
 										'<input id="ns1blankspaceAddressMailingCountry" class="ns1blankspaceText">' +
 										'</td></tr>');						
 						
-						aHTML.push('</tbody></table>');					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceAddressColumn2').html(aHTML.join(''));
 						
@@ -802,13 +794,13 @@ ns1blankspace.contactPerson =
 										'<td id="ns1blankspaceBusinessColumn1" class="ns1blankspaceColumn1Large"></td>' +
 										'<td id="ns1blankspaceBusinessColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
 										'</tr>' +
-										'</tbody></table>');				
+										'</table>');				
 						
 						$('#ns1blankspaceMainBusiness').html(aHTML.join(''));
 						
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspace"><tbody>');
+						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -825,7 +817,7 @@ ns1blankspace.contactPerson =
 										'<td id="ns1blankspaceBusinessSummary" class="ns1blankspace">' +
 										'</td></tr>');
 										
-						aHTML.push('</tbody></table>');					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceBusinessColumn1').html(aHTML.join(''));
 					
@@ -842,7 +834,7 @@ ns1blankspace.contactPerson =
 						
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspace"><tbody>');
+						aHTML.push('<table class="ns1blankspace">');
 							
 						if (ns1blankspace.objectContextData.contactbusiness != '')
 						{	
@@ -851,7 +843,7 @@ ns1blankspace.contactPerson =
 										'</td></tr>');
 						}
 						
-						aHTML.push('</tbody></table>');					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceBusinessColumn2').html(aHTML.join(''));	
 						
@@ -1051,7 +1043,7 @@ ns1blankspace.contactPerson =
 									{
 										var aHTML = [];
 
-										aHTML.push('<table class="ns1blankspace"><tbody>');
+										aHTML.push('<table class="ns1blankspace">');
 												
 										var sUserName = oResponse.username;
 										sUserName = sUserName.replace('@' + msOnDemandSiteId, '');
@@ -1063,7 +1055,7 @@ ns1blankspace.contactPerson =
 														oResponse.initialpassword +
 														'.</td></tr>');
 														
-										aHTML.push('</tbody></table>');					
+										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceMainUser').html(aHTML.join(''));
 									}	
@@ -1098,18 +1090,18 @@ ns1blankspace.contactPerson =
 									{
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceContainer"><tbody>' +
+										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
 													'<td id="ns1blankspaceContactPersonGroupsColumn1" class="ns1blankspaceColumn1Large"></td>' +
 													'<td id="ns1blankspaceContactPersonGroupsColumn2" style="width: 100px;" class="ns1blankspaceColumn2Action"></td>' +
 													'</tr>' +
-													'</tbody></table>');				
+													'</table>');				
 										
 										$('#ns1blankspaceMainGroups').html(aHTML.join(''));
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace"><tbody>');
+										aHTML.push('<table class="ns1blankspace">');
 										
 										aHTML.push('<tr><td class="ns1blankspace">' +
 														'<span id="ns1blankspaceContactPersonGroupsAdd">Add Group</span>' +
@@ -1139,15 +1131,15 @@ ns1blankspace.contactPerson =
 										if (oResponse.data.rows.length == 0)
 										{
 											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">' +
-															'<tbody>' +
+															'' +
 															'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' +
-															'</tbody></table>');
+															'</table>');
 
 											$('#ns1blankspaceContactPersonGroupsColumn1').html(aHTML.join(''));		
 										}
 										else
 										{
-											aHTML.push('<table class="ns1blankspace"><tbody>');
+											aHTML.push('<table class="ns1blankspace">');
 											
 											$.each(oResponse.data.rows, function()
 											{	
@@ -1166,7 +1158,7 @@ ns1blankspace.contactPerson =
 												}					
 											});
 											
-											aHTML.push('</tbody></table>');
+											aHTML.push('</table>');
 
 											$('#ns1blankspaceContactPersonGroupsColumn1').html(aHTML.join(''));
 											
@@ -1215,16 +1207,16 @@ ns1blankspace.contactPerson =
 											
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<table class="ns1blankspaceSearchMedium"><tbody>' + 
+												aHTML.push('<table class="ns1blankspaceSearchMedium">' + 
 																'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' + 
-																'</tbody></table>');
+																'</table>');
 
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 											}
 											else
 											{
-												aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.725em;"><tbody>');
+												aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.725em;">');
 												
 												$.each(oResponse.data.rows, function()
 												{	
@@ -1235,7 +1227,7 @@ ns1blankspace.contactPerson =
 													aHTML.push('</tr>');
 												});
 												
-												aHTML.push('</tbody></table>');
+												aHTML.push('</table>');
 
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
@@ -1329,15 +1321,15 @@ ns1blankspace.contactPerson =
 														
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML.push('<table class="ns1blankspace"><tbody>' +
+															aHTML.push('<table class="ns1blankspace">' +
 																			'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' + 
-																			'</tbody></table>');
+																			'</table>');
 
 															$('#ns1blankspaceContactPersonByGroupColumn1').html(aHTML.join(''));
 														}
 														else
 														{
-															aHTML.push('<table><tbody>');
+															aHTML.push('<table>');
 															
 															$.each(oResponse.data.rows, function()
 															{
@@ -1348,7 +1340,7 @@ ns1blankspace.contactPerson =
 																				this.title + '</td></tr>');
 															});
 															
-															aHTML.push('</tbody></table>');
+															aHTML.push('</table>');
 
 															$('#ns1blankspaceContactPersonByGroupColumn1').html(aHTML.join(''));
 																		
@@ -1389,13 +1381,13 @@ ns1blankspace.contactPerson =
 														
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML.push('<table><tbody><tr>' +
+															aHTML.push('<table><tr>' +
 																				'<td class="ns1blankspaceNothing">No contacts.</td></tr>' +
-																				'</tbody></table>');
+																				'</table>');
 														}
 														else
 														{		
-															aHTML.push('<table class="ns1blankspace"><tbody>');
+															aHTML.push('<table class="ns1blankspace">');
 										
 															aHTML.push('<tr class="ns1blankspaceCaption">' + 
 																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementId[2] + '</td>';
@@ -1406,7 +1398,7 @@ ns1blankspace.contactPerson =
 																aHTML.push(ns1blankspace.contactPerson.groups.search.row(this));
 															});
 															
-															aHTML.push('</tbody></table>');
+															aHTML.push('</table>');
 														}
 														
 														ns1blankspace.pagination.list(
@@ -1507,14 +1499,14 @@ ns1blankspace.contactPerson =
 														
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML.push('<table><tbody><tr>' +
+															aHTML.push('<table><tr>' +
 																				'<td class="ns1blankspaceNothing">No contacts.</td></tr>' +
-																				'</tbody></table>');
+																				'</table>');
 														}
 														else
 														{		
 															aHTML.push('<table class="ns1blankspace">');
-															aHTML.push('<tbody>');
+															aHTML.push('');
 															
 															aHTML.push('<tr class="ns1blankspaceCaption">');
 															aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
@@ -1526,7 +1518,7 @@ ns1blankspace.contactPerson =
 																aHTML.push(ns1blankspace.contactPerson.favourites.row(this));
 															});
 															
-															aHTML.push('</tbody></table>');
+															aHTML.push('</table>');
 														}
 														
 														ns1blankspacePaginationList(
