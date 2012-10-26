@@ -29,7 +29,7 @@ ns1blankspace.financial.invoice =
 						ns1blankspace.history.view({
 							newDestination: 'ns1blankspace.financial.invoice.init({showHome: true});',
 							move: false
-							})		
+							});	
 					}	
 							
 					ns1blankspace.app.reset();
@@ -80,9 +80,7 @@ ns1blankspace.financial.invoice =
 						var aHTML = [];
 
 						aHTML.push('<table>');
-
-						aHTML.push('<tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
-																
+						aHTML.push('<tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');				
 						aHTML.push('</table>');		
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
@@ -99,12 +97,11 @@ ns1blankspace.financial.invoice =
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to create a person contact.</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to create a invoice.</td></tr>');
 							aHTML.push('</table>');
 						}
 						else
@@ -211,7 +208,7 @@ ns1blankspace.financial.invoice =
 											oSearch.rf = 'json';
 											oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
 											
-											oSearch.getResults(function(data) {ns1blankspace.financial.invoice.search.send(oParam, data)});	
+											oSearch.getResults(function(data) {ns1blankspace.financial.invoice.search.process(oParam, data)});	
 										}
 									};	
 								},
@@ -276,36 +273,39 @@ ns1blankspace.financial.invoice =
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">Details</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');
 					}
 					else
 					{	
-						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">Summary</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">"' +
+										'Summary</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">Details</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
 						
-						aHTML.push('<tr><td id="ns1blankspaceControlItem" class="ns1blankspaceControl">Items</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlItem" class="ns1blankspaceControl">' +
+										'Items</td></tr>');
 					
 						aHTML.push('</table>');					
 					
-						aHTML.push('<table class="ns1blankspaceControl">';
-						
-						aHTML.push('<tr><td id="ns1blankspaceControlReceipts" class="ns1blankspaceControl">Receipts</td></tr>');
-									
-						aHTML.push('</table>');					
-
 						aHTML.push('<table class="ns1blankspaceControl">');
-					
-						aHTML.push('<tr><td id="ns1blankspaceControlGL" class="ns1blankspaceControl">GL</td></tr>');
+						
+						aHTML.push('<tr><td id="ns1blankspaceControlReceipts" class="ns1blankspaceControl">' +
+										'Receipts</td></tr>');
+													
+						aHTML.push('<tr><td id="ns1blankspaceControlGL" class="ns1blankspaceControl">' +
+										'GL</td></tr>');
 									
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 					
-						aHTML.push('<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+						aHTML.push('<table id="tableInterfaceViewportControl" class="interfaceViewportControl">');
 					
-						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">Actions</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
+										'Actions</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">Attachments</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
+										'Attachments</td></tr>');
 					}
 									
 					aHTML.push('</table>');					
@@ -331,7 +331,6 @@ ns1blankspace.financial.invoice =
 						ns1blankspace.financial.invoice.summary.show();
 					});
 
-					
 					$('#ns1blankspaceControlDetails').click(function(event)
 					{
 						ns1blankspace.show({selector: '#divInterfaceMainDetails'});
@@ -484,7 +483,6 @@ ns1blankspace.financial.invoice =
 									}
 									else
 									{
-
 										aHTML.push('<table class="ns1blankspaceMain">' +
 														'<tr class="ns1blankspaceRow">' +
 														'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
@@ -543,7 +541,7 @@ ns1blankspace.financial.invoice =
 											}
 											else
 											{	
-												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Not Sent.</td></tr>');			
+												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Invoice hasn\'t been sent.</td></tr>');			
 											}
 											
 											if (ns1blankspace.objectContextData.description != '')
@@ -610,7 +608,6 @@ ns1blankspace.financial.invoice =
 details: 		function ()
 				{
 					var aHTML = [];
-					var h = -1;
 						
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
@@ -749,7 +746,7 @@ details: 		function ()
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.financial.invoice.init();
 					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 					ns1blankspace.financial.invoice.details();
 				},
 
@@ -787,7 +784,7 @@ details: 		function ()
 									{			
 										if (oResponse.status == 'OK')
 										{	
-											ns1blankspaceStatus('Saved');
+											ns1blankspace.status.message('Saved');
 											
 											if (ns1blankspace.objectContext == -1)
 											{
@@ -856,8 +853,7 @@ details: 		function ()
 											})
 											.click(function() {
 												 ns1blankspace.financial.invoice.item.edit(oParam);
-											})
-											
+											});										
 										}
 										
 										var oSearch = new AdvancedSearch();
@@ -918,7 +914,7 @@ details: 		function ()
 												aHTML.push('</td></tr>');
 											});
 											
-											aHTML[++h] = '</table>';
+											aHTML.push('</table>');
 
 											$('#ns1blankspaceItemColumn1').html(aHTML.join(''));
 											
@@ -1091,8 +1087,7 @@ details: 		function ()
 									else
 									{
 										var aHTML = [];
-										var h = -1;
-
+										
 										if (oResponse.data.rows.length == 0)	
 										{
 											aHTML.push('<table class="ns1blankspace">' +
@@ -1230,8 +1225,7 @@ details: 		function ()
 											})
 											.click(function() {
 												 ns1blankspace.financial.invoice.receipt.edit(oParam);
-											})
-											
+											})		
 										}
 										
 										var oSearch = new AdvancedSearch();
@@ -1339,7 +1333,7 @@ details: 		function ()
 										aHTML.push('<table id="ns1blankspace">');
 										
 										aHTML.push('<tr class="ns1blankspace">' +
-														'<td class="aHTML.push("' +
+														'<td class="ns1blankspace"' +
 														' data-receiptedamount="' + cReceiptedAmount + '">' +
 														'$' + (cReceiptedAmount).formatMoney(2, ".", ",") + ' has been receipted so far.'
 														'</td></tr>');
