@@ -413,12 +413,12 @@ ns1blankspace.financial.expense =
 					}
 					else
 					{
-						aaHTML.push('<table class="ns1blankspaceMain">' +
-														'<tr class="ns1blankspaceRow">' +
-														'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-														'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
-														'</tr>' +
-														'</table>');				
+						aHTML.push('<table class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspaceRow">' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+										'</tr>' +
+										'</table>');				
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 						
@@ -481,7 +481,6 @@ ns1blankspace.financial.expense =
 	details: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
 						
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
@@ -550,9 +549,7 @@ ns1blankspace.financial.expense =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceDate">' +
 										'<input id="ns1blankspaceDetailsDueDate" class="ns1blankspaceDate">' +
-										'</td></tr>');
-																				
-						aHTML[++h] = '</table>';					
+										'</td></tr>');		
 						
 						aHTML.push('</table>');					
 						
@@ -966,7 +963,7 @@ ns1blankspace.financial.expense =
 											
 											aHTML.push('</table>');
 
-											$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''))
+											$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''));
 											
 											$('.ns1blankspaceItemAdd').button({
 												text: false,

@@ -101,7 +101,7 @@ ns1blankspace.financial.invoice =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to create a invoice.</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to add an invoice.</td></tr>');
 							aHTML.push('</table>');
 						}
 						else
@@ -122,16 +122,16 @@ ns1blankspace.financial.invoice =
 								aHTML.push('<td id="ns1blankspaceMostLikely_DueDate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;">' +
 														this.duedate + '</td>');
 																										
-								var sContact = this.contactbusinesssenttotext
+								var sContact = this.contactbusinesssenttotext;
 								if (sContact == '') {sContact = this.contactpersonsenttotext}
 								
-								aHTML[++h] = '<td id="ns1blankspaceMostLikely_Contact-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_Contact-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
 														sContact + '</td>');
 									
-								aHTML[++h] = '</tr>'
+								aHTML.push('</tr>');
 							});
 							
-							aHTML[++h] = '</table>';
+							aHTML.push('</table>');
 						}
 						
 						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
@@ -167,7 +167,7 @@ ns1blankspace.financial.invoice =
 									
 									if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
@@ -299,7 +299,7 @@ ns1blankspace.financial.invoice =
 									
 						aHTML.push('</table>');					
 					
-						aHTML.push('<table id="tableInterfaceViewportControl" class="interfaceViewportControl">');
+						aHTML.push('<table class="interfaceViewportControl">');
 					
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
@@ -358,8 +358,7 @@ ns1blankspace.financial.invoice =
 					$('#ns1blankspaceControlGL').click(function(event)
 					{
 						ns1blankspace.show({selector: '#divInterfaceMainTransaction', refresh: true});
-						ns1blankspace.financial.invoice.transaction();
-						//You'll find this in 1blankspace.financial-[].js
+						ns1blankspace.financial.transaction();
 					});
 
 					$('#ns1blankspaceControlActions').click(function(event)
