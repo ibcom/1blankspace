@@ -19,7 +19,8 @@ ns1blankspace.financial.receipt =
 					}
 
 					ns1blankspace.object = 6;
-					ns1blankspace.objectName = 'financial.receipt';
+					ns1blankspace.objectParentName = 'financial';
+					ns1blankspace.objectName = 'receipt';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Receipts';
@@ -117,8 +118,6 @@ ns1blankspace.financial.receipt =
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_Amount-' + this.id + '" class="ins1blankspaceMostLikelySub" style="width:50px;text-align:right;">' +
 														'$' + this.amount + '</td>');
-
-								aHTML.push('<tr class="ns1blankspaceRow">');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:50px;">' +
 														this.reference + '</td>');
@@ -243,17 +242,17 @@ ns1blankspace.financial.receipt =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="ns1blankspaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 										
-											aHTML[++h] = '<td class="ns1blankspaceSearch" id="' + +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' + +
 															'-' + this.id + '">' +
 															this.reference +
-															'</td>';
+															'</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
@@ -379,7 +378,7 @@ ns1blankspace.financial.receipt =
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the receipt.</td></tr></table>');
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this receipt.</td></tr></table>');
 								
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
@@ -699,7 +698,6 @@ ns1blankspace.financial.receipt =
 									if (oParam != undefined)
 									{
 										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-										if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
 										if (oParam.options != undefined) {oOptions = oParam.options}
 										if (oParam.actions != undefined) {oActions = oParam.actions}
 									}		
@@ -889,6 +887,7 @@ ns1blankspace.financial.receipt =
 												
 											$('#ns1blankspaceItemAccount').focus();
 										}
+										
 										if (iStep == 2)
 										{
 											var sData = 'title=' + $('#ns1blankspaceItemAccount').val();

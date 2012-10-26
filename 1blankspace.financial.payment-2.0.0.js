@@ -9,7 +9,7 @@ ns1blankspace.financial.payment =
 {
 	init: 		function interfaceFinancialPaymentMasterViewport(oParam)
 				{
-					interfaceFinancialMasterInitialise();
+					ns1blankspace.financial.init();
 					
 					var bShowHome = true
 					
@@ -27,94 +27,21 @@ ns1blankspace.financial.payment =
 					
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceFinancialPaymentMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.financial.payment.init({showHome: true});',
 							move: false
-							})		
+							});	
 					}	
 							
-					ns1blankspaceReset();
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Payments"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialPaymentSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceFinancialPaymentSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceFinancialPaymentSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceFinancialPaymentNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceFinancialPaymentNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceFinancialPaymentSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-						interfaceFinancialPaymentSaveOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceFinancialPaymentSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceFinancialPaymentSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceFinancialPaymentHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceFinancialPaymentHelpOptions();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceFinancialPaymentSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceFinancialPaymentSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					if (bShowHome) {interfaceFinancialPaymentHomeShow()};	
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
-	refresh: 	function interfaceFinancialPaymentRefresh(oResponse)
+	refresh: 	function (oResponse)
 				{
 					if (oResponse == undefined)
 					{
-						$('#spanInterfaceViewportControlSubContext_amount').html(ns1blankspace.xhtml.loadingSmall);
+						$('#ns1blankspaceControlSubContext_amount').html(ns1blankspace.xhtml.loadingSmall);
 							
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
@@ -122,7 +49,7 @@ ns1blankspace.financial.payment =
 						oSearch.rf = 'json';
 						oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 						
-						oSearch.getResults(function(data) {interfaceFinancialPaymentRefresh(data)});
+						oSearch.getResults(function(data) {ns1blankspace.financial.payment.refresh(data)});
 					}
 					else
 					{
@@ -131,103 +58,100 @@ ns1blankspace.financial.payment =
 						ns1blankspace.objectContextData.paiddate = oObjectContext.paiddate;
 						ns1blankspace.objectContextData.amount = oObjectContext.amount;
 								
-						$('#spanInterfaceViewportControlSubContext_paiddate').html(oObjectContext.receiveddate);
-						$('#spanInterfaceViewportControlSubContext_amount').html(oObjectContext.amount);
+						$('#ns1blankspaceControlSubContext_paiddate').html(oObjectContext.paiddate);
+						$('#ns1blankspaceControlSubContext_amount').html(oObjectContext.amount);
 					}
 				},			
 
-	home: 		function interfaceFinancialPaymentHomeShow(oResponse)
+	home: 		function (oResponse)
 				{
 					if (oResponse == undefined)
 					{
-						var aHTML = [];
-						var h = -1;
+							var aHTML = [];
 									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-										'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-										ns1blankspace.xhtml.loading + 
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceMain">' + 
+										'<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										ns1blankspace.xhtml.loading +
+										'</td></tr>' + 
+										'</table>');					
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
-						
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+											
 						var aHTML = [];
-						var h = -1;
-									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
-										'<td id="ns1blankspaceViewportFinancialLarge" class="ns1blankspaceViewportImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';		
+
+						aHTML.push('<table>');
+						aHTML.push('<tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');				
+						aHTML.push('</table>');		
 						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));	
-						
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
+
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 						oSearch.addField('reference,description,contactbusinesspaidtotext,contactpersonpaidtotext,paiddate,amount');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(interfaceFinancialPaymentHomeShow);
+						oSearch.getResults(ns1blankspace.financial.payment.home);
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
-						
+				
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialPaymentHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceFinancialPaymentHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceFinancialPaymentHomeMostLikelyNothing">Click New to create a expense.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to add a receipt.</td></tr>');
+							aHTML.push('</table>');
 						}
 						else
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialPaymentHomeMostLikely">';
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr><td class="ns1blankspaceMain" colspan="4">MOST LIKELY</td></tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{					
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML[++h] = '<td id="interfaceFinancialPaymentHomeMostLikely_Title-' + this.id + '" class="interfaceHomeMostLikely" style="width:50px;">' +
-														this.reference + '</td>';
+								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:50px;">' +
+														this.reference + '</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_Amount-' + this.id + '" class="ins1blankspaceMostLikelySub" style="width:50px;text-align:right;">' +
+														'$' + this.amount + '</td>');
 								
-								aHTML[++h] = '<td id="interfaceFinancialPaymentHomeMostLikely_Amount-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:50px;text-align:right;">' +
-														'$' + this.amount + '</td>';
+								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:50px;">' +
+														this.reference + '</td>');
+								
+								aHTML.push('<td id="ns1blankspaceMostLikely_Amount-' + this.id + '" class="ins1blankspaceMostLikelySub" style="width:50px;text-align:right;">' +
+														'$' + this.amount + '</td>');
 																		
-								aHTML[++h] = '<td id="interfaceFinancialPaymentHomeMostLikely_DueDate-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;">' +
-														this.paiddate + '</td>';
-														
-								var sContact = this.contactbusinesspaidtotext
+								aHTML.push('<td id="ns1blankspaceMostLikely_Date-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;">' +
+														this.paiddate + '</td>');
+																										
+								var sContact = this.contactbusinesspaidtotext;
 								if (sContact == '') {sContact = this.contactpersonpaidtotext}
 								
-								aHTML[++h] = '<td id="interfaceFinancialPaymentHomeMostLikely_Contact-' + this.id + '" class="interfaceHomeMostLikelySub">' +
-														sContact + '</td>';
+								aHTML.push('<td id="ns1blankspaceMostLikely_Contact-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+														sContact + '</td>');
 									
-								aHTML[++h] = '</tr>'
+								aHTML.push('</tr>');
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</table>');
 						}
 						
-						$('#tdInterfaceProjectHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.interfaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							interfaceFinancialPaymentSearch(event.target.id, {source: 1});
+							 ns1blankspace.financial.payment.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
 
 	search: 	{
-					send: 		function interfaceFinancialPaymentSearch(sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementId, oParam)
 								{
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
@@ -250,7 +174,7 @@ ns1blankspace.financial.payment =
 									
 									if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
@@ -262,13 +186,13 @@ ns1blankspace.financial.payment =
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										
-										oSearch.getResults(function(data) {interfaceFinancialPaymentShow(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.financial.receipt.show(oParam, data)});
 									}
 									else
 									{
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -284,34 +208,30 @@ ns1blankspace.financial.payment =
 											ns1blankspaceOptionsSetPosition(sElementId);
 											
 											var oSearch = new AdvancedSearch();
-											oSearch.endPoint = 'financial';
 											oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 											oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,' +
 																'reference,paiddate,amount');
 											oSearch.rf = 'json';
 											oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
 											
-											oSearch.getResults(function(data) {interfaceFinancialPaymentSearchShow(oParam, data)});	
+											oSearch.getResults(function(data) {ns1blankspace.financial.invoice.search.process(oParam, data)});	
 										}
 									};	
 								},
 
-					process:	function interfaceFinancialPaymentSearchShow(oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
-
 									var iColumn = 0;
-									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
-										
+									var aHTML = [];
+
 									if (oResponse.data.rows.length == 0)
 									{
-										$('#divns1blankspaceViewportControlOptions').hide();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{		
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
 										$.each(oResponse.data.rows, function()
 										{	
@@ -319,158 +239,135 @@ ns1blankspace.financial.payment =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 										
-											aHTML[++h] = '<td class="interfaceSearch" id="' + +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' + +
 															'-' + this.id + '">' +
 															this.reference +
-															'</td>';
+															'</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</table>');
 
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceFinancialPaymentSearch(event.target.id, {source: 1});
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.financial.payment.search.send(event.target.id, {source: 1});
 										});
-									}	
+									}				
 											
 								}
 				},				
 
-	layout: 	function interfaceFinancialPaymentViewport()
+	layout: 	function ()
 				{
-					
 					var aHTML = [];
-					var h = -1;
-
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
+					
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');
 					}
 					else
 					{	
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">"' +
+										'Summary</td></tr>');
 									
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-										'</tr>';
-												
-						aHTML[++h] = '</table>';					
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
+						
+						aHTML.push('</table>');					
 					
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+						aHTML.push('<table class="ns1blankspaceControl">');
+						
+						aHTML.push('<tr><td id="ns1blankspaceControlExpenses" class="ns1blankspaceControl">' +
+										'Expenses</td></tr>');
+													
+						aHTML.push('<tr><td id="ns1blankspaceControlGL" class="ns1blankspaceControl">' +
+										'GL</td></tr>');
 									
-						aHTML[++h] = '<tr id="trInterfaceViewportControlExpenses" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlExpenses" class="interfaceViewportControl">Expenses</td>' +
-										'</tr>';
-									
-						aHTML[++h] = '</table>';					
-
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+						aHTML.push('</table>');					
 					
-						aHTML[++h] = '<tr id="trInterfaceViewportControlGL" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlGL" class="interfaceViewportControl">GL</td>' +
-										'</tr>';
-									
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceControl">');
 					
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-					
-						aHTML[++h] = '<tr id="trInterfaceViewportControlActions" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlActions" class="interfaceViewportControl">Actions</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
+										'Actions</td></tr>');
 									
-						aHTML[++h] = '<tr id="trInterfaceViewportControlAttachments" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
+										'Attachments</td></tr>');
 					}
 									
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>');					
 							
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
-					
-					var aHTML = [];
-					var h = -1;
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 
-					aHTML[++h] = '<div id="divInterfaceMainContext" class="divInterfaceViewportMainContext"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainItem" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainExpense" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainTransaction" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainActions" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
+					var aHTML = [];
+
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainExpense" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTransaction" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
 					$('#divInterfaceMain').html(aHTML.join(''));
 					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceFinancialPaymentSummary();
-					});
-					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceFinancialPaymentDetails();
-					});
-					
-					$('#tdInterfaceViewportControlItem').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainItem", true);
-						interfaceFinancialPaymentItem();
-					});
-					
-					$('#tdInterfaceViewportControlExpenses').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainExpense", true);
-						interfaceFinancialPaymentExpense();
-					});
-					
-					$('#tdInterfaceViewportControlGL').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainTransaction", true);
-						interfaceFinancialTransaction();
-						//You'll find this in 1blankspace.financial-[].js
+						ns1blankspace.show({selector: '#divInterfaceMainSummary'});
+						ns1blankspace.financial.invoice.summary.show();
 					});
 
-					$('#tdInterfaceViewportControlActions').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
-						ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
+						ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+						ns1blankspace.financial.invoice.details();
+					});
+					
+					$('#ns1blankspaceControlExpenses').click(function(event)
+					{
+						ns1blankspace.show({selector: '#divInterfaceMainExpense', refresh: true});
+						ns1blankspace.financial.payment.expense();
+					});
+					
+					$('#ns1blankspaceControlGL').click(function(event)
+					{
+						ns1blankspace.show({selector: '#divInterfaceMainTransaction', refresh: true});
+						ns1blankspace.financial.transaction();
 					});
 
-					$('#tdInterfaceViewportControlAttachments').click(function(event)
+					$('#ns1blankspaceControlActions').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
-						ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+						ns1blankspace.show({selector: '#divInterfaceMainActions', refresh: true});
+						ns1blankspace.actions.show({xhtmlElementID: 'divInterfaceMainActions'});
+					});
+
+					$('#ns1blankspaceControlControlAttachments').click(function(event)
+					{
+						ns1blankspace.show({selector: '#divInterfaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show({xhtmlElementID: 'divInterfaceMainAttachments'});
 					});
 				},
 
-	show:		function interfaceFinancialPaymentShow(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceFinancialPaymentViewport();
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.financial.payment.layout();
 					
 					var aHTML = [];
 					var h = -1;
@@ -479,249 +376,237 @@ ns1blankspace.financial.payment =
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the payment.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this payment.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-									
-						$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference +
-							'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_paiddate">' +
-							 		ns1blankspace.objectContextData.paiddate + '</span>' +
-							'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_amount">' +
-									ns1blankspace.objectContextData.amount + '</span>');
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+								
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
+							'<br /><span id="ns1blankspaceControlContext_paiddate" class="ns1blankspaceControlSubContext">' + ns1blankspace.objectContextData.paiddate + '</span>' +
+							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceControlSubContext">$' + ns1blankspace.objectContextData.amount + '</span>');
 							
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceFinancialPaymentMasterViewport({showHome: false});interfaceFinancialPaymentSearch("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.financial.payment.init({showHome: false});ins1blankspace.financial.payment.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
 						
-						ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceFinancialPaymentSummary()'});
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.financial.payment.summary()'});
 					}	
 				},		
 		
 	summary: 	function interfaceFinancialPaymentSummary()
 				{
-					var aHTML = [];
-					var h = -1;
-					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the payment.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the receipt.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-								'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
-										'</td>' +
-										'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspaceRow">' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+										'</tr>' +
+										'</table>');				
 						
-						$('#divInterfaceMainSummary').html(aHTML.join(''));
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
-					
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
-						
+
+						aHTML[++h] = '<table class="ns1blankspaceColumn1">';
+
 						if (ns1blankspace.objectContextData.amount != '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAmountValue" class="interfaceMainSummaryValue" style="font-size:1.5em;font-weight:bold;">';
-							aHTML[++h] = '$' + ns1blankspace.objectContextData.amount;
-							aHTML[++h] = '</td></tr>';
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSummary">' +
+											'$' + ns1blankspace.objectContextData.amount +
+											'</td></tr>');
 						}	
 						
 						if (ns1blankspace.objectContextData.contactbusinesspaidtotext != '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryBusiness" class="interfaceMainSummary">Business</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryBusinessValue" class="interfaceMainSummaryValue">' +
-										ns1blankspace.objectContextData.contactbusinesspaidtotext +
-										'</td></tr>';
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.contactbusinesspaidtotext +
+											'</td></tr>');
 						}
 						
 						if (ns1blankspace.objectContextData.contactpersonpaidtotext != '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPerson" class="interfaceMainSummary">Person</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryPersonValue" class="interfaceMainSummaryValue">' +
-										ns1blankspace.objectContextData.contactpersonpaidtotext +
-										'</td></tr>';
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Person</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryPerson" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.contactpersonpaidtotext +
+											'</td></tr>');
 						}
-						
+					
 						if (ns1blankspace.objectContextData.paid == 'Y')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummarypaidDate" class="interfaceMainSummary">Date Paid</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummarypaidDateValue" class="interfaceMainSummaryValue">' +
-										ns1blankspace.objectContextData.paiddate +
-										'</td></tr>';			
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Received Date</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryReceivedDate" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.paiddate + 
+											'</td></tr>');
 						}
 						else
-						{	
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryPaidDate" class="interfaceMainSummary">Date Paid</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryPaidDateValue" class="interfaceMainSummaryValue">' +
-										'Has not been paid.' +
-										'</td></tr>';				
-						}
-						
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Has not been paid.</td></tr>'); 
+						}	
+
 						if (ns1blankspace.objectContextData.description != '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
-										ns1blankspace.objectContextData.description +
-										'</td></tr>';
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.description +
+											'</td></tr>');
 						}
 						
-						aHTML[++h] = '</table>';					
-						
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
+						aHTML.push('</table>');		
+
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 					}	
 				},
 
 	details: 	function interfaceFinancialPaymentDetails()
 				{
 					var aHTML = [];
-					var h = -1;
-						
-					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
+				
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 								
-						aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>');
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMainDetails').html(aHTML.join(''));
-						
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
+
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsReference" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsReference" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Reference' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsReferenceValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsReferenceValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsReference" class="inputInterfaceMainText">' +
-										'</td></tr>';								
-							
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsPaidDate" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsPaidDate" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsReference" class="ns1blankspaceText">' +
+										'</td></tr>');			
+					
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Paid Date' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsPaidDateValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsPaidDateValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsPaidDate" class="inputInterfaceMainDate">' +
-										'</td></tr>';						
-							
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsContactBusinessPaidTo" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsContactBusinessPaidTo" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceDetailsPaidDate" class="ns1blankspaceDate">' +
+										'</td></tr>');		
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Business' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsContactBusinessPaidToValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainDetailsContactBusinessPaidToValue" class="interfaceMainSelect">' +
-										'<input id="inputInterfaceMainDetailsContactBusinessPaidTo" class="inputInterfaceMainSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsPaidToBusiness" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_BUSINESS_SEARCH"' +
 											' data-columns="tradename">' +
-										'</td></tr>';
-										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsContactPersonReceivedFrom" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsContactPersonReceivedFrom" class="interfaceMain">' +
+										'</td></tr>');	
+							
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Person' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsContactPersonPaidToValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainDetailsContactPersonPaidToValue" class="interfaceMainSelect">' +
-										'<input id="inputInterfaceMainDetailsContactPersonPaidTo" class="inputInterfaceMainSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsPaidToPerson" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_PERSON_SEARCH"' +
 											' data-columns="surname"' +
-											' data-parent="inputInterfaceMainDetailsContactBusinessPaidTo"' +
+											' data-parent="ns1blankspaceDetailsPaidToBusiness"' +
 											' data-parent-search-id="contactbusiness"' +
 											' data-parent-search-text="tradename">' +
-										'</td></tr>';		
-						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsAmount" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsAmount" class="interfaceMain">' +
+										'</td></tr>');							
+								
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Amount' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsAmountValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsAmountValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsAmount" class="inputInterfaceMainText">' +
-										'</td></tr>';	
-															
-						aHTML[++h] = '</table>';					
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsAmount" class="ns1blankspaceText">' +
+										'</td></tr>');			
+											
+						aHTML.push('</table>');									
 						
 						$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
 						
 						$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
 						
-						var aHTML = [];
-						var h = -1;
-							
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsDescription" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsDescription" class="interfaceMain">' +
+						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspace">');
+							
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Description' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-										'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsDescription" class="inputInterfaceMainTextMulti"></textarea>' +
-										'</td></tr>';
-						
-						aHTML[++h] = '</table>';					
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<input id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti">' +
+										'</td></tr>');		
+										
+						aHTML.push('</table>');					
 							
-						$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
-							$('#inputInterfaceMainDetailsPaidDate').val(ns1blankspace.objectContextData.paiddate);
-							$('#inputInterfaceMainDetailsContactBusinessPaidTo').attr('data-id', ns1blankspace.objectContextData.contactbusinesspaidto);
-							$('#inputInterfaceMainDetailsContactBusinessPaidTo').val(ns1blankspace.objectContextData.contactbusinesspaidtotext);
-							$('#inputInterfaceMainDetailsContactPersonPaidTo').attr('data-id', ns1blankspace.objectContextData.contactpersonpaidto);
-							$('#inputInterfaceMainDetailsContactPersonPaidTo').val(ns1blankspace.objectContextData.contactpersonpaidtotext);	
-							$('#inputInterfaceMainDetailsAmount').val(ns1blankspace.objectContextData.amount);		
-							$('#inputInterfaceMainDetailsDescription').val(ns1blankspace.objectContextData.description);
+							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsPaidDate').val(ns1blankspace.objectContextData.paiddate);
+							$('#ns1blankspaceMainDetailsContactBusinessPaidTo').attr('data-id', ns1blankspace.objectContextData.contactbusinesspaidto);
+							$('#ns1blankspaceMainDetailsContactBusinessPaidTo').val(ns1blankspace.objectContextData.contactbusinesspaidtotext);
+							$('#ns1blankspaceMainDetailsContactPersonPaidTo').attr('data-id', ns1blankspace.objectContextData.contactpersonpaidto);
+							$('#ns1blankspaceMainDetailsContactPersonPaidTo').val(ns1blankspace.objectContextData.contactpersonpaidtotext);	
+							$('#ns1blankspaceDetailsAmount').val(ns1blankspace.objectContextData.amount);		
+							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
 						}
 					}	
 				},
 
-	new:		function interfaceFinancialPaymentNew(oParam)
+	new:		function (oParam)
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
-					interfaceFinancialPaymentViewport();
-					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-					ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-					interfaceFinancialPaymentDetails();
-				}			
+					ns1blankspace.financial.payment.init();
+					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+					ns1blankspace.financial.payment.details();
+				},		
 
 	save: 		{
-					send: 		function interfaceFinancialPaymentSave(oParam, oResponse)
+					send: 		function (oParam, oResponse)
 								{
-									ns1blankspaceStatusWorking();
+									ns1blankspace.status.working();
 										
 									var sData = (ns1blankspace.objectContext == -1)?'':'id=' + ns1blankspace.objectContext;
 										
-									if ($('#divInterfaceMainDetails').html() != '')
+									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + $('#inputInterfaceMainDetailsReference').val();
+										sData += '&reference=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsReference').val());
 										sData += '&paiddate=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPaidDate').val());
 										sData += '&description=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDescription').val());
 										sData += '&contactbusinesspaidfrom=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsContactBusinessPaidFrom').attr("data-id"));
@@ -731,33 +616,33 @@ ns1blankspace.financial.payment =
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspaceEndpointURL('FINANCIAL_PAYMENT_MANAGE'),
+										url: ns1blankspace.endpointURI('FINANCIAL_PAYMENT_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: function(data) {interfaceFinancialPaymentSaveProcess(data)}
+										success: function(data) {ns1blankspace.financial.payment.save.process(data)}
 									});	
 								}
 
-					process:	function interfaceFinancialPaymentSaveProcess(oResponse)
+					process:	function (oResponse)
 								{
 									if (oResponse.status == 'OK')
 									{
-										ns1blankspaceStatus('Saved');
+										ns1blankspace.status.message('Saved');
 										if (ns1blankspace.objectContext == -1) {var bNew = true}
 										ns1blankspace.objectContext = oResponse.id;	
 										
-										if ($('#divInterfaceMainDetails').html() != '')
+										if ($('#ns1blankspaceMainDetails').html() != '')
 										{
-											interfaceFinancialPaymentAmountSave();
+											ns1blankspace.financial.payment.save.amount();
 										}
 									}
 									else
 									{
-										ns1blankspaceError(oResponse.error.errornotes);
+										ns1blankspace.status.error(oResponse.error.errornotes);
 									}
 								},
 
-					amount:		function interfaceFinancialPaymentAmountSave(oParam)
+					amount:		function (oParam)
 								{
 									var iAccount = ns1blankspace.financial.settings.financialaccountcreditor;
 									var cAmount = $('#inputInterfaceMainDetailsAmount').val();
@@ -770,16 +655,16 @@ ns1blankspace.financial.payment =
 									}
 									else
 									{
-										var sData = 'object=' + ns1blankspace.object;
-										sData += '&objectcontext=' + ns1blankspace.objectContext;
-										sData += '&financialaccount=' + iAccount;
-										sData += '&amount=' + cAmount;
-										sData += '&description=' + $('#inputInterfaceMainDetailsDescription').val();
+										var sData = 'object=' + ns1blankspace.util.fs(ns1blankspace.object);
+										sData += '&objectcontext=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+										sData += '&financialaccount=' + ns1blankspace.util.fs(iAccount);
+										sData += '&amount=' + ns1blankspace.util.fs(cAmount);
+										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 										
 										$.ajax(
 										{
 											type: 'POST',
-											url: '/ondemand/financial/?method=FINANCIAL_ITEM_MANAGE',
+											url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
 											data: sData,
 											dataType: 'json',
 											success: function(oResponse)
@@ -790,12 +675,12 @@ ns1blankspace.financial.payment =
 												$.ajax(
 												{
 													type: 'POST',
-													url: '/ondemand/financial/?method=FINANCIAL_ITEM_COMPLETE',
+													url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
 													data: sData,
 													dataType: 'json',
 													success: function(oResponse)
 													{
-														interfaceFinancialPaymentRefresh();
+														ns1blankspace.financial.payment.refresh();
 													}
 												});
 											}
@@ -805,17 +690,15 @@ ns1blankspace.financial.payment =
 				},				
 
 	item: 		{
-					show:		function interfaceFinancialPaymentItem(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.objectContext;
-									var sXHTMLElementId = 'divInterfaceMainItem';
 									var oOptions = {view: true, remove: true};
 									var oActions = {add: true};
 									
 									if (oParam != undefined)
 									{
 										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-										if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
 										if (oParam.options != undefined) {oOptions = oParam.options}
 										if (oParam.actions != undefined) {oActions = oParam.actions}
 									}		
@@ -823,49 +706,42 @@ ns1blankspace.financial.payment =
 									if (oResponse == undefined)
 									{	
 										var aHTML = [];
-										var h = -1;	
-													
-										aHTML[++h] = '<table id="tableInterfaceMainItem" class="interfaceMain">' +
-													'<tr id="trInterfaceMainItemRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainItemColumn1" class="interfaceMainColumn1Large">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="tdInterfaceMainItemColumn2" class="interfaceMainColumn2Action" style="width: 200px;">' +
-													'</td>' +
-													'</tr>' +
-													'</table>';					
-											
-										$('#' + sXHTMLElementId).html(aHTML.join(''));
+
+										aHTML.push('<table class="ns1blankspaceContainer">');
+
+										aHTML.push('<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2"></td>' +
+														'</tr>');
+
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceMainItem').html(aHTML.join(''));
 										
 										if (oActions != undefined)
 										{
-												
-											sXHTMLElementId = 'tdInterfaceMainItemColumn1';
-											
 											var aHTML = [];
-											var h = -1;	
 											
-											aHTML[++h] = '<table id="tableInterfaceMainItemColumn2" class="interfaceMainColumn2">';
+											aHTML.push('<table class="ns1blankspaceColumn2">');
 											
 											if (oActions.add)
 											{
-												aHTML[++h] = '<tr><td id="tdInterfaceMainItemAdd" class="interfaceMainAction">' +
-															'<span id="spanInterfaceMainItemAdd">Add</span>' +
-															'</td></tr>';
+												aHTML.push('<tr><td class="ns1blankspaceAction">' +
+																'<span id="ns1blankspaceItemAdd">Add</span>' +
+																'</td></tr>');
 											}
 											
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>');					
 											
-											$('#tdInterfaceMainItemColumn2').html(aHTML.join(''));
+											$('#ns1blankspaceItemColumn2').html(aHTML.join(''));
 										
-											$('#spanInterfaceMainItemAdd').button(
+											$('#ns1blankspaceItemAdd').button(
 											{
 												label: "Add"
 											})
 											.click(function() {
-												 ns1blankspaceFinanicalExpenseItemAdd(oParam);
-											})
-											
+												 ns1blankspace.financial.payment.item.edit(oParam);
+											});
 										}
 										
 										var oSearch = new AdvancedSearch();
@@ -875,77 +751,67 @@ ns1blankspace.financial.payment =
 										oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('financialaccounttext', 'asc');
 										
-										oSearch.getResults(function(data) {interfaceFinancialPaymentItem(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.financial.receipt.item.show(oParam, data)});
 									}
 									else
 									{
-										var aHTML = [];
-										var h = -1;
-										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableFinancialPaymentItem" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
-															'<td class="interfaceMainRowNothing">No items.</td></tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No items.</td></tr></table>');
 
-											$('#' + sXHTMLElementId).html(aHTML.join(''));
+											$('#ns1blankspaceItemColumn1').html(aHTML.join(''));
 										}
 										else
 										{
-											aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">Financial Account</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">GST</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-											aHTML[++h] = '</tr>';
-											
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption style="width:125px;">Account</td>');
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">GST</td>');
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
+				
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML[++h] = '<tr class="interfaceMainRow">';
-																
-												aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
-																		this["financialaccounttext"] + '</td>';
-																		
-												aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
-																		this["tax"] + '</td>';
-																		
-												aHTML[++h] = '<td id="tdWebsiteLineitem_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
-																		this["issuedamount"] + '</td>';
-																		
-												aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+												aHTML.push('<tr class="ns1blankspaceRow">');
+																			
+												aHTML.push('<td id="ns1blankspaceItem_financialaccounttext-' + oRow.id + '" class="ns1blankspaceRow">' +
+																this["financialaccounttext"] + '</td>');
+												
+												aHTML.push('<td id="ns1blankspaceItem_tax-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																this["tax"] + '</td>');
+
+												aHTML.push('<td id="ns1blankspaceItem_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																this["issuedamount"] + '</td>');
+
+												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 													
 												if (oOptions.remove)
 												{	
-													aHTML[++h] = '<span id="spanExpenseItem_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+													aHTML[++h] = '<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceItemRemove"></span>';
 												};	
 													
 												if (oOptions.view)
 												{	
-													aHTML[++h] = '<span id="spanExpenseItem_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+													aHTML[++h] = '<span id="ns1blankspaceRowItemItem_options_view-' + this.id + '" class="ns1blankspaceItemView"></span>';
 												};	
 													
-												aHTML[++h] = '</td>';				
-												aHTML[++h] = '</tr>';
+												aHTML.push('</td></tr>');
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</table>');
 
-											$('#' + sXHTMLElementId).html(aHTML.join(''));
+											$('#ns1blankspaceItemColumn1').html(aHTML.join(''));
 											
 											if (oOptions.remove) 
 											{
-												$('.interfaceMainRowOptionsRemove').button( {
+												$('.ns1blankspaceItemRemove').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-close"
 													}
 												})
 												.click(function() {
-													ns1blankspaceExpenseItemRemove({xhtmlElementID: this.id});
+													ns1blankspace.financial.payment.item.remove({xhtmlElementID: this.id});
 												})
 												.css('width', '15px')
 												.css('height', '17px')
@@ -953,14 +819,14 @@ ns1blankspace.financial.payment =
 											
 											if (oOptions.view) 
 											{
-												$('.interfaceMainRowOptionsView').button( {
+												$('.ns1blankspaceItemView').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-play"
 													}
 												})
 												.click(function() {
-													ns1blankspaceExpenseItemAdd({xhtmlElementID: this.id})
+													ns1blankspace.financial.payment.item.edit({xhtmlElementID: this.id})
 												})
 												.css('width', '15px')
 												.css('height', '17px')
@@ -969,7 +835,7 @@ ns1blankspace.financial.payment =
 									}	
 								},
 
-					add:		function ns1blankspaceFinancialPaymentItemAdd(oParam, oResponse)
+					add:		function (oParam, oResponse)
 								{
 									var iStep = 1;
 									
@@ -983,54 +849,56 @@ ns1blankspace.financial.payment =
 										if (iStep == 1)
 										{
 											var aHTML = [];
-											var h = -1;
+											
+											aHTML.push('<table class="ns1blankspace">');
 													
-											aHTML[++h] = '<table id="tableInterfaceMainExpenseItemAddColumn2" class="interfaceMain">';
-									
-											aHTML[++h] = '<tr id="trInterfaceMainExpenseItemAddReference" class="interfaceMain">' +
-															'<td id="tdInterfaceMainExpenseItemAddReference" class="interfaceMain">' +
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
 															'Account' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainExpenseItemAddReferenceValue" class="interfaceMainText">' +
-															'<td id="tdInterfaceMainExpenseItemAddReferenceValue" class="interfaceMainText">' +
-															'<input id="inputInterfaceMainExpenseItemAddReference" class="inputInterfaceMainText">' +
-															'</td></tr>';
-											
-											aHTML[++h] = '<tr id="trInterfaceMainExpenseItemAdd" class="interfaceMain">' +
-															'<td id="tdInterfaceMainExpenseItemAddSearch" class="interfaceMain">' +
-															'<span id="spanInterfaceMainExpenseItemAddSearch">Search</span>' +
-															'</td></tr>';
-											
-											aHTML[++h] = '<tr id="trInterfaceMainExpenseItemAdd" class="interfaceMain">' +
-															'<td id="tdInterfaceMainExpenseItemAddSearchResults" class="interfaceMain">' +
-															'Enter a code or title and click search.' +
-															'</td></tr>';
-																			
-											aHTML[++h] = '</tbody></table>';		
-											
-											$('#tdInterfaceMainItemColumn2').html(aHTML.join(''));
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceText">' +
+															'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
+															'</td></tr>');
 
-											$('#spanInterfaceMainExpenseItemAddSearch').button(
-												{
-													label: "Search"
-												})
-												.click(function() {
-													ns1blankspaceFinanicalExpenseItemAdd($.extend(true, oParam, {step: 2}))
-												})
-												.css('width', '75px')
+											aHTML.push('<tr class="ns1blankspace">' +
+															'<td class="ns1blankspace" title="Enter a code or title and click search">' +
+															'<span id="ns1blankspaceItemEditSearch">Search</span>' +
+															'</td></tr>');
+											
+											aHTML.push('</table>');
+
+											aHTML.push('<table style="margin-top:15px;">');
+											
+											aHTML.push('<tr><td id="ns1blankspaceItemEditSearchResults"></td></tr>';
+																			
+											aHTML.push('</table>');		
+											
+											$('#ns1blankspaceItemColumn2').html(aHTML.join(''));
+
+											$('#ns1blankspaceItemEditSearch').button(
+											{
+												label: "Search"
+											})
+											.click(function() {
+												ns1blankspace.financial.payment.item.edit($.extend(true, oParam, {step: 2}))
+											})
+												
+											$('#ns1blankspaceItemAccount').focus();
 										}
+
 										if (iStep == 2)
 										{
-											var sParam = 'method=SETEP_FINANCIAL_ITEM_SEARCH&title=' + $('inputInterfaceMainExpenseItemAddReference').val();
-											sParam += '&includeimage=1';
-									
+											var sData = 'title=' + ns1blankspace.util.fs($('#ns1blankspaceItemAccount').val());
+											
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/setup/?' + sParam,
+												url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_ITEM_SEARCH'),
+												data: sData,
 												dataType: 'json',
-												success: function(data){ns1blankspaceFinanicalExpenseItemAdd($.extend(true, oParam, {step:3}), data)}
-											});	
+												success: function(data){ns1blankspace.financial.receipt.item.edit($.extend(true, oParam, {step:3}), data)}
+											});
 										}
 									}
 									else
@@ -1040,49 +908,43 @@ ns1blankspace.financial.payment =
 
 										if (oResponse.data.rows.length == 0)	
 										{
-											aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceActions">';
-											aHTML[++h] = '<td class="interfaceMainRowNothing">No accounts.</td>';
-											aHTML[++h] = '</tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table class="ns1blankspace">' +
+															'<tr><td class="ns1blankspaceNothing">No accounts.</td></tr>' + 
+															'</table>');
 
-											$('#tdInterfaceMainOrderProductsColumn1').html(aHTML.join(''));		
+											$('#ns1blankspaceItemEditSearchResults').html(aHTML.join(''));		
 										}
 										else
 										{	
 											$.each(oResponse.data.rows, function() 
 											{ 
-												aHTML[++h] = '<tr class="interfaceMainRow">';	
-															
-												aHTML[++h] = '<td id="tdExpenseItems_title-' + this.id + '" class="interfaceMainRow">' +
-																		this.reference + '</td>';
-																						
-												aHTML[++h] = '</tr>';	
+												aHTML.push('<tr class="ns1blankspaceRow">'+ 
+																'<td id="ns1blankspaceItem_title-' + this.id + '" class="ns1blankspaceRow">' +
+																this.title + '</td>' +
+																'<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+																'<span id="ns1blankspaceItemAccount_options_add-' + this.id + '" class="ns1blankspaceItemAccount"></span>' +
+																'</td></tr>');		
 
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</table>');
 
-											$('#tdInterfaceMainExpenseItemAddSearchResults').html(aHTML.join(''))
+											$('#ns1blankspaceItemEditSearchResults').html(aHTML.join(''));
 											
-											//bind rows to add product to order column 1
-										}
+											//binding
 									}	
 								}
 				},				
 
-	expense: 	function interfaceFinancialPaymentExpense(oParam, oResponse)
+	expense: 	function (oParam, oResponse)
 				{
 					var iObjectContext = ns1blankspace.objectContext;
-					var sXHTMLElementId = 'divInterfaceMainExpense';
 					var oOptions = {view: true, remove: true};
 					var oActions = {add: true};
 					
 					if (oParam != undefined)
 					{
 						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-						if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
 						if (oParam.options != undefined) {oOptions = oParam.options}
 						if (oParam.actions != undefined) {oActions = oParam.actions}
 					}		
@@ -1090,47 +952,40 @@ ns1blankspace.financial.payment =
 					if (oResponse == undefined)
 					{	
 						var aHTML = [];
-						var h = -1;	
-									
-						aHTML[++h] = '<table id="tableInterfaceMainPayment" class="interfaceMain">' +
-									'<tr id="trInterfaceMainPaymentRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainPaymentColumn1" class="interfaceMainColumn1Large">' +
-									ns1blankspace.xhtml.loading +
-									'</td>' +
-									'<td id="tdInterfaceMainPaymentColumn2" class="interfaceMainColumn2Action" style="width: 200px;">' +
-									'</td>' +
-									'</tr>' +
-									'</table>';					
-							
-						$('#' + sXHTMLElementId).html(aHTML.join(''));
+
+						aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceExpenseColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceExpenseColumn2" class="ns1blankspaceColumn2" style="width: 300px;></td>' +
+										'</tr>');
+						aHTML.push('</table>');					
+										
+						$('#ns1blankspaceMainExpense').html(aHTML.join(''));
 						
 						if (oActions != undefined)
 						{
-								
 							var aHTML = [];
-							var h = -1;	
-							
-							aHTML[++h] = '<table id="tableInterfaceMainPaymentColumn2" class="interfaceMainColumn2">';
+															
+							aHTML.push('<table class="ns1blankspaceColumn2">');
 							
 							if (oActions.add)
 							{
-								aHTML[++h] = '<tr><td id="tdInterfaceMainPaymentAdd" class="interfaceMainAction">' +
-											'<span id="spanInterfaceMainPaymentAdd">Add</span>' +
-											'</td></tr>';
+								aHTML.push('<tr><td class="ns1blankspaceAction">' +
+											'<span id="ns1blankspaceExpenseAdd">Add</span>' +
+											'</td></tr>');
 							}
 							
-							aHTML[++h] = '</table>';					
+							aHTML.push('</table>');					
 							
-							$('#tdInterfaceMainPaymentColumn2').html(aHTML.join(''));
+							$('#ns1blankspaceExpenseColumn2').html(aHTML.join(''));
 						
-							$('#spanInterfaceMainPaymentAdd').button(
+							$('#ns1blankspaceExpenseAdd').button(
 							{
 								label: "Add"
 							})
 							.click(function() {
-								 interfaceFinancialPaymentPaymentAdd(oParam);
+								 ns1blankspace.financial.payment.expense.edit(oParam);
 							})
-							
 						}
 						
 						var oSearch = new AdvancedSearch();
@@ -1138,88 +993,78 @@ ns1blankspace.financial.payment =
 						oSearch.addField('appliesdate,amount');
 						oSearch.addFilter('payment', 'EQUAL_TO', iObjectContext);
 						oSearch.sort('appliesdate', 'asc');
-						oSearch.getResults(function(data) {interfaceFinancialPaymentExpense(oParam, data)});
+						oSearch.getResults(function(data) {ns1blankspace.financial.payment.expense(oParam, data)});
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
-						
+									
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableFinancialPaymentPayment" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">' +
-											'<td class="interfaceMainRowNothing">No expenses.</td></tr>';
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('<table class="ns1blankspace">' +
+											'<tr><td class="ns1blankspaceNothing">No payments.</td></tr>' + 
+											'</table>');
 
-							$('#' + sXHTMLElementId).html(aHTML.join(''));
+							$('#ns1blankspaceInvoiceColumn1').html(aHTML.join(''));
 						}
 						else
 						{
-							aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-							aHTML[++h] = '</tr>';
+							aHTML.push('<tr class="ns1blankspaceCaption">');
+							aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
+							aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>');
+							aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+							aHTML.push('</tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML[++h] = '<tr class="interfaceMainRow">';
-												
-								aHTML[++h] = '<td id="tdWebsiteLinePayment_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
-														this.appliesdate + '</td>';
-														
-								aHTML[++h] = '<td id="tdWebsiteLinePayment_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
-														this.amount + '</td>';
-														
-								aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+								aHTML.push('<tr class="ns1blankspaceRow">');
+																			
+								aHTML.push('<td id="ns1blankspaceReceipt_date-' + oRow.id + '" class="ns1blankspaceRow">' +
+												this.appliesdate + '</td>');
+
+								
+								aHTML.push('<td id="ns1blankspaceReceipt_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+												this.amount + '</td>');
+		
+								aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 									
 								if (oOptions.remove)
 								{	
-									aHTML[++h] = '<span id="spanExpensePayment_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+									aHTML.push('<span id="ns1blankspaceInvoice_options_remove-' + this.id + '" class="ns1blankspaceInvoiceRemove"></span>');
 								};	
 									
-								if (oOptions.view)
-								{	
-									aHTML[++h] = '<span id="spanExpensePayment_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
-								};	
-									
-								aHTML[++h] = '</td>';				
-								aHTML[++h] = '</tr>';
+								aHTML.push('</td></tr>');
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</table>');
 
-							$('#tdInterfaceMainPaymentColumn1').html(aHTML.join(''));
+							$('#ns1blankspaceInvoiceColumn1').html(aHTML.join(''));
 							
 							if (oOptions.remove) 
 							{
-								$('.interfaceMainRowOptionsRemove').button( {
+								$('.ns1blankspaceInvoiceRemove').button( {
 									text: false,
 									icons: {
 										primary: "ui-icon-close"
 									}
 								})
 								.click(function() {
-									ns1blankspaceExpensePaymentRemove({xhtmlElementID: this.id});
+									ns1blankspace.financial.receipt.invoice.remove({xhtmlElementID: this.id});
 								})
 								.css('width', '15px')
 								.css('height', '17px')
 							}
-							
+					
 							if (oOptions.view) 
 							{
-								$('.interfaceMainRowOptionsView').button( {
+								$('.ns1blankspaceInvoiceView').button( {
 									text: false,
 									icons: {
 										primary: "ui-icon-play"
 									}
 								})
 								.click(function() {
-									ns1blankspaceExpensePaymentAdd({xhtmlElementID: this.id})
+									ns1blankspace.financial.receipt.invoice.edit({xhtmlElementID: this.id})
 								})
 								.css('width', '15px')
 								.css('height', '17px')
