@@ -798,181 +798,198 @@ function interfaceActionNext10()
 	interfaceActionNextSummary({xhtmlElement: 'tdInterfaceMainNext10Column1'});
 	
 }	
-	
-function interfaceActionsList(sElementId, iObject, lObjectContext, bAll, sActionType)
-{
 
-	if (iObject == undefined) {iObject = ns1blankspace.object};
-	if (lObjectContext == undefined) {lObjectContext = ns1blankspace.objectContext};
-	if (sElementId == undefined) {sElementId = "divns1blankspaceViewportControlOptions"};
-	if (bAll == undefined) {bAll = false};
-	if (sActionType == undefined) {sActionType = ''};
+	list: 			{
+						show:		function (oParam)
+									{
+										var iObject = ns1blankspace.object;
+										var iObjectContext = ns1blankspace.objectContext;
+										var iActionType;
 
-	if (lObjectContext != -1)
-	{
-		var sParam = 'method=ACTION_SEARCH';
-		
-		if (bAll && (iObject == 32 || iObject == 12))
-		{
-			if (iObject == 32)
-			{
-				sParam = sParam + '&contactperson=' + lObjectContext;
-			}	
-			else if (iObject == 12)
-			{
-				sParam = sParam + '&contactbusiness=' + lObjectContext;
-			}	
-		}
-		else
-		{
-			sParam += '&object=' + iObject;
-			sParam += '&objectcontext=' + lObjectContext;
-		}	
-		
-		switch (sActionType)
-		{
-		case gsActionTypeFileNote:
-			sParam += '&type=4';
-			break;
-		
-		case gsActionTypeCorrespondence:
-			sParam += '&type=5-9-10';
-			// Email Sent, Email Received, SMS Sent
-			break;
-		
-		case gsActionTypeAppointment:
-			sParam += '&type=' + giActionTypeAudit;
-			// Audit 
-			break;
-		
-		default:
-			sParam = sParam;
-		}
-		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/action/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceActionsListShow(data, sElementId, sActionType)}
-		});
-	}
+										if (oParam != undefined)
+										{
+											if (oParam.object != undefined) {iObject = oParam.object}
+											if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+											if (oParam.actionType != undefined) {iActionType = oParam.actionType}
+										}
 
-}
+										if (lObjectContext != -1)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
+											oSearch.addField('subject,description,actiondate');
 
-function interfaceActionsListShow(oResponse, sElementId, sActionType)
-{	
-	var aHTML = [];
-	var h = -1;
-	
-	if (oResponse.data.rows.length == 0)
-	{
-		aHTML[++h] = '<table class="interfaceMain">';
-		aHTML[++h] = '<tbody>'
-		aHTML[++h] = '<tr class="interfaceActions">';
-		aHTML[++h] = '<td class="interfaceMainRowNothing">No ' + sActionType + '.</td>';
-		aHTML[++h] = '</tr>';
-		
-		$('#' + sElementId).html(aHTML.join(''));
-		$('#' + sElementId).show(ns1blankspace.option.showSpeed);
-	}
-	else
-	{
-		
-		aHTML[++h] = '<table class="interfaceMain">';
-		aHTML[++h] = '<tbody>'
-	
-		aHTML[++h] = '<tr class="interfaceMainCaption">';
-		switch (sActionType)
-		{
-		case gsActionTypeFileNote:
-			aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Who</td>';
-			break;
+											if (bAll && (iObject == 32 || iObject == 12))
+											{
+												if (iObject == 32)
+												{
+													oSearch.addFilter('contactperson', 'EQUAL_TO', iObjectContext);
+												}	
+												else if (iObject == 12)
+												{
+													oSearch.addFilter('contactbusiness', 'EQUAL_TO', iObjectContext);
+												}	
+											}
+											else
+											{
+												oSearch.addFilter('object', 'EQUAL_TO', iObject);
+												oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+											}	
+											
+											switch (iActionType)
+											{
+												case ns1blankspace.data.actionType.fileNote:
+													oSearch.addFilter('type', 'EQUAL_TO', 4);
+													break;
+												
+												case gsActionTypeCorrespondence:
+													oSearch.addFilter('type', 'IN_LIST', '5,9,10');
+													break;
+												
+												default:
+													oSearch.addFilter('type', 'EQUAL_TO', iActionType);
+											}
 
-		case gsActionTypeCorrespondence:
-			aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Subject</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
-			break;
-			
-		case gsActionTypeAppointment:
-			aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Type</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Who</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Hours</td>';
-			break;
+											oSearch.rf = 'json';
+											oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
+											
+											oSearch.getResults(function(data) {ns1blankspace.financial.payment.refresh(data)});
 
-		default:
-			aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Time</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Subject</td>';
-			aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
+											$.ajax(
+											{
+												type: 'GET',
+												url: '/ondemand/action/?' + sParam,
+												dataType: 'json',
+												success: function(data) {ns1blankspace.action.list.process(data, oParam)}
+											});
+										}
+									},
 
-		}
-		aHTML[++h] = '</tr>';
+						process:		
+								function (oResponse, oParam)
+								{	
+									var iObject = ns1blankspace.object;
+									var iObjectContext = ns1blankspace.objectContext;
+									var sXHTMLElementID = ns1blankspace.xhtml.container;
+									var bAll = false;
+									var iActionType;
 
-		$.each(oResponse.data.rows, function()
-		{
-			
-			aHTML[++h] = '<tr class="interfaceActions">';
-			switch (sActionType)
-			{
-			case gsActionTypeFileNote:
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-date-' + this.id + '" class="interfaceActions">' +
-								this.actiondate + '</td>';
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-description-' + this.id + '" class="interfaceActions">' +
-								this.description + '</td>';
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-actionby-' + this.id + '" class="interfaceActions">' +
-								this.actionbyfirstname + ' ' + this.actionbysurname + '</td>';
-				break;
-			
-			case gsActionTypeCorrespondence:
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-date-' + this.id + '" class="interfaceActions">' + this.actiondate + '</td>';
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-subject-' + this.id + '" class="interfaceActions">' + onDemandXMLGetData(oRow, "subject") + '</td>';
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-description-' + this.id + '" class="interfaceActions">' + this.description + '</td>';
-				break;
-			
-			case gsActionTypeAppointment:
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-date-' + this.id + '" class="interfaceActions">' + this.actiondate + '</td>';
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-type-' + this.id + '" class="interfaceActions">' + this.typetext + '</td>';
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-actionby-' + this.id + '" class="interfaceActions">' + this.actionby + '</td>';
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-hours-' + this.id + '" class="interfaceActions">' + this.hours + '</td>';
-				break;
-			
-			default:
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction_date-' + this.id + '" class="interfaceActions">' + this.actiondate + '</td>';
-				
-				var sDate = new Date(this.actiondatetime);
-				
-				if ($.fullCalendar.formatDate(sDate, 'H') != '0' && $.fullCalendar.formatDate(sDate, 'm') != '0')
-				{
-					sDate = $.fullCalendar.formatDate(sDate, 'h:mm TT')
-					aHTML[++h] = '<td class="interfaceMainRow" id="tdAction_time-' + this.id + '" class="interfaceActions">' + sDate + '</td>';
-				}
-				
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-subject-' + this.id + '" class="interfaceActions">' + this.subject + '</td>';
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-description-' + this.id + '" class="interfaceActions">' + this.description + '</td>';
-			}
+									if (oParam != undefined)
+									{
+										if (oParam.object != undefined) {iObject = oParam.object}
+										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										if (oParam.all != undefined) {bAll = oParam.all}
+										if (oParam.actionType != undefined) {iActionType = oParam.actionType}
+									}
 
-			aHTML[++h] = '<td class="interfaceMainRowOptions" id="tdAction-options-' + this.id + '" class="interfaceActionsOptions">&nbsp;</td>';
-			aHTML[++h] = '</tr>'
-		});
-    	
-		aHTML[++h] = '</tbody></table>';
+									var aHTML = [];
+									
+									if (oResponse.data.rows.length == 0)
+									{
+										aHTML.push('<table id="ns1blankspaceMostLikely">');
+										aHTML.push('<tr><td class="ns1blankspaceNothing">No actions.</td></tr>');
+										aHTML.push('</table>');
+										
+										$('#' + sXHTMLElementID).html(aHTML.join(''));
+										$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
+									}
+									else
+									{
+										aHTML.push('<table class="ns1blankspace">';
+										aHTML[++h] = '<tbody>'
+									
+										aHTML[++h] = '<tr class="interfaceMainCaption">';
+										switch (sActionType)
+										{
+										case gsActionTypeFileNote:
+											aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
+											aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
+											aHTML[++h] = '<td class="interfaceMainCaption">Who</td>';
+											break;
 
-		$('#' + sElementId).html(aHTML.join(''));
-		$('#' + sElementId).show(ns1blankspace.option.showSpeed);
-		
-		$('td.interfaceActions').click(function(event)
-		{
-			ns1blankspaceElementEditStart(event.target.id);
-		});
-			
-	}
-	
-}
+										case gsActionTypeCorrespondence:
+											aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
+											aHTML[++h] = '<td class="interfaceMainCaption">Subject</td>';
+											aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
+											break;
+											
+										case gsActionTypeAppointment:
+											aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
+											aHTML[++h] = '<td class="interfaceMainCaption">Type</td>';
+											aHTML[++h] = '<td class="interfaceMainCaption">Who</td>';
+											aHTML[++h] = '<td class="interfaceMainCaption">Hours</td>';
+											break;
+
+										default:
+											aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
+											aHTML[++h] = '<td class="interfaceMainCaption">Time</td>';
+											aHTML[++h] = '<td class="interfaceMainCaption">Subject</td>';
+											aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
+
+										}
+										aHTML[++h] = '</tr>';
+
+										$.each(oResponse.data.rows, function()
+										{
+											
+											aHTML[++h] = '<tr class="interfaceActions">';
+											switch (sActionType)
+											{
+											case gsActionTypeFileNote:
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-date-' + this.id + '" class="interfaceActions">' +
+																this.actiondate + '</td>';
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-description-' + this.id + '" class="interfaceActions">' +
+																this.description + '</td>';
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-actionby-' + this.id + '" class="interfaceActions">' +
+																this.actionbyfirstname + ' ' + this.actionbysurname + '</td>';
+												break;
+											
+											case gsActionTypeCorrespondence:
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-date-' + this.id + '" class="interfaceActions">' + this.actiondate + '</td>';
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-subject-' + this.id + '" class="interfaceActions">' + onDemandXMLGetData(oRow, "subject") + '</td>';
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-description-' + this.id + '" class="interfaceActions">' + this.description + '</td>';
+												break;
+											
+											case gsActionTypeAppointment:
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-date-' + this.id + '" class="interfaceActions">' + this.actiondate + '</td>';
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-type-' + this.id + '" class="interfaceActions">' + this.typetext + '</td>';
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-actionby-' + this.id + '" class="interfaceActions">' + this.actionby + '</td>';
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-hours-' + this.id + '" class="interfaceActions">' + this.hours + '</td>';
+												break;
+											
+											default:
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction_date-' + this.id + '" class="interfaceActions">' + this.actiondate + '</td>';
+												
+												var sDate = new Date(this.actiondatetime);
+												
+												if ($.fullCalendar.formatDate(sDate, 'H') != '0' && $.fullCalendar.formatDate(sDate, 'm') != '0')
+												{
+													sDate = $.fullCalendar.formatDate(sDate, 'h:mm TT')
+													aHTML[++h] = '<td class="interfaceMainRow" id="tdAction_time-' + this.id + '" class="interfaceActions">' + sDate + '</td>';
+												}
+												
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-subject-' + this.id + '" class="interfaceActions">' + this.subject + '</td>';
+												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-description-' + this.id + '" class="interfaceActions">' + this.description + '</td>';
+											}
+
+											aHTML[++h] = '<td class="interfaceMainRowOptions" id="tdAction-options-' + this.id + '" class="interfaceActionsOptions">&nbsp;</td>';
+											aHTML[++h] = '</tr>'
+										});
+								    	
+										aHTML[++h] = '</tbody></table>';
+
+										$('#' + sElementId).html(aHTML.join(''));
+										$('#' + sElementId).show(ns1blankspace.option.showSpeed);
+										
+										$('td.interfaceActions').click(function(event)
+										{
+											ns1blankspaceElementEditStart(event.target.id);
+										});
+											
+									}
+									
+								}
 
 function interfaceActionsAddNote(iObject, iObjectContext)
 {
