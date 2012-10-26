@@ -7,9 +7,10 @@
 
 ns1blankspace.financial.tax = 
 {
-	init: 		function interfaceFinancialTaxMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-					interfaceFinancialMasterInitialise();
+
+					ns1blankspace.financial.init();
 					
 					var bShowHome = true
 					
@@ -20,186 +21,99 @@ ns1blankspace.financial.tax =
 
 					ns1blankspace.object = -1;
 					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectName = 'Tax';
+					ns1blankspace.parentObjectName = 'financial';
+					ns1blankspace.objectName = 'tax';
 					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Bank Accounts';
 					
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceFinancialTaxMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.financial.tax.init({showHome: true});',
 							move: false
 							})		
 					}	
 							
-					ns1blankspaceReset();
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Tax"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceFinancialSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceFinancialSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceFinancialNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceFinancialNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceFinancialSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-						interfaceFinancialSaveOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceFinancialSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceFinancialSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceFinancialHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceFinancialHelpOptions();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					if (bShowHome) {interfaceFinancialTaxHomeShow()};	
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
-	home: 		function interfaceFinancialTaxHomeShow(oParam, oResponse)
+	home: 		function (oParam, oResponse)
 				{		
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-										'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-										ns1blankspace.xhtml.loading + 
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceMain">' + 
+										'<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										ns1blankspace.xhtml.loading +
+										'</td></tr>' + 
+										'</table>');					
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
-						
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+											
 						var aHTML = [];
-						var h = -1;
-									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
-										'<td id="ns1blankspaceViewportFinancialLarge" class="ns1blankspaceViewportImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';		
+
+						aHTML.push('<table>');
+						aHTML.push('<tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');				
+						aHTML.push('</table>');		
 						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));	
-						
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
+													
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_TAX_REPORT_SEARCH';
-						//oSearch.addField('taxstartdate,enddate,taxofficereference,statustext');
-						oSearch.addField('*')
+						oSearch.addField('taxstartdate,enddate,taxofficereference,statustext');
 						oSearch.rows = 10;
 						oSearch.sort('enddate', 'desc');
-						oSearch.getResults(function(data){interfaceFinancialTaxHomeShow(oParam, data)});
+						oSearch.getResults(function(data){ns1blankspace.financial.tax.home(oParam, data)});
 					}
 					else
 					{
-						var aHTML = [];
-						var h = -1;
-						
-						aHTML[++h] = '<table id="tableFinancialTax" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-						aHTML[++h] = '<tbody>'
-					
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceFinancialTaxHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceFinancialTaxHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceFinancialTaxHomeMostLikelyNothing">Click New to create a invoice.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to add a tax report.</td></tr>');
+							aHTML.push('</table>');
 						}
 						else
-						{	
+						{
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr><td class="ns1blankspaceMain" colspan="4">MOST LIKELY</td></tr>');
+
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML[++h] = '<tr class="interfaceMainRow">';
-										
-								aHTML[++h] = '<td id="tdTax_title-' + this.id + '" class="interfaceHomeMostLikely" style="width:150px;">' +
-														this["enddate"] + '</td>';
+								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML[++h] = '<td id="interfaceTax_lastreconcileddate-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;">' +
-															this.statustext + '</td>';
-																	
-								aHTML[++h] = '<td id="interfaceTax_lastreconciledamount-' + this.id + '" class="interfaceHomeMostLikelySub" style="width:90px;">' +
-															this.taxofficereference + '</td>';
+								aHTML.push('<td id="ns1blankspaceMostLikely_enddate-' + this.id + '" class="ns1blankspaceMostLikely" style="width:150px;">' +
+														this.enddate + '</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_status-' + this.id + '" class="ns1blankspaceMostLikely" style="width:90px;">' +
+														this.statustext  + '</td>');
+								
+								aHTML.push('<td id="ns1blankspaceMostLikely_reference-' + this.id + '" class="ns1blankspaceMostLikely" style="width:90px;">' +
+														this.taxofficereference  + '</td>');
 							
-								aHTML[++h] = '<td>&nbsp;</td>';																	
-								aHTML[++h] = '</tr>';
+								aHTML.push('<td>&nbsp;</td></tr>');
 							});
 					
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</table>');
 						}
 						
-						$('#tdInterfaceMainItemColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('#divInterfaceMain').html(aHTML.join(''));
-
-						$('.interfaceHomeMostLikely').click(function(event) {
-							interfaceFinancialTaxSearch(event.target.id, {source: 1});
+						$('.ns1blankspaceMostLikely').click(function(event) {
+							ns1blankspace.financial.tax.search.send(event.target.id, {source: 1});
 						});
 					}	
 				},
 
 	search: 	{
-					send:		function interfaceFinancialTaxSearch(sXHTMLElementId, oParam)
+					send:		function (sXHTMLElementID, oParam)
 								{
-									var aSearch = sXHTMLElementId.split('-');
+									var aSearch = sXHTMLElementID.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
@@ -220,7 +134,7 @@ ns1blankspace.financial.tax =
 									
 									if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
@@ -229,14 +143,13 @@ ns1blankspace.financial.tax =
 										oSearch.addField('*');
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
-										
-										oSearch.getResults(function(data) {interfaceFinancialTaxShow(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.financial.tax.show(oParam, data)});
 									}
 									else
 									{
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -256,14 +169,13 @@ ns1blankspace.financial.tax =
 											oSearch.addField('enddate,taxofficereference');
 											oSearch.addFilter('taxofficereference', 'STRING_IS_LIKE', sSearchText);
 											
-											oSearch.getResults(function(data) {interfaceFinancialTaxSearchShow(oParam, data)});	
+											oSearch.getResults(function(data) {ns1blankspace.financial.tax.search.process(oParam, data)});	
 										}
 									};	
 								},
 
-					process:	function interfaceFinancialTaxSearchShow(oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
-
 									var iColumn = 0;
 									var aHTML = [];
 									var h = -1;
@@ -271,12 +183,11 @@ ns1blankspace.financial.tax =
 										
 									if (oResponse.data.rows.length == 0)
 									{
-										$('#divns1blankspaceViewportControlOptions').hide();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{		
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
 										$.each(oResponse.data.rows, function()
 										{	
@@ -284,12 +195,12 @@ ns1blankspace.financial.tax =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
+												aHTML[++h] = '<tr class="ns1blankspaceSearch">';
 											}
 										
-											aHTML[++h] = '<td class="interfaceSearch" id="' + +
+											aHTML[++h] = '<td class="ns1blankspaceSearch" id="' + +
 															'-' + this.id + '">' +
-															this.enddate + ' - ' + this.taxofficereference +
+															this.reference +
 															'</td>';
 											
 											if (iColumn == iMaximumColumns)
@@ -299,238 +210,241 @@ ns1blankspace.financial.tax =
 											}	
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</table>');
 
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceFinancialTaxSearch(event.target.id, {source: 1});
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.financial.tax.search.send(event.target.id, {source: 1});
 										});
 									}		
 								}
 				},				
 
-	layout: 	function interfaceFinancialTaxViewport()
+	layout: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
+					
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
+					
+					aHTML.push('<table class="ns1blankspaceControl">');
+					
+					if (ns1blankspace.objectContext == -1)
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');
+					}
+					else
+					{	
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">"' +
+										'Summary</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
 
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
-					
-					aHTML[++h] = '<table class="interfaceViewportControl">';
-					
-					aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-									'</tr>';
-					
-					aHTML[++h] = '</table>';
-					
-					aHTML[++h] = '<table class="interfaceViewportControl">';
-								
-					aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-									'</tr>';
-					
-					aHTML[++h] = '<tr id="trInterfaceViewportControlItem" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlReporting" class="interfaceViewportControl">Report</td>' +
-									'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlReport" class="ns1blankspaceControl">' +
+										'Report</td></tr>');
 
-					aHTML[++h] = '</table>';					
+						aHTML.push('</table>');
+					}				
 							
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
-					var aHTML = [];
-					var h = -1;
+					var aHTML = []
 
-					aHTML[++h] = '<div id="divInterfaceMainContext" class="divInterfaceViewportMainContext"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainReport" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceReport" class="ns1blankspaceControlMain"></div>');
 					
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+						$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceFinancialTaxSummary();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.financial.tax.summary.show();
+					});
+
+					$('#ns1blankspaceControlDetails').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.financial.tax.details();
 					});
 					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+					$('#ns1blankspaceControlReport').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceFinancialTaxDetails();
-					});
-					
-					$('#tdInterfaceViewportControlReporting').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainReport", true);
-						interfaceFinancialTaxReport();
+						ns1blankspace.show({selector: '#ns1blankspaceMainReport', refresh: true});
+						ns1blankspace.financial.tax.item.show();
 					});
 				},
 
-	show:		function interfaceFinancialTaxShow(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{	
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceFinancialTaxViewport();
-						
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.financial.tax.layout();
+					
 					var aHTML = [];
-					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
-							
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this tax report.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
-							
-						$('#divInterfaceMain').html(aHTML.join(''));
+						
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the tax report.</td></tr></table>');
+								
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
-							
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-							
-						$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.enddate+
-							'<br /><span class="interfaceViewportControlSubContext" id="spanInterfaceViewportControlSubContext_status">' + ns1blankspace.objectContextData.statustext + '</span>');
 						
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceFinancialTaxMasterViewport({showHome: false});interfaceFinancialTaxSearch("-' + ns1blankspace.objectContext + '")',
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+								
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.enddate +
+							'<br /><span id="ns1blankspaceControlContext_startdate" class="ns1blankspaceControlSubContext">' + ns1blankspace.objectContextData.startdate + '</span>');
+							
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.financial.tax.init({showHome: false});ins1blankspace.financial.tax.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
-					
-						ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceFinancialTaxSummary()'});
-					}		
+						
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.financial.tax.summary()'});
+					}	
 				},	
 
-	summary:	function interfaceFinancialTaxSummary(oParam, oResponse)
+	summary:	function (oParam, oResponse)
 				{
 					var aHTML = [];
-					var h = -1;
-
-					aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-					aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-								'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
-									'</td>' +
-									'<td id="tdInterfaceMainSummaryColumn2Action" style="width:400px;" class="interfaceMainColumn2x">' +
-									'</td>' +
-									'</tr>';
-					aHTML[++h] = '</table>';				
-
-					$('#divInterfaceMainSummary').html(aHTML.join(''));	
-
-					var aHTML = [];
-					var h = -1;
-
-					aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
-									
-					aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTotalAmount" class="interfaceMainSummary"></td></tr>' +
-									'<tr><td id="tdInterfaceMainSummaryTotalAmountValue" class="interfaceMainSummaryValue">' +
-									'This tax report was last updated on the ' + ns1blankspace.objectContextData.modifieddate + '.' +
-									'</td></tr>';			
+					var bUseTemplate = false;
 					
-					aHTML[++h] = '</table>';					
+					if (oParam)
+					{
+						if (oParam.useTemplate != undefined) {bUseTemplate = oParam.useTemplate}
+					}
 
-					$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));		
+					if (ns1blankspace.objectContextData == undefined)
+					{
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the tax report.</td></tr></table>');
+								
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+					}
+					else
+					{
+						aHTML.push('<table class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspaceRow">' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+										'</tr>' +
+										'</table>');				
+		
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
+				
+						var aHTML = [];
+					
+						aHTML.push('<table class="ns1blankspace">';
+						aHTML.push('<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSummary">' +
+										'This tax report was last updated on the ' + ns1blankspace.objectContextData.modifieddate + '.' +
+										'</td></tr>');
+
+						aHTML.push('</table>');					
+
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+					}			
 				},
 
-	details:	function interfaceFinancialTaxDetails(oParam)
+	details:	function (oParam)
 				{	
-					var aHTML = [];
-					var h = -1;
-					
-					aHTML[++h] = '<table class="interfaceMain" cellspacing=0 cellpadding=0>' +
-							'<tr>' +
-							'<td id="tdInterfaceMainDetails" style="padding-right:15px;width:200px;">' +
-							'</td>' +
-							'<td id="tdInterfaceMainDetails2" class="interfaceMainColumn2x">&nbsp;' +
-							'</td>' +
-							'</tr>' +
-							'</table>';			
-
-					$('#divInterfaceMainDetails').html(aHTML.join(''));
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
+					{
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
+								
+						aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>');
+						aHTML.push('</table>');					
 						
-					var aHTML = [];
-					var h = -1;
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 
-					aHTML[++h] = '<table class="interfaceMain">';
-							
-					aHTML[++h] = '<tr id="trInterfaceMainFinancialBanksAccountRecoStatementDate" class="interfaceMain">' +
-									'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementDate" class="interfaceMain">' +
-									'End Date' +
-									'</td></tr>' +
-									'<tr id="trInterfaceMainFinancialBanksAccountRecoStatementDateValue" class="interfaceMainText">' +
-									'<td id="tdInterfaceMainFinancialBanksAccountRecoStatementDateValue" class="interfaceMainText">' +
-									'<input id="inputInterfaceMainFinancialBanksAccountRecoStatementDate" class="inputInterfaceMainDate">' +
-									'</td></tr>';	
-										
-					aHTML[++h] = '<tr id="trInterfaceMainFinancialBanksAccountRecoStatus" class="interfaceMain">' +
-									'<td id="tdInterfaceMainFinancialBanksAccountRecoStatus" class="interfaceMain">' +
-									'Status' +
-									'</td></tr>' +
-									'<tr id="trInterfaceMainFinancialBanksAccountRecoStatusValue">' +
-									'<td id="tdInterfaceMainFinancialBanksAccountRecoStatusValue" class="interfaceMainRadio">' +
-									'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>In Progress' +
-									'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Completed' +
-									'</td></tr>';
-																																						
-					aHTML[++h] = '</table>';					
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'End Date' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceDetailsEndDate" class="ns1blankspaceDate">' +
+										'</td></tr>');			
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Status' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>In Progress' +
+										'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Completed' +
+										'</td></tr>');
+																																	
+						aHTML.push('</table>');					
 					
-					$('#tdInterfaceMainDetails').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 					
-					$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
+						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+					}
 				}			
 
 	report: 	{
 					layout:		function interfaceFinancialTaxReport()
 								{
 									var aHTML = [];
-									var h = -1;
+
+									aHTML.push('<table class="ns1blankspaceContainer">');
+
+									aHTML.push('<tr class="ns1blankspaceContainer">' +
+													'<td id="ns1blankspaceTaxReportCategoryColumn" class="ns1blankspaceColumn1" style="width: 120px;padding-right:5px;font-size:0.875em;">' +
+													ns1blankspace.xhtml.loading + '</td>' +
+													'<td id="ns1blankspaceTaxReportTypeColumn" class="ns1blankspaceColumn2" style="width: 125px;padding-right:5px;"></td>' +
+													'<td id="ns1blankspaceTaxReportItemColumn" class="ns1blankspaceColumn2"></td>' +
+													'</tr>');
+
+									aHTML.push('</table>');					
 									
-									aHTML[++h] = '<table id="tableInterfaceMainTax" class="interfaceMain">' +
-												'<tr id="trInterfaceMainTaxRow1" class="interfaceMainRow1">' +
-												'<td id="tdInterfaceMainTaxColumnReportCategory" style="width: 120px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-												ns1blankspace.xhtml.loading +
-												'</td>' +
-												'<td id="tdInterfaceMainTaxColumnReportType" style="width: 125px;padding-right:5px;" class="interfaceMainColumn2">' +
-												'</td>' +
-												'<td id="tdInterfaceMainTaxColumnReportItem" class="interfaceMainColumn2">' +
-												'</td>' +
-												'</tr>' +
-												'</table>';				
-									
-									$('#divInterfaceMainReport').html(aHTML.join(''));
+									$('#ns1blankspaceMainReport').html(aHTML.join(''));
 												
 									var aHTML = [];
-									var h = -1;
+									
+									aHTML.push('<div id="ns1blankspaceTaxCategoryColumn" style="width: 110px;margin-bottom:3px;">');
+									aHTML.push('<input style="width: 115px;" type="radio" id="ns1blankspaceTaxCategoryColumn-revenue" name="radioCategory" checked="checked" />' +
+													'<label for="ns1blankspaceTaxCategoryColumn-revenue" style="width: 115px;">Supplies (In)</label>');
+									aHTML.push('<input style="width: 115px;" type="radio" id="ns1blankspaceTaxCategoryColumn-expense" name="radioCategory" />' +
+													'<label for="ns1blankspaceTaxCategoryColumn-expense" style="width: 115px;">Aquisitions (Out)</label>';
+									aHTML.push('</div>');
 
-									aHTML[++h] = '<div id="interfaceMainTaxColumnCategory" style="width: 110px;margin-bottom:3px;">';
-									aHTML[++h] = '<input style="width: 115px;" type="radio" id="interfaceMainTaxColumnCategory-revenue" name="radioCategory" checked="checked" /><label for="interfaceMainTaxColumnCategory-revenue" style="width: 115px;">Supplies (In)</label>';
-									aHTML[++h] = '<input style="width: 115px;"  type="radio" id="interfaceMainTaxColumnCategory-expense" name="radioCategory" /><label for="interfaceMainTaxColumnCategory-expense" style="width: 115px;">Aquisitions (Out)</label>';
-									aHTML[++h] = '</div>';
-
-									$('#tdInterfaceMainTaxColumnReportCategory').html(aHTML.join(''));			
+									$('#ns1blankspaceTaxReportCategoryColumn').html(aHTML.join(''));			
 										
-									$('#interfaceMainTaxColumnCategory').buttonset().css('font-size', '0.875em');
+									$('#ns1blankspaceTaxCategoryColumn').buttonset().css('font-size', '0.875em');
 											
-									$('#interfaceMainTaxColumnCategory :radio').click(function()
+									$('#ns1blankspaceTaxCategoryColumn :radio').click(function()
 									{
 										var aID = (event.target.id).split('-');
-										interfaceFinancialTaxReportSummary({category: aID[1]});	
+										ns1blankspace.financial.tax.report.show({category: aID[1]});	
 									});
 									
-									interfaceFinancialTaxReportSummary();
+									ns1blankspace.financial.tax.report.show();
 								},
 
-					show:		function interfaceFinancialTaxReportSummary(oParam)	
+					show:		function (oParam)	
 								{	
 									var sCategory = "revenue";
 													
-									ns1blankspace.financial.reportsummary = {
+									ns1blankspace.financial.reportSummary = {
 										"revenue": ["g1","g2","g3","g4","g5","g6","g7","g8","g9"],
 										"expense": ["g10","g11","g12","g13","g14","g15","g16","g17","g18","g21"],
 										"payroll": ["w1","w2"],
@@ -542,42 +456,40 @@ ns1blankspace.financial.tax =
 										if (oParam.category != undefined) {sCategory = oParam.category}
 									}
 									
-									$('#tdInterfaceMainTaxColumnReportType').html(ns1blankspace.xhtml.loadingSmall);
+									$('#ns1blankspaceTaxReportTypeColumn').html(ns1blankspace.xhtml.loadingSmall);
 									
 									var aHTML = [];
-									var h = -1;
 									var sField;
 										
-									aHTML[++h] = '<table id="tableReco" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-									aHTML[++h] = '<tbody>';
+									aHTML.push('<table id="ns1blankspaceTaxReportType" class="ns1blankspace">';
 									
 									$.each(ns1blankspace.financial.reportsummary[sCategory], function()
 									{
 										sField = (this).toUpperCase();
 										
-										aHTML[++h] = '<tr class="interfaceMainRow">';
+										aHTML.push('<tr class="ns1blankspaceRow">';
 														
-										aHTML[++h] = '<td id="tdBankAccount_type-' + sField + '" class="interfaceMainRow interfaceMainRowSelect type" style="width:150px;">' +
-																sField + '</td>';
+										aHTML.push('<td id="ns1blankspaceReportType_type-' + sField + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceType" style="width:150px;">' +
+														sField + '</td>';
 												
-										aHTML[++h] = '<td id="interfaceBankAccount_amount-' + sField + '" class="interfaceMainRow interfaceMainRowSelect type" style="width:90px;text-align:right;">' +
-																	'$' + ns1blankspace.objectContextData[this] + '</td>';
+										aHTML.push('<td id="ns1blankspaceReportType_amount-' + sField + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceType" style="width:90px;text-align:right;">' +
+														'$' + ns1blankspace.objectContextData[sField] + '</td>';
 																																					
-										aHTML[++h] = '</tr>';
+										aHTML.push('</tr>');
 									});
 
-									aHTML[++h] = '</tbody></table>';
+									aHTML.push('</table>');
 									
-									$('#tdInterfaceMainTaxColumnReportType').html(aHTML.join(''));
+									$('#ns1blankspaceTaxReportTypeColumn').html(aHTML.join(''));
 									
-									$('.type').click(function()
+									$('.ns1blankspaceType').click(function()
 									{
 										var aID = (event.target.id).split('-');
-										interfaceFinancialTaxReportItems({field: aID[1]});
+										ns1blankspace.financial.tax.report.items({field: aID[1]});
 									});
 								},
 
-					items:		function interfaceFinancialTaxReportItems(oParam, oResponse)
+					items:		function (oParam, oResponse)
 								{
 									var iStep = 1;
 									var iType = 1;
@@ -601,19 +513,14 @@ ns1blankspace.financial.tax =
 										$.extend(true, oParam, {step: 2});
 										
 										var aHTML = [];
-										var h = -1;
-									
-										aHTML[++h] = '<table id="tableInterfaceMainTax" class="interfaceMain">' +
-													'<tr id="trInterfaceMainTaxRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainTaxColumnReportItemSubType" style="width: 120px;padding-right:5px;font-size:0.875em;" class="interfaceMainColumn1">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="tdInterfaceMainTaxColumnReportItems" class="interfaceMainColumn2">' +
-													'</td>' +
-													'</tr>' +
-													'</table>';				
-									
-										$('#tdInterfaceMainTaxColumnReportItem').html(aHTML.join(''));
+										
+										aHTML.push('<tr class="ns1blankspaceContainer">' +
+													'<td id="ns1blankspaceTaxReportItemSubTypeColumn" class="ns1blankspaceColumn1" style="width:120px; padding-right:5px; font-size:0.875em;">' +
+													ns1blankspace.xhtml.loading + '</td>' +
+													'<td id="ns1blankspaceTaxReportItemsColumn" class="ns1blankspaceColumn2" style="width: 125px;padding-right:5px;"></td>' +
+													'</tr>');
+
+										$('#ns1blankspaceTaxReportItemColumn').html(aHTML.join(''));
 												
 										var aHTML = [];
 										var h = -1;
