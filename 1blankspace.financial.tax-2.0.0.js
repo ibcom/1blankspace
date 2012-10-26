@@ -523,37 +523,40 @@ ns1blankspace.financial.tax =
 										$('#ns1blankspaceTaxReportItemColumn').html(aHTML.join(''));
 												
 										var aHTML = [];
-										var h = -1;
 
-										aHTML[++h] = '<div id="interfaceMainTaxColumnSubType" style="width: 115px;margin-bottom:3px;">';
+										aHTML.push('<div id="ns1blankspaceTaxSubTypeColumn" style="width: 115px;margin-bottom:3px;">');
 									
-										aHTML[++h] = '<input style="width: 115px;" type="radio" id="interfaceMainTaxColumnSubType-1" name="radioSubType" checked="checked" /><label for="interfaceMainTaxColumnSubType-1" style="width: 115px;">Standard</label>';
+										aHTML.push('<input style="width: 115px;" type="radio" id="interfaceMainTaxSubTypeColumn-1" name="radioSubType" checked="checked" />' +
+														'<label for="interfaceMainTaxSubTypeColumn-1" style="width: 115px;">Standard</label>');
 									
-										aHTML[++h] = '<input style="width: 115px;"  type="radio" id="interfaceMainTaxColumnSubType-2" name="radioSubType" /><label for="interfaceMainTaxColumnSubType-2" style="width: 115px;">Credit Notes</label>';
+										aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-2" name="radioSubType" />' +
+														'<label for="interfaceMainTaxSubTypeColumn-2" style="width: 115px;">Credit Notes</label>');
 									
-										aHTML[++h] = '<input style="width: 115px;"  type="radio" id="interfaceMainTaxColumnSubType-3" name="radioSubType" /><label for="interfaceMainTaxColumnSubType-3" style="width: 115px;">General Jounals (+ve)</label>';
+										aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-3" name="radioSubType" />' +
+														'<label for="interfaceMainTaxSubTypeColumn-3" style="width: 115px;">General Jounals (+ve)</label>');
 									
-										aHTML[++h] = '<input style="width: 115px;"  type="radio" id="interfaceMainTaxColumnSubType-4" name="radioSubType" /><label for="interfaceMainTaxColumnSubType-4" style="width: 115px;">General Jounals (-ve)</label>';
+										aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-4" name="radioSubType" />' +
+														'<label for="interfaceMainTaxSubTypeColumn-4" style="width: 115px;">General Jounals (-ve)</label>');
 										
-										aHTML[++h] = '</div>';
+										aHTML.push('</div>');
 
-										$('#tdInterfaceMainTaxColumnReportItemSubType').html(aHTML.join(''));			
+										$('#ns1blankspaceTaxReportItemSubTypeColumn').html(aHTML.join(''));			
 										
-										$('#interfaceMainTaxColumnSubType').buttonset().css('font-size', '0.875em');
+										$('#ns1blankspaceTaxSubTypeColumn').buttonset().css('font-size', '0.875em');
 											
-										$('#interfaceMainTaxColumnSubType :radio').click(function()
+										$('#ns1blankspaceTaxSubTypeColumn :radio').click(function()
 										{
 											var aID = (event.target.id).split('-');
 											$.extend(true, oParam, {subType: aID[1], step: 2});
-											interfaceFinancialTaxReportItems(oParam);	
+											ns1blankspace.financial.tax.report.items(oParam);	
 										});
 										
-										interfaceFinancialTaxReportItems(oParam);
+										ns1blankspace.financial.tax.report.items(oParam);
 									}
 									
 									if (iStep == 2)
 									{
-										$.extend(true, oParam, {step: 3});
+										oParam.step = 3;
 										
 										var sData = 'id=' + ns1blankspace.objectContext +
 													'&type=' + iType +
@@ -563,11 +566,11 @@ ns1blankspace.financial.tax =
 										$.ajax(
 										{
 											type: 'POST',
-											url: '/ondemand/financial/?method=FINANCIAL_TAX_REPORT_ITEM_SEARCH',
+											url: ns1blankspace.util.endpointURI('FINANCIAL_TAX_REPORT_ITEM_SEARCH'),
 											data: sData,
 											dataType: 'json',
 											success: function(data) {
-												interfaceFinancialTaxReportItems(oParam, data)
+												ns1blankspace.financial.tax.report.items(oParam, data)
 											}
 										});
 									}
@@ -575,30 +578,28 @@ ns1blankspace.financial.tax =
 									if (iStep == 3)
 									{
 										var aHTML = [];
-										var h = -1;
-										
-										aHTML[++h] = '<table id="tableReportItems" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-										aHTML[++h] = '<tbody>'
+
+										aHTML.push('<table id="ns1blankspaceReportItems" class="ns1blankspace">');
 										
 										$.each(oResponse.data.rows, function()
 										{
-											aHTML[++h] = '<tr class="interfaceMainRow">';
+											aHTML.push('<tr class="ns1blankspaceRow">');
 															
-											aHTML[++h] = '<td id="tdReportItems_reference-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect">' +
-																	this.reference + '</td>';
+											aHTML.push('<td id="ns1blankspaceReportItems_reference-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																	this.reference + '</td>');
 										
-											aHTML[++h] = '<td id="spanReportItems_amount-' + this.id + '" style="text-align:right;" class="interfaceMainRow interfaceMainRowSelect">' +
-																	this.amount + '</td>';
+											aHTML.push('<td id="ns1blankspaceReportItems_amount-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																	this.amount + '</td>');
 											
-											aHTML[++h] = '<td id="spanReportItems_tax-' + this.id + '" style="text-align:right;" class="interfaceMainRow interfaceMainRowSelect">' +
-																	this.gst + '</td>';
+											aHTML.push('<td id="ns1blankspaceReportItems_tax-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																	this.gst + '</td>');
 															
-											aHTML[++h] = '</tr>';
+											aHTML.push('</tr>');
 										});
 										
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</table>');
 
-										$('#tdInterfaceMainTaxColumnReportItems').html(aHTML.join(''));
+										$('#ns1blankspaceTaxReportItemsColumn').html(aHTML.join(''));
 									}	
 								}
 				}
