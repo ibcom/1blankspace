@@ -19,7 +19,8 @@ ns1blankspace.financial.expense =
 					ns1blankspace.financial.init();
 
 					ns1blankspace.object = 5;
-					ns1blankspace.objectName = 'Financial Expense';
+					ns1blankspace.objectParentName = 'financial';
+					ns1blankspace.objectName = 'expense';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Expenses';

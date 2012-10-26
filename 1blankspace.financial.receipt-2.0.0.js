@@ -19,7 +19,7 @@ ns1blankspace.financial.receipt =
 					}
 
 					ns1blankspace.object = 6;
-					ns1blankspace.objectName = 'Receipt';
+					ns1blankspace.objectName = 'financial.receipt';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Receipts';

@@ -772,22 +772,35 @@ ns1blankspace.app =
 	set: 		function (oParam)
 				{
 					var bShowHome;
+					var sParentNamespace = ns1blankspace.objectParentName;
 					var sNamespace = ns1blankspace.objectName;
 					var bNew;
 
 					if (oParam != undefined)
 					{
-						if (oParam.namespace != undefined) {bNamespace = oParam.namespace}
+						if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
+						if (oParam.parentNamespace != undefined) {sParentNamespace = oParam.parentNamespace}
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 						if (oParam.new != undefined) {bNew = oParam.new}	
 					}	
 
 					if (sNamespace)
 					{
+						if (sParentNamespace)
+						{
+							var oNS = ns1blankspace[sParentNamespace][sNamespace];
+							var sNS = 'ns1blankspace["' + sParentNamespace + '"]["' + sNamespace + '"]';
+						}
+						else
+						{
+							var oNS = ns1blankspace[sNamespace];
+							var sNS = 'ns1blankspace["' + sNamespace + '"]';
+						}
+
 						if (bShowHome)
 						{
 							ns1blankspace.history.view({
-								newDestination: 'ns1blankspace["' + sNamespace + '"].init({showHome: true});',
+								newDestination: sNS + '.init({showHome: true});',
 								move: false
 								})		
 						}
@@ -800,54 +813,51 @@ ns1blankspace.app =
 						$('#ns1blankspaceViewControlSearch').keyup(function(event)
 						{
 							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-					        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace["' + sNamespace + '"].search.show("ns1blankspaceViewControlSearch")', ns1blankspace.option.typingWait);
+					        ns1blankspace.timer.delayCurrent = setTimeout(sNS + '.search.show("ns1blankspaceViewControlSearch")', ns1blankspace.option.typingWait);
 						});
 						
 						$('#ns1blankspaceViewControlSearch').click(function(event)
 						{
-							ns1blankspace["' + sNamespace + '"].search.show('inputns1blankspaceViewportControlSearch')
+							oNS.search.show('ns1blankspaceViewControlSearch')
 						});
 						
 						$('#ns1blankspaceViewControlSearchOptions').click(function(event)
 						{
-							ns1blankspace["' + sNamespace + '"].search.options.show();
+							oNS.search.options.show();
 						});
 						
 						$('#ns1blankspaceViewControlNew').click(function(event)
 						{
-							ns1blankspace["' + sNamespace + '"].new();
+							oNS.new();
 						})
 						
 						$('#ns1blankspaceViewControlNewOptions').click(function(event)
 						{
-							ns1blankspace["' + sNamespace + '"].new.options();
+							oNS.new.options();
 						});
 						
-						$('#ns1blankspaceViewportControlAction').click(function(event)
+						$('#ns1blankspaceViewControlAction').click(function(event)
 						{
-							ns1blankspace["' + sNamespace + '"].save.send();
+							oNS.save.send();
 						});
 						
-						$('ns1blankspaceViewportControlAction').button({disabled: true});
+						$('ns1blankspaceViewControlAction').button({disabled: true});
 						
-						$('#ns1blankspaceViewportControlActionOptions').click(function(event)
+						$('#ns1blankspaceViewControlActionOptions').click(function(event)
 						{
 							var aHTML = [];
-							var h = -1;
-							
-							aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
+						
+							aHTML.push('<table id="ns1blankspaceActionOptions" class="ns1blankspaceOptions">');
 											
-							aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-											'<td id="tdinterfaceActionOptionsDelete" class="interfaceActionOptions">' +
+							aHTML.push('<tr class="ns1blankspaceOptions">' +
+											'<td id="ns1blankspaceActionOptionsRemove" class="ns1blankspaceActionOptions">' +
 											'Delete' +
 											'</td>' +
-											'</tr>';
+											'</tr>');
 
-							aHTML[++h] = '</table>';
+							aHTML.push('</table>');
 
-							ns1blankspace["' + sNamespace + '"].save.action.show();
-
-							//ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
+							oNS.save.action.show();
 						});
 						
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
@@ -858,11 +868,11 @@ ns1blankspace.app =
 
 						if (bNew) 
 						{
-							ns1blankspace["' + sNamespace + '"].new();
+							oNS.new();
 						}
 						else
 						{
-							if (bShowHome) {ns1blankspace["' + sNamespace + '"].home()};
+							if (bShowHome) {oNS.home()};
 						}
 				}				
 }

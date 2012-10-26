@@ -19,9 +19,11 @@ ns1blankspace.financial.payment =
 					}
 
 					ns1blankspace.object = 3;
-					ns1blankspace.objectName = 'Payment';
+					ns1blankspace.objectParentName = 'financial';
+					ns1blankspace.objectName = 'payment';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Payments';
 					
 					if (bShowHome)
 					{
