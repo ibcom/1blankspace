@@ -1002,10 +1002,10 @@ ns1blankspace.financial.payment =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table class="ns1blankspace">' +
-											'<tr><td class="ns1blankspaceNothing">No payments.</td></tr>' + 
+											'<tr><td class="ns1blankspaceNothing">No expenses.</td></tr>' + 
 											'</table>');
 
-							$('#ns1blankspaceInvoiceColumn1').html(aHTML.join(''));
+							$('#ns1blankspaceExpenseColumn1').html(aHTML.join(''));
 						}
 						else
 						{
@@ -1030,7 +1030,7 @@ ns1blankspace.financial.payment =
 									
 								if (oOptions.remove)
 								{	
-									aHTML.push('<span id="ns1blankspaceInvoice_options_remove-' + this.id + '" class="ns1blankspaceInvoiceRemove"></span>');
+									aHTML.push('<span id="ns1blankspaceExpense_options_remove-' + this.id + '" class="ns1blankspaceExpenseRemove"></span>');
 								};	
 									
 								aHTML.push('</td></tr>');
@@ -1038,18 +1038,18 @@ ns1blankspace.financial.payment =
 							
 							aHTML.push('</table>');
 
-							$('#ns1blankspaceInvoiceColumn1').html(aHTML.join(''));
+							$('#ns1blankspaceExpenseColumn1').html(aHTML.join(''));
 							
 							if (oOptions.remove) 
 							{
-								$('.ns1blankspaceInvoiceRemove').button( {
+								$('.ns1blankspaceExpenseRemove').button( {
 									text: false,
 									icons: {
 										primary: "ui-icon-close"
 									}
 								})
 								.click(function() {
-									ns1blankspace.financial.receipt.invoice.remove({xhtmlElementID: this.id});
+									ns1blankspace.financial.payment.expense.remove({xhtmlElementID: this.id});
 								})
 								.css('width', '15px')
 								.css('height', '17px')
@@ -1057,14 +1057,14 @@ ns1blankspace.financial.payment =
 					
 							if (oOptions.view) 
 							{
-								$('.ns1blankspaceInvoiceView').button( {
+								$('.ns1blankspaceExpenseView').button( {
 									text: false,
 									icons: {
 										primary: "ui-icon-play"
 									}
 								})
 								.click(function() {
-									ns1blankspace.financial.receipt.invoice.edit({xhtmlElementID: this.id})
+									ns1blankspace.financial.payment.expense.edit({xhtmlElementID: this.id})
 								})
 								.css('width', '15px')
 								.css('height', '17px')

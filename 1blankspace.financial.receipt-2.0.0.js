@@ -887,10 +887,10 @@ ns1blankspace.financial.receipt =
 												
 											$('#ns1blankspaceItemAccount').focus();
 										}
-										
+
 										if (iStep == 2)
 										{
-											var sData = 'title=' + $('#ns1blankspaceItemAccount').val();
+											var sData = 'title=' + ns1blankspace.util.fs($('#ns1blankspaceItemAccount').val());
 											
 											$.ajax(
 											{
@@ -1001,12 +1001,11 @@ ns1blankspace.financial.receipt =
 									else
 									{
 										var aHTML = [];
-											var aHTML = [];
-										
+									
 										if (oResponse.data.rows.length == 0)
 										{
 											aHTML.push('<table class="ns1blankspace">' +
-															'<tr><td class="ns1blankspaceNothing">No payments.</td></tr>' + 
+															'<tr><td class="ns1blankspaceNothing">No invoices.</td></tr>' + 
 															'</table>');
 
 											$('#ns1blankspaceInvoiceColumn1').html(aHTML.join(''));
@@ -1058,8 +1057,7 @@ ns1blankspace.financial.receipt =
 												.css('width', '15px')
 												.css('height', '17px')
 											}
-										}
-											
+									
 											if (oOptions.view) 
 											{
 												$('.ns1blankspaceInvoiceView').button( {
