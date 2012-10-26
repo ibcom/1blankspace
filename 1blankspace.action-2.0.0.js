@@ -122,7 +122,17 @@ ns1blankspace.financial.payment =
 
 				},
 
-search: 	{
+	new:		function (oParam)
+				{
+					ns1blankspace.objectContextData = undefined
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.action.init();
+					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+					ns1blankspace.action.details();
+				},
+
+	search: 	{
 					send: 		function (sXHTMLElementId, oParam)
 								{
 									var aSearch = sXHTMLElementId.split('-');
@@ -242,16 +252,6 @@ search: 	{
 									}	
 								}
 				},				
-
-	new:		function (oParam)
-				{
-					ns1blankspace.objectContextData = undefined
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.action.init();
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					ns1blankspace.action.details();
-				},
 
 	layout: 	function ()
 				{
@@ -780,93 +780,65 @@ summary: 		function interfaceFinancialPaymentSummary()
 				),
 
 
-function interfaceActionNext10()
-{
-	var aHTML = [];
-	var h = -1;	
-				
-	aHTML[++h] = '<table id="tableInterfaceMainNext10" class="interfaceMain">' +
-					'<tr id="trInterfaceMainNext10Row1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainNext10Column1">' +
-					ns1blankspace.xhtml.loading +
-					'</td>' +
-					'</tr>' +
-					'</table>';					
-			
-	$('#divInterfaceMainNext10').html(aHTML.join(''));
-	
-	interfaceActionNextSummary({xhtmlElement: 'tdInterfaceMainNext10Column1'});
-	
-}	
+	list: 		{
+					show:		function (oParam)
+								{
+									var iObject = ns1blankspace.object;
+									var iObjectContext = ns1blankspace.objectContext;
+									var iActionType;
 
-	list: 			{
-						show:		function (oParam)
+									if (oParam != undefined)
 									{
-										var iObject = ns1blankspace.object;
-										var iObjectContext = ns1blankspace.objectContext;
-										var iActionType;
+										if (oParam.object != undefined) {iObject = oParam.object}
+										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+										if (oParam.actionType != undefined) {iActionType = oParam.actionType}
+									}
 
-										if (oParam != undefined)
+									if (lObjectContext != -1)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
+										oSearch.addField('subject,description,actiondate');
+
+										if (bAll && (iObject == 32 || iObject == 12))
 										{
-											if (oParam.object != undefined) {iObject = oParam.object}
-											if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-											if (oParam.actionType != undefined) {iActionType = oParam.actionType}
-										}
-
-										if (lObjectContext != -1)
-										{
-											var oSearch = new AdvancedSearch();
-											oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
-											oSearch.addField('subject,description,actiondate');
-
-											if (bAll && (iObject == 32 || iObject == 12))
+											if (iObject == 32)
 											{
-												if (iObject == 32)
-												{
-													oSearch.addFilter('contactperson', 'EQUAL_TO', iObjectContext);
-												}	
-												else if (iObject == 12)
-												{
-													oSearch.addFilter('contactbusiness', 'EQUAL_TO', iObjectContext);
-												}	
-											}
-											else
-											{
-												oSearch.addFilter('object', 'EQUAL_TO', iObject);
-												oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+												oSearch.addFilter('contactperson', 'EQUAL_TO', iObjectContext);
 											}	
-											
-											switch (iActionType)
+											else if (iObject == 12)
 											{
-												case ns1blankspace.data.actionType.fileNote:
-													oSearch.addFilter('type', 'EQUAL_TO', 4);
-													break;
-												
-												case gsActionTypeCorrespondence:
-													oSearch.addFilter('type', 'IN_LIST', '5,9,10');
-													break;
-												
-												default:
-													oSearch.addFilter('type', 'EQUAL_TO', iActionType);
-											}
-
-											oSearch.rf = 'json';
-											oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-											
-											oSearch.getResults(function(data) {ns1blankspace.financial.payment.refresh(data)});
-
-											$.ajax(
-											{
-												type: 'GET',
-												url: '/ondemand/action/?' + sParam,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.action.list.process(data, oParam)}
-											});
+												oSearch.addFilter('contactbusiness', 'EQUAL_TO', iObjectContext);
+											}	
 										}
-									},
+										else
+										{
+											oSearch.addFilter('object', 'EQUAL_TO', iObject);
+											oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+										}	
+										
+										switch (iActionType)
+										{
+											case ns1blankspace.data.actionType.fileNote:
+												oSearch.addFilter('type', 'EQUAL_TO', 4);
+												break;
+											
+											case ns1blankspace.data.actionType.emailSent:
+												oSearch.addFilter('type', 'IN_LIST', '5,9,10');
+												break;
+											
+											default:
+												oSearch.addFilter('type', 'EQUAL_TO', iActionType);
+										}
 
-						process:		
-								function (oResponse, oParam)
+										oSearch.rf = 'json';
+										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
+										
+										oSearch.getResults(function(data) {ns1blankspace.financial.payment.refresh(data)});
+									}
+								},
+
+					process:	function (oResponse, oParam)
 								{	
 									var iObject = ns1blankspace.object;
 									var iObjectContext = ns1blankspace.objectContext;
@@ -896,36 +868,39 @@ function interfaceActionNext10()
 									}
 									else
 									{
-										aHTML.push('<table class="ns1blankspace">';
-										aHTML[++h] = '<tbody>'
-									
-										aHTML[++h] = '<tr class="interfaceMainCaption">';
+										aHTML.push('<table class="ns1blankspace ns1blankspaceActionList">';
+										aHTML.push('<tr class="ns1blankspaceCaption">');
+
 										switch (sActionType)
 										{
-										case gsActionTypeFileNote:
-											aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Who</td>';
-											break;
+											case ns1blankspace.data.actionType.fileNote:
 
-										case gsActionTypeCorrespondence:
-											aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Subject</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
-											break;
-											
-										case gsActionTypeAppointment:
-											aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Type</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Who</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Hours</td>';
-											break;
+												aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Description</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Who</td>');
+												break;
 
-										default:
-											aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Time</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Subject</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Description</td>';
+											case ns1blankspace.data.actionType.emailSent:
+
+												aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Subject</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Description</td>');
+												break;
+												
+											case ns1blankspace.data.actionType.meeting:
+
+												aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Type</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Who</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Hours</td>');
+												break;
+
+											default:
+
+												aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Time</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Subject</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Description</td>');
 
 										}
 										aHTML[++h] = '</tr>';
@@ -934,840 +909,829 @@ function interfaceActionNext10()
 										{
 											
 											aHTML[++h] = '<tr class="interfaceActions">';
-											switch (sActionType)
+
+											switch (iActionType)
 											{
-											case gsActionTypeFileNote:
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-date-' + this.id + '" class="interfaceActions">' +
-																this.actiondate + '</td>';
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-description-' + this.id + '" class="interfaceActions">' +
-																this.description + '</td>';
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-actionby-' + this.id + '" class="interfaceActions">' +
-																this.actionbyfirstname + ' ' + this.actionbysurname + '</td>';
-												break;
-											
-											case gsActionTypeCorrespondence:
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-date-' + this.id + '" class="interfaceActions">' + this.actiondate + '</td>';
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-subject-' + this.id + '" class="interfaceActions">' + onDemandXMLGetData(oRow, "subject") + '</td>';
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-description-' + this.id + '" class="interfaceActions">' + this.description + '</td>';
-												break;
-											
-											case gsActionTypeAppointment:
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-date-' + this.id + '" class="interfaceActions">' + this.actiondate + '</td>';
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-type-' + this.id + '" class="interfaceActions">' + this.typetext + '</td>';
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-actionby-' + this.id + '" class="interfaceActions">' + this.actionby + '</td>';
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-hours-' + this.id + '" class="interfaceActions">' + this.hours + '</td>';
-												break;
-											
-											default:
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction_date-' + this.id + '" class="interfaceActions">' + this.actiondate + '</td>';
+												case ns1blankspace.data.actionType.fileNote:
+
+													aHTML.push('<td id="ns1blankspaceAction_date-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.actiondate + '</td>');
+													aHTML.push('<td id="ns1blankspaceAction_description-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.description + '</td>');
+													aHTML.push('<td id="ns1blankspaceAction_actionby-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.actionbyfirstname + ' ' + this.actionbysurname + '</td>');
+													break;
 												
-												var sDate = new Date(this.actiondatetime);
+												case ns1blankspace.data.actionType.emailSent:
+
+													aHTML.push('<td id="ns1blankspaceAction-date-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.actiondate + '</td>');
+													aHTML.push('<td id="ns1blankspacedAction-subject-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.subject + '</td>');
+													aHTML.push('<td id="tns1blankspaceAction-description-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.description + '</td>');
+													break;
 												
-												if ($.fullCalendar.formatDate(sDate, 'H') != '0' && $.fullCalendar.formatDate(sDate, 'm') != '0')
-												{
-													sDate = $.fullCalendar.formatDate(sDate, 'h:mm TT')
-													aHTML[++h] = '<td class="interfaceMainRow" id="tdAction_time-' + this.id + '" class="interfaceActions">' + sDate + '</td>';
-												}
+												case ns1blankspace.data.actionType.meeting:
+
+													aHTML.push('<td id="ns1blankspaceAction-date-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.actiondate + '</td>');
+													aHTML.push('<td id="ns1blankspaceAction-type-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.typetext + '</td>');
+													aHTML.push('<td id="ns1blankspaceAction-actionby-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.actionby + '</td>');
+													aHTML.push('<td id="ns1blankspaceAction-hours-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.hours + '</td>');
+													break;
 												
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-subject-' + this.id + '" class="interfaceActions">' + this.subject + '</td>';
-												aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-description-' + this.id + '" class="interfaceActions">' + this.description + '</td>';
+												default:
+
+													aHTML.push('<td id="ns1blankspaceAction_date-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.actiondate + '</td>');
+													
+													var oDate = new Date.parse(ns1blankspace.objectContextData.actiondate);
+															
+													if (oDate.getHours() != 0 && oDate.getMinutes() != 0)
+													{
+														aHTML.push('<td id="ns1blankspaceAction_time-' + this.id + '" class="ns1blankspaceRow">' +
+																		oDate.toString('h:mm TT') + '</td>');
+													}
+													
+													aHTML.push('<td id="ns1blankspaceAction-subject-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.subject + '</td>');
+													aHTML.push('<td id="ns1blankspaceAction-description-' + this.id + '" class="ns1blankspaceRow">' +
+																	this.description + '</td>');
 											}
 
-											aHTML[++h] = '<td class="interfaceMainRowOptions" id="tdAction-options-' + this.id + '" class="interfaceActionsOptions">&nbsp;</td>';
-											aHTML[++h] = '</tr>'
+											aHTML.push('<td id="tdAction-options-' + this.id + '" class="ns1blankspaceRow">&nbsp;</td>');
+											aHTML.push'</tr>');
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</table>');
 
-										$('#' + sElementId).html(aHTML.join(''));
-										$('#' + sElementId).show(ns1blankspace.option.showSpeed);
+										$('#' + sXHTMLElementID).html(aHTML.join(''));
+										$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 										
-										$('td.interfaceActions').click(function(event)
+										$('ns1blankspaceActionList > td.ns1blankspaceRow').click(function(event)
 										{
-											ns1blankspaceElementEditStart(event.target.id);
+											ns1blankspace.edit.start(event.target.id);
 										});
+									}
+								},
+				},				
+
+	snapshot: 	{
+					show: 		function (oParam)
+								{
+									var sXHTMLElementID;
+									var iObject;
+									var iObjectContext;
+
+									if (oParam != undefined)
+									{
+										if (oParam.object != undefined) {iObject = oParam.object}
+										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+									}
 											
+									var oSearch = new AdvancedSearch();
+									oSearch.method = 'ACTION_SEARCH';
+									oSearch.addField('reference,date,hours');
+
+									if (iObject != undefined)
+									{		
+										oSearch.addFilter('object', 'EQUAL_TO', iObject);
+									}
+										
+									if (iObjectContext != undefined)
+									{		
+										oSearch.addFilter('objectContext', 'EQUAL_TO', iObjectContext);
+									}
+										
+									oSearch.addFilter('status', 'EQUAL_TO', giActionStatusInProgress);
+									oSearch.rows = 5;	
+									oSearch.sort('actiondate', 'desc');
+
+									oSearch.getResults(function(data) {ns1blankspace.action.snapshot.process(oParam, data)});
+								},
+
+					process:	function (oParam, oResponse)
+								{
+									if (oParam != undefined)
+									{
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+									}
+											
+									var aHTML = [];
+									
+									if (oResponse.data.rows.length > 0)
+									{
+										aHTML.push('<table class="ns1blankspace">');
+									
+										$.each(oResponse.data.rows, function()
+										{
+											aHTML.push('<tr><td class="ns1blankspaceRow';
+											
+											if (this.priority == ns1blankspace.action.data.priority.high) 
+												{ aHTML.push(' ns1blankspaceImportant'); }
+												
+											aHTML.push('" id="ns1blankspacedAction_date-' + this.id + '" class="ns1blankspaceRow">' +
+															this.actiondate + '</td>');
+
+											aHTML.push('<td id="ns1blankspaceAction_description-' + this.id + '"class="ns1blankspaceRow" >' +
+															this.description + '</td>');
+
+											aHTML.push('</tr>');
+										});
+										
+										aHTML.push('<table>');
+
+										$('#'+ sXHTMLElementID).html(aHTML.join(''));
 									}
 									
 								}
+				},				
 
-function interfaceActionsAddNote(iObject, iObjectContext)
-{
+	calendar: 	{
 
-	var aHTML = [];
-	var h = -1;
-	
-	aHTML[++h] = '<table id="tableInterfaceMainAddNote">';
-	
-	aHTML[++h] = '<tr><td id="tdInterfaceMainAddNoteDescription" class="interfaceMain">' +
-						'Note<td></tr>' +
-						'<tr><td id="tdInterfaceMainAddNoteDescriptionValue" class="interfaceMain">' +
-						'<textarea rows="10" cols="35" onDemandType="TEXTMULTI" id="inputInterfaceMainAddNoteDescription" class="inputInterfaceMainTextMulti"></textarea>' +
-						'</td></tr>';
-						
-	aHTML[++h] = '<tr><td id="tdInterfaceMainAddNoteStatus" class="interfaceMain">' +
-						'<input type="checkbox" id="inputInterfaceMainAddNoteStatus"/>&nbsp;Status Note?<td></tr>';
+					show:		function (oParam)
+								{	
+									var sXHTMLElementID = 'ns1blankspaceMainCalendar';		
+									var bEventFetch = true;
+									var iSourceObject = 17;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										if (oParam.eventFetch != undefined) {bEventFetch = oParam.eventFetch}
+										if (oParam.sourceObject != undefined) {iSourceObject = oParam.sourceObject}
+									}
+									
+									$('#' + sXHTMLElementID).html('');
+									
+									if (ns1blankspace.action.calendarUsers.length == 0 && bEventFetch)
+									{
+										if (ns1blankspace.action.user != undefined)
+										{
+											ns1blankspace.action.calendarUsers.push(ns1blankspace.action.user);
+										}
+										else
+										{	
+											ns1blankspace.action.calendarUsers.push(gsUserID);
+										}	
+									}	
+									
+									$(ns1blankspace.xhtml.container).hide(0);
+									
+									$('#' + sXHTMLElementID).fullCalendar(
+									{
+										theme: true,
+										defaultView: 'agendaWeek',
+										header: {
+											left: 'prev,next',
+											center: 'title',
+											right: 'today month,agendaWeek,agendaDay'
+										},
+										
+										titleFormat: 	{
+															month: 'MMMM yyyy',
+															week: "MMMM yyyy",
+															day: 'MMMM yyyy'
+														},
 
-	aHTML[++h] = '<tr><td id="tdInterfaceMainAddNoteHighPriority" class="interfaceMain">' +
-						'<input type="checkbox" id="inputInterfaceMainAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>';
-						
-	aHTML[++h] = '</table>';						
-	
-	$('#divInterfaceDialog').html(aHTML.join(''));
-	
-	$('#divInterfaceDialog').dialog(
-		{
-			width: 300,
-			resizable: false,
-			modal: true,
-			title: 'Add Note',
-			buttons: 
-			{
-				"Cancel": function() 
-				{
-					$( this ).dialog( "close" );
+										timeFormat: 'h(:mm)tt',
+										
+										editable: true,
+										firstHour: 7,
+										minTime: 7,
+										droppable: true,
+										selectable: true,
+										allDaySlot: false,				
+										selectHelper: true,
+										
+										drop: 	function(date, allDay) 
+														{ 
+															var originalEventObject = $(this).data('eventObject');
+															var copiedEventObject = $.extend({}, originalEventObject);
+
+															copiedEventObject.start = date;
+															copiedEventObject.allDay = allDay;
+															
+															ns1blankspace.action.dialog.show(
+															{
+																startDate: date
+															});
+															
+														},	
+										
+										columnFormat: 	{	
+															month: 'ddd',    
+															week: 'ddd d/M', 
+															day: 'dddd d/M'
+														},
+										
+										select: 		function(startDate, endDate, allDay, jsEvent, view )
+														{
+															ns1blankspace.action.dialog.show(
+															{
+																startDate: startDate,
+																endDate: endDate
+															});
+														},
+												
+										eventClick: 	function(calEvent, jsEvent, view) 
+														{
+															if (calEvent.editable)
+															{
+																ns1blankspace.action.dialog.show(
+																{
+																	actionID: calEvent.id,
+																});
+															};		
+														},
+										
+										dayClick: 		function(date, allDay, jsEvent, view) 
+														{
+														    if (allDay) 
+															{
+																alert('Clicked on the entire day: ' + date);
+															}
+															else
+															{
+																
+															}
+														},
+										
+										eventDrop: 		function(event,dayDelta,minuteDelta,allDay,revertFunc) 
+														{
+															if (event.sequence > 1 || event.hoursremaining > 0) 
+															{
+																alert('You can not drag a multi-day event. Click on the event and edit the date and time as required.');
+																revertFunc();
+															}
+															else
+															{
+																var sParam = '/ondemand/action/?rf=JSON&method=ACTION_MANAGE';
+																var sData = 'id=' + event.id;
+																
+																sData += '&actionby=' + event.user;
+																sData += '&daydelta=' + ns1blankspace.util.fs(dayDelta);
+																sData += '&minutedelta=' + ns1blankspace.util.fs(minuteDelta);
+																
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: sParam,
+																	data: sData,
+																	dataType: 'json',
+																	success: $('#divInterfaceMainCalendar').fullCalendar('refetchEvents')
+																});
+															}
+														},
+										
+										eventMouseover: function( event, jsEvent, view ) 
+														{
+															ns1blankspace.status.message(event.contactBusinessText);
+														},
+										
+										eventMouseout: 	function( event, jsEvent, view ) 
+														{
+															ns1blankspace.status.message('');
+														},
+														
+										eventResize: 	function(event,dayDelta,minuteDelta,revertFunc) 
+														{
+															if (event.sequence > 1 || event.hoursremaining > 0) 
+															{
+																alert('You can not resize a multi-day event. Click on the event and edit the date and time as required.');
+																revertFunc();
+															}
+															else
+															{
+																var sData = 'id=' + event.id;
+																
+																sData += '&actionby=' + event.user;
+																sData += '&enddaydelta=' + ns1blankspace.util.fs(dayDelta);
+																sData += '&endminutedelta=' + ns1blankspace.util.fs(minuteDelta);
+																
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
+																	data: sData,
+																	dataType: 'json',
+																});
+															}	
+														},
+										
+										viewDisplay: 	function(view) 
+														{
+															ns1blankspace.action.calendar.unavailable();	
+														}
+									});	
+									
+									$.each(ns1blankspace.action.calendarUsers, function() 
+									{ 
+										$('#' + sXHTMLElementID).fullCalendar('addEventSource', 
+										{
+											url: ns1blankspace.util.endpointURI('ACTION_CALENDAR_SEARCH') + ns1blankspace.action.calendarParam +
+														'&rf=JSON&diary=1&usercolours=1&titleoption=1&actionby=' + this
+										})
+									});
+									
+								},
+
+					unavailable:			
+								function ()
+								{
+									var aDays = [];
+									var iStartHour = 0;
+									var iEndHour = 24;
+									var sNotAvailableDayClasses = aDays.join(' ')
+									var bAvailable = true;
+
+									if (ns1blankspace.action.calendarUsers.length > 0) 
+									{ 
+										$.ajax(
+										{
+											type: 'GET',
+											url: ns1blankspace.util.endpointURI('SETUP_USER_SEARCH'),
+											data: 'profile=445-446-447&users=' + ns1blankspace.action.calendarUsers.toString('-');
+											dataType: 'json',
+											success: function (data) 
+											{
+												$(data.profile445).each(function()
+												{
+													var aDaysTmp = ($(this).split(',')
+													
+													$.each(aDaysTmp, function() 
+													{
+														if ($.inArray(this, aDays) == -1)
+														{
+															aDays.push(String(this))
+														}	
+													});	
+												});
+
+												$(data.profile446).each(function()
+												{
+													if (parseInt(this) > iStartHour) {iStartHour = parseInt(this)}
+												});
+
+												$(data.profile447).each(function()
+												{
+													if (parseInt(this) < iEndHour) {iEndHour = parseInt(this)}
+												});
+												
+												$('td.ui-widget-content').each(function()
+												{ 
+													var aClass = ($(this).attr('class')).split(' ');
+													
+													bAvailable = true;				
+													
+													$.each(aClass, function() 
+													{ 
+														if ($.inArray((this).replace('fc-',''), aDays) != -1)
+														{
+															bAvailable = false;
+														}	
+													});
+												 
+													if (!bAvailable)
+													{  
+														$(this).css({ 'background':'none', 'background-color' : '#E0E0E0' });
+													} 
+												});  
+								 
+												$('.fc-agenda-axis').each(function()
+												{
+													var sTime = $.trim(($(this).text()).toLowerCase());
+													
+													if (sTime != '')
+													{
+														bAvailable = true;	
+														var sTimeHour = sTime;
+														sTimeHour = sTimeHour.replace('am', '');
+														sTimeHour = sTimeHour.replace('pm', '');
+														var iTimeHour = parseInt(sTimeHour);
+														if (sTime.indexOf('pm') > 0 && iTimeHour < 12) {iTimeHour += 12}
+														if (iTimeHour < iStartHour) {bAvailable = false}
+														if (iTimeHour >= iEndHour) {bAvailable = false}
+													}
+													
+													if (!bAvailable)
+													{
+														$(this).parent().css('background-color','#E0E0E0');
+													}	
+												});
+											}
+										});
+									}
+								}
+				},				
+
+	dialog: 	{
+					show:		function (oParam, oResponse)
+								{
+									var iActionID = -1;
+									var dStartDate = new Date();
+									var dEndDate = dStartDate;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.actionID != undefined) {iActionID = oParam.actionID};
+										if (oParam.startDate != undefined) {dStartDate = oParam.startDate};
+										if (oParam.endDate != undefined) {dEndDate = oParam.endDate};
+									}	
+
+									if (iActionID != -1 && oResponse == undefined)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'ACTION_SEARCH';
+										oSearch.addField('*');
+										oSearch.addFilter('id', 'EQUAL_TO', iActionID);
+										oSearch.getResults(function(data) {ns1blankspace.action.dialog.show(oParam, data)});
+									}
+									else
+									{
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspace">');
+										
+										aHTML.push('<tr><td class="ns1blankspace">' +
+															'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText';
+															
+										if (iActionID == -1)
+										{	
+											aHTML.push(' ns1blankspaceWatermark" value="Subject">');
+										}
+										else
+										{
+											aHTML.push('">');
+										}
+										
+										aHTML.push('</td></tr>');
+										
+										aHTML.push('<tr><td class="aHTML.push(">' +
+															'<textarea rows="5" cols="35" id="ns1blankspaceActionCalendarDescription" class="ns1blankspaceTextMultiSmall');
+
+										if (iActionID == -1)
+										{	
+											aHTML.push(' ns1blankspaceWatermark">Add more text here, if required.</textarea>');
+										}
+										else
+										{
+											aHTML.push('"></textarea>');
+										}
+
+										aHTML.push('</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Business' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceActionCalendarBusiness" class="ns1blankspaceSelect"' +
+															' data-method="CONTACT_BUSINESS_SEARCH"' +
+															' data-columns="tradename">' +
+														'</td></tr>');	
+											
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Person' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceActionCalendarPerson" class="ns1blankspaceSelect"' +
+															' data-method="CONTACT_PERSON_SEARCH"' +
+															' data-columns="surname"' +
+															' data-parent="ns1blankspaceActionCalendarBusiness"' +
+															' data-parent-search-id="contactbusiness"' +
+															' data-parent-search-text="tradename">' +
+														'</td></tr>');		
+				
+										aHTML.push('<tr><td class="ns1blankspace">' +
+															'<input type="checkbox" id="ns1blankspaceActionCalendarHighPriority"/>&nbsp;High Priority?<td></tr>');
+
+										aHTML.push('<tr><td>');
+										
+											aHTML.push('<table class="ns1blankspaceSearchMedium">');
+											
+											ns1blankspace'<tr><td style="text-align: right;">' +
+																'<span id="ns1blankspaceActionCalendarSave">Save</span>' +
+																'<span id="ns1blankspaceActionCalendarCancel">Cancel</span>' +
+																'<td></tr>');
+											
+											aHTML.push('</table>');						
+
+										aHTML.push('</td></tr>');	
+											
+										aHTML.push('</table>');		
+										
+										var oElement = $('#ns1blankspaceMain')
+										
+										$('#ns1blankspaceDialog').html('');
+										$('#ns1blankspaceDialog').show();
+										$('#ns1blankspaceDialog').offset({ top: $(oElement).offset().top + $(oElement).height() + 5, left: $(oElement).offset().left });
+										$('#ns1blankspaceDialog').html(aHTML.join(''));
+										
+										$('#ns1blankspaceActionCalendarCancel').button(
+											{
+												text: false,
+												 icons: {
+													 primary: "ui-icon-close"
+												}
+											})
+											.click(function() {
+												$('#ns1blankspaceDialog').slideUp(500);
+												$('#ns1blankspaceDialog').html('');
+											})
+											.css('width', '20px')
+											.css('height', '20px')
+
+										$('#ns1blankspaceActionCalendarSave').button(
+											{
+												text: false,
+												 icons: {
+													 primary: "ui-icon-check"
+												}
+											})
+											.click(function() {
+												ns1blankspace.action.dialog.save({
+														id: iActionID,
+														date: $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
+																	' ' + $.fullCalendar.formatDate(dStartDate, "HH:mm"),
+														endDate: $.fullCalendar.formatDate(dEndDate, "dd MMM yyyy") + 
+																	' ' + $.fullCalendar.formatDate(dEndDate, "HH:mm"),
+														subject: $('#inputActionCalendarAddSubject').val(),
+														description: $('#inputActionCalendarAddDescription').val(),
+														priority: ($('#inputActionCalendarAddHighPriority').attr('checked')?3:2),
+														calendarXHTMLElementID: 'divInterfaceMainCalendar'
+														});
+												
+												$('#ns1blankspaceDialog').slideUp(500);
+												$('#ns1blankspaceDialog').html('');
+
+											})
+											.css('width', '30px')
+											.css('height', '20px')
+										
+										if (oResponse != undefined)
+										{	
+											if (oResponse.data.rows.length != 0)
+											{	
+												$('#inputActionCalendarAddSubject').val(oResponse.data.rows[0].subject);
+												$('#inputActionCalendarAddDescription').val(oResponse.data.rows[0].description);
+											}	
+										}	
+									}
+								},
+
+				save: 			function (oParam, oResponse)
+								{
+
+									if (oResponse == undefined)
+									{
+										var sData = '';
+										var iType = ns1blankspace.data.actionType.meeting;
+										var bAsync = true;
+										var iHours;
+										var sEndDate;
+										var iActionBy = ns1blankspace.action.user;
+										
+										if (oParam != undefined)
+										{
+											if (oParam.type != undefined) {iType = oParam.type}
+											if (oParam.async != undefined) {bAsync = oParam.async}
+											if (oParam.hours != undefined) {iHours = oParam.hours}
+											if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+											if (oParam.actionBy != undefined) {iActionBy = oParam.actionBy}
+										}	
+										
+										sData += 'object=' + ns1blankspace.util.fs(oParam.object);
+										sData += '&objectcontext=' + ns1blankspace.util.fs(oParam.objectContext);
+										sData += '&subject=' + ns1blankspace.util.fs(oParam.subject);
+										sData += '&description=' + ns1blankspace.util.fs(oParam.description);
+										sData += '&priority=' + ns1blankspace.util.fs(oParam.description);
+										sData += '&status=' + ns1blankspace.util.fs(oParam.status);
+										sData += '&type=' + ns1blankspace.util.fs(iType);
+										sData += '&date=' + ns1blankspace.util.fs(oParam.date);
+										sData += '&actionby=' + ns1blankspace.util.fs(iActionBy);
+										sData += '&contactbusiness=' + ns1blankspace.util.fs(oParam.contactBusiness);
+										sData += '&contactperson=' + ns1blankspace.util.fs(oParam.contactPerson);
+										
+										if (iHours != undefined)
+										{
+											sData += '&totaltimehours=' + ns1blankspace.util.fs(iHours);
+										}
+										
+										if (sEndDate != undefined)
+										{
+											sData += '&enddate=' + ns1blankspace.util.fs(sEndDate);
+										}
+										
+										sData += (oParam.otherData == undefined ? '' : oParam.otherData)
+											  
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
+											data: sData,
+											dataType: 'json',
+											async: bAsync,
+											success: function(data) {ns1blankspace.action.dialog.save(oParam, data);}
+										});
+									}
+									else	
+									{
+										if (oResponse.status == 'OK')
+										{
+											ns1blankspace.status.message('Saved');
+
+											var iActionID = oResponse.id;	
+										
+											var dStartDate = new Date;
+											var dEndDate = dStartDate;
+											var sTitle = '';
+											var sXHTMLElementID;
+											
+											if (oParam != undefined)
+											{
+												if (oParam.date != undefined) {sStartDate = oParam.date}
+												if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+												if (oParam.subject != undefined) {sTitle = oParam.subject}
+												if (oParam.xhtmlElementID != undefined) { sXHTMLElementID = oParam.xhtmlElementID}
+											}	
+											
+											if (sXHTMLElementID != undefined)
+											{
+												$('#' + sXHTMLElementID).fullCalendar('renderEvent',
+												{
+													id: 	iActionID,
+													title: 	sTitle,
+													start: 	sStartDate, 
+													end: 	sEndDate, 
+													allDay: false
+												});
+											}
+										}
+										else
+										{
+											ns1blankspace.status.error(oResponse.error.errornotes);
+										}
+									}
+								}						
+
+					quickNote:	function (iObject, iObjectContext)
+								{
+									var aHTML = [];
+									
+									aHTML.push('<table id="ns1blankspace">');
+									
+									aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+														'Note<td></tr>' +
+														'<tr><td class="ns1blankspaceTextMulti">' +
+														'<textarea rows="10" cols="35" id="ns1blankspaceActionNoteDescription" class="ns1blankspaceTextMulti"></textarea>' +
+														'</td></tr>');
+														
+									aHTML.push('<tr><td class="ns1blankspaceCheck">' +
+														'<input type="checkbox" id="ns1blankspaceActionNoteDescription"/>&nbsp;High Priority?<td></tr>');
+														
+									aHTML.push('</table>');						
+									
+									$('#ns1blankspaceDialog').html(aHTML.join(''));
+									
+									$('#ns1blankspaceDialog').dialog(
+										{
+											width: 300,
+											resizable: false,
+											modal: true,
+											title: 'Add Note',
+											buttons: 
+											{
+												"Cancel": 	function() 
+															{
+																$(this).dialog( "close" );
+															},
+												"Add Note": function() 
+															{
+																ns1blankspace.action.dialog.save(
+																{
+																	reference: '',
+																	description: $('#ns1blankspaceActionNoteDescription').val(),
+																	type: ns1blankspace.data.actionType.fileNote,
+																	priority: ($('#ns1blankspaceActionNoteDescription').attr('checked') ? 3 : 2)
+																});
+
+																$(this).dialog("close");
+															}
+											}
+										});
+								}
 				},
-				"Add Note": function() 
-				{
-					interfaceActionQuickSave({
-						reference: '',
-						description: $('#inputInterfaceMainAddNoteDescription').val(),
-						type: ($('#inputInterfaceMainAddNoteStatus').attr('checked')?ns1blankspace.data.actionType.fileNote:ns1blankspace.data.actionType.fileNote),
-						priority: ($('#inputInterfaceMainAddNoteHighPriority').attr('checked')?3:2)
-						});
-					$( this ).dialog( "close" );
+
+	next10: 	function (oParam, oResponse)
+				{	
+					var sXHTMLElementID = 'divInterfaceMain';
 					
-				}
-			}
-		});
-}
-
-
-
-function interfaceActionsSummaryActions(sElementId, iObject, iObjectContext)
-{
-
-	var sParam = '/ondemand/action/?method=ACTION_SEARCH' +
-								 '&rf=xml' +
-								 '&type=' + ns1blankspace.data.actionType.fileNote +
-								 '&status=' + giActionStatusInProgress;
-
-	if (iObject != undefined && iObjectContext != undefined)
-	{
-		sParam += '&object='+ iObject +
-				  '&objectcontext='+ iObjectContext;
-				  
-		$.ajax(
-		{
-			type: 'GET',
-			url: sParam,
-			dataType: 'json',
-			success: function(data) {interfaceActionsSummaryActionsShow(data, sElementId)}
-		});
-	}
-	
-}
-
-function interfaceActionsSummaryActionsShow(oResponse, asElementId)
-{
-	var aHTML = [];
-	var h = -1;
-	
-	if (oResponse.data.rows.length > 0)
-	{
-		aHTML[++h] = '<table class="interfaceMain">';
-		aHTML[++h] = '<tbody>'
-	
-		$.each(oResponse.data.rows, function()
-		{
-			aHTML[++h] = '<tr class="interfaceActions">';
-			aHTML[++h] = '<td class="interfaceMainRow';
-			
-			if (this.status == giActionStatusInProgress) 
-				{ aHTML[++h] = ' interfaceImportant'; }
-				
-			aHTML[++h] = '" id="tdAction-date-' + this.id + '" class="interfaceActions">' + this.actiondate + '</td>';
-			aHTML[++h] = '<td class="interfaceMainRow" id="tdAction-description-' + this.id + '" class="interfaceActions">' + this.description + '</td>';
-			aHTML[++h] = '</tr>';
-		});
-		
-		aHTML[++h] = '</tbody><table>';
-
-		$('#'+ asElementId).html(aHTML.join(''));
-	}
-	
-}
-
-calendar: {
-
-function interfaceActionCalendar(oParam)
-{
-			
-	var sXHTMLElementID = 'divInterfaceMainCalendar';		
-	var bEventFetch = true;
-	var iSourceObject = 17;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-		if (oParam.eventFetch != undefined) {bEventFetch = oParam.eventFetch}
-		if (oParam.sourceObject != undefined) {iSourceObject = oParam.sourceObject}
-	}
-	
-	$('#' + sXHTMLElementID).html('');
-	
-	if (ns1blankspace.action.calendarUsers.length == 0 && bEventFetch)
-	{
-		if (ns1blankspace.action.user != undefined)
-		{
-			ns1blankspace.action.calendarUsers.push(ns1blankspace.action.user);
-		}
-		else
-		{	
-			ns1blankspace.action.calendarUsers.push(gsUserID);
-		}	
-	}	
-	
-	$('#divns1blankspaceViewportControlOptions').hide(0);
-	
-	$('#' + sXHTMLElementID).fullCalendar({
-		theme: true,
-		defaultView: 'agendaWeek',
-		header: {
-			left: 'prev,next',
-			center: 'title',
-			right: 'today month,agendaWeek,agendaDay'
-		},
-		
-		titleFormat:
-		{
-			month: 'MMMM yyyy',
-			week: "MMMM yyyy",
-			day: 'MMMM yyyy'
-		},
-
-		timeFormat: 'h(:mm)tt',
-		
-		editable: true,
-		firstHour: 7,
-		minTime: 7,
-		droppable: true,
-		selectable: true,
-		allDaySlot: false,				
-		selectHelper: true,
-		
-		drop: function(date, allDay) 
-			{ 
-
-				var originalEventObject = $(this).data('eventObject');
-				var copiedEventObject = $.extend({}, originalEventObject);
-
-				copiedEventObject.start = date;
-				copiedEventObject.allDay = allDay;
-				
-				giActionBookingContextID = copiedEventObject.id;
-				giActionLastBookingContextID = copiedEventObject.id;
-
-				interfaceActionCalendarAddShow({
-						startDate: date
-					});
-				
-			},	
-		
-		columnFormat: {	month: 'ddd',    
-						week: 'ddd d/M', 
-						day: 'dddd d/M'},
-		
-		select: function(startDate, endDate, allDay, jsEvent, view )
-		{
-			interfaceActionCalendarAddShow({
-				startDate: startDate,
-				endDate: endDate
-			});
-		},
-		
-		eventClick: function(calEvent, jsEvent, view) 
-		{
-			if (calEvent.editable)
-			{
-				interfaceActionCalendarAddShow(
+					if (oParam != undefined)
 					{
-						actionID: calEvent.id,
-					});
-			};		
-		},
-		
-		dayClick: function(date, allDay, jsEvent, view) 
-		{
-		    if (allDay) 
-			{
-				alert('Clicked on the entire day: ' + date);
-			}
-			else
-			{
-				
-			}
-		},
-		
-		eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) 
-		{
-			if (event.sequence > 1 || event.hoursremaining > 0) 
-			{
-				alert('You can not drag a multi-day event. Click on the event and edit the date and time as required.');
-				revertFunc();
-			}
-			else
-			{
-				var sParam = '/ondemand/action/?rf=JSON&method=ACTION_MANAGE';
-				var sData = 'id=' + event.id;
-				
-				sData += '&actionby=' + event.user;
-				sData += '&daydelta=' + ns1blankspace.util.fs(dayDelta);
-				sData += '&minutedelta=' + ns1blankspace.util.fs(minuteDelta);
-				
-				$.ajax(
-				{
-					type: 'POST',
-					url: sParam,
-					data: sData,
-					dataType: 'json',
-					success: $('#divInterfaceMainCalendar').fullCalendar('refetchEvents')
-				});
-			}
-		},
-		
-		eventMouseover: function( event, jsEvent, view ) 
-		{
-			ns1blankspaceStatus(event.contactBusinessText);
-		},
-		
-		eventMouseout: function( event, jsEvent, view ) 
-		{
-			ns1blankspaceStatus('');
-		},
-		
-		eventResize: function(event,dayDelta,minuteDelta,revertFunc) 
-		{
-			if (event.sequence > 1 || event.hoursremaining > 0) 
-			{
-				alert('You can not resize a multi-day event. Click on the event and edit the date and time as required.');
-				revertFunc();
-			}
-			else
-			{
-				var sParam = '/ondemand/action/?rf=JSON&method=ACTION_MANAGE';
-				var sData = 'id=' + event.id;
-				
-				sData += '&actionby=' + event.user;
-				sData += '&enddaydelta=' + ns1blankspace.util.fs(dayDelta);
-				sData += '&endminutedelta=' + ns1blankspace.util.fs(minuteDelta);
-				
-				$.ajax(
-				{
-					type: 'POST',
-					url: sParam,
-					data: sData,
-					dataType: 'json',
-				});
-			}	
-		},
-		
-		viewDisplay: function(view) 
-		{
-			interfaceActionCalendarUnavailableShow();	
-		}
-	});	
-	
-	$.each(ns1blankspace.action.calendarUsers, function() 
-	{ 
-		$('#' + sXHTMLElementID).fullCalendar('addEventSource', 
-		{
-			url: '/ondemand/action/?method=ACTION_CALENDAR_SEARCH' + ns1blankspace.action.calendarParam + '&rf=JSON&diary=1&usercolours=1&titleoption=1&actionby=' + this
-		})
-	});
-	
-}
-
-function interfaceActionCalendarUnavailableShow()
-{
-	var aDays = [];
-	var iStartHour = 0;
-	var iEndHour = 24;
-	var sNotAvailableDayClasses = aDays.join(' ')
-	var bAvailable = true;
-
-	if (ns1blankspace.action.calendarUsers.length > 0) 
-	{ 
-		var sParam = 'method=SETUP_USER_SEARCH&profile=445-446-447&users=' + ns1blankspace.action.calendarUsers.toString('-');
-		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/setup/?rf=XML&' + sParam,
-			dataType: 'xml',
-			success: function (data) 
-			{
-				$(data).find('profile445').each(function()
-				{
-					var aDaysTmp = ($(this).text()).split(',')
-					
-					$.each(aDaysTmp, function() 
-					{
-						if ($.inArray(this, aDays) == -1)
+						if (oParam.xhtmlElementID != undefined)
 						{
-							aDays.push(String(this))
+							sXHTMLElementID = oParam.xhtmlElementID;
 						}	
-					});	
-				});
-
-				$(data).find('profile446').each(function()
-				{
-					if (parseInt($(this).text()) > iStartHour) {iStartHour = parseInt($(this).text())}
-				});
-				
-				$(data).find('profile447').each(function()
-				{
-					if (parseInt($(this).text()) < iEndHour) {iEndHour = parseInt($(this).text())}
-				});
-
-				$('td.ui-widget-content').each(function()
-				{ 
-					var aClass = ($(this).attr('class')).split(' ');
-					
-					bAvailable = true;				
-					
-					$.each(aClass, function() 
-					{ 
-						if ($.inArray((this).replace('fc-',''), aDays) != -1)
-						{
-							bAvailable = false;
-						}	
-					});
-				 
-					if (!bAvailable)
-					{  
-						$(this).css({ 'background':'none', 'background-color' : '#E0E0E0' });
-					} 
-				});  
- 
-				$('.fc-agenda-axis').each(function()
-				{
-					var sTime = $.trim(($(this).text()).toLowerCase());
-					
-					if (sTime != '')
-					{
-						bAvailable = true;	
-						var sTimeHour = sTime;
-						sTimeHour = sTimeHour.replace('am', '');
-						sTimeHour = sTimeHour.replace('pm', '');
-						var iTimeHour = parseInt(sTimeHour);
-						if (sTime.indexOf('pm') > 0 && iTimeHour < 12) {iTimeHour += 12}
-						if (iTimeHour < iStartHour) {bAvailable = false}
-						if (iTimeHour >= iEndHour) {bAvailable = false}
-					}
-					
-					if (!bAvailable)
-					{
-						$(this).parent().css('background-color','#E0E0E0');
 					}	
-				});
-				
-			}
-		});
-	}
-}
+					
+					if (oResponse == undefined)
+					{
+						//'&future=1';
 
-function interfaceActionCalendarAddShow(oParam, oResponse)
-{
-	var iActionID = -1;
-	var dStartDate = new Date();
-	var dEndDate = dStartDate;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.actionID != undefined) {iActionID = oParam.actionID};
-		if (oParam.startDate != undefined) {dStartDate = oParam.startDate};
-		if (oParam.endDate != undefined) {dEndDate = oParam.endDate};
-	}	
-
-	if (iActionID != -1 && oResponse == undefined)
-	{
-		sParam = 'method=ACTION_SEARCH&rf=json&select=' + iActionID;
-	
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/action/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceActionCalendarAddShow(oParam, data)}
-		});	
-	}
-	else
-	{
-		var aHTML = [];
-		var h = -1;
-		
-		aHTML[++h] = '<table id="tableInterfaceActionCalendarAdd" class="interfaceDialogMedium">';
-		
-		aHTML[++h] = '<tr id="trInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
-							'<td id="tdInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
-							'<input onDemandType="TEXT" id="inputActionCalendarAddSubject" class="inputInterfaceMainText';
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ACTION_SEARCH';
+						oSearch.addField('*');
+						oSearch.addFilter('actionby', 'EQUAL_TO', ns1blankspace.user);
+						oSearch.rows = 10
+						oSearch.getResults(function(data) {ns1blankspace.action.dialog.show(oParam, data)});
+					}
+					else
+					{
+						var aHTML = [];
+						var h = -1;
+					
+						if (oResponse.data.rows.length == 0)
+						{
+							aHTML.push('<table class="ns1blankspace"><tr><td class="ns1blankspaceNothing">Nothing scheduled.</td></tr></table>';
 							
-		if (iActionID == -1)
-		{	
-			aHTML[++h] = ' ns1blankspaceWatermark" value="Subject">';
-		}
-		else
-		{
-			aHTML[++h] = '">'
-		}
-		
-		aHTML[++h] = '</td></tr>';
-		
-		aHTML[++h] = '<tr><td id="tdInterfaceMainAddNoteDescriptionValue" class="interfaceMain">' +
-							'<textarea rows="5" cols="35" onDemandType="TEXTMULTI" id="inputActionCalendarAddDescription" class="inputInterfaceMainTextMultiSmall';
-
-		if (iActionID == -1)
-		{	
-			aHTML[++h] = ' ns1blankspaceWatermark">Add more text here, if required.</textarea>';
-		}
-		else
-		{
-			aHTML[++h] = '"></textarea>'
-		}
-
-		aHTML[++h] = '</td></tr>';
-
-		aHTML[++h] = '<tr id="trInterfaceActionCalendarAddBusiness" class="interfaceMain">' +
-							'<td id="tdInterfaceActionCalendarAddBusiness" class="interfaceMain">' +
-							'Business' +
-							'</td></tr>' +
-							'<tr id="trInterfaceActionCalendarAddBusinessValue" class="interfaceMainSelect">' +
-							'<td id="tdInterfaceActionCalendarAddBusinessValue" class="interfaceMainSelect">' +
-							'<input onDemandType="SELECT" id="inputInterfaceActionCalendarAddBusiness" class="inputInterfaceMainSelect"' +
-								' onDemandMethod="/ondemand/contact/?rf=XML&method=CONTACT_BUSINESS_SEARCH"' +
-								' onDemandColumns="tradename">' +
-							'</td></tr>';
+							$('#' + sXHTMLElementID).html(aHTML.join(''));
+							$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
+						}
+						else
+						{
+							aHTML.push('<table>');
 							
-		
-		aHTML[++h] = '<tr id="trInterfaceActionCalendarAddPerson" class="interfaceMain">' +
-							'<td id="tdInterfaceActionCalendarAddPerson" class="interfaceMain">' +
-							'Person' +
-							'</td></tr>' +
-							'<tr id="trInterfaceActionCalendarAddPersonValue" class="interfaceMainSelect">' +
-							'<td id="tdInterfaceActionCalendarAddPersonValue" class="interfaceMainSelect">' +
-							'<input onDemandType="SELECT" id="inputInterfaceActionCalendarAddPerson" class="inputInterfaceMainSelectContact"' +
-								' onDemandMethod="/ondemand/contact/?rf=XML&method=CONTACT_PERSON_SEARCH"' +
-								' onDemandParent="InterfaceActionCalendarAddBusiness">' +
-							'</td></tr>';									
-							
-							
-		aHTML[++h] = '<tr><td id="tdInterfaceActionCalendarAddHighPriority" class="interfaceMain">' +
-							'<input type="checkbox" id="inputInterfaceMainAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>';
-							
-						
-		aHTML[++h] = '<tr><td>';
-		
-			aHTML[++h] = '<table class="interfaceSearchFooterMedium">';
-			
-			aHTML[++h] = '<tr><td style="text-align: right;">' +
-								'<span id="spanSave">Save</span>' +
-								'<span id="spanCancel">Cancel</span>' +
-								'<td></tr>';
-			
-			aHTML[++h] = '</table>';						
+							$.each(oResponse.data.rows, function()
+							{
+								aHTML.push('<tr>';
+													
+								aHTML.push('<td id="ns1blankspaceAction_reference-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+													this.reference + '</td>');
+								
+								aHTML.push('<td id="tdAction_date-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+													this.actiondate + '</td>';
 
-		aHTML[++h] = '</td></tr>';	
-			
-		aHTML[++h] = '</table>';		
-		
-		var oElement = $('#ns1blankspaceViewportActionLarge')
-		
-		$('#divns1blankspaceDialog').html('');
-		$('#divns1blankspaceDialog').show();
-		$('#divns1blankspaceDialog').offset({ top: $(oElement).offset().top + $(oElement).height() + 5, left: $(oElement).offset().left });
-		$('#divns1blankspaceDialog').html(aHTML.join(''));
-		
-		$('#spanCancel').button(
-			{
-				text: false,
-				 icons: {
-					 primary: "ui-icon-close"
+								var oDate = new Date.parse(ns1blankspace.objectContextData.actiondate);
+										
+								if (oDate.getHours() != 0 && oDate.getMinutes() != 0)
+								{
+									sDate = oDate.toString('h:mm TT');
+								}
+								else
+								{
+									sDate = '&nbsp;';
+								}
+													
+								var sDate = new Date(this.actiondatetime);
+								
+								if ($.fullCalendar.formatDate(sDate, 'H') != '0' && $.fullCalendar.formatDate(sDate, 'm') != '0')
+								{
+									sDate = $.fullCalendar.formatDate(sDate, 'h:mm TT')
+								}
+								else
+								{
+									sDate = '&nbsp;';
+								}	
+								
+								aHTML.push('<td id="ns1blankspaceAction_time-' + this.id + '" class="ns1blankspaceRowSelect" >' +
+												sDate + '</td>');
+								
+								aHTML.push('<td id="ns1blankspaceAction_contact-' + this.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowSelectContact">' +
+												this.contactpersonfirstname + ' ' + this.contactpersonsurname + '</td>');
+								
+								aHTML.push('<td id="ns1blankspaceAction_description-' + this.id + '" class="ns1blankspaceRow">' +
+												this.description + '</td>');
+								
+								aHTML.push('<td id="tdAction_options-' + this.id + '" class="ns1blankspaceRows" >&nbsp;</td>');
+								
+								aHTML.push('</tr>');
+							});
+							
+							aHTML.push('</table>');
+
+							$('#' + sXHTMLElementID).html(aHTML.join(''));
+							$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
+							
+							$('td.ns1blankspaceRowSelect').click(function(event)
+							{
+								ns1blankspace.action.search.send(event.target.id, {source: 1});
+							});
+							
+							$('td.ns1blankspaceRowSelectContact').click(function(event)
+							{
+								ns1blankspace.contactPerson.search.init();
+								ns1blankspace.contactPerson.search.send(event.target.id, {source: 1});
+							});
+							
+						}
+					}	
 				}
-			})
-			.click(function() {
-				$('#divns1blankspaceDialog').slideUp(500);
-				$('#divns1blankspaceDialog').html('');
-			})
-			.css('width', '20px')
-			.css('height', '20px')
-
-		$('#spanSave').button(
-			{
-				text: false,
-				 icons: {
-					 primary: "ui-icon-check"
-				}
-			})
-			.click(function() {
-				interfaceActionQuickSave({
-						id: iActionID,
-						date: $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
-									' ' + $.fullCalendar.formatDate(dStartDate, "HH:mm"),
-						endDate: $.fullCalendar.formatDate(dEndDate, "dd MMM yyyy") + 
-									' ' + $.fullCalendar.formatDate(dEndDate, "HH:mm"),
-						subject: $('#inputActionCalendarAddSubject').val(),
-						description: $('#inputActionCalendarAddDescription').val(),
-						priority: ($('#inputActionCalendarAddHighPriority').attr('checked')?3:2),
-						calendarXHTMLElementID: 'divInterfaceMainCalendar'
-						});
-				
-				$('#divns1blankspaceDialog').slideUp(500);
-				$('#divns1blankspaceDialog').html('');
-
-			})
-			.css('width', '30px')
-			.css('height', '20px')
-		
-		if (oResponse != undefined)
-		{	
-			if (oResponse.data.rows.length != 0)
-			{	
-				$('#inputActionCalendarAddSubject').val(oResponse.data.rows[0].subject);
-				$('#inputActionCalendarAddDescription').val(oResponse.data.rows[0].description);
-				
-				//$('#inputInterfaceMainDetailsStatus').attr("onDemandID", oResponse.data.rows[0].customerstatus);
-				//$('#inputInterfaceMainDetailsStatus').val(oResponse.data.rows[0].customerstatustext);
-			}	
-		}	
-	}
 }
-
-function ns1blankspaceHomeCalendarAction(iActionId, sActionTitle)
-{
-
-	sParam = 'method=ACTION_SEARCH&contactperson=ALL&select=' + iActionId + '&rf=XML';
-	
-	$.ajax(
-	{
-		type: 'GET',
-		url: '/directory/ondemand/object.asp?' + sParam,
-		dataType: 'xml',
-		success: ns1blankspaceHomeCalendarActionShow()
-	});	
-
-	$('#divns1blankspaceViewportControlOptions').html(ns1blankspace.xhtml.loading);
-	
-	$('#divns1blankspaceViewportControlOptions').dialog({
-		title: sActionTitle,	
-		modal: true,
-		stack: false,
-		draggable: false,
-		resizeable: false
-	});
-}
-
-function interfaceActionNextSummary(oParam, oResponse)
-{	
-	var sElementId = 'divInterfaceMain';
-	
-	if (oParam != undefined)
-	{
-		if (oParam.xhtmlElement != undefined)
-		{
-			sElementId = oParam.xhtmlElement;
-		}	
-	}	
-	
-	if (oResponse == undefined)
-	{
-	
-		var sParam = 'method=ACTION_SEARCH';
-		sParam += '&rows=10';
-		sParam += '&future=1';
-		sParam += '&actionby=' + gsUserID;
-		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/action/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceActionNextSummary(oParam, data)}
-		});
-	
-	}
-	else
-	{
-		var aHTML = [];
-		var h = -1;
-	
-		if (oResponse.data.rows.length == 0)
-		{
-			aHTML[++h] = '<table class="interfaceMain">';
-			aHTML[++h] = '<tbody>'
-			aHTML[++h] = '<tr class="interfaceActionSummary">';
-			aHTML[++h] = '<td class="interfaceMainRowNothing">Nothing scheduled.</td>';
-			aHTML[++h] = '</tr>';
-			
-			$('#' + sElementId).html(aHTML.join(''));
-			$('#' + sElementId).show(ns1blankspace.option.showSpeed);
-			
-		}
-		else
-		{
-			
-			aHTML[++h] = '<table>';
-			aHTML[++h] = '<tbody>'
-
-			$.each(oResponse.data.rows, function()
-			{
-				aHTML[++h] = '<tr>';
-									
-				aHTML[++h] = '<td class="interfaceMainRow interfaceRowSelect" id="tdAction_reference-' + this.id + '" >' +
-									this.reference + '</td>';
-				
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction_date-' + this.id + '" >' +
-									this.actiondate + '</td>';
-									
-				var sDate = new Date(this.actiondatetime);
-				
-				if ($.fullCalendar.formatDate(sDate, 'H') != '0' && $.fullCalendar.formatDate(sDate, 'm') != '0')
-				{
-					sDate = $.fullCalendar.formatDate(sDate, 'h:mm TT')
-				}
-				else
-				{
-					sDate = '&nbsp;';
-				}	
-				
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction_time-' + this.id + '" class="interfaceActions">' + sDate + '</td>';
-				
-				aHTML[++h] = '<td class="interfaceMainRow interfaceRowSelectContact" id="tdAction_contact-' + this.contactperson + '" >' +
-									this.contactpersonfirstname + ' ' + this.contactpersonsurname + '</td>';
-				
-				aHTML[++h] = '<td class="interfaceMainRow" id="tdAction_description-' + this.id + '" >' +
-									this.description + '</td>';
-				
-				aHTML[++h] = '<td class="interfaceMainRowOptions" id="tdAction_options-' + this.id + 
-									'" class="interfaceActionsOptions">&nbsp;</td>';
-				
-				aHTML[++h] = '</tr>'
-			});
-			
-			aHTML[++h] = '</tbody></table>';
-
-			$('#' + sElementId).html(aHTML.join(''));
-			$('#' + sElementId).show(ns1blankspace.option.showSpeed);
-			
-			$('td.interfaceRowSelect').click(function(event)
-			{
-				interfaceActionSearch(event.target.id, {source: 1});
-			});
-			
-			$('td.interfaceRowSelectContact').click(function(event)
-			{
-				interfaceContactPersonSearch(event.target.id, {source: 1});
-			});
-			
-		}
-	}	
-}
-
-function interfaceActionQuickSave(oParam, oResponse)
-{
-
-	if (oResponse == undefined)
-	{
-		var sParam = '/ondemand/action/?rf=JSON&method=ACTION_MANAGE';
-		var sData = '';
-		var iType = ns1blankspace.data.actionType.meeting;
-		var bAsync = true;
-		var iHours;
-		var sEndDate;
-		var iActionBy = ns1blankspace.action.user;
-		
-		if (oParam != undefined)
-		{
-			if (oParam.type != undefined) {iType = oParam.type}
-			if (oParam.async != undefined) {bAsync = oParam.async}
-			if (oParam.hours != undefined) {iHours = oParam.hours}
-			if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
-			if (oParam.actionBy != undefined) {iActionBy = oParam.actionBy}
-		}	
-		
-		sData += 'object=' + ns1blankspace.util.fs(oParam.object);
-		sData += '&objectcontext=' + ns1blankspace.util.fs(oParam.objectContext);
-		sData += '&subject=' + ns1blankspace.util.fs(oParam.subject);
-		sData += '&description=' + ns1blankspace.util.fs(oParam.description);
-		sData += '&priority=' + ns1blankspace.util.fs(oParam.description);
-		sData += '&status=' + ns1blankspace.util.fs(oParam.status);
-		sData += '&type=' + ns1blankspace.util.fs(iType);
-		sData += '&date=' + ns1blankspace.util.fs(oParam.date);
-		sData += '&actionby=' + ns1blankspace.util.fs(iActionBy);
-		sData += '&contactbusiness=' + ns1blankspace.util.fs(oParam.contactBusiness);
-		sData += '&contactperson=' + ns1blankspace.util.fs(oParam.contactPerson);
-		
-		if (iHours != undefined)
-		{
-			sData += '&totaltimehours=' + iHours;
-		}
-		
-		if (sEndDate != undefined)
-		{
-			sData += '&enddate=' + ns1blankspace.util.fs(sEndDate);
-		}
-		
-		sData += (oParam.otherData==undefined?'':oParam.otherData)
-			  
-		$.ajax(
-		{
-			type: 'POST',
-			url: sParam,
-			data: sData,
-			dataType: 'json',
-			async: bAsync,
-			success: function(data) {interfaceActionQuickSave(oParam, data);}
-		});
-	}
-	else	
-	{
-		if (oResponse.status == 'OK')
-		{
-			ns1blankspaceStatus('Saved');
-			var iActionID = oResponse.id;	
-		
-			var dStartDate = new Date;
-			var dEndDate = dStartDate;
-			var sTitle = '';
-			var sCalendarXHTMLElementID;
-			
-			if (oParam != undefined)
-			{
-				if (oParam.date != undefined) {sStartDate = oParam.date}
-				if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
-				if (oParam.subject != undefined) {sTitle = oParam.subject}
-				if (oParam.calendarXHTMLElementID != undefined) {sCalendarXHTMLElementID = oParam.calendarXHTMLElementID}
-			}	
-			
-			if (sCalendarXHTMLElementID != undefined)
-			{
-			
-				$('#' + sCalendarXHTMLElementID).fullCalendar('renderEvent',
-				{
-					id: iActionID,
-					title: sTitle,
-					start: sStartDate, 
-					end: sEndDate, 
-					allDay: false},
-					true
-				);
-			}
-		}
-		else
-		{
-			ns1blankspaceStatus(oResponse.error.errornotes);
-			ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
-									   , title: 'Save error!'});
-		}
-	}
-}	
