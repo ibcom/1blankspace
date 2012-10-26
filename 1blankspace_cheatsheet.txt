@@ -65,8 +65,14 @@ data-method
 data-columns
 data-loading ('1')
 data-id [onDemandID]
+
+data-parent
+data-parent-search-id
+data-parent-search-text
+
 data-searchDate
 data-searchAmount
+data-receiptedamount
 
 # Javascript:
 

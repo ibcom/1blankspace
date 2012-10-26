@@ -67,7 +67,7 @@ ns1blankspace.financial.payment =
 				{
 					if (oResponse == undefined)
 					{
-							var aHTML = [];
+						var aHTML = [];
 									
 						aHTML.push('<table class="ns1blankspaceMain">' + 
 										'<tr class="ns1blankspaceMain">' +

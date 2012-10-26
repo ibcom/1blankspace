@@ -5,806 +5,780 @@
  * 01 FEB 2010
  */
  
-if (ns1blankspace.action === undefined) {ns1blankspace.action = {}}
 
-ns1blankspace.action.today = new Date();
-ns1blankspace.action.currentMonth = (ns1blankspace.action.today).getMonth() + 1;
-ns1blankspace.action.currentYear = (ns1blankspace.action.today).getFullYear();
-ns1blankspace.action.contactperson;
-ns1blankspace.action.contactbusiness;
-ns1blankspace.action.contactpersontext;
-ns1blankspace.action.contactbusinesstext;
-ns1blankspace.action.calendarUsers = [];
-ns1blankspace.action.user;
-ns1blankspace.action.calendarParam = '';
 
-ns1blankspace.data.actionType = {meeting: 3, fileNote: 4, emailSent: 5, emailReceived: 9};
-
-function interfaceActionMasterViewport(oParam)
+ns1blankspace.financial.payment = 
 {
-	ns1blankspace.objectContext = -1;
-	ns1blankspace.object = 17;	
-	ns1blankspace.objectName = 'Action';
-	ns1blankspace.objectContextData = undefined;
-	ns1blankspace.objectContext = -1;
+	init: 		function interfaceActionMasterViewport(oParam)
+				{
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.object = 17;	
+					ns1blankspace.objectName = 'action';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Actions';
 
-	var bShowHome = true
-	var bNew = false
-	
-	ns1blankspace.action.user = gsUserID;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-		if (oParam.showNew != undefined) {bNew = oParam.showNew}
-		if (oParam.contactPerson != undefined) {ns1blankspace.action.contactperson = oParam.contactPerson}
-		if (oParam.contactBusiness != undefined) {ns1blankspace.action.contactbusiness = oParam.contactBusiness}
-		if (oParam.contactPersonText != undefined) {ns1blankspace.action.contactpersontext = oParam.contactPersonText}
-		if (oParam.contactBusinessText != undefined) {ns1blankspace.action.contactbusinesstext = oParam.contactBusinessText}
-	}
-	
-	ns1blankspaceReset();		
-		
-	if (bShowHome)
-	{
-		ns1blankspaceViewportDestination({
-			newDestination: 'interfaceActionMasterViewport({showHome: true});',
-			move: false
-			})		
-	}
-		
-	$('#divns1blankspaceViewportControlSet').button(
-	{
-		label: "Actions"
-	});
-	
-	$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-	{
-		if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-        ns1blankspace.timer.delayCurrent = setTimeout("interfaceActionSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-	});
-	
-	$('#spanns1blankspaceViewportControlSearch').click(function(event)
-	{
-		interfaceActionSearch('inputns1blankspaceViewportControlSearch');
-	});
-	
-	$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-	{
-		interfaceActionSearchOptions();
-	});
-	
-	$('#spanns1blankspaceViewportControlNew').click(function(event)
-	{
-		interfaceActionNew();
-	})
-	
-	$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-	{
-		interfaceActionNewOptions();
-	});
-	
-	$('#spanns1blankspaceViewportControlAction').click(function(event)
-	{
-		interfaceActionSave();
-	});
-	
-	$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-	{
-		interfaceActionSaveOptions();
-	});
-	
-	$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-	
-	$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-	{
-		interfaceActionSetupOptions();
-	});
-	
-	$('#spanns1blankspaceViewportControlHelp').click(function(event)
-	{
-		interfaceActionHelp();
-	});
-	
-	$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-	{
-		interfaceActionHelpOptions();
-	});
-	
-	$('td.interfaceViewportMasterControlBrowse').click(function(event)
-	{
-		interfaceActionSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-	});
-	
-	$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-	{
-		interfaceActionSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-	});
-	
-	$('#divInterfaceViewportControl').html('');	
-	if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-	if (bNew)
-	{
-		interfaceActionNew()
-	}
-	else
-	{
-		if (bShowHome) {interfaceActionHomeShow(oParam)};
-	}
-}
+					var bShowHome = true
+					var bNew = false
+					
+					if (ns1blankspace.action === undefined) {ns1blankspace.action = {}}
 
-function interfaceActionHomeShow(oParam)
-{
-	var bCalendar = false;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.calendar != undefined) {bCalendar = oParam.calendar}
-	}	
-	
-	$('#divInterfaceMain').html(ns1blankspace.xhtml.loading);
-	
-	var aHTML = [];
-	var h = -1;
+					ns1blankspace.action.today = new Date();
+					ns1blankspace.action.currentMonth = (ns1blankspace.action.today).getMonth() + 1;
+					ns1blankspace.action.currentYear = (ns1blankspace.action.today).getFullYear();
+					ns1blankspace.action.contactperson;
+					ns1blankspace.action.contactbusiness;
+					ns1blankspace.action.contactpersontext;
+					ns1blankspace.action.contactbusinesstext;
+					ns1blankspace.action.calendarUsers = [];
+					ns1blankspace.action.user = ns1blankspace.action.user;
+					ns1blankspace.action.calendarParam = '';
 
-	aHTML[++h] = '<table>';
+					ns1blankspace.data.actionType = {meeting: 3, fileNote: 4, emailSent: 5, emailReceived: 9};
 
-	aHTML[++h] = '<tr>' +
-					'<td id="ns1blankspaceViewportActionLarge" class="ns1blankspaceViewportImageLarge">' +
-					'&nbsp;' + 
-					'</td>' +
-					'</tr>';
-	
-	aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlNext10" class="interfaceViewportControl">Next 10</td>' +
-					'</tr>';		
-
-	aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlCalendar" class="interfaceViewportControl">Calendar</td>' +
-					'</tr>';
-
-	
-	aHTML[++h] = '</table>';					
-			
-	$('#divInterfaceViewportControl').html(aHTML.join(''));
-	
-	var aHTML = [];
-	var h = -1;
-	
-	aHTML[++h] = '<div id="divInterfaceMainCalendar" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainNext10" class="divInterfaceViewportMain"></div>';
-	
-	$('#divInterfaceMain').html(aHTML.join(''));
-	
-	$('#tdInterfaceViewportControlCalendar').click(function(event)
-	{
-		ns1blankspaceMainViewportShow("#divInterfaceMainCalendar");
-		interfaceActionCalendar();
-	});
-	
-	$('#tdInterfaceViewportControlNext10').click(function(event)
-	{
-		ns1blankspaceMainViewportShow("#divInterfaceMainNext10");
-		interfaceActionNext10();
-	});
-	
-	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-	
-	if (bCalendar)
-	{
-		$('#tdInterfaceViewportControlCalendar').addClass('interfaceViewportControlHighlight');
-		interfaceActionCalendar();
-	}
-	else
-	{
-		$('#tdInterfaceViewportControlNext10').addClass('interfaceViewportControlHighlight');
-		interfaceActionNext10();
-	}	
-
-}
-
-function interfaceActionSearch(sXHTMLElementId, oParam)
-{
-	
-	var aSearch = sXHTMLElementId.split('-');
-	var sElementId = aSearch[0];
-	var sSearchContext = aSearch[1];
-	var iMinimumLength = 3;
-	var iSource = ns1blankspace.data.searchSource.text;
-	var sSearchText;
-	var iMaximumColumns = 1;
-	var iRows = 10;
-	
-	if (oParam != undefined)
-	{
-		if (oParam.source != undefined) {iSource = oParam.source}
-		if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
-		if (oParam.rows != undefined) {iRows = oParam.rows}
-		if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
-		if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
-		if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
-	}
-	
-	if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
-	{
-	
-		$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
-		
-		ns1blankspace.objectContext = sSearchContext;
-		
-		var sParam = 'method=ACTION_SEARCH' +
-								 '&id=' + ns1blankspace.objectContext;
-		
-		$.ajax(
-		{
-			type: 'GET',
-			url: '/ondemand/action/?' + sParam,
-			dataType: 'json',
-			success: function(data) {interfaceActionShow(oParam, data)}
-		});
-	}
-	else
-	{
-		if (sSearchText == undefined)
-		{
-			sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
-		}	
-		
-		if (iSource == ns1blankspace.data.searchSource.browse)
-		{
-			iMinimumLength = 1;
-			iMaximumColumns = 4;
-			sSearchText = aSearch[1];
-			if (sSearchText == '#') {sSearchText = '[0-9]'}
-			sElementId = 'tableInterfaceViewportMasterBrowse';
-		}
-		
-		if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
-		{
-			ns1blankspaceOptionsSetPosition(sElementId);
-			ns1blankspaceSearchStart(sElementId);
-			
-			var oSearch = new AdvancedSearch();
-			oSearch.method = 'ACTION_SEARCH';
-			oSearch.addField('subject');
-			oSearch.rf = 'json';
-			oSearch.addFilter('quicksearch', 'EQUAL_TO', sSearchText);	
-			oSearch.getResults(function(data) {interfaceActionSearchShow(oParam, data)});
-		}
-	}	
-}
-
-function interfaceActionSearchShow(oParam, oResponse)
-{
-	var iColumn = 0;
-	var aHTML = [];
-	var h = -1;
-	var	iMaximumColumns = 1;
-		
-	if (oResponse.data.rows.length == 0)
-	{
-		ns1blankspaceSearchStop();
-		$('#divns1blankspaceViewportControlOptions').hide();
-	}
-	else
-	{
-		aHTML[++h] = '<table border="0" class="interfaceSearchMedium">';
-		aHTML[++h] = '<tbody>'
-			
-		$.each(oResponse.data.rows, function()
-		{
-			iColumn = iColumn + 1;
-			
-			if (iColumn == 1)
-			{
-				aHTML[++h] = '<tr class="interfaceSearch">';
-			}
-			
-			aHTML[++h] = '<td class="interfaceSearch" id="' +
-							'-' + this.id + '">' +
-							this.subject + '</td>';
-			
-			if (iColumn == iMaximumColumns)
-			{
-				aHTML[++h] = '</tr>'
-				iColumn = 0;
-			}	
-		});
-    	
-		aHTML[++h] = '</tbody></table>';
-
-		$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-		$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-		
-		ns1blankspaceSearchStop();
-		
-		$('td.interfaceSearch').click(function(event)
-		{
-			$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-			$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-			interfaceActionSearch(event.target.id, 1);
-		});
-	}	
-}
-
-function interfaceActionNew()
-{
-	ns1blankspace.objectContextData = undefined
-	ns1blankspace.objectContext = -1;
-	interfaceActionMasterViewport();
-	ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-	$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-	interfaceActionDetails();
-}
-
-function interfaceActionViewport()
-{	
-	var aHTML = [];
-	var h = -1;
-
-	aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
-	
-	aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-	
-	if (ns1blankspace.objectContext != -1)
-	{
-		aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-					'</tr>';
+					if (oParam != undefined)
+					{
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+						if (oParam.showNew != undefined) {bNew = oParam.showNew}
+						if (oParam.contactPerson != undefined) {ns1blankspace.action.contactperson = oParam.contactPerson}
+						if (oParam.contactBusiness != undefined) {ns1blankspace.action.contactbusiness = oParam.contactBusiness}
+						if (oParam.contactPersonText != undefined) {ns1blankspace.action.contactpersontext = oParam.contactPersonText}
+						if (oParam.contactBusinessText != undefined) {ns1blankspace.action.contactbusinesstext = oParam.contactBusinessText}
+					}
+					
+					if (bShowHome)
+					{
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.action.init({showHome: true});',
+							move: false
+							});	
+					}	
 							
-		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-					'</tr>';
-					
-		aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDescription" class="interfaceViewportControl">Description</td>' +
-					'</tr>';				
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
+				}
 
-		aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDescriptionExtended" class="interfaceViewportControl">Message</td>' +
-					'</tr>';	
+	home:	function (oParam)
+				{
+					var bCalendar = false;
 					
-		aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-					'<td id="interfaceMessaging" ' +
-							' class="interfaceViewportControl interfaceViewportControlSub">' +
-							'&nbsp;' +
-							'</td>' +
-					'</tr>';		
+					if (oParam != undefined)
+					{
+						if (oParam.calendar != undefined) {bCalendar = oParam.calendar}
+					}	
 					
-		aHTML[++h] = '</table>';			
+					var aHTML = [];
+
+					aHTML.push('<table>');
+
+					aHTML.push('<tr><td id="ns1blankspaceViewActionLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlNext10" class="ns1blankspaceControl">Next 10</td>' +
+									'</tr>');		
+
+					aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlCalendar" class="ns1blankspaceControl">Calendar</td>' +
+									'</tr>');
+
+					aHTML.push('</table>');		
 					
-		aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					$('#ns1blankspaceControl').html(aHTML.join(''));	
+
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+
+					$('#divInterfaceMain').html(ns1blankspace.xhtml.loading);
+				
+					var aHTML = [];
+					var h = -1;
+					
+					aHTML[++h] = '<div id="ns1blankspaceMainCalendar" class="ns1blankspaceMain"></div>';
+					aHTML[++h] = '<div id="ns1blankspaceMainNext10" class="ns1blankspaceMain"></div>';
+					
+					$('#ns1blankspaceMain').html(aHTML.join(''));
+					
+					$('#ns1blankspaceControlCalendar').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainCalendar'});
+						ns1blankspace.action.calendar();
+					});
+					
+					$('#ns1blankspaceControlNext10').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceNext10'});
+						ns1blankspace.action.next10();
+					});
 						
-		aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
-					'</tr>';
-	}
-	else
-	{
-		aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
-					'</tr>';
+					if (bCalendar)
+					{
+						$('#ns1blankspaceControlCalendar').addClass('ns1blankspaceHighlight');
+						ns1blankspace.action.calendar();
+					}
+					else
+					{
+						$('#ns1blankspaceControlNext10').addClass('ns1blankspaceHighlight');
+						ns1blankspace.action.next10();
+					}	
+
+				},
+
+search: 	{
+					send: 		function (sXHTMLElementId, oParam)
+								{
+									var aSearch = sXHTMLElementId.split('-');
+									var sElementId = aSearch[0];
+									var sSearchContext = aSearch[1];
+									var iMinimumLength = 3;
+									var iSource = ns1blankspace.data.searchSource.text;
+									var sSearchText;
+									var iMaximumColumns = 1;
+									var iRows = 10;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.source != undefined) {iSource = oParam.source}
+										if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+										if (oParam.rows != undefined) {iRows = oParam.rows}
+										if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+										if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+										if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
+									}
+									
+									if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
+									{
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
+										
+										ns1blankspace.objectContext = sSearchContext;
+										
+										var sData = 'id=' + ns1blankspace.objectContext;
+										
+										$.ajax(
+										{
+											type: 'GET',
+											url: ns1blankspace.util.endpointURI('ACTION_SEARCH'),
+											data: sData,
+											dataType: 'json',
+											success: function(data) {ns1blankspace.action.show(oParam, data)}
+										});
+									}
+									else
+									{
+										if (sSearchText == undefined)
+										{
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
+										}	
+										
+										if (iSource == ns1blankspace.data.searchSource.browse)
+										{
+											iMinimumLength = 1;
+											iMaximumColumns = 4;
+											sSearchText = aSearch[1];
+											if (sSearchText == '#') {sSearchText = '[0-9]'}
+											sElementId = 'ns1blankspaceViewControlBrowse';
+										}
+										
+										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
+										{
+											ns1blankspace.dialog.position(sElementId);
+											ns1blankspace.search.start(sElementId);
+											
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'ACTION_SEARCH';
+											oSearch.addField('subject');
+											oSearch.rf = 'json';
+											oSearch.addFilter('quicksearch', 'EQUAL_TO', sSearchText);	
+											oSearch.getResults(function(data) {ns1blankspace.action.search.process(oParam, data)});
+										}
+									}	
+								},
+
+					process: 	function (oParam, oResponse)
+								{
+									var iColumn = 0;
+									var	iMaximumColumns = 1;
+									var aHTML = [];
+										
+									if (oResponse.data.rows.length == 0)
+									{
+										ns1blankspace.search.stop();
+										$(ns1blankspace.xhtml.container).hide();
+									}
+									else
+									{
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+											
+										$.each(oResponse.data.rows, function()
+										{	
+											iColumn = iColumn + 1;
+											
+											if (iColumn == 1)
+											{
+												aHTML.push('<tr class="ns1blankspaceSearch">');
+											}
+										
+											aHTML.push('<td class="ns1blankspaceSearch" id="' + +
+															'-' + this.id + '">' +
+															this.subject +
+															'</td>');
+											
+											if (iColumn == iMaximumColumns)
+											{
+												aHTML.push('</tr>');
+												iColumn = 0;
+											}	
+										});
+								    	
+										aHTML.push('</table>');
+
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										
+										$('td.ns1blankspaceSearch').click(function(event)
+										{
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.action.search.send(event.target.id, {source: 1});
+										});
+									}	
+								}
+				},				
+
+	new:		function (oParam)
+				{
+					ns1blankspace.objectContextData = undefined
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.action.init();
+					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+					ns1blankspace.action.details();
+				},
+
+	layout: 	function ()
+				{
+					var aHTML = [];
 					
-		aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-					'<td id="tdInterfaceViewportControlDescription" class="interfaceViewportControl">Description</td>' +
-					'</tr>';					
-	}
-				
-	aHTML[++h] = '</table>';					
-			
-	$('#divInterfaceViewportControl').html(aHTML.join(''));
-	
-	var aHTML = [];
-	var h = -1;
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
+					
+					aHTML.push('<table class="ns1blankspaceControl">');
+					
+					if (ns1blankspace.objectContext == -1)
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');
 
-	aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainDescription" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainDescriptionExtended" class="divInterfaceViewportMain"></div>';
-	aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
-		
-	$('#divInterfaceMain').html(aHTML.join(''));
-	
-	$('#tdInterfaceViewportControlSummary').click(function(event)
-	{
-		ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-		interfaceActionSummary();
-	});
-	
-	$('#tdInterfaceViewportControlDetails').click(function(event)
-	{
-		ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-		interfaceActionDetails();
-	});
-	
-	$('#tdInterfaceViewportControlDescription').click(function(event)
-	{
-		ns1blankspaceMainViewportShow("#divInterfaceMainDescription");
-		interfaceActionDescription();
-	});
-	
-	$('#tdInterfaceViewportControlDescriptionExtended').click(function(event)
-	{
-		ns1blankspaceMainViewportShow("#divInterfaceMainDescriptionExtended");
-		interfaceMessagingActionSearch({
-			xhtmlElementID: '-' + ns1blankspace.objectContext,
-			targetXHTMLElementID: 'divInterfaceMainDescriptionExtended',
-			setContext: false
-			})
-	});
-	
-	$('#tdInterfaceViewportControlAttachments').click(function(event)
-	{
-		ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
-		ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
-	});
-}
+						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
+										'Description</td></tr>');
+					}
+					else
+					{	
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">"' +
+										'Summary</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
 
-function interfaceActionShow(oParam, oResponse)
-{
-	$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-	interfaceActionViewport();
-		
-	var aHTML = [];
-	var h = -1;
-	
-	if (oResponse.data.rows.length == 0)
-	{
-		ns1blankspace.objectContextData = undefined;
-		
-		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find action.</td></tr>';
-		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
-				
-		$('#divInterfaceMain').html(aHTML.join(''));
-	}
-	else
-	{
-		ns1blankspace.objectContextData = oResponse.data.rows[0];
-				
-		$('#divInterfaceViewportControlContext').html(onDemandXMLGetData(oRow, 'subject'));
-		
-		aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-		aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-					'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
-						'</td>' +
-						'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';					
-		
-		$('#divInterfaceMainSummary').html(aHTML.join(''));
-		
-		var iMessageActionID;
-		
-		if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.emailSent || ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.emailReceived)
-				{iMessageActionID = ns1blankspace.objectContextData.id}
-		
-		if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.fileNote && ns1blankspace.objectContextData.object == 17)
-				{iMessageActionID = ns1blankspace.objectContextData.objectcontext}
-				
-		if (iMessageActionID != undefined)
-		{
-			
-			interfaceMessagingMasterViewport({autoShow: false});
-			interfaceMessagingActionSearch({
-				xhtmlElementID: '-' + iMessageActionID
-				})	
-		}
-		else
-		{
-			ns1blankspaceViewportDestination({
-				newDestination: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch("-' + ns1blankspace.objectContext + '")',
-				move: false
-			})
-			
-			$('#tdInterfaceViewportControlDescriptionExtended').hide();
-			$('#tdInterfaceViewportControlDescription').show();
-			$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-			$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
-			
-		}
-		
-		if (ns1blankspace.objectContext != -1) {interfaceActionSummary()}
-	}	
-}		
-		
-function interfaceActionSummary()
-{
+						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
+										'Description</td></tr>');
 
-	var aHTML = [];
-	var h = -1;
-	
-	if (ns1blankspace.objectContextData == undefined)
-	{
-		aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find action.</td></tr>';
-		aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
-				
-		$('#divInterfaceMain').html(aHTML.join(''));
-	}
-	else
-	{
-		aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
-	
-		if (ns1blankspace.objectContextData.contactbusinesstext != '')
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryContactBusiness" class="interfaceMainSummary">Business</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryContactBusinessValue" class="interfaceMainSummaryValue">' +
-						ns1blankspace.objectContextData.contactbusinesstext + 
-						'</td>' +
-						'</tr>';
-		}			
-	
-		if (ns1blankspace.objectContextData.contactpersontext != '')
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryContactPerson" class="interfaceMainSummary">Person</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryContactPersonValue" class="interfaceMainSummaryValue">' +
-						ns1blankspace.objectContextData.contactpersonfirstname + ' ' + ns1blankspace.objectContextData.contactpersonsurname +
-						'</td>' +
-						'</tr>';
-		}				
-			
-		aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDate" class="interfaceMainSummary">Date</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryDateValue" class="interfaceMainSummaryValue">' +
-						ns1blankspace.objectContextData.actiondate +
-						'</td></tr>';
-	
-		var sDate = new Date(ns1blankspace.objectContextData.actiondatetime);
-	
-		if ($.fullCalendar.formatDate(sDate, 'H') != '0' && $.fullCalendar.formatDate(sDate, 'm') != '0')
-		{
-		
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTime" class="interfaceMainSummary">Time</td></tr>' +
-							'<tr><td id="tdInterfaceMainSummaryTimeValue" class="interfaceMainSummaryValue">' +
-							$.fullCalendar.formatDate(sDate, 'h:mm TT') +
-							'</td>' +
-							'</tr>';
-		}					
-		
-		if (ns1blankspace.objectContextData.typetext != '')
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryType" class="interfaceMainSummary">Type</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryTypeValue" class="interfaceMainSummaryValue">' +
-						ns1blankspace.objectContextData.typetext +
-						'</td>' +
-						'</tr>';
-		}		
-		
-		if (ns1blankspace.objectContextData.statustext != '')
-		{
-			aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryStatus" class="interfaceMainSummary">Status</td></tr>' +
-						'<tr><td id="tdInterfaceMainSummaryStatusValue" class="interfaceMainSummaryValue">' +
-						ns1blankspace.objectContextData.statustext + 
-						'</td>' +
-						'</tr>';
-		}	
-		
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainSummaryColumn1').html(aHTML.join(''));
-
-		var aHTML = [];
-		var h = -1;	
-		
-		aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2">';
-		
-		//aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryMarkComplete" class="interfaceMainSummaryAction">' +
-		//				'<a class="interfaceMainSummary" href="#" id="aInterfaceMainSummaryMarkComplete">Mark as complete</a>' +
-		//				'</td></tr>';
+						aHTML.push('</table>');					
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
+										
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
+										'Attachments</td></tr>');
+					}
 								
-		aHTML[++h] = '</table>';					
-		
-		//$('#tdInterfaceMainSummaryColumn2').html(aHTML.join(''));
-		
-	}	
-}
-
-function interfaceActionDetails()
-{
-	var aHTML = [];
-	var h = -1;
-	
-	if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
-	{
-		$('#divInterfaceMainDetails').attr('onDemandLoading', '');
-		
-		aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1">' +
-						'</td>' +
-						'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMainColumn2">' +
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';					
-		
-		$('#divInterfaceMainDetails').html(aHTML.join(''));
-		
-		var aHTML = [];
-		var h = -1;
-		
-		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMainColumn1 interfaceMain">';
-		
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsSubject" class="interfaceMain">' +
-							'<td id="tdInterfaceMainDetailsSubject" class="interfaceMain">' +
-							'Subject' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainDetailsSubjectValue" class="interfaceMainText">' +
-							'<td id="tdInterfaceMainDetailsSubjectValue" class="interfaceMainText">' +
-							'<input id="inputInterfaceMainDetailsSubject" class="inputInterfaceMainText">' +
-							'</td></tr>';			
-			
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsDate" class="interfaceMain">' +
-							'<td id="tdInterfaceMainDetailsDate" class="interfaceMain">' +
-							'Date' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainDetailsDateValue" class="interfaceMainDate">' +
-							'<td id="tdInterfaceMainDetailsDateValue" class="interfaceMainDate">' +
-							'<input id="inputInterfaceMainDetailsDate" class="inputInterfaceMainDate">' +
-							'</td></tr>';				
-			
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsType" class="interfaceMain">' +
-							'<td id="tdInterfaceMainDetailsType" class="interfaceMain">' +
-							'Type' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainDetailsTypeValue" class="interfaceMainSelect">' +
-							'<td id="tdInterfaceMainDetailsTypeValue" class="interfaceMainSelect">' +
-							'<input id="inputInterfaceMainDetailsType" class="inputInterfaceMainSelect"' +
-								' onDemandMethod="/ondemand/setup/?rf=XML&method=SETUP_ACTION_TYPE_SEARCH">' +
-							'</td></tr>';
-	
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsTaskBy" class="interfaceMain">' +
-							'<td id="tdInterfaceMainDetailsTaskBy" class="interfaceMain">' +
-							'Action By' +
-							'</td></tr>' +
-							'<tr id="trInterfaceMainDetailsTaskByValue" class="interfaceMainSelect">' +
-							'<td id="tdInterfaceMainDetailsTaskByValue" class="interfaceMainSelect">' +
-							'<input id="inputInterfaceMainDetailsActionBy" class="inputInterfaceMainSelect"' +
-								' onDemandMethod="/ondemand/core/?method=CORE_USER_SEARCH&rf=XML" onDemandColumns="firstname-space-surname">' +
-							'</td></tr>';	
-			
-		aHTML[++h] = '<tr id="trInterfaceActionDetailsBusiness" class="interfaceMain">' +
-							'<td id="tdInterfaceActionDetailsBusiness" class="interfaceMain">' +
-							'Business' +
-							'</td></tr>' +
-							'<tr id="trInterfaceActionDetailsBusinessValue" class="interfaceMainSelect">' +
-							'<td id="tdInterfaceActionDetailsBusinessValue" class="interfaceMainSelect">' +
-							'<input onDemandType="SELECT" id="inputInterfaceMainDetailsBusiness" class="inputInterfaceMainSelect"' +
-								' onDemandMethod="/ondemand/contact/?rf=XML&method=CONTACT_BUSINESS_SEARCH"' +
-								' onDemandColumns="tradename">' +
-							'</td></tr>';
+					aHTML.push('</table>');						
 							
-		
-		aHTML[++h] = '<tr id="trInterfaceActionCalendarAddPerson" class="interfaceMain">' +
-							'<td id="tdInterfaceActionCalendarAddPerson" class="interfaceMain">' +
-							'Person' +
-							'</td></tr>' +
-							'<tr id="trInterfaceActionDetailsPersonValue" class="interfaceMainSelect">' +
-							'<td id="tdInterfaceActionDetailsPersonValue" class="interfaceMainSelect">' +
-							'<input onDemandType="SELECT" id="inputInterfaceMainDetailsPerson" class="inputInterfaceMainSelectContact"' +
-								' onDemandMethod="/ondemand/contact/?rf=XML&method=CONTACT_PERSON_SEARCH"' +
-								' onDemandParent="inputInterfaceMainDetailsBusiness">' +
-							'</td></tr>';										
-			
-		aHTML[++h] = '</table>';					
-		
-		$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
-		
-		$('input.inputInterfaceMainDate').datetimepicker({ 
-			dateFormat: 'dd M yy',
-			timeFormat: 'h:mm TT',
-			stepMinute: 5,
-			ampm: true
-			});
-		
-		var aHTML = [];
-		var h = -1;
-			
-		aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
-		
-		aHTML[++h] = '<tr id="trInterfaceMainDetailsStatus" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDetailsStatus" class="interfaceMain">' +
-						'Status' +
-						'</td></tr>' +
-						'<tr id="trInterfaceMainDetailsStatus" class="interfaceMainText">' +
-						'<td id="tdInterfaceMainDetailsStatusValue" class="interfaceMainText">' +
-						'<input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Not Started' +
-						'<br /><input type="radio" id="radioStatus4" name="radioStatus" value="4"/>In Progress' +
-						'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>Cancelled' +
-						'<br /><input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Completed' +
-						'</td></tr>';
-		
-		aHTML[++h] = '</table>';					
-			
-		$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+					$('#ns1blankspaceControl').html(aHTML.join(''));
+					
+					var aHTML = [];
 
-		if (ns1blankspace.objectContextData != undefined)
-		{
-			$('#inputInterfaceMainDetailsSubject').val(ns1blankspace.objectContextData.reference);
-			
-			var sDate = new Date(ns1blankspace.objectContextData.actiondatetime);
-			sDate = $.fullCalendar.formatDate(sDate, 'dd MMM yyyy h:mm TT')
-			$('#inputInterfaceMainDetailsDate').val(sDate);
-			
-			$('#inputInterfaceMainDetailsType').attr("onDemandID", ns1blankspace.objectContextData.type);
-			$('#inputInterfaceMainDetailsType').val(ns1blankspace.objectContextData.typetext);
-			$('#inputInterfaceMainDetailsActionBy').attr("onDemandID", ns1blankspace.objectContextData.actionby);
-			$('#inputInterfaceMainDetailsActionBy').val(ns1blankspace.objectContextData.actionbyfirstname + ' ' +
-							ns1blankspace.objectContextData.actionbysurname);
-			$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
-			
-			$('#inputInterfaceMainDetailsBusiness').attr("onDemandID", ns1blankspace.objectContextData.contactbusiness);
-			$('#inputInterfaceMainDetailsBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
-			
-			$('#inputInterfaceMainDetailsPerson').attr("onDemandID", ns1blankspace.objectContextData.contactperson);
-			$('#inputInterfaceMainDetailsPerson').val(ns1blankspace.objectContextData.contactpersonfirstname + 
-					' ' + ns1blankspace.objectContextData.contactpersonsurname);
-		}
-		else
-		{
-			$('[name="radioStatus"][value="1"]').attr('checked', true);
-			
-			if (ns1blankspace.action.contactbusiness != undefined)
-			{$('#inputInterfaceMainDetailsBusiness').attr("onDemandID", ns1blankspace.action.contactbusiness);}
-			
-			if (ns1blankspace.action.contactbusinesstext != undefined)
-			{$('#inputInterfaceMainDetailsBusiness').val(ns1blankspace.action.contactbusinesstext);}
-			
-			if (ns1blankspace.action.contactperson != undefined)
-			{$('#inputInterfaceMainDetailsPerson').attr("onDemandID", ns1blankspace.action.contactperson);}
-			
-			if (ns1blankspace.action.contactpersontext != undefined)
-			{$('#inputInterfaceMainDetailsPerson').val(ns1blankspace.action.contactpersontext);}
-		}
-		
-		$('#inputInterfaceMainDetailsStatus').keyup(function(event)
-		{
-			$('#divns1blankspaceViewportControlOptions').hide(200);
-			ns1blankspaceElementOptionsSearch(event.target.id);
-		});
-		
-	}	
-}
-
-function interfaceActionDescription()
-{
-	
-	var aHTML = [];
-	var h = -1;
-	
-	if ($('#divInterfaceMainDescription').attr('onDemandLoading') == '1')
-	{
-		$('#divInterfaceMainDescription').attr('onDemandLoading', '');
-				
-		aHTML[++h] = '<table id="tableInterfaceMainDescription" class="interfaceMain">';
-		aHTML[++h] = '<tr id="trInterfaceMainDescriptionRow1" class="interfaceMain">' +
-						'<td id="tdInterfaceMainDescriptionColumn1" class="interfaceMainColumn1Large">' +
-						'</td>' +
-						'<td id="tdInterfaceMainDescriptionColumn2" class="interfaceMain">' +
-						'</td>' +
-						'</tr>';
-		aHTML[++h] = '</table>';					
-		
-		$('#divInterfaceMainDescription').html(aHTML.join(''));
-		
-		var aHTML = [];
-		var h = -1;
-	
-		aHTML[++h] = '<table id="tableInterfaceMainDescriptionColumn1" class="interfaceMain">';
-				
-		aHTML[++h] = '<tr id="trInterfaceMainDescriptionValue" class="interfaceMainTextMulti">' +
-						'<td id="tdInterfaceMainDescriptionValue" class="interfaceMainTextMulti">' +
-						'<textarea rows="30" cols="50" onDemandType="TEXTMULTI" id="inputInterfaceMainDescription" class="inputInterfaceMainTextMulti inputInterfaceMainTextMultiLarge"></textarea>' +
-						'</td></tr>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDescription" class="ns1blankspaceMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceMain"></div>');
 						
-		aHTML[++h] = '</table>';					
+					$('#ns1blankspaceMainMain').html(aHTML.join(''));
+	
+					$('#ns1blankspaceControlSummary').click(function(event)
+					{
+						ns1blankspace.show({selector: '#divInterfaceMainSummary'});
+						ns1blankspace.action.summary.show();
+					});
+
+					$('#ns1blankspaceControlDetails').click(function(event)
+					{
+						ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+						ns1blankspace.action.details();
+					});
+					
+					$('#ns1blankspaceControlDescription').click(function(event)
+					{
+						ns1blankspace.show({selector: '#divInterfaceMainDescription', refresh: true});
+						ns1blankspace.action.description();
+					});
+
+					$('#ns1blankspaceControlControlAttachments').click(function(event)
+					{
+						ns1blankspace.show({selector: '#divInterfaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show({xhtmlElementID: 'divInterfaceMainAttachments'});
+					});
+				},
+
+	show:		function (oParam, oResponse)
+				{
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.action.layout();
+					
+					var aHTML = [];
+					var h = -1;
+					
+					if (oResponse.data.rows.length == 0)
+					{
+						ns1blankspace.objectContextData = undefined;
+						
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this action.</td></tr></table>');
+								
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+					}
+					else
+					{
+						ns1blankspace.objectContextData = oResponse.data.rows[0];
+						
+						var iMessageActionID;
+						
+						if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.emailSent || ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.emailReceived)
+								{iMessageActionID = ns1blankspace.objectContextData.id}
+						
+						if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.fileNote && ns1blankspace.objectContextData.object == 17)
+								{iMessageActionID = ns1blankspace.objectContextData.objectcontext}
+								
+						if (iMessageActionID != undefined)
+						{
+							ns1blankspace.messaging.init({autoShow: false});
+							ns1blankspace.messaging.search.send({
+								xhtmlElementID: '-' + iMessageActionID
+								})	
+						}
+						else
+						{
+							$('#ns1blankspaceViewControlAction').button({disabled: false});
+							$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+								
+							$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
+								'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceControlSubContext">' + ns1blankspace.objectContextData.actiondate + '</span>');
+								
+							ns1blankspace.history.view({
+								newDestination: 'ns1blankspace.action.init({showHome: false});ins1blankspace.action.search.send("-' + ns1blankspace.objectContext + '")',
+								move: false
+								})
+							
+							ns1blankspace.history.object({functionDefault: 'ns1blankspace.action.summary()'});		
+						}
+						
+						if (ns1blankspace.objectContext != -1) {ns1blankspace.action.summary()}
+					}	
+				},	
 		
-		$('#tdInterfaceMainDescriptionColumn1').html(aHTML.join(''));
-		
-		if (ns1blankspace.objectContextData != undefined)
-		{
-			$('#inputInterfaceMainDescription').val(unescape(ns1blankspace.objectContextData.description));
-		}
-	}	
-}
+summary: 		function interfaceFinancialPaymentSummary()
+				{
+					if (ns1blankspace.objectContextData == undefined)
+					{
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the action.</td></tr></table>');
+								
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+					}
+					else
+					{
+						aHTML.push('<table class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspaceRow">' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+										'</tr>' +
+										'</table>');				
+						
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+						
+						var aHTML = [];
+
+						aHTML[++h] = '<table class="ns1blankspaceColumn1">';
+					
+						if (ns1blankspace.objectContextData.contactbusinesstext != '')
+						{
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.contactbusinesstext +
+											'</td></tr>');
+						}
+						
+						if (ns1blankspace.objectContextData.contactpersontext != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Person</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryPerson" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.contactpersontext +
+											'</td></tr>');
+						}
+					
+						if (ns1blankspace.objectContextData.actiondate != '')
+						{
+							var oDate = new Date.parse(ns1blankspace.objectContextData.actiondate);
+								
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryDate" class="ns1blankspaceSummary">' +
+											oDate.toString("ddd, dd MMM yyyy h:mm TT") +
+											'</td></tr>');
+						
+							if (oDate.getHours() != 0 && oDate.getMinutes() != 0)
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Time</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryTime" class="ns1blankspaceSummary">' +
+											oDate.toString("h:mm TT") +
+											'</td></tr>');
+							}					
+						
+						}
+
+						if (ns1blankspace.objectContextData.typetext != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Type</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryDate" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.typetext +
+										'</td></tr>');
+						}		
+						
+						if (ns1blankspace.objectContextData.statustext != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Status</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryDate" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.statustext +
+										'</td></tr>');
+						}	
+
+						if (ns1blankspace.objectContextData.description != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.description +
+											'</td></tr>');
+						}
+						
+						aHTML.push('</table>');		
+
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+					}	
+				},
+	
+	details: 	function ()
+				{
+					var aHTML = [];
+				
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
+					{
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
+								
+						aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>');
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
+
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Subject' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsSubject" class="ns1blankspaceText">' +
+										'</td></tr>');			
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Date' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceDetailsDate" class="ns1blankspaceDate">' +
+										'</td></tr>');		
+							
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Type' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceDetailsType" class="ns1blankspaceSelect"' +
+												' data-method="SETUP_ACTION_TYPE_SEARCH">' +
+										'</td></tr>');		
+												
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Action By' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceDetailsType" class="ns1blankspaceSelect"' +
+												' data-method="CORE_USER_SEARCH"' +
+												' data-columns="firstname-space-surname">' +
+										'</td></tr>');	
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Business' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsBusiness" class="ns1blankspaceSelect"' +
+											' data-method="CONTACT_BUSINESS_SEARCH"' +
+											' data-columns="tradename">' +
+										'</td></tr>');	
+							
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Person' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsPerson" class="ns1blankspaceSelect"' +
+											' data-method="CONTACT_PERSON_SEARCH"' +
+											' data-columns="surname"' +
+											' data-parent="ns1blankspaceDetailsBusiness"' +
+											' data-parent-search-id="contactbusiness"' +
+											' data-parent-search-text="tradename">' +
+										'</td></tr>');							
+								
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
+						
+						$('input.ns1blankspaceDate').datetimepicker({ 
+							dateFormat: 'dd M yy',
+							timeFormat: 'h:mm TT',
+							stepMinute: 5,
+							ampm: true
+							});
+						
+						var aHTML = [];
+							
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Status' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Not Started' +
+											'<br /><input type="radio" id="radioStatus4" name="radioStatus" value="4"/>In Progress' +
+											'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>Cancelled' +
+											'<br /><input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Completed' +
+										'</td></tr>');	
+
+						aHTML[++h] = '</table>';					
+							
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
+
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							$('#inputInterfaceMainDetailsSubject').val(ns1blankspace.objectContextData.reference);
+							
+							var sDate = new Date(ns1blankspace.objectContextData.actiondatetime);
+							sDate = $.fullCalendar.formatDate(sDate, 'dd MMM yyyy h:mm TT')
+							$('#inputInterfaceMainDetailsDate').val(sDate);
+							
+							$('#ns1blankspaceDetailsType').attr("data-id", ns1blankspace.objectContextData.type);
+							$('#ns1blankspaceDetailsType').val(ns1blankspace.objectContextData.typetext);
+							$('#ns1blankspaceDetailsActionBy').attr("data-id", ns1blankspace.objectContextData.actionby);
+							$('#ins1blankspaceDetailsActionBy').val(ns1blankspace.objectContextData.actionbyfirstname + ' ' +
+											ns1blankspace.objectContextData.actionbysurname);
+							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
+							
+							$('#ns1blankspaceDetailsBusiness').attr("data-id", ns1blankspace.objectContextData.contactbusiness);
+							$('#ns1blankspaceDetailsBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
+							
+							$('#ns1blankspaceDetailsPerson').attr("data-id", ns1blankspace.objectContextData.contactperson);
+							$('#ns1blankspaceDetailsPerson').val(ns1blankspace.objectContextData.contactpersonfirstname + 
+									' ' + ns1blankspace.objectContextData.contactpersonsurname);
+						}
+						else
+						{
+							$('[name="radioStatus"][value="1"]').attr('checked', true);
+							
+							if (ns1blankspace.action.contactbusiness != undefined)
+							{$('#ns1blankspaceDetailsBusiness').attr("data-id", ns1blankspace.action.contactbusiness);}
+							
+							if (ns1blankspace.action.contactbusinesstext != undefined)
+							{$('#ns1blankspaceDetailsBusiness').val(ns1blankspace.action.contactbusinesstext);}
+							
+							if (ns1blankspace.action.contactperson != undefined)
+							{$('#ns1blankspaceDetailsPerson').attr("data-id", ns1blankspace.action.contactperson);}
+							
+							if (ns1blankspace.action.contactpersontext != undefined)
+							{$('#ns1blankspaceDetailsPerson').val(ns1blankspace.action.contactpersontext);}
+						}
+					}	
+				},
+
+	description:
+				function ()
+				{	
+					var aHTML = [];
+					
+					if ($('#ns1blankspaceMainDescription').attr('data-loading') == '1')
+					{
+						$('#ns1blankspaceMainDescription').attr('data-loading', '');
+							
+						aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDescriptionColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDescriptionColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>');
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceDescription').html(aHTML.join(''));
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="interfaceMain">');
+								
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="30" cols="50" id="ns1blankspaceDescription" class="ns1blankspaceTextMulti ns1blankspaceTextMultiLarge"></textarea>' +
+										'</td></tr>');
+										
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceDescriptionColumn1').html(aHTML.join(''));
+						
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							$('#ns1blankspaceDescription').val(unescape(ns1blankspace.objectContextData.description));
+						}
+					}	
+				},
+
+	save: 		{			
+					send:		function (oParam, oResponse)
+								{
+									var iType = ns1blankspace.data.actionType.meeting;
+									
+									if (oResponse == undefined)
+									{
+										if (oParam != undefined)
+										{
+											if (oParam.type != undefined) {iType = oParam.type}
+											if (oParam.object == undefined) {oParam.object = ns1blankspace.object}
+											if (oParam.objectContext == undefined) {oParam.objectContext = ns1blankspace.objectContext}
+
+											var sData = 'object=' + ns1blankspace.util.fs(oParam.object);
+											sData += '&objectcontext=' + ns1blankspace.util.fs(oParam.objectContext);
+											sData += '&subject=' + ns1blankspace.util.fs(oParam.subject);
+											sData += '&description=' + ns1blankspace.util.fs(oParam.description);
+											sData += '&priority=' + ns1blankspace.util.fs(oParam.description);
+											sData += '&status=' + ns1blankspace.util.fs(oParam.status);
+											sData += '&type=' + ns1blankspace.util.fs(iType);
+											sData += '&date=' + ns1blankspace.util.fs(oParam.date);
+											sData += '&enddate=' + ns1blankspace.util.fs(oParam.endDate);
+											sData += '&actionby=' + ns1blankspace.util.fs(oParam.actionBy);
+											sData += '&contactbusiness=' + ns1blankspace.util.fs(oParam.contactBusiness);
+											sData += '&contactperson=' + ns1blankspace.util.fs(oParam.contactPerson);
+											
+											sData += (oParam.otherData == undefined ? '' : oParam.otherData)
+										}	
+										else	  
+										{
+											if (ns1blankspace.objectContext != -1)
+											{
+												sData += 'id=' + ns1blankspace.objectContext;
+											}
+											else
+											{
+												sData += 'id=';
+											}
+											
+											if ($('#ns1blankspaceMainDetails').html() != '')
+											{
+												sData += '&subject=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSubject').val());
+												sData += '&priority=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPriority').attr('onDemandID'));				
+												sData += '&type=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsType').attr('onDemandID'));
+												sData += '&date=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDate').val());
+												sData += '&contactbusiness=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsBusiness').attr("onDemandID"));
+												sData += '&contactperson=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPerson').attr("onDemandID"));
+												sData += '&actionby=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsActionBy').attr("onDemandID"));
+												sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
+												
+											}
+											
+											if ($('#ns1blankspaceeMainDescription').html() != '')
+											{
+												sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceMainDescription').val());
+											}
+										}
+										  
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.endpointURI('ACTION_MANAGE'),
+											data: sData,
+											dataType: 'json',
+											success: function(data) {ns1blankspace.action.save.process(oParam, data);}
+										});
+									},
+
+					process: 		function ()
+									{
+
+										if (oResponse.status == 'OK')
+										{
+											ns1blankspace.status.message('Saved');
+											ns1blankspace.objectContext = oResponse.id;	
+										
+											var dStartDate = new Date;
+											var dEndDate = dStartDate;
+											var sTitle = '';
+											var sCalendarXHTMLElementID;
+											
+											if (oParam != undefined)
+											{
+												if (oParam.date != undefined) {sStartDate = oParam.date}
+												if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+												if (oParam.title != undefined) {sTitle = oParam.title}
+												if (oParam.calendarXHTMLElementID != undefined) {sCalendarXHTMLElementID = oParam.calendarXHTMLElementID}
+											}	
+										
+											if (sCalendarXHTMLElementID != undefined)
+											{
+												$('#' + sCalendarXHTMLElementID).fullCalendar('renderEvent',
+												{
+													id: ns1blankspace.objectContext,
+													title: sTitle,
+													start: sStartDate, 
+													end: sEndDate, 
+													allDay: false},
+													true
+												);
+											}
+											
+											ns1blankspace.inputDetected = false;
+											ns1blankspace.action.search.send('-' + ns1blankspace.objectContext, {source: 1});
+										}
+										else
+										{
+											ns1blankspace.status.error(oResponse.error.errornotes);
+										}
+									}
+									
+								}
+				),
+
 
 function interfaceActionNext10()
 {
@@ -1051,121 +1025,7 @@ function interfaceActionsAddNote(iObject, iObjectContext)
 		});
 }
 
-function interfaceActionSave(oParam, oResponse)
-{
-	var sData = '';
-	var iType = ns1blankspace.data.actionType.meeting;
-	
-	if (oResponse == undefined)
-	{
-		if (oParam != undefined)
-		{
-			if (oParam.type != undefined) {iType = oParam.type}
-			if (oParam.object == undefined) {oParam.object = ns1blankspace.object}
-			if (oParam.objectContext == undefined) {oParam.objectContext = ns1blankspace.objectContext}
 
-			sData += 'object=' + ns1blankspacens1blankspace.util.fs(oParam.object);
-			sData += '&objectcontext=' + ns1blankspacens1blankspace.util.fs(oParam.objectContext);
-			sData += '&subject=' + ns1blankspacens1blankspace.util.fs(oParam.subject);
-			sData += '&description=' + ns1blankspacens1blankspace.util.fs(oParam.description);
-			sData += '&priority=' + ns1blankspacens1blankspace.util.fs(oParam.description);
-			sData += '&status=' + ns1blankspacens1blankspace.util.fs(oParam.status);
-			sData += '&type=' + ns1blankspacens1blankspace.util.fs(iType);
-			sData += '&date=' + ns1blankspacens1blankspace.util.fs(oParam.date);
-			sData += '&enddate=' + ns1blankspacens1blankspace.util.fs(oParam.endDate);
-			sData += '&actionby=' + ns1blankspacens1blankspace.util.fs(oParam.actionBy);
-			sData += '&contactbusiness=' + ns1blankspacens1blankspace.util.fs(oParam.contactBusiness);
-			sData += '&contactperson=' + ns1blankspacens1blankspace.util.fs(oParam.contactPerson);
-			
-			sData += (oParam.otherData==undefined?'':oParam.otherData)
-		}	
-		else	  
-		{
-			if (ns1blankspace.objectContext != -1)
-			{
-				sData += 'id=' + ns1blankspace.objectContext;
-			}
-			else
-			{
-				sData += 'id=';
-			}
-			
-			if ($('#divInterfaceMainDetails').html() != '')
-			{
-				sData += '&subject=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSubject').val());
-				sData += '&priority=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPriority').attr('onDemandID'));				
-				sData += '&type=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsType').attr('onDemandID'));
-				sData += '&date=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDate').val());
-				sData += '&contactbusiness=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsBusiness').attr("onDemandID"));
-				sData += '&contactperson=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPerson').attr("onDemandID"));
-				sData += '&actionby=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsActionBy').attr("onDemandID"));
-				sData += '&status=' + $('input[name="radioStatus"]:checked').val();
-				
-			}
-			
-			if ($('#divInterfaceMainDescription').html() != '')
-			{
-				sData += '&description=' + ns1blankspacens1blankspace.util.fs($('#inputInterfaceMainDescription').val());
-			}
-		}
-		  
-		$.ajax(
-		{
-			type: 'POST',
-			url: ns1blankspaceEndpointURL('ACTION_MANAGE'),
-			data: sData,
-			dataType: 'json',
-			success: function(data) {interfaceActionSave(oParam, data);}
-		});
-	}	
-	else
-	{
-
-		if (oResponse.status == 'OK')
-		{
-			ns1blankspaceStatus('Saved');
-			ns1blankspace.objectContext = oResponse.id;	
-		
-			var dStartDate = new Date;
-			var dEndDate = dStartDate;
-			var sTitle = '';
-			var sCalendarXHTMLElementID;
-			
-			if (oParam != undefined)
-			{
-				if (oParam.date != undefined) {sStartDate = oParam.date}
-				if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
-				if (oParam.title != undefined) {sTitle = oParam.title}
-				if (oParam.calendarXHTMLElementID != undefined) {sCalendarXHTMLElementID = oParam.calendarXHTMLElementID}
-			}	
-		
-			if (sCalendarXHTMLElementID != undefined)
-			{
-			
-				$('#' + sCalendarXHTMLElementID).fullCalendar('renderEvent',
-				{
-					id: ns1blankspace.objectContext,
-					title: sTitle,
-					start: sStartDate, 
-					end: sEndDate, 
-					allDay: false},
-					true
-				);
-			}
-			
-			ns1blankspace.inputDetected = false;
-			interfaceActionSearch('-' + ns1blankspace.objectContext, {source: 1});
-		
-		}
-		else
-		{
-			ns1blankspaceStatus(oResponse.error.errornotes);
-			ns1blankspaceConfirm( {html: [oResponse.error.errornotes]
-									   , title: 'Save error!'});
-		}
-	}
-	
-}
 
 function interfaceActionsSummaryActions(sElementId, iObject, iObjectContext)
 {
@@ -1220,6 +1080,8 @@ function interfaceActionsSummaryActionsShow(oResponse, asElementId)
 	}
 	
 }
+
+calendar: {
 
 function interfaceActionCalendar(oParam)
 {
