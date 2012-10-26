@@ -1089,7 +1089,6 @@ ns1blankspace.financial.expense =
 									else
 									{
 										var aHTML = [];
-										var h = -1;
 										
 										if (oResponse.data.rows.length == 0)
 										{
@@ -1122,10 +1121,10 @@ ns1blankspace.financial.expense =
 													
 												if (oOptions.remove)
 												{	
-													aHTML.push('<span id="ns1blankspaceReceipt_options_remove-' + this.id + '" class="ns1blankspacePaymentRemove"></span>');
+													aHTML.push('<span id="ns1blankspaceReceipt_options_remove-' + this.id + '" class="ns1blankspaceReceiptRemove"></span>');
 												};	
 													
-												aHTML[++h] = '</td></tr>');
+												aHTML.push('</td></tr>');
 											});
 											
 											aHTML.push('</table>');

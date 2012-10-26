@@ -939,159 +939,144 @@ ns1blankspace.financial.receipt =
 								}
 					},
 								
-	invoice: 	function (oParam, oResponse)
-				{
-					var iObjectContext = ns1blankspace.objectContext;
-					var sXHTMLElementId = 'divInterfaceMainInvoice';
-					var oOptions = {view: true, remove: true};
-					var oActions = {add: true};
-					
-					if (oParam != undefined)
-					{
-						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-						if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
-						if (oParam.options != undefined) {oOptions = oParam.options}
-						if (oParam.actions != undefined) {oActions = oParam.actions}
-					}		
-						
-					if (oResponse == undefined)
-					{	
-						var aHTML = [];
-						var h = -1;	
+	invoice: 	{
+					show: 		function (oParam, oResponse)
+								{
+									var iObjectContext = ns1blankspace.objectContext;
+									var oOptions = {view: true, remove: true};
+									var oActions = {add: true};
 									
-						aHTML[++h] = '<table id="tableInterfaceMainReceipt" class="interfaceMain">' +
-									'<tr id="trInterfaceMainReceiptRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainReceiptColumn1" class="interfaceMainColumn1Large">' +
-									ns1blankspace.xhtml.loading +
-									'</td>' +
-									'<td id="tdInterfaceMainReceiptColumn2" class="interfaceMainColumn2Action" style="width: 200px;">' +
-									'</td>' +
-									'</tr>' +
-									'</table>';					
-							
-						$('#' + sXHTMLElementId).html(aHTML.join(''));
-						
-						if (oActions != undefined)
-						{
-								
-							var aHTML = [];
-							var h = -1;	
-							
-							aHTML[++h] = '<table id="tableInterfaceMainReceiptColumn2" class="interfaceMainColumn2">';
-							
-							if (oActions.add)
-							{
-								aHTML[++h] = '<tr><td id="tdInterfaceMainReceiptAdd" class="interfaceMainAction">' +
-											'<span id="spanInterfaceMainReceiptAdd">Add</span>' +
-											'</td></tr>';
-							}
-							
-							aHTML[++h] = '</table>';					
-							
-							$('#tdInterfaceMainReceiptColumn2').html(aHTML.join(''));
-						
-							$('#spanInterfaceMainReceiptAdd').button(
-							{
-								label: "Add"
-							})
-							.click(function() {
-								 interfaceFinancialReceiptReceiptAdd(oParam);
-							})
-							
-						}
-						
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
-						oSearch.addField('appliesdate,amount');
-						oSearch.addFilter('receipt', 'EQUAL_TO', iObjectContext);
-						oSearch.sort('appliesdate', 'asc');
-						oSearch.getResults(function(data) {interfaceFinancialReceiptInvoice(oParam, data)});
-					}
-					else
-					{
-						var aHTML = [];
-						var h = -1;
-						
-						if (oResponse.data.rows.length == 0)
-						{
-							aHTML[++h] = '<table id="tableFinancialReceiptReceipt" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">' +
-											'<td class="interfaceMainRowNothing">No invoices.</td></tr>';
-							aHTML[++h] = '</tbody></table>';
+									if (oParam != undefined)
+									{
+										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+										if (oParam.options != undefined) {oOptions = oParam.options}
+										if (oParam.actions != undefined) {oActions = oParam.actions}
+									}		
+										
+									if (oResponse == undefined)
+									{	
+										var aHTML = [];
 
-							$('#' + sXHTMLElementId).html(aHTML.join(''));
-						}
-						else
-						{
-							aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-							aHTML[++h] = '</tr>';
-							
-							$.each(oResponse.data.rows, function()
-							{
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+										aHTML.push('<table class="ns1blankspaceContainer">');
+										aHTML.push('<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceInvoiceColumn1" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspaceInvoiceColumn2" class="ns1blankspaceColumn2" style="width: 300px;></td>' +
+														'</tr>');
+										aHTML.push('</table>');					
+														
+										$('#ns1blankspaceMainInvoice').html(aHTML.join(''));
+										
+										if (oActions != undefined)
+										{	
+											var aHTML = [];
+															
+											aHTML.push('<table class="ns1blankspaceColumn2">');
+											
+											if (oActions.add)
+											{
+												aHTML.push('<tr><td class="ns1blankspaceAction">' +
+															'<span id="ns1blankspaceInvoiceAdd">Add</span>' +
+															'</td></tr>');
+											}
+											
+											aHTML.push('</table>');					
+											
+											$('#ns1blankspaceInvoiceColumn2').html(aHTML.join(''));
+										
+											$('#ns1blankspaceInvoiceAdd').button(
+											{
+												label: "Add"
+											})
+											.click(function() {
+												 ns1blankspace.financial.receipt.invoice.edit(oParam);
+											})
+										}
+										
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
+										oSearch.addField('appliesdate,amount');
+										oSearch.addFilter('receipt', 'EQUAL_TO', iObjectContext);
+										oSearch.sort('appliesdate', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.financial.receipt.invoice.show(oParam, data)});
+									}
+									else
+									{
+										var aHTML = [];
+											var aHTML = [];
+										
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table class="ns1blankspace">' +
+															'<tr><td class="ns1blankspaceNothing">No payments.</td></tr>' + 
+															'</table>');
+
+											$('#ns1blankspaceInvoiceColumn1').html(aHTML.join(''));
+										}
+										else
+										{
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
+											
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push('<tr class="ns1blankspaceRow">');
+																			
+												aHTML.push('<td id="ns1blankspaceReceipt_date-' + oRow.id + '" class="ns1blankspaceRow">' +
+																this.appliesdate + '</td>');
+
 												
-								aHTML[++h] = '<td id="tdWebsiteLineReceipt_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
-														this.appliesdate + '</td>';
-														
-								aHTML[++h] = '<td id="tdWebsiteLineReceipt_financialaccounttext-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
-														this.amount + '</td>';
-														
-								aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
-									
-								if (oOptions.remove)
-								{	
-									aHTML[++h] = '<span id="spanInvoiceReceipt_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-								};	
-									
-								if (oOptions.view)
-								{	
-									aHTML[++h] = '<span id="spanInvoiceReceipt_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
-								};	
-									
-								aHTML[++h] = '</td>';				
-								aHTML[++h] = '</tr>';
-							});
-							
-							aHTML[++h] = '</tbody></table>';
+												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																this.amount + '</td>');
+						
+												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+													
+												if (oOptions.remove)
+												{	
+													aHTML.push('<span id="ns1blankspaceInvoice_options_remove-' + this.id + '" class="ns1blankspaceInvoiceRemove"></span>');
+												};	
+													
+												aHTML.push('</td></tr>');
+											});
+											
+											aHTML.push('</table>');
 
-							$('#tdInterfaceMainReceiptColumn1').html(aHTML.join(''));
-							
-							if (oOptions.remove) 
-							{
-								$('.interfaceMainRowOptionsRemove').button( {
-									text: false,
-									icons: {
-										primary: "ui-icon-close"
-									}
-								})
-								.click(function() {
-									ns1blankspaceInvoiceReceiptRemove({xhtmlElementID: this.id});
-								})
-								.css('width', '15px')
-								.css('height', '17px')
-							}
-							
-							if (oOptions.view) 
-							{
-								$('.interfaceMainRowOptionsView').button( {
-									text: false,
-									icons: {
-										primary: "ui-icon-play"
-									}
-								})
-								.click(function() {
-									ns1blankspaceInvoiceReceiptAdd({xhtmlElementID: this.id})
-								})
-								.css('width', '15px')
-								.css('height', '17px')
-							}	
-						}
-					}	
-				}
+											$('#ns1blankspaceInvoiceColumn1').html(aHTML.join(''));
+											
+											if (oOptions.remove) 
+											{
+												$('.ns1blankspaceInvoiceRemove').button( {
+													text: false,
+													icons: {
+														primary: "ui-icon-close"
+													}
+												})
+												.click(function() {
+													ns1blankspace.financial.receipt.invoice.remove({xhtmlElementID: this.id});
+												})
+												.css('width', '15px')
+												.css('height', '17px')
+											}
+										}
+											
+											if (oOptions.view) 
+											{
+												$('.ns1blankspaceInvoiceView').button( {
+													text: false,
+													icons: {
+														primary: "ui-icon-play"
+													}
+												})
+												.click(function() {
+													ns1blankspace.financial.receipt.invoice.edit({xhtmlElementID: this.id})
+												})
+												.css('width', '15px')
+												.css('height', '17px')
+											}	
+										}
+									}	
+								}
+				}				
 }				
