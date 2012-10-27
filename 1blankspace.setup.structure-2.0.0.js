@@ -7,128 +7,35 @@
 
 ns1blankspace.setup.structure = 
 {
-	init: 		function interfaceSetupStructureMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-					gsSetupName = 'Website';
-					giSetupContext = -1;
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.object = 40;
-					ns1blankspace.objectContextData = undefined;
-					
-					var bShowHome = true;
-					var bNew = false;
+					var bShowHome = true
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.showNew != undefined) {bNew = oParam.showNew}
-						if (bNew) {interfaceSetupStructureNew()};
-					}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
+
+					ns1blankspace.object = 26;
+					ns1blankspace.objectParentName = 'setup';
+					ns1blankspace.objectName = 'structure';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Structures';
 					
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceSetupStructureMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.structure.init({showHome: true});',
 							move: false
-							})		
-					}
-					
-					ns1blankspaceReset();		
+							});	
+					}	
 							
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Structure"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupStructureSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSetupStructureSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSetupStructureSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceSetupStructureNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceSetupStructureNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSetupStructureSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-					
-						var aHTML = [];
-						var h = -1;
-						
-						aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
-										
-						aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-										'<td id="tdinterfaceActionOptionsRemove" class="interfaceActionOptions">' +
-										'Remove' +
-										'</td>' +
-										'</tr>';
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 
-						aHTML[++h] = '</table>';
-
-						ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceSetupStructureActionOptionsBind()");
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-						
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceSetupStructureSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSetupStructureSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceSetupStructureHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSetupStructureHelpOptions();
-					});
-
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceSetupStructureSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceSetupStructureSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
 					if (ns1blankspace.option.richTextEditing)
 					{
-					
 						tinyMCE.init(
 						{
 							mode : "none",

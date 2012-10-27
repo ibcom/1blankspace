@@ -7,117 +7,32 @@
  
 ns1blankspace.opportunity = 
 {
-	init: 		function interfaceOpportunityMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-					ns1blankspace.object = ns1blankspace.data.object.opportunity;
-					ns1blankspace.objectName = 'Opportunity';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-						
-					var bShowHome = true;
+					var bShowHome = true
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-					}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
+
+					ns1blankspace.object = ns1blankspace.data.object.opportunity;
+					ns1blankspace.objectParentName = undefined;
+					ns1blankspace.objectName = 'opportunity';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Opportunities';
 					
-					ns1blankspaceReset();		
-						
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceOpportunityMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.opportunity.init({showHome: true});',
 							move: false
-							})		
+							});	
 					}	
-						
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Opportunities"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceOpportunitySearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceOpportunitySearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceOpportunitySearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceOpportunityNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceOpportunitySave();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-					
-						var aHTML = [];
-						var h = -1;
-						
-						aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
-										
-						aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-										'<td id="tdinterfaceActionOptionsDelete" class="interfaceActionOptions">' +
-										'Delete' +
-										'</td>' +
-										'</tr>';
-
-						aHTML[++h] = '</table>';
-
-						ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceOpportunityActionOptionsBind()");
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceOpportunitySetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceOpportunitySetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceOpportunityHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceOpportunityHelpOptions();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceOpportunitySearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceOpportunitySearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
-					if (bShowHome) {interfaceOpportunityHomeShow()};
+							
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
 	home: 		function interfaceOpportunityHomeShow(oResponse)

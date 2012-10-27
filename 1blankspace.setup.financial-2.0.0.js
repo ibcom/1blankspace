@@ -7,85 +7,37 @@
 
 ns1blankspace.setup.financial = 
 {
-	init: 		function interfaceSetupFinancialMasterViewport()
+	init: 		function ()
 				{
-					ns1blankspace.objectName = 'Financials';
-					ns1blankspace.objectContext = -1;
+					var bShowHome = true
+					
+					if (oParam != undefined)
+					{
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
+
 					ns1blankspace.object = -1;
+					ns1blankspace.objectParentName = 'setup';
+					ns1blankspace.objectName = 'financial';
 					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Financials';
 					
-					if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}
-
-					interfaceFinancialMasterInitialise();
-
-					ns1blankspaceReset();		
+					if (bShowHome)
+					{
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.financial.init({showHome: true});',
+							move: false
+							});	
+					}	
+						
+					if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}	
+					ns1blankspace.financial.init();
 							
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Financials"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupFinancialSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSetupFinancialSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSetupFinancialSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSetupFinancialSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-						interfaceSetupFinancialSaveOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceSetupFinancialSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSetupFinancialSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceSetupFinancialHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSetupFinancialHelpOptions();
-					});
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceSetupFinancialSearch(event.target.id, ns1blankspace.data.searchSource.browse);
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceSetupFinancialSearch(event.target.id, ns1blankspace.data.searchSource.browse);
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
-					interfaceFormatEditorInitialise({height: "500px"});
-
-					interfaceSetupFinancialHomeShow();
+					ns1blankspace.financial.editor.init({height: "500px"});
 				},
 
 	home:		function interfaceSetupFinancialHomeShow(oResponse)

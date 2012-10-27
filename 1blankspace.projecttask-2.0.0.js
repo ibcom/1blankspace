@@ -7,7 +7,7 @@
  
 ns1blankspace.projectTask = 
 {
-	init: 		function interfaceProjectTaskMasterViewport(oParam)
+	init: 		function (oParam)
 				{
 					var bShowHome = true
 					
@@ -17,93 +17,22 @@ ns1blankspace.projectTask =
 					}
 
 					ns1blankspace.object = 11;
-					ns1blankspace.objectName = 'Project Task';
-					ns1blankspace.objectContext = -1;
+					ns1blankspace.objectParentName = undefined;
+					ns1blankspace.objectName = 'projectTask';
 					ns1blankspace.objectContextData = undefined;
-						
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Project Tasks';
+					
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceProjectTaskMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.projectTask.init({showHome: true});',
 							move: false
-							})		
-					}
-					
-					ns1blankspaceReset();
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Project Tasks"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceProjectTaskSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);	
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceProjectTaskSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceProjectTaskSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceProjectTaskNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceProjectTaskNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceProjectTaskSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-						interfaceProjectTaskSaveOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceProjectTaskSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceProjectTaskSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceProjectTaskHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceProjectTaskHelpOptions();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceProjectTaskSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceProjectTaskSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					if (bShowHome) {interfaceProjectTaskHomeShow()};
+							});	
+					}	
+							
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
 	home:		function interfaceProjectTaskHomeShow(oResponse)

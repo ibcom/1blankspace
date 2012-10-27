@@ -9,106 +9,35 @@ if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
  
 ns1blankspace.messaging.conversation = 
 {
-	init: 		function interfaceMessagingConversationMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-					ns1blankspace.object = 50;
-					ns1blankspace.objectName = 'Messaging Conversation';
-					ns1blankspace.objectContextDataXML = '';
-					ns1blankspace.objectContext = -1;
-							
-					var bShowHome = true;
+					var bShowHome = true
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-					}	
-						
-					ns1blankspaceReset();		
-							
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
+
+					ns1blankspace.object = 50;
+					ns1blankspace.objectParentName = 'messaging';
+					ns1blankspace.objectName = 'conversation';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Conversations';
+					
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceMessagingConversationMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.messaging.conversation.init({showHome: true});',
 							move: false
-							})		
-					}
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Conversations"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceMessagingConversationSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceMessagingConversationSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceMessagingConversationSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceMessagingConversationNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOption').click(function(event)
-					{
-						interfaceMessagingConversationNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceMessagingConversationSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-						
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceMessagingConversationSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceMessagingConversationSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceMessagingConversationHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceMessagingConversationHelpOptions();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceMessagingConversationSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceMessagingConversationSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					$('#divInterfaceViewportControl').html('');	
-					
+							});	
+					}	
+							
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
+
 					if (ns1blankspace.option.richTextEditing)
 					{
-					
 						tinyMCE.init(
 						{
 							mode : "none",
@@ -156,8 +85,6 @@ ns1blankspace.messaging.conversation =
 							media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
 						});				
 					}
-					
-					if (bShowHome) {interfaceMessagingConversationHomeShow()};
 				},
 
 	home: 		function interfaceMessagingConversationHomeShow(oResponse)

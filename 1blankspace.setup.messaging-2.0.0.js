@@ -7,89 +7,32 @@
  
 ns1blankspace.setup.messaging = 
 {
-	init: 		function interfaceSetupMessagingMasterViewport()
+	init: 		function ()
 				{
-					ns1blankspace.objectName = 'Messaging';
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.object = -1;
-					ns1blankspace.objectContextData = undefined;
+					var bShowHome = true
 					
-					ns1blankspaceReset();		
-							
-					$('#divns1blankspaceViewportControlSet').button(
+					if (oParam != undefined)
 					{
-						label: "Messaging"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupMessagingSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSetupMessagingSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSetupMessagingSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceSetupMessagingNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceSetupMessagingNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSetupMessagingSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-						interfaceSetupMessagingSaveOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceSetupMessagingSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSetupMessagingSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceSetupMessagingHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSetupMessagingHelpOptions();
-					});
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
 
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
+					ns1blankspace.object = 154;
+					ns1blankspace.objectParentName = 'setup';
+					ns1blankspace.objectName = 'messaging';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Messaging';
+					
+					if (bShowHome)
 					{
-						interfaceSetupMessagingSearch(event.target.id, ns1blankspace.data.searchSource.browse);
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceSetupMessagingSearch(event.target.id, ns1blankspace.data.searchSource.browse);
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
-					interfaceSetupMessagingHomeShow();
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.messaging.init({showHome: true});',
+							move: false
+							});	
+					}	
+							
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
 	home: 		function interfaceSetupMessagingHomeShow(oResponse)

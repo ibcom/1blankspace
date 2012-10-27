@@ -5,149 +5,89 @@
  * 01 FEB 2010
  */
  
-ns1blankspace.setup.project.task = 
+ns1blankspace.setup.projectTask = 
 {
-	init: 		function interfaceSetupProjectTaskMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-					var bShowHome = true;
-
+					var bShowHome = true
+					
 					if (oParam != undefined)
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
-					
-					ns1blankspace.object = 11;	
-					ns1blankspace.objectName = 'Project Task Template';
+
+					ns1blankspace.object = 11;
+					ns1blankspace.objectParentName = 'setup';
+					ns1blankspace.objectName = 'projectTask';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Project Templates';
+					
+					if (bShowHome)
+					{
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.projectTask.init({showHome: true});',
+							move: false
+							});	
+					}	
 							
-					ns1blankspaceReset();
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Template Tasks"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						interfaceSetupProjectTaskSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#imgns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSetupProjectTaskSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#imgns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSetupProjectTaskSearchOptions();
-					});
-					
-					$('#imgns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceSetupProjectTaskNew();
-					})
-					
-					$('#imgns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceSetupProjectTaskNewOptions();
-					});
-					
-					$('#divns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSetupProjectTaskSave();
-					});
-					
-					$('#imgns1blankspaceViewportControlActionMore').click(function(event)
-					{
-						interfaceSetupProjectTaskSaveOptions();
-					});
-					
-					$('#imgns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceSetupProjectTaskSetup();
-					});
-					
-					$('#imgns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSetupProjectTaskSetupOptions();
-					});
-					
-					$('#imgns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceSetupProjectTaskHelp();
-					});
-					
-					$('#imgns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSetupProjectTaskHelpOptions();
-					});
-					
-					$('.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceSetupProjectTaskSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceSetupProjectTaskSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
-					if (bShowHome) {interfaceSetupProjectTaskHomeShow()};
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 
-					tinyMCE.init(
+					if (ns1blankspace.option.richTextEditing)
 					{
-				        mode : "none",
-						height : "370px", 
-						width : "100%",
-						theme : "advanced",
-						
-						plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
+						tinyMCE.init(
+						{
+					        mode : "none",
+							height : "370px", 
+							width : "100%",
+							theme : "advanced",
+							
+							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
-						theme_advanced_buttons1_add_before : "forecolor,backcolor", 
-						theme_advanced_buttons1_add : "fontselect,fontsizeselect", 
-				 
-						theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak,visualchars", 
-						theme_advanced_buttons2_add_before: "cut,copy,paste,pasteword,separator,search,replace,separator", 
+							theme_advanced_buttons1_add_before : "forecolor,backcolor", 
+							theme_advanced_buttons1_add : "fontselect,fontsizeselect", 
+					 
+							theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak,visualchars", 
+							theme_advanced_buttons2_add_before: "cut,copy,paste,pasteword,separator,search,replace,separator", 
+							
+							theme_advanced_buttons3_add_before : "tablecontrols,separator", 
+							theme_advanced_buttons3_add : "emotions,iespell,fullscreen,print,templateFields,media,selectall,advhr",
+					 		
+							plugin_insertdate_dateFormat : "%d-%m-%y", 
+							plugin_insertdate_timeFormat : "%H:%M:%S", 
 						
-						theme_advanced_buttons3_add_before : "tablecontrols,separator", 
-						theme_advanced_buttons3_add : "emotions,iespell,fullscreen,print,templateFields,media,selectall,advhr",
-				 		
-						plugin_insertdate_dateFormat : "%d-%m-%y", 
-						plugin_insertdate_timeFormat : "%H:%M:%S", 
-					
-						theme_advanced_toolbar_location : "top",
-						theme_advanced_toolbar_align : "left",
-						theme_advanced_resizing : true,
-					
-						font_size_style_values : "8pt,10pt,12pt,14pt,18pt,24pt,36pt",
+							theme_advanced_toolbar_location : "top",
+							theme_advanced_toolbar_align : "left",
+							theme_advanced_resizing : true,
 						
-						extended_valid_elements : "style,input[accept|accesskey|align<bottom?left?middle?right?top|alt|checked<checked|class|dir<ltr?rtl|disabled<disabled|id|ismap<ismap|lang|maxlength|name|onblur|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onselect|readonly<readonly|size|src|style|tabindex|title|type<button?checkbox?file?hidden?image?password?radio?reset?submit?text|usemap|value],select[class|dir<ltr?rtl|disabled<disabled|id|lang|multiple<multiple|name|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|size|style|tabindex|title],ol[class|compact<compact|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|start|style|title|type],div[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title],li[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title|type|value],iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth]",
+							font_size_style_values : "8pt,10pt,12pt,14pt,18pt,24pt,36pt",
+							
+							extended_valid_elements : "style,input[accept|accesskey|align<bottom?left?middle?right?top|alt|checked<checked|class|dir<ltr?rtl|disabled<disabled|id|ismap<ismap|lang|maxlength|name|onblur|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onselect|readonly<readonly|size|src|style|tabindex|title|type<button?checkbox?file?hidden?image?password?radio?reset?submit?text|usemap|value],select[class|dir<ltr?rtl|disabled<disabled|id|lang|multiple<multiple|name|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|size|style|tabindex|title],ol[class|compact<compact|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|start|style|title|type],div[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title],li[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title|type|value],iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth]",
 
-						fullscreen_new_window : true, 
-						fullscreen_settings : 
-						{ 
-							theme_advanced_path_location : "top" 
-						}, 
-						relative_urls : false, 
-						remove_script_host : false, 
-						convert_urls : false, 
-						visual : true, 
-						gecko_spellcheck : true,
-						
-						content_css : ns1blankspace.xhtml.editorCSS,
-						
-						external_link_list_url : "/jscripts/ibcom/linkList.asp", 
-						
-						forced_root_block : false,
-						force_p_newlines : 'false',
-						remove_linebreaks : false,
-						force_br_newlines : true, 
-						remove_trailing_nbsp : false,   
-						verify_html : false
-					});		
+							fullscreen_new_window : true, 
+							fullscreen_settings : 
+							{ 
+								theme_advanced_path_location : "top" 
+							}, 
+							relative_urls : false, 
+							remove_script_host : false, 
+							convert_urls : false, 
+							visual : true, 
+							gecko_spellcheck : true,
+							
+							content_css : ns1blankspace.xhtml.editorCSS,
+							
+							external_link_list_url : "/jscripts/ibcom/linkList.asp", //???
+							
+							forced_root_block : false,
+							force_p_newlines : 'false',
+							remove_linebreaks : false,
+							force_br_newlines : true, 
+							remove_trailing_nbsp : false,   
+							verify_html : false
+						});
+					}
 				},
 
 	home: 		function interfaceSetupProjectTaskHomeShow(oResponse)

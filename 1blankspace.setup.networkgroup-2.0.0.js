@@ -7,102 +7,32 @@
 
 ns1blankspace.setup.networkGroup = 
 {
-	init: 		function interfaceSetupNetworkGroupMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-					gsSetupName = 'Network Group';
-					ns1blankspace.objectContext = undefined;
-					ns1blankspace.object = -1;
-					
-					var bShowHome = true;
+					var bShowHome = true
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.showNew != undefined) {bNew = oParam.showNew}
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
+
+					ns1blankspace.object = -1;
+					ns1blankspace.objectParentName = 'setup';
+					ns1blankspace.objectName = 'networkGroup';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Network Groups';
+					
+					if (bShowHome)
+					{
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.networkGroup.init({showHome: true});',
+							move: false
+							});	
 					}	
-					
-					ns1blankspaceReset();		
 							
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Network Groups"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						interfaceSetupNetworkGroupSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSetupNetworkGroupSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSetupNetworkGroupSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceSetupNetworkGroupNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceSetupNetworkGroupNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSetupNetworkGroupSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-						var aHTML = [];
-						var h = -1;
-						
-						aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
-										
-						aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-										'<td id="tdinterfaceActionOptionsDelete" class="interfaceActionOptions">' +
-										'Delete' +
-										'</td>' +
-										'</tr>';
-
-						aHTML[++h] = '</table>';
-
-						ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSetupNetworkGroupSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSetupNetworkGroupHelp();
-					});
-
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceSetupNetworkGroupSearch(event.target.id, ns1blankspace.data.searchSource.browse);
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceSetupNetworkGroupSearch(event.target.id, ns1blankspace.data.searchSource.browse);
-					});
-
-					$('#divInterfaceViewportControl').html('');		
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					if (bShowHome) {interfaceSetupNetworkGroupHomeShow()};
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
 	show:		function interfaceSetupNetworkGroupHomeShow(oParam, oResponse)

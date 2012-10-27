@@ -7,68 +7,33 @@
  
 ns1blankspace.setup.space = 
 {
-	init: 		function interfaceSetupSpaceMasterViewport()
+	init: 		function ()
 				{
-					gsSetupName = 'My Account';
-					goSetupContextXML = '';
-					giSetupContext = -1;
+
+					var bShowHome = true
+					
+					if (oParam != undefined)
+					{
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
+
+					ns1blankspace.object = 24;
+					ns1blankspace.objectParentName = 'setup';
+					ns1blankspace.objectName = 'space';
+					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.object = -1;
+					ns1blankspace.viewName = 'My Account';
 					
-					ns1blankspaceReset();		
+					if (bShowHome)
+					{
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.space.init({showHome: true});',
+							move: false
+							});	
+					}	
 							
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "My Account"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-						
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceSetupSpaceSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSetupSpaceSetupOptions();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
-					interfaceSetupSpaceHomeShow();
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
 	home:		function interfaceSetupSpaceHomeShow()

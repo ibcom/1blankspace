@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
  
-ns1blankspace.setup.networkGroup = 
+ns1blankspace.setup.project = 
 {
 	init: 		function interfaceSetupProjectMasterViewport(oParam)
 				{
@@ -15,87 +15,24 @@ ns1blankspace.setup.networkGroup =
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
-					
-					ns1blankspace.object = 1;	
-					ns1blankspace.objectName = 'Project Template';
+
+					ns1blankspace.object = 1;
+					ns1blankspace.objectParentName = 'setup';
+					ns1blankspace.objectName = 'project';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Project Templates';
+					
+					if (bShowHome)
+					{
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.project.init({showHome: true});',
+							move: false
+							});	
+					}	
 							
-					ns1blankspaceReset();
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Project Templates"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						interfaceSetupProjectSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#imgns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSetupProjectSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#imgns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSetupProjectSearchOptions();
-					});
-					
-					$('#imgns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceSetupProjectNew();
-					})
-					
-					$('#imgns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceSetupProjectNewOptions();
-					});
-					
-					$('#divns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSetupProjectSave();
-					});
-					
-					$('#imgns1blankspaceViewportControlActionMore').click(function(event)
-					{
-						interfaceSetupProjectSaveOptions();
-					});
-					
-					$('#imgns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceSetupProjectSetup();
-					});
-					
-					$('#imgns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSetupProjectSetupOptions();
-					});
-					
-					$('#imgns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceSetupProjectHelp();
-					});
-					
-					$('#imgns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSetupProjectHelpOptions();
-					});
-					
-					$('.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceSetupProjectSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceSetupProjectSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
-					if (bShowHome) {interfaceSetupProjectHomeShow()};
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
 	home:		function interfaceSetupProjectHomeShow(oResponse)

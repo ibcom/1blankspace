@@ -5,131 +5,37 @@
  * 01 FEB 2010
  */
 
-ns1blankspace.document = 
+ns1blankspace.news = 
 {
-	init: 		
-				function interfaceNewsMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-					ns1blankspace.object = 19;
-					ns1blankspace.objectName = 'News';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-							
-					var bShowHome = true;
-					var bNew = false;
+					var bShowHome = true
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.showNew != undefined) {bNew = oParam.showNew}
-						if (bNew) {interfaceNewsNew()};	
-					}	
-						
-					ns1blankspaceReset();		
-							
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
+
+					ns1blankspace.object = 19;
+					ns1blankspace.objectParentName = undefined;
+					ns1blankspace.objectName = 'news';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'News';
+					
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceNewsMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.news.init({showHome: true});',
 							move: false
-							})		
-					}
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "News"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceNewsSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceNewsSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceNewsSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceNewsNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOption').click(function(event)
-					{
-						interfaceNewsNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceNewsSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-					
-						var aHTML = [];
-						var h = -1;
-						
-						aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
-										
-						aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-										'<td id="tdinterfaceActionOptionsCopy" class="interfaceActionOptions">' +
-										'Copy' +
-										'</td>' +
-										'</tr>';
+							});	
+					}	
+							
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 
-						aHTML[++h] = '</table>';
-
-						ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceNewsActionOptionsBind()");
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceNewsSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceNewsSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceNewsHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceNewsHelpOptions();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceNewsSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceNewsSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					$('#divInterfaceViewportControl').html('');	
-					
 					if (ns1blankspace.option.richTextEditing)
 					{
-					
 						tinyMCE.init(
 						{
 							mode : "none",
@@ -175,12 +81,8 @@ ns1blankspace.document =
 							external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
 							external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
 							media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
-
 						});				
-					
 					}
-					
-					if (bShowHome) {interfaceNewsHomeShow()};
 				},
 
 	home:		function interfaceNewsHomeShow(oResponse)

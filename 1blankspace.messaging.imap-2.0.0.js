@@ -17,112 +17,52 @@
 
 if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
 
-ns1blankspace.messaging.autoCheck = false;
-ns1blankspace.messaging.emailAccounts = [];
-ns1blankspace.messaging.defaultRows = 25;
-ns1blankspace.messaging.account = -1;
-ns1blankspace.messaging.emailRead = [];
-ns1blankspace.messaging.emailRemoved = [];
-ns1blankspace.messaging.showRemoved = false;
-ns1blankspace.messaging.EmailInbox = [];
-ns1blankspace.messaging.EmailInboxXHTML = [];
-ns1blankspace.messaging.emailCount = 0;
-ns1blankspace.messaging.emailLastPage = 1;
-ns1blankspace.messaging.emailLastPagination;
-ns1blankspace.messaging.emailNewCount;
-ns1blankspace.messaging.action = -1;
-
 ns1blankspace.messaging.imap = 
 {
-	init: 		function interfaceMessagingIMAPMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-
-					ns1blankspace.object = 10;
-					ns1blankspace.objectName = 'Message';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-					bShowHome = true;
-							
+					var bShowHome = true
+					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
+
+					ns1blankspace.object = 39;
+					ns1blankspace.objectParentName = 'messaging';
+					ns1blankspace.objectName = 'imap';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Email';
+					
+					if (bShowHome)
+					{
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.messaging.imap.init({showHome: true});',
+							move: false
+							});	
 					}	
 							
-					ns1blankspaceReset();
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Email"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceMessagingSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceMessagingSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceMessagingSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
-						interfaceMessagingNew({xhtmlElementID: 'divInterfaceMainEdit', newEmail: true});
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceMessagingSendEmail();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceMessagingSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-						interfaceMessagingSaveOptions();
-					});
-						
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceMessagingSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceMessagingHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceMessagingHelpOptions();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceMessagingSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceMessagingSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					$('#divInterfaceViewportControl').html('');	
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
+
+					ns1blankspace.messaging.autoCheck = false;
+					ns1blankspace.messaging.emailAccounts = [];
+					ns1blankspace.messaging.defaultRows = 25;
+					ns1blankspace.messaging.account = -1;
+					ns1blankspace.messaging.emailRead = [];
+					ns1blankspace.messaging.emailRemoved = [];
+					ns1blankspace.messaging.showRemoved = false;
+					ns1blankspace.messaging.EmailInbox = [];
+					ns1blankspace.messaging.EmailInboxXHTML = [];
+					ns1blankspace.messaging.emailCount = 0;
+					ns1blankspace.messaging.emailLastPage = 1;
+					ns1blankspace.messaging.emailLastPagination;
+					ns1blankspace.messaging.emailNewCount;
+					ns1blankspace.messaging.action = -1;
 
 					if (ns1blankspace.option.richTextEditing)
 					{
-					
 						tinyMCE.init(
 						{
 							mode : "none",

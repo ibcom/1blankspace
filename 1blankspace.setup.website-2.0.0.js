@@ -7,140 +7,44 @@
  
 ns1blankspace.setup.website = 
 {
-	init: 		function interfaceSetupWebsiteMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-
-					gsSetupName = 'Website';
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.object = 40;
-					ns1blankspace.objectContextData = undefined;
-					
-					var bShowHome = true;
-					var bNew = false;
+					var bShowHome = true
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.showNew != undefined) {bNew = oParam.showNew}
-						if (bNew) {interfaceSetupWebsiteNew()};
-					}	
-					
-					if (bShowHome)
-					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceSetupWebsiteMasterViewport({showHome: true});',
-							move: false
-							})		
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
-					
-					ns1blankspaceReset();		
-							
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Websites & Webapps"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupWebsiteSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSetupWebsiteSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSetupWebsiteSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceSetupWebsiteNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceSetupWebsiteNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSetupWebsiteSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-					
-						var aHTML = [];
-						var h = -1;
-						
-						aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
-										
-						aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-										'<td id="tdinterfaceActionOptionsRemove" class="interfaceActionOptions">' +
-										'Remove' +
-										'</td>' +
-										'</tr>';
 
-						aHTML[++h] = '</table>';
-
-						ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceSetupWebsiteActionOptionsBind()");
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-						
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceSetupWebsiteSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSetupWebsiteSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceSetupWebsiteHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSetupWebsiteHelpOptions();
-					});
-
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceSetupWebsiteSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceSetupWebsiteSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
+					ns1blankspace.object = 40;
+					ns1blankspace.objectParentName = 'setup';
+					ns1blankspace.objectName = 'website';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Websites & Webapps';
 					
 					if (bShowHome)
 					{
-						interfaceSetupWebsiteHomeShow();
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.website.init({showHome: true});',
+							move: false
+							});	
 					}	
+							
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
+					ns1blankspace.setup.website.bind();
 				},
 
-	bind:		function interfaceSetupWebsiteActionOptionsBind()
+	bind:		function ()
 				{
-					$('#tdinterfaceActionOptionsRemove').click(function(event)
+					$('#ns1blankspaceActionOptionsRemove').click(function(event)
 					{
-						interfaceSetupWebsiteRemove();
+						ns1blankspace.setup.website.remove();
 					});
 				},
 
-	bind:		function interfaceSetupWebsiteHomeShow(oResponse)
+	home:		function (oResponse)
 				{
 
 					if (oResponse == undefined)

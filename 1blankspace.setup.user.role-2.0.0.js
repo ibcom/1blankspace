@@ -7,89 +7,32 @@
  
 ns1blankspace.setup.userRole = 
 {
-	init: 		function interfaceSetupUserRoleMasterViewport()
+	init: 		function ()
 				{
-					ns1blankspace.objectName = 'User Roles';
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.object = -1;
-					ns1blankspace.objectContextData = undefined;
+					var bShowHome = true
 					
-					ns1blankspaceReset();		
-							
-					$('#divns1blankspaceViewportControlSet').button(
+					if (oParam != undefined)
 					{
-						label: "User Roles"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupUserRoleSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSetupUserRoleSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSetupUserRoleSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceSetupUserRoleNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceSetupUserRoleNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSetupUserRoleSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-						interfaceSetupUserRoleSaveOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceSetupUserRoleSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSetupUserRoleSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceSetupUserRoleHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSetupUserRoleHelpOptions();
-					});
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
 
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
+					ns1blankspace.object = 22;
+					ns1blankspace.objectParentName = 'setup';
+					ns1blankspace.objectName = 'userRole';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'User ROles';
+					
+					if (bShowHome)
 					{
-						interfaceSetupUserRoleSearch(event.target.id, ns1blankspace.data.searchSource.browse);
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceSetupUserRoleSearch(event.target.id, ns1blankspace.data.searchSource.browse);
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
-					interfaceSetupUserRoleHomeShow();
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.userRole.init({showHome: true});',
+							move: false
+							});	
+					}	
+							
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
 	home: 		function interfaceSetupUserRoleHomeShow(oResponse)

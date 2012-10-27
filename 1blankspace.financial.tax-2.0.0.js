@@ -9,7 +9,6 @@ ns1blankspace.financial.tax =
 {
 	init: 		function (oParam)
 				{
-
 					ns1blankspace.financial.init();
 					
 					var bShowHome = true

@@ -9,86 +9,34 @@ $.extend(true, ns1blankspace.setup,
 {
 	init: 		function interfaceSetupMasterViewport(oParam)
 				{
+					var bShowHome = true
+					
 					if (oParam != undefined)
 					{
-						if (oParam.setupMethod != undefined) {gsSetupMethod = oParam.setupMethod}
-						if (oParam.setupName != undefined) {gsSetupName = oParam.setupName}
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+						if (oParam.method != undefined) {ns1blankspace.setup.method = oParam.method}
+						if (oParam.viewName != undefined) {ns1blankspace.setup.name = oParam.viewName}	
 					}
 
-					ns1blankspaceReset();
+					ns1blankspace.object = -1;
+					ns1blankspace.objectParentName = undefined;
+					ns1blankspace.objectName = 'setup';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = ns1blankspace.setup.name;
 					
-					$('#divns1blankspaceViewportControlSet').button(
+					if (bShowHome)
 					{
-						label: gsSetupName
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						interfaceSetupSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#imgns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSetupSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSetupSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceSetupAdd();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceSetupNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSetupSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-					
-						var aHTML = [];
-						var h = -1;
-						
-						aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
-										
-						aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-										'<td id="tdinterfaceActionOptionsDelete" class="interfaceActionOptions">' +
-										'Delete' +
-										'</td>' +
-										'</tr>';
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.init({showHome: true});',
+							move: false
+							});	
+					}	
+							
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 
-						aHTML[++h] = '</table>';
-
-						ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceContactPersonActionOptionsBind()");
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceSetupHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSetupHelpOptions();
-					});
-					
-					$('.ns1blankspaceViewportControlBrowse').click(function(event)
-					{
-						interfaceSetupSearch(ns1blankspace.data.searchSource.browse, event.target.id);
-					});
+					//???
 					
 					var aHTML = [];
 					var h = -1;

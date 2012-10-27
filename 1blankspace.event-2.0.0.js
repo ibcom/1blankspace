@@ -5,173 +5,81 @@
  * 01 FEB 2010
  */
 
-ns1blankspace.document = 
+ns1blankspace.event = 
 {
-	init: 		function interfaceEventMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-					ns1blankspace.object = 39;
-					ns1blankspace.objectName = 'Event';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-							
-					var bShowHome = true;
-					var bNew = false;
+					var bShowHome = true
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.showNew != undefined) {bNew = oParam.showNew}
-						if (bNew) {interfaceEventNew()};
-					}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
+
+					ns1blankspace.object = 39;
+					ns1blankspace.objectParentName = undefined;
+					ns1blankspace.objectName = 'event';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Events';
 					
-					ns1blankspaceReset();		
-						
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceEventMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.event.init({showHome: true});',
 							move: false
-							})		
-					}
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Events"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceEventSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceEventSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceEventSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceEventNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceEventNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceEventSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-					
-						var aHTML = [];
-						var h = -1;
-						
-						aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
-										
-						aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-										'<td id="tdinterfaceActionOptionsDelete" class="interfaceActionOptions">' +
-										'Delete' +
-										'</td>' +
-										'</tr>';
+							});	
+					}	
+							
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 
-						aHTML[++h] = '</table>';
+					if (ns1blankspace.option.richTextEditing)
+					{
+						tinyMCE.init(
+						{
+					        mode : "none",
+							height : "370px", 
+							width : "100%",
+							theme : "advanced",
 
-						ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceEventActionOptionsBind()");
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceEventSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceEventSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceEventHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceEventHelpOptions();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceEventSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceEventSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
-					$('#divInterfaceViewportControl').html('');	
-						
-					tinyMCE.init(
-					{
-				        mode : "none",
-						height : "370px", 
-						width : "100%",
-						theme : "advanced",
+							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
-						plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
+							theme_advanced_buttons1_add_before : "forecolor,backcolor", 
+							theme_advanced_buttons1_add : "fontselect,fontsizeselect", 
+					 
+							theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak,visualchars", 
+							theme_advanced_buttons2_add_before: "cut,copy,paste,pasteword,separator,search,replace,separator", 
+							
+							theme_advanced_buttons3_add_before : "tablecontrols,separator", 
+							theme_advanced_buttons3_add : "emotions,iespell,fullscreen,print,templateFields,media,selectall,advhr",
+					 
+							
+							plugin_insertdate_dateFormat : "%d-%m-%y", 
+							plugin_insertdate_timeFormat : "%H:%M:%S", 
+						
+							theme_advanced_toolbar_location : "top",
+							theme_advanced_toolbar_align : "left",
+							theme_advanced_resizing : true,
+						
+							font_size_style_values : "8pt,10pt,12pt,14pt,18pt,24pt,36pt",
+							
+							extended_valid_elements : "style,input[accept|accesskey|align<bottom?left?middle?right?top|alt|checked<checked|class|dir<ltr?rtl|disabled<disabled|id|ismap<ismap|lang|maxlength|name|onblur|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onselect|readonly<readonly|size|src|style|tabindex|title|type<button?checkbox?file?hidden?image?password?radio?reset?submit?text|usemap|value],select[class|dir<ltr?rtl|disabled<disabled|id|lang|multiple<multiple|name|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|size|style|tabindex|title],ol[class|compact<compact|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|start|style|title|type],div[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title],li[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title|type|value],iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth]",
 
-						theme_advanced_buttons1_add_before : "forecolor,backcolor", 
-						theme_advanced_buttons1_add : "fontselect,fontsizeselect", 
-				 
-						theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak,visualchars", 
-						theme_advanced_buttons2_add_before: "cut,copy,paste,pasteword,separator,search,replace,separator", 
-						
-						theme_advanced_buttons3_add_before : "tablecontrols,separator", 
-						theme_advanced_buttons3_add : "emotions,iespell,fullscreen,print,templateFields,media,selectall,advhr",
-				 
-						
-						plugin_insertdate_dateFormat : "%d-%m-%y", 
-						plugin_insertdate_timeFormat : "%H:%M:%S", 
-					
-						theme_advanced_toolbar_location : "top",
-						theme_advanced_toolbar_align : "left",
-						theme_advanced_resizing : true,
-					
-						font_size_style_values : "8pt,10pt,12pt,14pt,18pt,24pt,36pt",
-						
-						extended_valid_elements : "style,input[accept|accesskey|align<bottom?left?middle?right?top|alt|checked<checked|class|dir<ltr?rtl|disabled<disabled|id|ismap<ismap|lang|maxlength|name|onblur|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onselect|readonly<readonly|size|src|style|tabindex|title|type<button?checkbox?file?hidden?image?password?radio?reset?submit?text|usemap|value],select[class|dir<ltr?rtl|disabled<disabled|id|lang|multiple<multiple|name|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|size|style|tabindex|title],ol[class|compact<compact|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|start|style|title|type],div[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title],li[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title|type|value],iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth]",
-
-						fullscreen_new_window : true, 
-						fullscreen_settings : 
-						{ 
-							theme_advanced_path_location : "top" 
-						}, 
-						relative_urls : false, 
-						remove_script_host : false, 
-						convert_urls : false, 
-						visual : true, 
-						gecko_spellcheck : true,
-						TemplateLinkType : "32",
-						content_css : ns1blankspace.xhtml.editorCSS
-					});				
-					
-					if (bShowHome) {interfaceEventHomeShow()};	
+							fullscreen_new_window : true, 
+							fullscreen_settings : 
+							{ 
+								theme_advanced_path_location : "top" 
+							}, 
+							relative_urls : false, 
+							remove_script_host : false, 
+							convert_urls : false, 
+							visual : true, 
+							gecko_spellcheck : true,
+							TemplateLinkType : "32",
+							content_css : ns1blankspace.xhtml.editorCSS
+						});
+					}			
 				},
 
 	home: 		function interfaceEventHomeShow(oResponse)

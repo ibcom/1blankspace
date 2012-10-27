@@ -5,134 +5,42 @@
  * 01 FEB 2010
  */
  
-ns1blankspace.setup.website.form = 
+ns1blankspace.setup.websiteForm = 
 {
-	init: 		function interfaceSetupWebsiteFormMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.object = 40;
-					ns1blankspace.objectContextData = undefined;
-					
-					var bShowHome = true;
-					var bNew = false;
+					var bShowHome = true
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.showNew != undefined) {bNew = oParam.showNew}
-						if (oParam.site != undefined) {ns1blankspace.websiteFormSite = oParam.site}
-						if (bNew) {interfaceSetupWebsiteFormNew()};
-					}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
+
+					ns1blankspace.object = 40;
+					ns1blankspace.objectParentName = 'setup';
+					ns1blankspace.objectName = 'websiteForm';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Website Forms';
 					
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceSetupWebsiteFormMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.websiteForm.init({showHome: true});',
 							move: false
-							})		
-					}
-					
-					ns1blankspaceReset();		
+							});	
+					}	
 							
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Website Forms"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupWebsiteFormSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSetupWebsiteFormSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSetupWebsiteFormSearchOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceSetupWebsiteFormNew();
-					})
-					
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceSetupWebsiteFormNewOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSetupWebsiteFormSave();
-					});
-					
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-					{
-					
-						var aHTML = [];
-						var h = -1;
-						
-						aHTML[++h] = '<table id="tableinterfaceActionOptions" class="interfaceActionOptions">';
-										
-						aHTML[++h] = '<tr id="trinterfaceActionOptions" class="interfaceActionOptions">' +
-										'<td id="tdinterfaceActionOptionsRemove" class="interfaceActionOptions">' +
-										'Remove' +
-										'</td>' +
-										'</tr>';
-
-						aHTML[++h] = '</table>';
-
-						ns1blankspaceViewportActionShow(this, aHTML.join(''), "interfaceSetupWebsiteFormActionOptionsBind()");
-					});
-					
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-						
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceSetupWebsiteFormSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSetupWebsiteFormSetupOptions();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelp').click(function(event)
-					{
-						interfaceSetupWebsiteFormHelp();
-					});
-					
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSetupWebsiteFormHelpOptions();
-					});
-
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceSetupWebsiteFormSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceSetupWebsiteFormSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
-					interfaceSetupWebsiteFormHomeShow();
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
+					ns1blankspace.setup.websiteForm.bind();
 				},
 
-	bind:		function interfaceSetupWebsiteFormActionOptionsBind()
+	bind:		function ()
 				{
-					$('#tdinterfaceActionOptionsRemove').click(function(event)
+					$('#ns1blankspaceActionOptionsRemove').click(function(event)
 					{
-						interfaceSetupWebsiteFormRemove();
+						ns1blankspace.setup.websiteForm.remove();
 					});
 				},
 

@@ -8,104 +8,31 @@
 
 ns1blankspace.supportIssue = 
 {
-	init: 		function interfaceSupportIssueMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-
-					ns1blankspace.object = 8;
-					ns1blankspace.objectName = 'Support Issue';
-					ns1blankspace.objectContextDataXML = '';
-					ns1blankspace.objectContext = -1;
-
-					var bShowHome = true;
-					var bNew = false;
-
+					var bShowHome = true
+					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.showNew != undefined) {bNew = oParam.showNew}
-						if (bNew) {interfaceSupportIssueNew()};
-					}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
 
-					ns1blankspaceReset();
-
+					ns1blankspace.object = -1;
+					ns1blankspace.objectName = 'supportIssue';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Support Issues';
+					
 					if (bShowHome)
 					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceSupportIssueMasterViewport({showHome: true});',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.supportIssue.init({showHome: true});',
 							move: false
-							})		
-					}
-
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Support Issue"
-					});
-
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSupportIssueSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceSupportIssueSearch('inputns1blankspaceViewportControlSearch');
-					});
-
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceSupportIssueSearchOptions();
-					});
-
-					$('#spanns1blankspaceViewportControlNew').click(function(event)
-					{
-						interfaceSupportIssueNew();
-					})
-
-					$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-					{
-						interfaceSupportIssueNewOptions();
-					});
-
-					$('#spanns1blankspaceViewportControlAction').click(function(event)
-					{
-						interfaceSupportIssueSave();
-					});
-
-					$('#spanns1blankspaceViewportControlAction').button({disabled: true});
-
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceSupportIssueSetupOptions();
-					});
-
-					$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-					{
-						interfaceSupportIssueHelp();
-					});
-
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceSupportIssueSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceSupportIssueSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-
-					$('#divInterfaceViewportControl').html('');	
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					if (bNew) 
-					{
-						interfaceSupportIssueNew();
-					}
-					else
-					{
-						if (bShowHome) {interfaceSupportIssueHomeShow()};
-					}
+							});	
+					}	
+							
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
 	home: 		function interfaceSupportIssueHomeShow(oXML)
