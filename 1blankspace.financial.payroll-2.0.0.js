@@ -863,27 +863,25 @@ ns1blankspace.financial.payroll =
 									if (iStep == 11)
 									{
 										var aHTML = [];
-										var h = -1;
 
-										aHTML[++h] = '<table style="width:100%">' +
-														'<tr>' +
-														'<td id="tdInterfaceMainPayrollEmployeeDetailsEditColumn1" style="font-size:0.875em;padding-right:15px;>' +
-														ns1blankspace.xhtml.loading +
-														'</td>' +
-														'<td id="tdInterfaceMainPayrollEmployeeDetailsEditColumn2" class="interfaceMainColumn2" style="width:75px;font-size:0.875em;">' +
-														'<span style="width:60px;font-size:0.75em;" id="spanPayrollEmployeeEdit_options_save">Save</span>' +
-														'</td>' +
-														'</tr></table>';				
-											
-										$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+													'<tr class="ns1blankspaceContainer">' +
+													'<td id="ns1blankspacePayrollEmployeeDetailsColumn1" class="ns1blankspaceColumn1" style="font-size:0.875em;padding-right:15px;">' +
+													ns1blankspace.xhtml.loading + '</td>' +
+													'<td id="ns1blankspacePayrollEmployeeDetailsColumn2" class="ns1blankspaceColumn2">' +
+													'<span style="width:60px;font-size:0.75em;" id="ns1blankspacePayrollEmployeeEdit_options_save">Save</span></td>' +
+													'</tr>' + 
+													'</table>');		
+	
+										$('#ns1blankspacePayrollEmployeeColumn2').html(aHTML.join(''));
 
-										$('#spanPayrollEmployeeEdit_options_save').button(
+										$('#ns1blankspacePayrollEmployeeEdit_options_save').button(
 										{
 											text: "Save"
 										})
 										.click(function() 
 										{
-											ns1blankspaceStatusWorking();
+											ns1blankspace.status.working();
 										});	
 
 									}	
@@ -893,128 +891,107 @@ ns1blankspace.financial.payroll =
 									{
 										if (oResponse == undefined)
 										{
-											$('#tdInterfaceMainPayrollEmployeeColumn2').html(ns1blankspace.xhtml.loadingSmall);
+											$('#ns1blankspacePayrollEmployeeColumn2').html(ns1blankspace.xhtml.loadingSmall);
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
 											oSearch.addField('*');
 											oSearch.addFilter('id', 'EQUAL_TO', iEmployee);
-											oSearch.getResults(function(data) {interfaceFinancialPayrollEmployees(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.financial.payroll.employees.show(oParam, data)});
 										}
 										else
 										{
 											ns1blankspace.financial.employee = oResponse.data.rows[0];
 										
 											var aHTML = [];
-											var h = -1;
-											
-											aHTML[++h] = '<table class="interfaceMainPayrollEmployeeDetails" cellspacing=0 cellpadding=0>' +
-													'<tr id="trInterfaceMainPayrollEmployeeDetailsRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainPayrollEmployeeDetailsColumn1" style="width:50px;font-size:0.875em;padding-right:10px;">' +
-													'</td>' +
-													'<td id="tdInterfaceMainPayrollEmployeeDetailsColumn2" class="interfaceMainColumn2">' +
-													'</td>' +
-													'</tr>' +
-													'</table>';			
 										
-											$('#tdInterfaceMainPayrollEmployeeColumn2').html(aHTML.join(''));
+											aHTML.push('<table class="ns1blankspaceContainer">' +
+															'<tr class="ns1blankspaceContainer">' +
+															'<td id="ns1blankspacePayrollEmployeeDetailsColumn1" class="ns1blankspaceColumn1" style="width:50px;font-size:0.875em;padding-right:10px;">' +
+															ns1blankspace.xhtml.loading + '</td>' +
+															'<td id="ns1blankspacePayrollEmployeeDetailsColumn2" class="ns1blankspaceColumn2">' +
+															'</td>' +
+															'</tr>' + 
+															'</table>');		
+			
+											$('#ns1blankspacePayrollEmployeeColumn2').html(aHTML.join(''));
 											
 											var aHTML = [];
-											var h = -1;
 
-											aHTML[++h] = '<table id="tableEmployeeDetails" cellpadding=6>';
+											aHTML.push('<table id="ns1blankspacePayrollEmployeeDetails" cellpadding=6>');
 
-											aHTML[++h] = '<tr class="interfaceMainRow">';		
-											aHTML[++h] = '<td id="interfaceFinancialEmployee_details-11" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
-																	'Details</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-11" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
+																	'Details</td></tr>');
 
-											aHTML[++h] = '<tr class="interfaceMainRow">';
-											aHTML[++h] = '<td id="interfaceFinancialEmployee_details-12" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
-																	'Payroll</td>';																					
-											aHTML[++h] = '</tr>';
+											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-12" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
+																	'Payroll</td></tr>');
 
-											aHTML[++h] = '<tr class="interfaceMainRow">';
-											aHTML[++h] = '<td id="interfaceFinancialEmployee_details-13" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
-																	'Pay Rates</td>';																					
-											aHTML[++h] = '</tr>';
+											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-13" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
+																	'Pay Rates</td></tr>');
 
-											aHTML[++h] = '<tr class="interfaceMainRow">';
-											aHTML[++h] = '<td id="interfaceFinancialEmployee_details-14" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
-																	'Bank&nbsp;Accounts</td>';																					
-											aHTML[++h] = '</tr>';
+											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-14" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
+																	'Bank&nbsp;Accounts</td></tr>');
 
+											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-15" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
+																	'Superannuation</td></tr>');
 
-											aHTML[++h] = '<tr class="interfaceMainRow">';
-											aHTML[++h] = '<td id="interfaceFinancialEmployee_details-15" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
-																	'Superannuation</td>';																					
-											aHTML[++h] = '</tr>';
+											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-16" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
+																	'Role</td></tr>');
 
+											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-17" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
+																	'Induction</td></tr>');
 
-											aHTML[++h] = '<tr class="interfaceMainRow">';
-											aHTML[++h] = '<td id="interfaceFinancialEmployee_details-16" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
-																	'Role</td>';																					
-											aHTML[++h] = '</tr>';
+											aHTML.push('</table>');
 
-											aHTML[++h] = '<tr class="interfaceMainRow">';
-											aHTML[++h] = '<td id="interfaceFinancialEmployee_details-17" class="interfaceMainRow interfaceMainRowSelect employeedetails">' +
-																	'Induction</td>';																					
-											aHTML[++h] = '</tr>';
-
-											aHTML[++h] = '</table>';
-
-											$('#tdInterfaceMainPayrollEmployeeDetailsColumn1').html(aHTML.join(''));
+											$('#ns1blankspacePayrollEmployeeDetailsColumn1').html(aHTML.join(''));
 										
-											$('.employeedetails').click(function()
+											$('.ns1blankspacePayrollEmployeeDetails').click(function()
 											{
-												$('#tableEmployeeDetails td.Highlight').removeClass('Highlight');
+												$('#ns1blankspacePayrollEmployeeDetails td.Highlight').removeClass('Highlight');
 												$('#' + event.target.id).addClass('Highlight');
 												var aID = (event.target.id).split('-');
 												$.extend(true, oParam, {step: parseInt(aID[1]), stepAction: 1});
-												interfaceFinancialPayrollEmployees(oParam);
+												ns1blankspace.financial.payroll.employees.show(oParam);
 											});
 
-											$('#interfaceFinancialEmployee_details-11').addClass('Highlight');
+											$('#ins1blankspaceFinancialEmployee_details-11').addClass('Highlight');
 											$.extend(true, oParam, {step: 11});
-											interfaceFinancialPayrollEmployees(oParam);
+											ns1blankspace.financial.payroll.employees.show(oParam);
 										}
 									}
 									
 									if (iStep == 11)
 									{
 										var aHTML = [];
-										var h = -1;
-											
-										aHTML[++h] = '<table id="tableInterfaceMainEmployeeDetails" class="interfaceMain">';
-										
-										aHTML[++h] = '<tr id="trInterfaceMainEmployeeDetailsStatus" class="interfaceMain">' +
-														'<td id="tdInterfaceMainEmployeeDetailsStatus" class="interfaceMain">' +
+
+										aHTML.push('<table class="ns1blankspace" style="padding-right:15px;">';
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Status' +
 														'</td></tr>' +
-														'<tr id="trInterfaceMainEmployeeDetailsStatus" class="interfaceMainText">' +
-														'<td id="tdInterfaceMainEmployeeDetailsStatusValue" class="interfaceMainRadio">' +
+														'<tr><td class="ns1blankspaceRadio">' +
 														'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Proposed' +
 														'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Active' +
 														'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>In-active' +
-														'</td></tr>';
-										
-										aHTML[++h] = '<tr id="trInterfaceMainEmployeeDetailsNotes" class="interfaceMain">' +
-														'<td id="tdInterfaceMainEmployeeDetailsNotes" class="interfaceMain">' +
-														'Notes' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Status' +
 														'</td></tr>' +
-														'<tr id="trInterfaceMainEmployeeDetailsNotesValue" class="interfaceMainTextMulti">' +
-														'<td id="tdInterfaceMainEmployeeDetailsNotesValue" class="interfaceMainTextMulti">' +
-														'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsNotes" class="inputInterfaceMainTextMultiSmall"></textarea>' +
-														'</td></tr>';
+														'<tr><td class="ns1blankspaceMultiSmall">' +
+														'<textarea rows="10" cols="35" id="ns1blankspaceDetailsNotes" class="inputInterfaceMainTextMultiSmall"></textarea>' +
+														'</td></tr>');
 										
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>');					
 											
-										$('#tdInterfaceMainPayrollEmployeeDetailsEditColumn1').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
 											$('[name="radioStatus"][value="' + ns1blankspace.financial.employee["employee.status"] + '"]').attr('checked', true);
-											$('#inputInterfaceMainEmployeeDetailsNotes').val(ns1blankspace.financial.employee["employee.description"]);
+											$('#ns1blankspaceDetailsNotes').val(ns1blankspace.financial.employee["employee.description"]);
 										}
 										else
 										{
@@ -1025,59 +1002,84 @@ ns1blankspace.financial.payroll =
 									if (iStep == 12)
 									{
 										var aHTML = [];
-										var h = -1;
-											
-										aHTML[++h] = '<table id="tableInterfaceMainEmployeeDetails" class="interfaceMain">';
-										
-										aHTML[++h] = '<tr><td class="interfaceMain">Frequency</td></tr>' +
-														'<tr><td class="interfaceMainRadio">' +
+
+										aHTML.push('<table class="ns1blankspace" style="padding-right:15px;">';
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Frequency' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceRadio">' +
 														'<input type="radio" id="radioFrequency1" name="radioFrequency" value="1"/>Weekly' +
 														'<br /><input type="radio" id="radioFrequency2" name="radioFrequency" value="2"/>Fortnightly' +
 														'<br /><input type="radio" id="radioFrequency3" name="radioFrequency" value="3"/>Monthly' +
 														'<br /><input type="radio" id="radioFrequency4" name="radioFrequency" value="4"/>Bi/Semi Monthly' +
-														'</td></tr>';
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Allowance Amount' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<input id="ns1blankspaceDetailsAllowance" class="inputInterfaceMainText">' +
+														'</td></tr>');
+									
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Allowance Description' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<input id="ns1blankspaceDetailsDescription" class="inputInterfaceMainText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Standard Deduction Amount' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<input id="ns1blankspaceDetailsDeduction" class="inputInterfaceMainText">' +
+														'</td></tr>');	
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Standard Deduction Description' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<input id="ns1blankspaceDetailsDeductionDescription" class="inputInterfaceMainText">' +
+														'</td></tr>');	
 										
-										aHTML[++h] = '<tr><td class="interfaceMain">Allowance Amount</td></tr>' +
-														'<tr><td class="interfaceMainText">' +
-														'<input id="inputInterfaceMainDetailsAllowance" class="inputInterfaceMainText">' +
-														'</td></tr>';
-
-										aHTML[++h] = '<tr><td class="interfaceMain">Allowance Description</td></tr>' +
-														'<tr><td class="interfaceMainText">' +
-														'<input id="inputInterfaceMainDetailsAllowanceDescription" class="inputInterfaceMainText">' +
-														'</td></tr>';				
-										
-										aHTML[++h] = '<tr><td class="interfaceMain">Standard Deduction Amount</td></tr>' +
-														'<tr><td class="interfaceMainText">' +
-														'<input id="inputInterfaceMainDetailsDeduction" class="inputInterfaceMainText">' +
-														'</td></tr>';
-
-										aHTML[++h] = '<tr><td class="interfaceMain">Standard Deduction Description</td></tr>' +
-														'<tr><td class="interfaceMainText">' +
-														'<input id="inputInterfaceMainDetailsDeductionDescription" class="inputInterfaceMainText">' +
-														'</td></tr>';
-
-										aHTML[++h] = '<tr><td class="interfaceMain">Medicare</td></tr>' +
-														'<tr><td class="interfaceMainRadio">' +
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Medicare' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceRadio">' +
 														'<input type="radio" id="radioMedicare1" name="radioMedicare" value="1"/>Pay Medicare' +
 														'<br /><input type="radio" id="radioMedicare2" name="radioMedicare" value="2"/>Full Exemption' +
 														'<br /><input type="radio" id="radioMedicare3" name="radioMedicare" value="3"/>Half Exemption' +
-														'</td></tr>';
+														'</td></tr>');
 
-										aHTML[++h] = '<tr><td class="interfaceMain">Tax File Number</td></tr>' +
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Tax File Number' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceRadio">' +
 														'<tr><td class="interfaceMainText">' +
-														'<input id="inputInterfaceMainDetailsTaxNumber" class="inputInterfaceMainText">' +
-														'</td></tr>';
+														'<input id="ns1blankspaceDetailsTaxNumber" class="inputInterfaceMainText">' +
+														'</td></tr>');	
 
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>');					
 											
-										$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
 											$('[name="radioMedicare"][value="' + ns1blankspace.financial.employee["employee.status"] + '"]').attr('checked', true);
 											$('[name="radioFrequency"][value="' + ns1blankspace.financial.employee["employee.payfrequency"] + '"]').attr('checked', true);
-											$('#inputInterfaceMainDetailsAllowanceDescription').val(ns1blankspace.financial.employee["employee.allowancedescription"]);
+											$('#ns1blankspaceDetailsAllowanceDescription').val(ns1blankspace.financial.employee["employee.allowancedescription"]);
 										}
 										else
 										{
@@ -1089,43 +1091,59 @@ ns1blankspace.financial.payroll =
 									if (iStep == 15)
 									{
 										var aHTML = [];
-										var h = -1;
+
+										aHTML.push('<table class="ns1blankspace" style="padding-right:15px;">';
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Fund Name' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<input id="ns1blankspaceDetailsFundName" class="inputInterfaceMainText">' +
+														'</td></tr>');
 											
-										aHTML[++h] = '<table id="tableInterfaceMainEmployeeDetails" class="interfaceMain">';
-										
-										aHTML[++h] = '<tr><td class="interfaceMain">Fund Name</td></tr>' +
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Fund Member Number' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
 														'<tr><td class="interfaceMainText">' +
-														'<input id="inputInterfaceMainDetailsEmployerFundName" class="inputInterfaceMainText">' +
-														'</td></tr>';
+														'<input id="ns1blankspaceDetailsFundMemberNumber" class="inputInterfaceMainText">' +
+														'</td></tr>');
+								
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Superannuation %' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<input id="ns1blankspaceDetailsEmployerSuperannuationRate" class="inputInterfaceMainText">' +
+														'</td></tr>');
 
-										aHTML[++h] = '<tr><td class="interfaceMain">Fund Member Number</td></tr>' +
-														'<tr><td class="interfaceMainText">' +
-														'<input id="inputInterfaceMainDetailsEmployerFundMemberName" class="inputInterfaceMainText">' +
-														'</td></tr>';				
-										
-										aHTML[++h] = '<tr><td class="interfaceMain">Superannuation %</td></tr>' +
-														'<tr><td class="interfaceMainText">' +
-														'<input id="inputInterfaceMainDetailsEmployerSuperannuationRate" class="inputInterfaceMainText">' +
-														'</td></tr>';
-
-										aHTML[++h] = '<tr><td class="interfaceMain">Salary Sacrifice Contribution</td></tr>' +
-														'<tr><td class="interfaceMainRadio">' +
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Salary Sacrifice Contribution' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceRadio">' +
 														'<input type="radio" id="radioEmployerType1" name="radioEmployer" value="1"/>Dollar amount per pay' +
 														'<br /><input type="radio" id="radioEmployerType2" name="radioEmployer" value="2"/>Percentage of pay' +
-														'</td></tr>';				
+														'</td></tr>');
 
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>');					
 											
-										$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
 											$('[name="radioEmployerType1"][value="' + ns1blankspace.financial.employee["employee.status"] + '"]').attr('checked', true);
-											$('#inputInterfaceMainDetailsAllowanceDescription').val(ns1blankspace.financial.employee["employee.allowancedescription"]);
+											$('#ns1blankspaceDetailsFundName').val(ns1blankspace.financial.employee["employee.superfundname"]);
+											$('#ns1blankspaceDetailsFundMemberNumber').val(ns1blankspace.financial.employee["employee.superfundmembernumber"]);
+											$('#ns1blankspaceDetailsEmployerSuperannuationRate').val(ns1blankspace.financial.employee["employee.superrate"]);
 										}
 										else
 										{
-											$('[name="radioMedicare"][value="1"]').attr('checked', true);
+											$('[name="radioEmployerType"][value="1"]').attr('checked', true);
 										}
 									}	
 
@@ -1133,42 +1151,66 @@ ns1blankspace.financial.payroll =
 									if (iStep == 16)
 									{
 										var aHTML = [];
-										var h = -1;
-											
-										aHTML[++h] = '<table id="tableInterfaceMainEmployeeDetails" class="interfaceMain">';
+
+										aHTML.push('<table class="ns1blankspace" style="padding-right:15px;">';
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Description' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<textarea rows="10" cols="35" id="ns1blankspaceDetailsJobDescription" class="ns1blankspaceTextMultiSmall"></textarea>' +
+														'</td></tr>');
 										
-										aHTML[++h] = '<tr><td class="interfaceMain">Description</td></tr>' +
-														'<tr><td class="interfaceMainTextMulti">' +
-														'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsJobDetails" class="inputInterfaceMainTextMultiSmall"></textarea>' +
-														'</td></tr>';
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Reports To' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<textarea rows="10" cols="35" id="ns1blankspaceDetailsInternalRelationships" class="ns1blankspaceTextMultiSmall"></textarea>' +
+														'</td></tr>');
 
-										aHTML[++h] = '<tr><td class="interfaceMain">Reports To</td></tr>' +
-														'<tr><td class="interfaceMainTextMulti">' +
-														'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsInternalRelationships" class="inputInterfaceMainTextMultiSmall"></textarea>' +
-														'</td></tr>';
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'KPIs' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<textarea rows="10" cols="35" id="ns1blankspaceDetailsKPI" class="ns1blankspaceTextMultiSmall"></textarea>' +
+														'</td></tr>');
 
-										aHTML[++h] = '<tr><td class="interfaceMain">KPIs</td></tr>' +
-														'<tr><td class="interfaceMainTextMulti">' +
-														'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsKPI" class="inputInterfaceMainTextMultiSmall"></textarea>' +
-														'</td></tr>';
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Responsibilities' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<textarea rows="10" cols="35" id="ns1blankspaceDetailsResponsibilities" class="ns1blankspaceTextMultiSmall"></textarea>' +
+														'</td></tr>');
 
-										aHTML[++h] = '<tr><td class="interfaceMain">Responsibilities</td></tr>' +
-														'<tr><td class="interfaceMainTextMulti">' +
-														'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsResponsibilities" class="inputInterfaceMainTextMultiSmall"></textarea>' +
-														'</td></tr>';
 
-										aHTML[++h] = '<tr><td class="interfaceMain">Tasks</td></tr>' +
-														'<tr><td class="interfaceMainTextMulti">' +
-														'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsTasks" class="inputInterfaceMainTextMultiSmall"></textarea>' +
-														'</td></tr>';
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Must Do Tasks' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
+														'<textarea rows="10" cols="35" id="ns1blankspaceDetailsTasks" class="ns1blankspaceTextMultiSmall"></textarea>' +
+														'</td></tr>');
 
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>');					
 											
-										$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
-											$('#inputInterfaceMainDetailsJobDetails').val(ns1blankspace.financial.employee["employee.jobdetails"]);
+											$('#ns1blankspaceDetailsJobDescription').val(ns1blankspace.financial.employee["employee.jobdetails"]);
+											$('#ns1blankspaceDetailsInternalRelationships').val(ns1blankspace.financial.employee["employee.jobinternalrelationships"]);
+											$('#ns1blankspaceDetailsKPI').val(ns1blankspace.financial.employee["employee.jobkpis"]);
+											$('#ns1blankspaceDetailsResponsibilities').val(ns1blankspace.financial.employee["employee.jobresponsibilities"]);
+											$('#ns1blankspaceDetailsTasks').val(ns1blankspace.financial.employee["employee.jobtasks"]);
 										}
 									}	
 
@@ -1176,32 +1218,42 @@ ns1blankspace.financial.payroll =
 									if (iStep == 17)
 									{
 										var aHTML = [];
-										var h = -1;
-											
-										aHTML[++h] = '<table id="tableInterfaceMainEmployeeDetails" class="interfaceMain">';
-										
-										aHTML[++h] = '<tr><td class="interfaceMain">Induction Date</td></tr>' +
-														'<tr><td class="interfaceMainText">' +
-														'<input id="inputInterfaceMainDetailsInductionDate" class="inputInterfaceMainDate">' +
-														'</td></tr>';
 
-										aHTML[++h] = '<tr><td class="interfaceMain">Workers Compensation Insurance Completed</td></tr>' +
-														'<tr><td class="interfaceMainRadio">' +
+										aHTML.push('<table class="ns1blankspace" style="padding-right:15px;">';
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Induction Date' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspace">' +
+														'<tr><td class="ns1blankspaceDate">' +
+														'<input id="ns1blankspaceDetailsEmployerInductionRate" class="ns1blankspaceDate">' +
+														'</td></tr>');
+											
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Workers Compensation Insurance Completed' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="interfaceMainText">' +
 														'<input type="radio" id="radioWorkersCompensationY" name="radioWorkersCompensation" value="Y"/>Yes' +
 														'<br /><input type="radio" id="radioWorkersCompensationN" name="radioWorkersCompensation" value="N"/>No' +
-														'</td></tr>';				
-
-										aHTML[++h] = '</table>';					
+														'</td></tr>');
+															
+										aHTML.push('</table>');					
 											
-										$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+
+										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
+											$('#ns1blankspaceDetailsInductionDate').val(ns1blankspace.financial.employee["employee.inductiondate"]);
 											$('[name="radioWorkersCompensation"][value="' + ns1blankspace.financial.employee["employee.workerscompform"] + '"]').attr('checked', true);
 										}
 										else
 										{
-											$('[name="radioMedicare"][value="1"]').attr('checked', true);
+											$('[name="radioWorkersCompensation"][value="N"]').attr('checked', true);
 										}
 									}	
 
@@ -1213,7 +1265,7 @@ ns1blankspace.financial.payroll =
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/financial/?method=FINANCIAL_PAYROLL_EMPLOYEE_PAYRATE_MANAGE',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_EMPLOYEE_PAYRATE_MANAGE'),
 												data: 'remove=1&id=' + aXHTMLElementID[1],
 												dataType: 'json',
 												success: function(data)
@@ -1222,22 +1274,21 @@ ns1blankspace.financial.payroll =
 													{
 														$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 														$.extend(true, oParam, {stepAction: 1});
-														interfaceFinancialPayrollEmployees(oParam);
-														ns1blankspaceStatus('Removed');
+														ns1blankspace.financial.payroll.employees.show(oParam);
+														ns1blankspace.status.message('Removed');
 													}
 													else
 													{
-														ns1blankspaceError(data.error.errornotes);
+														ns1blankspace.status.error(data.error.errornotes);
 													}
 												}
 											});
-
 										}
 										else
 										{
 											if ((iStepAction == 1 || iStepAction == 2) && (oResponse == undefined))
 											{
-												$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(ns1blankspace.xhtml.loadingSmall);
+												$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(ns1blankspace.xhtml.loadingSmall);
 
 												var oSearch = new AdvancedSearch();
 												oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_PAYRATE_SEARCH';		
@@ -1256,91 +1307,84 @@ ns1blankspace.financial.payroll =
 													oParam.id = aXHTMLElementID[1];
 												}	
 
-												oSearch.getResults(function(data){interfaceFinancialPayrollEmployees(oParam, data)});
+												oSearch.getResults(function(data){ns1blankspace.financial.payroll.employees.show(oParam, data)});
 											}
 											else
 											{
 												var aHTML = [];
-												var h = -1;
-											
-												aHTML[++h] = '<table style="width:100%">' +
-																'<tr>' +
-																'<td id="tdInterfaceMainPayrollEmployeeDetailsPayRateColumn1" style="font-size:0.875em;>' +
-																ns1blankspace.xhtml.loading +
+
+												aHTML.push('<table class="ns1blankspaceContainer">' +
+																'<tr class="ns1blankspaceContainer">' +
+																'<td id="ns1blankspacePayrollEmployeeDetailsPayRateColumn1" class="ns1blankspaceColumn1" style="font-size:0.875em;">' +
+																ns1blankspace.xhtml.loading + '</td>' +
+																'<td id="ns1blankspacePayrollEmployeeDetailsPayRateColumn2" class="ns1blankspaceColumn2" style="width:75px;">' +
 																'</td>' +
-																'<td id="tdInterfaceMainPayrollEmployeeDetailsPayRateColumn2" class="interfaceMainColumn2" style="width:75px;">' +
-																'</td>' +
-																'</tr></table>';				
+																'</tr>' + 
+																'</table>');				
 											
-												$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+												$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
 											
 												var aHTML = [];
 												var h = -1;
 
 												if (iStepAction == 1)
 												{
-													$('#tdInterfaceMainPayrollEmployeeDetailsPayRateColumn2').html('<span id="spanPayrollEmployee_options_add" class="interfaceMainRowOptionsAdd" style="font-size:0.75em;">Add</span>');
+													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn2').html(
+																		'<span id="ns1blankspacePayrollEmployee_options_add" class="ns1blankspaceAdd" style="font-size:0.75em;">Add</span>');
 
-													$('#spanPayrollEmployee_options_add').button(
+													$('#ns1blankspacePayrollEmployee_options_add').button(
 													{
 														text: "Add"
 													})
 													.click(function() {
 														$.extend(true, oParam, {stepAction: 3, xhtmlElementID: "", id: ""});
-														interfaceFinancialPayrollEmployees(oParam);
+														ns1blankspace.financial.payroll.employees.show(oParam);
 													})
 													.css('font-size', '0.75em');
 												
 													if (oResponse.data.rows.length == 0)
 													{
-														aHTML[++h] = '<table>';
-														aHTML[++h] = '<tr>';
-														aHTML[++h] = '<td class="interfaceMainRowNothing">No pay rates.</td>';
-														aHTML[++h] = '</tr>';
-														aHTML[++h] = '</table>';
+														aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">' +
+																		'<tr><td class="ns1blankspaceNothing">No pay rates.</td></tr>' +
+																		'</table>');
 
-														$('#ttdInterfaceMainPayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
+														$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
 													}
 													else
-													{			
-														aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-														aHTML[++h] = '<tbody>'
-												
-														aHTML[++h] = '<tr class="interfaceMainCaption">';
-														aHTML[++h] = '<td class="interfaceMainCaption">Start Date</td>';
-														aHTML[++h] = '<td class="interfaceMainCaption">End Date</td>';
-														aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Rate</td>';
-														aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-														aHTML[++h] = '</tr>';
+													{	
+														aHTML.push('<table class="ns1blankspace">');
+														aHTML.push('<tr class="ns1blankspaceCaption">');
+														aHTML.push('<td class="ns1blankspaceCaption">Start Date</td>');
+														aHTML.push('<td class="ns1blankspaceCaption">End Date</td>');
+														aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Rate</td>');
+														aHTML.push('<td class="interfaceMainCaption">&nbsp;</td>');
+														aHTML.push('</tr>');
 
 														$(oResponse.data.rows).each(function() 
 														{
-															aHTML[++h] = '<tr class="interfaceMainRow">';
-															
-															aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsPayRate_StartDate-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate">' +
-																					this.startdate + '</td>';
-																				
-															aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsPayRate_EndDate-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate">' +
-																					this.enddate + '</td>';
-																	
-															aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsPayRate_EndDate-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate" style="text-align:right;">' +
-																					this.rate + '</td>';
-																																
-															aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-															
-															aHTML[++h] = '<span id="spanSubscription_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-																
-															aHTML[++h] = '</td>';				
-																											
-															aHTML[++h] = '</tr>'
+															aHTML.push('<tr class="ns1blankspaceRow">');
+																			
+															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsPayRate_startdate-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsPayRate">' +
+																			this.startdate + '</td>');
+
+															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsPayRate_enddate-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsPayRate">' +
+																			this.enddate + '</td>');
+
+															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsPayRate_rate-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsPayRate" style="text-align:right;">' +
+																			this.rate + '</td>');
+
+															aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
+																			'<span id="ns1blankspacePayrollEmployeeDetailsPayRate_options_remove-' + this.id + '" class="ns1blankspacePayrollEmployeeDetailsPayRateRemove"></span></td>');
+										
+															aHTML.push('</tr>');
 														});
 														
-														aHTML[++h] = '</tbody></table>';
+														aHTML.push('</table>';
 													}
 													
-													$('#tdInterfaceMainPayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
+													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
 
-													$('.interfaceMainRowOptionsRemove').button(
+													$('.ns1blankspacePayrollEmployeeDetailsPayRateRemove').button(
 													{
 														text: false,
 														icons: {
@@ -1349,103 +1393,100 @@ ns1blankspace.financial.payroll =
 													})
 													.click(function() {
 														$.extend(true, oParam, {stepAction: 4, xhtmlElementID: this.id});
-														interfaceFinancialPayrollEmployees(oParam);
+														ns1blankspace.financial.payroll.employees.show(oParam);
 													})
 													.css('width', '15px')
 													.css('height', '17px');
 
-													$('.payrate').click(function() {
+													$('.ns1blankspacePayrollEmployeeDetailsPayRate').click(function() {
 														$.extend(true, oParam, {stepAction: 2, xhtmlElementID: event.target.id});
-														interfaceFinancialPayrollEmployees(oParam);
+														ns1blankspace.financial.payroll.employees.show(oParam);
 													})
 												}
 												else
 												{
-													aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain" style="padding-right:15px;">';
+													aHTML.push('<table class="ns1blankspace" style="padding-right:15px;">');
 										
-													aHTML[++h] = '<tr><td class="interfaceMain">Start Date</td></tr>' +
+													aHTML.push('<tr><td class="ns1blankspaceCaption">Start Date</td></tr>' +
 																	'<tr><td>' +
-																	'<input id="inputInterfacePayrollEmployeeDetailsPayRateStartDate" class="inputInterfaceMainDate">' +
-																	'</td></tr>';	
+																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateStartDate" class="ns1blankspaceDate">' +
+																	'</td></tr>');	
 
-													aHTML[++h] = '<tr><td class="interfaceMain">End Date</td></tr>' +
+													aHTML.push('<tr><td class="ns1blankspaceCaption">End Date</td></tr>' +
 																	'<tr><td>' +
-																	'<input id="inputInterfacePayrollEmployeeDetailsPayRateEndDate" class="inputInterfaceMainDate">' +
-																	'</td></tr>';
+																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateEndDate" class="ns1blankspaceDate">' +
+																	'</td></tr>');
 
-													aHTML[++h] = '<tr><td class="interfaceMain">Rate Amount</td></tr>' +
+													aHTML.push('<tr><td class=ns1blankspaceCaption">Rate Amount</td></tr>' +
 																	'<tr><td>' +
-																	'<input id="inputInterfacePayrollEmployeeDetailsPayRateAmount" class="inputInterfaceMainText">' +
-																	'</td></tr>';				
+																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateAmount" class="inputInterfaceMainText">' +
+																	'</td></tr>');				
 
-													aHTML[++h] = '</table>';
+													aHTML.push('</table>');
 
-													$('#tdInterfaceMainPayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
+													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
 
-													$('input.inputInterfaceMainDate').datepicker({dateFormat: 'dd M yy'});
+													$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
 
 													var aHTML = [];
-													var h = -1;
-
-													aHTML[++h] = '<table class="interfaceMain" style="font-size:0.875em">' +
-																	'<tr iclass="interfaceMainAction">' +
-																	'<td class="interfaceMainAction">' +
-																	'<span style="width:70px;" id="spanPayrollEmployee_options_save">Save</span>' +
+												
+													aHTML.push('<table style="font-size:0.875em">' +
+																	'<tr><td>' +
+																	'<span style="width:70px;" id="ns1blankspacePayrollEmployeeDetailsPayRate_options_save">Save</span>' +
 																	'</td></tr>' +
-																	'<tr class="interfaceMainAction">' +
-																	'<td class="interfaceMainAction">' +
-																	'<span style="width:70px;" id="spanPayrollEmployee_options_cancel">Cancel</span>' +
+																	'<tr><td>' +
+																	'<span style="width:70px;" id="ns1blankspacePayrollEmployeeDetailsPayRate_options_cancel">Cancel</span>' +
 																	'</td></tr>' +
-																	'</table>';	
+																	'</table>');	
 
-													$('#tdInterfaceMainPayrollEmployeeDetailsPayRateColumn2').html(aHTML.join(''));
+													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn2').html(aHTML.join(''));
 
-													$('#spanPayrollEmployee_options_save').button(
+													$('#ns1blankspacePayrollEmployeeDetailsPayRate_options_save').button(
 													{
 														text: "Save"
 													})
 													.click(function() 
 													{
-														ns1blankspaceStatusWorking();
+														ns1blankspace.sstatus.working();
 
 														var sData = 'id=' + ns1blankspace.util.fs(iID);
 														if (iID == '')
 														{
 															sData += '&employee=' + ns1blankspace.util.fs(iEmployee);
 														}	
-														sData += '&startdate=' + ns1blankspace.util.fs($('#inputInterfacePayrollEmployeeDetailsPayRateStartDate').val());
-														sData += '&enddate=' + ns1blankspace.util.fs($('#inputInterfacePayrollEmployeeDetailsPayRateEndDate').val());
-														sData += '&rate=' + ns1blankspace.util.fs($('#inputInterfacePayrollEmployeeDetailsPayRateAmount').val());
+														sData += '&startdate=' + ns1blankspace.util.fs($('#ns1blankspacePayrollEmployeeDetailsPayRateStartDate').val());
+														sData += '&enddate=' + ns1blankspace.util.fs($('#ns1blankspacePayrollEmployeeDetailsPayRateEndDate').val());
+														sData += '&rate=' + ns1blankspace.util.fs($('#ns1blankspacePayrollEmployeeDetailsPayRateAmount').val());
 
 														$.ajax(
 														{
 															type: 'POST',
-															url: '/ondemand/financial/?method=FINANCIAL_PAYROLL_EMPLOYEE_PAYRATE_MANAGE',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_EMPLOYEE_PAYRATE_MANAGE'),
 															data: sData,
 															dataType: 'json',
 															success: function(data) {
 																if (data.status == "OK")
 																{
-																	ns1blankspaceStatus('Saved');
+																	ns1blankspace.status.message('Saved');
 																	$.extend(true, oParam, {stepAction: 1, id: ''});
-																	interfaceFinancialPayrollEmployees(oParam);
+																	ns1blankspace.financial.payroll.employees.show(oParam);
 																}
 																else
 																{
-																	ns1blankspaceError(data.error.errornotes);
+																	ns1blankspace.status.rrror(data.error.errornotes);
 																}
 															}
 														});
 													});
 
-													$('#spanPayrollEmployee_options_cancel').button(
+													$('#ns1blankspacePayrollEmployeeDetailsPayRate_options_cancel').button(
 													{
 														text: "Cancel"
 													})
 													.click(function() 
 													{
 														$.extend(true, oParam, {stepAction: 1});
-														interfaceFinancialPayrollEmployees(oParam);
+														ns1blankspace.financial.payroll.employees.show(oParam);
 													});
 													
 													if (oResponse != undefined)
@@ -1454,15 +1495,14 @@ ns1blankspace.financial.payroll =
 														{
 															var oObjectContext = oResponse.data.rows[0];
 															
-															$('#inputInterfacePayrollEmployeeDetailsPayRateStartDate').val(oObjectContext.startdate);
-															$('#inputInterfacePayrollEmployeeDetailsPayRateEndDate').val(oObjectContext.enddate);
-															$('#inputInterfacePayrollEmployeeDetailsPayRateAmount').val(oObjectContext.rate);
+															$('#ns1blankspacePayrollEmployeeDetailsPayRateStartDate').val(oObjectContext.startdate);
+															$('#ns1blankspacePayrollEmployeeDetailsPayRateEndDate').val(oObjectContext.enddate);
+															$('#ns1blankspacePayrollEmployeeDetailsPayRateAmount').val(oObjectContext.rate);
 														}
 														else
 														{
 														}
 													}	
-
 												}
 											}
 										}			
@@ -1476,7 +1516,7 @@ ns1blankspace.financial.payroll =
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/financial/?method=FINANCIAL_PAYROLL_EMPLOYEE_BANK_ACCOUNT_MANAGE',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_EMPLOYEE_BANK_ACCOUNT_MANAGE'),
 												data: 'remove=1&id=' + aXHTMLElementID[1],
 												dataType: 'json',
 												success: function(data)
@@ -1485,12 +1525,12 @@ ns1blankspace.financial.payroll =
 													{
 														$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 														$.extend(true, oParam, {stepAction: 1});
-														interfaceFinancialPayrollEmployees(oParam);
-														ns1blankspaceStatus('Removed');
+														ns1blankspace.financial.payroll.employees.show(oParam);
+														ns1blankspace.status.message('Removed');
 													}
 													else
 													{
-														ns1blankspaceError(data.error.errornotes);
+														ns1blankspace.status.error(data.error.errornotes);
 													}
 												}
 											});
@@ -1500,7 +1540,7 @@ ns1blankspace.financial.payroll =
 										{
 											if ((iStepAction == 1 || iStepAction == 2) && (oResponse == undefined))
 											{
-												$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(ns1blankspace.xhtml.loadingSmall);
+												$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn2').html(ns1blankspace.xhtml.loadingSmall);
 
 												var oSearch = new AdvancedSearch();
 												oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_BANK_ACCOUNT_SEARCH';		
@@ -1519,90 +1559,82 @@ ns1blankspace.financial.payroll =
 													oParam.id = aXHTMLElementID[1];
 												}	
 
-												oSearch.getResults(function(data){interfaceFinancialPayrollEmployees(oParam, data)});
+												oSearch.getResults(function(data){ns1blankspace.financial.payroll.employees.show(oParam, data)});
 											}
 											else
 											{
 												var aHTML = [];
-												var h = -1;
-											
-												aHTML[++h] = '<table style="width:100%">' +
-																'<tr>' +
-																'<td id="tdInterfaceMainPayrollEmployeeDetailsBankAccountColumn1" style="font-size:0.875em;>' +
-																ns1blankspace.xhtml.loading +
+
+												aHTML.push('<table class="ns1blankspaceContainer">' +
+																'<tr class="ns1blankspaceContainer">' +
+																'<td id="ns1blankspacePayrollEmployeeDetailsBankAccountColumn1" class="ns1blankspaceColumn1" style="font-size:0.875em;">' +
+																ns1blankspace.xhtml.loading + '</td>' +
+																'<td id="ns1blankspacePayrollEmployeeDetailsBankAccountColumn2" class="ns1blankspaceColumn2" style="width:75px;">' +
 																'</td>' +
-																'<td id="tdInterfaceMainPayrollEmployeeDetailsBankAccountColumn2" class="interfaceMainColumn2" style="width:75px;">' +
-																'</td>' +
-																'</tr></table>';				
-											
-												$('#tdInterfaceMainPayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+																'</tr>' + 
+																'</table>');	
+
+												$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn2').html(aHTML.join(''));
 											
 												var aHTML = [];
-												var h = -1;
-
+											
 												if (iStepAction == 1)
 												{
-													$('#tdInterfaceMainPayrollEmployeeDetailsBankAccountColumn2').html('<span id="spanPayrollEmployee_options_add" class="interfaceMainRowOptionsAdd" style="font-size:0.75em;">Add</span>');
+													$('#ns1blankspacePayrollEmployeeDetailsBankAccountColumn2').html(
+															'<span id="ns1blankspacePayrollEmployee_options_add" style="font-size:0.75em;">Add</span>');
 
-													$('#spanPayrollEmployee_options_add').button(
+													$('#ns1blankspacePayrollEmployee_options_add').button(
 													{
 														text: "Add"
 													})
 													.click(function() {
 														$.extend(true, oParam, {stepAction: 3, xhtmlElementID: "", id: ""});
-														interfaceFinancialPayrollEmployees(oParam);
+														ns1blankspace.financial.payroll.employees.show(oParam);
 													})
 													.css('font-size', '0.75em');
 												
 													if (oResponse.data.rows.length == 0)
 													{
-														aHTML[++h] = '<table>';
-														aHTML[++h] = '<tr>';
-														aHTML[++h] = '<td class="interfaceMainRowNothing">No bank accounts.</td>';
-														aHTML[++h] = '</tr>';
-														aHTML[++h] = '</table>';
+														aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">' +
+																		'<tr><td class="ns1blankspaceNothing">No bank accounts.</td></tr>' +
+																		'</table>');
 
-														$('#ttdInterfaceMainPayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
+														$('#ns1blankspacePayrollEmployeeDetailsBankAccountColumn1').html(aHTML.join(''));
 													}
 													else
-													{			
-														aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-														aHTML[++h] = '<tbody>'
-												
-														aHTML[++h] = '<tr class="interfaceMainCaption">';
-														aHTML[++h] = '<td class="interfaceMainCaption">Name</td>';
-														aHTML[++h] = '<td class="interfaceMainCaption">BSB</td>';
-														aHTML[++h] = '<td class="interfaceMainCaption">Number</td>';
-														aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">%</td>';
-														aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-														aHTML[++h] = '</tr>';
+													{	
+														aHTML.push('<table class="ns1blankspace">');
+														aHTML.push('<tr class="ns1blankspaceCaption">');
+														aHTML.push('<td class="ns1blankspaceCaption">Name</td>');
+														aHTML.push('<td class="ns1blankspaceCaption">BSB</td>');
+														aHTML.push('<td class="ns1blankspaceCaption">Number</td>');
+														aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">% of Pay</td>');
+														aHTML.push('<td class="interfaceMainCaption">&nbsp;</td>');
+														aHTML.push('</tr>');
 
 														$(oResponse.data.rows).each(function() 
 														{
-															aHTML[++h] = '<tr class="interfaceMainRow">';
-															
-															aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_Name-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect bankaccount">' +
-																					this.accountname + '</td>';
-																				
-															aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_BSB-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect bankaccount">' +
-																					this.bsb + '</td>';
-																	
-															aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_Number-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect bankaccount">' +
-																					this.accountnumber + '</td>';
+															aHTML.push('<tr class="ns1blankspaceRow">');
+																			
+															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsBankAccount_name-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsBankAccount">' +
+																			this.accountname + '</td>');
 
-															aHTML[++h] = '<td id="interfacePayrollEmployeeDetailsBankAccount_Percentage-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect payrate" style="text-align:right;">' +
-																					this.percentage + '</td>';						
-																																
-															aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-															
-															aHTML[++h] = '<span id="spanBankAccount_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-																
-															aHTML[++h] = '</td>';				
-																											
-															aHTML[++h] = '</tr>'
+															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsBankAccount_bsb-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsBankAccount">' +
+																			this.bsb + '</td>');
+
+															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsBankAccount_number-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsBankAccount" style="text-align:right;">' +
+																			this.accountnumber + '</td>');
+
+															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsBankAccount_percentage-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsBankAccount" style="text-align:right;">' +
+																			this.percentage + '</td>');
+
+															aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
+																			'<span id="ns1blankspacePayrollEmployeeDetailsBankAccount_options_remove-' + this.id + '" class="ns1blankspacePayrollEmployeeDetailsBankAccountRemove"></span></td>');
+										
+															aHTML.push('</tr>');
 														});
 														
-														aHTML[++h] = '</tbody></table>';
+														aHTML.push('</table>');
 													}
 													
 													$('#tdInterfaceMainPayrollEmployeeDetailsBankAccountColumn1').html(aHTML.join(''));
