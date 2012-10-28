@@ -69,7 +69,6 @@ ns1blankspace.contactPerson =
 						{
 							ns1blankspace.show(refresh: true});
 							ns1blankspace.contactPerson.groups.show();
-							//interfaceContactPersonByGroup("divInterfaceMain");
 						});
 							
 						$('#ns1blankspaceControlFavourites').click(function(event)
@@ -220,7 +219,6 @@ ns1blankspace.contactPerson =
 									else
 									{	
 										aHTML.push('<table class="ns1blankspaceSearchMedium">');
-										aHTML.push('');
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -283,9 +281,7 @@ ns1blankspace.contactPerson =
 
 	layout: 	function ()
 				{
-					
 					var aHTML = [];
-					var h = -1;
 
 					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
@@ -293,33 +289,42 @@ ns1blankspace.contactPerson =
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">Details</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');
 										
-						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">Address</td></tr>');				
+						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">' +
+										'Address</td></tr>');				
 					}
 					else
 					{
-						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">Summary</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Summary</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">Details</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceAddress" class="ns1blankspaceControl">Address</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceAddress" class="ns1blankspaceControl">' +
+										'Address</td></tr>');
 					
 						aHTML.push('</table>');					
 					
 						aHTML.push('<table class="ns1blankspaceControl">');
 					
-						aHTML.push('<tr><td id="ns1blankspaceControlGroups" class="ns1blankspaceControl">Groups</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlGroups" class="ns1blankspaceControl">' +
+										'Groups</td></tr>');
 											
-						aHTML.push('<tr><td id="ns1blankspaceControlBusiness" class="ns1blankspaceControl">Business</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlBusiness" class="ns1blankspaceControl">' +
+										'Business</td></tr>');
 									
 						aHTML.push('</table>');		
 					
 						aHTML.push('<table class="ns1blankspaceControl">');
 					
-						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">Actions</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
+										'Actions</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">Attachments</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">' +
+										'Attachments</td></tr>');
 					}
 							
 					aHTML.push('</table>');					
@@ -341,20 +346,20 @@ ns1blankspace.contactPerson =
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainSummary'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
 						ns1blankspace.contactPerson.summary();
 					});
 					
 					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 						ns1blankspace.contactPerson.details();
 					});
 					
 					
 					$('#ns1blankspaceControlAddress').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainAddress'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAddress'});
 						ns1blankspace.contactPerson.address();
 					});
 					
@@ -463,7 +468,6 @@ ns1blankspace.contactPerson =
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 					
 						var aHTML = [];
-						var h = -1;
 					
 						aHTML.push('<table class="ns1blankspaceColumn1">';
 						
