@@ -46,106 +46,92 @@ ns1blankspace.setup.website =
 
 	home:		function (oResponse)
 				{
-
 					if (oResponse == undefined)
 					{
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+
 						var aHTML = [];
-						var h = -1;
-									
-						aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceWebsiteHomeMostLikely" class="interfaceMainColumn1Large">' +
-										ns1blankspace.xhtml.loading +
-										'</td>' +
-										'<td id="tdInterfaceMainSummaryColumn2Action" style="width:175px;">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';		
-										
-						$('#divInterfaceMain').html(aHTML.join(''));
+			
+						aHTML.push('<table class="ns1blankspaceMain">' + 
+										'<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										ns1blankspace.xhtml.loading + '</td>' +
+										'<td id="ns1blankspaceHomeAction" style="width:175px;"></td>' +
+										'</tr></table>');					
+						
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+											
+						var aHTML = [];
+
+						aHTML.push('<table>' +
+										'<tr><td id="ns1blankspaceViewSetupWebsiteLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>' +			
+										'</table>');		
+						
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" cellspacing=0>';
+						aHTML.push('<table>');
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask1" class="interfaceMainColumn2Action" style="width:175px;">' +
+						aHTML.push('<tr><td style="width:175px;">' +
 										'<a href="/site/1262/mydigitalspace_attachment_loader.zip"' +
-										' id="aInterfaceMainSummaryAttachmentUploader">Download Windows File Attachment Uploader</a>' +
+										' id="ns1blankspaceAttachmentUploader">Download Windows File Attachment Uploader</a>' +
 										'</td></tr>';	
 														
-						aHTML[++h] = '</td></tr></table>';					
+						aHTML.push('</td></tr></table>');					
 
-						$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));
-						
-						var aHTML = [];
-						var h = -1;
-									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
-										'<td id="ns1blankspaceViewportSetupWebsiteLarge" class="ns1blankspaceViewportImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';		
-						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));	
-						
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$('#ns1blankspaceHomeAction').html(aHTML.join(''));	
 						
 						$.ajax(
 						{
 							type: 'GET',
 							url: '/ondemand/setup/?method=SETUP_SITE_SEARCH&recent=1',
 							dataType: 'json',
-							success: interfaceSetupWebsiteHomeShow
+							success: ns1blankspace.setup.website.home
 						});
 						
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
-					
+
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceWebsiteHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceWebsiteHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceWebsiteHomeMostLikelyNothing">Click New to create a website.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table>' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create a user.</td></tr>' +
+											'</table>');
 						}
 						else
 						{
 						
-							aHTML[++h] = '<table id="tableInterfaceWebsiteHomeMostLikely">';
+							aHTML.push('<table>');
 							
 							$.each(oResponse.data.rows, function()
 							{	
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+								aHTML.push('<tr class="ns1blankspaceRow">';
 								
-								aHTML[++h] = '<td id="interfaceWebsiteHomeMostLikely_Title-' + this.id + 
-														'" class="interfaceHomeMostLikely">' +
+								aHTML.push('<td id="ns1blankspaceSetupWebsiteMostLikely_title-' + this.id + 
+														'" class="ns1blankspaceMostLikely">' +
 														this.title +
-														'</td>';
+														'</td>');
 								
-								aHTML[++h] = '</tr>'
+								aHTML.push('</tr>');
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</table>');
 						}
 						
-						$('#tdInterfaceWebsiteHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.interfaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							interfaceSetupWebsiteSearch(event.target.id, {source: 1});
+							ns1blankspace.setup.website.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
 
 	search: 	{
-					send: 		function interfaceSetupWebsiteSearch(sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementId, oParam)
 								{
 									
 									var aSearch = sXHTMLElementId.split('-');
@@ -225,7 +211,7 @@ ns1blankspace.setup.website =
 
 									var iColumn = 0;
 									var aHTML = [];
-									var h = -1;
+									
 									var	iMaximumColumns = 1;
 									
 									if (oResponse.data.rows.length == 0)
@@ -235,8 +221,8 @@ ns1blankspace.setup.website =
 									}
 									else
 									{
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+										aHTML.push('<table class="interfaceSearchMedium">';
+										aHTML.push('<tbody>'
 											
 										$.each(oResponse.data.rows, function()
 										{	
@@ -244,21 +230,21 @@ ns1blankspace.setup.website =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
+												aHTML.push('<tr class="interfaceSearch">';
 											}
 											
-											aHTML[++h] = '<td class="interfaceSearch" id="title' +
+											aHTML.push('<td class="interfaceSearch" id="title' +
 															'-' + this.id + '">' +
 															this.title + '</td>';
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>'
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</tbody></table>';
 
 										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
@@ -279,81 +265,81 @@ ns1blankspace.setup.website =
 				{
 					
 					var aHTML = [];
-					var h = -1;
-
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+
+					aHTML.push('<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+					
+					aHTML.push('<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControlDetails" class="interfaceViewportControl">' +
+						aHTML.push('<tr id="trInterfaceViewportControlDetails" class="interfaceViewportControl">' +
 										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
 										'</tr>';
 					}
 					else
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControlSummary" class="interfaceViewportControl">' +
+						aHTML.push('<tr id="trInterfaceViewportControlSummary" class="interfaceViewportControl">' +
 										'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
 										'</tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceViewportControlDetails" class="interfaceViewportControl">' +
+						aHTML.push('<tr id="trInterfaceViewportControlDetails" class="interfaceViewportControl">' +
 										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
 										'</tr>';
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlLayout" class="interfaceViewportControl">' +
+						aHTML.push('<tr id="trInterfaceViewportControlLayout" class="interfaceViewportControl">' +
 										'<td id="tdInterfaceViewportControlLayout" class="interfaceViewportControl">Layout</td>' +
 										'</tr>';
 						
-						aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
+						aHTML.push('<tr><td>&nbsp;</td></tr>';
 							
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						aHTML.push('<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
 										'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
 										'</tr>';
 								
-						aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
+						aHTML.push('<tr><td>&nbsp;</td></tr>';
 
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						aHTML.push('<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
 										'<td id="tdInterfaceViewportControlPages" class="interfaceViewportControl">Pages</td>' +
 										'</tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						aHTML.push('<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
 										'<td id="tdInterfaceViewportControlForms" class="interfaceViewportControl">Forms</td>' +
 										'</tr>';				
 											
-						aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
+						aHTML.push('<tr><td>&nbsp;</td></tr>';
 
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						aHTML.push('<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
 										'<td id="tdInterfaceViewportControlAdvanced" class="interfaceViewportControl">Advanced</td>' +
 										'</tr>';
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						aHTML.push('<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
 										'<td id="tdInterfaceViewportControlScripts" class="interfaceViewportControl">Scripts</td>' +
 										'</tr>';
 								
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
+						aHTML.push('<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
 										'<td id="tdInterfaceViewportControlURLs" class="interfaceViewportControl">URLs</td>' +
 										'</tr>';
 					}
 					
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>';					
 								
 					$('#divInterfaceViewportControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
+					
 
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainLayout" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAddAttachment" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainPages" class="divInterfaceViewportMain"></div>';	
-					aHTML[++h] = '<div id="divInterfaceMainAdvanced" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainScripts" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainURLs" class="divInterfaceViewportMain"></div>';	
-					aHTML[++h] = '<div id="divInterfaceMainWebapp" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainForms" class="divInterfaceViewportMain"></div>';		
+					aHTML.push('<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divInterfaceMainLayout" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divInterfaceMainAddAttachment" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divInterfaceMainPages" class="divInterfaceViewportMain"></div>';	
+					aHTML.push('<div id="divInterfaceMainAdvanced" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divInterfaceMainScripts" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divInterfaceMainURLs" class="divInterfaceViewportMain"></div>';	
+					aHTML.push('<div id="divInterfaceMainWebapp" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divInterfaceMainForms" class="divInterfaceViewportMain"></div>';		
 						
 					$('#divInterfaceMain').html(aHTML.join(''));
 						
@@ -425,14 +411,14 @@ ns1blankspace.setup.website =
 					interfaceSetupWebsiteViewport();
 					
 					var aHTML = [];
-					var h = -1;
+					
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find website.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find website.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
 						$('#divInterfaceMain').html(aHTML.join(''));
 					}
@@ -440,14 +426,14 @@ ns1blankspace.setup.website =
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 									
-						aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
+						aHTML.push('<table id="tableInterfaceMainSummary" class="interfaceMain">';
+						aHTML.push('<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
 									'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
 										'</td>' +
 										'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#divInterfaceMainSummary').html(aHTML.join(''));
 						
@@ -467,30 +453,30 @@ ns1blankspace.setup.website =
 	summary:	function interfaceSetupWebsiteSummary()
 				{
 					var aHTML = [];
-					var h = -1;
+					
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find website.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find website.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
 						$('#divInterfaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML.push('<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummary">Site ID</td></tr>' +
+						aHTML.push('<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummary">Site ID</td></tr>' +
 										'<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummaryValue">' +
 										ns1blankspace.objectContextData.id +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteStatus" class="interfaceMainSummary">Status</td></tr>' +
+						aHTML.push('<tr><td id="tdInterfaceMainSummarySiteStatus" class="interfaceMainSummary">Status</td></tr>' +
 										'<tr><td id="tdInterfaceMainSummarySiteStatus" class="interfaceMainSummaryValue">' +
 										ns1blankspace.objectContextData.statustext +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteAttachmentsURL" class="interfaceMainSummary">Attachments URL</td></tr>' +
+						aHTML.push('<tr><td id="tdInterfaceMainSummarySiteAttachmentsURL" class="interfaceMainSummary">Attachments URL</td></tr>' +
 										'<tr><td id="tdInterfaceMainSummarySiteAttachmentsURL" class="interfaceMainSummaryValue">' +
 										'/site/' + ns1blankspace.objectContextData.id + '/' +
 										'</td></tr>';		
@@ -498,7 +484,7 @@ ns1blankspace.setup.website =
 
 						if (ns1blankspace.objectContextData.ondemandstatustext == '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummary">App Status</td></tr>' +
+							aHTML.push('<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummary">App Status</td></tr>' +
 										'<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummaryValue">' +
 										'Not Enabled (click Advanced to enable requests to the site)' +
 										'</td></tr>';
@@ -506,40 +492,40 @@ ns1blankspace.setup.website =
 						}
 						else
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummary">App Status</td></tr>' +
+							aHTML.push('<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummary">App Status</td></tr>' +
 										'<tr><td id="tdInterfaceMainSummaryAppStatus" class="interfaceMainSummaryValue">' +
 										ns1blankspace.objectContextData.ondemandstatustext +
 										'</td></tr>';
 						}			
 
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#tdInterfaceMainSummaryColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
-						var h = -1;	
+							
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" cellpadding=6>';
+						aHTML.push('<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" cellpadding=6>';
 											
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +
+						aHTML.push('<tr><td id="tdInterfaceMainSummaryTask2" class="interfaceMainColumn2Actionx" style="width:175px;">' +
 										'<a href="#" id="aInterfaceMainSummarySetupWebApp"><strong>Convert to a jQuery or jQuery mobile webapp.</strong></a>' +
 										'</td></tr>';
 									
 						if (ns1blankspace.objectContextData.primaryurl != '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryTask3" class="interfaceMainColumn2Actionx" style="width:175px;">' +
+							aHTML.push('<tr><td id="tdInterfaceMainSummaryTask3" class="interfaceMainColumn2Actionx" style="width:175px;">' +
 										'<a href="' + ns1blankspace.objectContextData.primaryurl + '" target="_blank">' + ns1blankspace.objectContextData.primaryurl + '</a>' +
 										'</td></tr>';
 						}		
 									
-						aHTML[++h] = '<tr class="interfaceMainColumn2Action" >' +						
+						aHTML.push('<tr class="interfaceMainColumn2Action" >' +						
 										'<td tdInterfaceMainSummaryTask4" class="interfaceMainColumn2Actionx" style="font-size:0.75em;color:#404040;">' +
 										'<br /><hr />' +
 										'<br />Use the Attachments link to add your js scripts and the Scripts section to reference them and any other scripts you may require.' +
 										'</td>' +
 										'</tr>';			
 									
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#tdInterfaceMainSummaryColumn2').html(aHTML.join(''));
 						
@@ -560,29 +546,29 @@ ns1blankspace.setup.website =
 	details: 	function interfaceSetupWebsiteDetails()
 				{
 					var aHTML = [];
-					var h = -1;
+					
 					
 					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
 					{
 						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
 								
-						aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
+						aHTML.push('<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
+						aHTML.push('<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
 										'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1">' +
 										'</td>' +
 										'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMainColumn2">' +
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#divInterfaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
+						
 					
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+						aHTML.push('<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsTitle" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainDetailsTitle" class="interfaceMain">' +
 										'<td id="tdInterfaceMainDetailsTitle" class="interfaceMain">' +
 										'Title' +
 										'</td></tr>' +
@@ -591,7 +577,7 @@ ns1blankspace.setup.website =
 										'<input id="inputInterfaceMainDetailsTitle" class="inputInterfaceMainText">' +
 										'</td></tr>';
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsEmail" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainDetailsEmail" class="interfaceMain">' +
 										'<td id="tdInterfaceMainDetailsEmail" class="interfaceMain">' +
 										'Email' +
 										'</td></tr>' +
@@ -601,16 +587,16 @@ ns1blankspace.setup.website =
 										'</td></tr>';
 						
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
+						
 							
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+						aHTML.push('<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsSharing" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainDetailsSharing" class="interfaceMain">' +
 										'<td id="tdInterfaceMainDetailsSharing" class="interfaceMain">' +
 										'Status' +
 										'</td></tr>' +
@@ -620,7 +606,7 @@ ns1blankspace.setup.website =
 										'<br /><input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Closed' +
 										'</td></tr>';
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
 						
@@ -640,29 +626,29 @@ ns1blankspace.setup.website =
 	style:		function interfaceSetupWebsiteLayout()
 				{
 					var aHTML = [];
-					var h = -1;
+					
 					
 					if ($('#divInterfaceMainLayout').attr('onDemandLoading') == '1')
 					{
 						$('#divInterfaceMainLayout').attr('onDemandLoading', '');
 								
-						aHTML[++h] = '<table id="tableInterfaceMainLayout" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainLayoutRow1" class="interfaceMain">' +
+						aHTML.push('<table id="tableInterfaceMainLayout" class="interfaceMainDetails">';
+						aHTML.push('<tr id="trInterfaceMainLayoutRow1" class="interfaceMain">' +
 										'<td id="tdInterfaceMainLayoutColumn1" class="interfaceMainColumn1">' +
 										'</td>' +
 										'<td id="tdInterfaceMainLayoutColumn2" class="interfaceMainColumn2">' +
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#divInterfaceMainLayout').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
+						
 					
-						aHTML[++h] = '<table id="tableInterfaceMainLayoutColumn1" class="interfaceMain">';
+						aHTML.push('<table id="tableInterfaceMainLayoutColumn1" class="interfaceMain">';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainLayout" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainLayout" class="interfaceMain">' +
 										'<td id="tdInterfaceMainLayout" class="interfaceMain">' +
 										'Layout' +
 										'</td></tr>' +
@@ -673,7 +659,7 @@ ns1blankspace.setup.website =
 										'<br /><input type="radio" id="radioLayout2" name="radioLayout" value="2"/>Using Frames' +
 										'<br /><br /></td></tr>';				
 							
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsCSSAttachment" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainDetailsCSSAttachment" class="interfaceMain">' +
 										'<td id="tdInterfaceMainDetailsCSSAttachment" class="interfaceMain">' +
 										'CSS Attachment' +
 										'</td></tr>' +
@@ -697,23 +683,23 @@ ns1blankspace.setup.website =
 						{
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML[++h] = '<input type="radio" id="radioCSSAttachment' + this.attachment + '" name="radioCSSAttachment" value="' + this.attachment + '"/>' +
+								aHTML.push('<input type="radio" id="radioCSSAttachment' + this.attachment + '" name="radioCSSAttachment" value="' + this.attachment + '"/>' +
 													this.filename + '<br />';				
 							});
 						});
 						
-						aHTML[++h] = '</td></tr>';				
+						aHTML.push('</td></tr>';				
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#tdInterfaceMainLayoutColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
+						
 							
-						aHTML[++h] = '<table id="tableInterfaceMainlayoutColumn2" class="interfaceMain">';
+						aHTML.push('<table id="tableInterfaceMainlayoutColumn2" class="interfaceMain">';
 
-							aHTML[++h] = '<tr id="trInterfaceMainLayoutHeaderHeight" class="interfaceMain">' +
+							aHTML.push('<tr id="trInterfaceMainLayoutHeaderHeight" class="interfaceMain">' +
 										'<td id="tdInterfaceMainLayoutHeaderHeight" class="interfaceMain">' +
 										'Header Height' +
 										'</td></tr>' +
@@ -722,7 +708,7 @@ ns1blankspace.setup.website =
 										'<input id="inputInterfaceMainLayoutHeaderHeight" class="inputInterfaceMainText">' +
 										'</td></tr>';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainLayoutFooterHeight" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainLayoutFooterHeight" class="interfaceMain">' +
 										'<td id="tdInterfaceMainLayoutFooterHeight" class="interfaceMain">' +
 										'Footer Height' +
 										'</td></tr>' +
@@ -731,7 +717,7 @@ ns1blankspace.setup.website =
 										'<input id="inputInterfaceMainLayoutFooterHeight" class="inputInterfaceMainText">' +
 										'</td></tr>';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainLayoutColumns" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainLayoutColumns" class="interfaceMain">' +
 										'<td id="tdInterfaceMainLayoutColumns" class="interfaceMain">' +
 										'Columns' +
 										'</td></tr>' +
@@ -740,7 +726,7 @@ ns1blankspace.setup.website =
 										'<input id="inputInterfaceMainLayoutColumns" class="inputInterfaceMainText">' +
 										'</td></tr>';
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#tdInterfaceMainLayoutColumn2').html(aHTML.join(''));
 						
@@ -764,27 +750,27 @@ ns1blankspace.setup.website =
 	advanced:	function interfaceSetupWebsiteAdvanced()
 				{
 					var aHTML = [];
-					var h = -1;
+					
 					
 					if ($('#divInterfaceMainAdvanced').attr('onDemandLoading') == '1')
 					{
 						$('#divInterfaceMainAdvanced').attr('onDemandLoading', '');
 								
-						aHTML[++h] = '<table id="tableInterfaceMainAdvanced" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainAdvancedRow1" class="interfaceMain">' +
+						aHTML.push('<table id="tableInterfaceMainAdvanced" class="interfaceMainDetails">';
+						aHTML.push('<tr id="trInterfaceMainAdvancedRow1" class="interfaceMain">' +
 										'<td id="tdInterfaceMainAdvancedColumn1" class="interfaceMainColumn1Large">' +
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#divInterfaceMainAdvanced').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
+						
 					
-						aHTML[++h] = '<table id="tableInterfaceMainAdvancedColumn1" class="interfaceMain">';
+						aHTML.push('<table id="tableInterfaceMainAdvancedColumn1" class="interfaceMain">';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainAdvancedOnDemand" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainAdvancedOnDemand" class="interfaceMain">' +
 										'<td id="tdInterfaceMainAdvancedOnDemand" class="interfaceMain">' +
 										'App Status' +
 										'</td></tr>' +
@@ -801,7 +787,7 @@ ns1blankspace.setup.website =
 												'Enabled (Requests only from same site & access to any space)' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAdvanced" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainAdvanced" class="interfaceMain">' +
 										'<td id="tdInterfaceMainAdvanced" class="interfaceMain">' +
 										'Web Page Title' +
 										'</td></tr>' +
@@ -811,7 +797,7 @@ ns1blankspace.setup.website =
 										'<br /><input type="radio" id="radioTitleY" name="radioTitle" value="Y"/>Use Document Keywords' +
 										'</td></tr>';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainAdvancedDocumentType" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainAdvancedDocumentType" class="interfaceMain">' +
 										'<td id="tdInterfaceMainAdvancedDocumentType" class="interfaceMain">' +
 										'Document Type' +
 										'</td></tr>' +
@@ -820,7 +806,7 @@ ns1blankspace.setup.website =
 										'<textarea style="height: 50px;" rows="3" cols="35" id="inputInterfaceMainAdvancedDocumentType" class="inputInterfaceMainTextMultiLarge"></textarea>' +
 										'</td></tr>';
 						
-						aHTML[++h] = '<tr id="trInterfaceMainAdvancedBodyTag" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainAdvancedBodyTag" class="interfaceMain">' +
 										'<td id="tdInterfaceMainAdvancedBodyTag" class="interfaceMain">' +
 										'BODY Tag' +
 										'</td></tr>' +
@@ -829,7 +815,7 @@ ns1blankspace.setup.website =
 										'<textarea style="height: 50px;" rows="3" cols="35" id="inputInterfaceMainBodyTag" class="inputInterfaceMainTextMultiLarge"></textarea>' +
 										'</td></tr>';
 					
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#tdInterfaceMainAdvancedColumn1').html(aHTML.join(''));
 						
@@ -848,15 +834,15 @@ ns1blankspace.setup.website =
 	scripts: 	function interfaceSetupWebsiteScripts()
 				{
 					var aHTML = [];
-					var h = -1;
+					
 					
 					if ($('#divInterfaceMainScripts').attr('onDemandLoading') == '1')
 					{
 						$('#divInterfaceMainScripts').attr('onDemandLoading', '');
 					
-						aHTML[++h] = '<table id="tableInterfaceMainScriptsColumn1" class="interfaceMain">';
+						aHTML.push('<table id="tableInterfaceMainScriptsColumn1" class="interfaceMain">';
 						
-						aHTML[++h] = '<tr id="trInterfaceMainScriptHeader" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainScriptHeader" class="interfaceMain">' +
 										'<td id="tdInterfaceMainScriptHeader" class="interfaceMain">' +
 										'Header Script' +
 										'</td></tr>' +
@@ -865,7 +851,7 @@ ns1blankspace.setup.website =
 										'<textarea style="height: 350px;" rows="20" cols="80" id="inputInterfaceMainScriptHeader" class="inputInterfaceMainTextMultiLarge"></textarea>' +
 										'</td></tr>';
 						
-						aHTML[++h] = '<tr id="trInterfaceMainScriptFooter" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainScriptFooter" class="interfaceMain">' +
 										'<td id="tdInterfaceMainScriptFooter" class="interfaceMain">' +
 										'Footer Script (eg Google Analytics)' +
 										'</td></tr>' +
@@ -874,7 +860,7 @@ ns1blankspace.setup.website =
 										'<textarea style="height: 150px;" rows="20" cols="80" id="inputInterfaceMainScriptsFooter" class="inputInterfaceMainTextMultiLarge"></textarea>' +
 										'</td></tr>';
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#divInterfaceMainScripts').html(aHTML.join(''));
 						
@@ -920,9 +906,9 @@ ns1blankspace.setup.website =
 										if (oActions != undefined)
 										{
 											var aHTML = [];
-											var h = -1;	
+												
 														
-											aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
+											aHTML.push('<table id="tableInterfaceMainPages" class="interfaceMain">' +
 														'<tr id="trInterfaceMainPagesRow1" class="interfaceMainRow1">' +
 														'<td id="tdInterfaceMainPagesColumn1" class="interfaceMainColumn1Large">' +
 														ns1blankspace.xhtml.loading +
@@ -936,18 +922,18 @@ ns1blankspace.setup.website =
 											sXHTMLElementId = 'tdInterfaceMainPagesColumn1';
 											
 											var aHTML = [];
-											var h = -1;	
+												
 											
-											aHTML[++h] = '<table id="tableInterfaceMainPagesColumn2" class="interfaceMainColumn2">';
+											aHTML.push('<table id="tableInterfaceMainPagesColumn2" class="interfaceMainColumn2">';
 											
 											if (oActions.add)
 											{
-												aHTML[++h] = '<tr><td id="tdInterfaceMainPagesAdd" class="interfaceMainAction">' +
+												aHTML.push('<tr><td id="tdInterfaceMainPagesAdd" class="interfaceMainAction">' +
 															'<span id="spanInterfaceMainPagesAdd">Add</span>' +
 															'</td></tr>';
 											}
 											
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>';					
 											
 											$('#tdInterfaceMainPagesColumn2').html(aHTML.join(''));
 										
@@ -962,79 +948,79 @@ ns1blankspace.setup.website =
 										}	
 									
 										var aHTML = [];
-										var h = -1;
+										
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableWebsitePages" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
+											aHTML.push('<table id="tableWebsitePages" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="interfaceMainCaption">' +
 															'<td class="interfaceMainRowNothing">No pages.</td></tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
 											$('#' + sXHTMLElementId).html(aHTML.join(''));
 										
 										}
 										else
 										{
-											aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">URL</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Type</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Sharing</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="interfaceMainCaption">';
+											aHTML.push('<td class="interfaceMainCaption">Title</td>';
+											aHTML.push('<td class="interfaceMainCaption">URL</td>';
+											aHTML.push('<td class="interfaceMainCaption">Type</td>';
+											aHTML.push('<td class="interfaceMainCaption">Sharing</td>';
+											aHTML.push('<td class="interfaceMainCaption">&nbsp;</td>';
+											aHTML.push('</tr>';
 											
 											$.each(oResponse.data.rows, function()
 											{	
-												aHTML[++h] = '<tr class="interfaceMainRow">';
+												aHTML.push('<tr class="interfaceMainRow">';
 																
-												aHTML[++h] = '<td id="tdWebsitePages_title-' + this.id + '" class="interfaceMainRow">' +
+												aHTML.push('<td id="tdWebsitePages_title-' + this.id + '" class="interfaceMainRow">' +
 																		this.documenttitle + '</td>';
 																		
-												aHTML[++h] = '<td id="tdWebsitePages_url-' + this.id + '" class="interfaceMainRow">' +
+												aHTML.push('<td id="tdWebsitePages_url-' + this.id + '" class="interfaceMainRow">' +
 																		this.documenturl + '</td>';
 																		
 												if (this.locationtext == 'Header' || this.locationtext == 'Home')
 												{				
-													aHTML[++h] = '<td id="tdWebsitePages_location-' + this.id + '" class="interfaceMainRow">' +
+													aHTML.push('<td id="tdWebsitePages_location-' + this.id + '" class="interfaceMainRow">' +
 																		this.locationtext + '</td>';
 												}
 												else
 												{
-													aHTML[++h] = '<td id="tdWebsitePages_location-' + this.id + '" class="interfaceMainRow" style="color:#A0A0A0;">' +
+													aHTML.push('<td id="tdWebsitePages_location-' + this.id + '" class="interfaceMainRow" style="color:#A0A0A0;">' +
 																		'Page</td>';
 												}						
 												
 												if (this.documentpublic == 'Y')
 												{				
-													aHTML[++h] = '<td id="tdWebsitePages_public-' + this.id + '" class="interfaceMainRow">' +
+													aHTML.push('<td id="tdWebsitePages_public-' + this.id + '" class="interfaceMainRow">' +
 																		'Public</td>';
 												}
 												else
 												{
-													aHTML[++h] = '<td id="tdWebsitePages_public-' + this.id + '" class="interfaceMainRow">' +
+													aHTML.push('<td id="tdWebsitePages_public-' + this.id + '" class="interfaceMainRow">' +
 																		'Private</td>';
 												}		
 																		
-												aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+												aHTML.push('<td style="width:60px;text-align:right;" class="interfaceMainRow">';
 												
 												if (oOptions.remove)
 												{	
-													aHTML[++h] = '<span id="spanWebsitePage_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+													aHTML.push('<span id="spanWebsitePage_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
 												};	
 													
 												if (oOptions.view)
 												{	
-													aHTML[++h] = '<span id="spanWebsitePage_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+													aHTML.push('<span id="spanWebsitePage_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
 												};
 																	
-												aHTML[++h] = '</td></tr>'
+												aHTML.push('</td></tr>'
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
 											$('#' + sXHTMLElementId).html(aHTML.join(''));
 											
@@ -1093,11 +1079,11 @@ ns1blankspace.setup.website =
 										}	
 									
 										var aHTML = [];
-										var h = -1;
+										
 
-										aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+										aHTML.push('<table id="tableInterfaceMainColumn1" class="interfaceMain">';
 												
-										aHTML[++h] = '<tr id="trInterfaceMainSetupWebsitePageAddTitle" class="interfaceMain">' +
+										aHTML.push('<tr id="trInterfaceMainSetupWebsitePageAddTitle" class="interfaceMain">' +
 														'<td id="tdInterfaceMainSetupWebsitePageAddTitle" class="interfaceMain">' +
 														'Title' +
 														'</td></tr>' +
@@ -1106,12 +1092,12 @@ ns1blankspace.setup.website =
 														'<input id="inputInterfaceMainSetupWebsitePageAddTitle" class="inputInterfaceMainText">' +
 														'</td></tr>';
 										
-										aHTML[++h] = '<tr id="trInterfaceMainSetupWebsitePageAddDetails">' +
+										aHTML.push('<tr id="trInterfaceMainSetupWebsitePageAddDetails">' +
 														'<td id="tdInterfaceMainSetupWebsitePageAddDetails">';
 														
-											aHTML[++h] = '<table id="tableInterfaceMainColumn1Details" class="interfaceMain" cellspacing=0 cellpadding=0>';
+											aHTML.push('<table id="tableInterfaceMainColumn1Details" class="interfaceMain" cellspacing=0 cellpadding=0>';
 											
-											aHTML[++h] = '<tr id="trInterfaceMainSetupWebsitePageAddURL" class="interfaceMain">' +
+											aHTML.push('<tr id="trInterfaceMainSetupWebsitePageAddURL" class="interfaceMain">' +
 															'<td id="tdInterfaceMainSetupWebsitePageAddURL" class="interfaceMain">' +
 															'URL' +
 															'</td>' +
@@ -1125,60 +1111,60 @@ ns1blankspace.setup.website =
 															'Sharing' +
 															'</td></tr>';
 															
-											aHTML[++h] = '<tr id="trInterfaceMainSetupWebsitePageAddURLValue" class="interfaceMainText">' +
+											aHTML.push('<tr id="trInterfaceMainSetupWebsitePageAddURLValue" class="interfaceMainText">' +
 															'<td id="tdInterfaceMainSetupWebsitePageAddURLValue" class="interfaceMainText" style="width:325px;">' +
 															'<input id="inputInterfaceMainSetupWebsitePageAddURL" class="inputInterfaceMainText" style="width:275px;">' +
 															'</td>';
 													
-											aHTML[++h] = '<td id="tdInterfaceMainSetupWebsitePageAddTypeValue" class="interfaceMainRadio">' +
+											aHTML.push('<td id="tdInterfaceMainSetupWebsitePageAddTypeValue" class="interfaceMainRadio">' +
 															'<input type="radio" id="radioType9" name="radioType" value="9"/>Page' +
 															'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Home' +
 															'<br /><input type="radio" id="radioType3" name="radioType" value="3"/>Header' +
 															'</td>';
 															
-											aHTML[++h] = '<td id="tdInterfaceMainSetupWebsitePageAddTypeValue" class="interfaceMainRadio">' +
+											aHTML.push('<td id="tdInterfaceMainSetupWebsitePageAddTypeValue" class="interfaceMainRadio">' +
 															'<input type="radio" id="radioDocumentType5" name="radioDocumentType" value="5"/>HTML' +
 															'<br /><input type="radio" id="radioDocumentType6" name="radioDocumentType" value="6"/>Text' +
 															'</td>';
 													
-											aHTML[++h] = '<td id="tdInterfaceMainSetupWebsitePageAddSharingValue" class="interfaceMainText">' +
+											aHTML.push('<td id="tdInterfaceMainSetupWebsitePageAddSharingValue" class="interfaceMainText">' +
 															'<input type="radio" id="radioPublicY" name="radioPublic" value="Y"/>Public' +
 															'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
 															'</td></tr>';
 										
-											aHTML[++h] = '</table>';
+											aHTML.push('</table>';
 											
-										aHTML[++h] = '</td></tr>';
+										aHTML.push('</td></tr>';
 										
 										ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
 										
-										aHTML[++h] = '<tr id="trInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti">' +
+										aHTML.push('<tr id="trInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti">' +
 														'<td id="tdInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti" style="padding-top:15px;">' +
 														'<textarea rows="10" cols="60" name="inputInterfaceMainEditText" id="inputInterfaceMainEditText' +
 														ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + '"' +
 														' class="inputInterfaceMainTextMultiLarge tinymceAdvanced"></textarea>' +
 														'</td></tr>';
 										
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
 										$('#tdInterfaceMainPagesColumn1').html(aHTML.join(''));
 										
 										var aHTML = [];
-										var h = -1;
+										
 									
-										aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+										aHTML.push('<table id="tableInterfaceMainColumn2" class="interfaceMain">';
 												
-										aHTML[++h] = '<tr id="trInterfaceMainWebsitePageAddSave" class="interfaceMainAction">' +
+										aHTML.push('<tr id="trInterfaceMainWebsitePageAddSave" class="interfaceMainAction">' +
 														'<td id="tdInterfaceMainWebsitePageAddSave" class="interfaceMainAction">' +
 														'<span style="width:80px;" id="spanInterfaceMainWebsitePageAddSave">Save</span>' +
 														'</td></tr>';
 									
-										aHTML[++h] = '<tr id="trInterfaceMainWebsitePageAddCancel" class="interfaceMainAction">' +
+										aHTML.push('<tr id="trInterfaceMainWebsitePageAddCancel" class="interfaceMainAction">' +
 														'<td id="tdInterfaceMainWebsitePageAddCancel" class="interfaceMainAction">' +
 														'<span style="width:80px;" id="spanInterfaceMainWebsitePageAddCancel">Cancel</span>' +
 														'</td></tr>';
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
 										$('#tdInterfaceMainPagesColumn2').html(aHTML.join(''));
 										
@@ -1412,9 +1398,9 @@ ns1blankspace.setup.website =
 						if (oActions != undefined)
 						{
 							var aHTML = [];
-							var h = -1;	
+								
 										
-							aHTML[++h] = '<table id="tableInterfaceMainForms" class="interfaceMain">' +
+							aHTML.push('<table id="tableInterfaceMainForms" class="interfaceMain">' +
 										'<tr id="trInterfaceMainFormsRow1" class="interfaceMainRow1">' +
 										'<td id="tdInterfaceMainFormsColumn1" class="interfaceMainColumn1Large">' +
 										ns1blankspace.xhtml.loading +
@@ -1428,18 +1414,18 @@ ns1blankspace.setup.website =
 							sXHTMLElementId = 'tdInterfaceMainFormsColumn1';
 							
 							var aHTML = [];
-							var h = -1;	
+								
 							
-							aHTML[++h] = '<table id="tableInterfaceMainFormsColumn2" class="interfaceMainColumn2">';
+							aHTML.push('<table id="tableInterfaceMainFormsColumn2" class="interfaceMainColumn2">';
 							
 							if (oActions.add)
 							{
-								aHTML[++h] = '<tr><td id="tdInterfaceMainFormsAdd" class="interfaceMainAction">' +
+								aHTML.push('<tr><td id="tdInterfaceMainFormsAdd" class="interfaceMainAction">' +
 											'<span id="spanInterfaceMainFormsAdd">Add</span>' +
 											'</td></tr>';
 							}
 							
-							aHTML[++h] = '</table>';					
+							aHTML.push('</table>';					
 							
 							$('#tdInterfaceMainFormsColumn2').html(aHTML.join(''));
 						
@@ -1455,48 +1441,48 @@ ns1blankspace.setup.website =
 						}	
 					
 						var aHTML = [];
-						var h = -1;
+						
 						
 						if (oResponse.data.rows.length == 0)
 					{
-							aHTML[++h] = '<table id="tableWebsitePages" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">' +
+							aHTML.push('<table id="tableWebsitePages" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+							aHTML.push('<tbody>'
+							aHTML.push('<tr class="interfaceMainCaption">' +
 											'<td class="interfaceMainRowNothing">No forms.</td></tr>';
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</tbody></table>';
 
 							$('#' + sXHTMLElementId).html(aHTML.join(''));
 						
 						}
 						else
 						{
-							aHTML[++h] = '<table id="tableWebsite" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption">Form</td>';
-							aHTML[++h] = '<td>&nbsp;</td>';
-							aHTML[++h] = '</tr>';
+							aHTML.push('<table id="tableWebsite" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+							aHTML.push('<tbody>'
+							aHTML.push('<tr class="interfaceMainCaption">';
+							aHTML.push('<td class="interfaceMainCaption">Form</td>';
+							aHTML.push('<td>&nbsp;</td>';
+							aHTML.push('</tr>';
 							
 							$.each(oResponse.data.rows, function()
 							{	
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+								aHTML.push('<tr class="interfaceMainRow">';
 								
 								sTitle = this.title;
 								if (sTitle == '') {sTitle = this.message}
 								if (sTitle == '') {sTitle = this.typetext}
 								sTitle = sTitle + ' (' + this.id + ')';
 								
-								aHTML[++h] = '<td id="tdWebsiteForms_title-' + this.id + '" class="interfaceMainRow">' +
+								aHTML.push('<td id="tdWebsiteForms_title-' + this.id + '" class="interfaceMainRow">' +
 														sTitle + '</td>';
 														
-								aHTML[++h] = '<td id="tdWebsiteForms_Options-' + this.id + 
+								aHTML.push('<td id="tdWebsiteForms_Options-' + this.id + 
 													'-' + this.id +
 													'" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
 														
-								aHTML[++h] = '</tr>'
+								aHTML.push('</tr>'
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</tbody></table>';
 
 							$('#' + sXHTMLElementId).html(aHTML.join(''));
 							
@@ -1551,9 +1537,9 @@ ns1blankspace.setup.website =
 										if (oActions != undefined)
 										{
 											var aHTML = [];
-											var h = -1;	
+												
 														
-											aHTML[++h] = '<table id="tableInterfaceMainPages" class="interfaceMain">' +
+											aHTML.push('<table id="tableInterfaceMainPages" class="interfaceMain">' +
 														'<tr id="trInterfaceMainURLsRow1" class="interfaceMainRow1">' +
 														'<td id="tdInterfaceMainWebsiteURLColumn1" class="interfaceMainColumn1Large">' +
 														ns1blankspace.xhtml.loading +
@@ -1567,22 +1553,22 @@ ns1blankspace.setup.website =
 											sXHTMLElementId = 'tdInterfaceMainWebsiteURLColumn1';
 											
 											var aHTML = [];
-											var h = -1;	
+												
 											
-											aHTML[++h] = '<table id="tableInterfaceMainWebsiteURLsColumn2" class="interfaceMainColumn2">';
+											aHTML.push('<table id="tableInterfaceMainWebsiteURLsColumn2" class="interfaceMainColumn2">';
 											
 											if (oActions.add)
 											{
-												aHTML[++h] = '<tr><td id="tdInterfaceMainURLsAdd" class="interfaceMainAction">' +
+												aHTML.push('<tr><td id="tdInterfaceMainURLsAdd" class="interfaceMainAction">' +
 															'<span id="spanInterfaceMainURLsAdd">Add</span>' +
 															'</td></tr>';
 															
-												aHTML[++h] = '<tr><td style="padding-top:20px;" id="tdInterfaceMainURLsAdd" class="interfaceMainAction">' +
+												aHTML.push('<tr><td style="padding-top:20px;" id="tdInterfaceMainURLsAdd" class="interfaceMainAction">' +
 															'CNAME your own url to site.mydigitalstructure.com' +
 															'</td></tr>';			
 											}
 											
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>';					
 											
 											$('#tdInterfaceMainWebsiteURLColumn2').html(aHTML.join(''));
 										
@@ -1597,57 +1583,57 @@ ns1blankspace.setup.website =
 										}	
 									
 										var aHTML = [];
-										var h = -1;
+										
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableWebsitePages" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
+											aHTML.push('<table id="tableWebsitePages" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="interfaceMainCaption">' +
 															'<td class="interfaceMainRowNothing">No URLs.</td></tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
 											$('#' + sXHTMLElementId).html(aHTML.join(''));
 										
 										}
 										else
 										{
-											aHTML[++h] = '<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">URL</td>';
-											//aHTML[++h] = '<td class="interfaceMainCaption">Status</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="interfaceMainCaption">';
+											aHTML.push('<td class="interfaceMainCaption">URL</td>';
+											//aHTML.push('<td class="interfaceMainCaption">Status</td>';
+											aHTML.push('<td class="interfaceMainCaption">&nbsp;</td>';
+											aHTML.push('</tr>';
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML[++h] = '<tr class="interfaceMainRow">';
+												aHTML.push('<tr class="interfaceMainRow">';
 																
-												aHTML[++h] = '<td id="tdWebsiteURL_url-' + this.id + '" class="interfaceMainRow">' +
+												aHTML.push('<td id="tdWebsiteURL_url-' + this.id + '" class="interfaceMainRow">' +
 																		this.url + '</td>';
 																		
-												//aHTML[++h] = '<td id="tdWebsiteURL_status-' + this.id + '" class="interfaceMainRow">' +
+												//aHTML.push('<td id="tdWebsiteURL_status-' + this.id + '" class="interfaceMainRow">' +
 												//						this.statustext + '</td>';
 																		
-												aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">';
+												aHTML.push('<td style="width:60px;text-align:right;" class="interfaceMainRow">';
 													
 												if (oOptions.remove)
 												{	
-													aHTML[++h] = '<span id="spanWebsiteURL_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+													aHTML.push('<span id="spanWebsiteURL_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
 												};	
 													
 												if (oOptions.view)
 												{	
-													aHTML[++h] = '<span id="spanWebsiteURL_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
+													aHTML.push('<span id="spanWebsiteURL_options_view-' + this.id + '" class="interfaceMainRowOptionsView"></span>';
 												};	
 													
-												aHTML[++h] = '</td>';
+												aHTML.push('</td>';
 																
-												aHTML[++h] = '</tr>';
+												aHTML.push('</tr>';
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
 											$('#' + sXHTMLElementId).html(aHTML.join(''));
 											
@@ -1704,11 +1690,11 @@ ns1blankspace.setup.website =
 										}	
 									
 										var aHTML = [];
-										var h = -1;
+										
 
-										aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+										aHTML.push('<table id="tableInterfaceMainColumn1" class="interfaceMain">';
 												
-										aHTML[++h] = '<tr id="trInterfaceMainSetupWebsiteURLAddURL" class="interfaceMain">' +
+										aHTML.push('<tr id="trInterfaceMainSetupWebsiteURLAddURL" class="interfaceMain">' +
 														'<td id="tdInterfaceMainSetupWebsiteURLAddURL" class="interfaceMain">' +
 														'URL' +
 														'</td></tr>' +
@@ -1717,26 +1703,26 @@ ns1blankspace.setup.website =
 														'<input id="inputInterfaceMainSetupWebsiteURLAddURL" class="inputInterfaceMainText">' +
 														'</td></tr>';
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
 										$('#tdInterfaceMainWebsiteURLColumn1').html(aHTML.join(''));
 										
 										var aHTML = [];
-										var h = -1;
+										
 									
-										aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+										aHTML.push('<table id="tableInterfaceMainColumn2" class="interfaceMain">';
 												
-										aHTML[++h] = '<tr id="trInterfaceMainWebsiteURLAddSave" class="interfaceMainAction">' +
+										aHTML.push('<tr id="trInterfaceMainWebsiteURLAddSave" class="interfaceMainAction">' +
 														'<td id="tdInterfaceMainWebsiteURLAddSave" class="interfaceMainAction">' +
 														'<span style="width:80px;" id="spanInterfaceMainWebsiteURLAddSave">Save</span>' +
 														'</td></tr>';
 									
-										aHTML[++h] = '<tr id="trInterfaceMainWebsiteURLAddCancel" class="interfaceMainAction">' +
+										aHTML.push('<tr id="trInterfaceMainWebsiteURLAddCancel" class="interfaceMainAction">' +
 														'<td id="tdInterfaceMainWebsiteURLAddCancel" class="interfaceMainAction">' +
 														'<span style="width:80px;" id="spanInterfaceMainWebsiteURLAddCancel">Cancel</span>' +
 														'</td></tr>';
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
 										$('#tdInterfaceMainWebsiteURLColumn2').html(aHTML.join(''));
 										
@@ -1934,16 +1920,16 @@ ns1blankspace.setup.website =
 								function interfaceSetupWebsiteAddAttachment()
 								{
 									var aHTML = [];
-									var h = -1;
+									
 
-									aHTML[++h] = '<table id="tableInterfaceMainAddAttachment" class="interfaceMainDetails">';
-									aHTML[++h] = '<tr id="trInterfaceMainAddAttachmentRow1" class="interfaceMain">' +
+									aHTML.push('<table id="tableInterfaceMainAddAttachment" class="interfaceMainDetails">';
+									aHTML.push('<tr id="trInterfaceMainAddAttachmentRow1" class="interfaceMain">' +
 														'<td id="tdInterfaceMainAddAttachmentColumn1" class="interfaceMainColumn1">' +
 														'</td>' +
 														'<td id="tdInterfaceMainAddAttachmentColumn2" class="interfaceMainColumn2">' +
 														'</td>' +
 														'</tr>';
-									aHTML[++h] = '</table>';					
+									aHTML.push('</table>';					
 										
 									$('#divInterfaceMainAddAttachment').html(aHTML.join(''));
 									$('#tdInterfaceMainAddAttachmentColumn1').html(ns1blankspaceAttachmentsUpload(1, 40));
@@ -2033,11 +2019,11 @@ ns1blankspace.setup.website =
 					{
 						
 						var aHTML = [];
-						var h = -1;
+						
 
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+						aHTML.push('<table id="tableInterfaceMainColumn1" class="interfaceMain">';
 								
-						aHTML[++h] = '<tr id="trInterfaceMainSetupWebappjQuery" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainSetupWebappjQuery" class="interfaceMain">' +
 										'<td id="tdInterfaceMainSetupWebappjQuery" class="interfaceMain">' +
 										'<span style="width:250px;font-size:0.875em" id="spanInterfaceMainWebappjQuery">1blankspace jQuery</span>' +
 										'</td>' +
@@ -2046,7 +2032,7 @@ ns1blankspace.setup.website =
 										'<span style="width:250px;font-size:0.875em" id="spanInterfaceMainWebappjQueryMobile">1blankspace jQuery Mobile</span>' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainSetupWebappjQueryMobile" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainSetupWebappjQueryMobile" class="interfaceMain">' +
 										'<td style="padding-top:15px;font-size:0.875em;color:#404040;">' +
 										'Set the header scripts to reference the 1blankspace jQuery framework / design pattern.' +
 										'</td>' +
@@ -2055,7 +2041,7 @@ ns1blankspace.setup.website =
 										'Set the header scripts to reference the 1blankspace jQuery Mobile framework / design pattern.' +
 										'</td></tr>';
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#divInterfaceMainWebapp').html(aHTML.join(''));
 						
@@ -2148,11 +2134,11 @@ ns1blankspace.setup.website =
 					else if (sVerifyCode != undefined && sUserVerifyCode == undefined)
 					{
 						var aHTML = [];
-						var h = -1;
+						
 
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceActionOptions">';
+						aHTML.push('<table id="tableInterfaceMainColumn1" class="interfaceActionOptions">';
 								
-						aHTML[++h] = '<tr id="trInterfaceMainSetupWebsiteRemove" class="interfaceMain">' +
+						aHTML.push('<tr id="trInterfaceMainSetupWebsiteRemove" class="interfaceMain">' +
 										'<td id="tdInterfaceMainSetupWebsiteRemove" class="interfaceMain">' +
 										'Enter verification code: ' + sVerifyCode +
 										'</td></tr>' +
@@ -2165,7 +2151,7 @@ ns1blankspace.setup.website =
 										'<span id="spanInterfaceMainSetupWebsiteRemoveVerify">Remove</span>' +
 										'</td></tr>';
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 						

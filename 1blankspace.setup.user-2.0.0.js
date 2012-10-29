@@ -669,7 +669,8 @@ ns1blankspace.setup.user =
 										
 												if (oResponse.data.rows.length == 0)
 												{
-													aHTML.push('<tr><td class="ns1blankspaceNothing" >This user has no roles and thus no functional access.</td></tr>');
+													aHTML.push('<tr><td class="ns1blankspaceNothing">' +
+																	'This user has no roles and thus no functional access.</td></tr>');
 												}
 
 												$(oResponse.data.rows).each(function()

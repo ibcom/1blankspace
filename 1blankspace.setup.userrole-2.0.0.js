@@ -280,7 +280,7 @@ ns1blankspace.setup.userRole =
 					});
 				},
 
-	show:		function interfaceSetupUserRoleShow(oResponse)
+	show:		function (oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					ns1blankspace.setup.userRole.layout();
@@ -313,7 +313,7 @@ ns1blankspace.setup.userRole =
 					}	
 				},	
 		
-	summary:	function interfaceSetupUserRoleSummary()
+	summary:	function ()
 				{
 					var aHTML = [];
 					
@@ -347,7 +347,7 @@ ns1blankspace.setup.userRole =
 					}	
 				},
 
-	details:	function interfaceSetupUserRoleDetails()
+	details:	function ()
 				{
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
