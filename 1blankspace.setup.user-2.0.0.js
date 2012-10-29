@@ -226,7 +226,6 @@ ns1blankspace.setup.user =
 									{	
 										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 										
-											
 										$.each(oResponse.data.rows, function()
 										{	
 											iColumn = iColumn + 1;
@@ -299,7 +298,7 @@ ns1blankspace.setup.user =
 					aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>';
 					aHTML.push('<div id="ns1blankspaceMainMessaging" class="ns1blankspaceControlMain"></div>';
 							
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
@@ -646,21 +645,19 @@ ns1blankspace.setup.user =
 
 												var aHTML = [];
 											
-												aHTML.push('<table class="ns1blankspaceColumn2">');
+												aHTML.push('<table class="ns1blankspaceColumn2">' +
+																'<tr><td><span id="ns1blankspaceUserAccessRolesAdd">' +
+																'Add Role</span></td></tr>' +
+																'</table>');					
 												
-												aHTML.push('<tr><td><span id="ns1blankspaceUserAccessRolesAdd">' +
-																'Add Role</span></td></tr>';
+												$('#ns1blankspaceAccessRolesColumn2').html(aHTML.join(''));
 												
-												aHTML.push('</table>');					
-												
-												$('#tdInterfaceMainUserAccessRolesColumn2').html(aHTML.join(''));
-												
-												$('#spanInterfaceMainUserAccessRolesAdd').button(
+												$('#ns1blankspaceUserAccessRolesAdd').button(
 												{
 													label: "Add Role"
 												})
 												.click(function() {
-													ns1blankspace.dialog.position('spanInterfaceMainUserAccessRolesAdd', -50, -280);
+													ns1blankspace.dialog.position('ns1blankspaceUserAccessRolesAdd', -50, -280);
 													ns1blankspace.setup.user.access.add(oParam);
 												})
 												.css('width', '75px')
