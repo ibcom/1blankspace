@@ -990,7 +990,7 @@ ns1blankspace.setup.user =
 
 	externalUser:
 				{					
-					show:		function (oParam, oResponse)
+					access:		function (oParam, oResponse)
 								{
 									var sXHTMLElementID = 'divInterfaceMain';
 									var iStep = 1;
@@ -1019,7 +1019,7 @@ ns1blankspace.setup.user =
 											oSearch.addField('userlogon,spacetext,usercontactpersontext,unrestrictedaccess,user');
 											oSearch.rows = 50;
 											oSearch.sort('userlogon', 'asc');
-											oSearch.getResults(function(data) {ns1blankspace.setup.externalUser.show(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.setup.externalUser.access(oParam, data)});
 										}
 										else
 										{
@@ -1056,7 +1056,7 @@ ns1blankspace.setup.user =
 											{
 												oParam.step = 2;
 												oParam.xhtmlElementID = '';
-												ns1blankspace.setup.externalUser.show(oParam);
+												ns1blankspace.setup.externalUser.access(oParam);
 											});
 
 											var aHTML = [];
@@ -1105,7 +1105,7 @@ ns1blankspace.setup.user =
 												{
 													oParam.step = 2;
 													oParam.xhtmlElementID = event.target.id;
-													ns1blankspace.setup.externalUser.show(oParam);
+													ns1blankspace.setup.externalUser.access(oParam);
 												});
 
 												$('.ns1blankspaceRowRemove').button(
@@ -1117,7 +1117,7 @@ ns1blankspace.setup.user =
 												{
 													oParam.step = 6;
 													oParam.xhtmlElementID = this.id;
-													ns1blankspace.setup.externalUser.show(oParam);
+													ns1blankspace.setup.externalUser.access(oParam);
 												})
 												.css('width', '15px')
 												.css('height', '20px')
@@ -1213,7 +1213,7 @@ ns1blankspace.setup.user =
 													dataType: 'json',
 													success: function() {
 														oParam.step = 1;
-														ns1blankspace.setup.externalUser.show(oParam);
+														ns1blankspace.setup.externalUser.access(oParam);
 														ns1blankspace.status.message('Saved');
 													}
 												});
@@ -1226,7 +1226,7 @@ ns1blankspace.setup.user =
 											.click(function() 
 											{
 												oParam.step = 1;
-												ns1blankspace.setup.externalUser.show(oParam);
+												ns1blankspace.setup.externalUser.access(oParam);
 											})
 
 											$('#ns1blankspaceSetupUserExternalEditRole').button(
@@ -1249,7 +1249,7 @@ ns1blankspace.setup.user =
 
 												oParam.user = $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.step = 3;
-												ns1blankspace.setup.externalUser.show(oParam);
+												ns1blankspace.setup.externalUser.access(oParam);
 											}
 											else
 											{
@@ -1271,7 +1271,7 @@ ns1blankspace.setup.user =
 											oSearch.addFilter('user', 'EQUAL_TO', iUser)
 											oSearch.rows = 50;
 											oSearch.sort('roletext', 'asc');
-											oSearch.getResults(function(data) {ns1blankspace.setup.externalUser.show(oParam, data)})
+											oSearch.getResults(function(data) {ns1blankspace.setup.externalUser.access(oParam, data)})
 										}
 										else
 										{
@@ -1340,30 +1340,31 @@ ns1blankspace.setup.user =
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/network/?method=NETWORK_USER_SEARCH&rows=10&scope=2&surname=' + ns1blankspace.util.fs(sSearchText),
+												url: ns1blankspace.util.endpointURI('NETWORK_USER_SEARCH'),
+												data: 'rows=10&scope=2&surname=' + ns1blankspace.util.fs(sSearchText),
 												dataType: 'json',
-												success: function(data) {interfaceSetupUserExternalSearch(sXHTMLInputElementID, data)}
+												success: function(data) {ns1blankspace.setup.externalUser.search(sXHTMLInputElementID, data)}
 											});
 										}
 									}
 									else
 									{	
-										aHTML.push('<table style="width: 350px;" class="interfaceViewportMasterControl" cellpadding=4>');
+										aHTML.push('<table style="width: 350px;">');
 
 										$(oResponse.data.rows).each(function()
 										{
 											aHTML.push('<tr>' +
-													'<td id="tdns1blankspaceNetworkUser-' + this.user + '" data-usertext="' + this.usertext + '" class="interfaceSearch ns1blankspaceNetworkUser">' +
+													'<td id="ns1blankspaceNetworkUser-' + this.user + '" data-usertext="' + this.usertext + '" class="ns1blankspaceSearch ns1blankspaceNetworkUser">' +
 													this.firstname + ' ' + this.surname + ' (' + this.contactbusinesstext + ')' +
 													'</td></tr>');
 										});			
 														
 										aHTML.push('</table>');
 										
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-										$('#divns1blankspaceViewportControlOptions').offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
 
 										$('.ns1blankspaceNetworkUser').click(function(event)
 										{
@@ -1372,7 +1373,7 @@ ns1blankspace.setup.user =
 
 											$('#' + sXHTMLInputElementID).val($('#' + event.target.id).attr("data-usertext"))
 											$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
-											$('#divns1blankspaceViewportControlOptions').hide();
+											$(ns1blankspace.xhtml.container).hide();
 										});
 									}	
 								}
