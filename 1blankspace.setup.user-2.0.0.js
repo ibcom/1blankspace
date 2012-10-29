@@ -932,7 +932,6 @@ ns1blankspace.setup.user =
 
 					process:	function (oParam)
 								{
-									var sParam = 'method=SETUP_USER_MANAGE';
 									var sData = '_=1';
 									var iContactBusiness = ns1blankspace.contactBusiness;
 									var iContactPerson;
@@ -965,24 +964,24 @@ ns1blankspace.setup.user =
 									{
 										sData += '&unrestrictedaccess=' + $('input[name="radioAccessUnrestricted"]:checked').val();
 										ns1blankspace.objectContextData.unrestrictedaccess = $('input[name="radioAccessUnrestricted"]:checked').val();
-										interfaceSetupUserAccessRoles();
+										// ?? interfaceSetupUserAccessRoles();
 									};
 
 									$.ajax(
 									{
 										type: 'POST',
-										url: '/ondemand/setup/setup.asp?' + sParam,
+										url: ns1blankspace.util.endpointURI('SETUP_USER_MANAGE'),
 										data: sData,
 										dataType: 'json',
 										success: function(data)
 										{
-											ns1blankspaceStatus('Saved.');
+											ns1blankspace.status.message('Saved.');
 											if (ns1blankspace.objectContext == -1) {var bNew = true}
 											ns1blankspace.objectContext = data.id;	
 											if (bNew)
 											{
-												ns1blankspaceStatus('Initial password is ' + data.password);
-												interfaceSetupUserSearch('-' + ns1blankspace.objectContext);
+												ns1blankspace.status.message('Initial password is ' + data.password);
+												ns1blankspace.setup.user.search.send('-' + ns1blankspace.objectContext);
 											}
 										}	
 									});		
@@ -991,7 +990,7 @@ ns1blankspace.setup.user =
 
 	externalUser:
 				{					
-					show:		function interfaceSetupUserExternal(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
 									var sXHTMLElementID = 'divInterfaceMain';
 									var iStep = 1;
@@ -1020,40 +1019,36 @@ ns1blankspace.setup.user =
 											oSearch.addField('userlogon,spacetext,usercontactpersontext,unrestrictedaccess,user');
 											oSearch.rows = 50;
 											oSearch.sort('userlogon', 'asc');
-											oSearch.getResults(function(data) {interfaceSetupUserExternal(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.setup.externalUser.show(oParam, data)});
 										}
 										else
 										{
 											var aHTML = [];
 											var h = -1;
 											
-											aHTML.push('<table id="tableInterfaceMainSetupUserExternal" class="interfaceMain">' +
-														'<tr id="trInterfaceMainSetupUserExternalRow1" class="interfaceMainRow1">' +
-														'<td id="tdInterfaceMainSetupUserExternalColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;">' +
-														'</td>' +
-														'<td id="tdInterfaceMainSetupUserExternalColumn2" class="interfaceMainColumn1Large" style="padding-left:15px;">' +
-														'</td>' +
-														'<td id="tdInterfaceMainSetupUserExternalColumn3" style="width: 100px;" class="interfaceMainColumn2Action">' +
-														'</td>' +
+											aHTML.push('<table id="ns1blankspaceSetupUserExternal" class="interfaceMain">' +
+														'<tr>' +
+														'<td id="ns1blankspaceSetupUserExternalColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;"></td>' +
+														'<td id="ns1blankspaceSetupUserExternalColumn2" class="ns1blankspaceColumn1Large" style="padding-left:15px;"></td>' +
+														'<td id="ns1blankspaceSetupUserExternalColumn3" style="width: 100px;" class="ns1blankspaceColumn2Action"></td>' +
 														'</tr>' +
-														'</table>';				
+														'</table>');				
 											
-											$('#divInterfaceMain').html(aHTML.join(''));
+											$('#ns1blankspaceMain').html(aHTML.join(''));
 											
 											var aHTML = [];
-											var h = -1;
 											
-											aHTML.push('<table>';
+											aHTML.push('<table>');
 											
-											aHTML.push('<tr><td id="tdInterfaceMainSetupUserExternalAdd" class="interfaceMainAction">' +
-															'<span id="spanInterfaceMainSetupUserExternalAdd">Add</span>' +
-															'</td></tr>';
+											aHTML.push('<tr><td id="ns1blankspaceSetupUserExternalAdd" class="interfaceMainAction">' +
+															'<span id="ns1blankspaceSetupUserExternalAdd">Add</span>' +
+															'</td></tr>');
 											
-											aHTML.push('</table>';					
+											aHTML.push('</table>');					
 											
-											$('#tdInterfaceMainSetupUserExternalColumn3').html(aHTML.join(''));
+											$('#tns1blankspaceSetupUserExternalColumn3').html(aHTML.join(''));
 											
-											$('#spanInterfaceMainSetupUserExternalAdd').button(
+											$('#ns1blankspaceSetupUserExternalAdd').button(
 											{
 												label: "Add"
 											})
@@ -1061,65 +1056,59 @@ ns1blankspace.setup.user =
 											{
 												oParam.step = 2;
 												oParam.xhtmlElementID = '';
-												interfaceSetupUserExternal(oParam);
+												ns1blankspace.setup.externalUser.show(oParam);
 											});
 
 											var aHTML = [];
-											var h = -1;
-											
+									
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-												aHTML.push('<tbody>'
-												aHTML.push('<tr class="interfaceMainCaption">' +
-																'<td class="interfaceMainRowNothing">No external user access.</td></tr>';
-												aHTML.push('</tbody></table>';
+												aHTML.push('<table><tr><td valign="top">No external user access.</td></tr></table>');
 
-												$('#tdInterfaceMainSetupUserExternalColumn1').html(aHTML.join(''));
+												$('#ns1blankspaceSetupUserExternalColumn1').html(aHTML.join(''));
 											}
 											else
 											{
-												aHTML.push('<table>';
-												aHTML.push('<tbody>';
-												
+												aHTML.push('<table>');
+											
 												$.each(oResponse.data.rows, function()
 												{
-													aHTML.push('<tr class="interfaceMainRow">';
+													aHTML.push('<tr class="ns1blankspaceRow">';
 													
-													aHTML.push('<td id="tdSetupUserExternal_title-' + this.id +
+													aHTML.push('<td id="ns1blankspaceUserExternal_title-' + this.id +
 																			'" data-user="' + this.user +
 																			'" data-usertext="' + this.userlogon +
 																			'" data-unrestrictedaccess="' + this.unrestrictedaccess +	
-																			'" class="interfaceMainRow interfaceRowSelect interfaceSetupUserExternal">' +
-																			this.userlogon;
+																			'" class="ns1blankspaceRow ns1blankspaceSelect ns1blankspaceSetupUserExternal">' +
+																			this.userlogon);
 													
-													aHTML.push('<br /><span class="interfaceViewportControlSubContext" id="interfaceSetupUserExternal_space-' + this.id + '">' +
-									 										this.spacetext + '</span>';
+													aHTML.push('<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceSetupUserExternal_space-' + this.id + '">' +
+									 										this.spacetext + '</span>');
 
-													aHTML.push('<br /><span class="interfaceViewportControlSubContext" id="interfaceSetupUserExternal_usercontactname-' + this.id + '">' +
-									 										this.usercontactpersontext + '</span>';
+													aHTML.push('<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceSetupUserExternal_usercontactname-' + this.id + '">' +
+									 										this.usercontactpersontext + '</span>');
 
-									 				aHTML.push('</td>';						
+									 				aHTML.push('</td>');						
 
-									 				aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-													aHTML.push('<span id="spanSetupUserExternal_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-													aHTML.push('</td>';		
+									 				aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">');
+													aHTML.push('<span id="ns1blankspaceSetupUserExternal_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+													aHTML.push('</td>');		
 
-													aHTML.push('</tr>';
+													aHTML.push('</tr>');
 												});
 												
-												aHTML.push('</tbody></table>';
+												aHTML.push('</table>');
 
-												$('#tdInterfaceMainSetupUserExternalColumn1').html(aHTML.join(''));
+												$('#tns1blankspaceSetupUserExternalColumn1').html(aHTML.join(''));
 															
-												$('td.interfaceSetupUserExternal').click(function(event)
+												$('td.ns1blankspaceSetupUserExternal').click(function(event)
 												{
 													oParam.step = 2;
 													oParam.xhtmlElementID = event.target.id;
-													interfaceSetupUserExternal(oParam);
+													ns1blankspace.setup.externalUser.show(oParam);
 												});
 
-												$('.interfaceMainRowOptionsRemove').button(
+												$('.ns1blankspaceRowRemove').button(
 												{
 													text: false,
 												 	icons: {primary: "ui-icon-close"}
@@ -1128,11 +1117,10 @@ ns1blankspace.setup.user =
 												{
 													oParam.step = 6;
 													oParam.xhtmlElementID = this.id;
-													interfaceSetupUserExternal(oParam);
+													ns1blankspace.setup.externalUser.show(oParam);
 												})
 												.css('width', '15px')
 												.css('height', '20px')
-
 											}
 										}
 									}
@@ -1142,137 +1130,126 @@ ns1blankspace.setup.user =
 										if (oResponse == undefined)
 										{
 											var aHTML = [];
-											var h = -1;
-
-											aHTML.push('<table class="interfaceMain">';
 											
-											aHTML.push('<tr id="trInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
-															'<td id="tdInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
+											aHTML.push('<table class="ns1blankspaceMain">');
+											
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
 															'User' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainSetupUserExternalUsernameValue" class="interfaceMainSelect">' +
-															'<td id="tdInterfaceMainSetupUserExternalUsernameValue" class="interfaceMainSelect">' +
-															'<input id="inputInterfaceMainSetupUserExternalUsername" class="inputInterfaceMainSelectCustom">' +
-															'</td></tr>';
+															'<tr class="ns1blankspaceSelect">' +
+															'<td id="ns1blankspaceSetupUserExternalUsername" class="ns1blankspaceText">' +
+															'<input id="ns1blankspaceSetupUserExternalUsername" class="ns1blankspaceText">' +
+															'</td></tr>');
 
-											aHTML.push('<tr class="interfaceMainCaption">' +
-																	'<td style="padding-bottom:10px;" class="interfaceMainRowNothing">You need to search by the surname<br />and enter at least 3 characters.</td></tr>';
+											aHTML.push('<tr><td style="padding-bottom:10px;" class="ns1blankspaceNothing">You need to search by the surname<br />and enter at least 3 characters.</td></tr>');
 									
-											aHTML.push('<tr><td class="interfaceMain">Access</td></tr>' +
-															'<tr><td class="interfaceMainRadio">' +
+											aHTML.push('<tr><td class="ns1blankspace">Access</td></tr>' +
+															'<tr><td class="ns1blankspaceRadio">' +
 															'<input type="radio" id="radioExternalAccessUnrestrictedY" name="radioExternalAccessUnrestricted" value="Y"/>Access&nbsp;to&nbsp;everything<br />' +
 															'<input type="radio" id="radioExternalAccessUnrestrictedN" name="radioExternalAccessUnrestricted" value="N"/>Restricted by role' +
-															'</td></tr>';
+															'</td></tr>');
 										
-											aHTML.push('<tr>' +
-															'<td style="padding-top:10px;" id="interfaceMainExternalUserRoles"></td></tr>';
+											aHTML.push('<tr><td style="padding-top:10px;" id="ns1blankspaceExternalUserRoles"></td></tr>');
 
-											aHTML.push('</table>';					
+											aHTML.push('</table>');					
 											
-											$('#tdInterfaceMainSetupUserExternalColumn2').html(aHTML.join(''));
+											$('#ns1blankspaceSetupUserExternalColumn2').html(aHTML.join(''));
 											
-											$('#inputInterfaceMainSetupUserExternalUsername').keyup(function()
+											$('#ns1blankspaceSetupUserExternalUsername').keyup(function()
 											{
 												if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-										        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupUserExternalSearch('inputInterfaceMainSetupUserExternalUsername')", ns1blankspace.option.typingWait);
+										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.setup.user.external.search('ns1blankspaceSetupUserExternalUsername')", ns1blankspace.option.typingWait);
 											});	
 												
-											$('#inputInterfaceMainSetupUserExternalUsername').live('blur', function() 
+											$('#ns1blankspaceSetupUserExternalUsername').live('blur', function() 
 											{
 												$(this).removeClass('ns1blankspaceHighlight');
 											});
 
 											var aHTML = [];
-											var h = -1;
-										
-											aHTML.push('<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em">';
+											
+											aHTML.push('<table class="ns1blankspace" style="font-size:0.875em">');
 													
 											if (aXHTMLElementID[1] && false)
 											{
-												aHTML.push('<tr class="interfaceMainCaption">' +
-																	'<td class="interfaceMainRowNothing">To change this access you need to delete it and then re-add it.</td></tr>';
-
+												aHTML.push('<tr><td class="ns1blankspaceNothing">To change this access you need to delete it and then re-add it.</td></tr>');
 											}	
 											else
 											{	
-												aHTML.push('<tr class="interfaceMainAction">' +
-																'<td class="interfaceMainAction">' +
-																'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditSave">Save</span>' +
-																'</td></tr>';
+												aHTML.push('<tr><td><span style="width:70px;" id="ns1blankspaceSetupUserExternalEditSave">' +
+																'Save</span></td></tr>');
 											}
 
-											aHTML.push('<tr class="interfaceMainAction">' +
-																'<td class="interfaceMainAction">' +
-																'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditCancel">Cancel</span>' +
-																'</td></tr>';
+											aHTML.push('<tr><td><span style="width:70px;" id="ns1blankspaceSetupUserExternalEditCancel">' +
+																'Cancel</span></td></tr>');
 
-											aHTML.push('<tr class="interfaceMainAction">' +
-																'<td style="padding-top:20px;" class="interfaceMainAction">' +
-																'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditRole">Add Role</span>' +
-																'</td></tr>';					
+											aHTML.push('<tr><td style="padding-top:20px;">' +
+																'<span style="width:70px;" id="ns1blankspaceSetupUserExternalEditRole">' +
+																'Add Role</span></td></tr>');					
 											
-											aHTML.push('</table>';					
+											aHTML.push('</table>');					
 											
-											$('#tdInterfaceMainSetupUserExternalColumn3').html(aHTML.join(''));
+											$('#tns1blankspaceSetupUserExternalColumn3').html(aHTML.join(''));
 
-											$('#spanInterfaceMainSetupUserExternalEditSave').button(
+											$('#ns1blankspaceSetupUserExternalEditSave').button(
 											{
 												text: "Save"
 											})
 											.click(function() 
 											{
-												ns1blankspaceStatusWorking();
+												ns1blankspace.status.working();
 
 												var sData = 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
 												sData += '&user=' + ns1blankspace.util.fs($('#inputInterfaceMainSetupUserExternalUsername').attr("data-id"));
 												sData += '&type=2';
-												sData += '&unrestrictedaccess=' + $('input[name="radioExternalAccessUnrestricted"]:checked').val();
+												sData += '&unrestrictedaccess=' + ns1blankspace.util.fs($('input[name="radioExternalAccessUnrestricted"]:checked').val());
 
 												$.ajax(
 												{
 													type: 'POST',
-													url: '/ondemand/setup/?method=SETUP_EXTERNAL_USER_ACCESS_MANAGE',
+													url: ns1blankspace.util.endpointURI('SETUP_EXTERNAL_USER_ACCESS_MANAGE'),
 													data: sData,
 													dataType: 'json',
 													success: function() {
 														oParam.step = 1;
-														interfaceSetupUserExternal(oParam);
-														ns1blankspaceStatus('Saved');
+														ns1blankspace.setup.externalUser.show(oParam);
+														ns1blankspace.status.message('Saved');
 													}
 												});
 											})
 											
-											$('#spanInterfaceMainSetupUserExternalEditCancel').button(
+											$('#ns1blankspaceSetupUserExternalEditCancel').button(
 											{
 												text: "Cancel"
 											})
 											.click(function() 
 											{
 												oParam.step = 1;
-												interfaceSetupUserExternal(oParam);
+												ns1blankspace.setup.externalUser.show(oParam);
 											})
 
-											$('#spanInterfaceMainSetupUserExternalEditRole').button(
+											$('#ns1blankspaceSetupUserExternalEditRole').button(
 											{
 												text: "Add Role"
 											})
 											.click(function() 
 											{
-												ns1blankspaceOptionsSetPosition('spanInterfaceMainSetupUserExternalEditRole', -42, -258);
-												oParam.user = $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
+												ns1blankspace.dialog.position({xhtmlElementID: 'ns1blankspaceSetupUserExternalEditRole', leftOffset: -42, topOffset: -258);
+												oParam.user = $('#ns1blankspaceSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.userType = 2;
-												interfaceSetupUserAccessRoleAdd(oParam);
+												ns1blankspace.setup.user.add(oParam);
 											})
 
 											if (aXHTMLElementID[1])
 											{
-												$('#inputInterfaceMainSetupUserExternalUsername').attr("data-id", $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user"))
-												$('#inputInterfaceMainSetupUserExternalUsername').val($('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-usertext"));
+												$('#ns1blankspaceSetupUserExternalUsername').attr("data-id", $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user"))
+												$('#ns1blankspaceSetupUserExternalUsername').val($('#ns1blankspaceSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-usertext"));
 												$('[name="radioExternalAccessUnrestricted"][value="' + $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-unrestrictedaccess") + '"]').attr('checked', true);
 
 												oParam.user = $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.step = 3;
-												interfaceSetupUserExternal(oParam);
+												ns1blankspace.setup.externalUser.show(oParam);
 											}
 											else
 											{
@@ -1294,42 +1271,40 @@ ns1blankspace.setup.user =
 											oSearch.addFilter('user', 'EQUAL_TO', iUser)
 											oSearch.rows = 50;
 											oSearch.sort('roletext', 'asc');
-											oSearch.getResults(function(data) {interfaceSetupUserExternal(oParam, data)})
+											oSearch.getResults(function(data) {ns1blankspace.setup.externalUser.show(oParam, data)})
 										}
 										else
 										{
 											var aHTML = [];
-											var h = -1;
 
-											aHTML.push('<table><tbody>';
+											aHTML.push('<table id="ns1blankspaceExternalUserRoles">');
 
 											$(oResponse.data.rows).each(function()
 											{
-												aHTML.push('<tr class="interfaceMainRow">';
+												aHTML.push('<tr class="ns1blankspaceRow">');
 												
-												aHTML.push('<td id="interfaceUserRole_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect role"' +
-																		' title="">' +
-																		this.roletext + '</td>';
+												aHTML.push('<td id="ns1blankspaceExternalUserRole_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																this.roletext + '</td>';
 
-												aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-												aHTML.push('<span id="spanUserAccessRole_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-												aHTML.push('</td>';																	
-												aHTML.push('</tr>';
+												aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">' +
+																'<span id="ns1blankspaceExternalAccessRole_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span></td>');
+
+												aHTML.push('</tr>');
 											});
 										
-											if (h != 0)
+											if (aHTML.length != 1)
 											{	
-												aHTML.push('</tbody></table>';
+												aHTML.push('</table>';
 												
-												$('#interfaceMainExternalUserRoles').html(aHTML.join(''));
+												$('#ns1blankspaceExternalUserRoles').html(aHTML.join(''));
 
-												$('.interfaceMainRowOptionsRemove').button(
+												$('# ns1blankspaceExternalUserRoles > td.ns1blankspaceRowRemove').button(
 												{
 													text: false,
 												 	icons: {primary: "ui-icon-close"}
 												})
 												.click(function() {
-													interfaceSetupUserAccessRoleRemove(this.id)
+													ns1blankspace.setup.user.access.remove(this.id)
 												})
 												.css('width', '15px')
 												.css('height', '20px')
@@ -1340,17 +1315,17 @@ ns1blankspace.setup.user =
 									else if (iStep == 6)
 									{	
 										$.ajax(
-											{
-												type: 'POST',
-												url: '/ondemand/setup/?method=SETUP_EXTERNAL_USER_ACCESS_MANAGE&remove=1',
-												data: 'id=' + aXHTMLElementID[1],
-												dataType: 'json',
-												success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
-											});	
-										}	
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('SETUP_EXTERNAL_USER_ACCESS_MANAGE'),
+											data: 'remove=1&id=' + aXHTMLElementID[1],
+											dataType: 'json',
+											success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
+										});	
+									}	
 								},
 
-					search: 	function interfaceSetupUserExternalSearch(sXHTMLInputElementID, oResponse)
+					search: 	function (sXHTMLInputElementID, oResponse)
 								{
 									var aHTML = [];
 									var sSearchText;
