@@ -509,12 +509,12 @@ ns1blankspace.contactPerson =
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						aHTML.push('<table class="ns1blankspaceContainer">');
-						aHTML.push('<tr class="ns1blankspaceContainer">' +
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
 										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
 										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
-										'</tr>');
-						aHTML.push('</table>');					
+										'</tr>' + 
+										'</table>');					
 						
 						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						

@@ -124,7 +124,7 @@ ns1blankspace.setup.user =
 									sRestriction = "Restrictred access by role"
 								}
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_Restriction-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_restriction-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
 														sRestriction + '</td>');
 
 								aHTML.push('</tr>');
@@ -144,7 +144,7 @@ ns1blankspace.setup.user =
 				},
 
 	search: 	{
-					send: 		function interfaceSetupUserSearch(sXHTMLElementId, iSource, sSearchText, sSearchContext)
+					send: 		function (sXHTMLElementId, iSource, sSearchText, sSearchContext)
 								{
 									
 									var aSearch = sXHTMLElementId.split('-');
@@ -158,7 +158,7 @@ ns1blankspace.setup.user =
 										
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
@@ -166,7 +166,7 @@ ns1blankspace.setup.user =
 										oSearch.method = 'SETUP_USER_SEARCH';
 										oSearch.addField('username,contactpersontext,lastlogon,disabled,disabledreason,unrestrictedaccess');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.getResults(function(data) {interfaceSetupUserShow(data)});
+										oSearch.getResults(function(data) {ns1blankspace.setup.user.show(data)});
 									}
 									else
 									{
@@ -175,7 +175,7 @@ ns1blankspace.setup.user =
 										
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -184,13 +184,13 @@ ns1blankspace.setup.user =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											sElementId = 'ns1blankspaceViewControlBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{	
-											ns1blankspaceOptionsSetPosition(sElementId);
-											ns1blankspaceSearchStart(sElementId);
+											ns1blankspace.dialog.position({xhtmlElementID: sElementId});
+											ns1blankspace.search.start(sElementId);
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_USER_SEARCH';
@@ -205,12 +205,12 @@ ns1blankspace.setup.user =
 												oSearch.addFilter('username', 'STRING_IS_LIKE', sSearchText);
 											}	
 											
-											oSearch.getResults(interfaceSetupUserSearchShow);
+											oSearch.getResults(ns1blankspace.setup.user.search.process);
 										}
 									};	
 								},
 
-					process:	function interfaceSetupUserSearchShow(oResponse)
+					process:	function (oResponse)
 								{
 									var iColumn = 0;
 									var aHTML = [];
@@ -219,13 +219,13 @@ ns1blankspace.setup.user =
 										
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspaceSearchStop();
-										$('#divns1blankspaceViewportControlOptions').hide();
+										ns1blankspace.search.stop();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{	
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										
 											
 										$.each(oResponse.data.rows, function()
 										{	
@@ -233,31 +233,31 @@ ns1blankspace.setup.user =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
-											aHTML[++h] = '<td class="interfaceSearch" id="' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
-															this.username + '</td>';
+															this.username + '</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</table>');
 
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-										ns1blankspaceSearchStop();
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										ns1blankspace.search.stop();
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspace').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceSetupUserSearch(event.target.id, 1);
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.setup.user.search.send(event.target.id, 1);
 										});
 									}			
 								}
@@ -266,95 +266,85 @@ ns1blankspace.setup.user =
 	layout: 	function interfaceSetupUserViewport()
 				{
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-							
+					aHTML.push('<table class="ns1blankspaceControl">');
+					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');		
 					}
 					else
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-										'</tr>';
-										
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-										'</tr>';
-											
-						aHTML[++h] = '<tr id="trInterfaceViewportControlAccess" class="interfaceViewportControl">' +
-											'<td id="tdInterfaceViewportControlAccess" class="interfaceViewportControl">Access</td>' +
-											'</tr>';
-					}
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Summary</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
 
-					aHTML[++h] = '</table>';					
+						aHTML.push('<tr><td id="ns1blankspaceAccess" class="ns1blankspaceControl">' +
+										'Access</td></tr>');
+					}	
+
+					aHTML.push('</table>');					
 								
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
-
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAccess" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainMessaging" class="divInterfaceViewportMain"></div>';
+				
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainMessaging" class="ns1blankspaceControlMain"></div>';
 							
 					$('#divInterfaceMain').html(aHTML.join(''));
 						
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceSetupUserSummary();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.setup.user.summary();
 					});
 					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceSetupUserDetails();
-					});	
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.setup.user.details();
+					});
 					
-					$('#tdInterfaceViewportControlMessaging').click(function(event)
+					$('#ns1blankspaceControlAccess').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainMessaging");
-						interfaceSetupUserMessaging();
+						ns1blankspace.show({selector: '#ns1blankspaceMainAccess'});
+						ns1blankspace.setup.user.access();
 					});
 
-					$('#tdInterfaceViewportControlAccess').click(function(event)
+					$('#ns1blankspaceControlMessaging').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAccess");
-						interfaceSetupUserAccess();
-					});	
+						ns1blankspace.show({selector: '#ns1blankspaceMainMessaging'});
+						ns1blankspace.setup.user.messaging();
+					});
 				},
 
-	show:		function interfaceSetupUserShow(oResponse)
+	show:		function (oResponse)
 				{
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceSetupUserViewport();
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.setup.user.layout();
 					
 					var aHTML = [];
-					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find User.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this user.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
-								
+						
 						var sContext = ns1blankspace.objectContextData.username;
 						var aContext = sContext.split("@");
 						
@@ -364,200 +354,197 @@ ns1blankspace.setup.user =
 						{
 							sContext += '<br />@' + aContext[i];
 						}
-							
-						$('#divInterfaceViewportControlContext').html(sContext);
+
+						$('#ns1blankspaceControlContext').html(sContext);
+
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						interfaceSetupUserSummary();
-					}	
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.user.init({showHome: false});ns1blankspace.setup.user.search.send("-' + ns1blankspace.objectContext + '")',
+							move: false
+							})
+						
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.setup.user.summary()'})
+					}		
 				},	
 		
-	summary: 	function interfaceSetupUserSummary()
+	summary: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
 					
-					aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain" style="width:100%;">';
-					aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
-									'</td>' +
-									'<td id="tdInterfaceMainSummaryColumn2Action" class="interfaceMainColumn2" style="width:150px;">' +
-									'</td>' +
-									'</tr>';
-					aHTML[++h] = '</table>';					
-					
-					$('#divInterfaceMainSummary').html(aHTML.join(''));
-
-					var aHTML = [];
-					var h = -1;
-
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find user.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this user.</td></tr></table>');
 								
-						$('#divInterfaceMainSummary').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
-					{	
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+					{
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'</tr>' +
+									'</table>');				
 						
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
+					
+						var aHTML = [];
 						var sTmpClass = ''
 						
 						if (ns1blankspace.objectContextData.disabled == 'Y')
 						{
-							sTmpClass = ' interfaceMainDisabled';
+							sTmpClass = ' ns1blankspaceDisabled';
 						}
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummary">User</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummarySiteID" class="interfaceMainSummaryValue' + sTmpClass + '">' +
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">User Name</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryUserName" class="ns1blankspaceSummary' + sTmpClass + '">' +
 										ns1blankspace.objectContextData.username +
-										'</td></tr>';
-										
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummary">Name</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummaryValue">' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Name</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryName" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.contactpersontext +
-										'</td></tr>';
+										'</td></tr>');
 						
 						if (ns1blankspace.objectContextData.lastlogon != '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummary">Last Logon</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryLastLogon" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Logon</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryLastLogon" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.lastlogon +
-										'</td></tr>';
+										'</td></tr>');
 						}
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
-						var h = -1;	
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" style="width:150px;">';
+						aHTML.push('<tableclass="ns1blankspaceColumn2" style="width:150px;">');
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainResetPassword">' +
-										'<span style="font-size:0.75em;" id="spanInterfaceMainResetPassword">Reset Password</span>' +
-										'</td></tr>';
+						aHTML.push('<tr><td id="ns1blankspaceResetPasswordContainer"><span style="font-size:0.75em;" id="ns1blankspaceResetPassword">' +
+										'Reset Password</span></td></tr>');
 						
-						aHTML[++h] = '</table>';								
+						aHTML.push('</table>');								
 						
-						$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));
+						$('#tns1blankspaceSummaryColumn2').html(aHTML.join(''));
 						
-						$('#spanInterfaceMainResetPassword').button(
+						$('#ns1blankspaceResetPassword').button(
 						{
 							
 						})
-						.click(function() {
-								
+						.click(function()
+						{	
 							$.ajax(
 							{
-								type: 'GET',
-								url: '/ondemand/setup/?method=SETUP_USER_MANAGE&password=&passwordexpiry=' + Date.today().add(-1).days().toString("dd-MMM-yyyy") +'&id=' + ns1blankspace.objectContext,
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('SETUP_USER_MANAGE'),
+								data: 'password=&passwordexpiry=' + Date.today().add(-1).days().toString("dd-MMM-yyyy") +'&id=' + ns1blankspace.objectContext,
 								dataType: 'json',
 								async: false,
-								success: function(data) {
-										$('#tdInterfaceMainResetPassword').html('New password is <strong>' + data.password + '</strong>.');
-									}
+								success: function(data)
+											{
+												$('#ns1blankspaceResetPasswordContainer').html('New password is <strong>' + data.password + '</strong>.');
+											}
 							});
 						})
 					}	
 				},
 
-	details: 	function interfaceSetupUserDetails()
+	details: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
-						
-					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
+					
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>');
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMainDetails').html(aHTML.join(''));
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
-					
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
-					
-						aHTML[++h] = '<tr class="interfaceMain">' +
-										'<td class="interfaceMain">' +
+						
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'User Name (Logon Name)' +
 										'</td></tr>' +
-										'<tr class="interfaceMainText">' +
-										'<td class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsUserName" class="inputInterfaceMainText">' +
-										'</td></tr>';
-						
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsUserName" class="ns1blankspaceText">' +
+										'</td></tr>');			
+					
 						if (ns1blankspace.objectContext == -1)
 						{
-							aHTML[++h] = '<tr class="interfaceMain">' +
-											'<td class="interfaceMain">' +
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">' +
 											'First Name' +
 											'</td></tr>' +
-											'<tr class="interfaceMainText">' +
-											'<td class="interfaceMainText">' +
-											'<input id="inputInterfaceMainDetailsFirstName" class="inputInterfaceMainText">' +
-											'</td></tr>';
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceText">' +
+											'<input id="ns1blankspaceDetailsFirstName" class="ns1blankspaceText">' +
+											'</td></tr>');	
 
-							aHTML[++h] = '<tr class="interfaceMain">' +
-											'<td class="interfaceMain">' +
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">' +
 											'Last Name' +
 											'</td></tr>' +
-											'<tr class="interfaceMainText">' +
-											'<td class="interfaceMainText">' +
-											'<input id="inputInterfaceMainDetailsLastName" class="inputInterfaceMainText">' +
-											'</td></tr>';			
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceText">' +
+											'<input id="ns1blankspaceDetailsLastName" class="ns1blankspaceText">' +
+											'</td></tr>');
 						}
 
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 							
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspaceColumn2">';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsDisabled" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsDisabled" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Disabled' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsDisabled" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsDisabledValue" class="interfaceMainRadio">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioDisabledN" name="radioDisabled" value="N"/>No<br />' +
 										'<input type="radio" id="radioDisabledY" name="radioDisabled" value="Y"/>Yes' +
-										'</td></tr>';
-						
+										'</td></tr>');
+
 						if (ns1blankspace.objectContext != -1)
 						{		
-							aHTML[++h] = '<tr id="trInterfaceMainDetailsDisabledReason" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsDisabledReason" class="interfaceMain">' +
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Disabled Reason' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsDisabledReasonValue" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDetailsDisabledReasonValue" class="interfaceMainTextMulti">' +
-										'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsDisabledReason" class="inputInterfaceMainTextMultiSmall"></textarea>' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceTextMulti">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="10" cols="35" id="ns1blankspaceDetailsDisabledReason" class="ns1blankspaceTextMultiSmall"></textarea>' +
+										'</td></tr>');
 						}				
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsUserName').val(ns1blankspace.objectContextData.username);
+							$('#ns1blankspaceDetailsUserName').val(ns1blankspace.objectContextData.username);
 							$('[name="radioDisabled"][value="' + ns1blankspace.objectContextData.disabled + '"]').attr('checked', true);
-							$('#inputInterfaceMainDetailsDisabledReason').val(ns1blankspace.objectContextData.disabledreason);
+							$('#ns1blankspaceDetailsDisabledReason').val(ns1blankspace.objectContextData.disabledreason);
 						}
 						else
 						{
@@ -567,38 +554,44 @@ ns1blankspace.setup.user =
 				},
 
 	access: 	{			
-					layout:		function interfaceSetupUserAccess()
+					layout:		function ()
 								{
 									var aHTML = [];
-									var h = -1;
-										
-									if ($('#divInterfaceMainAccess').attr('onDemandLoading') == '1')
+
+									if ($('#ns1blankspaceMainAccess').attr('data-loading') == '1')
 									{
-										$('#divInterfaceMainAccess').attr('onDemandLoading', '');
+										$('#ns1blankspaceMainAccess').attr('data-loading', '');
 										
-										aHTML[++h] = '<table id="tableInterfaceMainAccess" class="interfaceMainDetails">';
-										aHTML[++h] = '<tr id="trInterfaceMainAccessRow1" class="interfaceMain">' +
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+														'</tr>' + 
+														'</table>');
+
+										aHTML.push('<table id="tableInterfaceMainAccess" class="interfaceMainDetails">';
+										aHTML.push('<tr id="trInterfaceMainAccessRow1" class="interfaceMain">' +
 														'<td id="tdInterfaceMainAccessColumn1" class="interfaceMainColumn1" style="width:200px;">' +
 														'</td>' +
 														'<td id="tdInterfaceMainAccessColumn2" class="interfaceMainColumn2">' +
 														'</td>' +
 														'</tr>';
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
 										$('#divInterfaceMainAccess').html(aHTML.join(''));
 										
 										var aHTML = [];
 										var h = -1;
 									
-										aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+										aHTML.push('<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
 									
-										aHTML[++h] = '<tr id="trInterfaceMainAccessUnrestricted" class="interfaceMainText">' +
+										aHTML.push('<tr id="trInterfaceMainAccessUnrestricted" class="interfaceMainText">' +
 														'<td id="tdInterfaceMainAccessUnrestrictedValue" class="interfaceMainRadio">' +
 														'<input type="radio" id="radioAccessUnrestrictedY" name="radioAccessUnrestricted" value="Y"/>Access&nbsp;to&nbsp;everything<br />' +
 														'<input type="radio" id="radioAccessUnrestrictedN" name="radioAccessUnrestricted" value="N"/>Restricted by role' +
 														'</td></tr>';
 										
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
 										$('#tdInterfaceMainAccessColumn1').html(aHTML.join(''));
 											
@@ -624,13 +617,13 @@ ns1blankspace.setup.user =
 									{
 										if (ns1blankspace.objectContextData.unrestrictedaccess == 'Y')
 										{
-											aHTML[++h] = '<table lass="interfaceMain">';
+											aHTML.push('<table lass="interfaceMain">';
 
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
+											aHTML.push('<tr class="interfaceMainCaption">' +
 															'<td class="interfaceMainRowNothing" style="font-weight:600;">This user can access all functions within this space.</td></tr>' +
 															'<td class="interfaceMainRowNothing">If you select <em>restricted access</em> and save, you can then allocate predefined <em>users roles</em> to them.</td></tr>';
 
-											aHTML[++h] = '</table>';
+											aHTML.push('</table>';
 
 											$('#tdInterfaceMainAccessColumn2').html(aHTML.join(''));			
 										}
@@ -652,7 +645,7 @@ ns1blankspace.setup.user =
 												var aHTML = [];
 												var h = -1;
 												
-												aHTML[++h] = '<table class="interfaceMain">' +
+												aHTML.push('<table class="interfaceMain">' +
 															'<tr id="trInterfaceMainUserAccessRolesRow1" class="interfaceMainRow1">' +
 															'<td id="tdInterfaceMainUserAccessRolesColumn1" class="interfaceMainColumn1Large">' +
 															'</td>' +
@@ -666,13 +659,13 @@ ns1blankspace.setup.user =
 												var aHTML = [];
 												var h = -1;
 												
-												aHTML[++h] = '<table class="interfaceMainColumn2">';
+												aHTML.push('<table class="interfaceMainColumn2">';
 												
-												aHTML[++h] = '<tr><td id="tdInterfaceMainUserAccessRolesAdd" class="interfaceMainAction">' +
+												aHTML.push('<tr><td id="tdInterfaceMainUserAccessRolesAdd" class="interfaceMainAction">' +
 																'<span id="spanInterfaceMainUserAccessRolesAdd">Add Role</span>' +
 																'</td></tr>';
 												
-												aHTML[++h] = '</table>';					
+												aHTML.push('</table>';					
 												
 												$('#tdInterfaceMainUserAccessRolesColumn2').html(aHTML.join(''));
 												
@@ -689,31 +682,31 @@ ns1blankspace.setup.user =
 												var aHTML = [];
 												var h = -1;	
 														
-												aHTML[++h] = '<table cellspacing="0" cellpadding="0" class="interfaceMain">';
-												aHTML[++h] = '<tbody>';
+												aHTML.push('<table cellspacing="0" cellpadding="0" class="interfaceMain">';
+												aHTML.push('<tbody>';
 
 												if (oResponse.data.rows.length == 0)
 												{
-													aHTML[++h] = '<tr class="interfaceMainCaption">' +
+													aHTML.push('<tr class="interfaceMainCaption">' +
 															'<td class="interfaceMainRowNothing" >This user has no roles and thus no functional access.</td></tr>';
 												}
 
 												$(oResponse.data.rows).each(function()
 												{
 
-													aHTML[++h] = '<tr class="interfaceMainRow">';
+													aHTML.push('<tr class="interfaceMainRow">';
 													
-													aHTML[++h] = '<td id="interfaceUserRole_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect role"' +
+													aHTML.push('<td id="interfaceUserRole_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect role"' +
 																			' title="">' +
 																			this.roletext + '</td>';
 
-													aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-													aHTML[++h] = '<span id="spanUserAccessRole_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-													aHTML[++h] = '</td>';																	
-													aHTML[++h] = '</tr>';
+													aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+													aHTML.push('<span id="spanUserAccessRole_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+													aHTML.push('</td>';																	
+													aHTML.push('</tr>';
 												});
 											
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('</tbody></table>';
 													
 												$('#tdInterfaceMainUserAccessRolesColumn1').html(aHTML.join(''));
 
@@ -781,31 +774,31 @@ ns1blankspace.setup.user =
 											
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceSearchMedium">';
-												aHTML[++h] = '<tbody>'
-												aHTML[++h] = '<tr class="interfaceMainCaption">' +
+												aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="interfaceSearchMedium">';
+												aHTML.push('<tbody>'
+												aHTML.push('<tr class="interfaceMainCaption">' +
 																'<td class="interfaceMainRowNothing">No roles.</td></tr>';
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('</tbody></table>';
 
 												$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 												$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 											}
 											else
 											{
-												aHTML[++h] = '<table id="tableContactPersonGroupsAddSelect" class="interfaceSearchMedium" style="font-size:0.725em;">';
-												aHTML[++h] = '<tbody>'
+												aHTML.push('<table id="tableContactPersonGroupsAddSelect" class="interfaceSearchMedium" style="font-size:0.725em;">';
+												aHTML.push('<tbody>'
 												
 												$.each(oResponse.data.rows, function()
 												{	
-													aHTML[++h] = '<tr class="interfaceMainRow">';
+													aHTML.push('<tr class="interfaceMainRow">';
 													
-													aHTML[++h] = '<td id="tdUserAccessRoleAddSelect-title-' + this.id + '" class="interfaceMainRowSelect">' +
+													aHTML.push('<td id="tdUserAccessRoleAddSelect-title-' + this.id + '" class="interfaceMainRowSelect">' +
 																			this.title + '</td>';
 													
-													aHTML[++h] = '</tr>'
+													aHTML.push('</tr>'
 												});
 												
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('</tbody></table>';
 
 												$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 												$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
@@ -1067,7 +1060,7 @@ ns1blankspace.setup.user =
 											var aHTML = [];
 											var h = -1;
 											
-											aHTML[++h] = '<table id="tableInterfaceMainSetupUserExternal" class="interfaceMain">' +
+											aHTML.push('<table id="tableInterfaceMainSetupUserExternal" class="interfaceMain">' +
 														'<tr id="trInterfaceMainSetupUserExternalRow1" class="interfaceMainRow1">' +
 														'<td id="tdInterfaceMainSetupUserExternalColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;">' +
 														'</td>' +
@@ -1083,13 +1076,13 @@ ns1blankspace.setup.user =
 											var aHTML = [];
 											var h = -1;
 											
-											aHTML[++h] = '<table>';
+											aHTML.push('<table>';
 											
-											aHTML[++h] = '<tr><td id="tdInterfaceMainSetupUserExternalAdd" class="interfaceMainAction">' +
+											aHTML.push('<tr><td id="tdInterfaceMainSetupUserExternalAdd" class="interfaceMainAction">' +
 															'<span id="spanInterfaceMainSetupUserExternalAdd">Add</span>' +
 															'</td></tr>';
 											
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>';					
 											
 											$('#tdInterfaceMainSetupUserExternalColumn3').html(aHTML.join(''));
 											
@@ -1109,46 +1102,46 @@ ns1blankspace.setup.user =
 											
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-												aHTML[++h] = '<tbody>'
-												aHTML[++h] = '<tr class="interfaceMainCaption">' +
+												aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+												aHTML.push('<tbody>'
+												aHTML.push('<tr class="interfaceMainCaption">' +
 																'<td class="interfaceMainRowNothing">No external user access.</td></tr>';
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('</tbody></table>';
 
 												$('#tdInterfaceMainSetupUserExternalColumn1').html(aHTML.join(''));
 											}
 											else
 											{
-												aHTML[++h] = '<table>';
-												aHTML[++h] = '<tbody>';
+												aHTML.push('<table>';
+												aHTML.push('<tbody>';
 												
 												$.each(oResponse.data.rows, function()
 												{
-													aHTML[++h] = '<tr class="interfaceMainRow">';
+													aHTML.push('<tr class="interfaceMainRow">';
 													
-													aHTML[++h] = '<td id="tdSetupUserExternal_title-' + this.id +
+													aHTML.push('<td id="tdSetupUserExternal_title-' + this.id +
 																			'" data-user="' + this.user +
 																			'" data-usertext="' + this.userlogon +
 																			'" data-unrestrictedaccess="' + this.unrestrictedaccess +	
 																			'" class="interfaceMainRow interfaceRowSelect interfaceSetupUserExternal">' +
 																			this.userlogon;
 													
-													aHTML[++h] = '<br /><span class="interfaceViewportControlSubContext" id="interfaceSetupUserExternal_space-' + this.id + '">' +
+													aHTML.push('<br /><span class="interfaceViewportControlSubContext" id="interfaceSetupUserExternal_space-' + this.id + '">' +
 									 										this.spacetext + '</span>';
 
-													aHTML[++h] = '<br /><span class="interfaceViewportControlSubContext" id="interfaceSetupUserExternal_usercontactname-' + this.id + '">' +
+													aHTML.push('<br /><span class="interfaceViewportControlSubContext" id="interfaceSetupUserExternal_usercontactname-' + this.id + '">' +
 									 										this.usercontactpersontext + '</span>';
 
-									 				aHTML[++h] = '</td>';						
+									 				aHTML.push('</td>';						
 
-									 				aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-													aHTML[++h] = '<span id="spanSetupUserExternal_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-													aHTML[++h] = '</td>';		
+									 				aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+													aHTML.push('<span id="spanSetupUserExternal_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+													aHTML.push('</td>';		
 
-													aHTML[++h] = '</tr>';
+													aHTML.push('</tr>';
 												});
 												
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('</tbody></table>';
 
 												$('#tdInterfaceMainSetupUserExternalColumn1').html(aHTML.join(''));
 															
@@ -1184,9 +1177,9 @@ ns1blankspace.setup.user =
 											var aHTML = [];
 											var h = -1;
 
-											aHTML[++h] = '<table class="interfaceMain">';
+											aHTML.push('<table class="interfaceMain">';
 											
-											aHTML[++h] = '<tr id="trInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
+											aHTML.push('<tr id="trInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
 															'<td id="tdInterfaceMainSetupUserExternalUsername" class="interfaceMain">' +
 															'User' +
 															'</td></tr>' +
@@ -1195,19 +1188,19 @@ ns1blankspace.setup.user =
 															'<input id="inputInterfaceMainSetupUserExternalUsername" class="inputInterfaceMainSelectCustom">' +
 															'</td></tr>';
 
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
+											aHTML.push('<tr class="interfaceMainCaption">' +
 																	'<td style="padding-bottom:10px;" class="interfaceMainRowNothing">You need to search by the surname<br />and enter at least 3 characters.</td></tr>';
 									
-											aHTML[++h] = '<tr><td class="interfaceMain">Access</td></tr>' +
+											aHTML.push('<tr><td class="interfaceMain">Access</td></tr>' +
 															'<tr><td class="interfaceMainRadio">' +
 															'<input type="radio" id="radioExternalAccessUnrestrictedY" name="radioExternalAccessUnrestricted" value="Y"/>Access&nbsp;to&nbsp;everything<br />' +
 															'<input type="radio" id="radioExternalAccessUnrestrictedN" name="radioExternalAccessUnrestricted" value="N"/>Restricted by role' +
 															'</td></tr>';
 										
-											aHTML[++h] = '<tr>' +
+											aHTML.push('<tr>' +
 															'<td style="padding-top:10px;" id="interfaceMainExternalUserRoles"></td></tr>';
 
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>';					
 											
 											$('#tdInterfaceMainSetupUserExternalColumn2').html(aHTML.join(''));
 											
@@ -1225,33 +1218,33 @@ ns1blankspace.setup.user =
 											var aHTML = [];
 											var h = -1;
 										
-											aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em">';
+											aHTML.push('<table id="tableInterfaceMainColumn2" class="interfaceMain" style="font-size:0.875em">';
 													
 											if (aXHTMLElementID[1] && false)
 											{
-												aHTML[++h] = '<tr class="interfaceMainCaption">' +
+												aHTML.push('<tr class="interfaceMainCaption">' +
 																	'<td class="interfaceMainRowNothing">To change this access you need to delete it and then re-add it.</td></tr>';
 
 											}	
 											else
 											{	
-												aHTML[++h] = '<tr class="interfaceMainAction">' +
+												aHTML.push('<tr class="interfaceMainAction">' +
 																'<td class="interfaceMainAction">' +
 																'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditSave">Save</span>' +
 																'</td></tr>';
 											}
 
-											aHTML[++h] = '<tr class="interfaceMainAction">' +
+											aHTML.push('<tr class="interfaceMainAction">' +
 																'<td class="interfaceMainAction">' +
 																'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditCancel">Cancel</span>' +
 																'</td></tr>';
 
-											aHTML[++h] = '<tr class="interfaceMainAction">' +
+											aHTML.push('<tr class="interfaceMainAction">' +
 																'<td style="padding-top:20px;" class="interfaceMainAction">' +
 																'<span style="width:70px;" id="spanInterfaceMainSetupUserExternalEditRole">Add Role</span>' +
 																'</td></tr>';					
 											
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>';					
 											
 											$('#tdInterfaceMainSetupUserExternalColumn3').html(aHTML.join(''));
 
@@ -1341,25 +1334,25 @@ ns1blankspace.setup.user =
 											var aHTML = [];
 											var h = -1;
 
-											aHTML[++h] = '<table><tbody>';
+											aHTML.push('<table><tbody>';
 
 											$(oResponse.data.rows).each(function()
 											{
-												aHTML[++h] = '<tr class="interfaceMainRow">';
+												aHTML.push('<tr class="interfaceMainRow">';
 												
-												aHTML[++h] = '<td id="interfaceUserRole_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect role"' +
+												aHTML.push('<td id="interfaceUserRole_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect role"' +
 																		' title="">' +
 																		this.roletext + '</td>';
 
-												aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-												aHTML[++h] = '<span id="spanUserAccessRole_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-												aHTML[++h] = '</td>';																	
-												aHTML[++h] = '</tr>';
+												aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">';
+												aHTML.push('<span id="spanUserAccessRole_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
+												aHTML.push('</td>';																	
+												aHTML.push('</tr>';
 											});
 										
 											if (h != 0)
 											{	
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('</tbody></table>';
 												
 												$('#interfaceMainExternalUserRoles').html(aHTML.join(''));
 
