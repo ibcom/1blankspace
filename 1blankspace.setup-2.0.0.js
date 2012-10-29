@@ -7,14 +7,14 @@
 
 $.extend(true, ns1blankspace.setup, 
 {
-	init: 		function interfaceSetupMasterViewport(oParam)
+	init: 		function (oParam)
 				{
 					var bShowHome = true
 					
 					if (oParam != undefined)
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.method != undefined) {ns1blankspace.setup.method = oParam.method}
+						if (oParam.method != undefined) {ns1blankspace.setup.method = (oParam.method).toUpperCase()}
 						if (oParam.viewName != undefined) {ns1blankspace.setup.name = oParam.viewName}	
 					}
 
@@ -36,166 +36,146 @@ $.extend(true, ns1blankspace.setup,
 					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 
-					//???
-					
 					var aHTML = [];
-					var h = -1;
 								
-					aHTML[++h] = '<table>';
-					aHTML[++h] = '<tr>' +
-									'<td id="ns1blankspaceViewportSetupLarge" class="ns1blankspaceViewportImageLarge">' +
-									'&nbsp;' + 
-									'</td>' +
-									'</tr>';
-					aHTML[++h] = '</table>';		
+					aHTML.push('<table><tr><td id="ns1blankspaceViewSetupLarge" class="ns1blankspaceViewportImageLarge">' +
+									'&nbsp;</td></tr></table>');		
 					
-					$('#divInterfaceViewportControl').html(aHTML.join(''));	
+					$('#ns1blankspaceViewControl').html(aHTML.join(''));	
 					
-					ns1blankspaceStatus('Click value to edit.')
+					ns1blankspace.status.message('Click value to edit.')
 					
 					var oSearch = new AdvancedSearch();
-					oSearch.method = gsSetupMethod + '_SEARCH';
+					oSearch.method = ns1blankspace.setup.method + '_SEARCH';
 					oSearch.addField('title');
 					oSearch.rows = 100;
 					oSearch.sort('title', 'asc');
-					oSearch.getResults(function(data) {interfaceSetupHomeShow(oParam, data)});
+					oSearch.getResults(function(data) {ns1blankspace.setup.home(oParam, data)});
 				},
 
-	home:		function interfaceSetupHomeShow(oParam, oResponse)
+	home:		function (oParam, oResponse)
 				{
 					var aHTML = [];
-					var h = -1;
-								
-					var aHTML = [];
-					var h = -1;
-								
-					aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-					aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-									'<td id="tdInterfaceSetupHomeMostLikely" class="interfaceViewportMain">' +
+
+					aHTML.push('<table class="ns1blankspace">';
+					aHTML.push('<tr><td id="ns1blankspaceSetup">' +
 									ns1blankspace.xhtml.loading + 
-									'</td>' +
-									'</tr>';
-					aHTML[++h] = '</table>';					
+									'</td></tr></table>');					
 					
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 					
-					aHTML[++h] = '<table style="width:100%" border="0" cellspacing="0" cellpadding="0" id="tableInterfaceSetupHomeMostLikely">';
-					aHTML[++h] = '<tbody>'
-						
-					aHTML[++h] = '<tr class="interfaceMainRow">';
-					aHTML[++h] = '<td class="interfaceMainCaption">Title</td>';
-					aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right"><span id="spanInterfaceSetupAdd">Add</span></td>';
-					aHTML[++h] = '</tr>';
+					aHTML.push('<table id="ns1blankspaceSetupContainer">');
+	
+					aHTML.push('<tr class="ns1blankspaceRow">');
+					aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
+					aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right"><span id="ns1blankspaceSetupAdd">Add</span></td>');
+					aHTML.push('</tr>';
 					
 					if (oResponse.data.rows.length == 0)
 					{
-						aHTML[++h] = '<tr>';
-						aHTML[++h] = '<td class="interfaceMainRowNothing">Nothing to show.</td>';
-						aHTML[++h] = '<td></td>';
-						aHTML[++h] = '</tr>';	
-						$('#tdInterfaceProjectHomeMostLikely').html('Nothing to show.');
+						aHTML.push('<tr><td class="ns1blankspaceNothing">Nothing to show.</td></tr>');
+
+						$('#ns1blankspaceSetup').html('Nothing to show.');
 					}
 					else
 					{	
 						$.each(oResponse.data.rows, function()
 						{
-							aHTML[++h] = '<tr class="interfaceMainRow">';
+							aHTML.push('<tr class="ns1blankspaceRow">';
 										
-							aHTML[++h] = '<td id="tdSetup-' + this.id + 
-											'" class="interfaceMainRow interfaceHomeMostLikely">' +
-											this.title + '</td>';
+							aHTML.push('<td id="ns1blankspaceSetup-' + this.id + 
+											'" class="ns1blankspaceRow ns1blankspaceSetup">' +
+											this.title + '</td>');
 							
-							aHTML[++h] = '<td style="width:23px;text-align:right;" id="tdSetup_delete-' + this.id + 
-											'" class="interfaceMainRowOptionsDelete"></td>';
-							
-							aHTML[++h] = '</tr>'
+							aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
+											'<span id="ns1blankspaceSetup_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span></td>');
+
+						
+							aHTML.push('</tr>');
 						});
 					}
 
-					aHTML[++h] = '</tbody></table>';
+					aHTML.push('</table>');
 
-					$('#tdInterfaceSetupHomeMostLikely').html(aHTML.join(''));
+					$('#ns1blankspaceSetup').html(aHTML.join(''));
 						
-					$('#spanInterfaceSetupAdd').button({
+					$('#ns1blankspaceSetupAdd').button({
 							text: false,
 							 icons: {
 								 primary: "ui-icon-plus"
 							}
 						})
 						.click(function() {
-							interfaceSetupAdd()
+							ns1blankspace.setup.add()
 						})
 						.css('width', '15px')
 						.css('height', '20px')	
 						
-					$('td.interfaceHomeMostLikely').click(function(event)
+					$('td.ns1blankspaceSetup').click(function(event)
 					{
-						interfaceSetupElementEditStart(event.target.id);
+						ns1blankspace.setup.edit.start(event.target.id);
 					});
 					
-					$('.interfaceMainRowOptionsDelete').button({
+					$('.ns1blankspaceRowRemove').button({
 							text: false,
 							 icons: {
 								 primary: "ui-icon-close"
 							}
 						})
 						.click(function() {
-							interfaceSetupRemove(this.id)
+							ns1blankspace.setup.remove(this.id)
 						})
 						.css('width', '15px')
 						.css('height', '20px')
 							
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 				},		
 		
-	add:		function interfaceSetupAdd()
+	add:		function ()
 				{
 					var aHTML = [];
 					var h = -1;
 						
-					aHTML[++h] = '<tr class="interfaceMainRow">';
+					aHTML.push('<tr class="ns1blankspaceRow">');
 										
-					aHTML[++h] = '<td id="tdSetup-" class="interfaceMainRow interfaceHomeMostLikely"></td>';
+					aHTML.push('<td id="ns1blankspaceSetup-" class="ns1blankspaceRow ns1blankspaceSetup"></td>');
 					
-					aHTML[++h] = '<td style="width:23px;text-align:right;" id="tdSetup_delete-' + 
-									'" class="interfaceMainRowOptionsDelete"></td>';
-					
-					aHTML[++h] = '</tr>'
+					aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
+											'<span id="ns1blankspaceSetup_options_remove-" class="ns1blankspaceRowRemove"></span></td>');
+
+					aHTML.push('</tr>'
 							
-					$('#tableInterfaceSetupHomeMostLikely tr:first').after(aHTML.join(''));	
-					$('#spanns1blankspaceViewportControlNew').button({disabled: true});
-					$('#spanInterfaceSetupAdd').button({disabled: true});
+					$('#ns1blankspaceSetupContainer > tr:first').after(aHTML.join(''));	
+					$('#ns1blankspaceViewControlNew').button({disabled: true});
+					$('#ns1blankspaceSetupAdd').button({disabled: true});
 					
-					interfaceSetupElementEditStart("tdSetup-")
+					ns1blankspace.setup.edit.starti('ns1blankspaceSetup');
 				},
 	
 	search: 	{
-					send: 		function interfaceSetupSearch(sXHTMLElementId, iSource, sSearchText, sSearchContext)
-								{
-									
+					send: 		function (sXHTMLElementId, iSource, sSearchText, sSearchContext)
+								{	
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
 										
 									if (sSearchContext != undefined)
 									{
-										glSetupContext = aSearch[1];
-										var sParam = gsSetupMethod + '_SEARCH&rf=XML&id=' + glSetupContext;
+										ns1blankspace.setup.objectContext = aSearch[1];
+										var sParam = ns1blankspace.setup.method + '_SEARCH&id=' + ns1blankspace.setup.objectContext;
 										
 										$.ajax(
 										{
 											type: 'GET',
 											url: sParam,
-											dataType: 'xml',
-											success: interfaceSetupShow
+											dataType: 'json',
+											success: ns1blankspace.search.process
 										});
 									}
 									else
 									{
-									
 										var iMinimumLength = 3;
 										var iMaximumColumns = 1;
 									
@@ -206,7 +186,7 @@ $.extend(true, ns1blankspace.setup,
 										
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -219,106 +199,74 @@ $.extend(true, ns1blankspace.setup,
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											
-											ns1blankspaceOptionsSetPosition(sElementId);
-											
-											var sParam = gsSetupMethod + '_SEARCH&rf=XMLtitle=' + sSearchText;
+											ns1blankspace.dialog.position({xhtmlElementID: sElementId});
 																
 											$.ajax(
 											{
 												type: 'GET',
-												url: sParam,
-												dataType: 'xml',
+												url: ns1blankspace.util.endpointURI(ns1blankspace.setup.method + '_SEARCH'),
+												data: 'title=' + sSearchText,
+												dataType: 'json',
 												success: interfaceSetupSearchShow
 											});
-											
 										}
 									};	
 								}
 
-					process:	function interfaceSetupSearchShow(oXML)
+					process:	function (oResponse)
 								{
-
 									var iColumn = 0;
-									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
-										
-									var oRoot = oXML.getElementsByTagName('ondemand').item(0);
-									
-									if (oRoot.childNodes.length == 0)
+									var aHTML = [];
+														
+									if (oResponse.data.rows.length == 0 == 0)
 									{
-										$('#divns1blankspaceViewportControlOptions').hide();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{
-										var oRow = oRoot.childNodes.item(0);
+										aHTML.push('<table border="0" cellspacing="0" cellpadding="0">');
 										
-										aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0">';
-										aHTML[++h] = '<tbody>'
-											
-										for (var iRow = 0; iRow < oRoot.childNodes.length; iRow++) 
-										{
-											
-											var oRow = oRoot.childNodes.item(iRow);
-											
+										$(oResponse.data.rows).each(function() 
+										{	
 											iColumn = iColumn + 1;
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
-											aHTML[++h] = '<td class="interfaceSearch" id="' + onDemandXMLGetData(oRow, "xhtmlcontext") +
-															'-' + onDemandXMLGetData(oRow, "id") + '">' +
-															onDemandXMLGetData(oRow, "title") + '</td>';
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+															'-' + this.id + '">' +
+															this.title + '</td>';
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
-										}
-								    	
-										aHTML[++h] = '</tbody></table>';
-
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-										
-										$('td.interfaceSearch').click(function(event)
-										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceSetupSearch(event.target.id, 1);
 										});
-									}	
-											
+								    	
+										aHTML.push('</table>');
+
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										
+										$('td.ns1blankspaceSearch').click(function(event)
+										{
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.setup.search.send(event.target.id, 1);
+										});
+									}		
 								}
 				},
 
-	layout:		function interfaceSetupViewport()
+	layout:		function ()
 				{
-					var aHTML = [];
-					var h = -1;
-
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
-					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-									
-					aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-									'</tr>';
-									
-					aHTML[++h] = '</table>';					
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="divInterfaceViewportMain">&nbsp;</div>';
 						
-					//$('#divInterfaceViewportControl').html(aHTML.join(''));
-					
-					var aHTML = [];
-					var h = -1;
-					
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain">&nbsp;</div>';
-						
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 					$('#tdInterfaceViewportControlDetails').click(function(event)
 					{
@@ -327,211 +275,19 @@ $.extend(true, ns1blankspace.setup,
 					})
 				},
 
-	show:		function interfaceSetupShow(oParam, oXML)
-				{
-
-					var iActionID = -1;
-					var dStartDate = new Date();
-					var dEndDate = dStartDate;
-					var sXHTMLElementID;
-					var iOffsetHeight = 5;
-					var iOffsetLeft = 0;
-					
-					if (oParam != undefined)
-					{
-						if (oParam.setupObjectContextID != undefined) {iSetupObjectContextID = oParam.setupObjectContextID};
-						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID};
-						if (oParam.offsetHeight != undefined) {iOffsetHeight = oParam.offsetHeight};
-						if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft};
-					}	
-
-					if ($('#divns1blankspaceDialog').attr('data-initiator') == sXHTMLElementID)
-					{
-						$('#divns1blankspaceDialog').hide("slide", { direction: "up" }, 500);
-						$('#divns1blankspaceDialog').attr('data-initiator', '');
-					}
-					else
-					{
-						$('#divns1blankspaceDialog').attr('data-initiator', sXHTMLElementID);
-					
-						if (iActionID != -1 && oXML == undefined)
-						{
-							var sParam = gsSetupMethod + '_SEARCH&rf=XML&rows=100';
-							sParam += 'id=' + iSetupObjectContextID;
-						
-							$.ajax(
-							{
-								type: 'GET',
-								url: '/ondemand/setup/?' + sParam,
-								dataType: 'xml',
-								success: function(data) {interfaceSetupShow(oParam, data)}
-							});	
-						}
-						else
-						{
-							var aHTML = [];
-							var h = -1;
-							
-							aHTML[++h] = '<table id="tablens1blankspaceActionAdd" class="interfaceDialogMedium">';
-							
-							aHTML[++h] = '<tr id="trInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
-												'<td id="tdInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
-												'<input onDemandType="TEXT" id="inputMasterActionAddSubject" class="inputInterfaceMainText';
-												
-							if (iActionID == -1)
-							{	
-								aHTML[++h] = ' ns1blankspaceWatermark" value="Subject">';
-							}
-							else
-							{
-								aHTML[++h] = '">'
-							}
-							
-							aHTML[++h] = '</td></tr>';
-							
-							aHTML[++h] = '<tr><td id="tdns1blankspaceActionAddDescriptionValue" class="interfaceMain">' +
-												'<textarea rows="5" cols="35" onDemandType="TEXTMULTI" id="inputns1blankspaceActionAddDescription" class="inputInterfaceMainTextMultiSmall';
-
-							if (iActionID == -1)
-							{	
-								aHTML[++h] = ' ns1blankspaceWatermark">Add more text here, if required.</textarea>';
-							}
-							else
-							{
-								aHTML[++h] = '"></textarea>'
-							}
-
-							aHTML[++h] = '</td></tr>';
-
-							aHTML[++h] = '<tr id="trns1blankspaceActionAddBusiness" class="interfaceMain">' +
-												'<td id="tdns1blankspaceActionAddBusiness" class="interfaceMain">' +
-												'Business' +
-												'</td></tr>' +
-												'<tr id="trns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
-												'<td id="tdns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
-												'<input onDemandType="SELECT" id="inputns1blankspaceActionAddBusiness" class="inputInterfaceMainSelect"' +
-													' onDemandMethod="/ondemand/contact/?method=CONTACT_BUSINESS_SEARCH"' +
-													' onDemandColumns="tradename">' +
-												'</td></tr>';
-												
-							
-							aHTML[++h] = '<tr id="trns1blankspaceActionAddPerson" class="interfaceMain">' +
-												'<td id="tdns1blankspaceActionAddPerson" class="interfaceMain">' +
-												'Person' +
-												'</td></tr>' +
-												'<tr id="trns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
-												'<td id="tdns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
-												'<input onDemandType="SELECT" id="inputns1blankspaceActionAddPerson" class="inputInterfaceMainSelectContact"' +
-													' onDemandMethod="/ondemand/contact/?method=CONTACT_PERSON_SEARCH"' +
-													' onDemandParent="inputns1blankspaceActionAddBusiness">' +
-												'</td></tr>';									
-												
-												
-							aHTML[++h] = '<tr><td id="tdns1blankspaceActionAddHighPriority" class="interfaceMain">' +
-												'<input type="checkbox" id="inputns1blankspaceActionAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>';
-												
-								
-							aHTML[++h] = '<tr><td>';
-							
-								aHTML[++h] = '<table class="interfaceSearchFooterMedium">';
-								
-								aHTML[++h] = '<tr><td style="text-align: right;">' +
-													'<span id="spanSave">Save</span>' +
-													'<span id="spanCancel">Cancel</span>' +
-													'<td></tr>';
-								
-								aHTML[++h] = '</table>';						
-
-							aHTML[++h] = '</td></tr>';	
-								
-							aHTML[++h] = '</table>';		
-							
-							var oElement = $('#' + sXHTMLElementID)
-							
-							$('#divns1blankspaceDialog').html('');
-							$('#divns1blankspaceDialog').show();
-							$('#divns1blankspaceDialog').offset(
-								{
-									top: $(oElement).offset().top + $(oElement).height() + iOffsetHeight,
-									left: $(oElement).offset().left + iOffsetLeft
-								});
-							$('#divns1blankspaceDialog').html(aHTML.join(''));
-							
-							$('#spanCancel').button(
-								{
-									text: false,
-									 icons: {
-										 primary: "ui-icon-close"
-									}
-								})
-								.click(function() {
-									$('#divns1blankspaceDialog').slideUp(500);
-									$('#divns1blankspaceDialog').html('');
-								})
-								.css('width', '20px')
-								.css('height', '20px')
-
-							$('#spanSave').button(
-								{
-									text: false,
-									 icons: {
-										 primary: "ui-icon-check"
-									}
-								})
-								.click(function() {
-									interfaceActionQuickSave({
-											id: iActionID,
-											date: $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
-														' ' + $.fullCalendar.formatDate(dStartDate, "HH:mm"),
-											endDate: $.fullCalendar.formatDate(dEndDate, "dd MMM yyyy") + 
-														' ' + $.fullCalendar.formatDate(dEndDate, "HH:mm"),
-											subject: $('#inputActionCalendarAddSubject').val(),
-											description: $('#inputActionCalendarAddDescription').val(),
-											priority: ($('#inputActionCalendarAddHighPriority').attr('checked')?3:2),
-											calendarXHTMLElementID: 'divInterfaceMainCalendar'
-											});
-									
-									$('#divns1blankspaceDialog').slideUp(500);
-									$('#divns1blankspaceDialog').html('');
-
-								})
-								.css('width', '30px')
-								.css('height', '20px')
-							
-							if (oXML != undefined)
-							{
-								var oRoot = oXML.getElementsByTagName('ondemand').item(0);
-								
-								if (oRoot.childNodes.length != 0)
-								{
-									var oRow = oRoot.childNodes.item(0);
-									
-									$('#inputActionCalendarAddSubject').val(onDemandXMLGetData(oRow, 'subject'));
-									$('#inputActionCalendarAddDescription').val(onDemandXMLGetData(oRow, 'description'));
-								}	
-							}	
-						}
-					}
-				},
-
-	remove:		function interfaceSetupRemove(sXHTMLElementId)
+	remove:		function (sXHTMLElementId)
 				{
 					var aSearch = sXHTMLElementId.split('-');
 					var sElementId = aSearch[0];
 					var sSearchContext = aSearch[1];
 					
-					if (confirm('Are you sure?'))
-					{
-						var aMethod = gsSetupMethod.split('_');
-						var sEndpoint = aMethod[0];
-						var sParam = '/ondemand/' + sEndpoint + '/?method=' + gsSetupMethod + '_MANAGE&remove=1';
-						var sData = 'id=' + sSearchContext;
-									
+					if (confirm('Are you sure you want to remove it?'))
+					{								
 						$.ajax(
 							{
 								type: 'POST',
-								url: sParam,
-								data: sData,
+								url: ns1blankspace.util.endpointURI(ns1blankpsace.setup.method + '_MANAGE'),
+								data: 'remove=1&id=' + sSearchContext,
 								dataType: 'text',
 								success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
 							});
@@ -539,104 +295,85 @@ $.extend(true, ns1blankspace.setup,
 				},
 
 	edit: 		{
-					start:		function interfaceSetupElementEditStart(sElementId)
+					start:		function (sElementID)
 								{
-									var aSearch = sElementId.split('-');
-									var sActionElementId = '#' + aSearch[0] + '-options-' + aSearch[2];
+									var aSearch = sElementID.split('-');
+									var sActionElementID = '#' + aSearch[0] + '-options-' + aSearch[2];
 
-									if (1==0)
-									{
-										$('td.interfaceActionsOptions').button('destroy');
-										
-										$(sActionElementId).button(
-										{
-											icons: 
-											{
-												primary: "ui-icon-disk"
-											}
-										});
-									}
+									var sHTML = $('#' + sElementID).html();
 									
-									var sHTML = $('#' + sElementId).html();
+									var sElementInputID = sElementID.replace('td', 'input');
 									
-									var sElementInputId = sElementId.replace('td', 'input');
-									
-									sHTML = '<input style="width:100%;" onDemandType="TEXT" id="' + sElementInputId + '" class="inputInterfaceMainValue" ' +
+									sHTML = '<input style="width:100%;" id="' + sElementInputId + '" class="ns1blankspace" ' +
 															'value="' + sHTML + '">'
 									
-									$('#' + sElementId).html(sHTML);
-									$('#' + sElementInputId).focus();
+									$('#' + sElementID).html(sHTML);
+									$('#' + sElementInputID).focus();
 									
-									$('#' + sElementInputId).blur(function(event)
+									$('#' + sElementInputID).blur(function(event)
 									{
-										interfaceSetupElementEditStop(sElementId);
+										ns1blankspace.setup.edit.stop(sElementID);
 									});
 								},
 
-					stop:		function interfaceSetupElementEditStop(sElementId)
+					stop:		function (sElementID)
 								{
+									ns1blankspace.setup.edit.save(sElementID);
 									
-									interfaceSetupElementEditSave(sElementId);
-									
-									var aSearch = sElementId.split('-');
-									var sHTML = $('#' + sElementId.replace('td', 'input')).val();
+									var aSearch = sElementID.split('-');
+									var sHTML = $('#' + sElementID.replace('td', 'input')).val();
 
-									$('#' + sElementId).html(sHTML);
-
+									$('#' + sElementID).html(sHTML);
 								},
 
-					save:		function interfaceSetupElementEditSave(sElementId)
+					save:		function interfaceSetupElementEditSave(sElementID)
 								{
-									var aMethod = gsSetupMethod.split('_');
-									var sEndpoint = aMethod[0];
-									var aElement = sElementId.split('-');
-									var sParam = '/ondemand/' + sEndpoint + '/?method=' + gsSetupMethod + '_MANAGE&id=' + aElement[1];
-									sParam += '&title=' + $('#' + sElementId.replace('td', 'input')).val();
+									var aElement = sElementID.split('-');
 									
-									if (aElement[1] == '' && $('#' + sElementId.replace('td', 'input')).val() == '')
+									if (aElement[1] == '' && $('#' + sElementID.replace('td', 'input')).val() == '')
 									{
-										$('#tableInterfaceSetupHomeMostLikely tr:first').next().fadeOut(500);	
-										$('#spanns1blankspaceViewportControlNew').button({disabled: false});
-										$('#spanInterfaceSetupAdd').button({disabled: false});
+										$('#ns1blankspaceSetupContainer tr:first').next().fadeOut(500);	
+										$('#ns1blankspaceViewControlNew').button({disabled: false});
+										$('#ns1blankspaceSetupAdd').button({disabled: false});
 									}
 									else
 									{
 										$.ajax(
 										{
 											type: 'POST',
-											url: sParam,
-											dataType: 'text',
+											url: ns1blankspace.util.endpointURI(ns1blankpsace.setup.method + '_MANAGE'),
+											data: 'title=' + ns1blankspace.util.fs($('#' + sElementID.replace('td', 'input')).val());
+											dataType: 'json',
 											success: function(data) 
 													{
-														var aReturn = data.split('|');
-														if (aReturn[2] == 'ADDED')
+														if (data.notes == 'ADDED')
 														{
-															$('#tdSetup-').attr('id','tdSetup-' + aReturn[3]);
+															$('#ns1blankspaceSetup-').attr('id','ns1blankspaceSetup-' + aReturn[3]);
 															
-															$('td.interfaceHomeMostLikely').unbind('click');
+															$('td.ns1blankspaceSetup').unbind('click');
 																
-															$('td.interfaceHomeMostLikely').click(function(event)
-																{
-																	interfaceSetupElementEditStart(event.target.id);
-																});
+															$('td.ns1blankspaceSetupRow').click(function(event)
+															{
+																ns1blankspace.setup.edit.start(event.target.id);
+															});
 
 															$('#tdSetup_delete-').attr('id','tdSetup_delete-' + aReturn[3]);
 															
-															$('.interfaceMainRowOptionsDelete').button({
+															$('.ns1blankspaceRowRemove').button({
 																	text: false,
 																	 icons: {
 																		 primary: "ui-icon-close"
 																	}
 																})
 																.click(function() {
-																	interfaceSetupRemove(this.id)
+																	ns1blankspace.setup.remove(this.id)
 																})
 																.css('width', '15px')
 																.css('height', '20px')
 														}
-														ns1blankspaceStatus('Saved')
-														$('#spanns1blankspaceViewportControlNew').button({disabled: false});
-														$('#spanInterfaceSetupAdd').button({disabled: false});
+														ns1blankspace.status.message('Saved')
+														$('#ns1blankspaceViewControlNew').button({disabled: false});
+														$('#ns1blankspaceSetupAdd').button({disabled: false});
 													}
 										});
 									}			
