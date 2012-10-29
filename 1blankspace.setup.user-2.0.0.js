@@ -35,68 +35,60 @@ ns1blankspace.setup.user =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function interfaceSetupUserHomeShow(oResponse)
+	home:		function (oResponse)
 				{
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-										'<td id="tdInterfaceSetupUserHomeMostLikely" class="interfaceViewportMain">' +
-										ns1blankspace.xhtml.loading + 
+						aHTML.push('<table class="ns1blankspaceMain">');
+						aHTML.push('<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										ns1blankspace.xhtml.loading +
 										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+										'</tr>');
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
-										'<td id="ns1blankspaceViewportSetupLarge" class="ns1blankspaceViewportImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
+						aHTML.push('<table>');
 
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlInternal" class="interfaceViewportControl">Internal</td>' +
-									'</tr>';			
+						aHTML.push('<tr><td id="ns1blankspaceViewSetupLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceControlInternal" class="ns1blankspaceControl">' +
+									'Internal</td></tr>');			
 								
-						aHTML[++h] = '<tr id="trInterfaceViewportControl3" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlExternal" class="interfaceViewportControl" style="padding-top:10px;">Other User Access</td>' +
-									'</tr>';	
+						aHTML.push('<tr><td id="ns1blankspaceControlExternal" class="ns1blankspaceControl" style="padding-top:10px;">' +
+									'Other User Access</td></tr>');	
 
-						aHTML[++h] = '</table>';		
+						aHTML.push('</table>');		
 						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));
+						$('#ns1blankspaceControl').html(aHTML.join(''));
 						
-
-						$('#tdInterfaceViewportControlInternal').click(function(event)
+						$('#ns1blankspaceControlInternal').click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMain", true);
-							interfaceSetupUserHomeShow();
-						});
-							
-						$('#tdInterfaceViewportControlExternal').click(function(event)
-						{
-							ns1blankspaceMainViewportShow("#divInterfaceMain", true);
-							interfaceSetupUserExternal({xhtmlElementID: "divInterfaceMain"});
+							ns1blankspace.show(refresh: true});
+							ns1blankspace.setup.home();
 						});
 
-						$('#tdInterfaceViewportControlInternal').addClass('interfaceViewportControlHighlight');
+						$('#ns1blankspaceControlInternal').click(function(event)
+						{
+							ns1blankspace.show(refresh: true});
+							ns1blankspace.setup.external.show();
+						});
 
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$('#ns1blankspaceControlInternal').addClass('ns1blankspaceHighlight');
+
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'SETUP_USER_SEARCH';
 						oSearch.addField('username,unrestrictedaccess');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(interfaceSetupUserHomeShow);
+						oSearch.getResults(ns1blankspace.setup.user.home);
 					}
 					else
 					{
@@ -105,28 +97,24 @@ ns1blankspace.setup.user =
 
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="tableInterfaceMessagingConversationHomeMostLikely">');
-							aHTML.push('<tr class="trInterfaceMessagingConversationHomeMostLikelyNothing">');
-							aHTML.push('<td class="tdInterfaceMessagingConversationHomeMostLikelyNothing">Click New to create a user.</td>');
-							aHTML.push('</tr>');
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to create a user.</td></tr>');
 							aHTML.push('</table>');
 						}
 						else
 						{
-						
-							aHTML.push('<table id="tableInterfaceSetupUserHomeMostLikely" cellpadding="4">');
-							aHTML.push('<tr>');
-							aHTML.push('<td class="interfaceMain">MOST LIKELY</td>');
-							aHTML.push('</tr>');
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{	
-								aHTML.push('<tr class="interfaceMainRow">');
-								aHTML.push('<td id="interfaceSetupUserHomeMostLikely_Title-' + this.id + 
-														'" class="interfaceHomeMostLikely" style="width:250px;">' +
-														this.username +
-														'</td>');
+								aHTML.push('<tr class="ns1blankspaceRow">');
 								
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+														'" class="ns1blankspaceMostLikely" style="width:250px;">' +
+														this.username + 
+														'</td>');
+
 								if (this.unrestrictedaccess == 'Y')
 								{
 									sRestriction = "Access to everything"
@@ -136,7 +124,7 @@ ns1blankspace.setup.user =
 									sRestriction = "Restrictred access by role"
 								}
 
-								aHTML.push('<td id="interfaceUserHomeMostLikely_Restriction-' + this.id + '" class="interfaceHomeMostLikelySub">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_Restriction-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
 														sRestriction + '</td>');
 
 								aHTML.push('</tr>');
@@ -146,16 +134,11 @@ ns1blankspace.setup.user =
 							aHTML.push('</tbody></table>');
 						}
 						
-						$('#tdInterfaceSetupUserHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.interfaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							interfaceSetupUserSearch(event.target.id, {source: 1});
-						});
-						
-						$('#aInterfaceSetupUserHomeMostLikelyMore').click(function(event)
-						{
-							interfaceSetupUserSearch('tdInterfaceViewportMasterControlBrowse-', {source: ns1blankspace.data.searchSource.browse});
+							ns1blankspace.setup.user.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
