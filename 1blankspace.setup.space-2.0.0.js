@@ -22,7 +22,7 @@ ns1blankspace.setup.space =
 					ns1blankspace.objectName = 'space';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'My Account';
+					ns1blankspace.viewName = 'My Space & Account';
 					
 					if (bShowHome)
 					{
@@ -36,68 +36,60 @@ ns1blankspace.setup.space =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function interfaceSetupSpaceHomeShow()
+	home:		function ()
 				{
 					var aHTML = [];
-					var h = -1;
-						
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-								
-					aHTML[++h] = '<table class="interfaceMain">';
-					aHTML[++h] = '<tr class="interfaceMainRow1">' +
-								'<td id="tdInterfaceWebsiteHomeMostLikely" class="interfaceMainColumn1Large">' +
-									'</td>' +
-									'<td id="tdInterfaceMainSummaryColumn2Actionx" style="width:175px;">' +
-									'</td>' +
-									'</tr>';
-					aHTML[++h] = '</table>';		
 									
-					$('#divInterfaceMain').html(aHTML.join(''));
+					aHTML.push('<table class="ns1blankspace">' +
+									'<tr><td id="ns1blankspaceMostLikely" class="ns1blankspace">' +
+									ns1blankspace.xhtml.loading +
+									'</td></tr>' +
+									'</table>');					
+					
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
-					
-					var aHTML = [];
-					var h = -1;
 								
-					aHTML[++h] = '<table>';
-					aHTML[++h] = '<tr>' +
-									'<td id="ns1blankspaceViewportSetupSpaceLarge" class="ns1blankspaceViewportImageLarge">' +
-									'&nbsp;' + 
-									'</td>' +
-									'</tr>';	
-					
-					aHTML[++h] = '<tr class="interfaceViewportControl">' +
-								'<td id="tdInterfaceViewportControlSubscriptions" class="interfaceViewportControl" style="padding-top:10px;">Subscriptions</td>' +
-								'</tr>';			
+					aHTML.push('<table>');
+
+					aHTML.push('<tr><td id="ns1blankspaceSetupSpaceLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 							
-					aHTML[++h] = '<tr class="interfaceViewportControl">' +
-								'<td id="tdInterfaceViewportControlAccess" class="interfaceViewportControl">Access</td>' +
-								'</tr>';	
-
-					aHTML[++h] = '</table>';
-
-					$('#divInterfaceViewportControl').html(aHTML.join(''));	
+					aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">Subscriptions</td>' +
+									'</tr>');			
+						
+					if (ns1blankspace.option.advancedAccess)
+					{	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlAccess" class="ns1blankspaceControl">Access</td>' +
+									'</tr>');
+					}	
+								
+					aHTML.push('</table>');		
 					
-					$('#tdInterfaceViewportControlSubscriptions').addClass('interfaceViewportControlHighlight');
-
-					interfaceSetupSpaceSubscriptions({xhtmlElementID: "divInterfaceMain"})
-
-					$('#tdInterfaceViewportControlSubscriptions').click(function(event)
+					$('#ns1blankspaceControl').html(aHTML.join(''));	
+					
+					$('#ns1blankspaceControlSubscriptions').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMain", true);
-						interfaceSetupSpaceSubscriptions({xhtmlElementID: "divInterfaceMain"});
+						ns1blankspace.show(refresh: true});
+						ns1blankspace.setup.space.subscriptions();
 					});
 
-					$('#tdInterfaceViewportControlAccess').click(function(event)
+					$('#ns1blankspaceControlAccess').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMain", true);
-						interfaceSetupSpaceMethodAccess({xhtmlElementID: "divInterfaceMain"});
+						ns1blankspace.show(refresh: true});
+						ns1blankspace.setup.space.access();
 					});
+							
+					$('#ns1blankspaceControl').html(aHTML.join(''));	
+					
+					$('#ns1blankspaceControlSubscriptions').addClass('ns1blankspaceHighlight');
+
+					ns1blankspace.setup.space.subscriptions()
 				},
 
 	subscriptions:			
-				function interfaceSetupSpaceSubscriptions(oParam, oResponse)
+				function (oParam, oResponse)
 				{
 					var iStep = 1;
 					var sID; 
@@ -121,81 +113,64 @@ ns1blankspace.setup.space =
 
 					if (iStep == 1)
 					{
-						
 						if (oResponse == undefined)
 						{
 							$.ajax(
 							{
 								type: 'POST',
-								url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH',
+								url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH'),
 								data: '',
 								dataType: 'json',
-								success: function(data){interfaceSetupSpaceSubscriptions(oParam, data)}
+								success: function(data){ns1blankspace.setup.space.subscriptions(oParam, data)}
 							});	
 						}
 						else
 						{
 							var aHTML = [];
-							var h = -1;
+							
+							aHTML.push('<table class="ns1blankspaceMain">' +
+											'<tr class="ns1blankspace">' +
+											'<td id="ns1blankspaceSubscriptionColumn1" class="ns1blankspaceColumn1Large">' +
+											ns1blankspace.xhtml.loading + '</td>' +
+											'<td id="ns1blankspaceSubscriptionColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+											'</tr>' +
+											'</table>');	
 						
-							aHTML[++h] = '<table id="tableInterfaceMainSubscription" class="interfaceMain" style="width:100%">' +
-											'<tr id="trInterfaceMainSubscriptionRow1" class="interfaceMainRow1">' +
-											'<td id="tdInterfaceMainSubscriptionColumn1" style="width:250px;" class="interfaceMainColumn1">' +
-											ns1blankspace.xhtml.loading +
-											'</td>';
-
-							//aHTML[++h] = '<td id="tdInterfaceMainSubscriptionColumn2" class="interfaceMainColumn2">' +
-							//				'<span id="spanSubscription_options_add" class="interfaceMainRowOptionsAdd" style="font-size:0.75em;">Add</span>'
-							//				'</td>';
-
-							aHTML[++h] = '</tr>' +
-											'</table>';				
-						
-							$('#divInterfaceMain').html(aHTML.join(''));
+							$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 							var aHTML = [];
-							var h = -1;
 							
 							if (oResponse.data.rows.length == 0)
 							{
-								aHTML[++h] = '<table>';
-								aHTML[++h] = '<tr>';
-								aHTML[++h] = '<td class="interfaceMainRowNothing">You have no subsriptions</td>';
-								aHTML[++h] = '</tr>';
-								aHTML[++h] = '</table>';
+								aHTML.push('<table><tr><td valign="top">You have no subsriptions.</td></tr></table>');
 
-								$('#tdInterfaceMainSubscriptionColumn1').html(aHTML.join(''));
+								$('#ns1blankspaceSubscriptionColumn1').html(aHTML.join(''));
 							}
 							else
 							{			
 								var aHTML = [];
-								var h = -1;
-							
-								aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-								aHTML[++h] = '<tbody>'
+								
+								aHTML.push('<table id="ns1blankspaceSetupSpaceSubscriptions" class="ns1blankspace">');
 						
 								$(oResponse.data.rows).each(function() 
 								{
-									aHTML[++h] = '<tr class="interfaceMainRow">';
+									aHTML.push('<tr class="ns1blankspaceRow">';
 									
-									aHTML[++h] = '<td id="interfaceSetupSubscription_Membership-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect membership">' +
+									aHTML.push('<td id="ns1blankspaceSetupSpaceSubscription_membership-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 															this.membershiptext + '</td>';
 														
-									aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';
-									
-									aHTML[++h] = '<span id="spanSubscription_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>';
-										
-									aHTML[++h] = '</td>';				
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+													'<span id="ns1blankspaceSetupSpaceSubscription_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span></td>');				
 																					
-									aHTML[++h] = '</tr>'
+									aHTML.push('</tr>');
 								});
 								
-								aHTML[++h] = '</tbody></table>';
+								aHTML.push('</table>'_;
 							}
 							
-							$('#tdInterfaceMainSubscriptionColumn1').html(aHTML.join(''));
+							$('#ns1blankspaceSubscriptionColumn1').html(aHTML.join(''));
 
-							$('.interfaceMainRowOptionsRemoveX').button(
+							$('ns1blankspaceSetupSpaceSubscriptions > span.ns1blankspaceRowOptionsRemoveX').button(
 							{
 								text: false,
 								icons: {
@@ -204,174 +179,31 @@ ns1blankspace.setup.space =
 							})
 							.click(function() {
 								$.extend(true, oParam, {step: 4, xhtmlElementID: this.id});
-								interfaceSetupSpaceSubscriptions(oParam);
+								ns1blankspace.setup.space.subscriptions(oParam);
 							})
 							.css('width', '15px')
 							.css('height', '17px');
 
-							$('#spanSubscription_options_add').button(
-							{
-								text: "Add"
-							})
-							.click(function() {
-								$.extend(true, oParam, {step: 2, xhtmlElementID: ""});
-								interfaceSetupSpaceSubscriptions(oParam);
-							})
-							.css('font-size', '0.75em')
-
-							$('.bankaccount').click(function() {
+							$('ns1blankspaceSetupSpaceSubscriptions td.ns1blankspaceRowSelect').click(function() {
 								$.extend(true, oParam, {step: 2, xhtmlElementID: event.target.id});
-								interfaceSetupSpaceSubscriptions(oParam);
+								ns1blankspace.setup.space.subscriptions(oParam);
 							})
 						}	
 					}
 
 					if (iStep == 2)
 					{	
-						var aHTML = [];
-						var h = -1;
-					
-						aHTML[++h] = '<table class="interfaceMain">' +
-								'<tr id="trInterfaceMainSubscriptionRow1" class="interfaceMainRow1">' +
-								'<td id="tdInterfaceMainSubscriptionEditColumn1"  class="interfaceMainColumn1" style="width:300px;padding-right:15px;">' +
-								ns1blankspace.xhtml.loading +
-								'</td>' +
-								'<td id="tdInterfaceMainSubscriptionEditColumn2" class="interfaceMainColumn2">' +
-								'</td>' +
-								'</tr>' +
-								'</table>';				
-					
-						$('#tdInterfaceMainSubscriptionColumn2').html(aHTML.join(''));
-
-						var aHTML = [];
-						var h = -1;
-
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
-									
-						aHTML[++h] = '<tr id="trInterfaceMainBankAccountTitle" class="interfaceMain">' +
-										'<td id="tdInterfaceMainBankAccountTitle" class="interfaceMain">' +
-										'' +
-										'</td></tr>';
-
-						aHTML[++h] = '</table>';					
-						
-						$('#tdInterfaceMainSubscriptionEditColumn1').html(aHTML.join(''));
-						
-						var aHTML = [];
-						var h = -1;
-					
-						aHTML[++h] = '<table iclass="interfaceMain" style="font-size:0.875em">';
-								
-						//aHTML[++h] = '<tr id="trInterfaceMainSubscriptionEditSave" class="interfaceMainAction">' +
-						//				'<td id="tdInterfaceMainSubscriptionEditSave" class="interfaceMainAction">' +
-						//				'<span style="width:70px;" id="spanInterfaceMainSubscriptionEditSave">Save</span>' +
-						//				'</td></tr>';
-										
-						aHTML[++h] = '<tr id="trInterfaceMainSubscriptionEditCancel" class="interfaceMainAction">' +
-										'<td id="tdInterfaceMainSubscriptionEditCancel" class="interfaceMainAction">' +
-										'<span style="width:70px;" id="spanInterfaceMainSubscriptionEditCancel">Cancel</span>' +
-										'</td></tr>';
-														
-						aHTML[++h] = '</table>';					
-						
-						$('#tdInterfaceMainSubscriptionEditColumn2').html(aHTML.join(''));
-						
-						$('#spanInterfaceMainSubscriptionEditSave').button(
-						{
-							text: "Save"
-						})
-						.click(function() 
-						{
-							ns1blankspaceStatusWorking();
-
-							var sData = 'id=' + ns1blankspace.util.fs(sID);
-							sData += '&title=' + ns1blankspace.util.fs($('#inputInterfaceMainSubscriptionTitle').val());
-							sData += '&financialaccount=' + ns1blankspace.util.fs($('#inputInterfaceMainBankAccountFinancialAccount').attr("data-id"));
-
-							$.ajax(
-							{
-								type: 'POST',
-								url: '/ondemand/setup/?method=SETUP_FINANCIAL_BANK_ACCOUNT_MANAGE',
-								data: sData,
-								dataType: 'json',
-								success: function() {
-									$.extend(true, oParam, {step: 1});
-									interfaceSetupFinancialBankAccount(oParam);
-									ns1blankspaceStatus('Saved');
-								}
-							});
-						})
-						
-						$('#spanInterfaceMainSubscriptionEditCancel').button(
-						{
-							text: "Cancel"
-						})
-						.click(function() 
-						{
-							$.extend(true, oParam, {step: 1});
-							interfaceSetupSpaceSubscriptions(oParam);
-						})
-
-						if (sID != undefined)
-						{
-							ns1blankspaceStatusWorking();
-
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-							oSearch.addField('title,financialaccount,financialaccounttext');
-							oSearch.addFilter('id', 'EQUAL_TO', sID);
-							oSearch.getResults(function(data) {
-									$.extend(true, oParam, {step: 3});
-									interfaceSetupFinancialBankAccount(oParam, data)
-									});
-						}
-						else
-						{
-						}
+						//EDIT SUBSCRIPTION
 					}
-						
-					if (iStep == 3 && oResponse)
-					{
-						var oObjectContext = oResponse.data.rows[0];
-						$('#inputInterfaceMainBankAccountTitle').val(oObjectContext.title);
-						$('#inputInterfaceMainBankAccountTitle').focus();
-						$('#inputInterfaceMainBankAccountFinancialAccount').val(oObjectContext.financialaccounttext)
-						$('#inputInterfaceMainBankAccountFinancialAccount').attr('data-id', ns1blankspace.objectContextData.financialaccount);
-
-						ns1blankspaceStatus('');
-					}
-
+					
 					if (iStep == 4)
 					{			
-						var sParam = 'method=SETUP_FINANCIAL_BANK_ACCOUNT_MANAGE&remove=1';
-						var sData = 'id=' + sID;
-						
-						$.ajax(
-						{
-							type: 'POST',
-							url: '/ondemand/setup/?' + sParam,
-							data: sData,
-							dataType: 'json',
-							success: function(data)
-							{
-								if (data.status == 'OK')
-								{
-									$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-									$.extend(true, oParam, {step: 1});
-									interfaceSetupFinancialBankAccount(oParam);
-									ns1blankspaceStatus('Removed');
-								}
-								else
-								{
-									ns1blankspaceError(data.error.errornotes);
-								}
-							}
-						});
+						//REMOVE SUBSCRIPTION
 					}		
 				},
 
-	methodAccess:
-				function interfaceSetupSpaceMethodAccess(oParam, oResponse)
+	access:
+				function (oParam, oResponse)
 				{
 					var iStep = 1;
 					var iID;
@@ -387,43 +219,37 @@ ns1blankspace.setup.space =
 					if (iStep == 1)
 					{
 						var aHTML = [];
-						var h = -1;	
-							
+	
 						if (oResponse == undefined)
 						{
-										
-							aHTML[++h] = '<table id="tableInterfaceMainMethodAccess" class="interfaceMain">' +
-										'<tr id="trInterfaceMainSetupMethodAccessRow1" class="interfaceMainRow1">' +
-										'<td id="tdInterfaceMainSetupMethodAccessColumnAccess" style="width:450px;padding-right:5px;font-size:0.75em;" class="interfaceMainColumn1">' +
+							aHTML.push('<table class="ns1blankspaceMain">' +
+											'<tr class="ns1blankspace">' +
+											'<td id="ns1blankspaceSetupAccessColumnAccess" class="ns1blankspaceColumn1Large" style="width:450px;padding-right:5px;font-size:0.75em;">' +
 											ns1blankspace.xhtml.loading + '</td>' +
-										'<td id="tdInterfaceMainSetupMethodAccessColumnAction" class="interfaceMainColumn2">' +
-										'</td>' +
-										'</tr>' +
-										'</table>';				
-									
-							$('#divInterfaceMain').html(aHTML.join(''));
+											'<td id="ns1blankspaceSetupAccessColumnAction" class="ns1blankspaceColumn2Action"></td>' +
+											'</tr>' +
+											'</table>');
 
+							$('#ns1blankspaceMainAccess').html(aHTML.join(''));
 
 							var aHTML = [];
-							var h = -1;	
+
+							aHTML.push('<table class="ns1blankspaceColumn2">' +
+											'<tr><td class="ns1blankspaceAction">' +
+											'<span id="ns1blankspaceAccessAdd">Add</span>' +
+											'</td></tr>' +
+											'</table>');					
 							
-							aHTML[++h] = '<table class="interfaceMainColumn2">';
-							aHTML[++h] = '<tr><td class="interfaceMainAction">' +
-											'<span id="spanInterfaceMainAccessAdd">Add</span>' +
-											'</td></tr>';
-															
-							aHTML[++h] = '</table>';					
-							
-							$('#tdInterfaceMainSetupMethodAccessColumnAction').html(aHTML.join(''));
+							$('#ns1blankspaceSetupAccessColumnAction').html(aHTML.join(''));
 						
-							$('#spanInterfaceMainAccessAdd').button(
+							$('#ns1blankspaceAccessAdd').button(
 							{
 								label: "Add"
 							})
 							.click(function()
 							{
 								$.extend(true, oParam, {step: 4, id: ""});
-								interfaceSetupSpaceMethodAccess(oParam);
+								ns1blankspace.setup.space.access(oParam);
 							})
 						
 							var oSearch = new AdvancedSearch();
@@ -432,57 +258,56 @@ ns1blankspace.setup.space =
 							oSearch.rows = 50;
 							oSearch.sort('accessmethodtext', 'asc');
 							oSearch.addFilter('accessmethodtext', 'TEXT_IS_NOT_EMPTY')
-							oSearch.getResults(function(data) {interfaceSetupSpaceMethodAccess(oParam, data)})	
+							oSearch.getResults(function(data) {ns1blankspace.setup.space.access(oParam, data)})	
 						}
 						else
 						{
 							var aHTML = [];
 							
-							aHTML.push('<table cellspacing="0" cellpadding="0" class="interfaceMain">');
-							aHTML.push('<tbody>');
+							aHTML.push('<table class="ns1blankspaceContainer">');
 
-							aHTML.push('<tr class="interfaceMainCaption">');
-							aHTML.push('<td class="interfaceMainCaption">Method</td>');
-							aHTML.push('<td class="interfaceMainCaption" style="width:35px;text-align:center;">Search</td>');
-							aHTML.push('<td class="interfaceMainCaption" style="width:35px;text-align:center;">Add</td>');
-							aHTML.push('<td class="interfaceMainCaption" style="width:35px;text-align:center;">Update</td>');
-							aHTML.push('<td class="interfaceMainCaption" style="width:35px;text-align:center;">Remove</td>');
-							aHTML.push('<td class="interfaceMainCaption">&nbsp;</td>');
+							aHTML.push('<tr class="ns1blankspaceCaption">');
+							aHTML.push('<td class="ns1blankspaceCaption">Method</td>');
+							aHTML.push('<td class="ns1blankspaceCaption" style="width:35px;text-align:center;">Search</td>');
+							aHTML.push('<td class="ns1blankspaceCaption" style="width:35px;text-align:center;">Add</td>');
+							aHTML.push('<td class="ns1blankspaceCaption" style="width:35px;text-align:center;">Update</td>');
+							aHTML.push('<td class="ns1blankspaceCaption" style="width:35px;text-align:center;">Remove</td>');
+							aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
 							aHTML.push('</tr>');
 
 							$(oResponse.data.rows).each(function()
 							{
 
-								aHTML.push('<tr class="interfaceMainRow">');
+								aHTML.push('<tr id="ns1blankspaceSetupSpaceAccess" class="ns1blankspaceRow">');
 								
 								if (this.accessmethodtext != '')
 								{
-									aHTML.push('<td id="interfaceSetupSpaceMethodAccess_Title-' + this.id + '" class="interfaceMainRow interfaceMainRowSelect methodaccess"' +
+									aHTML.push('<td id="ns1blankspaceSetupSpaceAccess_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
 														' title="">' +
 														this.accessmethodtext + '</td>');
 
 									aHTML.push('<td style="width:35px;text-align:center;" ' +
-													'id="spanAccessMethod_options_useavailable-' + this.id + '" class="interfaceMainRow interfaceMainRowOptionsEdit' +
+													'id="ns1blankspaceSetupSpaceAccess_useavailable-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowEdit' +
 														((this.useavailable == 'Y') ? ' ticked' : '') + '">&nbsp;' +
 													'</td>');		
 
 									aHTML.push('<td style="width:35px;text-align:center;" ' +
-													'id="spanAccessMethod_options_addavailable-' + this.id + '" class="interfaceMainRow interfaceMainRowOptionsEdit' +
+													'id="ns1blankspaceSetupSpaceAccess_addavailable-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowEdit' +
 														((this.addavailable == 'Y') ? ' ticked' : '') + '">&nbsp;' +
 													'</td>');
 
 									aHTML.push('<td style="width:35px;text-align:center;" ' +
-													'id="spanAccessMethod_options_updateavailable-' + this.id + '" class="interfaceMainRow interfaceMainRowOptionsEdit' +
+													'id="ns1blankspaceSetupSpaceAccess_updateavailable-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowEdit' +
 														((this.updateavailable == 'Y') ? ' ticked' : '') + '">&nbsp;' +
 													'</td>');
 
 									aHTML.push('<td style="width:35px;text-align:right;" ' +
-													'id="spanAccessMethod_options_removeavailable-' + this.id + '" class="interfaceMainRow interfaceMainRowOptionsEdit' +
+													'id="ns1blankspaceSetupSpaceAccess_removeavailable-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowEdit' +
 														((this.removeavailable == 'Y') ? ' ticked' : '') + '">&nbsp;' +
 													'</td>');									
 
-									aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">' +
-													'<span id="spanAccessMethod_options_remove-' + this.id + '" class="interfaceMainRowOptionsRemove"></span>' +
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+													'<span id="ns1blankspaceSetupSpaceAccess_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
 													'</td>');		
 								}
 
@@ -490,19 +315,19 @@ ns1blankspace.setup.space =
 
 							});
 						
-							aHTML.push('</tbody></table>');
+							aHTML.push('</table>');
 								
-							$('#tdInterfaceMainSetupMethodAccessColumnAccess').html(aHTML.join(''));
+							$('#ns1blankspaceSetupAccessColumnAccess').html(aHTML.join(''));
 
-							$('td.methodaccess').click(function(event)
+							$('#ns1blankspaceSetupSpaceAccess > td.ns1blankspaceRowSelect').click(function(event)
 							{
 								var sXHTMLElementId = event.target.id;
 								var aId = sXHTMLElementId.split('-');
 								
-								interfaceSetupSpaceMethodAccess({id: aId[1], step: 3});
+								ns1blankspace.setup.space.access({id: aId[1], step: 3});
 							});
 
-							$('.interfaceMainRowOptionsRemove').button(
+							$('#ns1blankspaceSetupSpaceAccess > span.ns1blankspaceRowOptionsRemove').button(
 							{
 								text: false,
 								icons: {
@@ -511,11 +336,10 @@ ns1blankspace.setup.space =
 							})
 							.click(function() {
 								$.extend(true, oParam, {step: 5, xhtmlElementID: this.id});
-								interfaceSetupSpaceMethodAccess(oParam);
+								ns1blankspace.setup.space.access(oParam);
 							})
 							.css('width', '15px')
 							.css('height', '17px');
-
 						}
 						
 					}	
@@ -528,115 +352,114 @@ ns1blankspace.setup.space =
 
 						oSearch.getResults(function(data) {
 								$.extend(true, oParam, {step: 4});
-								interfaceSetupSpaceMethodAccess(oParam, data)
+								ns1blankspace.setup.space.access(oParam, data)
 								});
 					}
 
 					else if (iStep == 4)
 					{
 						var aHTML = [];
-						var h = -1;
-						
+
 						if (iID == '')
 						{
-							aHTML[++h] = '<table class="interfaceMain">';
+							aHTML.push('<table class="ns1blankspace">');
 							
-							aHTML[++h] = '<tr id="trInterfaceMainMethodAccessMethod" class="interfaceMain">' +
-											'<td id="tdInterfaceMainMethodAccessMethod" class="interfaceMain">' +
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">' +
 											'Method' +
 											'</td></tr>' +
-											'<tr class="interfaceMainSelect">' +
-											'<td class="interfaceMainSelect">' +
-											'<input id="inputInterfaceMainMethodAccessMethod" class="inputInterfaceMainSelectCustom">' +
+											'<tr class="ns1blankspaceSelect">' +
+											'<td class="ns1blankspaceSelect">' +
+											'<input id="ns1blankspaceAccessMethod" class="ns1blankspaceSelectCustom">' +
 											'</td></tr>';
 
-							aHTML[++h] = '</table>';					
+							aHTML.push('</table>');					
 						}
 
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspaceContainer">');
 						
-						aHTML[++h] = '<tr class="interfaceMain">' +
-										'<td class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Search?' +
 										'</td></tr>' +
-										'<tr class="interfaceMainText">' +
-										'<td id="tdInterfaceMainMethodAccessCanUseValue" class="interfaceMainRadio">' +
+										'<tr class="ns1blankspaceRadio">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioCanUseY" name="radioCanUse" value="Y"/>Yes' +
 										'<br /><input type="radio" id="radioCanUseN" name="radioCanUse" value="N"/>No' +
-									'</td></tr>';
+									'</td></tr>');
 
-						aHTML[++h] = '<tr class="interfaceMain">' +
-										'<td class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Add?' +
 										'</td></tr>' +
-										'<tr class="interfaceMainText">' +
-										'<td id="tdInterfaceMainMethodAccessCanAddValue" class="interfaceMainRadio">' +
+										'<tr class="ns1blankspaceRadio">' +
+										'<td id="ns1blankspaceAccessCanAddValue" class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioCanAddY" name="radioCanAdd" value="Y"/>Yes' +
 										'<br /><input type="radio" id="radioCanAddN" name="radioCanAdd" value="N"/>No' +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML[++h] = '<tr class="interfaceMain">' +
-										'<td class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Remove?' +
 										'</td></tr>' +
-										'<tr class="interfaceMainText">' +
-										'<td id="tdInterfaceMainMethodAccessCanRemoveValue" class="interfaceMainRadio">' +
+										'<tr class="ns1blankspaceRadio">' +
+										'<td id="ns1blankspaceAccessCanRemoveValue" class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioCanRemoveY" name="radioCanRemove" value="Y"/>Yes' +
 										'<br /><input type="radio" id="radioCanRemoveN" name="radioCanRemove" value="N"/>No' +
-									'</td></tr>';
+									'</td></tr>');
 					
 							
-						aHTML[++h] = '<tr class="interfaceMain">' +
-										'<td class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Update?' +
 										'</td></tr>' +
-										'<tr class="interfaceMainText">' +
-										'<td id="tdInterfaceMainMethodAccessCanUpdateValue" class="interfaceMainRadio">' +
+										'<tr class="ns1blankspaceRadio">' +
+										'<td id="ns1blankspaceAccessCanUpdateValue" class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioCanUpdateY" name="radioCanUpdate" value="Y"/>Yes' +
 										'<br /><input type="radio" id="radioCanUpdateN" name="radioCanUpdate" value="N"/>No' +
-									'</td></tr>';
+									'</td></tr>');
 					
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						aHTML[++h] = '<table class="interfaceMain" style="font-size:0.875em">';
+						aHTML.push('<table class="ns1blankspaceContainer" style="font-size:0.875em">');
 								
-						aHTML[++h] = '<tr iclass="interfaceMainAction">' +
-										'<td id="tdInterfaceMainMethodAccessSave" class="interfaceMainAction">' +
-										'<span style="width:70px;" id="spanInterfaceMainMethodAccessSave">Save</span>' +
-										'</td></tr>';
+						aHTML.push('<tr class="ns1blankspaceAction">' +
+										'<td id="ns1blankspaceAccessSave" class="ns1blankspaceAction">' +
+										'<span style="width:70px;" id="ns1blankspaceAccessSave">Save</span>' +
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr class="interfaceMainAction">' +
-											'<td id="tdInterfaceMainMethodAccessCancel" class="interfaceMainAction">' +
-											'<span style="width:70px;" id="spanInterfaceMainMethodAccessCancel">Cancel</span>' +
-											'</td></tr>';
+						aHTML.push('<tr class="ns1blankspaceAction">' +
+											'<td id="tdns1blankspaceMethodAccessCancel" class="ns1blankspaceAction">' +
+											'<span style="width:70px;" id="ns1blankspaceAccessCancel">Cancel</span>' +
+											'</td></tr>');
 															
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 							
-						$('#tdInterfaceMainSetupMethodAccessColumnAction').html(aHTML.join(''));
+						$('#ns1blankspaceSetupAccessColumnAction').html(aHTML.join(''));
 
-						$('#inputInterfaceMainMethodAccessMethod').keyup(function()
+						$('#ns1blankspaceAccessMethod').keyup(function()
 						{
 							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-					        ns1blankspace.timer.delayCurrent = setTimeout("interfaceSetupSpaceMethodSearch('inputInterfaceMainMethodAccessMethod')", ns1blankspace.option.typingWait);
+					        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.setup.space.methods.show('ns1blankspaceAccessMethod')", ns1blankspace.option.typingWait);
 						});	
 							
-						$('#inputInterfaceMainMethodAccessMethod').live('blur', function() 
+						$('#ns1blankspaceAccessMethod').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 						
-						$('#spanInterfaceMainMethodAccessSave').button(
+						$('#ns1blankspaceAccessSave').button(
 						{
 							text: "Save"
 						})
 						.click(function() 
 						{
-							ns1blankspaceStatusWorking();
+							ns1blankspace.status.working();
 
 							var sData = 'id=' + ns1blankspace.util.fs(iID);
 							if (iID == '')
 							{
-								sData += '&accessmethod=' + ns1blankspace.util.fs($('#inputInterfaceMainMethodAccessMethod').attr('data-id'));
+								sData += '&accessmethod=' + ns1blankspace.util.fs($('#ns1blankspaceAccessMethod').attr('data-id'));
 							}	
 							sData += '&addavailable=' + ns1blankspace.util.fs($('input[name="radioCanAdd"]:checked').val());
 							sData += '&removeavailable=' + ns1blankspace.util.fs($('input[name="radioCanRemove"]:checked').val());
@@ -646,32 +469,32 @@ ns1blankspace.setup.space =
 							$.ajax(
 							{
 								type: 'POST',
-								url: '/ondemand/setup/?method=SETUP_METHOD_ACCESS_MANAGE',
+								url: ns1blankspace.util.endpointURI('SETUP_METHOD_ACCESS_MANAGE'),
 								data: sData,
 								dataType: 'json',
 								success: function(data) {
 									if (data.status == "OK")
 									{
-										ns1blankspaceStatus('Saved');
+										ns1blankspace.status.message('Saved');
 										$.extend(true, oParam, {step: 1});
-										interfaceSetupSpaceMethodAccess(oParam);
+										ns1blankspace.setup.space.access(oParam);
 									}
 									else
 									{
-										ns1blankspaceError(data.error.errornotes);
+										ns1blankspace.status.error(data.error.errornotes);
 									}
 								}
 							});
 						});
 
-						$('#spanInterfaceMainMethodAccessCancel').button(
+						$('#ns1blankspaceAccessCancel').button(
 						{
 							text: "Cancel"
 						})
 						.click(function() 
 						{
 							$.extend(true, oParam, {step: 1});
-							interfaceSetupSpaceMethodAccess(oParam);
+							ns1blankspace.setup.space.access(oParam);
 						});
 
 						if (iID != '')
@@ -698,14 +521,12 @@ ns1blankspace.setup.space =
 					else if (iStep == 5)
 					{
 						var aSearch = sXHTMLElementID.split('-');
-						
-						var sParam = 'method=SETUP_METHOD_ACCESS_MANAGE';
 						var sData = 'remove=1&id=' + aSearch[1];
 									
 						$.ajax(
 						{
 							type: 'POST',
-							url: '/ondemand/setup/setup.asp?' + sParam,
+							url: ns1blankspace.util.endpointURI('SETUP_METHOD_ACCESS_MANAGE'),
 							data: sData,
 							dataType: 'json',
 							success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
@@ -714,7 +535,7 @@ ns1blankspace.setup.space =
 				},
 
 	methods: 	{
-					show: 		function interfaceSetupSpaceMethodSearch(sXHTMLInputElementID, oResponse)
+					show: 		function (sXHTMLInputElementID, oResponse)
 								{
 									var aHTML = [];
 									var sSearchText;
@@ -726,25 +547,24 @@ ns1blankspace.setup.space =
 										
 										if (sSearchText.length > 2)
 										{
-
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_METHOD_SEARCH';
 											oSearch.addField('title');
 											oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText)
 											oSearch.rows = 10;
 											oSearch.sort('title', 'asc');
-											oSearch.getResults(function(data) {interfaceSetupSpaceMethodSearch(sXHTMLInputElementID, data)})	
+											oSearch.getResults(function(data) {ns1blankspace.setup.space.methods.show(sXHTMLInputElementID, data)})	
 										}
 									}
 									else
 									{	
-										aHTML.push('<table style="width: 350px;" class="interfaceViewportMasterControl" cellpadding=4>');
+										aHTML.push('<table style="width: 350px;" class="ns1blankspaceSearchMedium">');
 
 										$(oResponse.data.rows).each(function()
 										{
 											
 											aHTML.push('<tr>' +
-												'<td id="tdns1blankspaceMethod-' + this.id + '" data-methodtext="' + this.title + '" class="interfaceSearch ns1blankspaceMethod">' +
+												'<td id="ns1blankspaceMethod-' + this.id + '" data-methodtext="' + this.title + '" class="ns1blankspaceSearch ns1blankspaceMethod">' +
 												this.title +
 												'</td></tr>');
 												
@@ -752,10 +572,10 @@ ns1blankspace.setup.space =
 														
 										aHTML.push('</table>');
 										
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-										$('#divns1blankspaceViewportControlOptions').offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
 
 										$('.ns1blankspaceMethod').click(function(event)
 										{
@@ -764,7 +584,7 @@ ns1blankspace.setup.space =
 
 											$('#' + sXHTMLInputElementID).val($('#' + event.target.id).attr("data-methodtext"))
 											$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
-											$('#divns1blankspaceViewportControlOptions').hide();
+											$(ns1blankspace.xhtml.container).hide();
 										});
 									}	
 								}
