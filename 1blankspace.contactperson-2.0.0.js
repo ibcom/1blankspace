@@ -403,8 +403,8 @@ ns1blankspace.contactPerson =
 					
 					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainAttachments', refresh: true});
-						ns1blankspace.attachments.show({xhtmlElementID: 'divInterfaceMainAttachments'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
 					});
 					
 				},
@@ -440,9 +440,9 @@ ns1blankspace.contactPerson =
 						ns1blankspace.history.view({
 							newDestination: 'ns1blankspace.contactPerson.init({showHome: false});ns1blankspace.contactPerson.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
-							})
+							});
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.contactPerson.summary()'})
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.contactPerson.summary()'});
 					}	
 				},	
 		

@@ -97,9 +97,9 @@ ns1blankspace.setup.user =
 
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to create a user.</td></tr>');
-							aHTML.push('</table>');
+							aHTML.push('<table id="ns1blankspaceMostLikely">' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create a user.</td></tr>' +
+											'</table>');
 						}
 						else
 						{
