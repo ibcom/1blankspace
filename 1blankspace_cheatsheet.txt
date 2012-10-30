@@ -97,3 +97,11 @@ aHTML.push('<table class="ns1blankspaceContainer"><tbody>' +
 - AdvancedSearch remove .endpoint
 - ; to end statements
 - Use ns1blankspace.util.endpointURI() with $.ajax(url:)
+
+# Good Coding Snippets: (github/gist):
+
+- Payroll
+- Setup financial
+
+
+
