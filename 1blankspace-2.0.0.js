@@ -5,6 +5,8 @@
  * 01 FEB 2010
  */
 
+"use strict";
+
 Function.prototype.method = function(name, func)
 {
 	if (!this.prototype[name])
