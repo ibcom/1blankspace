@@ -319,8 +319,8 @@ ns1blankspace.setup.financial =
 										'<tr class="ns1blankspaceContainer">' +
 										'<td id="ns1blankspaceBankAccountColumn1" class="ns1blankspaceColumn1">' +
 										ns1blankspace.xhtml.loading + '</td>' +
-										'<td id="ns1blankspaceBankAccountColumn2" class="ns1blankspaceColumn2"></td>' +
-										'<span id="ns1blankspaceBankAccountAdd" style="font-size:0.75em;">Add</span>'
+										'<td id="ns1blankspaceBankAccountColumn2" class="ns1blankspaceColumn2">' +
+										'<span id="ns1blankspaceBankAccountAdd" style="font-size:0.75em;">Add</span></td>'
 										'</tr>' + 
 										'</table>');
 
@@ -421,7 +421,7 @@ ns1blankspace.setup.financial =
 										'<input id="ns1blankspaceBankAccountTitle" class="ns1blankspaceText">' +
 										'</td></tr>');	
 
-						HTML.push('<tr class="ns1blankspaceCaption">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Financial Account' +
 										'</td></tr>' +
@@ -563,7 +563,7 @@ ns1blankspace.setup.financial =
 									});
 								},
 
-					show:		function interfaceSetupFinancialAccount(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
 									var iStep = 1;
 									var iType;
@@ -579,20 +579,19 @@ ns1blankspace.setup.financial =
 									if (iStep == 1)
 									{
 										var aHTML = [];
-											
 														
-										aHTML.push('<table id="tablens1blankspaceAccount" class="ns1blankspace">' +
-													'<tr id="trns1blankspaceSetupAccountRow1" class="ns1blankspaceRow1">' +
-													'<td id="tdns1blankspaceSetupAccountColumnType" style="width:100px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+													'<tr class="ns1blankspaceContainer">' +
+													'<td id="ns1blankspaceSetupAccountColumnType" style="width:100px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
 														ns1blankspace.xhtml.loading + '</td>' +
-													'<td id="tdns1blankspaceSetupAccountColumnList" style="width:200px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn2">' +
+													'<td id="ns1blankspaceSetupAccountColumnList" style="width:200px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn2">' +
 													'</td>' +
-													'<td id="tdns1blankspaceSetupAccountColumnEdit" style="width:280px;padding-right:15px;font-size:0.875em;" class="ns1blankspaceColumn2">' +
+													'<td id="ns1blankspaceSetupAccountColumnEdit" style="width:280px;padding-right:15px;font-size:0.875em;" class="ns1blankspaceColumn2">' +
 													'</td>' +
-													'<td id="tdns1blankspaceSetupAccountColumnAction" class="ns1blankspaceColumn2">' +
+													'<td id="ns1blankspaceSetupAccountColumnAction" class="ns1blankspaceColumn2">' +
 													'</td>' +
 													'</tr>' +
-													'</table>';				
+													'</table>');				
 												
 										$('#ns1blankspaceMainFinancialAccount').html(aHTML.join(''));
 										
@@ -629,167 +628,151 @@ ns1blankspace.setup.financial =
 												var oSearch = new AdvancedSearch();
 												oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
 												oSearch.addField('title,parentaccount,parentaccounttext,postable');
-												//oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount);
+												//oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount); //???
 												oSearch.rows = 200;
 												oSearch.sort('title', 'asc');
-												oSearch.getResults(function(data) {interfaceSetupFinancialAccount(oParam, data)})	
+												oSearch.getResults(function(data) {ns1blankspace.setup.financial.accounts(oParam, data)})	
 											}
 											else
 											{
 												var aHTML = [];
 													
-												
 												ns1blankspace.financial.accounts = oResponse.data.rows;
 												ns1blankspace.financial.rootAccounts =  $.grep(ns1blankspace.financial.accounts, function (a) { return a.parentaccount == ns1blankspace.financial.rootAccount; })
 												interfaceSetupFinancialAccountTree(ns1blankspace.financial.rootAccount); 
 
-												aHTML.push('<table id="tablens1blankspaceAccountType" class="ns1blankspace">' +
+												aHTML.push('<table id="ns1blankspaceAccountType" class="ns1blankspace">' +
 																'<tr class="ns1blankspaceRow">' +
-																'<td id="tdns1blankspaceSetupFinancialAccountType-1-'+ 
+																'<td id="ns1blankspaceSetupFinancialAccountType-1-'+ 
 																($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Expense') != -1; }))[0].id +
-																'" class="ns1blankspaceRow ns1blankspaceRowSelect type">' +
+																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Expenses</td>' +
 																'</tr>' +
 																'<tr class="ns1blankspaceRow">' +
-																'<td id="tdns1blankspaceSetupFinancialAccountType-2-' +
+																'<td id="ns1blankspaceSetupFinancialAccountType-2-' +
 																($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Revenue') != -1; }))[0].id +
-																'" class="ns1blankspaceRow ns1blankspaceRowSelect type">' +
+																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Revenue</td>' +
 																'</tr>' +
 																'<tr class="ns1blankspaceRow">' +
-																'<td id="tdns1blankspaceSetupFinancialAccountType-3-' +
+																'<td id="ns1blankspaceSetupFinancialAccountType-3-' +
 																($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Asset') != -1; }))[0].id +
-																'" class="ns1blankspaceRow ns1blankspaceRowSelect type">' +
+																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Asset</td>' +
 																'</tr>' +
 																'<tr class="ns1blankspaceRow">' +
-																'<td id="tdns1blankspaceSetupFinancialAccountType-4-' +
+																'<td id="ns1blankspaceSetupFinancialAccountType-4-' +
 																($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Liability') != -1; }))[0].id +
-																'" class="ns1blankspaceRow ns1blankspaceRowSelect type">' +
+																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Liability</td>' +
 																'</tr>' +
 																'<tr class="ns1blankspaceRow">' +
-																'<td id="tdns1blankspaceSetupFinancialAccountType-5-' +
+																'<td id="ns1blankspaceSetupFinancialAccountType-5-' +
 																($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Equity') != -1; }))[0].id +
-																'" class="ns1blankspaceRow ns1blankspaceRowSelect type">' +
+																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Equity</td>' +
 																'</tr>' +
 																'</table>';					
 														
-												$('#tdns1blankspaceSetupAccountColumnType').html(aHTML.join(''));
+												$('#ns1blankspaceSetupAccountColumnType').html(aHTML.join(''));
 
-												$('td.type').click(function(event)
+												$('#ns1blankspaceAccountType > td.ns1blankspaceRowSelect').click(function(event)
 												{
 													var sXHTMLElementId = event.target.id;
 													var aId = sXHTMLElementId.split('-');
 													
-													interfaceSetupFinancialAccount({type: aId[1], parentAccount: aId[2], step: 2});
+													ns1blankspace.setup.financial.accounts({type: aId[1], parentAccount: aId[2], step: 2});
 												});
 											}
 										}	
 									}	
 									else if (iStep == 2)
 									{
-
 										ns1blankspace.financial.currentAccount = iParentAccount;
 
 										if (oResponse == undefined)
 										{
-											$('#tdns1blankspaceSetupAccountColumnList').html(ns1blankspace.xhtml.loadingSmall);
-											$('#tdns1blankspaceSetupAccountColumnEdit').html("");
+											$('#ns1blankspaceSetupAccountColumnList').html(ns1blankspace.xhtml.loadingSmall);
+											$('#ns1blankspaceSetupAccountColumnEdit').html("");
 
 											var aHTML = [];
-												
+
+											aHTML.push('<table class="ns1blankspaceColumn2">' +
+															'<tr><td class="ns1blankspaceAction">' +
+															'<span id="ns1blankspaceAccountAdd">Add</span>' +
+															'</td></tr>' +
+															'</table>');					
 											
-											aHTML.push('<table id="tablens1blankspaceAccountColumnAction" class="ns1blankspaceColumn2">';
-											aHTML.push('<tr><td id="tdns1blankspaceAccountAdd" class="ns1blankspaceAction">' +
-															'<span id="spanns1blankspaceAccountAdd">Add</span>' +
-															'</td></tr>';
-																			
-											aHTML.push('</table>';					
-											
-											$('#tdns1blankspaceSetupAccountColumnAction').html(aHTML.join(''));
+											$('#ts1blankspaceSetupAccountColumnAction').html(aHTML.join(''));
 										
-											$('#spanns1blankspaceAccountAdd').button(
+											$('#ns1blankspaceAccountAdd').button(
 											{
 												label: "Add"
 											})
 											.click(function()
 											{
 												$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
-												interfaceSetupFinancialAccount(oParam);
+												ns1blankspace.setup.financial.accounts(oParam);
 											})
 
 											var oItems = $.grep(ns1blankspace.financial.accounts, function (a) { return a.parentaccount == iParentAccount; });
-											interfaceSetupFinancialAccount(oParam, oItems);
+											ns1blankspace.setup.financial.accounts(oParam, oItems);
 										}
 										else
 										{
 											var aHTML = [];
-											
-										
-										
-											var aHTML = [];
-											
-									
-											aHTML.push('<table id="tableSetupFinancialFinancialAccount" border="0" cellspacing="0" cellpadding="0" class="ns1blankspace">';
-											aHTML.push('<tbody>';
+
+											aHTML.push('<table id="ns1blankspaceSetupFinancialFinancialAccount" class="ns1blankspace">');
 										
 											if (($.grep(ns1blankspace.financial.rootAccounts, function (a) { return a.id == iParentAccount; })).length == 0)
 											{
-												aHTML.push('<tr class="ns1blankspaceCaption">';
+												aHTML.push('<tr class="ns1blankspaceCaption">');
 												aHTML.push('<td class="ns1blankspaceCaption" colspan=2>' +
-																'<div style="float:left;""><span id="spanns1blankspaceAccountParent-' +
+																'<div style="float:left;""><span id="ns1blankspaceAccountParent-' +
 																($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == iParentAccount; }))[0].parentaccount +
 																 '" class="ns1blankspaceRow ns1blankspaceRowOptionsParent">Add</span></div>' +
 																'<div style="float:left;margin-left:3px;margin-top:3px;">' + ($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == iParentAccount; }))[0].title
-																+ '</div></td>';
-												aHTML.push('</tr>';
+																+ '</div></td>');
+												aHTML.push('</tr>');
 											}
 											
 											if (oResponse.length == 0)
 											{
-												aHTML.push('<tr class="ns1blankspaceCaption">' +
-																'<td class="ns1blankspaceRowNothing">No sub-accounts.</td></tr>';
-												aHTML.push('</tbody></table>';
+												aHTML.push('<tr><td class="ns1blankspaceNothing">No sub-accounts.</td></tr></table>');
 											}
 											else
 											{		
-
 												$(oResponse).each(function()
 												{
-
 													aHTML.push('<tr class="ns1blankspaceRow">';
 													
 													if (this.postable == 'Y')
 													{
-														aHTML.push('<td id="interfaceFinancialAccount_Title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect account"' +
+														aHTML.push('<td id="ns1blankspaceFinancialAccount_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
 																			' title="">' +
-																			this.title + '</td>';
+																			this.title + '</td>');
 													}
 													else
 													{	
-														aHTML.push('<td style="font-weight:600;" id="interfaceFinancialAccount_Title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect account"' +
+														aHTML.push('<td style="font-weight:600;" id="ns1blankspaceFinancialAccount_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
 																			' title="">' +
-																			this.title + '</td>';
+																			this.title + '</td>');
 													}						
 															
 													aHTML.push('<td class="ns1blankspaceRow" style="width:20px;">' +
-																			'<span id="spanns1blankspaceAccountChildren-' + this.id + '" class="ns1blankspaceRow' +
+																			'<span id="ns1blankspaceAccountChildren-' + this.id + '" class="ns1blankspaceRow' +
 																			(this.postable != 'Y' ? ' ns1blankspaceRowOptionsChildren">Next' : '">') + '</span>' +
-																			'</td>';						
+																			'</td>');						
 																																
-													aHTML.push('</tr>'
-									
-													//aHTML.push(interfaceSetupFinancialAccountRow(this);
+													aHTML.push('</tr>');
 												});
 											
-												aHTML.push('</tbody></table>';
+												aHTML.push('</table>');
 											}
 										
-											$('#tdns1blankspaceSetupAccountColumnList').html(aHTML.join(''));
+											$('#ns1blankspaceSetupAccountColumnList').html(aHTML.join(''));
 										
-											$('.ns1blankspaceRowOptionsParent').button(
+											$('#ns1blankspaceSetupFinancialFinancialAccount > .ns1blankspaceRowOptionsParent').button(
 											{
 												text: false,
 												icons: {
@@ -799,12 +782,12 @@ ns1blankspace.setup.financial =
 											.click(function() {
 												var aId = (this.id).split('-');
 												$.extend(true, oParam, {step: 2, parentAccount: aId[1]});
-												interfaceSetupFinancialAccount(oParam);
+												ns1blankspace.setup.financial.accounts(oParam);
 											})
 											.css('width', '15px')
 											.css('height', '17px');
 
-											$('.ns1blankspaceRowOptionsChildren').button(
+											$('#ns1blankspaceSetupFinancialFinancialAccount > .ns1blankspaceRowOptionsChildren').button(
 											{
 												text: false,
 												icons: {
@@ -814,15 +797,15 @@ ns1blankspace.setup.financial =
 											.click(function() {
 												var aId = (this.id).split('-');
 												$.extend(true, oParam, {step: 2, parentAccount: aId[1]});
-												interfaceSetupFinancialAccount(oParam);
+												ns1blankspace.setup.financial.accounts(oParam);
 											})
 											.css('width', '15px')
 											.css('height', '17px');
 
-											$('td.account').click(function()
+											$('#ns1blankspaceSetupFinancialFinancialAccount > td.ns1blankspaceRowSelect').click(function()
 											{
 												$.extend(true, oParam, {step: 4, xhtmlElementID: event.target.id});
-												interfaceSetupFinancialAccount(oParam);
+												ns1blankspace.setup.financial.accounts(oParam);
 											})
 										}
 									}
@@ -846,66 +829,63 @@ ns1blankspace.setup.financial =
 									
 										var aHTML = [];
 										
-
-										aHTML.push('<table id="tablens1blankspaceColumn1" class="ns1blankspace">';
-													
-										aHTML.push('<tr id="trns1blankspaceAccountTitle" class="ns1blankspace">' +
-														'<td id="tdns1blankspaceAccountTitle" class="ns1blankspace">' +
+										aHTML.push('<table class="ns1blankspace">');
+						
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Title' +
 														'</td></tr>' +
-														'<tr id="trns1blankspaceAccountAddTitleValue" class="ns1blankspaceText">' +
-														'<td id="tdns1blankspaceAccountAddTitleValue" class="ns1blankspaceText">' +
-														'<input id="inputns1blankspaceAccountAddTitle" class="inputns1blankspaceText">' +
-														'</td></tr>';
-										
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceFinancialAccountTitle" class="ns1blankspaceText">' +
+														'</td></tr>');		
 
-										aHTML.push('<tr id="trns1blankspaceAccountParent" class="ns1blankspace">' +
-														'<td id="tdns1blankspaceAccountParent" class="ns1blankspace">' +
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Parent' +
 														'</td></tr>' +
-														'<tr id="trns1blankspaceAccountParentValue" class="ns1blankspaceSelect">' +
-														'<td id="tdns1blankspaceAccountParentValue" class="ns1blankspaceSelect">' +
-														'<input id="inputns1blankspaceAccountParentAccount" class="inputns1blankspaceSelect"' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceSelect">' +
+														'<input id="ns1blankspaceFinancialAccountParentAccount" class="ns1blankspaceSelect"' +
 															' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 															' data-columns="title">' +
-														'</td></tr>';
-
-										aHTML.push('<tr id="trns1blankspaceAccountPostable" class="ns1blankspace">' +
-															'<td id="tdns1blankspaceAccountPostable" class="ns1blankspace">' +
-															'Can transactions be linked to this account?' +
-															'</td></tr>' +
-															'<tr id="trns1blankspaceAccountPostable" class="ns1blankspaceText">' +
-															'<td id="tdns1blankspaceAccountPostableValue" class="ns1blankspaceRadio">' +
-															'<input type="radio" id="radioPostableY" name="radioPostable" value="Y"/>Yes' +
+														'</td></tr>');	
+										
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Can transactions be linked to this account?' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceRadio">' +
+														'<input type="radio" id="radioPostableY" name="radioPostable" value="Y"/>Yes' +
 															'<br /><input type="radio" id="radioPostableN" name="radioPostable" value="N"/>No (it is a header account)' +
-														'</td></tr>';
+														'</td></tr>');	
 
-										aHTML.push('</table>';					
+										aHTML.push('</table>');					
 										
-										$('#tdns1blankspaceSetupAccountColumnEdit').html(aHTML.join(''));
+										$('#ns1blankspaceSetupAccountColumnEdit').html(aHTML.join(''));
 										
-										$('#inputns1blankspaceAccountAddTitle').focus();
+										$('#ns1blankspaceFinancialAccountTitle').focus();
 
 										var aHTML = [];
 										
-									
-										aHTML.push('<table id="tablens1blankspaceColumn2" class="ns1blankspace" style="font-size:0.875em">';
+										aHTML.push('<table class="ns1blankspace"  style="font-size:0.875em">');
 												
-										aHTML.push('<tr id="trns1blankspaceAccountAddSave" class="ns1blankspaceAction">' +
-														'<td id="tdns1blankspaceAccountAddSave" class="ns1blankspaceAction">' +
-														'<span style="width:70px;" id="spanns1blankspaceAccountEditSave">Save</span>' +
-														'</td></tr>';
+										aHTML.push('<tr class="ns1blankspaceAction">' +
+														'<td class="ns1blankspaceAction">' +
+														'<span style="width:80px;" id="ns1blankspaceFinancialAccountEditSave">Save</span>' +
+														'</td></tr>');
+									
+										aHTML.push('<tr class="ns1blankspaceAction">' +
+														'<td class="ns1blankspaceAction">' +
+														'<span style="width:80px;" id="ns1blankspaceFinancialAccountEditCancel">Cancel</span>' +
+														'</td></tr>');
 														
-										aHTML.push('<tr id="trns1blankspaceBankAccountEditCancel" class="ns1blankspaceAction">' +
-															'<td id="tdns1blankspaceBankAccountEditCancel" class="ns1blankspaceAction">' +
-															'<span style="width:70px;" id="spanns1blankspaceAccountEditCancel">Cancel</span>' +
-															'</td></tr>';
-																			
-										aHTML.push('</table>';					
-											
-										$('#tdns1blankspaceSetupAccountColumnAction').html(aHTML.join(''));
+										aHTML.push('</table>');		
+	
+										$('#ns1blankspaceSetupAccountColumnAction').html(aHTML.join(''));
 										
-										$('#spanns1blankspaceAccountEditSave').button(
+										$('#ns1blankspaceFinancialAccountEditSave').button(
 										{
 											text: "Save"
 										})
@@ -915,28 +895,31 @@ ns1blankspace.setup.financial =
 
 											var sData = 'type=' + iType;
 											sData += '&id=' + ns1blankspace.util.fs(sID);
-											sData += '&title=' + ns1blankspace.util.fs($('#inputns1blankspaceAccountAddTitle').val());
-											sData += '&parentaccount=' + ns1blankspace.util.fs($('#inputns1blankspaceAccountParentAccount').attr("data-id"));
+											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTitle').val());
+											sData += '&parentaccount=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountParentAccount').attr("data-id"));
 											sData += '&postable=' + ns1blankspace.util.fs($('input[name="radioPostable"]:checked').val());
 
 											var oAdd =
 													{
 														"items": [], 
-														"title": $('#inputns1blankspaceAccountAddTitle').val(),
-														"parentaccount": $('#inputns1blankspaceAccountParentAccount').attr("data-id"),
+														"title": $('#ns1blankspaceFinancialAccountTitle').val(),
+														"parentaccount": $('#ns1blankspaceFinancialAccountParentAccount').attr("data-id"),
 														"postable": $('input[name="radioPostable"]:checked').val()
 													}
 
+											///ondemand/setup/setup.asp
+														
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_ACCOUNT_MANAGE',
+												url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_ACCOUNT_MANAGE'),
 												data: sData,
 												dataType: 'json',
-												success: function(data) {
+												success: function(data)
+												{
 													if (data.status == "OK")
 													{
-														ns1blankspaceStatus('Saved');
+														ns1blankspace.status.message('Saved');
 
 														$.extend(true, oAdd, {id: data.id});
 														
@@ -950,34 +933,35 @@ ns1blankspace.setup.financial =
 														if (bNew) {(ns1blankspace.financial.accounts).unshift(oAdd)}
 
 														$.extend(true, oParam, {step: 2});
-														interfaceSetupFinancialAccount(oParam)
+														ns1blankspace.setup.financial.accounts(oParam)
 													}
 													else
 													{
-														ns1blankspaceError(data.error.errornotes);
+														ns1blankspace.status.error(data.error.errornotes);
 													}
 												}
 											});
 										});
 
-										$('#spanns1blankspaceAccountEditCancel').button(
+										$('#ns1blankspaceFinancialAccountEditCancel').button(
 										{
 											text: "Cancel"
 										})
 										.click(function() 
 										{
 											$.extend(true, oParam, {step: 2});
-											interfaceSetupFinancialAccount(oParam);
+											ns1blankspace.setup.financial.accounts(oParam);
 										});
 
-										$('#spanns1blankspaceAccountAdd').button(
+										//???
+										$('#ns1blankspaceAccountAdd').button(
 											{
 												label: "Add"
 											})
 											.click(function()
 											{
 												$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
-												interfaceSetupFinancialAccount(oParam);
+												ns1blankspace.setup.financial.accountst(oParam);
 											})
 
 										if (sID != undefined)
@@ -988,13 +972,13 @@ ns1blankspace.setup.financial =
 											oSearch.addFilter('id', 'EQUAL_TO', sID);
 											oSearch.getResults(function(data) {
 													$.extend(true, oParam, {step: 5});
-													interfaceSetupFinancialAccount(oParam, data)
+													ns1blankspace.setup.financial.accounts(oParam, data)
 													});
 										}
 										else
 										{
-											$('#inputns1blankspaceAccountParentAccount').val(($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == ns1blankspace.financial.currentAccount; })[0].title).formatXHTML());
-											$('#inputns1blankspaceAccountParentAccount').attr('data-id', ns1blankspace.financial.currentAccount);
+											$('#ns1blankspaceFinancialAccountParentAccount').val(($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == ns1blankspace.financial.currentAccount; })[0].title).formatXHTML());
+											$('#ns1blankspaceFinancialAccountParentAccount').attr('data-id', ns1blankspace.financial.currentAccount);
 											$('[name="radioPostable"][value="Y"]').attr('checked', true);
 										}
 									}
@@ -1003,258 +987,229 @@ ns1blankspace.setup.financial =
 										if (oResponse.data.rows.length != 0)
 										{
 											var oObjectContext = oResponse.data.rows[0];
-											$('#inputns1blankspaceAccountAddTitle').val((oObjectContext.title).formatXHTML());
-											$('#inputns1blankspaceAccountParentAccount').val(($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == oObjectContext.parentaccount; })[0].title).formatXHTML());
-											$('#inputns1blankspaceAccountParentAccount').attr('data-id', oObjectContext.parentaccount);
+											$('#ns1blankspacens1blankspaceFinancialTitle').val((oObjectContext.title).formatXHTML());
+											$('#ns1blankspaceFinancialAccountParentAccount').val(($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == oObjectContext.parentaccount; })[0].title).formatXHTML());
+											$('#ns1blankspaceFinancialAccountParentAccount').attr('data-id', oObjectContext.parentaccount);
 											$('[name="radioPostable"][value="' + oObjectContext.postable + '"]').attr('checked', true);
 										}
 									}	
 								}
 
-					row:		function interfaceSetupFinancialAccountRow(oRow)
+					row:		function (oRow)
 								{
 									var aHTML = [];
-									
 
-									aHTML.push('<tr class="ns1blankspaceRow">';
-												
-									aHTML.push('<td id="interfaceFinancialHomeMostLikely_Title-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect account"' +
-															' title="' + oRow.notes + '-' + oRow.items.length + '">' +
-															oRow.title + '</td>';
+									aHTML.push('<tr class="ns1blankspaceRow">' +
+													'<td id="ins1blankspaceFinancialAccount_title-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
+													' title="' + oRow.notes + '-' + oRow.items.length + '">' +
+													oRow.title + '</td>');
 																						
-									aHTML.push('</tr>'
+									aHTML.push('</tr>');
 									
 									return aHTML.join('');
 								}
 				},
 
 	accountDefaults:			
-				function interfaceSetupFinancialFinancialAccountDefault()
+				function ()
 				{
 					var aHTML = [];
 					
-						
-					if ($('#ns1blankspaceMainFinancialAccountDefault').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainFinancialAccountDefault').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceMainFinancialAccountDefault').attr('onDemandLoading', '');
-						
-						aHTML.push('<table id="tablens1blankspaceFinancialAccount" class="ns1blankspaceDetails">';
-						aHTML.push('<tr id="trns1blankspaceFinancialAccountRow1" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceFinancialAccountColumn1" class="ns1blankspaceColumn1">' +
-										'</td>' +
-										'<td id="tdns1blankspaceFinancialAccountColumn2" class="ns1blankspaceColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
-						
+						$('#ns1blankspaceMainFinancialAccountDefault').attr('data-loading', '');
+
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceFinancialAccountDefaultsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceFinancialAccountDefaultsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');
+
 						$('#ns1blankspaceMainFinancialAccountDefault').html(aHTML.join(''));
 						
 						var aHTML = [];
 						
-					
-						aHTML.push('<table id="tablens1blankspaceDetailsColumn1" class="ns1blankspace">';
-					
-						aHTML.push('<tr id="trns1blankspaceFinancialAccountCash" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceFinancialAccountCash" class="ns1blankspace">' +
+						aHTML.push('<table class="ns1blankspace">';
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Cash' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceFinancialAccountCashValue" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceFinancialAccountCashValue" class="ns1blankspaceText">' +
-										'<input id="inputns1blankspaceFinancialAccountCash" class="inputns1blankspaceSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceFinancialAccountCash" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
-										'</td></tr>';
-						
-						aHTML.push('<tr id="trns1blankspaceFinancialAccountCreditors" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceFinancialAccountCreditors" class="ns1blankspace">' +
+										'</td></tr>');	
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Creditors' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceFinancialAccountCreditorsValue" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceFinancialAccountCreditorsValue" class="ns1blankspaceText">' +
-										'<input id="inputns1blankspaceFinancialAccountCreditors" class="inputns1blankspaceSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceFinancialAccountCreditors" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceFinancialAccountDebitors" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceFinancialAccountDebitors" class="ns1blankspace">' +
-										'Debitors' +
+										'</td></tr>');	
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Debtors' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceFinancialAccountDebitorsValue" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceFinancialAccountDebitorsValue" class="ns1blankspaceText">' +
-										'<input id="inputns1blankspaceFinancialAccountDebitors" class="inputns1blankspaceSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceFinancialAccountDebtors" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceFinancialAccountCurrentProfit" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceFinancialAccountCurrentProfit" class="ns1blankspace">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Current Profit' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceFinancialAccountCurrentProfitValue" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceFinancialAccountCurrentProfitValue" class="ns1blankspaceText">' +
-										'<input id="inputns1blankspaceFinancialAccountCurrentProfit" class="inputns1blankspaceSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceFinancialAccountCurrentProfit" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
-										'</td></tr>';	
+										'</td></tr>');
 										
-						aHTML.push('<tr id="trns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspace">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Retained Profit' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceFinancialAccountRetainedProfitValue" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceFinancialAccountRetainedProfitValue" class="ns1blankspaceText">' +
-										'<input id="inputns1blankspaceFinancialAccountRetainedProfit" class="inputns1blankspaceText"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
-										'</td></tr>';
+										'</td></tr>');	
 										
-						aHTML.push('<tr id="trns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspace">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Tax Liabilities' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceFinancialAccountRetainedProfitValue" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceFinancialAccountRetainedProfitValue" class="ns1blankspaceText">' +
-										'<input id="inputns1blankspaceFinancialAccountRetainedProfit" class="inputns1blankspaceSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceFinancialAccountTaxLiabilities" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
-										'</td></tr>';																				
-														
-						aHTML.push('<tr id="trns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspace">' +
+										'</td></tr>');	
+										
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Tax Credits' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceFinancialAccountRetainedProfitValue" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceFinancialAccountRetainedProfitValue" class="ns1blankspaceText">' +
-										'<input id="inputns1blankspaceFinancialAccountRetainedProfit" class="inputns1blankspaceSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceFinancialAccountTaxCredits" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
-										'</td></tr>';
-
-						aHTML.push('<tr id="trns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspace">' +
+										'</td></tr>');																	
+					
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Tax Payroll' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceFinancialAccountRetainedProfitValue" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceFinancialAccountRetainedProfitValue" class="ns1blankspaceText">' +
-										'<input id="inputns1blankspaceFinancialAccountRetainedProfit" class="inputns1blankspaceSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceFinancialAccountTaxPayroll" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
-										'</td></tr>';
-										
-						/*
-						aHTML.push('<tr id="trns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspace">' +
-										'Tax Instalments' +
-										'</td></tr>' +
-										'<tr id="trns1blankspaceFinancialAccountRetainedProfitValue" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceFinancialAccountRetainedProfitValue" class="ns1blankspaceText">' +
-										'<input id="inputns1blankspaceFinancialAccountRetainedProfit" class="inputns1blankspaceText">' +
-										'</td></tr>';
-						*/
-																		
-						aHTML.push('</table>';					
+										'</td></tr>');
+												
+						aHTML.push('</table>');					
 						
 						$('#tdns1blankspaceFinancialAccountColumn1').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputns1blankspaceFinancialAccountCash').val(ns1blankspace.objectContextData.financialaccountcashtext);
-							$('#inputns1blankspaceFinancialAccountCash').attr("data-id", ns1blankspace.objectContextData.financialaccountcash);
-							$('#inputns1blankspaceFinancialAccountCreditors').val(ns1blankspace.objectContextData.financialaccountcreditortext);
-							$('#inputns1blankspaceFinancialAccountCreditors').attr("data-id", ns1blankspace.objectContextData.financialaccountcreditor);
-							$('#inputns1blankspaceFinancialAccountDebitors').val(ns1blankspace.objectContextData.financialaccountdebitortext);
-							$('#inputns1blankspaceFinancialAccountDebitors').attr("data-id", ns1blankspace.objectContextData.financialaccountdebitor);
-							$('#inputns1blankspaceFinancialAccountCurrentProfit').val(ns1blankspace.objectContextData.financialaccountcurrentearningstext);
-							$('#inputns1blankspaceFinancialAccountCurrentProfit').attr("data-id", ns1blankspace.objectContextData.financialaccountcurrentearnings);
-							$('#inputns1blankspaceFinancialAccountRetainedProfit').val(ns1blankspace.objectContextData.financialaccountretainedearningstext);
-							$('#inputns1blankspaceFinancialAccountRetainedProfit').attr("data-id", ns1blankspace.objectContextData.financialaccountretainedearnings);
+							$('#ns1blankspaceFinancialAccountCash').val(ns1blankspace.objectContextData.financialaccountcashtext);
+							$('#ns1blankspaceFinancialAccountCash').attr("data-id", ns1blankspace.objectContextData.financialaccountcash);
+							$('#ns1blankspaceFinancialAccountCreditors').val(ns1blankspace.objectContextData.financialaccountcreditortext);
+							$('#ns1blankspaceFinancialAccountCreditors').attr("data-id", ns1blankspace.objectContextData.financialaccountcreditor);
+							$('#ns1blankspaceFinancialAccountDebitors').val(ns1blankspace.objectContextData.financialaccountdebitortext);
+							$('#ns1blankspaceFinancialAccountDebitors').attr("data-id", ns1blankspace.objectContextData.financialaccountdebitor);
+							$('#ns1blankspaceFinancialAccountCurrentProfit').val(ns1blankspace.objectContextData.financialaccountcurrentearningstext);
+							$('#ns1blankspaceFinancialAccountCurrentProfit').attr("data-id", ns1blankspace.objectContextData.financialaccountcurrentearnings);
+							$('#ns1blankspaceFinancialAccountRetainedProfit').val(ns1blankspace.objectContextData.financialaccountretainedearningstext);
+							$('#ns1blankspaceFinancialAccountRetainedProfit').attr("data-id", ns1blankspace.objectContextData.financialaccountretainedearnings);
 						}
 					}	
 				},
 
-	invoicing:	function interfaceSetupFinancialInvoicing()
+	invoicing:	function ()
 				{
 					var aHTML = [];
 					
-						
-					if ($('#ns1blankspaceMainInvoicing').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainInvoicing').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceMainInvoicing').attr('onDemandLoading', '');
-						
-						aHTML.push('<table id="tablens1blankspaceInvoicing" class="ns1blankspaceDetails">';
-						aHTML.push('<tr id="trns1blankspaceFinancialInvoicingRow1" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceInvoicingColumn1" class="ns1blankspaceColumn1">' +
-										'</td>' +
-										'<td id="tdns1blankspaceInvoicingColumn2" class="ns1blankspaceColumn2x">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
-						
+						$('#ns1blankspaceMainInvoicing').attr('data-loading', '');
+
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceInvoicingColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceInvoicingColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');
+		
 						$('#ns1blankspaceMainInvoicing').html(aHTML.join(''));
 						
 						var aHTML = [];
 						
+						aHTML.push('<table id="ns1blankspaceInvoicing" class="ns1blankspace">');
 					
-						aHTML.push('<table id="tablens1blankspaceInvoicingColumn1" class="ns1blankspace">';
-					
-						aHTML.push('<tr id="trns1blankspaceInvoicingPaymentTermsNotes" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceInvoicingPaymentTermsNotes" class="ns1blankspace">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Payment Term Notes' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceInvoicingPaymentTermsNotesValue" class="ns1blankspaceTextMulti">' +
-										'<td id="tdns1blankspaceInvoicingPaymentTermsNotesValue" class="ns1blankspaceTextMulti">' +
-										'<textarea rows="3" cols="35" id="inputns1blankspaceInvoicingPaymentTermsNotes" class="inputns1blankspaceTextMultiSmall"></textarea>' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceTextMulti">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="3" cols="35" id="ns1blankspaceInvoicingPaymentTermsNotes" class="ns1blankspaceTextMultiSmall"></textarea>' +
+										'</td></tr>');
 						
 						aHTML.push('</table>';	
 						
-						$('#tdns1blankspaceInvoicingColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceInvoicingColumn1').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							//$('[name="radioLock"][value="' + ns1blankspace.objectContextData.taxlock + '"]').attr('checked', true);
-						}
-						else
-						{
-							//$('[name="radioLock"][value="Y"]').attr('checked', true);			
+							$('#ns1blankspaceInvoicingPaymentTermsNotes').val(ns1blankspace.objectContextData.paymentterms);		
 						}
 					}	
 				},
 
 	invoiceTemplate:
 				{
-					show: 		function interfaceSetupFinancialInvoicingTemplate()
+					show: 		function ()
 								{
 									var aHTML = [];
 									
-									
-									if ($('#ns1blankspaceMainInvoicingTemplate').attr('onDemandLoading') == '1')
+									if ($('#ns1blankspaceMainInvoicing').attr('data-loading') == '1')
 									{
-										$('#ns1blankspaceMainInvoicingTemplate').attr('onDemandLoading', '');
+										$('#ns1blankspaceMainInvoicing').attr('data-loading', '');
 												
 										for (edId in tinyMCE.editors) 
 													tinyMCE.editors[edId].destroy(true);
 												
 										ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 												
-										aHTML.push('<table class="ns1blankspace">';
-										aHTML.push('<tr id="trns1blankspaceEditRow1" class="ns1blankspace">' +
-														'<td id="tdns1blankspaceInvoicingTemplateColumn1" class="ns1blankspace">' +
-														'</td>' +
-														'<td id="tdns1blankspaceInvoicingTemplateColumn2" style="width:100px;">' +
-														'</td>' +
-														'</tr>';
-										aHTML.push('</table>';					
-										
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceInvoicingTemplateColumn1" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspaceInvoicingTemplateColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+														'</tr>' + 
+														'</table>');
+													
 										$('#ns1blankspaceMainInvoicingTemplate').html(aHTML.join(''));
 										
 										var aHTML = [];
 										
-
-										aHTML.push('<table>';
+										aHTML.push('<table>');
 															
-										aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:0.75em;">Tags</td</tr>';
+										aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:0.75em;">Tags</td</tr>');
 
 										$.each(gaFormatTags, function()
 										{
@@ -1263,10 +1218,10 @@ ns1blankspace.setup.financial =
 												aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">';
 
 												aHTML.push('<span id="spanInterfaceFormatTag_' + (this.caption).replace(/ /g,'-') + '"' +
-														  		 ' class="interfaceFormatTags" ' +
+														  		' class="interfaceFormatTags" ' +
 														   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>';
 
-												aHTML.push('</td></tr>';		   		
+												aHTML.push('</td></tr>');		   		
 											}				
 										});
 
@@ -1280,28 +1235,26 @@ ns1blankspace.setup.financial =
 														  		 ' class="interfaceFormatTags" ' +
 														   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>';
 
-												aHTML.push('</td></tr>';		   		
+												aHTML.push('</td></tr>');		   		
 											}				
 										});
 														
 										aHTML.push('</table>';			
 
-										$('#tdns1blankspaceInvoicingTemplateColumn2').html(aHTML.join(''));
+										$('#ns1blankspaceInvoicingTemplateColumn2').html(aHTML.join(''));
 
 										var aHTML = [];
 										
-									
-										aHTML.push('<table id="tablens1blankspaceColumn1" class="ns1blankspace">';
+										aHTML.push('<table id="ns1blankspaceColumn1" class="ns1blankspace">';
 												
-										aHTML.push('<tr>' +
-														'<td>' +
-														'<textarea rows="30" cols="50" id="inputns1blankspaceInvoicingTemplateText' +
-																	ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="inputns1blankspaceTextMulti"></textarea>' +
-														'</td></tr>';
+										aHTML.push('<tr><td>' +
+														'<textarea rows="30" cols="50" id="ns1blankspaceInvoicingTemplateText' +
+															ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
+														'</td></tr>');
 														
-										aHTML.push('</table>';					
+										aHTML.push('</table>');					
 										
-										$('#tdns1blankspaceInvoicingTemplateColumn1').html(aHTML.join(''));
+										$('#ns1blankspaceInvoicingTemplateColumn1').html(aHTML.join(''));
 										
 										if (ns1blankspace.financial.invoiceTemplateXHTML == undefined)
 										{
@@ -1339,55 +1292,56 @@ ns1blankspace.setup.financial =
 													ns1blankspace.financial.invoiceTemplateDocumentID = oResponse.data.rows[0].id;
 												}
 
-												$('#inputns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).val(ns1blankspace.financial.invoiceTemplateXHTML);
+												$('#ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).val(ns1blankspace.financial.invoiceTemplateXHTML);
 
 												if (ns1blankspace.option.richTextEditing)
 												{
-													tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor);
+													tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor);
 												}	
 											});		
 										}
 										else
 										{
-											$('#inputns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).val(ns1blankspace.financial.invoiceTemplateXHTML);
+											$('#ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).val(ns1blankspace.financial.invoiceTemplateXHTML);
 
-
-
-											tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor);	
+											tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor);	
 										}
 									
 										$('.interfaceFormatTags')
 										.hover( function()
 										{	
-											oMCEBookmark = tinyMCE.get('inputns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).selection.getBookmark({type: 1, normalized: true});
+											oMCEBookmark = tinyMCE.get('ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).selection.getBookmark({type: 1, normalized: true});
 										})
 										.click( function()
 										{
-											ns1blankspaceEditorAddTag({xhtmlElementID: this.id,
-																		  editorID: 'inputns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor, 
-																		  mceBookmark: oMCEBookmark})
-										})
+											ns1blankspace.format.editor.addTag(
+											{
+												xhtmlElementID: this.id,
+												editorID: 'ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor, 
+												mceBookmark: oMCEBookmark
+											});
+										});
 									}
+								},	
 
-
-					save:		function interfaceSetupFinancialSaveTemplate()
+					save:		function ()
 								{
-									ns1blankspaceStatusWorking();
+									ns1blankspace.status.working();
 
 									var sData = 'id=' + (ns1blankspace.financial.invoiceTemplateDocumentID ? ns1blankspace.financial.invoiceTemplateDocumentID : '');
-									sData += '&content=' + encodeURIComponent(tinyMCE.get('inputns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).getContent());
+									sData += '&content=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).getContent());
 									sData += '&type=10';
 									sData += '&title=' + ns1blankspace.util.fs('Invoice Template');
 
 									$.ajax(
 									{
 										type: 'POST',
-										url: '/ondemand/document/?method=DOCUMENT_MANAGE',
+										url: ns1blankspace.util.endpointURI('DOCUMENT_MANAGE'),
 										data: sData,
 										dataType: 'json',
 										success: function(data)
 											{
-												ns1blankspaceStatus('Saved');
+												ns1blankspace.status.message('Saved');
 												ns1blankspace.financial.invoiceTemplateXHTML = tinyMCE.get('inputns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).getContent();
 												if(ns1blankspace.financial.invoiceTemplateDocumentID == undefined) {ns1blankspace.financial.invoiceTemplateDocumentID = data.id};
 											}
@@ -1396,22 +1350,20 @@ ns1blankspace.setup.financial =
 								}	
 				},
 
-	tax: 		function interfaceSetupFinancialTax()
+	tax: 		function ()
 				{
 					var aHTML = [];
 					
-						
-					if ($('#ns1blankspaceMainTax').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainTax').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceMainTax').attr('onDemandLoading', '');
-						
-						aHTML.push('<table id="tablens1blankspaceTax" class="ns1blankspaceDetails">';
-						aHTML.push('<tr id="trns1blankspaceFinancialTaxRow1" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceTaxColumn1" class="ns1blankspaceColumn1x">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
-						
+						$('#ns1blankspaceMainTax').attr('data-loading', '');
+												
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceTaxColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceTaxColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');						
 						$('#ns1blankspaceMainTax').html(aHTML.join(''));
 						
 						var aHTML = [];
@@ -1419,67 +1371,53 @@ ns1blankspace.setup.financial =
 					
 						aHTML.push('<table id="tablens1blankspaceTaxColumn1" class="ns1blankspace">';
 					
-						aHTML.push('<tr id="trns1blankspaceTaxLock" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceTaxLock" class="ns1blankspace">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Lock transactions if in completed tax period.' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceGeneralTaxLock" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceGeneralTaxLockValue" class="ns1blankspaceRadio">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioTaxLockY" name="radioTaxLock" value="Y"/>Yes' +
 										'<br /><input type="radio" id="radioTaxLockN" name="radioTaxLock" value="N"/>No' +
-										'</td></tr>';
+										'</td></tr>');
 										
-						aHTML.push('<tr id="trns1blankspaceTaxDefault" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceTaxDefault" class="ns1blankspace">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Includes tax default' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceGeneralTaxDefault" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceGeneralTaxDefaultValue" class="ns1blankspaceRadio">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioTaxDefaultY" name="radioTaxDefault" value="Y"/>Yes' +
 										'<br /><input type="radio" id="radioTaxDefaultN" name="radioTaxDefault" value="N"/>No' +
-										'</td></tr>';
+										'</td></tr>');
 							
-						aHTML.push('<tr id="trns1blankspaceTaxReportingFrequency" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceTaxReportingFrequency" class="ns1blankspace">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Value Added Tax Reporting Frequencies (eg GST)' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceGeneralTaxTaxReportingFrequency" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceGeneralTaxReportingFrequencyValue" class="ns1blankspaceRadio">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioTaxReportingFrequency4" name="radioTaxReportingFrequency" value="4"/>Never' +
 										'<br /><input type="radio" id="radioTaxReportingFrequency1" name="radioTaxReportingFrequency" value="1"/>Monthly' +
 										'<br /><input type="radio" id="radioTaxReportingFrequency2" name="radioTaxReportingFrequency" value="2"/>Quarterly' +
 										'<br /><input type="radio" id="radioTaxReportingFrequency3" name="radioTaxReportingFrequency" value="3"/>Annually' +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML.push('<tr id="trns1blankspaceTaxPayrollReportingFrequency" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceTaxPayrollReportingFrequency" class="ns1blankspace">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Payroll Tax Reporting Frequencies' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceGeneralTaxPayrollReportingFrequency" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceGeneralTaxPayrollReportingFrequencyValue" class="ns1blankspaceRadio">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioTaxPayrollReportingFrequency4" name="radioTaxPayrollReportingFrequency" value="4"/>Never' +
 										'<br /><input type="radio" id="radioTaxPayrollReportingFrequency1" name="radioTaxPayrollReportingFrequency" value="1"/>Monthly' +
 										'<br /><input type="radio" id="radioTaxPayrollReportingFrequency2" name="radioTaxPayrollReportingFrequency" value="2"/>Quarterly' +
 										'<br /><input type="radio" id="radioTaxPayrollReportingFrequency3" name="radioTaxPayrollReportingFrequency" value="3"/>Annually' +
-										'</td></tr>';
+										'</td></tr>');
+																																							
+						aHTML.push('</table>');					
 						
-						/*	
-						aHTML.push('<tr id="trns1blankspaceTaxBusinessReportingFrequency" class="ns1blankspace">' +
-										'<td id="tdns1blankspaceTaxBusinessReportingFrequency" class="ns1blankspace">' +
-										'Business Tax Reporting Frequencies' +
-										'</td></tr>' +
-										'<tr id="trns1blankspaceGeneralTaxBusinessReportingFrequency" class="ns1blankspaceText">' +
-										'<td id="tdns1blankspaceGeneralTaxBusinessReportingFrequencyValue" class="ns1blankspaceText">' +
-										'<input type="radio" id="radioTaxBusinessReportingFrequency4" name="radioTaxPayrollReportingFrequency" value="4"/>Never' +
-										'<br /><input type="radio" id="radioTaxBusinessReportingFrequency1" name="radioTaxBusinessReportingFrequency" value="1"/>Monthly' +
-										'<br /><input type="radio" id="radioTaxBusinessReportingFrequency2" name="radioTaxBusinessReportingFrequency" value="2"/>Quarterly' +
-										'<br /><input type="radio" id="radioTaxBusinessReportingFrequency3" name="radioTaxBusinessReportingFrequency" value="3"/>Annually' +
-										'</td></tr>';
-						*/				
-																																						
-						aHTML.push('</table>';					
-						
-						$('#tdns1blankspaceTaxColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceTaxColumn1').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
