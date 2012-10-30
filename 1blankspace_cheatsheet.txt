@@ -102,6 +102,7 @@ aHTML.push('<table class="ns1blankspaceContainer"><tbody>' +
 
 - Payroll
 - Setup financial
+- setup messaging - nice and simple summary & details - a good starting point
 
 
 

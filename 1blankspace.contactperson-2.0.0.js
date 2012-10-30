@@ -93,9 +93,9 @@ ns1blankspace.contactPerson =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to create a person contact.</td></tr>');
-							aHTML.push('</table>');
+							aHTML.push('<table id="ns1blankspaceMostLikely">' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create a person contact.</td></tr>' +
+											'</table>');
 						}
 						else
 						{
@@ -355,7 +355,6 @@ ns1blankspace.contactPerson =
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 						ns1blankspace.contactPerson.details();
 					});
-					
 					
 					$('#ns1blankspaceControlAddress').click(function(event)
 					{
