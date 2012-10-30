@@ -59,7 +59,7 @@ ns1blankspace.setup.automation =
 						
 						aHTML.push('<table>');
 						
-						aHTML.push('<tr><td class="interfaceMainColumn2Action" style="width:175px;">' +
+						aHTML.push('<tr><td class="ns1blankspaceMainColumn2Action" style="width:175px;">' +
 										'<a href="http://mydigitalstructure.com/gettingstarted_automation"' +
 										' target="_blank">Automation Getting Started</a>' +
 										'</td></tr>');
@@ -176,28 +176,27 @@ ns1blankspace.setup.automation =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											sElementId = 'ns1blankspaceViewBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspaceOptionsSetPosition(sElementId);
-											ns1blankspaceSearchStart(sElementId);
-											
-											var sParam = 'method=SETUP_AUTOMATION_SEARCH&quicksearch=' + sSearchText;
+											ns1blankspace.container.position(sElementId);
+											ns1blankspace.search.start(sElementId);
 
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/setup/?' + sParam,
+												url: ns1blankspace.util.endpointURI('SETUP_AUTOMATION_SEARCH'),
+												data: 'quicksearch=' + sSearchText,
 												dataType: 'json',
-												success: function(data) {interfaceSetupAutomationSearchShow(oParam, data)}
+												success: function(data) {ns1blankspace.setup.automation.search.process(oParam, data)}
 											});
 										}
 									};	
 								}
 
-					process:	function interfaceSetupAutomationSearchShow(oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
 									var iColumn = 0;
 									var aHTML = [];
@@ -206,12 +205,12 @@ ns1blankspace.setup.automation =
 										
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspaceSearchStop();
-										$('#divns1blankspaceViewportControlOptions').hide();
+										ns1blankspace.search.stop();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{
-										aHTML.push('<table class="interfaceSearchMedium">';
+										aHTML.push('<table class="ns1blankspaceSearchMedium">';
 										aHTML.push('<tbody>'
 											
 										$.each(oResponse.data.rows, function()
@@ -220,304 +219,300 @@ ns1blankspace.setup.automation =
 											
 											if (iColumn == 1)
 											{
-												aHTML.push('<tr class="interfaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
-											aHTML.push('<td class="interfaceSearch" id="' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
-															this.title + '</td>';
+															this.title + '</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML.push('</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML.push('</tbody></table>';
+										aHTML.push('</table>');
 
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										ns1blankspaceSearchStop();
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceSetupAutomationSearch(event.target.id, 1);
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.setup.automation.search.send(event.target.id, {source: 1});
 										});
-									}	
-											
+									}		
 								}
 				},
 
-	layout: 	function interfaceSetupAutomationViewport()
+	layout: 	function ()
 				{
-					
-					var aHTML = [];
-					
+						var aHTML = [];
 
-					aHTML.push('<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
-					aHTML.push('<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
-					aHTML.push('<tr id="trInterfaceViewportControlSummary" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-									'</tr>';
-									
-					aHTML.push('<tr id="trInterfaceViewportControlDetails" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-									'</tr>';
-					
-					aHTML.push('<tr id="trInterfaceViewportControlSchedule" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlSchedule" class="interfaceViewportControl">Schedule</td>' +
-									'</tr>';
-					
-					aHTML.push('<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlResponse" class="interfaceViewportControl">Response Action</td>' +
-									'</tr>';
-					
-					aHTML.push('<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlFormat" class="interfaceViewportControl">Formatting</td>' +
-									'</tr>';
-							
-					aHTML.push('<tr><td id="tdInterfaceViewportControlFormat" class="interfaceViewportControl">&nbsp;</td></tr>';
+					if (ns1blankspace.objectContext == -1)
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');		
+					}
+					else
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Summary</td></tr>');
 
-					// aHTML.push('<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									// '<td id="tdInterfaceViewportControlRun" class="interfaceViewportControl">Test Run</td>' +
-									// '</tr>';					
-							
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlSchedule" class="ns1blankspaceControl">' +
+										'Schedule</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlResponse" class="ns1blankspaceControl">' +
+										'Response</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlFormatting" class="ns1blankspaceControl">' +
+										'Formatting</td></tr>');
+					}	
+	
 					aHTML.push('</table>';					
 								
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
-					
+					$('#ns1blankspaceControl').html(aHTML.join(''));
+				
 					var aHTML = [];
 					
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSchedule" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainResponse" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainFormat" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainRun" class="ns1blankspaceControl"></div>';
+					
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 
-					aHTML.push('<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML.push('<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML.push('<div id="divInterfaceMainSchedule" class="divInterfaceViewportMain"></div>';
-					aHTML.push('<div id="divInterfaceMainResponse" class="divInterfaceViewportMain"></div>';
-					aHTML.push('<div id="divInterfaceMainFormat" class="divInterfaceViewportMain"></div>';
-					aHTML.push('<div id="divInterfaceMainRun" class="divInterfaceViewportMain"></div>';
-					
-					$('#divInterfaceMain').html(aHTML.join(''));
-						
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceSetupAutomationSummary();
-					});
-					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.setup.messaging.summary();
+					});	
+
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceSetupAutomationDetails();
-					});
-					
-					$('#tdInterfaceViewportControlSchedule').click(function(event)
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.setup.messaging.details();
+					});	
+				
+					$('#ns1blankspaceControlSchedule').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSchedule");
-						interfaceSetupAutomationSchedule();
-					});
+						ns1blankspace.show({selector: '#ns1blankspaceMainSchedule'});
+						ns1blankspace.setup.messaging.schedule();
+					});	
 					
-					$('#tdInterfaceViewportControlResponse').click(function(event)
+					$('#ns1blankspaceControlSchedule').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainResponse", true);
-						interfaceSetupAutomationResponse();
-					});
+						ns1blankspace.show({selector: '#ns1blankspaceMainResponse'});
+						ns1blankspace.setup.messaging.response();
+					});	
 					
-					$('#tdInterfaceViewportControlFormat').click(function(event)
+					$('#ns1blankspaceControlFormat').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainFormat");
-						interfaceSetupAutomationFormat();
-					});
-					
-					$('#tdInterfaceViewportControlRun').click(function(event)
+						ns1blankspace.show({selector: '#ns1blankspaceMainFormat'});
+						ns1blankspace.setup.messaging.format();
+					});	
+				
+					$('#ns1blankspaceControlRun').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainRun");
-						interfaceSetupAutomationRun();
+						ns1blankspace.show({selector: '#ns1blankspaceMainRun'});
+						ns1blankspace.setup.messaging.run();
 					});
 				},
 
-	show:		function interfaceSetupAutomationShow(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceSetupAutomationViewport();
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.setup.automation.layout();
 					
 					var aHTML = [];
 					
-					
 					if (oResponse.data.rows.length == 0)
 					{
-					
 						ns1blankspace.objectContextData = undefined;
 					
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find automation rule.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this automation rule.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{		
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
-						$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title);
 						
-						aHTML.push('<table id="tableInterfaceMainSummary" class="interfaceMain">';
-						aHTML.push('<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						$('#ns1blankspaceViewportControlAction').button({disabled: false});
+						$('#ns1blankspaceViewportControlActionOptions').button({disabled: false});
 						
-						$('#divInterfaceMainSummary').html(aHTML.join(''));
-						
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-						$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
-						
-						interfaceSetupAutomationSummary();
+						ns1blankspace.setup.automation.summary();
 					}	
 				},		
 		
-	summary:	function interfaceSetupAutomationSummary()
+	summary:	function ()
 				{
 					var aHTML = [];
-					
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
 						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find automation.</td></tr>';
 						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML.push('<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'</tr>' +
+									'</table>')				
 						
-						aHTML.push('<tr><td id="tdInterfaceMainSummaryID" class="interfaceMainSummary">Automation ID</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryID" class="interfaceMainSummaryValue">' +
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+
+						aHTML.push('<table class="ns1blankspaceColumn1">');
+						
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Automation ID</td></tr>' +
+										'<tr><td class="ns1blankspaceMainSummary">' +
 										ns1blankspace.objectContextData.id +
-										'</td></tr>';
+										'</td></tr>');
 										
-						aHTML.push('<tr><td id="tdInterfaceMainSummaryAutomationEndpoint" class="interfaceMainSummary">Endpoint</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryAutomationEndpoint" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Endpoint</td></tr>' +
+										'<tr><td class="ns1blankspaceMainSummary">' +
 										ns1blankspace.objectContextData.endpoint +
-										'</td></tr>';
+										'</td></tr>');
 										
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainSummaryColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
 							
 						
-						aHTML.push('<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2">';
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
-						aHTML.push('<tr><td id="tdInterfaceMainSummaryTask3" class="interfaceRowSelect">' +
+						aHTML.push('<tr><td class="ns1blankspace">' +
 										'<a href="/ondemand/setup/?method=SETUP_AUTOMATION_RUN&ct=text/html&id=' + ns1blankspace.objectContext + '"' +
-										' target="_blank" id="aInterfaceMainSummaryAutomationTestRun">Test Run</a>' +
-										'</td></tr>';
+										' target="_blank" id="ns1blankspaceMainSummaryAutomationTestRun">Test Run</a>' +
+										'</td></tr>');
 														
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainSummaryColumn2').html(aHTML.join(''));		
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));		
 					}	
 				},
 
-	details:	function interfaceSetupAutomationDetails()
+	details:	function ns1blankspaceSetupAutomationDetails()
 				{
 					var aHTML = [];
 					
-					
-					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						aHTML.push('<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
-					
-						aHTML.push('<tr id="trInterfaceMainDetailsTitle" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsTitle" class="interfaceMain">' +
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
+						
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Title' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsTitleValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsTitleValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsTitle" class="inputInterfaceMainText">' +
-										'</td></tr>';
-						
-						aHTML.push('<tr id="trInterfaceMainDetailsStatus" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsStatus" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceText">' +
+										'</td></tr>');			
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Status' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsStatus" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsStatusValue" class="interfaceMainRadio">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Disabled' +
 										'<br /><input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Enabled' +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML.push('<tr id="trInterfaceMainDetailsEndpoint" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsEndpoint" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Endpoint' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsEndpointValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsEndpointValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsEndpoint" class="inputInterfaceMainText">' +
-										'</td></tr>';
-						
-						aHTML.push('<tr id="trInterfaceMainDetailsURL" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsURL" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input id="ins1blankspaceDetailsEndpoint" class="ns1blankspaceText">' +
+										'</td></tr>');
+					
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'URL' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsURL" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDetailsURLValue" class="interfaceMainTextMulti">' +
-										'<textarea style="height: 50px;" rows="3" cols="35" onDemandType="TEXTMULTI" id="inputInterfaceMainDetailsURL"' +
-										' class="inputInterfaceMainTextMultiLarge"></textarea>' +
-										'</td></tr>';
-									
-						aHTML.push('<tr id="trInterfaceMainDetailsURLMethod" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsURLMethod" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea style="height: 50px;" rows="3" cols="35" id="ns1blankspaceDetailsURL"' +
+										' class="ns1blankspaceTextMultiLarge"></textarea>' +
+										'</td></tr>');
+					
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'URL Method' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsURLMethodValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsURLMethodValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsURLMethod" class="inputInterfaceMainText">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trInterfaceMainDetailsPostData" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsPostData" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsURLMethod" class="ns1blankspaceMainText">' +
+										'</td></tr>');
+									
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'POST Data' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsPostData" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDetailsPostDataValue" class="interfaceMainTextMulti">' +
-										'<textarea style="height: 250px;" rows="10" cols="35" onDemandType="TEXTMULTI" id="inputInterfaceMainDetailsPostData"' +
-										' class="inputInterfaceMainTextMultiLarge"></textarea>' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trInterfaceMainDetailsInContext" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsInContext" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea style="height: 50px;" rows="3" cols="35" id="ns1blankspaceDetailsPostData"' +
+										' class="ns1blankspaceTextMultiLarge"></textarea>' +
+										'</td></tr>');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'In context of user' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsInContextValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainDetailsInContextValue" class="interfaceMainRadio">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioInContextN" name="radioInContext" value="N"/>No' +
 										'<br /><input type="radio" id="radioInContextY" name="radioInContext" value="Y"/>Yes' +
-										'</td></tr>';
-										
-						aHTML.push('</table>';					
+										'</td></tr>');
+														
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMainDetails').html(aHTML.join(''));
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData == undefined)
 						{	
-							$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
-							$('#inputInterfaceMainDetailsEndpoint').val(ns1blankspace.objectContextData.endpoint);
-							$('#inputInterfaceMainDetailsURL').val(ns1blankspace.objectContextData.url);
-							$('#inputInterfaceMainDetailsURLMethod').val(ns1blankspace.objectContextData.urlmethod);
-							$('#inputInterfaceMainDetailsPostData').val(ns1blankspace.objectContextData.postdata);
-							
+							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.title);
+							$('#ns1blankspaceDetailsEndpoint').val(ns1blankspace.objectContextData.endpoint);
+							$('#ns1blankspaceDetailsURL').val(ns1blankspace.objectContextData.url);
+							$('#ns1blankspaceDetailsURLMethod').val(ns1blankspace.objectContextData.urlmethod);
+							$('#ns1blankspaceDetailsPostData').val(ns1blankspace.objectContextData.postdata);
 							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 							$('[name="radioInContext"][value="' + ns1blankspace.objectContextData.incontext + '"]').attr('checked', true);
 						}
@@ -529,65 +524,57 @@ ns1blankspace.setup.automation =
 					}	
 				},
 
-	schedule:	function interfaceSetupAutomationSchedule()
+	schedule:	function ()
 				{
-					var aHTML = [];
-					
-					
-					if ($('#divInterfaceMainSchedule').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainSchedule').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainSchedule').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainSchedule').attr('data-loading', '');
 						
-						aHTML.push('<table id="tableInterfaceMainSchedule" class="interfaceMainDetails">';
-						aHTML.push('<tr id="trInterfaceMainScheduleRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainScheduleColumn1" class="interfaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdInterfaceMainScheduleColumn2" class="interfaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceScheduleColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceScheduleColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
 						
-						$('#divInterfaceMainSchedule').html(aHTML.join(''));
-						
+						$('#ns1blankspaceMainSchedule').html(aHTML.join(''));
+										
 						var aHTML = [];
 						
+						aHTML.push('<table class="ns1blankspaceContainer">');
 					
-						aHTML.push('<table id="tableInterfaceMainScheduleColumn1" class="interfaceMain">';
-					
-						aHTML.push('<tr id="trInterfaceMainScheduleTimeHour" class="interfaceMain">' +
-										'<td id="tdInterfaceMainScheduleTimeHour" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Time (24 Hour)' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainScheduleTimeHourValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainScheduleTimeHourValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainScheduleTimeHour" class="inputInterfaceMainText">' +
-										'</td></tr>';
-					
-						aHTML.push('<tr id="trInterfaceMainScheduleTimeMinute" class="interfaceMain">' +
-										'<td id="tdInterfaceMainScheduleTimeMinute" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceScheduleTimeHour" class="ns1blankspaceMainText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Time (Minute)' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainScheduleTimeMinuteValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainScheduleTimeMinuteValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainScheduleTimeMinute" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceScheduleTimeMinute" class="ns1blankspaceMainText">' +
+										'</td></tr>');
+					
+						aHTML.push('</table>');					
 						
-										
-						aHTML.push('</table>';					
-						
-						$('#tdInterfaceMainScheduleColumn1').html(aHTML.join(''));
+						$('#s1blankspaceScheduleColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
-						
-							
-						aHTML.push('<table id="tableInterfaceMainScheduleColumn2" class="interfaceMain">';
 
-						aHTML.push('<tr id="trInterfaceMainScheduleType" class="interfaceMain">' +
-										'<td id="tdInterfaceMainScheduleType" class="interfaceMain">' +
+						aHTML.push('<table class="ns1blankspaceContainer ns1blankspaceColumn2">');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Type (When)' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainScheduleType" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainScheduleTypeValue" class="interfaceMainRadio">' +
+										'<tr class="ns1blankspaceRadio">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioScheduleType8" name="radioScheduleType" value="8"/>Every day' +
 										'<br /><input type="radio" id="radioScheduleType7" name="radioScheduleType" value="7"/>Weekdays' +
 										'<br /><input type="radio" id="radioScheduleType0" name="radioScheduleType" value="0"/>Sunday' +
@@ -597,16 +584,16 @@ ns1blankspace.setup.automation =
 										'<br /><input type="radio" id="radioScheduleType4" name="radioScheduleType" value="4"/>Thursday' +
 										'<br /><input type="radio" id="radioScheduleType5" name="radioScheduleType" value="5"/>Friday' +
 										'<br /><input type="radio" id="radioScheduleType6" name="radioScheduleType" value="6"/>Saturday' +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainScheduleColumn2').html(aHTML.join(''));
+						$('#tdns1blankspaceMainScheduleColumn2').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData == undefined)
 						{
-							$('#inputInterfaceMainScheduleTimeHour').val(ns1blankspace.objectContextData.scheduletimehour);
-							$('#inputInterfaceMainScheduleTimeMinute').val(ns1blankspace.objectContextData.scheduletimeminute);
+							$('#ns1blankspaceMainScheduleTimeHour').val(ns1blankspace.objectContextData.scheduletimehour);
+							$('#ns1blankspaceMainScheduleTimeMinute').val(ns1blankspace.objectContextData.scheduletimeminute);
 							$('[name="radioScheduleType"][value="' + ns1blankspace.objectContextData.scheduletype + '"]').attr('checked', true);
 						}
 						else
@@ -616,78 +603,74 @@ ns1blankspace.setup.automation =
 					}	
 				},
 
-	response: 	function interfaceSetupAutomationResponse()
+	response: 	function ()
 				{
 					var aHTML = [];
 					
-
-					if ($('#divInterfaceMainResponse').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainResponse').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainResponse').attr('onDemandLoading', '');
-								
-						aHTML.push('<table id="tableInterfaceMainResponse" class="interfaceMainDetails">';
-						aHTML.push('<tr id="trInterfaceMainResponseRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainResponseColumn1" class="interfaceMainColumn1Large">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						$('#ns1blankspaceMainResponse').attr('data-loading', '');
 						
-						$('#divInterfaceMainResponse').html(aHTML.join(''));
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceResponseColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceResponseColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');
 						
 						var aHTML = [];
 						
+						aHTML.push('<table class="ns1blankspaceContainer">');
 					
-						aHTML.push('<table id="tableInterfaceMainResponseColumn1" class="interfaceMain">';
-					
-						aHTML.push('<tr id="trInterfaceMainResponseAction" class="interfaceMain">' +
-										'<td id="tdInterfaceMainResponseAction" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Response Action' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainResponseActionValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainResponseActionValue" class="interfaceMainRadio">' +
-										'<input type="radio" id="radioResponseAction1" name="radioResponseAction" value="1"/>Email to network group' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioResponseAction1" name="radioResponseAction" value="1"/>' +
+												'Email to network group' +
 										'<br /><input type="radio" id="radioResponseAction3" name="radioResponseAction" value="3"/>' +
 												'Send to URL' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trInterfaceMainResponseActionContext" class="interfaceMain">' +
-										'<td id="tdInterfaceMainResponseActionContext" class="interfaceMain">' +
-										'Action Context (eg Network Group ID' +
-										'</td></tr>' +
-										'<tr id="trInterfaceMainResponseActionContextValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainResponseActionContextValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainResponseActionContext" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'</td></tr>');
 
-						aHTML.push('<tr id="trInterfaceMainResponseActionFrom" class="interfaceMain">' +
-										'<td id="tdInterfaceMainResponseActionFrom" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Action Context (eg Network Group ID)' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceResponseActionContext" class="ns1blankspaceMainText">' +
+										'</td></tr>');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Action From (email)' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainResponseActionFromValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainResponseActionFromValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainResponseActionFrom" class="inputInterfaceMainText">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trInterfaceMainResponseActionURL" class="interfaceMain">' +
-										'<td id="tdInterfaceMainResponseActionURL" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceResponseActionFrom" class="ns1blankspaceMainText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Response Action URL' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainResponseActionURL" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainResponseActionURLValue" class="interfaceMainTextMulti">' +
-										'<textarea style="height: 50px;" rows="3" cols="35" id="inputInterfaceMainResponseActionURL"' +
-										' class="inputInterfaceMainTextMultiLarge"></textarea>' +
-										'</td></tr>';	
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceResponseActionURL" class="ns1blankspaceMainText">' +
+										'</td></tr>');
 										
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainResponseColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceResponseColumn1').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData == undefined)
 						{
 							$('[name="radioResponseAction"][value="' + ns1blankspace.objectContextData.responseaction + '"]').attr('checked', true);
-							$('#inputInterfaceMainResponseActionContext').val(ns1blankspace.objectContextData.responseactioncontext);
-							$('#inputInterfaceMainResponseActionFrom').val(ns1blankspace.objectContextData.responseactionfrom);
-							$('#inputInterfaceMainResponseActionURL').val(ns1blankspace.objectContextData.responseactionurl);
+							$('#ns1blankspaceResponseActionContext').val(ns1blankspace.objectContextData.responseactioncontext);
+							$('#ns1blankspaceResponseActionFrom').val(ns1blankspace.objectContextData.responseactionfrom);
+							$('#ns1blankspaceResponseActionURL').val(ns1blankspace.objectContextData.responseactionurl);
 						}
 						else
 						{
@@ -696,116 +679,129 @@ ns1blankspace.setup.automation =
 					}	
 				},
 
-	format:		function interfaceSetupAutomationFormat()
+	format:		function ns1blankspaceSetupAutomationFormat()
 				{
 					var aHTML = [];
 					
-
-					if ($('#divInterfaceMainFormat').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainFormat').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainFormat').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainFormat').attr('data-loading', '');
+						
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceFormatColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceFormatColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceContainer">');
 					
-						aHTML.push('<table id="tableInterfaceMainFormatColumn1" class="interfaceMain">';
-						
-						aHTML.push('<tr id="trInterfaceMainFormatCaption" class="interfaceMain">' +
-										'<td id="tdInterfaceMainFormatCaption" class="interfaceMain">' +
-										'Captions' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Caption' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainFormatCaption" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainFormatCaptionValue" class="interfaceMainTextMulti">' +
-										'<textarea style="height: 50px;" rows="3" cols="35" id="inputInterfaceMainFormatCaption"' +
-										' class="inputInterfaceMainTextMultiLarge"></textarea>' +
-										'</td></tr>';			
-						
-						aHTML.push('<tr id="trInterfaceMainFormatCSSClass" class="interfaceMain">' +
-										'<td id="tdInterfaceMainFormatCSSClass" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea style="height: 50px;" rows="3" cols="35" id="ns1blankspaceFormatCaption"' +
+												' class="ns1blankspaceTextMultiLarge"></textarea>' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'CSS Class' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainFormatCSSClassValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainFormatCSSClassValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainFormatCSSClass" class="inputInterfaceMainText">' +
-										'</td></tr>';
-								
-						aHTML.push('<tr id="trInterfaceMainFormatXHTMLStyle" class="interfaceMain">' +
-										'<td id="tdInterfaceMainFormatXHTMLStyle" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceFormatCSSClass" class="ns1blankspaceMainText">' +
+										'</td></tr>');
+					
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'XHTML Style' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainFormatXHTMLStyle" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainFormatXHTMLStyleValue" class="interfaceMainTextMulti">' +
-										'<textarea style="height: 50px;" rows="3" cols="35" id="inputInterfaceMainFormatXHTMLStyle"' +
-										' class="inputInterfaceMainTextMultiLarge"></textarea>' +
-										'</td></tr>';		
-
-						aHTML.push('<tr id="trInterfaceMainFormatXHTMLAHref" class="interfaceMain">' +
-										'<td id="tdInterfaceMainFormatXHTMLAHref" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea style="height: 50px;" rows="3" cols="35" id="ns1blankspaceFormatXHTMLStyle"' +
+												' class="ns1blankspaceTextMultiLarge"></textarea>' +
+										'</td></tr>');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'XHTML Href' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainFormatXHTMLAHref" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainFormatXHTMLAHrefValue" class="interfaceMainTextMulti">' +
-										'<textarea style="height: 50px;" rows="3" cols="35" id="inputInterfaceMainFormatXHTMLAHref"' +
-										' class="inputInterfaceMainTextMultiLarge"></textarea>' +
-										'</td></tr>';	
-										
-						aHTML.push('</table>';					
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea style="height: 50px;" rows="3" cols="35" id="ns1blankspaceFormatXHTMLAHref"' +
+												' class="ns1blankspaceTextMultiLarge"></textarea>' +
+										'</td></tr>');
+
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMainFormat').html(aHTML.join(''));
+						$('#ns1blankspaceFormat').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData == undefined)
 						{
-							$('#inputInterfaceMainFormatCaption').val(ns1blankspace.objectContextData.caption);
-							$('#inputInterfaceMainFormatCSSClass').val(ns1blankspace.objectContextData.cssclass);
-							$('#inputInterfaceMainFormatXHTMLStyle').val(ns1blankspace.objectContextData.xhtmlstyle);
-							$('#inputInterfaceMainFormatXHTMLAHref').val(ns1blankspace.objectContextData.xhtmlahref);
+							$('#ns1blankspaceFormatCaption').val(ns1blankspace.objectContextData.caption);
+							$('#ns1blankspaceFormatCSSClass').val(ns1blankspace.objectContextData.cssclass);
+							$('#ns1blankspaceFormatXHTMLStyle').val(ns1blankspace.objectContextData.xhtmlstyle);
+							$('#ns1blankspaceFormatXHTMLAHref').val(ns1blankspace.objectContextData.xhtmlahref);
 						}
 					}	
-				}
+				},
 
+	new: 		function ns1blankspaceSetupAutomationNew()
+				{
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.setup.automation.layout();
+					ns1blankspace.show({selector: '#divns1blankspaceMainDetails'});
+					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
+					ns1blankspace.setup.automation.details();
+				},
+							
 	save: 		{
-					send:		function interfaceSetupAutomationSave(oResponse)
+					send:		function (oResponse)
 								{
 									if (oResponse == undefined)
 									{
-										var sParam = 'method=SETUP_AUTOMATION_MANAGE';
-										var sData = '';
+										var sData = 'id=' + (ns1blankspace.objectContext != -1 ? ns1blankspace.objectContext : '');	
 										
-										if (giSetupContext != -1)
+										if ($('#ns1blankspaceMainDetails').html() != '')
 										{
-											sParam += '&id=' + giSetupContext	
-										}	
-										
-										if ($('#divInterfaceMainDetails').html() != '')
-										{
-											sData += '&title=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsTitle').val());
-											sData += '&endpoint=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsEndpoint').val());
-											sData += '&url=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsURL').val());
-											sData += '&urlmethod=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsURLMethod').val());
-											sData += '&postdata=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPostData').val());
-											sData += '&status=' + $('input[name="radioStatus"]:checked').val();
-											sData += '&incontext=' + $('input[name="radioInContext"]:checked').val();
+											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceMainDetailsTitle').val());
+											sData += '&endpoint=' + ns1blankspace.util.fs($('#ns1blankspaceMainDetailsEndpoint').val());
+											sData += '&url=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsURL').val());
+											sData += '&urlmethod=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsURLMethod').val());
+											sData += '&postdata=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPostData').val());
+											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
+											sData += '&incontext=' + ns1blankspace.util.fs($('input[name="radioInContext"]:checked').val());
 										};
 
-										if ($('#divInterfaceMainSchedule').html() != '')
+										if ($('#ns1blankspaceMainSchedule').html() != '')
 										{
-											sData += '&scheduletimehour=' + ns1blankspace.util.fs($('#inputInterfaceMainScheduleTimeHour').val());
-											sData += '&scheduletimeminute=' + ns1blankspace.util.fs($('#inputInterfaceMainScheduleTimeMinute').val());
-											sData += '&scheduletype=' + $('input[name="radioScheduleType"]:checked').val();
+											sData += '&scheduletimehour=' + ns1blankspace.util.fs($('#ns1blankspaceScheduleTimeHour').val());
+											sData += '&scheduletimeminute=' + ns1blankspace.util.fs($('#ns1blankspaceScheduleTimeMinute').val());
+											sData += '&scheduletype=' + ns1blankspace.util.fs($('input[name="radioScheduleType"]:checked').val());
 										};
 										
-										if ($('#divInterfaceMainResponse').html() != '')
+										if ($('#ns1blankspaceMainResponse').html() != '')
 										{
-											sData += '&responseactioncontext=' + ns1blankspace.util.fs($('#inputInterfaceMainResponseActionContext').val());
-											sData += '&responseactionurl=' + ns1blankspace.util.fs($('#inputInterfaceMainResponseActionURL').val());
-											sData += '&responseactionfrom=' + ns1blankspace.util.fs($('#inputInterfaceMainResponseActionFrom').val());
-											sData += '&responseaction=' + $('input[name="radioResponseAction"]:checked').val();
+											sData += '&responseactioncontext=' + ns1blankspace.util.fs($('#ns1blankspaceResponseActionContext').val());
+											sData += '&responseactionurl=' + ns1blankspace.util.fs($('#ns1blankspaceResponseActionURL').val());
+											sData += '&responseactionfrom=' + ns1blankspace.util.fs($('#ns1blankspaceResponseActionFrom').val());
+											sData += '&responseaction=' + ns1blankspace.util.fs($('input[name="radioResponseAction"]:checked').val());
 											
 										};
 
-										if ($('#divInterfaceMainFormat').html() != '')
+										if ($('#ns1blankspaceMainFormat').html() != '')
 										{
-											sData += '&caption=' + ns1blankspace.util.fs($('#inputInterfaceMainFormatCaption').val());
-											sData += '&cssclass=' + ns1blankspace.util.fs($('#inputInterfaceMainFormatCSSClass').val());
-											sData += '&xhtmlstyle=' + ns1blankspace.util.fs($('#inputInterfaceMainFormatXHTMLStyle').val());
-											sData += '&xhtmlahref=' + ns1blankspace.util.fs($('#inputInterfaceMainFormatXHTMLAHref').val());
+											sData += '&caption=' + ns1blankspace.util.fs($('#ns1blankspaceFormatCaption').val());
+											sData += '&cssclass=' + ns1blankspace.util.fs($('#ns1blankspaceFormatCSSClass').val());
+											sData += '&xhtmlstyle=' + ns1blankspace.util.fs($('#ns1blankspaceFormatXHTMLStyle').val());
+											sData += '&xhtmlahref=' + ns1blankspace.util.fs($('#ns1blankspaceFormatXHTMLAHref').val());
 										};
 
 										if (sData != '')
@@ -815,39 +811,28 @@ ns1blankspace.setup.automation =
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/setup/?' + sParam,
+												url: ns1blankspace.util.endpointURI('SETUP_AUTOMATION_MANAGE'),
 												data: sData,
 												dataType: 'json',
-												success: interfaceSetupAutomationSave
+												success: ns1blankspace.setup.automation.save.send
 											});
 											
 										}
 										else
 										{
-											ns1blankspaceStatus('Saved');
+											ns1blankspace.status.message('Saved');
 										}	
 									}	
 									else
 									{
-										ns1blankspaceStatus('Saved')
+										ns1blankspace.status.message('Saved')
 										
-										if (giSetupContext == -1)
+										if (ns1blankspace.objectContext == -1)
 										{
-											giSetupContext = oResponse.id;
+											ns1blankspace.objectContext = oResponse.id;
 											ns1blankspace.inputDetected = false;
-											interfaceSetupAutomationSearch('-' + giSetupContext, {source: 1});
+											ns1blankspace.setup.automation.search.send('-' + ns1blankspace.objectContext, {source: 1});
 										}	
 									}
 								}
-				},				
-
-	new: 		function interfaceSetupAutomationNew()
-				{
-					giSetupContext = -1;
-					goSetupContextXML = undefined;
-					interfaceSetupAutomationViewport();
-					ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					interfaceSetupAutomationDetails();
 				}

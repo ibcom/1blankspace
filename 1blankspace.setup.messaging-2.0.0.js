@@ -259,10 +259,9 @@ ns1blankspace.setup.messaging =
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>';
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
@@ -363,7 +362,6 @@ ns1blankspace.setup.messaging =
 
 	details:	function ns1blankspaceSetupMessagingDetails()
 				{
-
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
