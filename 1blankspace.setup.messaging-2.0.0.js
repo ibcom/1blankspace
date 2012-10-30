@@ -78,7 +78,7 @@ ns1blankspace.setup.messaging =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table>' +
-											'<tr><td class="ns1blankspaceNothing">Click New to create a IMAP messaging account.</td></tr>' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create an IMAP messaging account.</td></tr>' +
 											'</table>');
 						}
 						else
@@ -297,7 +297,6 @@ ns1blankspace.setup.messaging =
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 					
-
 						var sContext = ns1blankspace.objectContextData.email;
 						var aContext = sContext.split("@");
 						
