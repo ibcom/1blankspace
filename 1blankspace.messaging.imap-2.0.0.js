@@ -114,23 +114,22 @@ ns1blankspace.messaging.imap =
 					}
 					
 					var aHTML = [];
-					var h = -1;
-
-					aHTML[++h] = '<div id="divInterfaceMainInbox" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainEdit" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainActions" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainActionsSent" class="divInterfaceViewportMain"></div>';
 					
-					$('#divInterfaceMain').html(aHTML.join(''));
+					aHTML.push('<div id="divns1blankspaceMainInbox" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainEdit" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainActions" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainAttachments" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainActionsSent" class="divns1blankspaceViewportMain"></div>';
+					
+					$('#divns1blankspaceMain').html(aHTML.join(''));
 					
 					ns1blankspace.messaging.emailAccounts.length = 0;
 					
-					if (bShowHome) {interfaceMessagingHomeShow(oParam)};
+					if (bShowHome) {ns1blankspaceMessagingHomeShow(oParam)};
 				},
 
-	check:		function interfaceMessagingCheckForNew(oParam, oResponse)
+	check:		function ns1blankspaceMessagingCheckForNew(oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -142,17 +141,17 @@ ns1blankspace.messaging.imap =
 							type: 'POST',
 							url: '/ondemand/messaging/?' + sParam,
 							dataType: 'json',
-							success: function(data) {interfaceMessagingCheckForNew(oParam, data)}
+							success: function(data) {ns1blankspaceMessagingCheckForNew(oParam, data)}
 						});
 					}
 					else
 					{
 						ns1blankspace.messaging.emailNewCount = oResponse.newrows;
-						$('#interfaceMainHeaderRefresh').html('Refresh (' + ns1blankspace.messaging.emailNewCount + ')')	
+						$('#ns1blankspaceMainHeaderRefresh').html('Refresh (' + ns1blankspace.messaging.emailNewCount + ')')	
 					}
 				},			
 
-	home:		function interfaceMessagingHomeShow(oParam, oResponse)
+	home:		function ns1blankspaceMessagingHomeShow(oParam, oResponse)
 				{
 					var bAutoShow = true;
 
@@ -162,28 +161,28 @@ ns1blankspace.messaging.imap =
 					}	
 					
 					ns1blankspaceViewportDestination({
-							newDestination: 'interfaceMessagingIMAPMasterViewport();',
+							newDestination: 'ns1blankspaceMessagingIMAPMasterViewport();',
 							move: false
 							})		
 							
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					
 					if (ns1blankspace.messaging.emailAccounts.length == 0)
 					{
 						if (oResponse == undefined)
 						{
 							var aHTML = [];
-							var h = -1;
+							
 										
-							aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-							aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-											'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
+							aHTML.push('<table id="tablens1blankspaceViewportMain" class="ns1blankspaceViewportMain">';
+							aHTML.push('<tr id="trns1blankspaceViewportMain" class="ns1blankspaceViewportMain">' +
+											'<td id="tdns1blankspaceProjectHomeMostLikely" class="ns1blankspaceViewportMain">' +
 											'' +  
 											'</td>' +
 											'</tr>';
-							aHTML[++h] = '</table>';					
+							aHTML.push('</table>';					
 							
-							$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+							$('#divns1blankspaceViewportControl').html(ns1blankspace.xhtml.loading);
 							
 							var sParam = 'method=MESSAGING_EMAIL_ACCOUNT_SEARCH';
 							
@@ -196,27 +195,27 @@ ns1blankspace.messaging.imap =
 								type: 'POST',
 								url: '/ondemand/messaging/?' + sParam,
 								dataType: 'json',
-								success: function(data) {interfaceMessagingHomeShow(oParam, data)}
+								success: function(data) {ns1blankspaceMessagingHomeShow(oParam, data)}
 							});
 						}
 						else
 						{
 							var aHTML = [];
-							var h = -1;
+							
 										
-							aHTML[++h] = '<table>';
-							aHTML[++h] = '<tr>' +
+							aHTML.push('<table>';
+							aHTML.push('<tr>' +
 											'<td id="ns1blankspaceViewportMessagingEmailLarge" class="ns1blankspaceViewportImageLarge">' +
 											'&nbsp;' + 
 											'</td>' +
 											'</tr>';
-							aHTML[++h] = '</table>';		
+							aHTML.push('</table>';		
 							
 							ns1blankspace.messaging.emailAccounts.length = 0;
 							
 							if (oResponse.data.rows.length != 0)
 							{
-								aHTML[++h] = '<table style="padding-top:0px;" id="tableInterfaceMessagingAccounts" class="interfaceViewportControl">';
+								aHTML.push('<table style="padding-top:0px;" id="tablens1blankspaceMessagingAccounts" class="ns1blankspaceViewportControl">';
 								
 								$.each(oResponse.data.rows, function(index)
 								{
@@ -240,9 +239,9 @@ ns1blankspace.messaging.imap =
 									if (aDescription.length > 0) {sDescription = aDescription[0]}	
 									
 									
-									aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-										'<td id="interfaceMessaging-' + this.id + '" ' +
-												'class="interfaceViewportControl"' +
+									aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+										'<td id="ns1blankspaceMessaging-' + this.id + '" ' +
+												'class="ns1blankspaceViewportControl"' +
 												' title="' + this.email + '">' +
 												sDescription +
 												'</td>' +
@@ -250,59 +249,59 @@ ns1blankspace.messaging.imap =
 										
 									if (ns1blankspace.option.messagingEmailShowCount)
 									{	
-										aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceMessagingCount-' + this.id + '" ' +
-												' class="interfaceViewportControl interfaceViewportControlSub" title="Including those marked to be removed.">' +
+										aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceMessagingCount-' + this.id + '" ' +
+												' class="ns1blankspaceViewportControl ns1blankspaceViewportControlSub" title="Including those marked to be removed.">' +
 												this.count + ' emails<br />' +
 												'</td>' +
 										'</tr>';		
 									}	
 								});
 								
-								aHTML[++h] = '<tr>' +
+								aHTML.push('<tr>' +
 										'<td>&nbsp;</td>' +
 										'</tr>';		
 								
-								aHTML[++h] = '</tbody></table>';
+								aHTML.push('</tbody></table>';
 								
-								aHTML[++h] = '<table id="tableInterfaceMessagingEmailViewport" cellspacing=0 cellpadding=0>';
-								aHTML[++h] = '<tr><td id="tdInterfaceMessagingEmailViewport"></td></tr>';
-								aHTML[++h] = '</table>';
+								aHTML.push('<table id="tablens1blankspaceMessagingEmailViewport" cellspacing=0 cellpadding=0>';
+								aHTML.push('<tr><td id="tdns1blankspaceMessagingEmailViewport"></td></tr>';
+								aHTML.push('</table>';
 								
 							}
 							else
 							{
-								aHTML[++h] = '<table id="tableInterfaceMessagingEmailViewport">';
-								aHTML[++h] = '<tr><td id="tdInterfaceMessagingEmailViewport">No accounts configured.</td></tr>';
-								aHTML[++h] = '</table>';
+								aHTML.push('<table id="tablens1blankspaceMessagingEmailViewport">';
+								aHTML.push('<tr><td id="tdns1blankspaceMessagingEmailViewport">No accounts configured.</td></tr>';
+								aHTML.push('</table>';
 							}
 							
-							$('#divInterfaceViewportControl').html(aHTML.join(''));	
+							$('#divns1blankspaceViewportControl').html(aHTML.join(''));	
 						
-							$('td.interfaceViewportControl').click(function(event)
+							$('td.ns1blankspaceViewportControl').click(function(event)
 							{
-								ns1blankspaceMainViewportShow("#divInterfaceMainInbox");
+								ns1blankspaceMainViewportShow("#divns1blankspaceMainInbox");
 								
 								var sID = event.target.id
 								var aID = sID.split('-');
 								if (ns1blankspace.messaging.account != aID[1])
 								{
-									interfaceMessagingInboxSearch({xhtmlElementID: event.target.id, source: 1, newOnly: false, repaginate:true});
+									ns1blankspaceMessagingInboxSearch({xhtmlElementID: event.target.id, source: 1, newOnly: false, repaginate:true});
 								}	
 							});
 							
 							if (ns1blankspace.messaging.account != undefined && bAutoShow)
 							{
-								$('#interfaceMessaging-' + ns1blankspace.messaging.account).addClass('interfaceViewportControlHighlight');
-								ns1blankspaceMainViewportShow("#divInterfaceMainInbox");
-								interfaceMessagingInboxSearch({xhtmlElementID: '-' + ns1blankspace.messaging.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+								$('#ns1blankspaceMessaging-' + ns1blankspace.messaging.account).addClass('ns1blankspaceViewportControlHighlight');
+								ns1blankspaceMainViewportShow("#divns1blankspaceMainInbox");
+								ns1blankspaceMessagingInboxSearch({xhtmlElementID: '-' + ns1blankspace.messaging.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 							}	
 						}
 					}	
 				},
 
 	inbox: 		{				
-					show:		function interfaceMessagingInboxSearch(oParam, oResponse)
+					show:		function ns1blankspaceMessagingInboxSearch(oParam, oResponse)
 								{
 									var sXHTMLElementID;
 									var bNew;
@@ -326,7 +325,7 @@ ns1blankspace.messaging.imap =
 									
 									if (iStart == undefined && bNew == undefined) {bNew = true}
 									
-									$('#tdInterfaceMessagingEmailViewport').html('');
+									$('#tdns1blankspaceMessagingEmailViewport').html('');
 									
 									if (sXHTMLElementID != undefined)
 									{
@@ -340,7 +339,7 @@ ns1blankspace.messaging.imap =
 										ns1blankspace.messaging.account = aXHTMLElementID[1];
 									}	
 									
-									if (bRefresh) {interfaceMessagingCheckForNew()}
+									if (bRefresh) {ns1blankspaceMessagingCheckForNew()}
 									
 									if (bRepaginate)
 									{
@@ -348,18 +347,18 @@ ns1blankspace.messaging.imap =
 										ns1blankspace.messaging.emailLastPage = 1;
 										
 										var aHTML = [];
-										var h = -1;
+										
 									
-										aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-										aHTML[++h] = '<tbody>'
-										aHTML[++h] = '<tr><td style="height:20px;" id="interfaceMessagingInboxHeader">' + ns1blankspace.xhtml.loading + '</td></tr>';
-										aHTML[++h] = '<tr><td id="interfaceMessagingInbox"></td></tr>';
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
+										aHTML.push('<tbody>'
+										aHTML.push('<tr><td style="height:20px;" id="ns1blankspaceMessagingInboxHeader">' + ns1blankspace.xhtml.loading + '</td></tr>';
+										aHTML.push('<tr><td id="ns1blankspaceMessagingInbox"></td></tr>';
+										aHTML.push('</tbody></table>';
 
-										$('#divInterfaceMainInbox').html(aHTML.join(''));
+										$('#divns1blankspaceMainInbox').html(aHTML.join(''));
 										
 										if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
-								        if (ns1blankspace.messaging.autoCheck) {ns1blankspace.timer.messaging = setInterval("interfaceMessagingCheckForNew()", ns1blankspace.option.messagingCheckForNew)};
+								        if (ns1blankspace.messaging.autoCheck) {ns1blankspace.timer.messaging = setInterval("ns1blankspaceMessagingCheckForNew()", ns1blankspace.option.messagingCheckForNew)};
 									}	
 										
 									if (ns1blankspace.messaging.account != undefined && oResponse == undefined && bRefresh)
@@ -372,7 +371,7 @@ ns1blankspace.messaging.imap =
 										oSearch.addSummaryField('count(*) cachecount');
 										oSearch.sort('date', 'desc')
 										oSearch.rows = ns1blankspace.messaging.defaultRows;
-										oSearch.getResults(function(data) {interfaceMessagingInboxSearch(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspaceMessagingInboxSearch(oParam, data)});
 									}
 									else
 									{
@@ -381,111 +380,111 @@ ns1blankspace.messaging.imap =
 										if (bRepaginate) //bRefresh?
 										{
 											var aHTML = [];
-											var h = -1;
+											
 										
-											aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainHeader">' +
-													'<td class="interfaceMainHeader" id="interfaceMainHeaderRemovedEmails" style="text-align:left;">' +
+											aHTML.push('<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMainHeader">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceMainHeader">' +
+													'<td class="ns1blankspaceMainHeader" id="ns1blankspaceMainHeaderRemovedEmails" style="text-align:left;">' +
 													ns1blankspace.messaging.emailCount + ' emails';
 													
 											if (ns1blankspace.messaging.emailCount > 5000)
 											{	
-												aHTML[++h] = '&nbsp;<span style="font-size:0.75em;vertical-align:bottom;" class="interfaceMessagingHeader"> You should think about saving some emails.</span>';
+												aHTML.push('&nbsp;<span style="font-size:0.75em;vertical-align:bottom;" class="ns1blankspaceMessagingHeader"> You should think about saving some emails.</span>';
 											}	
 											
-											aHTML[++h] = '</td>';	
+											aHTML.push('</td>';	
 											
-											aHTML[++h] = '<td class="interfaceMainHeader" id="interfaceMainHeaderRefresh">Refresh</td>';
-											aHTML[++h] = '<td class="interfaceMainHeader" style="width:5px;">&nbsp;|&nbsp;</td>';
+											aHTML.push('<td class="ns1blankspaceMainHeader" id="ns1blankspaceMainHeaderRefresh">Refresh</td>';
+											aHTML.push('<td class="ns1blankspaceMainHeader" style="width:5px;">&nbsp;|&nbsp;</td>';
 											
-											aHTML[++h] = '<td class="interfaceMainHeader" id="interfaceMainHeaderRemovedEmails" style="width:90px;">';
+											aHTML.push('<td class="ns1blankspaceMainHeader" id="ns1blankspaceMainHeaderRemovedEmails" style="width:90px;">';
 															
 											if (ns1blankspace.messaging.showRemoved)
 											{	
-												aHTML[++h] = '<span id="interfaceMainHeaderRemovedEmailsHide-' + ns1blankspace.messaging.account + '" class="interfaceMainHeaderRemovedEmailsHide" >Hide&nbsp;removed&nbsp;emails</span>';
+												aHTML.push('<span id="ns1blankspaceMainHeaderRemovedEmailsHide-' + ns1blankspace.messaging.account + '" class="ns1blankspaceMainHeaderRemovedEmailsHide" >Hide&nbsp;removed&nbsp;emails</span>';
 											}
 											else
 											{
-												aHTML[++h] = '<span id="interfaceMainHeaderRemovedEmailsShow-' + ns1blankspace.messaging.account + '" class="interfaceMainHeaderRemovedEmailsShow">Show&nbsp;removed&nbsp;emails</span>';
+												aHTML.push('<span id="ns1blankspaceMainHeaderRemovedEmailsShow-' + ns1blankspace.messaging.account + '" class="ns1blankspaceMainHeaderRemovedEmailsShow">Show&nbsp;removed&nbsp;emails</span>';
 											}	
 															
-											aHTML[++h] = '</td>';
+											aHTML.push('</td>';
 											
-											aHTML[++h] = '<td class="interfaceMainHeader" style="width:5px;">&nbsp;|&nbsp;</td>';
-											aHTML[++h] = '<td class="interfaceMainHeader" id="tdInterfaceMainHeaderSentEmails" style="width:70px;">';
-											aHTML[++h] = '<span id="spanInterfaceMainHeaderSentEmails" class="interfaceMainHeaderSentEmails" >Sent&nbsp;emails</span>';
+											aHTML.push('<td class="ns1blankspaceMainHeader" style="width:5px;">&nbsp;|&nbsp;</td>';
+											aHTML.push('<td class="ns1blankspaceMainHeader" id="tdns1blankspaceMainHeaderSentEmails" style="width:70px;">';
+											aHTML.push('<span id="spanns1blankspaceMainHeaderSentEmails" class="ns1blankspaceMainHeaderSentEmails" >Sent&nbsp;emails</span>';
 											
-											aHTML[++h] = '</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('</td>';
+											aHTML.push('</tr>';
 											
-											aHTML[++h] = '<tr class="interfaceMainHeader" id="trInterfaceMessagingInboxPages"><td colspan=2 id="tdInterfaceMessagingInboxPages"></td></tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<tr class="ns1blankspaceMainHeader" id="trns1blankspaceMessagingInboxPages"><td colspan=2 id="tdns1blankspaceMessagingInboxPages"></td></tr>';
+											aHTML.push('</tbody></table>';
 											
-											$('#interfaceMessagingInboxHeader').html(aHTML.join(''));
+											$('#ns1blankspaceMessagingInboxHeader').html(aHTML.join(''));
 											
-											//$('#interfaceMessagingInbox').html('<div id="divInboxPage-0" class="interfaceMessagingInbox"></div>');
+											//$('#ns1blankspaceMessagingInbox').html('<div id="divInboxPage-0" class="ns1blankspaceMessagingInbox"></div>');
 										}
 									
-										$('#interfaceMainHeaderRefresh').html('Refresh')
+										$('#ns1blankspaceMainHeaderRefresh').html('Refresh')
 										
-										$('.interfaceMainHeaderRemovedEmailsHide').click(function() {
-											$('#interfaceMainHeaderRemovedEmailsHide').hide();
-											$('#interfaceMainHeaderRemovedEmailsShow').show();
+										$('.ns1blankspaceMainHeaderRemovedEmailsHide').click(function() {
+											$('#ns1blankspaceMainHeaderRemovedEmailsHide').hide();
+											$('#ns1blankspaceMainHeaderRemovedEmailsShow').show();
 											ns1blankspace.messaging.showRemoved = false;
-											interfaceMessagingInboxSearch({xhtmlElementID: this.id, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+											ns1blankspaceMessagingInboxSearch({xhtmlElementID: this.id, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 										})
 										
-										$('.interfaceMainHeaderRemovedEmailsShow').click(function() {
-											$('#interfaceMainHeaderRemovedEmailsShow').hide();
-											$('#interfaceMainHeaderRemovedEmailsHide').show();
+										$('.ns1blankspaceMainHeaderRemovedEmailsShow').click(function() {
+											$('#ns1blankspaceMainHeaderRemovedEmailsShow').hide();
+											$('#ns1blankspaceMainHeaderRemovedEmailsHide').show();
 											ns1blankspace.messaging.showRemoved = true;
-											interfaceMessagingInboxSearch({xhtmlElementID: this.id, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+											ns1blankspaceMessagingInboxSearch({xhtmlElementID: this.id, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 										})
 											
-										$('#interfaceMainHeaderRefresh').click(function() {
-											interfaceMessagingInboxSearch({xhtmlElementID: '-' + ns1blankspace.messaging.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+										$('#ns1blankspaceMainHeaderRefresh').click(function() {
+											ns1blankspaceMessagingInboxSearch({xhtmlElementID: '-' + ns1blankspace.messaging.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 										})
 										
-										$('#tdInterfaceMainHeaderSentEmails').click(function() {
-											ns1blankspaceOptionsPosition({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', leftOffset: -170, topOffset: -5});
-											interfaceMessagingActions({xhtmlElementID: 'tdInterfaceMainHeaderSentEmails', type: 5})
+										$('#tdns1blankspaceMainHeaderSentEmails').click(function() {
+											ns1blankspaceOptionsPosition({xhtmlElementID: 'tdns1blankspaceMainHeaderSentEmails', leftOffset: -170, topOffset: -5});
+											ns1blankspaceMessagingActions({xhtmlElementID: 'tdns1blankspaceMainHeaderSentEmails', type: 5})
 										})
 										
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML[++h] = '<table id="tableMessagingEmails" border="0" cellspacing="0" cellpadding="0" style="font-size:0.875em">';
-										aHTML[++h] = '<tbody>'
+										
+										aHTML.push('<table id="tableMessagingEmails" border="0" cellspacing="0" cellpadding="0" style="font-size:0.875em">';
+										aHTML.push('<tbody>'
 										
 										$.each(oResponse.data.rows, function()
 										{
-											aHTML[++h] = interfaceMessagingInboxSearchRow(this);
+											aHTML.push(ns1blankspaceMessagingInboxSearchRow(this);
 										});
 										
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</tbody></table>';
 										
 										ns1blankspacePaginationList(
 										{
-											xhtmlElementID: 'interfaceMessagingInbox',
+											xhtmlElementID: 'ns1blankspaceMessagingInbox',
 											xhtmlContext: 'EmailIMAPInbox',
 											xhtml: aHTML.join(''),
 											showMore: (oResponse.morerows == "true"),
 											more: oResponse.moreid,
 											rows: 50,
-											functionShowRow: interfaceMessagingInboxSearchRow,
-											functionNewPage: 'interfaceMessagingInboxSearchBind()',
+											functionShowRow: ns1blankspaceMessagingInboxSearchRow,
+											functionNewPage: 'ns1blankspaceMessagingInboxSearchBind()',
 											type: 'json'
 										}); 	
 											
-										interfaceMessagingInboxSearchBind();
+										ns1blankspaceMessagingInboxSearchBind();
 									}
 								},
 
-								function interfaceMessagingInboxSearchRow(oRow)
+								function ns1blankspaceMessagingInboxSearchRow(oRow)
 								{
 									var aHTML = [];
-									var h = -1;
+									
 
 									var sID = oRow.id;
 									//sID	= sID.replace(/\./g, '___');
@@ -498,53 +497,53 @@ ns1blankspace.messaging.imap =
 									
 									if ((oRow.imapflags).indexOf('\\SEEN') == -1)
 									{
-										sClass = " interfaceMainBold"
+										sClass = " ns1blankspaceMainBold"
 									}
 									
-									aHTML[++h] = '<tr class="interfaceMainRow' + sClass + '" data-cached="' + oRow.detailscached + '" id="trMessagingEmails_from_id_' + sID + '">';
+									aHTML.push('<tr class="ns1blankspaceMainRow' + sClass + '" data-cached="' + oRow.detailscached + '" id="trMessagingEmails_from_id_' + sID + '">';
 									
-									aHTML[++h] = '<td style="padding-right:5px;" id="tdMessagingEmails_from_id_' + sID + 
-														'" style="cursor: pointer;" class="interfaceMainRowOptionsSelect interfaceMainRow' + sClass + '"' +
+									aHTML.push('<td style="padding-right:5px;" id="tdMessagingEmails_from_id_' + sID + 
+														'" style="cursor: pointer;" class="ns1blankspaceMainRowOptionsSelect ns1blankspaceMainRow' + sClass + '"' +
 														' title="' + oRow.fromEmail + '">' +
 														oRow.fromname + '</td>';
 														
-									aHTML[++h] = '<td style="padding-right:5px;" id="tdMessagingEmails_subject_id_' + sID + 
-														'" style="cursor: pointer;" class="interfaceMainRowOptionsSelect interfaceMainRow' + sClass + '">' +
+									aHTML.push('<td style="padding-right:5px;" id="tdMessagingEmails_subject_id_' + sID + 
+														'" style="cursor: pointer;" class="ns1blankspaceMainRowOptionsSelect ns1blankspaceMainRow' + sClass + '">' +
 														oRow.subject + '</td>';
 									
-									aHTML[++h] = '<td style="width:150px;" id="tdMessagingEmails_date_id_' + sID + '" class="interfaceMainRow' + sClass + '">' +
+									aHTML.push('<td style="width:150px;" id="tdMessagingEmails_date_id_' + sID + '" class="ns1blankspaceMainRow' + sClass + '">' +
 															sDate + '</td>';
 									
-									aHTML[++h] = '<td style="width:70px;text-align:right;" class="interfaceMainRow">';
-									aHTML[++h] = '<span id="spanMessagingEmails_reply_id_' + sID + '" class="interfaceMainRowOptionsReply"></span>';
+									aHTML.push('<td style="width:70px;text-align:right;" class="ns1blankspaceMainRow">';
+									aHTML.push('<span id="spanMessagingEmails_reply_id_' + sID + '" class="ns1blankspaceMainRowOptionsReply"></span>';
 									
 									if ((oRow.imapflags).indexOf('\\DELETED') == -1)
 									{
-										aHTML[++h] = '<span id="spanMessagingEmails_delete_id_' + sID + '" class="interfaceMainRowOptionsDelete"></span>';
+										aHTML.push('<span id="spanMessagingEmails_delete_id_' + sID + '" class="ns1blankspaceMainRowOptionsDelete"></span>';
 									}
 									else
 									{
-										aHTML[++h] = '<span style="width: 23px;" id="tdMessagingEmails_delete_id_' + sID +
-														'" class="interfaceMainRowOptionsDeleteDisabled"></span>';
+										aHTML.push('<span style="width: 23px;" id="tdMessagingEmails_delete_id_' + sID +
+														'" class="ns1blankspaceMainRowOptionsDeleteDisabled"></span>';
 									}
 
-									aHTML[++h] = '<span id="spanMessagingEmails_save_id_' + sID + '" class="interfaceMainRowOptionsSave"></span>';
+									aHTML.push('<span id="spanMessagingEmails_save_id_' + sID + '" class="ns1blankspaceMainRowOptionsSave"></span>';
 									
-									aHTML[++h] = '</td></tr>';
+									aHTML.push('</td></tr>';
 									
 									return aHTML.join('');
 								}
 
-								function interfaceMessagingInboxSearchBind()
+								function ns1blankspaceMessagingInboxSearchBind()
 								{
-									$('.interfaceMainRowOptionsSelect').click(function() {
-											$('td.interfaceViewportControl').removeClass('interfaceViewportControlHighlight');
-											$('#' + this.id).parent().find('td').removeClass('interfaceMainBold');
-											interfaceMessagingEmailRead(this.id);
-											interfaceMessagingSearch(this.id);
+									$('.ns1blankspaceMainRowOptionsSelect').click(function() {
+											$('td.ns1blankspaceViewportControl').removeClass('ns1blankspaceViewportControlHighlight');
+											$('#' + this.id).parent().find('td').removeClass('ns1blankspaceMainBold');
+											ns1blankspaceMessagingEmailRead(this.id);
+											ns1blankspaceMessagingSearch(this.id);
 										});
 										
-										$('.interfaceMainRowOptionsDelete').button({
+										$('.ns1blankspaceMainRowOptionsDelete').button({
 											text: false,
 											label: "Delete",
 											icons: {
@@ -552,12 +551,12 @@ ns1blankspace.messaging.imap =
 											}
 										})
 										.click(function() {
-											interfaceMessagingEmailRemove(this.id)
+											ns1blankspaceMessagingEmailRemove(this.id)
 										})
 										.css('width', '15px')
 										.css('height', '20px')
 									
-										$('.interfaceMainRowOptionsDeleteDisabled').button({
+										$('.ns1blankspaceMainRowOptionsDeleteDisabled').button({
 											text: false,
 											disabled: true,
 											 icons: {
@@ -567,7 +566,7 @@ ns1blankspace.messaging.imap =
 										.css('width', '15px')
 										.css('height', '20px')
 										
-										$('.interfaceMainRowOptionsReply').button({
+										$('.ns1blankspaceMainRowOptionsReply').button({
 											text: false,
 											label: "Reply",
 											icons: {
@@ -576,15 +575,15 @@ ns1blankspace.messaging.imap =
 										})
 										.click(function() {
 										
-											$('td.interfaceViewportControl').removeClass('interfaceViewportControlHighlight');
-											$('#' + this.id).parent().find('td').removeClass('interfaceMainBold');
-											interfaceMessagingEmailRead(this.id);
-											interfaceMessagingSearch(this.id, {reply: true});
+											$('td.ns1blankspaceViewportControl').removeClass('ns1blankspaceViewportControlHighlight');
+											$('#' + this.id).parent().find('td').removeClass('ns1blankspaceMainBold');
+											ns1blankspaceMessagingEmailRead(this.id);
+											ns1blankspaceMessagingSearch(this.id, {reply: true});
 										})
 										.css('width', '15px')
 										.css('height', '20px')
 										
-										$('.interfaceMainRowOptionsSave').button({
+										$('.ns1blankspaceMainRowOptionsSave').button({
 											text: false,
 											label: "Save",
 											icons: {
@@ -593,14 +592,14 @@ ns1blankspace.messaging.imap =
 										})
 										.click(function() {
 										
-											if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == this.id)
+											if ($(ns1blankspace.xhtml.container).attr('data-initiator') == this.id)
 											{
-												$('#divns1blankspaceViewportControlOptions').slideUp(500);
-												$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+												$(ns1blankspace.xhtml.container).slideUp(500);
+												$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 											}
 											else
 											{
-												interfaceMessagingEmailSave({xhtmlElementID: this.id})
+												ns1blankspaceMessagingEmailSave({xhtmlElementID: this.id})
 											}	
 										})
 										.css('width', '15px')
@@ -609,7 +608,7 @@ ns1blankspace.messaging.imap =
 				},
 
 	search: 	{
-					send:		function interfaceMessagingSearch(sXHTMLElementId, oParam)
+					send:		function ns1blankspaceMessagingSearch(sXHTMLElementId, oParam)
 								{
 									
 									var aSearch = sXHTMLElementId.split('_id_');
@@ -633,7 +632,7 @@ ns1blankspace.messaging.imap =
 									
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										ns1blankspaceMainViewportShow("#divInterfaceMainSummary", true);
+										ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary", true);
 										
 										sSearchContext = sSearchContext.replace(/\___/g, '.');
 										
@@ -647,7 +646,7 @@ ns1blankspace.messaging.imap =
 										oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.rows = ns1blankspace.messaging.defaultRows;
-										oSearch.getResults(function(data) {interfaceMessagingShow(oParam, data)});	
+										oSearch.getResults(function(data) {ns1blankspaceMessagingShow(oParam, data)});	
 									}
 									else
 									{
@@ -662,7 +661,7 @@ ns1blankspace.messaging.imap =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											sElementId = 'tablens1blankspaceViewportMasterBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
@@ -676,58 +675,58 @@ ns1blankspace.messaging.imap =
 											oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
 											oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 											oSearch.rows = ns1blankspace.messaging.defaultRows;
-											oSearch.getResults(function(data) {interfaceMessagingShow(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspaceMessagingShow(oParam, data)});
 										}
 									};	
 								},
 
-					process:	function interfaceMessagingSearchShow(oParam, oResponse)
+					process:	function ns1blankspaceMessagingSearchShow(oParam, oResponse)
 								{
 									var iColumn = 0;
 									var aHTML = [];
-									var h = -1;
+									
 									var	iMaximumColumns = 1;
 									
 									if (oResponse.data.rows.length == 0)
 									{
 										ns1blankspaceSearchStop();
-										$('#divns1blankspaceViewportControlOptions').hide();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">';
+										aHTML.push('<tbody>'
 											
 										$.each(oResponse.data.rows, function()
 										{
-											aHTML[++h] = '<tr class="interfaceSearch">';
-											aHTML[++h] = '<td class="interfaceSearch" id="' +
+											aHTML.push('<tr class="ns1blankspaceSearch">';
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
 															this.subject + '</td>';
-											aHTML[++h] = '</tr>'
+											aHTML.push('</tr>'
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</tbody></table>';
 
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
 										ns1blankspaceSearchStop();
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceMessagingSearch(event.target.id, {source: 1});
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspaceMessagingSearch(event.target.id, {source: 1});
 										});
 									}	
 								}
 				},
 						
-	layout: 	function interfaceMessagingViewport(oParam)
+	layout: 	function ns1blankspaceMessagingViewport(oParam)
 				{
 					var aHTML = [];
-					var h = -1;
+					
 					var bReply = false;
 					
 					if (oParam != undefined)
@@ -735,25 +734,25 @@ ns1blankspace.messaging.imap =
 						if (oParam.reply != undefined) {bReply = oParam.reply}
 					}	
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
 					
 					if (bReply) 
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl">Message</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl">Message</td>' +
 									'</tr>';
 					}
 					else
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Message</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Message</td>' +
 									'</tr>';
 					}
 					
 					/*
-					aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-									'<td id="interfaceMessagingAttachments" ' +
-											' class="interfaceViewportControl interfaceViewportControlSub">' +
+					aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+									'<td id="ns1blankspaceMessagingAttachments" ' +
+											' class="ns1blankspaceViewportControl ns1blankspaceViewportControlSub">' +
 											'&nbsp;' +
 											'</td>' +
 									'</tr>';		
@@ -761,78 +760,78 @@ ns1blankspace.messaging.imap =
 					
 					if (bReply) 
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlReply" class="interfaceViewportControl interfaceViewportControlHighlight">Reply</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlReply" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Reply</td>' +
 									'</tr>';
 					}
 					else
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlReply" class="interfaceViewportControl">Reply</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlReply" class="ns1blankspaceViewportControl">Reply</td>' +
 									'</tr>';
 					}
 					
-					aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlReplyAll" class="interfaceViewportControl">Reply All</td>' +
+					aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlReplyAll" class="ns1blankspaceViewportControl">Reply All</td>' +
 									'</tr>';
 						
-					aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlForward" class="interfaceViewportControl">Forward</td>' +
+					aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlForward" class="ns1blankspaceViewportControl">Forward</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>';					
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
 					
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>';					
 						
-					$('#tdInterfaceMessagingEmailViewport').html(aHTML.join(''));
+					$('#tdns1blankspaceMessagingEmailViewport').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
+					
 
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#tdns1blankspaceViewportControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceMessagingSummary();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary");
+						ns1blankspaceMessagingSummary();
 					});
 					
-					$('#tdInterfaceViewportControlReply').click(function(event)
+					$('#tdns1blankspaceViewportControlReply').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
-						interfaceMessagingSendEmail({xhtmlElementID: 'divInterfaceMainEdit'})
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainEdit");
+						ns1blankspaceMessagingSendEmail({xhtmlElementID: 'divns1blankspaceMainEdit'})
 					});
 
-					$('#tdInterfaceViewportControlReplyAll').click(function(event)
+					$('#tdns1blankspaceViewportControlReplyAll').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
-						interfaceMessagingSendEmail({xhtmlElementID: 'divInterfaceMainEdit', replyAll: true})
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainEdit");
+						ns1blankspaceMessagingSendEmail({xhtmlElementID: 'divns1blankspaceMainEdit', replyAll: true})
 					});
 					
-					$('#tdInterfaceViewportControlForward').click(function(event)
+					$('#tdns1blankspaceViewportControlForward').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
-						interfaceMessagingSendEmail({xhtmlElementID: 'divInterfaceMainEdit', forward: true})
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainEdit");
+						ns1blankspaceMessagingSendEmail({xhtmlElementID: 'divns1blankspaceMainEdit', forward: true})
 					});
 					
-					$('#tdInterfaceViewportControlActions').click(function(event)
+					$('#tdns1blankspaceViewportControlActions').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
-						ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainActions", true);
+						ns1blankspaceActions({xhtmlElementID: 'divns1blankspaceMainActions'});
 					});
 					
-					$('#interfaceMessagingAttachments').click(function(event)
+					$('#ns1blankspaceMessagingAttachments').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
-						interfaceMessagingAttachments();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainAttachments", true);
+						ns1blankspaceMessagingAttachments();
 					});
 				},
 
-	show: 		function interfaceMessagingShow(oParam, oResponse)
+	show: 		function ns1blankspaceMessagingShow(oParam, oResponse)
 				{
 					var bReply = false;
 					var aHTML = [];
-					var h = -1;
+					
 					var sHTML = '';
 					
 					if (oParam != undefined)
@@ -840,24 +839,24 @@ ns1blankspace.messaging.imap =
 						if (oParam.reply != undefined) {bReply = oParam.reply}
 					}	
 					
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					
-					interfaceMessagingViewport(oParam);
+					ns1blankspaceMessagingViewport(oParam);
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
 					
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the email.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find the email.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#divInterfaceMainSummary').html(aHTML.join(''));
+						$('#divns1blankspaceMainSummary').html(aHTML.join(''));
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 												
-						$('#divInterfaceViewportControlContext').html('');
+						$('#divns1blankspaceViewportControlContext').html('');
 						
 						if (ns1blankspace.objectContextData.detailscached == 'Y')
 						{
@@ -878,7 +877,7 @@ ns1blankspace.messaging.imap =
 						
 							sHTML += '<br /><br />';
 						
-							$('#interfaceMessagingAttachments').html(sHTML);
+							$('#ns1blankspaceMessagingAttachments').html(sHTML);
 						
 							var sAttachments = ns1blankspace.objectContextData.attachments;
 							var aAttachments = sAttachments.split('#');
@@ -889,70 +888,70 @@ ns1blankspace.messaging.imap =
 								sAttachments += '\r\n' + aAttachment[0];
 							});
 						
-							$('#interfaceMessagingAttachments').attr('title', sAttachments)
+							$('#ns1blankspaceMessagingAttachments').attr('title', sAttachments)
 						}
 						else
 						{
-							$('#interfaceMessagingAttachments').html('');
-							$('#interfaceMessagingAttachments').attr('title', '');
+							$('#ns1blankspaceMessagingAttachments').html('');
+							$('#ns1blankspaceMessagingAttachments').attr('title', '');
 						}	
 						
 						//IF NOT CACHED THEN GET AND DO FOLLOWING ON PROMISE
 						
 						if (bReply)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
-							interfaceMessagingSendEmail({xhtmlElementID: 'divInterfaceMainEdit'})
+							ns1blankspaceMainViewportShow("#divns1blankspaceMainEdit");
+							ns1blankspaceMessagingSendEmail({xhtmlElementID: 'divns1blankspaceMainEdit'})
 						}
 						else
 						{
-							interfaceMessagingSummary();
+							ns1blankspaceMessagingSummary();
 						}	
 					}	
 				},		
 	
-	summary:	function interfaceMessagingSummary()
+	summary:	function ns1blankspaceMessagingSummary()
 				{
 					var aHTML = [];
-					var h = -1;
+					
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this email.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find this email.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#divInterfaceMainSummary').html(aHTML.join(''));
+						$('#divns1blankspaceMainSummary').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-						aHTML[++h] = '<tbody>'
+						aHTML.push('<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMainHeader">';
+						aHTML.push('<tbody>'
 						
-						aHTML[++h] = '<tr class="interfaceMainHeader">' +
-										'<td style="text-align:left;font-weight:bold" class="interfaceMessagingHeader" id="interfaceMessagingHeader">' +
+						aHTML.push('<tr class="ns1blankspaceMainHeader">' +
+										'<td style="text-align:left;font-weight:bold" class="ns1blankspaceMessagingHeader" id="ns1blankspaceMessagingHeader">' +
 										ns1blankspace.objectContextData.subject + '</td>';
 						
 						var sDate = new Date(ns1blankspace.objectContextData.date);	
 						sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
 
-						aHTML[++h] = '<td style="text-align:right;" class="interfaceMessagingSubHeader" id="interfaceMessagingHeaderDate">' +
+						aHTML.push('<td style="text-align:right;" class="ns1blankspaceMessagingSubHeader" id="ns1blankspaceMessagingHeaderDate">' +
 										sDate + '</td>';
-						aHTML[++h] = '</tr>';
+						aHTML.push('</tr>';
 						
-						aHTML[++h] = '<tr class="interfaceMainHeader">' +
-										'<td colspan=2 style="text-align:left;" class="interfaceMessagingSubHeader" id="interfaceMainHeaderFromEmail">' +
+						aHTML.push('<tr class="ns1blankspaceMainHeader">' +
+										'<td colspan=2 style="text-align:left;" class="ns1blankspaceMessagingSubHeader" id="ns1blankspaceMainHeaderFromEmail">' +
 										ns1blankspace.objectContextData.from + '</td>';
 						
-						aHTML[++h] = '</tr>';
+						aHTML.push('</tr>';
 						
-						aHTML[++h] = '</tbody></table>';
+						aHTML.push('</tbody></table>';
 						
 						if (ns1blankspace.objectContextData.to != '')
 						{
-							aHTML[++h] = '<table id="tableMessagingEmailsHeaderTo" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainHeaderTo">' +
-											'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
+							aHTML.push('<table id="tableMessagingEmailsHeaderTo" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMainHeader">';
+							aHTML.push('<tbody>'
+							aHTML.push('<tr class="ns1blankspaceMainHeaderTo">' +
+											'<td style="text-align:left;" class="ns1blankspaceMainHeader" id="ns1blankspaceMainHeaderCC">';
 											
 							var sTo = ns1blankspace.objectContextData.to;
 							var aTo = sTo.split('|')
@@ -963,18 +962,18 @@ ns1blankspace.messaging.imap =
 								if (i % 2 !== 0) {sTo += this + '; ';}
 							});				
 											
-							aHTML[++h] = '<span class="interfaceMessagingHeader">To:</span> ' + sTo;
+							aHTML.push('<span class="ns1blankspaceMessagingHeader">To:</span> ' + sTo;
 
-							aHTML[++h] = '</td></tr>';
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</td></tr>';
+							aHTML.push('</tbody></table>';
 						}
 						
 						if (ns1blankspace.objectContextData.cc != '')
 						{
-							aHTML[++h] = '<table id="tableMessagingEmailsHeaderCC" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainHeaderCC">' +
-											'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
+							aHTML.push('<table id="tableMessagingEmailsHeaderCC" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMainHeader">';
+							aHTML.push('<tbody>'
+							aHTML.push('<tr class="ns1blankspaceMainHeaderCC">' +
+											'<td style="text-align:left;" class="ns1blankspaceMainHeader" id="ns1blankspaceMainHeaderCC">';
 											
 							var sCC = ns1blankspace.objectContextData.cc
 							var aCC = sCC.split('|')
@@ -985,33 +984,33 @@ ns1blankspace.messaging.imap =
 								if (i % 2 !== 0) {sCC += this + '; ';}
 							});				
 											
-							aHTML[++h] = '<span class="interfaceMessagingHeader">Cc:</span> ' + sCC;
+							aHTML.push('<span class="ns1blankspaceMessagingHeader">Cc:</span> ' + sCC;
 
-							aHTML[++h] = '</td></tr>';
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</td></tr>';
+							aHTML.push('</tbody></table>';
 						}
 						
 						//if (ns1blankspace.objectContextData.hasattachments == 'Y')
 						//{
-							aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceMainHeader">' +
-													'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
-							aHTML[++h] = '</td></tr>';
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMainHeader">';
+							aHTML.push('<tbody>'
+							aHTML.push('<tr class="ns1blankspaceMainHeader">' +
+													'<td style="text-align:left;" class="ns1blankspaceMainHeader" id="ns1blankspaceMainHeaderAttachments">';
+							aHTML.push('</td></tr>';
+							aHTML.push('</tbody></table>';
 						//}
 						
-						aHTML[++h] = ns1blankspace.xhtml.loading;
+						aHTML.push(ns1blankspace.xhtml.loading;
 						
-						aHTML[++h] = '<iframe style="display:block;height:10px;width:900px;" name="ifMessage" ' +
+						aHTML.push('<iframe style="display:block;height:10px;width:900px;" name="ifMessage" ' +
 											'id="ifMessage" frameborder="0" border="0" scrolling="no"></iframe>';
 										
-						$('#divInterfaceMainSummary').html(aHTML.join(''));
+						$('#divns1blankspaceMainSummary').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData.detailscached == 'Y')
 						{
-							setTimeout("interfaceMessagingShowMessage()", 300);
-							interfaceMessagingShowAttachments();
+							setTimeout("ns1blankspaceMessagingShowMessage()", 300);
+							ns1blankspaceMessagingShowAttachments();
 						}
 						else
 						{
@@ -1035,8 +1034,8 @@ ns1blankspace.messaging.imap =
 									oSearch.getResults(function(oResponse) 
 										{
 											ns1blankspace.objectContextData = oResponse.data.rows[0];
-											interfaceMessagingShowAttachments();
-											interfaceMessagingShowMessage();
+											ns1blankspaceMessagingShowAttachments();
+											ns1blankspaceMessagingShowMessage();
 										})	
 								}
 							});
@@ -1046,12 +1045,12 @@ ns1blankspace.messaging.imap =
 				},
 
 	message: 	{
-					attachments: function interfaceMessagingShowAttachments()
+					attachments: function ns1blankspaceMessagingShowAttachments()
 								{
 									if (ns1blankspace.objectContextData.hasattachments == 'Y')
 									{
 										var aHTML = [];
-										var h = -1;
+										
 										var sAttachments = ns1blankspace.objectContextData.attachments;
 										
 										if (sAttachments != 'undefined')
@@ -1073,7 +1072,7 @@ ns1blankspace.messaging.imap =
 													sAttachments +=	'<a href="' + sLink + '" target="_blank">' + aAttachment[0] + '</a>; ';
 												});	
 																
-												aHTML[++h] = '<span class="interfaceMessagingHeader">Attachments:</span> ' + sAttachments;
+												aHTML.push('<span class="ns1blankspaceMessagingHeader">Attachments:</span> ' + sAttachments;
 											}
 											else
 											{								
@@ -1087,19 +1086,19 @@ ns1blankspace.messaging.imap =
 													sAttachments +=	'<a href="' + aAttachment[1] + '" target="_blank">' + aAttachment[0] + '</a>; ';
 												});	
 																
-												aHTML[++h] = '<span class="interfaceMessagingHeader">Attachments:</span> ' + sAttachments;
+												aHTML.push('<span class="ns1blankspaceMessagingHeader">Attachments:</span> ' + sAttachments;
 											}
 										}
 									
-										$('#interfaceMainHeaderAttachments').html(aHTML.join());
+										$('#ns1blankspaceMainHeaderAttachments').html(aHTML.join());
 									}
 									else
 									{
-										$('#interfaceMainHeaderAttachments').html('No attachments.');
+										$('#ns1blankspaceMainHeaderAttachments').html('No attachments.');
 									}
 								},
 
-					show:		function interfaceMessagingShowMessage()
+					show:		function ns1blankspaceMessagingShowMessage()
 								{
 									var sHTML = ns1blankspace.objectContextData.message;
 									sHTML = ns1blankspaceFormatXHTML(sHTML);
@@ -1108,7 +1107,7 @@ ns1blankspace.messaging.imap =
 									  {
 									  }
 
-									$('.interfaceLoading').remove()
+									$('.ns1blankspaceLoading').remove()
 										
 									$('#ifMessage').contents().find('html').html(sHTML);
 									
@@ -1138,51 +1137,51 @@ ns1blankspace.messaging.imap =
 									$('#ifMessage').css('width', ($('#ifMessage').attr('scrollWidth') + 100) + 'px');
 								}
 
-					edit:		function interfaceMessagingEdit()
+					edit:		function ns1blankspaceMessagingEdit()
 								{
 									var aHTML = [];
-									var h = -1;
 									
-									if ($('#divInterfaceMainEdit').attr('onDemandLoading') == '1')
+									
+									if ($('#divns1blankspaceMainEdit').attr('onDemandLoading') == '1')
 									{
-										$('#divInterfaceMainEdit').attr('onDemandLoading', '');
+										$('#divns1blankspaceMainEdit').attr('onDemandLoading', '');
 												
-										aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+										aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMain">';
 												
-										aHTML[++h] = '<tr id="trInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti">' +
-														'<td id="tdInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti">' +
-														'<textarea rows="30" cols="50" onDemandType="TEXTMULTI" id="inputInterfaceMainEditText" class="inputInterfaceMainTextMultiLarge"></textarea>' +
+										aHTML.push('<tr id="trns1blankspaceMainDetailsEditTextValue" class="ns1blankspaceMainTextMulti">' +
+														'<td id="tdns1blankspaceMainDetailsEditTextValue" class="ns1blankspaceMainTextMulti">' +
+														'<textarea rows="30" cols="50" onDemandType="TEXTMULTI" id="inputns1blankspaceMainEditText" class="inputns1blankspaceMainTextMultiLarge"></textarea>' +
 														'</td></tr>';
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
-										$('#divInterfaceMainEdit').html(aHTML.join(''));
+										$('#divns1blankspaceMainEdit').html(aHTML.join(''));
 										
 										if (ns1blankspace.objectContextData != undefined)
 										{
 											//tinyMCE.get('editor1').getContent()
-											$('#inputInterfaceMainEditText').val(unescape(ns1blankspace.objectContextData.message));
+											$('#inputns1blankspaceMainEditText').val(unescape(ns1blankspace.objectContextData.message));
 										}
 									
 										if (ns1blankspace.option.richTextEditing)
 										{
-											tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText');
+											tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceMainEditText');
 										}	
 									}	
 								}
 				},
 
 	save: 		{
-					send: 		function interfaceMessagingSave(oParam, oResponse)
+					send: 		function ns1blankspaceMessagingSave(oParam, oResponse)
 								{
 									if (oResponse == undefined)
 									{			
 										var sParam = '/ondemand/messaging/?method=MESSAGING_EMAIL_DRAFT&rf=TEXT';
 										
-										if ($('#divInterfaceMainEdit').html() != '')
+										if ($('#divns1blankspaceMainEdit').html() != '')
 										{
-											var sData = 'subject=' + ns1blankspace.util.fs($('#inputInterfaceMainActionsSendEmailSubject').val());
-											sData += '&message=' + ns1blankspace.util.fs(tinyMCE.get('inputInterfaceMainActionsSendEmailMessage').getContent());
+											var sData = 'subject=' + ns1blankspace.util.fs($('#inputns1blankspaceMainActionsSendEmailSubject').val());
+											sData += '&message=' + ns1blankspace.util.fs(tinyMCE.get('inputns1blankspaceMainActionsSendEmailMessage').getContent());
 										}
 										
 										$.ajax(
@@ -1193,7 +1192,7 @@ ns1blankspace.messaging.imap =
 											dataType: 'text',
 											success: function(data) 
 											{
-												interfaceMessagingSave(oParam, data)
+												ns1blankspaceMessagingSave(oParam, data)
 											}
 										});
 										
@@ -1205,7 +1204,7 @@ ns1blankspace.messaging.imap =
 											ns1blankspaceStatus('Draft saved');
 											//if (ns1blankspace.objectContext == -1) {var bNew = true}
 											//ns1blankspace.objectContext = oResponse.id;	
-											//if (bNew) {interfaceMessagingSearch('-' + ns1blankspace.objectContext)}
+											//if (bNew) {ns1blankspaceMessagingSearch('-' + ns1blankspace.objectContext)}
 										}
 										else
 										{
@@ -1217,17 +1216,17 @@ ns1blankspace.messaging.imap =
 								}
 				},
 
-	attachments: function interfaceMessagingAttachments()
+	attachments: function ns1blankspaceMessagingAttachments()
 				{
 					var aHTML = [];
-					var h = -1;
+					
 
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this email.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find this email.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#divInterfaceMainAttachments').html(aHTML.join(''));
+						$('#divns1blankspaceMainAttachments').html(aHTML.join(''));
 					}
 					else
 					{
@@ -1235,27 +1234,27 @@ ns1blankspace.messaging.imap =
 						
 						if (iAttachmentCount == 0)
 						{
-							aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-							aHTML[++h] = '<tbody>'
-							aHTML[++h] = '<tr class="interfaceAttachments">';
-							aHTML[++h] = '<td class="interfaceMainRowNothing">No attachments.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
+							aHTML.push('<tbody>'
+							aHTML.push('<tr class="ns1blankspaceAttachments">';
+							aHTML.push('<td class="ns1blankspaceMainRowNothing">No attachments.</td>';
+							aHTML.push('</tr>';
+							aHTML.push('</tbody></table>';
 							
-							$('#divInterfaceMainAttachments').html(aHTML.join(''));
+							$('#divns1blankspaceMainAttachments').html(aHTML.join(''));
 						}
 						else
 						{
 							var sAttachments = ns1blankspace.objectContextData.attachments;
 							var aAttachments = sAttachments.split('#')
 
-							aHTML[++h] = '<table class="interfaceMain"">';
-							aHTML[++h] = '<tbody>'
+							aHTML.push('<table class="ns1blankspaceMain"">';
+							aHTML.push('<tbody>'
 						
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
-							aHTML[++h] = '<td class="interfaceMainCaption">Filename</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">Size (kb)</td>';
-							aHTML[++h] = '</tr>';
+							aHTML.push('<tr class="ns1blankspaceMainCaption">';
+							aHTML.push('<td class="ns1blankspaceMainCaption">Filename</td>';
+							aHTML.push('<td class="ns1blankspaceMainCaption">Size (kb)</td>';
+							aHTML.push('</tr>';
 						
 							$.each(aAttachments, function(iIndex) 
 							{
@@ -1270,23 +1269,23 @@ ns1blankspace.messaging.imap =
 									var aAttachment = this.split('|');
 									sAttachments += '\r\n' + aAttachment[0];
 								
-									aHTML[++h] = '<tr class="interfaceAttachments">';
-									aHTML[++h] = '<td id="tdAttachment_filename-' + (iIndex) + '" class="interfaceMainRow">' +
+									aHTML.push('<tr class="ns1blankspaceAttachments">';
+									aHTML.push('<td id="tdAttachment_filename-' + (iIndex) + '" class="ns1blankspaceMainRow">' +
 														'<a href="' + sLink + '" target="_blank">' + aAttachment[0] + '</a></td>';
-									aHTML[++h] = '<td id="tdAttachment_size-' + (iIndex) + '" class="interfaceMainRow">' + (aAttachment[1] / 1000).toFixed(2) + '</td>';
+									aHTML.push('<td id="tdAttachment_size-' + (iIndex) + '" class="ns1blankspaceMainRow">' + (aAttachment[1] / 1000).toFixed(2) + '</td>';
 													
-									aHTML[++h] = '</tr>'
+									aHTML.push('</tr>'
 								}	
 							});	
 						   	
-							aHTML[++h] = '</tbody></table>';
-							$('#divInterfaceMainAttachments').html(aHTML.join(''));
+							aHTML.push('</tbody></table>';
+							$('#divns1blankspaceMainAttachments').html(aHTML.join(''));
 						}
 					}	
 				},
 
 	send: 		{
-					show: 		function interfaceMessagingSendEmail(oParam)
+					show: 		function ns1blankspaceMessagingSendEmail(oParam)
 								{
 
 									var iObject = ns1blankspace.object;
@@ -1294,7 +1293,7 @@ ns1blankspace.messaging.imap =
 									var bShowTo = true;
 									var bShowPriority = false;
 									var bShowAll = false;
-									var sXHTMLElementID = 'divInterfaceDialog';
+									var sXHTMLElementID = 'divns1blankspaceDialog';
 									var bDialog = false;
 									var iContactBusiness;
 									var bReplyAll = false;
@@ -1341,14 +1340,14 @@ ns1blankspace.messaging.imap =
 									if (!bDialog)
 									{
 										var aHTML = [];
-										var h = -1;	
+											
 													
-										aHTML[++h] = '<table id="tableInterfaceMainSendEmail">' +
-													'<tr id="trInterfaceMainSendEmailRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainSendEmailColumn1" class="interfaceMainColumn1List">' +
+										aHTML.push('<table id="tablens1blankspaceMainSendEmail">' +
+													'<tr id="trns1blankspaceMainSendEmailRow1" class="ns1blankspaceMainRow1">' +
+													'<td id="tdns1blankspaceMainSendEmailColumn1" class="ns1blankspaceMainColumn1List">' +
 													ns1blankspace.xhtml.loading +
 													'</td>' +
-													'<td id="tdInterfaceMainSendEmailColumn2" class="interfaceMainColumn2Action">' +
+													'<td id="tdns1blankspaceMainSendEmailColumn2" class="ns1blankspaceMainColumn2Action">' +
 													'</td>' +
 													'</tr>' +
 													'</table>';					
@@ -1357,133 +1356,133 @@ ns1blankspace.messaging.imap =
 									}
 									
 									var aHTML = [];
-									var h = -1;
 									
-									aHTML[++h] = '<table id="tableInterfaceMainActionsSendEmail">';
+									
+									aHTML.push('<table id="tablens1blankspaceMainActionsSendEmail">';
 									
 									if (bShowTo)
 									{
 
-										aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmail" class="interfaceMain">';
+										aHTML.push('<tr><td id="tdns1blankspaceMainActionsSendEmail" class="ns1blankspaceMain">';
 										
-											aHTML[++h] = '<table id="tableInterfaceMainActionsSendEmailColumn" cellspacing=0 cellpadding=0>';
+											aHTML.push('<table id="tablens1blankspaceMainActionsSendEmailColumn" cellspacing=0 cellpadding=0>';
 									
-											aHTML[++h] = '<tr><td style="width:325px;font-size:0.875em;" id="tdInterfaceMainActionsSendEmailColumn1">';	
+											aHTML.push('<tr><td style="width:325px;font-size:0.875em;" id="tdns1blankspaceMainActionsSendEmailColumn1">';	
 												
-												aHTML[++h] = '<table id="tableInterfaceMainActionsSendEmailTo">';				
+												aHTML.push('<table id="tablens1blankspaceMainActionsSendEmailTo">';				
 															
-												aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmailTo" class="interfaceMain">' +
+												aHTML.push('<tr><td id="tdns1blankspaceMainActionsSendEmailTo" class="ns1blankspaceMain">' +
 															'To:</td>';		
 												
-												aHTML[++h] = '<td id="tdInterfaceMainActionsSendEmailToContact">' +
-															'<input id="inputInterfaceMainActionsSendEmailToContact" class="inputInterfaceMainSelectContactEmail ns1blankspaceWatermark"' +
-																' ondemandsetelementid="inputInterfaceMainActionsSendEmailTo" value="Search for contact here or type address below"';
+												aHTML.push('<td id="tdns1blankspaceMainActionsSendEmailToContact">' +
+															'<input id="inputns1blankspaceMainActionsSendEmailToContact" class="inputns1blankspaceMainSelectContactEmail ns1blankspaceWatermark"' +
+																' ondemandsetelementid="inputns1blankspaceMainActionsSendEmailTo" value="Search for contact here or type address below"';
 															
 												if (iContactBusiness != undefined)
 												{
-													aHTML[++h] = ' onDemandContactBusiness="' + iContactBusiness + '"'
+													aHTML.push(' onDemandContactBusiness="' + iContactBusiness + '"'
 												}
 
-												aHTML[++h] = '></td></tr>';				
+												aHTML.push('></td></tr>';				
 
-												aHTML[++h] = '<tr><td colspan=2 id="tdInterfaceMainActionsSendEmailToValue" >' +
-															'<textarea style="height:30px" rows="3" cols="25" id="inputInterfaceMainActionsSendEmailTo" class="inputInterfaceMainText"></textarea>' +
+												aHTML.push('<tr><td colspan=2 id="tdns1blankspaceMainActionsSendEmailToValue" >' +
+															'<textarea style="height:30px" rows="3" cols="25" id="inputns1blankspaceMainActionsSendEmailTo" class="inputns1blankspaceMainText"></textarea>' +
 															'</td></tr>';
 											
-												aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmailCc" class="interfaceMain">' +
+												aHTML.push('<tr><td id="tdns1blankspaceMainActionsSendEmailCc" class="ns1blankspaceMain">' +
 															'Cc:</td>';		
 												
-												aHTML[++h] = '<td id="tdInterfaceMainActionsSendEmailCcContact">' +
-															'<input id="inputInterfaceMainActionsSendEmailCcContact" class="inputInterfaceMainSelectContactEmail ns1blankspaceWatermark"' +
-																' ondemandsetelementid="inputInterfaceMainActionsSendEmailCc" value=""';
+												aHTML.push('<td id="tdns1blankspaceMainActionsSendEmailCcContact">' +
+															'<input id="inputns1blankspaceMainActionsSendEmailCcContact" class="inputns1blankspaceMainSelectContactEmail ns1blankspaceWatermark"' +
+																' ondemandsetelementid="inputns1blankspaceMainActionsSendEmailCc" value=""';
 															
 												if (iContactBusiness != undefined)
 												{
-													aHTML[++h] = ' onDemandContactBusiness="' + iContactBusiness + '"'
+													aHTML.push(' onDemandContactBusiness="' + iContactBusiness + '"'
 												}
 
-												aHTML[++h] = '></td></tr>';				
+												aHTML.push('></td></tr>';				
 
-												aHTML[++h] = '<tr><td colspan=2 id="tdInterfaceMainActionsSendEmailCcValue">' +
-															'<textarea style="height:30px" rows="3" cols="25" onDemandType="TEXTMULTI" id="inputInterfaceMainActionsSendEmailCc" class="inputInterfaceMainText"></textarea>' +
+												aHTML.push('<tr><td colspan=2 id="tdns1blankspaceMainActionsSendEmailCcValue">' +
+															'<textarea style="height:30px" rows="3" cols="25" onDemandType="TEXTMULTI" id="inputns1blankspaceMainActionsSendEmailCc" class="inputns1blankspaceMainText"></textarea>' +
 															'</td></tr>';
 											
-												aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmailBcc" class="interfaceMain">' +
+												aHTML.push('<tr><td id="tdns1blankspaceMainActionsSendEmailBcc" class="ns1blankspaceMain">' +
 															'Bcc:</td>';		
 												
-												aHTML[++h] = '<td id="tdInterfaceMainActionsSendEmailBccContact">' +
-															'<input id="inputInterfaceMainActionsSendEmailBccContact" class="inputInterfaceMainSelectContactEmail ns1blankspaceWatermark"' +
-																' ondemandsetelementid="inputInterfaceMainActionsSendEmailBcc" value=""';
+												aHTML.push('<td id="tdns1blankspaceMainActionsSendEmailBccContact">' +
+															'<input id="inputns1blankspaceMainActionsSendEmailBccContact" class="inputns1blankspaceMainSelectContactEmail ns1blankspaceWatermark"' +
+																' ondemandsetelementid="inputns1blankspaceMainActionsSendEmailBcc" value=""';
 															
 												if (iContactBusiness != undefined)
 												{
-													aHTML[++h] = ' onDemandContactBusiness="' + iContactBusiness + '"'
+													aHTML.push(' onDemandContactBusiness="' + iContactBusiness + '"'
 												}
 
-												aHTML[++h] = '></td></tr>';				
+												aHTML.push('></td></tr>';				
 
-												aHTML[++h] = '<tr><td colspan=2 id="tdInterfaceMainActionsSendEmailBccValue">' +
-															'<textarea style="height:30px" rows="3" cols="25" onDemandType="TEXTMULTI" id="inputInterfaceMainActionsSendEmailBcc" class="inputInterfaceMainText"></textarea>' +
+												aHTML.push('<tr><td colspan=2 id="tdns1blankspaceMainActionsSendEmailBccValue">' +
+															'<textarea style="height:30px" rows="3" cols="25" onDemandType="TEXTMULTI" id="inputns1blankspaceMainActionsSendEmailBcc" class="inputns1blankspaceMainText"></textarea>' +
 															'</td></tr>';
 											
-												aHTML[++h] = '</table>';				
+												aHTML.push('</table>';				
 												
-											aHTML[++h] = '<td width="20px;">&nbsp;</td>';	
+											aHTML.push('<td width="20px;">&nbsp;</td>';	
 
-											aHTML[++h] = '<td id="tdInterfaceMainActionsSendEmailColumn2">';	
+											aHTML.push('<td id="tdns1blankspaceMainActionsSendEmailColumn2">';	
 
-											aHTML[++h] = '<table id="tableInterfaceMainActionsSendEmailAttach">';				
+											aHTML.push('<table id="tablens1blankspaceMainActionsSendEmailAttach">';				
 															
-												aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmailAttachCaption" class="interfaceMain">' +
+												aHTML.push('<tr><td id="tdns1blankspaceMainActionsSendEmailAttachCaption" class="ns1blankspaceMain">' +
 															'Attachments</td>';		
 											
-												aHTML[++h] = '<td id="tdInterfaceMainActionsSendEmailMessageAttach" class="interfaceMainRight">';
+												aHTML.push('<td id="tdns1blankspaceMainActionsSendEmailMessageAttach" class="ns1blankspaceMainRight">';
 											
-												aHTML[++h] = '<div id="divInterfaceMainActionsSendEmailMessageAttach">' +
-															'<input type="checkbox" id="spanInterfaceMainSendEmailAttach" class="ns1blankspaceViewport"/>' +
-															'<label style="font-size:0.875em;" for="spanInterfaceMainSendEmailAttach">&nbsp;</label>' +
+												aHTML.push('<div id="divns1blankspaceMainActionsSendEmailMessageAttach">' +
+															'<input type="checkbox" id="spanns1blankspaceMainSendEmailAttach" class="ns1blankspaceViewport"/>' +
+															'<label style="font-size:0.875em;" for="spanns1blankspaceMainSendEmailAttach">&nbsp;</label>' +
 															'</div>';
 											
-												aHTML[++h] = '</td></tr>';				
+												aHTML.push('</td></tr>';				
 
-												aHTML[++h] = '<tr><td style="height:80px" colspan=2 id="tdInterfaceMainActionsSendEmailAttachments" class="ns1blankspaceBorder">' +
+												aHTML.push('<tr><td style="height:80px" colspan=2 id="tdns1blankspaceMainActionsSendEmailAttachments" class="ns1blankspaceBorder">' +
 															'</td></tr>';
 											
-												aHTML[++h] = '</table>';				
+												aHTML.push('</table>';				
 											
-											aHTML[++h] = '</td></tr>';						
+											aHTML.push('</td></tr>';						
 												
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>';					
 												
-										aHTML[++h] = '</td></tr>';				
+										aHTML.push('</td></tr>';				
 									}
 									
-									aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmailSubjectValue">';
+									aHTML.push('<tr><td id="tdns1blankspaceMainActionsSendEmailSubjectValue">';
 									
-										aHTML[++h] = '<table id="tableInterfaceMainActionsSendEmailSubjectOptions">';				
+										aHTML.push('<table id="tablens1blankspaceMainActionsSendEmailSubjectOptions">';				
 															
-											aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmailSubject" class="interfaceMain">' +
-														'<input onDemandType="TEXT" id="inputInterfaceMainActionsSendEmailSubject" class="inputInterfaceMainText ns1blankspaceWatermark"' +
+											aHTML.push('<tr><td id="tdns1blankspaceMainActionsSendEmailSubject" class="ns1blankspaceMain">' +
+														'<input onDemandType="TEXT" id="inputns1blankspaceMainActionsSendEmailSubject" class="inputns1blankspaceMainText ns1blankspaceWatermark"' +
 															' value="Subject">' +
 														'</td>';	
 											
 											if (bShowPriority)
 											{
-												aHTML[++h] = '<td style="width:150px" id="tdInterfaceMainSendEmailHighPriority" class="interfaceMainRight">' +
-																'&nbsp; <input type="checkbox" id="inputInterfaceMainSendEmailHighPriority"/>&nbsp;High Priority?<td>';
+												aHTML.push('<td style="width:150px" id="tdns1blankspaceMainSendEmailHighPriority" class="ns1blankspaceMainRight">' +
+																'&nbsp; <input type="checkbox" id="inputns1blankspaceMainSendEmailHighPriority"/>&nbsp;High Priority?<td>';
 											}
 										
-											aHTML[++h] = '</tr>';				
+											aHTML.push('</tr>';				
 												
-										aHTML[++h] = '</table>';				
+										aHTML.push('</table>';				
 									
-									aHTML[++h] = '</td></tr>';
+									aHTML.push('</td></tr>';
 									
-									aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmailMessageValue" class="interfaceMain">' +
-														'<textarea rows="10" cols="35" onDemandType="TEXTMULTI" id="inputInterfaceMainActionsSendEmailMessage" class="inputInterfaceMainTextMultiLarge"></textarea>' +
+									aHTML.push('<tr><td id="tdns1blankspaceMainActionsSendEmailMessageValue" class="ns1blankspaceMain">' +
+														'<textarea rows="10" cols="35" onDemandType="TEXTMULTI" id="inputns1blankspaceMainActionsSendEmailMessage" class="inputns1blankspaceMainTextMultiLarge"></textarea>' +
 														'</td></tr>';
 									
-									aHTML[++h] = '</table>';						
+									aHTML.push('</table>';						
 									
 									if (bDialog)
 									{
@@ -1503,10 +1502,10 @@ ns1blankspace.messaging.imap =
 												},
 												"Send": function() 
 												{
-													interfaceMessagingSendEmailSend({
-														subject: $('#inputInterfaceMainActionsSendEmailSubject').val(),
-														message: $('#inputInterfaceMainActionsSendEmailMessage').val(),
-														priority: ($('#inputInterfaceMainSendEmailHighPriority').attr('checked')?3:2),
+													ns1blankspaceMessagingSendEmailSend({
+														subject: $('#inputns1blankspaceMainActionsSendEmailSubject').val(),
+														message: $('#inputns1blankspaceMainActionsSendEmailMessage').val(),
+														priority: ($('#inputns1blankspaceMainSendEmailHighPriority').attr('checked')?3:2),
 														});
 													$( this ).dialog( "close" );
 													
@@ -1517,28 +1516,28 @@ ns1blankspace.messaging.imap =
 									else
 									{
 									
-										if (tinyMCE.getInstanceById('inputInterfaceMainActionsSendEmailMessage'))
+										if (tinyMCE.getInstanceById('inputns1blankspaceMainActionsSendEmailMessage'))
 										{
-											tinyMCE.get('inputInterfaceMainActionsSendEmailMessage').remove();
-											$('#inputInterfaceMainActionsSendEmailMessage').remove();
+											tinyMCE.get('inputns1blankspaceMainActionsSendEmailMessage').remove();
+											$('#inputns1blankspaceMainActionsSendEmailMessage').remove();
 										}	
 									
-										$('#tdInterfaceMainSendEmailColumn1').html(aHTML.join(''));
+										$('#tdns1blankspaceMainSendEmailColumn1').html(aHTML.join(''));
 										
 										var aHTML = [];
-										var h = -1;	
+											
 										
-										aHTML[++h] = '<table id="tableInterfaceMainSendEmailColumn2" class="interfaceMainColumn2">';
+										aHTML.push('<table id="tablens1blankspaceMainSendEmailColumn2" class="ns1blankspaceMainColumn2">';
 										
-										aHTML[++h] = '<tr><td id="tdInterfaceMainSendEmailAdd" class="interfaceMainAction">' +
-														'<span id="spanInterfaceMainSendEmailAdd">Send</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMainSendEmailAdd" class="ns1blankspaceMainAction">' +
+														'<span id="spanns1blankspaceMainSendEmailAdd">Send</span>' +
 														'</td></tr>';
 																
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
-										$('#tdInterfaceMainSendEmailColumn2').html(aHTML.join(''));
+										$('#tdns1blankspaceMainSendEmailColumn2').html(aHTML.join(''));
 									
-										$('#spanInterfaceMainSendEmailAdd').button(
+										$('#spanns1blankspaceMainSendEmailAdd').button(
 										{
 											label: "Send"
 										})
@@ -1546,30 +1545,30 @@ ns1blankspace.messaging.imap =
 										
 											if (oParam != undefined)
 											{
-												oParam.subject = $('#inputInterfaceMainActionsSendEmailSubject').val();
-												oParam.message = tinyMCE.get('inputInterfaceMainActionsSendEmailMessage').getContent();
-												oParam.contactPersonTo = $('#inputInterfaceMainActionsSendEmailTo').attr('onDemandID');
-												oParam.to = $('#inputInterfaceMainActionsSendEmailTo').val();
-												oParam.cc = $('#inputInterfaceMainActionsSendEmailCc').val();
-												oParam.bcc = $('#inputInterfaceMainActionsSendEmailBcc').val();
+												oParam.subject = $('#inputns1blankspaceMainActionsSendEmailSubject').val();
+												oParam.message = tinyMCE.get('inputns1blankspaceMainActionsSendEmailMessage').getContent();
+												oParam.contactPersonTo = $('#inputns1blankspaceMainActionsSendEmailTo').attr('onDemandID');
+												oParam.to = $('#inputns1blankspaceMainActionsSendEmailTo').val();
+												oParam.cc = $('#inputns1blankspaceMainActionsSendEmailCc').val();
+												oParam.bcc = $('#inputns1blankspaceMainActionsSendEmailBcc').val();
 											}
 											else
 											{
 												oParam = {
-														subject: $('#inputInterfaceMainActionsSendEmailSubject').val(),
-														message: tinyMCE.get('inputInterfaceMainActionsSendEmailMessage').getContent(),
-														contactPersonTo: $('#inputInterfaceMainActionsSendEmailTo').attr('onDemandID'),
-														to: $('#inputInterfaceMainActionsSendEmailTo').val(),
-														cc: $('#inputInterfaceMainActionsSendEmailCc').val(),
-														bcc: $('#inputInterfaceMainActionsSendEmailBcc').val(),
+														subject: $('#inputns1blankspaceMainActionsSendEmailSubject').val(),
+														message: tinyMCE.get('inputns1blankspaceMainActionsSendEmailMessage').getContent(),
+														contactPersonTo: $('#inputns1blankspaceMainActionsSendEmailTo').attr('onDemandID'),
+														to: $('#inputns1blankspaceMainActionsSendEmailTo').val(),
+														cc: $('#inputns1blankspaceMainActionsSendEmailCc').val(),
+														bcc: $('#inputns1blankspaceMainActionsSendEmailBcc').val(),
 														xhtmlElementID: sXHTMLElementID
 														}
 											}
 										
-											 interfaceMessagingSendEmailSend(oParam);
+											 ns1blankspaceMessagingSendEmailSend(oParam);
 										})
 									
-										$('#spanInterfaceMainSendEmailAttach').button(
+										$('#spanns1blankspaceMainSendEmailAttach').button(
 										{
 											text: false,
 											icons:	{
@@ -1578,7 +1577,7 @@ ns1blankspace.messaging.imap =
 										})
 										.click(function() {
 										
-											interfaceMessagingSendEmailAttachShow(oParam);
+											ns1blankspaceMessagingSendEmailAttachShow(oParam);
 										})
 										.css('width', '20px')
 										.css('height', '23px')
@@ -1589,15 +1588,15 @@ ns1blankspace.messaging.imap =
 											var sTo = '';
 										
 											var aHTML = [];
-											var h = -1;	
+												
 										
-											aHTML[++h] = '<br />';
+											aHTML.push('<br />';
 											
 											$.each(ns1blankspace.messaging.emailAccounts, function() 
 											{ 
 												if (this.id == ns1blankspace.messaging.account)
 												{
-													aHTML[++h] = this.footer + '<br />';
+													aHTML.push(this.footer + '<br />';
 												}
 											});
 												
@@ -1605,21 +1604,21 @@ ns1blankspace.messaging.imap =
 											{
 												if (bForward)
 												{
-													$('#inputInterfaceMainActionsSendEmailSubject').val('Fw: ' + ns1blankspace.objectContextData.subject)
+													$('#inputns1blankspaceMainActionsSendEmailSubject').val('Fw: ' + ns1blankspace.objectContextData.subject)
 												}
 												else
 												{
-													$('#inputInterfaceMainActionsSendEmailSubject').val('Re: ' + ns1blankspace.objectContextData.subject)
+													$('#inputns1blankspaceMainActionsSendEmailSubject').val('Re: ' + ns1blankspace.objectContextData.subject)
 												}	
 												
-												$('#inputInterfaceMainActionsSendEmailSubject').removeClass('ns1blankspaceWatermark');
+												$('#inputns1blankspaceMainActionsSendEmailSubject').removeClass('ns1blankspaceWatermark');
 												
 												
-												aHTML[++h] = '<br />---- Original Message ----<br />';
-												aHTML[++h] = '<table style="background-color:#f5f5f5;width:100%;color:black;">';
-												aHTML[++h] = '<tr><td><strong>From:</strong> ' + ns1blankspace.objectContextData.from + '</td></tr>';
+												aHTML.push('<br />---- Original Message ----<br />';
+												aHTML.push('<table style="background-color:#f5f5f5;width:100%;color:black;">';
+												aHTML.push('<tr><td><strong>From:</strong> ' + ns1blankspace.objectContextData.from + '</td></tr>';
 												
-												aHTML[++h] = '<tr><td><strong>To:</strong> ';	
+												aHTML.push('<tr><td><strong>To:</strong> ';	
 												
 												var sOrgTo = ns1blankspace.objectContextData.to;
 												var aOrgTo = sOrgTo.split('|')
@@ -1631,13 +1630,13 @@ ns1blankspace.messaging.imap =
 													if (i % 2 !== 0) {sOrgTo += this + '; '}		
 												});				
 												
-												aHTML[++h] = sOrgTo + '</td></tr>';
+												aHTML.push(sOrgTo + '</td></tr>';
 												
 												var sOrgCc = ns1blankspace.objectContextData.cc;
 												
 												if (sOrgCc != '')
 												{
-													aHTML[++h] = '<tr><td><strong>CC:</strong> ';	
+													aHTML.push('<tr><td><strong>CC:</strong> ';	
 													var aOrgCc = sOrgCc.split('|')
 													sOrgCc = '';
 											
@@ -1646,18 +1645,18 @@ ns1blankspace.messaging.imap =
 														if (i % 2 !== 0) {sOrgCc += this + '; '}	
 													});			
 													
-													aHTML[++h] = sOrgCc + '</td></tr>';
+													aHTML.push(sOrgCc + '</td></tr>';
 												}
 												
 												var sDate = new Date(ns1blankspace.objectContextData.date);	
 												sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
 										
-												aHTML[++h] = '<tr><td><strong>Sent:</strong> ' + sDate + '</td></tr>';	
-												aHTML[++h] = '<tr><td><strong>Subject:</strong> ' + ns1blankspace.objectContextData.subject + '</td></tr>';	
+												aHTML.push('<tr><td><strong>Sent:</strong> ' + sDate + '</td></tr>';	
+												aHTML.push('<tr><td><strong>Subject:</strong> ' + ns1blankspace.objectContextData.subject + '</td></tr>';	
 												
-												aHTML[++h] = '</table>';
+												aHTML.push('</table>';
 												
-												$('#inputInterfaceMainActionsSendEmailMessage').val(aHTML.join('') + ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.message));
+												$('#inputns1blankspaceMainActionsSendEmailMessage').val(aHTML.join('') + ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.message));
 										
 												if (!bForward)
 												{
@@ -1687,7 +1686,7 @@ ns1blankspace.messaging.imap =
 													sTo = sFrom + '; ' + sTo;
 												}	
 									
-												$('#inputInterfaceMainActionsSendEmailTo').val(sTo)
+												$('#inputns1blankspaceMainActionsSendEmailTo').val(sTo)
 									
 												if (ns1blankspace.objectContextData.attachments != '' && bForward && ns1blankspace.messaging.action == -1)
 												{
@@ -1707,7 +1706,7 @@ ns1blankspace.messaging.imap =
 															{
 																var aReturn = data.split('|');
 																ns1blankspace.messaging.action = aReturn[1];
-																interfaceMessagingSendEmailAttachments();
+																ns1blankspaceMessagingSendEmailAttachments();
 															}
 														});
 													}
@@ -1727,7 +1726,7 @@ ns1blankspace.messaging.imap =
 															{
 																var aReturn = data.split('|');
 																ns1blankspace.messaging.action = aReturn[2];
-																interfaceMessagingSendEmailAttachments();
+																ns1blankspaceMessagingSendEmailAttachments();
 															}
 														});
 													}
@@ -1735,7 +1734,7 @@ ns1blankspace.messaging.imap =
 												}	
 												else
 												{
-													interfaceMessagingSendEmailAttachments();
+													ns1blankspaceMessagingSendEmailAttachments();
 												}		
 											}	
 										}
@@ -1752,32 +1751,32 @@ ns1blankspace.messaging.imap =
 												}
 											});
 											
-											$('#inputInterfaceMainActionsSendEmailMessage').val(sFooter + sMessage)
+											$('#inputns1blankspaceMainActionsSendEmailMessage').val(sFooter + sMessage)
 										}
 										
 										if (iSource == 3)
 										{
-											$('#inputInterfaceMainActionsSendEmailSubject').val(sSubject)
-											$('#inputInterfaceMainActionsSendEmailSubject').removeClass('ns1blankspaceWatermark');
-											$('#inputInterfaceMainActionsSendEmailMessage').val(sMessage)
+											$('#inputns1blankspaceMainActionsSendEmailSubject').val(sSubject)
+											$('#inputns1blankspaceMainActionsSendEmailSubject').removeClass('ns1blankspaceWatermark');
+											$('#inputns1blankspaceMainActionsSendEmailMessage').val(sMessage)
 										}
 										
 										if (ns1blankspace.option.richTextEditing)
 										{
-											tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainActionsSendEmailMessage');
+											tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceMainActionsSendEmailMessage');
 										}	
 									}
 								},
 
 					attachments: {
-									attach:		function interfaceMessagingSendEmailAttachShow(oParam, sReturn)
+									attach:		function ns1blankspaceMessagingSendEmailAttachShow(oParam, sReturn)
 												{
 													
-													sXHTMLElementID = "tdInterfaceMainActionsSendEmailAttachCaption";
+													sXHTMLElementID = "tdns1blankspaceMainActionsSendEmailAttachCaption";
 													
-													if (!$('#spanInterfaceMainSendEmailAttach').attr('checked'))
+													if (!$('#spanns1blankspaceMainSendEmailAttach').attr('checked'))
 													{
-														$('#divns1blankspaceViewportControlOptions').hide()
+														$(ns1blankspace.xhtml.container).hide()
 													}
 													else
 													{	
@@ -1792,7 +1791,7 @@ ns1blankspace.messaging.imap =
 																dataType: 'text',
 																success: function(data) 
 																{
-																	interfaceMessagingSendEmailAttachShow(oParam, data)
+																	ns1blankspaceMessagingSendEmailAttachShow(oParam, data)
 																}
 															});
 														
@@ -1802,38 +1801,38 @@ ns1blankspace.messaging.imap =
 															var aReturn = sReturn.split('|');
 															
 															var aHTML = [];
-															var h = -1;
+															
 														
 															ns1blankspaceOptionsSetPosition(sXHTMLElementID)
 														
 															ns1blankspace.messaging.action = aReturn[1];
 														
-															aHTML[++h] = '<table class="interfaceDropDown" style="width:287px;">';
-															aHTML[++h] = '<tbody>';
-															aHTML[++h] = '<tr><td id="tdInterfaceMainActionsSendEmailAttachmentsUpload" class="interfaceMain">' +
+															aHTML.push('<table class="ns1blankspaceDropDown" style="width:287px;">';
+															aHTML.push('<tbody>';
+															aHTML.push('<tr><td id="tdns1blankspaceMainActionsSendEmailAttachmentsUpload" class="ns1blankspaceMain">' +
 																				ns1blankspaceAttachmentsUpload({object: 17, objectContext: aReturn[1], label: ''})	
 																			'</td></tr>';
-															aHTML[++h] = '</tbody></table>';			
+															aHTML.push('</tbody></table>';			
 
-															$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));	
+															$(ns1blankspace.xhtml.container).html(aHTML.join(''));	
 															
-															$('#spanInterfaceMainUpload').button(
+															$('#spanns1blankspaceMainUpload').button(
 															{
 																label: "Upload"
 															})
 															.click(function() {
-																 ns1blankspaceAttachmentsUploadProcess({functionPostUpdate: interfaceMessagingSendEmailAttachments});
+																 ns1blankspaceAttachmentsUploadProcess({functionPostUpdate: ns1blankspaceMessagingSendEmailAttachments});
 															})
 															
 														}					
 													}	
 												}
 
-									show: 		function interfaceMessagingSendEmailAttachments(oParam, oResponse)
+									show: 		function ns1blankspaceMessagingSendEmailAttachments(oParam, oResponse)
 												{	
 													var aHTML = [];
-													var h = -1;
-													var sXHTMLElementID = "tdInterfaceMainActionsSendEmailAttachments";
+													
+													var sXHTMLElementID = "tdns1blankspaceMainActionsSendEmailAttachments";
 													
 													if (oParam != undefined)
 													{
@@ -1841,10 +1840,10 @@ ns1blankspace.messaging.imap =
 														if (oParam.action != undefined) {ns1blankspace.messaging.action = oParam.action}
 													}
 													
-													$('#divns1blankspaceViewportControlOptions').hide();
+													$(ns1blankspace.xhtml.container).hide();
 													
-													$('#spanInterfaceMainSendEmailAttach').attr('checked', false)
-													$('#spanInterfaceMainSendEmailAttach').button("refresh");
+													$('#spanns1blankspaceMainSendEmailAttach').attr('checked', false)
+													$('#spanns1blankspaceMainSendEmailAttach').button("refresh");
 													
 													if (ns1blankspace.messaging.action != -1)
 													{
@@ -1859,7 +1858,7 @@ ns1blankspace.messaging.imap =
 																type: 'GET',
 																url: '/ondemand/core/?' + sParam,
 																dataType: 'json',
-																success: function(data) {interfaceMessagingSendEmailAttachments(oParam, data)}
+																success: function(data) {ns1blankspaceMessagingSendEmailAttachments(oParam, data)}
 															});
 														}
 														else
@@ -1871,29 +1870,29 @@ ns1blankspace.messaging.imap =
 															}
 															else
 															{
-																aHTML[++h] = '<table style="width:100%">';
-																aHTML[++h] = '<tbody>'
+																aHTML.push('<table style="width:100%">';
+																aHTML.push('<tbody>'
 																
 																$.each(oResponse.data.rows, function()
 																{
-																	aHTML[++h] = '<tr class="interfaceAttachments">';
-																	aHTML[++h] = '<td style="font-size:0.75em;color:black;font-weight:normal;width:100%" id="tdAttachment-filename-' + this.id + '" class="interfaceMainRow">' + this.filename + '</td>';
-																	aHTML[++h] = '<td style="width:20px;" id="tdAttachment_delete-' + this.attachment + '" class="interfaceMainRowOptionDelete">&nbsp;</td>';
-																	aHTML[++h] = '</tr>'
+																	aHTML.push('<tr class="ns1blankspaceAttachments">';
+																	aHTML.push('<td style="font-size:0.75em;color:black;font-weight:normal;width:100%" id="tdAttachment-filename-' + this.id + '" class="ns1blankspaceMainRow">' + this.filename + '</td>';
+																	aHTML.push('<td style="width:20px;" id="tdAttachment_delete-' + this.attachment + '" class="ns1blankspaceMainRowOptionDelete">&nbsp;</td>';
+																	aHTML.push('</tr>'
 																});
 																
-																aHTML[++h] = '</tbody></table>';
+																aHTML.push('</tbody></table>';
 
 																$('#' + sXHTMLElementID).html(aHTML.join(''));
 																
-																$('.interfaceMainRowOptionDelete').button({
+																$('.ns1blankspaceMainRowOptionDelete').button({
 																	text: false,
 																	 icons: {
 																		 primary: "ui-icon-close"
 																	}
 																})
 																.click(function() {
-																	interfaceMessagingSendEmailAttachmentsRemove(this.id)
+																	ns1blankspaceMessagingSendEmailAttachmentsRemove(this.id)
 																})
 																.css('width', '15px')
 																.css('height', '20px')
@@ -1903,7 +1902,7 @@ ns1blankspace.messaging.imap =
 													}	
 												},
 
-									remove: 	function interfaceMessagingSendEmailAttachmentsRemove(sXHTMLElementId)
+									remove: 	function ns1blankspaceMessagingSendEmailAttachmentsRemove(sXHTMLElementId)
 												{
 
 													var aSearch = sXHTMLElementId.split('-');
@@ -1924,12 +1923,12 @@ ns1blankspace.messaging.imap =
 														
 												},
 
-									send:		function interfaceMessagingSendEmailSend(oParam)
+									send:		function ns1blankspaceMessagingSendEmailSend(oParam)
 												{
 													var sParam = '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND';
 													var sData = '';
 													var fFunctionPostSend;
-													var sXHTMLElementID = 'divInterfaceMainEdit';
+													var sXHTMLElementID = 'divns1blankspaceMainEdit';
 													
 													if (oParam.object == undefined) {oParam.object = ns1blankspace.object}
 													if (oParam.objectContext == undefined) {oParam.objectContext = ns1blankspace.objectContext}
@@ -1962,7 +1961,7 @@ ns1blankspace.messaging.imap =
 														{
 															ns1blankspaceStatus('Email sent');
 															$('#' + sXHTMLElementID).html('<span><br />Email has been sent.</span>');
-															$('#tdInterfaceMessagingEmailViewport').html('');
+															$('#tdns1blankspaceMessagingEmailViewport').html('');
 															if (fFunctionPostSend != undefined) {fFunctionPostSend()};
 														}
 													});
@@ -1970,7 +1969,7 @@ ns1blankspace.messaging.imap =
 								}
 				},
 								
-	remove: 	function interfaceMessagingEmailRemove(sXHTMLElementId)
+	remove: 	function ns1blankspaceMessagingEmailRemove(sXHTMLElementId)
 				{
 					var aSearch = sXHTMLElementId.split('_id_');
 					var sElementId = aSearch[0];
@@ -2001,13 +2000,13 @@ ns1blankspace.messaging.imap =
 						});
 				},
 
-	markAsRead: function interfaceMessagingEmailRead(sXHTMLElementId)
+	markAsRead: function ns1blankspaceMessagingEmailRead(sXHTMLElementId)
 				{
 					var aSearch = sXHTMLElementId.split('_id_');
 					var sElementId = aSearch[0];
 					var sSearchContext = aSearch[1];
 						
-					if ($('#' + sXHTMLElementId).parent().hasClass('interfaceMainBold'))	
+					if ($('#' + sXHTMLElementId).parent().hasClass('ns1blankspaceMainBold'))	
 					{
 							
 						sSearchContext = sSearchContext.replace(/\___/g, '.');	
@@ -2030,11 +2029,11 @@ ns1blankspace.messaging.imap =
 					}		
 				},
 
-	new: 		function interfaceMessagingNew(oParam, oResponse)
+	new: 		function ns1blankspaceMessagingNew(oParam, oResponse)
 				{
 					var aHTML = [];
-					var h = -1;
-					var sXHTMLElementID = 'divInterfaceMain';
+					
+					var sXHTMLElementID = 'divns1blankspaceMain';
 
 					if (oParam != undefined)
 					{
@@ -2042,7 +2041,7 @@ ns1blankspace.messaging.imap =
 					}	
 					
 					$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading);
-					$('#tdInterfaceMessagingEmailViewport').html('');
+					$('#tdns1blankspaceMessagingEmailViewport').html('');
 					
 					if (oResponse == undefined)
 					{
@@ -2053,75 +2052,75 @@ ns1blankspace.messaging.imap =
 							type: 'GET',
 							url: '/ondemand/messaging/?' + sParam,
 							dataType: 'json',
-							success: function(data) {interfaceMessagingNew(oParam, data)}
+							success: function(data) {ns1blankspaceMessagingNew(oParam, data)}
 						});
 					}	
 					else	
 					{		
 						if (oResponse.data.rows.length == 0)
 						{
-							interfaceMessagingSendEmail(oParam);
+							ns1blankspaceMessagingSendEmail(oParam);
 						}
 						else
 						{
 						
-							aHTML[++h] = '<table id="tableInterfaceMainNew" class="interfaceMain">';
-							aHTML[++h] = '<tr id="trInterfaceMainNewRow1" class="interfaceMainRow1">' +
-										'<td id="tdInterfaceMainNewColumn1Large" class="interfaceMainColumn1Large">' +
+							aHTML.push('<table id="tablens1blankspaceMainNew" class="ns1blankspaceMain">';
+							aHTML.push('<tr id="trns1blankspaceMainNewRow1" class="ns1blankspaceMainRow1">' +
+										'<td id="tdns1blankspaceMainNewColumn1Large" class="ns1blankspaceMainColumn1Large">' +
 										ns1blankspace.xhtml.loading + '</td>' +
-										'<td id="tdInterfaceMainNewColumn2Action" style="width:150px;" class="interfaceMainColumn2Action">' +
+										'<td id="tdns1blankspaceMainNewColumn2Action" style="width:150px;" class="ns1blankspaceMainColumn2Action">' +
 										'</td>' +
 										'</tr>';
-							aHTML[++h] = '</table>';				
+							aHTML.push('</table>';				
 						
 							$('#' + sXHTMLElementID).html(aHTML.join(''));
 						
 							var aHTML = [];
-							var h = -1;
 							
-							aHTML[++h] = '<table id="tableInterfaceMainNewsGroupsColumn2" class="interfaceMainColumn2">';
+							
+							aHTML.push('<table id="tablens1blankspaceMainNewsGroupsColumn2" class="ns1blankspaceMainColumn2">';
 									
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSend" class="interfaceMainAction">' +
-											'<span id="spanInterfaceMainBlank">Create Blank</span>' +
+							aHTML.push('<tr><td id="tdns1blankspaceMainSend" class="ns1blankspaceMainAction">' +
+											'<span id="spanns1blankspaceMainBlank">Create Blank</span>' +
 											'</td></tr>';
 											
-							aHTML[++h] = '</table>';					
+							aHTML.push('</table>';					
 						
-							$('#tdInterfaceMainNewColumn2Action').html(aHTML.join(''));
+							$('#tdns1blankspaceMainNewColumn2Action').html(aHTML.join(''));
 						
-							$('#spanInterfaceMainBlank').button(
+							$('#spanns1blankspaceMainBlank').button(
 							{
 								label: "Blank"
 							})
 							.click(function() {
-								interfaceMessagingSendEmail(oParam);
+								ns1blankspaceMessagingSendEmail(oParam);
 							})
 							.css('width', '75px')
 						
 							var aHTML = [];
-							var h = -1;
 							
-							aHTML[++h] = '<table style="width:100%">';
-							aHTML[++h] = '<tbody>';
-							aHTML[++h] = '<tr><td class="interfaceMainCaption">Saved Drafts</td></tr>';
 							
-							aHTML[++h] = '<table style="width:100%">';
-							aHTML[++h] = '<tbody>';
+							aHTML.push('<table style="width:100%">';
+							aHTML.push('<tbody>';
+							aHTML.push('<tr><td class="ns1blankspaceMainCaption">Saved Drafts</td></tr>';
+							
+							aHTML.push('<table style="width:100%">';
+							aHTML.push('<tbody>';
 						
 							oResponse.data.rows.each(function() {
 							
 								if (this.subject.text() != '')
 								{
-									aHTML[++h] = '<tr><td id="tdMessagingDrafts_subject-' + $(this).find('id').text() + 
-												'"class="interfaceMainRow interfaceMainRowSelect">' + this.subject + '</td></tr>';
+									aHTML.push('<tr><td id="tdMessagingDrafts_subject-' + $(this).find('id').text() + 
+												'"class="ns1blankspaceMainRow ns1blankspaceMainRowSelect">' + this.subject + '</td></tr>';
 								}				
 							})
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</tbody></table>';
 							
-							$('#tdInterfaceMainNewColumn1Large').html(aHTML.join(''));
+							$('#tdns1blankspaceMainNewColumn1Large').html(aHTML.join(''));
 						
-							$('.interfaceMainRowSelect').click(function() {
+							$('.ns1blankspaceMainRowSelect').click(function() {
 							
 								var sParam = 'method=MESSAGING_EMAIL_DRAFT_SEARCH&getmessage=1';
 								sID = this.id;
@@ -2137,7 +2136,7 @@ ns1blankspace.messaging.imap =
 										oParam.message = oResponse.data.rows[0].message;
 										oParam.subject = oResponse.data.rows[0].subject;
 										oParam.source = 3;
-										interfaceMessagingSendEmail(oParam);
+										ns1blankspaceMessagingSendEmail(oParam);
 									}
 								});
 							})
@@ -2145,7 +2144,7 @@ ns1blankspace.messaging.imap =
 					}	
 				},
 
-	save: 		function interfaceMessagingEmailSave(oParam)
+	save: 		function ns1blankspaceMessagingEmailSave(oParam)
 				{
 					var iStep = 1;
 					var sXHTMLElementID = '';
@@ -2167,7 +2166,7 @@ ns1blankspace.messaging.imap =
 					var aID = sID.split('_id_');
 					sMessageId = aID[1];
 					
-					$('#divns1blankspaceViewportControlOptions').attr('data-initiator', sXHTMLElementID)
+					$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
 					
 					if (iStep == 1)
 					{
@@ -2175,37 +2174,37 @@ ns1blankspace.messaging.imap =
 						ns1blankspaceOptionsPosition({xhtmlElementID: sXHTMLElementID, leftOffset:-75});
 						
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<table id="tableMessagingEmailSaveOption" style="width:75px;" class="interfaceDropDown">';
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMessagingEmailSaveOptionJustSave" class="interfaceMainAction">' +
-										'<span id="spanInterfaceMessagingEmailSaveOptionJustSave">Save</span>' +
+						aHTML.push('<table id="tableMessagingEmailSaveOption" style="width:75px;" class="ns1blankspaceDropDown">';
+						
+						aHTML.push('<tr><td id="tdns1blankspaceMessagingEmailSaveOptionJustSave" class="ns1blankspaceMainAction">' +
+										'<span id="spanns1blankspaceMessagingEmailSaveOptionJustSave">Save</span>' +
 										'</td></tr>';
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 					
-						$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''))
+						$(ns1blankspace.xhtml.container).html(aHTML.join(''))
 						
-						$('#spanInterfaceMessagingEmailSaveOptionJustSave').button(
+						$('#spanns1blankspaceMessagingEmailSaveOptionJustSave').button(
 						{
 							label: "Save"
 						})
 						.click(function() {
-							$('#spanInterfaceMessagingEmailSaveOptionJustSave').html(ns1blankspace.xhtml.loadingSmall);
+							$('#spanns1blankspaceMessagingEmailSaveOptionJustSave').html(ns1blankspace.xhtml.loadingSmall);
 							oParam.step = 2
-							interfaceMessagingEmailSave(oParam);
+							ns1blankspaceMessagingEmailSave(oParam);
 							
 						})
 						.css('width', '75px')
 					
-						$('#spanInterfaceMessagingEmailSaveOptionSaveAsToDo').button(
+						$('#spanns1blankspaceMessagingEmailSaveOptionSaveAsToDo').button(
 						{
 							label: "To Do"
 						})
 						.click(function() {
 							oParam.step = 3
-							interfaceMessagingEmailSave(oParam);
+							ns1blankspaceMessagingEmailSave(oParam);
 						})
 						.css('width', '75px')
 					
@@ -2225,7 +2224,7 @@ ns1blankspace.messaging.imap =
 							dataType: 'json',
 							success: function(data)
 										{
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 											$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 										}
 						});	
@@ -2233,16 +2232,16 @@ ns1blankspace.messaging.imap =
 				},
 
 	actions: 	{
-					show: 		function interfaceMessagingActions(oParam, oResponse)
+					show: 		function ns1blankspaceMessagingActions(oParam, oResponse)
 								{
 
-									var sXHTMLElementID = 'divInterfaceMainActionsSent';
+									var sXHTMLElementID = 'divns1blankspaceMainActionsSent';
 									
 									var iType = 5 //Email Sent
 
 									if (oResponse == undefined)
 									{
-										$('#spanInterfaceMainHeaderSentEmails').html(ns1blankspace.xhtml.loadingSmall);
+										$('#spanns1blankspaceMainHeaderSentEmails').html(ns1blankspace.xhtml.loadingSmall);
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'ACTION_SEARCH';
@@ -2250,14 +2249,14 @@ ns1blankspace.messaging.imap =
 										oSearch.rf = 'json';
 										oSearch.addFilter('actiontype', 'EQUAL_TO', iType);
 										oSearch.sort('modifieddate', 'desc');
-										oSearch.getResults(function(data) {interfaceMessagingActions(oParam, data)}); 
+										oSearch.getResults(function(data) {ns1blankspaceMessagingActions(oParam, data)}); 
 									}
 									else
 									{
 										var aHTML = [];
-										var h = -1;
+										
 											
-										$('#spanInterfaceMainHeaderSentEmails').html('Sent&nbsp;emails');
+										$('#spanns1blankspaceMainHeaderSentEmails').html('Sent&nbsp;emails');
 										
 										if (oResponse.data.rows.length == 0)
 										{
@@ -2265,30 +2264,30 @@ ns1blankspace.messaging.imap =
 										}
 										else
 										{
-											aHTML[++h] = '<table border="0" class="interfaceSearchMedium">';
-											aHTML[++h] = '<tbody>'
+											aHTML.push('<table border="0" class="ns1blankspaceSearchMedium">';
+											aHTML.push('<tbody>'
 											
 											$.each(oResponse.data.rows, function() 
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
-												aHTML[++h] = '<td id="tdAction_subject-' + this.id + '" class="interfaceSearch">' +
+												aHTML.push('<tr class="ns1blankspaceSearch">';
+												aHTML.push('<td id="tdAction_subject-' + this.id + '" class="ns1blankspaceSearch">' +
 																this.actionreference + '</td>';
 																
-												aHTML[++h] = '<td id="tdAction_date-' + this.id + '" class="interfaceSearch">' +
+												aHTML.push('<td id="tdAction_date-' + this.id + '" class="ns1blankspaceSearch">' +
 																this.duedate + '</td>';
 												
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>'
 											});
 								    	
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
-											$('#divns1blankspaceViewportControlOptions').html(ns1blankspacePagination(
+											$(ns1blankspace.xhtml.container).html(ns1blankspacePagination(
 												   {
 													html: aHTML.join(''),
 													more: (oResponse.morerows == "true")
 												   }) );
 										
-											$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+											$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
 											ns1blankspacePaginationBind(
 											{
@@ -2298,23 +2297,23 @@ ns1blankspace.messaging.imap =
 												startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows)
 											});   
 										
-											//functionSearch: interfaceMessagingActions
+											//functionSearch: ns1blankspaceMessagingActions
 										}
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').hide();
-											interfaceMessagingActionSearch({xhtmlElementID: event.target.id});
+											$(ns1blankspace.xhtml.container).hide();
+											ns1blankspaceMessagingActionSearch({xhtmlElementID: event.target.id});
 										});
 									}
 								},
 
-				send:			function interfaceMessagingActionSearch(oParam, oResponse)
+				send:			function ns1blankspaceMessagingActionSearch(oParam, oResponse)
 								{
 									var aHTML = [];
-									var h = -1;
+									
 									var sXHTMLElementID;
-									var sTargetXHTMLElementID = 'divInterfaceMainSummary';
+									var sTargetXHTMLElementID = 'divns1blankspaceMainSummary';
 									var bSetContext = true;
 
 									if (oParam != undefined)
@@ -2328,7 +2327,7 @@ ns1blankspace.messaging.imap =
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
 									
-									if (bSetContext) {ns1blankspaceMainViewportShow("#divInterfaceMainSummary", true)};
+									if (bSetContext) {ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary", true)};
 									
 									if (oResponse == undefined)
 									{
@@ -2340,12 +2339,12 @@ ns1blankspace.messaging.imap =
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.addFilter('actiontype', 'EQUAL_TO', 5);				
-										oSearch.getResults(function(data) {interfaceMessagingActionSearch(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspaceMessagingActionSearch(oParam, data)});
 									}
 									else
 									{
 										ns1blankspaceViewportDestination({
-											newDestination: 'interfaceMessagingMasterViewport({autoShow: false});interfaceMessagingActionSearch({xhtmlElementID: "-' + sSearchContext + '"})',
+											newDestination: 'ns1blankspaceMessagingMasterViewport({autoShow: false});ns1blankspaceMessagingActionSearch({xhtmlElementID: "-' + sSearchContext + '"})',
 											move: false
 											})
 												
@@ -2368,17 +2367,17 @@ ns1blankspace.messaging.imap =
 											oSearch.addField('type,email,name');
 											oSearch.rf = 'json';
 											oSearch.addFilter('action', 'EQUAL_TO', sSearchContext);		
-											oSearch.getResults(function(data) {interfaceMessagingActionSearchShow(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspaceMessagingActionSearchShow(oParam, data)});
 										}
 									}
 								},
 									
-				process:		function interfaceMessagingActionSearchShow(oParam, oResponse)
+				process:		function ns1blankspaceMessagingActionSearchShow(oParam, oResponse)
 								{	
 									var aHTML = [];
-									var h = -1;
+									
 									var sXHTMLElementID;
-									var sTargetXHTMLElementID = 'divInterfaceMainSummary';
+									var sTargetXHTMLElementID = 'divns1blankspaceMainSummary';
 									var bSetContext = true;
 
 									if (oParam != undefined)
@@ -2402,34 +2401,34 @@ ns1blankspace.messaging.imap =
 									ns1blankspace.objectContextData.cc = aCC.join('|');
 									ns1blankspace.objectContextData.attachments = '';
 										
-									aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-									aHTML[++h] = '<tbody>'
+									aHTML.push('<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMainHeader">';
+									aHTML.push('<tbody>'
 									
-									aHTML[++h] = '<tr class="interfaceMainHeader">' +
-													'<td style="text-align:left;font-weight:bold" class="interfaceMessagingHeader" id="interfaceMessagingHeader">' +
+									aHTML.push('<tr class="ns1blankspaceMainHeader">' +
+													'<td style="text-align:left;font-weight:bold" class="ns1blankspaceMessagingHeader" id="ns1blankspaceMessagingHeader">' +
 													ns1blankspace.objectContextData.subject + '</td>';
 									
 									var sDate = new Date(ns1blankspace.objectContextData.date);	
 									sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
 
-									aHTML[++h] = '<td style="text-align:right;" class="interfaceMessagingSubHeader" id="interfaceMessagingHeaderDate">' +
+									aHTML.push('<td style="text-align:right;" class="ns1blankspaceMessagingSubHeader" id="ns1blankspaceMessagingHeaderDate">' +
 													sDate + '</td>';
-									aHTML[++h] = '</tr>';
+									aHTML.push('</tr>';
 									
-									aHTML[++h] = '<tr class="interfaceMainHeader">' +
-													'<td colspan=2 style="text-align:left;" class="interfaceMessagingSubHeader" id="interfaceMainHeaderFromEmail">' +
+									aHTML.push('<tr class="ns1blankspaceMainHeader">' +
+													'<td colspan=2 style="text-align:left;" class="ns1blankspaceMessagingSubHeader" id="ns1blankspaceMainHeaderFromEmail">' +
 													ns1blankspace.objectContextData.from + '</td>';
 									
-									aHTML[++h] = '</tr>';
+									aHTML.push('</tr>';
 									
-									aHTML[++h] = '</tbody></table>';
+									aHTML.push('</tbody></table>';
 									
 									if (ns1blankspace.objectContextData.to != '')
 									{
-										aHTML[++h] = '<table id="tableMessagingEmailsHeaderTo" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-										aHTML[++h] = '<tbody>'
-										aHTML[++h] = '<tr class="interfaceMainHeaderTo">' +
-														'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
+										aHTML.push('<table id="tableMessagingEmailsHeaderTo" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMainHeader">';
+										aHTML.push('<tbody>'
+										aHTML.push('<tr class="ns1blankspaceMainHeaderTo">' +
+														'<td style="text-align:left;" class="ns1blankspaceMainHeader" id="ns1blankspaceMainHeaderCC">';
 														
 										var sTo = ns1blankspace.objectContextData.to;
 										var aTo = sTo.split('|');
@@ -2440,18 +2439,18 @@ ns1blankspace.messaging.imap =
 											if (i % 2 !== 0) {sTo += this + '; ';}
 										});				
 														
-										aHTML[++h] = '<span class="interfaceMessagingHeader">To:</span> ' + sTo;
+										aHTML.push('<span class="ns1blankspaceMessagingHeader">To:</span> ' + sTo;
 
-										aHTML[++h] = '</td></tr>';
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</td></tr>';
+										aHTML.push('</tbody></table>';
 									}
 									
 									if (ns1blankspace.objectContextData.cc != '')
 									{
-										aHTML[++h] = '<table id="tableMessagingEmailsHeaderCC" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-										aHTML[++h] = '<tbody>'
-										aHTML[++h] = '<tr class="interfaceMainHeaderCC">' +
-														'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderCC">';
+										aHTML.push('<table id="tableMessagingEmailsHeaderCC" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMainHeader">';
+										aHTML.push('<tbody>'
+										aHTML.push('<tr class="ns1blankspaceMainHeaderCC">' +
+														'<td style="text-align:left;" class="ns1blankspaceMainHeader" id="ns1blankspaceMainHeaderCC">';
 														
 										var sCC = ns1blankspace.objectContextData.cc;
 										var aCC = sCC.split('#');
@@ -2462,18 +2461,18 @@ ns1blankspace.messaging.imap =
 											if (i % 2 !== 0) {sCC += this + '; ';}
 										});				
 														
-										aHTML[++h] = '<span class="interfaceMessagingHeader">Cc:</span> ' + sCC;
+										aHTML.push('<span class="ns1blankspaceMessagingHeader">Cc:</span> ' + sCC;
 
-										aHTML[++h] = '</td></tr>';
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</td></tr>';
+										aHTML.push('</tbody></table>';
 									}
 									
 									if (ns1blankspace.objectContextData.attachments != '')
 									{
-										aHTML[++h] = '<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="interfaceMainHeader">';
-										aHTML[++h] = '<tbody>'
-										aHTML[++h] = '<tr class="interfaceMainHeader">' +
-														'<td style="text-align:left;" class="interfaceMainHeader" id="interfaceMainHeaderAttachments">';
+										aHTML.push('<table id="tableMessagingEmailsHeader" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMainHeader">';
+										aHTML.push('<tbody>'
+										aHTML.push('<tr class="ns1blankspaceMainHeader">' +
+														'<td style="text-align:left;" class="ns1blankspaceMainHeader" id="ns1blankspaceMainHeaderAttachments">';
 														
 										var sAttachments = ns1blankspace.objectContextData.attachments;
 										var aAttachments = sAttachments.split('#');
@@ -2490,20 +2489,20 @@ ns1blankspace.messaging.imap =
 											}	
 										});	
 														
-										aHTML[++h] = '<span class="interfaceMessagingHeader">Attachments:</span> ' + sAttachments;
+										aHTML.push('<span class="ns1blankspaceMessagingHeader">Attachments:</span> ' + sAttachments;
 
-										aHTML[++h] = '</td></tr>';
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</td></tr>';
+										aHTML.push('</tbody></table>';
 									}
 									
-									aHTML[++h] = '<iframe style="display:block;height:10px;width:900px;" name="ifMessage" ' +
+									aHTML.push('<iframe style="display:block;height:10px;width:900px;" name="ifMessage" ' +
 													'id="ifMessage" frameborder="0" border="0" scrolling="no"></iframe>';
 													
 									$('#' + sTargetXHTMLElementID).html(aHTML.join('')); 
 									
-									interfaceMessagingViewport(oParam);
+									ns1blankspaceMessagingViewport(oParam);
 										
-									setTimeout("interfaceMessagingShowMessage()", 300);
+									setTimeout("ns1blankspaceMessagingShowMessage()", 300);
 								}
 				}
 }								

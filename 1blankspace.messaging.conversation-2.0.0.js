@@ -87,35 +87,35 @@ ns1blankspace.messaging.conversation =
 					}
 				},
 
-	home: 		function interfaceMessagingConversationHomeShow(oResponse)
+	home: 		function ns1blankspaceMessagingConversationHomeShow(oResponse)
 				{
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
 						var h = -1;
 									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-										'<td id="tdInterfaceMessagingConversationHomeMostLikely" class="interfaceViewportMain">' +
+						aHTML.push('<table id="tablens1blankspaceViewportMain" class="ns1blankspaceViewportMain">';
+						aHTML.push('<tr id="trns1blankspaceViewportMain" class="ns1blankspaceViewportMain">' +
+										'<td id="tdns1blankspaceMessagingConversationHomeMostLikely" class="ns1blankspaceViewportMain">' +
 										ns1blankspace.xhtml.loading + 
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#divns1blankspaceMain').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
+						aHTML.push('<table>';
+						aHTML.push('<tr>' +
 										'<td id="ns1blankspaceViewportMessagingConversationLarge" class="ns1blankspaceViewportImageLarge">' +
 										'&nbsp;' + 
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';		
+						aHTML.push('</table>';		
 						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));	
+						$('#divns1blankspaceViewportControl').html(aHTML.join(''));	
 						
 						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 						
@@ -126,7 +126,7 @@ ns1blankspace.messaging.conversation =
 							type: 'GET',
 							url: '/ondemand/messaging/?' + sParam,
 							dataType: 'json',
-							success: interfaceMessagingConversationHomeShow
+							success: ns1blankspaceMessagingConversationHomeShow
 						});		
 					}
 					else
@@ -135,24 +135,24 @@ ns1blankspace.messaging.conversation =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="tableInterfaceMessagingConversationHomeMostLikely">');
-							aHTML.push('<tr class="trInterfaceMessagingConversationHomeMostLikelyNothing">');
-							aHTML.push('<td class="tdInterfaceMessagingConversationHomeMostLikelyNothing">Click New to create a conversation.</td>');
+							aHTML.push('<table id="tablens1blankspaceMessagingConversationHomeMostLikely">');
+							aHTML.push('<tr class="trns1blankspaceMessagingConversationHomeMostLikelyNothing">');
+							aHTML.push('<td class="tdns1blankspaceMessagingConversationHomeMostLikelyNothing">Click New to create a conversation.</td>');
 							aHTML.push('</tr>');
 							aHTML.push('</table>');
 						}
 						else
 						{
-							aHTML.push('<table id="tableInterfaceBewsHomeMostLikely">');
+							aHTML.push('<table id="tablens1blankspaceBewsHomeMostLikely">');
 							aHTML.push('<tr>');
-							aHTML.push('<td class="interfaceMain">MOST LIKELY</td>');
+							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>');
 							aHTML.push('</tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{	
-								aHTML.push('<tr class="interfaceMainRow">');
-								aHTML.push('<td id="interfaceMessagingConversationHomeMostLikely_Title-' + this.id + 
-														'" class="interfaceHomeMostLikely">' +
+								aHTML.push('<tr class="ns1blankspaceMainRow">');
+								aHTML.push('<td id="ns1blankspaceMessagingConversationHomeMostLikely_Title-' + this.id + 
+														'" class="ns1blankspaceHomeMostLikely">' +
 														this.title +
 														'</td>');
 								aHTML.push('</tr>');
@@ -160,29 +160,29 @@ ns1blankspace.messaging.conversation =
 							
 							aHTML.push('</tbody></table>');
 							
-							aHTML.push('<table id="tableInterfaceMessagingConversationHomeMostLikelyMore">');
-							aHTML.push('<tr><td id="tdInterfaceMessagingConversationHomeMostLikelyMore">' +
-										'<a href="#" id="aInterfaceMessagingConversationHomeMostLikelyMore">more...</a>' +
+							aHTML.push('<table id="tablens1blankspaceMessagingConversationHomeMostLikelyMore">');
+							aHTML.push('<tr><td id="tdns1blankspaceMessagingConversationHomeMostLikelyMore">' +
+										'<a href="#" id="ans1blankspaceMessagingConversationHomeMostLikelyMore">more...</a>' +
 										'</td></tr>');
 							aHTML.push('</tbody></table>');
 						}
 						
-						$('#tdInterfaceMessagingConversationHomeMostLikely').html(aHTML.join(''));
+						$('#tdns1blankspaceMessagingConversationHomeMostLikely').html(aHTML.join(''));
 					
-						$('td.interfaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceHomeMostLikely').click(function(event)
 						{
-							interfaceMessagingConversationSearch(event.target.id, {source: 1});
+							ns1blankspaceMessagingConversationSearch(event.target.id, {source: 1});
 						});
 						
-						$('#aInterfaceMessagingConversationHomeMostLikelyMore').click(function(event)
+						$('#ans1blankspaceMessagingConversationHomeMostLikelyMore').click(function(event)
 						{
-							interfaceMessagingConversationSearch('tdInterfaceViewportMasterControlBrowse-', {source: ns1blankspace.data.searchSource.browse});
+							ns1blankspaceMessagingConversationSearch('tdns1blankspaceViewportMasterControlBrowse-', {source: ns1blankspace.data.searchSource.browse});
 						});
 					}
 				},
 
 	search: 	{
-					send:		function interfaceMessagingConversationSearch(sXHTMLElementId, oParam)
+					send:		function ns1blankspaceMessagingConversationSearch(sXHTMLElementId, oParam)
 								{
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
@@ -205,7 +205,7 @@ ns1blankspace.messaging.conversation =
 									
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#divns1blankspaceViewportControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										var sData = 'id=' + ns1blankspace.objectContext;
@@ -216,7 +216,7 @@ ns1blankspace.messaging.conversation =
 											url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_SEARCH',
 											data: sData,
 											dataType: 'json',
-											success: function(data) {interfaceMessagingConversationShow(oParam, data)}
+											success: function(data) {ns1blankspaceMessagingConversationShow(oParam, data)}
 										});
 									}
 									else
@@ -232,7 +232,7 @@ ns1blankspace.messaging.conversation =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											sElementId = 'tablens1blankspaceViewportMasterBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
@@ -247,7 +247,7 @@ ns1blankspace.messaging.conversation =
 											oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.rows = 10;
 											oSearch.sort('title', 'asc');
-											//oSearch.getResults(function(data) {interfaceMessagingConversationSearchShow(oParam, data)});
+											//oSearch.getResults(function(data) {ns1blankspaceMessagingConversationSearchShow(oParam, data)});
 											
 											var sData = 'quicksearch=' + sSearchText;
 
@@ -257,13 +257,13 @@ ns1blankspace.messaging.conversation =
 												url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_SEARCH',
 												data: sData,
 												dataType: 'json',
-												success: function(data) {interfaceMessagingConversationSearchShow(oParam, data)}
+												success: function(data) {ns1blankspaceMessagingConversationSearchShow(oParam, data)}
 											});
 										}
 									};	
 								},
 
-					process:	function interfaceMessagingConversationSearchShow(oParam, oResponse)
+					process:	function ns1blankspaceMessagingConversationSearchShow(oParam, oResponse)
 								{
 									var iColumn = 0;
 									var aHTML = [];
@@ -276,8 +276,8 @@ ns1blankspace.messaging.conversation =
 									}
 									else
 									{	
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">';
+										aHTML.push('<tbody>'
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -285,165 +285,165 @@ ns1blankspace.messaging.conversation =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">';
 											}
 											
-											aHTML[++h] = '<td class="interfaceSearch" id="-' + this.id + '">' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="-' + this.id + '">' +
 																this.title + '</td>';
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>'
 												iColumn = 0;
 											}
 											
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</tbody></table>';
 
 										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 										
 										ns1blankspaceSearchStop();
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
 											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceMessagingConversationSearch(event.target.id, {source: 1});
+											ns1blankspaceMessagingConversationSearch(event.target.id, {source: 1});
 										});
 									}	
 								}
 				},
 
-	layout: 	function interfaceMessagingConversationViewport()
+	layout: 	function ns1blankspaceMessagingConversationViewport()
 				{	
 					var aHTML = [];
 					var h = -1;
 
-					if (tinyMCE.getInstanceById('inputInterfaceMainEditText'))
+					if (tinyMCE.getInstanceById('inputns1blankspaceMainEditText'))
 					{
-						tinyMCE.get('inputInterfaceMainEditText').remove();
-						$('#inputInterfaceMainEditText').remove();
+						tinyMCE.get('inputns1blankspaceMainEditText').remove();
+						$('#inputns1blankspaceMainEditText').remove();
 					}	
 					
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+					aHTML.push('<div id="divns1blankspaceViewportControlContext" class="ns1blankspaceViewportControlContext"></div>';
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Details</td>' +
 										'</tr>';
 					}
 					else
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Summary</td>' +
 										'</tr>';
 									
 							
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">Details</td>' +
 										'</tr>';
 												
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlParticipants" class="interfaceViewportControl">Participants</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlParticipants" class="ns1blankspaceViewportControl">Participants</td>' +
 										'</tr>';			
 						
-						aHTML[++h] = '</table>';
+						aHTML.push('</table>';
 						
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+						aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlPosts" class="interfaceViewportControl">Posts</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlPosts" class="ns1blankspaceViewportControl">Posts</td>' +
 										'</tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlComments" class="interfaceViewportControl">Comments</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlComments" class="ns1blankspaceViewportControl">Comments</td>' +
 										'</tr>';				
 										
-						aHTML[++h] = '</table>';
+						aHTML.push('</table>';
 						
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+						aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlAttachments" class="ns1blankspaceViewportControl">Attachments</td>' +
 										'</tr>';
 								
-						aHTML[++h] = '</table>';				
+						aHTML.push('</table>';				
 					}
 					
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
+					$('#divns1blankspaceViewportControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainParticipants" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainParticipantsAdd" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainPosts" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainComments" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainPostDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainDetails" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainParticipants" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainParticipantsAdd" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainPosts" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainComments" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainPostDetails" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainAttachments" class="divns1blankspaceViewportMain"></div>';
 					
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#divns1blankspaceMain').html(aHTML.join(''));
 					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#tdns1blankspaceViewportControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary", true);
-						interfaceMessagingConversationSummary();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary", true);
+						ns1blankspaceMessagingConversationSummary();
 					});
 					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+					$('#tdns1blankspaceViewportControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceMessagingConversationDetails();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
+						ns1blankspaceMessagingConversationDetails();
 					});
 					
-					$('#tdInterfaceViewportControlParticipants').click(function(event)
+					$('#tdns1blankspaceViewportControlParticipants').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainParticipants", true);
-						interfaceMessagingConversationParticipants();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainParticipants", true);
+						ns1blankspaceMessagingConversationParticipants();
 					});
 					
-					$('#tdInterfaceViewportControlPosts').click(function(event)
+					$('#tdns1blankspaceViewportControlPosts').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainPosts");
-						interfaceMessagingConversationPosts();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainPosts");
+						ns1blankspaceMessagingConversationPosts();
 					});
 					
-					$('#tdInterfaceViewportControlComments').click(function(event)
+					$('#tdns1blankspaceViewportControlComments').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainComments");
-						interfaceMessagingConversationComments();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainComments");
+						ns1blankspaceMessagingConversationComments();
 					});
 					
-					$('#tdInterfaceViewportControlAttachments').click(function(event)
+					$('#tdns1blankspaceViewportControlAttachments').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
-						ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainAttachments", true);
+						ns1blankspaceAttachments({xhtmlElementID: 'divns1blankspaceMainAttachments'});
 					});
 				},
 
-	show: 		function interfaceMessagingConversationShow(oParam, oResponse)
+	show: 		function ns1blankspaceMessagingConversationShow(oParam, oResponse)
 				{
 					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceMessagingConversationViewport();
+					ns1blankspaceMessagingConversationViewport();
 					
 					var aHTML = [];
 					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find conversation.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find conversation.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
 						ns1blankspace.objectContextData = undefined;
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#divns1blankspaceMain').html(aHTML.join(''));
 						
 						ns1blankspace.messaging.ConversationOwner = false;
 					}
@@ -452,203 +452,203 @@ ns1blankspace.messaging.conversation =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
 						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceMessagingConversationMasterViewport({showHome: false});interfaceMessagingConversationSearch("-' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspaceMessagingConversationMasterViewport({showHome: false});ns1blankspaceMessagingConversationSearch("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
 								
-						$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.title);
+						$('#divns1blankspaceViewportControlContext').html(ns1blankspace.objectContextData.title);
 						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 						$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 						
 						ns1blankspace.messaging.ConversationOwner = (gsUserID == ns1blankspace.objectContextData.user)
 						
-						interfaceMessagingConversationSummary();
+						ns1blankspaceMessagingConversationSummary();
 					}
 				},	
 		
-	summary:	function interfaceMessagingConversationSummary()
+	summary:	function ns1blankspaceMessagingConversationSummary()
 				{
 
 					var aHTML = [];
 					var h = -1;
 					
-					aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-					aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-								'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
+					aHTML.push('<table id="tablens1blankspaceMainSummary" class="ns1blankspaceMain">';
+					aHTML.push('<tr id="trns1blankspaceMainSummaryRow1" class="ns1blankspaceMainRow1">' +
+								'<td id="tdns1blankspaceMainSummaryColumn1Large" class="ns1blankspaceMainColumn1Large">' +
 									'</td>' +
-									'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
+									'<td id="tdns1blankspaceMainSummaryColumn2Action" style="width:100px;">' +
 									'</td>' +
 									'</tr>';
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>';					
 						
-					$('#divInterfaceMainSummary').html(aHTML.join(''));
+					$('#divns1blankspaceMainSummary').html(aHTML.join(''));
 					
 					var aHTML = [];
 					var h = -1;
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find conversation.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find conversation.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#divns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 					
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
 									
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryOwner" class="interfaceMainSummary">Owner</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryOwnerValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td id="tdns1blankspaceMainSummaryOwner" class="ns1blankspaceMainSummary">Owner</td></tr>' +
+										'<tr><td id="tdns1blankspaceMainSummaryOwnerValue" class="ns1blankspaceMainSummaryValue">' +
 										ns1blankspace.objectContextData.ownerusertext +
 										'</td></tr>';	
 										
 						if (ns1blankspace.objectContextData.description != '')
 						{	
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryDescription" class="ns1blankspaceMainSummary">Description</td></tr>' +
+										'<tr><td id="tdns1blankspaceMainSummaryDescriptionValue" class="ns1blankspaceMainSummaryValue">' +
 										 ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.description) +
 										'</td></tr>';
 						}				
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#tdns1blankspaceMainSummaryColumn1Large').html(aHTML.join(''));
 
 						var aHTML = [];
 						var h = -1;	
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action" cellspacing=0>';
+						aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2Action" cellspacing=0>';
 						
 						if (ns1blankspace.messaging.ConversationOwner)
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryAddParticipant" class="interfaceMainColumn2Action">' +
-										'<a href="#" id="aInterfaceMainSummaryAddParticipant">Add&nbsp;Participant</a>' +
+							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryAddParticipant" class="ns1blankspaceMainColumn2Action">' +
+										'<a href="#" id="ans1blankspaceMainSummaryAddParticipant">Add&nbsp;Participant</a>' +
 										'</td></tr>';
 						}
 						else
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryRemoveParticipant" class="interfaceMainColumn2Action">' +
-										'<a href="#" id="aInterfaceMainSummaryRemoveParticipant">Leave</a>' +
+							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryRemoveParticipant" class="ns1blankspaceMainColumn2Action">' +
+										'<a href="#" id="ans1blankspaceMainSummaryRemoveParticipant">Leave</a>' +
 										'</td></tr>';
 						}	
 								
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));	
+						$('#tdns1blankspaceMainSummaryColumn2Action').html(aHTML.join(''));	
 						
-						$('#aInterfaceMainSummaryAddParticipant').click(function(event)
+						$('#ans1blankspaceMainSummaryAddParticipant').click(function(event)
 						{
-							interfaceMessagingConversationParticipantsAdd();
+							ns1blankspaceMessagingConversationParticipantsAdd();
 						});
 					}	
 				},
 
-	details: 	function interfaceMessagingConversationDetails()
+	details: 	function ns1blankspaceMessagingConversationDetails()
 				{
 					var aHTML = [];
 					var h = -1;
 					
-					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
+					if ($('#divns1blankspaceMainDetails').attr('onDemandLoading') == '1')
 					{
-						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
+						$('#divns1blankspaceMainDetails').attr('onDemandLoading', '');
 								
-						aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1">' +
+						aHTML.push('<table id="tablens1blankspaceMainDetails" class="ns1blankspaceMainDetails">';
+						aHTML.push('<tr id="trns1blankspaceMainDetailsRow1" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsColumn1" class="ns1blankspaceMainColumn1">' +
 										'</td>' +
-										'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMainColumn2">' +
+										'<td id="tdns1blankspaceMainDetailsColumn2" class="ns1blankspaceMainColumn2">' +
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#divInterfaceMainDetails').html(aHTML.join(''));
+						$('#divns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
 							
 						if (ns1blankspace.messaging.ConversationOwner)
 						{
-							aHTML[++h] = '<tr id="trInterfaceMainDetailsTitle" class="interfaceMain">' +
-											'<td id="tdInterfaceMainDetailsTitle" class="interfaceMain">' +
+							aHTML.push('<tr id="trns1blankspaceMainDetailsTitle" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainDetailsTitle" class="ns1blankspaceMain">' +
 											'Title' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainDetailsTitleValue" class="interfaceMainText">' +
-											'<td id="tdInterfaceMainDetailsTitleValue" class="interfaceMainText">' +
-											'<input onDemandType="TEXT" id="inputInterfaceMainDetailsTitle" class="inputInterfaceMainText">' +
+											'<tr id="trns1blankspaceMainDetailsTitleValue" class="ns1blankspaceMainText">' +
+											'<td id="tdns1blankspaceMainDetailsTitleValue" class="ns1blankspaceMainText">' +
+											'<input onDemandType="TEXT" id="inputns1blankspaceMainDetailsTitle" class="inputns1blankspaceMainText">' +
 											'</td></tr>';
 											
-							aHTML[++h] = '<tr id="trInterfaceMainDetailsSharing" class="interfaceMain">' +
-											'<td id="tdInterfaceMainDetailsSharing" class="interfaceMain">' +
+							aHTML.push('<tr id="trns1blankspaceMainDetailsSharing" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainDetailsSharing" class="ns1blankspaceMain">' +
 											'Sharing' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainDetailsSharing" class="interfaceMainText">' +
-											'<td id="tdInterfaceMainDetailsSharingValue" class="interfaceMainText">' +
+											'<tr id="trns1blankspaceMainDetailsSharing" class="ns1blankspaceMainText">' +
+											'<td id="tdns1blankspaceMainDetailsSharingValue" class="ns1blankspaceMainText">' +
 											'<input type="radio" id="radioSharingY" name="radioSharing" value="1"/>Added Participants & Network Groups' +
 											'<br /><input type="radio" id="radioSharingN" name="radioSharing" value="2"/>Everyone (Public)' +
 											'<br /><input type="radio" id="radioSharingN" name="radioSharing" value="3"/>Internal' +
 											'</td></tr>';
 
-							aHTML[++h] = '<tr id="trInterfaceMainDetailsParticipantCan" class="interfaceMain">' +
-											'<td id="tdInterfaceMainDetailsParticipantCan" class="interfaceMain">' +
+							aHTML.push('<tr id="trns1blankspaceMainDetailsParticipantCan" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainDetailsParticipantCan" class="ns1blankspaceMain">' +
 											'Participant Can' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainDetailsParticipantCan" class="interfaceMainText">' +
-											'<td id="tdInterfaceMainDetailsParticipantCanValue" class="interfaceMainText">' +
+											'<tr id="trns1blankspaceMainDetailsParticipantCan" class="ns1blankspaceMainText">' +
+											'<td id="tdns1blankspaceMainDetailsParticipantCanValue" class="ns1blankspaceMainText">' +
 											'<input type="radio" id="radioParticipantCan1" name="radioParticipantCan" value="1"/>Add Posts & Comments' +
 											'<br /><input type="radio" id="radioParticipantCan2" name="radioParticipantCan" value="2"/>Add Comments Only' +
 											'<br /><input type="radio" id="radioParticipantCan3" name="radioParticipantCan" value="3"/>View Only' +
 											'<br /><input type="radio" id="radioParticipantCan4" name="radioParticipantCan" value="4"/>Add Posts Only' +
 											'</td></tr>';
 											
-							aHTML[++h] = '<tr id="trInterfaceMainDetailsAlertURL" class="interfaceMain">' +
-											'<td id="tdInterfaceMainDetailsAlertURL" class="interfaceMain">' +
+							aHTML.push('<tr id="trns1blankspaceMainDetailsAlertURL" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainDetailsAlertURL" class="ns1blankspaceMain">' +
 											'URL For Alerts' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainDetailsURLValue" class="interfaceMainText">' +
-											'<td id="tdInterfaceMainDetailsURLValue" class="interfaceMainText">' +
-											'<input id="inputInterfaceMainDetailsAlertURL" class="inputInterfaceMainText">' +
+											'<tr id="trns1blankspaceMainDetailsURLValue" class="ns1blankspaceMainText">' +
+											'<td id="tdns1blankspaceMainDetailsURLValue" class="ns1blankspaceMainText">' +
+											'<input id="inputns1blankspaceMainDetailsAlertURL" class="inputns1blankspaceMainText">' +
 											'</td></tr>';
 											
 						}			
 						else
 						{
-							aHTML[++h] = '<tr class="interfaceMainCaption">' +
-												'<td class="interfaceMainRowNothing">Only the owner can change the conversation details.</td></tr>';
+							aHTML.push('<tr class="ns1blankspaceMainCaption">' +
+												'<td class="ns1blankspaceMainRowNothing">Only the owner can change the conversation details.</td></tr>';
 						}
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#tdns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
 						
 						if (ns1blankspace.messaging.ConversationOwner)
 						{
 							var aHTML = [];
 							var h = -1;
 									
-							aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+							aHTML.push('<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">';
 							
-							aHTML[++h] = '<tr id="trInterfaceMainDetailsDescription" class="interfaceMain">' +
-											'<td id="tdInterfaceMainDetailsDescription" class="interfaceMain">' +
+							aHTML.push('<tr id="trns1blankspaceMainDetailsDescription" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainDetailsDescription" class="ns1blankspaceMain">' +
 											'Description' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-											'<td id="tdInterfaceMainDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-											'<textarea rows="5" cols="35" onDemandType="TEXTMULTI" id="inputInterfaceMainDetailsDescription" class="inputInterfaceMainTextMulti"></textarea>' +
+											'<tr id="trns1blankspaceMainDetailsDescriptionValue" class="ns1blankspaceMainTextMulti">' +
+											'<td id="tdns1blankspaceMainDetailsDescriptionValue" class="ns1blankspaceMainTextMulti">' +
+											'<textarea rows="5" cols="35" onDemandType="TEXTMULTI" id="inputns1blankspaceMainDetailsDescription" class="inputns1blankspaceMainTextMulti"></textarea>' +
 											'</td></tr>';
 							
-							aHTML[++h] = '</table>';					
+							aHTML.push('</table>';					
 								
-							$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+							$('#tdns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
 						}	
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
-							$('#inputInterfaceMainDetailsDescription').val(ns1blankspace.objectContextData.description);
-							$('#inputInterfaceMainDetailsAlertURL').val(ns1blankspace.objectContextData.alerturl);
+							$('#inputns1blankspaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+							$('#inputns1blankspaceMainDetailsDescription').val(ns1blankspace.objectContextData.description);
+							$('#inputns1blankspaceMainDetailsAlertURL').val(ns1blankspace.objectContextData.alerturl);
 							
 							$('[name="radioSharing"][value="' + ns1blankspace.objectContextData.sharing + '"]').attr('checked', true);
 							$('[name="radioParticipantCan"][value="' + ns1blankspace.objectContextData.participantcan + '"]').attr('checked', true);
@@ -662,53 +662,53 @@ ns1blankspace.messaging.conversation =
 				},
 
 	participants: {
-					show:		function interfaceMessagingConversationParticipants(oParam)
+					show:		function ns1blankspaceMessagingConversationParticipants(oParam)
 								{
 									var aHTML = [];
 									var h = -1;	
 													
-									aHTML[++h] = '<table id="tableInterfaceMainParticipants" class="interfaceMain">' +
-													'<tr id="trInterfaceMainParticipantsRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainParticipantsColumn1" class="interfaceMainColumn1Large">' +
+									aHTML.push('<table id="tablens1blankspaceMainParticipants" class="ns1blankspaceMain">' +
+													'<tr id="trns1blankspaceMainParticipantsRow1" class="ns1blankspaceMainRow1">' +
+													'<td id="tdns1blankspaceMainParticipantsColumn1" class="ns1blankspaceMainColumn1Large">' +
 													ns1blankspace.xhtml.loading +
 													'</td>' +
-													'<td id="tdInterfaceMainParticipantsColumn2" class="interfaceMainColumn2Action">' +
+													'<td id="tdns1blankspaceMainParticipantsColumn2" class="ns1blankspaceMainColumn2Action">' +
 													'</td>' +
 													'</tr>' +
 													'</table>';					
 													
-									$('#divInterfaceMainParticipants').html(aHTML.join(''));	
+									$('#divns1blankspaceMainParticipants').html(aHTML.join(''));	
 									
 									if (ns1blankspace.messaging.ConversationOwner)
 									{	
 										var aHTML = [];
 										var h = -1;	
 										
-										aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
+										aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2Action">';
 																		
-										aHTML[++h] = '<tr><td id="tdInterfaceMainSend" class="interfaceMainAction">' +
-															'<span id="spanInterfaceMainParticipantsAdd">Add</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMainSend" class="ns1blankspaceMainAction">' +
+															'<span id="spanns1blankspaceMainParticipantsAdd">Add</span>' +
 															'</td></tr>';
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
-										$('#tdInterfaceMainParticipantsColumn2').html(aHTML.join(''));	
+										$('#tdns1blankspaceMainParticipantsColumn2').html(aHTML.join(''));	
 									
-										$('#spanInterfaceMainParticipantsAdd').button(
+										$('#spanns1blankspaceMainParticipantsAdd').button(
 											{
 												label: "Add"
 											})
 											.click(function() {
-												interfaceMessagingConversationParticipantsAdd();
+												ns1blankspaceMessagingConversationParticipantsAdd();
 											})
 									}		
 									
-									interfaceMessagingConversationParticipantsManage({xhtmlElementId: 'tdInterfaceMainParticipantsColumn1'});
+									ns1blankspaceMessagingConversationParticipantsManage({xhtmlElementId: 'tdns1blankspaceMainParticipantsColumn1'});
 								},		
 
-					search: 	function interfaceMessagingConversationParticipantsManage(oParam, oResponse)
+					search: 	function ns1blankspaceMessagingConversationParticipantsManage(oParam, oResponse)
 								{
-									var sXHTMLElementId = 'divInterfaceMainParticipants';
+									var sXHTMLElementId = 'divns1blankspaceMainParticipants';
 									var sLabel = "Participants";
 									var iOption = 1;
 									
@@ -728,7 +728,7 @@ ns1blankspace.messaging.conversation =
 											url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_PARTICIPANT_SEARCH',
 											data: sData,
 											dataType: 'json',
-											success: function(data) {interfaceMessagingConversationParticipantsManage(oParam, data)}
+											success: function(data) {ns1blankspaceMessagingConversationParticipantsManage(oParam, data)}
 										});
 									}
 									else
@@ -738,44 +738,44 @@ ns1blankspace.messaging.conversation =
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableInterfaceMessagingConversationHomeMostLikely">';
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																'<td class="interfaceMainRowNothing">No participants.</td></tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table id="tablens1blankspaceMessagingConversationHomeMostLikely">';
+											aHTML.push('<tr class="ns1blankspaceMainCaption">' +
+																'<td class="ns1blankspaceMainRowNothing">No participants.</td></tr>';
+											aHTML.push('</tbody></table>';
 
-											$('#tdInterfaceMainParticipantsColumn1').html(aHTML.join(''));
+											$('#tdns1blankspaceMainParticipantsColumn1').html(aHTML.join(''));
 										}
 										else
 										{
-											aHTML[++h] = '<table id="tableMessagingConversationParticipantsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
+											aHTML.push('<table id="tableMessagingConversationParticipantsList" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
+											aHTML.push('<tbody>'
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML[++h] = '<tr class="interfaceMainRow">';
+												aHTML.push('<tr class="ns1blankspaceMainRow">';
 																
-												aHTML[++h] = '<td id="tdMessagingConversationParticipantsList_userlogonname-' + this.user + '" class="interfaceMainRow">' +
+												aHTML.push('<td id="tdMessagingConversationParticipantsList_userlogonname-' + this.user + '" class="ns1blankspaceMainRow">' +
 																		this.userlogonname + '</td>';
 																		
-												aHTML[++h] = '<td id="tdMessagingConversationParticipantsList-' + this.user + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
+												aHTML.push('<td id="tdMessagingConversationParticipantsList-' + this.user + '" class="ns1blankspaceMainRowOptionsSelect">&nbsp;</td>';
 																		
-												aHTML[++h] = '</tr>';		
+												aHTML.push('</tr>';		
 											})
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
 											$('#' + sXHTMLElementId).html(aHTML.join(''));
 											
 											if (ns1blankspace.messaging.ConversationOwner)
 											{
-												$('.interfaceMainRowOptionsSelect').button( {
+												$('.ns1blankspaceMainRowOptionsSelect').button( {
 													text: false,
 													 icons: {
 														 primary: "ui-icon-close"
 													}
 												})
 												.click(function() {
-													interfaceMessagingConversationParticipantsRemove(this.id)
+													ns1blankspaceMessagingConversationParticipantsRemove(this.id)
 												})
 												.css('width', '15px')
 												.css('height', '20px')
@@ -784,9 +784,9 @@ ns1blankspace.messaging.conversation =
 									}	
 								},	
 
-					add: 		function interfaceMessagingConversationParticipantsAdd(oParam, oResponse)
+					add: 		function ns1blankspaceMessagingConversationParticipantsAdd(oParam, oResponse)
 								{
-									var sXHTMLElementId = 'divInterfaceMainParticipantsAdd';
+									var sXHTMLElementId = 'divns1blankspaceMainParticipantsAdd';
 									var oSearch;
 									
 									if (oParam != undefined)
@@ -805,97 +805,97 @@ ns1blankspace.messaging.conversation =
 											var aHTML = [];
 											var h = -1;	
 														
-											aHTML[++h] = '<table id="tableInterfaceMainParticipantsAdd" class="interfaceMain">' +
-															'<tr id="trInterfaceMainParticipantsAddRow1" class="interfaceMainRow1">' +
-															'<td id="tdInterfaceMainParticipantsAddColumn1" class="interfaceMainColumn1">' +
+											aHTML.push('<table id="tablens1blankspaceMainParticipantsAdd" class="ns1blankspaceMain">' +
+															'<tr id="trns1blankspaceMainParticipantsAddRow1" class="ns1blankspaceMainRow1">' +
+															'<td id="tdns1blankspaceMainParticipantsAddColumn1" class="ns1blankspaceMainColumn1">' +
 															ns1blankspace.xhtml.loading +
 															'</td>' +
-															'<td id="tdInterfaceMainParticipantsAddColumn2" class="interfaceMainColumn2Action" style="width:50%;">' +
+															'<td id="tdns1blankspaceMainParticipantsAddColumn2" class="ns1blankspaceMainColumn2Action" style="width:50%;">' +
 															'</td>' +
 															'</tr>' +
 															'</table>';					
 															
-											$('#divInterfaceMainParticipantsAdd').html(aHTML.join(''));	
+											$('#divns1blankspaceMainParticipantsAdd').html(aHTML.join(''));	
 											
 											var aHTML = [];
 											var h = -1;	
 											
-											aHTML[++h] = '<table id="tableInterfaceMainParticipantsAdd" class="interfaceMain">';
+											aHTML.push('<table id="tablens1blankspaceMainParticipantsAdd" class="ns1blankspaceMain">';
 											
-											aHTML[++h] = '<tr id="trInterfaceMainParticipantsAddFirstName" class="interfaceMain">' +
-														'<td id="tdInterfaceMainParticipantsAddFirstName" class="interfaceMain">' +
+											aHTML.push('<tr id="trns1blankspaceMainParticipantsAddFirstName" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainParticipantsAddFirstName" class="ns1blankspaceMain">' +
 														'First Name' +
 														'</td></tr>' +
-														'<tr id="trInterfaceMainParticipantsAddFirstNameValue" class="interfaceMainText">' +
-														'<td id="tdInterfaceMainParticipantsAddFirstNameValue" class="interfaceMainText">' +
-														'<input id="inputInterfaceMainParticipantsAddFirstName" class="inputInterfaceMainText">' +
+														'<tr id="trns1blankspaceMainParticipantsAddFirstNameValue" class="ns1blankspaceMainText">' +
+														'<td id="tdns1blankspaceMainParticipantsAddFirstNameValue" class="ns1blankspaceMainText">' +
+														'<input id="inputns1blankspaceMainParticipantsAddFirstName" class="inputns1blankspaceMainText">' +
 														'</td></tr>';							
 
-											aHTML[++h] = '<tr id="trInterfaceMainParticipantsAddSurname" class="interfaceMain">' +
-														'<td id="tdInterfaceMainParticipantsAddSurname" class="interfaceMain">' +
+											aHTML.push('<tr id="trns1blankspaceMainParticipantsAddSurname" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainParticipantsAddSurname" class="ns1blankspaceMain">' +
 														'Surname' +
 														'</td></tr>' +
-														'<tr id="trInterfaceMainParticipantsAddSurnameValue" class="interfaceMainText">' +
-														'<td id="tdInterfaceMainParticipantsAddSurnameValue" class="interfaceMainText">' +
-														'<input id="inputInterfaceMainParticipantsAddSurname" class="inputInterfaceMainText">' +
+														'<tr id="trns1blankspaceMainParticipantsAddSurnameValue" class="ns1blankspaceMainText">' +
+														'<td id="tdns1blankspaceMainParticipantsAddSurnameValue" class="ns1blankspaceMainText">' +
+														'<input id="inputns1blankspaceMainParticipantsAddSurname" class="inputns1blankspaceMainText">' +
 														'</td></tr>';
 														
-											aHTML[++h] = '<tr id="trInterfaceMainParticipantsAddEmail" class="interfaceMain">' +
-														'<td id="tdInterfaceMainParticipantsAddEmail" class="interfaceMain">' +
+											aHTML.push('<tr id="trns1blankspaceMainParticipantsAddEmail" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainParticipantsAddEmail" class="ns1blankspaceMain">' +
 														'Email' +
 														'</td></tr>' +
-														'<tr id="trInterfaceMainParticipantsAddEmailValue" class="interfaceMainText">' +
-														'<td id="tdInterfaceMainParticipantsAddEmailValue" class="interfaceMainText">' +
-														'<input id="inputInterfaceMainParticipantsAddEmail" class="inputInterfaceMainText">' +
+														'<tr id="trns1blankspaceMainParticipantsAddEmailValue" class="ns1blankspaceMainText">' +
+														'<td id="tdns1blankspaceMainParticipantsAddEmailValue" class="ns1blankspaceMainText">' +
+														'<input id="inputns1blankspaceMainParticipantsAddEmail" class="inputns1blankspaceMainText">' +
 														'</td></tr>';
 														
-											aHTML[++h] = '<tr id="trInterfaceMainParticipantsAddUserText" class="interfaceMain">' +
-														'<td id="tdInterfaceMainParticipantsAddUserText" class="interfaceMain">' +
+											aHTML.push('<tr id="trns1blankspaceMainParticipantsAddUserText" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainParticipantsAddUserText" class="ns1blankspaceMain">' +
 														'Logon Name' +
 														'</td></tr>' +
-														'<tr id="trInterfaceMainParticipantsAddUserTextValue" class="interfaceMainText">' +
-														'<td id="tdInterfaceMainParticipantsAddUserTextValue" class="interfaceMainText">' +
-														'<input id="inputInterfaceMainParticipantsAddUserText" class="inputInterfaceMainText">' +
+														'<tr id="trns1blankspaceMainParticipantsAddUserTextValue" class="ns1blankspaceMainText">' +
+														'<td id="tdns1blankspaceMainParticipantsAddUserTextValue" class="ns1blankspaceMainText">' +
+														'<input id="inputns1blankspaceMainParticipantsAddUserText" class="inputns1blankspaceMainText">' +
 														'</td></tr>';
 														
-											aHTML[++h] = '</table>';		
+											aHTML.push('</table>';		
 											
-											aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
+											aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2Action">';
 												
-											aHTML[++h] = '<tr><td id="tdInterfaceParticipantsAddSearch" class="interfaceMainAction">' +
-															'<span id="spanInterfaceParticipantsAddSearch">Search</span>' +
+											aHTML.push('<tr><td id="tdns1blankspaceParticipantsAddSearch" class="ns1blankspaceMainAction">' +
+															'<span id="spanns1blankspaceParticipantsAddSearch">Search</span>' +
 															'</td></tr>';
 														
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>';					
 										
-											$('#tdInterfaceMainParticipantsAddColumn1').html(aHTML.join(''))
+											$('#tdns1blankspaceMainParticipantsAddColumn1').html(aHTML.join(''))
 											
-											$('#spanInterfaceParticipantsAddSearch').button(
+											$('#spanns1blankspaceParticipantsAddSearch').button(
 											{
 												label: "Search"
 											})
 											.click(function() {
 											
 												var oSearchSet = {}
-												if ($('#inputInterfaceMainParticipantsAddFirstName').val() != '')
+												if ($('#inputns1blankspaceMainParticipantsAddFirstName').val() != '')
 												{
-													oSearchSet.firstName = $('#inputInterfaceMainParticipantsAddFirstName').val()
+													oSearchSet.firstName = $('#inputns1blankspaceMainParticipantsAddFirstName').val()
 												}
-												if ($('#inputInterfaceMainParticipantsAddSurname').val() != '')
+												if ($('#inputns1blankspaceMainParticipantsAddSurname').val() != '')
 												{
-													oSearchSet.surname = $('#inputInterfaceMainParticipantsAddSurname').val()
+													oSearchSet.surname = $('#inputns1blankspaceMainParticipantsAddSurname').val()
 												}
-												if ($('#inputInterfaceMainParticipantsAddEmail').val() != '')
+												if ($('#inputns1blankspaceMainParticipantsAddEmail').val() != '')
 												{
-													oSearchSet.email = $('#inputInterfaceMainParticipantsAddEmail').val()
+													oSearchSet.email = $('#inputns1blankspaceMainParticipantsAddEmail').val()
 												}
-												if ($('#inputInterfaceMainParticipantsAddUserText').val() != '')
+												if ($('#inputns1blankspaceMainParticipantsAddUserText').val() != '')
 												{
-													oSearchSet.userText = $('#inputInterfaceMainParticipantsAddUserText').val()
+													oSearchSet.userText = $('#inputns1blankspaceMainParticipantsAddUserText').val()
 												}
 												if (oParam == undefined) {oParam = {}}
 												oParam.search = oSearchSet;
-												interfaceMessagingConversationParticipantsAdd(oParam);
+												ns1blankspaceMessagingConversationParticipantsAdd(oParam);
 											})
 										
 										}
@@ -926,7 +926,7 @@ ns1blankspace.messaging.conversation =
 												url: '/ondemand/network/?method=NETWORK_USER_SEARCH',
 												data: sData,
 												dataType: 'json',
-												success: function(data){interfaceMessagingConversationParticipantsAdd(oParam, data)}
+												success: function(data){ns1blankspaceMessagingConversationParticipantsAdd(oParam, data)}
 											});
 										}	
 									}
@@ -937,13 +937,13 @@ ns1blankspace.messaging.conversation =
 											var aHTML = [];
 											var h = -1;
 											
-											aHTML[++h] = '<table id="tableMessagingConversationParticpantsAddSelect" border="0" cellspacing="0" cellpadding="0">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
-															'<td class="interfaceMainRowNothing">You need set the search criteria.</td></tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table id="tableMessagingConversationParticpantsAddSelect" border="0" cellspacing="0" cellpadding="0">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceMainCaption">' +
+															'<td class="ns1blankspaceMainRowNothing">You need set the search criteria.</td></tr>';
+											aHTML.push('</tbody></table>';
 
-											$('#tdInterfaceMainParticipantsAddColumn2').html(aHTML.join(''));
+											$('#tdns1blankspaceMainParticipantsAddColumn2').html(aHTML.join(''));
 										}
 										else
 										{
@@ -952,37 +952,37 @@ ns1blankspace.messaging.conversation =
 											
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML[++h] = '<table id="tableMessagingConversationParticpantsAddSelect" border="0" cellspacing="0" cellpadding="0">';
-												aHTML[++h] = '<tbody>'
-												aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																'<td class="interfaceMainRowNothing">No matching users.</td></tr>';
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('<table id="tableMessagingConversationParticpantsAddSelect" border="0" cellspacing="0" cellpadding="0">';
+												aHTML.push('<tbody>'
+												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
+																'<td class="ns1blankspaceMainRowNothing">No matching users.</td></tr>';
+												aHTML.push('</tbody></table>';
 
-												$('#tdInterfaceMainParticipantsAddColumn2').html(aHTML.join(''));
+												$('#tdns1blankspaceMainParticipantsAddColumn2').html(aHTML.join(''));
 											}
 											else
 											{
-												aHTML[++h] = '<table id="tableMessagingConversationParticpantsAddSelect" class="interfaceMain">';
-												aHTML[++h] = '<tbody>'
+												aHTML.push('<table id="tableMessagingConversationParticpantsAddSelect" class="ns1blankspaceMain">';
+												aHTML.push('<tbody>'
 												
 												$.each(oResponse.data.rows, function()
 												{	
-													aHTML[++h] = '<tr class="interfaceMainRow">';
-													aHTML[++h] = '<td id="tdMessagingConversationParticpantsAddSelect-title-' +
-																			this.user + '" class="interfaceMainRow">' +
+													aHTML.push('<tr class="ns1blankspaceMainRow">';
+													aHTML.push('<td id="tdMessagingConversationParticpantsAddSelect-title-' +
+																			this.user + '" class="ns1blankspaceMainRow">' +
 																			this.usertext + '</td>';
 													
-													aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">' +
-																	'<span id="spanMessagingConversationParticipantAddSelect-' + this.user + '" class="interfaceMainRowSelect"></span>' +
+													aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceMainRow">' +
+																	'<span id="spanMessagingConversationParticipantAddSelect-' + this.user + '" class="ns1blankspaceMainRowSelect"></span>' +
 																	'</td></tr>';
 													
 												});
 												
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('</tbody></table>';
 
-												$('#tdInterfaceMainParticipantsAddColumn2').html(aHTML.join(''));
+												$('#tdns1blankspaceMainParticipantsAddColumn2').html(aHTML.join(''));
 												
-												$('.interfaceMainRowSelect').button({
+												$('.ns1blankspaceMainRowSelect').button({
 													text: false,
 													label: "Add",
 													icons: {
@@ -990,7 +990,7 @@ ns1blankspace.messaging.conversation =
 													}
 												})
 												.click(function() {
-													interfaceMessagingConversationParticipantsAddSelect(this.id);
+													ns1blankspaceMessagingConversationParticipantsAddSelect(this.id);
 												})
 												.css('width', '15px')
 												.css('height', '20px')
@@ -1037,9 +1037,9 @@ ns1blankspace.messaging.conversation =
 				},
 
 	posts: 		{
-					show: 		function interfaceMessagingConversationPosts(oParam, oResponse)
+					show: 		function ns1blankspaceMessagingConversationPosts(oParam, oResponse)
 								{
-									var sXHTMLElementId = 'divInterfaceMainPosts';
+									var sXHTMLElementId = 'divns1blankspaceMainPosts';
 									
 									if (oParam != undefined)
 									{
@@ -1057,7 +1057,7 @@ ns1blankspace.messaging.conversation =
 											url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_POST_SEARCH',
 											data: sData,
 											dataType: 'json',
-											success: function(data) {interfaceMessagingConversationPosts(oParam, data)}
+											success: function(data) {ns1blankspaceMessagingConversationPosts(oParam, data)}
 										});
 									}
 									else
@@ -1065,37 +1065,37 @@ ns1blankspace.messaging.conversation =
 										var aHTML = [];
 										var h = -1;	
 														
-										aHTML[++h] = '<table id="tableInterfaceMainPosts" class="interfaceMain">' +
-														'<tr id="trInterfaceMainPostsRow1" class="interfaceMainRow1">' +
-														'<td id="tdInterfaceMainPostsColumn1" class="interfaceMainColumn1Large">' +
+										aHTML.push('<table id="tablens1blankspaceMainPosts" class="ns1blankspaceMain">' +
+														'<tr id="trns1blankspaceMainPostsRow1" class="ns1blankspaceMainRow1">' +
+														'<td id="tdns1blankspaceMainPostsColumn1" class="ns1blankspaceMainColumn1Large">' +
 														ns1blankspace.xhtml.loading +
 														'</td>' +
-														'<td id="tdInterfaceMainPostsColumn2" class="interfaceMainColumn2Action">' +
+														'<td id="tdns1blankspaceMainPostsColumn2" class="ns1blankspaceMainColumn2Action">' +
 														'</td>' +
 														'</tr>' +
 														'</table>';					
 														
-										$('#divInterfaceMainPosts').html(aHTML.join(''));	
+										$('#divns1blankspaceMainPosts').html(aHTML.join(''));	
 									
 										var aHTML = [];
 										var h = -1;	
 										
-										aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
+										aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2Action">';
 												
-										aHTML[++h] = '<tr><td id="tdInterfaceMainSend" class="interfaceMainAction">' +
-															'<span id="spanInterfaceMainAdd">Add</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMainSend" class="ns1blankspaceMainAction">' +
+															'<span id="spanns1blankspaceMainAdd">Add</span>' +
 															'</td></tr>';
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
-										$('#tdInterfaceMainPostsColumn2').html(aHTML.join(''));	
+										$('#tdns1blankspaceMainPostsColumn2').html(aHTML.join(''));	
 									
-										$('#spanInterfaceMainAdd').button(
+										$('#spanns1blankspaceMainAdd').button(
 										{
 											label: "Add"
 										})
 										.click(function() {
-											interfaceMessagingConversationPostsAdd(false);
+											ns1blankspaceMessagingConversationPostsAdd(false);
 										})
 										
 										var aHTML = [];
@@ -1103,52 +1103,52 @@ ns1blankspace.messaging.conversation =
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableInterfaceMessagingConversationHomeMostLikely">';
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																'<td class="interfaceMainRowNothing">No posts.</td></tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table id="tablens1blankspaceMessagingConversationHomeMostLikely">';
+											aHTML.push('<tr class="ns1blankspaceMainCaption">' +
+																'<td class="ns1blankspaceMainRowNothing">No posts.</td></tr>';
+											aHTML.push('</tbody></table>';
 										}
 										else
 										{		
-											aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+											aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
 												
-											aHTML[++h] = '<table id="tableMessagingConversationPostsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
+											aHTML.push('<table id="tableMessagingConversationPostsList" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
+											aHTML.push('<tbody>'
 											
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">Subject</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">By</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<tr class="ns1blankspaceMainCaption">';
+											aHTML.push('<td class="ns1blankspaceMainCaption">Subject</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption">By</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption">Date</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
+											aHTML.push('</tr>';
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML[++h] = '<tr class="interfaceMainRow">';
+												aHTML.push('<tr class="ns1blankspaceMainRow">';
 																
 												var sSubject = this.subject;
 												if (sSubject == '') {sSubject = (this.message).substring(0, 50) + '...'}		
 																
-												aHTML[++h] = '<td id="tdMessagingConversationPostsList_subject-' + this.id + '" class="interfaceMainRow">' +
+												aHTML.push('<td id="tdMessagingConversationPostsList_subject-' + this.id + '" class="ns1blankspaceMainRow">' +
 																		sSubject + '</td>';
 																		
-												aHTML[++h] = '<td id="tdMessagingConversationPostsList_usertext-' + this.id + '" class="interfaceMainRow">' +
+												aHTML.push('<td id="tdMessagingConversationPostsList_usertext-' + this.id + '" class="ns1blankspaceMainRow">' +
 																		this.usertext + '</td>';
 																		
-												aHTML[++h] = '<td id="tdMessagingConversationPostsList_date-' + this.id + '" class="interfaceMainRow">' +
+												aHTML.push('<td id="tdMessagingConversationPostsList_date-' + this.id + '" class="ns1blankspaceMainRow">' +
 																		this.datetime + '</td>';
 																
-												aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">' +
-																	'<span id="spanMessagingConversationPostsComment-' + this.id + '" class="interfaceMainRowSelect interfaceMainRowSelectAddComment"></span>' +
+												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceMainRow">' +
+																	'<span id="spanMessagingConversationPostsComment-' + this.id + '" class="ns1blankspaceMainRowSelect ns1blankspaceMainRowSelectAddComment"></span>' +
 																	'</td></tr>';
 													
 											});
 												
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
-											$('#tdInterfaceMainPostsColumn1').html(aHTML.join(''));
+											$('#tdns1blankspaceMainPostsColumn1').html(aHTML.join(''));
 										
-											$('.interfaceMainRowSelectAddComment').button({
+											$('.ns1blankspaceMainRowSelectAddComment').button({
 												text: false,
 												label: "Comment",
 												icons: {
@@ -1156,7 +1156,7 @@ ns1blankspace.messaging.conversation =
 												}
 											})
 											.click(function() {
-												interfaceMessagingConversationCommentsOptions({xhtmlElementID: this.id});
+												ns1blankspaceMessagingConversationCommentsOptions({xhtmlElementID: this.id});
 											})
 											.css('width', '15px')
 											.css('height', '20px')
@@ -1164,7 +1164,7 @@ ns1blankspace.messaging.conversation =
 									}	
 								}	
 
-								function interfaceMessagingConversationCommentsOptions(oParam)
+								function ns1blankspaceMessagingConversationCommentsOptions(oParam)
 								{
 									var aHTML = [];
 									var h = -1;
@@ -1179,17 +1179,17 @@ ns1blankspace.messaging.conversation =
 									
 									if (iStep == 1) 
 									{
-										aHTML[++h] = '<table id="tableMessagingConversationCommentsOptions" style="width:75px;" class="interfaceDropDown">';
+										aHTML.push('<table id="tableMessagingConversationCommentsOptions" style="width:75px;" class="ns1blankspaceDropDown">';
 										
-										aHTML[++h] = '<tr><td id="tdInterfaceMessagingConversationCommentsOptionsView" class="interfaceMainAction">' +
-														'<span id="spanInterfaceMessagingConversationCommentsOptionsView">View</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMessagingConversationCommentsOptionsView" class="ns1blankspaceMainAction">' +
+														'<span id="spanns1blankspaceMessagingConversationCommentsOptionsView">View</span>' +
 														'</td></tr>';
 														
-										aHTML[++h] = '<tr><td id="tdInterfaceMessagingConversationCommentsOptionsAdd" class="interfaceMainAction">' +
-														'<span id="spanInterfaceMessagingConversationCommentsOptionsAdd">Add</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMessagingConversationCommentsOptionsAdd" class="ns1blankspaceMainAction">' +
+														'<span id="spanns1blankspaceMessagingConversationCommentsOptionsAdd">Add</span>' +
 														'</td></tr>';				
 										
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 
 										ns1blankspaceViewportOptionsShow({
 											xhtmlElementID: sXHTMLElementID,
@@ -1198,24 +1198,24 @@ ns1blankspace.messaging.conversation =
 											xhtml: aHTML.join('')
 										});
 										
-										$('#spanInterfaceMessagingConversationCommentsOptionsView').button(
+										$('#spanns1blankspaceMessagingConversationCommentsOptionsView').button(
 										{
 											label: "View"
 										})
 										.click(function() {
 											ns1blankspaceViewportOptionsHide();
-											ns1blankspaceMainViewportShow("#divInterfaceMainComments");
+											ns1blankspaceMainViewportShow("#divns1blankspaceMainComments");
 											var aXHTMLElementID = sXHTMLElementID.split('-');
-											interfaceMessagingConversationComments({post: aXHTMLElementID[1]});
+											ns1blankspaceMessagingConversationComments({post: aXHTMLElementID[1]});
 										})
 										.css('width', '75px')
 										
-										$('#spanInterfaceMessagingConversationCommentsOptionsAdd').button(
+										$('#spanns1blankspaceMessagingConversationCommentsOptionsAdd').button(
 										{
 											label: "Add"
 										})
 										.click(function() {
-											interfaceMessagingConversationCommentsOptions({xhtmlElementID: sXHTMLElementID, step: 2});
+											ns1blankspaceMessagingConversationCommentsOptions({xhtmlElementID: sXHTMLElementID, step: 2});
 										})
 										.css('width', '75px')
 									}
@@ -1225,19 +1225,19 @@ ns1blankspace.messaging.conversation =
 										var aHTML = [];
 										var h = -1;
 															
-										aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceDropDown">';									
+										aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceDropDown">';									
 									
-										aHTML[++h] = '<tr id="trInterfaceMainPostDetailsMessageValue" class="interfaceMainTextMulti">' +
-															'<td id="tdInterfaceMainPostDetailsMessageValue" class="interfaceMainTextMulti">' +
-															'<textarea name="message" rows="15" cols="10" id="inputInterfaceMainCommentMessage"' +
-																	' class="inputInterfaceMainTextMulti"></textarea>' +
+										aHTML.push('<tr id="trns1blankspaceMainPostDetailsMessageValue" class="ns1blankspaceMainTextMulti">' +
+															'<td id="tdns1blankspaceMainPostDetailsMessageValue" class="ns1blankspaceMainTextMulti">' +
+															'<textarea name="message" rows="15" cols="10" id="inputns1blankspaceMainCommentMessage"' +
+																	' class="inputns1blankspaceMainTextMulti"></textarea>' +
 															'</td></tr>';
 										
-										aHTML[++h] = '<tr><td id="tdInterfaceMainCommentsSend" class="interfaceMainAction" style="text-align:right;">' +
-														'<span id="spanInterfaceMainCommentsSend">Send</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMainCommentsSend" class="ns1blankspaceMainAction" style="text-align:right;">' +
+														'<span id="spanns1blankspaceMainCommentsSend">Send</span>' +
 														'</td></tr>';
 																
-										aHTML[++h] = '</table>';
+										aHTML.push('</table>';
 
 										ns1blankspaceViewportOptionsShow({
 											xhtmlElementID: sXHTMLElementID,
@@ -1247,21 +1247,21 @@ ns1blankspace.messaging.conversation =
 											forceShow: true
 										});
 										
-										$('#spanInterfaceMainCommentsSend').button(
+										$('#spanns1blankspaceMainCommentsSend').button(
 										{
 											label: "Send"
 										})
 										.click(function() {
-											interfaceMessagingConversationCommentsOptions({xhtmlElementID: sXHTMLElementID, step: 3});
+											ns1blankspaceMessagingConversationCommentsOptions({xhtmlElementID: sXHTMLElementID, step: 3});
 										})
 										.css('width', '75px')
 									}
 									
 									if (iStep == 3)
 									{
-										$('#spanInterfaceMainCommentsSend').html(ns1blankspace.xhtml.loadingSmall);
+										$('#spanns1blankspaceMainCommentsSend').html(ns1blankspace.xhtml.loadingSmall);
 										
-										var sData = 'message=' + ns1blankspace.util.fs($('#inputInterfaceMainCommentMessage').val())
+										var sData = 'message=' + ns1blankspace.util.fs($('#inputns1blankspaceMainCommentMessage').val())
 										
 										var aXHTMLElementID = sXHTMLElementID.split('-');
 										sData += '&post=' + aXHTMLElementID[1];
@@ -1289,9 +1289,9 @@ ns1blankspace.messaging.conversation =
 									
 								}
 
-								function interfaceMessagingConversationPostsAdd(oParam, oResponse)
+								function ns1blankspaceMessagingConversationPostsAdd(oParam, oResponse)
 								{
-									var sXHTMLElementId = "divInterfaceMainPostDetails";
+									var sXHTMLElementId = "divns1blankspaceMainPostDetails";
 									var sXHTMLElementContextId;
 									var iPost;
 									
@@ -1315,16 +1315,16 @@ ns1blankspace.messaging.conversation =
 										var lProjectTask = aSearch[1];
 									}	
 										
-									ns1blankspaceMainViewportShow("#divInterfaceMainPostDetails");	
+									ns1blankspaceMainViewportShow("#divns1blankspaceMainPostDetails");	
 										
 									var aHTML = [];
 									var h = -1;
 										
-									aHTML[++h] = '<table id="tableInterfaceMainPostDetails" class="interfaceMain">' +
-													'<tr id="trInterfaceMainPostDetailsRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainPostDetailsColumn1" class="interfaceMainColumn1Large">' +
+									aHTML.push('<table id="tablens1blankspaceMainPostDetails" class="ns1blankspaceMain">' +
+													'<tr id="trns1blankspaceMainPostDetailsRow1" class="ns1blankspaceMainRow1">' +
+													'<td id="tdns1blankspaceMainPostDetailsColumn1" class="ns1blankspaceMainColumn1Large">' +
 													'</td>' +
-													'<td id="tdInterfaceMainPostDetailsColumn2" class="interfaceMainColumn2Action">' +
+													'<td id="tdns1blankspaceMainPostDetailsColumn2" class="ns1blankspaceMainColumn2Action">' +
 													'</td>' +
 													'</tr>' +
 													'</table>';				
@@ -1341,7 +1341,7 @@ ns1blankspace.messaging.conversation =
 											url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_POST_SEARCH',
 											data: sData,
 											dataType: 'json',
-											success: function(data) {interfaceMessagingConversationPostsAdd(oParam, data)}
+											success: function(data) {ns1blankspaceMessagingConversationPostsAdd(oParam, data)}
 										});
 									}
 									else
@@ -1350,55 +1350,55 @@ ns1blankspace.messaging.conversation =
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainTaskDetailsColumn2" class="interfaceMainColumn2Action">';
+										aHTML.push('<table id="tablens1blankspaceMainTaskDetailsColumn2" class="ns1blankspaceMainColumn2Action">';
 										
-										aHTML[++h] = '<tr><td id="tdInterfaceMainPostDetailsSend" class="interfaceMainAction">' +
-														'<span id="spanInterfaceMainPostDetailsSend">Send</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMainPostDetailsSend" class="ns1blankspaceMainAction">' +
+														'<span id="spanns1blankspaceMainPostDetailsSend">Send</span>' +
 														'</td></tr>';
 																
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
-										$('#tdInterfaceMainPostDetailsColumn2').html(aHTML.join(''));
+										$('#tdns1blankspaceMainPostDetailsColumn2').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainPostDetailsSend').button(
+										$('#spanns1blankspaceMainPostDetailsSend').button(
 										{
 											label: "Send"
 										})
 										.click(function() {
 											if ($('#oFile0').val() == '')
 											{
-												interfaceMessagingConversationPostDetailsSend()
+												ns1blankspaceMessagingConversationPostDetailsSend()
 											}
 											else
 											{
-												ns1blankspaceAttachmentsUploadProcess({functionPostUpdate: interfaceMessagingConversationPostsShow});
+												ns1blankspaceAttachmentsUploadProcess({functionPostUpdate: ns1blankspaceMessagingConversationPostsShow});
 											}	
 										})
 										
 										var aHTML = [];
 										var h = -1;
 															
-										aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';					
+										aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';					
 															
-										aHTML[++h] = '<tr id="trInterfaceMainPostDetailsSubject" class="interfaceMain">' +
-															'<td id="tdInterfaceMainPostDetailsSubject" class="interfaceMain">' +
+										aHTML.push('<tr id="trns1blankspaceMainPostDetailsSubject" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainPostDetailsSubject" class="ns1blankspaceMain">' +
 															'Subject' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainPostDetailsSubjectValue" class="interfaceMainText">' +
-															'<td id="tdInterfaceMainPostDetailsSubjectValue" class="interfaceMainText">' +
-															'<input name="subject" id="inputInterfaceMainPostDetailsSubject" class="inputInterfaceMainText">' +
+															'<tr id="trns1blankspaceMainPostDetailsSubjectValue" class="ns1blankspaceMainText">' +
+															'<td id="tdns1blankspaceMainPostDetailsSubjectValue" class="ns1blankspaceMainText">' +
+															'<input name="subject" id="inputns1blankspaceMainPostDetailsSubject" class="inputns1blankspaceMainText">' +
 															'</td></tr>';							
 									
-										aHTML[++h] = '<tr id="trInterfaceMainPostDetailsMessageValue" class="interfaceMainTextMulti">' +
-															'<td id="tdInterfaceMainPostDetailsMessageValue" class="interfaceMainTextMulti">' +
-															'<textarea name="message" rows="25" cols="50" id="inputInterfaceMainPostDetailsMessage' +
-																	ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="inputInterfaceMainTextMulti"></textarea>' +
+										aHTML.push('<tr id="trns1blankspaceMainPostDetailsMessageValue" class="ns1blankspaceMainTextMulti">' +
+															'<td id="tdns1blankspaceMainPostDetailsMessageValue" class="ns1blankspaceMainTextMulti">' +
+															'<textarea name="message" rows="25" cols="50" id="inputns1blankspaceMainPostDetailsMessage' +
+																	ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="inputns1blankspaceMainTextMulti"></textarea>' +
 																	
 															'</td></tr>';
 									
-										aHTML[++h] = '</table>';						
+										aHTML.push('</table>';						
 									
-										$('#tdInterfaceMainPostDetailsColumn1').html(
+										$('#tdns1blankspaceMainPostDetailsColumn1').html(
 											ns1blankspaceAttachmentsUpload(
 												{
 													xhtml: aHTML.join(''),
@@ -1408,43 +1408,43 @@ ns1blankspace.messaging.conversation =
 										
 										if (ns1blankspace.option.richTextEditing)
 										{
-											tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainPostDetailsMessage' + ns1blankspace.counter.editor);
+											tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceMainPostDetailsMessage' + ns1blankspace.counter.editor);
 										}	
 										
 										if (oResponse != undefined)
 										{	
 											if (oResponse.data.rows.length != 0)
 											{
-												$('#inputInterfaceMainPostDetailsSubject').val(oResponse.data.rows[0].subject);
-												$('#inputInterfaceMainPostDetailsMessage').val(oResponse.data.rows[0].message);		
+												$('#inputns1blankspaceMainPostDetailsSubject').val(oResponse.data.rows[0].subject);
+												$('#inputns1blankspaceMainPostDetailsMessage').val(oResponse.data.rows[0].message);		
 											}
 										}	
 									}	
 								}	
 
-								function interfaceMessagingConversationPostDetailsSend()
+								function ns1blankspaceMessagingConversationPostDetailsSend()
 								{
 									var sParam = '/ondemand/messaging/?method=MESSAGING_CONVERSATION_POST_MANAGE'
 									var sData = 'conversation=' + ns1blankspace.objectContext;
 									
-									sData += '&subject=' + encodeURIComponent($('#inputInterfaceMainPostDetailsSubject').val());
-									sData += '&message=' + encodeURIComponent(tinyMCE.get('inputInterfaceMainPostDetailsMessage' + ns1blankspace.counter.editor).getContent()) 
+									sData += '&subject=' + encodeURIComponent($('#inputns1blankspaceMainPostDetailsSubject').val());
+									sData += '&message=' + encodeURIComponent(tinyMCE.get('inputns1blankspaceMainPostDetailsMessage' + ns1blankspace.counter.editor).getContent()) 
 										
 									ns1blankspaceSave(sParam, sData, 'Post Sent');
-									ns1blankspaceMainViewportShow("#divInterfaceMainPosts", true);
-									interfaceMessagingConversationPosts();	
+									ns1blankspaceMainViewportShow("#divns1blankspaceMainPosts", true);
+									ns1blankspaceMessagingConversationPosts();	
 								}
 
-								function interfaceMessagingConversationPostsShow()
+								function ns1blankspaceMessagingConversationPostsShow()
 								{
-									ns1blankspaceMainViewportShow("#divInterfaceMainPosts", true);
-									interfaceMessagingConversationPosts();	
+									ns1blankspaceMainViewportShow("#divns1blankspaceMainPosts", true);
+									ns1blankspaceMessagingConversationPosts();	
 								}
 				},
 
-	comments: 	function interfaceMessagingConversationComments(oParam, oResponse)
+	comments: 	function ns1blankspaceMessagingConversationComments(oParam, oResponse)
 				{
-					var sXHTMLElementId = 'divInterfaceMainComments';
+					var sXHTMLElementId = 'divns1blankspaceMainComments';
 					var iPost;
 					
 					if (oParam != undefined)
@@ -1472,7 +1472,7 @@ ns1blankspace.messaging.conversation =
 							url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_POST_COMMENT_SEARCH',
 							data: sData,
 							dataType: 'json',
-							success: function(data) {interfaceMessagingConversationComments(oParam, data)}
+							success: function(data) {ns1blankspaceMessagingConversationComments(oParam, data)}
 						});
 					}
 					else
@@ -1480,37 +1480,37 @@ ns1blankspace.messaging.conversation =
 						var aHTML = [];
 						var h = -1;	
 										
-						aHTML[++h] = '<table id="tableInterfaceMainComments" class="interfaceMain">' +
-										'<tr id="trInterfaceMainCommentsRow1" class="interfaceMainRow1">' +
-										'<td id="tdInterfaceMainCommentsColumn1" class="interfaceMainColumn1Large">' +
+						aHTML.push('<table id="tablens1blankspaceMainComments" class="ns1blankspaceMain">' +
+										'<tr id="trns1blankspaceMainCommentsRow1" class="ns1blankspaceMainRow1">' +
+										'<td id="tdns1blankspaceMainCommentsColumn1" class="ns1blankspaceMainColumn1Large">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
-										'<td id="tdInterfaceMainCommentsColumn2" class="interfaceMainColumn2Action">' +
+										'<td id="tdns1blankspaceMainCommentsColumn2" class="ns1blankspaceMainColumn2Action">' +
 										'</td>' +
 										'</tr>' +
 										'</table>';					
 										
-						$('#divInterfaceMainComments').html(aHTML.join(''));	
+						$('#divns1blankspaceMainComments').html(aHTML.join(''));	
 					
 						var aHTML = [];
 						var h = -1;	
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
+						aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2Action">';
 								
-						aHTML[++h] = '<tr><td id="tdInterfaceMainCommentAdd" class="interfaceMainAction">' +
-											'<span id="spanInterfaceMainCommentsAdd">Add</span>' +
+						aHTML.push('<tr><td id="tdns1blankspaceMainCommentAdd" class="ns1blankspaceMainAction">' +
+											'<span id="spanns1blankspaceMainCommentsAdd">Add</span>' +
 											'</td></tr>';
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainCommentsColumn2').html(aHTML.join(''));	
+						$('#tdns1blankspaceMainCommentsColumn2').html(aHTML.join(''));	
 					
-						$('#spanInterfaceMainCommentsAdd').button(
+						$('#spanns1blankspaceMainCommentsAdd').button(
 						{
 							label: "Add"
 						})
 						.click(function() {
-							interfaceMessagingConversationCommentsAdd(false);
+							ns1blankspaceMessagingConversationCommentsAdd(false);
 						})
 						
 						var aHTML = [];
@@ -1518,62 +1518,62 @@ ns1blankspace.messaging.conversation =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceMessagingConversationHomeMostLikely">';
-							aHTML[++h] = '<tr class="interfaceMainCaption">' +
-												'<td class="interfaceMainRowNothing">No comments.</td></tr>';
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('<table id="tablens1blankspaceMessagingConversationHomeMostLikely">';
+							aHTML.push('<tr class="ns1blankspaceMainCaption">' +
+												'<td class="ns1blankspaceMainRowNothing">No comments.</td></tr>';
+							aHTML.push('</tbody></table>';
 						}
 						else
 						{		
-							aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+							aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
 								
-							aHTML[++h] = '<table id="tableMessagingConversationCommentsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-							aHTML[++h] = '<tbody>'
+							aHTML.push('<table id="tableMessagingConversationCommentsList" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
+							aHTML.push('<tbody>'
 							
-							aHTML[++h] = '<tr class="interfaceMainCaption">';
+							aHTML.push('<tr class="ns1blankspaceMainCaption">';
 							if (iPost == undefined)
 							{
-								aHTML[++h] = '<td class="interfaceMainCaption">Post</td>';
+								aHTML.push('<td class="ns1blankspaceMainCaption">Post</td>';
 							}
-							aHTML[++h] = '<td class="interfaceMainCaption">Comment</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">By</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-							aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-							aHTML[++h] = '</tr>';
+							aHTML.push('<td class="ns1blankspaceMainCaption">Comment</td>';
+							aHTML.push('<td class="ns1blankspaceMainCaption">By</td>';
+							aHTML.push('<td class="ns1blankspaceMainCaption">Date</td>';
+							aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
+							aHTML.push('</tr>';
 							
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+								aHTML.push('<tr class="ns1blankspaceMainRow">';
 													
 								if (iPost == undefined)
 								{
-									aHTML[++h] = '<td id="tdMessagingConversationCommentsList_postsubject-' + this.id + '" class="interfaceMainRow">' +
+									aHTML.push('<td id="tdMessagingConversationCommentsList_postsubject-' + this.id + '" class="ns1blankspaceMainRow">' +
 														this.postsubject + '</td>';	
 								}
 								
-								aHTML[++h] = '<td id="tdMessagingConversationCommentsList_message-' + this.id + '" class="interfaceMainRow">' +
+								aHTML.push('<td id="tdMessagingConversationCommentsList_message-' + this.id + '" class="ns1blankspaceMainRow">' +
 														this.message + '</td>';
 														
-								aHTML[++h] = '<td id="tdMessagingConversationCommentsList_usertext-' + this.id + '" class="interfaceMainRow">' +
+								aHTML.push('<td id="tdMessagingConversationCommentsList_usertext-' + this.id + '" class="ns1blankspaceMainRow">' +
 														this.usertext + '</td>';
 														
-								aHTML[++h] = '<td id="tdMessagingConversationCommentsList_date-' + this.id + '" class="interfaceMainRow">' +
+								aHTML.push('<td id="tdMessagingConversationCommentsList_date-' + this.id + '" class="ns1blankspaceMainRow">' +
 														this.datetime + '</td>';
 									
-								aHTML[++h] = '<td style="width:60px;text-align:right;" class="interfaceMainRow">' +
-													'<span id="spanMessagingConversationPostsComment-' + this.post + '" class="interfaceMainRowSelect interfaceMainRowSelectAddComment"></span>' +
+								aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceMainRow">' +
+													'<span id="spanMessagingConversationPostsComment-' + this.post + '" class="ns1blankspaceMainRowSelect ns1blankspaceMainRowSelectAddComment"></span>' +
 													'</td></tr>';
 										
-								aHTML[++h] = '</tr>'
+								aHTML.push('</tr>'
 								
 							});
 							
-							aHTML[++h] = '</tbody></table>';	
+							aHTML.push('</tbody></table>';	
 						}
 						
-						$('#divInterfaceMainComments').html(aHTML.join(''));
+						$('#divns1blankspaceMainComments').html(aHTML.join(''));
 						
-						$('.interfaceMainRowSelectAddComment').button({
+						$('.ns1blankspaceMainRowSelectAddComment').button({
 							text: false,
 							label: "Comment",
 							icons: {
@@ -1581,7 +1581,7 @@ ns1blankspace.messaging.conversation =
 							}
 						})
 						.click(function() {
-							interfaceMessagingConversationCommentsOptions({xhtmlElementID: this.id});
+							ns1blankspaceMessagingConversationCommentsOptions({xhtmlElementID: this.id});
 						})
 						.css('width', '15px')
 						.css('height', '20px')
@@ -1599,13 +1599,13 @@ ns1blankspace.messaging.conversation =
 										sData += '&id=' + ns1blankspace.objectContext	
 									}	
 									
-									if ($('#divInterfaceMainDetails').html() != '')
+									if ($('#divns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&title=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsTitle').val());
-										sData += '&description=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDescription').val());
+										sData += '&title=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsTitle').val());
+										sData += '&description=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsDescription').val());
 										sData += '&sharing=' + $('input[name="radioSharing"]:checked').val();
 										sData += '&participantcan=' + $('input[name="radioParticipantCan"]:checked').val();
-										sData += '&alerturl=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsAlertURL').val());
+										sData += '&alerturl=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsAlertURL').val());
 									}
 									
 									$.ajax(
@@ -1614,7 +1614,7 @@ ns1blankspace.messaging.conversation =
 										url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_MANAGE',
 										data: sData,
 										dataType: 'json',
-										success: interfaceMessagingConversationSaveProcess
+										success: ns1blankspaceMessagingConversationSaveProcess
 									});		
 								}
 
@@ -1625,7 +1625,7 @@ ns1blankspace.messaging.conversation =
 										ns1blankspaceStatus('Saved');
 										if (ns1blankspace.objectContext == -1) {ns1blankspace.objectContext = oResponse.id};	
 										ns1blankspace.inputDetected = false;
-										interfaceMessagingConversationSearch('-' + ns1blankspace.objectContext, {source: 1});
+										ns1blankspaceMessagingConversationSearch('-' + ns1blankspace.objectContext, {source: 1});
 									}
 									else
 									{
