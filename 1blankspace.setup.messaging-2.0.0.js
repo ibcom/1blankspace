@@ -39,6 +39,8 @@ ns1blankspace.setup.messaging =
 				{
 					if (oResponse == undefined)
 					{
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+
 						var aHTML = [];
 									
 						aHTML.push('<table class="ns1blankspaceMain">');
@@ -61,8 +63,6 @@ ns1blankspace.setup.messaging =
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 
-						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
 						oSearch.addField('email');
