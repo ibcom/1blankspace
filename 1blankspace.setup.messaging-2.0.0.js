@@ -53,7 +53,7 @@ ns1blankspace.setup.messaging =
 						
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 
-							var aHTML = [];
+						var aHTML = [];
 									
 						aHTML.push('<table>');
 
