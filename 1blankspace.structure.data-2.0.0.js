@@ -520,8 +520,8 @@ ns1blankspace.stuctureData =
 								}
 				},
 				
-	element: 	{							
-					layout:		function ns1blankspaceStructureDataElements(oParam, oResponse)
+	elements: 	{							
+					init:		function (oParam, oResponse)
 								{
 									var aHTML = [];
 									
@@ -531,71 +531,60 @@ ns1blankspace.stuctureData =
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/setup/?method=SETUP_STRUCTURE_CATEGORY_SEARCH&structure=' + ns1blankspace.objectContextData.structure,
+											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_CATEGORY_SEARCH'),
+											data: 'structure=' + ns1blankspace.objectContextData.structure,
 											dataType: 'json',
-											success: function(data) {ns1blankspaceStructureDataElements(oParam, data)}
+											success: function(data) {ns1blankspace.structureData.elements.init(oParam, data)}
 										});
 									}
 									else
 									{
-										if ($('#divns1blankspaceMainElement').attr('onDemandLoading') == '1')
+										if ($('#ns1blankspaceMainElement').attr('data-loading') == '1')
 										{
-											$('#divns1blankspaceMainElement').attr('onDemandLoading', '');
+											$('#ns1blankspaceMainElement').attr('data-loading', '');
 										
-											aHTML.push('<table id="tablens1blankspaceMainElement" class="ns1blankspaceMain">';
-											aHTML.push('<tr id="trns1blankspaceMainElementRow1" class="ns1blankspaceMain">' +
-															'<td id="tdns1blankspaceMainElementColumnCategory" style="width: 100px" class="ns1blankspaceMainColumn1">' +
-															'</td>' +
-															'<td id="tdns1blankspaceMainElementColumnElement" style="width: 300px" class="ns1blankspaceMainColumn2">' +
-															'</td>' +
-															'<td id="tdns1blankspaceMainElementColumnEdit" class="ns1blankspaceMainColumn2">' +
-															'</td>' +
-															'</tr>';
-											aHTML.push('</table>';					
+											aHTML.push('<table class="ns1blankspaceContainer">' +
+															'<tr class="ns1blankspaceContainer">' +
+															'<td id="ns1blankspaceMainElementColumnCategory" style="width: 100px" class="ns1blankspaceColumn1"></td>' +
+															'<td id="ns1blankspaceMainElementColumnElement" style="width: 300px" class="ns1blankspaceColumn2"></td>' +
+															'<td id="ns1blankspaceMainElementColumnEdit" class="ns1blankspaceMainColumn2"></td>' +
+															'</tr>' +
+															'</table>';					
 											
-											$('#divns1blankspaceMainElement').html(aHTML.join(''));
+											$('#ns1blankspaceMainElement').html(aHTML.join(''));
 											
 											var aHTML = [];
 											
-										
-											aHTML.push('<table id="tablens1blankspaceMainElementCategories" class="ns1blankspaceMain">';
+											aHTML.push('<table id="ns1blankspaceElementCategories" class="ns1blankspaceMain">';
 											
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<table id="tableStructureDataCategory" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-												aHTML.push('<tbody>'
-												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-																'<td class="ns1blankspaceMainRowNothing">No categories.</td></tr>';
-												aHTML.push('</tbody></table>';
+												aHTML.push('<table><tr><td valign="top">No categories</td></tr></table>');
 
-												$('#tdns1blankspaceMainElementColumn1').html(aHTML.join(''));
-											
+												$('#ns1blankspaceMainElementColumn1').html(aHTML.join(''));
 											}
 											else
 											{
-												aHTML.push('<table id="tableStructureDataCategory" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-												aHTML.push('<tbody>'
-												
 												$.each(oResponse.data.rows, function()
 												{
-													aHTML.push('<tr class="ns1blankspaceMainRow">';
+													aHTML.push('<tr class="ns1blankspaceRow">');
 																	
-													aHTML.push('<td id="tdStructureDataCategory_title-' + this.id + '" class="ns1blankspaceSearch">' +
-																			this.title + '</td>';
+													aHTML.push('<td id="ns1blankspaceStructureDataCategory_title-' + this.id + '" class="ns1blankspaceSearch">' +
+																			this.title + '</td>');
 																			
-													aHTML.push('</tr>';
+													aHTML.push('</tr>');
 												});
 												
-												aHTML.push('</tbody></table>';
+												aHTML.push('</table>');
 
-												$('#tdns1blankspaceMainElementColumnCategory').html(aHTML.join(''));
+												$('#ns1blankspaceElementColumnCategory').html(aHTML.join(''));
 									
 												$('td.ns1blankspaceSearch').click(function(event)
 												{
 													var sXHTMLElementId = event.target.id;
 													var aId = sXHTMLElementId.split('-');
 													
-													ns1blankspaceStructureDataCategoryElements({xhtmlElementID: 'tdns1blankspaceMainElementColumnElement', category: aId[1]});
+													ns1blankspace.structureData.category.elements.show({xhtmlElementID: 'ns1blankspaceMainElementColumnElement', category: aId[1]});
 													
 												});
 											}	
@@ -603,10 +592,9 @@ ns1blankspace.stuctureData =
 									}	
 								},
 
-					show:		function ns1blankspaceStructureDataCategoryElements(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.objectContext;
-									var sXHTMLElementId = 'tdns1blankspaceMainElementColumnElement';
 									var oOptions = {edit: true, remove: true};
 									var oActions = {add: true};
 									var iCategory;
@@ -614,7 +602,6 @@ ns1blankspace.stuctureData =
 									if (oParam != undefined)
 									{
 										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-										if (oParam.xhtmlElementID != undefined) {sXHTMLElementId = oParam.xhtmlElementID}
 										if (oParam.options != undefined) {oOptions = oParam.options}
 										if (oParam.actions != undefined) {oActions = oParam.actions}
 										if (oParam.category != undefined) {iCategory = oParam.category}
@@ -625,88 +612,82 @@ ns1blankspace.stuctureData =
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/structure/structure.asp?method=STRUCTURE_ELEMENT_DATA_VALUE_SEARCH' +
-														'&data=' + ns1blankspace.objectContext + '&category=' + iCategory,
+											url: ns1blankspace.util.endpointURI('STRUCTURE_ELEMENT_DATA_VALUE_SEARCH'),
+											data: 'data=' + ns1blankspace.util.fs(ns1blankspace.objectContext) + '&category=' + ns1blankspace.util.fs(iCategory),
 											dataType: 'json',
-											success: function(data) {ns1blankspaceStructureDataCategoryElements(oParam, data)}
+											success: function(data) {ns1blankspace.structureData.elements.show(oParam, data)}
 										});
 									}
 									else
 									{
 										var aHTML = [];
 										
-										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table id="tableStructureDataCategoryElements" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-															'<td class="ns1blankspaceMainRowNothing">No elements</td></tr>';
-											aHTML.push('</tbody></table>';
+											aHTML.push('<table><tr><td valign="top">No elements</td></tr></table>')
 
-											$('#' + sXHTMLElementId).html(aHTML.join(''));
-										
+											$('#ns1blankspaceMainElementColumnElement').html(aHTML.join(''));
 										}
 										else
 										{
-											aHTML.push('<table id="tableStructureDataValueHeader" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMainHeader" style="font-size:0.75em;background-color: #F8F8F8;padding:5px;">';
-											aHTML.push('<tbody>'
+											aHTML.push('<table class="ns1blankspaceMainContainer" style="font-size:0.75em;background-color: #f8f8f8;padding:5px;">');
+
 											aHTML.push('<tr class="ns1blankspaceMainHeader">' +
-													'<td class="ns1blankspaceMainHeaderX" id="ns1blankspaceMainHeaderRemovedEmails" style="text-align:left;">&nbsp;</td>';	
+													'<td class="ns1blankspaceHeader" style="text-align:left;">&nbsp;</td>');	
 											
-											aHTML.push('<td class="ns1blankspaceMainHeaderX" id="tdns1blankspaceMainHeaderAll" style="width:15px;">';
-											aHTML.push('<span id="spanns1blankspaceMainHeaderAll" class="ns1blankspaceMainHeaderAll">All</span>';
+											aHTML.push('<td class="ns1blankspaceMainHeaderX" id="ns1blankspaceMainHeaderAll" style="width:15px;">');
+											aHTML.push('<span id="spanns1blankspaceMainHeaderAll" class="ns1blankspaceMainHeaderAll">All</span>');
+											aHTML.push('</td>');
+											
+											aHTML.push('<td class="ns1blankspaceMainHeaderX" style="width:5px;">&nbsp;|&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceMainHeaderX" id="ns1blankspaceMainHeaderUnanswered" style="width:80px;">');
+											aHTML.push('<span id="spanns1blankspaceMainHeaderUnanswered" class="ns1blankspaceMainHeaderUnanswered">Unanswered</span>');
 											aHTML.push('</td>';
 											
-											aHTML.push('<td class="ns1blankspaceMainHeaderX" style="width:5px;">&nbsp;|&nbsp;</td>';
-											aHTML.push('<td class="ns1blankspaceMainHeaderX" id="tdns1blankspaceMainHeaderUnanswered" style="width:80px;">';
-											aHTML.push('<span id="spanns1blankspaceMainHeaderUnanswered" class="ns1blankspaceMainHeaderUnanswered">Unanswered</span>';
-											aHTML.push('</td>';
+											aHTML.push('<td class="ns1blankspaceMainHeaderX" style="width:5px;">&nbsp;|&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceMainHeaderX" id="ns1blankspaceMainHeaderAnswered" style="width:60px;">');
+											aHTML.push('<span id="spanns1blankspaceMainHeaderAnswered" class="ns1blankspaceMainHeaderAnswered">Answered</span>');
+											aHTML.push('</td>');
 											
-											aHTML.push('<td class="ns1blankspaceMainHeaderX" style="width:5px;">&nbsp;|&nbsp;</td>';
-											aHTML.push('<td class="ns1blankspaceMainHeaderX" id="tdns1blankspaceMainHeaderAnswered" style="width:60px;">';
-											aHTML.push('<span id="spanns1blankspaceMainHeaderAnswered" class="ns1blankspaceMainHeaderAnswered">Answered</span>';
-											aHTML.push('</td>';
-											
-											aHTML.push('</tr>';
-											aHTML.push('</table>';
+											aHTML.push('</tr>');
+											aHTML.push('</table>');
 														
-											aHTML.push('<tr class="ns1blankspaceMainHeader" id="trns1blankspaceMessagingInboxPages"><td colspan=2 id="tdns1blankspaceMessagingInboxPages"></td></tr>';
-											aHTML.push('</tbody></table>';
-											aHTML.push('<table id="tableStructureDataCategoryElements" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceMainHeader" id="trns1blankspaceMessagingInboxPages"><td colspan=2></td></tr>');
+											aHTML.push('</table>');
+
+											aHTML.push('<table id="tableStructureDataCategoryElements" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">');
 
 											var sClass;
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML.push('<tr class="ns1blankspaceMainRow">';
+												aHTML.push('<tr class="ns1blankspaceRow">');
 																
 												sClass = (this.text != '' || this.formatted != '') ? ' answered' : ''				
 																
-												aHTML.push('<td id="tdStructureDataCategoryElement_title-' + this.id + '" class="ns1blankspaceMainRow' + sClass + '">' +
-																		this.elementtext + '</td>';
+												aHTML.push('<td id="ns1blankspaceStructureDataCategoryElement_title-' + this.id + '" class="ns1blankspaceMainRow' + sClass + '">' +
+																		this.elementtext + '</td>');
 																		
-												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceMainRow">';
+												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceMainRow">');
 													
 												if (oOptions.remove)
 												{	
-													aHTML.push('<span id="spanStructureDataCategoryoptions_remove-' + this.id + '" class="ns1blankspaceMainRowOptionsRemove"></span>';
+													aHTML.push('<span id="ns1blankspaceStructureDataCategoryoptions_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
 												};	
 													
 												if (oOptions.edit)
 												{	
-													aHTML.push('<span id="spanStructureDataCategory_options_edit-' + this.id + '" class="ns1blankspaceMainRowOptionsEdit"></span>';
+													aHTML.push('<span id="ns1blankspacenStructureDataCategory_options_edit-' + this.id + '" class="ns1blankspaceRowEdit"></span>');
 												};	
 													
-												aHTML.push('</td>';
+												aHTML.push('</td>');
 																
-												aHTML.push('</tr>';
+												aHTML.push('</tr>');
 											});
 											
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>');
 
-											$('#' + sXHTMLElementId).html(aHTML.join(''));
+											$('#ns1blankspaceElementColumnElement').html(aHTML.join(''));
 											
 											if (oOptions.remove) 
 											{
@@ -717,31 +698,31 @@ ns1blankspace.stuctureData =
 													}
 												})
 												.click(function() {
-													ns1blankspaceStructureDataCategoryRemove({xhtmlElementID: this.id});
+													ns1blankspace.structureData.elements.remove({xhtmlElementID: this.id});
 												})
 												.css('width', '15px')
-												.css('height', '17px')
+												.css('height', '17px');
 											}
 											
 											if (oOptions.edit) 
 											{
-												$('.ns1blankspaceMainRowOptionsEdit').button( {
+												$('.ns1blankspaceMainRowEdit').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-pencil"
 													}
 												})
 												.click(function() {
-													ns1blankspaceStructureDataCategoryElementEdit({xhtmlElementID: this.id})
+													ns1blankspace.structureData.category.elements.edit({xhtmlElementID: this.id})
 												})
 												.css('width', '15px')
-												.css('height', '17px')
+												.css('height', '17px');
 											}	
 										}
 									}	
 								},
 
-					edit:		function ns1blankspaceStructureDataCategoryElementEdit(oParam, oResponse)
+					edit:		function (oParam, oResponse)
 								{
 									var sID; 
 									
@@ -763,65 +744,59 @@ ns1blankspace.stuctureData =
 										var aHTML = [];
 										
 
-										aHTML.push('<table style="font-size: 0.875px;">';
+										aHTML.push('<table style="font-size: 0.875px;">');
 												
-										aHTML.push('<tr id="trns1blankspaceMainStructureDataElementAddSave">' +
-														'<td>' +
-														'<span id="spanns1blankspaceMainStructureDataCategoryElementEditSave">Save</span>' +
-														'</td></tr>';
-										/*
-										aHTML.push('<td id="tdns1blankspaceMainStructureDataElementAddCancel" class="ns1blankspaceMainAction">' +
-														'<span id="spanns1blankspaceMainStructureDataCategoryElementEditCancel">Cancel</span>' +
-														'</td></tr>';
-										*/
+										aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceStructureDataElementSave">Save</span>' +
+														'</td></tr>');
 														
-										aHTML.push('</table>';			
+										aHTML.push('</table>');			
 											
 										aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMain">';
 												
-										aHTML.push('<tr id="trns1blankspaceMainSetupStructureDataCategoryTitle" class="ns1blankspaceMain">' +
-														'<td id="tdns1blankspaceMainSetupStructureDataCategoryTitle" class="ns1blankspaceMain">' +
+										aHTML.push('<tr class="ns1blankspaceMain">' +
+														'<td class="ns1blankspaceMain">' +
 														'Title' +
 														'</td></tr>' +
-														'<tr id="trns1blankspaceMainSetupStructureDataCategoryAddTitleValue" class="ns1blankspaceMainText">' +
-														'<td id="tdns1blankspaceMainSetupStructureDataCategoryAddTitleValue" class="ns1blankspaceMainText">' +
-														'<input id="inputns1blankspaceMainStructureDataCategoryAddTitle" class="inputns1blankspaceMainText">' +
+														'<tr class="ns1blankspaceMainText">' +
+														'<td class="ns1blankspaceMainText">' +
+														'<input id="ns1blankspaceStructureDataElementTitle" class="inputns1blankspaceMainText">' +
 														'</td></tr>';
 										
 										aHTML.push('</table>';					
 										
-										$('#tdns1blankspaceMainElementColumnEdit').html(aHTML.join(''));
+										$('#ns1blankspaceMainElementColumnEdit').html(aHTML.join(''));
 										
-										$('#spanns1blankspaceMainStructureDataCategoryElementEditSave').button(
+										$('#ns1blankspaceStructureDataElementSave').button(
 										{
 											text: "Save"
 										})
 										.click(function() 
 										{
-											var sData = 'StructureData=' + ns1blankspace.objectContext;
+											var sData = 'structureData=' + ns1blankspace.objectContext;
 											sData += '&id=' + ns1blankspace.util.fs(sID);
 											sData += '&title=' + ns1blankspace.util.fs($('#inputns1blankspaceMainStructureDataCategoryAddTitle').val());
 											
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/structure/structure.asp?method=STRUCTURE_DATA_VALUE_MANAGE',
+												url: ns1blankspace.util.endpointURI('STRUCTURE_DATA_VALUE_MANAGE'),
 												data: sData,
 												dataType: 'json',
 												success: function() {
-													$('#tdns1blankspaceMainElementColumnEdit').html('');
-													$('#tdStructureDataCategoryElement_title-' + sID).addClass('answered');
+													$('#ns1blankspaceMainElementColumnEdit').html('');
+													$('#ns1blankspaceStructureDataCategoryElement_title-' + sID).addClass('answered');
 												}
 											});
 										});
 										
-										$('#spanns1blankspaceMainStructureDataCategoryElementEditCancel').button(
+										$('#ns1blankspaceStructureDataElementCancel').button(
 										{
 											text: "Cancel"
 										})
 										.click(function() 
 										{
-											$('#tdns1blankspaceMainElementColumnEdit').html('');
+											$('#ns1blankspaceElementColumnEdit').html('');
 										});
 										
 										if (sID != undefined)
@@ -829,10 +804,10 @@ ns1blankspace.stuctureData =
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/structure/structure.asp?method=STRUCTURE_DATA_VALUE_SEARCH',
+												url: ns1blankspace.util.endpointURI('STRUCTURE_DATA_VALUE_SEARCH'),
 												data: 'id=' + sID,
 												dataType: 'json',
-												success: function(data) {ns1blankspaceStructureDataCategoryElementEdit(oParam, data)}
+												success: function(data) {ns1blankspace.structureData.category.element.edit(oParam, data)}
 											});
 										}
 										else
@@ -845,13 +820,13 @@ ns1blankspace.stuctureData =
 										if (oResponse.data.rows.length != 0)
 										{
 											var oObjectContext = oResponse.data.rows[0];
-											$('#inputns1blankspaceMainSetupStructureDataElementAddTitle').val(oObjectContext.title)
-											$('#inputns1blankspaceMainSetupStructureDataElementAddTitle').focus();
+											$('#ns1blankspaceMainSetupStructureDataElementTitle').val(oObjectContext.title)
+											$('#ns1blankspaceMainSetupStructureDataElementTitle').focus();
 										}
 									}		
 								},
 
-					remove:		function ns1blankspaceStructureDataCategoryElementRemove(oParam, oResponse)
+					remove:		function (oParam, oResponse)
 								{
 									var sXHTMLElementID;
 
@@ -865,16 +840,15 @@ ns1blankspace.stuctureData =
 									
 									if (oResponse == undefined)
 									{	
-										var sParam = 'method=STRUCTURE_DATA_VALUE_MANAGE&remove=1';
-										var sData = 'id=' + sID;
+										var sData = 'remove=1&id=' + sID;
 										
 										$.ajax(
 										{
 											type: 'POST',
-											url: '/ondemand/structure/structure.asp?' + sParam,
+											url: ns1blankspace.util.endpointURI('STRUCTURE_DATA_VALUE_MANAGE'),
 											data: sData,
 											dataType: 'json',
-											success: function(data){ns1blankspaceStructureDataCategoryElementRemove(oParam, data)}
+											success: function(data){ns1blankspace.structureData.element.remove(oParam, data)}
 										});
 									}	
 									else
@@ -892,40 +866,37 @@ ns1blankspace.stuctureData =
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
-					ns1blankspaceStructureDataViewport();
-					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-					ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
-					ns1blankspaceStructureDataDetails();
+					ns1blankspace.structureData.layout();
+					$('#ns1blankspaceVieControlAction').button({disabled: false});
+					ns1blankspace.show({selector: '#divns1blankspaceMainDetails'});
+					ns1blankspace.structureData.details();
 				},
 
 	debug: 		{
-					search: 		function ns1blankspaceStructureTest()
+					test: 		function ()
 									{
-										var oData = {"fields":
-														[
-															{
-																"name": "contactbusiness"
-															}
-														],
-														"filters":
-														[],
-														"options":
-														{
-															"rf": "JSON",
-															"rows": "100"
-														}
+										var oData = {
+														"fields": 	[
+																		{
+																			"name": "contactbusiness"
+																		}
+																	],
+
+														"filters": 	[],
+
+														"options": 	{
+																		"rf": "JSON",
+																		"rows": "100"
+																	}		
 													}
 
 										$.ajax({
-											url: "/rpc/structure/?method=STRUCTURE_DATA_SEARCH&advanced=1",
+											url: ns1blankspace.util.endpointURI('STRUCTURE_DATA_SEARCH') + '&advanced=1',
 											type: 'POST',
 											cache: false,
 											dataType: 'json',
 											data: JSON.stringify(oData),
-											success: function(response)
-											{
-														
-											}
+											success: function(response) {}
 										});			
 
 									}
