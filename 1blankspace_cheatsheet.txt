@@ -78,6 +78,9 @@ data-receiptedamount
 
 aHTML.push( )
 
+var oDate = new Date.parse(ns1blankspace.objectContextData.date);
+oDate.toString("ddd, dd MMM yyyy h:mm TT") 
+
 # HTML5:
 
 aHTML.push('<table class="ns1blankspaceContainer"><tbody>' +
