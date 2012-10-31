@@ -719,6 +719,11 @@ ns1blankspace.messaging.imap =
 					
 					var aHTML = [];
 					
+					$('#ns1blankspaceControlSummary').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.setup.messaging.summary();
+					});
 
 					$('#tdns1blankspaceViewportControlSummary').click(function(event)
 					{
