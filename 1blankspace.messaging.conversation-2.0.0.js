@@ -87,47 +87,40 @@ ns1blankspace.messaging.conversation =
 					}
 				},
 
-	home: 		function ns1blankspaceMessagingConversationHomeShow(oResponse)
+	home: 		function (oResponse)
 				{
 					if (oResponse == undefined)
 					{
-						var aHTML = [];
-						var h = -1;
-									
-						aHTML.push('<table id="tablens1blankspaceViewportMain" class="ns1blankspaceViewportMain">';
-						aHTML.push('<tr id="trns1blankspaceViewportMain" class="ns1blankspaceViewportMain">' +
-										'<td id="tdns1blankspaceMessagingConversationHomeMostLikely" class="ns1blankspaceViewportMain">' +
-										ns1blankspace.xhtml.loading + 
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
-						
-						$('#divns1blankspaceMain').html(aHTML.join(''));
-						
-						var aHTML = [];
-						var h = -1;
-									
-						aHTML.push('<table>';
-						aHTML.push('<tr>' +
-										'<td id="ns1blankspaceViewportMessagingConversationLarge" class="ns1blankspaceViewportImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';		
-						
-						$('#divns1blankspaceViewportControl').html(aHTML.join(''));	
-						
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-						
-						sParam = 'method=MESSAGING_CONVERSATION_SEARCH&rows=10';
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
-						$.ajax(
-						{
-							type: 'GET',
-							url: '/ondemand/messaging/?' + sParam,
-							dataType: 'json',
-							success: ns1blankspaceMessagingConversationHomeShow
-						});		
+						var aHTML = [];
+									
+						aHTML.push('<table class="ns1blankspaceMain">');
+						aHTML.push('<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										ns1blankspace.xhtml.loading +
+										'</td>' +
+										'</tr>');
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+
+						var aHTML = [];
+									
+						aHTML.push('<table>');
+
+						aHTML.push('<tr><td id="ns1blankspaceViewMessagingConversationLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+								
+						aHTML.push('</table>');		
+						
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
+
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
+						oSearch.addField('title');
+						oSearch.rows = 10;
+						oSearch.sort('modifieddate', 'asc');
+						oSearch.getResults(ns1blankspace.messaging.conversation.home);
 					}
 					else
 					{
@@ -135,54 +128,41 @@ ns1blankspace.messaging.conversation =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="tablens1blankspaceMessagingConversationHomeMostLikely">');
-							aHTML.push('<tr class="trns1blankspaceMessagingConversationHomeMostLikelyNothing">');
-							aHTML.push('<td class="tdns1blankspaceMessagingConversationHomeMostLikelyNothing">Click New to create a conversation.</td>');
-							aHTML.push('</tr>');
-							aHTML.push('</table>');
+							aHTML.push('<table>' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create a conversation.</td></tr>' +
+											'</table>');
 						}
 						else
 						{
-							aHTML.push('<table id="tablens1blankspaceBewsHomeMostLikely">');
-							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>');
-							aHTML.push('</tr>');
-							
+							aHTML.push('<table>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+
 							$.each(oResponse.data.rows, function()
-							{	
-								aHTML.push('<tr class="ns1blankspaceMainRow">');
-								aHTML.push('<td id="ns1blankspaceMessagingConversationHomeMostLikely_Title-' + this.id + 
-														'" class="ns1blankspaceHomeMostLikely">' +
+							{
+								aHTML.push('<tr class="ns1blankspaceRow">');
+								
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+														'" class="ns1blankspaceMostLikely">' +
 														this.title +
 														'</td>');
+								
 								aHTML.push('</tr>');
 							});
 							
-							aHTML.push('</tbody></table>');
-							
-							aHTML.push('<table id="tablens1blankspaceMessagingConversationHomeMostLikelyMore">');
-							aHTML.push('<tr><td id="tdns1blankspaceMessagingConversationHomeMostLikelyMore">' +
-										'<a href="#" id="ans1blankspaceMessagingConversationHomeMostLikelyMore">more...</a>' +
-										'</td></tr>');
-							aHTML.push('</tbody></table>');
+							aHTML.push('</table>');			
 						}
 						
-						$('#tdns1blankspaceMessagingConversationHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.ns1blankspaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							ns1blankspaceMessagingConversationSearch(event.target.id, {source: 1});
-						});
-						
-						$('#ans1blankspaceMessagingConversationHomeMostLikelyMore').click(function(event)
-						{
-							ns1blankspaceMessagingConversationSearch('tdns1blankspaceViewportMasterControlBrowse-', {source: ns1blankspace.data.searchSource.browse});
+							ns1blankspace.messaging.conversation.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
 
 	search: 	{
-					send:		function ns1blankspaceMessagingConversationSearch(sXHTMLElementId, oParam)
+					send:		function (sXHTMLElementId, oParam)
 								{
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
@@ -208,22 +188,20 @@ ns1blankspace.messaging.conversation =
 										$('#divns1blankspaceViewportControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
-										var sData = 'id=' + ns1blankspace.objectContext;
-										
-										$.ajax(
-										{
-											type: 'POST',
-											url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_SEARCH',
-											data: sData,
-											dataType: 'json',
-											success: function(data) {ns1blankspaceMessagingConversationShow(oParam, data)}
-										});
+									
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
+										oSearch.addField('*');
+										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext)
+										oSearch.rows = 10;
+										oSearch.sort('modifieddate', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.show(oParam, data));
 									}
 									else
 									{	
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -232,38 +210,26 @@ ns1blankspace.messaging.conversation =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tablens1blankspaceViewportMasterBrowse';
+											sElementId = 'ns1blankspaceViewControlBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspaceOptionsSetPosition(sElementId);
-											ns1blankspaceSearchStart(sElementId);
+											ns1blankspace.container.position(sElementId);
+											ns1blankspace.search.start(sElementId);
 											
 											var oSearch = new AdvancedSearch();
-											oSearch.endPoint = 'messaging';
 											oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
 											oSearch.addField('title');
 											oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.rows = 10;
 											oSearch.sort('title', 'asc');
-											//oSearch.getResults(function(data) {ns1blankspaceMessagingConversationSearchShow(oParam, data)});
-											
-											var sData = 'quicksearch=' + sSearchText;
-
-											$.ajax(
-											{
-												type: 'POST',
-												url: '/ondemand/messaging/?method=MESSAGING_CONVERSATION_SEARCH',
-												data: sData,
-												dataType: 'json',
-												success: function(data) {ns1blankspaceMessagingConversationSearchShow(oParam, data)}
-											});
+											oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.search.process(oParam, data)});
 										}
 									};	
 								},
 
-					process:	function ns1blankspaceMessagingConversationSearchShow(oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
 									var iColumn = 0;
 									var aHTML = [];
@@ -272,314 +238,301 @@ ns1blankspace.messaging.conversation =
 											
 									if (oResponse.data.rows.length == 0)
 									{
-										$('#divns1blankspaceViewportControlOptions').hide();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{	
-										aHTML.push('<table class="ns1blankspaceSearchMedium">';
-										aHTML.push('<tbody>'
-											
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+									
 										$.each(oResponse.data.rows, function()
 										{
 											iColumn = iColumn + 1;
 											
 											if (iColumn == 1)
 											{
-												aHTML.push('<tr class="ns1blankspaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
 											aHTML.push('<td class="ns1blankspaceSearch" id="-' + this.id + '">' +
-																this.title + '</td>';
+																this.title + '</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML.push('</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}
-											
 										});
 								    	
-										aHTML.push('</tbody></table>';
+										aHTML.push('</table>');
 
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
-										ns1blankspaceSearchStop();
+										ns1blankspace.search.stop();
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspaceMessagingConversationSearch(event.target.id, {source: 1});
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.messaging.conversation.search.send(event.target.id, {source: 1});
 										});
 									}	
 								}
 				},
 
-	layout: 	function ns1blankspaceMessagingConversationViewport()
-				{	
-					var aHTML = [];
-					var h = -1;
-
+	layout: 	function ()
+				{
 					if (tinyMCE.getInstanceById('inputns1blankspaceMainEditText'))
 					{
 						tinyMCE.get('inputns1blankspaceMainEditText').remove();
 						$('#inputns1blankspaceMainEditText').remove();
-					}	
+					}
+
+					var aHTML = [];
+
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
-					aHTML.push('<div id="divns1blankspaceViewportControlContext" class="ns1blankspaceViewportControlContext"></div>';
-					
-					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
+					aHTML.push('<table class="ns1blankspaceControlContainer">');
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Details</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');		
 					}
 					else
 					{
-						aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Summary</td>' +
-										'</tr>';
-									
-							
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">Details</td>' +
-										'</tr>';
-												
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlParticipants" class="ns1blankspaceViewportControl">Participants</td>' +
-										'</tr>';			
-						
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Summary</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
+
 						aHTML.push('</table>';
 						
-						aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
-						
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlPosts" class="ns1blankspaceViewportControl">Posts</td>' +
-										'</tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlComments" class="ns1blankspaceViewportControl">Comments</td>' +
-										'</tr>';				
-										
+						aHTML.push('<table class="ns1blankspaceControlContainer">';
+
+						aHTML.push('<tr><td id="ns1blankspaceControlParticipants" class="ns1blankspaceControl">' +
+										'Participants</td></tr>');
+
 						aHTML.push('</table>';
 						
-						aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
+						aHTML.push('<table class="ns1blankspaceControlContainer">';
+
+						aHTML.push('<tr><td id="ns1blankspaceControlPosts" class="ns1blankspaceControl">' +
+										'Posts</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlComments" class="ns1blankspaceControl">' +
+										'Comments</td></tr>');
+
+						aHTML.push('</table>';
 						
-						aHTML.push('<tr id="trns1blankspaceViewportControl" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlAttachments" class="ns1blankspaceViewportControl">Attachments</td>' +
-										'</tr>';
-								
-						aHTML.push('</table>';				
-					}
+						aHTML.push('<table class="ns1blankspaceControlContainer">';
+
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
+										'Attachments</td></tr>');
+					}	
 					
-					$('#divns1blankspaceViewportControl').html(aHTML.join(''));
+					aHTML.push('</table>';					
+								
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML.push('<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainDetails" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainParticipants" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainParticipantsAdd" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainPosts" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainComments" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainPostDetails" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainAttachments" class="divns1blankspaceViewportMain"></div>';
-					
-					$('#divns1blankspaceMain').html(aHTML.join(''));
-					
-					$('#tdns1blankspaceViewportControlSummary').click(function(event)
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainParticipants" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainParticipantsAdd" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainPosts" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainPostDetails" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainComments" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControl"></div>');
+						
+					$('#ns1blankspaceMain').html(aHTML.join(''));
+
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary", true);
-						ns1blankspaceMessagingConversationSummary();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.setup.messaging.summary();
 					});
 					
-					$('#tdns1blankspaceViewportControlDetails').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
-						ns1blankspaceMessagingConversationDetails();
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.setup.messaging.details();
 					});
-					
-					$('#tdns1blankspaceViewportControlParticipants').click(function(event)
+
+					$('#ns1blankspaceControlParticipants').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainParticipants", true);
-						ns1blankspaceMessagingConversationParticipants();
+						ns1blankspace.show({selector: '#ns1blankspaceMainParticipants'});
+						ns1blankspace.setup.messaging.participants();
 					});
-					
-					$('#tdns1blankspaceViewportControlPosts').click(function(event)
+
+					$('#ns1blankspaceControlPosts').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainPosts");
-						ns1blankspaceMessagingConversationPosts();
+						ns1blankspace.show({selector: '#ns1blankspaceMainPosts'});
+						ns1blankspace.setup.messaging.posts();
 					});
-					
-					$('#tdns1blankspaceViewportControlComments').click(function(event)
+				
+					$('#ns1blankspaceControlComments').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainComments");
-						ns1blankspaceMessagingConversationComments();
+						ns1blankspace.show({selector: '#ns1blankspaceMainComments'});
+						ns1blankspace.setup.messaging.comments();
 					});
-					
-					$('#tdns1blankspaceViewportControlAttachments').click(function(event)
+
+					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainAttachments", true);
-						ns1blankspaceAttachments({xhtmlElementID: 'divns1blankspaceMainAttachments'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments'});
+						ns1blankspace.setup.messaging.attachments();
 					});
 				},
 
-	show: 		function ns1blankspaceMessagingConversationShow(oParam, oResponse)
+	show: 		function (oParam, oResponse)
 				{
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspaceMessagingConversationViewport();
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.messaging.conversation.layout();
 					
 					var aHTML = [];
-					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find conversation.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
-								
 						ns1blankspace.objectContextData = undefined;
 						
-						$('#divns1blankspaceMain').html(aHTML.join(''));
-						
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this conversation.</td></tr></table>');
+								
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+
 						ns1blankspace.messaging.ConversationOwner = false;
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
+						ns1blankspace.messaging.ConversationOwner = (ns1blankspace.user == ns1blankspace.objectContextData.user)
+
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title);
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						ns1blankspaceViewportDestination({
-							newDestination: 'ns1blankspaceMessagingConversationMasterViewport({showHome: false});ns1blankspaceMessagingConversationSearch("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.messaging.conversation.init({showHome: false});ns1blankspace.messaging.conversation.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
-							})
-								
-						$('#divns1blankspaceViewportControlContext').html(ns1blankspace.objectContextData.title);
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-						$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
+							});
 						
-						ns1blankspace.messaging.ConversationOwner = (gsUserID == ns1blankspace.objectContextData.user)
-						
-						ns1blankspaceMessagingConversationSummary();
-					}
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.messaging.conversation.summary()'});
+					}	
 				},	
 		
-	summary:	function ns1blankspaceMessagingConversationSummary()
+	summary:	function ()
 				{
-
 					var aHTML = [];
-					var h = -1;
-					
-					aHTML.push('<table id="tablens1blankspaceMainSummary" class="ns1blankspaceMain">';
-					aHTML.push('<tr id="trns1blankspaceMainSummaryRow1" class="ns1blankspaceMainRow1">' +
-								'<td id="tdns1blankspaceMainSummaryColumn1Large" class="ns1blankspaceMainColumn1Large">' +
-									'</td>' +
-									'<td id="tdns1blankspaceMainSummaryColumn2Action" style="width:100px;">' +
-									'</td>' +
-									'</tr>';
-					aHTML.push('</table>';					
-						
-					$('#divns1blankspaceMainSummary').html(aHTML.join(''));
-					
-					var aHTML = [];
-					var h = -1;
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find conversation.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this conversation.</td></tr></table>');
 								
-						$('#divns1blankspaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-					
-						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
-									
-						aHTML.push('<tr><td id="tdns1blankspaceMainSummaryOwner" class="ns1blankspaceMainSummary">Owner</td></tr>' +
-										'<tr><td id="tdns1blankspaceMainSummaryOwnerValue" class="ns1blankspaceMainSummaryValue">' +
-										ns1blankspace.objectContextData.ownerusertext +
-										'</td></tr>';	
-										
-						if (ns1blankspace.objectContextData.description != '')
-						{	
-							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryDescription" class="ns1blankspaceMainSummary">Description</td></tr>' +
-										'<tr><td id="tdns1blankspaceMainSummaryDescriptionValue" class="ns1blankspaceMainSummaryValue">' +
-										 ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.description) +
-										'</td></tr>';
-						}				
-										
-						aHTML.push('</table>';					
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'</tr>' +
+									'</table>');				
 						
-						$('#tdns1blankspaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
-						var aHTML = [];
-						var h = -1;	
+						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2Action" cellspacing=0>';
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Owner</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryOwner" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.ownerusertext +
+										'</td></tr>');
+
+ 						if (ns1blankspace.objectContextData.description != '')
+						{	
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
+										(ns1blankspace.objectContextData.description).formatXHTML() +
+										'</td></tr>');
+						}						
+						
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMainSummaryColumn1').html(aHTML.join(''));
+				
+						var aHTML = [];
+			
+						aHTML.push('<tableclass="ns1blankspaceColumn2Action" cellspacing=0>');
 						
 						if (ns1blankspace.messaging.ConversationOwner)
 						{
-							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryAddParticipant" class="ns1blankspaceMainColumn2Action">' +
-										'<a href="#" id="ans1blankspaceMainSummaryAddParticipant">Add&nbsp;Participant</a>' +
-										'</td></tr>';
+							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+										'<a href="#" id="ns1blankspaceConversationAddParticipant">Add&nbsp;Participant</a>' +
+										'</td></tr>');
 						}
 						else
 						{
-							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryRemoveParticipant" class="ns1blankspaceMainColumn2Action">' +
-										'<a href="#" id="ans1blankspaceMainSummaryRemoveParticipant">Leave</a>' +
-										'</td></tr>';
+							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+										'<a href="#" id="ns1blankspaceConversationRemoveParticipant">Leave</a>' +
+										'</td></tr>');
 						}	
 								
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainSummaryColumn2Action').html(aHTML.join(''));	
+						$('#ns1blankspaceMainSummaryColumn2').html(aHTML.join(''));	
 						
-						$('#ans1blankspaceMainSummaryAddParticipant').click(function(event)
+						$('#ns1blankspaceConversationAddParticipant').click(function(event)
 						{
-							ns1blankspaceMessagingConversationParticipantsAdd();
+							ns1blankspace.messaging.conversation.participants.add();
+						});
+
+						$('#ns1blankspaceConversationRemoveParticipant').click(function(event)
+						{
+							ns1blankspace.messaging.conversation.participants.remove();
 						});
 					}	
 				},
 
-	details: 	function ns1blankspaceMessagingConversationDetails()
+	details: 	function ()
 				{
-					var aHTML = [];
-					var h = -1;
-					
-					if ($('#divns1blankspaceMainDetails').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
-						$('#divns1blankspaceMainDetails').attr('onDemandLoading', '');
-								
-						aHTML.push('<table id="tablens1blankspaceMainDetails" class="ns1blankspaceMainDetails">';
-						aHTML.push('<tr id="trns1blankspaceMainDetailsRow1" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsColumn1" class="ns1blankspaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainDetailsColumn2" class="ns1blankspaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						$('#divns1blankspaceMainDetails').html(aHTML.join(''));
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
+						
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
-
-						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
+						
+						aHTML.push('<table class="ns1blankspace">');
 							
 						if (ns1blankspace.messaging.ConversationOwner)
 						{
-							aHTML.push('<tr id="trns1blankspaceMainDetailsTitle" class="ns1blankspaceMain">' +
-											'<td id="tdns1blankspaceMainDetailsTitle" class="ns1blankspaceMain">' +
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">' +
 											'Title' +
 											'</td></tr>' +
-											'<tr id="trns1blankspaceMainDetailsTitleValue" class="ns1blankspaceMainText">' +
-											'<td id="tdns1blankspaceMainDetailsTitleValue" class="ns1blankspaceMainText">' +
-											'<input onDemandType="TEXT" id="inputns1blankspaceMainDetailsTitle" class="inputns1blankspaceMainText">' +
-											'</td></tr>';
-											
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceText">' +
+											'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceText">' +
+											'</td></tr>');			
+
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">' +
+											'Sharing' +
+											'</td></tr>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceText">' +
+											'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceText">' +
+											'</td></tr>');	
+															
 							aHTML.push('<tr id="trns1blankspaceMainDetailsSharing" class="ns1blankspaceMain">' +
 											'<td id="tdns1blankspaceMainDetailsSharing" class="ns1blankspaceMain">' +
 											'Sharing' +
@@ -741,7 +694,7 @@ ns1blankspace.messaging.conversation =
 											aHTML.push('<table id="tablens1blankspaceMessagingConversationHomeMostLikely">';
 											aHTML.push('<tr class="ns1blankspaceMainCaption">' +
 																'<td class="ns1blankspaceMainRowNothing">No participants.</td></tr>';
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>';
 
 											$('#tdns1blankspaceMainParticipantsColumn1').html(aHTML.join(''));
 										}
@@ -762,7 +715,7 @@ ns1blankspace.messaging.conversation =
 												aHTML.push('</tr>';		
 											})
 											
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>';
 
 											$('#' + sXHTMLElementId).html(aHTML.join(''));
 											
@@ -941,7 +894,7 @@ ns1blankspace.messaging.conversation =
 											aHTML.push('<tbody>'
 											aHTML.push('<tr class="ns1blankspaceMainCaption">' +
 															'<td class="ns1blankspaceMainRowNothing">You need set the search criteria.</td></tr>';
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>';
 
 											$('#tdns1blankspaceMainParticipantsAddColumn2').html(aHTML.join(''));
 										}
@@ -956,7 +909,7 @@ ns1blankspace.messaging.conversation =
 												aHTML.push('<tbody>'
 												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
 																'<td class="ns1blankspaceMainRowNothing">No matching users.</td></tr>';
-												aHTML.push('</tbody></table>';
+												aHTML.push('</table>';
 
 												$('#tdns1blankspaceMainParticipantsAddColumn2').html(aHTML.join(''));
 											}
@@ -978,7 +931,7 @@ ns1blankspace.messaging.conversation =
 													
 												});
 												
-												aHTML.push('</tbody></table>';
+												aHTML.push('</table>';
 
 												$('#tdns1blankspaceMainParticipantsAddColumn2').html(aHTML.join(''));
 												
@@ -1106,7 +1059,7 @@ ns1blankspace.messaging.conversation =
 											aHTML.push('<table id="tablens1blankspaceMessagingConversationHomeMostLikely">';
 											aHTML.push('<tr class="ns1blankspaceMainCaption">' +
 																'<td class="ns1blankspaceMainRowNothing">No posts.</td></tr>';
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>';
 										}
 										else
 										{		
@@ -1144,7 +1097,7 @@ ns1blankspace.messaging.conversation =
 													
 											});
 												
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>';
 
 											$('#tdns1blankspaceMainPostsColumn1').html(aHTML.join(''));
 										
@@ -1521,7 +1474,7 @@ ns1blankspace.messaging.conversation =
 							aHTML.push('<table id="tablens1blankspaceMessagingConversationHomeMostLikely">';
 							aHTML.push('<tr class="ns1blankspaceMainCaption">' +
 												'<td class="ns1blankspaceMainRowNothing">No comments.</td></tr>';
-							aHTML.push('</tbody></table>';
+							aHTML.push('</table>';
 						}
 						else
 						{		
@@ -1568,7 +1521,7 @@ ns1blankspace.messaging.conversation =
 								
 							});
 							
-							aHTML.push('</tbody></table>';	
+							aHTML.push('</table>';	
 						}
 						
 						$('#divns1blankspaceMainComments').html(aHTML.join(''));

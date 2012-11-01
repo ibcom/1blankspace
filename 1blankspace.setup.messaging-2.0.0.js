@@ -384,7 +384,7 @@ ns1blankspace.setup.messaging =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceSelect">' +
-										'<input id="ns1blankspaceDetailsUser" class="ns1blankspaceMainSelect"' +
+										'<input id="ns1blankspaceDetailsUser" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_USER_SEARCH"' +
 											' data-columns="username">' +
 										'</td></tr>');			
