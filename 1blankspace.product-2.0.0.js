@@ -566,16 +566,16 @@ ns1blankspace.product =
 									
 										var aHTML = [];
 
-											aHTML.push('<table class="ns1blankspace">');
-						
-											aHTML.push('<tr class="ns1blankspaceCaption">' +
-															'<td class="ns1blankspaceCaption">' +
-															'Retail Price' +
-															'</td></tr>' +
-															'<tr class="ns1blankspace">' +
-															'<td class="ns1blankspaceText">' +
-															'<input id="ns1blankspacePricingPriceRetail" class="ns1blankspaceText">' +
-															'</td></tr>');			
+										aHTML.push('<table class="ns1blankspace">');
+					
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Retail Price' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspacePricingPriceRetail" class="ns1blankspaceText">' +
+														'</td></tr>');			
 
 										aHTML.push('</table>');					
 										
@@ -643,65 +643,48 @@ ns1blankspace.product =
 										
 										$('#' + sXHTMLElementID).html(aHTML.join(''));
 									}	
-								},
-
-					save: 		function (oParam)
-								{
-									var sData = 'price=' + ns1blankspace.util.fs($('#inputInterfaceMainPricingPriceRetail').val());
-									sData += '&product=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-									
-									$.ajax(
-									{
-										type: 'POST',
-										url: ns1blankspace.util.endpointURI('PRODUCT_PRICE_MANAGE'),
-										data: sData,
-										dataType: 'json'
-									});
-								}			
+								}
 				},				
 
 	category:	function (oParam, oResponse)
 				{
 					var aHTML = [];
 					
-					if ($('#ns1blankspaceMainCategory').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainCategory').attr('data-loading') == '1')
 					{
+						$('#ns1blankspaceMainCategory').attr('data-loading', '');
+
 						if (oResponse == undefined)
 						{	
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'SETUP_PRODUCT_CATEGORY_SEARCH';
 							oSearch.addField('title');
 							oSearch.getResults(function(data) {
-									interfaceProductCategory(oParam, data)
+									ns1blankspace.product.category(oParam, data)
 									});
 						}
 						else
 						{
-							$('#ns1blankspaceMainCategory').attr('onDemandLoading', '');
-							
 							var aHTML = [];
-							var h = -1;
 								
-							aHTML.push('<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+							aHTML.push('<table class="ns1blankspace">';
 
 							if (oResponse.data.rows == 0)
 							{
-								aHTML.push('<tr>';
-								aHTML.push('<td class="interfaceMainRowNothing">No categories have been set up.</td>';
-								aHTML.push('</tr>';
+								aHTML.push('<tr><td class="ns1blankspaceNothing">No categories.</td></tr>';
 							}
 							else
 							{
-								aHTML.push('<tr id="trInterfaceMainCategory" class="interfaceMain">' +
-												'<td id="tdInterfaceMainCategoryValue" class="interfaceMainText" style="font-size:0.875em">';
+								aHTML.push('<tr class="ns1blankspaceRow">' +
+												'<td style="font-size:0.875em">');
 									
 								$.each(oResponse.data.rows, function() 
 								{ 
 									aHTML.push('<input type="radio" id="radioCategory' + this.id + '" name="radioCategory" value="' + this.id + '"/>' +
-													this.title + '<br />';
+													this.title + '<br />');
 								});
 						
-								aHTML.push('</td></tr>';
+								aHTML.push('</td></tr>');
 							}
 							
 							$('#ns1blankspaceMainCategory').html(aHTML.join(''));
@@ -717,61 +700,56 @@ ns1blankspace.product =
 	stock:		function interfaceProductStock()
 				{
 					var aHTML = [];
-					var h = -1;
 
-					if ($('#ns1blankspaceMainStock').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainPricing').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceMainStock').attr('onDemandLoading', '');
-								
-						aHTML.push('<table id="tableInterfaceMainStock" class="interfaceMainStock">';
-						aHTML.push('<tr id="trInterfaceMainStockRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainStockColumn1" class="interfaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdInterfaceMainStockColumn2" class="interfaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						$('#ns1blankspaceMainPricing').attr('data-loading', '');
+						
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceStockColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceStockColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
 						
 						$('#ns1blankspaceMainStock').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
+
+						aHTML.push('<table class="ns1blankspace">';
 						
-						aHTML.push('<table id="tableInterfaceMainStockColumn1" class="interfaceMain">';
-						
-						aHTML.push('<tr id="trInterfaceMainDetailsQuantity" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsQuantity" class="interfaceMain">' +
-										'Quantity' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Units / Quantity' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsQuantityValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsQuantityValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsQuantity" class="inputInterfaceMainText">' +
-										'</td></tr>';			
-						
-						aHTML.push('<tr id="trInterfaceMainDetailsMinimumStockLevel" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsMinimumStockLevel" class="interfaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceStockUnits" class="ns1blankspaceText">' +
+										'</td></tr>');			
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Minimum Stock Level' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsMinimumStockLevelValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsMinimumStockLevelValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsMinimumStockLevel" class="inputInterfaceMainText">' +
-										'</td></tr>';			
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceMinimumStockLevel" class="ns1blankspaceText">' +
+										'</td></tr>');	
+										
+						aHTML.push('</table>');					
 						
-						aHTML.push('</table>';					
-						
-						$('#tdInterfaceMainStockColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceStockColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
-							
-						aHTML.push('<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+					
+						aHTML.push('<table class="interfaceMain">');
 						
-						aHTML.push('<tr id="trInterfaceMainDetailsStockUnit" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsStockUnit" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Stock Type' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsStockUnit" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsStockUnitValue" class="interfaceMainRadio">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioStockUnit1" name="radioStockUnit" value="1"/>Each' +
 										'<br /><input type="radio" id="radioStockUnit2" name="radioStockUnit" value="2"/>Packet' +
 										'<br /><input type="radio" id="radioStockUnit6" name="radioStockUnit" value="3"/>Metre' +
@@ -781,25 +759,25 @@ ns1blankspace.product =
 										'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="7"/>Unit' +
 										'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="8"/>Hour' +
 										'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="9"/>Pair' +
-										'</td></tr>';
-						
-						aHTML.push('<tr id="trInterfaceMainDetailsTrackStock" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsTrackStock" class="interfaceMain">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Track Stock' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsTrackStock" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsTrackStockValue" class="interfaceMainRadio">' +
-										'<input type="radio" id="radioTrackStockN" name="radioTrackStock" value="N"/>No' +			
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioTrackStockN" name="radioTrackStock" value="N"/>No' +
+										'</td></tr>');
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 							
-						$('#tdInterfaceMainStockColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceStockColumn2').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsQuantity').val(ns1blankspace.objectContextData.units);
-							$('#inputInterfaceMainDetailsMinimumStockLevel').val(ns1blankspace.objectContextData.minimumstocklevel);
+							$('#ns1blankspaceStockUnits').val(ns1blankspace.objectContextData.units);
+							$('#ns1blankspaceMinimumStockLevel').val(ns1blankspace.objectContextData.minimumstocklevel);
 							$('[name="radioStockUnit"][value="' + ns1blankspace.objectContextData.unittype + '"]').attr('checked', true);
 							$('[name="radioTrackStock"][value="' + ns1blankspace.objectContextData.trackinventory + '"]').attr('checked', true);
 						}
@@ -811,48 +789,48 @@ ns1blankspace.product =
 					}	
 				},
 
-	new:		function interfaceProductNew()
+	new:		function ()
 				{
-					ns1blankspace.objectContextData = undefined
+					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					interfaceProductViewport();
-					ns1blankspaceMainViewportShow("#ns1blankspaceMainDetails");
-					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					interfaceProductDetails();
+					ns1blankspace.product.layout();
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+					$('#ns1blankspaceViewportControlAction').button({disabled: false});
+					$('#ns1blankspaceViewportControlActionOptions').button({disabled: true});
+					ns1blankspace.product.details();
 				},
 
 	save: 		{			
 					send: 		function interfaceProductSave()
 								{
-									ns1blankspaceStatusWorking();
+									ns1blankspace.status.working();
 
 									var sData = 'id=' + ((ns1blankspace.objectContext == -1)?'':ns1blankspace.objectContext);
 											
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsReference').val());
-										sData += '&title=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsTitle').val());
-										sData += '&description=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDescription').val());
+										sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
+										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
+										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 										
 										var iStatus = $('input[name="radioStatus"]:checked').val()
 										if (iStatus == '') {iStatus = 1}
 										
-										sData += '&status=' + iStatus;
-										sData += '&type=' + $('input[name="radioProductType"]:checked').val();
+										sData += '&status=' + ns1blankspace.util.fs(iStatus);
+										sData += '&type=' + ns1blankspace.util.fs($('input[name="radioProductType"]:checked').val());
 									}
 									
 									if ($('#ns1blankspaceMainStock').html() != '')
 									{
-										sData += '&minimumstocklevel=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsMinimumStockLevel').val());
-										sData += '&unittype=' + $('input[name="radioStockUnit"]:checked').val();
-										sData += '&trackinventory=' + $('input[name="radioTrackStock"]:checked').val();
+										sData += '&minimumstocklevel=' + ns1blankspace.util.fs($('#ns1blankspaceMinimumStockLevel').val());
+										sData += '&unittype=' + ns1blankspace.util.fs($('input[name="radioStockUnit"]:checked').val());
+										sData += '&trackinventory=' + ns1blankspace.util.fs($('input[name="radioTrackStock"]:checked').val());
 									}
 									
 									if ($('#ns1blankspaceMainCategory').html() != '')
 									{
-										var iCategory = $('input[name="radioCategory"]:checked').val()
-										if (iCategory == '') {iCategory = $('input[name="radioCategory"]:first').val()}
+										var iCategory = ns1blankspace.util.fs($('input[name="radioCategory"]:checked').val());
+										if (iCategory == '') {iCategory = ns1blankspace.util.fs($('input[name="radioCategory"]:first').val())}
 									
 										sData += '&category=' + ns1blankspace.util.fs(iCategory);
 									}
@@ -860,41 +838,54 @@ ns1blankspace.product =
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspaceEndpointURL('PRODUCT_MANAGE'),
+										url: ns1blankspace.util.fs(util.endpointURL('PRODUCT_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: interfaceProductSaveProcess
+										success: ns1blankspace.product.save.process
 									});
 								},
 
-					process:	function interfaceProductSaveProcess(oResponse)
+					process:	function (oResponse)
 								{
 									if (oResponse.status == 'OK')
 									{
-										ns1blankspaceStatus('Saved');
+										ns1blankspace.status.message('Saved');
 										if (ns1blankspace.objectContext == -1) {var bNew = true}
 										ns1blankspace.objectContext = oResponse.id;	
 										
 										if ($('#ns1blankspaceMainPricing').html() != '')
 										{
-											interfaceProductPriceSave();
+											ns1blankspace.product.save.price();
 										}
 											
 										if ($('#ns1blankspaceMainStock').html() != '')
 										{
-											interfaceProductQuantitySave();
+											ns1blankspace.product.save.units();
 										}	
 									}
 									else
 									{
-										ns1blankspaceError(oResponse.error.errornotes);
+										ns1blankspace.status.error(oResponse.error.errornotes);
 									}
-								}
+								},
 
-					save:		function interfaceProductQuantitySave(oParam)
+					price:		function (aParam)
 								{
-									var sParam = 'method=PRODUCT_STOCK_MANAGE&rf=JSON';
-									var sData = 'units=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsQuantity').val());
+									var sData = 'price=' + ns1blankspace.util.fs($('#ns1blankspacePricingPriceRetail').val());
+									sData += '&product=' + ns1blankspace.util.fs(giObjectContext);
+									
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('PRODUCT_PRICE_MANAGE'),
+										data: sData,
+										dataType: 'json'
+									});
+								},
+
+					units:		function (oParam)
+								{
+									var sData = 'units=' + ns1blankspace.util.fs($('#ns1blankspaceStockUnits').val());
 									sData += '&product=' + ns1blankspace.objectContext;
 									sData += '&type=3';
 									sData += '&effectivedate=' + Date.today().toString("dd-MMM-yyyy");
@@ -902,7 +893,7 @@ ns1blankspace.product =
 									$.ajax(
 									{
 										type: 'POST',
-										url: '/ondemand/product/?' + sParam,
+										url: ns1blankspace.util.endpointURI('PRODUCT_STOCK_MANAGE'),
 										data: sData,
 										dataType: 'json'
 									});

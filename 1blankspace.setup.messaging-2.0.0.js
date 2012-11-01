@@ -465,7 +465,7 @@ ns1blankspace.setup.messaging =
 				{
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.setup.messaging.layput();
+					ns1blankspace.setup.messaging.layout();
 					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 					$('#ns1blankspaceViewportControlAction').button({disabled: false});
 					$('#ns1blankspaceViewportControlActionOptions').button({disabled: true});
