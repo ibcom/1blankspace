@@ -183,10 +183,9 @@ ns1blankspace.setup.messaging =
 					process:	function (oResponse)
 								{
 									var iColumn = 0;
-									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
-										
+									var aHTML = [];
+
 									if (oResponse.data.rows.length == 0)
 									{
 										ns1blankspace.search.stop();
@@ -355,7 +354,7 @@ ns1blankspace.setup.messaging =
 						
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceMainSummaryColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 					}	
 				},
 
