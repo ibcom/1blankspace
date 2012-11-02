@@ -5,11 +5,9 @@
  * 01 FEB 2010
  */
  
-
-
-ns1blankspace.financial.payment = 
+ns1blankspace.action = 
 {
-	init: 		function interfaceActionMasterViewport(oParam)
+	init: 		function (oParam)
 				{
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.object = 17;	

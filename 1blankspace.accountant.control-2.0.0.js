@@ -113,7 +113,7 @@ ns1blankspace.views =
 
 ns1blankspace.views.show = function ()
 {
-	if (ns1blankspace.viewportXHTML == undefined)
+	if (ns1blankspace.xhtml.viewControl == undefined)
 	{
 		var aHTML = [];
 
@@ -122,24 +122,28 @@ ns1blankspace.views.show = function ()
 
 		$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
 		{
-			aHTML.push('<tr class='ns1blankspaceViewControl'>' +
-							'<td id='ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace '' class='interfaceViewControl'>' +
-							'<span id='ns1blankspaceViewControl' + this.parentnamespace + '_' + this.namespace '' class='interfaceViewControl'>' + 
+			aHTML.push('<tr class="ns1blankspaceViewControl">' +
+							'<td id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace '"" class="interfaceViewControl">' +
+							'<span id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace '" class="interfaceViewControl">' + 
 							this.title + '</span>' +
 							'</td></tr>');
 		});		
 
-		ns1blankspace.viewportXHTML = aHTML.join('');	
+		ns1blankspace.xhtml.viewControl = aHTML.join('');	
 	}
 
-	return ns1blankspace.viewportXHTML
+	ns1blankspace.xhtml.container.show(
+	{
+		xhtmlElementID: 'ns1blankspaceViewControlSet',
+		xhtml: ns1blankspace.xhtml.viewControl
+	});	
 }			
 
 ns1blankspace.views.bind = function ()
 {
 	$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
 	{
-		$('#ns1blankspaceViewControl' + this.parentnamespace + '_' + this.namespace).click(function(event)
+		$('#ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace).click(function(event)
 		{
 			$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 
@@ -158,7 +162,7 @@ ns1blankspace.views.bind = function ()
 
 ns1blankspace.setup.views.show = function ()
 {
-	if (ns1blankspace.viewportXHTML == undefined)
+	if (ns1blankspace.xhtml.setupViewControl == undefined)
 	{
 		var aHTML = [];
 
@@ -167,24 +171,28 @@ ns1blankspace.setup.views.show = function ()
 
 		$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
 		{
-			aHTML.push('<tr class='ns1blankspaceViewControl'>' +
-							'<td id='ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace '' class='interfaceViewControl'>' +
-							'<span id='ns1blankspaceViewControl' + this.parentnamespace + '_' + this.namespace '' class='interfaceViewControl'>' + 
+			aHTML.push('<tr class="ns1blankspaceViewControl">' +
+							'<td id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace '" class="interfaceViewControl">' +
+							'<span id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace '" class="interfaceViewControl">' + 
 							this.title + '</span>' +
 							'</td></tr>');
 		});		
 
-		ns1blankspace.viewportXHTML = aHTML.join('');	
+		ns1blankspace.xhtml.setupViewControl = aHTML.join('');	
 	}
 
-	return ns1blankspace.viewportXHTML
+	ns1blankspace.xhtml.container.show(
+	{
+		xhtmlElementID: 'ns1blankspaceViewControlSet',
+		xhtml: ns1blankspace.xhtml.setupViewControl
+	});	
 }			
 
 ns1blankspace.setup.views.bind = function ()
 {
 	$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
 	{
-		$('#ns1blankspaceViewControl' + this.parentnamespace + '_' + this.namespace).click(function(event)
+		$('#ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace).click(function(event)
 		{
 			$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 

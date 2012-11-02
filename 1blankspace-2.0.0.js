@@ -735,7 +735,7 @@ ns1blankspace.app =
 								preventDefaultEvents: true
 								});
 						
-						interfaceControlSetMasterViewport();
+						//???? interfaceControlSetMasterViewport();
 						
 						if (gbReturnToLast) 
 						{
@@ -2035,7 +2035,7 @@ ns1blankspace.edit =
 				}
 }				
 
-ns1blankspace.dialog = 
+ns1blankspace.container = 
 {
 	init: 		function(sSource)
 				{

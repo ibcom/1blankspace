@@ -5,7 +5,6 @@
  * 01 FEB 2010
  */
  
-
 ns1blankspace.supportIssue = 
 {
 	init: 		function (oParam)

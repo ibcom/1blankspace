@@ -9,8 +9,8 @@
 //var gbReturnToLast = true;
 //var gsMessagingEmailAccount = '';
 
-ns1blankspace.xhtml.loading = '<img class="interfaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">';
-ns1blankspace.xhtml.loadingSmall = '<img class="interfaceLoadingSmall" id="imgInterfaceLoadingSmall" src="/jscripts/1blankspace.loading.square.10.gif">';
+ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">';
+ns1blankspace.xhtml.loadingSmall = '<img class="ns1blankspaceLoadingSmall" id="imgns1blankspaceLoadingSmall" src="/jscripts/1blankspace.loading.square.10.gif">';
 ns1blankspace.xhtml.editorCSS = '';
 
 ns1blankspace.option.defaultRows = 20;
@@ -37,7 +37,8 @@ ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.set
 ns1blankspace.views = 
 [
 	{
-		title: "People",
+		title: "People",,
+		namespace: "contactPerson",
 		endpoint: "CONTACT_PERSON",
 		show: true,
 		group: 1,
@@ -45,6 +46,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Businesses",
+		namespace: "contactBusiness",
 		endpoint: "CONTACT_BUSINESS",
 		show: true,
 		group: 1,
@@ -52,6 +54,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Opportunities",
+		namespace: "opportunity",
 		endpoint: "OPPORTUNITY",
 		show: true,
 		group: 1,
@@ -59,13 +62,17 @@ ns1blankspace.views =
 	},
 	{
 		title: "Email",
-		endpoint: "MESSAGING_EMAIL",
+		parentnamespace: "messaging",
+		namespace: "imap",
+		endpoint: "MESSAGING_IMAP",
 		show: true,
 		group: 1,
 		type: 1
 	},
 	{
 		title: "Conversations",
+		parentnamespace: "messaging",
+		namespace: "conversation",
 		endpoint: "MESSAGING_CONVERSATION",
 		show: true,
 		group: 1,
@@ -73,6 +80,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Projects",
+		namespace: "project",
 		endpoint: "PROJECT",
 		show: true,
 		group: 2,
@@ -80,6 +88,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Project Tasks",
+		namespace: "projectTask",
 		endpoint: "PROJECT_TASK",
 		show: true,
 		group: 2,
@@ -87,6 +96,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Actions",
+		namespace: "action",
 		endpoint: "ACTION",
 		show: true,
 		group: 2,
@@ -94,6 +104,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Documents",
+		namespace: "document",
 		endpoint: "DOCUMENT",
 		show: true,
 		group: 3,
@@ -101,6 +112,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "News",
+		namespace: "news",
 		endpoint: "NEWS",
 		show: true,
 		group: 3,
@@ -108,6 +120,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Events",
+		namespace: "events",
 		endpoint: "EVENT",
 		show: true,
 		group: 3,
@@ -115,6 +128,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Products",
+		namespace: "products",
 		endpoint: "PRODUCT",
 		show: true,
 		group: 4,
@@ -122,6 +136,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Orders",
+		namespace: "orders",
 		endpoint: "PRODUCT_ORDER",
 		show: true,
 		group: 4,
@@ -129,6 +144,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Financials",
+		namespace: "financial",
 		endpoint: "FINANCIAL",
 		show: true,
 		group: 5,
@@ -136,6 +152,8 @@ ns1blankspace.views =
 	},
 	{
 		title: "Bank Accounts",
+		parentnamespace: "financial",
+		namespace: "bankAccount",
 		endpoint: "FINANCIAL_BANK_ACCOUNT",
 		show: true,
 		group: 5,
@@ -143,6 +161,8 @@ ns1blankspace.views =
 	},
 	{
 		title: "Invoices",
+		parentnamespace: "financial",
+		namespace: "invoice",
 		endpoint: "FINANCIAL_INVOICE",
 		show: true,
 		group: 5,
@@ -150,6 +170,8 @@ ns1blankspace.views =
 	},
 	{
 		title: "Expenses",
+		parentnamespace: "financial",
+		namespace: "expense",
 		endpoint: "FINANCIAL_EXPENSE",
 		show: true,
 		group: 5,
@@ -157,6 +179,8 @@ ns1blankspace.views =
 	},
 	{
 		title: "Receipts",
+		parentnamespace: "financial",
+		namespace: "receipt",
 		endpoint: "FINANCIAL_RECEIPT",
 		show: true,
 		group: 5,
@@ -164,6 +188,8 @@ ns1blankspace.views =
 	},
 	{
 		title: "Payments",
+		parentnamespace: "financial",
+		namespace: "payment",
 		endpoint: "FINANCIAL_PAYMENT",
 		show: true,
 		group: 5,
@@ -171,6 +197,8 @@ ns1blankspace.views =
 	},
 	{
 		title: "Payroll",
+		parentnamespace: "financial",
+		namespace: "payroll",
 		endpoint: "FINANCIAL_PAYROLL",
 		show: true,
 		group: 5,
@@ -178,6 +206,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Reporting",
+		namespace: "report",
 		endpoint: "DASHBOARD", 
 		show: true,
 		group: 6,
@@ -185,6 +214,8 @@ ns1blankspace.views =
 	},
 	{
 		title: "Tax",
+		parentnamespace: "financial",
+		namespace: "tax",
 		endpoint: "FINANCIAL_TAX",
 		show: true,
 		group: 6,
@@ -192,6 +223,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Structures",
+		namespace: "structure",
 		endpoint: "STRUCTURE", 
 		show: true,
 		group: 6,
@@ -199,6 +231,8 @@ ns1blankspace.views =
 	},
 	{
 		title: "Websites",
+		parentnamespace: "setup",
+		namespace: "website",
 		endpoint: "SETUP_SITE", 
 		show: true,
 		group: 2,
@@ -206,6 +240,8 @@ ns1blankspace.views =
 	},
 	{
 		title: "Automation",
+		parentnamespace: "setup",
+		namespace: "automation",
 		endpoint: "SETUP_AUTOMATION", 
 		show: true,
 		group: 2,
@@ -213,6 +249,8 @@ ns1blankspace.views =
 	},
 	{
 		title: "My Account",
+		parentnamespace: "setup",
+		namespace: "space",
 		endpoint: "ADMIN", 
 		show: true,
 		group: 4,
@@ -220,197 +258,195 @@ ns1blankspace.views =
 	},
 	{
 		title: "Support",
-		endpoint: "SUPPORT", 
+		namespace: "supportIssue",
+		endpoint: "SETUP", 
 		show: false,
 		group: 4,
 		type: 2
+	},
+	{
+		title: 'Contact Person Groups',
+		namespace: 'setup',
+		namesuffix: 'contactPersonGroups'.
+		endpoint: "SETUP", 
+		show: false,
+		group: 4,
+		type: 2,
+		param: {setupName: 'Contact Business Groups', setupMethod: 'SETUP_CONTACT_PEROSN_GROUP'}														
+	},
+	{
+		title: 'Contact Business Groups',
+		namespace: 'setup',
+		namesuffix: 'contactBusinessGroups'.
+		endpoint: "SUPPORT", 
+		show: false,
+		group: 4,
+		type: 2,
+		param: {setupName: 'Contact Business Groups', setupMethod: 'SETUP_CONTACT_BUSINESS_GROUP'}														
 	}
 ]
 
 ns1blankspace.control = 
 {
 	init: 		function (oParam, oResponse)
-					{
-						var iStep = 1;
-						var aRoles = [];
+				{
+					var iStep = 1;
+					var aRoles = [];
 
-						if (oParam != undefined)
+					if (oParam != undefined)
+					{
+						if (oParam.step != undefined) {iStep = oParam.step}
+						if (oParam.roles != undefined) {aRoles = oParam.roles}
+					}
+					else
+					{
+						oParam = {};
+					}
+						
+					if (iStep == 1)
+					{
+						if (ns1blankspace.userUnrestricted)
 						{
-							if (oParam.step != undefined) {iStep = oParam.step}
-							if (oParam.roles != undefined) {aRoles = oParam.roles}
+							$.extend(true, oParam, {step: 4});
+							ns1blankspace.control.init(oParam)
 						}
 						else
-						{
-							oParam = {};
-						}
-							
-						if (iStep == 1)
-						{
-							if (ns1blankspace.userUnrestricted)
-							{
-								$.extend(true, oParam, {step: 4});
-								interfaceControlSecurity(oParam)
-							}
-							else
-							{
-								if (oResponse == undefined)
-								{
-									var oSearch = new AdvancedSearch();
-									oSearch.method = 'SETUP_USER_ROLE_SEARCH';
-									oSearch.addField('role');
-									oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.user);
-									oSearch.async = false;
-									
-									oSearch.getResults(function(data) {interfaceControlSecurity(oParam, data)})
-								}
-								else
-								{
-									var aIDs = [];
-
-									$(oResponse.data.rows).each(function()
-									{
-										aIDs.push(this.role);	
-									})
-
-									$.extend(true, oParam, {step: 2, roles: aIDs});
-									interfaceControlSecurity(oParam);
-								}
-							}	
-						}
-
-						else if (iStep == 2)
 						{
 							if (oResponse == undefined)
 							{
 								var oSearch = new AdvancedSearch();
-								oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-								oSearch.addField('accessmethodtext,canadd,canremove,canupdate,canuse');
-								oSearch.addFilter('role', 'IN_LIST', aRoles.join(','));
-								oSearch.getResults(function(data) {interfaceControlSecurity(oParam, data)})
+								oSearch.method = 'SETUP_USER_ROLE_SEARCH';
+								oSearch.addField('role');
+								oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.user);
+								oSearch.getResults(function(data) {ns1blankspace.control.init(oParam, data)})
 							}
 							else
 							{
-								ns1blankspace.userMethods = oResponse.data.rows;
-								$.extend(true, oParam, {step: 3});
-								interfaceControlSecurity(oParam);
+								var aIDs = [];
+
+								$(oResponse.data.rows).each(function()
+								{
+									aIDs.push(this.role);	
+								})
+
+								$.extend(true, oParam, {step: 2, roles: aIDs});
+								ns1blankspace.control.init(oParam);
 							}
-						}
-
-						else if (iStep == 3)
-						{
-							$(ns1blankspace.views).each(function(i, k)
-							{
-								var oMethods = $.grep(ns1blankspace.userMethods, function (a) {return (a.accessmethodtext).indexOf(k.endpoint) != -1;})	
-								if (oMethods.length == 0) {this.show = false};
-							});
-						}
-
-						else if (iStep == 4)
-						{
-							//manipulate ns1blankspace.views
-
 						}	
-						
-						gbRoleSetup = ns1blankspace.systemAdmin;
-						
-						//Show the setup icon?
-						if (gbRoleSetup) {ns1blankspace.setupShow = true};
+					}
 
-						//Change the default viewport control menu option
-						if (gbRoleSpecial1) 
+					else if (iStep == 2)
+					{
+						if (oResponse == undefined)
 						{
-							ns1blankspace.option.defaultView = "Special 1"
-						}	
-						
-					},
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
+							oSearch.addField('accessmethodtext,canadd,canremove,canupdate,canuse');
+							oSearch.addFilter('role', 'IN_LIST', aRoles.join(','));
+							oSearch.getResults(function(data) {ns1blankspace.control.init(oParam, data)})
+						}
+						else
+						{
+							ns1blankspace.userMethods = oResponse.data.rows;
+							$.extend(true, oParam, {step: 3});
+							ns1blankspace.control.init(oParam);
+						}
+					}
 
-	setView:		{
+					else if (iStep == 3)
+					{
+						$(ns1blankspace.views).each(function(i, k)
+						{
+							var oMethods = $.grep(ns1blankspace.userMethods, function (a) {return (a.accessmethodtext).indexOf(k.endpoint) != -1;})	
+							if (oMethods.length == 0) {this.show = false};
+						});
+					}
+
+					else if (iStep == 4)
+					{
+						if (ns1blankspace.systemAdmin) {ns1blankspace.setupShow = true};
+						ns1blankspace.views.show();
+					}		
+				},
+
+	setView:	{
 					default: 		function ()
 									{
-										interfaceContactPersonMasterViewport({showHome: false});		
+										ns1blankspace.contactPerson.init({showHome: false});		
 									},
 
-					setup:			function interfaceControlSetSetupMasterViewport()
+					setup:			function ()
 									{
-										interfaceSetupWebsiteMasterViewport();
+										ns1blankspace.setup.website.init();
 									},
 				},					
 
 	views:		{					
-					show: 			function interfaceControlOptions()
+					show: 			function ()
 									{
 										var aHTML = [];
 										var oViewport;
 
-										if (ns1blankspace.viewportXHTML == undefined)
+										if (ns1blankspace.xhtml.viewControl == undefined)
 										{
-											aHTML.push('<table id="tableInterfaceViewportMasterControl" class="interfaceViewportMasterControl">');
-											aHTML.push('<tr id="trInterfaceViewportMasterControlRow1" class="interfaceViewportMasterControl">');
+											aHTML.push('<table class="ns1blankspaceViewControlContainer">');
+											aHTML.push('<tr class="ns1blankspaceViewControl">');
 
 											var aHTMLViewport = [];
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'People';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlContactPerson" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlContactPerson" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlContactPerson" class="interfaceViewportMasterControl">' + 
-														'People</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_contactPerson" class="ns1blankspaceViewControl">' + 
+																		'People</span></td></tr>');
 											}			
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Businesses';})[0];	
 											if (oViewport ? oViewport.show : false)
 											{	
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlContactBusiness" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlContactBusiness" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlContactBusiness" class="interfaceViewportMasterControl">' + 
-														'Businesses</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_contactBusiness" class="ns1blankspaceViewControl">' + 
+																		'Businesses</span></td></tr>');
 											}	
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Opportunities';})[0];	
 											if (oViewport ? oViewport.show : false)
 											{	
-													aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlOpportunity" class="interfaceViewportMasterControl">' +	
-														'<td id="tdInterfaceViewportMasterControlOpportunity" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlOpportunity" class="interfaceViewportMasterControl">' + 
-														'Opportunities</span>' +
-														'</td>' +
-														'</tr>');	
+													aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +	
+																			'<td class="ns1blankspaceViewControl">' +
+																			'<span id="ns1blankspaceViewControl_opportunity" class="ns1blankspaceViewControl">' + 
+																			'Opportunities</span></td></tr>');	
 											}
 											
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Email';})[0];		
 											if (oViewport ? oViewport.show : false)
 											{	
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlMessaging" class="interfaceViewportMasterControl">' +	
-														'<td id="tdInterfaceViewportMasterControlMessaging" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlMessaging" class="interfaceViewportMasterControl">' + 
-														'Email</span>' +
-														'</td>' +
-														'</tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +	
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_messaging_imap" class="ns1blankspaceViewControl">' + 
+																		'Email</span></td></tr>');
 											}
 											
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Conversations';})[0];	
 											if (oViewport ? oViewport.show : false)
 											{
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlMessagingConversation" class="interfaceViewportMasterControl">' +	
-														'<td id="tdInterfaceViewportMasterControlMessagingConversation" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlMessagingConversation" class="interfaceViewportMasterControl">' + 
-														'Conversations</span>' +
-														'</td>' +
-														'</tr>');	
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +	
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_messaging_conversation" class="ns1blankspaceViewControl">' + 
+																		'Conversations</span></td></tr>');	
 											}
 										
 											if (aHTMLViewport.length > 0)
 											{
-												aHTML.push('<td class="interfaceViewportMasterControlColumn">');
-												aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="interfaceViewportMasterControl">' +
-															'<td id="ns1blankspaceViewportContact" class="ns1blankspaceViewportImage">' +
-															'&nbsp;' +
-															'</td></tr>');			
+												aHTML.push('<tr class="ns1blankspaceViewControl">' +
+																'<td id="ns1blankspaceViewContact" class="ns1blankspaceViewImage">' +
+																'&nbsp;</td></tr>');			
 											
 												aHTML.push(aHTMLViewport.join(''))
 
@@ -423,43 +459,38 @@ ns1blankspace.control =
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Projects';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlProject" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlProject" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlProject" class="interfaceViewportMasterControl">' + 
-														'Projects</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_project" class="ns1blankspaceViewControl">' + 
+																		'Projects</span></td></tr>');
 											}		
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Tasks';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlProjectTask" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlProjectTask" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlProjectTask" class="interfaceViewportMasterControl">' + 
-														'Project Tasks</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_projectTask" class="ns1blankspaceViewControl">' + 
+																		'Project Tasks</span></td></tr>');
 											}		
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Actions';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlAction" class="interfaceViewportMasterControl">' +				
-														'<td id="tdInterfaceViewportMasterControlAction" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlAction" class="interfaceViewportMasterControl">' +
-														'Actions</span>' +
-														'</td>' +
-														'</tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +				
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControlAction" class="ns1blankspaceViewControl">' +
+																		'Actions</span></td></tr>');
 											}			
 
 											if (aHTMLViewport.length > 0)
 											{
-												aHTML.push('<td class="interfaceViewportMasterControlColumn">');
-												aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="interfaceViewportMasterControl">' +
-															'<td id="ns1blankspaceViewportProject" class="ns1blankspaceViewportImage">' +
-															'&nbsp;' +
-															'</td></tr>');			
+												aHTML.push('<tr class="ns1blankspaceViewControl">' +
+																'<td id="ns1blankspaceViewProject" class="ns1blankspaceViewImage">' +
+																'&nbsp;</td></tr>');			
 											
 												aHTML.push(aHTMLViewport.join(''))
 
@@ -472,42 +503,38 @@ ns1blankspace.control =
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Documents';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlDocument" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlDocument" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlDocument" class="interfaceViewportMasterControl">' +
-														'Documents</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_document" class="ns1blankspaceViewControl">' +
+																		'Documents</span></td></tr>');
 											}		
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'News';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlNews" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlNews" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlNews" class="interfaceViewportMasterControl">' +
-														'News</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_news" class="ns1blankspaceViewControl">' +
+																		'News</span></td></tr>');
 											}		
 											
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Events';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlEvent" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlEvent" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlEvent" class="interfaceViewportMasterControl">' +
-														'Events</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_event" class="ns1blankspaceViewControl">' +
+																		'Events</span></td></tr>');
 											}	
 
 											if (aHTMLViewport.length > 0)
 											{
-												aHTML.push('<td class="interfaceViewportMasterControlColumn">');
-												aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="interfaceViewportMasterControl">' +
-															'<td id="ns1blankspaceViewportDocument" class="ns1blankspaceViewportImage">' +
-															'&nbsp;' +
-															'</td></tr>');			
+												aHTML.push('<tr class="ns1blankspaceViewControl">' +
+																'<td id="ns1blankspaceViewDocument" class="ns1blankspaceViewImage">' +
+																'&nbsp;</td></tr>');			
 											
 												aHTML.push(aHTMLViewport.join(''))
 
@@ -520,32 +547,30 @@ ns1blankspace.control =
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Products';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlProduct" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlProduct" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlProduct" class="interfaceViewportMasterControl">' +
-														'Products</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_product" class="ns1blankspaceViewControl">' +
+																		'Products</span>' +
+																		'</td></tr>');
 											}		
 											
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Orders';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlOrder" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlOrder" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlOrder" class="interfaceViewportMasterControl">' +
-														'Orders</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_order" class="ns1blankspaceViewControl">' +
+																		'Orders</span></td></tr>');
 											}	
 
 											if (aHTMLViewport.length > 0)
 											{
-												aHTML.push('<td class="interfaceViewportMasterControlColumn">');
-												aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="interfaceViewportMasterControl">' +
-															'<td id="ns1blankspaceViewportProduct" class="ns1blankspaceViewportImage">' +
-															'&nbsp;' +
-															'</td></tr>');			
+												aHTML.push('<tr class="ns1blankspaceViewControl">' +
+																'<td id="ns1blankspaceViewProduct" class="ns1blankspaceViewImage">' +
+																'&nbsp;</td></tr>');			
 											
 												aHTML.push(aHTMLViewport.join(''))
 
@@ -558,82 +583,74 @@ ns1blankspace.control =
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Financials';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancial" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlFinancial" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlFinancial" class="interfaceViewportMasterControl">' +
-														'Financials</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_financial" class="ns1blankspaceViewControl">' +
+																		'Financials</span></td></tr>');
 											}		
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Bank Accounts';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialBankAccount" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlFinancialBankAccount" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlFinancialBankAccount" class="interfaceViewportMasterControl">' +
-														'Bank Accounts</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_financial_bankAccount" class="ns1blankspaceViewControl">' +
+																		'Bank Accounts</span></td></tr>');
 											}	
 											
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Invoices';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialInvoice" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlFinancialInvoice" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlFinancialInvoice" class="interfaceViewportMasterControl">' +
-														'Invoices</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_financial_invoice" class="ns1blankspaceViewControl">' +
+																		'Invoices</span></td></tr>');
 											}
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Expenses';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialExpense" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlFinancialExpense" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlFinancialExpense" class="interfaceViewportMasterControl">' +
-														'Expenses</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_financial_expense" class="ns1blankspaceViewControl">' +
+																		'Expenses</span></td></tr>');
 											}
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Receipts';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialReceipt" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlFinancialReceipt" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlFinancialReceipt" class="interfaceViewportMasterControl">' +
-														'Receipts</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_financial_receipt" class="ns1blankspaceViewControl">' +
+																		'Receipts</span></td></tr>');
 											}	
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Payments';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialPayment" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlFinancialPayment" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlFinancialPayment" class="interfaceViewportMasterControl">' +
-														'Payments</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_financial_payment" class="ns1blankspaceViewControl">' +
+																		'Payments</span></td></tr>');
 											}	
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Payroll';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialPayroll" class="interfaceViewportMasterControl">' +
-														'<td id="tdInterfaceViewportMasterControlFinancialPayroll" class="interfaceViewportMasterControl">' +
-														'<span id="spanInterfaceViewportMasterControlFinancialPayroll" class="interfaceViewportMasterControl">' +
-														'Payroll</span>' +
-														'</td></tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_financial_payroll" class="ns1blankspaceViewControl">' +
+																		'Payroll</span></td></tr>');
 											}	
 
 											if (aHTMLViewport.length > 0)
 											{
-												aHTML.push('<td class="interfaceViewportMasterControlColumn">');
-												aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="interfaceViewportMasterControl">' +
-															'<td id="ns1blankspaceViewportFinancial" class="ns1blankspaceViewportImage">' +
-															'&nbsp;' +
-															'</td></tr>');			
+												aHTML.push('<tr class="ns1blankspaceViewControl">' +
+																'<td id="ns1blankspaceViewFinancial" class="ns1blankspaceViewImage">' +
+																'&nbsp;</td></tr>');			
 											
 												aHTML.push(aHTMLViewport.join(''))
 
@@ -646,45 +663,38 @@ ns1blankspace.control =
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Reporting';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlReport" class="interfaceViewportMasterControl">' +
-															'<td id="tdInterfaceViewportMasterControlReport" class="interfaceViewportMasterControl">' +
-															'<span id="spanInterfaceViewportMasterControlReport" class="interfaceViewportMasterControl">' +
-															'Reporting</span>' +
-															'</td>' +
-															'</tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
+																		'Reporting</span></td></tr>');
 											}		
 											
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Tax';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
-															'<td id="tdInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
-															'<span id="spanInterfaceViewportMasterControlFinancialTax" class="interfaceViewportMasterControl">' +
-															'Tax</span>' +
-															'</td>' +
-															'</tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_financial_tax" class="ns1blankspaceViewControl">' +
+																		'Tax&nbsp;(BAS)</span></td></tr>');
 											}
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
-												aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlStructure" class="interfaceViewportMasterControl">' +
-															'<td id="tdInterfaceViewportMasterControlStructure" class="interfaceViewportMasterControl">' +
-															'<span id="spanInterfaceViewportMasterControlStructure" class="interfaceViewportMasterControl">' +
-															'Structures</span>' +
-															'</td>' +
-															'</tr>');
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_structure" class="ns1blankspaceViewControl">' +
+																		'Structures</span></td></tr>');
 											}	
 
 											if (aHTMLViewport.length > 0)
 											{
-												aHTML.push('<td class="interfaceViewportMasterControlColumn">');
-												aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="interfaceViewportMasterControl">' +
+												aHTML.push('<tr class="ns1blankspaceViewControl">' +
 															'<td id="ns1blankspaceViewportReport" class="ns1blankspaceViewportImage">' +
-															'&nbsp;' +
-															'</td></tr>');			
+															'&nbsp;</td></tr>');			
 											
 												aHTML.push(aHTMLViewport.join(''))
 
@@ -694,204 +704,79 @@ ns1blankspace.control =
 
 											aHTML.push('</tr></table>');
 
-											ns1blankspace.viewportXHTML = aHTML.join('');
+											ns1blankspace.xhtml.viewControl = aHTML.join('');
 										}
 
-										return ns1blankspace.viewportXHTML;
-											
+										ns1blankspace.xhtml.container.show(
+										{
+											xhtmlElementID: 'ns1blankspaceViewControlSet',
+											xhtml: ns1blankspace.xhtml.viewControl
+										});		
 									},
 			
-					bind: 			function interfaceControlOptionsBind()
+					bind: 			function ()
 									{
-										$('#tdInterfaceViewportMasterControlContactPerson').click(function(event)
+										$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
 										{
-											ns1blankspaceOptionsSource();
-											interfaceContactPersonMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlContactBusiness').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceContactBusinessMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlOpportunity').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceOpportunityMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlProject').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceProjectMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlProjectTask').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceProjectTaskMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlAction').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceActionMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlDocument').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceDocumentMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlNews').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceNewsMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlEvent').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceEventMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlProduct').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceProductMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlOrder').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceOrderMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlFinancial').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceFinancialMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlFinancialBankAccount').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceFinancialBankAccountMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlFinancialInvoice').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceFinancialInvoiceMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlFinancialExpense').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceFinancialExpenseMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlFinancialReceipt').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceFinancialReceiptMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlFinancialPayment').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceFinancialPaymentMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlFinancialTax').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceFinancialTaxMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlFinancialPayroll').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceFinancialPayrollMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlHelp').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceHelpMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlMessaging').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceMessagingIMAPMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlMessagingConversation').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceMessagingConversationMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlReport').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceReportMasterViewport();
-										});
-										
-										$('#tdInterfaceViewportMasterControlStructure').click(function(event)
-										{
-											ns1blankspaceOptionsSource();
-											interfaceStructureMasterViewport();
-										});
-										
+											var sNS = '_' + this.namespace;
+											if (this.parentnamespace) {sNS = '_' + this.parentnamespace + sNS}
+
+											$('#ns1blankspaceViewControl' + sNS).click(function(event)
+											{
+												$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+
+												if (this.parentnamespace)
+												{
+													var oNS = ns1blankspace[this.parentnamespace][this.namespace];
+												}
+												else
+												{
+													var oNS = ns1blankspace[this.parentnamespace];
+												}
+
+												oNS.init();
+											});
 									}
 					},
 					
 	setup:			{
 						views: 		{
-										show:		function interfaceControlSetupOptions()
+										show:		function ()
 													{
 														var aHTML = [];
 
-														aHTML.push('<table id="tableInterfaceViewportMasterSetupControl" class="interfaceViewportMasterControl">');
-														aHTML.push('<tr id="trInterfaceViewportMasterSetupControlRow1" class="interfaceViewportMasterControl">');
+														aHTML.push('<table class="ns1blankspaceViewControl">');
+														aHTML.push('<tr class="ns1blankspaceViewControl">');
 														
 														var aHTMLViewport = [];
 
-														aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupUser" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupUser" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupUser" class="interfaceViewportMasterControl">' +
-																		'Users</span>' +
-																		'</td></tr>');
+														aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_user" class="ns1blankspaceViewControl">' +
+																				'Users</span></td></tr>');
 
-														aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupUserRole" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupUserRole" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupUserRole" class="interfaceViewportMasterControl">' +
-																		'User Roles</span>' +
-																		'</td></tr>');
+														aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_userRole" class="ns1blankspaceViewControl">' +
+																				'User&nbsp;Roles</span></td></tr>');
 
-														aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupNetworkGroup" class="interfaceViewportMasterControl">' +
-																		'Network&nbsp;Groups</span>' +
-																		'</td></tr>');
+														aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_networkGroup" class="ns1blankspaceViewControl">' +
+																				'Network&nbsp;Groups</span></td></tr>');
 
-														aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupMessaging" class="interfaceViewportMasterControl">' +
-																		'Messaging</span>' +
-																		'</td></tr>');
+														aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_messaging" class="ns1blankspaceViewControl">' +
+																				'Messaging</span></td></tr>');
 
 														if (aHTMLViewport.length > 0)
 														{
-															aHTML.push('<td class="interfaceViewportMasterControlColumn">');
-															aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-															aHTML.push('<tr class="interfaceViewportMasterControl">' +
-																		'<td id="ns1blankspaceViewportContact" class="ns1blankspaceViewportImage">' +
+															aHTML.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td id="ns1blankspaceViewContact" class="ns1blankspaceViewImage">' +
 																		'&nbsp;' +
 																		'</td></tr>');			
 														
@@ -906,50 +791,46 @@ ns1blankspace.control =
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Websites';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
-																		'<td id="tdInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupWebsite" class="interfaceViewportMasterControl">' +
-																		'Websites & Webapps</span>' +
-																		'</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_website" class="ns1blankspaceViewControl">' +
+																				'Websites & Webapps</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupStructures" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupStructures" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupStructures" class="interfaceViewportMasterControl">' +
-																		'Structures</span>' +
-																		'</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_structure" class="ns1blankspaceViewControl">' +
+																				'Structures</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Automation';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupAutomation" class="interfaceViewportMasterControl">' +
-																		'Automation</span>' +
-																		'</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_automation" class="ns1blankspaceViewControl">' +
+																				'Automation</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Imports';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +	
-																		 '<td id="tdInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +
-																		 '<span id="spanInterfaceViewportMasterControlSetupImport" class="interfaceViewportMasterControl">' +
-																		 'Imports</span>' +
-																		 '</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_import" class="ns1blankspaceViewControl">' +
+																				'Imports</span></td></tr>');
 														}
 
 														if (aHTMLViewport.length > 0)
 														{
-															aHTML.push('<td class="interfaceViewportMasterControlColumn">');
-															aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-															aHTML.push('<tr class="interfaceViewportMasterControl">' +
-																		'<td id="ns1blankspaceViewportSetupWebsite" class="ns1blankspaceViewportImage">' +
+															aHTML.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td id="ns1blankspaceViewSetupWebsite" class="ns1blankspaceViewImage">' +
 																		'&nbsp;' +
 																		'</td></tr>');			
 														
@@ -964,60 +845,55 @@ ns1blankspace.control =
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Financials';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupFinancial" class="interfaceViewportMasterControl">' +
-																		'Financials</span>' +
-																		'</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_financial" class="ns1blankspaceViewControl">' +
+																				'Financials</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Businesses';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupContactBusinessGroup" class="interfaceViewportMasterControl">' +
-																		'Contact&nbsp;Business&nbsp;Groups</span>' +
-																		'</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_contactBusinessGroup" class="ns1blankspaceViewControl">' +
+																				'Contact&nbsp;Business&nbsp;Groups</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'People';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupContactPersonGroup" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupContactPersonGroup" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupContactPersonGroup" class="interfaceViewportMasterControl">' +
-																		'Contact&nbsp;Person&nbsp;Groups</span>' +
-																		'</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_contactPersonGroup" class="ns1blankspaceViewControl">' +
+																				'Contact&nbsp;Person&nbsp;Groups</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Projects';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupProject" class="interfaceViewportMasterControl">' +
-																		'Project&nbsp;Templates</span>' +
-																		'</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_project" class="ns1blankspaceViewControl">' +
+																				'Project&nbsp;Templates</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Tasks';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupProjectTask" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupProjectTask" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupProjectTask" class="interfaceViewportMasterControl">' +
-																		'Project&nbsp;Template&nbsp;Tasks</span>' +
-																		'</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_projectTask" class="ns1blankspaceViewControl">' +
+																				'Project&nbsp;Template&nbsp;Tasks</span></td></tr>');
 														}
 
 														if (aHTMLViewport.length > 0)
 														{
-															aHTML.push('<td class="interfaceViewportMasterControlColumn">');
-															aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-															aHTML.push('<tr class="interfaceViewportMasterControl">' +
-																		'<td id="ns1blankspaceViewportFinancial" class="ns1blankspaceViewportImage">' +
+															aHTML.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td id="ns1blankspaceViewFinancial" class="ns1blankspaceViewImage">' +
 																		'&nbsp;' +
 																		'</td></tr>');			
 														
@@ -1027,36 +903,33 @@ ns1blankspace.control =
 															aHTML.push('</td>');
 														}		
 														
-
 														var aHTMLViewport = [];
 																		
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'My Account';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSetupSpace" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSetupSpace" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSetupSpace" class="interfaceViewportMasterControl">' +
-																		'My&nbsp;Account</span>' +
-																		'</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_space" class="ns1blankspaceViewControl">' +
+																				'My&nbsp;Space&nbsp;/&nbsp;Account</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Support';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
-															aHTMLViewport.push('<tr id="trInterfaceViewportMasterControlSupportIssue" class="interfaceViewportMasterControl">' +	
-																		'<td id="tdInterfaceViewportMasterControlSupportIssue" class="interfaceViewportMasterControl">' +
-																		'<span id="spanInterfaceViewportMasterControlSupportIssue" class="interfaceViewportMasterControl">' +
-																		'Support&nbsp;Issues</span>' +
-																		'</td></tr>');
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_supportIssue" class="ns1blankspaceViewControl">' +
+																				'Support&nbsp;Issues</span></td></tr>');
 														}
 
 														if (aHTMLViewport.length > 0)
 														{
-															aHTML.push('<td class="interfaceViewportMasterControlColumn">');
-															aHTML.push('<table class="interfaceViewportMasterControlColumn">');
+															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-															aHTML.push('<tr class="interfaceViewportMasterControl">' +
-																		'<td id="ns1blankspaceViewportSetupSpace" class="ns1blankspaceViewportImage">' +
+															aHTML.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td id="ns1blankspaceViewSetupSpace" class="ns1blankspaceViewImage">' +
 																		'&nbsp;' +
 																		'</td></tr>');			
 														
@@ -1071,186 +944,102 @@ ns1blankspace.control =
 														return aHTML.join('');	
 													},
 
-										bind:		function interfaceControlSetupOptionsBind()
+										bind:		function ()
 													{
-														$('#tdInterfaceViewportMasterControlSetupWebsite').click(function(event)
+														$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
 														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupWebsiteMasterViewport();
-														});
-															
-														$('#tdInterfaceViewportMasterControlSetupUser').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupUserMasterViewport();
-														});
-														
-														$('#tdInterfaceViewportMasterControlSetupUserRole').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupUserRoleMasterViewport();
-														});
+															var sNS = '_' + this.namespace;
+															if (this.parentnamespace) {sNS = '_' + this.parentnamespace + sNS}
 
-														$('#tdInterfaceViewportMasterControlSetupNetworkGroup').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupNetworkGroupMasterViewport();
-														});
-														
-														$('#tdInterfaceViewportMasterControlSetupAutomation').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupAutomationMasterViewport();
-														});
-														
-														$('#tdInterfaceViewportMasterControlSetupMessaging').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupMessagingMasterViewport();
-														});
-														
-														$('#tdInterfaceViewportMasterControlSetupImport').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupImportMasterViewport();
-														});
+															$('#ns1blankspaceViewControl' + sNS).click(function(event)
+															{
+																$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 
-														$('#tdInterfaceViewportMasterControlSetupFinancial').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupFinancialMasterViewport();
-														});
+																if (this.parentnamespace)
+																{
+																	var oNS = ns1blankspace[this.parentnamespace][this.namespace];
+																}
+																else
+																{
+																	var oNS = ns1blankspace[this.parentnamespace];
+																}
 
-														$('#tdInterfaceViewportMasterControlSetupContactBusinessGroup').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupMasterViewport(
-																	{
-																	setupName: "Contact Business Groups",
-																	setupMethod: "SETUP_CONTACT_BUSINESS_GROUP"
-																	});
-														});
-														
-														$('#tdInterfaceViewportMasterControlSetupContactPersonGroup').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupMasterViewport(
-																	{
-																	setupName: "Contact Person Groups",
-																	setupMethod: "SETUP_CONTACT_PERSON_GROUP"
-																	});
-														});
-														
-														$('#tdInterfaceViewportMasterControlSetupProject').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupProjectMasterViewport();
-														});
-														
-														$('#tdInterfaceViewportMasterControlSetupProjectTaak').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupProjectTaskMasterViewport();
-														});
-														
-														$('#tdInterfaceViewportMasterControlSupportIssue').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSupportIssueMasterViewport();
-														});
-														
-														$('#tdInterfaceViewportMasterControlSetupStructures').click(function(event)
-														{
-															interfaceSetupStructureMasterViewport();
-														});
-
-														$('#tdInterfaceViewportMasterControlSetupSpace').click(function(event)
-														{
-															ns1blankspaceOptionsSource();
-															interfaceSetupSpaceMasterViewport();
-														});
+																oNS.init(this.param);
+															});
 													}
+
 									}
 					},
 
 	user:			{
-						show: 		function interfaceControlUserOptionsShow(oElement)
+						show: 		function w(oElement)
 									{
-										if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == oElement.id)
+										if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
 										{
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-											$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+											$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 										}
 										else
 										{	
-											$('#divns1blankspaceViewportControlOptions').attr('data-initiator', oElement.id);
-											$('#divns1blankspaceViewportControlOptions').html("&nbsp;");
-											$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-											$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 70});
-											$('#divns1blankspaceViewportControlOptions').html(interfaceControlUserOptions);
+											$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
+											$(ns1blankspace.xhtml.container).html("&nbsp;");
+											$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+											$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 70});
+											$(ns1blankspace.xhtml.container).html(ns1blankspaceControlUserOptions);
 												
-											interfaceControlUserOptionsBind();
+											ns1blankspace.control.user.bind();
 										}	
 									},
 
-						layout		function interfaceControlUserOptions()
+						layout		function ()
 									{
-
 										var aHTML = [];
-										var h = -1;
-										
-										aHTML[++h] = '<table style="width: 180px;" id="tablens1blankspaceUserOptions" class="interfaceViewportMasterControl" cellpadding=6>';
+		
+										aHTML.push('<table style="width: 180px;" id="ns1blankspaceControlUser" class="ns1blankspace">');
 											
-										aHTML[++h] = '<tr id="trns1blankspaceUserOptionsLogOff" class="ns1blankspaceUserOptions">' +
-														'<td id="tdns1blankspaceUserOptionsLogOff" class="ns1blankspaceUserOptions">' +
-														'Log Off' +
-														'</td>' +
-														'</tr>'
+										aHTML.push('<tr>' +
+														'<td id="ns1blankspaceUserLogOff" class="ns1blankspaceViewControl">' +
+														'Log Off</td></tr>');
 													
-										aHTML[++h] = '<tr id="trns1blankspaceUserOptionsChangePassword" class="ns1blankspaceUserOptions">' +
-														'<td id="tdns1blankspaceUserOptionsChangePassword" class="ns1blankspaceUserOptions">' +
-														'Change My Password' +
-														'</td>' +
-														'</tr>'			
+										aHTML.push('<tr>' +
+														'<td id="ns1blankspaceConrolUserChangePassword" class="ns1blankspaceViewControl">' +
+														'Change My Password</td></tr>');		
 													
-										aHTML[++h] = '<tr id="trns1blankspaceUserOptionsCreateSecureKey" class="ns1blankspaceUserOptions">' +
-														'<td id="tdns1blankspaceUserOptionsCreateSecureKey" class="ns1blankspaceUserOptions">' +
-														'Secure Access Token' +
-														'</td>' +
-														'</tr>'						
+										aHTML.push('<tr">' +
+														'<td id="ns1blankspaceControlUserCreateSecureKey" class="ns1blankspaceViewControl">' +
+														'Secure Access Token</td></tr>');					
 														
-										aHTML[++h] = '</table>'
+										aHTML.push('</table>');
 										
 										return aHTML.join('');
 									},
 
-						bind:		function interfaceControlUserOptionsBind()
+						bind:		function ()
 									{
-
-										$('#tdns1blankspaceUserOptionsLogOff').click(function(event)
+										$('#ns1blankspaceUserLogOff').click(function(event)
 										{
-											ns1blankspaceLogoff();
+											ns1blankspace.logoff();
 										})
 										
-										$('#tdns1blankspaceUserOptionsChangePassword').click(function(event)
+										$('#ns1blankspaceConrolUserChangePassword').click(function(event)
 										{
 											$(this).html(ns1blankspace.xhtml.loadingSmall);
-											ns1blankspaceUserOptionsChangePassword();
+											ns1blankspace.conrol.user.changePassword();
 										});
 										
-										$('#tdns1blankspaceUserOptionsCreateSecureKey').click(function(event)
+										$('#ns1blankspaceControlUserCreateSecureKey').click(function(event)
 										{
 											$(this).html(ns1blankspace.xhtml.loadingSmall);
-											ns1blankspaceUserOptionsCreateSecureKey();
+											ns1blankspace.conrol.user.createSecureKey();
 										});
-									}
+									},
 
-						changePassword:		function ns1blankspaceUserOptionsChangePassword(oParam)
+						changePassword:	function (oParam)
 									{
 										var aHTML = [];
-										var h = -1;
+
 										var bShow = true;
-										var sXHTMLElementID = 'divns1blankspaceViewportControlOptions'
+										var sXHTMLElementID = ns1blankspace.xhtml.container;
 										
 										if (oParam != undefined)
 										{
@@ -1258,23 +1047,22 @@ ns1blankspace.control =
 											if (oParam.show != undefined) {bShow = oParam.show}
 										}	
 										
-										aHTML[++h] = '<table id="tableInterfaceUserOptionsChangePassword" class="interfaceViewportMasterControl" style="width:350px;">';
+										aHTML.push('<table id="ns1blankspaceControlUserChangePasswordContainer" class="ns1blankspaceContainer" style="width:350px;">';
 											
 										if (bShow)
 										{
-											ns1blankspaceOptionsSetPosition(sXHTMLElementID, 0, -255)
+											ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: 0, topOffset: -255})
 											
-											aHTML[++h] = '<tr class="interfaceHomeOptionContext">';
-											aHTML[++h] = '<td class="interfaceHomeOptionContext">Change Password</td>';
-											aHTML[++h] = '<td id="tdInterfaceHomeOptionClose" style="text-align:right;"><span id="spanInterfaceMainOptionsClose">Close</span></td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<tr><td class="ns1blankspaceHeader">Change Password</td>' +
+															'<td class="ns1blankspaceHeader" style="text-align:right;">' +
+															'<span id="ns1blankspaceClose">Close</span></td></tr>');
 										}
 											
-										aHTML[++h] = '<tr><td id="tdInterfaceUserOptionsChangePassword" style="font-size:0.875em" colspan=2></td></tr></table>';
+										aHTML.push('<tr><td id="ns1blankspaceControlUserChangePassword" style="font-size:0.875em" colspan=2></td></tr></table>');
 										
 										$('#' + sXHTMLElementID).html(aHTML.join(''));	
 										
-										$('#spanInterfaceMainOptionsClose').button(
+										$('#ns1blankspaceClose').button(
 										{
 											text: false,
 											 icons: {
@@ -1289,17 +1077,17 @@ ns1blankspace.control =
 										.css('width', '20px')
 										.css('height', '20px')
 										
-										ns1blankspaceLogonChangePasswordShow({xhtmlElementID: 'tdInterfaceUserOptionsChangePassword'});
+										ns1blankspace.logon.changePassword.show({xhtmlElementID: 'ns1blankspaceControlUserChangePassword'});
 										
 									},
 
-						key:		function ns1blankspaceUserOptionsCreateSecureKey(oParam, oResponse)
+						key:		function (oParam, oResponse)
 									{
 										var aHTML = [];
 										var h = -1;
 										var bShow = true;
 										var bSetPosition = true;
-										var sXHTMLElementID = 'divns1blankspaceViewportControlOptions'
+										var sXHTMLElementID = 'divns1blankspaceViewControlOptions'
 										
 										if (oParam != undefined)
 										{
@@ -1313,73 +1101,69 @@ ns1blankspace.control =
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/core/?method=CORE_SECURE_TOKEN_SEARCH&rf=JSON',
+												url: ns1blankspace.util.endpointURI()'CORE_SECURE_TOKEN_SEARCH'),
 												dataType: 'json',
-												success: function(data) {ns1blankspaceUserOptionsCreateSecureKey(oParam, data)}
+												success: function(data) {ns1blankspace.control.user.createSecureKey(oParam, data)}
 											})
 										}
 										else
 										{	
-										
-											aHTML[++h] = '<table id="tableInterfaceUserOptionsCreateSecureKey" class="interfaceViewportMasterControl" style="width:400px;"><tr><td>';	
+											aHTML.push('<table id="ns1blankspaceControlUserCreateSecureKeyContainer" class="ns1blankspaceViewControl" style="width:400px;"><tr><td>';	
 
 											if (bSetPosition)
 											{
-												ns1blankspaceOptionsSetPosition(sXHTMLElementID, 0, -305)
+												ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: 0, topOffset: -305})
 											}	
 										
 											if (bShow)
 											{
-												aHTML[++h] = '<table id="tableInterfaceUserOptionsCreateSecureKey" style="width:400px;>';	
-												aHTML[++h] = '<tr class="interfaceHomeOptionContext">';
-												aHTML[++h] = '<td class="interfaceHomeOptionContext">Secure Access Token</td>';
-												aHTML[++h] = '<td id="tdInterfaceHomeOptionClose" style="text-align:right;"><span id="spanInterfaceMainOptionsClose">Close</span></td>';
-												aHTML[++h] = '</tr>';
-												aHTML[++h] = '</table>';
+												aHTML.push('<table style="width:400px;>' + 
+																'<tr><td class="ns1blankspaceCaption">Secure Access Token</td>' +
+																'<td id="tdns1blankspaceHomeOptionClose" style="text-align:right;">' +
+																'<span id="ns1blankspaceClose">Close</span></td>' +
+																'</tr>' +
+																'</table>');
 											}
 											
-											aHTML[++h] = '<table id="tableInterfaceUserOptionsCreateSecureKey" style="width:400px;font-size:0.75em">';
+											aHTML.push('<table id="ns1blankspaceControlUserCreateSecureKey" style="width:400px; font-size:0.75em">');
 											
 											if (oResponse.access_token == undefined)
 											{
-												aHTML[++h] = '<tr><td>' +
-																	'<br />No key has been set up.  Click <b>New Token</b> to create a token, which you can use to link to your information.<br /><br /></td></tr>';
+												aHTML.push('<tr><td>' +
+																'<br />No key has been set up.  Click <b>New Token</b> to create a token, which you can use to link to your information.<br /><br /></td></tr>');
 												
 											}
 											else
 											{
-											
-												aHTML[++h] = '<tr><td>' +
-																	oResponse.access_token + '<br /><br /></td></tr>';
+												aHTML.push('<tr><td>' +
+																	oResponse.access_token + '<br /><br /></td></tr>');
 												
-												aHTML[++h] = '<tr><td style="text-align:right;" id="tdInterfaceHomeOptionsCreateSecureKeyDisable"><span id="spanInterfaceHomeOptionsCreateSecureKeyDisable">Disable Token</span></td></tr>';								
-												aHTML[++h] = '<tr><td>' +
-																	'<br />If you generate a new token, the current token will no longer work.<br /><br /></td></tr>';
-												
+												aHTML.push('<tr><td style="text-align:right;"><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
+												aHTML.push('<tr><td><br />If you generate a new token, the current token will no longer work.<br /><br /></td></tr>');
 											}
 											
-											aHTML[++h] = '<tr><td style="text-align:right;" id="tdInterfaceHomeOptionsCreateSecureKeyNew"><span id="spanInterfaceHomeOptionsCreateSecureKeyNew">New Token</span></td></tr>';
+											aHTML.push('<tr><td style="text-align:right;""><span id="ns1blankspaceControlUserCreateSecureKeyNew">New Token</span></td></tr>');
 											
 											if (oResponse.access_token != undefined)
 											{
-												aHTML[++h] = '<tr><td><br /><b>Example link for future diary events in iCal format:</b><br /><br />' +
+												aHTML.push('<tr><td><br /><b>Example link for future diary events in iCal format:</b><br /><br />' +
 																	window.location.protocol + '//' + window.location.host + '/ondemand/action/' +
 																	'<br />?method=ACTION_ICAL_SEARCH' +
-																	'<br />&access_token=' + oResponse.access_token + '<br /><br /></td></tr>';
+																	'<br />&access_token=' + oResponse.access_token + '<br /><br /></td></tr>');
 																	
-												aHTML[++h] = '<tr><td><a href="' +
+												aHTML.push('<tr><td><a href="' +
 																	window.location.protocol + '//' + window.location.host + '/ondemand/action/?method=ACTION_ICAL_SEARCH' +
 																	'&access_token=' + oResponse.access_token + '" target="_blank" style="font-size:1.2em">Open example link</a>' +
-																	'<br /><span style="color: #A0A0A0;">(You can then copy & paste it)<br /><br /></span></td></tr>';					
+																	'<br /><span style="color: #A0A0A0;">(You can then copy & paste it)<br /><br /></span></td></tr>');					
 											}
 											
-											aHTML[++h] = '</table>';
+											aHTML.push('</table>');
 											
-											aHTML[++h] = '</td></tr></table>';
+											aHTML.push('</td></tr></table>');
 											
 											$('#' + sXHTMLElementID).html(aHTML.join(''));	
 											
-											$('#spanInterfaceMainOptionsClose').button(
+											$('#ns1blankspaceClose').button(
 											{
 												text: false,
 												 icons: {
@@ -1394,7 +1178,7 @@ ns1blankspace.control =
 											.css('width', '20px')
 											.css('height', '20px')
 											
-											$('#spanInterfaceHomeOptionsCreateSecureKeyDisable').button()
+											$('#ns1blankspaceControlUserCreateSecureKeyDisable').button()
 											.click(function() {
 											
 												if (confirm('Are you sure?'))
@@ -1402,16 +1186,17 @@ ns1blankspace.control =
 													$.ajax(
 													{
 														type: 'POST',
-														url: '/ondemand/core/?method=CORE_SECURE_TOKEN_MANAGE&remove=1&rf=TEXT',
+														url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_MANAGE'),
+														data: 'remove=1&rf=TEXT',
 														dataType: 'text',
 														async: false,
-														success: function(data) {ns1blankspaceUserOptionsCreateSecureKey({setPosition: false})}
+														success: function(data) {ns1blankspace.control.user.createSecureKey({setPosition: false})}
 													})
 												}		
 											})
 											.css('width', '150px')
 											
-											$('#spanInterfaceHomeOptionsCreateSecureKeyNew').button()
+											$('#ns1blankspaceControlUserCreateSecureKeyNew').button()
 											.click(function() {
 											
 												if (confirm('Are you sure?'))
@@ -1419,36 +1204,37 @@ ns1blankspace.control =
 													$.ajax(
 													{
 														type: 'POST',
-														url: '/ondemand/core/?method=CORE_SECURE_TOKEN_MANAGE&rf=TEXT',
+														url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_MANAGE'),
+														data: 'rf=TEXT',
 														dataType: 'text',
 														async: false,
-														success: function(data) {ns1blankspaceUserOptionsCreateSecureKey({setPosition: false})}
+														success: function(data) {ns1blankspace.control.user.createSecureKey({setPosition: false})}
 													})
 												}		
 											})
-											.css('width', '150px')
+											.css('width', '150px');
 										}		
 									}
 					},
 					
 	space:			{					
-						show:		function interfaceControlSpaceOptionsShow(oElement, oResponse)
+						show:		function ns1blankspaceControlSpaceOptionsShow(oElement, oResponse)
 									{
 										var aHTML = [];
 
 										if (oResponse == undefined)	
 										{
-											if ($('#divns1blankspaceViewportControlOptions').attr('data-source') == oElement.id)
+											if ($(ns1blankspace.xhtml.container).attr('data-source') == oElement.id)
 											{
-												$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-												$('#divns1blankspaceViewportControlOptions').attr('data-source', '');
+												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+												$(ns1blankspace.xhtml.container).attr('data-source', '');
 											}
 											else
 											{	
-												$('#divns1blankspaceViewportControlOptions').attr('data-source', oElement.id);
-												$('#divns1blankspaceViewportControlOptions').html('<table style="width: 250px;" class="interfaceViewportMasterControl"><tr><td>' + ns1blankspace.xhtml.loadingSmall + '</tr><td></table>');
-												$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-												$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left});
+												$(ns1blankspace.xhtml.container).attr('data-source', oElement.id);
+												$(ns1blankspace.xhtml.container).html('<table style="width: 250px;" class="ns1blankspaceViewControl"><tr><td>' + ns1blankspace.xhtml.loadingSmall + '</tr><td></table>');
+												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+												$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left});
 
 												if (ns1blankspace.space == ns1blankspace.userSpace)
 												{	
@@ -1457,23 +1243,23 @@ ns1blankspace.control =
 														type: 'GET',
 														url: '/ondemand/core/?method=CORE_SPACE_SEARCH&rows=20',
 														dataType: 'json',
-														success: function(data) {interfaceControlSpaceOptionsShow(oElement, data)}
+														success: function(data) {ns1blankspaceControlSpaceOptionsShow(oElement, data)}
 													});
 												}
 												else
 												{
-													aHTML.push('<table style="width: 250px;" id="tablens1blankspaceSpaceOptions" class="interfaceViewportMasterControl" cellpadding=4>');
+													aHTML.push('<table style="width: 250px;" id="tablens1blankspaceSpaceOptions" class="ns1blankspaceViewControl" cellpadding=4>');
 													aHTML.push('<tr class="ns1blankspaceSpaceOptions">' +
 																	'<td id="tdns1blankspaceSpaceOptionsSwitchBack" class="ns1blankspaceUserOptions">' +
 																	'Switch back to your space.' +
 																	'</td></tr>');
 													aHTML.push('</table>');
 											
-													$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+													$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 
 													$('#tdns1blankspaceSpaceOptionsSwitchBack').click(function(event)
 													{
-														$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+														$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
 														$.ajax(
 														{
@@ -1497,26 +1283,26 @@ ns1blankspace.control =
 										}	
 										else
 										{
-											aHTML.push('<table style="width: 250px;" id="tablens1blankspaceSpaceOptions" class="interfaceViewportMasterControl" cellpadding=0>');
+											aHTML.push('<table style="width: 250px;" id="tablens1blankspaceSpaceOptions" class="ns1blankspaceViewControl" cellpadding=0>');
 
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<tr class="interfaceMainCaption">' +
-																	'<td class="interfaceMainRowNothing">No access to other spaces.</td></tr>');
+												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
+																	'<td class="ns1blankspaceMainRowNothing">No access to other spaces.</td></tr>');
 											}
 											else
 											{
-												aHTML.push('<tr class="interfaceMainCaption">' +
-																	'<td class="interfaceMainRowNothing" style="padding-left:5px;padding-right:10px;"><input id="inputns1blankspaceSpaceSearch" class="inputInterfaceMainText"></td></tr>');
+												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
+																	'<td class="ns1blankspaceMainRowNothing" style="padding-left:5px;padding-right:10px;"><input id="inputns1blankspaceSpaceSearch" class="inputns1blankspaceMainText"></td></tr>');
 
-												aHTML.push('<tr class="interfaceMainCaption">' +
+												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
 																	'<td id="tdns1blankspaceSpaceSearch"></td></tr>');
 
 											}	
 
 											aHTML.push('</table>');
 
-											$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
+											$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 
 											var aHTML = [];
 
@@ -1539,12 +1325,12 @@ ns1blankspace.control =
 											$('#inputns1blankspaceSpaceSearch').keyup(function(event)
 											{
 												if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-										        ns1blankspace.timer.delayCurrent = setTimeout("interfaceControlSpaceOptionsShowSearch('inputns1blankspaceSpaceSearch')", ns1blankspace.option.typingWait);
+										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspaceControlSpaceOptionsShowSearch('inputns1blankspaceSpaceSearch')", ns1blankspace.option.typingWait);
 											});
 
 											$('.ns1blankspaceSpaceOptions').click(function(event)
 											{
-												$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
 												var aID = (event.target.id).split('-')
 												$.ajax(
@@ -1566,7 +1352,7 @@ ns1blankspace.control =
 										}
 									},
 
-						process:	function interfaceControlSpaceOptionsShowSearch(sXHTMLElementID, oResponse)
+						process:	function ns1blankspaceControlSpaceOptionsShowSearch(sXHTMLElementID, oResponse)
 									{	
 										var aSearch = sXHTMLElementID.split('-');
 										var sElementId = aSearch[0];
@@ -1585,7 +1371,7 @@ ns1blankspace.control =
 												type: 'GET',
 												url: '/ondemand/core/?method=CORE_SPACE_SEARCH&rows=20&spacetext=' + ns1blankspace.util.fs(sSearchText),
 												dataType: 'json',
-												success: function(data) {interfaceControlSpaceOptionsShowSearch(sXHTMLElementID, data)}
+												success: function(data) {ns1blankspaceControlSpaceOptionsShowSearch(sXHTMLElementID, data)}
 											});
 										}
 										else
@@ -1606,7 +1392,7 @@ ns1blankspace.control =
 
 											$('.ns1blankspaceSpaceOptions').click(function(event)
 											{
-												$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
 												var aID = (event.target.id).split('-')
 												$.ajax(

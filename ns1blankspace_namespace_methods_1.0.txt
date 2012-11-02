@@ -101,6 +101,13 @@ ns1blankspace
 	.pdf
 		.create
 
+# 1blankspace.control.js:
+	
+	.control
+		.init - setup views based on access
+
+		
+
 # 1blankspace.contactperson.js:
 
 	.contactperson
