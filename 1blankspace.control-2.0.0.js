@@ -1217,8 +1217,8 @@ ns1blankspace.control =
 									}
 					},
 					
-	space:			{					
-						show:		function ns1blankspaceControlSpaceOptionsShow(oElement, oResponse)
+	spaces:			{					
+						show:		function (oElement, oResponse)
 									{
 										var aHTML = [];
 
@@ -1241,30 +1241,31 @@ ns1blankspace.control =
 													$.ajax(
 													{
 														type: 'GET',
-														url: '/ondemand/core/?method=CORE_SPACE_SEARCH&rows=20',
+														url: ns1blankspace.util.endpointURI('CORE_SPACE_SEARCH'),
 														dataType: 'json',
-														success: function(data) {ns1blankspaceControlSpaceOptionsShow(oElement, data)}
+														success: function(data) {ns1blankspace.control.spaces.show(oElement, data)}
 													});
 												}
 												else
 												{
-													aHTML.push('<table style="width: 250px;" id="tablens1blankspaceSpaceOptions" class="ns1blankspaceViewControl" cellpadding=4>');
-													aHTML.push('<tr class="ns1blankspaceSpaceOptions">' +
-																	'<td id="tdns1blankspaceSpaceOptionsSwitchBack" class="ns1blankspaceUserOptions">' +
+													aHTML.push('<table style="width: 250px;" class="ns1blankspaceViewControl">' +
+																	'<tr class="ns1blankspaceSpaceOptions">' +
+																	'<td id="ns1blankspaceControlSpaceSwitchBack" class="ns1blankspace">' +
 																	'Switch back to your space.' +
-																	'</td></tr>');
-													aHTML.push('</table>');
+																	'</td></tr>' +
+																	'</table>');
 											
 													$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 
-													$('#tdns1blankspaceSpaceOptionsSwitchBack').click(function(event)
+													$('#ns1blankspaceControlSpaceSwitchBack').click(function(event)
 													{
 														$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
 														$.ajax(
 														{
-															type: 'GET',
-															url: '/ondemand/core/?method=CORE_SPACE_MANAGE&switchback=1',
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('CORE_SPACE_MANAGE'),
+															data: 'switchback=1',
 															dataType: 'json',
 															success: function(data)
 															{
@@ -1272,7 +1273,7 @@ ns1blankspace.control =
 																{	
 																	ns1blankspace.space = ns1blankspace.userSpace;
 																	ns1blankspace.spaceText = ns1blankspace.userSpaceText;
-																	$('#divns1blankspaceViewportSpaceText').html(ns1blankspace.spaceText);
+																	$('#ns1blankspaceViewControlSpaceText').html(ns1blankspace.spaceText);
 																}
 															}
 														});	
@@ -1283,20 +1284,17 @@ ns1blankspace.control =
 										}	
 										else
 										{
-											aHTML.push('<table style="width: 250px;" id="tablens1blankspaceSpaceOptions" class="ns1blankspaceViewControl" cellpadding=0>');
+											aHTML.push('<table style="width: 250px;" class="ns1blankspaceViewControl">');
 
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-																	'<td class="ns1blankspaceMainRowNothing">No access to other spaces.</td></tr>');
+												aHTML.push('<tr><td class="ns1blankspaceNothing">No access to other spaces.</td></tr>');
 											}
 											else
 											{
-												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-																	'<td class="ns1blankspaceMainRowNothing" style="padding-left:5px;padding-right:10px;"><input id="inputns1blankspaceSpaceSearch" class="inputns1blankspaceMainText"></td></tr>');
+												aHTML.push('<tr><td class="ns1blankspaceNothing" style="padding-left:5px;padding-right:10px;"><input id="ns1blankspaceControlSpaceSearch" class="inputns1blankspaceMainText"></td></tr>');
 
-												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-																	'<td id="tdns1blankspaceSpaceSearch"></td></tr>');
+												aHTML.push('<tr><td id="ns1blankspaceSpaceSearchResults"></td></tr>');
 
 											}	
 
@@ -1306,29 +1304,29 @@ ns1blankspace.control =
 
 											var aHTML = [];
 
-											aHTML.push('<table style="width: 100%;" cellpadding=4>');
+											aHTML.push('<table id="ns1blankspaceControlSpaceSwitchContainer" style="width: 100%;" cellpadding=4>');
 
 											$(oResponse.data.rows).each(function()
 											{
-												aHTML.push('<tr class="ns1blankspaceSpaceOptions">' +
-														'<td id="tdns1blankspaceSpaceOptionsSwitch-' + this.id + '" class="ns1blankspaceUserOptions">' +
-														this.space +
-														'</td></tr>');
+												aHTML.push('<tr>' +
+																'<td id="ns1blankspaceControlSpaceSwitch-' + this.id + '" class="ns1blankspace">' +
+																this.space +
+																'</td></tr>');
 											});			
 															
 											aHTML.push('</table>');
 											
-											$('#tdns1blankspaceSpaceSearch').html(aHTML.join(''));
+											$('#ns1blankspaceSpaceSearchResults').html(aHTML.join(''));
 										
-											$('#inputns1blankspaceSpaceSearch').focus();
+											$('#ns1blankspaceControlSpaceSearch').focus();
 
-											$('#inputns1blankspaceSpaceSearch').keyup(function(event)
+											$('#ns1blankspaceControlSpaceSearch').keyup(function(event)
 											{
 												if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspaceControlSpaceOptionsShowSearch('inputns1blankspaceSpaceSearch')", ns1blankspace.option.typingWait);
+										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.control.spaces.show.process('ns1blankspaceControlSpaceSearch')", ns1blankspace.option.typingWait);
 											});
 
-											$('.ns1blankspaceSpaceOptions').click(function(event)
+											$('#ns1blankspaceControlSpaceSwitchContainer > td.ns1blankspace').click(function(event)
 											{
 												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
@@ -1336,7 +1334,8 @@ ns1blankspace.control =
 												$.ajax(
 												{
 													type: 'GET',
-													url: '/ondemand/core/?method=CORE_SPACE_MANAGE&switch=1&id=' + aID[1],
+													url: ns1blankspace.util.endpointURI('CORE_SPACE_MANAGE'),
+													data: 'switch=1&id=' + aID[1],
 													dataType: 'json',
 													success: function(data)
 													{
@@ -1352,7 +1351,7 @@ ns1blankspace.control =
 										}
 									},
 
-						process:	function ns1blankspaceControlSpaceOptionsShowSearch(sXHTMLElementID, oResponse)
+						process:	function (sXHTMLElementID, oResponse)
 									{	
 										var aSearch = sXHTMLElementID.split('-');
 										var sElementId = aSearch[0];
@@ -1369,36 +1368,38 @@ ns1blankspace.control =
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/core/?method=CORE_SPACE_SEARCH&rows=20&spacetext=' + ns1blankspace.util.fs(sSearchText),
+												url: ns1blankspace.util.endpointURI('CORE_SPACE_SEARCH'),
+												data: 'rows=20&spacetext=' + ns1blankspace.util.fs(sSearchText),
 												dataType: 'json',
-												success: function(data) {ns1blankspaceControlSpaceOptionsShowSearch(sXHTMLElementID, data)}
+												success: function(data) {ns1blankspace.control.spaces.show(sXHTMLElementID, data)}
 											});
 										}
 										else
 										{	
-											aHTML.push('<table style="width: 100%;" cellspacing=4>');
+											aHTML.push('<table id="ns1blankspaceControlSpaceSwitchContainer" style="width: 100%;" cellspacing=4>');
 
 											$(oResponse.data.rows).each(function()
 											{
-												aHTML.push('<tr class="ns1blankspaceSpaceOptions">' +
-														'<td id="tdns1blankspaceSpaceOptionsSwitch-' + this.id + '" class="ns1blankspaceUserOptions">' +
-														this.space +
-														'</td></tr>');
-											});			
+												aHTML.push('<tr>' +
+																'<td id="ns1blankspaceControlSpaceSwitch-' + this.id + '" class="ns1blankspace">' +
+																this.space +
+																'</td></tr>');
+											});		
 															
 											aHTML.push('</table>');
 											
 											$('#tdns1blankspaceSpaceSearch').html(aHTML.join(''));
 
-											$('.ns1blankspaceSpaceOptions').click(function(event)
+											$('ns1blankspaceControlSpaceSwitchContainer > td.ns1blankspace').click(function(event)
 											{
 												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
 												var aID = (event.target.id).split('-')
 												$.ajax(
 												{
-													type: 'GET',
-													url: '/ondemand/core/?method=CORE_SPACE_MANAGE&switch=1&id=' + aID[1],
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('CORE_SPACE_MANAGE'),
+													data: 'switch=1&id=' + aID[1],
 													dataType: 'json',
 													success: function(data)
 													{
@@ -1406,7 +1407,7 @@ ns1blankspace.control =
 														{	
 															ns1blankspace.space = aID[1];
 															ns1blankspace.spaceText = $('#' + event.target.id).html();
-															$('#divns1blankspaceViewportSpaceText').html(ns1blankspace.spaceText);
+															$('#ns1blankspaceViewControlSpaceText').html(ns1blankspace.spaceText);
 														}	
 													}
 												});	
