@@ -36,70 +36,76 @@ ns1blankspace.order =
 				},
 
 	home:		{
-					show:		function interfaceOrderHomeShow(oResponse)
+					show:		function (oResponse)
 								{	
-									$('#divInterfaceMain').html(ns1blankspace.xhtml.loading);
+									$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
+									$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspaceMain">');
+									aHTML.push('<tr class="ns1blankspaceMain">' +
+													'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+													ns1blankspace.xhtml.loading +
+													'</td>' +
+													'</tr>');
+									aHTML.push('</table>');					
+									
+									$('#ns1blankspaceMain').html(aHTML.join(''));
 									
 									var aHTML = [];
-									var h = -1;
 												
-									aHTML[++h] = '<table>';
-									aHTML[++h] = '<tr>' +
-													'<td id="ns1blankspaceViewportOrderLarge" class="ns1blankspaceViewportImageLarge">' +
-													'&nbsp;' + 
-													'</td>' +
-													'</tr>';
-									aHTML[++h] = '</table>';		
-									
-									aHTML[++h] = '<table style="margin-top:15px;">';
+									aHTML.push('<table>');
 
-									aHTML[++h] = '<tr id="trInterfaceViewportControlRecent" class="interfaceViewportControl">' +
-													'<td id="tdInterfaceViewportControlRecent" class="interfaceViewportControl">Recent</td>' +
-													'</tr>';		
+									aHTML.push('<tr><td id="ns1blankspaceViewOrderLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+											
+									aHTML.push('<tr class="ns1blankspaceControl">' +
+													'<td id="ns1blankspaceControlRecent" class="ns1blankspaceControl ns1blankspaceViewportControlHighlight">' +
+													'Recent</td></tr>');			
+											
+									aHTML.push('<tr class="ns1blankspaceControl">' +
+													'<td id="ns1blankspaceControlStatus-2" class="ns1blankspaceControl orderStatus">' +
+													'To&nbsp;Be&nbsp;Submitted</td></tr>');	
+
+									aHTML.push('<tr class="ns1blankspaceControl">' +
+													'<td id="ns1blankspaceControlStatus-7" class="ns1blankspaceControl orderStatus">' +
+													'Processing</td></tr>');
+
+									aHTML.push('<tr class="ns1blankspaceControl">' +
+													'<td id="ns1blankspaceControlStatus-1" class="ns1blankspaceControl orderStatus">' +
+													'Completed</td></tr>');
+												
+									aHTML.push('</table>');		
 									
-									aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
-													'<td id="tdInterfaceViewportControlStatus-2" class="interfaceViewportControl orderStatus">To&nbsp;Be&nbsp;Submitted</td>' +
-													'</tr>';
+									$('#ns1blankspaceControl').html(aHTML.join(''));	
+
+									ns1blankspace.home.recent();
 									
-									aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
-													'<td id="tdInterfaceViewportControlStatus-7" class="interfaceViewportControl orderStatus">Processing</td>' +
-													'</tr>';
-														
-									aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
-													'<td id="tdInterfaceViewportControlStatus-1" class="interfaceViewportControl orderStatus">Completed</td>' +
-													'</tr>';
-																				
-									aHTML[++h] = '</table>';
-									
-									$('#divInterfaceViewportControl').html(aHTML.join(''));	
-									$('#tdInterfaceViewportControlRecent').addClass('interfaceViewportControlHighlight');
-									interfaceOrderHomeRecentShow();
-									
-									$('#tdInterfaceViewportControlRecent').click(function(event)
+									$('#ns1blankspaceControlRecent').click(function(event)
 									{
-										interfaceOrderHomeRecentShow();
+										ns1blankspace.home.recent();
 									});
 									
 									$('td.orderStatus').click(function(event)
 									{
 										var sID = this.id;
 										var aID = sID.split('-');
-										interfaceOrderHomeStatusShow({status: aID[1]});
+										ns1blankspace.home.status.show({status: aID[1]});
 									});
 										
-									$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+								
 								},
 
-					recent:		function interfaceOrderHomeRecentShow(oResponse)
+					recent:		function (oResponse)
 								{
 									if (oResponse == undefined)
 									{
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'PRODUCT_ORDER_SEARCH';
 										oSearch.addField('reference,orderbybusinesstext,orderbypersontext,orderdate');
-										oSearch.rows = 30;
+										oSearch.rows = 50;
 										oSearch.sort('orderdate', 'desc');
-										oSearch.getResults(interfaceOrderHomeRecentShow);
+										oSearch.getResults(ns1blankspace.home.recent);
 									}
 									else
 									{
@@ -108,51 +114,46 @@ ns1blankspace.order =
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableInterfaceOrderHomeMostLikely">';
-											aHTML[++h] = '<tr class="trInterfaceOrderHomeMostLikelyNothing">';
-											aHTML[++h] = '<td class="tdInterfaceOrderHomeMostLikelyNothing">Click New to create a order.</td>';
-											aHTML[++h] = '</tr>';
-											aHTML[++h] = '</table>';
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">Click New to create an order.</td></tr></table>');
 										}
 										else
 										{
-											aHTML[++h] = '<table id="tableInterfaceOrderHomeMostLikely">';
+											aHTML.push('<table class="ns1blankspaceContainer">');
 										
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML[++h] = '<tr class="interfaceMainRow">';
+												aHTML.push('<tr class="ns1blankspaceMainRow">');
 												
-												aHTML[++h] = '<td style="width:100px;" id="interfaceOrderHomeMostLikely_Title-' + this.id + 
-																		'" class="interfaceHomeMostLikely">' +
-																		this.reference +
-																		'</td>';
+												aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+																		'" class="ns1blankspaceMostLikely" style="width:100px;" >' +
+																		this.reference + '</td>');
 												
-												aHTML[++h] = '<td style="width:100px;" id="interfaceOrderHomeMostLikely_OrderDate-' + this.id + '" class="interfaceHomeMostLikelySub">' +
-																		this.orderdate + '</td>';
+												aHTML.push('<td id="ns1blankspaceMostLikely_orderdate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:100px;">' +
+																		this.orderdate + '</td>');
 																		
 												var sContact = this.orderbybusinesstext;
 												if (sContact == '') {sContact = this.orderbypersontext}
 																		
-												aHTML[++h] = '<td id="interfaceOrderHomeMostLikely_Contact-' + this.id + '" class="interfaceHomeMostLikelySub">' +
-																		sContact + '</td>';
+												aHTML.push('<td id="ns1blankspaceMostLikely_contact-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+																		sContact + '</td>');
 																		
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>');
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</table>');
 										}
 										
-										$('#divInterfaceMain').html(aHTML.join(''));
+										$('#ns1blankspaceMain').html(aHTML.join(''));
 									
-										$('td.interfaceHomeMostLikely').click(function(event)
+										$('td.ins1blankspaceMostLikely').click(function(event)
 										{
-											interfaceOrderSearch(event.target.id, {source: 1});
+											ns1blankspace.order.search.send(event.target.id, {source: 1});
 										});
 									}
 								}
 
 					status:		{
-									show: 		function interfaceOrderHomeStatusShow(oParam, oResponse)
+									show: 		function (oParam, oResponse)
 												{
 													var iStatus = 1;
 													
@@ -169,93 +170,84 @@ ns1blankspace.order =
 														oSearch.addFilter('status', 'EQUAL_TO', iStatus);
 														oSearch.rows = 30;
 														oSearch.sort('orderdate', 'desc');
-														oSearch.getResults(function(data) {interfaceOrderHomeStatusShow(oParam, data)});
+														oSearch.getResults(function(data) {ns1blankspace.home.status.show(oParam, data)});
 													}
 													else
 													{
 														var aHTML = [];
-														var h = -1;
-														
+
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML[++h] = '<table id="tableInterfaceOrderHomeMostLikely">';
-															aHTML[++h] = '<tr class="trInterfaceOrderHomeMostLikelyNothing">';
-															aHTML[++h] = '<td class="tdInterfaceOrderHomeMostLikelyNothing">Click New to create a order.</td>';
-															aHTML[++h] = '</tr>';
-															aHTML[++h] = '</table>';
+															aHTML.push('<table><tr><td class="ns1blankspaceNothing">No orders, click New to create an order.</td></tr></table>');
 														}
 														else
 														{			
-															aHTML[++h] = '<table id="tableInterfaceOrderHomeMostLikely">';
+															aHTML.push('<table class="ns1blankspaceContainer">';
 															
 															$.each(oResponse.data.rows, function()
 															{
-																aHTML[++h] = interfaceOrderHomeStatusRow(this)
+																aHTML.push(ns1blankspace.home.status.row(this)
 															});
 															
-															aHTML[++h] = '</tbody></table>';
+															aHTML.push('</table>');
 														}
 														
-														$('#divInterfaceMain').html(aHTML.join(''));
+														$('#ns1blankspaceeMain').html(aHTML.join(''));
 													
-														ns1blankspacePaginationList(
+														ns1blankspace.pagination.list(
 														{
-															xhtmlElementID: 'divInterfaceMain',
+															xhtmlElementID: 'divns1blankspaceMain',
 															xhtmlContext: 'OrderStatus',
 															xhtml: aHTML.join(''),
 															showMore: (oResponse.morerows == "true"),
 															more: oResponse.moreid,
 															rows: 30,
-															functionShowRow: interfaceOrderHomeStatusRow,
-															functionNewPage: 'interfaceOrderHomeStatusBind()',
+															functionShowRow: ns1blankspace.home.status.row,
+															functionNewPage: 'ns1blankspace.home.status.bind()',
 															type: 'json'
 														}); 
 																	
-														interfaceOrderHomeStatusBind();
+														ns1blankspace.home.status.bind();
 													}
 												},
 
-									row:		function interfaceOrderHomeStatusRow(oRow)
+									row:		function (oRow)
 												{
 													var aHTML = [];
-													var h = -1;
 
-													aHTML[++h] = '<tr class="interfaceMainRow">';
-																
-													aHTML[++h] = '<td style="width:100px;" id="interfaceProjectHomeMostLikely_Title-' + oRow.id + 
-																			'" class="interfaceHomeMostLikely">' +
-																			oRow.reference +
-																			'</td>';
+													aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+																		'" class="ns1blankspaceMostLikely" style="width:100px;" >' +
+																		this.reference + '</td>');
+												
+													aHTML.push('<td id="ns1blankspaceMostLikely_orderdate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:100px;">' +
+																		this.orderdate + '</td>');
+																		
+													var sContact = this.orderbybusinesstext;
+													if (sContact == '') {sContact = this.orderbypersontext}
 																			
-													aHTML[++h] = '<td style="width:100px;" id="interfaceOrderHomeMostLikely_OrderDate-' + oRow.id + '" class="interfaceHomeMostLikelySub">' +
-																			oRow.orderdate + '</td>';
-																			
-													var sContact = oRow.orderbybusinesstext;
-													if (sContact == '') {sContact = oRow.orderbypersontext}
-																			
-													aHTML[++h] = '<td id="interfaceOrderHomeMostLikely_Contact-' + oRow.id + '" class="interfaceHomeMostLikelySub">' +
-																			sContact + '</td>';
-																			
-													aHTML[++h] = '</tr>'
+													aHTML.push('<td id="ns1blankspaceMostLikely_contact-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+																		sContact + '</td>');
+
+													aHTML.push('</tr>');
 
 													return aHTML.join('');
 												},
 
-									bind:		function interfaceOrderHomeStatusBind()
+									bind:		function ()
 												{
-													$('td.interfaceHomeMostLikely').click(function(event)
+													$('td.ns1blankspaceMostLikelySub').click(function(event)
 													{
-														interfaceOrderSearch(event.target.id, {source: 1});
+														ns1blankspace.order.search.send(event.target.id, {source: 1});
 													});
 												}	
 								}
 				},				
 
 	search: 	{
-					send: 		function interfaceOrderSearch(sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementId, oParam)
 								{
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
+									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;
@@ -276,12 +268,11 @@ ns1blankspace.order =
 									if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 									{
 									
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
 										var oSearch = new AdvancedSearch();
-										oSearch.endPoint = 'product';
 										oSearch.method = 'PRODUCT_ORDER_SEARCH';
 										
 										oSearch.addField('reference,orderbybusinesstext,orderbybusiness,orderbypersontext,orderbyperson,billtobusinesstext,billtobusiness,billtoperson,' +
@@ -291,15 +282,14 @@ ns1blankspace.order =
 															'mailingaddresscombined,mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,' +
 															'createdusertext,createduser,createddate,modifiedusertext,modifieduser,modifieddate');
 										oSearch.rf = 'json';
-										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
-												
-										oSearch.getResults(function(data){interfaceOrderShow(oParam, data)});	
+										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);	
+										oSearch.getResults(function(data){ns1blankspace.order.show(oParam, data)});	
 									}
 									else
 									{
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -308,45 +298,37 @@ ns1blankspace.order =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											sElementId = 'ns1blankspaceViewControlBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspaceOptionsSetPosition(sElementId);
-											ns1blankspaceSearchStart(sElementId);
+											ns1blankspace.container.position(sElementID);
+											ns1blankspace.search.start(sElementID);
 											
 											var oSearch = new AdvancedSearch();
-											oSearch.endPoint = 'product';
 											oSearch.method = 'PRODUCT_ORDER_SEARCH';
 											oSearch.addField('reference,orderbybusinesstext');
 											oSearch.rf = 'json';
-											oSearch.addFilter('reference', 'STRING_IS_LIKE', sSearchText);
-													
-											oSearch.getResults(function(data) {interfaceOrderSearchShow(oParam, data)});
-											
+											oSearch.addFilter('reference', 'STRING_IS_LIKE', sSearchText);		
+											oSearch.getResults(function(data) {ns1blankspace.order.search.show(oParam, data)});
 										}
 									};	
 								}
 
-					process:	function interfaceOrderSearchShow(oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
-
 									var iColumn = 0;
-									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
-										
+									var aHTML = [];
+
 									if (oResponse.data.rows.length == 0)
 									{
-										$('#divns1blankspaceViewportControlOptions').hide();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{
-										var oRow = oRoot.childNodes.item(0);
-										
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -354,200 +336,199 @@ ns1blankspace.order =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
-											
-											aHTML[++h] = '<td class="interfaceContactType' + this.type + ' interfaceSearch">&nbsp;</td>';
-											aHTML[++h] = '<td class="interfaceSearch" id="' +
+
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
 															this.reference +
 															'</td>';
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</table>');
 
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-										var oElement = $('#inputns1blankspaceViewportControlSearch');
-										$('#divns1blankspaceViewportControlOptions').offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-										ns1blankspaceSearchStop();
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										var oElement = $('#ns1blankspaceViewControlSearch');
+										$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+										ns1blankspace.aearch.stop();
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceOrderSearch(event.target.id, {source: 1});
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.order.search.send(event.target.id, {source: 1});
 										});
 									}		
 								}
 				},
 
-	layout: 	function interfaceOrderViewport()
+	layout: 	function ns1blankspaceOrderViewport()
 				{
 					
 					var aHTML = [];
 					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+					aHTML.push('<div id="divns1blankspaceViewportControlContext" class="ns1blankspaceViewportControlContext"></div>';
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Details</td>' +
 										'</tr>';
 					}
 					else
 					{	
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Summary</td>' +
 										'</tr>';
 									
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">Details</td>' +
 										'</tr>';
 					
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlAddress" class="interfaceViewportControl">Address</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlAddress" class="ns1blankspaceViewportControl">Address</td>' +
 										'</tr>';
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControlProducts" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlProducts" class="interfaceViewportControl">Items</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControlProducts" class="ns1blankspaceViewportControl">' +
+										'<td id="tdns1blankspaceViewportControlProducts" class="ns1blankspaceViewportControl">Items</td>' +
 										'</tr>';							
 					}
 					
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>';					
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
 					
-					aHTML[++h] = '<tr id="trInterfaceViewportControlInvoices" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlInvoices" class="interfaceViewportControl">Invoices</td>' +
+					aHTML.push('<tr id="trns1blankspaceViewportControlInvoices" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlInvoices" class="ns1blankspaceViewportControl">Invoices</td>' +
 									'</tr>';
 										
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>';					
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
 					
-					aHTML[++h] = '<tr id="trInterfaceViewportControlActions" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlActions" class="interfaceViewportControl">Actions</td>' +
+					aHTML.push('<tr id="trns1blankspaceViewportControlActions" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlActions" class="ns1blankspaceViewportControl">Actions</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '<tr id="trInterfaceViewportControlAttachments" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
+					aHTML.push('<tr id="trns1blankspaceViewportControlAttachments" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlAttachments" class="ns1blankspaceViewportControl">Attachments</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>';					
 							
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
+					$('#divns1blankspaceViewportControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAddress" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainProducts" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainStatus" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDelivery" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDeliveryPick" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainInvoices" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainCredits" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainSupplierOrders" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainActions" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainDetails" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainAddress" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainProducts" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainStatus" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainDelivery" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainDeliveryPick" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainInvoices" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainCredits" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainSupplierOrders" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainActions" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainAttachments" class="divns1blankspaceViewportMain"></div>';
 					
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#divns1blankspaceMain').html(aHTML.join(''));
 					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#tdns1blankspaceViewportControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceOrderSummary();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary");
+						ns1blankspaceOrderSummary();
 					});
 					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+					$('#tdns1blankspaceViewportControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceOrderDetails();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
+						ns1blankspaceOrderDetails();
 					});
 					
-					$('#tdInterfaceViewportControlAddress').click(function(event)
+					$('#tdns1blankspaceViewportControlAddress').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAddress");
-						interfaceOrderAddress("divInterfaceMainAddress");
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainAddress");
+						ns1blankspaceOrderAddress("divns1blankspaceMainAddress");
 					});
 					
-					$('#tdInterfaceViewportControlProducts').click(function(event)
+					$('#tdns1blankspaceViewportControlProducts').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainProducts");
-						interfaceOrderProductItems();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainProducts");
+						ns1blankspaceOrderProductItems();
 					});
 					
-					$('#tdInterfaceViewportControlSupplier').click(function(event)
+					$('#tdns1blankspaceViewportControlSupplier').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSupplier");
-						interfaceOrderSupplier();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainSupplier");
+						ns1blankspaceOrderSupplier();
 					});
 					
-					$('#tdInterfaceViewportControlStock').click(function(event)
+					$('#tdns1blankspaceViewportControlStock').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainStatus");
-						interfaceOrderStatus();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainStatus");
+						ns1blankspaceOrderStatus();
 					});
 					
-					$('#tdInterfaceViewportControlDelivery').click(function(event)
+					$('#tdns1blankspaceViewportControlDelivery').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDelivery");
-						interfaceOrderDelivery();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainDelivery");
+						ns1blankspaceOrderDelivery();
 					});
 					
-					$('#tdInterfaceViewportControlDeliveryPick').click(function(event)
+					$('#tdns1blankspaceViewportControlDeliveryPick').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDeliveryPick");
-						interfaceOrderDeliveryPick();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainDeliveryPick");
+						ns1blankspaceOrderDeliveryPick();
 					});
 					
-					$('#tdInterfaceViewportControlInvoices').click(function(event)
+					$('#tdns1blankspaceViewportControlInvoices').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainInvoices");
-						interfaceOrderInvoices();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainInvoices");
+						ns1blankspaceOrderInvoices();
 					});
 					
-					$('#tdInterfaceViewportControlCredits').click(function(event)
+					$('#tdns1blankspaceViewportControlCredits').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainCredits");
-						interfaceOrderCredits();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainCredits");
+						ns1blankspaceOrderCredits();
 					});
 					
-					$('#tdInterfaceViewportControlSupplierOrders').click(function(event)
+					$('#tdns1blankspaceViewportControlSupplierOrders').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSupplierOrders");
-						interfaceOrderSupplierOrders();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainSupplierOrders");
+						ns1blankspaceOrderSupplierOrders();
 					});
 					
-					$('#tdInterfaceViewportControlActions').click(function(event)
+					$('#tdns1blankspaceViewportControlActions').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
-						ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainActions", true);
+						ns1blankspaceActions({xhtmlElementID: 'divns1blankspaceMainActions'});
 					});
 
-					$('#tdInterfaceViewportControlAttachments').click(function(event)
+					$('#tdns1blankspaceViewportControlAttachments').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
-						ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainAttachments", true);
+						ns1blankspaceAttachments({xhtmlElementID: 'divns1blankspaceMainAttachments'});
 					});
 				},
 
-	show:		function interfaceOrderShow(oParam, oResponse)
+	show:		function ns1blankspaceOrderShow(oParam, oResponse)
 				{
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceOrderViewport();
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspaceOrderViewport();
 					
 					var aHTML = [];
 					var h = -1;
@@ -556,10 +537,10 @@ ns1blankspace.order =
 					{
 						ns1blankspace.objectContextData = undefined;
 					
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find the order.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find the order.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#divns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
@@ -567,49 +548,49 @@ ns1blankspace.order =
 								
 						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 								
-						$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
+						$('#divns1blankspaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
 
 						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceOrderMasterViewport({showHome: false});interfaceOrderSearch("-' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspaceOrderMasterViewport({showHome: false});ns1blankspaceOrderSearch("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
 						
-						ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceOrderSummary()'});
+						ns1blankspaceObjectViewportHistory({functionDefault: 'ns1blankspaceOrderSummary()'});
 					}	
 				},		
 		
-	summary:	function interfaceOrderSummary()
+	summary:	function ns1blankspaceOrderSummary()
 				{
 					var aHTML = [];
 					var h = -1;
 					
-					aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-					aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-								'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
+					aHTML.push('<table id="tablens1blankspaceMainSummary" class="ns1blankspaceMain">';
+					aHTML.push('<tr id="trns1blankspaceMainSummaryRow1" class="ns1blankspaceMainRow1">' +
+								'<td id="tdns1blankspaceMainSummaryColumn1Large" class="ns1blankspaceMainColumn1Large">' +
 									'</td>' +
-									'<td id="tdInterfaceMainSummaryColumn2Action" class="interfaceMainColumn2" style="width:175px;">' +
+									'<td id="tdns1blankspaceMainSummaryColumn2Action" class="ns1blankspaceMainColumn2" style="width:175px;">' +
 									'</td>' +
 									'</tr>';
-					aHTML[++h] = '</table>';				
+					aHTML.push('</table>';				
 						
-					$('#divInterfaceMainSummary').html(aHTML.join(''));
+					$('#divns1blankspaceMainSummary').html(aHTML.join(''));
 					
 					var aHTML = [];
 					var h = -1;
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find order.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find order.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#divns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryOrderDate" class="interfaceMainSummary">Order Date</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryOrderDateValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td id="tdns1blankspaceMainSummaryOrderDate" class="ns1blankspaceMainSummary">Order Date</td></tr>' +
+										'<tr><td id="tdns1blankspaceMainSummaryOrderDateValue" class="ns1blankspaceMainSummaryValue">' +
 										ns1blankspace.objectContextData.orderdate +
 										'</td></tr>';
 										
@@ -617,69 +598,69 @@ ns1blankspace.order =
 						{				
 							var dDeliveryDate = new Date(ns1blankspace.objectContextData.deliverydate);
 							
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDeliveryDate" class="interfaceMainSummary">Delivery Date</td></tr>' +
-											'<tr><td id="tdInterfaceMainSummaryDeliveryDateValue" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryDeliveryDate" class="ns1blankspaceMainSummary">Delivery Date</td></tr>' +
+											'<tr><td id="tdns1blankspaceMainSummaryDeliveryDateValue" class="ns1blankspaceMainSummaryValue">' +
 											$.fullCalendar.formatDate(dDeliveryDate, "dd MMM yyyy HH:mm") +
 											'</td></tr>';
 						}					
 							
 						if (ns1blankspace.objectContextData.streetaddresscombined != '')
 						{				
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDeliveryAddress" class="interfaceMainSummary">Deliver To</td></tr>' +
-											'<tr><td id="tdInterfaceMainSummaryDeliveryAddressValue" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryDeliveryAddress" class="ns1blankspaceMainSummary">Deliver To</td></tr>' +
+											'<tr><td id="tdns1blankspaceMainSummaryDeliveryAddressValue" class="ns1blankspaceMainSummaryValue">' +
 											ns1blankspace.objectContextData.streetaddresscombined;
 											
 							if (ns1blankspace.objectContextData.streetsuburb != '')
 							{				
-								aHTML[++h] = '<br />' +	ns1blankspace.objectContextData.streetsuburb;
+								aHTML.push('<br />' +	ns1blankspace.objectContextData.streetsuburb;
 							}
 											
 							if (ns1blankspace.objectContextData.streetstate != '')
 							{				
-								aHTML[++h] = '<br />' +	ns1blankspace.objectContextData.streetstate;		
+								aHTML.push('<br />' +	ns1blankspace.objectContextData.streetstate;		
 							}
 							
-							aHTML[++h] = '</td></tr>';
+							aHTML.push('</td></tr>';
 													
 						}
 									
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#tdns1blankspaceMainSummaryColumn1Large').html(aHTML.join(''));
 
 						var aHTML = [];
 						var h = -1;	
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" style="width: 100%">';
+						aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2" style="width: 100%">';
 						
 						if (ns1blankspace.objectContextData.statustext != '')
 						{	
-							aHTML[++h] = '<tr><td class="interfaceMainSummary" style="padding-bottom:10px;">' +
+							aHTML.push('<tr><td class="ns1blankspaceMainSummary" style="padding-bottom:10px;">' +
 										ns1blankspace.objectContextData.statustext +
 										'</td></tr>';				
 						}
 						
 						if (ns1blankspace.objectContextData.status == 7)
 						{	
-							aHTML[++h] = '<tr><td>' +
-										'<span style="font-size:0.75em;" id="spanInterfaceMainOrderAction-7" class="orderAction">Unsubmit</span>' +
+							aHTML.push('<tr><td>' +
+										'<span style="font-size:0.75em;" id="spanns1blankspaceMainOrderAction-7" class="orderAction">Unsubmit</span>' +
 										'</td></tr>';
 										
-							aHTML[++h] = '<tr><td>' +
-										'<span style="font-size:0.75em;" id="spanInterfaceMainOrderAction-8" class="orderAction">Finalise</span>' +
+							aHTML.push('<tr><td>' +
+										'<span style="font-size:0.75em;" id="spanns1blankspaceMainOrderAction-8" class="orderAction">Finalise</span>' +
 										'</td></tr>';			
 						}
 						
 						if (ns1blankspace.objectContextData.status == 2)
 						{	
-							aHTML[++h] = '<tr><td>' +
-										'<span style="font-size:0.75em;" id="spanInterfaceMainOrderAction-2" class="orderAction">Submit</span>' +
+							aHTML.push('<tr><td>' +
+										'<span style="font-size:0.75em;" id="spanns1blankspaceMainOrderAction-2" class="orderAction">Submit</span>' +
 										'</td></tr>';
 						}
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));	
+						$('#tdns1blankspaceMainSummaryColumn2Action').html(aHTML.join(''));	
 						
 						$('span.orderAction').button(
 						{
@@ -697,7 +678,7 @@ ns1blankspace.order =
 								url: '/ondemand/product/?method=PRODUCT_ORDER_MANAGE&action=' + iAction + '&id=' + ns1blankspace.objectContext,
 								dataType: 'json',
 								async: false,
-								success: function(oResponse) {interfaceOrderSearch('-' + ns1blankspace.objectContext)}
+								success: function(oResponse) {ns1blankspaceOrderSearch('-' + ns1blankspace.objectContext)}
 							});
 						})
 						.css('width', '100px')
@@ -705,139 +686,139 @@ ns1blankspace.order =
 					}	
 				},
 
-	details:	function interfaceOrderDetails()
+	details:	function ns1blankspaceOrderDetails()
 				{
 					var aHTML = [];
 					var h = -1;
 
-					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
+					if ($('#divns1blankspaceMainDetails').attr('onDemandLoading') == '1')
 					{
-						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
+						$('#divns1blankspaceMainDetails').attr('onDemandLoading', '');
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1">' +
+						aHTML.push('<table id="tablens1blankspaceMainDetails" class="ns1blankspaceMainDetails">';
+						aHTML.push('<tr id="trns1blankspaceMainDetailsRow1" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsColumn1" class="ns1blankspaceMainColumn1">' +
 										'</td>' +
-										'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMainColumn2">' +
+										'<td id="tdns1blankspaceMainDetailsColumn2" class="ns1blankspaceMainColumn2">' +
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#divInterfaceMainDetails').html(aHTML.join(''));
+						$('#divns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsReference" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsReference" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsReference" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsReference" class="ns1blankspaceMain">' +
 										'Reference' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsReferenceValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsReferenceValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsReference" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainDetailsReferenceValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainDetailsReferenceValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainDetailsReference" class="inputns1blankspaceMainText">' +
 										'</td></tr>';			
 									
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsStartDate" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsStartDate" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsStartDate" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsStartDate" class="ns1blankspaceMain">' +
 										'Order Date' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsStartDateValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsStartDateValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsOrderDate" class="inputInterfaceMainDate">' +
+										'<tr id="trns1blankspaceMainDetailsStartDateValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainDetailsStartDateValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainDetailsOrderDate" class="inputns1blankspaceMainDate">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsOrderByBusiness" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsOrderByBusiness" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsOrderByBusiness" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsOrderByBusiness" class="ns1blankspaceMain">' +
 										'Business' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsOrderByBusinessValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainDetailsOrderByBusinessValue" class="interfaceMainSelect">' +
-										'<input id="inputInterfaceMainDetailsOrderByBusiness" class="inputInterfaceMainSelect"' +
+										'<tr id="trns1blankspaceMainDetailsOrderByBusinessValue" class="ns1blankspaceMainSelect">' +
+										'<td id="tdns1blankspaceMainDetailsOrderByBusinessValue" class="ns1blankspaceMainSelect">' +
+										'<input id="inputns1blankspaceMainDetailsOrderByBusiness" class="inputns1blankspaceMainSelect"' +
 											' data-method="CONTACT_BUSINESS_SEARCH"' +
 											' data-columns="tradename">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsOrderByPerson" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsOrderByPerson" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsOrderByPerson" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsOrderByPerson" class="ns1blankspaceMain">' +
 										'Person' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsOrderByPersonValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainDetailsOrderByPersonValue" class="interfaceMainSelect">' +
-										'<input id="inputInterfaceMainDetailsOrderByPerson" class="inputInterfaceMainSelect"' +
+										'<tr id="trns1blankspaceMainDetailsOrderByPersonValue" class="ns1blankspaceMainSelect">' +
+										'<td id="tdns1blankspaceMainDetailsOrderByPersonValue" class="ns1blankspaceMainSelect">' +
+										'<input id="inputns1blankspaceMainDetailsOrderByPerson" class="inputns1blankspaceMainSelect"' +
 											' data-method="CONTACT_PERSON_SEARCH"' +
 											' data-columns="surname"' +
-											' data-parent="inputInterfaceMainDetailsOrderByBusiness"' +
+											' data-parent="inputns1blankspaceMainDetailsOrderByBusiness"' +
 											' data-parent-search-id="contactbusiness"' +
 											' data-parent-search-text="tradename">' +
 										'</td></tr>';											
 						/*				
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsEndDate" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsEndDate" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsEndDate" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsEndDate" class="ns1blankspaceMain">' +
 										'Delivery/Pickup Date' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsEndDateValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsEndDateValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsEndDate" class="inputInterfaceMainDate">' +
+										'<tr id="trns1blankspaceMainDetailsEndDateValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainDetailsEndDateValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainDetailsEndDate" class="inputns1blankspaceMainDate">' +
 										'</td></tr>';			
 						*/
 									
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#tdns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
 						
-						$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy' });
+						$('input.inputns1blankspaceMainDate').datepicker({ dateFormat: 'dd M yy' });
 						
 						var aHTML = [];
 						var h = -1;
 							
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">';
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsSource" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsSource" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsSource" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsSource" class="ns1blankspaceMain">' +
 										'Source' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsSource" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsSourceValue" class="interfaceMainRadio" style="height:33px;">' +
+										'<tr id="trns1blankspaceMainDetailsSource" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainDetailsSourceValue" class="ns1blankspaceMainRadio" style="height:33px;">' +
 										'<input type="radio" id="radioSource1" name="radioSource" value="1"/>Manually Entered' +
 										'&nbsp;&nbsp;<input type="radio" id="radioSource2" name="radioSource" value="2"/>Web Order' +
 										'</td></tr>';
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsPurchaseOrderReference" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsPurchaseOrderReference" class="interfaceMain" >' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsPurchaseOrderReference" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsPurchaseOrderReference" class="ns1blankspaceMain" >' +
 										'Purchase Order' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsPurchaseOrderReferenceValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainDetailsPurchaseOrderReferenceValue" class="interfaceMainSelect">' +
-										'<input id="inputInterfaceMainDetailsPurchaseOrderReference" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainDetailsPurchaseOrderReferenceValue" class="ns1blankspaceMainSelect">' +
+										'<td id="tdns1blankspaceMainDetailsPurchaseOrderReferenceValue" class="ns1blankspaceMainSelect">' +
+										'<input id="inputns1blankspaceMainDetailsPurchaseOrderReference" class="inputns1blankspaceMainText">' +
 										'</td></tr>';	
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsNotes" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsNotes" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsNotes" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsNotes" class="ns1blankspaceMain">' +
 										'Notes' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsNotesValue" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDetailsNotesValue" class="interfaceMainTextMulti">' +
-										'<textarea style="width:350px;height:120px;" rows="5" cols="35" id="inputInterfaceMainDetailsNotes" class="inputInterfaceMainTextMulti"></textarea>' +
+										'<tr id="trns1blankspaceMainDetailsNotesValue" class="ns1blankspaceMainTextMulti">' +
+										'<td id="tdns1blankspaceMainDetailsNotesValue" class="ns1blankspaceMainTextMulti">' +
+										'<textarea style="width:350px;height:120px;" rows="5" cols="35" id="inputns1blankspaceMainDetailsNotes" class="inputns1blankspaceMainTextMulti"></textarea>' +
 										'</td></tr>';
 						
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 							
-						$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#tdns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
-							$('#inputInterfaceMainDetailsOrderDate').val(ns1blankspace.objectContextData.orderdate);
-							$('#inputInterfaceMainDetailsOrderByBusiness').attr('data-id', ns1blankspace.objectContextData.orderbybusiness);
-							$('#inputInterfaceMainDetailsOrderByBusiness').val(ns1blankspace.objectContextData.orderbybusinesstext);
-							$('#inputInterfaceMainDetailsOrderByPerson').attr('data-id', ns1blankspace.objectContextData.orderbyperson);
-							$('#inputInterfaceMainDetailsOrderByPerson').val(ns1blankspace.objectContextData.orderbypersontext);	
+							$('#inputns1blankspaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#inputns1blankspaceMainDetailsOrderDate').val(ns1blankspace.objectContextData.orderdate);
+							$('#inputns1blankspaceMainDetailsOrderByBusiness').attr('data-id', ns1blankspace.objectContextData.orderbybusiness);
+							$('#inputns1blankspaceMainDetailsOrderByBusiness').val(ns1blankspace.objectContextData.orderbybusinesstext);
+							$('#inputns1blankspaceMainDetailsOrderByPerson').attr('data-id', ns1blankspace.objectContextData.orderbyperson);
+							$('#inputns1blankspaceMainDetailsOrderByPerson').val(ns1blankspace.objectContextData.orderbypersontext);	
 							$('[name="radioSource"][value="' + ns1blankspace.objectContextData.source + '"]').attr('checked', true);
-							$('#inputInterfaceMainDetailsPurchaseOrderReference').val(ns1blankspace.objectContextData.purchaseorder);
-							$('#inputInterfaceMainDetailsNotes').val(ns1blankspace.objectContextData.notes);	
+							$('#inputns1blankspaceMainDetailsPurchaseOrderReference').val(ns1blankspace.objectContextData.purchaseorder);
+							$('#inputns1blankspaceMainDetailsNotes').val(ns1blankspace.objectContextData.notes);	
 						}
 						else
 						{
@@ -846,195 +827,195 @@ ns1blankspace.order =
 					}	
 				},
 
-	address:	function interfaceOrderAddress()
+	address:	function ns1blankspaceOrderAddress()
 				{
 					var aHTML = [];
 					var h = -1;
 					
 					ns1blankspace.debug.appContext = 'address';
 						
-					if ($('#divInterfaceMainAddress').attr('onDemandLoading') == '1')
+					if ($('#divns1blankspaceMainAddress').attr('onDemandLoading') == '1')
 					{
-						$('#divInterfaceMainAddress').attr('onDemandLoading', '');
+						$('#divns1blankspaceMainAddress').attr('onDemandLoading', '');
 								
-						aHTML[++h] = '<table id="tableInterfaceMainAddress" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainAddressRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressColumn1" class="interfaceMainColumn1">' +
+						aHTML.push('<table id="tablens1blankspaceMainAddress" class="ns1blankspaceMain">';
+						aHTML.push('<tr id="trns1blankspaceMainAddressRow1" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressColumn1" class="ns1blankspaceMainColumn1">' +
 										'</td>' +
-										'<td id="tdInterfaceMainAddressColumn2" class="interfaceMainColumn2">' +
+										'<td id="tdns1blankspaceMainAddressColumn2" class="ns1blankspaceMainColumn2">' +
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#divInterfaceMainAddress').html(aHTML.join(''));
+						$('#divns1blankspaceMainAddress').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
 								
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetAddress1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetAddress1" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressStreetAddress1" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressStreetAddress1" class="ns1blankspaceMain">' +
 										'Delivery Address' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetAddress1Value" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetAddress1Value" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressStreetAddress1" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainAddressStreetAddress1Value" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressStreetAddress1Value" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressStreetAddress1" class="inputns1blankspaceMainText">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetAddress2" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetAddress2" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressStreetAddress2" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressStreetAddress2" class="ns1blankspaceMain">' +
 										'' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetAddress2Value" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetAddress2Value" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressStreetAddress2" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainAddressStreetAddress2Value" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressStreetAddress2Value" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressStreetAddress2" class="inputns1blankspaceMainText">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetSuburb" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetSuburb" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressStreetSuburb" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressStreetSuburb" class="ns1blankspaceMain">' +
 										'Suburb' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetSuburbValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetSuburbValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressStreetSuburb" class="inputInterfaceMainText inputInterfaceMainSelectAddress">' +
+										'<tr id="trns1blankspaceMainAddressStreetSuburbValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressStreetSuburbValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressStreetSuburb" class="inputns1blankspaceMainText inputns1blankspaceMainSelectAddress">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetState" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetState" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressStreetState" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressStreetState" class="ns1blankspaceMain">' +
 										'State' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetStateValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetStateValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressStreetState" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainAddressStreetStateValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressStreetStateValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressStreetState" class="inputns1blankspaceMainText">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetPostCode" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetPostCode" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressStreetPostCode" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressStreetPostCode" class="ns1blankspaceMain">' +
 										'Post Code' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetPostCodeValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetPostCodeValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressStreetPostCode" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainAddressStreetPostCodeValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressStreetPostCodeValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressStreetPostCode" class="inputns1blankspaceMainText">' +
 										'</td></tr>';				
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressStreetCountry" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressStreetCountry" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressStreetCountry" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressStreetCountry" class="ns1blankspaceMain">' +
 										'Country' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressStreetCountryValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressStreetCountryValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressStreetCountry" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainAddressStreetCountryValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressStreetCountryValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressStreetCountry" class="inputns1blankspaceMainText">' +
 										'</td></tr>';						
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainContactCopyToMailingAddress" class="interfaceMainAction">' +
-										'<span id="spanInterfaceMainContactCopyToMailingAddress">Copy to Mailing Address</span>' +
+						aHTML.push('<tr><td id="tdns1blankspaceMainContactCopyToMailingAddress" class="ns1blankspaceMainAction">' +
+										'<span id="spanns1blankspaceMainContactCopyToMailingAddress">Copy to Mailing Address</span>' +
 										'</td></tr>';
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainAddressColumn1').html(aHTML.join(''));
+						$('#tdns1blankspaceMainAddressColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
 						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMain">';
+						aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMain">';
 								
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingAddress1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingAddress1" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressMailingAddress1" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressMailingAddress1" class="ns1blankspaceMain">' +
 										'Billing Address' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingAddress1Value" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingAddress1Value" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressMailingAddress1" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainAddressMailingAddress1Value" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressMailingAddress1Value" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressMailingAddress1" class="inputns1blankspaceMainText">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingAddress2" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingAddress2" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressMailingAddress2" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressMailingAddress2" class="ns1blankspaceMain">' +
 										'' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingAddress2Value" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingAddress2Value" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressMailingAddress2" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainAddressMailingAddress2Value" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressMailingAddress2Value" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressMailingAddress2" class="inputns1blankspaceMainText">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingSuburb" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingSuburb" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressMailingSuburb" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressMailingSuburb" class="ns1blankspaceMain">' +
 										'Suburb' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingSuburbValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingSuburbValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressMailingSuburb" class="inputInterfaceMainText inputInterfaceMainSelectAddress">' +
+										'<tr id="trns1blankspaceMainAddressMailingSuburbValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressMailingSuburbValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressMailingSuburb" class="inputns1blankspaceMainText inputns1blankspaceMainSelectAddress">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingState" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingState" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressMailingState" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressMailingState" class="ns1blankspaceMain">' +
 										'State' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingStateValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingStateValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressMailingState" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainAddressMailingStateValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressMailingStateValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressMailingState" class="inputns1blankspaceMainText">' +
 										'</td></tr>';
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingPostCode" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingPostCode" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressMailingPostCode" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressMailingPostCode" class="ns1blankspaceMain">' +
 										'Post Code' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingPostCodeValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingPostCodeValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressMailingPostCode" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainAddressMailingPostCodeValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressMailingPostCodeValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressMailingPostCode" class="inputns1blankspaceMainText">' +
 										'</td></tr>';				
 										
-						aHTML[++h] = '<tr id="trInterfaceMainAddressMailingCountry" class="interfaceMain">' +
-										'<td id="tdInterfaceMainAddressMailingCountry" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainAddressMailingCountry" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainAddressMailingCountry" class="ns1blankspaceMain">' +
 										'Country' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainAddressMailingCountryValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainAddressMailingCountryValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainAddressMailingCountry" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainAddressMailingCountryValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainAddressMailingCountryValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainAddressMailingCountry" class="inputns1blankspaceMainText">' +
 										'</td></tr>';						
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainAddressColumn2').html(aHTML.join(''));
+						$('#tdns1blankspaceMainAddressColumn2').html(aHTML.join(''));
 						
-						$('#spanInterfaceMainContactCopyToMailingAddress').button(
+						$('#spanns1blankspaceMainContactCopyToMailingAddress').button(
 						{
 							label: "Copy to Billing Address"
 						})
 						.click(function() {
 						
-							$('#inputInterfaceMainAddressMailingAddress1').val($('#inputInterfaceMainAddressStreetAddress1').val());
-							$('#inputInterfaceMainAddressMailingAddress2').val($('#inputInterfaceMainAddressStreetAddress2').val());
-							$('#inputInterfaceMainAddressMailingSuburb').val($('#inputInterfaceMainAddressStreetSuburb').val());
-							$('#inputInterfaceMainAddressMailingState').val($('#inputInterfaceMainAddressStreetState').val());
-							$('#inputInterfaceMainAddressMailingPostCode').val($('#inputInterfaceMainAddressStreetPostCode').val());
-							$('#inputInterfaceMainAddressMailingCountry').val($('#inputInterfaceMainAddressStreetCountry').val());
+							$('#inputns1blankspaceMainAddressMailingAddress1').val($('#inputns1blankspaceMainAddressStreetAddress1').val());
+							$('#inputns1blankspaceMainAddressMailingAddress2').val($('#inputns1blankspaceMainAddressStreetAddress2').val());
+							$('#inputns1blankspaceMainAddressMailingSuburb').val($('#inputns1blankspaceMainAddressStreetSuburb').val());
+							$('#inputns1blankspaceMainAddressMailingState').val($('#inputns1blankspaceMainAddressStreetState').val());
+							$('#inputns1blankspaceMainAddressMailingPostCode').val($('#inputns1blankspaceMainAddressStreetPostCode').val());
+							$('#inputns1blankspaceMainAddressMailingCountry').val($('#inputns1blankspaceMainAddressStreetCountry').val());
 
 						})
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainAddressStreetAddress1').val((ns1blankspace.objectContextData.streetaddress1).formatXHTML());
-							$('#inputInterfaceMainAddressStreetAddress2').val((ns1blankspace.objectContextData.streetaddress2).formatXHTML());
-							$('#inputInterfaceMainAddressStreetSuburb').val((ns1blankspace.objectContextData.streetsuburb).formatXHTML());
-							$('#inputInterfaceMainAddressStreetState').val((ns1blankspace.objectContextData.streetstate).formatXHTML());
-							$('#inputInterfaceMainAddressStreetPostCode').val((ns1blankspace.objectContextData.streetpostcode).formatXHTML());
-							$('#inputInterfaceMainAddressStreetCountry').val((ns1blankspace.objectContextData.streetcountry).formatXHTML());
-							$('#inputInterfaceMainAddressMailingAddress1').val((ns1blankspace.objectContextData.mailingaddress1).formatXHTML());
-							$('#inputInterfaceMainAddressMailingAddress2').val((ns1blankspace.objectContextData.mailingaddress2).formatXHTML());
-							$('#inputInterfaceMainAddressMailingSuburb').val((ns1blankspace.objectContextData.mailingsuburb).formatXHTML());
-							$('#inputInterfaceMainAddressMailingState').val((ns1blankspace.objectContextData.mailingstate).formatXHTML());
-							$('#inputInterfaceMainAddressMailingPostCode').val((ns1blankspace.objectContextData.mailingpostcode).formatXHTML());
-							$('#inputInterfaceMainAddressMailingCountry').val((ns1blankspace.objectContextData.mailingcountry).formatXHTML());
+							$('#inputns1blankspaceMainAddressStreetAddress1').val((ns1blankspace.objectContextData.streetaddress1).formatXHTML());
+							$('#inputns1blankspaceMainAddressStreetAddress2').val((ns1blankspace.objectContextData.streetaddress2).formatXHTML());
+							$('#inputns1blankspaceMainAddressStreetSuburb').val((ns1blankspace.objectContextData.streetsuburb).formatXHTML());
+							$('#inputns1blankspaceMainAddressStreetState').val((ns1blankspace.objectContextData.streetstate).formatXHTML());
+							$('#inputns1blankspaceMainAddressStreetPostCode').val((ns1blankspace.objectContextData.streetpostcode).formatXHTML());
+							$('#inputns1blankspaceMainAddressStreetCountry').val((ns1blankspace.objectContextData.streetcountry).formatXHTML());
+							$('#inputns1blankspaceMainAddressMailingAddress1').val((ns1blankspace.objectContextData.mailingaddress1).formatXHTML());
+							$('#inputns1blankspaceMainAddressMailingAddress2').val((ns1blankspace.objectContextData.mailingaddress2).formatXHTML());
+							$('#inputns1blankspaceMainAddressMailingSuburb').val((ns1blankspace.objectContextData.mailingsuburb).formatXHTML());
+							$('#inputns1blankspaceMainAddressMailingState').val((ns1blankspace.objectContextData.mailingstate).formatXHTML());
+							$('#inputns1blankspaceMainAddressMailingPostCode').val((ns1blankspace.objectContextData.mailingpostcode).formatXHTML());
+							$('#inputns1blankspaceMainAddressMailingCountry').val((ns1blankspace.objectContextData.mailingcountry).formatXHTML());
 						}
 					}	
 				},
 
 	items: 		{
-					show:		function interfaceOrderProductItems(oParam, oResponse)
+					show:		function ns1blankspaceOrderProductItems(oParam, oResponse)
 								{
-									var sXHTMLElementID = 'divInterfaceMainProducts';
+									var sXHTMLElementID = 'divns1blankspaceMainProducts';
 									
 									if (oParam != undefined)
 									{
@@ -1048,19 +1029,19 @@ ns1blankspace.order =
 										oSearch.addField('producttext,quantity,totalcost,totaltax');
 										oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('producttext', 'desc');
-										oSearch.getResults(function(data){interfaceOrderProductItems(oParam, data)});
+										oSearch.getResults(function(data){ns1blankspaceOrderProductItems(oParam, data)});
 									}
 									else
 									{
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainOrderProductItems" class="interfaceMain">' +
-													'<tr id="trInterfaceMainOrderProductItemsRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainOrderProductItemsColumn1" class="interfaceMainColumn1Large">' +
+										aHTML.push('<table id="tablens1blankspaceMainOrderProductItems" class="ns1blankspaceMain">' +
+													'<tr id="trns1blankspaceMainOrderProductItemsRow1" class="ns1blankspaceMainRow1">' +
+													'<td id="tdns1blankspaceMainOrderProductItemsColumn1" class="ns1blankspaceMainColumn1Large">' +
 													ns1blankspace.xhtml.loading +
 													'</td>' +
-													'<td id="tdInterfaceMainOrderProductItemsColumn2" style="width: 200px;" class="interfaceMainColumn2">' +
+													'<td id="tdns1blankspaceMainOrderProductItemsColumn2" style="width: 200px;" class="ns1blankspaceMainColumn2">' +
 													'</td>' +
 													'</tr>' +
 													'</table>';				
@@ -1070,31 +1051,31 @@ ns1blankspace.order =
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainOrderProductItemsColumn2" class="interfaceMainColumn2">';
+										aHTML.push('<table id="tablens1blankspaceMainOrderProductItemsColumn2" class="ns1blankspaceMainColumn2">';
 										
 										if (ns1blankspace.objectContextData.status == 2)
 										{
-											aHTML[++h] = '<tr><td id="tdInterfaceMainOrderProductItemsAdd" class="interfaceMainAction">' +
-														'<span id="spanInterfaceMainOrderProductItemsAdd">Add</span>' +
+											aHTML.push('<tr><td id="tdns1blankspaceMainOrderProductItemsAdd" class="ns1blankspaceMainAction">' +
+														'<span id="spanns1blankspaceMainOrderProductItemsAdd">Add</span>' +
 														'</td></tr>';
 										}
 										else
 										{
-											aHTML[++h] = '<tr><td class="interfaceViewportControlSub">' +
+											aHTML.push('<tr><td class="ns1blankspaceViewportControlSub">' +
 														'The order has been submitted, so items can not be added or removed.' +
 													'</td></tr>';
 										}				
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
-										$('#tdInterfaceMainOrderProductItemsColumn2').html(aHTML.join(''));
+										$('#tdns1blankspaceMainOrderProductItemsColumn2').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainOrderProductItemsAdd').button(
+										$('#spanns1blankspaceMainOrderProductItemsAdd').button(
 										{
 											label: "Add"
 										})
 										.click(function() {
-											interfaceOrderProductItemsAdd()
+											ns1blankspaceOrderProductItemsAdd()
 										})
 										.css('width', '75px')
 										
@@ -1103,81 +1084,81 @@ ns1blankspace.order =
 
 										if (oResponse.data.rows.length == 0)	
 										{
-											aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceActions">';
-											aHTML[++h] = '<td class="interfaceMainRowNothing">No items.</td>';
-											aHTML[++h] = '</tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceActions">';
+											aHTML.push('<td class="ns1blankspaceMainRowNothing">No items.</td>';
+											aHTML.push('</tr>';
+											aHTML.push('</tbody></table>';
 
-											$('#tdInterfaceMainOrderProductItemsColumn1').html(aHTML.join(''));		
+											$('#tdns1blankspaceMainOrderProductItemsColumn1').html(aHTML.join(''));		
 										}
 										else
 										{
-											aHTML[++h] = '<table id="tableOrderProductItemsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">Product</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Quantity</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Price</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<table id="tableOrderProductItemsList" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceMainCaption">';
+											aHTML.push('<td class="ns1blankspaceMainCaption">Product</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Quantity</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Price</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
+											aHTML.push('</tr>';
 											
 											$.each(oResponse.data.rows, function() 
 											{ 
-												aHTML[++h] = interfaceOrderProductItemsRow(this);
+												aHTML.push(ns1blankspaceOrderProductItemsRow(this);
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
 											ns1blankspacePaginationList(
 											{
-												xhtmlElementID: 'tdInterfaceMainOrderProductItemsColumn1',
+												xhtmlElementID: 'tdns1blankspaceMainOrderProductItemsColumn1',
 												xhtmlContext: 'OrderProductItems',
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
 												rows: ns1blankspace.option.defaultRows,
-												functionShowRow: interfaceOrderProductItemsRow,
-												functionNewPage: 'interfaceOrderProductItemsBind()',
+												functionShowRow: ns1blankspaceOrderProductItemsRow,
+												functionNewPage: 'ns1blankspaceOrderProductItemsBind()',
 												type: 'json'
 											}); 		
-											interfaceOrderProductItemsBind();
+											ns1blankspaceOrderProductItemsBind();
 										}
 									}	
 								}	
 
-					row:		function interfaceOrderProductItemsRow(oRow)
+					row:		function ns1blankspaceOrderProductItemsRow(oRow)
 								{
 									var aHTML = [];
 									var h = -1;
 
-									aHTML[++h] = '<tr class="interfaceMainRow">';
+									aHTML.push('<tr class="ns1blankspaceMainRow">';
 									
-									aHTML[++h] = '<td id="tdOrderProductItems_title-' + oRow.id + '" class="interfaceMainRow">' +
+									aHTML.push('<td id="tdOrderProductItems_title-' + oRow.id + '" class="ns1blankspaceMainRow">' +
 															oRow.producttext + '</td>';	
 															
-									aHTML[++h] = '<td id="tdOrderProductItems_quantity-' + oRow.id + '" class="interfaceMainRow"' +
+									aHTML.push('<td id="tdOrderProductItems_quantity-' + oRow.id + '" class="ns1blankspaceMainRow"' +
 															' style="text-align:right;">' +
 															oRow.quantity + '</td>';						
 																
-									aHTML[++h] = '<td id="tdOrderProductItems_price-' + oRow.id + '" class="interfaceMainRow"' +
+									aHTML.push('<td id="tdOrderProductItems_price-' + oRow.id + '" class="ns1blankspaceMainRow"' +
 															' style="text-align:right;">' +
 															oRow.totalcost + '</td>';					
 														
-									aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';	
-									aHTML[++h] = '<span id="spanOrderProductItems_options_remove-' + oRow.id + '" class="interfaceMainRowOptionsRemove"></span>';
-									//aHTML[++h] = '<span id="spanOrderProductItems_options_view-' + oRow.id + '" class="interfaceMainRowOptionsView"></span>';
-									aHTML[++h] = '</td>';
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">';	
+									aHTML.push('<span id="spanOrderProductItems_options_remove-' + oRow.id + '" class="ns1blankspaceMainRowOptionsRemove"></span>';
+									//aHTML.push('<span id="spanOrderProductItems_options_view-' + oRow.id + '" class="ns1blankspaceMainRowOptionsView"></span>';
+									aHTML.push('</td>';
 																									
-									aHTML[++h] = '</tr>';	
+									aHTML.push('</tr>';	
 									
 									return aHTML.join('');
 								},
 
-					bind:		function interfaceOrderProductItemsBind()
+					bind:		function ns1blankspaceOrderProductItemsBind()
 								{
-									$('.interfaceMainRowOptionsView').button( {
+									$('.ns1blankspaceMainRowOptionsView').button( {
 												text: false,
 												icons: {
 													primary: "ui-icons"
@@ -1191,21 +1172,21 @@ ns1blankspace.order =
 									
 									if (ns1blankspace.objectContextData.status == 2)
 									{
-										$('.interfaceMainRowOptionsRemove').button( {
+										$('.ns1blankspaceMainRowOptionsRemove').button( {
 											text: false,
 											 icons: {
 												 primary: "ui-icon-close"
 											}
 										})
 										.click(function() {
-											interfaceOrderProductItemsRemove({xhtmlElementID: this.id});
+											ns1blankspaceOrderProductItemsRemove({xhtmlElementID: this.id});
 										})
 										.css('width', '15px')
 										.css('height', '17px')
 									}	
 								},
 
-					remove:		function interfaceOrderProductItemsRemove(oParam, oResponse)
+					remove:		function ns1blankspaceOrderProductItemsRemove(oParam, oResponse)
 								{
 									var sXHTMLElementID;
 
@@ -1228,7 +1209,7 @@ ns1blankspace.order =
 											url: '/ondemand/product/?' + sParam,
 											data: sData,
 											dataType: 'json',
-											success: function(data){interfaceOrderProductItemsRemove(oParam, data)}
+											success: function(data){ns1blankspaceOrderProductItemsRemove(oParam, data)}
 										});
 									}	
 									else
@@ -1244,7 +1225,7 @@ ns1blankspace.order =
 									}	
 								},
 
-					add:		function interfaceOrderProductItemsAdd(oParam, oResponse)
+					add:		function ns1blankspaceOrderProductItemsAdd(oParam, oResponse)
 								{
 									var iStep = 1;
 									
@@ -1260,54 +1241,54 @@ ns1blankspace.order =
 											var aHTML = [];
 											var h = -1;
 													
-											aHTML[++h] = '<table id="tableInterfaceMainProductAddColumn2">';
+											aHTML.push('<table id="tablens1blankspaceMainProductAddColumn2">';
 									
-											aHTML[++h] = '<tr id="trInterfaceMainProductAddReference" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProductAddReference" class="interfaceMain">' +
+											aHTML.push('<tr id="trns1blankspaceMainProductAddReference" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProductAddReference" class="ns1blankspaceMain">' +
 															'Product' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProductAddReferenceValue" class="interfaceMainText">' +
-															'<td id="tdInterfaceMainProductAddReferenceValue" class="interfaceMainText">' +
-															'<input id="inputInterfaceMainProductAddReference" class="inputInterfaceMainText">' +
+															'<tr id="trns1blankspaceMainProductAddReferenceValue" class="ns1blankspaceMainText">' +
+															'<td id="tdns1blankspaceMainProductAddReferenceValue" class="ns1blankspaceMainText">' +
+															'<input id="inputns1blankspaceMainProductAddReference" class="inputns1blankspaceMainText">' +
 															'</td></tr>';
 											
-											aHTML[++h] = '<tr id="trInterfaceMainProductAdd">' +
-															'<td id="tdInterfaceMainProductAddSearch" style="font-size:0.75em;" title="Enter part of the title and click search.">' +
-															'<span id="spanInterfaceMainOrderProductItemsAddSearch">Search</span>' +
-															'</td></tr>';
-																			
-											aHTML[++h] = '</table>';
-											
-											aHTML[++h] = '<table style="margin-top:15px;">';
-											
-											aHTML[++h] = '<tr>' +
-															'<td id="tdInterfaceMainProductAddSearchResults">' +
+											aHTML.push('<tr id="trns1blankspaceMainProductAdd">' +
+															'<td id="tdns1blankspaceMainProductAddSearch" style="font-size:0.75em;" title="Enter part of the title and click search.">' +
+															'<span id="spanns1blankspaceMainOrderProductItemsAddSearch">Search</span>' +
 															'</td></tr>';
 																			
-											aHTML[++h] = '</table>';		
+											aHTML.push('</table>';
 											
-											$('#tdInterfaceMainOrderProductItemsColumn2').html(aHTML.join(''));
+											aHTML.push('<table style="margin-top:15px;">';
+											
+											aHTML.push('<tr>' +
+															'<td id="tdns1blankspaceMainProductAddSearchResults">' +
+															'</td></tr>';
+																			
+											aHTML.push('</table>';		
+											
+											$('#tdns1blankspaceMainOrderProductItemsColumn2').html(aHTML.join(''));
 
-											$('#spanInterfaceMainOrderProductItemsAddSearch').button(
+											$('#spanns1blankspaceMainOrderProductItemsAddSearch').button(
 												{
 													label: "Search"
 												})
 												.click(function() {
-													interfaceOrderProductItemsAdd($.extend(true, oParam, {step: 2}))
+													ns1blankspaceOrderProductItemsAdd($.extend(true, oParam, {step: 2}))
 												})
 												
-											$('#inputInterfaceMainProductAddReference').focus();
+											$('#inputns1blankspaceMainProductAddReference').focus();
 										}
 										if (iStep == 2)
 										{
-											$('#tdInterfaceMainProductAddSearchResults').html(ns1blankspace.xhtml.loadingSmall);
+											$('#tdns1blankspaceMainProductAddSearchResults').html(ns1blankspace.xhtml.loadingSmall);
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PRODUCT_SEARCH';
 											oSearch.addField('reference,title');
-											oSearch.addFilter('title', 'STRING_IS_LIKE', $('#inputInterfaceMainProductAddReference').val());
+											oSearch.addFilter('title', 'STRING_IS_LIKE', $('#inputns1blankspaceMainProductAddReference').val());
 											oSearch.sort('title', 'asc');
-											oSearch.getResults(function(data){interfaceOrderProductItemsAdd($.extend(true, oParam, {step:3}), data)});
+											oSearch.getResults(function(data){ns1blankspaceOrderProductItemsAdd($.extend(true, oParam, {step:3}), data)});
 										}
 									}
 									else
@@ -1317,43 +1298,43 @@ ns1blankspace.order =
 
 										if (oResponse.data.rows.length == 0)	
 										{
-											aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceActions">';
-											aHTML[++h] = '<td class="interfaceMainRowNothing">No products.</td>';
-											aHTML[++h] = '</tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" style="margin-top:15px; margin-bottom:15px;">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceActions">';
+											aHTML.push('<td class="ns1blankspaceMainRowNothing">No products.</td>';
+											aHTML.push('</tr>';
+											aHTML.push('</tbody></table>';
 
-											$('#tdInterfaceMainProductAddSearchResults').html(aHTML.join(''));		
+											$('#tdns1blankspaceMainProductAddSearchResults').html(aHTML.join(''));		
 										}
 										else
 										{	
-											aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" >';
-											aHTML[++h] = '<tbody>'
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" >';
+											aHTML.push('<tbody>'
 											
 											$.each(oResponse.data.rows, function() 
 											{ 
-												aHTML[++h] = '<tr class="interfaceMainRow">';	
+												aHTML.push('<tr class="ns1blankspaceMainRow">';	
 															
-												aHTML[++h] = '<td id="tdOrderProductItems_title-' + this.id + '" class="interfaceMainRow productadd">' +
+												aHTML.push('<td id="tdOrderProductItems_title-' + this.id + '" class="ns1blankspaceMainRow productadd">' +
 																		this.title + '</td>';
 																		
-												aHTML[++h] = '<td id="tdOrderProductItems_quantity-' + this.id + '" class="interfaceMainRow productadd">' +
-																'<input style="width:25px;" id="inputOrderProductItems_title-quantity-' + this.id + '" class="inputInterfaceMainText productadd"></td>';						
+												aHTML.push('<td id="tdOrderProductItems_quantity-' + this.id + '" class="ns1blankspaceMainRow productadd">' +
+																'<input style="width:25px;" id="inputOrderProductItems_title-quantity-' + this.id + '" class="inputns1blankspaceMainText productadd"></td>';						
 														
-												aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';	
-												aHTML[++h] = '<span id="spanOrderProductItems_options_add-' + this.id + '" class="interfaceMainRowOptionsAdd"></span>';
-												aHTML[++h] = '</td>';
+												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">';	
+												aHTML.push('<span id="spanOrderProductItems_options_add-' + this.id + '" class="ns1blankspaceMainRowOptionsAdd"></span>';
+												aHTML.push('</td>';
 												
-												aHTML[++h] = '</tr>';	
+												aHTML.push('</tr>';	
 
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
-											$('#tdInterfaceMainProductAddSearchResults').html(aHTML.join(''))
+											$('#tdns1blankspaceMainProductAddSearchResults').html(aHTML.join(''))
 											
-											$('.interfaceMainRowOptionsAdd').button({
+											$('.ns1blankspaceMainRowOptionsAdd').button({
 												text: false,
 												icons: {
 													primary: "ui-icon-plus"
@@ -1378,7 +1359,7 @@ ns1blankspace.order =
 													data: sData,
 													dataType: 'json',
 													async: false,
-													success: function(oResponse) {interfaceOrderProductItems()}
+													success: function(oResponse) {ns1blankspaceOrderProductItems()}
 												});
 											})
 											.css('width', '20px')
@@ -1394,46 +1375,46 @@ ns1blankspace.order =
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
-					interfaceOrderViewport();
-					ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+					ns1blankspaceOrderViewport();
+					ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
 					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					interfaceOrderDetails();
+					ns1blankspaceOrderDetails();
 				}
 
 	save: 		{		
-					send:		function interfaceOrderSave()
+					send:		function ns1blankspaceOrderSave()
 								{
 									ns1blankspaceStatusWorking();
 									
 									var sData = 'id=' + ((ns1blankspace.objectContext == -1)?'':ns1blankspace.objectContext);
 										
-									if ($('#divInterfaceMainDetails').html() != '')
+									if ($('#divns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsReference').val());
-										sData += '&orderdate=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsOrderDate').val());
-										sData += '&orderbybusiness=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsOrderByBusiness').attr("data-id"));
-										sData += '&orderbyperson=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsOrderByPerson').attr("data-id"));
-										sData += '&purchaseorder=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPurchaseOrderReference').val());
+										sData += '&reference=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsReference').val());
+										sData += '&orderdate=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsOrderDate').val());
+										sData += '&orderbybusiness=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsOrderByBusiness').attr("data-id"));
+										sData += '&orderbyperson=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsOrderByPerson').attr("data-id"));
+										sData += '&purchaseorder=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsPurchaseOrderReference').val());
 										sData += '&source=' + $('input[name="radioSource"]:checked').val();
-										sData += '&notes=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsNotes').val());
+										sData += '&notes=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsNotes').val());
 									}
 										
-									if ($('#divInterfaceMainAddress').html() != '')
+									if ($('#divns1blankspaceMainAddress').html() != '')
 									{
-										sData += '&streetaddress1=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetAddress1').val());
-										sData += '&streetaddress2=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetAddress2').val());
-										sData += '&streetsuburb=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetSuburb').val());
-										sData += '&streetstate=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetState').val());
-										sData += '&streetpostcode=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetPostCode').val());
-										sData += '&streetcountry=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressStreetCountry').val());
+										sData += '&streetaddress1=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetAddress1').val());
+										sData += '&streetaddress2=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetAddress2').val());
+										sData += '&streetsuburb=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetSuburb').val());
+										sData += '&streetstate=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetState').val());
+										sData += '&streetpostcode=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetPostCode').val());
+										sData += '&streetcountry=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetCountry').val());
 										
-										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingAddress1').val());
-										sData += '&mailingaddress2=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingAddress2').val());
-										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingSuburb').val());
-										sData += '&mailingstate=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingState').val());
-										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingPostCode').val());
-										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#inputInterfaceMainAddressMailingCountry').val());
+										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingAddress1').val());
+										sData += '&mailingaddress2=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingAddress2').val());
+										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingSuburb').val());
+										sData += '&mailingstate=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingState').val());
+										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingPostCode').val());
+										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingCountry').val());
 									}
 									
 									$.ajax(
@@ -1442,11 +1423,11 @@ ns1blankspace.order =
 										url: ns1blankspaceEndpointURL('PRODUCT_ORDER_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: interfaceOrderSaveProcess
+										success: ns1blankspaceOrderSaveProcess
 									});
 								},
 
-					process:	function interfaceOrderSaveProcess(oResponse)
+					process:	function ns1blankspaceOrderSaveProcess(oResponse)
 								{
 									
 									if (oResponse.status == 'OK')
@@ -1463,9 +1444,9 @@ ns1blankspace.order =
 				},
 
 	deliveries: {
-					show:		function interfaceOrderDelivery(oParam, oResponse)
+					show:		function ns1blankspaceOrderDelivery(oParam, oResponse)
 								{
-									var sXHTMLElementID = 'divInterfaceMainDelivery';
+									var sXHTMLElementID = 'divns1blankspaceMainDelivery';
 									
 									if (oParam != undefined)
 									{
@@ -1478,12 +1459,12 @@ ns1blankspace.order =
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainOrderDelivery" class="interfaceMain">' +
-													'<tr id="trInterfaceMainOrderDeliveryRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainOrderDeliveryColumn1" class="interfaceMainColumn1Large">' +
+										aHTML.push('<table id="tablens1blankspaceMainOrderDelivery" class="ns1blankspaceMain">' +
+													'<tr id="trns1blankspaceMainOrderDeliveryRow1" class="ns1blankspaceMainRow1">' +
+													'<td id="tdns1blankspaceMainOrderDeliveryColumn1" class="ns1blankspaceMainColumn1Large">' +
 													ns1blankspace.xhtml.loading +
 													'</td>' +
-													'<td id="tdInterfaceMainOrderDeliveryColumn2" style="width: 200px;" class="interfaceMainColumn2Actionx">' +
+													'<td id="tdns1blankspaceMainOrderDeliveryColumn2" style="width: 200px;" class="ns1blankspaceMainColumn2Actionx">' +
 													'</td>' +
 													'</tr>' +
 													'</table>';				
@@ -1493,18 +1474,18 @@ ns1blankspace.order =
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainOrderDeliveryColumn2" class="interfaceMainColumn2">';
+										aHTML.push('<table id="tablens1blankspaceMainOrderDeliveryColumn2" class="ns1blankspaceMainColumn2">';
 																		
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
-										$('#tdInterfaceMainOrderDeliveryColumn2').html(aHTML.join(''));
+										$('#tdns1blankspaceMainOrderDeliveryColumn2').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainOrderDeliveryAdd').button(
+										$('#spanns1blankspaceMainOrderDeliveryAdd').button(
 										{
 											label: "Add"
 										})
 										.click(function() {
-											interfaceOrderDeliveryPick();
+											ns1blankspaceOrderDeliveryPick();
 										})
 										.css('width', '75px')
 										
@@ -1512,7 +1493,7 @@ ns1blankspace.order =
 										oSearch.method = 'PRODUCT_ORDER_DELIVERY_SEARCH';
 										oSearch.addField('reference,deliverydate,notes');
 										oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.getResults(function(data) {interfaceOrderDelivery(oParam, data)});	
+										oSearch.getResults(function(data) {ns1blankspaceOrderDelivery(oParam, data)});	
 									}
 									else
 									{	
@@ -1521,42 +1502,42 @@ ns1blankspace.order =
 											
 										if (oResponse.data.rows.length == 0)	
 										{
-											aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceOrderInvoicesPick">';
-											aHTML[++h] = '<td class="interfaceMainRowNothing">No deliveries.</td>';
-											aHTML[++h] = '</tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceOrderInvoicesPick">';
+											aHTML.push('<td class="ns1blankspaceMainRowNothing">No deliveries.</td>';
+											aHTML.push('</tr>';
+											aHTML.push('</tbody></table>';
 
-											$('#tdInterfaceMainOrderDeliveryColumn1').html(aHTML.join(''));		
+											$('#tdns1blankspaceMainOrderDeliveryColumn1').html(aHTML.join(''));		
 										}
 										else
 										{
 										
-											aHTML[++h] = '<table id="tableOrderOrderDelivery" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">Date</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Notes</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<table id="tableOrderOrderDelivery" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceMainCaption">';
+											aHTML.push('<td class="ns1blankspaceMainCaption">Date</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption">Notes</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
+											aHTML.push('</tr>';
 												
 											$.each(oResponse.data.rows, function() 
 											{
-												aHTML[++h] = interfaceOrderDeliveryRow(this);
+												aHTML.push(ns1blankspaceOrderDeliveryRow(this);
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
 											ns1blankspacePaginationList(
 											{
-												xhtmlElementID: 'tdInterfaceMainOrderDeliveryColumn1',
+												xhtmlElementID: 'tdns1blankspaceMainOrderDeliveryColumn1',
 												xhtmlContext: 'OrderDelivery',
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
 												rows: ns1blankspace.option.defaultRows,
-												functionShowRow: interfaceOrderDeliveryRow,
+												functionShowRow: ns1blankspaceOrderDeliveryRow,
 												type: 'json'
 											}); 	
 										
@@ -1564,34 +1545,34 @@ ns1blankspace.order =
 									}	
 								},
 
-					row:		function interfaceOrderDeliveryRow(oRow)
+					row:		function ns1blankspaceOrderDeliveryRow(oRow)
 								{
 									var aHTML = [];
 									var h = -1;
 									
-									aHTML[++h] = '<tr class="interfaceMainRow">';
+									aHTML.push('<tr class="ns1blankspaceMainRow">';
 															
-									aHTML[++h] = '<td id="tdOrderDelivery_deliverydate-' + oRow.id + '" class="interfaceMainRow"' +
+									aHTML.push('<td id="tdOrderDelivery_deliverydate-' + oRow.id + '" class="ns1blankspaceMainRow"' +
 															'>' +
 															oRow.deliverydate + '</td>';						
 																
-									aHTML[++h] = '<td id="tdOrderDelivery_notes-' + oRow.id + '" class="interfaceMainRow"' +
+									aHTML.push('<td id="tdOrderDelivery_notes-' + oRow.id + '" class="ns1blankspaceMainRow"' +
 															'>' +
 															oRow.notes + '</td>';	
 																						
-									aHTML[++h] = '<td id="tdOrderDelivery-' + oRow.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
+									aHTML.push('<td id="tdOrderDelivery-' + oRow.id + '" class="ns1blankspaceMainRowOptionsSelect">&nbsp;</td>';
 															
-									aHTML[++h] = '</tr>';	
+									aHTML.push('</tr>';	
 									
 									return aHTML.join('');
 								}
 				},
 				
 	pick: 		{
-					show:		function interfaceOrderDeliveryPick(oParam, oResponse)
+					show:		function ns1blankspaceOrderDeliveryPick(oParam, oResponse)
 								{
 									
-									var sXHTMLElementID = 'divInterfaceMainDeliveryPick';
+									var sXHTMLElementID = 'divns1blankspaceMainDeliveryPick';
 									
 									if (oParam != undefined)
 									{
@@ -1603,12 +1584,12 @@ ns1blankspace.order =
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainOrderDeliveryPick" class="interfaceMain">' +
-													'<tr id="trInterfaceMainOrderDeliveryPickRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainOrderDeliveryPickColumn1" class="interfaceMainColumn1Large">' +
+										aHTML.push('<table id="tablens1blankspaceMainOrderDeliveryPick" class="ns1blankspaceMain">' +
+													'<tr id="trns1blankspaceMainOrderDeliveryPickRow1" class="ns1blankspaceMainRow1">' +
+													'<td id="tdns1blankspaceMainOrderDeliveryPickColumn1" class="ns1blankspaceMainColumn1Large">' +
 													ns1blankspace.xhtml.loading +
 													'</td>' +
-													'<td id="tdInterfaceMainOrderDeliveryPickColumn2" style="width: 100px;" class="interfaceMainColumn2Action">' +
+													'<td id="tdns1blankspaceMainOrderDeliveryPickColumn2" style="width: 100px;" class="ns1blankspaceMainColumn2Action">' +
 													'</td>' +
 													'</tr>' +
 													'</table>';				
@@ -1619,24 +1600,24 @@ ns1blankspace.order =
 										oSearch.method = 'PRODUCT_ORDER_DELIVERY_ITEM_SEARCH';
 										oSearch.addField('producttext,quantity');
 										oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.getResults(function(data) {interfaceOrderDeliveryPick(oParam, data)});	
+										oSearch.getResults(function(data) {ns1blankspaceOrderDeliveryPick(oParam, data)});	
 									}
 									else
 									{	
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainOrderDeliveryPickColumn2" class="interfaceMainColumn2">';
+										aHTML.push('<table id="tablens1blankspaceMainOrderDeliveryPickColumn2" class="ns1blankspaceMainColumn2">';
 										
-										aHTML[++h] = '<tr><td id="tdInterfaceMainOrderstreetPickPrint" class="interfaceMainAction">' +
-														'<span id="spanInterfaceMainOrderstreetPickPrint">Print</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMainOrderstreetPickPrint" class="ns1blankspaceMainAction">' +
+														'<span id="spanns1blankspaceMainOrderstreetPickPrint">Print</span>' +
 														'</td></tr>';
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
-										$('#tdInterfaceMainOrderstreetPickColumn2').html(aHTML.join(''));
+										$('#tdns1blankspaceMainOrderstreetPickColumn2').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainOrderstreetPickPrint').button(
+										$('#spanns1blankspaceMainOrderstreetPickPrint').button(
 										{
 											label: "Print"
 										})
@@ -1650,83 +1631,83 @@ ns1blankspace.order =
 											
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceOrderstreetPick">';
-											aHTML[++h] = '<td class="interfaceMainRowNothing">Nothing to pick.</td>';
-											aHTML[++h] = '</tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceOrderstreetPick">';
+											aHTML.push('<td class="ns1blankspaceMainRowNothing">Nothing to pick.</td>';
+											aHTML.push('</tr>';
+											aHTML.push('</tbody></table>';
 
-											$('#tdInterfaceMaiOrderstreetPickColumn1').html(aHTML.join(''));	
+											$('#tdns1blankspaceMaiOrderstreetPickColumn1').html(aHTML.join(''));	
 										}
 										else
 										{
-											aHTML[++h] = '<table id="tableOrderstreetPick" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">Product</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Quantity Ordered</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Already Delivered</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">This street</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<table id="tableOrderstreetPick" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceMainCaption">';
+											aHTML.push('<td class="ns1blankspaceMainCaption">Product</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Quantity Ordered</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Already Delivered</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">This street</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
+											aHTML.push('</tr>';
 												
 											$.each(oResponse.data.rows, function() 
 											{ 
-												aHTML[++h] = interfaceOrderstreetPickRow(this);
+												aHTML.push(ns1blankspaceOrderstreetPickRow(this);
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
 											ns1blankspacePaginationList(
 											{
-												xhtmlElementID: 'tdInterfaceMainOrderDeliveryPickColumn1',
+												xhtmlElementID: 'tdns1blankspaceMainOrderDeliveryPickColumn1',
 												xhtmlContext: 'OrderDeliveryPick',
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
 												rows: ns1blankspace.option.defaultRows,
-												functionShowRow: interfaceOrderDeliveryPickRow,
+												functionShowRow: ns1blankspaceOrderDeliveryPickRow,
 												type: 'json'
 											}); 	
 										}
 									}	
 								},	
 
-					row:		function interfaceOrderDeliveryPickRow(oRow)
+					row:		function ns1blankspaceOrderDeliveryPickRow(oRow)
 								{
 									var aHTML = [];
 									var h = -1;
 									
-									aHTML[++h] = '<tr class="interfaceMainRow">';
+									aHTML.push('<tr class="ns1blankspaceMainRow">';
 															
-									aHTML[++h] = '<td id="tdOrderstreetPick_title-' + oRow.id + '" class="interfaceMainRow">' +
+									aHTML.push('<td id="tdOrderstreetPick_title-' + oRow.id + '" class="ns1blankspaceMainRow">' +
 															oRow.producttext + '</td>';
 															
-									aHTML[++h] = '<td id="tdOrderstreetPick_quantity-' + oRow.id + '" class="interfaceMainRow"' +
+									aHTML.push('<td id="tdOrderstreetPick_quantity-' + oRow.id + '" class="ns1blankspaceMainRow"' +
 															' style="text-align:right;">' +
 															oRow.quantity + '</td>';						
 																
-									aHTML[++h] = '<td id="tdOrderstreetPick_price-' + oRow.id + '" class="interfaceMainRow"' +
+									aHTML.push('<td id="tdOrderstreetPick_price-' + oRow.id + '" class="ns1blankspaceMainRow"' +
 															' style="text-align:right;">' +
 															'</td>';	
 
-									aHTML[++h] = '<td id="tdOrderstreetPick_totalprice-' + oRow.id + '" class="interfaceMainRow"' +
+									aHTML.push('<td id="tdOrderstreetPick_totalprice-' + oRow.id + '" class="ns1blankspaceMainRow"' +
 															' style="text-align:right;">' +
 															'</td>';						
 																						
-									aHTML[++h] = '<td id="tdOrderstreetPick-' + oRow.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
+									aHTML.push('<td id="tdOrderstreetPick-' + oRow.id + '" class="ns1blankspaceMainRowOptionsSelect">&nbsp;</td>';
 															
-									aHTML[++h] = '</tr>';	
+									aHTML.push('</tr>';	
 									
 									return aHTML.join('');
 								}
 				},
 				
 	invoices: 	{
-					show:		function interfaceOrderInvoices(oParam, oResponse)
+					show:		function ns1blankspaceOrderInvoices(oParam, oResponse)
 								{
-									var sXHTMLElementID = 'divInterfaceMainInvoices';
+									var sXHTMLElementID = 'divns1blankspaceMainInvoices';
 									
 									if (oParam != undefined)
 									{
@@ -1738,12 +1719,12 @@ ns1blankspace.order =
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainOrderInvoices" class="interfaceMain">' +
-													'<tr id="trInterfaceMainOrderInvoicesRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainOrderInvoicesColumn1" class="interfaceMainColumn1Large">' +
+										aHTML.push('<table id="tablens1blankspaceMainOrderInvoices" class="ns1blankspaceMain">' +
+													'<tr id="trns1blankspaceMainOrderInvoicesRow1" class="ns1blankspaceMainRow1">' +
+													'<td id="tdns1blankspaceMainOrderInvoicesColumn1" class="ns1blankspaceMainColumn1Large">' +
 													ns1blankspace.xhtml.loading +
 													'</td>' +
-													'<td id="tdInterfaceMainOrderInvoicesColumn2" style="width: 100px;" class="interfaceMainColumn2Actionx">' +
+													'<td id="tdns1blankspaceMainOrderInvoicesColumn2" style="width: 100px;" class="ns1blankspaceMainColumn2Actionx">' +
 													'</td>' +
 													'</tr>' +
 													'</table>';				
@@ -1753,17 +1734,17 @@ ns1blankspace.order =
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainOrderInvoicesColumn2" class="interfaceMainColumn2">';
+										aHTML.push('<table id="tablens1blankspaceMainOrderInvoicesColumn2" class="ns1blankspaceMainColumn2">';
 										/*
-										aHTML[++h] = '<tr><td id="tdInterfaceMainOrderInvoicesAdd" class="interfaceMainAction">' +
-														'<span id="spanInterfaceMainOrderInvoicesAdd">Add</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMainOrderInvoicesAdd" class="ns1blankspaceMainAction">' +
+														'<span id="spanns1blankspaceMainOrderInvoicesAdd">Add</span>' +
 														'</td></tr>';
 										*/				
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
-										$('#tdInterfaceMainOrderInvoicesColumn2').html(aHTML.join(''));
+										$('#tdns1blankspaceMainOrderInvoicesColumn2').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainOrderInvoicesAdd').button(
+										$('#spanns1blankspaceMainOrderInvoicesAdd').button(
 										{
 											label: "Add"
 										})
@@ -1793,7 +1774,7 @@ ns1blankspace.order =
 											oSearch.addFilter('object', 'EQUAL_TO', 51);
 											oSearch.addFilter('objectcontext', 'IN_LIST', aID.join(','));
 										
-											oSearch.getResults(function(data) {interfaceOrderInvoices(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspaceOrderInvoices(oParam, data)});
 										});	
 									}
 									else
@@ -1803,91 +1784,91 @@ ns1blankspace.order =
 											
 										if (oResponse.data.rows.length == 0)	
 										{
-											aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceOrderInvoices">';
-											aHTML[++h] = '<td class="interfaceMainRowNothing">No invoices for this order.<br /><br />';
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceOrderInvoices">';
+											aHTML.push('<td class="ns1blankspaceMainRowNothing">No invoices for this order.<br /><br />';
 											
 											if (ns1blankspace.objectContextData.status == 2)
 											{
-												aHTML[++h] = 'Click <strong>submit</strong> and then <strong>finalise</strong> in the summary section to create the invoice.</td>';
+												aHTML.push('Click <strong>submit</strong> and then <strong>finalise</strong> in the summary section to create the invoice.</td>';
 											}
 											else
 											{
-												aHTML[++h] = 'Click <strong>finalise</strong> in the summary section to create the invoice.</td>';
+												aHTML.push('Click <strong>finalise</strong> in the summary section to create the invoice.</td>';
 											}
 												
-											aHTML[++h] = '</tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tr>';
+											aHTML.push('</tbody></table>';
 
-											$('#tdInterfaceMainOrderInvoicesColumn1').html(aHTML.join(''));		
+											$('#tdns1blankspaceMainOrderInvoicesColumn1').html(aHTML.join(''));		
 										}
 										else
 										{
-											aHTML[++h] = '<table id="tableOrderOrderInvoices" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">Reference</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Date</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption" style="text-align:right;">Amount</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<table id="tableOrderOrderInvoices" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
+											aHTML.push('<tbody>'
+											aHTML.push('<tr class="ns1blankspaceMainCaption">';
+											aHTML.push('<td class="ns1blankspaceMainCaption">Reference</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Date</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Amount</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
+											aHTML.push('</tr>';
 												
 											$.each(oResponse.data.rows, function() 
 											{
-												aHTML[++h] = interfaceOrderInvoicesRow(this);
+												aHTML.push(ns1blankspaceOrderInvoicesRow(this);
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</tbody></table>';
 
 											ns1blankspacePaginationList(
 											{
-												xhtmlElementID: 'tdInterfaceMainOrderInvoicesColumn1',
+												xhtmlElementID: 'tdns1blankspaceMainOrderInvoicesColumn1',
 												xhtmlContext: 'OrderInvoices',
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
 												rows: ns1blankspace.option.defaultRows,
-												functionShowRow: interfaceOrderInvoicesRow,
-												functionNewPage: 'interfaceOrderProductsBind()',
+												functionShowRow: ns1blankspaceOrderInvoicesRow,
+												functionNewPage: 'ns1blankspaceOrderProductsBind()',
 												type: 'json'
 											}); 	
 										
-											interfaceOrderIvoicesBind();
+											ns1blankspaceOrderIvoicesBind();
 										}
 									}	
 								},
 
-					row:		function interfaceOrderInvoicesRow(oRow)
+					row:		function ns1blankspaceOrderInvoicesRow(oRow)
 								{
 									var aHTML = [];
 									var h = -1;
 									
-									aHTML[++h] = '<tr class="interfaceMainRow">';
+									aHTML.push('<tr class="ns1blankspaceMainRow">';
 															
-									aHTML[++h] = '<td id="tdOrderInvoices_title-' + oRow.id + '" class="interfaceMainRow">' +
+									aHTML.push('<td id="tdOrderInvoices_title-' + oRow.id + '" class="ns1blankspaceMainRow">' +
 															oRow.reference + '</td>';
 															
-									aHTML[++h] = '<td id="tdOrderInvoices_quantity-' + oRow.id + '" class="interfaceMainRow"' +
+									aHTML.push('<td id="tdOrderInvoices_quantity-' + oRow.id + '" class="ns1blankspaceMainRow"' +
 															' style="text-align:right;">' +
 															oRow.sentdate + '</td>';						
 																
-									aHTML[++h] = '<td id="tdOrderInvoices_price-' + oRow.id + '" class="interfaceMainRow"' +
+									aHTML.push('<td id="tdOrderInvoices_price-' + oRow.id + '" class="ns1blankspaceMainRow"' +
 															' style="text-align:right;">' +
 															oRow.amount + '</td>';	
 																						
-									aHTML[++h] = '<td style="width:30px;text-align:right;" class="interfaceMainRow">';	
-									aHTML[++h] = '<span id="spanOrderInvoices_options_view-' + oRow.id + '" class="interfaceMainRowOptionsView"></span>';
-									aHTML[++h] = '</td>';
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">';	
+									aHTML.push('<span id="spanOrderInvoices_options_view-' + oRow.id + '" class="ns1blankspaceMainRowOptionsView"></span>';
+									aHTML.push('</td>';
 																									
-									aHTML[++h] = '</tr>';							
+									aHTML.push('</tr>';							
 									
 									return aHTML.join('');
 								},
 
-					bind:		function interfaceOrderIvoicesBind()
+					bind:		function ns1blankspaceOrderIvoicesBind()
 								{
-									$('.interfaceMainRowOptionsView').button( {
+									$('.ns1blankspaceMainRowOptionsView').button( {
 												text: false,
 												icons: {
 													primary: "ui-icon-play"
@@ -1897,8 +1878,8 @@ ns1blankspace.order =
 										var sID = this.id;
 										var aID = sID.split('-');
 											
-										interfaceFinancialInvoiceMasterViewport({showHome: false});
-										interfaceFinancialInvoiceSearch('-' + aID[1]);
+										ns1blankspaceFinancialInvoiceMasterViewport({showHome: false});
+										ns1blankspaceFinancialInvoiceSearch('-' + aID[1]);
 									})
 									.css('width', '15px')
 									.css('height', '17px')

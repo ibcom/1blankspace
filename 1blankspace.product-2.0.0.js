@@ -57,7 +57,7 @@ ns1blankspace.product =
 									
 						aHTML.push('<table>');
 
-						aHTML.push('<tr><td id="ns1blankspaceViewMessagingProductLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceViewProductLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 								
 						aHTML.push('</table>');		
 						
@@ -165,8 +165,8 @@ ns1blankspace.product =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position(sElementId);
-											ns1blankspace.search.start(sElementId);
+											ns1blankspace.container.position(sElementID);
+											ns1blankspace.search.start(sElementID);
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PRODUCT_SEARCH';
