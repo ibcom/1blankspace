@@ -1197,53 +1197,44 @@ ns1blankspace.order =
 											oSearch.addField('reference,title');
 											oSearch.addFilter('title', 'STRING_IS_LIKE', $('#inputns1blankspaceMainProductAddReference').val());
 											oSearch.sort('title', 'asc');
-											oSearch.getResults(function(data){ns1blankspaceOrderProductItemsAdd($.extend(true, oParam, {step:3}), data)});
+											oSearch.getResults(function(data){ns1blankspace.order.items.add($.extend(true, oParam, {step:3}), data)});
 										}
 									}
 									else
 									{
 										var aHTML = [];
-										var h = -1;
 
 										if (oResponse.data.rows.length == 0)	
 										{
-											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceActions">';
-											aHTML.push('<td class="ns1blankspaceMainRowNothing">No products.</td>';
-											aHTML.push('</tr>';
-											aHTML.push('</tbody></table>';
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No products.</td></tr></table>');
 
-											$('#tdns1blankspaceMainProductAddSearchResults').html(aHTML.join(''));		
+											$('#ns1blankspaceItemsProductSearchResults').html(aHTML.join(''));		
 										}
 										else
 										{	
-											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" >';
-											aHTML.push('<tbody>'
+											aHTML.push('<table id="ns1blankspaceOrderItems">');
 											
 											$.each(oResponse.data.rows, function() 
 											{ 
-												aHTML.push('<tr class="ns1blankspaceMainRow">';	
+												aHTML.push('<tr class="ns1blankspaceRow">');	
 															
-												aHTML.push('<td id="tdOrderProductItems_title-' + this.id + '" class="ns1blankspaceMainRow productadd">' +
+												aHTML.push('<td id="ns1blankspaceOrderItems_title-' + this.id + '" class="ns1blankspaceRow">' +
 																		this.title + '</td>';
 																		
-												aHTML.push('<td id="tdOrderProductItems_quantity-' + this.id + '" class="ns1blankspaceMainRow productadd">' +
-																'<input style="width:25px;" id="inputOrderProductItems_title-quantity-' + this.id + '" class="inputns1blankspaceMainText productadd"></td>';						
+												aHTML.push('<td id="ns1blankspaceOrderItems_units2-' + this.id + '" class="ns1blankspaceRow">' +
+																'<input style="width:25px;" id="ns1blankspaceOrderItems__units-' + this.id + '" class="ns1blankspaceText"></td>';						
 														
-												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">';	
-												aHTML.push('<span id="spanOrderProductItems_options_add-' + this.id + '" class="ns1blankspaceMainRowOptionsAdd"></span>';
-												aHTML.push('</td>';
+												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' + 
+																'<span id="ns1blankspaceOrderItems_add-' + this.id + '" class="ns1blankspaceRowAdd"></span></td>');
 												
-												aHTML.push('</tr>';	
-
+												aHTML.push('</tr>');
 											});
 											
 											aHTML.push('</tbody></table>';
 
-											$('#tdns1blankspaceMainProductAddSearchResults').html(aHTML.join(''))
+											$('#ns1blankspaceItemsProductSearchResults').html(aHTML.join(''))
 											
-											$('.ns1blankspaceMainRowOptionsAdd').button({
+											$('#ns1blankspaceOrderItems > span.ns1blankspaceRowAdd').button({
 												text: false,
 												icons: {
 													primary: "ui-icon-plus"
@@ -1254,7 +1245,7 @@ ns1blankspace.order =
 												var sID = this.id;
 												var aID = sID.split('-');
 												var iProduct = aID[1];
-												var iQuantity = $('#inputOrderProductItems_title-quantity-' + iProduct).val();
+												var iQuantity = $('#ns1blankspaceOrderItems__units-' + iProduct).val();
 												if (iQuantity == '') {iQuantity = 1};
 												
 												var sData = 'order=' + ns1blankspace.objectContext;
@@ -1264,17 +1255,17 @@ ns1blankspace.order =
 												$.ajax(
 												{
 													type: 'POST',
-													url: '/ondemand/product/?method=PRODUCT_ORDER_ITEM_MANAGE',
+													url: ns1blankspace.util.endpointURI('PRODUCT_ORDER_ITEM_MANAGE'),
 													data: sData,
 													dataType: 'json',
 													async: false,
-													success: function(oResponse) {ns1blankspaceOrderProductItems()}
+													success: function(oResponse) {ns1blankspace.order.items.show()}
 												});
 											})
 											.css('width', '20px')
 											.css('height', '20px')
 											
-											$('input.productadd:first').focus();
+											$('input.ns1blankspaceText:first').focus();
 										}
 									}	
 								}
@@ -1282,7 +1273,7 @@ ns1blankspace.order =
 
 	new:		function ()
 				{
-					blankspace.objectContextData = undefined;
+					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.order.layout();
 					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
@@ -1294,7 +1285,7 @@ ns1blankspace.order =
 	save: 		{		
 					send:		function ()
 								{
-									ns1blankspaceStatusWorking();
+									ns1blankspace.status.working();
 									
 									var sData = 'id=' + ((ns1blankspace.objectContext == -1)?'':ns1blankspace.objectContext);
 										
@@ -1354,7 +1345,7 @@ ns1blankspace.order =
 	deliveries: {
 					show:		function (oParam, oResponse)
 								{
-									var sXHTMLElementID = 'divns1blankspaceMainDelivery';
+									var sXHTMLElementID = 'ns1blankspaceMainDelivery';
 									
 									if (oParam != undefined)
 									{
@@ -1363,32 +1354,18 @@ ns1blankspace.order =
 
 									if (oResponse == undefined)
 									{
-										
 										var aHTML = [];
-										var h = -1;
-										
-										aHTML.push('<table id="tablens1blankspaceMainOrderDelivery" class="ns1blankspaceMain">' +
-													'<tr id="trns1blankspaceMainOrderDeliveryRow1" class="ns1blankspaceMainRow1">' +
-													'<td id="tdns1blankspaceMainOrderDeliveryColumn1" class="ns1blankspaceMainColumn1Large">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="tdns1blankspaceMainOrderDeliveryColumn2" style="width: 200px;" class="ns1blankspaceMainColumn2Actionx">' +
-													'</td>' +
-													'</tr>' +
-													'</table>';				
+									
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceDeliveryColumn1" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspaceDeliveryColumn2" class="ns1blankspaceColumn2"></td>' +
+														'</tr>' + 
+														'</table>');
 										
 										$('#' + sXHTMLElementID).html(aHTML.join(''));
 										
-										var aHTML = [];
-										var h = -1;
-										
-										aHTML.push('<table id="tablens1blankspaceMainOrderDeliveryColumn2" class="ns1blankspaceMainColumn2">';
-																		
-										aHTML.push('</table>';					
-										
-										$('#tdns1blankspaceMainOrderDeliveryColumn2').html(aHTML.join(''));
-										
-										$('#spanns1blankspaceMainOrderDeliveryAdd').button(
+										$('#ns1blankspaceOrderDeliveryAdd').button(
 										{
 											label: "Add"
 										})
@@ -1401,51 +1378,45 @@ ns1blankspace.order =
 										oSearch.method = 'PRODUCT_ORDER_DELIVERY_SEARCH';
 										oSearch.addField('reference,deliverydate,notes');
 										oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.getResults(function(data) {ns1blankspaceOrderDelivery(oParam, data)});	
+										oSearch.getResults(function(data) {ns1blankspace.order.deliveries.show(oParam, data)});	
 									}
 									else
 									{	
 										var aHTML = [];
-										var h = -1;
 											
 										if (oResponse.data.rows.length == 0)	
 										{
-											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceOrderInvoicesPick">';
-											aHTML.push('<td class="ns1blankspaceMainRowNothing">No deliveries.</td>';
-											aHTML.push('</tr>';
-											aHTML.push('</tbody></table>';
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No deliveries.</td></tr></table>');
 
-											$('#tdns1blankspaceMainOrderDeliveryColumn1').html(aHTML.join(''));		
+											$('#ns1blankspaceDeliveryColumn1').html(aHTML.join(''));		
 										}
 										else
 										{
 										
-											aHTML.push('<table id="tableOrderOrderDelivery" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
+											aHTML.push('<table class="ns1blankspaceContainer">';
 											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceMainCaption">';
-											aHTML.push('<td class="ns1blankspaceMainCaption">Date</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption">Notes</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
+											aHTML.push('<tr class="ns1blankspaceCaption">';
+											aHTML.push('<td class="ns1blankspaceCaption">Date</td>';
+											aHTML.push('<td class="ns1blankspaceCaption">Notes</td>';
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>';
 											aHTML.push('</tr>';
 												
 											$.each(oResponse.data.rows, function() 
 											{
-												aHTML.push(ns1blankspaceOrderDeliveryRow(this);
+												aHTML.push(ns1blankspace.order.deliveries.row(this);
 											});
 											
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>');
 
-											ns1blankspacePaginationList(
+											ns1blankspace.pagination.list(
 											{
-												xhtmlElementID: 'tdns1blankspaceMainOrderDeliveryColumn1',
+												xhtmlElementID: 'ns1blankspaceDeliveryColumn1',
 												xhtmlContext: 'OrderDelivery',
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
 												rows: ns1blankspace.option.defaultRows,
-												functionShowRow: ns1blankspaceOrderDeliveryRow,
+												functionShowRow: ns1blankspace.order.deliveries.row,
 												type: 'json'
 											}); 	
 										
@@ -1453,34 +1424,30 @@ ns1blankspace.order =
 									}	
 								},
 
-					row:		function ns1blankspaceOrderDeliveryRow(oRow)
+					row:		function (oRow)
 								{
 									var aHTML = [];
-									var h = -1;
-									
-									aHTML.push('<tr class="ns1blankspaceMainRow">';
+
+									aHTML.push('<tr class="ns1blankspaceRow">');
 															
-									aHTML.push('<td id="tdOrderDelivery_deliverydate-' + oRow.id + '" class="ns1blankspaceMainRow"' +
-															'>' +
-															oRow.deliverydate + '</td>';						
+									aHTML.push('<td id="ns1blankspaceOrderDelivery_deliverydate-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.deliverydate + '</td>');						
 																
-									aHTML.push('<td id="tdOrderDelivery_notes-' + oRow.id + '" class="ns1blankspaceMainRow"' +
-															'>' +
-															oRow.notes + '</td>';	
+									aHTML.push('<td id="ns1blankspaceOrderDelivery_notes-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.notes + '</td>');	
 																						
-									aHTML.push('<td id="tdOrderDelivery-' + oRow.id + '" class="ns1blankspaceMainRowOptionsSelect">&nbsp;</td>';
+									aHTML.push('<td id="ns1blankspaceOrderDelivery-' + oRow.id + '" class="ns1blankspaceRowSelect">&nbsp;</td>');
 															
-									aHTML.push('</tr>';	
+									aHTML.push('</tr>');	
 									
 									return aHTML.join('');
 								}
 				},
 				
 	pick: 		{
-					show:		function ns1blankspaceOrderDeliveryPick(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
-									
-									var sXHTMLElementID = 'divns1blankspaceMainDeliveryPick';
+									var sXHTMLElementID = 'ns1blankspaceMainDeliveryPick';
 									
 									if (oParam != undefined)
 									{
@@ -1490,17 +1457,13 @@ ns1blankspace.order =
 									if (oResponse == undefined)
 									{
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML.push('<table id="tablens1blankspaceMainOrderDeliveryPick" class="ns1blankspaceMain">' +
-													'<tr id="trns1blankspaceMainOrderDeliveryPickRow1" class="ns1blankspaceMainRow1">' +
-													'<td id="tdns1blankspaceMainOrderDeliveryPickColumn1" class="ns1blankspaceMainColumn1Large">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="tdns1blankspaceMainOrderDeliveryPickColumn2" style="width: 100px;" class="ns1blankspaceMainColumn2Action">' +
-													'</td>' +
-													'</tr>' +
-													'</table>';				
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceDeliveryPickColumn1" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspaceDeliveryPickColumn2" class="ns1blankspaceColumn2" style="width: 100px;"></td>' +
+														'</tr>' + 
+														'</table>');		
 										
 										$('#' + sXHTMLElementID).html(aHTML.join(''));
 										
@@ -1508,24 +1471,23 @@ ns1blankspace.order =
 										oSearch.method = 'PRODUCT_ORDER_DELIVERY_ITEM_SEARCH';
 										oSearch.addField('producttext,quantity');
 										oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.getResults(function(data) {ns1blankspaceOrderDeliveryPick(oParam, data)});	
+										oSearch.getResults(function(data) {ns1blankspace.order.pick(oParam, data)});	
 									}
 									else
 									{	
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML.push('<table id="tablens1blankspaceMainOrderDeliveryPickColumn2" class="ns1blankspaceMainColumn2">';
+										aHTML.push('<table class="ns1blankspaceMainColumn2">');
 										
-										aHTML.push('<tr><td id="tdns1blankspaceMainOrderstreetPickPrint" class="ns1blankspaceMainAction">' +
-														'<span id="spanns1blankspaceMainOrderstreetPickPrint">Print</span>' +
-														'</td></tr>';
+										aHTML.push('<tr><td class="ns1blankspaceMainAction">' +
+														'<span id="ns1blankspaceOrderPickPrint">Print</span>' +
+														'</td></tr>');
 														
-										aHTML.push('</table>';					
+										aHTML.push('</table>');					
 										
-										$('#tdns1blankspaceMainOrderstreetPickColumn2').html(aHTML.join(''));
+										$('#ns1blankspaceDeliveryPickColumn2').html(aHTML.join(''));
 										
-										$('#spanns1blankspaceMainOrderstreetPickPrint').button(
+										$('#ns1blankspaceOrderPickPrint').button(
 										{
 											label: "Print"
 										})
@@ -1539,83 +1501,74 @@ ns1blankspace.order =
 											
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceOrderstreetPick">';
-											aHTML.push('<td class="ns1blankspaceMainRowNothing">Nothing to pick.</td>';
-											aHTML.push('</tr>';
-											aHTML.push('</tbody></table>';
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">Nothing to pick.</td></tr></table>');
 
-											$('#tdns1blankspaceMaiOrderstreetPickColumn1').html(aHTML.join(''));	
+											$('#ns1blankspaceDeliveryPickColumn1').html(aHTML.join(''));	
 										}
 										else
 										{
-											aHTML.push('<table id="tableOrderstreetPick" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceMainCaption">';
-											aHTML.push('<td class="ns1blankspaceMainCaption">Product</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Quantity Ordered</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Already Delivered</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">This street</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
+											aHTML.push('<table id="ns1blankspaceOrderPick" class="ns1blankspaceContainer">');
+											aHTML.push('<tr class="ns1blankspaceCaption">';
+											aHTML.push('<td class="ns1blankspaceCaption">Product</td>';
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Quantity Ordered</td>';
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Already Delivered</td>';
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">This street</td>';
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>';
 											aHTML.push('</tr>';
 												
 											$.each(oResponse.data.rows, function() 
 											{ 
-												aHTML.push(ns1blankspaceOrderstreetPickRow(this);
+												aHTML.push(ns1blankspace.order.pick.row(this);
 											});
 											
 											aHTML.push('</tbody></table>';
 
-											ns1blankspacePaginationList(
+											ns1blankspace.pagination.list(
 											{
-												xhtmlElementID: 'tdns1blankspaceMainOrderDeliveryPickColumn1',
+												xhtmlElementID: 'ns1blankspaceDeliveryPickColumn1',
 												xhtmlContext: 'OrderDeliveryPick',
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
 												rows: ns1blankspace.option.defaultRows,
-												functionShowRow: ns1blankspaceOrderDeliveryPickRow,
+												functionShowRow: ns1blankspace.order.pick.row,
 												type: 'json'
 											}); 	
 										}
 									}	
 								},	
 
-					row:		function ns1blankspaceOrderDeliveryPickRow(oRow)
+					row:		function (oRow)
 								{
 									var aHTML = [];
-									var h = -1;
 									
-									aHTML.push('<tr class="ns1blankspaceMainRow">';
+									aHTML.push('<tr class="ns1blankspaceRow">');
 															
-									aHTML.push('<td id="tdOrderstreetPick_title-' + oRow.id + '" class="ns1blankspaceMainRow">' +
-															oRow.producttext + '</td>';
+									aHTML.push('<td id="ns1blankspaceDeliveryPick_title-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.producttext + '</td>');
 															
-									aHTML.push('<td id="tdOrderstreetPick_quantity-' + oRow.id + '" class="ns1blankspaceMainRow"' +
+									aHTML.push('<td id="ns1blankspaceDeliveryPick_units-' + oRow.id + '" class="ns1blankspaceRow"' +
 															' style="text-align:right;">' +
-															oRow.quantity + '</td>';						
+															oRow.quantity + '</td>');						
 																
-									aHTML.push('<td id="tdOrderstreetPick_price-' + oRow.id + '" class="ns1blankspaceMainRow"' +
-															' style="text-align:right;">' +
-															'</td>';	
+									aHTML.push('<td id="ns1blankspaceDeliveryPick_price-' + oRow.id + '" class="ns1blankspaceRow"' +
+															' style="text-align:right;"></td>');	
 
-									aHTML.push('<td id="tdOrderstreetPick_totalprice-' + oRow.id + '" class="ns1blankspaceMainRow"' +
-															' style="text-align:right;">' +
-															'</td>';						
+									aHTML.push('<td id="ns1blankspaceDeliveryPick_totalprice-' + oRow.id + '" class="ns1blankspaceRow"' +
+															' style="text-align:right;"></td>');						
 																						
-									aHTML.push('<td id="tdOrderstreetPick-' + oRow.id + '" class="ns1blankspaceMainRowOptionsSelect">&nbsp;</td>';
+									aHTML.push('<td id="ns1blankspaceDeliveryPick-' + oRow.id + '" class="ns1blankspaceRowSelect">&nbsp;</td>');
 															
-									aHTML.push('</tr>';	
+									aHTML.push('</tr>');	
 									
 									return aHTML.join('');
 								}
 				},
 				
 	invoices: 	{
-					show:		function ns1blankspaceOrderInvoices(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
-									var sXHTMLElementID = 'divns1blankspaceMainInvoices';
+									var sXHTMLElementID = 'ns1blankspaceMainInvoices';
 									
 									if (oParam != undefined)
 									{
@@ -1625,34 +1578,18 @@ ns1blankspace.order =
 									if (oResponse == undefined)
 									{
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML.push('<table id="tablens1blankspaceMainOrderInvoices" class="ns1blankspaceMain">' +
-													'<tr id="trns1blankspaceMainOrderInvoicesRow1" class="ns1blankspaceMainRow1">' +
-													'<td id="tdns1blankspaceMainOrderInvoicesColumn1" class="ns1blankspaceMainColumn1Large">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="tdns1blankspaceMainOrderInvoicesColumn2" style="width: 100px;" class="ns1blankspaceMainColumn2Actionx">' +
-													'</td>' +
-													'</tr>' +
-													'</table>';				
-										
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceInvoicesColumn1" class="ns1blankspaceColumn1">' +
+														ns1blankspace.xhtml.loading + '</td>' +
+														'<td id="ns1blankspaceInvoicesColumn2" class="ns1blankspaceColumn2" style="width: 100px;"></td>' +
+														'</tr>' + 
+														'</table>');
+													
 										$('#' + sXHTMLElementID).html(aHTML.join(''));
 										
-										var aHTML = [];
-										var h = -1;
-										
-										aHTML.push('<table id="tablens1blankspaceMainOrderInvoicesColumn2" class="ns1blankspaceMainColumn2">';
-										/*
-										aHTML.push('<tr><td id="tdns1blankspaceMainOrderInvoicesAdd" class="ns1blankspaceMainAction">' +
-														'<span id="spanns1blankspaceMainOrderInvoicesAdd">Add</span>' +
-														'</td></tr>';
-										*/				
-										aHTML.push('</table>';					
-										
-										$('#tdns1blankspaceMainOrderInvoicesColumn2').html(aHTML.join(''));
-										
-										$('#spanns1blankspaceMainOrderInvoicesAdd').button(
+										$('#ns1blankspaceOrderInvoicesAdd').button(
 										{
 											label: "Add"
 										})
@@ -1682,101 +1619,96 @@ ns1blankspace.order =
 											oSearch.addFilter('object', 'EQUAL_TO', 51);
 											oSearch.addFilter('objectcontext', 'IN_LIST', aID.join(','));
 										
-											oSearch.getResults(function(data) {ns1blankspaceOrderInvoices(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.order.invoices(oParam, data)});
 										});	
 									}
 									else
 									{	
 										var aHTML = [];
-										var h = -1;
 											
 										if (oResponse.data.rows.length == 0)	
 										{
-											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceOrderInvoices">';
-											aHTML.push('<td class="ns1blankspaceMainRowNothing">No invoices for this order.<br /><br />';
+											aHTML.push('<table style="margin-top:15px; margin-bottom:15px;">' +
+															'<tr><td class="ns1blankspaceNothing">No invoices for this order.<br /><br />');
 											
 											if (ns1blankspace.objectContextData.status == 2)
 											{
-												aHTML.push('Click <strong>submit</strong> and then <strong>finalise</strong> in the summary section to create the invoice.</td>';
+												aHTML.push('Click <strong>submit</strong> and then <strong>finalise</strong> in the summary section to create the invoice.</td>');
 											}
 											else
 											{
-												aHTML.push('Click <strong>finalise</strong> in the summary section to create the invoice.</td>';
+												aHTML.push('Click <strong>finalise</strong> in the summary section to create the invoice.</td>');
 											}
 												
-											aHTML.push('</tr>';
-											aHTML.push('</tbody></table>';
+											aHTML.push('</tr>');
 
-											$('#tdns1blankspaceMainOrderInvoicesColumn1').html(aHTML.join(''));		
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceInvoicesColumn1').html(aHTML.join(''));		
 										}
 										else
 										{
-											aHTML.push('<table id="tableOrderOrderInvoices" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceMainCaption">';
-											aHTML.push('<td class="ns1blankspaceMainCaption">Reference</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Date</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Amount</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
-											aHTML.push('</tr>';
+											aHTML.push('<table id="ns1blankspaceOrderInvoices" class="ns1blankspaceContainer">');
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption">Reference</td>');
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Date</td>');
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
 												
 											$.each(oResponse.data.rows, function() 
 											{
-												aHTML.push(ns1blankspaceOrderInvoicesRow(this);
+												aHTML.push(ns1blankspace.order.invoices.row(this);
 											});
 											
 											aHTML.push('</tbody></table>';
 
-											ns1blankspacePaginationList(
+											ns1blankspace.pagination.list(
 											{
-												xhtmlElementID: 'tdns1blankspaceMainOrderInvoicesColumn1',
+												xhtmlElementID: 'ns1blankspaceInvoicesColumn1',
 												xhtmlContext: 'OrderInvoices',
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
 												rows: ns1blankspace.option.defaultRows,
-												functionShowRow: ns1blankspaceOrderInvoicesRow,
-												functionNewPage: 'ns1blankspaceOrderProductsBind()',
+												functionShowRow: ns1blankspace.order.invoices.row,
+												functionNewPage: 'ns1blankspace.order.invoices.bind()',
 												type: 'json'
 											}); 	
 										
-											ns1blankspaceOrderIvoicesBind();
+											ns1blankspace.order.invoices.bind();
 										}
 									}	
 								},
 
-					row:		function ns1blankspaceOrderInvoicesRow(oRow)
+					row:		function (oRow)
 								{
 									var aHTML = [];
-									var h = -1;
-									
-									aHTML.push('<tr class="ns1blankspaceMainRow">';
+								
+									aHTML.push('<tr class="ns1blankspaceRow">');
 															
-									aHTML.push('<td id="tdOrderInvoices_title-' + oRow.id + '" class="ns1blankspaceMainRow">' +
-															oRow.reference + '</td>';
+									aHTML.push('<td id="ns1blankspaceOrderInvoices_title-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.reference + '</td>');
 															
-									aHTML.push('<td id="tdOrderInvoices_quantity-' + oRow.id + '" class="ns1blankspaceMainRow"' +
+									aHTML.push('<td id="ns1blankspaceOrderInvoices_quantity-' + oRow.id + '" class="ns1blankspaceRow"' +
 															' style="text-align:right;">' +
-															oRow.sentdate + '</td>';						
+															oRow.sentdate + '</td>');						
 																
-									aHTML.push('<td id="tdOrderInvoices_price-' + oRow.id + '" class="ns1blankspaceMainRow"' +
+									aHTML.push('<td id="ns1blankspaceOrderInvoices_price-' + oRow.id + '" class="ns1blankspaceRow"' +
 															' style="text-align:right;">' +
-															oRow.amount + '</td>';	
+															oRow.amount + '</td>');	
 																						
-									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">';	
-									aHTML.push('<span id="spanOrderInvoices_options_view-' + oRow.id + '" class="ns1blankspaceMainRowOptionsView"></span>';
-									aHTML.push('</td>';
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' + 
+													'<span id="ns1blankspaceOrderInvoices_view-' + oRow.id + '" class="ns1blankspaceRowView"></span></td>');
 																									
-									aHTML.push('</tr>';							
+									aHTML.push('</tr>');							
 									
 									return aHTML.join('');
 								},
 
-					bind:		function ns1blankspaceOrderIvoicesBind()
+					bind:		function ()
 								{
-									$('.ns1blankspaceMainRowOptionsView').button( {
+									$('#ns1blankspaceOrderInvoices > span.ns1blankspaceRowView').button( {
 												text: false,
 												icons: {
 													primary: "ui-icon-play"
@@ -1786,11 +1718,11 @@ ns1blankspace.order =
 										var sID = this.id;
 										var aID = sID.split('-');
 											
-										ns1blankspaceFinancialInvoiceMasterViewport({showHome: false});
-										ns1blankspaceFinancialInvoiceSearch('-' + aID[1]);
+										ns1blankspace.financial.invoice.init({showHome: false});
+										ns1blankspace.financial.invoice.search.send('-' + aID[1]);
 									})
 									.css('width', '15px')
-									.css('height', '17px')
+									.css('height', '17px');
 								}
 				}
 }								
