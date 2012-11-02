@@ -229,7 +229,7 @@ ns1blankspace.views =
 
 ns1blankspace.control = 
 {
-	init: 		function interfaceControlSecurity(oParam, oResponse)
+	init: 		function (oParam, oResponse)
 					{
 						var iStep = 1;
 						var aRoles = [];
