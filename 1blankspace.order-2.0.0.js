@@ -1152,49 +1152,45 @@ ns1blankspace.order =
 										if (iStep == 1)
 										{
 											var aHTML = [];
-											var h = -1;
 													
-											aHTML.push('<table id="tablens1blankspaceMainProductAddColumn2">';
-									
-											aHTML.push('<tr id="trns1blankspaceMainProductAddReference" class="ns1blankspaceMain">' +
-															'<td id="tdns1blankspaceMainProductAddReference" class="ns1blankspaceMain">' +
+											aHTML.push('<table>';
+
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
 															'Product' +
 															'</td></tr>' +
-															'<tr id="trns1blankspaceMainProductAddReferenceValue" class="ns1blankspaceMainText">' +
-															'<td id="tdns1blankspaceMainProductAddReferenceValue" class="ns1blankspaceMainText">' +
-															'<input id="inputns1blankspaceMainProductAddReference" class="inputns1blankspaceMainText">' +
-															'</td></tr>';
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceText">' +
+															'<input id="ns1blankspaceItemsProductReference" class="ns1blankspaceText">' +
+															'</td></tr>');		
 											
-											aHTML.push('<tr id="trns1blankspaceMainProductAdd">' +
-															'<td id="tdns1blankspaceMainProductAddSearch" style="font-size:0.75em;" title="Enter part of the title and click search.">' +
-															'<span id="spanns1blankspaceMainOrderProductItemsAddSearch">Search</span>' +
-															'</td></tr>';
+											aHTML.push('<tr><td style="font-size:0.75em;" title="Enter part of the title and click search.">' +
+															'<span id="ns1blankspaceItemsProductSearch">Search</span>' +
+															'</td></tr>');
 																			
-											aHTML.push('</table>';
+											aHTML.push('</table>');
 											
-											aHTML.push('<table style="margin-top:15px;">';
+											aHTML.push('<table style="margin-top:15px;">');
 											
-											aHTML.push('<tr>' +
-															'<td id="tdns1blankspaceMainProductAddSearchResults">' +
-															'</td></tr>';
+											aHTML.push('<tr><td id="ns1blankspaceItemsProductSearchResults"></td></tr>';
 																			
 											aHTML.push('</table>';		
 											
-											$('#tdns1blankspaceMainOrderProductItemsColumn2').html(aHTML.join(''));
+											$('#ns1blankspaceItemsColumn2').html(aHTML.join(''));
 
-											$('#spanns1blankspaceMainOrderProductItemsAddSearch').button(
+											$('#ns1blankspaceItemsProductSearch').button(
 												{
 													label: "Search"
 												})
 												.click(function() {
-													ns1blankspaceOrderProductItemsAdd($.extend(true, oParam, {step: 2}))
+													ns1blankspace.order.items.add($.extend(true, oParam, {step: 2}))
 												})
 												
 											$('#inputns1blankspaceMainProductAddReference').focus();
 										}
 										if (iStep == 2)
 										{
-											$('#tdns1blankspaceMainProductAddSearchResults').html(ns1blankspace.xhtml.loadingSmall);
+											$('#ns1blankspaceItemsProductSearchResults').html(ns1blankspace.xhtml.loadingSmall);
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PRODUCT_SEARCH';
