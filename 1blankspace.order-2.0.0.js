@@ -371,243 +371,201 @@ ns1blankspace.order =
 
 	layout: 	function ns1blankspaceOrderViewport()
 				{
-					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML.push('<div id="divns1blankspaceViewportControlContext" class="ns1blankspaceViewportControlContext"></div>';
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
-					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Details</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');		
 					}
 					else
-					{	
-						aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Summary</td>' +
-										'</tr>';
-									
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">Details</td>' +
-										'</tr>';
-					
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlAddress" class="ns1blankspaceViewportControl">Address</td>' +
-										'</tr>';
-						
-						aHTML.push('<tr id="trns1blankspaceViewportControlProducts" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlProducts" class="ns1blankspaceViewportControl">Items</td>' +
-										'</tr>';							
-					}
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Summary</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">' +
+										'Address</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlProducts" class="ns1blankspaceControl">' +
+										'Items</td></tr>');
+
+						aHTML.push('</table>');					
+
+						aHTML.push('<table class="ns1blankspaceControlContainer">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlInvoices" class="ns1blankspaceControl">' +
+										'Invoices</td></tr>');
+
+						aHTML.push('</table>';					
+
+						aHTML.push('<table class="ns1blankspaceControlContainer">';
+
+						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
+										'Actions</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
+										'Attachments</td></tr>');
+					}	
 					
 					aHTML.push('</table>';					
-					
-					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
-					
-					aHTML.push('<tr id="trns1blankspaceViewportControlInvoices" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlInvoices" class="ns1blankspaceViewportControl">Invoices</td>' +
-									'</tr>';
-										
-					aHTML.push('</table>';					
-					
-					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
-					
-					aHTML.push('<tr id="trns1blankspaceViewportControlActions" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlActions" class="ns1blankspaceViewportControl">Actions</td>' +
-									'</tr>';
-									
-					aHTML.push('<tr id="trns1blankspaceViewportControlAttachments" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlAttachments" class="ns1blankspaceViewportControl">Attachments</td>' +
-									'</tr>';
-									
-					aHTML.push('</table>';					
-							
-					$('#divns1blankspaceViewportControl').html(aHTML.join(''));
+								
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML.push('<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainDetails" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainAddress" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainProducts" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainStatus" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainDelivery" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainDeliveryPick" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainInvoices" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainCredits" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainSupplierOrders" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainActions" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainAttachments" class="divns1blankspaceViewportMain"></div>';
-					
-					$('#divns1blankspaceMain').html(aHTML.join(''));
-					
-					$('#tdns1blankspaceViewportControlSummary').click(function(event)
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAddress" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainProducts" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainInvoices" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControl"></div>');		
+
+					$('#ns1blankspaceMain').html(aHTML.join(''));
+
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary");
-						ns1blankspaceOrderSummary();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.order.summary();
 					});
 					
-					$('#tdns1blankspaceViewportControlDetails').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
-						ns1blankspaceOrderDetails();
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.order.details();
 					});
 					
-					$('#tdns1blankspaceViewportControlAddress').click(function(event)
+					$('#ns1blankspaceControlAddress').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainAddress");
-						ns1blankspaceOrderAddress("divns1blankspaceMainAddress");
+						ns1blankspace.show({selector: '#ns1blankspaceMainAddress'});
+						ns1blankspace.order.address();
 					});
 					
-					$('#tdns1blankspaceViewportControlProducts').click(function(event)
+					$('#ns1blankspaceControlProducts').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainProducts");
-						ns1blankspaceOrderProductItems();
+						ns1blankspace.show({selector: '#ns1blankspaceMainProducts'});
+						ns1blankspace.order.products();
 					});
-					
-					$('#tdns1blankspaceViewportControlSupplier').click(function(event)
+			
+					$('#ns1blankspaceControlInvoices').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainSupplier");
-						ns1blankspaceOrderSupplier();
-					});
-					
-					$('#tdns1blankspaceViewportControlStock').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainStatus");
-						ns1blankspaceOrderStatus();
-					});
-					
-					$('#tdns1blankspaceViewportControlDelivery').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainDelivery");
-						ns1blankspaceOrderDelivery();
-					});
-					
-					$('#tdns1blankspaceViewportControlDeliveryPick').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainDeliveryPick");
-						ns1blankspaceOrderDeliveryPick();
-					});
-					
-					$('#tdns1blankspaceViewportControlInvoices').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainInvoices");
-						ns1blankspaceOrderInvoices();
-					});
-					
-					$('#tdns1blankspaceViewportControlCredits').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainCredits");
-						ns1blankspaceOrderCredits();
-					});
-					
-					$('#tdns1blankspaceViewportControlSupplierOrders').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainSupplierOrders");
-						ns1blankspaceOrderSupplierOrders();
-					});
-					
-					$('#tdns1blankspaceViewportControlActions').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainActions", true);
-						ns1blankspaceActions({xhtmlElementID: 'divns1blankspaceMainActions'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainInvoices'});
+						ns1blankspace.order.invoices();
 					});
 
-					$('#tdns1blankspaceViewportControlAttachments').click(function(event)
+					$('#ns1blankspaceControlActions').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainAttachments", true);
-						ns1blankspaceAttachments({xhtmlElementID: 'divns1blankspaceMainAttachments'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainActions'});
+						ns1blankspace.actions.show();
+					});
+
+					$('#ns1blankspaceControlAttachments').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments'});
+						ns1blankspace.attachments.show();
 					});
 				},
 
-	show:		function ns1blankspaceOrderShow(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspaceOrderViewport();
+					ns1blankspace.order.layout();
 					
 					var aHTML = [];
-					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
-					
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find the order.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
+						
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this order.</td></tr></table>');
 								
-						$('#divns1blankspaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
-								
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-								
-						$('#divns1blankspaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
-
-						ns1blankspaceViewportDestination({
-							newDestination: 'ns1blankspaceOrderMasterViewport({showHome: false});ns1blankspaceOrderSearch("-' + ns1blankspace.objectContext + '")',
-							move: false
-							})
 						
-						ns1blankspaceObjectViewportHistory({functionDefault: 'ns1blankspaceOrderSummary()'});
-					}	
+						aHTML.push(ns1blankspace.objectContextData.title);
+
+						if (ns1blankspace.objectContextData.categorytext != '')
+						{
+							aHTML.push('<span id="ns1blankspaceControlContext_category" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.categorytext + '</span>'
+						}
+						
+						if (ns1blankspace.objectContextData.currentretailprice != '')
+						{
+							aHTML.push('<span id="ns1blankspaceControlContext_price" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.currentretailprice + '</span>'
+						}
+
+						$('#ns1blankspaceControlContext').html(aHTML.join(''));
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+						
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.order.init({showHome: false});ns1blankspace.order.search.send("-' + ns1blankspace.objectContext + '")',
+							move: false
+							});
+						
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.order.summary()'});
+					}
 				},		
 		
-	summary:	function ns1blankspaceOrderSummary()
+	summary:	function ()
 				{
 					var aHTML = [];
-					var h = -1;
-					
-					aHTML.push('<table id="tablens1blankspaceMainSummary" class="ns1blankspaceMain">';
-					aHTML.push('<tr id="trns1blankspaceMainSummaryRow1" class="ns1blankspaceMainRow1">' +
-								'<td id="tdns1blankspaceMainSummaryColumn1Large" class="ns1blankspaceMainColumn1Large">' +
-									'</td>' +
-									'<td id="tdns1blankspaceMainSummaryColumn2Action" class="ns1blankspaceMainColumn2" style="width:175px;">' +
-									'</td>' +
-									'</tr>';
-					aHTML.push('</table>';				
-						
-					$('#divns1blankspaceMainSummary').html(aHTML.join(''));
-					
-					var aHTML = [];
-					var h = -1;
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find order.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this order.</td></tr></table>');
 								
-						$('#divns1blankspaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'</tr>' +
+									'</table>');				
 						
-						aHTML.push('<tr><td id="tdns1blankspaceMainSummaryOrderDate" class="ns1blankspaceMainSummary">Order Date</td></tr>' +
-										'<tr><td id="tdns1blankspaceMainSummaryOrderDateValue" class="ns1blankspaceMainSummaryValue">' +
-										ns1blankspace.objectContextData.orderdate +
-										'</td></tr>';
-										
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Reference</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryReference" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.reference +
+										'</td></tr>');
+
+						var oDate = new Date.parse(ns1blankspace.objectContextData.orderdate);
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Order Date</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryOrderDate" class="ns1blankspaceSummary">' +
+										oDate.toString("ddd, dd MMM yyyy h:mm TT") +
+										'</td></tr>');
+			
 						if (ns1blankspace.objectContextData.deliverydate != '')
 						{				
-							var dDeliveryDate = new Date(ns1blankspace.objectContextData.deliverydate);
+							var oDate = new Date.parse(ns1blankspace.objectContextData.deliverydate);
 							
-							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryDeliveryDate" class="ns1blankspaceMainSummary">Delivery Date</td></tr>' +
-											'<tr><td id="tdns1blankspaceMainSummaryDeliveryDateValue" class="ns1blankspaceMainSummaryValue">' +
-											$.fullCalendar.formatDate(dDeliveryDate, "dd MMM yyyy HH:mm") +
-											'</td></tr>';
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Delivery Date</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryDeliveryDate" class="ns1blankspaceSummary">' +
+										oDate.toString("ddd, dd MMM yyyy h:mm TT") +
+										'</td></tr>');
 						}					
 							
 						if (ns1blankspace.objectContextData.streetaddresscombined != '')
 						{				
-							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryDeliveryAddress" class="ns1blankspaceMainSummary">Deliver To</td></tr>' +
-											'<tr><td id="tdns1blankspaceMainSummaryDeliveryAddressValue" class="ns1blankspaceMainSummaryValue">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Deliver To</td></tr>' +
+											'<tr><td class="ns1blankspaceSummary">' +
 											ns1blankspace.objectContextData.streetaddresscombined;
 											
 							if (ns1blankspace.objectContextData.streetsuburb != '')
@@ -620,22 +578,21 @@ ns1blankspace.order =
 								aHTML.push('<br />' +	ns1blankspace.objectContextData.streetstate;		
 							}
 							
-							aHTML.push('</td></tr>';
+							aHTML.push('</td></tr>');
 													
 						}
 									
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
-						var h = -1;	
 						
-						aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2" style="width: 100%">';
+						aHTML.push('<table class="ns1blankspace">';
 						
 						if (ns1blankspace.objectContextData.statustext != '')
 						{	
-							aHTML.push('<tr><td class="ns1blankspaceMainSummary" style="padding-bottom:10px;">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummary" style="padding-bottom:10px;">' +
 										ns1blankspace.objectContextData.statustext +
 										'</td></tr>';				
 						}
@@ -643,24 +600,24 @@ ns1blankspace.order =
 						if (ns1blankspace.objectContextData.status == 7)
 						{	
 							aHTML.push('<tr><td>' +
-										'<span style="font-size:0.75em;" id="spanns1blankspaceMainOrderAction-7" class="orderAction">Unsubmit</span>' +
-										'</td></tr>';
+										'<span id="ns1blankspaceOrderAction-7" class="orderAction" style="font-size:0.75em;">Unsubmit</span>' +
+										'</td></tr>');
 										
 							aHTML.push('<tr><td>' +
-										'<span style="font-size:0.75em;" id="spanns1blankspaceMainOrderAction-8" class="orderAction">Finalise</span>' +
-										'</td></tr>';			
+										'<span id="ns1blankspaceOrderAction-8" class="orderAction" style="font-size:0.75em;">Finalise</span>' +
+										'</td></tr>');			
 						}
 						
 						if (ns1blankspace.objectContextData.status == 2)
 						{	
 							aHTML.push('<tr><td>' +
-										'<span style="font-size:0.75em;" id="spanns1blankspaceMainOrderAction-2" class="orderAction">Submit</span>' +
-										'</td></tr>';
+										'<span id="ns1blankspaceOrderAction-2" class="orderAction" style="font-size:0.75em;">Submit</span>' +
+										'</td></tr>');
 						}
 										
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainSummaryColumn2Action').html(aHTML.join(''));	
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 						
 						$('span.orderAction').button(
 						{
@@ -675,134 +632,116 @@ ns1blankspace.order =
 							$.ajax(
 							{
 								type: 'GET',
-								url: '/ondemand/product/?method=PRODUCT_ORDER_MANAGE&action=' + iAction + '&id=' + ns1blankspace.objectContext,
+								url: ns1blankspace.util.endpointURI('PRODUCT_ORDER_MANAGE'),
+								data: 'action=' + iAction + '&id=' + ns1blankspace.objectContext,
 								dataType: 'json',
 								async: false,
-								success: function(oResponse) {ns1blankspaceOrderSearch('-' + ns1blankspace.objectContext)}
+								success: function(oResponse) {ns1blankspace.order.search.send('-' + ns1blankspace.objectContext)}
 							});
 						})
-						.css('width', '100px')
-													
+						.css('width', '100px');						
 					}	
 				},
 
 	details:	function ns1blankspaceOrderDetails()
 				{
-					var aHTML = [];
-					var h = -1;
-
-					if ($('#divns1blankspaceMainDetails').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
-						$('#divns1blankspaceMainDetails').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						aHTML.push('<table id="tablens1blankspaceMainDetails" class="ns1blankspaceMainDetails">';
-						aHTML.push('<tr id="trns1blankspaceMainDetailsRow1" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsColumn1" class="ns1blankspaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainDetailsColumn2" class="ns1blankspaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
 						
-						$('#divns1blankspaceMainDetails').html(aHTML.join(''));
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
+						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML.push('<tr id="trns1blankspaceMainDetailsReference" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsReference" class="ns1blankspaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Reference' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsReferenceValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainDetailsReferenceValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainDetailsReference" class="inputns1blankspaceMainText">' +
-										'</td></tr>';			
-									
-						aHTML.push('<tr id="trns1blankspaceMainDetailsStartDate" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsStartDate" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsReference" class="ns1blankspaceText">' +
+										'</td></tr>');			
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Order Date' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsStartDateValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainDetailsStartDateValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainDetailsOrderDate" class="inputns1blankspaceMainDate">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceMainDetailsOrderByBusiness" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsOrderByBusiness" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceDetailsOrderDate" class="ns1blankspaceDate">' +
+										'</td></tr>');			
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Business' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsOrderByBusinessValue" class="ns1blankspaceMainSelect">' +
-										'<td id="tdns1blankspaceMainDetailsOrderByBusinessValue" class="ns1blankspaceMainSelect">' +
-										'<input id="inputns1blankspaceMainDetailsOrderByBusiness" class="inputns1blankspaceMainSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceDetailsOrderByBusiness" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_BUSINESS_SEARCH"' +
 											' data-columns="tradename">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceMainDetailsOrderByPerson" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsOrderByPerson" class="ns1blankspaceMain">' +
+										'</td></tr>');	
+							
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Person' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsOrderByPersonValue" class="ns1blankspaceMainSelect">' +
-										'<td id="tdns1blankspaceMainDetailsOrderByPersonValue" class="ns1blankspaceMainSelect">' +
-										'<input id="inputns1blankspaceMainDetailsOrderByPerson" class="inputns1blankspaceMainSelect"' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceDetailsOrderByPerson" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_PERSON_SEARCH"' +
 											' data-columns="surname"' +
-											' data-parent="inputns1blankspaceMainDetailsOrderByBusiness"' +
+											' data-parent="ns1blankspaceDetailsOrderByBusiness"' +
 											' data-parent-search-id="contactbusiness"' +
 											' data-parent-search-text="tradename">' +
-										'</td></tr>';											
-						/*				
-						aHTML.push('<tr id="trns1blankspaceMainDetailsEndDate" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsEndDate" class="ns1blankspaceMain">' +
-										'Delivery/Pickup Date' +
-										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsEndDateValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainDetailsEndDateValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainDetailsEndDate" class="inputns1blankspaceMainDate">' +
-										'</td></tr>';			
-						*/
-									
-						aHTML.push('</table>';					
+										'</td></tr>');	
+
+						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
-						$('input.inputns1blankspaceMainDate').datepicker({ dateFormat: 'dd M yy' });
+						$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy' });
 						
 						var aHTML = [];
-						var h = -1;
-							
-						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">';
+
+						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML.push('<tr id="trns1blankspaceMainDetailsSource" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsSource" class="ns1blankspaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Source' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsSource" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainDetailsSourceValue" class="ns1blankspaceMainRadio" style="height:33px;">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioSource1" name="radioSource" value="1"/>Manually Entered' +
 										'&nbsp;&nbsp;<input type="radio" id="radioSource2" name="radioSource" value="2"/>Web Order' +
-										'</td></tr>';
+										'</td></tr>');		
 						
-						aHTML.push('<tr id="trns1blankspaceMainDetailsPurchaseOrderReference" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsPurchaseOrderReference" class="ns1blankspaceMain" >' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Purchase Order' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsPurchaseOrderReferenceValue" class="ns1blankspaceMainSelect">' +
-										'<td id="tdns1blankspaceMainDetailsPurchaseOrderReferenceValue" class="ns1blankspaceMainSelect">' +
-										'<input id="inputns1blankspaceMainDetailsPurchaseOrderReference" class="inputns1blankspaceMainText">' +
-										'</td></tr>';	
-						
-						aHTML.push('<tr id="trns1blankspaceMainDetailsNotes" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsNotes" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsPurchaseOrder" class="ns1blankspaceText">' +
+										'</td></tr>');		
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Notes' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsNotesValue" class="ns1blankspaceMainTextMulti">' +
-										'<td id="tdns1blankspaceMainDetailsNotesValue" class="ns1blankspaceMainTextMulti">' +
-										'<textarea style="width:350px;height:120px;" rows="5" cols="35" id="inputns1blankspaceMainDetailsNotes" class="inputns1blankspaceMainTextMulti"></textarea>' +
-										'</td></tr>';
-						
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<textarea id="ns1blankspaceDetailsNotes" class="ns1blankspaceTextMulti" style="width:350px; height:120px;" rows="5" cols="35"></textarea>' +
+										'</td></tr>');
 						
 						aHTML.push('</table>';					
 							
@@ -810,15 +749,15 @@ ns1blankspace.order =
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputns1blankspaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
-							$('#inputns1blankspaceMainDetailsOrderDate').val(ns1blankspace.objectContextData.orderdate);
-							$('#inputns1blankspaceMainDetailsOrderByBusiness').attr('data-id', ns1blankspace.objectContextData.orderbybusiness);
-							$('#inputns1blankspaceMainDetailsOrderByBusiness').val(ns1blankspace.objectContextData.orderbybusinesstext);
-							$('#inputns1blankspaceMainDetailsOrderByPerson').attr('data-id', ns1blankspace.objectContextData.orderbyperson);
-							$('#inputns1blankspaceMainDetailsOrderByPerson').val(ns1blankspace.objectContextData.orderbypersontext);	
+							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsOrderDate').val(ns1blankspace.objectContextData.orderdate);
+							$('#ns1blankspaceDetailsOrderByBusiness').attr('data-id', ns1blankspace.objectContextData.orderbybusiness);
+							$('#ns1blankspaceDetailsOrderByBusiness').val(ns1blankspace.objectContextData.orderbybusinesstext);
+							$('#ns1blankspaceDetailsOrderByPerson').attr('data-id', ns1blankspace.objectContextData.orderbyperson);
+							$('#ns1blankspaceDetailsOrderByPerson').val(ns1blankspace.objectContextData.orderbypersontext);	
 							$('[name="radioSource"][value="' + ns1blankspace.objectContextData.source + '"]').attr('checked', true);
-							$('#inputns1blankspaceMainDetailsPurchaseOrderReference').val(ns1blankspace.objectContextData.purchaseorder);
-							$('#inputns1blankspaceMainDetailsNotes').val(ns1blankspace.objectContextData.notes);	
+							$('#ns1blankspaceDetailsPurchaseOrderReference').val(ns1blankspace.objectContextData.purchaseorder);
+							$('#ns1blankspaceDetailsNotes').val(ns1blankspace.objectContextData.notes);	
 						}
 						else
 						{
@@ -827,195 +766,184 @@ ns1blankspace.order =
 					}	
 				},
 
-	address:	function ns1blankspaceOrderAddress()
+	address:	function ()
 				{
 					var aHTML = [];
-					var h = -1;
-					
-					ns1blankspace.debug.appContext = 'address';
-						
-					if ($('#divns1blankspaceMainAddress').attr('onDemandLoading') == '1')
+
+					if ($('#ns1blankspaceMainAddress').attr('data-loading') == '1')
 					{
-						$('#divns1blankspaceMainAddress').attr('onDemandLoading', '');
-								
-						aHTML.push('<table id="tablens1blankspaceMainAddress" class="ns1blankspaceMain">';
-						aHTML.push('<tr id="trns1blankspaceMainAddressRow1" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressColumn1" class="ns1blankspaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainAddressColumn2" class="ns1blankspaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						$('#ns1blankspaceMainAddress').attr('data-loading', '');
 						
-						$('#divns1blankspaceMainAddress').html(aHTML.join(''));
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceAddressColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceAddressColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
 						
-						var aHTML = [];
-						var h = -1;
-					
-						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
-								
-						aHTML.push('<tr id="trns1blankspaceMainAddressStreetAddress1" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressStreetAddress1" class="ns1blankspaceMain">' +
+						$('#ns1blankspaceMainAddress').html(aHTML.join(''));
+				
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Delivery Address' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressStreetAddress1Value" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressStreetAddress1Value" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressStreetAddress1" class="inputns1blankspaceMainText">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceMainAddressStreetAddress2" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressStreetAddress2" class="ns1blankspaceMain">' +
-										'' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetAddress" class="ns1blankspaceText">' +
+										'</td></tr>');			
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressStreetAddress2Value" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressStreetAddress2Value" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressStreetAddress2" class="inputns1blankspaceMainText">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceMainAddressStreetSuburb" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressStreetSuburb" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetAddress2" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Suburb' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressStreetSuburbValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressStreetSuburbValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressStreetSuburb" class="inputns1blankspaceMainText inputns1blankspaceMainSelectAddress">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceMainAddressStreetState" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressStreetState" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetSuburb" class="ns1blankspaceText">' +
+										'</td></tr>');
+					
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'State' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressStreetStateValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressStreetStateValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressStreetState" class="inputns1blankspaceMainText">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceMainAddressStreetPostCode" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressStreetPostCode" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetState" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Post Code' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressStreetPostCodeValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressStreetPostCodeValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressStreetPostCode" class="inputns1blankspaceMainText">' +
-										'</td></tr>';				
-										
-						aHTML.push('<tr id="trns1blankspaceMainAddressStreetCountry" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressStreetCountry" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetPostCode" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Country' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressStreetCountryValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressStreetCountryValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressStreetCountry" class="inputns1blankspaceMainText">' +
-										'</td></tr>';						
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetCountry" class="ns1blankspaceText">' +
+										'</td></tr>');	
 						
-						aHTML.push('<tr><td id="tdns1blankspaceMainContactCopyToMailingAddress" class="ns1blankspaceMainAction">' +
-										'<span id="spanns1blankspaceMainContactCopyToMailingAddress">Copy to Mailing Address</span>' +
-										'</td></tr>';
+						aHTML.push('<tr><td class="ns1blankspaceAction">' +
+										'<span id="ns1blankspaceContactCopyToMailingAddress">Copy to Billing Address</span>' +
+										'</td></tr>');
 										
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainAddressColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceAddressColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
-						var h = -1;
-					
-						aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMain">';
-								
-						aHTML.push('<tr id="trns1blankspaceMainAddressMailingAddress1" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressMailingAddress1" class="ns1blankspaceMain">' +
+						
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Billing Address' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressMailingAddress1Value" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressMailingAddress1Value" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressMailingAddress1" class="inputns1blankspaceMainText">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceMainAddressMailingAddress2" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressMailingAddress2" class="ns1blankspaceMain">' +
-										'' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingAddress" class="ns1blankspaceText">' +
+										'</td></tr>');			
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressMailingAddress2Value" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressMailingAddress2Value" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressMailingAddress2" class="inputns1blankspaceMainText">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceMainAddressMailingSuburb" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressMailingSuburb" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingAddress2" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Suburb' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressMailingSuburbValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressMailingSuburbValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressMailingSuburb" class="inputns1blankspaceMainText inputns1blankspaceMainSelectAddress">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceMainAddressMailingState" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressMailingState" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingSuburb" class="ns1blankspaceText">' +
+										'</td></tr>');
+					
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'State' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressMailingStateValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressMailingStateValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressMailingState" class="inputns1blankspaceMainText">' +
-										'</td></tr>';
-										
-						aHTML.push('<tr id="trns1blankspaceMainAddressMailingPostCode" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressMailingPostCode" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingState" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Post Code' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressMailingPostCodeValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressMailingPostCodeValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressMailingPostCode" class="inputns1blankspaceMainText">' +
-										'</td></tr>';				
-										
-						aHTML.push('<tr id="trns1blankspaceMainAddressMailingCountry" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainAddressMailingCountry" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingPostCode" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Country' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainAddressMailingCountryValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainAddressMailingCountryValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainAddressMailingCountry" class="inputns1blankspaceMainText">' +
-										'</td></tr>';						
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingCountry" class="ns1blankspaceText">' +
+										'</td></tr>');	
+
+						aHTML.push('</table>');					
 						
-						aHTML.push('</table>';					
+						$('#ns1blankspaceAddressColumn2').html(aHTML.join(''));
 						
-						$('#tdns1blankspaceMainAddressColumn2').html(aHTML.join(''));
-						
-						$('#spanns1blankspaceMainContactCopyToMailingAddress').button(
+						$('#ns1blankspaceContactCopyToMailingAddress').button(
 						{
 							label: "Copy to Billing Address"
 						})
 						.click(function() {
 						
-							$('#inputns1blankspaceMainAddressMailingAddress1').val($('#inputns1blankspaceMainAddressStreetAddress1').val());
-							$('#inputns1blankspaceMainAddressMailingAddress2').val($('#inputns1blankspaceMainAddressStreetAddress2').val());
-							$('#inputns1blankspaceMainAddressMailingSuburb').val($('#inputns1blankspaceMainAddressStreetSuburb').val());
-							$('#inputns1blankspaceMainAddressMailingState').val($('#inputns1blankspaceMainAddressStreetState').val());
-							$('#inputns1blankspaceMainAddressMailingPostCode').val($('#inputns1blankspaceMainAddressStreetPostCode').val());
-							$('#inputns1blankspaceMainAddressMailingCountry').val($('#inputns1blankspaceMainAddressStreetCountry').val());
+							$('#ns1blankspaceAddressMailingAddress1').val($('#ns1blankspaceAddressStreetAddress1').val());
+							$('#ns1blankspaceAddressMailingAddress2').val($('#ns1blankspaceAddressStreetAddress2').val());
+							$('#ns1blankspaceAddressMailingSuburb').val($('#ns1blankspaceAddressStreetSuburb').val());
+							$('#ns1blankspaceAddressMailingState').val($('#ns1blankspaceAddressStreetState').val());
+							$('#ns1blankspaceAddressMailingPostCode').val($('#ns1blankspaceAddressStreetPostCode').val());
+							$('#ns1blankspaceAddressMailingCountry').val($('#ns1blankspaceAddressStreetCountry').val());
 
 						})
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputns1blankspaceMainAddressStreetAddress1').val((ns1blankspace.objectContextData.streetaddress1).formatXHTML());
-							$('#inputns1blankspaceMainAddressStreetAddress2').val((ns1blankspace.objectContextData.streetaddress2).formatXHTML());
-							$('#inputns1blankspaceMainAddressStreetSuburb').val((ns1blankspace.objectContextData.streetsuburb).formatXHTML());
-							$('#inputns1blankspaceMainAddressStreetState').val((ns1blankspace.objectContextData.streetstate).formatXHTML());
-							$('#inputns1blankspaceMainAddressStreetPostCode').val((ns1blankspace.objectContextData.streetpostcode).formatXHTML());
-							$('#inputns1blankspaceMainAddressStreetCountry').val((ns1blankspace.objectContextData.streetcountry).formatXHTML());
-							$('#inputns1blankspaceMainAddressMailingAddress1').val((ns1blankspace.objectContextData.mailingaddress1).formatXHTML());
-							$('#inputns1blankspaceMainAddressMailingAddress2').val((ns1blankspace.objectContextData.mailingaddress2).formatXHTML());
-							$('#inputns1blankspaceMainAddressMailingSuburb').val((ns1blankspace.objectContextData.mailingsuburb).formatXHTML());
-							$('#inputns1blankspaceMainAddressMailingState').val((ns1blankspace.objectContextData.mailingstate).formatXHTML());
-							$('#inputns1blankspaceMainAddressMailingPostCode').val((ns1blankspace.objectContextData.mailingpostcode).formatXHTML());
-							$('#inputns1blankspaceMainAddressMailingCountry').val((ns1blankspace.objectContextData.mailingcountry).formatXHTML());
+							$('#ns1blankspaceAddressStreetAddress1').val((ns1blankspace.objectContextData.streetaddress1).formatXHTML());
+							$('#ns1blankspaceAddressStreetAddress2').val((ns1blankspace.objectContextData.streetaddress2).formatXHTML());
+							$('#ns1blankspaceAddressStreetSuburb').val((ns1blankspace.objectContextData.streetsuburb).formatXHTML());
+							$('#ns1blankspaceAddressStreetState').val((ns1blankspace.objectContextData.streetstate).formatXHTML());
+							$('#ns1blankspaceAddressStreetPostCode').val((ns1blankspace.objectContextData.streetpostcode).formatXHTML());
+							$('#ns1blankspaceAddressStreetCountry').val((ns1blankspace.objectContextData.streetcountry).formatXHTML());
+							$('#ns1blankspaceAddresssMailingAddress1').val((ns1blankspace.objectContextData.mailingaddress1).formatXHTML());
+							$('#ns1blankspaceAddressMailingAddress2').val((ns1blankspace.objectContextData.mailingaddress2).formatXHTML());
+							$('#ns1blankspaceAddressMailingSuburb').val((ns1blankspace.objectContextData.mailingsuburb).formatXHTML());
+							$('#ns1blankspaceAddressMailingState').val((ns1blankspace.objectContextData.mailingstate).formatXHTML());
+							$('#ns1blankspaceAddressMailingPostCode').val((ns1blankspace.objectContextData.mailingpostcode).formatXHTML());
+							$('#ns1blankspaceAddressMailingCountry').val((ns1blankspace.objectContextData.mailingcountry).formatXHTML());
 						}
 					}	
 				},
 
 	items: 		{
-					show:		function ns1blankspaceOrderProductItems(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
-									var sXHTMLElementID = 'divns1blankspaceMainProducts';
+									var sXHTMLElementID = 'ns1blankspaceMainProducts';
 									
 									if (oParam != undefined)
 									{
@@ -1029,136 +957,124 @@ ns1blankspace.order =
 										oSearch.addField('producttext,quantity,totalcost,totaltax');
 										oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('producttext', 'desc');
-										oSearch.getResults(function(data){ns1blankspaceOrderProductItems(oParam, data)});
+										oSearch.getResults(function(data){ns1blankspace.order.items.show(oParam, data)});
 									}
 									else
 									{
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML.push('<table id="tablens1blankspaceMainOrderProductItems" class="ns1blankspaceMain">' +
-													'<tr id="trns1blankspaceMainOrderProductItemsRow1" class="ns1blankspaceMainRow1">' +
-													'<td id="tdns1blankspaceMainOrderProductItemsColumn1" class="ns1blankspaceMainColumn1Large">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="tdns1blankspaceMainOrderProductItemsColumn2" style="width: 200px;" class="ns1blankspaceMainColumn2">' +
-													'</td>' +
-													'</tr>' +
-													'</table>';				
-										
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceItemsColumn1" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspaceItemsColumn2" class="ns1blankspaceColumn2"></td>' +
+														'</tr>' + 
+														'</table>');
+					
 										$('#' + sXHTMLElementID).html(aHTML.join(''));
 										
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML.push('<table id="tablens1blankspaceMainOrderProductItemsColumn2" class="ns1blankspaceMainColumn2">';
+										aHTML.push('<table class="ns1blankspaceColumn2">';
 										
 										if (ns1blankspace.objectContextData.status == 2)
 										{
-											aHTML.push('<tr><td id="tdns1blankspaceMainOrderProductItemsAdd" class="ns1blankspaceMainAction">' +
-														'<span id="spanns1blankspaceMainOrderProductItemsAdd">Add</span>' +
-														'</td></tr>';
+											aHTML.push('<tr><td class="ns1blankspaceAction">' +
+														'<span id="ns1blankspaceOrderItemsAdd">Add</span>' +
+														'</td></tr>');
 										}
 										else
 										{
 											aHTML.push('<tr><td class="ns1blankspaceViewportControlSub">' +
 														'The order has been submitted, so items can not be added or removed.' +
-													'</td></tr>';
+														'</td></tr>');
 										}				
 														
-										aHTML.push('</table>';					
+										aHTML.push('</table>');					
 										
-										$('#tdns1blankspaceMainOrderProductItemsColumn2').html(aHTML.join(''));
+										$('#ns1blankspaceItemsColumn2').html(aHTML.join(''));
 										
-										$('#spanns1blankspaceMainOrderProductItemsAdd').button(
+										$('#ns1blankspaceOrderItemsAdd').button(
 										{
 											label: "Add"
 										})
 										.click(function() {
-											ns1blankspaceOrderProductItemsAdd()
+											ns1blankspace.order.items.add()
 										})
-										.css('width', '75px')
+										.css('width', '75px');
 										
 										var aHTML = [];
-										var h = -1;
-
+	
 										if (oResponse.data.rows.length == 0)	
 										{
-											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceActions">';
-											aHTML.push('<td class="ns1blankspaceMainRowNothing">No items.</td>';
-											aHTML.push('</tr>';
-											aHTML.push('</tbody></table>';
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No items.</td></tr></table>');
 
-											$('#tdns1blankspaceMainOrderProductItemsColumn1').html(aHTML.join(''));		
+											$('#ns1blankspaceItemsColumn1').html(aHTML.join(''));		
 										}
 										else
 										{
-											aHTML.push('<table id="tableOrderProductItemsList" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceMainCaption">';
-											aHTML.push('<td class="ns1blankspaceMainCaption">Product</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Quantity</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption" style="text-align:right;">Price</td>';
-											aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
-											aHTML.push('</tr>';
+											aHTML.push('<table id="tns1blankspaceOrderItems" class="ns1blankspaceContainer">');
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption">Product</td>');
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Quantity</td>');
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Price</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function() 
 											{ 
-												aHTML.push(ns1blankspaceOrderProductItemsRow(this);
+												aHTML.push(ns1blankspace.order.items.row(this);
 											});
 											
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>');
 
-											ns1blankspacePaginationList(
+											ns1blankspace.pagination.list(
 											{
-												xhtmlElementID: 'tdns1blankspaceMainOrderProductItemsColumn1',
-												xhtmlContext: 'OrderProductItems',
+												xhtmlElementID: 'ns1blankspaceItemsColumn1',
+												xhtmlContext: 'OrderItems',
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
 												rows: ns1blankspace.option.defaultRows,
-												functionShowRow: ns1blankspaceOrderProductItemsRow,
-												functionNewPage: 'ns1blankspaceOrderProductItemsBind()',
+												functionShowRow: ns1blankspace.order.items.rows,
+												functionNewPage: 'ns1blankspace.order.items.bind()',
 												type: 'json'
-											}); 		
-											ns1blankspaceOrderProductItemsBind();
+											}); 
+
+											ns1blankspace.order.items.bind();
 										}
 									}	
 								}	
 
-					row:		function ns1blankspaceOrderProductItemsRow(oRow)
+					row:		function (oRow)
 								{
 									var aHTML = [];
-									var h = -1;
 
-									aHTML.push('<tr class="ns1blankspaceMainRow">';
+									aHTML.push('<tr class="ns1blankspaceRow">');
 									
-									aHTML.push('<td id="tdOrderProductItems_title-' + oRow.id + '" class="ns1blankspaceMainRow">' +
+									aHTML.push('<td id="ns1blankspaceOrderItems_title-' + oRow.id + '" class="ns1blankspaceRow">' +
 															oRow.producttext + '</td>';	
 															
-									aHTML.push('<td id="tdOrderProductItems_quantity-' + oRow.id + '" class="ns1blankspaceMainRow"' +
+									aHTML.push('<td id="ns1blankspaceOrderItems_quantity-' + oRow.id + '" class="ns1blankspaceRow"' +
 															' style="text-align:right;">' +
 															oRow.quantity + '</td>';						
 																
-									aHTML.push('<td id="tdOrderProductItems_price-' + oRow.id + '" class="ns1blankspaceMainRow"' +
+									aHTML.push('<td id="ns1blankspaceOrderItems_price-' + oRow.id + '" class="ns1blankspaceRow"' +
 															' style="text-align:right;">' +
 															oRow.totalcost + '</td>';					
 														
 									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">';	
-									aHTML.push('<span id="spanOrderProductItems_options_remove-' + oRow.id + '" class="ns1blankspaceMainRowOptionsRemove"></span>';
-									//aHTML.push('<span id="spanOrderProductItems_options_view-' + oRow.id + '" class="ns1blankspaceMainRowOptionsView"></span>';
-									aHTML.push('</td>';
+									aHTML.push('<span id="ns1blankspaceOrderItems_remove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>';
+									//aHTML.push('<span id="spanOrderProductItems_options_view-' + oRow.id + '" class="ns1blankspaceRowView"></span>';
+									aHTML.push('</td>');
 																									
-									aHTML.push('</tr>';	
+									aHTML.push('</tr>');	
 									
 									return aHTML.join('');
 								},
 
-					bind:		function ns1blankspaceOrderProductItemsBind()
+					bind:		function ()
 								{
-									$('.ns1blankspaceMainRowOptionsView').button( {
+									$('.ns1blankspaceRowView').button( {
 												text: false,
 												icons: {
 													primary: "ui-icons"
@@ -1168,25 +1084,25 @@ ns1blankspace.order =
 										alert("View product");
 									})
 									.css('width', '15px')
-									.css('height', '17px')
+									.css('height', '17px');
 									
 									if (ns1blankspace.objectContextData.status == 2)
 									{
-										$('.ns1blankspaceMainRowOptionsRemove').button( {
+										$('.ns1blankspaceRowRemove').button( {
 											text: false,
 											 icons: {
 												 primary: "ui-icon-close"
 											}
 										})
 										.click(function() {
-											ns1blankspaceOrderProductItemsRemove({xhtmlElementID: this.id});
+											ns1blankspace.order.items.remove({xhtmlElementID: this.id});
 										})
 										.css('width', '15px')
 										.css('height', '17px')
 									}	
 								},
 
-					remove:		function ns1blankspaceOrderProductItemsRemove(oParam, oResponse)
+					remove:		function (oParam, oResponse)
 								{
 									var sXHTMLElementID;
 
@@ -1200,16 +1116,13 @@ ns1blankspace.order =
 									
 									if (oResponse == undefined)
 									{	
-										var sParam = 'method=PRODUCT_ORDER_ITEM_MANAGE&remove=1';
-										var sData = 'id=' + sID;
-										
 										$.ajax(
 										{
 											type: 'POST',
-											url: '/ondemand/product/?' + sParam,
-											data: sData,
+											url: ns1blankspace.util.endpointURI('PRODUCT_ORDER_ITEM_MANAGE'),
+											data: 'remove=1&id=' + ns1blankspace.util.fs(sID),
 											dataType: 'json',
-											success: function(data){ns1blankspaceOrderProductItemsRemove(oParam, data)}
+											success: function(data){ns1blankspace.order.items.remove(oParam, data)}
 										});
 									}	
 									else
@@ -1220,12 +1133,12 @@ ns1blankspace.order =
 										}
 										else
 										{
-											ns1blankspaceError(oResponse.error.errornotes);
+											ns1blankspace.status.error(oResponse.error.errornotes);
 										}
 									}	
 								},
 
-					add:		function ns1blankspaceOrderProductItemsAdd(oParam, oResponse)
+					add:		function (oParam, oResponse)
 								{
 									var iStep = 1;
 									
@@ -1373,78 +1286,77 @@ ns1blankspace.order =
 
 	new:		function ()
 				{
-					ns1blankspace.objectContextData = undefined
+					blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspaceOrderViewport();
-					ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
-					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					ns1blankspaceOrderDetails();
-				}
+					ns1blankspace.order.layout();
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+					$('#ns1blankspaceViewportControlAction').button({disabled: false});
+					$('#ns1blankspaceViewportControlActionOptions').button({disabled: true});
+					ns1blankspace.order.details();
+				},
 
 	save: 		{		
-					send:		function ns1blankspaceOrderSave()
+					send:		function ()
 								{
 									ns1blankspaceStatusWorking();
 									
 									var sData = 'id=' + ((ns1blankspace.objectContext == -1)?'':ns1blankspace.objectContext);
 										
-									if ($('#divns1blankspaceMainDetails').html() != '')
+									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsReference').val());
-										sData += '&orderdate=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsOrderDate').val());
-										sData += '&orderbybusiness=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsOrderByBusiness').attr("data-id"));
-										sData += '&orderbyperson=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsOrderByPerson').attr("data-id"));
-										sData += '&purchaseorder=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsPurchaseOrderReference').val());
+										sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
+										sData += '&orderdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsOrderDate').val());
+										sData += '&orderbybusiness=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsOrderByBusiness').attr("data-id"));
+										sData += '&orderbyperson=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsOrderByPerson').attr("data-id"));
+										sData += '&purchaseorder=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPurchaseOrderReference').val());
 										sData += '&source=' + $('input[name="radioSource"]:checked').val();
-										sData += '&notes=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsNotes').val());
+										sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsNotes').val());
 									}
 										
-									if ($('#divns1blankspaceMainAddress').html() != '')
+									if ($('#ns1blankspaceMainAddress').html() != '')
 									{
-										sData += '&streetaddress1=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetAddress1').val());
-										sData += '&streetaddress2=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetAddress2').val());
-										sData += '&streetsuburb=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetSuburb').val());
-										sData += '&streetstate=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetState').val());
-										sData += '&streetpostcode=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetPostCode').val());
-										sData += '&streetcountry=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressStreetCountry').val());
+										sData += '&streetaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetAddress1').val());
+										sData += '&streetaddress2=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetAddress2').val());
+										sData += '&streetsuburb=' + ns1blankspace.util.fs($('#ins1blankspaceAddressStreetSuburb').val());
+										sData += '&streetstate=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetState').val());
+										sData += '&streetpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetPostCode').val());
+										sData += '&streetcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetCountry').val());
 										
-										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingAddress1').val());
-										sData += '&mailingaddress2=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingAddress2').val());
-										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingSuburb').val());
-										sData += '&mailingstate=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingState').val());
-										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingPostCode').val());
-										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#inputns1blankspaceMainAddressMailingCountry').val());
+										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingAddress1').val());
+										sData += '&mailingaddress2=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingAddress2').val());
+										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingSuburb').val());
+										sData += '&mailingstate=' + ns1blankspace.util.fs($('#ins1blankspaceAddressMailingState').val());
+										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingPostCode').val());
+										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingCountry').val());
 									}
 									
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspaceEndpointURL('PRODUCT_ORDER_MANAGE'),
+										url: ns1blankspace.util.endpointURL('PRODUCT_ORDER_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: ns1blankspaceOrderSaveProcess
+										success: ns1blankspace.order.save.process
 									});
 								},
 
-					process:	function ns1blankspaceOrderSaveProcess(oResponse)
+					process:	function (oResponse)
 								{
-									
 									if (oResponse.status == 'OK')
 									{
-										ns1blankspaceStatus('Saved');
+										ns1blankspace.status.message('Saved');
 										if (ns1blankspace.objectContext == -1) {var bNew = true}
 										ns1blankspace.objectContext = oResponse.id;	
 									}
 									else
 									{
-										ns1blankspaceError(oResponse.error.errornotes);
+										ns1blankspace.status.error(oResponse.error.errornotes);
 									}
 								}
 				},
 
 	deliveries: {
-					show:		function ns1blankspaceOrderDelivery(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
 									var sXHTMLElementID = 'divns1blankspaceMainDelivery';
 									

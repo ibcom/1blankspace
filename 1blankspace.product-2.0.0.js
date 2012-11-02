@@ -268,9 +268,9 @@ ns1blankspace.product =
 						aHTML.push('<tr><td id="ns1blankspaceControlStock" class="ns1blankspaceControl">' +
 										'Stock</td></tr>');
 
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 
-						aHTML.push('<table class="ns1blankspaceControlContainer">';
+						aHTML.push('<table class="ns1blankspaceControlContainer">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
@@ -352,7 +352,7 @@ ns1blankspace.product =
 	show:		function (oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspace.setup.messaging.layout();
+					ns1blankspace.product.layout();
 					
 					var aHTML = [];
 					
@@ -367,6 +367,13 @@ ns1blankspace.product =
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
+						
+						aHTML.push(ns1blankspace.objectContextData.title);
+
+						if (ns1blankspace.objectContextData.reference != '')
+						{
+							aHTML.push('<span id="ns1blankspaceControlContext_reference" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.reference + '</span>'
+						}
 						
 						if (ns1blankspace.objectContextData.categorytext != '')
 						{
