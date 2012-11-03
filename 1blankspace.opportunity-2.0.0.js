@@ -9,63 +9,59 @@ ns1blankspace.opportunity =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
+					ns1blankspace.object = 32;	
+					ns1blankspace.objectName = 'Opportunity';
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = 'Opportunity';
+					ns1blankspace.data.contactBusiness = -1;
+					ns1blankspace.data.contactPerson = -1;
+					ns1blankspace.opportunity.data.objectStatus = -1;
+					
+					var bShowHome = true;
+					var bNew = false;
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
-
-					ns1blankspace.object = ns1blankspace.data.object.opportunity;
-					ns1blankspace.objectParentName = undefined;
-					ns1blankspace.objectName = 'opportunity';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'Opportunities';
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.opportunity.init({showHome: true});',
-							move: false
-							});	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+						if (oParam.showNew != undefined) {bNew = oParam.showNew}
+						if (bNew) {ns1blankspace.opportunity.new()};
 					}	
 							
 					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 				},
 
-	home: 		function interfaceOpportunityHomeShow(oResponse)
+	home: 		function (oResponse)
 				{
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-										'<td id="tdInterfaceOpportunityHomeMostLikely" class="interfaceViewportMain">' +
+						aHTML.push('<table class="ns1blankspaceMain">';
+						aHTML.push('<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
 										ns1blankspace.xhtml.loading + 
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(');
 						
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
-										'<td id="ns1blankspaceViewportOpportunityLarge" class="ns1blankspaceViewportImageLarge">' +
+						aHTML.push('<table>';
+
+						aHTML.push('<tr>' +
+										'<td id="ns1blankspaceViewContactLarge" class="ns1blankspaceViewImageLarge">' +
 										'&nbsp;' + 
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';		
+						aHTML.push('</table>';		
 						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));	
+						$('#ns1blankspaceControl').html(aHTML.join(');	
 						
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.endPoint = 'opportunity';
@@ -81,57 +77,53 @@ ns1blankspace.opportunity =
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceOpportunityHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceOpportunityHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceOpportunityHomeMostLikelyNothing">Click New to create a opportunity.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table id="ns1blankspaceMostLikely">';
+							aHTML.push('<tr>';
+							aHTML.push('<td class="ns1blankspaceNothing">Click New to create a opportunity.</td>';
+							aHTML.push('</tr>';
+							aHTML.push('</table>';
 						}
 						else
 						{
-						
-							aHTML[++h] = '<table id="tableInterfaceOpportunityHomeMostLikely">';
-							aHTML[++h] = '<tr>';
-							aHTML[++h] = '<td class="interfaceMain">MOST LIKELY</td>';
-							aHTML[++h] = '</tr>';
-							
+							aHTML.push('<table id="ns1blankspaceMostLikely">';
+							aHTML.push('<tr>';
+							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>';
+							aHTML.push('</tr>';
+
 							$.each(oResponse.data.rows, function()
-							{			
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+							{
+								aHTML.push('<tr class="ns1blankspaceRow">';
 								
-								aHTML[++h] = '<td id="interfaceProjectHomeMostLikely_Title-' + this.id + 
-														'" class="interfaceHomeMostLikely">';
-														
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+														'" class="ns1blankspaceMostLikely">';
 								if (this.description != '')
 								{
-									aHTML[++h] = this.description;
+									aHTML.push(this.description);
 								}
 								else
 								{	
-									aHTML[++h] = this.reference;
+									aHTML.push(this.reference);
 								}
 								
-								aHTML[++h] = '</td></tr>';
+								aHTML.push('</td></tr>');
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</table>');
 						}
 						
-						$('#tdInterfaceOpportunityHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(');
 					
-						$('td.interfaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							interfaceOpportunitySearch(event.target.id, {source: 1});
+							ns1blankspace.opportunity.search.send(event.target.id, {source: 1});
 						});
-					}
 				},
 
 	search: 	{
-					send: 		function interfaceOpportunitySearch(sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementId, oParam)
 								{
 										
 									var aSearch = sXHTMLElementId.split('-');
@@ -140,7 +132,6 @@ ns1blankspace.opportunity =
 									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
-									var sClientFilter = '';
 									var iMaximumColumns = 1;
 									var iRows = 10;
 									
@@ -153,7 +144,7 @@ ns1blankspace.opportunity =
 										if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
 										if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 									}
-										
+									
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
 									
@@ -165,8 +156,8 @@ ns1blankspace.opportunity =
 										oSearch.method = 'OPPORTUNITY_SEARCH';
 										
 										oSearch.addField('reference,businessname,firstname,surname,' +
-																	'requestbybusiness,requestbybusinesstext,' +
-																	'requestbyperson,requestbypersontext,type,typetext,' +
+																	'requestbycontactbusiness,requestbycontactbusinesstext,' +
+																	'requestbycontactperson,requestbycontactpersontext,type,typetext,' +
 																	'lodgeddate,source,sourcetext,sourcetext,manageruser,managerusertext,' +
 																	'status,statustext,processingstatus,processingstatustext,' +
 																	'processingdate,description,' +
@@ -176,13 +167,13 @@ ns1blankspace.opportunity =
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.rf = 'json';
 									
-										oSearch.getResults(function(data){interfaceOpportunityShow(oParam, data)}) 
+										oSearch.getResults(function(data){ns1blankspace.opportunity.show(oParam, data)}) 
 									}
 									else
 									{
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -190,19 +181,19 @@ ns1blankspace.opportunity =
 											iMinimumLength = 1;
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											if (sSearchText == '#') {sSearchText = '[0-9]'}
+											sElementId = 'ns1blankspaceViewBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											
-											ns1blankspaceOptionsSetPosition(sElementId);
-											ns1blankspaceSearchStart(sElementId);
+											ns1blankspace.dialog.position({xhtmlElementID: sElementId});
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'OPPORTUNITY_SEARCH';
 											
-											oSearch.addField('businessname,firstname,surname,requestbytextbusiness,status,statustext');
+											oSearch.addField('businessname,firstname,surname,requestbycontactbusinesstext,status,statustext');
 											
 											if (iSource == ns1blankspace.data.searchSource.text)
 											{	
@@ -215,460 +206,422 @@ ns1blankspace.opportunity =
 											
 											oSearch.rf = 'json';
 											
-											oSearch.getResults(function(data){interfaceOpportunitySearchShow(oParam, data)}) 
+											oSearch.getResults(function(data){ns1blankspace.search.process(oParam, data)}) 
 
 										}
 									};	
 								},
 
-					process:	function interfaceOpportunitySearchShow(oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
 									var iColumn = 0;
 									var aHTML = [];
-									var h = -1;
-										
+									var	iMaximumColumns = 1;
+									
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspaceSearchStop();	
-										$('#divns1blankspaceViewportControlOptions').hide();
+										ns1blankspace.search.stop();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
-									{
-										var iStartRow = parseInt($(oRoot).attr('startrow'));
-										var iRows = parseInt($(oRoot).attr('rows'));
-										var bMore = ($(oRoot).attr('morerows') == "true");
-										var iMore = $(oRoot).attr('moreid')
-
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+									{	
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
 										$.each(oResponse.data.rows, function()
-										{	
-											aHTML[++h] = '<tr class="interfaceSearch">';
+										{
+											iColumn = iColumn + 1;
 											
-											aHTML[++h] = '<td class="interfaceSearch';
+											if (iColumn == 1)
+											{
+												aHTML.push('<tr class="ns1blankspaceSearch">');
+											}
 											
-											aHTML[++h] = ' interfaceOpportunity' + this.statustext;
+											aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceOpportunity' + this.statustext + '" id="opportunity' +
+															'-' + this.id + '">' +
+															this.businessname + 
+															'</td>');
 											
-											aHTML[++h] = '" id=-' + this.id + '">' +
-															this.businessname + '</td>';
+											aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceOpportunity' + this.statustext + '" id="opportunity' +
+															'-' + this.id + '">' +
+															this.firstname + ' ' + this.surname + '</td>');
 															
-											aHTML[++h] = '<td class="interfaceSearch';
-											
-											aHTML[++h] = ' interfaceOpportunity' + this.statustext;
-											
-											aHTML[++h] = '" id=-' + this.id + '">' +
-															this.firstname + ' ' + this.surname + '</td>';
-											
-											aHTML[++h] = '</tr>'
+											if (iColumn == iMaximumColumns)
+											{
+												aHTML.push('</tr>');
+												iColumn = 0;
+											}	
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
-
-										$('#divns1blankspaceViewportControlOptions').html(
-										ns1blankspacePagination(
-										   {
-											html: aHTML.join(''),
-											more: (oResponse.morerows == "true"),
-											type: 'json'
-										   }) 
-										);		
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
-										ns1blankspaceSearchStop();
+										aHTML.push('</table>');
 										
-										$('td.interfaceSearch').click(function(event)
+										$(ns1blankspace.xhtml.container).html(
+											ns1blankspace.pagination.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true")
+											}); 
+										);		
+										
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										
+										ns1blankspace.search.stop();
+										
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceOpportunitySearch(event.target.id, {source: 1});
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.opportunity.search.send(event.target.id, {source: 1});
 										});
 										
-										ns1blankspacePaginationBind(
+										ns1blankspace.pagination.bind(
 										{
 											columns: 'businessname-firstname-surname',
 											more: oResponse.moreid,
-											rows: 20,
-											startRow: 20,
+											rows: 15,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: interfaceOpportunitySearch,
+											functionSearch: oResponse.opportunity.search.send
 										});   
+										
 									}	
-								}
 					},
 
-	layout: 	function interfaceOpportunityViewport()
+	layout: 	function ()
 				{
 					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
-					if (ns1blankspace.objectContext != -1)
-					{	
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-										'</tr>';	
-					
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-									'</tr>';
+					if (ns1blankspace.objectContext == -1)
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">Details</td></tr>');
 					}
 					else
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
-									'</tr>';
-					}					
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">Summary</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">Details</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceContact" class="ns1blankspaceControl">Contact</td></tr>');
 					
-					aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlContact" class="interfaceViewportControl">Contact</td>' +
-									'</tr>';
-										
-					aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 					
-					if (ns1blankspace.objectContext != -1)
-					{	
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-						
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlActions" class="interfaceViewportControl">Actions</td>' +
-									'</tr>';
-										
-						aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceControl">');
+					
+						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">Actions</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">Attachments</td></tr>');
 					}
+							
+					aHTML.push('</table>');					
 						
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
+					$('#ns1blankspaceControl').html(aHTML.join(');
 					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainContact" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainActions" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
-						
-					$('#divInterfaceMain').html(aHTML.join(''));
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="divInterfaceViewportMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="divInterfaceViewportMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainContact" class="divInterfaceViewportMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="divInterfaceViewportMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="divInterfaceViewportMain"></div>');
 					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceOpportunitySummary();
-					});	
+					$('#ns1blankspaceMain').html(aHTML.join(');
 					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceOpportunityDetails();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.opportunity.summary();
 					});
 					
-					$('#tdInterfaceViewportControlContact').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainContact");
-						interfaceOpportunityContact();
-					});
-
-					$('#tdInterfaceViewportControlActions').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainActions");
-						ns1blankspaceActions({xhtmlElementID: 'divInterfaceMainActions'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.opportunity.details();
 					});
 					
-					$('#tdInterfaceViewportControlAttachments').click(function(event)
+					
+					$('#ns1blankspaceControlContact').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAttachments");
-						ns1blankspaceAttachments({xhtmlElementID: 'divInterfaceMainAttachments'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAddress'});
+						ns1blankspace.opportunity.contact();
 					});
 					
+					$('#ns1blankspaceControlActions').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceActions', refresh: true});
+						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceActions'};
+					});
+					
+					$('#ns1blankspaceControlAttachments').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
+					});
 				},
 
-	show: 		function interfaceOpportunityShow(oParam, oResponse)
+	show: 		function (oParam, oResponse)
 				{
 
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceOpportunityViewport();
-					ns1blankspaceStatus('');
-
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.opportunity.layout();
+					
 					var aHTML = [];
-					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this opportunity.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find opportunity.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(');
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
+						ns1blankspace.data.contactBusiness = ns1blankspace.objectContextData.requestbycontactbusiness;
+						ns1blankspace.data.contactPerson = ns1blankspace.objectContextData.requestbycontactperson;
 						
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceOpportunityMasterViewport({showHome: false});interfaceOpportunitySearch("-' + ns1blankspace.objectContext + '")',
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference;
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+						
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.opportunity.init({showHome: false});ns1blankspace.opportunity.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
-					
 						
-						var sContext = ns1blankspace.objectContextData.reference;
-						
-						if (ns1blankspace.objectContextData.businessname != '')
-						{
-							sContext += '<br /><span id="spanInterfaceViewportControlSubContext">' + ns1blankspace.objectContextData.businessname + '</span>';
-						}
-						
-						if (ns1blankspace.objectContextData.firstname != '')
-						{
-							sContext += '<br /><span id="spanInterfaceViewportControlSubContext">' + ns1blankspace.objectContextData.firstname + '</span>';
-						}
-						
-						if (ns1blankspace.objectContextData.surname != '')
-						{
-							sContext += '<br /><span id="spanInterfaceViewportControlSubContext">' + ns1blankspace.objectContextData.surname + '</span>';
-						}
-						
-						$('#divInterfaceViewportControlContext').html(sContext);
-						
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-						$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
-						
-						interfaceOpportunitySummary();
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.opportunity.summary()'})
 					}	
 				},		
 		
-	summary: 	function interfaceOpportunitySummary()
+	summary: 	function ()
 				{
 					var aHTML = [];
 					var h = -1;
 
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find this opportunity.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this opportunity.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(');
 					}
 					else
 					{
-						aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
-										'</td>' +
-										'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';				
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1Large" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2Action" style="width:100px;"></td>' +
+									'</tr>' +
+									'</table>');				
 						
-						$('#divInterfaceMainSummary').html(aHTML.join(''));
-						
+						$('#ns1blankspaceMainSummary').html(aHTML.join(');	
+					
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML.push('<tableclass="ns1blankspaceColumn1">');
 						
 						if (ns1blankspace.objectContextData.businessname != '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryBusiness" class="interfaceMainSummary">Business</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryBusinessValue" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryBusinessValue" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.businessname +
-										'</td></tr>';
+										'</td></tr>');
 						}				
 										
 						if (ns1blankspace.objectContextData.firstname != '' || ns1blankspace.objectContextData.surname != '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryContact" class="interfaceMainSummary">Contact</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryContactValue" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Contact</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryContact" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.firstname + ' ' + ns1blankspace.objectContextData.surname +
-										'</td></tr>';
+										'</td></tr>');
 						}				
 							
 						if (ns1blankspace.objectContextData.processingstatustext != '')
 						{	
-							aHTML[++h] = '<tr><td id="trInterfaceMainSummaryProcessingStatus" class="interfaceMainSummary">Processing Status</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryProcessingStatusValue" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Processing Status</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryProcessingStatusValue" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.processingstatustext +
-										'</td></tr>';											
+										'</td></tr>');											
 						}
 						
 						if (ns1blankspace.objectContextData.statustext != '')
 						{	
-							aHTML[++h] = '<tr><td id="trInterfaceMainSummaryStatus" class="interfaceMainSummary">Status</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryStatusValue" class="interfaceMainSummaryValue">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Status</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryStatusValue" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.statustext +
-										'</td></tr>';											
+										'</td></tr>');											
 						}
 						
 						var sDate = new Date(ns1blankspace.objectContextData.createddate);	
 						sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
 								
-						aHTML[++h] = '<tr><td id="trInterfaceMainSummaryDateLodged" class="interfaceMainSummary">Date Lodged</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryProcessingDateLogdgedValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date Lodged</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryProcessingDateLogdgedValue" class="ns1blankspaceSummary">' +
 										sDate +
-										'</td></tr>';		
+										'</td></tr>');		
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryDescriptionValue" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.description +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn1Large').html(aHTML.join(');
 							
 						var aHTML = [];
-						var h = -1;	
 							
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action" cellspacing=0>';
+						aHTML.push('<table class="ns1blankspaceColumn2Action" cellspacing=0>');
 						
-						if (ns1blankspace.objectContextData.requestbyperson == '')
+						if (ns1blankspace.objectContextData.requestbycontactperson == '')
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryCreateContact" class="interfaceMainColumn2Action">' +
-											'<a href="#" id="aInterfaceMainSummaryCreateContact">Create&nbsp;Person&nbsp;Contact</a></td></tr>';
+							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+											'<a href="#" id="ns1blankspaceSummaryCreateContact">Create&nbsp;Person&nbsp;Contact</a></td></tr>');
 						}
 						else
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryViewContact" class="interfaceMainColumn2Action">' +
-											'<a href="#" id="aInterfaceMainSummaryViewContact">View&nbsp;Person&nbsp;Contact</a></td></tr>';
+							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+											'<a href="#" id="ns1blankspaceSummaryViewContact">View&nbsp;Person&nbsp;Contact</a></td></tr>');
 						}	
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));	
+						$('#ns1blankspaceSummaryColumn2Action').html(aHTML.join(');	
 						
-						$('#aInterfaceMainSummaryViewContact').click(function(event)
+						$('#ns1blankspaceSummaryViewContact').click(function(event)
 						{
-							var iContactPerson = ns1blankspace.objectContextData.requestbyperson;	
-							interfaceContactPersonMasterViewport({showHome: false});
-							interfaceContactPersonSearch('-' + iContactPerson)
+							var iContactPerson = ns1blankspace.objectContextData.requestbycontactperson;	
+							1blankspace.contactPerson.init({showHome: false});
+							1blankspace.contactPerson.search.send(iContactPerson)
 						});
 						
-						$('#aInterfaceMainSummaryCreateContact').click(function(event)
+						$('#ns1blankspaceSummaryCreateContact').click(function(event)
 						{
-							interfaceOpportunityCreateContact();
+							ns1blankspace.opportunity.prospect.save.send();		
+							//interfaceOpportunityCreateContact();
 						});
 						
 						$('#aInterfaceMainSummarySendEmail').click(function(event)
 						{
-							interfaceMessagingSendEmail();
+							ns1blankspace.messaging.sendEmail();		//ToDo: Does this funciton exist?
 						});
 					}	
 				},
 
-	details: 	function interfaceOpportunityDetails()
+	details: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
 					
-					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';							
+						aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>');
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMainDetails').html(aHTML.join(''));
+						$('#ns1blankspaceMainDetails').html(aHTML.join(');
 						
 						var aHTML = [];
-						var h = -1;
-					
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsDateReceived" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsDateReceived" class="interfaceMain">' +
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Reference' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsReference" class="ns1blankspaceText">' +
+										'</td></tr>');			
+
+						aHTML.push('<trclass="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Date Received' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsDateReceivedValue" class="interfaceMainDate">' +
-										'<td id="tdInterfaceMainDetailsDateReceivedValue" class="interfaceMainDate">' +
-										'<input id="inputInterfaceMainDetailsDateReceived" class="inputInterfaceMainDate">' +
-										'</td></tr>';						
+										'<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaptionDate">' +
+										'<input id="ns1blankspaceDetailsDateReceived" class="ns1blankspaceDate">' +
+										'</td></tr>');						
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsSourceOfContact" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsSourceOfContact" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Source of Contact' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsSourceOfContactValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainDetailsSourceOfContactValue" class="interfaceMainSelect">' +
-										'<input id="inputInterfaceMainDetailsSourceOfContact" class="inputInterfaceMainSelect"' +
-											' onDemandMethod="SETUP_OPPORTUNITY_SOURCE_OF_CONTACT_SEARCH">' +
-										'</td></tr>';	
+										'<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaptionSelect">' +
+										'<input id="ns1blankspaceDetailsSourceOfContact" class="ns1blankspaceSelect"' +
+											' data-method="SETUP_OPPORTUNITY_SOURCE_OF_CONTACT_SEARCH">' +
+										'</td></tr>');	
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsSourceOfContactOther" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsSourceOfContactOther" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Source of Contact - Other Details' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsSourceOfContactOtherValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsSourceOfContactOtherValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsSourceOfContactOther" class="inputInterfaceMainText">' +
-										'</td></tr>';				
+										'<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaptionText">' +
+										'<input id="ns1blankspaceDetailsSourceOfContactOther" class="ns1blankspaceText">' +
+										'</td></tr>');				
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsManagedBy" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsManagedBy" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Managed By' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsManagedByValue" class="interfaceMainSelect">' +
-										'<td id="tdInterfaceMainDetailsManagedByValue" class="interfaceMainSelect">' +
-										'<input id="inputInterfaceMainDetailsManagedBy" class="inputInterfaceMainSelect"' +
-											' onDemandMethod="/ondemand/core/?method=CORE_USER_SEARCH&rf=xml"'+ 
-																		' onDemandColumns="firstname-space-surname">' +
-										'</td></tr>';			
+										'<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaptionSelect">' +
+										'<input id="ns1blankspaceDetailsManagedBy" class="ns1blankspaceSelect"' +
+											' data-method="/ondemand/core/?method=CORE_USER_SEARCH&rf=xml"'+ 
+											' data-columns="firstname-space-surname">' +
+										'</td></tr>');			
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsStatus" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsStatus" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Status' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsStatusValue" class="interfaceMainRadio">' +
-										'<td id="tdInterfaceMainDetailsStatusValue" class="interfaceMainRadio">' +
+										'<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaptionRadio">' +
 										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Open' +
 										'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Closed' +
 										'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>Cancelled' +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML[++h] = '</table>';
+						aHTML.push('</table>');
 
-						$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join('');
 						
 						var aHTML = [];
-						var h = -1;
 							
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspace">');
 					
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsDescription" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsDescription" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Description' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-										'<textarea rows="9" cols="35" id="inputInterfaceMainDetailsDescription" class="inputInterfaceMainTextMulti"></textarea>' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceTextMulti">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="9" cols="35" id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti"></textarea>' +
+										'</td></tr>');
 
-						aHTML[++h] = '</table>';		
+						aHTML.push('</table>');		
 						
-						$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(');
 						
-						$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy' });
+						//$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy' });
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsDateReceived').val(ns1blankspace.objectContextData.lodgeddate);
-							$('#inputInterfaceMainDetailsSourceOfContact').attr(ns1blankspace.objectContextData.source);
-							$('#inputInterfaceMainDetailsSourceOfContact').val(ns1blankspace.objectContextData.sourcetext);
-							$('#inputInterfaceMainDetailsSourceOfContactOther').val(ns1blankspace.objectContextData.sourcetext);
-							$('#inputInterfaceMainDetailsManagedBy').attr('onDemandID', ns1blankspace.objectContextData.manageruser);
-							$('#inputInterfaceMainDetailsManagedBy').val(ns1blankspace.objectContextData.managerusertext);
-							$('#inputInterfaceMainDetailsDescription').val(ns1blankspace.objectContextData.description);
+							$('#ns1blankspaceDetailsDateReceived').val(ns1blankspace.objectContextData.startdate);
+							$('#ns1blankspaceDetailsSourceOfContact').attr(ns1blankspace.objectContextData.source);
+							$('#ns1blankspaceDetailsSourceOfContact').val(ns1blankspace.objectContextData.sourcetext);
+							$('#ns1blankspaceDetailsSourceOfContactOther').val(ns1blankspace.objectContextData.sourcetext);
+							$('#ns1blankspaceDetailsManagedBy').attr('data-id', ns1blankspace.objectContextData.manageruser);
+							$('#ns1blankspaceDetailsManagedBy').val(ns1blankspace.objectContextData.managerusertext);
+							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
 							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 						}
 						else
@@ -676,639 +629,481 @@ ns1blankspace.opportunity =
 							var dDate = new Date();
 							var ns1blankspace.report.today;
 							ns1blankspace.report.today = dDate.format('d mmm yyyy');
-							$('#inputInterfaceMainDetailsDateReceived').val(ns1blankspace.report.today);
-							$('#inputInterfaceMainDetailsManagedBy').attr('onDemandID', gsUserID);
-							$('#inputInterfaceMainDetailsManagedBy').val(ns1blankspace.user.commonname);
+							$('#ns1blankspaceDetailsDateReceived').val(ns1blankspace.report.today);
+							$('#ns1blankspaceDetailsManagedBy').attr('data-id', gsUserID);
+							$('#ns1blankspaceDetailsManagedBy').val(ns1blankspace.user.commonname);
 							$('[name="radioStatus"][value="1"]').attr('checked', true);
 						}
 					}	
 				},
 
-	contact: 	function interfaceOpportunityContact()
+	contact: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
 					
-					if ($('#divInterfaceMainContact').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceContact').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainContact').attr('onDemandLoading', '');
+						$('#ns1blankspaceContact').attr('data-loading', '');
 						
-						aHTML[++h] = '<table id="tableInterfaceMainContact" class="interfaceMain">' +
-										'<tr id="trInterfaceMainContactRow1" class="interfaceMainRow1">' +
-										'<td id="tdInterfaceMainContactColumn1" class="interfaceMainColumn1Large">' +
-										'</td>' +
-										'<td id="tdInterfaceMainContactColumn2" class="interfaceMainColumn2Action">' +
-										'</td>' +
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceContactColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceContactColumn2" class="ns1blankspaceColumn2"></td>' +
 										'</tr>' +
-										'</table>';					
+										'</table>');					
 								
-						$('#divInterfaceMainContact').html(aHTML.join(''));
+						$('#ns1blankspaceContact').html(aHTML.join(');
 						
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainContactActionColumn1" class="interfaceMain">';
-						aHTML[++h] = '<tbody>';
+						aHTML.push('<table class="ns1blankspace">');
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							if (ns1blankspace.objectContextData.requestbybusiness != '')
+							if (ns1blankspace.objectContextData.requestbycontactbusiness != '')
 							{	
-								GetCurrentContactStatus('', 'business', ns1blankspace.objectContextData.requestbybusiness);
+								ns1blankspace.contactbusiness.status.get('', 'business', ns1blankspace.objectContextData.requestbycontactbusiness);
 
-								aHTML[++h] = '<tr><td id="tdInterfaceMainContactProspectBusiness" class="interfaceMainSummaryAction">';
-								aHTML[++h] = '<a href="#" id="aInterfaceMainContactProspectBusiness">Update&nbsp;Contact';
-								aHTML[++h] = '</a></td></tr>';
+								aHTML.push('<tr><td class="ns1blankspace">');
+								aHTML.push('<span id="ns1blankspaceContactProspectBusiness">Update Contact');
+								aHTML.push('</span></td></tr>');
 							}	
 							else
 							{
-								aHTML[++h] = '<tr><td id="tdInterfaceMainContactProspectBusiness" class="interfaceMainSummaryAction">';
-								aHTML[++h] = '<a href="#" id="aInterfaceMainContactProspectBusiness">Create Contact</a></td></tr>';
+								aHTML.push('<tr><td lass="ns1blankspace">');
+								aHTML.push('<span id="ns1blankspaceContactProspectBusiness">Create Contact</span></td></tr>');
 							}
 						}	
-						aHTML[++h] = '</tbody></table>';
+						aHTML.push('</table>');
 						
-						$('#tdInterfaceMainContactColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceContactColumn2').html(aHTML.join(');
 						
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainContactDetailColumn1" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspace">');
 										
-						aHTML[++h] = '<tr id="trInterfaceMainContactBusinessName" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactBusinessName" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Business Name' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactBusinessNameValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactBusinessNameValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainContactBusinessName" class="inputInterfaceMainText">' +
-										'</td></tr>';				
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactBusinessName" class="ns1blankspaceText">' +
+										'</td></tr>');				
 
-						aHTML[++h] = '<tr id="trInterfaceMainContactFirstName" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactFirstName" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'First Name' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactFirstNameValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactFirstNameValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainContactFirstName" class="inputInterfaceMainText">' +
-										'</td></tr>';			
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactFirstName" class="ns1blankspaceText">' +
+										'</td></tr>');			
 
-						aHTML[++h] = '<tr id="trInterfaceMainContactSurname" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactSurname" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Surname' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactSurnameValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactSurnameValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainContactSurname" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactSurname" class="ns1blankspaceText">' +
+										'</td></tr>');
 					
-						aHTML[++h] = '<tr id="trInterfaceMainContactPhone" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactPhone" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Phone' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactPhoneValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactPhoneValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainContactPhone" class="inputInterfaceMainText">' +
-										'</td></tr>';						
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactPhone" class="ns1blankspaceText">' +
+										'</td></tr>');						
 					
-						aHTML[++h] = '<tr id="trInterfaceMainContactMobile" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactMobile" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Mobile' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactMobileValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactMobileValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainContactMobile" class="inputInterfaceMainText">' +
-										'</td></tr>';			
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactMobile" class="ns1blankspaceText">' +
+										'</td></tr>');			
 						
-						aHTML[++h] = '<tr id="trInterfaceMainContactEmail" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactEmail" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Email' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactEmailValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactEmailValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainContactEmail" class="inputInterfaceMainText">' +
-										'</td></tr>';			
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactEmail" class="ns1blankspaceText">' +
+										'</td></tr>');			
 						
-						aHTML[++h] = '<tr id="trInterfaceMainContactMailingAddress1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactMailingAddress1" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Mailing Address' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactMailingAddress1Value" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactMailingAddress1Value" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainContactMailingAddress1" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactMailingAddress1" class="ns1blankspaceText">' +
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr id="trInterfaceMainContactMailingSuburb" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactMailingSuburb" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Suburb' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactMailingSuburbValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactMailingSuburbValue" class="interfaceMainText">' +
-										'<input onDemandType="TEXT" id="inputInterfaceMainContactMailingSuburb" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactMailingSuburb" class="ns1blankspaceText">' +
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr id="trInterfaceMainContactMailingState" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactMailingState" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'State' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactMailingStateValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactMailingStateValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainContactMailingState" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactMailingState" class="ns1blankspaceText">' +
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr id="trInterfaceMainContactMailingPostCode" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactMailingPostCode" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Post Code' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactMailingPostCodeValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactMailingPostCodeValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainContactMailingPostCode" class="inputInterfaceMainText">' +
-										'</td></tr>';				
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactMailingPostCode" class="ns1blankspaceText">' +
+										'</td></tr>');				
 										
-						aHTML[++h] = '<tr id="trInterfaceMainContactMailingCountry" class="interfaceMain">' +
-										'<td id="tdInterfaceMainContactMailingCountry" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Country' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainContactMailingCountryValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainContactMailingCountryValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainContactMailingCountry" class="inputInterfaceMainText">' +
-										'</td></tr>';						
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceContactMailingCountry" class="ns1blankspaceText">' +
+										'</td></tr>');						
 										
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainContactColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceContactColumn1').html(aHTML.join('');
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainContactBusinessName').val(ns1blankspace.objectContextData.businessname);
-							$('#inputInterfaceMainContactFirstName').val(ns1blankspace.objectContextData.firstname);
-							$('#inputInterfaceMainContactSurname').val(ns1blankspace.objectContextData.surname);
-							$('#inputInterfaceMainContactPhone').val(ns1blankspace.objectContextData.phone);
-							$('#inputInterfaceMainContactMobile').val(ns1blankspace.objectContextData.mobile);
-							$('#inputInterfaceMainContactEmail').val(ns1blankspace.objectContextData.email);
-							$('#inputInterfaceMainContactMailingAddress1').val(ns1blankspace.objectContextData.mailingaddress1);
-							$('#inputInterfaceMainContactMailingSuburb').val(ns1blankspace.objectContextData.mailingsuburb);
-							$('#inputInterfaceMainContactMailingState').val(ns1blankspace.objectContextData.mailingstate);
-							$('#inputInterfaceMainContactMailingPostCode').val(ns1blankspace.objectContextData.mailingpostcode);
-							$('#inputInterfaceMainContactMailingCountry').val(ns1blankspace.objectContextData.mailingcountry);
-							if ((ns1blankspace.objectContextData.requestbybusiness != '') || (ns1blankspace.objectContextData.requestbybusiness != ''))
+							$('#ns1blankspaceContactBusinessName').val(ns1blankspace.objectContextData.businessname);
+							$('#ns1blankspaceContactFirstName').val(ns1blankspace.objectContextData.firstname);
+							$('#ns1blankspaceContactSurname').val(ns1blankspace.objectContextData.surname);
+							$('#ns1blankspaceContactPhone').val(ns1blankspace.objectContextData.phone);
+							$('#ns1blankspaceContactMobile').val(ns1blankspace.objectContextData.mobile);
+							$('#ns1blankspaceContactEmail').val(ns1blankspace.objectContextData.email);
+							$('#ns1blankspaceContactMailingAddress1').val(ns1blankspace.objectContextData.mailingaddress1);
+							$('#ns1blankspaceContactMailingSuburb').val(ns1blankspace.objectContextData.mailingsuburb);
+							$('#ns1blankspaceContactMailingState').val(ns1blankspace.objectContextData.mailingstate);
+							$('#ns1blankspaceContactMailingPostCode').val(ns1blankspace.objectContextData.mailingpostcode);
+							$('#ns1blankspaceContactMailingCountry').val(ns1blankspace.objectContextData.mailingcountry);
+							if ((ns1blankspace.objectContextData.requestbycontactbusiness != '') || (ns1blankspace.objectContextData.requestbycontactbusiness != ''))
 							{
-								$('#aInterfaceMainContactProspectBusiness').click(function(event)
+								$('#ns1blankspaceContactProspectBusiness').click(function(event)
 								{
-									interfaceOpportunityManageProspect();
+									ns1blankspace.opportunity.prospect.save();		
+									//interfaceOpportunityManageProspect();
 								});
 							}
 						}
 					}	
 				},
 
-	new: 		function interfaceOpportunityNew()
+	new: 		function ()
 				{
-					ns1blankspace.objectContextData = unefined;
+					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					interfaceOpportunityViewport(true);
-					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					interfaceOpportunityDetails();	
+					ns1blankspace.opportunity.init();
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
+					ns1blankspace.opportunity.details();
 				},
 
 	save: 		{
-					send: 		function interfaceOpportunitySave()
+					send: 		function ()
 								{
-									var sParam = '/ondemand/opportunity/?method=OPPORTUNITY_MANAGE';
-									var sData = (ns1blankspace.objectContext == -1)?'':'&id=' + ns1blankspace.objectContext;
-									var sPreviousValue;
-									var sSavedProcessStatus = '';
-									var iFound = -1;
-									var iProcessingStatusCancelled;
-									var dDate = new Date();
-									var ns1blankspace.report.today;
-									ns1blankspace.report.today = dDate.format('d mmm yyyy');
-
-									iFound = $.inArray(gaOpportunityProcessingStatus, 'Opportunity Cancelled', 1)
-									if (iFound >= 0)  { iProcessingStatusCancelled = gaOpportunityProcessingStatus[iFound][0]}
-
-									if (ns1blankspace.objectContextData != undefined)	
-									{		
-										sSavedProcessStatus = ns1blankspace.objectContextData.processingstatus;
-									}
+									var sData = 'id=';
 									
-									if ($('#divInterfaceMainDetails').html() != '')
+									if (ns1blankspace.objectContext != -1)
 									{
-										sData += '&type=' + giOpportunityTypeOpportunity;
-										sData += '&startdate=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDateReceived').val());
-										
-										if ($('#inputInterfaceMainDetailsSourceOfContact').attr('onDemandID') != undefined)
-										{	sData += '&source=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSourceOfContact').attr('onDemandID'));}
-										
-										sData += '&sourcenote=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSourceOfContactOther').val());
-										
-										if ($('#inputInterfaceMainDetailsManagedBy').attr('onDemandID'))
-										{	sData += '&manageruser=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsManagedBy').attr('onDemandID'));}
-										else
-										{	
-											if (ns1blankspace.objectContextData != undefined)	
-											{	
-												sData += '&manageruser=' + ns1blankspace.objectContextData.manageruser;	
-												$('#inputInterfaceMainDetailsManagedBy').attr('onDemandID', ns1blankspace.objectContextData.manageruser);
-												$('#inputInterfaceMainDetailsManagedBy').val(ns1blankspace.objectContextData.managerusertext)
-											}
-											else
-											{
-												sData += '&manageruser='+ gsUserID;
-											}
+										sData += ns1blankspace.objectContext;
+									} 
+									
+									if ($('#ns1blankspaceMainDetails').html() != '')
+									{
+										//sData += '&type=' + giOpportunityTypeOpportunity;
+										sData += '&startdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDateReceived').val());
+										sData += '&source=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSourceOfContact').attr('data-id);}
+										sData += '&sourcenote=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSourceOfContactOther').val());
+										if ($('#ns1blankspaceDetailsManagedBy').attr('data-id') != undefined) {
+											sData += '&manageruser=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsManagedBy').attr('data-id);	
 										}
-
-										if ($('#inputInterfaceMainDetailsStatus').attr('onDemandID') == giOpportunityStatusCancelled )
-										{	 
-											if	( 
-												  ( $('#inputInterfaceMainDetailsNewProcessingStatus').attr('onDemandID') != undefined &&
-												    $('#inputInterfaceMainDetailsNewProcessingStatus').attr('onDemandID') != iProcessingStatusCancelled 
-												  )
-												||
-												  ( $('#inputInterfaceMainDetailsNewProcessingStatus').attr('onDemandID') == undefined && 
-												    sSavedProcessStatus != iProcessingStatusCancelled
-												  ) 
-											    )
-											{
-												$('#inputInterfaceMainDetailsNewProcessingStatus').attr('onDemandID') = iProcessingStatusCancelled;
-												$('#inputInterfaceMainDetailsNewProcessingStatus').val('Opportunity Cancelled');
-												$('#inputInterfaceMainDetailsNewProcessingDate').val(ns1blankspace.report.today);
-												$('#inputInterfaceMainDetailsNewProcessingNote').val('System update. User changed Opportunity Status to Cancelled.');
-												$('#tdInterfaceMainDetailsCurrentProcessingStatusValue').html('Opportunity Cancelled');
-											}
+										else {
+												sData += '&manageruser='+ ns1blankspace.user.id; 
 										}
-										
-										if ($('#inputInterfaceMainDetailsNewProcessingStatus').attr('onDemandID') == iProcessingStatusCancelled )
-										{	 
-											if	( 
-												  ( $('#inputInterfaceMainDetailsStatus').attr('onDemandID') != undefined &&
-												    $('#inputInterfaceMainDetailsStatus').attr('onDemandID') != giOpportunityStatusCancelled 
-												  )
-											    )
-											{
-												$('#inputInterfaceMainDetailsStatus').attr('onDemandID')  = giOpportunityStatusCancelled;
-												$('#inputInterfaceMainDetailsStatus').val('Cancelled');
-											}
-											
-										}
-
-										if ($('#inputInterfaceMainDetailsStatus').attr('onDemandID') != undefined)
-										{			
-											sData += '&status=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsStatus').attr('onDemandID'));
-										}
-										else
-										{	
-											if (ns1blankspace.objectContextData != undefined)	
-											{	
-												sData += '&status=' + ns1blankspace.objectContextData.status;	
-												$('#inputInterfaceMainDetailsStatus').attr('onDemandID', ns1blankspace.objectContextData.status);
-												$('#inputInterfaceMainDetailsStatus').val(ns1blankspace.objectContextData.statustext);
-											}
-											else
-											{	sData += '&status=' + giOpportunityStatusOpen;	}
-										}
-										
-										sData += '&description=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDescription').val());
-										
-										if ($('#inputInterfaceMainDetailsNewProcessingStatus').attr('onDemandID') != undefined)
-										{	if (ns1blankspace.objectContext != -1)
-											{
-												if (ns1blankspace.objectContextData != undefined)	
-												{
-													sPreviousValue = ns1blankspace.objectContextData.processingstatus;	
-													$('#inputInterfaceMainDetailsNewProcessingStatus').attr('onDemandID', ns1blankspace.objectContextData.processingstatus);
-												}
-												else 
-												{	sPreviousValue = '';	}
-												
-												if (sPreviousValue != $('#inputInterfaceMainDetailsNewProcessingStatus').attr('onDemandID'))
-												{	
-													sData += '&updateprocessingstatus=1' + 
-														'&processingstatus=' + $('#inputInterfaceMainDetailsNewProcessingStatus').attr('onDemandID') +
-														'&processingdate=' + $('#inputInterfaceMainDetailsNewProcessingDate').val() +
-														'&processingnote=' + $('#inputInterfaceMainDetailsNewProcessingNote').val() ;	
-												}
-											}
-											else
-											{	
-												iFound = interfaceOpportuntityProcessingStatus('New Opportunity')
-												if (iFound != -1) {sData += '&processingstatus=' + iFound;}
-											}
-										}
-										else
-										{	
-											iFound = interfaceOpportuntityProcessingStatus('New Opportunity')
-											if (iFound != -1) {sData += '&processingstatus=' + iFound;}
-											
-											iFound = ArrayFind(gaOpportunityProcessingStatus, 'New Opportunity', 1)
-											if (iFound >= 0)  {sData += '&processingstatus=' + gaOpportunityProcessingStatus[iFound][0]; }
-										}
+										sData += '&status=' + $('#ns1blankspaceDetailsStatus').attr('data-id');
+										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 									}
-										
-									if ($('#divInterfaceMainContact').html() != '')
+
+									if ($('#ns1blankspaceContact').html() != '')
 									{
-										if ($('#inputInterfaceMainContactFirstName') != '' && $('#inputInterfaceMainContactSurname') == '')
+										if ($('#ns1blankspaceContactFirstName') != '' && $('#ns1blankspaceContactSurname') == '')
 										{	
-											alert('Surname is mandatory for a Contact.');
+											ns1blankspace.status.error('Surname is mandatory for a Contact.');
 											return '';	}
 											
-										sData += '&businessname=' + ns1blankspace.util.fs($('#inputInterfaceMainContactBusinessName').val());
-										sData += '&firstname=' + ns1blankspace.util.fs($('#inputInterfaceMainContactFirstName').val());
-										sData += '&surname=' + ns1blankspace.util.fs($('#inputInterfaceMainContactSurname').val());
-										sData += '&phone=' + ns1blankspace.util.fs($('#inputInterfaceMainContactPhone').val());
-										sData += '&mobile=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMobile').val());
-										sData += '&email=' + ns1blankspace.util.fs($('#inputInterfaceMainContactEmail').val());
-										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingAddress1').val());
-										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingSuburb').val());
-										sData += '&mailingstate=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingState').val());
-										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingPostCode').val());
-										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingCountry').val());
+										sData += '&businessname=' + ns1blankspace.util.fs($('#ns1blankspaceContactBusinessName').val());
+										sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceContactFirstName').val());
+										sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceContactSurname').val());
+										sData += '&phone=' + ns1blankspace.util.fs($('#ns1blankspaceContactPhone').val());
+										sData += '&mobile=' + ns1blankspace.util.fs($('#ns1blankspaceContactMobile').val());
+										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceContactEmail').val());
+										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingAddress1').val());
+										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingSuburb').val());
+										sData += '&mailingstate=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingState').val());
+										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingPostCode').val());
+										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingCountry').val());
 									}
 									
-									ns1blankspaceSave(sParam, sData, 'Opportunity Saved');
 									
-									if (glObjectSaveId != -1)
-									{	
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('OPPORTUNITY_MANAGE'),
+										data: sData,
+										dataType: 'json',
+										success: this.process
+									});
 										if (ns1blankspace.objectContext == -1)
 										{	
 											ns1blankspace.objectContext = glObjectSaveId;
 											interfaceOpportunitySearch('opporunity-' + ns1blankspace.objectContext);
 										}
 									}
+								},
+
+					process: 	function (oResponse)
+								{
+									if (oResponse.status == 'OK')
+									{
+										ns1blankspaceStatus('Saved');
+										if (ns1blankspace.objectContext == -1) {var bNew = true}
+										ns1blankspace.objectContext = oResponse.id;	
+										
+										if (bNew) {ns1blankspace.opportunity.search.send('-' + ns1blankspace.objectContext)}
+									}
+									else
+									{
+										ns1blankspace.status.error(oResponse.error.errornotes);
+									}
 								}
 				},				
 
 	prospect: 	{
-					save: 		function interfaceOpportunityManageProspect()
-								{
-									var sParam = '';
-									var sData = '';
-									var sReturn = '';
-									var iContactBusiness = '';
-									var iContactPerson = '';
-									var sSuccessMessage = '';
-									
-									var aHTML = [];
-									var h = -1;
-									
-									if (ns1blankspace.objectContextData != undefined)	
-									{
-										aHTML[++h] = '<table><tbody><tr><td valign="top">Opportunity must be saved before prospect can be created.</td></tr>';
-										aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
-												
-										$('#divInterfaceMain').html(aHTML.join(''));
-									}
-									else
-									{
-										iContactPerson = ns1blankspace.objectContextData.requestbyperson;
-										iContactBusiness = ns1blankspace.objectContextData.requestbybusiness;
-									}
-
-									if ($('#inputInterfaceMainContactBusinessName').val() != '' || ns1blankspace.objectContextData.businessname != '' )
-									{
-										sParam = 'method=CONTACT_BUSINESS_MANAGE';
-										sData = '';
-										
-										if ($('#inputInterfaceMainContactBusinessName').val() != undefined)
+					save: 	{	
+								send: 		function ()
 										{
-											sData += '&tradename=' + ns1blankspace.util.fs($('#inputInterfaceMainContactBusinessName').val());
-											sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingAddress1').val());
-											sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingSuburb').val());
-											sData += '&mailingstate=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingState').val());
-											sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingPostCode').val());
-											sData += '&mailingcountry=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingCountry').val());
-											sData += '&phonenumber=' + ns1blankspace.util.fs($('#inputInterfaceMainContactPhone').val());
-											sData += '&faxnumber=' + ns1blankspace.util.fs($('#inputInterfaceMainContactFax').val());
-										}
-										else
-										{
-											sData += '&tradename=' + ns1blankspacens1blankspace.util.fs(onDemandXMLGetData(oRow, 'businessname'));
-											sData += '&mailingaddress1=' + ns1blankspacens1blankspace.util.fs(onDemandXMLGetData(oRow, 'mailingaddress1'));
-											sData += '&mailingsuburb=' + ns1blankspacens1blankspace.util.fs(onDemandXMLGetData(oRow, 'mailingsuburb'));
-											sData += '&mailingstate=' + ns1blankspacens1blankspace.util.fs(onDemandXMLGetData(oRow, 'mailingstate'));
-											sData += '&mailingpostcode=' + ns1blankspacens1blankspace.util.fs(onDemandXMLGetData(oRow, 'mailingpostcode'));
-											sData += '&mailingcountry=' + ns1blankspacens1blankspace.util.fs(onDemandXMLGetData(oRow, 'mailingcountry'));
-											sData += '&phonenumber=' + ns1blankspacens1blankspace.util.fs(onDemandXMLGetData(oRow, 'phone'));
-										}
-										
-										sData += '&customerstatus=' + ns1blankspace.objectStatusProspect;
-										
-										if (iContactBusiness != '')	
-										{
-											sData += '&id=' + iContactBusiness;
-											sSuccessMessage = 'updated';
-										}
-										else {sSuccessMessage = 'added'}
-
-										ns1blankspaceSave('/ondemand/contact/?' + sParam, sData, 'Prospect Business ' + sSuccessMessage + '.');
-										if (glObjectSaveId != -1)
-										{
-											sReturn = glObjectSaveId;
-											ns1blankspaceSave('/ondemand/opportunity/?method=OPPORTUNITY_MANAGE'
-																, '&id=' + ns1blankspace.objectContext + 
-																  '&requestbybusiness=' + sReturn +
-																  '&updatecontactid=1'
-																, '' );
+											var sData = '';
+											var sReturn = '';
 											
-											if (sSuccessMessage == 'added')
+											var aHTML = [];
+											
+											if (ns1blankspace.objectContextData != undefined)	
 											{
-												ns1blankspace.objectContext = glObjectSaveId;
-												sParam = '/ondemand/contact/?method=CONTACT_BUSINESS_GROUP_MANAGE';
-												sData += '&contactbusiness=' + sReturn + '&group=' + giGroupBusinessClient;
-												ns1blankspaceSave(sParam, sData, '');
+												ns1blankspace.status.error('Please save the Opportunity');
+											}
+											else
+											{
+												ns1blankspace.data.contactPerson = ns1blankspace.objectContextData.requestbycontactperson;
+												ns1blankspace.data.contactBusiness = ns1blankspace.objectContextData.requestbycontactbusiness;
 											}
 
-										}
-									}
+											if ($('#ns1blankspaceContactBusinessName').val() != '' || ns1blankspace.objectContextData.businessname != '' )
+											{
+												sParam = 'method=CONTACT_BUSINESS_MANAGE';
+												sData = '';
+												
+												if ($('#ns1blankspaceContactBusinessName').val() != undefined)
+												{
+													sData += '&tradename=' + ns1blankspace.util.fs($('#ns1blankspaceContactBusinessName').val());
+													sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingAddress1').val());
+													sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingSuburb').val());
+													sData += '&mailingstate=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingState').val());
+													sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingPostCode').val());
+													sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingCountry').val());
+													sData += '&phonenumber=' + ns1blankspace.util.fs($('#ns1blankspaceContactPhone').val());
+													sData += '&faxnumber=' + ns1blankspace.util.fs($('#ns1blankspaceContactFax').val());
+												}
+												else
+												{
+													sData += '&tradename=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.businessname);
+													sData += '&mailingaddress1=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingaddress1);
+													sData += '&mailingsuburb=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingsuburb);
+													sData += '&mailingstate=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingstate);
+													sData += '&mailingpostcode=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingpostcode);
+													sData += '&mailingcountry=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingcountry);
+													sData += '&phonenumber=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.phone);
+												}
+												
+												sData += '&customerstatus=' + ns1blankspace.opportunity.data.objectStatus;
+												
+												if (ns1blankspace.data.contactBusiness != '')	
+												{
+													sData += '&id=' + ns1blankspace.data.contactBusiness;
+													sSuccessMessage = 'updated';
+												}
+												else {sSuccessMessage = 'added'}
 
-									if ( $('#inputInterfaceMainContactSurname').val() != '' || onDemandXMLGetData(oRow, 'surname') != '' ) 
-									{
-										sParam = 'method=CONTACT_PERSON_MANAGE';
-										iContactBusiness = (iContactBusiness == '' && sReturn != '')?sReturn:iContactBusiness;
-										sData = (iContactBusiness != '')?'&contactbusiness=' + iContactBusiness + '&primarycontact=1':'';
-										
-										if ($('#inputInterfaceMainContactSurname').val() != undefined)
-										{
-											sData += '&firstname=' + ns1blankspace.util.fs($('#inputInterfaceMainContactFirstName').val());
-											sData += '&surname=' + ns1blankspace.util.fs($('#inputInterfaceMainContactSurname').val());
-											sData += '&jobtitle=' + ns1blankspace.util.fs($('#inputInterfaceMainContactJobTitle').val());
-											sData += '&streetaddress1=' + ns1blankspace.util.fs($('#inputInterfaceMainContactStreetAddress1').val());
-											sData += '&streetsuburb=' + ns1blankspace.util.fs($('#inputInterfaceMainContactStreetSuburb').val());
-											sData += '&streetstate=' + ns1blankspace.util.fs($('#inputInterfaceMainContactStreetState').val());
-											sData += '&streetpostcode=' + ns1blankspace.util.fs($('#inputInterfaceMainContactStreetPostCode').val());
-											sData += '&streetcountry=' + ns1blankspace.util.fs($('#inputInterfaceMainContactStreetCountry').val());
-											sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingAddress1').val());
-											sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingSuburb').val());
-											sData += '&mailingstate=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingState').val());
-											sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingPostCode').val());
-											sData += '&mailingcountry=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMailingCountry').val());
-											sData += '&phone=' + ns1blankspace.util.fs($('#inputInterfaceMainContactPhone').val());
-											sData += '&mobile=' + ns1blankspace.util.fs($('#inputInterfaceMainContactMobile').val());
-											sData += '&email=' + ns1blankspace.util.fs($('#inputInterfaceMainContactEmail').val());
-											sData += '&faxnumber=' + ns1blankspace.util.fs($('#inputInterfaceMainContactFax').val());
-										}
-										else
-										{
-											sData += '&firstname=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.firstname);
-											sData += '&surname=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.surname);
-											sData += '&mailingaddress1=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingaddress1);
-											sData += '&mailingsuburb=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingsuburb);
-											sData += '&mailingstate=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingstate);
-											sData += '&mailingpostcode=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingpostcode);
-											sData += '&mailingcountry=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingcountry);
-											sData += '&phone=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.phone);
-											sData += '&mobile=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mobile);
-											sData += '&email=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.email);
-										}
-										sData += '&customerstatus=' + ns1blankspace.objectStatusProspect;
-										
-										if (iContactPerson != '')	
-										{
-											sData += '&idt=' + iContactPerson;
-											sSuccessMessage = 'updated';
-										}
-										else {sSuccessMessage = 'added'}
-										
-										ns1blankspaceSave('/ondemand/contact/?' + sParam, sData, 'Prospect Contact ' + sSuccessMessage + '!');
-										if (glObjectSaveId != -1)
-										{
-											sReturn = glObjectSaveId;
-											ns1blankspaceSave('/ondemand/opportunity/?method=OPPORTUNITY_MANAGE'
-																, '&select=' + ns1blankspace.objectContext + 
-																  '&requestbyperson=' + sReturn +
-																  '&updatecontactid=1'
-																, '' );
-										}
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('CONTACT_BUSINESS_MANAGE'),
+													data: sData,
+													dataType: 'json',
+													success: function(data) { 
+																	this.process(data, 
+																		 {successText: 'Prospect Business ' + sSuccessMessage,
+																		   object: "business"} );
+														}
+												});
+												
+											}
 
-									}
+											if ( $('#ns1blankspaceContactSurname').val() != '' || onDemandXMLGetData(oRow, 'surname') != '' ) 
+											{
+												sData = (ns1blankspace.data.contactBusiness != '')?'&contactbusiness=' + ns1blankspace.data.contactBusiness + '&primarycontact=1':'';
+												
+												if ($('#ns1blankspaceContactSurname').val() != undefined)
+												{
+													sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceContactFirstName').val());
+													sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceContactSurname').val());
+													sData += '&jobtitle=' + ns1blankspace.util.fs($('#ns1blankspaceContactJobTitle').val());
+													sData += '&streetaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceContactStreetAddress1').val());
+													sData += '&streetsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceContactStreetSuburb').val());
+													sData += '&streetstate=' + ns1blankspace.util.fs($('#ns1blankspaceContactStreetState').val());
+													sData += '&streetpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceContactStreetPostCode').val());
+													sData += '&streetcountry=' + ns1blankspace.util.fs($('#ns1blankspaceContactStreetCountry').val());
+													sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingAddress1').val());
+													sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingSuburb').val());
+													sData += '&mailingstate=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingState').val());
+													sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingPostCode').val());
+													sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingCountry').val());
+													sData += '&phone=' + ns1blankspace.util.fs($('#ns1blankspaceContactPhone').val());
+													sData += '&mobile=' + ns1blankspace.util.fs($('#ns1blankspaceContactMobile').val());
+													sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceContactEmail').val());
+													sData += '&faxnumber=' + ns1blankspace.util.fs($('#ns1blankspaceContactFax').val());
+												}
+												else
+												{
+													sData += '&firstname=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.firstname);
+													sData += '&surname=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.surname);
+													sData += '&mailingaddress1=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingaddress1);
+													sData += '&mailingsuburb=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingsuburb);
+													sData += '&mailingstate=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingstate);
+													sData += '&mailingpostcode=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingpostcode);
+													sData += '&mailingcountry=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingcountry);
+													sData += '&phone=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.phone);
+													sData += '&mobile=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mobile);
+													sData += '&email=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.email);
+												}
+												sData += '&customerstatus=' + ns1blankspace.opportunity.data.objectStatus;		
+												
+												if (ns1blankspace.data.contactPerson != '')	
+												{
+													sData += '&id=' + ns1blankspace.data.contactPerson;
+													sSuccessMessage = 'updated';
+												}
+												else {sSuccessMessage = 'added'}
+												
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('CONTACT_PERSON_MANAGE'),
+													data: sData,
+													dataType: 'json',
+													success: function(data) { 
+																	this.process(data, 
+																		 {successText: 'Prospect Contact ' + sSuccessMessage,
+																		   object: "contact"} );
+														}
+												});
 
-									if (sReturn != -1)
-									{	interfaceOpportunitySearch('opportunity-' + ns1blankspace.objectContext);	}
-									
+											}
+
+											if (ns1blankspace.objectSaveId != -1)
+											{	ns1blankspace.opportunity.search.send('-' + ns1blankspace.objectContext);	}
+											
+										},
+
+								process: function(oResponse, oParam) 
+										{
+											var sStatus = "";
+											var sObject = "";
+
+											if (oParam != undefined)
+											{
+												if (oParam.successMessage != undefined) {sStatus = oParam.successMessage}
+												if (oParam.object != undefined) {sObject = oParam.object}
+											}	
+
+											if (oResponse.status == 'OK')
+											{
+												ns1blankspace.status.message(sStatus);
+												if (sObject == "business") {
+													ns1blankspace.data.contactBusiness = oResponse.id;	
+												}
+												else {
+													ns1blankspace.data.contactPerson = oResponse.id;	
+												}
+												
+												ns1blankspace.save(ns1blankspace.util.endpointURI('OPPORTUNITY_MANAGE')
+																	, '&id=' + ns1blankspace.objectContext + 
+																	  '&requestbycontact' + sObject + '=' + oResponse.id +
+																	  '&updatecontactid=1'
+																	, '' );
+											}
+											else
+											{
+												ns1blankspace.status.error(oResponse.error.errornotes);
+											}
+										}
 								},
 
-								function interfaceOpportunityViewProspect(asId)
-					view:		{
-									interfaceProspectMasterViewport();
-									interfaceProspectSearch('prospectid-' + asId);
+					view:		function (asId)
+								{
+									ns1blankspace.prospect.init({showHome: false});
+									ns1blankspace.prospect.search.send(asId);
 									
 								}
 				},				
 
-	processingStatus:
-				{
-					show:		function interfaceOpportunityChangeProcessingStatus()
-								{
-									var dDate = new Date();
-									ns1blankspace.report.today = dDate.format('d mmm yyyy');
-									
-									$('#interfaceMainDetailsProcessingStatusUpdate').show();
-									$('#inputInterfaceMainDetailsNewProcessingDate').val(ns1blankspace.report.today);
-									
-									$('#tdInterfaceMainDetailsProcessingStatusButtonLabel').html('Cancel');
-									$('#tdInterfaceMainDetailsProcessingStatusButtonLabel').bind('click', function() {
-										interfaceOpportunityCancelOpportunityStatusUpdate();	
-									});
-									
-									$('.interfaceMainOptionsSelectProcessingStatus').button( {
-										text: false,
-										icons: {
-											primary: "ui-icon-circle-cancel"
-										}
-									})
-									.click(function() {
-										interfaceOpportunityCancelProcessingStatusUpdate();
-									})
-									.css('width', '15px')
-									.css('height', '16px')
-								}
-
-					save:		function interfaceOpportunityCancelProcessingStatusUpdate()
-								{
-									$('#interfaceMainDetailsProcessingStatusUpdate').hide();
-
-									$('#inputInterfaceMainDetailsNewProcessing').val('');
-									$('#inputInterfaceMainDetailsNewProcessing').attr('onDemandID','');
-									$('#inputInterfaceMainDetailsNewProcessingDate').val('');
-									$('#inputInterfaceMainDetailsNewProcessingNote').val('');
-
-									$('#tdInterfaceMainDetailsProcessingStatusButtonLabel').html('Update');
-									$('#tdInterfaceMainDetailsProcessingStatusButtonLabel').bind('click', function() {
-										 interfaceOpportunityChangeProcessingStatus();
-									});
-									
-									$('.interfaceMainOptionsSelectProcessingStatus').button( {
-										text: false,
-										icons: {
-											primary: "ui-icon-circle-plus"
-										}
-									})
-									.click(function() {
-										interfaceOpportunityChangeProcessingStatus();
-									})
-									.css('width', '15px')
-									.css('height', '16px')
-								},
-
-					search:		function interfaceOpportuntityProcessingStatus(oParam)
-								{
-
-									var sFind;
-									var iFind = -1;
-									
-									if (oParam != undefined)
-									{
-										if (oParam.find != undefined) {sFind = oParam.find}
-									}	
-
-									if (ns1blankspace.opportuntityProcessingStatus == undefined)
-									{
-										$.ajax(
-										{
-											type: 'GET',
-											url: '/ondemand/setup/?method=SETUP_OPPORTUNITY_PROCESSING_STATUS_SEARCH&rf=JSON',
-											dataType: 'json',
-											async: false,
-											success: function(oJSON) {ns1blankspace.opportuntityProcessingStatus = oJSON.data.rows}
-										})
-									}
-
-									if (sFind != undefined)
-									{
-										$.each(ns1blankspace.opportuntityProcessingStatus, function() {
-											if (sFind.toUpperCase() == (this.title).toUpperCase()) {iFind = parseInt(this.id); return false}
-										});
-									}
-
-									return iFind;
-								}
-				},				
 
 	contactStatus:
 				function (oResponse, asContactType, aiContactId)
-				{
+				{	
 					if (oResponse == undefined) {oResponse = '';}
 					if (asContactType == undefined) { asContactType = '';}
 					if (aiContactId == undefined) {aiContactId = -1;}
 					
-					if (oResponse == '' || oResponse == undefined)
+					if (oResponse == undefined)
 					{
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CONTACT_' + asContactType.toUpperCase() + '_SEARCH';
 						oSearch.addField( 'customerstatus');
 						oSearch.addFilter('id', 'EQUAL_TO', aiContactId);
 						oSearch.rf = 'json';
-						oSearch.getResults(GetCurrentContactStatus) 
+						oSearch.getResults(opportunity.contactStatus) 
 					}
 					else
 					{	
-						if (oResponse.data.rows.length == 0)
+						if (oResponse.data.rows.length != 0)
 						{
-							giCurrentObjectStatus = oResponse.data.rows[0].customerstatus;
+							ns1blankspace.opportunity.data.objectStatus = oResponse.data.rows[0].customerstatus;
 						}
 						else
-						{	giCurrentObjectStatus = -1;	}	
+						{	ns1blankspace.opportunity.data.objectStatus = -1;	}	
 					}	
 				}
