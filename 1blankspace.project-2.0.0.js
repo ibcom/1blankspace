@@ -36,38 +36,34 @@ ns1blankspace.project =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home: 		function ns1blankspaceProjectHomeShow(oResponse)
+	home: 		function (oResponse)
 				{
-
 					if (oResponse == undefined)
 					{
-						var aHTML = [];
-									
-						aHTML.push('<table id="tablens1blankspaceViewportMain" class="ns1blankspaceViewportMain">';
-						aHTML.push('<tr id="trns1blankspaceViewportMain" class="ns1blankspaceViewportMain">' +
-										'<td id="tdns1blankspaceProjectHomeMostLikely" class="ns1blankspaceViewportMain">' +
-										ns1blankspace.xhtml.loading + 
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
-						
-						$('#divns1blankspaceMain').html(aHTML.join(''));
-						
-						var aHTML = [];
-						var h = -1;
-									
-						aHTML.push('<table>';
-						aHTML.push('<tr>' +
-										'<td id="ns1blankspaceViewportProjectLarge" class="ns1blankspaceViewportImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';		
-						
-						$('#divns1blankspaceViewportControl').html(aHTML.join(''));	
-						
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+
+						var aHTML = [];
+									
+						aHTML.push('<table class="ns1blankspaceMain">');
+						aHTML.push('<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										ns1blankspace.xhtml.loading +
+										'</td>' +
+										'</tr>');
+						aHTML.push('</table>');					
 						
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+
+						var aHTML = [];
+									
+						aHTML.push('<table>');
+
+						aHTML.push('<tr><td id="ns1blankspaceViewMessagingProjectLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+								
+						aHTML.push('</table>');		
+						
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
+
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'PROJECT_SEARCH';
 						
@@ -77,58 +73,52 @@ ns1blankspace.project =
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						
-						oSearch.getResults(ns1blankspaceProjectHomeShow);
-						
+						oSearch.getResults(ns1blankspace.project.home);		
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="tablens1blankspaceProjectHomeMostLikely">';
-							aHTML.push('<tr class="trns1blankspaceProjectHomeMostLikelyNothing">';
-							aHTML.push('<td class="tdns1blankspaceProjectHomeMostLikelyNothing">Click New to create a project.</td>';
-							aHTML.push('</tr>';
-							aHTML.push('</table>';
+							aHTML.push('<table>' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create a project.</td></tr>' +
+											'</table>');
 						}
 						else
 						{
-							aHTML.push('<table id="tablens1blankspaceProjectHomeMostLikely">';
-							aHTML.push('<tr>';
-							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>';
-							aHTML.push('</tr>';
-							
+							aHTML.push('<table>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+
 							$.each(oResponse.data.rows, function()
-							{	
-								aHTML.push('<tr class="ns1blankspaceMainRow">';
+							{
+								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML.push('<td id="ns1blankspaceProjectHomeMostLikely_Title-' +
-														this.id + '" class="ns1blankspaceHomeMostLikely">' +
-														this.reference + '</td>';
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+														'" class="ns1blankspaceMostLikely">' +
+														this.reference +
+														'</td>');
 								
-								aHTML.push('</tr>';
+								aHTML.push('</tr>');
 							});
 							
-							aHTML.push('</tbody></table>';
-						};
+							aHTML.push('</table>');			
+						}
 						
-						$('#tdns1blankspaceProjectHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.ns1blankspaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							ns1blankspaceProjectSearch(event.target.id, {source: 1});
+							ns1blankspace.project.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
 
 	search: 	{
-					send:		function ns1blankspaceProjectSearch(sXHTMLElementId, oParam)
+					send:		function (sXHTMLElementId, oParam)
 								{
-									
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
+									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;

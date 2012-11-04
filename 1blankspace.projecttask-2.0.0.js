@@ -39,84 +39,76 @@ ns1blankspace.projectTask =
 				{
 					if (oResponse == undefined)
 					{
-						var aHTML = [];
-						var h = -1;
-									
-						aHTML.push('<table id="tablens1blankspaceViewportMain" class="ns1blankspaceViewportMain">';
-						aHTML.push('<tr id="trns1blankspaceViewportMain" class="ns1blankspaceViewportMain">' +
-										'<td id="tdns1blankspaceProjectTaskHomeMostLikely" class="ns1blankspaceViewportMain">' +
-										ns1blankspace.xhtml.loading + 
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
-						
-						$('#divns1blankspaceMain').html(aHTML.join(''));
-						
-						var aHTML = [];
-						var h = -1;
-									
-						aHTML.push('<table>';
-						aHTML.push('<tr>' +
-										'<td id="ns1blankspaceViewportProjectLarge" class="ns1blankspaceViewportImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';		
-						
-						$('#divns1blankspaceViewportControl').html(aHTML.join(''));	
-						
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+
+						var aHTML = [];
+									
+						aHTML.push('<table class="ns1blankspaceMain">');
+						aHTML.push('<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										ns1blankspace.xhtml.loading +
+										'</td>' +
+										'</tr>');
+						aHTML.push('</table>');					
 						
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+
+						var aHTML = [];
+									
+						aHTML.push('<table>');
+
+						aHTML.push('<tr><td id="ns1blankspaceViewMessagingProjectLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+								
+						aHTML.push('</table>');		
+						
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
+
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'PROJECT_TASK_SEARCH';
-						oSearch.addField('reference,description');
+						
+						oSearch.addField('reference,title');
 						oSearch.async = false;
 						oSearch.rf = 'json';
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						
-						oSearch.getResults(ns1blankspaceProjectTaskHomeShow);
-						
+						oSearch.getResults(ns1blankspace.projectTask.home);
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
-								
+						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="tablens1blankspaceProjectTaskHomeMostLikely">';
-							aHTML.push('<tr class="trns1blankspaceProjectTaskHomeMostLikelyNothing">';
-							aHTML.push('<td class="tdns1blankspaceProjectTaskHomeMostLikelyNothing">Click New to create a project task.</td>';
-							aHTML.push('</tr>';
-							aHTML.push('</table>';
+							aHTML.push('<table>' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create a project.</td></tr>' +
+											'</table>');
 						}
 						else
 						{
-							aHTML.push('<table id="tablens1blankspaceProjectTaskHomeMostLikely">';
-							aHTML.push('<tr>';
-							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>';
-							aHTML.push('</tr>';
-							
+							aHTML.push('<table>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+
 							$.each(oResponse.data.rows, function()
-							{	
-								aHTML.push('<tr class="ns1blankspaceMainRow">';
+							{
+								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML.push('<td id="ns1blankspaceProjectTaskHomeMostLikely_Title-' +
-													this.id + '" class="ns1blankspaceHomeMostLikely">' +
-													this.description + '</td>';
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+														'" class="ns1blankspaceMostLikely">' +
+														this.reference +
+														'</td>');
 								
-								aHTML.push('</tr>';
+								aHTML.push('</tr>');
 							});
 							
-							aHTML.push('</tbody></table>';
+							aHTML.push('</table>');			
 						}
 						
-						$('#tdns1blankspaceProjectTaskHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.ns1blankspaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							ns1blankspaceProjectTaskSearch(event.target.id, {source: 1});
+							ns1blankspace.projectTask.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
