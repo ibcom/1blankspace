@@ -1192,9 +1192,7 @@ ns1blankspace.logon =
 										'<tr class="ns1blankspaceHome">' +						
 										'<td class="ns1blankspaceHome" style="color:#404040;">' +
 										ns1blankspace.xhtml.logonNotes +
-										'</td>' +
-										'</tr>' +
-										'</table>');
+										'</td></tr></table>');
 					}				
 
 					aHTML.push('</td></tr></table>');
