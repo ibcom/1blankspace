@@ -138,22 +138,21 @@ ns1blankspace.project =
 										
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#divns1blankspaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceViewControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
-										var sParam = 'method=PROJECT_SEARCH&id=' + ns1blankspace.objectContext;
-										
+									
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/project/?' + sParam,
+											url: ns1blankspace.util.endpointURI('PROJECT_SEARCH'),
+											data: 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 											dataType: 'json',
-											success: function(data) {ns1blankspaceProjectShow(oParam, data)}
+											success: function(data) {ns1blankspace.project.show(oParam, data)}
 										});
 									}
 									else
 									{
-									
 										var iMinimumLength = 3;
 										var iMaximumColumns = 1;
 									
@@ -173,44 +172,40 @@ ns1blankspace.project =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tablens1blankspaceViewportMasterBrowse';
+											sElementId = 'ns1blankspaceViewControlBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{		
-											ns1blankspace.container.position({xhtmlElementID: sElementId);
-											ns1blankspaceSearchStart(sElementId);
-											
-											var sParam = 'method=PROJECT_SEARCH&quicksearch=' + sSearchText + 
-																'&xhtmlcontext=' + sXHTMLElementId;
+											ns1blankspace.container.position({xhtmlElementID: sElementId});
+											ns1blankspace.search.start(sElementId);
 
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/project/?' + sParam,
+												url: ns1blankspace.util.endpointURI('PROJECT_SEARCH'),
+												data: 'quicksearch=' + ns1blankspace.util.fs(sSearchText),
 												dataType: 'json',
-												success: function(data) {ns1blankspaceProjectSearchShow(oParam, data)}
+												success: function(data) {ns1blankspace.project.search.process(oParam, data)}
 											});
 										}
 									};	
 								},
 
-					process:	function ns1blankspaceProjectSearchShow(oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
 									var iColumn = 0;
 									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
 											
 									if (oResponse.data.rows.length == 0)
 									{
 										$(ns1blankspace.xhtml.container).hide();
-										ns1blankspaceSearchStop();
+										ns1blankspace.search.stop();
 									}
 									else
 									{
-										aHTML.push('<table class="ns1blankspaceSearchMedium">';
-										aHTML.push('<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -218,23 +213,23 @@ ns1blankspace.project =
 											
 											if (iColumn == 1)
 											{
-												aHTML.push('<tr class="ns1blankspaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
 											aHTML.push('<td class="ns1blankspaceContactType' + this.type + ' ns1blankspaceSearch">&nbsp;</td>';
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
 															this.reference +
-															'</td>';
+															'</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML.push('</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML.push('</tbody></table>';
+										aHTML.push('</table>');
 
 										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
@@ -245,230 +240,186 @@ ns1blankspace.project =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspaceProjectSearch(event.target.id, {source: 1});
+											ns1blankspace.project.search.send(event.target.id, {source: 1});
 										});
 									}	
 											
 								}
 				},
 								
-	layout: 	function ns1blankspaceProjectViewport()
+	layout: 	function n()
 				{
 					var aHTML = [];
-					var h = -1;
 
-					aHTML.push('<div id="divns1blankspaceViewportControlContext" class="ns1blankspaceViewportControlContext"></div>';
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
-					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Details</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');		
 					}
 					else
 					{
-						aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Summary</td>' +
-										'</tr>';
-									
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">Details</td>' +
-										'</tr>';
-					
-						aHTML.push('<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlDescription" class="ns1blankspaceViewportControl">Description</td>' +
-										'</tr>';
-					
-						aHTML.push('<tr id="trns1blankspaceViewportControlTasks" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlTasks" class="ns1blankspaceViewportControl">Tasks</td>' +
-										'</tr>';
-					
-						aHTML.push('</table>';					
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Summary</td></tr>');
 
-						/* aHTML.push('<table id="tablens1blankspaceViewportControl2" class="ns1blankspaceViewportControl">';
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
+										'Description</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlTasks" class="ns1blankspaceControl">' +
+										'Tasks</td></tr>');
+
+						aHTML.push('</table>');		
 					
-						aHTML.push('<tr id="trns1blankspaceViewportControlFinancials" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlFinancials" class="ns1blankspaceViewportControl">Financials</td>' +
-										'</tr>';
-									
-						aHTML.push('</table>';*/				
+						aHTML.push('<table class="ns1blankspaceControl">');
 					
-						aHTML.push('<table id="tablens1blankspaceViewportControl3" class="ns1blankspaceViewportControl">';
+						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
+										'Actions</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">' +
+										'Attachments</td></tr>');
+					}	
 					
-						aHTML.push('<tr id="trns1blankspaceViewportControl" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlActions" class="ns1blankspaceViewportControl">Actions</td>' +
-										'</tr>';
-									
-						aHTML.push('<tr id="trns1blankspaceViewportControl" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlAttachments" class="ns1blankspaceViewportControl">Attachments</td>' +
-										'</tr>';
-					}
-									
 					aHTML.push('</table>';					
-							
-					$('#divns1blankspaceViewportControl').html(aHTML.join(''));
+								
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML.push('<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainDetails" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainDescription" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainTasks" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainTaskDetails" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainFinancials" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainActions" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainAttachments" class="divns1blankspaceViewportMain"></div>';
-					
-					$('#divns1blankspaceMain').html(aHTML.join(''));
-					
-					$('#tdns1blankspaceViewportControlSummary').click(function(event)
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDescription" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTasks" class="ns1blankspaceControl"></div>');		
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
+							
+					$('#ns1blankspaceMain').html(aHTML.join(''));
+
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary");
-						ns1blankspaceProjectSummary();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.setup.messaging.summary();
 					});
 					
-					$('#tdns1blankspaceViewportControlDetails').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
-						ns1blankspaceProjectDetails();
-					});
-					
-					$('#tdns1blankspaceViewportControlDescription').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainDescription");
-						ns1blankspaceProjectDescription();
-					});
-					
-					$('#tdns1blankspaceViewportControlTasks').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainTasks", true);
-						ns1blankspaceProjectTasks();
-					});
-					
-					$('#tdns1blankspaceViewportControlFinancials').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainFinancials", true);
-						ns1blankspaceProjectFinancials();
-					});
-					
-					$('#tdns1blankspaceViewportControlActions').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainActions", true);
-						ns1blankspaceActions({xhtmlElementID: 'divns1blankspaceMainActions'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.setup.messaging.details();
 					});
 
-					$('#tdns1blankspaceViewportControlAttachments').click(function(event)
+					$('#ns1blankspaceControlDescription').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainAttachments", true);
-						ns1blankspaceAttachments({xhtmlElementID: 'divns1blankspaceMainAttachments'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainDescription'});
+						ns1blankspace.project.description();
+					});
+
+					$('#ns1blankspaceControlTasks').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainTasks'});
+						ns1blankspace.project.tasks();
+					});
+
+					$('#ns1blankspaceControlActions').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceActions', refresh: true});
+						
+						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceActions'});
+					});
+					
+					$('#ns1blankspaceControlAttachments').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
 					});
 				},
 
 	show: 		function ns1blankspaceProjectShow(oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspaceProjectViewport();
+					ns1blankspace.setup.messaging.layout();
 					
 					var aHTML = [];
-					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find project.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this project.</td></tr></table>');
 								
-						$('#divns1blankspaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
-
-						$('#divns1blankspaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-						$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
+					
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference);
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						ns1blankspaceViewportDestination({
-							newDestination: 'ns1blankspaceProjectMasterViewport({showHome: false});ns1blankspaceProjectSearch("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.project.init({showHome: false});ns1blankspace.project.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
-							})
-							
-						ns1blankspaceProjectSummary();
+							});
+						
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.project.summary()'});
 					}	
+
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspaceProjectViewport();
 				},
 
-	summary: 	function ns1blankspaceProjectSummary()
+	summary: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find project.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this project.</td></tr></table>');
 								
-						$('#divns1blankspaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML.push('<table id="tablens1blankspaceMainSummary" class="ns1blankspaceMain">';
-						aHTML.push('<tr id="trns1blankspaceMainSummaryRow1" class="ns1blankspaceMainRow1">' +
-									'<td id="tdns1blankspaceMainSummaryColumn1Large" class="ns1blankspaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainSummaryColumn2Action" class="ns1blankspaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'</tr>' +
+									'</table>');				
 						
-						$('#divns1blankspaceMainSummary').html(aHTML.join(''));
-					
-						var aHTML = [];
-						var h = -1;	
-					
-						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
-						
-						aHTML.push('<tr><td id="tdns1blankspaceMainSummaryDescription" class="ns1blankspaceMainSummary">Description</td></tr>' +
-										'<tr><td id="tdns1blankspaceMainSummaryDescriptionValue" class="ns1blankspaceMainSummaryValue">' +
-										ns1blankspace.objectContextData.description +
-										'</td></tr>';
-										
-						aHTML.push( '<tr><td id="tdns1blankspaceMainSummaryStartDate" class="ns1blankspaceMainSummary">Start Date</td></tr>' +
-										'<tr><td id="tdns1blankspaceMainSummaryStartDateValue" class="ns1blankspaceMainSummaryValue">' +
-										ns1blankspace.objectContextData.startdate +
-										'</td>' +
-										'</tr>';
-						
-						aHTML.push( '<tr><td id="tdns1blankspaceMainSummaryStartDate" class="ns1blankspaceMainSummary">End Date</td></tr>' +
-										'<tr><td id="tdns1blankspaceMainSummaryEndDateValue" class="ns1blankspaceMainSummaryValue">' +
-										ns1blankspace.objectContextData.enddate +
-										'</td>' +
-										'</tr>';
-						
-						aHTML.push('</table>';					
-						
-						$('#tdns1blankspaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
-						var aHTML = [];
-						var h = -1;	
+						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2Action" cellspacing=0>';
-												
-						//aHTML.push('<tr><td id="tdns1blankspaceMainSummaryViewAsTimeline" class="ns1blankspaceMainColumn2Action">' +
-						//				'<a href="#" id="ans1blankspaceMainSummaryViewAsTimeline">View As Timeline</a>' +
-						//				'</td></tr>';
-										
-						aHTML.push('</table>';					
-						
-						$('#tdns1blankspaceMainSummaryColumn2Action').html(aHTML.join(''));	
-						
-						$('#ans1blankspaceMainSummaryViewAsTimeline').click(function(event)
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Email</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.description +
+										'</td></tr>');
+
+						if (ns1blankspace.objectContextData.startdate != '')
 						{
-							ns1blankspaceProjectViewAsTimeline();
-						});
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Server</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryServer" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.startdate +
+										'</td></tr>');	
+						}
+
+						if (ns1blankspace.objectContextData.enddate != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Server</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryServer" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.enddate +
+										'</td></tr>');
+						}											
+						
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 					}	
 				},
 
