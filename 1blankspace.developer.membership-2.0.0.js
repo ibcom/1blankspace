@@ -387,619 +387,549 @@ ns1blankspace.developer.membership =
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'User' +
+										'Title' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceSelect">' +
-										'<input id="ns1blankspaceDetailsUser" class="ns1blankspaceSelect"' +
-											' data-method="SETUP_USER_SEARCH"' +
-											' data-columns="username">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceText">' +
 										'</td></tr>');			
 
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Reference' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsReference" class="ns1blankspaceText">' +
+										'</td></tr>');			
 
-function ns1blankspaceDeveloperMembershipDetails()
-{
-	var aHTML = [];
-	var h = -1;
-		
-	if ($('#divns1blankspaceMainDetails').attr('onDemandLoading') == '1')
-	{
-		$('#divns1blankspaceMainDetails').attr('onDemandLoading', '');
-		
-		aHTML.push('<table id="tablens1blankspaceMainDetails" class="ns1blankspaceMainDetails">';
-		aHTML.push('<tr id="trns1blankspaceMainDetailsRow1" class="ns1blankspaceMain">' +
-						'<td id="tdns1blankspaceMainDetailsColumn1" class="ns1blankspaceMainColumn1">' +
-						'</td>' +
-						'<td id="tdns1blankspaceMainDetailsColumn2" class="ns1blankspaceMainColumn2x">' +
-						'</td>' +
-						'</tr>';
-		aHTML.push('</table>';					
-		
-		$('#divns1blankspaceMainDetails').html(aHTML.join(''));
-		
-		var aHTML = [];
-		var h = -1;
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Description' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<textarea id="ns1blankspaceDetailsDescription" rows="10" cols="35" class="ns1blankspaceTextMultiSmall"></textarea>' +
+										'</td></tr>');		
 	
-		aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
-	
-		aHTML.push('<tr id="trns1blankspaceMainDetailsTitle" class="ns1blankspaceMain">' +
-						'<td id="tdns1blankspaceMainDetailsTitle" class="ns1blankspaceMain">' +
-						'Title' +
-						'</td></tr>' +
-						'<tr id="trns1blankspaceMainDetailsTitleValue" class="ns1blankspaceMainText">' +
-						'<td id="tdns1blankspaceMainDetailsTitleValue" class="ns1blankspaceMainText">' +
-						'<input id="inputns1blankspaceMainDetailsTitle" class="inputns1blankspaceMainText">' +
-						'</td></tr>';
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Based On Subscription' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td id="ns1blankspaceBasedOnSubscription" class="ns1blankspaceRadio">' +
+										ns1blankspace.loadingSmallXHTML +
+										'</td></tr>');	
 
-		aHTML.push('<tr id="trns1blankspaceMainDetailsReference" class="ns1blankspaceMain">' +
-						'<td id="tdns1blankspaceMainDetailsReference" class="ns1blankspaceMain">' +
-						'Reference' +
-						'</td></tr>' +
-						'<tr id="trns1blankspaceMainDetailsReferenceValue" class="ns1blankspaceMainText">' +
-						'<td id="tdns1blankspaceMainDetailsReferenceValue" class="ns1blankspaceMainText">' +
-						'<input id="inputns1blankspaceMainDetailsReference" class="inputns1blankspaceMainText">' +
-						'</td></tr>';				
+						aHTML.push('</table>');					
 		
-		aHTML.push('<tr id="trns1blankspaceMainDetailsDescription" class="ns1blankspaceMain">' +
-						'<td id="tdns1blankspaceMainDetailsDescription" class="ns1blankspaceMain">' +
-						'Description' +
-						'</td></tr>' +
-						'<tr id="trns1blankspaceMainDetailsDescriptionValue" class="ns1blankspaceMainTextMulti">' +
-						'<td id="tdns1blankspaceMainDetailsDescriptionValue" class="ns1blankspaceMainTextMulti">' +
-						'<textarea rows="10" cols="35" id="inputns1blankspaceMainDetailsDescription" class="inputns1blankspaceMainTextMultiSmall"></textarea>' +
-						'</td></tr>';
+						ns1blankspace.developer.membership.mySubscriptions();
 
-		aHTML.push('<tr id="trns1blankspaceMainDetailsBasedOnSubscription" class="ns1blankspaceMain">' +
-						'<td id="tdns1blankspaceMainDetailsBasedOnSubscription" class="ns1blankspaceMain">' +
-						'Based On Subscription' +
-						'</td></tr>' +
-						'<tr>' +
-						'<td id="tdns1blankspaceMainDetailsBasedOnSubscriptionValue" class="ns1blankspaceMainRadio">' +
-						ns1blankspace.loadingSmallXHTML +
-						'</td></tr>';
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
+						
+						if (goObjectContext != undefined)
+						{
+							$('#inputns1blankspaceMainDetailsTitle').val(goObjectContext.title);
+							$('#inputns1blankspaceMainDetailsReference').val(goObjectContext.reference);
+							$('#inputns1blankspaceMainDetailsDescription').val(goObjectContext.description);
+						}
+					}	
+				},
 
-		aHTML.push('</table>';					
-		
-		ns1blankspaceDeveloperMembershipDetailsSubscriptions();
+	mySubscriptions:
 
-		$('#tdns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
-		
-		if (goObjectContext != undefined)
-		{
-			$('#inputns1blankspaceMainDetailsTitle').val(goObjectContext.title);
-			$('#inputns1blankspaceMainDetailsReference').val(goObjectContext.reference);
-			$('#inputns1blankspaceMainDetailsDescription').val(goObjectContext.description);
-		}
-	}	
-}
-
-function ns1blankspaceDeveloperMembershipDetailsSubscriptions(oParam, oResponse)
-{
-	if (oResponse == undefined)
-	{	
-		var sData = '';
-
-		$.ajax(
-			{
-				type: 'POST',
-				url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH',
-				data: sData,
-				dataType: 'json',
-				success: function(data) {ns1blankspaceDeveloperMembershipDetailsSubscriptions(oParam, data)
-				}
-			});
-	}
-	else
-	{
-		var aHTML = [];
-		var h = -1;
-
-		if (oResponse.data.rows == 0)
-		{
-			aHTML.push('No subscriptions';
-		}
-		else
-		{		
-			$.each(oResponse.data.rows, function() 
-			{ 
-				aHTML.push('<input type="radio" id="radioBasedOnSubscription' + this.id + '" name="radioBasedOnSubscription" value="' + this.id + '"/>' +
-								this.membershiptext + '<br />';
-			});
-		}
-		
-		$('#tdns1blankspaceMainDetailsBasedOnSubscriptionValue').html(aHTML.join(''));
-
-		if (goObjectContext != undefined)
-		{
-			$('[name="radioBasedOnSubscription"][value="' + goObjectContext.basedonsubscription + '"]').attr('checked', true);
-		}
-	}
-}
-
-function ns1blankspaceDeveloperMembershipEndpoints(oParam, oResponse)
-{
-	var aHTML = [];
-	var h = -1;
-	
-	
-	if (oResponse == undefined)
-	{
-		var oSearch = new AdvancedSearch();
-		oSearch.method = 'ADMIN_MEMBERSHIP_ENDPOINT_SEARCH';
-		oSearch.addField('endpointtext,endpoint');
-		oSearch.addFilter('membership', 'EQUAL_TO', giObjectContext)
-		oSearch.rows = 50;
-		oSearch.sort('endpointtext', 'asc');
-		oSearch.getResults(function(data) {ns1blankspaceDeveloperMembershipEndpoints(oParam, data)})	
-	}
-	else
-	{
-		var aHTML = [];
-		var h = -1;
-		
-		aHTML.push('<table class="ns1blankspaceMain">' +
-					'<tr id="trns1blankspaceMainMembershipEndpointsRow1" class="ns1blankspaceMainRow1">' +
-					'<td id="tdns1blankspaceMainMembershipEndpointsColumn1" class="ns1blankspaceMainColumn1Large">' +
-					'</td>' +
-					'<td id="tdns1blankspaceMainMembershipEndpointsColumn2" style="width: 100px;" class="ns1blankspaceMainColumn2Action">' +
-					'</td>' +
-					'</tr>' +
-					'</table>';				
-		
-		$('#divns1blankspaceMainEndpoints').html(aHTML.join(''));
-
-		var aHTML = [];
-		var h = -1;
-		
-		aHTML.push('<table class="ns1blankspaceMainColumn2">';
-		
-		aHTML.push('<tr><td id="tdns1blankspaceMainMembershipEndpointsAdd" class="ns1blankspaceMainAction">' +
-						'<span id="spanns1blankspaceMainMembershipEndpointsAdd">Add Endpoint</span>' +
-						'</td></tr>';
-		
-		aHTML.push('</table>';					
-		
-		$('#tdns1blankspaceMainMembershipEndpointsColumn2').html(aHTML.join(''));
-		
-		$('#spanns1blankspaceMainMembershipEndpointsAdd').button(
-		{
-			label: "Add Endpoint"
-		})
-		.click(function() {
-			ns1blankspaceMasterOptionsSetPosition('spanns1blankspaceMainMembershipEndpointsAdd', -50, -280);
-			ns1blankspaceDeveloperMembershipEndpointsAdd(oParam);
-		});
-
-		var aHTML = [];
-		var h = -1;	
-				
-		aHTML.push('<table cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-		aHTML.push('<tbody>';
-
-		if (oResponse.data.rows.length == 0)
-		{
-			aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-					'<td class="ns1blankspaceMainRowNothing" >No endpoints.</td></tr>';
-		}
-
-		$(oResponse.data.rows).each(function()
-		{
-
-			aHTML.push('<tr class="ns1blankspaceMainRow">';
-			
-			aHTML.push('<td id="ns1blankspaceMembershipEndpoint_Title-' + this.id + '" class="ns1blankspaceMainRow ns1blankspaceMainRowSelect endpoint"' +
-									' title="">' +
-									this.endpointtext + '</td>';
-
-			aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">';
-			aHTML.push('<span id="spanMembershipEndpoint_options_remove-' + this.id + '" class="ns1blankspaceMainRowOptionsRemove"></span>';
-			aHTML.push('</td>';																	
-			aHTML.push('</tr>';
-		});
-	
-		aHTML.push('</tbody></table>';
-			
-		$('#tdns1blankspaceMainMembershipEndpointsColumn1').html(aHTML.join(''));
-
-		$('td.endpoint').click(function(event)
-		{
-			var sXHTMLElementId = event.target.id;
-			var aId = sXHTMLElementId.split('-');
-			
-			ns1blankspaceDeveloperMembershipEndpoints({endpoint: aId[1], step: 2});
-		});
-
-		$('.ns1blankspaceMainRowOptionsRemove').button(
-		{
-			text: false,
-		 	icons: {primary: "ui-icon-close"}
-		})
-		.click(function() {
-			ns1blankspaceDeveloperMembershipEndpointsRemove(this.id)
-		})
-		.css('width', '15px')
-		.css('height', '20px')
-	}
-}
-
-function ns1blankspaceDeveloperMembershipEndpointsAdd(oParam, oResponse)
-{
-		
-	if ($(ns1blankspace.xhtml.container).attr('onDemandSource') == 'spanns1blankspaceMainUserAccessRolesAdd')
-	{
-		$(ns1blankspace.xhtml.container).slideUp(500);
-		$(ns1blankspace.xhtml.container).attr('onDemandSource', '');
-	}
-	else
-	{
-		if (oResponse == undefined)
-		{
-			var oSearch = new AdvancedSearch();
-			oSearch.method = 'SETUP_ENDPOINT_SEARCH';
-			oSearch.addField('title');
-			oSearch.sort('title', 'ASC');
-			oSearch.rows = 50;
-
-			oSearch.getResults(function(data)
-			{
-				ns1blankspaceDeveloperMembershipEndpointsAdd(oParam, data)
-			});
-		}
-		else
-		{
-			
-			$(ns1blankspace.xhtml.container).attr('onDemandSource', 'spanns1blankspaceMainUserAccessRolesAdd')
-			
-			var aHTML = [];
-			var h = -1;
-			
-			if (oResponse.data.rows.length == 0)
-			{
-				aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceSearchMedium">';
-				aHTML.push('<tbody>'
-				aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-								'<td class="ns1blankspaceMainRowNothing">No endpoints.</td></tr>';
-				aHTML.push('</tbody></table>';
-
-				$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-				$(ns1blankspace.xhtml.container).show(giShowSpeedOptions);
-			}
-			else
-			{
-				aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.725em;">';
-				aHTML.push('<tbody>'
-				
-				$.each(oResponse.data.rows, function()
-				{	
-					aHTML.push('<tr class="ns1blankspaceMainRow">';
-					
-					aHTML.push('<td id="tdMembershipEndpointsSelect-title-' + this.id + '" class="ns1blankspaceMainRowSelect">' +
-											this.title + '</td>';
-					
-					aHTML.push('</tr>'
-				});
-				
-				aHTML.push('</tbody></table>';
-
-				$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-				$(ns1blankspace.xhtml.container).show(giShowSpeedOptions);
-				
-				$('td.ns1blankspaceMainRowSelect').click(function(event)
+				function (oParam, oResponse)
 				{
-					ns1blankspaceDeveloperMembershipEndpointsSelect(event.target.id);
-				});
-			}
-		}
-	}	
-}
-	
-function ns1blankspaceDeveloperMembershipEndpointsSelect(sXHTMLElementId)
-{
-
-	var aSearch = sXHTMLElementId.split('-');
-	var sElementId = aSearch[0];
-	var sSearchContext = aSearch[2];
-	
-	$('#' + sXHTMLElementId).fadeOut(500);
-	
-	var sParam = 'method=ADMIN_MEMBERSHIP_ENDPOINT_MANAGE';
-	var sData = 'membership=' + giObjectContext +
-				'&endpoint=' + sSearchContext;
-				
-	$.ajax(
-		{
-			type: 'POST',
-			url: '/ondemand/admin/?' + sParam,
-			data: sData,
-			dataType: 'json',
-			success: function(data){ns1blankspaceDeveloperMembershipEndpoints()}
-		});
-		
-}
-
-function ns1blankspaceDeveloperMembershipEndpointsRemove(sXHTMLElementId)
-{
-
-	var aSearch = sXHTMLElementId.split('-');
-	var sElementId = aSearch[0];
-	var sSearchContext = aSearch[1];
-	
-	var sParam = 'method=ADMIN_MEMBERSHIP_ENDPOINT_MANAGE&remove=1';
-	var sData = 'id=' + sSearchContext;
-				
-	$.ajax(
-		{
-			type: 'POST',
-			url: '/ondemand/admin/?' + sParam,
-			data: sData,
-			dataType: 'json',
-			success: function(data){$('#' + sXHTMLElementId).parent().parent().fadeOut(500)}
-		});	
-}
-
-function ns1blankspaceDeveloperMembershipSubscriptions(oParam, oResponse)
-{
-	var sXHTMLElementID = 'divns1blankspaceMainSubscriptions';
-	var iStep = 1;
-	var aXHTMLElementID = [];
-
-	if (oParam != undefined)
-	{
-		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-		if (oParam.step != undefined) {iStep = oParam.step}
-	}
-	else
-	{
-		oParam = {step: 1}
-	}
-
-	aXHTMLElementID = sXHTMLElementID.split('-');
-
-	if (iStep == 1)
-	{
-		if (oResponse == undefined)
-		{
-			$.ajax(
-			{
-				type: 'POST',
-				url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH',
-				data: 'other=1&advanced=1&membership=' + giObjectContext,
-				dataType: 'json',
-				success: function(data){ns1blankspaceDeveloperMembershipSubscriptions(oParam, data)}
-			});	
-		}
-		else
-		{
-			var aHTML = [];
-			var h = -1;
-			
-			aHTML.push('<table class="ns1blankspaceMain">' +
-						'<tr>' +
-						'<td id="tdns1blankspaceMainMembershipSubscriptionsColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;">' +
-						'</td>' +
-						'<td id="tdns1blankspaceMainMembershipSubscriptionsColumn2" class="ns1blankspaceMainColumn1Large" style="padding-left:15px;">' +
-						'</td>' +
-						'<td id="tdns1blankspaceMainMembershipSubscriptionsColumn3" style="width: 100px;" class="ns1blankspaceMainColumn2Action">' +
-						'</td>' +
-						'</tr>' +
-						'</table>';				
-			
-			$('#divns1blankspaceMainSubscriptions').html(aHTML.join(''));
-			
-			var aHTML = [];
-			var h = -1;
-			
-			aHTML.push('<table>';
-			
-			aHTML.push('<tr><td class="ns1blankspaceMainAction">' +
-							'<span id="spanns1blankspaceMainMembershipSubscriptionsAdd">Add</span>' +
-							'</td></tr>';
-			
-			aHTML.push('</table>';					
-			
-			$('#tdns1blankspaceMainMembershipSubscriptionsColumn3').html(aHTML.join(''));
-			
-			$('#spanns1blankspaceMainMembershipSubscriptionsAdd').button(
-			{
-				label: "Add"
-			})
-			.click(function()
-			{
-				oParam.step = 2;
-				oParam.xhtmlElementID = '';
-				ns1blankspaceDeveloperMembershipSubscriptions(oParam);
-			});
-
-			var aHTML = [];
-			var h = -1;
-			
-			if (oResponse.data.rows.length == 0)
-			{
-				aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-				aHTML.push('<tbody>'
-				aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-								'<td class="ns1blankspaceMainRowNothing">No subscriptions.</td></tr>';
-				aHTML.push('</tbody></table>';
-
-				$('#tdns1blankspaceMainMembershipSubscriptionsColumn1').html(aHTML.join(''));
-			}
-			else
-			{
-				aHTML.push('<table>';
-				aHTML.push('<tbody>';
-				
-				$.each(oResponse.data.rows, function()
-				{
-					aHTML.push('<tr class="ns1blankspaceMainRow">';
-					
-					aHTML.push('<td id="tdMembershipSubscriptions_title-' + this.id +
-											'" data-contactbusinesstext="' + this.contactbusinesstext +
-											'" class="ns1blankspaceMainRow ns1blankspaceRowSelect ns1blankspaceMembershipSubscriptions">' +
-											this.contactbusinesstext;
-					
-					aHTML.push('<br /><span class="ns1blankspaceViewportControlSubContext" id="ns1blankspaceMembershipSubscriptions_startdate-' + this.id + '">' +
-	 										this.startdate + '</span>';
-
-	 				aHTML.push('</td>';						
-
-	 				aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">';
-					aHTML.push('<span id="spanMembershipSubscriptions_options_remove-' + this.id + '" class="ns1blankspaceMainRowOptionsRemove"></span>';
-					aHTML.push('</td>';		
-
-					aHTML.push('</tr>';
-				});
-				
-				aHTML.push('</tbody></table>';
-
-				$('#tdns1blankspaceMainMembershipSubscriptionsColumn1').html(aHTML.join(''));
-							
-				$('td.ns1blankspaceMembershipSubscriptions').click(function(event)
-				{
-					oParam.step = 2;
-					oParam.xhtmlElementID = event.target.id;
-					ns1blankspaceDeveloperMembershipSubscriptions(oParam);
-				});
-
-				$('.ns1blankspaceMainRowOptionsRemove').button(
-				{
-					text: false,
-				 	icons: {primary: "ui-icon-close"}
-				})
-				.click(function()
-				{
-					oParam.step = 6;
-					oParam.xhtmlElementID = this.id;
-					ns1blankspaceDeveloperMembershipSubscriptions(oParam);
-				})
-				.css('width', '15px')
-				.css('height', '20px')
-			}
-		}
-	}
-
-	else if (iStep == 2)
-	{
-		if (oResponse == undefined)
-		{
-			var aHTML = [];
-			var h = -1;
-
-			aHTML.push('<table class="ns1blankspaceMain">';
-			
-			aHTML.push('<tr id="trns1blankspaceMainMembershipSubscriptionsRegistration" class="ns1blankspaceMain">' +
-							'<td id="tdns1blankspaceMainMembershipSubscriptionsRegistration" class="ns1blankspaceMain">' +
-							'Space' +
-							'</td></tr>' +
-							'<tr id="trns1blankspaceMainMembershipSubscriptionsRegistrationValue" class="ns1blankspaceMainSelect">' +
-							'<td id="tdns1blankspaceMainMembershipSubscriptionsRegistrationValue" class="ns1blankspaceMainSelect">' +
-							'<input id="inputns1blankspaceMainMembershipSubscriptionsRegistration" class="inputns1blankspaceMainSelectCustom">' +
-							'</td></tr>';
-
-			aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-									'<td class="ns1blankspaceMainRowNothing">You need to enter at least 3 characters.</td></tr>' +
-									'<td class="ns1blankspaceMainRowNothing">It will only show spaces that you have signed up.</td></tr>';
-
-			aHTML.push('</table>';					
-			
-			$('#tdns1blankspaceMainMembershipSubscriptionsColumn2').html(aHTML.join(''));
-			
-			$('#inputns1blankspaceMainMembershipSubscriptionsRegistration').keyup(function()
-			{
-				if (giKeyPressTimeoutId != 0) {clearTimeout(giKeyPressTimeoutId)};
-		        giKeyPressTimeoutId = setTimeout("ns1blankspaceMembershipSubscriptionsRegistrationSearch('inputns1blankspaceMainMembershipSubscriptionsRegistration')", giWaitForStop);
-			});	
-				
-			$('#inputns1blankspaceMainMembershipSubscriptionsRegistration').live('blur', function() 
-			{
-				$(this).removeClass('ns1blankspaceMasterHighlight');
-			});
-
-			var aHTML = [];
-			var h = -1;
-		
-			aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMain" style="font-size:0.875em">';
-					
-			if (aXHTMLElementID[1])
-			{
-				aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-									'<td class="ns1blankspaceMainRowNothing">To change this access you need to delete it and then re-add it.</td></tr>';
-
-			}	
-			else
-			{	
-				aHTML.push('<tr class="ns1blankspaceMainAction">' +
-								'<td class="ns1blankspaceMainAction">' +
-								'<span style="width:70px;" id="spanns1blankspaceMainMembershipSubscriptionEditSave">Save</span>' +
-								'</td></tr>';
-			}
-
-			aHTML.push('<tr class="ns1blankspaceMainAction">' +
-								'<td class="ns1blankspaceMainAction">' +
-								'<span style="width:70px;" id="spanns1blankspaceMainMembershipSubscriptionEditCancel">Cancel</span>' +
-								'</td></tr>';
-			
-			aHTML.push('</table>';					
-			
-			$('#tdns1blankspaceMainMembershipSubscriptionsColumn3').html(aHTML.join(''));
-
-			$('#spanns1blankspaceMainMembershipSubscriptionEditSave').button(
-			{
-				text: "Save"
-			})
-			.click(function() 
-			{
-				ns1blankspaceMasterStatusWorking();
-
-				var sData = 'id=' + ns1blankspaceMasterFormatSave(aXHTMLElementID[1]);
-				sData += '&registration=' + ns1blankspaceMasterFormatSave($('#inputns1blankspaceMainMembershipSubscriptionsRegistration').attr("data-id"));
-				sData += '&membership=' + giObjectContext;
-
-				$.ajax(
-				{
-					type: 'POST',
-					url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE',
-					data: sData,
-					dataType: 'json',
-					success: function() {
-						oParam.step = 1;
-						ns1blankspaceDeveloperMembershipSubscriptions(oParam);
-						ns1blankspaceMasterStatus('Saved');
+					if (oResponse == undefined)
+					{	
+						$.ajax(
+						{
+							type: 'GET',
+							url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH'),
+							dataType: 'json',
+							success: function(data) {ns1blankspace.developer.membership.myubscriptions(oParam, data)
+							}
+						});
 					}
-				});
-			})
-			
-			$('#spanns1blankspaceMainMembershipSubscriptionEditCancel').button(
-			{
-				text: "Cancel"
-			})
-			.click(function() 
-			{
-				oParam.step = 1;
-				ns1blankspaceDeveloperMembershipSubscriptions(oParam);
-			})
+					else
+					{
+						var aHTML = [];
 
-			if (aXHTMLElementID[1])
-			{
-				$('#inputns1blankspaceMainMembershipSubscriptionsRegistration').attr("data-id", aXHTMLElementID[1])
-				$('#inputns1blankspaceMainMembershipSubscriptionsRegistration').val($('#tdMembershipSubscriptions_title-' + aXHTMLElementID[1]).attr("data-contactbusinesstext"));
-			}
-		}
-		else
-		{
-		}	
-	}
-	else if (iStep == 6)
-	{	
-		$.ajax(
-			{
-				type: 'POST',
-				url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE&remove=1',
-				data: 'id=' + aXHTMLElementID[1],
-				dataType: 'json',
-				success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
-			});	
-		}	
-}	
+						if (oResponse.data.rows == 0)
+						{
+							aHTML.push('No subscriptions';
+						}
+						else
+						{		
+							$.each(oResponse.data.rows, function() 
+							{ 
+								aHTML.push('<input type="radio" id="radioBasedOnSubscription' + this.id + '" name="radioBasedOnSubscription" value="' + this.id + '"/>' +
+												this.membershiptext + '<br />');
+							});
+						}
+						
+						$('#ns1blankspaceBasedOnSubscription').html(aHTML.join(''));
+
+						if (goObjectContext != undefined)
+						{
+							$('[name="radioBasedOnSubscription"][value="' + goObjectContext.basedonsubscription + '"]').attr('checked', true);
+						}
+					}
+				},
+
+	endpoints: 	{
+					show:		function (oParam, oResponse)
+								{
+									var aHTML = [];
+									
+									if (oResponse == undefined)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'ADMIN_MEMBERSHIP_ENDPOINT_SEARCH';
+										oSearch.addField('endpointtext,endpoint');
+										oSearch.addFilter('membership', 'EQUAL_TO', ns1blankspace.objectContext)
+										oSearch.rows = 50;
+										oSearch.sort('endpointtext', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.developer.membership.endpoints.show(oParam, data)})	
+									}
+									else
+									{
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceEndpointsColumn1" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspaceEndpointsColumn2" class="ns1blankspaceColumn2"></td>' +
+														'</tr>' + 
+														'</table>');		
+
+										$('#ns1blankspaceEndpoints').html(aHTML.join(''));
+
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceMainColumn2">');
+										
+										aHTML.push('<tr><td class="ns1blankspaceAction">' +
+														'<span id="ns1blankspaceMembershipEndpointsAdd">Add Endpoint</span>' +
+														'</td></tr>');
+										
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceEndpointsColumn2').html(aHTML.join(''));
+										
+										$('#ns1blankspaceMembershipEndpointsAdd').button(
+										{
+											label: "Add Endpoint"
+										})
+										.click(function() {
+											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceMembershipEndpointsAdd', leftOffset: -50, topOffset: -280});
+											ns1blankspace.developer.membership.endpoints.add(oParam);
+										});
+
+										var aHTML = [];
+								
+										aHTML.push('<table id="ns1blankspaceDeveloperMembershipEndpoints" class="ns1blankspaceMain">');
+
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<tr><td class="ns1blankspaceNothing">No endpoints.</td></tr>');
+										}
+
+										$(oResponse.data.rows).each(function()
+										{
+											aHTML.push('<tr class="ns1blankspaceRow">');
+											
+											aHTML.push('<td id="ns1blankspaceDeveloperMembershipEndpoints_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																this.endpointtext + '</td>';
+
+											aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+															'<span id="ns1blankspaceDeveloperMembershipEndpoints_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+															'</td>' +																
+															'</tr>');
+										});
+									
+										aHTML.push('</table>');
+											
+										$('#ns1blankspaceEndpointsColumn2').html(aHTML.join(''));
+
+										$('#ns1blankspaceDeveloperMembershipEndpoints > td.ns1blankspaceRowSelect').click(function(event)
+										{
+											var sXHTMLElementID = event.target.id;
+											var aId = sXHTMLElementID.split('-');
+											
+											ns1blankspace.developer.membership.endpoints.add({endpoint: aId[1], step: 2});
+										});
+
+										$('ns1blankspaceDeveloperMembershipEndpoints > td.ns1blankspaceRowRemove').button(
+										{
+											text: false,
+										 	icons: {primary: "ui-icon-close"}
+										})
+										.click(function() {
+											ns1blankspace.developer.membership.endpoints.remove(this.id)
+										})
+										.css('width', '15px')
+										.css('height', '20px');
+									}
+								},
+
+					add:		function (oParam, oResponse)
+								{
+										
+									if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceMembershipEndpointsAdd')
+									{
+										$(ns1blankspace.xhtml.container).slideUp(500);
+										$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+									}
+									else
+									{
+										if (oResponse == undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_ENDPOINT_SEARCH';
+											oSearch.addField('title');
+											oSearch.sort('title', 'ASC');
+											oSearch.rows = 50;
+
+											oSearch.getResults(function(data)
+											{
+												ns1blankspace.developer.membership.endpoints.add(oParam, data)
+											});
+										}
+										else
+										{
+											
+											$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceMembershipEndpointsAdd')
+											
+											var aHTML = [];
+											var h = -1;
+											
+											if (oResponse.data.rows.length == 0)
+											{
+												aHTML.push('<table>' +
+																'<tr><td class="ns1blankspaceNothing">No endpoints.</td></tr>' +
+																'</table>');
+
+												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).show(giShowSpeedOptions);
+											}
+											else
+											{
+												aHTML.push('<table id="ns1blankspaceMembershipEndpointAdd" class="ns1blankspaceSearchMedium" style="font-size:0.725em;">');
+												
+												$.each(oResponse.data.rows, function()
+												{	
+													aHTML.push('<tr class="ns1blankspaceRow">');
+													
+													aHTML.push('<td id="ns1blankspaceMembershipEndpointAdd_title-' + this.id + '" class="ns1blankspaceRowSelect">' +
+																			this.title + '</td>');
+													
+													aHTML.push('</tr>');
+												});
+												
+												aHTML.push('</table>');
+
+												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).show(giShowSpeedOptions);
+												
+												$('td.ns1blankspaceMainRowSelect').click(function(event)
+												{
+													ns1blankspace.developer.membership.endpoints.select(event.target.id);
+												});
+											}
+										}
+									}	
+								},
+	
+					select:		function (sXHTMLElementID)
+								{
+									var aSearch = sXHTMLElementID.split('-');
+									var sElementID = aSearch[0];
+									var sSearchContext = aSearch[2];
+									
+									$('#' + sXHTMLElementID).fadeOut(500);
+																
+									$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_ENDPOINT_MANAGE'),
+											data: sData,
+											dataType: 'json',
+											success: function(data){ns1blankspaceDeveloperMembershipEndpoints()}
+										});
+										
+								},
+
+					remove:		function (sXHTMLElementId)
+								{
+									var aSearch = sXHTMLElementId.split('-');
+									
+									var sData = 'id=' + ns1blankspace.util.fs(aSearch[1]);
+												
+									$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_ENDPOINT_MANAGE'),
+											data: sData,
+											dataType: 'json',
+											success: function(data){$('#' + sXHTMLElementId).parent().parent().fadeOut(500)}
+										});	
+								}
+				},				
+
+	subscriptions:
+				{
+					show: 		function (oParam, oResponse)
+								{
+									var sXHTMLElementID = 'ns1blankspaceMainSubscriptions';
+									var iStep = 1;
+									var aXHTMLElementID = [];
+
+									if (oParam != undefined)
+									{
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										if (oParam.step != undefined) {iStep = oParam.step}
+									}
+									else
+									{
+										oParam = {step: 1}
+									}
+
+									aXHTMLElementID = sXHTMLElementID.split('-');
+
+									if (iStep == 1)
+									{
+										if (oResponse == undefined)
+										{
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH'),
+												data: 'other=1&advanced=1&membership=' + ns1blankspace.util.fs(ns1blankspace.objectContext),
+												dataType: 'json',
+												success: function(data){ns1blankspace.developer.membership.subscriptions.show(oParam, data)}
+											});	
+										}
+										else
+										{
+											var aHTML = [];
+											
+											aHTML.push('<table class="ns1blankspaceContainer">' +
+															'<tr class="ns1blankspaceContainer">' +
+															'<td id="ns1blankspaceSubscriptionsColumn1" class="ns1blankspaceColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;"></td>' +
+															'<td id="ns1blankspaceSubscriptionsColumn2" class="ns1blankspaceColumn2" style="padding-left:15px;"></td>' +
+															'<td id="ns1blankspaceSubscriptionsColumn3" class="ns1blankspaceColumn2" style="width: 100px;"></td>' +
+															'</tr>' + 
+															'</table>');	
+								
+											$('#ns1blankspaceMainSubscriptions').html(aHTML.join(''));
+											
+											var aHTML = [];
+											var h = -1;
+											
+											aHTML.push('<table>');
+											
+											aHTML.push('<tr><td>' +
+															'<span id="ns1blankspaceMembershipSubscriptionsAdd">Add</span>' +
+															'</td></tr>');
+											
+											aHTML.push('</table>');					
+											
+											$('#ns1blankspaceSubscriptionsColumn3').html(aHTML.join(''));
+											
+											$('#ns1blankspaceMembershipSubscriptionsAdd').button(
+											{
+												label: "Add"
+											})
+											.click(function()
+											{
+												oParam.step = 2;
+												oParam.xhtmlElementID = '';
+												ns1blankspace.developer.membership.subscriptions.show(oParam);
+											});
+
+											var aHTML = [];
+											var h = -1;
+											
+											if (oResponse.data.rows.length == 0)
+											{
+												aHTML.push('<table><td class="ns1blankspaceMainRowNothing">No subscriptions.</td></tr></table>');
+
+												$('#ns1blankspaceSubscriptionsColumn1').html(aHTML.join(''));
+											}
+											else
+											{
+												aHTML.push('<table id="ns1blankspaceMembershipSubscriptions">');
+												
+												$.each(oResponse.data.rows, function()
+												{
+													aHTML.push('<tr class="ns1blankspaceRow">');
+													
+													aHTML.push('<td id="ns1blankspaceMembershipSubscriptions_title-' + this.id +
+																			'" data-contactbusinesstext="' + this.contactbusinesstext +
+																			'" class="ns1blankspaceMainRow ns1blankspaceRowSelect">' +
+																			this.contactbusinesstext;
+													
+													aHTML.push('<br /><span class="ns1blankspaceSub" id="ns1blankspaceMembershipSubscriptions_startdate-' + this.id + '">' +
+									 										this.startdate + '</span>');
+
+									 				aHTML.push('</td>');						
+
+									 				aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+													aHTML.push('<span id="ns1blankspaceMembershipSubscriptions_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+													aHTML.push('</td>');		
+
+													aHTML.push('</tr>');
+												});
+												
+												aHTML.push('</table>');
+
+												$('#ns1blankspaceSubscriptionsColumn1').html(aHTML.join(''));
+															
+												$('#ns1blankspaceMembershipSubscriptions > td.ns1blankspaceRowSelect').click(function(event)
+												{
+													oParam.step = 2;
+													oParam.xhtmlElementID = event.target.id;
+													ns1blankspace.developer.membership.subscriptions.show(oParam);
+												});
+
+												$('ns1blankspaceMembershipSubscriptions > span.ns1blankspaceRowRemove').button(
+												{
+													text: false,
+												 	icons: {primary: "ui-icon-close"}
+												})
+												.click(function()
+												{
+													oParam.step = 6;
+													oParam.xhtmlElementID = this.id;
+													ns1blankspace.developer.membership.subscriptions.show(oParam);
+												})
+												.css('width', '15px')
+												.css('height', '20px');
+											}
+										}
+									}
+
+									else if (iStep == 2)
+									{
+										if (oResponse == undefined)
+										{
+											var aHTML = [];
+											var h = -1;
+
+											aHTML.push('<table class="ns1blankspaceContainer">');
+											
+											aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+															'Space' +
+															'</td></tr>' +
+															'<tr><td class="ns1blankspaceMainSelectCustom">' +
+															'<input id="ns1blankspaceMembershipSubscriptionsRegistration" class="ns1blankspaceSelectCustom">' +
+															'</td></tr>');
+
+											aHTML.push('<tr><td class="ns1blankspaceSub">You need to enter at least 3 characters.</td></tr>' +
+																'<td class="ns1blankspaceNothing">It will only show spaces that you have signed up.</td></tr>');
+
+											aHTML.push('</table>');					
+											
+											$('#ns1blankspaceSubscriptionsColumn2').html(aHTML.join(''));
+											
+											$('#ns1blankspaceMembershipSubscriptionsRegistration').keyup(function()
+											{
+												if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.developer.membership.subscriptions.search('ns1blankspaceMembershipSubscriptionsRegistration')", giWaitForStop);
+											});	
+												
+											$('#ns1blankspaceMembershipSubscriptionsRegistration').live('blur', function() 
+											{
+												$(this).removeClass('ns1blankspaceMasterHighlight');
+											});
+
+											var aHTML = [];
+											var h = -1;
+										
+											aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMain" style="font-size:0.875em">';
+													
+											if (aXHTMLElementID[1])
+											{
+												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
+																	'<td class="ns1blankspaceMainRowNothing">To change this access you need to delete it and then re-add it.</td></tr>';
+
+											}	
+											else
+											{	
+												aHTML.push('<tr class="ns1blankspaceMainAction">' +
+																'<td class="ns1blankspaceMainAction">' +
+																'<span style="width:70px;" id="spanns1blankspaceMainMembershipSubscriptionEditSave">Save</span>' +
+																'</td></tr>';
+											}
+
+											aHTML.push('<tr class="ns1blankspaceMainAction">' +
+																'<td class="ns1blankspaceMainAction">' +
+																'<span style="width:70px;" id="spanns1blankspaceMainMembershipSubscriptionEditCancel">Cancel</span>' +
+																'</td></tr>';
+											
+											aHTML.push('</table>';					
+											
+											$('#tdns1blankspaceMainMembershipSubscriptionsColumn3').html(aHTML.join(''));
+
+											$('#spanns1blankspaceMainMembershipSubscriptionEditSave').button(
+											{
+												text: "Save"
+											})
+											.click(function() 
+											{
+												ns1blankspaceMasterStatusWorking();
+
+												var sData = 'id=' + ns1blankspaceMasterFormatSave(aXHTMLElementID[1]);
+												sData += '&registration=' + ns1blankspaceMasterFormatSave($('#inputns1blankspaceMainMembershipSubscriptionsRegistration').attr("data-id"));
+												sData += '&membership=' + giObjectContext;
+
+												$.ajax(
+												{
+													type: 'POST',
+													url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE',
+													data: sData,
+													dataType: 'json',
+													success: function() {
+														oParam.step = 1;
+														ns1blankspaceDeveloperMembershipSubscriptions(oParam);
+														ns1blankspaceMasterStatus('Saved');
+													}
+												});
+											})
+											
+											$('#spanns1blankspaceMainMembershipSubscriptionEditCancel').button(
+											{
+												text: "Cancel"
+											})
+											.click(function() 
+											{
+												oParam.step = 1;
+												ns1blankspaceDeveloperMembershipSubscriptions(oParam);
+											})
+
+											if (aXHTMLElementID[1])
+											{
+												$('#inputns1blankspaceMainMembershipSubscriptionsRegistration').attr("data-id", aXHTMLElementID[1])
+												$('#inputns1blankspaceMainMembershipSubscriptionsRegistration').val($('#tdMembershipSubscriptions_title-' + aXHTMLElementID[1]).attr("data-contactbusinesstext"));
+											}
+										}
+										else
+										{
+										}	
+									}
+									else if (iStep == 6)
+									{	
+										$.ajax(
+											{
+												type: 'POST',
+												url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE&remove=1',
+												data: 'id=' + aXHTMLElementID[1],
+												dataType: 'json',
+												success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
+											});	
+										}	
+								}	
 
 
 function ns1blankspaceMembershipSubscriptionsRegistrationSearch(sXHTMLInputElementID, oResponse)
