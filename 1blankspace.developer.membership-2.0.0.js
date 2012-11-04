@@ -7,7 +7,7 @@
 
 ns1blankspace.developer.membership = 
 {
-	init: 		function ns1blankspaceDeveloperMembershipMasterViewport()
+	init: 		function ()
 				{
 
 					var bShowHome = true
@@ -165,7 +165,7 @@ ns1blankspace.developer.membership =
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
 											
-											ns1blankspace.container.position(sElementId);
+											ns1blankspace.container.position({xhtmlElementID: sElementID});
 											ns1blankspace.search.start(sElementId);
 
 											$.ajax(
@@ -174,14 +174,14 @@ ns1blankspace.developer.membership =
 												url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SEARCH'),
 												data: 'title=' + sSearchText,
 												dataType: 'json',
-												success: function(data) {ns1blankspace.developer.membership.search.show(oParam, data)}
+												success: function(data) {ns1blankspace.developer.membership.search.process(oParam, data)}
 											});
 											
 										}
 									};	
-								}
+								},
 
-								function (oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
 
 									var iColumn = 0;
@@ -260,7 +260,7 @@ ns1blankspace.developer.membership =
 						aHTML.push('<tr><td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">' +
 										'Subscriptions</td></tr>');
 
-						aHTML.push('</table>';
+						aHTML.push('</table>');
 					}				
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
@@ -299,7 +299,7 @@ ns1blankspace.developer.membership =
 					});
 				},							
 
-	show:		function ns1blankspaceDeveloperMembershipShow(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					ns1blankspace.developer.membership.layout();
@@ -328,8 +328,7 @@ ns1blankspace.developer.membership =
 							});
 						
 						ns1blankspace.history.object({functionDefault: 'ns1blankspace.developer.membership.summary()'});
-					}	
-					}	
+					}		
 				},
 
 	summary:	function ()
