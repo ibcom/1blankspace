@@ -8,6 +8,18 @@
 ns1blankspace.option.defaultView = "Website";
 ns1blankspace.option.defaultSetupView = "Spaces";
 
+ns1blankspace.xhtml.logonNotes =
+
+	'<a href="http://mydigitalstructure.com/gettingstarted_first_app_ide" target="_blank"><strong>Help on building your first app<br/>using this simple development environment (IDE).</strong></a>' +
+	'<br /><br /><hr />' +
+	'<br />This is a simple jQueryUI app for managing your websites, webapps, structures & forms.' +
+	'<br /><br />If you wish, you can grab these scripts and modify them to create your own IDE or use your preferred IDE.' +
+	'<br /><br /><a href="http://mydigitalstructure.com/examples" target="_blank">More code examples</a>' +
+	'<br /><br /><a href="http://mydigitalstructure.com/documentation" target="_blank">Documentation</a>' +
+	'<br /><br /><a href="http://mydigitalstructure.com/gettingstarted" target="_blank">Getting started</a>' +
+	'<br /><br /><a href="http://twitter.com/ibComMYDS" target="_blank">twitter.com/ibComMYDS</a>' +
+	'<br /><br /><a href="http://mydigitalstructure.com/terms" target="_blank">By logging on you agree to the  mydigitalstructure terms of use</a>';
+	
 ns1blankspace.views = 
 [
 	{

@@ -1141,49 +1141,63 @@ ns1blankspace.logon =
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 					}	
 						
-					aHTML[++h] = '<table id="ns1blankspaceLogonContainer" class="ns1blankspaceLogon">';
+					aHTML.push('<table id="ns1blankspaceLogonContainer" class="ns1blankspaceLogon">';
 					
-					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+					aHTML.push('<tr class="ns1blankspaceLogon" >' +
+									'<td id="ns1blankspaceHomeLogon" class="ns1blankspaceLogon"' +
+									' style="width:150px;padding-right:15px;border-right-style:solid;border-width: 1px;border-color: #B8B8B8;">');
+
+					aHTML.push('<tr class="ns1blankspaceLogon">' +
 									'<td class="ns1blankspaceLogon">' +
 									'Logon Name' +
 									'</td>' +
 									'<td class="ns1blankspaceLogonInput">' +
 									'<input id="ns1blankspaceLogonName" class="ns1blankspaceLogon">' +
-									'</td>' +
-									'</tr>';
+									'</td></tr>');
 									
-					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+					aHTML.push('<tr class="ns1blankspaceLogon">' +
 									'<td class="ns1blankspaceLogon">' +
 									'Password' +
 									'</td>' +
 									'<td class="ns1blankspaceLogonInput">' +
 									'<input id="ns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password">' +
-									'</td>' +
-									'</tr>';
+									'</td></tr>');
 
-					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+					aHTML.push('<tr class="ns1blankspaceLogon">' +
 									'<td class="ns1blankspaceLogon" colspan=2>' +
 									'<span id="ns1blankspaceLogon"></span>' +
-									'</td>' +
-									'</tr>';
+									'</td></tr>');
 					
-					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+					aHTML.push('<tr class="ns1blankspaceLogon">' +
 								    '<td class="ns1blankspaceLogon" colspan=2>' +
-									'<input type="checkbox" id="ns1blankspaceLogonNameRemember"/>Remember Me</td></tr>';
+									'<input type="checkbox" id="ns1blankspaceLogonNameRemember"/>Remember Me</td></tr>');
 
-					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+					aHTML.push('<tr class="ns1blankspaceLogon">' +
 									'<td class="ns1blankspaceLogon" colspan=2>' +
 									'<a href="#" id="ns1blankspaceLogonGetPassword">Get Password</a>' +
-									'</td>' +
-									'</tr>';
+									'</td></tr>');
 									
-					aHTML[++h] = '<tr class="ns1blankspaceLogon">' +
+					aHTML.push('<tr class="ns1blankspaceLogon">' +
 									'<td id="ns1blankspaceLogonStatus" class="ns1blankspaceLogon" colspan=2>' +
 									'&nbsp;' +
-									'</td>' +
-									'</tr>';
+									'</td></tr>');
 									
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>');					
+					
+					if (ns1blankspace.xhtml.logonNotes)
+					{	
+						aHTML.push('</td><td class="ns1blankspaceLogonNotes"  style="width:150px;padding-left:15px;">');
+					
+						aHTML.push('<table class="ns1blankspaceHome">' +
+										'<tr class="ns1blankspaceHome">' +						
+										'<td class="ns1blankspaceHome" style="color:#404040;">' +
+										ns1blankspace.xhtml.logonNotes +
+										'</td>' +
+										'</tr>' +
+										'</table>');
+					}				
+
+					aHTML.push('</td></tr></table>');
 					
 					$('#' + sXHTMLElementID).css("z-index", "1");
 					$('#' + sXHTMLElementID).html(aHTML.join(''));

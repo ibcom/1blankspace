@@ -79,7 +79,7 @@ data-receiptedamount
 aHTML.push( )
 
 var oDate = new Date.parse(ns1blankspace.objectContextData.date);
-oDate.toString("ddd, dd MMM yyyy h:mm TT") 
+oDate.toString("ddd, dd MMM yyyy h:mm TT");
 
 # HTML5:
 
@@ -107,5 +107,6 @@ aHTML.push('<table class="ns1blankspaceContainer"><tbody>' +
 - Setup financial
 - setup messaging - nice and simple summary & details - a good starting point
 
+mature, self start/motived functions (objects) - if don't have everything they need they will interatively gather from the model as required.
 
 
