@@ -177,8 +177,8 @@ ns1blankspace.project =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{		
-											ns1blankspace.container.position({xhtmlElementID: sElementId});
-											ns1blankspace.search.start(sElementId);
+											ns1blankspace.container.position({xhtmlElementID: sElementID});
+											ns1blankspace.search.start(sElementID);
 
 											$.ajax(
 											{
@@ -299,18 +299,18 @@ ns1blankspace.project =
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControl"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControl"></div>');
 							
-					$('#ns1blankspace').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.setup.messaging.summary();
+						ns1blankspace.project.summary();
 					});
 					
 					$('#ns1blankspaceControlDetails').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-						ns1blankspace.setup.messaging.details();
+						ns1blankspace.project.details();
 					});
 
 					$('#ns1blankspaceControlDescription').click(function(event)
@@ -342,7 +342,7 @@ ns1blankspace.project =
 	show: 		function ns1blankspaceProjectShow(oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspace.setup.messaging.layout();
+					ns1blankspace.project.layout();
 					
 					var aHTML = [];
 					
@@ -397,23 +397,23 @@ ns1blankspace.project =
 
 						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Email</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.description +
 										'</td></tr>');
 
 						if (ns1blankspace.objectContextData.startdate != '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Server</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryServer" class="ns1blankspaceSummary">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Start Date</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryStartDate" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.startdate +
 										'</td></tr>');	
 						}
 
 						if (ns1blankspace.objectContextData.enddate != '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Server</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryServer" class="ns1blankspaceSummary">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">End Date</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryEndDate" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.enddate +
 										'</td></tr>');
 						}											
