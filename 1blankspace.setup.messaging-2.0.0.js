@@ -358,7 +358,7 @@ ns1blankspace.setup.messaging =
 					}	
 				},
 
-	details:	function ns1blankspaceSetupMessagingDetails()
+	details:	function ()
 				{
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
