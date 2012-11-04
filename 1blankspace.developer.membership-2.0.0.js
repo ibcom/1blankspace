@@ -724,7 +724,6 @@ ns1blankspace.developer.membership =
 											$('#ns1blankspaceMainSubscriptions').html(aHTML.join(''));
 											
 											var aHTML = [];
-											var h = -1;
 											
 											aHTML.push('<table>');
 											

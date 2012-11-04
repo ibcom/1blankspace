@@ -465,7 +465,7 @@ ns1blankspace.developer.space =
 					}
 					else
 					{
-							aHTML.push('<table class="ns1blankspaceContainer">' +
+						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
 										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
 										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
@@ -499,10 +499,11 @@ ns1blankspace.developer.space =
 					
 				}.
 
-	users:		function ns1blankspaceDeveloperSpaceSubscriptions(aParam, oResponse)
+	subscriptions:
+
+				function (aParam, oResponse)
 				{
 					var aHTML = [];
-					var h = -1;
 					var iStep = 1;
 					var sXHTMLElementID;
 					var aXHTMLElementID = [];
@@ -522,97 +523,89 @@ ns1blankspace.developer.space =
 					if (iStep == 1)
 					{
 						if (oResponse == undefined)
-						{
-							var sParam = 'method=ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH&other=1&registration=' + giObjectContext;
-							
+						{							
 							$.ajax(
 							{
 								type: 'GET',
-								url: '/ondemand/admin/?' + sParam,
+								url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH'),
+								data: 'other=1&registration=' + ns1blankspace.util.fs(ns1blankspace.objectContext),
 								dataType: 'json',
-								success: function(data) {ns1blankspaceDeveloperSpaceSubscriptions(aParam, data)}
+								success: function(data) {ns1blankspace.developer.space.subscriptions(aParam, data)}
 							});
 						}
 						else
 						{
 							var aHTML = [];
-							var h = -1;
 							
-							aHTML.push('<table class="ns1blankspaceMain">' +
-										'<tr class="ns1blankspaceMainRow1">' +
-										'<td id="tdns1blankspaceMainSpaceSubscriptionsColumn1" class="ns1blankspaceMainColumn1Large">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainSpaceSubscriptionsColumn2" style="width: 100px;" class="ns1blankspaceMainColumn2Action">' +
-										'</td>' +
-										'</tr>' +
-										'</table>';				
+							aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceSubscriptionsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceSubscriptionsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');		
 							
-							$('#divns1blankspaceMainSubscriptions').html(aHTML.join(''));
+							$('#ns1blankspaceMainSubscriptions').html(aHTML.join(''));
 
 							var aHTML = [];
-							var h = -1;
+
+							aHTML.push('<table>';
 							
-							aHTML.push('<table class="ns1blankspaceMainColumn2">';
-							
-							aHTML.push('<tr><td id="tdns1blankspaceMainSpaceSubscriptionsAdd" class="ns1blankspaceMainAction">' +
-											'<span id="spanns1blankspaceMainSpaceSubscriptionsAdd">Add Endpoint</span>' +
-											'</td></tr>';
-							
-							aHTML.push('</table>';					
+							aHTML.push('<tr><td><span id="ns1blankspaceSpaceSubscriptionsAdd">Add</span>' +
+															'</td></tr>');
+
+							aHTML.push('</table>');					
 							
 							$('#tdns1blankspaceMainSpaceSubscriptionsColumn2').html(aHTML.join(''));
 							
-							$('#spanns1blankspaceMainSpaceSubscriptionsAdd').button(
+							$('#ns1blankspaceSubscriptionsColumn2').button(
 							{
 								label: "Add"
 							})
 							.click(function()
 							{
-								if ($(ns1blankspace.xhtml.container).attr('onDemandSource') == 'spanns1blankspaceMainSpaceSubscriptionsAdd')
+								if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceSubscriptionsColumn2')
 								{
 									$(ns1blankspace.xhtml.container).slideUp(500);
-									$(ns1blankspace.xhtml.container).attr('onDemandSource', '');
+									$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 								}
 								else
 								{
-									ns1blankspaceMasterOptionsSetPosition('spanns1blankspaceMainSpaceSubscriptionsAdd', -50, -280);
+									ns1blankspaceMasterOptionsSetPosition({xhtmlElementID: 'ns1blankspaceSubscriptionsColumn2', leftOffset: -50, rightOffset: -280});
 									$.extend(true, aParam, {step: 2});
-									ns1blankspaceDeveloperSpaceSubscriptions(aParam);
+									ns1blankspace.developer.space.subscriptions(aParam);
 								}	
 							});
 
 							var aHTML = [];
-							var h = -1;	
 									
-							aHTML.push('<table cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-							aHTML.push('<tbody>';
+							aHTML.push('<table id="ns1blankspaceSpaceSubscriptions" class="ns1blankspaceContainer">');
 
 							if (oResponse.data.rows.length == 0)
 							{
-								aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-										'<td class="ns1blankspaceMainRowNothing">No subscriptions.</td></tr>';
+								aHTML.push('<tr><td class="ns1blankspaceNothing">No subscriptions.</td></tr>');
 							}
 
 							$(oResponse.data.rows).each(function()
 							{
 
-								aHTML.push('<tr class="ns1blankspaceMainRow">';
+								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML.push('<td id="ns1blankspaceSpaceSubscriptions_Title-' + this.id + '" class="ns1blankspaceMainRow ns1blankspaceMainRowSelect subscriptions"' +
+								aHTML.push('<td id="ns1blankspaceSpaceSubscriptions_Title-' + this.id + '" class="ns1blankspaceMainRow ns1blankspaceMainRowSelect"' +
 														' title="">' +
-														this.membershiptext + '</td>';
+														this.membershiptext + '</td>');
 
-								aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">';
-								aHTML.push('<span id="spanSpaceSubscriptions_options_remove-' + this.id + '" class="ns1blankspaceMainRowOptionsRemove"></span>';
-								aHTML.push('</td>';																	
-								aHTML.push('</tr>';
+								aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">');
+								aHTML.push('<span id="ns1blankspaceSpaceSubscriptions_remove-' + this.id + '" class="ns1blankspacenRowRemove"></span>');
+								aHTML.push('</td>');	
+
+								aHTML.push('</tr>');
 							});
 						
-							aHTML.push('</tbody></table>';
+							aHTML.push('</table>');
 								
-							$('#tdns1blankspaceMainSpaceSubscriptionsColumn1').html(aHTML.join(''));
+							$('#ns1blankspaceSubscriptionsColumn1').html(aHTML.join(''));
 
-							$('.ns1blankspaceMainRowOptionsRemove').button(
+							$('#ns1blankspaceSpaceSubscriptions > td.ns1blankspacenRowRemove').button(
 							{
 								text: false,
 							 	icons: {primary: "ui-icon-close"}
@@ -621,29 +614,28 @@ ns1blankspace.developer.space =
 							{
 								aParam.step = 4;
 								aParam.xhtmlElementID = this.id;
-								ns1blankspaceDeveloperSpaceSubscriptions(aParam)
+								ns1blankspace.developer.space.subscriptions(aParam)
 							})
 							.css('width', '15px')
-							.css('height', '20px')
+							.css('height', '20px');
 						}
 					}
 					else if (iStep == 2)
 					{
 						if (oResponse == undefined)
 						{
-							var sParam = 'method=ADMIN_MEMBERSHIP_SEARCH&me=1';
-							
 							$.ajax(
 							{
 								type: 'GET',
-								url: '/ondemand/admin/?' + sParam,
+								url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SEARCH'),
+								data: 'me=1',
 								dataType: 'json',
-								success: function(data) {ns1blankspaceDeveloperSpaceSubscriptions(aParam, data)}
+								success: function(data) {ns1blankspace.developer.space.subscriptions(aParam, data)}
 							});
 						}
 						else
 						{
-							$(ns1blankspace.xhtml.container).attr('onDemandSource', 'spanns1blankspaceMainSpaceSubscriptionsAdd')
+							$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceSpaceSubscriptionsAdd')
 							
 							var aHTML = [];
 							var h = -1;
@@ -651,39 +643,36 @@ ns1blankspace.developer.space =
 							if (oResponse.data.rows.length == 0)
 							{
 								aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceSearchMedium">';
-								aHTML.push('<tbody>'
-								aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-												'<td class="ns1blankspaceMainRowNothing">No memberships.</td></tr>';
-								aHTML.push('</tbody></table>';
+								aHTML.push('<tr><td class="ns1blankspaceNothing">No subscriptions.</td></tr>');
+								aHTML.push('</table>');
 
 								$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-								$(ns1blankspace.xhtml.container).show(giShowSpeedOptions);
+								$(ns1blankspace.xhtml.container).show();
 							}
 							else
 							{
-								aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.725em;">';
-								aHTML.push('<tbody>'
+								aHTML.push('<table id="ns1blankspaceSpaceSubscriptionsSelect" class="ns1blankspaceSearchMedium" style="font-size:0.725em;">');
 								
 								$.each(oResponse.data.rows, function()
 								{	
-									aHTML.push('<tr class="ns1blankspaceMainRow">';
+									aHTML.push('<tr class="ns1blankspaceRow">';
 									
-									aHTML.push('<td id="tdSpaceSubscriptionsSelect_title-' + this.id + '" class="ns1blankspaceMainRowSelect">' +
-															this.title + '</td>';
+									aHTML.push('<td id="ns1blankspaceSpaceSubscriptionsSelect_title-' + this.id + '" class="ns1blankspaceRowSelect">' +
+															this.title + '</td>');
 									
-									aHTML.push('</tr>'
+									aHTML.push('</tr>');
 								});
 								
-								aHTML.push('</tbody></table>';
+								aHTML.push('</table>');
 
 								$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-								$(ns1blankspace.xhtml.container).show(giShowSpeedOptions);
+								$(ns1blankspace.xhtml.container).show();
 								
-								$('td.ns1blankspaceMainRowSelect').click(function(event)
+								$('#s1blankspaceSpaceSubscriptionsSelect > td.ns1blankspaceRowSelect').click(function(event)
 								{
 									aParam.step = 3;
 									aParam.xhtmlElementID = event.target.id;
-									ns1blankspaceDeveloperSpaceSubscriptions(aParam);
+									ns1blankspace.developer.space.subscriptions(aParam);
 								});
 							}
 						}
@@ -692,17 +681,16 @@ ns1blankspace.developer.space =
 					{	
 						$('#' + sXHTMLElementID).fadeOut(500);
 						
-						var sParam = 'method=ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE';
-						var sData = 'registration=' + giObjectContext +
-									'&membership=' + aXHTMLElementID[1];
+						var sData = 'registration=' + ns1blankspace.util.fs(ns1blankspace.objectContext) +
+										'&membership=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
 									
 						$.ajax(
 						{
 							type: 'POST',
-							url: '/ondemand/admin/?' + sParam,
+							url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE'),
 							data: sData,
 							dataType: 'json',
-							success: function(data){ns1blankspaceDeveloperSpaceSubscriptions()}
+							success: function(data){ns1blankspace.developer.space.subscriptions()}
 						});
 					}
 
@@ -711,18 +699,18 @@ ns1blankspace.developer.space =
 						$.ajax(
 						{
 							type: 'POST',
-							url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE&remove=1',
-							data: 'id=' + aXHTMLElementID[1],
+							url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE'),
+							data: 'remove=1&id=' + ns1blankspace.util.fs(aXHTMLElementID[1]),
 							dataType: 'json',
 							success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 						});	
 					}
 				},
 
-	users:		function ns1blankspaceDeveloperSpaceMembers(aParam, oResponse)
+	users:		function (aParam, oResponse)
 				{
 					var iObjectContext = giObjectContext;
-					var sXHTMLElementId = 'divns1blankspaceMainMembers';
+					var sXHTMLElementId = 'ns1blankspaceMainMembers';
 					var oOptions = {view: true};
 					var oActions = {};
 					
@@ -736,14 +724,13 @@ ns1blankspace.developer.space =
 						
 					if (oResponse == undefined)
 					{
-						var sParam = 'method=ADMIN_MEMBERSHIP_SUBSCRIPTION_MEMBER_SEARCH&space=' + iObjectContext;
-						
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/ondemand/admin/?' + sParam,
+							url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_MEMBER_SEARCH'),
+							data: 'space=' + ns1blankspace.util.fs(ns1blankspace.objectContext),
 							dataType: 'json',
-							success: function(data) {ns1blankspaceDeveloperSpaceMembers(aParam, data)}
+							success: function(data) {ns1blankspace.developer.space.users(aParam, data)}
 						});
 					}
 					else
@@ -753,39 +740,35 @@ ns1blankspace.developer.space =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="tableWebsitePages" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-							aHTML.push('<tbody>'
-							aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-											'<td class="ns1blankspaceMainRowNothing">No users (members).</td></tr>';
-							aHTML.push('</tbody></table>';
+							aHTML.push('<table class="ns1blankspace">';
+							aHTML.push('<tr><td class="ns1blankspaceNothing">No users.</td></tr>');
+							aHTML.push('<table>');
 
 							$('#' + sXHTMLElementId).html(aHTML.join(''));
-						
 						}
 						else
 						{
-							aHTML.push('<table id="tableClientAudits" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-							aHTML.push('<tbody>'
-							aHTML.push('<tr class="ns1blankspaceMainCaption">';
-							aHTML.push('<td class="ns1blankspaceMainCaption">Logon Name</td>';
-							aHTML.push('<td class="ns1blankspaceMainCaption">Last logged on</td>';
-							aHTML.push('</tr>';
+							aHTML.push('<table id="ns1blankspaceSpaceSubscriptionUsers" class="ns1blankspaceContainer">');
+							aHTML.push('<tr class="ns1blankspaceCaption">');
+							aHTML.push('<td class="ns1blankspaceCaption">Logon Name</td>');
+							aHTML.push('<td class="ns1blankspaceCaption">Last logged on</td>');
+							aHTML.push('</tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{
 								
-								aHTML.push('<tr class="ns1blankspaceMainRow">';
+								aHTML.push('<tr class="ns1blankspaceRow">');
 												
-								aHTML.push('<td id="tdWebsitePages_title-' + this.id + '" class="ns1blankspaceMainRow">' +
-														this.username + '</td>';
+								aHTML.push('<td id="ns1blankspaceSpaceSubscriptionUsers_title-' + this.id + '" class="ns1blankspaceRow">' +
+														this.username + '</td>');
 														
-								aHTML.push('<td id="tdWebsitePages_url-' + this.id + '" class="ns1blankspaceMainRow">' +
-														this.lastlogondatetime + '</td>';
+								aHTML.push('<td id="s1blankspaceSpaceSubscriptionUsers_lastlogon-' + this.id + '" class="ns1blankspaceRow">' +
+														this.lastlogondatetime + '</td>');
 														
-								aHTML.push('</tr>'
+								aHTML.push('</tr>');
 							});
 							
-							aHTML.push('</tbody></table>';
+							aHTML.push('</table>');
 
 							$('#' + sXHTMLElementId).html(aHTML.join(''));
 						}
