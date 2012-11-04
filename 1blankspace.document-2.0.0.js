@@ -188,7 +188,6 @@ ns1blankspace.document =
 								{
 									var iColumn = 0;
 									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
 										
 									if (oResponse.data.rows.length == 0)
@@ -197,8 +196,7 @@ ns1blankspace.document =
 									}
 									else
 									{
-										aHTML[++h] = '<table class="ns1blankspaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -206,21 +204,21 @@ ns1blankspace.document =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="ns1blankspaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
-											aHTML[++h] = '<td class="ns1blankspaceSearch" id="' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
-															this.title + '</td>';
+															this.title + '</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</table>');
 
 										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
@@ -229,193 +227,179 @@ ns1blankspace.document =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspaceDocumentSearch(event.target.id, 1);
+											ns1blankspace.document.search.send(event.target.id, 1);
 										});
 									}	
 									
-									ns1blankspaceSearchStop();	
+									ns1blankspace.search.stop();	
 								}
 				},
-								
-	layout: 	function ns1blankspaceDocumentViewport()
+
+	layout: 	function ()
 				{
+					var aHTML = [];
+
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
+					
+					aHTML.push('<table class="ns1blankspaceControl">');
+					
+					if (ns1blankspace.objectContext == -1)
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlEdit" class="ns1blankspaceControl">' +
+										'Edit</td></tr>');		
+					}
+					else
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Summary</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlEdit" class="ns1blankspaceControl">' +
+										'Edit</td></tr>');
+					}	
+					
+					aHTML.push('</table>';					
+								
+					if (ns1blankspace.objectContext != -1)
+					{		
+						aHTML.push('<table class="ns1blankspaceViewControl">';
+									
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
+										'Attachments</td></tr>');
+
+						aHTML.push('</table>';
+					}	
+
+			
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
+
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainEdit" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControl"></div>');
+							
+					$('#ns1blankspaceMain').html(aHTML.join(''));
+
+					$('#ns1blankspaceControlSummary').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.document.summary();
+					});
+					
+					$('#ns1blankspaceControlDetails').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.document.details();
+					});
+
+					$('#ns1blankspaceControlEdit').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
+						ns1blankspace.document.edit();
+					});
+
+					$('#ns1blankspaceControlAttachments').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments'});
+						ns1blankspace.attachments.show();
+					});
 
 					if (ns1blankspace.option.richTextEditing)
 					{	
-						if (tinyMCE.getInstanceById('inputns1blankspaceMainEditText'))
+						if (tinyMCE.getInstanceById('ns1blankspaceDocumentEditText'))
 						{
-							tinyMCE.get('inputns1blankspaceMainEditText').remove();
-							$('#inputns1blankspaceMainEditText').remove();
+							tinyMCE.get('ns1blankspaceDocumentEditText').remove();
+							$('#ns1blankspaceDocumentEditText').remove();
 						}	
 					}
-					
-					aHTML[++h] = '<div id="divns1blankspaceViewportControlContext" class="ns1blankspaceViewportControlContext"></div>';
-					
-					aHTML[++h] = '<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
-					
-					aHTML[++h] = '<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Summary</td>' +
-									'</tr>';
-									
-					aHTML[++h] = '<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">Details</td>' +
-									'</tr>';
-								
-					aHTML[++h] = '<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlEdit" class="ns1blankspaceViewportControl">Edit</td>' +
-									'</tr>';			
-									
-					aHTML[++h] = '</table>';					
-							
-					if (ns1blankspace.objectContext != -1)
-					{		
-						aHTML[++h] = '<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
-									
-						aHTML[++h] = '<tr id="trns1blankspaceViewportControl" class="ns1blankspaceViewportControl">' +
-										'<td id="tdns1blankspaceViewportControlAttachments" class="ns1blankspaceViewportControl">Attachments</td>' +
-										'</tr>';
-
-						aHTML[++h] = '</table>';
-					}	
-
-					$('#divns1blankspaceViewportControl').html(aHTML.join(''));
-					
-					var aHTML = [];
-					var h = -1;
-
-					aHTML[++h] = '<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divns1blankspaceMainDetails" class="divns1blankspaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divns1blankspaceMainEdit" class="divns1blankspaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divns1blankspaceMainAttachments" class="divns1blankspaceViewportMain"></div>';	
-
-					$('#divns1blankspaceMain').html(aHTML.join(''));
-					
-					$('#tdns1blankspaceViewportControlSummary').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary");
-						ns1blankspaceDocumentSummary();
-					});
-					
-					$('#tdns1blankspaceViewportControlDetails').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
-						ns1blankspaceDocumentDetails();
-					});
-					
-					$('#tdns1blankspaceViewportControlEdit').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainEdit");
-						ns1blankspaceDocumentEdit();
-					});
-
-					$('#tdns1blankspaceViewportControlAttachments').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainAttachments", true);
-						ns1blankspaceAttachments({xhtmlElementID: 'divns1blankspaceMainAttachments'});
-					});
 				},
 
-	show: 		function ns1blankspaceDocumentShow(oParam, oResponse)
+	show: 		function (oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspaceDocumentViewport();
-
+					ns1blankspace.document.layout();
+					
 					var aHTML = [];
-					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML[++h] = '<table><tbody><tr><td class="ns1blankspaceMainRowNothing" valign="top">Sorry can\'t find the document.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this document.</td></tr></table>');
 								
-						$('#divns1blankspaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
-								
-						$('#divns1blankspaceViewportControlContext').html(ns1blankspace.objectContextData.title);
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-						$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 						
-						ns1blankspaceViewportDestination({
-							newDestination: 'ns1blankspaceDocumentMasterViewport({showHome: false});ns1blankspaceDocumentSearch("-' + ns1blankspace.objectContext + '")',
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title);
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+						
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.document.init({showHome: false});ns1blankspace.document.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
-							})
-							
-						ns1blankspaceObjectViewportHistory({functionDefault: 'ns1blankspaceDocumentSummary()'});
+							});
+						
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.document.summary()'});
 					}	
 				},		
 		
-	summary: 	function ns1blankspaceDocumentSummary()
+	summary: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top" class="ns1blankspaceMainRowNothing">Sorry can\'t find document.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this document.</td></tr></table>');
 								
-						$('#divns1blankspaceMainSummary').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML[++h] = '<table id="tablens1blankspaceMainSummary" class="ns1blankspaceMain">';
-						aHTML[++h] = '<tr id="trns1blankspaceMainSummaryRow1" class="ns1blankspaceMainRow1">' +
-									'<td id="tdns1blankspaceMainSummaryColumn1" class="ns1blankspaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainSummaryColumn2" class="ns1blankspaceMainColumn2x">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'</tr>' +
+									'</table>');				
 						
-						$('#divns1blankspaceMainSummary').html(aHTML.join(''));
-					
-						var aHTML = [];
-						var h = -1;
-					
-						if (ns1blankspace.objectContextData.summary == '')
-						{
-							aHTML[++h] = '<table><tbody><tr><td valign="top" class="ns1blankspaceMainRowNothing">There is no document summary.</td></tr>';
-							aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
-						}
-						else
-						{	
-							aHTML[++h] = '<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
-						
-							aHTML[++h] = '<tr><td id="tdns1blankspaceMainSummarySummary" class="ns1blankspaceMainSummary">&nbsp;</td></tr>' +
-											'<tr><td id="tdns1blankspaceMainSummarySummaryValue" class="ns1blankspaceMainSummaryValue">' +
-											ns1blankspace.objectContextData.summary +
-											'</td></tr>';
-											
-							aHTML[++h] = '</table>';					
-						}
-						
-						$('#tdns1blankspaceMainSummaryColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
-						var aHTML = [];
-						var h = -1;	
+						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML[++h] = '<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2">';
+						aHTML.push('<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.summary +
+										'</td></tr>');
+						
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+					
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceMainColumn2">');
 												
-						 aHTML[++h] = '<tr><td id="tdns1blankspaceMainSummaryPDF" class="ns1blankspaceMainColumn2Action">' +
-										 '<a href="#" id="ans1blankspaceMainSummaryPDF">View as PDF</a>' +
-										'</td></tr>';
+						 aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+										 '<a href="#" id="ns1blankspaceSummaryPDF">View as PDF</a>' +
+										'</td></tr>');
 						
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						//$('#tdns1blankspaceMainSummaryColumn2').html(aHTML.join(''));	
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));	
 					
-						$('#ans1blankspaceMainSummaryPDF').click(function(event)
+						$('#ns1blankspaceMainSummaryPDF').click(function(event)
 						{
-							ns1blankspaceDocumentPDF();
+							ns1blankspace.pdf.create();
 						});
 					}	
 				},
@@ -423,66 +407,62 @@ ns1blankspace.document =
 	details: 	function ns1blankspaceDocumentDetails()
 				{
 					var aHTML = [];
-					var h = -1;
-					
-					if ($('#divns1blankspaceMainDetails').attr('onDemandLoading') == '1')
+
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
-						$('#divns1blankspaceMainDetails').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						aHTML[++h] = '<table id="tablens1blankspaceMainDetails" class="ns1blankspaceMainDetails">';
-						aHTML[++h] = '<tr id="trns1blankspaceMainDetailsRow1" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsColumn1" class="ns1blankspaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainDetailsColumn2" class="ns1blankspaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
 						
-						$('#divns1blankspaceMainDetails').html(aHTML.join(''));
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
+						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML[++h] = '<tr id="trns1blankspaceMainDetailsTitle" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsTitle" class="ns1blankspaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Title' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsTitleValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainDetailsTitleValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainDetailsTitle" class="inputns1blankspaceMainText">' +
-										'</td></tr>';
-					
-						aHTML[++h] = '<tr id="trns1blankspaceMainDetailsURL" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsURL" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceText">' +
+										'</td></tr>');	
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'URL' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsURLValue" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainDetailsURLValue" class="ns1blankspaceMainText">' +
-										'<input id="inputns1blankspaceMainDetailsURL" class="inputns1blankspaceMainText">' +
-										'</td></tr>';
-					
-						aHTML[++h] = '<tr id="trns1blankspaceMainDetailsSharing" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsSharing" class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsURL" class="ns1blankspaceText">' +
+										'</td></tr>');	
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Sharing' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsSharing" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainDetailsFromEmailValue" class="ns1blankspaceMainText">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
 										'<input type="radio" id="radioPublicY" name="radioPublic" value="Y"/>Public' +
 										'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
-										'</td></tr>';
-					
-						aHTML[++h] = '</table>';					
+										'</td></tr>');	
+
+						aHTML.push('</table>';					
 						
 						$('#tdns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 							
-						aHTML[++h] = '<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">';
+						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">';
 						
-						aHTML[++h] = '<tr id="trns1blankspaceMainDetailsSummary" class="ns1blankspaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsSummary" class="ns1blankspaceMain">' +
 										'<td id="tdns1blankspaceMainDetailsSummary class="ns1blankspaceMain">' +
 										'Document Summary' +
 										'</td></tr>' +
@@ -491,7 +471,7 @@ ns1blankspace.document =
 										'<textarea rows="10" cols="35" id="inputns1blankspaceMainDetailsSummary" class="inputns1blankspaceMainTextMulti"></textarea>' +
 										'</td></tr>';
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 							
 						$('#tdns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
 
@@ -513,23 +493,23 @@ ns1blankspace.document =
 						var aHTML = [];
 						var h = -1;
 					
-						aHTML[++h] = '<table id="tablens1blankspaceMainEdit" class="ns1blankspaceMain">';
-						aHTML[++h] = '<tr id="trns1blankspaceMainEditRow1" class="ns1blankspaceMain">' +
+						aHTML.push('<table id="tablens1blankspaceMainEdit" class="ns1blankspaceMain">';
+						aHTML.push('<tr id="trns1blankspaceMainEditRow1" class="ns1blankspaceMain">' +
 										'<td id="tdns1blankspaceMainEditColumn1" class="ns1blankspaceMain">' +
 										'</td>' +
 										'<td id="tdns1blankspaceMainEditColumn2" class="ns1blankspaceMain">' +
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 							
 						$('#divns1blankspaceMainEdit').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 					
-						aHTML[++h] = '<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMain">';
+						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMain">';
 								
-						aHTML[++h] = '<tr id="trns1blankspaceMainEditText" class="ns1blankspaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainEditText" class="ns1blankspaceMain">' +
 										'<td id="tdns1blankspaceMainEditText" class="ns1blankspaceMain" style="text-align:right;">' +
 										'<a href="#" id="ans1blankspaceMainEditPDF">View as PDF</a>' +
 										'</td></tr>' +
@@ -538,7 +518,7 @@ ns1blankspace.document =
 										'<textarea rows="10" cols="60" onDemandType="TEXTMULTI" name="inputns1blankspaceMainEditText" id="inputns1blankspaceMainEditText" class="inputns1blankspaceMainTextMultiLarge tinymceAdvanced"></textarea>' +
 										'</td></tr>';
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
 						$('#tdns1blankspaceMainEditColumn1').html(aHTML.join(''));
 							
