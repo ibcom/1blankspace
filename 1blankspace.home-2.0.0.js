@@ -400,7 +400,7 @@ ns1blankspace.home.actions =
 					.css('height', '18px');
 				},
 
-	status:		function ns1blankspaceHomeTodayActionsStatus(sXHTMLElementID, iStatus)
+	status:		function (sXHTMLElementID, iStatus)
 				{
 					var sData = '';
 					

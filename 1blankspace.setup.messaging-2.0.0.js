@@ -112,10 +112,10 @@ ns1blankspace.setup.messaging =
 
 	search: 	{
 					send:			
-								function (sXHTMLElementId, iSource, sSearchText, sSearchContext)
+								function (sXHTMLElementID, iSource, sSearchText, sSearchContext)
 								{
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
+									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
 										
 									if (iSource == undefined)
@@ -157,8 +157,8 @@ ns1blankspace.setup.messaging =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{	
-											ns1blankspace.container.position(sElementId);
-											ns1blankspace.search.start(sElementId);
+											ns1blankspace.container.position({xhtmlElementID: sElementID});
+											ns1blankspace.search.start(sElementID);
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
