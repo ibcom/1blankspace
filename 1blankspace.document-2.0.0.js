@@ -7,10 +7,12 @@
  
 ns1blankspace.document = 
 {
+	data: 		{},
+
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
+					var bShowHome = true;
+
 					if (oParam != undefined)
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
@@ -23,6 +25,8 @@ ns1blankspace.document =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Documents';
 					
+					ns1blankspace.document.data.websiteContext = ((oParam?oParam:{}).websiteContext ? oParam.websiteContext : undefined);
+
 					if (bShowHome)
 					{
 						ns1blankspace.history.view({
@@ -174,7 +178,7 @@ ns1blankspace.document =
 											oSearch.addField('title');
 											oSearch.addFilter('email', 'STRING_IS_LIKE', sSearchText);
 
-											if (bWebsiteOnly)
+											if (ns1blankspace.document.data.websiteContext)
 											{
 												oSearch.addFilter('foldertitle', 'EQUAL_TO', '[My Website Documents]');
 											}	
@@ -383,24 +387,6 @@ ns1blankspace.document =
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
-					
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspaceMainColumn2">');
-												
-						 aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
-										 '<a href="#" id="ns1blankspaceSummaryPDF">View as PDF</a>' +
-										'</td></tr>');
-						
-										
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));	
-					
-						$('#ns1blankspaceMainSummaryPDF').click(function(event)
-						{
-							ns1blankspace.pdf.create();
-						});
 					}	
 				},
 
@@ -453,109 +439,101 @@ ns1blankspace.document =
 										'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
 										'</td></tr>');	
 
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 							
-						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">';
+						aHTML.push('<table class="ns1blankspaceMain">');
 						
-						aHTML.push('<tr id="trns1blankspaceMainDetailsSummary" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsSummary class="ns1blankspaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Document Summary' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsSummaryValue" class="ns1blankspaceMainTextMulti">' +
-										'<td id="tdns1blankspaceMainDetailsSummaryValue" class="ns1blankspaceMainTextMulti">' +
-										'<textarea rows="10" cols="35" id="inputns1blankspaceMainDetailsSummary" class="inputns1blankspaceMainTextMulti"></textarea>' +
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="10" cols="35" id="ns1blankspaceMainDetailsSummary" class="inputns1blankspaceMainTextMulti"></textarea>' +
+										'</td></tr>');
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 							
-						$('#tdns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputns1blankspaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
-							$('#inputns1blankspaceMainDetailsURL').val(ns1blankspace.objectContextData.url);
-							$('#inputns1blankspaceMainDetailsSummary').val(ns1blankspace.objectContextData.summary);
+							$('#ns1blankspaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
+							$('#ns1blankspaceMainDetailsURL').val(ns1blankspace.objectContextData.url);
+							$('#ns1blankspaceMainDetailsSummary').val(ns1blankspace.objectContextData.summary);
 							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
 						}
-						
 					}	
 				},
 
-	edit: 		function ns1blankspaceDocumentEdit(sReturn)
+	edit: 		function (sReturn)
 				{	
 					if ($('#divns1blankspaceMainEdit').attr('onDemandLoading') == '1')
 					{
 						var aHTML = [];
-						var h = -1;
-					
-						aHTML.push('<table id="tablens1blankspaceMainEdit" class="ns1blankspaceMain">';
-						aHTML.push('<tr id="trns1blankspaceMainEditRow1" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainEditColumn1" class="ns1blankspaceMain">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainEditColumn2" class="ns1blankspaceMain">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						
+							aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceEditColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceEditColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');		
 							
-						$('#divns1blankspaceMainEdit').html(aHTML.join(''));
+						$('#ns1blankspaceMainEdit').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMain">';
+						aHTML.push('<table class="ns1blankspace">';
 								
-						aHTML.push('<tr id="trns1blankspaceMainEditText" class="ns1blankspaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceMain">' +
 										'<td id="tdns1blankspaceMainEditText" class="ns1blankspaceMain" style="text-align:right;">' +
-										'<a href="#" id="ans1blankspaceMainEditPDF">View as PDF</a>' +
+										'<a href="#" id="ns1blankspaceEditPDF">View as PDF</a>' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsEditTextValue" class="ns1blankspaceMainTextMulti">' +
-										'<td id="tdns1blankspaceMainDetailsEditTextValue" class="ns1blankspaceMainTextMulti">' +
-										'<textarea rows="10" cols="60" onDemandType="TEXTMULTI" name="inputns1blankspaceMainEditText" id="inputns1blankspaceMainEditText" class="inputns1blankspaceMainTextMultiLarge tinymceAdvanced"></textarea>' +
-										'</td></tr>';
+										'<tr class="ns1blankspaceMainTextMulti">' +
+										'<td class="ns1blankspaceMainTextMulti">' +
+										'<textarea rows="10" cols="60" name="ns1blankspaceEditText" id="ns1blankspaceEditText" class="ns1blankspaceTextMultiLarge tinymceAdvanced"></textarea>' +
+										'</td></tr>');
 										
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainEditColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceEditColumn1').html(aHTML.join(''));
 							
-						$('#ans1blankspaceMainEditPDF').click(function(event)
+						$('#ns1blankspaceEditPDF').click(function(event)
 						{
-							ns1blankspaceDocumentPDF();
+							ns1blankspace.document.pdf();
 						});
 						
 						if (sReturn == undefined)
 						{
 							if (ns1blankspace.objectContext != -1)
 							{
-								sParam = 'method=DOCUMENT_CONTENT_SEARCH&id=' + ns1blankspace.objectContext;
-
 								$.ajax(
 								{
 									type: 'GET',
 									cache: false,
-									url: '/ondemand/document/?' + sParam,
+									url: ns1blankspace.util.endpointURI('DOCUMENT_CONTENT_SEARCH'),
+									data: 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext),
 									dataType: 'text',
-									success: ns1blankspaceDocumentEdit
+									success: ns1blankspace.document.edit
 								});
 							}
 							else
 							{
-								ns1blankspaceDocumentEdit("OK|");
+								ns1blankspace.document.edit("OK|");
 							}
 							
 						}
 						else
 						{
-						
-							$('#divns1blankspaceMainEdit').attr('onDemandLoading', '');
+							$('#ns1blankspaceMainEdit').attr('data-loading', '');
 							
 							var sHTML = sReturn;
 							
-							$('#inputns1blankspaceMainEditText').val(sHTML);
+							$('#ns1blankspaceEditText').val(sHTML);
 								
 							tinyMCE.init(
 							{
@@ -599,94 +577,90 @@ ns1blankspace.document =
 								gecko_spellcheck : true,
 								content_css : ns1blankspace.xhtml.editorCSS,
 								
-								external_link_list_url : "/jscripts/ibcom/linkList.asp", 
-								external_image_list_url : "/jscripts/ibcom/imageList.asp?LinkType=14&LinkId=" + ns1blankspace.objectContext, 
-								media_external_list_url : "/jscripts/ibcom/mediaList.asp?LinkType=14&LinkId=" + ns1blankspace.objectContext,  TemplateLinkType : "0", 
+								external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
+								external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
+								media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext
+
+								TemplateLinkType : "0", 
 
 							});				
 							
-							tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceMainEditText');
-									
+							tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText');	
 						}	
 					}	
 				},
 
-	new:		function ns1blankspaceDocumentNew(oXML)
+	new:		function ()
 				{
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.objectContextData = undefined;
-					ns1blankspaceDocumentViewport();
-					$('#divns1blankspaceMainDetails').html(ns1blankspace.xhtml.loading);
-					$('#divns1blankspaceMainDetails').attr('onDemandLoading', '1');
-					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					ns1blankspaceDocumentDetails();	
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.document.layout();
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+					$('#ns1blankspaceViewportControlAction').button({disabled: false});
+					$('#ns1blankspaceViewportControlActionOptions').button({disabled: true});
+					ns1blankspace.document.details();
 				},
 
 	save: 		{
-					send: 		function ns1blankspaceDocumentSave()
+					send: 		function ()
 								{
 									var sData = '_=1';
 									
 									if (ns1blankspace.objectContext != -1)
 									{
-										sParam += '&id=' + ns1blankspace.objectContext	
+										sData += '&id=' + ns1blankspace.objectContext	
 									}	
 										
 									if ($('#divns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&title=' + encodeURIComponent($('#inputns1blankspaceMainDetailsTitle').val());
-										sData += '&url=' + encodeURIComponent($('#inputns1blankspaceMainDetailsURL').val());
-										sData += '&public=' + $('input[name="radioPublic"]:checked').val();
-										sData += '&summary=' + encodeURIComponent($('#inputns1blankspaceMainDetailsSummary').val());
+										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
+										sData += '&url=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsURL').val());
+										sData += '&public=' + ns1blankspace.util.fs($('input[name="radioPublic"]:checked').val());
+										sData += '&summary=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSummary').val());
 									}
 									
-									if ($('#divns1blankspaceMainEdit').html() != '')
+									if ($('#ns1blankspaceMainEdit').html() != '')
 									{
-										sData += '&details=' + encodeURIComponent(tinyMCE.get('inputns1blankspaceMainEditText').getContent());
+										sData += '&details=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceEditText').getContent());
 									}
 									
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspaceEndpointURL('DOCUMENT_MANAGE'),
+										url: ns1blankspace.util.endpointURI('DOCUMENT_MANAGE'),
 										data: sData,
-										dataType: 'text',
-										success: ns1blankspaceDocumentSaveProcess
+										dataType: 'json',
+										success: ns1blankspace.document.save.process
 									});	
 								},
 
-					process:	function ns1blankspaceDocumentSaveProcess(sReturn)
+					process:	function (oResponse)
 								{
-									if (ns1blankspace.objectContext == -1)
+									if (ns1blankspace.objectContext == -1 && ns1blankspace.document.data.websiteContext)
 									{
+										ns1blankspace.objectContext = oResponse.id;
 
-										var aReturn = sReturn.split('|');
-										var sParam = 'method=DOCUMENT_FOLDER_LINK_MANAGE';
-										var sData = 'foldertitle=' + encodeURIComponent('[My Website Documents]');
-
-										ns1blankspace.objectContext = aReturn[3];
-										sData += '&select=' + aReturn[3];	
+										var sData = 'foldertitle=' + ns1blankspace.util.endpointURI('[My Website Documents]');
+										sData += '&document=' + ns1blankspace.objectContext;	
 												
 										$.ajax(
 										{
 											type: 'POST',
-											url: '/ondemand/document/?' + sParam,
+											url: ns1blankspace.util.endpointURI('DOCUMENT_FOLDER_LINK_MANAGE'),
 											data: sData,
 											dataType: 'text',
-											success: ns1blankspaceStatus('Saved')
+											success: ns1blankspace.status.message('Saved')
 										});
 									
 									}	
 									else
 									{
-										ns1blankspaceStatus('Saved');
+										ns1blankspace.status.message('Saved');
 									}	
-									
 								}
 				},
 	
-	pdf:		function ns1blankspaceDocumentPDF(oParam, sReturn)
+	pdf:		function (oParam, sReturn)
 				{
 					var sFilename = 'document_' + ns1blankspace.objectContext + '.pdf'
 					var sXHTMLElementID = '';
@@ -701,13 +675,9 @@ ns1blankspace.document =
 
 					if (sXHTMLContent == undefined)
 					{
-						if ($('#divns1blankspaceMainEdit').html() != '')
+						if ($('#ns1blankspaceMainEdit').html() != '')
 						{
-							sXHTMLContent = tinyMCE.get('inputns1blankspaceMainEditText').getContent();
-						}
-						else
-						{
-						
+							sXHTMLContent = tinyMCE.get('ns1blankspaceEditText').getContent();
 						}
 					}
 					
@@ -719,19 +689,18 @@ ns1blankspace.document =
 					{	
 						if (sReturn == undefined)
 						{
-							var sParam = 'method=CORE_PDF_CREATE&rf=TEXT';
-							var sData = 'object=' + ns1blankspace.object
-							sData += '&objectcontext=' + ns1blankspace.objectContext;
-							sData += '&filename=' + encodeURIComponent(sFilename);
-							sData += '&xhtmlcontent=' + encodeURIComponent(sXHTMLContent);
+							var sData = 'rf=TEXT&object=' + ns1blankspace.util.fs(ns1blankspace.object)
+							sData += '&objectcontext=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+							sData += '&filename=' + ns1blankspace.util.fs(sFilename);
+							sData += '&xhtmlcontent=' + ns1blankspace.util.fs(sXHTMLContent);
 							
 							$.ajax(
 							{
 								type: 'POST',
-								url: '/ondemand/core/?' + sParam,
+								url: ns1blankspace.util.endpointURI('CORE_PDF_CREATE'),
 								data: sData,
 								dataType: 'text',
-								success: function(data) {ns1blankspaceDocumentPDF(oParam, data)}
+								success: function(data) {ns1blankspace.document.pdf(oParam, data)}
 							});
 						}	
 						else	
