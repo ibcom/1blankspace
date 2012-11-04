@@ -847,32 +847,28 @@ ns1blankspace.developer.membership =
 											var aHTML = [];
 											var h = -1;
 										
-											aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMain" style="font-size:0.875em">';
+											aHTML.push('<table class="ns1blankspaceContainer" style="font-size:0.875em">');
 													
 											if (aXHTMLElementID[1])
 											{
-												aHTML.push('<tr class="ns1blankspaceMainCaption">' +
-																	'<td class="ns1blankspaceMainRowNothing">To change this access you need to delete it and then re-add it.</td></tr>';
-
+												aHTML.push('<tr><td class="ns1blankspaceNothing">To change this access you need to delete it and then re-add it.</td></tr>');
 											}	
 											else
 											{	
-												aHTML.push('<tr class="ns1blankspaceMainAction">' +
-																'<td class="ns1blankspaceMainAction">' +
-																'<span style="width:70px;" id="spanns1blankspaceMainMembershipSubscriptionEditSave">Save</span>' +
-																'</td></tr>';
+												aHTML.push('<tr><td class="ns1blankspaceAction">' +
+																'<span id="ns1blankspaceMembershipSubscriptionEditSave" style="width:70px;">Save</span>' +
+																'</td></tr>');
 											}
 
-											aHTML.push('<tr class="ns1blankspaceMainAction">' +
-																'<td class="ns1blankspaceMainAction">' +
-																'<span style="width:70px;" id="spanns1blankspaceMainMembershipSubscriptionEditCancel">Cancel</span>' +
-																'</td></tr>';
+											aHTML.push('<tr><td class="ns1blankspaceAction">' +
+																'<span id="ns1blankspaceMainMembershipSubscriptionEditCancel" style="width:70px;">Cancel</span>' +
+																'</td></tr>');
 											
-											aHTML.push('</table>';					
+											aHTML.push('</table>');					
 											
-											$('#tdns1blankspaceMainMembershipSubscriptionsColumn3').html(aHTML.join(''));
+											$('#ns1blankspaceSubscriptionsColumn2').html(aHTML.join(''));
 
-											$('#spanns1blankspaceMainMembershipSubscriptionEditSave').button(
+											$('#ns1blankspaceMembershipSubscriptionEditSave').button(
 											{
 												text: "Save"
 											})
@@ -880,38 +876,39 @@ ns1blankspace.developer.membership =
 											{
 												ns1blankspaceMasterStatusWorking();
 
-												var sData = 'id=' + ns1blankspaceMasterFormatSave(aXHTMLElementID[1]);
-												sData += '&registration=' + ns1blankspaceMasterFormatSave($('#inputns1blankspaceMainMembershipSubscriptionsRegistration').attr("data-id"));
-												sData += '&membership=' + giObjectContext;
+												var sData = 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
+												sData += '&registration=' + ns1blankspace.util.fs($('#ns1blankspaceMembershipSubscriptionsRegistration').attr("data-id"));
+												sData += '&membership=' + ns1blankspace.util.fs(giObjectContext);
 
 												$.ajax(
 												{
 													type: 'POST',
-													url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE',
+													url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE'),
 													data: sData,
 													dataType: 'json',
-													success: function() {
-														oParam.step = 1;
-														ns1blankspaceDeveloperMembershipSubscriptions(oParam);
-														ns1blankspaceMasterStatus('Saved');
-													}
+													success: 	function()
+																{
+																	oParam.step = 1;
+																	ns1blankspace.status.message('Saved');
+																	ns1blankspace.developer.membership.subscriptions.show(oParam);
+																}
 												});
 											})
 											
-											$('#spanns1blankspaceMainMembershipSubscriptionEditCancel').button(
+											$('#ns1blankspaceMainMembershipSubscriptionEditCancel').button(
 											{
 												text: "Cancel"
 											})
 											.click(function() 
 											{
 												oParam.step = 1;
-												ns1blankspaceDeveloperMembershipSubscriptions(oParam);
+												ns1blankspace.developer.membership.subscriptions.show(oParam);
 											})
 
 											if (aXHTMLElementID[1])
 											{
-												$('#inputns1blankspaceMainMembershipSubscriptionsRegistration').attr("data-id", aXHTMLElementID[1])
-												$('#inputns1blankspaceMainMembershipSubscriptionsRegistration').val($('#tdMembershipSubscriptions_title-' + aXHTMLElementID[1]).attr("data-contactbusinesstext"));
+												$('#ns1blankspaceMembershipSubscriptionsRegistration').attr("data-id", aXHTMLElementID[1])
+												$('#ns1blankspaceMembershipSubscriptionsRegistration').val($('#ns1blankspaceMembershipSubscriptions_title-' + aXHTMLElementID[1]).attr("data-contactbusinesstext"));
 											}
 										}
 										else
@@ -923,120 +920,120 @@ ns1blankspace.developer.membership =
 										$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/admin/?method=ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE&remove=1',
-												data: 'id=' + aXHTMLElementID[1],
+												url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE'),
+												data: 'remove=1&id=' + ns1blankspace.util.fs(aXHTMLElementID[1]),
 												dataType: 'json',
 												success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 											});	
 										}	
-								}	
+								},		
 
+					search:		function (sXHTMLInputElementID, oResponse)
+								{
+									var aHTML = [];
+									var sSearchText;
+									var iXHTMLElementContextID;
 
-function ns1blankspaceMembershipSubscriptionsRegistrationSearch(sXHTMLInputElementID, oResponse)
-{
-	var aHTML = [];
-	var sSearchText;
-	var iXHTMLElementContextID;
+									if (oResponse == undefined)
+									{	
+										sSearchText = $('#' + sXHTMLInputElementID).val();
+										
+										if (sSearchText.length > 2)
+										{
+											$.ajax(
+											{
+												type: 'GET',
+												url: ns1blankspace.util.endpointURI('ADMIN_REGISTRATION_SEARCH'),
+												data: 'rows=10&status=2&contactbusinesstext=' + ns1blankspace.util.fs(sSearchText),
+												dataType: 'json',
+												success: function(data) {ns1blankspace.developer.membership.subscriptions.search(sXHTMLInputElementID, data)}
+											});
+										}
+									}
+									else
+									{	
+										aHTML.push('<table id="ns1blankspaceMembershipRegistration" class="ns1blankspaceContainer" style="width: 350px;">');
 
-	if (oResponse == undefined)
-	{	
-		sSearchText = $('#' + sXHTMLInputElementID).val();
-		
-		if (sSearchText.length > 2)
-		{
-			$.ajax(
-			{
-				type: 'GET',
-				url: '/ondemand/admin/?method=ADMIN_REGISTRATION_SEARCH&rows=10&status=2&contactbusinesstext=' + ns1blankspaceMasterFormatSave(sSearchText),
-				dataType: 'json',
-				success: function(data) {ns1blankspaceMembershipSubscriptionsRegistrationSearch(sXHTMLInputElementID, data)}
-			});
-		}
-	}
-	else
-	{	
-		aHTML.push('<table style="width: 350px;" class="ns1blankspaceViewportMasterControl" cellpadding=4>');
+										$(oResponse.data.rows).each(function()
+										{
+											if (this.contactbusinesstext != '')
+											{
+												aHTML.push('<tr>' +
+													'<td id="ns1blankspaceMembershipRegistration-' + this.id + '" data-usertext="' + this.contactbusinesstext + '" class="ns1blankspaceSearch">' +
+													this.contactbusinesstext +
+													'</td></tr>');
+											}	
+										});			
+														
+										aHTML.push('</table>');
+										
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show();
+										$(ns1blankspace.xhtml.container).offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
 
-		$(oResponse.data.rows).each(function()
-		{
-			if (this.contactbusinesstext != '')
-			{
-				aHTML.push('<tr>' +
-					'<td id="tdns1blankspaceMasterRegistration-' + this.id + '" data-usertext="' + this.contactbusinesstext + '" class="ns1blankspaceSearch ns1blankspaceMasterNetworkUser">' +
-					this.contactbusinesstext +
-					'</td></tr>');
-			}	
-		});			
-						
-		aHTML.push('</table>');
-		
-		$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$('#ns1blankspaceMembershipRegistration > td.ns1blankspaceSearch').click(function(event)
+										{
+											var aXHTMLElementID = (event.target.id).split('-');
+											iXHTMLElementContextID = aXHTMLElementID[1];
 
-		$(ns1blankspace.xhtml.container).show(giShowSpeedOptions);
-		$(ns1blankspace.xhtml.container).offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
+											$('#' + sXHTMLInputElementID).val($('#' + event.target.id).attr("data-usertext"))
+											$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
+											$(ns1blankspace.xhtml.container).hide();
+										});
+									}	
+								}
+				},
 
-		$('.ns1blankspaceMasterNetworkUser').click(function(event)
-		{
-			var aXHTMLElementID = (event.target.id).split('-');
-			iXHTMLElementContextID = aXHTMLElementID[1];
-
-			$('#' + sXHTMLInputElementID).val($('#' + event.target.id).attr("data-usertext"))
-			$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
-			$(ns1blankspace.xhtml.container).hide();
-		});
-	}	
-}	
-
-function ns1blankspaceDeveloperMembershipSave()
-{
-
-	var sParam = 'method=ADMIN_MEMBERSHIP_MANAGE';
-	var sData = 'id=' + (giObjectContext != -1 ? giObjectContext : '');
-		
-	if ($('#divns1blankspaceMainDetails').html() != '')
-	{
-		sData += '&title=' + encodeURIComponent($('#inputns1blankspaceMainDetailsTitle').val());
-		sData += '&reference=' + encodeURIComponent($('#inputns1blankspaceMainDetailsReference').val());
-		sData += '&description=' + encodeURIComponent($('#inputns1blankspaceMainDetailsDescription').val());
-		sData += '&basedonsubscription=' + ns1blankspaceMasterFormatSave($('input[name="radioBasedOnSubscription"]:checked').val());
-	};
-
-	ns1blankspaceMasterStatusWorking();
-
-	$.ajax(
-	{
-		type: 'POST',
-		url: '/ondemand/admin/?' + sParam,
-		data: sData,
-		dataType: 'json',
-		success: function(oResponse)
-		{
-			if (oResponse.status == 'OK')
-			{	
-				ns1blankspaceMasterStatus('Saved');
-				
-				if (giObjectContext == -1)
+	new:		function (oParam)
 				{
-					giObjectContext = oResponse.id;
-					gbInputDetected = false;
-					ns1blankspaceDeveloperMembershipSearch('-' + giObjectContext, {source: 1});
-				}	
-			}
-			else
-			{
-				ns1blankspaceMasterError(oResponse.error.errornotes);;
-			}
-		}
-	});
-		
-}
+					ns1blankspace.objectContextData = undefined
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.developer.membership.layout();
+					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					ns1blankspaceMasterMainViewportShow("#ns1blankspaceMainDetails");
+					ns1blankspace.developer.membership.details();
+				},
 
-function ns1blankspaceDeveloperMembershipNew(oParam)
-{
-	goObjectContext = undefined
-	giObjectContext = -1;
-	ns1blankspaceDeveloperMembershipViewport();
-	$('#spanns1blankspaceMasterViewportControlAction').button({disabled: false});
-	ns1blankspaceMasterMainViewportShow("#divns1blankspaceMainDetails");
-	ns1blankspaceDeveloperMembershipDetails();
-}
+	save:		{
+					send:		function ()
+								{
+									var sData = 'id=' + (ns1blankspace.objectContext != -1 ? ns1blankspace.objectContext : '');
+										
+									if ($('#ns1blankspaceMainDetails').html() != '')
+									{
+										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
+										sData += '&reference=' + ns1blankspace.util.fs($('#s1blankspaceDetailsReference').val());
+										sData += '&description=' + ns1blankspace.util.fs($('#is1blankspaceDetailsDescription').val());
+										sData += '&basedonsubscription=' + ns1blankspace.util.fs($('input[name="radioBasedOnSubscription"]:checked').val());
+									};
+
+									ns1blankspace.status.working();
+
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_MANAGE'),
+										data: sData,
+										dataType: 'json',
+										success: function(oResponse)
+										{
+											if (oResponse.status == 'OK')
+											{	
+												ns1blankspace.status.message('Saved');
+												
+												if (ns1blankspace.objectContext == -1)
+												{
+													ns1blankspace.objectContext = oResponse.id;
+													ns1blankspace.inputDetected = false;
+													ns1blankspace.developer.membership.search.send('-' + ns1blankspace.objectContext, {source: 1});
+												}	
+											}
+											else
+											{
+												ns1blankspace.status.error(oResponse.error.errornotes);;
+											}
+										}
+									});	
+								}
+				}
+}				
