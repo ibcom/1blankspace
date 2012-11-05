@@ -7,7 +7,7 @@
  
 ns1blankspace.financial.bankAccount = 
 {
-	init: 		function interfaceFinancialBankAccountMasterViewport(oParam)
+	init: 		function (oParam)
 				{
 					ns1blankspace.financial.init();
 					
@@ -40,7 +40,7 @@ ns1blankspace.financial.bankAccount =
 				{	
 					var aHTML = [];
 					
-					aHTML.push('<table><tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr></table>';		
+					aHTML.push('<table><tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr></table>');		
 					
 					$('#ns1blankspaceControl').html(aHTML.join(''));	
 

@@ -245,7 +245,7 @@ ns1blankspace.financial.showHome = function interfaceFinancialHomeShow()
 						var aHTML = [];
 									
 						aHTML.push('<table>');
-						aHTML.push('<tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>';
+						aHTML.push('<tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 						aHTML.push('</table>');		
 						
 						aHTML.push('<table>');
@@ -363,7 +363,7 @@ ns1blankspace.financial.summary = function (oParam, oResponse)
 						{
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_PROFIT_LOSS_SEARCH'),
-							data: 'rows=1'
+							data: 'rows=1',
 							dataType: 'json',
 							success: function(data) {ns1blankspace.financial.summary(oParam, data)}
 						});
@@ -448,14 +448,13 @@ ns1blankspace.financial.debtors =
 						}
 						else
 						{
-							aHTML.push('<table class="ns1blankspace">';
-											'<tbody>' +
+							aHTML.push('<table class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">Debtor</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount Owed</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Date</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Amount</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
 											'</tr>');
 							
 							$(oResponse.data.rows).each(function() 
@@ -463,7 +462,7 @@ ns1blankspace.financial.debtors =
 								aHTML.push(ns1blankspace.financial.debtors.row(this));
 							});
 							
-							aHTML.push('</tbody></table>');
+							aHTML.push('</table>');
 						}
 						
 						ns1blankspace.pagination.list(
@@ -529,14 +528,14 @@ ns1blankspace.financial.creditors =
 						}
 						else
 						{
-							aHTML.push('<table class="ns1blankspace">';
+							aHTML.push('<table class="ns1blankspace">' +
 											'<tbody>' +
 											'<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">Creditor</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount To Be Paid</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Payment Date</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Payment Amoun</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -611,13 +610,12 @@ ns1blankspace.financial.profitLoss =
 						else
 						{
 						
-							aHTML.push('<table class="ns1blankspace">';
-											'<tbody>' +
+							aHTML.push('<table class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">Account</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Percentage</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -625,7 +623,7 @@ ns1blankspace.financial.profitLoss =
 								aHTML.push(ns1blankspace.financial.profitLoss.row(this));
 							});
 							
-							aHTML.push('</tbody></table>');
+							aHTML.push('</table>');
 						}
 						
 						ns1blankspace.pagination.list(
@@ -726,12 +724,11 @@ ns1blankspace.financial.balanceSheet =
 							
 							aHTML[++h] = '</tbody></table>';
 
-							aHTML.push('<table class="ns1blankspace">';
-											'<tbody>' +
+							aHTML.push('<table class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">Account</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -739,7 +736,7 @@ ns1blankspace.financial.balanceSheet =
 								aHTML.push(ns1blankspace.financial.balancesheet.row(this));
 							});
 							
-							aHTML.push('</tbody></table>');
+							aHTML.push('</table>');
 						}
 						
 						ns1blankspace.pagination.list(
@@ -811,13 +808,12 @@ ns1blankspace.financial.bankAccounts =
 						}
 						else
 						{		
-							aHTML.push('<table class="ns1blankspace">';
-											'<tbody>' +
+							aHTML.push('<table class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">Name</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;">Reconciled Amount</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;">Last Reconciled</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -825,7 +821,7 @@ ns1blankspace.financial.bankAccounts =
 								aHTML.push(ns1blankspace.financial.bankaccounts.row(this));
 							});
 							
-							aHTML.push('</tbody></table>');
+							aHTML.push('</table>');
 						}
 						
 						ns1blankspacePaginationList(
@@ -965,8 +961,7 @@ ns1blankspace.financial.unallocated =
 						}
 						else
 						{
-							aHTML.push('<table class="ns1blankspace">';
-											'<tbody>' +
+							aHTML.push('<table class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">Invoice</td>' +
 											'</tr>');
@@ -976,7 +971,7 @@ ns1blankspace.financial.unallocated =
 								aHTML.push(ns1blankspace.financial.unallocated.row(this));
 							});
 							
-							aHTML.push('</tbody></table>');
+							aHTML.push('</table>');
 						}
 						
 						ns1blankspace.pagination.list(
@@ -1051,14 +1046,13 @@ ns1blankspace.financial.transactions =
 						}
 						else
 						{
-							aHTML.push('<table class="ns1blankspace">';
-											'<tbody>' +
+							aHTML.push('<table class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption" style="width:150px;">Account</td>' +
 											'<td class="ns1blankspaceCaption" style="width:100px;">Reconciled Amount</td>' +
 											'<td class="ns1blankspaceCaption" style="text-align:right;width:125px;">Last Reconciled</td>' +
 											'<td class="ns1blankspaceCaption">Description</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>';
+											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
 											'</tr>');
 
 							$.each(oResponse.data.rows, function()
@@ -1080,7 +1074,7 @@ ns1blankspace.financial.transactions =
 								aHTML.push('</td></tr>');
 							});
 							
-							aHTML.push('</tbody></table>');
+							aHTML.push('</table>');
 
 							$('#' + sXHTMLElementId).html(aHTML.join(''));
 						}
@@ -1194,7 +1188,7 @@ ns1blankspace.financial.accounts =
 													'>' + this.title + '</td></tr>');
 								});
 							
-								aHTML.push('</tbody></table>';
+								aHTML.push('</table>');
 							
 								$('#tdInterfaceMainFinancialAccountTransactionsColumn1').html(aHTML.join(''));
 								
@@ -1254,13 +1248,13 @@ ns1blankspace.financial.accounts =
 							{
 								var aHTML = [];
 						
-								aHTML.push('<table class="ns1blankspace"><tbody>';
+								aHTML.push('<table class="ns1blankspace">');
 							
-								aHTML.push('<tr class="ns1blankspaceCaption">';
-								aHTML.push('<td class="ns1blankspaceCaption">TOTAL</td>';
-								aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>';
-								aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">' + oResponse.summary.sumamount + '</td>';
-								aHTML.push('</tr>';
+								aHTML.push('<tr class="ns1blankspaceCaption">');
+								aHTML.push('<td class="ns1blankspaceCaption">TOTAL</td>');
+								aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+								aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">' + oResponse.summary.sumamount + '</td>');
+								aHTML.push('</tr>');
 								
 								$(oResponse.data.rows).each(function(i) 
 								{
@@ -1276,7 +1270,7 @@ ns1blankspace.financial.accounts =
 									aHTML.push('</tr>');
 								});
 							
-								aHTML.push('</tbody></table>');
+								aHTML.push('</table>');
 							
 								$('#ns1blankspaceAccountTransactionsColumn2').html(aHTML.join(''));		
 							}

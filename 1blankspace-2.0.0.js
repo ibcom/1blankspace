@@ -152,6 +152,14 @@ ns1blankspace.scripts =
 	{
 		name: '1blankspace.action',
 		source: '/jscripts/1blankspace.action-2.0.0.js'
+	},
+	{
+		name: '1blankspace.financial',
+		source: '/jscripts/1blankspace.financial-2.0.0.js'
+	},
+	{
+		name: '1blankspace.financial.bankaccount',
+		source: '/jscripts/1blankspace.financial.bankaccount-2.0.0.js'
 	}
 ]
 
@@ -221,7 +229,7 @@ ns1blankspace.app =
 
 					$('#divInterfaceMasterViewportControl').html(
 							'<img class="ns1blankspaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">' +
-							' Your app is spinning up...');
+							' Your app is spinning up... (smile)');
 
 					ns1blankspace.option = {};
 					ns1blankspace.timer = {};
