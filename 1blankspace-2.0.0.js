@@ -91,6 +91,63 @@ String.method('trim', function () {return this.replace(/^\s+|\s+$/g, '');});
 
 var ns1blankspace = {};
 
+ns1blankspace.scripts2 =
+[
+	{
+		name: 'jqueryui'
+		source: '/jscripts/jqueryui/jqueryui-1.8.12.min.js'
+	},
+	{
+		name: 'timepicker'
+		source: '/jscripts/jqueryui/jqueryui-timepicker.js'
+	},
+	{
+		name: 'cookies'
+		source: '/jscripts/jquery.cookie.js'
+	},
+	{
+		name: 'tinymce'
+		source: '/jscripts/tiny_mce-3.4.4/tiny_mce.js'
+	},
+	{
+		name: 'calendar'
+		source: '/jscripts/fullcalendar.min.js'
+	},
+	{
+		name: 'touch'
+		source: '/jscripts/jquery.touchwipe.1.1.1.min.js'
+	},
+	{
+		name: '1blankspace.advancedsearch'
+		source: '/jscripts/1blankspace.advancedsearch-1.0.3.js'
+	},
+	{
+		name: '1blankspace.control'
+		source: '/jscripts/1blankspace.control-2.0.0.js'
+	},
+	{
+		name: '1blankspace.home'
+		source: '/jscripts/1blankspace.home-2.0.0.js'
+	}
+]
+
+/*
+'/jscripts/1blankspace.advancedsearch-1.0.3.js'
+'/jscripts/1blankspace.developer.control-1.0.0.js'
+'/jscripts/1blankspace.developer.home-1.0.0.js'
+'/jscripts/1blankspace.developer.space-1.0.0.js'
+'/jscripts/1blankspace.developer.membership-1.0.0.js'
+'/jscripts/1blankspace.setup-1.0.0.js'
+'/jscripts/1blankspace.setup.website-1.0.0.js'
+'/jscripts/1blankspace.setup.website.form-1.0.0.js'
+'/jscripts/1blankspace.setup.structure-1.0.2.js'
+'/jscripts/1blankspace.setup.space-1.0.1.js'
+'/jscripts/1blankspace.setup.automation-1.0.0.js'
+'/jscripts/1blankspace.setup.user-1.0.0.js'
+'/jscripts/1blankspace.setup.user.role-1.0.0.js'
+'/jscripts/1blankspace.setup.networkgroup-1.0.0.js'
+*/
+
 window.onbeforeunload = function() 
 {
 	if (ns1blankspace.unloadWarning)
@@ -138,7 +195,7 @@ ns1blankspace.app =
 											'</div>');
 					}		
 
-					$('#divInterfaceMasterViewportControl').html('Loading...')
+					$('#divInterfaceMasterViewportControl').html(ns1blankspace.xhtml.loading + ' Your app is being prepared...')
 
 					ns1blankspace.option = {};
 					ns1blankspace.timer = {};
@@ -223,34 +280,9 @@ ns1blankspace.app =
 						ns1blankspace.option.setFocus = false;
 					}	 
 
-					this.loadScript('/jscripts/1blankspace.advancedsearch-1.0.3.js');
-					this.loadScript('/jscripts/1blankspace.developer.control-2.0.0.js');
-
-					if ($('#scriptControl').length == 0 && false)
-					{
-						this.loadScript('/jscripts/jqueryui/jqueryui-1.8.12.min.js');
-						this.loadScript('/jscripts/jqueryui/jquery-ui-1.8.11.custom.min.js');
-						this.loadScript('/jscripts/jqueryui/jqueryui-timepicker.js');
-						this.loadScript('/jscripts/jquery.cookie.js');
-						this.loadScript('/jscripts/tiny_mce-3.4.4/tiny_mce.js');
-						this.loadScript('/jscripts/fullcalendar.min.js');
-						this.loadScript('/jscripts/jquery.touchwipe.1.1.1.min.js');
-					
-						this.loadScript('/jscripts/1blankspace.advancedsearch-1.0.3.js');
-						this.loadScript('/jscripts/1blankspace.developer.control-1.0.0.js');
-						this.loadScript('/jscripts/1blankspace.developer.home-1.0.0.js');
-						this.loadScript('/jscripts/1blankspace.developer.space-1.0.0.js');
-						this.loadScript('/jscripts/1blankspace.developer.membership-1.0.0.js');
-						this.loadScript('/jscripts/1blankspace.setup-1.0.0.js');
-						this.loadScript('/jscripts/1blankspace.setup.website-1.0.0.js');
-						this.loadScript('/jscripts/1blankspace.setup.website.form-1.0.0.js');
-						this.loadScript('/jscripts/1blankspace.setup.structure-1.0.2.js');
-						this.loadScript('/jscripts/1blankspace.setup.space-1.0.1.js');
-						this.loadScript('/jscripts/1blankspace.setup.automation-1.0.0.js');
-						this.loadScript('/jscripts/1blankspace.setup.user-1.0.0.js');
-						this.loadScript('/jscripts/1blankspace.setup.user.role-1.0.0.js');
-						this.loadScript('/jscripts/1blankspace.setup.networkgroup-1.0.0.js');
-					}
+					$(ns1blankspace.scripts).each(function(){
+						1blankspace.app.loadScript(this.source);
+					}):
 
 					$('td.ns1blankspaceControl').live('click', function()
 					{
