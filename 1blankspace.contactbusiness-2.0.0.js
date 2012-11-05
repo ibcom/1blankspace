@@ -872,7 +872,7 @@ ns1blankspace.contactBusiness =
 								{
 									if (oResponse.status == 'OK')
 									{
-										ns1blankspaceStatus('Saved');
+										ns1blankspace.status.message('Saved');
 										if (ns1blankspace.objectContext == -1) {var bNew = true}
 										ns1blankspace.objectContext = oResponse.id;	
 										
@@ -1017,7 +1017,7 @@ ns1blankspace.contactBusiness =
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/setup/?method=SETUP_CONTACT_BUSINESS_GROUP_SEARCH',
+												url: ns1blankspace.util.endpointURI('SETUP_CONTACT_BUSINESS_GROUP_SEARCH'),
 												dataType: 'json',
 												success: function(data){ns1blankspace.contactBusiness.groups.add(oParam, data)}
 											});
@@ -1328,8 +1328,8 @@ ns1blankspace.contactBusiness =
 										
 										aHTML.push('<table class="ns1blankspace">');
 										
-										aHTML.push('<tr><td class="interfaceMainAction">' +
-														'<span id="ns1blankspaceMainContactBusinessPeopleAdd">Add</span>' +
+										aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+														'<span id="ns1blankspaceContactBusinessPeopleAdd">Add</span>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');					
@@ -1354,24 +1354,24 @@ ns1blankspace.contactBusiness =
 										if (oResponse.data.rows.length == 0)
 										{
 											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px); margin-bottom:15px);">');
-											aHTML.push('<tr class="interfaceActions">');
-											aHTML.push('<td class="interfaceMainRowNothing">No people.</td>');
+											aHTML.push('<tr>');
+											aHTML.push('<td class="ns1blankspaceNothing">No people.</td>');
 											aHTML.push('</tr>');
 											aHTML.push('</table>');
 
-											$('#tdInterfaceMainContactBusinessPeopleColumn1').html(aHTML.join(''));		
+											$('#ns1blankspaceContactBusinessPeopleColumn1').html(aHTML.join(''));		
 										}
 										else
 										{
 										
-											aHTML.push('<table id="tableContactBusinessGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">');
-											aHTML.push('<tr class="interfaceMainCaption">');
-											aHTML.push('<td class="interfaceMainCaption">First Name</td>');
-											aHTML.push('<td class="interfaceMainCaption">Surname</td>');
-											aHTML.push('<td class="interfaceMainCaption">Position</td>');
-											aHTML.push('<td class="interfaceMainCaption">Mobile</td>');
-											aHTML.push('<td class="interfaceMainCaption">Email</td>');
-											aHTML.push('<td class="interfaceMainCaption">&nbsp);</td>');
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspace">');
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Surname</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Position</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Mobile</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Email</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp);</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
@@ -1394,7 +1394,7 @@ ns1blankspace.contactBusiness =
 												type: 'json'
 											}); 	
 											
-											interfaceContactBusinessPeopleBind();
+											ns1blankspace.contactBusiness.people.bind();
 										}
 									}	
 								},

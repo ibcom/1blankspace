@@ -9,13 +9,6 @@ ns1blankspace.news =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
-
 					ns1blankspace.object = 19;
 					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectName = 'news';
@@ -23,13 +16,13 @@ ns1blankspace.news =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'News';
 					
-					if (bShowHome)
+					var bShowHome = true
+					var bNew = false;
+					
+					if (oParam != undefined)
 					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.news.init({showHome: true});',
-							move: false
-							});	
-					}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+					}
 							
 					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
@@ -85,108 +78,92 @@ ns1blankspace.news =
 					}
 				},
 
-	home:		function interfaceNewsHomeShow(oResponse)
+	home:		function (oResponse)
 				{
 
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-										'<td id="tdInterfaceNewsHomeMostLikely" class="interfaceViewportMain">' +
+						aHTML.push('<table class="ns1blankspaceMain">');
+						aHTML.push('<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading + 
 										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+										'</tr>');
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
-										'<td id="ns1blankspaceViewportNewsLarge" class="ns1blankspaceViewportImageLarge">' +
+						aHTML.push('<table>');
+						aHTML.push('<tr>' +
+										'<td id="ns1blankspaceViewNewsLarge" class="ns1blankspaceViewImageLarge">' +
 										'&nbsp;' + 
 										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';		
+										'</tr>');
+						aHTML.push('</table>');		
 						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));	
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-						
-						sParam = 'method=NEWS_SEARCH&rows=10';
+						sParam = '&rows=10';
 
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/ondemand/news/?' + sParam,
+							url: ns1blankspace.util.endpointURI('NEWS_SEARCH') + sParam,
 							dataType: 'json',
-							success: interfaceNewsHomeShow
+							success: ns1blankspace.news.home
 						});
-						
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceNewsHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceNewsHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceNewsHomeMostLikelyNothing">Click New to create a news item.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr>');
+							aHTML.push('<td class="ns1blankspaceNothing">Click New to create a news item.</td>');
+							aHTML.push('</tr>');
+							aHTML.push('</table>');
 						}
 						else
 						{
 						
-							aHTML[++h] = '<table id="tableInterfaceBewsHomeMostLikely">';
-							aHTML[++h] = '<tr>';
-							aHTML[++h] = '<td class="interfaceMain">MOST LIKELY</td>';
-							aHTML[++h] = '</tr>';
-							
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr>');
+							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>');
+							aHTML.push('</tr>');
+
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML[++h] = '<td id="interfaceNewsHomeMostLikely_Title-' + this.id + 
-														'" class="interfaceHomeMostLikely">' +
-														this.subject +
-														'</td>';
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+														'" class="ns1blankspaceMostLikely">' +
+														this.subject + 
+														'</td>');
 								
-								aHTML[++h] = '</tr>'
+								aHTML.push('</tr>');
 							});
 							
-							aHTML[++h] = '</tbody></table>';
-							
-							aHTML[++h] = '<table id="tableInterfaceNewsHomeMostLikelyMore">';
-							aHTML[++h] = '<tr><td id="tdInterfaceNewsHomeMostLikelyMore">' +
-										'<a href="#" id="aInterfaceNewsHomeMostLikelyMore">more...</a>' +
-										'</td></tr>';
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</table>');
 						}
 						
-						$('#tdInterfaceNewsHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.interfaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							interfaceNewsSearch(event.target.id, {source: 1});
+							ns1blankspace.news.search.send(event.target.id, {source: 1});
 						});
 						
-						$('#aInterfaceNewsHomeMostLikelyMore').click(function(event)
-						{
-							interfaceNewsSearch('tdInterfaceViewportMasterControlBrowse-', {source: ns1blankspace.data.searchSource.browse});
-						});
 					}
-				}
+				},
 
 search: 		{
-					send: function interfaceNewsSearch(sXHTMLElementId, oParam)
+					send: function (sXHTMLElementId, oParam)
 								{
 									
 									var aSearch = sXHTMLElementId.split('-');
@@ -210,18 +187,18 @@ search: 		{
 									
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-									
 										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
-										var sParam = 'method=NEWS_SEARCH&advanced=1&select=' + ns1blankspace.objectContext;
+										
+										var sParam = '&advanced=1&select=' + ns1blankspace.objectContext;
 										
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/news/?' + sParam,
+											url: ns1blankspace.util.endpointURI('NEWS_SEARCH') + sParam,
 											dataType: 'json',
-											success: function(data) {interfaceNewsShow(oParam, data)}
+											success: function(data) {ns1blankspace.news.show(oParam, data)}
 										});
 									}
 									else
@@ -229,7 +206,7 @@ search: 		{
 										
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -238,44 +215,43 @@ search: 		{
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											sElementId = 'ns1blankspaceViewBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspaceOptionsSetPosition(sElementId);
-											ns1blankspaceSearchStart(sElementId);
+											ns1blankspace.dialog.position({xhtmlElementID: sElementId});
+											ns1blankspace.search.start();
 											
-											var sParam = 'method=NEWS_SEARCH&advanced=1&quicksearch=' + sSearchText;
+											var sParam = '&advanced=1&quicksearch=' + sSearchText;
 
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/news/?' + sParam,
+												url: ns1blankspace.util.endpointURI('NEWS_SEARCH') + sParam,
 												dataType: 'json',
-												success: function(data) {interfaceNewsSearchShow(oParam, data)}
+												success: function(data) {ns1blankspace.search.process(oParam, data)}
 											});
-											
 										}
-									};	
+									}
 								}
 
-				process:	function interfaceNewsSearchShow(oParam, oResponse)
+				process:	function (oParam, oResponse)
 								{
 
 									var iColumn = 0;
 									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
 										
 									if (oResponse.data.rows.length == 0)
 									{
-										$('#divns1blankspaceViewportControlOptions').hide();
+										ns1blankspace.search.stop();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
-									{
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+									{	
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('');
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -283,379 +259,365 @@ search: 		{
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
-											aHTML[++h] = '<td class="interfaceSearch" id="' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="contactperson' +
 															'-' + this.id + '">' +
-															this.subject + '</td>';
+															this.subject + 
+															'</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
-
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+										aHTML.push('</table>');
 										
-										ns1blankspaceSearchStop();
+										$(ns1blankspace.xhtml.container).html(
+											ns1blankspace.pagination.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true")
+											}) 
+										);		
 										
-										$('td.interfaceSearch').click(function(event)
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										
+										ns1blankspace.search.stop();
+										
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceNewsSearch(event.target.id, {source: 1});
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.news.search(event.target.id, {source: 1});
 										});
+										
+										ns1blankspace.pagination.bind(
+										{
+											columns: 'subject',
+											more: oResponse.moreid,
+											rows: 15,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: oResponse.news.search.send
+										});   
+										
 									}	
 								}
 				},
 
-	layout: 	function interfaceNewsViewport()
+	layout: 	function ()
 				{	
-					if (tinyMCE.getInstanceById('inputInterfaceMainEditText'))
+					if (tinyMCE.getInstanceById('ns1blankspaceEditText'))
 					{
-						tinyMCE.get('inputInterfaceMainEditText').remove();
-						$('#inputInterfaceMainEditText').remove();
+						tinyMCE.get('ns1blankspaceEditText').remove();
+						$('#ns1blankspaceEditText').remove();
 					}	
 					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl interfaceViewportControlHighlight">Details</td>' +
-										'</tr>';
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">Details</td></tr>');
 					}
 					else
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-										'</tr>';
-										
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
-										'</tr>';
-								
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlEdit" class="interfaceViewportControl">Edit</td>' +
-										'</tr>';			
-						
-						aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlGroups" class="interfaceViewportControl">Send To</td>' +
-										'</tr>';			
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">Summary</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">Details</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceControlEdit" class="ns1blankspaceControl">Edit</td></tr>');
 					
-						aHTML[++h] = '</table>';					
-								
-						aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
-						
-						aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControlTracking" class="interfaceViewportControl">Tracking</td>' +
-										'</tr>';
-						
-						aHTML[++h] = '</table>';					
+						aHTML.push('<tr><td id="ns1blankspaceControlSendTo" class="ns1blankspaceControl">Send To</td></tr>');
+											
+						aHTML.push('</table>');		
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
+					
+						aHTML.push('<tr><td id="ns1blankspaceControlTracking" class="ns1blankspaceControl">Tracking</td></tr>');
 					}
-					
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
+							
+					aHTML.push('</table>');					
+						
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainGroups" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainEdit" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainTracking" class="divInterfaceViewportMain"></div>';
+					aHTML[++h] = '<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>';
+					aHTML[++h] = '<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>';
+					aHTML[++h] = '<div id="ns1blankspaceMainEdit" class="ns1blankspaceControlMain"></div>';
+					aHTML[++h] = '<div id="ns1blankspaceMainSendTo" class="ns1blankspaceControlMain"></div>';
+					aHTML[++h] = '<div id="ns1blankspaceMainTracking" class="ns1blankspaceControlMain"></div>';
 					
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary", true);
-						interfaceNewsSummary();
+						ns1blankspace.show("#ns1blankspaceMainSummary", true);
+						ns1blankspace.news.summary();
 					});
 					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceNewsDetails();
+						ns1blankspace.show("#ns1blankspaceMainDetails");
+						ns1blankspace.news.details();
 					});
 					
-					$('#tdInterfaceViewportControlGroups').click(function(event)
+					$('#ns1blankspaceControlEdit').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainGroups", true);
-						interfaceNewsGroups();
-					});
-					
-					$('#tdInterfaceViewportControlEdit').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainEdit");
-						interfaceNewsEdit();
+						ns1blankspace.show("#ns1blankspaceMainEdit");
+						ns1blankspace.news.edit();
 					});
 
-					$('#tdInterfaceViewportControlTracking').click(function(event)
+					$('#ns1blankspaceControlSendTo').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainTracking");
-						interfaceNewsTracking();
+						ns1blankspace.show("#ns1blankspaceMainSendTo", true);
+						ns1blankspace.news.sendTo();
+					});
+					
+					$('#ns1blankspaceControlTracking').click(function(event)
+					{
+						ns1blankspace.show("#ns1blankspaceMainTracking");
+						ns1blankspace.news.tracking();
 					});
 					
 				},
 
-	show: 		function interfaceNewsShow(oParam, oResponse)
+	show: 		function (oParam, oResponse)
 				{
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceNewsViewport();
-
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.contactPerson.layout();
+					
 					var aHTML = [];
-					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find news.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find news item.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
-								
-						$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.subject);
-						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-						$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 						
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceNewsMasterViewport({showHome: false});interfaceNewsSearch("-' + ns1blankspace.objectContext + '")',
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.subject);
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+						
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.news.init({showHome: false});ns1blankspace.news.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
-							})
-							
-						ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceNewsSummary()'})
+							});
+						
+						ns1blankspace.history.object({functionDefault: 'ns1blankspace.news.summary()'});
 					}	
 				},		
 		
-	summary: 	function interfaceNewsSummary()
+	summary: 	function ()
 				{
 
 					var aHTML = [];
-					var h = -1;
-					
-					aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-					aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-								'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
-									'</td>' +
-									'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
-									'</td>' +
-									'</tr>';
-					aHTML[++h] = '</table>';					
-						
-					$('#divInterfaceMainSummary').html(aHTML.join(''));
-					
-					var aHTML = [];
-					var h = -1;
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find news.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this news item.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'</tr>' +
+									'</table>');				
+						
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
+					
+						var aHTML = [];
 						var sTmp = ns1blankspace.objectContextData.startdate;
 						if (sTmp == '&nbsp;') {sTmp = 'Not set.'};
+					
+						aHTML.push('<table class="ns1blankspaceColumn1">');
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Start Date</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryTypeValue" class="interfaceMainStartDateValue">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Start Date</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryTypeValue" class="ns1blankspaceSummary">' +
 										sTmp +
-										'</td></tr>';
+										'</td></tr>');
 										
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySummary" class="interfaceMainSummary">&nbsp;</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummarySummaryValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">&nbsp;</td></tr>' +
+										'<tr><td id="ns1blankspaceSummarySummaryValue" class="ns1blankspaceSummary">' +
 										ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.news) +
-										'</td></tr>';
+										'</td></tr>');
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
-						var h = -1;	
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action" cellspacing=0>';
-												
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySendPreviewEmail" class="interfaceMainColumn2Action">' +
-										'<a href="#" id="aInterfaceMainSummarySendPreviewEmail">Send&nbsp;preview&nbsp;email&nbsp;to&nbsp;me</a>' +
-										'</td></tr>';
+						aHTML.push('<table class="ns1blankspaceColumn2Action" cellspacing=0>');
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySendAsEmail" class="interfaceMainColumn2Action">' +
-										'<a href="#" id="aInterfaceMainSummarySendAsEmail" title="123|456">Send&nbsp;as&nbsp;email</a>' +
-										'</td></tr>';
+						aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+										'<span id="ns1blankspaceSummarySendPreviewEmail">Send&nbsp;preview&nbsp;email&nbsp;to&nbsp;me</a>' +
+										'</td></tr>');
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryCopy" class="interfaceMainColumn2Action">' +
-										'<a href="#" id="aInterfaceMainSummaryCopy">Copy</a>' +
-										'</td></tr>';
+						aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+										'<span id="ns1blankspaceSummarySendAsEmail">Send&nbsp;as&nbsp;email</a>' +
+										'</td></tr>');
+						
+						aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+										'<span id="ns1blankspaceSummaryCopy">Copy</a>' +
+										'</td></tr>');
 								
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainSummaryColumn2Action').html(aHTML.join(''));	
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 						
-						$('#aInterfaceMainSummarySendPreviewEmail').click(function(event)
+						$('#ns1blankspaceSummarySendPreviewEmail').click(function(event)
 						{
-							interfaceNewsSendAsEmail(true);
+							ns1blankspace.news.sendAsEmail(true);
 						});
 						
-						$('#aInterfaceMainSummarySendAsEmail').click(function(event)
+						$('#ns1blankspaceSummarySendAsEmail').click(function(event)
 						{
-							interfaceNewsSendAsEmail(false);
+							ns1blankspace.news.sendAsEmail(false);
 						});
 						
-						$('#aInterfaceMainSummaryCopy').click(function(event)
+						$('#ns1blankspaceSummaryCopy').click(function(event)
 						{
-							interfaceNewsCopy();
+							ns1blankspace.news.copy();
 						});
 					}	
 				},
 
-	bind: 		function interfaceNewsActionOptionsBind()
-				{
-					$('#tdinterfaceActionOptionsCopy').click(function(event)
-					{
-						interfaceNewsCopy();
-					});
-				},
-
-	details: 	function interfaceNewsDetails()
+	details: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
 					
-					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1">' +
-										'</td>' +
-										'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMainColumn2">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
 						
-						$('#divInterfaceMainDetails').html(aHTML.join(''));
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsSubject" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsSubject" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Title' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsSubjectValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsSubjectValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsSubject" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsSubject" class="ns1blankspaceText">' +
+										'</td></tr>');
 					
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsStartDate" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsStartDate" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Start Date' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsStartDateValue" class="interfaceMainDate">' +
-										'<td id="tdInterfaceMainDetailsStartDateValue" class="interfaceMainDate">' +
-										'<input id="inputInterfaceMainDetailsStartDate" class="inputInterfaceMainDate">' +
-										'</td></tr>';			
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceDetailsStartDate" class="ns1blankspaceDate">' +
+										'</td></tr>');			
 					
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsEndDate" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsEndDate" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'End Date' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsEndDateValue" class="interfaceMainDate">' +
-										'<td id="tdInterfaceMainDetailsEndDateValue" class="interfaceMainDate">' +
-										'<input id="inputInterfaceMainDetailsEndDate" class="inputInterfaceMainDate">' +
-										'</td></tr>';			
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceDetailsEndDate" class="ns1blankspaceDate">' +
+										'</td></tr>');			
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsFromEmail" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsFromEmail" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'From Email' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsFromEmailValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsFromEmailValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsFromEmail" class="inputInterfaceMainText">' +
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsFromEmail" class="ns1blankspaceText">' +
+										'</td></tr>');
 
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsSharing" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsSharing" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Sharing' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsSharing" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsSharingValue" class="interfaceMainText">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
 										'<input type="radio" id="radioPublicY" name="radioPublic" value="Y"/>Public' +
 										'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
-										'</td></tr>';
+										'</td></tr>');
 
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsTracking" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsTracking" class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Tracking' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsTracking" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsTrackingValue" class="interfaceMainText">' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioTracking1" name="radioTracking" value="1"/>No Tracking' +
 										'<br /><input type="radio" id="radioTracking2" name="radioTracking" value="2"/>When viewed' +
 										'<br /><input type="radio" id="radioTracking3" name="radioTracking" value="3"/>When a link is clicked' +
 										'<br /><input type="radio" id="radioTracking4" name="radioTracking" value="4"/>When viewed &/or a link is clicked' +
-										'</td></tr>';
+										'</td></tr>');
 								
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
 						var h = -1;
 							
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+						aHTML.push('<tableclass="ns1blankspaceCaption">');
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsSummary" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsSummary class="interfaceMain">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'News Summary' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsSummaryValue" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDetailsSummaryValue" class="interfaceMainTextMulti">' +
-										'<textarea rows="10" cols="35" id="inputInterfaceMainDetailsSummary" class="inputInterfaceMainTextMulti"></textarea>' +
-										'</td></tr>';
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="10" cols="35" id="ns1blankspaceDetailsSummary" class="ns1blankspaceTextMulti"></textarea>' +
+										'</td></tr>');
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 							
-						$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
-						$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy' });
+						$('input.ns1blankspaceDate').datepicker({ dateFormat: ns1blankspace.option.dateFormat });
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsSubject').val(ns1blankspace.objectContextData.subject);
+							$('#ns1blankspaceDetailsSubject').val(ns1blankspace.objectContextData.subject);
 							
 							var sTmp = ns1blankspace.objectContextData.startdate;
 							if (sTmp == '&nbsp;') {sTmp = ''};
-							$('#inputInterfaceMainDetailsStartDate').val(sTmp);
+							$('#ns1blankspaceDetailsStartDate').val(sTmp);
 							
 							var sTmp = ns1blankspace.objectContextData.enddate;
 							if (sTmp == '&nbsp;') {sTmp = ''};
-							$('#inputInterfaceMainDetailsEndDate').val(sTmp);
+							$('#ns1blankspaceDetailsEndDate').val(sTmp);
 							
-							$('#inputInterfaceMainDetailsFromEmail').val(ns1blankspace.objectContextData.fromemail);
-							$('#inputInterfaceMainDetailsSummary').val(ns1blankspace.objectContextData.summary);
+							$('#ns1blankspaceDetailsFromEmail').val(ns1blankspace.objectContextData.fromemail);
+							$('#ns1blankspaceDetailsSummary').val(ns1blankspace.objectContextData.summary);
 							
 							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
 							$('[name="radioTracking"][value="' + ns1blankspace.objectContextData.tracking + '"]').attr('checked', true);
@@ -665,176 +627,165 @@ search: 		{
 							$('[name="radioPublic"][value="N"]').attr('checked', true);
 							$('[name="radioTracking"][value="4"]').attr('checked', true);
 							var ns1blankspace.report.today = new Date()
-							$('#inputInterfaceMainDetailsStartDate').val($.fullCalendar.formatDate(ns1blankspace.report.today, "dd MMM yyyy"));
+							$('#ns1blankspaceDetailsStartDate').val($.fullCalendar.formatDate(ns1blankspace.report.today, "dd MMM yyyy"));
 						}
 						
 					}	
 				},
 
-	edit: 		function interfaceNewsEdit()
+	edit: 		function ()
 				{
 					var aHTML = [];
-					var h = -1;
 					
-					if ($('#divInterfaceMainEdit').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainEdit').attr('data-loading') == '1')
 					{
-						$('#divInterfaceMainEdit').attr('onDemandLoading', '');
-								
+						$('#ns1blankspaceMainEdit').attr('data-loading', '');
+
 						for (edId in tinyMCE.editors) 
 									tinyMCE.editors[edId].destroy(true);
 								
 						ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 								
-						aHTML[++h] = '<table id="tableInterfaceMainEdit" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainEditRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainEditColumn1" class="interfaceMain">' +
-										'</td>' +
-										'<td id="tdInterfaceMainEditColumn2" class="interfaceMain">' +
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceEditColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceEditColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' +
+										'</table>');					
 						
-						$('#divInterfaceMainEdit').html(aHTML.join(''));
+						$('#ns1blankspaceMainEdit').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+						aHTML.push('<table class="ns1blankspace">');
 								
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDetailsEditTextValue" class="interfaceMainTextMulti">' +
-										'<textarea rows="30" cols="50" onDemandType="TEXTMULTI" id="inputInterfaceMainEditText' +
-													ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="inputInterfaceMainTextMulti"></textarea>' +
-										'</td></tr>';
+						aHTML.push('<tr class="ns1blankspaceTextMulti">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="30" cols="50" onDemandType="TEXTMULTI" id="ns1blankspaceEditText' +
+													ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
+										'</td></tr>');
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainEditColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceEditColumn1').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							var sHTML = ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.news);
-							$('#inputInterfaceMainEditText' + ns1blankspace.counter.editor).val(sHTML);
+							$('#ns1blankspaceEditText' + ns1blankspace.counter.editor).val(sHTML);
 						}
 					
 						if (ns1blankspace.option.richTextEditing)
 						{
-							tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + ns1blankspace.counter.editor);
+							tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText' + ns1blankspace.counter.editor);
 						}	
 					}	
 				},
 
-	new: 		function interfaceNewsNew()
+	new: 		function ()
 				{
-					ns1blankspace.objectContextData = undefinded;
+					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					interfaceNewsViewport();
-					$('#divInterfaceMainDetails').html(ns1blankspace.xhtml.loading);
-					$('#divInterfaceMainDetails').attr('onDemandLoading', '1');
-					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					interfaceNewsDetails();	
+					ns1blankspace.news.init();
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
+					ns1blankspace.news.details();
 				},
 
-	copy:		function interfaceNewsCopy(oParam, oResponse)
+	copy:		function (oParam, oResponse)
 				{
 					if (ns1blankspace.objectContext != -1)
 					{
 						if (oReponse == undefined)
 						{
-							var sParam = 'method=NEWS_COPY';
-							sParam += '&id=' + ns1blankspace.objectContext;
+							var sParam = '&id=' + ns1blankspace.objectContext;
 
 							$.ajax(
 							{
 								type: 'GET',
-								url: '/ondemand/news/?' + sParam,
+								url: ns1blankspace.util.endpointURI('NEWS_COPY'),
 								dataType: 'json',
-								success: function(data) {interfaceNewsCopy(oParam, data)}
+								success: function(data) {ns1blankspace.news.copy(oParam, data)}
 							});
 						}	
 						else	
 						{
 							ns1blankspace.objectContext = oResponse.data.rows[0].id;
-							interfaceNewsShow(oParam, oResponse)
-							ns1blankspaceStatus('Copied');
-							$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-							$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');			
+							ns1blankspace.news.show(oParam, oResponse)
+							ns1blankspace.status.message('Copied');
+							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						}	
 					}	
 				},
 
 	groups: 	{
-					show: 		function interfaceNewsGroups(oParam)
+					show: 		function (oParam)
 								{
 									var aHTML = [];
-									var h = -1;	
 													
-									aHTML[++h] = '<table id="tableInterfaceMainGroups" class="interfaceMain">' +
-													'<tr id="trInterfaceMainGroupsRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainGroupsColumn1" class="interfaceMainColumn1Large">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="tdInterfaceMainGroupsColumn2" class="interfaceMainColumn2Action">' +
-													'</td>' +
+									aHTML.push('<table class="ns1blankspaceContainer">' +
+													'<tr class="ns1blankspaceContainer">' +
+													'<td id="ns1blankspaceGroupsColumn1" class="ns1blankspaceColumn1"></td>' +
+													'<td id="ns1blankspaceGroupsColumn2" class="ns1blankspaceColumn2"></td>' +
 													'</tr>' +
-													'</table>';					
-													
-									$('#divInterfaceMainGroups').html(aHTML.join(''));	
+													'</table>');					
+									
+									$('#ns1blankspaceMainGroups').html(aHTML.join(''));
 									
 									var aHTML = [];
-									var h = -1;	
 									
-									aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
+									aHTML.push('<table class="ns1blankspaceColumn2Action">');
 														
-									aHTML[++h] = '<tr><td id="tdInterfaceMainGroupsManage" class="interfaceMainSummary">' +
-													'<a href="#" id="aInterfaceMainGroupsManage">Show Groups</a>' +
-													'</td></tr>';
+									aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+													'<span id="ns1blankspaceGroupsManage">Show Groups</a>' +
+													'</td></tr>');
 									
-									aHTML[++h] = '<tr><td>&nbsp;' +
-													'</td></tr>';		
+									aHTML.push('<tr><td>&nbsp;' +
+													'</td></tr>');		
 													
-									aHTML[++h] = '<tr><td id="tdInterfaceMainGroupsContacts" class="interfaceMainSummary">' +
-													'<a href="#" id="aInterfaceMainGroupsContacts">Show Contacts</a>' +
-													'</td></tr>';
+									aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+													'<span id="ns1blankspaceGroupsContacts">Show Contacts</a>' +
+													'</td></tr>');
 											
-									aHTML[++h] = '<tr><td>&nbsp;' +
-													'</td></tr>';		
+									aHTML.push('<tr><td>&nbsp;' +
+													'</td></tr>');		
 											
-									aHTML[++h] = '<tr><td id="tdInterfaceMainSend" class="interfaceMainAction">' +
-														'<span id="spanInterfaceMainSend">Send</span>' +
-														'</td></tr>';
+									aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+														'<span id="ns1blankspaceGroupsSend">Send</span>' +
+														'</td></tr>');
 													
-									aHTML[++h] = '</table>';					
+									aHTML.push('</table>');					
 									
-									$('#tdInterfaceMainGroupsColumn2').html(aHTML.join(''));	
+									$('#ns1blankspaceGroupsColumn2').html(aHTML.join(''));	
 									
-									$('#aInterfaceMainGroupsManage').click(function(event)
+									$('#ns1blankspaceGroupsManage').click(function(event)
 									{
-										interfaceNewsGroupsManage({xhtmlElementId: 'tdInterfaceMainGroupsColumn1'});
+										ns1blankspace.news.groups.save({xhtmlElementId: 'ns1blankspaceGroupsColumn1'});
 									});
 									
-									$('#aInterfaceMainGroupsContacts').click(function(event)
+									$('#ns1blankspaceGroupsContacts').click(function(event)
 									{
-										interfaceNewsGroupsContacts({xhtmlElementId: 'tdInterfaceMainGroupsColumn1'});
+										ns1blankspace.news.groups.save({xhtmlElementId: 'ns1blankspaceGroupsColumn1'});
 									});
 									
-									$('#spanInterfaceMainSend').button(
+									$('#ns1blankspaceGroupsSend').button(
 										{
 											label: "Send"
 										})
 										.click(function() {
-											ns1blankspaceOptionsSetPosition('spanInterfaceMainNewsGroupsAdd');
-											interfaceNewsSendAsEmail(false);
+											ns1blankspaceOptionsSetPosition('ns1blankspaceNewsGroupsAdd');
+											1blankspace.news.sendAsEmail(false);
 										})
 										.css('width', '75px')
 									
-									interfaceNewsGroupsManage({xhtmlElementId: 'tdInterfaceMainGroupsColumn1'});
+									ns1blankspace.news.groups.save({xhtmlElementId: 'ns1blankspaceGroupsColumn1'});
 								},		
 
-					search:		function interfaceNewsGroupsContacts(oParam, oResponse)
+					search:		function (oParam, oResponse)
 								{	
-									var sXHTMLElementId = 'divInterfaceMainGroups';
+									var sXHTMLElementId = 'ns1blankspaceMainGroups';
 									var sLabel = "groups";
 									var iOption = 1;
 									
@@ -851,43 +802,38 @@ search: 		{
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/news/?method=NEWS_CONTACT_PERSON_SEARCH',
+											url: ns1blankspace.util.endpointURI('NEWS_CONTACT_PERSON_SEARCH'),
 											data: sData,
 											dataType: 'json',
-											success: function(data){interfaceNewsGroupsContacts(oParam, data)}
+											success: function(data){ns1blankspace.news.groups.search(oParam, data)}
 										});
 									}
 									else
 									{
 										var aHTML = [];
-										var h = -1;
 									
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableInterfaceNewsHomeMostLikely">';
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																'<td class="interfaceMainRowNothing">No contacts.</td></tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">' +
+															'<tr><td class="ns1blankspaceNothing">No contacts.</td></tr>' +
+															'</table>');
 										}
 										else
 										{		
-											aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
-												
-											aHTML[++h] = '<table id="tableNewsGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
+											aHTML.push('<table class="ns1blankspace" border="0" cellspacing="0" cellpadding="0" >');
 											
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">First Name</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Surname</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Email</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<tr>');
+											aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Surname</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Email</td>');
+											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML[++h] = interfaceNewsGroupsContactsRow(this);
+												aHTML.push(ns1blankspace.news.groups.row(this));
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</table>');
 										}
 										
 										$('#' + sXHTMLElementId).html(aHTML.join(''));
@@ -900,28 +846,28 @@ search: 		{
 											showMore: (oResponse.morerows == "true"),
 											more: oResponse.moreid,
 											rows: ns1blankspace.option.defaultRows,
-											functionShowRow: interfaceNewsGroupsContactsRow,
+											functionShowRow: ns1blankspace.news.groups.row,
 											type: 'json'
 										}); 	
 										
-										$('#tdInterfaceMainGroupsManageActions').html('');
+										$('#ns1blankspaceGroupsManageActions').html('');
 									}	
 								},	
 
-					row:		function interfaceNewsGroupsContactsRow(oRow)
+					row:		function (oRow)
 								{
 									var aHTML = [];
 									var h = -1;
 									
-									aHTML[++h] = '<tr class="interfaceMainRow">';
+									aHTML[++h] = '<tr class="ns1blankspaceRow">';
 															
-									aHTML[++h] = '<td id="tdNewsGroupsList_contact-' + oRow.id + '" class="interfaceMainRow">' +
+									aHTML[++h] = '<td id="ns1blankspaceNewsGroupsContacts_contact-' + oRow.id + '" class="ns1blankspaceRow">' +
 															oRow.firstname + '</td>';
 															
-									aHTML[++h] = '<td id="tdNewsGroupsList_activity-' + oRow.id + '" class="interfaceMainRow">' +
+									aHTML[++h] = '<td id="ns1blankspaceNewsGroupsContacts_activity-' + oRow.id + '" class="ns1blankspaceRow">' +
 															oRow.surname + '</td>';
 															
-									aHTML[++h] = '<td id="tdNewsGroupsList_link-' + oRow.id + '" class="interfaceMainRow">' +
+									aHTML[++h] = '<td id="ns1blankspaceNewsGroupsList_link-' + oRow.id + '" class="ns1blankspaceRow">' +
 															oRow.email + '</td>';
 															
 									aHTML[++h] = '</tr>';
@@ -930,9 +876,9 @@ search: 		{
 								},	
 
 
-					save:		function interfaceNewsGroupsManage(oParam, oResponse)
+					save:		function (oParam, oResponse)
 								{
-									var sXHTMLElementId = 'divInterfaceMainGroups';
+									var sXHTMLElementId = 'ns1blankspaceMainGroups';
 									var sLabel = "groups";
 									var iOption = 1;
 									
@@ -949,60 +895,55 @@ search: 		{
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/news/?method=NEWS_PERSON_GROUP_SEARCH',
+											url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_SEARCH'),
 											data: sParam,
 											dataType: 'json',
-											success: function(data){interfaceNewsGroupsManage(oParam, data)}
+											success: function(data){ns1blankspace.news.groups.save(oParam, data)}
 										});
 									}
 									else
 									{
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainNewsGroupsColumn2" class="interfaceMainColumn2">';
+										aHTML.push('<table class="ns1blankspaceColumn2Action">');
 										
-										aHTML[++h] = '<tr><td>' +
+										aHTML.push('<tr><td>' +
 														'&nbsp;' +
-														'</td></tr>';
+														'</td></tr>');
 														
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>');					
 										
-										$('#tdInterfaceMainGroupsManageActions').html(aHTML.join(''));
+										$('#ns1blankspaceGroupsManageActions').html(aHTML.join(''));
 										
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML[++h] = '<table id="tableNewsGroups" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-										aHTML[++h] = '<tbody>'
-										aHTML[++h] = '<tr class="interfaceMainCaption">' +
-															'<td id="tdInterfaceMainNewsGroupsColumn1Options">&nbsp;</td></tr>';
-										aHTML[++h] = '<tr class="interfaceMainCaption">' +
-															'<td id="tdInterfaceMainNewsGroupsColumn1Groups"></td></tr>';
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspace">');
+										aHTML.push('<tr class="ns1blankspaceCaption"><td id="ns1blankspaceNewsGroupsColumn1Options">&nbsp;</td></tr>');
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td id="ns1blankspaceNewsGroupsColumn1Groups"></td></tr>');
+										aHTML.push('</table>');
 
-										$('#tdInterfaceMainGroupsColumn1').html(aHTML.join(''));
+										$('#ns1blankspaceGroupsColumn1').html(aHTML.join(''));
 										
 										var aHTML = [];
-										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+										aHTML.push('<table class="ns1blankspace">');
 										
-										aHTML[++h] = '<tr id="trInterfaceMainEmailTo" class="interfaceMainText">' +
-														'<td id="tdInterfaceMainEmailToValue" class="interfaceMainText">' +
+										aHTML.push('<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceRadio">' +
 														'<input type="radio" id="radioEmailTo1" name="radioEmailTo" value="1"/>No one' +
 														'&nbsp;&nbsp;<input type="radio" id="radioEmailTo2" name="radioEmailTo" value="2"/>Everyone' +
 														'&nbsp;&nbsp;<input type="radio" id="radioEmailTo3" name="radioEmailTo" value="3"/>Selected Groups' +
-														'&nbsp;&nbsp;<span id="spanInterfaceMainNewsGroupsAdd">Add</span>' +
-														'</td></tr>';
+														'&nbsp;&nbsp;<span id="ns1blankspaceNewsGroupsAdd">Add</span>' +
+														'</td></tr>');
 
-										aHTML[++h] = '<tr><td colspan=2>&nbsp;</td></tr>';
+										aHTML.push('<tr><td colspan=2>&nbsp;</td></tr>');
 
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>');					
 										
-										$('#tdInterfaceMainNewsGroupsColumn1Options').html(aHTML.join(''));
+										$('#ns1blankspaceNewsGroupsColumn1Options').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainNewsGroupsAdd').button(
+										$('#ns1blankspaceNewsGroupsAdd').button(
 										{
 												text: false,
 												icons: {
@@ -1010,14 +951,13 @@ search: 		{
 												}
 										})
 										.click(function() {
-											ns1blankspaceOptionsSetPosition('spanInterfaceMainNewsGroupsAdd', -28, 32);
-											interfaceNewsGroupsAdd(oParam);
+											ns1blankspaceOptionsSetPosition('ns1blankspaceNewsGroupsAdd', -28, 32);
+											ns1blankspace.news.groups.add(oParam);
 										})
 										.css('width', '25px')
 										.css('font-size', '0.75em')
 										
 										var aHTML = [];
-										var h = -1;
 
 										if (oResponse.data.rows.length == 0)
 										{
@@ -1027,8 +967,7 @@ search: 		{
 										{
 											iOption = 3;
 											
-											aHTML[++h] = '<table id="tableNewsGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspace">');
 											
 											$.each(oResponse.data.rows, function()
 											{
@@ -1040,31 +979,31 @@ search: 		{
 												{
 													if (this.grouptext != '')
 													{
-														aHTML[++h] = '<tr class="interfaceMainRow">';
+														aHTML.push('<tr class="ns1blankspaceRow">');
 																		
-														aHTML[++h] = '<td id="tdNewsGroupsList-title-' + this.group + '" class="interfaceMainRow">' +
-																				this.grouptext + '</td>';
+														aHTML.push('<td id="ns1blankspaceNewsGroupsList-title-' + this.group + '" class="ns1blankspaceRow">' +
+																				this.grouptext + '</td>');
 																									
-														aHTML[++h] = '<td id="tdNewsGroupsList-' + this.group + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>';
+														aHTML.push('<td id="ns1blankspaceNewsGroupsList-' + this.group + '" class="ns1blankspaceRow ns1blankspaceRowRemove">&nbsp;</td>');
 																				
-														aHTML[++h] = '</tr>';
+														aHTML.push('</tr>');
 													}	
 												}		
 												
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML[++h] = '</table>';
 
-											$('#tdInterfaceMainNewsGroupsColumn1Groups').html(aHTML.join(''));
+											$('#ns1blankspaceNewsGroupsColumn1Groups').html(aHTML.join(''));
 											
-											$('.interfaceMainRowOptionsSelect').button( {
+											$('.ns1blankspaceRowRemove').button( {
 												text: false,
 												 icons: {
 													 primary: "ui-icon-close"
 												}
 											})
 											.click(function() {
-												interfaceNewsGroupsAddRemove(this.id)
+												ns1blankspace.news.groups.remove(this.id)
 											})
 											.css('width', '15px')
 											.css('height', '20px')
@@ -1074,12 +1013,12 @@ search: 		{
 									}	
 								},
 
-					add:		function interfaceNewsGroupsAdd(oParam, oResponse)
+					add:		function (oParam, oResponse)
 								{		
-									if ($('#divns1blankspaceViewportControlOptions').attr('data-initiator') == 'spanInterfaceMainNewsGroupsAdd')
+									if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceNewsGroupsAdd')
 									{
-										$('#divns1blankspaceViewportControlOptions').slideUp(500);
-										$('#divns1blankspaceViewportControlOptions').attr('data-initiator', '');
+										$(ns1blankspace.xhtml.container).slideUp(500);
+										$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 									}
 									else
 									{
@@ -1088,61 +1027,58 @@ search: 		{
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/setup/?method=SETUP_CONTACT_PERSON_GROUP_SEARCH',
+												url: ns1blankspace.util.endpointURI('SETUP_CONTACT_PERSON_GROUP_SEARCH'),
 												dataType: 'xml',
-												success: function(data){interfaceNewsGroupsAdd(oParam, data)}
+												success: function(data){ns1blankspace.news.groups.add(oParam, data)}
 											});
 										}
 										else
 										{
-											$('#divns1blankspaceViewportControlOptions').attr('data-initiator', 'spanInterfaceMainNewsGroupsAdd')
+											$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceNewsGroupsAdd')
+											
 											
 											var aHTML = [];
-											var h = -1;
 											
 											if (oResponse.data.rows.length == 0)
 											{	
-												aHTML[++h] = '<table id="tableNewsGroupsAddSelect" border="0" cellspacing="0" cellpadding="0" class="interfaceSearchMedium">';
-												aHTML[++h] = '<tbody>'
-												aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																'<td class="interfaceMainRowNothing">No groups.</td></tr>';
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('<table class="ns1blankspaceSearchMedium">' + 
+																'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' + 
+																'</table>');
+
+												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 
 												$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 												$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 											}
 											else
 											{
-												aHTML[++h] = '<table id="tableNewsGroupsAddSelect" class="interfaceSearchMedium" style="font-size:0.725em;">';
-												aHTML[++h] = '<tbody>'
+												aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.725em;">');
 												
 												$.each(oResponse.data.rows, function()
-												{
-													var oRow = oRoot.childNodes.item(iRow);
+												{	
+													aHTML.push('<tr class="ns1blankspaceRow">' +
+																	'<td id="ns1blankspaceGroupsAdd-title-' + this.id + '" class="ns1blankspaceRowSelect ns1blankspaceGroupsAddRowSelect">' +
+																			this.title + '</td>');
 													
-													aHTML[++h] = '<tr class="interfaceMainRow">';
-													
-													aHTML[++h] = '<td id="tdNewsGroupsAddSelect-title-' + this.id + '" class="interfaceMainRowSelect">' +
-																			this.title + '</td>';
-													
-													aHTML[++h] = '</tr>'
+													aHTML.push('</tr>');
 												});
 												
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('</table>');
 
-												$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-												$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 												
-												$('td.interfaceMainRowSelect').click(function(event)
+												$('td.ns1blankspaceGroupsAddRowSelect').click(function(event)
 												{
-													interfaceNewsGroupsAddSelect(event.target.id);
+													ns1blankspace.news.groups.select(event.target.id);
 												});
 											}
 										}
 									}	
 								},
 										
-					select:		function interfaceNewsGroupsAddSelect(sXHTMLElementId)
+					select:		function (sXHTMLElementId)
 								{
 
 									var aSearch = sXHTMLElementId.split('-');
@@ -1151,36 +1087,35 @@ search: 		{
 									
 									$('#' + sXHTMLElementId).fadeOut(500);
 									
-									var sParam = 'method=NEWS_PERSON_GROUP_MANAGE';
 									var sData = 'news=' + ns1blankspace.objectContext +
 												'&group=' + sSearchContext;
 												
 									$.ajax(
 										{
 											type: 'POST',
-											url: '/ondemand/news/?' + sParam,
+											url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE'),
 											data: sData,
 											dataType: 'text',
-											success: function(data){interfaceNewsGroups()}
+											success: function(data){ns1blankspace.news.groups.show()}
 										});
 										
 								},
 
-					remove:		function interfaceNewsGroupsAddRemove(sXHTMLElementId)
+					remove:		function (sXHTMLElementId)
 								{
 
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
 									
-									var sParam = 'method=NEWS_PERSON_GROUP_MANAGE&remove=1';
-									var sData = 'news=' + ns1blankspace.objectContext +
+									var sData = 'remove=1' + 
+												'&news=' + ns1blankspace.objectContext +
 												'&group=' + sSearchContext;
 												
 									$.ajax(
 										{
 											type: 'POST',
-											url: '/ondemand/news/?' + sParam,
+											url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE'),
 											data: sData,
 											dataType: 'text',
 											success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
@@ -1190,57 +1125,54 @@ search: 		{
 				},				
 
 	tracking: 	{
-					show: 	function interfaceNewsTracking(oParam)
+					show: 	function (oParam)
 								{
 									var aHTML = [];
-									var h = -1;	
+									aHTML.push('<table class="ns1blankspaceContainer">' +
+												'<tr class="ns1blankspaceContainer">' +
+												'<td id="ns1blankspaceNewsTrackingColumn1" class="ns1blankspaceColumn1Large">' +
+												ns1blankspace.xhtml.loading +
+												'</td>' +
+												'<td id="ns1blankspaceNewsTrackingColumn2" style="width: 100px;" class="ns1blankspaceColumn2Action">' +
+												'</td>' +
+												'</tr>' +
+												'</table>');				
 													
-									aHTML[++h] = '<table id="tableInterfaceMainTracking" class="interfaceMain">' +
-													'<tr id="trInterfaceMainTrackingRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainTrackingColumn1" class="interfaceMainColumn1Large">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="tdInterfaceMainTrackingColumn2" class="interfaceMainColumn2Action">' +
-													'</td>' +
-													'</tr>' +
-													'</table>';					
-													
-									$('#divInterfaceMainTracking').html(aHTML.join(''));	
+									$('#ns1blankspaceMainTracking').html(aHTML.join(''));	
 									
 									var aHTML = [];
-									var h = -1;	
 									
-									aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
+									aHTML.push('<table class="ns1blankspaceColumn2Action">');
 															
-									aHTML[++h] = '<tr><td id="tdInterfaceMainTrackingSummary" class="interfaceMainSummary">' +
-													'<a href="#" id="aInterfaceMainTrackingSummary">Summary</a>' +
-													'</td></tr>';
+									aHTML.push('<tr><td class="ns1blankspaceSummary">' +
+													'<span id="ns1blankspaceTrackingSummary">Summary</a>' +
+													'</td></tr>');
 									
-									aHTML[++h] = '<tr><td id="tdInterfaceMainTrackingDetails" class="interfaceMainSummary">' +
-													'<a href="#" id="aInterfaceMainTrackingDetails">Details</a>' +
-													'</td></tr>';
+									aHTML.push('<tr><td class="ns1blankspaceSummary">' +
+													'<span id="ns1blankspaceTrackingDetails">Details</a>' +
+													'</td></tr>');
 											
-									aHTML[++h] = '</table>';					
+									aHTML.push('</table>');					
 									
-									$('#tdInterfaceMainTrackingColumn2').html(aHTML.join(''));	
+									$('#ns1blankspaceNewsTrackingColumn2').html(aHTML.join(''));	
 									
-									$('#aInterfaceMainTrackingSummary').click(function(event)
+									$('#ns1blankspaceTrackingSummary').click(function(event)
 									{
-										interfaceNewsTrackingSummary({xhtmlElementId: 'tdInterfaceMainTrackingColumn1'});
+										ns1blankspace.news.tracking.summary({xhtmlElementId: 'ns1blankspaceNewsTrackingColumn1'});
 									});
 									
-									$('#aInterfaceMainTrackingDetails').click(function(event)
+									$('#ns1blankspaceTrackingDetails').click(function(event)
 									{
-										interfaceNewsTrackingDetails({xhtmlElementId: 'tdInterfaceMainTrackingColumn1'});
+										ns1blankspace.news.tracking.details({xhtmlElementId: 'ns1blankspaceNewsTrackingColumn1'});
 									});
 									
-									interfaceNewsTrackingSummary({xhtmlElementId: 'tdInterfaceMainTrackingColumn1'});
+									ns1blankspace.news.tracking.summary({xhtmlElementId: 'ns1blankspaceNewsTrackingColumn1'});
 								},		
 
-					summary:	function interfaceNewsTrackingSummary(oParam, oResponse)
+					summary:	function (oParam, oResponse)
 								{
 									
-									var sXHTMLElementId = 'divInterfaceMainTracking';
+									var sXHTMLElementId = 'ns1blankspaceMainTracking';
 									var sLabel = "groups";
 									var iOption = 1;
 									
@@ -1252,69 +1184,68 @@ search: 		{
 
 									if (oResponse == undefined)
 									{
-										var sParam = 'method=NEWS_TRACKING_SUMMARY&rows=20' +
+										var sParam = '&rows=20' +
 														'&news=' + ns1blankspace.objectContext;
 										
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/news/?' + sParam,
+											url: ns1blankspace.util.endpointURI('NEWS_TRACKING_SUMMARY') + sParam,
 											dataType: 'json',
-											success: function(data){interfaceNewsTrackingSummary(oParam, data)}
+											success: function(data){ns1blankspace.news.tracking.summary(oParam, data)}
 										});
 									}
 									else
 									{
 										var aHTML = [];
-										var h = -1;
 											
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableInterfaceNewsHomeMostLikely">';
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																'<td class="interfaceMainRowNothing">No tracking information available.</td></tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table>');
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+																'<td class="ns1blankspaceNothing">No tracking information available.</td></tr>');
+											aHTML.push('</table>');
 										}
 										else
 										{
-											aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+											aHTML.push('<table class="ns1blankspace">');
 												
-											aHTML[++h] = '<table id="tableNewsGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspace">');
+											aHTML.push(''
 											
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">Activity</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Link</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Count</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption">Activity</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Link</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Count</td>');
+											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML[++h] = '<tr class="interfaceMainRow">';
+												aHTML.push('<tr class="ns1blankspaceRow">');
 																		
-												aHTML[++h] = '<td id="tdNewsGroupsList_activity-' + this.id + '" class="interfaceMainRow">' +
-																		this.activity + '</td>';
+												aHTML.push('<td id="ns1blankspaceNewsGroupsList_activity-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.activity + '</td>');
 																		
-												aHTML[++h] = '<td id="tdNewsGroupsList_link-' + this.id + '" class="interfaceMainRow">' +
-																		this.link + '</td>';
+												aHTML.push('<td id="ns1blankspaceNewsGroupsList_link-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.link + '</td>');
 												
-												aHTML[++h] = '<td id="tdNewsGroupsList_link-' + this.id + '" class="interfaceMainRow">' +
-																		this.count + '</td>';
+												aHTML.push('<td id="ns1blankspaceNewsGroupsList_link-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.count + '</td>');
 																		
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>'
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</table>');
 										}
 										
 										$('#' + sXHTMLElementId).html(aHTML.join(''));
 									}	
 								}	
 
-					details:	function interfaceNewsTrackingDetails(oParam, oResponse)
+					details:	function (oParam, oResponse)
 								{
 									
-									var sXHTMLElementId = 'divInterfaceMainTracking';
+									var sXHTMLElementId = 'ns1blankspaceMainTracking';
 									var sLabel = "groups";
 									var iOption = 1;
 									
@@ -1326,63 +1257,60 @@ search: 		{
 
 									if (oResponse == undefined)
 									{
-										var sParam = 'method=NEWS_TRACKING_SEARCH&rows=20' +
+										var sParam = '&rows=20' +
 														'&news=' + ns1blankspace.objectContext;
 										
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/news/?' + sParam,
+											url: ns1blankspace.util.endpointURI('NEWS_TRACKING_SEARCH') + sParam,
 											dataType: 'json',
-											success: function(data){interfaceNewsTrackingDetails(oParam, data)}
+											success: function(data){ns1blankspace.news.tracking.details(oParam, data)}
 										});
 									}
 									else
 									{
 										var aHTML = [];
-										var h = -1;
-									
+								
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table id="tableInterfaceNewsHomeMostLikely">';
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																'<td class="interfaceMainRowNothing">No tracking information available.</td></tr>';
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('<table>' +
+															'<tr><td class="ns1blankspaceNothing">No tracking information available.</td></tr>' +
+															'</table>');
 										}
 										else
 										{		
-											aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+											aHTML.push('<table class="ns1blankspace">');
 												
-											aHTML[++h] = '<table id="tableNewsGroupsList" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-											aHTML[++h] = '<tbody>'
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspace">');
 											
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
-											aHTML[++h] = '<td class="interfaceMainCaption">Contact</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Activity</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Link</td>';
-											aHTML[++h] = '<td class="interfaceMainCaption">Date & Time</td>';
-											aHTML[++h] = '</tr>';
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption">Contact</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Activity</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Link</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Date & Time</td>');
+											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML[++h] = '<tr class="interfaceMainRow">';
+												aHTML.push('<tr class="ns1blankspaceRow">');
 																
-												aHTML[++h] = '<td id="tdNewsGroupsList_contact-' + this.contactperson + '" class="interfaceMainRow">' +
-																		this.contactpersontext + '</td>';
+												aHTML.push('<td id="ns1blankspaceNewsGroupsList_contact-' + this.contactperson + '" class="ns1blankspaceRow">' +
+																		this.contactpersontext + '</td>');
 																		
-												aHTML[++h] = '<td id="tdNewsGroupsList_activity-' + this.id + '" class="interfaceMainRow">' +
-																		this.activity + '</td>';
+												aHTML.push('<td id="ns1blankspaceNewsGroupsList_activity-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.activity + '</td>');
 																		
-												aHTML[++h] = '<td id="tdNewsGroupsList_link-' + this.id + '" class="interfaceMainRow">' +
-																		this.link + '</td>';
+												aHTML.push('<td id="ns1blankspaceNewsGroupsList_link-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.link + '</td>');
 												
-												aHTML[++h] = '<td id="tdNewsGroupsList_link-' + this.id + '" class="interfaceMainRow">' +
-																		this.datetime + '</td>';
+												aHTML.push('<td id="ns1blankspaceNewsGroupsList_link-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.datetime + '</td>');
 																		
-												aHTML[++h] = '</tr>';	
+												aHTML.push('</tr>');	
 											});
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</table>');
 										}
 										$('#' + sXHTMLElementId).html(aHTML.join(''));
 									}	
@@ -1390,7 +1318,7 @@ search: 		{
 				},				
 
 	save: 		{
-					send: 		function interfaceNewsSave()
+					send: 		function ()
 								{
 									var sParam = 'method=NEWS_MANAGE';
 									var sData = '_=1';
@@ -1400,86 +1328,98 @@ search: 		{
 										sParam += '&select=' + ns1blankspace.objectContext	
 									}	
 									
-									if ($('#divInterfaceMainDetails').html() != '')
+									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&subject=' + encodeURIComponent($('#inputInterfaceMainDetailsSubject').val());
-										sData += '&startdate=' + encodeURIComponent($('#inputInterfaceMainDetailsStartDate').val());
-										sData += '&stopdate=' + encodeURIComponent($('#inputInterfaceMainDetailsEndDate').val());
-										sData += '&fromemail=' + $('#inputInterfaceMainDetailsFromEmail').val();
+										sData += '&subject=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSubject').val());
+										sData += '&startdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsStartDate').val());
+										sData += '&stopdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEndDate').val());
+										sData += '&fromemail=' + $('#ns1blankspaceDetailsFromEmail').val();
 										sData += '&public=' + $('input[name="radioPublic"]:checked').val();
-										sData += '&summary=' + encodeURIComponent($('#inputInterfaceMainDetailsSummary').val());
+										sData += '&summary=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSummary').val());
 										sData += '&tracking=' + $('input[name="radioTracking"]:checked').val();
 									}
 									
-									if ($('#divInterfaceMainEdit').html() != '')
+									if ($('#ns1blankspaceMainEdit').html() != '')
 									{
-										sData += '&news=' + encodeURIComponent(tinyMCE.get('inputInterfaceMainEditText' + ns1blankspace.counter.editor).getContent());
+										sData += '&news=' + ns1blankspace.util.fs((tinyMCE.get('ns1blankspaceEditText' + ns1blankspace.counter.editor).getContent());
 									}
 									
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspaceEndpointURL('NEWS_MANAGE'),
+										url: ns1blankspace.util.endpointURI('NEWS_MANAGE'),
 										data: sData,
-										dataType: 'text',
-										success: interfaceNewsSaveProcess
+										dataType: 'json',
+										success: ns1blankspace.news.save.process
 									});	
 								},
 
-					process:	function interfaceNewsSaveProcess(sResponse)
+					process:	function (oResponse)
 								{
 
-									ns1blankspaceStatus('Saved');
-										
-									if ($('#divInterfaceMainGroups').html() != '')
+									if (oResponse.status == 'OK')
 									{
-										if ($('input[name="radioEmailTo"]:checked').val() == '1')
-										{
-										
-											var sParam = 'method=NEWS_PERSON_GROUP_MANAGE&remove=2';
-											var sData = 'news=' + ns1blankspace.objectContext;
-												
-											$.ajax(
-												{
-													type: 'POST',
-													url: '/ondemand/news/?' + sParam,
-													data: sData,
-													dataType: 'text',
-													success: function(data){interfaceNewsGroups()}
-												});
+										ns1blankspace.status.message('Saved');
+										if (ns1blankspace.objectContext == -1) {var bNew = true}
+										ns1blankspace.objectContext = oResponse.id;	
 											
-										}
-										
-										if ($('input[name="radioEmailTo"]:checked').val() == '2')
+										if ($('#ns1blankspaceMainGroups').html() != '')
 										{
+											if ($('input[name="radioEmailTo"]:checked').val() == '1')
+											{
+											
+												var sParam = '&remove=2';
+												var sData = 'news=' + ns1blankspace.objectContext;
+													
+												$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE') + sParam,
+														data: sData,
+														dataType: 'text',
+														success: function(data){ns1blankspace.news.groups()}
+													});
+												
+											}
+											
+											if ($('input[name="radioEmailTo"]:checked').val() == '2')
+											{
+											
+												var sData = 'news=' + ns1blankspace.objectContext +
+															'&group=-1';
+													
+												$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE'),
+														data: sData,
+														dataType: 'text',
+														success: function(data){ns1blankspace.news.groups()}
+													});
+													
+											}
+
+											if (bNew) {
+												ns1blankspace.news.search('-' + ns1blankspace.objectContext)
+											}
+										}	
 										
-											var sParam = 'method=NEWS_PERSON_GROUP_MANAGE';
-											var sData = 'news=' + ns1blankspace.objectContext +
-														'&group=-1';
-												
-											$.ajax(
-												{
-													type: 'POST',
-													url: '/ondemand/news/?' + sParam,
-													data: sData,
-													dataType: 'text',
-													success: function(data){interfaceNewsGroups()}
-												});
-												
-										}
-									}	
-									
-									var aResponse = sResponse.split('|');
-									if (aResponse.length == 4)	
-									{ns1blankspace.objectContext = aResponse[3]};
-									ns1blankspace.inputDetected = false;
-									interfaceNewsSearch('-' + ns1blankspace.objectContext, {source: 1});
+										// ToDo: These lines may be required if MANAGE method doesn't return JSON
+										//var aResponse = sResponse.split('|');
+										//if (aResponse.length == 4)	
+										//{ns1blankspace.objectContext = aResponse[3]};
+										//ns1blankspace.inputDetected = false;
+										//ns1blankspace.news.search('-' + ns1blankspace.objectContext, {source: 1});
+									}
+									else
+									{
+										ns1blankspace.status.error(oResponse.error.errornotes);
+									}
 								}
 				},					
 
-	sendAsEmail: function interfaceNewsSendAsEmail(bPreview)
+	sendAsEmail: function (bPreview)
 				{
-					var sParam = 'method=NEWS_SEND';
 					var sMessage = 'News sent as email to contacts.';
 					
 					if (bPreview)
@@ -1496,9 +1436,9 @@ search: 		{
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/ondemand/news/?' + sParam,
+							url: ns1blankspace.util.endpointURI('NEWS_SEND'),
 							dataType: 'text',
-							success: ns1blankspaceStatus(sMessage)
+							success: ns1blankspace.status.message(sMessage)
 						});
 					}		
 					

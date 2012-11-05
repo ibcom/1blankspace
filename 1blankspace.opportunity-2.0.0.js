@@ -46,7 +46,7 @@ ns1blankspace.opportunity =
 										'</tr>';
 						aHTML.push('</table>';					
 						
-						$('#ns1blankspaceMain').html(aHTML.join(');
+						$('#ns1blankspaceMain').html(aHTML.join('');
 						
 						var aHTML = [];
 									
@@ -59,7 +59,7 @@ ns1blankspace.opportunity =
 										'</tr>';
 						aHTML.push('</table>';		
 						
-						$('#ns1blankspaceControl').html(aHTML.join(');	
+						$('#ns1blankspaceControl').html(aHTML.join('');	
 						
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
@@ -71,7 +71,7 @@ ns1blankspace.opportunity =
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						
-						oSearch.getResults(interfaceOpportunityHomeShow);
+						oSearch.getResults(ns1blanksapce.opportunity.home);
 						
 					}
 					else
@@ -114,7 +114,7 @@ ns1blankspace.opportunity =
 							aHTML.push('</table>');
 						}
 						
-						$('#ns1blankspaceMostLikely').html(aHTML.join(');
+						$('#ns1blankspaceMostLikely').html(aHTML.join('');
 					
 						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
@@ -209,7 +209,7 @@ ns1blankspace.opportunity =
 											oSearch.getResults(function(data){ns1blankspace.search.process(oParam, data)}) 
 
 										}
-									};	
+									}	
 								},
 
 					process:	function (oParam, oResponse)
@@ -302,9 +302,9 @@ ns1blankspace.opportunity =
 					{
 						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">Summary</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">Details</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">Details</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceContact" class="ns1blankspaceControl">Contact</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlContact" class="ns1blankspaceControl">Contact</td></tr>');
 					
 						aHTML.push('</table>');					
 					
@@ -312,22 +312,22 @@ ns1blankspace.opportunity =
 					
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">Actions</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">Attachments</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">Attachments</td></tr>');
 					}
 							
 					aHTML.push('</table>');					
 						
-					$('#ns1blankspaceControl').html(aHTML.join(');
+					$('#ns1blankspaceControl').html(aHTML.join('');
 					
 					var aHTML = [];
 
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="divInterfaceViewportMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="divInterfaceViewportMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainContact" class="divInterfaceViewportMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainActions" class="divInterfaceViewportMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainAttachments" class="divInterfaceViewportMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainContact" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
-					$('#ns1blankspaceMain').html(aHTML.join(');
+					$('#ns1blankspaceMain').html(aHTML.join('');
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
@@ -344,7 +344,7 @@ ns1blankspace.opportunity =
 					
 					$('#ns1blankspaceControlContact').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainAddress'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainContact'});
 						ns1blankspace.opportunity.contact();
 					});
 					
@@ -375,7 +375,7 @@ ns1blankspace.opportunity =
 						
 						aHTML.push('<table><tr><td valign="top">Sorry can\'t find opportunity.</td></tr></table>');
 								
-						$('#ns1blankspaceMain').html(aHTML.join(');
+						$('#ns1blankspaceMain').html(aHTML.join('');
 					}
 					else
 					{
@@ -405,7 +405,7 @@ ns1blankspace.opportunity =
 					{
 						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this opportunity.</td></tr></table>');
 								
-						$('#ns1blankspaceMain').html(aHTML.join(');
+						$('#ns1blankspaceMain').html(aHTML.join('');
 					}
 					else
 					{
@@ -416,7 +416,7 @@ ns1blankspace.opportunity =
 									'</tr>' +
 									'</table>');				
 						
-						$('#ns1blankspaceMainSummary').html(aHTML.join(');	
+						$('#ns1blankspaceMainSummary').html(aHTML.join('');	
 					
 						var aHTML = [];
 						
@@ -469,7 +469,7 @@ ns1blankspace.opportunity =
 						
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceSummaryColumn1Large').html(aHTML.join(');
+						$('#ns1blankspaceSummaryColumn1Large').html(aHTML.join('');
 							
 						var aHTML = [];
 							
@@ -478,17 +478,17 @@ ns1blankspace.opportunity =
 						if (ns1blankspace.objectContextData.requestbycontactperson == '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
-											'<a href="#" id="ns1blankspaceSummaryCreateContact">Create&nbsp;Person&nbsp;Contact</a></td></tr>');
+											'<span id="ns1blankspaceSummaryCreateContact">Create&nbsp;Person&nbsp;Contact</a></td></tr>');
 						}
 						else
 						{
 							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
-											'<a href="#" id="ns1blankspaceSummaryViewContact">View&nbsp;Person&nbsp;Contact</a></td></tr>');
+											'<span id="ns1blankspaceSummaryViewContact">View&nbsp;Person&nbsp;Contact</a></td></tr>');
 						}	
 										
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceSummaryColumn2Action').html(aHTML.join(');	
+						$('#ns1blankspaceSummaryColumn2Action').html(aHTML.join('');	
 						
 						$('#ns1blankspaceSummaryViewContact').click(function(event)
 						{
@@ -503,7 +503,7 @@ ns1blankspace.opportunity =
 							//interfaceOpportunityCreateContact();
 						});
 						
-						$('#aInterfaceMainSummarySendEmail').click(function(event)
+						$('#ns1blankspaceSummarySendEmail').click(function(event)
 						{
 							ns1blankspace.messaging.sendEmail();		//ToDo: Does this funciton exist?
 						});
@@ -525,7 +525,7 @@ ns1blankspace.opportunity =
 										'</tr>');
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceMainDetails').html(aHTML.join(');
+						$('#ns1blankspaceMainDetails').html(aHTML.join('');
 						
 						var aHTML = [];
 						
@@ -609,7 +609,7 @@ ns1blankspace.opportunity =
 
 						aHTML.push('</table>');		
 						
-						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(');
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join('');
 						
 						//$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy' });
 						
@@ -652,7 +652,7 @@ ns1blankspace.opportunity =
 										'</tr>' +
 										'</table>');					
 								
-						$('#ns1blankspaceContact').html(aHTML.join(');
+						$('#ns1blankspaceContact').html(aHTML.join('');
 						
 						var aHTML = [];
 					
@@ -676,7 +676,7 @@ ns1blankspace.opportunity =
 						}	
 						aHTML.push('</table>');
 						
-						$('#ns1blankspaceContactColumn2').html(aHTML.join(');
+						$('#ns1blankspaceContactColumn2').html(aHTML.join('');
 						
 						var aHTML = [];
 					
@@ -880,7 +880,7 @@ ns1blankspace.opportunity =
 										if (ns1blankspace.objectContext == -1)
 										{	
 											ns1blankspace.objectContext = glObjectSaveId;
-											interfaceOpportunitySearch('opporunity-' + ns1blankspace.objectContext);
+											ns1blankspace.opportunity.search('opporunity-' + ns1blankspace.objectContext);
 										}
 									}
 								},
@@ -889,7 +889,7 @@ ns1blankspace.opportunity =
 								{
 									if (oResponse.status == 'OK')
 									{
-										ns1blankspaceStatus('Saved');
+										ns1blankspace.status.message('Saved');
 										if (ns1blankspace.objectContext == -1) {var bNew = true}
 										ns1blankspace.objectContext = oResponse.id;	
 										
