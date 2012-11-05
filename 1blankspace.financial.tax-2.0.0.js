@@ -342,7 +342,7 @@ ns1blankspace.financial.tax =
 				
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspace">';
+						aHTML.push('<table class="ns1blankspace">');
 						aHTML.push('<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSummary">' +
 										'This tax report was last updated on the ' + ns1blankspace.objectContextData.modifieddate + '.' +
 										'</td></tr>');
@@ -397,7 +397,7 @@ ns1blankspace.financial.tax =
 					
 						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
 					}
-				}			
+				},		
 
 	report: 	{
 					layout:		function interfaceFinancialTaxReport()
@@ -423,7 +423,7 @@ ns1blankspace.financial.tax =
 									aHTML.push('<input style="width: 115px;" type="radio" id="ns1blankspaceTaxCategoryColumn-revenue" name="radioCategory" checked="checked" />' +
 													'<label for="ns1blankspaceTaxCategoryColumn-revenue" style="width: 115px;">Supplies (In)</label>');
 									aHTML.push('<input style="width: 115px;" type="radio" id="ns1blankspaceTaxCategoryColumn-expense" name="radioCategory" />' +
-													'<label for="ns1blankspaceTaxCategoryColumn-expense" style="width: 115px;">Aquisitions (Out)</label>';
+													'<label for="ns1blankspaceTaxCategoryColumn-expense" style="width: 115px;">Aquisitions (Out)</label>');
 									aHTML.push('</div>');
 
 									$('#ns1blankspaceTaxReportCategoryColumn').html(aHTML.join(''));			
@@ -460,19 +460,19 @@ ns1blankspace.financial.tax =
 									var aHTML = [];
 									var sField;
 										
-									aHTML.push('<table id="ns1blankspaceTaxReportType" class="ns1blankspace">';
+									aHTML.push('<table id="ns1blankspaceTaxReportType" class="ns1blankspace">');
 									
 									$.each(ns1blankspace.financial.reportsummary[sCategory], function()
 									{
 										sField = (this).toUpperCase();
 										
-										aHTML.push('<tr class="ns1blankspaceRow">';
+										aHTML.push('<tr class="ns1blankspaceRow">');
 														
 										aHTML.push('<td id="ns1blankspaceReportType_type-' + sField + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceType" style="width:150px;">' +
-														sField + '</td>';
+														sField + '</td>');
 												
 										aHTML.push('<td id="ns1blankspaceReportType_amount-' + sField + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceType" style="width:90px;text-align:right;">' +
-														'$' + ns1blankspace.objectContextData[sField] + '</td>';
+														'$' + ns1blankspace.objectContextData[sField] + '</td>');
 																																					
 										aHTML.push('</tr>');
 									});
