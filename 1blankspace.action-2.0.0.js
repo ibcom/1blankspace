@@ -54,9 +54,9 @@ ns1blankspace.action =
 							
 					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
-				}
+				},
 
-	home:	function (oParam)
+	home:		function (oParam)
 				{
 					var bCalendar = false;
 					
@@ -729,54 +729,52 @@ summary: 		function interfaceFinancialPaymentSummary()
 											dataType: 'json',
 											success: function(data) {ns1blankspace.action.save.process(oParam, data);}
 										});
-									},
-
-					process: 		function ()
-									{
-
-										if (oResponse.status == 'OK')
-										{
-											ns1blankspace.status.message('Saved');
-											ns1blankspace.objectContext = oResponse.id;	
-										
-											var dStartDate = new Date;
-											var dEndDate = dStartDate;
-											var sTitle = '';
-											var sCalendarXHTMLElementID;
-											
-											if (oParam != undefined)
-											{
-												if (oParam.date != undefined) {sStartDate = oParam.date}
-												if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
-												if (oParam.title != undefined) {sTitle = oParam.title}
-												if (oParam.calendarXHTMLElementID != undefined) {sCalendarXHTMLElementID = oParam.calendarXHTMLElementID}
-											}	
-										
-											if (sCalendarXHTMLElementID != undefined)
-											{
-												$('#' + sCalendarXHTMLElementID).fullCalendar('renderEvent',
-												{
-													id: ns1blankspace.objectContext,
-													title: sTitle,
-													start: sStartDate, 
-													end: sEndDate, 
-													allDay: false},
-													true
-												);
-											}
-											
-											ns1blankspace.inputDetected = false;
-											ns1blankspace.action.search.send('-' + ns1blankspace.objectContext, {source: 1});
-										}
-										else
-										{
-											ns1blankspace.status.error(oResponse.error.errornotes);
-										}
 									}
-									
-								}
-				),
+								},	
 
+					process: 	function ()
+								{
+
+									if (oResponse.status == 'OK')
+									{
+										ns1blankspace.status.message('Saved');
+										ns1blankspace.objectContext = oResponse.id;	
+									
+										var dStartDate = new Date;
+										var dEndDate = dStartDate;
+										var sTitle = '';
+										var sCalendarXHTMLElementID;
+										
+										if (oParam != undefined)
+										{
+											if (oParam.date != undefined) {sStartDate = oParam.date}
+											if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+											if (oParam.title != undefined) {sTitle = oParam.title}
+											if (oParam.calendarXHTMLElementID != undefined) {sCalendarXHTMLElementID = oParam.calendarXHTMLElementID}
+										}	
+									
+										if (sCalendarXHTMLElementID != undefined)
+										{
+											$('#' + sCalendarXHTMLElementID).fullCalendar('renderEvent',
+											{
+												id: ns1blankspace.objectContext,
+												title: sTitle,
+												start: sStartDate, 
+												end: sEndDate, 
+												allDay: false},
+												true
+											);
+										}
+										
+										ns1blankspace.inputDetected = false;
+										ns1blankspace.action.search.send('-' + ns1blankspace.objectContext, {source: 1});
+									}
+									else
+									{
+										ns1blankspace.status.error(oResponse.error.errornotes);
+									}
+								}
+				},
 
 	list: 		{
 					show:		function (oParam)
@@ -866,7 +864,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 									}
 									else
 									{
-										aHTML.push('<table class="ns1blankspace ns1blankspaceActionList">';
+										aHTML.push('<table class="ns1blankspace ns1blankspaceActionList">');
 										aHTML.push('<tr class="ns1blankspaceCaption">');
 
 										switch (sActionType)
@@ -962,7 +960,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 											}
 
 											aHTML.push('<td id="tdAction-options-' + this.id + '" class="ns1blankspaceRow">&nbsp;</td>');
-											aHTML.push'</tr>');
+											aHTML.push('</tr>');
 										});
 								    	
 										aHTML.push('</table>');
@@ -1027,7 +1025,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 									
 										$.each(oResponse.data.rows, function()
 										{
-											aHTML.push('<tr><td class="ns1blankspaceRow';
+											aHTML.push('<tr><td class="ns1blankspaceRow');
 											
 											if (this.priority == ns1blankspace.action.data.priority.high) 
 												{ aHTML.push(' ns1blankspaceImportant'); }
@@ -1253,13 +1251,13 @@ summary: 		function interfaceFinancialPaymentSummary()
 										{
 											type: 'GET',
 											url: ns1blankspace.util.endpointURI('SETUP_USER_SEARCH'),
-											data: 'profile=445-446-447&users=' + ns1blankspace.action.calendarUsers.toString('-');
+											data: 'profile=445-446-447&users=' + ns1blankspace.action.calendarUsers.toString('-'),
 											dataType: 'json',
 											success: function (data) 
 											{
 												$(data.profile445).each(function()
 												{
-													var aDaysTmp = ($(this).split(',')
+													var aDaysTmp = $(this).split(',')
 													
 													$.each(aDaysTmp, function() 
 													{
@@ -1356,7 +1354,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 										aHTML.push('<table class="ns1blankspace">');
 										
 										aHTML.push('<tr><td class="ns1blankspace">' +
-															'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText';
+															'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText');
 															
 										if (iActionID == -1)
 										{	
@@ -1415,7 +1413,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 										
 											aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
-											ns1blankspace'<tr><td style="text-align: right;">' +
+											aHTML.push('<tr><td style="text-align: right;">' +
 																'<span id="ns1blankspaceActionCalendarSave">Save</span>' +
 																'<span id="ns1blankspaceActionCalendarCancel">Cancel</span>' +
 																'<td></tr>');
@@ -1578,7 +1576,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 											ns1blankspace.status.error(oResponse.error.errornotes);
 										}
 									}
-								}						
+								},					
 
 					quickNote:	function (iObject, iObjectContext)
 								{
@@ -1654,11 +1652,10 @@ summary: 		function interfaceFinancialPaymentSummary()
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 					
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table class="ns1blankspace"><tr><td class="ns1blankspaceNothing">Nothing scheduled.</td></tr></table>';
+							aHTML.push('<table class="ns1blankspace"><tr><td class="ns1blankspaceNothing">Nothing scheduled.</td></tr></table>');
 							
 							$('#' + sXHTMLElementID).html(aHTML.join(''));
 							$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
@@ -1669,13 +1666,13 @@ summary: 		function interfaceFinancialPaymentSummary()
 							
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML.push('<tr>';
+								aHTML.push('<tr>');
 													
 								aHTML.push('<td id="ns1blankspaceAction_reference-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 													this.reference + '</td>');
 								
 								aHTML.push('<td id="tdAction_date-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-													this.actiondate + '</td>';
+													this.actiondate + '</td>');
 
 								var oDate = new Date.parse(ns1blankspace.objectContextData.actiondate);
 										

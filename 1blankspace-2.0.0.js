@@ -150,8 +150,8 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.contactperson-2.0.0.js'
 	},
 	{
-		name: '1blankspace.contactBusiness',
-		source: '/jscripts/1blankspace.contactbusiness-2.0.0.js'
+		name: '1blankspace.action',
+		source: '/jscripts/1blankspace.action-2.0.0.js'
 	}
 ]
 
