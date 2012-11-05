@@ -164,6 +164,14 @@ ns1blankspace.scripts =
 	{
 		name: '1blankspace.financial.invoice',
 		source: '/jscripts/1blankspace.financial.invoice-2.0.0.js'
+	},
+	{
+		name: '1blankspace.financial.expense',
+		source: '/jscripts/1blankspace.financial.expense-2.0.0.js'
+	},
+	{
+		name: '1blankspace.financial.receipt',
+		source: '/jscripts/1blankspace.financial.receipt-2.0.0.js'
 	}
 ]
 

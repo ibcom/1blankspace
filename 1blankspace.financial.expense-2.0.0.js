@@ -338,7 +338,7 @@ ns1blankspace.financial.expense =
 					
 					$('#ns1blankspaceControlCredits').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainCredits'}, refresh: true});
+						ns1blankspace.show({selector: '#divInterfaceMainCredits', refresh: true});
 						ns1blankspace.financial.invoice.credit();
 					});
 					
@@ -909,7 +909,7 @@ ns1blankspace.financial.expense =
 											
 											aHTML.push('<table style="margin-top:15px;">');
 											
-											aHTML.push('<tr><td id="ns1blankspaceItemAddSearchResults"></td></tr>';
+											aHTML.push('<tr><td id="ns1blankspaceItemAddSearchResults"></td></tr>');
 																			
 											aHTML.push('</table>');		
 											
@@ -1186,13 +1186,13 @@ ns1blankspace.financial.expense =
 										aHTML.push('<tr class="ns1blankspace">' +
 														'<td class="ns1blankspace"' +
 														' data-receiptedamount="' + cPaidAmount + '">' +
-														'$' + (cPaidAmount).formatMoney(2, ".", ",") + ' has been paid so far.'
+														'$' + (cPaidAmount).formatMoney(2, ".", ",") + ' has been paid so far.' +
 														'</td></tr>');
 														
 										aHTML.push('<tr class="ns1blankspace">' +
 														'<td id="ns1blankspaceReceiptEditAmount" class="ns1blankspace"' +
 														'">' +
-														'$' + (parseFloat((ns1blankspace.objectContextData.amount).replace(",","")) - cPaidAmount).formatMoney(2, ".", ",") + ' remaining.'
+														'$' + (parseFloat((ns1blankspace.objectContextData.amount).replace(",","")) - cPaidAmount).formatMoney(2, ".", ",") + ' remaining.' +
 														'</td></tr>');
 																						
 										aHTML.push('<tr class="ns1blankspace">' +
@@ -1247,7 +1247,7 @@ ns1blankspace.financial.expense =
 										
 										var sData = 'bankaccount=' + ns1blankspace.util.fs($('input[name="radioBankAccount"]:checked').val());
 										sData += '&amount=' + ns1blankspace.util.fs(cAmount);
-										sData += '&receiveddate=' + ns1blankspace.util.fs(Date.today().toString("dd-MMM-yyyy");
+										sData += '&receiveddate=' + ns1blankspace.util.fs(Date.today().toString("dd-MMM-yyyy"));
 										sData += '&paymentmethod=3'; //todo
 										sData += '&contactbusinessreceivedfrom=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.contactbusinesssentto);	
 										sData += '&contactpersonreceivedfrom=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.contactpersonsentto);

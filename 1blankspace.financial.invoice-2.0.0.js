@@ -1055,7 +1055,7 @@ details: 		function ()
 											
 											aHTML.push('<table style="margin-top:15px;">');
 											
-											aHTML.push('<tr><td id="ns1blankspaceItemAddSearchResults"></td></tr>';
+											aHTML.push('<tr><td id="ns1blankspaceItemAddSearchResults"></td></tr>');
 																			
 											aHTML.push('</table>');		
 											
@@ -1272,7 +1272,7 @@ details: 		function ()
 													aHTML.push('<span id="ns1blankspaceReceipt_options_remove-' + this.id + '" class="ns1blankspaceReceiptRemove"></span>');
 												};	
 													
-												aHTML[++h] = '</td></tr>');
+												aHTML.push('</td></tr>');
 											});
 											
 											aHTML.push('</table>');
@@ -1333,13 +1333,13 @@ details: 		function ()
 										aHTML.push('<tr class="ns1blankspace">' +
 														'<td class="ns1blankspace"' +
 														' data-receiptedamount="' + cReceiptedAmount + '">' +
-														'$' + (cReceiptedAmount).formatMoney(2, ".", ",") + ' has been receipted so far.'
+														'$' + (cReceiptedAmount).formatMoney(2, ".", ",") + ' has been receipted so far.' +
 														'</td></tr>');
 														
 										aHTML.push('<tr class="ns1blankspace">' +
 														'<td id="ns1blankspaceReceiptEditAmount" class="ns1blankspace"' +
 														'">' +
-														'$' + (parseFloat((ns1blankspace.objectContextData.amount).replace(",","")) - cReceiptedAmount).formatMoney(2, ".", ",") + ' remaining.'
+														'$' + (parseFloat((ns1blankspace.objectContextData.amount).replace(",","")) - cReceiptedAmount).formatMoney(2, ".", ",") + ' remaining.' +
 														'</td></tr>');
 																						
 										aHTML.push('<tr class="ns1blankspace">' +
