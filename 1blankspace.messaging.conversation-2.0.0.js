@@ -195,7 +195,7 @@ ns1blankspace.messaging.conversation =
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext)
 										oSearch.rows = 10;
 										oSearch.sort('modifieddate', 'asc');
-										oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.show(oParam, data));
+										oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.show(oParam, data)});
 									}
 									else
 									{	
@@ -307,16 +307,16 @@ ns1blankspace.messaging.conversation =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
-						aHTML.push('</table>';
+						aHTML.push('</table>');
 						
-						aHTML.push('<table class="ns1blankspaceControlContainer">';
+						aHTML.push('<table class="ns1blankspaceControlContainer">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlParticipants" class="ns1blankspaceControl">' +
 										'Participants</td></tr>');
 
-						aHTML.push('</table>';
+						aHTML.push('</table>');
 						
-						aHTML.push('<table class="ns1blankspaceControlContainer">';
+						aHTML.push('<table class="ns1blankspaceControlContainer">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlPosts" class="ns1blankspaceControl">' +
 										'Posts</td></tr>');
@@ -324,15 +324,15 @@ ns1blankspace.messaging.conversation =
 						aHTML.push('<tr><td id="ns1blankspaceControlComments" class="ns1blankspaceControl">' +
 										'Comments</td></tr>');
 
-						aHTML.push('</table>';
+						aHTML.push('</table>');
 						
-						aHTML.push('<table class="ns1blankspaceControlContainer">';
+						aHTML.push('<table class="ns1blankspaceControlContainer">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
 					}	
 					
-					aHTML.push('</table>';					
+					aHTML.push('</table>');					
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
@@ -561,7 +561,7 @@ ns1blankspace.messaging.conversation =
 							aHTML.push('<tr><td class="ns1blankspaceNothing">Only the owner can change the conversation details.</td></tr>');
 						}
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
@@ -569,7 +569,7 @@ ns1blankspace.messaging.conversation =
 						{
 							var aHTML = [];
 						
-							aHTML.push('<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">';
+							aHTML.push('<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">');
 							
 							aHTML.push('<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">' +
@@ -620,7 +620,7 @@ ns1blankspace.messaging.conversation =
 									{	
 										var aHTML = [];1;	
 										
-										aHTML.push('<table class="ns1blankspaceMainColumn2Action">';
+										aHTML.push('<table class="ns1blankspaceMainColumn2Action">');
 																		
 										aHTML.push('<tr><td class="ns1blankspaceMainAction">' +
 															'<span id="ns1blankspaceParticipantsAdd">Add</span>' +
@@ -740,7 +740,7 @@ ns1blankspace.messaging.conversation =
 											
 											var aHTML = [];
 											
-											aHTML.push('<table class="ns1blankspaceContainer">';
+											aHTML.push('<table class="ns1blankspaceContainer">');
 											
 											aHTML.push('<tr class="ns1blankspaceCaption">' +
 															'<td class="ns1blankspaceCaption">' +
@@ -781,7 +781,7 @@ ns1blankspace.messaging.conversation =
 														
 											aHTML.push('</table>');		
 											
-											aHTML.push('<table class="ns1blankspaceMainColumn2Action">';
+											aHTML.push('<table class="ns1blankspaceMainColumn2Action">');
 												
 											aHTML.push('<tr><td  class="ns1blankspaceAction">' +
 															'<span id="ns1blankspaceParticipantsAddSearch">Search</span>' +
@@ -1016,7 +1016,7 @@ ns1blankspace.messaging.conversation =
 											aHTML.push('<td class="ns1blankspaceCaption">By</td>');
 											aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
 											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
-											aHTML.push('</tr>';
+											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
 											{
@@ -1075,7 +1075,7 @@ ns1blankspace.messaging.conversation =
 									
 									if (iStep == 1) 
 									{
-										aHTML.push('<table id="ns1blankspaceMessagingConversationComments" class="ns1blankspaceDropDown" style="width:75px;">';
+										aHTML.push('<table id="ns1blankspaceMessagingConversationComments" class="ns1blankspaceDropDown" style="width:75px;">');
 										
 										aHTML.push('<tr><td class="ns1blankspaceAction">' +
 														'<span id="ns1blankspaceMessagingConversationCommentsView">View</span>' +
@@ -1083,7 +1083,7 @@ ns1blankspace.messaging.conversation =
 														
 										aHTML.push('<tr><td class="ns1blankspaceAction">' +
 														'<span id="ns1blankspaceMessagingConversationCommentsAdd">Add</span>' +
-														'</td></tr>';				
+														'</td></tr>');				
 										
 										aHTML.push('</table>');					
 
@@ -1275,16 +1275,15 @@ ns1blankspace.messaging.conversation =
 															'<tr class="ns1blankspaceText">' +
 															'<td class="ns1blankspaceText">' +
 															'<input name="subject" id="ns1blankspacePostSubject" class="ns1blankspaceText">' +
-															'</td></tr>';							
+															'</td></tr>');							
 									
 										aHTML.push('<tr class="ns1blankspaceTextMulti">' +
 															'<td class="ns1blankspaceMainTextMulti">' +
 															'<textarea name="message" rows="25" cols="50" id="ns1blankspacePostMessage' +
-																	ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
-																	
-															'</td></tr>';
+															ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +	
+															'</td></tr>');
 									
-										aHTML.push('</table>';						
+										aHTML.push('</table>');						
 									
 										$('#ns1blankspacePostDetailsColumn1').html(
 											ns1blankspace.attachments.upload.show(
@@ -1308,7 +1307,7 @@ ns1blankspace.messaging.conversation =
 											}
 										}	
 									}	
-								}	
+								},	
 
 					send:		function ()
 								{
@@ -1376,13 +1375,13 @@ ns1blankspace.messaging.conversation =
 									
 										var aHTML = [];
 									
-										aHTML.push('<table class="ns1blankspaceColumn2Action">';
+										aHTML.push('<table class="ns1blankspaceColumn2Action">');
 												
 										aHTML.push('<tr><td class="ns1blankspaceAction">' +
 															'<span id="ns1blankspaceCommentsAdd">Add</span>' +
-															'</td></tr>';
+															'</td></tr>');
 														
-										aHTML.push('</table>';					
+										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceCommentsColumn2').html(aHTML.join(''));	
 									
@@ -1413,7 +1412,7 @@ ns1blankspace.messaging.conversation =
 											aHTML.push('<td class="ns1blankspaceCaption">Comment</td>');
 											aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
 											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
-											aHTML.push('</tr>';
+											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
 											{
@@ -1496,7 +1495,7 @@ ns1blankspace.messaging.conversation =
 											success: ns1blankspace.messaging.conversation.save.process
 										});		
 									}	
-								}
+								},
 
 					process:	function (oResponse)
 								{		

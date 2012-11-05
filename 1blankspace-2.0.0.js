@@ -184,6 +184,10 @@ ns1blankspace.scripts =
 	{
 		name: '1blankspace.financial.payroll',
 		source: '/jscripts/1blankspace.financial.payroll-2.0.0.js'
+	},
+	{
+		name: '1blankspace.messaging.conversation',
+		source: '/jscripts/1blankspace.messaging.conversation-2.0.0.js'
 	}
 ]
 
