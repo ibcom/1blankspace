@@ -5,9 +5,9 @@
  * 01 FEB 2010
  */
  
-ns1blankspace.financial.payment = 
+ns1blankspace.financial.payment =
 {
-	init: 		function interfaceFinancialPaymentMasterViewport(oParam)
+	init: 		function (oParam)
 				{
 					ns1blankspace.financial.init();
 					
@@ -216,7 +216,7 @@ ns1blankspace.financial.payment =
 											
 											oSearch.getResults(function(data) {ns1blankspace.financial.invoice.search.process(oParam, data)});	
 										}
-									};	
+									}	
 								},
 
 					process:	function (oParam, oResponse)
@@ -364,7 +364,7 @@ ns1blankspace.financial.payment =
 					});
 				},
 
-	show:		function (oParam, oResponse)
+					show:		function (oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					ns1blankspace.financial.payment.layout();
@@ -399,7 +399,7 @@ ns1blankspace.financial.payment =
 					}	
 				},		
 		
-	summary: 	function interfaceFinancialPaymentSummary()
+	summary: 	function ()
 				{
 					if (ns1blankspace.objectContextData == undefined)
 					{
@@ -473,7 +473,7 @@ ns1blankspace.financial.payment =
 					}	
 				},
 
-	details: 	function interfaceFinancialPaymentDetails()
+	details: 	function ()
 				{
 					var aHTML = [];
 				
@@ -595,7 +595,7 @@ ns1blankspace.financial.payment =
 					$('#ns1blankspaceViewControlAction').button({disabled: false});
 					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 					ns1blankspace.financial.payment.details();
-				},		
+				},
 
 	save: 		{
 					send: 		function (oParam, oResponse)
@@ -621,7 +621,7 @@ ns1blankspace.financial.payment =
 										dataType: 'json',
 										success: function(data) {ns1blankspace.financial.payment.save.process(data)}
 									});	
-								}
+								},
 
 					process:	function (oResponse)
 								{
@@ -687,7 +687,7 @@ ns1blankspace.financial.payment =
 										});
 									}	
 								}
-				},				
+				},
 
 	item: 		{
 					show:		function (oParam, oResponse)
@@ -787,12 +787,12 @@ ns1blankspace.financial.payment =
 													
 												if (oOptions.remove)
 												{	
-													aHTML[++h] = '<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceItemRemove"></span>';
+													aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceItemRemove"></span>');
 												};	
 													
 												if (oOptions.view)
 												{	
-													aHTML[++h] = '<span id="ns1blankspaceRowItemItem_options_view-' + this.id + '" class="ns1blankspaceItemView"></span>';
+													aHTML.push('<span id="ns1blankspaceRowItemItem_options_view-' + this.id + '" class="ns1blankspaceItemView"></span>');
 												};	
 													
 												aHTML.push('</td></tr>');
@@ -870,7 +870,7 @@ ns1blankspace.financial.payment =
 
 											aHTML.push('<table style="margin-top:15px;">');
 											
-											aHTML.push('<tr><td id="ns1blankspaceItemEditSearchResults"></td></tr>';
+											aHTML.push('<tr><td id="ns1blankspaceItemEditSearchResults"></td></tr>');
 																			
 											aHTML.push('</table>');		
 											
@@ -932,9 +932,11 @@ ns1blankspace.financial.payment =
 											$('#ns1blankspaceItemEditSearchResults').html(aHTML.join(''));
 											
 											//binding
+										}	
 									}	
-								}
-				},				
+								}							
+
+				},
 
 	expense: 	function (oParam, oResponse)
 				{
@@ -1071,6 +1073,5 @@ ns1blankspace.financial.payment =
 							}	
 						}
 					}	
-				}
-}				
-
+				}	
+}
