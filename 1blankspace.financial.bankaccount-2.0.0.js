@@ -90,11 +90,11 @@ ns1blankspace.financial.bankAccount =
 								
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlImport" class="ns1blankspaceControl">Import</td>' +
-									'</tr>';
+									'</tr>');
 					
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlReconcile" class="ns1blankspaceControl">Reconcile</td>' +
-									'</tr>';
+									'</tr>');
 
 					aHTML.push('</table>');					
 							
@@ -229,9 +229,7 @@ ns1blankspace.financial.bankAccount =
 														ns1blankspace.xhtml.loading +
 														'</td>' +
 														'<td id="ns1blankspaceBankAccountColumnReconcile2" class="interfaceMainColumn2">' +
-														'</td>' +
-														'</tr>' +
-														'</table>';				
+														'</td></tr></table>');				
 										
 										$('#ns1blankspaceMainReconcile').html(aHTML.join(''));
 												
@@ -241,7 +239,7 @@ ns1blankspace.financial.bankAccount =
 										{
 											aHTML.push('<table><tr><td style="font-size:0.75em;">' +
 															'<span id="ns1blankspaceBankAccountRecoAdd">Add</span>' +
-															'</td></tr></table>';
+															'</td></tr></table>');
 											
 											$('#ns1blankspaceBankAccountColumnReconcile1').html(aHTML.join(''));	
 										}
@@ -257,7 +255,7 @@ ns1blankspace.financial.bankAccount =
 												{
 													if (this.status == 2)
 													{
-														aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountRecoAdd">Add</span></td></tr>';
+														aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountRecoAdd">Add</span></td></tr>');
 													}
 												}
 												
@@ -303,7 +301,7 @@ ns1blankspace.financial.bankAccount =
 									{
 										aHTML.push('<td id="ns1blankspaceFinancialBankAccountReconcile_title-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountReconcileRowSelect"' +
 															' style="text-align:right;"' +
-															'>' + oRow.statementdate + '<br />)';
+															'>' + oRow.statementdate + '<br />');
 									}						
 									
 									aHTML.push('<span id="ns1blankspaceFinancialBankAccountReconcile_balance-' + oRow.id + '" class="ns1blankspaceSub">$' +
@@ -383,7 +381,7 @@ ns1blankspace.financial.bankAccount =
 											
 										var aHTML = [];
 									
-										aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">)';
+										aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">');
 												
 										aHTML.push('<tr class="ns1blankspaceAction">' +
 														'<td class="ns1blankspaceAction">' +
@@ -565,8 +563,7 @@ ns1blankspace.financial.bankAccount =
 														}		
 													}
 													else
-													{
-																		
+													{				
 														var aHTML = [];
 														var h = -1;
 														
@@ -645,7 +642,7 @@ ns1blankspace.financial.bankAccount =
 																aHTML.push('</tr>');
 															});
 															
-															aHTML.push('</table>';
+															aHTML.push('</table>');
 
 															$('#ns1blankspaceBankAccountReconcileItems').html(aHTML.join(''));
 														
@@ -942,9 +939,9 @@ ns1blankspace.financial.bankAccount =
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table id="tableInterfaceFinancialHomeMostLikely">';
+											aHTML.push('<table id="tableInterfaceFinancialHomeMostLikely">');
 											
-											aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountImportAdd">Add</span></td></tr>';
+											aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountImportAdd">Add</span></td></tr>');
 
 											aHTML.push('<tr><td class="ns1blankspaceNothing">No existing imports.</td></tr>');
 

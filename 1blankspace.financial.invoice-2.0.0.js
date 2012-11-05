@@ -346,7 +346,7 @@ ns1blankspace.financial.invoice =
 					
 					$('#ns1blankspaceControlCredits').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainCredits'}, refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainCredits', refresh: true});
 						ns1blankspace.financial.invoice.credit();
 					});
 					
