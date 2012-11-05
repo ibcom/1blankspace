@@ -20,7 +20,7 @@ ns1blankspace.xhtml.loading
 
 # Methods:
 
-ns1blankspace.show({selector: ,refresh: true});
+ns1blankspace.show({selector: , refresh: true});
 ns1blankspace.util.fs();
 ns1blankspace.util.endpointURI();
 ns1blankspace.status.message();
