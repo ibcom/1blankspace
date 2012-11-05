@@ -60,7 +60,7 @@ ns1blankspace.financial.receipt =
 						$('#ns1blankspaceControlSubContext_receiveddate').html(oObjectContext.receiveddate);
 						$('#ns1blankspaceControlSubContext_amount').html(oObjectContext.amount);
 					}
-				}			
+				},	
 
 	home: 		function (oResponse)
 				{
@@ -461,6 +461,7 @@ ns1blankspace.financial.receipt =
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Received Date</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryReceivedDate" class="ns1blankspaceSummary">' +
 											ns1blankspace.objectContextData.receiveddate +
+											'</td></tr>');
 						
 						if (ns1blankspace.objectContextData.description != '')
 						{
@@ -871,7 +872,7 @@ ns1blankspace.financial.receipt =
 
 											aHTML.push('<table style="margin-top:15px;">');
 											
-											aHTML.push('<tr><td id="ns1blankspaceItemEditSearchResults"></td></tr>';
+											aHTML.push('<tr><td id="ns1blankspaceItemEditSearchResults"></td></tr>');
 																			
 											aHTML.push('</table>');		
 											
