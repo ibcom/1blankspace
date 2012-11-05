@@ -94,40 +94,64 @@ var ns1blankspace = {};
 ns1blankspace.scripts2 =
 [
 	{
-		name: 'jqueryui'
+		name: 'jqueryui',
 		source: '/jscripts/jqueryui/jqueryui-1.8.12.min.js'
 	},
 	{
-		name: 'timepicker'
+		name: 'timepicker',
 		source: '/jscripts/jqueryui/jqueryui-timepicker.js'
 	},
 	{
-		name: 'cookies'
+		name: 'cookies',
 		source: '/jscripts/jquery.cookie.js'
 	},
 	{
-		name: 'tinymce'
+		name: 'tinymce',
 		source: '/jscripts/tiny_mce-3.4.4/tiny_mce.js'
 	},
 	{
-		name: 'calendar'
+		name: 'calendar',
 		source: '/jscripts/fullcalendar.min.js'
 	},
 	{
-		name: 'touch'
+		name: 'touch',
 		source: '/jscripts/jquery.touchwipe.1.1.1.min.js'
 	},
 	{
-		name: '1blankspace.advancedsearch'
+		name: '1blankspace.advancedsearch',
 		source: '/jscripts/1blankspace.advancedsearch-1.0.3.js'
 	},
 	{
-		name: '1blankspace.control'
+		name: '1blankspace.control',
 		source: '/jscripts/1blankspace.control-2.0.0.js'
 	},
 	{
-		name: '1blankspace.home'
+		name: '1blankspace.home',
 		source: '/jscripts/1blankspace.home-2.0.0.js'
+	}
+]
+
+ns1blankspace.scripts =
+[
+	{
+		name: '1blankspace.advancedsearch',
+		source: '/jscripts/1blankspace.advancedsearch-1.0.3.js'
+	},
+	{
+		name: '1blankspace.control',
+		source: '/jscripts/1blankspace.control-2.0.0.js'
+	},
+	{
+		name: '1blankspace.home',
+		source: '/jscripts/1blankspace.home-2.0.0.js'
+	},
+	{
+		name: '1blankspace.contactPerson',
+		source: '/jscripts/1blankspace.contactperson-2.0.0.js'
+	},
+	{
+		name: '1blankspace.contactBusiness',
+		source: '/jscripts/1blankspace.contactbusiness-2.0.0.js'
 	}
 ]
 
@@ -195,7 +219,9 @@ ns1blankspace.app =
 											'</div>');
 					}		
 
-					$('#divInterfaceMasterViewportControl').html(ns1blankspace.xhtml.loading + ' Your app is being prepared...')
+					$('#divInterfaceMasterViewportControl').html(
+							'<img class="ns1blankspaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">' +
+							' Your app is spinning up...');
 
 					ns1blankspace.option = {};
 					ns1blankspace.timer = {};
@@ -280,9 +306,10 @@ ns1blankspace.app =
 						ns1blankspace.option.setFocus = false;
 					}	 
 
-					$(ns1blankspace.scripts).each(function(){
-						1blankspace.app.loadScript(this.source);
-					}):
+					$.each(ns1blankspace.scripts, function()
+					{
+						ns1blankspace.app.loadScript(this.source);
+					});
 
 					$('td.ns1blankspaceControl').live('click', function()
 					{

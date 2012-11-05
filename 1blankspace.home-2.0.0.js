@@ -175,7 +175,7 @@ ns1blankspace.home.options =
 						$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 						ns1blankspace.home.options.bind();
 					}
-				}
+				},
 
 	bind:		function ()
 				{
@@ -231,7 +231,7 @@ ns1blankspace.home.actions =
 						$.ajax(
 						{
 							type: 'POST',
-							url: ns1blankspace.util.endpointURI('ACTION_SEARCH')
+							url: ns1blankspace.util.endpointURI('ACTION_SEARCH'),
 							data: sData,
 							dataType: 'json',
 							success: function(data) {ns1blankspace.home.actions.show(oParam, data)}
@@ -252,17 +252,17 @@ ns1blankspace.home.actions =
 						{
 							if (bShow)
 							{
-								aHTML.push('<table id="ns1blankspaceHomeActions" class="ns1blankspace">';
+								aHTML.push('<table id="ns1blankspaceHomeActions" class="ns1blankspace">');
 
 								aHTML.push('<tr><td class="ns1blankspaceCaption">' + sLabel + '</td>' + 
 												'<td id="tdns1blankspaceHomeTodayActions" class="ns1blankspaceHomeOptionClose">Close</td>' +
 												'</tr></table>');
 								
-								aHTML.push('<table id="ns1blankspaceHomeActions" class="ns1blankspace">';
+								aHTML.push('<table id="ns1blankspaceHomeActions" class="ns1blankspace">');
 							}
 							else
 							{
-								aHTML.push('<table id="s1blankspaceHomeActions' + iDay + '" class="ns1blankspace">';
+								aHTML.push('<table id="s1blankspaceHomeActions' + iDay + '" class="ns1blankspace">');
 							}	
 							
 							aHTML.push('<tr class="ns1blankspaceCaption">');

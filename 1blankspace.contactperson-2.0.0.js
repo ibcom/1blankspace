@@ -67,7 +67,7 @@ ns1blankspace.contactPerson =
 						
 						$('#ns1blankspaceControlByGroup').click(function(event)
 						{
-							ns1blankspace.show(refresh: true});
+							ns1blankspace.show({refresh: true});
 							ns1blankspace.contactPerson.groups.show();
 						});
 							
@@ -376,7 +376,7 @@ ns1blankspace.contactPerson =
 					
 					$('#ns1blankspaceControlBusiness').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainBusiness'}, refresh: true});
+						ns1blankspace.show({selector: '#divInterfaceMainBusiness' , refresh: true});
 						ns1blankspace.contactPerson.groups.business();
 					});
 					
@@ -468,7 +468,7 @@ ns1blankspace.contactPerson =
 					
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspaceColumn1">';
+						aHTML.push('<table class="ns1blankspaceColumn1">');
 						
 						if (ns1blankspace.objectContextData.workphone != '')
 						{
@@ -634,7 +634,7 @@ ns1blankspace.contactPerson =
 							ns1blankspace.search.send(event.target.id);
 						});
 					}	
-				}
+				},
 
 	address: 	function ()
 				{
@@ -678,7 +678,7 @@ ns1blankspace.contactPerson =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetSuburb" class="ns1blankspaceText">' +
-										'</td></tr>';
+										'</td></tr>');
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -687,7 +687,7 @@ ns1blankspace.contactPerson =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetState" class="ns1blankspaceText">' +
-										'</td></tr>';
+										'</td></tr>');
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -696,7 +696,7 @@ ns1blankspace.contactPerson =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetPostCode" class="ns1blankspaceText">' +
-										'</td></tr>';				
+										'</td></tr>');				
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspace">' +
@@ -705,9 +705,9 @@ ns1blankspace.contactPerson =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetCountry" class="ns1blankspaceText">' +
-										'</td></tr>';						
+										'</td></tr>');						
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceAddressColumn1').html(aHTML.join(''));
 
@@ -792,7 +792,7 @@ ns1blankspace.contactPerson =
 					{
 						$('#ns1blankspaceMainBusiness').attr('data-loading', '');
 						
-						aHTML.push('<table class="ns1blankspaceContainer">';
+						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
 										'<td id="ns1blankspaceBusinessColumn1" class="ns1blankspaceColumn1Large"></td>' +
 										'<td id="ns1blankspaceBusinessColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
@@ -1263,7 +1263,7 @@ ns1blankspace.contactPerson =
 										success: function(data){ns1blankspace.contactPerson.groups.search.show()}
 									});
 										
-								}
+								},
 
 					remove: 	function (sXHTMLElementID)
 								{
@@ -1392,7 +1392,7 @@ ns1blankspace.contactPerson =
 															aHTML.push('<table class="ns1blankspace">');
 										
 															aHTML.push('<tr class="ns1blankspaceCaption">' + 
-																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementId[2] + '</td>';
+																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementId[2] + '</td>' +
 																			'</tr>');
 															
 															$.each(oResponse.data.rows, function()

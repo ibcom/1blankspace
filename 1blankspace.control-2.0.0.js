@@ -37,7 +37,7 @@ ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.set
 ns1blankspace.views = 
 [
 	{
-		title: "People",,
+		title: "People",
 		namespace: "contactPerson",
 		endpoint: "CONTACT_PERSON",
 		show: true,
@@ -267,7 +267,7 @@ ns1blankspace.views =
 	{
 		title: 'Contact Person Groups',
 		namespace: 'setup',
-		namesuffix: 'contactPersonGroups'.
+		namesuffix: 'contactPersonGroups',
 		endpoint: "SETUP", 
 		show: false,
 		group: 4,
@@ -277,7 +277,7 @@ ns1blankspace.views =
 	{
 		title: 'Contact Business Groups',
 		namespace: 'setup',
-		namesuffix: 'contactBusinessGroups'.
+		namesuffix: 'contactBusinessGroups',
 		endpoint: "SUPPORT", 
 		show: false,
 		group: 4,
@@ -716,7 +716,7 @@ ns1blankspace.control =
 			
 					bind: 			function ()
 									{
-										$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
+										$.grep(ns1blankspace.views, function (a) {return a.type == 1;}).each(function()
 										{
 											var sNS = '_' + this.namespace;
 											if (this.parentnamespace) {sNS = '_' + this.parentnamespace + sNS}
@@ -736,6 +736,7 @@ ns1blankspace.control =
 
 												oNS.init();
 											});
+										});
 									}
 					},
 					
@@ -946,7 +947,7 @@ ns1blankspace.control =
 
 										bind:		function ()
 													{
-														$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
+														$.grep(ns1blankspace.views, function (a) {return a.type == 2;}).each(function()
 														{
 															var sNS = '_' + this.namespace;
 															if (this.parentnamespace) {sNS = '_' + this.parentnamespace + sNS}
@@ -966,13 +967,14 @@ ns1blankspace.control =
 
 																oNS.init(this.param);
 															});
+														});
 													}
 
 									}
 					},
 
 	user:			{
-						show: 		function w(oElement)
+						show: 		function (oElement)
 									{
 										if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
 										{
@@ -991,7 +993,7 @@ ns1blankspace.control =
 										}	
 									},
 
-						layout		function ()
+						layout:		function ()
 									{
 										var aHTML = [];
 		
@@ -1047,7 +1049,7 @@ ns1blankspace.control =
 											if (oParam.show != undefined) {bShow = oParam.show}
 										}	
 										
-										aHTML.push('<table id="ns1blankspaceControlUserChangePasswordContainer" class="ns1blankspaceContainer" style="width:350px;">';
+										aHTML.push('<table id="ns1blankspaceControlUserChangePasswordContainer" class="ns1blankspaceContainer" style="width:350px;">');
 											
 										if (bShow)
 										{
@@ -1101,14 +1103,14 @@ ns1blankspace.control =
 											$.ajax(
 											{
 												type: 'POST',
-												url: ns1blankspace.util.endpointURI()'CORE_SECURE_TOKEN_SEARCH'),
+												url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_SEARCH'),
 												dataType: 'json',
 												success: function(data) {ns1blankspace.control.user.createSecureKey(oParam, data)}
 											})
 										}
 										else
 										{	
-											aHTML.push('<table id="ns1blankspaceControlUserCreateSecureKeyContainer" class="ns1blankspaceViewControl" style="width:400px;"><tr><td>';	
+											aHTML.push('<table id="ns1blankspaceControlUserCreateSecureKeyContainer" class="ns1blankspaceViewControl" style="width:400px;"><tr><td>');	
 
 											if (bSetPosition)
 											{
