@@ -223,6 +223,9 @@ ns1blankspace.app =
 						ns1blankspace.option.setFocus = false;
 					}	 
 
+					this.loadScript('/jscripts/1blankspace.advancedsearch-1.0.3.js');
+					this.loadScript('/jscripts/1blankspace.developer.control-2.0.0.js');
+
 					if ($('#scriptControl').length == 0 && false)
 					{
 						this.loadScript('/jscripts/jqueryui/jqueryui-1.8.12.min.js');
@@ -232,7 +235,7 @@ ns1blankspace.app =
 						this.loadScript('/jscripts/tiny_mce-3.4.4/tiny_mce.js');
 						this.loadScript('/jscripts/fullcalendar.min.js');
 						this.loadScript('/jscripts/jquery.touchwipe.1.1.1.min.js');
-						this.loadScript('/jscripts/1blankspace-1.0.4.js');
+					
 						this.loadScript('/jscripts/1blankspace.advancedsearch-1.0.3.js');
 						this.loadScript('/jscripts/1blankspace.developer.control-1.0.0.js');
 						this.loadScript('/jscripts/1blankspace.developer.home-1.0.0.js');
