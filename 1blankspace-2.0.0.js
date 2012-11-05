@@ -2478,13 +2478,13 @@ ns1blankspace.util =
 				},
 
 	endpointURI:
-				function (asMethod)
+				function (sMethod)
 				{
-					ns1blankspaceRPCGet();
+					ns1blankspace.util.getRPC();
 
 					var sBaseEndpoint;
 
-					if ($.inArray(asMethod, ns1blankspace.rpc) == -1)
+					if ($.inArray(sMethod, ns1blankspace.rpc) == -1)
 					{
 						sBaseEndpoint = '/ondemand/';
 					}
@@ -2493,10 +2493,10 @@ ns1blankspace.util =
 						sBaseEndpoint = '/rpc/';
 					}
 
-					aMethod = asMethod.split('_');
-					sEndpoint = aMethod[0];
+					var aMethod = sMethod.split('_');
+					var sEndpoint = aMethod[0];
 					
-					return sBaseEndpoint + (aMethod[0]).toLowerCase() + '/?method=' + asMethod;
+					return sBaseEndpoint + (aMethod[0]).toLowerCase() + '/?method=' + (sMethod).toUpperCase();
 				},
 
 	uri: 		{
@@ -2985,10 +2985,9 @@ ns1blankspace.pagination =
 						
 							if ($('#divns1blankspaceSearch-' + iStartRow).length == 0)
 							{
-								aHTML.push('<div id="divns1blankspaceSearch-' + iStartRow + '" class="ns1blankspaceSearchPage">';
+								aHTML.push('<div id="divns1blankspaceSearch-' + iStartRow + '" class="ns1blankspaceSearchPage">');
 							
-								aHTML.push('<table border="0" class="' + sBodyClass + '">';
-								aHTML.push('<tbody>'
+								aHTML.push('<table border="0" class="' + sBodyClass + '">');
 										
 								var iStartRow = parseInt(oResponse.startrow);
 								var iRows = parseInt(oResponse.rows);
@@ -3040,7 +3039,7 @@ ns1blankspace.pagination =
 										}	
 									
 										aHTML.push('<td class="' + sClass + '" id="' +
-															sXHTMLElementID + '-' + this.id + sIDData + sIdAdditional + '">' 
+															sXHTMLElementID + '-' + this.id + sIDData + sIdAdditional + '">');
 															
 										switch (aColumns[i])
 										{
@@ -3155,22 +3154,21 @@ ns1blankspace.actions =
 									ns1blankspace.xhtml.loading +
 									'</td>' +
 									'<td id="tdInterfaceMainActionsColumn2" class="interfaceMainColumn2Action">' +
-									'</td>' +
-									'</tr>' +
-									'</table>';					
+									'</td></tr>' +
+									'</table>');					
 							
 						$('#' + sXHTMLElementID).html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;	
 						
-						aHTML.push('<table id="tableInterfaceMainActionsColumn2" class="interfaceMainColumn2">';
+						aHTML.push('<table id="tableInterfaceMainActionsColumn2" class="interfaceMainColumn2">');
 						
 						aHTML.push('<tr><td id="tdInterfaceMainActionsAdd" class="interfaceMainAction">' +
 										'<span id="spanInterfaceMainActionsAdd">Add</span>' +
-										'</td></tr>';
+										'</td></tr>');
 												
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#tdInterfaceMainActionsColumn2').html(aHTML.join(''));
 					
@@ -3213,8 +3211,7 @@ ns1blankspace.actions =
 							success: function(data) {this.process(data, sXHTMLElementID, oParam)}
 						});	
 					}
-
-				}
+				},
 
 	process: 	function (oResponse, sXHTMLElementID, oParam)
 				{	
@@ -3296,7 +3293,7 @@ ns1blankspace.actions =
 							.css('width', '15px')
 							.css('height', '20px')
 					}
-				}
+				},
 
 	add:		function (oParam, oResponse)
 				{
@@ -3562,7 +3559,7 @@ ns1blankspace.pagination.list =
 						var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + 
 											'" id="td' + sXHTMLContext + 'ns1blankspacePaginationList-' +
 											(iStartRow + iRows - 1) + '" rowStart="' +
-											(iStartRow + iRows - 1) + '">' + 'more...' + '</td>');
+											(iStartRow + iRows - 1) + '">' + 'more...' + '</td>';
 										
 						$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow)).after(sHTML);
 					
@@ -3666,7 +3663,7 @@ ns1blankspace.pagination.list =
 								
 								if (sXHTMLlFirstRow != undefined)
 								{
-									aHTML.push(sXHTMLlFirstRow;
+									aHTML.push(sXHTMLlFirstRow);
 								}
 								
 								if (sType == 'XML')
@@ -3747,7 +3744,7 @@ ns1blankspace.pagination.list =
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML.push('</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										}	
@@ -3765,9 +3762,8 @@ ns1blankspace.pagination.list =
 							
 									$(oRows).each(function() 
 									{
-										aHTML.push(fFunctionShowRow(this);
-									})
-									
+										aHTML.push(fFunctionShowRow(this));
+									});
 								}
 								
 								aHTML.push('</table>');
