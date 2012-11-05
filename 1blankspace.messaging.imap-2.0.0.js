@@ -108,17 +108,16 @@ ns1blankspace.messaging.imap =
 							external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
 							media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext
 						});				
-					
 					}
 					
 					var aHTML = [];
 					
-					aHTML.push('<div id="ns1blankspaceMainInbox" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainEdit" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainActionsSent" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainInbox" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainEdit" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActionsSent" class="ns1blankspaceControl"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -171,7 +170,7 @@ ns1blankspace.messaging.imap =
 					
 							$('#ns1blankspaceViewportControl').html(ns1blankspace.xhtml.loading);
 							
-							var sData += '&account=' + gsMessagingEmailAccount;
+							var sData = '&account=' + gsMessagingEmailAccount;
 							sData += '&type=5';
 							if (ns1blankspace.option.messagingEmailShowCount) {sData += '&advanced=1'}
 
@@ -196,7 +195,7 @@ ns1blankspace.messaging.imap =
 							
 							if (oResponse.data.rows.length != 0)
 							{
-								aHTML.push('<table style="padding-top:0px;padding-bottom: 15px;" id="ns1blankspaceMessagingIMAPAccounts" class="ns1blankspaceControlContainer">';
+								aHTML.push('<table style="padding-top:0px;padding-bottom: 15px;" id="ns1blankspaceMessagingIMAPAccounts" class="ns1blankspaceControlContainer">');
 								
 								$.each(oResponse.data.rows, function(index)
 								{
@@ -237,8 +236,8 @@ ns1blankspace.messaging.imap =
 								aHTML.push('</table>');
 								
 								aHTML.push('<table>');
-								aHTML.push('<tr><td id="ns1blankspaceMessagingMessageControlContainer"></td></tr>';
-								aHTML.push('</table>';
+								aHTML.push('<tr><td id="ns1blankspaceMessagingMessageControlContainer"></td></tr>');
+								aHTML.push('</table>');
 								
 							}
 							else
@@ -350,22 +349,22 @@ ns1blankspace.messaging.imap =
 										{
 											var aHTML = [];
 											
-											aHTML.push('<table id="ns1blankspaceMessagingInboxHeader" class="ns1blankspace">';
+											aHTML.push('<table id="ns1blankspaceMessagingInboxHeader" class="ns1blankspace">');
 											aHTML.push('<tr><td class="ns1blankspaceSub">' +
 															ns1blankspace.messaging.emailCount + ' emails');
 															
 											aHTML.push('</td>');	
 											
-											aHTML.push('<td class="ns1blankspaceHeader" id="ns1blankspaceMessagingInboxRefresh">Refresh</td>';
-											aHTML.push('<td class="ns1blankspaceHeader" style="width:5px;">&nbsp;|&nbsp;</td>';
+											aHTML.push('<td class="ns1blankspaceHeader" id="ns1blankspaceMessagingInboxRefresh">Refresh</td>');
+											aHTML.push('<td class="ns1blankspaceHeader" style="width:5px;">&nbsp;|&nbsp;</td>');
 											
-											aHTML.push('<td class="ns1blankspaceHeader" style="width:90px;">';
+											aHTML.push('<td class="ns1blankspaceHeader" style="width:90px;">');
 																			
 											aHTML.push('</td>');
 											
 											aHTML.push('<td class="ns1blankspaceHeader" style="width:5px;">&nbsp;|&nbsp;</td>');
 
-											aHTML.push('<td class="ns1blankspaceHeader" style="width:70px;">');
+											aHTML.push('<td class="ns1blankspaceHeader" style="width:70px;">' +
 														'<span id="ns1blankspaceSentEmails" class="ns1blankspaceHeader">Sent&nbsp;emails</span></td>');
 
 											aHTML.push('</tr>');
@@ -395,7 +394,7 @@ ns1blankspace.messaging.imap =
 										
 										$.each(oResponse.data.rows, function()
 										{
-											aHTML.push(ns1blankspace.messaging.imap.inbox.row(this);
+											aHTML.push(ns1blankspace.messaging.imap.inbox.row(this));
 										});
 										
 										aHTML.push('</table>');
@@ -433,7 +432,7 @@ ns1blankspace.messaging.imap =
 										sClass = " ns1blankspaceBold"
 									}
 									
-									aHTML.push('<tr id="ns1blankspaceMessagingInbox_id-' + sID + '" class="ns1blankspaceRow' + sClass + '" data-cached="' + oRow.detailscached + '">';
+									aHTML.push('<tr id="ns1blankspaceMessagingInbox_id-' + sID + '" class="ns1blankspaceRow' + sClass + '" data-cached="' + oRow.detailscached + '">');
 									
 									aHTML.push('<td id="ns1blankspaceMessagingInbox_from-' + sID + 
 														'" style="cursor: pointer;" class="ns1blankspaceRow ns1blankspaceRowSelect' + sClass + '"' +
@@ -447,21 +446,21 @@ ns1blankspace.messaging.imap =
 									aHTML.push('<td id="ns1blankspaceMessagingInbox_date-' + sID + '" class="ns1blankspaceRow' + sClass + '" style="width:150px;" >' +
 															sDate + '</td>');
 									
-									aHTML.push('<td class="ns1blankspaceRow" style="width:70px;text-align:right;">';
+									aHTML.push('<td class="ns1blankspaceRow" style="width:70px;text-align:right;">');
 
-									aHTML.push('<span id="ns1blankspaceMessagingInbox_reply-' + sID + '" class="ns1blankspaceRowReply"></span>';
+									aHTML.push('<span id="ns1blankspaceMessagingInbox_reply-' + sID + '" class="ns1blankspaceRowReply"></span>');
 									
 									if ((oRow.imapflags).indexOf('\\DELETED') == -1)
 									{
-										aHTML.push('<span id="ns1blankspaceMessagingInbox_remove-' + sID + '" class="ns1blankspaceRowRemove"></span>';
+										aHTML.push('<span id="ns1blankspaceMessagingInbox_remove-' + sID + '" class="ns1blankspaceRowRemove"></span>');
 									}
 									else
 									{
 										aHTML.push('<span style="width: 23px;" id="ns1blankspaceMessagingInbox_delete-' + sID +
-														'" class="ns1blankspaceRowRemoveDisabled"></span>';
+														'" class="ns1blankspaceRowRemoveDisabled"></span>');
 									}
 
-									aHTML.push('<span id="ns1blankspaceMessagingInbox_save-' + sID + '" class="ns1blankspaceRowSave"></span>';
+									aHTML.push('<span id="ns1blankspaceMessagingInbox_save-' + sID + '" class="ns1blankspaceRowSave"></span>');
 									
 									aHTML.push('</td></tr>');
 									
@@ -750,7 +749,7 @@ ns1blankspace.messaging.imap =
 					});
 				
 					$('#ns1blankspaceControlAttachments').click(function(event)
-					
+					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments'});
 						ns1blankspace.setup.messaging.attachments();
 					});
@@ -873,9 +872,9 @@ ns1blankspace.messaging.imap =
 						
 						if (ns1blankspace.objectContextData.to != '')
 						{
-							aHTML.push('<table id="ns1blankspaceMessagingEmailToContainer" class="ns1blankspaceHeader">';
+							aHTML.push('<table id="ns1blankspaceMessagingEmailToContainer" class="ns1blankspaceHeader">');
 							aHTML.push('<tr class="ns1blankspaceHeader">' +
-											'<td id="ns1blankspaceMessagingEmailTo" class="ns1blankspaceHeader">';
+											'<td id="ns1blankspaceMessagingEmailTo" class="ns1blankspaceHeader">');
 											
 							var sTo = ns1blankspace.objectContextData.to;
 							var aTo = sTo.split('|')
@@ -924,7 +923,7 @@ ns1blankspace.messaging.imap =
 						aHTML.push(ns1blankspace.xhtml.loading);
 						
 						aHTML.push('<iframe style="display:block;height:10px;width:900px;" name="ifMessage" ' +
-											'id="ifMessage" frameborder="0" border="0" scrolling="no"></iframe>';
+											'id="ifMessage" frameborder="0" border="0" scrolling="no"></iframe>');
 										
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 						
@@ -1004,7 +1003,7 @@ ns1blankspace.messaging.imap =
 													sAttachments +=	'<a href="' + aAttachment[1] + '" target="_blank">' + aAttachment[0] + '</a>; ';
 												});	
 																
-												aHTML.push('<span class="ns1blankspaceHeader">Attachments:</span> ' + sAttachments;
+												aHTML.push('<span class="ns1blankspaceHeader">Attachments:</span> ' + sAttachments);
 											}
 										}
 									
@@ -1043,13 +1042,13 @@ ns1blankspace.messaging.imap =
 										$('#ifMessage').width($('#ifMessage',top.document).contents().find('html').width())
 									}
 									
-								}
+								},
 
 					setHeight:	function ()
 								{
 									$('#ifMessage').css('height', ($('#ifMessage').attr('scrollHeight') + 100) + 'px');
 									$('#ifMessage').css('width', ($('#ifMessage').attr('scrollWidth') + 100) + 'px');
-								}
+								},
 
 					edit:		function ()
 								{
@@ -1059,14 +1058,14 @@ ns1blankspace.messaging.imap =
 									{
 										$('#ns1blankspaceMainEdit').attr('data-loading', '');
 												
-										aHTML.push('<table id="ns1blankspaceMessagingMessageEditContainer" class="ns1blankspaceMain">';
+										aHTML.push('<table id="ns1blankspaceMessagingMessageEditContainer" class="ns1blankspaceMain">');
 												
 										aHTML.push('<tr class="ns1blankspaceTextMulti">' +
 														'<td class="ns1blankspaceTextMulti">' +
 														'<textarea rows="30" cols="50" id="ns1blankspaceMessagingMessageEdit" class="ns1blankspaceTextMultiLarge"></textarea>' +
-														'</td></tr>';
+														'</td></tr>');
 														
-										aHTML.push('</table>';					
+										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceMainEdit').html(aHTML.join(''));
 										
@@ -1250,7 +1249,7 @@ ns1blankspace.messaging.imap =
 													'<td id="ns1blankspaceSendMessageColumn2" class="ns1blankspaceColumn2">' +
 													'</td>' +
 													'</tr>' +
-													'</table>';					
+													'</table>');					
 											
 										$('#' + sXHTMLElementID).html(aHTML.join(''));
 									}
@@ -1300,7 +1299,7 @@ ns1blankspace.messaging.imap =
 													aHTML.push(' data-contactbusiness="' + iContactBusiness + '"')
 												}
 
-												aHTML.push('></td></tr>';				
+												aHTML.push('></td></tr>');				
 
 												aHTML.push('<tr><td colspan="2">' +
 															'<textarea id="ns1blankspaceEditMessageCc" style="height:30px" rows="3" cols="25" class="ns1blankspaceMainTextMlti"></textarea>' +
@@ -1326,11 +1325,11 @@ ns1blankspace.messaging.imap =
 											
 												aHTML.push('</table>');				
 												
-											aHTML.push('<td width="20px;">&nbsp;</td>';	
+											aHTML.push('<td width="20px;">&nbsp;</td>');	
 
-											aHTML.push('<td>';	
+											aHTML.push('<td>');	
 
-											aHTML.push('<table>';				
+											aHTML.push('<table>');				
 															
 												aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 																'Attachments</td>');		
@@ -1356,9 +1355,9 @@ ns1blankspace.messaging.imap =
 										aHTML.push('</td></tr>');				
 									}
 									
-									aHTML.push('<tr><td>';
+									aHTML.push('<tr><td>');
 									
-										aHTML.push('<table>';				
+										aHTML.push('<table>');				
 															
 											aHTML.push('<tr><td class="ns1blankspace">' +
 														'<input id="ns1blankspaceMessagingEditMessageSubject" class="ns1blankspaceText ns1blankspaceWatermark"' +
@@ -1478,13 +1477,13 @@ ns1blankspace.messaging.imap =
 										
 											var aHTML = [];
 
-											aHTML.push('<br />';
+											aHTML.push('<br />');
 											
 											$.each(ns1blankspace.messaging.emailAccounts, function() 
 											{ 
 												if (this.id == ns1blankspace.messaging.account)
 												{
-													aHTML.push(this.footer + '<br />';
+													aHTML.push(this.footer + '<br />');
 												}
 											});
 												
@@ -1518,13 +1517,13 @@ ns1blankspace.messaging.imap =
 													if (i % 2 !== 0) {sOrgTo += this + '; '}		
 												});				
 												
-												aHTML.push(sOrgTo + '</td></tr>';
+												aHTML.push(sOrgTo + '</td></tr>');
 												
 												var sOrgCc = ns1blankspace.objectContextData.cc;
 												
 												if (sOrgCc != '')
 												{
-													aHTML.push('<tr><td><strong>CC:</strong> ';	
+													aHTML.push('<tr><td><strong>CC:</strong> ');	
 													var aOrgCc = sOrgCc.split('|')
 													sOrgCc = '';
 											
@@ -1533,7 +1532,7 @@ ns1blankspace.messaging.imap =
 														if (i % 2 !== 0) {sOrgCc += this + '; '}	
 													});			
 													
-													aHTML.push(sOrgCc + '</td></tr>';
+													aHTML.push(sOrgCc + '</td></tr>');
 												}
 												
 												var oDate = new Date.parse(ns1blankspace.objectContextData.date);
@@ -1655,7 +1654,7 @@ ns1blankspace.messaging.imap =
 									}
 								},
 
-					attach: {
+					attach: 	{
 									show:		function (oParam, oResponse)
 												{
 													sXHTMLElementID = "ns1blankspaceEditMessageAttachCaption";
@@ -1689,7 +1688,7 @@ ns1blankspace.messaging.imap =
 														
 															aHTML.push('<table style="width:287px;">');
 															aHTML.push('<tr><td id="ns1blankspaceMessageEditAttachmentUpload" class="ns1blankspace">' +
-																				ns1blankspace.attachments.upload({object: 17, objectContext: oResponse.action, label: ''})	
+																				ns1blankspace.attachments.upload({object: 17, objectContext: oResponse.action, label: ''}) +
 																			'</td></tr>');
 															aHTML.push('</table>');			
 
@@ -2273,7 +2272,7 @@ ns1blankspace.messaging.imap =
 													{
 														aHTML.push('<table class="ns1blankspace">');
 														aHTML.push('<tr class="ns1blankspaceHeader">' +
-																		'<td id="ns1blankspaceMessagingActionTo" style="text-align:left;" class="ns1blankspaceMainHeader">';
+																		'<td id="ns1blankspaceMessagingActionTo" style="text-align:left;" class="ns1blankspaceMainHeader">');
 																		
 														var sTo = ns1blankspace.objectContextData.to;
 														var aTo = sTo.split('|');
