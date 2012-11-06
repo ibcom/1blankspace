@@ -90,6 +90,7 @@ String.prototype.formatXHTML = function(bDirection)
 String.method('trim', function () {return this.replace(/^\s+|\s+$/g, '');});
 
 var ns1blankspace = {};
+ns1blankspace.selector = 'body';
 
 ns1blankspace.scriptsCore =
 [
@@ -154,6 +155,18 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.action-2.0.0.js'
 	},
 	{
+		nameSpace: '1blankspace.document',
+		source: '/jscripts/1blankspace.document-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.product',
+		source: '/jscripts/1blankspace.product-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.order',
+		source: '/jscripts/1blankspace.order-2.0.0.js'
+	},
+	{
 		nameSpace: '1blankspace.financial',
 		source: '/jscripts/1blankspace.financial-2.0.0.js'
 	},
@@ -184,14 +197,6 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.financial.payroll',
 		source: '/jscripts/1blankspace.financial.payroll-2.0.0.js'
-	},
-	{
-		nameSpace: '1blankspace.product',
-		source: '/jscripts/1blankspace.product-2.0.0.js'
-	},
-	{
-		nameSpace: '1blankspace.order',
-		source: '/jscripts/1blankspace.order-2.0.0.js'
 	},
 	{
 		nameSpace: '1blankspace.setup',
@@ -256,23 +261,7 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.supportIssue',
 		source: '/jscripts/1blankspace.supportissue-2.0.0.js'
-	},
-	{
-		nameSpace: '1blankspace.developer.control',
-		source: '/jscripts/1blankspace.developer.control-2.0.0.js'
-	},
-	{
-		nameSpace: '1blankspace.developer.home',
-		source: '/jscripts/1blankspace.developer.home-2.0.0.js'
-	},
-	{
-		nameSpace: '1blankspace.developer.membership',
-		source: '/jscripts/1blankspace.developer.membership-2.0.0.js'
-	},
-	{
-		nameSpace: '1blankspace.developer.space',
-		source: '/jscripts/1blankspace.developer.space-2.0.0.js'
-	},
+	}
 ]
 
 window.onbeforeunload = function() 
@@ -312,7 +301,7 @@ ns1blankspace.app =
 				{
 					if ($('#ns1blankspace').length == 0)
 					{
-						$('body').append('<div id="ns1blankspace" class="interface">' +
+						$(ns1blankspace.selector).append('<div id="ns1blankspace" class="interface">' +
 											'<div id="ns1blankspaceViewControl" class="ns1blankspaceViewControl"></div>' +
 											'<div id="ns1blankspaceControl" class="ns1blankspaceControl"></div>' +
 											'<div id="ns1blankspaceMain" class="ns1blankspaceMain"></div>' +

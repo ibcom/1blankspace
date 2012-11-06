@@ -267,19 +267,18 @@ ns1blankspace.document =
 										'Edit</td></tr>');
 					}	
 					
-					aHTML.push('</table>';					
+					aHTML.push('</table>');					
 								
 					if (ns1blankspace.objectContext != -1)
 					{		
-						aHTML.push('<table class="ns1blankspaceViewControl">';
+						aHTML.push('<table class="ns1blankspaceViewControl">');
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
 
-						aHTML.push('</table>';
+						aHTML.push('</table>');
 					}	
 
-			
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
@@ -487,7 +486,7 @@ ns1blankspace.document =
 						
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspace">';
+						aHTML.push('<table class="ns1blankspace">');
 								
 						aHTML.push('<tr class="ns1blankspaceMain">' +
 										'<td id="tdns1blankspaceMainEditText" class="ns1blankspaceMain" style="text-align:right;">' +
@@ -579,9 +578,9 @@ ns1blankspace.document =
 								
 								external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
 								external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
-								media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext
+								media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext,
 
-								TemplateLinkType : "0", 
+								TemplateLinkType : "0"
 
 							});				
 							

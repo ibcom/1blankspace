@@ -8,6 +8,24 @@
 ns1blankspace.option.defaultView = "Website";
 ns1blankspace.option.defaultSetupView = "Spaces";
 
+ns1blankspace.scripts.push(
+	{
+		nameSpace: '1blankspace.developer.home',
+		source: '/jscripts/1blankspace.developer.home-2.0.0.js'
+	});
+
+ns1blankspace.scripts.push(
+	{
+		nameSpace: '1blankspace.developer.membership',
+		source: '/jscripts/1blankspace.developer.membership-2.0.0.js'
+	});
+
+ns1blankspace.scripts.push(
+	{
+		nameSpace: '1blankspace.developer.space',
+		source: '/jscripts/1blankspace.developer.space-2.0.0.js'
+	});
+
 ns1blankspace.xhtml.logonNotes =
 
 	'<a href="http://mydigitalstructure.com/gettingstarted_first_app_ide" target="_blank"><strong>Help on building your first app<br/>using this simple development environment (IDE).</strong></a>' +
