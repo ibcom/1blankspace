@@ -1790,7 +1790,7 @@ ns1blankspace.setup.website =
 											{
 												ns1blankspace.objectContext = oResponse.id;
 												ns1blankspace.inputDetected = false;
-												ns1blankspace.setup.website.search.send('-' + ns1blankspace.objectContext, {source: 1});
+												{ns1blankspace.setup.website.search.send('-' + ns1blankspace.objectContext, {source: 1});
 											}	
 										}
 										else
@@ -2050,5 +2050,4 @@ ns1blankspace.setup.website =
 					}	
 					
 				}
-
 }
