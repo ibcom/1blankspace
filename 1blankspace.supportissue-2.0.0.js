@@ -66,7 +66,7 @@ ns1blankspace.supportIssue =
 						{
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('SUPPORT_ISSUE_SEARCH'),
-							data: 'byme=1&status=1,2,6&rows=30'
+							data: 'byme=1&status=1,2,6&rows=30',
 							dataType: 'json',
 							success: ns1blankspace.supportIssue.home
 						});
@@ -186,7 +186,7 @@ ns1blankspace.supportIssue =
 											});
 										}
 									};	
-								}
+								},
 
 					process:	function (oParam, oResponse)
 								{
@@ -232,7 +232,7 @@ ns1blankspace.supportIssue =
 												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
-										}
+										});
 								    	
 										aHTML.push('</table>');
 
@@ -240,8 +240,8 @@ ns1blankspace.supportIssue =
 											ns1blankspace.pagination(
 											{
 												html: aHTML.join(''),
-												more: ($(oRoot).attr('morerows') == "true")
-											});
+												more: (oResponse.morerows == "true")
+											})
 										);		
 
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
@@ -305,7 +305,7 @@ ns1blankspace.supportIssue =
 										'Attachments</td></tr>');
 					}	
 					
-					aHTML.push('</table>';					
+					aHTML.push('</table>');					
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
@@ -509,7 +509,7 @@ ns1blankspace.supportIssue =
 
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspaceMain">';
+						aHTML.push('<table class="ns1blankspaceMain">');
 
 						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 										'Type' +
@@ -578,11 +578,11 @@ ns1blankspace.supportIssue =
 								{
 									if (ns1blankspace.objectContext != -1)
 									{
-										var sData += 'id=' + ns1blankspace.objectContext;
+										var sData = 'id=' + ns1blankspace.objectContext;
 									} 
 									else
 									{
-										var sData += 'id='
+										var sData = 'id='
 									}
 
 									if ($('#ns1blankspaceMainDetails').html() != '')
@@ -631,7 +631,7 @@ ns1blankspace.supportIssue =
 										ns1blankspace.status.error(oResponse.error.errornotes);
 									}
 								}
-				}				
+				},				
 
 	getUsers:	function (oParam, oResponse)
 				{
