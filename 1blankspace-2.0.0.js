@@ -91,42 +91,42 @@ String.method('trim', function () {return this.replace(/^\s+|\s+$/g, '');});
 
 var ns1blankspace = {};
 
-ns1blankspace.scripts2 =
+ns1blankspace.scriptsCore =
 [
 	{
-		name: 'jqueryui',
+		nameSpace: 'jqueryui',
 		source: '/jscripts/jqueryui/jqueryui-1.8.12.min.js'
 	},
 	{
-		name: 'timepicker',
+		nameSpace: 'timepicker',
 		source: '/jscripts/jqueryui/jqueryui-timepicker.js'
 	},
 	{
-		name: 'cookies',
+		nameSpace: 'cookies',
 		source: '/jscripts/jquery.cookie.js'
 	},
 	{
-		name: 'tinymce',
+		nameSpace: 'tinymce',
 		source: '/jscripts/tiny_mce-3.4.4/tiny_mce.js'
 	},
 	{
-		name: 'calendar',
+		nameSpace: 'calendar',
 		source: '/jscripts/fullcalendar.min.js'
 	},
 	{
-		name: 'touch',
+		nameSpace: 'touch',
 		source: '/jscripts/jquery.touchwipe.1.1.1.min.js'
 	},
 	{
-		name: '1blankspace.advancedsearch',
+		nameSpace: '1blankspace.advancedsearch',
 		source: '/jscripts/1blankspace.advancedsearch-1.0.3.js'
 	},
 	{
-		name: '1blankspace.control',
+		nameSpace: '1blankspace.control',
 		source: '/jscripts/1blankspace.control-2.0.0.js'
 	},
 	{
-		name: '1blankspace.home',
+		nameSpace: '1blankspace.home',
 		source: '/jscripts/1blankspace.home-2.0.0.js'
 	}
 ]
@@ -236,25 +236,13 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.setup.space',
 		source: '/jscripts/1blankspace.setup.space-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.structure',
+		source: '/jscripts/1blankspace.setup.structure-2.0.0.js'
 	}
 ]
 
-/*
-'/jscripts/1blankspace.advancedsearch-1.0.3.js'
-'/jscripts/1blankspace.developer.control-1.0.0.js'
-'/jscripts/1blankspace.developer.home-1.0.0.js'
-'/jscripts/1blankspace.developer.space-1.0.0.js'
-'/jscripts/1blankspace.developer.membership-1.0.0.js'
-'/jscripts/1blankspace.setup-1.0.0.js'
-'/jscripts/1blankspace.setup.website-1.0.0.js'
-'/jscripts/1blankspace.setup.website.form-1.0.0.js'
-'/jscripts/1blankspace.setup.structure-1.0.2.js'
-'/jscripts/1blankspace.setup.space-1.0.1.js'
-'/jscripts/1blankspace.setup.automation-1.0.0.js'
-'/jscripts/1blankspace.setup.user-1.0.0.js'
-'/jscripts/1blankspace.setup.user.role-1.0.0.js'
-'/jscripts/1blankspace.setup.networkgroup-1.0.0.js'
-*/
 
 window.onbeforeunload = function() 
 {
