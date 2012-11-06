@@ -244,6 +244,10 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.setup.user',
 		source: '/jscripts/1blankspace.setup.user-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.userRole',
+		source: '/jscripts/1blankspace.setup.userRole-2.0.0.js'
 	}
 ]
 

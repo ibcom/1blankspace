@@ -172,7 +172,7 @@ ns1blankspace.setup.userRole =
 											oSearch.getResults(ns1blankspace.setup.userRole.search.process);
 										}
 									};	
-								}
+								},
 
 					process:	function (oResponse)
 								{
@@ -220,7 +220,7 @@ ns1blankspace.setup.userRole =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											oSearch.getResults(ns1blankspace.setup.userRole.search.send(event.target.id, 1);
+											ns1blankspace.setup.userRole.search.send(event.target.id, {source: 1});
 										});
 									}			
 								}
@@ -255,9 +255,9 @@ ns1blankspace.setup.userRole =
 					
 					var aHTML = [];
 				
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>');
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 						
@@ -414,7 +414,7 @@ ns1blankspace.setup.userRole =
 									
 									if (ns1blankspace.objectContext != -1)
 									{
-										sData += '&id=' + ns1blankspace.util.endpointURI(ns1blankspace.objectContext	
+										sData += '&id=' + ns1blankspace.util.endpointURI(ns1blankspace.objectContext);	
 									}	
 									
 									if ($('#ns1blankspaceMainDetails').html() != '')
@@ -486,7 +486,7 @@ ns1blankspace.setup.userRole =
 								
 								aHTML.push('<td id="ns1blankspaceUserRoleEndpoint_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
 														' title="">' +
-														(this.title).toUpperCase() + '</td>';
+														(this.title).toUpperCase() + '</td>');
 
 								aHTML.push('</tr>');
 
@@ -645,7 +645,7 @@ ns1blankspace.setup.userRole =
 							aXHTMLElementID = sXHTMLElementID.split('-');
 						}	
 					
-						aHTML.push('<table id="ns1blankspaceUserAccessMethods" class="ns1blankspace">';
+						aHTML.push('<table id="ns1blankspaceUserAccessMethods" class="ns1blankspace">');
 
 						if (oResponse != undefined)
 						{
@@ -656,7 +656,7 @@ ns1blankspace.setup.userRole =
 							else
 							{
 								aHTML.push('<tr><td class="ns1blankspaceNothing">' +
-												'This role doesn\'t have access to this method.  Click Save to add it.</td></tr>';
+												'This role doesn\'t have access to this method.  Click Save to add it.</td></tr>');
 							}
 						}
 
@@ -768,7 +768,7 @@ ns1blankspace.setup.userRole =
 									}
 									else
 									{
-										ns1blankspace.status..error(data.error.errornotes);
+										ns1blankspace.status.error(data.error.errornotes);
 									}
 								}
 							});
