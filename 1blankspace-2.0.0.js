@@ -216,6 +216,10 @@ ns1blankspace.scripts =
 	{
 		name: '1blankspace.setup.financial',
 		source: '/jscripts/1blankspace.setup.financial-2.0.0.js'
+	},
+	{
+		name: '1blankspace.setup.messaging',
+		source: '/jscripts/1blankspace.setup.messaging-2.0.0.js'
 	}
 ]
 
@@ -372,7 +376,10 @@ ns1blankspace.app =
 
 					$.each(ns1blankspace.scripts, function()
 					{
-						ns1blankspace.app.loadScript(this.source);
+						if (this.source != '')
+						{
+							ns1blankspace.app.loadScript(this.source);
+						}	
 					});
 
 					$('td.ns1blankspaceControl').live('click', function()

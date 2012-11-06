@@ -253,7 +253,7 @@ ns1blankspace.setup.messaging =
 										'Details</td></tr>');
 					}	
 					
-					aHTML.push('</table>';					
+					aHTML.push('</table>');					
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
@@ -430,7 +430,7 @@ ns1blankspace.setup.messaging =
 						
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspace">';
+						aHTML.push('<table class="ns1blankspace">');
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
