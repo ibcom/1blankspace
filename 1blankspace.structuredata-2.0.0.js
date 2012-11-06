@@ -225,7 +225,7 @@ ns1blankspace.stuctureData =
 											}	
 										});
 								    	
-										aHTML.push('</tbody></table>';
+										aHTML.push('</table>');
 
 										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
@@ -263,13 +263,13 @@ ns1blankspace.stuctureData =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
-						aHTML.push('<tr><td>&nbsp;</td></tr>';
+						aHTML.push('<tr><td>&nbsp;</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlElement" class="ns1blankspaceControl">' +
 										'Element</td></tr>');
 					}	
 					
-					aHTML.push('</table>';					
+					aHTML.push('</table>');					
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
@@ -549,13 +549,13 @@ ns1blankspace.stuctureData =
 															'<td id="ns1blankspaceMainElementColumnElement" style="width: 300px" class="ns1blankspaceColumn2"></td>' +
 															'<td id="ns1blankspaceMainElementColumnEdit" class="ns1blankspaceMainColumn2"></td>' +
 															'</tr>' +
-															'</table>';					
+															'</table>');					
 											
 											$('#ns1blankspaceMainElement').html(aHTML.join(''));
 											
 											var aHTML = [];
 											
-											aHTML.push('<table id="ns1blankspaceElementCategories" class="ns1blankspaceMain">';
+											aHTML.push('<table id="ns1blankspaceElementCategories" class="ns1blankspaceMain">');
 											
 											if (oResponse.data.rows.length == 0)
 											{
@@ -585,7 +585,6 @@ ns1blankspace.stuctureData =
 													var aId = sXHTMLElementId.split('-');
 													
 													ns1blankspace.structureData.category.elements.show({xhtmlElementID: 'ns1blankspaceMainElementColumnElement', category: aId[1]});
-													
 												});
 											}	
 										}
@@ -642,7 +641,7 @@ ns1blankspace.stuctureData =
 											aHTML.push('<td class="ns1blankspaceMainHeaderX" style="width:5px;">&nbsp;|&nbsp;</td>');
 											aHTML.push('<td class="ns1blankspaceMainHeaderX" id="ns1blankspaceMainHeaderUnanswered" style="width:80px;">');
 											aHTML.push('<span id="spanns1blankspaceMainHeaderUnanswered" class="ns1blankspaceMainHeaderUnanswered">Unanswered</span>');
-											aHTML.push('</td>';
+											aHTML.push('</td>');
 											
 											aHTML.push('<td class="ns1blankspaceMainHeaderX" style="width:5px;">&nbsp;|&nbsp;</td>');
 											aHTML.push('<td class="ns1blankspaceMainHeaderX" id="ns1blankspaceMainHeaderAnswered" style="width:60px;">');
@@ -752,7 +751,7 @@ ns1blankspace.stuctureData =
 														
 										aHTML.push('</table>');			
 											
-										aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMain">';
+										aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMain">');
 												
 										aHTML.push('<tr class="ns1blankspaceMain">' +
 														'<td class="ns1blankspaceMain">' +
@@ -761,9 +760,9 @@ ns1blankspace.stuctureData =
 														'<tr class="ns1blankspaceMainText">' +
 														'<td class="ns1blankspaceMainText">' +
 														'<input id="ns1blankspaceStructureDataElementTitle" class="inputns1blankspaceMainText">' +
-														'</td></tr>';
+														'</td></tr>');
 										
-										aHTML.push('</table>';					
+										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceMainElementColumnEdit').html(aHTML.join(''));
 										

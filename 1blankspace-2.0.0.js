@@ -260,6 +260,10 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.structure',
 		source: '/jscripts/1blankspace.structure-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.structureData',
+		source: '/jscripts/1blankspace.structuredata-2.0.0.js'
 	}
 ]
 
