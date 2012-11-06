@@ -54,7 +54,7 @@ ns1blankspace.setup.financial =
 
 					aHTML.push('</table>');		
 						
-					aHTML.push('<table class="ns1blankspaceControl">';
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 									'Summary</td></tr>');	
@@ -67,7 +67,7 @@ ns1blankspace.setup.financial =
 					
 					aHTML.push('</table>');		
 					
-					aHTML.push('<table class="ns1blankspaceControl">';
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					aHTML.push('<tr><td id="ns1blankspaceControlFinancialAccount" class="ns1blankspaceControl">' +
 									'Accounts</td></tr>');
@@ -101,15 +101,15 @@ ns1blankspace.setup.financial =
 					
 					var aHTML = [];
 					
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainGeneral" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainBankAccount" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainFinancialAccount" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainFinancialAccountDefault" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainInvoicing" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainInvoicingTemplate" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainTax" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainPayroll" class="ns1blankspaceControlMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainGeneral" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainBankAccount" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainFinancialAccount" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainFinancialAccountDefault" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainInvoicing" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainInvoicingTemplate" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTax" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainPayroll" class="ns1blankspaceControlMain"></div>');
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -320,7 +320,7 @@ ns1blankspace.setup.financial =
 										'<td id="ns1blankspaceBankAccountColumn1" class="ns1blankspaceColumn1">' +
 										ns1blankspace.xhtml.loading + '</td>' +
 										'<td id="ns1blankspaceBankAccountColumn2" class="ns1blankspaceColumn2">' +
-										'<span id="ns1blankspaceBankAccountAdd" style="font-size:0.75em;">Add</span></td>'
+										'<span id="ns1blankspaceBankAccountAdd" style="font-size:0.75em;">Add</span></td>' +
 										'</tr>' + 
 										'</table>');
 
@@ -356,11 +356,11 @@ ns1blankspace.setup.financial =
 									
 									aHTML.push('<td id="ns1blankspaceSetupFinancialBankAccount_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
 															' title="' + this.notes + '">' +
-															this.title + '</td>';
+															this.title + '</td>');
 														
-									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">';
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 									
-									aHTML.push('<span id="ns1blankspaceBankAccount_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>';
+									aHTML.push('<span id="ns1blankspaceBankAccount_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
 										
 									aHTML.push('</td>');				
 																					
@@ -432,7 +432,7 @@ ns1blankspace.setup.financial =
 											' data-columns="title">' +
 										'</td></tr>');	
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceBankAccountEditColumn1').html(aHTML.join(''));
 						
@@ -672,7 +672,7 @@ ns1blankspace.setup.financial =
 																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Equity</td>' +
 																'</tr>' +
-																'</table>';					
+																'</table>');					
 														
 												$('#ns1blankspaceSetupAccountColumnType').html(aHTML.join(''));
 
@@ -744,7 +744,7 @@ ns1blankspace.setup.financial =
 											{		
 												$(oResponse).each(function()
 												{
-													aHTML.push('<tr class="ns1blankspaceRow">';
+													aHTML.push('<tr class="ns1blankspaceRow">');
 													
 													if (this.postable == 'Y')
 													{
@@ -993,7 +993,7 @@ ns1blankspace.setup.financial =
 											$('[name="radioPostable"][value="' + oObjectContext.postable + '"]').attr('checked', true);
 										}
 									}	
-								}
+								},
 
 					row:		function (oRow)
 								{
@@ -1030,7 +1030,7 @@ ns1blankspace.setup.financial =
 						
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspace">';
+						aHTML.push('<table class="ns1blankspace">');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -1170,7 +1170,7 @@ ns1blankspace.setup.financial =
 										'<textarea rows="3" cols="35" id="ns1blankspaceInvoicingPaymentTermsNotes" class="ns1blankspaceTextMultiSmall"></textarea>' +
 										'</td></tr>');
 						
-						aHTML.push('</table>';	
+						aHTML.push('</table>');	
 						
 						$('#ns1blankspaceInvoicingColumn1').html(aHTML.join(''));
 
@@ -1215,11 +1215,11 @@ ns1blankspace.setup.financial =
 										{
 											if (this.object == 5 && this.type == 1)
 											{
-												aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">';
+												aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
 
 												aHTML.push('<span id="spanInterfaceFormatTag_' + (this.caption).replace(/ /g,'-') + '"' +
 														  		' class="interfaceFormatTags" ' +
-														   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>';
+														   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>');
 
 												aHTML.push('</td></tr>');		   		
 											}				
@@ -1229,23 +1229,23 @@ ns1blankspace.setup.financial =
 										{
 											if (this.object == 5 && this.type == 2)
 											{
-												aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">';
+												aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
 
 												aHTML.push('<span id="spanInterfaceFormatTag_' + (this.caption).replace(/ /g,'-') + '"' +
 														  		 ' class="interfaceFormatTags" ' +
-														   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>';
+														   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>');
 
 												aHTML.push('</td></tr>');		   		
 											}				
 										});
 														
-										aHTML.push('</table>';			
+										aHTML.push('</table>');			
 
 										$('#ns1blankspaceInvoicingTemplateColumn2').html(aHTML.join(''));
 
 										var aHTML = [];
 										
-										aHTML.push('<table id="ns1blankspaceColumn1" class="ns1blankspace">';
+										aHTML.push('<table id="ns1blankspaceColumn1" class="ns1blankspace">');
 												
 										aHTML.push('<tr><td>' +
 														'<textarea rows="30" cols="50" id="ns1blankspaceInvoicingTemplateText' +
@@ -1370,7 +1370,7 @@ ns1blankspace.setup.financial =
 						var aHTML = [];
 						
 					
-						aHTML.push('<table id="tablens1blankspaceTaxColumn1" class="ns1blankspace">';
+						aHTML.push('<table id="tablens1blankspaceTaxColumn1" class="ns1blankspace">');
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
