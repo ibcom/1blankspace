@@ -252,6 +252,10 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.setup.website',
 		source: '/jscripts/1blankspace.setup.website-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.websiteForm',
+		source: '/jscripts/1blankspace.setup.websiteForm-2.0.0.js'
 	}
 ]
 
