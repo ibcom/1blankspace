@@ -91,6 +91,7 @@ String.method('trim', function () {return this.replace(/^\s+|\s+$/g, '');});
 
 var ns1blankspace = {};
 ns1blankspace.selector = 'body';
+ns1blankspace.history = {};
 
 ns1blankspace.scriptsCore =
 [
@@ -305,19 +306,25 @@ ns1blankspace.app =
 				{
 					if ($('#ns1blankspace').length == 0)
 					{
-						$(ns1blankspace.selector).append('<div id="ns1blankspace" class="interface">' +
-											'<div id="ns1blankspaceViewControl" class="ns1blankspaceViewControl"></div>' +
-											'<div id="ns1blankspaceControl" class="ns1blankspaceControl"></div>' +
-											'<div id="ns1blankspaceMain" class="ns1blankspaceMain"></div>' +
-											'<div id="ns1blankspaceFooter" class="ns1blankspaceFooter"></div>' +
-											'<div id="ns1blankspaceBox" class="ns1blankspaceBox"></div>' +
-											'<div id="ns1blankspaceDialog"></div>' +
+						$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
+											'<div id="ns1blankspaceHeader"></div>' +
+											'<div id="ns1blankspaceViewControl"></div>' +
+											'<div id="ns1blankspaceControl"></div>' +
+											'<div id="ns1blankspaceMain"></div>' +
+											'<div id="ns1blankspaceFooter"></div>' +
+											'<div id="ns1blankspaceMultiUseContainer"></div>' +
 											'</div>');
 					}		
 
-					$('#divInterfaceMasterViewportControl').html(
-							'<img class="ns1blankspaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">' +
-							' The app is loading... (smile)');
+					$('#ns1blankspaceMain').html('Initialising the app...');
+
+					$.each(ns1blankspace.scripts, function()
+					{
+						if (this.source != '')
+						{
+							ns1blankspace.app.loadScript(this.source);
+						}	
+					});
 
 					ns1blankspace.option = {};
 					ns1blankspace.timer = {};
@@ -326,7 +333,6 @@ ns1blankspace.app =
 					ns1blankspace.user = {};
 					ns1blankspace.data = {};
 					ns1blankspace.debug = {};
-					ns1blankspace.history = {};
 
 					ns1blankspace.version = 2;
 
@@ -363,7 +369,7 @@ ns1blankspace.app =
 					ns1blankspace.xhtml.action = '';
 					ns1blankspace.xhtml.home = '';
 					ns1blankspace.xhtml.divID = '';
-					ns1blankspace.xhtml.container = '#ns1blankspaceOptionsContainer'
+					ns1blankspace.xhtml.container = '#ns1blankspaceMultiUseContainer'
 
 					ns1blankspace.user.commonname = '';
 					ns1blankspace.user.email = '';
@@ -378,10 +384,11 @@ ns1blankspace.app =
 
 					ns1blankspace.param;
 
-					ns1blankspace.history.viewport = ['ns1blankspaceHomeShow()']
+					ns1blankspace.history.viewList = ['ns1blankspace.home.show()']
 					ns1blankspace.history.currentIndex = 0
 					ns1blankspace.history.lastDestinationInstruction = '';
 					ns1blankspace.history.list = [];
+
 					ns1blankspace.user.networkGroups = '';
 					ns1blankspace.setupShow = false;
 
@@ -402,17 +409,9 @@ ns1blankspace.app =
 						ns1blankspace.option.setFocus = false;
 					}	 
 
-					$.each(ns1blankspace.scripts, function()
-					{
-						if (this.source != '')
-						{
-							ns1blankspace.app.loadScript(this.source);
-						}	
-					});
-
 					$('td.ns1blankspaceControl').live('click', function()
 					{
-						ns1blankspace.history.instruction({xhtmlElementID: this.id});
+						ns1blankspace.history.control({xhtmlElementID: this.id});
 					});
 					
 					$('.ns1blankspaceControl').live('mousedown', function() 
@@ -622,6 +621,8 @@ ns1blankspace.app =
 						cache: false,
 						success: function(data) 
 						{
+							$('#ns1blankspaceMain').html('&nbsp;');
+
 							if (data.status == 'ER')
 							{
 								ns1blankspace.logon.show();
@@ -638,89 +639,83 @@ ns1blankspace.app =
 				{
 					var aHTML = [];
 
-					ns1blankspace.user = oResponse.user;
-					ns1blankspace.userUnrestricted = (oResponse.unrestrictedaccess = 'Y' || oResponse.unrestrictedaccess == undefined ? true : false);
+					ns1blankspace.user = {};
+
+					ns1blankspace.user.id = oResponse.user;
+					ns1blankspace.user.unrestricted = (oResponse.unrestrictedaccess = 'Y' || oResponse.unrestrictedaccess == undefined ? true : false);
+					ns1blankspace.user.space = oResponse.space;
+					ns1blankspace.user.spaceText = oResponse.spacename
+					ns1blankspace.user.logonName = oResponse.userlogonname;
+					ns1blankspace.user.contactPerson = oResponse.contactperson;
+					ns1blankspace.user.email = oResponse.email;
+					ns1blankspace.user.systemAdmin = oResponse.systemadmin;
+
 					ns1blankspace.spaceText = oResponse.spacename;
 					ns1blankspace.space = oResponse.space;
-					ns1blankspace.userSpace = oResponse.space;
-					ns1blankspace.userSpaceText = oResponse.spacename
 					ns1blankspace.contactBusiness = oResponse.contactbusiness;
 					ns1blankspace.contactPerson = oResponse.contactperson;
 
-					ns1blankspace.user.commonname = oResponse.userlogonname;
-					gsUserID = oResponse.user;
-					gsUserContactPersonID = oResponse.contactperson;
-					ns1blankspace.user.email = oResponse.email;
-					ns1blankspace.systemAdmin = oResponse.systemadmin;
-					
-					interfaceControlSecurity();
-					
 					ns1blankspace.unloadWarning = true;
-						
-					aHTML.push('<div id="ns1blankspaceContainer" class="ns1blankspace">');
-					
+
+					//??? interfaceControlSecurity();
+											
 					$('#ns1blankspaceHeaderColumn2').css('width', '250px');
 					$('#ns1blankspaceHeaderColumn2').html('<div id="ns1blankspaceSpaceText">' + ns1blankspace.spaceText + '</div>' +
 													'<div id="ns1blankspaceLogonName">' + ns1blankspace.user.commonname + '</div>');
+	
+					aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
+									'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
+									'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
+									'</div>');
+									
+					aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
+									'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
+									'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
+									'<span id="ns1blankspaceViewControlForward">&nbsp;</span>' +
+									'</div>');				
+							
+					aHTML.push('<div id="ns1blankspaceViewControlViewContainer">' +
+									'<span id="ns1blankspaceViewControlView">&nbsp;</span>' +
+									'</div>');
+									
+					aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
+									'<input id="ns1blankspaceViewControlSearch">' +
+									'</div>');
+									
+					aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
+									
+					aHTML.push('<div id="ns1blankspaceViewControlNewContainer">' +
+									'<span id="ns1blankspaceViewControlNew">New</span>' +
+									'</div>');
+									
+					aHTML.push('<div id="ns1blankspaceViewControlActionContainer">' +
+									'<span id="ns1blankspaceViewControlAction" ></span>' +
+									'<span id="ns1blankspaceViewControlActionOptions">&nbsp;</span>' +
+									'</div>');
 					
-					aHTML.push('<div id="ns1blankspaceViewControlContainer" class="ns1blankspaceControl">');
+					aHTML.push('<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>');
 					
-						aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
-										'<span id="ns1blankspaceViewControlHome" class="ns1blankspaceControl">&nbsp;</span>' +
-										'<span id="ns1blankspaceViewControlHomeOptions" class="ns1blankspaceControl">&nbsp;</span>' +
+					if (ns1blankspace.setupShow) 
+					{
+						aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
+										'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
+										'<label style="font-size:0.875em;" for="ns1blankspaceControlSetup">&nbsp;</label>' +
 										'</div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
-										'<span id="ns1blankspaceViewControlBack" class="ns1blankspaceControl">&nbsp;</span>' +
-										'<span id="ns1blankspaceViewControlRefresh" class="ns1blankspaceControl">&nbsp;</span>' +
-										'<span id="ns1blankspaceViewControlForward" class="ns1blankspaceControl">&nbsp;</span>' +
-										'</div>');				
-								
-						aHTML.push('<div id="ns1blankspaceViewControlSetContainer" class="ns1blankspaceControl">' +
-										'<span id="ns1blankspaceViewControlSet" class="ns1blankspaceControl">&nbsp;</span>' +
-										'</div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
-										'<input id="ns1blankspaceViewControlSearch" class="ns1blankspaceControl">' +
-										'</div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlNewContainer">' +
-										'<span id="ns1blankspaceViewControlNew" class="ns1blankspaceControl">New</span>' +
-										'</div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlActionContainer">' +
-										'<span id="ns1blankspaceViewControlAction" class="ns1blankspaceControl"></span>' +
-										'<span id="ns1blankspaceViewControlActionOptions" class="ns1blankspaceControl">&nbsp;</span>' +
-										'</div>');
-						
-						aHTML.push('<div id="ns1blankspaceViewControlActionStatus" class="ns1blankspaceControl">&nbsp;</div>');
-						
-						if (ns1blankspace.setupShow) 
-						{
-							aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
-											'<input type="checkbox" id="ns1blankspaceViewControlSetupSwitch" class="ns1blankspaceControl"/>' +
-											'<label style="font-size:0.875em;" for="ns1blankspaceControlSetupSwitch">&nbsp;</label>' +
-											'</div>');
-						}				
-						
-						aHTML.push('<div id="ns1blankspaceViewControlHelpContainer">' + 
-										'<span id="ns1blankspaceViewControlHelp" class="ns1blankspaceControl">&nbsp;</span>' +
-										'</div>');
+					}				
 					
-					aHTML.push('</div>');
+					aHTML.push('<div id="ns1blankspaceViewControlHelpContainer">' + 
+									'<span id="ns1blankspaceViewControlHelp">&nbsp;</span>' +
+									'</div>');
 					
-					aHTML.push('</div>');
+					$('#ns1blankspaceViewControl').html(aHTML.join(''));
 					
-					aHTML.push('<div id="ns1blankspaceViewportControlBrowse" class="ns1blankspaceControl">&nbsp;</div>');
-					
-					aHTML.push('<div id="ns1blankspaceOptionsContainer" class="ns1blankspaceOptionsContainer">&nbsp;</div>');
-					aHTML.push('<div id="ns1blankspaceDialog" class="divns1blankspaceDialog">&nbsp;</div>');
-					
-					$('#ns1blankspaceViewControlContainer').html(aHTML.join(''));
-					
-					$('#ns1blankspaceControlHome')
+					if (!ns1blankspace.setupShow) 
+					{
+						$('#ns1blankspaceViewControlActionStatus')
+							.css('width', '215px');
+					}	
+
+					$('#ns1blankspaceViewControlHome')
 						.button({
 								text: false,
 								icons: {
@@ -742,10 +737,11 @@ ns1blankspace.app =
 								ns1blankspace.home.options.show(this);
 							})
 							.css('width', '12px')
+							.css('margin-left', '2px')
 							.parent()
 								.buttonset();
 					
-					$('#ns1blankspaceControlBack')
+					$('#ns1blankspaceViewControlBack')
 						.button({
 								text: false,
 								icons: {}
@@ -780,7 +776,7 @@ ns1blankspace.app =
 							.parent()
 								.buttonset();
 					
-					$('#ns1blankspaceControlView')
+					$('#ns1blankspaceViewControlViewContainer')
 						.button(
 						{
 							icons: 
@@ -796,7 +792,7 @@ ns1blankspace.app =
 						})
 						.css('text-align', 'left');
 					
-					$('#spanns1blankspaceViewportControlNew')
+					$('#ns1blankspaceViewControlNew')
 						.button({
 								label: "New"
 								})
@@ -812,7 +808,7 @@ ns1blankspace.app =
 							.parent()
 								.buttonset();
 					
-					$('#spanns1blankspaceViewportControlAction')
+					$('#ns1blankspaceViewControlAction')
 						.button({
 								label: "Save"
 								})
@@ -829,10 +825,10 @@ ns1blankspace.app =
 							.parent()
 								.buttonset();	
 														
-					$('#ns1blankspaceControlSetupSwitch')
+					$('#ns1blankspaceViewControlSetup')
 						.button({
 									text: false,
-									label: 'Set up your system.  Once finished click on this icon again.',
+									label: 'Set up your space.  Once finished click on this icon again.',
 									icons: {
 										primary: "ui-icon-gear"
 									}})
@@ -842,7 +838,7 @@ ns1blankspace.app =
 							ns1blankspace.setup.switch(this);
 						});	
 					
-					$('#ns1blankspaceControlHelp')
+					$('#ns1blankspaceViewControlHelp')
 						.button({
 								text: false,
 								icons: {
@@ -860,72 +856,102 @@ ns1blankspace.app =
 							}	
 						});		
 					
-					$('#ns1blankspaceLogonName').click(function(event)
+					$('#ns1blankspaceSpaceText').click(function(event)
 					{
 						ns1blankspace.control.user.show(this);
 					});
 
-					$('#ns1blankspaceViewportSpaceText').click(function(event)
+					$('#ns1blankspaceSpaceText').click(function(event)
 					{
 						ns1blankspace.control.space.show(this);
 					});
 					
 					if (ns1blankspace.option.showBrowsing)
 					{
-						$('#divns1blankspaceViewportControlBrowse').html(ns1blankspaceViewportBrowse());
+						$('#ns1blankspaceViewControlBrowse').html(ns1blankspaceViewportBrowse());
 					}
 					else
 					{
-						$('#divns1blankspaceViewportControlBrowse')
+						$('#ns1blankspaceViewControlBrowse')
 							.css('height', '1px')
 							.css('border-width', '0px');
 							
-						$('#divInterfaceViewportControl')
-							.css('top', '90px');
+						//$('#ns1blankspaceViewControl')
+						//	.css('top', '90px');
 							
-						$('#divInterfaceMain')
-							.css('top', '90px');
+						//$('#ns1blankspaceViewControl')
+						//	.css('top', '90px');
 					}
 					
-					$("#ns1blankspaceControlContainer").touchwipe({
+					$("#ns1blankspaceHeader").touchwipe({
 							wipeLeft: function() {ns1blankspace.history.view({instruction: 3});},
 							wipeRight: function() {ns1blankspace.history.view({instruction: 2});},
 							min_move_x: 35,
 							min_move_y: 35,
 							preventDefaultEvents: true
 							});
-					
-					//???? interfaceControlSetMasterViewport();
-					
+										
 					if (ns1blankspace.option.returnToLast) 
 					{
 						ns1blankspace.history.view({instruction: 8})
 					}
 					else
 					{
-						ns1blankspace.home.show();  //??? .init()
+						ns1blankspace.app.showWhenLoaded('home');
+						//ns1blankspace.timer.whenLoaded = window.setInterval('ns1blankspace.showWhenLoad("home")', 100);
+
+						//while (ns1blankspace.home == undefined) {}
+						//ns1blankspace.home.show();  //??? .init()
 					}	
 					
-					$('#ns1blankspaceControlSearch').focus();	
+					if (ns1blankspace.option.setFocus) {$('#ns1blankspaceViewControlSearch').focus()};
 				},
+
+	scriptLoaded:
+
+				function (sNamespace)
+				{
+					if (ns1blankspace[sNamespace])
+					{
+						return true
+					}	
+				},
+
+	showWhenLoaded:
+			
+				function (sNamespace)
+				{
+					if (ns1blankspace.timer.whenLoaded == undefined)
+					{	
+						ns1blankspace.timer.whenLoaded = window.setInterval('ns1blankspace.app.showWhenLoaded("' + sNamespace + '")', 100);
+					}
+					else
+					{	
+						if (ns1blankspace[sNamespace])
+						{
+							window.clearInterval(ns1blankspace.timer.whenLoaded);
+							ns1blankspace[sNamespace].show()
+						}	
+					}	
+				},		
 
 	reset:		function ()
 				{				
-					$('#ns1blankspaceControlSearch').unbind('keyup');
-					$('#ns1blankspaceControlSearch').unbind('click');
-					$('#ns1blankspaceControlSearch').unbind('click');
-					$('#ns1blankspaceControlSearchOptions').unbind('click');
-					$('#ns1blankspaceControlNew').unbind('click');
-					$('#ns1blankspaceControlNewOptions').unbind('click');
-					$('#ns1blankspaceControlAction').unbind('click');
-					$('#ns1blankspaceControlActionOptions').unbind('click');
-					$('#ns1blankspaceControlSetup').unbind('click');
-					$('#ns1blankspaceControlSetupOptions').unbind('click');
-					$('#ns1blankspaceControlHelp').unbind('click');
-					$('#ns1blankspaceControlHelpOptions').unbind('click');
-					$('td.interfaceViewportMasterControlBrowse').unbind('click');
-					$('td.interfaceViewportMasterControlBrowseAll').unbind('click');
-					$('#divns1blankspaceViewportControlActionStatus').text('');
+					$('#ns1blankspaceViewControlSearch').unbind('keyup');
+					$('#ns1blankspaceViewControlSearch').unbind('click');
+					$('#ns1blankspaceViewControlSearch').unbind('click');
+					$('#ns1blankspaceViewControlSearchOptions').unbind('click');
+					$('#ns1blankspaceViewControlNew').unbind('click');
+					$('#ns1blankspaceViewControlNewOptions').unbind('click');
+					$('#ns1blankspaceViewControlAction').unbind('click');
+					$('#ns1blankspaceViewControlActionOptions').unbind('click');
+					$('#ns1blankspaceViewControlSetup').unbind('click');
+					$('#ns1blankspaceViewControlSetupOptions').unbind('click');
+					$('#nns1blankspaceViewControlHelp').unbind('click');
+					$('#ns1blankspaceViewControlHelpOptions').unbind('click');
+					$('td.ns1blankspaceViewControlBrowse').unbind('click');
+					$('td.ns1blankspaceViewControlBrowseAll').unbind('click');
+					$('#ns1blankspaceViewControlActionStatus').text('');
 					if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
 					ns1blankspace.inputDetected = false;
 					ns1blankspace.xhtml.action = '';
@@ -1040,261 +1066,13 @@ ns1blankspace.app =
 				}				
 }
 
-ns1blankspace.history =
-{
-	control: 	function (oParam)
-				{
-					var bGet = false;
-					var iObject = ns1blankspace.object;
-					var iObjectContext = ns1blankspace.objectContext;
-					var sXHTMLElementID;
-					var sFunctionDefault;
-					
-					if (oParam != undefined)
-					{
-						if (oParam.object != undefined) {iObject = oParam.object}
-						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-						if (oParam.functionDefault != undefined) {sFunctionDefault = oParam.functionDefault}
-						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-					}
-					
-					$.each(ns1blankspace.history.list, function(index) 
-					{ 
-						if ((this.object == iObject) && (this.objectContext == iObjectContext))
-						{
-							if (sFunctionDefault != undefined)
-							{
-								sXHTMLElementID = this.xhtmlElementID
-							}
-							else
-							{
-								ns1blankspace.history.list.splice(index,1)
-							}	
-						}
-					});
-					
-					if (sFunctionDefault == undefined)
-					{
-						ns1blankspace.history.list.push(
-							{
-								object: iObject,
-								objectContext: iObjectContext,
-								xhtmlElementID: sXHTMLElementID
-							}
-						)
-					}
-					else
-					{
-						if (sXHTMLElementID == undefined)
-						{
-							eval(sFunctionDefault);
-						}
-						else
-						{
-							$('.ns1blankspaceControl').removeClass('ns1blankspaceControlHighlight')
-							$('#' + sXHTMLElementID).addClass('ns1blankspaceControlHighlight')
-							$('#' + sXHTMLElementID).click()
-						}
-					}
-				},
-
-	view: 		function (oParam)
-				{
-					var sDestinationInstructions;
-					var iInstruction = 1;
-					var iInstructionCount = 1;
-					var bContinue = true;
-					var bMove = true;
-					var bAdd = false;
-					
-					if (ns1blankspace.inputDetected)
-					{
-						 bContinue = confirm("You have edited this page.  Do you want to continue moving to the new page?")
-					}	
-							
-					if (bContinue)
-					{	
-						ns1blankspace.inputDetected = false;
-						
-						if (oParam != undefined)
-						{
-							if (oParam.newDestination != undefined) {sDestinationInstructions = oParam.newDestination}
-							if (oParam.instruction != undefined) {iInstruction = oParam.instruction}
-							if (oParam.instructionCount != undefined) {iInstructionCount = oParam.instructionCount}
-							if (oParam.index != undefined) {ns1blankspace.history.currentIndex = oParam.index}
-							if (oParam.move != undefined) {bMove = oParam.move}
-							
-							if (iInstruction == 1 && sDestinationInstructions != undefined)
-							{
-								if (sDestinationInstructions == ns1blankspace.history.lastDestinationInstruction)
-								{
-									var aTmp = sDestinationInstructions.split(';');
-									
-									$.each(aTmp, function(index) 
-									{ 
-										if (this == '')
-										{
-											aTmp.splice(index,1)
-										}
-									});
-									
-									if (aTmp.length == 1) 
-									{
-										$.each(ns1blankspace.history.viewport, function(index) 
-										{ 
-											if (this == sDestinationInstructions)
-											{
-												ns1blankspace.history.viewport.splice(index,1)
-												bAdd = true;
-											}
-										});
-									}	
-								}
-								else
-								{
-									bAdd = true;
-								}	
-								
-								if (bAdd)
-								{
-									ns1blankspace.history.viewport.push(sDestinationInstructions);
-									ns1blankspace.history.currentIndex = ns1blankspace.history.viewport.length - 1;
-									
-									var sData = 'value=' + ns1blankspace.util.fs(ns1blankspace.history.viewport.slice(-2).toString());
-									
-									$.ajax(
-									{
-										type: 'POST',
-										url: '/ondemand/core/?method=CORE_PROFILE_MANAGE&advanced=4',
-										data: sData,
-										dataType: 'text'
-									})
-								}		
-							}	
-							
-							if (iInstruction == 2)
-							{
-								ns1blankspace.history.currentIndex = ns1blankspace.history.currentIndex - iInstructionCount;
-								if (ns1blankspace.history.currentIndex < 0) {ns1blankspace.history.currentIndex = 0}
-							}
-							
-							if (iInstruction == 3)
-							{
-								ns1blankspace.history.currentIndex = ns1blankspace.history.currentIndex + iInstructionCount;
-								if (ns1blankspace.history.currentIndex > ns1blankspace.history.viewport.length - 1) {ns1blankspace.history.currentIndex = ns1blankspace.history.viewport.length - 1}
-							}
-							
-							if (iInstruction == 4)
-							{
-								ns1blankspace.history.viewport.length = 0;
-								ns1blankspace.history.currentIndex = 0;
-							}	
-							
-							if (iInstruction == 5)
-							{
-								ns1blankspace.history.currentIndex = ns1blankspace.history.viewport.length - 1;
-							}	
-							
-							if (iInstruction == 6)
-							{
-								ns1blankspace.history.currentIndex = 0;
-							}	
-							
-							if (iInstruction == 7)
-							{
-								//refresh
-							}	
-								
-							if (iInstruction == 8)
-							{
-								$.ajax(
-								{
-									type: 'GET',
-									url: '/ondemand/core/?method=CORE_PROFILE_SEARCH&advanced=4&rf=TEXT',
-									dataType: 'text',
-									async: false,
-									success: function(data) {
-										data = data.replace('OK|RETURNED|', '')
-										if (data == '')
-										{
-											ns1blankspace.history.viewport.push('ns1blankspaceHomeShow()');
-										}	
-										else
-										{
-											ns1blankspace.history.viewport = data.split(',');
-											ns1blankspace.history.currentIndex = ns1blankspace.history.viewport.length - 1
-										}	
-									}
-								})
-							}		
-								
-							$('#spanns1blankspaceViewportControlBack').button("destroy");	
-							$('#spanns1blankspaceViewportControlRefresh').button("destroy");	
-							$('#spanns1blankspaceViewportControlForward').button("destroy");	
-							
-							var bBack = true;
-							var bForward = true;
-							
-							if (ns1blankspace.history.currentIndex > 0)
-							{	
-								bBack = false;
-							};
-							
-							if (ns1blankspace.history.currentIndex < ns1blankspace.history.viewport.length - 1)
-							{
-								bForward = false;					
-							};			
-					
-							$('#ns1blankspaceControlBack')
-								.button({
-										text: false,
-										icons: {primary: "ui-icon-triangle-1-w"},
-										disabled: bBack
-										})
-								.next()
-									.button( {
-										text: false,
-										icons: {
-											primary: "ui-icon-arrowrefresh-1-e"
-										}
-									})
-								.next()
-									.button( {
-										text: false,
-										icons: {primary: "ui-icon-triangle-1-e"},
-										disabled: bForward
-									})
-									.parent()
-										.buttonset();
-					
-							$('#ns1blankspaceControlBack')
-								.button({disabled: bBack})
-					
-							$('#ns1blankspaceControlForward')
-								.button({disabled: bForward})
-					
-							sDestinationInstructions = ns1blankspace.history.viewport[ns1blankspace.history.currentIndex]
-							ns1blankspace.history.lastDestinationInstruction = sDestinationInstructions;
-							
-							if (bMove)
-							{
-								if (sDestinationInstructions != '' && sDestinationInstructions != undefined)
-								{
-									eval(sDestinationInstructions)
-								}	
-							}	
-						}
-					}	
-				}
-}
-
 ns1blankspace.logon = 
 {
 	show: 		function (oParam)
 				{
 					var aHTML = [];
 					var h = -1;
-					var sXHTMLElementID = "divInterfaceBox";
+					var sXHTMLElementID = ns1blankspace.xhtml.container;
 					
 					if (oParam != undefined)
 					{
@@ -1304,6 +1082,10 @@ ns1blankspace.logon =
 						
 					aHTML.push('<table id="ns1blankspaceLogonContainer" class="ns1blankspaceLogon">');
 					
+					aHTML.push('<tr><td class="ns1blankspaceLogon" style="width:400px;">');
+
+					aHTML.push('<table id="ns1blankspaceLogonContainer" class="ns1blankspaceLogon">');
+
 					aHTML.push('<tr class="ns1blankspaceLogon" >' +
 									'<td id="ns1blankspaceHomeLogon" class="ns1blankspaceLogon"' +
 									' style="width:150px;padding-right:15px;border-right-style:solid;border-width: 1px;border-color: #B8B8B8;">');
@@ -1312,26 +1094,26 @@ ns1blankspace.logon =
 									'<td class="ns1blankspaceLogon">' +
 									'Logon Name' +
 									'</td>' +
-									'<td class="ns1blankspaceLogonInput">' +
-									'<input id="ns1blankspaceLogonName" class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogonText">' +
+									'<input id="ns1blankspaceLogonLogonName" class="ns1blankspaceLogon">' +
 									'</td></tr>');
 									
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
 									'<td class="ns1blankspaceLogon">' +
 									'Password' +
 									'</td>' +
-									'<td class="ns1blankspaceLogonInput">' +
+									'<td class="ns1blankspaceLogonText">' +
 									'<input id="ns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password">' +
 									'</td></tr>');
 
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
 									'<td class="ns1blankspaceLogon" colspan=2>' +
-									'<span id="ns1blankspaceLogon"></span>' +
+									'<span id="ns1blankspaceLogonSend">Logon</span>' +
 									'</td></tr>');
 					
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
 								    '<td class="ns1blankspaceLogon" colspan=2>' +
-									'<input type="checkbox" id="ns1blankspaceLogonNameRemember"/>Remember Me</td></tr>');
+									'<input type="checkbox" id="ns1blankspaceLogonRemember"/>Remember Me</td></tr>');
 
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
 									'<td class="ns1blankspaceLogon" colspan=2>' +
@@ -1358,25 +1140,25 @@ ns1blankspace.logon =
 
 					aHTML.push('</td></tr></table>');
 					
-					$('#' + sXHTMLElementID).css("z-index", "1");
-					$('#' + sXHTMLElementID).html(aHTML.join(''));
+					$(sXHTMLElementID).css("z-index", "1");
+					$(sXHTMLElementID).html(aHTML.join(''));
 					
-					$('#' + sXHTMLElementID).show();
+					$(sXHTMLElementID).show();
 
 					var sLogonName = $.cookie('mydigitalstucturelogonname')
 					
 					if (sLogonName != '' && sLogonName != null)
 					{
-						$('#ns1blankspaceLogonName').val(sLogonName);
-						$('#ns1blankspaceLogonNameRemember').attr('checked', true);
+						$('#ns1blankspaceLogonLogonName').val(sLogonName);
+						$('#ns1blankspaceLogonRemember').attr('checked', true);
 						$('#ns1blankspaceLogonPassword').focus();
 					}
 					else
 					{
-						$('#ins1blankspaceLogonName').focus();
+						$('#ins1blankspaceLogonLogonName').focus();
 					}
 					
-					$('#ns1blankspaceLogon').button(
+					$('#ns1blankspaceLogonSend').button(
 					{
 						label: "Logon"
 					})
@@ -1385,7 +1167,7 @@ ns1blankspace.logon =
 						ns1blankspace.logon.send();
 					});	
 
-					$('#ns1blankspaceLogonName').keypress(function(e)
+					$('#ns1blankspaceLogonLogonName').keypress(function(e)
 					{
 					    if (e.which == 13)
 					    {
@@ -1409,8 +1191,8 @@ ns1blankspace.logon =
 
 	send: 		function ()
 				{
-					var sData = 'logon=' + ns1blankspace.util.fs($('#inputns1blankspaceLogonName').val()) +
-								'&password=' + ns1blankspace.util.fs($('#inputns1blankspaceLogonPassword').val());
+					var sData = 'logon=' + ns1blankspace.util.fs($('#ns1blankspaceLogonLogonName').val()) +
+								'&password=' + ns1blankspace.util.fs($('#ns1blankspaceLogonPassword').val());
 
 					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loadingSmall);
 					
@@ -1433,7 +1215,7 @@ ns1blankspace.logon =
 					}
 					else 
 					{
-						$('#ns1blankspaceLogonStatus').html('Logon successful, loading app...');
+						$('#ns1blankspaceLogonStatus').html('Logon successful, starting app...');
 						
 						if ($('#ns1blankspaceLogonNameRemember').attr('checked'))
 						{
@@ -1687,6 +1469,253 @@ ns1blankspace.logOff = function ()
 					
 					ns1blankspace.unloadWarning = false;
 					document.location.reload(false);
+				}
+
+ns1blankspace.history.control =
+				function (oParam)
+				{
+					var bGet = false;
+					var iObject = ns1blankspace.object;
+					var iObjectContext = ns1blankspace.objectContext;
+					var sXHTMLElementID;
+					var sFunctionDefault;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.object != undefined) {iObject = oParam.object}
+						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+						if (oParam.functionDefault != undefined) {sFunctionDefault = oParam.functionDefault}
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+					}
+					
+					$.each(ns1blankspace.history.list, function(index) 
+					{ 
+						if ((this.object == iObject) && (this.objectContext == iObjectContext))
+						{
+							if (sFunctionDefault != undefined)
+							{
+								sXHTMLElementID = this.xhtmlElementID
+							}
+							else
+							{
+								ns1blankspace.history.list.splice(index,1)
+							}	
+						}
+					});
+					
+					if (sFunctionDefault == undefined)
+					{
+						ns1blankspace.history.list.push(
+							{
+								object: iObject,
+								objectContext: iObjectContext,
+								xhtmlElementID: sXHTMLElementID
+							}
+						)
+					}
+					else
+					{
+						if (sXHTMLElementID == undefined)
+						{
+							eval(sFunctionDefault);
+						}
+						else
+						{
+							$('.ns1blankspaceControl').removeClass('ns1blankspaceControlHighlight')
+							$('#' + sXHTMLElementID).addClass('ns1blankspaceControlHighlight')
+							$('#' + sXHTMLElementID).click()
+						}
+					}
+				}
+
+ns1blankspace.history.view =
+				function (oParam)
+				{
+					var sDestinationInstructions;
+					var iInstruction = 1;
+					var iInstructionCount = 1;
+					var bContinue = true;
+					var bMove = true;
+					var bAdd = false;
+					
+					if (ns1blankspace.inputDetected)
+					{
+						 bContinue = confirm("You have edited this page.  Do you want to continue moving to the new page?")
+					}	
+							
+					if (bContinue)
+					{	
+						ns1blankspace.inputDetected = false;
+						
+						if (oParam != undefined)
+						{
+							if (oParam.newDestination != undefined) {sDestinationInstructions = oParam.newDestination}
+							if (oParam.instruction != undefined) {iInstruction = oParam.instruction}
+							if (oParam.instructionCount != undefined) {iInstructionCount = oParam.instructionCount}
+							if (oParam.index != undefined) {ns1blankspace.history.currentIndex = oParam.index}
+							if (oParam.move != undefined) {bMove = oParam.move}
+							
+							if (iInstruction == 1 && sDestinationInstructions != undefined)
+							{
+								if (sDestinationInstructions == ns1blankspace.history.lastDestinationInstruction)
+								{
+									var aTmp = sDestinationInstructions.split(';');
+									
+									$.each(aTmp, function(index) 
+									{ 
+										if (this == '')
+										{
+											aTmp.splice(index,1)
+										}
+									});
+									
+									if (aTmp.length == 1) 
+									{
+										$.each(ns1blankspace.history.viewList, function(index) 
+										{ 
+											if (this == sDestinationInstructions)
+											{
+												ns1blankspace.history.viewList.splice(index,1)
+												bAdd = true;
+											}
+										});
+									}	
+								}
+								else
+								{
+									bAdd = true;
+								}	
+								
+								if (bAdd)
+								{
+									ns1blankspace.history.viewList.push(sDestinationInstructions);
+									ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1;
+									
+									var sData = 'value=' + ns1blankspace.util.fs(ns1blankspace.history.viewList.slice(-2).toString());
+									
+									$.ajax(
+									{
+										type: 'POST',
+										url: '/ondemand/core/?method=CORE_PROFILE_MANAGE&advanced=4',
+										data: sData,
+										dataType: 'text'
+									})
+								}		
+							}	
+							
+							if (iInstruction == 2)
+							{
+								ns1blankspace.history.currentIndex = ns1blankspace.history.currentIndex - iInstructionCount;
+								if (ns1blankspace.history.currentIndex < 0) {ns1blankspace.history.currentIndex = 0}
+							}
+							
+							if (iInstruction == 3)
+							{
+								ns1blankspace.history.currentIndex = ns1blankspace.history.currentIndex + iInstructionCount;
+								if (ns1blankspace.history.currentIndex > ns1blankspace.history.viewList.length - 1) {ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1}
+							}
+							
+							if (iInstruction == 4)
+							{
+								ns1blankspace.history.viewList.length = 0;
+								ns1blankspace.history.currentIndex = 0;
+							}	
+							
+							if (iInstruction == 5)
+							{
+								ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1;
+							}	
+							
+							if (iInstruction == 6)
+							{
+								ns1blankspace.history.currentIndex = 0;
+							}	
+							
+							if (iInstruction == 7)
+							{
+								//refresh
+							}	
+								
+							if (iInstruction == 8)
+							{
+								$.ajax(
+								{
+									type: 'GET',
+									url: '/ondemand/core/?method=CORE_PROFILE_SEARCH&advanced=4&rf=TEXT',
+									dataType: 'text',
+									async: false,
+									success: function(data) {
+										data = data.replace('OK|RETURNED|', '')
+										if (data == '')
+										{
+											ns1blankspace.history.viewList.push('ns1blankspace.home.show()');
+										}	
+										else
+										{
+											ns1blankspace.history.viewList = data.split(',');
+											ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1
+										}	
+									}
+								})
+							}		
+								
+							$('#ns1blankspaceViewControlBack').button("destroy");	
+							$('#ns1blankspaceViewControlRefresh').button("destroy");	
+							$('#ns1blankspaceViewControlForward').button("destroy");	
+							
+							var bBack = true;
+							var bForward = true;
+							
+							if (ns1blankspace.history.currentIndex > 0)
+							{	
+								bBack = false;
+							};
+							
+							if (ns1blankspace.history.currentIndex < ns1blankspace.history.viewList.length - 1)
+							{
+								bForward = false;					
+							};			
+					
+							$('#ns1blankspaceViewControlBack')
+								.button({
+										text: false,
+										icons: {primary: "ui-icon-triangle-1-w"},
+										disabled: bBack
+										})
+								.next()
+									.button( {
+										text: false,
+										icons: {
+											primary: "ui-icon-arrowrefresh-1-e"
+										}
+									})
+								.next()
+									.button( {
+										text: false,
+										icons: {primary: "ui-icon-triangle-1-e"},
+										disabled: bForward
+									})
+									.parent()
+										.buttonset();
+					
+							$('#ns1blankspaceViewControlBack')
+								.button({disabled: bBack})
+					
+							$('#s1blankspaceViewControlForward')
+								.button({disabled: bForward})
+					
+							sDestinationInstructions = ns1blankspace.history.viewList[ns1blankspace.history.currentIndex]
+							ns1blankspace.history.lastDestinationInstruction = sDestinationInstructions;
+							
+							if (bMove)
+							{
+								if (sDestinationInstructions != '' && sDestinationInstructions != undefined)
+								{
+									eval(sDestinationInstructions)
+								}	
+							}	
+						}
+					}	
 				}
 
 ns1blankspace.attachments = 

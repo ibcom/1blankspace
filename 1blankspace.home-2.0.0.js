@@ -191,6 +191,8 @@ ns1blankspace.home.actions =
 	show: 		function (oParam, oResponse)
 				{
 
+					return;
+					
 					var bShow = false;
 					var sXHTMLElementID = 'ns1blankspaceMain';
 					var iDay = 0;

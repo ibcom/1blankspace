@@ -146,7 +146,7 @@ ns1blankspace.project =
 										{
 											type: 'GET',
 											url: ns1blankspace.util.endpointURI('PROJECT_SEARCH'),
-											data: 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+											data: 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext),
 											dataType: 'json',
 											success: function(data) {ns1blankspace.project.show(oParam, data)}
 										});
@@ -216,7 +216,7 @@ ns1blankspace.project =
 												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
-											aHTML.push('<td class="ns1blankspaceContactType' + this.type + ' ns1blankspaceSearch">&nbsp;</td>';
+											aHTML.push('<td class="ns1blankspaceContactType' + this.type + ' ns1blankspaceSearch">&nbsp;</td>')
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
 															this.reference +
@@ -285,7 +285,7 @@ ns1blankspace.project =
 										'Attachments</td></tr>');
 					}	
 					
-					aHTML.push('</table>';					
+					aHTML.push('</table>');					
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
@@ -531,14 +531,14 @@ ns1blankspace.project =
 						
 						var aHTML = [];
 					
-						aHTML.push('<table id="ns1blankspaceDescriptionColumn1" class="ns1blankspace">';
+						aHTML.push('<table id="ns1blankspaceDescriptionColumn1" class="ns1blankspace">');
 								
 						aHTML.push('<tr class="ns1blankspaceTextMulti">' +
 										'<td class="ns1blankspaceTextMulti">' +
 										'<textarea id="ns1blankspaceDescription" rows="30" cols="50" class="ns1blankspaceTextMulti ns1blankspaceTextMultiLarge"></textarea>' +
-										'</td></tr>';
+										'</td></tr>');
 										
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceDescriptionColumn1').html(aHTML.join(''));
 						
@@ -625,7 +625,7 @@ ns1blankspace.project =
 												aHTML.push('<tr class="ns1blankspaceRow">');
 					
 												aHTML.push('<td id="ns1blankspaceSetupProjectTasks_title-' + this.id + '" class="ns1blankspaceRow" style="width: 420px;">' +
-																		this.title + '</td>';
+																		this.title + '</td>');
 														
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 													
@@ -725,13 +725,13 @@ ns1blankspace.project =
 									{
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">';
+										aHTML.push('<table class="ns1blankspace">');
 										
 										aHTML.push('<tr><td>' +
 														'<span id="ns1blankspaceTaskDetailsSave">Save</span>' +
-														'</td></tr>';
+														'</td></tr>');
 																
-										aHTML.push('</table>';					
+										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceTaskDetailsColumn2').html(aHTML.join(''));
 										
