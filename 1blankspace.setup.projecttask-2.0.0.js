@@ -90,7 +90,7 @@ ns1blankspace.setup.projectTask =
 					}
 				},
 
-	home: 		function interfaceSetupProjectTaskHomeShow(oResponse)
+	home: 		function (oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -175,7 +175,7 @@ ns1blankspace.setup.projectTask =
 				},
 
 	search: 	{
-					send: 		function interfaceSetupProjectTaskSearch(sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementId, oParam)
 								{
 									
 									var aSearch = sXHTMLElementId.split('-');
@@ -246,7 +246,7 @@ ns1blankspace.setup.projectTask =
 									};	
 								},
 
-					process:	function interfaceSetupProjectTaskSearchShow(oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
 									var iColumn = 0;
 									var aHTML = [];
@@ -295,7 +295,7 @@ ns1blankspace.setup.projectTask =
 								}
 				},
 
-	layout:		function interfaceSetupProjectTaskViewport()
+	layout:		function ()
 				{
 					
 					var aHTML = [];
@@ -416,7 +416,7 @@ ns1blankspace.setup.projectTask =
 					});
 				},
 
-	show:		function interfaceSetupProjectTaskShow(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
 					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 					
@@ -446,7 +446,7 @@ ns1blankspace.setup.projectTask =
 					}	
 				},	
 		
-	summary:	function interfaceSetupProjectTaskSummary()
+	summary:	function ()
 				{
 
 					var aHTML = [];
@@ -512,7 +512,7 @@ ns1blankspace.setup.projectTask =
 					}	
 				},
 
-	details:	function interfaceSetupProjectTaskDetails()
+	details:	function ()
 				{
 					var aHTML = [];
 					var h = -1;
@@ -649,7 +649,7 @@ ns1blankspace.setup.projectTask =
 				},
 
 	description:
-				function interfaceSetupProjectTaskDescription()
+				function ()
 				{
 					
 					var aHTML = [];
@@ -694,7 +694,7 @@ ns1blankspace.setup.projectTask =
 				},
 
 	save: 		{
-					send: 		function interfaceSetupProjectTaskSave()
+					send: 		function ()
 								{
 									var sParam = '/ondemand/project/?method=PROJECT_TASK_MANAGE'
 									var sData = (ns1blankspace.objectContext == -1)?'':'&id=' + ns1blankspace.objectContext;
@@ -721,7 +721,7 @@ ns1blankspace.setup.projectTask =
 				},
 				
 	actions: 	{
-					show:		function interfaceSetupProjectTaskActionDetails(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
 
 									var sXHTMLElementId = "divInterfaceMainActionDetails";
@@ -864,7 +864,7 @@ ns1blankspace.setup.projectTask =
 									}	
 								},	
 
-					remove:		function interfaceSetupProjectTaskActionRemove(sXHTMLElementId)
+					remove:		function (sXHTMLElementId)
 								{
 
 									var aSearch = sXHTMLElementId.split('-');
@@ -886,7 +886,7 @@ ns1blankspace.setup.projectTask =
 										
 								},
 
-					save:		function interfaceSetupProjectTaskActionDetailsSave(oParam)
+					save:		function (oParam)
 								{
 									var sParam = '/ondemand/action/?rf=JSON&method=ACTION_MANAGE';
 									var sData = '';

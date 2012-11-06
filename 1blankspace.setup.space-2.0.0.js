@@ -71,13 +71,13 @@ ns1blankspace.setup.space =
 					
 					$('#ns1blankspaceControlSubscriptions').click(function(event)
 					{
-						ns1blankspace.show(refresh: true});
+						ns1blankspace.show({refresh: true});
 						ns1blankspace.setup.space.subscriptions();
 					});
 
 					$('#ns1blankspaceControlAccess').click(function(event)
 					{
-						ns1blankspace.show(refresh: true});
+						ns1blankspace.show({refresh: true});
 						ns1blankspace.setup.space.access();
 					});
 							
@@ -154,10 +154,10 @@ ns1blankspace.setup.space =
 						
 								$(oResponse.data.rows).each(function() 
 								{
-									aHTML.push('<tr class="ns1blankspaceRow">';
+									aHTML.push('<tr class="ns1blankspaceRow">');
 									
 									aHTML.push('<td id="ns1blankspaceSetupSpaceSubscription_membership-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-															this.membershiptext + '</td>';
+															this.membershiptext + '</td>');
 														
 									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 													'<span id="ns1blankspaceSetupSpaceSubscription_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span></td>');				
@@ -165,7 +165,7 @@ ns1blankspace.setup.space =
 									aHTML.push('</tr>');
 								});
 								
-								aHTML.push('</table>'_;
+								aHTML.push('</table>');
 							}
 							
 							$('#ns1blankspaceSubscriptionColumn1').html(aHTML.join(''));
@@ -371,7 +371,7 @@ ns1blankspace.setup.space =
 											'<tr class="ns1blankspaceSelect">' +
 											'<td class="ns1blankspaceSelect">' +
 											'<input id="ns1blankspaceAccessMethod" class="ns1blankspaceSelectCustom">' +
-											'</td></tr>';
+											'</td></tr>');
 
 							aHTML.push('</table>');					
 						}

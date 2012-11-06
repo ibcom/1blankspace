@@ -134,100 +134,108 @@ ns1blankspace.scripts2 =
 ns1blankspace.scripts =
 [
 	{
-		name: '1blankspace.advancedsearch',
+		nameSpace: '1blankspace.advancedsearch',
 		source: '/jscripts/1blankspace.advancedsearch-1.0.3.js'
 	},
 	{
-		name: '1blankspace.control',
+		nameSpace: '1blankspace.control',
 		source: '/jscripts/1blankspace.control-2.0.0.js'
 	},
 	{
-		name: '1blankspace.home',
+		nameSpace: '1blankspace.home',
 		source: '/jscripts/1blankspace.home-2.0.0.js'
 	},
 	{
-		name: '1blankspace.contactPerson',
+		nameSpace: '1blankspace.contactPerson',
 		source: '/jscripts/1blankspace.contactperson-2.0.0.js'
 	},
 	{
-		name: '1blankspace.action',
+		nameSpace: '1blankspace.action',
 		source: '/jscripts/1blankspace.action-2.0.0.js'
 	},
 	{
-		name: '1blankspace.messaging.conversation',
+		nameSpace: '1blankspace.messaging.conversation',
 		source: '/jscripts/1blankspace.messaging.conversation-2.0.0.js'
 	},
 	{
-		name: '1blankspace.messaging.imap',
+		nameSpace: '1blankspace.messaging.imap',
 		source: '/jscripts/1blankspace.messaging.imap-2.0.0.js'
 	},
 	{
-		name: '1blankspace.action',
+		nameSpace: '1blankspace.action',
 		source: '/jscripts/1blankspace.action-2.0.0.js'
 	},
 	{
-		name: '1blankspace.financial',
+		nameSpace: '1blankspace.financial',
 		source: '/jscripts/1blankspace.financial-2.0.0.js'
 	},
 	{
-		name: '1blankspace.financial.bankAccount',
+		nameSpace: '1blankspace.financial.bankAccount',
 		source: '/jscripts/1blankspace.financial.bankaccount-2.0.0.js'
 	},
 	{
-		name: '1blankspace.financial.invoice',
+		nameSpace: '1blankspace.financial.invoice',
 		source: '/jscripts/1blankspace.financial.invoice-2.0.0.js'
 	},
 	{
-		name: '1blankspace.financial.expense',
+		nameSpace: '1blankspace.financial.expense',
 		source: '/jscripts/1blankspace.financial.expense-2.0.0.js'
 	},
 	{
-		name: '1blankspace.financial.receipt',
+		nameSpace: '1blankspace.financial.receipt',
 		source: '/jscripts/1blankspace.financial.receipt-2.0.0.js'
 	},
 	{
-		name: '1blankspace.financial.payment',
+		nameSpace: '1blankspace.financial.payment',
 		source: '/jscripts/1blankspace.financial.payment-2.0.0.js'
 	},
 	{
-		name: '1blankspace.financial.tax',
+		nameSpace: '1blankspace.financial.tax',
 		source: '/jscripts/1blankspace.financial.tax-2.0.0.js'
 	},
 	{
-		name: '1blankspace.financial.payroll',
+		nameSpace: '1blankspace.financial.payroll',
 		source: '/jscripts/1blankspace.financial.payroll-2.0.0.js'
 	},
 	{
-		name: '1blankspace.product',
+		nameSpace: '1blankspace.product',
 		source: '/jscripts/1blankspace.product-2.0.0.js'
 	},
 	{
-		name: '1blankspace.order',
+		nameSpace: '1blankspace.order',
 		source: '/jscripts/1blankspace.order-2.0.0.js'
 	},
 	{
-		name: '1blankspace.setup',
+		nameSpace: '1blankspace.setup',
 		source: '/jscripts/1blankspace.setup-2.0.0.js'
 	},
 	{
-		name: '1blankspace.setup.automation',
+		nameSpace: '1blankspace.setup.automation',
 		source: '/jscripts/1blankspace.setup.automation-2.0.0.js'
 	},
 	{
-		name: '1blankspace.setup.financial',
+		nameSpace: '1blankspace.setup.financial',
 		source: '/jscripts/1blankspace.setup.financial-2.0.0.js'
 	},
 	{
-		name: '1blankspace.setup.messaging',
+		nameSpace: '1blankspace.setup.messaging',
 		source: '/jscripts/1blankspace.setup.messaging-2.0.0.js'
 	},
 	{
-		name: '1blankspace.setup.networkGroup',
+		nameSpace: '1blankspace.setup.networkGroup',
 		source: '/jscripts/1blankspace.setup.networkgroup-2.0.0.js'
 	},
 	{
-		name: '1blankspace.setup.project',
+		nameSpace: '1blankspace.setup.project',
 		source: '/jscripts/1blankspace.setup.project-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.projectTask',
+		source: '/jscripts/1blankspace.setup.projecttask-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.space',
+		source: '/jscripts/1blankspace.setup.space-2.0.0.js'
 	}
 ]
 
