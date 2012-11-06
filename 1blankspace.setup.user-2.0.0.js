@@ -69,13 +69,13 @@ ns1blankspace.setup.user =
 						
 						$('#ns1blankspaceControlInternal').click(function(event)
 						{
-							ns1blankspace.show(refresh: true});
+							ns1blankspace.show({refresh: true});
 							ns1blankspace.setup.home();
 						});
 
 						$('#ns1blankspaceControlInternal').click(function(event)
 						{
-							ns1blankspace.show(refresh: true});
+							ns1blankspace.show({refresh: true});
 							ns1blankspace.setup.external.show();
 						});
 
@@ -293,10 +293,10 @@ ns1blankspace.setup.user =
 					
 					var aHTML = [];
 				
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainMessaging" class="ns1blankspaceControlMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainMessaging" class="ns1blankspaceControlMain"></div>');
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 						
@@ -509,9 +509,8 @@ ns1blankspace.setup.user =
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
-							
-						aHTML.push('<table class="ns1blankspaceColumn2">';
+
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -535,7 +534,7 @@ ns1blankspace.setup.user =
 										'</td></tr>');
 						}				
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 						
@@ -572,7 +571,7 @@ ns1blankspace.setup.user =
 										
 										var aHTML = [];
 									
-										aHTML.push('<table class="interfaceMain">';
+										aHTML.push('<table class="interfaceMain">');
 									
 										aHTML.push('<tr class="ns1blankspaceRow">' +
 														'<td id="ns1blankspaceAccessUnrestricted" class="ns1blankspaceRadio">' +
@@ -606,13 +605,13 @@ ns1blankspace.setup.user =
 									{
 										if (ns1blankspace.objectContextData.unrestrictedaccess == 'Y')
 										{
-											aHTML.push('<table class="ns1blankspace">';
+											aHTML.push('<table class="ns1blankspace">');
 
 											aHTML.push('<tr>' +
 															'<td class="ns1blankspaceNothing" style="font-weight:600;">This user can access all functions within this space.</td></tr>' +
 															'<td class="ns1blankspaceNothing">If you select <em>restricted access</em> and save, you can then allocate predefined <em>users roles</em> to them.</td></tr>');
 
-											aHTML.push('</table>';
+											aHTML.push('</table>');
 
 											$('#ns1blankspaceAccessColumn2').html(aHTML.join(''));			
 										}
@@ -675,13 +674,13 @@ ns1blankspace.setup.user =
 
 												$(oResponse.data.rows).each(function()
 												{
-													aHTML.push('<tr id="ns1blankspaceUserRole" class="ns1blankspaceRow">';
+													aHTML.push('<tr id="ns1blankspaceUserRole" class="ns1blankspaceRow">');
 													
 													aHTML.push('<td id="ns1blankspaceUserRole_title-' + this.id + '" class="ns1blankspaceRow">' +
-																			this.roletext + '</td>';
+																			this.roletext + '</td>');
 
 													aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
-																	'<span id="ns1blankspaceUserAccessRole_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>';
+																	'<span id="ns1blankspaceUserAccessRole_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
 																	'</td>');	
 
 													aHTML.push('</tr>');
@@ -1071,7 +1070,7 @@ ns1blankspace.setup.user =
 											
 												$.each(oResponse.data.rows, function()
 												{
-													aHTML.push('<tr class="ns1blankspaceRow">';
+													aHTML.push('<tr class="ns1blankspaceRow">');
 													
 													aHTML.push('<td id="ns1blankspaceUserExternal_title-' + this.id +
 																			'" data-user="' + this.user +
@@ -1233,7 +1232,7 @@ ns1blankspace.setup.user =
 											})
 											.click(function() 
 											{
-												ns1blankspace.dialog.position({xhtmlElementID: 'ns1blankspaceSetupUserExternalEditRole', leftOffset: -42, topOffset: -258);
+												ns1blankspace.dialog.position({xhtmlElementID: 'ns1blankspaceSetupUserExternalEditRole', leftOffset: -42, topOffset: -258});
 												oParam.user = $('#ns1blankspaceSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.userType = 2;
 												ns1blankspace.setup.user.add(oParam);
@@ -1282,7 +1281,7 @@ ns1blankspace.setup.user =
 												aHTML.push('<tr class="ns1blankspaceRow">');
 												
 												aHTML.push('<td id="ns1blankspaceExternalUserRole_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-																this.roletext + '</td>';
+																this.roletext + '</td>');
 
 												aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">' +
 																'<span id="ns1blankspaceExternalAccessRole_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span></td>');
@@ -1292,7 +1291,7 @@ ns1blankspace.setup.user =
 										
 											if (aHTML.length != 1)
 											{	
-												aHTML.push('</table>';
+												aHTML.push('</table>');
 												
 												$('#ns1blankspaceExternalUserRoles').html(aHTML.join(''));
 
