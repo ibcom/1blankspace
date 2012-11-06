@@ -204,6 +204,10 @@ ns1blankspace.scripts =
 	{
 		name: '1blankspace.order',
 		source: '/jscripts/1blankspace.order-2.0.0.js'
+	},
+	{
+		name: '1blankspace.setup',
+		source: '/jscripts/1blankspace.setup-2.0.0.js'
 	}
 ]
 
@@ -273,7 +277,7 @@ ns1blankspace.app =
 
 					$('#divInterfaceMasterViewportControl').html(
 							'<img class="ns1blankspaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">' +
-							' Your app is loading... (smile)');
+							' The app is loading... (smile)');
 
 					ns1blankspace.option = {};
 					ns1blankspace.timer = {};

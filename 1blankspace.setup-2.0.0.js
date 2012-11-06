@@ -57,7 +57,7 @@ $.extend(true, ns1blankspace.setup,
 				{
 					var aHTML = [];
 
-					aHTML.push('<table class="ns1blankspace">';
+					aHTML.push('<table class="ns1blankspace">');
 					aHTML.push('<tr><td id="ns1blankspaceSetup">' +
 									ns1blankspace.xhtml.loading + 
 									'</td></tr></table>');					
@@ -71,7 +71,7 @@ $.extend(true, ns1blankspace.setup,
 					aHTML.push('<tr class="ns1blankspaceRow">');
 					aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
 					aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right"><span id="ns1blankspaceSetupAdd">Add</span></td>');
-					aHTML.push('</tr>';
+					aHTML.push('</tr>');
 					
 					if (oResponse.data.rows.length == 0)
 					{
@@ -83,7 +83,7 @@ $.extend(true, ns1blankspace.setup,
 					{	
 						$.each(oResponse.data.rows, function()
 						{
-							aHTML.push('<tr class="ns1blankspaceRow">';
+							aHTML.push('<tr class="ns1blankspaceRow">');
 										
 							aHTML.push('<td id="ns1blankspaceSetup-' + this.id + 
 											'" class="ns1blankspaceRow ns1blankspaceSetup">' +
@@ -145,7 +145,7 @@ $.extend(true, ns1blankspace.setup,
 					aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
 											'<span id="ns1blankspaceSetup_options_remove-" class="ns1blankspaceRowRemove"></span></td>');
 
-					aHTML.push('</tr>'
+					aHTML.push('</tr>');
 							
 					$('#ns1blankspaceSetupContainer > tr:first').after(aHTML.join(''));	
 					$('#ns1blankspaceViewControlNew').button({disabled: true});
@@ -211,7 +211,7 @@ $.extend(true, ns1blankspace.setup,
 											});
 										}
 									};	
-								}
+								},
 
 					process:	function (oResponse)
 								{
@@ -238,7 +238,7 @@ $.extend(true, ns1blankspace.setup,
 											
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
-															this.title + '</td>';
+															this.title + '</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
@@ -256,7 +256,7 @@ $.extend(true, ns1blankspace.setup,
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.setup.search.send(event.target.id, 1);
+											ns1blankspace.setup.search.send(event.target.id, {source: 1});
 										});
 									}		
 								}
@@ -264,14 +264,14 @@ $.extend(true, ns1blankspace.setup,
 
 	layout:		function ()
 				{
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="divInterfaceViewportMain">&nbsp;</div>';
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="divInterfaceViewportMain">&nbsp;</div>');
 						
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 					$('#tdInterfaceViewportControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceSetupDetails();
+						ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+						ns1blankspace.setup.details();
 					})
 				},
 
@@ -342,7 +342,7 @@ $.extend(true, ns1blankspace.setup,
 										{
 											type: 'POST',
 											url: ns1blankspace.util.endpointURI(ns1blankpsace.setup.method + '_MANAGE'),
-											data: 'title=' + ns1blankspace.util.fs($('#' + sElementID.replace('td', 'input')).val());
+											data: 'title=' + ns1blankspace.util.fs($('#' + sElementID.replace('td', 'input')).val()),
 											dataType: 'json',
 											success: function(data) 
 													{
