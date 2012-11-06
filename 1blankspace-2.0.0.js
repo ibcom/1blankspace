@@ -170,7 +170,7 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.financial-2.0.0.js'
 	},
 	{
-		name: '1blankspace.financial.bankaccount',
+		name: '1blankspace.financial.bankAccount',
 		source: '/jscripts/1blankspace.financial.bankaccount-2.0.0.js'
 	},
 	{
@@ -220,6 +220,10 @@ ns1blankspace.scripts =
 	{
 		name: '1blankspace.setup.messaging',
 		source: '/jscripts/1blankspace.setup.messaging-2.0.0.js'
+	},
+	{
+		name: '1blankspace.setup.networkGroup',
+		source: '/jscripts/1blankspace.setup.networkgroup-2.0.0.js'
 	}
 ]
 

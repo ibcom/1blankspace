@@ -248,15 +248,15 @@ ns1blankspace.setup.networkGroup =
 										'Add User</td></tr>');
 					}	
 					
-					aHTML.push('</table>';			
+					aHTML.push('</table>');			
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 					
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainUserAdd" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainUserAdd" class="ns1blankspaceControl"></div>');
 						
 					$('#ns1blankspaceControlMain').html(aHTML.join(''));
 
@@ -279,7 +279,7 @@ ns1blankspace.setup.networkGroup =
 					});
 				},
 
-	show:		function interfaceSetupNetworkGroupShow(oResponse)
+	show:		function (oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					ns1blankspace.setup.messaging.layout();
@@ -309,9 +309,9 @@ ns1blankspace.setup.networkGroup =
 						
 						ns1blankspace.history.object({functionDefault: 'ns1blankspace.setup.networkGroup.summary()'});
 					}	
-				}		
+				},		
 						
-	summary:	function interfaceSetupNetworkGroupSummary()
+	summary:	function ()
 				{
 					var aHTML = [];
 					
@@ -342,7 +342,7 @@ ns1blankspace.setup.networkGroup =
 						}
 						else
 						{	
-							aHTML.push('Contact synchronisation is disabled.)'
+							aHTML.push('Contact synchronisation is disabled.');
 						}	
 
 						aHTML.push('</td></tr>');
@@ -438,7 +438,7 @@ ns1blankspace.setup.networkGroup =
 
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">';
+										aHTML.push('<table class="ns1blankspace">');
 												
 										aHTML.push('<tr><td id="ns1blankspaceMainUsersAdd" class="ns1blankspaceTextMulti">' +
 														'<span id="ns1blankspaceUsersAdd">Add</span>' +
@@ -465,7 +465,7 @@ ns1blankspace.setup.networkGroup =
 									{
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceContainer">';
+										aHTML.push('<table class="ns1blankspaceContainer">');
 												
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -498,9 +498,9 @@ ns1blankspace.setup.networkGroup =
 										aHTML.push('<tr class="ns1blankspaceAction">' +
 														'<td class="ns1blankspaceTextMulti">' +
 														'<span id="ns1blankspaceUsersAddAdd">Add</span>' +
-														'</td></tr>';
+														'</td></tr>');
 									
-										aHTML.push('</table>';					
+										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceUsersColumn2').html(aHTML.join(''));
 										
@@ -532,12 +532,11 @@ ns1blankspace.setup.networkGroup =
 										{
 											var aHTML = [];
 											
-
-											aHTML.push('<table>';
+											aHTML.push('<table>');
 													
 											aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 															ns1blankspace.xhtml.loadingSmall +
-															' &nbsp;Adding userss...'
+															' &nbsp;Adding userss...' +
 															'</td></tr>');
 											
 											aHTML.push('</table>');					
