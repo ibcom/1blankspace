@@ -116,18 +116,6 @@ ns1blankspace.scriptsCore =
 	{
 		nameSpace: 'touch',
 		source: '/jscripts/jquery.touchwipe.1.1.1.min.js'
-	},
-	{
-		nameSpace: '1blankspace.advancedsearch',
-		source: '/jscripts/1blankspace.advancedsearch-1.0.3.js'
-	},
-	{
-		nameSpace: '1blankspace.control',
-		source: '/jscripts/1blankspace.control-2.0.0.js'
-	},
-	{
-		nameSpace: '1blankspace.home',
-		source: '/jscripts/1blankspace.home-2.0.0.js'
 	}
 ]
 
@@ -268,6 +256,10 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.supportIssue',
 		source: '/jscripts/1blankspace.supportissue-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.developer.control',
+		source: '/jscripts/1blankspace.developer.control-2.0.0.js'
 	}
 ]
 
