@@ -314,7 +314,6 @@ ns1blankspace.setup.websiteForm =
 					$('#divInterfaceViewportControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 
 					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
 					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
@@ -339,9 +338,9 @@ ns1blankspace.setup.websiteForm =
 						ns1blankspaceMainViewportShow("#divInterfaceMainStructure");
 						interfaceSetupWebsiteFormStructureCheck();
 					});
-				}
+				},
 
-				function interfaceSetupWebsiteFormShow(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
 
 					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
