@@ -154,6 +154,18 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.action-2.0.0.js'
 	},
 	{
+		name: '1blankspace.messaging.conversation',
+		source: '/jscripts/1blankspace.messaging.conversation-2.0.0.js'
+	},
+	{
+		name: '1blankspace.messaging.imap',
+		source: '/jscripts/1blankspace.messaging.imap-2.0.0.js'
+	},
+	{
+		name: '1blankspace.action',
+		source: '/jscripts/1blankspace.action-2.0.0.js'
+	},
+	{
 		name: '1blankspace.financial',
 		source: '/jscripts/1blankspace.financial-2.0.0.js'
 	},
@@ -186,12 +198,8 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.financial.payroll-2.0.0.js'
 	},
 	{
-		name: '1blankspace.messaging.conversation',
-		source: '/jscripts/1blankspace.messaging.conversation-2.0.0.js'
-	},
-	{
-		name: '1blankspace.messaging.imap',
-		source: '/jscripts/1blankspace.messaging.imap-2.0.0.js'
+		name: '1blankspace.order',
+		source: '/jscripts/1blankspace.order-2.0.0.js'
 	}
 ]
 

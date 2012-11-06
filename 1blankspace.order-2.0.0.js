@@ -150,7 +150,7 @@ ns1blankspace.order =
 											ns1blankspace.order.search.send(event.target.id, {source: 1});
 										});
 									}
-								}
+								},
 
 					status:		{
 									show: 		function (oParam, oResponse)
@@ -182,11 +182,11 @@ ns1blankspace.order =
 														}
 														else
 														{			
-															aHTML.push('<table class="ns1blankspaceContainer">';
+															aHTML.push('<table class="ns1blankspaceContainer">');
 															
 															$.each(oResponse.data.rows, function()
 															{
-																aHTML.push(ns1blankspace.home.status.row(this)
+																aHTML.push(ns1blankspace.home.status.row(this));
 															});
 															
 															aHTML.push('</table>');
@@ -314,7 +314,7 @@ ns1blankspace.order =
 											oSearch.getResults(function(data) {ns1blankspace.order.search.show(oParam, data)});
 										}
 									};	
-								}
+								},
 
 					process:	function (oParam, oResponse)
 								{
@@ -342,7 +342,7 @@ ns1blankspace.order =
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
 															this.reference +
-															'</td>';
+															'</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
@@ -403,9 +403,9 @@ ns1blankspace.order =
 						aHTML.push('<tr><td id="ns1blankspaceControlInvoices" class="ns1blankspaceControl">' +
 										'Invoices</td></tr>');
 
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 
-						aHTML.push('<table class="ns1blankspaceControlContainer">';
+						aHTML.push('<table class="ns1blankspaceControlContainer">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
@@ -414,7 +414,7 @@ ns1blankspace.order =
 										'Attachments</td></tr>');
 					}	
 					
-					aHTML.push('</table>';					
+					aHTML.push('</table>');					
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
@@ -496,12 +496,12 @@ ns1blankspace.order =
 
 						if (ns1blankspace.objectContextData.categorytext != '')
 						{
-							aHTML.push('<span id="ns1blankspaceControlContext_category" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.categorytext + '</span>'
+							aHTML.push('<span id="ns1blankspaceControlContext_category" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.categorytext + '</span>');
 						}
 						
 						if (ns1blankspace.objectContextData.currentretailprice != '')
 						{
-							aHTML.push('<span id="ns1blankspaceControlContext_price" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.currentretailprice + '</span>'
+							aHTML.push('<span id="ns1blankspaceControlContext_price" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.currentretailprice + '</span>');
 						}
 
 						$('#ns1blankspaceControlContext').html(aHTML.join(''));
@@ -566,16 +566,16 @@ ns1blankspace.order =
 						{				
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Deliver To</td></tr>' +
 											'<tr><td class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.streetaddresscombined;
+											ns1blankspace.objectContextData.streetaddresscombined);
 											
 							if (ns1blankspace.objectContextData.streetsuburb != '')
 							{				
-								aHTML.push('<br />' +	ns1blankspace.objectContextData.streetsuburb;
+								aHTML.push('<br />' +	ns1blankspace.objectContextData.streetsuburb);
 							}
 											
 							if (ns1blankspace.objectContextData.streetstate != '')
 							{				
-								aHTML.push('<br />' +	ns1blankspace.objectContextData.streetstate;		
+								aHTML.push('<br />' +	ns1blankspace.objectContextData.streetstate);		
 							}
 							
 							aHTML.push('</td></tr>');
@@ -588,13 +588,13 @@ ns1blankspace.order =
 
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspace">';
+						aHTML.push('<table class="ns1blankspace">');
 						
 						if (ns1blankspace.objectContextData.statustext != '')
 						{	
 							aHTML.push('<tr><td class="ns1blankspaceSummary" style="padding-bottom:10px;">' +
 										ns1blankspace.objectContextData.statustext +
-										'</td></tr>';				
+										'</td></tr>');				
 						}
 						
 						if (ns1blankspace.objectContextData.status == 7)
@@ -743,7 +743,7 @@ ns1blankspace.order =
 										'<textarea id="ns1blankspaceDetailsNotes" class="ns1blankspaceTextMulti" style="width:350px; height:120px;" rows="5" cols="35"></textarea>' +
 										'</td></tr>');
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 							
 						$('#tdns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
 
@@ -974,7 +974,7 @@ ns1blankspace.order =
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceColumn2">';
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
 										if (ns1blankspace.objectContextData.status == 2)
 										{
@@ -1022,7 +1022,7 @@ ns1blankspace.order =
 											
 											$.each(oResponse.data.rows, function() 
 											{ 
-												aHTML.push(ns1blankspace.order.items.row(this);
+												aHTML.push(ns1blankspace.order.items.row(this));
 											});
 											
 											aHTML.push('</table>');
@@ -1043,7 +1043,7 @@ ns1blankspace.order =
 											ns1blankspace.order.items.bind();
 										}
 									}	
-								}	
+								},	
 
 					row:		function (oRow)
 								{
@@ -1052,18 +1052,18 @@ ns1blankspace.order =
 									aHTML.push('<tr class="ns1blankspaceRow">');
 									
 									aHTML.push('<td id="ns1blankspaceOrderItems_title-' + oRow.id + '" class="ns1blankspaceRow">' +
-															oRow.producttext + '</td>';	
+															oRow.producttext + '</td>');	
 															
 									aHTML.push('<td id="ns1blankspaceOrderItems_quantity-' + oRow.id + '" class="ns1blankspaceRow"' +
 															' style="text-align:right;">' +
-															oRow.quantity + '</td>';						
+															oRow.quantity + '</td>');						
 																
 									aHTML.push('<td id="ns1blankspaceOrderItems_price-' + oRow.id + '" class="ns1blankspaceRow"' +
 															' style="text-align:right;">' +
-															oRow.totalcost + '</td>';					
+															oRow.totalcost + '</td>');					
 														
-									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">';	
-									aHTML.push('<span id="ns1blankspaceOrderItems_remove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>';
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">');	
+									aHTML.push('<span id="ns1blankspaceOrderItems_remove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>');
 									//aHTML.push('<span id="spanOrderProductItems_options_view-' + oRow.id + '" class="ns1blankspaceRowView"></span>';
 									aHTML.push('</td>');
 																									
@@ -1153,7 +1153,7 @@ ns1blankspace.order =
 										{
 											var aHTML = [];
 													
-											aHTML.push('<table>';
+											aHTML.push('<table>');
 
 											aHTML.push('<tr class="ns1blankspaceCaption">' +
 															'<td class="ns1blankspaceCaption">' +
@@ -1172,9 +1172,9 @@ ns1blankspace.order =
 											
 											aHTML.push('<table style="margin-top:15px;">');
 											
-											aHTML.push('<tr><td id="ns1blankspaceItemsProductSearchResults"></td></tr>';
+											aHTML.push('<tr><td id="ns1blankspaceItemsProductSearchResults"></td></tr>');
 																			
-											aHTML.push('</table>';		
+											aHTML.push('</table>');		
 											
 											$('#ns1blankspaceItemsColumn2').html(aHTML.join(''));
 
@@ -1219,10 +1219,10 @@ ns1blankspace.order =
 												aHTML.push('<tr class="ns1blankspaceRow">');	
 															
 												aHTML.push('<td id="ns1blankspaceOrderItems_title-' + this.id + '" class="ns1blankspaceRow">' +
-																		this.title + '</td>';
+																		this.title + '</td>');
 																		
 												aHTML.push('<td id="ns1blankspaceOrderItems_units2-' + this.id + '" class="ns1blankspaceRow">' +
-																'<input style="width:25px;" id="ns1blankspaceOrderItems__units-' + this.id + '" class="ns1blankspaceText"></td>';						
+																'<input style="width:25px;" id="ns1blankspaceOrderItems__units-' + this.id + '" class="ns1blankspaceText"></td>');						
 														
 												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' + 
 																'<span id="ns1blankspaceOrderItems_add-' + this.id + '" class="ns1blankspaceRowAdd"></span></td>');
@@ -1230,7 +1230,7 @@ ns1blankspace.order =
 												aHTML.push('</tr>');
 											});
 											
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>');
 
 											$('#ns1blankspaceItemsProductSearchResults').html(aHTML.join(''))
 											
@@ -1393,17 +1393,16 @@ ns1blankspace.order =
 										else
 										{
 										
-											aHTML.push('<table class="ns1blankspaceContainer">';
-											aHTML.push('<tbody>'
-											aHTML.push('<tr class="ns1blankspaceCaption">';
-											aHTML.push('<td class="ns1blankspaceCaption">Date</td>';
-											aHTML.push('<td class="ns1blankspaceCaption">Notes</td>';
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>';
-											aHTML.push('</tr>';
+											aHTML.push('<table class="ns1blankspaceContainer">');
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Notes</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
 												
 											$.each(oResponse.data.rows, function() 
 											{
-												aHTML.push(ns1blankspace.order.deliveries.row(this);
+												aHTML.push(ns1blankspace.order.deliveries.row(this));
 											});
 											
 											aHTML.push('</table>');
@@ -1508,20 +1507,20 @@ ns1blankspace.order =
 										else
 										{
 											aHTML.push('<table id="ns1blankspaceOrderPick" class="ns1blankspaceContainer">');
-											aHTML.push('<tr class="ns1blankspaceCaption">';
-											aHTML.push('<td class="ns1blankspaceCaption">Product</td>';
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Quantity Ordered</td>';
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Already Delivered</td>';
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">This street</td>';
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>';
-											aHTML.push('</tr>';
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption">Product</td>');
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Quantity Ordered</td>');
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Already Delivered</td>');
+											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">This street</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
 												
 											$.each(oResponse.data.rows, function() 
 											{ 
-												aHTML.push(ns1blankspace.order.pick.row(this);
+												aHTML.push(ns1blankspace.order.pick.row(this));
 											});
 											
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>');
 
 											ns1blankspace.pagination.list(
 											{
@@ -1658,10 +1657,10 @@ ns1blankspace.order =
 												
 											$.each(oResponse.data.rows, function() 
 											{
-												aHTML.push(ns1blankspace.order.invoices.row(this);
+												aHTML.push(ns1blankspace.order.invoices.row(this));
 											});
 											
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>');
 
 											ns1blankspace.pagination.list(
 											{
