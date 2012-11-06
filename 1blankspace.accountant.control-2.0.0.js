@@ -117,20 +117,20 @@ ns1blankspace.views =
 	}
 ]
 
-ns1blankspace.views.show = function ()
+ns1blankspace.control.views.show = function ()
 {
 	if (ns1blankspace.xhtml.viewControl == undefined)
 	{
 		var aHTML = [];
 
-		aHTML.push('<table id='ns1blankspaceViewControl' class='ns1blankspaceViewControlContainer'>');
-		aHTML.push('<tr class='ns1blankspaceViewControlColumnContainer'>');
+		aHTML.push('<table id="ns1blankspaceViewControl" class="ns1blankspaceViewControlContainer">');
+		aHTML.push('<tr class="ns1blankspaceViewControlColumnContainer">');
 
 		$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
 		{
 			aHTML.push('<tr class="ns1blankspaceViewControl">' +
-							'<td id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace '"" class="interfaceViewControl">' +
-							'<span id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace '" class="interfaceViewControl">' + 
+							'<td id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace + '"" class="interfaceViewControl">' +
+							'<span id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace + '" class="interfaceViewControl">' + 
 							this.title + '</span>' +
 							'</td></tr>');
 		});		
@@ -145,7 +145,7 @@ ns1blankspace.views.show = function ()
 	});	
 }			
 
-ns1blankspace.views.bind = function ()
+ns1blankspace.control.views.bind = function ()
 {
 	$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
 	{
@@ -164,22 +164,23 @@ ns1blankspace.views.bind = function ()
 
 			oNS.init();
 		});
+	});	
 }			
 
-ns1blankspace.setup.views.show = function ()
+ns1blankspace.control.setup.views.show = function ()
 {
 	if (ns1blankspace.xhtml.setupViewControl == undefined)
 	{
 		var aHTML = [];
 
-		aHTML.push('<table id='ns1blankspaceViewControl' class='ns1blankspaceViewControlContainer'>');
-		aHTML.push('<tr class='ns1blankspaceViewControlColumnContainer'>');
+		aHTML.push('<table id="ns1blankspaceViewControl" class="ns1blankspaceViewControlContainer">');
+		aHTML.push('<tr class="ns1blankspaceViewControlColumnContainer">');
 
 		$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
 		{
 			aHTML.push('<tr class="ns1blankspaceViewControl">' +
-							'<td id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace '" class="interfaceViewControl">' +
-							'<span id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace '" class="interfaceViewControl">' + 
+							'<td id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace + '" class="interfaceViewControl">' +
+							'<span id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace + '" class="interfaceViewControl">' + 
 							this.title + '</span>' +
 							'</td></tr>');
 		});		
@@ -194,7 +195,7 @@ ns1blankspace.setup.views.show = function ()
 	});	
 }			
 
-ns1blankspace.setup.views.bind = function ()
+ns1blankspace.control.setup.views.bind = function ()
 {
 	$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
 	{
@@ -213,4 +214,5 @@ ns1blankspace.setup.views.bind = function ()
 
 			oNS.init();
 		});
+	});	
 }			

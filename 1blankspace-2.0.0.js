@@ -260,6 +260,10 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.developer.control',
 		source: '/jscripts/1blankspace.developer.control-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.accountant.control',
+		source: '/jscripts/1blankspace.accountant.control-2.0.0.js'
 	}
 ]
 
