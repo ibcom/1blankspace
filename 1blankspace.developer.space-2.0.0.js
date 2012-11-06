@@ -4,7 +4,9 @@
  * http://1blankspace.com/license
  * 01 FEB 2010
  */
- 
+
+if (ns1blankspace.developer == undefined) {ns1blankspace.developer = {}}
+
 ns1blankspace.developer.space = 
 {
 	init: 		function ()
@@ -142,7 +144,7 @@ ns1blankspace.developer.space =
 										{
 											type: 'GET',
 											url: ns1blankspace.util.endpointURI('ADMIN_REGISTRATION_SEARCH'),
-											data: 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext)
+											data: 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext),
 											dataType: 'json',
 											success: function(data) {ns1blankspace.developer.space.show(aParam, data)}
 										});
@@ -230,7 +232,7 @@ ns1blankspace.developer.space =
 											ns1blankspace.developer.space.search(event.target.id, {source: 1});
 										});
 									}	
-											
+								}			
 				},
 
 	layout:		function ()
@@ -487,7 +489,7 @@ ns1blankspace.developer.space =
 										'<input id="ns1blankspaceDetailsEnterpriseName" class="ns1blankspaceText">' +
 										'</td></tr>');		
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
@@ -497,7 +499,7 @@ ns1blankspace.developer.space =
 						}
 					}	
 					
-				}.
+				},
 
 	subscriptions:
 
@@ -548,7 +550,7 @@ ns1blankspace.developer.space =
 
 							var aHTML = [];
 
-							aHTML.push('<table>';
+							aHTML.push('<table>');
 							
 							aHTML.push('<tr><td><span id="ns1blankspaceSpaceSubscriptionsAdd">Add</span>' +
 															'</td></tr>');
@@ -642,7 +644,7 @@ ns1blankspace.developer.space =
 							
 							if (oResponse.data.rows.length == 0)
 							{
-								aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceSearchMedium">';
+								aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceSearchMedium">');
 								aHTML.push('<tr><td class="ns1blankspaceNothing">No subscriptions.</td></tr>');
 								aHTML.push('</table>');
 
@@ -655,7 +657,7 @@ ns1blankspace.developer.space =
 								
 								$.each(oResponse.data.rows, function()
 								{	
-									aHTML.push('<tr class="ns1blankspaceRow">';
+									aHTML.push('<tr class="ns1blankspaceRow">');
 									
 									aHTML.push('<td id="ns1blankspaceSpaceSubscriptionsSelect_title-' + this.id + '" class="ns1blankspaceRowSelect">' +
 															this.title + '</td>');
@@ -736,11 +738,10 @@ ns1blankspace.developer.space =
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table class="ns1blankspace">';
+							aHTML.push('<table class="ns1blankspace">');
 							aHTML.push('<tr><td class="ns1blankspaceNothing">No users.</td></tr>');
 							aHTML.push('<table>');
 
@@ -797,11 +798,11 @@ ns1blankspace.developer.space =
 										{
 											iContactBusinessId = $('#inputns1blankspaceMainDetailsContactBusiness').attr('data-id');
 											iContactPersonId = $('#inputns1blankspaceMainDetailsContactPerson').attr('data-id');
-										};
+										}
 
 										if ($('#divns1blankspaceMainNew').html() != '' && (iContactBusinessId == '' || iContactPersonId == ''))
 										{
-											ns1blankspaceMasterStatusWorking();
+											ns1blankspace.status.working();
 
 											var sReturn;
 											var sParam = 'method=REGISTER_SPACE';
@@ -830,11 +831,11 @@ ns1blankspace.developer.space =
 													}
 													else
 													{
-														ns1blankspaceMasterError(aResponse[1]);
+														ns1blankspace.status.error(aResponse[1]);
 													}
 												}
 											});
-										};
+										}
 									}
 								}
 				}				
