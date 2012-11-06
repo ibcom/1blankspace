@@ -195,9 +195,9 @@ ns1blankspace.setup.project =
 											
 										}
 									};	
-								}
+								},
 
-					process:	function interfaceSetupProjectSearchShow(oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
 
 									var iColumn = 0;
@@ -774,29 +774,31 @@ ns1blankspace.setup.project =
 											}
 										}	
 									}	
-								}	
+								},	
 
-					save:		function interfaceSetupProjectTaskAddSave()
-								{
-									var sParam = '/ondemand/project/?method=PROJECT_TASK_MANAGE'
-									var sData = 'project=' + ns1blankspace.objectContext;
-									
-									sData += '&title=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsTitle').val());
-									sData += '&type=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsType').attr('onDemandID'));
-									sData += '&taskbyuser=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsTaskBy').attr('onDemandID'));
-									sData += '&taskdependson=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID'));
-									sData += '&taskstartbasedon=' + $('input[name="radioStartBasedOn"]:checked').val();
-									sData += '&daysbeforestart=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsStartDays').val());
-									sData += '&durationdays=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsDurationDays').val());
-									sData += '&displayorder=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsDisplayOrder').val());
-									sData += '&description=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsDescription').val());
-									
-									ns1blankspaceSave(sParam, sData, 'Template Task Added');
-									ns1blankspaceMainViewportShow("#divInterfaceMainTasks", true);
-									interfaceSetupProjectTasks();	
-								}
+					save:		{
+									send:		function ()
+												{
+													var sParam = '/ondemand/project/?method=PROJECT_TASK_MANAGE'
+													var sData = 'project=' + ns1blankspace.objectContext;
+													
+													sData += '&title=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsTitle').val());
+													sData += '&type=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsType').attr('onDemandID'));
+													sData += '&taskbyuser=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsTaskBy').attr('onDemandID'));
+													sData += '&taskdependson=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID'));
+													sData += '&taskstartbasedon=' + $('input[name="radioStartBasedOn"]:checked').val();
+													sData += '&daysbeforestart=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsStartDays').val());
+													sData += '&durationdays=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsDurationDays').val());
+													sData += '&displayorder=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsDisplayOrder').val());
+													sData += '&description=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsDescription').val());
+													
+													ns1blankspaceSave(sParam, sData, 'Template Task Added');
+													ns1blankspaceMainViewportShow("#divInterfaceMainTasks", true);
+													interfaceSetupProjectTasks();	
+												}
+								},				
 
-					remove:		function interfaceSetupProjectTasksRemove(sXHTMLElementId)
+					remove:		function (sXHTMLElementId)
 								{
 
 									var aSearch = sXHTMLElementId.split('-');
@@ -818,7 +820,7 @@ ns1blankspace.setup.project =
 				},				
 
 	save: 		{
-					send:		function interfaceSetupProjectSave()
+					send:		function ()
 								{
 									var sParam = '/ondemand/project/?method=PROJECT_MANAGE'
 									var sData = (ns1blankspace.objectContext == -1)?'':'&id=' + ns1blankspace.objectContext;

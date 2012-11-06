@@ -224,6 +224,10 @@ ns1blankspace.scripts =
 	{
 		name: '1blankspace.setup.networkGroup',
 		source: '/jscripts/1blankspace.setup.networkgroup-2.0.0.js'
+	},
+	{
+		name: '1blankspace.setup.project',
+		source: '/jscripts/1blankspace.setup.project-2.0.0.js'
 	}
 ]
 
