@@ -279,7 +279,7 @@ ns1blankspace.product =
 										'Attachments</td></tr>');
 					}	
 					
-					aHTML.push('</table>';					
+					aHTML.push('</table>');					
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
@@ -287,7 +287,7 @@ ns1blankspace.product =
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainPricing" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainPricing" class="ns1blankspaceControl"></div>');
 					aHTML.push('<div id="ns1blankspaceMainCategory" class="ns1blankspaceControl"></div>');
 					aHTML.push('<div id="ns1blankspaceMainSupplier" class="ns1blankspaceControl"></div>');
 					aHTML.push('<div id="ns1blankspaceMainStock" class="ns1blankspaceControl"></div>');
@@ -331,22 +331,6 @@ ns1blankspace.product =
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments'});
 						ns1blankspace.attachments.show();
 					});
-							
-					$('#ns1blankspaceViewportControl').html(aHTML.join(''));
-					
-					var aHTML = [];
-					var h = -1;
-
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainPricing" class="ns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainCategory" class="ns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainSupplier" class="ns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainStock" class="ns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceViewportMain"></div>';
-					
-					$('#ns1blankspaceMain').html(aHTML.join(''));
 				},
 
 	show:		function (oParam, oResponse)
@@ -372,17 +356,17 @@ ns1blankspace.product =
 
 						if (ns1blankspace.objectContextData.reference != '')
 						{
-							aHTML.push('<span id="ns1blankspaceControlContext_reference" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.reference + '</span>'
+							aHTML.push('<span id="ns1blankspaceControlContext_reference" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.reference + '</span>');
 						}
 						
 						if (ns1blankspace.objectContextData.categorytext != '')
 						{
-							aHTML.push('<span id="ns1blankspaceControlContext_category" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.categorytext + '</span>'
+							aHTML.push('<span id="ns1blankspaceControlContext_category" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.categorytext + '</span>');
 						}
 						
 						if (ns1blankspace.objectContextData.currentretailprice != '')
 						{
-							aHTML.push('<span id="ns1blankspaceControlContext_price" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.currentretailprice + '</span>'
+							aHTML.push('<span id="ns1blankspaceControlContext_price" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.currentretailprice + '</span>');
 						}
 
 						$('#ns1blankspaceControlContext').html(aHTML.join(''));
@@ -509,7 +493,7 @@ ns1blankspace.product =
 						
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspaceColumn2">';
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -623,7 +607,7 @@ ns1blankspace.product =
 										
 										var aHTML = [];
 								
-										aHTML.push('<table class="ns1blankspace">';
+										aHTML.push('<table class="ns1blankspace">');
 										
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -641,7 +625,7 @@ ns1blankspace.product =
 												if (this.title != '')
 												{
 													aHTML.push('<input type="radio" id="radioPricingGroup' + this.id + '" name="radioPricingGroup" value="' + this.id + ' "/>' +
-																this.title + '<br />';
+																this.title + '<br />');
 												}				
 											});
 										}
@@ -674,11 +658,11 @@ ns1blankspace.product =
 						{
 							var aHTML = [];
 								
-							aHTML.push('<table class="ns1blankspace">';
+							aHTML.push('<table class="ns1blankspace">');
 
 							if (oResponse.data.rows == 0)
 							{
-								aHTML.push('<tr><td class="ns1blankspaceNothing">No categories.</td></tr>';
+								aHTML.push('<tr><td class="ns1blankspaceNothing">No categories.</td></tr>');
 							}
 							else
 							{
@@ -723,7 +707,7 @@ ns1blankspace.product =
 						
 						var aHTML = [];
 
-						aHTML.push('<table class="ns1blankspace">';
+						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -845,7 +829,7 @@ ns1blankspace.product =
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.fs(util.endpointURL('PRODUCT_MANAGE'),
+										url: ns1blankspace.util.fs('PRODUCT_MANAGE'),
 										data: sData,
 										dataType: 'json',
 										success: ns1blankspace.product.save.process

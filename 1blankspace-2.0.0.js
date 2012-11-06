@@ -198,6 +198,10 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.financial.payroll-2.0.0.js'
 	},
 	{
+		name: '1blankspace.product',
+		source: '/jscripts/1blankspace.product-2.0.0.js'
+	},
+	{
 		name: '1blankspace.order',
 		source: '/jscripts/1blankspace.order-2.0.0.js'
 	}
