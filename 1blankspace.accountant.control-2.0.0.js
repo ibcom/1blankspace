@@ -14,6 +14,18 @@ ns1blankspace.xhtml.logonNotes =
 	'<br /><br /><hr />' +
 	'<br /><br /><a href="http://mydigitalstructure.com/terms" target="_blank">By logging on you agree to the  mydigitalstructure terms of use</a>';
 	
+ns1blankspace.scripts.push(
+	{
+		nameSpace: '1blankspace.accountant.control',
+		source: '/jscripts/1blankspace.accountant.control-2.0.0.js'
+	});
+
+ns1blankspace.scripts.push(
+	{
+		nameSpace: '1blankspace.accountant.home',
+		source: '/jscripts/1blankspace.accountant.home-2.0.0.js'
+	});
+
 ns1blankspace.views = 
 [
 	{

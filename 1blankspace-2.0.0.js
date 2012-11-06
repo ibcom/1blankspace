@@ -262,11 +262,14 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.developer.control-2.0.0.js'
 	},
 	{
-		nameSpace: '1blankspace.accountant.control',
-		source: '/jscripts/1blankspace.accountant.control-2.0.0.js'
-	}
+		nameSpace: '1blankspace.developer.home',
+		source: '/jscripts/1blankspace.developer.home-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.developer.membership',
+		source: '/jscripts/1blankspace.developer.membership-2.0.0.js'
+	},
 ]
-
 
 window.onbeforeunload = function() 
 {

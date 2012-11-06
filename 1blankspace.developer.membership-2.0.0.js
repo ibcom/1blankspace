@@ -5,11 +5,12 @@
  * 01 FEB 2010
  */
 
+if (ns1blankspace.developer == undefined) {ns1blankspace.developer = {}}
+
 ns1blankspace.developer.membership = 
 {
 	init: 		function ()
 				{
-
 					var bShowHome = true
 					
 					if (oParam != undefined)
@@ -164,7 +165,6 @@ ns1blankspace.developer.membership =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											
 											ns1blankspace.container.position({xhtmlElementID: sElementID});
 											ns1blankspace.search.start(sElementId);
 
@@ -176,9 +176,8 @@ ns1blankspace.developer.membership =
 												dataType: 'json',
 												success: function(data) {ns1blankspace.developer.membership.search.process(oParam, data)}
 											});
-											
 										}
-									};	
+									}	
 								},
 
 					process:	function (oParam, oResponse)
@@ -269,8 +268,8 @@ ns1blankspace.developer.membership =
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainEndpoints" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainSubscriptions" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainEndpoints" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSubscriptions" class="ns1blankspaceControl"></div>');
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
@@ -456,7 +455,7 @@ ns1blankspace.developer.membership =
 
 						if (oResponse.data.rows == 0)
 						{
-							aHTML.push('No subscriptions';
+							aHTML.push('No subscriptions');
 						}
 						else
 						{		
@@ -539,10 +538,10 @@ ns1blankspace.developer.membership =
 											aHTML.push('<tr class="ns1blankspaceRow">');
 											
 											aHTML.push('<td id="ns1blankspaceDeveloperMembershipEndpoints_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-																this.endpointtext + '</td>';
+																this.endpointtext + '</td>');
 
 											aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
-															'<span id="ns1blankspaceDeveloperMembershipEndpoints_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+															'<span id="ns1blankspaceDeveloperMembershipEndpoints_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
 															'</td>' +																
 															'</tr>');
 										});
@@ -766,7 +765,7 @@ ns1blankspace.developer.membership =
 													aHTML.push('<td id="ns1blankspaceMembershipSubscriptions_title-' + this.id +
 																			'" data-contactbusinesstext="' + this.contactbusinesstext +
 																			'" class="ns1blankspaceMainRow ns1blankspaceRowSelect">' +
-																			this.contactbusinesstext;
+																			this.contactbusinesstext);
 													
 													aHTML.push('<br /><span class="ns1blankspaceSub" id="ns1blankspaceMembershipSubscriptions_startdate-' + this.id + '">' +
 									 										this.startdate + '</span>');
