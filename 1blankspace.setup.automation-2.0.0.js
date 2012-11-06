@@ -192,7 +192,7 @@ ns1blankspace.setup.automation =
 											});
 										}
 									};	
-								}
+								},
 
 					process:	function (oParam, oResponse)
 								{
@@ -208,8 +208,7 @@ ns1blankspace.setup.automation =
 									}
 									else
 									{
-										aHTML.push('<table class="ns1blankspaceSearchMedium">';
-										aHTML.push('<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -249,7 +248,7 @@ ns1blankspace.setup.automation =
 
 	layout: 	function ()
 				{
-						var aHTML = [];
+					var aHTML = [];
 
 					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
@@ -278,18 +277,18 @@ ns1blankspace.setup.automation =
 										'Formatting</td></tr>');
 					}	
 	
-					aHTML.push('</table>';					
+					aHTML.push('</table>');					
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 				
 					var aHTML = [];
 					
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainSchedule" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainResponse" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainFormat" class="ns1blankspaceControl"></div>';
-					aHTML.push('<div id="ns1blankspaceMainRun" class="ns1blankspaceControl"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSchedule" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainResponse" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainFormat" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainRun" class="ns1blankspaceControl"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
@@ -364,8 +363,8 @@ ns1blankspace.setup.automation =
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find automation.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find automation.</td></tr>');
+						aHTML.push('<tr>&nbsp;</tr></table>');
 								
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
@@ -376,7 +375,7 @@ ns1blankspace.setup.automation =
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
 									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
 									'</tr>' +
-									'</table>')				
+									'</table>');			
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
@@ -412,7 +411,7 @@ ns1blankspace.setup.automation =
 					}	
 				},
 
-	details:	function ns1blankspaceSetupAutomationDetails()
+	details:	function ()
 				{
 					var aHTML = [];
 					
@@ -813,8 +812,7 @@ ns1blankspace.setup.automation =
 												data: sData,
 												dataType: 'json',
 												success: ns1blankspace.setup.automation.save.send
-											});
-											
+											});	
 										}
 										else
 										{
@@ -834,3 +832,4 @@ ns1blankspace.setup.automation =
 									}
 								}
 				}
+}				

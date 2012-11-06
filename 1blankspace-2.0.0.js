@@ -208,6 +208,10 @@ ns1blankspace.scripts =
 	{
 		name: '1blankspace.setup',
 		source: '/jscripts/1blankspace.setup-2.0.0.js'
+	},
+	{
+		name: '1blankspace.setup.automation',
+		source: '/jscripts/1blankspace.setup.automation-2.0.0.js'
 	}
 ]
 
