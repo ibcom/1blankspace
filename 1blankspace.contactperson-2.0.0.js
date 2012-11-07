@@ -10,7 +10,7 @@ ns1blankspace.contactPerson =
 	init: 		function (oParam)
 				{
 					ns1blankspace.object = 32;	
-					ns1blankspace.objectName = 'ContactPerson';
+					ns1blankspace.objectName = 'contactPerson';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'People';
@@ -85,7 +85,7 @@ ns1blankspace.contactPerson =
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						
-						oSearch.getResults(ns1blankspace.contactPerson.home());	
+						oSearch.getResults(ns1blankspace.contactPerson.home);	
 					}
 					else
 					{
@@ -129,7 +129,7 @@ ns1blankspace.contactPerson =
 
 	search: 	{
 					send: 		function (sXHTMLElementId, oParam)
-								{v
+								{
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];

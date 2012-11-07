@@ -275,6 +275,44 @@ td.ns1blankspaceControl
 	cursor: pointer;
 }
 
+td.ns1blankspaceHighlight
+{
+	font-weight: bold;	
+	color: #DA8300;	
+}
+
+.ns1blankspaceCaption
+{
+	font-size: 0.875em;
+	color: #B8B8B8;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+	padding-left: 2px;
+}	
+
+table.ns1blankspaceMostLikely
+{
+	border-spacing: 5px 0px;
+}
+td.ns1blankspaceMostLikely
+{
+	cursor: pointer;
+	color: #EE8F00;
+	text-decoration: none;
+	font-size: 0.875em;
+}	
+
+.ns1blankspaceControlContext
+{
+	font-size: 1em;
+	font-weight: bold;
+	text-align: right;
+	width: 100%;
+	margin-right: 20px;
+}
+
 .ui-button-icon-only .ui-icon
 {
 	margin-left: -8px;

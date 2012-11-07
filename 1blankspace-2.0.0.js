@@ -935,6 +935,7 @@ ns1blankspace.app =
 
 	reset:		function ()
 				{				
+					$(ns1blankspace.xhtml.container).hide(500);
 					$('#ns1blankspaceViewControlSearch').unbind('keyup');
 					$('#ns1blankspaceViewControlSearch').unbind('click');
 					$('#ns1blankspaceViewControlSearch').unbind('click');
@@ -957,7 +958,7 @@ ns1blankspace.app =
 
 	set: 		function (oParam)
 				{
-					var bShowHome;
+					var bShowHome = true;
 					var sParentNamespace = ns1blankspace.objectParentName;
 					var sNamespace = ns1blankspace.objectName;
 					var bNew;
