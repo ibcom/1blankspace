@@ -90,8 +90,17 @@ String.prototype.formatXHTML = function(bDirection)
 String.method('trim', function () {return this.replace(/^\s+|\s+$/g, '');});
 
 var ns1blankspace = {};
-ns1blankspace.selector = 'body';
+
 ns1blankspace.history = {};
+ns1blankspace.xhtml = {};
+ns1blankspace.option = {};
+ns1blankspace.timer = {};
+ns1blankspace.counter = {};
+ns1blankspace.user = {};
+ns1blankspace.data = {};
+ns1blankspace.debug = {};
+
+ns1blankspace.selector = 'body';
 
 ns1blankspace.scriptsCore =
 [
@@ -126,10 +135,6 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.advancedsearch',
 		source: '/jscripts/1blankspace.advancedsearch-1.0.3.js'
-	},
-	{
-		nameSpace: '1blankspace.control',
-		source: '/jscripts/1blankspace.control-2.0.0.js'
 	},
 	{
 		nameSpace: '1blankspace.home',
@@ -326,13 +331,7 @@ ns1blankspace.app =
 						}	
 					});
 
-					ns1blankspace.option = {};
-					ns1blankspace.timer = {};
-					ns1blankspace.counter = {};
-					ns1blankspace.xhtml = {};
-					ns1blankspace.user = {};
-					ns1blankspace.data = {};
-					ns1blankspace.debug = {};
+					$('#ns1blankspaceHeader').html(ns1blankspace.xhtml.header);
 
 					ns1blankspace.version = 2;
 

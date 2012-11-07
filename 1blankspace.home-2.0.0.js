@@ -430,12 +430,4 @@ ns1blankspace.home.actions =
 				}				
 }
 
-ns1blankspace.xhtml.logonNotes =
-				'1blankspace.com is an example app based on the mydigitalstructure.com platform.' +
-				'<br /><br /><a href="https://github/ibcom/1blankspace" target="_blank">github Repository</a>' +
-				'<br /><br /><a href="http://mydigitalstructure.com/examples" target="_blank">More code examples</a>' +
-				'<br /><br /><a href="http://mydigitalstructure.com/documentation" target="_blank">Documentation</a>' +
-				'<br /><br /><a href="http://mydigitalstructure.com/gettingstarted" target="_blank">Getting started</a>' +
-				'<br /><br /><a href="http://twitter.com/ibComMYDS" target="_blank">twitter.com/ibComMYDS</a>' +
-				'<br /><br /><hr />' +
-				'<br /><a href="https://developer.1blankspace.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
+ns1blankspace.xhtml.homeNotes = '';

@@ -5,10 +5,6 @@
  * 01 FEB 2010
  */
 
-//var gbShowAdd = true;
-//var gbReturnToLast = true;
-//var gsMessagingEmailAccount = '';
-
 ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">';
 ns1blankspace.xhtml.loadingSmall = '<img class="ns1blankspaceLoadingSmall" id="imgns1blankspaceLoadingSmall" src="/jscripts/1blankspace.loading.square.10.gif">';
 ns1blankspace.xhtml.editorCSS = '';
@@ -33,6 +29,19 @@ if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}
 
 ns1blankspace.financial.summaryUseTemplate = false; 
 ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html';
+
+ns1blankspace.xhtml.logonNotes =
+	'1blankspace.com is an example app based on the mydigitalstructure.com platform.' +
+	'<br /><br /><a href="https://github/ibcom/1blankspace" target="_blank">github Repository</a>' +
+	'<br /><br /><a href="http://mydigitalstructure.com/examples" target="_blank">More code examples</a>' +
+	'<br /><br /><a href="http://mydigitalstructure.com/documentation" target="_blank">Documentation</a>' +
+	'<br /><br /><a href="http://mydigitalstructure.com/gettingstarted" target="_blank">Getting started</a>' +
+	'<br /><br /><a href="http://twitter.com/ibComMYDS" target="_blank">twitter.com/ibComMYDS</a>' +
+	'<br /><br /><hr />' +
+	'<br /><a href="https://developer.1blankspace.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
+
+ns1blankspace.xhtml.header =
+	'<img src="/jscripts/1blankspace-2.0.0.png">';
 
 ns1blankspace.views = 
 [
@@ -707,9 +716,9 @@ ns1blankspace.control =
 											ns1blankspace.xhtml.viewControl = aHTML.join('');
 										}
 
-										ns1blankspace.xhtml.container.show(
+										$(ns1blankspace.xhtml.container).show(
 										{
-											xhtmlElementID: 'ns1blankspaceViewControlSet',
+											xhtmlElementID: 'ns1blankspaceViewControlViewContainer',
 											xhtml: ns1blankspace.xhtml.viewControl
 										});		
 									},
