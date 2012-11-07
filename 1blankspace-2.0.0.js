@@ -646,14 +646,13 @@ ns1blankspace.app =
 					ns1blankspace.user.spaceText = oResponse.spacename
 					ns1blankspace.user.logonName = oResponse.userlogonname;
 					ns1blankspace.user.contactPerson = oResponse.contactperson;
+					ns1blankspace.user.contactBusiness = oResponse.contactbusiness;
 					ns1blankspace.user.email = oResponse.email;
 					ns1blankspace.user.systemAdmin = oResponse.systemadmin;
 
 					ns1blankspace.spaceText = oResponse.spacename;
 					ns1blankspace.space = oResponse.space;
-					ns1blankspace.contactBusiness = oResponse.contactbusiness;
-					ns1blankspace.contactPerson = oResponse.contactperson;
-
+					
 					ns1blankspace.unloadWarning = true;
 
 					//??? interfaceControlSecurity();

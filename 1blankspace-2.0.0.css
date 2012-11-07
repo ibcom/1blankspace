@@ -233,6 +233,40 @@ a:hover
 	left: 870px;
 }
 
+.ns1blankspaceViewControlContainer
+{
+	border-spacing: 5px 5px;
+
+	background-color: #F8F8F8;
+	width: 175px;
+	
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+	
+	border-style: solid;
+	border-width: 3px;
+	border-color: #E8E8E8;
+	
+	margin-top:8px;
+	margin-bottom:1px;
+	margin-right:1px;
+	margin-left:1px;
+}
+
+.ns1blankspaceViewControlColumn
+{
+	background-color: #ffffff;
+	width: 100px;
+	font-size: 0.9375em;
+	border-spacing: 6px;
+}
+
+td.ns1blankspaceViewControl
+{
+	cursor: pointer;
+}
 
 td.ns1blankspaceControl
 {

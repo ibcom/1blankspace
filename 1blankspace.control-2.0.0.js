@@ -702,7 +702,7 @@ ns1blankspace.control =
 												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
 												aHTML.push('<tr class="ns1blankspaceViewControl">' +
-															'<td id="ns1blankspaceViewportReport" class="ns1blankspaceViewportImage">' +
+															'<td id="ns1blankspaceViewReport" class="ns1blankspaceViewImage">' +
 															'&nbsp;</td></tr>');			
 											
 												aHTML.push(aHTMLViewport.join(''))
@@ -720,27 +720,36 @@ ns1blankspace.control =
 										{
 											xhtmlElementID: 'ns1blankspaceViewControlViewContainer',
 											xhtml: ns1blankspace.xhtml.viewControl
-										});		
+										});	
+
+										ns1blankspace.control.views.bind();	
 									},
 			
 					bind: 			function ()
 									{
-										$.grep(ns1blankspace.views, function (a) {return a.type == 1;}).each(function()
+										$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
 										{
 											var sNS = '_' + this.namespace;
-											if (this.parentnamespace) {sNS = '_' + this.parentnamespace + sNS}
+											
+											if (this.parentnamespace)
+											{
+												sNS = '_' + this.parentnamespace + sNS;
+												$('#ns1blankspaceViewControl' + sNS).attr('data-parentnamespace', this.parentnamespace);
+											}
+
+											$('#ns1blankspaceViewControl' + sNS).attr('data-namespace', this.namespace);
 
 											$('#ns1blankspaceViewControl' + sNS).click(function(event)
 											{
 												$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 
-												if (this.parentnamespace)
+												if ($(this).attr('data-parentnamespace'))
 												{
-													var oNS = ns1blankspace[this.parentnamespace][this.namespace];
+													var oNS = ns1blankspace[$(this).attr('data-parentnamespace')][$(this).attr('data-namespace')];
 												}
 												else
 												{
-													var oNS = ns1blankspace[this.parentnamespace];
+													var oNS = ns1blankspace[$(this).attr('data-namespace')];
 												}
 
 												oNS.init();
