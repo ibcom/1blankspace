@@ -33,6 +33,7 @@ table
 td
 {
 	padding: 2px;
+	vertical-align: top;
 }
 
 a:link, a:visited, a:active
@@ -148,9 +149,14 @@ td.ns1blankspaceLogon
 input.ns1blankspaceLogon
 {
 	height: 23px;
-	width: 100%;
+	width: 234px;;
 	font-size: 1em;
 	padding-left: 5px;
+}
+
+.ns1blankspaceAction
+{
+	font-size: 0.875em;
 }
 
 td.ns1blankspaceLogonSub
@@ -168,7 +174,7 @@ td.ns1blankspaceLogonSub
 
 td.ns1blankspaceLogonNotes
 {
-	color:#404040;
+	color: #999999;
 	font-size: 0.875em;
 	padding-left: 15px;
 	border-left-style:solid;

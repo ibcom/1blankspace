@@ -1137,7 +1137,7 @@ ns1blankspace.control =
 										$('#ns1blankspaceControlUserCreateSecureKey').click(function(event)
 										{
 											$(this).html(ns1blankspace.xhtml.loadingSmall);
-											ns1blankspace.conrol.user.createSecureKey();
+											ns1blankspace.control.user.key({setPosition: true, xhtmlPositionElementID: 'ns1blankspaceLogonName'});
 										});
 									},
 
@@ -1145,7 +1145,7 @@ ns1blankspace.control =
 									{
 										var aHTML = [];
 
-										var bShow = true;
+										var bShow = false;
 										var sXHTMLElementID = 'ns1blankspaceMultiUseContainer';
 										
 										if (oParam != undefined)
@@ -1154,7 +1154,7 @@ ns1blankspace.control =
 											if (oParam.show != undefined) {bShow = oParam.show}
 										}	
 										
-										aHTML.push('<table id="ns1blankspaceControlUserChangePasswordContainer" class="ns1blankspaceContainer" style="width:350px;">');
+										aHTML.push('<table id="ns1blankspaceControlUserChangePasswordContainer" class="ns1blankspaceViewControlContainer" style="width:350px;">');
 											
 										if (bShow)
 										{
@@ -1184,7 +1184,7 @@ ns1blankspace.control =
 										.css('width', '20px')
 										.css('height', '20px')
 										
-										ns1blankspace.logon.changePassword.show({xhtmlElementID: 'ns1blankspaceControlUserChangePassword'});
+										ns1blankspace.logon.changePassword.show({xhtmlElementID: 'ns1blankspaceLogonName'});
 										
 									},
 
@@ -1193,12 +1193,14 @@ ns1blankspace.control =
 										var aHTML = [];
 										var h = -1;
 										var bShow = true;
-										var bSetPosition = true;
-										var sXHTMLElementID = 'divns1blankspaceViewControlOptions'
-										
+										var bSetPosition = false;
+										var sXHTMLElementID = 'ns1blankspaceMultiUseContainer'
+										var sXHTMLPositionElementID = 'ns1blankspaceMultiUseContainer'
+
 										if (oParam != undefined)
 										{
 											if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+											if (oParam.xhtmlPositionElementID != undefined) {sXHTMLPositionElementID = oParam.xhtmlPositionElementID}
 											if (oParam.show != undefined) {bShow = oParam.show}
 											if (oParam.setPosition != undefined) {bSetPosition = oParam.setPosition}
 										}	
@@ -1210,21 +1212,21 @@ ns1blankspace.control =
 												type: 'POST',
 												url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_SEARCH'),
 												dataType: 'json',
-												success: function(data) {ns1blankspace.control.user.createSecureKey(oParam, data)}
+												success: function(data) {ns1blankspace.control.user.key(oParam, data)}
 											})
 										}
 										else
 										{	
-											aHTML.push('<table id="ns1blankspaceControlUserCreateSecureKeyContainer" class="ns1blankspaceViewControl" style="width:400px;"><tr><td>');	
+											aHTML.push('<table id="ns1blankspaceControlUserKeyContainer" class="ns1blankspaceViewControlContainer" style="width:400px;"><tr><td>');	
 
 											if (bSetPosition)
 											{
-												ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: 0, topOffset: -305})
+												ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -198, topOffset: 0})
 											}	
 										
 											if (bShow)
 											{
-												aHTML.push('<table style="width:400px;>' + 
+												aHTML.push('<table style="width:400px;">' + 
 																'<tr><td class="ns1blankspaceCaption">Secure Access Token</td>' +
 																'<td id="tdns1blankspaceHomeOptionClose" style="text-align:right;">' +
 																'<span id="ns1blankspaceClose">Close</span></td>' +
@@ -1245,11 +1247,11 @@ ns1blankspace.control =
 												aHTML.push('<tr><td>' +
 																	oResponse.access_token + '<br /><br /></td></tr>');
 												
-												aHTML.push('<tr><td style="text-align:right;"><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
+												aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
 												aHTML.push('<tr><td><br />If you generate a new token, the current token will no longer work.<br /><br /></td></tr>');
 											}
 											
-											aHTML.push('<tr><td style="text-align:right;""><span id="ns1blankspaceControlUserCreateSecureKeyNew">New Token</span></td></tr>');
+											aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyNew">New Token</span></td></tr>');
 											
 											if (oResponse.access_token != undefined)
 											{

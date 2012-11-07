@@ -321,7 +321,7 @@ ns1blankspace.app =
 											'</div>');
 					}		
 
-					$('#ns1blankspaceViewControl').html('<span style="font-size:1.2em;">Initialising the app...</span>');
+					$('#ns1blankspaceViewControl').html('<span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span>');
 
 					$.each(ns1blankspace.scripts, function()
 					{
@@ -1077,7 +1077,7 @@ ns1blankspace.logon =
 						
 					aHTML.push('<table id="ns1blankspaceLogonContainer" style="width:700px;">');
 					
-					aHTML.push('<tr><td style="width:225px; padding-right:30px;">');
+					aHTML.push('<tr><td style="width:235px; padding-right:25px;">');
 
 					aHTML.push('<table id="ns1blankspaceLogon" class="ns1blankspaceLogonContainer">');
 
@@ -1086,8 +1086,8 @@ ns1blankspace.logon =
 									'Logon Name' +
 									'</td>')
 
-					aHTML.push('<td class="ns1blankspaceLogonSub" style="padding-right:0px;">' +
-									'Remember <input style="margin:0px; padding:0px; border: 0px;" type="checkbox" id="ns1blankspaceLogonRemember"/></td></tr>');
+					aHTML.push('<td class="ns1blankspaceLogonSub" style="padding-right:2px;">' +
+									'remember <input style="margin:0px; padding:0px; border: 0px;" type="checkbox" id="ns1blankspaceLogonRemember"/></td></tr>');
 
 					aHTML.push('<tr><td colspan=2 style="padding-bottom: 10px;">' +
 									'<input id="ns1blankspaceLogonLogonName" class="ns1blankspaceLogon">' +
@@ -1098,8 +1098,8 @@ ns1blankspace.logon =
 									'Password' +
 									'</td>')
 
-					aHTML.push('<td class="ns1blankspaceLogonSub">' +
-									'Get it' +
+					aHTML.push('<td class="ns1blankspaceLogonSub" style="padding-right:2px;">' +
+									'<span id="ns1blankspacePasswordSend" style="cursor: pointer;">get it</span>' +
 									'</td></tr>');
 
 					aHTML.push('<tr><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
@@ -1174,7 +1174,7 @@ ns1blankspace.logon =
 					    }
 					});
 
-					$('#ns1blankspaceLogonGetPassword').click(function()
+					$('#ns1blankspacePasswordSend').click(function()
 					{
 						ns1blankspace.logon.getPassword.show();
 					});
@@ -1238,42 +1238,42 @@ ns1blankspace.logon.changePassword =
 				{
 					var aHTML = [];
 					var h = -1;
-					var sXHTMLElementID = '#ns1blankspaceViewControl';
+					var sXHTMLElementID = 'ns1blankspaceViewControl';
 					
 					if (oParam != undefined)
 					{
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 					}	
 					
-					aHTML.push('<table id="ns1blankspaceLogonChangePasswordContainer" class="ns1blankspaceLogon">');
+					aHTML.push('<table id="ns1blankspaceLogonChangePasswordContainer" class="ns1blankspaceViewControlContainer">');
 					
-					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td class="ns1blankspaceLogon">' +
+					aHTML.push('<tr>' +
+									'<td class="ns1blankspaceLogonCaption">' +
 									'Current Password' +
-									'</td>' +
-									'<td class="ns1blankspaceLogonInput">' +
+									'</td></tr>' +
+									'<tr><td class="ns1blankspaceLogonInput">' +
 									'<input id="ns1blankspaceLogonCurrentPassword" class="ns1blankspaceLogon" type="password">' +
 									'</td></tr>');
 									
-					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td class="ns1blankspaceLogon">' +
+					aHTML.push('<tr>' +
+									'<td class="ns1blankspaceLogonCaption">' +
 									'New Password' +
-									'</td>' +
-									'<td class="ns1blankspaceLogonInput">' +
+									'</td></tr>' +
+									'<tr><td class="ns1blankspaceLogonInput">' +
 									'<input id="ns1blankspaceLogonNewPassword" class="ns1blankspaceLogon" type="password">' +
 									'</td></tr>');
 
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogonCaption">' +
 									'Confirm Password' +
-									'</td>' +
-									'<td class="ns1blankspaceLogonInput">' +
+									'</td></tr>' +
+									'<tr><td class="ns1blankspaceLogonInput">' +
 									'<input id="ns1blankspaceLogonNewPasswordConfirm" class="ns1blankspaceLogon" type="password">' +
 									'</td></tr>');
 									
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td class="ns1blankspaceLogon" colspan=2>' +
-									'<span id="ns1blankspaceLogonChangePassword" class="ns1blankspaceLogon">Change Password</span>' +
+									'<td class="ns1blankspaceLogon">' +
+									'<span id="ns1blankspaceLogonChangePassword" class="ns1blankspaceAction">Change Password</span>' +
 									'</td></tr>');
 									
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
@@ -1285,10 +1285,11 @@ ns1blankspace.logon.changePassword =
 					
 					ns1blankspace.container.show(
 										{
-											xhtmlElementID: 'ns1blankspaceViewControl',
+											xhtmlElementID: sXHTMLElementID,
 											xhtml: aHTML.join(''),
 											forceShow: true,
-											offsetTop: -15
+											offsetTop: -3,
+											offsetLeft: 24
 										});	
 					
 					$('#ns1blankspaceLogonCurrentPassword').focus();
@@ -1378,19 +1379,19 @@ ns1blankspace.logon.getPassword =
 				{
 					var aHTML = [];
 
-					aHTML.push('<table class="ns1blankspaceLogon">');
+					aHTML.push('<table class="ns1blankspaceViewControlContainer">');
 					
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td class="ns1blankspaceLogon">' +
+									'<td class="ns1blankspaceLogonCaption">' +
 									'Logon Name' +
-									'</td>' +
-									'<td class="ns1blankspaceLogon">' +
+									'</td></tr>' +
+									'<tr><td class="ns1blankspaceLogon" style="padding-bottom:10px;">' +
 									'<input id="ns1blankspaceGetPasswordLogonName" class="ns1blankspaceLogon">' +
 									'</td></tr>');
 									
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td class="ns1blankspaceLogon" colspan=2>' +
-									'<span id="ns1blankspaceGetPassword" class="ns1blankspaceLogon">Send Password</span>' +
+									'<td class="ns1blankspaceLogon">' +
+									'<span id="ns1blankspaceGetPassword" class="ns1blankspaceLogon ns1blankspaceAction">Send Password</span>' +
 									'</td></tr>');
 									
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
@@ -2108,7 +2109,7 @@ ns1blankspace.setup =
 						{
 							ns1blankspace.control.views.show(this);;
 						});
-						
+
 						if (sViewScript)
 						{
 							eval(sViewScript);
