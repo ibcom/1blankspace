@@ -1002,12 +1002,12 @@ ns1blankspace.control =
 											$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 										}
 										else
-										{	
+										{
 											$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
 											$(ns1blankspace.xhtml.container).html("&nbsp;");
 											$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 											$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 70});
-											$(ns1blankspace.xhtml.container).html(ns1blankspaceControlUserOptions);
+											$(ns1blankspace.xhtml.container).html(this.layout());
 												
 											ns1blankspace.control.user.bind();
 										}	
@@ -1017,7 +1017,7 @@ ns1blankspace.control =
 									{
 										var aHTML = [];
 		
-										aHTML.push('<table style="width: 180px;" id="ns1blankspaceControlUser" class="ns1blankspace">');
+										aHTML.push('<table style="width: 232px;" id="ns1blankspaceControlUser" class="ns1blankspaceViewControlContainer">');
 											
 										aHTML.push('<tr>' +
 														'<td id="ns1blankspaceUserLogOff" class="ns1blankspaceViewControl">' +
@@ -1254,11 +1254,11 @@ ns1blankspace.control =
 											else
 											{	
 												$(ns1blankspace.xhtml.container).attr('data-source', oElement.id);
-												$(ns1blankspace.xhtml.container).html('<table style="width: 250px;" class="ns1blankspaceViewControl"><tr><td>' + ns1blankspace.xhtml.loadingSmall + '</tr><td></table>');
+												$(ns1blankspace.xhtml.container).html('<table style="width: 250px;" class="ns1blankspaceViewControlContainer"><tr><td>' + ns1blankspace.xhtml.loadingSmall + '</tr><td></table>');
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 												$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left});
 
-												if (ns1blankspace.space == ns1blankspace.userSpace)
+												if (ns1blankspace.space == ns1blankspace.user.space)
 												{	
 													$.ajax(
 													{
@@ -1270,7 +1270,7 @@ ns1blankspace.control =
 												}
 												else
 												{
-													aHTML.push('<table style="width: 250px;" class="ns1blankspaceViewControl">' +
+													aHTML.push('<table style="width: 250px;" class="ns1blankspaceViewControlContainer">' +
 																	'<tr class="ns1blankspaceSpaceOptions">' +
 																	'<td id="ns1blankspaceControlSpaceSwitchBack" class="ns1blankspace">' +
 																	'Switch back to your space.' +
@@ -1306,7 +1306,7 @@ ns1blankspace.control =
 										}	
 										else
 										{
-											aHTML.push('<table style="width: 250px;" class="ns1blankspaceViewControl">');
+											aHTML.push('<table style="width: 302px;" class="ns1blankspaceViewControlContainer">');
 
 											if (oResponse.data.rows.length == 0)
 											{
@@ -1314,7 +1314,8 @@ ns1blankspace.control =
 											}
 											else
 											{
-												aHTML.push('<tr><td class="ns1blankspaceNothing" style="padding-left:5px;padding-right:10px;"><input id="ns1blankspaceControlSpaceSearch" class="inputns1blankspaceMainText"></td></tr>');
+												aHTML.push('<tr><td class="ns1blankspaceNothing" style="padding-left:5px;padding-right:10px;">' +
+													'<input id="ns1blankspaceControlSpaceSearch" class="ns1blankspaceMainText" style="font-size:1.1em; width:100%; height:23px;"></td></tr>');
 
 												aHTML.push('<tr><td id="ns1blankspaceSpaceSearchResults"></td></tr>');
 
@@ -1345,7 +1346,7 @@ ns1blankspace.control =
 											$('#ns1blankspaceControlSpaceSearch').keyup(function(event)
 											{
 												if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.control.spaces.show.process('ns1blankspaceControlSpaceSearch')", ns1blankspace.option.typingWait);
+										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.control.spaces.process('ns1blankspaceControlSpaceSearch')", ns1blankspace.option.typingWait);
 											});
 
 											$('#ns1blankspaceControlSpaceSwitchContainer > td.ns1blankspace').click(function(event)
@@ -1365,7 +1366,7 @@ ns1blankspace.control =
 														{	
 															ns1blankspace.space = aID[1];
 															ns1blankspace.spaceText = $('#' + event.target.id).html();
-															$('#divns1blankspaceViewportSpaceText').html(ns1blankspace.spaceText);
+															$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
 														}	
 													}
 												});	
@@ -1410,7 +1411,7 @@ ns1blankspace.control =
 															
 											aHTML.push('</table>');
 											
-											$('#tdns1blankspaceSpaceSearch').html(aHTML.join(''));
+											$('#ns1blankspaceSpaceSearchResults').html(aHTML.join(''));
 
 											$('ns1blankspaceControlSpaceSwitchContainer > td.ns1blankspace').click(function(event)
 											{

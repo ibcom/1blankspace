@@ -855,14 +855,14 @@ ns1blankspace.app =
 							}	
 						});		
 					
-					$('#ns1blankspaceSpaceText').click(function(event)
+					$('#ns1blankspaceLogonName').click(function(event)
 					{
 						ns1blankspace.control.user.show(this);
 					});
 
 					$('#ns1blankspaceSpaceText').click(function(event)
 					{
-						ns1blankspace.control.space.show(this);
+						ns1blankspace.control.spaces.show(this);
 					});
 					
 					if (ns1blankspace.option.showBrowsing)
