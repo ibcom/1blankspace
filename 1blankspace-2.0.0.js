@@ -1239,7 +1239,7 @@ ns1blankspace.logon.changePassword =
 				{
 					var aHTML = [];
 					var h = -1;
-					var sXHTMLElementID = 'ns1blankspaceBox';
+					var sXHTMLElementID = '#ns1blankspaceViewControl';
 					
 					if (oParam != undefined)
 					{
@@ -1284,7 +1284,13 @@ ns1blankspace.logon.changePassword =
 									
 					aHTML.push('</table>');					
 					
-					$('#' + sXHTMLElementID).html(aHTML.join(''));
+					ns1blankspace.container.show(
+										{
+											xhtmlElementID: 'ns1blankspaceViewControl',
+											xhtml: aHTML.join(''),
+											forceShow: true,
+											offsetTop: -15
+										});	
 					
 					$('#ns1blankspaceLogonCurrentPassword').focus();
 					
@@ -1395,8 +1401,13 @@ ns1blankspace.logon.getPassword =
 									
 					aHTML.push('</table>');					
 					
-					$('#ns1blankspaceBox').css("z-index", "1");
-					$('#ns1blankspaceBox').html(aHTML.join(''));
+					ns1blankspace.container.show(
+										{
+											xhtmlElementID: 'ns1blankspaceViewControl',
+											xhtml: aHTML.join(''),
+											forceShow: true,
+											offsetTop: -15
+										});	
 					
 					$('#ns1blankspaceGetPasswordLogon').focus();
 					

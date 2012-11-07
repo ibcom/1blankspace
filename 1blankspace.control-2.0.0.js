@@ -242,10 +242,55 @@ ns1blankspace.views =
 		type: 1
 	},
 	{
-		title: "Websites",
+		title: "Users",
+		parentnamespace: "setup",
+		namespace: "user",
+		endpoint: "SETUP_USER", 
+		show: true,
+		group: 1,
+		type: 2
+	},
+	{
+		title: "User Roles",
+		parentnamespace: "setup",
+		namespace: "userRole",
+		endpoint: "SETUP_USER_ROLE", 
+		show: true,
+		group: 1,
+		type: 2
+	},
+	{
+		title: "Network Groups",
+		parentnamespace: "setup",
+		namespace: "networkGroup",
+		endpoint: "SETUP_NETWORK_GROUP", 
+		show: true,
+		group: 1,
+		type: 2
+	},
+	{
+		title: "Messaging",
+		parentnamespace: "setup",
+		namespace: "messaging",
+		endpoint: "SETUP_MESSAGING", 
+		show: true,
+		group: 1,
+		type: 2
+	},
+	{
+		title: "Websites & Webapps",
 		parentnamespace: "setup",
 		namespace: "website",
 		endpoint: "SETUP_SITE", 
+		show: true,
+		group: 2,
+		type: 2
+	},
+	{
+		title: "Structures",
+		parentnamespace: "setup",
+		namespace: "structure",
+		endpoint: "SETUP_STRUCTURE", 
 		show: true,
 		group: 2,
 		type: 2
@@ -257,6 +302,53 @@ ns1blankspace.views =
 		endpoint: "SETUP_AUTOMATION", 
 		show: true,
 		group: 2,
+		type: 2
+	},
+	{
+		title: "Financials",
+		parentnamespace: "setup",
+		namespace: "financial",
+		endpoint: "SETUP_FINANCIAL", 
+		show: true,
+		group: 3,
+		type: 2
+	},
+	{
+		title: 'Person Groups',
+		namespace: 'setup',
+		namesuffix: 'contactPersonGroups',
+		endpoint: "SETUP", 
+		show: false,
+		group: 4,
+		type: 2,
+		param: {setupName: 'Contact Business Groups', setupMethod: 'SETUP_CONTACT_PEROSN_GROUP'}														
+	},
+	{
+		title: 'Business Groups',
+		namespace: 'setup',
+		namesuffix: 'contactBusinessGroups',
+		endpoint: "SUPPORT", 
+		show: false,
+		group: 4,
+		type: 2,
+		param: {setupName: 'Contact Business Groups', setupMethod: 'SETUP_CONTACT_BUSINESS_GROUP'}														
+	},
+	{
+		title: "Project Templates",
+		parentnamespace: "setup",
+		namespace: "project",
+		endpoint: "PROJECT", 
+		show: true,
+		group: 3,
+		type: 2
+	},
+	{
+		title: "Project Template Tasks",
+		parentnamespace: "setup",
+		namespace: "projectTask",
+		endpoint: "PROJECT", 
+		show: true,
+		group: 3,
 		type: 2
 	},
 	{
@@ -275,26 +367,6 @@ ns1blankspace.views =
 		show: false,
 		group: 4,
 		type: 2
-	},
-	{
-		title: 'Contact Person Groups',
-		namespace: 'setup',
-		namesuffix: 'contactPersonGroups',
-		endpoint: "SETUP", 
-		show: false,
-		group: 4,
-		type: 2,
-		param: {setupName: 'Contact Business Groups', setupMethod: 'SETUP_CONTACT_PEROSN_GROUP'}														
-	},
-	{
-		title: 'Contact Business Groups',
-		namespace: 'setup',
-		namesuffix: 'contactBusinessGroups',
-		endpoint: "SUPPORT", 
-		show: false,
-		group: 4,
-		type: 2,
-		param: {setupName: 'Contact Business Groups', setupMethod: 'SETUP_CONTACT_BUSINESS_GROUP'}														
 	}
 ]
 
@@ -878,7 +950,7 @@ ns1blankspace.control =
 															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
 																				'<td class="ns1blankspaceViewControl">' +
 																				'<span id="ns1blankspaceViewControl_setup_contactBusinessGroup" class="ns1blankspaceViewControl">' +
-																				'Contact&nbsp;Business&nbsp;Groups</span></td></tr>');
+																				'Business&nbsp;Groups</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'People';})[0];
@@ -887,7 +959,7 @@ ns1blankspace.control =
 															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
 																				'<td class="ns1blankspaceViewControl">' +
 																				'<span id="ns1blankspaceViewControl_setup_contactPersonGroup" class="ns1blankspaceViewControl">' +
-																				'Contact&nbsp;Person&nbsp;Groups</span></td></tr>');
+																				'Person&nbsp;Groups</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Projects';})[0];
@@ -1002,7 +1074,6 @@ ns1blankspace.control =
 															});
 														});
 													}
-
 									}
 					},
 
@@ -1059,7 +1130,7 @@ ns1blankspace.control =
 										$('#ns1blankspaceConrolUserChangePassword').click(function(event)
 										{
 											$(this).html(ns1blankspace.xhtml.loadingSmall);
-											ns1blankspace.conrol.user.changePassword();
+											ns1blankspace.control.user.changePassword();
 										});
 										
 										$('#ns1blankspaceControlUserCreateSecureKey').click(function(event)
@@ -1074,7 +1145,7 @@ ns1blankspace.control =
 										var aHTML = [];
 
 										var bShow = true;
-										var sXHTMLElementID = ns1blankspace.xhtml.container;
+										var sXHTMLElementID = 'ns1blankspaceMultiUseContainer';
 										
 										if (oParam != undefined)
 										{
