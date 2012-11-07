@@ -54,25 +54,29 @@ ns1blankspace.home =
 					
 					aHTML.push('<table id="ns1blankspaceHomeContainer">');
 					
-					aHTML.push('<tr><td style="background-position: right center;" id="ns1blankspaceHomeAction" class="ns1blankspaceViewportImageLarge">' +
+					aHTML.push('<tr><td style="background-position: right center;" id="ns1blankspaceViewAction" class="ns1blankspaceViewImageLarge">' +
 										'&nbsp;</td></tr>');
 						
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlActionToday" class="ns1blankspaceControl ns1blankspaceControlHome">Today</td>' +
+									'<td id="ns1blankspaceControlActionToday" class="ns1blankspaceControl ns1blankspaceControlHome">' +
+										'Today</td>' +
 									'</tr>');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlActionTomorrow" class="ns1blankspaceControl ns1blankspaceControlHome">Tomorrow</td>' +
+									'<td id="ns1blankspaceControlActionTomorrow" class="ns1blankspaceControl ns1blankspaceControlHome">' +
+										'Tomorrow</td>' +
 									'</tr>');
 					
 					aHTML.push('<tr><td>&nbsp;</td></tr>');
 						
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlActionFuture" class="ns1blankspaceControl ns1blankspaceControlHome">Future</td>' +
+									'<td id="ns1blankspaceControlActionFuture" class="ns1blankspaceControl ns1blankspaceControlHome">' +
+										'Future</td>' +
 									'</tr>');
 					
 					aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
-									'<td id="ns1blankspaceControlActionOverdue" class="ns1blankspaceControl ns1blankspaceControlHome">Overdue</td>' +
+									'<td id="ns1blankspaceControlActionOverdue" class="ns1blankspaceControl ns1blankspaceControlHome">' +
+										'Overdue</td>' +
 									'</tr>');
 									
 					aHTML.push('</table>');					
@@ -83,7 +87,7 @@ ns1blankspace.home =
 
 					if (ns1blankspace.xhtml.defaultElementID != '')
 					{
-						$('#' + ns1blankspace.xhtml.defaultElementID).addClass('ns1blankspaceControlHighlight');
+						$('#' + ns1blankspace.xhtml.defaultElementID).addClass('ns1blankspaceHighlight');
 						$('#' + ns1blankspace.xhtml.defaultElementID).click();
 					};
 				},
@@ -189,10 +193,7 @@ ns1blankspace.home.options =
 ns1blankspace.home.actions = 
 {
 	show: 		function (oParam, oResponse)
-				{
-
-					return;
-					
+				{					
 					var bShow = false;
 					var sXHTMLElementID = 'ns1blankspaceMain';
 					var iDay = 0;
@@ -233,7 +234,7 @@ ns1blankspace.home.actions =
 						$.ajax(
 						{
 							type: 'POST',
-							url: ns1blankspace.util.endpointURI('ACTION_SEARCH'),
+							url: '/ondemand/action/?method=ACTION_SEARCH',
 							data: sData,
 							dataType: 'json',
 							success: function(data) {ns1blankspace.home.actions.show(oParam, data)}
