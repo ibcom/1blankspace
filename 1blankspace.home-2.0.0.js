@@ -49,7 +49,14 @@ $(function()
 ns1blankspace.home = 
 {
 	show: 		function ()
-				{		
+				{	
+					if (ns1blankspace.setupView)
+					{	
+						$('#ns1blankspaceViewControlSetup').attr('checked', false);
+						$('#ns1blankspaceViewControlSetup').button('refresh');
+						ns1blankspace.setup.switch({viewScript: 'ns1blankspace.home.show()'});
+					}	
+
 					$('#ns1blankspaceViewControlAction').button({disabled: true});
 					$('#ns1blankspaceViewControlNew').button({disabled: true});
 					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});

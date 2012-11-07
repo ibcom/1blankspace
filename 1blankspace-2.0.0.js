@@ -2108,9 +2108,16 @@ ns1blankspace.setup =
 						{
 							ns1blankspace.control.views.show(this);;
 						});
-					
-						ns1blankspace.control.setView.default();
 						
+						if (sViewScript)
+						{
+							eval(sViewScript);
+						}
+						else
+						{
+							ns1blankspace.control.setView.default();
+						}
+											
 						ns1blankspace.status.message('');
 					}
 					else
