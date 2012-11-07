@@ -1053,7 +1053,7 @@ ns1blankspace.control =
 									{
 										$('#ns1blankspaceUserLogOff').click(function(event)
 										{
-											ns1blankspace.logoff();
+											ns1blankspace.logOff();
 										})
 										
 										$('#ns1blankspaceConrolUserChangePassword').click(function(event)

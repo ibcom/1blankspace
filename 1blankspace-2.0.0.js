@@ -321,7 +321,7 @@ ns1blankspace.app =
 											'</div>');
 					}		
 
-					$('#ns1blankspaceViewControl').html('Initialising the app...');
+					$('#ns1blankspaceViewControl').html('<span style="font-size:1.2em;">Initialising the app...</span>');
 
 					$.each(ns1blankspace.scripts, function()
 					{
@@ -620,7 +620,7 @@ ns1blankspace.app =
 						cache: false,
 						success: function(data) 
 						{
-							$('#ns1blankspaceMain').html('&nbsp;');
+							$('#ns1blankspaceViewControl').html('&nbsp;');
 
 							if (data.status == 'ER')
 							{
@@ -1068,7 +1068,7 @@ ns1blankspace.logon =
 				{
 					var aHTML = [];
 					var h = -1;
-					var sXHTMLElementID = ns1blankspace.xhtml.container;
+					var sXHTMLElementID = '#ns1blankspaceViewControl';
 					
 					if (oParam != undefined)
 					{
@@ -1076,70 +1076,66 @@ ns1blankspace.logon =
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 					}	
 						
-					aHTML.push('<table id="ns1blankspaceLogonContainer" class="ns1blankspaceLogon">');
+					aHTML.push('<table id="ns1blankspaceLogonContainer" style="width:700px;">');
 					
-					aHTML.push('<tr><td class="ns1blankspaceLogon" style="width:400px;">');
+					aHTML.push('<tr><td style="width:225px; padding-right:30px;">');
 
-					aHTML.push('<table id="ns1blankspaceLogonContainer" class="ns1blankspaceLogon">');
+					aHTML.push('<table id="ns1blankspaceLogon" class="ns1blankspaceLogonContainer">');
 
-					aHTML.push('<tr class="ns1blankspaceLogon" >' +
-									'<td id="ns1blankspaceHomeLogon" class="ns1blankspaceLogon"' +
-									' style="width:150px;padding-right:15px;border-right-style:solid;border-width: 1px;border-color: #B8B8B8;">');
-
-					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td class="ns1blankspaceLogon">' +
+					aHTML.push('<tr>' +
+									'<td class="ns1blankspaceLogonCaption">' +
 									'Logon Name' +
-									'</td>' +
-									'<td class="ns1blankspaceLogonText">' +
+									'</td>')
+
+					aHTML.push('<td class="ns1blankspaceLogonSub" style="padding-right:0px;">' +
+									'Remember <input style="margin:0px; padding:0px; border: 0px;" type="checkbox" id="ns1blankspaceLogonRemember"/></td></tr>');
+
+					aHTML.push('<tr><td colspan=2 style="padding-bottom: 10px;">' +
 									'<input id="ns1blankspaceLogonLogonName" class="ns1blankspaceLogon">' +
 									'</td></tr>');
 									
-					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td class="ns1blankspaceLogon">' +
+					aHTML.push('<tr>' +
+									'<td class="ns1blankspaceLogonCaption">' +
 									'Password' +
-									'</td>' +
-									'<td class="ns1blankspaceLogonText">' +
+									'</td>')
+
+					aHTML.push('<td class="ns1blankspaceLogonSub">' +
+									'Get it' +
+									'</td></tr>');
+
+					aHTML.push('<tr><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
 									'<input id="ns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password">' +
 									'</td></tr>');
 
-					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td class="ns1blankspaceLogon" colspan=2>' +
-									'<span id="ns1blankspaceLogonSend">Logon</span>' +
-									'</td></tr>');
-					
-					aHTML.push('<tr class="ns1blankspaceLogon">' +
-								    '<td class="ns1blankspaceLogon" colspan=2>' +
-									'<input type="checkbox" id="ns1blankspaceLogonRemember"/>Remember Me</td></tr>');
+					aHTML.push('<tr>' +
+								'<td class="ns1blankspaceLogon" style="width:110px">' +
+								'<span id="ns1blankspaceLogonSend">Logon</span>' +
+								'</td>');
+				
+					aHTML.push('<td id="ns1blankspaceLogonStatus">' +
+								'&nbsp;' +
+								'</td></tr>');
 
-					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td class="ns1blankspaceLogon" colspan=2>' +
-									'<a href="#" id="ns1blankspaceLogonGetPassword">Get Password</a>' +
-									'</td></tr>');
-									
-					aHTML.push('<tr class="ns1blankspaceLogon">' +
-									'<td id="ns1blankspaceLogonStatus" class="ns1blankspaceLogon" colspan=2>' +
-									'&nbsp;' +
-									'</td></tr>');
-									
 					aHTML.push('</table>');					
 					
 					if (ns1blankspace.xhtml.logonNotes)
 					{	
-						aHTML.push('</td><td class="ns1blankspaceLogonNotes"  style="width:150px;padding-left:15px;">');
+						aHTML.push('</td><td class="ns1blankspaceLogonNotes">');
 					
-						aHTML.push('<table class="ns1blankspaceHome">' +
-										'<tr class="ns1blankspaceHome">' +						
-										'<td class="ns1blankspaceHome" style="color:#404040;">' +
+						aHTML.push('<table class="ns1blankspace"><tr><td>' +
 										ns1blankspace.xhtml.logonNotes +
 										'</td></tr></table>');
 					}				
 
 					aHTML.push('</td></tr></table>');
 					
-					$(sXHTMLElementID).css("z-index", "1");
-					$(sXHTMLElementID).html(aHTML.join(''));
-					
-					$(sXHTMLElementID).show();
+					ns1blankspace.container.show(
+										{
+											xhtmlElementID: 'ns1blankspaceViewControl',
+											xhtml: aHTML.join(''),
+											forceShow: true,
+											offsetTop: -15
+										});	
 
 					var sLogonName = $.cookie('mydigitalstucturelogonname')
 					
@@ -1213,9 +1209,9 @@ ns1blankspace.logon =
 					{
 						$('#ns1blankspaceLogonStatus').html('Logon successful, starting app...');
 						
-						if ($('#ns1blankspaceLogonNameRemember').attr('checked'))
+						if ($('#ns1blankspaceLogonRemember').attr('checked'))
 						{
-							$.cookie('mydigitalstucturelogonname', $('#inputns1blankspaceLogonName').val(), {expires:30});
+							$.cookie('mydigitalstucturelogonname', $('#ns1blankspaceLogonLogonName').val(), {expires:30});
 						}
 						
 						if (oResponse.passwordStatus == "EXPIRED")
@@ -2265,8 +2261,8 @@ ns1blankspace.container =
 						}
 						else
 						{
-							$(ns1blankspace.xhtml.container).attr('data-initiator', oXHTMLElement.attr('id'))
-								.html("&nbsp;")
+							$(ns1blankspace.xhtml.container).attr('data-initiator', oXHTMLElement.attr('id'));
+							$(ns1blankspace.xhtml.container).html("&nbsp;")
 								.show(ns1blankspace.option.showSpeedOptions)
 								.offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft})
 								.html(sXHTML);

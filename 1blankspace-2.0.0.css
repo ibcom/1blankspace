@@ -40,14 +40,12 @@ a:link, a:visited, a:active
 	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
 	color: #ee8f00; 
 	text-decoration: none;
-	font-size: 0.875em;
 }
 
 a:hover
 {
 	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
 	color: #006EBA;
-	font-size: 0.875em;
 }
 
 #ns1blankspaceContainer
@@ -133,6 +131,49 @@ a:hover
 	width: 250px;
 	padding-bottom: 5px;
 	text-align: right;
+}
+
+td.ns1blankspaceLogonCaption
+{
+	font-weight: 500;
+	color: #666666;
+}
+
+td.ns1blankspaceLogon
+{
+	font-size: 0.875em;
+	padding-left: 5px;
+}
+
+input.ns1blankspaceLogon
+{
+	height: 23px;
+	width: 100%;
+	font-size: 1em;
+	padding-left: 5px;
+}
+
+td.ns1blankspaceLogonSub
+{
+	text-align: right;
+	font-size: 0.75em;
+	color: #999999;
+	vertical-align: bottom;
+}
+
+#ns1blankspaceLogonStatus
+{
+	font-size: 0.75em;
+}
+
+td.ns1blankspaceLogonNotes
+{
+	color:#404040;
+	font-size: 0.875em;
+	padding-left: 15px;
+	border-left-style:solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
 }
 
 #ns1blankspaceSpaceText
