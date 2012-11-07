@@ -4131,7 +4131,7 @@ ns1blankspace.show =
 
 					$(sSelector).show();
 
-					ns1blankspace.xhtml.divID = sDivSelector;
+					ns1blankspace.xhtml.divID = sSelector;
 					
 					if ($(sSelector).html() == '' || bRefresh)
 					{
