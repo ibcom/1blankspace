@@ -153,7 +153,7 @@ ns1blankspace.setup.userRole =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{	
-											ns1blankspace.dialog.position(sElementId);
+											ns1blankspace.container.position(sElementId);
 											ns1blankspace.search.start(sElementId);
 											
 											var oSearch = new AdvancedSearch();

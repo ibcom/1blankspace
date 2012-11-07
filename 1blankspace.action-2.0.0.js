@@ -187,7 +187,7 @@ ns1blankspace.action =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.dialog.position(sElementId);
+											ns1blankspace.container.position(sElementId);
 											ns1blankspace.search.start(sElementId);
 											
 											var oSearch = new AdvancedSearch();
@@ -1112,7 +1112,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 															copiedEventObject.start = date;
 															copiedEventObject.allDay = allDay;
 															
-															ns1blankspace.action.dialog.show(
+															ns1blankspace.action.container.show(
 															{
 																startDate: date
 															});
@@ -1127,7 +1127,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 										
 										select: 		function(startDate, endDate, allDay, jsEvent, view )
 														{
-															ns1blankspace.action.dialog.show(
+															ns1blankspace.action.container.show(
 															{
 																startDate: startDate,
 																endDate: endDate
@@ -1138,7 +1138,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 														{
 															if (calEvent.editable)
 															{
-																ns1blankspace.action.dialog.show(
+																ns1blankspace.action.container.show(
 																{
 																	actionID: calEvent.id,
 																});
@@ -1345,7 +1345,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 										oSearch.method = 'ACTION_SEARCH';
 										oSearch.addField('*');
 										oSearch.addFilter('id', 'EQUAL_TO', iActionID);
-										oSearch.getResults(function(data) {ns1blankspace.action.dialog.show(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.action.container.show(oParam, data)});
 									}
 									else
 									{
@@ -1453,7 +1453,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 												}
 											})
 											.click(function() {
-												ns1blankspace.action.dialog.save({
+												ns1blankspace.action.container.save({
 														id: iActionID,
 														date: $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
 																	' ' + $.fullCalendar.formatDate(dStartDate, "HH:mm"),
@@ -1535,7 +1535,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 											data: sData,
 											dataType: 'json',
 											async: bAsync,
-											success: function(data) {ns1blankspace.action.dialog.save(oParam, data);}
+											success: function(data) {ns1blankspace.action.container.save(oParam, data);}
 										});
 									}
 									else	
@@ -1611,7 +1611,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 															},
 												"Add Note": function() 
 															{
-																ns1blankspace.action.dialog.save(
+																ns1blankspace.action.container.save(
 																{
 																	reference: '',
 																	description: $('#ns1blankspaceActionNoteDescription').val(),
@@ -1647,7 +1647,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 						oSearch.addField('*');
 						oSearch.addFilter('actionby', 'EQUAL_TO', ns1blankspace.user);
 						oSearch.rows = 10
-						oSearch.getResults(function(data) {ns1blankspace.action.dialog.show(oParam, data)});
+						oSearch.getResults(function(data) {ns1blankspace.action.container.show(oParam, data)});
 					}
 					else
 					{

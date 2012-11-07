@@ -200,7 +200,7 @@ ns1blankspace.financial.invoice =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.dialog.position({xhtmlElementID: sElementId});
+											ns1blankspace.container.position({xhtmlElementID: sElementId});
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';

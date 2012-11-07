@@ -197,7 +197,7 @@ ns1blankspace.contactBusiness =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.dialog.position({xhtmlElementID: sElementId});
+											ns1blankspace.container.position({xhtmlElementID: sElementId});
 											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
@@ -935,7 +935,7 @@ ns1blankspace.contactBusiness =
 											label: "Add Group"
 										})
 										.click(function() {
-											ns1blankspace.dialog.position(
+											ns1blankspace.container.position(
 											{
 												xhtmlElementID: 'ns1blankspaceContactBusinessGroupsAdd',
 												leftOffset: -50,

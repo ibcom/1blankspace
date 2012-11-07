@@ -187,7 +187,7 @@ ns1blankspace.opportunity =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.dialog.position({xhtmlElementID: sElementId});
+											ns1blankspace.container.position({xhtmlElementID: sElementId});
 											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();

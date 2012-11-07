@@ -25,8 +25,8 @@ ns1blankspace.util.fs();
 ns1blankspace.util.endpointURI();
 ns1blankspace.status.message();
 ns1blankspace.status.error();
-ns1blankspace.dialog.confirm();
-ns1blankspace.dialog.position(
+ns1blankspace.container.confirm();
+ns1blankspace.container.position(
 	{
 		xhtmlElementID: 'ns1blankspaceContactPersonGroupsAdd',
 		leftOffset: -50,

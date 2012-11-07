@@ -189,7 +189,7 @@ ns1blankspace.setup.user =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{	
-											ns1blankspace.dialog.position({xhtmlElementID: sElementId});
+											ns1blankspace.container.position({xhtmlElementID: sElementId});
 											ns1blankspace.search.start(sElementId);
 											
 											var oSearch = new AdvancedSearch();
@@ -656,7 +656,7 @@ ns1blankspace.setup.user =
 													label: "Add Role"
 												})
 												.click(function() {
-													ns1blankspace.dialog.position('ns1blankspaceUserAccessRolesAdd', -50, -280);
+													ns1blankspace.container.position('ns1blankspaceUserAccessRolesAdd', -50, -280);
 													ns1blankspace.setup.user.access.add(oParam);
 												})
 												.css('width', '75px')
@@ -1232,7 +1232,7 @@ ns1blankspace.setup.user =
 											})
 											.click(function() 
 											{
-												ns1blankspace.dialog.position({xhtmlElementID: 'ns1blankspaceSetupUserExternalEditRole', leftOffset: -42, topOffset: -258});
+												ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceSetupUserExternalEditRole', leftOffset: -42, topOffset: -258});
 												oParam.user = $('#ns1blankspaceSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.userType = 2;
 												ns1blankspace.setup.user.add(oParam);

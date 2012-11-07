@@ -193,7 +193,7 @@ ns1blankspace.financial.expense =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.dialog.position({xhtmlElementID: sElementId});
+											ns1blankspace.container.position({xhtmlElementID: sElementId});
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';

@@ -185,7 +185,7 @@ ns1blankspace.setup.website =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.dialog.position(sElementId);
+											ns1blankspace.container.position(sElementId);
 											ns1blankspace.search.tart(sElementId);
 											
 											$.ajax(

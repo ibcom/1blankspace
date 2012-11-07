@@ -2401,7 +2401,7 @@ ns1blankspace.search =
 					{
 						if (oResponse == undefined)
 						{
-							ns1blankspace.dialog.position(sXHTMLInputElementID);
+							ns1blankspace.container.position(sXHTMLInputElementID);
 							
 							if (sColumns == undefined) {sColumns = 'title'};
 							
