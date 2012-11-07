@@ -12,6 +12,7 @@ ns1blankspace.xhtml.editorCSS = '';
 ns1blankspace.option.defaultRows = 20;
 ns1blankspace.option.defaultView = "People";
 ns1blankspace.option.defaultSetupView = "Website";
+ns1blankspace.option.returnToLast = true;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];
