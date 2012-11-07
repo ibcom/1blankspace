@@ -989,7 +989,7 @@ ns1blankspace.app =
 								});	
 						}
 						
-						$('#ns1blankspaceViewControlSet').button(
+						$('#ns1blankspaceViewControlViewContainer').button(
 						{
 							label: ns1blankspace.viewName
 						});
@@ -4121,7 +4121,7 @@ ns1blankspace.show =
 				{
 					var bRefresh = false;
 					var sSelector = '#ns1blankspaceMain';
-					var sClassSelector = '.ns1blankspaceControl';
+					var sClassSelector = 'div.ns1blankspaceControl';
 
 					if (oParam)
 					{

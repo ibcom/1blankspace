@@ -7,7 +7,7 @@
 
 ns1blankspace.setup.user = 
 {
-	init: 		function ()
+	init: 		function (oParam)
 				{
 					var bShowHome = true
 					
@@ -70,13 +70,13 @@ ns1blankspace.setup.user =
 						$('#ns1blankspaceControlInternal').click(function(event)
 						{
 							ns1blankspace.show({refresh: true});
-							ns1blankspace.setup.home();
+							ns1blankspace.setup.user.home();
 						});
 
-						$('#ns1blankspaceControlInternal').click(function(event)
+						$('#ns1blankspaceControlExternal').click(function(event)
 						{
 							ns1blankspace.show({refresh: true});
-							ns1blankspace.setup.external.show();
+							ns1blankspace.setup.user.external.show();
 						});
 
 						$('#ns1blankspaceControlInternal').addClass('ns1blankspaceHighlight');
@@ -818,7 +818,7 @@ ns1blankspace.setup.user =
 												}
 												else
 												{	
-													ns1blankspace.setup.externalUser.access({step:3, user: iUser});
+													ns1blankspace.setup.user.external.access({step:3, user: iUser});
 												}	
 											}
 										});
@@ -985,11 +985,11 @@ ns1blankspace.setup.user =
 								}
 				},
 
-	externalUser:
+	external:
 				{					
-					access:		function (oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
-									var sXHTMLElementID = 'divInterfaceMain';
+									var sXHTMLElementID = 'ns1blankspaceMain';
 									var iStep = 1;
 									var aXHTMLElementID = [];
 									var iUser;
@@ -1016,12 +1016,11 @@ ns1blankspace.setup.user =
 											oSearch.addField('userlogon,spacetext,usercontactpersontext,unrestrictedaccess,user');
 											oSearch.rows = 50;
 											oSearch.sort('userlogon', 'asc');
-											oSearch.getResults(function(data) {ns1blankspace.setup.externalUser.access(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.setup.user.external.show(oParam, data)});
 										}
 										else
 										{
 											var aHTML = [];
-											var h = -1;
 											
 											aHTML.push('<table id="ns1blankspaceSetupUserExternal" class="interfaceMain">' +
 														'<tr>' +
@@ -1043,7 +1042,7 @@ ns1blankspace.setup.user =
 											
 											aHTML.push('</table>');					
 											
-											$('#tns1blankspaceSetupUserExternalColumn3').html(aHTML.join(''));
+											$('#ns1blankspaceSetupUserExternalColumn3').html(aHTML.join(''));
 											
 											$('#ns1blankspaceSetupUserExternalAdd').button(
 											{
@@ -1053,7 +1052,7 @@ ns1blankspace.setup.user =
 											{
 												oParam.step = 2;
 												oParam.xhtmlElementID = '';
-												ns1blankspace.setup.externalUser.access(oParam);
+												ns1blankspace.setup.user.external.show(oParam);
 											});
 
 											var aHTML = [];
@@ -1096,13 +1095,13 @@ ns1blankspace.setup.user =
 												
 												aHTML.push('</table>');
 
-												$('#tns1blankspaceSetupUserExternalColumn1').html(aHTML.join(''));
+												$('#ns1blankspaceSetupUserExternalColumn1').html(aHTML.join(''));
 															
 												$('td.ns1blankspaceSetupUserExternal').click(function(event)
 												{
 													oParam.step = 2;
 													oParam.xhtmlElementID = event.target.id;
-													ns1blankspace.setup.externalUser.access(oParam);
+													ns1blankspace.setup.user.external.show(oParam);
 												});
 
 												$('.ns1blankspaceRowRemove').button(
@@ -1114,7 +1113,7 @@ ns1blankspace.setup.user =
 												{
 													oParam.step = 6;
 													oParam.xhtmlElementID = this.id;
-													ns1blankspace.setup.externalUser.access(oParam);
+													ns1blankspace.setup.user.external.show(oParam);
 												})
 												.css('width', '15px')
 												.css('height', '20px')
@@ -1135,8 +1134,8 @@ ns1blankspace.setup.user =
 															'User' +
 															'</td></tr>' +
 															'<tr class="ns1blankspaceSelect">' +
-															'<td id="ns1blankspaceSetupUserExternalUsername" class="ns1blankspaceText">' +
-															'<input id="ns1blankspaceSetupUserExternalUsername" class="ns1blankspaceText">' +
+															'<td id="ns1blankspaceSetupUserexternalname" class="ns1blankspaceText">' +
+															'<input id="ns1blankspaceSetupUserexternalname" class="ns1blankspaceText">' +
 															'</td></tr>');
 
 											aHTML.push('<tr><td style="padding-bottom:10px;" class="ns1blankspaceNothing">You need to search by the surname<br />and enter at least 3 characters.</td></tr>');
@@ -1147,19 +1146,19 @@ ns1blankspace.setup.user =
 															'<input type="radio" id="radioExternalAccessUnrestrictedN" name="radioExternalAccessUnrestricted" value="N"/>Restricted by role' +
 															'</td></tr>');
 										
-											aHTML.push('<tr><td style="padding-top:10px;" id="ns1blankspaceExternalUserRoles"></td></tr>');
+											aHTML.push('<tr><td style="padding-top:10px;" id="ns1blankspaceexternalRoles"></td></tr>');
 
 											aHTML.push('</table>');					
 											
 											$('#ns1blankspaceSetupUserExternalColumn2').html(aHTML.join(''));
 											
-											$('#ns1blankspaceSetupUserExternalUsername').keyup(function()
+											$('#ns1blankspaceSetupUserexternalname').keyup(function()
 											{
 												if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.setup.user.external.search('ns1blankspaceSetupUserExternalUsername')", ns1blankspace.option.typingWait);
+										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.setup.user.external.search('ns1blankspaceSetupUserexternalname')", ns1blankspace.option.typingWait);
 											});	
 												
-											$('#ns1blankspaceSetupUserExternalUsername').live('blur', function() 
+											$('#ns1blankspaceSetupUserexternalname').live('blur', function() 
 											{
 												$(this).removeClass('ns1blankspaceHighlight');
 											});
@@ -1198,7 +1197,7 @@ ns1blankspace.setup.user =
 												ns1blankspace.status.working();
 
 												var sData = 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
-												sData += '&user=' + ns1blankspace.util.fs($('#inputInterfaceMainSetupUserExternalUsername').attr("data-id"));
+												sData += '&user=' + ns1blankspace.util.fs($('#inputInterfaceMainSetupUserexternalname').attr("data-id"));
 												sData += '&type=2';
 												sData += '&unrestrictedaccess=' + ns1blankspace.util.fs($('input[name="radioExternalAccessUnrestricted"]:checked').val());
 
@@ -1210,7 +1209,7 @@ ns1blankspace.setup.user =
 													dataType: 'json',
 													success: function() {
 														oParam.step = 1;
-														ns1blankspace.setup.externalUser.access(oParam);
+														ns1blankspace.setup.user.external.show(oParam);
 														ns1blankspace.status.message('Saved');
 													}
 												});
@@ -1223,7 +1222,7 @@ ns1blankspace.setup.user =
 											.click(function() 
 											{
 												oParam.step = 1;
-												ns1blankspace.setup.externalUser.access(oParam);
+												ns1blankspace.setup.user.external.show(oParam);
 											})
 
 											$('#ns1blankspaceSetupUserExternalEditRole').button(
@@ -1240,13 +1239,13 @@ ns1blankspace.setup.user =
 
 											if (aXHTMLElementID[1])
 											{
-												$('#ns1blankspaceSetupUserExternalUsername').attr("data-id", $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user"))
-												$('#ns1blankspaceSetupUserExternalUsername').val($('#ns1blankspaceSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-usertext"));
+												$('#ns1blankspaceSetupUserexternalname').attr("data-id", $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user"))
+												$('#ns1blankspaceSetupUserexternalname').val($('#ns1blankspaceSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-usertext"));
 												$('[name="radioExternalAccessUnrestricted"][value="' + $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-unrestrictedaccess") + '"]').attr('checked', true);
 
 												oParam.user = $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.step = 3;
-												ns1blankspace.setup.externalUser.access(oParam);
+												ns1blankspace.setup.user.external.ns1blankspaceMainViewportShow(oParam);
 											}
 											else
 											{
@@ -1268,19 +1267,19 @@ ns1blankspace.setup.user =
 											oSearch.addFilter('user', 'EQUAL_TO', iUser)
 											oSearch.rows = 50;
 											oSearch.sort('roletext', 'asc');
-											oSearch.getResults(function(data) {ns1blankspace.setup.externalUser.access(oParam, data)})
+											oSearch.getResults(function(data) {ns1blankspace.setup.user.external.show(oParam, data)})
 										}
 										else
 										{
 											var aHTML = [];
 
-											aHTML.push('<table id="ns1blankspaceExternalUserRoles">');
+											aHTML.push('<table id="ns1blankspaceexternalRoles">');
 
 											$(oResponse.data.rows).each(function()
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 												
-												aHTML.push('<td id="ns1blankspaceExternalUserRole_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+												aHTML.push('<td id="ns1blankspaceexternalRole_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																this.roletext + '</td>');
 
 												aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">' +
@@ -1293,15 +1292,15 @@ ns1blankspace.setup.user =
 											{	
 												aHTML.push('</table>');
 												
-												$('#ns1blankspaceExternalUserRoles').html(aHTML.join(''));
+												$('#ns1blankspaceexternalRoles').html(aHTML.join(''));
 
-												$('# ns1blankspaceExternalUserRoles > td.ns1blankspaceRowRemove').button(
+												$('# ns1blankspaceexternalRoles > td.ns1blankspaceRowRemove').button(
 												{
 													text: false,
 												 	icons: {primary: "ui-icon-close"}
 												})
 												.click(function() {
-													ns1blankspace.setup.user.access.remove(this.id)
+													ns1blankspace.setup.user.show.remove(this.id)
 												})
 												.css('width', '15px')
 												.css('height', '20px')
@@ -1340,7 +1339,7 @@ ns1blankspace.setup.user =
 												url: ns1blankspace.util.endpointURI('NETWORK_USER_SEARCH'),
 												data: 'rows=10&scope=2&surname=' + ns1blankspace.util.fs(sSearchText),
 												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.externalUser.search(sXHTMLInputElementID, data)}
+												success: function(data) {ns1blankspace.setup.user.external.search(sXHTMLInputElementID, data)}
 											});
 										}
 									}

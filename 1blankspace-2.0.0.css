@@ -187,6 +187,12 @@ td.ns1blankspaceLogonNotes
 	text-align: right;
 }
 
+.ns1blankspaceMostLikelySub
+{
+	font-size: 0.75em;
+	color: #999999;
+}
+
 #ns1blankspaceViewControlHomeContainer
 {
 	position: absolute;
