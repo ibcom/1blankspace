@@ -146,13 +146,6 @@ a:hover
 	text-align: right;
 }
 
-#ns1blankspaceViewControlx
-{
-	position: absolute;
-	top: 35px;
-	width: 800px;
-}
-
 #ns1blankspaceViewControlHomeContainer
 {
 	position: absolute;
@@ -164,15 +157,15 @@ a:hover
 {
 	position: absolute;
 	top: 0px;
-	left: 48px;	
+	left: 52px;	
 }
 
 #ns1blankspaceViewControlViewContainer
 {
 	position: absolute;
 	top: 0px;
-	left: 128px;	
-	width: 225px;
+	left: 135px;	
+	width: 216px;
 }
 
 #ns1blankspaceViewControlSearch
@@ -182,7 +175,7 @@ a:hover
 	width: 130px;
 	padding-top: 0px;
 	padding-left: 3px;
-	margin: 0px;
+	margin-top: 1px;
 	font-size: 1.25em;
 	height: 23px;
 }
@@ -200,14 +193,14 @@ a:hover
 {
 	position: absolute;
 	top: 0px;
-	left: 502px;	
+	left: 504px;	
 }
 
 #ns1blankspaceViewControlActionContainer
 {
 	position: absolute;
 	top: 0px;
-	left: 564px;
+	left: 567px;
 }
 
 #ns1blankspaceViewControlActionStatus
@@ -264,7 +257,7 @@ table.ns1blankspaceViewControlContainer
 .ns1blankspaceViewControlColumn
 {
 	background-color: #ffffff;
-	width: 100px;
+	width: 115px;
 	font-size: 0.9375em;
 	border-spacing: 6px;
 }

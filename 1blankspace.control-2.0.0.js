@@ -314,7 +314,7 @@ ns1blankspace.control =
 						
 					if (iStep == 1)
 					{
-						if (ns1blankspace.userUnrestricted)
+						if (ns1blankspace.user.unrestricted)
 						{
 							$.extend(true, oParam, {step: 4});
 							ns1blankspace.control.init(oParam)
@@ -356,7 +356,7 @@ ns1blankspace.control =
 						}
 						else
 						{
-							ns1blankspace.userMethods = oResponse.data.rows;
+							ns1blankspace.user.methods = oResponse.data.rows;
 							$.extend(true, oParam, {step: 3});
 							ns1blankspace.control.init(oParam);
 						}
@@ -366,15 +366,14 @@ ns1blankspace.control =
 					{
 						$(ns1blankspace.views).each(function(i, k)
 						{
-							var oMethods = $.grep(ns1blankspace.userMethods, function (a) {return (a.accessmethodtext).indexOf(k.endpoint) != -1;})	
+							var oMethods = $.grep(ns1blankspace.user.methods, function (a) {return (a.accessmethodtext).indexOf(k.endpoint) != -1;})	
 							if (oMethods.length == 0) {this.show = false};
 						});
 					}
 
 					else if (iStep == 4)
 					{
-						if (ns1blankspace.systemAdmin) {ns1blankspace.setupShow = true};
-						ns1blankspace.views.show();
+						if (ns1blankspace.user.systemAdmin) {ns1blankspace.setupShow = true};
 					}		
 				},
 

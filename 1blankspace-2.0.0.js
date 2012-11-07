@@ -352,8 +352,7 @@ ns1blankspace.app =
 					ns1blankspace.setupViewport = false;
 					ns1blankspace.inputDetected = false;
 					ns1blankspace.unloadWarning = false;
-					ns1blankspace.systemAdmin = false;
-
+					
 					ns1blankspace.object = -1;
 					ns1blankspace.objectName = '';
 					ns1blankspace.objectContext = -1;
@@ -375,6 +374,7 @@ ns1blankspace.app =
 					ns1blankspace.user.networkGroups = '';
 					ns1blankspace.user.id = -1;
 					ns1blankspace.user.contactperson = -1;
+					ns1blankspace.user.systemAdmin = false;
 					ns1blankspace.setupShow = false;
 						
 					ns1blankspace.data.searchSource = {text: 1, browse: 2, select: 3, all: 4}
@@ -655,7 +655,9 @@ ns1blankspace.app =
 					
 					ns1blankspace.unloadWarning = true;
 
-					//??? interfaceControlSecurity();
+					ns1blankspace.setupShow = ns1blankspace.user.systemAdmin;
+
+					ns1blankspace.control.init();
 											
 					$('#ns1blankspaceHeaderColumn2').css('width', '250px');
 					$('#ns1blankspaceHeaderColumn2').html('<div id="ns1blankspaceSpaceText">' + ns1blankspace.spaceText + '</div>' +
