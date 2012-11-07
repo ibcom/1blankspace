@@ -897,10 +897,6 @@ ns1blankspace.app =
 					else
 					{
 						ns1blankspace.app.showWhenLoaded('home');
-						//ns1blankspace.timer.whenLoaded = window.setInterval('ns1blankspace.showWhenLoad("home")', 100);
-
-						//while (ns1blankspace.home == undefined) {}
-						//ns1blankspace.home.show();  //??? .init()
 					}	
 					
 					if (ns1blankspace.option.setFocus) {$('#ns1blankspaceViewControlSearch').focus()};
@@ -2067,13 +2063,13 @@ ns1blankspace.setup =
 					var h = -1;
 					
 					$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-					$('#div1blankspaceViewportControlSet').unbind('click');
+					$('#ns1blankspaceViewControlViewContainer').unbind('click');
 					
-					if (ns1blankspace.setupViewport)
+					if (ns1blankspace.setupView)
 					{
-						ns1blankspace.setupViewport = false;
+						ns1blankspace.setupView = false;
 						
-						$('#divns1blankspaceViewportControlSet')
+						$('#ns1blankspaceViewControlViewContainer')
 						.button(
 						{
 							icons: 
@@ -2085,33 +2081,34 @@ ns1blankspace.setup =
 						})
 						.click(function() 
 						{
-							ns1blankspaceViewportControlShow(this);
+							ns1blankspace.control.views.show(this);;
 						});
 						
 						ns1blankspace.control.setView.default();
-						ns1blankspace.home.show();
 						
-						ns1blankspace.status.message("")	
+						//ns1blankspace.home.show();
+						
+						ns1blankspace.status.message('');
 					}
 					else
 					{
-						ns1blankspace.setupViewport = true;
+						ns1blankspace.setupView = true;
 
-						$('#divns1blankspaceViewportControlSet')
+						$('#ns1blankspaceViewControlViewContainer')
 						.button(
 						{
 							label: ns1blankspace.option.defaultSetupView
 						})
 						.click(function() 
 						{
-							ns1blankspace.setup.show(this);
+							ns1blankspace.control.setup.views.show(this);;
 						});
 					
-						$('.divInterfaceViewportMain').html(interfaceControlSetupOptions);
+						//$('.divInterfaceViewportMain').html(interfaceControlSetupOptions);
 						
 						ns1blankspace.control.setView.setup();
 						
-						ns1blankspace.status.message("Click icon again to return.")		
+						ns1blankspace.status.message('');	
 					}		
 				}
 }				

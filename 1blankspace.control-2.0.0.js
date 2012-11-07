@@ -766,7 +766,7 @@ ns1blankspace.control =
 													{
 														var aHTML = [];
 
-														aHTML.push('<table class="ns1blankspaceViewControl">');
+														aHTML.push('<table class="ns1blankspaceViewControlContainer">');
 														aHTML.push('<tr class="ns1blankspaceViewControl">');
 														
 														var aHTMLViewport = [];
@@ -962,30 +962,43 @@ ns1blankspace.control =
 														
 														aHTML.push('</tr></table>');
 														
-														return aHTML.join('');	
+														ns1blankspace.container.show(
+														{
+															xhtmlElementID: 'ns1blankspaceViewControlViewContainer',
+															xhtml: aHTML.join('')
+														});	
+
+														ns1blankspace.control.setup.views.bind();
 													},
 
 										bind:		function ()
 													{
-														$.grep(ns1blankspace.views, function (a) {return a.type == 2;}).each(function()
+														$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
 														{
 															var sNS = '_' + this.namespace;
-															if (this.parentnamespace) {sNS = '_' + this.parentnamespace + sNS}
+															
+															if (this.parentnamespace)
+															{
+																sNS = '_' + this.parentnamespace + sNS;
+																$('#ns1blankspaceViewControl' + sNS).attr('data-parentnamespace', this.parentnamespace);
+															}
+
+															$('#ns1blankspaceViewControl' + sNS).attr('data-namespace', this.namespace);
 
 															$('#ns1blankspaceViewControl' + sNS).click(function(event)
 															{
 																$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 
-																if (this.parentnamespace)
+																if ($(this).attr('data-parentnamespace'))
 																{
-																	var oNS = ns1blankspace[this.parentnamespace][this.namespace];
+																	var oNS = ns1blankspace[$(this).attr('data-parentnamespace')][$(this).attr('data-namespace')];
 																}
 																else
 																{
-																	var oNS = ns1blankspace[this.parentnamespace];
+																	var oNS = ns1blankspace[$(this).attr('data-namespace')];
 																}
 
-																oNS.init(this.param);
+																oNS.init();
 															});
 														});
 													}
@@ -1394,7 +1407,7 @@ ns1blankspace.control =
 												url: ns1blankspace.util.endpointURI('CORE_SPACE_SEARCH'),
 												data: 'rows=20&spacetext=' + ns1blankspace.util.fs(sSearchText),
 												dataType: 'json',
-												success: function(data) {ns1blankspace.control.spaces.show(sXHTMLElementID, data)}
+												success: function(data) {ns1blankspace.control.spaces.process(sXHTMLElementID, data)}
 											});
 										}
 										else
