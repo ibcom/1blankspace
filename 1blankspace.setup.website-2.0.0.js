@@ -283,7 +283,7 @@ ns1blankspace.setup.website =
 						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
 
-						HTML.push('<tr><td id="ns1blankspaceControlAttachmentAdd" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachmentAdd" class="ns1blankspaceControl">' +
 										'Upload</td></tr>');
 
 						aHTML.push('<tr><td>&nbsp;</td></tr>');
@@ -396,7 +396,7 @@ ns1blankspace.setup.website =
 	show: 		function (oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspace.contactPerson.layout();
+					ns1blankspace.setup.website.layout();
 					
 					var aHTML = [];
 					
@@ -475,7 +475,7 @@ ns1blankspace.setup.website =
 						}
 						else
 						{
-							aHTML.push('<tr><td class="ins1blankspaceSummaryCaptionSummary">App Status</td></tr>' +
+							aHTML.push('<tr><td class="ins1blankspaceSummaryCaption">App Status</td></tr>' +
 										'<tr><td class="ns1blankspaceSummarySummary">' +
 										ns1blankspace.objectContextData.ondemandstatustext +
 										'</td></tr>');

@@ -409,6 +409,94 @@ td.ns1blankspaceRow
 	padding-left: 2px;
 }
 
+input.ns1blankspaceText, .ins1blankspaceTextMoney
+{
+	width: 100%;
+	font-size: 0.875em;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-bottom: 5px;
+}
+
+input.ns1blankspaceDate, input.ns1blankspaceDateTime
+{
+	width: 100%;
+	font-size: 0.875em;
+	margin-bottom: 5px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-bottom: 5px;
+}
+
+td.ns1blankspaceRadio
+{
+	font-size: 0.875em;
+	padding-left: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-bottom: 5px;
+}
+
+textarea.ns1blankspaceTextMulti
+{
+	height: 250px;
+	width: 250px;
+	font-size: 0.875em;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	margin-bottom: 5px;
+}
+
+textarea.ns1blankspaceTextMultiLarge
+{
+	height: 250px;
+	width: 100%;
+	font-size: 0.875em;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	margin-bottom: 5px;
+}
+
+textarea.ns1blankspaceTextMultiSmall
+{
+	height: 50px;
+	width: 100%;
+	font-size: 0.875em;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	margin-bottom: 5px;
+}
+
+input.ns1blankspaceSelect, input.ins1blankspaceSelectContact, input.ns1blankspaceSelectContactEmail, input.ns1blankspaceSelectCustom
+{
+	width: 100%;
+	font-size: 0.875em;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-bottom: 5px;
+}
+
 .ui-button-icon-only .ui-icon
 {
 	margin-left: -8px;

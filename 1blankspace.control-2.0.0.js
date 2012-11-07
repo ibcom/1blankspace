@@ -882,7 +882,7 @@ ns1blankspace.control =
 
 														var aHTMLViewport = [];
 
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Websites';})[0];
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Websites & Webapps';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
 															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +

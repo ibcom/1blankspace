@@ -413,14 +413,14 @@ ns1blankspace.app =
 						ns1blankspace.history.control({xhtmlElementID: this.id});
 					});
 					
-					$('.ns1blankspaceControl').live('mousedown', function() 
+					$('td.ns1blankspaceControl').live('mousedown', function() 
 					{
-						$('td.ns1blankspaceControlHighlight').removeClass('ns1blankspaceControlHighlight');
+						$('td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
 					});
 
-					$('.ns1blankspaceControl').live('mouseup', function() 
+					$('td.ns1blankspaceControl').live('mouseup', function() 
 					{
-						$(this).addClass('ns1blankspaceControlHighlight');
+						$(this).addClass('ns1blankspaceHighlight');
 					});
 
 					$('.ns1blankspaceWatermark').live('focus', function() 
@@ -4150,7 +4150,7 @@ ns1blankspace.show =
 				{
 					var bRefresh = false;
 					var sSelector = '#ns1blankspaceMain';
-					var sClassSelector = 'div.ns1blankspaceControl';
+					var sClassSelector = 'div.ns1blankspaceControlMain';
 
 					if (oParam)
 					{
