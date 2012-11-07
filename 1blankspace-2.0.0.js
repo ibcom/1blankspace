@@ -321,7 +321,7 @@ ns1blankspace.app =
 											'</div>');
 					}		
 
-					$('#ns1blankspaceMain').html('Initialising the app...');
+					$('#ns1blankspaceViewControl').html('Initialising the app...');
 
 					$.each(ns1blankspace.scripts, function()
 					{
@@ -659,10 +659,9 @@ ns1blankspace.app =
 
 					ns1blankspace.control.init();
 											
-					$('#ns1blankspaceHeaderColumn2').css('width', '250px');
-					$('#ns1blankspaceHeaderColumn2').html('<div id="ns1blankspaceSpaceText">' + ns1blankspace.spaceText + '</div>' +
-													'<div id="ns1blankspaceLogonName">' + ns1blankspace.user.commonname + '</div>');
-	
+					$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
+					$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
+
 					aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
 									'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
 									'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
@@ -699,7 +698,7 @@ ns1blankspace.app =
 					{
 						aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
 										'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
-										'<label style="font-size:0.875em;" for="ns1blankspaceControlSetup">&nbsp;</label>' +
+										'<label for="ns1blankspaceViewControlSetup">&nbsp;</label>' +
 										'</div>');
 					}				
 					

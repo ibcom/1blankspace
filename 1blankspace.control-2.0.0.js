@@ -41,7 +41,10 @@ ns1blankspace.xhtml.logonNotes =
 	'<br /><a href="https://developer.1blankspace.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
 
 ns1blankspace.xhtml.header =
-	'<img src="/jscripts/images/1blankspace-2.0.0.png">';
+	'<div id="ns1blankspaceLogo" style="width:200px; float:left; "><img src="/jscripts/images/1blankspace-2.0.0.png"></div>' +
+	'<div style="float:right; margin-right:3px;">' +
+	'<div id="ns1blankspaceSpaceText" style="width:300px;"></div>' +
+	'<div id="ns1blankspaceLogonName" style="width:300px;"></div></div>';
 
 ns1blankspace.views = 
 [
