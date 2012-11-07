@@ -7,7 +7,7 @@
 
 ns1blankspace.setup.financial = 
 {
-	init: 		function ()
+	init: 		function (oParam)
 				{
 					var bShowHome = true
 					

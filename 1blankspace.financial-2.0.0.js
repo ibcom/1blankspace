@@ -16,6 +16,7 @@ ns1blankspace.financial.init = function (oParam)
 
 						ns1blankspace.object = -1;
 						ns1blankspace.objectContextData = undefined;
+						ns1blankspace.objectParentName = undefined;
 						ns1blankspace.objectName = 'Financials';
 						ns1blankspace.objectContext = -1;
 						

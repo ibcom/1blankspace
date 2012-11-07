@@ -7,7 +7,7 @@
  
 ns1blankspace.setup.project = 
 {
-	init: 		function interfaceSetupProjectMasterViewport(oParam)
+	init: 		function (oParam)
 				{
 					var bShowHome = true
 					
@@ -35,7 +35,7 @@ ns1blankspace.setup.project =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function interfaceSetupProjectHomeShow(oResponse)
+	home:		function (oResponse)
 				{
 					if (oResponse == undefined)
 					{

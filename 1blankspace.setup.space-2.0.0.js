@@ -7,9 +7,8 @@
  
 ns1blankspace.setup.space = 
 {
-	init: 		function ()
+	init: 		function (oParam)
 				{
-
 					var bShowHome = true
 					
 					if (oParam != undefined)

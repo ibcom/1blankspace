@@ -898,8 +898,6 @@ ns1blankspace.app =
 					{
 						ns1blankspace.app.showWhenLoaded('home');
 					}	
-					
-					if (ns1blankspace.option.setFocus) {$('#ns1blankspaceViewControlSearch').focus()};
 				},
 
 	scriptLoaded:
@@ -941,7 +939,6 @@ ns1blankspace.app =
 					$('#ns1blankspaceViewControlNewOptions').unbind('click');
 					$('#ns1blankspaceViewControlAction').unbind('click');
 					$('#ns1blankspaceViewControlActionOptions').unbind('click');
-					$('#ns1blankspaceViewControlSetup').unbind('click');
 					$('#ns1blankspaceViewControlSetupOptions').unbind('click');
 					$('#nns1blankspaceViewControlHelp').unbind('click');
 					$('#ns1blankspaceViewControlHelpOptions').unbind('click');
@@ -1015,6 +1012,8 @@ ns1blankspace.app =
 							oNS.new();
 						});
 						
+						$('#ns1blankspaceViewControlNew').button({disabled: false});
+
 						$('#ns1blankspaceViewControlNewOptions').click(function(event)
 						{
 							oNS.new.options();
@@ -1025,7 +1024,7 @@ ns1blankspace.app =
 							oNS.save.send();
 						});
 						
-						$('ns1blankspaceViewControlAction').button({disabled: true});
+						$('#ns1blankspaceViewControlAction').button({disabled: true});
 						
 						$('#ns1blankspaceViewControlActionOptions').click(function(event)
 						{

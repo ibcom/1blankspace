@@ -7,7 +7,7 @@
  
 ns1blankspace.setup.userRole = 
 {
-	init: 		function ()
+	init: 		function (oParam)
 				{
 					var bShowHome = true
 					
@@ -21,7 +21,7 @@ ns1blankspace.setup.userRole =
 					ns1blankspace.objectName = 'userRole';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'User ROles';
+					ns1blankspace.viewName = 'User Roles';
 					
 					if (bShowHome)
 					{

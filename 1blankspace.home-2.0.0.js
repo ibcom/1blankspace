@@ -32,7 +32,7 @@ $(function()
 		{
 			var aHash = sHash.split('-');
 		
-			if (aHash[0] == '#viewport')
+			if (aHash[0] == '#view')
 			{
 				if (aHash.length > 1)
 				{
@@ -49,7 +49,16 @@ $(function()
 ns1blankspace.home = 
 {
 	show: 		function ()
-				{				
+				{		
+					$('#ns1blankspaceViewControlAction').button({disabled: true});
+					$('#ns1blankspaceViewControlNew').button({disabled: true});
+					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
+
+					$('#ns1blankspaceViewControlViewContainer').button(
+						{
+							label: 'Select...'
+						});
+
 					var aHTML = [];
 					
 					aHTML.push('<table id="ns1blankspaceHomeContainer">');

@@ -193,6 +193,11 @@ td.ns1blankspaceLogonNotes
 	color: #999999;
 }
 
+.ns1blankspaceSub, .ns1blankspaceSubContext
+{
+	color: #999999;
+}
+
 #ns1blankspaceViewControlHomeContainer
 {
 	position: absolute;
@@ -375,6 +380,27 @@ td.ns1blankspaceMostLikely
 .ns1blankspaceSummary
 {
 	padding-bottom: 10px;
+}
+
+td.ns1blankspaceRowSelect, td.ns1blankspaceSelect
+{
+	cursor: pointer;
+	color: #ee8f00;
+	text-decoration: none;
+	font-size: 0.875em;
+}
+
+td.ns1blankspaceRow
+{
+	font-size: 0.875em;
+	border-spacing: 0px;
+	border-bottom-style:solid;
+	border-width: 1px;
+	border-color: #D0D0D0;	
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+	padding-left: 2px;
 }
 
 .ui-button-icon-only .ui-icon

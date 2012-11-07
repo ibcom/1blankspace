@@ -11,6 +11,7 @@ ns1blankspace.contactPerson =
 				{
 					ns1blankspace.object = 32;	
 					ns1blankspace.objectName = 'contactPerson';
+					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'People';

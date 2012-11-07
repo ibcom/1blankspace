@@ -7,7 +7,7 @@
  
 ns1blankspace.setup.messaging = 
 {
-	init: 		function ()
+	init: 		function (oParam)
 				{
 					var bShowHome = true
 					

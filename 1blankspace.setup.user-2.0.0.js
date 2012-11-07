@@ -1078,10 +1078,10 @@ ns1blankspace.setup.user =
 																			'" class="ns1blankspaceRow ns1blankspaceSelect ns1blankspaceSetupUserExternal">' +
 																			this.userlogon);
 													
-													aHTML.push('<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceSetupUserExternal_space-' + this.id + '">' +
+													aHTML.push('<br /><span class="ns1blankspaceSub" id="ns1blankspaceSetupUserExternal_space-' + this.id + '">' +
 									 										this.spacetext + '</span>');
 
-													aHTML.push('<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceSetupUserExternal_usercontactname-' + this.id + '">' +
+													aHTML.push('<br /><span class="ns1blankspaceSub" id="ns1blankspaceSetupUserExternal_usercontactname-' + this.id + '">' +
 									 										this.usercontactpersontext + '</span>');
 
 									 				aHTML.push('</td>');						
@@ -1245,7 +1245,7 @@ ns1blankspace.setup.user =
 
 												oParam.user = $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.step = 3;
-												ns1blankspace.setup.user.external.ns1blankspaceMainViewportShow(oParam);
+												ns1blankspace.setup.user.external.show(oParam);
 											}
 											else
 											{

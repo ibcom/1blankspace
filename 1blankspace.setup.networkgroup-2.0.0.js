@@ -35,7 +35,7 @@ ns1blankspace.setup.networkGroup =
 					ns1blankspace.app.set(oParam);
 				},
 
-	show:		function interfaceSetupNetworkGroupHomeShow(oParam, oResponse)
+	home:		function interfaceSetupNetworkGroupHomeShow(oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -68,7 +68,7 @@ ns1blankspace.setup.networkGroup =
 						oSearch.rows = 10;
 						oSearch.addSummaryField('count networkgroupcount')
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(function(data) {ns1blankspace.setup.networkgroup(oParam, data)});	
+						oSearch.getResults(function(data) {ns1blankspace.setup.networkGroup.home(oParam, data)});	
 					}
 					else
 					{

@@ -7,7 +7,7 @@
  
 ns1blankspace.setup.automation = 
 {
-	init: 		function ()
+	init: 		function (oParam)
 				{
 					var bShowHome = true
 					

@@ -62,7 +62,7 @@ ns1blankspace.setup.structure =
 						});				
 					}
 					
-					if (bShowHome) {interfaceSetupStructureHomeShow()};	
+					if (bShowHome) {ns1blankspace.setup.structure.home()};	
 				},
 
 	bind: 		function ()

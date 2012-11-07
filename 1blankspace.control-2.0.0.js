@@ -455,7 +455,7 @@ ns1blankspace.control =
 	setView:	{
 					default: 		function ()
 									{
-										ns1blankspace.contactPerson.init({showHome: false});		
+										ns1blankspace.contactPerson.init({showHome: true});		
 									},
 
 					setup:			function ()
