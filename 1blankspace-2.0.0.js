@@ -4129,7 +4129,7 @@ ns1blankspace.show =
 
 					$(sClassSelector).hide();
 
-					$(sSelector).show(giShowSpeed);
+					$(sSelector).show();
 
 					ns1blankspace.xhtml.divID = sDivSelector;
 					
