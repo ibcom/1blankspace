@@ -355,7 +355,7 @@ ns1blankspace.projectTask =
 							move: false
 							});
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.projectTask.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.projectTask.summary()'});
 					}	
 				},	
 		

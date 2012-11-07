@@ -309,7 +309,7 @@ ns1blankspace.setup.userRole =
 							move: false
 							})
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.setup.userRole.summary()'})
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.setup.userRole.summary()'})
 					}	
 				},	
 		

@@ -328,7 +328,7 @@ ns1blankspace.stuctureData =
 							move: false
 							});
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.structureData.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.structureData.summary()'});
 					}	
 				},	
 		

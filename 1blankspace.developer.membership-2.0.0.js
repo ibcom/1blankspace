@@ -326,7 +326,7 @@ ns1blankspace.developer.membership =
 							move: false
 							});
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.developer.membership.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.developer.membership.summary()'});
 					}		
 				},
 

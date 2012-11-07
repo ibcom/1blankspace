@@ -367,7 +367,7 @@ ns1blankspace.project =
 							move: false
 							});
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.project.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.project.summary()'});
 					}	
 
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);

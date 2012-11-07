@@ -395,7 +395,7 @@ ns1blankspace.financial.payment =
 							move: false
 							})
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.financial.payment.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.payment.summary()'});
 					}	
 				},		
 		

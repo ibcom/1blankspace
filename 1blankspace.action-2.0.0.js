@@ -372,7 +372,7 @@ ns1blankspace.action =
 								move: false
 								})
 							
-							ns1blankspace.history.object({functionDefault: 'ns1blankspace.action.summary()'});		
+							ns1blankspace.history.control({functionDefault: 'ns1blankspace.action.summary()'});		
 						}
 						
 						if (ns1blankspace.objectContext != -1) {ns1blankspace.action.summary()}

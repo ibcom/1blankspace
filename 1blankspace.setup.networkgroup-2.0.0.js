@@ -307,7 +307,7 @@ ns1blankspace.setup.networkGroup =
 							move: false
 							});
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.setup.networkGroup.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.setup.networkGroup.summary()'});
 					}	
 				},		
 						

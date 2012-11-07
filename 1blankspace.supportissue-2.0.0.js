@@ -364,7 +364,7 @@ ns1blankspace.supportIssue =
 							move: false
 							});
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.supportIssue.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.supportIssue.summary()'});
 					}	
 				},	
 

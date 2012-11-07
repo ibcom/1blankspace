@@ -417,7 +417,7 @@ ns1blankspace.messaging.conversation =
 							move: false
 							});
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.messaging.conversation.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.messaging.conversation.summary()'});
 					}	
 				},	
 		
