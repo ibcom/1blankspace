@@ -72,7 +72,7 @@ ns1blankspace.home =
 									'</tr>');
 					
 					aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
-									'<td id="ns1blankspaceControlActionOverdue" class="ns1blankspaceViewportControl ns1blankspaceControlHome">Overdue</td>' +
+									'<td id="ns1blankspaceControlActionOverdue" class="ns1blankspaceControl ns1blankspaceControlHome">Overdue</td>' +
 									'</tr>');
 									
 					aHTML.push('</table>');					

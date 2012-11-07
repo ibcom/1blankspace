@@ -5,8 +5,8 @@
  * 01 FEB 2010
  */
 
-ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" src="/jscripts/1blankspace.loading.square.20.gif">';
-ns1blankspace.xhtml.loadingSmall = '<img class="ns1blankspaceLoadingSmall" id="imgns1blankspaceLoadingSmall" src="/jscripts/1blankspace.loading.square.10.gif">';
+ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" id="ns1blankspaceLoading" src="/jscripts/images/1blankspace.loading.square.20.gif">';
+ns1blankspace.xhtml.loadingSmall = '<img class="ns1blankspaceLoadingSmall" id="ns1blankspaceLoadingSmall" src="/jscripts/images/1blankspace.loading.square.10.gif">';
 ns1blankspace.xhtml.editorCSS = '';
 
 ns1blankspace.option.defaultRows = 20;
@@ -41,7 +41,7 @@ ns1blankspace.xhtml.logonNotes =
 	'<br /><a href="https://developer.1blankspace.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
 
 ns1blankspace.xhtml.header =
-	'<img src="/jscripts/1blankspace-2.0.0.png">';
+	'<img src="/jscripts/images/1blankspace-2.0.0.png">';
 
 ns1blankspace.views = 
 [
@@ -716,7 +716,7 @@ ns1blankspace.control =
 											ns1blankspace.xhtml.viewControl = aHTML.join('');
 										}
 
-										$(ns1blankspace.xhtml.container).show(
+										ns1blankspace.container.show(
 										{
 											xhtmlElementID: 'ns1blankspaceViewControlViewContainer',
 											xhtml: ns1blankspace.xhtml.viewControl
