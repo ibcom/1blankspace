@@ -20,91 +20,10 @@ ns1blankspace.financial.init = function (oParam)
 						ns1blankspace.objectName = 'Financials';
 						ns1blankspace.objectContext = -1;
 						
-						interfaceFinancialMasterInitialise();
+						ns1blankspace.financial.initData();
 						
-						if (bShowHome)
-						{
-							ns1blankspaceViewportDestination({
-								newDestination: 'interfaceFinancialMasterViewport({showHome: true});',
-								move: false
-								})		
-						}	
-								
-						ns1blankspaceReset();
-						
-						$('#divns1blankspaceViewportControlSet').button(
-						{
-							label: "Financials"
-						});
-						
-						$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-						{
-							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-					        ns1blankspace.timer.delayCurrent = setTimeout("interfaceFinancialSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-						});
-						
-						$('#spanns1blankspaceViewportControlSearch').click(function(event)
-						{
-							interfaceFinancialSearch('inputns1blankspaceViewportControlSearch');
-						});
-						
-						$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-						{
-							interfaceFinancialSearchOptions();
-						});
-						
-						$('#spanns1blankspaceViewportControlNew').click(function(event)
-						{
-							interfaceFinancialNew();
-						})
-						
-						$('#spanns1blankspaceViewportControlNewOptions').click(function(event)
-						{
-							interfaceFinancialNewOptions();
-						});
-						
-						$('#spanns1blankspaceViewportControlAction').click(function(event)
-						{
-							interfaceFinancialSave();
-						});
-						
-						$('#spanns1blankspaceViewportControlActionOptions').click(function(event)
-						{
-							interfaceFinancialSaveOptions();
-						});
-						
-						$('#spanns1blankspaceViewportControlSetup').click(function(event)
-						{
-							interfaceFinancialSetup();
-						});
-						
-						$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-						{
-							interfaceFinancialSetupOptions();
-						});
-						
-						$('#spanns1blankspaceViewportControlHelp').click(function(event)
-						{
-							interfaceFinancialHelp();
-						});
-						
-						$('#spanns1blankspaceViewportControlHelpOptions').click(function(event)
-						{
-							interfaceFinancialHelpOptions();
-						});
-						
-						$('td.interfaceViewportMasterControlBrowse').click(function(event)
-						{
-							interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-						});
-						
-						$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-						{
-							interfaceFinancialSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-						});
-						
-						if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-						if (bShowHome) {interfaceFinancialHomeShow()};	
+						ns1blankspace.app.reset();
+						ns1blankspace.app.set(oParam);
 					}
 
 ns1blankspace.financial.initData = function (oParam, oResponse)

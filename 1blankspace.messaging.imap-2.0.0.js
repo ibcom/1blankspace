@@ -46,9 +46,9 @@ ns1blankspace.messaging.imap =
 					ns1blankspace.app.reset();
 
 					ns1blankspace.messaging.autoCheck = false;
-					ns1blankspace.messaging.emailAccounts = [];
+					ns1blankspace.messaging.imap.emailAccounts = [];
 					ns1blankspace.messaging.defaultRows = 25;
-					ns1blankspace.messaging.account = -1;
+					ns1blankspace.messaging.imap.account = -1;
 					ns1blankspace.messaging.emailRead = [];
 					ns1blankspace.messaging.emailRemoved = [];
 					ns1blankspace.messaging.showRemoved = false;
@@ -121,7 +121,7 @@ ns1blankspace.messaging.imap =
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
-					ns1blankspace.messaging.emailAccounts.length = 0;
+					ns1blankspace.messaging.imap.emailAccounts.length = 0;
 
 					ns1blankspace.app.set(oParam);
 				},
@@ -134,7 +134,7 @@ ns1blankspace.messaging.imap =
 						{
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_CACHE_CHECK'),
-							data: 'account=' + ns1blankspace.util.fs(ns1blankspace.messaging.account),
+							data: 'account=' + ns1blankspace.util.fs(ns1blankspace.messaging.imap.account),
 							dataType: 'json',
 							success: function(data) {ns1blankspace.messaging.check(oParam, data)}
 						});
@@ -162,7 +162,7 @@ ns1blankspace.messaging.imap =
 			
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					
-					if (ns1blankspace.messaging.emailAccounts.length == 0)
+					if (ns1blankspace.messaging.imap.emailAccounts.length == 0)
 					{
 						if (oResponse == undefined)
 						{
@@ -170,8 +170,7 @@ ns1blankspace.messaging.imap =
 					
 							$('#ns1blankspaceViewportControl').html(ns1blankspace.xhtml.loading);
 							
-							var sData = '&account=' + gsMessagingEmailAccount;
-							sData += '&type=5';
+							var sData = 'type=5';
 							if (ns1blankspace.option.messagingEmailShowCount) {sData += '&advanced=1'}
 
 							$.ajax(
@@ -180,7 +179,7 @@ ns1blankspace.messaging.imap =
 								url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ACCOUNT_SEARCH'),
 								data: sData,
 								dataType: 'json',
-								success: function(data) {ns1blankspace.messaging.home(oParam, data)}
+								success: function(data) {ns1blankspace.messaging.imap.home(oParam, data)}
 							});
 						}
 						else
@@ -191,7 +190,7 @@ ns1blankspace.messaging.imap =
 							aHTML.push('<tr><td id="ns1blankspaceViewMessagingEmailLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 							aHTML.push('</table>');		
 							
-							ns1blankspace.messaging.emailAccounts.length = 0;
+							ns1blankspace.messaging.imap.emailAccounts.length = 0;
 							
 							if (oResponse.data.rows.length != 0)
 							{
@@ -199,18 +198,18 @@ ns1blankspace.messaging.imap =
 								
 								$.each(oResponse.data.rows, function(index)
 								{
-									ns1blankspace.messaging.emailAccounts.push({
+									ns1blankspace.messaging.imap.emailAccounts.push({
 										id: this.id,
 										footer: (this.footer).formatXHTML()
 									})		
 									
 									if (index == 0) 
 									{
-										ns1blankspace.messaging.account = this.id;
+										ns1blankspace.messaging.imap.account = this.id;
 									}
 									else
 									{
-										ns1blankspace.messaging.account = undefined;
+										ns1blankspace.messaging.imap.account = undefined;
 									}
 									
 									var sDescription = this.email;
@@ -254,17 +253,17 @@ ns1blankspace.messaging.imap =
 								var sID = event.target.id
 								var aID = sID.split('-');
 
-								if (ns1blankspace.messaging.account != aID[1])
+								if (ns1blankspace.messaging.imap.account != aID[1])
 								{
-									ns1blankspace.messaging.inbox.show({xhtmlElementID: event.target.id, source: 1, newOnly: false, repaginate:true});
+									ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: event.target.id, source: 1, newOnly: false, repaginate:true});
 								}	
 							});
 							
-							if (ns1blankspace.messaging.account != undefined && bAutoShow)
+							if (ns1blankspace.messaging.imap.account != undefined && bAutoShow)
 							{
-								$('#ns1blankspaceMessaging-' + ns1blankspace.messaging.account).addClass('ns1blankspaceHighlight');
+								$('#ns1blankspaceMessaging-' + ns1blankspace.messaging.imap.account).addClass('ns1blankspaceHighlight');
 								ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
-								ns1blankspace.messaging.inbox.show({xhtmlElementID: '-' + ns1blankspace.messaging.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+								ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 							}	
 						}
 					}	
@@ -301,12 +300,12 @@ ns1blankspace.messaging.imap =
 									{
 										var aXHTMLElementID = sXHTMLElementID.split('-');
 										
-										if (ns1blankspace.messaging.account != aXHTMLElementID[1]) 
+										if (ns1blankspace.messaging.imap.account != aXHTMLElementID[1]) 
 										{
 											bRefresh = true;
 											oParam.refreshInbox = true;
 										}
-										ns1blankspace.messaging.account = aXHTMLElementID[1];
+										ns1blankspace.messaging.imap.account = aXHTMLElementID[1];
 									}	
 									
 									if (bRefresh) {ns1blankspace.messaging.check()}
@@ -329,13 +328,13 @@ ns1blankspace.messaging.imap =
 								        if (ns1blankspace.messaging.autoCheck) {ns1blankspace.timer.messaging = setInterval("ns1blankspace.messaging.check()", ns1blankspace.option.messagingCheckForNew)};
 									}	
 										
-									if (ns1blankspace.messaging.account != undefined && oResponse == undefined && bRefresh)
+									if (ns1blankspace.messaging.imap.account != undefined && oResponse == undefined && bRefresh)
 									{	
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 										oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
 															'hasattachments,attachments,imapflags,detailscached');
-										oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
+										oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.imap.account);
 										oSearch.addSummaryField('count(*) cachecount');
 										oSearch.sort('date', 'desc')
 										oSearch.rows = ns1blankspace.messaging.defaultRows;
@@ -380,7 +379,7 @@ ns1blankspace.messaging.imap =
 												
 										$('#ns1blankspaceMessagingInboxRefresh').click(function()
 										{
-											ns1blankspace.messaging.inbox.search({xhtmlElementID: '-' + ns1blankspace.messaging.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+											ns1blankspace.messaging.inbox.search({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 										})
 										
 										$('#ns1blankspaceSentEmails').click(function() {
@@ -579,7 +578,7 @@ ns1blankspace.messaging.imap =
 										oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 										oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
 															'message,hasattachments,attachments,imapflags,detailscached');
-										oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
+										oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.imap.account);
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.rows = ns1blankspace.messaging.defaultRows;
 										oSearch.getResults(function(data) {ns1blankspace.messaging.imap.show(oParam, data)});	
@@ -608,7 +607,7 @@ ns1blankspace.messaging.imap =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 											oSearch.addField('subject');
-											oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
+											oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.imap.account);
 											oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 											oSearch.rows = ns1blankspace.messaging.defaultRows;
 											oSearch.getResults(function(data) {ns1blankspace.messaging.imap.process(oParam, data)});
@@ -946,7 +945,7 @@ ns1blankspace.messaging.imap =
 									oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 									oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
 														'message,hasattachments,attachments,imapflags,detailscached');
-									oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.account);
+									oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.imap.account);
 									oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 									oSearch.getResults(function(oResponse) 
 										{
@@ -983,7 +982,7 @@ ns1blankspace.messaging.imap =
 													
 													var sLink = ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ATTACHMENT_DOWNLOAD');
 													sLink += '&attachmentindex=' + (iIndex);
-													sLink += '&account=' + ns1blankspace.util.fs(ns1blankspace.messaging.account);
+													sLink += '&account=' + ns1blankspace.util.fs(ns1blankspace.messaging.imap.account);
 													sLink += '&messageid=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.messageid);
 													
 													sAttachments +=	'<a href="' + sLink + '" target="_blank">' + aAttachment[0] + '</a>; ';
@@ -1165,7 +1164,7 @@ ns1blankspace.messaging.imap =
 								{
 									var sLink = ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ATTACHMENT_DOWNLOAD');
 									sLink += '&attachment=' + ns1blankspace.util.fs(iIndex);
-									sLink += '&account=' + ns1blankspace.util.fs(ns1blankspace.messaging.account);
+									sLink += '&account=' + ns1blankspace.util.fs(ns1blankspace.messaging.imap.account);
 									sLink += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 									
 									var aAttachment = this.split('|');
@@ -1479,9 +1478,9 @@ ns1blankspace.messaging.imap =
 
 											aHTML.push('<br />');
 											
-											$.each(ns1blankspace.messaging.emailAccounts, function() 
+											$.each(ns1blankspace.messaging.imap.emailAccounts, function() 
 											{ 
-												if (this.id == ns1blankspace.messaging.account)
+												if (this.id == ns1blankspace.messaging.imap.account)
 												{
 													aHTML.push(this.footer + '<br />');
 												}
@@ -1579,7 +1578,7 @@ ns1blankspace.messaging.imap =
 													if (ns1blankspace.objectContextData.sourcetypetext == "EMAIL")
 													{
 														var sParam = ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ATTACHMENT_MANAGE') + '&rf=TEXT';
-														var sData = 'account=' + ns1blankspace.messaging.account;
+														var sData = 'account=' + ns1blankspace.messaging.imap.account;
 														sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 														
 														$.ajax(
@@ -1629,9 +1628,9 @@ ns1blankspace.messaging.imap =
 										{
 											var sFooter = '<br />';
 											
-											$.each(ns1blankspace.messaging.emailAccounts, function() 
+											$.each(ns1blankspace.messaging.imap.emailAccounts, function() 
 											{ 
-												if (this.id == ns1blankspace.messaging.account)
+												if (this.id == ns1blankspace.messaging.imap.account)
 												{
 													sFooter = this.footer + '<br />';
 												}
@@ -1877,7 +1876,7 @@ ns1blankspace.messaging.imap =
 					{
 						//sSearchContext = sSearchContext.replace(/\___/g, '.');	
 						
-						var sData = '&flags=(\\SEEN)&account=' + ns1blankspace.messaging.account;
+						var sData = '&flags=(\\SEEN)&account=' + ns1blankspace.messaging.imap.account;
 						sData += '&id=' + ns1blankspace.util.fs(sSearchContext);
 								
 						$.ajax(
@@ -2069,7 +2068,7 @@ ns1blankspace.messaging.imap =
 
 					if (iStep == 2)
 					{
-						var sData = 'account=' + ns1blankspace.util.fs(ns1blankspace.messaging.account);
+						var sData = 'account=' + ns1blankspace.util.fs(ns1blankspace.messaging.imap.account);
 						sData += '&messageid=' + ns1blankspace.util.fs(sMessageID);
 						
 						$.ajax(

@@ -154,7 +154,7 @@ ns1blankspace.setup.website =
 										
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#ns1blankspaceViewControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
@@ -421,7 +421,7 @@ ns1blankspace.setup.website =
 							move: false
 							});
 						
-						ns1blankspace.history.object({functionDefault: 'ns1blankspace.setup.website.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.setup.website.summary()'});
 					}	
 				},	
 		

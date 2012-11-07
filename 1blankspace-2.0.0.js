@@ -834,7 +834,7 @@ ns1blankspace.app =
 						.css('font-size', '0.75em')			
 						.click(function() 
 						{
-							ns1blankspace.setup.switch(this);
+							ns1blankspace.setup.switch();
 						});	
 					
 					$('#ns1blankspaceViewControlHelp')
@@ -1713,7 +1713,17 @@ ns1blankspace.history.view =
 							{
 								if (sDestinationInstructions != '' && sDestinationInstructions != undefined)
 								{
-									eval(sDestinationInstructions)
+									if ((sDestinationInstructions).indexOf('setup') != -1)
+									{
+										ns1blankspace.setupView = false;
+										$('#ns1blankspaceViewControlSetup').attr('checked', true);
+										$('#ns1blankspaceViewControlSetup').button('refresh');
+										ns1blankspace.setup.switch({viewScript: sDestinationInstructions});
+									}
+									else
+									{	
+										eval(sDestinationInstructions);
+									}	
 								}	
 							}	
 						}
@@ -2063,8 +2073,17 @@ ns1blankspace.attachments =
 
 ns1blankspace.setup = 
 {
-	switch:		function ()
+	switch:		function (oParam)
 				{
+					var sViewScript;
+					var sXHTMLElementID;
+
+					if (oParam != undefined)
+					{
+						if (oParam.viewScript != undefined) {sViewScript = oParam.viewScript}
+						if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
+					}		
+
 					var aHTML = [];
 					var h = -1;
 					
@@ -2089,10 +2108,8 @@ ns1blankspace.setup =
 						{
 							ns1blankspace.control.views.show(this);;
 						});
-						
+					
 						ns1blankspace.control.setView.default();
-						
-						//ns1blankspace.home.show();
 						
 						ns1blankspace.status.message('');
 					}
@@ -2109,11 +2126,16 @@ ns1blankspace.setup =
 						{
 							ns1blankspace.control.setup.views.show(this);;
 						});
-					
-						//$('.divInterfaceViewportMain').html(interfaceControlSetupOptions);
 						
-						ns1blankspace.control.setView.setup();
-						
+						if (sViewScript)
+						{
+							eval(sViewScript);
+						}
+						else
+						{
+							ns1blankspace.control.setView.setup();
+						}
+
 						ns1blankspace.status.message('');	
 					}		
 				}
