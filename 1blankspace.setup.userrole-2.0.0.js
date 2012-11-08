@@ -57,7 +57,7 @@ ns1blankspace.setup.userRole =
 						aHTML.push('<tr><td id="ns1blankspaceViewSetupLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 						aHTML.push('</table>');		
 						
-						$('#dns1blankspaceControl').html(aHTML.join(''));
+						$('#ns1blankspaceControl').html(aHTML.join(''));
 						
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
@@ -122,7 +122,7 @@ ns1blankspace.setup.userRole =
 										
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#ns1blankspaceViewControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
