@@ -73,9 +73,9 @@ ns1blankspace.setup.website =
 						
 						aHTML.push('<table>');
 						
-						aHTML.push('<tr><td style="width:175px;">' +
+						aHTML.push('<tr><td style="width:200px;" class="ns1blankspaceColumn2">' +
 										'<a href="/site/1262/mydigitalspace_attachment_loader.zip"' +
-										' id="ns1blankspaceAttachmentUploader">Download Windows File Attachment Uploader</a>' +
+										' id="ns1blankspaceAttachmentUploader">Download the Windows file attachment uploader</a>' +
 										'</td></tr>');	
 														
 						aHTML.push('</td></tr></table>');					
@@ -440,7 +440,7 @@ ns1blankspace.setup.website =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						

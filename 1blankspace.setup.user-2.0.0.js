@@ -280,10 +280,14 @@ ns1blankspace.setup.user =
 						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspaceAccess" class="ns1blankspaceControl">' +
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlAccess" class="ns1blankspaceControl">' +
 										'Access</td></tr>');
 					}	
 
@@ -315,7 +319,7 @@ ns1blankspace.setup.user =
 					$('#ns1blankspaceControlAccess').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAccess'});
-						ns1blankspace.setup.user.access();
+						ns1blankspace.setup.user.access.show();
 					});
 
 					$('#ns1blankspaceControlMessaging').click(function(event)
@@ -562,7 +566,7 @@ ns1blankspace.setup.user =
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceAccessColumn1" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspaceAccessColumn1" class="ns1blankspaceColumn1" style="width:50%;"></td>' +
 														'<td id="ns1blankspaceAccessColumn2" class="ns1blankspaceColumn2"></td>' +
 														'</tr>' + 
 														'</table>');
@@ -583,8 +587,6 @@ ns1blankspace.setup.user =
 										
 										$('#ns1blankspaceAccessColumn1').html(aHTML.join(''));
 											
-										ns1blankspace.setup.user.access.roles();
-
 										if (ns1blankspace.objectContextData != undefined)
 										{
 											$('[name="radioAccessUnrestricted"][value="' + ns1blankspace.objectContextData.unrestrictedaccess + '"]').attr('checked', true);
@@ -599,8 +601,9 @@ ns1blankspace.setup.user =
 					show:		function (oParam, oResponse)
 								{
 									var aHTML = [];
-									var h = -1;
-									
+																		
+									ns1blankspace.setup.user.access.layout();
+
 									if (ns1blankspace.objectContextData != undefined)
 									{
 										if (ns1blankspace.objectContextData.unrestrictedaccess == 'Y')
