@@ -341,7 +341,7 @@ ns1blankspace.setup.website =
 					$('#ns1blankspaceControlLayout').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainLayout'});
-						ns1blankspace.setup.website.layout();
+						ns1blankspace.setup.website.style();
 					});
 						
 					$('#ns1blankspaceControlAttachments').click(function(event)
@@ -598,9 +598,9 @@ ns1blankspace.setup.website =
 				{
 					var aHTML = [];
 					
-					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
+					if ($('#ns1blankspaceMainLayout').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceMainDetails').attr('data-loading', '');
+						$('#ns1blankspaceMainLayout').attr('data-loading', '');
 						
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
@@ -620,7 +620,7 @@ ns1blankspace.setup.website =
 										'Style' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioLayout3" name="radioLayout" value="3"/>None (Use CSS/Divs)' +
 										'<br /><input type="radio" id="radioLayout1" name="radioLayout" value="1"/>Using Tables' +
 										'<br /><input type="radio" id="radioLayout2" name="radioLayout" value="2"/>Using Frames' +
@@ -632,10 +632,8 @@ ns1blankspace.setup.website =
 										'</td></tr>' +
 										'<tr class="ns1blankspaceRadio">' +
 										'<td id="ns1blankspaceDetailsCSSAttachment" class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioCSSAttachment-1" name="radioCSSAttachment" value="-1"/>' +
-													'None<br />' +
-													'<span id="ns1blankspaceSetupWebsiteCSSContainer">' +
-													ns1blankspace.xhtml.loadingSmall + '</span>');
+											'<span id="ns1blankspaceSetupWebsiteCSSContainer">' +
+											ns1blankspace.xhtml.loadingSmall + '</span>');
 						
 						aHTML.push('</td></tr>');				
 										
@@ -710,13 +708,16 @@ ns1blankspace.setup.website =
 					
 					oSearch.getResults(function(oResponse)
 					{
+						aHTML.push('<input type="radio" id="radioCSSAttachment-1" name="radioCSSAttachment" value="-1"/>' +
+													'None<br />');
+
 						$.each(oResponse.data.rows, function()
 						{
 							aHTML.push('<input type="radio" id="radioCSSAttachment' + this.attachment + '" name="radioCSSAttachment" value="' + this.attachment + '"/>' +
 												this.filename + '<br />');				
 						});
 						
-						$('#ns1blankspaceSetupWebsiteCSSContainer').html(aHTML.join(''))
+						$('#ns1blankspaceSetupWebsiteCSSContainer').html(aHTML.join(''));
 						$('[name="radioCSSAttachment"][value="' + iValue + '"]').attr('checked', true);
 					});
 				},	

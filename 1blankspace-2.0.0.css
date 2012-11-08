@@ -406,6 +406,7 @@ table.ns1blankspaceColumn2
 	border-color: #B8B8B8;
 	padding-left: 10px;
 	margin-left: 15px;
+	margin-right: 15px;
 }
 
 td.ns1blankspaceRowSelect, td.ns1blankspaceSelect
@@ -429,7 +430,7 @@ td.ns1blankspaceRow
 	padding-left: 2px;
 }
 
-input.ns1blankspaceText, .ins1blankspaceTextMoney
+input.ns1blankspaceText, input.ins1blankspaceTextMoney
 {
 	width: 100%;
 	font-size: 0.875em;
@@ -440,6 +441,11 @@ input.ns1blankspaceText, .ins1blankspaceTextMoney
 	padding-top: 3px;
 	padding-bottom: 3px;
 	margin-bottom: 5px;
+}
+
+td.ns1blankspaceText
+{
+	padding-right:10px;
 }
 
 input.ns1blankspaceDate, input.ns1blankspaceDateTime
