@@ -81,7 +81,7 @@ a:hover
 	top: 70px;
 	margin-top: 20px;
 	border-right-style:solid;
-	border-width: 2px;
+	border-width: 1px;
 	border-color: #B8B8B8;
 	padding-right: 20px;
 }
@@ -137,7 +137,7 @@ a:hover
 td.ns1blankspaceLogonCaption
 {
 	font-weight: 500;
-	color: #666666;
+	color: #B8B8B8;
 }
 
 td.ns1blankspaceLogon
@@ -395,7 +395,7 @@ td.ns1blankspaceMostLikely
 
 td.ns1blankspaceColumn1
 {
-	padding-right: 15px;
+	padding-right: 20px;
 	width: 50%;
 }
 
@@ -405,6 +405,7 @@ table.ns1blankspaceColumn2
 	border-width: 1px;
 	border-color: #B8B8B8;
 	padding-left: 10px;
+	margin-left: 15px;
 }
 
 td.ns1blankspaceRowSelect, td.ns1blankspaceSelect
@@ -462,6 +463,15 @@ td.ns1blankspaceRadio
 	padding-top: 3px;
 	padding-bottom: 3px;
 	margin-bottom: 5px;
+}
+
+input.ns1blankspaceRadio
+{
+	font-size: 0.875em;
+	padding-top: 0px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+	padding-left: 2px;
 }
 
 textarea.ns1blankspaceTextMulti

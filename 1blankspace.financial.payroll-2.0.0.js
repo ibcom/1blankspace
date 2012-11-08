@@ -836,7 +836,7 @@ ns1blankspace.financial.payroll =
 												aHTML.push('</table>');
 											}
 										
-											ns1blankspace.pagination.list(
+											ns1blankspace.render.page.show(
 											{
 												type: 'JSON',
 												xhtmlElementID: 'ns1blankspacePayrollEmployeeColumn1',

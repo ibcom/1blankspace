@@ -360,6 +360,8 @@ ns1blankspace.setup.messaging =
 
 	details:	function ()
 				{
+					var aHTML = [];
+
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
@@ -426,24 +428,24 @@ ns1blankspace.setup.messaging =
 														
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Type' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioType5" name="radioType" value="5"/>IMAP' +
 										'</td></tr>');
 	
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{

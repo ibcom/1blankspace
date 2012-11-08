@@ -249,7 +249,7 @@ ns1blankspace.contactPerson =
 										aHTML.push('</table>');
 										
 										$(ns1blankspace.xhtml.container).html(
-											ns1blankspace.pagination.init(
+											ns1blankspace.render.init(
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true")
@@ -1404,7 +1404,7 @@ ns1blankspace.contactPerson =
 															aHTML.push('</table>');
 														}
 														
-														ns1blankspace.pagination.list(
+														ns1blankspace.render.page.show(
 														{
 															xhtmlElementID: 'ns1blankspaceContactPersonByGroupColumn2',
 															xhtmlContext: 'ContactPersonGroupsContacts',

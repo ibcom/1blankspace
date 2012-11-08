@@ -306,7 +306,7 @@ ns1blankspace.home.actions =
 
 							if (bShow) {$('#' + sXHTMLElementId).show(ns1blankspace.option.showSpeedOptions)}	
 							
-							ns1blankspace.pagination.list(
+							ns1blankspace.render.page.show(
 							{
 								xhtmlElementID: sXHTMLElementID,
 								xhtmlContext: 'HomeTodayAction',

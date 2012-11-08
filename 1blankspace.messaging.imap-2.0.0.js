@@ -398,7 +398,7 @@ ns1blankspace.messaging.imap =
 										
 										aHTML.push('</table>');
 										
-										ns1blankspace.pagination.list(
+										ns1blankspace.render.page.show(
 										{
 											xhtmlElementID: 'ns1blankspaceMessagingInboxContainer',
 											xhtmlContext: 'IMAPInbox',

@@ -32,12 +32,12 @@ ns1blankspace.setup.financial =
 					}	
 						
 					if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}	
-					ns1blankspace.financial.init();
+					ns1blankspace.financial.initData();
 							
 					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 
-					ns1blankspace.financial.editor.init({height: "500px"});
+					ns1blankspace.format.editor({height: "500px"});
 				},
 
 	home:		function (oResponse)

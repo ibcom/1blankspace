@@ -17,7 +17,8 @@ ns1blankspace.financial.init = function (oParam)
 						ns1blankspace.object = -1;
 						ns1blankspace.objectContextData = undefined;
 						ns1blankspace.objectParentName = undefined;
-						ns1blankspace.objectName = 'Financials';
+						ns1blankspace.objectName = 'financial';
+						ns1blankspace.viewName = 'Financials';
 						ns1blankspace.objectContext = -1;
 						
 						ns1blankspace.financial.initData();
@@ -49,7 +50,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							if (oResponse == undefined)
 							{
 								$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-								ns1blankspaceStatus(ns1blankspace.xhtml.loadingSmall + ' initalising.')
+								ns1blankspace.status.message(ns1blankspace.xhtml.loadingSmall + ' initalising...')
 
 								if (ns1blankspace.financial.init == undefined || bRefresh)
 								{
@@ -145,10 +146,10 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							}
 						}
 
-						ns1blankspaceStatus('&nbsp;');
+						ns1blankspace.status.message('&nbsp;');
 					}
 
-ns1blankspace.financial.showHome = function interfaceFinancialHomeShow()
+ns1blankspace.financial.home = function ()
 					{	
 						var aHTML = [];
 						
@@ -171,7 +172,7 @@ ns1blankspace.financial.showHome = function interfaceFinancialHomeShow()
 						aHTML.push('<table>');
 						
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="tns1blankspaceControlSummary" class="ns1blankspaceControl">Summary</td>' +
+									'<td id="ns1blankspaceControlSummary" class="ns1blankspaceControl">Summary</td>' +
 									'</tr>');	
 						
 						aHTML.push('<tr class="interfaceViewportControl">' +
@@ -209,14 +210,14 @@ ns1blankspace.financial.showHome = function interfaceFinancialHomeShow()
 						var aHTML = [];
 						var h = -1;
 						
-						aHTML[++h] = '<div id="ns1blankspaceMainSummary" class="ns1blankspaceViewportMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainBankAccount" class="ns1blankspaceViewportMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainDebtors" class="ns1blankspaceViewportMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainCreditors" class="ns1blankspaceViewportMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainPL" class="ns1blankspaceViewportMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainBS" class="ns1blankspaceViewportMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainAccounts" class="ns1blankspaceViewportMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainUnallocated" class="ns1blankspaceViewportMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainBankAccount" class="ns1blankspaceControlMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainDebtors" class="ns1blankspaceControlMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainCreditors" class="ns1blankspaceControlMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainPL" class="ns1blankspaceControlMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainBS" class="ns1blankspaceControlMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainAccounts" class="ns1blankspaceControlMain"></div>';
+						aHTML[++h] = '<div id="ns1blankspaceMainUnallocated" class="ns1blankspaceControlMain"></div>';
 						
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
@@ -229,7 +230,7 @@ ns1blankspace.financial.showHome = function interfaceFinancialHomeShow()
 						$('#ns1blankspaceControlBankAccount').click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainBankAccount'});
-							ns1blankspace.financial.bankaccounts.show();
+							ns1blankspace.financial.bankAccounts.show();
 						});	
 						
 						$('#ns1blankspaceControlDebtors').click(function(event)
@@ -268,9 +269,9 @@ ns1blankspace.financial.showHome = function interfaceFinancialHomeShow()
 							ns1blankspace.financial.unallocated.show();
 						});	
 						
-						$('#ns1blankspaceControlSummary').addClass('interfaceViewportControlHighlight');
+						$('#ns1blankspaceControlSummary').addClass('ns1blankspaceHighlight');
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.financial.summary.show();
+						ns1blankspace.financial.summary();
 					}
 
 ns1blankspace.financial.summary = function (oParam, oResponse)
@@ -385,7 +386,7 @@ ns1blankspace.financial.debtors =
 							aHTML.push('</table>');
 						}
 						
-						ns1blankspace.pagination.list(
+						ns1blankspace.render.page.show(
 						   {
 							type: 'JSON',
 							xhtmlElementID: 'ns1blankspaceDebtors',
@@ -466,7 +467,7 @@ ns1blankspace.financial.creditors =
 							aHTML.push('</tbody></table>');
 						}
 						
-						ns1blankspace.pagination.list(
+						ns1blankspace.render.page.show(
 						   {
 							type: 'JSON',
 							xhtmlElementID: 'ns1blankspaceCreditors',
@@ -546,7 +547,7 @@ ns1blankspace.financial.profitLoss =
 							aHTML.push('</table>');
 						}
 						
-						ns1blankspace.pagination.list(
+						ns1blankspace.render.page.show(
 						   {
 							type: 'JSON',
 							xhtmlElementID: 'ns1blankspacePL',
@@ -659,7 +660,7 @@ ns1blankspace.financial.balanceSheet =
 							aHTML.push('</table>');
 						}
 						
-						ns1blankspace.pagination.list(
+						ns1blankspace.render.page.show(
 						   {
 							type: 'JSON',
 							xhtmlElementID: 'ns1blankspaceBalanceSheetColumn2',
@@ -701,7 +702,7 @@ ns1blankspace.financial.bankAccounts =
 						oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
 						oSearch.sort('title', 'asc');
 						oSearch.rows = ns1blankspace.option.defaultRows;
-						oSearch.getResults(function(data) {interfaceFinancialBankAccount(oParam, data)});
+						oSearch.getResults(function(data) {ns1blankspace.financial.bankAccounts.show(oParam, data)});
 					}
 					else
 					{
@@ -738,13 +739,13 @@ ns1blankspace.financial.bankAccounts =
 							
 							$(oResponse.data.rows).each(function() 
 							{
-								aHTML.push(ns1blankspace.financial.bankaccounts.row(this));
+								aHTML.push(ns1blankspace.financial.bankAccounts.row(this));
 							});
 							
 							aHTML.push('</table>');
 						}
 						
-						ns1blankspacePaginationList(
+						ns1blankspace.render.page.show(
 						   {
 							type: 'JSON',
 							xhtmlElementID: 'ns1blankspaceBankAccountsColumn1',
@@ -753,7 +754,7 @@ ns1blankspace.financial.bankAccounts =
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
 							rows: 100,
-							functionShowRow: ns1blankspace.financial.bankaccounts.row,
+							functionShowRow: ns1blankspace.financial.bankAccounts.row,
 							functionOpen: undefined,
 							functionNewPage: ''
 						   });
@@ -894,7 +895,7 @@ ns1blankspace.financial.unallocated =
 							aHTML.push('</table>');
 						}
 						
-						ns1blankspace.pagination.list(
+						ns1blankspace.render.page.show(
 						   {
 							type: 'JSON',
 							xhtmlElementID: 'ns1blankspaceUnallocatedColumn1',

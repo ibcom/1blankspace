@@ -91,22 +91,19 @@ ns1blankspace.setup.structure =
 									
 						aHTML.push('<table>');
 
-						aHTML.push('<tr><td id="ns1blankspaceSetupLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceViewSetupLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 								
 						aHTML.push('</table>');		
 
-						$('#ns1blankspaceViewportControl').html(aHTML.join(''));	
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
-						$.ajax(
-						{
-							type: 'GET',
-							url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_SEARCH'),
-							data: 'recent=1',
-							dataType: 'json',
-							success: ns1blankspace.setup.structure.home
-						});
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'SETUP_STRUCTURE_SEARCH';
+						oSearch.addField('reference,title');
+						oSearch.sort('modifieddate', 'desc');
+						oSearch.getResults(ns1blankspace.setup.structure.home);
 					}
 					else
 					{
@@ -174,16 +171,13 @@ ns1blankspace.setup.structure =
 										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
-										var sParam = 'method=SETUP_STRUCTURE_SEARCH&id=' + giSetupContext;
-										
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_SEARCH'),
-											data: 'id=' + ns1blankspace.objectContext,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.setup.structure.show(oParam, data)}
-										});
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_STRUCTURE_SEARCH';
+										oSearch.addField('reference,title');
+										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext)
+										oSearch.sort('modifieddate', 'desc');
+										oSearch.getResults(function(data) {ns1blankspace.setup.structure.show(oParam, data)});
 									}
 									else
 									{
@@ -321,33 +315,33 @@ ns1blankspace.setup.structure =
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.setup.messaging.summary();
+						ns1blankspace.setup.structure.summary();
 					});
 					
 					$('#ns1blankspaceControlDetails').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-						ns1blankspace.setup.messaging.details();
+						ns1blankspace.setup.structure.details();
 					});
 						
 					$('#ns1blankspaceControlGrouping').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainGrouping'});
-						ns1blankspace.setup.messaging.grouping();
+						ns1blankspace.setup.structure.grouping();
 					});
 
 	
 					$('#ns1blankspaceControlCategory').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainCategory'});
-						ns1blankspace.setup.messaging.category();
+						ns1blankspace.setup.structure.category();
 					});
 
 
 					$('#ns1blankspaceControlElement').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainElement'});
-						ns1blankspace.setup.messaging.element();
+						ns1blankspace.setup.structure.element();
 					});
 				},
 
@@ -419,6 +413,8 @@ ns1blankspace.setup.structure =
 
 	details: 	function ()
 				{
+					var aHTML = [];
+
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');

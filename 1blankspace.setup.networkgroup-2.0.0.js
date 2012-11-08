@@ -110,7 +110,7 @@ ns1blankspace.setup.networkGroup =
 				},
 
 	search: 	{
-					send: 		function interfaceSetupNetworkGroupSearch(sXHTMLElementId, iSource, sSearchText, sSearchContext)
+					send: 		function (sXHTMLElementId, iSource, sSearchText, sSearchContext)
 								{
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
@@ -262,7 +262,7 @@ ns1blankspace.setup.networkGroup =
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainUserAdd" class="ns1blankspaceControlMain"></div>');
 						
-					$('#ns1blankspaceControlMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{

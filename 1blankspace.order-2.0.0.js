@@ -194,7 +194,7 @@ ns1blankspace.order =
 														
 														$('#ns1blankspaceeMain').html(aHTML.join(''));
 													
-														ns1blankspace.pagination.list(
+														ns1blankspace.render.page.show(
 														{
 															xhtmlElementID: 'divns1blankspaceMain',
 															xhtmlContext: 'OrderStatus',
@@ -1027,7 +1027,7 @@ ns1blankspace.order =
 											
 											aHTML.push('</table>');
 
-											ns1blankspace.pagination.list(
+											ns1blankspace.render.page.show(
 											{
 												xhtmlElementID: 'ns1blankspaceItemsColumn1',
 												xhtmlContext: 'OrderItems',
@@ -1407,7 +1407,7 @@ ns1blankspace.order =
 											
 											aHTML.push('</table>');
 
-											ns1blankspace.pagination.list(
+											ns1blankspace.render.page.show(
 											{
 												xhtmlElementID: 'ns1blankspaceDeliveryColumn1',
 												xhtmlContext: 'OrderDelivery',
@@ -1522,7 +1522,7 @@ ns1blankspace.order =
 											
 											aHTML.push('</table>');
 
-											ns1blankspace.pagination.list(
+											ns1blankspace.render.page.show(
 											{
 												xhtmlElementID: 'ns1blankspaceDeliveryPickColumn1',
 												xhtmlContext: 'OrderDeliveryPick',
@@ -1662,7 +1662,7 @@ ns1blankspace.order =
 											
 											aHTML.push('</table>');
 
-											ns1blankspace.pagination.list(
+											ns1blankspace.render.page.show(
 											{
 												xhtmlElementID: 'ns1blankspaceInvoicesColumn1',
 												xhtmlContext: 'OrderInvoices',

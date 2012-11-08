@@ -1111,7 +1111,7 @@ ns1blankspace.logon =
 								'<span id="ns1blankspaceLogonSend">Logon</span>' +
 								'</td>');
 				
-					aHTML.push('<td id="ns1blankspaceLogonStatus">' +
+					aHTML.push('<td id="ns1blankspaceLogonStatus" style="vertical-align:middle;">' +
 								'&nbsp;' +
 								'</td></tr>');
 
@@ -1185,7 +1185,7 @@ ns1blankspace.logon =
 					var sData = 'logon=' + ns1blankspace.util.fs($('#ns1blankspaceLogonLogonName').val()) +
 								'&password=' + ns1blankspace.util.fs($('#ns1blankspaceLogonPassword').val());
 
-					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loadingSmall);
+					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
 					
 					$.ajax(
 					{
@@ -1857,7 +1857,7 @@ ns1blankspace.attachments =
 				    	
 						aHTML.push('</table>');
 
-						ns1blankspace.pagination.list(
+						ns1blankspace.render.page.show(
 						   {
 							xhtmlElementID: sXHTMLElementID,
 							xhtmlContext: 'Attachment',
@@ -3050,7 +3050,7 @@ ns1blankspace.search.email =
 				}
 }				
 
-ns1blankspace.pagination =
+ns1blankspace.render =
 {
 	init: 		function (oParam)
 				{
@@ -3489,7 +3489,7 @@ ns1blankspace.actions =
 				    	
 						aHTML.push('</table>');
 						
-						ns1blankspace.pagination.list(
+						ns1blankspace.render.page.show(
 						   {
 							xhtmlElementID: sXHTMLElementID,
 							xhtmlContext: 'Action',
@@ -3731,9 +3731,9 @@ ns1blankspace.actions =
 				}
 }
 
-ns1blankspace.pagination.list = 
+ns1blankspace.render.page = 
 {
-	show: 		function ns1blankspacePaginationList(oParam)
+	show: 		function (oParam)
 				{
 					var aHTML = [];
 					var h = -1;
@@ -3792,15 +3792,14 @@ ns1blankspace.pagination.list =
 							var sStart = $('#' + sID).attr('rowStart');
 							$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
 							if (oParam != undefined) {oParam.more = iMore;oParam.startRow = sStart}else{oParam = {more: iMore, startRow: sStart}};
-							ns1blankspacePaginationListShowMore(oParam);
+							ns1blankspace.render.page.showMore(oParam);
 						});
 					}
 					
 					$('.ns1blankspacePaginationListPage' + sXHTMLContext).click(function(event)
 					{
-						ns1blankspacePaginationListShowPage(this.id, sXHTMLContext);
+						ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
 					});
-						
 				},
 
 	showMore:	function (oParam, oData)

@@ -75,7 +75,7 @@ ns1blankspace.setup.website =
 						
 						aHTML.push('<tr><td style="width:200px; font-size:0.875em;" >' +
 										'<a href="/site/1262/mydigitalspace_attachment_loader.zip"' +
-										' id="ns1blankspaceAttachmentUploader">Download the Windows file attachment uploader</a>' +
+										' id="ns1blankspaceAttachmentUploader">Get the file attachment uploader for Windows</a>' +
 										'</td></tr>');	
 														
 						aHTML.push('</td></tr></table>');					
@@ -475,8 +475,8 @@ ns1blankspace.setup.website =
 						}
 						else
 						{
-							aHTML.push('<tr><td class="ins1blankspaceSummaryCaption">App Status</td></tr>' +
-										'<tr><td class="ns1blankspaceSummarySummary">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">App Status</td></tr>' +
+										'<tr><td class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.ondemandstatustext +
 										'</td></tr>');
 						}			
@@ -631,27 +631,9 @@ ns1blankspace.setup.website =
 										'<tr class="ns1blankspaceRadio">' +
 										'<td id="ns1blankspaceDetailsCSSAttachment" class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioCSSAttachment-1" name="radioCSSAttachment" value="-1"/>' +
-													'None<br />');
-						
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-						
-						oSearch.addField('filename,attachment');
-						oSearch.addFilter('filename', 'TEXT_IS_LIKE', 'css')
-						oSearch.addFilter('object', 'EQUAL_TO', 40);
-						oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext)
-						oSearch.async = false;
-						oSearch.rf = 'json';
-						oSearch.sort('filename', 'asc');
-						
-						oSearch.getResults(function(oResponse)
-						{
-							$.each(oResponse.data.rows, function()
-							{
-								aHTML.push('<input type="radio" id="radioCSSAttachment' + this.attachment + '" name="radioCSSAttachment" value="' + this.attachment + '"/>' +
-													this.filename + '<br />');				
-							});
-						});
+													'None<br />' +
+													'<span id="ns1blankspaceSetupWebsiteCSSContainer">' +
+													ns1blankspace.xhtml.loadingSmall + '</span>');
 						
 						aHTML.push('</td></tr>');				
 										
@@ -700,15 +682,42 @@ ns1blankspace.setup.website =
 							$('#ns1blankspaceLayoutFooterHeight').val(ns1blankspace.objectContextData.footerheight);
 							$('#ns1blankspaceLayoutColumns').val(ns1blankspace.objectContextData.columns);
 							$('[name="radioLayout"][value="' + ns1blankspace.objectContextData.layout + '"]').attr('checked', true);
-							$('[name="radioCSSAttachment"][value="' + ns1blankspace.objectContextData.cssattachment + '"]').attr('checked', true);
+							ns1blankspace.setup.website.css(ns1blankspace.objectContextData.cssattachment);
 						}
 						else
 						{
 							$('[name="radioLayout"][value="3"]').attr('checked', true);
-							$('[name="radioCSSAttachment"][value="-1"]').attr('checked', true);
+							ns1blankspace.setup.website.css(-1);
 						}
 					}	
 				},
+
+	css: 		function (iValue)
+				{
+					var aHTML = [];
+
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+					
+					oSearch.addField('filename,attachment');
+					oSearch.addFilter('filename', 'TEXT_IS_LIKE', 'css')
+					oSearch.addFilter('object', 'EQUAL_TO', 40);
+					oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext)
+					oSearch.rf = 'json';
+					oSearch.sort('filename', 'asc');
+					
+					oSearch.getResults(function(oResponse)
+					{
+						$.each(oResponse.data.rows, function()
+						{
+							aHTML.push('<input type="radio" id="radioCSSAttachment' + this.attachment + '" name="radioCSSAttachment" value="' + this.attachment + '"/>' +
+												this.filename + '<br />');				
+						});
+						
+						$('#ns1blankspaceSetupWebsiteCSSContainer').html(aHTML.join(''))
+						$('[name="radioCSSAttachment"][value="' + iValue + '"]').attr('checked', true);
+					});
+				},	
 
 	advanced:	function ()
 				{
