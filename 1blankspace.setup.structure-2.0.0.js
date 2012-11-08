@@ -310,11 +310,11 @@ ns1blankspace.setup.structure =
 					
 					var aHTML = [];
 
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainGrouping" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainCategory" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainElement" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainGrouping" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainCategory" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainElement" class="ns1blankspaceControlMain"></div>');
 				
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 						

@@ -193,6 +193,12 @@ td.ns1blankspaceLogonNotes
 	text-align: right;
 }
 
+td.ns1blankspaceNothing
+{
+	font-size: 0.875em;
+	color: #888888;
+}
+
 .ns1blankspaceMostLikelySub
 {
 	font-size: 0.75em;
@@ -390,9 +396,10 @@ td.ns1blankspaceMostLikely
 td.ns1blankspaceColumn1
 {
 	padding-right: 15px;
+	width: 50%;
 }
 
-td.ns1blankspaceColumn2
+table.ns1blankspaceColumn2
 {
 	border-left-style:solid;
 	border-width: 1px;

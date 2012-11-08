@@ -228,6 +228,8 @@ ns1blankspace.setup.userRole =
 
 	layout:		function ()
 				{
+					var aHTML = [];
+
 					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
@@ -242,10 +244,14 @@ ns1blankspace.setup.userRole =
 						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
+													
+						aHTML.push('</table>');
+									
+						aHTML.push('<table class="ns1blankspaceControl">');
 
-						aHTML.push('<tr><td id="ns1blankspaceAccess" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlAccess" class="ns1blankspaceControl">' +
 										'Access</td></tr>');
 					}	
 
@@ -334,7 +340,6 @@ ns1blankspace.setup.userRole =
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 
-				
 						aHTML.push('<table>');
 										
 						aHTML.push('<tr><td class="ns1blankspaceSummary">' +
@@ -349,6 +354,8 @@ ns1blankspace.setup.userRole =
 
 	details:	function ()
 				{
+					var aHTML = [];
+
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
@@ -470,7 +477,7 @@ ns1blankspace.setup.userRole =
 							oSearch.addField('title');
 							oSearch.rows = 50;
 							oSearch.sort('title', 'asc');
-							oSearch.getResults(function(data) {ns1blankspace.setup.user.access(oParam, data)})	
+							oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access(oParam, data)})	
 						}
 						else
 						{
@@ -496,12 +503,12 @@ ns1blankspace.setup.userRole =
 								
 							$('#ns1blankspaceAccessColumnEndpoint').html(aHTML.join(''));
 
-							$('#ns1blankspaceUserAccessEndpoints > td.ns1blankspaceRowSelect').click(function(event)
+							$('#ns1blankspaceUserAccessEndpoints td.ns1blankspaceRowSelect').click(function(event)
 							{
 								var sXHTMLElementId = event.target.id;
-								var aId = sXHTMLElementId.split('-');
+								var aID = sXHTMLElementId.split('-');
 								
-								ns1blankspace.setup.user.access({endpoint: aId[1], step: 3});
+								ns1blankspace.setup.userRole.access({endpoint: aID[1], step: 3});
 							});
 						}
 					}	
@@ -515,12 +522,12 @@ ns1blankspace.setup.userRole =
 							oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
 							oSearch.rows = 50;
 							oSearch.sort('title', 'asc');
-							oSearch.getResults(function(data) {ns1blankspace.setup.user.access(oParam, data)})	
+							oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access(oParam, data)})	
 						}
 						else
 						{
 							$.extend(true, oParam, {step: 3, methods: oResponse.data.rows});
-							ins1blankspace.setup.user.access(oParam);	
+							ins1blankspace.setup.userRole.access(oParam);	
 						}
 					}
 
@@ -534,7 +541,7 @@ ns1blankspace.setup.userRole =
 							var aHTML = [];
 							
 							aHTML.push('<table class="ns1blankspaceColumn2">' +
-											'<tr><td><span id="ns1blankspaceUserAccessAdd">' +
+											'<tr><td><span id="ns1blankspaceUserAccessAdd" class="ns1blankspaceAction">' +
 											'Add</span></td></tr>' +
 											'</table>');									
 							
@@ -547,7 +554,7 @@ ns1blankspace.setup.userRole =
 							.click(function()
 							{
 								$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
-								ns1blankspace.setup.user.access(oParam);
+								ns1blankspace.setup.userRole.access(oParam);
 							})
 
 							var oSearch = new AdvancedSearch();
@@ -556,13 +563,13 @@ ns1blankspace.setup.userRole =
 							oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
 							oSearch.rows = 50;
 							oSearch.sort('title', 'asc');
-							oSearch.getResults(function(data) {ns1blankspace.setup.user.access(oParam, data)})	
+							oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access(oParam, data)})	
 						}
 						else
 						{
 							var aHTML = [];
 					
-							aHTML.push('<table id="ns1blankspaceUserAccessMethods">');
+							aHTML.push('<table id="ns1blankspaceUserAccessMethods" class="ns1blankspaceColumn2">');
 						
 							if (oResponse.data.rows.length == 0)
 							{
@@ -595,7 +602,7 @@ ns1blankspace.setup.userRole =
 							$('#ns1blankspaceUserAccessMethods > td.ns1blankspaceRowSelect').click(function()
 							{
 								$.extend(true, oParam, {step: 4, xhtmlElementID: event.target.id});
-								ns1blankspace.setup.user.access(oParam);
+								ns1blankspace.setup.userRole.access(oParam);
 							})
 						}
 					}
@@ -622,7 +629,7 @@ ns1blankspace.setup.userRole =
 
 						oSearch.getResults(function(data) {
 								$.extend(true, oParam, {step: 5});
-								ns1blankspace.setup.user.access(oParam, data)
+								ns1blankspace.setup.userRole.access(oParam, data)
 								});
 					}
 
@@ -728,11 +735,11 @@ ns1blankspace.setup.userRole =
 						aHTML.push('<table class="ns1blankspace" style="font-size:0.875em">');
 								
 						aHTML.push('<tr><td class="ns1blankspaceAction">' +
-										'<span style="width:70px;" id="ns1blankspaceUserAccessSave">Save</span>' +
+										'<span style="width:70px;" id="ns1blankspaceUserAccessSave" class="ns1blankspaceAction">Save</span>' +
 										'</td></tr>');
 										
 						aHTML.push('<tr><td class="ns1blankspace">' +
-										'<span style="width:70px;" id="ns1blankspaceUserAccessCancel">Cancel</span>' +
+										'<span style="width:70px;" id="ns1blankspaceUserAccessCancel" class="ns1blankspaceAction">Cancel</span>' +
 										'</td></tr>');
 															
 						aHTML.push('</table>');					
@@ -781,7 +788,7 @@ ns1blankspace.setup.userRole =
 						.click(function() 
 						{
 							$.extend(true, oParam, {step: 2});
-							ins1blankspace.setup.user.access(oParam);
+							ins1blankspace.setup.userRole.access(oParam);
 						});
 
 						if (oResponse.data.rows.length != 0)

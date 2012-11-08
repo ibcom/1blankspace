@@ -420,13 +420,13 @@ ns1blankspace.order =
 					
 					var aHTML = [];
 
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainAddress" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainProducts" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainInvoices" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControl"></div>');		
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAddress" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainProducts" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainInvoices" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');		
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 

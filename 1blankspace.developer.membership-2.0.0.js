@@ -266,10 +266,10 @@ ns1blankspace.developer.membership =
 					
 					var aHTML = [];
 
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainEndpoints" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainSubscriptions" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainEndpoints" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSubscriptions" class="ns1blankspaceControlMain"></div>');
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 

@@ -291,13 +291,13 @@ ns1blankspace.project =
 					
 					var aHTML = [];
 
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDescription" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainTasks" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainTaskDetails" class="ns1blankspaceControl"></div>');			
-					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDescription" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTasks" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTaskDetails" class="ns1blankspaceControlMain"></div>');			
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 

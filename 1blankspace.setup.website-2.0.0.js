@@ -71,9 +71,9 @@ ns1blankspace.setup.website =
 						
 						var aHTML = [];
 						
-						aHTML.push('<table>');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
-						aHTML.push('<tr><td style="width:200px;" class="ns1blankspaceColumn2">' +
+						aHTML.push('<tr><td style="width:200px; font-size:0.875em;" >' +
 										'<a href="/site/1262/mydigitalspace_attachment_loader.zip"' +
 										' id="ns1blankspaceAttachmentUploader">Download the Windows file attachment uploader</a>' +
 										'</td></tr>');	

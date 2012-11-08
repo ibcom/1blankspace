@@ -283,12 +283,12 @@ ns1blankspace.setup.automation =
 				
 					var aHTML = [];
 					
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainSchedule" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainResponse" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainFormat" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainRun" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSchedule" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainResponse" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainFormat" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainRun" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 

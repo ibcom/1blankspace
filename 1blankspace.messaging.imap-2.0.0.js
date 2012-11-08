@@ -112,12 +112,12 @@ ns1blankspace.messaging.imap =
 					
 					var aHTML = [];
 					
-					aHTML.push('<div id="ns1blankspaceMainInbox" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainEdit" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainActionsSent" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainInbox" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainEdit" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActionsSent" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					

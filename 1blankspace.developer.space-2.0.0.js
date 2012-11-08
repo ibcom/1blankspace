@@ -260,9 +260,9 @@ ns1blankspace.developer.space =
 					
 					var aHTML = [];
 
-					aHTML.push('<div id="ns1blankspaceMainFromNew" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainFromContact" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainSubscriptions" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainFromNew" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainFromContact" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSubscriptions" class="ns1blankspaceControlMain"></div>');
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 

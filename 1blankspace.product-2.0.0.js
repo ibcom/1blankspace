@@ -285,14 +285,14 @@ ns1blankspace.product =
 					
 					var aHTML = [];
 
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainPricing" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainCategory" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainSupplier" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainStock" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControl"></div>');		
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainPricing" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainCategory" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSupplier" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainStock" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');		
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 

@@ -35,7 +35,7 @@ ns1blankspace.setup.networkGroup =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function interfaceSetupNetworkGroupHomeShow(oParam, oResponse)
+	home:		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -55,7 +55,7 @@ ns1blankspace.setup.networkGroup =
 						var aHTML = [];
 						
 						aHTML.push('<table>' +
-										'<tr><td id="ns1blankspaceViewSetupAutomationLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>' +
+										'<tr><td id="ns1blankspaceViewContactLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>' +
 										'</table>');		
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
@@ -244,6 +244,10 @@ ns1blankspace.setup.networkGroup =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
+						aHTML.push('</table>');	
+						
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlAddMember" class="ns1blankspaceControl">' +
 										'Add User</td></tr>');
 					}	
@@ -254,9 +258,9 @@ ns1blankspace.setup.networkGroup =
 					
 					var aHTML = [];
 					
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControl"></div>');
-					aHTML.push('<div id="ns1blankspaceMainUserAdd" class="ns1blankspaceControl"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainUserAdd" class="ns1blankspaceControlMain"></div>');
 						
 					$('#ns1blankspaceControlMain').html(aHTML.join(''));
 
@@ -282,7 +286,7 @@ ns1blankspace.setup.networkGroup =
 	show:		function (oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspace.setup.messaging.layout();
+					ns1blankspace.setup.networkGroup.layout();
 					
 					var aHTML = [];
 					
@@ -355,6 +359,8 @@ ns1blankspace.setup.networkGroup =
 
 	details: 	function ()
 				{
+					var aHTML = [];
+
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
