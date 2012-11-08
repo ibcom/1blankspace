@@ -488,7 +488,7 @@ ns1blankspace.setup.website =
 						var aHTML = [];
 							
 						
-						aHTML.push('<table id="ns1blankspaceSummaryActions" class="ns1blankspaceSummaryColumn2">');
+						aHTML.push('<table id="ns1blankspaceSummaryActions" class="ns1blankspaceColumn2">');
 											
 						aHTML.push('<tr><td class="ns1blankspaceSummaryColumn2Action" style="width:175px;">' +
 										'<a href="#" id="ns1blankspaceSummarySetupWebApp">' +
@@ -497,14 +497,14 @@ ns1blankspace.setup.website =
 									
 						if (ns1blankspace.objectContextData.primaryurl != '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryColumn2Action" style="width:175px;">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryColumn2Action" style="width:175px; padding-top:10px;">' +
 										'<a href="' + ns1blankspace.objectContextData.primaryurl + '" target="_blank">' + ns1blankspace.objectContextData.primaryurl + '</a>' +
 										'</td></tr>');
 						}		
 									
 						aHTML.push('<tr><td class="ns1blankspaceSummaryColumn2Action" style="font-size:0.75em;color:#404040;">' +
 										'<br /><hr />' +
-										'<br />Use the Attachments link to add your js scripts and the Scripts section to reference them and any other scripts you may require.' +
+										'<br />Use the Attachments link to add your js scripts and update the Scripts section to reference them and any other scripts your app may require.' +
 										'</td>' +
 										'</tr>');			
 									
@@ -565,12 +565,14 @@ ns1blankspace.setup.website =
 						
 						var aHTML = [];
 						
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Status' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Open' +
 										'<br /><input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Closed' +
 										'</td></tr>');

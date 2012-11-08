@@ -471,9 +471,15 @@ input.ns1blankspaceRadio
 	padding-top: 0px;
 	padding-bottom: 2px;
 	padding-right: 2px;
-	padding-left: 2px;
+	padding-left: 12px;
 }
 
+input[type=radio]
+{
+	margin-top: 2px;
+	margin-right: 7px;
+	margin-bottom: 7px;
+}
 textarea.ns1blankspaceTextMulti
 {
 	height: 250px;
