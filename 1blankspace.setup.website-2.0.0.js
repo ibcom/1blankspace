@@ -299,7 +299,7 @@ ns1blankspace.setup.website =
 						aHTML.push('<tr><td id="ns1blankspaceControlAdvanced" class="ns1blankspaceControl">' +
 										'Advanced</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlAdvanced" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlScripts" class="ns1blankspaceControl">' +
 										'Scripts</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlURLs" class="ns1blankspaceControl">' +
@@ -726,9 +726,9 @@ ns1blankspace.setup.website =
 				{
 					var aHTML = [];
 					
-					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
+					if ($('#ns1blankspaceMainURLs').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceMainDetails').attr('data-loading', '');
+						$('#ns1blankspaceMainURLs').attr('data-loading', '');
 						
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
@@ -805,9 +805,9 @@ ns1blankspace.setup.website =
 
 	scripts: 	function ()
 				{
-					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
+					if ($('#ns1blankspaceMainScripts').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceMainDetails').attr('data-loading', '');
+						$('#ns1blankspaceMainScripts').attr('data-loading', '');
 						
 						var aHTML = [];
 											
