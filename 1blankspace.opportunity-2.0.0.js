@@ -10,12 +10,14 @@ ns1blankspace.opportunity =
 	init: 		function (oParam)
 				{
 					ns1blankspace.object = 32;	
-					ns1blankspace.objectName = 'Opportunity';
+					ns1blankspace.objectName = 'opportunity';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Opportunity';
 					ns1blankspace.data.contactBusiness = -1;
 					ns1blankspace.data.contactPerson = -1;
+
+					ns1blankspace.opportunity.data = {};
 					ns1blankspace.opportunity.data.objectStatus = -1;
 					
 					var bShowHome = true;
@@ -42,7 +44,7 @@ ns1blankspace.opportunity =
 
 						aHTML.push('<tr class="ns1blankspaceMain">' +
 										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
-										ns1blankspace.xhtml.loading + '</td>/tr>');
+										ns1blankspace.xhtml.loading + '</td></tr>');
 
 						aHTML.push('</table>');					
 						
@@ -63,7 +65,7 @@ ns1blankspace.opportunity =
 						oSearch.addField('description,reference');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(ns1blanksapce.opportunity.home);
+						oSearch.getResults(ns1blankspace.opportunity.home);
 						
 					}
 					else
@@ -146,7 +148,7 @@ ns1blankspace.opportunity =
 										oSearch.addField('reference,businessname,firstname,surname,' +
 																	'requestbycontactbusiness,requestbycontactbusinesstext,' +
 																	'requestbycontactperson,requestbycontactpersontext,type,typetext,' +
-																	'lodgeddate,source,sourcetext,sourcetext,manageruser,managerusertext,' +
+																	'createddate,source,sourcetext,sourcetext,manageruser,managerusertext,' +
 																	'status,statustext,processingstatus,processingstatustext,' +
 																	'processingdate,description,' +
 																	'mailingaddress1,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,' +
@@ -270,12 +272,12 @@ ns1blankspace.opportunity =
 											functionSearch: oResponse.opportunity.search.send
 										});   
 										
-									}	
-					},
+									}
+								}	
+				},
 
 	layout: 	function ()
 				{
-					
 					var aHTML = [];
 
 					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
@@ -387,7 +389,6 @@ ns1blankspace.opportunity =
 	summary: 	function ()
 				{
 					var aHTML = [];
-					var h = -1;
 
 					if (ns1blankspace.objectContextData == undefined)
 					{
@@ -812,7 +813,7 @@ ns1blankspace.opportunity =
 	save: 		{
 					validate: 	function ()
 								{
-									if ($('#ns1blankspaceContactFirstName') != '' && $('#ns1blankspaceContactSurname') == '')
+									if ($('#ns1blankspaceContactFirstName').val() != '' && $('#ns1blankspaceContactSurname').val() == '')
 									{	
 										ns1blankspace.status.error('Surname is mandatory for a Contact.');
 										return false;
@@ -870,12 +871,6 @@ ns1blankspace.opportunity =
 											dataType: 'json',
 											success: this.process
 										});
-											if (ns1blankspace.objectContext == -1)
-											{	
-												ns1blankspace.objectContext = glObjectSaveId;
-												ns1blankspace.opportunity.search('opporunity-' + ns1blankspace.objectContext);
-											}
-										}
 									}	
 								},
 
