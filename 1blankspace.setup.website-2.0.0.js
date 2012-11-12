@@ -502,7 +502,7 @@ ns1blankspace.setup.website =
 										'</td></tr>');
 						}		
 									
-						aHTML.push('<tr><td class="ns1blankspaceSummaryColumn2Action" style="font-size:0.75em;color:#404040;">' +
+						aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.75em;">' +
 										'<br /><hr />' +
 										'<br />Use the Attachments link to add your js scripts and update the Scripts section to reference them and any other scripts your app may require.' +
 										'</td>' +

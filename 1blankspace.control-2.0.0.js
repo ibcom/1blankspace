@@ -34,7 +34,7 @@ ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.set
 ns1blankspace.xhtml.logonNotes =
 	'1blankspace.com is an example app based on the mydigitalstructure.com platform.' +
 	'<br /><br /><a href="http://mydigitalstructure.com/1blankspace" target="_blank">1blankspace namespace overview</a>' +
-	'<br /><br /><a href="https://github/ibcom/1blankspace" target="_blank">github Repository</a>' +
+	'<br /><br /><a href="https://github/ibcom/1blankspace" target="_blank">github repository</a>' +
 	'<br /><br /><a href="http://mydigitalstructure.com/examples" target="_blank">More code examples</a>' +
 	'<br /><br /><a href="http://mydigitalstructure.com/documentation" target="_blank">Documentation</a>' +
 	'<br /><br /><a href="http://mydigitalstructure.com/gettingstarted" target="_blank">Getting started</a>' +

@@ -1379,7 +1379,7 @@ ns1blankspace.logon.getPassword =
 				{
 					var aHTML = [];
 
-					aHTML.push('<table class="ns1blankspaceViewControlContainer">');
+					aHTML.push('<table class="ns1blankspace">');
 					
 					aHTML.push('<tr class="ns1blankspaceLogon">' +
 									'<td class="ns1blankspaceLogonCaption">' +
