@@ -134,7 +134,7 @@ ns1blankspace.news =
 						
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
 							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>');
+							aHTML.push('<td class="ns1blankspaceCaption">MOST LIKELY</td>');
 							aHTML.push('</tr>');
 
 							$.each(oResponse.data.rows, function()
@@ -163,11 +163,9 @@ ns1blankspace.news =
 				},
 
 search: 		{
-					send: function (sXHTMLElementId, oParam)
-								{
-									
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+					send: function (sXHTMLElementID, oParam)
+								{						
+									var aSearch = sXHTMLElementID.split('-');
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;
@@ -187,7 +185,7 @@ search: 		{
 									
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
