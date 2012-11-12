@@ -1934,7 +1934,7 @@ ns1blankspace.attachments =
 				{
 					$('#ns1blankspaceAttachmentsColumn1').html(ns1blankspace.attachments.upload.show(oParam));
 					
-					$('#spanns1blankspaceUpload').button(
+					$('#ns1blankspaceUpload').button(
 						{
 							label: "Upload"
 						})
@@ -1952,7 +1952,7 @@ ns1blankspace.attachments =
 									var iMaxFiles = 1
 									var iObject = ns1blankspace.object
 									var lObjectContext = ns1blankspace.objectContext
-									var sLabel = 'Select File';
+									var sLabel = '';
 									var sObjectName = '';
 									var iAttachmentType = '';
 									var bShowUpload = true;
@@ -1973,7 +1973,7 @@ ns1blankspace.attachments =
 									}	
 
 									aHTML.push('<form name="ns1blankspaceFileUpload" action="/ondemand/attach/" ' +
-													'enctype="multipart/form-data" method="POST" target="ifonDemandUpload" accept-charset="utf-8">' +
+													'enctype="multipart/form-data" method="POST" target="ns1blankspaceUploadProxy" accept-charset="utf-8">' +
 													'<input type="hidden" name="maxfiles" id="maxfiles" value="' + iMaxFiles + '">' +
 													'<input type="hidden" name="object" id="object" value="' + iObject + '">' +
 													'<input type="hidden" name="objectcontext" id="objectcontext" value="' + lObjectContext + '">');
@@ -1987,23 +1987,23 @@ ns1blankspace.attachments =
 									
 									if (sLabel != '') 
 									{
-										aHTML.push('<div id="interfaceUploadLabel" class="ns1blankspaceControl">' + sLabel + '</div>');
+										aHTML.push('<div id="ns1blankspaceUploadLabel" class="ns1blankspaceUpload">' + sLabel + '</div>');
 									}	
 										
 									for (var i = 0; i < iMaxFiles; i++) 	
 									{
-										aHTML.push('<div id="interfaceUploadFile' + i + '" class="ns1blankspaceUpload">' +
+										aHTML.push('<div id="ns1blankspaceUploadFile' + i + '" class="ns1blankspaceUpload">' +
 														'<input class="ns1blankspaceUpload" type="file" name="oFile' + i + '" id="oFile' + i + '">' +
 														'</div>');
 									}
 									
 									if (bShowUpload)
 									{
-										aHTML.push('<span id="spanns1blankspaceUpload" class="ns1blankspaceAction ns1blankspaceMarginTop"></span>');
-										aHTML.push('<br /><br /><span id="spanns1blankspaceUploadStatus" class="ns1blankspaceUpload"></span>');
+										aHTML.push('<span id="ns1blankspaceUpload" class="ns1blankspaceAction" style="margin-top:10px;"></span>');
+										aHTML.push('<br /><br /><span id="ns1blankspaceUploadStatus" class="ns1blankspaceUpload"></span>');
 									}	
 										
-									aHTML.push('<iframe style="display:none;" name="ifonDemandUpload" id="ifonDemandUpload" class="interfaceUpload" frameborder="0"></iframe>' +
+									aHTML.push('<iframe style="display:none;" name="ns1blankspaceUploadProxy" id="ns1blankspaceUploadProxy" class="ns1blankspaceUpload" frameborder="0"></iframe>' +
 													'</form>');
 									
 									return aHTML.join('');
@@ -2015,7 +2015,7 @@ ns1blankspace.attachments =
 									ns1blankspace.param = {};
 									if (oParam != undefined) {ns1blankspace.param = oParam};
 									
-									$('#spanns1blankspaceUploadStatus').html('Uploading..');
+									$('#ns1blankspaceUploadStatus').html('Uploading..');
 									var oForm = document.ns1blankspaceFileUpload;
 								  	oForm.submit();
 								 	this.upload.status();
@@ -2024,8 +2024,8 @@ ns1blankspace.attachments =
 
 					status:		function ()
 								{
-									var oDivStatus = document.getElementById('divonDemandFileUploadStatus');
-									var oFrame = document.getElementById('ifonDemandUpload');
+									var oDivStatus = document.getElementById('ns1blankspaceFileUploadStatus');
+									var oFrame = document.getElementById('ns1blankspaceUploadProxy');
 									var sStatus;
 									var sCurrentState;
 
@@ -2064,7 +2064,7 @@ ns1blankspace.attachments =
 											oDivStatus.style.display = 'none';
 										}
 										
-										$('#spanns1blankspaceUploadStatus').html('File Upload Complete...');
+										$('#ns1blankspaceUploadStatus').html('File Upload Complete...');
 										fFunctionPostUpdate();
 										
 									}
