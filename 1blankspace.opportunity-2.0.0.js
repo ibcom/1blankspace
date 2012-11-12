@@ -38,39 +38,31 @@ ns1blankspace.opportunity =
 					{
 						var aHTML = [];
 									
-						aHTML.push('<table class="ns1blankspaceMain">';
+						aHTML.push('<table class="ns1blankspace">');
+
 						aHTML.push('<tr class="ns1blankspaceMain">' +
 										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
-										ns1blankspace.xhtml.loading + 
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+										ns1blankspace.xhtml.loading + '</td>/tr>');
+
+						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceMain').html(aHTML.join('');
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 						var aHTML = [];
 									
-						aHTML.push('<table>';
-
-						aHTML.push('<tr>' +
+						aHTML.push('<table><tr>' +
 										'<td id="ns1blankspaceViewContactLarge" class="ns1blankspaceViewImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';		
+										'&nbsp;</td></tr></table>');		
 						
-						$('#ns1blankspaceControl').html(aHTML.join('');	
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
-						oSearch.endPoint = 'opportunity';
 						oSearch.method = 'OPPORTUNITY_SEARCH';
-						
 						oSearch.addField('description,reference');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						
 						oSearch.getResults(ns1blanksapce.opportunity.home);
 						
 					}
@@ -80,25 +72,21 @@ ns1blankspace.opportunity =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">';
-							aHTML.push('<tr>';
-							aHTML.push('<td class="ns1blankspaceNothing">Click New to create a opportunity.</td>';
-							aHTML.push('</tr>';
-							aHTML.push('</table>';
+							aHTML.push('<table id="ns1blankspaceMostLikely">' +
+										'<tr><td class="ns1blankspaceNothing">' +
+										'Click New to create a opportunity.</td></tr></table>');
 						}
 						else
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">';
-							aHTML.push('<tr>';
-							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>';
-							aHTML.push('</tr>';
+							aHTML.push('<table id="ns1blankspaceMostLikely">' +
+											'<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML.push('<tr class="ns1blankspaceRow">';
+								aHTML.push('<tr class="ns1blankspaceRow">');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
-														'" class="ns1blankspaceMostLikely">';
+														'" class="ns1blankspaceMostLikely">');
 								if (this.description != '')
 								{
 									aHTML.push(this.description);
@@ -114,18 +102,18 @@ ns1blankspace.opportunity =
 							aHTML.push('</table>');
 						}
 						
-						$('#ns1blankspaceMostLikely').html(aHTML.join('');
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
 						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							ns1blankspace.opportunity.search.send(event.target.id, {source: 1});
+							ns1blankspace.opportunity.search.send(event.target.id, {source: 1})
 						});
+					}	
 				},
 
 	search: 	{
 					send: 		function (sXHTMLElementId, oParam)
-								{
-										
+								{	
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
@@ -259,7 +247,7 @@ ns1blankspace.opportunity =
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true")
-											}); 
+											}) 
 										);		
 										
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
@@ -317,7 +305,7 @@ ns1blankspace.opportunity =
 							
 					aHTML.push('</table>');					
 						
-					$('#ns1blankspaceControl').html(aHTML.join('');
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 
@@ -327,7 +315,7 @@ ns1blankspace.opportunity =
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
-					$('#ns1blankspaceMain').html(aHTML.join('');
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
@@ -351,7 +339,7 @@ ns1blankspace.opportunity =
 					$('#ns1blankspaceControlActions').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceActions', refresh: true});
-						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceActions'};
+						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceActions'});
 					});
 					
 					$('#ns1blankspaceControlAttachments').click(function(event)
@@ -373,9 +361,9 @@ ns1blankspace.opportunity =
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML.push('<table><tr><td valign="top">Sorry can\'t find opportunity.</td></tr></table>');
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this opportunity.</td></tr></table>');
 								
-						$('#ns1blankspaceMain').html(aHTML.join('');
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
@@ -383,7 +371,7 @@ ns1blankspace.opportunity =
 						ns1blankspace.data.contactBusiness = ns1blankspace.objectContextData.requestbycontactbusiness;
 						ns1blankspace.data.contactPerson = ns1blankspace.objectContextData.requestbycontactperson;
 						
-						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference;
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference);
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
@@ -405,18 +393,18 @@ ns1blankspace.opportunity =
 					{
 						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this opportunity.</td></tr></table>');
 								
-						$('#ns1blankspaceMain').html(aHTML.join('');
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1Large" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" style="width:100px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
-						$('#ns1blankspaceMainSummary').html(aHTML.join('');	
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 					
 						var aHTML = [];
 						
@@ -469,32 +457,32 @@ ns1blankspace.opportunity =
 						
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceSummaryColumn1Large').html(aHTML.join('');
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 							
 						var aHTML = [];
 							
-						aHTML.push('<table class="ns1blankspaceColumn2Action" cellspacing=0>');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
 						if (ns1blankspace.objectContextData.requestbycontactperson == '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+							aHTML.push('<tr><td class="ns1blankspaceAction">' +
 											'<span id="ns1blankspaceSummaryCreateContact">Create&nbsp;Person&nbsp;Contact</a></td></tr>');
 						}
 						else
 						{
-							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
+							aHTML.push('<tr><td class="ns1blankspaceAction">' +
 											'<span id="ns1blankspaceSummaryViewContact">View&nbsp;Person&nbsp;Contact</a></td></tr>');
 						}	
 										
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceSummaryColumn2Action').html(aHTML.join('');	
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 						
 						$('#ns1blankspaceSummaryViewContact').click(function(event)
 						{
 							var iContactPerson = ns1blankspace.objectContextData.requestbycontactperson;	
-							1blankspace.contactPerson.init({showHome: false});
-							1blankspace.contactPerson.search.send(iContactPerson)
+							ns1blankspace.contactPerson.init({showHome: false});
+							ns1blankspace.contactPerson.search.send(iContactPerson)
 						});
 						
 						$('#ns1blankspaceSummaryCreateContact').click(function(event)
@@ -525,13 +513,13 @@ ns1blankspace.opportunity =
 										'</tr>');
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceMainDetails').html(aHTML.join('');
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
 						
 						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
+						aHTML.push('<tr>' +
 										'<td class="ns1blankspaceCaption">' +
 										'Reference' +
 										'</td></tr>' +
@@ -592,8 +580,10 @@ ns1blankspace.opportunity =
 						
 						aHTML.push('</table>');
 
-						$('#ns1blankspaceDetailsColumn1').html(aHTML.join('');
+						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
+						$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy' });
+
 						var aHTML = [];
 							
 						aHTML.push('<table class="ns1blankspace">');
@@ -609,9 +599,7 @@ ns1blankspace.opportunity =
 
 						aHTML.push('</table>');		
 						
-						$('#ns1blankspaceDetailsColumn2').html(aHTML.join('');
-						
-						//$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy' });
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
@@ -627,11 +615,10 @@ ns1blankspace.opportunity =
 						else
 						{
 							var dDate = new Date();
-							var ns1blankspace.report.today;
-							ns1blankspace.report.today = dDate.format('d mmm yyyy');
-							$('#ns1blankspaceDetailsDateReceived').val(ns1blankspace.report.today);
-							$('#ns1blankspaceDetailsManagedBy').attr('data-id', gsUserID);
-							$('#ns1blankspaceDetailsManagedBy').val(ns1blankspace.user.commonname);
+							
+							$('#ns1blankspaceDetailsDateReceived').val(dDate.format('d mmm yyyy'));
+							$('#ns1blankspaceDetailsManagedBy').attr('data-id', ns1blankspace.user.id);
+							$('#ns1blankspaceDetailsManagedBy').val(ns1blankspace.user.logonname);
 							$('[name="radioStatus"][value="1"]').attr('checked', true);
 						}
 					}	
@@ -652,7 +639,7 @@ ns1blankspace.opportunity =
 										'</tr>' +
 										'</table>');					
 								
-						$('#ns1blankspaceContact').html(aHTML.join('');
+						$('#ns1blankspaceContact').html(aHTML.join(''));
 						
 						var aHTML = [];
 					
@@ -676,7 +663,7 @@ ns1blankspace.opportunity =
 						}	
 						aHTML.push('</table>');
 						
-						$('#ns1blankspaceContactColumn2').html(aHTML.join('');
+						$('#ns1blankspaceContactColumn2').html(aHTML.join(''));
 						
 						var aHTML = [];
 					
@@ -784,7 +771,7 @@ ns1blankspace.opportunity =
 						
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceContactColumn1').html(aHTML.join('');
+						$('#ns1blankspaceContactColumn1').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
@@ -823,66 +810,73 @@ ns1blankspace.opportunity =
 				},
 
 	save: 		{
+					validate: 	function ()
+								{
+									if ($('#ns1blankspaceContactFirstName') != '' && $('#ns1blankspaceContactSurname') == '')
+									{	
+										ns1blankspace.status.error('Surname is mandatory for a Contact.');
+										return false;
+									}
+								},
+									
 					send: 		function ()
 								{
-									var sData = 'id=';
-									
-									if (ns1blankspace.objectContext != -1)
-									{
-										sData += ns1blankspace.objectContext;
-									} 
-									
-									if ($('#ns1blankspaceMainDetails').html() != '')
-									{
-										//sData += '&type=' + giOpportunityTypeOpportunity;
-										sData += '&startdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDateReceived').val());
-										sData += '&source=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSourceOfContact').attr('data-id);}
-										sData += '&sourcenote=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSourceOfContactOther').val());
-										if ($('#ns1blankspaceDetailsManagedBy').attr('data-id') != undefined) {
-											sData += '&manageruser=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsManagedBy').attr('data-id);	
-										}
-										else {
+									if (ns1blankspace.opportunity.save.validate)
+									{	
+										var sData = 'id=';
+										
+										if (ns1blankspace.objectContext != -1)
+										{
+											sData += ns1blankspace.objectContext;
+										} 
+										
+										if ($('#ns1blankspaceMainDetails').html() != '')
+										{
+											sData += '&startdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDateReceived').val());
+											sData += '&source=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSourceOfContact').attr('data-id'));
+											sData += '&sourcenote=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSourceOfContactOther').val());
+											if ($('#ns1blankspaceDetailsManagedBy').attr('data-id') != undefined)
+											{
+												sData += '&manageruser=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsManagedBy').attr('data-id'));	
+											}
+											else
+											{
 												sData += '&manageruser='+ ns1blankspace.user.id; 
+											}
+											sData += '&status=' + $('#ns1blankspaceDetailsStatus').attr('data-id');
+											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 										}
-										sData += '&status=' + $('#ns1blankspaceDetailsStatus').attr('data-id');
-										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
-									}
 
-									if ($('#ns1blankspaceContact').html() != '')
-									{
-										if ($('#ns1blankspaceContactFirstName') != '' && $('#ns1blankspaceContactSurname') == '')
+										if ($('#ns1blankspaceContact').html() != '')
 										{	
-											ns1blankspace.status.error('Surname is mandatory for a Contact.');
-											return '';	}
-											
-										sData += '&businessname=' + ns1blankspace.util.fs($('#ns1blankspaceContactBusinessName').val());
-										sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceContactFirstName').val());
-										sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceContactSurname').val());
-										sData += '&phone=' + ns1blankspace.util.fs($('#ns1blankspaceContactPhone').val());
-										sData += '&mobile=' + ns1blankspace.util.fs($('#ns1blankspaceContactMobile').val());
-										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceContactEmail').val());
-										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingAddress1').val());
-										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingSuburb').val());
-										sData += '&mailingstate=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingState').val());
-										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingPostCode').val());
-										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingCountry').val());
-									}
-									
-									
-									$.ajax(
-									{
-										type: 'POST',
-										url: ns1blankspace.util.endpointURI('OPPORTUNITY_MANAGE'),
-										data: sData,
-										dataType: 'json',
-										success: this.process
-									});
-										if (ns1blankspace.objectContext == -1)
-										{	
-											ns1blankspace.objectContext = glObjectSaveId;
-											ns1blankspace.opportunity.search('opporunity-' + ns1blankspace.objectContext);
+											sData += '&businessname=' + ns1blankspace.util.fs($('#ns1blankspaceContactBusinessName').val());
+											sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceContactFirstName').val());
+											sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceContactSurname').val());
+											sData += '&phone=' + ns1blankspace.util.fs($('#ns1blankspaceContactPhone').val());
+											sData += '&mobile=' + ns1blankspace.util.fs($('#ns1blankspaceContactMobile').val());
+											sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceContactEmail').val());
+											sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingAddress1').val());
+											sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingSuburb').val());
+											sData += '&mailingstate=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingState').val());
+											sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingPostCode').val());
+											sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingCountry').val());
 										}
-									}
+										
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('OPPORTUNITY_MANAGE'),
+											data: sData,
+											dataType: 'json',
+											success: this.process
+										});
+											if (ns1blankspace.objectContext == -1)
+											{	
+												ns1blankspace.objectContext = glObjectSaveId;
+												ns1blankspace.opportunity.search('opporunity-' + ns1blankspace.objectContext);
+											}
+										}
+									}	
 								},
 
 					process: 	function (oResponse)
@@ -1080,7 +1074,6 @@ ns1blankspace.opportunity =
 								}
 				},				
 
-
 	contactStatus:
 				function (oResponse, asContactType, aiContactId)
 				{	
@@ -1107,3 +1100,4 @@ ns1blankspace.opportunity =
 						{	ns1blankspace.opportunity.data.objectStatus = -1;	}	
 					}	
 				}
+}				
