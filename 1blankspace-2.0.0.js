@@ -2755,9 +2755,8 @@ ns1blankspace.util =
 
 ns1blankspace.search.address =
 {
-	show:		function ns1blankspaceAddressSearch(sXHTMLElementID, oParam)
+	show:		function (sXHTMLElementID, oParam)
 				{
-					
 					var aSearch = sXHTMLElementID.split('-');
 					var sElementId = aSearch[0];
 					var lElementSearchContext = aSearch[1];	
@@ -2771,22 +2770,15 @@ ns1blankspace.search.address =
 					}
 					else
 					{
-						var sParam = '/ondemand/core/?method=CORE_ADDRESS_SEARCH&rf=XML';
-						var sData = '';
-						
-						ns1blankspaceOptionsSetPosition(sXHTMLElementID)
-						
-						//sData += '&postpcde=' + encodeURIComponent((oParam.postcode==undefined?'':oParam.postcode));
-						
-						sData += 'suburblike=' + encodeURIComponent($('#' + ns1blankspace.xhtml.divID).val());
+						ns1blankspace.container.position(sXHTMLElementID)
 
 						$.ajax(
 						{
 							type: 'POST',
-							url: sParam,
-							data: sData,
+							url: ns1blankspace.util.endpointURI('CORE_ADDRESS_SEARCH'),
+							data: 'suburblike=' + encodeURIComponent($('#' + ns1blankspace.xhtml.divID).val()),
 							dataType: 'json',
-							success: this.process
+							success: ns1blankspace.search.address.process
 						});
 					}
 				},
@@ -2837,10 +2829,9 @@ ns1blankspace.search.address =
 						$('td.ns1blankspaceSearch').click(function(event)
 						{
 							$(ns1blankspace.xhtml.container).hide(200);
-							ns1blankspaceAddressSearch(event.target.id);
+							ns1blankspace.search.address.show(event.target.id);
 						});
-					}	
-							
+					}				
 				}
 }				
 
@@ -2855,8 +2846,8 @@ ns1blankspace.search.email =
 					var sSearchText;
 					var iMaximumColumns = 1;
 					var bEmailOnly = false;
-					var sParentSearchId;
-					var sSetXHTMLElementId;
+					var sParentSearchID;
+					var sSetXHTMLElementID;
 					
 					if (oParam != undefined)
 					{
@@ -2876,28 +2867,28 @@ ns1blankspace.search.email =
 						
 					if (sElementId != '')
 					{
-						var sMethod = $('#' + sElementId).attr("onDemandMethod")
-						var sParentElementId = $('#' + sElementId).attr("onDemandParent")
+						var sMethod = $('#' + sElementId).attr("data-method")
+						var sParentElementId = $('#' + sElementId).attr("data-parent")
 					}	
 					
 					if (lElementSearchContext != undefined)
 					{
-						if (sSetXHTMLElementId == undefined) {sSetXHTMLElementId = sElementId}
+						if (sSetXHTMLElementID == undefined) {sSetXHTMLElementID = sElementID}
 					
-						var lOnDemandID = $('#' + sSetXHTMLElementId).attr("onDemandID")
+						var lDataID = $('#' + sSetXHTMLElementId).attr("data-id")
 						
-						if (lOnDemandID == undefined) 
+						if (lDataID == undefined) 
 						{
-							lOnDemandID = aSearch[1];
+							lDataID = aSearch[1];
 						}
 						else
 						{	
-							lOnDemandID += '-' + aSearch[1]
+							lDataID += '-' + aSearch[1]
 						}	
 						
-						$('#' + sSetXHTMLElementId).attr("onDemandID", lOnDemandID)
+						$('#' + sSetXHTMLElementId).attr("data-id", lOnDemandID)
 						
-						var sValue = $('#' + sSetXHTMLElementId).val()
+						var sValue = $('#' + sSetXHTMLElementID).val()
 						
 						if (bEmailOnly) 
 						{
@@ -2910,21 +2901,20 @@ ns1blankspace.search.email =
 								sValue += ';' + aSearch[6]
 							}		
 								
-							$('#' + sSetXHTMLElementId).val(sValue)	
+							$('#' + sSetXHTMLElementID).val(sValue)	
 						}
 						else
 						{
-							$('#' + sSetXHTMLElementId).val(aSearch[2] + ' ' + aSearch[3])
+							$('#' + sSetXHTMLElementID).val(aSearch[2] + ' ' + aSearch[3])
 						}	
 						
-						$('#' + sParentElementId).attr("onDemandID", aSearch[4])
+						$('#' + sParentElementId).attr("data-id", aSearch[4])
 						$('#' + sParentElementId).val(aSearch[5])
 						$(ns1blankspace.xhtml.container).hide();
 					}
 					else
 					{
-					
-						ns1blankspaceOptionsSetPosition(sXHTMLElementID);
+						ns1blankspace.container.position(sXHTMLElementID);
 					
 						if (sSearchText == undefined) {sSearchText = ''};
 							
@@ -2934,24 +2924,22 @@ ns1blankspace.search.email =
 						}	
 						
 						if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.all)
-						{
-							
+						{						
 							var oSearch = new AdvancedSearch();
-							oSearch.endPoint = 'contact';
 							oSearch.rows = 10;
 							oSearch.method = 'CONTACT_PERSON_SEARCH';
 							oSearch.addField( 'firstname,surname,contactbusinesstext,contactbusiness,email');
 							oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
 							
-							if (sParentElementId != undefined)
+							if (sParentElementID != undefined)
 							{
-								var sParentSearchText = $('#' + sParentElementId).val();
-								sParentSearchId = $('#' + sParentElementId).attr("onDemandID");
+								var sParentSearchText = $('#' + sParentElementID).val();
+								sParentSearchID = $('#' + sParentElementID).attr("data-id");
 							}	
 							
-							if (sParentSearchId != undefined)
+							if (sParentSearchID != undefined)
 							{
-								oSearch.addFilter('contactbusiness', 'EQUAL_TO', sParentSearchId);
+								oSearch.addFilter('contactbusiness', 'EQUAL_TO', sParentSearchID);
 							}
 							else if	(sParentSearchText != undefined)
 							{
@@ -2966,7 +2954,7 @@ ns1blankspace.search.email =
 							
 							oSearch.rf = 'JSON';
 						
-							oSearch.getResults(function (data) {this.process(data, sElementId, oParam)}) 
+							oSearch.getResults(function (data) {ns1blankspace.search.email.process(data, sElementId, oParam)}) 
 										
 						}
 					};	
@@ -3042,12 +3030,12 @@ ns1blankspace.search.email =
 							ns1blankspace.email.search.send(event.target.id, oParam);
 						});
 						
-						ns1blankspace.pagination.bind(
+						ns1blankspace.render.bind(
 						{
 							columns: 'firstname-surname-email-contactbusinesstext',
 							idColumns: 'firstname-surname-contactbusiness-contactbusinesstext-email',
 							more: oResponse.moreid, 
-							bodyClass: 'interfaceSearchLarge',
+							bodyClass: 'ns1blankspaceSearchLarge',
 							functionSearch: ns1blankspace.email.search.send,
 							xhtmlElementID: sElementID,
 							idSeperator: '---',
@@ -3073,20 +3061,20 @@ ns1blankspace.render =
 						if (oParam.more != undefined) {bMore = oParam.more}
 					}
 
-					aHTML.push('<table border="0" id="tableInterfaceSearchHeader" class="interfaceSearchHeaderMedium"><tbody>');
-					aHTML.push('<tr class="interfaceSearchHeader">');
-					aHTML.push('<td id="tdInterfaceSearchHeaderClose" class="interfaceSearchHeaderClose">' +
-											'<span id="spanInterfaceSearchHeaderClose"></span></td>');
+					aHTML.push('<table id="ns1blankspaceSearchHeader" class="interfaceSearchHeaderMedium">');
+					aHTML.push('<tr>');
+					aHTML.push('<td class="ns1blankspaceSearchHeaderClose">' +
+											'<span id="ns1blankspaceSearchHeaderClose"></span></td>');
 					if (bMore)
 					{
-						aHTML.push('<td id="tdInterfaceSearchHeaderMore" class="interfaceSearchHeaderMore">' +
-											'<span id="spanInterfaceSearchHeaderMore"></span></td>');
+						aHTML.push('<td class="ns1blankspaceSearchHeaderMore">' +
+											'<span id="ns1blankspaceSearchHeaderMore"></span></td>');
 					}
 					
 					aHTML.push('</tr>');
 					aHTML.push('</table>');
 						
-					aHTML.push('<div id="divns1blankspaceSearch-0" class="ns1blankspaceSearchPage">');
+					aHTML.push('<div id="ns1blankspaceSearch-0" class="ns1blankspaceSearchPage">');
 								
 					aHTML.push(sHTML);
 
@@ -3094,15 +3082,15 @@ ns1blankspace.render =
 
 					if (bMore)
 					{
-						aHTML.push('<table border="0" class="interfaceSearchFooterMedium"><tbody>');
-						aHTML.push('<tr class="interfaceSearchFooter">');
+						aHTML.push('<table class="ns1blankspaceSearchFooterMedium">');
+						aHTML.push('<tr class="ns1blankspaceSearchFooter">');
 						
-						aHTML.push('<td id="tdInterfaceSearchFooterPage" class="interfaceSearchHeader">' +
-									'<span id="spanInterfaceSearchFooterPage-0" class="interfaceSearchFooterPage">' +
-									'1</span></td>');
+						aHTML.push('<td class="ns1blankspaceSearchHeader">' +
+										'<span id="ns1blankspaceSearchFooterPage-0" class="ns1blankspaceSearchFooterPage">' +
+										'1</span></td>');
 						
 						aHTML.push('</tr>');
-						aHTML.push('</tbody></table>');
+						aHTML.push('</table>');
 					}	
 					
 					return aHTML.join('');
@@ -3110,7 +3098,7 @@ ns1blankspace.render =
 
 	bind:		function (oParam)
 				{
-					var fFunctionMore = ns1blankspacePaginationShowMore;
+					var fFunctionMore = ns1blankspace.render.showMore;
 					var iMore;
 					
 					if (oParam != undefined)
@@ -3119,7 +3107,7 @@ ns1blankspace.render =
 						if (oParam.more != undefined) {iMore = oParam.more}
 					}
 					
-					$('#spanInterfaceSearchHeaderClose').button( {
+					$('#ns1blankspaceSearchHeaderClose').button( {
 								text: false,
 								icons: {
 									primary: "ui-icon-close"
@@ -3132,7 +3120,7 @@ ns1blankspace.render =
 							.css('width', '15px')
 							.css('height', '16px')
 						
-					$('#spanInterfaceSearchHeaderMore').button( {
+					$('#ns1blankspaceSearchHeaderMore').button( {
 								text: false,
 								icons: {
 									primary: "ui-icon-play"
@@ -3145,9 +3133,9 @@ ns1blankspace.render =
 							.css('width', '15px')
 							.css('height', '16px')
 						
-					$('.interfaceSearchFooterPage').click(function(event)
+					$('.ins1blankspaceSearchFooterPage').click(function(event)
 					{
-						ns1blankspacePaginationShowPage(this.id);
+						ns1blankspace.render.showPage(this.id);
 					});
 				},
 
@@ -3166,7 +3154,7 @@ ns1blankspace.render =
 					var fFunctionClass;
 					var sClass;
 					var sIdAdditional = '';
-					var sBodyClass = 'interfaceSearchMedium';
+					var sBodyClass = 'ns1blankspaceSearchMedium';
 					var sIDSeperator = '-';
 					
 					if (oParam != undefined)
@@ -3182,10 +3170,9 @@ ns1blankspace.render =
 						if (oParam.idAdditional != undefined) {sIdAdditional = oParam.idAdditional}
 						if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
 						if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
-						
 					}
 					
-					$('#tdInterfaceSearchFooterMoreStatus').html(ns1blankspace.xhtml.loadingSmall);
+					$('#ns1blankspaceSearchFooterMoreStatus').html(ns1blankspace.xhtml.loadingSmall);
 					
 					if (iMore == -1)
 					{
@@ -3195,7 +3182,6 @@ ns1blankspace.render =
 					{
 						if (oResponse == undefined)
 						{
-							var sParam = 'method=CORE_SEARCH_MORE';
 							var sData =	'id=' + iMore +
 											'&startrow=' + iStartRow + 
 											'&rows=' + iRows;
@@ -3203,22 +3189,21 @@ ns1blankspace.render =
 							$.ajax(
 							{
 								type: 'GET',
-								url: '/ondemand/core/?' + sParam,
+								url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
 								data: sData,
 								dataType: 'json',
-								success: function(data){ns1blankspacePaginationShowMore(oParam, data)}
+								success: function(data){ns1blankspace.render.showMore(oParam, data)}
 							});
 						}
 						else
 						{	
 							var aHTML = [];
-							var h = -1;
 						
-							if ($('#divns1blankspaceSearch-' + iStartRow).length == 0)
+							if ($('#ns1blankspaceSearch-' + iStartRow).length == 0)
 							{
-								aHTML.push('<div id="divns1blankspaceSearch-' + iStartRow + '" class="ns1blankspaceSearchPage">');
+								aHTML.push('<div id="ns1blankspaceSearch-' + iStartRow + '" class="ns1blankspaceSearchPage">');
 							
-								aHTML.push('<table border="0" class="' + sBodyClass + '">');
+								aHTML.push('<table class="' + sBodyClass + '">');
 										
 								var iStartRow = parseInt(oResponse.startrow);
 								var iRows = parseInt(oResponse.rows);
@@ -3226,44 +3211,39 @@ ns1blankspace.render =
 												
 								if (bMoreRows)
 								{				
-									$('#spanInterfaceSearchHeaderMore').show();
+									$('#ns1blankspaceSearchHeaderMore').show();
 								}
 								else
 								{
-									$('#spanInterfaceSearchHeaderMore').hide();
+									$('#ns1blankspaceSearchHeaderMore').hide();
 								}	
 								
 								oParam.startRow = iStartRow + iRows;	
-									
-								$('#tdInterfaceSearchFooterMore').unbind('click');
-									
-								$('#tdInterfaceSearchFooterMore').click(function(event)
-								{
-									interfaceAuditSearchAdd(oParam);
-								});	
-										
+												
 								$.each(oResponse.data.rows, function()
 								{		
 									iColumn = iColumn + 1;
 									
 									if (iColumn == 1)
 									{
-										aHTML.push('<tr class="interfaceSearch">');
+										aHTML.push('<tr class="ns1blankspaceSearch">');
 									}
 									
 									var aIDColumns = sIDColumns.split("-");
 									
 									var sIDData = '';
+
 									for (var i = 0; i < aIDColumns.length; i++)
 									{
-										sIDData += '-' + onDemandXMLGetData(oRow, aIDColumns[i]);
+										sIDData += '-' + this[aIDColumns[i]];
 									}
 									
 									var aColumns = sColumns.split("-");
 									
 									for (var i = 0; i < aColumns.length; i++)
 									{
-										sClass = 'interfaceSearch'
+										sClass = 'ns1blankspaceSearch';
+
 										if (fFunctionClass != undefined)
 										{
 											sClass = sClass + fFunctionClass(oRow);
@@ -3311,30 +3291,27 @@ ns1blankspace.render =
 									fFunctionSearch(event.target.id, {source: 1});
 								});
 										
-								$('#tdInterfaceSearchFooterPage').append(
-										' | <span id="spanInterfaceSearchFooterPage-' + iStartRow + '" class="interfaceSearchFooterPage">' +
+								$('#ns1blankspaceSearchFooterPage').append(
+										' | <span id="ns1blankspaceSearchFooterPage-' + iStartRow + '" class="ns1blankspaceSearchFooterPage">' +
 											(parseInt(iStartRow/iRows) + 1) + '</span>');
 											
-								$('#tdInterfaceSearchFooterMoreStatus').html('&nbsp;');			
+								$('#ns1blankspaceSearchFooterMoreStatus').html('&nbsp;');			
 							}
 						
-							$('.interfaceSearchFooterPage').click(function(event)
+							$('.ns1blankspaceSearchFooterPage').click(function(event)
 							{
-								ns1blankspacePaginationShowPage(this.id);
+								ns1blankspace.render.showPage(this.id);
 							});
-						
 						}
 					}
 				},
 
-	showPage:	function ns1blankspacePaginationShowPage(sXHTMLElementID)
+	showPage:	function (sXHTMLElementID)
 				{
-
 					var aElement = sXHTMLElementID.split('-');
 					
 					$('.ns1blankspaceSearchPage').hide();
-					$('#divns1blankspaceSearch-' + aElement[1]).show();
-					
+					$('#ns1blankspaceSearch-' + aElement[1]).show();
 				}
 }				
 
@@ -3715,7 +3692,7 @@ ns1blankspace.actions =
 					}
 				},
 
-	dialog:		function ns1blankspaceViewportActionShow(oElement, sActionXHTML, sFunctionActionBind)
+	dialog:		function (oElement, sActionXHTML, sFunctionActionBind)
 				{
 
 					var aHTML = [];
@@ -3779,12 +3756,12 @@ ns1blankspace.render.page =
 					{
 						aHTML.push('<table><tr>');
 						//aHTML.push('<td style="width:1px;" class="interfaceMessagingSubHeader ns1blankspacePaginationList" id="tdns1blankspacePaginationList' + sXHTMLContext + '-"></td>';
-						aHTML.push('<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + '"' +
-											' id="td' + sXHTMLContext + 'ns1blankspacePaginationList-0" rowStart="0">1</td>');
+						aHTML.push('<td style="width:5px;cursor:pointer;" class="ns1blankspaceSubHeader ns1blankspaceRenderList' + sXHTMLContext + '"' +
+											' id="td' + sXHTMLContext + 'ns1blankspaceRenderList-0" rowStart="0">1</td>');
 						aHTML.push('<td></td></tr></table>');
 					}
 						
-					aHTML.push('<div id="div' + sXHTMLContext + 'ns1blankspacePaginationList-0" class="ns1blankspacePaginationListPage' + sXHTMLContext + '">');
+					aHTML.push('<div id="div' + sXHTMLContext + 'ns1blankspaceRenderList-0" class="ns1blankspaceRenderListPage' + sXHTMLContext + '">');
 					aHTML.push(sHTML);
 					aHTML.push('</div>');
 
@@ -3793,24 +3770,24 @@ ns1blankspace.render.page =
 						
 					if (bMore)
 					{
-						var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + 
-											'" id="td' + sXHTMLContext + 'ns1blankspacePaginationList-' +
+						var sHTML = '<td style="width:5px;cursor:pointer;" class="ns1blankspaceSubHeader ns1blankspaceRenderList' + sXHTMLContext + 
+											'" id="td' + sXHTMLContext + 'ns1blankspaceRenderList-' +
 											(iStartRow + iRows - 1) + '" rowStart="' +
 											(iStartRow + iRows - 1) + '">' + 'more...' + '</td>';
 										
-						$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow)).after(sHTML);
+						$('#td' + sXHTMLContext + 'ns1blankspaceRenderList-' + (iStartRow)).after(sHTML);
 					
-						$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow + iRows - 1)).click(function(event)
+						$('#td' + sXHTMLContext + 'ns1blankspaceRenderList-' + (iStartRow + iRows - 1)).click(function(event)
 						{
 							var sID = event.target.id;
 							var sStart = $('#' + sID).attr('rowStart');
 							$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
-							if (oParam != undefined) {oParam.more = iMore;oParam.startRow = sStart}else{oParam = {more: iMore, startRow: sStart}};
+							if (oParam != undefined) {oParam.more = iMore;oParam.startRow = sStart} else {oParam = {more: iMore, startRow: sStart}};
 							ns1blankspace.render.page.showMore(oParam);
 						});
 					}
 					
-					$('.ns1blankspacePaginationListPage' + sXHTMLContext).click(function(event)
+					$('.ns1blankspaceRenderListPage' + sXHTMLContext).click(function(event)
 					{
 						ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
 					});
@@ -3837,7 +3814,6 @@ ns1blankspace.render.page =
 					var sXHTMLlFirstRow;
 					var sXHTMLContext = '';
 					var fFunctionShowRow;
-					var sType = 'XML';
 					
 					if (oParam != undefined)
 					{
@@ -3856,7 +3832,6 @@ ns1blankspace.render.page =
 						if (oParam.xhtmlFirstRow != undefined) {sXHTMLlFirstRow = oParam.xhtmlFirstRow}
 						if (oParam.functionNewPage != undefined) {sFunctionNewPage = oParam.functionNewPage}
 						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
-						if (oParam.type != undefined) {sType = oParam.type}
 					}
 
 					sType = sType.toUpperCase();
@@ -3869,7 +3844,6 @@ ns1blankspace.render.page =
 					{
 						if (oData == undefined)
 						{
-							var sParam = 'method=CORE_SEARCH_MORE';
 							var sData =	'id=' + iMore +
 											'&startrow=' + iStartRow + 
 											'&rows=' + iRows;
@@ -3877,139 +3851,50 @@ ns1blankspace.render.page =
 							$.ajax(
 							{
 								type: 'GET',
-								url: '/ondemand/core/?rf=' + sType + '&' + sParam,
+								url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
 								data: sData,
 								dataType: sType.toLowerCase(),
-								success: function(data){ns1blankspacePaginationListShowMore(oParam, data)}
+								success: function(data){ns1blankspace.render.list.showMore(oParam, data)}
 							});
 						}
 						else
 						{
-						
 							var aHTML = [];
-							var h = -1;
 						
-							if ($('#div' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).length == 0)
+							if ($('#div' + sXHTMLContext + 'ns1blankspaceRenderList-' + iStartRow).length == 0)
 							{
 							
-								aHTML.push('<div id="div' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow + 
-												'" class="ns1blankspacePaginationListPage' + sXHTMLContext + '">');
+								aHTML.push('<div id="div' + sXHTMLContext + 'ns1blankspaceRenderList-' + iStartRow + 
+												'" class="ns1blankspaceRenderListPage' + sXHTMLContext + '">');
 							
-								aHTML.push('<table border="0" class="' + sBodyClass + '">');
+								aHTML.push('<table class="' + sBodyClass + '">');
 								
 								if (sXHTMLlFirstRow != undefined)
 								{
 									aHTML.push(sXHTMLlFirstRow);
 								}
+					
+								var iStartRow = parseInt(oData.startrow)
+								var iRows = parseInt(oData.rows);
+								var bMoreRows = (oData.morerows == "true");
+												
+								oParam.startRow = iStartRow + iRows;	
 								
-								if (sType == 'XML')
+								var oRows = oData.data.rows;
+						
+								$(oRows).each(function() 
 								{
-								
-									var oRoot = oXML.getElementsByTagName('ondemand').item(0);	
-									
-									var iStartRow = parseInt($(oRoot).attr('startrow'));
-									var iRows = parseInt($(oRoot).attr('rows'));
-									var bMoreRows = ($(oRoot).attr('morerows') == "true");
-													
-									oParam.startRow = iStartRow + iRows;	
-								
-									for (var iRow = 0; iRow < oRoot.childNodes.length; iRow++) 
-									{
-										
-										var oRow = oRoot.childNodes.item(iRow);
-										
-										if (fFunctionShowRow != undefined)
-										{
-											aHTML.push(fFunctionShowRow(oRow));
-										}
-										else
-										{
-										
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class=ns1blankspaceRow" id="tr' + sXHTMLContext + '-' + onDemandXMLGetData(oRow, "id") + sIDData + sIdAdditional + '">');
-											}
-											
-											var aIDColumns = sIDColumns.split("-");
-											
-											var sIDData = '';
-											for (var i = 0; i < aIDColumns.length; i++)
-											{
-												sIDData += '-' + onDemandXMLGetData(oRow, aIDColumns[i]);
-											}
-											
-											var aColumns = sColumns.split("-");
-											
-											for (var i = 0; i < aColumns.length; i++)
-											{
-												sClass = 'ns1blankspaceRow'
-												if (fFunctionClass != undefined)
-												{
-													sClass = sClass + fFunctionClass(oRow);
-												}	
-											
-												aHTML.push('<td class="' + sClass + '" id="td' + sXHTMLContext + '_' +
-																	aColumns[i] + '-' + onDemandXMLGetData(oRow, "id") + sIDData + sIdAdditional + '">');
-																	
-												switch (aColumns[i])
-												{
-												case 'space':
-													aHTML.push(' ');
-													break;
-												case 'comma':
-													aHTML.push(',');
-													break;
-												case 'pipe':
-													aHTML.push('|');
-													break;
-												default:
-													aHTML.push(onDemandXMLGetData(oRow, aColumns[i]));
-												}
-												
-												aHTML.push('</td>');
-												
-												if (i == (aColumns.length-1) && (sFunctionOpen != undefined))
-												{
-													aHTML.push('<td id="td' + sXHTMLContext + '_options-' + onDemandXMLGetData(oRow, "id") + 
-																		'" class="ns1blankspaceRowOptionsSelect ns1blankspaceRowOptionsSelect' + sXHTMLContext + '">&nbsp;</td>');
-												}
-												
-											}
-											
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
-										}	
-									}
-								}	
-								else if (sType == 'JSON')
-								{
-									var iStartRow = parseInt(oData.startrow)
-									var iRows = parseInt(oData.rows);
-									var bMoreRows = (oData.morerows == "true");
-													
-									oParam.startRow = iStartRow + iRows;	
-									
-									var oRows = oData.data.rows;
-							
-									$(oRows).each(function() 
-									{
-										aHTML.push(fFunctionShowRow(this));
-									});
-								}
+									aHTML.push(fFunctionShowRow(this));
+								});
 								
 								aHTML.push('</table>');
 								
 								aHTML.push('</div>');
 								
-								$('.ns1blankspacePaginationListPage' + sXHTMLContext).hide();
-								$('.ns1blankspacePaginationListPage' + sXHTMLContext + ':last').after(aHTML.join(''));
+								$('.ns1blankspaceRenderListPage' + sXHTMLContext).hide();
+								$('.ns1blankspaceRenderListPage' + sXHTMLContext + ':last').after(aHTML.join(''));
 								
-								$('.ns1blankspaceRowOptionsSelect' + sXHTMLContext).unbind('click');
+								$('.ns1blankspaceRowSelect' + sXHTMLContext).unbind('click');
 								
 								if (sFunctionOpen != undefined)
 								{
@@ -4026,31 +3911,31 @@ ns1blankspace.render.page =
 									.css('height', '20px')
 								}
 								
-								$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).html(((iStartRow+1)/iRows)+1);
+								$('#td' + sXHTMLContext + 'ns1blankspaceRenderList-' + iStartRow).html(((iStartRow+1)/iRows)+1);
 
-								$('td.ns1blankspacePaginationList' + sXHTMLContext).unbind('click');
+								$('td.ns1blankspaceRenderList' + sXHTMLContext).unbind('click');
 								
-								$('td.ns1blankspacePaginationList' + sXHTMLContext).click(function(event)
+								$('td.ns1blankspaceRenderList' + sXHTMLContext).click(function(event)
 								{
-									ns1blankspacePaginationListShowPage(this.id, sXHTMLContext);
+									ns1blankspace.render.list.showPage(this.id, sXHTMLContext);
 								});
 							
 								if (bMoreRows)
 								{
-									var sHTML = '<td style="width:5px;cursor:pointer;" class="interfaceMessagingSubHeader ns1blankspacePaginationList' + sXHTMLContext + 
-											'" id="td' + sXHTMLContext + 'ns1blankspacePaginationList-' +
+									var sHTML = '<td style="width:5px; cursor:pointer;" class="ns1blankspaceSubHeader ns1blankspaceRenderList' + sXHTMLContext + 
+											'" id="td' + sXHTMLContext + 'ns1blankspaceRenderList-' +
 											(iStartRow + iRows) + '" rowStart="' +
 											(iStartRow + iRows) + '">' + 'more...' + '</td>';
 										
-									$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + iStartRow).after(sHTML);
+									$('#td' + sXHTMLContext + 'ns1blankspaceRenderList-' + iStartRow).after(sHTML);
 									
-									$('#td' + sXHTMLContext + 'ns1blankspacePaginationList-' + (iStartRow + iRows)).click(function(event)
+									$('#td' + sXHTMLContext + 'ns1blankspaceRenderList-' + (iStartRow + iRows)).click(function(event)
 									{
 										var sID = event.target.id;
 										var sStart = $('#' + sID).attr('rowStart')
 										$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
 										(oParam != undefined?oParam.more = iMore:oParam = {more: iMore, startRow: sStart})
-										ns1blankspacePaginationListShowMore(oParam);
+										ns1blankspace.render.list.showMore(oParam);
 									});
 								}	
 								
@@ -4067,8 +3952,8 @@ ns1blankspace.render.page =
 				{
 					var aElement = sXHTMLElementID.split('-');
 					
-					$('.ns1blankspacePaginationListPage' + sXHTMLContext).hide();
-					$('#div' + sXHTMLContext + 'ns1blankspacePaginationList-' + aElement[1]).show();
+					$('.ns1blankspaceRenderListPage' + sXHTMLContext).hide();
+					$('#div' + sXHTMLContext + 'ns1blankspaceRenderList-' + aElement[1]).show();
 				}
 }
 
@@ -4095,19 +3980,18 @@ ns1blankspace.pdf =
 					{
 						$('#ans1blankspaceSummaryViewPDF').html(ns1blankspace.xhtml.loadingSmall)
 						
-						var sParam = 'method=CORE_PDF_CREATE&rf=TEXT';
-						var sData = 'object=' + iObject;
+						var sData = 'rf=TEXT&object=' + iObject;
 						sData += '&objectcontext=' + iObjectContext;
-						sData += '&filename=' + encodeURIComponent(sFileName);
-						sData += '&xhtmlcontent=' + encodeURIComponent(sXHTMLContent);
+						sData += '&filename=' + ns1blankspace.util.fs(sFileName);
+						sData += '&xhtmlcontent=' + ns1blankspace.util.fs(sXHTMLContent);
 						
 						$.ajax(
 						{
 							type: 'POST',
-							url: '/ondemand/core/?' + sParam,
+							url: ns1blankspace.util.endpointURI('CORE_PDF_CREATE'),
 							data: sData,
 							dataType: 'text',
-							success: function(data) {ns1blankspaceCreatePDF(oParam, data)}
+							success: function(data) {ns1blankspace.pdf.create(oParam, data)}
 						});
 					}	
 					else	

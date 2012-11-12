@@ -409,7 +409,7 @@ ns1blankspace.opportunity =
 					
 						var aHTML = [];
 						
-						aHTML.push('<tableclass="ns1blankspaceColumn1">');
+						aHTML.push('<table class="ns1blankspaceColumn1">');
 						
 						if (ns1blankspace.objectContextData.businessname != '')
 						{

@@ -66,13 +66,11 @@ ns1blankspace.project =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'PROJECT_SEARCH';
-						
 						oSearch.addField('reference,description');
 						oSearch.async = false;
 						oSearch.rf = 'json';
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						
 						oSearch.getResults(ns1blankspace.project.home);		
 					}
 					else
