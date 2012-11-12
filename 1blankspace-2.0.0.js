@@ -145,6 +145,10 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.contactperson-2.0.0.js'
 	},
 	{
+		nameSpace: '1blankspace.contactBusiness',
+		source: '/jscripts/1blankspace.contactbusiness-2.0.0.js'
+	},
+	{
 		nameSpace: '1blankspace.action',
 		source: '/jscripts/1blankspace.action-2.0.0.js'
 	},
@@ -2858,7 +2862,7 @@ ns1blankspace.search.email =
 						if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
 						if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 						if (oParam.emailOnly != undefined) {bEmailOnly = oParam.emailOnly}
-						if (oParam.contactBusiness != undefined) {sParentSearchId = oParam.contactBusiness}
+						if (oParam.data.contactBusiness != undefined) {sParentSearchId = oParam.contactBusiness}
 						if (oParam.setXHTMLElementID != undefined) {sSetXHTMLElementId = oParam.setXHTMLElementID}
 					}
 

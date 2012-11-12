@@ -393,9 +393,9 @@ ns1blankspace.contactPerson =
 						ns1blankspace.actions.show({
 											xhtmlElementID: 'ns1blankspaceActions',
 											contactPerson: ns1blankspace.objectContext, 
-											contactPersonText: ns1blankspace.contactPersonText,
-											contactBusiness: ns1blankspace.contactBusiness, 
-											contactBusinessText: ns1blankspace.contactBusinessText,
+											contactPersonText: ns1blankspace.data.contactPersonText,
+											contactBusiness: ns1blankspace.data.contactBusiness, 
+											contactBusinessText: ns1blankspace.data.contactBusinessText,
 											object: '',
 											objectContext: ''
 											});
@@ -428,9 +428,9 @@ ns1blankspace.contactPerson =
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
-						ns1blankspace.contactBusiness = ns1blankspace.objectContextData.contactbusiness;
-						ns1blankspace.contactBusinessText = ns1blankspace.objectContextData.contactbusinesstext
-						ns1blankspace.contactPersonText = ns1blankspace.objectContextData.firstname + ' ' + ns1blankspace.objectContextData.surname;
+						ns1blankspace.data.contactBusiness = ns1blankspace.objectContextData.contactbusiness;
+						ns1blankspace.data.contactBusinessText = ns1blankspace.objectContextData.contactbusinesstext
+						ns1blankspace.data.contactPersonText = ns1blankspace.objectContextData.firstname + ' ' + ns1blankspace.objectContextData.surname;
 						
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.firstname + 
 									'<br />' + ns1blankspace.objectContextData.surname);
@@ -805,7 +805,7 @@ ns1blankspace.contactPerson =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceSelect">' +
 										'<input id="ns1blankspaceBusiness" class="ns1blankspaceSelect"' +
-											' data-method="/ondemand/contact/?rf=XML&method=CONTACT_BUSINESS_SEARCH"' +
+											' data-method="CONTACT_BUSINESS_SEARCH"' +
 											' data-columns="tradename">' +
 										'</td></tr>');
 										
@@ -821,11 +821,6 @@ ns1blankspace.contactPerson =
 						{
 							$('#ns1blankspaceBusiness').attr('data-id', ns1blankspace.objectContextData.contactbusiness);
 							$('#ns1blankspaceBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
-						}
-						else
-						{
-							$('#ns1blankspaceBusiness').attr('data-id', ns1blankspace.contactBusiness);
-							$('#ns1blankspaceBusiness').val(ns1blankspace.contactBusinessText);
 						}
 						
 						var aHTML = [];

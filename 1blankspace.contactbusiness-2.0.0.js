@@ -10,7 +10,7 @@ ns1blankspace.contactBusiness =
 		init: 	function (oParam)
 				{
 					ns1blankspace.object = 12;
-					ns1blankspace.objectName = 'Business';
+					ns1blankspace.objectName = 'contactBusiness';
 					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
@@ -70,9 +70,8 @@ ns1blankspace.contactBusiness =
 						
 						$('#ns1blankspaceControlByGroup').click(function(event)
 						{
-							ns1blankspace.show(refresh: true});
+							ns1blankspace.show({refresh: true});
 							ns1blankspace.contactBusiness.groups.show();
-							//interfaceContactPersonByGroup("divInterfaceMain");
 						});
 							
 						$('#ns1blankspaceControlFavourites').click(function(event)
@@ -97,17 +96,15 @@ ns1blankspace.contactBusiness =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceNothing">Click New to create a business.</td>');
-							aHTML.push('</tr>');
-							aHTML.push('</table>');
+							aHTML.push('<table>' +
+											'<tr><td class="ns1blankspaceNothing">' +
+											'Click New to create a business.</td></tr></table>');
 						}
 						else
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<table>');
 							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceMain">MOST LIKELY</td>');
+							aHTML.push('<td class="ns1blankspaceCaption">MOST LIKELY</td>');
 							aHTML.push('</tr>');
 
 							$.each(oResponse.data.rows, function()
@@ -332,7 +329,7 @@ ns1blankspace.contactBusiness =
 					
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">Actions</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">Attachments</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">Attachments</td></tr>');
 					}
 							
 					aHTML.push('</table>');					
@@ -396,9 +393,9 @@ ns1blankspace.contactBusiness =
 					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
-						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
+						ns1blankspace.attachments.show();
 					});
-				}
+				},
 
 	show: 		function (oParam, oResponse)
 				{
@@ -420,10 +417,10 @@ ns1blankspace.contactBusiness =
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
-						ns1blankspace.contactBusiness = ns1blankspace.objectContextData.contactbusiness;
-						ns1blankspace.contactBusinessText = ns1blankspace.objectContextData.contactbusinesstext;
+						ns1blankspace.data.contactBusiness = ns1blankspace.objectContextData.contactbusiness;
+						ns1blankspace.data.contactBusinessText = ns1blankspace.objectContextData.contactbusinesstext;
 						
-						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.tradename;
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.tradename);
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
@@ -450,8 +447,8 @@ ns1blankspace.contactBusiness =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1Large" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" style="width:100px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -459,22 +456,22 @@ ns1blankspace.contactBusiness =
 					
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspaceColumn1">';
+						aHTML.push('<table class="ns1blankspaceColumn1">');
 						
 						if (ns1blankspace.objectContextData.phonenumber != '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryPhone" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.phonenumber +
-										'</td></tr>';
+										'</td></tr>');
 						}
 
-						if (ns1blankspace.objectContextData.suburb != '')
+						if (ns1blankspace.objectContextData.streetsuburb != '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Location</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryLocation" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.suburb + ' ' + ns1blankspace.objectContextData.state +
-										'</td></tr>';
+										ns1blankspace.objectContextData.streetsuburb + ' ' + ns1blankspace.objectContextData.streetstate +
+										'</td></tr>');
 						}				
 						
 						if (ns1blankspace.objectContextData.webaddress != '')
@@ -482,7 +479,7 @@ ns1blankspace.contactBusiness =
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Website</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryWebAddress" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.webaddress +
-										'</td></tr>';
+										'</td></tr>');
 						}				
 								
 						if (ns1blankspace.objectContextData.customerstatus != '')
@@ -490,7 +487,7 @@ ns1blankspace.contactBusiness =
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Status</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryStatus" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.customerstatustext +
-										'</td></tr>';
+										'</td></tr>');
 						}				
 								
 						if (ns1blankspace.objectContextData.notes != '')
@@ -498,12 +495,12 @@ ns1blankspace.contactBusiness =
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Notes</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryNotes" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.notes +
-										'</td></tr>';
+										'</td></tr>');
 						}				
 								
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceSummaryColumn1Large').html(aHTML.join(''));		 
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));		 
 					}	
 				},
 
@@ -697,7 +694,7 @@ ns1blankspace.contactBusiness =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetSuburb" class="ns1blankspaceText">' +
-										'</td></tr>';
+										'</td></tr>');
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -706,7 +703,7 @@ ns1blankspace.contactBusiness =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetState" class="ns1blankspaceText">' +
-										'</td></tr>';
+										'</td></tr>');
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -715,7 +712,7 @@ ns1blankspace.contactBusiness =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetPostCode" class="ns1blankspaceText">' +
-										'</td></tr>';				
+										'</td></tr>');				
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspace">' +
@@ -724,9 +721,9 @@ ns1blankspace.contactBusiness =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetCountry" class="ns1blankspaceText">' +
-										'</td></tr>';						
+										'</td></tr>');						
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceAddressColumn1').html(aHTML.join(''));
 
@@ -1209,7 +1206,7 @@ ns1blankspace.contactBusiness =
 															aHTML.push('<table class="ns1blankspace">');
 										
 															aHTML.push('<tr class="ns1blankspaceCaption">' + 
-																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementId[2] + '</td>';
+																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementId[2] + '</td>' +
 																			'</tr>');
 															
 															$.each(oResponse.data.rows, function()
@@ -1367,12 +1364,12 @@ ns1blankspace.contactBusiness =
 											aHTML.push('<td class="ns1blankspaceCaption">Position</td>');
 											aHTML.push('<td class="ns1blankspaceCaption">Mobile</td>');
 											aHTML.push('<td class="ns1blankspaceCaption">Email</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp);</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML.push(1blankspace.contactBusiness.people.row(this));
+												aHTML.push(ns1blankspace.contactBusiness.people.row(this));
 											});
 											
 											aHTML.push('</table>');
@@ -1450,8 +1447,8 @@ ns1blankspace.contactBusiness =
 												}
 									})
 									.click(function() {
-										1blankspace.contactPerson.init({showHome: false});
-										1blankspace.contactPerson.search(this.id)
+										ns1blankspace.contactPerson.init({showHome: false});
+										ns1blankspace.contactPerson.search(this.id)
 									})
 									.css('width', '15px')
 									.css('height', '20px')
