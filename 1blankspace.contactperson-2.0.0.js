@@ -301,10 +301,10 @@ ns1blankspace.contactPerson =
 						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceAddress" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">' +
 										'Address</td></tr>');
 					
 						aHTML.push('</table>');					
@@ -324,7 +324,7 @@ ns1blankspace.contactPerson =
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
 					}
 							
@@ -365,25 +365,25 @@ ns1blankspace.contactPerson =
 					
 					$('#ns1blankspaceControlUser').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainUser', refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainUser', refresh: true});
 						ns1blankspace.contactPerson.user();
 					});
 					
 					$('#ns1blankspaceControlGroups').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainGroups', refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainGroups', refresh: true});
 						ns1blankspace.contactPerson.groups.show();
 					});
 					
 					$('#ns1blankspaceControlBusiness').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainBusiness' , refresh: true});
-						ns1blankspace.contactPerson.groups.business();
+						ns1blankspace.show({selector: '#ns1blankspaceMainBusiness' , refresh: true});
+						ns1blankspace.contactPerson.business();
 					});
 					
 					$('#ns1blankspaceControlActions').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceActions', refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainActions', refresh: true});
 						
 						if ($('#ns1blankspaceDetailsFirstName').val() != undefined)
 						{
@@ -404,7 +404,7 @@ ns1blankspace.contactPerson =
 					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
-						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
+						ns1blankspace.attachments.show();
 					});
 					
 				},
@@ -658,14 +658,10 @@ ns1blankspace.contactPerson =
 					
 		
 						aHTML.push('<table class="ns1blankspace">');
-						
-						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-										'Street' +
-										'</td></tr>');
-								
+				
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Address' +
+										'Street' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -715,14 +711,10 @@ ns1blankspace.contactPerson =
 						var aHTML = [];
 					
 						aHTML.push('<table class="ns1blankspace">');
-						
-						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-										'Mailing' +
-										'</td></tr>');
 								
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Address' +
+										'Mailing' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -785,7 +777,7 @@ ns1blankspace.contactPerson =
 					}	
 				},
 
-	contactBusiness: function ()
+	business: function ()
 				{
 					var aHTML = [];
 					
@@ -1096,8 +1088,8 @@ ns1blankspace.contactPerson =
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceContactPersonGroupsColumn1" class="ns1blankspaceColumn1Large"></td>' +
-													'<td id="ns1blankspaceContactPersonGroupsColumn2" style="width: 100px;" class="ns1blankspaceColumn2Action"></td>' +
+													'<td id="ns1blankspaceContactPersonGroupsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+													'<td id="ns1blankspaceContactPersonGroupsColumn2" class="ns1blankspaceColumn2Action" style="width: 100px;"></td>' +
 													'</tr>' +
 													'</table>');				
 										
@@ -1105,9 +1097,9 @@ ns1blankspace.contactPerson =
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
-										aHTML.push('<tr><td class="ns1blankspace">' +
+										aHTML.push('<tr><td class="ns1blankspaceAction">' +
 														'<span id="ns1blankspaceContactPersonGroupsAdd">Add Group</span>' +
 														'</td></tr>');
 															
@@ -1134,7 +1126,7 @@ ns1blankspace.contactPerson =
 									
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">' +
+											aHTML.push('<table style="margin-top:5px;">' +
 															'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' +
 															'</table>');
 

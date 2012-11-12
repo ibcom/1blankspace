@@ -1841,7 +1841,7 @@ ns1blankspace.setup.website =
 
 					updload:	function ()
 								{
-									var oForm = document.frmonDemandFileUpload;
+									var oForm = document.ns1blankspaceFileUpload;
 								  	oForm.submit();
 								},
 

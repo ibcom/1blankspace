@@ -1735,10 +1735,10 @@ ns1blankspace.attachments =
 {
 	show: 		function (oParam)
 				{
-					var sXHTMLElementID;
+					var sXHTMLElementID = 'ns1blankspaceMainAttachments';
 					var iObject = ns1blankspace.object;
 					var iObjectContext = ns1blankspace.objectContext;
-					var bShowAdd = gbShowAdd;
+					var bShowAdd = true;
 					var iAttachmentType;
 					var oActions = {add: true};
 					var sHelpNotes;
@@ -1761,10 +1761,10 @@ ns1blankspace.attachments =
 									
 						aHTML.push('<table>' +
 									'<tr>' +
-									'<td id="ns1blankspaceAttachmentsColumn1" class="ns1blankspaceColumn1Large">' +
+									'<td id="ns1blankspaceAttachmentsColumn1" class="ns1blankspaceColumn1Flexixble">' +
 									ns1blankspace.xhtml.loading +
 									'</td>' +
-									'<td id="ns1blankspaceAttachmentsColumn2" class="ns1blankspaceColumn2Action">' +
+									'<td id="ns1blankspaceAttachmentsColumn2" class="ns1blankspaceColumn2" style="width:100px;">' +
 									'</td></tr>' +
 									'</table>');					
 							
@@ -1819,7 +1819,7 @@ ns1blankspace.attachments =
 						}
 						
 						oSearch.sort('filename', 'asc');
-						oSearch.getResults(function(data) {this.process(data, sXHTMLElementID)});
+						oSearch.getResults(function(data) {ns1blankspace.attachments.process(data, sXHTMLElementID)});
 					}
 
 				},
@@ -1831,7 +1831,7 @@ ns1blankspace.attachments =
 						
 					if (oResponse.data.rows.length == 0)
 					{
-						aHTML.push('<table width="750" style="margin-top:15px; margin-bottom:15px;">');
+						aHTML.push('<table style="margin-top:5px;">');
 						aHTML.push('<tr class="ns1blankspaceAttachments">');
 						aHTML.push('<td class="ns1blankspaceNothing">No attachments.</td>');
 						aHTML.push('</tr>');
@@ -1934,7 +1934,7 @@ ns1blankspace.attachments =
 				{
 					$('#ns1blankspaceAttachmentsColumn1').html(ns1blankspace.attachments.upload.show(oParam));
 					
-					$('#spanInterfaceMainUpload').button(
+					$('#spanns1blankspaceUpload').button(
 						{
 							label: "Upload"
 						})
@@ -1972,8 +1972,8 @@ ns1blankspace.attachments =
 										if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
 									}	
 
-									aHTML.push('<form name="frmonDemandFileUpload" action="/ondemand/attach/" ' +
-													'enctype="multipart/form-data" method="POST" target="ifonDemandUpload">' +
+									aHTML.push('<form name="ns1blankspaceFileUpload" action="/ondemand/attach/" ' +
+													'enctype="multipart/form-data" method="POST" target="ifonDemandUpload" accept-charset="utf-8">' +
 													'<input type="hidden" name="maxfiles" id="maxfiles" value="' + iMaxFiles + '">' +
 													'<input type="hidden" name="object" id="object" value="' + iObject + '">' +
 													'<input type="hidden" name="objectcontext" id="objectcontext" value="' + lObjectContext + '">');
@@ -1993,14 +1993,14 @@ ns1blankspace.attachments =
 									for (var i = 0; i < iMaxFiles; i++) 	
 									{
 										aHTML.push('<div id="interfaceUploadFile' + i + '" class="ns1blankspaceUpload">' +
-														'<input class="interfaceMainUpload" type="file" name="oFile' + i + '" id="oFile' + i + '">' +
+														'<input class="ns1blankspaceUpload" type="file" name="oFile' + i + '" id="oFile' + i + '">' +
 														'</div>');
 									}
 									
 									if (bShowUpload)
 									{
-										aHTML.push('<span id="spanInterfaceMainUpload" class="interfaceMainAction interfaceMainMarginTop"></span>');
-										aHTML.push('<br /><br /><span id="spanInterfaceMainUploadStatus" class="ns1blankspaceUpload"></span>');
+										aHTML.push('<span id="spanns1blankspaceUpload" class="ns1blankspaceAction ns1blankspaceMarginTop"></span>');
+										aHTML.push('<br /><br /><span id="spanns1blankspaceUploadStatus" class="ns1blankspaceUpload"></span>');
 									}	
 										
 									aHTML.push('<iframe style="display:none;" name="ifonDemandUpload" id="ifonDemandUpload" class="interfaceUpload" frameborder="0"></iframe>' +
@@ -2015,8 +2015,8 @@ ns1blankspace.attachments =
 									ns1blankspace.param = {};
 									if (oParam != undefined) {ns1blankspace.param = oParam};
 									
-									$('#spanInterfaceMainUploadStatus').html('Uploading..');
-									var oForm = document.frmonDemandFileUpload;
+									$('#spanns1blankspaceUploadStatus').html('Uploading..');
+									var oForm = document.ns1blankspaceFileUpload;
 								  	oForm.submit();
 								 	this.upload.status();
 									ns1blankspace.timer.delay = setInterval('ns1blankspace.attachments.upload.status()', 1000);
@@ -2064,7 +2064,7 @@ ns1blankspace.attachments =
 											oDivStatus.style.display = 'none';
 										}
 										
-										$('#spanInterfaceMainUploadStatus').html('File Upload Complete...');
+										$('#spanns1blankspaceUploadStatus').html('File Upload Complete...');
 										fFunctionPostUpdate();
 										
 									}
@@ -2211,7 +2211,7 @@ ns1blankspace.edit =
 					
 					var sElementInputId = sElementId.replace('td', 'input');
 					
-					sHTML = '<input id="' + sElementInputId + '" class="inputInterfaceMainValue" ' +
+					sHTML = '<input id="' + sElementInputId + '" class="inputns1blankspaceValue" ' +
 											'value="' + sHTML + '">'
 					
 					$('#' + sElementId).html(sHTML);
@@ -3283,7 +3283,7 @@ ns1blankspace.render =
 									}
 									
 									if (iColumn == iMaximumColumns)
-									{
+									{    
 										aHTML.push('</tr>');
 										iColumn = 0;
 									}	
@@ -3334,12 +3334,11 @@ ns1blankspace.actions =
 {
 	show: function (oParam)
 				{
-
-					var sXHTMLElementID;
+					var sXHTMLElementID = 'ns1blankspaceMainActions';
 					var iObject = ns1blankspace.object;
 					var iObjectContext = ns1blankspace.objectContext;
-					var bShowAdd = gbShowAdd;
-					var iActionType = '';
+					var bShowAdd = true;
+					var iType;
 					var oActions = {add: true};
 					var iContactBusiness;
 					var iContactPerson;
@@ -3352,7 +3351,8 @@ ns1blankspace.actions =
 						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
 						if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
 						if (oParam.showAdd != undefined) {bShowAdd = oParam.showAdd}
-						if (oParam.actionType != undefined ) {iActionType = oParam.actionType}
+						if (oParam.actionType != undefined ) {iType = oParam.actionType}
+						if (oParam.type != undefined ) {iType = oParam.type}
 						if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
 						if (oParam.actions != undefined) {oActions = oParam.actions}
 						if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
@@ -3367,16 +3367,15 @@ ns1blankspace.actions =
 					
 					if (oActions.add)
 					{
-					
 						var aHTML = [];
 						var h = -1;	
 									
-						aHTML.push('<table id="tableInterfaceMainActions" class="interfaceMain">' +
-									'<tr id="trInterfaceMainActionsRow1" class="interfaceMainRow1">' +
-									'<td id="tdInterfaceMainActionsColumn1" class="interfaceMainColumn1Large">' +
+						aHTML.push('<table id="ns1blankspace" class="ns1blankspace">' +
+									'<tr>' +
+									'<td id="ns1blankspaceActionsColumn1" class="ns1blankspaceColumn1Large">' +
 									ns1blankspace.xhtml.loading +
 									'</td>' +
-									'<td id="tdInterfaceMainActionsColumn2" class="interfaceMainColumn2Action">' +
+									'<td id="ns1blankspaceActionsColumn2" class="ns1blankspaceColumn2Action">' +
 									'</td></tr>' +
 									'</table>');					
 							
@@ -3385,105 +3384,112 @@ ns1blankspace.actions =
 						var aHTML = [];
 						var h = -1;	
 						
-						aHTML.push('<table id="tableInterfaceMainActionsColumn2" class="interfaceMainColumn2">');
+						aHTML.push('<table id="tablens1blankspaceActionsColumn2" class="ns1blankspaceColumn2">');
 						
-						aHTML.push('<tr><td id="tdInterfaceMainActionsAdd" class="interfaceMainAction">' +
-										'<span id="spanInterfaceMainActionsAdd">Add</span>' +
+						aHTML.push('<tr><td class="ns1blankspaceAction">' +
+										'<span id="ns1blankspaceActionsAdd">Add</span>' +
 										'</td></tr>');
 												
 						aHTML.push('</table>');					
 						
-						$('#tdInterfaceMainActionsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceActionsColumn2').html(aHTML.join(''));
 					
-						oParam.xhtmlElementID = 'spanInterfaceMainActionsAdd';
+						oParam.xhtmlElementID = 'ns1blankspaceActionsAdd';
 						oParam.offsetHeight = -30;
 						oParam.offsetLeft = -305;
 						
-						$('#spanInterfaceMainActionsAdd').button(
+						$('#ns1blankspaceActionsAdd').button(
 						{
 							label: "Add"
 						})
 						.click(function() {
-							interfaceActionMasterViewport({
-															showHome: false, 
-															showNew: true,
-															contactPerson: iContactPerson,
-															contactBusiness: iContactBusiness,
-															contactPersonText: sContactPersonText,
-															contactBusinessText: sContactBusinessText
-															})
-						})
+							ns1blankspace.action.init(
+							{
+								showHome: false, 
+								showNew: true,
+								contactPerson: iContactPerson,
+								contactBusiness: iContactBusiness,
+								contactPersonText: sContactPersonText,
+								contactBusinessText: sContactBusinessText
+							});
+						});
 					
-						sXHTMLElementID = 'tdInterfaceMainActionsColumn1';
+						sXHTMLElementID = 'ns1blankspaceActionsColumn1';
 					}
 					
 					if (iObjectContext != -1)
 					{
-						var sParam = 'method=ACTION_SEARCH&lastfirst=1' +
-										'&object=' + iObject + 
-										'&objectcontext=' + iObjectContext +
-										'&type=' + iActionType +
-										'&contactbusiness=' + iContactBusiness + 
-										'&contactperson=' + iContactPerson;
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ACTION_SEARCH';
+						oSearch.addField('subject');
+						oSearch.addFilter('object', 'EQUAL_TO', iObject);
+						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 						
-						$.ajax(
-						{
-							type: 'GET',
-							url: '/ondemand/action/?rows=' + ns1blankspace.option.defaultRows + '&' + sParam,
-							dataType: 'json',
-							success: function(data) {this.process(data, sXHTMLElementID, oParam)}
-						});	
+						if (iType) {oSearch.addFilter('type', 'EQUAL_TO', iType)};
+						if (iContactBusiness) {oSearch.addFilter('contactbusiness', 'EQUAL_TO', iContactBusiness)};
+						if (iContactPerson) {oSearch.addFilter('contactperson', 'EQUAL_TO', iContactPerson)};
+
+						oSearch.sort('modifieddate', 'desc')
+
+						oSearch.getResults(function(data) {ns1blankspace.actions.process(oParam, data)});
 					}
 				},
 
-	process: 	function (oResponse, sXHTMLElementID, oParam)
+	process: 	function (oParam, oResponse)
 				{	
 					var aHTML = [];
-					var h = -1;
-					var bDescription = false;
+					var bShowDescription = false;
+					var sXHTMLElementID;
 					
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.showDescription != undefined ) {bShowDescription = oParam.showDescription}
+					}	
+
 					if (oResponse.data.rows.length == 0)
 					{
-						aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">');
-						aHTML.push('<tbody>')
-						aHTML.push('<tr class="interfaceActions">');
-						aHTML.push('<td class="interfaceMainRowNothing">No actions.</td>');
-						aHTML.push('</tr>');
+						aHTML.push('<table class="ns1blankspace">' +
+										'<tr><td class="ns1blankspaceNothing">No actions.</td>' +
+										'</tr>');
 						
 						$('#' + sXHTMLElementID).html(aHTML.join(''));
 						$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
 					}
 					else
 					{
-						aHTML.push('<table class="interfaceMain">');
+						aHTML.push('<table class="ns1blankspace">');
 					
-						aHTML.push('<tr class="interfaceMainCaption">');
-						aHTML.push('<td class="interfaceMainCaption">Subject</td>');
-						aHTML.push('<td class="interfaceMainCaption">Date</td>');
-						if (bDescription)
+						aHTML.push('<tr class="ins1blankspaceCaption">');
+						aHTML.push('<td class="ns1blankspaceCaption">Subject</td>');
+						aHTML.push('<td class="ns1blankspace">Date</td>');
+
+						if (bShowDescription)
 						{
-							aHTML.push('<td class="interfaceMainCaption">Description</td>');
+							aHTML.push('<td class="ns1blankspace">Description</td>');
 						}
-						aHTML.push('<td class="interfaceMainCaption">&nbsp;</td>');
+
+						aHTML.push('<td class="ns1blankspace">&nbsp;</td>');
 						aHTML.push('</tr>');
 
 						$.each(oResponse.data.rows, function()
 						{	
-							aHTML.push('<tr class="interfaceAttachments">');
+							aHTML.push('<tr>');
 
-							aHTML.push('<td id="tdAction_subject-' + this.id + '" class="interfaceMainRow">' +
+							aHTML.push('<td id="ns1blankspaceAction_subject-' + this.id + '" class="ns1blankspaceRow">' +
 											this.subject + '</td>');
 
-							aHTML.push('<td id="tdAction_date-' + this.id + '" class="interfaceMainRow">' +
+							aHTML.push('<td id="ns1blankspaceAction_date-' + this.id + '" class="ns1blankspaceRow">' +
 											this.actiondate + '</td>');
 							
-							if (bDescription)
+							if (bShowDescription)
 							{
-								aHTML.push('<td id="tdAction_description-' + this.id + '" class="interfaceMainRow">' +
+								aHTML.push('<td id="ns1blankspaceAction_description-' + this.id + '" class="ns1blankspaceRow">' +
 												this.description + '</td>');
 							}					
 							
-							aHTML.push('<td id="tdAction_options-' + this.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</td>');
+							aHTML.push('<td id="ns1blankspaceAction_options-' + this.id + '" class="ns1blankspaceRowOptionsSelect">&nbsp;</td>');
+
 							aHTML.push('</tr>');
 						});
 				    	
@@ -3499,10 +3505,10 @@ ns1blankspace.actions =
 							more: this.moreid,
 							rows: ns1blankspace.option.defaultRows,
 							functionSearch: ns1blankspaceActions,
-							functionOpen: "interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)"
+							functionOpen: "ns1blankspace.action.init({showHome: false});ns1blankspace.action.search.show(this.id)"
 						   }); 
 						
-						$('.interfaceMainRowOptionsSelect').button( {
+						$('.ns1blankspaceRowSelect').button( {
 								text: false,
 								icons: {
 									primary: "ui-icon-play"
@@ -3510,11 +3516,11 @@ ns1blankspace.actions =
 							})
 							.click(function()
 							{
-								interfaceActionMasterViewport({showHome: false});
-								interfaceActionSearch(this.id)
+								ns1blankspace.action.init({showHome: false});
+								ns1blankspace.action.search.show(this.id)
 							})
 							.css('width', '15px')
-							.css('height', '20px')
+							.css('height', '20px');
 					}
 				},
 
@@ -3523,7 +3529,7 @@ ns1blankspace.actions =
 					var iActionID = -1;
 					var dStartDate = new Date();
 					var dEndDate = dStartDate;
-					var sXHTMLElementID = 'spanInterfaceMainActionsAdd';
+					var sXHTMLElementID = 'ns1blankspaceActionsAdd';
 					var iOffsetHeight = 5;
 					var iOffsetLeft = 0;
 					
@@ -3565,9 +3571,9 @@ ns1blankspace.actions =
 							
 							aHTML.push('<table id="tablens1blankspaceActionAdd" class="interfaceDialogMedium">');
 							
-							aHTML.push('<tr id="trInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
-												'<td id="tdInterfaceActionCalendarAddSubjectValue" class="interfaceMainText">' +
-												'<input id="inputMasterActionAddSubject" class="inputInterfaceMainText');
+							aHTML.push('<tr id="trInterfaceActionCalendarAddSubjectValue" class="ns1blankspaceText">' +
+												'<td id="tdInterfaceActionCalendarAddSubjectValue" class="ns1blankspaceText">' +
+												'<input id="inputMasterActionAddSubject" class="inputns1blankspaceText');
 												
 							if (iActionID == -1)
 							{	
@@ -3580,8 +3586,8 @@ ns1blankspace.actions =
 							
 							aHTML.push('</td></tr>');
 							
-							aHTML.push('<tr><td id="tdns1blankspaceActionAddDescriptionValue" class="interfaceMain">' +
-												'<textarea rows="5" cols="35" id="inputns1blankspaceActionAddDescription" class="inputInterfaceMainTextMultiSmall');
+							aHTML.push('<tr><td id="tdns1blankspaceActionAddDescriptionValue" class="ns1blankspace">' +
+												'<textarea rows="5" cols="35" id="inputns1blankspaceActionAddDescription" class="inputns1blankspaceTextMultiSmall');
 
 							if (iActionID == -1)
 							{	
@@ -3594,31 +3600,31 @@ ns1blankspace.actions =
 
 							aHTML.push('</td></tr>');
 
-							aHTML.push('<tr id="trns1blankspaceActionAddBusiness" class="interfaceMain">' +
-												'<td id="tdns1blankspaceActionAddBusiness" class="interfaceMain">' +
+							aHTML.push('<tr id="trns1blankspaceActionAddBusiness" class="ns1blankspace">' +
+												'<td id="tdns1blankspaceActionAddBusiness" class="ns1blankspace">' +
 												'Business' +
 												'</td></tr>' +
-												'<tr id="trns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
-												'<td id="tdns1blankspaceActionAddBusinessValue" class="interfaceMainSelect">' +
-												'<input id="inputns1blankspaceActionAddBusiness" class="inputInterfaceMainSelect"' +
+												'<tr id="trns1blankspaceActionAddBusinessValue" class="ns1blankspaceSelect">' +
+												'<td id="tdns1blankspaceActionAddBusinessValue" class="ns1blankspaceSelect">' +
+												'<input id="inputns1blankspaceActionAddBusiness" class="inputns1blankspaceSelect"' +
 													' onDemandMethod="/ondemand/contact/?method=CONTACT_BUSINESS_SEARCH"' +
 													' onDemandColumns="tradename">' +
 												'</td></tr>');
 												
 							
-							aHTML.push('<tr id="trns1blankspaceActionAddPerson" class="interfaceMain">' +
-												'<td id="tdns1blankspaceActionAddPerson" class="interfaceMain">' +
+							aHTML.push('<tr id="trns1blankspaceActionAddPerson" class="ns1blankspace">' +
+												'<td id="tdns1blankspaceActionAddPerson" class="ns1blankspace">' +
 												'Person' +
 												'</td></tr>' +
-												'<tr id="trns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
-												'<td id="tdns1blankspaceActionAddPersonValue" class="interfaceMainSelect">' +
-												'<input id="inputns1blankspaceActionAddPerson" class="inputInterfaceMainSelectContact"' +
+												'<tr id="trns1blankspaceActionAddPersonValue" class="ns1blankspaceSelect">' +
+												'<td id="tdns1blankspaceActionAddPersonValue" class="ns1blankspaceSelect">' +
+												'<input id="inputns1blankspaceActionAddPerson" class="inputns1blankspaceSelectContact"' +
 													' onDemandMethod="/ondemand/contact/?method=CONTACT_PERSON_SEARCH"' +
 													' onDemandParent="inputns1blankspaceActionAddBusiness">' +
 												'</td></tr>');									
 												
 												
-							aHTML.push('<tr><td id="tdns1blankspaceActionAddHighPriority" class="interfaceMain">' +
+							aHTML.push('<tr><td id="tdns1blankspaceActionAddHighPriority" class="ns1blankspace">' +
 												'<input type="checkbox" id="inputns1blankspaceActionAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>');
 												
 								
@@ -3679,7 +3685,7 @@ ns1blankspace.actions =
 											subject: $('#inputActionCalendarAddSubject').val(),
 											description: $('#inputActionCalendarAddDescription').val(),
 											priority: ($('#inputActionCalendarAddHighPriority').attr('checked')?3:2),
-											calendarXHTMLElementID: 'divInterfaceMainCalendar'
+											calendarXHTMLElementID: 'divns1blankspaceCalendar'
 											});
 									
 									$('#divns1blankspaceDialog').slideUp(500);
@@ -3915,7 +3921,7 @@ ns1blankspace.render.page =
 											
 											if (iColumn == 1)
 											{
-												aHTML.push('<tr class=interfaceMainRow" id="tr' + sXHTMLContext + '-' + onDemandXMLGetData(oRow, "id") + sIDData + sIdAdditional + '">');
+												aHTML.push('<tr class=ns1blankspaceRow" id="tr' + sXHTMLContext + '-' + onDemandXMLGetData(oRow, "id") + sIDData + sIdAdditional + '">');
 											}
 											
 											var aIDColumns = sIDColumns.split("-");
@@ -3930,7 +3936,7 @@ ns1blankspace.render.page =
 											
 											for (var i = 0; i < aColumns.length; i++)
 											{
-												sClass = 'interfaceMainRow'
+												sClass = 'ns1blankspaceRow'
 												if (fFunctionClass != undefined)
 												{
 													sClass = sClass + fFunctionClass(oRow);
@@ -3959,7 +3965,7 @@ ns1blankspace.render.page =
 												if (i == (aColumns.length-1) && (sFunctionOpen != undefined))
 												{
 													aHTML.push('<td id="td' + sXHTMLContext + '_options-' + onDemandXMLGetData(oRow, "id") + 
-																		'" class="interfaceMainRowOptionsSelect interfaceMainRowOptionsSelect' + sXHTMLContext + '">&nbsp;</td>');
+																		'" class="ns1blankspaceRowOptionsSelect ns1blankspaceRowOptionsSelect' + sXHTMLContext + '">&nbsp;</td>');
 												}
 												
 											}
@@ -3995,11 +4001,11 @@ ns1blankspace.render.page =
 								$('.ns1blankspacePaginationListPage' + sXHTMLContext).hide();
 								$('.ns1blankspacePaginationListPage' + sXHTMLContext + ':last').after(aHTML.join(''));
 								
-								$('.interfaceMainRowOptionsSelect' + sXHTMLContext).unbind('click');
+								$('.ns1blankspaceRowOptionsSelect' + sXHTMLContext).unbind('click');
 								
 								if (sFunctionOpen != undefined)
 								{
-									$('.interfaceMainRowOptionsSelect' + sXHTMLContext).button({
+									$('.ns1blankspaceRowOptionsSelect' + sXHTMLContext).button({
 										text: false,
 										icons: {
 											primary: "ui-icon-play"
@@ -4079,7 +4085,7 @@ ns1blankspace.pdf =
 
 					if (sReturn == undefined)
 					{
-						$('#aInterfaceMainSummaryViewPDF').html(ns1blankspace.xhtml.loadingSmall)
+						$('#ans1blankspaceSummaryViewPDF').html(ns1blankspace.xhtml.loadingSmall)
 						
 						var sParam = 'method=CORE_PDF_CREATE&rf=TEXT';
 						var sData = 'object=' + iObject;
@@ -4106,7 +4112,7 @@ ns1blankspace.pdf =
 						}
 						else
 						{
-							$('#aInterfaceMainSummaryViewPDF').html('<a href="/download/' + aReturn[1] + '" target="_blank">Open PDF</a>');
+							$('#ans1blankspaceSummaryViewPDF').html('<a href="/download/' + aReturn[1] + '" target="_blank">Open PDF</a>');
 						}	
 					}	
 
