@@ -153,22 +153,20 @@ ns1blankspace.event =
 							aHTML.push('</table>');
 						}
 						
-						$('#tdns1blankspaceProjectHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.ns1blankspaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							ns1blankspaceEventSearch(event.target.id, {source: 1});
+							ns1blankspace.event.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
 
 	search: 	{
 				
-					send: 		function ns1blankspaceEventSearch(sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementId, oParam)
 								{
-									
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;
@@ -188,26 +186,24 @@ ns1blankspace.event =
 									
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#divns1blankspaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
 										var oSearch = new AdvancedSearch();
-										oSearch.method = 'EVENT_SEARCH';
-										
+										oSearch.method = 'EVENT_SEARCH';									
 										oSearch.addField('reference,description,startdate,enddate,status,public');
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										
-										oSearch.getResults(function(data) {ns1blankspaceEventShow(oParam, data)});	
+										oSearch.getResults(function(data) {ns1blankspace.event.show(oParam, data)});	
 									
 									}
 									else
 									{
-
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -216,31 +212,27 @@ ns1blankspace.event =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tablens1blankspaceViewportMasterBrowse';
+											sElementId = 'ns1blankspaceViewControlBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											
-											ns1blankspaceOptionsSetPosition(sElementId);
-											ns1blankspaceSearchStart(sElementId);
+											ns1blankspace.container.position(sElementId);
+											ns1blankspace.search.start(sElementId);
 												
-											var sParam = 'method=EVENT_SEARCH&quicksearch=' + sSearchText + 
-																'&xhtmlcontext=' + sXHTMLElementId;
-
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/event/?' + sParam,
+												url: ns1blankspace.util.endpointURI('EVENT_SEARCH'),
+												data: 'quicksearch=' + ns1blankspace.util.fs(sSearchText),
 												dataType: 'json',
-												success: function(data) {ns1blankspaceEventSearchShow(oParam, data)}
+												success: function(data) {ns1blankspace.event.search.process(oParam, data)}
 											});
-											
 										}
 									};	
 								},
 
-					process: 	function ns1blankspaceEventSearchShow(oParam, oResponse)
+					process: 	function (oParam, oResponse)
 								{
 
 									var iColumn = 0;
