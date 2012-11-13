@@ -111,9 +111,9 @@ ns1blankspace.developer.space =
 				},
 
 	search: 	{
-					send:		function (sXHTMLElementId, aParam)
+					send:		function (sXHTMLElementID, aParam)
 								{
-									var aSearch = sXHTMLElementId.split('-');
+									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
