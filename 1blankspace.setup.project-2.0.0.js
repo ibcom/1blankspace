@@ -115,10 +115,9 @@ ns1blankspace.setup.project =
 				},
 	
 	search: 	{
-					send: 		function (sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementID, oParam)
 								{						
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;
@@ -139,50 +138,48 @@ ns1blankspace.setup.project =
 										
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-									
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
-										var sParam = 'method=PROJECT_SEARCH&id=' + ns1blankspace.objectContext;
-										sParam += '&template=1';
 										
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/project/?' + sParam,
+											url: ns1blankspace.util.endpointURI('PROJECT_SEARCH'),
+											data: 'id=' + ns1blankspace.objectContext & '&template=1',
 											dataType: 'json',
-											success: function(data) {interfaceSetupProjectShow(oParam, data)}
+											success: function(data) {ns1blankspace.setup.project.search.process(oParam, data)}
 										});
 									}
 									else
 									{
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
 										{
 											iMinimumLength = 1;
 											sSearchText = aSearch[1];
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											sElementId = 'ns1blankspaceViewControlBrowse';
 											sQuickSearchType = 'start';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspaceOptionsSetPosition(sElementId);
+											ns1blankspace.containter.position(sElementId);
 											
-											var sParam = 'method=PROJECT_SEARCH&quicksearch' + sQuickSearchType + '=' + sSearchText + 
-																'&xhtmlcontext=' + sXHTMLElementId;
-																sParam += '&template=1';
+											var sData = 'quicksearch' + sQuickSearchType + '=' + sSearchText;
+											sData += '&template=1';
 
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/project/?' + sParam,
+												url: ns1blankspace.util.endpointURI('PROJECT_SEARCH'),
+												data: sData,
 												dataType: 'json',
-												success: function(data) {interfaceSetupProjectSearchShow(oParam, data)}
+												success: function(data) {ns1blankspace.setup.project.search.process(oParam, data)}
 											});
 											
 										}
@@ -191,157 +188,158 @@ ns1blankspace.setup.project =
 
 					process:	function (oParam, oResponse)
 								{
-
 									var iColumn = 0;
 									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
 										
 									if (oResponse.data.rows.length == 0)
 									{
-										$('#divns1blankspaceViewportControlOptions').hide();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{
-										aHTML.push('<table class="interfaceSearchMedium">';
-										aHTML.push('<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
 										$.each(oResponse.data.rows, function()
 										{
-											aHTML.push('<tr class="interfaceSearch">';
+											aHTML.push('<tr class="ns1blankspaceSearch">');
 
-											aHTML.push('<td class="interfaceContactType' + this.type + ' interfaceSearch">&nbsp;</td>';
-											aHTML.push('<td class="interfaceSearch" id="' +
+											aHTML.push('<td class="ns1blankspaceContactType' + this.type + ' ns1blankspaceSearch">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
 															this.reference +
-															'</td>';
+															'</td>');
 											
-											aHTML.push('</tr>'
+											aHTML.push('</tr>');
 										});
 								    	
-										aHTML.push('</tbody></table>';
+										aHTML.push('</table>');
 
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceSetupProjectSearch(event.target.id, {source: 1});
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.setup.project.search.send(event.target.id, {source: 1});
 										});
 									}			
 								}
 				},				
 
-	layout:		function interfaceSetupProjectViewport()
+	layout:		function ()
 				{
+					var aHTML = [];
+
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
+					
+					aHTML.push('<table class="ns1blankspaceControl">');
+					
+					if (ns1blankspace.objectContext == -1)
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');
+										
+						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
+										'Description</td></tr>');				
+					}
+					else
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Summary</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
+										'Description</td></tr>');
+					
+						aHTML.push('<tr><td id="ns1blankspaceControlTasks" class="ns1blankspaceControl">' +
+										'Tasks</td></tr>');
+
+						aHTML.push('</table>');					
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
+									
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
+										'Attachments</td></tr>');		
+					}
+					
+					aHTML.push('</table>');	
+
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 
-					aHTML.push('<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
-					
-					aHTML.push('<table id="tableInterfaceViewportControl1" class="interfaceViewportControl">';
-					
-					aHTML.push('<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
-									'</tr>';
-					
-					aHTML.push('<tr id="trInterfaceViewportControlDescription" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDescription" class="interfaceViewportControl">Description</td>' +
-									'</tr>';
-					
-					aHTML.push('<tr id="trInterfaceViewportControlTasks" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlTasks" class="interfaceViewportControl">Tasks</td>' +
-									'</tr>';
-					
-					aHTML.push('</table>';					
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDescription" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTasks" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
+	
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 
-					aHTML.push('<table id="tableInterfaceViewportControl3" class="interfaceViewportControl">';
-									
-					aHTML.push('<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
-									'</tr>';
-									
-					aHTML.push('</table>';					
-							
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
-					
-					var aHTML = [];
-					var h = -1;
-
-					aHTML.push('<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML.push('<div id="divInterfaceMainDescription" class="divInterfaceViewportMain"></div>';
-					aHTML.push('<div id="divInterfaceMainTasks" class="divInterfaceViewportMain"></div>';
-					aHTML.push('<div id="divInterfaceMainTaskDetails" class="divInterfaceViewportMain"></div>';
-					aHTML.push('<div id="divInterfaceMainActions" class="divInterfaceViewportMain"></div>';
-					aHTML.push('<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
-					
-					$('#divInterfaceMain').html(aHTML.join(''));
-					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceSetupProjectSummary();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.setup.project.summary();
 					});
 					
-					$('#tdInterfaceViewportControlDescription').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDescription");
-						interfaceSetupProjectDescription();
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.setup.project.details();
 					});
 					
-					$('#tdInterfaceViewportControlTasks').click(function(event)
+					$('#ns1blankspaceControlTasks').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainTasks", true);
-						interfaceSetupProjectTasks();
+						ns1blankspace.show({selector: '#ns1blankspaceMainTasks'});
+						ns1blankspace.setup.project.tasks();
 					});
 					
-					$('#tdInterfaceViewportControlActions').click(function(event)
+					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
-						ns1blankspaceActions("divInterfaceMainActions", ns1blankspace.data.object.contactperson, ns1blankspace.objectContext);
-					});
-
-					$('#tdInterfaceViewportControlAttachments').click(function(event)
-					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
-						ns1blankspaceAttachments("divInterfaceMainAttachments", ns1blankspace.data.object.contactperson, ns1blankspace.objectContext);
-					});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
+					});			
 				},
 
-	show:		function interfaceSetupProjectShow(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceSetupProjectViewport();
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.setup.project.layout();
 					
 					var aHTML = [];
-					var h = -1;
 					
 					if (oResponse.data.rows.length == 0)
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find project.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this project template.</td></tr></table>');
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
-								
+
 						var sContext = ns1blankspace.objectContextData.reference;
-						sContext += '<br /><span id="spanInterfaceViewportControlSubContext">(Template)</span>';		
+						sContext += '<br /><span id="ns1blankspaceSubContext">(Template)</span>';
+							
+						$('#ns1blankspaceControlContext').html(sContext);
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						$('#divInterfaceViewportControlContext').html(sContext);
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.project.init({showHome: false});ns1blankspace.setup.project.search.send("-' + ns1blankspace.objectContext + '")',
+							move: false
+							});
 						
-						interfaceSetupProjectSummary();
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.setup.project.summary()'});
 					}	
 				},
 
-	summary:	function interfaceSetupProjectSummary()
+	summary:	function ns1blankspaceSetupProjectSummary()
 				{
 					var aHTML = [];
 					var h = -1;
@@ -349,89 +347,89 @@ ns1blankspace.setup.project =
 					if (ns1blankspace.objectContextData == undefined)
 					{
 						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find project template.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<tr>&nbsp;</tr></table>';
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#divns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML.push('<table id="tableInterfaceMainSummary" class="interfaceMain">';
-						aHTML.push('<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-										'<td id="tdInterfaceMainSummaryColumn1" class="interfaceMainColumn1">' +
+						aHTML.push('<table id="tablens1blankspaceMainSummary" class="ns1blankspaceMain">';
+						aHTML.push('<tr id="trns1blankspaceMainSummaryRow1" class="ns1blankspaceMainRow1">' +
+										'<td id="tdns1blankspaceMainSummaryColumn1" class="ns1blankspaceMainColumn1">' +
 										'</td>' +
-										'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2">' +
+										'<td id="tdns1blankspaceMainSummaryColumn2" class="ns1blankspaceMainColumn2">' +
 										'</td>' +
 										'</tr>';
 						aHTML.push('</table>';					
 						
-						$('#divInterfaceMainSummary').html(aHTML.join(''));
+						$('#divns1blankspaceMainSummary').html(aHTML.join(''));
 						
-						aHTML.push('<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
 						
-						aHTML.push('<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td id="tdns1blankspaceMainSummaryDescription" class="ns1blankspaceMainSummary">Description</td></tr>' +
+										'<tr><td id="tdns1blankspaceMainSummaryDescriptionValue" class="ns1blankspaceMainSummaryValue">' +
 										ns1blankspace.objectContextData.description +
 										'</td></tr>';
 
 						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainSummaryColumn1').html(aHTML.join(''));
+						$('#tdns1blankspaceMainSummaryColumn1').html(aHTML.join(''));
 
-						$('#aInterfaceMainSummaryViewAsTimeline').click(function(event)
+						$('#ans1blankspaceMainSummaryViewAsTimeline').click(function(event)
 						{
-							interfaceSetupProjectViewAsTimeline();
+							ns1blankspaceSetupProjectViewAsTimeline();
 						});
 					}	
 				},
 
 	descriptions:
-				function interfaceSetupProjectDescription()
+				function ns1blankspaceSetupProjectDescription()
 				{
 					
 					var aHTML = [];
 					var h = -1;
 					
-					if ($('#divInterfaceMainDescription').attr('onDemandLoading') == '1')
+					if ($('#divns1blankspaceMainDescription').attr('onDemandLoading') == '1')
 					{
-						$('#divInterfaceMainDescription').attr('onDemandLoading', '');
+						$('#divns1blankspaceMainDescription').attr('onDemandLoading', '');
 								
-						aHTML.push('<table id="tableInterfaceMainDescription" class="interfaceMain">';
-						aHTML.push('<tr id="trInterfaceMainDescriptionRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDescriptionColumn1" class="interfaceMain">' +
+						aHTML.push('<table id="tablens1blankspaceMainDescription" class="ns1blankspaceMain">';
+						aHTML.push('<tr id="trns1blankspaceMainDescriptionRow1" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDescriptionColumn1" class="ns1blankspaceMain">' +
 										'</td>' +
-										'<td id="tdInterfaceMainDescriptionColumn2" class="interfaceMain">' +
+										'<td id="tdns1blankspaceMainDescriptionColumn2" class="ns1blankspaceMain">' +
 										'</td>' +
 										'</tr>';
 						aHTML.push('</table>';					
 						
-						$('#divInterfaceMainDescription').html(aHTML.join(''));
+						$('#divns1blankspaceMainDescription').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 					
-						aHTML.push('<table id="tableInterfaceMainDescriptionColumn1" class="interfaceMain">';
+						aHTML.push('<table id="tablens1blankspaceMainDescriptionColumn1" class="ns1blankspaceMain">';
 								
-						aHTML.push('<tr id="trInterfaceMainDescriptionValue" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDescriptionValue" class="interfaceMainTextMulti">' +
-										'<textarea rows="30" cols="50" id="inputInterfaceMainDescription" class="inputInterfaceMainTextMulti inputInterfaceMainTextMultiLarge"></textarea>' +
+						aHTML.push('<tr id="trns1blankspaceMainDescriptionValue" class="ns1blankspaceMainTextMulti">' +
+										'<td id="tdns1blankspaceMainDescriptionValue" class="ns1blankspaceMainTextMulti">' +
+										'<textarea rows="30" cols="50" id="inputns1blankspaceMainDescription" class="inputns1blankspaceMainTextMulti inputns1blankspaceMainTextMultiLarge"></textarea>' +
 										'</td></tr>';
 										
 						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainDescriptionColumn1').html(aHTML.join(''));
+						$('#tdns1blankspaceMainDescriptionColumn1').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDescription').val(ns1blankspace.objectContextData.description);
+							$('#inputns1blankspaceMainDescription').val(ns1blankspace.objectContextData.description);
 						}
 					}	
 				},
 
 	tasks:		{
-					show: 		function interfaceSetupProjectTasks(oParam, oResponse)
+					show: 		function ns1blankspaceSetupProjectTasks(oParam, oResponse)
 								{
 									
-									var sXHTMLElementId = 'divInterfaceMainTasks';
+									var sXHTMLElementId = 'divns1blankspaceMainTasks';
 									var sLabel = "Tasks";
 									var iOption = 1;
 									
@@ -452,7 +450,7 @@ ns1blankspace.setup.project =
 											url: '/ondemand/project/?',
 											data: sParam,
 											dataType: 'json',
-											success: function(data){interfaceSetupProjectTasks(oParam, data)}
+											success: function(data){ns1blankspaceSetupProjectTasks(oParam, data)}
 										});
 									}
 									else
@@ -460,40 +458,40 @@ ns1blankspace.setup.project =
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML.push('<table id="tableInterfaceMainTasks" class="interfaceMain">' +
-													'<tr id="trInterfaceMainTasksRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainTasksColumn1" class="interfaceMainColumn1Large">' +
+										aHTML.push('<table id="tablens1blankspaceMainTasks" class="ns1blankspaceMain">' +
+													'<tr id="trns1blankspaceMainTasksRow1" class="ns1blankspaceMainRow1">' +
+													'<td id="tdns1blankspaceMainTasksColumn1" class="ns1blankspaceMainColumn1Large">' +
 													'</td>' +
-													'<td id="tdInterfaceMainTasksColumn2" class="interfaceMainColumn2Action">' +
+													'<td id="tdns1blankspaceMainTasksColumn2" class="ns1blankspaceMainColumn2Action">' +
 													'</td>' +
 													'</tr>' +
 													'</table>';				
 										
-										$('#divInterfaceMainTasks').html(aHTML.join(''));
+										$('#divns1blankspaceMainTasks').html(aHTML.join(''));
 										
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML.push('<table id="tableInterfaceMainTasksColumn2" class="interfaceMainColumn2">';
+										aHTML.push('<table id="tablens1blankspaceMainTasksColumn2" class="ns1blankspaceMainColumn2">';
 										
-										aHTML.push('<tr><td id="tdInterfaceMainTasksAdd" class="interfaceMain">' +
-														'<span id="spanInterfaceMainTasksAdd">Add</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMainTasksAdd" class="ns1blankspaceMain">' +
+														'<span id="spanns1blankspaceMainTasksAdd">Add</span>' +
 														'</td></tr>';
 																
-										aHTML.push('<tr><td id="tdInterfaceMainTasksAdd" class="interfaceMain">' +
+										aHTML.push('<tr><td id="tdns1blankspaceMainTasksAdd" class="ns1blankspaceMain">' +
 														'&nbsp;' +
 														'</td></tr>';
 																
 										aHTML.push('</table>';					
 										
-										$('#tdInterfaceMainTasksColumn2').html(aHTML.join(''));
+										$('#tdns1blankspaceMainTasksColumn2').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainTasksAdd').button(
+										$('#spanns1blankspaceMainTasksAdd').button(
 										{
 											label: "Add"
 										})
 										.click(function() {
-											interfaceSetupProjectTaskDetailsAdd();
+											ns1blankspaceSetupProjectTaskDetailsAdd();
 										})
 										
 										var aHTML = [];
@@ -501,101 +499,101 @@ ns1blankspace.setup.project =
 									
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table id="tableSetupProjectTasks" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+											aHTML.push('<table id="tableSetupProjectTasks" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
 											aHTML.push('<tbody>'
-											aHTML.push('<tr class="interfaceMainCaption">' +
-															'<td class="interfaceMainRowNothing">No tasks.</td></tr>';
-											aHTML.push('</tbody></table>';
+											aHTML.push('<tr class="ns1blankspaceMainCaption">' +
+															'<td class="ns1blankspaceMainRowNothing">No tasks.</td></tr>';
+											aHTML.push('</table>';
 
-											$('#tdInterfaceMainTasksColumn1').html(aHTML.join(''));
+											$('#tdns1blankspaceMainTasksColumn1').html(aHTML.join(''));
 											
 										}
 										else
 										{
-											aHTML.push('<table id="tableSetupProjectTasks" border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
+											aHTML.push('<table id="tableSetupProjectTasks" border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
 											aHTML.push('<tbody>'
-											aHTML.push('<tr class="interfaceMainCaption">';
-											aHTML.push('<td class="interfaceMainCaption">Title</td>';
-											aHTML.push('<td class="interfaceMainCaption">&nbsp;</td>';
+											aHTML.push('<tr class="ns1blankspaceMainCaption">';
+											aHTML.push('<td class="ns1blankspaceMainCaption">Title</td>';
+											aHTML.push('<td class="ns1blankspaceMainCaption">&nbsp;</td>';
 											aHTML.push('</tr>';
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML.push(interfaceSetupProjectTasksRow(this)
+												aHTML.push(ns1blankspaceSetupProjectTasksRow(this)
 											});
 											
-											aHTML.push('</tbody></table>';
+											aHTML.push('</table>';
 
 											ns1blankspacePaginationList(
 											{
-												xhtmlElementID: 'tdInterfaceMainTasksColumn1',
+												xhtmlElementID: 'tdns1blankspaceMainTasksColumn1',
 												xhtmlContext: 'SetupProjectTasks',
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
 												rows: ns1blankspace.option.defaultRows,
-												functionShowRow: interfaceSetupProjectTasksRow,
-												functionNewPage: 'interfaceSetupProjectTasksBind()',
+												functionShowRow: ns1blankspaceSetupProjectTasksRow,
+												functionNewPage: 'ns1blankspaceSetupProjectTasksBind()',
 												type: 'json'
 											}); 	
 
-											$('#tdInterfaceMainTasksColumn1').html(aHTML.join(''));
+											$('#tdns1blankspaceMainTasksColumn1').html(aHTML.join(''));
 											
-											interfaceSetupProjectTasksBind();
+											ns1blankspaceSetupProjectTasksBind();
 										}
 									}	
 								},
 
-					row:		function interfaceSetupProjectTasksRow(oRow)
+					row:		function ns1blankspaceSetupProjectTasksRow(oRow)
 								{
 									var aHTML = [];
 									var h = -1;
 									
-									aHTML.push('<tr class="interfaceMainRow">';
+									aHTML.push('<tr class="ns1blankspaceMainRow">';
 												
-									aHTML.push('<td id="tdSetupProjectTasks_title-' + oRow.id + '" class="interfaceMainRow">' +
+									aHTML.push('<td id="tdSetupProjectTasks_title-' + oRow.id + '" class="ns1blankspaceMainRow">' +
 															oRow.title + '</td>';
 															
-									aHTML.push('<td class="interfaceMainRow" style="width: 40px;text-align:right;"><span id="tdSetupProjectTasks_delete-' +
-														oRow.id + '" class="interfaceMainRowOptionsDelete">&nbsp;</span>';
-									aHTML.push('<span id="tdSetupProjectTasks_select-' + oRow.id + '" class="interfaceMainRowOptionsSelect">&nbsp;</span></td>';
+									aHTML.push('<td class="ns1blankspaceMainRow" style="width: 40px;text-align:right;"><span id="tdSetupProjectTasks_delete-' +
+														oRow.id + '" class="ns1blankspaceMainRowOptionsDelete">&nbsp;</span>';
+									aHTML.push('<span id="tdSetupProjectTasks_select-' + oRow.id + '" class="ns1blankspaceMainRowOptionsSelect">&nbsp;</span></td>';
 									
 									aHTML.push('</tr>'
 									
 									return aHTML.join('');
 								},
 
-					bind:		function interfaceSetupProjectTasksBind()
+					bind:		function ns1blankspaceSetupProjectTasksBind()
 								{
-									$('.interfaceMainRowOptionsDelete').button({
+									$('.ns1blankspaceMainRowOptionsDelete').button({
 												text: false,
 												 icons: {
 													 primary: "ui-icon-close"
 												}
 											})
 											.click(function() {
-												interfaceSetupProjectTasksRemove(this.id)
+												ns1blankspaceSetupProjectTasksRemove(this.id)
 											})
 											.css('width', '15px')
 											.css('height', '20px')
 											
-									$('.interfaceMainRowOptionsSelect').button({
+									$('.ns1blankspaceMainRowOptionsSelect').button({
 										text: false,
 										 icons: {
 											 primary: "ui-icon-play"
 										}
 									})
 									.click(function() {
-										interfaceSetupProjectTaskMasterViewport({showHome: false});
-										interfaceSetupProjectTaskSearch(this.id);
+										ns1blankspaceSetupProjectTaskMasterViewport({showHome: false});
+										ns1blankspaceSetupProjectTaskSearch(this.id);
 									})
 									.css('width', '15px')
 									.css('height', '20px')
 								},
 
-					add:		function interfaceSetupProjectTaskDetailsAdd(oParam, oResponse)
+					add:		function ns1blankspaceSetupProjectTaskDetailsAdd(oParam, oResponse)
 								{
-									var sXHTMLElementId = "divInterfaceMainTaskDetails";
+									var sXHTMLElementId = "divns1blankspaceMainTaskDetails";
 									var sXHTMLElementContextId;
 									var lProjectTask;
 									
@@ -614,16 +612,16 @@ ns1blankspace.setup.project =
 										var lProjectTask = aSearch[1];
 									}	
 										
-									ns1blankspaceMainViewportShow("#divInterfaceMainTaskDetails");	
+									ns1blankspaceMainViewportShow("#divns1blankspaceMainTaskDetails");	
 										
 									var aHTML = [];
 									var h = -1;
 										
-									aHTML.push('<table id="tableInterfaceMainProjectTaskDetails" class="interfaceMain">' +
-													'<tr id="trInterfaceMainProjectTaskDetailsRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainProjectTaskDetailsColumn1" class="interfaceMainColumn1Large">' +
+									aHTML.push('<table id="tablens1blankspaceMainProjectTaskDetails" class="ns1blankspaceMain">' +
+													'<tr id="trns1blankspaceMainProjectTaskDetailsRow1" class="ns1blankspaceMainRow1">' +
+													'<td id="tdns1blankspaceMainProjectTaskDetailsColumn1" class="ns1blankspaceMainColumn1Large">' +
 													'</td>' +
-													'<td id="tdInterfaceMainProjectTaskDetailsColumn2" class="interfaceMainColumn2Action">' +
+													'<td id="tdns1blankspaceMainProjectTaskDetailsColumn2" class="ns1blankspaceMainColumn2Action">' +
 													'</td>' +
 													'</tr>' +
 													'</table>';				
@@ -641,7 +639,7 @@ ns1blankspace.setup.project =
 											url: '/ondemand/project/?',
 											data: sParam,
 											dataType: 'json',
-											success: function(data){interfaceSetupProjectTaskDetailsAdd(oParam, data)}
+											success: function(data){ns1blankspaceSetupProjectTaskDetailsAdd(oParam, data)}
 										});
 									}
 									else
@@ -649,120 +647,120 @@ ns1blankspace.setup.project =
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML.push('<table id="tableInterfaceMainTaskDetailsColumn2" class="interfaceMainColumn2">';
+										aHTML.push('<table id="tablens1blankspaceMainTaskDetailsColumn2" class="ns1blankspaceMainColumn2">';
 										
-										aHTML.push('<tr><td id="tdInterfaceMainTaskDetailsSave" class="interfaceMain">' +
-														'<span id="spanInterfaceMainTaskDetailsSave">Save</span>' +
+										aHTML.push('<tr><td id="tdns1blankspaceMainTaskDetailsSave" class="ns1blankspaceMain">' +
+														'<span id="spanns1blankspaceMainTaskDetailsSave">Save</span>' +
 														'</td></tr>';
 																
 										aHTML.push('</table>';					
 										
-										$('#tdInterfaceMainProjectTaskDetailsColumn2').html(aHTML.join(''));
+										$('#tdns1blankspaceMainProjectTaskDetailsColumn2').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainTaskDetailsSave').button(
+										$('#spanns1blankspaceMainTaskDetailsSave').button(
 										{
 											label: "Save"
 										})
 										.click(function() {
-											interfaceSetupProjectTaskAddSave(oParam);
+											ns1blankspaceSetupProjectTaskAddSave(oParam);
 										})
 										
 										var aHTML = [];
 										var h = -1;
 															
-										aHTML.push('<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';					
+										aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';					
 															
-										aHTML.push('<tr id="trInterfaceMainProjectTaskDetailsTitle" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsTitle" class="interfaceMain">' +
+										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsTitle" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsTitle" class="ns1blankspaceMain">' +
 															'Title' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsTitleValue" class="interfaceMainText">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsTitleValue" class="interfaceMainText">' +
-															'<input id="inputInterfaceMainProjectTaskDetailsTitle" class="inputInterfaceMainText">' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsTitleValue" class="ns1blankspaceMainText">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsTitleValue" class="ns1blankspaceMainText">' +
+															'<input id="inputns1blankspaceMainProjectTaskDetailsTitle" class="inputns1blankspaceMainText">' +
 															'</td></tr>';							
 									
-										aHTML.push('<tr id="trInterfaceMainProjectTaskDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-															'<textarea rows="10" cols="50" style="width:100%;" onDemandType="TEXTMULTI" id="inputInterfaceMainProjectTaskDetailsDescription" class="inputInterfaceMainTextMulti"></textarea>' +
+										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsDescriptionValue" class="ns1blankspaceMainTextMulti">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsDescriptionValue" class="ns1blankspaceMainTextMulti">' +
+															'<textarea rows="10" cols="50" style="width:100%;" onDemandType="TEXTMULTI" id="inputns1blankspaceMainProjectTaskDetailsDescription" class="inputns1blankspaceMainTextMulti"></textarea>' +
 															'</td></tr>';
 									
-										aHTML.push('<tr id="trInterfaceMainProjectTaskDetailsType" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsType" class="interfaceMain">' +
+										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsType" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsType" class="ns1blankspaceMain">' +
 															'Type' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsTypeValue" class="interfaceMainSelect">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsTypeValue" class="interfaceMainSelect">' +
-															'<input id="inputInterfaceMainProjectTaskDetailsType" class="inputInterfaceMainSelect"' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsTypeValue" class="ns1blankspaceMainSelect">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsTypeValue" class="ns1blankspaceMainSelect">' +
+															'<input id="inputns1blankspaceMainProjectTaskDetailsType" class="inputns1blankspaceMainSelect"' +
 																' onDemandMethod="/ondemand/setup/?rf=XML&method=SETUP_PROJECT_TASK_TYPE_SEARCH">' +
 															'</td></tr>';
 									
-										aHTML.push('<tr id="trInterfaceMainProjectTaskDetailsTaskBy" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsTaskBy" class="interfaceMain">' +
+										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsTaskBy" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsTaskBy" class="ns1blankspaceMain">' +
 															'Task By' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsTaskByValue" class="interfaceMainSelect">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsTaskByValue" class="interfaceMainSelect">' +
-															'<input id="inputInterfaceMainProjectTaskDetailsTaskBy" class="inputInterfaceMainSelect"' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsTaskByValue" class="ns1blankspaceMainSelect">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsTaskByValue" class="ns1blankspaceMainSelect">' +
+															'<input id="inputns1blankspaceMainProjectTaskDetailsTaskBy" class="inputns1blankspaceMainSelect"' +
 																' onDemandMethod="/ondemand/setup/?method=SETUP_USER_SEARCH&rf=XML" onDemandColumns="username">' +
 															'</td></tr>';
 									
-										aHTML.push('<tr id="trInterfaceMainProjectTaskDetailsTaskDependsOn" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsTaskDependsOn" class="interfaceMain">' +
+										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsTaskDependsOn" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsTaskDependsOn" class="ns1blankspaceMain">' +
 															'Depends On Task' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsTaskDependsOnValue" class="interfaceMainSelect">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsTaskDependsOnValue" class="interfaceMainSelect">' +
-															'<input id="inputInterfaceMainProjectTaskDetailsTaskDependsOn" class="inputInterfaceMainSelect"' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsTaskDependsOnValue" class="ns1blankspaceMainSelect">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsTaskDependsOnValue" class="ns1blankspaceMainSelect">' +
+															'<input id="inputns1blankspaceMainProjectTaskDetailsTaskDependsOn" class="inputns1blankspaceMainSelect"' +
 																' onDemandMethod="/ondemand/project/?rf=XML&method=PROJECT_TASK_SEARCH&project=' + ns1blankspace.objectContext + '">' +
 															'</td></tr>';
 									
-										aHTML.push('<tr id="trInterfaceMainProjectTaskDetailsStartBasedOn" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsStartBasedOn" class="interfaceMain">' +
+										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsStartBasedOn" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsStartBasedOn" class="ns1blankspaceMain">' +
 															'Start Date Is Based On' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsStartBasedOnValue" class="interfaceMainRadio">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsStartBasedOnValue" class="interfaceMainRadio">' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsStartBasedOnValue" class="ns1blankspaceMainRadio">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsStartBasedOnValue" class="ns1blankspaceMainRadio">' +
 															'<input type="radio" id="radioStartBasedOn1" name="radioStartBasedOn" value="1"/>When Dependant Task Completed' +
 																'&nbsp;&nbsp;<input type="radio" id="radioStartBasedOn2" name="radioStartBasedOn" value="2"/>Project Start Date<br /><br />';
 															'</td></tr>';
 									
-										aHTML.push('<tr id="trInterfaceMainProjectTaskDetailsStartDays" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsStartDays" class="interfaceMain">' +
+										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsStartDays" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsStartDays" class="ns1blankspaceMain">' +
 															'Days Before Start' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsStartDaysValue" class="interfaceMainText">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsStartDaysValue" class="interfaceMainText">' +
-															'<input onDemandType="TEXT" id="inputInterfaceMainProjectTaskDetailsStartDays" class="inputInterfaceMainText">' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsStartDaysValue" class="ns1blankspaceMainText">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsStartDaysValue" class="ns1blankspaceMainText">' +
+															'<input onDemandType="TEXT" id="inputns1blankspaceMainProjectTaskDetailsStartDays" class="inputns1blankspaceMainText">' +
 															'</td></tr>';				
 									
-										aHTML.push('<tr id="trInterfaceMainProjectTaskDetailsDurationDays" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsDurationDays" class="interfaceMain">' +
+										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsDurationDays" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsDurationDays" class="ns1blankspaceMain">' +
 															'Duration (Elapsed Days)' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsDurationDaysValue" class="interfaceMainText">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsDurationDaysValue" class="interfaceMainText">' +
-															'<input onDemandType="TEXT" id="inputInterfaceMainProjectTaskDetailsDurationDays" class="inputInterfaceMainText">' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsDurationDaysValue" class="ns1blankspaceMainText">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsDurationDaysValue" class="ns1blankspaceMainText">' +
+															'<input onDemandType="TEXT" id="inputns1blankspaceMainProjectTaskDetailsDurationDays" class="inputns1blankspaceMainText">' +
 															'</td></tr>';
 										
-									aHTML.push('<tr id="trInterfaceMainProjectTaskDetailsDisplayOrder" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsDisplayOrder" class="interfaceMain">' +
+									aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsDisplayOrder" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsDisplayOrder" class="ns1blankspaceMain">' +
 															'Display Order' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsDisplayOrderValue" class="interfaceMainText">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsDisplayOrderValue" class="interfaceMainText">' +
-															'<input onDemandType="TEXT" id="inputInterfaceMainProjectTaskDetailsDisplayOrder" class="inputInterfaceMainText">' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsDisplayOrderValue" class="ns1blankspaceMainText">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsDisplayOrderValue" class="ns1blankspaceMainText">' +
+															'<input onDemandType="TEXT" id="inputns1blankspaceMainProjectTaskDetailsDisplayOrder" class="inputns1blankspaceMainText">' +
 															'</td></tr>';				
 										
 										aHTML.push('</table>';						
 									
-										$('#tdInterfaceMainProjectTaskDetailsColumn1').html(aHTML.join(''));
+										$('#tdns1blankspaceMainProjectTaskDetailsColumn1').html(aHTML.join(''));
 										
 										if (oResponse != undefined)
 										{
 											if (oResponse.data.rows.length == 0)
 											{
-												$('#inputInterfaceMainProjectTaskDetailsReference').val(oResponse.data.rows[0].reference);
-												$('#inputInterfaceMainProjectTaskDetailsTitle').val(oResponse.data.rows[0].title);		
+												$('#inputns1blankspaceMainProjectTaskDetailsReference').val(oResponse.data.rows[0].reference);
+												$('#inputns1blankspaceMainProjectTaskDetailsTitle').val(oResponse.data.rows[0].title);		
 											}
 										}	
 									}	
@@ -774,19 +772,19 @@ ns1blankspace.setup.project =
 													var sParam = '/ondemand/project/?method=PROJECT_TASK_MANAGE'
 													var sData = 'project=' + ns1blankspace.objectContext;
 													
-													sData += '&title=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsTitle').val());
-													sData += '&type=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsType').attr('onDemandID'));
-													sData += '&taskbyuser=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsTaskBy').attr('onDemandID'));
-													sData += '&taskdependson=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID'));
+													sData += '&title=' + ns1blankspace.util.fs($('#inputns1blankspaceMainProjectTaskDetailsTitle').val());
+													sData += '&type=' + ns1blankspace.util.fs($('#inputns1blankspaceMainProjectTaskDetailsType').attr('onDemandID'));
+													sData += '&taskbyuser=' + ns1blankspace.util.fs($('#inputns1blankspaceMainProjectTaskDetailsTaskBy').attr('onDemandID'));
+													sData += '&taskdependson=' + ns1blankspace.util.fs($('#inputns1blankspaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID'));
 													sData += '&taskstartbasedon=' + $('input[name="radioStartBasedOn"]:checked').val();
-													sData += '&daysbeforestart=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsStartDays').val());
-													sData += '&durationdays=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsDurationDays').val());
-													sData += '&displayorder=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsDisplayOrder').val());
-													sData += '&description=' + ns1blankspace.util.fs($('#inputInterfaceMainProjectTaskDetailsDescription').val());
+													sData += '&daysbeforestart=' + ns1blankspace.util.fs($('#inputns1blankspaceMainProjectTaskDetailsStartDays').val());
+													sData += '&durationdays=' + ns1blankspace.util.fs($('#inputns1blankspaceMainProjectTaskDetailsDurationDays').val());
+													sData += '&displayorder=' + ns1blankspace.util.fs($('#inputns1blankspaceMainProjectTaskDetailsDisplayOrder').val());
+													sData += '&description=' + ns1blankspace.util.fs($('#inputns1blankspaceMainProjectTaskDetailsDescription').val());
 													
 													ns1blankspaceSave(sParam, sData, 'Template Task Added');
-													ns1blankspaceMainViewportShow("#divInterfaceMainTasks", true);
-													interfaceSetupProjectTasks();	
+													ns1blankspaceMainViewportShow("#divns1blankspaceMainTasks", true);
+													ns1blankspaceSetupProjectTasks();	
 												}
 								},				
 
@@ -817,9 +815,9 @@ ns1blankspace.setup.project =
 									var sParam = '/ondemand/project/?method=PROJECT_MANAGE'
 									var sData = (ns1blankspace.objectContext == -1)?'':'&id=' + ns1blankspace.objectContext;
 										
-									if ($('#divInterfaceMainDetails').html() != '')
+									if ($('#divns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&description=' + ns1blankspace.util.fs($('#inputInterfaceMainDescription').val());
+										sData += '&description=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDescription').val());
 									}
 									
 									ns1blankspaceSave(sParam, sData, 'Project Template Saved');	
