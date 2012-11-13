@@ -333,40 +333,39 @@ ns1blankspace.event =
 					
 					var aHTML = [];
 					
-					aHTML.push('<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainDetails" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainDescription" class="divns1blankspaceViewportMain"></div>';
-					aHTML.push('<div id="divns1blankspaceMainAttendees" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDescription" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttendees" class="ns1blankspaceControlMain"></div>');
 						
-					$('#divns1blankspaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
-					$('#tdns1blankspaceViewportControlSummary').click(function(event)
+					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary", true);
-						ns1blankspaceEventSummary();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.event.summary();
 					});
 					
-					$('#tdns1blankspaceViewportControlDetails').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
-						ns1blankspaceEventDetails();
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.event.details();
 					});
 					
-					$('#tdns1blankspaceViewportControlDescription').click(function(event)
+					$('#ns1blankspaceControlDescription').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainDescription");
-						ns1blankspaceEventDescription();
+						ns1blankspace.show({selector: '#ns1blankspaceMainDescription'});
+						ns1blankspace.event.description();
 					});
-					
-					$('#tdns1blankspaceViewportControlAttendees').click(function(event)
+
+					$('#ns1blankspaceViewControlAttendees').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divns1blankspaceMainAttendees", true);
-						ns1blankspaceEventAttendees();
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttendees'});
+						ns1blankspace.event.attendees();
 					});
-					
 				},
 
-	show: 		function ns1blankspaceEventShow(oParam, oResponse)
+	show: 		function (oParam, oResponse)
 				{
 					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
 					ns1blankspaceEventViewport();
