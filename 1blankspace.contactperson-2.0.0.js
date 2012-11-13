@@ -901,7 +901,6 @@ ns1blankspace.contactPerson =
 										dataType: 'json',
 										success: this.process
 									});
-										
 								},
 
 					process: 	function (oResponse)
