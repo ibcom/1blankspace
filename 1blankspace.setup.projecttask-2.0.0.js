@@ -158,8 +158,7 @@ ns1blankspace.setup.projectTask =
 	search: 	{
 					send: 		function (sXHTMLElementID, oParam)
 								{	
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;
@@ -180,47 +179,47 @@ ns1blankspace.setup.projectTask =
 										
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-									
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceViewControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
-										var sParam = 'method=PROJECT_TASK_SEARCH&id=' + ns1blankspace.objectContext;
-										
+		
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/project/?' + sParam,
+											url: ns1blankspace.util.endpointURI('PROJECT_TASK_SEARCH'),
+											data: 'id=' + ns1blankspace.objectContext,
 											dataType: 'json',
-											success: function(data) {interfaceSetupProjectTaskShow(oParam, data)}
+											success: function(data) {ns1blankspace.setup.projectTask.show(oParam, data)}
 										});
 									}
 									else
 									{
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#inputns1blankspaceViewportControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
 										{
 											iMinimumLength = 1;
 											sSearchText = aSearch[1];
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											sElementId = 'ns1blankspaceViewControlBrowse';
 											sQuickSearchType = 'start';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspaceOptionsSetPosition(sElementId);
+											ns1blankspace.container.position(sElementId);
 											
 											var sParam = 'method=PROJECT_TASK_SEARCH&quicksearch' + sQuickSearchType + '=' + sSearchText;
 
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/project/?' + sParam,
+												url: ns1blankspace.util.endpointURI('PROJECT_TASK_SEARCH'),
+												data: 'quicksearch' + sQuickSearchType + '=' + sSearchText,
 												dataType: 'json',
-												success: function(data) {interfaceSetupProjectTaskSearchShow(oParam, data)}
+												success: function(data) {ns1blankspace.setup.projectTask.process(oParam, data)}
 											});
 										}
 									};	
@@ -235,19 +234,19 @@ ns1blankspace.setup.projectTask =
 											
 									if (oResponse.data.rows.length == 0)
 									{
-										$('#divns1blankspaceViewportControlOptions').hide();
+										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
 									{
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
+										aHTML[++h] = '<table class="ns1blankspaceSearchMedium">';
 										aHTML[++h] = '<tbody>'
 											
 										$.each(oResponse.data.rows, function()
 										{
-											aHTML[++h] = '<tr class="interfaceSearch">';
+											aHTML[++h] = '<tr class="ns1blankspaceSearch">';
 										
-											aHTML[++h] = '<td class="interfaceContactType' + onDemandXMLGetData(oRow, "type") + ' interfaceSearch">&nbsp;</td>';
-											aHTML[++h] = '<td class="interfaceSearch class="interfaceProjectTaskType' + onDemandXMLGetData(oRow, "typetext") + '" id="' + onDemandXMLGetData(oRow, "xhtmlcontext") +
+											aHTML[++h] = '<td class="ns1blankspaceContactType' + onDemandXMLGetData(oRow, "type") + ' ns1blankspaceSearch">&nbsp;</td>';
+											aHTML[++h] = '<td class="ns1blankspaceSearch class="ns1blankspaceProjectTaskType' + onDemandXMLGetData(oRow, "typetext") + '" id="' + onDemandXMLGetData(oRow, "xhtmlcontext") +
 															'-' + onDemandXMLGetData(oRow, "id") + '">' +
 															onDemandXMLGetData(oRow, "title") +
 															'</td>';
@@ -261,14 +260,14 @@ ns1blankspace.setup.projectTask =
 								    	
 										aHTML[++h] = '</tbody></table>';
 
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceSetupProjectTaskSearch(event.target.id, {source: 1});
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspaceSetupProjectTaskSearch(event.target.id, {source: 1});
 										});
 									}	
 											
@@ -281,124 +280,124 @@ ns1blankspace.setup.projectTask =
 					var aHTML = [];
 					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+					aHTML[++h] = '<div id="divns1blankspaceViewportControlContext" class="ns1blankspaceViewportControlContext"></div>';
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl1" class="interfaceViewportControl">';
+					aHTML[++h] = '<table id="tablens1blankspaceViewportControl1" class="ns1blankspaceViewportControl">';
 					
-					aHTML[++h] = '<tr id="trInterfaceViewportControl1" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+					aHTML[++h] = '<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Summary</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
+					aHTML[++h] = '<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">Details</td>' +
 									'</tr>';
 					
-					aHTML[++h] = '<tr id="trInterfaceViewportControl2" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDescription" class="interfaceViewportControl">Description</td>' +
+					aHTML[++h] = '<tr id="trns1blankspaceViewportControl2" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlDescription" class="ns1blankspaceViewportControl">Description</td>' +
 									'</tr>';
 					
 					aHTML[++h] = '</table>';					
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl3" class="interfaceViewportControl">';
+					aHTML[++h] = '<table id="tablens1blankspaceViewportControl3" class="ns1blankspaceViewportControl">';
 					
-					aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlActions" class="interfaceViewportControl">Actions</td>' +
+					aHTML[++h] = '<tr id="trns1blankspaceViewportControl" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlActions" class="ns1blankspaceViewportControl">Actions</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlAttachments" class="interfaceViewportControl">Attachments</td>' +
+					aHTML[++h] = '<tr id="trns1blankspaceViewportControl" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlAttachments" class="ns1blankspaceViewportControl">Attachments</td>' +
 									'</tr>';
 									
 					aHTML[++h] = '</table>';								
 							
-					aHTML[++h] = '<table id="tableInterfaceViewportControl3" class="interfaceViewportControl">';
+					aHTML[++h] = '<table id="tablens1blankspaceViewportControl3" class="ns1blankspaceViewportControl">';
 					
-					aHTML[++h] = '<tr id="trInterfaceViewportControl" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlViewProject" class="interfaceViewportControl">View Project</td>' +
+					aHTML[++h] = '<tr id="trns1blankspaceViewportControl" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlViewProject" class="ns1blankspaceViewportControl">View Project</td>' +
 									'</tr>';
 									
 					aHTML[++h] = '</table>';			
 					
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
+					$('#divns1blankspaceViewportControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDescription" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainScheduling" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainActions" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAttachments" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainActionDetails" class="divInterfaceViewportMain"></div>';
+					aHTML[++h] = '<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
+					aHTML[++h] = '<div id="divns1blankspaceMainDetails" class="divns1blankspaceViewportMain"></div>';
+					aHTML[++h] = '<div id="divns1blankspaceMainDescription" class="divns1blankspaceViewportMain"></div>';
+					aHTML[++h] = '<div id="divns1blankspaceMainScheduling" class="divns1blankspaceViewportMain"></div>';
+					aHTML[++h] = '<div id="divns1blankspaceMainActions" class="divns1blankspaceViewportMain"></div>';
+					aHTML[++h] = '<div id="divns1blankspaceMainAttachments" class="divns1blankspaceViewportMain"></div>';
+					aHTML[++h] = '<div id="divns1blankspaceMainActionDetails" class="divns1blankspaceViewportMain"></div>';
 						
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#divns1blankspaceMain').html(aHTML.join(''));
 					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#tdns1blankspaceViewportControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary");
-						interfaceSetupProjectTaskSummary();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary");
+						ns1blankspaceSetupProjectTaskSummary();
 					});
 					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+					$('#tdns1blankspaceViewportControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceSetupProjectTaskDetails();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
+						ns1blankspaceSetupProjectTaskDetails();
 					});
 					
-					$('#tdInterfaceViewportControlDescription').click(function(event)
+					$('#tdns1blankspaceViewportControlDescription').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDescription");
-						interfaceSetupProjectTaskDescription();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainDescription");
+						ns1blankspaceSetupProjectTaskDescription();
 					});
 					
-					$('#tdInterfaceViewportControlScheduling').click(function(event)
+					$('#tdns1blankspaceViewportControlScheduling').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainScheduling");
-						interfaceSetupProjectTaskScheduling("divInterfaceMainScheduling", true);
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainScheduling");
+						ns1blankspaceSetupProjectTaskScheduling("divns1blankspaceMainScheduling", true);
 					});
 					
-					$('#tdInterfaceViewportControlActions').click(function(event)
+					$('#tdns1blankspaceViewportControlActions').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainActions", true);
-						interfaceSetupProjectTaskActions(
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainActions", true);
+						ns1blankspaceSetupProjectTaskActions(
 						{
 							bindAdd: false,
-							xhtmlElementId: 'divInterfaceMainActions',
+							xhtmlElementId: 'divns1blankspaceMainActions',
 							object: ns1blankspace.objectContext
 						});
 						
-						$('#spanInterfaceMainActionsAdd').button(
+						$('#spanns1blankspaceMainActionsAdd').button(
 						{
 							label: "Add"
 						})	
 						.click(function() {
-							 interfaceSetupProjectTaskActionDetails();
+							 ns1blankspaceSetupProjectTaskActionDetails();
 						})	
 
 					});
 
-					$('#tdInterfaceViewportControlAttachments').click(function(event)
+					$('#tdns1blankspaceViewportControlAttachments').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAttachments", true);
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainAttachments", true);
 						ns1blankspaceAttachments(
 						{
-							xhtmlElementID: "divInterfaceMainAttachments", 
+							xhtmlElementID: "divns1blankspaceMainAttachments", 
 							object: "11",
 							objectContext: ns1blankspace.objectContext
 						});
 					});
 					
-					$('#tdInterfaceViewportControlViewProject').click(function(event)
+					$('#tdns1blankspaceViewportControlViewProject').click(function(event)
 					{
-						interfaceSetupProjectMasterViewport();
-						interfaceSetupProjectSearch('-' + giParentObjectContext)
+						ns1blankspaceSetupProjectMasterViewport();
+						ns1blankspaceSetupProjectSearch('-' + giParentObjectContext)
 					});
 				},
 
 	show:		function (oParam, oResponse)
 				{
-					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					
 					var aHTML = [];
 					var h = -1;
@@ -410,19 +409,19 @@ ns1blankspace.setup.projectTask =
 						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find template task.</td></tr>';
 						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#divns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 							
-						interfaceSetupProjectTaskViewport();
+						ns1blankspaceSetupProjectTaskViewport();
 										
-						$('#divInterfaceViewportControlContext').html(onDemandXMLGetData(oRow, 'title'));
-						$('#divInterfaceViewportControlContext').addClass('interfaceProjectTaskType' + onDemandXMLGetData(oRow, "typetext") + 'BG');
+						$('#divns1blankspaceViewportControlContext').html(onDemandXMLGetData(oRow, 'title'));
+						$('#divns1blankspaceViewportControlContext').addClass('ns1blankspaceProjectTaskType' + onDemandXMLGetData(oRow, "typetext") + 'BG');
 						giParentObjectContext = onDemandXMLGetData(oRow, "project");
 						
-						interfaceSetupProjectTaskSummary();
+						ns1blankspaceSetupProjectTaskSummary();
 					}	
 				},	
 		
@@ -433,16 +432,16 @@ ns1blankspace.setup.projectTask =
 					var h = -1;
 					var oXML = ns1blankspace.objectContextDataXML;
 					
-					aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-					aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-								'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
+					aHTML[++h] = '<table id="tablens1blankspaceMainSummary" class="ns1blankspaceMain">';
+					aHTML[++h] = '<tr id="trns1blankspaceMainSummaryRow1" class="ns1blankspaceMainRow1">' +
+								'<td id="tdns1blankspaceMainSummaryColumn1Large" class="ns1blankspaceMainColumn1Large">' +
 									'</td>' +
-									'<td id="tdInterfaceMainSummaryColumn2" class="interfaceMainColumn2Action">' +
+									'<td id="tdns1blankspaceMainSummaryColumn2" class="ns1blankspaceMainColumn2Action">' +
 									'</td>' +
 									'</tr>';
 					aHTML[++h] = '</table>';					
 						
-					$('#divInterfaceMainSummary').html(aHTML.join(''));
+					$('#divns1blankspaceMainSummary').html(aHTML.join(''));
 					
 					var aHTML = [];
 					var h = -1;
@@ -452,42 +451,42 @@ ns1blankspace.setup.projectTask =
 						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find SetupProjectTask.</td></tr>';
 						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#divns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML[++h] = '<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
 						
 						var sDescription = ns1blankspace.objectContextData.description;
 						
 						sDescription = sDescription.replace(/(\r\n|\r|\n)/g, "<br />");
 						
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Description<br /><br /></td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryDescriptionValue" class="interfaceMainSummaryValue">' +
+						aHTML[++h] = '<tr><td id="tdns1blankspaceMainSummaryDescription" class="ns1blankspaceMainSummary">Description<br /><br /></td></tr>' +
+										'<tr><td id="tdns1blankspaceMainSummaryDescriptionValue" class="ns1blankspaceMainSummaryValue">' +
 										sDescription +
 										'</td></tr>';
 						
 						aHTML[++h] = '</table>';					
 						
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#tdns1blankspaceMainSummaryColumn1Large').html(aHTML.join(''));
 
 						var aHTML = [];
 						var h = -1;	
 						
-						aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2">';
+						aHTML[++h] = '<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2">';
 												
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryViewProject" class="interfaceMainSummaryAction">' +
-										'<a href="#" id="aInterfaceMainSummaryViewProject">View Project</a>' +
+						aHTML[++h] = '<tr><td id="tdns1blankspaceMainSummaryViewProject" class="ns1blankspaceMainSummaryAction">' +
+										'<a href="#" id="ans1blankspaceMainSummaryViewProject">View Project</a>' +
 										'</td></tr>';
 										
 						aHTML[++h] = '</table>';					
 						
-						$('#tdInterfaceMainSummaryColumn2').html(aHTML.join(''));	
+						$('#tdns1blankspaceMainSummaryColumn2').html(aHTML.join(''));	
 						
-						$('#aInterfaceMainSummaryViewProject').click(function(event)
+						$('#ans1blankspaceMainSummaryViewProject').click(function(event)
 						{
-							interfaceSetupProjectMasterViewport();
-							interfaceSetupProjectSearch('-' + ns1blankspace.objectContextData.project)
+							ns1blankspaceSetupProjectMasterViewport();
+							ns1blankspaceSetupProjectSearch('-' + ns1blankspace.objectContextData.project)
 						});
 					}	
 				},
@@ -497,133 +496,133 @@ ns1blankspace.setup.projectTask =
 					var aHTML = [];
 					var h = -1;
 					
-					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
+					if ($('#divns1blankspaceMainDetails').attr('onDemandLoading') == '1')
 					{
-						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
+						$('#divns1blankspaceMainDetails').attr('onDemandLoading', '');
 						var oRow = oRoot.childNodes.item(0);
 								
-						aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1Large">' +
+						aHTML[++h] = '<table id="tablens1blankspaceMainDetails" class="ns1blankspaceMainDetails">';
+						aHTML[++h] = '<tr id="trns1blankspaceMainDetailsRow1" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsColumn1" class="ns1blankspaceMainColumn1Large">' +
 										'</td>' +
-										'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">' +
 										'</td>' +
 										'</tr>';
 						aHTML[++h] = '</table>';					
 						
-						$('#divInterfaceMainDetails').html(aHTML.join(''));
+						$('#divns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+						aHTML[++h] = '<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
 						
-						aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsTitle" class="interfaceMain">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsTitle" class="interfaceMain">' +
+						aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsTitle" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsTitle" class="ns1blankspaceMain">' +
 											'Title' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainProjectTaskDetailsTitleValue" class="interfaceMainText">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsTitleValue" class="interfaceMainText">' +
-											'<input id="inputInterfaceMainProjectTaskDetailsTitle" class="inputInterfaceMainText">' +
+											'<tr id="trns1blankspaceMainProjectTaskDetailsTitleValue" class="ns1blankspaceMainText">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsTitleValue" class="ns1blankspaceMainText">' +
+											'<input id="inputns1blankspaceMainProjectTaskDetailsTitle" class="inputns1blankspaceMainText">' +
 											'</td></tr>';							
 					
-						aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsType" class="interfaceMain">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsType" class="interfaceMain">' +
+						aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsType" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsType" class="ns1blankspaceMain">' +
 											'Type' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainProjectTaskDetailsTypeValue" class="interfaceMainSelect">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsTypeValue" class="interfaceMainSelect">' +
-											'<input id="inputInterfaceMainProjectTaskDetailsType" class="inputInterfaceMainSelect"' +
+											'<tr id="trns1blankspaceMainProjectTaskDetailsTypeValue" class="ns1blankspaceMainSelect">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsTypeValue" class="ns1blankspaceMainSelect">' +
+											'<input id="inputns1blankspaceMainProjectTaskDetailsType" class="inputns1blankspaceMainSelect"' +
 												' onDemandMethod="/ondemand/setup/?rf=XML&method=SETUP_PROJECT_TASK_TYPE_SEARCH">' +
 											'</td></tr>';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsTaskBy" class="interfaceMain">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsTaskBy" class="interfaceMain">' +
+						aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsTaskBy" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsTaskBy" class="ns1blankspaceMain">' +
 											'Task By' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainProjectTaskDetailsTaskByValue" class="interfaceMainSelect">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsTaskByValue" class="interfaceMainSelect">' +
-											'<input id="inputInterfaceMainProjectTaskDetailsTaskBy" class="inputInterfaceMainSelect"' +
+											'<tr id="trns1blankspaceMainProjectTaskDetailsTaskByValue" class="ns1blankspaceMainSelect">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsTaskByValue" class="ns1blankspaceMainSelect">' +
+											'<input id="inputns1blankspaceMainProjectTaskDetailsTaskBy" class="inputns1blankspaceMainSelect"' +
 												' onDemandMethod="/ondemand/setup/?method=SETUP_USER_SEARCH&rf=XML" onDemandColumns="username">' +
 											'</td></tr>';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsTaskDependsOn" class="interfaceMain">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsTaskDependsOn" class="interfaceMain">' +
+						aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsTaskDependsOn" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsTaskDependsOn" class="ns1blankspaceMain">' +
 											'Depends On Task' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainProjectTaskDetailsTaskDependsOnValue" class="interfaceMainSelect">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsTaskDependsOnValue" class="interfaceMainSelect">' +
-											'<input id="inputInterfaceMainProjectTaskDetailsTaskDependsOn" class="inputInterfaceMainSelect"' +
+											'<tr id="trns1blankspaceMainProjectTaskDetailsTaskDependsOnValue" class="ns1blankspaceMainSelect">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsTaskDependsOnValue" class="ns1blankspaceMainSelect">' +
+											'<input id="inputns1blankspaceMainProjectTaskDetailsTaskDependsOn" class="inputns1blankspaceMainSelect"' +
 												' onDemandMethod="/ondemand/project/?rf=XML&method=PROJECT_TASK_SEARCH&project=' + onDemandXMLGetData(oRow, 'project') + '">' +
 											'</td></tr>';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsStartBasedOn" class="interfaceMain">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsStartBasedOn" class="interfaceMain">' +
+						aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsStartBasedOn" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsStartBasedOn" class="ns1blankspaceMain">' +
 											'Start Date Is Based On' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainProjectTaskDetailsStartBasedOnValue" class="interfaceMainText">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsStartBasedOnValue" class="interfaceMainText">' +
+											'<tr id="trns1blankspaceMainProjectTaskDetailsStartBasedOnValue" class="ns1blankspaceMainText">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsStartBasedOnValue" class="ns1blankspaceMainText">' +
 											'<input type="radio" id="radioStartBasedOn1" name="radioStartBasedOn" value="1"/>When Dependant Task Completed' +
 												'&nbsp;&nbsp;<input type="radio" id="radioStartBasedOn2" name="radioStartBasedOn" value="2"/>Project Start Date<br /><br />';
 											'</td></tr>';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsStartDays" class="interfaceMain">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsStartDays" class="interfaceMain">' +
+						aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsStartDays" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsStartDays" class="ns1blankspaceMain">' +
 											'Days Before Start' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainProjectTaskDetailsStartDaysValue" class="interfaceMainText">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsStartDaysValue" class="interfaceMainText">' +
-											'<input id="inputInterfaceMainProjectTaskDetailsStartDays" class="inputInterfaceMainText">' +
+											'<tr id="trns1blankspaceMainProjectTaskDetailsStartDaysValue" class="ns1blankspaceMainText">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsStartDaysValue" class="ns1blankspaceMainText">' +
+											'<input id="inputns1blankspaceMainProjectTaskDetailsStartDays" class="inputns1blankspaceMainText">' +
 											'</td></tr>';				
 					
-						aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsDurationDays" class="interfaceMain">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsDurationDays" class="interfaceMain">' +
+						aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsDurationDays" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsDurationDays" class="ns1blankspaceMain">' +
 											'Duration (Elapsed Days)' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainProjectTaskDetailsDurationDaysValue" class="interfaceMainText">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsDurationDaysValue" class="interfaceMainText">' +
-											'<input id="inputInterfaceMainProjectTaskDetailsDurationDays" class="inputInterfaceMainText">' +
+											'<tr id="trns1blankspaceMainProjectTaskDetailsDurationDaysValue" class="ns1blankspaceMainText">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsDurationDaysValue" class="ns1blankspaceMainText">' +
+											'<input id="inputns1blankspaceMainProjectTaskDetailsDurationDays" class="inputns1blankspaceMainText">' +
 											'</td></tr>';	
 											
-						aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsDisplayOrder" class="interfaceMain">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsDisplayOrder" class="interfaceMain">' +
+						aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsDisplayOrder" class="ns1blankspaceMain">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsDisplayOrder" class="ns1blankspaceMain">' +
 											'Display Order' +
 											'</td></tr>' +
-											'<tr id="trInterfaceMainProjectTaskDetailsDisplayOrderValue" class="interfaceMainText">' +
-											'<td id="tdInterfaceMainProjectTaskDetailsDisplayOrderValue" class="interfaceMainText">' +
-											'<input id="inputInterfaceMainProjectTaskDetailsDisplayOrder" class="inputInterfaceMainText">' +
+											'<tr id="trns1blankspaceMainProjectTaskDetailsDisplayOrderValue" class="ns1blankspaceMainText">' +
+											'<td id="tdns1blankspaceMainProjectTaskDetailsDisplayOrderValue" class="ns1blankspaceMainText">' +
+											'<input id="inputns1blankspaceMainProjectTaskDetailsDisplayOrder" class="inputns1blankspaceMainText">' +
 											'</td></tr>';						
 
 						aHTML[++h] = '</table>';					
 						
-						$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#tdns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
 						
-						$('#trInterfaceMainProjectTaskDetailsTaskBy').hide();
+						$('#trns1blankspaceMainProjectTaskDetailsTaskBy').hide();
 						
 						var aHTML = [];
 						var h = -1;
 							
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+						aHTML[++h] = '<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">';
 						
 						aHTML[++h] = '</table>';					
 							
-						$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#tdns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainProjectTaskDetailsTitle').val(ns1blankspace.objectContextData.title);
-							$('#inputInterfaceMainProjectTaskDetailsType').attr('onDemandID', ns1blankspace.objectContextData.type);
-							$('#inputInterfaceMainProjectTaskDetailsType').val(ns1blankspace.objectContextData.typetext);
-							$('#inputInterfaceMainProjectTaskDetailsTaskBy').attr('onDemandID', ns1blankspace.objectContextData.taskbyuser);
-							$('#inputInterfaceMainProjectTaskDetailsTaskBy').val(ns1blankspace.objectContextData.taskbyusertext);
-							$('#inputInterfaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID', ns1blankspace.objectContextData.templatedependsontask);
-							$('#inputInterfaceMainProjectTaskDetailsTaskDependsOn').val(ns1blankspace.objectContextData.templatedependsontasktext);
+							$('#inputns1blankspaceMainProjectTaskDetailsTitle').val(ns1blankspace.objectContextData.title);
+							$('#inputns1blankspaceMainProjectTaskDetailsType').attr('onDemandID', ns1blankspace.objectContextData.type);
+							$('#inputns1blankspaceMainProjectTaskDetailsType').val(ns1blankspace.objectContextData.typetext);
+							$('#inputns1blankspaceMainProjectTaskDetailsTaskBy').attr('onDemandID', ns1blankspace.objectContextData.taskbyuser);
+							$('#inputns1blankspaceMainProjectTaskDetailsTaskBy').val(ns1blankspace.objectContextData.taskbyusertext);
+							$('#inputns1blankspaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID', ns1blankspace.objectContextData.templatedependsontask);
+							$('#inputns1blankspaceMainProjectTaskDetailsTaskDependsOn').val(ns1blankspace.objectContextData.templatedependsontasktext);
 							
 							$('[name="radioStartBasedOn"][value="' + ns1blankspace.objectContextData.templateelapsedstartdatetype + '"]').attr('checked', true);
 						
-							$('#inputInterfaceMainProjectTaskDetailsStartDays').val(ns1blankspace.objectContextData.templateelapsedstartdatedurationdays);
-							$('#inputInterfaceMainProjectTaskDetailsDurationDays').val(ns1blankspace.objectContextData.templateelapseddurationdays);
-							$('#inputInterfaceMainProjectTaskDetailsDisplayOrder').val(ns1blankspace.objectContextData.displayorder);
+							$('#inputns1blankspaceMainProjectTaskDetailsStartDays').val(ns1blankspace.objectContextData.templateelapsedstartdatedurationdays);
+							$('#inputns1blankspaceMainProjectTaskDetailsDurationDays').val(ns1blankspace.objectContextData.templateelapseddurationdays);
+							$('#inputns1blankspaceMainProjectTaskDetailsDisplayOrder').val(ns1blankspace.objectContextData.displayorder);
 						}
 					}	
 				},
@@ -635,41 +634,41 @@ ns1blankspace.setup.projectTask =
 					var aHTML = [];
 					var h = -1;
 					
-					if ($('#divInterfaceMainDescription').attr('onDemandLoading') == '1')
+					if ($('#divns1blankspaceMainDescription').attr('onDemandLoading') == '1')
 					{
-						$('#divInterfaceMainDescription').attr('onDemandLoading', '');
+						$('#divns1blankspaceMainDescription').attr('onDemandLoading', '');
 								
-						aHTML[++h] = '<table id="tableInterfaceMainDescription" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainDescriptionRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDescriptionColumn1" class="interfaceMainColumn1Large">' +
+						aHTML[++h] = '<table id="tablens1blankspaceMainDescription" class="ns1blankspaceMain">';
+						aHTML[++h] = '<tr id="trns1blankspaceMainDescriptionRow1" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDescriptionColumn1" class="ns1blankspaceMainColumn1Large">' +
 										'</td>' +
-										'<td id="tdInterfaceMainDescriptionColumn2" class="interfaceMain">' +
+										'<td id="tdns1blankspaceMainDescriptionColumn2" class="ns1blankspaceMain">' +
 										'</td>' +
 										'</tr>';
 						aHTML[++h] = '</table>';					
 						
-						$('#divInterfaceMainDescription').html(aHTML.join(''));
+						$('#divns1blankspaceMainDescription').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainDescriptionColumn1" class="interfaceMain">';
+						aHTML[++h] = '<table id="tablens1blankspaceMainDescriptionColumn1" class="ns1blankspaceMain">';
 								
-						aHTML[++h] = '<tr id="trInterfaceMainDescriptionValue" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDescriptionValue" class="interfaceMainTextMulti">' +
-										'<textarea rows="30" cols="50" id="inputInterfaceMainDescription" class="inputInterfaceMainTextMulti inputInterfaceMainTextMultiLarge"></textarea>' +
+						aHTML[++h] = '<tr id="trns1blankspaceMainDescriptionValue" class="ns1blankspaceMainTextMulti">' +
+										'<td id="tdns1blankspaceMainDescriptionValue" class="ns1blankspaceMainTextMulti">' +
+										'<textarea rows="30" cols="50" id="inputns1blankspaceMainDescription" class="inputns1blankspaceMainTextMulti inputns1blankspaceMainTextMultiLarge"></textarea>' +
 										'</td></tr>';
 										
 						aHTML[++h] = '</table>';					
 						
-						$('#tdInterfaceMainDescriptionColumn1').html(aHTML.join(''));
+						$('#tdns1blankspaceMainDescriptionColumn1').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDescription').val(unescape(ns1blankspace.objectContextData.description));
+							$('#inputns1blankspaceMainDescription').val(unescape(ns1blankspace.objectContextData.description));
 						}
 					
-						//tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainDescription');
+						//tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceMainDescription');
 					}	
 				},
 
@@ -679,21 +678,21 @@ ns1blankspace.setup.projectTask =
 									var sParam = '/ondemand/project/?method=PROJECT_TASK_MANAGE'
 									var sData = (ns1blankspace.objectContext == -1)?'':'&id=' + ns1blankspace.objectContext;
 										
-									if ($('#divInterfaceMainDetails').html() != '')
+									if ($('#divns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&title=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsTitle').val());
-										sData += '&type=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsType').attr('onDemandID'));
-										sData += '&taskbyuser=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsTaskBy').attr('onDemandID'));
-										sData += '&taskdependson=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID'));
+										sData += '&title=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsTitle').val());
+										sData += '&type=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsType').attr('onDemandID'));
+										sData += '&taskbyuser=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsTaskBy').attr('onDemandID'));
+										sData += '&taskdependson=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID'));
 										sData += '&taskstartbasedon=' + $('input[name="radioStartBasedOn"]:checked').val();
-										sData += '&daysbeforestart=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsStartDays').val());
-										sData += '&durationdays=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsDurationDays').val());
-										sData += '&displayorder=' + encodeURIComponent($('#inputInterfaceMainProjectTaskDetailsDisplayOrder').val());
+										sData += '&daysbeforestart=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsStartDays').val());
+										sData += '&durationdays=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsDurationDays').val());
+										sData += '&displayorder=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsDisplayOrder').val());
 									}
 
-									if ($('#divInterfaceMainDescription').html() != '')
+									if ($('#divns1blankspaceMainDescription').html() != '')
 									{
-										sData += '&description=' + encodeURIComponent($('#inputInterfaceMainDescription').val());
+										sData += '&description=' + encodeURIComponent($('#inputns1blankspaceMainDescription').val());
 									}
 									
 									ns1blankspaceSave(sParam, sData, 'Template Task Saved');	
@@ -704,7 +703,7 @@ ns1blankspace.setup.projectTask =
 					show:		function (oParam, oResponse)
 								{
 
-									var sXHTMLElementId = "divInterfaceMainActionDetails";
+									var sXHTMLElementId = "divns1blankspaceMainActionDetails";
 									var sXHTMLElementContextId;
 									var lProjectTask;
 									
@@ -728,11 +727,11 @@ ns1blankspace.setup.projectTask =
 									var aHTML = [];
 									var h = -1;
 										
-									aHTML[++h] = '<table id="tableInterfaceMainProjectTaskActionDetails" class="interfaceMain">' +
-													'<tr id="trInterfaceMainProjectTaskActionDetailsRow1" class="interfaceMainRow1">' +
-													'<td id="tdInterfaceMainProjectTaskActionDetailsColumn1" class="interfaceMainColumn1Large">' +
+									aHTML[++h] = '<table id="tablens1blankspaceMainProjectTaskActionDetails" class="ns1blankspaceMain">' +
+													'<tr id="trns1blankspaceMainProjectTaskActionDetailsRow1" class="ns1blankspaceMainRow1">' +
+													'<td id="tdns1blankspaceMainProjectTaskActionDetailsColumn1" class="ns1blankspaceMainColumn1Large">' +
 													'</td>' +
-													'<td id="tdInterfaceMainProjectTaskActionDetailsColumn2" class="interfaceMainColumn2Action">' +
+													'<td id="tdns1blankspaceMainProjectTaskActionDetailsColumn2" class="ns1blankspaceMainColumn2Action">' +
 													'</td>' +
 													'</tr>' +
 													'</table>';				
@@ -750,7 +749,7 @@ ns1blankspace.setup.projectTask =
 											url: '/ondemand/action/',
 											data: sParam,
 											dataType: 'json',
-											success: function(data){interfaceSetupProjectTaskActionDetails(oParam, data)}
+											success: function(data){ns1blankspaceSetupProjectTaskActionDetails(oParam, data)}
 										});
 									}
 									else
@@ -761,86 +760,86 @@ ns1blankspace.setup.projectTask =
 										var aHTML = [];
 										var h = -1;
 										
-										aHTML[++h] = '<table id="tableInterfaceMainTaskDetailsColumn2" class="interfaceMainColumn2">';
+										aHTML[++h] = '<table id="tablens1blankspaceMainTaskDetailsColumn2" class="ns1blankspaceMainColumn2">';
 										
-										aHTML[++h] = '<tr><td id="tdInterfaceMainTaskActionDetailsSave" class="interfaceMain">' +
-														'<span id="spanInterfaceMainTaskActionDetailsSave">Save</span>' +
+										aHTML[++h] = '<tr><td id="tdns1blankspaceMainTaskActionDetailsSave" class="ns1blankspaceMain">' +
+														'<span id="spanns1blankspaceMainTaskActionDetailsSave">Save</span>' +
 														'</td></tr>';
 																
 										aHTML[++h] = '</table>';					
 										
-										$('#tdInterfaceMainProjectTaskActionDetailsColumn2').html(aHTML.join(''));
+										$('#tdns1blankspaceMainProjectTaskActionDetailsColumn2').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainTaskActionDetailsSave').button(
+										$('#spanns1blankspaceMainTaskActionDetailsSave').button(
 										{
 											label: "Save"
 										})
 										.click(function() {
-											interfaceSetupProjectTaskActionDetailsSave(oParam);
+											ns1blankspaceSetupProjectTaskActionDetailsSave(oParam);
 										})
 										
 										var aHTML = [];
 										var h = -1;
 															
-										aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';					
+										aHTML[++h] = '<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';					
 															
-										aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsSubject" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsSubject" class="interfaceMain">' +
+										aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsSubject" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsSubject" class="ns1blankspaceMain">' +
 															'Subject' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsSubjectValue" class="interfaceMainText">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsSubjectValue" class="interfaceMainText">' +
-															'<input id="inputInterfaceMainProjectTaskDetailsSubject" class="inputInterfaceMainText">' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsSubjectValue" class="ns1blankspaceMainText">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsSubjectValue" class="ns1blankspaceMainText">' +
+															'<input id="inputns1blankspaceMainProjectTaskDetailsSubject" class="inputns1blankspaceMainText">' +
 															'</td></tr>';		
 															
 										ns1blankspace.counter.editor = + ns1blankspace.counter.editor + 1;
 									
-										aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsDescriptionValue" class="interfaceMainTextMulti">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsDescriptionValue" class="interfaceMainTextMulti">' +
+										aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsDescriptionValue" class="ns1blankspaceMainTextMulti">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsDescriptionValue" class="ns1blankspaceMainTextMulti">' +
 															'<textarea rows="10" cols="50" style="width:100%;" ' +
-															'id="inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor + '" class="inputInterfaceMainTextMulti"></textarea>' +
+															'id="inputns1blankspaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor + '" class="inputns1blankspaceMainTextMulti"></textarea>' +
 															'</td></tr>';
 									
-										aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsType" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsType" class="interfaceMain">' +
+										aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsType" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsType" class="ns1blankspaceMain">' +
 															'Type' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsTypeValue" class="interfaceMainSelect">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsTypeValue" class="interfaceMainSelect">' +
-															'<input id="inputInterfaceMainProjectTaskActionDetailsType" class="inputInterfaceMainSelect"' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsTypeValue" class="ns1blankspaceMainSelect">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsTypeValue" class="ns1blankspaceMainSelect">' +
+															'<input id="inputns1blankspaceMainProjectTaskActionDetailsType" class="inputns1blankspaceMainSelect"' +
 																' onDemandMethod="/ondemand/setup/?rf=XML&method=SETUP_ACTION_TYPE_SEARCH">' +
 															'</td></tr>';
 									
-										aHTML[++h] = '<tr id="trInterfaceMainProjectTaskDetailsTaskBy" class="interfaceMain">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsTaskBy" class="interfaceMain">' +
+										aHTML[++h] = '<tr id="trns1blankspaceMainProjectTaskDetailsTaskBy" class="ns1blankspaceMain">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsTaskBy" class="ns1blankspaceMain">' +
 															'Task By' +
 															'</td></tr>' +
-															'<tr id="trInterfaceMainProjectTaskDetailsTaskByValue" class="interfaceMainSelect">' +
-															'<td id="tdInterfaceMainProjectTaskDetailsTaskByValue" class="interfaceMainSelect">' +
-															'<input id="inputInterfaceMainProjectTaskActionDetailsTaskBy" class="inputInterfaceMainSelect"' +
+															'<tr id="trns1blankspaceMainProjectTaskDetailsTaskByValue" class="ns1blankspaceMainSelect">' +
+															'<td id="tdns1blankspaceMainProjectTaskDetailsTaskByValue" class="ns1blankspaceMainSelect">' +
+															'<input id="inputns1blankspaceMainProjectTaskActionDetailsTaskBy" class="inputns1blankspaceMainSelect"' +
 																' onDemandMethod="SETUP_USER_SEARCH" onDemandColumns="username">' +
 															'</td></tr>';
 										
 										aHTML[++h] = '</table>';						
 									
-										$('#tdInterfaceMainProjectTaskActionDetailsColumn1').html(aHTML.join(''));
+										$('#tdns1blankspaceMainProjectTaskActionDetailsColumn1').html(aHTML.join(''));
 										
 										if (oResponse != undefined)
 										{
 											if (oResponse.data.rows.length != 0)
 											{
-												$('#inputInterfaceMainProjectTaskDetailsSubject').val(oResponse.data.rows[0].subject);
+												$('#inputns1blankspaceMainProjectTaskDetailsSubject').val(oResponse.data.rows[0].subject);
 												
-												$('#inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).val(ns1blankspaceFormatXHTML(oResponse.data.rows[0].description));	
+												$('#inputns1blankspaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).val(ns1blankspaceFormatXHTML(oResponse.data.rows[0].description));	
 												
-												$('#inputInterfaceMainProjectTaskActionDetailsType').attr('onDemandID', oResponse.data.rows[0].type);
-												$('#inputInterfaceMainProjectTaskActionDetailsType').val(oResponse.data.rows[0].typetext);
-												$('#inputInterfaceMainProjectTaskActionDetailsTaskBy').attr('onDemandID', oResponse.data.rows[0].actionby);
-												$('#inputInterfaceMainProjectTaskActionDetailsTaskBy').val(oResponse.data.rows[0].actionbyfirstname + ' ' + oResponse.data.rows[0].actionbysurname);
+												$('#inputns1blankspaceMainProjectTaskActionDetailsType').attr('onDemandID', oResponse.data.rows[0].type);
+												$('#inputns1blankspaceMainProjectTaskActionDetailsType').val(oResponse.data.rows[0].typetext);
+												$('#inputns1blankspaceMainProjectTaskActionDetailsTaskBy').attr('onDemandID', oResponse.data.rows[0].actionby);
+												$('#inputns1blankspaceMainProjectTaskActionDetailsTaskBy').val(oResponse.data.rows[0].actionbyfirstname + ' ' + oResponse.data.rows[0].actionbysurname);
 											}
 										}	
 										
-										tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor);
+										tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor);
 									}	
 								},	
 
@@ -898,10 +897,10 @@ ns1blankspace.setup.projectTask =
 										sData += '&objectcontext=' + ns1blankspace.objectContext;
 									}
 									
-									sData += '&subject=' + ns1blankspaceFormatValue($('#inputInterfaceMainProjectTaskDetailsSubject').val());
-									sData += '&description=' + ns1blankspaceFormatValue(tinyMCE.get('inputInterfaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).getContent());
-									sData += '&type=' + ns1blankspaceFormatValue($('#inputInterfaceMainProjectTaskActionDetailsType').attr('onDemandID'));
-									sData += '&actionby=' + ns1blankspaceFormatValue($('#inputInterfaceMainProjectTaskActionDetailsTaskBy').attr('onDemandID'));
+									sData += '&subject=' + ns1blankspaceFormatValue($('#inputns1blankspaceMainProjectTaskDetailsSubject').val());
+									sData += '&description=' + ns1blankspaceFormatValue(tinyMCE.get('inputns1blankspaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).getContent());
+									sData += '&type=' + ns1blankspaceFormatValue($('#inputns1blankspaceMainProjectTaskActionDetailsType').attr('onDemandID'));
+									sData += '&actionby=' + ns1blankspaceFormatValue($('#inputns1blankspaceMainProjectTaskActionDetailsTaskBy').attr('onDemandID'));
 										  
 									$.ajax(
 									{
@@ -912,11 +911,11 @@ ns1blankspace.setup.projectTask =
 										async: bAsync,
 										success: function(data) {
 												ns1blankspaceStatus('Action saved');
-												ns1blankspaceMainViewportShow("#divInterfaceMainActions");
-												interfaceSetupProjectTaskActions(
+												ns1blankspaceMainViewportShow("#divns1blankspaceMainActions");
+												ns1blankspaceSetupProjectTaskActions(
 													{
 														actions: {add: false},
-														xhtmlElementID: 'tdInterfaceMainActionsColumn1'
+														xhtmlElementID: 'tdns1blankspaceMainActionsColumn1'
 													});
 												
 												}
