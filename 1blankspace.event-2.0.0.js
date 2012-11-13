@@ -82,97 +82,89 @@ ns1blankspace.event =
 					}			
 				},
 
-	home: 		function interfaceEventHomeShow(oResponse)
+	home: 		function (oResponse)
 				{
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-										'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
+						aHTML.push('<table class="ns1blankspaceViewportMain">');
+						aHTML.push('<tr id="trns1blankspaceViewportMain" class="ns1blankspaceViewportMain">' +
+										'<td id="tdns1blankspaceProjectHomeMostLikely" class="ns1blankspaceViewportMain">' +
 										ns1blankspace.xhtml.loading + 
 										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+										'</tr>');
+						aHTML.push('</table>');					
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
-										'<td id="ns1blankspaceViewportEventLarge" class="ns1blankspaceViewportImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';		
+						aHTML.push('<table><tr>' +
+										'<td id="ns1blankspaceViewEventLarge" class="ns1blankspaceViewImageLarge">' +
+										'&nbsp;</td></tr></table>');		
 						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));	
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'EVENT_SEARCH';
-						
 						oSearch.addField('description');
 						oSearch.rf = 'json';
 						oSearch.rows = 10;
 						oSearch.addSummaryField('count eventcount')
 						oSearch.sort('modifieddate', 'desc');
 						
-						oSearch.getResults(interfaceEventHomeShow);	
+						oSearch.getResults(ns1blankspace.event.home);	
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceNewsHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceNewsHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceNewsHomeMostLikelyNothing">Click New to create an event.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table>');
+							aHTML.push('<tr>');
+							aHTML.push('<td class="ns1blankspaceNothing">Click New to create an event.</td>');
+							aHTML.push('</tr>');
+							aHTML.push('</table>');
 						}
 						else
 						{
 						
-							aHTML[++h] = '<table id="tableInterfaceNewsHomeMostLikely">';
-							aHTML[++h] = '<tr>';
-							aHTML[++h] = '<td class="interfaceMain">MOST LIKELY</td>';
-							aHTML[++h] = '</tr>';
+							aHTML.push('<table>');
+							aHTML.push('<tr>');
+							aHTML.push('<td class="ns1blankspaceCaption">MOST LIKELY</td>');
+							aHTML.push('</tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+								aHTML.push('<tr>');
 								
-								aHTML[++h] = '<td id="interfaceNewsHomeMostLikely_Title-' + this.id + 
-														'" class="interfaceHomeMostLikely">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + 
+														'" class="ns1blankspaceMostLikely">' +
 														this.description +
 														'</td>';
 								
-								aHTML[++h] = '</tr>'
+								aHTML.push('</tr>');
 							});
 							
-								aHTML[++h] = '</tbody></table>';
+							aHTML.push('</table>');
 						}
 						
-						$('#tdInterfaceProjectHomeMostLikely').html(aHTML.join(''));
+						$('#tdns1blankspaceProjectHomeMostLikely').html(aHTML.join(''));
 					
-						$('td.interfaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceHomeMostLikely').click(function(event)
 						{
-							interfaceEventSearch(event.target.id, {source: 1});
+							ns1blankspaceEventSearch(event.target.id, {source: 1});
 						});
 					}
 				},
 
 	search: 	{
 				
-					send: 		function interfaceEventSearch(sXHTMLElementId, oParam)
+					send: 		function ns1blankspaceEventSearch(sXHTMLElementId, oParam)
 								{
 									
 									var aSearch = sXHTMLElementId.split('-');
@@ -196,7 +188,7 @@ ns1blankspace.event =
 									
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#divns1blankspaceViewportControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
@@ -207,7 +199,7 @@ ns1blankspace.event =
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										
-										oSearch.getResults(function(data) {interfaceEventShow(oParam, data)});	
+										oSearch.getResults(function(data) {ns1blankspaceEventShow(oParam, data)});	
 									
 									}
 									else
@@ -224,7 +216,7 @@ ns1blankspace.event =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'tableInterfaceViewportMasterBrowse';
+											sElementId = 'tablens1blankspaceViewportMasterBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
@@ -241,14 +233,14 @@ ns1blankspace.event =
 												type: 'GET',
 												url: '/ondemand/event/?' + sParam,
 												dataType: 'json',
-												success: function(data) {interfaceEventSearchShow(oParam, data)}
+												success: function(data) {ns1blankspaceEventSearchShow(oParam, data)}
 											});
 											
 										}
 									};	
 								},
 
-					process: 	function interfaceEventSearchShow(oParam, oResponse)
+					process: 	function ns1blankspaceEventSearchShow(oParam, oResponse)
 								{
 
 									var iColumn = 0;
@@ -263,8 +255,8 @@ ns1blankspace.event =
 									}
 									else
 									{
-										aHTML[++h] = '<table class="interfaceSearchMedium">';
-										aHTML[++h] = '<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">';
+										aHTML.push('<tbody>'
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -272,127 +264,127 @@ ns1blankspace.event =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="interfaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">';
 											}
 											
-											aHTML[++h] = '<td class="interfaceSearch" id="' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
 															this.reference + '</td>';
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>'
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML[++h] = '</tbody></table>';
+										aHTML.push('</tbody></table>';
 
 										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
 										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
 										
 										ns1blankspaceSearchStop();
 										
-										$('td.interfaceSearch').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
 											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceEventSearch(event.target.id, 1);
+											ns1blankspaceEventSearch(event.target.id, 1);
 										});
 									}		
 								}
 				},
 								
-	layout: 	function interfaceEventViewport()
+	layout: 	function ns1blankspaceEventViewport()
 				{
 					
 					var aHTML = [];
 					var h = -1;
 
-					if (tinyMCE.getInstanceById('inputInterfaceMainDescriptionText'))
+					if (tinyMCE.getInstanceById('inputns1blankspaceMainDescriptionText'))
 					{
-						tinyMCE.get('inputInterfaceMainDescriptionText').remove();
-						$('#inputInterfaceMainDescriptionText').remove();
+						tinyMCE.get('inputns1blankspaceMainDescriptionText').remove();
+						$('#inputns1blankspaceMainDescriptionText').remove();
 					}	
 								
-					aHTML[++h] = '<div id="divInterfaceViewportControlContext" class="interfaceViewportControlContext"></div>';
+					aHTML.push('<div id="divns1blankspaceViewportControlContext" class="ns1blankspaceViewportControlContext"></div>';
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
 					
-					aHTML[++h] = '<tr id="trInterfaceViewportControlSummary" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlSummary" class="interfaceViewportControl interfaceViewportControlHighlight">Summary</td>' +
+					aHTML.push('<tr id="trns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Summary</td>' +
 									'</tr>';
 									
-					aHTML[++h] = '<tr id="trInterfaceViewportControlDetails" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDetails" class="interfaceViewportControl">Details</td>' +
+					aHTML.push('<tr id="trns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">Details</td>' +
 									'</tr>';
 								
-					aHTML[++h] = '<tr id="trInterfaceViewportControlDescription" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlDescription" class="interfaceViewportControl">Description</td>' +
+					aHTML.push('<tr id="trns1blankspaceViewportControlDescription" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlDescription" class="ns1blankspaceViewportControl">Description</td>' +
 									'</tr>';				
 					
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>';					
 					
-					aHTML[++h] = '<table id="tableInterfaceViewportControl" class="interfaceViewportControl">';
+					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
 					
 					if (ns1blankspace.objectContext != -1)
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControlAttendees" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlAttendees" class="interfaceViewportControl">Attendees</td>' +
+						aHTML.push('<tr id="trns1blankspaceViewportControlAttendees" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlAttendees" class="ns1blankspaceViewportControl">Attendees</td>' +
 									'</tr>';			
 					}
 					else
 					{
-						aHTML[++h] = '<tr id="trInterfaceViewportControlStatus" class="interfaceViewportControl">' +
-									'<td id="tdInterfaceViewportControlStatus" class="interfaceViewportControl interfaceViewportControlStatus">' +
+						aHTML.push('<tr id="trns1blankspaceViewportControlStatus" class="ns1blankspaceViewportControl">' +
+									'<td id="tdns1blankspaceViewportControlStatus" class="ns1blankspaceViewportControl ns1blankspaceViewportControlStatus">' +
 									'Once you save this event, you can then add & view attendees</td>' +
 									'</tr>';			
 					}
 									
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>';					
 							
-					$('#divInterfaceViewportControl').html(aHTML.join(''));
+					$('#divns1blankspaceViewportControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 					var h = -1;
 
-					aHTML[++h] = '<div id="divInterfaceMainSummary" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDetails" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainDescription" class="divInterfaceViewportMain"></div>';
-					aHTML[++h] = '<div id="divInterfaceMainAttendees" class="divInterfaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainDetails" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainDescription" class="divns1blankspaceViewportMain"></div>';
+					aHTML.push('<div id="divns1blankspaceMainAttendees" class="divns1blankspaceViewportMain"></div>';
 						
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#divns1blankspaceMain').html(aHTML.join(''));
 					
-					$('#tdInterfaceViewportControlSummary').click(function(event)
+					$('#tdns1blankspaceViewportControlSummary').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainSummary", true);
-						interfaceEventSummary();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainSummary", true);
+						ns1blankspaceEventSummary();
 					});
 					
-					$('#tdInterfaceViewportControlDetails').click(function(event)
+					$('#tdns1blankspaceViewportControlDetails').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
-						interfaceEventDetails();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
+						ns1blankspaceEventDetails();
 					});
 					
-					$('#tdInterfaceViewportControlDescription').click(function(event)
+					$('#tdns1blankspaceViewportControlDescription').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainDescription");
-						interfaceEventDescription();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainDescription");
+						ns1blankspaceEventDescription();
 					});
 					
-					$('#tdInterfaceViewportControlAttendees').click(function(event)
+					$('#tdns1blankspaceViewportControlAttendees').click(function(event)
 					{
-						ns1blankspaceMainViewportShow("#divInterfaceMainAttendees", true);
-						interfaceEventAttendees();
+						ns1blankspaceMainViewportShow("#divns1blankspaceMainAttendees", true);
+						ns1blankspaceEventAttendees();
 					});
 					
 				},
 
-	show: 		function interfaceEventShow(oParam, oResponse)
+	show: 		function ns1blankspaceEventShow(oParam, oResponse)
 				{
 					$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-					interfaceEventViewport();
+					ns1blankspaceEventViewport();
 
 					var aHTML = [];
 					var h = -1;
@@ -401,161 +393,161 @@ ns1blankspace.event =
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find event.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find event.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#divns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{		
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 					
-						$('#divInterfaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
+						$('#divns1blankspaceViewportControlContext').html(ns1blankspace.objectContextData.reference);
 						$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 						$('#spanns1blankspaceViewportControlActionOptions').button({disabled: false});
 						
 						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceEventMasterViewport({showHome: false});interfaceEventSearch("-' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspaceEventMasterViewport({showHome: false});ns1blankspaceEventSearch("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
 					
-						ns1blankspaceObjectViewportHistory({functionDefault: 'interfaceEventSummary()'});
+						ns1blankspaceObjectViewportHistory({functionDefault: 'ns1blankspaceEventSummary()'});
 					}	
 				},		
 		
-	summary: 	function interfaceEventSummary()
+	summary: 	function ns1blankspaceEventSummary()
 				{
 					var aHTML = [];
 					var h = -1;
 					
-					aHTML[++h] = '<table id="tableInterfaceMainSummary" class="interfaceMain">';
-					aHTML[++h] = '<tr id="trInterfaceMainSummaryRow1" class="interfaceMainRow1">' +
-								'<td id="tdInterfaceMainSummaryColumn1Large" class="interfaceMainColumn1Large">' +
+					aHTML.push('<table id="tablens1blankspaceMainSummary" class="ns1blankspaceMain">';
+					aHTML.push('<tr id="trns1blankspaceMainSummaryRow1" class="ns1blankspaceMainRow1">' +
+								'<td id="tdns1blankspaceMainSummaryColumn1Large" class="ns1blankspaceMainColumn1Large">' +
 									'</td>' +
-									'<td id="tdInterfaceMainSummaryColumn2Action" style="width:100px;">' +
+									'<td id="tdns1blankspaceMainSummaryColumn2Action" style="width:100px;">' +
 									'</td>' +
 									'</tr>';
-					aHTML[++h] = '</table>';					
+					aHTML.push('</table>';					
 						
-					$('#divInterfaceMainSummary').html(aHTML.join(''));
+					$('#divns1blankspaceMainSummary').html(aHTML.join(''));
 					
 					var aHTML = [];
 					var h = -1;
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML[++h] = '<table><tbody><tr><td valign="top">Sorry can\'t find event.</td></tr>';
-						aHTML[++h] = '<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find event.</td></tr>';
+						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
 								
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#tdns1blankspaceMainSummaryColumn1Large').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMainColumn1">';
+						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
 						
 						var sTmp = ns1blankspace.objectContextData.startdate;
 						
 						if (sTmp != '&nbsp;') 
 						{
-							aHTML[++h] = '<tr><td id="tdInterfaceMainSummaryDescription" class="interfaceMainSummary">Start Date</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummaryTypeValue" class="interfaceMainStartDateValue">' +
+							aHTML.push('<tr><td id="tdns1blankspaceMainSummaryDescription" class="ns1blankspaceMainSummary">Start Date</td></tr>' +
+										'<tr><td id="tdns1blankspaceMainSummaryTypeValue" class="ns1blankspaceMainStartDateValue">' +
 										sTmp +
 										'</td></tr>';
 						}				
 										
-						aHTML[++h] = '<tr><td id="tdInterfaceMainSummarySummary" class="interfaceMainSummary">&nbsp;</td></tr>' +
-										'<tr><td id="tdInterfaceMainSummarySummaryValue" class="interfaceMainSummaryValue">' +
+						aHTML.push('<tr><td id="tdns1blankspaceMainSummarySummary" class="ns1blankspaceMainSummary">&nbsp;</td></tr>' +
+										'<tr><td id="tdns1blankspaceMainSummarySummaryValue" class="ns1blankspaceMainSummaryValue">' +
 										ns1blankspace.objectContextData.description +
 										'</td></tr>';
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#tdns1blankspaceMainSummaryColumn1Large').html(aHTML.join(''));
 	
-						$('#aInterfaceMainSummaryEdit').click(function(event)
+						$('#ans1blankspaceMainSummaryEdit').click(function(event)
 						{
-							interfaceEventEdit();
+							ns1blankspaceEventEdit();
 						});
 					}	
 				},
 
-	details: 	function interfaceEventDetails()
+	details: 	function ns1blankspaceEventDetails()
 				{
 					var aHTML = [];
 					var h = -1;
 					
-					if ($('#divInterfaceMainDetails').attr('onDemandLoading') == '1')
+					if ($('#divns1blankspaceMainDetails').attr('onDemandLoading') == '1')
 					{
-						$('#divInterfaceMainDetails').attr('onDemandLoading', '');
+						$('#divns1blankspaceMainDetails').attr('onDemandLoading', '');
 								
-						aHTML[++h] = '<table id="tableInterfaceMainDetails" class="interfaceMainDetails">';
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsColumn1" class="interfaceMainColumn1">' +
+						aHTML.push('<table id="tablens1blankspaceMainDetails" class="ns1blankspaceMainDetails">';
+						aHTML.push('<tr id="trns1blankspaceMainDetailsRow1" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsColumn1" class="ns1blankspaceMainColumn1">' +
 										'</td>' +
-										'<td id="tdInterfaceMainDetailsColumn2" class="interfaceMainColumn2">' +
+										'<td id="tdns1blankspaceMainDetailsColumn2" class="ns1blankspaceMainColumn2">' +
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#divInterfaceMainDetails').html(aHTML.join(''));
+						$('#divns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 						
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn1" class="interfaceMain">';
+						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
 						
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsReference" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsReference" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsReference" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsReference" class="ns1blankspaceMain">' +
 										'Reference' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsReferenceValue" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsReferenceValue" class="interfaceMainText">' +
-										'<input id="inputInterfaceMainDetailsReference" class="inputInterfaceMainText">' +
+										'<tr id="trns1blankspaceMainDetailsReferenceValue" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainDetailsReferenceValue" class="ns1blankspaceMainText">' +
+										'<input id="inputns1blankspaceMainDetailsReference" class="inputns1blankspaceMainText">' +
 										'</td></tr>';
 					
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsStartDate" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsStartDate" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsStartDate" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsStartDate" class="ns1blankspaceMain">' +
 										'Start Date' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsStartDateValue" class="interfaceMainDate">' +
-										'<td id="tdInterfaceMainDetailsStartDateValue" class="interfaceMainDate">' +
-										'<input id="inputInterfaceMainDetailsStartDate" class="inputInterfaceMainDate">' +
+										'<tr id="trns1blankspaceMainDetailsStartDateValue" class="ns1blankspaceMainDate">' +
+										'<td id="tdns1blankspaceMainDetailsStartDateValue" class="ns1blankspaceMainDate">' +
+										'<input id="inputns1blankspaceMainDetailsStartDate" class="inputns1blankspaceMainDate">' +
 										'</td></tr>';			
 					
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsEndDate" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsEndDate" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsEndDate" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsEndDate" class="ns1blankspaceMain">' +
 										'End Date' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsEndDateValue" class="interfaceMainDate">' +
-										'<td id="tdInterfaceMainDetailsEndDateValue" class="interfaceMainDate">' +
-										'<input id="inputInterfaceMainDetailsEndDate" class="inputInterfaceMainDate">' +
+										'<tr id="trns1blankspaceMainDetailsEndDateValue" class="ns1blankspaceMainDate">' +
+										'<td id="tdns1blankspaceMainDetailsEndDateValue" class="ns1blankspaceMainDate">' +
+										'<input id="inputns1blankspaceMainDetailsEndDate" class="inputns1blankspaceMainDate">' +
 										'</td></tr>';			
 										
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsSharing" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsSharing" class="interfaceMain">' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsSharing" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsSharing" class="ns1blankspaceMain">' +
 										'Sharing' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsSharing" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsSharingValue" class="interfaceMainText">' +
+										'<tr id="trns1blankspaceMainDetailsSharing" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainDetailsSharingValue" class="ns1blankspaceMainText">' +
 										'<input type="radio" id="radioPublicY" name="radioPublic" value="Y"/>Public' +
 										'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
 										'</td></tr>';				
 
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainDetailsColumn1').html(aHTML.join(''));
+						$('#tdns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
 						var h = -1;
 							
-						aHTML[++h] = '<table id="tableInterfaceMainDetailsColumn2" class="interfaceMain">';
+						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">';
 						
-							aHTML[++h] = '<tr id="trInterfaceMainDetailsStatus" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDetailsStatus" class="interfaceMain">' +
+							aHTML.push('<tr id="trns1blankspaceMainDetailsStatus" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDetailsStatus" class="ns1blankspaceMain">' +
 										'Status' +
 										'</td></tr>' +
-										'<tr id="trInterfaceMainDetailsStatus" class="interfaceMainText">' +
-										'<td id="tdInterfaceMainDetailsStatusValue" class="interfaceMainText">' +
+										'<tr id="trns1blankspaceMainDetailsStatus" class="ns1blankspaceMainText">' +
+										'<td id="tdns1blankspaceMainDetailsStatusValue" class="ns1blankspaceMainText">' +
 										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Planning' +
 										'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>In Progress' +
 										'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>Completed' +
@@ -563,27 +555,27 @@ ns1blankspace.event =
 										'<br /><input type="radio" id="radioStatus5" name="radioStatus" value="5"/>Confirmed' +
 										'</td></tr>';
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 							
-						$('#tdInterfaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#tdns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
 
-						$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy' });
+						$('input.inputns1blankspaceMainDate').datepicker({ dateFormat: 'dd M yy' });
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#inputns1blankspaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
 							
 							var sTmp = ns1blankspace.objectContextData.startdate;
 							if (sTmp == '&nbsp;') {sTmp = ''};
-							$('#inputInterfaceMainDetailsStartDate').val(sTmp);
+							$('#inputns1blankspaceMainDetailsStartDate').val(sTmp);
 							
 							var sTmp = ns1blankspace.objectContextData.enddate;
 							if (sTmp == '&nbsp;') {sTmp = ''};
-							$('#inputInterfaceMainDetailsEndDate').val(sTmp);
+							$('#inputns1blankspaceMainDetailsEndDate').val(sTmp);
 							
-							$('#inputInterfaceMainDetailsFromEmail').val(ns1blankspace.objectContextData.fromemail);
+							$('#inputns1blankspaceMainDetailsFromEmail').val(ns1blankspace.objectContextData.fromemail);
 							
-							$('#inputInterfaceMainDetailsSummary').val(ns1blankspace.objectContextData.summary);
+							$('#inputns1blankspaceMainDetailsSummary').val(ns1blankspace.objectContextData.summary);
 							
 							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
@@ -591,165 +583,165 @@ ns1blankspace.event =
 					}	
 				},
 
-	description: function interfaceEventDescription()
+	description: function ns1blankspaceEventDescription()
 				{
 					var aHTML = [];
 					var h = -1;
 					
-					if ($('#divInterfaceMainDescription').attr('onDemandLoading') == '1')
+					if ($('#divns1blankspaceMainDescription').attr('onDemandLoading') == '1')
 					{
-						$('#divInterfaceMainDescription').attr('onDemandLoading', '');
+						$('#divns1blankspaceMainDescription').attr('onDemandLoading', '');
 								
-						aHTML[++h] = '<table id="tableInterfaceMainEdit" class="interfaceMain">';
-						aHTML[++h] = '<tr id="trInterfaceMainEditRow1" class="interfaceMain">' +
-										'<td id="tdInterfaceMainDescriptionColumn1" class="interfaceMain">' +
+						aHTML.push('<table id="tablens1blankspaceMainEdit" class="ns1blankspaceMain">';
+						aHTML.push('<tr id="trns1blankspaceMainEditRow1" class="ns1blankspaceMain">' +
+										'<td id="tdns1blankspaceMainDescriptionColumn1" class="ns1blankspaceMain">' +
 										'</td>' +
-										'<td id="tdInterfaceMainDescriptionColumn2" class="interfaceMain">' +
+										'<td id="tdns1blankspaceMainDescriptionColumn2" class="ns1blankspaceMain">' +
 										'</td>' +
 										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#divInterfaceMainDescription').html(aHTML.join(''));
+						$('#divns1blankspaceMainDescription').html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
+						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMain">';
 								
-						aHTML[++h] = '<tr id="trInterfaceMainDetailsDescriptionTextValue" class="interfaceMainTextMulti">' +
-										'<td id="tdInterfaceMainDetailsDescriptionTextValue" class="interfaceMainTextMulti">' +
-										'<textarea rows="30" cols="50" id="inputInterfaceMainDescriptionText" class="inputInterfaceMainTextMulti"></textarea>' +
+						aHTML.push('<tr id="trns1blankspaceMainDetailsDescriptionTextValue" class="ns1blankspaceMainTextMulti">' +
+										'<td id="tdns1blankspaceMainDetailsDescriptionTextValue" class="ns1blankspaceMainTextMulti">' +
+										'<textarea rows="30" cols="50" id="inputns1blankspaceMainDescriptionText" class="inputns1blankspaceMainTextMulti"></textarea>' +
 										'</td></tr>';
 										
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>';					
 						
-						$('#tdInterfaceMainDescriptionColumn1').html(aHTML.join(''));
+						$('#tdns1blankspaceMainDescriptionColumn1').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDescriptionText').val(unescape(ns1blankspace.objectContextData.description));
+							$('#inputns1blankspaceMainDescriptionText').val(unescape(ns1blankspace.objectContextData.description));
 						}
 					
-						tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainDescriptionText');
+						tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceMainDescriptionText');
 					}	
 				},
 
 	attendees: 	{
-					show: 		function interfaceEventAttendees()
+					show: 		function ns1blankspaceEventAttendees()
 								{
 
 									var aHTML = [];
 									var h = -1;
 									
-									if ($('#divInterfaceMainAttendees').attr('onDemandLoading') == '1')
+									if ($('#divns1blankspaceMainAttendees').attr('onDemandLoading') == '1')
 									{
-										$('#divInterfaceMainAttendees').attr('onDemandLoading', '');
+										$('#divns1blankspaceMainAttendees').attr('onDemandLoading', '');
 									
-										aHTML[++h] = '<table id="tableInterfaceMainEdit" class="interfaceMain">';
-										aHTML[++h] = '<tr id="trInterfaceMainEditRow1" class="interfaceMain">' +
-														'<td id="tdInterfaceMainAttendeesColumn1" style="width: 70px" class="interfaceMainColumn1">' +
+										aHTML.push('<table id="tablens1blankspaceMainEdit" class="ns1blankspaceMain">';
+										aHTML.push('<tr id="trns1blankspaceMainEditRow1" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainAttendeesColumn1" style="width: 70px" class="ns1blankspaceMainColumn1">' +
 														'</td>' +
-														'<td id="tdInterfaceMainAttendeesColumn2" class="interfaceMainColumn1Large">' +
+														'<td id="tdns1blankspaceMainAttendeesColumn2" class="ns1blankspaceMainColumn1Large">' +
 														'</td>' +
 														'</tr>';
-										aHTML[++h] = '</table>';					
+										aHTML.push('</table>';					
 										
-										$('#divInterfaceMainAttendees').html(aHTML.join(''));
+										$('#divns1blankspaceMainAttendees').html(aHTML.join(''));
 										
 										var aHTML = [];
 										var h = -1;
 									
-										aHTML[++h] = '<table id="tableInterfaceMainAtteendeesAtoZ" class="interfaceMain">';
+										aHTML.push('<table id="tablens1blankspaceMainAtteendeesAtoZ" class="ns1blankspaceMain">';
 										
-										aHTML[++h] = '<tr id="trInterfaceMainAtteendeesAtoE" class="interfaceMain">' +
-														'<td id="tdInterfaceMainAtteendees-AtoE" class="interfaceRowSelect">' +
-														'<span id="spanInterfaceMainAtteendees-A" class="interfaceMainAtoZ">A</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-B" class="interfaceMainAtoZ">B</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-C" class="interfaceMainAtoZ">C</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-D" class="interfaceMainAtoZ">D</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-E" class="interfaceMainAtoZ">E</span>' +
+										aHTML.push('<tr id="trns1blankspaceMainAtteendeesAtoE" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainAtteendees-AtoE" class="ns1blankspaceRowSelect">' +
+														'<span id="spanns1blankspaceMainAtteendees-A" class="ns1blankspaceMainAtoZ">A</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-B" class="ns1blankspaceMainAtoZ">B</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-C" class="ns1blankspaceMainAtoZ">C</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-D" class="ns1blankspaceMainAtoZ">D</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-E" class="ns1blankspaceMainAtoZ">E</span>' +
 														'</td></tr>';
 										
-										aHTML[++h] = '<tr id="trInterfaceMainAtteendeesFtoJ" class="interfaceMain">' +
-														'<td id="tdInterfaceMainAtteendees-FtoJ" class="interfaceRowSelect">' +
-														'<span id="spanInterfaceMainAtteendees-F" class="interfaceMainAtoZ">F</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-G" class="interfaceMainAtoZ">G</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-H" class="interfaceMainAtoZ">H</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-I" class="interfaceMainAtoZ">I</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-J" class="interfaceMainAtoZ">J</span>' +
+										aHTML.push('<tr id="trns1blankspaceMainAtteendeesFtoJ" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainAtteendees-FtoJ" class="ns1blankspaceRowSelect">' +
+														'<span id="spanns1blankspaceMainAtteendees-F" class="ns1blankspaceMainAtoZ">F</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-G" class="ns1blankspaceMainAtoZ">G</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-H" class="ns1blankspaceMainAtoZ">H</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-I" class="ns1blankspaceMainAtoZ">I</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-J" class="ns1blankspaceMainAtoZ">J</span>' +
 														'</td></tr>';
 														
-										aHTML[++h] = '<tr id="trInterfaceMainAtteendeesKtoO" class="interfaceMain">' +
-														'<td id="tdInterfaceMainAtteendees-KtoO" class="interfaceRowSelect">' +
-														'<span id="spanInterfaceMainAtteendees-K" class="interfaceMainAtoZ">K</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-L" class="interfaceMainAtoZ">L</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-M" class="interfaceMainAtoZ">M</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-N" class="interfaceMainAtoZ">N</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-O" class="interfaceMainAtoZ">O</span>' +
+										aHTML.push('<tr id="trns1blankspaceMainAtteendeesKtoO" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainAtteendees-KtoO" class="ns1blankspaceRowSelect">' +
+														'<span id="spanns1blankspaceMainAtteendees-K" class="ns1blankspaceMainAtoZ">K</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-L" class="ns1blankspaceMainAtoZ">L</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-M" class="ns1blankspaceMainAtoZ">M</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-N" class="ns1blankspaceMainAtoZ">N</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-O" class="ns1blankspaceMainAtoZ">O</span>' +
 														'</td></tr>';
 														
-										aHTML[++h] = '<tr id="trInterfaceMainAtteendeesPtoT" class="interfaceMain">' +
-														'<td id="tdInterfaceMainAtteendees-PtoT" class="interfaceRowSelect">' +
-														'<span id="spanInterfaceMainAtteendees-P" class="interfaceMainAtoZ">P</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-Q" class="interfaceMainAtoZ">Q</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-R" class="interfaceMainAtoZ">R</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-S" class="interfaceMainAtoZ">S</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-T" class="interfaceMainAtoZ">T</span>' +
+										aHTML.push('<tr id="trns1blankspaceMainAtteendeesPtoT" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainAtteendees-PtoT" class="ns1blankspaceRowSelect">' +
+														'<span id="spanns1blankspaceMainAtteendees-P" class="ns1blankspaceMainAtoZ">P</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-Q" class="ns1blankspaceMainAtoZ">Q</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-R" class="ns1blankspaceMainAtoZ">R</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-S" class="ns1blankspaceMainAtoZ">S</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-T" class="ns1blankspaceMainAtoZ">T</span>' +
 														'</td></tr>';
 										
-										aHTML[++h] = '<tr id="trInterfaceMainAtteendeesUtoZ" class="interfaceMain">' +
-														'<td id="tdInterfaceMainAtteendees-UtoZ" class="interfaceRowSelect">' +
-														'<span id="spanInterfaceMainAtteendees-U" class="interfaceMainAtoZ">U</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-V" class="interfaceMainAtoZ">V</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-W" class="interfaceMainAtoZ">W</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-X" class="interfaceMainAtoZ">X</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-Y" class="interfaceMainAtoZ">Y</span>' +
+										aHTML.push('<tr id="trns1blankspaceMainAtteendeesUtoZ" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainAtteendees-UtoZ" class="ns1blankspaceRowSelect">' +
+														'<span id="spanns1blankspaceMainAtteendees-U" class="ns1blankspaceMainAtoZ">U</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-V" class="ns1blankspaceMainAtoZ">V</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-W" class="ns1blankspaceMainAtoZ">W</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-X" class="ns1blankspaceMainAtoZ">X</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-Y" class="ns1blankspaceMainAtoZ">Y</span>' +
 														'</td></tr>';
 										
-										aHTML[++h] = '<tr id="trInterfaceMainAtteendeesZ0to9" class="interfaceMain">' +
-														'<td id="tdInterfaceMainAtteendees-Z0to9" class="interfaceRowSelect">' +
-														'<span id="spanInterfaceMainAtteendees-Z" class="interfaceMainAtoZ">Z</span>&nbsp;' +
-														'<span id="spanInterfaceMainAtteendees-#" class="interfaceMainAtoZ">0 to 9</span>&nbsp;' +
+										aHTML.push('<tr id="trns1blankspaceMainAtteendeesZ0to9" class="ns1blankspaceMain">' +
+														'<td id="tdns1blankspaceMainAtteendees-Z0to9" class="ns1blankspaceRowSelect">' +
+														'<span id="spanns1blankspaceMainAtteendees-Z" class="ns1blankspaceMainAtoZ">Z</span>&nbsp;' +
+														'<span id="spanns1blankspaceMainAtteendees-#" class="ns1blankspaceMainAtoZ">0 to 9</span>&nbsp;' +
 														'</td></tr>';
 												
-										aHTML[++h] = '</table>';
+										aHTML.push('</table>';
 
-										$('#tdInterfaceMainAttendeesColumn1').html(aHTML.join(''));	
+										$('#tdns1blankspaceMainAttendeesColumn1').html(aHTML.join(''));	
 										
-										$('span.interfaceMainAtoZ').click(function(event)
+										$('span.ns1blankspaceMainAtoZ').click(function(event)
 										{
 											var sXHTMLElementId = event.target.id;
 											var aId = sXHTMLElementId.split('-');
 											
-											interfaceEventAttendeesSearch({quicksearch: aId[1]});	
+											ns1blankspaceEventAttendeesSearch({quicksearch: aId[1]});	
 										});
 									}	
 								}
 
-					row: 		function interfaceEventAttendeesSearchRow(oRow)
+					row: 		function ns1blankspaceEventAttendeesSearchRow(oRow)
 								{
 									var aHTML = [];
 									var h = -1;
 									
-									aHTML[++h] = '<tr class="interfaceMainRow">';
-									aHTML[++h] = '<td id="tdEvent-firstname" class="interfaceMainRow">' + oRow.firstname + '</td>';
-									aHTML[++h] = '<td id="tdEvent-surname" class="interfaceMainRow">' + oRow.surname + '</td>';
+									aHTML.push('<tr class="ns1blankspaceMainRow">';
+									aHTML.push('<td id="tdEvent-firstname" class="ns1blankspaceMainRow">' + oRow.firstname + '</td>';
+									aHTML.push('<td id="tdEvent-surname" class="ns1blankspaceMainRow">' + oRow.surname + '</td>';
 									
 									var sPhone = oRow.phone
 									if (sPhone == '') {if (oRow.homephone != '') {sPhone = '(H) ' + oRow.homephone}}
 									
-									aHTML[++h] = '<td id="tdEvent-phone" class="interfaceMainRow">' + sPhone + '</td>';
-									aHTML[++h] = '<td id="tdEvent-email" class="interfaceMainRow">' + oRow.mobile + '</td>';
-									aHTML[++h] = '<td id="tdEvent-options-' + oRow.id + '"' +
-														' class="interfaceMainRowOptions">&nbsp;</td>';
-									aHTML[++h] = '</tr>'
+									aHTML.push('<td id="tdEvent-phone" class="ns1blankspaceMainRow">' + sPhone + '</td>';
+									aHTML.push('<td id="tdEvent-email" class="ns1blankspaceMainRow">' + oRow.mobile + '</td>';
+									aHTML.push('<td id="tdEvent-options-' + oRow.id + '"' +
+														' class="ns1blankspaceMainRowOptions">&nbsp;</td>';
+									aHTML.push('</tr>'
 									
 									return aHTML.join('');
 								},
 
-					search:		function interfaceEventAttendeesSearch(oParam, oResponse)
+					search:		function ns1blankspaceEventAttendeesSearch(oParam, oResponse)
 								{
-									var sXHTMLElementId = 'tdInterfaceMainAttendeesColumn1';
+									var sXHTMLElementId = 'tdns1blankspaceMainAttendeesColumn1';
 									var sQuickSearch;
 									
 									if (oParam != undefined)
@@ -761,7 +753,7 @@ ns1blankspace.event =
 									{
 										if (oResponse == undefined)
 										{	
-											$('#tdInterfaceMainAttendeesColumn2').html(ns1blankspace.xhtml.loading);
+											$('#tdns1blankspaceMainAttendeesColumn2').html(ns1blankspace.xhtml.loading);
 											
 											var aId = sXHTMLElementId.split('-');
 											var sParam = 'method=EVENT_ATTENDEE_SEARCH' +
@@ -772,7 +764,7 @@ ns1blankspace.event =
 												type: 'GET',
 												url: '/ondemand/event/?' + sParam,
 												dataType: 'json',
-												success: function(data) {interfaceEventAttendeesSearch(oParam, data)}
+												success: function(data) {ns1blankspaceEventAttendeesSearch(oParam, data)}
 											});
 										
 										}
@@ -783,46 +775,46 @@ ns1blankspace.event =
 											
 											if (oResponse.data.rows.length != 0)
 											{	
-												aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" class="interfaceMain">';
-												aHTML[++h] = '<tbody>'
+												aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
+												aHTML.push('<tbody>'
 											
-												aHTML[++h] = '<tr class="interfaceMainCaption">';
-												aHTML[++h] = '<td class="interfaceMainCaption">First Name</td>';
-												aHTML[++h] = '<td class="interfaceMainCaption">Surname</td>';
-												aHTML[++h] = '<td class="interfaceMainCaption">Phone</td>';
-												aHTML[++h] = '<td class="interfaceMainCaption">Mobile</td>';
-												aHTML[++h] = '<td class="interfaceMainCaption"></td>';
-												aHTML[++h] = '</tr>';
+												aHTML.push('<tr class="ns1blankspaceMainCaption">';
+												aHTML.push('<td class="ns1blankspaceMainCaption">First Name</td>';
+												aHTML.push('<td class="ns1blankspaceMainCaption">Surname</td>';
+												aHTML.push('<td class="ns1blankspaceMainCaption">Phone</td>';
+												aHTML.push('<td class="ns1blankspaceMainCaption">Mobile</td>';
+												aHTML.push('<td class="ns1blankspaceMainCaption"></td>';
+												aHTML.push('</tr>';
 
 												$.each(oResponse.data.rows, function()
 												{
-													aHTML[++h] = interfaceEventAttendeesSearchRow(this);
+													aHTML.push(ns1blankspaceEventAttendeesSearchRow(this);
 												});
 												
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('</tbody></table>';
 												
 												ns1blankspacePaginationList(
 												{
-													xhtmlElementID: 'tdInterfaceMainAttendeesColumn2',
+													xhtmlElementID: 'tdns1blankspaceMainAttendeesColumn2',
 													xhtmlContext: 'EventAttendees',
 													xhtml: aHTML.join(''),
 													showMore: (oResponse.morerows == "true"),
 													more: oResponse.moreid,
 													rows: ns1blankspace.option.defaultRows,
-													functionShowRow: interfaceEventAttendeesSearchRow,
-													functionNewPage: 'interfaceEventAttendeesSearchBind()',
+													functionShowRow: ns1blankspaceEventAttendeesSearchRow,
+													functionNewPage: 'ns1blankspaceEventAttendeesSearchBind()',
 													type: 'json'
 												}); 	
 												
 											}
 											else
 											{
-												aHTML[++h] = '<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-												aHTML[++h] = '<tbody>'
-												aHTML[++h] = '<tr class="interfaceMainRowNothing"><td>None.</td></tr>';
-												aHTML[++h] = '</tbody></table>';
+												aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
+												aHTML.push('<tbody>'
+												aHTML.push('<tr class="ns1blankspaceMainRowNothing"><td>None.</td></tr>';
+												aHTML.push('</tbody></table>';
 												
-												$('#tdInterfaceMainAttendeesColumn2').html(aHTML.join(''));
+												$('#tdns1blankspaceMainAttendeesColumn2').html(aHTML.join(''));
 											}
 											
 										}	
@@ -831,19 +823,19 @@ ns1blankspace.event =
 								}
 				},				
 
-	new:		function interfaceEventNew()
+	new:		function ns1blankspaceEventNew()
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
-					interfaceEventViewport();
-					ns1blankspaceMainViewportShow("#divInterfaceMainDetails");
+					ns1blankspaceEventViewport();
+					ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
 					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
 					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					interfaceEventDetails();
+					ns1blankspaceEventDetails();
 				},
 
 	save:		{	
-					send:		function interfaceEventSave()
+					send:		function ns1blankspaceEventSave()
 								{
 
 									var sParam;
@@ -859,18 +851,18 @@ ns1blankspace.event =
 										sParam = 'method=EVENT_ADD';
 									}
 										
-									if ($('#divInterfaceMainDetails').html() != '')
+									if ($('#divns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + encodeURIComponent($('#inputInterfaceMainDetailsReference').val());
+										sData += '&reference=' + encodeURIComponent($('#inputns1blankspaceMainDetailsReference').val());
 										sData += '&public=' + $("input[@name='radioPublic']:checked").val();
 										
-										//sData += '&url=' + encodeURIComponent($('#inputInterfaceMainDetailsURL').val());
-										//sData += '&summary=' + encodeURIComponent($('#inputInterfaceMainDetailsSummary').val());
+										//sData += '&url=' + encodeURIComponent($('#inputns1blankspaceMainDetailsURL').val());
+										//sData += '&summary=' + encodeURIComponent($('#inputns1blankspaceMainDetailsSummary').val());
 									}
 									
-									if ($('#divInterfaceMainDescription').html() != '')
+									if ($('#divns1blankspaceMainDescription').html() != '')
 									{
-										sData += '&description=' + escape(tinyMCE.get('inputInterfaceMainDescriptionText').getContent());
+										sData += '&description=' + escape(tinyMCE.get('inputns1blankspaceMainDescriptionText').getContent());
 									}
 									
 									$.ajax(
