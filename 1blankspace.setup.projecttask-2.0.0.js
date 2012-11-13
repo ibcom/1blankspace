@@ -398,66 +398,57 @@ ns1blankspace.setup.projectTask =
 		
 	summary:	function ()
 				{
-
 					var aHTML = [];
-					var h = -1;
-					var oXML = ns1blankspace.objectContextDataXML;
-					
-					aHTML.push('<table id="tablens1blankspaceMainSummary" class="ns1blankspaceMain">';
-					aHTML.push('<tr id="trns1blankspaceMainSummaryRow1" class="ns1blankspaceMainRow1">' +
-								'<td id="tdns1blankspaceMainSummaryColumn1Large" class="ns1blankspaceMainColumn1Large">' +
-									'</td>' +
-									'<td id="tdns1blankspaceMainSummaryColumn2" class="ns1blankspaceMainColumn2Action">' +
-									'</td>' +
-									'</tr>';
-					aHTML.push('</table>';					
-						
-					$('#divns1blankspaceMainSummary').html(aHTML.join(''));
-					
-					var aHTML = [];
-					var h = -1;
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML.push('<table><tbody><tr><td valign="top">Sorry can\'t find SetupProjectTask.</td></tr>';
-						aHTML.push('<tr>&nbsp;</tr></tbody></table>';
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this project template task.</td></tr></table>');
 								
-						$('#divns1blankspaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMainColumn1">';
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+									'</tr></table>');				
+						
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
+				
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceMainColumn1">';
 						
 						var sDescription = ns1blankspace.objectContextData.description;
 						
 						sDescription = sDescription.replace(/(\r\n|\r|\n)/g, "<br />");
 						
-						aHTML.push('<tr><td id="tdns1blankspaceMainSummaryDescription" class="ns1blankspaceMainSummary">Description<br /><br /></td></tr>' +
-										'<tr><td id="tdns1blankspaceMainSummaryDescriptionValue" class="ns1blankspaceMainSummaryValue">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
+										'<tr><td class="ns1blankspaceSummary">' +
 										sDescription +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainSummaryColumn1Large').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
-						var h = -1;	
 						
 						aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2">';
 												
-						aHTML.push('<tr><td id="tdns1blankspaceMainSummaryViewProject" class="ns1blankspaceMainSummaryAction">' +
-										'<a href="#" id="ans1blankspaceMainSummaryViewProject">View Project</a>' +
-										'</td></tr>';
+						aHTML.push('<tr><td>' +
+										'<a href="#" id="ns1blankspaceSummaryViewProject">View Project</a>' +
+										'</td></tr>');
 										
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainSummaryColumn2').html(aHTML.join(''));	
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 						
-						$('#ans1blankspaceMainSummaryViewProject').click(function(event)
+						$('#ns1blankspaceSummaryViewProject').click(function(event)
 						{
-							ns1blankspaceSetupProjectMasterViewport();
-							ns1blankspaceSetupProjectSearch('-' + ns1blankspace.objectContextData.project)
+							ns1blankspace.setup.project.init();
+							ns1blankspace.setup.project.search.send('-' + ns1blankspace.objectContextData.project)
 						});
 					}	
 				},
@@ -465,27 +456,33 @@ ns1blankspace.setup.projectTask =
 	details:	function ()
 				{
 					var aHTML = [];
-					var h = -1;
-					
-					if ($('#divns1blankspaceMainDetails').attr('onDemandLoading') == '1')
+
+					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
-						$('#divns1blankspaceMainDetails').attr('onDemandLoading', '');
-						var oRow = oRoot.childNodes.item(0);
-								
-						aHTML.push('<table id="tablens1blankspaceMainDetails" class="ns1blankspaceMainDetails">';
-						aHTML.push('<tr id="trns1blankspaceMainDetailsRow1" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDetailsColumn1" class="ns1blankspaceMainColumn1Large">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						$('#divns1blankspaceMainDetails').html(aHTML.join(''));
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDetailsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
 						
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
+							
 						var aHTML = [];
-						var h = -1;
 						
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Title' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsFirstName" class="ns1blankspaceText">' +
+										'</td></tr>');
+
 						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
 						
 						aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsTitle" class="ns1blankspaceMain">' +
