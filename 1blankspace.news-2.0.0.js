@@ -658,7 +658,7 @@ search: 		{
 								
 						aHTML.push('<tr class="ns1blankspaceTextMulti">' +
 										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea rows="30" cols="50" onDemandType="TEXTMULTI" id="ns1blankspaceEditText' +
+										'<textarea rows="30" cols="50" id="ns1blankspaceEditText' +
 													ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
 										'</td></tr>');
 										

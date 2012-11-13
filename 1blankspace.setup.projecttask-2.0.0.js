@@ -95,89 +95,69 @@ ns1blankspace.setup.projectTask =
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-										'<td id="tdInterfaceProjectHomeMostLikely" class="interfaceViewportMain">' +
-										ns1blankspace.xhtml.loading + 
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+						aHTML.push('<table class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										ns1blankspace.xhtml.loading + '</td></tr></table>');					
 						
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table>';
-						aHTML[++h] = '<tr>' +
-										'<td id="ns1blankspaceViewportProjectLarge" class="ns1blankspaceViewportImageLarge">' +
-										'&nbsp;' + 
-										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';		
+						aHTML.push('<table><tr><td id="ns1blankspaceViewProjectLarge"' +
+										' class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>' +
+										'</table>');		
 						
-						$('#divInterfaceViewportControl').html(aHTML.join(''));	
+						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
-						$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
-						
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+									
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'PROJECT_TASK_SEARCH';
 						oSearch.addField('reference,description');
 						oSearch.rf = 'json';
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(interfaceSetupProjectTaskHomeShow);
+						oSearch.getResults(ns1blankspace.setup.projectTask.home);
 					}
 					else
 					{
-						var aHTML = [];
-						var h = -1;
-						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML[++h] = '<table id="tableInterfaceSetupProjectTaskHomeMostLikely">';
-							aHTML[++h] = '<tr class="trInterfaceSetupProjectTaskHomeMostLikelyNothing">';
-							aHTML[++h] = '<td class="tdInterfaceSetupProjectTaskHomeMostLikelyNothing">Click New to create a project template task.</td>';
-							aHTML[++h] = '</tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table id="ns1blankspaceMostLikely">' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create a new project template task.</td></tr>' +
+											'</table>');
 						}
 						else
 						{
-						
-							aHTML[++h] = '<table id="tableInterfaceSetupProjectTaskHomeMostLikely">';
-							aHTML[++h] = '<tr>';
-							aHTML[++h] = '<td class="interfaceMain">MOST LIKELY</td>';
-							aHTML[++h] = '</tr>';
+								aHTML.push('<table><tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML[++h] = '<tr class="interfaceMainRow">';
+								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML[++h] = '<td id="interfaceSetupProjectTaskHomeMostLikely_Title-' +
-													this.id + '" class="interfaceHomeMostLikely">' +
-													this.description + '</td>';
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + '" class="ns1blankspaceMostLikely">' +
+														this.reference + '</td>');
 								
-								aHTML[++h] = '</tr>'
+								aHTML.push('</tr>');
 							});
 							
-							aHTML[++h] = '</tbody></table>';
+							aHTML.push('</table>');
 						}
 						
-						$('#tdInterfaceSetupProjectTaskHomeMostLikely').html(aHTML.join(''));
+						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.interfaceHomeMostLikely').click(function(event)
+						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							interfaceSetupProjectTaskSearch(event.target.id, {source: 1});
+							ns1blankspace.setup.projectTask.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
 
 	search: 	{
-					send: 		function (sXHTMLElementId, oParam)
-								{
-									
+					send: 		function (sXHTMLElementID, oParam)
+								{	
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
