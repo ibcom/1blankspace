@@ -234,10 +234,8 @@ ns1blankspace.event =
 
 					process: 	function (oParam, oResponse)
 								{
-
 									var iColumn = 0;
 									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
 										
 									if (oResponse.data.rows.length == 0)
@@ -247,8 +245,7 @@ ns1blankspace.event =
 									}
 									else
 									{
-										aHTML.push('<table class="ns1blankspaceSearchMedium">';
-										aHTML.push('<tbody>'
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -256,90 +253,86 @@ ns1blankspace.event =
 											
 											if (iColumn == 1)
 											{
-												aHTML.push('<tr class="ns1blankspaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
-															this.reference + '</td>';
+															this.reference + '</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML.push('</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
 								    	
-										aHTML.push('</tbody></table>';
+										aHTML.push('</table>');
 
-										$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-										$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
-										ns1blankspaceSearchStop();
+										ns1blankspace.search.stop();
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$('#divns1blankspaceViewportControlOptions').html('&nbsp;');
-											$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspaceEventSearch(event.target.id, 1);
+											$(ns1blankspace.xhtml.container).html('&nbsp;');
+											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.event.search.send(event.target.id, {source: 1});
 										});
 									}		
 								}
 				},
 								
-	layout: 	function ns1blankspaceEventViewport()
-				{
-					
+	layout: 	function ()
+				{		
 					var aHTML = [];
-					var h = -1;
 
-					if (tinyMCE.getInstanceById('inputns1blankspaceMainDescriptionText'))
+					if (tinyMCE.getInstanceById('ns1blankspaceMainDescriptionText'))
 					{
-						tinyMCE.get('inputns1blankspaceMainDescriptionText').remove();
-						$('#inputns1blankspaceMainDescriptionText').remove();
+						tinyMCE.get('ns1blankspaceMainDescriptionText').remove();
+						$('#ns1blankspaceMainDescriptionText').remove();
 					}	
-								
-					aHTML.push('<div id="divns1blankspaceViewportControlContext" class="ns1blankspaceViewportControlContext"></div>';
+						
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
-					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
-					aHTML.push('<tr id="trns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlSummary" class="ns1blankspaceViewportControl ns1blankspaceViewportControlHighlight">Summary</td>' +
-									'</tr>';
-									
-					aHTML.push('<tr id="trns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlDetails" class="ns1blankspaceViewportControl">Details</td>' +
-									'</tr>';
-								
-					aHTML.push('<tr id="trns1blankspaceViewportControlDescription" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlDescription" class="ns1blankspaceViewportControl">Description</td>' +
-									'</tr>';				
-					
-					aHTML.push('</table>';					
-					
-					aHTML.push('<table id="tablens1blankspaceViewportControl" class="ns1blankspaceViewportControl">';
-					
-					if (ns1blankspace.objectContext != -1)
+					if (ns1blankspace.objectContext == -1)
 					{
-						aHTML.push('<tr id="trns1blankspaceViewportControlAttendees" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlAttendees" class="ns1blankspaceViewportControl">Attendees</td>' +
-									'</tr>';			
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Details</td></tr>');
+										
+						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
+										'Description</td></tr>');				
 					}
 					else
 					{
-						aHTML.push('<tr id="trns1blankspaceViewportControlStatus" class="ns1blankspaceViewportControl">' +
-									'<td id="tdns1blankspaceViewportControlStatus" class="ns1blankspaceViewportControl ns1blankspaceViewportControlStatus">' +
-									'Once you save this event, you can then add & view attendees</td>' +
-									'</tr>';			
-					}
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Summary</td></tr>');
 									
-					aHTML.push('</table>';					
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+										'Details</td></tr>');
+									
+						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
+										'Description</td></tr>');
+					
+						aHTML.push('</table>');		
+									
+		
+						aHTML.push('<table class="ns1blankspaceViewControl">');
+					
+						aHTML.push('<tr><td id="ns1blankspaceViewControlAttendees" class="ns1blankspaceControl">' +
+									'Attendees</td>' +
+									'</tr>');			
+								
+						aHTML.push('</table>');	
+					}
 							
-					$('#divns1blankspaceViewportControl').html(aHTML.join(''));
+					$('#ns1blankspaceViewportControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
-
+					
 					aHTML.push('<div id="divns1blankspaceMainSummary" class="divns1blankspaceViewportMain"></div>';
 					aHTML.push('<div id="divns1blankspaceMainDetails" class="divns1blankspaceViewportMain"></div>';
 					aHTML.push('<div id="divns1blankspaceMainDescription" class="divns1blankspaceViewportMain"></div>';
