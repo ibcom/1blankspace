@@ -660,27 +660,25 @@ ns1blankspace.event =
 					row: 		function (oRow)
 								{
 									var aHTML = [];
-									var h = -1;
 									
-									aHTML.push('<tr class="ns1blankspaceMainRow">';
-									aHTML.push('<td id="tdEvent-firstname" class="ns1blankspaceMainRow">' + oRow.firstname + '</td>';
-									aHTML.push('<td id="tdEvent-surname" class="ns1blankspaceMainRow">' + oRow.surname + '</td>';
+									aHTML.push('<tr><td id="ns1blankspaceAttendee-firstname" class="ns1blankspaceRow">' + oRow.firstname + '</td>' +
+													'<td id="ns1blankspaceAttendee-surname" class="ns1blankspaceRow">' + oRow.surname + '</td>');
 									
 									var sPhone = oRow.phone
 									if (sPhone == '') {if (oRow.homephone != '') {sPhone = '(H) ' + oRow.homephone}}
 									
-									aHTML.push('<td id="tdEvent-phone" class="ns1blankspaceMainRow">' + sPhone + '</td>';
-									aHTML.push('<td id="tdEvent-email" class="ns1blankspaceMainRow">' + oRow.mobile + '</td>';
-									aHTML.push('<td id="tdEvent-options-' + oRow.id + '"' +
-														' class="ns1blankspaceMainRowOptions">&nbsp;</td>';
-									aHTML.push('</tr>'
+									aHTML.push('<td id="ns1blankspaceAttendee-phone" class="ns1blankspaceRow">' + sPhone + '</td>' +
+													'<td id="ns1blankspaceAttendee-email" class="ns1blankspaceMainRow">' + oRow.mobile + '</td>' +
+													'<td id="ns1blankspaceAttendee-options-' + oRow.id + '"' +
+														' class="ns1blankspaceMainRowOptions">&nbsp;</td>');
+									aHTML.push('</tr>');
 									
 									return aHTML.join('');
 								},
 
 					search:		function (oParam, oResponse)
 								{
-									var sXHTMLElementId = 'tdns1blankspaceMainAttendeesColumn1';
+									var sXHTMLElementID = 'ns1blankspaceAttendeesColumn1';
 									var sQuickSearch;
 									
 									if (oParam != undefined)
@@ -692,72 +690,67 @@ ns1blankspace.event =
 									{
 										if (oResponse == undefined)
 										{	
-											$('#tdns1blankspaceMainAttendeesColumn2').html(ns1blankspace.xhtml.loading);
+											$('#ns1blankspaceAttendeesColumn2').html(ns1blankspace.xhtml.loading);
 											
-											var aId = sXHTMLElementId.split('-');
+											var aID = sXHTMLElementID.split('-');
 											var sParam = 'method=EVENT_ATTENDEE_SEARCH' +
-															'&quicksearch=' + encodeURIComponent(sQuickSearch);
+															'&quicksearch=' + ns1blankspace.util.fs(sQuickSearch);
 
 											$.ajax(
 											{
 												type: 'GET',
 												url: '/ondemand/event/?' + sParam,
 												dataType: 'json',
-												success: function(data) {ns1blankspaceEventAttendeesSearch(oParam, data)}
+												success: function(data) {ns1blankspace.event.attendees.search(oParam, data)}
 											});
 										
 										}
 										else
 										{
 											var aHTML = [];
-											var h = -1;
 											
 											if (oResponse.data.rows.length != 0)
 											{	
-												aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspaceMain">';
-												aHTML.push(''
+												aHTML.push('<table class="ns1blankspace">');
 											
-												aHTML.push('<tr class="ns1blankspaceMainCaption">';
-												aHTML.push('<td class="ns1blankspaceMainCaption">First Name</td>';
-												aHTML.push('<td class="ns1blankspaceMainCaption">Surname</td>';
-												aHTML.push('<td class="ns1blankspaceMainCaption">Phone</td>';
-												aHTML.push('<td class="ns1blankspaceMainCaption">Mobile</td>';
-												aHTML.push('<td class="ns1blankspaceMainCaption"></td>';
-												aHTML.push('</tr>';
+												aHTML.push('<tr class="ns1blankspaceCaption">');
+												aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Surname</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Phone</td>');
+												aHTML.push('<td class="ns1blankspaceCaption">Mobile</td>');
+												aHTML.push('<td class="ns1blankspaceCaption"></td>');
+												aHTML.push('</tr>');
 
 												$.each(oResponse.data.rows, function()
 												{
-													aHTML.push(ns1blankspaceEventAttendeesSearchRow(this);
+													aHTML.push(ns1blankspace.event.attendees.row(this);
 												});
 												
-												aHTML.push('</table>';
+												aHTML.push('</table>');
 												
 												ns1blankspacePaginationList(
 												{
-													xhtmlElementID: 'tdns1blankspaceMainAttendeesColumn2',
+													xhtmlElementID: 's1blankspaceAttendeesColumn2',
 													xhtmlContext: 'EventAttendees',
 													xhtml: aHTML.join(''),
 													showMore: (oResponse.morerows == "true"),
 													more: oResponse.moreid,
 													rows: ns1blankspace.option.defaultRows,
 													functionShowRow: ns1blankspaceEventAttendeesSearchRow,
-													functionNewPage: 'ns1blankspaceEventAttendeesSearchBind()',
+													functionNewPage: 'ns1blankspace.event.attendees.search.bind()',
 													type: 'json'
 												}); 	
 												
 											}
 											else
 											{
-												aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">';
-												aHTML.push(''
-												aHTML.push('<tr class="ns1blankspaceMainRowNothing"><td>None.</td></tr>';
-												aHTML.push('</table>';
+												aHTML.push('<table style="margin-top:15px; margin-bottom:15px;">');
+												aHTML.push('<tr><td class="ns1blankspaceNothing">None.</td></tr>');
+												aHTML.push('</table>');
 												
-												$('#tdns1blankspaceMainAttendeesColumn2').html(aHTML.join(''));
-											}
-											
-										}	
-										
+												$('#ns1blankspaceAttendeesColumn2').html(aHTML.join(''));
+											}	
+										}
 									}
 								}
 				},				
@@ -766,18 +759,16 @@ ns1blankspace.event =
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
-					ns1blankspaceEventViewport();
-					ns1blankspaceMainViewportShow("#divns1blankspaceMainDetails");
-					$('#spanns1blankspaceViewportControlAction').button({disabled: false});
-					$('#spanns1blankspaceViewportControlActionOptions').button({disabled: true});
-					ns1blankspaceEventDetails();
+					ns1blankspace.event.init();
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
+					ns1blankspace.event.details();
 				},
 
 	save:		{	
 					send:		function ()
 								{
-
-									var sParam;
 									var sData = '_=1';
 									
 									if (ns1blankspace.objectContext != -1)
@@ -790,18 +781,18 @@ ns1blankspace.event =
 										sParam = 'method=EVENT_ADD';
 									}
 										
-									if ($('#divns1blankspaceMainDetails').html() != '')
+									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + encodeURIComponent($('#inputns1blankspaceMainDetailsReference').val());
+										sData += '&reference=' + encodeURIComponent($('#ns1blankspaceMainDetailsReference').val());
 										sData += '&public=' + $("input[@name='radioPublic']:checked").val();
 										
 										//sData += '&url=' + encodeURIComponent($('#inputns1blankspaceMainDetailsURL').val());
 										//sData += '&summary=' + encodeURIComponent($('#inputns1blankspaceMainDetailsSummary').val());
 									}
 									
-									if ($('#divns1blankspaceMainDescription').html() != '')
+									if ($('#ns1blankspaceMainDescription').html() != '')
 									{
-										sData += '&description=' + escape(tinyMCE.get('inputns1blankspaceMainDescriptionText').getContent());
+										sData += '&description=' + escape(tinyMCE.get('ns1blankspaceMainDescriptionText').getContent());
 									}
 									
 									$.ajax(
