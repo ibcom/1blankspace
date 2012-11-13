@@ -503,43 +503,33 @@ ns1blankspace.event =
 
 						var aHTML = [];
 							
-						aHTML.push('<table class="ns1blankspaceColumn2">';
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
-							aHTML.push('<tr>' +
-										'<td class="ns1blankspaceMain">' +
+						aHTML.push('<tr><td class="ns1blankspace">' +
 										'Status' +
 										'</td></tr>' +
-										'<tr id="trns1blankspaceMainDetailsStatus" class="ns1blankspaceMainText">' +
-										'<td id="tdns1blankspaceMainDetailsStatusValue" class="ns1blankspaceMainText">' +
+										'<tr>' +
+										'<td class="ns1blankspaceText">' +
 										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Planning' +
 										'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>In Progress' +
 										'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>Completed' +
 										'<br /><input type="radio" id="radioStatus4" name="radioStatus" value="4"/>Cancelled' +
 										'<br /><input type="radio" id="radioStatus5" name="radioStatus" value="5"/>Confirmed' +
-										'</td></tr>';
+										'</td></tr>');
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 							
-						$('#tdns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
-						$('input.inputns1blankspaceMainDate').datepicker({ dateFormat: 'dd M yy' });
+						$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy' });
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputns1blankspaceMainDetailsReference').val(ns1blankspace.objectContextData.reference);
-							
-							var sTmp = ns1blankspace.objectContextData.startdate;
-							if (sTmp == '&nbsp;') {sTmp = ''};
-							$('#inputns1blankspaceMainDetailsStartDate').val(sTmp);
-							
-							var sTmp = ns1blankspace.objectContextData.enddate;
-							if (sTmp == '&nbsp;') {sTmp = ''};
-							$('#inputns1blankspaceMainDetailsEndDate').val(sTmp);
-							
-							$('#inputns1blankspaceMainDetailsFromEmail').val(ns1blankspace.objectContextData.fromemail);
-							
-							$('#inputns1blankspaceMainDetailsSummary').val(ns1blankspace.objectContextData.summary);
-							
+							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsStartDate').val(ns1blankspace.objectContextData.startdate);
+							$('#ns1blankspaceDetailsEndDate').val(ns1blankspace.objectContextData.enddate);
+							$('#ns1blankspaceDetailsFromEmail').val(ns1blankspace.objectContextData.fromemail);
+							$('#ns1blankspaceDetailsSummary').val(ns1blankspace.objectContextData.summary);
 							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
 						}
@@ -548,135 +538,121 @@ ns1blankspace.event =
 
 	description: function ()
 				{
-					var aHTML = [];
-					var h = -1;
-					
-					if ($('#divns1blankspaceMainDescription').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainDescripton').attr('data-loading') == '1')
 					{
-						$('#divns1blankspaceMainDescription').attr('onDemandLoading', '');
-								
-						aHTML.push('<table id="tablens1blankspaceMainEdit" class="ns1blankspaceMain">';
-						aHTML.push('<tr id="trns1blankspaceMainEditRow1" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDescriptionColumn1" class="ns1blankspaceMain">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainDescriptionColumn2" class="ns1blankspaceMain">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
+						$('#ns1blankspaceMainDescripton').attr('data-loading', '');
 						
-						$('#divns1blankspaceMainDescription').html(aHTML.join(''));
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDescriptonColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceDescriptonColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
+						
+						$('#ns1blankspaceMainDescripton').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML.push('<table id="tablens1blankspaceMainColumn1" class="ns1blankspaceMain">';
+						aHTML.push('<table class="ns1blankspaceMain">');
 								
-						aHTML.push('<tr id="trns1blankspaceMainDetailsDescriptionTextValue" class="ns1blankspaceMainTextMulti">' +
-										'<td id="tdns1blankspaceMainDetailsDescriptionTextValue" class="ns1blankspaceMainTextMulti">' +
-										'<textarea rows="30" cols="50" id="inputns1blankspaceMainDescriptionText" class="inputns1blankspaceMainTextMulti"></textarea>' +
-										'</td></tr>';
+						aHTML.push('<tr><td class="ns1blankspaceMainTextMulti">' +
+										'<textarea id="ns1blankspaceDescription" class="ns1blankspaceTextMulti" rows="30" cols="50" ></textarea>' +
+										'</td></tr>');
 										
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainDescriptionColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceDescriptionColumn1').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputns1blankspaceMainDescriptionText').val(unescape(ns1blankspace.objectContextData.description));
+							$('#ns1blankspaceDescription').val(unescape(ns1blankspace.objectContextData.description));
 						}
 					
-						tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceMainDescriptionText');
+						tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceDescription');
 					}	
 				},
 
 	attendees: 	{
 					show: 		function ()
 								{
-
-									var aHTML = [];
-									var h = -1;
-									
-									if ($('#divns1blankspaceMainAttendees').attr('onDemandLoading') == '1')
+									if ($('#ns1blankspaceMainAttendees').attr('data-loading') == '1')
 									{
-										$('#divns1blankspaceMainAttendees').attr('onDemandLoading', '');
-									
-										aHTML.push('<table id="tablens1blankspaceMainEdit" class="ns1blankspaceMain">';
-										aHTML.push('<tr id="trns1blankspaceMainEditRow1" class="ns1blankspaceMain">' +
-														'<td id="tdns1blankspaceMainAttendeesColumn1" style="width: 70px" class="ns1blankspaceMainColumn1">' +
-														'</td>' +
-														'<td id="tdns1blankspaceMainAttendeesColumn2" class="ns1blankspaceMainColumn1Large">' +
-														'</td>' +
-														'</tr>';
-										aHTML.push('</table>';					
+										$('#ns1blankspaceMainAttendees').attr('data-loading', '');
 										
-										$('#divns1blankspaceMainAttendees').html(aHTML.join(''));
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceAttendeesColumn1" class="ns1blankspaceColumn2" style="width: 70px;"></td>' +
+														'<td id="ns1blankspaceAttendeesColumn2" class="ns1blankspaceColumn1Flexible"></td>' +
+														'</tr>' + 
+														'</table>');					
 										
+										$('#ns1blankspaceMainAttendees').html(aHTML.join(''));
+	
 										var aHTML = [];
-										var h = -1;
 									
-										aHTML.push('<table id="tablens1blankspaceMainAtteendeesAtoZ" class="ns1blankspaceMain">';
+										aHTML.push('<table id="ns1blankspaceMainAtteendeesAtoZ" class="ns1blankspace">';
 										
-										aHTML.push('<tr id="trns1blankspaceMainAtteendeesAtoE" class="ns1blankspaceMain">' +
-														'<td id="tdns1blankspaceMainAtteendees-AtoE" class="ns1blankspaceRowSelect">' +
-														'<span id="spanns1blankspaceMainAtteendees-A" class="ns1blankspaceMainAtoZ">A</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-B" class="ns1blankspaceMainAtoZ">B</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-C" class="ns1blankspaceMainAtoZ">C</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-D" class="ns1blankspaceMainAtoZ">D</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-E" class="ns1blankspaceMainAtoZ">E</span>' +
-														'</td></tr>';
+										aHTML.push('<tr id="ns1blankspaceMainAtteendeesAtoE" class="ns1blankspaceMain">' +
+														'<td id="ns1blankspaceMainAtteendees-AtoE" class="ns1blankspaceRowSelect">' +
+														'<span id="ns1blankspaceAtteendees-A" class="ns1blankspaceAtoZ">A</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-B" class="ns1blankspaceAtoZ">B</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-C" class="ns1blankspaceAtoZ">C</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-D" class="ns1blankspaceAtoZ">D</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-E" class="ns1blankspaceAtoZ">E</span>' +
+														'</td></tr>');
 										
-										aHTML.push('<tr id="trns1blankspaceMainAtteendeesFtoJ" class="ns1blankspaceMain">' +
-														'<td id="tdns1blankspaceMainAtteendees-FtoJ" class="ns1blankspaceRowSelect">' +
-														'<span id="spanns1blankspaceMainAtteendees-F" class="ns1blankspaceMainAtoZ">F</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-G" class="ns1blankspaceMainAtoZ">G</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-H" class="ns1blankspaceMainAtoZ">H</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-I" class="ns1blankspaceMainAtoZ">I</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-J" class="ns1blankspaceMainAtoZ">J</span>' +
-														'</td></tr>';
+										aHTML.push('<tr id="ns1blankspaceMainAtteendeesFtoJ" class="ns1blankspaceMain">' +
+														'<td id="ns1blankspaceMainAtteendees-FtoJ" class="ns1blankspaceRowSelect">' +
+														'<span id="ns1blankspaceAtteendees-F" class="ns1blankspaceAtoZ">F</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-G" class="ns1blankspaceAtoZ">G</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-H" class="ns1blankspaceAtoZ">H</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-I" class="ns1blankspaceAtoZ">I</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-J" class="ns1blankspaceAtoZ">J</span>' +
+														'</td></tr>');
 														
-										aHTML.push('<tr id="trns1blankspaceMainAtteendeesKtoO" class="ns1blankspaceMain">' +
-														'<td id="tdns1blankspaceMainAtteendees-KtoO" class="ns1blankspaceRowSelect">' +
-														'<span id="spanns1blankspaceMainAtteendees-K" class="ns1blankspaceMainAtoZ">K</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-L" class="ns1blankspaceMainAtoZ">L</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-M" class="ns1blankspaceMainAtoZ">M</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-N" class="ns1blankspaceMainAtoZ">N</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-O" class="ns1blankspaceMainAtoZ">O</span>' +
-														'</td></tr>';
+										aHTML.push('<tr id="ns1blankspaceMainAtteendeesKtoO" class="ns1blankspaceMain">' +
+														'<td id="ts1blankspaceMainAtteendees-KtoO" class="ns1blankspaceRowSelect">' +
+														'<span id="ns1blankspaceAtteendees-K" class="ns1blankspaceAtoZ">K</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-L" class="ns1blankspaceAtoZ">L</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-M" class="ns1blankspaceAtoZ">M</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-N" class="ns1blankspaceAtoZ">N</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-O" class="ns1blankspaceAtoZ">O</span>' +
+														'</td></tr>');
 														
-										aHTML.push('<tr id="trns1blankspaceMainAtteendeesPtoT" class="ns1blankspaceMain">' +
-														'<td id="tdns1blankspaceMainAtteendees-PtoT" class="ns1blankspaceRowSelect">' +
-														'<span id="spanns1blankspaceMainAtteendees-P" class="ns1blankspaceMainAtoZ">P</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-Q" class="ns1blankspaceMainAtoZ">Q</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-R" class="ns1blankspaceMainAtoZ">R</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-S" class="ns1blankspaceMainAtoZ">S</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-T" class="ns1blankspaceMainAtoZ">T</span>' +
-														'</td></tr>';
+										aHTML.push('<tr id="ns1blankspaceMainAtteendeesPtoT" class="ns1blankspaceMain">' +
+														'<td id="ns1blankspaceMainAtteendees-PtoT" class="ns1blankspaceRowSelect">' +
+														'<span id="ns1blankspaceAtteendees-P" class="ns1blankspaceAtoZ">P</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-Q" class="ns1blankspaceAtoZ">Q</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-R" class="ns1blankspaceAtoZ">R</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-S" class="ns1blankspaceAtoZ">S</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-T" class="ns1blankspaceAtoZ">T</span>' +
+														'</td></tr>');
 										
-										aHTML.push('<tr id="trns1blankspaceMainAtteendeesUtoZ" class="ns1blankspaceMain">' +
-														'<td id="tdns1blankspaceMainAtteendees-UtoZ" class="ns1blankspaceRowSelect">' +
-														'<span id="spanns1blankspaceMainAtteendees-U" class="ns1blankspaceMainAtoZ">U</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-V" class="ns1blankspaceMainAtoZ">V</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-W" class="ns1blankspaceMainAtoZ">W</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-X" class="ns1blankspaceMainAtoZ">X</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-Y" class="ns1blankspaceMainAtoZ">Y</span>' +
-														'</td></tr>';
+										aHTML.push('<tr id="ns1blankspaceMainAtteendeesUtoZ" class="ns1blankspaceMain">' +
+														'<td id="ns1blankspaceMainAtteendees-UtoZ" class="ns1blankspaceRowSelect">' +
+														'<span id="ns1blankspaceAtteendees-U" class="ns1blankspaceAtoZ">U</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-V" class="ns1blankspaceAtoZ">V</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-W" class="ns1blankspaceAtoZ">W</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-X" class="ns1blankspaceAtoZ">X</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-Y" class="ns1blankspaceAtoZ">Y</span>' +
+														'</td></tr>');
 										
-										aHTML.push('<tr id="trns1blankspaceMainAtteendeesZ0to9" class="ns1blankspaceMain">' +
-														'<td id="tdns1blankspaceMainAtteendees-Z0to9" class="ns1blankspaceRowSelect">' +
-														'<span id="spanns1blankspaceMainAtteendees-Z" class="ns1blankspaceMainAtoZ">Z</span>&nbsp;' +
-														'<span id="spanns1blankspaceMainAtteendees-#" class="ns1blankspaceMainAtoZ">0 to 9</span>&nbsp;' +
-														'</td></tr>';
+										aHTML.push('<tr id="ns1blankspaceMainAtteendeesZ0to9" class="ns1blankspaceMain">' +
+														'<td id="ns1blankspaceMainAtteendees-Z0to9" class="ns1blankspaceRowSelect">' +
+														'<span id="ns1blankspaceAtteendees-Z" class="ns1blankspaceAtoZ">Z</span>&nbsp;' +
+														'<span id="ns1blankspaceAtteendees-#" class="ns1blankspaceAtoZ">0 to 9</span>&nbsp;' +
+														'</td></tr>');
 												
 										aHTML.push('</table>';
 
 										$('#tdns1blankspaceMainAttendeesColumn1').html(aHTML.join(''));	
 										
-										$('span.ns1blankspaceMainAtoZ').click(function(event)
+										$('span.ns1blankspaceAtoZ').click(function(event)
 										{
-											var sXHTMLElementId = event.target.id;
-											var aId = sXHTMLElementId.split('-');
+											var sXHTMLElementID = event.target.id;
+											var aID = sXHTMLElementID.split('-');
 											
-											ns1blankspaceEventAttendeesSearch({quicksearch: aId[1]});	
+											ns1blankspace.event.attendees.search({quicksearch: aID[1]});	
 										});
 									}	
 								}
