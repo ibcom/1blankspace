@@ -189,19 +189,19 @@ search: 		{
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
-										var sParam = '&advanced=1&select=' + ns1blankspace.objectContext;
+										var sData = '&advanced=1&id=' + ns1blankspace.objectContext;
 										
 										$.ajax(
 										{
 											type: 'GET',
 											url: ns1blankspace.util.endpointURI('NEWS_SEARCH') + sParam,
+											data: sData,
 											dataType: 'json',
 											success: function(data) {ns1blankspace.news.show(oParam, data)}
 										});
 									}
 									else
-									{
-										
+									{	
 										if (sSearchText == undefined)
 										{
 											sSearchText = $('#ns1blankspaceViewControlSearch').val();
@@ -249,7 +249,6 @@ search: 		{
 									else
 									{	
 										aHTML.push('<table class="ns1blankspaceSearchMedium">');
-										aHTML.push('');
 											
 										$.each(oResponse.data.rows, function()
 										{
@@ -348,11 +347,11 @@ search: 		{
 					var aHTML = [];
 					var h = -1;
 
-					aHTML[++h] = '<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>';
-					aHTML[++h] = '<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>';
-					aHTML[++h] = '<div id="ns1blankspaceMainEdit" class="ns1blankspaceControlMain"></div>';
-					aHTML[++h] = '<div id="ns1blankspaceMainSendTo" class="ns1blankspaceControlMain"></div>';
-					aHTML[++h] = '<div id="ns1blankspaceMainTracking" class="ns1blankspaceControlMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainEdit" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSendTo" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTracking" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -391,7 +390,7 @@ search: 		{
 	show: 		function (oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspace.contactPerson.layout();
+					ns1blankspace.news.layout();
 					
 					var aHTML = [];
 					
@@ -857,18 +856,18 @@ search: 		{
 									var aHTML = [];
 									var h = -1;
 									
-									aHTML[++h] = '<tr class="ns1blankspaceRow">';
+									aHTML.push('<tr class="ns1blankspaceRow">';
 															
-									aHTML[++h] = '<td id="ns1blankspaceNewsGroupsContacts_contact-' + oRow.id + '" class="ns1blankspaceRow">' +
-															oRow.firstname + '</td>';
+									aHTML.push('<td id="ns1blankspaceNewsGroupsContacts_contact-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.firstname + '</td>');
 															
-									aHTML[++h] = '<td id="ns1blankspaceNewsGroupsContacts_activity-' + oRow.id + '" class="ns1blankspaceRow">' +
-															oRow.surname + '</td>';
+									aHTML.push('<td id="ns1blankspaceNewsGroupsContacts_activity-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.surname + '</td>');
 															
-									aHTML[++h] = '<td id="ns1blankspaceNewsGroupsList_link-' + oRow.id + '" class="ns1blankspaceRow">' +
-															oRow.email + '</td>';
+									aHTML.push('<td id="ns1blankspaceNewsGroupsList_link-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.email + '</td>');
 															
-									aHTML[++h] = '</tr>';
+									aHTML.push('</tr>');
 												
 									return aHTML.join('');
 								},	
@@ -990,7 +989,7 @@ search: 		{
 												
 											});
 											
-											aHTML[++h] = '</table>';
+											aHTML.push('</table>';
 
 											$('#ns1blankspaceNewsGroupsColumn1Groups').html(aHTML.join(''));
 											
@@ -1046,8 +1045,8 @@ search: 		{
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 
-												$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''));
-												$('#divns1blankspaceViewportControlOptions').show(ns1blankspace.option.showSpeedOptions);
+												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 											}
 											else
 											{
@@ -1076,14 +1075,12 @@ search: 		{
 									}	
 								},
 										
-					select:		function (sXHTMLElementId)
+					select:		function (sXHTMLElementID)
 								{
-
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementIdDsplit('-');
 									var sSearchContext = aSearch[2];
 									
-									$('#' + sXHTMLElementId).fadeOut(500);
+									$('#' + sXHTMLElementID).fadeOut(500);
 									
 									var sData = 'news=' + ns1blankspace.objectContext +
 												'&group=' + sSearchContext;
@@ -1099,11 +1096,9 @@ search: 		{
 										
 								},
 
-					remove:		function (sXHTMLElementId)
+					remove:		function (sXHTMLElementID)
 								{
-
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
 									var sSearchContext = aSearch[1];
 									
 									var sData = 'remove=1' + 
@@ -1116,9 +1111,8 @@ search: 		{
 											url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE'),
 											data: sData,
 											dataType: 'text',
-											success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
-										});
-										
+											success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
+										});	
 								}
 				},				
 
@@ -1318,7 +1312,6 @@ search: 		{
 	save: 		{
 					send: 		function ()
 								{
-									var sParam = 'method=NEWS_MANAGE';
 									var sData = '_=1';
 									
 									if (ns1blankspace.objectContext != -1)
