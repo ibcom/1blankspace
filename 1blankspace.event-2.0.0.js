@@ -399,7 +399,7 @@ ns1blankspace.event =
 					}	
 				},		
 		
-	summary: 	function ns1blankspaceEventSummary()
+	summary: 	function ()
 				{
 					var aHTML = [];
 					var h = -1;
@@ -455,7 +455,7 @@ ns1blankspace.event =
 					}	
 				},
 
-	details: 	function ns1blankspaceEventDetails()
+	details: 	function ()
 				{
 					var aHTML = [];
 					var h = -1;
@@ -567,7 +567,7 @@ ns1blankspace.event =
 					}	
 				},
 
-	description: function ns1blankspaceEventDescription()
+	description: function ()
 				{
 					var aHTML = [];
 					var h = -1;
@@ -611,7 +611,7 @@ ns1blankspace.event =
 				},
 
 	attendees: 	{
-					show: 		function ns1blankspaceEventAttendees()
+					show: 		function ()
 								{
 
 									var aHTML = [];
@@ -702,7 +702,7 @@ ns1blankspace.event =
 									}	
 								}
 
-					row: 		function ns1blankspaceEventAttendeesSearchRow(oRow)
+					row: 		function (oRow)
 								{
 									var aHTML = [];
 									var h = -1;
@@ -723,7 +723,7 @@ ns1blankspace.event =
 									return aHTML.join('');
 								},
 
-					search:		function ns1blankspaceEventAttendeesSearch(oParam, oResponse)
+					search:		function (oParam, oResponse)
 								{
 									var sXHTMLElementId = 'tdns1blankspaceMainAttendeesColumn1';
 									var sQuickSearch;
@@ -807,7 +807,7 @@ ns1blankspace.event =
 								}
 				},				
 
-	new:		function ns1blankspaceEventNew()
+	new:		function ()
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
@@ -819,7 +819,7 @@ ns1blankspace.event =
 				},
 
 	save:		{	
-					send:		function ns1blankspaceEventSave()
+					send:		function ()
 								{
 
 									var sParam;
