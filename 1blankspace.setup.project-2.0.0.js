@@ -192,8 +192,6 @@ ns1blankspace.setup.project =
 										$.each(oResponse.data.rows, function()
 										{
 											aHTML.push('<tr class="ns1blankspaceSearch">');
-
-											aHTML.push('<td class="ns1blankspaceContactType' + this.type + ' ns1blankspaceSearch">&nbsp;</td>');
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
 															this.reference +
@@ -279,6 +277,12 @@ ns1blankspace.setup.project =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 						ns1blankspace.setup.project.details();
+					});
+
+					$('#ns1blankspaceControlDescription').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainDescription'});
+						ns1blankspace.setup.project.description();
 					});
 					
 					$('#ns1blankspaceControlTasks').click(function(event)

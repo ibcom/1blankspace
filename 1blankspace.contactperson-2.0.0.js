@@ -405,8 +405,7 @@ ns1blankspace.contactPerson =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
 						ns1blankspace.attachments.show();
-					});
-					
+					});				
 				},
 
 	show: 		function (oParam, oResponse)
