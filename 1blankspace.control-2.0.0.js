@@ -22,7 +22,7 @@ ns1blankspace.debug.enabled = true;
 
 ns1blankspace.option.showBrowsing = false;
 ns1blankspace.option.messagingEmailShowCount = false;
-ns1blankspace.option.messagingCheckForNew = 60000;
+ns1blankspace.option.messagingCheckForNew = 30000;
 ns1blankspace.option.helpURI = 'http://community.mydigitalstructure.com';
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}

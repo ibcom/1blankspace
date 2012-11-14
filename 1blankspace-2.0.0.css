@@ -270,6 +270,11 @@ table.ns1blankspaceMessagingIMAPInbox
 	width: 216px;
 }
 
+.ns1blankspaceNotSeen
+{
+	font-weight: bold;
+}
+
 #ns1blankspaceViewControlSearch
 {
 	position: absolute;
