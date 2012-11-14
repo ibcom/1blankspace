@@ -276,7 +276,7 @@ ns1blankspace.messaging.imap =
 									var bNew;
 									var iStart;
 									var bRefresh = false;
-									var bRepaginate = true;
+									var bRebuild = true;
 									
 									if (oParam != undefined)
 									{
@@ -285,7 +285,7 @@ ns1blankspace.messaging.imap =
 										if (oParam.newOnly != undefined) {bNew = oParam.newOnly}
 										if (oParam.start != undefined) {iStart = oParam.start}
 										if (oParam.refreshInbox != undefined) {bRefresh = oParam.refreshInbox}
-										if (oParam.repaginate != undefined) {bRepaginate = oParam.repaginate}
+										if (oParam.rebuild != undefined) {bRebuild = oParam.rebuild}
 									}
 									else
 									{
@@ -310,7 +310,7 @@ ns1blankspace.messaging.imap =
 									
 									if (bRefresh) {ns1blankspace.messaging.imap.check()}
 									
-									if (bRepaginate)
+									if (bRebuild)
 									{
 										ns1blankspace.messaging.emailLastPagination = undefined;
 										ns1blankspace.messaging.emailLastPage = 1;
@@ -344,7 +344,7 @@ ns1blankspace.messaging.imap =
 									{
 										ns1blankspace.messaging.emailCount = oResponse.summary.cachecount;
 											
-										if (bRepaginate) //bRefresh?
+										if (bRebuild)
 										{
 											var aHTML = [];
 											
@@ -352,12 +352,12 @@ ns1blankspace.messaging.imap =
 											aHTML.push('<tr>');
 
 											aHTML.push('<td class="ns1blankspaceHeader">' +
-															'<span id="ns1blankspaceMessagingIMAPInboxCount" class="ns1blankspaceAction">' +
+															'<span id="ns1blankspaceMessagingIMAPInboxCount" class="ns1blankspaceSub">' +
 																ns1blankspace.messaging.emailCount + ' emails</span>' +
 																'</td>');
 											
 											aHTML.push('<td class="ns1blankspaceHeader" style="text-align:right;">' +
-															'<span id="ns1blankspaceMessagingIMAPInboxRefresh" class="ns1blankspaceAction">' +
+															'<span id="ns1blankspaceMessagingIMAPInboxRefresh" class="ns1blankspaceAction" style="margin-right:4px;"">' +
 																'Refresh</span>' +
 															'<span id="ns1blankspaceMessagingInboxIMAPSentEmails" class="ns1blankspaceAction">' +
 																'Sent&nbsp;emails</span></td>');
@@ -366,19 +366,39 @@ ns1blankspace.messaging.imap =
 											aHTML.push('</table>');
 											
 											$('#ns1blankspaceMessagingIMAPHeader').html(aHTML.join(''));
+
+											$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
+											{
+													label: 'Refresh'
+											})
+											.click(function(event)
+											{
+												ns1blankspace.messaging.inbox.search({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, rebuild: true});
+											});
+
+											$('#ns1blankspaceMessagingInboxIMAPSentEmails').button(
+											{
+												label: 'Sent Emails'
+											})
+											.click(function(event)
+											{
+												ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxSentEmails', leftOffset: -170, topOffset: -5});
+												ns1blankspace.messaging.actions({xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxSentEmails', type: 5})
+											})
+
 										}
 									
-										$('#ns1blankspaceMessagingIMAPInboxRefresh').html('Refresh')
+										//$('#ns1blankspaceMessagingIMAPInboxRefresh').html('Refresh')
 												
-										$('#ns1blankspaceMessagingIMAPInboxRefresh').click(function()
-										{
-											ns1blankspace.messaging.inbox.search({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
-										})
+										//$('#ns1blankspaceMessagingIMAPInboxRefresh').click(function()
+										//{
+										//	ns1blankspace.messaging.inbox.search({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+										//})
 										
-										$('#ns1blankspaceMessagingIMAPInboxSentEmails').click(function() {
-											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxSentEmails', leftOffset: -170, topOffset: -5});
-											ns1blankspace.messaging.actions({xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxSentEmails', type: 5})
-										})
+										//$('#ns1blankspaceMessagingIMAPInboxSentEmails').click(function() {
+										//	ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxSentEmails', leftOffset: -170, topOffset: -5});
+										//	ns1blankspace.messaging.actions({xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxSentEmails', type: 5})
+										//})
 										
 										var aHTML = [];
 										
@@ -415,9 +435,17 @@ ns1blankspace.messaging.imap =
 									
 									var sID = oRow.id;
 									
-									var oDate = new Date.parse(oRow.date);
-									sDate = oDate.toString("d MMM yyyy h:mm tt) 
-								
+									var sDate = '';
+									var sTime = '';
+
+									var oDate = Date.parse(oRow.date);
+
+									if (oDate != null)
+									{ 
+										var sDate = oDate.toString("d MMM yyyy");
+										var sTime = oDate.toString("h:mm tt");
+									}
+										
 									var sClass = '';
 									
 									if ((oRow.imapflags).indexOf('\\SEEN') == -1)
@@ -436,8 +464,8 @@ ns1blankspace.messaging.imap =
 														'" style="cursor: pointer; padding-right:5px;" class="ns1blankspaceRow ns1blankspaceMainRowSelect' + sClass + '">' +
 														oRow.subject + '</td>');
 									
-									aHTML.push('<td id="ns1blankspaceMessagingInbox_date-' + sID + '" class="ns1blankspaceRow' + sClass + '" style="width:150px;" >' +
-															sDate + '</td>');
+									aHTML.push('<td id="ns1blankspaceMessagingInbox_date-' + sID + '" class="ns1blankspaceRow' + sClass + '" style="width:75px; text-align:right;" >' +
+															sDate + '<br /><span class="ns1blankspaceSub">' + sTime + '</span></td>');
 									
 									aHTML.push('<td class="ns1blankspaceRow" style="width:70px;text-align:right;">');
 
@@ -462,7 +490,7 @@ ns1blankspace.messaging.imap =
 
 					bind:		function ()
 								{
-									$('#ns1blankspaceMessagingInboxContainer > td.ns1blankspaceRowSelect').click(function()
+									$('#td.ns1blankspaceRowSelect').click(function()
 									{
 										$('#ns1blankspaceMessagingInboxContainer > td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 										$('#' + this.id).parent().find('td').removeClass('ns1blankspaceBold');
@@ -470,7 +498,7 @@ ns1blankspace.messaging.imap =
 										ns1blankspace.messaging.imap.search.show(this.id);
 									});
 										
-									$('#ns1blankspaceMessagingInboxContainer > .ns1blankspaceRowRemove').button(
+									$('.ns1blankspaceRowRemove').button(
 									{
 										text: false,
 										label: "Delete",
@@ -484,7 +512,7 @@ ns1blankspace.messaging.imap =
 									.css('width', '15px')
 									.css('height', '20px');
 									
-									$('#ns1blankspaceMessagingInboxContainer > .ns1blankspaceRowRemovedDisabled').button(
+									$('.ns1blankspaceRowRemovedDisabled').button(
 									{
 										text: false,
 										disabled: true,
@@ -495,7 +523,7 @@ ns1blankspace.messaging.imap =
 									.css('width', '15px')
 									.css('height', '20px');
 										
-									$('#ns1blankspaceMessagingInboxContainer > .ns1blankspaceRowReply').button(
+									$('.ns1blankspaceRowReply').button(
 									{
 										text: false,
 										label: "Reply",
@@ -505,7 +533,7 @@ ns1blankspace.messaging.imap =
 									})
 									.click(function() {
 									
-										$('#ns1blankspaceMessagingInboxContainer > td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+										$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 										$('#' + this.id).parent().find('td').removeClass('ns1blankspaceBold');
 										ns1blankspace.messaging.imap.read(this.id);
 										ns1blankspace.messaging.imap.search.show(this.id, {reply: true});
@@ -513,7 +541,7 @@ ns1blankspace.messaging.imap =
 									.css('width', '15px')
 									.css('height', '20px');
 										
-									$('#ns1blankspaceMessagingInboxContainer > .ns1blankspaceRowSave').button({
+									$('.ns1blankspaceRowSave').button({
 										text: false,
 										label: "Save",
 										icons: {

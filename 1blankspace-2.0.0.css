@@ -223,20 +223,29 @@ table.ns1blankspaceMessagingIMAPInbox
 
 .ns1blankspaceRenderHeaderPage
 {
-	color: white;
+	color: #999999;
 	font-size: 0.875em;
-	background-color: #999999;
-	border-right: 2px;
+	text-align: center;
+	border: 1px;
 	border-style:solid;
-	border-right-color: white;
+	border-color: #999999;
 	padding: 2px;
 	font-weight: 200;
+	min-width: 15px;
+	margin-right:4px;
+}
+
+.ns1blankspaceRenderHeaderPageSelected
+{
+	color: white;
+	background-color: #999999;
 }
 
 .ns1blankspaceRenderHeaderMore
 {
 	color: #999999;
-	font-size: 0.875em;
+	font-size: 0.75em;
+	vertical-align: middle;
 }
 
 #ns1blankspaceViewControlHomeContainer

@@ -3752,9 +3752,9 @@ ns1blankspace.render.page =
 					
 					if (bMore)
 					{
-						aHTML.push('<table id="ns1blankspaceRenderPage_' + sXHTMLContext + '"><tr>');
-						aHTML.push('<td style="width:5px; cursor:pointer;" class="ns1blankspaceRenderHeaderPage"' +
-											' id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-0" rowStart="0">1</td>');
+						aHTML.push('<table style="border-spacing:2px;" id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '"><tr>');
+						aHTML.push('<td style="width:5px; cursor:pointer;" class="ns1blankspaceRenderHeaderPage ns1blankspaceRenderHeaderPageSelected"' +
+											' id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-0" data-rowstart="0">1</td>');
 						aHTML.push('<td></td></tr></table>');
 					}
 						
@@ -3784,7 +3784,7 @@ ns1blankspace.render.page =
 						});
 					}
 					
-					$('ns1blankspaceRenderHeaderPage_' + sXHTMLContext + ' .ns1blankspaceRenderHeaderPage').click(function(event)
+					$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-0').click(function(event)
 					{
 						ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
 					});
@@ -3909,9 +3909,9 @@ ns1blankspace.render.page =
 								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).removeClass('ns1blankspaceRenderHeaderMore');
 								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).addClass('ns1blankspaceRenderHeaderPage');
 
-								$('ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow).unbind('click');
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).unbind('click');
 								
-								$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow).click(function(event)
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).click(function(event)
 								{
 									ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
 								});
@@ -3924,6 +3924,9 @@ ns1blankspace.render.page =
 														(iStartRow + iRows) + '">' + 'more...' + '</td>';
 													
 									$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).after(sHTML);
+
+									$('.ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
+									$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).addClass('ns1blankspaceRenderHeaderPageSelected');
 								
 									$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow + iRows)).click(function(event)
 									{
@@ -3948,6 +3951,9 @@ ns1blankspace.render.page =
 				{
 					var aElement = sXHTMLElementID.split('-');
 					
+					$('.ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
+					$('#' + sXHTMLElementID).addClass('ns1blankspaceRenderHeaderPageSelected');
+
 					$('.ns1blankspaceRenderPage_' + sXHTMLContext).hide();
 					$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + aElement[1]).show();
 				}
