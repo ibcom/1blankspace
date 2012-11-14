@@ -564,14 +564,16 @@ ns1blankspace.financial.invoice =
 										{
 											if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
 											{
-												aHTML.push('<tr><td id="ns1blankspaceSummaryViewPDF" class="ns1blankspaceColumn2Action">' +
-															'<a href="#" id="ns1blankspaceSummaryViewPDF">Create&nbsp;PDF</a>' +
+												aHTML.push('<tr><td>' +
+																'<span id="ns1blankspaceSummaryCreatePDF" class="ns1blankspaceAction" style="margin-right:4px;">' +
+																'Create&nbsp;PDF</span>'
 															'</td></tr>');
 											}
 											else
 											{				
-												aHTML.push('<tr><td id="ns1blankspaceSummaryView" class="interfaceMainColumn2Action">' +
-															'<a href="#" id="ns1blankspaceSummaryView">View</a>' +
+												aHTML.push('<tr><td>' +
+																'<span id="ns1blankspaceSummaryView" class="ns1blankspaceAction" style="margin-right:4px;">' +
+																'View</span>'
 															'</td></tr>');
 											}
 
@@ -581,7 +583,11 @@ ns1blankspace.financial.invoice =
 											
 											if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
 											{
-												$('#ns1blankspaceSummaryViewPDF').click(function(event)
+												$('#ns1blankspaceSummaryCreatePDF').button(
+												{
+													label: 'Create PDF'
+												})
+												.click(function(event)
 												{
 													ns1blankspace.pdf.create({
 															xhtmlContent: $('#ns1blankspaceSummaryColumn1').html(),
@@ -592,11 +598,14 @@ ns1blankspace.financial.invoice =
 											}		
 											else		
 											{	
-												$('#ns1blankspaceSummaryView').click(function(event)
+												$('#ns1blankspaceSummaryView').button(
+												{
+													label: 'View'
+												})
+												.click(function(event)
 												{
 													ns1blankspace.financial.invoice.summary.show({useTemplate: true});
 												});
-
 											}	
 										}	
 									}	

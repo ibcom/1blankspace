@@ -152,9 +152,7 @@ ns1blankspace.format.tags =
 			
 		]		
 
-var gaTestHTML = [];
-
-function ins1blankspace.format.test()
+ns1blankspace.format.test = function()
 {
 	ns1blankspace.format.xhtmlTest = '<table><tr><td>[[Reference]]</td></tr></table>' +
 										'<table>' +
@@ -178,8 +176,6 @@ ns1blankspace.format.render = function (oParam)
 						if (oParam.object != undefined) {iObject = oParam.object}		
 					}
 
-					interfaceFormatInitialise();
-
 					sXHTMLTemplate = (sXHTMLTemplate).replace(/\[\[/g,'<div class="template">');
 					sXHTMLTemplate = (sXHTMLTemplate).replace(/\]\]/g,'</div>');
 
@@ -190,7 +186,7 @@ ns1blankspace.format.render = function (oParam)
 					{
 						$(this).find('div.template').each(function(i,e) 
 						{
-							var oTemplateTag = $.grep(gaFormatTags, function (a) { return a.caption == $(e).html(); })
+							var oTemplateTag = $.grep(ns1blankspace.format.tags, function (a) { return a.caption == $(e).html(); })
 
 							if (oTemplateTag[0])
 							{
@@ -246,7 +242,7 @@ ns1blankspace.format.render = function (oParam)
 						oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 
 						var oTmp = {group: this.group};
-						oSearch.getResults(function(data) {interfaceFormatRenderProcess(oTmp, data)});
+						oSearch.getResults(function(data) {ns1blankspace.format.process(oTmp, data)});
 					});
 
 					return aXHTML.join('');

@@ -367,7 +367,7 @@ ns1blankspace.messaging.imap =
 																'</td>');
 											
 											aHTML.push('<td class="ns1blankspaceHeader" style="text-align:right;">' +
-															'<span id="ns1blankspaceMessagingIMAPInboxRefresh" class="ns1blankspaceAction" style="margin-right:4px;"">' +
+															'<span id="ns1blankspaceMessagingIMAPInboxRefresh" class="ns1blankspaceAction" style="margin-right:4px;">' +
 																'Refresh</span>' +
 															'<span id="ns1blankspaceMessagingInboxIMAPSentEmails" class="ns1blankspaceAction">' +
 																'Sent&nbsp;emails</span></td>');
