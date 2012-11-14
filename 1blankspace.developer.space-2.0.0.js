@@ -67,7 +67,7 @@ ns1blankspace.developer.space =
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/ondemand/admin/?method=ADMIN_REGISTRATION_SEARCH',
+							url: ns1blankspace.util.endpointURI('ADMIN_REGISTRATION_SEARCH'),
 							dataType: 'json',
 							success: s1blankspace.developer.space.home
 						});
@@ -92,7 +92,7 @@ ns1blankspace.developer.space =
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
 														'" class="ns1blankspaceMostLikely">' +
-														this.email +
+														this.title +
 														'</td>');
 								
 								aHTML.push('</tr>');
@@ -263,6 +263,7 @@ ns1blankspace.developer.space =
 					aHTML.push('<div id="ns1blankspaceMainFromNew" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainFromContact" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainSubscriptions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainUsers" class="ns1blankspaceControlMain"></div>');
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
@@ -712,7 +713,7 @@ ns1blankspace.developer.space =
 	users:		function (aParam, oResponse)
 				{
 					var iObjectContext = giObjectContext;
-					var sXHTMLElementId = 'ns1blankspaceMainMembers';
+					var sXHTMLElementID = 'ns1blankspaceMainUsers';
 					var oOptions = {view: true};
 					var oActions = {};
 					
@@ -771,7 +772,7 @@ ns1blankspace.developer.space =
 							
 							aHTML.push('</table>');
 
-							$('#' + sXHTMLElementId).html(aHTML.join(''));
+							$('#' + sXHTMLElementID).html(aHTML.join(''));
 						}
 					}	
 				},
@@ -794,27 +795,25 @@ ns1blankspace.developer.space =
 									{
 										var iContactBusinessId = ''; 
 
-										if ($('#divns1blankspaceMainNewContact').html() != '')
+										if ($('#ns1blankspaceMainFromContact').html() != '')
 										{
-											iContactBusinessId = $('#inputns1blankspaceMainDetailsContactBusiness').attr('data-id');
-											iContactPersonId = $('#inputns1blankspaceMainDetailsContactPerson').attr('data-id');
+											iContactBusinessId = $('#ns1blankspaceDetailsContactBusiness').attr('data-id');
+											iContactPersonId = $('#ns1blankspaceDetailsContactPerson').attr('data-id');
 										}
 
-										if ($('#divns1blankspaceMainNew').html() != '' && (iContactBusinessId == '' || iContactPersonId == ''))
+										if ($('#ns1blankspaceMainFromNew').html() != '' && (iContactBusinessId == '' || iContactPersonId == ''))
 										{
 											ns1blankspace.status.working();
 
-											var sReturn;
-											var sParam = 'method=REGISTER_SPACE';
-											var sData = 'firstname=' + encodeURIComponent($('#inputns1blankspaceMainDetailsFirstName').val()) +
-																'&surname=' + encodeURIComponent($('#inputns1blankspaceMainDetailsSurname').val()) +
-																'&email=' + encodeURIComponent($('#inputns1blankspaceMainDetailsEmail').val()) +
-																'&spacename=' + encodeURIComponent($('#inputns1blankspaceMainDetailsEnterpriseName').val());
+											var sData = 'firstname=' + ns1blankspace.util.fs(($('#ns1blankspaceDetailsFirstName').val()) +
+																'&surname=' + ns1blankspace.util.fs(($('#ns1blankspaceDetailsSurname').val()) +
+																'&email=' + ns1blankspace.util.fs(($('#ns1blankspaceDetailsEmail').val()) +
+																'&spacename=' + ns1blankspace.util.fs(($('#ns1blankspaceDetailsEnterpriseName').val());
 
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/directory/ondemand/register.asp?' + sParam,
+												url: '/directory/ondemand/register.asp?method=REGISTER_SPACE',
 												data: sData,
 												dataType: 'text',
 												success: function(data)
@@ -823,11 +822,14 @@ ns1blankspace.developer.space =
 
 													if (aResponse[0] == "OK")
 													{
-														ns1blankspaceMasterStatus('Space created');
+														ns1blankspace.status.message('Space created');
+
 														if (aResponse.length > 3)	
-														{giObjectContext = aResponse[3]};
-														gbInputDetected = false;
-														ns1blankspaceDeveloperSpaceSearch('-' + giObjectContext, {source: 1});
+														{
+															ns1blankspace.objectContext = aResponse[3]
+														}
+														ns1blankspace.inputDetected = false;
+														ns1blankspace.developer.space.search.send('-' + ns1blankspace.objectContext, {source: 1});
 													}
 													else
 													{
