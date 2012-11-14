@@ -355,7 +355,7 @@ ns1blankspace.setup.project =
 										ns1blankspace.objectContextData.description +
 										'</td></tr>');
 						
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 					}	
@@ -475,7 +475,7 @@ ns1blankspace.setup.project =
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML.push(ns1blankspace.setup.project.tasks.row(this)
+												aHTML.push(ns1blankspace.setup.project.tasks.row(this))
 											});
 											
 											aHTML.push('</table>');
@@ -507,13 +507,13 @@ ns1blankspace.setup.project =
 									aHTML.push('<tr class="ns1blankspaceRow">');
 												
 									aHTML.push('<td id="ns1blankspaceSetupProjectTasks_title-' + oRow.id + '" class="ns1blankspaceMainRow">' +
-															oRow.title + '</td>';
+															oRow.title + '</td>');
 															
 									aHTML.push('<td class="ns1blankspaceRow" style="width: 60px;text-align:right;">' +
 													'<span id="ns1blankspaceSetupProjectTasks_remove-' +
-														oRow.id + '" class="ns1blankspaceRowRemove">&nbsp;</span>';
+														oRow.id + '" class="ns1blankspaceRowRemove">&nbsp;</span>');
 
-									aHTML.push('<span id="ns1blankspaceSetupProjectTasks_select-' + oRow.id + '" class="ns1blankspaceRowSelect">&nbsp;</span></td>';
+									aHTML.push('<span id="ns1blankspaceSetupProjectTasks_select-' + oRow.id + '" class="ns1blankspaceRowSelect">&nbsp;</span></td>');
 									
 									aHTML.push('</tr>');
 									
@@ -585,7 +585,7 @@ ns1blankspace.setup.project =
 									{
 										var aHTML = [];
 									
-										aHTML.push('<table class="ns1blankspaceColumn2">';
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
 										aHTML.push('<tr><td>' +
 														'<span id="ns1blankspaceTaskSave" class="ns1blankspaceAction">Save</span>' +
@@ -605,7 +605,7 @@ ns1blankspace.setup.project =
 										
 										var aHTML = [];
 											
-										aHTML.push('<table class="ns1blankspaceMain">';					
+										aHTML.push('<table class="ns1blankspaceMain">');					
 												
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -728,9 +728,7 @@ ns1blankspace.setup.project =
 														data: sData,
 														dataType: 'json',
 														success: function ()
-														[
-
-														]
+														{}
 													});
 
 													ns1blankspace.setup.project.tasks();	

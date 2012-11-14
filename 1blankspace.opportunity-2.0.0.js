@@ -451,10 +451,13 @@ ns1blankspace.opportunity =
 										sDate +
 										'</td></tr>');		
 						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
+						if (ns1blankspace.objectContextData.description)
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryDescriptionValue" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.description +
 										'</td></tr>');
+						}	
 						
 						aHTML.push('</table>');					
 						

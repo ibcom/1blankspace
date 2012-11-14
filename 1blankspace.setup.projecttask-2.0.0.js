@@ -289,9 +289,9 @@ ns1blankspace.setup.projectTask =
 						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
 										'Description</td></tr>');
 					
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 					
-						aHTML.push('<table id="tablens1blankspaceViewportControl3" class="ns1blankspaceViewportControl">';
+						aHTML.push('<table class="ns1blankspaceControl">');
 					
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
@@ -300,7 +300,7 @@ ns1blankspace.setup.projectTask =
 										'Attachments</td></tr>');
 					}
 
-					aHTML.push('</table>';										
+					aHTML.push('</table>');										
 					
 					$('#ns1blankspaceViewControl').html(aHTML.join(''));
 					
@@ -416,7 +416,7 @@ ns1blankspace.setup.projectTask =
 				
 						var aHTML = [];
 
-						aHTML.push('<table class="ns1blankspaceMainColumn1">';
+						aHTML.push('<table class="ns1blankspaceMainColumn1">');
 						
 						var sDescription = ns1blankspace.objectContextData.description;
 						
@@ -433,7 +433,7 @@ ns1blankspace.setup.projectTask =
 
 						var aHTML = [];
 						
-						aHTML.push('<table id="tablens1blankspaceMainColumn2" class="ns1blankspaceMainColumn2">';
+						aHTML.push('<table class="ns1blankspaceMainColumn2">');
 												
 						aHTML.push('<tr><td>' +
 										'<a href="#" id="ns1blankspaceSummaryViewProject">View Project</a>' +

@@ -221,7 +221,7 @@ ns1blankspace.setup.websiteForm =
 												
 											aHTML.push('<td class="ns1blankspaceSearch" id="title' +
 															'-' + this.id + '">' +
-															sTitle + '</td>';
+															sTitle + '</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
@@ -271,7 +271,7 @@ ns1blankspace.setup.websiteForm =
 										'Layout</td></tr>');
 					}
 					
-					aHTML.push('</table>';					
+					aHTML.push('</table>');					
 								
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
@@ -428,7 +428,7 @@ ns1blankspace.setup.websiteForm =
 						
 						var aHTML = [];
 							
-						aHTML.push('<table class="ns1blankspaceColumn2">';
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 					
 						aHTML.push('<tr>' +
 										'<td class="ns1blankspaceCaption">' +
@@ -744,7 +744,7 @@ ns1blankspace.setup.websiteForm =
 										var aHTML = [];
 										
 									
-										aHTML.push('<table class="ns1blankspaceColumn2">';
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
 										aHTML.push('<tr><td>' +
 														'<span id="ns1blankspaceStructureSave" class="ns1blankspaceAction" style="width:80px;">Save</span>' +
