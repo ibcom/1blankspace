@@ -136,7 +136,7 @@ ns1blankspace.messaging.imap =
 							url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_CACHE_CHECK'),
 							data: 'account=' + ns1blankspace.util.fs(ns1blankspace.messaging.imap.account),
 							dataType: 'json',
-							success: function(data) {ns1blankspace.messaging.check(oParam, data)}
+							success: function(data) {ns1blankspace.messaging.imap.check(oParam, data)}
 						});
 					}
 					else
@@ -308,7 +308,7 @@ ns1blankspace.messaging.imap =
 										ns1blankspace.messaging.imap.account = aXHTMLElementID[1];
 									}	
 									
-									if (bRefresh) {ns1blankspace.messaging.check()}
+									if (bRefresh) {ns1blankspace.messaging.imap.check()}
 									
 									if (bRepaginate)
 									{
@@ -319,7 +319,7 @@ ns1blankspace.messaging.imap =
 										
 										aHTML.push('<table id="ns1blankspaceMessagingIMAPHeaderContainer" class="ns1blankspaceContainer">');
 										aHTML.push('<tr><td style="height:20px;" id="ns1blankspaceMessagingIMAPHeader">' + ns1blankspace.xhtml.loading + '</td></tr>');
-										aHTML.push('<tr><td id="ns1blankspaceMessagingInbox"></td></tr>');
+										aHTML.push('<tr><td id="ns1blankspaceMessagingIMAPInboxContainer"></td></tr>');
 										aHTML.push('</table>');
 
 										$('#ns1blankspaceMainInbox').html(aHTML.join(''));
@@ -338,7 +338,7 @@ ns1blankspace.messaging.imap =
 										oSearch.addSummaryField('count(*) cachecount');
 										oSearch.sort('date', 'desc')
 										oSearch.rows = ns1blankspace.messaging.defaultRows;
-										oSearch.getResults(function(data) {ns1blankspace.messaging.inbox.show(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.messaging.imap.inbox.show(oParam, data)});
 									}
 									else
 									{
@@ -348,48 +348,41 @@ ns1blankspace.messaging.imap =
 										{
 											var aHTML = [];
 											
-											aHTML.push('<table id="ns1blankspaceMessagingInboxHeader" class="ns1blankspace">');
-											aHTML.push('<tr><td class="ns1blankspaceSub">' +
-															ns1blankspace.messaging.emailCount + ' emails');
-															
-											aHTML.push('</td>');	
-											
-											aHTML.push('<td class="ns1blankspaceHeader" id="ns1blankspaceMessagingInboxRefresh">Refresh</td>');
-											aHTML.push('<td class="ns1blankspaceHeader" style="width:5px;">&nbsp;|&nbsp;</td>');
-											
-											aHTML.push('<td class="ns1blankspaceHeader" style="width:90px;">');
-																			
-											aHTML.push('</td>');
-											
-											aHTML.push('<td class="ns1blankspaceHeader" style="width:5px;">&nbsp;|&nbsp;</td>');
+											aHTML.push('<table class="ns1blankspace" style=>');
+											aHTML.push('<tr>');
 
-											aHTML.push('<td class="ns1blankspaceHeader" style="width:70px;">' +
-														'<span id="ns1blankspaceSentEmails" class="ns1blankspaceHeader">Sent&nbsp;emails</span></td>');
+											aHTML.push('<td class="ns1blankspaceHeader">' +
+															'<span id="ns1blankspaceMessagingIMAPInboxCount" class="ns1blankspaceAction">' +
+																ns1blankspace.messaging.emailCount + ' emails</span>' +
+																'</td>');
+											
+											aHTML.push('<td class="ns1blankspaceHeader" style="text-align:right;">' +
+															'<span id="ns1blankspaceMessagingIMAPInboxRefresh" class="ns1blankspaceAction">' +
+																'Refresh</span>' +
+															'<span id="ns1blankspaceMessagingInboxIMAPSentEmails" class="ns1blankspaceAction">' +
+																'Sent&nbsp;emails</span></td>');
 
 											aHTML.push('</tr>');
-											
-											aHTML.push('<tr class="ns1blankspaceHeader"><td class="ns1blankspaceHeader" colspan=2 id="ns1blankspaceMessagingInboxPages"></td></tr>');
-
 											aHTML.push('</table>');
 											
-											$('#ns1blankspaceMessagingInboxHeader').html(aHTML.join(''));
+											$('#ns1blankspaceMessagingIMAPHeader').html(aHTML.join(''));
 										}
 									
-										$('#ns1blankspaceMessagingInboxRefresh').html('Refresh')
+										$('#ns1blankspaceMessagingIMAPInboxRefresh').html('Refresh')
 												
-										$('#ns1blankspaceMessagingInboxRefresh').click(function()
+										$('#ns1blankspaceMessagingIMAPInboxRefresh').click(function()
 										{
 											ns1blankspace.messaging.inbox.search({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
 										})
 										
-										$('#ns1blankspaceSentEmails').click(function() {
-											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceSentEmails', leftOffset: -170, topOffset: -5});
-											ns1blankspace.messaging.actions({xhtmlElementID: 'ns1blankspaceSentEmails', type: 5})
+										$('#ns1blankspaceMessagingIMAPInboxSentEmails').click(function() {
+											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxSentEmails', leftOffset: -170, topOffset: -5});
+											ns1blankspace.messaging.actions({xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxSentEmails', type: 5})
 										})
 										
 										var aHTML = [];
 										
-										aHTML.push('<table id="ns1blankspaceMessagingInboxContainer" style="font-size:0.875em">');
+										aHTML.push('<table id="ns1blankspaceMessagingIMAPInbox" class="ns1blankspaceMessagingIMAPInbox">');
 										
 										$.each(oResponse.data.rows, function()
 										{
@@ -400,15 +393,16 @@ ns1blankspace.messaging.imap =
 										
 										ns1blankspace.render.page.show(
 										{
-											xhtmlElementID: 'ns1blankspaceMessagingInboxContainer',
+											xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxContainer',
 											xhtmlContext: 'IMAPInbox',
 											xhtml: aHTML.join(''),
 											showMore: (oResponse.morerows == "true"),
 											more: oResponse.moreid,
-											rows: 50,
+											rows: ns1blankspace.messaging.defaultRows,
 											functionShowRow: ns1blankspace.messaging.imap.inbox.row,
 											functionNewPage: 'ns1blankspace.messaging.imap.inbox.bind()',
-											type: 'json'
+											headerRow: false,
+											bodyClass: 'ns1blankspaceMessagingIMAPInbox'
 										}); 	
 											
 										ns1blankspace.messaging.imap.inbox.bind();
@@ -422,7 +416,7 @@ ns1blankspace.messaging.imap =
 									var sID = oRow.id;
 									
 									var oDate = new Date.parse(oRow.date);
-									sDate = oDate.toString("d MMM yyyy h:mm TT") 
+									sDate = oDate.toString("d MMM yyyy h:mm tt) 
 								
 									var sClass = '';
 									

@@ -210,6 +210,35 @@ td.ns1blankspaceNothing
 	color: #999999;
 }
 
+.ns1blankspaceHeader
+{
+	color: #999999;
+	font-size: 0.875em;
+}
+
+table.ns1blankspaceMessagingIMAPInbox
+{
+	font-size: 0.875em;
+}
+
+.ns1blankspaceRenderHeaderPage
+{
+	color: white;
+	font-size: 0.875em;
+	background-color: #999999;
+	border-right: 2px;
+	border-style:solid;
+	border-right-color: white;
+	padding: 2px;
+	font-weight: 200;
+}
+
+.ns1blankspaceRenderHeaderMore
+{
+	color: #999999;
+	font-size: 0.875em;
+}
+
 #ns1blankspaceViewControlHomeContainer
 {
 	position: absolute;

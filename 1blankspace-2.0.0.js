@@ -1154,7 +1154,7 @@ ns1blankspace.logon =
 					}
 					else
 					{
-						$('#ins1blankspaceLogonLogonName').focus();
+						$('#ns1blankspaceLogonLogonName').focus();
 					}
 					
 					$('#ns1blankspaceLogonSend').button(
@@ -3733,6 +3733,7 @@ ns1blankspace.render.page =
 					var iRows = 30;
 					var bShowList = true;
 					var sXHTMLContext = '';
+					var bHeaderRow = true;
 					
 					if (oParam != undefined)
 					{
@@ -3744,20 +3745,20 @@ ns1blankspace.render.page =
 						if (oParam.showList != undefined) {bShowList = oParam.showList}
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
+						if (oParam.headerRow != undefined) {bHeaderRow = oParam.headerRow}
 					}
 
-					oParam.xhtmlFirstRow = $('tr:first', sHTML).html();
+					if (bHeaderRow) {oParam.xhtmlFirstRow = $('tr:first', sHTML).html()};
 					
 					if (bMore)
 					{
-						aHTML.push('<table><tr>');
-						//aHTML.push('<td style="width:1px;" class="interfaceMessagingSubHeader ns1blankspacePaginationList" id="tdns1blankspacePaginationList' + sXHTMLContext + '-"></td>';
-						aHTML.push('<td style="width:5px;cursor:pointer;" class="ns1blankspaceSubHeader ns1blankspaceRenderList' + sXHTMLContext + '"' +
-											' id="td' + sXHTMLContext + 'ns1blankspaceRenderList-0" rowStart="0">1</td>');
+						aHTML.push('<table id="ns1blankspaceRenderPage_' + sXHTMLContext + '"><tr>');
+						aHTML.push('<td style="width:5px; cursor:pointer;" class="ns1blankspaceRenderHeaderPage"' +
+											' id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-0" rowStart="0">1</td>');
 						aHTML.push('<td></td></tr></table>');
 					}
 						
-					aHTML.push('<div id="div' + sXHTMLContext + 'ns1blankspaceRenderList-0" class="ns1blankspaceRenderListPage' + sXHTMLContext + '">');
+					aHTML.push('<div id="ns1blankspaceRenderPage_' + sXHTMLContext + '-0" class="ns1blankspaceRenderPage ns1blankspaceRenderPage_' + sXHTMLContext + '">');
 					aHTML.push(sHTML);
 					aHTML.push('</div>');
 
@@ -3766,24 +3767,24 @@ ns1blankspace.render.page =
 						
 					if (bMore)
 					{
-						var sHTML = '<td style="width:5px;cursor:pointer;" class="ns1blankspaceSubHeader ns1blankspaceRenderList' + sXHTMLContext + 
-											'" id="td' + sXHTMLContext + 'ns1blankspaceRenderList-' +
-											(iStartRow + iRows - 1) + '" rowStart="' +
-											(iStartRow + iRows - 1) + '">' + 'more...' + '</td>';
+						var sHTML = '<td style="width:5px;cursor:pointer;" class="ns1blankspaceRenderHeaderMore' + 
+											'" id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' +
+											(iStartRow + iRows) + '" data-rowstart="' +
+											(iStartRow + iRows) + '">' + 'more...' + '</td>';
 										
-						$('#td' + sXHTMLContext + 'ns1blankspaceRenderList-' + (iStartRow)).after(sHTML);
+						$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).after(sHTML);
 					
-						$('#td' + sXHTMLContext + 'ns1blankspaceRenderList-' + (iStartRow + iRows - 1)).click(function(event)
+						$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow + iRows)).click(function(event)
 						{
 							var sID = event.target.id;
-							var sStart = $('#' + sID).attr('rowStart');
+							var sStart = $('#' + sID).attr('data-rowstart');
 							$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
 							if (oParam != undefined) {oParam.more = iMore;oParam.startRow = sStart} else {oParam = {more: iMore, startRow: sStart}};
 							ns1blankspace.render.page.showMore(oParam);
 						});
 					}
 					
-					$('.ns1blankspaceRenderListPage' + sXHTMLContext).click(function(event)
+					$('ns1blankspaceRenderHeaderPage_' + sXHTMLContext + ' .ns1blankspaceRenderHeaderPage').click(function(event)
 					{
 						ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
 					});
@@ -3829,9 +3830,7 @@ ns1blankspace.render.page =
 						if (oParam.functionNewPage != undefined) {sFunctionNewPage = oParam.functionNewPage}
 						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
 					}
-
-					sType = sType.toUpperCase();
-					
+				
 					if (iMore == -1)
 					{
 						alert('No more!')
@@ -3849,19 +3848,18 @@ ns1blankspace.render.page =
 								type: 'GET',
 								url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
 								data: sData,
-								dataType: sType.toLowerCase(),
-								success: function(data){ns1blankspace.render.list.showMore(oParam, data)}
+								dataType: 'json',
+								success: function(data){ns1blankspace.render.page.showMore(oParam, data)}
 							});
 						}
 						else
 						{
 							var aHTML = [];
 						
-							if ($('#div' + sXHTMLContext + 'ns1blankspaceRenderList-' + iStartRow).length == 0)
+							if ($('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow).length == 0)
 							{
-							
-								aHTML.push('<div id="div' + sXHTMLContext + 'ns1blankspaceRenderList-' + iStartRow + 
-												'" class="ns1blankspaceRenderListPage' + sXHTMLContext + '">');
+								aHTML.push('<div id="ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow + 
+												'" class="ns1blankspaceRenderPage ns1blankspaceRenderPage_' + sXHTMLContext + '">');
 							
 								aHTML.push('<table class="' + sBodyClass + '">');
 								
@@ -3887,14 +3885,14 @@ ns1blankspace.render.page =
 								
 								aHTML.push('</div>');
 								
-								$('.ns1blankspaceRenderListPage' + sXHTMLContext).hide();
-								$('.ns1blankspaceRenderListPage' + sXHTMLContext + ':last').after(aHTML.join(''));
+								$('.ns1blankspaceRenderPage_' + sXHTMLContext).hide();
+								$('.ns1blankspaceRenderPage_' + sXHTMLContext + ':last').after(aHTML.join(''));
 								
-								$('.ns1blankspaceRowSelect' + sXHTMLContext).unbind('click');
+								//$('.ns1blankspaceRowSelect' + sXHTMLContext).unbind('click');
 								
 								if (sFunctionOpen != undefined)
 								{
-									$('.ns1blankspaceRowOptionsSelect' + sXHTMLContext).button({
+									$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow + ' .ns1blankspaceRowSelect').button({
 										text: false,
 										icons: {
 											primary: "ui-icon-play"
@@ -3907,33 +3905,35 @@ ns1blankspace.render.page =
 									.css('height', '20px')
 								}
 								
-								$('#td' + sXHTMLContext + 'ns1blankspaceRenderList-' + iStartRow).html(((iStartRow+1)/iRows)+1);
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).html(((iStartRow)/iRows)+1);
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).removeClass('ns1blankspaceRenderHeaderMore');
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).addClass('ns1blankspaceRenderHeaderPage');
 
-								$('td.ns1blankspaceRenderList' + sXHTMLContext).unbind('click');
+								$('ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow).unbind('click');
 								
-								$('td.ns1blankspaceRenderList' + sXHTMLContext).click(function(event)
+								$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow).click(function(event)
 								{
-									ns1blankspace.render.list.showPage(this.id, sXHTMLContext);
+									ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
 								});
 							
 								if (bMoreRows)
 								{
-									var sHTML = '<td style="width:5px; cursor:pointer;" class="ns1blankspaceSubHeader ns1blankspaceRenderList' + sXHTMLContext + 
-											'" id="td' + sXHTMLContext + 'ns1blankspaceRenderList-' +
-											(iStartRow + iRows) + '" rowStart="' +
-											(iStartRow + iRows) + '">' + 'more...' + '</td>';
-										
-									$('#td' + sXHTMLContext + 'ns1blankspaceRenderList-' + iStartRow).after(sHTML);
-									
-									$('#td' + sXHTMLContext + 'ns1blankspaceRenderList-' + (iStartRow + iRows)).click(function(event)
+									var sHTML = '<td style="width:5px; cursor:pointer;" class="ns1blankspaceRenderHeaderMore' + 
+														'" id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' +
+														(iStartRow + iRows) + '" data-rowstart="' +
+														(iStartRow + iRows) + '">' + 'more...' + '</td>';
+													
+									$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).after(sHTML);
+								
+									$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow + iRows)).click(function(event)
 									{
 										var sID = event.target.id;
-										var sStart = $('#' + sID).attr('rowStart')
+										var sStart = $('#' + sID).attr('data-rowstart');
 										$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
-										(oParam != undefined?oParam.more = iMore:oParam = {more: iMore, startRow: sStart})
-										ns1blankspace.render.list.showMore(oParam);
+										if (oParam != undefined) {oParam.more = iMore; oParam.startRow = sStart} else {oParam = {more: iMore, startRow: sStart}};
+										ns1blankspace.render.page.showMore(oParam);
 									});
-								}	
+								}
 								
 								if (sFunctionNewPage != undefined)
 								{
@@ -3948,8 +3948,8 @@ ns1blankspace.render.page =
 				{
 					var aElement = sXHTMLElementID.split('-');
 					
-					$('.ns1blankspaceRenderListPage' + sXHTMLContext).hide();
-					$('#div' + sXHTMLContext + 'ns1blankspaceRenderList-' + aElement[1]).show();
+					$('.ns1blankspaceRenderPage_' + sXHTMLContext).hide();
+					$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + aElement[1]).show();
 				}
 }
 
