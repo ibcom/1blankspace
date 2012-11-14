@@ -141,6 +141,10 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.home-2.0.0.js'
 	},
 	{
+		nameSpace: '1blankspace.format',
+		source: '/jscripts/1blankspace.format-2.0.0.js'
+	},
+	{
 		nameSpace: '1blankspace.contactPerson',
 		source: '/jscripts/1blankspace.contactperson-2.0.0.js'
 	},

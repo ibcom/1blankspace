@@ -60,14 +60,14 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 										url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_MANAGE&setdefault=1',
 										dataType: 'json',
 										async: false,
-										success: function(data) {interfaceFinancialMasterInitialise(oParam, data)}
+										success: function(data) {ns1blankspace.financial.initData(oParam, data)}
 									});
 								}
 							}
 							else
 							{
 								ns1blankspace.financial.init = 1;
-								interfaceFinancialMasterInitialise($.extend(true, oParam, {step: 1}))
+								ns1blankspace.financial.initData($.extend(true, oParam, {step: 1}))
 							}
 						}
 
@@ -82,13 +82,13 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
 									oSearch.rows = 100;
 									oSearch.async = false;
-									oSearch.getResults(function(data) {interfaceFinancialMasterInitialise(oParam, data)});
+									oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)});
 								}
 							}
 							else
 							{
 								ns1blankspace.financial.bankaccounts = oResponse.data.rows;
-								interfaceFinancialMasterInitialise($.extend(true, oParam, {step: 2}))
+								ns1blankspace.financial.initData($.extend(true, oParam, {step: 2}))
 							}
 						}
 						
@@ -104,7 +104,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 										url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_SEARCH&all=1&includefinancialaccounttext=1',
 										dataType: 'json',
 										async: false,
-										success: function(data) {interfaceFinancialMasterInitialise(oParam, data)}
+										success: function(data) {ns1blankspace.financial.initData(oParam, data)}
 									});
 								}
 							}
@@ -126,7 +126,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									oSearch.addField('title');
 									oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount);
 									oSearch.sort('parentaccount', 'asc')
-									oSearch.getResults(function(data) {interfaceFinancialMasterInitialise(oParam, data)})	
+									oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)})	
 
 									$.ajax(
 									{
@@ -134,14 +134,14 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 										url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_ACCOUNTS_SEARCH&all=1&includefinancialaccounttext=1',
 										dataType: 'json',
 										async: false,
-										success: function(data) {interfaceFinancialMasterInitialise(oParam, data)}
+										success: function(data) {ns1blankspace.financial.initData(oParam, data)}
 									});
 								}
 							}
 							else
 							{
 								ns1blankspace.financial.accounts = oResponse.data.rows;
-								ns1blankspace.financial.accountsTree = intefaceSetupFinancialAccountsTree(ns1blankspace.financial.accounts[ns1blankspace.financial.rootaccount],ns1blankspace.financial.accounts); 
+								ns1blankspace.financial.accountsTree = ns1blankspace.setup.financial.accounts.tree(ns1blankspace.financial.accounts[ns1blankspace.financial.rootaccount],ns1blankspace.financial.accounts); 
 								ns1blankspace.financial.status = 2;
 							}
 						}

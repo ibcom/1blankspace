@@ -16,7 +16,7 @@ ns1blankspace.financial.invoice =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 
-					ns1blankspace.financial.init();
+					ns1blankspace.financial.initData();
 
 					ns1blankspace.object = 5;
 					ns1blankspace.objectParentName = 'financial';
@@ -93,7 +93,7 @@ ns1blankspace.financial.invoice =
 						oSearch.addField('reference,description,contactbusinesssenttotext,contactpersonsenttotext,duedate,amount');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(ns1blankspace.financial.invoice.home;
+						oSearch.getResults(ns1blankspace.financial.invoice.home);
 					}
 					else
 					{
@@ -108,7 +108,7 @@ ns1blankspace.financial.invoice =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceMain" colspan="4">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="4">MOST LIKELY</td></tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{					
@@ -117,10 +117,10 @@ ns1blankspace.financial.invoice =
 								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:50px;">' +
 														this.reference + '</td>');
 								
-								aHTML.push('<td id="ns1blankspaceMostLikely_Amount-' + this.id + '" class="ins1blankspaceMostLikelySub" style="width:50px;text-align:right;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_Amount-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:50px;text-align:right;padding-left:10px;padding-right:10px;">' +
 														'$' + this.amount + '</td>');
 																		
-								aHTML.push('<td id="ns1blankspaceMostLikely_DueDate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_DueDate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;padding-right:15px;">' +
 														this.duedate + '</td>');
 																										
 								var sContact = this.contactbusinesssenttotext;
@@ -279,7 +279,7 @@ ns1blankspace.financial.invoice =
 					}
 					else
 					{	
-						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">"' +
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
@@ -316,7 +316,7 @@ ns1blankspace.financial.invoice =
 					var aHTML = [];
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainItem" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainCredit" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainReceipt" class="ns1blankspaceControlMain"></div>');
@@ -324,7 +324,7 @@ ns1blankspace.financial.invoice =
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
@@ -401,11 +401,11 @@ ns1blankspace.financial.invoice =
 							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceControlSubContext">$' + ns1blankspace.objectContextData.amount + '</span>');
 							
 						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.invoice.init({showHome: false});ins1blankspace.financial.invoice.search.send("-' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspace.financial.invoice.init({showHome: false});ns1blankspace.financial.invoice.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
 						
-						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.invoice.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.invoice.summary.show()'});
 					}	
 				},		
 		
@@ -483,8 +483,8 @@ ns1blankspace.financial.invoice =
 									{
 										aHTML.push('<table class="ns1blankspaceMain">' +
 														'<tr class="ns1blankspaceRow">' +
-														'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-														'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+														'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 														'</tr>' +
 														'</table>');				
 						
@@ -502,7 +502,7 @@ ns1blankspace.financial.invoice =
 											
 											if (ns1blankspace.objectContextData.amount != '')
 											{
-												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
+												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Amount</td></tr>' +
 																'<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSummary">' +
 																'$' + ns1blankspace.objectContextData.amount +
 																'</td></tr>');
@@ -527,7 +527,7 @@ ns1blankspace.financial.invoice =
 											
 											if (ns1blankspace.objectContextData.sent == 'Y')
 											{
-												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Send Date</td></tr>' +
+												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Sent Date</td></tr>' +
 																'<tr><td id="ns1blankspaceSummarySentDate" class="ns1blankspaceSummary">' +
 																ns1blankspace.objectContextData.sentdate +
 																'</td></tr>');
@@ -558,7 +558,7 @@ ns1blankspace.financial.invoice =
 
 										var aHTML = [];
 
-										aHTML[++h] = '<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">';
+										aHTML.push('<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">');
 														
 										if (ns1blankspace.financial.invoiceTemplateXHTML != '')
 										{
@@ -575,7 +575,7 @@ ns1blankspace.financial.invoice =
 															'</td></tr>');
 											}
 
-											aHTML[++h] = '</table>';					
+											aHTML.push('</table>');					
 											
 											$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 											
