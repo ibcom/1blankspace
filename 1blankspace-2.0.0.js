@@ -3357,10 +3357,10 @@ ns1blankspace.actions =
 									
 						aHTML.push('<table id="ns1blankspace" class="ns1blankspace">' +
 									'<tr>' +
-									'<td id="ns1blankspaceActionsColumn1" class="ns1blankspaceColumn1Large">' +
+									'<td id="ns1blankspaceActionsColumn1" class="ns1blankspaceColumn1Flexible">' +
 									ns1blankspace.xhtml.loading +
 									'</td>' +
-									'<td id="ns1blankspaceActionsColumn2" class="ns1blankspaceColumn2Action">' +
+									'<td id="ns1blankspaceActionsColumn2" class="ns1blankspaceColumn2" style="width: 100px;">' +
 									'</td></tr>' +
 									'</table>');					
 							
@@ -3378,10 +3378,6 @@ ns1blankspace.actions =
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceActionsColumn2').html(aHTML.join(''));
-					
-						oParam.xhtmlElementID = 'ns1blankspaceActionsAdd';
-						oParam.offsetHeight = -30;
-						oParam.offsetLeft = -305;
 						
 						$('#ns1blankspaceActionsAdd').button(
 						{
@@ -3407,8 +3403,8 @@ ns1blankspace.actions =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ACTION_SEARCH';
 						oSearch.addField('subject');
-						oSearch.addFilter('object', 'EQUAL_TO', iObject);
-						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+						oSearch.addFilter('linktype', 'EQUAL_TO', iObject);
+						oSearch.addFilter('linkid', 'EQUAL_TO', iObjectContext);
 						
 						if (iType) {oSearch.addFilter('type', 'EQUAL_TO', iType)};
 						if (iContactBusiness) {oSearch.addFilter('contactbusiness', 'EQUAL_TO', iContactBusiness)};
@@ -3424,7 +3420,7 @@ ns1blankspace.actions =
 				{	
 					var aHTML = [];
 					var bShowDescription = false;
-					var sXHTMLElementID;
+					var sXHTMLElementID = 'ns1blankspaceActionsColumn1';
 					
 					if (oParam != undefined)
 					{

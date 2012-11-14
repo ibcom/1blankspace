@@ -138,7 +138,7 @@ ns1blankspace.opportunity =
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
 									
-										$('#divInterfaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
@@ -340,8 +340,8 @@ ns1blankspace.opportunity =
 					
 					$('#ns1blankspaceControlActions').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceActions', refresh: true});
-						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceActions'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainActions', refresh: true});
+						ns1blankspace.actions.show();
 					});
 					
 					$('#ns1blankspaceControlAttachments').click(function(event)
@@ -571,12 +571,11 @@ ns1blankspace.opportunity =
 											' data-columns="firstname-space-surname">' +
 										'</td></tr>');			
 						
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 										'Status' +
 										'</td></tr>' +
-										'<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaptionRadio">' +
+										'<tr>' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Open' +
 										'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Closed' +
 										'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>Cancelled' +
@@ -632,9 +631,9 @@ ns1blankspace.opportunity =
 				{
 					var aHTML = [];
 					
-					if ($('#ns1blankspaceContact').attr('data-loading') == '1')
+					if ($('#ns1blankspaceMainContact').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceContact').attr('data-loading', '');
+						$('#ns1blankspaceMainContact').attr('data-loading', '');
 						
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
@@ -643,32 +642,37 @@ ns1blankspace.opportunity =
 										'</tr>' +
 										'</table>');					
 								
-						$('#ns1blankspaceContact').html(aHTML.join(''));
+						$('#ns1blankspaceMainContact').html(aHTML.join(''));
 						
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							if (ns1blankspace.objectContextData.requestbycontactbusiness != '')
 							{	
-								ns1blankspace.contactbusiness.status.get('', 'business', ns1blankspace.objectContextData.requestbycontactbusiness);
-
-								aHTML.push('<tr><td class="ns1blankspace">');
-								aHTML.push('<span id="ns1blankspaceContactProspectBusiness">Update Contact');
+								aHTML.push('<tr><td>');
+								aHTML.push('<span id="ns1blankspaceContactBusiness" class="ns1blankspaceAction">Update Contact');
 								aHTML.push('</span></td></tr>');
 							}	
 							else
 							{
-								aHTML.push('<tr><td lass="ns1blankspace">');
-								aHTML.push('<span id="ns1blankspaceContactProspectBusiness">Create Contact</span></td></tr>');
+								aHTML.push('<tr><td>');
+								aHTML.push('<span id="ns1blankspaceContactBusiness" class="ns1blankspaceAction">Create Contact</span></td></tr>');
 							}
 						}	
 						aHTML.push('</table>');
 						
 						$('#ns1blankspaceContactColumn2').html(aHTML.join(''));
 						
+						$('#ns1blankspaceContactBusiness')
+								.button()
+								.click(function(event)
+								{
+									ns1blankspace.opportunity.contact.save();		
+								});
+
 						var aHTML = [];
 					
 						aHTML.push('<table class="ns1blankspace">');
@@ -790,14 +794,6 @@ ns1blankspace.opportunity =
 							$('#ns1blankspaceContactMailingState').val(ns1blankspace.objectContextData.mailingstate);
 							$('#ns1blankspaceContactMailingPostCode').val(ns1blankspace.objectContextData.mailingpostcode);
 							$('#ns1blankspaceContactMailingCountry').val(ns1blankspace.objectContextData.mailingcountry);
-							if ((ns1blankspace.objectContextData.requestbycontactbusiness != '') || (ns1blankspace.objectContextData.requestbycontactbusiness != ''))
-							{
-								$('#ns1blankspaceContactProspectBusiness').click(function(event)
-								{
-									ns1blankspace.opportunity.prospect.save();		
-									//interfaceOpportunityManageProspect();
-								});
-							}
 						}
 					}	
 				},
