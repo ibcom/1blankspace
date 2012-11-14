@@ -93,7 +93,7 @@ ns1blankspace.financial.invoice =
 						oSearch.addField('reference,description,contactbusinesssenttotext,contactpersonsenttotext,duedate,amount');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(ns1blankspace.financial.invoice.home());
+						oSearch.getResults(ns1blankspace.financial.invoice.home;
 					}
 					else
 					{

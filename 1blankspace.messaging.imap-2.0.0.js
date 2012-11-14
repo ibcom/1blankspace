@@ -455,7 +455,7 @@ ns1blankspace.messaging.imap =
 									
 									aHTML.push('<td id="ns1blankspaceMessagingInbox_from-' + sID + 
 														'" style="cursor: pointer;" class="ns1blankspaceRow ns1blankspaceRowSelect' + sClass + '"' +
-														' title="' + oRow.fromEmail + '" style="padding-right:5px;">' +
+														' title="' + oRow.fromemail + '" style="padding-right:5px;">' +
 														oRow.fromname + '</td>');
 														
 									aHTML.push('<td id="ns1blankspaceMessagingInbox_subject-' + sID + 
@@ -488,12 +488,12 @@ ns1blankspace.messaging.imap =
 
 					bind:		function ()
 								{
-									$('#td.ns1blankspaceRowSelect').click(function()
+									$('td.ns1blankspaceRowSelect').click(function()
 									{
 										$('#ns1blankspaceMessagingInboxContainer > td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
-										$('#' + this.id).parent().find('td').removeClass('ns1blankspaceBold');
-										ns1blankspace.messaging.imap.read(this.id);
-										ns1blankspace.messaging.imap.search.show(this.id);
+										$('#' + this.id).parent().find('td').removeClass('ns1blankspaceNotSeen');
+										ns1blankspace.messaging.imap.markAsRead(this.id);
+										ns1blankspace.messaging.imap.search.send(this.id);
 									});
 										
 									$('.ns1blankspaceRowRemove').button(
@@ -1888,11 +1888,11 @@ ns1blankspace.messaging.imap =
 
 	markAsRead: function (sXHTMLElementID)
 				{
-					var aSearch = sXHTMLElementID.split('_id_');
+					var aSearch = sXHTMLElementID.split('-');
 					var sElementID = aSearch[0];
 					var sSearchContext = aSearch[1];
 						
-					if ($('#' + sXHTMLElementID).parent().hasClass('ns1blankspaceMainBold'))	
+					if ($('#' + sXHTMLElementID).parent().hasClass('ns1blankspaceNotSeen'))	
 					{
 						//sSearchContext = sSearchContext.replace(/\___/g, '.');	
 						
