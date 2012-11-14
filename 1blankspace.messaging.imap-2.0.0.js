@@ -397,19 +397,7 @@ ns1blankspace.messaging.imap =
 											})
 
 										}
-									
-										//$('#ns1blankspaceMessagingIMAPInboxRefresh').html('Refresh')
-												
-										//$('#ns1blankspaceMessagingIMAPInboxRefresh').click(function()
-										//{
-										//	ns1blankspace.messaging.inbox.search({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
-										//})
-										
-										//$('#ns1blankspaceMessagingIMAPInboxSentEmails').click(function() {
-										//	ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxSentEmails', leftOffset: -170, topOffset: -5});
-										//	ns1blankspace.messaging.actions({xhtmlElementID: 'ns1blankspaceMessagingIMAPInboxSentEmails', type: 5})
-										//})
-										
+				
 										var aHTML = [];
 										
 										aHTML.push('<table id="ns1blankspaceMessagingIMAPInbox" class="ns1blankspaceMessagingIMAPInbox">');
@@ -474,7 +462,7 @@ ns1blankspace.messaging.imap =
 														'" style="cursor: pointer; padding-right:5px;" class="ns1blankspaceRow ns1blankspaceMainRowSelect' + sClass + '">' +
 														oRow.subject + '</td>');
 									
-									aHTML.push('<td id="ns1blankspaceMessagingInbox_date-' + sID + '" class="ns1blankspaceRow" style="width:75px; text-align:right;" >' +
+									aHTML.push('<td id="ns1blankspaceMessagingInbox_date-' + sID + '" class="ns1blankspaceRow" style="width:85px; text-align:right;" >' +
 															sDate + '<br /><span class="ns1blankspaceSub">' + sTime + '</span></td>');
 									
 									aHTML.push('<td class="ns1blankspaceRow" style="width:70px;text-align:right;">');
