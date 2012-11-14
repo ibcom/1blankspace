@@ -662,7 +662,7 @@ ns1blankspace.setup.project =
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceRadio">' +
 														'<input type="radio" id="radioStartBasedOn1" name="radioStartBasedOn" value="1"/>When Dependant Task Completed' +
-																'<br /><input type="radio" id="radioStartBasedOn2" name="radioStartBasedOn" value="2"/>Project Start Date';
+																'<br /><input type="radio" id="radioStartBasedOn2" name="radioStartBasedOn" value="2"/>Project Start Date' +
 														'</td></tr>');	
 										
 										aHTML.push('<tr class="ns1blankspaceCaption">' +

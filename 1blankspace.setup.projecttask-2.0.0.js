@@ -179,7 +179,7 @@ ns1blankspace.setup.projectTask =
 										
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#ns1blankspaceViewControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 		
@@ -211,8 +211,6 @@ ns1blankspace.setup.projectTask =
 										{
 											ns1blankspace.container.position(sElementId);
 											
-											var sParam = 'method=PROJECT_TASK_SEARCH&quicksearch' + sQuickSearchType + '=' + sSearchText;
-
 											$.ajax(
 											{
 												type: 'GET',
@@ -480,414 +478,167 @@ ns1blankspace.setup.projectTask =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsFirstName" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceText">' +
 										'</td></tr>');
 
-						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';
-						
-						aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsTitle" class="ns1blankspaceMain">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsTitle" class="ns1blankspaceMain">' +
-											'Title' +
-											'</td></tr>' +
-											'<tr id="trns1blankspaceMainProjectTaskDetailsTitleValue" class="ns1blankspaceMainText">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsTitleValue" class="ns1blankspaceMainText">' +
-											'<input id="inputns1blankspaceMainProjectTaskDetailsTitle" class="inputns1blankspaceMainText">' +
-											'</td></tr>';							
-					
-						aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsType" class="ns1blankspaceMain">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsType" class="ns1blankspaceMain">' +
-											'Type' +
-											'</td></tr>' +
-											'<tr id="trns1blankspaceMainProjectTaskDetailsTypeValue" class="ns1blankspaceMainSelect">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsTypeValue" class="ns1blankspaceMainSelect">' +
-											'<input id="inputns1blankspaceMainProjectTaskDetailsType" class="inputns1blankspaceMainSelect"' +
-												' onDemandMethod="/ondemand/setup/?rf=XML&method=SETUP_PROJECT_TASK_TYPE_SEARCH">' +
-											'</td></tr>';
-					
-						aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsTaskBy" class="ns1blankspaceMain">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsTaskBy" class="ns1blankspaceMain">' +
-											'Task By' +
-											'</td></tr>' +
-											'<tr id="trns1blankspaceMainProjectTaskDetailsTaskByValue" class="ns1blankspaceMainSelect">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsTaskByValue" class="ns1blankspaceMainSelect">' +
-											'<input id="inputns1blankspaceMainProjectTaskDetailsTaskBy" class="inputns1blankspaceMainSelect"' +
-												' onDemandMethod="/ondemand/setup/?method=SETUP_USER_SEARCH&rf=XML" onDemandColumns="username">' +
-											'</td></tr>';
-					
-						aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsTaskDependsOn" class="ns1blankspaceMain">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsTaskDependsOn" class="ns1blankspaceMain">' +
-											'Depends On Task' +
-											'</td></tr>' +
-											'<tr id="trns1blankspaceMainProjectTaskDetailsTaskDependsOnValue" class="ns1blankspaceMainSelect">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsTaskDependsOnValue" class="ns1blankspaceMainSelect">' +
-											'<input id="inputns1blankspaceMainProjectTaskDetailsTaskDependsOn" class="inputns1blankspaceMainSelect"' +
-												' onDemandMethod="/ondemand/project/?rf=XML&method=PROJECT_TASK_SEARCH&project=' + onDemandXMLGetData(oRow, 'project') + '">' +
-											'</td></tr>';
-					
-						aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsStartBasedOn" class="ns1blankspaceMain">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsStartBasedOn" class="ns1blankspaceMain">' +
-											'Start Date Is Based On' +
-											'</td></tr>' +
-											'<tr id="trns1blankspaceMainProjectTaskDetailsStartBasedOnValue" class="ns1blankspaceMainText">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsStartBasedOnValue" class="ns1blankspaceMainText">' +
-											'<input type="radio" id="radioStartBasedOn1" name="radioStartBasedOn" value="1"/>When Dependant Task Completed' +
-												'&nbsp;&nbsp;<input type="radio" id="radioStartBasedOn2" name="radioStartBasedOn" value="2"/>Project Start Date<br /><br />';
-											'</td></tr>';
-					
-						aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsStartDays" class="ns1blankspaceMain">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsStartDays" class="ns1blankspaceMain">' +
-											'Days Before Start' +
-											'</td></tr>' +
-											'<tr id="trns1blankspaceMainProjectTaskDetailsStartDaysValue" class="ns1blankspaceMainText">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsStartDaysValue" class="ns1blankspaceMainText">' +
-											'<input id="inputns1blankspaceMainProjectTaskDetailsStartDays" class="inputns1blankspaceMainText">' +
-											'</td></tr>';				
-					
-						aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsDurationDays" class="ns1blankspaceMain">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsDurationDays" class="ns1blankspaceMain">' +
-											'Duration (Elapsed Days)' +
-											'</td></tr>' +
-											'<tr id="trns1blankspaceMainProjectTaskDetailsDurationDaysValue" class="ns1blankspaceMainText">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsDurationDaysValue" class="ns1blankspaceMainText">' +
-											'<input id="inputns1blankspaceMainProjectTaskDetailsDurationDays" class="inputns1blankspaceMainText">' +
-											'</td></tr>';	
-											
-						aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsDisplayOrder" class="ns1blankspaceMain">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsDisplayOrder" class="ns1blankspaceMain">' +
-											'Display Order' +
-											'</td></tr>' +
-											'<tr id="trns1blankspaceMainProjectTaskDetailsDisplayOrderValue" class="ns1blankspaceMainText">' +
-											'<td id="tdns1blankspaceMainProjectTaskDetailsDisplayOrderValue" class="ns1blankspaceMainText">' +
-											'<input id="inputns1blankspaceMainProjectTaskDetailsDisplayOrder" class="inputns1blankspaceMainText">' +
-											'</td></tr>';						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Type' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsType" class="ns1blankspaceSelect"' +
+												' data-method="SETUP_PROJECT_TASK_TYPE_SEARCH">' +
+										'</td></tr>');
 
-						aHTML.push('</table>';					
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Task By' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsTaskBy" class="ns1blankspaceSelect"' +
+												' data-method="SETUP_USER_SEARCH" data-columns="username">' +
+										'</td></tr>');			
+					
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Depends On Task' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsDependsOn" class="ns1blankspaceSelect"' +
+												' data-method="PROJECT_TASK_SEARCH&project=' + ns1blankspace.objectContextData.project + '" data-columns="username">' +
+										'</td></tr>');
+				
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Start Date Is Based On' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input type="radio" id="radioStartBasedOn1" name="radioStartBasedOn" value="1"/>When Dependant Task Completed' +
+											'<br /><input type="radio" id="radioStartBasedOn2" name="radioStartBasedOn" value="2"/>Project Start Date' + 
+										'</td></tr>');
 						
-						$('#tdns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
-						
-						$('#trns1blankspaceMainProjectTaskDetailsTaskBy').hide();
-						
-						var aHTML = [];
-						var h = -1;
-							
-						aHTML.push('<table id="tablens1blankspaceMainDetailsColumn2" class="ns1blankspaceMain">';
-						
-						aHTML.push('</table>';					
-							
-						$('#tdns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Days Before Start' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsStartDays" class="ns1blankspaceText">' +
+										'</td></tr>');	
+					
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Duration (Elapsed Days)' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsDurationDays" class="ns1blankspaceText">' +
+										'</td></tr>');	
+								
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Display Order' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsDisplayOrder" class="ns1blankspaceText">' +
+										'</td></tr>');	
 
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMainDetailsColumn1').html(aHTML.join(''));
+						
+						$('#ns1blankspaceDetailsTaskBy').hide();
+						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputns1blankspaceMainProjectTaskDetailsTitle').val(ns1blankspace.objectContextData.title);
-							$('#inputns1blankspaceMainProjectTaskDetailsType').attr('onDemandID', ns1blankspace.objectContextData.type);
-							$('#inputns1blankspaceMainProjectTaskDetailsType').val(ns1blankspace.objectContextData.typetext);
-							$('#inputns1blankspaceMainProjectTaskDetailsTaskBy').attr('onDemandID', ns1blankspace.objectContextData.taskbyuser);
-							$('#inputns1blankspaceMainProjectTaskDetailsTaskBy').val(ns1blankspace.objectContextData.taskbyusertext);
-							$('#inputns1blankspaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID', ns1blankspace.objectContextData.templatedependsontask);
-							$('#inputns1blankspaceMainProjectTaskDetailsTaskDependsOn').val(ns1blankspace.objectContextData.templatedependsontasktext);
-							
+							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.title);
+							$('#ns1blankspaceDetailsType').attr('data-id', ns1blankspace.objectContextData.type);
+							$('#ns1blankspaceDetailsType').val(ns1blankspace.objectContextData.typetext);
+							$('#ns1blankspaceDetailsTaskBy').attr('data-id', ns1blankspace.objectContextData.taskbyuser);
+							$('#ns1blankspaceDetailsTaskBy').val(ns1blankspace.objectContextData.taskbyusertext);
+							$('#ns1blankspaceDetailsTaskDependsOn').attr('data-id', ns1blankspace.objectContextData.templatedependsontask);
+							$('#ns1blankspaceDetailsTaskDependsOn').val(ns1blankspace.objectContextData.templatedependsontasktext);
 							$('[name="radioStartBasedOn"][value="' + ns1blankspace.objectContextData.templateelapsedstartdatetype + '"]').attr('checked', true);
-						
-							$('#inputns1blankspaceMainProjectTaskDetailsStartDays').val(ns1blankspace.objectContextData.templateelapsedstartdatedurationdays);
-							$('#inputns1blankspaceMainProjectTaskDetailsDurationDays').val(ns1blankspace.objectContextData.templateelapseddurationdays);
-							$('#inputns1blankspaceMainProjectTaskDetailsDisplayOrder').val(ns1blankspace.objectContextData.displayorder);
+							$('#ns1blankspaceDetailsStartDays').val(ns1blankspace.objectContextData.templateelapsedstartdatedurationdays);
+							$('#ns1blankspaceDetailsDurationDays').val(ns1blankspace.objectContextData.templateelapseddurationdays);
+							$('#ns1blankspaceDetailsDisplayOrder').val(ns1blankspace.objectContextData.displayorder);
 						}
 					}	
 				},
 
 	description:
 				function ()
-				{
-					
+				{	
 					var aHTML = [];
-					var h = -1;
 					
-					if ($('#divns1blankspaceMainDescription').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainDescription').attr('data-loading') == '1')
 					{
-						$('#divns1blankspaceMainDescription').attr('onDemandLoading', '');
+						$('#ns1blankspaceMainDescription').attr('data-loading', '');
 								
-						aHTML.push('<table id="tablens1blankspaceMainDescription" class="ns1blankspaceMain">';
-						aHTML.push('<tr id="trns1blankspaceMainDescriptionRow1" class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainDescriptionColumn1" class="ns1blankspaceMainColumn1Large">' +
-										'</td>' +
-										'<td id="tdns1blankspaceMainDescriptionColumn2" class="ns1blankspaceMain">' +
-										'</td>' +
-										'</tr>';
-						aHTML.push('</table>';					
-						
-						$('#divns1blankspaceMainDescription').html(aHTML.join(''));
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceDescriptionColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceDescriptionColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+									'</tr></table>');
+			
+						$('#ns1blankspaceMainDescription').html(aHTML.join(''));
 						
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML.push('<table id="tablens1blankspaceMainDescriptionColumn1" class="ns1blankspaceMain">';
+						aHTML.push('<table class="ns1blankspace">');
 								
-						aHTML.push('<tr id="trns1blankspaceMainDescriptionValue" class="ns1blankspaceMainTextMulti">' +
-										'<td id="tdns1blankspaceMainDescriptionValue" class="ns1blankspaceMainTextMulti">' +
-										'<textarea rows="30" cols="50" id="inputns1blankspaceMainDescription" class="inputns1blankspaceMainTextMulti inputns1blankspaceMainTextMultiLarge"></textarea>' +
-										'</td></tr>';
+						aHTML.push('<tr class="ns1blankspaceTextMulti">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="30" cols="50" id="ns1blankspaceDescription' +
+											ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
+										'</td></tr>');
 										
-						aHTML.push('</table>';					
-						
-						$('#tdns1blankspaceMainDescriptionColumn1').html(aHTML.join(''));
+						aHTML.push('</table>');	
+	
+						$('#ns1blankspaceDescriptionColumn1').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputns1blankspaceMainDescription').val(unescape(ns1blankspace.objectContextData.description));
+							$('#ns1blankspaceMainDescription').val(ns1blankspace.objectContextData.description);
 						}
-					
-						//tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceMainDescription');
 					}	
 				},
 
 	save: 		{
 					send: 		function ()
 								{
-									var sParam = '/ondemand/project/?method=PROJECT_TASK_MANAGE'
-									var sData = (ns1blankspace.objectContext == -1)?'':'&id=' + ns1blankspace.objectContext;
+									var sData = 'id=' + ns1blankspace.objectContext;
 										
-									if ($('#divns1blankspaceMainDetails').html() != '')
+									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&title=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsTitle').val());
-										sData += '&type=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsType').attr('onDemandID'));
-										sData += '&taskbyuser=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsTaskBy').attr('onDemandID'));
-										sData += '&taskdependson=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsTaskDependsOn').attr('onDemandID'));
+										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
+										sData += '&type=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsType').attr('onDemandID'));
+										sData += '&taskbyuser=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTaskBy').attr('onDemandID'));
+										sData += '&taskdependson=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTaskDependsOn').attr('onDemandID'));
 										sData += '&taskstartbasedon=' + $('input[name="radioStartBasedOn"]:checked').val();
-										sData += '&daysbeforestart=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsStartDays').val());
-										sData += '&durationdays=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsDurationDays').val());
-										sData += '&displayorder=' + encodeURIComponent($('#inputns1blankspaceMainProjectTaskDetailsDisplayOrder').val());
+										sData += '&daysbeforestart=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsStartDays').val());
+										sData += '&durationdays=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDurationDays').val());
+										sData += '&displayorder=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDisplayOrder').val());
 									}
 
-									if ($('#divns1blankspaceMainDescription').html() != '')
+									if ($('#ns1blankspaceMainDescription').html() != '')
 									{
-										sData += '&description=' + encodeURIComponent($('#inputns1blankspaceMainDescription').val());
+										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDescription').val());
 									}
 									
-									ns1blankspaceSave(sParam, sData, 'Template Task Saved');	
-								}
-				},
-				
-	actions: 	{
-					show:		function (oParam, oResponse)
-								{
-
-									var sXHTMLElementId = "divns1blankspaceMainActionDetails";
-									var sXHTMLElementContextId;
-									var lProjectTask;
-									
-									if (oParam != undefined)
-									{
-										if (oParam.label != undefined) {sLabel = oParam.label}
-										if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
-										if (oParam.xhtmlElementContextId != undefined) {sXHTMLElementContextId = oParam.xhtmlElementContextId}
-										if (oParam.action != undefined) {lAction = oParam.action}
-									}
-
-									if (sXHTMLElementContextId != undefined)
-									{
-										var aSearch = sXHTMLElementContextId.split('-');
-										var sElementId = aSearch[0];
-										var lAction = aSearch[1];
-									}	
-										
-									ns1blankspaceMainViewportShow('#' + sXHTMLElementId);	
-										
-									var aHTML = [];
-									var h = -1;
-										
-									aHTML.push('<table id="tablens1blankspaceMainProjectTaskActionDetails" class="ns1blankspaceMain">' +
-													'<tr id="trns1blankspaceMainProjectTaskActionDetailsRow1" class="ns1blankspaceMainRow1">' +
-													'<td id="tdns1blankspaceMainProjectTaskActionDetailsColumn1" class="ns1blankspaceMainColumn1Large">' +
-													'</td>' +
-													'<td id="tdns1blankspaceMainProjectTaskActionDetailsColumn2" class="ns1blankspaceMainColumn2Action">' +
-													'</td>' +
-													'</tr>' +
-													'</table>';				
-										
-									$('#' + sXHTMLElementId).html(aHTML.join(''));
-
-									if (oResponse == undefined && lAction != undefined)
-									{
-										var sParam = 'method=ACTION_SEARCH' +
-														'&id=' + lAction;
-										
-										$.ajax(
-										{
-											type: 'GET',
-											url: '/ondemand/action/',
-											data: sParam,
-											dataType: 'json',
-											success: function(data){ns1blankspaceSetupProjectTaskActionDetails(oParam, data)}
-										});
-									}
-									else
-									{
-										for (edId in tinyMCE.editors) 
-											tinyMCE.editors[edId].destroy(true);
-											
-										var aHTML = [];
-										var h = -1;
-										
-										aHTML.push('<table id="tablens1blankspaceMainTaskDetailsColumn2" class="ns1blankspaceMainColumn2">';
-										
-										aHTML.push('<tr><td id="tdns1blankspaceMainTaskActionDetailsSave" class="ns1blankspaceMain">' +
-														'<span id="spanns1blankspaceMainTaskActionDetailsSave">Save</span>' +
-														'</td></tr>';
-																
-										aHTML.push('</table>';					
-										
-										$('#tdns1blankspaceMainProjectTaskActionDetailsColumn2').html(aHTML.join(''));
-										
-										$('#spanns1blankspaceMainTaskActionDetailsSave').button(
-										{
-											label: "Save"
-										})
-										.click(function() {
-											ns1blankspaceSetupProjectTaskActionDetailsSave(oParam);
-										})
-										
-										var aHTML = [];
-										var h = -1;
-															
-										aHTML.push('<table id="tablens1blankspaceMainDetailsColumn1" class="ns1blankspaceMain">';					
-															
-										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsSubject" class="ns1blankspaceMain">' +
-															'<td id="tdns1blankspaceMainProjectTaskDetailsSubject" class="ns1blankspaceMain">' +
-															'Subject' +
-															'</td></tr>' +
-															'<tr id="trns1blankspaceMainProjectTaskDetailsSubjectValue" class="ns1blankspaceMainText">' +
-															'<td id="tdns1blankspaceMainProjectTaskDetailsSubjectValue" class="ns1blankspaceMainText">' +
-															'<input id="inputns1blankspaceMainProjectTaskDetailsSubject" class="inputns1blankspaceMainText">' +
-															'</td></tr>';		
-															
-										ns1blankspace.counter.editor = + ns1blankspace.counter.editor + 1;
-									
-										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsDescriptionValue" class="ns1blankspaceMainTextMulti">' +
-															'<td id="tdns1blankspaceMainProjectTaskDetailsDescriptionValue" class="ns1blankspaceMainTextMulti">' +
-															'<textarea rows="10" cols="50" style="width:100%;" ' +
-															'id="inputns1blankspaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor + '" class="inputns1blankspaceMainTextMulti"></textarea>' +
-															'</td></tr>';
-									
-										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsType" class="ns1blankspaceMain">' +
-															'<td id="tdns1blankspaceMainProjectTaskDetailsType" class="ns1blankspaceMain">' +
-															'Type' +
-															'</td></tr>' +
-															'<tr id="trns1blankspaceMainProjectTaskDetailsTypeValue" class="ns1blankspaceMainSelect">' +
-															'<td id="tdns1blankspaceMainProjectTaskDetailsTypeValue" class="ns1blankspaceMainSelect">' +
-															'<input id="inputns1blankspaceMainProjectTaskActionDetailsType" class="inputns1blankspaceMainSelect"' +
-																' onDemandMethod="/ondemand/setup/?rf=XML&method=SETUP_ACTION_TYPE_SEARCH">' +
-															'</td></tr>';
-									
-										aHTML.push('<tr id="trns1blankspaceMainProjectTaskDetailsTaskBy" class="ns1blankspaceMain">' +
-															'<td id="tdns1blankspaceMainProjectTaskDetailsTaskBy" class="ns1blankspaceMain">' +
-															'Task By' +
-															'</td></tr>' +
-															'<tr id="trns1blankspaceMainProjectTaskDetailsTaskByValue" class="ns1blankspaceMainSelect">' +
-															'<td id="tdns1blankspaceMainProjectTaskDetailsTaskByValue" class="ns1blankspaceMainSelect">' +
-															'<input id="inputns1blankspaceMainProjectTaskActionDetailsTaskBy" class="inputns1blankspaceMainSelect"' +
-																' onDemandMethod="SETUP_USER_SEARCH" onDemandColumns="username">' +
-															'</td></tr>';
-										
-										aHTML.push('</table>';						
-									
-										$('#tdns1blankspaceMainProjectTaskActionDetailsColumn1').html(aHTML.join(''));
-										
-										if (oResponse != undefined)
-										{
-											if (oResponse.data.rows.length != 0)
-											{
-												$('#inputns1blankspaceMainProjectTaskDetailsSubject').val(oResponse.data.rows[0].subject);
-												
-												$('#inputns1blankspaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).val(ns1blankspaceFormatXHTML(oResponse.data.rows[0].description));	
-												
-												$('#inputns1blankspaceMainProjectTaskActionDetailsType').attr('onDemandID', oResponse.data.rows[0].type);
-												$('#inputns1blankspaceMainProjectTaskActionDetailsType').val(oResponse.data.rows[0].typetext);
-												$('#inputns1blankspaceMainProjectTaskActionDetailsTaskBy').attr('onDemandID', oResponse.data.rows[0].actionby);
-												$('#inputns1blankspaceMainProjectTaskActionDetailsTaskBy').val(oResponse.data.rows[0].actionbyfirstname + ' ' + oResponse.data.rows[0].actionbysurname);
-											}
-										}	
-										
-										tinyMCE.execCommand('mceAddControl', false, 'inputns1blankspaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor);
-									}	
-								},	
-
-					remove:		function (sXHTMLElementId)
-								{
-
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
-									var sSearchContext = aSearch[1];
-									
-									//var sParam = 'method=ACTION_MANAGE&remove=1';
-									var sParam = 'method=ACTION_MANAGE&object=' + (-1 * ns1blankspace.objectProjectTask);
-									var sData = 'id=' + sSearchContext;
-												
-									$.ajax(
-										{
-											type: 'POST',
-											url: '/ondemand/action/?' + sParam,
-											data: sData,
-											dataType: 'text',
-											success: function(data){$('#' + sXHTMLElementId).parent().parent().fadeOut(500)}
-										});
-										
-								},
-
-					save:		function (oParam)
-								{
-									var sParam = '/ondemand/action/?rf=JSON&method=ACTION_MANAGE';
-									var sData = '';
-									var bAsync = true;
-									//var ns1blankspace.report.today = new Date();
-									//ns1blankspace.report.today = ns1blankspace.report.today.format('yyyy-mm-dd');
-									var iAction;
-									var sXHTMLElementContextId;
-									
-									if (oParam != undefined)
-									{
-										if (oParam.action != undefined) {iAction = oParam.action}
-										if (oParam.xhtmlElementContextId != undefined) {sXHTMLElementContextId = oParam.xhtmlElementContextId}
-									}	
-									
-									if (sXHTMLElementContextId != undefined)
-									{
-										var aSearch = sXHTMLElementContextId.split('-');
-										var iAction = aSearch[1];
-									}	
-									
-									if (iAction != undefined)
-									{
-											sData += 'id=' + iAction;
-									}
-									else
-									{
-										sData += 'object=' + ns1blankspace.objectProjectTask;
-										sData += '&objectcontext=' + ns1blankspace.objectContext;
-									}
-									
-									sData += '&subject=' + ns1blankspaceFormatValue($('#inputns1blankspaceMainProjectTaskDetailsSubject').val());
-									sData += '&description=' + ns1blankspaceFormatValue(tinyMCE.get('inputns1blankspaceMainProjectTaskDetailsDescription' + ns1blankspace.counter.editor).getContent());
-									sData += '&type=' + ns1blankspaceFormatValue($('#inputns1blankspaceMainProjectTaskActionDetailsType').attr('onDemandID'));
-									sData += '&actionby=' + ns1blankspaceFormatValue($('#inputns1blankspaceMainProjectTaskActionDetailsTaskBy').attr('onDemandID'));
-										  
 									$.ajax(
 									{
 										type: 'POST',
-										url: sParam,
+										url: ns1blankspace.util.endpointURI('PROJECT_TASK_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										async: bAsync,
-										success: function(data) {
-												ns1blankspaceStatus('Action saved');
-												ns1blankspaceMainViewportShow("#divns1blankspaceMainActions");
-												ns1blankspaceSetupProjectTaskActions(
-													{
-														actions: {add: false},
-														xhtmlElementID: 'tdns1blankspaceMainActionsColumn1'
-													});
-												
-												}
-									});	
+										success: function(data){ns1blankspace.status.message('Saved')}
+									});		
 								}
 				}
 }								
