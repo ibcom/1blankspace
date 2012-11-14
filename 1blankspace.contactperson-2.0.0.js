@@ -850,7 +850,7 @@ ns1blankspace.contactPerson =
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.contactPerson.init();
-					ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 					$('#ns1blankspaceViewControlAction').button({disabled: false});
 					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
 					ns1blankspace.contactPerson.details();
