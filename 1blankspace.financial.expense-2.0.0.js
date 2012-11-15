@@ -193,14 +193,18 @@ ns1blankspace.financial.expense =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position({xhtmlElementID: sElementId});
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 											oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,' +
 																'reference,accrueddate,amount');
-											oSearch.rf = 'json';
-											oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+											//oSearch.addOperator('or');
+											//oSearch.addFilter('expense.ContactBusinessPaidTo.tradename', 'TEXT_IS_LIKE', sSearchText);
+											//oSearch.addOperator('or');
+											//.addFilter('expense.ContactPersonPaidTo.surname', 'TEXT_IS_LIKE', sSearchText);
+
 											oSearch.getResults(function(data) {ns1blankspace.financial.expense.search.process(oParam, data)});	
 										}
 									};	
@@ -211,6 +215,9 @@ ns1blankspace.financial.expense =
 									var iColumn = 0;
 									var	iMaximumColumns = 1;
 									var aHTML = [];
+									var sContact;
+
+									ns1blankspace.search.stop();
 										
 									if (oResponse.data.rows.length == 0)
 									{
@@ -229,11 +236,25 @@ ns1blankspace.financial.expense =
 												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 										
-											aHTML.push('<td class="ns1blankspaceSearch" id="' + +
-															'-' + this.id + '">' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+															'search-' + this.id + '">' +
 															this.reference +
 															'</td>');
+
+											if (this.contactbusinesspaidtotext != '')
+											{
+												sContact = this.contactbusinesspaidtotext;
+											}
+											else
+											{
+												sContact = this.contactpersonpaidtotext;
+											}	
 											
+											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
+															'searchContact-' + this.id + '">' +
+															sContact +
+															'</td>');
+
 											if (iColumn == iMaximumColumns)
 											{
 												aHTML.push('</tr>');
@@ -425,17 +446,17 @@ ns1blankspace.financial.expense =
 						
 						var aHTML = [];
 
-						aHTML[++h] = '<table class="ns1blankspaceColumn1">';
+						aHTML.push('<table class="ns1blankspaceColumn1">');
 											
 						if (ns1blankspace.objectContextData.amount != '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Amount</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSummary">' +
 											'$' + ns1blankspace.objectContextData.amount +
 											'</td></tr>');
 						}	
 						
-						if (ns1blankspace.objectContextData.contactbusinesssenttotext != '')
+						if (ns1blankspace.objectContextData.contactbusinesspaidtotext != '')
 						{
 
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
@@ -444,7 +465,7 @@ ns1blankspace.financial.expense =
 											'</td></tr>');
 						}
 						
-						if (ns1blankspace.objectContextData.contactpersonsenttotext != '')
+						if (ns1blankspace.objectContextData.contactpersonpaidtotext != '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Person</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryPerson" class="ns1blankspaceSummary">' +

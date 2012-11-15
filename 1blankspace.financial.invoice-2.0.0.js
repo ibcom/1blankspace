@@ -207,7 +207,11 @@ ns1blankspace.financial.invoice =
 											oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,projecttext,project,projecttext,areatext,' +
 																'area,reference,purchaseorder,sentdate,duedate,description,amount,tax,sent');
 											oSearch.rf = 'json';
-											oSearch.addFilter('reference', 'STRING_IS_LIKE', sSearchText);
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addOperator('or');
+											oSearch.addFilter('invoice.contactbusinesssentto.tradename', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addOperator('or');
+											oSearch.addFilter('invoice.contactpersonsentto.surname', 'TEXT_IS_LIKE', sSearchText);
 											
 											oSearch.getResults(function(data) {ns1blankspace.financial.invoice.search.process(oParam, data)});	
 										}
@@ -239,10 +243,25 @@ ns1blankspace.financial.invoice =
 												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 										
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'-' + this.id + '">' +
+												aHTML.push('<td class="ns1blankspaceSearch" id="' +
+															'search-' + this.id + '">' +
 															this.reference +
 															'</td>');
+
+											if (this.contactbusinesssenttotext != '')
+											{
+												sContact = this.contactbusinesssenttotext;
+											}
+											else
+											{
+												sContact = this.contactpersonsenttotext;
+											}	
+											
+											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
+															'searchContact-' + this.id + '">' +
+															sContact +
+															'</td>');
+
 											
 											if (iColumn == iMaximumColumns)
 											{

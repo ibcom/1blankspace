@@ -388,12 +388,23 @@ table.ns1blankspaceSearchMedium
 
 td.ns1blankspaceSearch
 {
-	border-top-style: solid;
-	border-width: 0px;
-	border-color: #B8B8B8;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-color: white;
 	cursor: pointer;
 	font-size: 0.875em;
-	padding: 2px;
+	padding: 3px;
+}
+
+td.ns1blankspaceSearchSub
+{
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: white;
+	cursor: pointer;
+	font-size: 0.875em;
+	padding: 3px;
+	color: #B8B8B8;
 }
 
 .ns1blankspaceViewControlColumn
