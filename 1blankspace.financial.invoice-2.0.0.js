@@ -145,10 +145,10 @@ ns1blankspace.financial.invoice =
 				},
 
 	search: 	{
-					send: 		function (sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementID, oParam)
 								{
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
+									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;
@@ -200,14 +200,14 @@ ns1blankspace.financial.invoice =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position({xhtmlElementID: sElementId});
-											
+											ns1blankspace.search.start();
+
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 											oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,projecttext,project,projecttext,areatext,' +
 																'area,reference,purchaseorder,sentdate,duedate,description,amount,tax,sent');
 											oSearch.rf = 'json';
-											oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
+											oSearch.addFilter('reference', 'STRING_IS_LIKE', sSearchText);
 											
 											oSearch.getResults(function(data) {ns1blankspace.financial.invoice.search.process(oParam, data)});	
 										}
@@ -219,6 +219,8 @@ ns1blankspace.financial.invoice =
 									var iColumn = 0;
 									var	iMaximumColumns = 1;
 									var aHTML = [];
+										
+									ns1blankspace.search.stop();
 										
 									if (oResponse.data.rows.length == 0)
 									{
@@ -234,17 +236,17 @@ ns1blankspace.financial.invoice =
 											
 											if (iColumn == 1)
 											{
-												aHTML[++h] = '<tr class="ns1blankspaceSearch">';
+												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 										
-											aHTML[++h] = '<td class="ns1blankspaceSearch" id="' + +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
 															this.reference +
-															'</td>';
+															'</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
-												aHTML[++h] = '</tr>'
+												aHTML.push('</tr>');
 												iColumn = 0;
 											}	
 										});
@@ -300,7 +302,7 @@ ns1blankspace.financial.invoice =
 									
 						aHTML.push('</table>');					
 					
-						aHTML.push('<table class="interfaceViewportControl">');
+						aHTML.push('<table class="ns1blankspaceControl">');
 					
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
@@ -397,8 +399,8 @@ ns1blankspace.financial.invoice =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 								
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
-							'<br /><span id="ns1blankspaceControlContext_sentdate" class="ns1blankspaceControlSubContext">' + ns1blankspace.objectContextData.sentdate + '</span>' +
-							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceControlSubContext">$' + ns1blankspace.objectContextData.amount + '</span>');
+							'<br /><span id="ns1blankspaceControlContext_sentdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.sentdate + '</span>' +
+							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>');
 							
 						ns1blankspace.history.view({
 							newDestination: 'ns1blankspace.financial.invoice.init({showHome: false});ns1blankspace.financial.invoice.search.send("-' + ns1blankspace.objectContext + '")',
@@ -731,7 +733,7 @@ details: 		function ()
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
-										'<input id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti">' +
+										'<textarea id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti" rows="10" cols="35" ></textarea>' +
 										'</td></tr>');		
 										
 						aHTML.push('</table>');					

@@ -84,6 +84,7 @@ a:hover
 	border-width: 1px;
 	border-color: #B8B8B8;
 	padding-right: 20px;
+	text-align: right;
 }
 
 #ns1blankspaceMain
@@ -292,8 +293,10 @@ table.ns1blankspaceMessagingIMAPInbox
 	position: absolute;
 	top: 5px;
 	left: 461px;
-	width: 20px;	
+	width: 20px;
+	height: 20px;
 	z-index: 1;
+	padding-top: 5px;
 }
 
 #ns1blankspaceViewControlNewContainer
@@ -359,6 +362,36 @@ table.ns1blankspaceViewControlContainer
 	margin-bottom:1px;
 	margin-right:1px;
 	margin-left:1px;
+}
+
+table.ns1blankspaceSearchMedium
+{
+	font-size: 0.875em;
+	background-color: #F8F8F8;
+	width: 250px;
+	
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+	
+	border-style: solid;
+	border-width: 3px;
+	border-color: #E8E8E8;
+	
+	margin-bottom: 1px;
+	margin-right: 1px;
+	margin-left: 1px;
+}
+
+td.ns1blankspaceSearch
+{
+	border-top-style: solid;
+	border-width: 0px;
+	border-color: #B8B8B8;
+	cursor: pointer;
+	font-size: 0.875em;
+	padding: 2px;
 }
 
 .ns1blankspaceViewControlColumn

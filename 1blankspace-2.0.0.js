@@ -1006,13 +1006,13 @@ ns1blankspace.app =
 						$('#ns1blankspaceViewControlSearch').keyup(function(event)
 						{
 							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-					        ns1blankspace.timer.delayCurrent = setTimeout(sNS + '.search.show("ns1blankspaceViewControlSearch")', ns1blankspace.option.typingWait);
+					        ns1blankspace.timer.delayCurrent = setTimeout(sNS + '.search.send("ns1blankspaceViewControlSearch")', ns1blankspace.option.typingWait);
 						});
 						
-						$('#ns1blankspaceViewControlSearch').click(function(event)
-						{
-							oNS.search.show('ns1blankspaceViewControlSearch');
-						});
+						//$('#ns1blankspaceViewControlSearch').click(function(event)
+						//{
+						//	oNS.search.show('ns1blankspaceViewControlSearch');
+						//});
 						
 						$('#ns1blankspaceViewControlSearchOptions').click(function(event)
 						{
@@ -2562,16 +2562,17 @@ ns1blankspace.search =
 
 	start: 		function ()
 				{
-					var sElementId = 'ns1blankspaceViewControlSearchStatus';
-					$('#' + sElementId).show();
-					$('#' + sElementId).html(ns1blankspace.xhtml.loadingSmall);
+					var sElementID = 'ns1blankspaceViewControlSearch';
+					$('#' + sElementID).show();
+					$('#' + sElementID).html(ns1blankspace.xhtml.loadingSmall);
+					ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: 10});
 				},
 
 	stop:		function ()
 				{
-					var sElementId = 'ns1blankspaceViewControlSearchStatus';
-					$('#' + sElementId).hide();
-					$('#' + sElementId).html('');
+					var sElementID = 'ns1blankspaceViewControlSearchStatus';
+					$('#' + sElementID).hide();
+					$('#' + sElementID).html('');
 				}
 }
 
