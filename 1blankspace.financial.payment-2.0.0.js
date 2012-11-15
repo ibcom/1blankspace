@@ -108,7 +108,7 @@ ns1blankspace.financial.payment =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceMain" colspan="4">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="4">MOST LIKELY</td></tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{					
@@ -205,16 +205,15 @@ ns1blankspace.financial.payment =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position(sElementId);
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 											oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,' +
 																'reference,paiddate,amount');
-											oSearch.rf = 'json';
-											oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 											
-											oSearch.getResults(function(data) {ns1blankspace.financial.invoice.search.process(oParam, data)});	
+											oSearch.getResults(function(data) {ns1blankspace.financial.receipt.search.process(oParam, data)});	
 										}
 									}	
 								},
@@ -224,6 +223,9 @@ ns1blankspace.financial.payment =
 									var iColumn = 0;
 									var	iMaximumColumns = 1;
 									var aHTML = [];
+									var sContact;
+
+									ns1blankspace.search.stop();
 
 									if (oResponse.data.rows.length == 0)
 									{
@@ -242,9 +244,23 @@ ns1blankspace.financial.payment =
 												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 										
-											aHTML.push('<td class="ns1blankspaceSearch" id="' + +
-															'-' + this.id + '">' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+															'search-' + this.id + '">' +
 															this.reference +
+															'</td>');
+
+											if (this.contactbusinesspaidtotext != '')
+											{
+												sContact = this.contactbusinesspaidtotext;
+											}
+											else
+											{
+												sContact = this.contactpersonpaidtotext;
+											}	
+											
+											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
+															'searchContact-' + this.id + '">' +
+															sContact +
 															'</td>');
 											
 											if (iColumn == iMaximumColumns)

@@ -223,7 +223,8 @@ ns1blankspace.financial.invoice =
 									var iColumn = 0;
 									var	iMaximumColumns = 1;
 									var aHTML = [];
-										
+									var sContact;
+									
 									ns1blankspace.search.stop();
 										
 									if (oResponse.data.rows.length == 0)
@@ -243,10 +244,10 @@ ns1blankspace.financial.invoice =
 												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 										
-												aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'search-' + this.id + '">' +
-															this.reference +
-															'</td>');
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+														'search-' + this.id + '">' +
+														this.reference +
+														'</td>');
 
 											if (this.contactbusinesssenttotext != '')
 											{
@@ -262,7 +263,6 @@ ns1blankspace.financial.invoice =
 															sContact +
 															'</td>');
 
-											
 											if (iColumn == iMaximumColumns)
 											{
 												aHTML.push('</tr>');
