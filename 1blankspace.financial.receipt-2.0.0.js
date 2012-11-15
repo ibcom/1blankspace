@@ -9,7 +9,7 @@ ns1blankspace.financial.receipt =
 {
 	init: 		function (oParam)
 				{
-					ns1blankspace.financial.init();
+					ns1blankspace.financial.initData();
 					
 					var bShowHome = true
 					

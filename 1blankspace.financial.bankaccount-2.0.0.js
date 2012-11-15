@@ -9,7 +9,7 @@ ns1blankspace.financial.bankAccount =
 {
 	init: 		function (oParam)
 				{
-					ns1blankspace.financial.init();
+					ns1blankspace.financial.initData();
 					
 					var bShowHome = true
 					

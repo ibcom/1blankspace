@@ -204,11 +204,13 @@ td.ns1blankspaceNothing
 {
 	font-size: 0.75em;
 	color: #999999;
+	padding-left: 10px;
 }
 
 .ns1blankspaceSub, .ns1blankspaceSubContext
 {
 	color: #999999;
+	font-weight: 100;
 }
 
 .ns1blankspaceHeader

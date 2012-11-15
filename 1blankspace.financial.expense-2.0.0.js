@@ -16,7 +16,7 @@ ns1blankspace.financial.expense =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 
-					ns1blankspace.financial.init();
+					ns1blankspace.financial.initData();
 
 					ns1blankspace.object = 5;
 					ns1blankspace.objectParentName = 'financial';
@@ -109,7 +109,7 @@ ns1blankspace.financial.expense =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceMain" colspan="4">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="4">MOST LIKELY</td></tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{				
@@ -391,11 +391,11 @@ ns1blankspace.financial.expense =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 								
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
-							'<br /><span id="ns1blankspaceControlContext_accrueddate" class="ns1blankspaceControlSubContext">' + ns1blankspace.objectContextData.accrueddate + '</span>' +
-							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceControlSubContext">$' + ns1blankspace.objectContextData.amount + '</span>');
+							'<br /><span id="ns1blankspaceControlContext_accrueddate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.accrueddate + '</span>' +
+							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>');
 							
 						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.expense.init({showHome: false});ins1blankspace.financial.invoice.search.send("-' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspace.financial.expense.init({showHome: false});ns1blankspace.financial.expense.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
 						
@@ -403,7 +403,7 @@ ns1blankspace.financial.expense =
 					}	
 				},		
 
-	summary: 	function interfaceFinancialExpenseSummary()
+	summary: 	function ()
 				{
 					var aHTML = [];
 					

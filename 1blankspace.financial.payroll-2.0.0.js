@@ -16,7 +16,7 @@ ns1blankspace.financial.payroll =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 
-					ns1blankspace.financial.init();
+					ns1blankspace.financial.initData();
 
 					ns1blankspace.object = 37;
 					ns1blankspace.objectParentName = 'financial';
