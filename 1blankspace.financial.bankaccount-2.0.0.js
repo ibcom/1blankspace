@@ -20,7 +20,8 @@ ns1blankspace.financial.bankAccount =
 
 					ns1blankspace.object = -1;
 					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectName = 'financial.bankaccount';
+					ns1blankspace.objectParentName = 'financial';
+					ns1blankspace.objectName = 'bankAccount';
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Bank Accounts';
 					
@@ -37,40 +38,53 @@ ns1blankspace.financial.bankAccount =
 				},
 
 	home: 		function ()
-				{	
-					var aHTML = [];
-					
-					aHTML.push('<table><tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr></table>');		
-					
-					$('#ns1blankspaceControl').html(aHTML.join(''));	
+				{
+					if (ns1blankspace.timer.initData == undefined)
+					{	
+						$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
+						ns1blankspace.timer.initData = window.setInterval('ns1blankspace.financial.bankAccount.home()', 100);
+					}
+					else
+					{	
+						if (ns1blankspace.financial.data.bankaccounts)
+						{
+							window.clearInterval(ns1blankspace.timer.initData);
+							
+							var aHTML = [];
+							
+							aHTML.push('<table><tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr></table>');		
+							
+							$('#ns1blankspaceControl').html(aHTML.join(''));	
 
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					
-					var aHTML = [];
-								
-					aHTML.push('<table id="ns1blankspaceMostLikely" class="ns1blankspace">');
+							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+							
+							var aHTML = [];
+										
+							aHTML.push('<table id="ns1blankspaceMostLikely" class="ns1blankspace">');
 
-					$.each(ns1blankspace.financial.bankaccounts, function()
-					{
-						aHTML.push('<tr class="ns1blankspaceRow">' +
-										'<td id="ns1blankspaceBankAccount_title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:150px;">' +
-										this["title"] + '</td>' + 
-										'<td id="ns1blankspaceBankAccount_lastreconcileddate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;">' +
-										this.lastreconcileddate + '</td>' +
-										'<td id="ns1blankspaceBankAccount_lastreconciledamount-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;">' +
-										'$' + this.lastreconciledamount + '</td>' + 	
-										'<td>&nbsp;</td></tr>');
-					});
-					
-					aHTML.push('</table>');
-		
-					$('#ns1blankspaceMain').html(aHTML.join(''));
+							$.each(ns1blankspace.financial.data.bankaccounts, function()
+							{
+								aHTML.push('<tr class="ns1blankspaceRow">' +
+												'<td id="ns1blankspaceBankAccount_title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:150px;">' +
+												this["title"] + '</td>' + 
+												'<td id="ns1blankspaceBankAccount_lastreconcileddate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;">' +
+												this.lastreconcileddate + '</td>' +
+												'<td id="ns1blankspaceBankAccount_lastreconciledamount-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;">' +
+												'$' + this.lastreconciledamount + '</td>' + 	
+												'<td>&nbsp;</td></tr>');
+							});
+							
+							aHTML.push('</table>');
+				
+							$('#ns1blankspaceMain').html(aHTML.join(''));
 
-					$('.ns1blankspaceMostLikely').click(function(event) {
-						var aID = (event.target.id).split('-');
-						ns1blankspace.financial.bankAccount.show({id: aID[1]});
-					});
-				},
+							$('.ns1blankspaceMostLikely').click(function(event) {
+								var aID = (event.target.id).split('-');
+								ns1blankspace.financial.bankAccount.show({id: aID[1]});
+							});
+						}	
+					}	
+				},		
 
 	layout: 	function ()
 				{	
@@ -138,7 +152,7 @@ ns1blankspace.financial.bankAccount =
 					ns1blankspace.financial.bankAccount.layout();
 					
 					ns1blankspace.objectContextData == undefined;
-					ns1blankspace.objectContextData = ($.grep(ns1blankspace.financial.bankaccounts, function (a) { return a.id == ns1blankspace.objectContext; }))[0];
+					ns1blankspace.objectContextData = ($.grep(ns1blankspace.financial.data.bankaccounts, function (a) { return a.id == ns1blankspace.objectContext; }))[0];
 					
 					var aHTML = [];
 					var h = -1;

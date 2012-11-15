@@ -96,7 +96,7 @@ ns1blankspace.document =
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
 														'" class="ns1blankspaceMostLikely">' +
-														this.email +
+														this.title +
 														'</td>');
 								
 								aHTML.push('</tr>');
@@ -170,13 +170,12 @@ ns1blankspace.document =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position({xhtmlElementID: sElementID});
-											ns1blankspace.search.start(sElementID);
+											ns1blankspace.search.start();
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'DOCUMENT_SEARCH';
 											oSearch.addField('title');
-											oSearch.addFilter('email', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
 
 											if (ns1blankspace.document.data.websiteContext)
 											{
@@ -193,7 +192,7 @@ ns1blankspace.document =
 									var iColumn = 0;
 									var aHTML = [];
 									var	iMaximumColumns = 1;
-										
+												
 									if (oResponse.data.rows.length == 0)
 									{
 										$(ns1blankspace.xhtml.container).hide();

@@ -548,9 +548,9 @@ ns1blankspace.setup.financial =
 	accounts: 	{
 					tree: 		function ()
 								{
-									var oAccounts = ns1blankspace.financial.accounts;
+									var oAccounts = ns1blankspace.financial.data.accounts;
 
-								  	$(ns1blankspace.financial.accounts).each(function(i,k) 
+								  	$(ns1blankspace.financial.data.accounts).each(function(i,k) 
 									{
 										var oItems = $.grep(oAccounts, function (a) { return parseInt(a.parentaccount) == parseInt(k.id); })	
 										this.items = oItems;

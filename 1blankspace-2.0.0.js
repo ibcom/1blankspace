@@ -719,7 +719,7 @@ ns1blankspace.app =
 									'</div>');
 					
 					$('#ns1blankspaceViewControl').html(aHTML.join(''));
-					
+
 					if (!ns1blankspace.setupShow) 
 					{
 						$('#ns1blankspaceViewControlActionStatus')
@@ -1014,6 +1014,11 @@ ns1blankspace.app =
 						//	oNS.search.show('ns1blankspaceViewControlSearch');
 						//});
 						
+						$("#ns1blankspaceViewControlSearch").click(function()
+						{
+						    this.select();
+						});
+
 						$('#ns1blankspaceViewControlSearchOptions').click(function(event)
 						{
 							oNS.search.options.show();
@@ -1067,7 +1072,10 @@ ns1blankspace.app =
 						}
 						else
 						{
-							if (bShowHome) {oNS.home()};
+							if (bShowHome) 
+							{
+								if (typeof(oNS.home) == 'function') {oNS.home()} else {oNS.home.show()}
+							};
 						}
 					}	
 				}				
@@ -1724,20 +1732,35 @@ ns1blankspace.history.view =
 							
 							if (bMove)
 							{
-								if (sDestinationInstructions != '' && sDestinationInstructions != undefined)
-								{
-									if ((sDestinationInstructions).indexOf('setup') != -1)
+								if (ns1blankspace.timer.history == undefined)
+								{	
+									ns1blankspace.timer.history = window.setInterval('ns1blankspace.history.view({instruction: 0, move: true})', 100);
+								}
+								else
+								{	
+									var aDestinationInstructions = sDestinationInstructions.split(';');
+									var aDestination = (aDestinationInstructions[0]).split('(');
+
+									if (aDestination[0])
 									{
-										ns1blankspace.setupView = false;
-										$('#ns1blankspaceViewControlSetup').attr('checked', true);
-										$('#ns1blankspaceViewControlSetup').button('refresh');
-										ns1blankspace.setup.switch({viewScript: sDestinationInstructions});
-									}
-									else
-									{	
-										eval(sDestinationInstructions);
+										window.clearInterval(ns1blankspace.timer.history);
+										
+										if (sDestinationInstructions != '' && sDestinationInstructions != undefined)
+										{
+											if ((sDestinationInstructions).indexOf('setup') != -1)
+											{
+												ns1blankspace.setupView = false;
+												$('#ns1blankspaceViewControlSetup').attr('checked', true);
+												$('#ns1blankspaceViewControlSetup').button('refresh');
+												ns1blankspace.setup.switch({viewScript: sDestinationInstructions});
+											}
+											else
+											{	
+												eval(sDestinationInstructions);
+											}	
+										}
 									}	
-								}	
+								}			
 							}	
 						}
 					}	

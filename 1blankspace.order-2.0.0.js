@@ -60,7 +60,7 @@ ns1blankspace.order =
 									aHTML.push('<tr><td id="ns1blankspaceViewOrderLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 											
 									aHTML.push('<tr class="ns1blankspaceControl">' +
-													'<td id="ns1blankspaceControlRecent" class="ns1blankspaceControl ns1blankspaceViewportControlHighlight">' +
+													'<td id="ns1blankspaceControlRecent" class="ns1blankspaceControl ns1blankspaceHighlight" style="padding-top:15px;">' +
 													'Recent</td></tr>');			
 											
 									aHTML.push('<tr class="ns1blankspaceControl">' +
@@ -79,38 +79,37 @@ ns1blankspace.order =
 									
 									$('#ns1blankspaceControl').html(aHTML.join(''));	
 
-									ns1blankspace.home.recent();
+									ns1blankspace.order.home.recent();
 									
 									$('#ns1blankspaceControlRecent').click(function(event)
 									{
-										ns1blankspace.home.recent();
+										ns1blankspace.order.home.recent();
 									});
 									
 									$('td.orderStatus').click(function(event)
 									{
 										var sID = this.id;
 										var aID = sID.split('-');
-										ns1blankspace.home.status.show({status: aID[1]});
+										ns1blankspace.order.home.status.show({status: aID[1]});
 									});
-										
-								
 								},
 
 					recent:		function (oResponse)
 								{
 									if (oResponse == undefined)
 									{
+										$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
+
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'PRODUCT_ORDER_SEARCH';
 										oSearch.addField('reference,orderbybusinesstext,orderbypersontext,orderdate');
 										oSearch.rows = 50;
 										oSearch.sort('orderdate', 'desc');
-										oSearch.getResults(ns1blankspace.home.recent);
+										oSearch.getResults(ns1blankspace.order.home.recent);
 									}
 									else
 									{
 										var aHTML = [];
-										var h = -1;
 										
 										if (oResponse.data.rows.length == 0)
 										{
@@ -145,7 +144,7 @@ ns1blankspace.order =
 										
 										$('#ns1blankspaceMain').html(aHTML.join(''));
 									
-										$('td.ins1blankspaceMostLikely').click(function(event)
+										$('td.ns1blankspaceMostLikely').click(function(event)
 										{
 											ns1blankspace.order.search.send(event.target.id, {source: 1});
 										});
@@ -164,13 +163,15 @@ ns1blankspace.order =
 														
 													if (oResponse == undefined)
 													{
+														$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
+
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'PRODUCT_ORDER_SEARCH';
 														oSearch.addField('reference,orderbybusinesstext,orderbypersontext,orderdate');
 														oSearch.addFilter('status', 'EQUAL_TO', iStatus);
 														oSearch.rows = 30;
 														oSearch.sort('orderdate', 'desc');
-														oSearch.getResults(function(data) {ns1blankspace.home.status.show(oParam, data)});
+														oSearch.getResults(function(data) {ns1blankspace.order.home.status.show(oParam, data)});
 													}
 													else
 													{
@@ -186,28 +187,28 @@ ns1blankspace.order =
 															
 															$.each(oResponse.data.rows, function()
 															{
-																aHTML.push(ns1blankspace.home.status.row(this));
+																aHTML.push(ns1blankspace.order.home.status.row(this));
 															});
 															
 															aHTML.push('</table>');
 														}
 														
-														$('#ns1blankspaceeMain').html(aHTML.join(''));
+														$('#ns1blankspaceMain').html(aHTML.join(''));
 													
 														ns1blankspace.render.page.show(
 														{
-															xhtmlElementID: 'divns1blankspaceMain',
+															xhtmlElementID: 'ns1blankspaceMain',
 															xhtmlContext: 'OrderStatus',
 															xhtml: aHTML.join(''),
 															showMore: (oResponse.morerows == "true"),
 															more: oResponse.moreid,
 															rows: 30,
-															functionShowRow: ns1blankspace.home.status.row,
-															functionNewPage: 'ns1blankspace.home.status.bind()',
+															functionShowRow: ns1blankspace.order.home.status.row,
+															functionNewPage: 'ns1blankspace.order.home.status.bind()',
 															type: 'json'
 														}); 
 																	
-														ns1blankspace.home.status.bind();
+														ns1blankspace.order.home.status.bind();
 													}
 												},
 
@@ -215,17 +216,17 @@ ns1blankspace.order =
 												{
 													var aHTML = [];
 
-													aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+													aHTML.push('<td id="ns1blankspaceMostLikely_title-' + oRow.id + 
 																		'" class="ns1blankspaceMostLikely" style="width:100px;" >' +
-																		this.reference + '</td>');
+																		oRow.reference + '</td>');
 												
-													aHTML.push('<td id="ns1blankspaceMostLikely_orderdate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:100px;">' +
-																		this.orderdate + '</td>');
+													aHTML.push('<td id="ns1blankspaceMostLikely_orderdate-' + oRow.id + '" class="ns1blankspaceMostLikelySub" style="width:100px;">' +
+																		oRow.orderdate + '</td>');
 																		
-													var sContact = this.orderbybusinesstext;
-													if (sContact == '') {sContact = this.orderbypersontext}
+													var sContact = oRow.orderbybusinesstext;
+													if (sContact == '') {sContact = oRow.orderbypersontext}
 																			
-													aHTML.push('<td id="ns1blankspaceMostLikely_contact-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+													aHTML.push('<td id="ns1blankspaceMostLikely_contact-' + oRow.id + '" class="ns1blankspaceMostLikelySub">' +
 																		sContact + '</td>');
 
 													aHTML.push('</tr>');
@@ -235,7 +236,7 @@ ns1blankspace.order =
 
 									bind:		function ()
 												{
-													$('td.ns1blankspaceMostLikelySub').click(function(event)
+													$('td.ns1blankspaceMostLikely').click(function(event)
 													{
 														ns1blankspace.order.search.send(event.target.id, {source: 1});
 													});
@@ -244,7 +245,7 @@ ns1blankspace.order =
 				},				
 
 	search: 	{
-					send: 		function (sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementID, oParam)
 								{
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
@@ -280,9 +281,11 @@ ns1blankspace.order =
 															'purchaseorder,orderdate,deliverydate,statustext,status,processingstatustext,processingstatus,sourcetext,source,' +
 															'notes,streetaddresscombined,streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
 															'mailingaddresscombined,mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,' +
+															'order.orderitem.TotalCost,' +
 															'createdusertext,createduser,createddate,modifiedusertext,modifieduser,modifieddate');
 										oSearch.rf = 'json';
-										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);	
+										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
+										oSearch.addSummaryField('sum(order.OrderItem.TotalCost) totalcost');
 										oSearch.getResults(function(data){ns1blankspace.order.show(oParam, data)});	
 									}
 									else
@@ -303,15 +306,14 @@ ns1blankspace.order =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position(sElementID);
-											ns1blankspace.search.start(sElementID);
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PRODUCT_ORDER_SEARCH';
-											oSearch.addField('reference,orderbybusinesstext');
+											oSearch.addField('reference,orderbybusinesstext,orderbypersontext');
 											oSearch.rf = 'json';
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);		
-											oSearch.getResults(function(data) {ns1blankspace.order.search.show(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.order.search.process(oParam, data)});
 										}
 									};	
 								},
@@ -344,6 +346,20 @@ ns1blankspace.order =
 															this.reference +
 															'</td>');
 											
+											if (this.orderbybusinesstext != '')
+											{
+												sContact = this.orderbybusinesstext;
+											}
+											else
+											{
+												sContact = this.orderbypersontext;
+											}	
+											
+											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
+															'searchContact-' + this.id + '">' +
+															sContact +
+															'</td>');
+
 											if (iColumn == iMaximumColumns)
 											{
 												aHTML.push('</tr>');
@@ -355,17 +371,16 @@ ns1blankspace.order =
 
 										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-										var oElement = $('#ns1blankspaceViewControlSearch');
-										$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-										ns1blankspace.aearch.stop();
-										
+
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.order.search.send(event.target.id, {source: 1});
 										});
-									}		
+									}
+
+									ns1blankspace.search.stop();		
 								}
 				},
 
@@ -398,14 +413,14 @@ ns1blankspace.order =
 
 						aHTML.push('</table>');					
 
-						aHTML.push('<table class="ns1blankspaceControlContainer">');
+						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlInvoices" class="ns1blankspaceControl">' +
 										'Invoices</td></tr>');
 
 						aHTML.push('</table>');					
 
-						aHTML.push('<table class="ns1blankspaceControlContainer">');
+						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
@@ -451,13 +466,13 @@ ns1blankspace.order =
 					$('#ns1blankspaceControlProducts').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainProducts'});
-						ns1blankspace.order.products();
+						ns1blankspace.order.items.show();
 					});
 			
 					$('#ns1blankspaceControlInvoices').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainInvoices'});
-						ns1blankspace.order.invoices();
+						ns1blankspace.order.invoices.show();
 					});
 
 					$('#ns1blankspaceControlActions').click(function(event)
@@ -492,16 +507,12 @@ ns1blankspace.order =
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
-						aHTML.push(ns1blankspace.objectContextData.title);
+						aHTML.push(ns1blankspace.objectContextData.reference);
 
-						if (ns1blankspace.objectContextData.categorytext != '')
+						if (ns1blankspace.objectContextData.orderdate != '')
 						{
-							aHTML.push('<span id="ns1blankspaceControlContext_category" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.categorytext + '</span>');
-						}
-						
-						if (ns1blankspace.objectContextData.currentretailprice != '')
-						{
-							aHTML.push('<span id="ns1blankspaceControlContext_price" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.currentretailprice + '</span>');
+							var oDate = Date.parse(ns1blankspace.objectContextData.orderdate);
+							aHTML.push('<br /><span id="ns1blankspaceControlContext_orderDate" class="ns1blankspaceSub">' + oDate.toString("dd MMM yyyy") + '</span>');
 						}
 
 						$('#ns1blankspaceControlContext').html(aHTML.join(''));
@@ -525,40 +536,37 @@ ns1blankspace.order =
 					{
 						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this order.</td></tr></table>');
 								
-						$('#ns1blankspaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 					}
 					else
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:200px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
-						aHTML.push('<table class="ns1blankspace">');
-						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Reference</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryReference" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.reference +
-										'</td></tr>');
+						var aHTML = [];
 
-						var oDate = new Date.parse(ns1blankspace.objectContextData.orderdate);
+						aHTML.push('<table class="ns1blankspace">');
+
+						var oDate = Date.parse(ns1blankspace.objectContextData.orderdate);
 
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Order Date</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryOrderDate" class="ns1blankspaceSummary">' +
-										oDate.toString("ddd, dd MMM yyyy h:mm TT") +
+										oDate.toString("ddd, dd MMM yyyy") +
 										'</td></tr>');
 			
 						if (ns1blankspace.objectContextData.deliverydate != '')
 						{				
-							var oDate = new Date.parse(ns1blankspace.objectContextData.deliverydate);
+							var oDate = Date.parse(ns1blankspace.objectContextData.deliverydate);
 							
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Delivery Date</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryDeliveryDate" class="ns1blankspaceSummary">' +
-										oDate.toString("ddd, dd MMM yyyy h:mm TT") +
+										oDate.toString("ddd, dd MMM yyyy") +
 										'</td></tr>');
 						}					
 							
@@ -570,12 +578,12 @@ ns1blankspace.order =
 											
 							if (ns1blankspace.objectContextData.streetsuburb != '')
 							{				
-								aHTML.push('<br />' +	ns1blankspace.objectContextData.streetsuburb);
+								aHTML.push('<br />' + ns1blankspace.objectContextData.streetsuburb);
 							}
 											
 							if (ns1blankspace.objectContextData.streetstate != '')
 							{				
-								aHTML.push('<br />' +	ns1blankspace.objectContextData.streetstate);		
+								aHTML.push('<br />' + ns1blankspace.objectContextData.streetstate);		
 							}
 							
 							aHTML.push('</td></tr>');
@@ -588,11 +596,11 @@ ns1blankspace.order =
 
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
 						if (ns1blankspace.objectContextData.statustext != '')
 						{	
-							aHTML.push('<tr><td class="ns1blankspaceSummary" style="padding-bottom:10px;">' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
 										ns1blankspace.objectContextData.statustext +
 										'</td></tr>');				
 						}
@@ -645,6 +653,8 @@ ns1blankspace.order =
 
 	details:	function ns1blankspaceOrderDetails()
 				{
+					var aHTML = [];
+
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
@@ -783,11 +793,13 @@ ns1blankspace.order =
 						
 						$('#ns1blankspaceMainAddress').html(aHTML.join(''));
 				
+						var aHTML = [];
+
 						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Delivery Address' +
+										'Delivery' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -852,7 +864,7 @@ ns1blankspace.order =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Billing Address' +
+										'Billing' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -984,7 +996,7 @@ ns1blankspace.order =
 										}
 										else
 										{
-											aHTML.push('<tr><td class="ns1blankspaceViewportControlSub">' +
+											aHTML.push('<tr><td class="ns1blankspaceSub">' +
 														'The order has been submitted, so items can not be added or removed.' +
 														'</td></tr>');
 										}				
@@ -1496,7 +1508,6 @@ ns1blankspace.order =
 										.css('width', '75px')
 										
 										var aHTML = [];
-										var h = -1;
 											
 										if (oResponse.data.rows.length == 0)
 										{
@@ -1580,7 +1591,7 @@ ns1blankspace.order =
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceInvoicesColumn1" class="ns1blankspaceColumn1">' +
+														'<td id="ns1blankspaceInvoicesColumn1" class="ns1blankspaceColumn1Flexible">' +
 														ns1blankspace.xhtml.loading + '</td>' +
 														'<td id="ns1blankspaceInvoicesColumn2" class="ns1blankspaceColumn2" style="width: 100px;"></td>' +
 														'</tr>' + 
@@ -1618,7 +1629,7 @@ ns1blankspace.order =
 											oSearch.addFilter('object', 'EQUAL_TO', 51);
 											oSearch.addFilter('objectcontext', 'IN_LIST', aID.join(','));
 										
-											oSearch.getResults(function(data) {ns1blankspace.order.invoices(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.order.invoices.show(oParam, data)});
 										});	
 									}
 									else
@@ -1707,7 +1718,7 @@ ns1blankspace.order =
 
 					bind:		function ()
 								{
-									$('#ns1blankspaceOrderInvoices > span.ns1blankspaceRowView').button( {
+									$('#ns1blankspaceOrderInvoices span.ns1blankspaceRowView').button( {
 												text: false,
 												icons: {
 													primary: "ui-icon-play"

@@ -7,47 +7,10 @@
 
 ns1blankspace.xhtml.defaultElementID = 'ns1blankspaceControlActionToday';
 
-$(function()
-{	
-	var sHash = window.location.hash;
-	
-	switch(sHash)
-	{
-	case '#home':
-		ns1blankspace.home.show();
-		break;
-	
-	case '#contactperson':
-		ns1blankspace.contactperson.init();
-		break;
-
-	case '#contactbusiness':
-		ns1blankspace.contactbusiness.init();
-		break;
-	}
-	
-	if (ns1blankspace.user != -1 && ns1blankspace.user != undefined)
-	{
-		if (sHash != '')
-		{
-			var aHash = sHash.split('-');
-		
-			if (aHash[0] == '#view')
-			{
-				if (aHash.length > 1)
-				{
-					var sID = aHash[2]
-					sID = aHash[1] + '-' + sID;
-					eval('ns1blankspace' + aHash[1] + 'MasterViewport({showHome: false});ns1blankspace' + aHash[1] + 'Search("' + sID + '")');
-				}
-			}
-		}
-	}	
-	
-});
-
 ns1blankspace.home = 
 {
+	init: 		function () {ns1blankspace.home.show()},
+
 	show: 		function ()
 				{	
 					if (ns1blankspace.setupView)

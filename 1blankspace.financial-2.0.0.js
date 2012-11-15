@@ -29,6 +29,8 @@ ns1blankspace.financial.init = function (oParam)
 
 ns1blankspace.financial.initData = function (oParam, oResponse)
 					{
+						ns1blankspace.timer.initData = undefined;
+
 						var bRefresh = false;
 						var iStep = 0;
 						
@@ -38,18 +40,18 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							if (oParam.step != undefined) {iStep = oParam.step}
 						}
 
-						if (ns1blankspace.financial == undefined)
+						if (ns1blankspace.financial.data == undefined)
 						{
-							ns1blankspaceStatusWorking();	
-							ns1blankspace.financial = {};
-							ns1blankspace.financial.status = 1;
+							ns1blankspace.status.working();	
+							ns1blankspace.financial.data = {};
+							ns1blankspace.financial.init = undefined;
 						}
 						
 						if (iStep == 0)
 						{
 							if (oResponse == undefined)
 							{
-								$('#divns1blankspaceViewportControlOptions').hide(ns1blankspace.option.hideSpeedOptions);
+								$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 								ns1blankspace.status.message(ns1blankspace.xhtml.loadingSmall + ' initalising...')
 
 								if (ns1blankspace.financial.init == undefined || bRefresh)
@@ -75,7 +77,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 						{
 							if (oResponse == undefined)
 							{
-								if (ns1blankspace.financial.bankaccounts == undefined || bRefresh)
+								if (ns1blankspace.financial.data.bankaccounts == undefined || bRefresh)
 								{
 									var oSearch = new AdvancedSearch();
 									oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
@@ -87,7 +89,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							}
 							else
 							{
-								ns1blankspace.financial.bankaccounts = oResponse.data.rows;
+								ns1blankspace.financial.data.bankaccounts = oResponse.data.rows;
 								ns1blankspace.financial.initData($.extend(true, oParam, {step: 2}))
 							}
 						}
@@ -110,8 +112,8 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							}
 							else
 							{
-								ns1blankspace.financial.settings = oResponse;
-								//interfaceFinancialMasterInitialise($.extend(true, oParam, {step: 3}))
+								ns1blankspace.financial.data.settings = oResponse;
+								ns1blankspace.financial.initData($.extend(true, oParam, {step: 3}))
 							}
 						}
 						
@@ -119,7 +121,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 						{
 							if (oResponse == undefined)
 							{
-								if (ns1blankspace.financial.accounts == undefined || bRefresh)
+								if (ns1blankspace.financial.data.accounts == undefined || bRefresh)
 								{
 									var oSearch = new AdvancedSearch();
 									oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
@@ -140,9 +142,9 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							}
 							else
 							{
-								ns1blankspace.financial.accounts = oResponse.data.rows;
-								ns1blankspace.financial.accountsTree = ns1blankspace.setup.financial.accounts.tree(ns1blankspace.financial.accounts[ns1blankspace.financial.rootaccount],ns1blankspace.financial.accounts); 
-								ns1blankspace.financial.status = 2;
+								ns1blankspace.financial.data.accounts = oResponse.data.rows;
+								ns1blankspace.financial.data.accountsTree = ns1blankspace.setup.financial.accounts.tree(ns1blankspace.financial.accounts[ns1blankspace.financial.rootaccount],ns1blankspace.financial.accounts); 
+								ns1blankspace.financial.init = 2;
 							}
 						}
 

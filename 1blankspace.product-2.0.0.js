@@ -70,7 +70,7 @@ ns1blankspace.product =
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						
-						oSearch.getResults(interfaceProductHomeShow);
+						oSearch.getResults(ns1blankspace.product.home);
 					}
 					else
 					{
@@ -93,7 +93,7 @@ ns1blankspace.product =
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
 														'" class="ns1blankspaceMostLikely">' +
-														this.email +
+														this.title +
 														'</td>');
 								
 								aHTML.push('</tr>');
@@ -165,13 +165,11 @@ ns1blankspace.product =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position(sElementID);
-											ns1blankspace.search.start(sElementID);
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PRODUCT_SEARCH';
 											oSearch.addField('reference,title');
-											oSearch.rf = 'json';
 										
 											if (iSource == ns1blankspace.data.searchSource.browse)
 											{
@@ -179,10 +177,12 @@ ns1blankspace.product =
 											}
 											else
 											{	
+												oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+												oSearch.addOperator('or');
 												oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
 											}	
 										
-											oSearch.getResults(function(data){ns1blankspace.product.search.show(oParam, data)});
+											oSearch.getResults(function(data){ns1blankspace.product.search.process(oParam, data)});
 										}
 									};	
 								},
@@ -195,7 +195,6 @@ ns1blankspace.product =
 
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspace.search.stop();
 										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
@@ -212,9 +211,13 @@ ns1blankspace.product =
 											}
 											
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'-' + this.id + '">' +
-															this.title + '</td>');
+															'search-' + this.id + '">' +
+															this.reference + '</td>');
 											
+											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
+															'searchTitle-' + this.id + '">' +
+															this.title + '</td>');
+
 											if (iColumn == iMaximumColumns)
 											{
 												aHTML.push('</tr>');
@@ -226,7 +229,6 @@ ns1blankspace.product =
 
 										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-										ns1blankspace.search.stop();
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
@@ -234,7 +236,9 @@ ns1blankspace.product =
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.product.search.send(event.target.id, {source: 1});
 										});
-									}				
+									}
+
+									ns1blankspace.search.stop();			
 								}
 				},				
 
@@ -265,12 +269,16 @@ ns1blankspace.product =
 						aHTML.push('<tr><td id="ns1blankspaceControlCategory" class="ns1blankspaceControl">' +
 										'Category</td></tr>');
 
+						aHTML.push('</table>');					
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlStock" class="ns1blankspaceControl">' +
 										'Stock</td></tr>');
 
 						aHTML.push('</table>');					
 
-						aHTML.push('<table class="ns1blankspaceControlContainer">');
+						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
@@ -356,17 +364,17 @@ ns1blankspace.product =
 
 						if (ns1blankspace.objectContextData.reference != '')
 						{
-							aHTML.push('<span id="ns1blankspaceControlContext_reference" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.reference + '</span>');
+							aHTML.push('<br /><span id="ns1blankspaceControlContext_reference" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.reference + '</span>');
 						}
 						
 						if (ns1blankspace.objectContextData.categorytext != '')
 						{
-							aHTML.push('<span id="ns1blankspaceControlContext_category" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.categorytext + '</span>');
+							aHTML.push('<br /><span id="ns1blankspaceControlContext_category" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.categorytext + '</span>');
 						}
 						
 						if (ns1blankspace.objectContextData.currentretailprice != '')
 						{
-							aHTML.push('<span id="ns1blankspaceControlContext_price" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.currentretailprice + '</span>');
+							aHTML.push('<br /><span id="ns1blankspaceControlContext_price" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.currentretailprice + '</span>');
 						}
 
 						$('#ns1blankspaceControlContext').html(aHTML.join(''));
@@ -421,9 +429,9 @@ ns1blankspace.product =
 						
 						if (ns1blankspace.objectContextData.units != '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Units / Quantity</td></tr>' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Units</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryUnits" class="ns1blankspaceSummary">' +
-										ns1blankspace.ns1blankspace.objectContextData.units +
+										ns1blankspace.objectContextData.units +
 										'</td></tr>');
 						}	
 						
@@ -441,7 +449,7 @@ ns1blankspace.product =
 					}
 				},
 
-	details:	function interfaceProductDetails()
+	details:	function ()
 				{
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
