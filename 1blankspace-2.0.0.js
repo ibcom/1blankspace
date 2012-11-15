@@ -2549,7 +2549,7 @@ ns1blankspace.search =
 								$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 								$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 							
-								$('td.interfaceSearch').click(function(event)
+								$('td.ns1blankspaceSearch').click(function(event)
 								{
 									$(ns1blankspace.xhtml.container).hide(200);
 									$.extend(true, oParam, {xhtmlElementID: event.target.id})
@@ -2562,9 +2562,10 @@ ns1blankspace.search =
 
 	start: 		function ()
 				{
+					var sElementStatusID = 'ns1blankspaceViewControlSearchStatus';
 					var sElementID = 'ns1blankspaceViewControlSearch';
-					$('#' + sElementID).show();
-					$('#' + sElementID).html(ns1blankspace.xhtml.loadingSmall);
+					$('#' + sElementStatusID).show();
+					$('#' + sElementStatusID).html(ns1blankspace.xhtml.loadingSmall);
 					ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: 10});
 				},
 

@@ -521,14 +521,6 @@ ns1blankspace.financial.invoice =
 										{
 											aHTML.push('<table class="ns1blankspaceColumn1">');
 											
-											if (ns1blankspace.objectContextData.amount != '')
-											{
-												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Amount</td></tr>' +
-																'<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSummary">' +
-																'$' + ns1blankspace.objectContextData.amount +
-																'</td></tr>');
-											}	
-											
 											if (ns1blankspace.objectContextData.contactbusinesssenttotext != '')
 											{
 

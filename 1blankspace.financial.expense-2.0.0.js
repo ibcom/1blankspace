@@ -72,7 +72,7 @@ ns1blankspace.financial.expense =
 									
 						aHTML.push('<table class="ns1blankspaceMain">' + 
 										'<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td></tr>' + 
 										'</table>');					
@@ -292,7 +292,7 @@ ns1blankspace.financial.expense =
 					}
 					else
 					{	
-						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">"' +
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
@@ -337,7 +337,7 @@ ns1blankspace.financial.expense =
 					aHTML[++h] = '<div id="ns1blankspaceMainActions" class="ns1blankspaceMain"></div>';
 					aHTML[++h] = '<div id="ns1blankspaceMainAttachments" class="ns1blankspaceMain"></div>';
 					
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
@@ -447,15 +447,7 @@ ns1blankspace.financial.expense =
 						var aHTML = [];
 
 						aHTML.push('<table class="ns1blankspaceColumn1">');
-											
-						if (ns1blankspace.objectContextData.amount != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Amount</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSummary">' +
-											'$' + ns1blankspace.objectContextData.amount +
-											'</td></tr>');
-						}	
-						
+												
 						if (ns1blankspace.objectContextData.contactbusinesspaidtotext != '')
 						{
 
