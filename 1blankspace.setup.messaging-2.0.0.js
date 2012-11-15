@@ -167,11 +167,11 @@ ns1blankspace.setup.messaging =
 
 											if (iSource == ns1blankspace.data.searchSource.browse)
 											{
-												oSearch.addFilter('email', 'STRING_STARTS_WITH', sSearchText);
+												oSearch.addFilter('email', 'TEXT_STARTS_WITH', sSearchText);
 											}
 											else
 											{	
-												oSearch.addFilter('email', 'STRING_IS_LIKE', sSearchText);
+												oSearch.addFilter('email', 'TEXT_IS_LIKE', sSearchText);
 											}	
 											
 											oSearch.getResults(ns1blankspace.setup.messaging.search.process);

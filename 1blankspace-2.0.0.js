@@ -2462,7 +2462,7 @@ ns1blankspace.search =
 								var oSearch = new AdvancedSearch();
 								oSearch.method = sMethod;
 								oSearch.addField(sColumns);
-								oSearch.addFilter(aColumns[0], 'STRING_IS_LIKE', sSearchText);
+								oSearch.addFilter(aColumns[0], 'TEXT_IS_LIKE', sSearchText);
 								
 								if (sXHTMLParentInputElementID != undefined)
 								{
@@ -2477,7 +2477,7 @@ ns1blankspace.search =
 									}
 									else if	(sParentColumnText != undefined && sParentContextText != '')
 									{
-										oSearch.addFilter(sParentColumnText, 'STRING_STARTS_WITH', sParentContextText);
+										oSearch.addFilter(sParentColumnText, 'TEXT_STARTS_WITH', sParentContextText);
 									}
 								}
 								
@@ -2934,7 +2934,7 @@ ns1blankspace.search.email =
 							oSearch.rows = 10;
 							oSearch.method = 'CONTACT_PERSON_SEARCH';
 							oSearch.addField( 'firstname,surname,contactbusinesstext,contactbusiness,email');
-							oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
+							oSearch.addFilter('quicksearch', 'TEXT_IS_LIKE', sSearchText);
 							
 							if (sParentElementID != undefined)
 							{
@@ -2948,13 +2948,13 @@ ns1blankspace.search.email =
 							}
 							else if	(sParentSearchText != undefined)
 							{
-								oSearch.addFilter('contactbusinesstext', 'STRING_STARTS_WITH', sParentSearchText);
+								oSearch.addFilter('contactbusinesstext', 'TEXT_STARTS_WITH', sParentSearchText);
 							}
 							
 							if (bEmailOnly)
 							{
 								oSearch.addFilter('email', 'IS_NOT_NULL', sParentSearchText);
-								oSearch.addFilter('email', 'STRING_IS_LIKE', '@');
+								oSearch.addFilter('email', 'TEXT_IS_LIKE', '@');
 							}	
 							
 							oSearch.rf = 'JSON';

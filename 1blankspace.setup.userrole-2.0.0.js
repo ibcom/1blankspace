@@ -162,11 +162,11 @@ ns1blankspace.setup.userRole =
 											
 											if (iSource == ns1blankspace.data.searchSource.browse)
 											{
-												oSearch.addFilter('title', 'STRING_STARTS_WITH', sSearchText);
+												oSearch.addFilter('title', 'TEXT_STARTS_WITH', sSearchText);
 											}
 											else
 											{	
-												oSearch.addFilter('title', 'STRING_IS_LIKE', sSearchText);
+												oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
 											}	
 											
 											oSearch.getResults(ns1blankspace.setup.userRole.search.process);

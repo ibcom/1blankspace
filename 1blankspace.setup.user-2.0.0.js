@@ -198,11 +198,11 @@ ns1blankspace.setup.user =
 											
 											if (iSource == ns1blankspace.data.searchSource.browse)
 											{
-												oSearch.addFilter('username', 'STRING_STARTS_WITH', sSearchText);
+												oSearch.addFilter('username', 'TEXT_STARTS_WITH', sSearchText);
 											}
 											else
 											{	
-												oSearch.addFilter('username', 'STRING_IS_LIKE', sSearchText);
+												oSearch.addFilter('username', 'TEXT_IS_LIKE', sSearchText);
 											}	
 											
 											oSearch.getResults(ns1blankspace.setup.user.search.process);

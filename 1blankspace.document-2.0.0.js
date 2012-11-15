@@ -176,7 +176,7 @@ ns1blankspace.document =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'DOCUMENT_SEARCH';
 											oSearch.addField('title');
-											oSearch.addFilter('email', 'STRING_IS_LIKE', sSearchText);
+											oSearch.addFilter('email', 'TEXT_IS_LIKE', sSearchText);
 
 											if (ns1blankspace.document.data.websiteContext)
 											{

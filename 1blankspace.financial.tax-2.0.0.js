@@ -166,7 +166,7 @@ ns1blankspace.financial.tax =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 											oSearch.addField('enddate,taxofficereference');
-											oSearch.addFilter('taxofficereference', 'STRING_IS_LIKE', sSearchText);
+											oSearch.addFilter('taxofficereference', 'TEXT_IS_LIKE', sSearchText);
 											
 											oSearch.getResults(function(data) {ns1blankspace.financial.tax.search.process(oParam, data)});	
 										}

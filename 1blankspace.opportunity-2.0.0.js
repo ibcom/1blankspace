@@ -187,11 +187,11 @@ ns1blankspace.opportunity =
 											
 											if (iSource == ns1blankspace.data.searchSource.text)
 											{	
-												oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
+												oSearch.addFilter('quicksearch', 'TEXT_IS_LIKE', sSearchText);
 											}
 											else
 											{
-												oSearch.addFilter('quicksearch', 'STRING_STARTS_WITH', sSearchText);
+												oSearch.addFilter('quicksearch', 'TEXT_STARTS_WITH', sSearchText);
 											}
 											
 											oSearch.rf = 'json';

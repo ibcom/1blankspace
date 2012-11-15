@@ -192,11 +192,11 @@ ns1blankspace.contactPerson =
 											
 											if (iSource == ns1blankspace.data.searchSource.browse)
 											{
-												oSearch.addFilter('quicksearch', 'STRING_STARTS_WITH', sSearchText);
+												oSearch.addFilter('quicksearch', 'TEXT_STARTS_WITH', sSearchText);
 											}
 											else
 											{	
-												oSearch.addFilter('quicksearch', 'STRING_IS_LIKE', sSearchText);
+												oSearch.addFilter('quicksearch', 'TEXT_IS_LIKE', sSearchText);
 											}	
 											
 											oSearch.rows = 15;

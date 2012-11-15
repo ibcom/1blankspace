@@ -310,7 +310,7 @@ ns1blankspace.order =
 											oSearch.method = 'PRODUCT_ORDER_SEARCH';
 											oSearch.addField('reference,orderbybusinesstext');
 											oSearch.rf = 'json';
-											oSearch.addFilter('reference', 'STRING_IS_LIKE', sSearchText);		
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);		
 											oSearch.getResults(function(data) {ns1blankspace.order.search.show(oParam, data)});
 										}
 									};	
@@ -1195,7 +1195,7 @@ ns1blankspace.order =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PRODUCT_SEARCH';
 											oSearch.addField('reference,title');
-											oSearch.addFilter('title', 'STRING_IS_LIKE', $('#inputns1blankspaceMainProductAddReference').val());
+											oSearch.addFilter('title', 'TEXT_IS_LIKE', $('#inputns1blankspaceMainProductAddReference').val());
 											oSearch.sort('title', 'asc');
 											oSearch.getResults(function(data){ns1blankspace.order.items.add($.extend(true, oParam, {step:3}), data)});
 										}

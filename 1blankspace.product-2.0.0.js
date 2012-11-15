@@ -175,11 +175,11 @@ ns1blankspace.product =
 										
 											if (iSource == ns1blankspace.data.searchSource.browse)
 											{
-												oSearch.addFilter('title', 'STRING_STARTS_WITH', sSearchText);
+												oSearch.addFilter('title', 'TEXT_STARTS_WITH', sSearchText);
 											}
 											else
 											{	
-												oSearch.addFilter('title', 'STRING_IS_LIKE', sSearchText);
+												oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
 											}	
 										
 											oSearch.getResults(function(data){ns1blankspace.product.search.show(oParam, data)});

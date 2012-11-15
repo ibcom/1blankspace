@@ -1118,7 +1118,7 @@ details: 		function ()
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
 											oSearch.addField('title');
-											oSearch.addFilter('title', 'STRING_IS_LIKE', $('#ns1blankspaceItemAccount').val());
+											oSearch.addFilter('title', 'TEXT_IS_LIKE', $('#ns1blankspaceItemAccount').val());
 											oSearch.sort('title', 'asc');
 											oSearch.getResults(function(data){ns1blankspace.financial.invoice.item.edit($.extend(true, oParam, {step:3}), data)});
 										}

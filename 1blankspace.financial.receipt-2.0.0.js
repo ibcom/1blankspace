@@ -206,7 +206,7 @@ ns1blankspace.financial.receipt =
 											oSearch.addField('contactbusinessreceivedfromtext,contactbusinessreceivedfrom,' +
 																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
 																'reference,receiveddate,description,amount');
-											oSearch.addFilter('reference', 'STRING_IS_LIKE', sSearchText);
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 											
 											oSearch.getResults(function(data) {ns1blankspace.financial.invoice.search.process(oParam, data)});	
 										}
