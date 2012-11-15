@@ -3967,6 +3967,7 @@ ns1blankspace.pdf =
 {
 	create:		function (oParam, sReturn)
 				{
+					var sXHTMLElementID = 'ns1blankspaceSummaryCreatePDF';
 					var iObject = ns1blankspace.object;
 					var iObjectContext = ns1blankspace.objectContext;
 					var sFileName = ns1blankspace.objectContextData.id + '.pdf'
@@ -3979,12 +3980,16 @@ ns1blankspace.pdf =
 						if (oParam.objectContext) {iObjectContext = oParam.objectContext}
 						if (oParam.filename) {sFileName = oParam.filename}	
 						if (oParam.xhtmlContent) {sXHTMLContent = oParam.xhtmlContent}
-						//if (oParam.open) {bOpen = oParam.open}	
+						if (oParam.open) {bOpen = oParam.open}
+						if (oParam.xhtmlElementID) {sXHTMLElementID = oParam.xhtmlElementID}
 					}
 
 					if (sReturn == undefined)
 					{
-						$('#ans1blankspaceSummaryViewPDF').html(ns1blankspace.xhtml.loadingSmall)
+						$('#' + sXHTMLElementID).button(
+						{
+							label: 'Creating'
+						});
 						
 						var sData = 'rf=TEXT&object=' + iObject;
 						sData += '&objectcontext=' + iObjectContext;
@@ -4004,13 +4009,32 @@ ns1blankspace.pdf =
 					{
 						var aReturn = sReturn.split('|');
 
-						if (bOpen)
+						if (aReturn[1])
 						{
-							window.open('/download/' + aReturn[1])	
+							if (bOpen)
+							{
+								window.open('/download/' + aReturn[1])	
+							}
+							
+							$('#' + sXHTMLElementID).button(
+							{
+								label: 'Open'
+							})
+							.click(function(event)
+							{
+								window.open('/download/' + aReturn[1])
+							});
 						}
 						else
 						{
-							$('#ans1blankspaceSummaryViewPDF').html('<a href="/download/' + aReturn[1] + '" target="_blank">Open PDF</a>');
+							$('#' + sXHTMLElementID).button(
+							{
+								label: 'Error'
+							})
+							.click(function(event)
+							{
+								window.alert('An error occured while creating the PDF.');
+							});
 						}	
 					}	
 

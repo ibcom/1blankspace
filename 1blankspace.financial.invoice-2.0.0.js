@@ -564,17 +564,19 @@ ns1blankspace.financial.invoice =
 										{
 											if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
 											{
-												aHTML.push('<tr><td>' +
-																'<span id="ns1blankspaceSummaryCreatePDF" class="ns1blankspaceAction" style="margin-right:4px;">' +
-																'Create&nbsp;PDF</span>'
-															'</td></tr>');
+												aHTML.push('<tr><td style="text-align: right;">' +
+																'<span id="ns1blankspaceSummaryCreatePDF" class="ns1blankspaceAction" style="width:75px;">' +
+																'PDF</span></td></tr>');
 											}
 											else
 											{				
-												aHTML.push('<tr><td>' +
-																'<span id="ns1blankspaceSummaryView" class="ns1blankspaceAction" style="margin-right:4px;">' +
-																'View</span>'
-															'</td></tr>');
+												aHTML.push('<tr><td style="text-align: right;">' +
+																'<span id="ns1blankspaceSummaryView" class="ns1blankspaceAction" style="width:75px;">' +
+																'View</span></td></tr>');
+
+												aHTML.push('<tr><td style="text-align: right;">' +
+																'<span id="ns1blankspaceSummaryEmail" class="ns1blankspaceAction" style="width:75px;">' +
+																'Email</span></td></tr>');
 											}
 
 											aHTML.push('</table>');					
@@ -585,7 +587,7 @@ ns1blankspace.financial.invoice =
 											{
 												$('#ns1blankspaceSummaryCreatePDF').button(
 												{
-													label: 'Create PDF'
+													label: 'PDF'
 												})
 												.click(function(event)
 												{
@@ -605,6 +607,15 @@ ns1blankspace.financial.invoice =
 												.click(function(event)
 												{
 													ns1blankspace.financial.invoice.summary.show({useTemplate: true});
+												});
+
+												$('#ns1blankspaceSummaryEmail').button(
+												{
+													label: 'Email'
+												})
+												.click(function(event)
+												{
+													alert('to do');
 												});
 											}	
 										}	
