@@ -35,7 +35,7 @@ ns1blankspace.projectTask =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function ns1blankspaceProjectTaskHomeShow(oResponse)
+	home:		function (oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -57,7 +57,7 @@ ns1blankspace.projectTask =
 									
 						aHTML.push('<table>');
 
-						aHTML.push('<tr><td id="ns1blankspaceViewMessagingProjectLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceViewProjectLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 								
 						aHTML.push('</table>');		
 						
@@ -114,7 +114,7 @@ ns1blankspace.projectTask =
 				},
 
 	search: 	{			
-					send: 		function ns1blankspaceProjectTaskSearch(sXHTMLElementID, oParam)
+					send: 		function (sXHTMLElementID, oParam)
 								{
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
@@ -147,7 +147,7 @@ ns1blankspace.projectTask =
 											url: ns1blankspace.util.endpointURI('PROJECT_TASK_SEARCH'),
 											data: 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext),
 											dataType: 'json',
-											success: function(data) {ns1blankspace.project.task.show(oParam, data)}
+											success: function(data) {ns1blankspace.projectTask.show(oParam, data)}
 										});
 									}
 									else
@@ -185,7 +185,7 @@ ns1blankspace.projectTask =
 												url: ns1blankspace.util.endpointURI('PROJECT_TASK_SEARCH'),
 												data: 'quicksearch=' + ns1blankspace.util.fs(sSearchText),
 												dataType: 'json',
-												success: function(data) {ns1blankspace.project.task.search.process(oParam, data)}
+												success: function(data) {ns1blankspace.projectTask.search.process(oParam, data)}
 											});
 										}
 									};	
@@ -199,7 +199,6 @@ ns1blankspace.projectTask =
 
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspace.search.stop();
 										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
@@ -232,20 +231,19 @@ ns1blankspace.projectTask =
 										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
-										ns1blankspace.search.stop();
-										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.project.task.search.send(event.target.id, {source: 1});
 										});
-									}	
-											
+									}
+
+									ns1blankspace.search.stop();			
 								}
 				},
 
-	layout: 	function ns1blankspaceProjectTaskViewport()
+	layout: 	function ()
 				{
 					var aHTML = [];
 
@@ -285,7 +283,6 @@ ns1blankspace.projectTask =
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
-					var h = -1;
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
@@ -293,7 +290,7 @@ ns1blankspace.projectTask =
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
-					$('#divns1blankspaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
@@ -473,9 +470,8 @@ ns1blankspace.projectTask =
 						$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy' });
 						
 						var aHTML = [];
-						var h = -1;
 							
-						aHTML.push('<table class="ns1blankspaceMain">';
+						aHTML.push('<table class="ns1blankspaceMain">');
 						
 						aHTML.push('<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -530,14 +526,14 @@ ns1blankspace.projectTask =
 						
 						var aHTML = [];
 					
-						aHTML.push('<table id="ns1blankspaceDescriptionColumn1" class="ns1blankspace">';
+						aHTML.push('<table id="ns1blankspaceDescriptionColumn1" class="ns1blankspace">');
 								
 						aHTML.push('<tr class="ns1blankspaceTextMulti">' +
 										'<td class="ns1blankspaceTextMulti">' +
 										'<textarea id="ns1blankspaceDescription" rows="30" cols="50" class="ns1blankspaceTextMulti ns1blankspaceTextMultiLarge"></textarea>' +
-										'</td></tr>';
+										'</td></tr>');
 										
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceDescriptionColumn1').html(aHTML.join(''));
 						
@@ -559,7 +555,7 @@ ns1blankspace.projectTask =
 					ns1blankspace.projectTask.details();
 				},
 
-	save 		{
+	save:		{
 					send:		function ()
 								{
 									var sData = 'id=' + ((ns1blankspace.objectContext == -1) ? '' : ns1blankspace.objectContext);

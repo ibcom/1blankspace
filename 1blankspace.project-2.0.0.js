@@ -52,13 +52,13 @@ ns1blankspace.project =
 										'</tr>');
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspace').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 
 						var aHTML = [];
 									
 						aHTML.push('<table>');
 
-						aHTML.push('<tr><td id="ns1blankspaceViewMessagingProjectLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceViewProjectLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 								
 						aHTML.push('</table>');		
 						
@@ -113,7 +113,7 @@ ns1blankspace.project =
 				},
 
 	search: 	{
-					send:		function (sXHTMLElementId, oParam)
+					send:		function (sXHTMLElementID, oParam)
 								{
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
@@ -175,8 +175,7 @@ ns1blankspace.project =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{		
-											ns1blankspace.container.position({xhtmlElementID: sElementID});
-											ns1blankspace.search.start(sElementID);
+											ns1blankspace.search.start();
 
 											$.ajax(
 											{
@@ -268,6 +267,10 @@ ns1blankspace.project =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
 										'Description</td></tr>');
+
+						aHTML.push('</table>');		
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlTasks" class="ns1blankspaceControl">' +
 										'Tasks</td></tr>');
@@ -367,9 +370,6 @@ ns1blankspace.project =
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.project.summary()'});
 					}	
-
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspaceProjectViewport();
 				},
 
 	summary: 	function ()
@@ -422,8 +422,10 @@ ns1blankspace.project =
 					}	
 				},
 
-	details: 	function ns1blankspaceProjectDetails()
+	details: 	function ()
 				{
+					var aHTML = [];
+
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
@@ -476,7 +478,7 @@ ns1blankspace.project =
 						
 						var aHTML = [];
 							
-						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
 						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 										'Status' +
@@ -525,7 +527,7 @@ ns1blankspace.project =
 										'</tr>' + 
 										'</table>');								
 						
-						$('#divns1blankspaceMainDescription').html(aHTML.join(''));
+						$('#ns1blankspaceMainDescription').html(aHTML.join(''));
 						
 						var aHTML = [];
 					
@@ -568,7 +570,6 @@ ns1blankspace.project =
 											type: 'GET',
 											url: ns1blankspace.util.endpointURI('PROJECT_TASK_SEARCH'),
 											data: 'rows=100&project=' + ns1blankspace.objectContext,
-											data: sParam,
 											dataType: 'json',
 											success: function(data){ns1blankspace.project.tasks.show(oParam, data)}
 										});
@@ -579,8 +580,8 @@ ns1blankspace.project =
 
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceTasksColumn1" class="ns1blankspaceColumn1"></td>' +
-														'<td id="ns1blankspaceTasksColumn2" class="ns1blankspaceColumn2"></td>' +
+														'<td id="ns1blankspaceTasksColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceTasksColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 														'</tr>' + 
 														'</table>');	
 	
@@ -591,7 +592,7 @@ ns1blankspace.project =
 										aHTML.push('<table id="ns1blankspaceTasksColumn2" class="ns1blankspaceColumn2">');
 										
 										aHTML.push('<tr><td>' +
-														'<span id="ns1blankspaceTasksAdd">Add</span>' +
+														'<span id="ns1blankspaceTasksAdd" class="ns1blankspaceAction">Add</span>' +
 														'</td></tr>');
 										
 										aHTML.push('</table>');					
@@ -627,15 +628,9 @@ ns1blankspace.project =
 														
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 													
-												if (oOptions.remove)
-												{	
-													aHTML.push('<span id="ns1blankspaceSetupProjectTasks_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
-												};	
-													
-												if (oOptions.view)
-												{	
-													aHTML.push('<span id="ns1blankspaceSetupProjectTasks_view-' + this.id + '" class="ns1blankspaceRowView"></span>');
-												};	
+												aHTML.push('<span id="ns1blankspaceSetupProjectTasks_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+											
+												aHTML.push('<span id="ns1blankspaceSetupProjectTasks_view-' + this.id + '" class="ns1blankspaceRowView"></span>');
 																		
 												aHTML.push('</td>');
 												
@@ -646,7 +641,7 @@ ns1blankspace.project =
 
 											$('#ns1blankspaceTasksColumn1').html(aHTML.join(''));
 											
-											$('#ns1blankspaceProjectTasks > .ns1blankspaceRowRemove').button({
+											$('#ns1blankspaceProjectTasks span.ns1blankspaceRowRemove').button({
 												text: false,
 												 icons: {
 													 primary: "ui-icon-close"
@@ -658,7 +653,7 @@ ns1blankspace.project =
 											.css('width', '15px')
 											.css('height', '20px')
 											
-											$('#ns1blankspaceProjectTasks > .ns1blankspaceRowSelect').button({
+											$('#ns1blankspaceProjectTasks span.ns1blankspaceRowView').button({
 												text: false,
 												 icons: {
 													 primary: "ui-icon-play"

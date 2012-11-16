@@ -181,6 +181,10 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.project-2.0.0.js'
 	},
 	{
+		nameSpace: '1blankspace.projectTask',
+		source: '/jscripts/1blankspace.projecttask-2.0.0.js'
+	},
+	{
 		nameSpace: '1blankspace.product',
 		source: '/jscripts/1blankspace.product-2.0.0.js'
 	},
