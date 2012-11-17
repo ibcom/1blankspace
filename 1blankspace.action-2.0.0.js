@@ -98,7 +98,7 @@ ns1blankspace.action =
 					$('#ns1blankspaceControlCalendar').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainCalendar'});
-						ns1blankspace.action.calendar();
+						ns1blankspace.action.calendar.show();
 					});
 					
 					$('#ns1blankspaceControlNext10').click(function(event)
@@ -1628,8 +1628,9 @@ summary: 		function interfaceFinancialPaymentSummary()
 
 	next10: 	function (oParam, oResponse)
 				{	
-					var sXHTMLElementID = 'divInterfaceMain';
-					
+					var sXHTMLElementID = 'ns1blankspaceMain';
+					var sDate;
+
 					if (oParam != undefined)
 					{
 						if (oParam.xhtmlElementID != undefined)
@@ -1640,14 +1641,18 @@ summary: 		function interfaceFinancialPaymentSummary()
 					
 					if (oResponse == undefined)
 					{
-						//'&future=1';
-
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ACTION_SEARCH';
-						oSearch.addField('*');
-						oSearch.addFilter('actionby', 'EQUAL_TO', ns1blankspace.user);
+						oSearch.addField('contactperson,actionby,actionbytext,actionreference,actiontype,actiontypetext,billingstatus,' +
+											'billingstatustext,completed,completedtime,contactbusiness,contactbusinesstext,contactperson,' +
+											'contactpersontext,date,description,duedate,duedatetime,object,objectcontext,objecttext,' +
+											'priority,prioritytext,status,statustext,subject,text,totaltimehrs,totaltimemin');
+						oSearch.addFilter('actionby', 'EQUAL_TO', ns1blankspace.user.id);
+						oSearch.addFilter('status', 'NOT_EQUAL_TO', 1);
+						oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', 'hour', '0', 'start_of_today');
+
 						oSearch.rows = 10
-						oSearch.getResults(function(data) {ns1blankspace.action.container.show(oParam, data)});
+						oSearch.getResults(function(data) {ns1blankspace.action.next10(oParam, data)});
 					}
 					else
 					{
@@ -1674,27 +1679,16 @@ summary: 		function interfaceFinancialPaymentSummary()
 								aHTML.push('<td id="tdAction_date-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 													this.actiondate + '</td>');
 
-								var oDate = new Date.parse(ns1blankspace.objectContextData.actiondate);
+								sDate = '&nbsp;';
+								var oDate = Date.parse(this.actiondate);
 										
-								if (oDate.getHours() != 0 && oDate.getMinutes() != 0)
-								{
-									sDate = oDate.toString('h:mm TT');
+								if (oDate != null)
+								{ 			
+									if (oDate.getHours() != 0 && oDate.getMinutes() != 0)
+									{
+										sDate = oDate.toString('h:mm TT');
+									}
 								}
-								else
-								{
-									sDate = '&nbsp;';
-								}
-													
-								var sDate = new Date(this.actiondatetime);
-								
-								if ($.fullCalendar.formatDate(sDate, 'H') != '0' && $.fullCalendar.formatDate(sDate, 'm') != '0')
-								{
-									sDate = $.fullCalendar.formatDate(sDate, 'h:mm TT')
-								}
-								else
-								{
-									sDate = '&nbsp;';
-								}	
 								
 								aHTML.push('<td id="ns1blankspaceAction_time-' + this.id + '" class="ns1blankspaceRowSelect" >' +
 												sDate + '</td>');

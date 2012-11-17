@@ -197,14 +197,14 @@ ns1blankspace.financial.expense =
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-											oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,' +
-																'reference,accrueddate,amount');
+											oSearch.addField('reference,accrueddate,amount,contactbusinesspaidtotext,expense.contactpersonpaidtotext');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
-											//oSearch.addOperator('or');
-											//oSearch.addFilter('expense.ContactBusinessPaidTo.tradename', 'TEXT_IS_LIKE', sSearchText);
-											//oSearch.addOperator('or');
-											//.addFilter('expense.ContactPersonPaidTo.surname', 'TEXT_IS_LIKE', sSearchText);
-
+											/*
+											oSearch.addOperator('or');
+											oSearch.addFilter('expense.contactbusinesspaidto.tradename', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addOperator('or');
+											oSearch.addFilter('expense.contactpersonpaidto.surname', 'TEXT_IS_LIKE', sSearchText);
+											*/
 											oSearch.getResults(function(data) {ns1blankspace.financial.expense.search.process(oParam, data)});	
 										}
 									};	

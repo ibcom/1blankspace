@@ -141,14 +141,17 @@ ns1blankspace.projectTask =
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('PROJECT_TASK_SEARCH'),
-											data: 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext),
-											dataType: 'json',
-											success: function(data) {ns1blankspace.projectTask.show(oParam, data)}
-										});
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'PROJECT_TASK_SEARCH';
+
+										oSearch.addField('actualenddate,criticaldate,dependsontask,dependsontasktext,description,enddate,' +
+															'expectedduration,milestone,percentagecomplete,priority,prioritytext,prioritynumber,project,projecttext,' +
+															'reassignmentnotes,reference,schedulingnotes,startdate,status,statustext,taskby,taskbytext,tasktype,' +
+															'tasktypetext,timespent,title,tobecheckedby,tobecheckedbytext');
+										oSearch.rf = 'json';
+										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
+										
+										oSearch.getResults(function(data) {ns1blankspace.projectTask.show(oParam, data)});
 									}
 									else
 									{
@@ -274,7 +277,7 @@ ns1blankspace.projectTask =
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
 					}
 									
@@ -522,7 +525,7 @@ ns1blankspace.projectTask =
 										'</tr>' + 
 										'</table>');								
 						
-						$('#divns1blankspaceMainDescription').html(aHTML.join(''));
+						$('#ns1blankspaceMainDescription').html(aHTML.join(''));
 						
 						var aHTML = [];
 					

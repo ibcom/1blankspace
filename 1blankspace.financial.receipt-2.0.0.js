@@ -207,7 +207,12 @@ ns1blankspace.financial.receipt =
 																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
 																'reference,receiveddate,description,amount');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
-											
+											/*
+											oSearch.addOperator('or');
+											oSearch.addFilter('receipt.contactbusinessreceivedfrom.tradename', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addOperator('or');
+											oSearch.addFilter('receipt.contactpersonreceivedfrom.surname', 'TEXT_IS_LIKE', sSearchText);
+											*/
 											oSearch.getResults(function(data) {ns1blankspace.financial.receipt.search.process(oParam, data)});	
 										}
 									};	

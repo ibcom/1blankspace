@@ -617,7 +617,7 @@ ns1blankspace.control =
 											{		
 												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +				
 																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControlAction" class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_action" class="ns1blankspaceViewControl">' +
 																		'Actions</span></td></tr>');
 											}			
 
