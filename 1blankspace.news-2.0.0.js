@@ -232,9 +232,9 @@ search: 		{
 											});
 										}
 									}
-								}
+								},
 
-				process:	function (oParam, oResponse)
+				process:		function (oParam, oResponse)
 								{
 
 									var iColumn = 0;
@@ -623,8 +623,7 @@ search: 		{
 						{
 							$('[name="radioPublic"][value="N"]').attr('checked', true);
 							$('[name="radioTracking"][value="4"]').attr('checked', true);
-							var ns1blankspace.report.today = new Date()
-							$('#ns1blankspaceDetailsStartDate').val($.fullCalendar.formatDate(ns1blankspace.report.today, "dd MMM yyyy"));
+							$('#ns1blankspaceDetailsStartDate').val(Date.today().toString("dd MMM yyyy"));
 						}
 						
 					}	
@@ -773,7 +772,7 @@ search: 		{
 										})
 										.click(function() {
 											ns1blankspaceOptionsSetPosition('ns1blankspaceNewsGroupsAdd');
-											1blankspace.news.sendAsEmail(false);
+											ns1blankspace.news.sendAsEmail(false);
 										})
 										.css('width', '75px')
 									
@@ -854,9 +853,8 @@ search: 		{
 					row:		function (oRow)
 								{
 									var aHTML = [];
-									var h = -1;
 									
-									aHTML.push('<tr class="ns1blankspaceRow">';
+									aHTML.push('<tr class="ns1blankspaceRow">');
 															
 									aHTML.push('<td id="ns1blankspaceNewsGroupsContacts_contact-' + oRow.id + '" class="ns1blankspaceRow">' +
 															oRow.firstname + '</td>');
@@ -989,7 +987,7 @@ search: 		{
 												
 											});
 											
-											aHTML.push('</table>';
+											aHTML.push('</table>');
 
 											$('#ns1blankspaceNewsGroupsColumn1Groups').html(aHTML.join(''));
 											
@@ -1201,10 +1199,6 @@ search: 		{
 										else
 										{
 											aHTML.push('<table class="ns1blankspace">');
-												
-											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspace">');
-											aHTML.push(''
-											
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceCaption">Activity</td>');
 											aHTML.push('<td class="ns1blankspaceCaption">Link</td>');
@@ -1224,7 +1218,7 @@ search: 		{
 												aHTML.push('<td id="ns1blankspaceNewsGroupsList_link-' + this.id + '" class="ns1blankspaceRow">' +
 																		this.count + '</td>');
 																		
-												aHTML.push('</tr>'
+												aHTML.push('</tr>');
 											});
 											
 											aHTML.push('</table>');
@@ -1232,7 +1226,7 @@ search: 		{
 										
 										$('#' + sXHTMLElementId).html(aHTML.join(''));
 									}	
-								}	
+								},	
 
 					details:	function (oParam, oResponse)
 								{
@@ -1332,7 +1326,7 @@ search: 		{
 									
 									if ($('#ns1blankspaceMainEdit').html() != '')
 									{
-										sData += '&news=' + ns1blankspace.util.fs((tinyMCE.get('ns1blankspaceEditText' + ns1blankspace.counter.editor).getContent());
+										sData += '&news=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceEditText' + ns1blankspace.counter.editor).getContent());
 									}
 									
 									$.ajax(

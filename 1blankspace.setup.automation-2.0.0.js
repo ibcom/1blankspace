@@ -45,10 +45,10 @@ ns1blankspace.setup.automation =
 									
 						aHTML.push('<table class="ns1blankspaceMain">');
 						aHTML.push('<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
-										'<td id="ns1blankspaceMostLikelyColumn2" class="ins1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikelyColumn2" style="width:175px;">' +
 										'</td>' +
 										'</tr>');
 						aHTML.push('</table>');					

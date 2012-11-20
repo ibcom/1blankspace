@@ -10,7 +10,8 @@ ns1blankspace.action =
 	init: 		function (oParam)
 				{
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.object = 17;	
+					ns1blankspace.object = 17;
+					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectName = 'action';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;

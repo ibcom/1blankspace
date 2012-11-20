@@ -177,6 +177,14 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.document-2.0.0.js'
 	},
 	{
+		nameSpace: '1blankspace.news',
+		source: '/jscripts/1blankspace.news-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.event',
+		source: '/jscripts/1blankspace.event-2.0.0.js'
+	},
+	{
 		nameSpace: '1blankspace.project',
 		source: '/jscripts/1blankspace.project-2.0.0.js'
 	},

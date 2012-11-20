@@ -187,7 +187,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Events",
-		namespace: "events",
+		namespace: "event",
 		endpoint: "EVENT",
 		show: true,
 		group: 3,

@@ -185,13 +185,15 @@ ns1blankspace.messaging.conversation =
 									
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
-										$('#divns1blankspaceViewportControl').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
 									
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
-										oSearch.addField('*');
+										oSearch.addField('alertemailfrom,alertemailmessage,alerturl,allowsmsalerts,commentcount,description,emailalertdefault,' +
+															'includemessageinemailalert,lastcommentdate,lastcommentuser,lastcommentusertext,' +
+															'lastpostedday,object,objectcontext,participantcan,participantcantext,postcount,sharing,sharingtext,title');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext)
 										oSearch.rows = 10;
 										oSearch.sort('modifieddate', 'asc');

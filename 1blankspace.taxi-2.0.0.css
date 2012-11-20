@@ -1,6 +1,6 @@
 html
 {
-	background-color: transparent;
+	background-color: black;
 }
 
 body 
@@ -8,14 +8,14 @@ body
 	font-size: 100%;
 	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
 	margin: 0px;
-	background-color: transparent;
+	background-color: black;
 }
 
 input, textarea
 {
 	background-color: white;
 	color: black;
-	opacity: 0.95;
+	opacity: 0.75;
 }
 
 span, div, textarea, input, td
@@ -48,7 +48,7 @@ td
 {
 	padding: 2px;
 	vertical-align: top;
-	color: #000000;
+	color: white;
 }
 
 a:link, a:visited, a:active
@@ -74,6 +74,8 @@ a:hover
 	min-height: 800px;
 	overflow: auto;
 	margin: auto;
+	background-image: url(/jscripts/images/1blankspace.theme.taxi.jpg);
+	background-repeat: no-repeat;
 }
 
 #ns1blankspaceHeaderContainer
@@ -366,7 +368,7 @@ table.ns1blankspaceViewControlContainer
 {
 	border-spacing: 5px 5px;
 
-	background-color: #F8F8F8;
+	x-background-color: #F8F8F8;
 	width: 175px;
 	
 	padding-top: 5px;
@@ -383,7 +385,7 @@ table.ns1blankspaceViewControlContainer
 	margin-right:1px;
 	margin-left:1px;
 
-	opacity: 0.95;
+	opacity: 0.85;
 }
 
 table.ns1blankspaceSearchMedium

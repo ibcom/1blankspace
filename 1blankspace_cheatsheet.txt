@@ -1,11 +1,11 @@
 # HTML5 Containers, id=:
 
-ns1blankspaceViewControl
-ns1blankspaceControl
-ns1blankspaceMain
-ns1blankspaceFooter
-ns1blankspaceBox
-ns1blankspaceDialog
+'<div id="ns1blankspaceHeader"></div>' +
+'<div id="ns1blankspaceViewControl"></div>' +
+'<div id="ns1blankspaceControl"></div>' +
+'<div id="ns1blankspaceMain"></div>' +
+'<div id="ns1blankspaceFooter"></div>' +
+'<div id="ns1blankspaceMultiUseContainer"></div>' +
 
 # HTML5 Key Elements, id=:
 

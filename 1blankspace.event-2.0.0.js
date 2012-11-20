@@ -145,7 +145,7 @@ ns1blankspace.event =
 								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + 
 														'" class="ns1blankspaceMostLikely">' +
 														this.description +
-														'</td>';
+														'</td>');
 								
 								aHTML.push('</tr>');
 							});
@@ -433,7 +433,7 @@ ns1blankspace.event =
 										ns1blankspace.objectContextData.description +
 										'</td></tr>');
 										
-						aHTML.push('</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceMainSummaryColumn1').html(aHTML.join(''));
 					}	
@@ -590,7 +590,7 @@ ns1blankspace.event =
 	
 										var aHTML = [];
 									
-										aHTML.push('<table id="ns1blankspaceMainAtteendeesAtoZ" class="ns1blankspace">';
+										aHTML.push('<table id="ns1blankspaceMainAtteendeesAtoZ" class="ns1blankspace">');
 										
 										aHTML.push('<tr id="ns1blankspaceMainAtteendeesAtoE" class="ns1blankspaceMain">' +
 														'<td id="ns1blankspaceMainAtteendees-AtoE" class="ns1blankspaceRowSelect">' +
@@ -643,9 +643,9 @@ ns1blankspace.event =
 														'<span id="ns1blankspaceAtteendees-#" class="ns1blankspaceAtoZ">0 to 9</span>&nbsp;' +
 														'</td></tr>');
 												
-										aHTML.push('</table>';
+										aHTML.push('</table>');
 
-										$('#tdns1blankspaceMainAttendeesColumn1').html(aHTML.join(''));	
+										$('#s1blankspaceAttendeesColumn1').html(aHTML.join(''));	
 										
 										$('span.ns1blankspaceAtoZ').click(function(event)
 										{
@@ -655,7 +655,7 @@ ns1blankspace.event =
 											ns1blankspace.event.attendees.search({quicksearch: aID[1]});	
 										});
 									}	
-								}
+								},
 
 					row: 		function (oRow)
 								{
@@ -723,7 +723,7 @@ ns1blankspace.event =
 
 												$.each(oResponse.data.rows, function()
 												{
-													aHTML.push(ns1blankspace.event.attendees.row(this);
+													aHTML.push(ns1blankspace.event.attendees.row(this));
 												});
 												
 												aHTML.push('</table>');
