@@ -9,28 +9,13 @@ ns1blankspace.setup.userRole =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
-
 					ns1blankspace.object = 22;
 					ns1blankspace.objectParentName = 'setup';
 					ns1blankspace.objectName = 'userRole';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'User Roles';
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.setup.userRole.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
+								
 					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 				},
@@ -395,6 +380,8 @@ ns1blankspace.setup.userRole =
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
+
+						$('#ns1blankspaceDetailsTitle').focus();
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
@@ -402,16 +389,6 @@ ns1blankspace.setup.userRole =
 							$('#ns1blankspaceDetailsNotes').val(ns1blankspace.objectContextData.notes);
 						}
 					}	
-				},
-
-	new:		function (oParam)
-				{
-					ns1blankspace.objectContextData = undefined
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.setup.userRole.init();
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					ns1blankspace.show({selector: '#divInterfaceMainDetails'});
-					ns1blankspace.setup.userRole.details();
 				},
 
 	save: 		{
@@ -436,9 +413,26 @@ ns1blankspace.setup.userRole =
 										url: ns1blankspace.util.endpointURI('SETUP_ROLE_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: ns1blankspace.status.message('Saved')
+										success: this.process
 									});		
-								}
+								},
+
+					process: 	function (oResponse)
+								{	
+									if (oResponse.status == 'OK')
+									{
+										ns1blankspace.status.message('Saved');
+										ns1blankspace.inputDetected = false;
+										if (ns1blankspace.objectContext == -1) {var bNew = true}
+										ns1blankspace.objectContext = oResponse.id;	
+										
+										if (bNew) {ns1blankspace.setup.userRole.search.send('-' + ns1blankspace.objectContext)}
+									}
+									else
+									{
+										ns1blankspace.status.error(oResponse.error.errornotes);
+									}
+								}			
 				},				
 
 	access: 	function (oParam, oResponse)
@@ -734,11 +728,11 @@ ns1blankspace.setup.userRole =
 						
 						aHTML.push('<table class="ns1blankspace" style="font-size:0.875em">');
 								
-						aHTML.push('<tr><td class="ns1blankspaceAction">' +
+						aHTML.push('<tr><td>' +
 										'<span style="width:70px;" id="ns1blankspaceUserAccessSave" class="ns1blankspaceAction">Save</span>' +
 										'</td></tr>');
 										
-						aHTML.push('<tr><td class="ns1blankspace">' +
+						aHTML.push('<tr><td>' +
 										'<span style="width:70px;" id="ns1blankspaceUserAccessCancel" class="ns1blankspaceAction">Cancel</span>' +
 										'</td></tr>');
 															

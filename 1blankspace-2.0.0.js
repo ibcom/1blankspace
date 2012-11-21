@@ -1038,7 +1038,7 @@ ns1blankspace.app =
 						
 						$('#ns1blankspaceViewControlNew').click(function(event)
 						{
-							oNS.new();
+							oNS.init({new: true});
 						});
 						
 						$('#ns1blankspaceViewControlNew').button({disabled: false});
@@ -1080,7 +1080,13 @@ ns1blankspace.app =
 
 						if (bNew) 
 						{
-							oNS.new();
+							ns1blankspace.objectContextData = undefined
+							ns1blankspace.objectContext = -1;
+							$('#ns1blankspaceViewControlAction').button({disabled: false});
+							if (typeof(oNS.layout) == 'function') {oNS.layout()}
+							ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+							if (typeof(oNS.details) == 'function') {oNS.details()} else {oNS.home.show()}
+							$('#ns1blankspaceViewControlNew').button({disabled: true});
 						}
 						else
 						{
