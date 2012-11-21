@@ -1086,7 +1086,7 @@ ns1blankspace.app =
 							if (typeof(oNS.layout) == 'function') {oNS.layout()}
 							ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 							if (typeof(oNS.details) == 'function') {oNS.details()} else {oNS.home.show()}
-							$('#ns1blankspaceViewControlNew').button({disabled: true});
+							//$('#ns1blankspaceViewControlNew').button({disabled: true});
 						}
 						else
 						{

@@ -61,7 +61,7 @@ ns1blankspace.setup.user =
 									'Internal</td></tr>');			
 								
 						aHTML.push('<tr><td id="ns1blankspaceControlExternal" class="ns1blankspaceControl" style="padding-top:10px;">' +
-									'Other User Access</td></tr>');	
+									'Other User<br />Access</td></tr>');	
 
 						aHTML.push('</table>');		
 						
@@ -847,7 +847,7 @@ ns1blankspace.setup.user =
 								}
 				},
 
-	new: 		function (oParam)
+	xnew: 		function (oParam)
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
@@ -1037,10 +1037,10 @@ ns1blankspace.setup.user =
 											
 											var aHTML = [];
 											
-											aHTML.push('<table>');
+											aHTML.push('<table class="ns1blankspaceColumn2">');
 											
-											aHTML.push('<tr><td id="ns1blankspaceSetupUserExternalAdd" class="interfaceMainAction">' +
-															'<span id="ns1blankspaceSetupUserExternalAdd">Add</span>' +
+											aHTML.push('<tr><td>' +
+															'<span id="ns1blankspaceSetupUserExternalAdd" class="ns1blankspaceAction">Add</span>' +
 															'</td></tr>');
 											
 											aHTML.push('</table>');					
@@ -1078,7 +1078,7 @@ ns1blankspace.setup.user =
 																			'" data-user="' + this.user +
 																			'" data-usertext="' + this.userlogon +
 																			'" data-unrestrictedaccess="' + this.unrestrictedaccess +	
-																			'" class="ns1blankspaceRow ns1blankspaceSelect ns1blankspaceSetupUserExternal">' +
+																			'" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceSetupUserExternal">' +
 																			this.userlogon);
 													
 													aHTML.push('<br /><span class="ns1blankspaceSub" id="ns1blankspaceSetupUserExternal_space-' + this.id + '">' +
