@@ -262,12 +262,30 @@ ns1blankspace.views =
 		type: 1
 	},
 	{
+		title: "Credits",
+		parentnamespace: "financial",
+		namespace: "credit",
+		endpoint: "FINANCIAL_CREDIT",
+		show: true,
+		group: 5,
+		type: 1
+	},
+	{
+		title: "Journals",
+		parentnamespace: "financial",
+		namespace: "journal",
+		endpoint: "FINANCIAL_GENERAL_JOURNAL",
+		show: true,
+		group: 6,
+		type: 1
+	},
+	{
 		title: "Payroll",
 		parentnamespace: "financial",
 		namespace: "payroll",
 		endpoint: "FINANCIAL_PAYROLL",
 		show: true,
-		group: 5,
+		group: 6,
 		type: 1
 	},
 	{
@@ -771,13 +789,13 @@ ns1blankspace.control =
 																		'Payments</span></td></tr>');
 											}	
 
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Payroll';})[0];
+											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Credits';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
 												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
 																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial_payroll" class="ns1blankspaceViewControl">' +
-																		'Payroll</span></td></tr>');
+																		'<span id="ns1blankspaceViewControl_financial_credit" class="ns1blankspaceViewControl">' +
+																		'Credits</span></td></tr>');
 											}	
 
 											if (aHTMLViewport.length > 0)
@@ -797,15 +815,15 @@ ns1blankspace.control =
 
 											var aHTMLViewport = [];
 
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Reporting';})[0];
+											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Payroll';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
 												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
 																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
-																		'Reporting</span></td></tr>');
-											}		
-											
+																		'<span id="ns1blankspaceViewControl_financial_payroll" class="ns1blankspaceViewControl">' +
+																		'Payroll</span></td></tr>');
+											}	
+
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Tax';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
@@ -815,6 +833,25 @@ ns1blankspace.control =
 																		'Tax&nbsp;(BAS)</span></td></tr>');
 											}
 
+											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Journals';})[0];
+											if (oViewport ? oViewport.show : false)
+											{		
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_financial_journal" class="ns1blankspaceViewControl">' +
+																		'Journals</span></td></tr>');
+											}	
+
+											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Reporting';})[0];
+											if (oViewport ? oViewport.show : false)
+											{		
+												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																		'<td class="ns1blankspaceViewControl">' +
+																		'<span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
+																		'Reporting</span></td></tr>');
+											}		
+											
+											
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		

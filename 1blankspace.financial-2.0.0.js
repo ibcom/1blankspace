@@ -1201,4 +1201,372 @@ ns1blankspace.financial.accounts =
 						}
 					}
 				}
+}
+
+ns1blankspace.financial.item =
+{
+	show:	function (oParam, oResponse)
+			{
+				var iObject = ns1blankspace.object;
+				var iObjectContext = ns1blankspace.objectContext;
+				var sNamespace;
+				
+				if (oParam != undefined)
+				{
+					if (oParam.object != undefined) {iObject = oParam.object}
+					if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+					if (oParam.namespace != undefined) {sNamespace = oParam.namespace}	
+				}
+				else
+				{
+					oParam = {}
+				}	
+					
+				if (oResponse == undefined)
+				{	
+					var aHTML = [];
+
+					aHTML.push('<table class="ns1blankspaceContainer">');
+
+					aHTML.push('<tr class="ns1blankspaceContainer">' +
+									'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
+									'</tr>');
+
+					aHTML.push('</table>');					
+					
+					$('#ns1blankspaceMainItem').html(aHTML.join(''));	
+			
+					var aHTML = [];
+					
+					aHTML.push('<table class="ns1blankspaceColumn2">');
+					
+					
+					aHTML.push('<tr><td class="ns1blankspaceAction">' +
+									'<span id="ns1blankspaceItemAdd">Add</span>' +
+									'</td></tr>');
+		
+					
+					aHTML.push('</table>');					
+					
+					$('#ns1blankspaceItemColumn2').html(aHTML.join(''));
+				
+					$('#ns1blankspaceItemAdd').button(
+					{
+						label: "Add"
+					})
+					.click(function() {
+						 ns1blankspace.financial.item.edit(oParam);
+					});										
+					
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'FINANCIAL_ITEM_SEARCH';
+					oSearch.addField('financialaccounttext,tax,issuedamount,amount,description');
+					oSearch.addFilter('object', 'EQUAL_TO', iObject);
+					oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+					oSearch.sort('financialaccounttext', 'asc');
+					
+					oSearch.getResults(function(data) {ns1blankspace.financial.item.show(oParam, data)});
+				}
+				else
+				{
+					var aHTML = [];
+					var h = -1;
+					
+					if (oResponse.data.rows.length == 0)
+					{
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">No items.</td></tr></table>');
+
+						$('#ns1blankspaceItemColumn1').html(aHTML.join(''));
+					}
+					else
+					{
+						aHTML.push('<tr class="ns1blankspaceCaption">');
+						aHTML.push('<td class="ns1blankspaceCaption style="width:125px;">Account</td>');
+						aHTML.push('<td class="ns1blankspaceCaption">Description</td>');
+						aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>');
+						aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+						aHTML.push('</tr>');
+
+						$.each(oResponse.data.rows, function()
+						{
+							aHTML.push('<tr class="ns1blankspaceRow">');
+														
+							aHTML.push('<td id="ns1blankspaceItem_financialaccounttext-' + this.id + '" class="ns1blankspaceRow">' +
+											this["financialaccounttext"] + '</td>');
+							
+							aHTML.push('<td id="ns1blankspaceItem_description-' + this.id + '" class="ns1blankspaceRow">' +
+											this["description"] + '</td>');
+
+							aHTML.push('<td id="ns1blankspaceItem_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;"' +
+											' title="' + this["tax"] + '">' +
+											this["amount"] + '</td>');
+
+							aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+							aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceItemRemove"></span>');
+							aHTML.push('<span id="ns1blankspaceRowItemItem_options_view-' + this.id + '" class="ns1blankspaceItemView"></span>');
+						
+							aHTML.push('</td></tr>');
+						});
+						
+						aHTML.push('</table>');
+
+						$('#ns1blankspaceItemColumn1').html(aHTML.join(''));
+						
+						$('.ns1blankspaceItemRemove').button( {
+							text: false,
+							icons: {
+								primary: "ui-icon-close"
+							}
+						})
+						.click(function() {
+							oParam.xhtmlElementID = this.id;
+							ns1blankspace.financial.item.remove(oParam);
+						})
+						.css('width', '15px')
+						.css('height', '17px')
+				
+						$('.ins1blankspaceItemView').button( {
+							text: false,
+							icons: {
+								primary: "ui-icon-play"
+							}
+						})
+						.click(function() {
+							ns1blankspace.financial[sNamespace].item.edit({xhtmlElementID: this.id})
+						})
+						.css('width', '15px')
+						.css('height', '17px')	
+					}
+				}	
+			},
+
+	remove:	function (oParam, oResponse)
+			{
+				var sXHTMLElementID;
+				var sNamespace;
+				var iObject = ns1blankspace.object;
+				var iObjectContext = ns1blankspace.objectContext;
+				var sNamespace;
+				
+				if (oParam != undefined)
+				{
+					if (oParam.object != undefined) {iObject = oParam.object}
+					if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+					if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
+					if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+				}		
+
+				var aXHTMLElementID = sXHTMLElementID.split('-');
+				var sID = aXHTMLElementID[1];
+				
+				if (oResponse == undefined)
+				{	
+					$.ajax(
+					{
+						type: 'POST',
+						url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
+						data: 'remove=1&id=' + sID,
+						dataType: 'json',
+						success: function(data)
+						{
+							var sData = 'object=' + ns1blankspace.object;
+							sData += '&objectcontext=' + ns1blankspace.objectContext;
+							
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
+								data: sData,
+								dataType: 'json',
+								success: function(data){ns1blankspace.financial[sNamespace].refresh()}
+							});
+							
+							ns1blankspace.financial[sNamespace].remove(oParam, data)
+						}
+					});
+				}	
+				else
+				{
+					if (oResponse.status == 'OK')
+					{
+						$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+					}
+					else
+					{
+						ns1blankspace.status.error(oResponse.error.errornotes);
+					}
+				}	
+			},
+
+	edit:	function (oParam, oResponse)
+			{
+				var iStep = 1;
+				var sNamespace;
+				
+				if (oParam != undefined)
+				{
+					if (oParam.step != undefined) {iStep = oParam.step}	
+					if (oParam.namespace != undefined) {sNamespace = oParam.namespace}	
+				}
+				
+				if (oResponse == undefined)
+				{
+					if (iStep == 1)
+					{
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
+				
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Amount' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceItemAmount" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Description' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea id="ns1blankspaceItemDescription" class="ns1blankspaceTextMulti" style="height:100px; width:200px;" rows="10" cols="35" ></textarea>' +
+										'</td></tr>');		
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Account' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspace" title="Enter a code or title and click search">' +
+										'<span id="ns1blankspaceItemAddSearch" class="ns1blankspaceAction">Search</span>' +
+										'</td></tr>');
+						
+						aHTML.push('</table>');
+						
+						aHTML.push('<table style="margin-top:15px;">');
+						
+						aHTML.push('<tr><td id="ns1blankspaceItemAddSearchResults"></td></tr>');
+														
+						aHTML.push('</table>');		
+						
+						$('#ns1blankspaceItemColumn2').html(aHTML.join(''));
+
+						$('#ns1blankspaceItemAddSearch').button(
+						{
+							label: "Search"
+						})
+						.click(function() {
+							ns1blankspace.financial[sNamespace].items.edit($.extend(true, oParam, {step: 2}))
+						})
+							
+						$('#ns1blankspaceItemAmount').focus();
+					}
+
+					if (iStep == 2)
+					{	
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+						oSearch.addField('title');
+						oSearch.addFilter('title', 'TEXT_IS_LIKE', $('#ns1blankspaceItemAccount').val());
+						oSearch.sort('title', 'asc');
+						oSearch.getResults(function(data){ns1blankspace.financial[sNamespace].item.edit($.extend(true, oParam, {step:3}), data)});
+					}
+				}
+				else
+				{
+					var aHTML = [];
+					
+					if (oResponse.data.rows.length == 0)	
+					{
+						aHTML.push('<table class="ns1blankspace">' +
+										'<tr><td class="ns1blankspaceNothing">No accounts.</td></tr>' + 
+										'</table>');
+
+						$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''));		
+					}
+					else
+					{	
+						aHTML.push('<table class="ns1blankspace">');
+						
+						$.each(oResponse.data.rows, function() 
+						{ 
+							aHTML.push('<tr class="ns1blankspaceRow">'+ 
+											'<td id="ns1blankspaceItem_title-' + this.id + '" class="ns1blankspaceRow">' +
+											this.title + '</td>' +
+											'<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+											'<span id="ns1blankspaceItem_options_add-' + this.id + '" class="ns1blankspaceItemAdd"></span>' +
+											'</td></tr>');	
+						});
+						
+						aHTML.push('</table>');
+
+						$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''))
+						
+						$('.ns1blankspaceItemAdd').button({
+							text: false,
+							icons: {
+								primary: "ui-icon-plus"
+							}
+						})
+						.click(function()
+						{
+							ns1blankspace.status.working();
+
+							var sID = this.id;
+							var aID = sID.split('-');
+							var iAccount = aID[1];
+							var cAmount = $('#ns1blankspaceItemAmount').val();
+							if (cAmount == '') {cAmount = 0};
+							
+							var sData = 'object=' + ns1blankspace.object;
+							sData += '&objectcontext=' + ns1blankspace.objectContext;
+							sData += '&financialaccount=' + iAccount;
+							sData += '&amount=' + cAmount;
+							sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceItemDescription').val());
+								
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
+								data: sData,
+								dataType: 'json',
+								success: function(oResponse)
+								{
+									ns1blankspaceStatus('Added.');
+
+									var sData = 'object=' + ns1blankspace.object;
+									sData += '&objectcontext=' + ns1blankspace.objectContext;
+									
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
+										data: sData,
+										dataType: 'json',
+										success: function(oResponse)
+										{
+											ns1blankspace.financial[sNamespace].refresh();
+											ns1blankspace.financial[sNamespace].show();
+										}
+									});
+								}
+							});
+						})
+						.css('width', '20px')
+						.css('height', '20px')
+						
+						$('input.ns1blankspaceText:first').focus();
+					}
+				}	
+			}
 }				
+

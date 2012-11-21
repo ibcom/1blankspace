@@ -204,7 +204,7 @@ ns1blankspace.messaging.imap =
 							
 							if (oResponse.data.rows.length != 0)
 							{
-								aHTML.push('<table style="padding-top:0px;padding-bottom: 15px;" id="ns1blankspaceMessagingIMAPAccounts" class="ns1blankspaceControlContainer">');
+								aHTML.push('<table style="padding-top:0px; padding-bottom:5px;" id="ns1blankspaceMessagingIMAPAccounts" class="ns1blankspaceControl">');
 								
 								$.each(oResponse.data.rows, function(index)
 								{
@@ -244,9 +244,8 @@ ns1blankspace.messaging.imap =
 								
 								aHTML.push('</table>');
 								
-								aHTML.push('<table>');
-								aHTML.push('<tr><td id="ns1blankspaceMessagingMessageControlContainer"></td></tr>');
-								aHTML.push('</table>');
+								aHTML.push('<div id="ns1blankspaceMessagingMessageControlContainer"></div>');
+								
 								
 							}
 							else
@@ -490,7 +489,7 @@ ns1blankspace.messaging.imap =
 								{
 									$('td.ns1blankspaceRowSelect').click(function()
 									{
-										$('#ns1blankspaceMessagingInboxContainer > td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+										$('#ns1blankspaceMessagingInboxContainer td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 										$('#' + this.id).parent().find('td').removeClass('ns1blankspaceNotSeen');
 										ns1blankspace.messaging.imap.markAsRead(this.id);
 										ns1blankspace.messaging.imap.search.send(this.id);
@@ -566,7 +565,7 @@ ns1blankspace.messaging.imap =
 	search: 	{
 					send:		function (sXHTMLElementID, oParam)
 								{
-									var aSearch = sXHTMLElementID.split('_id_');
+									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
@@ -688,7 +687,7 @@ ns1blankspace.messaging.imap =
 						if (oParam.reply != undefined) {bReply = oParam.reply}
 					}	
 					
-					aHTML.push('<table id="ns1blankspaceControl" class="ns1blankspaceControl">');
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					if (bReply) 
 					{
@@ -709,25 +708,25 @@ ns1blankspace.messaging.imap =
 					if (bReply) 
 					{
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlReply" class="ns1blankspaceVControl ns1blankspaceHighlight">' +
+									'<td id="ns1blankspaceControlReply" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 									'Reply</td>' +
 									'</tr>');
 					}
 					else
 					{
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlReply" class="ns1blankspaceVControl">' +
+									'<td id="ns1blankspaceControlReply" class="ns1blankspaceControl">' +
 									'Reply</td>' +
 									'</tr>');
 					}
 					
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlReplyAll" class="ns1blankspaceVControl">' +
+									'<td id="ns1blankspaceControlReplyAll" class="ns1blankspaceControl">' +
 									'Reply All</td>' +
 									'</tr>');	
 					
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlForward" class="ns1blankspaceVControl">' +
+									'<td id="ns1blankspaceControlForward" class="ns1blankspaceControl">' +
 									'Forward</td>' +
 									'</tr>');
 												
@@ -740,37 +739,37 @@ ns1blankspace.messaging.imap =
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.setup.messaging.summary();
+						ns1blankspace.messaging.imap.summary();
 					});
 
 					$('#ns1blankspaceControlReply').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
-						ns1blankspace.setup.messaging.reply();
+						ns1blankspace.messaging.imap.edit.show({reply: true});
 					});
 					
 					$('#ns1blankspaceControlReplyAll').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
-						ns1blankspace.setup.messaging.replyall();
+						ns1blankspace.messaging.imap.edit.show({replyAll: true});
 					});
 
 					$('#ns1blankspaceControlForward').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
-						ns1blankspace.setup.messaging.forward();
+						ns1blankspace.messaging.imap.edit.show({forward: true});
 					});
 					
 					$('#ns1blankspaceControlActions').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainActions'});
-						ns1blankspace.setup.messaging.actions();
+						ns1blankspace.messaging.imap.actions();
 					});
 				
 					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments'});
-						ns1blankspace.setup.messaging.attachments();
+						ns1blankspace.messaging.imap.attachments();
 					});
 				},
 
@@ -787,7 +786,7 @@ ns1blankspace.messaging.imap =
 					
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					
-					ns1blankspace.messaging.layout(oParam);
+					ns1blankspace.messaging.imap.layout(oParam);
 					
 					if (oResponse.data.rows.length == 0)
 					{
@@ -850,12 +849,12 @@ ns1blankspace.messaging.imap =
 						}
 						else
 						{
-							ns1blankspace.messaging.summary();
+							ns1blankspace.messaging.imap.summary();
 						}	
 					}	
 				},		
 	
-	summary:	function ns1blankspaceMessagingSummary()
+	summary:	function ()
 				{
 					var aHTML = [];
 					
@@ -873,8 +872,14 @@ ns1blankspace.messaging.imap =
 										'<td id="ns1blankspaceMessagingEmailSubject" class="ns1blankspaceHeader" style="text-align:left;font-weight:bold">' +
 										ns1blankspace.objectContextData.subject + '</td>');
 						
-						var oDate = new Date.parse(ns1blankspace.objectContextData.date);
-						sDate = oDate.toString("ddd, dd MMM yyyy h:mm TT");
+						var oDate = Date.parse(ns1blankspace.objectContextData.date);
+
+						var sDate = '';
+
+						if (oDate != null)
+						{
+							sDate = oDate.toString("ddd, dd MMM yyyy h:mm TT");
+						}	
 
 						aHTML.push('<td id="ns1blankspaceMessagingEmailDate" class="ns1blankspaceMessagingSubHeader" style="text-align:right;">' +
 										sDate + '</td>');
@@ -948,7 +953,7 @@ ns1blankspace.messaging.imap =
 						
 						if (ns1blankspace.objectContextData.detailscached == 'Y')
 						{
-							setTimeout("ns1blankspace.message.show()", 300);
+							setTimeout("ns1blankspace.messaging.imap.message.show()", 300);
 							ns1blankspace.messaging.imap.message.attachments();
 						}
 						else
@@ -1037,7 +1042,7 @@ ns1blankspace.messaging.imap =
 					show:		function ()
 								{
 									var sHTML = ns1blankspace.objectContextData.message;
-									sHTML = ns1blankspaceFormatXHTML(sHTML);
+									sHTML = (sHTML).formatXHTML();
 
 									while ($('#ifMessage').length == 0) {}
 
@@ -1639,7 +1644,7 @@ ns1blankspace.messaging.imap =
 												}	
 												else
 												{
-													ns1blankspace.messaging.imap.edit.attachments();
+													//ns1blankspace.messaging.imap.edit.attachments();
 												}		
 											}	
 										}

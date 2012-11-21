@@ -119,7 +119,7 @@ ns1blankspace.messaging.conversation =
 						oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
 						oSearch.addField('title');
 						oSearch.rows = 10;
-						oSearch.sort('modifieddate', 'asc');
+						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(ns1blankspace.messaging.conversation.home);
 					}
 					else
@@ -192,7 +192,7 @@ ns1blankspace.messaging.conversation =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
 										oSearch.addField('alertemailfrom,alertemailmessage,alerturl,allowsmsalerts,commentcount,description,emailalertdefault,' +
-															'includemessageinemailalert,lastcommentdate,lastcommentuser,lastcommentusertext,' +
+															'includemessageinemailalert,lastcommentdate,owner,ownertext,lastcommentuser,lastcommentusertext,' +
 															'lastpostedday,object,objectcontext,participantcan,participantcantext,postcount,sharing,sharingtext,title');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext)
 										oSearch.rows = 10;
@@ -294,7 +294,7 @@ ns1blankspace.messaging.conversation =
 
 					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
 					
-					aHTML.push('<table class="ns1blankspaceControlContainer">');
+					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					if (ns1blankspace.objectContext == -1)
 					{
@@ -311,14 +311,14 @@ ns1blankspace.messaging.conversation =
 
 						aHTML.push('</table>');
 						
-						aHTML.push('<table class="ns1blankspaceControlContainer">');
+						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlParticipants" class="ns1blankspaceControl">' +
 										'Participants</td></tr>');
 
 						aHTML.push('</table>');
 						
-						aHTML.push('<table class="ns1blankspaceControlContainer">');
+						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlPosts" class="ns1blankspaceControl">' +
 										'Posts</td></tr>');
@@ -328,7 +328,7 @@ ns1blankspace.messaging.conversation =
 
 						aHTML.push('</table>');
 						
-						aHTML.push('<table class="ns1blankspaceControlContainer">');
+						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
@@ -354,37 +354,37 @@ ns1blankspace.messaging.conversation =
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.setup.messaging.summary();
+						ns1blankspace.messaging.conversation.summary();
 					});
 					
 					$('#ns1blankspaceControlDetails').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-						ns1blankspace.setup.messaging.details();
+						ns1blankspace.messaging.conversation.details();
 					});
 
 					$('#ns1blankspaceControlParticipants').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainParticipants'});
-						ns1blankspace.setup.messaging.participants();
+						ns1blankspace.messaging.conversation.participants.init();
 					});
 
 					$('#ns1blankspaceControlPosts').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainPosts'});
-						ns1blankspace.setup.messaging.posts();
+						ns1blankspace.messaging.conversation.posts.show();
 					});
 				
 					$('#ns1blankspaceControlComments').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainComments'});
-						ns1blankspace.setup.messaging.comments();
+						ns1blankspace.messaging.conversation.comments.show();
 					});
 
 					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments'});
-						ns1blankspace.setup.messaging.attachments();
+						ns1blankspace.messaging.conversation.attachments();
 					});
 				},
 
@@ -403,12 +403,12 @@ ns1blankspace.messaging.conversation =
 								
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 
-						ns1blankspace.messaging.ConversationOwner = false;
+						ns1blankspace.messaging.isConversationOwner = false;
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
-						ns1blankspace.messaging.ConversationOwner = (ns1blankspace.user == ns1blankspace.objectContextData.user)
+						ns1blankspace.messaging.isConversationOwner = (ns1blankspace.user.id == ns1blankspace.objectContextData.owner)
 
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title);
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
@@ -467,7 +467,7 @@ ns1blankspace.messaging.conversation =
 			
 						aHTML.push('<tableclass="ns1blankspaceColumn2Action" cellspacing=0>');
 						
-						if (ns1blankspace.messaging.ConversationOwner)
+						if (ns1blankspace.messaging.isConversationOwner)
 						{
 							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
 										'<a href="#" id="ns1blankspaceConversationAddParticipant">Add&nbsp;Participant</a>' +
@@ -498,6 +498,8 @@ ns1blankspace.messaging.conversation =
 
 	details: 	function ()
 				{
+					var aHTML = [];
+
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
@@ -515,7 +517,7 @@ ns1blankspace.messaging.conversation =
 						
 						aHTML.push('<table class="ns1blankspace">');
 							
-						if (ns1blankspace.messaging.ConversationOwner)
+						if (ns1blankspace.messaging.isConversationOwner)
 						{
 							aHTML.push('<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">' +
@@ -567,7 +569,7 @@ ns1blankspace.messaging.conversation =
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
-						if (ns1blankspace.messaging.ConversationOwner)
+						if (ns1blankspace.messaging.isConversationOwner)
 						{
 							var aHTML = [];
 						
@@ -611,21 +613,21 @@ ns1blankspace.messaging.conversation =
 									
 									aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceParticipantsColumn1" class="ns1blankspaceColumn1Large"></td>' +
-													'<td id="ns1blankspaceParticipantsColumn2" class="ns1blankspaceColumn2Action"></td>' +
+													'<td id="ns1blankspaceParticipantsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+													'<td id="ns1blankspaceParticipantsColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 													'</tr>' + 
 													'</table>');
 													
 									$('#ns1blankspaceMainParticipants').html(aHTML.join(''));	
 									
-									if (ns1blankspace.messaging.ConversationOwner)
+									if (ns1blankspace.messaging.isConversationOwner)
 									{	
 										var aHTML = [];1;	
 										
-										aHTML.push('<table class="ns1blankspaceMainColumn2Action">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 																		
-										aHTML.push('<tr><td class="ns1blankspaceMainAction">' +
-															'<span id="ns1blankspaceParticipantsAdd">Add</span>' +
+										aHTML.push('<tr><td>' +
+															'<span id="ns1blankspaceParticipantsAdd" class="ns1blankspaceAction">Add</span>' +
 															'</td></tr>');
 														
 										aHTML.push('</table>');					
@@ -644,7 +646,7 @@ ns1blankspace.messaging.conversation =
 									ns1blankspace.messaging.conversation.participants.show();
 								},		
 
-					show: 	function (oParam, oResponse)
+					show: 		function (oParam, oResponse)
 								{
 									var sLabel = "Participants";
 									var iOption = 1;
@@ -656,11 +658,14 @@ ns1blankspace.messaging.conversation =
 
 									if (oResponse == undefined)
 									{
-										var oSearch = new AdvancedSearch();
-										oSearch.method = 'MESSAGING_CONVERSATION_PARTICIPANT_SEARCH';
-										oSearch.addField('*');
-										oSearch.addFilter('conversation', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.participants.show(oParam, data)});
+										$.ajax(
+										{
+											type: 'GET',
+											url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_PARTICIPANT_SEARCH'),
+											data: 'conversation=' + ns1blankspace.objectContext,
+											dataType: 'json',
+											success: function(data){ns1blankspace.messaging.conversation.participants.show(oParam, data)}
+										});
 									}
 									else
 									{
@@ -681,10 +686,10 @@ ns1blankspace.messaging.conversation =
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																
-												aHTML.push('<td id="ns1blankspaceConversationParticipants_userlogonname-' + this.user + '" class="ns1blankspaceMainRow">' +
+												aHTML.push('<td id="ns1blankspaceConversationParticipants_userlogonname-' + this.user + '" class="ns1blankspaceRow">' +
 																		this.userlogonname + '</td>');
 																		
-												aHTML.push('<td id="ns1blankspaceConversationParticipants-' + this.user + '" class="ns1blankspaceRowSelect">&nbsp;</td>');
+												aHTML.push('<td id="ns1blankspaceConversationParticipants-' + this.user + '" class="ns1blankspaceRow ns1blankspaceRowSelect">&nbsp;</td>');
 																		
 												aHTML.push('</tr>');		
 											})
@@ -693,9 +698,9 @@ ns1blankspace.messaging.conversation =
 
 											$('#ns1blankspaceParticipantsColumn1').html(aHTML.join(''));
 											
-											if (ns1blankspace.messaging.ConversationOwner)
+											if (ns1blankspace.messaging.isConversationOwner)
 											{
-												$('#ns1blankspaceConversationParticipants > td.ns1blankspaceRowSelect').button(
+												$('#ns1blankspaceConversationParticipants td.ns1blankspaceRowSelect').button(
 												{
 													text: false,
 													icons: 
@@ -1030,13 +1035,13 @@ ns1blankspace.messaging.conversation =
 												aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_subject-' + this.id + '" class="ns1blankspaceRow">' +
 																		sSubject + '</td>');
 																		
-												aHTML.push('<td id="s1blankspaceMessagingConversationPosts_usertext-' + this.id + '" class="ns1blankspaceMainRow">' +
+												aHTML.push('<td id="s1blankspaceMessagingConversationPosts_usertext-' + this.id + '" class="ns1blankspaceRow">' +
 																		this.usertext + '</td>');
 																		
-												aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_date-' + this.id + '" class="ns1blankspaceMainRow">' +
+												aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_date-' + this.id + '" class="ns1blankspaceRow">' +
 																		this.datetime + '</td>');
 																
-												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceMainRow">' +
+												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
 																	'<span id="ns1blankspaceMessagingConversationPosts_comment-' + this.id + '" class="ns1blankspaceRowSelect ns1blankspaceRowAddComment"></span>' +
 																	'</td></tr>');
 													
@@ -1368,33 +1373,13 @@ ns1blankspace.messaging.conversation =
 
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspaceCommentsColumn1" class="ns1blankspaceColumn1Large"></td>' +
-															'<td id="ns1blankspaceCommentsColumn2" class="ns1blankspaceColumn2Action"></td>' +
+															'<td id="ns1blankspaceCommentsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+															'<td id="ns1blankspaceCommentsColumn2" class="ns1blankspaceColumn2" style="width: 5px;"></td>' +
 															'</tr>' + 
 															'</table>');			
 														
-										$('#' + sXHTMLElementID).html(aHTML.join(''));	
+										$('#ns1blankspaceMainComments').html(aHTML.join(''));	
 									
-										var aHTML = [];
-									
-										aHTML.push('<table class="ns1blankspaceColumn2Action">');
-												
-										aHTML.push('<tr><td class="ns1blankspaceAction">' +
-															'<span id="ns1blankspaceCommentsAdd">Add</span>' +
-															'</td></tr>');
-														
-										aHTML.push('</table>');					
-										
-										$('#ns1blankspaceCommentsColumn2').html(aHTML.join(''));	
-									
-										$('#spanns1blankspaceMainCommentsAdd').button(
-										{
-											label: "Add"
-										})
-										.click(function() {
-											ns1blankspace.messaging.conversation.comments.add(false);
-										})
-										
 										var aHTML = [];
 										
 										if (oResponse.data.rows.length == 0)
@@ -1412,6 +1397,7 @@ ns1blankspace.messaging.conversation =
 												aHTML.push('<td class="ns1blankspaceCaption">Post</td>');
 											}
 											aHTML.push('<td class="ns1blankspaceCaption">Comment</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">By</td>');
 											aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
 											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
@@ -1435,7 +1421,7 @@ ns1blankspace.messaging.conversation =
 												aHTML.push('<td id="ns1blankspaceConversationComments_date-' + this.id + '" class="ns1blankspaceRow">' +
 																		this.datetime + '</td>');
 													
-												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceMainRow">' +
+												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
 																	'<span id="ns1blankspaceConversationComments-' + this.post + '-' + this.id + '" class="ns1blankspaceRowSelect ns1blankspaceRowSelect"></span>' +
 																	'</td></tr>');
 														
@@ -1446,9 +1432,9 @@ ns1blankspace.messaging.conversation =
 											aHTML.push('</table>');	
 										}
 										
-										$('#ns1blankspaceMainComments').html(aHTML.join(''));
+										$('#ns1blankspaceCommentsColumn1').html(aHTML.join(''));
 										
-										$('#ns1blankspaceConversationComments > span.ns1blankspaceRowSelect').button({
+										$('#ns1blankspaceConversationComments span.ns1blankspaceRowSelect').button({
 											text: false,
 											label: "Comment",
 											icons: {

@@ -1177,7 +1177,13 @@ ns1blankspace.contactPerson =
 										}
 										else
 										{
-											
+											ns1blankspace.container.position(
+											{
+												xhtmlElementID: 'ns1blankspaceContactPersonGroupsAdd',
+												topOffset: -50,
+												leftOffset: -257
+											});
+
 											$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceContactPersonGroupsAdd')
 											
 											var aHTML = [];
@@ -1193,7 +1199,7 @@ ns1blankspace.contactPerson =
 											}
 											else
 											{
-												aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.725em;">');
+												aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.875em;">');
 												
 												$.each(oResponse.data.rows, function()
 												{	
@@ -1235,7 +1241,7 @@ ns1blankspace.contactPerson =
 										url: ns1blankspace.util.endpointURI('CONTACT_PERSON_GROUP_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: function(data){ns1blankspace.contactPerson.groups.search.show()}
+										success: function(data){ns1blankspace.contactPerson.groups.show()}
 									});
 										
 								},
@@ -1252,7 +1258,7 @@ ns1blankspace.contactPerson =
 										url: ns1blankspace.util.endpointURI('CONTACT_PERSON_GROUP_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
+										success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 									});
 										
 								},					
@@ -1274,6 +1280,7 @@ ns1blankspace.contactPerson =
 														{
 															type: 'GET',
 															url: ns1blankspace.util.endpointURI('SETUP_CONTACT_PERSON_GROUP_SEARCH'),
+															data: 'rows=100',
 															dataType: 'json',
 															success: function(data) {ns1blankspace.contactPerson.groups.search.show(oParam, data)}
 														});
@@ -1312,7 +1319,7 @@ ns1blankspace.contactPerson =
 																aHTML.push('<tr class="interfaceMainRow">' +
 																				'<td id="ns1blankspaceContactPersonByGroup_title-' + this.id +
 																				'-' + this.title +
-																				'" class="ns1blankspaceRowSelect ns1blankspaceRowSelectByGroup">' +
+																				'" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceRowSelectByGroup">' +
 																				this.title + '</td></tr>');
 															});
 															
@@ -1363,7 +1370,7 @@ ns1blankspace.contactPerson =
 														}
 														else
 														{		
-															aHTML.push('<table class="ns1blankspace">');
+															aHTML.push('<table id="ns1blankspaceContactPersonGroup" class="ns1blankspace">');
 										
 															aHTML.push('<tr class="ns1blankspaceCaption">' + 
 																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementID[2] + '</td>' +
@@ -1405,9 +1412,11 @@ ns1blankspace.contactPerson =
 																			
 													aHTML.push('<td id="ns1blankspaceContactPersonGroup_surname-' + oRow.contactperson + '" class="ns1blankspaceRow">' +
 																			oRow["persongroup.contactperson.surname"]+ '</td>');
-																			
-													aHTML.push('<td id="ns1blankspaceContactPersonGroup-' + oRow.contactperson + '" class="ns1blankspaceRowSelect ns1blankspaceContactPersonGroupRowSelect">&nbsp;</td>');						
-													
+															
+													aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+																	'<span id="ns1blankspaceContactPersonGroup_view-' + oRow.contactperson + 
+																	'" class="ns1blankspaceRowView">&nbsp;</span></td>');
+																		
 													aHTML.push('</tr>');
 																
 													return aHTML.join('');
@@ -1415,7 +1424,7 @@ ns1blankspace.contactPerson =
 
 									bind: 		function ()
 												{
-													$('.ns1blankspaceContactPersonGroupRowSelect').button( {
+													$('#ns1blankspaceContactPersonGroup .ns1blankspaceRowView').button( {
 																text: false,
 																icons: {
 																	primary: "ui-icon-play"
@@ -1522,8 +1531,10 @@ ns1blankspace.contactPerson =
 															
 									aHTML.push('<td id="ns1blankspaceFavourites_firstname-' + oRow.id + '" class="ns1blankspaceRow">' +
 															oRow.surname + '</td>');
-															
-									aHTML.push('<td id="ns1blankspaceFavourites-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceFavouritesRowSelect">&nbsp;</td>');						
+									
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+													'<span id="ns1blankspaceFavourites_view-' + oRow.id + 
+													'" class="ns1blankspaceRowView">&nbsp;</span></td>');				
 									
 									aHTML.push('</tr>');
 												
@@ -1532,7 +1543,7 @@ ns1blankspace.contactPerson =
 
 					bind: 		function ()
 								{
-									$('#ns1blankspaceFavourites .ns1blankspaceFavouritesRowSelect').button( {
+									$('#ns1blankspaceFavourites .ns1blankspaceRowView').button( {
 												text: false,
 												icons: {
 													primary: "ui-icon-play"
