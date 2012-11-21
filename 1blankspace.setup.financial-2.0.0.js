@@ -37,7 +37,7 @@ ns1blankspace.setup.financial =
 					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 
-					ns1blankspace.format.editor({height: "500px"});
+					ns1blankspace.format.editor.init({height: "500px"});
 				},
 
 	home:		function (oResponse)
@@ -46,7 +46,6 @@ ns1blankspace.setup.financial =
 					$('#ns1blankspaceViewControlAction').button({disabled: false});
 					
 					var aHTML = [];
-					
 								
 					aHTML.push('<table>');
 
@@ -128,19 +127,19 @@ ns1blankspace.setup.financial =
 					$('#ns1blankspaceControlBankAccount').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainBankAccount'});
-						ns1blankspace.setup.financial.bankAccount();
+						ns1blankspace.setup.financial.bankAccounts();
 					});
 					
 					$('#ns1blankspaceControlFinancialAccount').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainFinancialAccount'});
-						ns1blankspace.setup.financial.account();
+						ns1blankspace.setup.financial.accounts.show();
 					});
 					
 					$('#ns1blankspaceControlFinancialAccountDefault').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainFinancialAccountDefault'});
-						ns1blankspace.setup.financial.accountDefault();
+						ns1blankspace.setup.financial.accountDefaults();
 					});
 					
 					$('#ns1blankspaceControlInvoicing').click(function(event)
@@ -152,7 +151,7 @@ ns1blankspace.setup.financial =
 					$('#ns1blankspaceControlInvoicingTemplate').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainInvoicingTemplate'});
-						ns1blankspace.setup.financial.invoicingTemplate();
+						ns1blankspace.setup.financial.invoicingTemplate.show();
 					});
 
 					$('#ns1blankspaceControlTax').click(function(event)
@@ -260,7 +259,7 @@ ns1blankspace.setup.financial =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceGeneralAccountingYear" class="inputns1blankspaceText">' +
+										'<input id="ns1blankspaceGeneralAccountingYear" class="ns1blankspaceText">' +
 										'</td></tr>');
 																		
 						aHTML.push('</table>');					
@@ -317,10 +316,12 @@ ns1blankspace.setup.financial =
 							
 							aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceBankAccountColumn1" class="ns1blankspaceColumn1">' +
+										'<td id="ns1blankspaceBankAccountColumn1" class="ns1blankspaceColumn1Flexible">' +
 										ns1blankspace.xhtml.loading + '</td>' +
-										'<td id="ns1blankspaceBankAccountColumn2" class="ns1blankspaceColumn2">' +
-										'<span id="ns1blankspaceBankAccountAdd" style="font-size:0.75em;">Add</span></td>' +
+										'<td id="ns1blankspaceBankAccountColumn2" class="ns1blankspaceColumn2" style="width: 100px;">' +
+										'<table class="ns1blankspaceColumn2"><tr><td>' +
+										'<span id="ns1blankspaceBankAccountAdd" class="ns1blankspaceAction">Add</span></td>' +
+										'</td></tr></table>' +
 										'</tr>' + 
 										'</table>');
 
@@ -372,7 +373,7 @@ ns1blankspace.setup.financial =
 							
 							$('#ns1blankspaceBankAccountColumn1').html(aHTML.join(''));
 
-							$('#ns1blankspaceSetupFinancialBankAccount > span.ns1blankspaceRowRemove').button(
+							$('#ns1blankspaceSetupFinancialBankAccount span.ns1blankspaceRowRemove').button(
 							{
 								text: false,
 								icons: {
@@ -386,7 +387,7 @@ ns1blankspace.setup.financial =
 							.css('width', '15px')
 							.css('height', '17px');
 
-							$('#ns1blankspaceSetupFinancialBankAccount > td.ns1blankspaceRowSelect').click(function() {
+							$('#ns1blankspaceSetupFinancialBankAccount td.ns1blankspaceRowSelect').click(function() {
 								$.extend(true, oParam, {step: 2, xhtmlElementID: event.target.id});
 								ns1blankspace.setup.financial.bankAccounts(oParam);
 							})
@@ -631,44 +632,44 @@ ns1blankspace.setup.financial =
 												//oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount); //???
 												oSearch.rows = 200;
 												oSearch.sort('title', 'asc');
-												oSearch.getResults(function(data) {ns1blankspace.setup.financial.accounts(oParam, data)})	
+												oSearch.getResults(function(data) {ns1blankspace.setup.financial.accounts.show(oParam, data)})	
 											}
 											else
 											{
 												var aHTML = [];
 													
-												ns1blankspace.financial.accounts = oResponse.data.rows;
-												ns1blankspace.financial.rootAccounts =  $.grep(ns1blankspace.financial.accounts, function (a) { return a.parentaccount == ns1blankspace.financial.rootAccount; })
-												interfaceSetupFinancialAccountTree(ns1blankspace.financial.rootAccount); 
+												ns1blankspace.financial.data.accounts = oResponse.data.rows;
+												ns1blankspace.financial.data.rootAccounts =  $.grep(ns1blankspace.financial.data.accounts, function (a) { return a.parentaccount == ns1blankspace.financial.rootAccount; })
+												ns1blankspace.setup.financial.accounts.tree(ns1blankspace.financial.rootAccount); 
 
 												aHTML.push('<table id="ns1blankspaceAccountType" class="ns1blankspace">' +
 																'<tr class="ns1blankspaceRow">' +
 																'<td id="ns1blankspaceSetupFinancialAccountType-1-'+ 
-																($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Expense') != -1; }))[0].id +
+																($.grep(ns1blankspace.financial.data.rootAccounts, function (a) { return (a.title).indexOf('Expense') != -1; }))[0].id +
 																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Expenses</td>' +
 																'</tr>' +
 																'<tr class="ns1blankspaceRow">' +
 																'<td id="ns1blankspaceSetupFinancialAccountType-2-' +
-																($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Revenue') != -1; }))[0].id +
+																($.grep(ns1blankspace.financial.data.rootAccounts, function (a) { return (a.title).indexOf('Revenue') != -1; }))[0].id +
 																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Revenue</td>' +
 																'</tr>' +
 																'<tr class="ns1blankspaceRow">' +
 																'<td id="ns1blankspaceSetupFinancialAccountType-3-' +
-																($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Asset') != -1; }))[0].id +
+																($.grep(ns1blankspace.financial.data.rootAccounts, function (a) { return (a.title).indexOf('Asset') != -1; }))[0].id +
 																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Asset</td>' +
 																'</tr>' +
 																'<tr class="ns1blankspaceRow">' +
 																'<td id="ns1blankspaceSetupFinancialAccountType-4-' +
-																($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Liability') != -1; }))[0].id +
+																($.grep(ns1blankspace.financial.data.rootAccounts, function (a) { return (a.title).indexOf('Liability') != -1; }))[0].id +
 																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Liability</td>' +
 																'</tr>' +
 																'<tr class="ns1blankspaceRow">' +
 																'<td id="ns1blankspaceSetupFinancialAccountType-5-' +
-																($.grep(ns1blankspace.financial.rootAccounts, function (a) { return (a.title).indexOf('Equity') != -1; }))[0].id +
+																($.grep(ns1blankspace.financial.data.rootAccounts, function (a) { return (a.title).indexOf('Equity') != -1; }))[0].id +
 																'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Equity</td>' +
 																'</tr>' +
@@ -676,12 +677,12 @@ ns1blankspace.setup.financial =
 														
 												$('#ns1blankspaceSetupAccountColumnType').html(aHTML.join(''));
 
-												$('#ns1blankspaceAccountType > td.ns1blankspaceRowSelect').click(function(event)
+												$('#ns1blankspaceAccountType td.ns1blankspaceRowSelect').click(function(event)
 												{
 													var sXHTMLElementId = event.target.id;
 													var aId = sXHTMLElementId.split('-');
 													
-													ns1blankspace.setup.financial.accounts({type: aId[1], parentAccount: aId[2], step: 2});
+													ns1blankspace.setup.financial.accounts.show({type: aId[1], parentAccount: aId[2], step: 2});
 												});
 											}
 										}	
@@ -698,8 +699,8 @@ ns1blankspace.setup.financial =
 											var aHTML = [];
 
 											aHTML.push('<table class="ns1blankspaceColumn2">' +
-															'<tr><td class="ns1blankspaceAction">' +
-															'<span id="ns1blankspaceAccountAdd">Add</span>' +
+															'<tr><td>' +
+															'<span id="ns1blankspaceAccountAdd" class="ns1blankspaceAction">Add</span>' +
 															'</td></tr>' +
 															'</table>');					
 											
@@ -712,11 +713,11 @@ ns1blankspace.setup.financial =
 											.click(function()
 											{
 												$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
-												ns1blankspace.setup.financial.accounts(oParam);
+												ns1blankspace.setup.financial.accounts.show(oParam);
 											})
 
-											var oItems = $.grep(ns1blankspace.financial.accounts, function (a) { return a.parentaccount == iParentAccount; });
-											ns1blankspace.setup.financial.accounts(oParam, oItems);
+											var oItems = $.grep(ns1blankspace.financial.data.accounts, function (a) { return a.parentaccount == iParentAccount; });
+											ns1blankspace.setup.financial.accounts.show(oParam, oItems);
 										}
 										else
 										{
@@ -724,14 +725,14 @@ ns1blankspace.setup.financial =
 
 											aHTML.push('<table id="ns1blankspaceSetupFinancialFinancialAccount" class="ns1blankspace">');
 										
-											if (($.grep(ns1blankspace.financial.rootAccounts, function (a) { return a.id == iParentAccount; })).length == 0)
+											if (($.grep(ns1blankspace.financial.data.rootAccounts, function (a) { return a.id == iParentAccount; })).length == 0)
 											{
 												aHTML.push('<tr class="ns1blankspaceCaption">');
 												aHTML.push('<td class="ns1blankspaceCaption" colspan=2>' +
 																'<div style="float:left;""><span id="ns1blankspaceAccountParent-' +
-																($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == iParentAccount; }))[0].parentaccount +
+																($.grep(ns1blankspace.financial.data.accounts, function (a) { return a.id == iParentAccount; }))[0].parentaccount +
 																 '" class="ns1blankspaceRow ns1blankspaceRowOptionsParent">Add</span></div>' +
-																'<div style="float:left;margin-left:3px;margin-top:3px;">' + ($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == iParentAccount; }))[0].title
+																'<div style="float:left;margin-left:3px;margin-top:3px;">' + ($.grep(ns1blankspace.financial.data.accounts, function (a) { return a.id == iParentAccount; }))[0].title
 																+ '</div></td>');
 												aHTML.push('</tr>');
 											}
@@ -772,7 +773,7 @@ ns1blankspace.setup.financial =
 										
 											$('#ns1blankspaceSetupAccountColumnList').html(aHTML.join(''));
 										
-											$('#ns1blankspaceSetupFinancialFinancialAccount > .ns1blankspaceRowOptionsParent').button(
+											$('#ns1blankspaceSetupFinancialFinancialAccount .ns1blankspaceRowOptionsParent').button(
 											{
 												text: false,
 												icons: {
@@ -782,12 +783,12 @@ ns1blankspace.setup.financial =
 											.click(function() {
 												var aId = (this.id).split('-');
 												$.extend(true, oParam, {step: 2, parentAccount: aId[1]});
-												ns1blankspace.setup.financial.accounts(oParam);
+												ns1blankspace.setup.financial.accounts.show(oParam);
 											})
 											.css('width', '15px')
 											.css('height', '17px');
 
-											$('#ns1blankspaceSetupFinancialFinancialAccount > .ns1blankspaceRowOptionsChildren').button(
+											$('#ns1blankspaceSetupFinancialFinancialAccount .ns1blankspaceRowOptionsChildren').button(
 											{
 												text: false,
 												icons: {
@@ -797,15 +798,15 @@ ns1blankspace.setup.financial =
 											.click(function() {
 												var aId = (this.id).split('-');
 												$.extend(true, oParam, {step: 2, parentAccount: aId[1]});
-												ns1blankspace.setup.financial.accounts(oParam);
+												ns1blankspace.setup.financial.accounts.show(oParam);
 											})
 											.css('width', '15px')
 											.css('height', '17px');
 
-											$('#ns1blankspaceSetupFinancialFinancialAccount > td.ns1blankspaceRowSelect').click(function()
+											$('#ns1blankspaceSetupFinancialFinancialAccount td.ns1blankspaceRowSelect').click(function()
 											{
 												$.extend(true, oParam, {step: 4, xhtmlElementID: event.target.id});
-												ns1blankspace.setup.financial.accounts(oParam);
+												ns1blankspace.setup.financial.accounts.show(oParam);
 											})
 										}
 									}
@@ -871,14 +872,14 @@ ns1blankspace.setup.financial =
 										
 										aHTML.push('<table class="ns1blankspace"  style="font-size:0.875em">');
 												
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceFinancialAccountEditSave">Save</span>' +
+										aHTML.push('<tr>' +
+														'<td>' +
+														'<span id="ns1blankspaceFinancialAccountEditSave" class="ns1blankspaceAction" style="width:80px;">Save</span>' +
 														'</td></tr>');
 									
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceFinancialAccountEditCancel">Cancel</span>' +
+										aHTML.push('<tr>' +
+														'<td>' +
+														'<span id="ns1blankspaceFinancialAccountEditCancel" class="ns1blankspaceAction" style="width:80px;">Cancel</span>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');		
@@ -925,15 +926,15 @@ ns1blankspace.setup.financial =
 														
 														var bNew = true;
 
-														$(ns1blankspace.financial.accounts).each(function(i) 
+														$(ns1blankspace.financial.data.accounts).each(function(i) 
 														{
-															if (this.id == data.id) {ns1blankspace.financial.accounts[i] = oAdd; bNew = false}
+															if (this.id == data.id) {ns1blankspace.financial.data.accounts[i] = oAdd; bNew = false}
 														});
 
-														if (bNew) {(ns1blankspace.financial.accounts).unshift(oAdd)}
+														if (bNew) {(ns1blankspace.financial.data.accounts).unshift(oAdd)}
 
 														$.extend(true, oParam, {step: 2});
-														ns1blankspace.setup.financial.accounts(oParam)
+														ns1blankspace.setup.financial.data.accounts(oParam)
 													}
 													else
 													{
@@ -950,7 +951,7 @@ ns1blankspace.setup.financial =
 										.click(function() 
 										{
 											$.extend(true, oParam, {step: 2});
-											ns1blankspace.setup.financial.accounts(oParam);
+											ns1blankspace.setup.financial.accounts.show(oParam);
 										});
 
 										//???
@@ -961,7 +962,7 @@ ns1blankspace.setup.financial =
 											.click(function()
 											{
 												$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
-												ns1blankspace.setup.financial.accountst(oParam);
+												ns1blankspace.setup.financial.accounts.show(oParam);
 											})
 
 										if (sID != undefined)
@@ -972,12 +973,12 @@ ns1blankspace.setup.financial =
 											oSearch.addFilter('id', 'EQUAL_TO', sID);
 											oSearch.getResults(function(data) {
 													$.extend(true, oParam, {step: 5});
-													ns1blankspace.setup.financial.accounts(oParam, data)
+													ns1blankspace.setup.financial.accounts.show(oParam, data)
 													});
 										}
 										else
 										{
-											$('#ns1blankspaceFinancialAccountParentAccount').val(($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == ns1blankspace.financial.currentAccount; })[0].title).formatXHTML());
+											$('#ns1blankspaceFinancialAccountParentAccount').val(($.grep(ns1blankspace.financial.data.accounts, function (a) { return a.id == ns1blankspace.financial.currentAccount; })[0].title).formatXHTML());
 											$('#ns1blankspaceFinancialAccountParentAccount').attr('data-id', ns1blankspace.financial.currentAccount);
 											$('[name="radioPostable"][value="Y"]').attr('checked', true);
 										}
@@ -987,8 +988,8 @@ ns1blankspace.setup.financial =
 										if (oResponse.data.rows.length != 0)
 										{
 											var oObjectContext = oResponse.data.rows[0];
-											$('#ns1blankspacens1blankspaceFinancialTitle').val((oObjectContext.title).formatXHTML());
-											$('#ns1blankspaceFinancialAccountParentAccount').val(($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == oObjectContext.parentaccount; })[0].title).formatXHTML());
+											$('#ns1blankspaceFinancialAccountTitle').val((oObjectContext.title).formatXHTML());
+											$('#ns1blankspaceFinancialAccountParentAccount').val(($.grep(ns1blankspace.financial.data.accounts, function (a) { return a.id == oObjectContext.parentaccount; })[0].title).formatXHTML());
 											$('#ns1blankspaceFinancialAccountParentAccount').attr('data-id', oObjectContext.parentaccount);
 											$('[name="radioPostable"][value="' + oObjectContext.postable + '"]').attr('checked', true);
 										}
@@ -1021,8 +1022,8 @@ ns1blankspace.setup.financial =
 
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceFinancialAccountDefaultsColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspaceFinancialAccountDefaultsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'<td id="ns1blankspaceFinancialAccountDefaultColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceFinancialAccountDefaultColumn2" class="ns1blankspaceColumn2"></td>' +
 										'</tr>' + 
 										'</table>');
 
@@ -1122,7 +1123,7 @@ ns1blankspace.setup.financial =
 												
 						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceFinancialAccountColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceFinancialAccountDefaultColumn1').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
@@ -1181,15 +1182,15 @@ ns1blankspace.setup.financial =
 					}	
 				},
 
-	invoiceTemplate:
+	invoicingTemplate:
 				{
 					show: 		function ()
 								{
 									var aHTML = [];
 									
-									if ($('#ns1blankspaceMainInvoicing').attr('data-loading') == '1')
+									if ($('#ns1blankspaceMainInvoicingTemplate').attr('data-loading') == '1')
 									{
-										$('#ns1blankspaceMainInvoicing').attr('data-loading', '');
+										$('#ns1blankspaceMainInvoicingTemplate').attr('data-loading', '');
 												
 										for (edId in tinyMCE.editors) 
 													tinyMCE.editors[edId].destroy(true);
@@ -1211,7 +1212,7 @@ ns1blankspace.setup.financial =
 															
 										aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:0.75em;">Tags</td</tr>');
 
-										$.each(gaFormatTags, function()
+										$.each(ns1blankspace.format.tags, function()
 										{
 											if (this.object == 5 && this.type == 1)
 											{
@@ -1225,7 +1226,7 @@ ns1blankspace.setup.financial =
 											}				
 										});
 
-										$.each(gaFormatTags, function()
+										$.each(ns1blankspace.format.tags, function()
 										{
 											if (this.object == 5 && this.type == 2)
 											{

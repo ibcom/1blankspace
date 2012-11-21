@@ -57,11 +57,11 @@ ns1blankspace.setup.automation =
 
 						var aHTML = [];
 						
-						aHTML.push('<table>');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
 						aHTML.push('<tr><td class="ns1blankspaceMainColumn2Action" style="width:175px;">' +
 										'<a href="http://mydigitalstructure.com/gettingstarted_automation"' +
-										' target="_blank">Automation Getting Started</a>' +
+										' target="_blank"><span class="ns1blankspaceSub" style="font-size: 0.875em;">Automation Getting Started</span></a>' +
 										'</td></tr>');
 														
 						aHTML.push('</table>');					
@@ -71,7 +71,7 @@ ns1blankspace.setup.automation =
 						var aHTML = [];
 									
 						aHTML.push('<table>' +
-										'<tr><td id="ns1blankspaceViewSetupAutomationLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>' +
+										'<tr><td id="ns1blankspaceViewAutomationLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>' +
 										'</table>');		
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
@@ -267,13 +267,17 @@ ns1blankspace.setup.automation =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
+						aHTML.push('</table>');	
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlSchedule" class="ns1blankspaceControl">' +
 										'Schedule</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlResponse" class="ns1blankspaceControl">' +
 										'Response</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlFormatting" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlFormat" class="ns1blankspaceControl">' +
 										'Formatting</td></tr>');
 					}	
 	
@@ -295,37 +299,37 @@ ns1blankspace.setup.automation =
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.setup.messaging.summary();
+						ns1blankspace.setup.automation.summary();
 					});	
 
 					$('#ns1blankspaceControlDetails').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-						ns1blankspace.setup.messaging.details();
+						ns1blankspace.setup.automation.details();
 					});	
 				
 					$('#ns1blankspaceControlSchedule').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSchedule'});
-						ns1blankspace.setup.messaging.schedule();
+						ns1blankspace.setup.automation.schedule();
 					});	
 					
-					$('#ns1blankspaceControlSchedule').click(function(event)
+					$('#ns1blankspaceControlResponse').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainResponse'});
-						ns1blankspace.setup.messaging.response();
+						ns1blankspace.setup.automation.response();
 					});	
 					
 					$('#ns1blankspaceControlFormat').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainFormat'});
-						ns1blankspace.setup.messaging.format();
+						ns1blankspace.setup.automation.format();
 					});	
 				
 					$('#ns1blankspaceControlRun').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainRun'});
-						ns1blankspace.setup.messaging.run();
+						ns1blankspace.setup.automation.run();
 					});
 				},
 
@@ -353,6 +357,11 @@ ns1blankspace.setup.automation =
 						$('#ns1blankspaceViewportControlAction').button({disabled: false});
 						$('#ns1blankspaceViewportControlActionOptions').button({disabled: false});
 						
+						ns1blankspace.history.view({
+							newDestination: 'ns1blankspace.setup.automation.init({showHome: false});ns1blankspace.setup.automation.search.send("-' + ns1blankspace.objectContext + '")',
+							move: false
+							});
+						
 						ns1blankspace.setup.automation.summary();
 					}	
 				},		
@@ -372,22 +381,24 @@ ns1blankspace.setup.automation =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
 									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
 									'</tr>' +
 									'</table>');			
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
+						var aHTML = [];
+
 						aHTML.push('<table class="ns1blankspaceColumn1">');
 						
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Automation ID</td></tr>' +
-										'<tr><td class="ns1blankspaceMainSummary">' +
+										'<tr><td class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.id +
 										'</td></tr>');
 										
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Endpoint</td></tr>' +
-										'<tr><td class="ns1blankspaceMainSummary">' +
+										'<tr><td class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.endpoint +
 										'</td></tr>');
 										
@@ -476,7 +487,7 @@ ns1blankspace.setup.automation =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsURLMethod" class="ns1blankspaceMainText">' +
+										'<input id="ns1blankspaceDetailsURLMethod" class="ns1blankspaceText">' +
 										'</td></tr>');
 									
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -485,7 +496,7 @@ ns1blankspace.setup.automation =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea style="height: 50px;" rows="3" cols="35" id="ns1blankspaceDetailsPostData"' +
+										'<textarea style="height: 100px;" rows="3" cols="35" id="ns1blankspaceDetailsPostData"' +
 										' class="ns1blankspaceTextMultiLarge"></textarea>' +
 										'</td></tr>');
 						
@@ -503,7 +514,7 @@ ns1blankspace.setup.automation =
 						
 						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
-						if (ns1blankspace.objectContextData == undefined)
+						if (ns1blankspace.objectContextData != undefined)
 						{	
 							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.title);
 							$('#ns1blankspaceDetailsEndpoint').val(ns1blankspace.objectContextData.endpoint);
@@ -523,6 +534,8 @@ ns1blankspace.setup.automation =
 
 	schedule:	function ()
 				{
+					var aHTML = [];
+
 					if ($('#ns1blankspaceMainSchedule').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainSchedule').attr('data-loading', '');
@@ -546,7 +559,7 @@ ns1blankspace.setup.automation =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceScheduleTimeHour" class="ns1blankspaceMainText">' +
+										'<input id="ns1blankspaceScheduleTimeHour" class="ns1blankspaceText">' +
 										'</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -555,12 +568,12 @@ ns1blankspace.setup.automation =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceScheduleTimeMinute" class="ns1blankspaceMainText">' +
+										'<input id="ns1blankspaceScheduleTimeMinute" class="ns1blankspaceText">' +
 										'</td></tr>');
 					
 						aHTML.push('</table>');					
 						
-						$('#s1blankspaceScheduleColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceScheduleColumn1').html(aHTML.join(''));
 						
 						var aHTML = [];
 
@@ -585,9 +598,9 @@ ns1blankspace.setup.automation =
 						
 						aHTML.push('</table>');					
 						
-						$('#tdns1blankspaceMainScheduleColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceScheduleColumn2').html(aHTML.join(''));
 						
-						if (ns1blankspace.objectContextData == undefined)
+						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('#ns1blankspaceMainScheduleTimeHour').val(ns1blankspace.objectContextData.scheduletimehour);
 							$('#ns1blankspaceMainScheduleTimeMinute').val(ns1blankspace.objectContextData.scheduletimeminute);
@@ -614,7 +627,9 @@ ns1blankspace.setup.automation =
 										'<td id="ns1blankspaceResponseColumn2" class="ns1blankspaceColumn2"></td>' +
 										'</tr>' + 
 										'</table>');
-						
+
+						$('#ns1blankspaceMainResponse').html(aHTML.join(''));
+
 						var aHTML = [];
 						
 						aHTML.push('<table class="ns1blankspaceContainer">');
@@ -637,7 +652,7 @@ ns1blankspace.setup.automation =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceResponseActionContext" class="ns1blankspaceMainText">' +
+										'<input id="ns1blankspaceResponseActionContext" class="ns1blankspaceText">' +
 										'</td></tr>');
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -646,7 +661,7 @@ ns1blankspace.setup.automation =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceResponseActionFrom" class="ns1blankspaceMainText">' +
+										'<input id="ns1blankspaceResponseActionFrom" class="ns1blankspaceText">' +
 										'</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -655,14 +670,14 @@ ns1blankspace.setup.automation =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceResponseActionURL" class="ns1blankspaceMainText">' +
+										'<input id="ns1blankspaceResponseActionURL" class="ns1blankspaceText">' +
 										'</td></tr>');
 										
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceResponseColumn1').html(aHTML.join(''));
 						
-						if (ns1blankspace.objectContextData == undefined)
+						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('[name="radioResponseAction"][value="' + ns1blankspace.objectContextData.responseaction + '"]').attr('checked', true);
 							$('#ns1blankspaceResponseActionContext').val(ns1blankspace.objectContextData.responseactioncontext);
@@ -676,7 +691,7 @@ ns1blankspace.setup.automation =
 					}	
 				},
 
-	format:		function ns1blankspaceSetupAutomationFormat()
+	format:		function ()
 				{
 					var aHTML = [];
 					
@@ -691,6 +706,8 @@ ns1blankspace.setup.automation =
 										'</tr>' + 
 										'</table>');
 						
+						$('#ns1blankspaceMainFormat').html(aHTML.join(''));
+
 						var aHTML = [];
 						
 						aHTML.push('<table class="ns1blankspaceContainer">');
@@ -711,7 +728,7 @@ ns1blankspace.setup.automation =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceFormatCSSClass" class="ns1blankspaceMainText">' +
+										'<input id="ns1blankspaceFormatCSSClass" class="ns1blankspaceText">' +
 										'</td></tr>');
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -736,9 +753,9 @@ ns1blankspace.setup.automation =
 
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceFormat').html(aHTML.join(''));
+						$('#ns1blankspaceFormatColumn1').html(aHTML.join(''));
 						
-						if (ns1blankspace.objectContextData == undefined)
+						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('#ns1blankspaceFormatCaption').val(ns1blankspace.objectContextData.caption);
 							$('#ns1blankspaceFormatCSSClass').val(ns1blankspace.objectContextData.cssclass);
@@ -748,7 +765,7 @@ ns1blankspace.setup.automation =
 					}	
 				},
 
-	new: 		function ns1blankspaceSetupAutomationNew()
+	new: 		function ()
 				{
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.objectContextData = undefined;

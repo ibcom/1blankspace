@@ -54,7 +54,7 @@ ns1blankspace.setup.website =
 			
 						aHTML.push('<table class="ns1blankspaceMain">' + 
 										'<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely">' +
 										ns1blankspace.xhtml.loading + '</td>' +
 										'<td id="ns1blankspaceHomeAction" style="width:175px;"></td>' +
 										'</tr></table>');					

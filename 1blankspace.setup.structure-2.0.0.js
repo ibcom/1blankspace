@@ -327,21 +327,21 @@ ns1blankspace.setup.structure =
 					$('#ns1blankspaceControlGrouping').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainGrouping'});
-						ns1blankspace.setup.structure.grouping();
+						ns1blankspace.setup.structure.grouping.show();
 					});
 
 	
 					$('#ns1blankspaceControlCategory').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainCategory'});
-						ns1blankspace.setup.structure.category();
+						ns1blankspace.setup.structure.category.show();
 					});
 
 
 					$('#ns1blankspaceControlElement').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainElement'});
-						ns1blankspace.setup.structure.element();
+						ns1blankspace.setup.structure.element.init();
 					});
 				},
 
@@ -438,7 +438,7 @@ ns1blankspace.setup.structure =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsTitle" class="inputns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceText">' +
 										'</td></tr>');			
 						
 						aHTML.push('</table>');					
@@ -533,6 +533,295 @@ ns1blankspace.setup.structure =
 									}
 								}
 				},
+
+	grouping: 	{							
+					show: 		function (oParam, oResponse)
+								{
+									var iObjectContext = ns1blankspace.objectContext;
+									var oOptions = {view: true, remove: true};
+									var oActions = {add: true};
+									
+									if (oParam != undefined)
+									{
+										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+										if (oParam.options != undefined) {oOptions = oParam.options}
+										if (oParam.actions != undefined) {oActions = oParam.actions}
+									}		
+										
+									if (oResponse == undefined)
+									{	
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_STRUCTURE_DATA_GROUP_SEARCH';
+										oSearch.addField('backgroundcolour,description,document,documenttext,groupingfactor,' +
+															'maximumpoints,minimumpoints,structure,structuretext,textcolour,title,type,typetext');
+										oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.objectContext)
+										oSearch.sort('title', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.setup.structure.grouping.show(oParam, data)});
+									}
+									else
+									{
+										if (oActions != undefined)
+										{
+											var aHTML = [];
+															
+											aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceGroupingColumn1" class="ns1blankspaceColumn1Large">' +
+														ns1blankspace.xhtml.loading + '</td>' +
+														'<td id="ns1blankspaceGroupingColumn2" class="ns1blankspaceColumn2Action"></td>' +
+														'</tr>' +
+														'</table>');					
+												
+											$('#ns1blankspaceMainGrouping').html(aHTML.join(''));
+		
+											var aHTML = [];
+												
+											aHTML.push('<table class="ns1blankspaceColumn2">');
+											
+											if (oActions.add)
+											{
+												aHTML.push('<tr><td>' +
+															'<span id="ns1blankspaceSetupStructureGroupingAdd" class="ns1blankspaceAction">Add</span>' +
+															'</td></tr>');
+											}
+											
+											aHTML.push('</table>');					
+											
+											$('#ns1blankspaceGroupingColumn2').html(aHTML.join(''));
+										
+											$('#ns1blankspaceSetupStructureGroupingAdd').button(
+											{
+												label: "Add"
+											})
+											.click(function() {
+												 ns1blankspace.setup.structure.grouping.edit(oParam);
+											})
+										}	
+									
+										var aHTML = [];
+
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No brouping has been set up.</td></tr></table>');
+
+											$('#ns1blankspaceGroupingColumn1').html(aHTML.join(''));
+										}
+										else
+										{
+											aHTML.push('<table id="ns1blankspaceSetupStructureGrouping" class="ns1blankspace">');
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
+											
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push('<tr class="ns1blankspaceRow">');
+																
+												aHTML.push('<td id="ns1blankspaceSetupStructureGrouping_title-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.title + '</td>');
+																		
+												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+													
+												if (oOptions.remove)
+												{	
+													aHTML.push('<span id="ns1blankspaceSetupStructureGrouping_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+												};	
+													
+												if (oOptions.view)
+												{	
+													aHTML.push('<span id="ns1blankspaceSetupStructureGrouping_options_view-' + this.id + '" class="ns1blankspaceRowView"></span>');
+												};	
+													
+												aHTML.push('</td>');
+																
+												aHTML.push('</tr>');
+											});
+											
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceGroupingColumn1').html(aHTML.join(''));
+											
+											if (oOptions.view) 
+											{
+												$('#ns1blankspaceGroupingColumn > .ns1blankspaceRowRemove').button( {
+													text: false,
+													icons: {
+														primary: "ui-icon-close"
+													}
+												})
+												.click(function() {
+													ns1blankspace.setup.structure.grouping.remove({xhtmlElementID: this.id});
+												})
+												.css('width', '15px')
+												.css('height', '17px');
+											}
+											
+											if (oOptions.remove) 
+											{
+												$('#ns1blankspaceGroupingColumn > .ns1blankspaceRowOptionsView').button( {
+													text: false,
+													icons: {
+														primary: "ui-icon-play"
+													}
+												})
+												.click(function() {
+													ns1blankspace.setup.structure.grouping.add({xhtmlElementID: this.id})
+												})
+												.css('width', '15px')
+												.css('height', '17px');
+											}	
+										}
+									}	
+								},
+
+					edit:		function (oParam, oResponse)
+								{
+									var sID; 
+									
+									if (oResponse == undefined)
+									{
+										var sXHTMLElementID;
+
+										if (oParam != undefined)
+										{
+											if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										}
+										
+										if (sXHTMLElementID != undefined)
+										{
+											var aXHTMLElementID = sXHTMLElementID.split('-');
+											var sID = aXHTMLElementID[1];
+										}	
+									
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceContainer">');
+												
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Title' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureGroupingTitle" class="inputns1blankspaceText">' +
+														'</td></tr>');
+										
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceSetupStructureGroupingColumn1').html(aHTML.join(''));
+										
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspace">');
+												
+										aHTML.push('<tr class="ns1blankspaceAction">' +
+														'<td class="ns1blankspaceAction">' +
+														'<span style="width:80px;" id="ns1blankspaceSetupStructureGroupingSave">Save</span>' +
+														'</td></tr>');
+									
+										aHTML.push('<trclass="ns1blankspaceAction">' +
+														'<td class="ns1blankspaceAction">' +
+														'<span style="width:80px;" id="ns1blankspaceSetupStructureGroupingCancel">Cancel</span>' +
+														'</td></tr>');
+														
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceSetupStructureGroupingColumn2').html(aHTML.join(''));
+										
+										$('#ns1blankspaceSetupStructureGroupingSave').button(
+										{
+											text: "Save"
+										})
+										.click(function() 
+										{
+											var sData = 'structure=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+											sData += '&id=' + ns1blankspace.util.fs(sID);
+											sData += '&title=' + ns1blankspace.util.fs($('#ins1blankspaceSetupStructureGroupingTitle').val());
+											
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_GROUP_MANAGE'),
+												data: sData,
+												dataType: 'json',
+												success: function() {
+													ns1blankspace.setup.structure.grouping.show();
+												}
+											});
+										});
+										
+										$('#ns1blankspaceSetupStructureGroupingCancel').button(
+										{
+											text: "Cancel"
+										})
+										.click(function() 
+										{
+											ns1blankspace.setup.structure.grouping.show();
+										});
+										
+										if (sID != undefined)
+										{
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_GROUP_SEARCH'),
+												data: 'id=' + sID,
+												dataType: 'json',
+												success: function(data) {ns1blankspace.setup.structure.grouping.edit(oParam, data)}
+											});
+										}
+										else
+										{
+											$('[name="radioDataType"][value="4"]').attr('checked', true);	
+										}
+									}
+									else
+									{
+										if (oResponse.data.rows.length != 0)
+										{
+											var oObjectContext = oResponse.data.rows[0];
+											$('#ns1blankspaceSetupStructureGroupingTitle').val(oObjectContext.title)
+											$('#ns1blankspaceSetupStructureGroupingTitle').focus();
+										}
+									}		
+								},
+
+					remove:		function (oParam, oResponse)
+								{
+									var sXHTMLElementID;
+
+									if (oParam != undefined)
+									{
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+									}
+									
+									var aXHTMLElementID = sXHTMLElementID.split('-');
+									var sID = aXHTMLElementID[1];
+									
+									if (oResponse == undefined)
+									{	
+										var sData = 'remove=1&id=' + sID;
+										
+										$.ajax(
+										{
+											type: 'DELETE',
+											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_MANAGE'),
+											data: sData,
+											dataType: 'json',
+											success: function(data){ns1blankspaceSetupStructureGroupingRemove(oParam, data)}
+										});
+									}	
+									else
+									{
+										if (oResponse.status == 'OK')
+										{
+											$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+										}	
+									}	
+									
+								}
+				},
 				
 	category: 	{
 					show:		function (oParam, oResponse)
@@ -567,8 +856,8 @@ ns1blankspace.setup.structure =
 												
 											aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspaceCategoryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-															'<td id="ns1blankspaceCategoryColumn2" class="ns1blankspaceColumn2"></td>' +
+															'<td id="ns1blankspaceCategoryColumn1" class="ns1blankspaceColumn1Flexixble"></td>' +
+															'<td id="ns1blankspaceCategoryColumn2" class="ns1blankspaceColumn2" style="width: 100px;"></td>' +
 															'</tr>' + 
 															'</table>');		
 
@@ -837,14 +1126,12 @@ ns1blankspace.setup.structure =
 										
 									if (oResponse == undefined)
 									{	
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_CATEGORY_SEARCH'),
-											data: 'structure=' + ns1blankspace.objectContext,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.setup.structure.element.layout(oParam, data)}
-										});
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_STRUCTURE_CATEGORY_SEARCH';
+										oSearch.addField('title');
+										oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.objectContext)
+										oSearch.sort('title', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.setup.structure.element.init(oParam, data)});
 									}
 									else
 									{
@@ -1825,296 +2112,6 @@ ns1blankspace.setup.structure =
 											$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 										}	
 									}	
-								}
-				},
-				
-	grouping: 	{							
-					show: 		function (oParam, oResponse)
-								{
-									var iObjectContext = ns1blankspace.objectContext;
-									var oOptions = {view: true, remove: true};
-									var oActions = {add: true};
-									
-									if (oParam != undefined)
-									{
-										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-										if (oParam.options != undefined) {oOptions = oParam.options}
-										if (oParam.actions != undefined) {oActions = oParam.actions}
-									}		
-										
-									if (oResponse == undefined)
-									{	
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_GROUP_SEARCH'),
-											data: 'structure=' + ns1blankspace.objectContext,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.setup.structure.grouping(oParam, data)}
-										});
-									}
-									else
-									{
-										if (oActions != undefined)
-										{
-											var aHTML = [];
-															
-											aHTML.push('<table class="ns1blankspaceContainer">' +
-														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceGroupingColumn1" class="ns1blankspaceColumn1Large">' +
-														ns1blankspace.xhtml.loading + '</td>' +
-														'<td id="ns1blankspaceGroupingColumn2" class="ns1blankspaceColumn2Action"></td>' +
-														'</tr>' +
-														'</table>');					
-												
-											$('#ns1blankspaceMainGrouping').html(aHTML.join(''));
-		
-											var aHTML = [];
-												
-											aHTML.push('<table class="ns1blankspaceColumn2">');
-											
-											if (oActions.add)
-											{
-												aHTML.push('<tr><td class="ns1blankspaceAction">' +
-															'<span id="ns1blankspaceSetupStructureGroupingAdd">Add</span>' +
-															'</td></tr>');
-											}
-											
-											aHTML.push('</table>');					
-											
-											$('#ns1blankspaceGroupingColumn2').html(aHTML.join(''));
-										
-											$('#sns1blankspaceSetupStructureGroupingAdd').button(
-											{
-												label: "Add"
-											})
-											.click(function() {
-												 ns1blankspace.setup.structure.grouping.edit(oParam);
-											})
-										}	
-									
-										var aHTML = [];
-
-										if (oResponse.data.rows.length == 0)
-										{
-											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No brouping has been set up.</td></tr></table>');
-
-											$('#ns1blankspaceGroupingColumn1').html(aHTML.join(''));
-										}
-										else
-										{
-											aHTML.push('<table id="ns1blankspaceSetupStructureGrouping" class="ns1blankspace">');
-											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
-											aHTML.push('</tr>');
-											
-											$.each(oResponse.data.rows, function()
-											{
-												aHTML.push('<tr class="ns1blankspaceRow">');
-																
-												aHTML.push('<td id="ns1blankspaceSetupStructureGrouping_title-' + this.id + '" class="ns1blankspaceRow">' +
-																		this.title + '</td>');
-																		
-												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
-													
-												if (oOptions.remove)
-												{	
-													aHTML.push('<span id="ns1blankspaceSetupStructureGrouping_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
-												};	
-													
-												if (oOptions.view)
-												{	
-													aHTML.push('<span id="ns1blankspaceSetupStructureGrouping_options_view-' + this.id + '" class="ns1blankspaceRowView"></span>');
-												};	
-													
-												aHTML.push('</td>');
-																
-												aHTML.push('</tr>');
-											});
-											
-											aHTML.push('</table>');
-
-											$('#ns1blankspaceGroupingColumn1').html(aHTML.join(''));
-											
-											if (oOptions.view) 
-											{
-												$('#ns1blankspaceGroupingColumn > .ns1blankspaceRowRemove').button( {
-													text: false,
-													icons: {
-														primary: "ui-icon-close"
-													}
-												})
-												.click(function() {
-													ns1blankspace.setup.structure.grouping.remove({xhtmlElementID: this.id});
-												})
-												.css('width', '15px')
-												.css('height', '17px');
-											}
-											
-											if (oOptions.remove) 
-											{
-												$('#ns1blankspaceGroupingColumn > .ns1blankspaceRowOptionsView').button( {
-													text: false,
-													icons: {
-														primary: "ui-icon-play"
-													}
-												})
-												.click(function() {
-													ns1blankspace.setup.structure.grouping.add({xhtmlElementID: this.id})
-												})
-												.css('width', '15px')
-												.css('height', '17px');
-											}	
-										}
-									}	
-								},
-
-					edit:		function (oParam, oResponse)
-								{
-									var sID; 
-									
-									if (oResponse == undefined)
-									{
-										var sXHTMLElementID;
-
-										if (oParam != undefined)
-										{
-											if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-										}
-										
-										if (sXHTMLElementID != undefined)
-										{
-											var aXHTMLElementID = sXHTMLElementID.split('-');
-											var sID = aXHTMLElementID[1];
-										}	
-									
-										var aHTML = [];
-										
-										aHTML.push('<table class="ns1blankspaceContainer">');
-												
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Title' +
-														'</td></tr>' +
-														'<tr class="ns1blankspaceText">' +
-														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceSetupStructureGroupingTitle" class="inputns1blankspaceText">' +
-														'</td></tr>');
-										
-										aHTML.push('</table>');					
-										
-										$('#ns1blankspaceSetupStructureGroupingColumn1').html(aHTML.join(''));
-										
-										var aHTML = [];
-										
-										aHTML.push('<table class="ns1blankspace">');
-												
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceSetupStructureGroupingSave">Save</span>' +
-														'</td></tr>');
-									
-										aHTML.push('<trclass="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceSetupStructureGroupingCancel">Cancel</span>' +
-														'</td></tr>');
-														
-										aHTML.push('</table>');					
-										
-										$('#ns1blankspaceSetupStructureGroupingColumn2').html(aHTML.join(''));
-										
-										$('#ns1blankspaceSetupStructureGroupingSave').button(
-										{
-											text: "Save"
-										})
-										.click(function() 
-										{
-											var sData = 'structure=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-											sData += '&id=' + ns1blankspace.util.fs(sID);
-											sData += '&title=' + ns1blankspace.util.fs($('#ins1blankspaceSetupStructureGroupingTitle').val());
-											
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_GROUP_MANAGE'),
-												data: sData,
-												dataType: 'json',
-												success: function() {
-													ns1blankspace.setup.structure.grouping.show();
-												}
-											});
-										});
-										
-										$('#ns1blankspaceSetupStructureGroupingCancel').button(
-										{
-											text: "Cancel"
-										})
-										.click(function() 
-										{
-											ns1blankspace.setup.structure.grouping.show();
-										});
-										
-										if (sID != undefined)
-										{
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_GROUP_SEARCH'),
-												data: 'id=' + sID,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.structure.grouping.edit(oParam, data)}
-											});
-										}
-										else
-										{
-											$('[name="radioDataType"][value="4"]').attr('checked', true);	
-										}
-									}
-									else
-									{
-										if (oResponse.data.rows.length != 0)
-										{
-											var oObjectContext = oResponse.data.rows[0];
-											$('#ns1blankspaceSetupStructureGroupingTitle').val(oObjectContext.title)
-											$('#ns1blankspaceSetupStructureGroupingTitle').focus();
-										}
-									}		
-								},
-
-					remove:		function (oParam, oResponse)
-								{
-									var sXHTMLElementID;
-
-									if (oParam != undefined)
-									{
-										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-									}
-									
-									var aXHTMLElementID = sXHTMLElementID.split('-');
-									var sID = aXHTMLElementID[1];
-									
-									if (oResponse == undefined)
-									{	
-										var sData = 'remove=1&id=' + sID;
-										
-										$.ajax(
-										{
-											type: 'DELETE',
-											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_MANAGE'),
-											data: sData,
-											dataType: 'json',
-											success: function(data){ns1blankspaceSetupStructureGroupingRemove(oParam, data)}
-										});
-									}	
-									else
-									{
-										if (oResponse.status == 'OK')
-										{
-											$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-										}	
-									}	
-									
 								}
 				}
 }				

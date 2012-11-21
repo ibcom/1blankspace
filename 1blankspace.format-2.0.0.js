@@ -292,7 +292,8 @@ ns1blankspace.format.process = function (oParam, oResponse)
 				};
 
 ns1blankspace.format.editor = 
-				function (oParam)
+{
+	init:		function (oParam)
 				{
 					var sHeight = "370px";
 					var bDynamicTags = false;
@@ -357,4 +358,33 @@ ns1blankspace.format.editor =
 						});				
 					
 					}
-				};
+				},
+
+	addTag:		function (oParam)
+				{ 
+					var sXHTMLElementID;
+					var sEditorID;
+					var oMCEBookmark;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.editorID != undefined) {sEditorID = oParam.editorID}
+						if (oParam.mceBookmark != undefined) {oMCEBookmark = oParam.mceBookmark}
+						
+						var oEditor = tinyMCE.get(sEditorID); 
+						var sInsertText = $('#' + sXHTMLElementID).attr('data-caption');
+						if (oMCEBookmark != undefined)
+						{
+							tinyMCE.get(sEditorID).selection.moveToBookmark(oMCEBookmark);
+						}
+						oEditor.execCommand('mceInsertContent', false, sInsertText); 
+					}
+					else
+					{
+						ns1blankspaceConfim({title: 'Error inserting field!', html: ["An error occurred when inserting the field. Please contact support." +
+																					  "<br /><br />Details: No parameters passed to ns1blankspaceEditorAddTag"]});
+						return false;
+					}
+				}
+}	
