@@ -248,8 +248,8 @@ ns1blankspace.setup.networkGroup =
 						
 						aHTML.push('<table class="ns1blankspaceControl">');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlAddMember" class="ns1blankspaceControl">' +
-										'Add User</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlUsers" class="ns1blankspaceControl">' +
+										'Users</td></tr>');
 					}	
 					
 					aHTML.push('</table>');			
@@ -260,7 +260,7 @@ ns1blankspace.setup.networkGroup =
 					
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainUserAdd" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainUsers" class="ns1blankspaceControlMain"></div>');
 						
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
@@ -276,10 +276,10 @@ ns1blankspace.setup.networkGroup =
 						ns1blankspace.setup.networkGroup.details();
 					});
 						
-					$('#ns1blankspaceControlMemberAdd').click(function(event)
+					$('#ns1blankspaceControlUsers').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainUserAdd'});
-						ns1blankspace.setup.networkGroup.users.add();
+						ns1blankspace.show({selector: '#ns1blankspaceMainUsers'});
+						ns1blankspace.setup.networkGroup.users.show();
 					});
 				},
 
@@ -440,26 +440,26 @@ ns1blankspace.setup.networkGroup =
 										
 										$('#ns1blankspaceMainUsers').html(aHTML.join(''));
 											
-										$('#ns1blankspaceMainUsersColumn1').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceUsersColumn1').html(ns1blankspace.xhtml.loading);
 
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
-										aHTML.push('<tr><td id="ns1blankspaceMainUsersAdd" class="ns1blankspaceTextMulti">' +
-														'<span id="ns1blankspaceUsersAdd">Add</span>' +
+										aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceUsersAdd" class="ns1blankspaceAction">Add</span>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');					
 										
-										$('#ns1blankspaceMainUsersColumn2').html(aHTML.join(''));
+										$('#ns1blankspaceUsersColumn2').html(aHTML.join(''));
 										
 										$('#ns1blankspaceUsersAdd').button(
 										{
 											text: "Add"
 										})
 										.click(function() {
-											alert('TODO');
+											ns1blankspace.setup.networkGroup.users.add();
 										})
 										
 									}	

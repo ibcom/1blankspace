@@ -69,7 +69,7 @@ ns1blankspace.contactPerson =
 						$('#ns1blankspaceControlByGroup').click(function(event)
 						{
 							ns1blankspace.show({refresh: true});
-							ns1blankspace.contactPerson.groups.show();
+							ns1blankspace.contactPerson.groups.search.show();
 						});
 							
 						$('#ns1blankspaceControlFavourites').click(function(event)
@@ -159,7 +159,7 @@ ns1blankspace.contactPerson =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'CONTACT_PERSON_SEARCH';
 										oSearch.addField('firstname,surname,contactbusiness,contactbusinesstext,title,titletext,position,workphone,fax,mobile,email,' +
-																 'customerstatus,customerstatustext,primarycontactfor,gender,gendertext,' +
+																 'customerstatus,customerstatustext,gender,gendertext,' +
 																 'streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
 																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry');
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
@@ -845,17 +845,6 @@ ns1blankspace.contactPerson =
 					}	
 				},
 
-	new: 		function ()
-				{
-					ns1blankspace.objectContextData = undefined
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.contactPerson.init();
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
-					ns1blankspace.contactPerson.details();
-				},
-
 	save: 		{
 					send: 		function ()
 								{
@@ -1271,7 +1260,6 @@ ns1blankspace.contactPerson =
 					search: 	{
 									show: 		function (oParam, oResponse)
 												{
-													var sXHTMLElementID = 'divInterfaceMain';
 													var sLabel = "groups";
 													var iOption = 1;
 													
@@ -1287,7 +1275,7 @@ ns1blankspace.contactPerson =
 															type: 'GET',
 															url: ns1blankspace.util.endpointURI('SETUP_CONTACT_PERSON_GROUP_SEARCH'),
 															dataType: 'json',
-															success: function(data) {ns1blankspace.contactPerson.search.show(oParam, data)}
+															success: function(data) {ns1blankspace.contactPerson.groups.search.show(oParam, data)}
 														});
 													}
 													else
@@ -1349,7 +1337,7 @@ ns1blankspace.contactPerson =
 														if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 													}
 
-													var aXHTMLElementId = sXHTMLElementID.split('-')
+													var aXHTMLElementID = sXHTMLElementID.split('-')
 													
 													if (oResponse == undefined)
 													{
@@ -1358,7 +1346,7 @@ ns1blankspace.contactPerson =
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'CONTACT_PERSON_GROUP_SEARCH';
 														oSearch.addField('contactperson,persongroup.contactperson.firstname,persongroup.contactperson.surname,group,grouptext');
-														oSearch.addFilter('group', 'EQUAL_TO', aXHTMLElementId[1]);
+														oSearch.addFilter('group', 'EQUAL_TO', aXHTMLElementID[1]);
 														oSearch.sort('persongroup.contactperson.firstname', 'asc');
 														oSearch.sort('persongroup.contactperson.surname', 'asc');
 														oSearch.getResults(function(data) {ns1blankspace.contactPerson.groups.search.process(oParam, data)});
@@ -1378,7 +1366,7 @@ ns1blankspace.contactPerson =
 															aHTML.push('<table class="ns1blankspace">');
 										
 															aHTML.push('<tr class="ns1blankspaceCaption">' + 
-																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementId[2] + '</td>' +
+																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementID[2] + '</td>' +
 																			'</tr>');
 															
 															$.each(oResponse.data.rows, function()
@@ -1435,7 +1423,7 @@ ns1blankspace.contactPerson =
 													})
 													.click(function() {
 														ns1blankspace.contactPerson.init({showHome: false});
-														ins1blankspace.contactPerson.search.send(this.id)
+														ns1blankspace.contactPerson.search.send(this.id)
 													})
 													.css('width', '15px')
 													.css('height', '20px')
@@ -1444,120 +1432,118 @@ ns1blankspace.contactPerson =
 				},								
 
 	favourites: {
-						search: {
-									show: 		function (oParam, oResponse)
-												{
-													var sXHTMLElementID;
-													
-													if (oParam != undefined)
-													{
-														if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-													}
+					show: 		function (oParam, oResponse)
+								{
+									var sXHTMLElementID;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+									}
 
-													var aXHTMLElementId = sXHTMLElementID.split('-')
-													
-													if (oResponse == undefined)
-													{
-														var aHTML = [];
-														
-														aHTML.push('<table class="ns1blankspaceContainer">' +
-																	'<tr class="ns1blankspaceContainer">' +
-																	'<td id="ns1blankspaceContactPersonFavouriteColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;">' +
-																	'</td>' +
-																	'<td id="ns1blankspaceContactPersonFavouriteColumn2" class="ns1blankspaceColumn1Large" style="padding-left:15px;">' +
-																	'</td>' +
-																	'</tr>' +
-																	'</table>');				
-														
-														$('#ns1blankspaceMain').html(aHTML.join(''));
+									var aXHTMLElementId = sXHTMLElementID.split('-')
+									
+									if (oResponse == undefined)
+									{
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+													'<tr class="ns1blankspaceContainer">' +
+													'<td id="ns1blankspaceContactPersonFavouriteColumn1" class="ns1blankspaceColumn1Flexible">' +
+													'</td>' +
+													'<td id="ns1blankspaceContactPersonFavouriteColumn2" class="ns1blankspaceColumn1Large" style="width:200px;">' +
+													'</td>' +
+													'</tr>' +
+													'</table>');				
+										
+										$('#ns1blankspaceMain').html(aHTML.join(''));
 
-														$('#ns1blankspaceContactPersonFavouriteColumn2').html(ns1blankspace.xhtml.loading);
-														
-														var oSearch = new AdvancedSearch();
-														oSearch.method = 'CONTACT_PERSON_SEARCH';
-														oSearch.addField('firstname,surname');
-														oSearch.addFilter('', 'IS_FAVOURITE', '');
-														oSearch.rows = 20;
-														oSearch.sort('firstname', 'asc');
-														oSearch.getResults(function(data) {ns1blankspace.contactPerson.favourites.search.show(oParam, data)});	
-													}
-													else
-													{
-														var aHTML = [];
-														
-														if (oResponse.data.rows.length == 0)
-														{
-															aHTML.push('<table><tr>' +
-																				'<td class="ns1blankspaceNothing">No contacts.</td></tr>' +
-																				'</table>');
-														}
-														else
-														{		
-															aHTML.push('<table class="ns1blankspace">');
-															aHTML.push('<tr class="ns1blankspaceCaption">');
-															aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
-															aHTML.push('<td class="ns1blankspaceCaption">Last Name</td>');
-															aHTML.push('</tr>');
-															
-															$.each(oResponse.data.rows, function() {
-															
-																aHTML.push(ns1blankspace.contactPerson.favourites.row(this));
-															});
-															
-															aHTML.push('</table>');
-														}
-														
-														ns1blankspacePaginationList(
-														{
-															xhtmlElementID: sXHTMLElementID,
-															xhtmlContext: 'ContactFavourites',
-															xhtml: aHTML.join(''),
-															showMore: (oResponse.morerows == "true"),
-															more: oResponse.moreid,
-															rows: ns1blankspace.option.defaultRows,
-															functionShowRow: ns1blankspace.contactPerson.favourites.row,
-															functionNewPage: 'ns1blankspace.contactPerson.favourites.bind()',
-															type: 'json'
-														}); 	
-														
-														ns1blankspace.contactPerson.favourites.bindd();
-													}	
-												},	
+										$('#ns1blankspaceContactPersonFavouriteColumn1').html(ns1blankspace.xhtml.loading);
+										
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'CONTACT_PERSON_SEARCH';
+										oSearch.addField('firstname,surname');
+										oSearch.addFilter('', 'IS_FAVOURITE', '');
+										oSearch.rows = 20;
+										oSearch.sort('firstname', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.contactPerson.favourites.show(oParam, data)});	
+									}
+									else
+									{
+										var aHTML = [];
+										
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table><tr>' +
+																'<td class="ns1blankspaceNothing">No favourite contacts.</td></tr>' +
+																'</table>');
+										}
+										else
+										{		
+											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFavourites">');
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
+											aHTML.push('<td class="ns1blankspaceCaption">Last Name</td>');
+											aHTML.push('</tr>');
+											
+											$.each(oResponse.data.rows, function() {
+											
+												aHTML.push(ns1blankspace.contactPerson.favourites.row(this));
+											});
+											
+											aHTML.push('</table>');
+										}
+										
+										ns1blankspace.render.page.show(
+										{
+											xhtmlElementID: 'ns1blankspaceContactPersonFavouriteColumn1',
+											xhtmlContext: 'ContactFavourites',
+											xhtml: aHTML.join(''),
+											showMore: (oResponse.morerows == "true"),
+											more: oResponse.moreid,
+											rows: ns1blankspace.option.defaultRows,
+											functionShowRow: ns1blankspace.contactPerson.favourites.row,
+											functionNewPage: 'ns1blankspace.contactPerson.favourites.bind()',
+											type: 'json'
+										}); 	
+										
+										ns1blankspace.contactPerson.favourites.bind();
+									}	
+								},	
 
-									row: 		function (oRow)
-												{
-													var aHTML = [];
+					row: 		function (oRow)
+								{
+									var aHTML = [];
+								
+									aHTML.push('<tr class="ns1blankspaceRow">');
+															
+									aHTML.push('<td id="ns1blankspaceFavourites_firstname-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.firstname + '</td>');
+															
+									aHTML.push('<td id="ns1blankspaceFavourites_firstname-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.surname + '</td>');
+															
+									aHTML.push('<td id="ns1blankspaceFavourites-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceFavouritesRowSelect">&nbsp;</td>');						
+									
+									aHTML.push('</tr>');
 												
-													aHTML.push('<tr class="ns1blankspaceRow">');
-																			
-													aHTML.push('<td id="ns1blankspaceFavourites_firstname-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			oRow.firstname + '</td>');
-																			
-													aHTML.push('<td id="ns1blankspaceFavourites_firstname-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			oRow.surname + '</td>');
-																			
-													aHTML.push('<td id="ns1blankspaceFavourites-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceFavouritesRowSelect">&nbsp;</td>');						
-													
-													aHTML.push('</tr>');
-																
-													return aHTML.join('');
-												},
+									return aHTML.join('');
+								},
 
-									bind: 		function ()
-												{
-													$('.ns1blankspaceFavouritesRowSelect').button( {
-																text: false,
-																icons: {
-																	primary: "ui-icon-play"
-																}
-													})
-													.click(function() {
-														ns1blankspace.contactPerson.init({showHome: false});
-														ns1blankspace.contactPerson.search.send(this.id)
-													})
-													.css('width', '15px')
-													.css('height', '20px')
-												}	
-								}
+					bind: 		function ()
+								{
+									$('#ns1blankspaceFavourites .ns1blankspaceFavouritesRowSelect').button( {
+												text: false,
+												icons: {
+													primary: "ui-icon-play"
+												}
+									})
+									.click(function() {
+										ns1blankspace.contactPerson.init({showHome: false});
+										ns1blankspace.contactPerson.search.send(this.id)
+									})
+									.css('width', '15px')
+									.css('height', '20px')
+								}	
 				}
 }														
