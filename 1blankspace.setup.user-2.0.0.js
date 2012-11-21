@@ -608,7 +608,7 @@ ns1blankspace.setup.user =
 									{
 										if (ns1blankspace.objectContextData.unrestrictedaccess == 'Y')
 										{
-											aHTML.push('<table class="ns1blankspace">');
+											aHTML.push('<table class="ns1blankspaceColumn2">');
 
 											aHTML.push('<tr>' +
 															'<td class="ns1blankspaceNothing" style="font-weight:600;">This user can access all functions within this space.</td></tr>' +

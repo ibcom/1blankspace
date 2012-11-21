@@ -52,7 +52,6 @@ $(function()
 		if (aHash.length == 4)
 		{
 			ns1blankspace.history.control({functionDefault: 'ns1blankspace' + sNS + '.' + aHash[3] + '()'});
-
 		}
 	}	
 	
@@ -371,29 +370,29 @@ ns1blankspace.views =
 	{
 		title: 'Person Groups',
 		namespace: 'setup',
-		namesuffix: 'contactPersonGroups',
+		namesuffix: 'contactPersonGroup',
 		endpoint: "SETUP", 
 		show: false,
 		group: 4,
 		type: 2,
-		param: {setupName: 'Contact Business Groups', setupMethod: 'SETUP_CONTACT_PEROSN_GROUP'}														
+		param: {viewName: 'Person Groups', method: 'SETUP_CONTACT_PERSON_GROUP'}														
 	},
 	{
 		title: 'Business Groups',
 		namespace: 'setup',
-		namesuffix: 'contactBusinessGroups',
+		namesuffix: 'contactBusinessGroup',
 		endpoint: "SUPPORT", 
 		show: false,
 		group: 4,
 		type: 2,
-		param: {setupName: 'Contact Business Groups', setupMethod: 'SETUP_CONTACT_BUSINESS_GROUP'}														
+		param: {viewName: 'Business Groups', method: 'SETUP_CONTACT_BUSINESS_GROUP'}														
 	},
 	{
 		title: "Project Templates",
 		parentnamespace: "setup",
 		namespace: "project",
 		endpoint: "PROJECT", 
-		show: true,
+		show: false,
 		group: 3,
 		type: 2
 	},
@@ -402,7 +401,7 @@ ns1blankspace.views =
 		parentnamespace: "setup",
 		namespace: "projectTask",
 		endpoint: "PROJECT", 
-		show: true,
+		show: false,
 		group: 3,
 		type: 2
 	},
@@ -1017,7 +1016,7 @@ ns1blankspace.control =
 																				'Person&nbsp;Groups</span></td></tr>');
 														}
 
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Projects';})[0];
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Templates';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
 															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
@@ -1026,7 +1025,7 @@ ns1blankspace.control =
 																				'Project&nbsp;Templates</span></td></tr>');
 														}
 
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Tasks';})[0];
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Template Tasks';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
 															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
@@ -1110,10 +1109,28 @@ ns1blankspace.control =
 																$('#ns1blankspaceViewControl' + sNS).attr('data-parentnamespace', this.parentnamespace);
 															}
 
+															if (this.namesuffix)
+															{
+																sNS = sNS + '_' + this.namesuffix;
+																$('#ns1blankspaceViewControl' + sNS).attr('data-namesuffix', this.namesuffix);
+															}
+
 															$('#ns1blankspaceViewControl' + sNS).attr('data-namespace', this.namespace);
+															$('#ns1blankspaceViewControl' + sNS).attr('data-fullnamespace', sNS);
+															$('#ns1blankspaceViewControl' + sNS).attr('data-title', this.title);
 
 															$('#ns1blankspaceViewControl' + sNS).click(function(event)
 															{
+																var oParam = {};
+																var sTitle = $(this).attr('data-title')
+
+																var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == sTitle;})[0];
+
+																if (oViewport.param)
+																{
+																	oParam = oViewport.param;
+																}
+
 																$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 
 																if ($(this).attr('data-parentnamespace'))
@@ -1125,7 +1142,7 @@ ns1blankspace.control =
 																	var oNS = ns1blankspace[$(this).attr('data-namespace')];
 																}
 
-																oNS.init();
+																oNS.init(oParam);
 															});
 														});
 													}

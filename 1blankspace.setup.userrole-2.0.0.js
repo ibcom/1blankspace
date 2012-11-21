@@ -599,7 +599,7 @@ ns1blankspace.setup.userRole =
 						
 							$('#ns1blankspaceAccessColumnMethod').html(aHTML.join(''));
 
-							$('#ns1blankspaceUserAccessMethods > td.ns1blankspaceRowSelect').click(function()
+							$('#ns1blankspaceUserAccessMethods td.ns1blankspaceRowSelect').click(function()
 							{
 								$.extend(true, oParam, {step: 4, xhtmlElementID: event.target.id});
 								ns1blankspace.setup.userRole.access(oParam);
@@ -652,7 +652,7 @@ ns1blankspace.setup.userRole =
 							aXHTMLElementID = sXHTMLElementID.split('-');
 						}	
 					
-						aHTML.push('<table id="ns1blankspaceUserAccessMethods" class="ns1blankspace">');
+						aHTML.push('<table id="ns1blankspaceUserAccessMethods" class="ns1blankspaceColumn2">');
 
 						if (oResponse != undefined)
 						{

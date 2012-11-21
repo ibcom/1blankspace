@@ -9,13 +9,17 @@ $.extend(true, ns1blankspace.setup,
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
+					var bShowHome = false
 					
 					if (oParam != undefined)
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
 						if (oParam.method != undefined) {ns1blankspace.setup.method = (oParam.method).toUpperCase()}
 						if (oParam.viewName != undefined) {ns1blankspace.setup.name = oParam.viewName}	
+					}
+					else
+					{
+						oParam = {}
 					}
 
 					ns1blankspace.object = -1;
@@ -24,113 +28,118 @@ $.extend(true, ns1blankspace.setup,
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = ns1blankspace.setup.name;
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.setup.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
+								
 					ns1blankspace.app.reset();
+
+					oParam.showHome = bShowHome;
+
 					ns1blankspace.app.set(oParam);
 
-					var aHTML = [];
-								
-					aHTML.push('<table><tr><td id="ns1blankspaceViewSetupLarge" class="ns1blankspaceViewportImageLarge">' +
-									'&nbsp;</td></tr></table>');		
-					
-					$('#ns1blankspaceViewControl').html(aHTML.join(''));	
-					
-					ns1blankspace.status.message('Click value to edit.')
-					
-					var oSearch = new AdvancedSearch();
-					oSearch.method = ns1blankspace.setup.method + '_SEARCH';
-					oSearch.addField('title');
-					oSearch.rows = 100;
-					oSearch.sort('title', 'asc');
-					oSearch.getResults(function(data) {ns1blankspace.setup.home(oParam, data)});
+					ns1blankspace.setup.home();
 				},
 
 	home:		function (oParam, oResponse)
 				{
-					var aHTML = [];
-
-					aHTML.push('<table class="ns1blankspace">');
-					aHTML.push('<tr><td id="ns1blankspaceSetup">' +
-									ns1blankspace.xhtml.loading + 
-									'</td></tr></table>');					
-					
-					$('#ns1blankspaceMain').html(aHTML.join(''));
-					
-					var aHTML = [];
-					
-					aHTML.push('<table id="ns1blankspaceSetupContainer">');
-	
-					aHTML.push('<tr class="ns1blankspaceRow">');
-					aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
-					aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right"><span id="ns1blankspaceSetupAdd">Add</span></td>');
-					aHTML.push('</tr>');
-					
-					if (oResponse.data.rows.length == 0)
+					if (oResponse == undefined)
 					{
-						aHTML.push('<tr><td class="ns1blankspaceNothing">Nothing to show.</td></tr>');
+						var aHTML = [];
 
-						$('#ns1blankspaceSetup').html('Nothing to show.');
-					}
-					else
-					{	
-						$.each(oResponse.data.rows, function()
-						{
-							aHTML.push('<tr class="ns1blankspaceRow">');
-										
-							aHTML.push('<td id="ns1blankspaceSetup-' + this.id + 
-											'" class="ns1blankspaceRow ns1blankspaceSetup">' +
-											this.title + '</td>');
-							
-							aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
-											'<span id="ns1blankspaceSetup_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span></td>');
-
+						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<tr><td id="ns1blankspaceSetup">' +
+										ns1blankspace.xhtml.loading + 
+										'</td></tr></table>');					
 						
-							aHTML.push('</tr>');
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+						
+						var aHTML = [];
+
+						aHTML.push('<table><tr><td id="ns1blankspaceViewSetupLarge" class="ns1blankspaceViewImageLarge">' +
+										'&nbsp;</td></tr></table>');		
+						
+						$('#ns1blankspaceControl').html(aHTML.join(''));
+	
+						ns1blankspace.status.message('Click value to edit.')
+						
+						$.ajax(
+						{
+							type: 'GET',
+							url: ns1blankspace.util.endpointURI(ns1blankspace.setup.method + '_SEARCH'),
+							dataType: 'json',
+							success: function(data) {
+								ns1blankspace.setup.home(oParam, data)
+							}
 						});
 					}
-
-					aHTML.push('</table>');
-
-					$('#ns1blankspaceSetup').html(aHTML.join(''));
-						
-					$('#ns1blankspaceSetupAdd').button({
-							text: false,
-							 icons: {
-								 primary: "ui-icon-plus"
-							}
-						})
-						.click(function() {
-							ns1blankspace.setup.add()
-						})
-						.css('width', '15px')
-						.css('height', '20px')	
-						
-					$('td.ns1blankspaceSetup').click(function(event)
+					else
 					{
-						ns1blankspace.setup.edit.start(event.target.id);
-					});
-					
-					$('.ns1blankspaceRowRemove').button({
-							text: false,
-							 icons: {
-								 primary: "ui-icon-close"
-							}
-						})
-						.click(function() {
-							ns1blankspace.setup.remove(this.id)
-						})
-						.css('width', '15px')
-						.css('height', '20px')
+						var aHTML = [];
+						
+						aHTML.push('<table id="ns1blankspaceSetupContainer">');
+		
+						aHTML.push('<tr class="ns1blankspaceRow">');
+						aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
+						aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right"><span id="ns1blankspaceSetupAdd">Add</span></td>');
+						aHTML.push('</tr>');
+						
+						if (oResponse.data.rows.length == 0)
+						{
+							aHTML.push('<tr><td class="ns1blankspaceNothing">Nothing to show.</td></tr>');
+
+							$('#ns1blankspaceSetup').html('Nothing to show.');
+						}
+						else
+						{	
+							$.each(oResponse.data.rows, function()
+							{
+								aHTML.push('<tr class="ns1blankspaceRow">');
+											
+								aHTML.push('<td id="td_ns1blankspaceSetup-' + this.id + 
+												'" class="ns1blankspaceRow ns1blankspaceSetup" style="cursor: pointer;">' +
+												this.title + '</td>');
+								
+								aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
+												'<span id="ns1blankspaceSetup_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span></td>');
+
 							
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+								aHTML.push('</tr>');
+							});
+						}
+
+						aHTML.push('</table>');
+
+						$('#ns1blankspaceSetup').html(aHTML.join(''));
+							
+						$('#ns1blankspaceSetupAdd').button({
+								text: false,
+								 icons: {
+									 primary: "ui-icon-plus"
+								}
+							})
+							.click(function() {
+								ns1blankspace.setup.add()
+							})
+							.css('width', '15px')
+							.css('height', '20px')	
+							
+						$('td.ns1blankspaceSetup').click(function(event)
+						{
+							ns1blankspace.setup.edit.start(event.target.id);
+						});
+						
+						$('.ns1blankspaceRowRemove').button({
+								text: false,
+								 icons: {
+									 primary: "ui-icon-close"
+								}
+							})
+							.click(function() {
+								ns1blankspace.setup.remove(this.id)
+							})
+							.css('width', '15px')
+							.css('height', '20px')
+								
+						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					}	
 				},		
 		
 	add:		function ()
@@ -140,7 +149,7 @@ $.extend(true, ns1blankspace.setup,
 						
 					aHTML.push('<tr class="ns1blankspaceRow">');
 										
-					aHTML.push('<td id="ns1blankspaceSetup-" class="ns1blankspaceRow ns1blankspaceSetup"></td>');
+					aHTML.push('<td id="td_ns1blankspaceSetup-" class="ns1blankspaceRow ns1blankspaceSetup"></td>');
 					
 					aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
 											'<span id="ns1blankspaceSetup_options_remove-" class="ns1blankspaceRowRemove"></span></td>');
@@ -151,7 +160,7 @@ $.extend(true, ns1blankspace.setup,
 					$('#ns1blankspaceViewControlNew').button({disabled: true});
 					$('#ns1blankspaceSetupAdd').button({disabled: true});
 					
-					ns1blankspace.setup.edit.starti('ns1blankspaceSetup');
+					ns1blankspace.setup.edit.start('ns1blankspaceSetup');
 				},
 	
 	search: 	{
@@ -275,22 +284,22 @@ $.extend(true, ns1blankspace.setup,
 					})
 				},
 
-	remove:		function (sXHTMLElementId)
+	remove:		function (sXHTMLElementID)
 				{
-					var aSearch = sXHTMLElementId.split('-');
-					var sElementId = aSearch[0];
+					var aSearch = sXHTMLElementID.split('-');
+					var sElementID = aSearch[0];
 					var sSearchContext = aSearch[1];
 					
 					if (confirm('Are you sure you want to remove it?'))
 					{								
 						$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI(ns1blankpsace.setup.method + '_MANAGE'),
-								data: 'remove=1&id=' + sSearchContext,
-								dataType: 'text',
-								success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
-							});
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI(ns1blankspace.setup.method + '_MANAGE'),
+							data: 'remove=1&id=' + sSearchContext,
+							dataType: 'text',
+							success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
+						});
 					}
 				},
 
@@ -304,13 +313,13 @@ $.extend(true, ns1blankspace.setup,
 									
 									var sElementInputID = sElementID.replace('td', 'input');
 									
-									sHTML = '<input style="width:100%;" id="' + sElementInputId + '" class="ns1blankspace" ' +
+									sHTML = '<input style="width:100%;" id="' + sElementInputID + '" class="ns1blankspace" ' +
 															'value="' + sHTML + '">'
 									
 									$('#' + sElementID).html(sHTML);
 									$('#' + sElementInputID).focus();
 									
-									$('#' + sElementInputID).blur(function(event)
+									$('#' + sElementInputID).focusout(function(event)
 									{
 										ns1blankspace.setup.edit.stop(sElementID);
 									});
@@ -326,57 +335,61 @@ $.extend(true, ns1blankspace.setup,
 									$('#' + sElementID).html(sHTML);
 								},
 
-					save:		function interfaceSetupElementEditSave(sElementID)
+					save:		function (sElementID)
 								{
-									var aElement = sElementID.split('-');
-									
-									if (aElement[1] == '' && $('#' + sElementID.replace('td', 'input')).val() == '')
+									if ($('#' + sElementID.replace('td', 'input')).length == 1)
 									{
-										$('#ns1blankspaceSetupContainer tr:first').next().fadeOut(500);	
-										$('#ns1blankspaceViewControlNew').button({disabled: false});
-										$('#ns1blankspaceSetupAdd').button({disabled: false});
-									}
-									else
-									{
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI(ns1blankpsace.setup.method + '_MANAGE'),
-											data: 'title=' + ns1blankspace.util.fs($('#' + sElementID.replace('td', 'input')).val()),
-											dataType: 'json',
-											success: function(data) 
-													{
-														if (data.notes == 'ADDED')
-														{
-															$('#ns1blankspaceSetup-').attr('id','ns1blankspaceSetup-' + aReturn[3]);
-															
-															$('td.ns1blankspaceSetup').unbind('click');
-																
-															$('td.ns1blankspaceSetupRow').click(function(event)
-															{
-																ns1blankspace.setup.edit.start(event.target.id);
-															});
 
-															$('#tdSetup_delete-').attr('id','tdSetup_delete-' + aReturn[3]);
-															
-															$('.ns1blankspaceRowRemove').button({
-																	text: false,
-																	 icons: {
-																		 primary: "ui-icon-close"
-																	}
-																})
-																.click(function() {
-																	ns1blankspace.setup.remove(this.id)
-																})
-																.css('width', '15px')
-																.css('height', '20px')
+										var aElement = sElementID.split('-');
+										
+										if (aElement[1] == '' && $('#' + sElementID.replace('td', 'input')).val() == '')
+										{
+											$('#ns1blankspaceSetupContainer tr:first').next().fadeOut(500);	
+											$('#ns1blankspaceViewControlNew').button({disabled: false});
+											$('#ns1blankspaceSetupAdd').button({disabled: false});
+										}
+										else
+										{
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI(ns1blankspace.setup.method + '_MANAGE'),
+												data: 'id=' + aElement[1] + '&title=' + ns1blankspace.util.fs($('#' + sElementID.replace('td', 'input')).val()),
+												dataType: 'json',
+												success: function(data) 
+														{
+															if (data.notes == 'ADDED')
+															{
+																$('#ns1blankspaceSetup-').attr('id','td_ns1blankspaceSetup-' + data.id);
+																
+																$('td.ns1blankspaceSetup').unbind('click');
+																	
+																$('td.ns1blankspaceSetupRow').click(function(event)
+																{
+																	ns1blankspace.setup.edit.start(event.target.id);
+																});
+
+																$('#tdSetup_delete-').attr('id','tdSetup_delete-' + aReturn[3]);
+																
+																$('.ns1blankspaceRowRemove').button({
+																		text: false,
+																		 icons: {
+																			 primary: "ui-icon-close"
+																		}
+																	})
+																	.click(function() {
+																		ns1blankspace.setup.remove(this.id)
+																	})
+																	.css('width', '15px')
+																	.css('height', '20px')
+															}
+															ns1blankspace.status.message('Saved')
+															$('#ns1blankspaceViewControlNew').button({disabled: false});
+															$('#ns1blankspaceSetupAdd').button({disabled: false});
 														}
-														ns1blankspace.status.message('Saved')
-														$('#ns1blankspaceViewControlNew').button({disabled: false});
-														$('#ns1blankspaceSetupAdd').button({disabled: false});
-													}
-										});
-									}			
+											});
+										}
+									}				
 								}
 				}
 });								
