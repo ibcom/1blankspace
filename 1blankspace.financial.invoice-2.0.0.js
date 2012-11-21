@@ -374,7 +374,7 @@ ns1blankspace.financial.invoice =
 					$('#ns1blankspaceControlReceipts').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainReceipt', refresh: true});
-						ns1blankspace.financial.invoice.receipt();
+						ns1blankspace.financial.invoice.receipt.show();
 					});
 					
 					$('#ns1blankspaceControlGL').click(function(event)

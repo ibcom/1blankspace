@@ -373,11 +373,11 @@ ns1blankspace.financial.debtors =
 						{
 							aHTML.push('<table class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
-											'<td class="ns1blankspaceCaption">Debtor</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount Owed</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Date</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Amount</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
+											'<td class="ns1blankspaceHeaderCaption">Debtor</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount Owed</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Date</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Amount</td>' +
+											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');
 							
 							$(oResponse.data.rows).each(function() 
@@ -454,11 +454,11 @@ ns1blankspace.financial.creditors =
 							aHTML.push('<table class="ns1blankspace">' +
 											'<tbody>' +
 											'<tr class="ns1blankspaceCaption">' +
-											'<td class="ns1blankspaceCaption">Creditor</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount To Be Paid</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Payment Date</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Last Payment Amoun</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
+											'<td class="ns1blankspaceHeaderCaption">Creditor</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount To Be Paid</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Payment Date</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Payment Amoun</td>' +
+											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -535,10 +535,10 @@ ns1blankspace.financial.profitLoss =
 						
 							aHTML.push('<table class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
-											'<td class="ns1blankspaceCaption">Account</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;color:#A0A0A0;">Percentage</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
+											'<td class="ns1blankspaceHeaderCaption">Account</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Percentage</td>' +
+											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -649,9 +649,9 @@ ns1blankspace.financial.balanceSheet =
 
 							aHTML.push('<table class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
-											'<td class="ns1blankspaceCaption">Account</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
+											'<td class="ns1blankspaceHeaderCaption">Account</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>' +
+											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -733,10 +733,10 @@ ns1blankspace.financial.bankAccounts =
 						{		
 							aHTML.push('<table class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
-											'<td class="ns1blankspaceCaption">Name</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;">Reconciled Amount</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;">Last Reconciled</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
+											'<td class="ns1blankspaceHeaderCaption">Name</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Reconciled Amount</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Last Reconciled</td>' +
+											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -970,28 +970,28 @@ ns1blankspace.financial.transactions =
 						else
 						{
 							aHTML.push('<table class="ns1blankspace">' +
-											'<tr class="ns1blankspaceCaption">' +
-											'<td class="ns1blankspaceCaption" style="width:150px;">Account</td>' +
-											'<td class="ns1blankspaceCaption" style="width:100px;">Reconciled Amount</td>' +
-											'<td class="ns1blankspaceCaption" style="text-align:right;width:125px;">Last Reconciled</td>' +
-											'<td class="ns1blankspaceCaption">Description</td>' +
-											'<td class="ns1blankspaceCaption">&nbsp;</td>' +
+											'<tr class="ns1blankspaceHeaderCaption">' +
+											'<td class="ns1blankspaceHeaderCaption" style="width:150px;">Account</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="width:125px;">Date</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
+											'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML.push('<tr class="interfaceMainRow">');
+								aHTML.push('<tr class="ns1blankspaceRow">');
 												
-								aHTML.push('<td id="tdFinancialTransaction_financialaccounttext-' + this.id + '" class="interfaceMainRow">' +
+								aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + this.id + '" class="ns1blankspaceRow">' +
 														this.financialaccounttext + '</td>');
 														
-								aHTML.push('<td id="tdFinancialTransaction_date-' + this.id + '" class="interfaceMainRow">' +
+								aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + this.id + '" class="ns1blankspaceRow">' +
 														this.date + '</td>');
 														
-								aHTML.push('<td id="tdFinancialTransaction_amount-' + this.id + '" style="text-align:right;" class="interfaceMainRow">' +
+								aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow">' +
 														this.amount + '</td>');
 									
-								aHTML.push('<td id="tdFinancialTransaction_description-' + this.id + '" class="interfaceMainRow">' +
+								aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + this.id + '" class="ns1blankspaceRow">' +
 														this.description + '</td>');
 																				
 								aHTML.push('</td></tr>');
@@ -999,7 +999,7 @@ ns1blankspace.financial.transactions =
 							
 							aHTML.push('</table>');
 
-							$('#' + sXHTMLElementId).html(aHTML.join(''));
+							$('#' + sXHTMLElementID).html(aHTML.join(''));
 						}
 					}	
 				}
@@ -1173,10 +1173,10 @@ ns1blankspace.financial.accounts =
 						
 								aHTML.push('<table class="ns1blankspace">');
 							
-								aHTML.push('<tr class="ns1blankspaceCaption">');
-								aHTML.push('<td class="ns1blankspaceCaption">TOTAL</td>');
-								aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
-								aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">' + oResponse.summary.sumamount + '</td>');
+								aHTML.push('<tr>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">TOTAL</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + oResponse.summary.sumamount + '</td>');
 								aHTML.push('</tr>');
 								
 								$(oResponse.data.rows).each(function(i) 
@@ -1281,11 +1281,11 @@ ns1blankspace.financial.item =
 					}
 					else
 					{
-						aHTML.push('<tr class="ns1blankspaceCaption">');
-						aHTML.push('<td class="ns1blankspaceCaption style="width:125px;">Account</td>');
-						aHTML.push('<td class="ns1blankspaceCaption">Description</td>');
-						aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>');
-						aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+						aHTML.push('<tr>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Account</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 						aHTML.push('</tr>');
 
 						$.each(oResponse.data.rows, function()

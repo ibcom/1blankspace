@@ -238,6 +238,18 @@ td.ns1blankspaceNothing
 	font-size: 0.875em;
 }
 
+.ns1blankspaceHeaderCaption
+{
+	color: #888888;
+	font-weight: 300;
+	padding: 2px;
+	padding-bottom: 4px;
+	x-background-color: #D0D0D0;
+	border-bottom-style:solid;
+	border-width: 1px;
+	border-color: #D0D0D0;	
+}
+
 table.ns1blankspaceMessagingIMAPInbox
 {
 	font-size: 0.875em;

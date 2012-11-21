@@ -372,8 +372,7 @@ ns1blankspace.financial.expense =
 					$('#ns1blankspaceControlGL').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainTransaction', refresh: true});
-						ns1blankspace.financial.expense.transaction();
-						//You'll find this in 1blankspace.financial-[].js
+						ns1blankspace.financial.transactions.show();
 					});
 
 					$('#ns1blankspaceControlActions').click(function(event)
