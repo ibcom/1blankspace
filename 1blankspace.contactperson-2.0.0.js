@@ -1491,8 +1491,8 @@ ns1blankspace.contactPerson =
 										{		
 											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFavourites">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Last Name</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">First Name</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Last Name</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function() {

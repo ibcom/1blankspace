@@ -77,8 +77,8 @@ $.extend(true, ns1blankspace.setup,
 						aHTML.push('<table id="ns1blankspaceSetupContainer">');
 		
 						aHTML.push('<tr class="ns1blankspaceRow">');
-						aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
-						aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right"><span id="ns1blankspaceSetupAdd">Add</span></td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right"><span id="ns1blankspaceSetupAdd">Add</span></td>');
 						aHTML.push('</tr>');
 						
 						if (oResponse.data.rows.length == 0)

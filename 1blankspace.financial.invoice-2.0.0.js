@@ -910,20 +910,20 @@ details: 		function ()
 										else
 										{
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 
 											$.each(oResponse.data.rows, function()
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																			
-												aHTML.push('<td id="ns1blankspaceReceipt_date-' + oRow.id + '" class="ns1blankspaceRow">' +
+												aHTML.push('<td id="ns1blankspaceReceipt_date-' + this.id + '" class="ns1blankspaceRow">' +
 																this.appliesdate + '</td>');
 
 												
-												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 																this.amount + '</td>');
 						
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');

@@ -752,8 +752,8 @@ ns1blankspace.developer.space =
 						{
 							aHTML.push('<table id="ns1blankspaceSpaceSubscriptionUsers" class="ns1blankspaceContainer">');
 							aHTML.push('<tr class="ns1blankspaceCaption">');
-							aHTML.push('<td class="ns1blankspaceCaption">Logon Name</td>');
-							aHTML.push('<td class="ns1blankspaceCaption">Last logged on</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Logon Name</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Last logged on</td>');
 							aHTML.push('</tr>');
 							
 							$.each(oResponse.data.rows, function()

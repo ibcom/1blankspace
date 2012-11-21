@@ -1019,10 +1019,10 @@ ns1blankspace.messaging.conversation =
 											aHTML.push('<table id="ns1blankspaceMessagingConversationPosts" class="ns1blankspaceContainer">');
 												
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Subject</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">By</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Subject</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">By</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
@@ -1394,12 +1394,12 @@ ns1blankspace.messaging.conversation =
 
 											if (iPost == undefined)
 											{
-												aHTML.push('<td class="ns1blankspaceCaption">Post</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Post</td>');
 											}
-											aHTML.push('<td class="ns1blankspaceCaption">Comment</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">By</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Comment</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">By</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()

@@ -610,8 +610,8 @@ ns1blankspace.setup.structure =
 										{
 											aHTML.push('<table id="ns1blankspaceSetupStructureGrouping" class="ns1blankspace">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
@@ -899,8 +899,8 @@ ns1blankspace.setup.structure =
 										{
 											aHTML.push('<table id="ns1blankspaceSetupStructureCategory" class="ns1blankspaceContainer">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
@@ -1623,9 +1623,9 @@ ns1blankspace.setup.structure =
 																			' data-method="SETUP_STRUCTURE_ELEMENT_OPTION">');
 										
 														aHTML.push('<tr class="ns1blankspaceRow">');
-														aHTML.push('<td class="ns1blankspaceCaption">Choices</td>');
-														aHTML.push('<td class="ns1blankspaceCaption">Points</td>');
-														aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right"><span id="ns1blankspaceElementOptionAdd">Add</span></td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption">Choices</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption">Points</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right"><span id="ns1blankspaceElementOptionAdd">Add</span></td>');
 														aHTML.push('</tr>');
 																
 														if (oResponse.data.rows.length == 0)
@@ -1912,8 +1912,8 @@ ns1blankspace.setup.structure =
 										{
 											aHTML.push('<table id="ns1blankspaceSetupStructureAutomation" class="ns1blankspaceContainer">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Automation</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Automation</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
@@ -2003,7 +2003,7 @@ ns1blankspace.setup.structure =
 										aHTML.push('<table class="ns1blankspace">');
 										
 										aHTML.push('<tr class="ns1blankspaceCaption">');
-										aHTML.push('<td class="ns1blankspaceCaption">Automation</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption">Automation</td>');
 										aHTML.push('</tr>');
 													
 										aHTML.push('<tr class="ns1blankspaceCaption">' +

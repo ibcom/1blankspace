@@ -1026,10 +1026,10 @@ ns1blankspace.order =
 										{
 											aHTML.push('<table id="tns1blankspaceOrderItems" class="ns1blankspaceContainer">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Product</td>');
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Quantity</td>');
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Price</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Product</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Quantity</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Price</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function() 
@@ -1407,9 +1407,9 @@ ns1blankspace.order =
 										
 											aHTML.push('<table class="ns1blankspaceContainer">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Notes</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Notes</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 												
 											$.each(oResponse.data.rows, function() 
@@ -1519,11 +1519,11 @@ ns1blankspace.order =
 										{
 											aHTML.push('<table id="ns1blankspaceOrderPick" class="ns1blankspaceContainer">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Product</td>');
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Quantity Ordered</td>');
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Already Delivered</td>');
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">This street</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Product</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Quantity Ordered</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Already Delivered</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">This street</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 												
 											$.each(oResponse.data.rows, function() 
@@ -1660,10 +1660,10 @@ ns1blankspace.order =
 										{
 											aHTML.push('<table id="ns1blankspaceOrderInvoices" class="ns1blankspaceContainer">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Reference</td>');
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Date</td>');
-											aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 												
 											$.each(oResponse.data.rows, function() 

@@ -248,16 +248,16 @@ ns1blankspace.home.actions =
 							}	
 							
 							aHTML.push('<tr class="ns1blankspaceCaption">');
-							aHTML.push('<td class="ns1blankspaceCaption">Subject</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Subject</td>');
 							
 							if (bOverdue || bFuture)
 							{
-								aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
 							}
 							
-							aHTML.push('<td class="ns1blankspaceCaption">Time</td>');
-							aHTML.push('<td class="ns1blankspaceCaption">Contact</td>');
-							aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Time</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Contact</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 							aHTML.push('</tr>');
 
 							$.each(oResponse.data.rows, function()

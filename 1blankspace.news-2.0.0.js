@@ -819,9 +819,9 @@ search: 		{
 											aHTML.push('<table class="ns1blankspace" border="0" cellspacing="0" cellpadding="0" >');
 											
 											aHTML.push('<tr>');
-											aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Surname</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Email</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">First Name</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Surname</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Email</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
@@ -1200,9 +1200,9 @@ search: 		{
 										{
 											aHTML.push('<table class="ns1blankspace">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Activity</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Link</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Count</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Activity</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Link</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Count</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
@@ -1271,10 +1271,10 @@ search: 		{
 											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspace">');
 											
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Contact</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Activity</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Link</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Date & Time</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Contact</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Activity</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Link</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date & Time</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()

@@ -714,11 +714,11 @@ ns1blankspace.event =
 												aHTML.push('<table class="ns1blankspace">');
 											
 												aHTML.push('<tr class="ns1blankspaceCaption">');
-												aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Surname</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Phone</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Mobile</td>');
-												aHTML.push('<td class="ns1blankspaceCaption"></td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">First Name</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Surname</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Phone</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Mobile</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption"></td>');
 												aHTML.push('</tr>');
 
 												$.each(oResponse.data.rows, function()

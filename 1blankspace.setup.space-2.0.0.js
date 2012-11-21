@@ -266,12 +266,12 @@ ns1blankspace.setup.space =
 							aHTML.push('<table class="ns1blankspaceContainer">');
 
 							aHTML.push('<tr class="ns1blankspaceCaption">');
-							aHTML.push('<td class="ns1blankspaceCaption">Method</td>');
-							aHTML.push('<td class="ns1blankspaceCaption" style="width:35px;text-align:center;">Search</td>');
-							aHTML.push('<td class="ns1blankspaceCaption" style="width:35px;text-align:center;">Add</td>');
-							aHTML.push('<td class="ns1blankspaceCaption" style="width:35px;text-align:center;">Update</td>');
-							aHTML.push('<td class="ns1blankspaceCaption" style="width:35px;text-align:center;">Remove</td>');
-							aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Method</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:35px;text-align:center;">Search</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:35px;text-align:center;">Add</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:35px;text-align:center;">Update</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:35px;text-align:center;">Remove</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 							aHTML.push('</tr>');
 
 							$(oResponse.data.rows).each(function()

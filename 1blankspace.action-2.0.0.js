@@ -872,32 +872,32 @@ summary: 		function interfaceFinancialPaymentSummary()
 										{
 											case ns1blankspace.data.actionType.fileNote:
 
-												aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Description</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Who</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Who</td>');
 												break;
 
 											case ns1blankspace.data.actionType.emailSent:
 
-												aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Subject</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Description</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Subject</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
 												break;
 												
 											case ns1blankspace.data.actionType.meeting:
 
-												aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Type</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Who</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Hours</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Who</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Hours</td>');
 												break;
 
 											default:
 
-												aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Time</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Subject</td>');
-												aHTML.push('<td class="ns1blankspaceCaption">Description</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Time</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Subject</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
 
 										}
 										aHTML[++h] = '</tr>';

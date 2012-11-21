@@ -1179,8 +1179,8 @@ ns1blankspace.messaging.imap =
 							aHTML.push('<table>');
 						
 							aHTML.push('<tr class="ns1blankspaceCaption">');
-							aHTML.push('<td class="ns1blankspaceCaption">Filename</td>');
-							aHTML.push('<td class="ns1blankspaceCaption">Size (kb)</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Filename</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Size (kb)</td>');
 							aHTML.push('</tr>');
 						
 							$.each(aAttachments, function(iIndex) 

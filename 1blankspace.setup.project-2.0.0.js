@@ -469,8 +469,8 @@ ns1blankspace.setup.project =
 										{
 											aHTML.push('<table id="ns1blankspaceSetupProjectTasks" class="ns1blankspaceContainer">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()

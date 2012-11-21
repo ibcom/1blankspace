@@ -919,11 +919,11 @@ ns1blankspace.setup.website =
 										{
 											aHTML.push('<table class="ns1blankspaceSetupWebsitePages">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Title</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">URL</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Type</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Sharing</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">URL</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Sharing</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
@@ -1385,7 +1385,7 @@ ns1blankspace.setup.website =
 						{
 							aHTML.push('<table id="ns1blankspaceSetupWebsiteForms" class="ns1blankspace">');
 							aHTML.push('<tr class="ns1blankspaceCaption">');
-							aHTML.push('<td class="ns1blankspaceCaption">Form</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Form</td>');
 							aHTML.push('<td>&nbsp;</td>');
 							aHTML.push('</tr>');
 							
@@ -1511,8 +1511,8 @@ ns1blankspace.setup.website =
 										{
 											aHTML.push('<table class="ns1blankspaceSetupWebsiteURLs">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">URL</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">URL</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 		
 											$.each(oResponse.data.rows, function()

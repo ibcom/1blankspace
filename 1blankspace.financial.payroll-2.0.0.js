@@ -1354,9 +1354,9 @@ ns1blankspace.financial.payroll =
 													{	
 														aHTML.push('<table class="ns1blankspace">');
 														aHTML.push('<tr class="ns1blankspaceCaption">');
-														aHTML.push('<td class="ns1blankspaceCaption">Start Date</td>');
-														aHTML.push('<td class="ns1blankspaceCaption">End Date</td>');
-														aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Rate</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption">Start Date</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption">End Date</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Rate</td>');
 														aHTML.push('<td class="interfaceMainCaption">&nbsp;</td>');
 														aHTML.push('</tr>');
 
@@ -1605,10 +1605,10 @@ ns1blankspace.financial.payroll =
 													{	
 														aHTML.push('<table id="ns1blankspacePayrollEmployeeDetailsBankAccount" class="ns1blankspace">');
 														aHTML.push('<tr class="ns1blankspaceCaption">');
-														aHTML.push('<td class="ns1blankspaceCaption">Name</td>');
-														aHTML.push('<td class="ns1blankspaceCaption">BSB</td>');
-														aHTML.push('<td class="ns1blankspaceCaption">Number</td>');
-														aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">% of Pay</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption">Name</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption">BSB</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption">Number</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">% of Pay</td>');
 														aHTML.push('<td class="interfaceMainCaption">&nbsp;</td>');
 														aHTML.push('</tr>');
 
@@ -2075,9 +2075,9 @@ ns1blankspace.financial.payroll =
 							else
 							{		
 								aHTML.push('<tr class="ns1blankspaceCaption">');
-								aHTML.push('<td class="ns1blankspaceCaption">Type</td>');
-								aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Hours</td>');
-								aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Hours</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 								aHTML.push('</tr>');
 								
 								$(oResponse.data.rows).each(function()
@@ -2309,9 +2309,9 @@ ns1blankspace.financial.payroll =
 							else
 							{		
 								aHTML.push('<tr class="ns1blankspaceCaption">');
-								aHTML.push('<td class="ns1blankspaceCaption">Description</td>');
-								aHTML.push('<td class="ns1blankspaceCaption" style="text-align:right;">Amount</td>');
-								aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 								aHTML.push('</tr>');
 								
 								$(oResponse.data.rows).each(function()

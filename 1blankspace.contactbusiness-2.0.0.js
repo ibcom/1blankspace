@@ -661,16 +661,11 @@ ns1blankspace.contactBusiness =
 						
 						var aHTML = [];
 					
-		
 						aHTML.push('<table class="ns1blankspace">');
-						
-						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-										'Street' +
-										'</td></tr>');
 								
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Address' +
+										'Street' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -720,14 +715,10 @@ ns1blankspace.contactBusiness =
 						var aHTML = [];
 					
 						aHTML.push('<table class="ns1blankspace">');
-						
-						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-										'Mailing' +
-										'</td></tr>');
 								
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Address' +
+										'Mailing' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -1337,12 +1328,12 @@ ns1blankspace.contactBusiness =
 										
 											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspace">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">First Name</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Surname</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Position</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Mobile</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">Email</td>');
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">First Name</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Surname</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Position</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Mobile</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Email</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
@@ -1499,7 +1490,7 @@ ns1blankspace.contactBusiness =
 											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFavourites">');
 											
 											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceCaption">Trading Name</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Trading Name</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function() {
