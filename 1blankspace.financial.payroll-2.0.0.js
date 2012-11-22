@@ -43,27 +43,15 @@ ns1blankspace.financial.payroll =
 					{
 						var aHTML = [];
 									
-						aHTML.push('<table class="ns1blankspaceMain">');
-						aHTML.push('<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
-										ns1blankspace.xhtml.loading +
-										'</td>' +
-										'</tr>');
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceMain').html(aHTML.join(''));
-						
-						var aHTML = [];
-									
 						aHTML.push('<table>');
 
 						aHTML.push('<tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 								
-						aHTML.push('<tr class="ns1blankspaceControl">' +
+						aHTML.push('<tr>' +
 										'<td id="ns1blankspaceControlPayRuns" class="ns1blankspaceControl">Pays</td>' +
 										'</tr>');			
 								
-						aHTML.push('<tr class="ns1blankspaceControl">' +
+						aHTML.push('<tr>' +
 										'<td id="ns1blankspaceControlEmployees" class="ns1blankspaceControl">Employees</td>' +
 										'</tr>');	
 									
@@ -80,17 +68,16 @@ ns1blankspace.financial.payroll =
 						$('#ns1blankspaceControlEmployees').click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainEmployee', refresh: true});
-							ns1blankspace.financial.payroll.emplyees.show();
+							ns1blankspace.financial.payroll.employees.show();
 						});
 						
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<div id="ns1blankspaceMainPayRun" class="divInterfaceViewportMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainEmployee" class="divInterfaceViewportMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainNew" class="divInterfaceViewportMain"></div>';
+						aHTML.push('<div id="ns1blankspaceMainPayRun" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainEmployee" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainNew" class="ns1blankspaceControlMain"></div>');
 
-						$('#divInterfaceMain').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
@@ -135,7 +122,7 @@ ns1blankspace.financial.payroll =
 						$('#ns1blankspaceMainPayRun').html(aHTML.join(''));
 
 						$('.ns1blankspaceMostLikely').click(function(event) {
-							ns1blankspace.financial.payroll.search.show(event.target.id, {source: 1});
+							ns1blankspace.financial.payroll.search.send(event.target.id, {source: 1});
 						});
 					}	
 				},
@@ -273,41 +260,44 @@ ns1blankspace.financial.payroll =
 						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspacePays" class="ns1blankspaceControl">' +
-										'Pays</td></tr>');
-					
-						aHTML.push('</table>');	
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlPays" class="ns1blankspaceControl">' +
+										'Pays</td></tr>');		
 					}					
 							
+					aHTML.push('</table>');
+
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 
-					aHTML.push('<div id="ns1blankspaceMainContext" class="divInterfaceViewportMainContext"></div>');
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="divInterfaceViewportMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="divInterfaceViewportMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainPays" class="divInterfaceViewportMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainPays" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceSummary'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
 						ns1blankspace.financial.payroll.summary();
 					});
 					
 					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceDetails'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 						ns1blankspace.financial.payroll.details();
 					});
 					
-					$('#ns1blankspaceControlAddress').click(function(event)
+					$('#ns1blankspaceControlPays').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspacePays'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainPays'});
 						ns1blankspace.financial.payroll.pays();
 					});
 				},
@@ -332,7 +322,7 @@ ns1blankspace.financial.payroll =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.paydate +
-							'<br /><span id="ns1blankspaceControlSubContext_status" class="ns1blankspaceControlSubContext">' + ns1blankspace.objectContextData.statustext + '</span>');
+							'<br /><span id="ns1blankspaceSub_status" class="ns1blankspaceControlSubContext">' + ns1blankspace.objectContextData.statustext + '</span>');
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
@@ -345,7 +335,7 @@ ns1blankspace.financial.payroll =
 					}
 				},
 
-	summary: 	function interfaceFinancialPayrollSummary(oParam, oResponse)
+	summary: 	function (oParam, oResponse)
 				{
 					var aHTML = [];
 					
@@ -359,8 +349,8 @@ ns1blankspace.financial.payroll =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:150px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -370,13 +360,13 @@ ns1blankspace.financial.payroll =
 					
 						aHTML.push('<table class="ns1blankspaceColumn1">');
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Start Date</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryStartDate" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.startdate +
 										'</td></tr>');
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryStartDate" class="ns1blankspaceSummary">' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">End Date</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryEndDate" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.paydate +
 										'</td></tr>');
 				
@@ -386,23 +376,23 @@ ns1blankspace.financial.payroll =
 
 						var aHTML = [];
 						
-						aHTML.push('<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2" style="width: 100%">');
+						aHTML.push('<table class="ns1blankspaceColumn2" style="width: 100%;">');
 						
 						if (ns1blankspace.objectContextData.statustext != '')
 						{	
-							aHTML[++h] = '<tr><td class="ns1blankspaceSummary" style="padding-bottom:10px;">' +
+							aHTML.push('<tr><td class="ns1blankspaceCaption" style="padding-bottom:10px;">' +
 										ns1blankspace.objectContextData.statustext +
-										'</td></tr>';				
+										'</td></tr>');				
 						}
 						
 						if (ns1blankspace.objectContextData.status == 1)
 						{	
-							aHTML[++h] = '<tr><td>' +
+							aHTML.push('<tr><td>' +
 										'<span style="font-size:0.75em;" id="ns1blankspaceStatusComplete">Complete</span>' +
-										'</td></tr>';			
+										'</td></tr>');			
 						}
 						
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 
@@ -799,7 +789,7 @@ ns1blankspace.financial.payroll =
 													'</tr>' + 
 													'</table>');		
 															
-										$('#ns1blankspaceEmployee').html(aHTML.join(''));
+										$('#ns1blankspaceMainEmployee').html(aHTML.join(''));
 										
 										if (oResponse == undefined)
 										{
@@ -859,39 +849,13 @@ ns1blankspace.financial.payroll =
 											});	
 										}
 									}
-
-									if (iStep == 11)
-									{
-										var aHTML = [];
-
-										aHTML.push('<table class="ns1blankspaceContainer">' +
-													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspacePayrollEmployeeDetailsColumn1" class="ns1blankspaceColumn1" style="font-size:0.875em;padding-right:15px;">' +
-													ns1blankspace.xhtml.loading + '</td>' +
-													'<td id="ns1blankspacePayrollEmployeeDetailsColumn2" class="ns1blankspaceColumn2">' +
-													'<span style="width:60px;font-size:0.75em;" id="ns1blankspacePayrollEmployeeEdit_options_save">Save</span></td>' +
-													'</tr>' + 
-													'</table>');		
-	
-										$('#ns1blankspacePayrollEmployeeColumn2').html(aHTML.join(''));
-
-										$('#ns1blankspacePayrollEmployeeEdit_options_save').button(
-										{
-											text: "Save"
-										})
-										.click(function() 
-										{
-											ns1blankspace.status.working();
-										});	
-
-									}	
 									
 									//EMPLOYEE DETAILS
 									if (iStep == 2)
 									{
 										if (oResponse == undefined)
 										{
-											$('#ns1blankspacePayrollEmployeeColumn2').html(ns1blankspace.xhtml.loadingSmall);
+											$('#ns1blankspacePayrollEmployeDetailsColumn2').html(ns1blankspace.xhtml.loadingSmall);
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
@@ -1821,7 +1785,7 @@ ns1blankspace.financial.payroll =
 											'</tr>' + 
 											'</table>');	
 							
-							$('#ns1blankspacePays').html(aHTML.join(''));
+							$('#ns1blankspaceMainPays').html(aHTML.join(''));
 						
 							$('#ns1blankspacePayrollPayColumn1').html(ns1blankspace.xhtml.loadingSmall);
 
