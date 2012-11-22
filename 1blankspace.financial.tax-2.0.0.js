@@ -20,10 +20,10 @@ ns1blankspace.financial.tax =
 
 					ns1blankspace.object = -1;
 					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.parentObjectName = 'financial';
+					ns1blankspace.objectParentName = 'financial';
 					ns1blankspace.objectName = 'tax';
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'Bank Accounts';
+					ns1blankspace.viewName = 'Tax (BAS)';
 					
 					if (bShowHome)
 					{
@@ -62,12 +62,24 @@ ns1blankspace.financial.tax =
 													
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
+						/*
+						$.ajax(
+								{
+									type: 'POST',
+									url: ns1blankspace.util.endpointURI('FINANCIAL_TAX_REPORT_SEARCH'),
+									data: 'rows=10',
+									dataType: 'json',
+									success: function(data){ns1blankspace.financial.tax.home(oParam, data)}
+								});
+						*/
+								
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_TAX_REPORT_SEARCH';
 						oSearch.addField('taxstartdate,enddate,taxofficereference,statustext');
 						oSearch.rows = 10;
 						oSearch.sort('enddate', 'desc');
 						oSearch.getResults(function(data){ns1blankspace.financial.tax.home(oParam, data)});
+						
 					}
 					else
 					{
