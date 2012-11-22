@@ -636,7 +636,7 @@ ns1blankspace.financial.invoice =
 								}
 				},				
 
-details: 		function ()
+	details: 	function ()
 				{
 					var aHTML = [];
 						
@@ -853,40 +853,35 @@ details: 		function ()
 										aHTML.push('<table class="ns1blankspaceContainer">');
 
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceReceiptColumn1" class="ns1blankspaceColumn1"></td>' +
-														'<td id="ns1blankspaceReceiptColumn2" class="ns1blankspaceColumn2" style="width: 300px;></td>' +
+														'<td id="ns1blankspaceReceiptColumn1" class="ns1blankspaceColumn1Flexible">' +
+														ns1blankspace.xhtml.loading + '</td>' +
+														'<td id="ns1blankspaceReceiptColumn2" class="ns1blankspaceColumn2" style="width: 350px;"></td>' +
 														'</tr>');
 										
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceMainReceipt').html(aHTML.join(''));	
+									
+										var aHTML = [];
 										
-										if (oActions != undefined)
-										{	
-											var aHTML = [];
-											
-											aHTML.push('<table class="ns1blankspaceColumn2">');
-											
-											if (oActions.add)
-											{
-												aHTML.push('<tr><td class="ns1blankspaceAction">' +
-															'<span id="ns1blankspaceReceiptAdd">Add</span>' +
-															'</td></tr>');
-											}
-											
-											aHTML.push('</table>');					
-											
-											$('#ns1blankspaceReceiptColumn2').html(aHTML.join(''));
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
-											$('#ns1blankspaceReceiptAdd').button(
-											{
-												label: "Add"
-											})
-											.click(function() {
-												 ns1blankspace.financial.invoice.receipt.edit(oParam);
-											})		
-										}
+										aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceReceiptAdd" class="ns1blankspaceAction">Add</span>' +
+														'</td></tr>');
 										
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceReceiptColumn2').html(aHTML.join(''));
+									
+										$('#ns1blankspaceReceiptAdd').button(
+										{
+											label: "Add"
+										})
+										.click(function() {
+											 ns1blankspace.financial.invoice.receipt.edit(oParam);
+										})		
+									
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
 										oSearch.addField('appliesdate,amount');
@@ -909,7 +904,8 @@ details: 		function ()
 										}
 										else
 										{
-											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<table class="ns1blankspace">');
+											aHTML.push('<tr>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
@@ -967,7 +963,7 @@ details: 		function ()
 										if (oParam.step != undefined) {iStep = oParam.step}	
 									}
 									
-									if (ns1blankspace.financial.bankaccounts.length == 0) {alert("No bank accounts set up.");return;}
+									if (ns1blankspace.financial.data.bankaccounts.length == 0) {alert("No bank accounts set up.");return;}
 									
 									if (iStep == 1)
 									{	
@@ -989,22 +985,20 @@ details: 		function ()
 										
 										var aHTML = [];
 										
-										aHTML.push('<table id="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
-										aHTML.push('<tr class="ns1blankspace">' +
-														'<td class="ns1blankspace"' +
+										aHTML.push('<tr><td class="ns1blankspaceSub"' +
 														' data-receiptedamount="' + cReceiptedAmount + '">' +
-														'$' + (cReceiptedAmount).formatMoney(2, ".", ",") + ' has been receipted so far.' +
+														'$' + parseFloat(cReceiptedAmount).formatMoney(2, ".", ",") + ' has been receipted so far.' +
 														'</td></tr>');
 														
-										aHTML.push('<tr class="ns1blankspace">' +
-														'<td id="ns1blankspaceReceiptEditAmount" class="ns1blankspace"' +
-														'">' +
+										aHTML.push('<tr>' +
+														'<td id="ns1blankspaceReceiptEditAmount" class="ns1blankspaceSub">' +
 														'$' + (parseFloat((ns1blankspace.objectContextData.amount).replace(",","")) - cReceiptedAmount).formatMoney(2, ".", ",") + ' remaining.' +
 														'</td></tr>');
 																						
 										aHTML.push('<tr class="ns1blankspace">' +
-														'<td class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption" style="padding-top: 10px;">' +
 														'Bank Account' +
 														'</td></tr>' +
 														'<tr class="ns1blankspaceRadio">' +
@@ -1012,7 +1006,7 @@ details: 		function ()
 									
 										var iDefaultBankAccount;
 										
-										$.each(ns1blankspace.financial.bankaccounts, function()
+										$.each(ns1blankspace.financial.data.bankaccounts, function()
 										{
 											if (iDefaultBankAccount == undefined) {iDefaultBankAccount = this.id}
 											aHTML.push('<input type="radio" id="radioBankAccount' + this.id + '" name="radioBankAccount" value="' + this.id + '"/>' +
@@ -1023,7 +1017,7 @@ details: 		function ()
 														
 										aHTML.push('<tr class="ns1blankspace">' +
 														'<td class="ns1blankspace">' +
-														'<span id="ns1blankspaceReceiptEditFull">Receipt</span>' +
+														'<span id="ns1blankspaceReceiptEditFull" class="ns1blankspaceAction">Receipt</span>' +
 														'</td></tr>');
 										
 										aHTML.push('</table>');

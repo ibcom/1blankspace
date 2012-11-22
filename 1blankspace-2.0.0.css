@@ -244,7 +244,7 @@ td.ns1blankspaceNothing
 	font-weight: 300;
 	padding: 2px;
 	padding-bottom: 4px;
-	x-background-color: #D0D0D0;
+	padding-right: 8px;
 	border-bottom-style:solid;
 	border-width: 1px;
 	border-color: #D0D0D0;	
@@ -557,7 +557,7 @@ td.ns1blankspaceRow
 	border-color: #D0D0D0;	
 	padding-top: 2px;
 	padding-bottom: 2px;
-	padding-right: 2px;
+	padding-right: 8px;
 	padding-left: 2px;
 }
 

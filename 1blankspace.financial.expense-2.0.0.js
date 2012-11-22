@@ -313,7 +313,7 @@ ns1blankspace.financial.expense =
 									
 						aHTML.push('</table>');					
 					
-						aHTML.push('<table id="tableInterfaceViewportControl" class="interfaceViewportControl">');
+						aHTML.push('<table class="ns1blankspaceControl">');
 					
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
@@ -366,7 +366,7 @@ ns1blankspace.financial.expense =
 					$('#ns1blankspaceControlPayments').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainPayment', refresh: true});
-						ns1blankspace.financial.expense.payment();
+						ns1blankspace.financial.expense.payment.show();
 					});
 					
 					$('#ns1blankspaceControlGL').click(function(event)
@@ -696,7 +696,7 @@ ns1blankspace.financial.expense =
 
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspacePaymentColumn1" class="ns1blankspaceColumn1"></td>' +
-														'<td id="ns1blankspacePaymentColumn2" class="ns1blankspaceColumn2" style="width: 300px;></td>' +
+														'<td id="ns1blankspacePaymentColumn2" class="ns1blankspaceColumn2" style="width: 300px;"></td>' +
 														'</tr>');
 										
 										aHTML.push('</table>');					
@@ -711,8 +711,8 @@ ns1blankspace.financial.expense =
 											
 											if (oActions.add)
 											{
-												aHTML.push('<tr><td class="ns1blankspaceAction">' +
-															'<span id="ns1blankspacePaymentAdd">Add</span>' +
+												aHTML.push('<tr><td>' +
+															'<span id="ns1blankspacePaymentAdd" class="ns1blankspaceAction">Add</span>' +
 															'</td></tr>');
 											}
 											
@@ -808,7 +808,7 @@ ns1blankspace.financial.expense =
 										if (oParam.step != undefined) {iStep = oParam.step}	
 									}
 									
-									if (ns1blankspace.financial.bankaccounts.length == 0) {alert("No bank accounts set up.");return;}
+									if (ns1blankspace.financial.data.bankaccounts.length == 0) {alert("No bank accounts set up.");return;}
 									
 									if (iStep == 1)
 									{	
@@ -835,7 +835,7 @@ ns1blankspace.financial.expense =
 										aHTML.push('<tr class="ns1blankspace">' +
 														'<td class="ns1blankspace"' +
 														' data-receiptedamount="' + cPaidAmount + '">' +
-														'$' + (cPaidAmount).formatMoney(2, ".", ",") + ' has been paid so far.' +
+														'$' + parseFloat(cPaidAmount).formatMoney(2, ".", ",") + ' has been paid so far.' +
 														'</td></tr>');
 														
 										aHTML.push('<tr class="ns1blankspace">' +
@@ -853,7 +853,7 @@ ns1blankspace.financial.expense =
 									
 										var iDefaultBankAccount;
 										
-										$.each(ns1blankspace.financial.bankaccounts, function()
+										$.each(ns1blankspace.financial.data.bankaccounts, function()
 										{
 											if (iDefaultBankAccount == undefined) {iDefaultBankAccount = this.id}
 											aHTML.push('<input type="radio" id="radioBankAccount' + this.id + '" name="radioBankAccount" value="' + this.id + '"/>' +

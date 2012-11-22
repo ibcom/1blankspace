@@ -973,8 +973,8 @@ ns1blankspace.financial.transactions =
 											'<tr class="ns1blankspaceHeaderCaption">' +
 											'<td class="ns1blankspaceHeaderCaption" style="width:150px;">Account</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="width:125px;">Date</td>' +
-											'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
 											'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+											'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
 											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');
 
@@ -987,13 +987,13 @@ ns1blankspace.financial.transactions =
 														
 								aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + this.id + '" class="ns1blankspaceRow">' +
 														this.date + '</td>');
-														
-								aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow">' +
-														this.amount + '</td>');
-									
+																
 								aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + this.id + '" class="ns1blankspaceRow">' +
 														this.description + '</td>');
-																				
+													
+								aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow">' +
+														this.amount + '</td>');
+																										
 								aHTML.push('</td></tr>');
 							});
 							
