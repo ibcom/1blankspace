@@ -120,24 +120,24 @@ ns1blankspace.financial.bankAccount =
 					aHTML.push('<div id="ns1blankspaceMainImport" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainReconcile" class="ns1blankspaceControlMain"></div>');
 					
-					$('#ns1blankspaceControlMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainSummary'});
-						ns1blankspace.financial.bankAccount.Summary();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.financial.bankAccount.summary();
 					});
 					
 					$('#ns1blankspaceControlImport').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainImport'});
-						ns1blankspace.financial.bankAccount.import();
+						ns1blankspace.show({selector: '#ns1blankspaceMainImport'});
+						ns1blankspace.financial.bankAccount.import.show();
 					});
 					
 					$('#ns1blankspaceControlReconcile').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainReconcile', refresh: true});
-						ns1blankspace.financial.bankAccount.reconcile();
+						ns1blankspace.show({selector: '#ns1blankspaceMainReconcile', refresh: true});
+						ns1blankspace.financial.bankAccount.reconcile.show();
 					});
 				},
 
@@ -186,8 +186,8 @@ ns1blankspace.financial.bankAccount =
 
 					aHTML.push('<table class="ns1blankspace"><tbody>' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:400px;"></td>' +
 									'</tr>' +
 									'</tbody></table>');				
 						
@@ -196,7 +196,7 @@ ns1blankspace.financial.bankAccount =
 					var aHTML = [];
 				
 					aHTML.push('<table class="ns1blankspace">' +
-									'<tr><td class="ns1blankspace">' +
+									'<tr><td class="ns1blankspaceSub">' +
 									'This bank account was last reconciled on the ' +
 									 ns1blankspace.objectContextData.lastreconcileddate + '.' +
 									'</td></tr></table>');					
@@ -205,15 +205,15 @@ ns1blankspace.financial.bankAccount =
 					
 					var aHTML = [];
 					
-					aHTML.push('<table cellpadding=6>' +
-									'<tr><td class="ns1blankspaceSummary" colspan=2>You have a number of options when reconciling a bank account.</td></tr>' + 
-									'<tr><td class="ns1blankspaceSummary" style="width:15px;padding-bottom:10px;">1</td><td class="ns1blankspaceSub">' +
+					aHTML.push('<table cellpadding=6 class="ns1blankspaceColumn2" style="font-size:0.75em;">' +
+									'<tr><td class="ns1blankspaceSub" colspan=2>You have a number of options when reconciling a bank account.</td></tr>' + 
+									'<tr><td class="ns1blankspaceCaption" style="width:15px;padding-bottom:10px;">1</td><td class="ns1blankspaceSub">' +
 									'Use a printed or PDF bank statement directly.  In this case you skip the import step and go straight to reconcile.' +
-									' You can then add a reconilication - selecting the date you want to balance up to.  You then search the system for matching payments or receipts that have already been entered or if not, add them as you go.' +
+									' You can then add a reconciliation - selecting the date you want to balance up to.  You then search the system for matching payments or receipts that have already been entered or if not, add them as you go.' +
 									'</td></tr>' + 
-									'<tr><td class="ns1blankspaceSummary" style="width:15px;">2</td><td class="ns1blankspaceSub">' +
-									'You export a file from your internet banking and then import it.' +
-									'  You can then add a reconilication - selecting the date you want to balance up to.  The system will then help you then search the system for matching payments or receipts that have already been entered, based on these transactions or if not, add them as you go.' +
+									'<tr><td class="ns1blankspaceCaption" style="width:15px;padding-top:10px;">2</td><td class="ns1blankspaceSub" style="padding-top:10px;">' +
+									'You export a file from your bank and then import it.' +
+									'  You can then add a reconciliation - selecting the date you want to balance up to.  The system will then help you then search the system for matching payments or receipts that have already been entered, based on these transactions or if not, add them as you go.' +
 									'</td></tr>' + 
 									'</table>');
 					
@@ -501,28 +501,26 @@ ns1blankspace.financial.bankAccount =
 															$('#ns1blankspaceBankAccountColumnReconcile2').html(aHTML.join(''));
 															
 															var aHTML = [];
-															var h = -1;
-														
-															aHTML[++h] = '<div id="ns1blankspaceBankAccountColumnItemType" style="width: 70px;margin-bottom:3px;">';
-															aHTML[++h] = '<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemType-1" name="radioType" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemType-1" style="width: 70px;">Debits (Out)</label>';
-															aHTML[++h] = '<input style="width: 100px;"  type="radio" id="ns1blankspaceBankAccountColumnItemType-2" name="radioType" /><label for="ns1blankspaceBankAccountColumnItemType-2" style="width: 70px;">Credits (In)</label>';
-															aHTML[++h] = '</div>';
+															
+															aHTML.push('<div id="ns1blankspaceBankAccountColumnItemType" style="width: 70px;margin-bottom:3px;">');
+															aHTML.push('<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemType-1" name="radioType" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemType-1" style="width: 70px;">Debits (Out)</label>');
+															aHTML.push('<input style="width: 100px;"  type="radio" id="ns1blankspaceBankAccountColumnItemType-2" name="radioType" /><label for="ns1blankspaceBankAccountColumnItemType-2" style="width: 70px;">Credits (In)</label>');
+															aHTML.push('</div>');
 														
 															$('#ns1blankspaceBankAccountReconcileColumnType').html(aHTML.join(''));
 														
 															var aHTML = [];
-															var h = -1;
-															
-															aHTML[++h] = '<div id="ns1blankspaceBankAccountColumnItemSource" style="width: 200px;;margin-bottom:3px;">';
-															aHTML[++h] = '<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-1" name="radioSource" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemSource-1" style="width: 96px;">Reconciled</label>';
-															aHTML[++h] = '<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-2" name="radioSource" /><label for="ns1blankspaceBankAccountColumnItemSource-2" style="width: 96px;">Statement</label>';
-															aHTML[++h] = '</div>';
+																
+															aHTML.push('<div id="ns1blankspaceBankAccountColumnItemSource" style="width: 200px;;margin-bottom:3px;">');
+															aHTML.push('<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-1" name="radioSource" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemSource-1" style="width: 96px;">Reconciled</label>');
+															aHTML.push('<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-2" name="radioSource" /><label for="ns1blankspaceBankAccountColumnItemSource-2" style="width: 96px;">Statement</label>');
+															aHTML.push('</div>');
 														
 															aHTML[++h] = '<div id="ns1blankspaceBankAccountReconcileItems" style="width: 200px;margin-bottom:3px;"></div>';
 															
 															$('#ns1blankspaceBankAccountReconcileColumnItem').html(aHTML.join(''));
 															
-															ns1blankspace.financial.bankAccount.items.edit(oParam);
+															ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 														}
 													
 														$('#ns1blankspaceBankAccountColumnItemType').buttonset().css('font-size', '0.875em');
@@ -532,14 +530,14 @@ ns1blankspace.financial.bankAccount =
 														{
 															var aID = (event.target.id).split('-');
 															$.extend(true, oParam, {type: parseInt(aID[1])});
-															ns1blankspace.financial.bankAccount.items.show(oParam);	
+															ns1blankspace.financial.bankAccount.reconcile.items.show(oParam);	
 														});
 
 														$('#ns1blankspaceBankAccountColumnItemSource :radio').click(function()
 														{
 															var aID = (event.target.id).split('-');
 															$.extend(true, oParam, {source: parseInt(aID[1])});
-															ns1blankspace.financial.bankAccount.items.show(oParam);
+															ns1blankspace.financial.bankAccount.reconcile.items.show(oParam);
 														});
 	
 														$('#ns1blankspaceBankAccountReconcileItems').html(ns1blankspace.xhtml.loadingSmall);
@@ -563,7 +561,7 @@ ns1blankspace.financial.bankAccount =
 															
 															oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
 															oSearch.rows = ns1blankspace.option.defaultRows;
-															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.items.show(oParam, data)});
+															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.show(oParam, data)});
 														}		
 														else
 														{
@@ -573,7 +571,7 @@ ns1blankspace.financial.bankAccount =
 															oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 															oSearch.addFilter('status', 'EQUAL_TO', 1);
 															oSearch.rows = ns1blankspace.option.defaultRows;
-															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.items.show(oParam, data)});
+															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.show(oParam, data)});
 														}		
 													}
 													else
@@ -924,20 +922,10 @@ ns1blankspace.financial.bankAccount =
 								{
 									if (oResponse == undefined)
 									{
-										var oSearch = new AdvancedSearch();
-										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_SEARCH';
-										oSearch.addField('startdate,enddate,processeddate');
-										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.sort('enddate', 'desc');
-										oSearch.rows = ns1blankspace.option.defaultRows;
-										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import(oParam, data)});
-									}
-									else
-									{
 										var aHTML = [];
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
-													'<tr class="ns1blankspaceContainer>' +
+													'<tr class="ns1blankspaceContainer">' +
 													'<td id="ns1blankspaceBankAccountImportColumn1" style="width: 75px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
 													ns1blankspace.xhtml.loading +
 													'</td>' +
@@ -947,9 +935,18 @@ ns1blankspace.financial.bankAccount =
 													'</table>');				
 										
 										$('#ns1blankspaceMainImport').html(aHTML.join(''));
-										
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_SEARCH';
+										oSearch.addField('startdate,enddate,processeddate');
+										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.sort('enddate', 'desc');
+										oSearch.rows = ns1blankspace.option.defaultRows;
+										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.show(oParam, data)});
+									}
+									else
+									{
 										var aHTML = [];
-										var h = -1;
 										
 										if (oResponse.data.rows.length == 0)
 										{
@@ -999,7 +996,7 @@ ns1blankspace.financial.bankAccount =
 									}
 								},
 
-					row:		function interfaceFinancialBankAccountImportRow(oRow)
+					row:		function (oRow)
 								{
 									var aHTML = [];
 
@@ -1041,7 +1038,7 @@ ns1blankspace.financial.bankAccount =
 										var aHTML = [];
 										var h = -1;
 																		
-										aHTML.push(ns1blankspace.attachments.upload(
+										aHTML.push(ns1blankspace.attachments.upload.show(
 														{	
 															object: 28,
 															objectContext: -1,

@@ -350,32 +350,32 @@ ns1blankspace.financial.receipt =
 
 					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 						ns1blankspace.financial.invoice.details();
 					});
 					
 					$('#ns1blankspaceControlInvoices').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainInvoice', refresh: true});
-						ns1blankspace.financial.receipt.invoice();
+						ns1blankspace.show({selector: '#ns1blankspaceMainInvoice', refresh: true});
+						ns1blankspace.financial.receipt.invoice.show();
 					});
 					
 					$('#ns1blankspaceControlGL').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainTransaction', refresh: true});
-						ns1blankspace.financial.transaction();
+						ns1blankspace.show({selector: '#ns1blankspaceMainTransaction', refresh: true});
+						ns1blankspace.financial.transactions.show();
 					});
 
 					$('#ns1blankspaceControlActions').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainActions', refresh: true});
-						ns1blankspace.actions.show({xhtmlElementID: 'divInterfaceMainActions'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainActions', refresh: true});
+						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceMainActions'});
 					});
 
 					$('#ns1blankspaceControlControlAttachments').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainAttachments', refresh: true});
-						ns1blankspace.attachments.show({xhtmlElementID: 'divInterfaceMainAttachments'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
 					});			
 				},
 
@@ -1028,11 +1028,11 @@ ns1blankspace.financial.receipt =
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																			
-												aHTML.push('<td id="ns1blankspaceReceipt_date-' + oRow.id + '" class="ns1blankspaceRow">' +
+												aHTML.push('<td id="ns1blankspaceReceipt_date-' + this.id + '" class="ns1blankspaceRow">' +
 																this.appliesdate + '</td>');
 
 												
-												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 																this.amount + '</td>');
 						
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');

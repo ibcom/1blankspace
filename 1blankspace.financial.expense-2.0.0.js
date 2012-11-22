@@ -480,7 +480,7 @@ ns1blankspace.financial.expense =
 
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 
-							if (ns1blankspace.objectContextData.paid == 'Y')
+						if (ns1blankspace.objectContextData.paid == 'Y')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Paid Date</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryPaidDate" class="ns1blankspaceSummary">' +
@@ -675,7 +675,7 @@ ns1blankspace.financial.expense =
 				},				
 
 	payment: 	{
-					show:		function interfaceFinancialExpensePayment(oParam, oResponse)
+					show:		function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.objectContext;
 									var oOptions = {view: true, remove: true};
@@ -695,7 +695,8 @@ ns1blankspace.financial.expense =
 										aHTML.push('<table class="ns1blankspaceContainer">');
 
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspacePaymentColumn1" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspacePaymentColumn1" class="ns1blankspaceColumn1Flexible">' +
+														ns1blankspace.xhtml.loading + '</td>' +
 														'<td id="ns1blankspacePaymentColumn2" class="ns1blankspaceColumn2" style="width: 300px;"></td>' +
 														'</tr>');
 										
@@ -734,7 +735,7 @@ ns1blankspace.financial.expense =
 										oSearch.addField('appliesdate,amount');
 										oSearch.addFilter('expense', 'EQUAL_TO', iObjectContext);
 										oSearch.sort('appliesdate', 'asc');
-										oSearch.getResults(function(data) {ns1blankspace.financial.expense.payment.edit(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.financial.expense.payment.show(oParam, data)});
 									}
 									else
 									{
@@ -750,6 +751,7 @@ ns1blankspace.financial.expense =
 										}
 										else
 										{
+											aHTML.push('<table class="ns1blankspace">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
@@ -760,18 +762,18 @@ ns1blankspace.financial.expense =
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																			
-												aHTML.push('<td id="ns1blankspaceReceipt_date-' + oRow.id + '" class="ns1blankspaceRow">' +
+												aHTML.push('<td id="ns1blankspaceReceipt_date-' + this.id + '" class="ns1blankspaceRow">' +
 																this.appliesdate + '</td>');
 
 												
-												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 																this.amount + '</td>');
 						
-												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 													
 												if (oOptions.remove)
 												{	
-													aHTML.push('<span id="ns1blankspaceReceipt_options_remove-' + this.id + '" class="ns1blankspaceReceiptRemove"></span>');
+													aHTML.push('<span id="ns1blankspacePayment_options_remove-' + this.id + '" class="ns1blankspacePaymentRemove"></span>');
 												};	
 													
 												aHTML.push('</td></tr>');
@@ -830,16 +832,16 @@ ns1blankspace.financial.expense =
 										
 										var aHTML = [];
 										
-										aHTML.push('<table id="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
 										aHTML.push('<tr class="ns1blankspace">' +
-														'<td class="ns1blankspace"' +
+														'<td class="ns1blankspaceSub"' +
 														' data-receiptedamount="' + cPaidAmount + '">' +
 														'$' + parseFloat(cPaidAmount).formatMoney(2, ".", ",") + ' has been paid so far.' +
 														'</td></tr>');
 														
 										aHTML.push('<tr class="ns1blankspace">' +
-														'<td id="ns1blankspaceReceiptEditAmount" class="ns1blankspace"' +
+														'<td id="ns1blankspaceReceiptEditAmount" class="ns1blankspaceSub"' +
 														'">' +
 														'$' + (parseFloat((ns1blankspace.objectContextData.amount).replace(",","")) - cPaidAmount).formatMoney(2, ".", ",") + ' remaining.' +
 														'</td></tr>');
@@ -863,8 +865,8 @@ ns1blankspace.financial.expense =
 										aHTML.push('</td></tr>');				
 														
 										aHTML.push('<tr class="ns1blankspace">' +
-														'<td class="ns1blankspace">' +
-														'<span id="ns1blankspacePaymentEditFull">Receipt</span>' +
+														'<td>' +
+														'<span id="ns1blankspacePaymentEditFull" class="ns1blankspaceAction">Pay</span>' +
 														'</td></tr>');
 										
 										aHTML.push('</table>');

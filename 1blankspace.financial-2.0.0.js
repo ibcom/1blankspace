@@ -44,7 +44,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 						{
 							ns1blankspace.status.working();	
 							ns1blankspace.financial.data = {};
-							ns1blankspace.financial.init = undefined;
+							ns1blankspace.financial.initStatus = undefined;
 						}
 						
 						if (iStep == 0)
@@ -54,7 +54,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 								$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 								ns1blankspace.status.message(ns1blankspace.xhtml.loadingSmall + ' initalising...')
 
-								if (ns1blankspace.financial.init == undefined || bRefresh)
+								if (ns1blankspace.financial.initStatus == undefined || bRefresh)
 								{
 									$.ajax(
 									{
@@ -68,7 +68,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							}
 							else
 							{
-								ns1blankspace.financial.init = 1;
+								ns1blankspace.financial.initStatus = 1;
 								ns1blankspace.financial.initData($.extend(true, oParam, {step: 1}))
 							}
 						}
@@ -144,7 +144,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							{
 								ns1blankspace.financial.data.accounts = oResponse.data.rows;
 								ns1blankspace.financial.data.accountsTree = ns1blankspace.setup.financial.accounts.tree(ns1blankspace.financial.accounts[ns1blankspace.financial.rootaccount],ns1blankspace.financial.accounts); 
-								ns1blankspace.financial.init = 2;
+								ns1blankspace.financial.initStatus = 2;
 							}
 						}
 

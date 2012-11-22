@@ -922,7 +922,7 @@ ns1blankspace.financial.invoice =
 												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 																this.amount + '</td>');
 						
-												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
 													
 												if (oOptions.remove)
 												{	
