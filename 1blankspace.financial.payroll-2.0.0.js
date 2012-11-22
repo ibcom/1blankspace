@@ -24,15 +24,7 @@ ns1blankspace.financial.payroll =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Payroll';
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.payroll.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
+								
 					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);	
 				},

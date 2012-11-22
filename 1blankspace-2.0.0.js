@@ -233,6 +233,10 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.financial.payroll-2.0.0.js'
 	},
 	{
+		nameSpace: '1blankspace.report',
+		source: '/jscripts/1blankspace.report-2.0.0.js'
+	},
+	{
 		nameSpace: '1blankspace.setup',
 		source: '/jscripts/1blankspace.setup-2.0.0.js'
 	},

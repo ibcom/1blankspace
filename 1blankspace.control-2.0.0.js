@@ -291,7 +291,7 @@ ns1blankspace.views =
 	{
 		title: "Reporting",
 		namespace: "report",
-		endpoint: "DASHBOARD", 
+		endpoint: "", 
 		show: true,
 		group: 6,
 		type: 1

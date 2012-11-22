@@ -25,7 +25,7 @@ ns1blankspace.report.selectAttributes = [];
 
 ns1blankspace.report = 
 {
-	initData: 		function ()
+	initData: 	function ()
 				{
 					ns1blankspace.report.reports =
 						[
@@ -33,15 +33,15 @@ ns1blankspace.report =
 								name: "Businesses",
 								method: "CONTACT_BUSINESS_SEARCH",
 								returnParameters: 'contactbusiness,contactbusiness.relationshipbusiness,contactbusiness.customerstatuschange,contactbusiness.relationshipotherbusiness,contactbusiness.contactperson',
-								functionSearch: interfaceContactBusinessSearch,
-								scriptOpen: 'interfaceContactBusinessMasterViewport({showHome: false});interfaceContactBusinessSearch(this.id)',
+								functionSearch: ns1blankspace.contactBusiness.search.send,
+								scriptOpen: 'ns1blankspace.contactBusiness.init({showHome: false});ns1blankspace.contactBusiness.search.send(this.id)',
 							},
 							{
 								name: "People",
 								method: "CONTACT_PERSON_SEARCH",
 								returnParameters: 'contactperson,contactperson.contactbusiness,contactperson.contactbusiness.audititemtype',
-								functionSearch: interfaceContactPersonSearch,
-								scriptOpen: 'interfaceContactPersonMasterViewport({showHome: false});interfaceContactPersonSearch(this.id)',
+								functionSearch: ns1blankspace.contactPerson.search.send,
+								scriptOpen: 'ns1blankspace.contactPerson.init({showHome: false});ns1blankspace.contactPerson.search.send(this.id)',
 								selectableParameters:
 								{
 									fields:
@@ -93,8 +93,8 @@ ns1blankspace.report =
 								name: "Opportunities",
 								method: "OPPORTUNITY_SEARCH",
 								returnParameters: 'opportunity.contactbusiness,opportunity.contactperson,opportunity.audititemtype,opportunity.processingstatushistory',
-								functionSearch: interfaceOpportunitySearch,
-								scriptOpen: 'interfaceOpportunityMasterViewport({showHome: false});interfaceOpportunitySearch(this.id)',
+								functionSearch: ns1blankspace.opportunity.search.send,
+								scriptOpen: 'ns1blankspace.opportunity.init({showHome: false});ns1blankspace.opportunity.search.send(this.id)',
 								selectableParameters:
 								{
 									fields:
@@ -283,17 +283,17 @@ ns1blankspace.report =
 						[
 							{
 								name: "contact.businesstext", 
-								addClass: "inputInterfaceMainSelectBusiness",
+								addClass: "ns1blankspaceSelectBusiness",
 								onDemandColumns: "tradename-space-customerstatustext"
 							},
 							{
 								name: "contactbusiness.primarycontactpersontext",
-								addClass: "inputInterfaceMainSelectBusiness",
+								addClass: "ins1blankspaceSelectBusiness",
 								onDemandColumns: "tradename-space-customerstatustext"
 							},
 							{
 								name: "contactperson.contactbusinesstext",
-								addClass: "inputInterfaceMainSelectBusiness",
+								addClass: "ns1blankspaceSelectBusiness",
 								onDemandColumns: "tradename-space-customerstatustext"
 							},
 							{
@@ -304,79 +304,22 @@ ns1blankspace.report =
 						];
 				},
 
-	init: 		function interfaceReportMasterViewport(oParam)
+	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.report.initData();
 
-					ns1blankspace.object = 5;
-					ns1blankspace.objectName = 'Reporting';
+					ns1blankspace.object = -1;
+					ns1blankspace.objectParentName = undefined;
+					ns1blankspace.objectName = 'report';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					
-					if (bShowHome)
-					{
-						ns1blankspaceViewportDestination({
-							newDestination: 'interfaceReportMasterViewport({showHome: true});',
-							move: false
-							})		
-					}	
-							
-					ns1blankspaceReset();
-					
-					$('#divns1blankspaceViewportControlSet').button(
-					{
-						label: "Reporting"
-					});
-					
-					$('#inputns1blankspaceViewportControlSearch').keyup(function(event)
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-				        ns1blankspace.timer.delayCurrent = setTimeout("interfaceReportSearch('inputns1blankspaceViewportControlSearch')", ns1blankspace.option.typingWait);
-					});
-					
-					$('#spanns1blankspaceViewportControlSearch').click(function(event)
-					{
-						interfaceReportSearch('inputns1blankspaceViewportControlSearch');
-					});
-					
-					$('#spanns1blankspaceViewportControlSearchOptions').click(function(event)
-					{
-						interfaceReportSearchOptions();
-					});
-						
-					$('#spanns1blankspaceViewportControlSetup').click(function(event)
-					{
-						interfaceReportSetup();
-					});
-					
-					$('#spanns1blankspaceViewportControlSetupOptions').click(function(event)
-					{
-						interfaceReportSetupOptions();
-					});
-					
-					$('td.interfaceViewportMasterControlBrowse').click(function(event)
-					{
-						interfaceReportSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					$('td.interfaceViewportMasterControlBrowseAll').click(function(event)
-					{
-						interfaceReportSearch(event.target.id, {source: ns1blankspace.data.searchSource.browse});
-					});
-					
-					if (ns1blankspace.option.setFocus) {$('#inputns1blankspaceViewportControlSearch').focus()};
-					
-					interfaceReportInitialise()
-					
-					if (bShowHome) {interfaceReportHomeShow()};	
+					ns1blankspace.viewName = 'Reporting';
+
+					ns1blankspace.app.reset();
+					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function interfaceReportHomeShow(oParam, oResponse)
+	home:		function (oParam, oResponse)
 				{
 					
 					var aHTML = [];
@@ -384,7 +327,7 @@ ns1blankspace.report =
 								
 					aHTML[++h] = '<table>';
 					aHTML[++h] = '<tr>' +
-									'<td id="ns1blankspaceViewportReportLarge" class="ns1blankspaceViewportImageLarge">' +
+									'<td id="ns1blankspaceViewReportLarge" class="ns1blankspaceViewImageLarge">' +
 									'&nbsp;' + 
 									'</td>' +
 									'</tr>';
@@ -396,38 +339,38 @@ ns1blankspace.report =
 					{
 						var sName = (this.name).replace(/ /g,'')
 						
-						aHTML[++h] = '<tr id="trInterfaceViewportControl' + sName + '" class="interfaceViewportControl">' +
-										'<td id="tdInterfaceViewportControl' + sName + '" class="interfaceViewportControl"' +
+						aHTML[++h] = '<tr>' +
+										'<td id="ns1blankspaceControl' + sName + '" class="ns1blankspaceControl"' +
 												' data-method="' + this.method + '">' + this.name + '</td>' +
 										'</tr>';	
 					});
 					
 					aHTML[++h] = '</table>';		
 					
-					$('#divInterfaceViewportControl').html(aHTML.join(''));	
+					$('#ns1blankspaceControl').html(aHTML.join(''));	
 					
 					var aHTML = [];
 					var h = -1;
 					
-					aHTML[++h] = '<div id="divInterfaceMainReport" class="divInterfaceViewportMain"></div>';
+					aHTML[++h] = '<div id="ns1blankspaceMainReport" class="ns1blankspaceMain"></div>';
 					
-					$('#divInterfaceMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					$.each(ns1blankspace.report.reports, function()
 					{
 						var sName = (this.name).replace(/ /g,'')
 								
-						$('#tdInterfaceViewportControl' + sName).data('param', this);
+						$('#ns1blankspaceControl' + sName).data('param', this);
 						
-						$('#tdInterfaceViewportControl' + sName).click(function(event)
+						$('#ns1blankspaceControl' + sName).click(function(event)
 						{
-							ns1blankspaceMainViewportShow("#divInterfaceMainReport");
+							ns1blankspace.show({selector: '#ns1blankspaceMainReport'});
 							var sMethod = $(this).attr('data-method');
-							interfaceReportViewport($(this).data('param'));
+							ns1blankspace.report.show($(this).data('param'));
 						});				
 					});
 					
-					ns1blankspaceMainViewportShow("#divInterfaceMainReport", false);
+					ns1blankspace.show({selector: '#ns1blankspaceMainReport'});
 					
 					var aHTML = [];
 					var h = -1;
@@ -440,10 +383,10 @@ ns1blankspace.report =
 									'</tr>';
 					aHTML[++h] = '</table>';					
 					
-					$('#divInterfaceMainReport').html(aHTML.join(''));
+					$('#ns1blankspaceMainReport').html(aHTML.join(''));
 				},
 
-	getCaption: function interfaceReportDictionaryGet(oParam)
+	getCaption: function (oParam)
 				{
 					var sName;
 					var sReturn;
@@ -541,10 +484,10 @@ ns1blankspace.report =
 					
 					if (!bShowSelect)
 					{
-						aHTML[++h] = '<div id="divInterfaceMainReportHeader"></div>';
-						aHTML[++h] = '<div style="display:none;" id="divInterfaceMainReportResults"></div>';
-						aHTML[++h] = '<div style="display:none;" id="divInterfaceMainReportSend">No data.</div>';
-						$('#divInterfaceMainReport').html(aHTML.join(''));	
+						aHTML[++h] = '<div id="ns1blankspaceMainReportHeader"></div>';
+						aHTML[++h] = '<div style="display:none;" id="ns1blankspaceMainReportResults"></div>';
+						aHTML[++h] = '<div style="display:none;" id="ns1blankspaceMainReportSend">No data.</div>';
+						$('#ns1blankspaceMainReport').html(aHTML.join(''));	
 							
 						var aHTML = [];
 						var h = -1;
@@ -560,7 +503,7 @@ ns1blankspace.report =
 						
 						aHTML[++h] = '</table>';
 							
-						$('#divInterfaceMainReportHeader').html(aHTML.join(''))	
+						$('#ns1blankspaceMainReportHeader').html(aHTML.join(''))	
 						
 						interfaceReportSearch(oParam);
 					}
@@ -568,11 +511,11 @@ ns1blankspace.report =
 					{
 						if (oResponse == undefined)
 						{
-							aHTML[++h] = '<div id="divInterfaceMainReportHeader">' + ns1blankspace.xhtml.loading + '</div>';
-							aHTML[++h] = '<div id="divInterfaceMainReportSearch"></div>';
-							aHTML[++h] = '<div style="display:none;" id="divInterfaceMainReportResults">No results.</div>';
-							aHTML[++h] = '<div style="display:none;" id="divInterfaceMainReportSend">No data.</div>';
-							$('#divInterfaceMainReport').html(aHTML.join(''));	
+							aHTML[++h] = '<div id="ns1blankspaceMainReportHeader">' + ns1blankspace.xhtml.loading + '</div>';
+							aHTML[++h] = '<div id="ns1blankspaceMainReportSearch"></div>';
+							aHTML[++h] = '<div style="display:none;" id="ns1blankspaceMainReportResults">No results.</div>';
+							aHTML[++h] = '<div style="display:none;" id="ns1blankspaceMainReportSend">No data.</div>';
+							$('#ns1blankspaceMainReport').html(aHTML.join(''));	
 						}
 						
 						if (oResponse == undefined && sJSONSearch != undefined)
@@ -650,16 +593,16 @@ ns1blankspace.report =
 							aHTML[++h] = '<td style="text-align:right;font-size:0.75em;"><span id="spanInterfaceReportExport">&nbsp;</span></td></tr>';
 							aHTML[++h] = '</table>';
 							
-							$('#divInterfaceMainReportHeader').html(aHTML.join(''))
+							$('#ns1blankspaceMainReportHeader').html(aHTML.join(''))
 							
 							$('#spanReportHeaderSend').hide();
 							$('#spanReportHeaderSearch').addClass('Highlight')
 							
 							$('#spanReportHeaderSearch').click(function(event)
 							{
-								$('#divInterfaceMainReportSearch').show();
-								$('#divInterfaceMainReportResults').hide();
-								$('#divInterfaceMainReportSend').hide();
+								$('#ns1blankspaceMainReportSearch').show();
+								$('#ns1blankspaceMainReportResults').hide();
+								$('#ns1blankspaceMainReportSend').hide();
 								$('#spanReportHeaderSearch').css('cursor', 'auto');
 								$('#spanReportHeaderResults').css('cursor', 'pointer');
 								$('#spanReportHeaderSend').css('cursor', 'pointer');
@@ -673,9 +616,9 @@ ns1blankspace.report =
 							
 							$('#spanReportHeaderResults').click(function(event)
 							{
-								$('#divInterfaceMainReportSearch').hide();
-								$('#divInterfaceMainReportResults').show();
-								$('#divInterfaceMainReportSend').hide();
+								$('#ns1blankspaceMainReportSearch').hide();
+								$('#ns1blankspaceMainReportResults').show();
+								$('#ns1blankspaceMainReportSend').hide();
 								$('#spanReportHeaderSearch').css('cursor', 'pointer');
 								$('#spanReportHeaderResults').css('cursor', 'auto');
 								$('#spanReportHeaderSend').css('cursor', 'pointer');
@@ -686,9 +629,9 @@ ns1blankspace.report =
 							
 							$('#spanReportHeaderSend').click(function(event)
 							{
-								$('#divInterfaceMainReportSearch').hide();
-								$('#divInterfaceMainReportResults').hide();
-								$('#divInterfaceMainReportSend').show();
+								$('#ns1blankspaceMainReportSearch').hide();
+								$('#ns1blankspaceMainReportResults').hide();
+								$('#ns1blankspaceMainReportSend').show();
 								$('#spanReportHeaderSearch').css('cursor', 'pointer');
 								$('#spanReportHeaderResults').css('cursor', 'pointer');
 								$('#spanReportHeaderSend').css('cursor', 'auto');
@@ -851,7 +794,7 @@ ns1blankspace.report =
 							
 							aHTML[++h] = '</table>';			
 							
-							$('#divInterfaceMainReportSearch').html(aHTML.join(''))
+							$('#ns1blankspaceMainReportSearch').html(aHTML.join(''))
 							
 							$('#spanInterfaceReportSearch').button(
 							{
@@ -1159,11 +1102,11 @@ ns1blankspace.report =
 										else
 										{
 										
-											$('#divInterfaceMainReportSearch').hide();
+											$('#ns1blankspaceMainReportSearch').hide();
 											$('#spanReportHeaderSearch').removeClass('Highlight')
 											
-											$('#divInterfaceMainReportResults').show();
-											$('#divInterfaceMainReportResults').html(ns1blankspace.xhtml.loading);
+											$('#ns1blankspaceMainReportResults').show();
+											$('#ns1blankspaceMainReportResults').html(ns1blankspace.xhtml.loading);
 											$('#spanReportHeaderResults').addClass('Highlight')
 										
 											$('#spanReportHeaderSearch').css('cursor', 'pointer');
@@ -1352,7 +1295,7 @@ ns1blankspace.report =
 											aHTML[++h] = '<tr class="interfaceMainCaption">' +
 																'<td class="interfaceMainRowNothing">Nothing to show.</td></tr>' ;
 
-											$('#divInterfaceMainReportResults').html(aHTML.join(''));
+											$('#ns1blankspaceMainReportResults').html(aHTML.join(''));
 										}
 										else
 										{
@@ -1420,7 +1363,7 @@ ns1blankspace.report =
 											
 											ns1blankspacePaginationList(
 											   {
-												xhtmlElementID: 'divInterfaceMainReportResults',
+												xhtmlElementID: 'ns1blankspaceMainReportResults',
 												xhtmlContext: '',
 												xhtml: aHTML.join(''),
 												showMore: ($(oResponse).attr('morerows') == "true"),
@@ -1476,7 +1419,7 @@ ns1blankspace.report =
 													tinyMCE.editors[edId].destroy(true);
 												
 												ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
-												$('#divInterfaceMainReportSend').attr('onDemandLoading', '');
+												$('#ns1blankspaceMainReportSend').attr('onDemandLoading', '');
 												
 												aHTML = [];
 												h = -1;
@@ -1489,7 +1432,7 @@ ns1blankspace.report =
 																'</tr>';
 												aHTML[++h] = '</table>';					
 												
-												$('#divInterfaceMainReportSend').html(aHTML.join(''));
+												$('#ns1blankspaceMainReportSend').html(aHTML.join(''));
 												
 												var aHTML = [];
 												var h = -1;
@@ -1936,7 +1879,7 @@ ns1blankspace.report =
 										aHTML[++h] = '<td class="interfaceMainCaption"><a href="' + oResponse.link;
 										aHTML[++h] = '" target="_blank">Click here</a> to download the file.</td></tr>';
 										aHTML[++h] = '</tbody></table>';
-										$('#divInterfaceMainReportResults').html(aHTML.join(''));
+										$('#ns1blankspaceMainReportResults').html(aHTML.join(''));
 									}
 								}
 							});
@@ -1952,7 +1895,7 @@ ns1blankspace.report =
 						aHTML[++h] = '<tr class="interfaceMainCaption">';
 						aHTML[++h] = '<td class="interfaceMainCaption">No results. File not created.</td></tr>';
 						aHTML[++h] = '</tbody></table>';
-						$('#divInterfaceMainReportResults').html(aHTML.join(''));
+						$('#ns1blankspaceMainReportResults').html(aHTML.join(''));
 					}
 				},
 
