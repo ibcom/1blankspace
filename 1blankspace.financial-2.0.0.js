@@ -171,7 +171,7 @@ ns1blankspace.financial.home = function ()
 						aHTML.push('<tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
 						aHTML.push('</table>');		
 						
-						aHTML.push('<table>');
+						aHTML.push('<table cellpadding="6">');
 						
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlSummary" class="ns1blankspaceControl">Summary</td>' +
@@ -238,31 +238,31 @@ ns1blankspace.financial.home = function ()
 						$('#ns1blankspaceControlDebtors').click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainDebtors'});
-							ns1blankspace.financial.debtors.show()();
+							ns1blankspace.financial.debtors.show();
 						});	
 							
 						$('#ns1blankspaceControlCreditors').click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainCreditors'});
-							ns1blankspace.financial.creditors.show()();
+							ns1blankspace.financial.creditors.show();
 						});	
 						
 						$('#ns1blankspaceControlPL').click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainPL'});
-							ns1blankspace.financial.profitLoss.show()();
+							ns1blankspace.financial.profitLoss.show();
 						});	
 						
 						$('#ns1blankspaceControlBS').click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainBS'});
-							ins1blankspace.financial.balancesheet.show();
+							ns1blankspace.financial.balanceSheet.show();
 						});	
 						
 						$('#ns1blankspaceControlAccounts').click(function(event)
 						{
-							nns1blankspace.show({selector: '#ns1blankspaceMainAccounts'});
-							ns1blankspace.financial.accounts.show()();
+							ns1blankspace.show({selector: '#ns1blankspaceMainAccounts'});
+							ns1blankspace.financial.accounts.show();
 						});	
 						
 						$('#ns1blankspaceControlUnallocated').click(function(event)
@@ -354,7 +354,7 @@ ns1blankspace.financial.debtors =
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_DEBTOR_SEARCH'),
 							dataType: 'json',
-							success: function(data) {ns1blankspace.financial.debtors(oParam, data)}
+							success: function(data) {ns1blankspace.financial.debtors.show(oParam, data)}
 						});			
 					}
 					else
@@ -391,7 +391,7 @@ ns1blankspace.financial.debtors =
 						ns1blankspace.render.page.show(
 						   {
 							type: 'JSON',
-							xhtmlElementID: 'ns1blankspaceDebtors',
+							xhtmlElementID: 'ns1blankspaceMainDebtors',
 							xhtmlContext: 'Debtors',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
@@ -472,7 +472,7 @@ ns1blankspace.financial.creditors =
 						ns1blankspace.render.page.show(
 						   {
 							type: 'JSON',
-							xhtmlElementID: 'ns1blankspaceCreditors',
+							xhtmlElementID: 'ns1blankspaceMainCreditors',
 							xhtmlContext: 'Creditors',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
@@ -510,12 +510,13 @@ ns1blankspace.financial.profitLoss =
 				{
 					if (oResponse == undefined)
 					{		
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_PROFIT_LOSS_SEARCH';
-						oSearch.addField('financialaccounttext,total,percentage');
-						oSearch.sort('financialaccounttext', 'asc');
-						oSearch.rows = ns1blankspace.messaging.defaultRows;
-						oSearch.getResults(function(data) {ns1blankspace.financial.profitLoss.show(oParam, data)});
+						$.ajax(
+						{
+							type: 'GET',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_PROFIT_LOSS_SEARCH'),
+							dataType: 'json',
+							success: function(data) {ns1blankspace.financial.profitLoss.show(oParam, data)}
+						});
 					}
 					else
 					{
@@ -538,7 +539,6 @@ ns1blankspace.financial.profitLoss =
 											'<td class="ns1blankspaceHeaderCaption">Account</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Percentage</td>' +
-											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -552,7 +552,7 @@ ns1blankspace.financial.profitLoss =
 						ns1blankspace.render.page.show(
 						   {
 							type: 'JSON',
-							xhtmlElementID: 'ns1blankspacePL',
+							xhtmlElementID: 'ns1blankspaceMainPL',
 							xhtmlContext: 'Creditors',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
@@ -588,18 +588,18 @@ ns1blankspace.financial.balanceSheet =
 				{
 					if (oResponse == undefined)
 					{	
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_BALANCE_SHEET_SEARCH';
-						oSearch.addField('financialaccounttext,amount,subtotalcount,type');
-						oSearch.sort('financialaccounttext', 'asc');
-						oSearch.rows = 100;
-						oSearch.getResults(function(data) {ns1blankspace.financial.balanceSheet.show(oParam, data)});	
+						$.ajax(
+						{
+							type: 'GET',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_BALANCE_SHEET_SEARCH'),
+							dataType: 'json',
+							success: function(data) {ns1blankspace.financial.balanceSheet.show(oParam, data)}
+						});
 					}
 					else
 					{
 						var aHTML = [];
-						var h = -1;
-						
+				
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table><tbody>' +
@@ -645,9 +645,7 @@ ns1blankspace.financial.balanceSheet =
 						
 							var aHTML = [];
 							
-							aHTML[++h] = '</tbody></table>';
-
-							aHTML.push('<table class="ns1blankspace">' +
+							aHTML.push('<table class="ns1blankspaceColumn2">' +
 											'<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceHeaderCaption">Account</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>' +
@@ -656,7 +654,7 @@ ns1blankspace.financial.balanceSheet =
 							
 							$(oResponse.data.rows).each(function() 
 							{
-								aHTML.push(ns1blankspace.financial.balancesheet.row(this));
+								aHTML.push(ns1blankspace.financial.balanceSheet.row(this));
 							});
 							
 							aHTML.push('</table>');
@@ -671,7 +669,7 @@ ns1blankspace.financial.balanceSheet =
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
 							rows: 100,
-							functionShowRow: ns1blankspace.financial.balancesheet.row,
+							functionShowRow: ns1blankspace.financial.balanceSheet.row,
 							functionOpen: undefined,
 							functionNewPage: ''
 						   }); 	
@@ -683,9 +681,9 @@ ns1blankspace.financial.balanceSheet =
 					var aHTML = [];
 
 					aHTML.push('<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceDebtors_AccountText-" class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceBalanceSheet_AccountText-" class="ns1blankspaceRow">' +
 									oRow.financialaccounttext + '</td>' +
-									'<td id="ns1blankspaceDebtors_Amount-" class="ns1blankspaceRow" style="text-align:right;">' +
+									'<td id="ns1blankspaceBalanceSheet_Amount-" class="ns1blankspaceRow" style="text-align:right;">' +
 									oRow.amount + '</td>' + 						
 									'</tr>');
 
@@ -712,8 +710,8 @@ ns1blankspace.financial.bankAccounts =
 						
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceBankAccountsColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspaceBankAccountsColumn2" class="ns1blankspaceColumn2" style="width: 150px;"></td>' +
+										'<td id="ns1blankspaceBankAccountsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceBankAccountsColumn2" class="ns1blankspaceColumn2" style="width: 175px;"></td>' +
 										'</tr>' +
 										'</table>');	
 
@@ -736,7 +734,6 @@ ns1blankspace.financial.bankAccounts =
 											'<td class="ns1blankspaceHeaderCaption">Name</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Reconciled Amount</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Last Reconciled</td>' +
-											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -764,7 +761,7 @@ ns1blankspace.financial.bankAccounts =
 						var aHTML = [];
 						var h = -1;	
 						
-						aHTML[++h] = '<table class="ns1blankspace" cellpadding=6>';
+						aHTML[++h] = '<table class="ns1blankspaceColumn2" cellpadding=6>';
 											
 						aHTML[++h] = '<tr><td class="ns1blankspace" style="width:175px;">' +
 										'<a href="#" id="ns1blankspaceBankAccountReco">Reconcile & Import Transactions</a>' +
@@ -773,11 +770,12 @@ ns1blankspace.financial.bankAccounts =
 						aHTML[++h] = '<tr><td class="ns1blankspace" style="width:175px;">' +
 										'<a href="#" id="ns1blankspaceBankAccountReceipt">Receipt an Invoice</a>' +
 										'</td></tr>';
-										
+						/*			
 						aHTML[++h] = '<tr><td class="ns1blankspace" style="width:175px;">' +
 										'<a href="#" id="ns1blankspaceBankAccountDeposit">Bulk Deposit</a>' +
 										'</td></tr>';								
-									
+						*/
+
 						aHTML[++h] = '</table>';					
 								
 						$('#ns1blankspaceBankAccountsColumn2').html(aHTML.join(''));
@@ -816,114 +814,381 @@ ns1blankspace.financial.bankAccounts =
 				}
 }
 
+ns1blankspace.financial.accounts =
+{
+	show: 		function (oParam, oResponse)
+				{
+					var iStep = 1;
+					var iFinancialAccount = -1;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.step != undefined) {iStep = oParam.step};
+						if (oParam.financialAccount != undefined) {iFinancialAccount = oParam.financialAccount};
+					}
+					else
+					{
+						oParam = {};
+					}
+					
+					if (iStep == 1)	
+					{
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceAccountColumn1" style="width:100px;font-size:0.75em;"></td>' +
+										'<td id="ns1blankspaceAccountColumn2"></td>' +
+										'</tr>' +
+										'</table>');				
+						
+						$('#ns1blankspaceMainAccounts').html(aHTML.join(''));
+							
+						var aHTML = [];
+
+						aHTML.push('<div id="ns1blankspaceAccountColumnCategory" style="width:100px; margin-top:3px; text-align:right;">');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-1" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-1" style="width: 100px; margin-bottom:1px;">All</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-2" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-2" style="width: 100px; margin-bottom:1px;">Profit & Loss</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-3" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-3" style="width: 100px; margin-bottom:1px;">Balance Sheet</label>');
+						aHTML.push('</div>');
+
+						$('#ns1blankspaceAccountColumn1').html(aHTML.join(''));
+					
+						$('#ns1blankspaceAccountColumnCategory').buttonset().css('font-size', '0.875em');
+						
+						$('#ns1blankspaceAccountColumnCategory :radio').click(function()
+						{
+							var aID = (event.target.id).split('-');
+							$.extend(true, oParam, {step: 2, category: parseInt(aID[1])});
+							ns1blankspace.financial.accounts.show(oParam);
+						});
+					}
+					
+					if (iStep == 2)
+					{	
+						if (oResponse == undefined)
+						{	
+							$('#ns1blankspaceAccountColumn2').html(ns1blankspace.xhtml.loadingSmall);
+							
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+							oSearch.addField('title');
+							oSearch.sort('title', 'asc');
+							//oSearch.addFilter('type', 'EQUAL_TO', iType);
+							oSearch.rows = 200;
+							oSearch.getResults(function(data) {ns1blankspace.financial.accounts.show(oParam, data)});	
+						}
+						else
+						{
+							$.extend(true, oParam, {step: 3});
+							
+							var aHTML = [];
+						
+							if (oResponse.data.rows.length == 0)
+							{
+								aHTML.push('<table><tbody>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">No accounts.</td>' +
+											'</tr>' +
+											'</tbody></table>');
+								
+								$('#ns1blankspaceAccountColumn2').html(aHTML.join(''));
+							}
+							else
+							{
+								aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceAccountTransactionsColumn1" style="width: 70px;font-size:0.875em;"></td>' +
+										'<td id="ns1blankspaceAccountTransactionsColumn2"></td>' +
+										'</tr>' +
+										'</table>');
+
+								$('#ns1blankspaceAccountColumn2').html(aHTML.join(''));
+						
+								var aHTML = [];
+								
+								aHTML.push('<table id="ns1blankspaceReco" class="ns1blankspaceColumn2" style="padding-right: 10px;">');
+							
+								$(oResponse.data.rows).each(function(i) 
+								{
+									if (i==0)
+									{
+										aHTML.push('<tr><td><span id="ns1blankspaceAccountTransactionsAll" style="font-size:0.75em;width:100%;">All</span></td></tr>');
+									}
+								
+									aHTML.push('<tr><td id="ns1blankspaceAccountTransactions_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceFinancialAccountRowSelect"' +
+													'>' + this.title + '</td></tr>');
+								});
+							
+								aHTML.push('</table>');
+							
+								$('#ns1blankspaceAccountTransactionsColumn1').html(aHTML.join(''));
+								
+								$('#ns1blankspaceAccountTransactionsAll').button(
+								{
+									label: "All"
+								})
+								.click(function() {
+										$.extend(true, oParam, {step: 3, financialAccount: -1});
+										ns1blankspace.financial.accounts.show(oParam);
+								})
+								.css("width", "100%");
+								
+								$('.ns1blankspaceFinancialAccountRowSelect').click(function() {
+										var aID = (event.target.id).split('-');
+										$.extend(true, oParam, {step: 3, financialAccount: parseInt(aID[1])});
+										ns1blankspace.financial.accounts.show(oParam);
+								});
+							}
+							
+						}
+					}
+					
+					if (iStep == 3)
+					{	
+						if (oResponse == undefined)
+						{	
+							$('#ns1blankspaceAccountTransactionsColumn2').html('<table class="ns1blankspaceColumn2">' +
+											'<tr><td>' + ns1blankspace.xhtml.loading + '</td></tr></table>');
+							
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
+							oSearch.addField('date,description,amount');
+							oSearch.addSummaryField('sum(amount) sumamount');
+							oSearch.sort('date', 'desc');
+							if (iFinancialAccount != -1) {oSearch.addFilter('financialaccount', 'EQUAL_TO', iFinancialAccount)};
+							oSearch.rows = 200;
+							oSearch.getResults(function(data) {ns1blankspace.financial.accounts.show(oParam, data)});	
+						}
+						else
+						{
+							$.extend(true, oParam, {step: 3});
+							
+							var aHTML = [];
+							var h = -1;
+						
+							if (oResponse.data.rows.length == 0)
+							{
+								aHTML.push('<table class="ns1blankspaceColumn2">' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceNothing">No transactions.</td>' +
+											'</tr>' +
+											'</table>');
+								
+								$('#ns1blankspaceAccountTransactionsColumn2').html(aHTML.join(''));
+							}
+							else
+							{
+								var aHTML = [];
+						
+								aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em;">');
+							
+								aHTML.push('<tr>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">TOTAL</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + oResponse.summary.sumamount + '</td>');
+								aHTML.push('</tr>');
+								
+								$(oResponse.data.rows).each(function(i) 
+								{
+									aHTML.push('<tr><td id="ns1blankspaceFinancialAccountTransactions_date-' + this.id + '" class="ns1blankspaceRow"' +
+													'>' + this.date + '</td>');
+									
+									aHTML.push('<td id="ns1blankspaceFinancialAccountTransactions_description-' + this.id + '" class="ns1blankspaceRow"' +
+													'>' + this.description + '</td>');
+													
+									aHTML.push('<td id="ns1blankspaceFinancialAccountTransactions_amount-' + this.id + '" class="ns1blankspaceRow"' +
+													' style="text-align:right;">' + this.amount + '</td>');				
+																	
+									aHTML.push('</tr>');
+								});
+							
+								aHTML.push('</table>');
+							
+								$('#ns1blankspaceAccountTransactionsColumn2').html(aHTML.join(''));		
+							}
+							
+						}
+					}
+				}
+}
+
 ns1blankspace.financial.unallocated =
 {
 	show: 		function (oParam, oResponse)
 				{
-					if (oResponse == undefined)
+					var iStep = 1;
+					var iType = 1;
+					
+					if (oParam != undefined)
 					{
-						if (ns1blankspace.financial.unallocatedAccount == undefined)
-						{	
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-							oSearch.addField('title');
-							oSearch.addFilter('title', 'TEXT_IS_LIKE', 'Unallocated');
-							oSearch.async = false;
-							oSearch.rows = 1;
-							
-							oSearch.getResults(function(oResponse)
-							{
-								if (oResponse.data.rows.length != 0)
-								{
-									ns1blankspace.financial.unallocatedAccount = oResponse.data.rows[0].id;
-								}
-								else
-								{
-									ns1blankspace.financial.unallocatedAccount = -1;
-								}	
-							});	
-						}
-							
-						if (ns1blankspace.financial.unallocatedAccount == -1)
-						{
-							$('#ns1blankspaceMainUnallocated').html("No unallocated account set up.");
-						}
-						else
-						{	
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-							oSearch.addField('invoice.reference,invoice.amount');
-							oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
-							oSearch.rows = 20;
-							oSearch.getResults(function(data) {ns1blankspace.financial.unallocated.show(oParam, data)});
-						}	
+						if (oParam.step != undefined) {iStep = oParam.step};
+						if (oParam.type != undefined) {iType = oParam.type};
 					}
 					else
 					{
+						oParam = {};
+					}
+					
+					if (iStep == 1)	
+					{
 						var aHTML = [];
-			
+						
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceUnallocatedColumn1" class="ns1blankspaceColumn1" style="width: 70px"></td>' +
-										'<td id="ns1blankspaceUnallocatedColumn2" class="ns1blankspaceColumn2"></td>' +
+										'<td id="ns1blankspaceUnallocatedColumn1" style="width:100px;font-size:0.75em;"></td>' +
+										'<td id="ns1blankspaceUnallocatedColumn2"></td>' +
 										'</tr>' +
-										'</table>');	
-
-						$('#ns1blankspaceMainUnallocated').html(aHTML.join(''));
-
-						var aHTML = [];
-						var h = -1;
+										'</table>');				
 						
-						if (oResponse.data.rows.length == 0)
+						$('#ns1blankspaceMainUnallocated').html(aHTML.join(''));
+							
+						var aHTML = [];
+
+						aHTML.push('<div id="ns1blankspaceUnallocatedColumnType" style="width:85px; margin-top:3px; text-align:right;">');
+						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-1" name="radioType" /><label for="ns1blankspaceUnallocatedColumnType-1" style="width: 85px; margin-bottom:1px;">Invoices</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-2" name="radioType" /><label for="ns1blankspaceUnallocatedColumnType-2" style="width: 85px; margin-bottom:1px;">Expenses</label>');
+						aHTML.push('</div>');
+
+						$('#ns1blankspaceUnallocatedColumn1').html(aHTML.join(''));
+					
+						$('#ns1blankspaceUnallocatedColumnType').buttonset().css('font-size', '0.875em');
+						
+						$('#ns1blankspaceUnallocatedColumnType :radio').click(function()
 						{
-							aHTML.push('<table><tbody>' +
-											'<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceNothing">No unallocated accounts.</td>' +
-											'</tr>' +
-											'</tbody></table>');
+							var aID = (event.target.id).split('-');
+							$.extend(true, oParam, {step: 2, type: parseInt(aID[1])});
+							ns1blankspace.financial.unallocated.show(oParam);
+						});
+					}
+					
+					if (iStep == 2)
+					{	
+						if (oResponse == undefined)
+						{
+							if (ns1blankspace.financial.unallocatedAccount == undefined)
+							{	
+								var oSearch = new AdvancedSearch();
+								oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+								oSearch.addField('title');
+								oSearch.addFilter('title', 'TEXT_IS_LIKE', 'Unallocated');
+								oSearch.async = false;
+								oSearch.rows = 1;
+								
+								oSearch.getResults(function(oResponse)
+								{
+									if (oResponse.data.rows.length != 0)
+									{
+										ns1blankspace.financial.unallocatedAccount = oResponse.data.rows[0].id;
+									}
+									else
+									{
+										ns1blankspace.financial.unallocatedAccount = -1;
+									}	
+								});	
+							}
+								
+							if (ns1blankspace.financial.unallocatedAccount == -1)
+							{
+								$('#ns1blankspaceUnallocatedColumn1').html('<span class="ns1blankspaceNothing">No unallocated account set up.</span>');
+							}
+							else
+							{	
+								$('#ns1blankspaceUnallocatedColumn2').html(ns1blankspace.xhtml.loading);
+
+								var oSearch = new AdvancedSearch();
+
+								if (iType == 1)
+								{
+									oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+									oSearch.addField('invoice.reference,invoice.amount');
+									oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+
+									ns1blankspace.financial.unallocated.row = function (oRow)
+									{
+										var aHTML = [];
+										
+										aHTML.push('<tr class="ns1blankspaceRow">' +
+														'<td id="ns1blankspaceBalanceSheet_Title-' + oRow["invoice.id"] + '" class="ns1blankspaceRow">' +
+														oRow["invoice.reference"] + '<br />' + 
+														'<span style="color: #808080;font-size: 0.75em;">' + oRow["invoice.amount"] + '</span>' +
+														'</td></tr>');
+
+										return aHTML.join('');
+									}
+
+								}
+								else
+								{
+									oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
+									oSearch.addField('expense.reference,expense.amount');
+									oSearch.addFilter('expense.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+
+									ns1blankspace.financial.unallocated.row = function (oRow)
+									{
+										var aHTML = [];
+										
+										aHTML.push('<tr class="ns1blankspaceRow">' +
+														'<td id="ns1blankspaceBalanceSheet_Title-' + oRow["expense.id"] + '" class="ns1blankspaceRow">' +
+														oRow["expense.reference"] + '<br />' + 
+														'<span style="color: #808080;font-size: 0.75em;">' + oRow["expense.amount"] + '</span>' +
+														'</td></tr>');
+
+										return aHTML.join('');
+									}
+								}
+
+								oSearch.rows = 20;
+								oSearch.getResults(function(data) {ns1blankspace.financial.unallocated.show(oParam, data)});
+							}	
 						}
 						else
 						{
-							aHTML.push('<table class="ns1blankspace">' +
-											'<tr class="ns1blankspaceCaption">' +
-											'<td class="ns1blankspaceCaption">Invoice</td>' +
-											'</tr>');
+							var aHTML = [];
+				
+							aHTML.push('<table class="ns1blankspaceContainer">' +
+											'<tr class="ns1blankspaceContainer">' +
+											'<td id="ns1blankspaceUnallocatedEditColumn1" style="width: 100px"></td>' +
+											'<td id="ns1blankspaceUnallocatedEditColumn2" class="ns1blankspaceColumn2"></td>' +
+											'</tr>' +
+											'</table>');	
 
-							$(oResponse.data.rows).each(function() 
-							{
-								aHTML.push(ns1blankspace.financial.unallocated.row(this));
-							});
+							$('#ns1blankspaceUnallocatedColumn2').html(aHTML.join(''));
+
+							var aHTML = [];
+							var h = -1;
 							
-							aHTML.push('</table>');
+							if (oResponse.data.rows.length == 0)
+							{
+								aHTML.push('<span class="ns1blankspaceNothing">No unallocated accounts.</span>');
+							}
+							else
+							{
+								aHTML.push('<table class="ns1blankspace">');
+
+								$(oResponse.data.rows).each(function() 
+								{
+									aHTML.push(ns1blankspace.financial.unallocated.row(this));
+								});
+								
+								aHTML.push('</table>');
+							}
+							
+							ns1blankspace.render.page.show(
+							   {
+								type: 'JSON',
+								xhtmlElementID: 'ns1blankspaceUnallocatedEditColumn1',
+								xhtmlContext: 'Unallocated',
+								xhtml: aHTML.join(''),
+								showMore: (oResponse.morerows == "true"),
+								more: oResponse.moreid,
+								rows: 100,
+								functionShowRow: ns1blankspace.financial.unallocated.row,
+								functionOpen: undefined,
+								functionNewPage: ''
+							   }); 	
 						}
-						
-						ns1blankspace.render.page.show(
-						   {
-							type: 'JSON',
-							xhtmlElementID: 'ns1blankspaceUnallocatedColumn1',
-							xhtmlContext: 'Unallocated',
-							xhtml: aHTML.join(''),
-							showMore: (oResponse.morerows == "true"),
-							more: oResponse.moreid,
-							rows: 100,
-							functionShowRow: ns1blankspace.financial.unallocated.row,
-							functionOpen: undefined,
-							functionNewPage: ''
-						   }); 	
-					}
-				},
-
-	row:		function (oRow)
-				{
-					var aHTML = [];
-					
-					aHTML.push('<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceBalanceSheet_Title-' + oRow["invoice.id"] + '" class="ns1blankspaceRow">' +
-									oRow["invoice.reference"] + '<br />' + 
-									'<span style="color: #808080;font-size: 0.75em;">' + oRow["invoice.amount"] + '</span>' +
-									'</td></tr>');
-
-					return aHTML.join('');
+					}	
 				}
 }
 
@@ -1002,204 +1267,6 @@ ns1blankspace.financial.transactions =
 							$('#' + sXHTMLElementID).html(aHTML.join(''));
 						}
 					}	
-				}
-}
-
-ns1blankspace.financial.accounts =
-{
-	show: 		function (oParam, oResponse)
-				{
-					var iStep = 1;
-					var iFinancialAccount = -1;
-					
-					if (oParam != undefined)
-					{
-						if (oParam.step != undefined) {iStep = oParam.step};
-						if (oParam.financialAccount != undefined) {iFinancialAccount = oParam.financialAccount};
-					}
-					else
-					{
-						oParam = {};
-					}
-					
-					if (iStep == 1)	
-					{
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspaceContainer">' +
-										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceAccountColumn1" class="ns1blankspaceColumn1" style="width:100px;font-size:0.75em;"></td>' +
-										'<td id="ns1blankspaceAccountColumn2" class="ns1blankspaceColumn2"></td>' +
-										'</tr>' +
-										'</table>');				
-						
-						$('#ns1blankspaceMainAccounts').html(aHTML.join(''));
-							
-						var aHTML = [];
-
-						aHTML.push('<div id="ns1blankspaceAccountColumnCategory" style="width: 100;margin-bottom:3px;text-align:right;">');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-1" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-1" style="width: 100px;">All</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-2" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-2" style="width: 100px;">Profit & Loss</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-3" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-3" style="width: 100px;">Balance Sheet</label>');
-						aHTML.push('</div>');
-
-						$('#ns1blankspaceAccountColumn1').html(aHTML.join(''));
-					
-						$('#ns1blankspaceAccountColumnCategory').buttonset().css('font-size', '0.875em');
-						
-						$('#ns1blankspaceAccountColumnCategory :radio').click(function()
-						{
-							var aID = (event.target.id).split('-');
-							$.extend(true, oParam, {step: 2, category: parseInt(aID[1])});
-							ns1blankspace.financial.accounts.show(oParam);
-						});
-					}
-					
-					if (iStep == 2)
-					{	
-						if (oResponse == undefined)
-						{	
-							$('#ns1blankspaceAccountColumn2').html(ns1blankspace.xhtml.loadingSmall);
-							
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-							oSearch.addField('title');
-							oSearch.sort('title', 'asc');
-							//oSearch.addFilter('type', 'EQUAL_TO', iType);
-							oSearch.rows = 200;
-							oSearch.getResults(function(data) {ns1blankspace.financial.accounts.show(oParam, data)});	
-						}
-						else
-						{
-							$.extend(true, oParam, {step: 3});
-							
-							var aHTML = [];
-						
-							if (oResponse.data.rows.length == 0)
-							{
-								aHTML.push('<table><tbody>' +
-											'<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceNothing">No accounts.</td>' +
-											'</tr>' +
-											'</tbody></table>');
-								
-								$('#ns1blankspaceAccountColumn2').html(aHTML.join(''));
-							}
-							else
-							{
-								aHTML.push('<table class="ns1blankspaceContainer">' +
-										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceAccountTransactionsColumn1" class="ns1blankspaceColumn1" style="width: 70px;font-size:0.875em;"></td>' +
-										'<td id="ns1blankspaceAccountTransactionsColumn2" class="ns1blankspaceColumn2"></td>' +
-										'</tr>' +
-										'</table>');
-
-								$('#ns1blankspaceAccountColumn2').html(aHTML.join(''));
-						
-								var aHTML = [];
-								
-								aHTML.push('<table id="ns1blankspaceReco" class="ns1blankspace"><tbody>');
-							
-								$(oResponse.data.rows).each(function(i) 
-								{
-									if (i==0)
-									{
-										aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceAccountTransactionsAll">All</span></td></tr>');	
-									}
-								
-									aHTML.push('<tr><td id="ns1blankspaceAccountTransactions_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceFinancialAccountRowSelect"' +
-													'>' + this.title + '</td></tr>');
-								});
-							
-								aHTML.push('</table>');
-							
-								$('#tdInterfaceMainFinancialAccountTransactionsColumn1').html(aHTML.join(''));
-								
-								$('#ns1blankspaceAccountTransactionsAll').button(
-								{
-									label: "All"
-								})
-								.click(function() {
-										$.extend(true, oParam, {step: 3, financialAccount: -1});
-										ns1blankspace.financial.accounts.show(oParam);
-								})
-								.css("width", "75px");
-								
-								$('.s1blankspaceFinancialAccountRowSelect').click(function() {
-										var aID = (event.target.id).split('-');
-										$.extend(true, oParam, {step: 3, financialAccount: parseInt(aID[1])});
-										ns1blankspace.financial.accounts.show(oParam);
-								});
-							}
-							
-						}
-					}
-					
-					if (iStep == 3)
-					{	
-						if (oResponse == undefined)
-						{	
-							$('#ns1blankspaceAccountTransactionsColumn2').html(ns1blankspace.xhtml.loadingSmall);
-							
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
-							oSearch.addField('date,description,amount');
-							oSearch.addSummaryField('sum(amount) sumamount');
-							oSearch.sort('date', 'desc');
-							if (iFinancialAccount != -1) {oSearch.addFilter('financialaccount', 'EQUAL_TO', iFinancialAccount)};
-							oSearch.rows = 200;
-							oSearch.getResults(function(data) {ns1blankspace.financial.accounts.show(oParam, data)});	
-						}
-						else
-						{
-							$.extend(true, oParam, {step: 3});
-							
-							var aHTML = [];
-							var h = -1;
-						
-							if (oResponse.data.rows.length == 0)
-							{
-								aHTML.push('<table><tbody>' +
-											'<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceNothing">No transactions.</td>' +
-											'</tr>' +
-											'</tbody></table>');
-								
-								$('#ns1blankspaceAccountTransactionsColumn2').html(aHTML.join(''));
-							}
-							else
-							{
-								var aHTML = [];
-						
-								aHTML.push('<table class="ns1blankspace">');
-							
-								aHTML.push('<tr>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">TOTAL</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + oResponse.summary.sumamount + '</td>');
-								aHTML.push('</tr>');
-								
-								$(oResponse.data.rows).each(function(i) 
-								{
-									aHTML.push('<tr><td id="ns1blankspaceFinancialAccountTransactions_date-' + this.id + '" class="ns1blankspaceMainRow ns1blankspaceRowSelect"' +
-													'>' + this.date + '</td>');
-									
-									aHTML.push('<td id="ns1blankspaceFinancialAccountTransactions_description-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
-													'>' + this.description + '</td>');
-													
-									aHTML.push('<td id="ns1blankspaceFinancialAccountTransactions_amount-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSelect"' +
-													' style="text-align:right;">' + this.amount + '</td>');				
-																	
-									aHTML.push('</tr>');
-								});
-							
-								aHTML.push('</table>');
-							
-								$('#ns1blankspaceAccountTransactionsColumn2').html(aHTML.join(''));		
-							}
-							
-						}
-					}
 				}
 }
 
