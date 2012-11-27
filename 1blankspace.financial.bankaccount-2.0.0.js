@@ -52,7 +52,11 @@ ns1blankspace.financial.bankAccount =
 							
 							var aHTML = [];
 							
-							aHTML.push('<table><tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr></table>');		
+							aHTML.push('<table>');
+
+							aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
+	
+							aHTML.push('</table>');		
 							
 							$('#ns1blankspaceControl').html(aHTML.join(''));	
 

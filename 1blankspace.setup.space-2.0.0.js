@@ -51,8 +51,10 @@ ns1blankspace.setup.space =
 								
 					aHTML.push('<table>');
 
-					aHTML.push('<tr><td id="ns1blankspaceViewSetupSpaceLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
-							
+					aHTML.push('<table>' +
+							'<tr><td><div id="ns1blankspaceViewSetupSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
+							'</table>');
+
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">Subscriptions</td>' +
 									'</tr>');			

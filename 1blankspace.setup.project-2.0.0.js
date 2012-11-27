@@ -50,9 +50,9 @@ ns1blankspace.setup.project =
 						
 						var aHTML = [];
 									
-						aHTML.push('<table><tr><td id="ns1blankspaceViewProjectLarge"' +
-										' class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>' +
-										'</table>');		
+						aHTML.push('<table>' +
+							'<tr><td><div id="ns1blankspaceViewProjectLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
+							'</table>');	
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						

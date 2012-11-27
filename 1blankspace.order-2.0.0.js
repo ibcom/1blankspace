@@ -57,8 +57,8 @@ ns1blankspace.order =
 												
 									aHTML.push('<table>');
 
-									aHTML.push('<tr><td id="ns1blankspaceViewOrderLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
-											
+									aHTML.push('<tr><td><div id="ns1blankspaceViewOrderLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
+	
 									aHTML.push('<tr class="ns1blankspaceControl">' +
 													'<td id="ns1blankspaceControlRecent" class="ns1blankspaceControl ns1blankspaceHighlight" style="padding-top:15px;">' +
 													'Recent</td></tr>');			

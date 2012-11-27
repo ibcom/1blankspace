@@ -168,7 +168,9 @@ ns1blankspace.financial.home = function ()
 						var aHTML = [];
 									
 						aHTML.push('<table>');
-						aHTML.push('<tr><td id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+
+						aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
+
 						aHTML.push('</table>');		
 						
 						aHTML.push('<table cellpadding="6">');

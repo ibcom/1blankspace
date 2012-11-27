@@ -197,7 +197,7 @@ ns1blankspace.messaging.imap =
 							var aHTML = [];
 										
 							aHTML.push('<table>');
-							aHTML.push('<tr><td id="ns1blankspaceViewMessagingEmailLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+							aHTML.push('<tr><td><div id="ns1blankspaceViewMessagingEmailLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 							aHTML.push('</table>');		
 							
 							ns1blankspace.messaging.imap.emailAccounts.length = 0;

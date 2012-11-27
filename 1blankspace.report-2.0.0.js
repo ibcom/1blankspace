@@ -326,11 +326,9 @@ ns1blankspace.report =
 					var h = -1;
 								
 					aHTML[++h] = '<table>';
-					aHTML[++h] = '<tr>' +
-									'<td id="ns1blankspaceViewReportLarge" class="ns1blankspaceViewImageLarge">' +
-									'&nbsp;' + 
-									'</td>' +
-									'</tr>';
+
+					aHTML[++h] = '<tr><td><div id="ns1blankspaceViewReportLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>';
+
 					aHTML[++h] = '</table>';		
 					
 					aHTML[++h] = '<table>';

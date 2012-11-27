@@ -64,11 +64,9 @@ ns1blankspace.stucture =
 
 							var aHTML = [];
 									
-						aHTML.push('<table>');
-
-						aHTML.push('<tr><td id="ns1blankspaceViewMessagingEmailLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
-								
-						aHTML.push('</table>');		
+						aHTML.push('<table>' +
+							'<tr><td><div id="ns1blankspaceViewSetupLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
+							'</table>');	
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						

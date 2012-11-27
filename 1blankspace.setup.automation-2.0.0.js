@@ -71,8 +71,8 @@ ns1blankspace.setup.automation =
 						var aHTML = [];
 									
 						aHTML.push('<table>' +
-										'<tr><td id="ns1blankspaceViewAutomationLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>' +
-										'</table>');		
+							'<tr><td><div id="ns1blankspaceViewProjectLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
+							'</table>');		
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 
