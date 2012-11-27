@@ -707,205 +707,205 @@ textarea.ns1blankspaceTextMultiSmall
 
 #ns1blankspaceViewOpportunityLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.opportunity.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -195px 0px;
 }
 
 #ns1blankspaceViewProject
 {
-	background-image:url(/jscripts/images/1blankspace.view.project.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) 0px -100px;
 }
 
 #ns1blankspaceViewProjectLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.project.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) 0px -130px;
 }
 
 #ns1blankspaceViewAction
 {
-	background-image:url(/jscripts/images/1blankspace.view.action.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) 0px 0px;
 }
 
 #ns1blankspaceViewActionLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.action.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) 0px 0px;
 }
 
 #ns1blankspaceViewDocument
 {
-	background-image:url(/jscripts/images/1blankspace.view.document.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -200px -100px;
 }
 
 #ns1blankspaceViewDocumentLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.document.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -260px -130px;
 }
 
 #ns1blankspaceViewNews
 {
-	background-image:url(/jscripts/images/1blankspace.view.news.png);
-}
-
-#ns1blankspaceViewEvent
-{
-	background-image:url(/jscripts/images/1blankspace.view.event.png);
-}
-
-#ns1blankspaceViewEventLarge
-{
-	background-image:url(/jscripts/images/1blankspace.view.event.large.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -50px -150px;
 }
 
 #ns1blankspaceViewNewsLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.news.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px -195px;
+}
+
+#ns1blankspaceViewEvent
+{
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -150px -200px;
+}
+
+#ns1blankspaceViewEventLarge
+{
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -195px -260px;
 }
 
 #ns1blankspaceViewProduct
 {
-	background-image:url(/jscripts/images/1blankspace.view.product.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -150px -150px;
 }
 
 #ns1blankspaceViewProductLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.product.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -195px -195px;
 }
 
 #ns1blankspaceViewOrder
 {
-	background-image:url(/jscripts/images/1blankspace.view.order.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -200px -150px;
 }
 
 #ns1blankspaceViewOrderLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.order.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -260px -195px;
 }
 
 #ns1blankspaceViewFinancial
 {
-	background-image:url(/jscripts/images/1blankspace.view.financial.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -100px -50px;
 }
 
 #ns1blankspaceViewFinancialLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.financial.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -130px -65px;
 }
 
 #ns1blankspaceViewHelp
 {
-	background-image:url(/jscripts/images/1blankspace.view.help.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -50px -200px;
 }
 
 #ns1blankspaceViewHelpLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.help.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px -260px;
 }
 
 #ns1blankspaceViewSetup
 {
-	background-image:url(/jscripts/images/1blankspace.view.setup.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -50px -200px;
 }
 
 #ns1blankspaceViewSetupLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.setup.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px -260px;
 }
 
 #ns1blankspaceViewSetupWebsite
 {
-	background-image:url(/jscripts/images/1blankspace.view.setup.website.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -100px -150px;
 }
 
 #ns1blankspaceViewSetupWebsiteLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.setup.website.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -130px -195px;
 }
 
 #ns1blankspaceViewSetupUser
 {
-	background-image:url(/jscripts/images/1blankspace.view.setup.website.png);
+	background: url(/jscripts/images/1blankspace.icons.05-2.0.0.png) -50px 0px;
 }
 
 #ns1blankspaceViewSetupUserLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.setup.website.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px 0px;
 }
 
 #ns1blankspaceViewMessagingEmail
 {
-	background-image:url(/jscripts/images/1blankspace.view.messaging.email.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -100px -130px;
 }
 
 #ns1blankspaceViewMessagingEmailLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.messaging.email.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -130px -130px;
 }
 
 #ns1blankspaceViewReport
 {
-	background-image:url(/jscripts/images/1blankspace.view.report.png);
-}
-
-#ns1blankspaceViewMessagingConversation
-{
-	background-image:url(/jscripts/images/1blankspace.view.messaging.conversation.png);
-}
-
-#ns1blankspaceViewMessagingConversationLarge
-{
-	background-image:url(/jscripts/images/1blankspace.view.messaging.conversation.large.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -100px -200px;
 }
 
 #ns1blankspaceViewReportLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.report.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -130px -260px;
+}
+
+#ns1blankspaceViewMessagingConversation
+{
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -150px -100px;
+}
+
+#ns1blankspaceViewMessagingConversationLarge
+{
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -165px -130px;
 }
 
 #ns1blankspaceViewAutomation
 {
-	background-image:url(/jscripts/images/1blankspace.view.automation.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -250px 0px;
 }
 
 #ns1blankspaceViewAutomationLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.automation.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -325px 0px;
 }
 
 #ns1blankspaceViewDeveloper
 {
-	background-image:url(/jscripts/images/1blankspace.view.developer.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -250px 0px;
 }
 
 #ns1blankspaceViewDeveloperLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.developer.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -325px 0px;
 }
 
 #ns1blankspaceViewDeveloperSpace
 {
-	background-image:url(/jscripts/images/1blankspace.view.developer.space.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -250px 0px;
 }
 
 #ns1blankspaceViewDeveloperSpaceLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.developer.space.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -325px 0px;
 }
 
 #ns1blankspaceViewDeveloperBilling
 {
-	background-image:url(/jscripts/images/1blankspace.view.developer.billing.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -250px 0px;
 }
 
 #ns1blankspaceViewDeveloperBillingLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.developer.billing.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -325px 0px;
 }
 
 #ns1blankspaceViewSetupSpace
 {
-	background-image:url(/jscripts/images/1blankspace.view.setup.space.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) 0px -200px;
 }
 
 #ns1blankspaceViewSetupSpaceLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.setup.space.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) 0px -260px;
 }
