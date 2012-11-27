@@ -599,9 +599,9 @@ ns1blankspace.control =
 												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="ns1blankspaceViewControl">' +
-																'<td id="ns1blankspaceViewContact" class="ns1blankspaceViewImage">' +
-																'&nbsp;</td></tr>');			
+												aHTML.push('<tr><td>' +
+																'<div id="ns1blankspaceViewContact" class="ns1blankspaceViewImage"></div>' +
+																'</td></tr>');	
 											
 												aHTML.push(aHTMLViewport.join(''))
 
@@ -643,10 +643,10 @@ ns1blankspace.control =
 												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="ns1blankspaceViewControl">' +
-																'<td id="ns1blankspaceViewProject" class="ns1blankspaceViewImage">' +
-																'&nbsp;</td></tr>');			
-											
+												aHTML.push('<tr><td>' +
+																'<div id="ns1blankspaceViewProject" class="ns1blankspaceViewImage"></div>' +
+																'</td></tr>');
+						
 												aHTML.push(aHTMLViewport.join(''))
 
 												aHTML.push('</table>');
@@ -687,10 +687,10 @@ ns1blankspace.control =
 												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="ns1blankspaceViewControl">' +
-																'<td id="ns1blankspaceViewDocument" class="ns1blankspaceViewImage">' +
-																'&nbsp;</td></tr>');			
-											
+												aHTML.push('<tr><td>' +
+																'<div id="ns1blankspaceViewDocument" class="ns1blankspaceViewImage"></div>'+
+																'</td></tr>');
+
 												aHTML.push(aHTMLViewport.join(''))
 
 												aHTML.push('</table>');
@@ -723,10 +723,10 @@ ns1blankspace.control =
 												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="ns1blankspaceViewControl">' +
-																'<td id="ns1blankspaceViewProduct" class="ns1blankspaceViewImage">' +
-																'&nbsp;</td></tr>');			
-											
+												aHTML.push('<tr><td>' +
+																'<div id="ns1blankspaceViewProduct" class="ns1blankspaceViewImage"></div>' +
+																'</td></tr>');
+
 												aHTML.push(aHTMLViewport.join(''))
 
 												aHTML.push('</table>');
@@ -803,9 +803,9 @@ ns1blankspace.control =
 												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="ns1blankspaceViewControl">' +
-																'<td id="ns1blankspaceViewFinancial" class="ns1blankspaceViewImage">' +
-																'&nbsp;</td></tr>');			
+												aHTML.push('<tr><td>' +
+																'<div id="ns1blankspaceViewFinancial" class="ns1blankspaceViewImage"></div>' +
+																'</td></tr>');			
 											
 												aHTML.push(aHTMLViewport.join(''))
 
@@ -866,9 +866,9 @@ ns1blankspace.control =
 												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-												aHTML.push('<tr class="ns1blankspaceViewControl">' +
-															'<td id="ns1blankspaceViewReport" class="ns1blankspaceViewImage">' +
-															'&nbsp;</td></tr>');			
+												aHTML.push('<tr><td>' +
+																'<div id="ns1blankspaceViewReport" class="ns1blankspaceViewImage"></div>' +
+																'</td></tr>');		
 											
 												aHTML.push(aHTMLViewport.join(''))
 
@@ -959,11 +959,10 @@ ns1blankspace.control =
 															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-															aHTML.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td id="ns1blankspaceViewContact" class="ns1blankspaceViewImage">' +
-																		'&nbsp;' +
-																		'</td></tr>');			
-														
+															aHTML.push('<tr><td>' +
+																'<div id="ns1blankspaceViewContact" class="ns1blankspaceViewImage"></div>' +
+																'</td></tr>');
+
 															aHTML.push(aHTMLViewport.join(''))
 
 															aHTML.push('</table>');
@@ -1013,10 +1012,9 @@ ns1blankspace.control =
 															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-															aHTML.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td id="ns1blankspaceViewSetupWebsite" class="ns1blankspaceViewImage">' +
-																		'&nbsp;' +
-																		'</td></tr>');			
+															aHTML.push('<tr><td>' +
+																'<div id="ns1blankspaceViewSetupWebsite" class="ns1blankspaceViewImage"></div>' +
+																'</td></tr>');
 														
 															aHTML.push(aHTMLViewport.join(''))
 
@@ -1076,10 +1074,9 @@ ns1blankspace.control =
 															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-															aHTML.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td id="ns1blankspaceViewFinancial" class="ns1blankspaceViewImage">' +
-																		'&nbsp;' +
-																		'</td></tr>');			
+															aHTML.push('<tr><td>' +
+																'<div id="ns1blankspaceViewFinancial" class="ns1blankspaceViewImage"></div>' +
+																'</td></tr>');		
 														
 															aHTML.push(aHTMLViewport.join(''))
 
@@ -1112,10 +1109,9 @@ ns1blankspace.control =
 															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-															aHTML.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td id="ns1blankspaceViewSetupSpace" class="ns1blankspaceViewImage">' +
-																		'&nbsp;' +
-																		'</td></tr>');			
+															aHTML.push('<tr><td>' +
+																'<div id="ns1blankspaceViewSetupSpace" class="ns1blankspaceViewImage"></div>' +
+																'</td></tr>');		
 														
 															aHTML.push(aHTMLViewport.join(''))
 

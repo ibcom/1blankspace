@@ -152,10 +152,10 @@ a:hover
 .ns1blankspaceViewImage
 {
 	background-repeat: no-repeat;
-	background-position: left center;
-	top: 0px;
-	height: 55px;
-	border-bottom-style:solid;
+	float: left;
+	height: 50px;
+	width: 50px;
+	border-bottom-style: solid;
 	border-width: 8px;
 	border-color: white;
 }
