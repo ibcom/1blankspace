@@ -25,20 +25,6 @@ span, div, textarea, input, td
 	vertical-align: top;
 }
 
-h2, th
-{
-	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
-	vertical-align: top;
-	font-size: 0.875em;
-}
-
-h3
-{
-	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
-	vertical-align: top;
-	font-size: 0.75em;
-}
-
 table
 {
 	width: 100%;
@@ -63,6 +49,494 @@ a:hover
 {
 	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
 	color: #006EBA;
+}
+
+.ns1blankspaceAction
+{
+	font-size: 0.75em;
+}
+
+.ns1blankspaceMostLikelySub
+{
+	font-size: 0.75em;
+	color: #999999;
+	padding-left: 10px;
+}
+
+.ns1blankspaceSub, .ns1blankspaceSubContext
+{
+	color: #999999;
+	font-weight: 100;
+}
+
+.ns1blankspaceHeader
+{
+	color: #999999;
+	font-size: 0.875em;
+}
+
+.ns1blankspaceHeaderCaption
+{
+	color: #888888;
+	font-weight: 300;
+	padding: 2px;
+	padding-bottom: 4px;
+	padding-right: 8px;
+	border-bottom-style:solid;
+	border-width: 1px;
+	border-color: #D0D0D0;	
+}
+
+.ns1blankspaceRenderHeaderPage
+{
+	color: #999999;
+	font-size: 0.875em;
+	text-align: center;
+	border: 1px;
+	border-style:solid;
+	border-color: #999999;
+	padding: 2px;
+	font-weight: 200;
+	min-width: 15px;
+	margin-right:4px;
+}
+
+.ns1blankspaceRenderHeaderPageSelected
+{
+	color: white;
+	background-color: #999999;
+}
+
+.ns1blankspaceRenderHeaderMore
+{
+	color: #999999;
+	font-size: 0.75em;
+	vertical-align: middle;
+}
+
+.ns1blankspaceNotSeen
+{
+	font-weight: bold;
+}
+
+.ns1blankspaceControlContext
+{
+	font-size: 1em;
+	font-weight: bold;
+	text-align: right;
+	width: 100%;
+	margin-right: 20px;
+}
+
+.ns1blankspaceSummaryCaption
+{
+	color: #B8B8B8;
+	font-weight: bold;
+}
+
+.ns1blankspaceSummary
+{
+	padding-bottom: 10px;
+}
+
+.ui-button-icon-only .ui-icon
+{
+	margin-left: -8px;
+}
+
+.ui-button-icon-only .ui-icon, .ui-button-text-icon-primary .ui-icon, .ui-button-text-icon-secondary .ui-icon, .ui-button-text-icons .ui-icon, .ui-button-icons-only .ui-icon
+{
+	margin-top: -8px;
+}
+
+.ns1blankspaceViewImage
+{
+	background-repeat: no-repeat;
+	background-position: left center;
+	top: 0px;
+	height: 55px;
+	border-bottom-style:solid;
+	border-width: 8px;
+	border-color: white;
+}
+
+.ns1blankspaceViewImageLarge
+{
+	background-repeat: no-repeat;
+	background-position: right center;
+	top: 0px;
+	height: 75px;
+}
+
+.ns1blankspaceTicked, .ticked
+{
+	height: 13px;
+	width: 13px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image:url(/jscripts/images/ticked.png);
+}
+
+.ns1blankspaceCaption
+{
+	color: #B8B8B8;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+	padding-left: 2px;
+}
+
+.ns1blankspaceViewControlColumn
+{
+	background-color: #ffffff;
+	width: 115px;
+	font-size: 0.9375em;
+	border-spacing: 6px;
+	color: black;
+}
+
+table.ns1blankspaceMessagingIMAPInbox
+{
+	font-size: 0.875em;
+}
+
+table.ns1blankspaceViewControlContainer
+{
+	border-spacing: 5px 5px;
+
+	background-color: #F8F8F8;
+	width: 175px;
+	
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+	
+	border-style: solid;
+	border-width: 3px;
+	border-color: #E8E8E8;
+	
+	margin-top:8px;
+	margin-bottom:1px;
+	margin-right:1px;
+	margin-left:1px;
+
+	opacity: 0.95;
+}
+
+table.ns1blankspaceSearchMedium
+{
+	font-size: 0.875em;
+	background-color: #F8F8F8;
+	width: 250px;
+	
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+	
+	border-style: solid;
+	border-width: 3px;
+	border-color: #E8E8E8;
+	
+	margin-bottom: 1px;
+	margin-right: 1px;
+	margin-left: 1px;
+}
+
+table.ns1blankspaceMostLikely
+{
+	border-spacing: 5px 0px;
+}
+
+table.ns1blankspaceControl
+{
+	padding-top: 20px;
+	padding-right: 0px;
+}
+
+table.ns1blankspaceColumn2
+{
+	border-left-style:solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 10px;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+td.ns1blankspaceNothing
+{
+	font-size: 0.875em;
+	color: #888888;
+}
+
+td.ns1blankspaceLogonCaption
+{
+	font-weight: 500;
+	color: #B8B8B8;
+}
+
+td.ns1blankspaceLogon
+{
+	font-size: 0.875em;
+	padding-left: 5px;
+}
+
+td.ns1blankspaceLogonSub
+{
+	text-align: right;
+	font-size: 0.75em;
+	color: #999999;
+	vertical-align: bottom;
+}
+
+td.ns1blankspaceLogonNotes
+{
+	color: #999999;
+	font-size: 0.875em;
+	padding-left: 15px;
+	border-left-style:solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+}
+
+td.ns1blankspaceColumn1
+{
+	padding-right: 20px;
+	width: 50%;
+}
+
+td.ns1blankspaceColumn1Flexixble
+{
+	padding-right: 20px;
+}
+
+td.ns1blankspaceRowSelect
+{
+	cursor: pointer;
+	color: #ee8f00;
+	text-decoration: none;
+	font-size: 0.875em;
+}
+
+td.ns1blankspaceRow
+{
+	font-size: 0.875em;
+	border-spacing: 0px;
+	border-bottom-style:solid;
+	border-width: 1px;
+	border-color: #D0D0D0;	
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 8px;
+	padding-left: 2px;
+}
+
+td.ns1blankspaceText, td.ns1blankspaceTextMulti, td.ns1blankspaceSelect, td.ns1blankspaceDate
+{
+	padding-right: 10px;
+}
+
+td.ns1blankspaceRadio
+{
+	font-size: 0.875em;
+	padding-left: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-bottom: 5px;
+}
+
+td.ns1blankspaceSearch
+{
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-color: white;
+	cursor: pointer;
+	font-size: 0.875em;
+	padding: 3px;
+	color: black;
+}
+
+td.ns1blankspaceSearchSub
+{
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: white;
+	cursor: pointer;
+	font-size: 0.875em;
+	padding: 3px;
+	color: #B8B8B8;
+}
+
+td.ns1blankspaceViewControl
+{
+	cursor: pointer;
+	color: black;
+}
+
+td.ns1blankspaceControl
+{
+	text-align: right;
+	padding-right: 0px;
+	cursor: pointer;
+}
+
+td.ns1blankspaceHighlight
+{
+	font-weight: bold;	
+	color: #DA8300;	
+}
+
+
+td.ns1blankspaceMostLikely
+{
+	cursor: pointer;
+	color: #EE8F00;
+	text-decoration: none;
+	font-size: 0.875em;
+}	
+
+input.ns1blankspaceLogon
+{
+	height: 23px;
+	width: 234px;;
+	font-size: 1em;
+	padding-left: 5px;
+}
+
+input.ns1blankspaceText, input.ins1blankspaceTextMoney
+{
+	width: 100%;
+	font-size: 0.875em;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-bottom: 5px;
+}
+
+input.ns1blankspaceDate, input.ns1blankspaceDateTime
+{
+	width: 100%;
+	font-size: 0.875em;
+	margin-bottom: 5px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-bottom: 5px;
+}
+
+input.ns1blankspaceRadio
+{
+	font-size: 0.875em;
+	padding-top: 0px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+	padding-left: 12px;
+}
+
+input[type=radio]
+{
+	margin-top: 2px;
+	margin-right: 7px;
+	margin-bottom: 7px;
+}
+
+input.ns1blankspaceSelect, input.ins1blankspaceSelectContact, input.ns1blankspaceSelectContactEmail, input.ns1blankspaceSelectCustom
+{
+	width: 100%;
+	font-size: 0.875em;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-bottom: 5px;
+}
+
+textarea.ns1blankspaceTextMulti
+{
+	height: 250px;
+	width: 250px;
+	font-size: 0.875em;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	margin-bottom: 5px;
+}
+
+textarea.ns1blankspaceTextMultiLarge
+{
+	height: 250px;
+	width: 100%;
+	font-size: 0.875em;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	margin-bottom: 5px;
+}
+
+textarea.ns1blankspaceTextMultiSmall
+{
+	height: 50px;
+	width: 100%;
+	font-size: 0.875em;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #B8B8B8;
+	padding-left: 3px;
+	padding-top: 3px;
+	margin-bottom: 5px;
+}
+
+#ns1blankspaceLogonStatus
+{
+	font-size: 0.75em;
+}
+
+#ns1blankspaceSpaceText
+{
+	font-weight: 100;
+	color: #CCCCCC;
+	cursor: pointer;
+	font-size: 1.25em;
+	width: 250px;
+	padding-bottom: 2px;
+	text-align: right;
+}
+
+#ns1blankspaceViewControlHomeContainer
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;	
+}
+
+#ns1blankspaceViewControlHistoryContainer
+{
+	position: absolute;
+	top: 0px;
+	left: 52px;	
+}
+
+#ns1blankspaceViewControlViewContainer
+{
+	position: absolute;
+	top: 0px;
+	left: 135px;	
+	width: 216px;
 }
 
 #ns1blankspaceContainer
@@ -154,161 +628,6 @@ a:hover
 	text-align: right;
 }
 
-td.ns1blankspaceLogonCaption
-{
-	font-weight: 500;
-	color: #B8B8B8;
-}
-
-td.ns1blankspaceLogon
-{
-	font-size: 0.875em;
-	padding-left: 5px;
-}
-
-input.ns1blankspaceLogon
-{
-	height: 23px;
-	width: 234px;;
-	font-size: 1em;
-	padding-left: 5px;
-}
-
-.ns1blankspaceAction
-{
-	font-size: 0.75em;
-}
-
-td.ns1blankspaceLogonSub
-{
-	text-align: right;
-	font-size: 0.75em;
-	color: #999999;
-	vertical-align: bottom;
-}
-
-#ns1blankspaceLogonStatus
-{
-	font-size: 0.75em;
-}
-
-td.ns1blankspaceLogonNotes
-{
-	color: #999999;
-	font-size: 0.875em;
-	padding-left: 15px;
-	border-left-style:solid;
-	border-width: 1px;
-	border-color: #B8B8B8;
-}
-
-#ns1blankspaceSpaceText
-{
-	font-weight: 100;
-	color: #CCCCCC;
-	cursor: pointer;
-	font-size: 1.25em;
-	width: 250px;
-	padding-bottom: 2px;
-	text-align: right;
-}
-
-td.ns1blankspaceNothing
-{
-	font-size: 0.875em;
-	color: #888888;
-}
-
-.ns1blankspaceMostLikelySub
-{
-	font-size: 0.75em;
-	color: #999999;
-	padding-left: 10px;
-}
-
-.ns1blankspaceSub, .ns1blankspaceSubContext
-{
-	color: #999999;
-	font-weight: 100;
-}
-
-.ns1blankspaceHeader
-{
-	color: #999999;
-	font-size: 0.875em;
-}
-
-.ns1blankspaceHeaderCaption
-{
-	color: #888888;
-	font-weight: 300;
-	padding: 2px;
-	padding-bottom: 4px;
-	padding-right: 8px;
-	border-bottom-style:solid;
-	border-width: 1px;
-	border-color: #D0D0D0;	
-}
-
-table.ns1blankspaceMessagingIMAPInbox
-{
-	font-size: 0.875em;
-}
-
-.ns1blankspaceRenderHeaderPage
-{
-	color: #999999;
-	font-size: 0.875em;
-	text-align: center;
-	border: 1px;
-	border-style:solid;
-	border-color: #999999;
-	padding: 2px;
-	font-weight: 200;
-	min-width: 15px;
-	margin-right:4px;
-}
-
-.ns1blankspaceRenderHeaderPageSelected
-{
-	color: white;
-	background-color: #999999;
-}
-
-.ns1blankspaceRenderHeaderMore
-{
-	color: #999999;
-	font-size: 0.75em;
-	vertical-align: middle;
-}
-
-#ns1blankspaceViewControlHomeContainer
-{
-	position: absolute;
-	top: 0px;
-	left: 0px;	
-}
-
-#ns1blankspaceViewControlHistoryContainer
-{
-	position: absolute;
-	top: 0px;
-	left: 52px;	
-}
-
-#ns1blankspaceViewControlViewContainer
-{
-	position: absolute;
-	top: 0px;
-	left: 135px;	
-	width: 216px;
-}
-
-.ns1blankspaceNotSeen
-{
-	font-weight: bold;
-}
-
 #ns1blankspaceViewControlSearch
 {
 	position: absolute;
@@ -374,337 +693,6 @@ table.ns1blankspaceMessagingIMAPInbox
 	position: absolute;
 	top: 0px;
 	left: 870px;
-}
-
-table.ns1blankspaceViewControlContainer
-{
-	border-spacing: 5px 5px;
-
-	background-color: #F8F8F8;
-	width: 175px;
-	
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-right: 5px;
-	padding-left: 5px;
-	
-	border-style: solid;
-	border-width: 3px;
-	border-color: #E8E8E8;
-	
-	margin-top:8px;
-	margin-bottom:1px;
-	margin-right:1px;
-	margin-left:1px;
-
-	opacity: 0.95;
-}
-
-table.ns1blankspaceSearchMedium
-{
-	font-size: 0.875em;
-	background-color: #F8F8F8;
-	width: 250px;
-	
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-right: 5px;
-	padding-left: 5px;
-	
-	border-style: solid;
-	border-width: 3px;
-	border-color: #E8E8E8;
-	
-	margin-bottom: 1px;
-	margin-right: 1px;
-	margin-left: 1px;
-}
-
-td.ns1blankspaceSearch
-{
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
-	border-color: white;
-	cursor: pointer;
-	font-size: 0.875em;
-	padding: 3px;
-	color: black;
-}
-
-td.ns1blankspaceSearchSub
-{
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
-	border-bottom-color: white;
-	cursor: pointer;
-	font-size: 0.875em;
-	padding: 3px;
-	color: #B8B8B8;
-}
-
-.ns1blankspaceViewControlColumn
-{
-	background-color: #ffffff;
-	width: 115px;
-	font-size: 0.9375em;
-	border-spacing: 6px;
-	color: black;
-}
-
-td.ns1blankspaceViewControl
-{
-	cursor: pointer;
-	color: black;
-}
-
-table.ns1blankspaceControl
-{
-	padding-top: 20px;
-	padding-right: 0px;
-}
-
-td.ns1blankspaceControl
-{
-	text-align: right;
-	padding-right: 0px;
-	cursor: pointer;
-}
-
-td.ns1blankspaceHighlight
-{
-	font-weight: bold;	
-	color: #DA8300;	
-}
-
-.ns1blankspaceCaption
-{
-	color: #B8B8B8;
-	font-weight: bold;
-	padding-top: 5px;
-	padding-bottom: 2px;
-	padding-right: 2px;
-	padding-left: 2px;
-}	
-
-table.ns1blankspaceMostLikely
-{
-	border-spacing: 5px 0px;
-}
-
-td.ns1blankspaceMostLikely
-{
-	cursor: pointer;
-	color: #EE8F00;
-	text-decoration: none;
-	font-size: 0.875em;
-}	
-
-.ns1blankspaceControlContext
-{
-	font-size: 1em;
-	font-weight: bold;
-	text-align: right;
-	width: 100%;
-	margin-right: 20px;
-}
-
-.ns1blankspaceSummaryCaption
-{
-	color: #B8B8B8;
-	font-weight: bold;
-}
-
-.ns1blankspaceSummary
-{
-	padding-bottom: 10px;
-}
-
-td.ns1blankspaceColumn1
-{
-	padding-right: 20px;
-	width: 50%;
-}
-
-td.ns1blankspaceColumn1Flexixble
-{
-	padding-right: 20px;
-}
-
-table.ns1blankspaceColumn2
-{
-	border-left-style:solid;
-	border-width: 1px;
-	border-color: #B8B8B8;
-	padding-left: 10px;
-	margin-left: 15px;
-	margin-right: 15px;
-}
-
-td.ns1blankspaceRowSelect
-{
-	cursor: pointer;
-	color: #ee8f00;
-	text-decoration: none;
-	font-size: 0.875em;
-}
-
-td.ns1blankspaceRow
-{
-	font-size: 0.875em;
-	border-spacing: 0px;
-	border-bottom-style:solid;
-	border-width: 1px;
-	border-color: #D0D0D0;	
-	padding-top: 2px;
-	padding-bottom: 2px;
-	padding-right: 8px;
-	padding-left: 2px;
-}
-
-input.ns1blankspaceText, input.ins1blankspaceTextMoney
-{
-	width: 100%;
-	font-size: 0.875em;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #B8B8B8;
-	padding-left: 3px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	margin-bottom: 5px;
-}
-
-td.ns1blankspaceText, td.ns1blankspaceTextMulti, td.ns1blankspaceSelect, td.ns1blankspaceDate
-{
-	padding-right: 10px;
-}
-
-input.ns1blankspaceDate, input.ns1blankspaceDateTime
-{
-	width: 100%;
-	font-size: 0.875em;
-	margin-bottom: 5px;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #B8B8B8;
-	padding-left: 3px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	margin-bottom: 5px;
-}
-
-td.ns1blankspaceRadio
-{
-	font-size: 0.875em;
-	padding-left: 3px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	margin-bottom: 5px;
-}
-
-input.ns1blankspaceRadio
-{
-	font-size: 0.875em;
-	padding-top: 0px;
-	padding-bottom: 2px;
-	padding-right: 2px;
-	padding-left: 12px;
-}
-
-input[type=radio]
-{
-	margin-top: 2px;
-	margin-right: 7px;
-	margin-bottom: 7px;
-}
-textarea.ns1blankspaceTextMulti
-{
-	height: 250px;
-	width: 250px;
-	font-size: 0.875em;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #B8B8B8;
-	padding-left: 3px;
-	padding-top: 3px;
-	margin-bottom: 5px;
-}
-
-textarea.ns1blankspaceTextMultiLarge
-{
-	height: 250px;
-	width: 100%;
-	font-size: 0.875em;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #B8B8B8;
-	padding-left: 3px;
-	padding-top: 3px;
-	margin-bottom: 5px;
-}
-
-textarea.ns1blankspaceTextMultiSmall
-{
-	height: 50px;
-	width: 100%;
-	font-size: 0.875em;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #B8B8B8;
-	padding-left: 3px;
-	padding-top: 3px;
-	margin-bottom: 5px;
-}
-
-input.ns1blankspaceSelect, input.ins1blankspaceSelectContact, input.ns1blankspaceSelectContactEmail, input.ns1blankspaceSelectCustom
-{
-	width: 100%;
-	font-size: 0.875em;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #B8B8B8;
-	padding-left: 3px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	margin-bottom: 5px;
-}
-
-.ui-button-icon-only .ui-icon
-{
-	margin-left: -8px;
-}
-
-.ui-button-icon-only .ui-icon, .ui-button-text-icon-primary .ui-icon, .ui-button-text-icon-secondary .ui-icon, .ui-button-text-icons .ui-icon, .ui-button-icons-only .ui-icon
-{
-	margin-top: -8px;
-}
-
-.ns1blankspaceViewImage
-{
-	background-repeat: no-repeat;
-	background-position: left center;
-	top: 0px;
-	height: 55px;
-	border-bottom-style:solid;
-	border-width: 8px;
-	border-color: white;
-}
-
-.ns1blankspaceViewImageLarge
-{
-	background-repeat: no-repeat;
-	background-position: right center;
-	top: 0px;
-	height: 75px;
-}
-
-.ns1blankspaceTicked, .ticked
-{
-	height: 13px;
-	width: 13px;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-image:url(/jscripts/images/ticked.png);
 }
 
 #ns1blankspaceViewContact
