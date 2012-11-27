@@ -163,9 +163,9 @@ a:hover
 .ns1blankspaceViewImageLarge
 {
 	background-repeat: no-repeat;
-	background-position: right center;
-	top: 0px;
-	height: 75px;
+	float: right;
+	height: 65px;
+	width: 65px;
 }
 
 .ns1blankspaceTicked, .ticked
@@ -697,12 +697,12 @@ textarea.ns1blankspaceTextMultiSmall
 
 #ns1blankspaceViewContact
 {
-	background-image:url(/jscripts/images/1blankspace.view.contact.green.png);
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -50px -100px;
 }
 
 #ns1blankspaceViewContactLarge
 {
-	background-image:url(/jscripts/images/1blankspace.view.contact.green.large.png);
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px -130px;
 }
 
 #ns1blankspaceViewOpportunityLarge
