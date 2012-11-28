@@ -857,7 +857,7 @@ textarea.ns1blankspaceTextMultiSmall
 
 #ns1blankspaceViewMessagingConversationLarge
 {
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -165px -130px;
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -195px -130px;
 }
 
 #ns1blankspaceViewAutomation
@@ -867,7 +867,7 @@ textarea.ns1blankspaceTextMultiSmall
 
 #ns1blankspaceViewAutomationLarge
 {
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -325px 0px;
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -325px -65px;
 }
 
 #ns1blankspaceViewDeveloper
@@ -877,7 +877,7 @@ textarea.ns1blankspaceTextMultiSmall
 
 #ns1blankspaceViewDeveloperLarge
 {
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -325px 0px;
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px -260px;
 }
 
 #ns1blankspaceViewDeveloperSpace
@@ -887,7 +887,7 @@ textarea.ns1blankspaceTextMultiSmall
 
 #ns1blankspaceViewDeveloperSpaceLarge
 {
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -325px 0px;
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -390px 0px;
 }
 
 #ns1blankspaceViewDeveloperBilling
@@ -897,7 +897,7 @@ textarea.ns1blankspaceTextMultiSmall
 
 #ns1blankspaceViewDeveloperBillingLarge
 {
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -325px 0px;
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -390px -130px;
 }
 
 #ns1blankspaceViewSetupSpace

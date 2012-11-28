@@ -100,7 +100,7 @@ ns1blankspace.event =
 						
 						var aHTML = [];
 						
-						aHTML.push('<tr><td><div id="ns1blankspaceViewEventLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');	
+						aHTML.push('<table><tr><td><div id="ns1blankspaceViewEventLarge" class="ns1blankspaceViewImageLarge"></div></td></tr></table>');	
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
