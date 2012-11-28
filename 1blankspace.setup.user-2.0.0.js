@@ -55,9 +55,7 @@ ns1blankspace.setup.user =
 									
 						aHTML.push('<table>');
 
-						aHTML.push('<tr><td><div id="ns1blankspaceViewProjectLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');	
-
-						aHTML.push('<tr><td id="ns1blankspaceViewSetupLarge" class="ns1blankspaceViewImageLarge">&nbsp;</td></tr>');
+						aHTML.push('<tr><td><div id="ns1blankspaceViewSetupUserLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');	
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlInternal" class="ns1blankspaceControl">' +
 									'Internal</td></tr>');			

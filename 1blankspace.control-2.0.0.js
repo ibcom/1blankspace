@@ -960,7 +960,7 @@ ns1blankspace.control =
 															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
 															aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewContact" class="ns1blankspaceViewImage"></div>' +
+																'<div id="ns1blankspaceViewSetupUser" class="ns1blankspaceViewImage"></div>' +
 																'</td></tr>');
 
 															aHTML.push(aHTMLViewport.join(''))

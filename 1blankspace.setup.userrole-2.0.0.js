@@ -39,7 +39,7 @@ ns1blankspace.setup.userRole =
 						var aHTML = [];
 						
 						aHTML.push('<table>' +
-							'<tr><td><div id="ns1blankspaceViewSetupLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
+							'<tr><td><div id="ns1blankspaceViewSetupUserLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
 							'</table>');	
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));
