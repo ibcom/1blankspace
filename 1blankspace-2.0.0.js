@@ -134,7 +134,7 @@ ns1blankspace.scripts =
 [
 	{
 		nameSpace: '1blankspace.advancedsearch',
-		source: '/jscripts/1blankspace.advancedsearch-1.0.3.js'
+		source: '/jscripts/1blankspace.advancedsearch-2.0.0.js'
 	},
 	{
 		nameSpace: '1blankspace.home',
@@ -2751,7 +2751,7 @@ ns1blankspace.util =
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/jscripts/1blankspace.rpc-1.0.1.json',
+							url: '/jscripts/1blankspace.rpc-1.0.2.json',
 							dataType: 'json',
 							async: false,
 							success: function(data) {ns1blankspace.rpc = data.methods}
