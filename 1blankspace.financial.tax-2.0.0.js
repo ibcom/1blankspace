@@ -45,7 +45,7 @@ ns1blankspace.financial.tax =
 									
 						aHTML.push('<table class="ns1blankspaceMain">' + 
 										'<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td></tr>' + 
 										'</table>');					
@@ -61,17 +61,6 @@ ns1blankspace.financial.tax =
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 													
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-						
-						/*
-						$.ajax(
-								{
-									type: 'POST',
-									url: ns1blankspace.util.endpointURI('FINANCIAL_TAX_REPORT_SEARCH'),
-									data: 'rows=10',
-									dataType: 'json',
-									success: function(data){ns1blankspace.financial.tax.home(oParam, data)}
-								});
-						*/
 								
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_TAX_REPORT_SEARCH';
@@ -83,6 +72,8 @@ ns1blankspace.financial.tax =
 					}
 					else
 					{
+						var aHTML = [];
+
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
@@ -92,7 +83,6 @@ ns1blankspace.financial.tax =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceMain" colspan="4">MOST LIKELY</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
@@ -101,11 +91,8 @@ ns1blankspace.financial.tax =
 								aHTML.push('<td id="ns1blankspaceMostLikely_enddate-' + this.id + '" class="ns1blankspaceMostLikely" style="width:150px;">' +
 														this.enddate + '</td>');
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_status-' + this.id + '" class="ns1blankspaceMostLikely" style="width:90px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_status-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;">' +
 														this.statustext  + '</td>');
-								
-								aHTML.push('<td id="ns1blankspaceMostLikely_reference-' + this.id + '" class="ns1blankspaceMostLikely" style="width:90px;">' +
-														this.taxofficereference  + '</td>');
 							
 								aHTML.push('<td>&nbsp;</td></tr>');
 							});
@@ -251,7 +238,7 @@ ns1blankspace.financial.tax =
 					}
 					else
 					{	
-						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">"' +
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +

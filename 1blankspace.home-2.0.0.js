@@ -33,8 +33,7 @@ ns1blankspace.home =
 					
 					aHTML.push('<table id="ns1blankspaceHomeContainer">');
 					
-					aHTML.push('<tr><td style="background-position: right center;" id="ns1blankspaceViewAction" class="ns1blankspaceViewImageLarge">' +
-										'&nbsp;</td></tr>');
+					aHTML.push('<tr><td><div id="ns1blankspaceViewActionLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 						
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlActionToday" class="ns1blankspaceControl ns1blankspaceControlHome">' +

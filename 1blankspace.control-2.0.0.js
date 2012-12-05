@@ -100,6 +100,22 @@ ns1blankspace.xhtml.header =
 	'<div id="ns1blankspaceSpaceText" style="width:300px;"></div>' +
 	'<div id="ns1blankspaceLogonName" style="width:300px;"></div></div>';
 
+ns1blankspace.themes = 
+[
+	{
+		title: "Standard",
+		cssURI: "",
+	},
+	{
+		title: "Taxi",
+		cssURI: "/jscripts/1blankspace.theme.taxi-2.0.0.css",
+		xhtmlHeader: 	'<div id="ns1blankspaceLogo" style="width:200px; float:left; "><img src="/jscripts/images/1blankspace-2.0.0.png"></div>' +
+						'<div style="float:right; margin-right:3px;">' +
+						'<div id="ns1blankspaceSpaceText" style="width:300px;"></div>' +
+						'<div id="ns1blankspaceLogonName" style="width:300px;"></div></div>';
+	}
+]	
+
 ns1blankspace.views = 
 [
 	{
@@ -1206,11 +1222,15 @@ ns1blankspace.control =
 									{
 										var aHTML = [];
 		
-										aHTML.push('<table style="width: 232px;" id="ns1blankspaceControlUser" class="ns1blankspaceViewControlContainer">');
+										aHTML.push('<table style="width: 232px;" id="ns1blankspaceControlUser" class="ns1blankspaceViewControlContainer" style="font-size: 0.875em;">');
 											
 										aHTML.push('<tr>' +
 														'<td id="ns1blankspaceUserLogOff" class="ns1blankspaceViewControl">' +
 														'Log Off</td></tr>');
+
+										aHTML.push('<tr>' +
+														'<td id="ns1blankspaceUserTheme" class="ns1blankspaceViewControl">' +
+														'Change Theme</td></tr>');
 													
 										aHTML.push('<tr>' +
 														'<td id="ns1blankspaceConrolUserChangePassword" class="ns1blankspaceViewControl">' +
@@ -1232,6 +1252,12 @@ ns1blankspace.control =
 											ns1blankspace.logOff();
 										})
 										
+										$('#ns1blankspaceConrolUserChangeTheme').click(function(event)
+										{
+											$(this).html(ns1blankspace.xhtml.loadingSmall);
+											ns1blankspace.control.user.changeTheme();
+										});
+
 										$('#ns1blankspaceConrolUserChangePassword').click(function(event)
 										{
 											$(this).html(ns1blankspace.xhtml.loadingSmall);
@@ -1291,6 +1317,144 @@ ns1blankspace.control =
 										ns1blankspace.logon.changePassword.show({xhtmlElementID: 'ns1blankspaceLogonName'});
 										
 									},
+
+						changeTheme:
+									function (oParam, oResponse)
+									{
+										var aHTML = [];
+										var h = -1;
+										var bShow = true;
+										var bSetPosition = false;
+										var sXHTMLElementID = 'ns1blankspaceMultiUseContainer'
+										var sXHTMLPositionElementID = 'ns1blankspaceMultiUseContainer'
+
+										if (oParam != undefined)
+										{
+											if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+											if (oParam.xhtmlPositionElementID != undefined) {sXHTMLPositionElementID = oParam.xhtmlPositionElementID}
+											if (oParam.show != undefined) {bShow = oParam.show}
+											if (oParam.setPosition != undefined) {bSetPosition = oParam.setPosition}
+										}	
+										
+										if (oResponse == undefined)
+										{
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_SEARCH'),
+												dataType: 'json',
+												success: function(data) {ns1blankspace.control.user.key(oParam, data)}
+											})
+										}
+										else
+										{	
+											aHTML.push('<table id="ns1blankspaceControlUserKeyContainer" class="ns1blankspaceViewControlContainer" style="width:400px;"><tr><td>');	
+
+											if (bSetPosition)
+											{
+												ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -198, topOffset: 0})
+											}	
+										
+											if (bShow)
+											{
+												aHTML.push('<table style="width:400px;">' + 
+																'<tr><td class="ns1blankspaceCaption">Secure Access Token</td>' +
+																'<td id="tdns1blankspaceHomeOptionClose" style="text-align:right;">' +
+																'<span id="ns1blankspaceClose">Close</span></td>' +
+																'</tr>' +
+																'</table>');
+											}
+											
+											aHTML.push('<table id="ns1blankspaceControlUserCreateSecureKey" style="width:400px; font-size:0.75em">');
+											
+											if (oResponse.access_token == undefined)
+											{
+												aHTML.push('<tr><td>' +
+																'<br />No key has been set up.  Click <b>New Token</b> to create a token, which you can use to link to your information.<br /><br /></td></tr>');
+												
+											}
+											else
+											{
+												aHTML.push('<tr><td>' +
+																	oResponse.access_token + '<br /><br /></td></tr>');
+												
+												aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
+												aHTML.push('<tr><td><br />If you generate a new token, the current token will no longer work.<br /><br /></td></tr>');
+											}
+											
+											aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyNew">New Token</span></td></tr>');
+											
+											if (oResponse.access_token != undefined)
+											{
+												aHTML.push('<tr><td><br /><b>Example link for future diary events in iCal format:</b><br /><br />' +
+																	window.location.protocol + '//' + window.location.host + '/ondemand/action/' +
+																	'<br />?method=ACTION_ICAL_SEARCH' +
+																	'<br />&access_token=' + oResponse.access_token + '<br /><br /></td></tr>');
+																	
+												aHTML.push('<tr><td><a href="' +
+																	window.location.protocol + '//' + window.location.host + '/ondemand/action/?method=ACTION_ICAL_SEARCH' +
+																	'&access_token=' + oResponse.access_token + '" target="_blank" style="font-size:1.2em">Open example link</a>' +
+																	'<br /><span style="color: #A0A0A0;">(You can then copy & paste it)<br /><br /></span></td></tr>');					
+											}
+											
+											aHTML.push('</table>');
+											
+											aHTML.push('</td></tr></table>');
+											
+											$('#' + sXHTMLElementID).html(aHTML.join(''));	
+											
+											$('#ns1blankspaceClose').button(
+											{
+												text: false,
+												 icons: {
+													 primary: "ui-icon-close"
+												}
+											})
+											.click(function() {
+												$('#' + sXHTMLElementID).slideUp(500);
+												$('#' + sXHTMLElementID).html('');
+												$('#' + sXHTMLElementID).attr('data-initiator', '');
+											})
+											.css('width', '20px')
+											.css('height', '20px')
+											
+											$('#ns1blankspaceControlUserCreateSecureKeyDisable').button()
+											.click(function() {
+											
+												if (confirm('Are you sure?'))
+												{
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_MANAGE'),
+														data: 'remove=1&rf=TEXT',
+														dataType: 'text',
+														async: false,
+														success: function(data) {ns1blankspace.control.user.createSecureKey({setPosition: false})}
+													})
+												}		
+											})
+											.css('width', '150px')
+											
+											$('#ns1blankspaceControlUserCreateSecureKeyNew').button()
+											.click(function() {
+											
+												if (confirm('Are you sure?'))
+												{
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_MANAGE'),
+														data: 'rf=TEXT',
+														dataType: 'text',
+														async: false,
+														success: function(data) {ns1blankspace.control.user.createSecureKey({setPosition: false})}
+													})
+												}		
+											})
+											.css('width', '150px');
+										}		
+									},		
 
 						key:		function (oParam, oResponse)
 									{
