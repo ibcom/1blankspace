@@ -404,7 +404,8 @@ ns1blankspace.app =
 					ns1blankspace.user.contactperson = -1;
 					ns1blankspace.user.systemAdmin = false;
 					ns1blankspace.setupShow = false;
-						
+					ns1blankspace.user.theme = 'Standard';
+
 					ns1blankspace.data.searchSource = {text: 1, browse: 2, select: 3, all: 4}
 
 					ns1blankspace.debug.appContext = 'start';
@@ -665,8 +666,6 @@ ns1blankspace.app =
 	show: 		function (oResponse)	
 				{
 					var aHTML = [];
-
-					ns1blankspace.user = {};
 
 					ns1blankspace.user.id = oResponse.user;
 					ns1blankspace.user.unrestricted = (oResponse.unrestrictedaccess = 'Y' || oResponse.unrestrictedaccess == undefined ? true : false);

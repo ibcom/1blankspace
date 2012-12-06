@@ -95,7 +95,7 @@ ns1blankspace.xhtml.logonNotes =
 	'<br /><a href="https://developer.1blankspace.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
 
 ns1blankspace.xhtml.header =
-	'<div id="ns1blankspaceLogo" style="width:200px; float:left; "><img src="/jscripts/images/1blankspace-2.0.0.png"></div>' +
+	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/1blankspace-2.0.0.png"></div>' +
 	'<div style="float:right; margin-right:3px;">' +
 	'<div id="ns1blankspaceSpaceText" style="width:300px;"></div>' +
 	'<div id="ns1blankspaceLogonName" style="width:300px;"></div></div>';
@@ -103,16 +103,20 @@ ns1blankspace.xhtml.header =
 ns1blankspace.themes = 
 [
 	{
-		title: "Standard",
-		cssURI: "",
+		title: 				'Standard',
+		cssURI: 			'', 
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace-2.0.0.png">',
+		default: 			true
 	},
 	{
-		title: "Taxi",
-		cssURI: "/jscripts/1blankspace.theme.taxi-2.0.0.css",
-		xhtmlHeader: 	'<div id="ns1blankspaceLogo" style="width:200px; float:left; "><img src="/jscripts/images/1blankspace-2.0.0.png"></div>' +
-						'<div style="float:right; margin-right:3px;">' +
-						'<div id="ns1blankspaceSpaceText" style="width:300px;"></div>' +
-						'<div id="ns1blankspaceLogonName" style="width:300px;"></div></div>';
+		title: 				'New York',
+		cssURI: 			'/jscripts/1blankspace.theme.newyork-2.0.0.css',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+	},
+	{
+		title: 				'Photography',
+		cssURI: 			'/jscripts/1blankspace.theme.photography-2.0.0.css',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
 	}
 ]	
 
@@ -537,6 +541,21 @@ ns1blankspace.control =
 					else if (iStep == 4)
 					{
 						if (ns1blankspace.user.systemAdmin) {ns1blankspace.setupShow = true};
+
+						$.ajax(
+						{
+							type: 'GET',
+							url: '/ondemand/core/?method=CORE_PROFILE_SEARCH&type=1&rf=TEXT&id=455',
+							dataType: 'text',
+							async: true,
+							success: function(data) {
+								sData = data.replace('OK|RETURNED|', '')
+								if (sData != '')
+								{
+									ns1blankspace.control.user.changeTheme({theme: sData});
+								}	
+							}
+						})
 					}		
 				},
 
@@ -1222,18 +1241,18 @@ ns1blankspace.control =
 									{
 										var aHTML = [];
 		
-										aHTML.push('<table style="width: 232px;" id="ns1blankspaceControlUser" class="ns1blankspaceViewControlContainer" style="font-size: 0.875em;">');
+										aHTML.push('<table style="width: 232px; font-size: 0.875em;" id="ns1blankspaceControlUser" class="ns1blankspaceViewControlContainer">');
 											
 										aHTML.push('<tr>' +
 														'<td id="ns1blankspaceUserLogOff" class="ns1blankspaceViewControl">' +
 														'Log Off</td></tr>');
 
 										aHTML.push('<tr>' +
-														'<td id="ns1blankspaceUserTheme" class="ns1blankspaceViewControl">' +
+														'<td id="ns1blankspaceControlUserChangeTheme" class="ns1blankspaceViewControl">' +
 														'Change Theme</td></tr>');
 													
 										aHTML.push('<tr>' +
-														'<td id="ns1blankspaceConrolUserChangePassword" class="ns1blankspaceViewControl">' +
+														'<td id="ns1blankspaceControlUserChangePassword" class="ns1blankspaceViewControl">' +
 														'Change My Password</td></tr>');		
 													
 										aHTML.push('<tr">' +
@@ -1252,13 +1271,13 @@ ns1blankspace.control =
 											ns1blankspace.logOff();
 										})
 										
-										$('#ns1blankspaceConrolUserChangeTheme').click(function(event)
+										$('#ns1blankspaceControlUserChangeTheme').click(function(event)
 										{
 											$(this).html(ns1blankspace.xhtml.loadingSmall);
 											ns1blankspace.control.user.changeTheme();
 										});
 
-										$('#ns1blankspaceConrolUserChangePassword').click(function(event)
+										$('#ns1blankspaceControlUserChangePassword').click(function(event)
 										{
 											$(this).html(ns1blankspace.xhtml.loadingSmall);
 											ns1blankspace.control.user.changePassword();
@@ -1327,6 +1346,7 @@ ns1blankspace.control =
 										var bSetPosition = false;
 										var sXHTMLElementID = 'ns1blankspaceMultiUseContainer'
 										var sXHTMLPositionElementID = 'ns1blankspaceMultiUseContainer'
+										var sTheme;
 
 										if (oParam != undefined)
 										{
@@ -1334,126 +1354,108 @@ ns1blankspace.control =
 											if (oParam.xhtmlPositionElementID != undefined) {sXHTMLPositionElementID = oParam.xhtmlPositionElementID}
 											if (oParam.show != undefined) {bShow = oParam.show}
 											if (oParam.setPosition != undefined) {bSetPosition = oParam.setPosition}
+											if (oParam.theme != undefined) {sTheme = oParam.theme}
 										}	
 										
-										if (oResponse == undefined)
+										if (sTheme == undefined)
 										{
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_SEARCH'),
-												dataType: 'json',
-												success: function(data) {ns1blankspace.control.user.key(oParam, data)}
-											})
-										}
-										else
-										{	
-											aHTML.push('<table id="ns1blankspaceControlUserKeyContainer" class="ns1blankspaceViewControlContainer" style="width:400px;"><tr><td>');	
+											aHTML.push('<table id="ns1blankspaceControlUserKeyContainer" class="ns1blankspaceViewControlContainer" style="width:200px;"><tr><td>');	
 
 											if (bSetPosition)
 											{
 												ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -198, topOffset: 0})
 											}	
+											
+											aHTML.push('<table id="ns1blankspaceControlUserChangeTheme" style="width:200px;">');
+											
+											aHTML.push('<tr class="ns1blankspace">' +
+														'<td id="ns1blankspaceContolUser" class="ns1blankspaceRadio">');
+									
+											$.each(ns1blankspace.themes, function(i)
+											{
+												aHTML.push('<input class="theme" type="radio" id="radioTheme-' + i + '" name="radioTheme" value="' + this.cssURI + '"' +
+																	' title="' + this.title + '"/>' + this.title + '<br />');				
+											});
+											
+											aHTML.push('</td></tr>');	
+											
+											aHTML.push('<tr><td><span id="ns1blankspaceClose" class="ns1blankspaceAction">Close</span></td></tr>');
 										
-											if (bShow)
-											{
-												aHTML.push('<table style="width:400px;">' + 
-																'<tr><td class="ns1blankspaceCaption">Secure Access Token</td>' +
-																'<td id="tdns1blankspaceHomeOptionClose" style="text-align:right;">' +
-																'<span id="ns1blankspaceClose">Close</span></td>' +
-																'</tr>' +
-																'</table>');
-											}
-											
-											aHTML.push('<table id="ns1blankspaceControlUserCreateSecureKey" style="width:400px; font-size:0.75em">');
-											
-											if (oResponse.access_token == undefined)
-											{
-												aHTML.push('<tr><td>' +
-																'<br />No key has been set up.  Click <b>New Token</b> to create a token, which you can use to link to your information.<br /><br /></td></tr>');
-												
-											}
-											else
-											{
-												aHTML.push('<tr><td>' +
-																	oResponse.access_token + '<br /><br /></td></tr>');
-												
-												aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
-												aHTML.push('<tr><td><br />If you generate a new token, the current token will no longer work.<br /><br /></td></tr>');
-											}
-											
-											aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyNew">New Token</span></td></tr>');
-											
-											if (oResponse.access_token != undefined)
-											{
-												aHTML.push('<tr><td><br /><b>Example link for future diary events in iCal format:</b><br /><br />' +
-																	window.location.protocol + '//' + window.location.host + '/ondemand/action/' +
-																	'<br />?method=ACTION_ICAL_SEARCH' +
-																	'<br />&access_token=' + oResponse.access_token + '<br /><br /></td></tr>');
-																	
-												aHTML.push('<tr><td><a href="' +
-																	window.location.protocol + '//' + window.location.host + '/ondemand/action/?method=ACTION_ICAL_SEARCH' +
-																	'&access_token=' + oResponse.access_token + '" target="_blank" style="font-size:1.2em">Open example link</a>' +
-																	'<br /><span style="color: #A0A0A0;">(You can then copy & paste it)<br /><br /></span></td></tr>');					
-											}
-											
 											aHTML.push('</table>');
-											
-											aHTML.push('</td></tr></table>');
-											
+												
 											$('#' + sXHTMLElementID).html(aHTML.join(''));	
 											
-											$('#ns1blankspaceClose').button(
-											{
-												text: false,
-												 icons: {
-													 primary: "ui-icon-close"
-												}
-											})
+											$('#ns1blankspaceClose').button()
 											.click(function() {
 												$('#' + sXHTMLElementID).slideUp(500);
 												$('#' + sXHTMLElementID).html('');
 												$('#' + sXHTMLElementID).attr('data-initiator', '');
 											})
-											.css('width', '20px')
-											.css('height', '20px')
 											
-											$('#ns1blankspaceControlUserCreateSecureKeyDisable').button()
-											.click(function() {
-											
-												if (confirm('Are you sure?'))
+											$('[name="radioTheme"][title="' + ns1blankspace.user.theme + '"]').attr('checked', true);
+										
+											$('input.theme')
+											.click(function()
+											{
+												var sTitle = $(this).attr('title');
+												ns1blankspace.control.user.changeTheme({theme: sTitle})
+											});
+										}	
+										else
+										{		
+											 var oTheme = $.grep(ns1blankspace.themes, function (a) {return a.title == sTheme;})[0];	
+
+											 if (oTheme != undefined)
+											 {	
+											 	ns1blankspace.user.theme = sTheme;
+
+												var sCSSURI = oTheme.cssURI;
+
+												$.ajax(
 												{
-													$.ajax(
-													{
-														type: 'POST',
-														url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_MANAGE'),
-														data: 'remove=1&rf=TEXT',
-														dataType: 'text',
-														async: false,
-														success: function(data) {ns1blankspace.control.user.createSecureKey({setPosition: false})}
-													})
-												}		
-											})
-											.css('width', '150px')
-											
-											$('#ns1blankspaceControlUserCreateSecureKeyNew').button()
-											.click(function() {
-											
-												if (confirm('Are you sure?'))
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('CORE_PROFILE_MANAGE'),
+													data: 'type=1&id=455&value=' + ns1blankspace.util.fs(ns1blankspace.user.theme),
+													dataType: 'text'
+												})
+
+												if (sCSSURI == '')
 												{
-													$.ajax(
-													{
-														type: 'POST',
-														url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_MANAGE'),
-														data: 'rf=TEXT',
-														dataType: 'text',
-														async: false,
-														success: function(data) {ns1blankspace.control.user.createSecureKey({setPosition: false})}
-													})
-												}		
-											})
-											.css('width', '150px');
-										}		
+													$("#ns1blankspaceThemeCSS").remove();
+												}
+												else
+												{
+												    if ($("#ns1blankspaceThemeCSS").length == 0)
+												    {
+												        $("head").append("<link>");
+
+												        var cssLink = $("head").children(":last");
+
+												        cssLink.attr(
+												        {
+													        id: "ns1blankspaceThemeCSS",
+													        rel:  "stylesheet",
+													        type: "text/css",
+													        href: sCSSURI
+												        });
+												    }
+												    else
+												    {
+												        $("#ns1blankspaceThemeCSS").attr("href", sCSSURI);
+												    }
+												}
+												    
+											    if (oTheme.xhtmlHeader != undefined)
+											    {
+											    	$('#ns1blankspaceHeader').html(oTheme.xhtmlHeader);
+											    }
+
+											    if (oTheme.xhtmlHeaderLogo != undefined)
+											    {
+											    	$('#ns1blankspaceLogo').html(oTheme.xhtmlHeaderLogo);
+											    }
+											}   
+										}
 									},		
 
 						key:		function (oParam, oResponse)
