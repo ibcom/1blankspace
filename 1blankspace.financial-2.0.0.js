@@ -61,7 +61,6 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 										type: 'GET',
 										url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_MANAGE&setdefault=1',
 										dataType: 'json',
-										async: false,
 										success: function(data) {ns1blankspace.financial.initData(oParam, data)}
 									});
 								}
@@ -83,7 +82,6 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
 									oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
 									oSearch.rows = 100;
-									oSearch.async = false;
 									oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)});
 								}
 							}
@@ -105,7 +103,6 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 										type: 'GET',
 										url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_SEARCH&all=1&includefinancialaccounttext=1',
 										dataType: 'json',
-										async: false,
 										success: function(data) {ns1blankspace.financial.initData(oParam, data)}
 									});
 								}
@@ -126,10 +123,11 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									var oSearch = new AdvancedSearch();
 									oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
 									oSearch.addField('title');
-									oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount);
+									//oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount);
 									oSearch.sort('parentaccount', 'asc')
 									oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)})	
 
+									/*
 									$.ajax(
 									{
 										type: 'GET',
@@ -138,6 +136,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 										async: false,
 										success: function(data) {ns1blankspace.financial.initData(oParam, data)}
 									});
+*/
 								}
 							}
 							else

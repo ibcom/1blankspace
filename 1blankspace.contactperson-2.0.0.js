@@ -695,7 +695,7 @@ ns1blankspace.contactPerson =
 										'</td></tr>');				
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Country' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +

@@ -2028,6 +2028,8 @@ ns1blankspace.attachments =
 										if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
 									}	
 
+									$('[name="ns1blankspaceFileUpload"]').remove();
+
 									aHTML.push('<form name="ns1blankspaceFileUpload" action="/ondemand/attach/" ' +
 													'enctype="multipart/form-data" method="POST" target="ns1blankspaceUploadProxy" accept-charset="utf-8">' +
 													'<input type="hidden" name="maxfiles" id="maxfiles" value="' + iMaxFiles + '">' +

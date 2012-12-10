@@ -1,0 +1,65 @@
+html
+{
+	background-color: black;
+}
+
+#ns1blankspaceContainer
+{
+	background-image: url(/jscripts/images/1blankspace.theme.wall.jpg);
+	background-repeat: no-repeat;
+}
+
+a:link, a:visited, a:active
+{
+	color: white;
+}
+
+a:hover
+{
+	color: #ee8f00;
+}
+
+td
+{
+	color: white;
+}
+
+td.ns1blankspaceRowSelect, td.ns1blankspaceMostLikely,
+td.ns1blankspaceControl, .ns1blankspaceCaption,
+.ns1blankspaceSummaryCaption, .ns1blankspaceControlContext,
+.ns1blankspaceMostLikelySub
+{
+	color: white;
+}
+
+td.ns1blankspaceRow, td.ns1blankspaceSummary
+{
+	color: white;
+}
+
+input, textarea
+{
+	opacity: 0.90;
+}
+
+table.ns1blankspaceViewControlContainer
+{
+	opacity: 0.90;
+}
+
+#ns1blankspaceLogo
+{
+	opacity: 0.80;
+}
+
+.ns1blankspaceViewImageLarge
+{
+	opacity: 0.95;
+}
+
+.ns1blankspaceHeaderCaption
+{
+	background-color: white;
+	opacity: 0.70;
+	color: black;
+}

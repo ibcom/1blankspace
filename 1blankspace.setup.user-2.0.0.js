@@ -774,7 +774,7 @@ ns1blankspace.setup.user =
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 												
-												$('#ns1blankspaceUserRoles > td.ns1blankspaceRowSelect').click(function(event)
+												$('#ns1blankspaceUserRoles td.ns1blankspaceRowSelect').click(function(event)
 												{
 													oParam.xhtmlElementID = event.target.id;
 													ns1blankspace.setup.user.access.select(oParam);
@@ -944,7 +944,7 @@ ns1blankspace.setup.user =
 
 									if (ns1blankspace.objectContext != -1)
 									{
-										sParam += '&id=' + ns1blankspace.objectContext	
+										sData += '&id=' + ns1blankspace.objectContext	
 									}
 									else
 									{
@@ -953,14 +953,14 @@ ns1blankspace.setup.user =
 										sData += '&unrestrictedaccess=N';
 									}
 									
-									if ($('#divInterfaceMainDetails').html() != '')
+									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
 										sData += '&username=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsUserName').val());
 										sData += '&disabled=' + $('input[name="radioDisabled"]:checked').val();
 										sData += '&disabledreason=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDisabledReason').val());
 									};
 
-									if ($('#divInterfaceMainAccess').html() != '')
+									if ($('#ns1blankspaceMainAccess').html() != '')
 									{
 										sData += '&unrestrictedaccess=' + $('input[name="radioAccessUnrestricted"]:checked').val();
 										ns1blankspace.objectContextData.unrestrictedaccess = $('input[name="radioAccessUnrestricted"]:checked').val();
@@ -1012,6 +1012,8 @@ ns1blankspace.setup.user =
 
 									if (iStep == 1)
 									{
+										$('#ns1blankspaceViewControlAction').button({disabled: false});
+
 										if (oResponse == undefined)
 										{
 											var oSearch = new AdvancedSearch();
@@ -1137,8 +1139,8 @@ ns1blankspace.setup.user =
 															'User' +
 															'</td></tr>' +
 															'<tr class="ns1blankspaceSelect">' +
-															'<td id="ns1blankspaceSetupUserexternalname" class="ns1blankspaceText">' +
-															'<input id="ns1blankspaceSetupUserexternalname" class="ns1blankspaceText">' +
+															'<td class="ns1blankspaceText">' +
+															'<input id="ns1blankspaceSetupUserExternalName" class="ns1blankspaceText">' +
 															'</td></tr>');
 
 											aHTML.push('<tr><td style="padding-bottom:10px;" class="ns1blankspaceNothing">You need to search by the surname<br />and enter at least 3 characters.</td></tr>');
@@ -1176,20 +1178,20 @@ ns1blankspace.setup.user =
 											}	
 											else
 											{	
-												aHTML.push('<tr><td><span style="width:70px;" id="ns1blankspaceSetupUserExternalEditSave">' +
+												aHTML.push('<tr><td><span style="width:70px;" class="ns1blankspaceAction" id="ns1blankspaceSetupUserExternalEditSave">' +
 																'Save</span></td></tr>');
 											}
 
-											aHTML.push('<tr><td><span style="width:70px;" id="ns1blankspaceSetupUserExternalEditCancel">' +
+											aHTML.push('<tr><td><span style="width:70px;" class="ns1blankspaceAction" id="ns1blankspaceSetupUserExternalEditCancel">' +
 																'Cancel</span></td></tr>');
 
 											aHTML.push('<tr><td style="padding-top:20px;">' +
-																'<span style="width:70px;" id="ns1blankspaceSetupUserExternalEditRole">' +
+																'<span style="width:70px;" class="ns1blankspaceAction" id="ns1blankspaceSetupUserExternalEditRole">' +
 																'Add Role</span></td></tr>');					
 											
 											aHTML.push('</table>');					
 											
-											$('#tns1blankspaceSetupUserExternalColumn3').html(aHTML.join(''));
+											$('#ns1blankspaceSetupUserExternalColumn3').html(aHTML.join(''));
 
 											$('#ns1blankspaceSetupUserExternalEditSave').button(
 											{
@@ -1242,11 +1244,11 @@ ns1blankspace.setup.user =
 
 											if (aXHTMLElementID[1])
 											{
-												$('#ns1blankspaceSetupUserexternalname').attr("data-id", $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user"))
-												$('#ns1blankspaceSetupUserexternalname').val($('#ns1blankspaceSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-usertext"));
-												$('[name="radioExternalAccessUnrestricted"][value="' + $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-unrestrictedaccess") + '"]').attr('checked', true);
+												$('#ns1blankspaceSetupUserExternalName').attr("data-id", $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-user"))
+												$('#ns1blankspaceSetupUserExternalName').val($('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-usertext"));
+												$('[name="radioExternalAccessUnrestricted"][value="' + $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-unrestrictedaccess") + '"]').attr('checked', true);
 
-												oParam.user = $('#tdSetupUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
+												oParam.user = $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.step = 3;
 												ns1blankspace.setup.user.external.show(oParam);
 											}

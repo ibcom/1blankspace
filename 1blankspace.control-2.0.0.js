@@ -109,6 +109,11 @@ ns1blankspace.themes =
 		default: 			true
 	},
 	{
+		title: 				'Helping Hand',
+		cssURI: 			'/jscripts/1blankspace.theme.helpinghand-2.0.0.css',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+	},
+	{
 		title: 				'New York',
 		cssURI: 			'/jscripts/1blankspace.theme.newyork-2.0.0.css',
 		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
@@ -117,7 +122,18 @@ ns1blankspace.themes =
 		title: 				'Photography',
 		cssURI: 			'/jscripts/1blankspace.theme.photography-2.0.0.css',
 		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+	},
+	{
+		title: 				'Travelling',
+		cssURI: 			'/jscripts/1blankspace.theme.travelling-2.0.0.css',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+	},
+	{
+		title: 				'Wall',
+		cssURI: 			'/jscripts/1blankspace.theme.wall-2.0.0.css',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
 	}
+
 ]	
 
 ns1blankspace.views = 
