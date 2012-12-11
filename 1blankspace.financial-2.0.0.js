@@ -126,24 +126,32 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 														'parentaccount,parentaccounttext,postable,title,taxtype,taxtypeincomingtext,taxtypeoutgoingtext,type,typetext');
 
 									oSearch.sort('parentaccount', 'asc')
+									oSearch.rows = 500;
 									oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)})	
 								}
 							}
 							else
 							{
+								if (oResponse.morerows == "true")
+								{
+									alert("There is an issue with this report");
+								}
+								else
+								{
+									ns1blankspace.financial.data.accounts = oResponse.data.rows;
 
-								ns1blankspace.financial.data.accounts = oResponse.data.rows;
+									var oItem = $.grep(ns1blankspace.financial.data.accounts, function (a) { return a.parentaccount == ''; })
 
-								var oItem = $.grep(ns1blankspace.financial.data.accounts, function (a) { return a.parentaccount == ''; })
+									if (oItem.length != 0)
+									{	
+										ns1blankspace.financial.rootAccount = oItem[0].id;
+									}	
 
-								if (oItem.length != 0)
-								{	
-									ns1blankspace.financial.rootaccount = oItem[0].id;
+									ns1blankspace.setup.financial.accounts.tree(ns1blankspace.financial.accounts[ns1blankspace.financial.rootaccount],ns1blankspace.financial.accounts); 
+									ns1blankspace.financial.data.rootAccounts = $.grep(ns1blankspace.financial.data.accounts, function (a) {return parseInt(a.parentaccount) == parseInt(ns1blankspace.financial.rootAccount);})
+			
+									ns1blankspace.financial.initStatus = 2;
 								}	
-
-								
-								ns1blankspace.setup.financial.accounts.tree(ns1blankspace.financial.accounts[ns1blankspace.financial.rootaccount],ns1blankspace.financial.accounts); 
-								ns1blankspace.financial.initStatus = 2;
 							}
 						}
 
@@ -505,7 +513,7 @@ ns1blankspace.financial.creditors =
 				}
 }
 
-ns1blankspace.financial.profitLoss =
+ns1blankspace.financial.profitLossOrg =
 {
 	show: 		function (oParam, oResponse)
 				{
@@ -583,7 +591,43 @@ ns1blankspace.financial.profitLoss =
 				}
 }
 
-ns1blankspace.financial.balanceSheet =
+ns1blankspace.financial.profitLoss =
+{
+	show: 		function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						$.ajax(
+						{
+							type: 'GET',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_PROFIT_LOSS_SEARCH'),
+							data: 'rows=500',
+							dataType: 'json',
+							success: function(data) {ns1blankspace.financial.profitLoss.show(oParam, data)}
+						});
+					}
+					else
+					{
+						if (oResponse.morerows == "true")
+						{
+							alert("There is an issue with this report");
+						}
+						else
+						{
+							var oParam = {};
+							oParam.dataRoot = $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 1 || parseInt(a.type) == 2;});
+							oParam.dataTree = ns1blankspace.financial.data.accounts;
+							oParam.dataBranch = oResponse.data.rows;
+							oParam.branchDetailName = 'total';
+							oParam.xhtmlElementID = 'ns1blankspaceMainPL';
+
+							ns1blankspace.format.tree.init(oParam);
+						}	
+					}	
+				}
+}
+
+ns1blankspace.financial.balanceSheetOrg =
 {
 	show: 		function (oParam, oResponse)
 				{
@@ -692,11 +736,52 @@ ns1blankspace.financial.balanceSheet =
 				}
 }
 
+ns1blankspace.financial.balanceSheet =
+{
+	show: 		function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						$.ajax(
+						{
+							type: 'GET',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_BALANCE_SHEET_SEARCH'),
+							data: 'rows=500',
+							dataType: 'json',
+							success: function(data) {ns1blankspace.financial.balanceSheet.show(oParam, data)}
+						});
+					}
+					else
+					{
+						if (oResponse.morerows == "true")
+						{
+							alert("There is an issue with this report");
+						}
+						else
+						{
+							var oParam = {};
+							oParam.dataRoot = $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 3 || parseInt(a.type) == 4 || parseInt(a.type) == 5;});
+							oParam.dataTree = ns1blankspace.financial.data.accounts;
+							oParam.dataBranch = oResponse.data.rows;
+							oParam.xhtmlElementID = 'ns1blankspaceMainBS';
+
+							ns1blankspace.format.tree.init(oParam);
+						}	
+					}	
+				}
+}
 
 ns1blankspace.financial.balanceSheet2 =
 {
 	show: 		function (oParam, oResponse)
 				{
+					var bAutoShow = false;
+
+					if (oParam != undefined)
+					{
+						if (oParam.autoShow != undefined) {bAutoShow = oParam.autoShow}
+					}
+
 					if (oResponse == undefined)
 					{	
 						$.ajax(
@@ -725,63 +810,93 @@ ns1blankspace.financial.balanceSheet2 =
 						{
 							aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr><td id="ns1blankspaceBalanceSheetRow1" class="ns1blankspaceRow1" style="width: 100%;"></td></tr>' +
-										'<tr><td id="ns1blankspaceBalanceSheetRow2" class="ns1blankspaceRow1" style="width: 100%;"></td></tr>' +
-										'<tr><td id="ns1blankspaceBalanceSheetRow3" class="ns1blankspaceRow1" style="width: 100%;"></td></tr>' +
+										'<tr><td id="ns1blankspaceBalanceSheetRow2" class="ns1blankspaceRow1" style="width: 100%; border-top-style:solid; border-width: 1px; border-color: #D0D0D0;"></td></tr>' +
+										'<tr><td id="ns1blankspaceBalanceSheetRow3" class="ns1blankspaceRow1" style="width: 100%; border-top-style:solid; border-width: 1px; border-color: #D0D0D0;"></td></tr>' +
 										'</table>');	
 
 							$('#ns1blankspaceMainBS').html(aHTML.join(''));
 						
-							var aHTML = [];
+							var oItem = ($.grep(ns1blankspace.financial.data.rootAccounts, function (a) { return (a.title).indexOf('Asset') != -1;}))[0]
+
+							if (oItem)
+							{
+								var aHTML = [];
 							
-							aHTML.push('<table class="ns1blankspaceContainer">' +
+								aHTML.push('<table class="ns1blankspaceContainer">' +
 											'<tr><td class="ns1blankspaceSummaryCaption">Assets</td></tr>' +
-											'<tr><td id="ns1blankspaceBalanceSheetAssetTotal" class="ns1blankspaceSummary">' +	
+											'<tr><td id="ns1blankspaceBalanceSheetAssetTotal-' + oItem.id + '" class="ns1blankspaceSummary ns1blankspaceBalanceSheetCategory">' +	
 											(oResponse.assettotal).formatMoney(2, '.', ',') +
 											'</td></tr>' +
 											'</table>');							
 							
-							$('#ns1blankspaceBalanceSheetRow1').html(aHTML.join(''));
+								$('#ns1blankspaceBalanceSheetRow1').html(aHTML.join(''));
+							}	
 
-							aHTML.push('<table class="ns1blankspaceContainer">' +
+							var oItem = ($.grep(ns1blankspace.financial.data.rootAccounts, function (a) { return (a.title).indexOf('Liability') != -1;}))[0]
+
+							if (oItem)
+							{
+								var aHTML = [];
+
+								aHTML.push('<table class="ns1blankspaceContainer">' +
 											'<tr><td class="ns1blankspaceSummaryCaption">Liabilities</td></tr>' +
-											'<tr><td id="ns1blankspaceBalanceSheetLiabilityTotal" class="ns1blankspaceSummary">' +
+											'<tr><td id="ns1blankspaceBalanceSheetLiabilityTotal-' + oItem.id + '" class="ns1blankspaceSummary ns1blankspaceBalanceSheetCategory">' +
 											(oResponse.liabilitytotal).formatMoney(2, '.', ',') +
 											'</td></tr>' +
 											'</table>');				
+								
+								$('#ns1blankspaceBalanceSheetRow2').html(aHTML.join(''));
+							}
 
-							$('#ns1blankspaceBalanceSheetRow2').html(aHTML.join(''));
-						
-							var aHTML = [];
+							var oItem = ($.grep(ns1blankspace.financial.data.rootAccounts, function (a) { return (a.title).indexOf('Equity') != -1;}))[0]
+
+							if (oItem)
+							{
+								var aHTML = [];
+
+								aHTML.push('<table class="ns1blankspaceContainer">' +
+											'<tr><td class="ns1blankspaceSummaryCaption">Equity</td></tr>' +
+											'<tr><td id="ns1blankspaceBalanceSheetEquityTotal-' + oItem.id + '" class="ns1blankspaceSummary ns1blankspaceBalanceSheetCategory">' +
+											(oResponse.equitytotal).formatMoney(2, '.', ',') +
+											'</td></tr>' +
+											'</table>');					
+
+								$('#ns1blankspaceBalanceSheetRow3').html(aHTML.join(''));
+							}
+						}
+					}					
+				},
+
+	transactions: 
+				function (iParent)			
+				{
+					var aHTML = [];
 							
-							aHTML.push('<table class="ns1blankspaceColumn2">' +
+					aHTML.push('<table class="ns1blankspaceColumn2">' +
 											'<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceHeaderCaption">Account</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>' +
 											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');	
-							
-							$(oResponse.data.rows).each(function() 
-							{
-								aHTML.push(ns1blankspace.financial.balanceSheet.row(this));
-							});
-							
-							aHTML.push('</table>');
-						}
-						
-						ns1blankspace.render.page.show(
-						   {
-							type: 'JSON',
-							xhtmlElementID: 'ns1blankspaceBalanceSheetColumn2',
-							xhtmlContext: 'BalanceSheet',
-							xhtml: aHTML.join(''),
-							showMore: (oResponse.morerows == "true"),
-							more: oResponse.moreid,
-							rows: 100,
-							functionShowRow: ns1blankspace.financial.balanceSheet.row,
-							functionOpen: undefined,
-							functionNewPage: ''
-						   }); 	
-					}
+
+					$(oResponse.data.rows).each(function() 
+					{
+						aHTML.push(ns1blankspace.financial.balanceSheet2.row(this));
+					});
+
+					ns1blankspace.render.page.show(
+					   {
+						type: 'JSON',
+						xhtmlElementID: 'ns1blankspaceBalanceSheetColumn2',
+						xhtmlContext: 'BalanceSheet',
+						xhtml: aHTML.join(''),
+						showMore: (oResponse.morerows == "true"),
+						more: oResponse.moreid,
+						rows: 100,
+						functionShowRow: ns1blankspace.financial.balanceSheet.row,
+						functionOpen: undefined,
+						functionNewPage: ''
+					   }); 	
 				},
 
 	row:		function (oRow)

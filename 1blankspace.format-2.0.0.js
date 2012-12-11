@@ -387,4 +387,150 @@ ns1blankspace.format.editor =
 						return false;
 					}
 				}
-}	
+}
+
+ns1blankspace.format.tree = 
+{
+	init: 		function (oParam)
+				{
+					var sXHTMLElementID;
+					var oDataRoot;
+					var sXHTMLElementContext = '';
+
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.dataRoot != undefined) {oDataRoot = oParam.dataRoot}
+					}
+
+					if ($('.ns1blankspaceTreeRoot').length == 0)
+					{	
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceContainer ns1blankspaceTreeRoot">');
+
+						if (oDataRoot)
+						{
+							$(oDataRoot).each(function(i) 
+							{
+								aHTML.push('<tr><td id="ns1blankspaceRow-' + i + '" class="ns1blankspaceRow" style="width: 100%;"></td></tr>');
+							});
+
+						}
+						else
+						{
+							aHTML.push('<tr><td id="ns1blankspaceRow-1" class="ns1blankspaceRow" style="width: 100%;"></td></tr>');
+						}
+
+						aHTML.push('</table>');
+
+						$('#' + sXHTMLElementID).html(aHTML.join(''))
+
+						ns1blankspace.format.tree.root(oParam);
+
+						$('.ns1blankspaceParent').live('click', function(event)
+						{
+							oParam.xhtmlElementID = event.target.id;
+							ns1blankspace.format.tree.branch(oParam);
+						});
+					}
+				},
+				
+	root: 	function(oParam)
+				{	
+					var sXHTMLElementID;
+					var oDataRoot;
+					var oDataTree;
+					var sXHTMLElementContext = '';
+
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.dataRoot != undefined) {oDataRoot = oParam.dataRoot}
+						if (oParam.dataTree != undefined) {oDataTree = oParam.dataTree}
+					}
+
+					if (oDataRoot)
+					{
+						$(oDataRoot).each(function(i) 
+						{
+							var aHTML = [];
+
+							aHTML.push('<table>' +
+											'<tr><td id="ns1blankspace_' + i + '-1" data-id="' + this.id + '" class="ns1blankspaceParent" style="width:100px;">' +
+											this.title +
+											'</td>' +
+											'<td id="ns1blankspace_' + i + '-2" data-parent-id="' + this.id + '"class="ns1blankspaceChild"></td></tr>' +
+											'</table>');
+
+							$('#ns1blankspaceRow-' + i).html(aHTML.join(''))
+
+						});
+					}				
+				},
+
+	branch: 	function(oParam)
+				{	
+					var sXHTMLElementID;
+					var iParentID;
+					var oDataTree;
+					var oDataBranch;
+					var sXHTMLElementContext = '';
+					var sBranchDetailName = 'amount'
+
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.dataTree != undefined) {oDataTree = oParam.dataTree}
+						if (oParam.dataBranch != undefined) {oDataBranch = oParam.dataBranch}
+						if (oParam.branchDetailName != undefined) {sBranchDetailName = oParam.branchDetailName}
+					}
+
+					iParentID = $('#' + sXHTMLElementID).attr('data-id');
+
+					var oDataTreeChild = $.grep(oDataTree, function (a) {return parseInt(a.parentaccount) == parseInt(iParentID);})
+
+					console.log(oDataTreeChild.length);
+
+					var aHTML= [];
+
+					if (oDataTreeChild.length > 0)
+					{
+						aHTML.push('<table>');
+
+						$(oDataTreeChild).each(function(i, k) 
+						{
+							aHTML.push('<tr><td id="ns1blankspace-' + i + '-1" data-id="' + this.id + '" class="ns1blankspaceParent ns1blankspaceTreeColumn1">' +
+											this.title + '</td>' +
+											'<td id="ns1blankspace-' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2" style="text-align: right;">');
+
+							var oDataBranchChild = $.grep(oDataBranch, function (a) {return parseInt(a.financialaccount) == parseInt(k.id);})[0]
+
+							if (oDataBranchChild)
+							{
+								aHTML.push(oDataBranchChild[sBranchDetailName]);
+							}
+
+							aHTML.push('</td></tr>');
+						});
+
+						aHTML.push('</table>');
+
+						$('#' + sXHTMLElementID).next("td").html(aHTML.join(''));
+					}
+					else
+					{
+						var oDataBranchChild = $.grep(oDataBranch, function (a) {return parseInt(a.financialaccount) == parseInt(iParentID);})[0]
+
+						if (oDataBranchChild)
+						{
+							$('#' + sXHTMLElementID).next("td").html(oDataBranchChild[sBranchDetailName]);
+						}
+					}			
+				}
+
+
+}
+
+
+
