@@ -403,7 +403,7 @@ ns1blankspace.format.tree =
 						if (oParam.dataRoot != undefined) {oDataRoot = oParam.dataRoot}
 					}
 
-					if ($('.ns1blankspaceTreeRoot').length == 0)
+					if ($('#' + sXHTMLElementID + ' .ns1blankspaceTreeRoot').length == 0)
 					{	
 						var aHTML = [];
 
@@ -500,15 +500,16 @@ ns1blankspace.format.tree =
 
 						$(oDataTreeChild).each(function(i, k) 
 						{
-							aHTML.push('<tr><td id="ns1blankspace-' + i + '-1" data-id="' + this.id + '" class="ns1blankspaceParent ns1blankspaceTreeColumn1">' +
+							aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-id="' + this.id + '" class="ns1blankspaceParent ns1blankspaceTreeColumn1">' +
 											this.title + '</td>' +
-											'<td id="ns1blankspace-' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2" style="text-align: right;">');
+											'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2">');
 
 							var oDataBranchChild = $.grep(oDataBranch, function (a) {return parseInt(a.financialaccount) == parseInt(k.id);})[0]
 
 							if (oDataBranchChild)
 							{
 								aHTML.push(oDataBranchChild[sBranchDetailName]);
+								$('#' + sXHTMLElementID + '_' + i + '-2').css('text-align', 'right')
 							}
 
 							aHTML.push('</td></tr>');
