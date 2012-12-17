@@ -118,7 +118,7 @@ ns1blankspace.scriptsCore =
 	},
 	{
 		nameSpace: 'tinymce',
-		source: '/jscripts/tiny_mce-3.4.4/tiny_mce.js'
+		source: '/jscripts/tiny_mce-3.5.8/tiny_mce.js'
 	},
 	{
 		nameSpace: 'calendar',
