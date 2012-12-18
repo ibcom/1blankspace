@@ -614,13 +614,100 @@ ns1blankspace.financial.profitLoss =
 						}
 						else
 						{
+							var bShowOther = false;
+
+							var aHTML = [];
+
+							aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr>' +
+									'<td id="ns1blankspacePLColumn1" style="width:175px; padding-right:10px;"></td>' +
+									'<td id="ns1blankspacePLColumn2" style="width:100%; font-size: 0.875em;"></td>' +
+									'</tr>' +
+									'</table>');	
+
+							//$('#ns1blankspaceMainPL').html(aHTML.join(''));	
+
 							var oParam = {};
-							oParam.dataRoot = $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 1 || parseInt(a.type) == 2;});
 							oParam.dataTree = ns1blankspace.financial.data.accounts;
 							oParam.dataBranch = oResponse.data.rows;
 							oParam.branchDetailName = 'total';
 							oParam.xhtmlElementID = 'ns1blankspaceMainPL';
 
+							oParam.dataRoot =
+							[
+								{
+									title: 'Sales',
+									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 2})[0]['id'],
+									xhtml: '<span>Sales</span><br /><span>' + (oResponse.TotalSales).formatMoney(2, '.', ',') + '</span>'
+								},
+								{
+									title: 'Cost of Sales',
+									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 1})[0]['id'],
+									filter: function (a) {return a.expensecostofsale == 'Y'},
+									xhtml: '<span>Cost of Sales</span><br /><span>' + (oResponse.TotalCostOfSales).formatMoney(2, '.', ',') + '</span>' +
+												'<br /><span>' + (oResponse.TotalCostOfSalesPercentage).formatMoney(2, '.', ',') + '%</span>' 
+								},
+								{
+									xhtml: '<span>Gross Margin</span><br /><span>' + (oResponse.GrossMargin).formatMoney(2, '.', ',') + '</span>' +
+												'<br /><span>' + (oResponse.GrossMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
+									class: 'ns1blankspaceHeader'
+								},
+								{
+									title: 'Expenses',
+									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 1})[0]['id'],
+									filter: function (a) {return a.expensecostofsale != 'Y'},
+									xhtml: '<span>Expenses</span><br /><span>' + (oResponse.TotalOperationalExpenses).formatMoney(2, '.', ',') + '</span>' +
+											'<br /><span>' + (oResponse.TotalOperationalExpensesPercentage).formatMoney(2, '.', ',') + '%</span>' 
+								}
+							]	
+
+							if (parseInt(oResponse.TotalOtherIncome) == 0 && parseInt(oResponse.TotalOtherExpenses) == 0)
+							{
+								oParam.dataRoot.push(
+								{
+									xhtml: '<span>Margin</span><br /><span>' + (oResponse.NetMargin).formatMoney(2, '.', ',') + '</span>' +
+												'<br /><span>' + (oResponse.NetMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
+									class: 'ns1blankspaceHeader'
+								});
+							}
+							else
+							{
+								oParam.dataRoot.push(
+								{
+									xhtml: '<span>Net&nbsp;Margin</span><br /><span>' + (oResponse.OperatingMargin).formatMoney(2, '.', ',') + '</span>' +
+												'<br /><span>' + (oResponse.OperatingMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
+									class: 'ns1blankspaceHeader'
+								});
+
+								
+								if (parseInt(oResponse.TotalOtherIncome) != 0)
+								{
+									oParam.dataRoot.push(
+									{
+										xhtml: '<span>Other&nbsp;Income</span><br /><span>' + (oResponse.TotalOtherIncome).formatMoney(2, '.', ',') + '</span>' +
+													'<br /><span>' + (oResponse.TotalOtherIncomePercentage).formatMoney(2, '.', ',') + '%</span>',
+										class: 'ns1blankspaceHeader'
+									});
+								}
+									
+								if (parseInt(oResponse.TotalOtherIncome) != 0)
+								{
+									oParam.dataRoot.push(
+									{
+										xhtml: '<span>Other&nbsp;Expenses</span><br /><span>' + (oResponse.TotalOtherExpenses).formatMoney(2, '.', ',') + '</span>' +
+													'<br /><span>' + (oResponse.TotalOtherExpensesPercentage).formatMoney(2, '.', ',') + '%</span>',
+										class: 'ns1blankspaceHeader'
+									});
+								}	
+
+								oParam.dataRoot.push(
+								{
+									xhtml: '<span>Margin</span><br /><span>' + (oResponse.NetMargin).formatMoney(2, '.', ',') + '</span>' +
+												'<br /><span>' + (oResponse.NetMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
+									class: 'ns1blankspaceHeader'
+								});
+							}
+							
 							ns1blankspace.format.tree.init(oParam);
 						}	
 					}	

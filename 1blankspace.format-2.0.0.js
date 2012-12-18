@@ -430,7 +430,14 @@ ns1blankspace.format.tree =
 
 						$('.ns1blankspaceParent').live('click', function(event)
 						{
-							oParam.xhtmlElementID = event.target.id;
+							oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
+							ns1blankspace.format.tree.branch(oParam);
+						});
+
+						$('.ns1blankspaceRoot').live('click', function(event)
+						{
+							oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
+							oParam.shaded = true;
 							ns1blankspace.format.tree.branch(oParam);
 						});
 					}
@@ -442,7 +449,7 @@ ns1blankspace.format.tree =
 					var oDataRoot;
 					var oDataTree;
 					var sXHTMLElementContext = '';
-
+					
 					if (oParam != undefined)
 					{
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
@@ -457,10 +464,11 @@ ns1blankspace.format.tree =
 							var aHTML = [];
 
 							aHTML.push('<table>' +
-											'<tr><td id="ns1blankspace_' + i + '-1" data-id="' + this.id + '" class="ns1blankspaceParent" style="width:100px;">' +
-											this.title +
+											'<tr><td id="ns1blankspace_' + i + '-1" data-title="' + (this.title?this.title:'') + '" data-id="' + (this.id?this.id:'') + '" class="' +
+											(this.class ? this.class : 'ns1blankspaceRoot') + '" style="width:100px;">' +
+											(this.xhtml ? this.xhtml : this.title) +
 											'</td>' +
-											'<td id="ns1blankspace_' + i + '-2" data-parent-id="' + this.id + '"class="ns1blankspaceChild"></td></tr>' +
+											'<td id="ns1blankspace_' + i + '-2" data-parent-id="' + (this.id?this.id:'') + '"class="ns1blankspaceChild"></td></tr>' +
 											'</table>');
 
 							$('#ns1blankspaceRow-' + i).html(aHTML.join(''))
@@ -475,20 +483,40 @@ ns1blankspace.format.tree =
 					var iParentID;
 					var oDataTree;
 					var oDataBranch;
+					var oDataRoot;
 					var sXHTMLElementContext = '';
 					var sBranchDetailName = 'amount'
+					var sParentClass;
+					var sClass = '';
+					var bShaded = false;
 
 					if (oParam != undefined)
 					{
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 						if (oParam.dataTree != undefined) {oDataTree = oParam.dataTree}
 						if (oParam.dataBranch != undefined) {oDataBranch = oParam.dataBranch}
+						if (oParam.dataRoot != undefined) {oDataRoot = oParam.dataRoot}
 						if (oParam.branchDetailName != undefined) {sBranchDetailName = oParam.branchDetailName}
+						if (oParam.shaded != undefined)
+						{
+							bShaded = oParam.shaded;
+							oParam.shaded = false;
+						}
 					}
 
 					iParentID = $('#' + sXHTMLElementID).attr('data-id');
-
+					sTitle = $('#' + sXHTMLElementID).attr('data-title');
 					var oDataTreeChild = $.grep(oDataTree, function (a) {return parseInt(a.parentaccount) == parseInt(iParentID);})
+
+					var oDataRootBranch = $.grep(oDataRoot, function (a) {return a.title == sTitle;})[0];
+
+					if (oDataRootBranch)
+					{
+						if (oDataRootBranch.filter)
+						{
+							var oDataTreeChild = $.grep(oDataTreeChild, oDataRootBranch.filter)
+						}
+					}
 
 					console.log(oDataTreeChild.length);
 
@@ -500,21 +528,40 @@ ns1blankspace.format.tree =
 
 						$(oDataTreeChild).each(function(i, k) 
 						{
+							if (bShaded)
+							{
+								if (sClass == '')
+								{
+									sClass = ' ns1blankspaceRowShaded';
+								}
+								else
+								{
+									sClass = '';
+								}
+							}
+
+							var oDataTreeHasChild = $.grep(oDataTree, function (a) {return parseInt(a.parentaccount) == parseInt(k.id);})[0]
+							if (oDataTreeHasChild) {sParentClass = 'ns1blankspaceParent ' } else {sParentClass = ''}
+
 							var oDataBranchChild = $.grep(oDataBranch, function (a) {return parseInt(a.financialaccount) == parseInt(k.id);})[0]
 
 							if (oDataBranchChild)
 							{
-								aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-id="' + this.id + '" class="ns1blankspaceParent ns1blankspaceTreeColumn1">' +
+								aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '">' +
 											this.title + '</td>' +
-											'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2" style="text-align: right;">');
+											'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2' + sClass + '" style="text-align: right;">');
 
 								aHTML.push(oDataBranchChild[sBranchDetailName]);
+
+								$('#' + sXHTMLElementID).next("td").css('text-align', 'left');
 							}
 							else
 							{
-								aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-id="' + this.id + '" class="ns1blankspaceParent ns1blankspaceTreeColumn1">' +
+								aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '" >' +
 											this.title + '</td>' +
-											'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2">');
+											'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2' + sClass + '" style="text-align: right; color: #CCCCCC">-&nbsp;');
+
+								$('#' + sXHTMLElementID).next("td").css('text-align', 'left');
 							}
 							
 							aHTML.push('</td></tr>');

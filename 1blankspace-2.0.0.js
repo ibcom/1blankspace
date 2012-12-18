@@ -1480,7 +1480,7 @@ ns1blankspace.logon.getPassword =
 						$.ajax(
 						{
 							type: 'POST',
-							url: '/ondemand/site/?method=SITE_SEND_PASSWORD',
+							url: ns1blankspace.util.endpointURI('SITE_SEND_PASSWORD'),
 							data: sData,
 							dataType: 'json',
 							success: this.process
@@ -1507,7 +1507,7 @@ ns1blankspace.logOff = function ()
 					{
 						type: 'GET',
 						async: false,
-						url: '/ondemand/core/?method=CORE_LOGOFF',
+						url: ns1blankspace.util.endpointURI('CORE_LOGOFF'),
 						dataType: 'json'
 					})
 					
@@ -1635,12 +1635,13 @@ ns1blankspace.history.view =
 									ns1blankspace.history.viewList.push(sDestinationInstructions);
 									ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1;
 									
-									var sData = 'value=' + ns1blankspace.util.fs(ns1blankspace.history.viewList.slice(-2).toString());
+									var sData = 'value=' + ns1blankspace.util.fs(ns1blankspace.history.viewList.slice(-2).toString()) +
+													'&advanced=4';
 									
 									$.ajax(
 									{
 										type: 'POST',
-										url: '/ondemand/core/?method=CORE_PROFILE_MANAGE&advanced=4',
+										url: ns1blankspace.util.endpointURI('CORE_PROFILE_MANAGE'),
 										data: sData,
 										dataType: 'text'
 									})
@@ -1685,7 +1686,8 @@ ns1blankspace.history.view =
 								$.ajax(
 								{
 									type: 'GET',
-									url: '/ondemand/core/?method=CORE_PROFILE_SEARCH&advanced=4&rf=TEXT',
+									url: ns1blankspace.util.endpointURI('CORE_PROFILE_SEARCH'),
+									data: 'advanced=4&rf=TEXT',
 									dataType: 'text',
 									async: false,
 									success: function(data) {
@@ -1973,13 +1975,12 @@ ns1blankspace.attachments =
 					var sElementId = aSearch[0];
 					var sSearchContext = aSearch[1];
 					
-					var sParam = 'method=CORE_ATTACHMENT_MANAGE&remove=1';
-					var sData = 'id=' + sSearchContext;
+					var sData = 'id=' + ns1blankspace.util.fs(sSearchContext) + '&remove=1';
 								
 					$.ajax(
 						{
 							type: 'POST',
-							url: '/ondemand/core/?' + sParam,
+							url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_MANAGE'),
 							data: sData,
 							dataType: 'json',
 							success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
@@ -2244,75 +2245,6 @@ ns1blankspace.status =
 							'<div style="display:table-cell; vertical-align:bottom; padding:5px; height:25px; color:white; background-color:red;">' + sError + '</div></div>');
 				}
 }
-
-ns1blankspace.edit =
-{
-	start: 		function (sElementId)
-				{	
-					var aSearch = sElementId.split('-');
-					var sActionElementId = '#' + aSearch[0] + '-options-' + aSearch[2];
-
-					if (1==0)
-					{
-						$('td.interfaceActionsOptions').button('destroy');
-						
-						$(sActionElementId).button(
-						{
-							icons: 
-							{
-								primary: "ui-icon-disk"
-							}
-						});
-					}
-					
-					var sHTML = $('#' + sElementId).html();
-					
-					var sElementInputId = sElementId.replace('td', 'input');
-					
-					sHTML = '<input id="' + sElementInputId + '" class="inputns1blankspaceValue" ' +
-											'value="' + sHTML + '">'
-					
-					$('#' + sElementId).html(sHTML);
-					$('#' + sElementInputId).focus();
-					
-					$('#' + sElementInputId).blur(function(event)
-					{
-						ns1blankspace.edit.stop(sElementId);
-					});
-				},
-
-	stop:		function (sElementId)
-				{
-					ns1blankspace.edit.save(sElementId);
-					
-					var aSearch = sElementId.split('-');
-					var sHTML = $('#' + sElementId.replace('td', 'input')).val();
-
-					$('#' + sElementId).html(sHTML);
-				},
-
-	save:		function (sElementId)
-				{
-					var aSearch = sElementId.split('-');
-
-					var sMethod = aSearch[0];
-					sMethod = sMethod.replace('td', '');
-					sMethod = sMethod.toUpperCase();
-					sMethod = sMethod + '_MANAGE';
-					
-					var sParam = 'method=' + sMethod + '&select=' + aSearch[2];
-					sParam += '&' + aSearch[1] + '=' + $('#' + sElementId.replace('td', 'input')).val();
-					
-					$.ajax(
-					{
-						type: 'GET',
-						url: '/directory/ondemand/object.asp?' + sParam,
-						dataType: 'text',
-						success: ns1blankspaceStatus('Saved')
-					});
-						
-				}
-}				
 
 ns1blankspace.container = 
 {
@@ -2634,7 +2566,7 @@ ns1blankspace.save =
 					$.ajax(
 					{
 						type: 'POST',
-						url: sParam + '&rf=JSON',
+						url: sParam,
 						data: sData,
 						dataType: 'json',
 						async: false,
@@ -2828,7 +2760,7 @@ ns1blankspace.search.address =
 						{
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('CORE_ADDRESS_SEARCH'),
-							data: 'suburblike=' + encodeURIComponent($('#' + ns1blankspace.xhtml.divID).val()),
+							data: 'suburblike=' + ns1blankspace.util.fs($('#' + ns1blankspace.xhtml.divID).val()),
 							dataType: 'json',
 							success: ns1blankspace.search.address.process
 						});
@@ -4088,6 +4020,8 @@ ns1blankspace.pdf =
 
 				}
 }				
+
+ns1blankspace.edit = {}
 
 ns1blankspace.edit.editor = 
 {
