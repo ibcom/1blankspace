@@ -786,7 +786,7 @@ ns1blankspace.financial.bankAccount =
 															
 															$('#ns1blankspaceReconcileItemEdit2').html(aHTML.join(''));
 														
-															$('input.ns1blankspacenDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+															$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
 														
 															if (dSearchDate) {$('#ns1blankspaceItemsEditSearchDate').val(dSearchDate)}
 															if (cSearchAmount) {$('#ns1blankspaceItemsEditSearchAmount').val(cSearchAmount)}

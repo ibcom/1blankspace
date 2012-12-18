@@ -465,10 +465,10 @@ ns1blankspace.format.tree =
 
 							aHTML.push('<table>' +
 											'<tr><td id="ns1blankspace_' + i + '-1" data-title="' + (this.title?this.title:'') + '" data-id="' + (this.id?this.id:'') + '" class="' +
-											(this.class ? this.class : 'ns1blankspaceRoot') + '" style="width:100px;">' +
+											(this.class ? this.class : 'ns1blankspaceRoot') + '" style="width:150px;">' +
 											(this.xhtml ? this.xhtml : this.title) +
 											'</td>' +
-											'<td id="ns1blankspace_' + i + '-2" data-parent-id="' + (this.id?this.id:'') + '"class="ns1blankspaceChild"></td></tr>' +
+											'<td id="ns1blankspace_' + i + '-2" data-parent-id="' + (this.id?this.id:'') + '"class="' + (this.class ? this.class : 'ns1blankspaceChild') + '"></td></tr>' +
 											'</table>');
 
 							$('#ns1blankspaceRow-' + i).html(aHTML.join(''))
@@ -524,6 +524,18 @@ ns1blankspace.format.tree =
 
 					if (oDataTreeChild.length > 0)
 					{
+						if ($('#' + sXHTMLElementID).attr('data-tree-type') == "1")
+						{
+							var sHTML = $('#' + sXHTMLElementID).html();
+							sHTML = sHTML + '<br /><span class="ns1blankspaceSub">' + $('#' + sXHTMLElementID).next("td").html() + '</span>';
+							$('#' + sXHTMLElementID).html(sHTML)
+							$('#' + sXHTMLElementID).attr('data-tree-type', '2'); 
+						}
+						else
+						{
+							//$('#' + sXHTMLElementID).attr('data-tree-type', '1'); 
+						}
+
 						aHTML.push('<table>');
 
 						$(oDataTreeChild).each(function(i, k) 
@@ -547,7 +559,7 @@ ns1blankspace.format.tree =
 
 							if (oDataBranchChild)
 							{
-								aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '">' +
+								aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-tree-type="1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '">' +
 											this.title + '</td>' +
 											'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2' + sClass + '" style="text-align: right;">');
 
@@ -557,7 +569,7 @@ ns1blankspace.format.tree =
 							}
 							else
 							{
-								aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '" >' +
+								aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-tree-type="1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '" >' +
 											this.title + '</td>' +
 											'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2' + sClass + '" style="text-align: right; color: #CCCCCC">-&nbsp;');
 

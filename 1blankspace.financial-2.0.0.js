@@ -125,7 +125,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									oSearch.addField('area,areatext,class,classtext,code,description,expensecostofsale,expensepayroll,' +
 														'parentaccount,parentaccounttext,postable,title,taxtype,taxtypeincomingtext,taxtypeoutgoingtext,type,typetext');
 
-									oSearch.sort('parentaccount', 'asc')
+									oSearch.sort('title', 'asc')
 									oSearch.rows = 500;
 									oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)})	
 								}
@@ -595,13 +595,89 @@ ns1blankspace.financial.profitLoss =
 {
 	show: 		function (oParam, oResponse)
 				{
+					var sStartDate;
+					var sEndDate;
+
+					if (oParam != undefined)
+					{
+						if (oParam.startDate != undefined) {sStartDate = oParam.startDate}
+						if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+					}		
+
 					if (oResponse == undefined)
 					{
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceMain" style="width:100%;">' +
+								'<tr>' +
+								'<td id="ns1blankspacePLColumn1" class="ns1blankspaceColumn1" style="width:100px; font-size: 0.875em; padding-right:10px;"></td>' +
+								'<td id="ns1blankspacePLColumn2" style="font-size: 0.925em; padding-left:10px;">' + ns1blankspace.xhtml.loading + '</td>' +
+								'</tr>' +
+								'</table>');	
+
+						$('#ns1blankspaceMainPL').html(aHTML.join(''));	
+
+						var aHTML = [];
+						
+						aHTML.push('<table>');
+						
+						aHTML.push('<tr>' +
+										'<tr><td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspacePLStartDate" class="ns1blankspaceDate">' +
+										'</td></tr>');
+							
+						aHTML.push('<tr>' +
+										'<td class="ns1blankspaceCaption" style="padding-top:0px;">' +
+										'To' +
+										'</td></tr>' +
+										'<tr><td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspacePLEndDate" class="ns1blankspaceDate">' +
+										'</td></tr>');
+														
+						aHTML.push('<tr><td style="padding-top:5px;">' +
+										'<span class="ns1blankspaceAction" style="width:95px;" id="ns1blankspacePLRefresh">Refresh</span>' +
+										'</td></tr>');
+						
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspacePLColumn1').html(aHTML.join(''));
+
+						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+
+						$('#ns1blankspacePLRefresh').button(
+						{
+							label: 'Refresh',
+							icons: {
+								primary: "ui-icon-arrowrefresh-1-e"
+							}
+						})
+						.click(function() {
+							ns1blankspace.financial.profitLoss.show(
+							{
+								startDate: $('#ns1blankspacePLStartDate').val(),
+								endDate: $('#ns1blankspacePLEndDate').val()
+							})
+						});
+
+						var sData = 'rows=500'
+
+						if (sStartDate != undefined)
+						{
+							sData += '&startdate=' + ns1blankspace.util.fs(sStartDate);
+							$('#ns1blankspacePLStartDate').val(sStartDate);
+						}
+							
+						if (sEndDate != undefined)
+						{
+							sData += '&enddate=' + ns1blankspace.util.fs(sEndDate);
+							$('#ns1blankspacePLEndDate').val(sEndDate);
+						}
+							
 						$.ajax(
 						{
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_PROFIT_LOSS_SEARCH'),
-							data: 'rows=500',
+							data: sData,
 							dataType: 'json',
 							success: function(data) {ns1blankspace.financial.profitLoss.show(oParam, data)}
 						});
@@ -614,50 +690,37 @@ ns1blankspace.financial.profitLoss =
 						}
 						else
 						{
-							var bShowOther = false;
-
-							var aHTML = [];
-
-							aHTML.push('<table class="ns1blankspaceMain">' +
-									'<tr>' +
-									'<td id="ns1blankspacePLColumn1" style="width:175px; padding-right:10px;"></td>' +
-									'<td id="ns1blankspacePLColumn2" style="width:100%; font-size: 0.875em;"></td>' +
-									'</tr>' +
-									'</table>');	
-
-							//$('#ns1blankspaceMainPL').html(aHTML.join(''));	
-
 							var oParam = {};
 							oParam.dataTree = ns1blankspace.financial.data.accounts;
 							oParam.dataBranch = oResponse.data.rows;
 							oParam.branchDetailName = 'total';
-							oParam.xhtmlElementID = 'ns1blankspaceMainPL';
+							oParam.xhtmlElementID = 'ns1blankspacePLColumn2';
 
 							oParam.dataRoot =
 							[
 								{
 									title: 'Sales',
 									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 2})[0]['id'],
-									xhtml: '<span>Sales</span><br /><span>' + (oResponse.TotalSales).formatMoney(2, '.', ',') + '</span>'
+									xhtml: '<span class="ns1blankspaceHeaderLarge">Sales</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.TotalSales).formatMoney(2, '.', ',') + '</span>'
 								},
 								{
 									title: 'Cost of Sales',
 									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 1})[0]['id'],
 									filter: function (a) {return a.expensecostofsale == 'Y'},
-									xhtml: '<span>Cost of Sales</span><br /><span>' + (oResponse.TotalCostOfSales).formatMoney(2, '.', ',') + '</span>' +
-												'<br /><span>' + (oResponse.TotalCostOfSalesPercentage).formatMoney(2, '.', ',') + '%</span>' 
+									xhtml: '<span class="ns1blankspaceHeaderLarge">Cost&nbsp;of&nbsp;Sales</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.TotalCostOfSales).formatMoney(2, '.', ',') + '</span>' +
+												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.TotalCostOfSalesPercentage).formatMoney(2, '.', ',') + '%</span>' 
 								},
 								{
-									xhtml: '<span>Gross Margin</span><br /><span>' + (oResponse.GrossMargin).formatMoney(2, '.', ',') + '</span>' +
-												'<br /><span>' + (oResponse.GrossMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
-									class: 'ns1blankspaceHeader'
+									xhtml: '<span class="ns1blankspaceHeaderLarge">Gross&nbsp;Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.GrossMargin).formatMoney(2, '.', ',') + '</span>' +
+												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.GrossMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
+									class: 'ns1blankspaceRowShaded'
 								},
 								{
 									title: 'Expenses',
 									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 1})[0]['id'],
 									filter: function (a) {return a.expensecostofsale != 'Y'},
-									xhtml: '<span>Expenses</span><br /><span>' + (oResponse.TotalOperationalExpenses).formatMoney(2, '.', ',') + '</span>' +
-											'<br /><span>' + (oResponse.TotalOperationalExpensesPercentage).formatMoney(2, '.', ',') + '%</span>' 
+									xhtml: '<span class="ns1blankspaceHeaderLarge">Expenses</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.TotalOperationalExpenses).formatMoney(2, '.', ',') + '</span>' +
+											'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.TotalOperationalExpensesPercentage).formatMoney(2, '.', ',') + '%</span>' 
 								}
 							]	
 
@@ -665,18 +728,18 @@ ns1blankspace.financial.profitLoss =
 							{
 								oParam.dataRoot.push(
 								{
-									xhtml: '<span>Margin</span><br /><span>' + (oResponse.NetMargin).formatMoney(2, '.', ',') + '</span>' +
-												'<br /><span>' + (oResponse.NetMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
-									class: 'ns1blankspaceHeader'
+									xhtml: '<span class="ns1blankspaceHeaderLarge">Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.NetMargin).formatMoney(2, '.', ',') + '</span>' +
+												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.NetMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
+									class: 'ns1blankspaceRowShaded'
 								});
 							}
 							else
 							{
 								oParam.dataRoot.push(
 								{
-									xhtml: '<span>Net&nbsp;Margin</span><br /><span>' + (oResponse.OperatingMargin).formatMoney(2, '.', ',') + '</span>' +
-												'<br /><span>' + (oResponse.OperatingMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
-									class: 'ns1blankspaceHeader'
+									xhtml: '<span class="ns1blankspaceHeaderLarge">Net&nbsp;Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;"> ' + (oResponse.OperatingMargin).formatMoney(2, '.', ',') + '</span>' +
+												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.OperatingMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
+									class: 'ns1blankspaceRowShaded'
 								});
 
 								
@@ -684,9 +747,9 @@ ns1blankspace.financial.profitLoss =
 								{
 									oParam.dataRoot.push(
 									{
-										xhtml: '<span>Other&nbsp;Income</span><br /><span>' + (oResponse.TotalOtherIncome).formatMoney(2, '.', ',') + '</span>' +
-													'<br /><span>' + (oResponse.TotalOtherIncomePercentage).formatMoney(2, '.', ',') + '%</span>',
-										class: 'ns1blankspaceHeader'
+										xhtml: '<span class="ns1blankspaceHeaderLarge">Other&nbsp;Income</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.TotalOtherIncome).formatMoney(2, '.', ',') + '</span>' +
+													'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.TotalOtherIncomePercentage).formatMoney(2, '.', ',') + '%</span>',
+										class: 'ns1blankspaceRowShaded'
 									});
 								}
 									
@@ -694,17 +757,17 @@ ns1blankspace.financial.profitLoss =
 								{
 									oParam.dataRoot.push(
 									{
-										xhtml: '<span>Other&nbsp;Expenses</span><br /><span>' + (oResponse.TotalOtherExpenses).formatMoney(2, '.', ',') + '</span>' +
-													'<br /><span>' + (oResponse.TotalOtherExpensesPercentage).formatMoney(2, '.', ',') + '%</span>',
-										class: 'ns1blankspaceHeader'
+										xhtml: '<span class="ns1blankspaceHeaderLarge">Other&nbsp;Expenses</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.TotalOtherExpenses).formatMoney(2, '.', ',') + '</span>' +
+													'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.TotalOtherExpensesPercentage).formatMoney(2, '.', ',') + '%</span>',
+										class: 'ns1blankspaceRowShaded'
 									});
 								}	
 
 								oParam.dataRoot.push(
 								{
-									xhtml: '<span>Margin</span><br /><span>' + (oResponse.NetMargin).formatMoney(2, '.', ',') + '</span>' +
-												'<br /><span>' + (oResponse.NetMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
-									class: 'ns1blankspaceHeader'
+									xhtml: '<span class="ns1blankspaceHeaderLarge">Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.NetMargin).formatMoney(2, '.', ',') + '</span>' +
+												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.NetMarginPercentage).formatMoney(2, '.', ',') + '%</span>',
+									class: 'ns1blankspaceRowShaded'
 								});
 							}
 							
