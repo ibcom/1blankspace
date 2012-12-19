@@ -401,25 +401,26 @@ ns1blankspace.format.tree =
 					{
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 						if (oParam.dataRoot != undefined) {oDataRoot = oParam.dataRoot}
+						if (oParam.xhtmlElementContext != undefined) {sXHTMLElementContext = oParam.xhtmlElementContext}
 					}
 
 					if ($('#' + sXHTMLElementID + ' .ns1blankspaceTreeRoot').length == 0)
 					{	
 						var aHTML = [];
 
-						aHTML.push('<table class="ns1blankspaceContainer ns1blankspaceTreeRoot">');
+						aHTML.push('<table id="ns1blankspaceTree_' + sXHTMLElementID + '"" class="ns1blankspaceContainer ns1blankspaceTreeRoot">');
 
 						if (oDataRoot)
 						{
 							$(oDataRoot).each(function(i) 
 							{
-								aHTML.push('<tr><td id="ns1blankspaceRow-' + i + '" class="ns1blankspaceRow" style="width: 100%;"></td></tr>');
+								aHTML.push('<tr><td id="ns1blankspaceRow' + sXHTMLElementContext + '-' + i + '" class="ns1blankspaceRow" style="width: 100%;"></td></tr>');
 							});
 
 						}
 						else
 						{
-							aHTML.push('<tr><td id="ns1blankspaceRow-1" class="ns1blankspaceRow" style="width: 100%;"></td></tr>');
+							aHTML.push('<tr><td id="ns1blankspaceRow' + sXHTMLElementContext + '-1" class="ns1blankspaceRow" style="width: 100%;"></td></tr>');
 						}
 
 						aHTML.push('</table>');
@@ -428,19 +429,26 @@ ns1blankspace.format.tree =
 
 						ns1blankspace.format.tree.root(oParam);
 
-						$('.ns1blankspaceParent').live('mouseup', function(event)
-						{
-							oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
-							ns1blankspace.format.tree.branch(oParam);
-						});
+						//if (ns1blankspace.format.initStatus == undefined)
+						//{
+							$('#' + sXHTMLElementID).off('mouseup', '.ns1blankspaceParent');
+							$('#' + sXHTMLElementID).on('mouseup', '.ns1blankspaceParent', function(event)
+							{
+								oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
+								ns1blankspace.format.tree.branch(oParam);
+							});
 
-						$('.ns1blankspaceRoot').live('mouseup', function(event)
-						{
-							oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
-							oParam.shaded = true;
-							ns1blankspace.format.tree.branch(oParam);
-						});
-					}
+							$('#' + sXHTMLElementID).off('mouseup', '.ns1blankspaceRoot');
+							$('#' + sXHTMLElementID).on('mouseup', '.ns1blankspaceRoot', function(event)
+							{
+								oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
+								oParam.shaded = true;
+								ns1blankspace.format.tree.branch(oParam);
+							});
+
+							ns1blankspace.format.initStatus = 1;
+						}	
+					//}
 				},
 				
 	root: 	function(oParam)
@@ -455,6 +463,7 @@ ns1blankspace.format.tree =
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 						if (oParam.dataRoot != undefined) {oDataRoot = oParam.dataRoot}
 						if (oParam.dataTree != undefined) {oDataTree = oParam.dataTree}
+						if (oParam.xhtmlElementContext != undefined) {sXHTMLElementContext = oParam.xhtmlElementContext}
 					}
 
 					if (oDataRoot)
@@ -464,14 +473,14 @@ ns1blankspace.format.tree =
 							var aHTML = [];
 
 							aHTML.push('<table>' +
-											'<tr><td id="ns1blankspace_' + i + '-1" data-title="' + (this.title?this.title:'') + '" data-id="' + (this.id?this.id:'') + '" class="' +
+											'<tr><td id="ns1blankspace' + sXHTMLElementContext + '_' + i + '-1" data-title="' + (this.title?this.title:'') + '" data-id="' + (this.id?this.id:'') + '" class="' +
 											(this.class ? this.class : 'ns1blankspaceRoot') + '" style="width:150px;">' +
 											(this.xhtml ? this.xhtml : this.title) +
 											'</td>' +
-											'<td id="ns1blankspace_' + i + '-2" data-parent-id="' + (this.id?this.id:'') + '"class="' + (this.class ? this.class : 'ns1blankspaceChild') + '"></td></tr>' +
+											'<td id="ns1blankspace' + sXHTMLElementContext + '_' + i + '-2" data-parent-id="' + (this.id?this.id:'') + '"class="' + (this.class ? this.class : 'ns1blankspaceChild') + '"></td></tr>' +
 											'</table>');
 
-							$('#ns1blankspaceRow-' + i).html(aHTML.join(''))
+							$('#' + sXHTMLElementID + ' #ns1blankspaceRow' + sXHTMLElementContext + '-' + i).html(aHTML.join(''))
 
 						});
 					}				
@@ -493,6 +502,7 @@ ns1blankspace.format.tree =
 					if (oParam != undefined)
 					{
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.xhtmlElementContext != undefined) {sXHTMLElementContext = oParam.xhtmlElementContext}
 						if (oParam.dataTree != undefined) {oDataTree = oParam.dataTree}
 						if (oParam.dataBranch != undefined) {oDataBranch = oParam.dataBranch}
 						if (oParam.dataRoot != undefined) {oDataRoot = oParam.dataRoot}
@@ -525,10 +535,19 @@ ns1blankspace.format.tree =
 						if ($('#' + sXHTMLElementID).attr('data-tree-type') == "2")
 						{
 							var sHTML = $('#' + sXHTMLElementID + ' .ns1blankspaceTreeSubContext').html();
-							$('#' + sXHTMLElementID).next("td").html(sHTML);
-							$('#' + sXHTMLElementID + ' .ns1blankspaceTreeSubContext').html('');
+							
+							if (sHTML)
+							{
+								$('#' + sXHTMLElementID).next("td").html(sHTML);
+								$('#' + sXHTMLElementID + ' .ns1blankspaceTreeSubContext').html('');
+								$('#' + sXHTMLElementID).next("td").css('text-align', 'right');
+							}
+							else
+							{
+								$('#' + sXHTMLElementID).next("td").html('&nbsp;');
+							}
+
 							$('#' + sXHTMLElementID).attr('data-tree-type', '1');
-							$('#' + sXHTMLElementID).next("td").css('text-align', 'right');
 						}
 						else
 						{

@@ -617,6 +617,7 @@ ns1blankspace.financial.profitLoss =
 							oParam.dataBranch = oResponse.data.rows;
 							oParam.branchDetailName = 'total';
 							oParam.xhtmlElementID = 'ns1blankspacePLColumn2';
+							oParam.xhtmlElementContext = 'PL';
 
 							oParam.dataRoot =
 							[
@@ -802,6 +803,7 @@ ns1blankspace.financial.balanceSheet =
 							oParam.dataTree = ns1blankspace.financial.data.accounts;
 							oParam.dataBranch = oResponse.data.rows;
 							oParam.xhtmlElementID = 'ns1blankspaceBSColumn2';
+							oParam.xhtmlElementContext = 'BS';
 
 							oParam.dataRoot =
 							[
