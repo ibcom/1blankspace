@@ -244,19 +244,23 @@ ns1blankspace.financial.tax =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlReport" class="ns1blankspaceControl">' +
 										'Report</td></tr>');
-
-						aHTML.push('</table>');
 					}				
-							
+					
+					aHTML.push('</table>');
+
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = []
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceDetails" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceReport" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainReport" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -275,7 +279,7 @@ ns1blankspace.financial.tax =
 					$('#ns1blankspaceControlReport').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainReport', refresh: true});
-						ns1blankspace.financial.tax.item.show();
+						ns1blankspace.financial.tax.report.show();
 					});
 				},
 
@@ -300,11 +304,11 @@ ns1blankspace.financial.tax =
 						
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 								
-						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.enddate +
-							'<br /><span id="ns1blankspaceControlContext_startdate" class="ns1blankspaceControlSubContext">' + ns1blankspace.objectContextData.startdate + '</span>');
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData['taxreport.enddate'] +
+							'<br /><span id="ns1blankspaceControlContext_startdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData['taxreport.taxstartdate'] + '</span>');
 							
 						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.tax.init({showHome: false});ins1blankspace.financial.tax.search.send("-' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspace.financial.tax.init({showHome: false});ns1blankspace.financial.tax.search.send("-' + ns1blankspace.objectContext + '")',
 							move: false
 							})
 						
@@ -343,7 +347,7 @@ ns1blankspace.financial.tax =
 					
 						aHTML.push('<table class="ns1blankspace">');
 						aHTML.push('<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSummary">' +
-										'This tax report was last updated on the ' + ns1blankspace.objectContextData.modifieddate + '.' +
+										'This tax report was last updated on the ' + ns1blankspace.objectContextData['taxreport.modifieddate'] + '.' +
 										'</td></tr>');
 
 						aHTML.push('</table>');					
@@ -357,6 +361,8 @@ ns1blankspace.financial.tax =
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
+							
+						var aHTML = [];
 								
 						aHTML.push('<table class="ns1blankspaceContainer">');
 						aHTML.push('<tr class="ns1blankspaceContainer">' +
@@ -395,6 +401,12 @@ ns1blankspace.financial.tax =
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 					
 						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							$('#ns1blankspaceDetailsEndDate').val(ns1blankspace.objectContextData['taxreport.enddate']);
+							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData['taxreport.status'] + '"]').attr('checked', true);
+						}
 					}
 				},		
 
@@ -418,7 +430,7 @@ ns1blankspace.financial.tax =
 												
 									var aHTML = [];
 									
-									aHTML.push('<div id="ns1blankspaceTaxCategoryColumn" style="width: 110px;margin-bottom:3px;">');
+									aHTML.push('<div id="ns1blankspaceTaxCategoryColumn" style="width: 110px;margin-bottom:3px; font-size:0.875em;">');
 									aHTML.push('<input style="width: 115px;" type="radio" id="ns1blankspaceTaxCategoryColumn-revenue" name="radioCategory" checked="checked" />' +
 													'<label for="ns1blankspaceTaxCategoryColumn-revenue" style="width: 115px;">Supplies (In)</label>');
 									aHTML.push('<input style="width: 115px;" type="radio" id="ns1blankspaceTaxCategoryColumn-expense" name="radioCategory" />' +
@@ -434,8 +446,6 @@ ns1blankspace.financial.tax =
 										var aID = (event.target.id).split('-');
 										ns1blankspace.financial.tax.report.show({category: aID[1]});	
 									});
-									
-									ns1blankspace.financial.tax.report.show();
 								},
 
 					show:		function (oParam)	
@@ -454,6 +464,8 @@ ns1blankspace.financial.tax =
 										if (oParam.category != undefined) {sCategory = oParam.category}
 									}
 									
+									ns1blankspace.financial.tax.report.layout();
+
 									$('#ns1blankspaceTaxReportTypeColumn').html(ns1blankspace.xhtml.loadingSmall);
 									
 									var aHTML = [];
@@ -461,7 +473,7 @@ ns1blankspace.financial.tax =
 										
 									aHTML.push('<table id="ns1blankspaceTaxReportType" class="ns1blankspace">');
 									
-									$.each(ns1blankspace.financial.reportsummary[sCategory], function()
+									$.each(ns1blankspace.financial.reportSummary[sCategory], function()
 									{
 										sField = (this).toUpperCase();
 										
@@ -471,7 +483,7 @@ ns1blankspace.financial.tax =
 														sField + '</td>');
 												
 										aHTML.push('<td id="ns1blankspaceReportType_amount-' + sField + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceType" style="width:90px;text-align:right;">' +
-														'$' + ns1blankspace.objectContextData[sField] + '</td>');
+														'$' + ns1blankspace.objectContextData['taxreport.' + this] + '</td>');
 																																					
 										aHTML.push('</tr>');
 									});
@@ -577,8 +589,14 @@ ns1blankspace.financial.tax =
 									{
 										var aHTML = [];
 
-										aHTML.push('<table id="ns1blankspaceReportItems" class="ns1blankspace">');
-										
+										aHTML.push('<table id="ns1blankspaceReportItems" class="ns1blankspace">' +
+												'<tr class="ns1blankspaceCaption">' +
+												'<td class="ns1blankspaceHeaderCaption">Reference</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + ns1blankspace.option.taxCaption + '</td>' +
+												'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
+												'</tr>');
+
 										$.each(oResponse.data.rows, function()
 										{
 											aHTML.push('<tr class="ns1blankspaceRow">');
@@ -600,5 +618,49 @@ ns1blankspace.financial.tax =
 										$('#ns1blankspaceTaxReportItemsColumn').html(aHTML.join(''));
 									}	
 								}
-				}
+				},
+
+				save: 		{
+								send: 		function ()
+											{
+												var sData = 'id=';
+												
+												if (ns1blankspace.objectContext != -1)
+												{
+													sData += ns1blankspace.objectContext;
+												} 
+												
+												if ($('#ns1blankspaceMainDetails').html() != '')
+												{
+													sData += '&enddate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEndDate').val());
+													sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
+												}
+													
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('TAX_REPORT_MANAGE'),
+													data: sData,
+													dataType: 'json',
+													success: this.process
+												});
+											},
+
+								process: 	function (oResponse)
+											{	
+												if (oResponse.status == 'OK')
+												{
+													ns1blankspace.status.message('Saved');
+													if (ns1blankspace.objectContext == -1) {var bNew = true}
+													ns1blankspace.objectContext = oResponse.id;	
+													
+													if (bNew) {ns1blankspace.financial.tax.search.send('-' + ns1blankspace.objectContext)}
+												}
+												else
+												{
+													ns1blankspace.status.error(oResponse.error.errornotes);
+												}
+											}
+				}			
+
 }				

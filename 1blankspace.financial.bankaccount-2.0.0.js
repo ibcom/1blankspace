@@ -241,7 +241,7 @@ ns1blankspace.financial.bankAccount =
 									{
 										var aHTML = [];
 
-										aHTML.push('<table class="interfaceMain">' +
+										aHTML.push('<table class="ns1blankspace">' +
 														'<tr class="ns1blankspaceRow">' +
 														'<td id="ns1blankspaceBankAccountColumnReconcile1" style="width: 85px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
 														ns1blankspace.xhtml.loading +
@@ -520,7 +520,7 @@ ns1blankspace.financial.bankAccount =
 															aHTML.push('<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-2" name="radioSource" /><label for="ns1blankspaceBankAccountColumnItemSource-2" style="width: 96px;">Statement</label>');
 															aHTML.push('</div>');
 														
-															aHTML[++h] = '<div id="ns1blankspaceBankAccountReconcileItems" style="width: 200px;margin-bottom:3px;"></div>';
+															aHTML.push('<div id="ns1blankspaceBankAccountReconcileItems" style="width: 200px;margin-bottom:3px;"></div>');
 															
 															$('#ns1blankspaceBankAccountReconcileColumnItem').html(aHTML.join(''));
 															
@@ -683,7 +683,7 @@ ns1blankspace.financial.bankAccount =
 															.click(function() {
 																var aID = (this.id).split('-');
 																$.extend(true, oParam, {searchSourceID: aID[1], searchDate: $(this).attr("data-searchDate"), searchAmount: $(this).attr("data-searchAmount")});
-																ns1blankspace.financial.bankAccount.items.edit(oParam);
+																ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 															})
 															.css('width', '15px')
 															.css('height', '17px')
@@ -751,7 +751,7 @@ ns1blankspace.financial.bankAccount =
 														{
 															var aID = (event.target.id).split('-');
 															$.extend(true, oParam, {editAction: parseInt(aID[1])});
-															ns1blankspace.financial.bankAccount.items.edit(oParam);
+															ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 														});
 														
 														if (iEditAction == 1)
@@ -784,7 +784,7 @@ ns1blankspace.financial.bankAccount =
 															
 															aHTML.push('</table>');					
 															
-															$('#ns1blankspaceReconcileItemEdit2').html(aHTML.join(''));
+															$('#ns1blankspaceReconcileItemsEdit').html(aHTML.join(''));
 														
 															$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
 														
