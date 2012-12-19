@@ -428,13 +428,13 @@ ns1blankspace.format.tree =
 
 						ns1blankspace.format.tree.root(oParam);
 
-						$('.ns1blankspaceParent').live('click', function(event)
+						$('.ns1blankspaceParent').live('mouseup', function(event)
 						{
 							oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
 							ns1blankspace.format.tree.branch(oParam);
 						});
 
-						$('.ns1blankspaceRoot').live('click', function(event)
+						$('.ns1blankspaceRoot').live('mouseup', function(event)
 						{
 							oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
 							oParam.shaded = true;
@@ -518,70 +518,75 @@ ns1blankspace.format.tree =
 						}
 					}
 
-					console.log(oDataTreeChild.length);
-
 					var aHTML= [];
 
 					if (oDataTreeChild.length > 0)
 					{
-						if ($('#' + sXHTMLElementID).attr('data-tree-type') == "1")
+						if ($('#' + sXHTMLElementID).attr('data-tree-type') == "2")
 						{
-							var sHTML = $('#' + sXHTMLElementID).html();
-							sHTML = sHTML + '<br /><span class="ns1blankspaceSub">' + $('#' + sXHTMLElementID).next("td").html() + '</span>';
-							$('#' + sXHTMLElementID).html(sHTML)
-							$('#' + sXHTMLElementID).attr('data-tree-type', '2'); 
+							var sHTML = $('#' + sXHTMLElementID + ' .ns1blankspaceTreeSubContext').html();
+							$('#' + sXHTMLElementID).next("td").html(sHTML);
+							$('#' + sXHTMLElementID + ' .ns1blankspaceTreeSubContext').html('');
+							$('#' + sXHTMLElementID).attr('data-tree-type', '1');
+							$('#' + sXHTMLElementID).next("td").css('text-align', 'right');
 						}
 						else
 						{
-							//$('#' + sXHTMLElementID).attr('data-tree-type', '1'); 
-						}
+							var sHTML = $('#' + sXHTMLElementID).next("td").html();
+							$('#' + sXHTMLElementID + ' .ns1blankspaceTreeSubContext').html(sHTML)
+							$('#' + sXHTMLElementID).attr('data-tree-type', '2'); 
+						
+							aHTML.push('<table>');
 
-						aHTML.push('<table>');
-
-						$(oDataTreeChild).each(function(i, k) 
-						{
-							if (bShaded)
+							$(oDataTreeChild).each(function(i, k) 
 							{
-								if (sClass == '')
+								if (bShaded)
 								{
-									sClass = ' ns1blankspaceRowShaded';
+									if (sClass == '')
+									{
+										sClass = ' ns1blankspaceRowShaded';
+									}
+									else
+									{
+										sClass = '';
+									}
+								}
+
+								var oDataTreeHasChild = $.grep(oDataTree, function (a) {return parseInt(a.parentaccount) == parseInt(k.id);})[0]
+								if (oDataTreeHasChild) {sParentClass = 'ns1blankspaceParent ' } else {sParentClass = ''}
+
+								var oDataBranchChild = $.grep(oDataBranch, function (a) {return parseInt(a.financialaccount) == parseInt(k.id);})[0]
+
+								if (oDataBranchChild)
+								{
+									aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-tree-type="1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '">' +
+												this.title +
+												'<br /><span class="ns1blankspaceSub ns1blankspaceTreeSubContext">' +
+												'</td>' +
+												'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2' + sClass + '" style="text-align: right;">');
+
+									aHTML.push(oDataBranchChild[sBranchDetailName]);
+
+									$('#' + sXHTMLElementID).next("td").css('text-align', 'left');
 								}
 								else
 								{
-									sClass = '';
+									aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-tree-type="1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '" >' +
+												this.title +
+												'<br /><span class="ns1blankspaceSub ns1blankspaceTreeSubContext">' +
+												'</td>' +
+												'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2' + sClass + '" style="text-align: right; color: #CCCCCC">-&nbsp;');
+
+									$('#' + sXHTMLElementID).next("td").css('text-align', 'left');
 								}
-							}
+								
+								aHTML.push('</td></tr>');
+							});
 
-							var oDataTreeHasChild = $.grep(oDataTree, function (a) {return parseInt(a.parentaccount) == parseInt(k.id);})[0]
-							if (oDataTreeHasChild) {sParentClass = 'ns1blankspaceParent ' } else {sParentClass = ''}
+							aHTML.push('</table>');
 
-							var oDataBranchChild = $.grep(oDataBranch, function (a) {return parseInt(a.financialaccount) == parseInt(k.id);})[0]
-
-							if (oDataBranchChild)
-							{
-								aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-tree-type="1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '">' +
-											this.title + '</td>' +
-											'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2' + sClass + '" style="text-align: right;">');
-
-								aHTML.push(oDataBranchChild[sBranchDetailName]);
-
-								$('#' + sXHTMLElementID).next("td").css('text-align', 'left');
-							}
-							else
-							{
-								aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-tree-type="1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '" >' +
-											this.title + '</td>' +
-											'<td id="' + sXHTMLElementID + '_' + i + '-2" data-parent-id="' + this.id + '" class="ns1blankspaceChild ns1blankspaceTreeColumn2' + sClass + '" style="text-align: right; color: #CCCCCC">-&nbsp;');
-
-								$('#' + sXHTMLElementID).next("td").css('text-align', 'left');
-							}
-							
-							aHTML.push('</td></tr>');
-						});
-
-						aHTML.push('</table>');
-
-						$('#' + sXHTMLElementID).next("td").html(aHTML.join(''));
+							$('#' + sXHTMLElementID).next("td").html(aHTML.join(''));
+						}	
 					}
 					else
 					{
