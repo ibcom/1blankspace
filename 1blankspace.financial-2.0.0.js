@@ -532,7 +532,7 @@ ns1blankspace.financial.profitLoss =
 
 						aHTML.push('<table class="ns1blankspaceMain" style="width:100%;">' +
 								'<tr>' +
-								'<td id="ns1blankspacePLColumn1" class="ns1blankspaceColumn1" style="width:100px; font-size: 0.875em; padding-right:10px;"></td>' +
+								'<td id="ns1blankspacePLColumn1" class="ns1blankspaceColumn1Divider" style="width:100px; font-size: 0.875em; padding-right:10px;"></td>' +
 								'<td id="ns1blankspacePLColumn2" style="font-size: 0.925em; padding-left:10px;">' + ns1blankspace.xhtml.loading + '</td>' +
 								'</tr>' +
 								'</table>');	
@@ -719,7 +719,7 @@ ns1blankspace.financial.balanceSheet =
 
 						aHTML.push('<table class="ns1blankspaceMain" style="width:100%;">' +
 								'<tr>' +
-								'<td id="ns1blankspaceBSColumn1" class="ns1blankspaceColumn1" style="width:100px; font-size: 0.875em; padding-right:10px;"></td>' +
+								'<td id="ns1blankspaceBSColumn1" class="ns1blankspaceColumn1Divider" style="width:100px; font-size: 0.875em; padding-right:10px;"></td>' +
 								'<td id="ns1blankspaceBSColumn2" style="font-size: 0.925em; padding-left:10px;">' + ns1blankspace.xhtml.loading + '</td>' +
 								'</tr>' +
 								'</table>');	
@@ -921,7 +921,7 @@ ns1blankspace.financial.bankAccounts =
 						
 						$('#ns1blankspaceBankAccountReco').click(function()
 						{
-							ns1blankspace.financial.bankaccount.init();
+							ns1blankspace.financial.bankAccount.init();
 						});	
 						
 						$('#ns1blankspaceBankAccountReceipt').click(function()
