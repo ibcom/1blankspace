@@ -336,23 +336,46 @@ ns1blankspace.financial.tax =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 										'<tr class="ns1blankspaceRow">' +
-										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Fexible"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:150px;"></td>' +
 										'</tr>' +
 										'</table>');				
 		
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 				
 						var aHTML = [];
+
+						var cTaxPayable = parseFloat(ns1blankspace.objectContextData['taxreport.g9']);
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' on sales</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryG9" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData['taxreport.g9'] +
+										'</td></tr>');
+
+						var cTaxCredit = parseFloat(ns1blankspace.objectContextData['taxreport.g20']);
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' on purchases (credits)</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData['taxreport.g20'] +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' on purchases (credits)</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">' +
+										(cTaxPayable - cTaxCredit) +
+										'</td></tr>');
+
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspace">');
-						aHTML.push('<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSummary">' +
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+						aHTML.push('<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSub" >' +
 										'This tax report was last updated on the ' + ns1blankspace.objectContextData['taxreport.modifieddate'] + '.' +
 										'</td></tr>');
 
 						aHTML.push('</table>');					
 
-						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
 					}			
 				},
 
@@ -453,8 +476,8 @@ ns1blankspace.financial.tax =
 									var sCategory = "revenue";
 													
 									ns1blankspace.financial.reportSummary = {
-										"revenue": ["g1","g2","g3","g4","g5","g6","g7","g8","g9"],
-										"expense": ["g10","g11","g12","g13","g14","g15","g16","g17","g18","g21"],
+										"revenue": ["g1","g2","g3","g4","g5","g6","g7","g8"],
+										"expense": ["g10","g11","g12","g13","g14","g15","g16","g17","g18"],
 										"payroll": ["w1","w2"],
 										"instalments": ["t1","t2","t3","t7","t9"]
 									};
@@ -571,7 +594,8 @@ ns1blankspace.financial.tax =
 										var sData = 'id=' + ns1blankspace.objectContext +
 													'&type=' + iType +
 													'&subtype=' + iSubType +
-													'&field=' + sField;
+													'&field=' + sField +
+													'&rows=200';
 										
 										$.ajax(
 										{
@@ -601,14 +625,14 @@ ns1blankspace.financial.tax =
 										{
 											aHTML.push('<tr class="ns1blankspaceRow">');
 															
-											aHTML.push('<td id="ns1blankspaceReportItems_reference-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+											aHTML.push('<td id="ns1blankspaceReportItems_reference-' + this.id + '" class="ns1blankspaceRow">' +
 																	this.reference + '</td>');
 										
-											aHTML.push('<td id="ns1blankspaceReportItems_amount-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+											aHTML.push('<td id="ns1blankspaceReportItems_amount-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow">' +
 																	this.amount + '</td>');
 											
-											aHTML.push('<td id="ns1blankspaceReportItems_tax-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-																	this.gst + '</td>');
+											aHTML.push('<td id="ns1blankspaceReportItems_tax-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow">' +
+																	this.tax + '</td>');
 															
 											aHTML.push('</tr>');
 										});
