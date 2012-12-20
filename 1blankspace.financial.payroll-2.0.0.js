@@ -10,13 +10,13 @@ ns1blankspace.financial.payroll =
 	init: 		function (oParam)
 				{
 					var bShowHome = true
-					
+					var bInitialised = false;
+
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}	
 					}
-
-					ns1blankspace.financial.initData();
 
 					ns1blankspace.object = 37;
 					ns1blankspace.objectParentName = 'financial';
@@ -24,9 +24,16 @@ ns1blankspace.financial.payroll =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Payroll';
-								
-					ns1blankspace.app.reset();
-					ns1blankspace.app.set(oParam);	
+
+					if (!bInitialised)
+					{
+						ns1blankspace.financial.initData(oParam)
+					}
+					else
+					{		
+						ns1blankspace.app.reset();
+						ns1blankspace.app.set(oParam);
+					}	
 				},
 
 	home:		function (oParam, oResponse)
@@ -71,6 +78,8 @@ ns1blankspace.financial.payroll =
 
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 					
+						$('#ns1blankspaceMainPayRun').html(ns1blankspace.xhtml.loading);
+
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
@@ -319,7 +328,7 @@ ns1blankspace.financial.payroll =
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
 						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.payroll.init({showHome: false});ns1blankspace.financial.payroll.search.send("-' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspace.financial.payroll.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
 							move: false
 							})
 						
@@ -782,6 +791,8 @@ ns1blankspace.financial.payroll =
 													'</table>');		
 															
 										$('#ns1blankspaceMainEmployee').html(aHTML.join(''));
+										
+										$('#ns1blankspacePayrollEmployeeColumn1').html(ns1blankspace.xhtml.loading);
 										
 										if (oResponse == undefined)
 										{

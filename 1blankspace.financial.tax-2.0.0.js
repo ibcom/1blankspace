@@ -9,13 +9,13 @@ ns1blankspace.financial.tax =
 {
 	init: 		function (oParam)
 				{
-					ns1blankspace.financial.initData();
-					
 					var bShowHome = true
-					
+					var bInitialised = false;
+
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}	
 					}
 
 					ns1blankspace.object = -1;
@@ -25,16 +25,25 @@ ns1blankspace.financial.tax =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Tax (BAS)';
 					
-					if (bShowHome)
+					if (!bInitialised)
 					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.tax.init({showHome: true});',
-							move: false
-							})		
+						ns1blankspace.financial.initData(oParam)
+					}
+					else
+					{
+						if (bShowHome)
+						{
+							ns1blankspace.history.view({
+								newDestination: 'ns1blankspace.financial.tax.init({showHome: true});',
+								move: false
+								})		
+						}	
+								
+						ns1blankspace.app.reset();
+						ns1blankspace.app.set(oParam);
+
+						//ns1blankspace.financial.tax.show({id: iID})
 					}	
-							
-					ns1blankspace.app.reset();
-					ns1blankspace.app.set(oParam);
 				},
 
 	home: 		function (oParam, oResponse)
@@ -308,7 +317,7 @@ ns1blankspace.financial.tax =
 							'<br /><span id="ns1blankspaceControlContext_startdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData['taxreport.taxstartdate'] + '</span>');
 							
 						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.tax.init({showHome: false});ns1blankspace.financial.tax.search.send("-' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspace.financial.tax.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
 							move: false
 							})
 						
@@ -336,8 +345,8 @@ ns1blankspace.financial.tax =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 										'<tr class="ns1blankspaceRow">' +
-										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Fexible"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:150px;"></td>' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:250px;"></td>' +
 										'</tr>' +
 										'</table>');				
 		
@@ -345,23 +354,23 @@ ns1blankspace.financial.tax =
 				
 						var aHTML = [];
 
-						var cTaxPayable = parseFloat(ns1blankspace.objectContextData['taxreport.g9']);
+						var cTaxPayable = (ns1blankspace.objectContextData['taxreport.g9']).parseCurrency();
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' on sales</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' on Sales</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryG9" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData['taxreport.g9'] +
 										'</td></tr>');
 
-						var cTaxCredit = parseFloat(ns1blankspace.objectContextData['taxreport.g20']);
+						var cTaxCredit = (ns1blankspace.objectContextData['taxreport.g20']).parseCurrency();
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' on purchases (credits)</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' on Purchases (credits)</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData['taxreport.g20'] +
 										'</td></tr>');
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' on purchases (credits)</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' Payable</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">' +
-										(cTaxPayable - cTaxCredit) +
+										(cTaxPayable - cTaxCredit).formatMoney(2, '.', ',') +
 										'</td></tr>');
 
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));

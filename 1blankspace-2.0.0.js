@@ -88,6 +88,7 @@ String.prototype.formatXHTML = function(bDirection)
 };
 
 String.method('trim', function () {return this.replace(/^\s+|\s+$/g, '');});
+String.method('parseCurrency', function () {return parseFloat(this.replace(/,/g, ''));});
 
 var ns1blankspace = {};
 
@@ -983,13 +984,15 @@ ns1blankspace.app =
 					var sParentNamespace = ns1blankspace.objectParentName;
 					var sNamespace = ns1blankspace.objectName;
 					var bNew;
+					var iID;
 
 					if (oParam != undefined)
 					{
 						if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
 						if (oParam.parentNamespace != undefined) {sParentNamespace = oParam.parentNamespace}
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-						if (oParam.new != undefined) {bNew = oParam.new}	
+						if (oParam.new != undefined) {bNew = oParam.new}
+						if (oParam.id != undefined) {iID = oParam.id}
 					}	
 
 					if (sNamespace)
@@ -1096,7 +1099,14 @@ ns1blankspace.app =
 							if (bShowHome) 
 							{
 								if (typeof(oNS.home) == 'function') {oNS.home()} else {oNS.home.show()}
-							};
+							}
+							else
+							{
+								if (iID)
+								{	
+									oNS.show({id: iID});
+								}
+							}		
 						}
 					}	
 				}				
@@ -1635,7 +1645,7 @@ ns1blankspace.history.view =
 									ns1blankspace.history.viewList.push(sDestinationInstructions);
 									ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1;
 									
-									var sData = 'value=' + ns1blankspace.util.fs(ns1blankspace.history.viewList.slice(-2).toString()) +
+									var sData = 'value=' + ns1blankspace.util.fs(ns1blankspace.history.viewList.slice(-2).join('|').toString()) +
 													'&advanced=4';
 									
 									$.ajax(
@@ -1698,7 +1708,7 @@ ns1blankspace.history.view =
 										}	
 										else
 										{
-											ns1blankspace.history.viewList = data.split(',');
+											ns1blankspace.history.viewList = data.split('|');
 											ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1
 										}	
 									}

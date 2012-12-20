@@ -10,13 +10,13 @@ ns1blankspace.financial.invoice =
 	init: 		function (oParam)
 				{
 					var bShowHome = true
-					
+					var bInitialised = false;
+
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}		
 					}
-
-					ns1blankspace.financial.initData();
 
 					ns1blankspace.object = 5;
 					ns1blankspace.objectParentName = 'financial';
@@ -25,16 +25,23 @@ ns1blankspace.financial.invoice =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Invoices';
 					
-					if (bShowHome)
+					if (!bInitialised)
 					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.invoice.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
-					ns1blankspace.app.set(oParam);	
+						ns1blankspace.financial.initData(oParam)
+					}
+					else
+					{
+						if (bShowHome)
+						{
+							ns1blankspace.history.view({
+								newDestination: 'ns1blankspace.financial.invoice.init({showHome: true});',
+								move: false
+								});	
+						}	
+								
+						ns1blankspace.app.reset();
+						ns1blankspace.app.set(oParam);
+					}		
 				},
 
 	refresh:	function (oResponse)
@@ -422,7 +429,7 @@ ns1blankspace.financial.invoice =
 							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>');
 							
 						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.invoice.init({showHome: false});ns1blankspace.financial.invoice.search.send("-' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspace.financial.invoice.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
 							move: false
 							})
 						

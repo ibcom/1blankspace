@@ -9,13 +9,15 @@ ns1blankspace.financial.bankAccount =
 {
 	init: 		function (oParam)
 				{
-					ns1blankspace.financial.initData();
-					
 					var bShowHome = true
-					
+					var bInitialised = false;
+					var iID;
+
 					if (oParam != undefined)
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}
+						if (oParam.id != undefined) {iID = oParam.id}	
 					}
 
 					ns1blankspace.object = -1;
@@ -25,16 +27,25 @@ ns1blankspace.financial.bankAccount =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Bank Accounts';
 					
-					if (bShowHome)
+					if (!bInitialised)
 					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.bankAccount.init({showHome: true});',
-							move: false
-							})		
+						ns1blankspace.financial.initData(oParam)
+					}
+					else
+					{
+						if (bShowHome)
+						{
+							ns1blankspace.history.view({
+								newDestination: 'ns1blankspace.financial.bankAccount.init({showHome: true});',
+								move: false
+								})		
+						}	
+										
+						ns1blankspace.app.reset();
+						ns1blankspace.app.set(oParam);
+
+						//ns1blankspace.financial.bankAccount.show({id: iID})
 					}	
-							
-					ns1blankspace.app.reset();
-					ns1blankspace.app.set(oParam);
 				},
 
 	home: 		function ()
@@ -110,6 +121,10 @@ ns1blankspace.financial.bankAccount =
 									'<td id="ns1blankspaceControlImport" class="ns1blankspaceControl">Import</td>' +
 									'</tr>');
 					
+					aHTML.push('</table>');
+					
+					aHTML.push('<table class="ns1blankspaceControl">');
+
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlReconcile" class="ns1blankspaceControl">Reconcile</td>' +
 									'</tr>');
@@ -176,7 +191,7 @@ ns1blankspace.financial.bankAccount =
 							'<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceControlSubContext_amount">$' + ns1blankspace.objectContextData.lastreconciledamount + '</span>');
 						
 						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.bankAccount.init({showHome: false});ns1blankspace.financial.bankAccount.show({id: ' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.financial.bankAccount.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
 							move: false
 							})
 					

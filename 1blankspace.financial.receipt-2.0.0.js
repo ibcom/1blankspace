@@ -9,13 +9,13 @@ ns1blankspace.financial.receipt =
 {
 	init: 		function (oParam)
 				{
-					ns1blankspace.financial.initData();
-					
-					var bShowHome = true
+					var bShowHome = true;
+					var bInitialised = false;
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}	
 					}
 
 					ns1blankspace.object = 6;
@@ -25,16 +25,23 @@ ns1blankspace.financial.receipt =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Receipts';
 
-					if (bShowHome)
+					if (!bInitialised)
 					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.invoice.init({showHome: true});',
-							move: false
-							});	
+						ns1blankspace.financial.initData(oParam)
+					}
+					else
+					{
+						if (bShowHome)
+						{
+							ns1blankspace.history.view({
+								newDestination: 'ns1blankspace.financial.invoice.init({showHome: true});',
+								move: false
+								});	
+						}	
+								
+						ns1blankspace.app.reset();
+						ns1blankspace.app.set(oParam);
 					}	
-							
-					ns1blankspace.app.reset();
-					ns1blankspace.app.set(oParam);
 				},
 
 	refresh: 	function (oResponse)
@@ -406,7 +413,7 @@ ns1blankspace.financial.receipt =
 							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>');
 							
 						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.receipt.init({showHome: false});ns1blankspace.financial.receipt.search.send("-' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspace.financial.receipt.init({showHome: false}, id: ' + ns1blankspace.objectContext + '})',
 							move: false
 							})
 						
