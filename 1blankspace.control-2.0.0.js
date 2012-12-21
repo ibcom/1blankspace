@@ -85,7 +85,7 @@ ns1blankspace.financial.summaryUseTemplate = false;
 ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html';
 
 ns1blankspace.xhtml.logonNotes =
-	'1blankspace.com is an example app based on the mydigitalstructure.com platform.' +
+	'1blankspace all-of-enterprise is an example app based on the mydigitalstructure platform.' +
 	'<br /><br /><a href="http://mydigitalstructure.com/1blankspace" target="_blank">1blankspace namespace</a>' +
 	'<br /><br /><a href="https://github/ibcom/1blankspace" target="_blank">github repository</a>' +
 	'<br /><br /><a href="http://mydigitalstructure.com/examples" target="_blank">More code examples</a>' +
@@ -96,7 +96,7 @@ ns1blankspace.xhtml.logonNotes =
 	'<br /><a href="https://developer.1blankspace.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
 
 ns1blankspace.xhtml.header =
-	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/1blankspace-2.0.0.png"></div>' +
+	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/1blankspace.aoe-2.0.0.png"></div>' +
 	'<div style="float:right; margin-right:3px;">' +
 	'<div id="ns1blankspaceSpaceText" style="width:300px;"></div>' +
 	'<div id="ns1blankspaceLogonName" style="width:300px;"></div></div>';
@@ -106,7 +106,7 @@ ns1blankspace.themes =
 	{
 		title: 				'Standard',
 		cssURI: 			'', 
-		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace-2.0.0.png">',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.aoe-2.0.0.png">',
 		default: 			true
 	},
 	{

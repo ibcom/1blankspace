@@ -336,8 +336,15 @@ ns1blankspace.app =
 					xhtmlHeadID.appendChild(oScript);
 				},
 
-	init: 		function ()
+	init: 		function (oParam)
 				{
+					var bInitialise = false;
+
+					if (oParam != undefined)
+					{
+						if (oParam.initialise != undefined) {bInitialise = oParam.initialise}
+					}
+
 					if ($('#ns1blankspace').length == 0)
 					{
 						$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
@@ -350,294 +357,300 @@ ns1blankspace.app =
 											'</div>');
 					}		
 
-					$('#ns1blankspaceViewControl').html('<span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span>');
-
-					$.each(ns1blankspace.scripts, function()
+					if (!bInitialise)
 					{
-						if (this.source != '')
+						$('#ns1blankspaceViewControl').html('<span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span>');
+						window.setTimeout('ns1blankspace.app.init({initialise: true})', 100);
+					}
+					else
+					{	
+						$.each(ns1blankspace.scripts, function()
 						{
-							ns1blankspace.app.loadScript(this.source);
-						}	
-					});
-
-					$('#ns1blankspaceHeader').html(ns1blankspace.xhtml.header);
-
-					ns1blankspace.version = 2;
-
-					ns1blankspace.option.showSpeed = 0;
-					ns1blankspace.option.showSpeedOptions = 0;
-					ns1blankspace.option.hideSpeed = 0;
-					ns1blankspace.option.hideSpeedOptions = 0;
-					ns1blankspace.option.typingWait = 400;
-					ns1blankspace.option.logonStayOnDocument = true;
-					ns1blankspace.option.setFocus = true;
-					ns1blankspace.option.richTextEditing = true;
-					ns1blankspace.option.setupURI = '/ondemand/setup/';
-					ns1blankspace.option.dateFormat = 'dd M yy';
-
-					ns1blankspace.timer.messaging = 0;
-					ns1blankspace.timer.delay;
-
-					ns1blankspace.setupViewport = false;
-					ns1blankspace.inputDetected = false;
-					ns1blankspace.unloadWarning = false;
-					
-					ns1blankspace.object = -1;
-					ns1blankspace.objectName = '';
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.objectContextData;
-					ns1blankspace.objectContextSearch = '';
-
-					ns1blankspace.okToSave = true;
-
-					ns1blankspace.counter.editor = 0;
-
-					ns1blankspace.xhtml.masterControl = '';
-					ns1blankspace.xhtml.action = '';
-					ns1blankspace.xhtml.home = '';
-					ns1blankspace.xhtml.divID = '';
-					ns1blankspace.xhtml.container = '#ns1blankspaceMultiUseContainer'
-
-					ns1blankspace.user.commonname = '';
-					ns1blankspace.user.email = '';
-					ns1blankspace.user.networkGroups = '';
-					ns1blankspace.user.id = -1;
-					ns1blankspace.user.contactperson = -1;
-					ns1blankspace.user.systemAdmin = false;
-					ns1blankspace.setupShow = false;
-					ns1blankspace.user.theme = 'Standard';
-
-					ns1blankspace.data.searchSource = {text: 1, browse: 2, select: 3, all: 4}
-
-					ns1blankspace.debug.appContext = 'start';
-
-					ns1blankspace.param;
-
-					ns1blankspace.history.viewList = ['ns1blankspace.home.show()']
-					ns1blankspace.history.currentIndex = 0
-					ns1blankspace.history.lastDestinationInstruction = '';
-					ns1blankspace.history.list = [];
-
-					ns1blankspace.user.networkGroups = '';
-					ns1blankspace.setupShow = false;
-
-					$(document).ajaxError(
-						function(oEvent, oXMLHTTPRequest, oAjaxOptions, oError) 
+							if (this.source != '')
 							{
-								alert('Error: ' + oAjaxOptions.url + ' \nException: ' + oError + ' \nReturned: ' + oXMLHTTPRequest.responseText);
-							}
-					);	
-
-					$.ajaxSetup(
-					{
-						cache: false
-					});
-
-					if (navigator.platform.indexOf('iPad') != -1 || navigator.platform.indexOf('iPhone') != -1) 
-					{
-						ns1blankspace.option.setFocus = false;
-					}	 
-
-					$('td.ns1blankspaceControl').live('click', function()
-					{
-						ns1blankspace.history.control({xhtmlElementID: this.id});
-					});
-					
-					$('td.ns1blankspaceControl').live('mousedown', function() 
-					{
-						$('td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
-					});
-
-					$('td.ns1blankspaceControl').live('mouseup', function() 
-					{
-						$(this).addClass('ns1blankspaceHighlight');
-					});
-
-					$('.ns1blankspaceWatermark').live('focus', function() 
-					{
-						if ($(this).hasClass('ns1blankspaceWatermark'))
-						{
-							$(this).val('');
-							$(this).removeClass('ns1blankspaceWatermark');
-						}	
-					});		
-						
-					$('.ns1blankspaceSearch').live('focus', function() 
-					{		
-						$(this).addClass('ns1blankspaceHighlight');
-						
-						ns1blankspace.xhtml.divID = this.id;
-						
-						$(ns1blankspace.xhtml.container).html('');
-						$(ns1blankspace.xhtml.container).show();
-						$(ns1blankspace.xhtml.container).offset(
-						{ 
-							top: $('#' + ns1blankspace.xhtml.divID).offset().top,
-							left: $('#' + ns1blankspace.xhtml.divID).offset().left + $('#' + ns1blankspace.xhtml.divID).width() - 10
+								ns1blankspace.app.loadScript(this.source);
+							}	
 						});
-								
-						$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
+
+						$('#ns1blankspaceHeader').html(ns1blankspace.xhtml.header);
+
+						ns1blankspace.version = 2;
+
+						ns1blankspace.option.showSpeed = 0;
+						ns1blankspace.option.showSpeedOptions = 0;
+						ns1blankspace.option.hideSpeed = 0;
+						ns1blankspace.option.hideSpeedOptions = 0;
+						ns1blankspace.option.typingWait = 400;
+						ns1blankspace.option.logonStayOnDocument = true;
+						ns1blankspace.option.setFocus = true;
+						ns1blankspace.option.richTextEditing = true;
+						ns1blankspace.option.setupURI = '/ondemand/setup/';
+						ns1blankspace.option.dateFormat = 'dd M yy';
+
+						ns1blankspace.timer.messaging = 0;
+						ns1blankspace.timer.delay;
+
+						ns1blankspace.setupViewport = false;
+						ns1blankspace.inputDetected = false;
+						ns1blankspace.unloadWarning = false;
 						
-						$('#ns1blankspaceSearchOptions').button({
-							text: false,
-							icons: {
-								primary: "ui-icon-triangle-1-s"
-							}
-						})
-						.click(function() {
-							ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
-						})
-						.css('width', '14px')
-						.css('height', '23px')
-					});
+						ns1blankspace.object = -1;
+						ns1blankspace.objectName = '';
+						ns1blankspace.objectContext = -1;
+						ns1blankspace.objectContextData;
+						ns1blankspace.objectContextSearch = '';
+
+						ns1blankspace.okToSave = true;
+
+						ns1blankspace.counter.editor = 0;
+
+						ns1blankspace.xhtml.masterControl = '';
+						ns1blankspace.xhtml.action = '';
+						ns1blankspace.xhtml.home = '';
+						ns1blankspace.xhtml.divID = '';
+						ns1blankspace.xhtml.container = '#ns1blankspaceMultiUseContainer'
+
+						ns1blankspace.user.commonname = '';
+						ns1blankspace.user.email = '';
+						ns1blankspace.user.networkGroups = '';
+						ns1blankspace.user.id = -1;
+						ns1blankspace.user.contactperson = -1;
+						ns1blankspace.user.systemAdmin = false;
+						ns1blankspace.setupShow = false;
+						ns1blankspace.user.theme = 'Standard';
+
+						ns1blankspace.data.searchSource = {text: 1, browse: 2, select: 3, all: 4}
+
+						ns1blankspace.debug.appContext = 'start';
+
+						ns1blankspace.param;
+
+						ns1blankspace.history.viewList = ['ns1blankspace.home.show()']
+						ns1blankspace.history.currentIndex = 0
+						ns1blankspace.history.lastDestinationInstruction = '';
+						ns1blankspace.history.list = [];
+
+						ns1blankspace.user.networkGroups = '';
+						ns1blankspace.setupShow = false;
+
+						$(document).ajaxError(
+							function(oEvent, oXMLHTTPRequest, oAjaxOptions, oError) 
+								{
+									alert('Error: ' + oAjaxOptions.url + ' \nException: ' + oError + ' \nReturned: ' + oXMLHTTPRequest.responseText);
+								}
+						);	
+
+						$.ajaxSetup(
+						{
+							cache: false
+						});
+
+						if (navigator.platform.indexOf('iPad') != -1 || navigator.platform.indexOf('iPhone') != -1) 
+						{
+							ns1blankspace.option.setFocus = false;
+						}	 
+
+						$('td.ns1blankspaceControl').live('click', function()
+						{
+							ns1blankspace.history.control({xhtmlElementID: this.id});
+						});
 						
-					$('.ns1blankspaceSearch').live('keyup', function()
-					{
-						ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
-					});	
-						
-					$('.ns1blankspaceSearch').live('blur', function() 
-					{
-						$(this).removeClass('ns1blankspaceHighlight');
-					});
-					
-					$('.ns1blankspaceSearchAddress').live('focus', function() 
-					{
-						ns1blankspace.xhtml.divID = this.id;
-						$(ns1blankspace.xhtml.container).html('');
-						$(ns1blankspace.xhtml.container).show();
-						$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
-						$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
-						
-						$('#ns1blankspaceSearchOptions').button( {
-							text: false,
-							icons: {
-								primary: "ui-icon-triangle-1-s"
-							}
-						})
-						.click(function() {
-							ns1blankspace.search.address.show(ns1blankspace.xhtml.divID);
-						})
-						.css('width', '14px')
-						.css('height', '23px')
-					});
-					
-					$('.ns1blankspaceSearchAddress').live('blur', function() 
-					{
-						$(ns1blankspace.xhtml.container).hide();
-					});
-					
-					$('.ns1blankspaceSearchContact').live('keyup', function()
-					{
-						ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 1, 3);	
-					});	
-					
-					$('.ns1blankspaceSearchContact').live('focus', function() 
-					{
-						ns1blankspace.xhtml.divID = this.id;
-						$(ns1blankspace.xhtml.container).html('');
-						$(ns1blankspace.xhtml.container).show();
-						$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
-						$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ins1blankspaceSearchOptions"></span>');
-						
-						$('#ns1blankspaceSearchOptions').button( {
-							text: false,
-							icons: {
-								primary: "ui-icon-triangle-1-s"
-							}
-						})
-						.click(function() {
-							ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 4);
-						})
-						.css('width', '14px')
-						.css('height', '23px')
-					});
-					
-					$('.ns1blankspaceSearchContactEmail').live('focus', function() 
-					{
-						ns1blankspace.xhtml.divID = this.id;
-						$(ns1blankspace.xhtml.container).html('');
-						$(ns1blankspace.xhtml.container).show();
-						$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width()});
-						$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
-						
-						$('#ns1blankspaceSearchOptions').button( {
-							text: false,
-							icons: {
-								primary: "ui-icon-triangle-1-s"
-							}
-						})
-						.click(function() {
-							ns1blankspace.contact.email.search(ns1blankspace.xhtml.divID, {
-									source: 4, 
-									emailOnly: true,
-									contactBusiness: $('#' + ns1blankspace.xhtml.divID).attr('data-contactbusiness'),
-									setXHTMLElementID: $(this).attr('data-setelementid')
-									});
-						})
-						.css('width', '14px')
-						.css('height', '23px')
-					});
-					
-					$('.ns1blankspaceSearchContactEmail').live('keyup', function() 
-					{
-						if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-						
-						var sFunction = "ns1blankspace.contact.email.search(ns1blankspace.xhtml.divID, {" +
-									"source: 1," +
-									"emailOnly: true," +
-									"contactBusiness: " + $(this).attr('data-contactbusiness') + "," +
-									"setXHTMLElementID: '" + $(this).attr('data-setelementid') + "'});"
-						
-						ns1blankspace.timer.delayCurrent = setTimeout(sFunction, ns1blankspace.option.typingWait);
-						
-					});
-					
-					$('.ns1blankspaceOptionsClose').live('click', function() 
-					{
-						$(ns1blankspace.xhtml.container).slideUp(500);
-						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-					});
-					
-					$('.ns1blankspaceSearchHeaderPage').live('click', function() 
-					{
-						interfaceAuditSearchShowPage(this.id);
-					}); //???
+						$('td.ns1blankspaceControl').live('mousedown', function() 
+						{
+							$('td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
+						});
+
+						$('td.ns1blankspaceControl').live('mouseup', function() 
+						{
+							$(this).addClass('ns1blankspaceHighlight');
+						});
+
+						$('.ns1blankspaceWatermark').live('focus', function() 
+						{
+							if ($(this).hasClass('ns1blankspaceWatermark'))
+							{
+								$(this).val('');
+								$(this).removeClass('ns1blankspaceWatermark');
+							}	
+						});		
 							
-					$('input.ns1blankspaceText').live('focus', function() 
-					{
-						$(this).addClass('ns1blankspaceHighlight');
-					});
-
-					$('input.ns1blankspaceText').live('keyup', function() 
-					{
-						ns1blankspace.inputDetected = true;
-					});
+						$('.ns1blankspaceSearch').live('focus', function() 
+						{		
+							$(this).addClass('ns1blankspaceHighlight');
+							
+							ns1blankspace.xhtml.divID = this.id;
+							
+							$(ns1blankspace.xhtml.container).html('');
+							$(ns1blankspace.xhtml.container).show();
+							$(ns1blankspace.xhtml.container).offset(
+							{ 
+								top: $('#' + ns1blankspace.xhtml.divID).offset().top,
+								left: $('#' + ns1blankspace.xhtml.divID).offset().left + $('#' + ns1blankspace.xhtml.divID).width() - 10
+							});
+									
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
+							
+							$('#ns1blankspaceSearchOptions').button({
+								text: false,
+								icons: {
+									primary: "ui-icon-triangle-1-s"
+								}
+							})
+							.click(function() {
+								ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
+							})
+							.css('width', '14px')
+							.css('height', '23px')
+						});
+							
+						$('.ns1blankspaceSearch').live('keyup', function()
+						{
+							ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
+						});	
+							
+						$('.ns1blankspaceSearch').live('blur', function() 
+						{
+							$(this).removeClass('ns1blankspaceHighlight');
+						});
 						
-					$('input.ns1blankspaceText').live('blur', function() 
-					{
-						$(this).removeClass('ns1blankspaceHighlight');
-					});
+						$('.ns1blankspaceSearchAddress').live('focus', function() 
+						{
+							ns1blankspace.xhtml.divID = this.id;
+							$(ns1blankspace.xhtml.container).html('');
+							$(ns1blankspace.xhtml.container).show();
+							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
+							
+							$('#ns1blankspaceSearchOptions').button( {
+								text: false,
+								icons: {
+									primary: "ui-icon-triangle-1-s"
+								}
+							})
+							.click(function() {
+								ns1blankspace.search.address.show(ns1blankspace.xhtml.divID);
+							})
+							.css('width', '14px')
+							.css('height', '23px')
+						});
+						
+						$('.ns1blankspaceSearchAddress').live('blur', function() 
+						{
+							$(ns1blankspace.xhtml.container).hide();
+						});
+						
+						$('.ns1blankspaceSearchContact').live('keyup', function()
+						{
+							ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 1, 3);	
+						});	
+						
+						$('.ns1blankspaceSearchContact').live('focus', function() 
+						{
+							ns1blankspace.xhtml.divID = this.id;
+							$(ns1blankspace.xhtml.container).html('');
+							$(ns1blankspace.xhtml.container).show();
+							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ins1blankspaceSearchOptions"></span>');
+							
+							$('#ns1blankspaceSearchOptions').button( {
+								text: false,
+								icons: {
+									primary: "ui-icon-triangle-1-s"
+								}
+							})
+							.click(function() {
+								ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 4);
+							})
+							.css('width', '14px')
+							.css('height', '23px')
+						});
+						
+						$('.ns1blankspaceSearchContactEmail').live('focus', function() 
+						{
+							ns1blankspace.xhtml.divID = this.id;
+							$(ns1blankspace.xhtml.container).html('');
+							$(ns1blankspace.xhtml.container).show();
+							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width()});
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
+							
+							$('#ns1blankspaceSearchOptions').button( {
+								text: false,
+								icons: {
+									primary: "ui-icon-triangle-1-s"
+								}
+							})
+							.click(function() {
+								ns1blankspace.contact.email.search(ns1blankspace.xhtml.divID, {
+										source: 4, 
+										emailOnly: true,
+										contactBusiness: $('#' + ns1blankspace.xhtml.divID).attr('data-contactbusiness'),
+										setXHTMLElementID: $(this).attr('data-setelementid')
+										});
+							})
+							.css('width', '14px')
+							.css('height', '23px')
+						});
+						
+						$('.ns1blankspaceSearchContactEmail').live('keyup', function() 
+						{
+							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+							
+							var sFunction = "ns1blankspace.contact.email.search(ns1blankspace.xhtml.divID, {" +
+										"source: 1," +
+										"emailOnly: true," +
+										"contactBusiness: " + $(this).attr('data-contactbusiness') + "," +
+										"setXHTMLElementID: '" + $(this).attr('data-setelementid') + "'});"
+							
+							ns1blankspace.timer.delayCurrent = setTimeout(sFunction, ns1blankspace.option.typingWait);
+							
+						});
+						
+						$('.ns1blankspaceOptionsClose').live('click', function() 
+						{
+							$(ns1blankspace.xhtml.container).slideUp(500);
+							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+						});
+						
+						$('.ns1blankspaceSearchHeaderPage').live('click', function() 
+						{
+							interfaceAuditSearchShowPage(this.id);
+						}); //???
+								
+						$('input.ns1blankspaceText').live('focus', function() 
+						{
+							$(this).addClass('ns1blankspaceHighlight');
+						});
 
-					$('input.ns1blankspaceDate').live('focus', function() 
-					{
-						$(this).addClass('ns1blankspaceHighlight');
-					});
+						$('input.ns1blankspaceText').live('keyup', function() 
+						{
+							ns1blankspace.inputDetected = true;
+						});
+							
+						$('input.ns1blankspaceText').live('blur', function() 
+						{
+							$(this).removeClass('ns1blankspaceHighlight');
+						});
 
-					$('input.ns1blankspaceDate').live('blur', function() 
-					{
-						$(this).removeClass('ns1blankspaceHighlight');
-					});
+						$('input.ns1blankspaceDate').live('focus', function() 
+						{
+							$(this).addClass('ns1blankspaceHighlight');
+						});
 
-					$('.ns1blankspaceTextMulti').live('focus', function()
-					{
-						$(this).addClass('ns1blankspaceHighlight');
-					});
+						$('input.ns1blankspaceDate').live('blur', function() 
+						{
+							$(this).removeClass('ns1blankspaceHighlight');
+						});
 
-					$('.ns1blankspaceTextMulti').live('blur', function() 
-					{
-						$(this).removeClass('ns1blankspaceHighlight');
-					});	
+						$('.ns1blankspaceTextMulti').live('focus', function()
+						{
+							$(this).addClass('ns1blankspaceHighlight');
+						});
+
+						$('.ns1blankspaceTextMulti').live('blur', function() 
+						{
+							$(this).removeClass('ns1blankspaceHighlight');
+						});
+					}	
 				},
 							
 	start: 		function ()
