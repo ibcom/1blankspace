@@ -1588,8 +1588,8 @@ ns1blankspace.history.control =
 						}
 						else
 						{
-							$('.ns1blankspaceControl').removeClass('ns1blankspaceControlHighlight')
-							$('#' + sXHTMLElementID).addClass('ns1blankspaceControlHighlight')
+							$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight')
+							$('#' + sXHTMLElementID).addClass('ns1blankspaceHighlight')
 							$('#' + sXHTMLElementID).click()
 						}
 					}

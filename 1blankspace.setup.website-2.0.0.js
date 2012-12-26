@@ -283,9 +283,6 @@ ns1blankspace.setup.website =
 						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlAttachmentAdd" class="ns1blankspaceControl">' +
-										'Upload</td></tr>');
-
 						aHTML.push('<tr><td>&nbsp;</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlPages" class="ns1blankspaceControl">' +
@@ -359,7 +356,7 @@ ns1blankspace.setup.website =
 					$('#ns1blankspaceControlPages').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainPages'});
-						ns1blankspace.setup.website.pages();
+						ns1blankspace.setup.website.pages.show();
 					});
 
 					$('#ns1blankspaceControlForms').click(function(event)
@@ -389,7 +386,7 @@ ns1blankspace.setup.website =
 					$('#ns1blankspaceControlURLs').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainURLs'});
-						ns1blankspace.setup.website.urls();
+						ns1blankspace.setup.website.urls.show();
 					});
 				},
 
@@ -439,8 +436,8 @@ ns1blankspace.setup.website =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:300px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -448,7 +445,7 @@ ns1blankspace.setup.website =
 					
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspaceColumn1">');
+						aHTML.push('<table>');
 
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Site ID</td></tr>' +
 										'<tr><td id="ns1blankspaceSummarySiteID" class="ns1blankspaceSummary">' +
@@ -488,11 +485,11 @@ ns1blankspace.setup.website =
 						var aHTML = [];
 							
 						
-						aHTML.push('<table id="ns1blankspaceSummaryActions" class="ns1blankspaceColumn2">');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 											
 						aHTML.push('<tr><td class="ns1blankspaceSummaryColumn2Action" style="width:175px;">' +
 										'<a href="#" id="ns1blankspaceSummarySetupWebApp">' +
-										'<strong>Convert to a jQuery or jQuery mobile webapp.</strong></a>' +
+										'<strong>Set up as a jQuery webapp</strong></a>' +
 										'</td></tr>');
 									
 						if (ns1blankspace.objectContextData.primaryurl != '')
@@ -622,8 +619,8 @@ ns1blankspace.setup.website =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioLayout3" name="radioLayout" value="3"/>None (Use CSS/Divs)' +
-										'<br /><input type="radio" id="radioLayout1" name="radioLayout" value="1"/>Using Tables' +
-										'<br /><input type="radio" id="radioLayout2" name="radioLayout" value="2"/>Using Frames' +
+										'<br /><input type="radio" id="radioLayout2" name="radioLayout" value="2"/>Using Tables' +
+										'<br /><input type="radio" id="radioLayout1" name="radioLayout" value="1"/>Using Frames' +
 										'</td></tr>');			
 							
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -724,21 +721,10 @@ ns1blankspace.setup.website =
 
 	advanced:	function ()
 				{
-					var aHTML = [];
-					
-					if ($('#ns1blankspaceMainURLs').attr('data-loading') == '1')
+					if ($('#ns1blankspaceMainAdvanced').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceMainURLs').attr('data-loading', '');
+						$('#ns1blankspaceMainAdvanced').attr('data-loading', '');
 						
-						aHTML.push('<table class="ns1blankspaceContainer">' +
-										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceAdvancedColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspaceAdvancedColumn2" class="ns1blankspaceColumn2"></td>' +
-										'</tr>' + 
-										'</table>');					
-						
-						$('#ns1blankspaceMainAdvanced').html(aHTML.join(''));
-
 						var aHTML = [];
 											
 						aHTML.push('<table class="ns1blankspace">');
@@ -790,7 +776,7 @@ ns1blankspace.setup.website =
 										
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceAdvancedColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceMainAdvanced').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
@@ -876,8 +862,8 @@ ns1blankspace.setup.website =
 												
 											aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspacePagesColumn1" class="ns1blankspaceColumn1"></td>' +
-															'<td id="ns1blankspacePagesColumn2" class="ns1blankspaceColumn2"></td>' +
+															'<td id="ns1blankspacePagesColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+															'<td id="ns1blankspacePagesColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 															'</tr>' + 
 															'</table>');	
 												
@@ -885,7 +871,7 @@ ns1blankspace.setup.website =
 
 											var aHTML = [];
 
-											aHTML.push('<table class="ns1blankspace">');
+											aHTML.push('<table class="ns1blankspaceColumn2">');
 											
 											if (oActions.add)
 											{
@@ -1338,8 +1324,8 @@ ns1blankspace.setup.website =
 								
 							aHTML.push('<table class="ns1blankspaceContainer">' +
 											'<tr class="ns1blankspaceContainer">' +
-											'<td id="ns1blankspaceFormsColumn1" class="ns1blankspaceColumn1"></td>' +
-											'<td id="ns1blankspaceFormsColumn2" class="ns1blankspaceColumn2"></td>' +
+											'<td id="ns1blankspaceFormsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+											'<td id="ns1blankspaceFormsColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 											'</tr>' + 
 											'</table>');	
 
@@ -1347,14 +1333,11 @@ ns1blankspace.setup.website =
 							
 							var aHTML = [];
 
-							aHTML.push('<table class="ns1blankspace">');
+							aHTML.push('<table class="ns1blankspaceColumn2">');
 							
-							if (oActions.add)
-							{
-								aHTML.push('<tr><td class="ns1blankspaceAction">' +
+							aHTML.push('<tr><td class="ns1blankspaceAction">' +
 												'<span id="ns1blankspaceSetupWebsiteFormsAdd">Add</span>' +
 												'</td></tr>');
-							}
 							
 							aHTML.push('</table>');					
 							
@@ -1373,12 +1356,11 @@ ns1blankspace.setup.website =
 					
 						var aHTML = [];
 						
-						
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table><tr><td class="ns1blankspaceNothing">No forms.</td></tr></table>');
 	
-							$('#ns1blankspacePagesColumn1').html(aHTML.join(''));
+							$('#ns1blankspaceFormsColumn1').html(aHTML.join(''));
 						
 						}
 						else
@@ -1386,7 +1368,7 @@ ns1blankspace.setup.website =
 							aHTML.push('<table id="ns1blankspaceSetupWebsiteForms" class="ns1blankspace">');
 							aHTML.push('<tr class="ns1blankspaceCaption">');
 							aHTML.push('<td class="ns1blankspaceHeaderCaption">Form</td>');
-							aHTML.push('<td>&nbsp;</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 							aHTML.push('</tr>');
 							
 							$.each(oResponse.data.rows, function()
@@ -1398,7 +1380,7 @@ ns1blankspace.setup.website =
 								if (sTitle == '') {sTitle = this.typetext}
 								sTitle = sTitle + ' (' + this.id + ')';
 								
-								aHTML.push('<td id="ns1blankspaceWebsiteForms_title-' + this.id + '" class="interfaceMainRow">' +
+								aHTML.push('<td id="ns1blankspaceWebsiteForms_title-' + this.id + '" class="ns1blankspaceRow">' +
 														sTitle + '</td>');
 														
 								aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
@@ -1410,23 +1392,21 @@ ns1blankspace.setup.website =
 							
 							aHTML.push('</table>');
 
-							$('#' + sXHTMLElementId).html(aHTML.join(''));
+							$('#ns1blankspaceFormsColumn1').html(aHTML.join(''));
 							
-							if (oOptions.view) 
-							{
-								$('#ns1blankspaceSetupWebsiteForms > span.interfaceMainRowOptionsSelect').button( {
-									text: false,
-									icons: {
-										primary: "ui-icon-play"
-									}
-								})
-								.click(function() {
-									ns1blankspace.setup.website.forms({showHome: false});
-									ns1blankspace.setup.websiteForm.search.send(this.id, {source: 1})
-								})
-								.css('width', '15px')
-								.css('height', '17px');
-							}	
+							$('#ns1blankspaceSetupWebsiteForms .ns1blankspaceRowSelect').button( {
+								text: false,
+								icons: {
+									primary: "ui-icon-play"
+								}
+							})
+							.click(function() {
+								ns1blankspace.setup.website.forms({showHome: false});
+								ns1blankspace.setup.websiteForm.search.send(this.id, {source: 1})
+							})
+							.css('width', '15px')
+							.css('height', '17px');
+							
 						}
 					}	
 				},
@@ -1464,12 +1444,12 @@ ns1blankspace.setup.website =
 												
 											aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspaceURLColumn1" class="ns1blankspaceColumn1"></td>' +
-															'<td id="ns1blankspaceURLColumn2" class="ns1blankspaceColumn2"></td>' +
+															'<td id="ns1blankspaceURLColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+															'<td id="ns1blankspaceURLColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 															'</tr>' + 
 															'</table>');
 
-											$('#ns1blankspaceURLs').html(aHTML.join(''));
+											$('#ns1blankspaceMainURLs').html(aHTML.join(''));
 											
 											var aHTML = [];
 												
@@ -1611,19 +1591,19 @@ ns1blankspace.setup.website =
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceURLColumn1').html(aHTML.join(''));
+
+										$('#ns1blankspaceSetupWebsiteURLURL').focus();
 										
 										var aHTML = [];
 
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceWebsiteURLSave">Save</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceWebsiteURLSave">Save</span>' +
 														'</td></tr>');
 									
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceWebsiteURLCancel">Cancel</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceWebsiteURLCancel">Cancel</span>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');	
