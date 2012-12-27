@@ -354,8 +354,8 @@ ns1blankspace.setup.automation =
 						
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title);
 						
-						$('#ns1blankspaceViewportControlAction').button({disabled: false});
-						$('#ns1blankspaceViewportControlActionOptions').button({disabled: false});
+						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
 						ns1blankspace.history.view({
 							newDestination: 'ns1blankspace.setup.automation.init({showHome: false});ns1blankspace.setup.automation.search.send("-' + ns1blankspace.objectContext + '")',
@@ -379,10 +379,10 @@ ns1blankspace.setup.automation =
 					}
 					else
 					{
-						aHTML.push('<table class="ns1blankspaceMain">' +
-									'<tr class="ns1blankspaceRow">' +
+						aHTML.push('<table class="ns1blankspace">' +
+									'<tr>' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 									'</tr>' +
 									'</table>');			
 						
@@ -390,7 +390,7 @@ ns1blankspace.setup.automation =
 
 						var aHTML = [];
 
-						aHTML.push('<table class="ns1blankspaceColumn1">');
+						aHTML.push('<table>');
 						
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Automation ID</td></tr>' +
 										'<tr><td class="ns1blankspaceSummary">' +
@@ -411,9 +411,9 @@ ns1blankspace.setup.automation =
 						
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
-						aHTML.push('<tr><td class="ns1blankspace">' +
+						aHTML.push('<tr><td>' +
 										'<a href="/ondemand/setup/?method=SETUP_AUTOMATION_RUN&ct=text/html&id=' + ns1blankspace.objectContext + '"' +
-										' target="_blank" id="ns1blankspaceMainSummaryAutomationTestRun">Test Run</a>' +
+										' target="_blank" id="ns1blankspaceMainSummaryAutomationTestRun">Run</a>' +
 										'</td></tr>');
 														
 						aHTML.push('</table>');					
@@ -468,7 +468,7 @@ ns1blankspace.setup.automation =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
-										'<input id="ins1blankspaceDetailsEndpoint" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsEndpoint" class="ns1blankspaceText">' +
 										'</td></tr>');
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -602,8 +602,8 @@ ns1blankspace.setup.automation =
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceMainScheduleTimeHour').val(ns1blankspace.objectContextData.scheduletimehour);
-							$('#ns1blankspaceMainScheduleTimeMinute').val(ns1blankspace.objectContextData.scheduletimeminute);
+							$('#ns1blankspaceScheduleTimeHour').val(ns1blankspace.objectContextData.scheduletimehour);
+							$('#ns1blankspaceScheduleTimeMinute').val(ns1blankspace.objectContextData.scheduletimeminute);
 							$('[name="radioScheduleType"][value="' + ns1blankspace.objectContextData.scheduletype + '"]').attr('checked', true);
 						}
 						else
@@ -662,15 +662,6 @@ ns1blankspace.setup.automation =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceResponseActionFrom" class="ns1blankspaceText">' +
-										'</td></tr>');
-
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Response Action URL' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceResponseActionURL" class="ns1blankspaceText">' +
 										'</td></tr>');
 										
 						aHTML.push('</table>');					
@@ -785,8 +776,8 @@ ns1blankspace.setup.automation =
 										
 										if ($('#ns1blankspaceMainDetails').html() != '')
 										{
-											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceMainDetailsTitle').val());
-											sData += '&endpoint=' + ns1blankspace.util.fs($('#ns1blankspaceMainDetailsEndpoint').val());
+											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
+											sData += '&endpoint=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEndpoint').val());
 											sData += '&url=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsURL').val());
 											sData += '&urlmethod=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsURLMethod').val());
 											sData += '&postdata=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPostData').val());
@@ -804,7 +795,6 @@ ns1blankspace.setup.automation =
 										if ($('#ns1blankspaceMainResponse').html() != '')
 										{
 											sData += '&responseactioncontext=' + ns1blankspace.util.fs($('#ns1blankspaceResponseActionContext').val());
-											sData += '&responseactionurl=' + ns1blankspace.util.fs($('#ns1blankspaceResponseActionURL').val());
 											sData += '&responseactionfrom=' + ns1blankspace.util.fs($('#ns1blankspaceResponseActionFrom').val());
 											sData += '&responseaction=' + ns1blankspace.util.fs($('input[name="radioResponseAction"]:checked').val());
 											
@@ -820,7 +810,7 @@ ns1blankspace.setup.automation =
 
 										if (sData != '')
 										{
-											if (sData.slice(0,1) == '&') {sData = sData.replace('&', '')}
+											ns1blankspace.status.working();
 										
 											$.ajax(
 											{

@@ -262,7 +262,7 @@ ns1blankspace.setup.user =
 								}
 				},				
 
-	layout: 	function interfaceSetupUserViewport()
+	layout: 	function ()
 				{
 					var aHTML = [];
 
@@ -776,7 +776,7 @@ ns1blankspace.setup.user =
 					select:		function (oParam)
 								{
 									var sXHTMLElementID;
-									var iUser = ns1blankspace.objectContext;
+									var iUser = ns1blankspace.objectContext.id;
 									var iUserType = 1;
 
 									if (oParam != undefined)

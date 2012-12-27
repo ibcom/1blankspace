@@ -10,10 +10,12 @@ ns1blankspace.setup.financial =
 	init: 		function (oParam)
 				{
 					var bShowHome = true
-					
+					var bInitialised = false;
+
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
+						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}
 					}
 
 					ns1blankspace.object = -1;
@@ -23,27 +25,33 @@ ns1blankspace.setup.financial =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Financials';
 					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.setup.financial.init({showHome: true});',
-							move: false
-							});	
-					}	
-						
-					if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}	
-					ns1blankspace.financial.initData();
-							
-					ns1blankspace.app.reset();
-					ns1blankspace.app.set(oParam);
+					if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}
 
-					ns1blankspace.format.editor.init({height: "500px"});
+					if (!bInitialised)
+					{
+						ns1blankspace.financial.initData(oParam)
+					}
+					else
+					{
+						if (bShowHome)
+						{
+							ns1blankspace.history.view({
+								newDestination: 'ns1blankspace.setup.financial.init({showHome: true});',
+								move: false
+								});		
+						}	
+						
+						ns1blankspace.app.reset();
+						ns1blankspace.app.set(oParam);
+						ns1blankspace.format.editor.init({height: "500px"});
+					}
 				},
 
 	home:		function (oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					$('#ns1blankspaceViewControlNew').button({disabled: true});
 					
 					var aHTML = [];
 								
@@ -206,7 +214,7 @@ ns1blankspace.setup.financial =
 						
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspaceColumn1">');
+						aHTML.push('<table class="ns1blankspace">');
 						
 						var sTaxMethod = (ns1blankspace.objectContextData.taxreportcalculationmethod == "1") ? "Cash" : "Accrual";
 						
@@ -1453,8 +1461,8 @@ ns1blankspace.setup.financial =
 						aHTML.push('<table class="ns1blankspace">');
 					
 						aHTML.push('<tr class="ns1blankspace">' +
-										'<td class="ns1blankspace">' +
-										'Default Pay Period.' +
+										'<td class="ns1blankspaceCaption">' +
+										'Default Pay Period' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +

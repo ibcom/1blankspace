@@ -474,7 +474,7 @@ ns1blankspace.app =
 							}	
 						});		
 							
-						$('.ns1blankspaceSearch').live('focus', function() 
+						$('input.ns1blankspaceSelect').live('focus', function() 
 						{		
 							$(this).addClass('ns1blankspaceHighlight');
 							
@@ -488,9 +488,9 @@ ns1blankspace.app =
 								left: $('#' + ns1blankspace.xhtml.divID).offset().left + $('#' + ns1blankspace.xhtml.divID).width() - 10
 							});
 									
-							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSelectOptions" class="ns1blankspaceSelectOptions"></span>');
 							
-							$('#ns1blankspaceSearchOptions').button({
+							$('#ns1blankspaceSelectOptions').button({
 								text: false,
 								icons: {
 									primary: "ui-icon-triangle-1-s"
@@ -503,25 +503,25 @@ ns1blankspace.app =
 							.css('height', '23px')
 						});
 							
-						$('.ns1blankspaceSearch').live('keyup', function()
+						$('input.ns1blankspaceSelect').live('keyup', function()
 						{
 							ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
 						});	
 							
-						$('.ns1blankspaceSearch').live('blur', function() 
+						$('input.ns1blankspaceSelect').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 						
-						$('.ns1blankspaceSearchAddress').live('focus', function() 
+						$('.ns1blankspaceSelectAddress').live('focus', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
 							$(ns1blankspace.xhtml.container).html('');
 							$(ns1blankspace.xhtml.container).show();
 							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
-							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSelectOptions" class="ns1blankspaceSelectOptions"></span>');
 							
-							$('#ns1blankspaceSearchOptions').button( {
+							$('#ns1blankspaceSelectOptions').button( {
 								text: false,
 								icons: {
 									primary: "ui-icon-triangle-1-s"
@@ -534,25 +534,25 @@ ns1blankspace.app =
 							.css('height', '23px')
 						});
 						
-						$('.ns1blankspaceSearchAddress').live('blur', function() 
+						$('.ns1blankspaceSelectAddress').live('blur', function() 
 						{
 							$(ns1blankspace.xhtml.container).hide();
 						});
 						
-						$('.ns1blankspaceSearchContact').live('keyup', function()
+						$('.ns1blankspaceSelectContact').live('keyup', function()
 						{
 							ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 1, 3);	
 						});	
 						
-						$('.ns1blankspaceSearchContact').live('focus', function() 
+						$('.ns1blankspaceSelectContact').live('focus', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
 							$(ns1blankspace.xhtml.container).html('');
 							$(ns1blankspace.xhtml.container).show();
 							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
-							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ins1blankspaceSearchOptions"></span>');
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSelectOptions" class="ns1blankspaceSelectOptions"></span>');
 							
-							$('#ns1blankspaceSearchOptions').button( {
+							$('#ns1blankspaceSelectOptions').button( {
 								text: false,
 								icons: {
 									primary: "ui-icon-triangle-1-s"
@@ -565,15 +565,15 @@ ns1blankspace.app =
 							.css('height', '23px')
 						});
 						
-						$('.ns1blankspaceSearchContactEmail').live('focus', function() 
+						$('.ns1blankspaceSelectContactEmail').live('focus', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
 							$(ns1blankspace.xhtml.container).html('');
 							$(ns1blankspace.xhtml.container).show();
 							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width()});
-							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchOptions" class="ns1blankspaceSearchOptions"></span>');
+							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSelectOptions" class="ns1blankspaceSelectOptions"></span>');
 							
-							$('#ns1blankspaceSearchOptions').button( {
+							$('#ns1blankspaceSelectOptions').button( {
 								text: false,
 								icons: {
 									primary: "ui-icon-triangle-1-s"
@@ -591,7 +591,7 @@ ns1blankspace.app =
 							.css('height', '23px')
 						});
 						
-						$('.ns1blankspaceSearchContactEmail').live('keyup', function() 
+						$('.ns1blankspaceSelectContactEmail').live('keyup', function() 
 						{
 							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
 							
@@ -2448,7 +2448,7 @@ ns1blankspace.search =
 					{
 						if (oResponse == undefined)
 						{
-							ns1blankspace.container.position(sXHTMLInputElementID);
+							ns1blankspace.container.position({xhtmlElementID: sXHTMLInputElementID});
 							
 							if (sColumns == undefined) {sColumns = 'title'};
 							
@@ -2483,7 +2483,7 @@ ns1blankspace.search =
 								}
 								
 								oSearch.sort(aColumns[0], 'asc');
-								oSearch.getResults(function(data){this.search(oParam, data)});
+								oSearch.getResults(function(data){ns1blankspace.search.show(oParam, data)});
 							}
 						}	
 						else
