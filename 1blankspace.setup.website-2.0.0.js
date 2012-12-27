@@ -85,7 +85,7 @@ ns1blankspace.setup.website =
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/ondemand/setup/?method=SETUP_SITE_SEARCH&recent=1',
+							url: ns1blankspace.util.endpointURI('SETUP_SITE_SEARCH') + '&rows=50',
 							dataType: 'json',
 							success: ns1blankspace.setup.website.home
 						});
@@ -512,7 +512,7 @@ ns1blankspace.setup.website =
 						$('#ns1blankspaceSummarySetupWebApp').click(function() 
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainWebapp'});
-							ns1blankspace.setup.website.app();
+							ns1blankspace.setup.website.webapp();
 						});
 					}	
 				},
@@ -1897,7 +1897,7 @@ ns1blankspace.setup.website =
 										
 						aHTML.push('<tr class="ns1blankspace">' +
 										'<td style="padding-top:15px;font-size:0.875em;color:#404040;">' +
-										'Set the header scripts to reference the 1blankspace jQuery framework / design pattern.' +
+										'Set the header scripts to reference the <a href="http://mydigitalstructure.com/1blankspace" target="_blank">1blankspace namespace</a>.' +
 										'</td>' +
 										'<td style="width:25px;"></td>' +
 										'<td style="padding-top:15px;font-size:0.875em;color:#404040;">' +
@@ -1914,7 +1914,7 @@ ns1blankspace.setup.website =
 						})
 						.click(function() 
 						{
-							interfaceSetupWebApp({action: 'jquery'});
+							ns1blankspace.setup.website.webapp({action: 'jquery'});
 						});
 						
 						$('#ns1blankspaceWebappjQueryMobile').button(

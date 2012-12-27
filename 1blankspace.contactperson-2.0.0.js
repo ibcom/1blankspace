@@ -201,7 +201,7 @@ ns1blankspace.contactPerson =
 											
 											oSearch.rows = 15;
 											oSearch.rf = 'json';
-											oSearch.getResults(function(data) {ns1blankspace.search.process(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.contactPerson.search.process(oParam, data)});
 										}
 									};	
 								},
@@ -264,16 +264,16 @@ ns1blankspace.contactPerson =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											interfaceContactPersonSearch(event.target.id, {source: 1});
+											ns1blankspace.contactPerson.search.send(event.target.id, {source: 1});
 										});
 										
-										ns1blankspace.pagination.bind(
+										ns1blankspace.render.bind(
 										{
 											columns: 'firstname-surname',
 											more: oResponse.moreid,
 											rows: 15,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: oResponse.contactPerson.search.send
+											functionSearch: ns1blankspace.contactPerson.search.send
 										});   
 										
 									}	
@@ -459,8 +459,8 @@ ns1blankspace.contactPerson =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -468,7 +468,7 @@ ns1blankspace.contactPerson =
 					
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspaceColumn1">');
+						aHTML.push('<table class="ns1blankspace">');
 						
 						if (ns1blankspace.objectContextData.workphone != '')
 						{

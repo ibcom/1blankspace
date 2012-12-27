@@ -1923,12 +1923,12 @@ ns1blankspace.attachments =
 					}
 					else
 					{
-						aHTML.push('<table>');
+						aHTML.push('<table id="ns1blankspaceAttachments">');
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">');
-						aHTML.push('<td class="ns1blankspaceCaption">File Name</td>');
-						aHTML.push('<td class="ns1blankspaceCaption">Date</td>');
-						aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">File Name</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 						aHTML.push('</tr>');
 
 						$.each(oResponse.data.rows, function()
@@ -1970,7 +1970,7 @@ ns1blankspace.attachments =
 					
 					aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 									'<span id="ns1blankspaceAttachment_options_remove-' + oRow.attachment + 
-									'" class="ns1blankspaceAttachmentOptionsRemove">&nbsp;</span></td>');
+									'" class="ns1blankspaceAttachmentsRemove">&nbsp;</span></td>');
 					
 					aHTML.push('</tr>');
 					
@@ -1979,14 +1979,14 @@ ns1blankspace.attachments =
 
 	bind:		function ()
 				{
-					$('td.ns1blankspaceAttachmentOptionsRemove').button({
+					$('#ns1blankspaceAttachments .ns1blankspaceAttachmentsRemove').button({
 								text: false,
 								 icons: {
 									 primary: "ui-icon-close"
 						}
 					})
 					.click(function() {
-						this.remove(this.id)
+						ns1blankspace.attachments.remove(this.id)
 					})
 					.css('width', '15px')
 					.css('height', '20px')	
@@ -2006,7 +2006,7 @@ ns1blankspace.attachments =
 							url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_MANAGE'),
 							data: sData,
 							dataType: 'json',
-							success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
+							success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 						});
 				},
 
@@ -2100,7 +2100,7 @@ ns1blankspace.attachments =
 									$('#ns1blankspaceUploadStatus').html('Uploading..');
 									var oForm = document.ns1blankspaceFileUpload;
 								  	oForm.submit();
-								 	this.upload.status();
+								 	ns1blankspace.attachments.upload.status();
 									ns1blankspace.timer.delay = setInterval('ns1blankspace.attachments.upload.status()', 1000);
 								},
 
@@ -2111,7 +2111,7 @@ ns1blankspace.attachments =
 									var sStatus;
 									var sCurrentState;
 
-									var fFunctionPostUpdate = ns1blankspaceAttachments;
+									var fFunctionPostUpdate = ns1blankspace.attachments.show;
 									
 									if (ns1blankspace.param != undefined)
 									{
