@@ -356,7 +356,7 @@ ns1blankspace.setup.website =
 					$('#ns1blankspaceControlPages').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainPages'});
-						ns1blankspace.setup.website.pages.show();
+						ns1blankspace.setup.website.css.getURI();  //after getting custom css it calls pages.show()
 					});
 
 					$('#ns1blankspaceControlForms').click(function(event)
@@ -679,44 +679,85 @@ ns1blankspace.setup.website =
 							$('#ns1blankspaceLayoutFooterHeight').val(ns1blankspace.objectContextData.footerheight);
 							$('#ns1blankspaceLayoutColumns').val(ns1blankspace.objectContextData.columns);
 							$('[name="radioLayout"][value="' + ns1blankspace.objectContextData.layout + '"]').attr('checked', true);
-							ns1blankspace.setup.website.css(ns1blankspace.objectContextData.cssattachment);
+							ns1blankspace.setup.website.css.list(ns1blankspace.objectContextData.cssattachment);
 						}
 						else
 						{
 							$('[name="radioLayout"][value="3"]').attr('checked', true);
-							ns1blankspace.setup.website.css(-1);
+							ns1blankspace.setup.website.css.list(-1);
 						}
 					}	
 				},
 
-	css: 		function (iValue)
-				{
-					var aHTML = [];
+	css: 		{
+					list: 		function (iValue)
+								{
+									var oSearch = new AdvancedSearch();
+									oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+									
+									oSearch.addField('filename,attachment');
+									oSearch.addFilter('filename', 'TEXT_IS_LIKE', 'css')
+									oSearch.addFilter('object', 'EQUAL_TO', 40);
+									oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext)
+									oSearch.rf = 'json';
+									oSearch.sort('filename', 'asc');
+									
+									oSearch.getResults(function(oResponse)
+									{
+										var aHTML = [];
 
-					var oSearch = new AdvancedSearch();
-					oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-					
-					oSearch.addField('filename,attachment');
-					oSearch.addFilter('filename', 'TEXT_IS_LIKE', 'css')
-					oSearch.addFilter('object', 'EQUAL_TO', 40);
-					oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext)
-					oSearch.rf = 'json';
-					oSearch.sort('filename', 'asc');
-					
-					oSearch.getResults(function(oResponse)
-					{
-						aHTML.push('<input type="radio" id="radioCSSAttachment-1" name="radioCSSAttachment" value="-1"/>' +
-													'None<br />');
+										aHTML.push('<input type="radio" id="radioCSSAttachment-1" name="radioCSSAttachment" value="-1"/>' +
+																	'None<br />');
 
-						$.each(oResponse.data.rows, function()
-						{
-							aHTML.push('<input type="radio" id="radioCSSAttachment' + this.attachment + '" name="radioCSSAttachment" value="' + this.attachment + '"/>' +
-												this.filename + '<br />');				
-						});
-						
-						$('#ns1blankspaceSetupWebsiteCSSContainer').html(aHTML.join(''));
-						$('[name="radioCSSAttachment"][value="' + iValue + '"]').attr('checked', true);
-					});
+										$.each(oResponse.data.rows, function()
+										{
+											aHTML.push('<input type="radio" id="radioCSSAttachment' + this.attachment + '" name="radioCSSAttachment" value="' + this.attachment + '"/>' +
+																this.filename + '<br />');				
+										});
+										
+										$('#ns1blankspaceSetupWebsiteCSSContainer').html(aHTML.join(''));
+										$('[name="radioCSSAttachment"][value="' + iValue + '"]').attr('checked', true);
+									});
+								},
+
+					getURI: 	function (oParam)
+								{
+									var iCSSAttachment = (ns1blankspace.objectContextData.cssattachment ? ns1blankspace.objectContextData.cssattachment : -1);
+									var fCallback = ns1blankspace.setup.website.pages.show;
+
+									if (oParam != undefined)
+									{
+										if (oParam.cssAttachment != undefined) {iCSSAttachment = oParam.cssAttachment}
+									}
+
+									if 	(iCSSAttachment != -1 && ns1blankspace.objectContextData.cssuri == undefined)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+										oSearch.addField('filename');
+										oSearch.addFilter('attachment', 'EQUAL_TO', iCSSAttachment);
+										oSearch.rf = 'json';
+										
+										oSearch.getResults(function(oResponse)
+										{
+											if (oResponse.status = "OK")
+											{
+												if (oResponse.data.rows.length > 0)
+												{
+													ns1blankspace.objectContextData.cssuri = '/site/' + ns1blankspace.objectContext + '/' +
+														oResponse.data.rows[0].filename;
+												}		
+											}	
+											 
+											fCallback();
+										});
+									}
+									else
+									{
+										fCallback();
+									}
+								},
+	
 				},	
 
 	advanced:	function ()
@@ -1160,6 +1201,9 @@ ns1blankspace.setup.website =
 											}
 										});
 										
+										var sCSS = ns1blankspace.objectContextData.cssuri;
+										if (sCSS == undefined) {sCSS = ns1blankspace.xhtml.editorCSS}
+
 										tinyMCE.init(
 										{
 											mode : "none",
@@ -1199,7 +1243,7 @@ ns1blankspace.setup.website =
 											convert_urls : false, 
 											visual : true, 
 											gecko_spellcheck : true,
-											content_css : ns1blankspace.xhtml.editorCSS,
+											content_css : sCSS,
 											
 											external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
 											external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
@@ -1749,6 +1793,8 @@ ns1blankspace.setup.website =
 											sData += '&columns=' + ns1blankspace.util.fs($('#ns1blankspaceLayoutColumns').val());
 											sData += '&layout=' + ns1blankspace.util.fs($('input[name="radioLayout"]:checked').val());
 											sCSSAttachment = $('input[name="radioCSSAttachment"]:checked').val();
+											ns1blankspace.objectContextData.cssattachment = sCSSAttachment;
+											ns1blankspace.objectContextData.cssuri = undefined;
 										}
 										
 										if ($('#ns1blankspaceMainAdvanced').html() != '')
