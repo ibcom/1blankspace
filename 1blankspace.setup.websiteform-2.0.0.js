@@ -268,7 +268,7 @@ ns1blankspace.setup.websiteForm =
 										
 						aHTML.push('<table class="ns1blankspaceControl">');
 										
-						aHTML.push('<tr><td id="ns1blankspaceControlLayout" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlStructure" class="ns1blankspaceControl">' +
 										'Layout</td></tr>');
 					}
 					
@@ -299,7 +299,7 @@ ns1blankspace.setup.websiteForm =
 					$('#ns1blankspaceControlStructure').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainStructure'});
-						ns1blankspace.setup.websiteForm.structures.init();
+						ns1blankspace.setup.websiteForm.structure.init();
 					});
 				},
 
@@ -326,7 +326,7 @@ ns1blankspace.setup.websiteForm =
 						if (sContext == '') {sContext = 'Form ' + ns1blankspace.objectContextData.id}
 						
 						$('#ns1blankspaceControlContext').html(sContext +
-								'<br /><br /><span class="ns1blankspaceSub">' + ns1blankspace.objectContextData.sitetext + '</span>');
+								'<br /><span class="ns1blankspaceSub">' + ns1blankspace.objectContextData.sitetext + '</span>');
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
@@ -362,7 +362,7 @@ ns1blankspace.setup.websiteForm =
 					
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspaceColumn1">');
+						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Type</td></tr>' +
 									'<tr><td id="ns1blankspaceSummaryType" class="ns1blankspaceSummary">' +
@@ -436,7 +436,7 @@ ns1blankspace.setup.websiteForm =
 										'Type' +
 										'</td></tr>' +
 										'<tr>' +
-										'<tdclass="ns1blankspaceRadio">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioType1" name="radioType" value="1"/>Standard' +
 										'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Simple' +
 										'<br /><input type="radio" id="radioType3" name="radioType" value="3"/>Advanced' +
@@ -562,15 +562,13 @@ ns1blankspace.setup.websiteForm =
 										
 									if (oResponse == undefined)
 									{	
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_ELEMENT_SEARCH'),
-											data: 'structure=' + ns1blankspace.objectContextData.structure + '&category=' + ns1blankspace.objectContextData.structurecategory,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.setup.websiteForm.structure.show(oParam, data)}
-										});
-
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';
+										oSearch.addField('title,datatype,datatypetext');
+										oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.objectContextData.structure);
+										oSearch.addFilter('category', 'EQUAL_TO', ns1blankspace.objectContextData.structurecategory);
+										oSearch.sort('title', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.setup.websiteForm.structure.show(oParam, data)});
 									}
 									else
 									{
@@ -580,12 +578,12 @@ ns1blankspace.setup.websiteForm =
 												
 											aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspaceStructureColumn1" class="ns1blankspaceColumn1"></td>' +
-															'<td id="ns1blankspaceStructureColumn2" class="ns1blankspaceColumn2"></td>' +
+															'<td id="ns1blankspaceStructureColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+															'<td id="ns1blankspaceStructureColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 															'</tr>' + 
 															'</table>');	
 
-											$('#' + sXHTMLElementID).html(aHTML.join(''));
+											$('#ns1blankspaceMainStructure').html(aHTML.join(''));
 											
 											var aHTML = [];
 												
@@ -662,7 +660,7 @@ ns1blankspace.setup.websiteForm =
 											
 											if (oOptions.view) 
 											{
-												$('#ns1blankspaceWebsiteFormStructure span.ns1blankspaceRowRemove').button( {
+												$('#ns1blankspaceWebsiteFormStructure .ns1blankspaceRowRemove').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-close"
@@ -677,7 +675,7 @@ ns1blankspace.setup.websiteForm =
 											
 											if (oOptions.remove) 
 											{
-												$('#ns1blankspaceWebsiteFormStructure  span.ns1blankspaceRowView').button( {
+												$('#ns1blankspaceWebsiteFormStructure .ns1blankspaceRowView').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-play"
@@ -741,10 +739,11 @@ ns1blankspace.setup.websiteForm =
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceStructureColumn1').html(aHTML.join(''));
+
+										$('#ns1blankspaceStructureTitle').focus();
 										
 										var aHTML = [];
 										
-									
 										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
 										aHTML.push('<tr><td>' +
