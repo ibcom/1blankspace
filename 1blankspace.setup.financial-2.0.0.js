@@ -1139,8 +1139,8 @@ ns1blankspace.setup.financial =
 							$('#ns1blankspaceFinancialAccountCash').attr("data-id", ns1blankspace.objectContextData.financialaccountcash);
 							$('#ns1blankspaceFinancialAccountCreditors').val(ns1blankspace.objectContextData.financialaccountcreditortext);
 							$('#ns1blankspaceFinancialAccountCreditors').attr("data-id", ns1blankspace.objectContextData.financialaccountcreditor);
-							$('#ns1blankspaceFinancialAccountDebitors').val(ns1blankspace.objectContextData.financialaccountdebitortext);
-							$('#ns1blankspaceFinancialAccountDebitors').attr("data-id", ns1blankspace.objectContextData.financialaccountdebitor);
+							$('#ns1blankspaceFinancialAccountDebtors').val(ns1blankspace.objectContextData.financialaccountdebtortext);
+							$('#ns1blankspaceFinancialAccountDebtors').attr("data-id", ns1blankspace.objectContextData.financialaccountdebtor);
 							$('#ns1blankspaceFinancialAccountCurrentProfit').val(ns1blankspace.objectContextData.financialaccountcurrentearningstext);
 							$('#ns1blankspaceFinancialAccountCurrentProfit').attr("data-id", ns1blankspace.objectContextData.financialaccountcurrentearnings);
 							$('#ns1blankspaceFinancialAccountRetainedProfit').val(ns1blankspace.objectContextData.financialaccountretainedearningstext);
@@ -1490,13 +1490,13 @@ ns1blankspace.setup.financial =
 									
 									ns1blankspace.status.working();
 
-									if ($('#ns1blankspaceMainFinancialAccount').html() != '')
+									if ($('#ns1blankspaceMainFinancialAccountDefault').html() != '')
 									{
-										sData += '&financialaccountcash=' + ns1blankspace.util.fs($('#inputns1blankspaceFinancialAccountCash').attr('data-id'));
-										sData += '&financialaccountcreditor=' + ns1blankspace.util.fs($('#inputns1blankspaceFinancialAccountCreditors').attr('data-id'));
-										sData += '&financialaccountdebitor=' + ns1blankspace.util.fs($('#inputns1blankspaceFinancialAccountDebitors').attr('data-id'));
-										sData += '&financialaccountcurrentearnings=' + ns1blankspace.util.fs($('#inputns1blankspaceFinancialAccountCurrentProfit').attr('data-id'));
-										sData += '&financialaccountretainedearnings=' + ns1blankspace.util.fs($('#inputns1blankspaceFinancialAccountRetainedProfit').attr('data-id'));		
+										sData += '&financialaccountcash=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountCash').attr('data-id'));
+										sData += '&financialaccountcreditor=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountCreditors').attr('data-id'));
+										sData += '&financialaccountdebtor=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountDebtors').attr('data-id'));
+										sData += '&financialaccountcurrentearnings=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountCurrentProfit').attr('data-id'));
+										sData += '&financialaccountretainedearnings=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountRetainedProfit').attr('data-id'));		
 									};
 
 									if ($('#ns1blankspaceMainGeneral').html() != '')
