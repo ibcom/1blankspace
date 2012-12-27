@@ -513,7 +513,8 @@ ns1blankspace.messaging.imap =
 									{
 										text: false,
 										disabled: true,
-										 icons: {
+										icons:
+										{
 											 primary: "ui-icon-close"
 										}
 									})

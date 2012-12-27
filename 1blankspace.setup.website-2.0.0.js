@@ -648,7 +648,7 @@ ns1blankspace.setup.website =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="inputInterfaceMainLayoutHeaderHeight" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceLayoutHeaderHeight" class="ns1blankspaceText">' +
 										'</td></tr>');		
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -657,7 +657,7 @@ ns1blankspace.setup.website =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="inputInterfaceMainLayoutFooterHeight" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceLayoutFooterHeight" class="ns1blankspaceText">' +
 										'</td></tr>');		
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -666,7 +666,7 @@ ns1blankspace.setup.website =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="inputInterfaceMainLayoutColumns" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceLayoutColumns" class="ns1blankspaceText">' +
 										'</td></tr>');		
 						
 						aHTML.push('</table>');					
@@ -783,8 +783,8 @@ ns1blankspace.setup.website =
 							$('[name="radioAppStatus"][value="' + ns1blankspace.objectContextData.ondemandstatus + '"]').attr('checked', true);
 							$('[name="radioTitle"][value="' + ns1blankspace.objectContextData.usekeywordsastitle + '"]').attr('checked', true);
 							$('[name="radioTitle"][value="' +ns1blankspace.objectContextData.layout + '"]').attr('checked', true);
-							$('#ns1blankspaceAdvancedDocumentType').val(ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.documenttype));
-							$('#ns1blankspaceAdvancedBodyTag').val(ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.bodytag));
+							$('#ns1blankspaceAdvancedDocumentType').val((ns1blankspace.objectContextData.documenttype).formatXHTML());
+							$('#ns1blankspaceAdvancedBodyTag').val((ns1blankspace.objectContextData.bodytag).formatXHTML());
 						}
 					}	
 				},
@@ -823,8 +823,8 @@ ns1blankspace.setup.website =
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceScriptsHeader').val(ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.headerscript));
-							$('#ns1blankspaceScriptsFooter').val(ns1blankspaceFormatXHTML(ns1blankspace.objectContextData.footerscript));
+							$('#ns1blankspaceScriptsHeader').val((ns1blankspace.objectContextData.headerscript).formatXHTML());
+							$('#ns1blankspaceScriptsFooter').val((ns1blankspace.objectContextData.footerscript).formatXHTML());
 						}
 					}	
 				},
@@ -903,7 +903,7 @@ ns1blankspace.setup.website =
 										}
 										else
 										{
-											aHTML.push('<table class="ns1blankspaceSetupWebsitePages">');
+											aHTML.push('<table id="ns1blankspaceSetupWebsitePages">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">URL</td>');
@@ -946,15 +946,9 @@ ns1blankspace.setup.website =
 																		
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 												
-												if (oOptions.remove)
-												{	
-													aHTML.push('<span id="ns1blankspaceWebsitePage_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
-												}
-													
-												if (oOptions.view)
-												{	
-													aHTML.push('<span id="ns1blankspaceWebsitePage_options_select-' + this.id + '" class="ns1blankspaceRowSelect"></span>');
-												}
+												aHTML.push('<span id="ns1blankspaceWebsitePage_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+											
+												aHTML.push('<span id="ns1blankspaceWebsitePage_options_select-' + this.id + '" class="ns1blankspaceRowSelect"></span>');
 																	
 												aHTML.push('</td></tr>');
 											});
@@ -963,40 +957,37 @@ ns1blankspace.setup.website =
 
 											$('#ns1blankspacePagesColumn1').html(aHTML.join(''));
 											
-											if (oOptions.remove) 
-											{
-												$('#ns1blankspaceSetupWebsitePages > span.ns1blankspaceRowRemove').button( {
-													text: false,
-													icons: {
-														primary: "ui-icon-close"
-													}
-												})
-												.click(function() {
-													ns1blankspace.setup.website.pages.remove({xhtmlElementID: this.id});
-												})
-												.css('width', '15px')
-												.css('height', '17px')
-											}
-										
-											if (oOptions.view) 
-											{
-												$('#ns1blankspaceSetupWebsitePages > span.ns1blankspaceRowSelect').button( {
-													text: false,
-													icons: {
-														primary: "ui-icon-play"
-													}
-												})
-												.click(function() {
-													ns1blankspace.setup.website.pages.add({xhtmlElementID: this.id})
-												})
-												.css('width', '15px')
-												.css('height', '17px')
-											}	
+											
+											$('#ns1blankspaceSetupWebsitePages .ns1blankspaceRowRemove').button({
+												text: false,
+												icons: {
+													primary: "ui-icon-close"
+												}
+											})
+											.click(function() {
+												ns1blankspace.setup.website.pages.remove({xhtmlElementID: this.id});
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+											
+											
+											$('#ns1blankspaceSetupWebsitePages span.ns1blankspaceRowSelect').button({
+												text: false,
+												icons: {
+													primary: "ui-icon-play"
+												}
+											})
+											.click(function() {
+												ns1blankspace.setup.website.pages.edit({xhtmlElementID: this.id})
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+												
 										}
 									}	
 								},
 
-					add:		function (oParam, oResponse)
+					edit:		function (oParam, oResponse)
 								{
 									var sID; 
 									var iDocumentType = 5;
@@ -1018,7 +1009,7 @@ ns1blankspace.setup.website =
 									
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceCaption">');
+										aHTML.push('<table class="ns1blankspace">');
 												
 										aHTML.push('<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -1034,16 +1025,16 @@ ns1blankspace.setup.website =
 											aHTML.push('<table class="ns1blankspace">');
 											
 											aHTML.push('<tr class="ns1blankspace">' +
-															'<td id="ns1blankspaceSetupWebsitePageURL" class="ns1blankspace">' +
+															'<td class="ns1blankspaceCaption">' +
 															'URL' +
 															'</td>' +
-															'<td id="tns1blankspaceSetupWebsitePageType" class="ns1blankspace">' +
+															'<td class="ns1blankspaceCaption">' +
 															'Type' +
 															'</td>' +
-															'<td id="ns1blankspaceSetupWebsitePageDocumentType" class="ns1blankspace">' +
+															'<td class="ns1blankspaceCaption">' +
 															'Format' +
 															'</td>' +
-															'<td id="ns1blankspaceSetupWebsitePageSharing" class="ns1blankspace">' +
+															'<td class="ns1blankspaceCaption">' +
 															'Sharing' +
 															'</td></tr>');
 															
@@ -1084,34 +1075,38 @@ ns1blankspace.setup.website =
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspacePagesColumn1').html(aHTML.join(''));
+
+										$('#ns1blankspaceSetupWebsitePageTitle').focus();
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceWebsitePageSave">Save</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" id="ns1blankspaceWebsitePageSave">Save</span>' +
 														'</td></tr>');
 									
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceWebsitePageCancel">Cancel</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" id="ns1blankspaceWebsitePageCancel">Cancel</span>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspacePagesColumn2').html(aHTML.join(''));
 										
-										$('#ns1blankspaceWebsitePageSave').button(
-										{
-											text: "Save"
+										$('#ns1blankspaceWebsitePageSave').button({
+											text: false,
+											label: "Save",
+											icons:
+											{
+												 primary: "ui-icon-check"
+											}
 										})
 										.click(function() 
 										{
 											var sData = 'site=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-											sData += '&documenttitle=' + ns1blankspace.util.fs($('#inputInterfaceMainSetupWebsitePageAddTitle').val());
-											sData += '&documenturl=' + ns1blankspace.util.fs($('#inputInterfaceMainSetupWebsitePageAddURL').val());
+											sData += '&documenttitle=' + ns1blankspace.util.fs($('#ns1blankspaceSetupWebsitePageTitle').val());
+											sData += '&documenturl=' + ns1blankspace.util.fs($('#ns1blankspaceSetupWebsitePageURL').val());
 											sData += '&documenttype=' + ns1blankspace.util.fs($('input[name="radioDocumentType"]:checked').val());
 											sData += '&documentpublic=' + ns1blankspace.util.fs($('input[name="radioPublic"]:checked').val());
 											sData += '&location=' + ns1blankspace.util.fs($('input[name="radioType"]:checked').val());
@@ -1134,7 +1129,6 @@ ns1blankspace.setup.website =
 												data: sData,
 												dataType: 'json',
 												success: function() {
-													ns1blankspace.show({selector: '#ns1blankspaceMainPage'});
 													ns1blankspace.setup.website.pages.show();
 												}
 											});
@@ -1142,11 +1136,15 @@ ns1blankspace.setup.website =
 										
 										$('#ns1blankspaceWebsitePageCancel').button(
 										{
-											text: "Cancel"
+											text: false,
+											label: "Cancel",
+											icons:
+											{
+												 primary: "ui-icon-close"
+											}
 										})
 										.click(function() 
 										{
-											ns1blankspace.show({selector: '#ns1blankspaceMainPage'});
 											ns1blankspace.setup.website.pages.show();
 										});
 										
@@ -1218,7 +1216,7 @@ ns1blankspace.setup.website =
 												url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_SEARCH'),
 												data: 'includecontent=1&id=' + sID,
 												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.website.pages.add(oParam, data)}
+												success: function(data) {ns1blankspace.setup.website.pages.edit(oParam, data)}
 											});
 										}
 										else
@@ -1237,7 +1235,7 @@ ns1blankspace.setup.website =
 											$('#ns1blankspaceSetupWebsitePageTitle').val(oObjectContext.documenttitle);
 											$('#ns1blankspaceSetupWebsitePageURL').val(oObjectContext.documenturl);
 											
-											$('#ins1blankspaceEditText' + ns1blankspace.counter.editor).val(ns1blankspaceFormatXHTML(oObjectContext.documentcontent));
+											$('#ns1blankspaceEditText' + ns1blankspace.counter.editor).val((oObjectContext.documentcontent).formatXHTML());
 											
 											if (parseInt(oObjectContext.documenttype) == 5)
 											{
@@ -1579,8 +1577,8 @@ ns1blankspace.setup.website =
 	
 										aHTML.push('<table class="ns1blankspace">');
 												
-										aHTML.push('<tr class="ns1blankspacev">' +
-														'<td id="ns1blankspaceSetupWebsiteURLURL" class="interfaceMain">' +
+										aHTML.push('<tr>' +
+														'<td class="ns1blankspaceCaption">' +
 														'URL' +
 														'</td></tr>' +
 														'<tr class="ns1blankspaceText">' +
@@ -1620,15 +1618,26 @@ ns1blankspace.setup.website =
 											sData += '&url=' + ns1blankspace.util.fs($('#ns1blankspaceSetupWebsiteURLURL').val());
 											sData += '&id=' + ns1blankspace.util.fs(sID);
 											
+											ns1blankspace.status.working();
+
 											$.ajax(
 											{
 												type: 'POST',
 												url: ns1blankspace.util.endpointURI('SETUP_SITE_URL_MANAGE'),
 												data: sData,
 												dataType: 'json',
-												success: function() {
-													ns1blankspace.show({selector: '#ns1blankspaceMainURLs'});
-													ns1blankspace.setup.website.urls.show();
+												success: function(data) {
+													if (data.status == 'OK')
+													{	
+														ns1blankspace.status.message('URL added.')
+														ns1blankspace.show({selector: '#ns1blankspaceMainURLs'});
+														ns1blankspace.setup.website.urls.show();
+
+													}
+													else
+													{
+														ns1blankspace.status.error(data.error.errornotes);
+													}	
 												}
 											});
 										});
@@ -1719,7 +1728,7 @@ ns1blankspace.setup.website =
 										
 										if (ns1blankspace.objectContext != -1)
 										{
-											sParam += '&id=' + ns1blankspace.objectContext	
+											sData += '&id=' + ns1blankspace.objectContext	
 										}
 										else
 										{
@@ -1728,32 +1737,32 @@ ns1blankspace.setup.website =
 										
 										if ($('#ns1blankspaceMainDetails').html() != '')
 										{
-											sData += '&title=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsTitle').val());
-											sData += '&email=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsEmail').val());
+											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
+											sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
 											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());	
 										}
 
 										if ($('#ns1blankspaceMainLayout').html() != '')
 										{
-											sData += '&headerheight=' + ns1blankspace.util.fs($('#inputInterfaceMainLayoutHeaderHeight').val());
-											sData += '&footerheight=' + ns1blankspace.util.fs($('#inputInterfaceMainLayoutFooterHeight').val());
-											sData += '&columns=' + ns1blankspace.util.fs($('#inputInterfaceMainLayoutColumns').val());
+											sData += '&headerheight=' + ns1blankspace.util.fs($('#ns1blankspaceLayoutHeaderHeight').val());
+											sData += '&footerheight=' + ns1blankspace.util.fs($('#ns1blankspaceLayoutFooterHeight').val());
+											sData += '&columns=' + ns1blankspace.util.fs($('#ns1blankspaceLayoutColumns').val());
 											sData += '&layout=' + ns1blankspace.util.fs($('input[name="radioLayout"]:checked').val());
 											sCSSAttachment = $('input[name="radioCSSAttachment"]:checked').val();
 										}
 										
 										if ($('#ns1blankspaceMainAdvanced').html() != '')
 										{
-											sData += '&ondemandstatus=' + ns1blankspace.util.fs($('input[name="radioOnDemand"]:checked').val());	
+											sData += '&ondemandstatus=' + ns1blankspace.util.fs($('input[name="radioAppStatus"]:checked').val());	
 											sData += '&usekeywordsastitle=' + ns1blankspace.util.fs($('input[name="radioTitle"]:checked').val());
-											sData += '&documenttype=' + ns1blankspace.util.fs($('#inputInterfaceMainAdvancedDocumentType').val());
-											sData += '&bodytag=' + ns1blankspace.util.fs($('#inputInterfaceMainBodyTag').val());
+											sData += '&documenttype=' + ns1blankspace.util.fs($('#ns1blankspaceAdvancedDocumentType').val());
+											sData += '&bodytag=' + ns1blankspace.util.fs($('#ns1blankspaceAdvancedBodyTag').val());
 										}
 										
 										if ($('#ns1blankspaceMainScripts').html() != '')
 										{
-											sData += '&headerscript=' + ns1blankspace.util.fs($('#inputInterfaceMainScriptHeader').val());
-											sData += '&footerscript=' + ns1blankspace.util.fs($('#inputInterfaceMainScriptsFooter').val());
+											sData += '&headerscript=' + ns1blankspace.util.fs($('#ns1blankspaceScriptsHeader').val());
+											sData += '&footerscript=' + ns1blankspace.util.fs($('#ns1blankspaceScriptsFooter').val());
 										}
 										
 										if (sCSSAttachment != undefined)

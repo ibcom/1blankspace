@@ -2260,7 +2260,7 @@ ns1blankspace.status =
 							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + ns1blankspace.xhtml.loadingSmall + '</div></div>');
 				},
 
-	error: 		function ns1blankspaceError(sError)
+	error: 		function (sError)
 				{
 					if (sError == undefined) {sError = 'Error!'};
 					
