@@ -442,7 +442,11 @@ ns1blankspace.app =
 
 						$.ajaxSetup(
 						{
-							cache: false
+							cache: false,
+							beforeSend: function (oRequest)
+										{
+					            			oRequest.setRequestHeader("X-HTTP-myds-rest-level", "1");
+					        			}
 						});
 
 						if (navigator.platform.indexOf('iPad') != -1 || navigator.platform.indexOf('iPhone') != -1) 
@@ -474,9 +478,9 @@ ns1blankspace.app =
 							}	
 						});		
 							
-						$('input.ns1blankspaceSelect').live('focus', function() 
+						$('input.ns1blankspaceSelect').live('focusin', function() 
 						{		
-							$(this).addClass('ns1blankspaceHighlight');
+							$(this).addClass('ns1blankspaceSelectHighlight');
 							
 							ns1blankspace.xhtml.divID = this.id;
 							
@@ -510,7 +514,7 @@ ns1blankspace.app =
 							
 						$('input.ns1blankspaceSelect').live('blur', function() 
 						{
-							$(this).removeClass('ns1blankspaceHighlight');
+							$(this).removeClass('ns1blankspaceSelectHighlight');
 						});
 						
 						$('.ns1blankspaceSelectAddress').live('focus', function() 
@@ -2288,6 +2292,7 @@ ns1blankspace.container =
 					var iOffsetTop = 0;
 					var iOffsetLeft = 0;
 					var bForceShow = false;
+					var bSetWidth = false;
 					
 					if (oParam != undefined)
 					{
@@ -2298,6 +2303,7 @@ ns1blankspace.container =
 						if (oParam.offsetTop != undefined) {iOffsetTop = oParam.offsetTop}
 						if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft}
 						if (oParam.forceShow != undefined) {bForceShow = oParam.forceShow}
+						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
 					}
 					
 					if (oXHTMLElement == undefined)
@@ -2320,6 +2326,8 @@ ns1blankspace.container =
 								.offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft})
 								.html(sXHTML);
 							
+							if (bSetWidth) {$(ns1blankspace.xhtml.container + ' table').css('width', oXHTMLElement.width())}
+
 							if (sFunctionBind != undefined)
 								{eval(sFunctionBind)}
 						}
@@ -2338,12 +2346,14 @@ ns1blankspace.container =
 					var sXHTMLElementID = '';
 					var iLeftOffset = 0;
 					var iTopOffset = 7;
+					var bSetWidth = false;
 					
 					if (oParam != undefined)
 					{
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 						if (oParam.leftOffset != undefined) {iLeftOffset = oParam.leftOffset}
 						if (oParam.topOffset != undefined) {iTopOffset = oParam.topOffset}
+						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
 					}
 					
 					var oElement = $('#' + sXHTMLElementID)
@@ -2351,6 +2361,8 @@ ns1blankspace.container =
 					$(ns1blankspace.xhtml.container).html('')
 						.show()
 						.offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
+
+					if (bSetWidth) {$(ns1blankspace.xhtml.container).css('width', oElement.width())}
 				},
 
 	confirm:	function (oParam)
@@ -2448,7 +2460,7 @@ ns1blankspace.search =
 					{
 						if (oResponse == undefined)
 						{
-							ns1blankspace.container.position({xhtmlElementID: sXHTMLInputElementID});
+							ns1blankspace.container.position({xhtmlElementID: sXHTMLInputElementID, topOffset: 10, setWidth: true});
 							
 							if (sColumns == undefined) {sColumns = 'title'};
 							
@@ -2497,7 +2509,8 @@ ns1blankspace.search =
 							}
 							else
 							{
-								aHTML.push('<table class="interfaceSearchLarge">');
+								aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:' +
+												$('#' + sXHTMLInputElementID).width() + 'px;">');
 							
 								$.each(oResponse.data.rows, function() 
 								{ 
@@ -2505,17 +2518,17 @@ ns1blankspace.search =
 							
 									if (iColumn == 1)
 									{
-										aHTML.push('<tr class="interfaceSearch">');
+										aHTML.push('<tr class="ns1blankspaceSearch">');
 									}
 										
 									if (sColumns.length == 0)
 									{
-										aHTML.push('<td class="interfaceSearch" id="' + sXHTMLInputElementID +
+										aHTML.push('<td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
 															'-' + this.id + '">' + this.title + '</td>');
 									}
 									else
 									{
-										aHTML.push('<td class="interfaceSearch" id="' + sXHTMLInputElementID +
+										aHTML.push('<td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
 																'-' + this.id + '">');
 														
 										for (var i = 0; i < aColumns.length; i++)

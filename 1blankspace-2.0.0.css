@@ -430,18 +430,19 @@ td.ns1blankspaceHighlight
 	color: #DA8300;	
 }
 
-input.ns1blankspaceHighlight
+.ns1blankspaceSelectHighlight
 {
-	border-style:solid;
+	border-style: solid;
 	border-width: 1px;
-	border-color: #ee8f00;	
+	border-color: #ee8f00;
+	background-color: #f2f2f2;
 }
 
 textarea.ns1blankspaceHighlight
 {
 	border-style:solid;
 	border-width: 1px;
-	border-color: #ee8f00;	
+	border-color: #ee8f00;
 }
 
 td.ns1blankspaceMostLikely
