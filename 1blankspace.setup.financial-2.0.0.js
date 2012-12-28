@@ -324,9 +324,9 @@ ns1blankspace.setup.financial =
 							
 							aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceBankAccountColumn1" class="ns1blankspaceColumn1Flexible">' +
+										'<td id="ns1blankspaceBankAccountColumn1" class="ns1blankspaceColumn1Flexible" style="width: 300px;">' +
 										ns1blankspace.xhtml.loading + '</td>' +
-										'<td id="ns1blankspaceBankAccountColumn2" class="ns1blankspaceColumn2" style="width: 100px;">' +
+										'<td id="ns1blankspaceBankAccountColumn2" class="ns1blankspaceColumn2">' +
 										'<table class="ns1blankspaceColumn2"><tr><td>' +
 										'<span id="ns1blankspaceBankAccountAdd" class="ns1blankspaceAction">Add</span></td>' +
 										'</td></tr></table>' +
@@ -419,7 +419,7 @@ ns1blankspace.setup.financial =
 						var aHTML = [];
 						
 
-						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 									
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -447,16 +447,14 @@ ns1blankspace.setup.financial =
 						
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspace"  style="font-size:0.875em">');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 												
-						aHTML.push('<tr class="ns1blankspaceAction">' +
-										'<td class="ns1blankspaceAction">' +
-										'<span style="width:80px;" id="ns1blankspaceBankAccountEditSave">Save</span>' +
+						aHTML.push('<tr><td>' +
+										'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceBankAccountEditSave">Save</span>' +
 										'</td></tr>');
 					
-						aHTML.push('<tr class="ns1blankspaceAction">' +
-										'<td class="ns1blankspaceAction">' +
-										'<span style="width:80px;" id="ns1blankspaceBankAccountEditCancel">Cancel</span>' +
+						aHTML.push('<tr><td>' +
+										'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceBankAccountEditCancel">Cancel</span>' +
 										'</td></tr>');
 										
 						aHTML.push('</table>');		
@@ -520,7 +518,7 @@ ns1blankspace.setup.financial =
 						$('#ns1blankspaceBankAccountTitle').val(oObjectContext.title);
 						$('#ns1blankspaceBankAccountTitle').focus();
 						$('#ns1blankspaceBankAccountFinancialAccount').val(oObjectContext.financialaccounttext)
-						$('#ns1blankspaceBankAccountFinancialAccount').attr('data-id', ns1blankspace.objectContextData.financialaccount);
+						$('#ns1blankspaceBankAccountFinancialAccount').attr('data-id', oObjectContext.financialaccount);
 
 						ns1blankspace.status.message('');
 					}
@@ -731,7 +729,7 @@ ns1blankspace.setup.financial =
 										{
 											var aHTML = [];
 
-											aHTML.push('<table id="ns1blankspaceSetupFinancialFinancialAccount" class="ns1blankspace">');
+											aHTML.push('<table id="ns1blankspaceSetupFinancialFinancialAccount" class="ns1blankspaceColumn2">');
 										
 											if (($.grep(ns1blankspace.financial.data.rootAccounts, function (a) { return a.id == iParentAccount; })).length == 0)
 											{
@@ -838,7 +836,7 @@ ns1blankspace.setup.financial =
 									
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 						
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -878,15 +876,13 @@ ns1blankspace.setup.financial =
 
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace"  style="font-size:0.875em">');
+										aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em">');
 												
-										aHTML.push('<tr>' +
-														'<td>' +
+										aHTML.push('<tr><td>' +
 														'<span id="ns1blankspaceFinancialAccountEditSave" class="ns1blankspaceAction" style="width:80px;">Save</span>' +
 														'</td></tr>');
 									
-										aHTML.push('<tr>' +
-														'<td>' +
+										aHTML.push('<tr><td>' +
 														'<span id="ns1blankspaceFinancialAccountEditCancel" class="ns1blankspaceAction" style="width:80px;">Cancel</span>' +
 														'</td></tr>');
 														
@@ -1145,6 +1141,12 @@ ns1blankspace.setup.financial =
 							$('#ns1blankspaceFinancialAccountCurrentProfit').attr("data-id", ns1blankspace.objectContextData.financialaccountcurrentearnings);
 							$('#ns1blankspaceFinancialAccountRetainedProfit').val(ns1blankspace.objectContextData.financialaccountretainedearningstext);
 							$('#ns1blankspaceFinancialAccountRetainedProfit').attr("data-id", ns1blankspace.objectContextData.financialaccountretainedearnings);
+							$('#ns1blankspaceFinancialAccountTaxLiabilities').val(ns1blankspace.objectContextData.taxreportfinancialaccountpayabletext);
+							$('#ns1blankspaceFinancialAccountTaxLiabilities').attr("data-id", ns1blankspace.objectContextData.taxreportfinancialaccountpayable);
+							$('#ns1blankspaceFinancialAccountTaxCredits').val(ns1blankspace.objectContextData.taxreportfinancialaccountcreditstext);
+							$('#ns1blankspaceFinancialAccountTaxCredits').attr("data-id", ns1blankspace.objectContextData.taxreportfinancialaccountcredits);
+							$('#ns1blankspaceFinancialAccountTaxPayroll').val(ns1blankspace.objectContextData.payrollfinancialaccounttaxtext);
+							$('#ns1blankspaceFinancialAccountTaxPayroll').attr("data-id", ns1blankspace.objectContextData.payrollfinancialaccounttax);
 						}
 					}	
 				},
@@ -1496,7 +1498,10 @@ ns1blankspace.setup.financial =
 										sData += '&financialaccountcreditor=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountCreditors').attr('data-id'));
 										sData += '&financialaccountdebtor=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountDebtors').attr('data-id'));
 										sData += '&financialaccountcurrentearnings=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountCurrentProfit').attr('data-id'));
-										sData += '&financialaccountretainedearnings=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountRetainedProfit').attr('data-id'));		
+										sData += '&financialaccountretainedearnings=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountRetainedProfit').attr('data-id'));
+										sData += '&taxreportfinancialaccountpayable=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxLiabilities').attr('data-id'));
+										sData += '&taxreportfinancialaccountcredits=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxCredits').attr('data-id'));
+										sData += '&payrollfinancialaccounttax=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxPayroll').attr('data-id'));
 									};
 
 									if ($('#ns1blankspaceMainGeneral').html() != '')

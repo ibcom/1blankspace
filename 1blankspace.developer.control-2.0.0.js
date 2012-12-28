@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
  
-ns1blankspace.option.defaultView = "Website";
+ns1blankspace.option.defaultView = "Select...";
 ns1blankspace.option.defaultSetupView = "Spaces";
 
 ns1blankspace.scripts.push(
@@ -37,7 +37,48 @@ ns1blankspace.xhtml.logonNotes =
 	'<br /><br /><a href="http://mydigitalstructure.com/gettingstarted" target="_blank">Getting started</a>' +
 	'<br /><br /><a href="http://twitter.com/ibComMYDS" target="_blank">twitter.com/ibComMYDS</a>' +
 	'<br /><br /><a href="http://mydigitalstructure.com/terms" target="_blank">By logging on you agree to the  mydigitalstructure terms of use</a>';
-	
+
+ns1blankspace.xhtml.header =
+	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/mydigitalstructure.develop-2.0.0.png"></div>' +
+	'<div style="float:right; margin-right:3px;">' +
+	'<div id="ns1blankspaceSpaceText" style="width:300px;"></div>' +
+	'<div id="ns1blankspaceLogonName" style="width:300px;"></div></div>';
+
+ns1blankspace.themes = 
+[
+	{
+		title: 				'Standard',
+		cssURI: 			'', 
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/mydigitalstructure.develop-2.0.0.png">',
+		default: 			true
+	},
+	{
+		title: 				'Helping Hand',
+		cssURI: 			'/jscripts/1blankspace.theme.helpinghand-2.0.0.css',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+	},
+	{
+		title: 				'New York',
+		cssURI: 			'/jscripts/1blankspace.theme.newyork-2.0.0.css',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+	},
+	{
+		title: 				'Photography',
+		cssURI: 			'/jscripts/1blankspace.theme.photography-2.0.0.css',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+	},
+	{
+		title: 				'Travelling',
+		cssURI: 			'/jscripts/1blankspace.theme.travelling-2.0.0.css',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+	},
+	{
+		title: 				'Wall',
+		cssURI: 			'/jscripts/1blankspace.theme.wall-2.0.0.css',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+	}
+]
+
 ns1blankspace.views = 
 [
 	{
@@ -144,11 +185,14 @@ ns1blankspace.control.views.show = function ()
 		ns1blankspace.xhtml.viewControl = aHTML.join('');	
 	}
 
-	ns1blankspace.xhtml.container.show(
+	ns1blankspace.container.show(
 	{
-		xhtmlElementID: 'ns1blankspaceViewControlSet',
-		xhtml: ns1blankspace.xhtml.viewControl
-	});	
+		xhtmlElementID: 'ns1blankspaceViewControlViewContainer',
+		xhtml: ns1blankspace.xhtml.viewControl,
+		setWidth: false
+	});
+
+	ns1blankspace.control.views.bind();
 }			
 
 ns1blankspace.control.views.bind = function ()
@@ -194,9 +238,9 @@ ns1blankspace.control.setup.views.show = function ()
 		ns1blankspace.xhtml.setupViewControl = aHTML.join('');	
 	}
 
-	ns1blankspace.xhtml.container.show(
+	ns1blankspace.container.show(
 	{
-		xhtmlElementID: 'ns1blankspaceViewControlSet',
+		xhtmlElementID: 'ns1blankspaceViewControlViewContainer',
 		xhtml: ns1blankspace.xhtml.setupViewControl
 	});	
 }			

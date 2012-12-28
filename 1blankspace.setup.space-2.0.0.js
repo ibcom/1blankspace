@@ -21,7 +21,7 @@ ns1blankspace.setup.space =
 					ns1blankspace.objectName = 'space';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'My Space & Account';
+					ns1blankspace.viewName = 'My Space / Account';
 					
 					if (bShowHome)
 					{
@@ -48,12 +48,12 @@ ns1blankspace.setup.space =
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					var aHTML = [];
-								
-					aHTML.push('<table>');
 
 					aHTML.push('<table>' +
 							'<tr><td><div id="ns1blankspaceViewSetupSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
 							'</table>');
+
+					aHTML.push('<table>');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">Subscriptions</td>' +
@@ -81,8 +81,6 @@ ns1blankspace.setup.space =
 						ns1blankspace.show({refresh: true});
 						ns1blankspace.setup.space.access();
 					});
-							
-					$('#ns1blankspaceControl').html(aHTML.join(''));	
 					
 					$('#ns1blankspaceControlSubscriptions').addClass('ns1blankspaceHighlight');
 
@@ -157,7 +155,7 @@ ns1blankspace.setup.space =
 								{
 									aHTML.push('<tr class="ns1blankspaceRow">');
 									
-									aHTML.push('<td id="ns1blankspaceSetupSpaceSubscription_membership-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+									aHTML.push('<td id="ns1blankspaceSetupSpaceSubscription_membership-' + this.id + '" class="ns1blankspaceRow">' +
 															this.membershiptext + '</td>');
 														
 									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +

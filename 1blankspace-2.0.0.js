@@ -480,7 +480,7 @@ ns1blankspace.app =
 							
 						$('input.ns1blankspaceSelect').live('focusin', function() 
 						{		
-							$(this).addClass('ns1blankspaceSelectHighlight');
+							$(this).addClass('ns1blankspaceHighlight');
 							
 							ns1blankspace.xhtml.divID = this.id;
 							
@@ -512,9 +512,9 @@ ns1blankspace.app =
 							ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
 						});	
 							
-						$('input.ns1blankspaceSelect').live('blur', function() 
+						$('input.ns1blankspaceSelect').live('focusout', function() 
 						{
-							$(this).removeClass('ns1blankspaceSelectHighlight');
+							$(this).removeClass('ns1blankspaceHighlight');
 						});
 						
 						$('.ns1blankspaceSelectAddress').live('focus', function() 

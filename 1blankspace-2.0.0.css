@@ -430,7 +430,7 @@ td.ns1blankspaceHighlight
 	color: #DA8300;	
 }
 
-.ns1blankspaceSelectHighlight
+input.ns1blankspaceHighlight
 {
 	border-style: solid;
 	border-width: 1px;

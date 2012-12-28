@@ -803,10 +803,10 @@ ns1blankspace.developer.space =
 										{
 											ns1blankspace.status.working();
 
-											var sData = 'firstname=' + ns1blankspace.util.fs(($('#ns1blankspaceDetailsFirstName').val()) +
-																'&surname=' + ns1blankspace.util.fs(($('#ns1blankspaceDetailsSurname').val()) +
-																'&email=' + ns1blankspace.util.fs(($('#ns1blankspaceDetailsEmail').val()) +
-																'&spacename=' + ns1blankspace.util.fs(($('#ns1blankspaceDetailsEnterpriseName').val());
+											var sData = 'firstname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFirstName').val()) +
+																'&surname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSurname').val()) +
+																'&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val()) +
+																'&spacename=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEnterpriseName').val());
 
 											$.ajax(
 											{
