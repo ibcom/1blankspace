@@ -9,9 +9,8 @@ if (ns1blankspace.developer == undefined) {ns1blankspace.developer = {}}
 
 ns1blankspace.developer.space = 
 {
-	init: 		function ()
+	init: 		function (oParam)
 				{
-
 					var bShowHome = true
 					
 					if (oParam != undefined)
@@ -58,8 +57,10 @@ ns1blankspace.developer.space =
 
 						var aHTML = [];
 									
-						aHTML.push('<tr><td><div id="ns1blankspaceViewDeveloperSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');	
-						
+						aHTML.push('<table>' +
+							'<tr><td><div id="ns1blankspaceViewDeveloperSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
+							'</table>');
+												
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
 						$.ajax(
@@ -67,7 +68,7 @@ ns1blankspace.developer.space =
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('ADMIN_REGISTRATION_SEARCH'),
 							dataType: 'json',
-							success: s1blankspace.developer.space.home
+							success: ns1blankspace.developer.space.home
 						});
 					}
 					else
@@ -90,7 +91,7 @@ ns1blankspace.developer.space =
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
 														'" class="ns1blankspaceMostLikely">' +
-														this.title +
+														this.contactbusinesstext +
 														'</td>');
 								
 								aHTML.push('</tr>');
@@ -136,7 +137,7 @@ ns1blankspace.developer.space =
 										
 										ns1blankspace.objectContext = sSearchContext;
 
-										var sParam = 'method=ADMIN_REGISTRATION_SEARCH&id=' + giObjectContext;
+										var sParam = 'method=ADMIN_REGISTRATION_SEARCH&id=' + ns1blankspace.objectContext;
 										
 										$.ajax(
 										{
@@ -248,7 +249,10 @@ ns1blankspace.developer.space =
 					}
 					else
 					{
-						aHTML.push('<tr><td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+										'Summary</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">' +
 										'Subscriptions</td></tr>');
 
 						aHTML.push('</table>');
@@ -260,6 +264,8 @@ ns1blankspace.developer.space =
 
 					aHTML.push('<div id="ns1blankspaceMainFromNew" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainFromContact" class="ns1blankspaceControlMain"></div>');
+
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainSubscriptions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainUsers" class="ns1blankspaceControlMain"></div>');
 
@@ -277,6 +283,12 @@ ns1blankspace.developer.space =
 						ns1blankspace.developer.membership.new.fromContact();
 					});
 					
+					$('#ns1blankspaceControlSummary').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.developer.membership.summary();
+					});
+
 					$('#ns1blankspaceControlSubscriptions').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSubscriptions'});

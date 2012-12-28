@@ -9,7 +9,7 @@ if (ns1blankspace.developer == undefined) {ns1blankspace.developer = {}}
 
 ns1blankspace.developer.membership = 
 {
-	init: 		function ()
+	init: 		function (oParam)
 				{
 					var bShowHome = true
 					
@@ -57,7 +57,7 @@ ns1blankspace.developer.membership =
 
 						var aHTML = [];
 									
-						aHTML.push('<tr><td><div id="ns1blankspaceViewDeveloperSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
+						aHTML.push('<table><tr><td><div id="ns1blankspaceViewDeveloperBillingLarge" class="ns1blankspaceViewImageLarge"></div></td></tr></table>');
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
@@ -90,7 +90,7 @@ ns1blankspace.developer.membership =
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
 														'" class="ns1blankspaceMostLikely">' +
-														this.email +
+														this.title +
 														'</td>');
 								
 								aHTML.push('</tr>');
@@ -251,6 +251,10 @@ ns1blankspace.developer.membership =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlEndpoints" class="ns1blankspaceControl">' +
 										'Endpoints</td></tr>');
 
@@ -286,13 +290,13 @@ ns1blankspace.developer.membership =
 					$('#ns1blankspaceControlEndpoints').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEndpoints'});
-						ns1blankspace.developer.membership.endpoints();
+						ns1blankspace.developer.membership.endpoints.show();
 					});
 
 					$('#ns1blankspaceControlSubscriptions').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSubscriptions'});
-						ns1blankspace.developer.membership.subscriptions();
+						ns1blankspace.developer.membership.subscriptions.show();
 					});
 				},							
 
@@ -368,6 +372,8 @@ ns1blankspace.developer.membership =
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
+						var aHTML = [];
+
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
 										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
@@ -414,7 +420,7 @@ ns1blankspace.developer.membership =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td id="ns1blankspaceBasedOnSubscription" class="ns1blankspaceRadio">' +
-										ns1blankspace.loadingSmallXHTML +
+										ns1blankspace.xhtml.loadingSmall +
 										'</td></tr>');	
 
 						aHTML.push('</table>');					
@@ -423,11 +429,11 @@ ns1blankspace.developer.membership =
 
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
-						if (goObjectContext != undefined)
+						if (ns1blankspace.objectContext != undefined)
 						{
-							$('#inputns1blankspaceMainDetailsTitle').val(goObjectContext.title);
-							$('#inputns1blankspaceMainDetailsReference').val(goObjectContext.reference);
-							$('#inputns1blankspaceMainDetailsDescription').val(goObjectContext.description);
+							$('#inputns1blankspaceMainDetailsTitle').val(ns1blankspace.objectContext.title);
+							$('#inputns1blankspaceMainDetailsReference').val(ns1blankspace.objectContext.reference);
+							$('#inputns1blankspaceMainDetailsDescription').val(ns1blankspace.objectContext.description);
 						}
 					}	
 				},
@@ -443,7 +449,7 @@ ns1blankspace.developer.membership =
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH'),
 							dataType: 'json',
-							success: function(data) {ns1blankspace.developer.membership.myubscriptions(oParam, data)
+							success: function(data) {ns1blankspace.developer.membership.mySubscriptions(oParam, data)
 							}
 						});
 					}
@@ -466,9 +472,9 @@ ns1blankspace.developer.membership =
 						
 						$('#ns1blankspaceBasedOnSubscription').html(aHTML.join(''));
 
-						if (goObjectContext != undefined)
+						if (ns1blankspace.objectContext != undefined)
 						{
-							$('[name="radioBasedOnSubscription"][value="' + goObjectContext.basedonsubscription + '"]').attr('checked', true);
+							$('[name="radioBasedOnSubscription"][value="' + ns1blankspace.objectContext.basedonsubscription + '"]').attr('checked', true);
 						}
 					}
 				},
@@ -712,7 +718,7 @@ ns1blankspace.developer.membership =
 											
 											aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspaceSubscriptionsColumn1" class="ns1blankspaceColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;"></td>' +
+															'<td id="ns1blankspaceSubscriptionsColumn1" class="ns1blankspaceColumn1Flexible" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;"></td>' +
 															'<td id="ns1blankspaceSubscriptionsColumn2" class="ns1blankspaceColumn2" style="padding-left:15px;"></td>' +
 															'<td id="ns1blankspaceSubscriptionsColumn3" class="ns1blankspaceColumn2" style="width: 100px;"></td>' +
 															'</tr>' + 
@@ -722,10 +728,10 @@ ns1blankspace.developer.membership =
 											
 											var aHTML = [];
 											
-											aHTML.push('<table>');
+											aHTML.push('<table class="ns1blankspaceColumn2">');
 											
 											aHTML.push('<tr><td>' +
-															'<span id="ns1blankspaceMembershipSubscriptionsAdd">Add</span>' +
+															'<span id="ns1blankspaceMembershipSubscriptionsAdd" class="ns1blankspaceAction">Add</span>' +
 															'</td></tr>');
 											
 											aHTML.push('</table>');					
@@ -762,7 +768,7 @@ ns1blankspace.developer.membership =
 													
 													aHTML.push('<td id="ns1blankspaceMembershipSubscriptions_title-' + this.id +
 																			'" data-contactbusinesstext="' + this.contactbusinesstext +
-																			'" class="ns1blankspaceMainRow ns1blankspaceRowSelect">' +
+																			'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																			this.contactbusinesstext);
 													
 													aHTML.push('<br /><span class="ns1blankspaceSub" id="ns1blankspaceMembershipSubscriptions_startdate-' + this.id + '">' +
@@ -781,14 +787,14 @@ ns1blankspace.developer.membership =
 
 												$('#ns1blankspaceSubscriptionsColumn1').html(aHTML.join(''));
 															
-												$('#ns1blankspaceMembershipSubscriptions > td.ns1blankspaceRowSelect').click(function(event)
+												$('#ns1blankspaceMembershipSubscriptions td.ns1blankspaceRowSelect').click(function(event)
 												{
 													oParam.step = 2;
 													oParam.xhtmlElementID = event.target.id;
 													ns1blankspace.developer.membership.subscriptions.show(oParam);
 												});
 
-												$('ns1blankspaceMembershipSubscriptions > span.ns1blankspaceRowRemove').button(
+												$('#ns1blankspaceMembershipSubscriptions span.ns1blankspaceRowRemove').button(
 												{
 													text: false,
 												 	icons: {primary: "ui-icon-close"}
@@ -842,11 +848,11 @@ ns1blankspace.developer.membership =
 											var aHTML = [];
 											var h = -1;
 										
-											aHTML.push('<table class="ns1blankspaceContainer" style="font-size:0.875em">');
+											aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em">');
 													
-											if (aXHTMLElementID[1])
+											if (!aXHTMLElementID[1])
 											{
-												aHTML.push('<tr><td class="ns1blankspaceNothing">To change this access you need to delete it and then re-add it.</td></tr>');
+												aHTML.push('<tr><td class="ns1blankspaceNothing">You need to delete it and then re-add it.</td></tr>');
 											}	
 											else
 											{	
@@ -861,7 +867,7 @@ ns1blankspace.developer.membership =
 											
 											aHTML.push('</table>');					
 											
-											$('#ns1blankspaceSubscriptionsColumn2').html(aHTML.join(''));
+											$('#ns1blankspaceSubscriptionsColumn3').html(aHTML.join(''));
 
 											$('#ns1blankspaceMembershipSubscriptionEditSave').button(
 											{
@@ -869,7 +875,7 @@ ns1blankspace.developer.membership =
 											})
 											.click(function() 
 											{
-												ns1blankspaceMasterStatusWorking();
+												ns1blankspace.status.working();
 
 												var sData = 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
 												sData += '&registration=' + ns1blankspace.util.fs($('#ns1blankspaceMembershipSubscriptionsRegistration').attr("data-id"));

@@ -137,7 +137,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Spaces",
-		parentnamespace: "setup",
+		parentnamespace: "developer",
 		namespace: "space",
 		endpoint: "SETUP_SPACE", 
 		show: true,
@@ -147,14 +147,14 @@ ns1blankspace.views =
 	{
 		title: "Apps&nbsp;(Memberships)",
 		parentnamespace: "developer",
-		namespace: "space",
+		namespace: "membership",
 		endpoint: "ADMIN_MEMBERSHIP", 
 		show: true,
 		group: 1,
 		type: 2
 	},
 	{
-		title: "My&nbsp;Account",
+		title: "My&nbsp;Space&nbsp;/&nbsp;Account",
 		parentnamespace: "setup",
 		namespace: "space",
 		endpoint: "", 
@@ -170,14 +170,14 @@ ns1blankspace.control.views.show = function ()
 	{
 		var aHTML = [];
 
-		aHTML.push('<table id="ns1blankspaceViewControl" class="ns1blankspaceViewControlContainer">');
-		aHTML.push('<tr class="ns1blankspaceViewControlColumnContainer">');
+		aHTML.push('<table class="ns1blankspaceViewControlContainer">');
+		aHTML.push('<tr class="ns1blankspaceViewControl">');
 
 		$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
 		{
 			aHTML.push('<tr class="ns1blankspaceViewControl">' +
-							'<td id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace + '" class="interfaceViewControl">' +
-							'<span id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace  + '" class="interfaceViewControl">' + 
+							'<td class="ns1blankspaceViewControl">' +
+							'<span id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace  + '" class="ns1blankspaceViewControl">' + 
 							this.title + '</span>' +
 							'</td></tr>');
 		});		
@@ -195,42 +195,20 @@ ns1blankspace.control.views.show = function ()
 	ns1blankspace.control.views.bind();
 }			
 
-ns1blankspace.control.views.bind = function ()
-{
-	$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
-	{
-		$('#ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace).click(function(event)
-		{
-			$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-
-			if (this.parentnamespace)
-			{
-				var oNS = ns1blankspace[this.parentnamespace][this.namespace];
-			}
-			else
-			{
-				var oNS = ns1blankspace[this.parentnamespace];
-			}
-
-			oNS.init();
-		});
-	});	
-}			
-
 ns1blankspace.control.setup.views.show = function ()
 {
 	if (ns1blankspace.xhtml.setupViewControl == undefined)
 	{
 		var aHTML = [];
 
-		aHTML.push('<table id="ns1blankspaceViewControl" class="ns1blankspaceViewControlContainer">');
-		aHTML.push('<tr class="ns1blankspaceViewControlColumnContainer">');
+		aHTML.push('<table class="ns1blankspaceViewControlContainer">');
+		aHTML.push('<tr class="ns1blankspaceViewControl">');
 
 		$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
 		{
 			aHTML.push('<tr class="ns1blankspaceViewControl">' +
-							'<td id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace + '" class="interfaceViewControl">' +
-							'<span id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace + '" class="interfaceViewControl">' + 
+							'<td class="ns1blankspaceViewControl">' +
+							'<span id="ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace + '" class="ns1blankspaceViewControl">' + 
 							this.title + '</span>' +
 							'</td></tr>');
 		});		
@@ -242,27 +220,20 @@ ns1blankspace.control.setup.views.show = function ()
 	{
 		xhtmlElementID: 'ns1blankspaceViewControlViewContainer',
 		xhtml: ns1blankspace.xhtml.setupViewControl
-	});	
-}			
+	});
 
-ns1blankspace.control.setup.views.bind = function ()
+	ns1blankspace.control.setup.views.bind();
+}
+
+ns1blankspace.control.setView =
 {
-	$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
-	{
-		$('#ns1blankspaceViewControl_' + this.parentnamespace + '_' + this.namespace).click(function(event)
-		{
-			$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+	default: 		function ()
+					{
+						ns1blankspace.setup.website.init();		
+					},
 
-			if (this.parentnamespace)
-			{
-				var oNS = ns1blankspace[this.parentnamespace][this.namespace];
-			}
-			else
-			{
-				var oNS = ns1blankspace[this.parentnamespace];
-			}
-
-			oNS.init();
-		});
-	});	
+	setup:			function ()
+					{
+						ns1blankspace.developer.space.init();
+					},
 }			
