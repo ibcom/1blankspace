@@ -8,26 +8,79 @@
 ns1blankspace.option.defaultView = "Select...";
 ns1blankspace.option.defaultSetupView = "Spaces";
 
-ns1blankspace.scripts.push(
+ns1blankspace.scripts =
+[
 	{
-		nameSpace: '1blankspace.developer.home',
+		nameSpace: '1blankspace.advancedsearch',
+		source: '/jscripts/1blankspace.advancedsearch-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.home',
 		source: '/jscripts/1blankspace.developer.home-2.0.0.js'
-	});
-
-ns1blankspace.scripts.push(
+	},
+	{
+		nameSpace: '1blankspace.format',
+		source: '/jscripts/1blankspace.format-2.0.0.js'
+	},
 	{
 		nameSpace: '1blankspace.developer.membership',
 		source: '/jscripts/1blankspace.developer.membership-2.0.0.js'
-	});
-
-ns1blankspace.scripts.push(
+	},
 	{
 		nameSpace: '1blankspace.developer.space',
 		source: '/jscripts/1blankspace.developer.space-2.0.0.js'
-	});
+	},
+	{
+		nameSpace: '1blankspace.news',
+		source: '/jscripts/1blankspace.news-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup',
+		source: '/jscripts/1blankspace.setup-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.automation',
+		source: '/jscripts/1blankspace.setup.automation-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.messaging',
+		source: '/jscripts/1blankspace.setup.messaging-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.networkGroup',
+		source: '/jscripts/1blankspace.setup.networkgroup-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.space',
+		source: '/jscripts/1blankspace.setup.space-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.structure',
+		source: '/jscripts/1blankspace.setup.structure-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.user',
+		source: '/jscripts/1blankspace.setup.user-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.userRole',
+		source: '/jscripts/1blankspace.setup.userRole-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.website',
+		source: '/jscripts/1blankspace.setup.website-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.websiteForm',
+		source: '/jscripts/1blankspace.setup.websiteForm-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.supportIssue',
+		source: '/jscripts/1blankspace.supportissue-2.0.0.js'
+	}
+]
 
 ns1blankspace.xhtml.logonNotes =
-
 	'<a href="http://mydigitalstructure.com/gettingstarted_first_app_ide" target="_blank"><strong>Help on building your first app<br/>using this simple development environment (IDE).</strong></a>' +
 	'<br /><br /><hr />' +
 	'<br />This is a simple jQueryUI app for managing your websites, webapps, structures & forms.' +
@@ -38,9 +91,24 @@ ns1blankspace.xhtml.logonNotes =
 	'<br /><br /><a href="http://twitter.com/ibComMYDS" target="_blank">twitter.com/ibComMYDS</a>' +
 	'<br /><br /><a href="http://mydigitalstructure.com/terms" target="_blank">By logging on you agree to the  mydigitalstructure terms of use</a>';
 
+ns1blankspace.xhtml.homeNotes =
+	'<table class="ns1blankspaceColumn2"><tr><td class="ns1blankspaceSub" style="font-size:0.875em;">' +
+	'This is a simple jQueryUI app for managing your websites, webapps, structures & forms.' +
+	'<br /><br />If you wish, you can grab these scripts and modify them to create your own IDE or use your existing preferred IDE.' +
+	'<br /><br /><a href="https://github/ibcom/1blankspace" target="_blank">github Repository</a>' +
+	'<br /><br /><a href="http://mydigitalstructure.com/examples" target="_blank">More code examples</a>' +
+	'<br /><br /><hr />' +
+	'<br /><a href="http://mydigitalstructure.com/documentation" target="_blank">Documentation</a>' +
+	'<br /><br /><a href="http://mydigitalstructure.com/endpoints" target="_blank">Endpoints</a>' +
+	'<br /><br />If you\'re looking for help on a method you can do <i>mydigitalstructure.com/<br />[method name]</i> as a shortcut.' +
+	'<br /><br /><hr />' +
+	'<br /><a href="https://app.1blankspace.com" target="_blank">app.1blankspace.com</a> is an example jQueryUI app that covers all the endpoints.  You can use your logon to check it out.' +
+		'<br /><br /><a href="http://mydigitalstructure.com/1blankspace" target="_blank">Developer notes</a>' +
+	'</td></tr></table>';
+
 ns1blankspace.xhtml.header =
-	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/mydigitalstructure.develop-2.0.0.png"></div>' +
-	'<div style="float:right; margin-right:3px;">' +
+	'<div id="ns1blankspaceLogo" style="width:265px; float:left; "><img src="/jscripts/images/mydigitalstructure.develop-2.0.0.png"></div>' +
+	'<div id="ns1blankspaceHeaderControl" style="float:right; margin-right:3px;">' +
 	'<div id="ns1blankspaceSpaceText" style="width:300px;"></div>' +
 	'<div id="ns1blankspaceLogonName" style="width:300px;"></div></div>';
 
@@ -53,36 +121,21 @@ ns1blankspace.themes =
 		default: 			true
 	},
 	{
-		title: 				'Helping Hand',
-		cssURI: 			'/jscripts/1blankspace.theme.helpinghand-2.0.0.css',
-		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
-	},
-	{
-		title: 				'New York',
-		cssURI: 			'/jscripts/1blankspace.theme.newyork-2.0.0.css',
-		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
-	},
-	{
-		title: 				'Photography',
-		cssURI: 			'/jscripts/1blankspace.theme.photography-2.0.0.css',
-		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
-	},
-	{
 		title: 				'Travelling',
 		cssURI: 			'/jscripts/1blankspace.theme.travelling-2.0.0.css',
-		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/mydigitalstructure.develop.white-2.0.0.png">'
 	},
 	{
 		title: 				'Wall',
 		cssURI: 			'/jscripts/1blankspace.theme.wall-2.0.0.css',
-		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/mydigitalstructure.develop.white-2.0.0.png">'
 	}
 ]
 
 ns1blankspace.views = 
 [
 	{
-		title: "Websites",
+		title: "Websites&nbsp;&&nbsp;Webapps",
 		parentnamespace: "setup",
 		namespace: "website",
 		endpoint: "SETUP_SITE", 
@@ -100,7 +153,7 @@ ns1blankspace.views =
 		type: 1
 	},
 	{
-		title: "User Roles",
+		title: "User&nbsp;Roles",
 		parentnamespace: "setup",
 		namespace: "userRole",
 		endpoint: "SETUP_USER_ROLE", 
@@ -170,7 +223,7 @@ ns1blankspace.control.views.show = function ()
 	{
 		var aHTML = [];
 
-		aHTML.push('<table class="ns1blankspaceViewControlContainer">');
+		aHTML.push('<table class="ns1blankspaceViewControlContainer" style="width: 220px;">');
 		aHTML.push('<tr class="ns1blankspaceViewControl">');
 
 		$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
@@ -201,7 +254,7 @@ ns1blankspace.control.setup.views.show = function ()
 	{
 		var aHTML = [];
 
-		aHTML.push('<table class="ns1blankspaceViewControlContainer">');
+		aHTML.push('<table class="ns1blankspaceViewControlContainer" style="width: 220px;">');
 		aHTML.push('<tr class="ns1blankspaceViewControl">');
 
 		$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
@@ -236,4 +289,19 @@ ns1blankspace.control.setView =
 					{
 						ns1blankspace.developer.space.init();
 					},
-}			
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

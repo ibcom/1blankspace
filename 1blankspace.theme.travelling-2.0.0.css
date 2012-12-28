@@ -9,6 +9,11 @@ html
 	background-repeat: no-repeat;
 }
 
+#ns1blankspaceLogo
+{
+	background-color: black;
+}
+
 a:link, a:visited, a:active
 {
 	color: black;
@@ -19,6 +24,16 @@ a:hover
 	color: #ee8f00;
 }
 
+#ns1blankspaceControl
+{
+	border-color: #666666;
+}
+
+table.ns1blankspaceColumn2
+{
+	border-color: #666666;
+}
+
 td.ns1blankspaceRowSelect, td.ns1blankspaceMostLikely, td.ns1blankspaceControl
 {
 	color: black;
@@ -27,6 +42,11 @@ td.ns1blankspaceRowSelect, td.ns1blankspaceMostLikely, td.ns1blankspaceControl
 td.ns1blankspaceRow, td.ns1blankspaceSummary
 {
 	color: black;
+}
+
+td.ns1blankspaceSummaryCaption, td.ns1blankspaceHighlight, td.ns1blankspaceCaption
+{
+	color: #666666;
 }
 
 input, textarea

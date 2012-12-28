@@ -63,6 +63,17 @@ ns1blankspace.home =
 					
 					this.bind();
 
+					var aHTML = [];
+					
+					aHTML.push('<table id="ns1blankspaceHomeContainer">');
+					aHTML.push('<tr><td id="ns1blankspaceHomeColumn1" class="ns1blankspaceColumn1Flexible"></td>');
+					aHTML.push('<td id="ns1blankspaceHomeColumn2" class="ns1blankspaceColumn2" style="width:300px;">');
+					aHTML.push('</td></tr></table>');	
+
+					$('#ns1blankspaceMain').html(aHTML.join(''));
+
+					$('#ns1blankspaceHomeColumn2').html(ns1blankspace.xhtml.homeNotes);
+
 					if (ns1blankspace.xhtml.defaultElementID != '')
 					{
 						$('#' + ns1blankspace.xhtml.defaultElementID).addClass('ns1blankspaceHighlight');
@@ -75,48 +86,48 @@ ns1blankspace.home =
 					
 					$('#ns1blankspaceControlActionToday').click(function(event)
 					{
-						$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
+						$('#ns1blankspaceHomeColumn1').html(ns1blankspace.xhtml.loading);
 						ns1blankspace.xhtml.defaultElementID = this.id;
 						
 						ns1blankspace.home.actions.show({
 							show: false,
-							xhtmlElementID: 'ns1blankspaceMain',
+							xhtmlElementID: 'ns1blankspaceHomeColumn1',
 							day: 0
 							})
 					});
 
 					$('#ns1blankspaceControlActionTomorrow').click(function(event)
 					{
-						$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
+						$('#ns1blankspaceHomeColumn1').html(ns1blankspace.xhtml.loading);
 						ns1blankspace.xhtml.defaultElementID = this.id;
 						
 						ns1blankspace.home.actions.show({
 							show: false,
-							xhtmlElementID: 'ns1blankspaceMain',
+							xhtmlElementID: 'ns1blankspaceHomeColumn1',
 							day: 1
 							})
 					});
 					
 					$('#ns1blankspaceControlActionFuture').click(function(event)
 					{
-						$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
+						$('#ns1blankspaceHomeColumn1').html(ns1blankspace.xhtml.loading);
 						ns1blankspace.xhtml.defaultElementID = this.id;
 						
 						ns1blankspace.home.actions.show({
 							show: false,
-							xhtmlElementID: 'ns1blankspaceMain',
+							xhtmlElementID: 'ns1blankspaceHomeColumn1',
 							future: true
 							})
 					});
 
 					$('#ns1blankspaceControlActionOverdue').click(function(event)
 					{
-						$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
+						$('#ns1blankspaceHomeColumn1').html(ns1blankspace.xhtml.loading);
 						ns1blankspace.xhtml.defaultElementID = this.id;
 						
 						ns1blankspace.home.actions.show({
 							show: false,
-							xhtmlElementID: 'ns1blankspaceMain',
+							xhtmlElementID: 'ns1blankspaceHomeColumn1',
 							overdue: true
 							})
 					});
@@ -173,7 +184,7 @@ ns1blankspace.home.actions =
 	show: 		function (oParam, oResponse)
 				{					
 					var bShow = false;
-					var sXHTMLElementID = 'ns1blankspaceMain';
+					var sXHTMLElementID = 'ns1blankspaceHomeColumn1';
 					var iDay = 0;
 					var sLabel = 'Actions';
 					var bOverdue = false;
@@ -236,7 +247,7 @@ ns1blankspace.home.actions =
 								aHTML.push('<table id="ns1blankspaceHomeActions" class="ns1blankspace">');
 
 								aHTML.push('<tr><td class="ns1blankspaceCaption">' + sLabel + '</td>' + 
-												'<td id="tdns1blankspaceHomeTodayActions" class="ns1blankspaceHomeOptionClose">Close</td>' +
+												'<td id="ns1blankspaceHomeTodayActions" class="ns1blankspaceHomeOptionClose">Close</td>' +
 												'</tr></table>');
 								
 								aHTML.push('<table id="ns1blankspaceHomeActions" class="ns1blankspace">');
@@ -334,12 +345,12 @@ ns1blankspace.home.actions =
 	bind:		function ()	
 				{
 
-					$('#ns1blankspaceHomeActions > td.ns1blankspaceRowContact').click(function() {
+					$('#ns1blankspaceHomeActions td.ns1blankspaceRowContact').click(function() {
 						ns1blankspace.contactPerson.init();
 						ns1blankspace.contactPerson.searchsend(this.id);
 					})
 
-					$('#ns1blankspaceHomeActions > .ns1blankspaceMainRowOptionsSelect').button( {
+					$('#ns1blankspaceHomeActions .ns1blankspaceMainRowOptionsSelect').button( {
 						text: false,
 						icons: {
 							primary: "ui-icon-play"
@@ -353,7 +364,7 @@ ns1blankspace.home.actions =
 					.css('width', '15px')
 					.css('height', '18px');
 
-					$('#ns1blankspaceHomeActions > .ns1blankspaceMainRowOptionsCancel').button({
+					$('#ns1blankspaceHomeActions .ns1blankspaceMainRowOptionsCancel').button({
 						text: false,
 						label: "Cancel",
 						icons: {
@@ -367,7 +378,7 @@ ns1blankspace.home.actions =
 					.css('height', '18px')
 						
 						
-					$('#ns1blankspaceHomeActions > .ns1blankspaceMainRowOptionsComplete').button({
+					$('#ns1blankspaceHomeActions .ns1blankspaceMainRowOptionsComplete').button({
 						text: false,
 						label: "Complete",
 						icons: {
@@ -408,5 +419,3 @@ ns1blankspace.home.actions =
 					}	
 				}				
 }
-
-ns1blankspace.xhtml.homeNotes = '';

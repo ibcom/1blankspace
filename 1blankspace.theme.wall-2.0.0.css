@@ -19,11 +19,6 @@ a:hover
 	color: #ee8f00;
 }
 
-td
-{
-	color: white;
-}
-
 td.ns1blankspaceRowSelect, td.ns1blankspaceMostLikely,
 td.ns1blankspaceControl, .ns1blankspaceCaption,
 .ns1blankspaceSummaryCaption, .ns1blankspaceControlContext,

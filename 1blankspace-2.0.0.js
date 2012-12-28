@@ -170,10 +170,6 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.messaging.imap-2.0.0.js'
 	},
 	{
-		nameSpace: '1blankspace.action',
-		source: '/jscripts/1blankspace.action-2.0.0.js'
-	},
-	{
 		nameSpace: '1blankspace.document',
 		source: '/jscripts/1blankspace.document-2.0.0.js'
 	},
@@ -345,7 +341,7 @@ ns1blankspace.app =
 						if (oParam.initialise != undefined) {bInitialise = oParam.initialise}
 					}
 
-					if ($('#ns1blankspace').length == 0)
+					if ($('#ns1blankspaceContainer').length == 0)
 					{
 						$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
 											'<div id="ns1blankspaceHeader"></div>' +
