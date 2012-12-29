@@ -441,7 +441,7 @@ ns1blankspace.app =
 							cache: false,
 							beforeSend: function (oRequest)
 										{
-					            			oRequest.setRequestHeader("X-HTTP-myds-rest-level", "1");
+					            			//oRequest.setRequestHeader("X-HTTP-myds-rest-level", "1");
 					        			}
 						});
 

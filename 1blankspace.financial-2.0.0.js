@@ -1859,7 +1859,7 @@ ns1blankspace.financial.save =
 
 					if (iObject == 3)
 					{
-						sSuffix = 'paidfrom';
+						sSuffix = 'paidto';
 						sMethod = 'FINANCIAL_PAYMENT_MANAGE';
 					}
 
@@ -1894,7 +1894,7 @@ ns1blankspace.financial.save =
 					$.ajax(
 					{
 						type: 'POST',
-						url: ns1blankspace.endpointURI(sMethod),
+						url: ns1blankspace.util.endpointURI(sMethod),
 						data: sData,
 						dataType: 'json',
 						success: function(data) {ns1blankspace.financial.save.process(oParam, data)}
@@ -1914,7 +1914,7 @@ ns1blankspace.financial.save =
 					{
 						if (!iID) {oParam.id = oResponse.id}
 						
-						ns1blankspace.financial.save.amount();
+						ns1blankspace.financial.save.amount(oParam);
 					}
 					else
 					{
@@ -1947,8 +1947,8 @@ ns1blankspace.financial.save =
 
 					if (!iAccount)
 					{
-						if (iObject == 2) {iAccount = ns1blankspace.financial.settings.financialaccountcreditor}
-						if (iObject == 5) {iAccount = ns1blankspace.financial.settings.financialaccountdebtor}
+						if (iObject == 3) {iAccount = ns1blankspace.financial.data.settings.financialaccountcreditor}
+						if (iObject == 6) {iAccount = ns1blankspace.financial.data.settings.financialaccountdebtor}
 					}
 
 					if (cAmount == '') {cAmount = 0};

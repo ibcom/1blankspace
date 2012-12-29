@@ -1058,7 +1058,11 @@ ns1blankspace.financial.bankAccount =
 
 														$('#ns1blankspaceItemsEditDate').val(dSearchDate);
 														$('#ns1blankspaceItemsEditAmount').val(cSearchAmount);
-														$('#ns1blankspaceItemsEditContactBusiness').focus();
+
+														if (cSearchAmount)
+														{	
+															$('#ns1blankspaceItemsEditContactBusiness').focus();
+														}	
 
 														var aHTML = [];
 														
@@ -1090,8 +1094,8 @@ ns1blankspace.financial.bankAccount =
 																contactBusiness: $('#ns1blankspaceItemsEditContactBusiness').attr('data-id'),
 																contactPerson: $('#ns1blankspaceItemsEditContactPerson').attr('data-id'),
 																object: iObject,
-																amount: $('#ns1blankspaceItemsEditAmount').attr('data-id'),
-																postSave: ns1blankspace.bankAccount.reconcile.items.edit
+																amount: $('#ns1blankspaceItemsEditAmount').val(),
+																postSave: ns1blankspace.financial.bankAccount.reconcile.items.edit
 															});
 														})
 													}	
