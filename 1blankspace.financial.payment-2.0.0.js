@@ -642,11 +642,11 @@ ns1blankspace.financial.payment =
 										url: ns1blankspace.endpointURI('FINANCIAL_PAYMENT_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: function(data) {ns1blankspace.financial.payment.save.process(data)}
+										success: function(data) {ns1blankspace.financial.payment.save.process(oParam, data)}
 									});	
 								},
 
-					process:	function (oResponse)
+					process:	function (oParam, oResponse)
 								{
 									if (oResponse.status == 'OK')
 									{

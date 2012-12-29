@@ -1829,3 +1829,181 @@ ns1blankspace.financial.item =
 			}
 }				
 
+ns1blankspace.financial.save =
+{
+	send: 		function (oParam, oResponse)
+				{
+					var sReference;
+					var sDate;
+					var sDescription;
+					var iContactBusiness;
+					var iContactPerson;
+					var iObject;
+					var iID;
+					var sMethod;
+					var sSuffix = '';
+
+					if (oParam != undefined)
+					{
+						if (oParam.reference != undefined) {sReference = oParam.reference}
+						if (oParam.date != undefined) {sDate = oParam.date}
+						if (oParam.description != undefined) {sDescription = oParam.description}
+						if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
+						if (oParam.contactPerson != undefined) {iContactPerson = oParam.contactPerson}
+						if (oParam.object != undefined) {iObject = oParam.object}
+						if (oParam.method != undefined) {sMethod = oParam.method}
+						if (oParam.id != undefined) {iID = oParam.id}
+					}
+
+					ns1blankspace.status.working();
+
+					if (iObject == 3)
+					{
+						sSuffix = 'paidfrom';
+						sMethod = 'FINANCIAL_PAYMENT_MANAGE';
+					}
+
+					if (iObject == 6)
+					{
+						sSuffix = 'receivedfrom';
+						sMethod = 'FINANCIAL_RECEIPT_MANAGE';
+					}
+
+					if (iObject == 2)
+					{
+						sSuffix = 'paidto';
+						sMethod = 'FINANCIAL_EXPENSE_MANAGE';
+					}
+
+					if (iObject == 5)
+					{
+						sSuffix = 'receivedfrom';
+						sMethod = 'FINANCIAL_INVOICE_MANAGE';
+					}
+
+					oParam.method = sMethod;
+
+					var sData = (iID == undefined) ? '' : 'id=' + iID;
+						
+					sData += '&reference=' + ns1blankspace.util.fs(sReference);
+					sData += '&paiddate=' + ns1blankspace.util.fs(sDate);
+					sData += '&description=' + ns1blankspace.util.fs(sDescription);
+					sData += '&contactbusiness' + sSuffix + '=' + ns1blankspace.util.fs(iContactBusiness);
+					sData += '&contactperson' + sSuffix + '=' + ns1blankspace.util.fs(iContactPerson);
+				
+					$.ajax(
+					{
+						type: 'POST',
+						url: ns1blankspace.endpointURI(sMethod),
+						data: sData,
+						dataType: 'json',
+						success: function(data) {ns1blankspace.financial.save.process(oParam, data)}
+					});	
+				},
+
+	process:	function (oParam, oResponse)
+				{
+					var iID;
+
+					if (oParam != undefined)
+					{
+						if (oParam.id != undefined) {iID = oParam.id}
+					}
+
+					if (oResponse.status == 'OK')
+					{
+						if (!iID) {oParam.id = oResponse.id}
+						
+						ns1blankspace.financial.save.amount();
+					}
+					else
+					{
+						ns1blankspace.status.error(oResponse.error.errornotes);
+					}
+				},
+
+	amount:		function (oParam)
+				{
+					var iAccount;
+					var cAmount;
+					var iObject;
+					var iObjectContext;
+					var sItemDescription;
+					var bComplete = true;
+					var bRefresh = false;
+					var fPostSave;
+
+					if (oParam != undefined)
+					{
+						if (oParam.account != undefined) {iAccount = oParam.account}
+						if (oParam.amount != undefined) {cAmount = oParam.amount}
+						if (oParam.object != undefined) {iObject = oParam.object}
+						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+						if (oParam.itemDescription != undefined) {sItemDescription = oParam.itemDescription}
+						if (oParam.complete != undefined) {bComplete = oParam.complete}
+						if (oParam.refresh != undefined) {bRefresh = oParam.refresh}
+						if (oParam.postSave != undefined) {fPostSave = oParam.postSave}		
+					}
+
+					if (!iAccount)
+					{
+						if (iObject == 2) {iAccount = ns1blankspace.financial.settings.financialaccountcreditor}
+						if (iObject == 5) {iAccount = ns1blankspace.financial.settings.financialaccountdebtor}
+					}
+
+					if (cAmount == '') {cAmount = 0};
+
+					if (cAmount == 0 || iAccount == undefined)
+					{
+						if (iAccount == undefined) {ns1blankspace.status.error('No account set.')}
+					}
+					else
+					{
+						var sData = 'object=' + ns1blankspace.util.fs(iObject);
+						sData += '&objectcontext=' + ns1blankspace.util.fs(iObjectContext);
+						sData += '&financialaccount=' + ns1blankspace.util.fs(iAccount);
+						sData += '&amount=' + ns1blankspace.util.fs(cAmount);
+						sData += '&description=' + ns1blankspace.util.fs(sItemDescription);
+						
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
+							data: sData,
+							dataType: 'json',
+							success: function(oResponse)
+							{
+								if (bComplete)
+								{	
+									var sData = 'object=' + iObject;
+									sData += '&objectcontext=' + iObjectContext;
+								
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
+										data: sData,
+										dataType: 'json',
+										success: function(oResponse)
+										{
+											if (bRefresh)
+											{
+												var aMethod = sMethod.split('_');
+												ns1blankspace.financial[aMethod[1].toLowerCase()].refresh()
+											};
+
+											if (fPostSave) {fPostSave()}
+
+											ns1blankspace.status.message('Saved');
+										}
+									});
+								}
+								else
+								{
+									ns1blankspace.status.message('Saved');
+								}
+							}
+						});
+					}	
+				}
+}

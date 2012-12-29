@@ -18,7 +18,7 @@ ns1blankspace.financial.expense =
 						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}
 					}
 
-					ns1blankspace.object = 5;
+					ns1blankspace.object = 2;
 					ns1blankspace.objectParentName = 'financial';
 					ns1blankspace.objectName = 'expense';
 					ns1blankspace.objectContextData = undefined;

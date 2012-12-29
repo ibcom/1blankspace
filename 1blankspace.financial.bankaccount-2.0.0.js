@@ -1005,7 +1005,16 @@ ns1blankspace.financial.bankAccount =
 																		'<tr class="ns1blankspace">' +
 																		'<td class="ns1blankspaceText">' +
 																		'<input id="ns1blankspaceItemsEditDate" class="ns1blankspaceDate">' +
-																		'</td></tr>');						
+																		'</td></tr>');
+
+														aHTML.push('<tr class="ns1blankspaceCaption">' +
+																		'<td class="ns1blankspaceCaption">' +
+																		'Amount' +
+																		'</td></tr>' +
+																		'<tr class="ns1blankspaceText">' +
+																		'<td class="ns1blankspaceText">' +
+																		'<input id="ns1blankspaceItemsEditAmount" class="ns1blankspaceText">' +
+																		'</td></tr>');										
 														
 														aHTML.push('<tr class="ns1blankspaceCaption">' +
 																		'<td class="ns1blankspaceCaption">' +
@@ -1034,15 +1043,6 @@ ns1blankspace.financial.bankAccount =
 													
 														aHTML.push('<tr class="ns1blankspaceCaption">' +
 																		'<td class="ns1blankspaceCaption">' +
-																		'Amount' +
-																		'</td></tr>' +
-																		'<tr class="ns1blankspaceText">' +
-																		'<td class="ns1blankspaceText">' +
-																		'<input id="ns1blankspaceItemsEditAmount" class="ns1blankspaceText">' +
-																		'</td></tr>');	
-														
-														aHTML.push('<tr class="ns1blankspaceCaption">' +
-																		'<td class="ns1blankspaceCaption">' +
 																		'Description' +
 																		'</td></tr>' +
 																		'<tr class="ns1blankspaceTextMulti">' +
@@ -1059,7 +1059,7 @@ ns1blankspace.financial.bankAccount =
 														$('#ns1blankspaceItemsEditDate').val(dSearchDate);
 														$('#ns1blankspaceItemsEditAmount').val(cSearchAmount);
 														$('#ns1blankspaceItemsEditContactBusiness').focus();
-														
+
 														var aHTML = [];
 														
 														aHTML.push('<table>');
@@ -1078,8 +1078,21 @@ ns1blankspace.financial.bankAccount =
 																primary: "ui-icon-check"
 															}
 														})
-														.click(function() {
-															 //Save based on iType
+														.click(function()
+														{
+															if (iType == 1) {iObject = 3}
+															if (iType == 2) {iObject = 6}
+
+															ns1blankspace.financial.save.send(
+															{
+																date: $('#ns1blankspaceItemsEditDate').val(),
+																description: $('#ns1blankspaceItemsEditDescription').val(),
+																contactBusiness: $('#ns1blankspaceItemsEditContactBusiness').attr('data-id'),
+																contactPerson: $('#ns1blankspaceItemsEditContactPerson').attr('data-id'),
+																object: iObject,
+																amount: $('#ns1blankspaceItemsEditAmount').attr('data-id'),
+																postSave: ns1blankspace.bankAccount.reconcile.items.edit
+															});
 														})
 													}	
 												}
