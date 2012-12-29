@@ -2471,7 +2471,11 @@ ns1blankspace.search =
 								var oSearch = new AdvancedSearch();
 								oSearch.method = sMethod;
 								oSearch.addField(sColumns);
-								oSearch.addFilter(aColumns[0], 'TEXT_IS_LIKE', sSearchText);
+
+								if (iSource == ns1blankspace.data.searchSource.text)
+								{	
+									oSearch.addFilter(aColumns[0], 'TEXT_IS_LIKE', sSearchText);
+								}	
 								
 								if (sXHTMLParentInputElementID != undefined)
 								{

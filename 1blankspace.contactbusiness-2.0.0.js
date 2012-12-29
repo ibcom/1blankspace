@@ -199,7 +199,7 @@ ns1blankspace.contactBusiness =
 											
 											oSearch.rows = 15;
 											oSearch.rf = 'json';
-											oSearch.getResults(function(data) {ns1blankspace.search.process(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.contactBusiness.search.process(oParam, data)});
 										}
 									}
 								},
@@ -264,7 +264,7 @@ ns1blankspace.contactBusiness =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.contactPerson.search(event.target.id, {source: 1});
+											ns1blankspace.contactBusiness.search.send(event.target.id, {source: 1});
 										});
 										
 										ns1blankspace.pagination.bind(
@@ -309,6 +309,12 @@ ns1blankspace.contactBusiness =
 					
 						aHTML.push('<tr><td id="ns1blankspaceControlGroups" class="ns1blankspaceControl">Groups</td></tr>');
 											
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+					
+						aHTML.push('<tr><td id="ns1blankspaceControlPeople" class="ns1blankspaceControl">People</td></tr>');
+											
 						aHTML.push('</table>');		
 					
 						aHTML.push('<table class="ns1blankspaceControl">');
@@ -328,6 +334,7 @@ ns1blankspace.contactBusiness =
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAddress" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainGroups" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainPeople" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
@@ -356,6 +363,12 @@ ns1blankspace.contactBusiness =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainGroups', refresh: true});
 						ns1blankspace.contactBusiness.groups.show();
+					});
+
+					$('#ns1blankspaceControlPeople').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainPeople', refresh: true});
+						ns1blankspace.contactBusiness.people.show();
 					});
 					
 					$('#ns1blankspaceControlActions').click(function(event)
@@ -442,7 +455,7 @@ ns1blankspace.contactBusiness =
 					
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspaceColumn1">');
+						aHTML.push('<table class="ns1blankspace">');
 						
 						if (ns1blankspace.objectContextData.phonenumber != '')
 						{
@@ -1250,7 +1263,8 @@ ns1blankspace.contactBusiness =
 
 									if (oResponse == undefined)
 									{
-									
+										$('#ns1blankspaceMainPeople').html(ns1blankspace.xhtml.loading);
+
 										var oSearch = new AdvancedSearch();
 										oSearch.endPoint = 'contact';
 										oSearch.method = 'CONTACT_PERSON_SEARCH';
@@ -1263,11 +1277,9 @@ ns1blankspace.contactBusiness =
 										oSearch.sort('modifieddate', 'desc');
 										
 										oSearch.getResults(function(data) {ns1blankspace.contactBusiness.people.show(oParam, data)});
-										
 									}
 									else
 									{
-									
 										var aHTML = [];
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
@@ -1284,10 +1296,10 @@ ns1blankspace.contactBusiness =
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
-										aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
-														'<span id="ns1blankspaceContactBusinessPeopleAdd">Add</span>' +
+										aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceContactBusinessPeopleAdd" class="ns1blankspaceAction">Add</span>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');					
@@ -1395,9 +1407,11 @@ ns1blankspace.contactBusiness =
 
 									aHTML.push('<td id="ns1blankspaceContactBusinessPeople_email-' + oRow.id + '" class="ns1blankspaceRow">' +
 															oRow.email + '</td>');												
-																						
-									aHTML.push('<td id="ns1blankspaceContactBusinessPeople-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceContactBusinessPeopleRowSelect">&nbsp);</td>');
-															
+																													
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+									aHTML.push('<span id="ns1blankspaceContactBusinessPeople_options_view-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceContactBusinessPeopleRowSelect"></span>');
+									aHTML.push('</td>');
+																							
 									aHTML.push('</tr>');	
 									
 									return aHTML.join('');
@@ -1413,7 +1427,7 @@ ns1blankspace.contactBusiness =
 									})
 									.click(function() {
 										ns1blankspace.contactPerson.init({showHome: false});
-										ns1blankspace.contactPerson.search(this.id)
+										ns1blankspace.contactPerson.search.send(this.id)
 									})
 									.css('width', '15px')
 									.css('height', '20px')
@@ -1429,7 +1443,6 @@ ns1blankspace.contactBusiness =
 									})
 									.css('width', '15px')
 									.css('height', '20px')
-									
 								}
 
 				},
