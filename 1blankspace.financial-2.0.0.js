@@ -1437,7 +1437,7 @@ ns1blankspace.financial.transactions =
 
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML.push(ns1blankspace.financials.transactions.row(this));
+								aHTML.push(ns1blankspace.financial.transactions.row(this));
 							});
 							
 							aHTML.push('</table>');
@@ -1450,17 +1450,19 @@ ns1blankspace.financial.transactions =
 								showMore: (oResponse.morerows == "true"),
 								more: oResponse.moreid,
 								rows: 20,
-								functionShowRow: ns1blankspace.financials.transactions.row,
-								functionNewPage: 'ns1blankspace.financials.transactions.bind()',	
+								functionShowRow: ns1blankspace.financial.transactions.row,
+								functionNewPage: 'ns1blankspace.financial.transactions.bind()',	
 							}); 	
 								
-							ns1blankspace.financials.transactions.bind();
+							ns1blankspace.financial.transactions.bind();
 						}
 					}	
 				},
 
 	row: 		function(oRow)
 				{
+					var aHTML = [];
+					
 					aHTML.push('<tr class="ns1blankspaceRow">');
 												
 					aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + oRow.id + '" class="ns1blankspaceRow">' +
@@ -1493,12 +1495,14 @@ ns1blankspace.financial.item =
 				var iObject = ns1blankspace.object;
 				var iObjectContext = ns1blankspace.objectContext;
 				var sNamespace;
+				var bRefresh = false;
 				
 				if (oParam != undefined)
 				{
 					if (oParam.object != undefined) {iObject = oParam.object}
 					if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-					if (oParam.namespace != undefined) {sNamespace = oParam.namespace}	
+					if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
+					if (oParam.refresh != undefined) {bRefresh = oParam.refresh}		
 				}
 				else
 				{
@@ -1507,41 +1511,45 @@ ns1blankspace.financial.item =
 					
 				if (oResponse == undefined)
 				{	
-					var aHTML = [];
+					if (!bRefresh)
+					{	
+						var aHTML = [];
 
-					aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<table class="ns1blankspaceContainer">');
 
-					aHTML.push('<tr class="ns1blankspaceContainer">' +
-									'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-									'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
-									'</tr>');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
+										'</tr>');
 
-					aHTML.push('</table>');					
-					
-					$('#ns1blankspaceMainItem').html(aHTML.join(''));	
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMainItem').html(aHTML.join(''));
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+						
+						
+						aHTML.push('<tr><td class="ns1blankspaceAction">' +
+										'<span id="ns1blankspaceItemAdd">Add</span>' +
+										'</td></tr>');
 			
-					var aHTML = [];
+						
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceItemColumn2').html(aHTML.join(''));
 					
-					aHTML.push('<table class="ns1blankspaceColumn2">');
+						$('#ns1blankspaceItemAdd').button(
+						{
+							label: "Add"
+						})
+						.click(function() {
+							 ns1blankspace.financial.item.edit(oParam);
+						});										
 					
-					
-					aHTML.push('<tr><td class="ns1blankspaceAction">' +
-									'<span id="ns1blankspaceItemAdd">Add</span>' +
-									'</td></tr>');
-		
-					
-					aHTML.push('</table>');					
-					
-					$('#ns1blankspaceItemColumn2').html(aHTML.join(''));
-				
-					$('#ns1blankspaceItemAdd').button(
-					{
-						label: "Add"
-					})
-					.click(function() {
-						 ns1blankspace.financial.item.edit(oParam);
-					});										
-					
+					}
+
 					var oSearch = new AdvancedSearch();
 					oSearch.method = 'FINANCIAL_ITEM_SEARCH';
 					oSearch.addField('financialaccounttext,tax,issuedamount,amount,description');
@@ -1728,28 +1736,22 @@ ns1blankspace.financial.item =
 										'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
 										'</td></tr>');
 
-						aHTML.push('<tr class="ns1blankspace">' +
-										'<td class="ns1blankspace" title="Enter a code or title and click search">' +
-										'<span id="ns1blankspaceItemAddSearch" class="ns1blankspaceAction">Search</span>' +
-										'</td></tr>');
-						
 						aHTML.push('</table>');
 						
-						aHTML.push('<table style="margin-top:15px;">');
+						aHTML.push('<table class="ns1blankspaceColumn2" style="margin-top:15px;">');
 						
 						aHTML.push('<tr><td id="ns1blankspaceItemAddSearchResults"></td></tr>');
 														
 						aHTML.push('</table>');		
 						
 						$('#ns1blankspaceItemColumn2').html(aHTML.join(''));
-
-						$('#ns1blankspaceItemAddSearch').button(
+	
+						$('#ns1blankspaceItemAccount').live('keyup', function()
 						{
-							label: "Search"
-						})
-						.click(function() {
-							ns1blankspace.financial.item.edit($.extend(true, oParam, {step: 2}))
-						})
+							$.extend(true, oParam, {step: 2});
+							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+					        ns1blankspace.timer.delayCurrent = setTimeout(ns1blankspace.financial.item.edit(oParam), ns1blankspace.option.typingWait);
+						});	
 							
 						$('#ns1blankspaceItemAmount').focus();
 					}
@@ -1760,6 +1762,7 @@ ns1blankspace.financial.item =
 						oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
 						oSearch.addField('title');
 						oSearch.addFilter('title', 'TEXT_IS_LIKE', $('#ns1blankspaceItemAccount').val());
+						oSearch.addFilter('postable', 'EQUAL_TO', 'Y');
 						oSearch.sort('title', 'asc');
 						oSearch.getResults(function(data){ns1blankspace.financial.item.edit($.extend(true, oParam, {step:3}), data)});
 					}
@@ -1836,9 +1839,10 @@ ns1blankspace.financial.item =
 										data: sData,
 										dataType: 'json',
 										success: function(oResponse)
-										{
-											ns1blankspace.financial[sNamespace].refresh();
+										{	
+											oParam.refresh = true;
 											ns1blankspace.financial.item.show(oParam);
+											ns1blankspace.financial[sNamespace].refresh();
 										}
 									});
 								}
@@ -1847,7 +1851,7 @@ ns1blankspace.financial.item =
 						.css('width', '20px')
 						.css('height', '20px')
 						
-						$('input.ns1blankspaceText:first').focus();
+						//$('input.ns1blankspaceText:first').focus();
 					}
 				}	
 			}

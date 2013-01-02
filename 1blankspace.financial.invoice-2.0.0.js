@@ -424,7 +424,8 @@ ns1blankspace.financial.invoice =
 						
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 								
-						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
+						$('#ns1blankspaceControlContext').html(
+							'<span id="ns1blankspaceControlContext_reference">' + ns1blankspace.objectContextData.reference + '</span>' +
 							'<br /><span id="ns1blankspaceControlContext_sentdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.sentdate + '</span>' +
 							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>');
 							
@@ -528,6 +529,11 @@ ns1blankspace.financial.invoice =
 										{
 											aHTML.push('<table class="ns1blankspaceColumn1">');
 											
+											if (ns1blankspace.objectContextData.sent == 'N')
+											{	
+												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:15px; color:#cc0000;">Invoice hasn\'t been sent.</td></tr>');			
+											}
+
 											if (ns1blankspace.objectContextData.contactbusinesssenttotext != '')
 											{
 
@@ -556,10 +562,6 @@ ns1blankspace.financial.invoice =
 																'<tr><td id="ns1blankspaceSummaryDueDate" class="ns1blankspaceSummary">' +
 																ns1blankspace.objectContextData.duedate +
 																'</td></tr>');	
-											}
-											else
-											{	
-												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Invoice hasn\'t been sent.</td></tr><tr><td>&nbsp;</td></tr>');			
 											}
 											
 											if (ns1blankspace.objectContextData.description != '')
