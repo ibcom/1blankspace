@@ -559,7 +559,7 @@ ns1blankspace.financial.invoice =
 											}
 											else
 											{	
-												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Invoice hasn\'t been sent.</td></tr>');			
+												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Invoice hasn\'t been sent.</td></tr><tr><td>&nbsp;</td></tr>');			
 											}
 											
 											if (ns1blankspace.objectContextData.description != '')
@@ -799,13 +799,14 @@ ns1blankspace.financial.invoice =
 											
 										if ($('#ns1blankspaceMainDetails').html() != '')
 										{
-											sData += '&reference=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsReference').val());
-											sData += '&purchaseorder=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPurchaseOrderReference').val());
-											sData += '&sentdate=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSentDate').val());
-											sData += '&duedate=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDueDate').val());
-											sData += '&description=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDescription').val());
-											sData += '&contactbusinesssentto=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSentToBusiness').attr("data-id"));
-											sData += '&contactpersonsentto=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSentToPerson').attr("data-id"));
+											sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
+											sData += '&purchaseorder=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPurchaseOrderReference').val());
+											sData += '&sentdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSentDate').val());
+											sData += '&duedate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDueDate').val());
+											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
+											sData += '&contactbusinesssentto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSentToBusiness').attr("data-id"));
+											sData += '&contactpersonsentto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSentToPerson').attr("data-id"));
+											sData += '&sent=' + $('input[name="radioSent"]:checked').val();
 										}
 										
 										$.ajax(
