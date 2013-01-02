@@ -3737,6 +3737,7 @@ ns1blankspace.actions =
 					{
 						var sData = '';
 						var iType = ns1blankspace.data.actionTypes.fileNote;
+						var iStatus = 1;
 						var iHours;
 						var dDate = Date.today().toString("dd-MMM-yyyy");
 						var dEndDate;
@@ -3748,6 +3749,7 @@ ns1blankspace.actions =
 						if (oData != undefined)
 						{
 							if (oData.type != undefined) {iType = oData.type}
+							if (oData.status != undefined) {iStatus = oData.status}
 							if (oData.hours != undefined) {iHours = oData.hours}
 							if (oData.date != undefined) {dDate = oData.date}
 							if (oData.endDate != undefined) {dEndDate = oData.endDate}
@@ -3758,7 +3760,7 @@ ns1blankspace.actions =
 							sData += '&subject=' + ns1blankspace.util.fs(oData.subject);
 							sData += '&description=' + ns1blankspace.util.fs(oData.description);
 							sData += '&priority=' + ns1blankspace.util.fs(oData.priority);
-							sData += '&status=' + ns1blankspace.util.fs(oData.status);
+							sData += '&status=' + ns1blankspace.util.fs(iStatus);
 							sData += '&type=' + ns1blankspace.util.fs(iType);
 							sData += '&date=' + ns1blankspace.util.fs(dDate);
 							sData += '&actionby=' + ns1blankspace.util.fs(iActionBy);

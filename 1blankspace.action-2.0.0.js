@@ -283,35 +283,35 @@ ns1blankspace.action =
 					
 					var aHTML = [];
 
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDescription" class="ns1blankspaceMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDescription" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 						
-					$('#ns1blankspaceMainMain').html(aHTML.join(''));
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 	
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainSummary'});
-						ns1blankspace.action.summary.show();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.action.summary();
 					});
 
 					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainDetails'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 						ns1blankspace.action.details();
 					});
 					
 					$('#ns1blankspaceControlDescription').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainDescription', refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainDescription', refresh: true});
 						ns1blankspace.action.description();
 					});
 
-					$('#ns1blankspaceControlControlAttachments').click(function(event)
+					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
-						ns1blankspace.show({selector: '#divInterfaceMainAttachments', refresh: true});
-						ns1blankspace.attachments.show({xhtmlElementID: 'divInterfaceMainAttachments'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
 					});
 				},
 
@@ -370,7 +370,7 @@ ns1blankspace.action =
 					}	
 				},	
 		
-summary: 		function interfaceFinancialPaymentSummary()
+summary: 		function ()
 				{
 					var aHTML = [];
 
@@ -384,8 +384,8 @@ summary: 		function interfaceFinancialPaymentSummary()
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 										'<tr class="ns1blankspaceRow">' +
-										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 										'</tr>' +
 										'</table>');				
 						
@@ -393,7 +393,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 						
 						var aHTML = [];
 
-						aHTML.push('<table class="ns1blankspaceColumn1">');
+						aHTML.push('<table class="ns1blankspace">');
 					
 						if (ns1blankspace.objectContextData.contactbusinesstext != '')
 						{
@@ -431,11 +431,11 @@ summary: 		function interfaceFinancialPaymentSummary()
 						
 						}
 
-						if (ns1blankspace.objectContextData.typetext != '')
+						if (ns1blankspace.objectContextData.actiontypetext != '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Type</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryDate" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.typetext +
+										ns1blankspace.objectContextData.actiontypetext +
 										'</td></tr>');
 						}		
 						
@@ -573,46 +573,44 @@ summary: 		function interfaceFinancialPaymentSummary()
 											'<br /><input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Completed' +
 										'</td></tr>');	
 
-						aHTML[++h] = '</table>';					
+						aHTML.push('</table>');					
 							
 						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#inputInterfaceMainDetailsSubject').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsSubject').val(ns1blankspace.objectContextData.reference);
 							
-							var sDate = new Date(ns1blankspace.objectContextData.actiondatetime);
+							var sDate = new Date(ns1blankspace.objectContextData.duedatetime);
 							sDate = $.fullCalendar.formatDate(sDate, 'dd MMM yyyy h:mm TT')
-							$('#inputInterfaceMainDetailsDate').val(sDate);
+							$('#ns1blankspaceDetailsDate').val(sDate);
 							
-							$('#ns1blankspaceDetailsType').attr("data-id", ns1blankspace.objectContextData.type);
-							$('#ns1blankspaceDetailsType').val(ns1blankspace.objectContextData.typetext);
+							$('#ns1blankspaceDetailsType').attr("data-id", ns1blankspace.objectContextData.actiontype);
+							$('#ns1blankspaceDetailsType').val(ns1blankspace.objectContextData.actiontypetext);
 							$('#ns1blankspaceDetailsActionBy').attr("data-id", ns1blankspace.objectContextData.actionby);
-							$('#ins1blankspaceDetailsActionBy').val(ns1blankspace.objectContextData.actionbyfirstname + ' ' +
-											ns1blankspace.objectContextData.actionbysurname);
+							$('#ns1blankspaceDetailsActionBy').val(ns1blankspace.objectContextData.actionbytext);
 							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 							
 							$('#ns1blankspaceDetailsBusiness').attr("data-id", ns1blankspace.objectContextData.contactbusiness);
 							$('#ns1blankspaceDetailsBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
 							
 							$('#ns1blankspaceDetailsPerson').attr("data-id", ns1blankspace.objectContextData.contactperson);
-							$('#ns1blankspaceDetailsPerson').val(ns1blankspace.objectContextData.contactpersonfirstname + 
-									' ' + ns1blankspace.objectContextData.contactpersonsurname);
+							$('#ns1blankspaceDetailsPerson').val(ns1blankspace.objectContextData.contactpersontext);
 						}
 						else
 						{
 							$('[name="radioStatus"][value="1"]').attr('checked', true);
 							
-							if (ns1blankspace.action.contactbusiness != undefined)
+							if (ns1blankspace.data.contactbusiness != undefined)
 							{$('#ns1blankspaceDetailsBusiness').attr("data-id", ns1blankspace.action.contactbusiness);}
 							
-							if (ns1blankspace.action.contactbusinesstext != undefined)
+							if (ns1blankspace.data.contactbusinesstext != undefined)
 							{$('#ns1blankspaceDetailsBusiness').val(ns1blankspace.action.contactbusinesstext);}
 							
-							if (ns1blankspace.action.contactperson != undefined)
+							if (ns1blankspace.data.contactperson != undefined)
 							{$('#ns1blankspaceDetailsPerson').attr("data-id", ns1blankspace.action.contactperson);}
 							
-							if (ns1blankspace.action.contactpersontext != undefined)
+							if (ns1blankspace.data.contactpersontext != undefined)
 							{$('#ns1blankspaceDetailsPerson').val(ns1blankspace.action.contactpersontext);}
 						}
 					}	
@@ -634,7 +632,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 										'</tr>');
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceDescription').html(aHTML.join(''));
+						$('#ns1blankspaceMainDescription').html(aHTML.join(''));
 						
 						var aHTML = [];
 						
