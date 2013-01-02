@@ -78,13 +78,12 @@ ns1blankspace.action =
 
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
-					$('#divInterfaceMain').html(ns1blankspace.xhtml.loading);
+					$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
 				
 					var aHTML = [];
-					var h = -1;
 					
-					aHTML[++h] = '<div id="ns1blankspaceMainCalendar" class="ns1blankspaceMain"></div>';
-					aHTML[++h] = '<div id="ns1blankspaceMainNext10" class="ns1blankspaceMain"></div>';
+					aHTML.push('<div id="ns1blankspaceMainCalendar" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainNext10" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -96,18 +95,20 @@ ns1blankspace.action =
 					
 					$('#ns1blankspaceControlNext10').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceNext10'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainNext10'});
 						ns1blankspace.action.next10();
 					});
 						
 					if (bCalendar)
 					{
 						$('#ns1blankspaceControlCalendar').addClass('ns1blankspaceHighlight');
-						ns1blankspace.action.calendar();
+						ns1blankspace.show({selector: '#ns1blankspaceMainCalendar'});
+						ns1blankspace.action.calendar.show();
 					}
 					else
 					{
 						$('#ns1blankspaceControlNext10').addClass('ns1blankspaceHighlight');
+						ns1blankspace.show({selector: '#ns1blankspaceMainNext10'});
 						ns1blankspace.action.next10();
 					}	
 
@@ -1073,6 +1074,8 @@ summary: 		function ()
 									
 									$(ns1blankspace.xhtml.container).hide(0);
 									
+									$('#' + sXHTMLElementID).css('font-size', '0.825em');
+
 									$('#' + sXHTMLElementID).fullCalendar(
 									{
 										theme: true,
@@ -1623,7 +1626,7 @@ summary: 		function ()
 
 	next10: 	function (oParam, oResponse)
 				{	
-					var sXHTMLElementID = 'ns1blankspaceMain';
+					var sXHTMLElementID = 'ns1blankspaceMainNext10';
 					var sDate;
 
 					if (oParam != undefined)
