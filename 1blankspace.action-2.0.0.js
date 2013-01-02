@@ -7,6 +7,8 @@
  
 ns1blankspace.action = 
 {
+	data: 		{},
+
 	init: 		function (oParam)
 				{
 					ns1blankspace.objectContext = -1;
@@ -1055,15 +1057,17 @@ summary: 		function ()
 									
 									$('#' + sXHTMLElementID).html('');
 									
-									if (ns1blankspace.action.calendarUsers.length == 0 && bEventFetch)
+									if (!ns1blankspace.action.data.calendarUsers) {ns1blankspace.action.data.calendarUsers = []}
+
+									if (ns1blankspace.action.data.calendarUsers.length == 0 && bEventFetch)
 									{
-										if (ns1blankspace.action.user != undefined)
+										if (ns1blankspace.action.data.user != undefined)
 										{
-											ns1blankspace.action.calendarUsers.push(ns1blankspace.action.user);
+											ns1blankspace.action.data.calendarUsers.push(ns1blankspace.action.user);
 										}
 										else
 										{	
-											ns1blankspace.action.calendarUsers.push(gsUserID);
+											ns1blankspace.action.data.calendarUsers.push(ns1blankspace.user.id);
 										}	
 									}	
 									
