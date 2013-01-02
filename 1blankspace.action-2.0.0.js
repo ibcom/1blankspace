@@ -33,8 +33,6 @@ ns1blankspace.action =
 					ns1blankspace.action.user = ns1blankspace.action.user;
 					ns1blankspace.action.calendarParam = '';
 
-					ns1blankspace.data.actionType = {meeting: 3, fileNote: 4, emailSent: 5, emailReceived: 9};
-
 					if (oParam != undefined)
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
@@ -44,14 +42,6 @@ ns1blankspace.action =
 						if (oParam.contactPersonText != undefined) {ns1blankspace.action.contactpersontext = oParam.contactPersonText}
 						if (oParam.contactBusinessText != undefined) {ns1blankspace.action.contactbusinesstext = oParam.contactBusinessText}
 					}
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.action.init({showHome: true});',
-							move: false
-							});	
-					}	
 							
 					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
@@ -159,16 +149,16 @@ ns1blankspace.action =
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
-										var sData = 'id=' + ns1blankspace.objectContext;
-										
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('ACTION_SEARCH'),
-											data: sData,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.action.show(oParam, data)}
-										});
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'ACTION_SEARCH';
+										oSearch.addField('actiontype,contactperson,actionby,actionbytext,actionreference,' +
+															'actiontype,actiontypetext,actionreference,billingstatus,billingstatustext,' +
+															'completed,completedtime,contactbusiness,contactbusinesstext,contactperson,' +
+															'contactpersontext,date,description,duedate,duedatetime,object,objectcontext,' +
+															'objecttext,priority,private,prioritytext,status,statustext,subject,text,totaltimehrs,totaltimemin');
+										oSearch.rf = 'json';
+										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);	
+										oSearch.getResults(function(data) {ns1blankspace.action.show(oParam, data)});
 									}
 									else
 									{
@@ -270,7 +260,7 @@ ns1blankspace.action =
 					}
 					else
 					{	
-						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">"' +
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
@@ -347,16 +337,16 @@ ns1blankspace.action =
 						
 						var iMessageActionID;
 						
-						if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.emailSent || ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.emailReceived)
+						if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionTypes.emailSent.id || ns1blankspace.objectContextData.type == ns1blankspace.data.actionTypes.emailReceived.id)
 								{iMessageActionID = ns1blankspace.objectContextData.id}
 						
-						if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionType.fileNote && ns1blankspace.objectContextData.object == 17)
+						if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionTypes.fileNote.id && ns1blankspace.objectContextData.object == 17)
 								{iMessageActionID = ns1blankspace.objectContextData.objectcontext}
 								
 						if (iMessageActionID != undefined)
 						{
-							ns1blankspace.messaging.init({autoShow: false});
-							ns1blankspace.messaging.search.send({
+							ns1blankspace.messaging.imap.nit({autoShow: false});
+							ns1blankspace.messaging.imap.search.send({
 								xhtmlElementID: '-' + iMessageActionID
 								})	
 						}
@@ -365,11 +355,11 @@ ns1blankspace.action =
 							$('#ns1blankspaceViewControlAction').button({disabled: false});
 							$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 								
-							$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
-								'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceControlSubContext">' + ns1blankspace.objectContextData.actiondate + '</span>');
+							$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.actionreference +
+								'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.duedate + '</span>');
 								
 							ns1blankspace.history.view({
-								newDestination: 'ns1blankspace.action.init({showHome: false});ins1blankspace.action.search.send("-' + ns1blankspace.objectContext + '")',
+								newDestination: 'ns1blankspace.action.init({id: ' + ns1blankspace.objectContext + '})',
 								move: false
 								})
 							
@@ -382,6 +372,8 @@ ns1blankspace.action =
 		
 summary: 		function interfaceFinancialPaymentSummary()
 				{
+					var aHTML = [];
+
 					if (ns1blankspace.objectContextData == undefined)
 					{
 						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the action.</td></tr></table>');
@@ -401,7 +393,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 						
 						var aHTML = [];
 
-						aHTML[++h] = '<table class="ns1blankspaceColumn1">';
+						aHTML.push('<table class="ns1blankspaceColumn1">');
 					
 						if (ns1blankspace.objectContextData.contactbusinesstext != '')
 						{
@@ -422,7 +414,7 @@ summary: 		function interfaceFinancialPaymentSummary()
 					
 						if (ns1blankspace.objectContextData.actiondate != '')
 						{
-							var oDate = new Date.parse(ns1blankspace.objectContextData.actiondate);
+							var oDate = Date.parse(ns1blankspace.objectContextData.duedate);
 								
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryDate" class="ns1blankspaceSummary">' +

@@ -998,7 +998,6 @@ ns1blankspace.setup.website =
 
 											$('#ns1blankspacePagesColumn1').html(aHTML.join(''));
 											
-											
 											$('#ns1blankspaceSetupWebsitePages .ns1blankspaceRowRemove').button({
 												text: false,
 												icons: {
@@ -1023,7 +1022,6 @@ ns1blankspace.setup.website =
 											})
 											.css('width', '15px')
 											.css('height', '17px');
-												
 										}
 									}	
 								},

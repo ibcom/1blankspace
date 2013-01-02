@@ -441,7 +441,7 @@ ns1blankspace.app =
 							cache: false,
 							beforeSend: function (oRequest)
 										{
-					            			oRequest.setRequestHeader("X-HTTP-myds-rest-level", "1");
+					            			oRequest.setRequestHeader("X-HTTP-myds-rest-level", ns1blankspace.option.restLevel);
 					        			}
 						});
 
@@ -1108,15 +1108,20 @@ ns1blankspace.app =
 						}
 						else
 						{
-							if (bShowHome) 
-							{
-								if (typeof(oNS.home) == 'function') {oNS.home()} else {oNS.home.show()}
+							if (iID)
+							{	
+								oNS.search.send('-' + iID);
 							}
 							else
-							{
-								if (iID)
-								{	
-									oNS.search.send('-' + iID);
+							{	
+								if (bShowHome) 
+								{
+									ns1blankspace.history.view({
+										newDestination: sNS + '.init({showHome: true});',
+										move: false
+										});	
+
+									if (typeof(oNS.home) == 'function') {oNS.home()} else {oNS.home.show()}
 								}
 							}		
 						}
@@ -1946,7 +1951,7 @@ ns1blankspace.attachments =
 							columns: 'subject-actiondate',
 							more: oResponse.moreid,
 							rows: ns1blankspace.option.defaultRows,
-							functionSearch: ns1blankspace.actions.show(),
+							functionSearch: ns1blankspace.attachments.show(),
 							functionShowRow: ns1blankspace.attachments.row,
 							functionNewPage: 'ns1blankspace.attachments.bind()',
 							type: 'json'
@@ -3403,34 +3408,25 @@ ns1blankspace.actions =
 							label: "Add"
 						})
 						.click(function() {
-							ns1blankspace.action.init(
-							{
-								showHome: false, 
-								showNew: true,
-								contactPerson: iContactPerson,
-								contactBusiness: iContactBusiness,
-								contactPersonText: sContactPersonText,
-								contactBusinessText: sContactBusinessText
-							});
+							ns1blankspace.actions.edit();
 						});
-					
-						sXHTMLElementID = 'ns1blankspaceActionsColumn1';
 					}
 					
 					if (iObjectContext != -1)
 					{
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ACTION_SEARCH';
-						oSearch.addField('subject');
-						oSearch.addFilter('linktype', 'EQUAL_TO', iObject);
-						oSearch.addFilter('linkid', 'EQUAL_TO', iObjectContext);
+						oSearch.addField('subject,duedate,actiontypetext');
+						oSearch.addFilter('object', 'EQUAL_TO', iObject);
+						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 						
-						if (iType) {oSearch.addFilter('type', 'EQUAL_TO', iType)};
+						if (iType) {oSearch.addFilter('actiontype', 'EQUAL_TO', iType)};
 						if (iContactBusiness) {oSearch.addFilter('contactbusiness', 'EQUAL_TO', iContactBusiness)};
 						if (iContactPerson) {oSearch.addFilter('contactperson', 'EQUAL_TO', iContactPerson)};
 
 						oSearch.sort('modifieddate', 'desc')
 
+						oParam.xhtmlElementID = 'ns1blankspaceActionsColumn1';
 						oSearch.getResults(function(data) {ns1blankspace.actions.process(oParam, data)});
 					}
 				},
@@ -3458,18 +3454,19 @@ ns1blankspace.actions =
 					}
 					else
 					{
-						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<table id="ns1blankspaceActions" class="ns1blankspace">');
 					
-						aHTML.push('<tr class="ins1blankspaceCaption">');
-						aHTML.push('<td class="ns1blankspaceCaption">Subject</td>');
-						aHTML.push('<td class="ns1blankspace">Date</td>');
+						aHTML.push('<tr class="ns1blankspaceCaption">');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">Subject</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
 
 						if (bShowDescription)
 						{
-							aHTML.push('<td class="ns1blankspace">Description</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
 						}
 
-						aHTML.push('<td class="ns1blankspace">&nbsp;</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 						aHTML.push('</tr>');
 
 						$.each(oResponse.data.rows, function()
@@ -3480,7 +3477,10 @@ ns1blankspace.actions =
 											this.subject + '</td>');
 
 							aHTML.push('<td id="ns1blankspaceAction_date-' + this.id + '" class="ns1blankspaceRow">' +
-											this.actiondate + '</td>');
+											this.duedate + '</td>');
+
+							aHTML.push('<td id="ns1blankspaceAction_type-' + this.id + '" class="ns1blankspaceRow">' +
+											this.actiontypetext + '</td>');
 							
 							if (bShowDescription)
 							{
@@ -3488,7 +3488,10 @@ ns1blankspace.actions =
 												this.description + '</td>');
 							}					
 							
-							aHTML.push('<td id="ns1blankspaceAction_options-' + this.id + '" class="ns1blankspaceRowOptionsSelect">&nbsp;</td>');
+							aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' + 			
+											'<span id="ns1blankspaceAction_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
+											'<span id="ns1blankspaceAction_options_select-' + this.id + '" class="ns1blankspaceRowSelect"></span>' +	
+											'</td>');
 
 							aHTML.push('</tr>');
 						});
@@ -3502,40 +3505,86 @@ ns1blankspace.actions =
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == 'true'),
 							columns: 'subject-actiondate',
-							more: this.moreid,
+							more: oResponse.moreid,
 							rows: ns1blankspace.option.defaultRows,
-							functionSearch: ns1blankspaceActions,
+							functionSearch: ns1blankspace.action.search.send,
 							functionOpen: "ns1blankspace.action.init({showHome: false});ns1blankspace.action.search.show(this.id)"
 						   }); 
 						
-						$('.ns1blankspaceRowSelect').button( {
-								text: false,
-								icons: {
-									primary: "ui-icon-play"
-								}
-							})
-							.click(function()
+						$('#ns1blankspaceActions .ns1blankspaceRowRemove').button({
+							text: false,
+							icons:
 							{
-								ns1blankspace.action.init({showHome: false});
-								ns1blankspace.action.search.show(this.id)
-							})
-							.css('width', '15px')
-							.css('height', '20px');
+								primary: "ui-icon-close"
+							}
+						})
+						.click(function() {
+							ns1blankspace.actions.remove({xhtmlElementID: this.id});
+						})
+						.css('width', '15px')
+						.css('height', '17px');
+						
+						$('#ns1blankspaceActions span.ns1blankspaceRowSelect').button({
+							text: false,
+							icons:
+							{
+								primary: "ui-icon-play"
+							}
+						})
+						.click(function() {
+							ns1blankspace.action.init({id: (this.id).split('-')[1]})
+						})
+						.css('width', '15px')
+						.css('height', '17px');
 					}
 				},
 
-	add:		function (oParam, oResponse)
+	remove:		function (oParam, oResponse)
+				{
+					var sXHTMLElementID;
+
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+					}
+					
+					var aXHTMLElementID = sXHTMLElementID.split('-');
+					var sID = aXHTMLElementID[1];
+					
+					if (oResponse == undefined)
+					{	
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
+							data: 'remove=1&id=' + sID,
+							dataType: 'json',
+							success: function(data){ns1blankspace.actions.remove(oParam, data)}
+						});
+					}	
+					else
+					{
+						if (oResponse.status == 'OK')
+						{
+							$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+						}	
+					}	
+					
+				},
+
+	edit:		function (oParam, oResponse)
 				{
 					var iActionID = -1;
 					var dStartDate = new Date();
 					var dEndDate = dStartDate;
-					var sXHTMLElementID = 'ns1blankspaceActionsAdd';
+					var sXHTMLElementID = 'ns1blankspaceActionsColumn1';
 					var iOffsetHeight = 5;
 					var iOffsetLeft = 0;
-					
+				
 					if (oParam != undefined)
 					{
 						if (oParam.actionID != undefined) {iActionID = oParam.actionID};
+						if (oParam.id != undefined) {iActionID = oParam.id};
 						if (oParam.startDate != undefined) {dStartDate = oParam.startDate};
 						if (oParam.endDate != undefined) {dEndDate = oParam.endDate};
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID};
@@ -3543,198 +3592,218 @@ ns1blankspace.actions =
 						if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft};
 					}	
 
-					if ($('#divns1blankspaceDialog').attr('data-initiator') == sXHTMLElementID)
+					if (iActionID != -1 && oResponse == undefined)
 					{
-						$('#divns1blankspaceDialog').hide("slide", { direction: "right" }, 500);
-						$('#divns1blankspaceDialog').attr('data-initiator', '');
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ACTION_SEARCH';
+						oSearch.addField('subject,actiontype');
+						oSearch.rf = 'json';
+						oSearch.addFilter('id', 'EQUAL_TO', iActionID);	
+						oSearch.getResults(function(data) {ns1blankspace.actions.edit(oParam, data)});
 					}
 					else
 					{
-						$('#divns1blankspaceDialog').attr('data-initiator', sXHTMLElementID);
+						var aHTML = [];
 					
-						if (iActionID != -1 && oResponse == undefined)
-						{
-							sParam = 'method=ACTION_SEARCH&rf=XML&contactperson=ALL&select=' + iActionID;
+						aHTML.push('<table class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspaceRow">' +
+										'<td id="ns1blankspaceEditColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceEditColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
+										'</tr>' +
+										'</table>');
 						
-							$.ajax(
+						$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+						
+						aHTML.push('<tr><td>' +
+											'<span id="ns1blankspaceActionAddSave" class="ns1blankspaceAction">Save</span>' +
+											'<td></tr>');
+						
+
+						aHTML.push('<tr><td>' +
+											'<span id="ns1blankspaceActionAddCancel" class="ns1blankspaceAction">Cancel</span>' +
+											'<td></tr>');
+
+						aHTML.push('</table>');						
+
+						$('#' + (sXHTMLElementID).replace('Column1', 'Column2')).html(aHTML.join(''));
+
+						$('#ns1blankspaceActionAddCancel').button(
+						{
+							label: 'Cancel',
+						})
+						.click(function() {
+							ns1blankspace.actions.show();
+						})
+						.css('width', '75px');
+
+						$('#ns1blankspaceActionAddSave').button(
+						{
+							label: 'Save',
+						})
+						.click(function()
+						{
+							ns1blankspace.actions.save(oParam,
 							{
-								type: 'GET',
-								url: '/ondemand/action/?' + sParam,
-								dataType: 'json',
-								success: function(data) {ns1blankspaceActionAddShow(oParam, data)}
-							});	
+								id: iActionID,
+								subject: $('#ns1blankspaceActionAddSubject').val(),
+								date: $('#ns1blankspaceActionAddDate').val(),
+								description: $('#ns1blankspaceActionAddDescription').val(),
+								priority: ($('#ns1blankspaceActionAddImportant').attr('checked') ? 3 : 2),
+								type: $('input[name="radioActionType"]:checked').val()
+							});
+						})
+						.css('width', '75px');
+						
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspace">');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">Subject</td></tr>' + 
+										'<tr><td><input id="ns1blankspaceActionAddSubject" class="ns1blankspaceText">' + 
+										'</td></tr>');
+						
+						aHTML.push('<tr>' +
+										'<td class="ns1blankspaceCaption">' +
+										'Date' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceActionAddDate" class="ns1blankspaceDate">' +
+										'</td></tr>');		
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">Description</td></tr>' + 
+										'<tr><td>' +
+										'<textarea rows="5" cols="35" id="ns1blankspaceActionAddDescription" class="ns1blankspaceTextMulti" style="width:100%; height:100px;"></textarea>' +
+										'</td></tr>');
+
+						aHTML.push('</table>');
+						
+						$('#ns1blankspaceEditColumn1').html(aHTML.join(''));
+
+						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+
+						$('#ns1blankspaceActionAddSubject').focus();
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
+						aHTML.push('<tr><td class="ns1blankspaceCheck">' +
+											'<input type="checkbox" id="ns1blankspaceActionAddImportant"/>&nbsp;Important!<td></tr>');	
+							
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption" style="padding-top: 10px;">' +
+										'Type' +
+										'</td></tr>' +
+										'<tr class="ns1blankspaceRadio">' +
+										'<td class="ns1blankspaceRadio">');
+						
+						$.each(ns1blankspace.data.actionTypes, function(k, v)
+						{
+							aHTML.push('<input type="radio" id="radioActionType' + v.id + '" name="radioActionType" value="' + v.id + '"/>' +
+												v.title + '<br />');				
+						});
+						
+						aHTML.push('</td></tr>');				
+
+						aHTML.push('</table>');
+						
+						$('#ns1blankspaceEditColumn2').html(aHTML.join(''));
+
+						if (oResponse != undefined)
+						{	
+							if (oResponse.data.rows.length == 0)
+							{	
+								$('#ns1blankspaceActionAddSubject').val(oResponse.data.rows[0].subject);
+								$('#ns1blankspaceActionAddDescription').val(oResponse.data.rows[0].description);
+								$('[name="radioActionType"][value="' + oResponse.data.rows[0].actiontype + '"]').attr('checked', true);
+							}	
 						}
 						else
 						{
-							var aHTML = [];
-							var h = -1;
-							
-							aHTML.push('<table id="tablens1blankspaceActionAdd" class="interfaceDialogMedium">');
-							
-							aHTML.push('<tr id="trInterfaceActionCalendarAddSubjectValue" class="ns1blankspaceText">' +
-												'<td id="tdInterfaceActionCalendarAddSubjectValue" class="ns1blankspaceText">' +
-												'<input id="inputMasterActionAddSubject" class="inputns1blankspaceText');
-												
-							if (iActionID == -1)
-							{	
-								aHTML.push(' ns1blankspaceWatermark" value="Subject">');
-							}
-							else
-							{
-								aHTML.push('">');
-							}
-							
-							aHTML.push('</td></tr>');
-							
-							aHTML.push('<tr><td id="tdns1blankspaceActionAddDescriptionValue" class="ns1blankspace">' +
-												'<textarea rows="5" cols="35" id="inputns1blankspaceActionAddDescription" class="inputns1blankspaceTextMultiSmall');
-
-							if (iActionID == -1)
-							{	
-								aHTML.push(' ns1blankspaceWatermark">Add more text here, if required.</textarea>');
-							}
-							else
-							{
-								aHTML.push('"></textarea>');
-							}
-
-							aHTML.push('</td></tr>');
-
-							aHTML.push('<tr id="trns1blankspaceActionAddBusiness" class="ns1blankspace">' +
-												'<td id="tdns1blankspaceActionAddBusiness" class="ns1blankspace">' +
-												'Business' +
-												'</td></tr>' +
-												'<tr id="trns1blankspaceActionAddBusinessValue" class="ns1blankspaceSelect">' +
-												'<td id="tdns1blankspaceActionAddBusinessValue" class="ns1blankspaceSelect">' +
-												'<input id="inputns1blankspaceActionAddBusiness" class="inputns1blankspaceSelect"' +
-													' onDemandMethod="/ondemand/contact/?method=CONTACT_BUSINESS_SEARCH"' +
-													' onDemandColumns="tradename">' +
-												'</td></tr>');
-												
-							
-							aHTML.push('<tr id="trns1blankspaceActionAddPerson" class="ns1blankspace">' +
-												'<td id="tdns1blankspaceActionAddPerson" class="ns1blankspace">' +
-												'Person' +
-												'</td></tr>' +
-												'<tr id="trns1blankspaceActionAddPersonValue" class="ns1blankspaceSelect">' +
-												'<td id="tdns1blankspaceActionAddPersonValue" class="ns1blankspaceSelect">' +
-												'<input id="inputns1blankspaceActionAddPerson" class="inputns1blankspaceSelectContact"' +
-													' onDemandMethod="/ondemand/contact/?method=CONTACT_PERSON_SEARCH"' +
-													' onDemandParent="inputns1blankspaceActionAddBusiness">' +
-												'</td></tr>');									
-												
-												
-							aHTML.push('<tr><td id="tdns1blankspaceActionAddHighPriority" class="ns1blankspace">' +
-												'<input type="checkbox" id="inputns1blankspaceActionAddNoteHighPriority"/>&nbsp;High Priority?<td></tr>');
-												
-								
-							aHTML.push('<tr><td>');
-							
-								aHTML.push('<table class="interfaceSearchFooterMedium">');
-								
-								aHTML.push('<tr><td style="text-align: right;">' +
-													'<span id="spanSave">Save</span>' +
-													'<span id="spanCancel">Cancel</span>' +
-													'<td></tr>');
-								
-								aHTML.push('</table>');						
-
-							aHTML.push('</td></tr>');	
-								
-							aHTML.push('</table>');		
-							
-							var oElement = $('#' + sXHTMLElementID)
-							
-							$('#divns1blankspaceDialog').html('');
-							$('#divns1blankspaceDialog').show();
-							$('#divns1blankspaceDialog').offset(
-								{
-									top: $(oElement).offset().top + $(oElement).height() + iOffsetHeight,
-									left: $(oElement).offset().left + iOffsetLeft
-								});
-							$('#divns1blankspaceDialog').html(aHTML.join(''));
-							
-							$('#spanCancel').button(
-								{
-									text: false,
-									 icons: {
-										 primary: "ui-icon-close"
-									}
-								})
-								.click(function() {
-									$('#divns1blankspaceDialog').slideUp(500);
-									$('#divns1blankspaceDialog').html('');
-								})
-								.css('width', '20px')
-								.css('height', '20px')
-
-							$('#spanSave').button(
-								{
-									text: false,
-									 icons: {
-										 primary: "ui-icon-check"
-									}
-								})
-								.click(function() {
-									interfaceActionQuickSave({
-											id: iActionID,
-											date: $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
-														' ' + $.fullCalendar.formatDate(dStartDate, "HH:mm"),
-											endDate: $.fullCalendar.formatDate(dEndDate, "dd MMM yyyy") + 
-														' ' + $.fullCalendar.formatDate(dEndDate, "HH:mm"),
-											subject: $('#inputActionCalendarAddSubject').val(),
-											description: $('#inputActionCalendarAddDescription').val(),
-											priority: ($('#inputActionCalendarAddHighPriority').attr('checked')?3:2),
-											calendarXHTMLElementID: 'divns1blankspaceCalendar'
-											});
-									
-									$('#divns1blankspaceDialog').slideUp(500);
-									$('#divns1blankspaceDialog').html('');
-
-								})
-								.css('width', '30px')
-								.css('height', '20px')
-							
-							if (oResponse != undefined)
-							{	
-								if (oResponse.data.rows.length == 0)
-								{	
-									$('#inputActionCalendarAddSubject').val(oResponse.data.rows[0].subject);
-									$('#inputActionCalendarAddDescription').val(oResponse.data.rows[0].description);
-								}	
-							}	
-						}
+							$('#ns1blankspaceActionAddDate').val(Date.today().toString("d MMM yyyy"));
+							$('[name="radioActionType"][value="' + ns1blankspace.data.actionTypes.fileNote.id + '"]').attr('checked', true);
+						}	
 					}
 				},
 
-	dialog:		function (oElement, sActionXHTML, sFunctionActionBind)
+	save: 		function (oParam, oData, oResponse)
 				{
-
-					var aHTML = [];
-					var h = -1;
-
-					if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
+					if (oResponse == undefined)
 					{
-						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-					}
-					else
-					{	
-						if (ns1blankspace.xhtml.masterControl == '')
-						{
-							ns1blankspace.xhtml.masterControl = interfaceControlOptions();
-						}
-
-						$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
-						$(ns1blankspace.xhtml.container).html("&nbsp;");
-						$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
-						$(ns1blankspace.xhtml.container).html(sActionXHTML);
+						var sData = '';
+						var iType = ns1blankspace.data.actionTypes.fileNote;
+						var iHours;
+						var dDate = Date.today().toString("dd-MMM-yyyy");
+						var dEndDate;
+						var iActionBy = ns1blankspace.action.user;
+						var iObject = ns1blankspace.object;
+						var iObjectContext = ns1blankspace.objectContext;
+						var fPostSave = ns1blankspace.actions.show;
 						
-						if (sFunctionActionBind != undefined)
-							{eval(sFunctionActionBind)}
-					}	
-				}
+						if (oData != undefined)
+						{
+							if (oData.type != undefined) {iType = oData.type}
+							if (oData.hours != undefined) {iHours = oData.hours}
+							if (oData.date != undefined) {dDate = oData.date}
+							if (oData.endDate != undefined) {dEndDate = oData.endDate}
+							if (oData.actionBy != undefined) {iActionBy = oData.actionBy}
+						
+							sData += 'object=' + ns1blankspace.util.fs(iObject);
+							sData += '&objectcontext=' + ns1blankspace.util.fs(iObjectContext);
+							sData += '&subject=' + ns1blankspace.util.fs(oData.subject);
+							sData += '&description=' + ns1blankspace.util.fs(oData.description);
+							sData += '&priority=' + ns1blankspace.util.fs(oData.priority);
+							sData += '&status=' + ns1blankspace.util.fs(oData.status);
+							sData += '&type=' + ns1blankspace.util.fs(iType);
+							sData += '&date=' + ns1blankspace.util.fs(dDate);
+							sData += '&actionby=' + ns1blankspace.util.fs(iActionBy);
+							sData += '&contactbusiness=' + ns1blankspace.util.fs(oData.contactBusiness);
+							sData += '&contactperson=' + ns1blankspace.util.fs(oData.contactPerson);
+							
+							if (iHours != undefined)
+							{
+								sData += '&totaltimehours=' + ns1blankspace.util.fs(iHours);
+							}
+							
+							if (dEndDate != undefined)
+							{
+								sData += '&enddate=' + ns1blankspace.util.fs(dEndDate);
+							}
+							
+							sData += (oData.otherData == undefined ? '' : oData.otherData)
+								  
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
+								data: sData,
+								dataType: 'json',
+								success: function(data) {ns1blankspace.actions.show(oParam, oData, data);}
+							});
+						}
+						else
+						{
+							
+						}
+					}
+					else	
+					{
+						if (oResponse.status == 'OK')
+						{
+							ns1blankspace.status.message('Action saved');
+							fPostSave();
+						}
+						else
+						{
+							ns1blankspace.status.error(oResponse.error.errornotes);
+						}
+					}
+				}				
 }
 
 ns1blankspace.render.page = 

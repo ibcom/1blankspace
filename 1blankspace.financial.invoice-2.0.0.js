@@ -30,15 +30,7 @@ ns1blankspace.financial.invoice =
 						ns1blankspace.financial.initData(oParam)
 					}
 					else
-					{
-						if (bShowHome)
-						{
-							ns1blankspace.history.view({
-								newDestination: 'ns1blankspace.financial.invoice.init({showHome: true});',
-								move: false
-								});	
-						}	
-								
+					{		
 						ns1blankspace.app.reset();
 						ns1blankspace.app.set(oParam);
 					}		
@@ -396,7 +388,7 @@ ns1blankspace.financial.invoice =
 						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceMainActions'});
 					});
 
-					$('#ns1blankspaceControlControlAttachments').click(function(event)
+					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
 						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
@@ -460,7 +452,7 @@ ns1blankspace.financial.invoice =
 
 										if (ns1blankspace.financial.invoiceTemplateXHTML == undefined && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
 										{
-											$('#ns1blankspaceMainSummary').html(ns1blankspace.xhtml.loadingSmall);
+											$('#ns1blankspaceMainSummary').html(ns1blankspace.xhtml.loading);
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'DOCUMENT_SEARCH';
@@ -513,7 +505,7 @@ ns1blankspace.financial.invoice =
 										aHTML.push('<table class="ns1blankspaceMain">' +
 														'<tr class="ns1blankspaceRow">' +
 														'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-														'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+														'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:80px;"></td>' +
 														'</tr>' +
 														'</table>');				
 						
@@ -527,7 +519,7 @@ ns1blankspace.financial.invoice =
 										}
 										else
 										{
-											aHTML.push('<table class="ns1blankspaceColumn1">');
+											aHTML.push('<table class="ns1blankspace">');
 											
 											if (ns1blankspace.objectContextData.sent == 'N')
 											{	
@@ -580,23 +572,23 @@ ns1blankspace.financial.invoice =
 
 										var aHTML = [];
 
-										aHTML.push('<table id="tableInterfaceMainColumn2" class="interfaceMainColumn2Action">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 														
 										if (ns1blankspace.financial.invoiceTemplateXHTML != '')
 										{
 											if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
 											{
-												aHTML.push('<tr><td style="text-align: right;">' +
+												aHTML.push('<tr><td>' +
 																'<span id="ns1blankspaceSummaryCreatePDF" class="ns1blankspaceAction" style="width:75px;">' +
 																'PDF</span></td></tr>');
 											}
 											else
 											{				
-												aHTML.push('<tr><td style="text-align: right;">' +
+												aHTML.push('<tr><td>' +
 																'<span id="ns1blankspaceSummaryView" class="ns1blankspaceAction" style="width:75px;">' +
 																'View</span></td></tr>');
 
-												aHTML.push('<tr><td style="text-align: right;">' +
+												aHTML.push('<tr><td>' +
 																'<span id="ns1blankspaceSummaryEmail" class="ns1blankspaceAction" style="width:75px;">' +
 																'Email</span></td></tr>');
 											}

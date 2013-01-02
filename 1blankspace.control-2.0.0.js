@@ -65,10 +65,18 @@ ns1blankspace.option.defaultRows = 20;
 ns1blankspace.option.defaultView = "Select...";
 ns1blankspace.option.defaultSetupView = "Website";
 ns1blankspace.option.returnToLast = true;
+ns1blankspace.option.restLevel = 0;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];
 ns1blankspace.data.networkGroups;
+ns1blankspace.data.actionTypes =
+{
+	meeting: {id: 3, title: 'Meeting'},
+	fileNote: {id: 4, title: 'File Note'},
+	emailSent: {id: 5, title: 'Email Sent'},
+	emailReceived: {id: 9, title: 'Email Received'}
+};
 
 ns1blankspace.debug.enabled = true;
 
