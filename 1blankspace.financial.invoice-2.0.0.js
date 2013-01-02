@@ -48,7 +48,7 @@ ns1blankspace.financial.invoice =
 				{
 					if (oResponse == undefined)
 					{
-						$('#ns1blankspaceControlSubContext_amount').html(ns1blankspace.xhtml.loadingSmall);
+						$('#ns1blankspaceControlContext_amount').html(ns1blankspace.xhtml.loadingSmall);
 							
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
@@ -65,8 +65,8 @@ ns1blankspace.financial.invoice =
 						ns1blankspace.objectContextData.sentdate = oObjectContext.sentdate;
 						ns1blankspace.objectContextData.amount = oObjectContext.amount;
 								
-						$('#nns1blankspaceControlSubContext_sentdate').html(oObjectContext.sentdate);
-						$('#ns1blankspaceControlSubContext_amount').html(oObjectContext.amount);
+						$('#ns1blankspaceControlContext_sentdate').html(oObjectContext.sentdate);
+						$('#ns1blankspaceControlContext_amount').html('$' + oObjectContext.amount);
 					}
 				},
 
@@ -737,7 +737,7 @@ ns1blankspace.financial.invoice =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Send' +
+										'Sent' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +

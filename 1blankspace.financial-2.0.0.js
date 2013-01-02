@@ -1437,29 +1437,53 @@ ns1blankspace.financial.transactions =
 
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML.push('<tr class="ns1blankspaceRow">');
-												
-								aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + this.id + '" class="ns1blankspaceRow">' +
-														this.financialaccounttext + '</td>');
-														
-								aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + this.id + '" class="ns1blankspaceRow">' +
-														this.date + '</td>');
-																
-								aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + this.id + '" class="ns1blankspaceRow">' +
-														this.description + '</td>');
-													
-								aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow">' +
-														this.amount + '</td>');
-																										
-								aHTML.push('</td></tr>');
+								aHTML.push(ns1blankspace.financials.transactions.row(this));
 							});
 							
 							aHTML.push('</table>');
 
-							$('#' + sXHTMLElementID).html(aHTML.join(''));
+							ns1blankspace.render.page.show(
+							{
+								xhtmlElementID: sXHTMLElementID,
+								xhtmlContext: 'Transaction',
+								xhtml: aHTML.join(''),
+								showMore: (oResponse.morerows == "true"),
+								more: oResponse.moreid,
+								rows: 20,
+								functionShowRow: ns1blankspace.financials.transactions.row,
+								functionNewPage: 'ns1blankspace.financials.transactions.bind()',	
+							}); 	
+								
+							ns1blankspace.financials.transactions.bind();
 						}
 					}	
-				}
+				},
+
+	row: 		function(oRow)
+				{
+					aHTML.push('<tr class="ns1blankspaceRow">');
+												
+					aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + oRow.id + '" class="ns1blankspaceRow">' +
+											oRow.financialaccounttext + '</td>');
+											
+					aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + oRow.id + '" class="ns1blankspaceRow">' +
+											oRow.date + '</td>');
+													
+					aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + oRow.id + '" class="ns1blankspaceRow">' +
+											oRow.description + '</td>');
+										
+					aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right;" class="ns1blankspaceRow">' +
+											oRow.amount + '</td>');
+																							
+					aHTML.push('</td></tr>');
+
+					return aHTML.join('');
+				},
+
+	bind: 		function()
+				{
+
+				},			
 }
 
 ns1blankspace.financial.item =
@@ -1724,7 +1748,7 @@ ns1blankspace.financial.item =
 							label: "Search"
 						})
 						.click(function() {
-							ns1blankspace.financial[sNamespace].items.edit($.extend(true, oParam, {step: 2}))
+							ns1blankspace.financial.item.edit($.extend(true, oParam, {step: 2}))
 						})
 							
 						$('#ns1blankspaceItemAmount').focus();
@@ -1737,7 +1761,7 @@ ns1blankspace.financial.item =
 						oSearch.addField('title');
 						oSearch.addFilter('title', 'TEXT_IS_LIKE', $('#ns1blankspaceItemAccount').val());
 						oSearch.sort('title', 'asc');
-						oSearch.getResults(function(data){ns1blankspace.financial[sNamespace].item.edit($.extend(true, oParam, {step:3}), data)});
+						oSearch.getResults(function(data){ns1blankspace.financial.item.edit($.extend(true, oParam, {step:3}), data)});
 					}
 				}
 				else
@@ -1800,7 +1824,7 @@ ns1blankspace.financial.item =
 								dataType: 'json',
 								success: function(oResponse)
 								{
-									ns1blankspaceStatus('Added.');
+									ns1blankspace.status.message('Added.');
 
 									var sData = 'object=' + ns1blankspace.object;
 									sData += '&objectcontext=' + ns1blankspace.objectContext;
@@ -1814,7 +1838,7 @@ ns1blankspace.financial.item =
 										success: function(oResponse)
 										{
 											ns1blankspace.financial[sNamespace].refresh();
-											ns1blankspace.financial[sNamespace].show();
+											ns1blankspace.financial.item.show(oParam);
 										}
 									});
 								}

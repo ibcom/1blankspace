@@ -441,7 +441,7 @@ ns1blankspace.app =
 							cache: false,
 							beforeSend: function (oRequest)
 										{
-					            			//oRequest.setRequestHeader("X-HTTP-myds-rest-level", "1");
+					            			oRequest.setRequestHeader("X-HTTP-myds-rest-level", "1");
 					        			}
 						});
 
@@ -1105,7 +1105,6 @@ ns1blankspace.app =
 							if (typeof(oNS.layout) == 'function') {oNS.layout()}
 							ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 							if (typeof(oNS.details) == 'function') {oNS.details()} else {oNS.home.show()}
-							//$('#ns1blankspaceViewControlNew').button({disabled: true});
 						}
 						else
 						{
@@ -1117,7 +1116,7 @@ ns1blankspace.app =
 							{
 								if (iID)
 								{	
-									oNS.show({id: iID});
+									oNS.search.send('-' + iID);
 								}
 							}		
 						}
