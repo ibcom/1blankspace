@@ -996,6 +996,7 @@ ns1blankspace.app =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = undefined;
+					ns1blankspace.viewOptionsBind = undefined;
 				},
 
 	set: 		function (oParam)
@@ -1083,14 +1084,13 @@ ns1blankspace.app =
 						
 						$('#ns1blankspaceViewControlActionOptions').click(function(event)
 						{
-							ns1blankspace.app.options.show(
+							ns1blankspace.app.options.show($.extend(true, oParam,
 							{
 								element: this,
 								xhtml: undefined,
-								bind: undefined,
 								namespace: oNS,
 								namespaceText: sNS
-							});
+							}));
 						});
 						
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
@@ -1135,7 +1135,7 @@ ns1blankspace.app =
 								{
 									var oElement;
 									var sXHTML;
-									var fBind;
+									var fBind = ns1blankspace.viewOptionsBind;
 
 									if (oParam != undefined)
 									{

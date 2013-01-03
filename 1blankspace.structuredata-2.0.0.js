@@ -57,7 +57,6 @@ ns1blankspace.stuctureData =
 					{
 						var aHTML = [];
 						
-					
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table>' +

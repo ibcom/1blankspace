@@ -15,14 +15,14 @@ ns1blankspace.setup.website =
 					ns1blankspace.objectParentName = 'setup';
 					ns1blankspace.objectName = 'website';
 					ns1blankspace.viewName = 'Websites & Webapps';
-			
+					ns1blankspace.viewOptionsBind = ns1blankspace.setup.website.bind;
+					
 					ns1blankspace.app.set(oParam);
-					ns1blankspace.setup.website.bind();
 				},
 
 	bind:		function ()
 				{
-					$('#ns1blankspaceActionOptionsRemove').click(function(event)
+					$('#ns1blankspaceControlActionOptionsRemove').click(function(event)
 					{
 						ns1blankspace.setup.website.remove();
 					});
