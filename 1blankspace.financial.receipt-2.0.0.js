@@ -9,12 +9,10 @@ ns1blankspace.financial.receipt =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true;
 					var bInitialised = false;
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
 						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}	
 					}
 

@@ -9,6 +9,13 @@ ns1blankspace.financial.expense =
 {
 	init: 		function (oParam)
 				{
+					var bInitialised = false;
+
+					if (oParam != undefined)
+					{
+						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}	
+					}
+				
 					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 2;
