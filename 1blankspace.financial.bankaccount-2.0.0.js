@@ -185,6 +185,7 @@ ns1blankspace.financial.bankAccount =
 					else
 					{
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 							
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title +
 							'<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceControlSubContext_date">' + ns1blankspace.objectContextData.lastreconcileddate + '</span>' +

@@ -417,6 +417,7 @@ ns1blankspace.financial.invoice =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 								
 						$('#ns1blankspaceControlContext').html(
 							'<span id="ns1blankspaceControlContext_reference">' + ns1blankspace.objectContextData.reference + '</span>' +
@@ -787,73 +788,17 @@ ns1blankspace.financial.invoice =
 
 	remove: 	function (aParam, oResponse)
 				{		
-					var sVerifyCode;
-					var sUserVerifyCode;
-					
-					if (aParam != undefined)
+					if (oResponse == undefined)
 					{
-						if (aParam.verifyCode != undefined) {sVerifyCode = aParam.verifyCode}
-						if (aParam.userVerifyCode != undefined) {sUserVerifyCode = aParam.userVerifyCode}
-					}
-					
-					if (sVerifyCode == undefined && ns1blankspace.objectContext != -1)
-					{		
-						var sData = 'remove=1&id=' + ns1blankspace.objectContext;
-						
-						$.ajax(
-						{
-							type: 'POST',
-							url: ns1blankspace.util.endpointURI('SETUP_SITE_MANAGE'),
-							data: sData,
-							dataType: 'json',
-							success: function(data){ns1blankspace.setup.website.remove({verifyCode: data.verifycode})}
-						});
-							
-					}
-					else if (sVerifyCode != undefined && sUserVerifyCode == undefined)
-					{
-						var aHTML = [];
+						ns1blankspace.status.message(ns1blankspace.xhtml.loadingSmall);
 
-						aHTML.push('<table class="ns1blankspace">');
-								
-						aHTML.push('<tr>' +
-										'<td class="ns1blankspaceCaption">' +
-										'Enter verification code: ' + sVerifyCode +
-										'</td></tr>' +
-										'<tr>' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceSetupWebsiteRemoveVerify" class="ns1blankspaceText">' +
-										'</td></tr>' +
-										'<tr>' +
-										'<td">' +
-										'<span id="ns1blankspaceSetupWebsiteRemoveVerifyRemove" class="ns1blankspaceAction">Remove</span>' +
-										'</td></tr>');
-										
-						aHTML.push('</table>');					
-						
-						$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-						
-						$('#ns1blankspaceSetupWebsiteRemoveVerifyRemove').button(
-						{
-							text: "Remove"
-						})
-						.click(function() 
-						{
-							ns1blankspace.setup.website.remove({verifyCode: sVerifyCode, userVerifyCode: $('#ns1blankspaceSetupWebsiteRemoveVerify').val()})
-						});
-					
-					}
-					else if (sVerifyCode != undefined && sUserVerifyCode != undefined && oResponse == undefined)
-					{
-						var sData = 'remove=1&id=' + giObjectContext + '&verifycode=' + sUserVerifyCode;
-						
 						$.ajax(
 						{
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('SETUP_SITE_MANAGE'),
-							data: sData,
+							data: 'remove=1&id=' + ns1blankspace.objectContext,
 							dataType: 'json',
-							success: function(data){ns1blankspace.setup.website.remove(aParam, data)}
+							success: function(data){ns1blankspace.financial.invoice.remove(aParam, data)}
 						});
 
 					}
@@ -861,18 +806,17 @@ ns1blankspace.financial.invoice =
 					{
 						if (oResponse.notes == 'REMOVED')
 						{
-							alert("Website removed");
+							ns1blankspace.status.message("Removed");
 						}
 						else
 						{
-							alert('Cannot remove website!')
+							ns1blankspace.status.error('Cannot remove website!')
 						}
 					}	
 					else
 					{
-						alert('Cannot remove website!')
+						ns1blankspace.status.error('Cannot remove website!')
 					}	
-					
 				},
 
 	save:		{		

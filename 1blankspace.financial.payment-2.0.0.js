@@ -406,6 +406,7 @@ ns1blankspace.financial.payment =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 								
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
 							'<br /><span id="ns1blankspaceControlContext_paiddate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.paiddate + '</span>' +

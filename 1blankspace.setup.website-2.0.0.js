@@ -2049,7 +2049,7 @@ ns1blankspace.setup.website =
 										'</td></tr>' +
 										'<tr class="ns1blankspaceText">' +
 										'<td class="ns1blankspaceText">' +
-										'<span id="ns1blankspaceSetupWebsiteRemoveVerifyRemove" class="ns1blankspaceAction">Remove</span>' +
+										'<span id="ns1blankspaceSetupWebsiteRemoveVerifyRemove" class="ns1blankspaceAction">Delete</span>' +
 										'</td></tr>');
 										
 						aHTML.push('</table>');					
@@ -2058,7 +2058,7 @@ ns1blankspace.setup.website =
 						
 						$('#ns1blankspaceSetupWebsiteRemoveVerifyRemove').button(
 						{
-							text: "Remove"
+							text: "Delete"
 						})
 						.click(function() 
 						{
@@ -2072,7 +2072,7 @@ ns1blankspace.setup.website =
 						{
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('SETUP_SITE_MANAGE'),
-							data: 'id=' + ns1blankspace.objectContext + '&verifycode=' + sUserVerifyCode,
+							data: 'remove=1&id=' + ns1blankspace.objectContext + '&verifycode=' + sUserVerifyCode,
 							dataType: 'json',
 							success: function(data){ns1blankspace.setup.website.remove(oParam, data)}
 						});
@@ -2082,6 +2082,9 @@ ns1blankspace.setup.website =
 					{
 						if (oResponse.notes == 'REMOVED')
 						{
+							ns1blankspace.inputDetected = false;
+							ns1blankspace.app.options.hide();
+							ns1blankspace.setup.website.init();
 							ns1blankspace.status.message("Website removed");
 						}
 						else
@@ -2093,7 +2096,5 @@ ns1blankspace.setup.website =
 					{
 						ns1blankspace.status.error('Cannot remove website!')
 					}	
-					
 				}
-
 }

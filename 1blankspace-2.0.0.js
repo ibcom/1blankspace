@@ -1081,7 +1081,8 @@ ns1blankspace.app =
 								element: this,
 								xhtml: undefined,
 								bind: undefined,
-								namespace: oNS
+								namespace: oNS,
+								namespaceText: sNS
 							});
 						});
 						
@@ -1170,6 +1171,21 @@ ns1blankspace.app =
 
 					bind: 		function (oParam)
 								{
+									$('#ns1blankspaceControlActionOptionsRemove')
+									.click(function() 
+									{
+										ns1blankspace.app.options.remove(oParam)
+									});
+								},
+
+					hide: 		function (oParam)
+								{
+									$(ns1blankspace.xhtml.container).hide();
+									$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+								},
+
+					remove: 	function (oParam, oResponse)
+								{		
 									var oNS;
 
 									if (oParam != undefined)
@@ -1177,12 +1193,59 @@ ns1blankspace.app =
 										if (oParam.namespace != undefined) {oNS = oParam.namespace}
 									}	
 
-									$('#ns1blankspaceControlActionOptionsRemove')
-									.click(function() 
+									var sMethod = ns1blankspace.objectMethod;
+
+									if (sMethod == undefined)
 									{
-										oNS.remove()
-									});
-								}			
+										var sParentNamespace = ns1blankspace.objectParentName;
+										var sNamespace = ns1blankspace.objectName;
+
+										if (sParentNamespace)
+										{
+											var sMethod = (sParentNamespace).toUpperCase() + '_' + (sNamespace).toUpperCase();
+										}
+										else
+										{
+											var sMethod = (sNamespace).toUpperCase();
+										}
+									}	
+
+									if (oResponse == undefined && sMethod)
+									{
+										sMethod += '_MANAGE';
+
+										$('#ns1blankspaceControlActionOptionsRemove').html(ns1blankspace.xhtml.loadingSmall);
+
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI(sMethod),
+											data: 'remove=1&id=' + ns1blankspace.objectContext,
+											dataType: 'json',
+											success: function(data){ns1blankspace.app.options.remove(oParam, data)}
+										});
+
+									}
+									else if (oResponse != undefined)
+									{
+										if (oResponse.notes == 'REMOVED')
+										{
+											ns1blankspace.inputDetected = false;
+											ns1blankspace.app.options.hide();
+											oNS.init();
+											ns1blankspace.status.message("Deleted");
+										}
+										else
+										{
+											$('#ns1blankspaceControlActionOptionsRemove').html(oResponse.error.errornotes)
+										}
+									}	
+									else
+									{
+										ns1blankspace.app.options.hide();
+										ns1blankspace.status.error('Cannot delete!')
+									}	
+								}							
 				}										
 }
 
@@ -3239,7 +3302,7 @@ ns1blankspace.render =
 							.css('width', '15px')
 							.css('height', '16px')
 						
-					$('.ins1blankspaceSearchFooterPage').click(function(event)
+					$('.ns1blankspaceSearchFooterPage').click(function(event)
 					{
 						ns1blankspace.render.showPage(this.id);
 					});

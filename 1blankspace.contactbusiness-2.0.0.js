@@ -12,6 +12,7 @@ ns1blankspace.contactBusiness =
 					ns1blankspace.object = 12;
 					ns1blankspace.objectName = 'contactBusiness';
 					ns1blankspace.objectParentName = undefined;
+					ns1blankspace.objectMethod = 'CONTACT_BUSINESS'
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Business';
