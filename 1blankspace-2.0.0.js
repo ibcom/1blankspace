@@ -1076,19 +1076,13 @@ ns1blankspace.app =
 						
 						$('#ns1blankspaceViewControlActionOptions').click(function(event)
 						{
-							var aHTML = [];
-						
-							aHTML.push('<table id="ns1blankspaceActionOptions" class="ns1blankspaceOptions">');
-											
-							aHTML.push('<tr class="ns1blankspaceOptions">' +
-											'<td id="ns1blankspaceActionOptionsRemove" class="ns1blankspaceActionOptions">' +
-											'Delete' +
-											'</td>' +
-											'</tr>');
-
-							aHTML.push('</table>');
-
-							oNS.save.action.show();
+							ns1blankspace.app.options.show(
+							{
+								element: this,
+								xhtml: undefined,
+								bind: undefined,
+								namespace: oNS
+							});
 						});
 						
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
@@ -1126,7 +1120,70 @@ ns1blankspace.app =
 							}		
 						}
 					}	
-				}				
+				},
+
+	options: 	{
+					show: 		function (oParam)
+								{
+									var oElement;
+									var sXHTML;
+									var fBind;
+
+									if (oParam != undefined)
+									{
+										if (oParam.element != undefined) {oElement = oParam.element}
+										if (oParam.xhtml != undefined) {sActionXHTML = oParam.xhtml}
+										if (oParam.bind != undefined) {fBind = oParam.bind}	
+									}		
+
+									if (sXHTML == undefined)
+									{
+										sXHTML = '<table id="ns1blankspaceOptions" class="ns1blankspaceViewControlContainer">' +	
+													'<tr class="ns1blankspaceOptions">' +
+													'<td id="ns1blankspaceControlActionOptionsRemove" class="ns1blankspaceViewControl">' +
+													'Delete' +
+													'</td></tr></table>';
+									}	
+
+									if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
+									{
+										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+									}
+									else
+									{	
+										$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id)
+																		.html("&nbsp;")
+																		.show()
+																		.offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left })
+																		.html(sXHTML);
+										
+										if (fBind != undefined)
+											{fBind()}
+										else
+										{
+											ns1blankspace.app.options.bind(oParam);
+										}
+									
+									}	
+								},
+
+					bind: 		function (oParam)
+								{
+									var oNS;
+
+									if (oParam != undefined)
+									{
+										if (oParam.namespace != undefined) {oNS = oParam.namespace}
+									}	
+
+									$('#ns1blankspaceControlActionOptionsRemove')
+									.click(function() 
+									{
+										oNS.remove()
+									});
+								}			
+				}										
 }
 
 ns1blankspace.logon = 

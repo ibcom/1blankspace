@@ -2038,7 +2038,7 @@ ns1blankspace.setup.website =
 					{
 						var aHTML = [];
 						
-						aHTML.push('<table class="ins1blankspace">');
+						aHTML.push('<table class="ns1blankspaceViewControlContainer">');
 								
 						aHTML.push('<tr><td class="ns1blankspace">' +
 										'Enter verification code: ' + sVerifyCode +
@@ -2049,7 +2049,7 @@ ns1blankspace.setup.website =
 										'</td></tr>' +
 										'<tr class="ns1blankspaceText">' +
 										'<td class="ns1blankspaceText">' +
-										'<span id="ns1blankspaceSetupWebsiteRemoveVerifyRemove">Remove</span>' +
+										'<span id="ns1blankspaceSetupWebsiteRemoveVerifyRemove" class="ns1blankspaceAction">Remove</span>' +
 										'</td></tr>');
 										
 						aHTML.push('</table>');					

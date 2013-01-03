@@ -785,6 +785,96 @@ ns1blankspace.financial.invoice =
 					ns1blankspace.financial.invoice.details();
 				},
 
+	remove: 	function (aParam, oResponse)
+				{		
+					var sVerifyCode;
+					var sUserVerifyCode;
+					
+					if (aParam != undefined)
+					{
+						if (aParam.verifyCode != undefined) {sVerifyCode = aParam.verifyCode}
+						if (aParam.userVerifyCode != undefined) {sUserVerifyCode = aParam.userVerifyCode}
+					}
+					
+					if (sVerifyCode == undefined && ns1blankspace.objectContext != -1)
+					{		
+						var sData = 'remove=1&id=' + ns1blankspace.objectContext;
+						
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('SETUP_SITE_MANAGE'),
+							data: sData,
+							dataType: 'json',
+							success: function(data){ns1blankspace.setup.website.remove({verifyCode: data.verifycode})}
+						});
+							
+					}
+					else if (sVerifyCode != undefined && sUserVerifyCode == undefined)
+					{
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspace">');
+								
+						aHTML.push('<tr>' +
+										'<td class="ns1blankspaceCaption">' +
+										'Enter verification code: ' + sVerifyCode +
+										'</td></tr>' +
+										'<tr>' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceSetupWebsiteRemoveVerify" class="ns1blankspaceText">' +
+										'</td></tr>' +
+										'<tr>' +
+										'<td">' +
+										'<span id="ns1blankspaceSetupWebsiteRemoveVerifyRemove" class="ns1blankspaceAction">Remove</span>' +
+										'</td></tr>');
+										
+						aHTML.push('</table>');					
+						
+						$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+						
+						$('#ns1blankspaceSetupWebsiteRemoveVerifyRemove').button(
+						{
+							text: "Remove"
+						})
+						.click(function() 
+						{
+							ns1blankspace.setup.website.remove({verifyCode: sVerifyCode, userVerifyCode: $('#ns1blankspaceSetupWebsiteRemoveVerify').val()})
+						});
+					
+					}
+					else if (sVerifyCode != undefined && sUserVerifyCode != undefined && oResponse == undefined)
+					{
+						var sData = 'remove=1&id=' + giObjectContext + '&verifycode=' + sUserVerifyCode;
+						
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('SETUP_SITE_MANAGE'),
+							data: sData,
+							dataType: 'json',
+							success: function(data){ns1blankspace.setup.website.remove(aParam, data)}
+						});
+
+					}
+					else if (oResponse != undefined)
+					{
+						if (oResponse.notes == 'REMOVED')
+						{
+							alert("Website removed");
+						}
+						else
+						{
+							alert('Cannot remove website!')
+						}
+					}	
+					else
+					{
+						alert('Cannot remove website!')
+					}	
+					
+				},
+
 	save:		{		
 					send:		function (oParam, oResponse)
 								{
