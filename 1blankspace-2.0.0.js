@@ -2774,7 +2774,32 @@ ns1blankspace.util =
 									{
 										return $.urlParameters()[sName];
 									}
-				}			
+				},
+
+	unique: 	function (oParam)
+				{
+					var oData;
+					var sKey;
+					var oUniqueData = [];
+					var aUniqueKey = [];
+
+					if (oParam != undefined)
+					{
+						if (oParam.data != undefined) {oData = oParam.data}
+						if (oParam.key != undefined) {sKey = oParam.key}	
+
+						$.each(oData, function()
+						{
+							if ($.inArray(this[sKey], aUniqueKey) == -1)
+							{
+								aUniqueKey.push(this[sKey]);
+								oUniqueData.push(this);
+							}	
+						});
+
+						return oUniqueData;
+					}		
+				}					
 }
 
 ns1blankspace.search.address =

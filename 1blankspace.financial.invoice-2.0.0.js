@@ -412,6 +412,8 @@ ns1blankspace.financial.invoice =
 					}
 					else
 					{
+						ns1blankspace.financial.invoice.receipt.refresh();
+
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
@@ -419,7 +421,8 @@ ns1blankspace.financial.invoice =
 						$('#ns1blankspaceControlContext').html(
 							'<span id="ns1blankspaceControlContext_reference">' + ns1blankspace.objectContextData.reference + '</span>' +
 							'<br /><span id="ns1blankspaceControlContext_sentdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.sentdate + '</span>' +
-							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>');
+							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>' +
+							'<br /><span id="ns1blankspaceControlContext_outstanding" class="ns1blankspaceSub"></span>');
 							
 						ns1blankspace.history.view({
 							newDestination: 'ns1blankspace.financial.invoice.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
@@ -835,6 +838,29 @@ ns1blankspace.financial.invoice =
 				},
 
 	receipt: 	{
+					refresh:	function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										$('#ns1blankspaceControlContext_outstanding').html(ns1blankspace.xhtml.loadingSmall);
+											
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
+										oSearch.addField('amount');
+										oSearch.addSummaryField('sum(amount) sumamount');
+										oSearch.addFilter('invoice', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.rows = 1;
+										oSearch.getResults(function(data){ns1blankspace.financial.invoice.receipt.refresh(oParam, data)});
+									}
+									else
+									{
+										ns1blankspace.objectContextData.outstanding = oResponse.summary.sumamount;
+										$('#ns1blankspaceControlContext_outstanding').html('<span style="background-color:#CCCCCC; color: white;">' +
+												'$' + ((ns1blankspace.objectContextData.amount).parseCurrency() -
+												(oResponse.summary.sumamount).parseCurrency()).formatMoney(2, ".", ",") + '</span>');
+									}
+								},
+
 					show: 		function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.objectContext;
@@ -874,7 +900,7 @@ ns1blankspace.financial.invoice =
 										
 										aHTML.push('</table>');					
 										
-										$('#ns1blankspaceReceiptColumn2').html(aHTML.join(''));
+										//$('#ns1blankspaceReceiptColumn2').html(aHTML.join(''));
 									
 										$('#ns1blankspaceReceiptAdd').button(
 										{
@@ -884,9 +910,11 @@ ns1blankspace.financial.invoice =
 											 ns1blankspace.financial.invoice.receipt.edit(oParam);
 										})		
 									
+										ns1blankspace.financial.invoice.receipt.edit(oParam);
+
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
-										oSearch.addField('appliesdate,amount');
+										oSearch.addField('appliesdate,amount,receiptinvoice.receipt.reference,receiptinvoice.receipt.amount');
 										oSearch.addFilter('invoice', 'EQUAL_TO', iObjectContext);
 										oSearch.sort('appliesdate', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.financial.invoice.receipt.show(oParam, data)});
@@ -906,6 +934,8 @@ ns1blankspace.financial.invoice =
 										}
 										else
 										{
+											var oReceipts = ns1blankspace.util.unique({key: 'receiptinvoice.receipt.reference', data: oResponse.data.rows});
+									
 											aHTML.push('<table class="ns1blankspace">');
 											aHTML.push('<tr>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
@@ -913,16 +943,16 @@ ns1blankspace.financial.invoice =
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 
-											$.each(oResponse.data.rows, function()
+											$.each(oReceipts, function()
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																			
 												aHTML.push('<td id="ns1blankspaceReceipt_date-' + this.id + '" class="ns1blankspaceRow">' +
-																this.appliesdate + '</td>');
+																this['appliesdate'] + '</td>');
 
 												
 												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-																this.amount + '</td>');
+																this['receiptinvoice.receipt.amount'] + '</td>');
 						
 												aHTML.push('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
 													
@@ -959,10 +989,14 @@ ns1blankspace.financial.invoice =
 					edit:		function (oParam, oResponse)
 								{
 									var iStep = 1;
+									var cReceiptAmount = 0;
+									var cReceiptedAmount = 0;
 									
 									if (oParam != undefined)
 									{
-										if (oParam.step != undefined) {iStep = oParam.step}	
+										if (oParam.step != undefined) {iStep = oParam.step}
+										if (oParam.receiptAmount != undefined) {cReceiptAmount = oParam.receiptAmount}
+										if (oParam.receiptedAmount != undefined) {cReceiptedAmount = oParam.receiptedAmount}	
 									}
 									
 									if (ns1blankspace.financial.data.bankaccounts.length == 0) {alert("No bank accounts set up.");return;}
@@ -982,7 +1016,7 @@ ns1blankspace.financial.invoice =
 										
 									if (iStep == 2)
 									{
-										cReceiptedAmount = oResponse.summary.sumamount;
+										var cReceiptedAmount = oResponse.summary.sumamount;
 										if (cReceiptedAmount == '') {cReceiptedAmount = 0}
 										
 										var aHTML = [];
@@ -1017,40 +1051,64 @@ ns1blankspace.financial.invoice =
 										
 										aHTML.push('</td></tr>');				
 														
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Amount' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceReceiptAmount" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Date' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceDate">' +
+														'<input id="ns1blankspaceReceiptDate" class="ns1blankspaceDate">' +
+														'</td></tr>');		
+																				
 										aHTML.push('<tr class="ns1blankspace">' +
-														'<td class="ns1blankspace">' +
-														'<span id="ns1blankspaceReceiptEditFull" class="ns1blankspaceAction">Receipt</span>' +
+														'<td class="ns1blankspace" id="ns1blankspaceReceiptAddContainer">' +
+														'<span id="ns1blankspaceReceiptAdd" class="ns1blankspaceAction">Receipt</span>' +
 														'</td></tr>');
 										
 										aHTML.push('</table>');
-										
-										aHTML.push('<table style="margin-top:15px;">');
-										
-										aHTML.push('<tr><td id="ns1blankspaceReceiptEditFullResults"></td></tr>');
-																		
-										aHTML.push('</table>');		
-											
+													
 										$('#ns1blankspaceReceiptColumn2').html(aHTML.join(''));
 
 										$('[name="radioBankAccount"][value="' + iDefaultBankAccount + '"]').attr('checked', true);
 									
-										$('#ns1blankspaceReceiptEditFull').button(
+										$('#ns1blankspaceReceiptAmount').val((ns1blankspace.objectContextData.amount).parseCurrency() - (cReceiptedAmount).parseCurrency());
+
+										$('#ns1blankspaceReceiptAmount').focus();
+
+										$('#ns1blankspaceReceiptDate').val(Date.today().toString("d MMM yyyy"));
+										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+
+										$('#ns1blankspaceReceiptAdd').button(
 										{
-											label: "Receipt Full Amount"
+											label: "Add Receipt"
 										})
 										.click(function() {
-											ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam, {step: 3, receiptedamount: cReceiptedAmount}))
+											ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam,
+													{	step: 4,
+														receiptedAmount: cReceiptedAmount,
+														receiptAmount: $('#ns1blankspaceReceiptAmount').val(),
+														date: $('#ns1blankspaceReceiptDate').val()
+													}))
 										});
 									}
 									
 									if (iStep == 3)
 									{
-										$('#ns1blankspaceReceiptEditFullResults').html(ns1blankspace.xhtml.loadingSmall);
+										//NOT USED
+
+										$('#ns1blankspaceReceiptAddContainer').html(ns1blankspace.xhtml.loadingSmall);
 												
-										var cAmount = ns1blankspace.objectContextData.amount - cReceiptedAmount;
-										
 										var sData = 'bankaccount=' + ns1blankspace.util.fs($('input[name="radioBankAccount"]:checked').val());
-										sData += '&amount=' + ns1blankspace.util.fs(cAmount);
+										sData += '&amount=' + ns1blankspace.util.fs(cReceiptAmount);
 										sData += '&receiveddate=' + ns1blankspace.util.fs(Date.today().toString("dd-MMM-yyyy"));
 										sData += '&paymentmethod=3'; //todo
 										sData += '&contactbusinessreceivedfrom=' + ns1blankspace.objectContextData.contactbusinesssentto;	
@@ -1064,31 +1122,22 @@ ns1blankspace.financial.invoice =
 											dataType: 'json',
 											success: function(data)
 											{
-												ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam, {step: 4, amount: cAmount}), data)
+												ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam, {step: 4}), data)
 											}
 										});	
 									}
 									
 									if (iStep == 4)
 									{
-										var cAmount = 0;
-										
-										if (oParam != undefined)
-										{
-											if (oParam.amount != undefined) {cAmount = oParam.amount}	
-										}
-										
-										var iReceiptID = oResponse.id;
-										
-										var sData = 'invoice=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-										sData += '&amount=' + ns1blankspace.util.fs(cAmount);
-										sData += '&appliesdate=' + ns1blankspace.util.fs(Date.today().toString("dd-MMM-yyyy"));
-										sData += '&receipt=' + ns1blankspace.util.fs(iReceiptID);
+										$('#ns1blankspaceReceiptAddContainer').html(ns1blankspace.xhtml.loadingSmall);
+												
+										var sData = 'bankaccount=' + ns1blankspace.util.fs($('input[name="radioBankAccount"]:checked').val());
+										sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 												
 										$.ajax(
 										{
 											type: 'POST',
-											url: ns1blankspace.util.endpointURI('FINANCIAL_RECEIPT_INVOICE_MANAGE'),
+											url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
 											data: sData,
 											dataType: 'json',
 											success: function(data)
@@ -1096,6 +1145,42 @@ ns1blankspace.financial.invoice =
 												ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam, {step: 5}), data)
 											}
 										});	
+									}
+
+									if (iStep == 5)
+									{
+										var cAmount = cReceiptAmount;
+										var dDate = Date.today().toString("dd-MMM-yyyy");
+										
+										if (oParam != undefined)
+										{
+											if (oParam.amount != undefined) {cAmount = oParam.amount}
+											if (oParam.date != undefined) {dDate = oParam.date}	
+										}
+											
+										var sData = 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+										sData += '&amount=' + ns1blankspace.util.fs(cAmount);
+										sData += '&receiptdate=' + ns1blankspace.util.fs(dDate);
+										sData += '&paymentmethod=3';
+												
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('FINANCIAL_AUTO_RECEIPT'),
+											data: sData,
+											dataType: 'json',
+											success: function(data)
+											{
+												ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam, {step: 6}), data)
+											}
+										});	
+									}
+
+									if (iStep == 6)
+									{
+										ns1blankspace.status.message('Receipt added');
+										ns1blankspace.financial.invoice.receipt.show();
+										ns1blankspace.financial.invoice.receipt.refresh();
 									}
 								}
 				},				

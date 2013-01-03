@@ -154,8 +154,8 @@ ns1blankspace.action =
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'ACTION_SEARCH';
-										oSearch.addField('actiontype,contactperson,actionby,actionbytext,actionreference,' +
-															'actiontype,actiontypetext,actionreference,billingstatus,billingstatustext,' +
+										oSearch.addField('actiontype,contactperson,actionby,actionbytext,' +
+															'actiontype,actiontypetext,billingstatus,billingstatustext,' +
 															'completed,completedtime,contactbusiness,contactbusinesstext,contactperson,' +
 															'contactpersontext,date,description,duedate,duedatetime,object,objectcontext,' +
 															'objecttext,priority,private,prioritytext,status,statustext,subject,text,totaltimehrs,totaltimemin');
@@ -358,7 +358,7 @@ ns1blankspace.action =
 							$('#ns1blankspaceViewControlAction').button({disabled: false});
 							$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 								
-							$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.actionreference +
+							$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.subject +
 								'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.duedate + '</span>');
 								
 							ns1blankspace.history.view({
@@ -582,7 +582,7 @@ summary: 		function ()
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDetailsSubject').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsSubject').val(ns1blankspace.objectContextData.subject);
 							
 							var sDate = new Date(ns1blankspace.objectContextData.duedatetime);
 							sDate = $.fullCalendar.formatDate(sDate, 'dd MMM yyyy h:mm TT')
@@ -698,20 +698,20 @@ summary: 		function ()
 											
 											if ($('#ns1blankspaceMainDetails').html() != '')
 											{
-												sData += '&subject=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSubject').val());
-												sData += '&priority=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPriority').attr('onDemandID'));				
-												sData += '&type=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsType').attr('onDemandID'));
-												sData += '&date=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDate').val());
-												sData += '&contactbusiness=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsBusiness').attr("onDemandID"));
-												sData += '&contactperson=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPerson').attr("onDemandID"));
-												sData += '&actionby=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsActionBy').attr("onDemandID"));
+												sData += '&subject=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSubject').val());
+												sData += '&priority=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPriority').attr('onDemandID'));				
+												sData += '&type=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsType').attr('onDemandID'));
+												sData += '&date=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDate').val());
+												sData += '&contactbusiness=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsBusiness').attr("onDemandID"));
+												sData += '&contactperson=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPerson').attr("onDemandID"));
+												sData += '&actionby=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsActionBy').attr("onDemandID"));
 												sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
 												
 											}
 											
-											if ($('#ns1blankspaceeMainDescription').html() != '')
+											if ($('#ns1blankspaceMainDescription').html() != '')
 											{
-												sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceMainDescription').val());
+												sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDescription').val());
 											}
 										}
 										  
