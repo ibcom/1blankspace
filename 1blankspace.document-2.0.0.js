@@ -11,12 +11,7 @@ ns1blankspace.document =
 
 	init: 		function (oParam)
 				{
-					var bShowHome = true;
-
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 14;
 					ns1blankspace.objectParentName = undefined;
@@ -27,15 +22,6 @@ ns1blankspace.document =
 					
 					ns1blankspace.document.data.websiteContext = ((oParam?oParam:{}).websiteContext ? oParam.websiteContext : undefined);
 
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.document.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 				},
 

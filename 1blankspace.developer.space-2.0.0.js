@@ -11,12 +11,7 @@ ns1blankspace.developer.space =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = -1;
 					ns1blankspace.objectParentName = 'developer';
@@ -24,16 +19,7 @@ ns1blankspace.developer.space =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Spaces';
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.developer.space.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
+								
 					ns1blankspace.app.set(oParam);
 				},
 

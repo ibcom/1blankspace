@@ -989,6 +989,13 @@ ns1blankspace.app =
 					if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
 					ns1blankspace.inputDetected = false;
 					ns1blankspace.xhtml.action = '';
+					ns1blankspace.object = undefined;
+					ns1blankspace.objectParentName = undefined;
+					ns1blankspace.objectName = undefined;
+					ns1blankspace.objectMethod = undefined;
+					ns1blankspace.objectContextData = undefined;
+					ns1blankspace.objectContext = -1;
+					ns1blankspace.viewName = undefined;
 				},
 
 	set: 		function (oParam)

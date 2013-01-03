@@ -9,38 +9,13 @@ ns1blankspace.stuctureData =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 154;
-					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectName = 'stuctureData';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Structure Data';
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.setup.stuctureData.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
+				
 					ns1blankspace.app.set(oParam);
-				},
-
-	bind:		function ()
-				{
-					$('#tdns1blankspaceActionOptionsRemove').click(function(event)
-					{
-						ns1blankspaceStructureDataRemove();
-					});
 				},
 
 	home: 		function (oResponse)

@@ -9,29 +9,13 @@ ns1blankspace.setup.structure =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 26;
 					ns1blankspace.objectParentName = 'setup';
 					ns1blankspace.objectName = 'structure';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Structures';
 					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.setup.structure.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 
 					if (ns1blankspace.option.richTextEditing)

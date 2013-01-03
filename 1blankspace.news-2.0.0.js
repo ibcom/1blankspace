@@ -9,11 +9,10 @@ ns1blankspace.news =
 {
 	init: 		function (oParam)
 				{
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = 19;
-					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectName = 'news';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'News';
 					
 					var bShowHome = true
@@ -24,7 +23,7 @@ ns1blankspace.news =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 							
-					ns1blankspace.app.reset();
+					
 					ns1blankspace.app.set(oParam);
 
 					if (ns1blankspace.option.richTextEditing)

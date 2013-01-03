@@ -9,14 +9,7 @@ ns1blankspace.financial.expense =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					var bInitialised = false;
-
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 2;
 					ns1blankspace.objectParentName = 'financial';
@@ -31,15 +24,6 @@ ns1blankspace.financial.expense =
 					}
 					else
 					{
-						if (bShowHome)
-						{
-							ns1blankspace.history.view({
-								newDestination: 'ns1blankspace.financial.expense.init({showHome: true});',
-								move: false
-								});		
-						}	
-						
-						ns1blankspace.app.reset();
 						ns1blankspace.app.set(oParam);
 					}	
 				},
@@ -416,7 +400,8 @@ ns1blankspace.financial.expense =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
-								
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
 							'<br /><span id="ns1blankspaceControlContext_accrueddate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.accrueddate + '</span>' +
 							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>');
@@ -443,8 +428,8 @@ ns1blankspace.financial.expense =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 										'<tr class="ns1blankspaceRow">' +
-										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:250px;"></td>' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:250px;"></td>' +
 										'</tr>' +
 										'</table>');				
 						
@@ -452,7 +437,7 @@ ns1blankspace.financial.expense =
 						
 						var aHTML = [];
 
-						aHTML.push('<table class="ns1blankspaceColumn1">');
+						aHTML.push('<table class="ns1blankspace">');
 												
 						if (ns1blankspace.objectContextData.contactbusinesspaidtotext != '')
 						{

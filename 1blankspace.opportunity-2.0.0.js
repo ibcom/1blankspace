@@ -9,10 +9,10 @@ ns1blankspace.opportunity =
 {
 	init: 		function (oParam)
 				{
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = 32;	
 					ns1blankspace.objectName = 'opportunity';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Opportunity';
 					ns1blankspace.data.contactBusiness = -1;
 					ns1blankspace.data.contactPerson = -1;
@@ -29,8 +29,7 @@ ns1blankspace.opportunity =
 						if (oParam.showNew != undefined) {bNew = oParam.showNew}
 						if (bNew) {ns1blankspace.opportunity.new()};
 					}	
-							
-					ns1blankspace.app.reset();
+
 					ns1blankspace.app.set(oParam);
 				},
 
@@ -409,7 +408,7 @@ ns1blankspace.opportunity =
 					
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspaceColumn1">');
+						aHTML.push('<table class="ns1blankspace">');
 						
 						if (ns1blankspace.objectContextData.businessname != '')
 						{
@@ -470,26 +469,34 @@ ns1blankspace.opportunity =
 						if (ns1blankspace.objectContextData.requestbycontactperson == '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceAction">' +
-											'<span id="ns1blankspaceSummaryCreateContact">Create&nbsp;Person&nbsp;Contact</a></td></tr>');
+											'<span id="ns1blankspaceSummaryCreateContact">Create&nbsp;Contact</a></td></tr>');
 						}
 						else
 						{
 							aHTML.push('<tr><td class="ns1blankspaceAction">' +
-											'<span id="ns1blankspaceSummaryViewContact">View&nbsp;Person&nbsp;Contact</a></td></tr>');
+											'<span id="ns1blankspaceSummaryViewContact">View&nbsp;Contact</a></td></tr>');
 						}	
 										
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 						
-						$('#ns1blankspaceSummaryViewContact').click(function(event)
+						$('#ns1blankspaceSummaryViewContact').button(
+						{
+							label: 'View Contact'
+						})
+						.click(function(event)
 						{
 							var iContactPerson = ns1blankspace.objectContextData.requestbycontactperson;	
 							ns1blankspace.contactPerson.init({showHome: false});
 							ns1blankspace.contactPerson.search.send(iContactPerson)
 						});
 						
-						$('#ns1blankspaceSummaryCreateContact').click(function(event)
+						$('#ns1blankspaceSummaryCreateContact').button(
+						{
+							label: 'Create Contact'
+						})
+						.click(function(event)
 						{
 							ns1blankspace.opportunity.prospect.save.send();		
 							//interfaceOpportunityCreateContact();

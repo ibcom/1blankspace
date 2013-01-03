@@ -16,22 +16,15 @@ ns1blankspace.order =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = 43;
 					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectName = 'order';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Orders';
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.order.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
+									
 					ns1blankspace.app.set(oParam);
 				},
 

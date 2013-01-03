@@ -10,29 +10,12 @@ ns1blankspace.project =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 1;
-					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectName = 'project';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Projects';
 					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.project.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 				},
 
@@ -67,7 +50,6 @@ ns1blankspace.project =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'PROJECT_SEARCH';
 						oSearch.addField('reference,description');
-						oSearch.async = false;
 						oSearch.rf = 'json';
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');

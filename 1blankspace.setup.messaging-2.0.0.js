@@ -16,22 +16,13 @@ ns1blankspace.setup.messaging =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = 154;
 					ns1blankspace.objectParentName = 'setup';
 					ns1blankspace.objectName = 'messaging';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Messaging';
 					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.setup.messaging.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 				},
 

@@ -9,6 +9,8 @@ ns1blankspace.contactBusiness =
 {
 		init: 	function (oParam)
 				{
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = 12;
 					ns1blankspace.objectName = 'contactBusiness';
 					ns1blankspace.objectParentName = undefined;
@@ -26,8 +28,7 @@ ns1blankspace.contactBusiness =
 						if (oParam.showNew != undefined) {bNew = oParam.showNew}
 						if (bNew) {ns1blankspace.contactBusiness.new()};
 					}	
-							
-					ns1blankspace.app.reset();
+
 					ns1blankspace.app.set(oParam);
 				},
 

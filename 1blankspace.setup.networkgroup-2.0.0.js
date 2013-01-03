@@ -16,22 +16,12 @@ ns1blankspace.setup.networkGroup =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 
-					ns1blankspace.object = -1;
+					ns1blankspace.app.reset();
+
 					ns1blankspace.objectParentName = 'setup';
 					ns1blankspace.objectName = 'networkGroup';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Network Groups';
 					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.setup.networkGroup.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 				},
 

@@ -18,6 +18,8 @@ ns1blankspace.financial.tax =
 						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}	
 					}
 
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = -1;
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectParentName = 'financial';
@@ -31,18 +33,7 @@ ns1blankspace.financial.tax =
 					}
 					else
 					{
-						if (bShowHome)
-						{
-							ns1blankspace.history.view({
-								newDestination: 'ns1blankspace.financial.tax.init({showHome: true});',
-								move: false
-								})		
-						}	
-								
-						ns1blankspace.app.reset();
 						ns1blankspace.app.set(oParam);
-
-						//ns1blankspace.financial.tax.show({id: iID})
 					}	
 				},
 

@@ -9,29 +9,13 @@ ns1blankspace.stucture =
 {
 	init: 		function interfaceStructureMasterViewport(oParam)
 				{
-						var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 154;
 					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectName = 'structure';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Structures';
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.structure.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
+		
 					ns1blankspace.app.set(oParam);
 				},
 

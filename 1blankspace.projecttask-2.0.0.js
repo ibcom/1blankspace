@@ -9,29 +9,13 @@ ns1blankspace.projectTask =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 11;
-					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectName = 'projectTask';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
+					ns1blankspace.objectMethod = 'PROJECT_TASK';
 					ns1blankspace.viewName = 'Project Tasks';
 					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.projectTask.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 				},
 
@@ -65,9 +49,7 @@ ns1blankspace.projectTask =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'PROJECT_TASK_SEARCH';
-						
 						oSearch.addField('reference,title');
-						oSearch.async = false;
 						oSearch.rf = 'json';
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');

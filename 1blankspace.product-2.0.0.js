@@ -16,22 +16,12 @@ ns1blankspace.product =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 
-					ns1blankspace.object = 16;
-					ns1blankspace.objectParentName = undefined;
-					ns1blankspace.objectName = 'product';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'Products';
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.product.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
 					ns1blankspace.app.reset();
+
+					ns1blankspace.object = 16;
+					ns1blankspace.objectName = 'product';
+					ns1blankspace.viewName = 'Products';	
+					
 					ns1blankspace.app.set(oParam);
 				},
 

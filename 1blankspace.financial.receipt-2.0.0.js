@@ -18,6 +18,8 @@ ns1blankspace.financial.receipt =
 						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}	
 					}
 
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = 6;
 					ns1blankspace.objectParentName = 'financial';
 					ns1blankspace.objectName = 'receipt';
@@ -31,15 +33,6 @@ ns1blankspace.financial.receipt =
 					}
 					else
 					{
-						if (bShowHome)
-						{
-							ns1blankspace.history.view({
-								newDestination: 'ns1blankspace.financial.invoice.init({showHome: true});',
-								move: false
-								});	
-						}	
-								
-						ns1blankspace.app.reset();
 						ns1blankspace.app.set(oParam);
 					}	
 				},

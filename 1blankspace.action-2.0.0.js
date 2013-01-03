@@ -11,6 +11,8 @@ ns1blankspace.action =
 
 	init: 		function (oParam)
 				{
+					ns1blankspace.app.reset();
+					
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.object = 17;
 					ns1blankspace.objectParentName = undefined;
@@ -45,7 +47,6 @@ ns1blankspace.action =
 						if (oParam.contactBusinessText != undefined) {ns1blankspace.action.contactbusinesstext = oParam.contactBusinessText}
 					}
 							
-					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 				},
 

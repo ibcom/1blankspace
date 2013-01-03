@@ -9,14 +9,15 @@ ns1blankspace.setup.userRole =
 {
 	init: 		function (oParam)
 				{
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = 22;
 					ns1blankspace.objectParentName = 'setup';
 					ns1blankspace.objectName = 'userRole';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'User Roles';
-								
-					ns1blankspace.app.reset();
+
 					ns1blankspace.app.set(oParam);
 				},
 

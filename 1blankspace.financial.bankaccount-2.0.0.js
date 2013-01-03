@@ -9,6 +9,8 @@ ns1blankspace.financial.bankAccount =
 {
 	init: 		function (oParam)
 				{
+					ns1blankspace.app.reset();
+
 					var bShowHome = true
 					var bInitialised = false;
 					var iID;
@@ -41,10 +43,7 @@ ns1blankspace.financial.bankAccount =
 								})		
 						}	
 										
-						ns1blankspace.app.reset();
 						ns1blankspace.app.set(oParam);
-
-						//ns1blankspace.financial.bankAccount.show({id: iID})
 					}	
 				},
 

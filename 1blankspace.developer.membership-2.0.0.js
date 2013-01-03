@@ -11,12 +11,7 @@ ns1blankspace.developer.membership =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = -1;
 					ns1blankspace.objectParentName = 'developer';
@@ -32,8 +27,7 @@ ns1blankspace.developer.membership =
 							move: false
 							});	
 					}	
-							
-					ns1blankspace.app.reset();
+	
 					ns1blankspace.app.set(oParam);
 				},
 

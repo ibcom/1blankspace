@@ -9,29 +9,13 @@ ns1blankspace.setup.website =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 40;
 					ns1blankspace.objectParentName = 'setup';
 					ns1blankspace.objectName = 'website';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Websites & Webapps';
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.setup.website.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
+			
 					ns1blankspace.app.set(oParam);
 					ns1blankspace.setup.website.bind();
 				},

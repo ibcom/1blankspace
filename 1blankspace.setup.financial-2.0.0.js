@@ -18,11 +18,10 @@ ns1blankspace.setup.financial =
 						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}
 					}
 
-					ns1blankspace.object = -1;
+					ns1blankspace.app.reset();
+
 					ns1blankspace.objectParentName = 'setup';
 					ns1blankspace.objectName = 'financial';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Financials';
 					
 					if (ns1blankspace.financial == undefined) {ns1blankspace.financial = {}}
@@ -33,15 +32,6 @@ ns1blankspace.setup.financial =
 					}
 					else
 					{
-						if (bShowHome)
-						{
-							ns1blankspace.history.view({
-								newDestination: 'ns1blankspace.setup.financial.init({showHome: true});',
-								move: false
-								});		
-						}	
-						
-						ns1blankspace.app.reset();
 						ns1blankspace.app.set(oParam);
 						ns1blankspace.format.editor.init({height: "500px"});
 					}

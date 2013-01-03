@@ -28,23 +28,13 @@ ns1blankspace.messaging.imap =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = 39;
 					ns1blankspace.objectParentName = 'messaging';
 					ns1blankspace.objectName = 'imap';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Email';
 					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.messaging.imap.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
-
 					ns1blankspace.messaging.autoCheck = true;
 					ns1blankspace.messaging.imap.emailAccounts = [];
 					ns1blankspace.messaging.defaultRows = 25;

@@ -18,6 +18,8 @@ ns1blankspace.financial.payroll =
 						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}	
 					}
 
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = 37;
 					ns1blankspace.objectParentName = 'financial';
 					ns1blankspace.objectName = 'payroll';
@@ -31,7 +33,6 @@ ns1blankspace.financial.payroll =
 					}
 					else
 					{		
-						ns1blankspace.app.reset();
 						ns1blankspace.app.set(oParam);
 					}	
 				},

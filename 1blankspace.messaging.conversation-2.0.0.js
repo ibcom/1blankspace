@@ -18,22 +18,13 @@ ns1blankspace.messaging.conversation =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = 50;
 					ns1blankspace.objectParentName = 'messaging';
 					ns1blankspace.objectName = 'conversation';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Conversations';
 					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.messaging.conversation.init({showHome: true});',
-							move: false
-							});	
-					}	
-							
-					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 
 					if (ns1blankspace.option.richTextEditing)

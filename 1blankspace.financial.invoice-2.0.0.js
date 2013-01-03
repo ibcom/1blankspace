@@ -9,14 +9,7 @@ ns1blankspace.financial.invoice =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					var bInitialised = false;
-
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}		
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 5;
 					ns1blankspace.objectParentName = 'financial';
@@ -31,7 +24,6 @@ ns1blankspace.financial.invoice =
 					}
 					else
 					{		
-						ns1blankspace.app.reset();
 						ns1blankspace.app.set(oParam);
 					}		
 				},
