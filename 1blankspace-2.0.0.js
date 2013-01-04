@@ -1924,7 +1924,7 @@ ns1blankspace.history.view =
 										
 										if (sDestinationInstructions != '' && sDestinationInstructions != undefined)
 										{
-											if ((sDestinationInstructions).indexOf('setup') != -1)
+											if ((sDestinationInstructions).indexOf('setup') != -1 && ns1blankspace.option.autoSetupSwitch)
 											{
 												ns1blankspace.setupView = false;
 												$('#ns1blankspaceViewControlSetup').attr('checked', true);

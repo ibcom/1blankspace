@@ -66,6 +66,7 @@ ns1blankspace.option.defaultView = "Select...";
 ns1blankspace.option.defaultSetupView = "Website";
 ns1blankspace.option.returnToLast = true;
 ns1blankspace.option.restLevel = 0;
+ns1blankspace.option.autoSetupSwitch = true;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];

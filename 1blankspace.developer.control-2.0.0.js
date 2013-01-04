@@ -7,6 +7,7 @@
  
 ns1blankspace.option.defaultView = "Select...";
 ns1blankspace.option.defaultSetupView = "Spaces";
+ns1blankspace.option.autoSetupSwitch = false;
 
 ns1blankspace.scripts =
 [
