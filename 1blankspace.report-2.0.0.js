@@ -424,7 +424,7 @@ ns1blankspace.report =
 						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 										'<td class="ns1blankspaceSub">' +
-										'Select an option from the list to the left.' + 
+										'Select a search type from left.' + 
 										'</td>' +
 										'</tr>';
 						aHTML[++h] = '</table>';					
