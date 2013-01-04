@@ -393,7 +393,7 @@ ns1blankspace.contactPerson =
 						}
 						
 						ns1blankspace.actions.show({
-											xhtmlElementID: 'ns1blankspaceActions',
+											xhtmlElementID: 'ns1blankspaceMainActions',
 											contactPerson: ns1blankspace.objectContext, 
 											contactPersonText: ns1blankspace.data.contactPersonText,
 											contactBusiness: ns1blankspace.data.contactBusiness, 
@@ -1172,7 +1172,7 @@ ns1blankspace.contactPerson =
 											$.ajax(
 											{
 												type: 'GET',
-												url: '/ondemand/setup/?method=SETUP_CONTACT_PERSON_GROUP_SEARCH',
+												url: ns1blankspace.util.endpointURI('SETUP_CONTACT_PERSON_GROUP_SEARCH'),
 												dataType: 'json',
 												success: function(data){ns1blankspace.contactPerson.groups.add(oParam, data)}
 											});

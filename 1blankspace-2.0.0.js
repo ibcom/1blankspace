@@ -3569,10 +3569,12 @@ ns1blankspace.actions =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ACTION_SEARCH';
 						oSearch.addField('subject,duedate,actiontypetext');
-						oSearch.addFilter('object', 'EQUAL_TO', iObject);
-						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
-						
+
 						if (iType) {oSearch.addFilter('actiontype', 'EQUAL_TO', iType)};
+
+						if (iObject != undefined && iObject != '') {oSearch.addFilter('object', 'EQUAL_TO', iObject)};
+						if (iObjectContext != undefined && iObjectContext != '') {oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext)};
+						
 						if (iContactBusiness) {oSearch.addFilter('contactbusiness', 'EQUAL_TO', iContactBusiness)};
 						if (iContactPerson) {oSearch.addFilter('contactperson', 'EQUAL_TO', iContactPerson)};
 

@@ -375,7 +375,7 @@ ns1blankspace.contactBusiness =
 					
 					$('#ns1blankspaceControlActions').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceActions', refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainActions', refresh: true});
 						
 						if ($('#ns1blankspaceDetailsTradename').val() != undefined)
 						{
@@ -383,7 +383,7 @@ ns1blankspace.contactBusiness =
 						}
 						
 						ns1blankspace.actions.show({
-											xhtmlElementID: 'ns1blankspaceActions',
+											xhtmlElementID: 'ns1blankspaceMainActions',
 											contactBusiness: ns1blankspace.objectContext, 
 											contactBusinessText: ns1blankspace.contactBusinessText,
 											object: '',
@@ -874,23 +874,12 @@ ns1blankspace.contactBusiness =
 
 									if (oResponse == undefined)
 									{
-										var oSearch = new AdvancedSearch();
-										oSearch.endPoint = 'contact';
-										oSearch.method = 'CONTACT_BUSINESS_GROUP_SEARCH';
-										oSearch.addField('contactbusiness,contactbusinesstext,group,grouptext');
-										oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.rows = 100;
-										oSearch.sort('grouptext', 'asc');
-										oSearch.getResults(function(data) {ns1blankspace.contactBusiness.groups.show(oParam, data)});
-									}
-									else
-									{
 										var aHTML = [];
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceContactPersonGroupsColumn1" class="ns1blankspaceColumn1Large"></td>' +
-													'<td id="ns1blankspaceContactPersonGroupsColumn2" style="width: 100px;" class="ns1blankspaceColumn2Action"></td>' +
+													'<td id="ns1blankspaceContactBusinessGroupsColumn1" class="ns1blankspaceColumn1Large"></td>' +
+													'<td id="ns1blankspaceContactBusinessGroupsColumn2" style="width: 100px;" class="ns1blankspaceColumn2Action"></td>' +
 													'</tr>' +
 													'</table>');				
 										
@@ -898,10 +887,10 @@ ns1blankspace.contactBusiness =
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
-										aHTML.push('<tr><td class="ns1blankspace">' +
-														'<span id="ns1blankspaceContactBusinessGroupsAdd">Add Group</span>' +
+										aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceContactBusinessGroupsAdd" class="ns1blankspaceAction">Add Group</span>' +
 														'</td></tr>');
 															
 										aHTML.push('</table>');					
@@ -922,6 +911,18 @@ ns1blankspace.contactBusiness =
 											ns1blankspace.contactBusiness.groups.add(oParam);
 										})
 										.css('width', '75px')
+									
+										var oSearch = new AdvancedSearch();
+										oSearch.endPoint = 'contact';
+										oSearch.method = 'CONTACT_BUSINESS_GROUP_SEARCH';
+										oSearch.addField('contactbusiness,contactbusinesstext,group,grouptext');
+										oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.rows = 100;
+										oSearch.sort('grouptext', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.contactBusiness.groups.show(oParam, data)});
+									}
+									else
+									{
 										
 										var aHTML = [];
 									
@@ -997,7 +998,13 @@ ns1blankspace.contactBusiness =
 										}
 										else
 										{
-											
+											ns1blankspace.container.position(
+											{
+												xhtmlElementID: 'ns1blankspaceContactBusinessGroupsAdd',
+												topOffset: -50,
+												leftOffset: -257
+											});
+
 											$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceContactBusinessGroupsAdd')
 											
 											var aHTML = [];
@@ -1013,7 +1020,7 @@ ns1blankspace.contactBusiness =
 											}
 											else
 											{
-												aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.725em;">');
+												aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.875em;">');
 												
 												$.each(oResponse.data.rows, function()
 												{	
@@ -1056,7 +1063,7 @@ ns1blankspace.contactBusiness =
 										url: ns1blankspace.util.endpointURI('CONTACT_BUSINESS_GROUP_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: function(data){ns1blankspace.contactBusiness.groups.search.show()}
+										success: function(data){ns1blankspace.contactBusiness.groups.show()}
 									});
 								},
 
@@ -1073,8 +1080,8 @@ ns1blankspace.contactBusiness =
 										type: 'POST',
 										url: ns1blankspace.util.endpointURI('CONTACT_BUSINESS_GROUP_MANAGE'),
 										data: sData,
-										dataType: 'text',
-										success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
+										dataType: 'json',
+										success: function(data){$('#' + sXHTMLElementId).parent().parent().fadeOut(500)}
 									});	
 								},
 					search: 	{

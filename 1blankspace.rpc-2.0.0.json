@@ -242,6 +242,8 @@
 					{title: "TRANSPORT_MANIFEST_SEARCH", advancedSearch: "true"},
 					{title: "TRANSPORT_MOVEMENT_ITEM_SEARCH", advancedSearch: "true"},
 					{title: "TRANSPORT_MOVEMENT_SEARCH", advancedSearch: "true"},
-					{title: "TRANSPORT_STORE_SEARCH", advancedSearch: "true"}
+					{title: "TRANSPORT_STORE_SEARCH", advancedSearch: "true"},
+					{title: "FINANCIAL_AUTO_RECEIPT", advancedSearch: "false"},
+					{title: "FINANCIAL_AUTO_PAYMENT", advancedSearch: "false"}
 	]
 }

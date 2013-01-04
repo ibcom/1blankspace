@@ -950,6 +950,7 @@ ns1blankspace.financial.invoice =
 										oSearch.addField('appliesdate,amount,receiptinvoice.receipt.reference,receiptinvoice.receipt.amount');
 										oSearch.addFilter('invoice', 'EQUAL_TO', iObjectContext);
 										oSearch.sort('appliesdate', 'asc');
+										oSearch.rows = 1000;
 										oSearch.getResults(function(data) {ns1blankspace.financial.invoice.receipt.show(oParam, data)});
 									}
 									else
@@ -1050,7 +1051,7 @@ ns1blankspace.financial.invoice =
 									if (iStep == 2)
 									{
 										var cReceiptedAmount = oResponse.summary.sumamount;
-										if (cReceiptedAmount == '') {cReceiptedAmount = 0}
+										if (cReceiptedAmount == '') {cReceiptedAmount = "0"}
 										
 										var aHTML = [];
 										
@@ -1116,6 +1117,7 @@ ns1blankspace.financial.invoice =
 										$('#ns1blankspaceReceiptAmount').val((ns1blankspace.objectContextData.amount).parseCurrency() - (cReceiptedAmount).parseCurrency());
 
 										$('#ns1blankspaceReceiptAmount').focus();
+										$('#ns1blankspacePaymentAmount').select();
 
 										$('#ns1blankspaceReceiptDate').val(Date.today().toString("d MMM yyyy"));
 										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
@@ -1159,28 +1161,8 @@ ns1blankspace.financial.invoice =
 											}
 										});	
 									}
-									
+								
 									if (iStep == 4)
-									{
-										$('#ns1blankspaceReceiptAddContainer').html(ns1blankspace.xhtml.loadingSmall);
-												
-										var sData = 'bankaccount=' + ns1blankspace.util.fs($('input[name="radioBankAccount"]:checked').val());
-										sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-												
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
-											data: sData,
-											dataType: 'json',
-											success: function(data)
-											{
-												ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam, {step: 5}), data)
-											}
-										});	
-									}
-
-									if (iStep == 5)
 									{
 										var cAmount = cReceiptAmount;
 										var dDate = Date.today().toString("dd-MMM-yyyy");
@@ -1195,6 +1177,7 @@ ns1blankspace.financial.invoice =
 										sData += '&amount=' + ns1blankspace.util.fs(cAmount);
 										sData += '&receiptdate=' + ns1blankspace.util.fs(dDate);
 										sData += '&paymentmethod=3';
+										sData += '&bankaccount=' + ns1blankspace.util.fs($('input[name="radioBankAccount"]:checked').val());
 												
 										$.ajax(
 										{
@@ -1204,12 +1187,12 @@ ns1blankspace.financial.invoice =
 											dataType: 'json',
 											success: function(data)
 											{
-												ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam, {step: 6}), data)
+												ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam, {step: 5}), data)
 											}
 										});	
 									}
 
-									if (iStep == 6)
+									if (iStep == 5)
 									{
 										ns1blankspace.status.message('Receipt added');
 										ns1blankspace.financial.invoice.receipt.show();

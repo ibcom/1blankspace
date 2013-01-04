@@ -89,7 +89,7 @@ ns1blankspace.financial.expense =
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-						oSearch.addField('reference,description,contactbusinesspaidtotext,contactpersonpaidtotext');
+						oSearch.addField('reference,description,amount,accrueddate,contactbusinesspaidtotext,contactpersonpaidtotext');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(ns1blankspace.financial.expense.home);
@@ -113,13 +113,19 @@ ns1blankspace.financial.expense =
 							{				
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:50px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:50px;">' +
 														this.reference + '</td>');	
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_amount-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:50px;text-align:right;padding-left:10px;padding-right:10px;">' +
+														'$' + this.amount + '</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_date-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;padding-right:15px;">' +
+														this.accrueddate + '</td>');
 
 								var sContact = this.contactbusinesspaidtotext
 								if (sContact == '') {sContact = this.contactpersonpaidtotext}
 								
-								aHTML.push('<td id="ns1blankspaceMostLikely_Contact-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_contact-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
 														sContact + '</td>');
 									
 								aHTML.push('</tr>');
@@ -404,6 +410,8 @@ ns1blankspace.financial.expense =
 					}
 					else
 					{
+						ns1blankspace.financial.expense.payment.refresh();
+
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
@@ -411,7 +419,8 @@ ns1blankspace.financial.expense =
 
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
 							'<br /><span id="ns1blankspaceControlContext_accrueddate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.accrueddate + '</span>' +
-							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>');
+							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>' +
+							'<br /><span id="ns1blankspaceControlContext_outstanding" class="ns1blankspaceSub"></span>');
 							
 						ns1blankspace.history.view({
 							newDestination: 'ns1blankspace.financial.expense.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
@@ -628,7 +637,7 @@ ns1blankspace.financial.expense =
 								{
 									if (oResponse == undefined)
 									{
-										ns1blankspaceStatusWorking();
+										ns1blankspace.status.working();
 										
 										var sData = (ns1blankspace.objectContext == -1)?'':'id=' + ns1blankspace.objectContext;
 											
@@ -645,7 +654,7 @@ ns1blankspace.financial.expense =
 										$.ajax(
 										{
 											type: 'POST',
-											url: ns1blankspace.util.endpointURL('FINANCIAL_EXPENSE_MANAGE'),
+											url: ns1blankspace.util.endpointURI('FINANCIAL_EXPENSE_MANAGE'),
 											data: sData,
 											dataType: 'json',
 											success: function(data) {ns1blankspace.financial.expense.save.send(oParam, data)}
@@ -674,6 +683,29 @@ ns1blankspace.financial.expense =
 				},				
 
 	payment: 	{
+					refresh:	function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										$('#ns1blankspaceControlContext_outstanding').html(ns1blankspace.xhtml.loadingSmall);
+											
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
+										oSearch.addField('amount');
+										oSearch.addSummaryField('sum(amount) sumamount');
+										oSearch.addFilter('expense', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.rows = 1;
+										oSearch.getResults(function(data){ns1blankspace.financial.expense.payment.refresh(oParam, data)});
+									}
+									else
+									{
+										ns1blankspace.objectContextData.outstanding = oResponse.summary.sumamount;
+										$('#ns1blankspaceControlContext_outstanding').html('<span style="background-color:#CCCCCC; color: white;">' +
+												'$' + ((ns1blankspace.objectContextData.amount).parseCurrency() -
+												(oResponse.summary.sumamount).parseCurrency()).formatMoney(2, ".", ",") + '</span>');
+									}
+								},
+
 					show:		function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.objectContext;
@@ -696,7 +728,7 @@ ns1blankspace.financial.expense =
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspacePaymentColumn1" class="ns1blankspaceColumn1Flexible">' +
 														ns1blankspace.xhtml.loading + '</td>' +
-														'<td id="ns1blankspacePaymentColumn2" class="ns1blankspaceColumn2" style="width: 300px;"></td>' +
+														'<td id="ns1blankspacePaymentColumn2" class="ns1blankspaceColumn2" style="width: 350px;"></td>' +
 														'</tr>');
 										
 										aHTML.push('</table>');					
@@ -718,7 +750,7 @@ ns1blankspace.financial.expense =
 											
 											aHTML.push('</table>');					
 											
-											$('#ns1blankspacePaymentColumn2').html(aHTML.join(''));
+											//$('#ns1blankspacePaymentColumn2').html(aHTML.join(''));
 										
 											$('#ns1blankspacePaymentAdd').button(
 											{
@@ -729,11 +761,14 @@ ns1blankspace.financial.expense =
 											})
 										}
 										
+										ns1blankspace.financial.expense.payment.edit(oParam);
+
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
-										oSearch.addField('appliesdate,amount');
+										oSearch.addField('appliesdate,amount,paymentexpense.payment.reference,paymentexpense.payment.amount');
 										oSearch.addFilter('expense', 'EQUAL_TO', iObjectContext);
 										oSearch.sort('appliesdate', 'asc');
+										oSearch.rows = 1000;
 										oSearch.getResults(function(data) {ns1blankspace.financial.expense.payment.show(oParam, data)});
 									}
 									else
@@ -750,6 +785,8 @@ ns1blankspace.financial.expense =
 										}
 										else
 										{
+											var oPayments = ns1blankspace.util.unique({key: 'paymentexpense.payment.reference', data: oResponse.data.rows});
+
 											aHTML.push('<table class="ns1blankspace">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
@@ -757,16 +794,16 @@ ns1blankspace.financial.expense =
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 
-											$.each(oResponse.data.rows, function()
+											$.each(oPayments, function()
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																			
 												aHTML.push('<td id="ns1blankspaceReceipt_date-' + this.id + '" class="ns1blankspaceRow">' +
-																this.appliesdate + '</td>');
+																this['appliesdate'] + '</td>');
 
 												
 												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-																this.amount + '</td>');
+																this['paymentexpense.payment.amount'] + '</td>');
 						
 												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 													
@@ -803,17 +840,21 @@ ns1blankspace.financial.expense =
 					edit:		function (oParam, oResponse)
 								{
 									var iStep = 1;
-									
+									var cPaymentAmount = 0;
+									var cPaidAmount = 0;
+
 									if (oParam != undefined)
 									{
-										if (oParam.step != undefined) {iStep = oParam.step}	
+										if (oParam.step != undefined) {iStep = oParam.step}
+										if (oParam.paymentAmount != undefined) {cPaymentAmount = oParam.paymentAmount}
+										if (oParam.paidAmount != undefined) {cPaidAmount = oParam.paidAmount}	
 									}
 									
 									if (ns1blankspace.financial.data.bankaccounts.length == 0) {alert("No bank accounts set up.");return;}
 									
 									if (iStep == 1)
 									{	
-										$('#ns1blankspaceReceiptColumn2').html(ns1blankspace.xhtml.loadingSmall)
+										$('#ns1blankspacePaymentColumn2').html(ns1blankspace.xhtml.loadingSmall)
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
@@ -827,7 +868,7 @@ ns1blankspace.financial.expense =
 									if (iStep == 2)
 									{
 										cPaidAmount = oResponse.summary.sumamount;
-										if (cPaidAmount == '') {cPaidAmount = 0}
+										if (cPaidAmount == '') {cPaidAmount = "0"}
 										
 										var aHTML = [];
 										
@@ -863,34 +904,60 @@ ns1blankspace.financial.expense =
 										
 										aHTML.push('</td></tr>');				
 														
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Amount' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspacePaymentAmount" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Date' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceDate">' +
+														'<input id="ns1blankspacePaymentDate" class="ns1blankspaceDate">' +
+														'</td></tr>');
+																		
 										aHTML.push('<tr class="ns1blankspace">' +
-														'<td>' +
-														'<span id="ns1blankspacePaymentEditFull" class="ns1blankspaceAction">Pay</span>' +
+														'<td id="ns1blankspacePaymentAddContainer">' +
+														'<span id="ns1blankspacePaymentAdd" class="ns1blankspaceAction">Pay</span>' +
 														'</td></tr>');
 										
 										aHTML.push('</table>');
-										
-										aHTML.push('<table style="margin-top:15px;">');
-										
-										aHTML.push('<tr><td id="ns1blankspacePaymentEditFullResults"></td></tr>');
-																		
-										aHTML.push('</table>');		
-											
+												
 										$('#ns1blankspacePaymentColumn2').html(aHTML.join(''));
 												
 										$('[name="radioBankAccount"][value="' + iDefaultBankAccount + '"]').attr('checked', true);
 									
-										$('#ns1blankspacePaymentEditFull').button(
+										$('#ns1blankspacePaymentAmount').val((ns1blankspace.objectContextData.amount).parseCurrency() - (cPaidAmount).parseCurrency());
+
+										$('#ns1blankspacePaymentAmount').focus();
+										$('#ns1blankspacePaymentAmount').select();
+
+										$('#ns1blankspacePaymentDate').val(Date.today().toString("d MMM yyyy"));
+										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+
+										$('#ns1blankspacePaymentAdd').button(
 										{
-											label: "Pay Full Amount"
+											label: "Add Payment"
 										})
 										.click(function() {
-											ns1blankspace.financial.expense.payment.edit($.extend(true, oParam, {step: 3, paidamount: cPaidAmount}))
+											ns1blankspace.financial.expense.payment.edit($.extend(true, oParam,
+													{	step: 4,
+														paidAmount: cPaidAmount,
+														paymentAmount: $('#ns1blankspacePaymentAmount').val(),
+														date: $('#ns1blankspacePaymentDate').val()
+													}))
 										});
 									}
 									
 									if (iStep == 3)
 									{
+										//NOT USED
 										$('#ns1blankspacePaymentEditFullResults').html(ns1blankspace.xhtml.loadingSmall);
 												
 										var cAmount = ns1blankspace.objectContextData.amount - cPaidAmount;
@@ -917,24 +984,25 @@ ns1blankspace.financial.expense =
 									
 									if (iStep == 4)
 									{
-										var cAmount = 0;
+										var cAmount = cPaymentAmount;
+										var dDate = Date.today().toString("dd-MMM-yyyy");
 										
 										if (oParam != undefined)
 										{
-											if (oParam.amount != undefined) {cAmount = oParam.amount}	
+											if (oParam.amount != undefined) {cAmount = oParam.amount}
+											if (oParam.date != undefined) {dDate = oParam.date}	
 										}
 										
-										var iRecieptID = oResponse.id;
-										
-										var sData = 'expense=' + ns1blankspace.objectContext;
-										sData += '&amount=' + cAmount;
-										sData += '&appliesdate=' + Date.today().toString("dd-MMM-yyyy");
-										sData += '&payment=' + iPaymentID;
-												
+										var sData = 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+										sData += '&amount=' + ns1blankspace.util.fs(cAmount);
+										sData += '&paymentdate=' + ns1blankspace.util.fs(dDate);
+										sData += '&paymentmethod=3';
+										sData += '&bankaccount=' + ns1blankspace.util.fs($('input[name="radioBankAccount"]:checked').val());
+
 										$.ajax(
 										{
 											type: 'POST',
-											url: ns1blankspace.financial.expense.payment.edit('FINANCIAL_PAYMENT_EXPENSE_MANAGE'),
+											url: ns1blankspace.util.endpointURI('FINANCIAL_AUTO_PAYMENT'),
 											data: sData,
 											dataType: 'json',
 											success: function(data)
@@ -942,6 +1010,13 @@ ns1blankspace.financial.expense =
 												ns1blankspace.financial.expense.payment.edit($.extend(true, oParam, {step: 5}), data)
 											}
 										});	
+									}
+
+									if (iStep == 5)
+									{
+										ns1blankspace.status.message('Payment added');
+										ns1blankspace.financial.expense.payment.show();
+										ns1blankspace.financial.expense.payment.refresh();
 									}
 								}
 				}

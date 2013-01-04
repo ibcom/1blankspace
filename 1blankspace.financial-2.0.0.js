@@ -59,9 +59,9 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 								if (oResponse == undefined)
 								{
 									$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-									ns1blankspace.status.message(ns1blankspace.xhtml.loadingSmall + ' initalising...')
-									$('#ns1blankspaceMain').html();
-									$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
+									ns1blankspace.status.message(ns1blankspace.xhtml.loadingSmall + ' initalising financials')
+									$('#ns1blankspaceMain').html('');
+									$('#ns1blankspaceControl').html('<span class="ns1blankspaceSub">There goes a fighter</span>');
 
 									$.ajax(
 									{
@@ -1572,6 +1572,8 @@ ns1blankspace.financial.item =
 					}
 					else
 					{
+						aHTML.push('<table class="ns1blankspace">');
+
 						aHTML.push('<tr>');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Account</td>');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
