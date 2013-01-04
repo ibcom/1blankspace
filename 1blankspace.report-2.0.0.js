@@ -312,23 +312,27 @@ ns1blankspace.report =
 
 					if (!bAll)
 					{
+						var sMethod = ns1blankspace.objectMethod = 'CONTACT_PERSON';
 						var sParentNamespace = ns1blankspace.objectParentName;
 						var sNamespace = ns1blankspace.objectName;
 
-						if (sParentNamespace)
-						{
-							var sMethod = (sParentNamespace).toUpperCase() + '_' + (sNamespace).toUpperCase();
+						if (sMethod == undefined)
+						{	
+							if (sParentNamespace)
+							{
+								var sMethod = (sParentNamespace).toUpperCase() + '_' + (sNamespace).toUpperCase();
+							}
+							else
+							{
+								var sMethod = (sNamespace).toUpperCase();
+							}
 						}
-						else
-						{
-							var sMethod = (sNamespace).toUpperCase();
-						}
-
+							
 						if (sMethod)
 						{
 							sMethod += '_SEARCH';
 
-							$.grep(ns1blankspace.report.reports, function (a) {return a.method == sMethod})
+							ns1blankspace.report.reports = $.grep(ns1blankspace.report.reports, function (a) {return a.method == sMethod})
 						}	
 					}	
 
@@ -395,20 +399,30 @@ ns1blankspace.report =
 						});				
 					});
 					
-					ns1blankspace.show({selector: '#ns1blankspaceMainReport'});
+					if (ns1blankspace.report.reports.length == 1)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainReport'});
+						var sMethod = ns1blankspace.report.reports[0].method;
+						ns1blankspace.report.show(ns1blankspace.report.reports[0]);
+						$('td.ns1blankspaceControl:first').addClass('ns1blankspaceHighlight')
+					}	
+					else
+					{	
+						ns1blankspace.show({selector: '#ns1blankspaceMainReport'});
 					
-					var aHTML = [];
-					var h = -1;
-								
-					aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-					aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
-									'<td id="tdInterfaceReportHomeMostLikely" class="interfaceViewportMain">' +
-									'Please select a report from the list to the left.' + 
-									'</td>' +
-									'</tr>';
-					aHTML[++h] = '</table>';					
-					
-					$('#ns1blankspaceMainReport').html(aHTML.join(''));
+						var aHTML = [];
+						var h = -1;
+									
+						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
+						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
+										'<td class="ns1blankspaceSub">' +
+										'Please select an option from the list to the left.' + 
+										'</td>' +
+										'</tr>';
+						aHTML[++h] = '</table>';					
+						
+						$('#ns1blankspaceMainReport').html(aHTML.join(''));
+					}	
 				},
 
 	getCaption: function (oParam)
@@ -447,7 +461,7 @@ ns1blankspace.report =
 					return sReturn
 				},
 
-	show:		function interfaceReportViewport(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
 					var aHTML = [];
 					var h = -1;
@@ -562,7 +576,7 @@ ns1blankspace.report =
 							{	oSearch.categoryId = iCategoryId;}
 							oSearch.returnParameters = ns1blankspace.report.returnParameters;
 							oSearch.rf = 'json';
-							oSearch.getResults(function(data) {interfaceReportViewport(oParam, data)}) ;
+							oSearch.getResults(function(data) {ns1blankspace.report.show(oParam, data)}) ;
 						}
 						
 						else if (oResponse != undefined)
