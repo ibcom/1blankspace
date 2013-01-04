@@ -334,7 +334,7 @@ ns1blankspace.views =
 		type: 1
 	},
 	{
-		title: "Reporting",
+		title: "Search & Report",
 		namespace: "report",
 		endpoint: "", 
 		show: true,
@@ -354,7 +354,7 @@ ns1blankspace.views =
 		title: "Structures",
 		namespace: "structure",
 		endpoint: "STRUCTURE", 
-		show: true,
+		show: false,
 		group: 6,
 		type: 1
 	},
@@ -901,17 +901,7 @@ ns1blankspace.control =
 																		'<span id="ns1blankspaceViewControl_financial_journal" class="ns1blankspaceViewControl">' +
 																		'Journals</span></td></tr>');
 											}	
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Reporting';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
-																		'Reporting</span></td></tr>');
-											}		
-											
-											
+	
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures';})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
@@ -927,7 +917,7 @@ ns1blankspace.control =
 												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
 												aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewReport" class="ns1blankspaceViewImage"></div>' +
+																'<div id="ns1blankspaceViewReportX" class="ns1blankspaceViewImage"></div>' +
 																'</td></tr>');		
 											
 												aHTML.push(aHTMLViewport.join(''))
@@ -935,6 +925,12 @@ ns1blankspace.control =
 												aHTML.push('</table>');
 												aHTML.push('</td>');
 											}	
+
+											aHTML.push('</tr>');
+
+											aHTML.push('<tr class="ns1blankspaceViewControl">');
+
+											aHTML.push('<td class="ns1blankspaceViewControl" colspan=6 style="text-align: right; color: #999999; font-size:0.825em;"><span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">Search & Reporting</span></td>');
 
 											aHTML.push('</tr></table>');
 

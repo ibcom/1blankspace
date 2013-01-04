@@ -2724,9 +2724,9 @@ ns1blankspace.search =
 	advanced: 	function ()
 				{
 					var sElementID = 'ns1blankspaceViewControlSearch';
-					ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: -30, leftOffset: 82});
+					ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: -38, leftOffset: 49});
 					$(ns1blankspace.xhtml.container).show();
-					$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchAdvanced" style="padding:3px; padding-left: 4px; padding-right: 4px; color:#666666; background-color:#F5F5F5; font-size:0.625em; cursor:pointer;">advanced</span>');
+					$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchAdvanced" style="padding:3px; padding-left: 4px; padding-right: 4px; color:#CCCCCC; font-size:0.625em; cursor:pointer;">advanced&nbsp;search</span>');
 					$('#ns1blankspaceSearchAdvanced').click(function() {ns1blankspace.report.init({all: false})});
 				}		
 

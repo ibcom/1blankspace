@@ -342,10 +342,18 @@ ns1blankspace.report =
 				{
 					ns1blankspace.report.initData(oParam);
 
+					var bAll = true;
+
+					if (oParam != undefined)
+					{
+						if (oParam.all != undefined) {bAll = oParam.all}
+					}
+
 					ns1blankspace.app.reset();
 
 					ns1blankspace.objectName = 'report';
-					ns1blankspace.viewName = 'Reporting';
+
+					ns1blankspace.viewName = 'Search & Reporting';
 	
 					ns1blankspace.app.set(oParam);
 				},
@@ -416,7 +424,7 @@ ns1blankspace.report =
 						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
 						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 										'<td class="ns1blankspaceSub">' +
-										'Please select an option from the list to the left.' + 
+										'Select an option from the list to the left.' + 
 										'</td>' +
 										'</tr>';
 						aHTML[++h] = '</table>';					
