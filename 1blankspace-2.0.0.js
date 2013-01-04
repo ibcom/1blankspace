@@ -378,7 +378,7 @@ ns1blankspace.app =
 						ns1blankspace.option.hideSpeedOptions = 0;
 						ns1blankspace.option.typingWait = 400;
 						ns1blankspace.option.logonStayOnDocument = true;
-						ns1blankspace.option.setFocus = true;
+						ns1blankspace.option.setFocus = false;
 						ns1blankspace.option.richTextEditing = true;
 						ns1blankspace.option.setupURI = '/ondemand/setup/';
 						ns1blankspace.option.dateFormat = 'dd M yy';
@@ -1048,10 +1048,10 @@ ns1blankspace.app =
 					        ns1blankspace.timer.delayCurrent = setTimeout(sNS + '.search.send("ns1blankspaceViewControlSearch")', ns1blankspace.option.typingWait);
 						});
 						
-						//$('#ns1blankspaceViewControlSearch').click(function(event)
-						//{
-						//	oNS.search.show('ns1blankspaceViewControlSearch');
-						//});
+						$('#ns1blankspaceViewControlSearch').focusin(function(event)
+						{
+							ns1blankspace.search.advanced();
+						});
 						
 						$("#ns1blankspaceViewControlSearch").click(function()
 						{
@@ -2719,7 +2719,17 @@ ns1blankspace.search =
 					var sElementID = 'ns1blankspaceViewControlSearchStatus';
 					$('#' + sElementID).hide();
 					$('#' + sElementID).html('');
-				}
+				},
+
+	advanced: 	function ()
+				{
+					var sElementID = 'ns1blankspaceViewControlSearch';
+					ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: -30, leftOffset: 82});
+					$(ns1blankspace.xhtml.container).show();
+					$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchAdvanced" style="padding:3px; padding-left: 4px; padding-right: 4px; color:#666666; background-color:#F5F5F5; font-size:0.625em; cursor:pointer;">advanced</span>');
+					$('#ns1blankspaceSearchAdvanced').click(function() {ns1blankspace.report.init({all: false})});
+				}		
+
 }
 
 ns1blankspace.save =
@@ -3189,7 +3199,7 @@ ns1blankspace.search.email =
 				    	
 						aHTML.push('</table>');
 					
-						$(ns1blankspace.xhtml.container).html(ns1blankspacePagination(
+						$(ns1blankspace.xhtml.container).html(ns1blankspace.pagination(
 							{
 								html: aHTML.join(''),
 								more: (oResponse.morerows == 'true'),
@@ -3237,7 +3247,7 @@ ns1blankspace.render =
 						if (oParam.more != undefined) {bMore = oParam.more}
 					}
 
-					aHTML.push('<table id="ns1blankspaceSearchHeader" class="interfaceSearchHeaderMedium">');
+					aHTML.push('<table id="ns1blankspaceSearchHeader" class="ns1blankspaceSearchHeaderMedium">');
 					aHTML.push('<tr>');
 					aHTML.push('<td class="ns1blankspaceSearchHeaderClose">' +
 											'<span id="ns1blankspaceSearchHeaderClose"></span></td>');

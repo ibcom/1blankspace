@@ -25,8 +25,15 @@ ns1blankspace.report.selectAttributes = [];
 
 ns1blankspace.report = 
 {
-	initData: 	function ()
+	initData: 	function (oParam)
 				{
+					var bAll = true;
+
+					if (oParam != undefined)
+					{
+						if (oParam.all != undefined) {bAll = oParam.all}
+					}
+							
 					ns1blankspace.report.reports =
 						[
 							{
@@ -302,20 +309,40 @@ ns1blankspace.report =
 								
 							}
 						];
+
+					if (!bAll)
+					{
+						var sParentNamespace = ns1blankspace.objectParentName;
+						var sNamespace = ns1blankspace.objectName;
+
+						if (sParentNamespace)
+						{
+							var sMethod = (sParentNamespace).toUpperCase() + '_' + (sNamespace).toUpperCase();
+						}
+						else
+						{
+							var sMethod = (sNamespace).toUpperCase();
+						}
+
+						if (sMethod)
+						{
+							sMethod += '_SEARCH';
+
+							$.grep(ns1blankspace.report.reports, function (a) {return a.method == sMethod})
+						}	
+					}	
+
 				},
 
 	init: 		function (oParam)
 				{
-					ns1blankspace.report.initData();
-
-					ns1blankspace.object = -1;
-					ns1blankspace.objectParentName = undefined;
-					ns1blankspace.objectName = 'report';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'Reporting';
+					ns1blankspace.report.initData(oParam);
 
 					ns1blankspace.app.reset();
+
+					ns1blankspace.objectName = 'report';
+					ns1blankspace.viewName = 'Reporting';
+	
 					ns1blankspace.app.set(oParam);
 				},
 
@@ -654,7 +681,7 @@ ns1blankspace.report =
 							{
 								$.each(oFixedParameters.fields, function() 
 								{ 
-									sCaption = interfaceReportDictionaryGet({name: this.name})
+									sCaption = ns1blankspace.report.getCaption({name: this.name})
 									var sName = (this.name).replace(/\./g,'_')
 									
 									aHTML[++h] = '<tr><td colspan=2 style="color:#B8B8B8;padding:2px;">' +
@@ -670,7 +697,7 @@ ns1blankspace.report =
 							
 							$.each(oResponse.data.parameters, function() 
 							{ 
-								sCaption = interfaceReportDictionaryGet({name: this.name})
+								sCaption = ns1blankspace.report.getCaption({name: this.name})
 								
 								var iSelectableIndex = $.inArray(this.name, aSelectableParameterList)
 								var sSearchFilter = '';
@@ -800,13 +827,13 @@ ns1blankspace.report =
 							})
 							.click(function() 
 							{
-								interfaceReportSearch(oParam);
+								ns1blankspace.report.search.send(oParam);
 							});	
 							
 							$('td.interfaceMainReportComparison').click(function(event)
 							{
 								var sID = event.target.id
-								interfaceReportComparisonShow({xhtmlElementID: sID})
+								ns1blankspace.report.showComparison({xhtmlElementID: sID})
 							});
 							
 							$('td.interfaceMainReportComparison').mouseenter(function(event)
@@ -1051,7 +1078,7 @@ ns1blankspace.report =
 				},
 
 	search: 	{
-					show: 		function interfaceReportSearch(oParam, oResponse)
+					send: 		function interfaceReportSearch(oParam, oResponse)
 								{ 
 									var sXHTMLElementID;
 									var aHTML = [];
@@ -1339,7 +1366,7 @@ ns1blankspace.report =
 													});
 												}
 												
-												{	sCaption = interfaceReportDictionaryGet({name: this})	}
+												{	sCaption = ns1blankspace.report.getCaption({name: this})	}
 												
 												if (sName != sIDColumn)
 												{	aHTML[++h] = '<td class="interfaceMainCaption">' + sCaption + '</td>';	}
@@ -1353,13 +1380,13 @@ ns1blankspace.report =
 
 											$.each(oResponse.data.rows, function(index) 
 											{ 
-												aHTML[++h] = interfaceReportSearchRow(this, oParam);
+												aHTML[++h] = ns1blankspace.report.search.row(this, oParam);
 											});
 											ns1blankspace.report.rowParameters = oParam;
 											
 											aHTML[++h] = '</tbody></table>';
 											
-											ns1blankspacePaginationList(
+											ns1blankspace.render.page(
 											   {
 												xhtmlElementID: 'ns1blankspaceMainReportResults',
 												xhtmlContext: '',
@@ -1368,7 +1395,7 @@ ns1blankspace.report =
 												columns: oParameter.join('-'),
 												more: $(oResponse).attr('moreid'),
 												rows: ns1blankspace.option.defaultRows,
-												functionShowRow: interfaceReportSearchRow,
+												functionShowRow: ns1blankspace.report.search.row,
 												functionSearch: ns1blankspace.report.searchFunction,
 												functionOpen: ns1blankspace.report.scriptOpen,
 												functionNewPage: ns1blankspace.report.scriptNewPage,

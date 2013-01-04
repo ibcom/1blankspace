@@ -14,20 +14,18 @@ ns1blankspace.financial.init = function (oParam)
 							if (oParam.initialised != undefined) {bInitialised = oParam.initialised}
 						}
 
+						ns1blankspace.app.reset();
 						ns1blankspace.object = -1;
-						ns1blankspace.objectContextData = undefined;
-						ns1blankspace.objectParentName = undefined;
 						ns1blankspace.objectName = 'financial';
 						ns1blankspace.viewName = 'Financials';
-						ns1blankspace.objectContext = -1;
-						
+
 						if (!bInitialised)
 						{
 							ns1blankspace.financial.initData(oParam)
 						}
 						else
 						{							
-							ns1blankspace.app.reset();
+							
 							ns1blankspace.app.set(oParam);
 						}	
 					}
@@ -86,7 +84,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									{
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-										oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
+										oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status');
 										oSearch.rows = 100;
 										oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)});
 									}
@@ -233,7 +231,7 @@ ns1blankspace.financial.home = function ()
 
 						aHTML.push('</table>');		
 						
-						aHTML.push('<table cellpadding="6">');
+						aHTML.push('<table class="ns1blankspaceControl" style="padding-top: 5px;">');
 						
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlSummary" class="ns1blankspaceControl">Summary</td>' +
@@ -243,6 +241,10 @@ ns1blankspace.financial.home = function ()
 									'<td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">Bank Accounts</td>' +
 									'</tr>');	
 						
+						aHTML.push('</table>');		
+						
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlDebtors" class="ns1blankspaceControl">Debtors</td>' +
 									'</tr>');	
@@ -251,6 +253,10 @@ ns1blankspace.financial.home = function ()
 									'<td id="ns1blankspaceControlCreditors" class="ns1blankspaceControl">Creditors</td>' +
 									'</tr>');	
 						
+						aHTML.push('</table>');		
+						
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlPL" class="ns1blankspaceControl">Profit & Loss</td>' +
 									'</tr>');	
@@ -259,6 +265,10 @@ ns1blankspace.financial.home = function ()
 									'<td id="ns1blankspaceControlBS" class="ns1blankspaceControl">Balance Sheet</td>' +
 									'</tr>');	
 						
+						aHTML.push('</table>');		
+						
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlAccounts" class="ns1blankspaceControl">Accounts</td>' +
 									'</tr>');

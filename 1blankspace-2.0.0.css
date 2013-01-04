@@ -260,6 +260,14 @@ table.ns1blankspaceSearchMedium
 	margin-left: 1px;
 }
 
+table.ns1blankspaceSearchHeaderMedium
+{
+	font-size: 0.75em;
+	background-color: #E8E8E8;
+	width: 250px;
+	margin-top: 8px;
+}
+
 table.ns1blankspaceMostLikely
 {
 	border-spacing: 5px 0px;
@@ -717,7 +725,7 @@ textarea.ns1blankspaceTextMultiSmall
 	position: absolute;
 	top: 5px;
 	left: 461px;
-	width: 20px;
+	width: 35px;
 	height: 20px;
 	z-index: 1;
 	padding-top: 5px;

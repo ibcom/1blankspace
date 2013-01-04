@@ -21,8 +21,6 @@ ns1blankspace.financial.invoice =
 					ns1blankspace.object = 5;
 					ns1blankspace.objectParentName = 'financial';
 					ns1blankspace.objectName = 'invoice';
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Invoices';
 					
 					if (!bInitialised)
