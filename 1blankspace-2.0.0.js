@@ -334,7 +334,7 @@ ns1blankspace.app =
 
 	init: 		function (oParam)
 				{
-					var bInitialise = false;
+					var bInitialise = true;
 
 					if (oParam != undefined)
 					{
