@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
 
-"use strict";
+"use strict"; 1
 
 Function.prototype.method = function(name, func)
 {

@@ -571,5 +571,20 @@ ns1blankspace.setup.space =
 										});
 									}	
 								}
+				},
+
+	template: 	{
+					list: 		function ()
+								{
+
+
+								},
+
+					create: 	function ()
+								{
+
+								}			
+
 				}
+
 }								

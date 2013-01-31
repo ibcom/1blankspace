@@ -1,0 +1,19 @@
+{
+	template: 	{
+					name: 'Default',
+
+					methods:
+					[
+						{
+							name: "CONTACT_BUSINESS_MANAGE"
+							data: "&tradename=ABC Pty Ltd"
+						},
+						{
+							name: "CONTACT_PERSON_MANAGE"
+							data: "contactbusiness=[[id]]&firstname=Fred"
+						},
+
+					]
+				}
+
+}	
