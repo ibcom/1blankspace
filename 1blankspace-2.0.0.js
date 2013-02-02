@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
 
-"use strict"; 1
+"use strict";
 
 Function.prototype.method = function(name, func)
 {
@@ -1522,7 +1522,7 @@ ns1blankspace.logon.changePassword =
 						var sCurrentPassword = $('#ns1blankspaceLogonCurrentPassword').val();
 
 						var sData = 'expiredays=36500' +
-										'&site=' + msOnDemandSiteId +
+										'&site=1533' +
 										'&currentpassword=' + sCurrentPassword + 
 										'&newpassword=' + sNewPassword +
 										'&newpasswordconfirm=' + sNewPasswordConfirm;
@@ -1628,7 +1628,7 @@ ns1blankspace.logon.getPassword =
 					{
 						$('#tns1blankspaceGetPasswordStatus').html('Sending password...');
 										
-						var sData = 'site=' + msOnDemandSiteId +
+						var sData = 'site=1533' +
 										'&logon=' + $('#ns1blankspaceGetPasswordLogonName').val();	
 						
 						$.ajax(
