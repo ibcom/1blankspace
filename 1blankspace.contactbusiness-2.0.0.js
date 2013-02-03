@@ -301,9 +301,9 @@ ns1blankspace.contactBusiness =
 					{
 						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">Summary</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceDetails" class="ns1blankspaceControl">Details</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">Details</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceAddress" class="ns1blankspaceControl">Address</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">Address</td></tr>');
 					
 						aHTML.push('</table>');					
 					
@@ -711,7 +711,7 @@ ns1blankspace.contactBusiness =
 										'</td></tr>');				
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Country' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
