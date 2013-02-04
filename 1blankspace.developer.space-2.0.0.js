@@ -231,7 +231,7 @@ ns1blankspace.developer.space =
 					if (ns1blankspace.objectContext == -1)
 					{
 						aHTML.push('<tr><td id="ns1blankspaceControlFromNew" class="ns1blankspaceControl ns1blankspaceHighlight">' +
-										'From New</td></tr>');		
+										'Details</td></tr>');		
 					}
 					else
 					{
@@ -249,7 +249,7 @@ ns1blankspace.developer.space =
 					var aHTML = [];
 
 					aHTML.push('<div id="ns1blankspaceMainFromNew" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainFromContact" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainSubscriptions" class="ns1blankspaceControlMain"></div>');
@@ -257,28 +257,28 @@ ns1blankspace.developer.space =
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
-					$('#ns1blankspaceControlFromNew').click(function(event)
+					$('#ns1blankspaceControlDetails').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainFromNew'});
-						ns1blankspace.developer.membership.new.fromNew();
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.developer.space.details({source: 1});
 					});
 
 					$('#ns1blankspaceControlFromContact').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainFromContact'});
-						ns1blankspace.developer.membership.new.fromContact();
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.developer.space.details({source: 2});
 					});
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.developer.membership.summary();
+						ns1blankspace.developer.space.summary();
 					});
 
 					$('#ns1blankspaceControlSubscriptions').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSubscriptions'});
-						ns1blankspace.developer.membership.subscriptions();
+						ns1blankspace.developer.space.subscriptions();
 					});
 				},							
 				
@@ -301,7 +301,7 @@ ns1blankspace.developer.space =
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
-						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title);
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.contactbusinesstext);
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
@@ -347,16 +347,22 @@ ns1blankspace.developer.space =
 										ns1blankspace.objectContextData.initiallogonname +
 										'</td></tr>');
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Initial Password</td></tr>' +
+						if (ns1blankspace.objectContextData.initialpassword != '')
+						{	
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Initial Password</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryInitialPassword" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.initialpassword +
 										'</td></tr>');
+						}
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creation Date</td></tr>' +
+						if (ns1blankspace.objectContextData.registrationdate != '')
+						{	
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creation Date</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryCreationDate" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.registrationdate +
 										'</td></tr>');
-
+						}
+								
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
@@ -377,7 +383,7 @@ ns1blankspace.developer.space =
 						aParam = {}
 					}
 					
-					if (ns1blankspace.objectContext == undefined)
+					if (ns1blankspace.objectContextData == undefined)
 					{
 						if (iSource == 2)
 						{
@@ -412,7 +418,7 @@ ns1blankspace.developer.space =
 
 							aHTML.push('</table>');		
 
-							$('#ns1blankspaceMainFromContact').html(aHTML.join(''));		
+							$('#ns1blankspaceMainDetails').html(aHTML.join(''));		
 						}	
 						else
 						{
@@ -458,7 +464,7 @@ ns1blankspace.developer.space =
 
 							aHTML.push('</table>');					
 						
-							$('#divns1blankspaceMainFromNew').html(aHTML.join(''));
+							$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						}
 
 					}
@@ -471,7 +477,7 @@ ns1blankspace.developer.space =
 										'</tr>' + 
 										'</table>');			
 						
-						$('#divns1blankspaceMainDetails').html(aHTML.join(''));
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						var aHTML = [];
 					
@@ -492,7 +498,7 @@ ns1blankspace.developer.space =
 						
 						if (ns1blankspace.objectContext != undefined)
 						{
-							$('#ns1blankspaceDetailsEnterpriseName').val(goObjectContext.spacename);
+							$('#ns1blankspaceDetailsEnterpriseName').val(ns1blankspace.objectContext.spacename);
 						}
 					}	
 					
@@ -547,37 +553,38 @@ ns1blankspace.developer.space =
 
 							var aHTML = [];
 
-							aHTML.push('<table>');
+							aHTML.push('<table class="ns1blankspaceColumn2">');
 							
-							aHTML.push('<tr><td><span id="ns1blankspaceSpaceSubscriptionsAdd">Add</span>' +
+							aHTML.push('<tr><td><span id="ns1blankspaceSpaceSubscriptionsAdd" class="ns1blankspaceAction">Add</span>' +
 															'</td></tr>');
 
 							aHTML.push('</table>');					
 							
-							$('#tdns1blankspaceMainSpaceSubscriptionsColumn2').html(aHTML.join(''));
+							$('#ns1blankspaceSubscriptionsColumn2').html(aHTML.join(''));
 							
-							$('#ns1blankspaceSubscriptionsColumn2').button(
+							$('#ns1blankspaceSpaceSubscriptionsAdd').button(
 							{
 								label: "Add"
 							})
 							.click(function()
 							{
-								if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceSubscriptionsColumn2')
+								if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceSpaceSubscriptionsAdd')
 								{
 									$(ns1blankspace.xhtml.container).slideUp(500);
 									$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 								}
 								else
 								{
-									ns1blankspaceMasterOptionsSetPosition({xhtmlElementID: 'ns1blankspaceSubscriptionsColumn2', leftOffset: -50, rightOffset: -280});
+									ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceSpaceSubscriptionsAdd', topOffset: -30, leftOffset: -255});
 									$.extend(true, aParam, {step: 2});
 									ns1blankspace.developer.space.subscriptions(aParam);
 								}	
-							});
+							})
+							.css('font-size', '0.875em');
 
 							var aHTML = [];
 									
-							aHTML.push('<table id="ns1blankspaceSpaceSubscriptions" class="ns1blankspaceContainer">');
+							aHTML.push('<table id="ns1blankspaceSpaceSubscriptions">');
 
 							if (oResponse.data.rows.length == 0)
 							{
@@ -604,7 +611,7 @@ ns1blankspace.developer.space =
 								
 							$('#ns1blankspaceSubscriptionsColumn1').html(aHTML.join(''));
 
-							$('#ns1blankspaceSpaceSubscriptions > td.ns1blankspacenRowRemove').button(
+							$('#ns1blankspaceSpaceSubscriptions td.ns1blankspacenRowRemove').button(
 							{
 								text: false,
 							 	icons: {primary: "ui-icon-close"}
@@ -637,7 +644,6 @@ ns1blankspace.developer.space =
 							$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceSpaceSubscriptionsAdd')
 							
 							var aHTML = [];
-							var h = -1;
 							
 							if (oResponse.data.rows.length == 0)
 							{
@@ -667,7 +673,7 @@ ns1blankspace.developer.space =
 								$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 								$(ns1blankspace.xhtml.container).show();
 								
-								$('#s1blankspaceSpaceSubscriptionsSelect > td.ns1blankspaceRowSelect').click(function(event)
+								$('#s1blankspaceSpaceSubscriptionsSelect td.ns1blankspaceRowSelect').click(function(event)
 								{
 									aParam.step = 3;
 									aParam.xhtmlElementID = event.target.id;
@@ -777,13 +783,13 @@ ns1blankspace.developer.space =
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.developer.membership.init();
+					ns1blankspace.developer.space.details({source: 1});
 				},
 
 	save:		{
 					send:		function ()
 								{
-									if (giObjectContext != -1)
+									if (ns1blankspace.objectContext != -1)
 									{
 										
 									}	
@@ -797,7 +803,7 @@ ns1blankspace.developer.space =
 											iContactPersonId = $('#ns1blankspaceDetailsContactPerson').attr('data-id');
 										}
 
-										if ($('#ns1blankspaceMainFromNew').html() != '' && (iContactBusinessId == '' || iContactPersonId == ''))
+										if ($('#ns1blankspaceMainDetails').html() != '')
 										{
 											ns1blankspace.status.working();
 
