@@ -309,7 +309,7 @@ ns1blankspace.product =
 					$('#ns1blankspaceControlPricing').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainPricing'});
-						ns1blankspace.product.pricing();
+						ns1blankspace.product.pricing.show();
 					});
 					
 					$('#ns1blankspaceControlCategory').click(function(event)
@@ -546,6 +546,8 @@ ns1blankspace.product =
 									{
 										$('#ns1blankspaceMainPricing').attr('data-loading', '');
 										
+										var aHTML = [];
+
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspacePricingColumn1" class="ns1blankspaceColumn1"></td>' +
@@ -643,8 +645,6 @@ ns1blankspace.product =
 					
 					if ($('#ns1blankspaceMainCategory').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceMainCategory').attr('data-loading', '');
-
 						if (oResponse == undefined)
 						{	
 							var oSearch = new AdvancedSearch();
@@ -656,6 +656,8 @@ ns1blankspace.product =
 						}
 						else
 						{
+							$('#ns1blankspaceMainCategory').attr('data-loading', '');
+
 							var aHTML = [];
 								
 							aHTML.push('<table class="ns1blankspace">');
@@ -678,6 +680,8 @@ ns1blankspace.product =
 								aHTML.push('</td></tr>');
 							}
 							
+							aHTML.push('</table>');
+
 							$('#ns1blankspaceMainCategory').html(aHTML.join(''));
 
 							if (oResponse.data.rows.length != 0)
@@ -688,7 +692,7 @@ ns1blankspace.product =
 					}	
 				},
 
-	stock:		function interfaceProductStock()
+	stock:		function ()
 				{
 					var aHTML = [];
 
@@ -854,9 +858,8 @@ ns1blankspace.product =
 											ns1blankspace.product.save.units();
 										}
 
-										if (ns1blankspace.objectContext == -1)
+										if (bNew)
 										{
-											ns1blankspace.objectContext = oResponse.id;
 											ns1blankspace.inputDetected = false;
 											ns1blankspace.product.search.send('-' + ns1blankspace.objectContext, {source: 1});
 										}	
