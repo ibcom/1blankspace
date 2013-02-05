@@ -902,12 +902,12 @@ ns1blankspace.report =
 						var aHTML = [];
 						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceReportComparison" class="interfaceSearchMedium">';
+						aHTML[++h] = '<table class="ns1blankspaceSearchMedium">';
 						aHTML[++h] = (advancedSearchComparisonGet({dataType: aID[2], returnFormat: 'xhtml'})).join('');
 						aHTML[++h] = '</table>';		
 						
-						ns1blankspaceOptionsPosition({xhtmlElementID: sXHTMLElementID})		
-						$('#divns1blankspaceViewportControlOptions').html(aHTML.join(''))	
+						ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID})		
+						$('#ns1blankspace.xhtml.container').html(aHTML.join(''))	
 						
 						$('td.interfaceMainReportComparisonType').click(function(event)
 						{
@@ -930,7 +930,7 @@ ns1blankspace.report =
 							//$('#' + sXHTMLElementID).attr('data-inputType', sInputType);
 							$('#' + sXHTMLElementID).attr('data-inputCount', $('#' + sID).attr('data-inputcount'));
 							
-							$('#divns1blankspaceViewportControlOptions').hide();
+							$('#ns1blankspace.xhtml.container').hide();
 							
 							var sXHTMLElementInputID  = sXHTMLElementID.replace('_comparison', '_input');
 							var iInputCount = $('#' + sID).attr('data-inputCount');
@@ -1962,7 +1962,7 @@ ns1blankspace.report =
 					}
 					else
 					{
-						ns1blankspaceConfirm({html: ['Parameters not passed to interfaceReportSendPreview. <br /><br />Preview aborted.'], title: 'System Error!'})
+						ns1blankspace.status.error('Parameters not passed to interfaceReportSendPreview. <br /><br />Preview aborted.');
 						return false;
 					}
 					
@@ -1980,8 +1980,8 @@ ns1blankspace.report =
 					
 					sParam = "&more=" + iMoreId + 
 							 "&object=" + iObject + "&objectcontext=" + oRow.id +
-							 "&templatetext=" + FormatSave(sText) + 
-							 "&tags=" + FormatSave(sTags);
+							 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+							 "&tags=" + ns1blankspace.util.fs(sTags);
 
 					$.ajax(
 					{
@@ -1995,7 +1995,7 @@ ns1blankspace.report =
 						{
 							if (data.substr(0,12) == "OK|RETURNED|")
 							{	
-								ns1blankspaceConfirm({html: [data.substring(12)], title: "Merged content."});	}
+								ns1blankspace.status.status(data.substring(12));	}
 						}
 					});
 				},
@@ -2019,7 +2019,7 @@ ns1blankspace.report =
 					}
 					else
 					{
-						ns1blankspaceConfirm({html: ['Parameters not passed to ns1blankspace.report.sendEmail. <br /><br />Preview aborted.'], title: 'System Error!'})
+						ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.sendEmail. <br /><br />Preview aborted.');
 						return false;
 					}
 					
@@ -2041,14 +2041,14 @@ ns1blankspace.report =
 						});
 						
 						sParam = "&more=" + iMoreId + 
-								 "&title=" + FormatSave(sSubject) +
+								 "&title=" + ns1blankspace.util.fs(sSubject) +
 								 "&status=1" + 
 								 "&type=2" +
 								 '&scheduletype=9' +
 								 "&schedulemaximumcount=1" + 
-								 "&responseactionfrom=" + FormatSave(sEmail) + 
-								 "&templatetext=" + FormatSave(sText) + 
-								 "&caption=" + FormatSave(sTags);
+								 "&responseactionfrom=" + ns1blankspace.util.fs(sEmail) + 
+								 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+								 "&caption=" + ns1blankspace.util.fs(sTags);
 
 						$.ajax(
 						{
@@ -2060,7 +2060,7 @@ ns1blankspace.report =
 							async: false,
 							success: function(data)
 							{
-								ns1blankspaceConfirm({title: "Bulk Email", html: ["Email(s) sent"]});
+								ns1blankspace.status.status("Email(s) sent");
 							}
 						});
 					}
