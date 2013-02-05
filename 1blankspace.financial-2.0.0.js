@@ -432,46 +432,58 @@ ns1blankspace.financial.debtors =
 					{
 						var aHTML = [];
 						
-						if (oResponse.data.rows.length == 0)
+						if (oResponse.status == 'ER')
 						{
 							aHTML.push('<table><tbody>' +
-											'<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceNothing">Good news and band news, in that no debtors.  So good that no one owes you money, but bad in that no one owes you money.</td>' +
-											'</tr>' +
-											'</tbody></table>');
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceNothing">No debtors.</td>' +
+										'</tr>' +
+										'</tbody></table>');
 						}
 						else
 						{
-							aHTML.push('<table class="ns1blankspace">' +
-											'<tr class="ns1blankspaceCaption">' +
-											'<td class="ns1blankspaceHeaderCaption">Debtor</td>' +
-											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount Owed</td>' +
-											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Date</td>' +
-											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Amount</td>' +
-											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
-											'</tr>');
-							
-							$(oResponse.data.rows).each(function() 
+							if (oResponse.data.rows.length == 0 )
 							{
-								aHTML.push(ns1blankspace.financial.debtors.row(this));
-							});
-							
-							aHTML.push('</table>');
+								aHTML.push('<table><tbody>' +
+												'<tr class="ns1blankspace">' +
+												'<td class="ns1blankspaceNothing">No debtors.</td>' +
+												'</tr>' +
+												'</tbody></table>');
+							}
+							else
+							{
+								aHTML.push('<table class="ns1blankspace">' +
+												'<tr class="ns1blankspaceCaption">' +
+												'<td class="ns1blankspaceHeaderCaption">Debtor</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount Owed</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Date</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Amount</td>' +
+												'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
+												'</tr>');
+								
+								$(oResponse.data.rows).each(function() 
+								{
+									aHTML.push(ns1blankspace.financial.debtors.row(this));
+								});
+								
+								aHTML.push('</table>');
+							}
 						}
-						
+
 						ns1blankspace.render.page.show(
-						   {
-							type: 'JSON',
-							xhtmlElementID: 'ns1blankspaceMainDebtors',
-							xhtmlContext: 'Debtors',
-							xhtml: aHTML.join(''),
-							showMore: (oResponse.morerows == "true"),
-							more: oResponse.moreid,
-							rows: ns1blankspace.option.defaultRows,
-							functionShowRow: ns1blankspace.financial.debtors.row,
-							functionOpen: undefined,
-							functionNewPage: ''
-						   }); 	
+							   {
+								type: 'JSON',
+								xhtmlElementID: 'ns1blankspaceMainDebtors',
+								xhtmlContext: 'Debtors',
+								xhtml: aHTML.join(''),
+								showMore: (oResponse.morerows == "true"),
+								more: oResponse.moreid,
+								rows: ns1blankspace.option.defaultRows,
+								functionShowRow: ns1blankspace.financial.debtors.row,
+								functionOpen: undefined,
+								functionNewPage: ''
+							   });
+							    	
 					}
 				},
 
@@ -512,33 +524,45 @@ ns1blankspace.financial.creditors =
 					{
 						var aHTML = [];
 						
-						if (oResponse.data.rows.length == 0)
+						if (oResponse.status == 'ER')
 						{
 							aHTML.push('<table><tbody>' +
-											'<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceNothing">You don\'t owe anyone any money.</td>' +
-											'</tr>' +
-											'</tbody></table>');
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceNothing">No creditors.</td>' +
+										'</tr>' +
+										'</tbody></table>');
 						}
 						else
 						{
-							aHTML.push('<table class="ns1blankspace">' +
-											'<tbody>' +
-											'<tr class="ns1blankspaceCaption">' +
-											'<td class="ns1blankspaceHeaderCaption">Creditor</td>' +
-											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount To Be Paid</td>' +
-											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Payment Date</td>' +
-											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Payment Amoun</td>' +
-											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
-											'</tr>');	
-							
-							$(oResponse.data.rows).each(function() 
+
+							if (oResponse.data.rows.length == 0)
 							{
-								aHTML.push(ns1blankspace.financial.creditors.row(this));
-							});
-							
-							aHTML.push('</tbody></table>');
-						}
+								aHTML.push('<table><tbody>' +
+												'<tr class="ns1blankspace">' +
+												'<td class="ns1blankspaceNothing">Do creditors</td>' +
+												'</tr>' +
+												'</tbody></table>');
+							}
+							else
+							{
+								aHTML.push('<table class="ns1blankspace">' +
+												'<tbody>' +
+												'<tr class="ns1blankspaceCaption">' +
+												'<td class="ns1blankspaceHeaderCaption">Creditor</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount To Be Paid</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Payment Date</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Payment Amoun</td>' +
+												'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
+												'</tr>');	
+								
+								$(oResponse.data.rows).each(function() 
+								{
+									aHTML.push(ns1blankspace.financial.creditors.row(this));
+								});
+								
+								aHTML.push('</tbody></table>');
+							}
+						}	
 						
 						ns1blankspace.render.page.show(
 						   {

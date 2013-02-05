@@ -2078,7 +2078,7 @@ ns1blankspace.attachments =
 							columns: 'subject-actiondate',
 							more: oResponse.moreid,
 							rows: ns1blankspace.option.defaultRows,
-							functionSearch: ns1blankspace.attachments.show(),
+							functionSearch: ns1blankspace.attachments.show,
 							functionShowRow: ns1blankspace.attachments.row,
 							functionNewPage: 'ns1blankspace.attachments.bind()',
 							type: 'json'

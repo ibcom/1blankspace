@@ -419,6 +419,8 @@ ns1blankspace.financial.payroll =
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
+						var aHTML = [];
+
 						aHTML.push('<table class="ns1blankspaceContainer">');
 						aHTML.push('<tr class="ns1blankspaceContainer">' +
 										'<td id="ns1blankspaceDetailsColumn1" class="ns1blankspaceColumn1"></td>' +
@@ -452,7 +454,7 @@ ns1blankspace.financial.payroll =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Pay Date' +
+										'Status' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +

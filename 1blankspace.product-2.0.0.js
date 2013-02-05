@@ -443,6 +443,8 @@ ns1blankspace.product =
 				{
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
+						var aHTML = [];
+
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
 						aHTML.push('<table class="ns1blankspaceContainer">' +
@@ -827,7 +829,7 @@ ns1blankspace.product =
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.fs('PRODUCT_MANAGE'),
+										url: ns1blankspace.util.endpointURI('PRODUCT_MANAGE'),
 										data: sData,
 										dataType: 'json',
 										success: ns1blankspace.product.save.process
@@ -850,6 +852,13 @@ ns1blankspace.product =
 										if ($('#ns1blankspaceMainStock').html() != '')
 										{
 											ns1blankspace.product.save.units();
+										}
+
+										if (ns1blankspace.objectContext == -1)
+										{
+											ns1blankspace.objectContext = oResponse.id;
+											ns1blankspace.inputDetected = false;
+											ns1blankspace.product.search.send('-' + ns1blankspace.objectContext, {source: 1});
 										}	
 									}
 									else

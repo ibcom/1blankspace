@@ -20,14 +20,6 @@ ns1blankspace.developer.membership =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Apps (Memberships)';
 					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.developer.membership.init({showHome: true});',
-							move: false
-							});	
-					}	
-	
 					ns1blankspace.app.set(oParam);
 				},
 
@@ -425,9 +417,9 @@ ns1blankspace.developer.membership =
 						
 						if (ns1blankspace.objectContext != undefined)
 						{
-							$('#inputns1blankspaceMainDetailsTitle').val(ns1blankspace.objectContext.title);
-							$('#inputns1blankspaceMainDetailsReference').val(ns1blankspace.objectContext.reference);
-							$('#inputns1blankspaceMainDetailsDescription').val(ns1blankspace.objectContext.description);
+							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.title);
+							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
 						}
 					}	
 				},
@@ -499,11 +491,11 @@ ns1blankspace.developer.membership =
 														'</tr>' + 
 														'</table>');		
 
-										$('#ns1blankspaceEndpoints').html(aHTML.join(''));
+										$('#ns1blankspaceMainEndpoints').html(aHTML.join(''));
 
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceMainColumn2">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
 										aHTML.push('<tr><td class="ns1blankspaceAction">' +
 														'<span id="ns1blankspaceMembershipEndpointsAdd">Add Endpoint</span>' +
@@ -518,13 +510,13 @@ ns1blankspace.developer.membership =
 											label: "Add Endpoint"
 										})
 										.click(function() {
-											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceMembershipEndpointsAdd', leftOffset: -50, topOffset: -280});
+											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceMembershipEndpointsAdd', topOffset: -50, leftOffset: -280});
 											ns1blankspace.developer.membership.endpoints.add(oParam);
 										});
 
 										var aHTML = [];
 								
-										aHTML.push('<table id="ns1blankspaceDeveloperMembershipEndpoints" class="ns1blankspaceMain">');
+										aHTML.push('<table id="ns1blankspaceDeveloperMembershipEndpoints" class="ns1blankspace">');
 
 										if (oResponse.data.rows.length == 0)
 										{
@@ -546,9 +538,9 @@ ns1blankspace.developer.membership =
 									
 										aHTML.push('</table>');
 											
-										$('#ns1blankspaceEndpointsColumn2').html(aHTML.join(''));
+										$('#ns1blankspaceEndpointsColumn1').html(aHTML.join(''));
 
-										$('#ns1blankspaceDeveloperMembershipEndpoints > td.ns1blankspaceRowSelect').click(function(event)
+										$('#ns1blankspaceDeveloperMembershipEndpoints td.ns1blankspaceRowSelect').click(function(event)
 										{
 											var sXHTMLElementID = event.target.id;
 											var aId = sXHTMLElementID.split('-');
@@ -556,7 +548,7 @@ ns1blankspace.developer.membership =
 											ns1blankspace.developer.membership.endpoints.add({endpoint: aId[1], step: 2});
 										});
 
-										$('ns1blankspaceDeveloperMembershipEndpoints > td.ns1blankspaceRowRemove').button(
+										$('ns1blankspaceDeveloperMembershipEndpoints td.ns1blankspaceRowRemove').button(
 										{
 											text: false,
 										 	icons: {primary: "ui-icon-close"}
@@ -607,7 +599,7 @@ ns1blankspace.developer.membership =
 																'</table>');
 
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-												$(ns1blankspace.xhtml.container).show(giShowSpeedOptions);
+												$(ns1blankspace.xhtml.container).show();
 											}
 											else
 											{
@@ -626,9 +618,9 @@ ns1blankspace.developer.membership =
 												aHTML.push('</table>');
 
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-												$(ns1blankspace.xhtml.container).show(giShowSpeedOptions);
+												$(ns1blankspace.xhtml.container).show();
 												
-												$('td.ns1blankspaceMainRowSelect').click(function(event)
+												$('td.ns1blankspaceRowSelect').click(function(event)
 												{
 													ns1blankspace.developer.membership.endpoints.select(event.target.id);
 												});
@@ -639,10 +631,11 @@ ns1blankspace.developer.membership =
 	
 					select:		function (sXHTMLElementID)
 								{
-									var aSearch = sXHTMLElementID.split('-');
-									var sElementID = aSearch[0];
-									var sSearchContext = aSearch[2];
+									var aXHTMLElementID = sXHTMLElementID.split('-');
 									
+									var sData = 'membership=' + ns1blankspace.objectContext +
+													'&endpoint=' + ns1blankspace.util.fs(aXHTMLElementID[1])
+
 									$('#' + sXHTMLElementID).fadeOut(500);
 																
 									$.ajax(
@@ -651,7 +644,7 @@ ns1blankspace.developer.membership =
 											url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_ENDPOINT_MANAGE'),
 											data: sData,
 											dataType: 'json',
-											success: function(data){ns1blankspaceDeveloperMembershipEndpoints()}
+											success: function(data){ns1blankspace.developer.membership.endpoints.show()}
 										});
 										
 								},

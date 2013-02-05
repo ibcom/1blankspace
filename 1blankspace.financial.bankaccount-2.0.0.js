@@ -214,11 +214,21 @@ ns1blankspace.financial.bankAccount =
 
 					var aHTML = [];
 				
-					aHTML.push('<table class="ns1blankspace">' +
+					if (ns1blankspace.objectContextData.lastreconcileddate == '')
+					{
+						aHTML.push('<table class="ns1blankspace">' +
+									'<tr><td class="ns1blankspaceSub">' +
+									'This bank account has never been reconciled.' +
+									'</td></tr></table>');
+					}
+					else
+					{	
+						aHTML.push('<table class="ns1blankspace">' +
 									'<tr><td class="ns1blankspaceSub">' +
 									'This bank account was last reconciled on the ' +
 									 ns1blankspace.objectContextData.lastreconcileddate + '.' +
-									'</td></tr></table>');					
+									'</td></tr></table>');
+					}								
 
 					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 					

@@ -76,7 +76,7 @@ ns1blankspace.event =
 									
 						aHTML.push('<table class="ns1blankspaceViewportMain">');
 						aHTML.push('<tr id="trns1blankspaceViewportMain" class="ns1blankspaceViewportMain">' +
-										'<td id="tdns1blankspaceProjectHomeMostLikely" class="ns1blankspaceViewportMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceViewportMain">' +
 										ns1blankspace.xhtml.loading + 
 										'</td>' +
 										'</tr>');

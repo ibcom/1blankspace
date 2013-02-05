@@ -843,9 +843,9 @@ ns1blankspace.setup.user =
 									{
 										if (oResponse == undefined)
 										{	
-											if ($('#inputInterfaceMainDetailsUserName').val() == '' ||
-												$('#inputInterfaceMainDetailsFirstName').val() == '' ||
-												$('#inputInterfaceMainDetailsLastName').val() == '')
+											if ($('#ns1blankspaceDetailsUserName').val() == '' ||
+												$('#ns1blankspaceDetailsFirstName').val() == '' ||
+												$('#ns1blankspaceDetailsLastName').val() == '')
 											{
 												ns1blankspace.status.error('Missing information.');
 											}	
@@ -854,9 +854,9 @@ ns1blankspace.setup.user =
 												var oSearch = new AdvancedSearch();
 												oSearch.method = 'CONTACT_PERSON_SEARCH';
 												oSearch.addField('firstname');
-												oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.contactBusiness);
-												oSearch.addFilter('firstname', 'EQUAL_TO', $('#inputInterfaceMainDetailsFirstName').val());
-												oSearch.addFilter('surname', 'EQUAL_TO', $('#inputInterfaceMainDetailsLastName').val());
+												oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.user.contactBusiness);
+												oSearch.addFilter('firstname', 'EQUAL_TO', $('#ns1blankspaceDetailsFirstName').val());
+												oSearch.addFilter('surname', 'EQUAL_TO', $('#ns1blankspaceDetailsLastName').val());
 												oSearch.getResults(ns1blankspace.setup.user.save.send);
 											}
 										}
@@ -867,19 +867,19 @@ ns1blankspace.setup.user =
 												ns1blankspace.setup.user.save.process(
 												{
 													contactPerson: oResponse.data.rows[0].contactperson,
-													contactBusiness: ns1blankspace.contactBusiness
+													contactBusiness: ns1blankspace.user.contactBusiness
 												});		
 											}
 											else
 											{
-												var sData = 'contactbusiness=' + ns1blankspace.contactBusiness;
-												sData += '&firstname=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsFirstName').val());
-												sData += '&surname=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsLastName').val());
+												var sData = 'contactbusiness=' + ns1blankspace.user.contactBusiness;
+												sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFirstName').val());
+												sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsLastName').val());
 
 												$.ajax(
 												{
 													type: 'POST',
-													url: ns1blankspace.util.endpointURL('CONTACT_PERSON_MANAGE'),
+													url: ns1blankspace.util.endpointURI('CONTACT_PERSON_MANAGE'),
 													data: sData,
 													dataType: 'json',
 													success: function(data)
@@ -889,7 +889,7 @@ ns1blankspace.setup.user =
 																ns1blankspace.setup.user.save.process(
 																{
 																	contactPerson: data.id,
-																	contactBusiness: ns1blankspace.contactBusiness
+																	contactBusiness: ns1blankspace.user.contactBusiness
 																});	
 															}
 															else
@@ -906,7 +906,7 @@ ns1blankspace.setup.user =
 					process:	function (oParam)
 								{
 									var sData = '_=1';
-									var iContactBusiness = ns1blankspace.contactBusiness;
+									var iContactBusiness = ns1blankspace.user.contactBusiness;
 									var iContactPerson;
 
 									if (oParam != undefined)
@@ -928,9 +928,9 @@ ns1blankspace.setup.user =
 									
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&username=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsUserName').val());
+										sData += '&username=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsUserName').val());
 										sData += '&disabled=' + $('input[name="radioDisabled"]:checked').val();
-										sData += '&disabledreason=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDisabledReason').val());
+										sData += '&disabledreason=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDisabledReason').val());
 									};
 
 									if ($('#ns1blankspaceMainAccess').html() != '')

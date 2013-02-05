@@ -596,12 +596,12 @@ ns1blankspace.developer.space =
 
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML.push('<td id="ns1blankspaceSpaceSubscriptions_Title-' + this.id + '" class="ns1blankspaceMainRow ns1blankspaceMainRowSelect"' +
+								aHTML.push('<td id="ns1blankspaceSpaceSubscriptions_Title-' + this.id + '" class="ns1blankspaceRow"' +
 														' title="">' +
 														this.membershiptext + '</td>');
 
 								aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">');
-								aHTML.push('<span id="ns1blankspaceSpaceSubscriptions_remove-' + this.id + '" class="ns1blankspacenRowRemove"></span>');
+								aHTML.push('<span id="ns1blankspaceSpaceSubscriptions_remove-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowRemove"></span>');
 								aHTML.push('</td>');	
 
 								aHTML.push('</tr>');
