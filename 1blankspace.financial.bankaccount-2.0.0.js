@@ -79,7 +79,7 @@ ns1blankspace.financial.bankAccount =
 							$.each(ns1blankspace.financial.data.bankaccounts, function()
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">' +
-												'<td id="ns1blankspaceBankAccount_title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:150px;">' +
+												'<td id="ns1blankspaceBankAccount_title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:200px;">' +
 												this["title"] + '</td>' + 
 												'<td id="ns1blankspaceBankAccount_lastreconcileddate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;">' +
 												this.lastreconcileddate + '</td>' +

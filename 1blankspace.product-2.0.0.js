@@ -131,7 +131,7 @@ ns1blankspace.product =
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'PRODUCT_SEARCH';
-										oSearch.addField('reference,title,trackinventory,status,statustext,description,' +
+										oSearch.addField('reference,title,trackinventory,status,statustext,description,financialaccountincome,financialaccountincometext,' +
 															'unittype,unittypetext,units,category,categorytext,currentretailprice,type,minimumstocklevel');
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
@@ -261,13 +261,16 @@ ns1blankspace.product =
 
 						aHTML.push('</table>');					
 
-						aHTML.push('<table class="ns1blankspaceControl">');
+						if (false)
+						{
+							aHTML.push('<table class="ns1blankspaceControl">');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlStock" class="ns1blankspaceControl">' +
-										'Stock</td></tr>');
+							aHTML.push('<tr><td id="ns1blankspaceControlStock" class="ns1blankspaceControl">' +
+											'Stock</td></tr>');
 
-						aHTML.push('</table>');					
-
+							aHTML.push('</table>');					
+						}
+							
 						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
@@ -364,7 +367,7 @@ ns1blankspace.product =
 						
 						if (ns1blankspace.objectContextData.currentretailprice != '')
 						{
-							aHTML.push('<br /><span id="ns1blankspaceControlContext_price" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.currentretailprice + '</span>');
+							aHTML.push('<br /><span id="ns1blankspaceControlContext_price" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.currentretailprice + '</span>');
 						}
 
 						$('#ns1blankspaceControlContext').html(aHTML.join(''));
@@ -412,7 +415,7 @@ ns1blankspace.product =
 						{
 
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Retail Price</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryPrice" class="ns1blankspaceSummary">' +
+										'<tr><td id="ns1blankspaceSummaryPrice" class="ns1blankspaceSummary">$' +
 										ns1blankspace.objectContextData.currentretailprice +
 										'</td></tr>');
 						}	
@@ -484,8 +487,19 @@ ns1blankspace.product =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea id="ns1blankspaceDetailsDescription" style="width:320px;" rows="10" cols="35" class="ns1blankspaceTextMulti"></textarea>' +
-										'</td></tr>');					
+										'<textarea id="ns1blankspaceDetailsDescription" style="width:320px;" rows="5" cols="35" class="ns1blankspaceTextMulti"></textarea>' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Product Sales' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceDetailsFinancialAccountProductSales" class="ns1blankspaceSelect"' +
+											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+											' data-columns="title">' +
+										'</td></tr>');						
 									
 						aHTML.push('</table>');					
 						
@@ -530,6 +544,9 @@ ns1blankspace.product =
 							$('#ins1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
 							$('[name="radioStatus"][value="' + iStatus + '"]').attr('checked', true);
 							$('[name="radioProductType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
+
+							$('#ns1blankspaceDetailsFinancialAccountProductSales').val(ns1blankspace.objectContextData.financialaccountincometext);
+							$('#ns1blankspaceDetailsFinancialAccountProductSales').attr("data-id", ns1blankspace.objectContextData.financialaccountincome);
 						}
 						else
 						{
@@ -578,7 +595,7 @@ ns1blankspace.product =
 
 										if (ns1blankspace.objectContextData != undefined)
 										{
-											$('#ins1blankspacePricingPriceRetail').val(ns1blankspace.objectContextData.currentretailprice);
+											$('#ns1blankspacePricingPriceRetail').val(ns1blankspace.objectContextData.currentretailprice);
 										}
 									}	
 								},
@@ -813,6 +830,8 @@ ns1blankspace.product =
 										
 										sData += '&status=' + ns1blankspace.util.fs(iStatus);
 										sData += '&type=' + ns1blankspace.util.fs($('input[name="radioProductType"]:checked').val());
+
+										sData += '&financialaccountincome=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFinancialAccountProductSales').attr('data-id'));
 									}
 									
 									if ($('#ns1blankspaceMainStock').html() != '')
@@ -873,7 +892,7 @@ ns1blankspace.product =
 					price:		function (aParam)
 								{
 									var sData = 'price=' + ns1blankspace.util.fs($('#ns1blankspacePricingPriceRetail').val());
-									sData += '&product=' + ns1blankspace.util.fs(giObjectContext);
+									sData += '&product=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 									
 									$.ajax(
 									{
@@ -887,7 +906,7 @@ ns1blankspace.product =
 					units:		function (oParam)
 								{
 									var sData = 'units=' + ns1blankspace.util.fs($('#ns1blankspaceStockUnits').val());
-									sData += '&product=' + ns1blankspace.objectContext;
+									sData += '&product=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 									sData += '&type=3';
 									sData += '&effectivedate=' + Date.today().toString("dd-MMM-yyyy");
 									

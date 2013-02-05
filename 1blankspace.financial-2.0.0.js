@@ -59,6 +59,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 									ns1blankspace.status.message(ns1blankspace.xhtml.loadingSmall + ' initalising financials')
 									$('#ns1blankspaceMain').html('');
+									$('#ns1blankspaceControl').html('');
 
 									$.ajax(
 									{

@@ -1080,6 +1080,17 @@ ns1blankspace.setup.financial =
 										'<input id="ns1blankspaceFinancialAccountRetainedProfit" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Product Sales' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceFinancialAccountProductSales" class="ns1blankspaceSelect"' +
+											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+											' data-columns="title">' +
 										'</td></tr>');	
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -1137,6 +1148,8 @@ ns1blankspace.setup.financial =
 							$('#ns1blankspaceFinancialAccountTaxCredits').attr("data-id", ns1blankspace.objectContextData.taxreportfinancialaccountcredits);
 							$('#ns1blankspaceFinancialAccountTaxPayroll').val(ns1blankspace.objectContextData.payrollfinancialaccounttaxtext);
 							$('#ns1blankspaceFinancialAccountTaxPayroll').attr("data-id", ns1blankspace.objectContextData.payrollfinancialaccounttax);
+							$('#ns1blankspaceFinancialAccountProductSales').val(ns1blankspace.objectContextData.financialaccountproductincometext);
+							$('#ns1blankspaceFinancialAccountProductSales').attr("data-id", ns1blankspace.objectContextData.financialaccountproductincome);
 						}
 					}	
 				},
@@ -1492,6 +1505,7 @@ ns1blankspace.setup.financial =
 										sData += '&taxreportfinancialaccountpayable=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxLiabilities').attr('data-id'));
 										sData += '&taxreportfinancialaccountcredits=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxCredits').attr('data-id'));
 										sData += '&payrollfinancialaccounttax=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxPayroll').attr('data-id'));
+										sData += '&financialaccountproductincome=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountProductSales').attr('data-id'));
 									};
 
 									if ($('#ns1blankspaceMainGeneral').html() != '')
