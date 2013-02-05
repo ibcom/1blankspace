@@ -552,7 +552,7 @@ ns1blankspace.report =
 							
 						$('#ns1blankspaceMainReportHeader').html(aHTML.join(''))	
 						
-						interfaceReportSearch(oParam);
+						ns1blankspace.report.search.send(oParam);
 					}
 					else
 					{
@@ -570,7 +570,7 @@ ns1blankspace.report =
 							var oSearch = new AdvancedSearch();
 							oSearch.returnParameters = ns1blankspace.report.returnParameters;
 							oSearch.rf = 'json';
-							oSearch.getResults(sJSONSearch, function(data) {interfaceReportViewport(oParam, data)}) ;	
+							oSearch.getResults(sJSONSearch, function(data) {ns1blankspace.report.show(oParam, data)}) ;	
 						}
 						
 						else if (oResponse == undefined && ns1blankspace.report.method != undefined)
@@ -598,7 +598,7 @@ ns1blankspace.report =
 									var sCaption = this.caption;
 									if (sCaption == undefined)
 									{	
-										sCaption = interfaceReportDictionaryGet({name: this.name});
+										sCaption = ns1blankspace.report.getCaption({name: this.name});
 										if (sCaption == undefined) { sCaption = this.name;	}
 									}
 									ns1blankspace.report.allParameters.push({name: this.name, caption: sCaption})
@@ -614,7 +614,7 @@ ns1blankspace.report =
 									var sCaption = this.caption;
 									if (sCaption == undefined)
 									{	
-										sCaption = interfaceReportDictionaryGet({name: this.name});
+										sCaption = ns1blankspace.report.getCaption({name: this.name});
 										if (sCaption == undefined) { sCaption = this.name;	}
 									}
 									ns1blankspace.report.allParameters.push({name: this.name, caption: sCaption})
@@ -886,7 +886,7 @@ ns1blankspace.report =
 				},
 
 	showComparison:
-				function interfaceReportComparisonShow(oParam)
+				function (oParam)
 				{ 
 					var sXHTMLElementID;
 					
@@ -944,7 +944,7 @@ ns1blankspace.report =
 							var sOnDemandClick = $('#' + sXHTMLElementID).attr('data-onDemandClick');
 							var sSearchRelatedField = $('#' + sXHTMLElementID).attr('data-searchrelatedfield');
 								
-							interfaceReportSetInput(
+							ns1blankspace.report.setInput(
 							{
 								xhtmlElementID: sXHTMLElementInputID, 
 								dataType: sDataType,
@@ -966,7 +966,7 @@ ns1blankspace.report =
 					}
 				},
 
-	setInput: 	function interfaceReportSetInput(oParam)
+	setInput: 	function (oParam)
 				{ 
 					var sXHTMLElementID;
 					var sDataType;
@@ -1100,7 +1100,7 @@ ns1blankspace.report =
 				},
 
 	search: 	{
-					send: 		function interfaceReportSearch(oParam, oResponse)
+					send: 		function (oParam, oResponse)
 								{ 
 									var sXHTMLElementID;
 									var aHTML = [];
@@ -1328,7 +1328,7 @@ ns1blankspace.report =
 											oSearch.addSummaryField("count(*) " + ns1blankspace.report.endpoint);
 											oSearch.rows = iRows;
 											oSearch.rf = sReturnFormat;
-											oSearch.getResults(function(data){interfaceReportSearch(oParam, data)}) ;	
+											oSearch.getResults(function(data){ns1blankspace.report.search.send(oParam, data)}) ;	
 										}	
 											
 									}
@@ -1449,7 +1449,7 @@ ns1blankspace.report =
 											})
 											.click(function() 
 											{
-												interfaceReportExportToCSV({moreId: $(oResponse).attr('moreid'),
+												ns1blankspace.report.exportToCSV({moreId: $(oResponse).attr('moreid'),
 																			count: eval('oResponse.summary.' + ns1blankspace.report.endpoint)
 																			});
 											});	
@@ -1542,7 +1542,7 @@ ns1blankspace.report =
 												.click(function()
 												{
 													//var sText = interfaceReportReplaceMailMerge();
-													var sText = interfaceReportReplaceMergeFields({columns: aColumns, 
+													var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
 																								   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + ns1blankspace.counter.editor)).getContent()});
 													var iObject;
 													if (oParam.method != undefined)
@@ -1580,7 +1580,7 @@ ns1blankspace.report =
 																		object: iObject,
 																		text: sText
 																	   }
-													interfaceReportSendPreview(aReportParam);
+													ns1blankspace.report.sendPreview(aReportParam);
 												})
 												.css('width', '30px')
 												.css('height', '30px');
@@ -1592,11 +1592,11 @@ ns1blankspace.report =
 												})
 												.click(function()
 												{
-													var sText = interfaceReportReplaceMergeFields({columns: aColumns, 
+													var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
 																								   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + ns1blankspace.counter.editor)).getContent()});
-													var sSubject = interfaceReportReplaceMergeFields({columns: aColumns, 
+													var sSubject = ns1blankspace.report.mergeFields({columns: aColumns, 
 																								   replace: $('#inputInterfaceMainDetailsReportSendSubject').val()});
-													interfaceReportSendEmail({moreID: oResponse.moreid,
+													ns1blankspace.report.sendEmail({moreID: oResponse.moreid,
 																			  parameters: oParameter,
 																			  text: sText,
 																			  subject: sSubject
@@ -1628,7 +1628,7 @@ ns1blankspace.report =
 								},
 
 
-					row:		function interfaceReportSearchRow(oResponse, oParam)
+					row:		function (oResponse, oParam)
 								{
 									var aHTML = [];
 									var h = -1;
@@ -1711,8 +1711,7 @@ ns1blankspace.report =
 								}
 				},
 
-	mergeFields:
-				function interfaceReportReplaceMergeFields(oParam)
+	mergeFields:	function (oParam)
 				{
 					var sText = "";
 					var aColumns = [];
@@ -1732,7 +1731,7 @@ ns1blankspace.report =
 					return sText;
 				},
 
-	newPage:	function interfaceReportNewPage(oParam, oResponse)
+	newPage:	function (oParam, oResponse)
 				{
 					var sEndpoint;
 					var sMethod;
@@ -1815,7 +1814,7 @@ ns1blankspace.report =
 
 						oAdvancedSearch.rf = 'JSON';
 
-						oAdvancedSearch.getResults(function(data) {interfaceReportNewPage(oParam, data)}) 	
+						oAdvancedSearch.getResults(function(data) {ns1blankspace.report.newPage(oParam, data)}) 	
 					}
 					else
 					{
@@ -1846,8 +1845,7 @@ ns1blankspace.report =
 					}
 				},
 
-	fieldIncluded:
-				function interfaceReportFieldIsIncluded(sFieldList)
+	fieldIncluded: 	function (sFieldList)
 				{
 					var aFields = sFieldList.split('-');
 					var bIncluded = false;
@@ -1867,8 +1865,7 @@ ns1blankspace.report =
 					return bIncluded;
 				},
 
-	searchFilter:			
-				function interfaceReportAddSearchFilter(oParam)
+	searchFilter:	function (oParam)
 				{
 
 					var sValue = $('#' + ns1blankspace.xhtml.divID).val();
@@ -1897,8 +1894,7 @@ ns1blankspace.report =
 					
 				},
 
-	exportCSV:				
-				function interfaceReportExportToCSV(oParam)
+	exportCSV:		function (oParam)
 				{
 					var iMoreId;
 					
@@ -1946,8 +1942,7 @@ ns1blankspace.report =
 					}
 				},
 
-	sendPreview:
-				function interfaceReportSendPreview(oParam)
+	sendPreview:	function (oParam)
 				{
 					var oRow;
 					var iMoreId;
@@ -2005,8 +2000,7 @@ ns1blankspace.report =
 					});
 				},
 
-	sendEMail:			
-				function interfaceReportSendEmail(oParam)
+	sendEMail:	function (oParam)
 				{
 					var iMoreId;
 					var sText = "";
@@ -2025,7 +2019,7 @@ ns1blankspace.report =
 					}
 					else
 					{
-						ns1blankspaceConfirm({html: ['Parameters not passed to interfaceReportSendEmail. <br /><br />Preview aborted.'], title: 'System Error!'})
+						ns1blankspaceConfirm({html: ['Parameters not passed to ns1blankspace.report.sendEmail. <br /><br />Preview aborted.'], title: 'System Error!'})
 						return false;
 					}
 					
