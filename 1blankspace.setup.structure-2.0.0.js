@@ -1298,7 +1298,7 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.view) 
 											{
-												$('#ns1blankspaceSetupStructureElementColumnElement > span.ns1blankspaceRowView').click(function() {
+												$('#ns1blankspaceSetupStructureElementColumnElement span.ns1blankspaceRowView').click(function() {
 													ns1blankspace.setup.structure.element.edit({xhtmlElementID: this.id})
 												})
 												.css('width', '15px')
@@ -1307,7 +1307,7 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.automation) 
 											{
-												$('#ns1blankspaceSetupStructureElementColumnElement > span.ns1blankspaceRowAutomation').button( {
+												$('#ns1blankspaceSetupStructureElementColumnElement span.ns1blankspaceRowAutomation').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-gear"
