@@ -346,20 +346,20 @@ ns1blankspace.financial.tax =
 						var cTaxPayable = (ns1blankspace.objectContextData['taxreport.g9']).parseCurrency();
 
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' on Sales (collected)</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryG9" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData['taxreport.g9'] +
+										'<tr><td id="ns1blankspaceSummaryG9" class="ns1blankspaceSummary">$' +
+										cTaxPayable.formatMoney(0, ".", ",") +
 										'</td></tr>');
 
 						var cTaxCredit = (ns1blankspace.objectContextData['taxreport.g20']).parseCurrency();
 
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' on Purchases (credits)</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData['taxreport.g20'] +
+										'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">$' +
+										cTaxCredit.formatMoney(0, ".", ",")+
 										'</td></tr>');
 
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxCaption + ' Payable</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">' +
-										(cTaxPayable - cTaxCredit).formatMoney(2, '.', ',') +
+										'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">$' +
+										(cTaxPayable - cTaxCredit).formatMoney(0, '.', ',') +
 										'</td></tr>');
 
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
@@ -570,7 +570,7 @@ ns1blankspace.financial.tax =
 														sField + '</td>');
 
 											aHTML.push('<td id="ns1blankspaceReportType_amount-' + sField + '" class="ns1blankspaceRow" style="width:90px;text-align:right;">' +
-														'$' + ns1blankspace.objectContextData['taxreport.' + this.code] + '</td>');
+														'' + (ns1blankspace.objectContextData['taxreport.' + this.code]).parseCurrency().formatMoney(0, ".", ",") + '</td>');
 										}
 										else
 										{
@@ -578,7 +578,7 @@ ns1blankspace.financial.tax =
 														sField + '</td>');
 
 											aHTML.push('<td id="ns1blankspaceReportType_amount-' + sField + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceType" style="width:90px;text-align:right;">' +
-														'' + ns1blankspace.objectContextData['taxreport.' + this.code] + '</td>');
+														'' + (ns1blankspace.objectContextData['taxreport.' + this.code]).parseCurrency().formatMoney(0, ".", ",") + '</td>');
 										}	
 																																											
 										aHTML.push('</tr>');

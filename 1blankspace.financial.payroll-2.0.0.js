@@ -157,7 +157,7 @@ ns1blankspace.financial.payroll =
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
-										oSearch.addField('startdate,paydate,statustext,status,notes,modifieddate');
+										oSearch.addField('startdate,paydate,statustext,status,notes,modifieddate,frequency,frequencytext');
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										
 										oSearch.getResults(function(data) {ns1blankspace.financial.payroll.show(oParam, data)});
@@ -350,7 +350,7 @@ ns1blankspace.financial.payroll =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:150px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:150px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -358,7 +358,7 @@ ns1blankspace.financial.payroll =
 					
 						var aHTML = [];
 					
-						aHTML.push('<table class="ns1blankspaceColumn1">');
+						aHTML.push('<table class="ns1blankspace">');
 
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Start Date</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryStartDate" class="ns1blankspaceSummary">' +
