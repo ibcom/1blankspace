@@ -122,14 +122,16 @@ ns1blankspace.project =
 										
 										ns1blankspace.objectContext = sSearchContext;
 									
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('PROJECT_SEARCH'),
-											data: 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext),
-											dataType: 'json',
-											success: function(data) {ns1blankspace.project.show(oParam, data)}
-										});
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'PROJECT_SEARCH';
+										
+										oSearch.addField('amount,business,businesstext,description,enddate,id,notes,' +
+															'paymentfrequency,paymentfrequencytext,percentagecomplete,person,persontext,' +
+															'projectmanageruser,projectmanagerusertext,reference,startdate,' +
+															'status,statustext,template,totaltime,type,typetext');
+										oSearch.rf = 'json';
+										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
+										oSearch.getResults(function(data){ns1blankspace.project.show(oParam, data)});	
 									}
 									else
 									{
@@ -159,14 +161,12 @@ ns1blankspace.project =
 										{		
 											ns1blankspace.search.start();
 
-											$.ajax(
-											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('PROJECT_SEARCH'),
-												data: 'quicksearch=' + ns1blankspace.util.fs(sSearchText),
-												dataType: 'json',
-												success: function(data) {ns1blankspace.project.search.process(oParam, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'PROJECT_SEARCH';
+											oSearch.addField('reference,description');
+											oSearch.rf = 'json';
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);		
+											oSearch.getResults(function(data) {ns1blankspace.project.search.process(oParam, data)});
 										}
 									};	
 								},
@@ -546,15 +546,14 @@ ns1blankspace.project =
 									}
 
 									if (oResponse == undefined)
-									{									
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('PROJECT_TASK_SEARCH'),
-											data: 'rows=100&project=' + ns1blankspace.objectContext,
-											dataType: 'json',
-											success: function(data){ns1blankspace.project.tasks.show(oParam, data)}
-										});
+									{		
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'PROJECT_TASK_SEARCH';
+										oSearch.addField('reference,title');
+										oSearch.rf = 'json';
+										oSearch.addFilter('project', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.rows = 100;	
+										oSearch.getResults(function(data) {ns1blankspace.project.tasks.show(oParam, data)});
 									}
 									else
 									{
@@ -654,14 +653,14 @@ ns1blankspace.project =
 					edit:		function (oParam, oResponse)
 								{
 									var sXHTMLElementID = "ns1blankspaceMainTaskDetails";
-									var sXHTMLElementContextId;
+									var sXHTMLElementContextID;
 									var lProjectTask;
 									
 									if (oParam != undefined)
 									{
 										if (oParam.label != undefined) {sLabel = oParam.label}
 										if (oParam.xhtmlElementID != undefined) {sXHTMLElementId = oParam.xhtmlElementID}
-										if (oParam.xhtmlElementContextID != undefined) {sXHTMLElementContextId = oParam.xhtmlElementContextID}
+										if (oParam.xhtmlElementContextID != undefined) {sXHTMLElementContextID = oParam.xhtmlElementContextID}
 										if (oParam.projectTask != undefined) {lProjectTask = oParam.projectTask}
 									}
 
@@ -672,7 +671,7 @@ ns1blankspace.project =
 										var lProjectTask = aSearch[1];
 									}	
 										
-									ns1blankspace.show({selector: '#divns1blankspaceMainTaskDetails'});	
+									ns1blankspace.show({selector: '#ns1blankspaceMainTaskDetails'});	
 										
 									var aHTML = [];
 									
@@ -862,7 +861,7 @@ ns1blankspace.project =
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspaceEndpointURL('PROJECT_MANAGE'),
+										url: ns1blankspace.util.endpointURI('PROJECT_MANAGE'),
 										data: sData,
 										dataType: 'json',
 										success: ns1blankspace.project.save.process
@@ -874,9 +873,14 @@ ns1blankspace.project =
 									
 									if (oResponse.status == 'OK')
 									{
-										ns1blankspace.status.message('Project saved');
-										if (ns1blankspace.objectContext == -1) {var bNew = true}
-										ns1blankspace.objectContext = oResponse.id;	
+										ns1blankspace.status.message('Saved');
+
+										if (ns1blankspace.objectContext == -1)
+										{
+											ns1blankspace.objectContext = oResponse.id;
+											ns1blankspace.inputDetected = false;
+											ns1blankspace.project.search.send('-' + ns1blankspace.objectContext, {source: 1});
+										}	
 									}
 									else
 									{
