@@ -377,7 +377,7 @@ ns1blankspace.order =
 								}
 				},
 
-	layout: 	function ns1blankspaceOrderViewport()
+	layout: 	function ()
 				{
 					var aHTML = [];
 
