@@ -222,6 +222,10 @@ ns1blankspace.scripts =
 		source: '/jscripts/1blankspace.financial.payment-2.0.0.js'
 	},
 	{
+		nameSpace: '1blankspace.financial.credit',
+		source: '/jscripts/1blankspace.financial.credit-2.0.0.js'
+	},
+	{
 		nameSpace: '1blankspace.financial.tax',
 		source: '/jscripts/1blankspace.financial.tax-2.0.0.js'
 	},

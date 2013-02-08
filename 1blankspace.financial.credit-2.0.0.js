@@ -5,7 +5,7 @@
  * 01 FEB 2010
  */
 
-ns1blankspace.financial.receipt = 
+ns1blankspace.financial.credit = 
 {
 	init: 		function (oParam)
 				{
@@ -18,12 +18,12 @@ ns1blankspace.financial.receipt =
 
 					ns1blankspace.app.reset();
 
-					ns1blankspace.object = 6;
+					ns1blankspace.object = 69;
 					ns1blankspace.objectParentName = 'financial';
-					ns1blankspace.objectName = 'receipt';
+					ns1blankspace.objectName = 'credit';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'Receipts';
+					ns1blankspace.viewName = 'Credits';
 
 					if (!bInitialised)
 					{
@@ -35,6 +35,7 @@ ns1blankspace.financial.receipt =
 					}	
 				},
 
+//???
 	refresh: 	function (oResponse)
 				{
 					if (oResponse == undefined)
@@ -86,11 +87,11 @@ ns1blankspace.financial.receipt =
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
-						oSearch.addField('reference,description,contactbusinessreceivedfromtext,contactpersonreceivedfromtext,receiveddate,amount');
+						oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
+						oSearch.addField('reference,contactbusinesstext,amount,notes,type,typetext,creditdate');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(ns1blankspace.financial.receipt.home);
+						oSearch.getResults(ns1blankspace.financial.credit.home);
 					}
 					else
 					{
@@ -99,7 +100,7 @@ ns1blankspace.financial.receipt =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to add a receipt.</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to add a credit (note).</td></tr>');
 							aHTML.push('</table>');
 						}
 						else
@@ -111,17 +112,20 @@ ns1blankspace.financial.receipt =
 							{					
 								aHTML.push('<tr class="ns1blankspaceRow">');
 									
-								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:50px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:60px;">' +
 														this.reference + '</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_Type-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:150px; padding-left:10px;">' +
+														this.typetext + '</td>');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_Amount-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:50px;text-align:right;">' +
 														'$' + this.amount + '</td>');
 																		
 								aHTML.push('<td id="ns1blankspaceMostLikely_Date-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;">' +
-														this.receiveddate + '</td>');
+														this.creditdate + '</td>');
 																										
-								var sContact = this.contactbusinessreceivedfromtext;
-								if (sContact == '') {sContact = this.contactpersonreceivedfromtext}
+								var sContact = this.contactbusinesstext;
+								//if (sContact == '') {sContact = this.contactpersonreceivedfromtext}
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_Contact-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
 														sContact + '</td>');
@@ -136,7 +140,7 @@ ns1blankspace.financial.receipt =
 					
 						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							 ns1blankspace.financial.receipt.search.send(event.target.id, {source: 1});
+							 ns1blankspace.financial.credit.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
@@ -170,15 +174,15 @@ ns1blankspace.financial.receipt =
 										ns1blankspace.objectContext = sSearchContext;
 										
 										var oSearch = new AdvancedSearch();
-										oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
-										oSearch.addField('contactbusinessreceivedfromtext,contactbusinessreceivedfrom,' +
-																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
-																'projecttext,project,areatext,area,' +
-																'reference,paymentmethodtext,paymentmethod,receiveddate,description,amount,tax');
+										oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
+										oSearch.addField('amount,area,areatext,contactbusiness,contactbusinesstext,contactperson,contactpersontext,' +
+															'creditdate,financialaccount,financialaccounttext,notes,' +
+															'object,objectcontext,objecttext,project,projecttext,reason,reasontext,' +
+															'reference,store,storetext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										
-										oSearch.getResults(function(data) {ns1blankspace.financial.receipt.show(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.financial.credit.show(oParam, data)});
 									}
 									else
 									{
@@ -200,17 +204,14 @@ ns1blankspace.financial.receipt =
 											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
-											oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
-											oSearch.addField('contactbusinessreceivedfromtext,contactbusinessreceivedfrom,' +
-																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
-																'reference,receiveddate,description,amount');
+											oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
+											oSearch.addField('contactbusiness,contactbusinesstext,contactperson,contactpersontext,' +
+																'reference,creditdate,notes,amount');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
-											/*
 											oSearch.addOperator('or');
-											oSearch.addFilter('receipt.contactbusinessreceivedfrom.tradename', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addFilter('contactbusinesstext', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
-											oSearch.addFilter('receipt.contactpersonreceivedfrom.surname', 'TEXT_IS_LIKE', sSearchText);
-											*/
+											oSearch.addFilter('contactpersontext', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.getResults(function(data) {ns1blankspace.financial.receipt.search.process(oParam, data)});	
 										}
 									};	
@@ -247,13 +248,13 @@ ns1blankspace.financial.receipt =
 														this.reference +
 														'</td>');
 
-											if (this.contactbusinessreceivedfromtext != '')
+											if (this.contactbusinesstext != '')
 											{
-												sContact = this.contactbusinessreceivedfromtext;
+												sContact = this.contactbusinesstext;
 											}
 											else
 											{
-												sContact = this.contactpersonreceivedfromtext;
+												sContact = this.contactpersontext;
 											}	
 											
 											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
@@ -308,8 +309,12 @@ ns1blankspace.financial.receipt =
 					
 						aHTML.push('<table class="ns1blankspaceControl">');
 						
-						aHTML.push('<tr><td id="ns1blankspaceControlInvoices" class="ns1blankspaceControl">' +
-										'Invoices</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlAppliedTo" class="ns1blankspaceControl">' +
+										'Applied To</td></tr>');
+											
+						aHTML.push('</table>');					
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
 													
 						aHTML.push('<tr><td id="ns1blankspaceControlGL" class="ns1blankspaceControl">' +
 										'GL</td></tr>');
@@ -333,7 +338,7 @@ ns1blankspace.financial.receipt =
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainInvoice" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAppliedTo" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainTransaction" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
@@ -343,19 +348,19 @@ ns1blankspace.financial.receipt =
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.financial.invoice.summary.show();
+						ns1blankspace.financial.credit.summary.show();
 					});
 
 					$('#ns1blankspaceControlDetails').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-						ns1blankspace.financial.invoice.details();
+						ns1blankspace.financial.credit.details();
 					});
 					
-					$('#ns1blankspaceControlInvoices').click(function(event)
+					$('#ns1blankspaceControlAppliedTo').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainInvoice', refresh: true});
-						ns1blankspace.financial.receipt.invoice.show();
+						ns1blankspace.show({selector: '#ns1blankspaceMainAppliedTo', refresh: true});
+						ns1blankspace.financial.credit.appliedTo.show();
 					});
 					
 					$('#ns1blankspaceControlGL').click(function(event)
@@ -389,7 +394,7 @@ ns1blankspace.financial.receipt =
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this receipt.</td></tr></table>');
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this credit (note).</td></tr></table>');
 								
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
@@ -401,15 +406,15 @@ ns1blankspace.financial.receipt =
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 								
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
-							'<br /><span id="ns1blankspaceControlContext_receiveddate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.receiveddate + '</span>' +
+							'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.creditdate + '</span>' +
 							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>');
 							
 						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.receipt.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.financial.credit.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
 							move: false
 							})
 						
-						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.receipt.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.credit.summary()'});
 					}	
 				},		
 
@@ -425,7 +430,7 @@ ns1blankspace.financial.receipt =
 
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the receipt.</td></tr></table>');
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the credit (note).</td></tr></table>');
 								
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 					}
@@ -444,34 +449,34 @@ ns1blankspace.financial.receipt =
 
 						aHTML.push('<table class="ns1blankspaceColumn1">');
 											
-						if (ns1blankspace.objectContextData.contactbusinessreceivedfromtext != '')
+						if (ns1blankspace.objectContextData.contactbusinesstext != '')
 						{
 
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.contactbusinessreceivedfromtext +
+											ns1blankspace.objectContextData.contactbusinesstext +
 											'</td></tr>');
 						}
 						
-						if (ns1blankspace.objectContextData.contactpersonreceivedfromtext != '')
+						if (ns1blankspace.objectContextData.contactpersontext != '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Person</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryPerson" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.contactpersonreceivedfromtext +
+											ns1blankspace.objectContextData.ccontactpersontext +
 											'</td></tr>');
 						}
 					
 						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Received Date</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Credit Date</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryReceivedDate" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.receiveddate +
+											ns1blankspace.objectContextData.creditdate +
 											'</td></tr>');
 						
-						if (ns1blankspace.objectContextData.description != '')
+						if (ns1blankspace.objectContextData.notes != '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.description +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Notes</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryNotes" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.notes +
 											'</td></tr>');
 						}
 						
@@ -513,11 +518,11 @@ ns1blankspace.financial.receipt =
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Received Date' +
+										'Credit Date' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceDetailsReceivedDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceDetailsCreditDate" class="ns1blankspaceDate">' +
 										'</td></tr>');		
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -526,7 +531,7 @@ ns1blankspace.financial.receipt =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsReceivedFromBusiness" class="ns1blankspaceSelect"' +
+										'<input id="ns1blankspaceDetailsContactBusiness" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_BUSINESS_SEARCH"' +
 											' data-columns="tradename">' +
 										'</td></tr>');	
@@ -537,10 +542,10 @@ ns1blankspace.financial.receipt =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsReceivedFromPerson" class="ns1blankspaceSelect"' +
+										'<input id="ns1blankspaceDetailsContactPerson" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_PERSON_SEARCH"' +
 											' data-columns="surname"' +
-											' data-parent="ns1blankspaceDetailsReceivedFromBusiness"' +
+											' data-parent="ns1blankspaceDetailsContactBusiness"' +
 											' data-parent-search-id="contactbusiness"' +
 											' data-parent-search-text="tradename">' +
 										'</td></tr>');							
@@ -566,7 +571,7 @@ ns1blankspace.financial.receipt =
 							
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Description' +
+										'Notes' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
@@ -580,13 +585,13 @@ ns1blankspace.financial.receipt =
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
-							$('#ns1blankspaceDetailsReceivedDate').val(ns1blankspace.objectContextData.receiveddate);
-							$('#ns1blankspaceDetailsContactBusinessReceivedFrom').attr('data-id', ns1blankspace.objectContextData.contactbusinessreceivedfrom);
-							$('#ns1blankspaceDetailsContactBusinessReceivedFrom').val(ns1blankspace.objectContextData.contactbusinessreceivedfromtext);
-							$('#ns1blankspaceDetailsContactPersonReceivedFrom').attr('data-id', ns1blankspace.objectContextData.contactpersonreceivedfrom);
-							$('#ns1blankspaceDetailsContactPersonReceivedFrom').val(ns1blankspace.objectContextData.contactpersonreceivedfromtext);	
+							$('#ns1blankspaceDetailsCreditDate').val(ns1blankspace.objectContextData.creditdate);
+							$('#ns1blankspaceDetailsContactBusiness').attr('data-id', ns1blankspace.objectContextData.contactbusiness);
+							$('#ns1blankspaceDetailsContactBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
+							$('#ns1blankspaceDetailsContactPerson').attr('data-id', ns1blankspace.objectContextData.contactperson);
+							$('#ns1blankspaceDetailsContactPerson').val(ns1blankspace.objectContextData.contactpersontext);	
 							$('#ns1blankspaceDetailsAmount').val(ns1blankspace.objectContextData.amount);		
-							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
+							$('#ns1blankspaceDetailsNotes').val(ns1blankspace.objectContextData.notes);
 						}
 					}	
 				},
@@ -595,10 +600,10 @@ ns1blankspace.financial.receipt =
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.financial.receipt.init();
+					ns1blankspace.financial.credit.init();
 					$('#ns1blankspaceViewControlAction').button({disabled: false});
 					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					ns1blankspace.financial.receipt.details();
+					ns1blankspace.financial.credit.details();
 				},		
 
 	save: 		{

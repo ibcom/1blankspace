@@ -621,17 +621,17 @@ ns1blankspace.financial.payment =
 										
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsReference').val());
-										sData += '&paiddate=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPaidDate').val());
-										sData += '&description=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDescription').val());
-										sData += '&contactbusinesspaidfrom=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsContactBusinessPaidFrom').attr("data-id"));
-										sData += '&contactpersonpaidfrom=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsContactPersonPaidFrom').attr("data-id"));
+										sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
+										sData += '&paiddate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPaidDate').val());
+										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
+										sData += '&contactbusinesspaidfrom=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactBusinessPaidFrom').attr("data-id"));
+										sData += '&contactpersonpaidfrom=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactPersonPaidFrom').attr("data-id"));
 									}
 									
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.endpointURI('FINANCIAL_PAYMENT_MANAGE'),
+										url: ns1blankspace.util.endpointURI('FINANCIAL_PAYMENT_MANAGE'),
 										data: sData,
 										dataType: 'json',
 										success: function(data) {ns1blankspace.financial.payment.save.process(oParam, data)}
