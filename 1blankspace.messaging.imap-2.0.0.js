@@ -55,7 +55,7 @@ ns1blankspace.messaging.imap =
 						tinyMCE.init(
 						{
 							mode : "none",
-							height : "500px", 
+							height : "250px", 
 							width : "100%",
 							theme : "advanced",
 
@@ -114,6 +114,12 @@ ns1blankspace.messaging.imap =
 					ns1blankspace.messaging.imap.emailAccounts.length = 0;
 
 					ns1blankspace.app.set(oParam);
+
+					$('#ns1blankspaceViewControlNew').unbind('click');
+					$('#ns1blankspaceViewControlNew').click(function(event)
+					{
+						ns1blankspace.messaging.imap.new();
+					});
 				},
 
 	check:		function (oParam, oResponse)
@@ -1210,7 +1216,7 @@ ns1blankspace.messaging.imap =
 									var bShowTo = true;
 									var bShowPriority = false;
 									var bShowAll = false;
-									var sXHTMLElementID = 'ns1blankspaceDialog';
+									var sXHTMLElementID = 'ns1blankspaceMain';
 									var bDialog = false;
 									var iContactBusiness;
 									var bReplyAll = false;
@@ -1260,12 +1266,13 @@ ns1blankspace.messaging.imap =
 													'<tr class="ns1blankspace">' +
 													'<td id="ns1blankspaceSendMessageColumn1" class="ns1blankspaceColumn1">' +
 													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="ns1blankspaceSendMessageColumn2" class="ns1blankspaceColumn2">' +
-													'</td>' +
+													'</td>' +	
 													'</tr>' +
 													'</table>');					
 											
+										//'<td id="ns1blankspaceSendMessageColumn2" class="ns1blankspaceColumn2">' +
+										//			'</td>' +
+														
 										$('#' + sXHTMLElementID).html(aHTML.join(''));
 									}
 									
@@ -1275,21 +1282,20 @@ ns1blankspace.messaging.imap =
 									
 									if (bShowTo)
 									{
-
 										aHTML.push('<tr><td class="ns1blankspace">');
 										
 											aHTML.push('<table class="ns1blankspace">');
 									
-											aHTML.push('<tr><td style="width:325px;font-size:0.875em;">');	
+											aHTML.push('<tr><td style="width:320px;font-size:0.875em;">');	
 												
 												aHTML.push('<table class="ns1blankspace">');				
 															
-												aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+												aHTML.push('<tr><td class="ns1blankspaceCaption" style="width:10px;">' +
 															'To:</td>');		
 												
 												aHTML.push('<td>' +
 															'<input id="ns1blankspaceEditMessageToContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark"' +
-																' data-setelementid="ns1blankspaceEditMessageTo" value="Search for contact here or type address below"');
+																' data-setelementid="ns1blankspaceEditMessageTo" value="Search for contact" style="width:220px;"');
 															
 												if (iContactBusiness != undefined)
 												{
@@ -1298,16 +1304,16 @@ ns1blankspace.messaging.imap =
 
 												aHTML.push('></td></tr>');				
 
-												aHTML.push('<tr><td colspan="2">' +
-															'<textarea id="ns1blankspaceEditMessageTo" style="height:30px" rows="3" cols="25" class="ns1blankspaceTextMulti"></textarea>' +
+												aHTML.push('<tr><td style="width:10px;"></td><td>' +
+															'<textarea id="ns1blankspaceEditMessageTo" style="height:30px; width:220px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
 															'</td></tr>');
 											
-												aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+												aHTML.push('<tr><td style="width:10px;" class="ns1blankspaceCaption">' +
 															'Cc:</td>');		
 												
-												aHTML.push('<td>' +
-															'<input id="ns1blankspaceEditMessageCcContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark"' +
-																' data-setelementid="ns1blankspaceEditMessageCc" value=""');
+												aHTML.push('<td style="width:10px;">' +
+															'<input id="ns1blankspaceEditMessageCcContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark ns1blankspaceText"' +
+																' data-setelementid="ns1blankspaceEditMessageCc" value="" style="width:220px;"');
 															
 												if (iContactBusiness != undefined)
 												{
@@ -1316,16 +1322,16 @@ ns1blankspace.messaging.imap =
 
 												aHTML.push('></td></tr>');				
 
-												aHTML.push('<tr><td colspan="2">' +
-															'<textarea id="ns1blankspaceEditMessageCc" style="height:30px" rows="3" cols="25" class="ns1blankspaceMainTextMlti"></textarea>' +
+												aHTML.push('<tr><td style="width:10px;"></td><td>' +
+															'<textarea id="ns1blankspaceEditMessageCc" style="height:30px; width:220px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
 															'</td></tr>');
 											
-												aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+												aHTML.push('<tr><td style="width:10px;" class="ns1blankspaceCaption">' +
 															'Bcc:</td>');		
 												
 												aHTML.push('<td>' +
-															'<input id="ns1blankspaceEditMessageBccContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark"' +
-																' data-setelementid="ns1blankspaceEditMessageBcc" value=""');
+															'<input id="ns1blankspaceEditMessageBccContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark ns1blankspaceText"' +
+																' data-setelementid="ns1blankspaceEditMessageBcc" value="" style="width:220px;"');
 															
 												if (iContactBusiness != undefined)
 												{
@@ -1334,36 +1340,48 @@ ns1blankspace.messaging.imap =
 
 												aHTML.push('></td></tr>');				
 
-												aHTML.push('<tr><td colspan="2">' +
-															'<textarea id="ns1blankspaceEditMessageBcc" style="height:30px" rows="3" cols="25" class="ns1blankspaceTextMulti"></textarea>' +
+												aHTML.push('<tr><td style="width:10px;"></td><td>' +
+															'<textarea id="ns1blankspaceEditMessageBcc" style="height:30px; width:220px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
 															'</td></tr>');
 											
 												aHTML.push('</table>');				
 												
-											aHTML.push('<td width="20px;">&nbsp;</td>');	
+											aHTML.push('<td width="15px;">&nbsp;</td>');	
 
-											aHTML.push('<td>');	
+											aHTML.push('<td style="width:275px;">');	
 
-											aHTML.push('<table>');				
+												aHTML.push('<table>');				
 															
-												aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+												aHTML.push('<tr><td id="ns1blankspaceEditMessageAttachCaption" class="ns1blankspaceCaption">' +
 																'Attachments</td>');		
 											
-												aHTML.push('<td class="ns1blankspaceRight">');
+												aHTML.push('<td class="ns1blankspaceRight" style+"text-align:right;">');
 											
-												aHTML.push('<div id="ns1blankspaceEditMessageAttachContainer">' +
-																'<input type="checkbox" id="ns1blankspaceEditMessageAttach" class="ns1blankspace"/>' +
+												aHTML.push('<div id="ns1blankspaceEditMessageAttachContainer" style="font-size:0.75em;">' +
+																'<input type="checkbox" id="ns1blankspaceEditMessageAttach" class="ns1blankspaceAction"/>' +
 																'<label style="font-size:0.875em;" for="ns1blankspaceEditMessageAttach">&nbsp;</label>' +
 																'</div>');
 											
 												aHTML.push('</td></tr>');				
 
-												aHTML.push('<tr><td style="height:80px" colspan=2 id="tdns1blankspaceMainActionsEditEmailAttachments" class="ns1blankspaceBorder">' +
+												aHTML.push('<tr><td style="height:80px" colspan=2 id="ns1blankspaceActionsEditEmailAttachments" class="ns1blankspaceBorder">' +
 															'</td></tr>');
 											
 												aHTML.push('</table>');				
 											
-											aHTML.push('</td></tr>');						
+											aHTML.push('</td>');
+
+											aHTML.push('<td style="width:50px;">');	
+
+												aHTML.push('<table class="ns1blankspaceColumn2">');
+										
+												aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceEditMessageSend" class="ns1blankspaceAction">Send</span>' +
+														'</td></tr>');
+																
+												aHTML.push('</table>');					
+										
+											aHTML.push('</td></tr>');				
 												
 											aHTML.push('</table>');					
 												
@@ -1381,7 +1399,7 @@ ns1blankspace.messaging.imap =
 											
 											if (bShowPriority)
 											{
-												aHTML.push('<td style="width:150px" class="ns1blankspaceRight">' +
+												aHTML.push('<td style="width:150px; text-align:right;" class="ns1blankspaceRight">' +
 																'&nbsp; <input type="checkbox" id="ns1blankspaceMessagingEditdMessageHighPriority"/>&nbsp;High Priority?<td>');
 											}
 										
@@ -1446,7 +1464,7 @@ ns1blankspace.messaging.imap =
 																
 										aHTML.push('</table>');					
 										
-										$('#ns1blankspaceSendMessageColumn2').html(aHTML.join(''));
+										//$('#ns1blankspaceSendMessageColumn2').html(aHTML.join(''));
 									
 										$('#ns1blankspaceEditMessageSend').button(
 										{
@@ -1467,9 +1485,7 @@ ns1blankspace.messaging.imap =
 											oParam.bcc = $('#ns1blankspaceMessagingEditMessageBcc').val();
 											
 											ns1blankspace.messaging.imap.edit.Send(oParam);
-										})
-									
-										//???
+										});
 
 										$('#ns1blankspaceEditMessageAttach').button(
 										{
@@ -1680,16 +1696,16 @@ ns1blankspace.messaging.imap =
 													}
 													else
 													{	
-														if (sReturn == undefined)
+														if (oResponse == undefined)
 														{					
 															$.ajax(
 															{
 																type: 'POST',
 																url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_DRAFT'),
-																dataType: 'text',
+																dataType: 'json',
 																success: function(data) 
 																{
-																	ns1blankspace.messaging.imap.message.edit.attach.process(oParam, data)
+																	ns1blankspace.messaging.imap.edit.attach.show(oParam, data)
 																}
 															});
 														}
@@ -1697,24 +1713,30 @@ ns1blankspace.messaging.imap =
 														{															
 															var aHTML = [];
 															
-															ns1blankspace.container.position(sXHTMLElementID)
+															ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID})
 														
-															ns1blankspace.messaging.action = oResponse.action;
+															ns1blankspace.messaging.action = oResponse.id;
 														
-															aHTML.push('<table style="width:287px;">');
+															aHTML.push('<table style="width:287px;" class="ns1blankspaceViewControlContainer">');
 															aHTML.push('<tr><td id="ns1blankspaceMessageEditAttachmentUpload" class="ns1blankspace">' +
-																				ns1blankspace.attachments.upload({object: 17, objectContext: oResponse.action, label: ''}) +
+																				ns1blankspace.attachments.upload.show(
+																				{
+																					object: 17,
+																					objectContext: oResponse.id,
+																					label: '',
+																					showUpload: true
+																				}) +
 																			'</td></tr>');
 															aHTML.push('</table>');			
 
 															$(ns1blankspace.xhtml.container).html(aHTML.join(''));	
 															
-															$('#ns1blankspaceMainUpload').button(
+															$('#ns1blankspaceUpload').button(
 															{
 																label: "Upload"
 															})
 															.click(function() {
-																 ns1blankspaceA.attachments.upload.process({functionPostUpdate: ns1blankspace.messaging.imap.edit.attach.process});
+																 ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.messaging.imap.edit.attach.process});
 															})
 														}					
 													}	
@@ -1724,7 +1746,7 @@ ns1blankspace.messaging.imap =
 												{	
 													var aHTML = [];
 													
-													var sXHTMLElementID = "ns1blankspaceEditEmailAttachments";
+													var sXHTMLElementID = "ns1blankspaceActionsEditEmailAttachments";
 													
 													if (oParam != undefined)
 													{
@@ -1741,17 +1763,14 @@ ns1blankspace.messaging.imap =
 													{
 														if (oResponse == undefined)
 														{
-															var sData = '&object=17' + 
-																			'&objectcontext=' + ns1blankspace.messaging.action;
-															
-															$.ajax(
-															{
-																type: 'GET',
-																url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_SEARCH'),
-																data: sData,
-																dataType: 'json',
-																success: function(data) {ns1blankspace.messaging.imap.edit.attach.process(oParam, data)}
-															});
+															var oSearch = new AdvancedSearch();
+															oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+															oSearch.addField('filename,description,download,modifieddate,attachment');
+															oSearch.addFilter('object', 'EQUAL_TO', 17);
+															oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.messaging.action);
+														
+															oSearch.sort('filename', 'asc');
+															oSearch.getResults(function(data) {ns1blankspace.messaging.imap.edit.attach.process(oParam, data)});
 														}
 														else
 														{
@@ -1909,7 +1928,7 @@ ns1blankspace.messaging.imap =
 					}		
 				},
 
-	new: 		function n(oParam, oResponse)
+	new: 		function (oParam, oResponse)
 				{
 					var aHTML = [];
 					
@@ -1921,7 +1940,7 @@ ns1blankspace.messaging.imap =
 					}	
 					
 					$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading);
-					$('#tdns1blankspaceMessagingEmailViewport').html('');
+					//$('#tdns1blankspaceMessagingEmailViewport').html('');
 					
 					if (oResponse == undefined)
 					{
@@ -1932,7 +1951,7 @@ ns1blankspace.messaging.imap =
 							type: 'GET',
 							url: '/ondemand/messaging/?' + sParam,
 							dataType: 'json',
-							success: function(data) {ns1blankspace.messaging.new(oParam, data)}
+							success: function(data) {ns1blankspace.messaging.imap.new(oParam, data)}
 						});
 					}	
 					else	
@@ -1955,10 +1974,10 @@ ns1blankspace.messaging.imap =
 						
 							var aHTML = [];
 							
-							aHTML.push('<table class="ns1blankspaceMainColumn2">');
+							aHTML.push('<table class="ns1blankspaceColumn2">');
 									
-							aHTML.push('<tr><td class="ns1blankspaceMainAction">' +
-											'<span id="ns1blankspaceMessagingNewBlank">Create New</span>' +
+							aHTML.push('<tr><td >' +
+											'<span id="ns1blankspaceMessagingNewBlank" class="ns1blankspaceAction">Create New</span>' +
 											'</td></tr>');
 											
 							aHTML.push('</table>');					
@@ -1981,20 +2000,22 @@ ns1blankspace.messaging.imap =
 							
 							aHTML.push('<table style="width:100%">');
 						
-							oResponse.data.rows.each(function() {
+							var sSubject;
+
+							$.each(oResponse.data.rows, function() {
 							
-								if (this.subject.text() != '')
-								{
-									aHTML.push('<tr><td id="ns1blankspaceMessagingNewDrafts_subject-' + $(this).find('id').text() + 
-												'"class="ns1blankspaceRow ns1blankspaceRowSelect">' + this.subject + '</td></tr>');
-								}				
+								sSubject = this.subject
+								if (sSubject == '') {sSubject = 'No Subject'}
+								
+								aHTML.push('<tr><td id="ns1blankspaceMessagingNewDrafts_subject-' + this.id + 
+												'"class="ns1blankspaceRow ns1blankspaceRowSelect">' + sSubject + '</td></tr>');				
 							})
 							
 							aHTML.push('</table>');
 							
 							$('#ns1blankspaceNewColumn1').html(aHTML.join(''));
 						
-							$('#ns1blankspaceMessagingContainer > .ns1blankspaceRowSelect').click(function() {
+							$('#ns1blankspaceMessagingContainer .ns1blankspaceRowSelect').click(function() {
 							
 								var sData = 'method=MESSAGING_EMAIL_DRAFT_SEARCH&getmessage=1';
 								sID = this.id;

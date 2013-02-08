@@ -45,7 +45,7 @@ ns1blankspace.setup.project =
 						$.ajax(
 						{
 							type: 'GET',
-							url: ns1blankspace.util.fs('PROJECT_SEARCH'),
+							url: ns1blankspace.util.endpointURI('PROJECT_SEARCH'),
 							data: 'template=1',
 							dataType: 'json',
 							success: ns1blankspace.setup.project.home

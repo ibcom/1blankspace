@@ -51,6 +51,20 @@ a:hover
 	color: #006EBA;
 }
 
+.ns1blankspaceWatermark
+{
+	color: #BCBCBC;
+	font-style: italic;
+}
+
+
+.ns1blankspaceBorder
+{
+	border-style:solid;
+	border-width: 1px;
+	border-color:#D0D0D0;	
+}
+
 .ns1blankspaceAction
 {
 	font-size: 0.75em;
