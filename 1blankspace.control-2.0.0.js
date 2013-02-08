@@ -85,7 +85,9 @@ ns1blankspace.option.showBrowsing = false;
 ns1blankspace.option.messagingEmailShowCount = false;
 ns1blankspace.option.messagingCheckForNew = 30000;
 ns1blankspace.option.helpURI = 'http://community.mydigitalstructure.com';
-ns1blankspace.option.taxCaption = 'GST';
+ns1blankspace.option.taxVATCaption = 'GST';
+ns1blankspace.option.taxPayrollCaption = 'Employee';
+ns1blankspace.option.taxBusinessCaption = 'Business';
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}

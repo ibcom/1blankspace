@@ -372,8 +372,8 @@ ns1blankspace.messaging.conversation =
 
 					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments'});
-						ns1blankspace.messaging.conversation.attachments();
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show();
 					});
 				},
 
@@ -426,18 +426,20 @@ ns1blankspace.messaging.conversation =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
 									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
+						var aHTML = [];
+
 						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Owner</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryOwner" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.ownerusertext +
+										ns1blankspace.objectContextData.ownertext +
 										'</td></tr>');
 
  						if (ns1blankspace.objectContextData.description != '')
@@ -450,35 +452,35 @@ ns1blankspace.messaging.conversation =
 						
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceMainSummaryColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 				
 						var aHTML = [];
 			
-						aHTML.push('<tableclass="ns1blankspaceColumn2Action" cellspacing=0>');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
 						if (ns1blankspace.messaging.isConversationOwner)
 						{
-							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
-										'<a href="#" id="ns1blankspaceConversationAddParticipant">Add&nbsp;Participant</a>' +
+							aHTML.push('<tr><td style="padding-top:10px;">' +
+										'<span id="ns1blankspaceConversationAddParticipant" class="ns1blankspaceAction">Add&nbsp;Participant</span>' +
 										'</td></tr>');
 						}
 						else
 						{
-							aHTML.push('<tr><td class="ns1blankspaceColumn2Action">' +
-										'<a href="#" id="ns1blankspaceConversationRemoveParticipant">Leave</a>' +
+							aHTML.push('<tr><td style="padding-top:10px;">' +
+										'<span id="ns1blankspaceConversationRemoveParticipant" class="ns1blankspaceAction">Leave</span>' +
 										'</td></tr>');
 						}	
 								
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceMainSummaryColumn2').html(aHTML.join(''));	
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 						
-						$('#ns1blankspaceConversationAddParticipant').click(function(event)
+						$('#ns1blankspaceConversationAddParticipant').button().click(function(event)
 						{
 							ns1blankspace.messaging.conversation.participants.add();
 						});
 
-						$('#ns1blankspaceConversationRemoveParticipant').click(function(event)
+						$('#ns1blankspaceConversationRemoveParticipant').button().click(function(event)
 						{
 							ns1blankspace.messaging.conversation.participants.remove();
 						});
@@ -602,7 +604,8 @@ ns1blankspace.messaging.conversation =
 									
 									aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceParticipantsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+													'<td id="ns1blankspaceParticipantsColumn1" class="ns1blankspaceColumn1Flexible">' +
+													ns1blankspace.xhtml.loading + '</td>' +
 													'<td id="ns1blankspaceParticipantsColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 													'</tr>' + 
 													'</table>');
@@ -1083,11 +1086,11 @@ ns1blankspace.messaging.conversation =
 										
 										aHTML.push('</table>');					
 
-										ns1blankspace.containter.show(
+										ns1blankspace.container.show(
 										{
 											xhtmlElementID: sXHTMLElementID,
 											offsetLeft: -75,
-											offsetTop: 6,
+											offsetTop: 3,
 											xhtml: aHTML.join('')
 										});
 										
@@ -1096,10 +1099,10 @@ ns1blankspace.messaging.conversation =
 											label: "View"
 										})
 										.click(function() {
-											ns1blankspacecontainter.hide();
-											ns1blankspace.show({selector: '#divns1blankspaceMainComments'});
+											ns1blankspace.container.hide();
+											ns1blankspace.show({selector: '#ns1blankspaceMainComments'});
 											var aXHTMLElementID = sXHTMLElementID.split('-');
-											ns1blankspace.messaging.conversation.comments({post: aXHTMLElementID[1]});
+											ns1blankspace.messaging.conversation.comments.show({post: aXHTMLElementID[1]});
 										})
 										.css('width', '75px');
 										
@@ -1125,13 +1128,13 @@ ns1blankspace.messaging.conversation =
 																	' class="ns1blankspaceTextMulti"></textarea>' +
 															'</td></tr>');
 										
-										aHTML.push('<tr><td class="ns1blankspaceMainAction" style="text-align:right;">' +
-														'<span id="ns1blankspaceCommentSend">Send</span>' +
+										aHTML.push('<tr><td style="text-align:right;">' +
+														'<span id="ns1blankspaceCommentSend" class="ns1blankspaceAction">Send</span>' +
 														'</td></tr>');
 																
 										aHTML.push('</table>');
 
-										ns1blankspaceViewportOptionsShow(
+										ns1blankspace.container.show(
 										{
 											xhtmlElementID: sXHTMLElementID,
 											offsetLeft: -251,
@@ -1147,7 +1150,9 @@ ns1blankspace.messaging.conversation =
 										.click(function() {
 											ns1blankspace.messaging.conversation.posts.comments({xhtmlElementID: sXHTMLElementID, step: 3});
 										})
-										.css('width', '75px')
+										.css('width', '75px');
+
+										$('#ns1blankspaceCommentMessage').focus();
 									}
 									
 									if (iStep == 3)
@@ -1169,7 +1174,7 @@ ns1blankspace.messaging.conversation =
 												{
 													if (data.status == 'OK')
 													{
-														ns1blankspace.containter.hide();
+														ns1blankspace.container.hide();
 													}
 													else
 													{
@@ -1342,11 +1347,9 @@ ns1blankspace.messaging.conversation =
 										{
 											sData += '&post=' + iPost;
 										}
-										else
-										{
-											sData += '&includepost=1';
-										}	
 										
+										sData += '&includepost=1';
+											
 										$.ajax(
 										{
 											type: 'POST',
@@ -1355,6 +1358,7 @@ ns1blankspace.messaging.conversation =
 											dataType: 'json',
 											success: function(data) {ns1blankspace.messaging.conversation.comments.show(oParam, data)}
 										});
+
 									}
 									else
 									{
@@ -1379,6 +1383,12 @@ ns1blankspace.messaging.conversation =
 										{		
 											aHTML.push('<table id="ns1blankspaceConversationComments" class="ns1blankspaceContainer">');
 												
+											if (iPost)
+											{
+												aHTML.push('<tr><td style="padding-bottom:15px;">' +
+																oResponse.data.rows[0].postmessage + '</td></tr>');
+											}
+
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 
 											if (iPost == undefined)
@@ -1431,7 +1441,7 @@ ns1blankspace.messaging.conversation =
 											}
 										})
 										.click(function() {
-											ns1blankspace.messaging.conversation.posts.comments.show({xhtmlElementID: this.id});
+											ns1blankspace.messaging.conversation.posts.comments({xhtmlElementID: this.id});
 										})
 										.css('width', '15px')
 										.css('height', '20px');
