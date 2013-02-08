@@ -595,7 +595,7 @@ ns1blankspace.app =
 						{
 							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
 							
-							var sFunction = "ns1blankspace.contact.email.search(ns1blankspace.xhtml.divID, {" +
+							var sFunction = "ns1blankspace.search.email.show(ns1blankspace.xhtml.divID, {" +
 										"source: 1," +
 										"emailOnly: true," +
 										"contactBusiness: " + $(this).attr('data-contactbusiness') + "," +
@@ -3033,6 +3033,7 @@ ns1blankspace.search.email =
 					var iMaximumColumns = 1;
 					var bEmailOnly = false;
 					var sParentSearchID;
+					var sParentElementID;
 					var sSetXHTMLElementID;
 					
 					if (oParam != undefined)
@@ -3043,8 +3044,8 @@ ns1blankspace.search.email =
 						if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
 						if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
 						if (oParam.emailOnly != undefined) {bEmailOnly = oParam.emailOnly}
-						if (oParam.data.contactBusiness != undefined) {sParentSearchId = oParam.contactBusiness}
-						if (oParam.setXHTMLElementID != undefined) {sSetXHTMLElementId = oParam.setXHTMLElementID}
+						if (oParam.contactBusiness != undefined) {sParentSearchId = oParam.contactBusiness}
+						if (oParam.setXHTMLElementID != undefined) {sSetXHTMLElementID = oParam.setXHTMLElementID}
 					}
 
 					var aSearch = sXHTMLElementID.split('---');
@@ -3100,7 +3101,7 @@ ns1blankspace.search.email =
 					}
 					else
 					{
-						ns1blankspace.container.position(sXHTMLElementID);
+						ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID});
 					
 						if (sSearchText == undefined) {sSearchText = ''};
 							
