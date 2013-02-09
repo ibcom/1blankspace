@@ -40,7 +40,7 @@ $.extend(true, ns1blankspace.setup,
 
 	home:		function (oParam, oResponse)
 				{
-					if (oResponse == undefined)
+					if (oResponse === undefined)
 					{
 						var aHTML = [];
 
@@ -82,7 +82,7 @@ $.extend(true, ns1blankspace.setup,
 						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right"><span id="ns1blankspaceSetupAdd">Add</span></td>');
 						aHTML.push('</tr>');
 						
-						if (oResponse.data.rows.length == 0)
+						if (oResponse.data.rows.length === 0)
 						{
 							aHTML.push('<tr><td class="ns1blankspaceNothing">Nothing to show.</td></tr>');
 
@@ -146,7 +146,6 @@ $.extend(true, ns1blankspace.setup,
 	add:		function ()
 				{
 					var aHTML = [];
-					var h = -1;
 						
 					aHTML.push('<tr class="ns1blankspaceRow">');
 										
@@ -157,11 +156,11 @@ $.extend(true, ns1blankspace.setup,
 
 					aHTML.push('</tr>');
 							
-					$('#ns1blankspaceSetupContainer > tr:first').after(aHTML.join(''));	
+					$('#ns1blankspaceSetupContainer tr:first').after(aHTML.join(''));	
 					$('#ns1blankspaceViewControlNew').button({disabled: true});
 					$('#ns1blankspaceSetupAdd').button({disabled: true});
 					
-					ns1blankspace.setup.edit.start('ns1blankspaceSetup');
+					ns1blankspace.setup.edit.start('td_ns1blankspaceSetup-');
 				},
 	
 	search: 	{
@@ -189,17 +188,17 @@ $.extend(true, ns1blankspace.setup,
 										var iMinimumLength = 3;
 										var iMaximumColumns = 1;
 									
-										if (iSource == undefined)
+										if (iSource === undefined)
 										{
 											iSource = ns1blankspace.data.searchSource.text;
 										}	
 										
-										if (sSearchText == undefined)
+										if (sSearchText === undefined)
 										{
 											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
-										if (iSource == ns1blankspace.data.searchSource.browse)
+										if (iSource === ns1blankspace.data.searchSource.browse)
 										{
 											iMinimumLength = 1;
 											iMaximumColumns = 4;
@@ -207,7 +206,7 @@ $.extend(true, ns1blankspace.setup,
 											sSearchText = aSearch[1];
 										}
 										
-										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
+										if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.browse)
 										{
 											ns1blankspace.container.position({xhtmlElementID: sElementId});
 																
@@ -229,7 +228,7 @@ $.extend(true, ns1blankspace.setup,
 									var	iMaximumColumns = 1;
 									var aHTML = [];
 														
-									if (oResponse.data.rows.length == 0 == 0)
+									if (oResponse.data.rows.length === 0 === 0)
 									{
 										$(ns1blankspace.xhtml.container).hide();
 									}
@@ -241,7 +240,7 @@ $.extend(true, ns1blankspace.setup,
 										{	
 											iColumn = iColumn + 1;
 											
-											if (iColumn == 1)
+											if (iColumn === 1)
 											{
 												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
@@ -250,7 +249,7 @@ $.extend(true, ns1blankspace.setup,
 															'-' + this.id + '">' +
 															this.title + '</td>');
 											
-											if (iColumn == iMaximumColumns)
+											if (iColumn === iMaximumColumns)
 											{
 												aHTML.push('</tr>');
 												iColumn = 0;
@@ -338,12 +337,12 @@ $.extend(true, ns1blankspace.setup,
 
 					save:		function (sElementID)
 								{
-									if ($('#' + sElementID.replace('td', 'input')).length == 1)
+									if ($('#' + sElementID.replace('td', 'input')).length === 1)
 									{
 
 										var aElement = sElementID.split('-');
 										
-										if (aElement[1] == '' && $('#' + sElementID.replace('td', 'input')).val() == '')
+										if (aElement[1] === '' && $('#' + sElementID.replace('td', 'input')).val() === '')
 										{
 											$('#ns1blankspaceSetupContainer tr:first').next().fadeOut(500);	
 											$('#ns1blankspaceViewControlNew').button({disabled: false});
@@ -359,7 +358,7 @@ $.extend(true, ns1blankspace.setup,
 												dataType: 'json',
 												success: function(data) 
 														{
-															if (data.notes == 'ADDED')
+															if (data.notes === 'ADDED')
 															{
 																$('#ns1blankspaceSetup-').attr('id','td_ns1blankspaceSetup-' + data.id);
 																
@@ -370,7 +369,7 @@ $.extend(true, ns1blankspace.setup,
 																	ns1blankspace.setup.edit.start(event.target.id);
 																});
 
-																$('#tdSetup_delete-').attr('id','tdSetup_delete-' + aReturn[3]);
+																$('#ns1blankspaceSetup_options_remove-').attr('id','ns1blankspaceSetup_options_remove-' + data.id);
 																
 																$('.ns1blankspaceRowRemove').button({
 																		text: false,

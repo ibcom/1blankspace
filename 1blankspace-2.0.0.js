@@ -18,7 +18,7 @@ Function.prototype.method = function(name, func)
 
 Number.prototype.formatMoney = function(c, d, t)
 {
-	var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
+	var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d === undefined ? "," : d, t = t === undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
    	return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
  
@@ -319,7 +319,7 @@ $(function()
 {
 	ns1blankspace.app.init();
 
-	if (window.location.hash == '#PASSWORDEXPIRED')
+	if (window.location.hash === '#PASSWORDEXPIRED')
 	{
 		ns1blankspace.logon.changePassword.show();
 	}
@@ -349,7 +349,7 @@ ns1blankspace.app =
 						if (oParam.initialise != undefined) {bInitialise = oParam.initialise}
 					}
 
-					if ($('#ns1blankspaceContainer').length == 0)
+					if ($('#ns1blankspaceContainer').length === 0)
 					{
 						$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
 											'<div id="ns1blankspaceHeader"></div>' +
@@ -673,7 +673,7 @@ ns1blankspace.app =
 						{
 							$('#ns1blankspaceViewControl').html('&nbsp;');
 
-							if (data.status == 'ER')
+							if (data.status === 'ER')
 							{
 								ns1blankspace.logon.show();
 							}
@@ -690,7 +690,7 @@ ns1blankspace.app =
 					var aHTML = [];
 
 					ns1blankspace.user.id = oResponse.user;
-					ns1blankspace.user.unrestricted = (oResponse.unrestrictedaccess = 'Y' || oResponse.unrestrictedaccess == undefined ? true : false);
+					ns1blankspace.user.unrestricted = (oResponse.unrestrictedaccess = 'Y' || oResponse.unrestrictedaccess === undefined ? true : false);
 					ns1blankspace.user.space = oResponse.space;
 					ns1blankspace.user.spaceText = oResponse.spacename
 					ns1blankspace.user.logonName = oResponse.userlogonname;
@@ -963,7 +963,7 @@ ns1blankspace.app =
 			
 				function (sNamespace)
 				{
-					if (ns1blankspace.timer.whenLoaded == undefined)
+					if (ns1blankspace.timer.whenLoaded === undefined)
 					{	
 						ns1blankspace.timer.whenLoaded = window.setInterval('ns1blankspace.app.showWhenLoaded("' + sNamespace + '")', 100);
 					}
@@ -1112,9 +1112,9 @@ ns1blankspace.app =
 							ns1blankspace.objectContextData = undefined
 							ns1blankspace.objectContext = -1;
 							$('#ns1blankspaceViewControlAction').button({disabled: false});
-							if (typeof(oNS.layout) == 'function') {oNS.layout()}
+							if (typeof(oNS.layout) === 'function') {oNS.layout()}
 							ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-							if (typeof(oNS.details) == 'function') {oNS.details()} else {oNS.home.show()}
+							if (typeof(oNS.details) === 'function') {oNS.details()} else {oNS.home.show()}
 						}
 						else
 						{
@@ -1131,7 +1131,7 @@ ns1blankspace.app =
 										move: false
 										});	
 
-									if (typeof(oNS.home) == 'function') {oNS.home()} else {oNS.home.show()}
+									if (typeof(oNS.home) === 'function') {oNS.home()} else {oNS.home.show()}
 								}
 							}		
 						}
@@ -1152,7 +1152,7 @@ ns1blankspace.app =
 										if (oParam.bind != undefined) {fBind = oParam.bind}	
 									}		
 
-									if (sXHTML == undefined)
+									if (sXHTML === undefined)
 									{
 										sXHTML = '<table id="ns1blankspaceOptions" class="ns1blankspaceViewControlContainer">' +	
 													'<tr class="ns1blankspaceOptions">' +
@@ -1161,7 +1161,7 @@ ns1blankspace.app =
 													'</td></tr></table>';
 									}	
 
-									if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
+									if ($(ns1blankspace.xhtml.container).attr('data-initiator') === oElement.id)
 									{
 										$(ns1blankspace.xhtml.container).hide();
 										$(ns1blankspace.xhtml.container).attr('data-initiator', '');
@@ -1210,7 +1210,7 @@ ns1blankspace.app =
 
 									var sMethod = ns1blankspace.objectMethod;
 
-									if (sMethod == undefined)
+									if (sMethod === undefined)
 									{
 										var sParentNamespace = ns1blankspace.objectParentName;
 										var sNamespace = ns1blankspace.objectName;
@@ -1225,7 +1225,7 @@ ns1blankspace.app =
 										}
 									}	
 
-									if (oResponse == undefined && sMethod)
+									if (oResponse === undefined && sMethod)
 									{
 										sMethod += '_MANAGE';
 
@@ -1243,7 +1243,7 @@ ns1blankspace.app =
 									}
 									else if (oResponse != undefined)
 									{
-										if (oResponse.notes == 'REMOVED')
+										if (oResponse.notes === 'REMOVED')
 										{
 											ns1blankspace.inputDetected = false;
 											ns1blankspace.app.options.hide();
@@ -1363,7 +1363,7 @@ ns1blankspace.logon =
 
 					$('#ns1blankspaceLogonLogonName').keypress(function(e)
 					{
-					    if (e.which == 13)
+					    if (e.which === 13)
 					    {
 					        ns1blankspace.logon.send();
 					    }
@@ -1371,7 +1371,7 @@ ns1blankspace.logon =
 
 					$('#ns1blankspaceLogonPassword').keypress(function(e)
 					{
-					    if (e.which == 13)
+					    if (e.which === 13)
 					    {
 					        ns1blankspace.logon.send();
 					    }
@@ -1402,7 +1402,7 @@ ns1blankspace.logon =
 
 	process: 	function (oResponse)	
 				{		
-					if (oResponse.status == 'ER')
+					if (oResponse.status === 'ER')
 					{
 						$('#ns1blankspaceLogonStatus').html('Logon Name or password is incorrect.');
 						$('#ns1blankspaceContainer').effect("shake", { times:2 }, 100);
@@ -1416,13 +1416,13 @@ ns1blankspace.logon =
 							$.cookie('mydigitalstucturelogonname', $('#ns1blankspaceLogonLogonName').val(), {expires:30});
 						}
 						
-						if (oResponse.passwordStatus == "EXPIRED")
+						if (oResponse.passwordStatus === "EXPIRED")
 						{
 							ns1blankspace.logon.changePassword.show(); 
 						}
 						else
 						{	
-							if (oResponse.url == '#' || ns1blankspace.option.logonStayOnDocument)
+							if (oResponse.url === '#' || ns1blankspace.option.logonStayOnDocument)
 							{
 								document.location.reload(false);
 							}	
@@ -1519,7 +1519,7 @@ ns1blankspace.logon.changePassword =
 						$('#ns1blankspaceLogonChangePasswordStatus').html('New passwords do not match.');
 					}
 
-					else if (sNewPassword == '')
+					else if (sNewPassword === '')
 					{
 						$('#ns1blankspaceLogonChangePasswordStatus').html('New password can not be blank.');
 					}
@@ -1548,9 +1548,9 @@ ns1blankspace.logon.changePassword =
 
 	process: 	function (oResponse)
 				{	
-					if (oResponse.status == 'ER') 
+					if (oResponse.status === 'ER') 
 					{
-						if (oResponse.error.errornotes == 'PASSWORD_LESS_THAN_6_CHAR') 
+						if (oResponse.error.errornotes === 'PASSWORD_LESS_THAN_6_CHAR') 
 						{
 							$('#ns1blankspaceLogonChangePasswordStatus').html('New password needs to be at least 6 characters.');
 						}
@@ -1563,7 +1563,7 @@ ns1blankspace.logon.changePassword =
 					{
 						$('#ns1blankspaceLogonChangePasswordStatus').html('Password changed!');
 					
-						if (oResponse.url == '#' || ns1blankspace.option.logonStayOnDocument)
+						if (oResponse.url === '#' || ns1blankspace.option.logonStayOnDocument)
 						{
 							window.location.hash = '';
 							document.location.reload(false);
@@ -1628,7 +1628,7 @@ ns1blankspace.logon.getPassword =
 
 	send: 		function ()
 				{	
-					if ($('#ns1blankspaceGetPasswordLogonName').val() == '')
+					if ($('#ns1blankspaceGetPasswordLogonName').val() === '')
 					{
 						$('#ns1blankspaceGetPasswordStatus').html('Logon name is blank, please enter a logon name.');
 					}
@@ -1652,7 +1652,7 @@ ns1blankspace.logon.getPassword =
 
 	process:	function (oResponse)
 				{
-					if (oResponse.status == 'OK')
+					if (oResponse.status === 'OK')
 					{
 						$('#ns1blankspaceGetPasswordStatus').html('Your password has been emailed to you.');
 					}
@@ -1696,7 +1696,7 @@ ns1blankspace.history.control =
 					
 					$.each(ns1blankspace.history.list, function(index) 
 					{ 
-						if ((this.object == iObject) && (this.objectContext == iObjectContext))
+						if ((this.object === iObject) && (this.objectContext === iObjectContext))
 						{
 							if (sFunctionDefault != undefined)
 							{
@@ -1709,7 +1709,7 @@ ns1blankspace.history.control =
 						}
 					});
 					
-					if (sFunctionDefault == undefined)
+					if (sFunctionDefault === undefined)
 					{
 						ns1blankspace.history.list.push(
 							{
@@ -1721,7 +1721,7 @@ ns1blankspace.history.control =
 					}
 					else
 					{
-						if (sXHTMLElementID == undefined)
+						if (sXHTMLElementID === undefined)
 						{
 							eval(sFunctionDefault);
 						}
@@ -1761,25 +1761,25 @@ ns1blankspace.history.view =
 							if (oParam.index != undefined) {ns1blankspace.history.currentIndex = oParam.index}
 							if (oParam.move != undefined) {bMove = oParam.move}
 							
-							if (iInstruction == 1 && sDestinationInstructions != undefined)
+							if (iInstruction === 1 && sDestinationInstructions != undefined)
 							{
-								if (sDestinationInstructions == ns1blankspace.history.lastDestinationInstruction)
+								if (sDestinationInstructions === ns1blankspace.history.lastDestinationInstruction)
 								{
 									var aTmp = sDestinationInstructions.split(';');
 									
 									$.each(aTmp, function(index) 
 									{ 
-										if (this == '')
+										if (this === '')
 										{
 											aTmp.splice(index,1)
 										}
 									});
 									
-									if (aTmp.length == 1) 
+									if (aTmp.length === 1) 
 									{
 										$.each(ns1blankspace.history.viewList, function(index) 
 										{ 
-											if (this == sDestinationInstructions)
+											if (this === sDestinationInstructions)
 											{
 												ns1blankspace.history.viewList.splice(index,1)
 												bAdd = true;
@@ -1810,40 +1810,40 @@ ns1blankspace.history.view =
 								}		
 							}	
 							
-							if (iInstruction == 2)
+							if (iInstruction === 2)
 							{
 								ns1blankspace.history.currentIndex = ns1blankspace.history.currentIndex - iInstructionCount;
 								if (ns1blankspace.history.currentIndex < 0) {ns1blankspace.history.currentIndex = 0}
 							}
 							
-							if (iInstruction == 3)
+							if (iInstruction === 3)
 							{
 								ns1blankspace.history.currentIndex = ns1blankspace.history.currentIndex + iInstructionCount;
 								if (ns1blankspace.history.currentIndex > ns1blankspace.history.viewList.length - 1) {ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1}
 							}
 							
-							if (iInstruction == 4)
+							if (iInstruction === 4)
 							{
 								ns1blankspace.history.viewList.length = 0;
 								ns1blankspace.history.currentIndex = 0;
 							}	
 							
-							if (iInstruction == 5)
+							if (iInstruction === 5)
 							{
 								ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1;
 							}	
 							
-							if (iInstruction == 6)
+							if (iInstruction === 6)
 							{
 								ns1blankspace.history.currentIndex = 0;
 							}	
 							
-							if (iInstruction == 7)
+							if (iInstruction === 7)
 							{
 								//refresh
 							}	
 								
-							if (iInstruction == 8)
+							if (iInstruction === 8)
 							{
 								$.ajax(
 								{
@@ -1854,7 +1854,7 @@ ns1blankspace.history.view =
 									async: false,
 									success: function(data) {
 										data = data.replace('OK|RETURNED|', '')
-										if (data == '')
+										if (data === '')
 										{
 											ns1blankspace.history.viewList.push('ns1blankspace.home.show()');
 										}	
@@ -1917,7 +1917,7 @@ ns1blankspace.history.view =
 							
 							if (bMove)
 							{
-								if (ns1blankspace.timer.history == undefined)
+								if (ns1blankspace.timer.history === undefined)
 								{	
 									ns1blankspace.timer.history = window.setInterval('ns1blankspace.history.view({instruction: 0, move: true})', 100);
 								}
@@ -2049,7 +2049,7 @@ ns1blankspace.attachments =
 					var aHTML = [];
 					var h = -1;
 						
-					if (oResponse.data.rows.length == 0)
+					if (oResponse.data.rows.length === 0)
 					{
 						aHTML.push('<table style="margin-top:5px;">');
 						aHTML.push('<tr class="ns1blankspaceAttachments">');
@@ -2082,7 +2082,7 @@ ns1blankspace.attachments =
 							xhtmlElementID: sXHTMLElementID,
 							xhtmlContext: 'Attachment',
 							xhtml: aHTML.join(''),
-							showMore: (oResponse.morerows == "true"),
+							showMore: (oResponse.morerows === "true"),
 							columns: 'subject-actiondate',
 							more: oResponse.moreid,
 							rows: ns1blankspace.option.defaultRows,
@@ -2181,7 +2181,7 @@ ns1blankspace.attachments =
 									if (oParam != undefined)
 									{
 										if (oParam.maxFiles != undefined) {iMaxFiles = oParam.maxFiles}
-										if (oParam.object != undefined || iObject == '') {iObject = oParam.object}
+										if (oParam.object != undefined || iObject === '') {iObject = oParam.object}
 										if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
 										if (oParam.objectContext != undefined ) {lObjectContext = oParam.objectContext}
 										if (oParam.label != undefined) {sLabel = oParam.label}
@@ -2265,7 +2265,7 @@ ns1blankspace.attachments =
 									else 
 									{
 										//FF
-										if (oFrame.contentDocument.body.innerHTML == 'OK') 
+										if (oFrame.contentDocument.body.innerHTML === 'OK') 
 										{
 											sCurrentState = 'complete';
 										}
@@ -2275,7 +2275,7 @@ ns1blankspace.attachments =
 										}
 									}
 								 
-									if (sCurrentState == 'complete') 
+									if (sCurrentState === 'complete') 
 									{
 										clearInterval(ns1blankspace.timer.delay);
 
@@ -2401,7 +2401,7 @@ ns1blankspace.status =
 
 	error: 		function (sError)
 				{
-					if (sError == undefined) {sError = 'Error!'};
+					if (sError === undefined) {sError = 'Error!'};
 					
 					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
 							'<div style="display:table-cell; vertical-align:bottom; padding:5px; height:25px; color:white; background-color:red;">' + sError + '</div></div>');
@@ -2412,7 +2412,7 @@ ns1blankspace.container =
 {
 	init: 		function(sSource)
 				{
-					if (sSource == undefined) {sSource = ''}
+					if (sSource === undefined) {sSource = ''}
 					$(ns1blankspace.xhtml.container).attr('data-initiator', sSource);
 				},
 
@@ -2441,14 +2441,14 @@ ns1blankspace.container =
 						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
 					}
 					
-					if (oXHTMLElement == undefined)
+					if (oXHTMLElement === undefined)
 					{
 						oXHTMLElement = $('#' + sXHTMLElementID)
 					}
 					
 					if (oXHTMLElement != undefined)
 					{
-						if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oXHTMLElement.attr('id') && !bForceShow)
+						if ($(ns1blankspace.xhtml.container).attr('data-initiator') === oXHTMLElement.attr('id') && !bForceShow)
 						{
 							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
@@ -2542,7 +2542,7 @@ ns1blankspace.search =
 					var iMaximumColumns = 1;
 					var sMethod;
 					var sSearchText = '';
-					var sColumns;
+					var sColumns = 'title';
 					var iColumn = 0;
 						
 					if (oParam != undefined)
@@ -2565,20 +2565,20 @@ ns1blankspace.search =
 					
 						$.extend(true, oParam, {xhtmlInputElementID: sXHTMLInputElementID});
 					
-						if (sMethod == undefined)
+						if (sMethod === undefined)
 						{
 							sMethod = $('#' + sXHTMLInputElementID).attr("onDemandMethod");
-							if (sMethod == undefined) {sMethod = $('#' + sXHTMLInputElementID).attr("data-method")}	
+							if (sMethod === undefined) {sMethod = $('#' + sXHTMLInputElementID).attr("data-method")}	
 						}
 						
-						if (sColumns == undefined)
+						if (sColumns === undefined)
 						{
 							sColumns = $('#' + sXHTMLInputElementID).attr("onDemandColumns");
-							if (sColumns == undefined) {sColumns = $('#' + sXHTMLInputElementID).attr("data-columns")}
+							if (sColumns === undefined) {sColumns = $('#' + sXHTMLInputElementID).attr("data-columns")}
 							if (sColumns != undefined) {$.extend(true, oParam, {columns: sColumns})};	
 						}
 						
-						if (sXHTMLParentInputElementID == undefined)
+						if (sXHTMLParentInputElementID === undefined)
 						{
 							sXHTMLParentInputElementID = $('#' + sXHTMLInputElementID).attr("data-parent")
 							if (sXHTMLParentInputElementID != undefined) {$.extend(true, oParam, {xhtmlParentInputElementID: sXHTMLParentInputElementID})};	
@@ -2593,25 +2593,25 @@ ns1blankspace.search =
 					}
 					else
 					{
-						if (oResponse == undefined)
+						if (oResponse === undefined)
 						{
 							ns1blankspace.container.position({xhtmlElementID: sXHTMLInputElementID, topOffset: 10, setWidth: true});
 							
-							if (sColumns == undefined) {sColumns = 'title'};
+							if (sColumns === undefined) {sColumns = 'title'};
 							
-							if (sSearchText == '' && iSource == ns1blankspace.data.searchSource.text)
+							if (sSearchText === '' && iSource === ns1blankspace.data.searchSource.text)
 							{
 								sSearchText = $('#' + sXHTMLInputElementID).val();
 							}	
 						
-							if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.all)
+							if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
 							{
 								var aColumns = sColumns.split(',');	
 								var oSearch = new AdvancedSearch();
 								oSearch.method = sMethod;
 								oSearch.addField(sColumns);
 
-								if (iSource == ns1blankspace.data.searchSource.text)
+								if (iSource === ns1blankspace.data.searchSource.text)
 								{	
 									oSearch.addFilter(aColumns[0], 'TEXT_IS_LIKE', sSearchText);
 								}	
@@ -2642,7 +2642,7 @@ ns1blankspace.search =
 							var aColumns = sColumns.split('-');
 							var aHTML = [];
 							
-							if (oResponse.data.rows.length == 0)
+							if (oResponse.data.rows.length === 0)
 							{
 								$(ns1blankspace).hide();
 							}
@@ -2655,12 +2655,12 @@ ns1blankspace.search =
 								{ 
 									iColumn = iColumn + 1;
 							
-									if (iColumn == 1)
+									if (iColumn === 1)
 									{
 										aHTML.push('<tr class="ns1blankspaceSearch">');
 									}
 										
-									if (sColumns.length == 0)
+									if (sColumns.length === 0)
 									{
 										aHTML.push('<td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
 															'-' + this.id + '">' + this.title + '</td>');
@@ -2690,7 +2690,7 @@ ns1blankspace.search =
 										aHTML.push('</td>');
 									}
 							
-									if (iColumn == iMaximumColumns)
+									if (iColumn === iMaximumColumns)
 									{
 										aHTML.push('</tr>');
 										iColumn = 0;
@@ -2744,9 +2744,9 @@ ns1blankspace.save =
 {
 	send: 		function (sParam, sData, sSuccessMessage)
 				{
-					if (sParam == undefined) {sParam = ''};
+					if (sParam === undefined) {sParam = ''};
 					
-					if (sData != '' && sData.indexOf('&') == 0) {sData = sData.substr(1)};
+					if (sData != '' && sData.indexOf('&') === 0) {sData = sData.substr(1)};
 					
 					$.ajax(
 					{
@@ -2763,7 +2763,7 @@ ns1blankspace.save =
 				{
 					oResponse = data;
 					
-					if (oResponse.status == 'OK')
+					if (oResponse.status === 'OK')
 					{
 						ns1blankspace.status.message(sSuccessMessage);
 						ns1blankspace.objectSaveId =  oResponse.id;  //???
@@ -2781,13 +2781,13 @@ ns1blankspace.util =
 {
 	json: 		function (oJSON, sElement, iRow)
 				{
-					oJSON = (oJSON == undefined)?'':oJSON;
-					sElement = (sElement == undefined)?'':asElement;
-					iRow = (iRow == undefined)?0:iRow;
+					oJSON = (oJSON === undefined)?'':oJSON;
+					sElement = (sElement === undefined)?'':asElement;
+					iRow = (iRow === undefined)?0:iRow;
 					
-					if (oJSON.length == 0) return '';
+					if (oJSON.length === 0) return '';
 					
-					if (sElement == '' || aiRow < 0) return '';
+					if (sElement === '' || aiRow < 0) return '';
 					
 					if (oJSON.data.rows.length > 0)
 					{	return oJSON.data.rows[iRow][sElement];	}
@@ -2797,7 +2797,7 @@ ns1blankspace.util =
 
 	tf2OnOff:	function (bValue)
 				{
-					if (bValue == undefined) {bValue = false}
+					if (bValue === undefined) {bValue = false}
 					
 					if (bValue)
 					{ 
@@ -2812,9 +2812,9 @@ ns1blankspace.util =
 
 	onOff2TF:	function (sValue)
 				{
-					if (sValue == undefined) {sValue = '0'}
+					if (sValue === undefined) {sValue = '0'}
 					
-					if (sValue == '1')
+					if (sValue === '1')
 					{ 
 						return true;
 					}
@@ -2826,7 +2826,7 @@ ns1blankspace.util =
 
 	tf2YN:		function (bValue)
 				{
-					if (bValue == undefined) {bValue = false}
+					if (bValue === undefined) {bValue = false}
 					
 					if (bValue)
 					{ 
@@ -2840,9 +2840,9 @@ ns1blankspace.util =
 
 	yn2tf:		function (sValue)
 				{
-					if (sValue == undefined) {sValue = 'N'}
+					if (sValue === undefined) {sValue = 'N'}
 					
-					if (sValue == 'Y')
+					if (sValue === 'Y')
 					{ 
 						return true;
 					}
@@ -2854,7 +2854,7 @@ ns1blankspace.util =
 
 	formatSave:	function (sValue)
 				{
-					if (sValue == undefined || sValue == 'undefined') { sValue = ''; }
+					if (sValue === undefined || sValue === 'undefined') { sValue = ''; }
 					
 					return encodeURIComponent(sValue)
 
@@ -2864,7 +2864,7 @@ ns1blankspace.util =
 
 	getRPC:		function ()
 				{
-					if (ns1blankspace.rpc == undefined)
+					if (ns1blankspace.rpc === undefined)
 					{
 						$.ajax(
 						{
@@ -2884,7 +2884,7 @@ ns1blankspace.util =
 
 					var sBaseEndpoint;
 
-					if ($.inArray(sMethod, ns1blankspace.rpc) == -1)
+					if ($.inArray(sMethod, ns1blankspace.rpc) === -1)
 					{
 						sBaseEndpoint = '/ondemand/';
 					}
@@ -2935,7 +2935,7 @@ ns1blankspace.util =
 
 						$.each(oData, function()
 						{
-							if ($.inArray(this[sKey], aUniqueKey) == -1)
+							if ($.inArray(this[sKey], aUniqueKey) === -1)
 							{
 								aUniqueKey.push(this[sKey]);
 								oUniqueData.push(this);
@@ -2984,7 +2984,7 @@ ns1blankspace.search.address =
 					var h = -1;
 					var	iMaximumColumns = 1;
 							
-					if (oResponse.data.rows.length == 0)
+					if (oResponse.data.rows.length === 0)
 					{
 						$(ns1blankspace.xhtml.container).hide();
 					}
@@ -3068,11 +3068,11 @@ ns1blankspace.search.email =
 					
 					if (lElementSearchContext != undefined)
 					{
-						if (sSetXHTMLElementID == undefined) {sSetXHTMLElementID = sElementID}
+						if (sSetXHTMLElementID === undefined) {sSetXHTMLElementID = sElementID}
 					
 						var lDataID = $('#' + sSetXHTMLElementId).attr("data-id")
 						
-						if (lDataID == undefined) 
+						if (lDataID === undefined) 
 						{
 							lDataID = aSearch[1];
 						}
@@ -3087,7 +3087,7 @@ ns1blankspace.search.email =
 						
 						if (bEmailOnly) 
 						{
-							if (sValue == '') 
+							if (sValue === '') 
 							{
 								sValue = aSearch[6]
 							}
@@ -3111,14 +3111,14 @@ ns1blankspace.search.email =
 					{
 						ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID});
 					
-						if (sSearchText == undefined) {sSearchText = ''};
+						if (sSearchText === undefined) {sSearchText = ''};
 							
-						if (sSearchText == '' && iSource == ns1blankspace.data.searchSource.text)
+						if (sSearchText === '' && iSource === ns1blankspace.data.searchSource.text)
 						{
 							sSearchText = $('#' + sElementId).val();
 						}	
 						
-						if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.all)
+						if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
 						{						
 							var oSearch = new AdvancedSearch();
 							oSearch.rows = 10;
@@ -3164,7 +3164,7 @@ ns1blankspace.search.email =
 					var	iMaximumColumns = 1;
 					var sElementIDSuffix;
 					
-					if (oResponse.data.rows.length == 0)
+					if (oResponse.data.rows.length === 0)
 					{
 						$(ns1blankspace.xhtml.container).hide();
 					}
@@ -3211,7 +3211,7 @@ ns1blankspace.search.email =
 						$(ns1blankspace.xhtml.container).html(ns1blankspace.pagination(
 							{
 								html: aHTML.join(''),
-								more: (oResponse.morerows == 'true'),
+								more: (oResponse.morerows === 'true'),
 								headerClass: 'ns1blankspaceSearchHeaderLarge',
 								footerClass: 'ns1blankspaceSearchFooterLarge'
 							})	
@@ -3369,13 +3369,13 @@ ns1blankspace.render =
 					
 					$('#ns1blankspaceSearchFooterMoreStatus').html(ns1blankspace.xhtml.loadingSmall);
 					
-					if (iMore == -1)
+					if (iMore === -1)
 					{
 						alert('No more!')
 					}
 					else
 					{
-						if (oResponse == undefined)
+						if (oResponse === undefined)
 						{
 							var sData =	'id=' + iMore +
 											'&startrow=' + iStartRow + 
@@ -3394,7 +3394,7 @@ ns1blankspace.render =
 						{	
 							var aHTML = [];
 						
-							if ($('#ns1blankspaceSearch-' + iStartRow).length == 0)
+							if ($('#ns1blankspaceSearch-' + iStartRow).length === 0)
 							{
 								aHTML.push('<div id="ns1blankspaceSearch-' + iStartRow + '" class="ns1blankspaceSearchPage">');
 							
@@ -3402,7 +3402,7 @@ ns1blankspace.render =
 										
 								var iStartRow = parseInt(oResponse.startrow);
 								var iRows = parseInt(oResponse.rows);
-								var bMoreRows = (oResponse.morerows == 'true');
+								var bMoreRows = (oResponse.morerows === 'true');
 												
 								if (bMoreRows)
 								{				
@@ -3419,7 +3419,7 @@ ns1blankspace.render =
 								{		
 									iColumn = iColumn + 1;
 									
-									if (iColumn == 1)
+									if (iColumn === 1)
 									{
 										aHTML.push('<tr class="ns1blankspaceSearch">');
 									}
@@ -3465,7 +3465,7 @@ ns1blankspace.render =
 										aHTML.push('</td>');
 									}
 									
-									if (iColumn == iMaximumColumns)
+									if (iColumn === iMaximumColumns)
 									{    
 										aHTML.push('</tr>');
 										iColumn = 0;
@@ -3512,7 +3512,7 @@ ns1blankspace.render =
 
 ns1blankspace.actions =
 {
-	show: function (oParam)
+	show: 		function (oParam)
 				{
 					var sXHTMLElementID = 'ns1blankspaceMainActions';
 					var iObject = ns1blankspace.object;
@@ -3616,7 +3616,7 @@ ns1blankspace.actions =
 						if (oParam.showDescription != undefined ) {bShowDescription = oParam.showDescription}
 					}	
 
-					if (oResponse.data.rows.length == 0)
+					if (oResponse.data.rows.length === 0)
 					{
 						aHTML.push('<table class="ns1blankspace">' +
 										'<tr><td class="ns1blankspaceNothing">No actions.</td>' +
@@ -3676,7 +3676,7 @@ ns1blankspace.actions =
 							xhtmlElementID: sXHTMLElementID,
 							xhtmlContext: 'Action',
 							xhtml: aHTML.join(''),
-							showMore: (oResponse.morerows == 'true'),
+							showMore: (oResponse.morerows === 'true'),
 							columns: 'subject-actiondate',
 							more: oResponse.moreid,
 							rows: ns1blankspace.option.defaultRows,
@@ -3724,7 +3724,7 @@ ns1blankspace.actions =
 					var aXHTMLElementID = sXHTMLElementID.split('-');
 					var sID = aXHTMLElementID[1];
 					
-					if (oResponse == undefined)
+					if (oResponse === undefined)
 					{	
 						$.ajax(
 						{
@@ -3737,7 +3737,7 @@ ns1blankspace.actions =
 					}	
 					else
 					{
-						if (oResponse.status == 'OK')
+						if (oResponse.status === 'OK')
 						{
 							$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 						}	
@@ -3765,7 +3765,7 @@ ns1blankspace.actions =
 						if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft};
 					}	
 
-					if (iActionID != -1 && oResponse == undefined)
+					if (iActionID != -1 && oResponse === undefined)
 					{
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ACTION_SEARCH';
@@ -3826,7 +3826,8 @@ ns1blankspace.actions =
 								date: $('#ns1blankspaceActionAddDate').val(),
 								description: $('#ns1blankspaceActionAddDescription').val(),
 								priority: ($('#ns1blankspaceActionAddImportant').attr('checked') ? 3 : 2),
-								type: $('input[name="radioActionType"]:checked').val()
+								type: $('input[name="radioActionType"]:checked').val(),
+								status: $('input[name="radioActionStatus"]:checked').val()
 							});
 						})
 						.css('width', '75px');
@@ -3883,30 +3884,43 @@ ns1blankspace.actions =
 						
 						aHTML.push('</td></tr>');				
 
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Status' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input type="radio" id="radioActionStatus2" name="radioActionStatus" value="2"/>Not Started' +
+											'<br /><input type="radio" id="radioActionStatus4" name="radioActionStatus" value="4"/>In Progress' +
+											'<br /><input type="radio" id="radioActionStatus1" name="radioActionStatus" value="1"/>Completed' +
+										'</td></tr>');
+
 						aHTML.push('</table>');
 						
 						$('#ns1blankspaceEditColumn2').html(aHTML.join(''));
 
 						if (oResponse != undefined)
 						{	
-							if (oResponse.data.rows.length == 0)
+							if (oResponse.data.rows.length === 0)
 							{	
 								$('#ns1blankspaceActionAddSubject').val(oResponse.data.rows[0].subject);
 								$('#ns1blankspaceActionAddDescription').val(oResponse.data.rows[0].description);
 								$('[name="radioActionType"][value="' + oResponse.data.rows[0].actiontype + '"]').attr('checked', true);
+								$('[name="radioActionStatus"][value="' + oResponse.data.rows[0].status + '"]').attr('checked', true);
 							}	
 						}
 						else
 						{
 							$('#ns1blankspaceActionAddDate').val(Date.today().toString("d MMM yyyy"));
 							$('[name="radioActionType"][value="' + ns1blankspace.data.actionTypes.fileNote.id + '"]').attr('checked', true);
+							$('[name="radioActionStatus"][value="1"]').attr('checked', true);
 						}	
 					}
 				},
 
 	save: 		function (oParam, oData, oResponse)
 				{
-					if (oResponse == undefined)
+					if (oResponse === undefined)
 					{
 						var sData = '';
 						var iType = ns1blankspace.data.actionTypes.fileNote;
@@ -3950,7 +3964,7 @@ ns1blankspace.actions =
 								sData += '&enddate=' + ns1blankspace.util.fs(dEndDate);
 							}
 							
-							sData += (oData.otherData == undefined ? '' : oData.otherData)
+							sData += (oData.otherData === undefined ? '' : oData.otherData)
 								  
 							$.ajax(
 							{
@@ -3968,7 +3982,7 @@ ns1blankspace.actions =
 					}
 					else	
 					{
-						if (oResponse.status == 'OK')
+						if (oResponse.status === 'OK')
 						{
 							ns1blankspace.status.message('Action saved');
 							fPostSave();
@@ -4094,13 +4108,13 @@ ns1blankspace.render.page =
 						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
 					}
 				
-					if (iMore == -1)
+					if (iMore === -1)
 					{
 						alert('No more!')
 					}
 					else
 					{
-						if (oData == undefined)
+						if (oData === undefined)
 						{
 							var sData =	'id=' + iMore +
 											'&startrow=' + iStartRow + 
@@ -4119,7 +4133,7 @@ ns1blankspace.render.page =
 						{
 							var aHTML = [];
 						
-							if ($('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow).length == 0)
+							if ($('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow).length === 0)
 							{
 								aHTML.push('<div id="ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow + 
 												'" class="ns1blankspaceRenderPage ns1blankspaceRenderPage_' + sXHTMLContext + '">');
@@ -4133,7 +4147,7 @@ ns1blankspace.render.page =
 					
 								var iStartRow = parseInt(oData.startrow)
 								var iRows = parseInt(oData.rows);
-								var bMoreRows = (oData.morerows == "true");
+								var bMoreRows = (oData.morerows === "true");
 												
 								oParam.startRow = iStartRow + iRows;	
 								
@@ -4243,7 +4257,7 @@ ns1blankspace.pdf =
 						if (oParam.xhtmlElementID) {sXHTMLElementID = oParam.xhtmlElementID}
 					}
 
-					if (sReturn == undefined)
+					if (sReturn === undefined)
 					{
 						$('#' + sXHTMLElementID).button(
 						{
@@ -4355,7 +4369,7 @@ ns1blankspace.show =
 
 					ns1blankspace.xhtml.divID = sSelector;
 					
-					if ($(sSelector).html() == '' || bRefresh)
+					if ($(sSelector).html() === '' || bRefresh)
 					{
 						$(sSelector).attr('data-loading', '1');
 						$(sSelector).html(ns1blankspace.xhtml.loading);

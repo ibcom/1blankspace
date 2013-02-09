@@ -374,7 +374,7 @@ ns1blankspace.action =
 					}	
 				},	
 		
-summary: 		function ()
+	summary: 	function ()
 				{
 					var aHTML = [];
 
@@ -389,7 +389,7 @@ summary: 		function ()
 						aHTML.push('<table class="ns1blankspaceMain">' +
 										'<tr class="ns1blankspaceRow">' +
 										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:350px;"></td>' +
 										'</tr>' +
 										'</table>');				
 						
@@ -416,20 +416,20 @@ summary: 		function ()
 											'</td></tr>');
 						}
 					
-						if (ns1blankspace.objectContextData.actiondate != '')
+						if (ns1blankspace.objectContextData.duedatetime != '')
 						{
-							var oDate = Date.parse(ns1blankspace.objectContextData.duedate);
+							var oDate = Date.parse(ns1blankspace.objectContextData.duedatetime);
 								
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryDate" class="ns1blankspaceSummary">' +
-											oDate.toString("ddd, dd MMM yyyy h:mm TT") +
+											oDate.toString("ddd, dd MMM yyyy") +
 											'</td></tr>');
 						
 							if (oDate.getHours() != 0 && oDate.getMinutes() != 0)
 							{
 								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Time</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryTime" class="ns1blankspaceSummary">' +
-											oDate.toString("h:mm TT") +
+											oDate.toString("h:mm tt") +
 											'</td></tr>');
 							}					
 						
@@ -450,6 +450,14 @@ summary: 		function ()
 										ns1blankspace.objectContextData.statustext +
 										'</td></tr>');
 						}	
+			
+						aHTML.push('</table>');		
+
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspace">');
 
 						if (ns1blankspace.objectContextData.description != '')
 						{
@@ -458,10 +466,10 @@ summary: 		function ()
 											ns1blankspace.objectContextData.description +
 											'</td></tr>');
 						}
-						
+
 						aHTML.push('</table>');		
 
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
 					}	
 				},
 	
@@ -520,7 +528,7 @@ summary: 		function ()
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceSelect">' +
-										'<input id="ns1blankspaceDetailsType" class="ns1blankspaceSelect"' +
+										'<input id="ns1blankspaceDetailsActionBy" class="ns1blankspaceSelect"' +
 												' data-method="CORE_USER_SEARCH"' +
 												' data-columns="firstname-space-surname">' +
 										'</td></tr>');	
@@ -1673,13 +1681,13 @@ summary: 		function ()
 								aHTML.push('<tr>');
 													
 								aHTML.push('<td id="ns1blankspaceAction_reference-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-													this.reference + '</td>');
+													this.subject + '</td>');
 								
-								aHTML.push('<td id="tdAction_date-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-													this.actiondate + '</td>');
+								aHTML.push('<td id="tdAction_date-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRow">' +
+													this.duedate + '</td>');
 
 								sDate = '&nbsp;';
-								var oDate = Date.parse(this.actiondate);
+								var oDate = Date.parse(this.duedate);
 										
 								if (oDate != null)
 								{ 			
@@ -1689,11 +1697,11 @@ summary: 		function ()
 									}
 								}
 								
-								aHTML.push('<td id="ns1blankspaceAction_time-' + this.id + '" class="ns1blankspaceRowSelect" >' +
+								aHTML.push('<td id="ns1blankspaceAction_time-' + this.id + '" class="ns1blankspaceRow" >' +
 												sDate + '</td>');
 								
 								aHTML.push('<td id="ns1blankspaceAction_contact-' + this.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowSelectContact">' +
-												this.contactpersonfirstname + ' ' + this.contactpersonsurname + '</td>');
+												this.contactpersontext + '</td>');
 								
 								aHTML.push('<td id="ns1blankspaceAction_description-' + this.id + '" class="ns1blankspaceRow">' +
 												this.description + '</td>');

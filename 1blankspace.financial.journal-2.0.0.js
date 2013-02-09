@@ -612,7 +612,7 @@ ns1blankspace.financial.journal =
 
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-														'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
+														'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:30px;"></td>' +
 														'</tr>');
 
 										aHTML.push('</table>');					
@@ -621,7 +621,7 @@ ns1blankspace.financial.journal =
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceColumn2">');
+										aHTML.push('<table class="ns1blankspaceColumn2" style="width:50px;">');
 										
 										
 										aHTML.push('<tr><td class="ns1blankspaceAction">' +
@@ -646,8 +646,8 @@ ns1blankspace.financial.journal =
 									var oSearch = new AdvancedSearch();
 									oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_ITEM_SEARCH';
 									oSearch.addField('area,areatext,capital,creditamount,credittax,debitamount,debittax,' +
-														'financialaccount,financialaccounttext,generaljournal,generaljournaltext' +
-														'project,projecttext,reconciliation,reconciliationtext,taxcategory,taxcategorytext' +
+														'financialaccount,financialaccounttext,generaljournal,generaljournaltext,' +
+														'project,projecttext,reconciliation,reconciliationtext,taxcategory,taxcategorytext,' +
 														'taxreport,taxreportfield,taxreportfield2,taxreporttext,taxtype,taxtypeexpensetext,taxtyperevenuetext');
 									oSearch.addFilter('generaljournal', 'EQUAL_TO', iObjectContext);
 									oSearch.sort('taxcategorytext', 'asc');
