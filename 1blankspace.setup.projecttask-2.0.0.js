@@ -286,7 +286,7 @@ ns1blankspace.setup.projectTask =
 
 					aHTML.push('</table>');										
 					
-					$('#ns1blankspaceViewControl').html(aHTML.join(''));
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 
