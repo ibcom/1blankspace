@@ -561,7 +561,7 @@ ns1blankspace.setup.project =
 											label: "Save"
 										})
 										.click(function() {
-											ns1blankspace.setup.projectTask.save.send(oParam);
+											ns1blankspace.setup.project.tasks.save.send({projectTask: lProjectTask});
 										})
 										
 										var aHTML = [];
@@ -663,7 +663,7 @@ ns1blankspace.setup.project =
 											{
 												$('#ns1blankspaceTaskTitle').val(oResponse.data.rows[0].title);
 												$('#ns1blankspaceTaskDescription').val(oResponse.data.rows[0].description);
-												
+
 												$('#ns1blankspaceTaskType').val(oResponse.data.rows[0].typetext);
 												$('#ns1blankspaceTaskType').attr('data-id', oResponse.data.rows[0].type);
 
@@ -683,8 +683,17 @@ ns1blankspace.setup.project =
 								},	
 
 					save:		{
-									send:		function ()
+									send:		function (oParam)
 												{
+													var lProjectTask;
+													
+													if (oParam !== undefined)
+													{
+														if (oParam.projectTask !== undefined) {lProjectTask = oParam.projectTask}
+													}
+
+													ns1blankspace.status.working();
+
 													var sData = 'project=' + ns1blankspace.objectContext;
 													
 													sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceTaskTitle').val());
@@ -695,8 +704,10 @@ ns1blankspace.setup.project =
 													sData += '&daysbeforestart=' + ns1blankspace.util.fs($('#ns1blankspaceTaskStartDays').val());
 													sData += '&durationdays=' + ns1blankspace.util.fs($('#ns1blankspaceTaskDurationDays').val());
 													sData += '&displayorder=' + ns1blankspace.util.fs($('#ns1blankspaceTaskDisplayOrder').val());
-													sData += '&ns1blankspaceTaskDescription=' + ns1blankspace.util.fs($('#ns1blankspaceTaskDescription').val());
+													sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceTaskDescription').val());
 													
+													if (lProjectTask !== undefined) {sData += '&id=' + lProjectTask}
+
 													$.ajax(
 													{
 														type: 'POST',
@@ -704,10 +715,13 @@ ns1blankspace.setup.project =
 														data: sData,
 														dataType: 'json',
 														success: function ()
-														{}
+														{
+															ns1blankspace.status.message("Task saved");
+															ns1blankspace.setup.project.tasks.show();
+														}
 													});
 
-													ns1blankspace.setup.project.tasks();	
+														
 												}
 								},				
 
