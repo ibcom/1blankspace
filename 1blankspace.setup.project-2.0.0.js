@@ -661,7 +661,22 @@ ns1blankspace.setup.project =
 										{
 											if (oResponse.data.rows.length !== 0)
 											{
-												$('#ns1blankspaceTaskTitle').val(oResponse.data.rows[0].title);		
+												$('#ns1blankspaceTaskTitle').val(oResponse.data.rows[0].title);
+												$('#ns1blankspaceTaskDescription').val(oResponse.data.rows[0].description);
+												
+												$('#ns1blankspaceTaskType').val(oResponse.data.rows[0].typetext);
+												$('#ns1blankspaceTaskType').attr('data-id', oResponse.data.rows[0].type);
+
+												$('#ns1blankspaceTaskTaskBy').val(oResponse.data.rows[0].taskbyusertext);
+												$('#ns1blankspaceTaskTaskBy').attr('data-id', oResponse.data.rows[0].taskbyuser);
+
+												$('#ns1blankspaceTaskTaskDependsOn').val(oResponse.data.rows[0].taskdependsontext);
+												$('#ns1blankspaceTaskTaskBy').attr('data-id', oResponse.data.rows[0].taskdependson);
+
+												$('[name="radioStartBasedOn"][value="' + ns1blankspace.objectContextData.taskstartbasedon + '"]').attr('checked', true);
+												$('#ns1blankspaceTaskStartDays').val(oResponse.data.rows[0].daysbeforestart);
+												$('#ns1blankspaceTaskDurationDays').val(oResponse.data.rows[0].durationdays);
+												$('#ns1blankspaceTaskDisplayOrder').val(oResponse.data.rows[0].displayorder);
 											}
 										}	
 									}	
@@ -674,13 +689,13 @@ ns1blankspace.setup.project =
 													
 													sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceTaskTitle').val());
 													sData += '&type=' + ns1blankspace.util.fs($('#ns1blankspaceTaskType').attr('data-id'));
-													sData += '&taskbyuser=' + ns1blankspace.util.fs($('#ins1blankspaceTaskTaskBy').attr('data-id'));
+													sData += '&taskbyuser=' + ns1blankspace.util.fs($('#ns1blankspaceTaskTaskBy').attr('data-id'));
 													sData += '&taskdependson=' + ns1blankspace.util.fs($('#ns1blankspaceTaskTaskDependsOn').attr('data-id'));
 													sData += '&taskstartbasedon=' + $('input[name="radioStartBasedOn"]:checked').val();
 													sData += '&daysbeforestart=' + ns1blankspace.util.fs($('#ns1blankspaceTaskStartDays').val());
 													sData += '&durationdays=' + ns1blankspace.util.fs($('#ns1blankspaceTaskDurationDays').val());
 													sData += '&displayorder=' + ns1blankspace.util.fs($('#ns1blankspaceTaskDisplayOrder').val());
-													sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceTaskDescription').val());
+													sData += '&ns1blankspaceTaskDescription=' + ns1blankspace.util.fs($('#ns1blankspaceTaskDescription').val());
 													
 													$.ajax(
 													{
