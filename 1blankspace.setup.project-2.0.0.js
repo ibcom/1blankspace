@@ -280,7 +280,7 @@ ns1blankspace.setup.project =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 
 						var sContext = ns1blankspace.objectContextData.reference;
-						sContext += '<br /><span id="ns1blankspaceSubContext">(Template)</span>';
+						sContext += '<br /><span class="ns1blankspaceSub">(Template)</span>';
 							
 						$('#ns1blankspaceControlContext').html(sContext);
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
@@ -501,8 +501,9 @@ ns1blankspace.setup.project =
 											
 									$('#ns1blankspaceSetupProjectTasks td.ns1blankspaceRowSelect')
 									.click(function() {
-										ns1blankspace.setup.projectTask.init({showHome: false});
-										ns1blankspace.setup.projectTask.search.send(this.id);
+										//ns1blankspace.setup.projectTask.init({showHome: false});
+										//ns1blankspace.setup.projectTask.search.send(this.id);
+										ns1blankspace.setup.project.tasks.edit({xhtmlElementContextID: this.id})
 									})
 									.css('width', '15px')
 									.css('height', '20px');
@@ -532,14 +533,14 @@ ns1blankspace.setup.project =
 													
 									if (oResponse === undefined && lProjectTask !== undefined)
 									{
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('PROJECT_TASK_SEARCH'),
-											data: 'id=' + lProjectTask,
-											dataType: 'json',
-											success: function(data){ns1blankspace.setup.projectTask.add(oParam, data)}
-										});
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'PROJECT_TASK_SEARCH';
+										oSearch.addField('actualenddate,criticaldate,dependsontask,dependsontasktext,description,enddate,expectedduration,' +
+															'milestone,percentagecomplete,priority,prioritytext,prioritynumber,project,projecttext,' +
+															'reassignmentnotes,reference,schedulingnotes,startdate,status,statustext,' +
+															'taskby,taskbytext,tasktype,tasktypetext,timespent,title,tobecheckedby,tobecheckedbytext');
+										oSearch.addFilter('id', 'EQUAL_TO', lProjectTask);
+										oSearch.getResults(function(data) {ns1blankspace.setup.project.tasks.edit(oParam, data)});
 									}
 									else
 									{
@@ -658,9 +659,9 @@ ns1blankspace.setup.project =
 										
 										if (oResponse !== undefined)
 										{
-											if (oResponse.data.rows.length === 0)
+											if (oResponse.data.rows.length !== 0)
 											{
-												$('#ns1blankspaceMainProjectTaskTitle').val(oResponse.data.rows[0].title);		
+												$('#ns1blankspaceTaskTitle').val(oResponse.data.rows[0].title);		
 											}
 										}	
 									}	
