@@ -35,6 +35,44 @@ ns1blankspace.financial.journal =
 					}	
 				},
 
+	refresh:	function (oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						$('#ns1blankspaceControlContext_balance').html(ns1blankspace.xhtml.loadingSmall);
+							
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_ITEM_SEARCH';
+						oSearch.addField('creditamount,credittax,debitamount,debittax');
+						oSearch.addFilter('generaljournal', 'EQUAL_TO', ns1blankspace.objectContext);
+						
+						oSearch.getResults(function(data) {ns1blankspace.financial.journal.refresh(data)});
+					}
+					else
+					{
+						var oBalance =
+						{
+							creditamount: 0,
+							credittax: 0,
+							debitamount: 0,
+							debittax: 0
+						};
+						
+						$.each(oResponse.data.rows, function()
+						{
+							oBalance.creditamount += (this.creditamount).parseCurrency();
+							oBalance.credittax += (this.credittax).parseCurrency();
+							oBalance.debitamount += (this.debitamount).parseCurrency();
+							oBalance.debittax += (this.debittax).parseCurrency();
+						});	
+
+						ns1blankspace.objectContextData.balanceAmount = oBalance.creditamount - oBalance.debitamount;
+						ns1blankspace.objectContextData.balanceTax = oBalance.credittax - oBalance.debittax;
+								
+						$('#ns1blankspaceControlContext_balance').html(ns1blankspace.objectContextData.balanceAmount);
+					}
+				},
+
 	home: 		function (oResponse)
 				{
 					if (oResponse == undefined)
@@ -355,7 +393,7 @@ ns1blankspace.financial.journal =
 								
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
 							'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.journaldate + '</span>' +
-							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">' + '' + '</span>');
+							'<br /><span id="ns1blankspaceControlContext_balance" class="ns1blankspaceSub"></span>');
 							
 						ns1blankspace.history.view({
 							newDestination: 'ns1blankspace.financial.journal.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
@@ -612,7 +650,7 @@ ns1blankspace.financial.journal =
 
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-														'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:30px;"></td>' +
+														'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:150px;"></td>' +
 														'</tr>');
 
 										aHTML.push('</table>');					
@@ -671,8 +709,10 @@ ns1blankspace.financial.journal =
 
 										aHTML.push('<tr>');
 										aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Account</td>');
-										aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
-										aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Credit</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + ns1blankspace.option.taxVATCaption +'</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Debit</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + ns1blankspace.option.taxVATCaption +'</td>');
 										aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 										aHTML.push('</tr>');
 
@@ -683,17 +723,22 @@ ns1blankspace.financial.journal =
 											aHTML.push('<td id="ns1blankspaceItem_financialaccounttext-' + this.id + '" class="ns1blankspaceRow">' +
 															this["financialaccounttext"] + '</td>');
 											
-											aHTML.push('<td id="ns1blankspaceItem_description-' + this.id + '" class="ns1blankspaceRow">' +
-															this["description"] + '</td>');
+											aHTML.push('<td id="ns1blankspaceItem_creditamount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+															ns1blankspace.util.fz(this["creditamount"]) + '</td>');
 
-											aHTML.push('<td id="ns1blankspaceItem_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;"' +
-															' title="' + this["tax"] + '">' +
-															this["amount"] + '</td>');
+											aHTML.push('<td id="ns1blankspaceItem_credittax-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;"' +
+															'">' +
+															ns1blankspace.util.fz(this["credittax"]) + '</td>');
 
-											aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+											aHTML.push('<td id="ns1blankspaceItem_debitamount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+															ns1blankspace.util.fz(this["debitamount"]) + '</td>');
+
+											aHTML.push('<td id="ns1blankspaceItem_debittax-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;"' +
+															'">' +
+															ns1blankspace.util.fz(this["debittax"]) + '</td>');
+
+											aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 											aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceItemRemove"></span>');
-											aHTML.push('<span id="ns1blankspaceRowItemItem_options_view-' + this.id + '" class="ns1blankspaceItemView"></span>');
-										
 											aHTML.push('</td></tr>');
 										});
 										

@@ -148,7 +148,7 @@ ns1blankspace.action =
 									}
 									
 									if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
-									{
+									{∂
 										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;

@@ -88,7 +88,7 @@ String.prototype.formatXHTML = function(bDirection)
 };
 
 String.method('trim', function () {return this.replace(/^\s+|\s+$/g, '');});
-String.method('parseCurrency', function () {return parseFloat(this.replace(/,/g, ''));});
+String.method('parseCurrency', function () {var c = this; if (c == undefined || c == '') {c = '0'}; return parseFloat(c.replace(/,/g, ''));});
 
 var ns1blankspace = {};
 
@@ -2861,6 +2861,20 @@ ns1blankspace.util =
 				},
 
 	fs:			function (sValue) {return this.formatSave(sValue)},
+
+	fz: 		function (sValue)
+				{
+					if (sValue === undefined || sValue === 'undefined') { sValue = 0; }
+					
+					if (parseInt((sValue).parseCurrency()) === 0)
+					{
+						return '-';
+					}
+					else
+					{
+						return sValue
+					}	
+				},
 
 	getRPC:		function ()
 				{

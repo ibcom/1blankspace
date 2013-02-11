@@ -436,7 +436,7 @@ ns1blankspace.financial.credit =
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Person</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryPerson" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.ccontactpersontext +
+											ns1blankspace.objectContextData.contactpersontext +
 											'</td></tr>');
 						}
 					
@@ -562,7 +562,7 @@ ns1blankspace.financial.credit =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioType1" name="radioType" value="1"/>You owe customer' +
-										'<br /><input type="radio" id="radioType2" name="radioTracking" value="2"/>Supplier owes you' +
+										'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Supplier owes you' +
 										'</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -668,8 +668,8 @@ ns1blankspace.financial.credit =
 
 										aHTML.push('<table class="ns1blankspaceContainer">');
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceAppliedToColumn1" class="ns1blankspaceColumn1"></td>' +
-														'<td id="ns1blankspaceAppliedToColumn2" class="ns1blankspaceColumn2" style="width: 200px;></td>' +
+														'<td id="ns1blankspaceAppliedToColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceAppliedToColumn2" class="ns1blankspaceColumn2" style="width: 200px;"></td>' +
 														'</tr>');
 										aHTML.push('</table>');					
 														
