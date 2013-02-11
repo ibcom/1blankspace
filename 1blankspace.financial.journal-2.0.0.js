@@ -68,8 +68,40 @@ ns1blankspace.financial.journal =
 
 						ns1blankspace.objectContextData.balanceAmount = oBalance.creditamount - oBalance.debitamount;
 						ns1blankspace.objectContextData.balanceTax = oBalance.credittax - oBalance.debittax;
-								
-						$('#ns1blankspaceControlContext_balance').html(ns1blankspace.objectContextData.balanceAmount);
+						
+						var sHTML = '$' + (oBalance.creditamount).formatMoney(2, ".", ",");
+
+						if (parseInt(ns1blankspace.objectContextData.balanceAmount) !== 0)
+						{
+							sHTML += '<br /><span style="background-color:red; color: white;">' +
+												'$' + (ns1blankspace.objectContextData.balanceAmount).formatMoney(2, ".", ",") + '</span>';
+						}
+
+						if (parseInt(oBalance.credittax) !== 0)
+						{
+							sHTML += '<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">' +
+												ns1blankspace.option.taxVATCaption + '</span>';
+
+							sHTML += ' $' + (oBalance.credittax).formatMoney(2, ".", ",");;
+						}
+
+						if (parseInt(ns1blankspace.objectContextData.balanceTax) !== 0)
+						{
+							if (parseInt(oBalance.credittax) === 0)
+							{
+								sHTML += '<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">' +
+												ns1blankspace.option.taxVATCaption + '</span> ';
+							}					
+							else
+							{
+								sHTML += '<br />'
+							}
+
+							sHTML += '<span style="background-color:red; color: white;">' +
+												'$' + (ns1blankspace.objectContextData.balanceTax).formatMoney(2, ".", ",") + '</span>';
+						}
+
+						$('#ns1blankspaceControlContext_balance').html(sHTML);
 					}
 				},
 
@@ -334,7 +366,7 @@ ns1blankspace.financial.journal =
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.financial.journal.summary.show();
+						ns1blankspace.financial.journal.summary();
 					});
 
 					$('#ns1blankspaceControlDetails').click(function(event)
@@ -387,9 +419,17 @@ ns1blankspace.financial.journal =
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
+
+						ns1blankspace.financial.journal.refresh();
 						
-						$('#ns1blankspaceViewControlAction').button({disabled: false});
-						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+						ns1blankspace.objectContextData.locked = false;
+						if (ns1blankspace.objectContextData.status === '2') {ns1blankspace.objectContextData.locked = true;}
+
+						if (!ns1blankspace.objectContextData.locked)
+						{	
+							$('#ns1blankspaceViewControlAction').button({disabled: false});
+							$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+						}	
 								
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
 							'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.journaldate + '</span>' +
@@ -649,7 +689,8 @@ ns1blankspace.financial.journal =
 										aHTML.push('<table class="ns1blankspaceContainer">');
 
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1Flexible">' +
+														ns1blankspace.xhtml.loading + '</td>' +
 														'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:150px;"></td>' +
 														'</tr>');
 
@@ -659,13 +700,20 @@ ns1blankspace.financial.journal =
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceColumn2" style="width:50px;">');
+										aHTML.push('<table class="ns1blankspaceColumn2" style="width:150px;">');
 										
-										
-										aHTML.push('<tr><td class="ns1blankspaceAction">' +
+										if (ns1blankspace.objectContextData.locked)
+										{
+											aHTML.push('<tr><td class="ns1blankspaceSub">' +
+														'This journal can not be edited.' +
+														'</td></tr>');
+										}
+										else
+										{
+											aHTML.push('<tr><td class="ns1blankspaceAction">' +
 														'<span id="ns1blankspaceItemAdd">Add</span>' +
 														'</td></tr>');
-							
+										}
 										
 										aHTML.push('</table>');					
 										
@@ -746,30 +794,33 @@ ns1blankspace.financial.journal =
 
 										$('#ns1blankspaceItemColumn1').html(aHTML.join(''));
 										
-										$('.ns1blankspaceItemRemove').button( {
-											text: false,
-											icons: {
-												primary: "ui-icon-close"
-											}
-										})
-										.click(function() {
-											oParam.xhtmlElementID = this.id;
-											ns1blankspace.financial.item.remove(oParam);
-										})
-										.css('width', '15px')
-										.css('height', '17px')
-								
-										$('.ins1blankspaceItemView').button( {
-											text: false,
-											icons: {
-												primary: "ui-icon-play"
-											}
-										})
-										.click(function() {
-											ns1blankspace.financial[sNamespace].item.edit({xhtmlElementID: this.id})
-										})
-										.css('width', '15px')
-										.css('height', '17px')	
+										if (!ns1blankspace.objectContextData.locked)
+										{
+											$('.ns1blankspaceItemRemove').button( {
+												text: false,
+												icons: {
+													primary: "ui-icon-close"
+												}
+											})
+											.click(function() {
+												oParam.xhtmlElementID = this.id;
+												ns1blankspace.financial.journal.item.remove(oParam);
+											})
+											.css('width', '15px')
+											.css('height', '17px')
+									
+											$('.ins1blankspaceItemView').button( {
+												text: false,
+												icons: {
+													primary: "ui-icon-play"
+												}
+											})
+											.click(function() {
+												//ns1blankspace.financial[sNamespace].item.edit({xhtmlElementID: this.id})
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+										}
 									}
 								}	
 							},
@@ -798,24 +849,12 @@ ns1blankspace.financial.journal =
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
+										url: ns1blankspace.util.endpointURI('FINANCIAL_GENERAL_JOURNAL_ITEM_MANAGE'),
 										data: 'remove=1&id=' + sID,
 										dataType: 'json',
 										success: function(data)
 										{
-											var sData = 'object=' + ns1blankspace.object;
-											sData += '&objectcontext=' + ns1blankspace.objectContext;
-											
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
-												data: sData,
-												dataType: 'json',
-												success: function(data){ns1blankspace.financial[sNamespace].refresh()}
-											});
-											
-											ns1blankspace.financial[sNamespace].remove(oParam, data)
+											ns1blankspace.financial.journal.item.remove(oParam, data);
 										}
 									});
 								}	
@@ -824,6 +863,7 @@ ns1blankspace.financial.journal =
 									if (oResponse.status == 'OK')
 									{
 										$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+										ns1blankspace.financial.journal.refresh()
 									}
 									else
 									{
