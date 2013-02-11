@@ -691,7 +691,7 @@ ns1blankspace.financial.journal =
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1Flexible">' +
 														ns1blankspace.xhtml.loading + '</td>' +
-														'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:150px;"></td>' +
+														'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
 														'</tr>');
 
 										aHTML.push('</table>');					
@@ -700,7 +700,7 @@ ns1blankspace.financial.journal =
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceColumn2" style="width:150px;">');
+										aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
 										
 										if (ns1blankspace.objectContextData.locked)
 										{
@@ -724,7 +724,7 @@ ns1blankspace.financial.journal =
 											label: "Add"
 										})
 										.click(function() {
-											 ns1blankspace.financial.item.edit(oParam);
+											 ns1blankspace.financial.journal.item.edit(oParam);
 										});										
 									
 									}
@@ -893,6 +893,16 @@ ns1blankspace.financial.journal =
 								
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
+														'Type' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceRadio">' +
+														'<input type="radio" id="radioType1" name="radioType" value="1"/>Credit' +
+														'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Debit' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Amount' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
@@ -908,6 +918,34 @@ ns1blankspace.financial.journal =
 														'<td class="ns1blankspaceTextMulti">' +
 														'<textarea id="ns1blankspaceItemDescription" class="ns1blankspaceTextMulti" style="height:100px; width:200px;" rows="10" cols="35" ></textarea>' +
 														'</td></tr>');		
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														ns1blankspace.option.taxVATCaption +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceRadio">' +
+														'<input type="radio" id="radioTaxCategory-1" name="radioTaxCategory" value="1"/>Sale' +
+														'<br /><input type="radio" id="radioTaxCategory-2" name="radioTaxCategory" value="2"/>Purchase' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														ns1blankspace.option.taxVATCaption + ' Type' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td id="ns1blankspaceFinancialTaxCode" class="ns1blankspaceRadio">' +
+														ns1blankspace.xhtml.loadingSmall +
+														'</td></tr>');	
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														ns1blankspace.option.taxVATCaption + 'Amount' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceItemTaxAmount" class="ns1blankspaceText">' +
+														'</td></tr>');
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -928,6 +966,8 @@ ns1blankspace.financial.journal =
 										
 										$('#ns1blankspaceItemColumn2').html(aHTML.join(''));
 					
+										ns1blankspace.financial.codes.tax({xhtmlElementID: 'ns1blankspaceFinancialTaxCode', id: 1});
+
 										$('#ns1blankspaceItemAccount').live('keyup', function()
 										{
 											$.extend(true, oParam, {step: 2});
@@ -936,6 +976,16 @@ ns1blankspace.financial.journal =
 										});	
 											
 										$('#ns1blankspaceItemAmount').focus();
+
+										$('[name="radioTaxCategory"]').click(function()
+										{
+											ns1blankspace.financial.codes.tax(
+											{
+												xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
+												id: 1,
+												type: (this.id).split('-')[1]
+											});;
+										})
 									}
 
 									if (iStep == 2)
