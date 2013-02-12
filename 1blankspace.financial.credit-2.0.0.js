@@ -815,8 +815,8 @@ ns1blankspace.financial.credit =
 									if (oResponse === undefined)
 									{
 										$('#ns1blankspaceAppliedToColumn1').html(ns1blankspace.xhtml.loading);
-										$('#ns1blankspaceAppliedToColumn1').html('');
-										 
+										$('#ns1blankspaceAppliedToColumn2').html('');
+
 										var oSearch = new AdvancedSearch();
 
 										if (ns1blankspace.objectContextData.type == '1')
@@ -875,15 +875,23 @@ ns1blankspace.financial.credit =
 												aHTML.push('<td id="ns1blankspaceCreditAppliedTo_date-' + this.id + '" class="ns1blankspaceRow">' +
 																this.reference + '</td>');
 
-												aHTML.push('<td id="ns1blankspaceCreditAppliedTo_date-' + this.id + '" class="ns1blankspaceRow">' +
-																this.appliesdate + '</td>');
+												if (ns1blankspace.objectContextData.type == '1')
+												{
+													aHTML.push('<td id="ns1blankspaceCreditAppliedTo_date-' + this.id + '" class="ns1blankspaceRow">' +
+																this.sentdate + '</td>');
+												}
+												else
+												{
+													aHTML.push('<td id="ns1blankspaceCreditAppliedTo_date-' + this.id + '" class="ns1blankspaceRow">' +
+																this.accrueddate + '</td>');
+												}	
 												
 												aHTML.push('<td id="ns1blankspaceCreditAppliedTo_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 																this.amount + '</td>');
 						
 												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 																		
-												aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_remove-' + this.id + '" class="ns1blankspaceAppliedToRemove"></span>');
+												aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_select-' + this.id + '" class="ns1blankspaceAppliedToSelect"></span>');
 													
 												aHTML.push('</td></tr>');
 											});
@@ -891,6 +899,21 @@ ns1blankspace.financial.credit =
 											aHTML.push('</table>');
 
 											$('#ns1blankspaceAppliedToColumn1').html(aHTML.join(''));
+
+											$('.ns1blankspaceAppliedToSelect').button(
+											{
+												text: false,
+												label: "Save",
+												icons: {
+													 primary: "ui-icon-check"
+												}
+											})
+											.click(function() {
+												$.ajax()
+												
+											})
+											.css('width', '15px')
+											.css('height', '20px');
 										}	
 									}	
 								}			
