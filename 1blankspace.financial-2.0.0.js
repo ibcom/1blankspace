@@ -2072,51 +2072,105 @@ ns1blankspace.financial.save =
 				}
 }
 
-ns1blankspace.financial.codes =
+ns1blankspace.financial.util =
 {
-	tax: 		function (oParam, oResponse)
-				{
-					var iType = 1;
-					var sXHTMLElementID;
-					var iID;
-				
-					if (oParam != undefined)
-					{
-						if (oParam.type != undefined) {iType = oParam.type}
-						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-						if (oParam.id != undefined) {iID = oParam.id}
-					}
+	tax: 		{
+					codes: 		function (oParam)
+								{
+									var iType = 1;
+									var sXHTMLElementID;
+									var iID;
+								
+									if (oParam != undefined)
+									{
+										if (oParam.type != undefined) {iType = oParam.type}
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										if (oParam.id != undefined) {iID = oParam.id}
+									}
 
-					if (iType == 1)  //Sales
-					{	
-						var sHTML = '<input type="radio" id="radioTaxCode1" name="radioTaxCode" value="1" data-rate="10"/>Applies' +
-									'<br /><input type="radio" id="radioTaxCode2" name="radioTaxCode" value="2" data-rate="0"/>Export' +
-									'<br /><input type="radio" id="radioTaxCode3" name="radioTaxCode" value="3" data-rate="0"/>Free' +
-									'<br /><input type="radio" id="radioTaxCode4" name="radioTaxCode" value="4" data-rate="0"/>Input Taxed' +
-									'<br /><input type="radio" id="radioTaxCode5" name="radioTaxCode" value="5" data-rate="0"/>Excluded';
-					}
+									if (iType == 1)  //Sales
+									{	
+										var sHTML = '<input type="radio" id="radioTaxCode1" name="radioTaxCode" value="1" data-rate="10"/>Applies' +
+													'<br /><input type="radio" id="radioTaxCode2" name="radioTaxCode" value="2" data-rate="0"/>Export' +
+													'<br /><input type="radio" id="radioTaxCode3" name="radioTaxCode" value="3" data-rate="0"/>Free' +
+													'<br /><input type="radio" id="radioTaxCode4" name="radioTaxCode" value="4" data-rate="0"/>Input Taxed' +
+													'<br /><input type="radio" id="radioTaxCode5" name="radioTaxCode" value="5" data-rate="0"/>Excluded';
+									}
 
-					if (iType == 2)  //Purchases
-					{	
-						var sHTML = '<input type="radio" id="radioTaxCode1" name="radioTaxCode" value="1" data-rate="10"/>Applies' +
-									'<br /><input type="radio" id="radioTaxCode2" name="radioTaxCode" value="2" data-rate="0"/>Input Taxed' +
-									'<br /><input type="radio" id="radioTaxCode3" name="radioTaxCode" value="3" data-rate="0"/>Free' +
-									'<br /><input type="radio" id="radioTaxCode4" name="radioTaxCode" value="4" data-rate="0"/>Entertainment' +
-									'<br /><input type="radio" id="radioTaxCode5" name="radioTaxCode" value="5" data-rate="0"/>Excluded';
-					}
+									if (iType == 2)  //Purchases
+									{	
+										var sHTML = '<input type="radio" id="radioTaxCode1" name="radioTaxCode" value="1" data-rate="10"/>Applies' +
+													'<br /><input type="radio" id="radioTaxCode2" name="radioTaxCode" value="2" data-rate="0"/>Input Taxed' +
+													'<br /><input type="radio" id="radioTaxCode3" name="radioTaxCode" value="3" data-rate="0"/>Free' +
+													'<br /><input type="radio" id="radioTaxCode4" name="radioTaxCode" value="4" data-rate="0"/>Entertainment' +
+													'<br /><input type="radio" id="radioTaxCode5" name="radioTaxCode" value="5" data-rate="0"/>Excluded';
+									}
 
-					if (sXHTMLElementID)
-					{
-						$('#' + sXHTMLElementID).html(sHTML)
+									if (sXHTMLElementID)
+									{
+										$('#' + sXHTMLElementID).html(sHTML)
 
-						if (iID)
-						{
-							$('[name="radioTaxCode"][value="' + iID + '"]').attr('checked', true);
-						}	
-					}	
-					else
-					{
-						return sHTML;
-					}
-				}
+										if (iID)
+										{
+											$('[name="radioTaxCode"][value="' + iID + '"]').attr('checked', true);
+										}	
+									}	
+									else
+									{
+										return sHTML;
+									}
+								},
+
+					calculate: 	function (oParam)
+								{
+									var cAmount;
+									var sAmountXHTMLElementID;
+									var cTax;
+									var sTaxXHTMLElementID;
+									var cRate;
+									var sRateXHTMLElementName = 'radioTaxCode';
+									var bTaxIncludedInAmount = true;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.amount != undefined) {cAmount = oParam.amount}
+										if (oParam.amountXHTMLElementID != undefined) {sAmountXHTMLElementID = oParam.amountXHTMLElementID}
+										if (oParam.tax != undefined) {cTax = oParam.tax}
+										if (oParam.taxXHTMLElementID != undefined) {sTaxXHTMLElementID = oParam.taxXHTMLElementID}
+										if (oParam.taxIncludedInAmount != undefined) {bTaxIncludedInAmount = oParam.taxIncludedInAmount}	
+									}
+
+									if (cRate === undefined)
+									{
+										cRate = parseFloat($('input[name="' + sRateXHTMLElementName + '"]:checked').attr("data-rate"))
+									}
+
+									if (cAmount === undefined)
+									{
+										cAmount = parseFloat($('#' + sAmountXHTMLElementID).val());
+									}
+
+									if (cRate == 0)
+									{
+										cTax = 0;
+									}
+									else
+									{
+										if (bTaxIncludedInAmount)
+										{
+											cTax = (cAmount - (cAmount / (1 + cRate / 100)));
+										}	
+										else
+										{
+											cTax = CurrencyDefault((cRate / 100) * cTax)
+										}
+									}
+
+									if (sTaxXHTMLElementID)
+									{
+										$('#' + sTaxXHTMLElementID).val((cTax).toFixed(2))
+									}	
+
+								}
+				}						
 }					

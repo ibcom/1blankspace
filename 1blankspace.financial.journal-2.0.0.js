@@ -903,21 +903,12 @@ ns1blankspace.financial.journal =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Amount' +
+														'Amount <span style="font-size:0.75em;"(inc Tax)</span>' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
 														'<input id="ns1blankspaceItemAmount" class="ns1blankspaceText">' +
 														'</td></tr>');
-
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Description' +
-														'</td></tr>' +
-														'<tr class="ns1blankspace">' +
-														'<td class="ns1blankspaceTextMulti">' +
-														'<textarea id="ns1blankspaceItemDescription" class="ns1blankspaceTextMulti" style="height:100px; width:200px;" rows="10" cols="35" ></textarea>' +
-														'</td></tr>');		
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -940,12 +931,21 @@ ns1blankspace.financial.journal =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														ns1blankspace.option.taxVATCaption + 'Amount' +
+														ns1blankspace.option.taxVATCaption + ' Amount' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceItemTaxAmount" class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceItemTax" class="ns1blankspaceText">' +
 														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Description' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceTextMulti">' +
+														'<textarea id="ns1blankspaceItemDescription" class="ns1blankspaceTextMulti" style="height:50px; width:200px;" rows="3" cols="35" ></textarea>' +
+														'</td></tr>');	
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -966,26 +966,61 @@ ns1blankspace.financial.journal =
 										
 										$('#ns1blankspaceItemColumn2').html(aHTML.join(''));
 					
-										ns1blankspace.financial.codes.tax({xhtmlElementID: 'ns1blankspaceFinancialTaxCode', id: 1});
+										ns1blankspace.financial.util.tax.codes({xhtmlElementID: 'ns1blankspaceFinancialTaxCode', id: 1});
+										$('[name="radioType"][value="1"]').attr('checked', true);
+										$('[name="radioTaxCategory"][value="1"]').attr('checked', true);
 
-										$('#ns1blankspaceItemAccount').live('keyup', function()
+										$('#ns1blankspaceItemAccount').keyup(function()
 										{
 											$.extend(true, oParam, {step: 2});
 											if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-									        ns1blankspace.timer.delayCurrent = setTimeout(ns1blankspace.financial.item.edit(oParam), ns1blankspace.option.typingWait);
+									        ns1blankspace.timer.delayCurrent = setTimeout(ns1blankspace.financial.journal.item.edit(oParam), ns1blankspace.option.typingWait);
 										});	
 											
 										$('#ns1blankspaceItemAmount').focus();
 
 										$('[name="radioTaxCategory"]').click(function()
 										{
-											ns1blankspace.financial.codes.tax(
+											ns1blankspace.financial.util.tax.codes(
 											{
 												xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
 												id: 1,
 												type: (this.id).split('-')[1]
-											});;
-										})
+											});
+
+											ns1blankspace.financial.util.tax.calculate(
+											{
+												amountXHTMLElementID: 'ns1blankspaceItemAmount',
+												taxXHTMLElementID: 'ns1blankspaceItemTax'
+											});
+
+											$('[name="radioTaxCode"]').click(function()
+											{
+												ns1blankspace.financial.util.tax.calculate(
+												{
+													amountXHTMLElementID: 'ns1blankspaceItemAmount',
+													taxXHTMLElementID: 'ns1blankspaceItemTax'
+												});
+											});
+										});
+
+										$('#ns1blankspaceItemAmount').keyup(function()
+										{
+											ns1blankspace.financial.util.tax.calculate(
+											{
+												amountXHTMLElementID: 'ns1blankspaceItemAmount',
+												taxXHTMLElementID: 'ns1blankspaceItemTax'
+											});
+										});
+
+										$('[name="radioTaxCode"]').click(function()
+										{
+											ns1blankspace.financial.util.tax.calculate(
+											{
+												amountXHTMLElementID: 'ns1blankspaceItemAmount',
+												taxXHTMLElementID: 'ns1blankspaceItemTax'
+											});
+										});
 									}
 
 									if (iStep == 2)
@@ -996,7 +1031,7 @@ ns1blankspace.financial.journal =
 										oSearch.addFilter('title', 'TEXT_IS_LIKE', $('#ns1blankspaceItemAccount').val());
 										oSearch.addFilter('postable', 'EQUAL_TO', 'Y');
 										oSearch.sort('title', 'asc');
-										oSearch.getResults(function(data){ns1blankspace.financial.item.edit($.extend(true, oParam, {step:3}), data)});
+										oSearch.getResults(function(data){ns1blankspace.financial.journal.item.edit($.extend(true, oParam, {step:3}), data)});
 									}
 								}
 								else
@@ -1044,46 +1079,43 @@ ns1blankspace.financial.journal =
 											var iAccount = aID[1];
 											var cAmount = $('#ns1blankspaceItemAmount').val();
 											if (cAmount == '') {cAmount = 0};
+											var cTax = $('#ns1blankspaceItemTax').val();
+											if (cTax == '') {cTax = 0};
 											
-											var sData = 'object=' + ns1blankspace.object;
-											sData += '&objectcontext=' + ns1blankspace.objectContext;
+											var sData = 'generaljournal=' + ns1blankspace.objectContext;
 											sData += '&financialaccount=' + iAccount;
-											sData += '&amount=' + cAmount;
+
+											if ($('input[name="radioType"]:checked').val() == '1')
+											{	
+												sData += '&creditamount=' + cAmount;
+												sData += '&credittax=' + cTax;
+											}
+											else
+											{
+												sData += '&debitamount=' + cAmount;
+												sData += '&debittax=' + cTax;
+											}	
+
 											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceItemDescription').val());
+
+											sData += '&taxtcategory=' + $('input[name="radioTaxCategory"]:checked').val();
+											sData += '&taxtype=' + $('input[name="radioTaxCode"]:checked').val();
 												
 											$.ajax(
 											{
 												type: 'POST',
-												url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
+												url: ns1blankspace.util.endpointURI('FINANCIAL_GENERAL_JOURNAL_ITEM_MANAGE'),
 												data: sData,
 												dataType: 'json',
 												success: function(oResponse)
 												{
 													ns1blankspace.status.message('Added.');
-
-													var sData = 'object=' + ns1blankspace.object;
-													sData += '&objectcontext=' + ns1blankspace.objectContext;
-													
-													$.ajax(
-													{
-														type: 'POST',
-														url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
-														data: sData,
-														dataType: 'json',
-														success: function(oResponse)
-														{	
-															oParam.refresh = true;
-															ns1blankspace.financial.item.show(oParam);
-															ns1blankspace.financial[sNamespace].refresh();
-														}
-													});
+													ns1blankspace.financial.journal.item.show();
 												}
 											});
 										})
 										.css('width', '20px')
-										.css('height', '20px')
-										
-										//$('input.ns1blankspaceText:first').focus();
+										.css('height', '20px');
 									}
 								}	
 							}
