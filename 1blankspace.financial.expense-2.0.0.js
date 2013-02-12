@@ -58,6 +58,8 @@ ns1blankspace.financial.expense =
 								
 						$('#ns1blankspaceControlSubContext_accrueddate').html(oObjectContext.accrueddate);
 						$('#ns1blankspaceControlSubContext_amount').html(oObjectContext.amount);
+
+						ns1blankspace.financial.expense.payment.refresh();
 					}
 				},
 

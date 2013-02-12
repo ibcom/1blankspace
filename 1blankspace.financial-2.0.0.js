@@ -1823,6 +1823,15 @@ ns1blankspace.financial.item =
 							});
 						});
 
+						$('[name="radioTaxCode"]').click(function()
+						{
+							ns1blankspace.financial.util.tax.calculate(
+							{
+								amountXHTMLElementID: 'ns1blankspaceItemAmount',
+								taxXHTMLElementID: 'ns1blankspaceItemTax'
+							});
+						});
+
 						$('#ns1blankspaceItemAccount').keyup(function()
 						{
 							$.extend(true, oParam, {step: 2});
@@ -1896,7 +1905,7 @@ ns1blankspace.financial.item =
 							sData += '&objectcontext=' + ns1blankspace.objectContext;
 							sData += '&financialaccount=' + iAccount;
 							sData += '&amount=' + cAmount;
-							sData += '&tax=' + cAmount;
+							sData += '&tax=' + cTax;
 							sData += '&taxtype=' + ns1blankspace.util.fs($('input[name="radioTaxCode"]:checked').val());
 							sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceItemDescription').val());
 								

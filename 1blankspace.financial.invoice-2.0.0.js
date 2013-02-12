@@ -55,6 +55,8 @@ ns1blankspace.financial.invoice =
 								
 						$('#ns1blankspaceControlContext_sentdate').html(oObjectContext.sentdate);
 						$('#ns1blankspaceControlContext_amount').html('$' + oObjectContext.amount);
+
+						ns1blankspace.financial.invoice.receipt.refresh();
 					}
 				},
 
