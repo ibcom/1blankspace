@@ -543,7 +543,18 @@ ns1blankspace.financial.credit =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceDetailsAmount" class="ns1blankspaceText">' +
-										'</td></tr>');			
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Financial Account' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceDetailsFinancialAccount" class="ns1blankspaceSelect"' +
+											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+											' data-columns="title">' +
+										'</td></tr>');						
 											
 						aHTML.push('</table>');				
 						
@@ -589,6 +600,8 @@ ns1blankspace.financial.credit =
 							$('#ns1blankspaceDetailsAmount').val(ns1blankspace.objectContextData.amount);		
 							$('#ns1blankspaceDetailsNotes').val(ns1blankspace.objectContextData.notes);
 							$('[name="radioType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
+							$('#ns1blankspaceDetailsFinancialAccount').val(oObjectContext.financialaccounttext)
+							$('#ns1blankspaceDetailsFinancialAccount').attr('data-id', oObjectContext.financialaccount);
 						}
 						else
 						{
@@ -622,8 +635,9 @@ ns1blankspace.financial.credit =
 										sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsNotes').val());
 										sData += '&contactbusiness=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactBusiness').attr("data-id"));
 										sData += '&contactperson=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactPerson').attr("data-id"));
-										sData += '&amount=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAmount').attr("data-id"));
+										sData += '&amount=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAmount').val());
 										sData += '&type=' + $('input[name="radioType"]:checked').val();
+										sData += '&financialaccount=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFinancialAccount').attr('data-id'));
 									}
 									
 									$.ajax(
@@ -640,9 +654,11 @@ ns1blankspace.financial.credit =
 								{
 									if (oResponse.status == 'OK')
 									{
-										ns1blankspaceStatus('Saved');
+										ns1blankspace.status.message('Saved');
 										if (ns1blankspace.objectContext == -1) {var bNew = true}
-										ns1blankspace.objectContext = oResponse.id;	
+										ns1blankspace.objectContext = oResponse.id;
+										ns1blankspace.inputDetected = false;
+										ns1blankspace.financial.credit.search.send('-' + ns1blankspace.objectContext, {source: 1});
 									}
 									else
 									{

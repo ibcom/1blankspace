@@ -301,6 +301,10 @@ ns1blankspace.financial.invoice =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 						
+						aHTML.push('</table>');					
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
+						
 						aHTML.push('<tr><td id="ns1blankspaceControlItem" class="ns1blankspaceControl">' +
 										'Items</td></tr>');
 					
@@ -729,7 +733,15 @@ ns1blankspace.financial.invoice =
 						
 						aHTML.push('<table class="ns1blankspace">');
 
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
+						if (ns1blankspace.objectContextData.sent == 'Y')
+						{	
+							aHTML.push('<tr><td>' +
+										'<span id="ns1blankspaceDetailUndoSend" class="ns1blankspaceAction">Mark as unsent</span>' +
+										'</td></tr>');
+						}
+						else
+						{	
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Sent' +
 										'</td></tr>' +
@@ -737,7 +749,8 @@ ns1blankspace.financial.invoice =
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioSentN" name="radioSent" value="N"/>No' +
 										'&nbsp;&nbsp;<input type="radio" id="radioSentY" name="radioSent" value="Y"/>Yes' +
-										'</td></tr>');	
+										'</td></tr>');
+						}	
 							
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -751,6 +764,22 @@ ns1blankspace.financial.invoice =
 						aHTML.push('</table>');					
 							
 						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
+
+						$('#ns1blankspaceDetailUndoSend').button().click(function()
+						{
+							var sID = this.id;
+							var aID = sID.split('-');
+							var iStatus = aID[1];
+							
+							$.ajax(
+							{
+								type: 'GET',
+								url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
+								data: 'sent=N&id=' + ns1blankspace.objectContext,
+								dataType: 'json',
+								success: function(oResponse) {ns1blankspace.financial.invoice.search.send('-' + ns1blankspace.objectContext)}
+							});
+						});
 
 						if (ns1blankspace.objectContextData != undefined)
 						{

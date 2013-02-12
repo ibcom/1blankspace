@@ -1552,7 +1552,8 @@ ns1blankspace.financial.item =
 						aHTML.push('<table class="ns1blankspaceContainer">');
 
 						aHTML.push('<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceItemColumn1" class="ns1blankspaceColumn1Flexible">' +
+										ns1blankspace.xhtml.loading + '</td>' +
 										'<td id="ns1blankspaceItemColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
 										'</tr>');
 
@@ -1612,6 +1613,9 @@ ns1blankspace.financial.item =
 						aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Account</td>');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' +
+										ns1blankspace.option.taxVATCaption + '</td>');
+
 						aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 						aHTML.push('</tr>');
 
@@ -1625,14 +1629,14 @@ ns1blankspace.financial.item =
 							aHTML.push('<td id="ns1blankspaceItem_description-' + this.id + '" class="ns1blankspaceRow">' +
 											this["description"] + '</td>');
 
-							aHTML.push('<td id="ns1blankspaceItem_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;"' +
-											' title="' + this["tax"] + '">' +
+							aHTML.push('<td id="ns1blankspaceItem_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 											this["amount"] + '</td>');
 
-							aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+							aHTML.push('<td id="ns1blankspaceItem_tax-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
+											this["tax"] + '</td>');
+
+							aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 							aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceItemRemove"></span>');
-							aHTML.push('<span id="ns1blankspaceRowItemItem_options_view-' + this.id + '" class="ns1blankspaceItemView"></span>');
-						
 							aHTML.push('</td></tr>');
 						});
 						
@@ -1730,6 +1734,7 @@ ns1blankspace.financial.item =
 			{
 				var iStep = 1;
 				var sNamespace;
+				var iType = 1;
 				
 				if (oParam != undefined)
 				{
@@ -1737,6 +1742,8 @@ ns1blankspace.financial.item =
 					if (oParam.namespace != undefined) {sNamespace = oParam.namespace}	
 				}
 				
+				if (sNamespace === 'expense') {iType = 2}
+
 				if (oResponse == undefined)
 				{
 					if (iStep == 1)
@@ -1756,11 +1763,29 @@ ns1blankspace.financial.item =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
+										ns1blankspace.option.taxVATCaption + ' Type' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td id="ns1blankspaceFinancialTaxCode" class="ns1blankspaceRadio">' +
+										ns1blankspace.xhtml.loadingSmall +
+										'</td></tr>');	
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										ns1blankspace.option.taxVATCaption + ' Amount' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceItemTax" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Description' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea id="ns1blankspaceItemDescription" class="ns1blankspaceTextMulti" style="height:100px; width:200px;" rows="10" cols="35" ></textarea>' +
+										'<textarea id="ns1blankspaceItemDescription" class="ns1blankspaceTextMulti" style="height:50px; width:200px;" rows="3" cols="35" ></textarea>' +
 										'</td></tr>');		
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -1782,7 +1807,23 @@ ns1blankspace.financial.item =
 						
 						$('#ns1blankspaceItemColumn2').html(aHTML.join(''));
 	
-						$('#ns1blankspaceItemAccount').live('keyup', function()
+						ns1blankspace.financial.util.tax.codes(
+						{
+							xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
+							id: 1,
+							type: iType
+						});
+
+						$('#ns1blankspaceItemAmount').keyup(function()
+						{
+							ns1blankspace.financial.util.tax.calculate(
+							{
+								amountXHTMLElementID: 'ns1blankspaceItemAmount',
+								taxXHTMLElementID: 'ns1blankspaceItemTax'
+							});
+						});
+
+						$('#ns1blankspaceItemAccount').keyup(function()
 						{
 							$.extend(true, oParam, {step: 2});
 							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
@@ -1848,11 +1889,15 @@ ns1blankspace.financial.item =
 							var iAccount = aID[1];
 							var cAmount = $('#ns1blankspaceItemAmount').val();
 							if (cAmount == '') {cAmount = 0};
+							var cTax = $('#ns1blankspaceItemTax').val();
+							if (cTax == '') {cTax = 0};
 							
 							var sData = 'object=' + ns1blankspace.object;
 							sData += '&objectcontext=' + ns1blankspace.objectContext;
 							sData += '&financialaccount=' + iAccount;
 							sData += '&amount=' + cAmount;
+							sData += '&tax=' + cAmount;
+							sData += '&taxtype=' + ns1blankspace.util.fs($('input[name="radioTaxCode"]:checked').val());
 							sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceItemDescription').val());
 								
 							$.ajax(
