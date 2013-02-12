@@ -692,12 +692,22 @@ ns1blankspace.financial.credit =
 											label: "Apply"
 										})
 										.click(function() {
-											 ns1blankspace.financial.credit.applyTo.edit(oParam);
+											 ns1blankspace.financial.credit.appliedTo.edit(oParam);
 										})
 										
 										var oSearch = new AdvancedSearch();
-										oSearch.method = 'FINANCIAL_INVOICE_CREDIT_NOTE_SEARCH';
-										oSearch.addField('appliesdate,amount,invoicetext');
+										
+										if (ns1blankspace.objectContextData.type == '1')
+										{	
+											oSearch.method = 'FINANCIAL_INVOICE_CREDIT_NOTE_SEARCH';
+											oSearch.addField('appliesdate,amount,invoicetext');
+										}
+										else
+										{
+											oSearch.method = 'FINANCIAL_EXPENSE_CREDIT_NOTE_SEARCH';
+											oSearch.addField('appliesdate,amount,expensetext');
+										}	
+
 										oSearch.addFilter('credit', 'EQUAL_TO', iObjectContext);
 										oSearch.sort('appliesdate', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.financial.credit.appliedTo.show(oParam, data)});
@@ -769,13 +779,101 @@ ns1blankspace.financial.credit =
 												}
 											})
 											.click(function() {
-												ns1blankspace.financial.invoice.init({id: (this.id).split('-')[1]})
+												if (ns1blankspace.objectContextData.type == '1')
+												{
+													ns1blankspace.financial.invoice.init({id: (this.id).split('-')[1]})
+												}
+												else
+												{
+													ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]})
+												}	
 											})
 											.css('width', '15px')
-											.css('height', '17px')
-												
+											.css('height', '17px');	
 										}
 									}	
-								}
+								},
+
+					edit: 		function(oParam, oResponse)
+								{
+									if (oResponse === undefined)
+									{
+										var oSearch = new AdvancedSearch();
+
+										if (ns1blankspace.objectContextData.type == '1')
+										{
+											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+											oSearch.addField('reference,sentdate,amount,tax');
+
+											if (ns1blankspace.objectContextData.contactbusiness !== '')
+												{oSearch.addFilter('contactbusinesssentto', 'EQUAL_TO', ns1blankspace.objectContext.contactbusiness)};
+
+											if (ns1blankspace.objectContextData.contactperson !== '')
+												{oSearch.addFilter('contactpersonsentto', 'EQUAL_TO', ns1blankspace.objectContext.contactperson)};
+										}
+										else
+										{
+											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
+											oSearch.addField('reference,accrueddate,amount,tax');
+
+											if (ns1blankspace.objectContextData.contactbusiness !== '')
+												{oSearch.addFilter('contactbusinesspaidto', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusiness)};
+
+											if (ns1blankspace.objectContextData.contactperson !== '')
+												{oSearch.addFilter('contactpersonpaidto', 'EQUAL_TO', ns1blankspace.objectContextData.contactperson)};
+										}	
+										
+										oSearch.addFilter('amount', 'NOT_EQUAL_TO', 0);
+										oSearch.getResults(function(data) {ns1blankspace.financial.credit.appliedTo.edit(oParam, data)});
+									}
+									else
+									{
+										var aHTML = [];
+									
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table class="ns1blankspace">' +
+															'<tr><td class="ns1blankspaceNothing">Nothing to apply this too.</td></tr>' + 
+															'</table>');
+
+											$('#ns1blankspaceAppliedToColumn1').html(aHTML.join(''));
+										}
+										else
+										{
+											aHTML.push('<table id="ns1blankspaceCreditAppliedTo" class="ns1blankspace">');
+
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
+											
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push('<tr class="ns1blankspaceRow">');
+																			
+												aHTML.push('<td id="ns1blankspaceCreditAppliedTo_date-' + this.id + '" class="ns1blankspaceRow">' +
+																this.reference + '</td>');
+
+												aHTML.push('<td id="ns1blankspaceCreditAppliedTo_date-' + this.id + '" class="ns1blankspaceRow">' +
+																this.appliesdate + '</td>');
+												
+												aHTML.push('<td id="ns1blankspaceCreditAppliedTo_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																this.amount + '</td>');
+						
+												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+																		
+												aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_remove-' + this.id + '" class="ns1blankspaceAppliedToRemove"></span>');
+													
+												aHTML.push('</td></tr>');
+											});
+											
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceAppliedToColumn1').html(aHTML.join(''));
+										}	
+									}	
+								}			
 				}				
 }				

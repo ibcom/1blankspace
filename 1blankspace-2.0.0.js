@@ -2542,7 +2542,7 @@ ns1blankspace.search =
 					var iMaximumColumns = 1;
 					var sMethod;
 					var sSearchText = '';
-					var sColumns = 'title';
+					var sColumns;
 					var iColumn = 0;
 						
 					if (oParam != undefined)

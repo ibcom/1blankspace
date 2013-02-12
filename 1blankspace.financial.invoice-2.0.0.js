@@ -44,7 +44,6 @@ ns1blankspace.financial.invoice =
 						oSearch.addField('sentdate,amount,tax');
 						oSearch.rf = 'json';
 						oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-						
 						oSearch.getResults(function(data) {ns1blankspace.financial.invoice.refresh(data)});
 					}
 					else
