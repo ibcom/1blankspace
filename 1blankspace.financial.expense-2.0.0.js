@@ -63,7 +63,7 @@ ns1blankspace.financial.expense =
 					}
 				},
 
-	home: 		function interfaceFinancialExpenseHomeShow(oResponse)
+	home: 		function (oResponse)
 				{
 					if (oResponse == undefined)
 					{

@@ -600,8 +600,8 @@ ns1blankspace.financial.credit =
 							$('#ns1blankspaceDetailsAmount').val(ns1blankspace.objectContextData.amount);		
 							$('#ns1blankspaceDetailsNotes').val(ns1blankspace.objectContextData.notes);
 							$('[name="radioType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
-							$('#ns1blankspaceDetailsFinancialAccount').val(oObjectContext.financialaccounttext)
-							$('#ns1blankspaceDetailsFinancialAccount').attr('data-id', oObjectContext.financialaccount);
+							$('#ns1blankspaceDetailsFinancialAccount').val(ns1blankspace.objectContextData.financialaccounttext)
+							$('#ns1blankspaceDetailsFinancialAccount').attr('data-id', ns1blankspace.objectContextData.financialaccount);
 						}
 						else
 						{
@@ -814,6 +814,9 @@ ns1blankspace.financial.credit =
 								{
 									if (oResponse === undefined)
 									{
+										$('#ns1blankspaceAppliedToColumn1').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceAppliedToColumn1').html('');
+										 
 										var oSearch = new AdvancedSearch();
 
 										if (ns1blankspace.objectContextData.type == '1')
@@ -822,10 +825,10 @@ ns1blankspace.financial.credit =
 											oSearch.addField('reference,sentdate,amount,tax');
 
 											if (ns1blankspace.objectContextData.contactbusiness !== '')
-												{oSearch.addFilter('contactbusinesssentto', 'EQUAL_TO', ns1blankspace.objectContext.contactbusiness)};
+												{oSearch.addFilter('contactbusinesssentto', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusiness)};
 
 											if (ns1blankspace.objectContextData.contactperson !== '')
-												{oSearch.addFilter('contactpersonsentto', 'EQUAL_TO', ns1blankspace.objectContext.contactperson)};
+												{oSearch.addFilter('contactpersonsentto', 'EQUAL_TO', ns1blankspace.objectContextData.contactperson)};
 										}
 										else
 										{
