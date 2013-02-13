@@ -735,7 +735,12 @@ ns1blankspace.financial.invoice =
 						
 						aHTML.push('<table class="ns1blankspace">');
 
-						if (ns1blankspace.objectContextData.sent == 'Y')
+						var bSent = false;
+
+						if (ns1blankspace.objectContextData)
+							{bSent = (ns1blankspace.objectContextData.sent == 'Y')}
+
+						if (bSent)
 						{	
 							aHTML.push('<tr><td>' +
 										'<span id="ns1blankspaceDetailUndoSend" class="ns1blankspaceAction">Mark as unsent</span>' +
