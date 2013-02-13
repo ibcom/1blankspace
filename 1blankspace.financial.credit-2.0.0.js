@@ -35,6 +35,55 @@ ns1blankspace.financial.credit =
 					}	
 				},
 
+	refresh:	function (oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						$('#ns1blankspaceControlContext_tobeapplied').html(ns1blankspace.xhtml.loadingSmall);
+							
+						var oSearch = new AdvancedSearch();
+										
+						if (ns1blankspace.objectContextData.type == '1')
+						{	
+							oSearch.method = 'FINANCIAL_INVOICE_CREDIT_NOTE_SEARCH';
+						}
+						else
+						{
+							oSearch.method = 'FINANCIAL_EXPENSE_CREDIT_NOTE_SEARCH';
+						}	
+
+						oSearch.addField('amount');
+						oSearch.rows = 0;
+						oSearch.addSummaryField('sum(amount) totalamount');
+						oSearch.addSummaryField('sum(tax) totaltax');
+						oSearch.addFilter('credit', 'EQUAL_TO', ns1blankspace.objectContext);
+						oSearch.getResults(function(data) {ns1blankspace.financial.credit.refresh(data)});
+											
+					}
+					else
+					{
+						ns1blankspace.objectContextData.appliedAmount = (oResponse.summary.totalamount).parseCurrency();
+						ns1blankspace.objectContextData.appliedTax = (oResponse.summary.totaltax).parseCurrency();
+						
+						ns1blankspace.objectContextData.tobeAppliedAmount =
+								(ns1blankspace.objectContextData.amount).parseCurrency() - ns1blankspace.objectContextData.appliedAmount;
+
+						ns1blankspace.objectContextData.tobeAppliedTax =
+								(ns1blankspace.objectContextData.tax).parseCurrency() - ns1blankspace.objectContextData.appliedTax;		
+
+						var sHTML = '<span style="background-color:#CCCCCC; color:white;">' +
+												'$' + (ns1blankspace.objectContextData.tobeAppliedAmount).formatMoney(2, ".", ",") + '</span>';
+
+						sHTML += '<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">' +
+												ns1blankspace.option.taxVATCaption + '</span> ';
+
+						sHTML += '<span style="background-color:#CCCCCC; color:white;">' +
+									'$' + (ns1blankspace.objectContextData.tobeAppliedTax).formatMoney(2, ".", ",") + '</span>';
+
+						$('#ns1blankspaceControlContext_tobeapplied').html(sHTML);
+					}
+				},
+
 	home: 		function (oResponse)
 				{
 					if (oResponse == undefined)
@@ -381,8 +430,11 @@ ns1blankspace.financial.credit =
 								
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
 							'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.creditdate + '</span>' +
-							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>');
+							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>' +
+							'<br /><span id="ns1blankspaceControlContext_tobeapplied" class="ns1blankspaceSub"></span>');
 							
+						ns1blankspace.financial.credit.refresh();
+														
 						ns1blankspace.history.view({
 							newDestination: 'ns1blankspace.financial.credit.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
 							move: false
@@ -684,7 +736,8 @@ ns1blankspace.financial.credit =
 
 										aHTML.push('<table class="ns1blankspaceContainer">');
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceAppliedToColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceAppliedToColumn1" class="ns1blankspaceColumn1Flexible">' +
+														ns1blankspace.xhtml.loading + '</td>' +
 														'<td id="ns1blankspaceAppliedToColumn2" class="ns1blankspaceColumn2" style="width: 200px;"></td>' +
 														'</tr>');
 										aHTML.push('</table>');					
@@ -822,7 +875,7 @@ ns1blankspace.financial.credit =
 										if (ns1blankspace.objectContextData.type == '1')
 										{
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-											oSearch.addField('reference,sentdate,amount,tax');
+											oSearch.addField('reference,sentdate,amount,tax,invoice.lineitem.id,invoice.lineitem.description,invoice.lineitem.amount,invoice.lineitem.tax');
 
 											if (ns1blankspace.objectContextData.contactbusiness !== '')
 												{oSearch.addFilter('contactbusinesssentto', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusiness)};
@@ -833,7 +886,7 @@ ns1blankspace.financial.credit =
 										else
 										{
 											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-											oSearch.addField('reference,accrueddate,amount,tax');
+											oSearch.addField('reference,accrueddate,amount,tax,expense.lineitem.id,expense.lineitem.description,expense.lineitem.amount,expense.lineitem.tax');
 
 											if (ns1blankspace.objectContextData.contactbusiness !== '')
 												{oSearch.addFilter('contactbusinesspaidto', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusiness)};
@@ -843,6 +896,7 @@ ns1blankspace.financial.credit =
 										}	
 										
 										oSearch.addFilter('amount', 'NOT_EQUAL_TO', 0);
+										oSearch.sort('reference', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.financial.credit.appliedTo.edit(oParam, data)});
 									}
 									else
@@ -860,40 +914,88 @@ ns1blankspace.financial.credit =
 										else
 										{
 											aHTML.push('<table id="ns1blankspaceCreditAppliedTo" class="ns1blankspace">');
+		
+											var sLastReference = '';
+											var sReference = '';
 
-											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-											aHTML.push('</tr>');
-											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML.push('<tr class="ns1blankspaceRow">');
-																			
-												aHTML.push('<td id="ns1blankspaceCreditAppliedTo_date-' + this.id + '" class="ns1blankspaceRow">' +
-																this.reference + '</td>');
+												if (parseInt((this["invoice.lineitem.amount"]).parseCurrency()) !== 0)
+												{	
+													sReference = '';
 
-												if (ns1blankspace.objectContextData.type == '1')
-												{
-													aHTML.push('<td id="ns1blankspaceCreditAppliedTo_date-' + this.id + '" class="ns1blankspaceRow">' +
-																this.sentdate + '</td>');
-												}
-												else
-												{
-													aHTML.push('<td id="ns1blankspaceCreditAppliedTo_date-' + this.id + '" class="ns1blankspaceRow">' +
-																this.accrueddate + '</td>');
-												}	
-												
-												aHTML.push('<td id="ns1blankspaceCreditAppliedTo_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-																this.amount + '</td>');
-						
-												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-																		
-												aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_select-' + this.id + '" class="ns1blankspaceAppliedToSelect"></span>');
+													if (sLastReference != this.reference)
+													{
+														sReference = this.reference;
+														sLastReference = this.reference;
+
+														aHTML.push('<tr class="ns1blankspaceRow">');						
+																				
+														aHTML.push('<td class="ns1blankspaceRow1" style="font-size:0.875em; width:100px; background-color:#f3f3f3;">' +
+																	sReference + '</td>');
+
+														if (ns1blankspace.objectContextData.type == '1')
+														{
+															aHTML.push('<td style="font-size:0.875em; background-color:#f3f3f3;">' +
+																		this.sentdate + '</td>');
+														}
+														else
+														{
+															aHTML.push('<td style="font-size:0.875em; background-color:#f3f3f3;">' +
+																		this.accrueddate + '</td>');
+														}
+
+														aHTML.push('<td style="text-align:right;font-size:0.875em; background-color:#f3f3f3;">' +
+																	this["amount"]  + '</td>');
+
+														aHTML.push('<td style="width:30px;text-align:right;font-size:0.875em; background-color:#f3f3f3;"></td>');
+
+														aHTML.push('</td></tr>');
+													}
+
 													
-												aHTML.push('</td></tr>');
+													aHTML.push('<tr class="ns1blankspaceRow">');
+																
+													aHTML.push('<td class="ns1blankspaceRow"></td>');
+													
+													if (ns1blankspace.objectContextData.type == '1')
+													{
+														aHTML.push('<td id="ns1blankspaceCreditAppliedTo_notes-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																	this["invoice.lineitem.description"] + '</td>');
+
+														aHTML.push('<td id="ns1blankspaceCreditAppliedTo_amount-' + this.id + '"' +
+																	' class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
+																	this["invoice.lineitem.amount"] + '</td>');
+													}	
+													else	
+													{
+														aHTML.push('<td id="ns1blankspaceCreditAppliedTo_notes-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																	this["expense.lineitem.description"] + '</td>');
+
+														aHTML.push('<td id="ns1blankspaceCreditAppliedTo_amount-' + this.id + '"' +
+																	' class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
+																	this["expense.lineitem.amount"] + '</td>');
+													}
+
+													aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+														
+													if (ns1blankspace.objectContextData.type == '1')
+													{						
+														aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_select-' + this["invoice.lineitem.id"]  + '"' +
+																		' data-amount="' + this["invoice.lineitem.amount"] + '"' +
+																		' data-tax="' + this["invoice.lineitem.tax"] + '"' +
+																		' class="ns1blankspaceAppliedToSelect"></span>');
+													}
+													else
+													{						
+														aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_select-' + this["expense.lineitem.id"]  + '"' +
+																		' data-amount="' + this["expense.lineitem.amount"] + '"' +
+																		' data-tax="' + this["expense.lineitem.tax"] + '"' +
+																		' class="ns1blankspaceAppliedToSelect"></span>');
+													}
+
+													aHTML.push('</td></tr>');
+												}	
 											});
 											
 											aHTML.push('</table>');
@@ -908,8 +1010,33 @@ ns1blankspace.financial.credit =
 													 primary: "ui-icon-check"
 												}
 											})
-											.click(function() {
-												$.ajax()
+											.click(function()
+											{	
+												var sMethod = 'FINANCIAL_INVOICE_CREDIT_NOTE_MANAGE'
+												var sXHTMLElementID = this.id;
+
+												if (ns1blankspace.objectContextData.type == '2')
+												{
+													sMethod = 'FINANCIAL_EXPENSE_CREDIT_NOTE_MANAGE'
+												}	
+
+												var sData = 'lineitem=' + ns1blankspace.util.fs(ns1blankspace.util.getID(this.id));
+												sData += '&creditnote=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+												sData += '&amount=' + ns1blankspace.util.fs($(this).attr("data-amount"));
+												sData += '&tax=' + ns1blankspace.util.fs($(this).attr("data-tax"));
+
+												$.ajax(
+												{
+													type: 'GET',
+													url: ns1blankspace.util.endpointURI(sMethod),
+													data: sData,
+													dataType: 'json',
+													success: function(oResponse)
+													{
+														$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+														ns1blankspace.financial.credit.refresh();
+													}
+												});
 												
 											})
 											.css('width', '15px')

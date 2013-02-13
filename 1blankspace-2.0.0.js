@@ -2876,6 +2876,8 @@ ns1blankspace.util =
 					}	
 				},
 
+	getID:		function (sValue) {return (sValue).split('-')[1]},
+
 	getRPC:		function ()
 				{
 					if (ns1blankspace.rpc === undefined)
