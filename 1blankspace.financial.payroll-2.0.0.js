@@ -582,7 +582,7 @@ ns1blankspace.financial.payroll =
 									if ($('#ns1blankspaceControlPayRuns').hasClass('ns1blankspaceHighlight'))
 									{
 										aHTML.push('<table><tr>' + 
-														'<td class="ns1blankspaceNothing">Just check that you want to create the next pay period.<br /><br />If you do, then please click Next.</td>' + 
+														'<td class="ns1blankspaceNothing">Just checking that you really want to create the next pay period.<br /><br />If you do, then please click Next.</td>' + 
 														'</tr>' +
 														'</table>');
 									}
@@ -2244,36 +2244,6 @@ ns1blankspace.financial.payroll =
 								ns1blankspace.financial.payroll.pays(oParam);
 							});
 
-							var aHTML = [];
-						
-							aHTML.push('<table class="ns1blankspaceColumn2">');
-
-							if (ns1blankspace.objectContextData.status == "1")
-							{
-								aHTML.push('<tr><td >' +
-											'<span id="ns1blankspaceFinancialPayrollAdd" class="ns1blankspaceAction">Add</span>' +
-											'</td></tr>');
-							}
-							else
-							{
-								aHTML.push('<tr class="ns1blankspaceCaption">' +
-												'<td class="ns1blankspaceNothing">This pay has been completed.</td></tr>');
-							}				
-															
-							aHTML.push('</table>');					
-							
-							$('#ns1blankspacePayrollPayRunColumn3').html(aHTML.join(''));
-						
-							$('#ns1blankspaceFinancialPayrollAdd').button(
-							{
-								label: "Add"
-							})
-							.click(function()
-							{
-								$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
-								ns1blankspace.financial.payroll.pays(oParam);
-							})
-
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
 							oSearch.addFilter('id', 'EQUAL_TO', iPay)
@@ -2338,13 +2308,44 @@ ns1blankspace.financial.payroll =
 					{	
 						if (oResponse == undefined)
 						{
+							var aHTML = [];
+						
+							aHTML.push('<table class="ns1blankspaceColumn2">');
+
+							if (ns1blankspace.objectContextData.status == "1")
+							{
+								aHTML.push('<tr><td >' +
+											'<span id="ns1blankspaceFinancialPayrollAdd" class="ns1blankspaceAction">Add</span>' +
+											'</td></tr>');
+							}
+							else
+							{
+								aHTML.push('<tr class="ns1blankspaceCaption">' +
+												'<td class="ns1blankspaceNothing">This pay has been completed.</td></tr>');
+							}				
+															
+							aHTML.push('</table>');					
+							
+							$('#ns1blankspacePayrollPayRunColumn3').html(aHTML.join(''));						
+
+							$('#ns1blankspaceFinancialPayrollAdd').button(
+							{
+								label: "Add"
+							})
+							.click(function()
+							{
+								$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
+								ns1blankspace.financial.payroll.pays(oParam);
+							})
+
 							$('#ns1blankspacePayrollPayRunColumn2').html(ns1blankspace.xhtml.loadingSmall);
 							
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_ITEM_SEARCH';
 							oSearch.addField('type,typetext,hours');
-							oSearch.addFilter('id', 'EQUAL_TO', iPay);
+							oSearch.addFilter('record', 'EQUAL_TO', iPay);
 							oSearch.rows = 100;
+							oSearch.sort('type', 'asc')
 							oSearch.getResults(function(data) {ns1blankspace.financial.payroll.pays(oParam, data)})	
 						}
 						else
@@ -2389,14 +2390,21 @@ ns1blankspace.financial.payroll =
 
 							if (ns1blankspace.objectContextData.status == "1")
 							{
-								$('ns1blankspaceFinancialPayrollItem > td.ns1blankspaceRowRemove').button(
+								$('#ns1blankspaceFinancialPayrollItem span.ns1blankspaceRowRemove').button(
 								{
 									text: false,
 								 	icons: {primary: "ui-icon-close"}
 								})
 								.click(function() {
-									$.extend(true, oParam, {step: 5, xhtmlElementID: event.target.id});
-									ns1blankspace.financial.payroll.pays(this.id)
+									$.extend(true, oParam, {step: 6, xhtmlElementID: event.target.id});
+									ns1blankspace.financial.payroll.pays(oParam)
+								})
+								.css('width', '15px')
+								.css('height', '20px');
+
+								$('#ns1blankspaceFinancialPayrollItem td.ns1blankspaceRowSelect').click(function() {
+									$.extend(true, oParam, {step: 4, xhtmlElementID: event.target.id});
+									ns1blankspace.financial.payroll.pays(oParam)
 								})
 								.css('width', '15px')
 								.css('height', '20px')
@@ -2490,47 +2498,23 @@ ns1blankspace.financial.payroll =
 						{
 							ns1blankspace.status.working();
 
-							//TODO
-
-							return;
-
-							var sData = 'type=' +  ns1blankspace.util.fs(iType);
+							var sData = 'record=' + ns1blankspace.util.fs(iPay);
+							sData += '&type=' + ns1blankspace.util.fs($('input[name="radioItemType"]:checked').val());
+							sData += '&hours=' + ns1blankspace.util.fs($('#ns1blankspacePayrollItemHours').val());
 							sData += '&id=' + ns1blankspace.util.fs(sID);
-							sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceAccountAddTitle').val());
-							sData += '&parentaccount=' + ns1blankspace.util.fs($('#ns1blankspaceAccountParentAccount').attr("data-id"));
-							sData += '&postable=' + ns1blankspace.util.fs($('input[name="radioPostable"]:checked').val());
 
-							var oAdd =
-									{
-										"items": [], 
-										"title": $('#ns1blankspaceAccountAddTitle').val(),
-										"parentaccount": $('#ns1blankspaceAccountParentAccount').attr("data-id"),
-										"postable": $('input[name="radioPostable"]:checked').val()
-									}
-
+							
 							$.ajax(
 							{
 								type: 'POST',
-								url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_ACCOUNT_MANAGE'),
+								url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_RECORD_ITEM_MANAGE'),
 								data: sData,
 								dataType: 'json',
 								success: function(data) {
 									if (data.status == "OK")
 									{
-										ns1blankspaceStatus('Saved');
-
-										$.extend(true, oAdd, {id: data.id});
-										
-										var bNew = true;
-
-										$(ns1blankspace.financial.accounts).each(function(i) 
-										{
-											if (this.id == data.id) {ns1blankspace.financial.accounts[i] = oAdd; bNew = false}
-										});
-
-										if (bNew) {(ns1blankspace.financial.accounts).unshift(oAdd)}
-
-										$.extend(true, oParam, {step: 2});
+										ns1blankspace.status.message('Time saved');
+										$.extend(true, oParam, {step: 3});
 										ns1blankspace.financial.payroll.pays(oParam)
 									}
 									else
@@ -2554,8 +2538,8 @@ ns1blankspace.financial.payroll =
 						if (sID != undefined)
 						{
 							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-							oSearch.addField('title,description,parentaccount,parentaccounttext,postable');
+							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_ITEM_SEARCH';
+							oSearch.addField('hours,type,typetext');
 							oSearch.addFilter('id', 'EQUAL_TO', sID);
 							oSearch.getResults(function(data) {
 									$.extend(true, oParam, {step: 5});
@@ -2568,8 +2552,18 @@ ns1blankspace.financial.payroll =
 						}
 					}
 
-					//EXPENSES
 					else if (iStep == 5)
+					{
+						if (oResponse.data.rows.length != 0)
+						{
+							var oObjectContext = oResponse.data.rows[0];
+							$('#ns1blankspacePayrollItemHours').val(oObjectContext.hours);	
+							$('[name="radioItemType"][value="' + oObjectContext.type + '"]').attr('checked', true);
+						}
+					}
+
+					//EXPENSES
+					else if (iStep == 7)
 					{	
 						if (oResponse == undefined)
 						{
@@ -2642,20 +2636,8 @@ ns1blankspace.financial.payroll =
 						}
 					}
 
-					else if (iStep == 6)
-					{
-						if (oResponse.data.rows.length != 0)
-						{
-							var oObjectContext = oResponse.data.rows[0];
-							$('#ns1blankspaceAccountAddTitle').val((oObjectContext.title).formatXHTML());
-							$('#ns1blankspaceAccountParentAccount').val(($.grep(ns1blankspace.financial.accounts, function (a) { return a.id == oObjectContext.parentaccount; })[0].title).formatXHTML());
-							$('#ns1blankspaceAccountParentAccount').attr('data-id', oObjectContext.parentaccount);
-							$('[name="radioPostable"][value="' + oObjectContext.postable + '"]').attr('checked', true);
-						}
-					}
-
 					//ADD PAY RECORD
-					else if (iStep == 7)
+					else if (iStep == 8)
 					{	
 						var aHTML = [];
 
