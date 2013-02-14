@@ -615,7 +615,7 @@ ns1blankspace.financial.bankAccount =
 														if (oResponse.data.rows.length == 0)
 														{
 															aHTML.push('<table><tr class="ns1blankspace">' +
-																			'<td class="ns1blankspaceNothing">No items.</td>' +
+																			'<td class="ns1blankspaceNothing">No items have been reconciled.</td>' +
 																			'</tr></table>');
 
 															$('#ns1blankspaceBankAccountReconcileItems').html(aHTML.join(''));							
@@ -1136,7 +1136,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_SEARCH';
 										oSearch.addField('startdate,enddate,processeddate');
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.sort('enddate', 'desc');
+										oSearch.sort('processeddate', 'desc');
 										oSearch.rows = ns1blankspace.option.defaultRows;
 										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.show(oParam, data)});
 									}
@@ -1187,7 +1187,7 @@ ns1blankspace.financial.bankAccount =
 										$('.ns1blankspaceBankAccountImportRowSelect').click(function()
 										{
 											var aID = (event.target.id).split('-');
-											ns1blankspace.financial.bankAccount.import.transactions({fileSource: aID[1]});
+											ns1blankspace.financial.bankAccount.import.items.show({fileSource: aID[1]});
 										});
 									}
 								},
@@ -1313,23 +1313,117 @@ ns1blankspace.financial.bankAccount =
 								},
 
 					items:   	{
-									show:		function(oResponse)
+									show:		function(oParam, oResponse)
 												{
 													if (oResponse === undefined)
 													{	
+														var oSearch = new AdvancedSearch();
 														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
-														oSearch.addField('description,amount,posteddate');
+														oSearch.addField('amount,area,areatext,bankaccount,bankaccounttext,capital,category,categorytext,' +
+																			'contactbusiness,contactbusinesstext,contactperson,contactpersontext,description,' +
+																			'externalid,financialaccount,financialaccounttext,posteddate,project,projecttext,' +
+																			'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
 														oSearch.sort('posteddate', 'desc');
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-														oSearch.addFilter('status', 'EQUAL_TO', 1);
 														oSearch.rows = ns1blankspace.option.defaultRows;
 														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.items.show(oParam, data)});
 													}
 													else
 													{
+														var aHTML = [];
+					
+														aHTML.push('<table id="ns1blankspaceFinancialBankImportItems" class="ns1blankspaceColumn2" style="font-size:0.875em;">');
+													
+														if (oResponse.data.rows.length == 0)
+														{
+															aHTML.push('<tr class="ns1blankspaceCaption">' +
+																			'<td class="ns1blankspaceNothing">No transactions.</td></tr>');
+															aHTML.push('</table>');
+														}
+														else
+														{		
+															aHTML.push('<tr class="ns1blankspaceCaption">');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+															aHTML.push('</tr>');
+															
+															$(oResponse.data.rows).each(function()
+															{
+																aHTML.push('<tr class="ns1blankspaceRow">');
+																	
+																aHTML.push('<td id="ns1blankspaceFinancialImportItem_Date-' + this.id + '" class="ns1blankspaceRow">' +
+																						this["posteddate"] + '</td>');
+																							
+																aHTML.push('<td id="ns1blankspaceFinancialImportItem_Description-' + this.id + '" class="ns1blankspaceRow">' +
+																						this["description"] + '</td>');
+
+																aHTML.push('<td id="ns1blankspaceFinancialImportItem_Amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																						 parseFloat(this["amount"]).toFixed(2) + '</td>');						
+																				
+																aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+																aHTML.push('<span id="ns1blankspaceFinancialImportItem_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+																aHTML.push('</td>');					
+																																			
+																aHTML.push('</tr>');
+															});	
+														}
+															
+														aHTML.push('</table>');
+													
+														$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
+
+														$('#ns1blankspaceFinancialBankImportItems .ns1blankspaceRowRemove').button(
+														{
+															text: false,
+														 	icons: {primary: "ui-icon-close"}
+														})
+														.click(function() {
+															$.extend(true, oParam, {step: 5, xhtmlElementID: event.target.id});
+															ns1blankspace.financial.bankAccount.import.items.remove({xhtmlElementID: this.id})
+														})
+														.css('width', '15px')
+														.css('height', '20px')
 
 													}
-												}
+												},
+
+									remove: 	function (oParam)
+												{
+													var sID;
+													var sXHTMLElementID;
+
+													if (oParam != undefined)
+													{
+														if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+													}
+													
+													if (sXHTMLElementID != undefined)
+													{
+														var aXHTMLElementID = sXHTMLElementID.split('-');
+														var sID = aXHTMLElementID[1];
+													}	
+															
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
+														data: 'remove=1&id=' + sID,
+														dataType: 'json',
+														success: function(data)
+														{
+															if (data.status == 'OK')
+															{
+																$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+															}
+															else
+															{
+																ns1blankspace.status.error(oResponse.error.errornotes);
+															}
+														}
+													});
+												}			
 								}									
 				}
 }								
