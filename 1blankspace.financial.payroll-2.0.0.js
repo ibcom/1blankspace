@@ -1121,7 +1121,7 @@ ns1blankspace.financial.payroll =
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
-											$('[name="radioMedicare"][value="' + ns1blankspace.financial.employee["employee.status"] + '"]').attr('checked', true);
+											$('[name="radioMedicare"][value="' + ns1blankspace.financial.employee["employee.medicare"] + '"]').attr('checked', true);
 											$('[name="radioFrequency"][value="' + ns1blankspace.financial.employee["employee.payfrequency"] + '"]').attr('checked', true);
 											$('#ns1blankspaceDetailsAllowance').val(ns1blankspace.financial.employee["employee.allowance"]);
 											$('#ns1blankspaceDetailsAllowanceDescription').val(ns1blankspace.financial.employee["employee.allowancedescription"]);
@@ -1152,8 +1152,8 @@ ns1blankspace.financial.payroll =
 											ns1blankspace.status.working();
 
 											var sData = 'id=' + ns1blankspace.util.fs(iEmployee);
-											sData += '&frequency=' + ns1blankspace.util.fs($('input[name="radioFrequency"]:checked').val());
-											sData += '&medicare=' + ns1blankspace.util.fs($('input[name="radioMedicare]:checked').val());
+											sData += '&payfrequency=' + ns1blankspace.util.fs($('input[name="radioFrequency"]:checked').val());
+											sData += '&medicare=' + ns1blankspace.util.fs($('input[name="radioMedicare"]:checked').val());
 											sData += '&allowance=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAllowance').val());
 											sData += '&allowancedescription=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAllowanceDescription').val());
 											sData += '&deduction=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDeduction').val());
@@ -1187,6 +1187,19 @@ ns1blankspace.financial.payroll =
 									//SUPERANNUATION
 									if (iStep == 15)
 									{
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+																'<tr class="ns1blankspaceContainer">' +
+																'<td id="ns1blankspacePayrollEmployeeDetails15Column1" style="font-size:0.875em;">' +
+																ns1blankspace.xhtml.loading + '</td>' +
+																'<td id="ns1blankspacePayrollEmployeeDetails15Column2" style="width:75px;">' +
+																'</td>' +
+																'</tr>' + 
+																'</table>');				
+											
+										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+
 										var aHTML = [];
 
 										aHTML.push('<table class="ns1blankspaceColumn2" style="padding-right:15px;">');
@@ -1229,24 +1242,82 @@ ns1blankspace.financial.payroll =
 
 										aHTML.push('</table>');					
 											
-										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetails15Column1').html(aHTML.join(''));
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
 											$('[name="radioSuperContributionType"][value="' + ns1blankspace.financial.employee["employee.pretaxsupertype"] + '"]').attr('checked', true);
 											$('#ns1blankspaceDetailsFundName').val(ns1blankspace.financial.employee["employee.superfundname"]);
-											$('#ns1blankspaceDetailsFundMemberNumber').val(ns1blankspace.financial.employee["employee.superfundmembernumber"]);
-											$('#ns1blankspaceDetailsEmployerSuperannuationRate').val(ns1blankspace.financial.employee["employee.superrate"]);
+											$('#ns1blankspaceDetailsFundMemberNumber').val(ns1blankspace.financial.employee["employee.supermembernumber"]);
+											$('#ns1blankspaceDetailsEmployerSuperannuationRate').val(ns1blankspace.financial.employee["employee.superannuationrate"]);
 										}
 										else
 										{
 											$('[name="radioEmployerType"][value="1"]').attr('checked', true);
 										}
+
+										var aHTML = [];
+						
+										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>' +
+														'<span id="ns1blankspacePayrollEmployee_options_save" class="ns1blankspaceAction">' +
+														'Save</span></td></tr></table>');					
+										
+										$('#ns1blankspacePayrollEmployeeDetails15Column2').html(aHTML.join(''));
+
+										$('#ns1blankspacePayrollEmployee_options_save').button(
+										{
+											text: "Save"
+										})
+										.click(function()
+										{
+											ns1blankspace.status.working();
+
+											var sData = 'id=' + ns1blankspace.util.fs(iEmployee);
+											sData += '&pretaxsupertype=' + ns1blankspace.util.fs($('input[name="radioSuperContributionType"]:checked').val());									
+											sData += '&superfundname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFundName').val());
+											sData += '&supermembernumber=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFundMemberNumber').val());
+											sData += '&superannuationrate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmployerSuperannuationRate').val());
+											
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_EMPLOYEE_MANAGE'),
+												data: sData,
+												dataType: 'json',
+												success: function(data)
+												{
+													if (data.status == 'OK')
+													{
+														ns1blankspace.status.message('Superannuation saved');
+														ns1blankspace.financial.payroll.employees.show();
+													}
+													else
+													{
+														ns1blankspace.status.error(data.error.errornotes);
+													}
+												}
+											});	
+
+										})
+										.css('font-size', '0.75em');
 									}	
 
 									//ROLE
 									if (iStep == 16)
 									{
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspacePayrollEmployeeDetails16Column1" style="font-size:0.875em;">' +
+														ns1blankspace.xhtml.loading + '</td>' +
+														'<td id="ns1blankspacePayrollEmployeeDetails16Column2" style="width:75px;">' +
+														'</td>' +
+														'</tr>' + 
+														'</table>');	
+
+										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+
 										var aHTML = [];
 
 										aHTML.push('<table class="ns1blankspaceColumn2" style="padding-right:15px;">');
@@ -1299,21 +1370,80 @@ ns1blankspace.financial.payroll =
 
 										aHTML.push('</table>');					
 											
-										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetails16Column1').html(aHTML.join(''));
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
 											$('#ns1blankspaceDetailsJobDescription').val(ns1blankspace.financial.employee["employee.jobdetails"]);
-											$('#ns1blankspaceDetailsInternalRelationships').val(ns1blankspace.financial.employee["employee.jobinternalrelationships"]);
-											$('#ns1blankspaceDetailsKPI').val(ns1blankspace.financial.employee["employee.jobkpis"]);
-											$('#ns1blankspaceDetailsResponsibilities').val(ns1blankspace.financial.employee["employee.jobresponsibilities"]);
-											$('#ns1blankspaceDetailsTasks').val(ns1blankspace.financial.employee["employee.jobtasks"]);
+											$('#ns1blankspaceDetailsInternalRelationships').val(ns1blankspace.financial.employee["employee.internalrelationships"]);
+											$('#ns1blankspaceDetailsKPI').val(ns1blankspace.financial.employee["employee.kpi"]);
+											$('#ns1blankspaceDetailsResponsibilities').val(ns1blankspace.financial.employee["employee.responsibilities"]);
+											$('#ns1blankspaceDetailsTasks').val(ns1blankspace.financial.employee["employee.tasks"]);
 										}
+
+										var aHTML = [];
+						
+										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>' +
+														'<span id="ns1blankspacePayrollEmployee_options_save" class="ns1blankspaceAction">' +
+														'Save</span></td></tr></table>');					
+										
+										$('#ns1blankspacePayrollEmployeeDetails16Column2').html(aHTML.join(''));
+
+										$('#ns1blankspacePayrollEmployee_options_save').button(
+										{
+											text: "Save"
+										})
+										.click(function()
+										{
+											ns1blankspace.status.working();
+
+											var sData = 'id=' + ns1blankspace.util.fs(iEmployee);							
+											sData += '&jobdetails=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsJobDescription').val());
+											sData += '&internalrelationships=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsInternalRelationships').val());
+											sData += '&kpi=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsKPI').val());
+											sData += '&responsibilities=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsResponsibilities').val());
+											sData += '&tasks=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTasks').val());
+											
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_EMPLOYEE_MANAGE'),
+												data: sData,
+												dataType: 'json',
+												success: function(data)
+												{
+													if (data.status == 'OK')
+													{
+														ns1blankspace.status.message('Role saved');
+														ns1blankspace.financial.payroll.employees.show();
+													}
+													else
+													{
+														ns1blankspace.status.error(data.error.errornotes);
+													}
+												}
+											});	
+
+										})
+										.css('font-size', '0.75em');
 									}	
 
 									//INDUCTION
 									if (iStep == 17)
 									{
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspacePayrollEmployeeDetails17Column1" style="font-size:0.875em;">' +
+														ns1blankspace.xhtml.loading + '</td>' +
+														'<td id="ns1blankspacePayrollEmployeeDetails17Column2" style="width:75px;">' +
+														'</td>' +
+														'</tr>' + 
+														'</table>');	
+
+										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+
 										var aHTML = [];
 
 										aHTML.push('<table class="ns1blankspaceColumn2" style="padding-right:15px;">');
@@ -1324,7 +1454,7 @@ ns1blankspace.financial.payroll =
 														'</td></tr>' +
 														'<tr><td class="ns1blankspace">' +
 														'<tr><td class="ns1blankspaceDate">' +
-														'<input id="ns1blankspaceDetailsEmployerInductionRate" class="ns1blankspaceDate">' +
+														'<input id="ns1blankspaceDetailsInductionDate" class="ns1blankspaceDate">' +
 														'</td></tr>');
 											
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -1339,19 +1469,62 @@ ns1blankspace.financial.payroll =
 															
 										aHTML.push('</table>');					
 											
-										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetails17Column1').html(aHTML.join(''));
 
 										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
-											$('#ns1blankspaceDetailsInductionDate').val(ns1blankspace.financial.employee["employee.inductiondate"]);
+											$('#ns1blankspaceDetailsInductionDate').val(ns1blankspace.financial.employee["employee.programdate"]);
 											$('[name="radioWorkersCompensation"][value="' + ns1blankspace.financial.employee["employee.workerscompform"] + '"]').attr('checked', true);
 										}
 										else
 										{
 											$('[name="radioWorkersCompensation"][value="N"]').attr('checked', true);
 										}
+
+										var aHTML = [];
+						
+										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>' +
+														'<span id="ns1blankspacePayrollEmployee_options_save" class="ns1blankspaceAction">' +
+														'Save</span></td></tr></table>');					
+										
+										$('#ns1blankspacePayrollEmployeeDetails17Column2').html(aHTML.join(''));
+
+										$('#ns1blankspacePayrollEmployee_options_save').button(
+										{
+											text: "Save"
+										})
+										.click(function()
+										{
+											ns1blankspace.status.working();
+
+											var sData = 'id=' + ns1blankspace.util.fs(iEmployee);							
+											sData += '&workerscompform=' + ns1blankspace.util.fs($('input[name="radioWorkersCompensation"]:checked').val());	
+											sData += '&programdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsInductionDate').val());
+											
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_EMPLOYEE_MANAGE'),
+												data: sData,
+												dataType: 'json',
+												success: function(data)
+												{
+													if (data.status == 'OK')
+													{
+														ns1blankspace.status.message('Induction saved');
+														ns1blankspace.financial.payroll.employees.show();
+													}
+													else
+													{
+														ns1blankspace.status.error(data.error.errornotes);
+													}
+												}
+											});	
+
+										})
+										.css('font-size', '0.75em');
 									}	
 
 									//PAYRATES
@@ -1428,10 +1601,8 @@ ns1blankspace.financial.payroll =
 													var aHTML = [];
 						
 													aHTML.push('<table class="ns1blankspaceColumn2">' +
-																	'<tr><td >' +
-																	'<span id="ns1blankspacePayrollEmployee_options_add" class="ns1blankspaceAction">Add</span>' +
-																	'</td></tr>' +
-																	'</table>');					
+																	'<tr><td><span id="ns1blankspacePayrollEmployee_options_add" class="ns1blankspaceAction">' +
+																	'Add</span></td></tr></table>');					
 													
 													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn2').html(aHTML.join(''));
 
@@ -1443,14 +1614,14 @@ ns1blankspace.financial.payroll =
 														$.extend(true, oParam, {stepAction: 3, xhtmlElementID: "", id: ""});
 														ns1blankspace.financial.payroll.employees.show(oParam);
 													})
-													.css('font-size', '0.875em');
+													.css('font-size', '0.75em');
 												
 													var aHTML = [];
 
 													if (oResponse.data.rows.length == 0)
 													{
-														aHTML.push('<table style="width: 750px; margin-top:15px; margin-bottom:15px;">' +
-																		'<tr><td class="ns1blankspaceNothing">No pays.</td></tr>' +
+														aHTML.push('<table class="ns1blankspaceColumn2">' +
+																		'<tr><td class="ns1blankspaceNothing">No pays rates.</td></tr>' +
 																		'</table>');
 
 														$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
@@ -1522,7 +1693,7 @@ ns1blankspace.financial.payroll =
 																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateEndDate" class="ns1blankspaceDate">' +
 																	'</td></tr>');
 
-													aHTML.push('<tr><td class="ns1blankspaceCaption">Rate Amount</td></tr>' +
+													aHTML.push('<tr><td class="ns1blankspaceCaption">Rate ($)</td></tr>' +
 																	'<tr><td>' +
 																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateAmount" class="ns1blankspaceText">' +
 																	'</td></tr>');				
@@ -1774,7 +1945,7 @@ ns1blankspace.financial.payroll =
 												}
 												else
 												{
-													aHTML.push('<table id="ns1blankspacePayrollEmployeeDetailsBankAccountEdit" class="ns1blankspaceColumn2">');
+													aHTML.push('<table id="ns1blankspacePayrollEmployeeDetailsBankAccountEdit" class="ns1blankspaceColumn2" style="padding-right:15px;">');
 										
 													aHTML.push('<tr><td class="ns1blankspaceCaption">Account Name</td></tr>' +
 																	'<tr><td>' +
