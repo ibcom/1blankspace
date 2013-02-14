@@ -100,6 +100,8 @@ ns1blankspace.financial.bankAccount =
 					}	
 				},		
 
+	search: 	{send: function (sID) {ns1blankspace.financial.bankAccount.show({id: (sID).split('-')[1]})}},
+				
 	layout: 	function ()
 				{	
 					var aHTML = [];
@@ -604,6 +606,7 @@ ns1blankspace.financial.bankAccount =
 															oSearch.sort('posteddate', 'desc');
 															oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 															oSearch.addFilter('status', 'EQUAL_TO', 1);
+															oSearch.addFilter('category', 'EQUAL_TO', (iType==1?2:1));
 															oSearch.rows = ns1blankspace.option.defaultRows;
 															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.show(oParam, data)});
 														}		
@@ -649,7 +652,7 @@ ns1blankspace.financial.bankAccount =
 																
 																	aHTML.push('<td id="ns1blankspaceRecocileItems_amount-' + this.id + '" style="text-align:right;"' +
 																						' class="recoitem">' +
-																						this.amount + '</td>');
+																						Math.abs((this.amount).parseCurrency()).formatMoney(2, ".", ",") + '</td>');
 																	
 																	if (iSource == 1)
 																	{
@@ -678,7 +681,7 @@ ns1blankspace.financial.bankAccount =
 																	aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 																	aHTML.push('<span id="spanRecoItems_options_search-' + this.id + '"' +
 																					' data-searchDate="' + this.posteddate + '"' +
-																					' data-searchAmount="' + this.amount + '"' +
+																					' data-searchAmount="' + Math.abs((this.amount).parseCurrency()).toFixed(2) + '"' +
 																					' class="ns1blankspaceReconcileItemsMatch"></span>');
 																	aHTML.push('</td>');
 																};	
