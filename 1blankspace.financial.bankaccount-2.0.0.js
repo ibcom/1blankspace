@@ -1243,7 +1243,7 @@ ns1blankspace.financial.bankAccount =
 																				
 										$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
 										
-										$('#spanInterfaceMainUpload').button(
+										$('#ns1blankspaceUpload').button(
 										{
 											label: "Upload Bank File"
 										})
@@ -1290,7 +1290,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.addField('type,filename,description,download,modifieddate');
 										oSearch.addFilter('object', 'EQUAL_TO', 28);
 										oSearch.addFilter('objectcontext', 'EQUAL_TO', $('#objectcontext').val());
-										oSearch.getResults(function(data) {ins1blankspace.financial.bankAccount.import.process(data)});
+										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.process(data)});
 									}
 									else
 									{
@@ -1310,6 +1310,26 @@ ns1blankspace.financial.bankAccount =
 											});	
 										}
 									}	
-								}
+								},
+
+					items:   	{
+									show:		function(oResponse)
+												{
+													if (oResponse === undefined)
+													{	
+														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
+														oSearch.addField('description,amount,posteddate');
+														oSearch.sort('posteddate', 'desc');
+														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+														oSearch.addFilter('status', 'EQUAL_TO', 1);
+														oSearch.rows = ns1blankspace.option.defaultRows;
+														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.items.show(oParam, data)});
+													}
+													else
+													{
+
+													}
+												}
+								}									
 				}
 }								
