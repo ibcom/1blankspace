@@ -1021,7 +1021,7 @@ ns1blankspace.financial.credit =
 												}	
 
 												var sData = 'lineitem=' + ns1blankspace.util.fs(ns1blankspace.util.getID(this.id));
-												sData += '&creditnote=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+												sData += '&credit=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 												sData += '&amount=' + ns1blankspace.util.fs($(this).attr("data-amount"));
 												sData += '&tax=' + ns1blankspace.util.fs($(this).attr("data-tax"));
 

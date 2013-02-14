@@ -585,14 +585,14 @@ ns1blankspace.financial.bankAccount =
 															if (iType == 1)
 															{
 																oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
-																oSearch.addField('reference,amount,paiddate,reconciliation');
-																oSearch.sort('paiddate', 'desc');
+																oSearch.addField('reference,description,amount,paiddate,reconciliation,contactbusinesspaidtotext,contactpersonpaidtotext');
+																oSearch.sort('paiddate', 'asc');
 															}	
 															else
 															{
 																oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
-																oSearch.addField('reference,amount,receiveddate,reconciliation');
-																oSearch.sort('receiveddate', 'desc');
+																oSearch.addField('reference,description,amount,receiveddate,reconciliation,contactbusinessreceivedfromtext,contactpersonreceivedfromtext');
+																oSearch.sort('receiveddate', 'asc');
 															}
 															
 															oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
@@ -617,9 +617,18 @@ ns1blankspace.financial.bankAccount =
 													
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML.push('<table><tr class="ns1blankspace">' +
-																			'<td class="ns1blankspaceNothing">No items have been reconciled.</td>' +
-																			'</tr></table>');
+															aHTML.push('<table><tr class="ns1blankspace">');
+
+															if (iSource == 1)
+															{
+																aHTML.push('<td class="ns1blankspaceNothing">No items have been reconciled.</td>')
+															}
+															else
+															{
+																aHTML.push('<td class="ns1blankspaceNothing">No bank transactions have been imported.  You can either import transactions from a file or reconcile of a statement.</td>');
+															}
+																			
+															aHTML.push('</tr></table>');
 
 															$('#ns1blankspaceBankAccountReconcileItems').html(aHTML.join(''));							
 														}
@@ -656,9 +665,36 @@ ns1blankspace.financial.bankAccount =
 																	
 																	if (iSource == 1)
 																	{
+																		var sDescription = this.description;
+
+																		if (iType === 1)
+																		{
+																			if (this.contactbusinesspaidtotext !== '')
+																			{
+																				sDescription += '<br />' + this.contactbusinesspaidtotext
+																			}
+
+																			if (this.contactpersonpaidtotext !== '')
+																			{
+																				sDescription += '<br />' + this.contactpersonpaidtotext
+																			}
+																		}
+																		else
+																		{
+																			if (this.contactbusinessreceivedfromtext !== '')
+																			{
+																				sDescription += '<br />' + this.contactbusinessreceivedfromtext
+																			}
+
+																			if (this.contactpersonreceivedfromtext !== '')
+																			{
+																				sDescription += '<br />' + this.contactpersonreceivedfromtext
+																			}
+																		}
+
 																		aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceRecocileItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
-																						' class="recoitem">' +
-																						this.reference + '</td>');
+																						' class="recoitem" title="' + this.reference + '">' +
+																						sDescription + '</td>');
 																	}
 																	else
 																	{
@@ -672,7 +708,7 @@ ns1blankspace.financial.bankAccount =
 																if ((this.paiddate) || (this.receiveddate))
 																{					
 																	aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-																	aHTML.push('<span id="ns1blankspaceReconcileItems_options_remove-' + this.id + '" class="ns1blankspaceReconcileItemsRemove"></span>');
+																	aHTML.push('<span id="ns1blankspaceReconcileItems_options_remove-' + this.id + '-' + iType + '" class="ns1blankspaceReconcileItemsRemove"></span>');
 																	aHTML.push('</td>');
 																};	
 																
@@ -700,7 +736,8 @@ ns1blankspace.financial.bankAccount =
 																}
 															})
 															.click(function() {
-																ns1blankspace.financial.bankAccount.items.remove({xhtmlElementID: this.id});
+																oParam.xhtmlElementID = this.id;
+																ns1blankspace.financial.bankAccount.reconcile.items.remove(oParam);
 															})
 															.css('width', '15px')
 															.css('height', '17px')
@@ -725,20 +762,22 @@ ns1blankspace.financial.bankAccount =
 									remove: 	function(oParam)
 												{
 													var sXHTMLElementID;
+													var iReconciliation;
 
 													if (oParam != undefined)
 													{
 														if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
 														if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+														if (oParam.reconciliation != undefined) {iReconciliation = oParam.reconciliation}
 													}
 															
 													var aXHTMLElementID = sXHTMLElementID.split('-');
-													var sData = 'remove=1&reconcilition=' + ns1blankspace.util.fs(iReconciliation);
+													var sData = 'remove=1&reconciliation=' + ns1blankspace.util.fs(iReconciliation);
 
-													if (aXHTMLElementID[2] == 1) {sData += '&linkype=3'}
-													if (aXHTMLElementID[2] == 2) {sData += '&linkype=6'}
+													if (aXHTMLElementID[2] == 1) {sData += '&object=3'}
+													if (aXHTMLElementID[2] == 2) {sData += '&object=6'}
 
-													sData += '&linkid=' + aXHTMLElementID[1];	
+													sData += '&objectcontext=' + aXHTMLElementID[1];	
 
 													$.ajax(
 													{
@@ -888,16 +927,16 @@ ns1blankspace.financial.bankAccount =
 															if (iType == 1)
 															{
 																oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
-																oSearch.addField('reference,amount,paiddate,reconciliation');
+																oSearch.addField('reference,description,amount,paiddate,reconciliation,contactbusinesspaidtotext,contactpersonpaidtotext');
 																if (dSearchDate) {oSearch.addFilter('paiddate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
-																oSearch.sort('paiddate', 'desc');
+																oSearch.sort('paiddate', 'asc');
 															}	
 															else
 															{
 																oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
-																oSearch.addField('reference,amount,receiveddate,reconciliation');
+																oSearch.addField('reference,description,amount,receiveddate,reconciliation,contactbusinessreceivedfromtext,contactpersonreceivedfromtext');
 																if (dSearchDate) {oSearch.addFilter('receiveddate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
-																oSearch.sort('receiveddate', 'desc');
+																oSearch.sort('receiveddate', 'asc');
 															}
 														
 															if (cSearchAmount) {oSearch.addFilter('amount', 'APPROX_EQUAL_TO', cSearchAmount)}
@@ -949,9 +988,36 @@ ns1blankspace.financial.bankAccount =
 																							' class="recoitem">' +
 																							this.amount + '</td>');
 																		
+																		var sDescription = this.description;
+
+																		if (iType === 1)
+																		{
+																			if (this.contactbusinesspaidtotext !== '')
+																			{
+																				sDescription += '<br />' + this.contactbusinesspaidtotext
+																			}
+
+																			if (this.contactpersonpaidtotext !== '')
+																			{
+																				sDescription += '<br />' + this.contactpersonpaidtotext
+																			}
+																		}
+																		else
+																		{
+																			if (this.contactbusinessreceivedfromtext !== '')
+																			{
+																				sDescription += '<br />' + this.contactbusinessreceivedfromtext
+																			}
+
+																			if (this.contactpersonreceivedfromtext !== '')
+																			{
+																				sDescription += '<br />' + this.contactpersonreceivedfromtext
+																			}
+																		}
+
 																		aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceReconcileItems_reference-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
-																							' class="recoitem">' +
-																							this.reference + '</td>');
+																							' class="recoitem" title="' + this.reference + '">' +
+																							sDescription + '</td>');
 																					
 																	aHTML.push('</tr></table></td>');	
 																						
@@ -986,12 +1052,12 @@ ns1blankspace.financial.bankAccount =
 													else if (iEditAction == 3)  //add to reconciliation
 													{
 														var aXHTMLElementID = sXHTMLElementID.split('-');
-														var sData = 'reconcilition=' + ns1blankspace.util.fs(iReconciliation);
+														var sData = 'reconciliation=' + ns1blankspace.util.fs(iReconciliation);
 
-														if (aXHTMLElementID[2] == 1) {sData += '&linkype=3'}
-														if (aXHTMLElementID[2] == 2) {sData += '&linkype=6'}
+														if (aXHTMLElementID[2] == 1) {sData += '&object=3'}
+														if (aXHTMLElementID[2] == 2) {sData += '&object=6'}
 
-														sData += '&linkid=' + aXHTMLElementID[1];	
+														sData += '&objectcontext=' + aXHTMLElementID[1];	
 
 														$.ajax(
 														{
