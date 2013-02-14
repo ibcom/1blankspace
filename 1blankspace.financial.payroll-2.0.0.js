@@ -2396,7 +2396,7 @@ ns1blankspace.financial.payroll =
 								 	icons: {primary: "ui-icon-close"}
 								})
 								.click(function() {
-									$.extend(true, oParam, {step: 6, xhtmlElementID: event.target.id});
+									$.extend(true, oParam, {step: 6, xhtmlElementID: this.id});
 									ns1blankspace.financial.payroll.pays(oParam)
 								})
 								.css('width', '15px')
@@ -2560,6 +2560,51 @@ ns1blankspace.financial.payroll =
 							$('#ns1blankspacePayrollItemHours').val(oObjectContext.hours);	
 							$('[name="radioItemType"][value="' + oObjectContext.type + '"]').attr('checked', true);
 						}
+					}
+
+					else if (iStep == 6)
+					{
+						var sID; 
+						var iType;
+						var sXHTMLElementID;
+
+						if (oParam != undefined)
+						{
+							if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+							if (oParam.type != undefined) {iType = oParam.type}
+						}
+						
+						if (sXHTMLElementID != undefined)
+						{
+							var aXHTMLElementID = sXHTMLElementID.split('-');
+							var sID = aXHTMLElementID[1];
+						}	
+								
+						if (oResponse == undefined)
+						{	
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_RECORD_ITEM_MANAGE'),
+								data: 'remove=1&id=' + sID,
+								dataType: 'json',
+								success: function(data)
+								{
+									ns1blankspace.financial.payroll.pays(oParam, data);
+								}
+							});
+						}	
+						else
+						{
+							if (oResponse.status == 'OK')
+							{
+								$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+							}
+							else
+							{
+								ns1blankspace.status.error(oResponse.error.errornotes);
+							}
+						}	
 					}
 
 					//EXPENSES
