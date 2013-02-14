@@ -19,7 +19,7 @@ ns1blankspace.financial.bankAccount =
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}
-						if (oParam.id != undefined) {iID = oParam.id}	
+						if (oParam.id != undefined) {iID = oParam.id}
 					}
 
 					ns1blankspace.object = -1;

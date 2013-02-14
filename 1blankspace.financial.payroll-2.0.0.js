@@ -2513,8 +2513,7 @@ ns1blankspace.financial.payroll =
 								success: function(data) {
 									if (data.status == "OK")
 									{
-										ns1blankspace.status.message('Time saved');
-										$.extend(true, oParam, {step: 3});
+										$.extend(true, oParam, {step: 7});
 										ns1blankspace.financial.payroll.pays(oParam)
 									}
 									else
@@ -2559,6 +2558,8 @@ ns1blankspace.financial.payroll =
 							var oObjectContext = oResponse.data.rows[0];
 							$('#ns1blankspacePayrollItemHours').val(oObjectContext.hours);	
 							$('[name="radioItemType"][value="' + oObjectContext.type + '"]').attr('checked', true);
+							$('#ns1blankspacePayrollItemHours').focus();
+							$('#ns1blankspacePayrollItemHours').select();
 						}
 					}
 
@@ -2590,6 +2591,7 @@ ns1blankspace.financial.payroll =
 								dataType: 'json',
 								success: function(data)
 								{
+									$.extend(true, oParam, {step: 7});
 									ns1blankspace.financial.payroll.pays(oParam, data);
 								}
 							});
@@ -2607,8 +2609,28 @@ ns1blankspace.financial.payroll =
 						}	
 					}
 
-					//EXPENSES
 					else if (iStep == 7)
+					{
+						var iType = 4;
+						var sXHTMLElementID;
+	
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_PROCESS'),
+							data: 'type=' + iType + '&record=' + iPay,
+							dataType: 'json',
+							success: function(data)
+							{
+								ns1blankspace.status.message('Updated');
+								$.extend(true, oParam, {step: 2});
+								ns1blankspace.financial.payroll.pays(oParam);
+							}
+						});
+					}
+
+					//EXPENSES
+					else if (iStep == 10)
 					{	
 						if (oResponse == undefined)
 						{
@@ -2682,7 +2704,7 @@ ns1blankspace.financial.payroll =
 					}
 
 					//ADD PAY RECORD
-					else if (iStep == 8)
+					else if (iStep == 11)
 					{	
 						var aHTML = [];
 
