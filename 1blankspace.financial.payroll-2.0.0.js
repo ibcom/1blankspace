@@ -32,7 +32,14 @@ ns1blankspace.financial.payroll =
 					else
 					{		
 						ns1blankspace.app.set(oParam);
-					}	
+					}
+
+					$('#ns1blankspaceViewControlNew').unbind('click');
+
+					$('#ns1blankspaceViewControlNew').click(function(event)
+					{
+						ns1blankspace.financial.payroll.new.show();
+					});
 				},
 
 	home:		function (oParam, oResponse)
@@ -527,7 +534,7 @@ ns1blankspace.financial.payroll =
 								{
 									var aHTML = [];
 							
-									ns1blankspace.show({selector: '#divInterfaceMainNew'});
+									ns1blankspace.show({selector: '#ns1blankspaceMainNew'});
 
 									aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
@@ -540,7 +547,7 @@ ns1blankspace.financial.payroll =
 
 									var aHTML = [];
 
-									aHTML.push('<table class="ns1blankspace" style="font-size:0.875em">' +
+									aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em">' +
 														'<tr><td>' +
 														'<span style="width:70px;" id="ns1blankspacePayrollNew_options_save">Next</span>' +
 														'</td></tr>' +
@@ -557,7 +564,7 @@ ns1blankspace.financial.payroll =
 									})
 									.click(function() 
 									{
-										ns1blankspace.financial.payroll.new.show();
+										ns1blankspace.financial.payroll.new.save();
 									});
 
 									$('#ns1blankspacePayrollNew_options_cancel').button(
@@ -632,7 +639,7 @@ ns1blankspace.financial.payroll =
 										$.ajax(
 										{
 											type: 'POST',
-											url: ns1blankspaceEndpointURL('FINANCIAL_PAYROLL_PAY_PROCESS'),
+											url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_PROCESS'),
 											data: 'type=1',
 											dataType: 'json',
 											success: function(data) {
@@ -663,11 +670,11 @@ ns1blankspace.financial.payroll =
 													var oSearch = new AdvancedSearch();
 													oSearch.method = 'CONTACT_PERSON_SEARCH';
 													oSearch.addField('firstname');
-													oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.contactBusiness);
+													oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.user.contactBusiness);
 													oSearch.addFilter('firstname', 'EQUAL_TO', $('#ns1blankspaceDetailsFirstName').val());
 													oSearch.addFilter('surname', 'EQUAL_TO', $('#ns1blankspaceDetailsLastName').val());
 
-													oSearch.getResults(ns1blankspace.financial.payroll.new.save);
+													oSearch.getResults(function(data) {ns1blankspace.financial.payroll.new.save(oParam, data)});
 												}
 											}
 											else	
@@ -677,19 +684,19 @@ ns1blankspace.financial.payroll =
 													ns1blankspace.financial.payroll.new.process(
 													{
 														contactPerson: oResponse.data.rows[0].contactperson,
-														contactBusiness: ns1blankspace.contactBusiness
+														contactBusiness: ns1blankspace.user.contactBusiness
 													});		
 												}
 												else
 												{
-													var sData = 'contactbusiness=' + ns1blankspace.util.fs(ns1blankspace.contactBusiness);
+													var sData = 'contactbusiness=' + ns1blankspace.util.fs(ns1blankspace.user.contactBusiness);
 													sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFirstName').val());
 													sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsLastName').val());
 
 													$.ajax(
 													{
 														type: 'POST',
-														url: ns1blankspace.util.endpointURL('CONTACT_PERSON_MANAGE'),
+														url: ns1blankspace.util.endpointURI('CONTACT_PERSON_MANAGE'),
 														data: sData,
 														dataType: 'json',
 														success: function(data)
@@ -699,7 +706,7 @@ ns1blankspace.financial.payroll =
 																ns1blankspace.financial.payroll.new.process(
 																{
 																	contactPerson: data.id,
-																	contactBusiness: ns1blankspace.contactBusiness
+																	contactBusiness: ns1blankspace.user.contactBusiness
 																});	
 															}
 															else
@@ -720,7 +727,7 @@ ns1blankspace.financial.payroll =
 
 					process: 	function (oParam)
 								{
-									var iContactBusiness = ns1blankspace.contactBusiness;
+									var iContactBusiness = ns1blankspace.user.contactBusiness;
 									var iContactPerson;
 									var iID;
 									var sData;
@@ -739,13 +746,13 @@ ns1blankspace.financial.payroll =
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.endpointURL('FINANCIAL_PAYROLL_EMPLOYEE_MANAGE'),
+										url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_EMPLOYEE_MANAGE'),
 										data: sData,
 										dataType: 'json',
 										success: function(data)
 										{
 											ns1blankspace.status.message('Saved.');
-											ns1blankspace.show({selector: '#divInterfaceMainEmployee'});
+											ns1blankspace.show({selector: '#ns1blankspaceMainEmployee'});
 											ns1blankspace.financial.payroll.employees.show();
 										}	
 									});		
@@ -932,6 +939,19 @@ ns1blankspace.financial.payroll =
 									{
 										var aHTML = [];
 
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+																'<tr class="ns1blankspaceContainer">' +
+																'<td id="ns1blankspacePayrollEmployeeDetails11Column1" style="font-size:0.875em;">' +
+																ns1blankspace.xhtml.loading + '</td>' +
+																'<td id="ns1blankspacePayrollEmployeeDetails11Column2" style="width:75px;">' +
+																'</td>' +
+																'</tr>' + 
+																'</table>');				
+											
+										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+
+										var aHTML = [];
+
 										aHTML.push('<table class="ns1blankspaceColumn2" style="padding-right:15px;">');
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -954,21 +974,77 @@ ns1blankspace.financial.payroll =
 										
 										aHTML.push('</table>');					
 											
-										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetails11Column1').html(aHTML.join(''));
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
 											$('[name="radioStatus"][value="' + ns1blankspace.financial.employee["employee.status"] + '"]').attr('checked', true);
-											$('#ns1blankspaceDetailsNotes').val(ns1blankspace.financial.employee["employee.description"]);
+											$('#ns1blankspaceDetailsNotes').val(ns1blankspace.financial.employee["employee.notes"]);
 										}
 										else
 										{
 											$('[name="radioStatus"][value="1"]').attr('checked', true);
 										}
+
+										var aHTML = [];
+						
+										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>' +
+														'<span id="ns1blankspacePayrollEmployee_options_save" class="ns1blankspaceAction">' +
+														'Save</span></td></tr></table>');					
+										
+										$('#ns1blankspacePayrollEmployeeDetails11Column2').html(aHTML.join(''));
+
+										$('#ns1blankspacePayrollEmployee_options_save').button(
+										{
+											text: "Save"
+										})
+										.click(function()
+										{
+											ns1blankspace.status.working();
+
+											var sData = 'id=' + ns1blankspace.util.fs(iEmployee);
+											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
+											sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsNotes').val());
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_EMPLOYEE_MANAGE'),
+												data: sData,
+												dataType: 'json',
+												success: function(data)
+												{
+													if (data.status == 'OK')
+													{
+														ns1blankspace.status.message('Saved');
+														ns1blankspace.financial.payroll.employees.show();
+													}
+													else
+													{
+														ns1blankspace.status.error(data.error.errornotes);
+													}
+												}
+											});	
+
+										})
+										.css('font-size', '0.75em');
 									}
 									
 									if (iStep == 12)
 									{
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+																'<tr class="ns1blankspaceContainer">' +
+																'<td id="ns1blankspacePayrollEmployeeDetails12Column1" style="font-size:0.875em;">' +
+																ns1blankspace.xhtml.loading + '</td>' +
+																'<td id="ns1blankspacePayrollEmployeeDetails12Column2" style="width:75px;">' +
+																'</td>' +
+																'</tr>' + 
+																'</table>');				
+											
+										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+
 										var aHTML = [];
 
 										aHTML.push('<table class="ns1blankspaceColumn2" style="padding-right:15px;">');
@@ -999,7 +1075,7 @@ ns1blankspace.financial.payroll =
 														'</td></tr>' +
 														'<tr><td class="ns1blankspaceText">' +
 														'<tr><td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceDetailsDescription" class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsAllowanceDescription" class="ns1blankspaceText">' +
 														'</td></tr>');
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -1041,18 +1117,71 @@ ns1blankspace.financial.payroll =
 
 										aHTML.push('</table>');					
 											
-										$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetails12Column1').html(aHTML.join(''));
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
 											$('[name="radioMedicare"][value="' + ns1blankspace.financial.employee["employee.status"] + '"]').attr('checked', true);
 											$('[name="radioFrequency"][value="' + ns1blankspace.financial.employee["employee.payfrequency"] + '"]').attr('checked', true);
+											$('#ns1blankspaceDetailsAllowance').val(ns1blankspace.financial.employee["employee.allowance"]);
 											$('#ns1blankspaceDetailsAllowanceDescription').val(ns1blankspace.financial.employee["employee.allowancedescription"]);
+											$('#ns1blankspaceDetailsDeduction').val(ns1blankspace.financial.employee["employee.deduction"]);
+											$('#ns1blankspaceDetailsDeductionDescription').val(ns1blankspace.financial.employee["employee.deductiondescription"]);
+											$('#ns1blankspaceDetailsTaxNumber').val(ns1blankspace.financial.employee["employee.taxfilenumber"]);
 										}
 										else
 										{
+											$('[name="radioFrequency"][value="1"]').attr('checked', true);
 											$('[name="radioMedicare"][value="1"]').attr('checked', true);
 										}
+
+										var aHTML = [];
+						
+										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>' +
+														'<span id="ns1blankspacePayrollEmployee_options_save" class="ns1blankspaceAction">' +
+														'Save</span></td></tr></table>');					
+										
+										$('#ns1blankspacePayrollEmployeeDetails12Column2').html(aHTML.join(''));
+
+										$('#ns1blankspacePayrollEmployee_options_save').button(
+										{
+											text: "Save"
+										})
+										.click(function()
+										{
+											ns1blankspace.status.working();
+
+											var sData = 'id=' + ns1blankspace.util.fs(iEmployee);
+											sData += '&frequency=' + ns1blankspace.util.fs($('input[name="radioFrequency"]:checked').val());
+											sData += '&medicare=' + ns1blankspace.util.fs($('input[name="radioMedicare]:checked').val());
+											sData += '&allowance=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAllowance').val());
+											sData += '&allowancedescription=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAllowanceDescription').val());
+											sData += '&deduction=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDeduction').val());
+											sData += '&deductiondescription=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDeductionDescription').val());
+											sData += '&taxfilenumber=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTaxNumber').val());
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_EMPLOYEE_MANAGE'),
+												data: sData,
+												dataType: 'json',
+												success: function(data)
+												{
+													if (data.status == 'OK')
+													{
+														ns1blankspace.status.message('Saved');
+														ns1blankspace.financial.payroll.employees.show();
+													}
+													else
+													{
+														ns1blankspace.status.error(data.error.errornotes);
+													}
+												}
+											});	
+
+										})
+										.css('font-size', '0.75em');
 									}
 
 									//SUPERANNUATION
@@ -1293,7 +1422,6 @@ ns1blankspace.financial.payroll =
 												$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
 											
 												var aHTML = [];
-												var h = -1;
 
 												if (iStepAction == 1)
 												{
