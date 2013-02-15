@@ -228,8 +228,9 @@ ns1blankspace.financial.bankAccount =
 						aHTML.push('<table class="ns1blankspace">' +
 									'<tr><td class="ns1blankspaceSub">' +
 									'This bank account was last reconciled on the ' +
-									 ns1blankspace.objectContextData.lastreconcileddate + '.' +
-									'</td></tr></table>');
+									 ns1blankspace.objectContextData.lastreconcileddate + ', with an account balance of $' +
+									 ns1blankspace.objectContextData.lastreconciledamount +
+									'.</td></tr></table>');
 					}								
 
 					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
@@ -239,7 +240,7 @@ ns1blankspace.financial.bankAccount =
 					aHTML.push('<table cellpadding=6 class="ns1blankspaceColumn2" style="font-size:0.75em;">' +
 									'<tr><td class="ns1blankspaceSub" colspan=2>You have a number of options when reconciling a bank account.</td></tr>' + 
 									'<tr><td class="ns1blankspaceCaption" style="width:15px;padding-bottom:10px;">1</td><td class="ns1blankspaceSub">' +
-									'Use a printed or PDF bank statement directly.  In this case you skip the import step and go straight to reconcile.' +
+									'Use a printed or PDF bank statement directly.  In this case you skip the bank transactions import step and go straight to reconcile.' +
 									' You can then add a reconciliation - selecting the date you want to balance up to.  You then search the system for matching payments or receipts that have already been entered or if not, add them as you go.' +
 									'</td></tr>' + 
 									'<tr><td class="ns1blankspaceCaption" style="width:15px;padding-top:10px;">2</td><td class="ns1blankspaceSub" style="padding-top:10px;">' +
@@ -261,7 +262,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance');
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('statementdate', 'desc');
-										oSearch.rows = 12;
+										oSearch.rows = 6;
 										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.show(oParam, data)});
 									}
 									else
@@ -275,8 +276,18 @@ ns1blankspace.financial.bankAccount =
 														'</td><td id="ns1blankspaceBankAccountColumnReconcile2" class="interfaceMainColumn2">' +
 														'</td></tr></table>');				
 										
-										$('#ns1blankspaceMainReconcile').html(aHTML.join(''));
-												
+										$('#ns1blankspaceMainReconcile').html(aHTML.join(''));		
+
+										var aHTML = [];
+											
+										aHTML.push('<table class="ns1blankspaceColumn2">' +
+														'<tr><td class="ns1blankspaceNothing">The last six reconciliations are shown for your information.' +
+														'<br /><br />To reconcile this bank account, select your current reconcilation<br />or if completed, press "+" to add a new one.' +
+														'<br /><br />Once selected you can click the edit icon to change reconcilation details,<br />ie bank statement balance amount.</td></tr>' +
+														'</table>');
+
+										$('#ns1blankspaceBankAccountColumnReconcile2').html(aHTML.join(''));
+																
 										var aHTML = [];
 										
 										if (oResponse.data.rows.length == 0)
@@ -356,8 +367,9 @@ ns1blankspace.financial.bankAccount =
 
 											$('#ns1blankspaceBankAccountColumnReconcile2').html('');
 											$('#ns1blankspaceBankAccountRecoEdit').button({disabled: false})
-											var aID = (event.target.id).split('-');
-											ns1blankspace.financial.bankAccount.reconcile.items.show({reconciliation: aID[1]});
+
+											var aID = (this.id).split('-');
+											ns1blankspace.financial.bankAccount.reconcile.items.show({reconciliation: aID[1], status: aID[2]});
 										});
 									}
 								},
@@ -371,7 +383,7 @@ ns1blankspace.financial.bankAccount =
 									aHTML.push('<td class="ns1blankspaceRow" id="ns1blankspaceFinancialBankAccountReconcileRow-' + oRow.id + '">');
 
 									aHTML.push('<div class="ns1blankspaceFinancialBankAccountReconcileContainer"' +
-													' style="cursor: pointer;" id="ns1blankspaceFinancialBankAccountReconcile-' + oRow.id + '">');
+													' style="cursor: pointer;" id="ns1blankspaceFinancialBankAccountReconcile-' + oRow.id + '-' + oRow.status + '">');
 
 									aHTML.push('<table class="ns1blankspace">');
 
@@ -380,18 +392,21 @@ ns1blankspace.financial.bankAccount =
 										aHTML.push('<td id="ns1blankspaceFinancialBankAccountReconcile_title-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceBankAccountReconcileRowSelect"' +
 														' style="text-align:right;">' +
 														'<span id="ns1blankspaceFinancialBankAccountReconcile_date-' +
-														oRow.id + '" class="ns1blankspaceSub">' + oRow.statementdate + '</span><br />');
+														oRow.id  + '" class="ns1blankspaceSub">' + oRow.statementdate + '</span><br />');
+
+										aHTML.push('<span id="ns1blankspaceFinancialBankAccountReconcile_balance-' + '-' + oRow.id + '" class="ns1blankspaceSub">$' +
+									 					oRow.statementbalance + '</span>');
 									}
 									else
 									{
 										aHTML.push('<td id="ns1blankspaceFinancialBankAccountReconcile_title-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceBankAccountReconcileRowSelect"' +
-															' style="text-align:right;"' +
+															' style="text-align:right; color:black;"' +
 															'>' + oRow.statementdate + '<br />');
+
+										aHTML.push('<span id="ns1blankspaceFinancialBankAccountReconcile_balance-' + oRow.id + '">$' +
+									 					oRow.statementbalance + '</span>');
 									}						
 									
-									aHTML.push('<span id="ns1blankspaceFinancialBankAccountReconcile_balance-' + oRow.id + '" class="ns1blankspaceSub">$' +
-									 					oRow.statementbalance + '</span>');
-										
 									aHTML.push('</td></tr>');
 									aHTML.push('</table>');
 									aHTML.push('</div>');
@@ -434,7 +449,7 @@ ns1blankspace.financial.bankAccount =
 
 										if (parseInt((oResponse.outofbalance).parseCurrency()) !== 0)
 										{	
-											aHTML.push('<div style="color:red; margin-right:3px; margin-bottom:5px; font-size:0.875em;">' +
+											aHTML.push('<div style="margin-right:3px; margin-bottom:5px; font-size:0.875em;" class="ns1blankspaceSub">' +
 																'$' + (oResponse.outofbalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
 										}	
 	
@@ -599,7 +614,8 @@ ns1blankspace.financial.bankAccount =
 													var oActions = {add: true};
 													var iReconciliation;
 													var iType = 1;
-													var iSource = 1;
+													var iSource = 2;
+													var iStatus = 2;
 													
 													if (oParam != undefined)
 													{
@@ -610,6 +626,7 @@ ns1blankspace.financial.bankAccount =
 														if (oParam.reconciliation != undefined) {iReconciliation = oParam.reconciliation}
 														if (oParam.type != undefined) {iType = oParam.type}
 														if (oParam.source != undefined) {iSource = oParam.source}
+														if (oParam.status != undefined) {iStatus = oParam.status}
 													}		
 													
 													$.extend(true, oParam, {source: iSource, type: iType});
@@ -624,7 +641,7 @@ ns1blankspace.financial.bankAccount =
 															
 															aHTML.push('<table class="ns1blankspaceContainer" style="font-size:0.875em;">' +
 																			'<tr class="ns1blankspaceContainer">' +
-																			'<td id="ns1blankspaceBankAccountReconcileColumnItem" class="ns1blankspaceColumn2" style="width:200px; font-size:0.875em; border-left-style:solid; border-width:1px; border-color:#B8B8B8; padding-left:7px;"></td>' +
+																			'<td id="ns1blankspaceBankAccountReconcileColumnItem" class="ns1blankspaceColumn2" style="width:150px; font-size:0.875em; border-left-style:solid; border-width:1px; border-color:#B8B8B8; padding-left:7px;"></td>' +
 																			'<td id="ns1blankspaceBankAccountReconcileColumnItemEdit" class="ns1blankspaceColumn2" style="font-size:0.875em; border-left-style:solid; border-width:1px; border-color:#B8B8B8; padding-left:7px;"></td>' +
 																			'</tr></table>');			
 														
@@ -632,14 +649,14 @@ ns1blankspace.financial.bankAccount =
 															
 															var aHTML = [];
 																
-															aHTML.push('<div id="ns1blankspaceBankAccountColumnItemSource" style="width: 200px;;margin-bottom:3px;">');
-															aHTML.push('<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-1" name="radioSource" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemSource-1" style="width: 96px;">' +
-																			'Reconciled</label>');
-															aHTML.push('<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-2" name="radioSource" /><label for="ns1blankspaceBankAccountColumnItemSource-2" style="width: 96px;">' +
+															aHTML.push('<div id="ns1blankspaceBankAccountColumnItemSource" style="width: 150px;;margin-bottom:3px;">');
+															//aHTML.push('<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-1" name="radioSource" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemSource-1" style="width: 96px;">' +
+															//				'Reconciled</label>');
+															aHTML.push('<input style="width: 70px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-2" name="radioSource"/><label for="ns1blankspaceBankAccountColumnItemSource-2" style="width: 70px;">' +
 																			'Bank</label>');
 															aHTML.push('</div>');
 														
-															aHTML.push('<div id="ns1blankspaceBankAccountReconcileItems" style="width: 200px;margin-bottom:3px;"></div>');
+															aHTML.push('<div id="ns1blankspaceBankAccountReconcileItems" style="width: 150px;margin-bottom:3px;"></div>');
 															
 															$('#ns1blankspaceBankAccountReconcileColumnItem').html(aHTML.join(''));
 															
@@ -704,7 +721,7 @@ ns1blankspace.financial.bankAccount =
 															}
 															else
 															{
-																aHTML.push('<td class="ns1blankspaceNothing">There are no bank transactions.  You can either import transactions from a file or reconcile of a statement.</td>');
+																aHTML.push('<td class="ns1blankspaceNothing">There are no imported bank transactions.<br /><br />You can either import transactions from a file or reconcile of a statement.</td>');
 															}
 																			
 															aHTML.push('</tr></table>');
@@ -784,22 +801,25 @@ ns1blankspace.financial.bankAccount =
 																			
 																aHTML.push('</tr></table></td>');	
 																	
-																if ((this.paiddate) || (this.receiveddate))
-																{					
-																	aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-																	aHTML.push('<span id="ns1blankspaceReconcileItems_options_remove-' + this.id + '-' + iType + '" class="ns1blankspaceReconcileItemsRemove"></span>');
-																	aHTML.push('</td>');
-																};	
-																
-																if (this.posteddate)
-																{					
-																	aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-																	aHTML.push('<span id="ns1blankspaceReconcileItems_options_search-' + this.id + '"' +
-																					' data-searchDate="' + this.posteddate + '"' +
-																					' data-searchAmount="' + Math.abs((this.amount).parseCurrency()).toFixed(2) + '"' +
-																					' class="ns1blankspaceReconcileItemsMatch"></span>');
-																	aHTML.push('</td>');
-																};	
+																if (iStatus == 1)
+																{	
+																	if ((this.paiddate) || (this.receiveddate))
+																	{					
+																		aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+																		aHTML.push('<span id="ns1blankspaceReconcileItems_options_remove-' + this.id + '-' + iType + '" class="ns1blankspaceReconcileItemsRemove"></span>');
+																		aHTML.push('</td>');
+																	};	
+																	
+																	if (this.posteddate)
+																	{					
+																		aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+																		aHTML.push('<span id="ns1blankspaceReconcileItems_options_search-' + this.id + '"' +
+																						' data-searchDate="' + this.posteddate + '"' +
+																						' data-searchAmount="' + Math.abs((this.amount).parseCurrency()).toFixed(2) + '"' +
+																						' class="ns1blankspaceReconcileItemsMatch"></span>');
+																		aHTML.push('</td>');
+																	};	
+																}	
 																		
 																aHTML.push('</tr>');
 															});
@@ -884,6 +904,7 @@ ns1blankspace.financial.bankAccount =
 													var dSearchDate;
 													var cSearchAmount;
 													var iSearchSourceID;
+													var iStatus = 2;
 
 													if (oParam != undefined)
 													{
@@ -896,7 +917,8 @@ ns1blankspace.financial.bankAccount =
 														if (oParam.editAction != undefined) {iEditAction = oParam.editAction}
 														if (oParam.searchDate != undefined) {dSearchDate = oParam.searchDate}
 														if (oParam.searchAmount != undefined) {cSearchAmount = oParam.searchAmount}
-														if (oParam.searchSourceID != undefined) {iSearchSourceID = oParam.searchSourceID}	
+														if (oParam.searchSourceID != undefined) {iSearchSourceID = oParam.searchSourceID}
+														if (oParam.status != undefined) {iStatus = oParam.status}
 													}		
 													
 													$.extend(true, oParam, {editAction: iEditAction, type: iType});
@@ -907,7 +929,7 @@ ns1blankspace.financial.bankAccount =
 														
 														aHTML.push('<table class="ns1blankspaceContainer">' +
 																		'<tr class="ns1blankspaceContainer">' +
-																		'<td id="ns1blankspaceReconcileItemEdit1" style="width:250px;"></td>' +
+																		'<td id="ns1blankspaceReconcileItemEdit1"></td>' +
 																		'<td id="ns1blankspaceReconcileItemEdit2" class="ns1blankspaceColumn2" style="width:50px; border-left-style:solid; border-width:1px; border-color:#B8B8B8; padding-left:7px;"></td>' +
 																		'</tr>' +
 																		'</table>');			
@@ -917,10 +939,19 @@ ns1blankspace.financial.bankAccount =
 														var aHTML = [];
 														
 														aHTML.push('<div id="ns1blankspaceReconcileItemEditOption" style="width: 196;margin-bottom:3px;text-align:left;">');
+
 														aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemEdit-1" name="radioEdit" checked="checked" /><label for="ns1blankspaceReconcileItemEdit-1" style="width: 112px;">' +
 																		'Unreconciled</label>');
-														aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemEdit-2" name="radioEdit" /><label for="ns1blankspaceReconcileItemEdit-2" style="width: 50px;">' +
+
+														aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemEdit-2" name="radioEdit" /><label for="ns1blankspaceReconcileItemEdit-2" style="width: 107px;">' +
+																		'Reconciled</label>');
+
+														if (iStatus == 10)
+														{	
+															aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemEdit-4" name="radioEdit" /><label for="ns1blankspaceReconcileItemEdit-4" style="width: 50px;">' +
 																		'Add</label>');
+														}
+															
 														aHTML.push('</div>');
 													
 														aHTML.push('<div id="ns1blankspaceReconcileItemsEdit"></div>');
@@ -969,7 +1000,11 @@ ns1blankspace.financial.bankAccount =
 																			'</td></tr>');
 
 															aHTML.push('<tr><td class="ns1blankspaceAction">' +
-																			'<span style="width:100%" id="ns1blankspaceItemsEditClearSearch">Search</span>' +
+																			'<span style="width:100%" id="ns1blankspaceItemsEditClearSearch">Clear</span>' +
+																			'</td></tr>');
+
+															aHTML.push('<tr><td class="ns1blankspaceAction" style="padding-top: 15px;">' +
+																			'<span style="width:100%" id="ns1blankspaceItemsEditAdd">Add</span>' +
 																			'</td></tr>');
 															
 															aHTML.push('</table>');					
@@ -1003,6 +1038,18 @@ ns1blankspace.financial.bankAccount =
 															{
 																oParam.searchDate = undefined;
 																oParam.searchAmount = undefined;
+																ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
+															})
+
+															$('#ns1blankspaceItemsEditAdd').button( {
+																label: 'Add',
+																icons: {
+																	primary: "ui-icon-plus"
+																}
+															})
+															.click(function()
+															{
+																$.extend(true, oParam, {editAction: 4});
 																ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 															})
 															
@@ -1106,12 +1153,15 @@ ns1blankspace.financial.bankAccount =
 																							sDescription + '</td>');
 																					
 																	aHTML.push('</tr></table></td>');	
-																						
-																	aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-																	aHTML.push('<span id="ns1blankspaceReconcileItems_options_add-' + this.id + '-' + iType + '" class="ns1blankspaceReconcileItemsAdd"></span>');
-																	aHTML.push('</td>');
-		
-																	aHTML.push('</tr>');
+																		
+
+																	if (iStatus == 1)
+																	{					
+																		aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+																		aHTML.push('<span id="ns1blankspaceReconcileItems_options_add-' + this.id + '-' + iType + '" class="ns1blankspaceReconcileItemsAdd"></span>');
+																		aHTML.push('</td>');
+																		aHTML.push('</tr>');
+																	}	
 																});
 																
 																aHTML.push('</table>');
@@ -1173,7 +1223,7 @@ ns1blankspace.financial.bankAccount =
 														});
 													}
 
-													else if (iEditAction == 2) //add item
+													else if (iEditAction == 4) //add item
 													{
 														var aHTML = [];
 														
