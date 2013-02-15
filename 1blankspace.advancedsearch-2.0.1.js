@@ -4,7 +4,6 @@
  * http://1blankspace.com/license
  * 01 FEB 2010
  */
-
 if (ns1blankspace === undefined) {ns1blankspace = {}}
 if (ns1blankspace.data === undefined) {ns1blankspace.data = {}}
 
