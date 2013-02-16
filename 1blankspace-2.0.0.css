@@ -717,7 +717,6 @@ textarea.ns1blankspaceTextMultiSmall
 #ns1blankspaceMultiUseContainer
 {
 	position: absolute;
-	width: 100px; 
 	z-index: 999;
 	background-color: transparent;
 }

@@ -1957,6 +1957,7 @@ ns1blankspace.financial.save =
 					var iContactBusiness;
 					var iContactPerson;
 					var iObject;
+					var iBankAccount;
 					var iID;
 					var sMethod;
 					var sSuffix = '';
@@ -1971,6 +1972,7 @@ ns1blankspace.financial.save =
 						if (oParam.object != undefined) {iObject = oParam.object}
 						if (oParam.method != undefined) {sMethod = oParam.method}
 						if (oParam.id != undefined) {iID = oParam.id}
+						if (oParam.bankAccount != undefined) {iBankAccount = oParam.bankAccount}
 					}
 
 					ns1blankspace.status.working();
@@ -2008,6 +2010,7 @@ ns1blankspace.financial.save =
 					sData += '&description=' + ns1blankspace.util.fs(sDescription);
 					sData += '&contactbusiness' + sSuffix + '=' + ns1blankspace.util.fs(iContactBusiness);
 					sData += '&contactperson' + sSuffix + '=' + ns1blankspace.util.fs(iContactPerson);
+					sData += '&bankaccount' + sSuffix + '=' + ns1blankspace.util.fs(iBankAccount);
 				
 					$.ajax(
 					{
@@ -2030,7 +2033,7 @@ ns1blankspace.financial.save =
 
 					if (oResponse.status == 'OK')
 					{
-						if (!iID) {oParam.id = oResponse.id}
+						if (!iID) {oParam.objectContext = oResponse.id}
 						
 						ns1blankspace.financial.save.amount(oParam);
 					}

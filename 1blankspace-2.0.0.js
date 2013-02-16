@@ -2387,16 +2387,17 @@ ns1blankspace.help =
 
 ns1blankspace.status =
 {
-	message: 		function (sStatus)
+	message: 	function (sStatus)
 				{	
 					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
 							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
 				},
 
-	working:	function ()
+	working:	function (sStatus)
 				{	
 					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
-							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + ns1blankspace.xhtml.loadingSmall + '</div></div>');
+							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + ns1blankspace.xhtml.loadingSmall + 
+							(sStatus===undefined?'':' ' + sStatus) + '</div></div>');
 				},
 
 	error: 		function (sError)
@@ -2497,7 +2498,14 @@ ns1blankspace.container =
 						.show()
 						.offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
 
-					if (bSetWidth) {$(ns1blankspace.xhtml.container).css('width', oElement.width())}
+					if (bSetWidth)
+					{
+						$(ns1blankspace.xhtml.container).css('width', oElement.width());
+					}
+					else
+					{
+						$(ns1blankspace.xhtml.container).css('width', '');
+					}
 				},
 
 	confirm:	function (oParam)
