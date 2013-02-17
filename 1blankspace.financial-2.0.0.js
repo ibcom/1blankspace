@@ -2113,7 +2113,7 @@ ns1blankspace.financial.save =
 												ns1blankspace.financial[aMethod[1].toLowerCase()].refresh()
 											};
 
-											if (fPostSave) {fPostSave()}
+											if (fPostSave) {fPostSave(oParam, oResponse)}
 
 											ns1blankspace.status.message('Saved');
 										}
