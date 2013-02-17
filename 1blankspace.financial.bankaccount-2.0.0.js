@@ -636,7 +636,6 @@ ns1blankspace.financial.bankAccount =
 													var oActions = {add: true};
 													var iReconciliation;
 													var iType = 1;
-													var iSource = 2;
 													var iStatus = 2;
 													
 													if (oParam != undefined)
@@ -647,7 +646,6 @@ ns1blankspace.financial.bankAccount =
 														if (oParam.actions != undefined) {oActions = oParam.actions}
 														if (oParam.reconciliation != undefined) {iReconciliation = oParam.reconciliation}
 														if (oParam.type != undefined) {iType = oParam.type}
-														if (oParam.source != undefined) {iSource = oParam.source}
 														if (oParam.status != undefined) {iStatus = oParam.status}
 													}		
 													
@@ -655,81 +653,38 @@ ns1blankspace.financial.bankAccount =
 														
 													if (oResponse == undefined)
 													{	
-														//if ($('#ns1blankspaceBankAccountColumnReconcile2').html() == '')
-														//{
-															//ns1blankspace.financial.bankAccount.reconcile.refresh(oParam);
-
-															var aHTML = [];
-															
-															aHTML.push('<table class="ns1blankspaceContainer" style="font-size:0.875em;">' +
-																			'<tr class="ns1blankspaceContainer">' +
-																			'<td id="ns1blankspaceBankAccountReconcileColumnItem" class="ns1blankspaceColumn2" style="width:150px; font-size:0.875em; border-left-style:solid; border-width:1px; border-color:#B8B8B8; padding-left:7px;"></td>' +
-																			'<td id="ns1blankspaceBankAccountReconcileColumnItemEdit" class="ns1blankspaceColumn2" style="font-size:0.875em; border-left-style:solid; border-width:1px; border-color:#B8B8B8; padding-left:7px;"></td>' +
-																			'</tr></table>');			
+														var aHTML = [];
 														
-															$('#ns1blankspaceBankAccountColumnReconcile2').html(aHTML.join(''));
-															
-															var aHTML = [];
-																
-															aHTML.push('<div class="ns1blankspaceHeaderCaption" id="ns1blankspaceBankAccountColumnItemSource" style="width: 150px;margin-right:10px;margin-bottom:3px;">');
-															//aHTML.push('<input style="width: 100px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-1" name="radioSource" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemSource-1" style="width: 96px;">' +
-															//				'Reconciled</label>');
-															//aHTML.push('<input style="width: 70px;" type="radio" id="ns1blankspaceBankAccountColumnItemSource-2" name="radioSource"/><label for="ns1blankspaceBankAccountColumnItemSource-2" style="width: 70px;">' +
-															//				'Bank</label>');
-															aHTML.push('<span style="font-size:1.25em;">BANK</span>');
-
-															aHTML.push('</div>');
-														
-															aHTML.push('<div id="ns1blankspaceBankAccountReconcileItems" style="width: 150px;margin-bottom:3px;"></div>');
-															
-															$('#ns1blankspaceBankAccountReconcileColumnItem').html(aHTML.join(''));
-															
-															//ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
-														//}
+														aHTML.push('<table class="ns1blankspaceContainer" style="font-size:0.875em;">' +
+																		'<tr class="ns1blankspaceContainer">' +
+																		'<td id="ns1blankspaceBankAccountReconcileColumnItem" class="ns1blankspaceColumn2" style="width:150px; font-size:0.875em; border-left-style:solid; border-width:1px; border-color:#B8B8B8; padding-left:7px;"></td>' +
+																		'<td id="ns1blankspaceBankAccountReconcileColumnItemEdit" class="ns1blankspaceColumn2" style="font-size:0.875em; border-left-style:solid; border-width:1px; border-color:#B8B8B8; padding-left:7px;"></td>' +
+																		'</tr></table>');			
 													
-														//$('#ns1blankspaceBankAccountColumnItemSource').buttonset().css('font-size', '0.875em');
+														$('#ns1blankspaceBankAccountColumnReconcile2').html(aHTML.join(''));
 														
-														$('#ns1blankspaceBankAccountColumnItemSource :radio').click(function()
-														{
-															var aID = (event.target.id).split('-');
-															$.extend(true, oParam, {source: parseInt(aID[1])});
-															ns1blankspace.financial.bankAccount.reconcile.items.show(oParam);
-														});
-	
+														var aHTML = [];
+															
+														aHTML.push('<div class="ns1blankspaceHeaderCaption" style="width: 150px;margin-right:10px;margin-bottom:3px;">');
+														aHTML.push('<span style="font-size:1.25em;">BANK</span>');
+														aHTML.push('</div>');
+													
+														aHTML.push('<div id="ns1blankspaceBankAccountReconcileItems" style="width: 150px;margin-bottom:3px;"></div>');
+														
+														$('#ns1blankspaceBankAccountReconcileColumnItem').html(aHTML.join(''));
+														
 														$('#ns1blankspaceBankAccountReconcileItems').html(ns1blankspace.xhtml.loadingSmall);
 														
 														var oSearch = new AdvancedSearch();
 														
-														if (iSource == 1)
-														{
-															if (iType == 1)
-															{
-																oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
-																oSearch.addField('reference,description,amount,paiddate,reconciliation,contactbusinesspaidtotext,contactpersonpaidtotext');
-																oSearch.sort('paiddate', 'asc');
-															}	
-															else
-															{
-																oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
-																oSearch.addField('reference,description,amount,receiveddate,reconciliation,contactbusinessreceivedfromtext,contactpersonreceivedfromtext');
-																oSearch.sort('receiveddate', 'asc');
-															}
-															
-															oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
-															oSearch.rows = ns1blankspace.option.defaultRows;
-															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.show(oParam, data)});
-														}		
-														else
-														{
-															oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
-															oSearch.addField('description,amount,posteddate');
-															oSearch.sort('posteddate', 'desc');
-															oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-															oSearch.addFilter('status', 'EQUAL_TO', 1);
-															oSearch.addFilter('category', 'EQUAL_TO', (iType==1?2:1));
-															oSearch.rows = ns1blankspace.option.defaultRows;
-															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.show(oParam, data)});
-														}		
+														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
+														oSearch.addField('description,amount,posteddate');
+														oSearch.sort('posteddate', 'desc');
+														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+														oSearch.addFilter('status', 'EQUAL_TO', 1);
+														oSearch.addFilter('category', 'EQUAL_TO', (iType==1?2:1));
+														oSearch.rows = ns1blankspace.option.defaultRows;
+														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.show(oParam, data)});		
 													}
 													else
 													{				
@@ -739,16 +694,9 @@ ns1blankspace.financial.bankAccount =
 														{
 															aHTML.push('<table id="ns1blankspaceReconcileItems"><tr class="ns1blankspace">');
 
-															if (iSource == 1)
-															{
-																aHTML.push('<td class="ns1blankspaceNothing">No items have been reconciled.</td>')
-															}
-															else
-															{
-																aHTML.push('<td class="ns1blankspaceNothing">There are no imported bank ' + (iType==1?'debit':'credit') +
+															aHTML.push('<td class="ns1blankspaceNothing">There are no imported bank ' + (iType==1?'debit':'credit') +
 																	' transactions.<br /><br />If you haven\'t aready, you can either import transactions from a file or reconcile of a statement.' +
 																	'<br /><br /></td>');
-															}
 																			
 															aHTML.push('</tr></table>');
 
@@ -776,77 +724,22 @@ ns1blankspace.financial.bankAccount =
 																	'<td class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																	'<table cellspacing=0 cellpadding=0><tr>');
 																				
-																	if (this.paiddate)
-																	{				
-																		aHTML.push('<td id="ns1blankspaceReconcileItems_date-' + this.id + '" class="recoitempayment">' +
-																							this.paiddate + '</td>');
-																	}
-																	else if (this.receiveddate)
-																	{
-																		aHTML.push('<td id="tdRecoItems_date-' + this.id + '" class="recoitemreceipt">' +
-																							this.receiveddate + '</td>');
-																	}							
-																	else if (this.posteddate)
-																	{
-																		aHTML.push('<td id="ns1blankspaceReconcileItems_date-' + this.id + '" class="recoitemstatement">' +
+																aHTML.push('<td id="ns1blankspaceReconcileItems_date-' + this.id + '" class="recoitemstatement">' +
 																							this.posteddate + '</td>');
-																	}
+																	
 																
-																	aHTML.push('<td id="ns1blankspaceReconcileItems_amount-' + this.id + '" style="text-align:right;"' +
+																aHTML.push('<td id="ns1blankspaceReconcileItems_amount-' + this.id + '" style="text-align:right;"' +
 																						' class="recoitem">' +
 																						Math.abs((this.amount).parseCurrency()).formatMoney(2, ".", ",") + '</td>');
 																	
-																	if (iSource == 1)
-																	{
-																		var sDescription = this.description;
-
-																		if (iType === 1)
-																		{
-																			if (this.contactbusinesspaidtotext !== '')
-																			{
-																				sDescription += '<br />' + this.contactbusinesspaidtotext
-																			}
-
-																			if (this.contactpersonpaidtotext !== '')
-																			{
-																				sDescription += '<br />' + this.contactpersonpaidtotext
-																			}
-																		}
-																		else
-																		{
-																			if (this.contactbusinessreceivedfromtext !== '')
-																			{
-																				sDescription += '<br />' + this.contactbusinessreceivedfromtext
-																			}
-
-																			if (this.contactpersonreceivedfromtext !== '')
-																			{
-																				sDescription += '<br />' + this.contactpersonreceivedfromtext
-																			}
-																		}
-
-																		aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceRecocileItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
-																						' class="recoitem" title="' + this.reference + '">' +
-																						sDescription + '</td>');
-																	}
-																	else
-																	{
-																		aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceRecocileItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
+																aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceRecocileItems_description-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
 																						' class="recoitem">' +
 																						this.description + '</td>');
-																	}
 																			
 																aHTML.push('</tr></table></td>');	
 																	
 																if (iStatus == 1)
-																{	
-																	if ((this.paiddate) || (this.receiveddate))
-																	{					
-																		aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-																		aHTML.push('<span id="ns1blankspaceReconcileItems_options_remove-' + this.id + '-' + iType + '" class="ns1blankspaceReconcileItemsRemove"></span>');
-																		aHTML.push('</td>');
-																	};	
-																	
+																{
 																	if (this.posteddate)
 																	{					
 																		aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
@@ -1409,7 +1302,7 @@ ns1blankspace.financial.bankAccount =
 														}	
 													}
 
-													else if (iEditAction == 3)  //MARK PAYMENT / EXPENSE AS RECONCILED
+													else if (iEditAction == 3)  //MARK PAYMENT / RECEIPT AS RECONCILED
 													{
 														ns1blankspace.status.working();
 

@@ -2010,7 +2010,7 @@ ns1blankspace.financial.save =
 					sData += '&description=' + ns1blankspace.util.fs(sDescription);
 					sData += '&contactbusiness' + sSuffix + '=' + ns1blankspace.util.fs(iContactBusiness);
 					sData += '&contactperson' + sSuffix + '=' + ns1blankspace.util.fs(iContactPerson);
-					sData += '&bankaccount' + sSuffix + '=' + ns1blankspace.util.fs(iBankAccount);
+					sData += '&bankaccount=' + ns1blankspace.util.fs(iBankAccount);
 				
 					$.ajax(
 					{
