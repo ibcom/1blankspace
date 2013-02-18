@@ -816,7 +816,7 @@ ns1blankspace.contactPerson =
 					}	
 				},
 
-	business: function ()
+	business: 	function ()
 				{
 					var aHTML = [];
 					

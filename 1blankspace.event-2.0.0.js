@@ -94,12 +94,10 @@ ns1blankspace.event =
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'EVENT_SEARCH';
-						oSearch.addField('description');
+						oSearch.addField('reference,startdate');
 						oSearch.rf = 'json';
 						oSearch.rows = 10;
-						oSearch.addSummaryField('count eventcount')
 						oSearch.sort('modifieddate', 'desc');
-						
 						oSearch.getResults(ns1blankspace.event.home);	
 					}
 					else
@@ -116,20 +114,21 @@ ns1blankspace.event =
 						}
 						else
 						{
-						
 							aHTML.push('<table>');
 							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceCaption">MOST LIKELY</td>');
+							aHTML.push('<td colspan=2 class="ns1blankspaceCaption">MOST LIKELY</td>');
 							aHTML.push('</tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{
 								aHTML.push('<tr>');
 								
-								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + 
-														'" class="ns1blankspaceMostLikely">' +
-														this.description +
-														'</td>');
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
+												'" class="ns1blankspaceMostLikely" style="width:100px;" >' +
+												(this.startdate==''?'...':Date.parse(this.startdate).toString("dd MMM yyyy")) + '</td>');
+												
+								aHTML.push('<td id="ns1blankspaceMostLikely_orderdate-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+												 this.reference + '</td>');
 								
 								aHTML.push('</tr>');
 							});
@@ -148,7 +147,7 @@ ns1blankspace.event =
 
 	search: 	{
 				
-					send: 		function (sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementID, oParam)
 								{
 									var aSearch = sXHTMLElementID.split('-');
 									var sSearchContext = aSearch[1];
@@ -181,7 +180,6 @@ ns1blankspace.event =
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										
 										oSearch.getResults(function(data) {ns1blankspace.event.show(oParam, data)});	
-									
 									}
 									else
 									{
@@ -304,16 +302,16 @@ ns1blankspace.event =
 						aHTML.push('</table>');		
 									
 		
-						aHTML.push('<table class="ns1blankspaceViewControl">');
+						aHTML.push('<table class="ns1blankspaceControl">');
 					
-						aHTML.push('<tr><td id="ns1blankspaceViewControlAttendees" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlAttendees" class="ns1blankspaceControl">' +
 										'Attendees</td>' +
 										'</tr>');			
 								
 						aHTML.push('</table>');	
 					}
 							
-					$('#ns1blankspaceViewportControl').html(aHTML.join(''));
+					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
 					var aHTML = [];
 					
@@ -342,10 +340,10 @@ ns1blankspace.event =
 						ns1blankspace.event.description();
 					});
 
-					$('#ns1blankspaceViewControlAttendees').click(function(event)
+					$('#ns1blankspaceControlAttendees').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttendees'});
-						ns1blankspace.event.attendees();
+						ns1blankspace.event.attendees.show();
 					});
 				},
 
@@ -520,20 +518,23 @@ ns1blankspace.event =
 					}	
 				},
 
-	description: function ()
+	description:
+				function ()
 				{
-					if ($('#ns1blankspaceMainDescripton').attr('data-loading') == '1')
+					if ($('#ns1blankspaceMainDescription').attr('data-loading') == '1')
 					{
-						$('#ns1blankspaceMainDescripton').attr('data-loading', '');
+						$('#ns1blankspaceMainDescription').attr('data-loading', '');
 						
+						var aHTML = [];
+
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceDescriptonColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspaceDescriptonColumn2" class="ns1blankspaceColumn2"></td>' +
+										'<td id="ns1blankspaceDescriptionColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceDescriptionColumn2" ></td>' +
 										'</tr>' + 
 										'</table>');					
 						
-						$('#ns1blankspaceMainDescripton').html(aHTML.join(''));
+						$('#ns1blankspaceMainDescription').html(aHTML.join(''));
 						
 						var aHTML = [];
 					
@@ -563,6 +564,8 @@ ns1blankspace.event =
 									{
 										$('#ns1blankspaceMainAttendees').attr('data-loading', '');
 										
+										var aHTML = [];
+
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceAttendeesColumn1" class="ns1blankspaceColumn2" style="width: 70px;"></td>' +
@@ -629,7 +632,7 @@ ns1blankspace.event =
 												
 										aHTML.push('</table>');
 
-										$('#s1blankspaceAttendeesColumn1').html(aHTML.join(''));	
+										$('#ns1blankspaceAttendeesColumn1').html(aHTML.join(''));	
 										
 										$('span.ns1blankspaceAtoZ').click(function(event)
 										{
@@ -687,7 +690,6 @@ ns1blankspace.event =
 												dataType: 'json',
 												success: function(data) {ns1blankspace.event.attendees.search(oParam, data)}
 											});
-										
 										}
 										else
 										{
@@ -695,7 +697,7 @@ ns1blankspace.event =
 											
 											if (oResponse.data.rows.length != 0)
 											{	
-												aHTML.push('<table class="ns1blankspace">');
+												aHTML.push('<table class="ns1blankspaceColumn2">');
 											
 												aHTML.push('<tr class="ns1blankspaceCaption">');
 												aHTML.push('<td class="ns1blankspaceHeaderCaption">First Name</td>');
@@ -728,7 +730,7 @@ ns1blankspace.event =
 											}
 											else
 											{
-												aHTML.push('<table style="margin-top:15px; margin-bottom:15px;">');
+												aHTML.push('<table class="ns1blankspaceColumn2">');
 												aHTML.push('<tr><td class="ns1blankspaceNothing">None.</td></tr>');
 												aHTML.push('</table>');
 												
