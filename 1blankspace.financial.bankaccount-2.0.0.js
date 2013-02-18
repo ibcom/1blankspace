@@ -1103,7 +1103,6 @@ ns1blankspace.financial.bankAccount =
 
 																oSearch.addFilter('reconciliation', 'IS_NULL');
 																oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext)
-																//oSearch.addFilter('reconciliation', 'EQUAL_TO', -1)
 																oSearch.rows = ns1blankspace.option.defaultRows;
 																oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam, data)});
 															}
@@ -1418,7 +1417,7 @@ ns1blankspace.financial.bankAccount =
 																			'<table cellspacing=0 cellpadding=0><tr>');
 
 																		aHTML.push('<td id="ns1blankspaceReconcileItems_date-' + this.id + '-3" class="recoitemstatement">' +
-																								this.journaldate + '</td>');
+																								this['generaljournalitem.generaljournal.journaldate'] + '</td>');
 																		
 																		var cAmount = this.debitamount;
 
@@ -1428,10 +1427,10 @@ ns1blankspace.financial.bankAccount =
 																							' class="recoitem">' +
 																							cAmount + '</td>');
 																		
-																		var sDescription = this.description;
+																		var sDescription = this['generaljournalitem.generaljournal.description'];
 
 																		aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceReconcileItems_reference-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
-																							' class="recoitem" title="' + this.reference + '">' +
+																							' class="recoitem" title="' + this['generaljournalitem.generaljournal.reference'] + '">' +
 																							sDescription + '</td>');
 																						
 																		aHTML.push('</tr></table></td>');	
@@ -1746,7 +1745,7 @@ ns1blankspace.financial.bankAccount =
 																{
 																	if (data.status == 'OK')
 																	{	
-																		oParam.xhtmlElementID = '-' + (iType==1?data.Payment:data.receipt);
+																		oParam.xhtmlElementID = '-' + (iType==1?data.payment:data.receipt);
 																		oParam.editAction = 3;
 																		ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 																	}
@@ -1772,6 +1771,10 @@ ns1blankspace.financial.bankAccount =
 													{
 														if (oParam.reconciliation != undefined) {iReconciliation = oParam.reconciliation}
 														if (oParam.type != undefined) {iType = oParam.type}
+														if (oParam.source != undefined) {iSource = oParam.source}
+														if (oParam.searchDate != undefined) {dSearchDate = oParam.searchDate}
+														if (oParam.searchAmount != undefined) {cSearchAmount = oParam.searchAmount}
+														if (oParam.searchReference != undefined) {sSearchReference = oParam.searchReference}
 													}		
 
 													if (oResponse === undefined)
@@ -1793,16 +1796,16 @@ ns1blankspace.financial.bankAccount =
 
 														if (iType == 1)  //DEBITS (OUT)
 														{	
-															aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemLocked-1" name="radioEdit" checked="checked" /><label for="ns1blankspaceReconcileItemLocked-1" style="width: 80px;">' +
+															aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemLocked-1" value="1" name="radioLockedSource"/><label for="ns1blankspaceReconcileItemLocked-1" style="width: 80px;">' +
 																			'Payments</label>');
 														}
 														else if (iType == 2) //CREDITS (IN)
 														{
-															aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemLocked-1" name="radioEdit" checked="checked" /><label for="ns1blankspaceReconcileItemLocked-1" style="width: 80px;">' +
+															aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemLocked-1" value="1" name="radioLockedSource" /><label for="ns1blankspaceReconcileItemLocked-1" style="width: 80px;">' +
 																			'Receipts</label>');
 														}
 
-														aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemLocked-3" name="radioEdit" /><label for="ns1blankspaceReconcileItemLocked-3" style="width: 80px;">' +
+														aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemLocked-3" value="3" name="radioLockedSource" /><label for="ns1blankspaceReconcileItemLocked-3" style="width: 80px;">' +
 																		'Journal</label>');
 
 														aHTML.push('</div>');
@@ -1810,6 +1813,8 @@ ns1blankspace.financial.bankAccount =
 														aHTML.push('<div id="ns1blankspaceReconcileItemsLocked"></div>');
 														
 														$('#ns1blankspaceReconcileItemLocked1').html(aHTML.join(''));
+
+														$('[name="radioLockedSource"][value="' + iSource + '"]').attr('checked', 'checked');
 
 														$('#ns1blankspaceReconcileItemLockedOption').buttonset().css('font-size', '0.75em');
 														
@@ -1893,6 +1898,8 @@ ns1blankspace.financial.bankAccount =
 															ns1blankspace.financial.bankAccount.reconcile.items.locked(oParam);
 														})
 													
+														$('#ns1blankspaceReconcileItemsLocked').html(ns1blankspace.xhtml.loadingSmall);
+
 														var oSearch = new AdvancedSearch();
 
 														if (iSource == 1)
@@ -1911,6 +1918,8 @@ ns1blankspace.financial.bankAccount =
 																if (dSearchDate) {oSearch.addFilter('receiveddate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
 																oSearch.sort('receiveddate', 'asc');
 															}
+
+															if (cSearchAmount) {oSearch.addFilter('amount', 'APPROX_EQUAL_TO', cSearchAmount)}
 														}
 														else
 														{
@@ -1918,17 +1927,18 @@ ns1blankspace.financial.bankAccount =
 															oSearch.addField('creditamount,debitamount,generaljournalitem.generaljournal.reference,generaljournalitem.generaljournal.description,generaljournalitem.generaljournal.journaldate');
 															
 															if (dSearchDate) {oSearch.addFilter('journaldate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
-															if (cSearchAmount) {oSearch.addFilter('creditamount', 'APPROX_EQUAL_TO', cSearchAmount)}
-															if (sSearchReference) {oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference)}
+															
+															if (cSearchAmount) {oSearch.addFilter((iType==1?'creditamount':'debitamount'), 'APPROX_EQUAL_TO', cSearchAmount)}
+															
 															oSearch.addFilter('taxcategory', 'EQUAL_TO', (iType==1?2:1));
 
 															oSearch.sort('generaljournalitem.generaljournal.journaldate', 'asc');
 														}	
 
+														if (sSearchReference) {oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference)}
 														oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
 
 														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.locked(oParam, data)});
-
 													}
 													else
 													{
@@ -1953,26 +1963,43 @@ ns1blankspace.financial.bankAccount =
 																	'<td class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																	'<table cellspacing=0 cellpadding=0><tr>');
 
+																var dDate;
+																var cAmount = this.amount;
+																var sDescription = this.description;
+
+																if (iSource == 1 && iType == 1)  //PAYMENT
+																{	
+																	dDate = this.paiddate;
+																}
+																	
+																if (iSource == 1 && iType == 2)  //RECEIPT
+																{	
+																	dDate = this.receiveddate
+																}
+
+																if (iSource == 3)  //JOURNAL
+																{	
+																	dDate = this['generaljournalitem.generaljournal.journaldate'];
+																	cAmount = this.debitamount;
+
+																	if (iType == 1) {cAmount = this.creditamount};
+																	var sDescription = this['generaljournalitem.generaljournal.description'];
+																}
+
 																aHTML.push('<td id="ns1blankspaceReconcileItems_date-' + this.id + '-3" class="recoitemstatement">' +
-																						this.journaldate + '</td>');
+																						dDate + '</td>');
 																
-																var cAmount = this.debitamount;
-
-																if (iType == 1) {cAmount = this.creditamount};
-
 																aHTML.push('<td id="ns1blankspaceReconcileItems_amount-' + this.id + '" style="text-align:right;"' +
 																					' class="recoitem">' +
 																					cAmount + '</td>');
 																
-																var sDescription = this.description;
-
 																aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceReconcileItems_reference-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
 																					' class="recoitem" title="' + this.reference + '">' +
 																					sDescription + '</td>');
 																				
 																aHTML.push('</tr></table></td>');	
-																	
-																if (iStatus == 1)
+
+																if (false)
 																{					
 																	aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 																	aHTML.push('<span id="ns1blankspaceReconcileItems_options_remove-' + this.id + '-3"' +
