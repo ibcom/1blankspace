@@ -15,6 +15,7 @@ ns1blankspace.financial.init = function (oParam)
 						}
 
 						ns1blankspace.app.reset();
+
 						ns1blankspace.object = -1;
 						ns1blankspace.objectName = 'financial';
 						ns1blankspace.viewName = 'Financials';
@@ -27,7 +28,9 @@ ns1blankspace.financial.init = function (oParam)
 						{							
 							
 							ns1blankspace.app.set(oParam);
-						}	
+						}
+
+						$('#ns1blankspaceViewControlNew').button({disabled: true});
 					}
 
 ns1blankspace.financial.initData = function (oParam, oResponse)
@@ -1262,7 +1265,7 @@ ns1blankspace.financial.unallocated =
 						
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceUnallocatedColumn1" style="width:100px;font-size:0.75em;"></td>' +
+										'<td id="ns1blankspaceUnallocatedColumn1" style="width:100px; font-size:0.75em;"></td>' +
 										'<td id="ns1blankspaceUnallocatedColumn2"></td>' +
 										'</tr>' +
 										'</table>');				
@@ -1272,8 +1275,8 @@ ns1blankspace.financial.unallocated =
 						var aHTML = [];
 
 						aHTML.push('<div id="ns1blankspaceUnallocatedColumnType" style="width:85px; margin-top:3px; text-align:right;">');
-						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-1" name="radioType" /><label for="ns1blankspaceUnallocatedColumnType-1" style="width: 85px; margin-bottom:1px;">Invoices</label>');
 						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-2" name="radioType" /><label for="ns1blankspaceUnallocatedColumnType-2" style="width: 85px; margin-bottom:1px;">Expenses</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-1" name="radioType" /><label for="ns1blankspaceUnallocatedColumnType-1" style="width: 85px; margin-bottom:1px;">Invoices</label>');
 						aHTML.push('</div>');
 
 						$('#ns1blankspaceUnallocatedColumn1').html(aHTML.join(''));
@@ -1327,38 +1330,62 @@ ns1blankspace.financial.unallocated =
 								if (iType == 1)
 								{
 									oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-									oSearch.addField('invoice.reference,invoice.amount');
+									oSearch.addField('reference,sentdate,invoice.lineitem.amount,invoice.lineitem.description,invoice.lineitem.id');
 									oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+									oSearch.addFilter('invoice.sent', 'EQUAL_TO', 'N');
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
 									{
 										var aHTML = [];
 										
 										aHTML.push('<tr class="ns1blankspaceRow">' +
-														'<td id="ns1blankspaceBalanceSheet_Title-' + oRow["invoice.id"] + '" class="ns1blankspaceRow">' +
-														oRow["invoice.reference"] + '<br />' + 
-														'<span style="color: #808080;font-size: 0.75em;">' + oRow["invoice.amount"] + '</span>' +
-														'</td></tr>');
+														'<td id="ns1blankspaceUnallocated_reference-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+														oRow["reference"] + '</td>'); 
+
+										aHTML.push('<td id="ns1blankspaceUnallocated_date-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+														oRow["sentdate"] + '</td>'); 
+
+										aHTML.push('<td id="ns1blankspaceUnallocated_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+														oRow["invoice.lineitem.description"] + '</td>'); 
+
+										aHTML.push('<td id="ns1blankspaceUnallocated_amount-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:right;">' +
+														oRow["invoice.lineitem.amount"] + '</td>'); 
+
+										aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+										aHTML.push('<span id="ns1blankspaceReconcileItems_options_search-' + oRow["invoice.lineitem.id"] + '-1"' +
+														' class="ns1blankspaceUnallocatedEdit"></span></td>');
+										aHTML.push('</tr>');
 
 										return aHTML.join('');
 									}
-
 								}
 								else
 								{
 									oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-									oSearch.addField('expense.reference,expense.amount');
+									oSearch.addField('reference,accrueddate,expense.lineitem.amount,expense.lineitem.description,expense.lineitem.id');
 									oSearch.addFilter('expense.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
 									{
 										var aHTML = [];
-										
+
 										aHTML.push('<tr class="ns1blankspaceRow">' +
-														'<td id="ns1blankspaceBalanceSheet_Title-' + oRow["expense.id"] + '" class="ns1blankspaceRow">' +
-														oRow["expense.reference"] + '<br />' + 
-														'<span style="color: #808080;font-size: 0.75em;">' + oRow["expense.amount"] + '</span>' +
-														'</td></tr>');
+														'<td id="ns1blankspaceUnallocated_reference-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+														oRow["reference"] + '</td>'); 
+
+										aHTML.push('<td id="ns1blankspaceUnallocated_date-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+														oRow["accrueddate"] + '</td>'); 
+
+										aHTML.push('<td id="ns1blankspaceUnallocated_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+														oRow["expense.lineitem.description"] + '</td>'); 
+
+										aHTML.push('<td id="ns1blankspaceUnallocated_amount-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:right;">' +
+														oRow["expense.lineitem.amount"] + '</td>'); 
+
+										aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+										aHTML.push('<span id="ns1blankspaceReconcileItems_options_search-' + oRow["expense.lineitem.id"] + '-2"' +
+														' class="ns1blankspaceUnallocatedEdit"></span></td>');
+										aHTML.push('</tr>');
 
 										return aHTML.join('');
 									}
@@ -1371,26 +1398,21 @@ ns1blankspace.financial.unallocated =
 						else
 						{
 							var aHTML = [];
-				
-							aHTML.push('<table class="ns1blankspaceContainer">' +
-											'<tr class="ns1blankspaceContainer">' +
-											'<td id="ns1blankspaceUnallocatedEditColumn1" style="width: 100px"></td>' +
-											'<td id="ns1blankspaceUnallocatedEditColumn2" class="ns1blankspaceColumn2"></td>' +
-											'</tr>' +
-											'</table>');	
-
-							$('#ns1blankspaceUnallocatedColumn2').html(aHTML.join(''));
-
-							var aHTML = [];
-							var h = -1;
-							
+						
 							if (oResponse.data.rows.length == 0)
 							{
-								aHTML.push('<span class="ns1blankspaceNothing">No unallocated accounts.</span>');
+								aHTML.push('<span class="ns1blankspaceSub">No unallocated items.</span>');
 							}
 							else
 							{
-								aHTML.push('<table class="ns1blankspace">');
+								aHTML.push('<table class="ns1blankspaceColumn2" id="ns1blankspaceUnallocatedItems">' +
+											'<tr class="ns1blankspaceHeaderCaption">' +
+											'<td class="ns1blankspaceHeaderCaption" id="ns1blankspaceUnallocatedEditReference" style="width:100px;">Reference</td>' +
+											'<td class="ns1blankspaceHeaderCaption" id="ns1blankspaceUnallocatedEditDate" style="width:100px;">Date</td>' +
+											'<td class="ns1blankspaceHeaderCaption" id="ns1blankspaceUnallocatedEditDescription">Description</td>' +
+											'<td class="ns1blankspaceHeaderCaption" id="ns1blankspaceUnallocatedEditAmount" style="width:100px; text-align:right;">Amount</td>' +
+											'<td class="ns1blankspaceHeaderCaption" id="ns1blankspaceUnallocatedEditallocated" class="2"></td>' +
+											'</tr>');
 
 								$(oResponse.data.rows).each(function() 
 								{
@@ -1401,9 +1423,9 @@ ns1blankspace.financial.unallocated =
 							}
 							
 							ns1blankspace.render.page.show(
-							   {
+							{
 								type: 'JSON',
-								xhtmlElementID: 'ns1blankspaceUnallocatedEditColumn1',
+								xhtmlElementID: 'ns1blankspaceUnallocatedColumn2',
 								xhtmlContext: 'Unallocated',
 								xhtml: aHTML.join(''),
 								showMore: (oResponse.morerows == "true"),
@@ -1411,11 +1433,135 @@ ns1blankspace.financial.unallocated =
 								rows: 100,
 								functionShowRow: ns1blankspace.financial.unallocated.row,
 								functionOpen: undefined,
-								functionNewPage: ''
-							   }); 	
+								functionNewPage: 'ns1blankspace.financial.unallocated.bind()'
+							}); 
+
+							ns1blankspace.financial.unallocated.bind();   	
 						}
 					}	
-				}
+				},
+
+	bind: 		function()
+				{
+					$('#ns1blankspaceUnallocatedItems .ns1blankspaceUnallocatedEdit').button(
+					{
+						text: false,
+						icons: {
+							primary: "ui-icon-pencil"
+						}
+					})
+					.click(function() {
+						ns1blankspace.financial.unallocated.edit({xhtmlElementID: this.id});
+					})
+					.css('width', '15px')
+					.css('height', '17px');
+				},
+
+	edit: 		function(oParam, oResponse)
+				{
+					var iType = 1;
+					var sXHTMLElementID;
+					var iItemID = '';
+
+					if (oParam != undefined)
+					{
+						if (oParam.type != undefined) {iType = oParam.type};
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID};
+					}
+
+					var aXHTMLElementID = sXHTMLElementID.split('-');
+					if (aXHTMLElementID[2]) {iType = aXHTMLElementID[2]}
+
+					if (oResponse === undefined)
+					{	
+						if ($(ns1blankspace.xhtml.container).attr('data-source') == sXHTMLElementID)
+						{
+							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+							$(ns1blankspace.xhtml.container).attr('data-source', '');
+						}
+						else
+						{	
+							$(ns1blankspace.xhtml.container).attr('data-source', sXHTMLElementID);
+							ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -255, topOffset: -17})
+							$(ns1blankspace.xhtml.container).html('<table class="ns1blankspaceSearchMedium"><tr><td>' + ns1blankspace.xhtml.loadingSmall + '</td></tr></table>');
+							$(ns1blankspace.xhtml.container).show();
+
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+							oSearch.addField('title');
+							oSearch.addFilter('type', 'EQUAL_TO', iType);
+							oSearch.addFilter('id', 'NOT_EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+							oSearch.rows = 100;
+							oSearch.sort('title', 'asc');
+							oSearch.getResults(function(data) {ns1blankspace.financial.unallocated.edit(oParam, data)});
+						}		
+					}
+					else
+					{
+						if (aXHTMLElementID[1]) {iItemID = aXHTMLElementID[1]}
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceSearchMedium">');
+
+						if (oResponse.data.rows.length == 0)
+						{
+							aHTML.push('<td class="ns1blankspaceNothing">No accounts</td>');
+						}
+						else
+						{			
+							$.each(oResponse.data.rows, function()
+							{		
+								aHTML.push('<tr class="ns1blankspaceSearch">');
+							
+								aHTML.push('<td class="ns1blankspaceSearch" id="' +
+												'search-' + iItemID + '-' + this.id + '">' +
+												this.title +
+												'</td>');
+
+								aHTML.push('</tr>');
+							});
+						}				
+
+						aHTML.push('</table>');
+	
+						$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+
+						$('td.ns1blankspaceSearch').click(function(event)
+						{
+							$(ns1blankspace.xhtml.container).hide();
+
+							ns1blankspace.status.working();
+
+							var sID = event.target.id;
+							var aID = sID.split('-');
+
+							var sData = 'id=' + ns1blankspace.util.fs(aID[1]);
+							sData += '&financialaccount=' + ns1blankspace.util.fs(aID[2]);
+
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
+								data: sData,
+								dataType: 'json',
+								success: function(data)
+								{
+									if (data.status == 'OK')
+									{
+										ns1blankspace.status.message('Allocated');
+										$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+									}
+									else
+									{
+										ns1blankspace.status.error(data.error.errornotes);
+									}
+								}
+							});
+
+						});
+					}		
+				}													
 }
 
 ns1blankspace.financial.transactions =

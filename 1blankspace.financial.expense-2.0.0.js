@@ -56,8 +56,8 @@ ns1blankspace.financial.expense =
 						ns1blankspace.objectContextData.accrueddate = oObjectContext.accrueddate;
 						ns1blankspace.objectContextData.amount = oObjectContext.amount;
 								
-						$('#ns1blankspaceControlSubContext_accrueddate').html(oObjectContext.accrueddate);
-						$('#ns1blankspaceControlSubContext_amount').html(oObjectContext.amount);
+						$('#ns1blankspaceControlContext_accrueddate').html(oObjectContext.accrueddate);
+						$('#ns1blankspaceControlContext_amount').html(oObjectContext.amount);
 
 						ns1blankspace.financial.expense.payment.refresh();
 					}
@@ -648,12 +648,12 @@ ns1blankspace.financial.expense =
 											
 										if ($('#ns1blankspaceMainDetails').html() != '')
 										{
-											sData += '&reference=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsReference').val());
-											sData += '&paiddate=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsPaidDate').val());
-											sData += '&duedate=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDueDate').val());
-											sData += '&description=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsDescription').val());
-											sData += '&contactbusinesssentto=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSentToBusiness').attr("data-id"));
-											sData += '&contactpersonsentto=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsSentToPerson').attr("data-id"));
+											sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
+											sData += '&accrueddate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAccruedDate').val());
+											sData += '&paymentduedate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDueDate').val());
+											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
+											sData += '&contactbusinesspaidto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPaidToBusiness').attr("data-id"));
+											sData += '&contactpersonpaidto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPaidToPerson').attr("data-id"));
 										}
 										
 										$.ajax(
@@ -676,7 +676,7 @@ ns1blankspace.financial.expense =
 											{
 												ns1blankspace.objectContext = oResponse.id;
 												ns1blankspace.inputDetected = false;
-												ns1blankspace.financial.expense.save.send('-' + ns1blankspace.objectContext, {source: 1});
+												ns1blankspace.financial.expense.search.send('-' + ns1blankspace.objectContext, {source: 1});
 											}	
 										}
 										else

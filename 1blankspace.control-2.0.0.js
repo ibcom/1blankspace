@@ -1331,7 +1331,7 @@ ns1blankspace.control =
 											
 										if (bShow)
 										{
-											ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: 0, topOffset: -255})
+											ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: 0, topOffset: -255});
 											
 											aHTML.push('<tr><td class="ns1blankspaceHeader">Change Password</td>' +
 															'<td class="ns1blankspaceHeader" style="text-align:right;">' +
