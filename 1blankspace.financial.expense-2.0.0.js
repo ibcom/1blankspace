@@ -313,6 +313,9 @@ ns1blankspace.financial.expense =
 						
 						aHTML.push('<tr><td id="ns1blankspaceControlPayments" class="ns1blankspaceControl">' +
 										'Payments</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlCredit" class="ns1blankspaceControl">' +
+										'Credits</td></tr>');
 													
 						aHTML.push('<tr><td id="ns1blankspaceControlGL" class="ns1blankspaceControl">' +
 										'GL</td></tr>');
@@ -363,10 +366,10 @@ ns1blankspace.financial.expense =
 						ns1blankspace.financial.item.show({namespace: 'expense'});
 					});
 					
-					$('#ns1blankspaceControlCredits').click(function(event)
+					$('#ns1blankspaceControlCredit').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainCredits', refresh: true});
-						ns1blankspace.financial.expense.credit();
+						ns1blankspace.show({selector: '#ns1blankspaceMainCredit', refresh: true});
+						ns1blankspace.financial.util.credit.show();
 					});
 					
 					$('#ns1blankspaceControlPayments').click(function(event)

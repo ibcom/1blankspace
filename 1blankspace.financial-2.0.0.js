@@ -1742,7 +1742,7 @@ ns1blankspace.financial.item =
 					if (oParam.namespace != undefined) {sNamespace = oParam.namespace}	
 				}
 				
-				if (sNamespace === 'expense') {iType = 2}
+				if (sNamespace === 'expense' || sNamespace === 'payment') {iType = 2}
 
 				if (oResponse == undefined)
 				{
@@ -1788,7 +1788,9 @@ ns1blankspace.financial.item =
 										'<textarea id="ns1blankspaceItemDescription" class="ns1blankspaceTextMulti" style="height:50px; width:200px;" rows="3" cols="35" ></textarea>' +
 										'</td></tr>');		
 
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
+						if (sNamespace === 'expense' || sNamespace === 'invoice')
+						{
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Account' +
 										'</td></tr>' +
@@ -1796,6 +1798,7 @@ ns1blankspace.financial.item =
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
 										'</td></tr>');
+						}	
 
 						aHTML.push('</table>');
 						
@@ -1939,9 +1942,7 @@ ns1blankspace.financial.item =
 							});
 						})
 						.css('width', '20px')
-						.css('height', '20px')
-						
-						//$('input.ns1blankspaceText:first').focus();
+						.css('height', '20px');
 					}
 				}	
 			}
@@ -2226,8 +2227,156 @@ ns1blankspace.financial.util =
 									if (sTaxXHTMLElementID)
 									{
 										$('#' + sTaxXHTMLElementID).val((cTax).toFixed(2))
-									}	
-
+									}
 								}
-				}						
+				},
+
+	credit: 	{
+					show:	function (oParam, oResponse)
+							{
+								var iObject = ns1blankspace.object;
+								var iObjectContext = ns1blankspace.objectContext;
+								var sNamespace;
+								var bRefresh = false;
+								
+								if (oParam != undefined)
+								{
+									if (oParam.object != undefined) {iObject = oParam.object}
+									if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+									if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
+									if (oParam.refresh != undefined) {bRefresh = oParam.refresh}		
+								}
+								else
+								{
+									oParam = {}
+								}	
+									
+								if (oResponse == undefined)
+								{	
+									if (!bRefresh)
+									{	
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceContainer">');
+
+										aHTML.push('<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceCreditColumn1" class="ns1blankspaceColumn1Flexible">' +
+														ns1blankspace.xhtml.loading + '</td>' +
+														'<td id="ns1blankspaceCreditColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
+														'</tr>');
+
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceMainCredit').html(aHTML.join(''));
+										
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceColumn2">');
+										
+										
+										aHTML.push('<tr><td class="ns1blankspaceAction">' +
+														'<span id="ns1blankspaceCreditAdd">Add</span>' +
+														'</td></tr>');
+							
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceCreditColumn2').html(aHTML.join(''));
+									
+										$('#ns1blankspaceCreditAdd').button(
+										{
+											label: "Add"
+										})
+										.click(function() {
+											 ns1blankspace.financial.util.credit.edit(oParam);
+										});										
+									
+									}
+
+									var oSearch = new AdvancedSearch();
+									oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
+									oSearch.addField('creditdate,notes,amount,tax,type,typetext');
+									oSearch.addFilter('object', 'EQUAL_TO', iObject);
+									oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+									oSearch.sort('creditdate', 'desc');
+									
+									oSearch.getResults(function(data) {ns1blankspace.financial.util.credit.show(oParam, data)});
+								}
+								else
+								{
+									var aHTML = [];
+									var h = -1;
+									
+									if (oResponse.data.rows.length == 0)
+									{
+										aHTML.push('<table><tr><td class="ns1blankspaceNothing">No credit (notes).</td></tr></table>');
+
+										$('#ns1blankspaceCreditColumn1').html(aHTML.join(''));
+									}
+									else
+									{
+										aHTML.push('<table class="ns1blankspace">');
+
+										aHTML.push('<tr>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Date</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption">Notes</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' +
+														ns1blankspace.option.taxVATCaption + '</td>');
+
+										aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+										aHTML.push('</tr>');
+
+										$.each(oResponse.data.rows, function()
+										{
+											aHTML.push('<tr class="ns1blankspaceRow">');
+																		
+											aHTML.push('<td id="ns1blankspaceCredit_date-' + this.id + '" class="ns1blankspaceRow">' +
+															this['creditdate'] + '</td>');
+											
+											aHTML.push('<td id="ns1blankspaceCredit_description-' + this.id + '" class="ns1blankspaceRow">' +
+															this["notes"] + '</td>');
+
+											aHTML.push('<td id="ns1blankspaceCredit_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+															this["amount"] + '</td>');
+
+											aHTML.push('<td id="ns1blankspaceCredit_tax-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
+															this["tax"] + '</td>');
+
+											aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+											aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceCreditRemove"></span>');
+											aHTML.push('</td></tr>');
+										});
+										
+										aHTML.push('</table>');
+
+										$('#ns1blankspaceCreditColumn1').html(aHTML.join(''));
+										
+										$('.ns1blankspaceCreditRemove').button( {
+											text: false,
+											icons: {
+												primary: "ui-icon-close"
+											}
+										})
+										.click(function() {
+											oParam.xhtmlElementID = this.id;
+											ns1blankspace.financial.credit.remove(oParam);
+										})
+										.css('width', '15px')
+										.css('height', '17px')
+								
+										$('.ns1blankspaceCreditView').button( {
+											text: false,
+											icons: {
+												primary: "ui-icon-play"
+											}
+										})
+										.click(function() {
+											//ns1blankspace.financial.util.credit.edit({xhtmlElementID: this.id})
+										})
+										.css('width', '15px')
+										.css('height', '17px')	
+									}
+								}	
+							}
+				}											
 }					
