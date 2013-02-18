@@ -1049,9 +1049,11 @@ ns1blankspace.financial.accounts =
 				{
 					var iStep = 1;
 					var iFinancialAccount = -1;
+					var iType;
 					
 					if (oParam != undefined)
 					{
+						if (oParam.type != undefined) {iType = oParam.type};
 						if (oParam.step != undefined) {iStep = oParam.step};
 						if (oParam.financialAccount != undefined) {iFinancialAccount = oParam.financialAccount};
 					}
@@ -1076,9 +1078,12 @@ ns1blankspace.financial.accounts =
 						var aHTML = [];
 
 						aHTML.push('<div id="ns1blankspaceAccountColumnCategory" style="width:100px; margin-top:3px; text-align:right;">');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-1" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-1" style="width: 100px; margin-bottom:1px;">All</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-2" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-2" style="width: 100px; margin-bottom:1px;">Profit & Loss</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-3" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-3" style="width: 100px; margin-bottom:1px;">Balance Sheet</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-0" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-0" style="width: 100px; margin-bottom:1px;">All</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-1" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-1" style="width: 100px; margin-bottom:1px;">Profit & Loss</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-2" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-2" style="width: 100px; margin-bottom:1px;">Balance Sheet</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-3" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-3" style="width: 100px; margin-bottom:1px;">Assets</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-4" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-4" style="width: 100px; margin-bottom:1px;">Liability</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-5" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-5" style="width: 100px; margin-bottom:1px;">Equity</label>');
 						aHTML.push('</div>');
 
 						$('#ns1blankspaceAccountColumn1').html(aHTML.join(''));
@@ -1088,7 +1093,7 @@ ns1blankspace.financial.accounts =
 						$('#ns1blankspaceAccountColumnCategory :radio').click(function()
 						{
 							var aID = (event.target.id).split('-');
-							$.extend(true, oParam, {step: 2, category: parseInt(aID[1])});
+							$.extend(true, oParam, {step: 2, type: parseInt(aID[1])});
 							ns1blankspace.financial.accounts.show(oParam);
 						});
 					}
@@ -1103,7 +1108,7 @@ ns1blankspace.financial.accounts =
 							oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
 							oSearch.addField('title');
 							oSearch.sort('title', 'asc');
-							//oSearch.addFilter('type', 'EQUAL_TO', iType);
+							if (iType != 0) {oSearch.addFilter('type', 'EQUAL_TO', iType)};
 							oSearch.rows = 200;
 							oSearch.getResults(function(data) {ns1blankspace.financial.accounts.show(oParam, data)});	
 						}
@@ -1140,7 +1145,7 @@ ns1blankspace.financial.accounts =
 							
 								$(oResponse.data.rows).each(function(i) 
 								{
-									if (i==0)
+									if (i==0 && iType == 0)
 									{
 										aHTML.push('<tr><td><span id="ns1blankspaceAccountTransactionsAll" style="font-size:0.75em;width:100%;">All</span></td></tr>');
 									}
@@ -1169,7 +1174,6 @@ ns1blankspace.financial.accounts =
 										ns1blankspace.financial.accounts.show(oParam);
 								});
 							}
-							
 						}
 					}
 					
@@ -1215,7 +1219,7 @@ ns1blankspace.financial.accounts =
 								aHTML.push('<tr>');
 								aHTML.push('<td class="ns1blankspaceHeaderCaption">TOTAL</td>');
 								aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + oResponse.summary.sumamount + '</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + (oResponse.summary.sumamount).parseCurrency().formatMoney(2, '.', ',') + '</td>');
 								aHTML.push('</tr>');
 								
 								$(oResponse.data.rows).each(function(i) 
