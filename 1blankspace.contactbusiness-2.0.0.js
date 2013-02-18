@@ -158,7 +158,7 @@ ns1blankspace.contactBusiness =
 															',webaddress,area,areatext,' +
 															'streetaddress1,streetaddress2,streetsuburb,streetpostcode,streetstate,streetcountry' + 
 															',mailingaddress1,mailingaddress2,mailingsuburb,mailingpostcode,mailingstate,mailingcountry,' +
-															'notes,primarycontactperson');
+															'notes,primarycontactperson,modifieddate');
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.rf = 'json';
 										oSearch.getResults(function(data) {ns1blankspace.contactBusiness.show(oParam, data)}) 
@@ -449,7 +449,7 @@ ns1blankspace.contactBusiness =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" style="width:300px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -474,15 +474,7 @@ ns1blankspace.contactBusiness =
 										ns1blankspace.objectContextData.streetsuburb + ' ' + ns1blankspace.objectContextData.streetstate +
 										'</td></tr>');
 						}				
-						
-						if (ns1blankspace.objectContextData.webaddress != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Website</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryWebAddress" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.webaddress +
-										'</td></tr>');
-						}				
-								
+										
 						if (ns1blankspace.objectContextData.customerstatus != '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Status</td></tr>' +
@@ -499,9 +491,30 @@ ns1blankspace.contactBusiness =
 										'</td></tr>');
 						}				
 								
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
+										Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+										'</td></tr>');
+													
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));		 
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+						if (ns1blankspace.objectContextData.webaddress != '')
+						{	
+							var aHTML = [];
+					
+							aHTML.push('<table class="ns1blankspaceColumn2">');
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
+										'<a href="' + ns1blankspace.objectContextData.webaddress + '" target="_blank">' + 
+										ns1blankspace.objectContextData.webaddress + '</a>' +
+										'</td></tr>');	
+
+							aHTML.push('</table>');					
+						
+							$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
+						} 
 					}	
 				},
 
@@ -550,7 +563,7 @@ ns1blankspace.contactBusiness =
 										'</td></tr>' +
 										'<tr class="ns1blankspaceSelect">' +
 										'<td class="ns1blankspaceSelect">' +
-										'<input id="ns1blankspaceDetailsTradingName" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsTradeName" class="ns1blankspaceText">' +
 										'</td></tr>');							
 										
 						aHTML.push('<tr class="ns1blankspace">' +
@@ -632,7 +645,7 @@ ns1blankspace.contactBusiness =
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
-							$('#ns1blankspaceDetailsTradingName').val(ns1blankspace.objectContextData.tradename);
+							$('#ns1blankspaceDetailsTradeName').val(ns1blankspace.objectContextData.tradename);
 							$('#ns1blankspaceDetailsLegalName').val(ns1blankspace.objectContextData.legalname);
 							$('#ns1blankspaceDetailsIndustry').val(ns1blankspace.objectContextData.industrytext);
 							$('#ns1blankspaceDetailsIndustry').attr('data-id', ns1blankspace.objectContextData.industry);
@@ -795,6 +808,8 @@ ns1blankspace.contactBusiness =
 	save: 		{
 					send: 		function ()
 								{
+									ns1blankspace.status.working();
+
 									var sData = 'id=';
 									
 									if (ns1blankspace.objectContext != -1)
@@ -806,14 +821,14 @@ ns1blankspace.contactBusiness =
 									{
 										sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
 										sData += '&legalname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsLegalName').val());
-										sData += '&tradename=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsBusinessTradingName').val());
-										sData += '&industry=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsIndustry').attr('onDemandID'));
+										sData += '&tradename=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTradeName').val());
+										sData += '&industry=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsIndustry').attr('data-id'));
 										sData += '&abn=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsABN').val());
 										sData += '&phonenumber=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPhone').val());
 										sData += '&faxnumber=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFax').val());
 										sData += '&webaddress=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsWebAddress').val());
 										//sData += '&area=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsArea').val());
-										sData += '&customerstatus=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsStatus').attr('onDemandID'));
+										sData += '&customerstatus=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsStatus').attr('data-id'));
 										sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 									}
 									
@@ -878,7 +893,8 @@ ns1blankspace.contactBusiness =
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceContactBusinessGroupsColumn1" class="ns1blankspaceColumn1Large"></td>' +
+													'<td id="ns1blankspaceContactBusinessGroupsColumn1" class="ns1blankspaceColumn1Large">' +
+													ns1blankspace.xhtml.loading + '</td>' +
 													'<td id="ns1blankspaceContactBusinessGroupsColumn2" style="width: 100px;" class="ns1blankspaceColumn2Action"></td>' +
 													'</tr>' +
 													'</table>');				
@@ -928,8 +944,7 @@ ns1blankspace.contactBusiness =
 									
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" width="750" style="margin-top:15px; margin-bottom:15px;">' +
-															'' +
+											aHTML.push('<table>' +
 															'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' +
 															'</table>');
 

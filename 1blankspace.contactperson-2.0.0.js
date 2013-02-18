@@ -163,7 +163,7 @@ ns1blankspace.contactPerson =
 										oSearch.addField('firstname,surname,contactbusiness,contactbusinesstext,title,titletext,position,workphone,fax,mobile,email,' +
 																 'customerstatus,customerstatustext,gender,gendertext,' +
 																 'streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
-																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry');
+																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,modifieddate');
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.getResults(function(data) {ns1blankspace.contactPerson.show(oParam, data)});
 									}
@@ -462,7 +462,7 @@ ns1blankspace.contactPerson =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:300px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -472,6 +472,14 @@ ns1blankspace.contactPerson =
 					
 						aHTML.push('<table class="ns1blankspace">');
 						
+						if (ns1blankspace.objectContextData.contactbusinesstext != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.contactbusinesstext +
+										'</td></tr>');
+						}
+
 						if (ns1blankspace.objectContextData.workphone != '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
@@ -488,17 +496,47 @@ ns1blankspace.contactPerson =
 										'</td></tr>');
 						}				
 						
-						if (ns1blankspace.objectContextData.email != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Email</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.email +
-										'</td></tr>');
-						}				
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
+										Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+										'</td></tr>');	
 								
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));		 
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));	
+
+						if (ns1blankspace.objectContextData.email != '')
+						{	
+
+							var aHTML = [];
+					
+							aHTML.push('<table class="ns1blankspaceColumn2">');
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
+										ns1blankspace.objectContextData.email +
+										'</td></tr>');	
+
+							aHTML.push('<tr><td>' +
+										'<span id="ns1blankspaceContactPersonEmail" class="ns1blankspaceAction">Email</span>' +
+										'</td></tr>');
+
+							aHTML.push('</table>');					
+						
+							$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
+
+							$('#ns1blankspaceContactPersonEmail').button(
+							{
+								label: 'Send Email',
+								icons:
+								{
+									primary: "ui-icon-mail-closed"
+								}
+							})
+							.click(function()
+							{
+								
+							});
+						}
 					}	
 				},
 
@@ -1073,7 +1111,8 @@ ns1blankspace.contactPerson =
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
 													'<td id="ns1blankspaceContactPersonGroupsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-													'<td id="ns1blankspaceContactPersonGroupsColumn2" class="ns1blankspaceColumn2Action" style="width: 100px;"></td>' +
+													'<td id="ns1blankspaceContactPersonGroupsColumn2" class="ns1blankspaceColumn2Action" style="width: 100px;">' + 
+													ns1blankspace.xhtml.loading + '</td>' +
 													'</tr>' +
 													'</table>');				
 										
@@ -1110,7 +1149,7 @@ ns1blankspace.contactPerson =
 									
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table style="margin-top:5px;">' +
+											aHTML.push('<table>' +
 															'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' +
 															'</table>');
 

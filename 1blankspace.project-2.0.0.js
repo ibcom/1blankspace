@@ -128,7 +128,7 @@ ns1blankspace.project =
 										oSearch.addField('amount,business,businesstext,description,enddate,id,notes,' +
 															'paymentfrequency,paymentfrequencytext,percentagecomplete,person,persontext,' +
 															'projectmanageruser,projectmanagerusertext,reference,startdate,' +
-															'status,statustext,template,totaltime,type,typetext');
+															'status,statustext,template,totaltime,type,typetext,modifieddate');
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.getResults(function(data){ns1blankspace.project.show(oParam, data)});	
@@ -377,10 +377,13 @@ ns1blankspace.project =
 
 						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
+						if (ns1blankspace.objectContextData.description != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.description +
 										'</td></tr>');
+						}	
 
 						if (ns1blankspace.objectContextData.startdate != '')
 						{
@@ -398,6 +401,11 @@ ns1blankspace.project =
 										'</td></tr>');
 						}											
 						
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
+										Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+										'</td></tr>');	
+
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));

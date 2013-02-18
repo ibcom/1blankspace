@@ -134,7 +134,7 @@ ns1blankspace.document =
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'DOCUMENT_SEARCH';
-										oSearch.addField('title,summary,keywords,url,status,statustext,public,website,websitetext,style,internal,content,type,typetext');
+										oSearch.addField('title,summary,keywords,url,status,statustext,public,website,websitetext,style,internal,content,type,typetext,modifieddate');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.document.show(oParam, data)});
 									}
@@ -237,6 +237,10 @@ ns1blankspace.document =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Details</td></tr>');
 
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlEdit" class="ns1blankspaceControl">' +
 										'Edit</td></tr>');		
 					}
@@ -248,6 +252,10 @@ ns1blankspace.document =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
+						aHTML.push('</table>');	
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlEdit" class="ns1blankspaceControl">' +
 										'Edit</td></tr>');
 					}	
@@ -256,7 +264,7 @@ ns1blankspace.document =
 								
 					if (ns1blankspace.objectContext != -1)
 					{		
-						aHTML.push('<table class="ns1blankspaceViewControl">');
+						aHTML.push('<table class="ns1blankspaceControl">');
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
@@ -355,26 +363,48 @@ ns1blankspace.document =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:250px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
+						var aHTML = [];
+
 						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML.push('<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
+						if (ns1blankspace.objectContextData.summary != '')
+						{	
+							aHTML.push('<tr><td id="ns1blankspaceSummarySummary" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.summary +
 										'</td></tr>');
+						}		
 						
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
+										Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+										'</td></tr>');	
+
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+						var aHTML = [];
+					
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
+										(ns1blankspace.objectContextData.public=='Y'?'<span style="color:red;">Public</span>':'Private') +
+										'</td></tr>');	
+
+						aHTML.push('</table>');					
+					
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 					}	
 				},
 
-	details: 	function ns1blankspaceDocumentDetails()
+	details: 	function ()
 				{
 					var aHTML = [];
 
@@ -446,9 +476,9 @@ ns1blankspace.document =
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceMainDetailsTitle').val(ns1blankspace.objectContextData.title);
-							$('#ns1blankspaceMainDetailsURL').val(ns1blankspace.objectContextData.url);
-							$('#ns1blankspaceMainDetailsSummary').val(ns1blankspace.objectContextData.summary);
+							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.title);
+							$('#ns1blankspaceDetailsURL').val(ns1blankspace.objectContextData.url);
+							$('#ns1blankspaceDetailsSummary').val(ns1blankspace.objectContextData.summary);
 							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
 						}
 					}	
@@ -456,7 +486,7 @@ ns1blankspace.document =
 
 	edit: 		function (sReturn)
 				{	
-					if ($('#divns1blankspaceMainEdit').attr('onDemandLoading') == '1')
+					if ($('#ns1blankspaceMainEdit').attr('data-loading') == '1')
 					{
 						var aHTML = [];
 						
@@ -473,11 +503,7 @@ ns1blankspace.document =
 					
 						aHTML.push('<table class="ns1blankspace">');
 								
-						aHTML.push('<tr class="ns1blankspaceMain">' +
-										'<td id="tdns1blankspaceMainEditText" class="ns1blankspaceMain" style="text-align:right;">' +
-										'<a href="#" id="ns1blankspaceEditPDF">View as PDF</a>' +
-										'</td></tr>' +
-										'<tr class="ns1blankspaceMainTextMulti">' +
+						aHTML.push('<tr class="ns1blankspaceMainTextMulti">' +
 										'<td class="ns1blankspaceMainTextMulti">' +
 										'<textarea rows="10" cols="60" name="ns1blankspaceEditText" id="ns1blankspaceEditText" class="ns1blankspaceTextMultiLarge tinymceAdvanced"></textarea>' +
 										'</td></tr>');
