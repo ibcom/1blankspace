@@ -497,6 +497,7 @@ ns1blankspace.financial.bankAccount =
 
 											if (iMode == 1)
 											{	
+												oParam.editAction = undefined;
 												ns1blankspace.financial.bankAccount.reconcile.items.show(oParam);
 											}
 											else
@@ -901,6 +902,7 @@ ns1blankspace.financial.bankAccount =
 													var iSearchSourceID;
 													var iStatus = 2;
 													var sXHTMLElementContainerID = 'ns1blankspaceBankAccountReconcileColumnItemEdit';
+													var iObject;
 
 													if (oParam != undefined)
 													{
@@ -918,6 +920,7 @@ ns1blankspace.financial.bankAccount =
 														if (oParam.status != undefined) {iStatus = oParam.status}
 														if (oParam.source != undefined) {iSource = oParam.source}
 														if (oParam.xhtmlElementContainerID != undefined) {sXHTMLElementContainerID = oParam.xhtmlElementContainerID}
+														if (oParam.object != undefined) {iObject = oParam.object}
 													}		
 													
 													$.extend(true, oParam, {editAction: iEditAction, source: iSource, type: iType});
@@ -1130,8 +1133,7 @@ ns1blankspace.financial.bankAccount =
 																		{
 																			sHTML += '<br / >that match this bank transaction.';
 																			sHTML += '<br /><br />You can search for an existing invoice<br / >or click Add';
-																		}
-																			
+																		}	
 																	}	
 
 																	aHTML.push('<table><tr class="ns1blankspace">' +
@@ -1364,6 +1366,7 @@ ns1blankspace.financial.bankAccount =
 																		oParam.editAction = 5;
 																		oParam.xhtmlElementID = this.id;
 																		oParam.accruedAmount = $(this).attr('data-amount');
+																		oParam.object = undefined;
 																		ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 																	})
 																	.css('width', '15px')
@@ -1457,9 +1460,9 @@ ns1blankspace.financial.bankAccount =
 																	}
 																	})
 																	.click(function() {
-																		oParam.editAction = 5;
+																		oParam.editAction = 3;
 																		oParam.xhtmlElementID = this.id;
-																		oParam.accruedAmount = $(this).attr('data-amount');
+																		oParam.object = 122;
 																		ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 																	})
 																	.css('width', '15px')
@@ -1469,15 +1472,22 @@ ns1blankspace.financial.bankAccount =
 														}
 													}
 
-													else if (iEditAction == 3)  //MARK PAYMENT / RECEIPT AS RECONCILED
+													else if (iEditAction == 3)  //MARK PAYMENT / RECEIPT / JOURNAL AS RECONCILED
 													{
 														ns1blankspace.status.working();
 
 														var aXHTMLElementID = sXHTMLElementID.split('-');
 														var sData = 'reconciliation=' + ns1blankspace.util.fs(iReconciliation);
 
-														if (iType == 1) {sData += '&object=3'}
-														if (iType == 2) {sData += '&object=6'}
+														if (iObject === undefined)
+														{	
+															if (iType == 1) {sData += '&object=3'}
+															if (iType == 2) {sData += '&object=6'}
+														}
+														else
+														{
+															sData += '&object=' + ns1blankspace.util.fs(iObject);
+														}	
 
 														sData += '&objectcontext=' + aXHTMLElementID[1];	
 
