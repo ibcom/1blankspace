@@ -638,7 +638,12 @@ ns1blankspace.financial.invoice =
 												})
 												.click(function(event)
 												{
-													alert('to do');
+													ns1blankspace.messaging.imap.init(
+													{
+														action: 1,
+														object: 5,
+														objectContext: ns1blankspace.objectContextData.id
+													});
 												});
 											}	
 										}	

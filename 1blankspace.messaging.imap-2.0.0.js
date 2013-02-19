@@ -11,10 +11,6 @@
 // totals & get details for messages not fully cached.  Show part of message that have and then back fill attachments and message
 // Back update flags for read.
 
-//var ns1blankspace.messaging.lastMessageID = '';
-//var giMessagingLastInboxPageID = '';
-//var giMessagingEmailSkippedCount;
-
 if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
 
 ns1blankspace.messaging.imap = 
@@ -120,6 +116,21 @@ ns1blankspace.messaging.imap =
 					{
 						ns1blankspace.messaging.imap.new();
 					});
+
+					var iAction;
+
+					// 1 = Compose New
+
+					if (oParam)
+					{
+						if (oParam.action !== undefined) {iAction = oParam.action}
+					}
+
+					if (iAction == 1)
+					{
+						ns1blankspace.messaging.imap.edit.show(oParam)
+					}	
+
 				},
 
 	check:		function (oParam, oResponse)
@@ -1148,7 +1159,8 @@ ns1blankspace.messaging.imap =
 								}
 				},
 
-	attachments: function ()
+	attachments: 
+				function ()
 				{
 					var aHTML = [];
 					
