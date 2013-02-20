@@ -1132,7 +1132,43 @@ ns1blankspace.messaging.imap =
 				},
 
 	message: 	{
-					attachments: function ()
+					show:		function ()
+								{
+									var sHTML = ns1blankspace.objectContextData.message;
+									sHTML = (sHTML).formatXHTML();
+
+									while ($('#ifMessage').length == 0) {}
+
+									$('.ns1blankspaceLoading').remove()
+										
+									$('#ifMessage').contents().find('html').html(sHTML);
+									
+									if ($.browser.msie) {}
+									else
+									{	
+										var newHeight = $('#ifMessage',top.document).contents().find('html').height() + 100;
+									}
+
+									if ($.browser.msie)
+									{
+										setTimeout("ns1blankspace.messaging.imap.message.setHeight()", 100);
+									}
+									else
+									{	
+										$('#ifMessage').height($('#ifMessage',top.document).contents().find('html').height())
+										$('#ifMessage').width($('#ifMessage',top.document).contents().find('html').width())
+									}
+									
+								},
+
+					setHeight:	function ()
+								{
+									$('#ifMessage').css('height', ($('#ifMessage').attr('scrollHeight') + 100) + 'px');
+									$('#ifMessage').css('width', ($('#ifMessage').attr('scrollWidth') + 100) + 'px');
+								},
+
+					attachments:
+								function ()
 								{
 									if (ns1blankspace.objectContextData.hasattachments == 'Y')
 									{
@@ -1184,43 +1220,675 @@ ns1blankspace.messaging.imap =
 										$('#ns1blankspaceMessagingEmailAttachments').html('No attachments.');
 									}
 								},
+												
+					edit: 		{
+									show: 		function (oParam)
+												{
 
-					show:		function ()
+													var iObject = ns1blankspace.object;
+													var iObjectContext = ns1blankspace.objectContext;
+													var bShowTo = true;
+													var bShowPriority = false;
+													var bShowAll = false;
+													var sXHTMLElementID = 'ns1blankspaceMain';
+													var bDialog = false;
+													var iContactBusiness;
+													var bReplyAll = false;
+													var bForward = false;
+													var bNewEmail = false;
+													var sMessage = '';
+													var sSubject = '';
+													var iSource = 1;
+													
+													if (oParam != undefined)
+													{
+														if (oParam.object != undefined) {iObject = oParam.object}
+														if (oParam.objectContext != undefined) {iObject = oParam.objectContext}
+														if (oParam.showTo != undefined) {bShowTo = oParam.showTo}
+														if (oParam.showPriority != undefined) {bShowPriority = oParam.showPriority}
+														if (oParam.showAll != undefined) {bShowAll = oParam.showAll}
+														if (oParam.dialog != undefined) {bDialog = oParam.dialog}
+														if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+														if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
+														if (oParam.replyAll != undefined) {bReplyAll = oParam.replyAll}
+														if (oParam.forward != undefined) {bForward = oParam.forward}
+														if (oParam.newEmail != undefined) {bNewEmail = oParam.newEmail}
+														if (oParam.message != undefined) {sMessage = oParam.message}
+														if (oParam.subject != undefined) {sSubject = oParam.subject}
+														if (oParam.source != undefined) {iSource = oParam.source}
+													}
+
+													if (bNewEmail)
+													{
+														ns1blankspace.objectContext = '';
+														ns1blankspace.objectContextData = undefined;
+					
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_DRAFT') + '&new=1',
+															dataType: 'json',
+															async: false
+														});
+													}
+													
+													if (!bDialog)
+													{
+														var aHTML = [];
+																		
+														aHTML.push('<table id="ns1blankspaceMessagingSendMessageContainer">' +
+																	'<tr class="ns1blankspace">' +
+																	'<td id="ns1blankspaceSendMessageColumn1" class="ns1blankspaceColumn1">' +
+																	ns1blankspace.xhtml.loading +
+																	'</td>' +	
+																	'</tr>' +
+																	'</table>');					
+															
+														//'<td id="ns1blankspaceSendMessageColumn2" class="ns1blankspaceColumn2">' +
+														//			'</td>' +
+																		
+														$('#' + sXHTMLElementID).html(aHTML.join(''));
+													}
+													
+													var aHTML = [];
+													
+													aHTML.push('<table>');
+													
+													if (bShowTo)
+													{
+														aHTML.push('<tr><td class="ns1blankspace">');
+														
+															aHTML.push('<table class="ns1blankspace">');
+													
+															aHTML.push('<tr><td style="width:320px;font-size:0.875em;">');	
+																
+																aHTML.push('<table class="ns1blankspace">');				
+																			
+																aHTML.push('<tr><td class="ns1blankspaceCaption" style="width:10px;">' +
+																			'To:</td>');		
+																
+																aHTML.push('<td>' +
+																			'<input id="ns1blankspaceEditMessageToContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark"' +
+																				' data-setelementid="ns1blankspaceEditMessageTo" value="Search for contact" style="width:220px;"');
+																			
+																if (iContactBusiness != undefined)
+																{
+																	aHTML.push(' data-contactbusiness="' + iContactBusiness + '"')
+																}
+
+																aHTML.push('></td></tr>');				
+
+																aHTML.push('<tr><td style="width:10px;"></td><td>' +
+																			'<textarea id="ns1blankspaceEditMessageTo" style="height:30px; width:220px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
+																			'</td></tr>');
+															
+																aHTML.push('<tr><td style="width:10px;" class="ns1blankspaceCaption">' +
+																			'Cc:</td>');		
+																
+																aHTML.push('<td style="width:10px;">' +
+																			'<input id="ns1blankspaceEditMessageCcContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark ns1blankspaceText"' +
+																				' data-setelementid="ns1blankspaceEditMessageCc" value="" style="width:220px;"');
+																			
+																if (iContactBusiness != undefined)
+																{
+																	aHTML.push(' data-contactbusiness="' + iContactBusiness + '"')
+																}
+
+																aHTML.push('></td></tr>');				
+
+																aHTML.push('<tr><td style="width:10px;"></td><td>' +
+																			'<textarea id="ns1blankspaceEditMessageCc" style="height:30px; width:220px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
+																			'</td></tr>');
+															
+																aHTML.push('<tr><td style="width:10px;" class="ns1blankspaceCaption">' +
+																			'Bcc:</td>');		
+																
+																aHTML.push('<td>' +
+																			'<input id="ns1blankspaceEditMessageBccContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark ns1blankspaceText"' +
+																				' data-setelementid="ns1blankspaceEditMessageBcc" value="" style="width:220px;"');
+																			
+																if (iContactBusiness != undefined)
+																{
+																	aHTML.push(' data-contactbusiness="' + iContactBusiness + '"');
+																}
+
+																aHTML.push('></td></tr>');				
+
+																aHTML.push('<tr><td style="width:10px;"></td><td>' +
+																			'<textarea id="ns1blankspaceEditMessageBcc" style="height:30px; width:220px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
+																			'</td></tr>');
+															
+																aHTML.push('</table>');				
+																
+															aHTML.push('<td width="15px;">&nbsp;</td>');	
+
+															aHTML.push('<td style="width:275px;">');	
+
+																aHTML.push('<table>');				
+																			
+																aHTML.push('<tr><td id="ns1blankspaceEditMessageAttachCaption" class="ns1blankspaceCaption">' +
+																				'Attachments</td>');		
+															
+																aHTML.push('<td class="ns1blankspaceRight" style+"text-align:right;">');
+															
+																aHTML.push('<div id="ns1blankspaceEditMessageAttachContainer" style="font-size:0.75em;">' +
+																				'<input type="checkbox" id="ns1blankspaceEditMessageAttach" class="ns1blankspaceAction"/>' +
+																				'<label style="font-size:0.875em;" for="ns1blankspaceEditMessageAttach">&nbsp;</label>' +
+																				'</div>');
+															
+																aHTML.push('</td></tr>');				
+
+																aHTML.push('<tr><td style="height:80px" colspan=2 id="ns1blankspaceActionsEditEmailAttachments" class="ns1blankspaceBorder">' +
+																			'</td></tr>');
+															
+																aHTML.push('</table>');				
+															
+															aHTML.push('</td>');
+
+															aHTML.push('<td style="width:50px;">');	
+
+																aHTML.push('<table class="ns1blankspaceColumn2">');
+														
+																aHTML.push('<tr><td>' +
+																		'<span id="ns1blankspaceEditMessageSend" class="ns1blankspaceAction">Send</span>' +
+																		'</td></tr>');
+																				
+																aHTML.push('</table>');					
+														
+															aHTML.push('</td></tr>');				
+																
+															aHTML.push('</table>');					
+																
+														aHTML.push('</td></tr>');				
+													}
+													
+													aHTML.push('<tr><td>');
+													
+														aHTML.push('<table>');				
+																			
+															aHTML.push('<tr><td class="ns1blankspace">' +
+																		'<input id="ns1blankspaceMessagingEditMessageSubject" class="ns1blankspaceText ns1blankspaceWatermark"' +
+																			' value="Subject">' +
+																		'</td>');	
+															
+															if (bShowPriority)
+															{
+																aHTML.push('<td style="width:150px; text-align:right;" class="ns1blankspaceRight">' +
+																				'&nbsp; <input type="checkbox" id="ns1blankspaceMessagingEditdMessageHighPriority"/>&nbsp;High Priority?<td>');
+															}
+														
+															aHTML.push('</tr>');				
+																
+														aHTML.push('</table>');				
+													
+													aHTML.push('</td></tr>');
+													
+													aHTML.push('<tr><td class="ns1blankspace">' +
+																		'<textarea rows="10" cols="35" id="ns1blankspaceMessagingEditMessageText" class="ns1blankspaceTextMultiLarge"></textarea>' +
+																		'</td></tr>');
+													
+													aHTML.push('</table>');						
+													
+													if (bDialog)
+													{
+														$('#' + sXHTMLElementID).html(aHTML.join(''));
+														$('#' + sXHTMLElementID).dialog(
+														{
+															width: 400,
+															resizable: false,
+															modal: true,
+															title: 'Send Email Message',
+															buttons: 
+															{
+																"Cancel": function() 
+																{
+																	$( this ).dialog( "close" );
+																},
+
+																"Send": function() 
+																{
+																	ns1blankspace.messaging.edit.send({
+																		subject: $('#ns1blankspaceMessagingSendMessageSubject').val(),
+																		message: $('#ns1blankspaceMessagingSendMessageMessage').val(),
+																		priority: ($('#ns1blankspaceMessagingSendMessageHighPriority').attr('checked')?3:2),
+																		});
+
+																	$( this ).dialog( "close" );
+																}
+															}
+														});
+													}	
+													else
+													{
+														if (tinyMCE.getInstanceById('ns1blankspaceMessagingMessageEdit'))
+														{
+															tinyMCE.get('ns1blankspaceMessagingMessageEdit').remove();
+															$('#ns1blankspaceMessagingMessageEdit').remove();
+														}	
+													
+														$('#ns1blankspaceSendMessageColumn1').html(aHTML.join(''));
+														
+														var aHTML = [];
+
+														aHTML.push('<table class="ns1blankspaceColumn2">');
+														
+														aHTML.push('<tr><td class="ns1blankspaceMainAction">' +
+																		'<span id="ns1blankspaceEditMessageSend">Send</span>' +
+																		'</td></tr>');
+																				
+														aHTML.push('</table>');					
+														
+														//$('#ns1blankspaceSendMessageColumn2').html(aHTML.join(''));
+													
+														$('#ns1blankspaceEditMessageSend').button(
+														{
+															label: "Send"
+														})
+														.click(function() {
+														
+															if (oParam != undefined)
+															{
+																oParam = {};
+															}
+
+															oParam.subject = $('#ns1blankspaceMessagingEditMessageSubject').val();
+															oParam.message = tinyMCE.get('ns1blankspaceMessagingEditMessageMessage').getContent();
+															oParam.contactPersonTo = $('#ns1blankspaceMessagingEditMessageContactTo').attr('data-id');
+															oParam.to = $('#ns1blankspaceMessagingEditMessageTo').val();
+															oParam.cc = $('#ns1blankspaceMessagingEditMessageCc').val();
+															oParam.bcc = $('#ns1blankspaceMessagingEditMessageBcc').val();
+															
+															ns1blankspace.messaging.imap.edit.Send(oParam);
+														});
+
+														$('#ns1blankspaceEditMessageAttach').button(
+														{
+															text: false,
+															icons:	{
+																		primary: "ui-icon-plus"
+																	}
+														})
+														.click(function() {
+														
+															ns1blankspace.messaging.imap.edit.attach.show(oParam);
+														})
+														.css('width', '20px')
+														.css('height', '23px')
+														.css('font-size', '0.75em');
+														
+														if (ns1blankspace.objectContextData != undefined && iSource == 1)
+														{
+															var sTo = '';
+														
+															var aHTML = [];
+
+															aHTML.push('<br />');
+															
+															$.each(ns1blankspace.messaging.imap.emailAccounts, function() 
+															{ 
+																if (this.id == ns1blankspace.messaging.imap.account)
+																{
+																	aHTML.push(this.footer + '<br />');
+																}
+															});
+																
+															if (ns1blankspace.objectContextData != undefined)
+															{
+																if (bForward)
+																{
+																	$('#ns1blankspaceMessagingEditMessageSubject').val('Fw: ' + ns1blankspace.objectContextData.subject)
+																}
+																else
+																{
+																	$('#ns1blankspaceMessagingEditMessageSubject').val('Re: ' + ns1blankspace.objectContextData.subject)
+																}	
+																
+																$('#ns1blankspaceMessagingEditMessageSubject').removeClass('ns1blankspaceWatermark');
+																
+																
+																aHTML.push('<br />---- Original Message ----<br />');
+																aHTML.push('<table style="background-color:#f5f5f5;width:100%;color:black;">');
+																aHTML.push('<tr><td><strong>From:</strong> ' + ns1blankspace.objectContextData.from + '</td></tr>');
+																
+																aHTML.push('<tr><td><strong>To:</strong> ');	
+																
+																var sOrgTo = ns1blankspace.objectContextData.to;
+																var aOrgTo = sOrgTo.split('|')
+																
+																sOrgTo = '';
+														
+																$.each(aOrgTo, function(i)
+																{
+																	if (i % 2 !== 0) {sOrgTo += this + '; '}		
+																});				
+																
+																aHTML.push(sOrgTo + '</td></tr>');
+																
+																var sOrgCc = ns1blankspace.objectContextData.cc;
+																
+																if (sOrgCc != '')
+																{
+																	aHTML.push('<tr><td><strong>CC:</strong> ');	
+																	var aOrgCc = sOrgCc.split('|')
+																	sOrgCc = '';
+															
+																	$.each(aOrgCc, function()
+																	{
+																		if (i % 2 !== 0) {sOrgCc += this + '; '}	
+																	});			
+																	
+																	aHTML.push(sOrgCc + '</td></tr>');
+																}
+																
+																var oDate = new Date.parse(ns1blankspace.objectContextData.date);
+																sDate = oDate.toString("ddd, dd MMM yyyy h:mm TT") 
+														
+																aHTML.push('<tr><td><strong>Sent:</strong> ' + sDate + '</td></tr>');	
+																aHTML.push('<tr><td><strong>Subject:</strong> ' + ns1blankspace.objectContextData.subject + '</td></tr>');	
+																aHTML.push('</table>');
+																
+																$('#ns1blankspaceMessagingEditMessageText').val(aHTML.join('') + (ns1blankspace.objectContextData.message).formatXHTML());
+														
+																if (!bForward)
+																{
+																	if (ns1blankspace.objectContextData.from != '')
+																	{
+																		var sFrom = ns1blankspace.objectContextData.from;
+																	}
+														
+																	if (ns1blankspace.objectContextData.to != '' && bReplyAll)
+																	{			
+																		sTo = ns1blankspace.objectContextData.to;
+																		var aTo = sTo.split('|');
+																		sTo = '';
+																	
+																		$.each(aTo, function(i)
+																		{
+																			if (i % 2 !== 0) 
+																			{
+																				if (this != ns1blankspace.user.email && this != sFrom)
+																				{	
+																					sTo += this + '; ';
+																				}
+																			}		
+																		});	
+																	}
+														
+																	sTo = sFrom + '; ' + sTo;
+																}	
+													
+																$('#ns1blankspaceMessagingEditMessageTo').val(sTo)
+													
+																if (ns1blankspace.objectContextData.attachments != '' && bForward && ns1blankspace.messaging.action == -1)
+																{
+																	if (ns1blankspace.objectContextData.sourcetypetext == "EMAIL")
+																	{
+																		var sParam = ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ATTACHMENT_MANAGE') + '&rf=TEXT';
+																		var sData = 'account=' + ns1blankspace.messaging.imap.account;
+																		sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+																		
+																		$.ajax(
+																		{
+																			type: 'POST',
+																			url: sParam,
+																			data: sData,
+																			dataType: 'text',
+																			success: function(data) 
+																			{
+																				var aReturn = data.split('|');
+																				ns1blankspace.messaging.action = aReturn[1];
+																				ns1blankspace.messaging.imap.edit.attachments();
+																			}
+																		});
+																	}
+																	
+																	if (ns1blankspace.objectContextData.sourcetypetext == "ACTION")
+																	{
+																		var sParam = ns1blankspace.util.endpointURI('MESSAGING_EMAIL_DRAFT_MANAGE') + '&new=1&rf=TEXT';
+																		var sData = 'copyaction=' + ns1blankspace.objectContextData.id;
+																		
+																		$.ajax(
+																		{
+																			type: 'POST',
+																			url: sParam,
+																			data: sData,
+																			dataType: 'text',
+																			success: function(data) 
+																			{
+																				var aReturn = data.split('|');
+																				ns1blankspace.messaging.action = aReturn[2];
+																				ns1blankspace.messaging.imap.edit.attachments();
+																			}
+																		});
+																	}
+																	
+																}	
+																else
+																{
+																	//ns1blankspace.messaging.imap.edit.attachments();
+																}		
+															}	
+														}
+														
+														if (iSource == 2)
+														{
+															var sFooter = '<br />';
+															
+															$.each(ns1blankspace.messaging.imap.emailAccounts, function() 
+															{ 
+																if (this.id == ns1blankspace.messaging.imap.account)
+																{
+																	sFooter = this.footer + '<br />';
+																}
+															});
+															
+															$('#ns1blankspaceMessagingEditMessageText').val(sFooter + sMessage)
+														}
+														
+														if (iSource == 3)
+														{
+															$('#ns1blankspaceMessagingEditMessageSubject').val(sSubject)
+															$('#ns1blankspaceMessagingEditMessageSubject').removeClass('ns1blankspaceWatermark');
+															$('#ns1blankspaceMessagingEditMessageText').val(sMessage)
+														}
+														
+														if (ns1blankspace.option.richTextEditing)
+														{
+															tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingEditMessageText');
+														}	
+													}
+												},
+
+									attach: 	{
+													show:		function (oParam, oResponse)
+																{
+																	sXHTMLElementID = "ns1blankspaceEditMessageAttachCaption";
+																	
+																	if (!$('#ns1blankspaceEditMessageAttach').attr('checked'))
+																	{
+																		$(ns1blankspace.xhtml.container).hide()
+																	}
+																	else
+																	{	
+																		if (oResponse == undefined)
+																		{					
+																			$.ajax(
+																			{
+																				type: 'POST',
+																				url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_DRAFT'),
+																				dataType: 'json',
+																				success: function(data) 
+																				{
+																					ns1blankspace.messaging.imap.edit.attach.show(oParam, data)
+																				}
+																			});
+																		}
+																		else
+																		{															
+																			var aHTML = [];
+																			
+																			ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID})
+																		
+																			ns1blankspace.messaging.action = oResponse.id;
+																		
+																			aHTML.push('<table style="width:287px;" class="ns1blankspaceViewControlContainer">');
+																			aHTML.push('<tr><td id="ns1blankspaceMessageEditAttachmentUpload" class="ns1blankspace">' +
+																								ns1blankspace.attachments.upload.show(
+																								{
+																									object: 17,
+																									objectContext: oResponse.id,
+																									label: '',
+																									showUpload: true
+																								}) +
+																							'</td></tr>');
+																			aHTML.push('</table>');			
+
+																			$(ns1blankspace.xhtml.container).html(aHTML.join(''));	
+																			
+																			$('#ns1blankspaceUpload').button(
+																			{
+																				label: "Upload"
+																			})
+																			.click(function() {
+																				 ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.messaging.imap.edit.attach.process});
+																			})
+																		}					
+																	}	
+																},
+
+													process: 	function (oParam, oResponse)
+																{	
+																	var aHTML = [];
+																	
+																	var sXHTMLElementID = "ns1blankspaceActionsEditEmailAttachments";
+																	
+																	if (oParam != undefined)
+																	{
+																		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+																		if (oParam.action != undefined) {ns1blankspace.messaging.action = oParam.action}
+																	}
+																	
+																	$(ns1blankspace.xhtml.container).hide();
+																	
+																	$('#ns1blankspaceMessaageEditAttach').attr('checked', false)
+																	$('#ns1blankspaceMessaageEditAttach').button("refresh");
+																	
+																	if (ns1blankspace.messaging.action != -1)
+																	{
+																		if (oResponse == undefined)
+																		{
+																			var oSearch = new AdvancedSearch();
+																			oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+																			oSearch.addField('filename,description,download,modifieddate,attachment');
+																			oSearch.addFilter('object', 'EQUAL_TO', 17);
+																			oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.messaging.action);
+																		
+																			oSearch.sort('filename', 'asc');
+																			oSearch.getResults(function(data) {ns1blankspace.messaging.imap.edit.attach.process(oParam, data)});
+																		}
+																		else
+																		{
+																			if (oResponse.data.rows.length == 0)
+																			{
+																				$('#' + sXHTMLElementID).html('');
+																			}
+																			else
+																			{
+																				aHTML.push('<table style="width:100%">');
+																			
+																				$.each(oResponse.data.rows, function()
+																				{
+																					aHTML.push('<tr class="ns1blankspaceAttachments">');
+																					aHTML.push('<td id="ns1blankspaceAttachment_filename-' + this.id + '" style="font-size:0.75em;color:black;font-weight:normal;width:100%" class="ns1blankspaceRow">' + this.filename + '</td>');
+																					aHTML.push('<td id="ns1blankspaceAttachmentAttachment_delete-' + this.attachment + '" style="width:20px;" class="ns1blankspaceRowRemove">&nbsp;</td>');
+																					aHTML.push('</tr>');
+																				});
+																				
+																				aHTML.push('</table>');
+
+																				$('#' + sXHTMLElementID).html(aHTML.join(''));
+																				
+																				$('.ns1blankspaceRowRemove').button({
+																					text: false,
+																					 icons: {
+																						 primary: "ui-icon-close"
+																					}
+																				})
+																				.click(function() {
+																					ns1blankspace.messaging.imap.edit.attach.remove(this.id)
+																				})
+																				.css('width', '15px')
+																				.css('height', '20px')
+																				
+																			}
+																		}
+																	}	
+																},
+
+													remove: 	function (sXHTMLElementId)
+																{
+																	var aSearch = sXHTMLElementId.split('-');
+																	var sElementId = aSearch[0];
+																	var sSearchContext = aSearch[1];
+						
+																	$.ajax(
+																		{
+																			type: 'POST',
+																			url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_MANAGE'),
+																			data: 'remove=1&id=' + sSearchContext,
+																			dataType: 'text',
+																			success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
+																		});	
+																}
+											}
+								},
+
+					send:		function (oParam)
 								{
-									var sHTML = ns1blankspace.objectContextData.message;
-									sHTML = (sHTML).formatXHTML();
-
-									while ($('#ifMessage').length == 0) {}
-
-									$('.ns1blankspaceLoading').remove()
-										
-									$('#ifMessage').contents().find('html').html(sHTML);
+									var fFunctionPostSend;
+									var sXHTMLElementID = 'ns1blankspaceMainEdit';
 									
-									if ($.browser.msie) {}
-									else
-									{	
-										var newHeight = $('#ifMessage',top.document).contents().find('html').height() + 100;
-									}
-
-									if ($.browser.msie)
+									if (oParam.object == undefined) {oParam.object = ns1blankspace.object}
+									if (oParam.objectContext == undefined) {oParam.objectContext = ns1blankspace.objectContext}
+									
+									if (oParam != undefined)
 									{
-										setTimeout("ns1blankspace.messaging.imap.message.setHeight()", 100);
-									}
-									else
-									{	
-										$('#ifMessage').height($('#ifMessage',top.document).contents().find('html').height())
-										$('#ifMessage').width($('#ifMessage',top.document).contents().find('html').width())
-									}
+										if (oParam.functionPostSend != undefined) {fFunctionPostSend = oParam.functionPostSend}
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+									}	
 									
-								},
+									//sData += 'object=' + oParam.object;
+									//sData += '&objectcontext=' + oParam.objectContext;
+									sData += 'subject=' + ns1blankspace.util.fs((oParam.subject == undefined ? '' : oParam.subject));
+									sData += '&message=' + ns1blankspace.util.fs((oParam.message == undefined ?' ' : oParam.message));
+									sData += '&priority=' + ns1blankspace.util.fs((oParam.priority == undefined ? '' : oParam.priority));
+									sData += '&id=' + ns1blankspace.util.fs((oParam.contactPersonTo == undefined ? '' : oParam.contactPersonTo));
+									sData += '&to=' + ns1blankspace.util.fs((oParam.to==undefined ? '' : oParam.to));
+									sData += '&cc=' + ns1blankspace.util.fs((oParam.cc==undefined ? '' : oParam.cc));
+									sData += '&bcc=' + ns1blankspace.util.fs((oParam.bcc==undefined ? '' : oParam.bcc));
+									
+									sData += (oParam.otherData == undefined ? '' : oParam.otherData)
+									
+									$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading);
 
-					setHeight:	function ()
-								{
-									$('#ifMessage').css('height', ($('#ifMessage').attr('scrollHeight') + 100) + 'px');
-									$('#ifMessage').css('width', ($('#ifMessage').attr('scrollWidth') + 100) + 'px');
-								},
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+										data: sData,
+										dataType: 'text',
+										success: function(data) 
+										{
+											ns1blankspace.status.message('Email sent');
+											$('#' + sXHTMLElementID).html('<span><br />Email has been sent.</span>');
+											$('#ns1blankspaceMessaging').html(''); //???
+											if (fFunctionPostSend != undefined) {fFunctionPostSend()};
+										}
+									});
 
-					edit:		function ()
+								},						
+
+					edit2:		function ()
 								{
 									var aHTML = [];
 
@@ -1356,674 +2024,7 @@ ns1blankspace.messaging.imap =
 						}
 					}	
 				},
-
-	edit: 		{
-					show: 		function (oParam)
-								{
-
-									var iObject = ns1blankspace.object;
-									var iObjectContext = ns1blankspace.objectContext;
-									var bShowTo = true;
-									var bShowPriority = false;
-									var bShowAll = false;
-									var sXHTMLElementID = 'ns1blankspaceMain';
-									var bDialog = false;
-									var iContactBusiness;
-									var bReplyAll = false;
-									var bForward = false;
-									var bNewEmail = false;
-									var sMessage = '';
-									var sSubject = '';
-									var iSource = 1;
-									
-									if (oParam != undefined)
-									{
-										if (oParam.object != undefined) {iObject = oParam.object}
-										if (oParam.objectContext != undefined) {iObject = oParam.objectContext}
-										if (oParam.showTo != undefined) {bShowTo = oParam.showTo}
-										if (oParam.showPriority != undefined) {bShowPriority = oParam.showPriority}
-										if (oParam.showAll != undefined) {bShowAll = oParam.showAll}
-										if (oParam.dialog != undefined) {bDialog = oParam.dialog}
-										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-										if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
-										if (oParam.replyAll != undefined) {bReplyAll = oParam.replyAll}
-										if (oParam.forward != undefined) {bForward = oParam.forward}
-										if (oParam.newEmail != undefined) {bNewEmail = oParam.newEmail}
-										if (oParam.message != undefined) {sMessage = oParam.message}
-										if (oParam.subject != undefined) {sSubject = oParam.subject}
-										if (oParam.source != undefined) {iSource = oParam.source}
-									}
-
-									if (bNewEmail)
-									{
-										ns1blankspace.objectContext = '';
-										ns1blankspace.objectContextData = undefined;
-	
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_DRAFT') + '&new=1',
-											dataType: 'json',
-											async: false
-										});
-									}
-									
-									if (!bDialog)
-									{
-										var aHTML = [];
-														
-										aHTML.push('<table id="ns1blankspaceMessagingSendMessageContainer">' +
-													'<tr class="ns1blankspace">' +
-													'<td id="ns1blankspaceSendMessageColumn1" class="ns1blankspaceColumn1">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +	
-													'</tr>' +
-													'</table>');					
-											
-										//'<td id="ns1blankspaceSendMessageColumn2" class="ns1blankspaceColumn2">' +
-										//			'</td>' +
-														
-										$('#' + sXHTMLElementID).html(aHTML.join(''));
-									}
-									
-									var aHTML = [];
-									
-									aHTML.push('<table>');
-									
-									if (bShowTo)
-									{
-										aHTML.push('<tr><td class="ns1blankspace">');
-										
-											aHTML.push('<table class="ns1blankspace">');
-									
-											aHTML.push('<tr><td style="width:320px;font-size:0.875em;">');	
-												
-												aHTML.push('<table class="ns1blankspace">');				
-															
-												aHTML.push('<tr><td class="ns1blankspaceCaption" style="width:10px;">' +
-															'To:</td>');		
-												
-												aHTML.push('<td>' +
-															'<input id="ns1blankspaceEditMessageToContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark"' +
-																' data-setelementid="ns1blankspaceEditMessageTo" value="Search for contact" style="width:220px;"');
-															
-												if (iContactBusiness != undefined)
-												{
-													aHTML.push(' data-contactbusiness="' + iContactBusiness + '"')
-												}
-
-												aHTML.push('></td></tr>');				
-
-												aHTML.push('<tr><td style="width:10px;"></td><td>' +
-															'<textarea id="ns1blankspaceEditMessageTo" style="height:30px; width:220px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
-															'</td></tr>');
-											
-												aHTML.push('<tr><td style="width:10px;" class="ns1blankspaceCaption">' +
-															'Cc:</td>');		
-												
-												aHTML.push('<td style="width:10px;">' +
-															'<input id="ns1blankspaceEditMessageCcContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark ns1blankspaceText"' +
-																' data-setelementid="ns1blankspaceEditMessageCc" value="" style="width:220px;"');
-															
-												if (iContactBusiness != undefined)
-												{
-													aHTML.push(' data-contactbusiness="' + iContactBusiness + '"')
-												}
-
-												aHTML.push('></td></tr>');				
-
-												aHTML.push('<tr><td style="width:10px;"></td><td>' +
-															'<textarea id="ns1blankspaceEditMessageCc" style="height:30px; width:220px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
-															'</td></tr>');
-											
-												aHTML.push('<tr><td style="width:10px;" class="ns1blankspaceCaption">' +
-															'Bcc:</td>');		
-												
-												aHTML.push('<td>' +
-															'<input id="ns1blankspaceEditMessageBccContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark ns1blankspaceText"' +
-																' data-setelementid="ns1blankspaceEditMessageBcc" value="" style="width:220px;"');
-															
-												if (iContactBusiness != undefined)
-												{
-													aHTML.push(' data-contactbusiness="' + iContactBusiness + '"');
-												}
-
-												aHTML.push('></td></tr>');				
-
-												aHTML.push('<tr><td style="width:10px;"></td><td>' +
-															'<textarea id="ns1blankspaceEditMessageBcc" style="height:30px; width:220px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
-															'</td></tr>');
-											
-												aHTML.push('</table>');				
-												
-											aHTML.push('<td width="15px;">&nbsp;</td>');	
-
-											aHTML.push('<td style="width:275px;">');	
-
-												aHTML.push('<table>');				
-															
-												aHTML.push('<tr><td id="ns1blankspaceEditMessageAttachCaption" class="ns1blankspaceCaption">' +
-																'Attachments</td>');		
-											
-												aHTML.push('<td class="ns1blankspaceRight" style+"text-align:right;">');
-											
-												aHTML.push('<div id="ns1blankspaceEditMessageAttachContainer" style="font-size:0.75em;">' +
-																'<input type="checkbox" id="ns1blankspaceEditMessageAttach" class="ns1blankspaceAction"/>' +
-																'<label style="font-size:0.875em;" for="ns1blankspaceEditMessageAttach">&nbsp;</label>' +
-																'</div>');
-											
-												aHTML.push('</td></tr>');				
-
-												aHTML.push('<tr><td style="height:80px" colspan=2 id="ns1blankspaceActionsEditEmailAttachments" class="ns1blankspaceBorder">' +
-															'</td></tr>');
-											
-												aHTML.push('</table>');				
-											
-											aHTML.push('</td>');
-
-											aHTML.push('<td style="width:50px;">');	
-
-												aHTML.push('<table class="ns1blankspaceColumn2">');
-										
-												aHTML.push('<tr><td>' +
-														'<span id="ns1blankspaceEditMessageSend" class="ns1blankspaceAction">Send</span>' +
-														'</td></tr>');
-																
-												aHTML.push('</table>');					
-										
-											aHTML.push('</td></tr>');				
-												
-											aHTML.push('</table>');					
-												
-										aHTML.push('</td></tr>');				
-									}
-									
-									aHTML.push('<tr><td>');
-									
-										aHTML.push('<table>');				
-															
-											aHTML.push('<tr><td class="ns1blankspace">' +
-														'<input id="ns1blankspaceMessagingEditMessageSubject" class="ns1blankspaceText ns1blankspaceWatermark"' +
-															' value="Subject">' +
-														'</td>');	
-											
-											if (bShowPriority)
-											{
-												aHTML.push('<td style="width:150px; text-align:right;" class="ns1blankspaceRight">' +
-																'&nbsp; <input type="checkbox" id="ns1blankspaceMessagingEditdMessageHighPriority"/>&nbsp;High Priority?<td>');
-											}
-										
-											aHTML.push('</tr>');				
-												
-										aHTML.push('</table>');				
-									
-									aHTML.push('</td></tr>');
-									
-									aHTML.push('<tr><td class="ns1blankspace">' +
-														'<textarea rows="10" cols="35" id="ns1blankspaceMessagingEditMessageText" class="ns1blankspaceTextMultiLarge"></textarea>' +
-														'</td></tr>');
-									
-									aHTML.push('</table>');						
-									
-									if (bDialog)
-									{
-										$('#' + sXHTMLElementID).html(aHTML.join(''));
-										$('#' + sXHTMLElementID).dialog(
-										{
-											width: 400,
-											resizable: false,
-											modal: true,
-											title: 'Send Email Message',
-											buttons: 
-											{
-												"Cancel": function() 
-												{
-													$( this ).dialog( "close" );
-												},
-
-												"Send": function() 
-												{
-													ns1blankspace.messaging.edit.send({
-														subject: $('#ns1blankspaceMessagingSendMessageSubject').val(),
-														message: $('#ns1blankspaceMessagingSendMessageMessage').val(),
-														priority: ($('#ns1blankspaceMessagingSendMessageHighPriority').attr('checked')?3:2),
-														});
-
-													$( this ).dialog( "close" );
-												}
-											}
-										});
-									}	
-									else
-									{
-										if (tinyMCE.getInstanceById('ns1blankspaceMessagingMessageEdit'))
-										{
-											tinyMCE.get('ns1blankspaceMessagingMessageEdit').remove();
-											$('#ns1blankspaceMessagingMessageEdit').remove();
-										}	
-									
-										$('#ns1blankspaceSendMessageColumn1').html(aHTML.join(''));
-										
-										var aHTML = [];
-
-										aHTML.push('<table class="ns1blankspaceColumn2">');
-										
-										aHTML.push('<tr><td class="ns1blankspaceMainAction">' +
-														'<span id="ns1blankspaceEditMessageSend">Send</span>' +
-														'</td></tr>');
-																
-										aHTML.push('</table>');					
-										
-										//$('#ns1blankspaceSendMessageColumn2').html(aHTML.join(''));
-									
-										$('#ns1blankspaceEditMessageSend').button(
-										{
-											label: "Send"
-										})
-										.click(function() {
-										
-											if (oParam != undefined)
-											{
-												oParam = {};
-											}
-
-											oParam.subject = $('#ns1blankspaceMessagingEditMessageSubject').val();
-											oParam.message = tinyMCE.get('ns1blankspaceMessagingEditMessageMessage').getContent();
-											oParam.contactPersonTo = $('#ns1blankspaceMessagingEditMessageContactTo').attr('data-id');
-											oParam.to = $('#ns1blankspaceMessagingEditMessageTo').val();
-											oParam.cc = $('#ns1blankspaceMessagingEditMessageCc').val();
-											oParam.bcc = $('#ns1blankspaceMessagingEditMessageBcc').val();
-											
-											ns1blankspace.messaging.imap.edit.Send(oParam);
-										});
-
-										$('#ns1blankspaceEditMessageAttach').button(
-										{
-											text: false,
-											icons:	{
-														primary: "ui-icon-plus"
-													}
-										})
-										.click(function() {
-										
-											ns1blankspace.messaging.imap.edit.attach.show(oParam);
-										})
-										.css('width', '20px')
-										.css('height', '23px')
-										.css('font-size', '0.75em');
-										
-										if (ns1blankspace.objectContextData != undefined && iSource == 1)
-										{
-											var sTo = '';
-										
-											var aHTML = [];
-
-											aHTML.push('<br />');
-											
-											$.each(ns1blankspace.messaging.imap.emailAccounts, function() 
-											{ 
-												if (this.id == ns1blankspace.messaging.imap.account)
-												{
-													aHTML.push(this.footer + '<br />');
-												}
-											});
-												
-											if (ns1blankspace.objectContextData != undefined)
-											{
-												if (bForward)
-												{
-													$('#ns1blankspaceMessagingEditMessageSubject').val('Fw: ' + ns1blankspace.objectContextData.subject)
-												}
-												else
-												{
-													$('#ns1blankspaceMessagingEditMessageSubject').val('Re: ' + ns1blankspace.objectContextData.subject)
-												}	
-												
-												$('#ns1blankspaceMessagingEditMessageSubject').removeClass('ns1blankspaceWatermark');
-												
-												
-												aHTML.push('<br />---- Original Message ----<br />');
-												aHTML.push('<table style="background-color:#f5f5f5;width:100%;color:black;">');
-												aHTML.push('<tr><td><strong>From:</strong> ' + ns1blankspace.objectContextData.from + '</td></tr>');
-												
-												aHTML.push('<tr><td><strong>To:</strong> ');	
-												
-												var sOrgTo = ns1blankspace.objectContextData.to;
-												var aOrgTo = sOrgTo.split('|')
-												
-												sOrgTo = '';
-										
-												$.each(aOrgTo, function(i)
-												{
-													if (i % 2 !== 0) {sOrgTo += this + '; '}		
-												});				
-												
-												aHTML.push(sOrgTo + '</td></tr>');
-												
-												var sOrgCc = ns1blankspace.objectContextData.cc;
-												
-												if (sOrgCc != '')
-												{
-													aHTML.push('<tr><td><strong>CC:</strong> ');	
-													var aOrgCc = sOrgCc.split('|')
-													sOrgCc = '';
-											
-													$.each(aOrgCc, function()
-													{
-														if (i % 2 !== 0) {sOrgCc += this + '; '}	
-													});			
-													
-													aHTML.push(sOrgCc + '</td></tr>');
-												}
-												
-												var oDate = new Date.parse(ns1blankspace.objectContextData.date);
-												sDate = oDate.toString("ddd, dd MMM yyyy h:mm TT") 
-										
-												aHTML.push('<tr><td><strong>Sent:</strong> ' + sDate + '</td></tr>');	
-												aHTML.push('<tr><td><strong>Subject:</strong> ' + ns1blankspace.objectContextData.subject + '</td></tr>');	
-												aHTML.push('</table>');
-												
-												$('#ns1blankspaceMessagingEditMessageText').val(aHTML.join('') + (ns1blankspace.objectContextData.message).formatXHTML());
-										
-												if (!bForward)
-												{
-													if (ns1blankspace.objectContextData.from != '')
-													{
-														var sFrom = ns1blankspace.objectContextData.from;
-													}
-										
-													if (ns1blankspace.objectContextData.to != '' && bReplyAll)
-													{			
-														sTo = ns1blankspace.objectContextData.to;
-														var aTo = sTo.split('|');
-														sTo = '';
-													
-														$.each(aTo, function(i)
-														{
-															if (i % 2 !== 0) 
-															{
-																if (this != ns1blankspace.user.email && this != sFrom)
-																{	
-																	sTo += this + '; ';
-																}
-															}		
-														});	
-													}
-										
-													sTo = sFrom + '; ' + sTo;
-												}	
-									
-												$('#ns1blankspaceMessagingEditMessageTo').val(sTo)
-									
-												if (ns1blankspace.objectContextData.attachments != '' && bForward && ns1blankspace.messaging.action == -1)
-												{
-													if (ns1blankspace.objectContextData.sourcetypetext == "EMAIL")
-													{
-														var sParam = ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ATTACHMENT_MANAGE') + '&rf=TEXT';
-														var sData = 'account=' + ns1blankspace.messaging.imap.account;
-														sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-														
-														$.ajax(
-														{
-															type: 'POST',
-															url: sParam,
-															data: sData,
-															dataType: 'text',
-															success: function(data) 
-															{
-																var aReturn = data.split('|');
-																ns1blankspace.messaging.action = aReturn[1];
-																ns1blankspace.messaging.imap.edit.attachments();
-															}
-														});
-													}
-													
-													if (ns1blankspace.objectContextData.sourcetypetext == "ACTION")
-													{
-														var sParam = ns1blankspace.util.endpointURI('MESSAGING_EMAIL_DRAFT_MANAGE') + '&new=1&rf=TEXT';
-														var sData = 'copyaction=' + ns1blankspace.objectContextData.id;
-														
-														$.ajax(
-														{
-															type: 'POST',
-															url: sParam,
-															data: sData,
-															dataType: 'text',
-															success: function(data) 
-															{
-																var aReturn = data.split('|');
-																ns1blankspace.messaging.action = aReturn[2];
-																ns1blankspace.messaging.imap.edit.attachments();
-															}
-														});
-													}
-													
-												}	
-												else
-												{
-													//ns1blankspace.messaging.imap.edit.attachments();
-												}		
-											}	
-										}
-										
-										if (iSource == 2)
-										{
-											var sFooter = '<br />';
-											
-											$.each(ns1blankspace.messaging.imap.emailAccounts, function() 
-											{ 
-												if (this.id == ns1blankspace.messaging.imap.account)
-												{
-													sFooter = this.footer + '<br />';
-												}
-											});
-											
-											$('#ns1blankspaceMessagingEditMessageText').val(sFooter + sMessage)
-										}
-										
-										if (iSource == 3)
-										{
-											$('#ns1blankspaceMessagingEditMessageSubject').val(sSubject)
-											$('#ns1blankspaceMessagingEditMessageSubject').removeClass('ns1blankspaceWatermark');
-											$('#ns1blankspaceMessagingEditMessageText').val(sMessage)
-										}
-										
-										if (ns1blankspace.option.richTextEditing)
-										{
-											tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingEditMessageText');
-										}	
-									}
-								},
-
-					attach: 	{
-									show:		function (oParam, oResponse)
-												{
-													sXHTMLElementID = "ns1blankspaceEditMessageAttachCaption";
-													
-													if (!$('#ns1blankspaceEditMessageAttach').attr('checked'))
-													{
-														$(ns1blankspace.xhtml.container).hide()
-													}
-													else
-													{	
-														if (oResponse == undefined)
-														{					
-															$.ajax(
-															{
-																type: 'POST',
-																url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_DRAFT'),
-																dataType: 'json',
-																success: function(data) 
-																{
-																	ns1blankspace.messaging.imap.edit.attach.show(oParam, data)
-																}
-															});
-														}
-														else
-														{															
-															var aHTML = [];
-															
-															ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID})
-														
-															ns1blankspace.messaging.action = oResponse.id;
-														
-															aHTML.push('<table style="width:287px;" class="ns1blankspaceViewControlContainer">');
-															aHTML.push('<tr><td id="ns1blankspaceMessageEditAttachmentUpload" class="ns1blankspace">' +
-																				ns1blankspace.attachments.upload.show(
-																				{
-																					object: 17,
-																					objectContext: oResponse.id,
-																					label: '',
-																					showUpload: true
-																				}) +
-																			'</td></tr>');
-															aHTML.push('</table>');			
-
-															$(ns1blankspace.xhtml.container).html(aHTML.join(''));	
-															
-															$('#ns1blankspaceUpload').button(
-															{
-																label: "Upload"
-															})
-															.click(function() {
-																 ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.messaging.imap.edit.attach.process});
-															})
-														}					
-													}	
-												},
-
-									process: 	function (oParam, oResponse)
-												{	
-													var aHTML = [];
-													
-													var sXHTMLElementID = "ns1blankspaceActionsEditEmailAttachments";
-													
-													if (oParam != undefined)
-													{
-														if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-														if (oParam.action != undefined) {ns1blankspace.messaging.action = oParam.action}
-													}
-													
-													$(ns1blankspace.xhtml.container).hide();
-													
-													$('#ns1blankspaceMessaageEditAttach').attr('checked', false)
-													$('#ns1blankspaceMessaageEditAttach').button("refresh");
-													
-													if (ns1blankspace.messaging.action != -1)
-													{
-														if (oResponse == undefined)
-														{
-															var oSearch = new AdvancedSearch();
-															oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-															oSearch.addField('filename,description,download,modifieddate,attachment');
-															oSearch.addFilter('object', 'EQUAL_TO', 17);
-															oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.messaging.action);
-														
-															oSearch.sort('filename', 'asc');
-															oSearch.getResults(function(data) {ns1blankspace.messaging.imap.edit.attach.process(oParam, data)});
-														}
-														else
-														{
-															if (oResponse.data.rows.length == 0)
-															{
-																$('#' + sXHTMLElementID).html('');
-															}
-															else
-															{
-																aHTML.push('<table style="width:100%">');
-															
-																$.each(oResponse.data.rows, function()
-																{
-																	aHTML.push('<tr class="ns1blankspaceAttachments">');
-																	aHTML.push('<td id="ns1blankspaceAttachment_filename-' + this.id + '" style="font-size:0.75em;color:black;font-weight:normal;width:100%" class="ns1blankspaceRow">' + this.filename + '</td>');
-																	aHTML.push('<td id="ns1blankspaceAttachmentAttachment_delete-' + this.attachment + '" style="width:20px;" class="ns1blankspaceRowRemove">&nbsp;</td>');
-																	aHTML.push('</tr>');
-																});
-																
-																aHTML.push('</table>');
-
-																$('#' + sXHTMLElementID).html(aHTML.join(''));
-																
-																$('.ns1blankspaceRowRemove').button({
-																	text: false,
-																	 icons: {
-																		 primary: "ui-icon-close"
-																	}
-																})
-																.click(function() {
-																	ns1blankspace.messaging.imap.edit.attach.remove(this.id)
-																})
-																.css('width', '15px')
-																.css('height', '20px')
-																
-															}
-														}
-													}	
-												},
-
-									remove: 	function (sXHTMLElementId)
-												{
-													var aSearch = sXHTMLElementId.split('-');
-													var sElementId = aSearch[0];
-													var sSearchContext = aSearch[1];
-		
-													$.ajax(
-														{
-															type: 'POST',
-															url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_MANAGE'),
-															data: 'remove=1&id=' + sSearchContext,
-															dataType: 'text',
-															success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
-														});	
-												}
-							}
-				},				
-
-	send:		function (oParam)
-				{
-					var fFunctionPostSend;
-					var sXHTMLElementID = 'ns1blankspaceMainEdit';
 					
-					if (oParam.object == undefined) {oParam.object = ns1blankspace.object}
-					if (oParam.objectContext == undefined) {oParam.objectContext = ns1blankspace.objectContext}
-					
-					if (oParam != undefined)
-					{
-						if (oParam.functionPostSend != undefined) {fFunctionPostSend = oParam.functionPostSend}
-						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-					}	
-					
-					//sData += 'object=' + oParam.object;
-					//sData += '&objectcontext=' + oParam.objectContext;
-					sData += 'subject=' + ns1blankspace.util.fs((oParam.subject == undefined ? '' : oParam.subject));
-					sData += '&message=' + ns1blankspace.util.fs((oParam.message == undefined ?' ' : oParam.message));
-					sData += '&priority=' + ns1blankspace.util.fs((oParam.priority == undefined ? '' : oParam.priority));
-					sData += '&id=' + ns1blankspace.util.fs((oParam.contactPersonTo == undefined ? '' : oParam.contactPersonTo));
-					sData += '&to=' + ns1blankspace.util.fs((oParam.to==undefined ? '' : oParam.to));
-					sData += '&cc=' + ns1blankspace.util.fs((oParam.cc==undefined ? '' : oParam.cc));
-					sData += '&bcc=' + ns1blankspace.util.fs((oParam.bcc==undefined ? '' : oParam.bcc));
-					
-					sData += (oParam.otherData == undefined ? '' : oParam.otherData)
-					
-					$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading);
-
-					$.ajax(
-					{
-						type: 'POST',
-						url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
-						data: sData,
-						dataType: 'text',
-						success: function(data) 
-						{
-							ns1blankspace.status.message('Email sent');
-							$('#' + sXHTMLElementID).html('<span><br />Email has been sent.</span>');
-							$('#ns1blankspaceMessaging').html(''); //???
-							if (fFunctionPostSend != undefined) {fFunctionPostSend()};
-						}
-					});
-
-				},
-								
 	new: 		function (oParam, oResponse)
 				{
 					var aHTML = [];
