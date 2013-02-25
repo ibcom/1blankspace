@@ -1513,7 +1513,7 @@ ns1blankspace.setup.website =
 										}
 										else
 										{
-											aHTML.push('<table class="ns1blankspaceSetupWebsiteURLs">');
+											aHTML.push('<table id="ns1blankspaceSetupWebsiteURLs">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">URL</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
