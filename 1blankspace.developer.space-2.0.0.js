@@ -207,13 +207,13 @@ ns1blankspace.developer.space =
 										aHTML.push('</table>');
 
 										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-										$(ns1blankspace.xhtml.container).show(giShowSpeedOptions);
+										$(ns1blankspace.xhtml.container).show();
 										ns1blankspace.search.stop();
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(giHideSpeedOptions)
+											$(ns1blankspace.xhtml.container).hide()
 											ns1blankspace.developer.space.search(event.target.id, {source: 1});
 										});
 									}	
