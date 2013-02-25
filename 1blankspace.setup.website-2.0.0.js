@@ -1556,7 +1556,7 @@ ns1blankspace.setup.website =
 													}
 												})
 												.click(function() {
-													ns1blankspace.setup.website.URLs.remove({xhtmlElementID: this.id});
+													ns1blankspace.setup.website.urls.remove({xhtmlElementID: this.id});
 												})
 												.css('width', '15px')
 												.css('height', '17px')
@@ -1571,7 +1571,7 @@ ns1blankspace.setup.website =
 													}
 												})
 												.click(function() {
-													ns1blankspace.setup.website.URLs.add({xhtmlElementID: this.id})
+													ns1blankspace.setup.website.urls.add({xhtmlElementID: this.id})
 												})
 												.css('width', '15px')
 												.css('height', '17px')
