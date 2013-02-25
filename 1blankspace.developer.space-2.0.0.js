@@ -138,7 +138,7 @@ ns1blankspace.developer.space =
 									{	
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#ns1blankspaceViewpControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
