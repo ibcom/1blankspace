@@ -673,7 +673,7 @@ ns1blankspace.developer.space =
 								$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 								$(ns1blankspace.xhtml.container).show();
 								
-								$('#s1blankspaceSpaceSubscriptionsSelect td.ns1blankspaceRowSelect').click(function(event)
+								$('#ns1blankspaceSpaceSubscriptionsSelect td.ns1blankspaceRowSelect').click(function(event)
 								{
 									aParam.step = 3;
 									aParam.xhtmlElementID = event.target.id;
