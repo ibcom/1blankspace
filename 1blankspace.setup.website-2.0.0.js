@@ -1549,7 +1549,7 @@ ns1blankspace.setup.website =
 											
 											if (oOptions.remove) 
 											{
-												$('#ns1blankspaceSetupWebsiteURLs > span.ns1blankspaceRowRemove').button( {
+												$('#ns1blankspaceSetupWebsiteURLs span.ns1blankspaceRowRemove').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-close"
@@ -1564,7 +1564,7 @@ ns1blankspace.setup.website =
 											
 											if (oOptions.view) 
 											{
-												$('#ns1blankspaceSetupWebsiteURLs > .ns1blankspaceRowSelect').button( {
+												$('#ns1blankspaceSetupWebsiteURLs .ns1blankspaceRowSelect').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-play"
