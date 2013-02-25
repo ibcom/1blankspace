@@ -611,7 +611,7 @@ ns1blankspace.developer.space =
 								
 							$('#ns1blankspaceSubscriptionsColumn1').html(aHTML.join(''));
 
-							$('#ns1blankspaceSpaceSubscriptions td.ns1blankspacenRowRemove').button(
+							$('#ns1blankspaceSpaceSubscriptions span.ns1blankspacenRowRemove').button(
 							{
 								text: false,
 							 	icons: {primary: "ui-icon-close"}
