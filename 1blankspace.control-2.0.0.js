@@ -96,8 +96,8 @@ ns1blankspace.financial.summaryUseTemplate = false;
 ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html';
 
 ns1blankspace.xhtml.logonNotes =
-	'<span style="font-weight:bold;">THIS IS AN UI BEING WORKED ON BY THE COMMUNITY.</span><br /><br />' +
-	'As much as mydigitalstructure is well proven and stable, this HTML/js UI code is not yet stable and should not be used in production as is. ' +
+	'<span style="font-weight:bold;">THIS IS AN APP BEING WORKED ON BY THE COMMUNITY.</span><br /><br />' +
+	'This UI code is not yet stable and should not be used in production as is. ' +
 	'It exists to allow the community to debug and others to learn from. ' +
 	'Each day it gets more stable, so keep a watch on the repo.  If you find a bug, please raise any issue on github.<br /><br />' +
 	'<span style="font-weight:bold">Thanks!</span></span><br /><br />' +
