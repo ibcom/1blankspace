@@ -214,7 +214,7 @@ ns1blankspace.developer.space =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide()
-											ns1blankspace.developer.space.search(event.target.id, {source: 1});
+											ns1blankspace.developer.space.search.send(event.target.id, {source: 1});
 										});
 									}	
 								}			
