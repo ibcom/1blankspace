@@ -2614,35 +2614,70 @@ ns1blankspace.search =
 						
 							if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
 							{
-								var aColumns = sColumns.split(',');	
-								var oSearch = new AdvancedSearch();
-								oSearch.method = sMethod;
-								oSearch.addField(sColumns);
+								var aColumns = sColumns.split('-');	
 
-								if (iSource === ns1blankspace.data.searchSource.text)
-								{	
-									oSearch.addFilter(aColumns[0], 'TEXT_IS_LIKE', sSearchText);
-								}	
-								
-								if (sXHTMLParentInputElementID != undefined)
+								if (ns1blankspace.util.isMethodAdvancedSearch(sMethod))
 								{
-									var sParentColumnID = $('#' + sXHTMLInputElementID).attr("data-parent-search-id")
-									var sParentColumnText = $('#' + sXHTMLInputElementID).attr("data-parent-search-text")
-									var sParentContextID = $('#' + sXHTMLParentInputElementID).attr("data-id");
-									var sParentContextText = $('#' + sXHTMLParentInputElementID).val();
+									var oSearch = new AdvancedSearch();
+									oSearch.method = sMethod;
+									oSearch.addField(sColumns);
+
+									if (iSource === ns1blankspace.data.searchSource.text)
+									{	
+										oSearch.addFilter(aColumns[0], 'TEXT_IS_LIKE', sSearchText);
+									}	
 									
-									if (sParentColumnID != undefined && sParentContextID != undefined)
+									if (sXHTMLParentInputElementID != undefined)
 									{
-										oSearch.addFilter(sParentColumnID, 'EQUAL_TO', sParentContextID);
+										var sParentColumnID = $('#' + sXHTMLInputElementID).attr("data-parent-search-id")
+										var sParentColumnText = $('#' + sXHTMLInputElementID).attr("data-parent-search-text")
+										var sParentContextID = $('#' + sXHTMLParentInputElementID).attr("data-id");
+										var sParentContextText = $('#' + sXHTMLParentInputElementID).val();
+										
+										if (sParentColumnID != undefined && (sParentContextID != undefined && sParentContextID != ''))
+										{
+											oSearch.addFilter(sParentColumnID, 'EQUAL_TO', sParentContextID);
+										}
+										else if	(sParentColumnText != undefined && sParentContextText != '')
+										{
+											oSearch.addFilter(sParentColumnText, 'TEXT_STARTS_WITH', sParentContextText);
+										}
 									}
-									else if	(sParentColumnText != undefined && sParentContextText != '')
-									{
-										oSearch.addFilter(sParentColumnText, 'TEXT_STARTS_WITH', sParentContextText);
-									}
+									
+									oSearch.sort(aColumns[0], 'asc');
+									oSearch.getResults(function(data){ns1blankspace.search.show(oParam, data)});
 								}
-								
-								oSearch.sort(aColumns[0], 'asc');
-								oSearch.getResults(function(data){ns1blankspace.search.show(oParam, data)});
+								else
+								{
+									var sData = '=_';
+
+									if (iSource === ns1blankspace.data.searchSource.text)
+									{	
+										sData = '&' + aColumns[0] + '=' + ns1blankspace.util.fs(sSearchText);
+									}	
+									
+									if (sXHTMLParentInputElementID != undefined)
+									{
+										var sParentColumnID = $('#' + sXHTMLInputElementID).attr("data-parent-search-id")
+										var sParentColumnText = $('#' + sXHTMLInputElementID).attr("data-parent-search-text")
+										var sParentContextID = $('#' + sXHTMLParentInputElementID).attr("data-id");
+										var sParentContextText = $('#' + sXHTMLParentInputElementID).val();
+										
+										if (sParentColumnID != undefined && (sParentContextID != undefined && sParentContextID != ''))
+										{
+											sData = '&' + sParentColumnID + '=' + sParentContextID;
+										}
+									}
+
+									$.ajax(
+									{
+										type: 'GET',
+										url: ns1blankspace.util.endpointURI(sMethod),
+										data: sData,
+										dataType: 'json',
+										success: function(data){ns1blankspace.search.show(oParam, data)}
+									});
+								}	
 							}
 						}	
 						else

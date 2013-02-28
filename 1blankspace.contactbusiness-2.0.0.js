@@ -275,7 +275,7 @@ ns1blankspace.contactBusiness =
 											more: oResponse.moreid,
 											rows: 15,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: oResponse.contactBusiness.search.send
+											functionSearch: ns1blankspace.contactBusiness.search.send
 										});   
 										
 									}	
