@@ -2682,12 +2682,13 @@ ns1blankspace.search =
 						}	
 						else
 						{
+							if (sColumns == undefined) {sColumns = 'title'}
 							var aColumns = sColumns.split('-');
 							var aHTML = [];
 							
 							if (oResponse.data.rows.length === 0)
 							{
-								$(ns1blankspace).hide();
+								$(ns1blankspace.xhtml.container).hide();
 							}
 							else
 							{
@@ -2698,12 +2699,12 @@ ns1blankspace.search =
 								{ 
 									iColumn = iColumn + 1;
 							
-									if (iColumn === 1)
+									if (iColumn == 1)
 									{
 										aHTML.push('<tr class="ns1blankspaceSearch">');
 									}
 										
-									if (sColumns.length === 0)
+									if (sColumns.length == 0)
 									{
 										aHTML.push('<td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
 															'-' + this.id + '">' + this.title + '</td>');
