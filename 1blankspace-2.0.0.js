@@ -2886,9 +2886,9 @@ ns1blankspace.util =
 
 	getID:		function (sValue) {return (sValue).split('-')[1]},
 
-	getRPC:		function ()
+	getMethods:		function ()
 				{
-					if (ns1blankspace.rpc === undefined)
+					if (ns1blankspace.methods === undefined)
 					{
 						$.ajax(
 						{
@@ -2896,7 +2896,7 @@ ns1blankspace.util =
 							url: '/jscripts/1blankspace.rpc-2.0.0.json',
 							dataType: 'json',
 							async: false,
-							success: function(data) {ns1blankspace.rpc = data.methods}
+							success: function(data) {ns1blankspace.methods = data.methods}
 						});
 					}
 				},
@@ -2904,19 +2904,18 @@ ns1blankspace.util =
 	endpointURI:
 				function (sMethod)
 				{
-					ns1blankspace.util.getRPC();
+					ns1blankspace.util.getMethods();
 
-					var sBaseEndpoint;
+					var sBaseEndpoint = '/ondemand/';
 
-					var oMethod = $.grep(ns1blankspace.rpc, function (a) {return a.title == sMethod;})	
+					var oMethod = $.grep(ns1blankspace.methods, function (a) {return a.title == sMethod;})	
 
-					if (oMethod.length == 0) 
+					if (oMethod.length != 0) 
 					{
-						sBaseEndpoint = '/ondemand/';
-					}
-					else
-					{
-						sBaseEndpoint = '/rpc/';
+						if (oMethod[0].rpc == 'true')
+						{	
+							sBaseEndpoint = '/rpc/';
+						}	
 					}
 
 					var aMethod = sMethod.split('_');
@@ -2928,11 +2927,11 @@ ns1blankspace.util =
 	isMethodAdvancedSearch:
 				function (sMethod)
 				{
-					ns1blankspace.util.getRPC();
+					ns1blankspace.util.getMethods();
 
 					var sBaseEndpoint;
 
-					var oMethod = $.grep(ns1blankspace.rpc, function (a) {return a.title == sMethod;})	
+					var oMethod = $.grep(ns1blankspace.methods, function (a) {return a.title == sMethod;})	
 
 					if (oMethod.length == 0) 
 					{
