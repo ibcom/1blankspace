@@ -800,6 +800,8 @@ ns1blankspace.project =
 
 					save:		function ()
 								{
+									ns1blankspace.status.working();
+
 									var sData = 'project=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 									
 									sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceTaskDetailsTitle').val());

@@ -504,6 +504,8 @@ ns1blankspace.financial.payroll =
 								{
 									if (ns1blankspace.objectContext != -1)
 									{
+										ns1blankspace.status.working();
+										
 										var sData = 'id=' + ns1blankspace.objectContext;
 										
 										if ($('#ns1blankspaceMainDetails').html() != '')

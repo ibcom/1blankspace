@@ -830,6 +830,8 @@ ns1blankspace.opportunity =
 								{
 									if (ns1blankspace.opportunity.save.validate)
 									{	
+										ns1blankspace.status.working();
+
 										var sData = 'id=';
 										
 										if (ns1blankspace.objectContext != -1)

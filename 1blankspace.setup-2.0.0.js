@@ -350,6 +350,8 @@ $.extend(true, ns1blankspace.setup,
 										}
 										else
 										{
+											ns1blankspace.status.working();
+											
 											$.ajax(
 											{
 												type: 'POST',

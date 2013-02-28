@@ -689,6 +689,8 @@ ns1blankspace.messaging.imap =
 
 									if (iStep == 2)
 									{
+										ns1blankspace.status.working();
+
 										var sData = 'account=' + ns1blankspace.util.fs(ns1blankspace.messaging.imap.account);
 										sData += '&messageid=' + ns1blankspace.util.fs(sMessageID);
 										
@@ -699,10 +701,11 @@ ns1blankspace.messaging.imap =
 											data: sData,
 											dataType: 'json',
 											success: function(data)
-														{
-															$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-															$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-														}
+											{
+												ns1blankspace.status.message('Saved')
+												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+												$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+											}
 										});	
 									}
 								}						

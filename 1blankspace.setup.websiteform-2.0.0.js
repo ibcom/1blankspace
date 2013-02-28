@@ -460,6 +460,8 @@ ns1blankspace.setup.websiteForm =
 	save:     	{
 					send:		function (oParam, oResponse)
 								{
+									ns1blankspace.status.working();
+
 									var sData = 'site=' + ns1blankspace.websiteForm.site;
 									
 									if (ns1blankspace.objectContext != -1)

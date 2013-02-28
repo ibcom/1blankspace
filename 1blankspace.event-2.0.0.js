@@ -755,6 +755,8 @@ ns1blankspace.event =
 	save:		{	
 					send:		function ()
 								{
+									ns1blankspace.status.working();
+
 									var sData = '_=1';
 									
 									if (ns1blankspace.objectContext != -1)
@@ -792,7 +794,7 @@ ns1blankspace.event =
 													{ 
 														var aReturn = data.split('|');
 														ns1blankspace.objectContext = aReturn[2];
-														ns1blankspaceStatus('Event saved.');
+														ns1blankspace.status.message('Event saved.');
 													}
 									});
 										

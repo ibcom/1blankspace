@@ -468,10 +468,12 @@ ns1blankspace.setup.structure =
 				},			
 
 	save: 		{
-					send:		function i(oParam, oResponse)
+					send:		function (oParam, oResponse)
 								{
 									if (oResponse == undefined)
 									{
+										ns1blankspace.status.working();
+										
 										var sData = '_=1';
 										
 										if (ns1blankspace.objectContext != -1)

@@ -604,6 +604,8 @@ ns1blankspace.setup.projectTask =
 	save: 		{
 					send: 		function ()
 								{
+									ns1blankspace.status.working();
+
 									var sData = 'id=' + ns1blankspace.objectContext;
 										
 									if ($('#ns1blankspaceMainDetails').html() != '')

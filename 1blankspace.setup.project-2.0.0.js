@@ -685,6 +685,8 @@ ns1blankspace.setup.project =
 					save:		{
 									send:		function (oParam)
 												{
+													ns1blankspace.status.working();
+													
 													var lProjectTask;
 													
 													if (oParam !== undefined)

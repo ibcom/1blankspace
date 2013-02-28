@@ -1749,6 +1749,8 @@ ns1blankspace.setup.website =
 								{
 									if (oResponse == undefined)
 									{
+										ns1blankspace.status.working();
+										
 										var sData = '_=1';
 										var sCSSAttachment;
 										

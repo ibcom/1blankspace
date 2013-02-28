@@ -894,6 +894,8 @@ ns1blankspace.contactPerson =
 	save: 		{
 					send: 		function ()
 								{
+									ns1blankspace.status.working();
+									
 									var sData = 'id=';
 									
 									if (ns1blankspace.objectContext != -1)

@@ -574,6 +574,8 @@ ns1blankspace.supportIssue =
 	save: 		{
 					send:		function ()
 								{
+									ns1blankspace.status.working();
+									
 									if (ns1blankspace.objectContext != -1)
 									{
 										var sData = 'id=' + ns1blankspace.objectContext;

@@ -1457,6 +1457,8 @@ ns1blankspace.messaging.conversation =
 								{
 									if (ns1blankspace.messaging.conversation.save.validate)
 									{	
+										ns1blankspace.status.working();
+										
 										var sData = '_=1';
 										
 										if (ns1blankspace.objectContext != -1)

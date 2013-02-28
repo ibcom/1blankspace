@@ -448,6 +448,8 @@ ns1blankspace.stuctureData =
 								{
 									if (oResponse == undefined)
 									{
+										ns1blankspace.status.working();
+										
 										var sData = '_=1';
 										
 										if (ns1blankspace.objectContext != -1)

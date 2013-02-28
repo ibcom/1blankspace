@@ -762,6 +762,8 @@ ns1blankspace.setup.automation =
 								{
 									if (oResponse == undefined)
 									{
+										ns1blankspace.status.working()
+										
 										var sData = 'id=' + (ns1blankspace.objectContext != -1 ? ns1blankspace.objectContext : '');	
 										
 										if ($('#ns1blankspaceMainDetails').html() != '')
