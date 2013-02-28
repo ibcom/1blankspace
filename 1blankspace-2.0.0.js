@@ -2893,7 +2893,7 @@ ns1blankspace.util =
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/jscripts/1blankspace.rpc-1.0.2.json',
+							url: '/jscripts/1blankspace.rpc-2.0.0.json',
 							dataType: 'json',
 							async: false,
 							success: function(data) {ns1blankspace.rpc = data.methods}
@@ -2908,7 +2908,9 @@ ns1blankspace.util =
 
 					var sBaseEndpoint;
 
-					if ($.inArray(sMethod, ns1blankspace.rpc) === -1)
+					var oMethod = $.grep(ns1blankspace.rpc, function (a) {return a.title == sMethod;})	
+
+					if (oMethod.length == 0) 
 					{
 						sBaseEndpoint = '/ondemand/';
 					}
@@ -2921,6 +2923,25 @@ ns1blankspace.util =
 					var sEndpoint = aMethod[0];
 					
 					return sBaseEndpoint + (aMethod[0]).toLowerCase() + '/?method=' + (sMethod).toUpperCase();
+				},
+
+	isMethodAdvancedSearch:
+				function (sMethod)
+				{
+					ns1blankspace.util.getRPC();
+
+					var sBaseEndpoint;
+
+					var oMethod = $.grep(ns1blankspace.rpc, function (a) {return a.title == sMethod;})	
+
+					if (oMethod.length == 0) 
+					{
+						return false;
+					}
+					else
+					{
+						return (oMethod[0].advancedSearch == 'true');
+					}
 				},
 
 	uri: 		{

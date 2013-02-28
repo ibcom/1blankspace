@@ -2055,7 +2055,7 @@ ns1blankspace.messaging.imap =
 					{		
 						if (oResponse.data.rows.length == 0)
 						{
-							ns1blankspace.messaging.imap.edit.show(oParam);
+							ns1blankspace.messaging.imap.message.edit.show(oParam);
 						}
 						else
 						{	
