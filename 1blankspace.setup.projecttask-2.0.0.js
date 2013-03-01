@@ -611,9 +611,9 @@ ns1blankspace.setup.projectTask =
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
 										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
-										sData += '&type=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsType').attr('onDemandID'));
-										sData += '&taskbyuser=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTaskBy').attr('onDemandID'));
-										sData += '&taskdependson=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTaskDependsOn').attr('onDemandID'));
+										sData += '&type=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsType').attr('data-id'));
+										sData += '&taskbyuser=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTaskBy').attr('data-id'));
+										sData += '&taskdependson=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTaskDependsOn').attr('data-id'));
 										sData += '&taskstartbasedon=' + $('input[name="radioStartBasedOn"]:checked').val();
 										sData += '&daysbeforestart=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsStartDays').val());
 										sData += '&durationdays=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDurationDays').val());

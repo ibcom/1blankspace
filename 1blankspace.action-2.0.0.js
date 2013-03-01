@@ -708,12 +708,12 @@ ns1blankspace.action =
 											if ($('#ns1blankspaceMainDetails').html() != '')
 											{
 												sData += '&subject=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSubject').val());
-												sData += '&priority=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPriority').attr('onDemandID'));				
-												sData += '&type=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsType').attr('onDemandID'));
+												sData += '&priority=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPriority').attr('data-id'));				
+												sData += '&type=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsType').attr('data-id'));
 												sData += '&date=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDate').val());
-												sData += '&contactbusiness=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsBusiness').attr("onDemandID"));
-												sData += '&contactperson=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPerson').attr("onDemandID"));
-												sData += '&actionby=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsActionBy').attr("onDemandID"));
+												sData += '&contactbusiness=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsBusiness').attr("data-id"));
+												sData += '&contactperson=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPerson').attr("data-id"));
+												sData += '&actionby=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsActionBy').attr("data-id"));
 												sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
 												
 											}

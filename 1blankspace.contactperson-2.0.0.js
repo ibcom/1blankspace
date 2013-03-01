@@ -907,7 +907,7 @@ ns1blankspace.contactPerson =
 									{
 										sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFirstName').val());
 										sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSurname').val());
-										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').attr('onDemandID'));
+										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').attr('data-id'));
 										sData += '&jobtitle=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPosition').val());
 										sData += '&phone=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPhone').val());
 										sData += '&fax=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFax').val());

@@ -491,7 +491,7 @@ ns1blankspace.setup.networkGroup =
 										})
 										.click(function() 
 										{
-											var sData = 'rows=2&quicksearch=Auto&contactbusiness=' + $('#ns1blankspaceUsersAddContactBusiness').attr("ondemandID");
+											var sData = 'rows=2&quicksearch=Auto&contactbusiness=' + $('#ns1blankspaceUsersAddContactBusiness').attr("data-id");
 										
 											$.ajax(
 											{
