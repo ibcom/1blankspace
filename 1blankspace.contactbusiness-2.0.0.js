@@ -864,6 +864,7 @@ ns1blankspace.contactBusiness =
 										ns1blankspace.status.message('Saved');
 										if (ns1blankspace.objectContext == -1) {var bNew = true}
 										ns1blankspace.objectContext = oResponse.id;	
+										ns1blankspace.inputDetected = false;
 										
 										if (bNew) {ns1blankspace.contactBusiness.search.send('-' + ns1blankspace.objectContext)}
 									}
