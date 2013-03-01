@@ -23,7 +23,6 @@ ns1blankspace.news =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 							
-					
 					ns1blankspace.app.set(oParam);
 
 					if (ns1blankspace.option.richTextEditing)

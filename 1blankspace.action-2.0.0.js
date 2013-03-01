@@ -126,9 +126,9 @@ ns1blankspace.action =
 				},
 
 	search: 	{
-					send: 		function (sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementID, oParam)
 								{
-									var aSearch = sXHTMLElementId.split('-');
+									var aSearch = sXHTMLElementID.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
@@ -148,7 +148,7 @@ ns1blankspace.action =
 									}
 									
 									if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
-									{∂
+									{
 										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
@@ -182,32 +182,40 @@ ns1blankspace.action =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position(sElementId);
-											ns1blankspace.search.start(sElementId);
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'ACTION_SEARCH';
 											oSearch.addField('subject');
-											oSearch.rf = 'json';
-											oSearch.addFilter('quicksearch', 'EQUAL_TO', sSearchText);	
+											
+											oSearch.addFilter('subject', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addOperator('or');
+											oSearch.addFilter('action.contactperson.surname', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addOperator('or');
+											oSearch.addFilter('action.contactperson.firstname', 'TEXT_IS_LIKE', sSearchText);
+
+											oSearch.sort('subject', 'asc');
+
 											oSearch.getResults(function(data) {ns1blankspace.action.search.process(oParam, data)});
 										}
 									}	
 								},
 
-					process: 	function (oParam, oResponse)
+					process:	function (oParam, oResponse)
 								{
 									var iColumn = 0;
 									var	iMaximumColumns = 1;
 									var aHTML = [];
+									var sContact;
+									
+									ns1blankspace.search.stop();
 										
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspace.search.stop();
 										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
-									{
+									{		
 										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 											
 										$.each(oResponse.data.rows, function()
@@ -219,11 +227,25 @@ ns1blankspace.action =
 												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 										
-											aHTML.push('<td class="ns1blankspaceSearch" id="' + +
-															'-' + this.id + '">' +
-															this.subject +
-															'</td>');
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+														'search-' + this.id + '">' +
+														this.subject +
+														'</td>');
+
+											if (this.contactbusinesssenttotext != '')
+											{
+												sContact = this.contactbusinesssenttotext;
+											}
+											else
+											{
+												sContact = this.contactpersonsenttotext;
+											}	
 											
+											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
+															'searchContact-' + this.id + '">' +
+															sContact +
+															'</td>');
+
 											if (iColumn == iMaximumColumns)
 											{
 												aHTML.push('</tr>');
@@ -242,7 +264,7 @@ ns1blankspace.action =
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.action.search.send(event.target.id, {source: 1});
 										});
-									}	
+									}			
 								}
 				},				
 
@@ -578,7 +600,7 @@ ns1blankspace.action =
 										'Status' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceSelect">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Not Started' +
 											'<br /><input type="radio" id="radioStatus4" name="radioStatus" value="4"/>In Progress' +
 											'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>Cancelled' +
@@ -669,7 +691,7 @@ ns1blankspace.action =
 	save: 		{			
 					send:		function (oParam, oResponse)
 								{
-									var iType = ns1blankspace.data.actionType.meeting;
+									var iType = ns1blankspace.data.actionTypes.meeting;
 									
 									if (oResponse == undefined)
 									{

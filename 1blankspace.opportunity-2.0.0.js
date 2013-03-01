@@ -149,7 +149,7 @@ ns1blankspace.opportunity =
 																	'requestbycontactperson,requestbycontactpersontext,type,typetext,' +
 																	'createddate,source,sourcetext,sourcetext,manageruser,managerusertext,' +
 																	'status,statustext,processingstatus,processingstatustext,' +
-																	'processingdate,description,' +
+																	'processingdate,description,startdate,' +
 																	'mailingaddress1,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,' +
 																	'email,mobile,phone,createddate,createdusertext');
 																	
@@ -442,14 +442,16 @@ ns1blankspace.opportunity =
 										'</td></tr>');											
 						}
 						
-						var sDate = new Date(ns1blankspace.objectContextData.createddate);	
-						sDate = $.fullCalendar.formatDate(sDate, 'd MMM yyyy h:mm TT');
-								
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date Lodged</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryProcessingDateLogdgedValue" class="ns1blankspaceSummary">' +
-										sDate +
-										'</td></tr>');		
-						
+						if (ns1blankspace.objectContextData.startdate != '')
+						{	
+							var oDate = Date.parse(ns1blankspace.objectContextData.startdate);
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date Received</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryStartDate" class="ns1blankspaceSummary">' +
+											oDate.toString("ddd, dd MMM yyyy") +
+											'</td></tr>');
+						}	
+
 						if (ns1blankspace.objectContextData.description)
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
@@ -574,7 +576,7 @@ ns1blankspace.opportunity =
 										'<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaptionSelect">' +
 										'<input id="ns1blankspaceDetailsManagedBy" class="ns1blankspaceSelect"' +
-											' data-method="/ondemand/core/?method=CORE_USER_SEARCH&rf=xml"'+ 
+											' data-method="CORE_USER_SEARCH"'+ 
 											' data-columns="firstname-space-surname">' +
 										'</td></tr>');			
 						
@@ -613,6 +615,7 @@ ns1blankspace.opportunity =
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
+							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
 							$('#ns1blankspaceDetailsDateReceived').val(ns1blankspace.objectContextData.startdate);
 							$('#ns1blankspaceDetailsSourceOfContact').attr(ns1blankspace.objectContextData.source);
 							$('#ns1blankspaceDetailsSourceOfContact').val(ns1blankspace.objectContextData.sourcetext);
@@ -852,7 +855,8 @@ ns1blankspace.opportunity =
 											{
 												sData += '&manageruser='+ ns1blankspace.user.id; 
 											}
-											sData += '&status=' + $('#ns1blankspaceDetailsStatus').attr('data-id');
+
+											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());											
 											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 										}
 

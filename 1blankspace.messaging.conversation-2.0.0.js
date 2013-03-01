@@ -11,12 +11,14 @@ ns1blankspace.messaging.conversation =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
+					var bNew = false;
 					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
+						if (oParam.new != undefined) {bNew = oParam.new}	
 					}
+
+					if (bNew) {ns1blankspace.messaging.isConversationOwner = true}
 
 					ns1blankspace.app.reset();
 
@@ -1468,11 +1470,11 @@ ns1blankspace.messaging.conversation =
 										
 										if ($('#ns1blankspaceMainDetails').html() != '')
 										{
-											sData += '&title=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsTitle').val());
-											sData += '&description=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsDescription').val());
+											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
+											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 											sData += '&sharing=' + $('input[name="radioSharing"]:checked').val();
 											sData += '&participantcan=' + $('input[name="radioParticipantCan"]:checked').val();
-											sData += '&alerturl=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsAlertURL').val());
+											sData += '&alerturl=' + ns1blankspace.util.fs($('#ns1blankspaceMainDetailsAlertURL').val());
 										}
 										
 										$.ajax(

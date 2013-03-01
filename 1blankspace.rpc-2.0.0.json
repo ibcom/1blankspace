@@ -306,7 +306,7 @@
 		{"title":"MEDIA_SCHEDULE_ORDER_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"MEDIA_SCHEDULE_ORDER_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"MEDIA_SCHEDULE_SEARCH", "advancedSearch":"false", "rpc":"true"},
-		{"title":"MESSAGING_CONVERSATION_MANAGE", "advancedSearch":"false", "rpc":"true"},
+		{"title":"MESSAGING_CONVERSATION_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_CONVERSATION_PARTICIPANT_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"MESSAGING_CONVERSATION_PARTICIPANT_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_CONVERSATION_POST_COMMENT_MANAGE", "advancedSearch":"false", "rpc":"false"},

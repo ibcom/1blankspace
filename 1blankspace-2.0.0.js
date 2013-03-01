@@ -3288,7 +3288,7 @@ ns1blankspace.search.email =
 				    	
 						aHTML.push('</table>');
 					
-						$(ns1blankspace.xhtml.container).html(ns1blankspace.pagination(
+						$(ns1blankspace.xhtml.container).html(ns1blankspace.render.init(
 							{
 								html: aHTML.join(''),
 								more: (oResponse.morerows === 'true'),
@@ -3659,7 +3659,7 @@ ns1blankspace.actions =
 							label: "Add"
 						})
 						.click(function() {
-							ns1blankspace.actions.edit();
+							ns1blankspace.actions.edit(oParam);
 						});
 					}
 					
@@ -3667,7 +3667,7 @@ ns1blankspace.actions =
 					{
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ACTION_SEARCH';
-						oSearch.addField('subject,duedate,actiontypetext');
+						oSearch.addField('subject,duedate,actiontype,actiontypetext');
 
 						if (iType) {oSearch.addFilter('actiontype', 'EQUAL_TO', iType)};
 
@@ -3969,7 +3969,7 @@ ns1blankspace.actions =
 										'Status' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceSelect">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioActionStatus2" name="radioActionStatus" value="2"/>Not Started' +
 											'<br /><input type="radio" id="radioActionStatus4" name="radioActionStatus" value="4"/>In Progress' +
 											'<br /><input type="radio" id="radioActionStatus1" name="radioActionStatus" value="1"/>Completed' +
@@ -4008,7 +4008,7 @@ ns1blankspace.actions =
 						var iHours;
 						var dDate = Date.today().toString("dd-MMM-yyyy");
 						var dEndDate;
-						var iActionBy = ns1blankspace.action.user;
+						var iActionBy = ns1blankspace.user.id;
 						var iObject = ns1blankspace.object;
 						var iObjectContext = ns1blankspace.objectContext;
 						var fPostSave = ns1blankspace.actions.show;
@@ -4028,11 +4028,11 @@ ns1blankspace.actions =
 							sData += '&description=' + ns1blankspace.util.fs(oData.description);
 							sData += '&priority=' + ns1blankspace.util.fs(oData.priority);
 							sData += '&status=' + ns1blankspace.util.fs(iStatus);
-							sData += '&type=' + ns1blankspace.util.fs(iType);
+							sData += '&actiontype=' + ns1blankspace.util.fs(iType);
 							sData += '&date=' + ns1blankspace.util.fs(dDate);
 							sData += '&actionby=' + ns1blankspace.util.fs(iActionBy);
-							sData += '&contactbusiness=' + ns1blankspace.util.fs(oData.contactBusiness);
-							sData += '&contactperson=' + ns1blankspace.util.fs(oData.contactPerson);
+							sData += '&contactbusiness=' + ns1blankspace.util.fs(oParam.contactBusiness);
+							sData += '&contactperson=' + ns1blankspace.util.fs(oParam.contactPerson);
 							
 							if (iHours != undefined)
 							{
