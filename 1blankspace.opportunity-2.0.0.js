@@ -13,7 +13,7 @@ ns1blankspace.opportunity =
 
 					ns1blankspace.object = 32;	
 					ns1blankspace.objectName = 'opportunity';
-					ns1blankspace.viewName = 'Opportunity';
+					ns1blankspace.viewName = 'Opportunities';
 					ns1blankspace.data.contactBusiness = -1;
 					ns1blankspace.data.contactPerson = -1;
 
@@ -80,24 +80,22 @@ ns1blankspace.opportunity =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">' +
-											'<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+											'<tr><td colspan=2 class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
-														'" class="ns1blankspaceMostLikely">');
-								if (this.description != '')
-								{
-									aHTML.push(this.description);
-								}
-								else
-								{	
-									aHTML.push(this.reference);
-								}
-								
-								aHTML.push('</td></tr>');
+								aHTML.push('<td id="ns1blankspaceMostLikely_reference-' + this.id + 
+												'" class="ns1blankspaceMostLikely" style="width:90px;">' +
+												this.reference + 
+												'</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_orderdate-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+																		this.description + '</td>');
+
+								aHTML.push('</tr>');
+
 							});
 							
 							aHTML.push('</table>');
@@ -609,9 +607,9 @@ ns1blankspace.opportunity =
 						{
 							if (ns1blankspace.objectContextData.requestbycontactperson != '')
 							{	
-								aHTML.push('<tr><td>');
-								aHTML.push('<span id="ns1blankspaceContactCreate" class="ns1blankspaceAction">Update Contact');
-								aHTML.push('</span></td></tr>');
+								//aHTML.push('<tr><td>');
+								//aHTML.push('<span id="ns1blankspaceContactUpdate" class="ns1blankspaceAction">Update Contact');
+								//aHTML.push('</span></td></tr>');
 
 								aHTML.push('<tr><td>');
 								aHTML.push('<span id="ns1blankspaceContactView" class="ns1blankspaceAction">View Contact');
@@ -630,7 +628,7 @@ ns1blankspace.opportunity =
 						
 						$('#ns1blankspaceContactCreate').button(
 						{
-							label: 'Create Contact'
+							label: 'Create as contact'
 						})
 						.click(function(event)
 						{
@@ -639,7 +637,7 @@ ns1blankspace.opportunity =
 
 						$('#ns1blankspaceContactView').button(
 						{
-							label: 'View Contact'
+							label: 'View contact'
 						})
 						.click(function(event)
 						{
@@ -894,10 +892,13 @@ ns1blankspace.opportunity =
 
 									if (iStep == 1) //BUSINESS
 									{	
+										var bContinue = false;
+
 										if ($('#ns1blankspaceContact').html() != '')
 										{	
 											if ($('#ns1blankspaceContactBusinessName').val() != '')
-											{											
+											{		
+												bContinue = true;									
 												sData += '&tradename=' + ns1blankspace.util.fs($('#ns1blankspaceContactBusinessName').val());
 												sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingAddress1').val());
 												sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingSuburb').val());
@@ -910,6 +911,7 @@ ns1blankspace.opportunity =
 										}	
 										else if (ns1blankspace.objectContextData.businessname != '')
 										{
+											bContinue = true;
 											sData += '&tradename=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.businessname);
 											sData += '&mailingaddress1=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingaddress1);
 											sData += '&mailingsuburb=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingsuburb);
@@ -919,31 +921,38 @@ ns1blankspace.opportunity =
 											sData += '&phonenumber=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.phone);
 										}
 											
-										sData += '&customerstatus=1';
-										
-										if (ns1blankspace.objectContextData.requestbycontactbusiness != '')	
-										{
-											sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.requestbycontactbusiness);
-											oParam.successMessage = 'Updated';
+										if (bContinue)
+										{	
+											sData += '&customerstatus=1';
+											
+											if (ns1blankspace.objectContextData.requestbycontactbusiness != '')	
+											{
+												sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.requestbycontactbusiness);
+												oParam.successMessage = 'Updated';
+											}
+											else
+											{
+												oParam.successMessage = 'Added';
+											}
+
+											ns1blankspace.status.working();
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('CONTACT_BUSINESS_MANAGE'),
+												data: sData,
+												dataType: 'json',
+												success: function(data)
+												{ 
+													ns1blankspace.opportunity.contactCreate.process(oParam, data);
+												}
+											});
 										}
 										else
 										{
-											oParam.successMessage = 'Added';
-										}
-
-										ns1blankspace.status.working();
-
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('CONTACT_BUSINESS_MANAGE'),
-											data: sData,
-											dataType: 'json',
-											success: function(data)
-											{ 
-												ns1blankspace.opportunity.contactCreate.process(oParam, data);
-											}
-										});
+											ns1blankspace.opportunity.contactCreate.send({step: 2});
+										}	
 										
 									}
 
@@ -951,10 +960,13 @@ ns1blankspace.opportunity =
 									{	
 										sData = (ns1blankspace.objectContextData.requestbycontactbusiness != '')?'&contactbusiness=' + ns1blankspace.objectContextData.requestbycontactbusiness + '&primarycontact=1':'';
 
+										var bContinue = false;
+
 										if ($('#ns1blankspaceContact').html() != '')
 										{		
-											if ($('#ns1blankspaceContactSurname').val() != undefined)
+											if ($('#ns1blankspaceContactSurname').val() != '')
 											{
+												bContinue = true;
 												sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceContactFirstName').val());
 												sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceContactSurname').val());
 												sData += '&jobtitle=' + ns1blankspace.util.fs($('#ns1blankspaceContactJobTitle').val());
@@ -977,6 +989,7 @@ ns1blankspace.opportunity =
 										}	
 										else if (ns1blankspace.objectContextData.surname != '')
 										{
+											bContinue = true;
 											sData += '&firstname=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.firstname);
 											sData += '&surname=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.surname);
 											sData += '&mailingaddress1=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.mailingaddress1);
@@ -989,31 +1002,38 @@ ns1blankspace.opportunity =
 											sData += '&email=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.email);
 										}
 
-										sData += '&customerstatus=1';		
+										if (bContinue)
+										{	
+											sData += '&customerstatus=1';		
+												
+											if (ns1blankspace.objectContextData.requestbycontactpersontext != '')	
+											{
+												sData += '&id=' +  ns1blankspace.util.fs(ns1blankspace.objectContextData.requestbycontactperson);
+												sSuccessMessage = 'Updated';
+											}
+											else
+											{
+												sSuccessMessage = 'Added';
+											}
 											
-										if (ns1blankspace.objectContextData.requestbycontactpersontext != '')	
-										{
-											sData += '&id=' +  ns1blankspace.util.fs(ns1blankspace.objectContextData.requestbycontactperson);
-											sSuccessMessage = 'Updated';
+											ns1blankspace.status.working();
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('CONTACT_PERSON_MANAGE'),
+												data: sData,
+												dataType: 'json',
+												success: function(data)
+												{ 
+													ns1blankspace.opportunity.contactCreate.process(oParam, data);
+												}
+											});
 										}
 										else
 										{
-											sSuccessMessage = 'Added';
-										}
-										
-										ns1blankspace.status.working();
-
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('CONTACT_PERSON_MANAGE'),
-											data: sData,
-											dataType: 'json',
-											success: function(data)
-											{ 
-												ns1blankspace.opportunity.contactCreate.process(oParam, data);
-											}
-										});
+											ns1blankspace.status.error('No contact details');
+										}	
 									}
 								},
 
@@ -1071,7 +1091,28 @@ ns1blankspace.opportunity =
 												else
 												{
 													ns1blankspace.status.message(sMessage);
-													ns1blankspace.opportunity.search.send('-' + ns1blankspace.objectContext)
+
+													var aHTML = [];
+					
+													aHTML.push('<table class="ns1blankspaceColumn2">');
+
+													aHTML.push('<tr><td>');
+													aHTML.push('<span id="ns1blankspaceContactView" class="ns1blankspaceAction">View Contact');
+													aHTML.push('</span></td></tr>');
+
+													aHTML.push('</table>');
+													
+													$('#ns1blankspaceContactColumn2').html(aHTML.join(''));
+													
+													$('#ns1blankspaceContactView').button(
+													{
+														label: 'View contact'
+													})
+													.click(function(event)
+													{
+														var iContactPerson = ns1blankspace.objectContextData.requestbycontactperson;	
+														ns1blankspace.contactPerson.init({showHome: false, id: iContactPerson});
+													});
 												}	
 												
 											}

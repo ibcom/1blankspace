@@ -38,12 +38,15 @@ ns1blankspace.messaging.conversation =
 							width : "100%",
 							theme : "advanced",
 
+							theme_advanced_path : false,
+							theme_advanced_statusbar_location : "bottom",
+
 							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,dynamicTags,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
 							theme_advanced_buttons1_add_before : "forecolor,backcolor", 
 							theme_advanced_buttons1_add : "fontselect,fontsizeselect", 
 					 
-							theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak,visualchars", 
+							theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak", 
 							theme_advanced_buttons2_add_before: "cut,copy,paste,pasteword,separator,search,replace,separator", 
 							
 							theme_advanced_buttons3_add_before : "tablecontrols,separator", 
@@ -957,6 +960,38 @@ ns1blankspace.messaging.conversation =
 
 									if (oResponse == undefined)
 									{
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+															'<tr class="ns1blankspaceContainer">' +
+															'<td id="ns1blankspacePostsColumn1" class="ns1blankspaceColumn1Flexible">' +
+															ns1blankspace.xhtml.loading + '</td>' +
+															'<td id="ns1blankspacePostsColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+															'</tr>' + 
+															'</table>');	
+														
+										$('#ns1blankspaceMainPosts').html(aHTML.join(''));	
+									
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceColumn2">');
+												
+										aHTML.push('<tr><td>' +
+															'<span class="ns1blankspaceAction" id="ns1blankspacePostsAdd">Add</span>' +
+															'</td></tr>');
+														
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspacePostsColumn2').html(aHTML.join(''));	
+									
+										$('#ns1blankspacePostsAdd').button(
+										{
+											label: "Add"
+										})
+										.click(function() {
+											ns1blankspace.messaging.conversation.posts.add(false);
+										})
+
 										var sData = 'includeme=1&dontencode=1&conversation=' + ns1blankspace.objectContext;
 										
 										$.ajax(
@@ -972,41 +1007,13 @@ ns1blankspace.messaging.conversation =
 									{
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceContainer">' +
-															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspacePostsColumn1" class="ns1blankspaceColumn1Large"></td>' +
-															'<td id="ns1blankspacePostsColumn2" class="ns1blankspaceColumn2Action"></td>' +
-															'</tr>' + 
-															'</table>');	
-														
-										$('#ns1blankspaceMainPosts').html(aHTML.join(''));	
-									
-										var aHTML = [];
-
-										aHTML.push('<table class="ns1blankspaceColumn2Action">');
-												
-										aHTML.push('<tr><td class="ns1blankspaceMainAction">' +
-															'<span id="ns1blankspacePostsAdd">Add</span>' +
-															'</td></tr>');
-														
-										aHTML.push('</table>');					
-										
-										$('#ns1blankspacePostsAddColumn2').html(aHTML.join(''));	
-									
-										$('#ns1blankspacePostsAdd').button(
-										{
-											label: "Add"
-										})
-										.click(function() {
-											ns1blankspace.messaging.conversation.posts.add(false);
-										})
-										
-										var aHTML = [];
-										var h = -1;
-										
 										if (oResponse.data.rows.length == 0)
 										{
 											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No posts.</td></tr></table>');
+
+											aHTML.push('</table>');
+
+											$('#ns1blankspacePostsColumn1').html(aHTML.join(''));
 										}
 										else
 										{		
@@ -1211,18 +1218,18 @@ ns1blankspace.messaging.conversation =
 										var lProjectTask = aSearch[1];
 									}	
 										
-									ns1blankspace.show({selector: '#ns1blankspacePostDetails'});	
+									ns1blankspace.show({selector: '#ns1blankspaceMainPostDetails'});	
 										
 									var aHTML = [];
 									
 									aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspacePostDetailsColumn1" class="ns1blankspaceColumn1Large"></td>' +
-															'<td id="ns1blankspacePostDetailsColumn2" class="ns1blankspaceColumn2Action"></td>' +
+															'<td id="ns1blankspacePostDetailsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+															'<td id="ns1blankspacePostDetailsColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 															'</tr>' + 
 															'</table>');			
 										
-									$('#ns1blankspacePostDetails').html(aHTML.join(''));
+									$('#ns1blankspaceMainPostDetails').html(aHTML.join(''));
 											
 									if (oResponse == undefined && iPost != undefined)
 									{
@@ -1241,10 +1248,10 @@ ns1blankspace.messaging.conversation =
 									{
 										var aHTML = [];
 
-										aHTML.push('<table class="ns1blankspaceColumn2Action">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
-										aHTML.push('<tr><td class="ns1blankspaceAction">' +
-														'<span id="ns1blankspacePostDetailsSend">Send</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" id="ns1blankspacePostDetailsSend">Send</span>' +
 														'</td></tr>');
 																
 										aHTML.push('</table>');					
