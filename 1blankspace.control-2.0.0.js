@@ -1718,7 +1718,7 @@ ns1blankspace.control =
 											$(oResponse.data.rows).each(function()
 											{
 												aHTML.push('<tr>' +
-																'<td id="ns1blankspaceControlSpaceSwitch-' + this.id + '" class="ns1blankspace">' +
+																'<td id="ns1blankspaceControlSpaceSwitch-' + this.id + '" class="ns1blankspaceRowSelect">' +
 																this.space +
 																'</td></tr>');
 											});			
@@ -1735,7 +1735,7 @@ ns1blankspace.control =
 										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.control.spaces.process('ns1blankspaceControlSpaceSearch')", ns1blankspace.option.typingWait);
 											});
 
-											$('#ns1blankspaceControlSpaceSwitchContainer > td.ns1blankspace').click(function(event)
+											$('#ns1blankspaceControlSpaceSwitchContainer td.ns1blankspaceRowSelect').click(function(event)
 											{
 												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 

@@ -121,14 +121,14 @@ ns1blankspace.financial.bankAccount =
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlImport" class="ns1blankspaceControl">Import</td>' +
 									'</tr>');
-					
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlReconcile" class="ns1blankspaceControl">Reconcile</td>' +
-									'</tr>');
 
 					aHTML.push('</table>');
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
+
+					aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlReconcile" class="ns1blankspaceControl">Unreconciled</td>' +
+									'</tr>');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlReconciliations" class="ns1blankspaceControl">Reconciled</td>' +
@@ -2081,7 +2081,7 @@ ns1blankspace.financial.bankAccount =
 											{
 												if (i==0)
 												{
-													aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountImportAdd">Import</span></td></tr>');
+													//aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountImportAdd">Import</span></td></tr>');
 												}
 												
 												aHTML.push(ns1blankspace.financial.bankAccount.import.row(this));
@@ -2094,7 +2094,7 @@ ns1blankspace.financial.bankAccount =
 											
 										$('#ns1blankspaceBankAccountImportAdd').button(
 										{
-											label: "Import"
+											label: "Add"
 										})
 										.click(function() {
 											ns1blankspace.financial.bankAccount.import.add();
@@ -2106,6 +2106,8 @@ ns1blankspace.financial.bankAccount =
 											var aID = (event.target.id).split('-');
 											ns1blankspace.financial.bankAccount.import.items.show({fileSource: aID[1]});
 										});
+
+										ns1blankspace.financial.bankAccount.import.add();
 									}
 								},
 
