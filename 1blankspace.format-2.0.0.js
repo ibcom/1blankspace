@@ -317,6 +317,8 @@ ns1blankspace.format.editor =
 							width : "100%",
 							theme : "advanced",
 
+							theme_advanced_path : false,
+
 							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime," + sAdditional + "preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
 							theme_advanced_buttons1_add_before : "forecolor,backcolor", 

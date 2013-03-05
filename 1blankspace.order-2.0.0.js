@@ -651,8 +651,11 @@ ns1blankspace.order =
 								url: ns1blankspace.util.endpointURI('PRODUCT_ORDER_MANAGE'),
 								data: 'action=' + iAction + '&id=' + ns1blankspace.objectContext,
 								dataType: 'json',
-								async: false,
-								success: function(oResponse) {ns1blankspace.order.search.send('-' + ns1blankspace.objectContext)}
+								success: function(oResponse)
+								{
+									ns1blankspace.inputDetected = false;
+									ns1blankspace.order.search.send('-' + ns1blankspace.objectContext)
+								}
 							});
 						})
 						.css('width', '100px');						
@@ -774,7 +777,7 @@ ns1blankspace.order =
 							$('#ns1blankspaceDetailsOrderByPerson').attr('data-id', ns1blankspace.objectContextData.orderbyperson);
 							$('#ns1blankspaceDetailsOrderByPerson').val(ns1blankspace.objectContextData.orderbypersontext);	
 							$('[name="radioSource"][value="' + ns1blankspace.objectContextData.source + '"]').attr('checked', true);
-							$('#ns1blankspaceDetailsPurchaseOrderReference').val(ns1blankspace.objectContextData.purchaseorder);
+							$('#ns1blankspaceDetailsPurchaseOrder').val(ns1blankspace.objectContextData.purchaseorder);
 							$('#ns1blankspaceDetailsNotes').val(ns1blankspace.objectContextData.notes);	
 						}
 						else
@@ -811,7 +814,7 @@ ns1blankspace.order =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressStreetAddress" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');			
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -876,7 +879,7 @@ ns1blankspace.order =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressMailingAddress" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');			
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -931,15 +934,14 @@ ns1blankspace.order =
 						{
 							label: "Copy to Billing Address"
 						})
-						.click(function() {
-						
+						.click(function()
+						{
 							$('#ns1blankspaceAddressMailingAddress1').val($('#ns1blankspaceAddressStreetAddress1').val());
 							$('#ns1blankspaceAddressMailingAddress2').val($('#ns1blankspaceAddressStreetAddress2').val());
 							$('#ns1blankspaceAddressMailingSuburb').val($('#ns1blankspaceAddressStreetSuburb').val());
 							$('#ns1blankspaceAddressMailingState').val($('#ns1blankspaceAddressStreetState').val());
 							$('#ns1blankspaceAddressMailingPostCode').val($('#ns1blankspaceAddressStreetPostCode').val());
 							$('#ns1blankspaceAddressMailingCountry').val($('#ns1blankspaceAddressStreetCountry').val());
-
 						})
 
 						if (ns1blankspace.objectContextData != undefined)
@@ -950,7 +952,7 @@ ns1blankspace.order =
 							$('#ns1blankspaceAddressStreetState').val((ns1blankspace.objectContextData.streetstate).formatXHTML());
 							$('#ns1blankspaceAddressStreetPostCode').val((ns1blankspace.objectContextData.streetpostcode).formatXHTML());
 							$('#ns1blankspaceAddressStreetCountry').val((ns1blankspace.objectContextData.streetcountry).formatXHTML());
-							$('#ns1blankspaceAddresssMailingAddress1').val((ns1blankspace.objectContextData.mailingaddress1).formatXHTML());
+							$('#ns1blankspaceAddressMailingAddress1').val((ns1blankspace.objectContextData.mailingaddress1).formatXHTML());
 							$('#ns1blankspaceAddressMailingAddress2').val((ns1blankspace.objectContextData.mailingaddress2).formatXHTML());
 							$('#ns1blankspaceAddressMailingSuburb').val((ns1blankspace.objectContextData.mailingsuburb).formatXHTML());
 							$('#ns1blankspaceAddressMailingState').val((ns1blankspace.objectContextData.mailingstate).formatXHTML());
@@ -1082,7 +1084,7 @@ ns1blankspace.order =
 															' style="text-align:right;">' +
 															oRow.totalcost + '</td>');					
 														
-									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceMainRow">');	
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');	
 									aHTML.push('<span id="ns1blankspaceOrderItems_remove-' + oRow.id + '" class=" ns1blankspaceRow ns1blankspaceRowRemove"></span>');
 									aHTML.push('</td>');
 																									
@@ -1218,7 +1220,7 @@ ns1blankspace.order =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PRODUCT_SEARCH';
 											oSearch.addField('reference,title');
-											oSearch.addFilter('title', 'TEXT_IS_LIKE', $('#inputns1blankspaceMainProductAddReference').val());
+											oSearch.addFilter('title', 'TEXT_IS_LIKE', $('#ns1blankspaceItemsProductReference').val());
 											oSearch.sort('title', 'asc');
 											oSearch.getResults(function(data){ns1blankspace.order.items.add($.extend(true, oParam, {step:3}), data)});
 										}
@@ -1318,7 +1320,7 @@ ns1blankspace.order =
 										sData += '&orderdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsOrderDate').val());
 										sData += '&orderbybusiness=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsOrderByBusiness').attr("data-id"));
 										sData += '&orderbyperson=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsOrderByPerson').attr("data-id"));
-										sData += '&purchaseorder=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPurchaseOrderReference').val());
+										sData += '&purchaseorder=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPurchaseOrder').val());
 										sData += '&source=' + $('input[name="radioSource"]:checked').val();
 										sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsNotes').val());
 									}
@@ -1327,7 +1329,7 @@ ns1blankspace.order =
 									{
 										sData += '&streetaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetAddress1').val());
 										sData += '&streetaddress2=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetAddress2').val());
-										sData += '&streetsuburb=' + ns1blankspace.util.fs($('#ins1blankspaceAddressStreetSuburb').val());
+										sData += '&streetsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetSuburb').val());
 										sData += '&streetstate=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetState').val());
 										sData += '&streetpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetPostCode').val());
 										sData += '&streetcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetCountry').val());
@@ -1335,7 +1337,7 @@ ns1blankspace.order =
 										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingAddress1').val());
 										sData += '&mailingaddress2=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingAddress2').val());
 										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingSuburb').val());
-										sData += '&mailingstate=' + ns1blankspace.util.fs($('#ins1blankspaceAddressMailingState').val());
+										sData += '&mailingstate=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingState').val());
 										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingPostCode').val());
 										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingCountry').val());
 									}

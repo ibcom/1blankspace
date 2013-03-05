@@ -236,16 +236,10 @@ ns1blankspace.document =
 					{
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Details</td></tr>');
-
-						aHTML.push('</table>');
-
-						aHTML.push('<table class="ns1blankspaceControl">');
-
-						aHTML.push('<tr><td id="ns1blankspaceControlEdit" class="ns1blankspaceControl">' +
-										'Edit</td></tr>');		
 					}
 					else
 					{
+						
 						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 
@@ -498,19 +492,6 @@ ns1blankspace.document =
 										'</table>');		
 							
 						$('#ns1blankspaceMainEdit').html(aHTML.join(''));
-						
-						var aHTML = [];
-					
-						aHTML.push('<table class="ns1blankspace">');
-								
-						aHTML.push('<tr class="ns1blankspaceMainTextMulti">' +
-										'<td class="ns1blankspaceMainTextMulti">' +
-										'<textarea rows="10" cols="60" name="ns1blankspaceEditText" id="ns1blankspaceEditText" class="ns1blankspaceTextMultiLarge tinymceAdvanced"></textarea>' +
-										'</td></tr>');
-										
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceEditColumn1').html(aHTML.join(''));
 							
 						$('#ns1blankspaceEditPDF').click(function(event)
 						{
@@ -533,7 +514,7 @@ ns1blankspace.document =
 							}
 							else
 							{
-								ns1blankspace.document.edit("OK|");
+								ns1blankspace.document.edit('');
 							}
 							
 						}
@@ -543,7 +524,27 @@ ns1blankspace.document =
 							
 							var sHTML = sReturn;
 							
-							$('#ns1blankspaceEditText').val(sHTML);
+							for (edId in tinyMCE.editors) 
+													tinyMCE.editors[edId].destroy(true);
+												
+							ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
+
+							var aHTML = [];
+						
+							aHTML.push('<table class="ns1blankspace">');
+									
+							aHTML.push('<tr class="ns1blankspaceMainTextMulti">' +
+											'<td class="ns1blankspaceMainTextMulti">' +
+											'<textarea rows="10" cols="60" name="ns1blankspaceEditText"' + 
+											' id="ns1blankspaceEditText' + ns1blankspace.counter.editor +
+											'" class="ns1blankspaceTextMultiLarge tinymceAdvanced"></textarea>' +
+											'</td></tr>');
+											
+							aHTML.push('</table>');					
+							
+							$('#ns1blankspaceEditColumn1').html(aHTML.join(''));
+
+							$('#ns1blankspaceEditText' + ns1blankspace.counter.editor).val(sHTML);
 								
 							tinyMCE.init(
 							{
@@ -551,6 +552,8 @@ ns1blankspace.document =
 								height : "415px", 
 								width : "100%",
 								theme : "advanced",
+
+								theme_advanced_path : false,
 
 								plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
@@ -595,7 +598,7 @@ ns1blankspace.document =
 
 							});				
 							
-							tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText');	
+							tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText' + ns1blankspace.counter.editor);	
 						}	
 					}	
 				},
@@ -623,7 +626,7 @@ ns1blankspace.document =
 										sData += '&id=' + ns1blankspace.objectContext	
 									}	
 										
-									if ($('#divns1blankspaceMainDetails').html() != '')
+									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
 										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
 										sData += '&url=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsURL').val());
@@ -633,7 +636,7 @@ ns1blankspace.document =
 									
 									if ($('#ns1blankspaceMainEdit').html() != '')
 									{
-										sData += '&details=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceEditText').getContent());
+										sData += '&details=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceEditText' + ns1blankspace.counter.editor).getContent());
 									}
 									
 									$.ajax(
@@ -648,6 +651,10 @@ ns1blankspace.document =
 
 					process:	function (oResponse)
 								{
+									if (ns1blankspace.objectContext == -1) {var bNew = true}
+									ns1blankspace.objectContext = oResponse.id;	
+									ns1blankspace.inputDetected = false;
+
 									if (ns1blankspace.objectContext == -1 && ns1blankspace.document.data.websiteContext)
 									{
 										ns1blankspace.objectContext = oResponse.id;
@@ -661,13 +668,18 @@ ns1blankspace.document =
 											url: ns1blankspace.util.endpointURI('DOCUMENT_FOLDER_LINK_MANAGE'),
 											data: sData,
 											dataType: 'text',
-											success: ns1blankspace.status.message('Saved')
+											success: function (data)
+											{
+												ns1blankspace.status.message('Saved');
+												if (bNew) {ns1blankspace.contactBusiness.search.send('-' + ns1blankspace.objectContext)}
+											}		
 										});
 									
 									}	
 									else
 									{
 										ns1blankspace.status.message('Saved');
+										if (bNew) {ns1blankspace.contactBusiness.search.send('-' + ns1blankspace.objectContext)}
 									}	
 								}
 				},

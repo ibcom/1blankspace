@@ -278,10 +278,10 @@ ns1blankspace.messaging.conversation =
 
 	layout: 	function ()
 				{
-					if (tinyMCE.getInstanceById('inputns1blankspaceMainEditText'))
+					if (tinyMCE.getInstanceById('ns1blankspaceMainEditText'))
 					{
-						tinyMCE.get('inputns1blankspaceMainEditText').remove();
-						$('#inputns1blankspaceMainEditText').remove();
+						tinyMCE.get('ns1blankspaceMainEditText').remove();
+						$('#ns1blankspaceMainEditText').remove();
 					}
 
 					var aHTML = [];

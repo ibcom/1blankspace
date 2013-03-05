@@ -803,7 +803,7 @@ ns1blankspace.financial.invoice =
 							$('#ns1blankspaceDetailsSentToBusiness').attr('data-id', ns1blankspace.objectContextData.contactbusinesssentto);
 							$('#ns1blankspaceDetailsSentToBusiness').val(ns1blankspace.objectContextData.contactbusinesssenttotext);
 							$('#ns1blankspaceDetailsSentToPerson').attr('data-id', ns1blankspace.objectContextData.contactpersonsentto);
-							$('#ns1blankspaceMainDetailsSentToPerson').val(ns1blankspace.objectContextData.contactpersonsenttotext);	
+							$('#ns1blankspaceDetailsSentToPerson').val(ns1blankspace.objectContextData.contactpersonsenttotext);	
 							$('[name="radioSent"][value="' + ns1blankspace.objectContextData.sent + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsSentDate').val(ns1blankspace.objectContextData.sentdate);
 							$('#ns1blankspaceDetailsDueDate').val(ns1blankspace.objectContextData.duedate);

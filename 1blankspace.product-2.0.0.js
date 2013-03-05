@@ -541,7 +541,7 @@ ns1blankspace.product =
 						
 							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
 							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.title);
-							$('#ins1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
+							$('#ns1blankspaceDetailsDescription').val((ns1blankspace.objectContextData.description).formatXHTML());
 							$('[name="radioStatus"][value="' + iStatus + '"]').attr('checked', true);
 							$('[name="radioProductType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
 
@@ -591,7 +591,7 @@ ns1blankspace.product =
 										
 										$('#ns1blankspacePricingColumn1').html(aHTML.join(''));
 											
-										ns1blankspace.product.pricing.group({xhtmlElemendID: 'ns1blankspacePricingColumn2'})
+										//ns1blankspace.product.pricing.group({xhtmlElemendID: 'ns1blankspacePricingColumn2'})
 
 										if (ns1blankspace.objectContextData != undefined)
 										{
@@ -813,7 +813,7 @@ ns1blankspace.product =
 				},
 
 	save: 		{			
-					send: 		function interfaceProductSave()
+					send: 		function ()
 								{
 									ns1blankspace.status.working();
 
@@ -893,6 +893,7 @@ ns1blankspace.product =
 								{
 									var sData = 'price=' + ns1blankspace.util.fs($('#ns1blankspacePricingPriceRetail').val());
 									sData += '&product=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+									sData += '&group=-1';
 									
 									$.ajax(
 									{
