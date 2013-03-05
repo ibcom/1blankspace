@@ -38,8 +38,8 @@ ns1blankspace.messaging.imap =
 					ns1blankspace.messaging.emailRead = [];
 					ns1blankspace.messaging.emailRemoved = [];
 					ns1blankspace.messaging.showRemoved = false;
-					ns1blankspace.messaging.EmailInbox = [];
-					ns1blankspace.messaging.EmailInboxXHTML = [];
+					ns1blankspace.messaging.emailInbox = [];
+					ns1blankspace.messaging.emailInboxXHTML = [];
 					ns1blankspace.messaging.emailCount = 0;
 					ns1blankspace.messaging.emailLastPage = 1;
 					ns1blankspace.messaging.emailLastPagination;
@@ -55,6 +55,9 @@ ns1blankspace.messaging.imap =
 							width : "100%",
 							theme : "advanced",
 
+							theme_advanced_path : false,
+							theme_advanced_statusbar_location : "bottom",
+
 							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
 							theme_advanced_buttons1_add_before : "forecolor,backcolor", 
@@ -65,8 +68,7 @@ ns1blankspace.messaging.imap =
 							
 							theme_advanced_buttons3_add_before : "tablecontrols,separator", 
 							theme_advanced_buttons3_add : "emotions,iespell,fullscreen,print,templateFields,media,selectall,advhr",
-					 
-							
+					 						
 							plugin_insertdate_dateFormat : "%d-%m-%y", 
 							plugin_insertdate_timeFormat : "%H:%M:%S", 
 						
@@ -346,6 +348,8 @@ ns1blankspace.messaging.imap =
 										
 									if (ns1blankspace.messaging.imap.account != undefined && oResponse == undefined && bRefresh)
 									{	
+										ns1blankspace.status.working();
+
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 										oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
@@ -358,6 +362,8 @@ ns1blankspace.messaging.imap =
 									}
 									else
 									{
+										ns1blankspace.status.message('Refreshed @ ' + Date.now().toString("h:mm tt"));
+
 										ns1blankspace.messaging.emailCount = oResponse.summary.cachecount;
 											
 										if (bRebuild)
@@ -389,7 +395,7 @@ ns1blankspace.messaging.imap =
 											})
 											.click(function(event)
 											{
-												ns1blankspace.messaging.imap.inbox.search({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, rebuild: false});
+												ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, rebuild: false});
 											});
 
 											$('#ns1blankspaceMessagingInboxIMAPSentEmails').button(
@@ -461,7 +467,7 @@ ns1blankspace.messaging.imap =
 									
 									aHTML.push('<td id="ns1blankspaceMessagingInbox_from-' + sID + 
 														'" style="cursor: pointer;" class="ns1blankspaceRow ns1blankspaceRowSelect' + sClass + '"' +
-														' title="' + oRow.fromemail + '" style="padding-right:5px;">' +
+														' title="' + oRow.from + '" style="padding-right:5px;">' +
 														oRow.fromname + '</td>');
 														
 									aHTML.push('<td id="ns1blankspaceMessagingInbox_subject-' + sID + 
@@ -498,7 +504,7 @@ ns1blankspace.messaging.imap =
 									{
 										$('#ns1blankspaceMessagingInboxContainer td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 										$('#' + this.id).parent().find('td').removeClass('ns1blankspaceNotSeen');
-										ns1blankspace.messaging.imap.markAsRead(this.id);
+										ns1blankspace.messaging.imap.inbox.markAsRead(this.id);
 										ns1blankspace.messaging.imap.search.send(this.id);
 									});
 										
@@ -607,7 +613,7 @@ ns1blankspace.messaging.imap =
 									{
 										//sSearchContext = sSearchContext.replace(/\___/g, '.');	
 										
-										var sData = '&flags=(\\SEEN)&account=' + ns1blankspace.messaging.imap.account;
+										var sData = '&imapflags=(\\SEEN)&account=' + ns1blankspace.messaging.imap.account;
 										sData += '&id=' + ns1blankspace.util.fs(sSearchContext);
 												
 										$.ajax(
@@ -737,8 +743,6 @@ ns1blankspace.messaging.imap =
 									{
 										ns1blankspace.show({selector: '#ns1blankspaceMainSummary', refresh: true});
 										
-										// ??? sSearchContext = sSearchContext.replace(/\___/g, '.');
-										
 										ns1blankspace.objectContext = sSearchContext;
 										ns1blankspace.messaging.action = -1;
 										
@@ -848,7 +852,7 @@ ns1blankspace.messaging.imap =
 					else
 					{
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceControlHighlight">' +
+									'<td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 									'Message</td>' +
 									'</tr>');
 					}
@@ -894,19 +898,19 @@ ns1blankspace.messaging.imap =
 					$('#ns1blankspaceControlReply').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
-						ns1blankspace.messaging.imap.edit.show({reply: true});
+						ns1blankspace.messaging.imap.message.edit.show({reply: true});
 					});
 					
 					$('#ns1blankspaceControlReplyAll').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
-						ns1blankspace.messaging.imap.edit.show({replyAll: true});
+						ns1blankspace.messaging.imap.message.edit.show({replyAll: true});
 					});
 
 					$('#ns1blankspaceControlForward').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
-						ns1blankspace.messaging.imap.edit.show({forward: true});
+						ns1blankspace.messaging.imap.message.edit.show({forward: true});
 					});
 					
 					$('#ns1blankspaceControlActions').click(function(event)
@@ -1018,7 +1022,7 @@ ns1blankspace.messaging.imap =
 						aHTML.push('<table id="ns1blankspaceMessagingEmailContainer" class="ns1blankspace">');
 					
 						aHTML.push('<tr class="ns1blankspaceHeader">' +
-										'<td id="ns1blankspaceMessagingEmailSubject" class="ns1blankspaceHeader" style="text-align:left;font-weight:bold">' +
+										'<td id="ns1blankspaceMessagingEmailSubject" class="ns1blankspaceHeaderCaption" style="text-align:left;font-weight:bold;">' +
 										ns1blankspace.objectContextData.subject + '</td>');
 						
 						var oDate = Date.parse(ns1blankspace.objectContextData.date);
@@ -1027,17 +1031,20 @@ ns1blankspace.messaging.imap =
 
 						if (oDate != null)
 						{
-							sDate = oDate.toString("ddd, dd MMM yyyy h:mm TT");
+							sDate = oDate.toString("ddd, dd MMM yyyy h:mm tt");
 						}	
 
-						aHTML.push('<td id="ns1blankspaceMessagingEmailDate" class="ns1blankspaceMessagingSubHeader" style="text-align:right;">' +
+						aHTML.push('<td id="ns1blankspaceMessagingEmailDate" class="ns1blankspaceHeaderCaption" style="text-align:right;">' +
 										sDate + '</td>');
 
 						aHTML.push('</tr>');
 						
+						var sFrom = ns1blankspace.objectContextData.fromname;
+						if (sFrom != ns1blankspace.objectContextData.from) {sFrom += ' (' + ns1blankspace.objectContextData.from + ')'}
+
 						aHTML.push('<tr class="ns1blankspaceHeader">' +
-										'<td id="ns1blankspaceMessagingEmailFromEmail" colspan=2 style="text-align:left;" class="ns1blankspaceSub" >' +
-										ns1blankspace.objectContextData.from + '</td>');
+										'<td id="ns1blankspaceMessagingEmailFromEmail" colspan=2 class="ns1blankspaceSub" style="padding-bottom:10px;">' +
+										sFrom + '</td>');
 						
 						aHTML.push('</tr>');
 						
@@ -1045,9 +1052,9 @@ ns1blankspace.messaging.imap =
 						
 						if (ns1blankspace.objectContextData.to != '')
 						{
-							aHTML.push('<table id="ns1blankspaceMessagingEmailToContainer" class="ns1blankspaceHeader">');
+							aHTML.push('<table id="ns1blankspaceMessagingEmailToContainer" class="ns1blankspaceHeader" style="background-color:#f3f3f3;">');
 							aHTML.push('<tr class="ns1blankspaceHeader">' +
-											'<td id="ns1blankspaceMessagingEmailTo" class="ns1blankspaceHeader">');
+											'<td id="ns1blankspaceMessagingEmailTo" class="ns1blankspace">');
 											
 							var sTo = ns1blankspace.objectContextData.to;
 							var aTo = sTo.split('|')
@@ -1058,7 +1065,7 @@ ns1blankspace.messaging.imap =
 								if (i % 2 !== 0) {sTo += this + '; ';}
 							});				
 											
-							aHTML.push('<span class="ns1blankspaceHeader">To:</span> ' + sTo);
+							aHTML.push('<span class="ns1blankspace">To:</span> ' + sTo);
 
 							aHTML.push('</td></tr>');
 							aHTML.push('</table>');
@@ -1066,9 +1073,9 @@ ns1blankspace.messaging.imap =
 						
 						if (ns1blankspace.objectContextData.cc != '')
 						{
-							aHTML.push('<table id="ns1blankspaceMessagingEmailCCContainer" class="ns1blankspaceHeader">');
+							aHTML.push('<table id="ns1blankspaceMessagingEmailCCContainer" class="ns1blankspaceHeader" style="background-color:#f3f3f3;">');
 							aHTML.push('<tr class="ns1blankspaceHeader">' +
-											'<td id="ns1blankspaceMessagingEmailCC" class="ns1blankspaceHeader" style="text-align:left;">');
+											'<td id="ns1blankspaceMessagingEmailCC" class="ns1blankspace" style="text-align:left;">');
 											
 							var sCC = ns1blankspace.objectContextData.cc
 							var aCC = sCC.split('|')
@@ -1079,7 +1086,7 @@ ns1blankspace.messaging.imap =
 								if (i % 2 !== 0) {sCC += this + '; ';}
 							});				
 											
-							aHTML.push('<span class="ns1blankspaceHeader">Cc:</span> ' + sCC);
+							aHTML.push('<span class="ns1blankspace">Cc:</span> ' + sCC);
 
 							aHTML.push('</td></tr>');
 							aHTML.push('</table>');
@@ -1087,9 +1094,9 @@ ns1blankspace.messaging.imap =
 						
 						//if (ns1blankspace.objectContextData.hasattachments == 'Y')
 						//{
-							aHTML.push('<table id="ns1blankspaceMessagingEmailAttachmentsContainer" class="ns1blankspaceHeader">');
+							aHTML.push('<table id="ns1blankspaceMessagingEmailAttachmentsContainer" class="ns1blankspaceHeader" style="background-color:#f3f3f3;">');
 							aHTML.push('<tr class="ns1blankspaceHeader">' +
-													'<td id="ns1blankspaceMessagingEmailAttachments" class="ns1blankspaceHeader"></td></tr>');
+													'<td id="ns1blankspaceMessagingEmailAttachments" class="ns1blankspace"></td></tr>');
 							aHTML.push('</table>');
 						//}
 						
@@ -1198,7 +1205,7 @@ ns1blankspace.messaging.imap =
 													sAttachments +=	'<a href="' + sLink + '" target="_blank">' + aAttachment[0] + '</a>; ';
 												});	
 																
-												aHTML.push('<span class="ns1blankspaceHeader">Attachments:</span> ' + sAttachments);
+												aHTML.push('<span class="ns1blankspace">Attachments:</span> ' + sAttachments);
 											}
 											else
 											{								
@@ -1212,7 +1219,7 @@ ns1blankspace.messaging.imap =
 													sAttachments +=	'<a href="' + aAttachment[1] + '" target="_blank">' + aAttachment[0] + '</a>; ';
 												});	
 																
-												aHTML.push('<span class="ns1blankspaceHeader">Attachments:</span> ' + sAttachments);
+												aHTML.push('<span class="ns1blankspace">Attachments:</span> ' + sAttachments);
 											}
 										}
 									

@@ -29,6 +29,9 @@ ns1blankspace.event =
 							width : "100%",
 							theme : "advanced",
 
+							theme_advanced_path : false,
+							theme_advanced_statusbar_location : "bottom",
+
 							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
 							theme_advanced_buttons1_add_before : "forecolor,backcolor", 
@@ -410,14 +413,9 @@ ns1blankspace.event =
 										'</td></tr>');
 						}
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.description +
-										'</td></tr>');
-										
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceMainSummaryColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 					}	
 				},
 
@@ -487,11 +485,11 @@ ns1blankspace.event =
 							
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
-						aHTML.push('<tr><td class="ns1blankspace">' +
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 										'Status' +
 										'</td></tr>' +
 										'<tr>' +
-										'<td class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Planning' +
 										'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>In Progress' +
 										'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>Completed' +
@@ -503,14 +501,18 @@ ns1blankspace.event =
 							
 						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
-						$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy' });
+						$('input.ns1blankspaceDate').datetimepicker({ 
+							dateFormat: 'dd M yy',
+							timeFormat: 'h:mm TT',
+							stepMinute: 5,
+							ampm: true
+							});
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
 							$('#ns1blankspaceDetailsStartDate').val(ns1blankspace.objectContextData.startdate);
 							$('#ns1blankspaceDetailsEndDate').val(ns1blankspace.objectContextData.enddate);
-							$('#ns1blankspaceDetailsFromEmail').val(ns1blankspace.objectContextData.fromemail);
 							$('#ns1blankspaceDetailsSummary').val(ns1blankspace.objectContextData.summary);
 							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
@@ -550,7 +552,7 @@ ns1blankspace.event =
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDescription').val(unescape(ns1blankspace.objectContextData.description));
+							$('#ns1blankspaceDescription').val((ns1blankspace.objectContextData.description).formatXHTML());
 						}
 					
 						tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceDescription');
@@ -761,39 +763,35 @@ ns1blankspace.event =
 									
 									if (ns1blankspace.objectContext != -1)
 									{
-										sParam = 'method=EVENT_UPDATE';
-										sParam += '&select=' + ns1blankspace.objectContext	
-									}
-									else
-									{
-										sParam = 'method=EVENT_ADD';
-									}
+										sData += '&id=' + ns1blankspace.objectContext	
+									}	
 										
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + encodeURIComponent($('#ns1blankspaceMainDetailsReference').val());
-										sData += '&public=' + $("input[@name='radioPublic']:checked").val();
+										sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
+										sData += '&startdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsStartDate').val());
+										sData += '&enddate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEndDate').val());
+
+										sData += '&public=' + $('input[name="radioPublic"]:checked').val();
+										sData += '&status=' + $('input[name="radioStatus"]:checked').val();
 										
-										//sData += '&url=' + encodeURIComponent($('#inputns1blankspaceMainDetailsURL').val());
-										//sData += '&summary=' + encodeURIComponent($('#inputns1blankspaceMainDetailsSummary').val());
 									}
 									
 									if ($('#ns1blankspaceMainDescription').html() != '')
 									{
-										sData += '&description=' + escape(tinyMCE.get('ns1blankspaceMainDescriptionText').getContent());
+										sData += '&description=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceMainDescriptionText').getContent());
 									}
 									
 									$.ajax(
 									{
 										type: 'POST',
-										url: '/ondemand/event/?' + sParam,
+										url: ns1blankspace.util.endpointURI('EVENT_MANAGE'),
 										data: sData,
-										dataType: 'text',
-										async: false,
+										dataType: 'json',
 										success: function(data) 
 													{ 
-														var aReturn = data.split('|');
-														ns1blankspace.objectContext = aReturn[2];
+														if (ns1blankspace.objectContext == -1) {var bNew = true}
+														if (bNew) {ns1blankspace.objectContext = data.id};
 														ns1blankspace.status.message('Event saved.');
 													}
 									});
