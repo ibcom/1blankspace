@@ -649,8 +649,8 @@ ns1blankspace.project =
 												}
 											})
 											.click(function() {
-												ns1blankspace.project.task.init({showHome: false});
-												ns1blankspace.project.task.search.show(this.id);
+												ns1blankspace.projectTask.init({showHome: false});
+												ns1blankspace.projectTask.search.send(this.id);
 											})
 											.css('width', '15px')
 											.css('height', '20px');
@@ -660,7 +660,7 @@ ns1blankspace.project =
 
 					edit:		function (oParam, oResponse)
 								{
-									var sXHTMLElementID = "ns1blankspaceMainTaskDetails";
+									var sXHTMLElementID = "ns1blankspaceMainTasks";
 									var sXHTMLElementContextID;
 									var lProjectTask;
 									
@@ -679,7 +679,7 @@ ns1blankspace.project =
 										var lProjectTask = aSearch[1];
 									}	
 										
-									ns1blankspace.show({selector: '#ns1blankspaceMainTaskDetails'});	
+									//ns1blankspace.show({selector: '#ns1blankspaceMainTaskDetails'});	
 										
 									var aHTML = [];
 									
@@ -707,10 +707,10 @@ ns1blankspace.project =
 									{
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
 										aHTML.push('<tr><td>' +
-														'<span id="ns1blankspaceTaskDetailsSave">Save</span>' +
+														'<span class="ns1blankspaceAction" id="ns1blankspaceTaskDetailsSave">Save</span>' +
 														'</td></tr>');
 																
 										aHTML.push('</table>');					
@@ -722,7 +722,7 @@ ns1blankspace.project =
 											label: "Save"
 										})
 										.click(function() {
-											ns1blankspace.project.tasks.edit(oParam);
+											ns1blankspace.project.tasks.save(oParam);
 										})
 										
 										var aHTML = [];
@@ -740,7 +740,7 @@ ns1blankspace.project =
 											
 										aHTML.push('<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceTextMulti">' +
-														'<textarea id="ns1blankspaceTaskDetailsDescription" class="ns1blankspaceTextMulti" rows="10" cols="50" style="width:100%;"></textarea>' +
+														'<textarea id="ns1blankspaceTaskDetailsDescription" class="ns1blankspaceTextMulti" rows="5" cols="50" style="width:100%; height:100px;"></textarea>' +
 														'</td></tr>');
 									
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -760,7 +760,8 @@ ns1blankspace.project =
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceSelect">' +
 														'<input id="ns1blankspaceTaskDetailsTaskBy" class="ns1blankspaceSelect"' +
-																' data-method="SETUP_USER_SEARCH">' +
+																' data-method="CORE_USER_SEARCH"' +
+																' data-columns="firstname-space-surname">' +
 														'</td></tr>');	
 									
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -786,6 +787,8 @@ ns1blankspace.project =
 										$('#ns1blankspaceTaskDetailsColumn1').html(aHTML.join(''));
 										
 										$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy' });
+
+										$('#ns1blankspaceTaskDetailsTitle').focus();
 										
 										if (oResponse != undefined)
 										{	
@@ -818,7 +821,8 @@ ns1blankspace.project =
 										data: sData,
 										dataType: 'json',
 										success: function(data){
-											ns1blankspace.show({selector: 'ns1blankspaceTasks', refresh: true});
+											ns1blankspace.status.message('Task added')
+											//ns1blankspace.show({selector: 'ns1blankspaceMainTasks', refresh: true});
 											ns1blankspace.project.tasks.show();
 										}
 									});
@@ -834,7 +838,7 @@ ns1blankspace.project =
 										url: ns1blankspace.util.endpointURI('PROJECT_TASK_MANAGE'),
 										data: 'remove=1&id=' + ns1blankspace.util.fs(aXHTMLElementID[1]),
 										dataType: 'json',
-										success: function(data){$('#' + sXHTMLElementId).parent().fadeOut(500)}
+										success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 									});
 								}	
 				},
