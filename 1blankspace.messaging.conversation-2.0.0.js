@@ -1187,7 +1187,7 @@ ns1blankspace.messaging.conversation =
 													}
 													else
 													{
-														alert ('Comment could not be sent.');
+														ns1blankspace.status.message('Comment could not be sent.');
 													}	
 												}
 										});	

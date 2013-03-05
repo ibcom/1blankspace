@@ -34,6 +34,9 @@ ns1blankspace.news =
 							width : "100%",
 							theme : "advanced",
 
+							theme_advanced_path : false,
+							theme_advanced_statusbar_location : "bottom",
+							
 							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,dynamicTags,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
 							theme_advanced_buttons1_add_before : "forecolor,backcolor", 
@@ -101,15 +104,12 @@ ns1blankspace.news =
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
-						sParam = '&rows=10';
-
-						$.ajax(
-						{
-							type: 'GET',
-							url: ns1blankspace.util.endpointURI('NEWS_SEARCH') + sParam,
-							dataType: 'json',
-							success: ns1blankspace.news.home
-						});
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'NEWS_SEARCH';
+						oSearch.addField('subject,startdate');
+						oSearch.rows = 10;
+						oSearch.sort('modifieddate', 'desc');
+						oSearch.getResults(ns1blankspace.news.home);
 					}
 					else
 					{
@@ -183,16 +183,12 @@ search: 		{
 										
 										ns1blankspace.objectContext = sSearchContext;
 										
-										var sData = 'id=' + ns1blankspace.objectContext;
-										
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('NEWS_SEARCH'),
-											data: sData,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.news.show(oParam, data)}
-										});
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'NEWS_SEARCH';
+										oSearch.addField('emailtemplate,enddate,fromemail,format,greeting,greetingtext,formattext,headerlink,headerlinktext,' +
+															'mobile,newsbody,public,startdate,subject,summary,tracking,trackingtext,unsubscribegroupsonly,unsubscribetext');
+										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
+										oSearch.getResults(function(data) {ns1blankspace.news.show(oParam, data)});
 									}
 									else
 									{	
@@ -215,16 +211,12 @@ search: 		{
 											ns1blankspace.container.position({xhtmlElementID: sElementId});
 											ns1blankspace.search.start();
 											
-											var sPData = '&quicksearch=' + sSearchText;
-
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('NEWS_SEARCH'),
-												data: sData,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.search.process(oParam, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'NEWS_SEARCH';
+											oSearch.addField('subject,startdate');
+											oSearch.addFilter('subject', 'TEXT_LIKE', sSearchText);
+											oSearch.sort('subject', 'desc');
+											oSearch.getResults(function(data) {ns1blankspace.news.search.process(oParam, data)});
 										}
 									}
 								},
@@ -287,13 +279,13 @@ search: 		{
 											ns1blankspace.news.search(event.target.id, {source: 1});
 										});
 										
-										ns1blankspace.pagination.bind(
+										ns1blankspace.render.bind(
 										{
 											columns: 'subject',
 											more: oResponse.moreid,
 											rows: 15,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: oResponse.news.search.send
+											functionSearch: ns1blankspace.news.search.send
 										});   
 										
 									}	
@@ -653,7 +645,7 @@ search: 		{
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							var sHTML = (ns1blankspace.objectContextData.news).formatXHTML();
+							var sHTML = (ns1blankspace.objectContextData.newsbody).formatXHTML();
 							$('#ns1blankspaceEditText' + ns1blankspace.counter.editor).val(sHTML);
 						}
 					
@@ -1296,7 +1288,7 @@ search: 		{
 									
 									if (ns1blankspace.objectContext != -1)
 									{
-										sParam += '&select=' + ns1blankspace.objectContext	
+										sData += '&id=' + ns1blankspace.objectContext	
 									}	
 									
 									if ($('#ns1blankspaceMainDetails').html() != '')

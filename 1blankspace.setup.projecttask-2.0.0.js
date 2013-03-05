@@ -411,12 +411,15 @@ ns1blankspace.setup.projectTask =
 						
 						var sDescription = ns1blankspace.objectContextData.description;
 						
-						sDescription = sDescription.replace(/(\r\n|\r|\n)/g, "<br />");
-						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
-										'<tr><td class="ns1blankspaceSummary">' +
-										sDescription +
-										'</td></tr>');
+						if (sDescription != '')
+						{	
+							sDescription = sDescription.replace(/(\r\n|\r|\n)/g, "<br />");
+							
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
+											'<tr><td class="ns1blankspaceSummary">' +
+											sDescription +
+											'</td></tr>');
+						}
 						
 						aHTML.push('</table>');					
 						

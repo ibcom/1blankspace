@@ -199,8 +199,6 @@ ns1blankspace.contactBusiness =
 												oSearch.addFilter('quicksearch', 'TEXT_IS_LIKE', sSearchText);
 											}	
 											
-											oSearch.rows = 15;
-											oSearch.rf = 'json';
 											oSearch.getResults(function(data) {ns1blankspace.contactBusiness.search.process(oParam, data)});
 										}
 									}
@@ -269,7 +267,7 @@ ns1blankspace.contactBusiness =
 											ns1blankspace.contactBusiness.search.send(event.target.id, {source: 1});
 										});
 										
-										ns1blankspace.pagination.bind(
+										ns1blankspace.render.bind(
 										{
 											columns: 'tradename-legalname',
 											more: oResponse.moreid,

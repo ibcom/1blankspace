@@ -364,10 +364,13 @@ ns1blankspace.projectTask =
 
 						aHTML.push('<table class="ns1blankspace">');
 						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
+						if (ns1blankspace.objectContextData.description != '')
+						{	
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.description +
 										'</td></tr>');
+						}	
 
 						if (ns1blankspace.objectContextData.statustext != '')
 						{
@@ -462,8 +465,8 @@ ns1blankspace.projectTask =
 										'<td class="ns1blankspaceCaption">' +
 										'Status' +
 										'</td></tr>' +
-										'<tr class="ns1blankspaceMain">' +
-										'<td class="ns1blankspaceMainRadio">' +
+										'<tr>' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Not Started' +
 										'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>In Progress' +
 										'<br /><input type="radio" id="radioStatus5" name="radioStatus" value="5"/>On Hold' +
@@ -553,6 +556,7 @@ ns1blankspace.projectTask =
 										sData += '&startdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsStartDate').val());
 										sData += '&enddate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEndDate').val());
 										sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
+										sData += '&percentagecomplete=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPercentageComplete').val());
 									}
 									
 									if ($('#ns1blankspaceMainDescription').html() != '')
