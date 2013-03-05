@@ -857,9 +857,9 @@ ns1blankspace.project =
 										
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + ns1blankspace.util.fs($('#inputns1blankspaceDetailsReference').val());
-										sData += '&startdate=' + ns1blankspace.util.fs($('#inputns1blankspaceDetailsStartDate').val());
-										sData += '&enddate=' + ns1blankspace.util.fs($('#inputns1blankspaceDetailsEndDate').val());
+										sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
+										sData += '&startdate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsStartDate').val());
+										sData += '&enddate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEndDate').val());
 										sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
 									}
 									

@@ -115,10 +115,10 @@ ns1blankspace.setup.website =
 				},
 
 	search: 	{
-					send: 		function (sXHTMLElementId, oParam)
+					send: 		function (sXHTMLElementID, oParam)
 								{
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
+									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;
@@ -169,8 +169,8 @@ ns1blankspace.setup.website =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position(sElementId);
-											ns1blankspace.search.tart(sElementId);
+											ns1blankspace.container.position({xhtmlElementID: sElementID});
+											ns1blankspace.search.start();
 											
 											$.ajax(
 											{
@@ -178,7 +178,7 @@ ns1blankspace.setup.website =
 												url: ns1blankspace.util.endpointURI('SETUP_SITE_SEARCH'),
 												data: 'quicksearch=' + sSearchText,
 												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.website.search.send(oParam, data)}
+												success: function(data) {ns1blankspace.setup.website.search.process(oParam, data)}
 											});
 											
 										}
