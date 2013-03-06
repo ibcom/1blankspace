@@ -1658,7 +1658,7 @@ ns1blankspace.control =
 												{
 													aHTML.push('<table style="width: 250px;" class="ns1blankspaceViewControlContainer">' +
 																	'<tr class="ns1blankspaceSpaceOptions">' +
-																	'<td id="ns1blankspaceControlSpaceSwitchBack" class="ns1blankspace">' +
+																	'<td id="ns1blankspaceControlSpaceSwitchBack" class="ns1blankspaceRowSelect">' +
 																	'Switch back to your space.' +
 																	'</td></tr>' +
 																	'</table>');
@@ -1679,9 +1679,9 @@ ns1blankspace.control =
 															{
 																if (data.status == 'OK')
 																{	
-																	ns1blankspace.space = ns1blankspace.userSpace;
-																	ns1blankspace.spaceText = ns1blankspace.userSpaceText;
-																	$('#ns1blankspaceViewControlSpaceText').html(ns1blankspace.spaceText);
+																	ns1blankspace.space = ns1blankspace.user.space;
+																	ns1blankspace.spaceText = ns1blankspace.user.spaceText;
+																	$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
 																}
 															}
 														});	
