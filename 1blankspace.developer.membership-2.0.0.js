@@ -460,7 +460,7 @@ ns1blankspace.developer.membership =
 
 						if (ns1blankspace.objectContext != undefined)
 						{
-							$('[name="radioBasedOnSubscription"][value="' + ns1blankspace.objectContext.basedonsubscription + '"]').attr('checked', true);
+							$('[name="radioBasedOnSubscription"][value="' + ns1blankspace.objectContextData.basedonsubscription + '"]').attr('checked', true);
 						}
 					}
 				},
