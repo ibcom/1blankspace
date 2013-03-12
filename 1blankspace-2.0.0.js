@@ -1007,6 +1007,39 @@ ns1blankspace.app =
 					ns1blankspace.viewOptionsBind = undefined;
 				},
 
+	refresh: 	function (oParam)
+				{
+					var sParentNamespace = ns1blankspace.objectParentName;
+					var sNamespace = ns1blankspace.objectName;
+
+					if (oParam != undefined)
+					{
+						if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
+						if (oParam.parentNamespace != undefined) {sParentNamespace = oParam.parentNamespace}
+					}	
+
+					if (sNamespace)
+					{
+						if (sParentNamespace)
+						{
+							var oNS = ns1blankspace[sParentNamespace][sNamespace];
+						}
+						else
+						{
+							var oNS = ns1blankspace[sNamespace];
+						}
+
+						if (oNS.init)
+						{
+							oNS.init();
+						}
+						else
+						{
+							ns1blankspace.home.show();
+						}
+					}	
+				},		
+
 	set: 		function (oParam)
 				{
 					var bShowHome = true;

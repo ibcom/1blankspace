@@ -25,8 +25,7 @@ ns1blankspace.financial.init = function (oParam)
 							ns1blankspace.financial.initData(oParam)
 						}
 						else
-						{							
-							
+						{														
 							ns1blankspace.app.set(oParam);
 						}
 
