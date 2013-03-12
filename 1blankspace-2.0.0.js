@@ -484,6 +484,8 @@ ns1blankspace.app =
 							
 						$('input.ns1blankspaceSelect').live('focusin', function() 
 						{		
+							$('input.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
+
 							$(this).addClass('ns1blankspaceHighlight');
 							
 							ns1blankspace.xhtml.divID = this.id;
@@ -508,18 +510,13 @@ ns1blankspace.app =
 								ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
 							})
 							.css('width', '14px')
-							.css('height', '23px')
+							.css('height', '21px')
 						});
 							
 						$('input.ns1blankspaceSelect').live('keyup', function()
 						{
 							ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
 						});	
-							
-						$('input.ns1blankspaceSelect').live('focusout', function() 
-						{
-							$(this).removeClass('ns1blankspaceHighlight');
-						});
 						
 						$('.ns1blankspaceSelectAddress').live('focus', function() 
 						{
@@ -539,7 +536,7 @@ ns1blankspace.app =
 								ns1blankspace.search.address.show(ns1blankspace.xhtml.divID);
 							})
 							.css('width', '14px')
-							.css('height', '23px')
+							.css('height', '21px')
 						});
 						
 						$('.ns1blankspaceSelectAddress').live('blur', function() 
@@ -570,7 +567,7 @@ ns1blankspace.app =
 								ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 4);
 							})
 							.css('width', '14px')
-							.css('height', '23px')
+							.css('height', '21px')
 						});
 						
 						$('.ns1blankspaceSelectContactEmail').live('focus', function() 
@@ -596,7 +593,7 @@ ns1blankspace.app =
 										});
 							})
 							.css('width', '14px')
-							.css('height', '23px')
+							.css('height', '21px')
 						});
 						
 						$('.ns1blankspaceSelectContactEmail').live('keyup', function() 
@@ -1056,6 +1053,8 @@ ns1blankspace.app =
 						if (oParam.new != undefined) {bNew = oParam.new}
 						if (oParam.id != undefined) {iID = oParam.id}
 					}	
+
+					if (iID) {bShowHome = false}
 
 					if (sNamespace)
 					{
@@ -2653,11 +2652,29 @@ ns1blankspace.search =
 								{
 									var oSearch = new AdvancedSearch();
 									oSearch.method = sMethod;
-									oSearch.addField(sColumns);
+
+									$.each(aColumns, function() 
+									{
+										if (this != 'space' && this != 'comma' && this != 'pipe')
+										{	
+											oSearch.addField(this);
+										}	
+									});	
 
 									if (iSource === ns1blankspace.data.searchSource.text)
 									{	
-										oSearch.addFilter(aColumns[0], 'TEXT_IS_LIKE', sSearchText);
+										$.each(aColumns, function(i) 
+										{
+											if (this != 'space' && this != 'comma' && this != 'pipe')
+											{	
+												if (i != 0)
+												{
+													oSearch.addOperator('or');
+												}
+
+												oSearch.addFilter(this, 'TEXT_IS_LIKE', sSearchText);
+											}	
+										});	
 									}	
 									
 									if (sXHTMLParentInputElementID != undefined)
@@ -2728,7 +2745,7 @@ ns1blankspace.search =
 								aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:' +
 												$('#' + sXHTMLInputElementID).width() + 'px;">');
 							
-								$.each(oResponse.data.rows, function() 
+								$.each(oResponse.data.rows, function(i, v) 
 								{ 
 									iColumn = iColumn + 1;
 							
@@ -2740,30 +2757,46 @@ ns1blankspace.search =
 									if (sColumns.length == 0)
 									{
 										aHTML.push('<td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
-															'-' + this.id + '">' + this.title + '</td>');
+															'-' + v.id + '">' + v.title + '</td>');
 									}
 									else
 									{
+										var bNewTD = true;
+
 										aHTML.push('<td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
-																'-' + this.id + '">');
-														
-										for (var i = 0; i < aColumns.length; i++)
+																	'-' + v.id + '">');
+
+										$.each(aColumns, function(j, k) 
 										{
-											switch (aColumns[i])
+											bNewTD = false;
+
+											switch (k)
 											{
-											case 'space':
-												aHTML.push(' ');
-												break;
-											case 'comma':
-												aHTML.push(',');
-												break;
-											case 'pipe':
-												aHTML.push('|');
-												break;
-											default:
-												aHTML.push(this[aColumns[i]]);
+												case 'space':
+													aHTML.push(' ');
+													break;
+
+												case 'comma':
+													aHTML.push(',');
+													break;
+
+												case 'pipe':
+													aHTML.push('|');
+													break;
+
+												default:
+
+													if (bNewTD)
+													{
+														aHTML.push('</td><td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
+																	'-' + v.id + '">');
+													}				
+																
+													aHTML.push(v[k]);
+													bNewTD = true;
 											}
-										}
+										});
+
 										aHTML.push('</td>');
 									}
 							

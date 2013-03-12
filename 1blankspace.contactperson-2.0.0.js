@@ -19,16 +19,10 @@ ns1blankspace.contactPerson =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'People';
 					
-					var bShowHome = true;
-					var bNew = false;
-					
 					if (oParam != undefined)
 					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
-						if (oParam.showNew != undefined) {bNew = oParam.showNew}
 						if (oParam.contactBusiness != undefined) {ns1blankspace.data.contactBusiness = oParam.contactBusiness}
 						if (oParam.contactBusinessText != undefined) {ns1blankspace.data.contactBusinessText = oParam.contactBusinessText}
-						if (bNew) {ns1blankspace.contactPerson.new()};
 					}	
 
 					ns1blankspace.app.set(oParam);
@@ -515,9 +509,8 @@ ns1blankspace.contactPerson =
 										ns1blankspace.objectContextData.email +
 										'</td></tr>');	
 
-							aHTML.push('<tr><td>' +
-										'<span id="ns1blankspaceContactPersonEmail" class="ns1blankspaceAction">Email</span>' +
-										'</td></tr>');
+							aHTML.push('<tr><td><span id="ns1blankspaceContactPersonEmail" class="ns1blankspaceAction">' +
+										'Email</span></td></tr>');
 
 							aHTML.push('</table>');					
 						
@@ -870,23 +863,29 @@ ns1blankspace.contactPerson =
 						
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 							
 						if (ns1blankspace.objectContextData.contactbusiness != '')
 						{	
-							aHTML.push('<tr><td class="ns1blankspace">' +
-										'<a href="#" id="ns1blankspaceBusinessView">View&nbsp;Business</a>' +
-										'</td></tr>');
+							aHTML.push('<tr><td><span id="ns1blankspaceBusinessView" class="ns1blankspaceAction">' +
+										'View</span></td></tr>');
 						}
 						
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceBusinessColumn2').html(aHTML.join(''));	
 						
-						$('#ns1blankspaceBusinessColumn2BusinessView').click(function(event)
+						$('#ns1blankspaceBusinessView').button(
 						{
-							ns1blankspace.contactBusiness.init({showHome: false});
-							ns1blankspace.contactBusiness.search.show('-' + ns1blankspace.objectContextData.contactbusiness, {source: 1});
+							label: 'View',
+							icons:
+							{
+								primary: "ui-icon-play"
+							}
+						})
+						.click(function()
+						{
+							ns1blankspace.contactBusiness.init({id: ns1blankspace.objectContextData.contactbusiness});
 						});
 					}	
 				},
