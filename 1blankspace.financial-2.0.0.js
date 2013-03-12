@@ -37,6 +37,8 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 						var bRefresh = false;
 						var iStep = 0;
 						
+						if (oParam == undefined) {oParam = {}}
+							
 						if (oParam != undefined)
 						{
 							if (oParam.refresh != undefined) {bRefresh = oParam.refresh}
