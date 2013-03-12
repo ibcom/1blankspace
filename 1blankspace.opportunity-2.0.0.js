@@ -11,7 +11,7 @@ ns1blankspace.opportunity =
 				{
 					ns1blankspace.app.reset();
 
-					ns1blankspace.object = 32;	
+					ns1blankspace.object = 35;	
 					ns1blankspace.objectName = 'opportunity';
 					ns1blankspace.viewName = 'Opportunities';
 					ns1blankspace.data.contactBusiness = -1;
@@ -193,7 +193,7 @@ ns1blankspace.opportunity =
 											
 											oSearch.rf = 'json';
 											
-											oSearch.getResults(function(data){ns1blankspace.search.process(oParam, data)}) 
+											oSearch.getResults(function(data){ns1blankspace.opportunity.search.process(oParam, data)}) 
 
 										}
 									}	
@@ -284,6 +284,8 @@ ns1blankspace.opportunity =
 					if (ns1blankspace.objectContext == -1)
 					{
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">Details</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlContact" class="ns1blankspaceControl">Contact</td></tr>');
 					}
 					else
 					{

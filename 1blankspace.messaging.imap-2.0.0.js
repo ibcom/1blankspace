@@ -2096,16 +2096,16 @@ ns1blankspace.messaging.imap =
 								label: "Blank"
 							})
 							.click(function() {
-								ns1blankspace.messaging.imap.edit.show(oParam);
+								s1blankspace.messaging.imap.message.edit.show(oParam);
 							})
 							.css('width', '75px')
 						
 							var aHTML = [];
 	
-							aHTML.push('<table id="ns1blankspaceMessagingContainer" style="width:100%">');
+							aHTML.push('<table style="width:100%">');
 							aHTML.push('<tr><td class="ns1blankspaceCaption">Saved Drafts</td></tr>');
 							
-							aHTML.push('<table style="width:100%">');
+							aHTML.push('<table id="ns1blankspaceMessagingContainer" style="width:100%">');
 						
 							var sSubject;
 
@@ -2122,7 +2122,7 @@ ns1blankspace.messaging.imap =
 							
 							$('#ns1blankspaceNewColumn1').html(aHTML.join(''));
 						
-							$('#ns1blankspaceMessagingContainer .ns1blankspaceRowSelect').click(function() {
+							$('#ns1blankspaceMessagingContainer td.ns1blankspaceRowSelect').click(function() {
 							
 								var sData = 'method=MESSAGING_EMAIL_DRAFT_SEARCH&getmessage=1';
 								sID = this.id;

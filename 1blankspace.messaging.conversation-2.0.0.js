@@ -41,7 +41,7 @@ ns1blankspace.messaging.conversation =
 							theme_advanced_path : false,
 							theme_advanced_statusbar_location : "bottom",
 
-							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,dynamicTags,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
+							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
 							theme_advanced_buttons1_add_before : "forecolor,backcolor", 
 							theme_advanced_buttons1_add : "fontselect,fontsizeselect", 
@@ -50,7 +50,7 @@ ns1blankspace.messaging.conversation =
 							theme_advanced_buttons2_add_before: "cut,copy,paste,pasteword,separator,search,replace,separator", 
 							
 							theme_advanced_buttons3_add_before : "tablecontrols,separator", 
-							theme_advanced_buttons3_add : "emotions,iespell,fullscreen,print,dynamicTags,media,selectall,advhr",
+							theme_advanced_buttons3_add : "emotions,iespell,fullscreen,print,media,selectall,advhr",
 					 
 							plugin_insertdate_dateFormat : "%d-%m-%y", 
 							plugin_insertdate_timeFormat : "%H:%M:%S", 
@@ -735,8 +735,8 @@ ns1blankspace.messaging.conversation =
 			
 											aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspaceParticipantsAddColumn1" class="ns1blankspaceColumn1Large"></td>' +
-															'<td id="ns1blankspaceParticipantsAddColumn2" class="ns1blankspaceColumn2Action"></td>' +
+															'<td id="ns1blankspaceParticipantsAddColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+															'<td id="ns1blankspaceParticipantsAddColumn2" class="ns1blankspaceColumn2" style="width:300px;"></td>' +
 															'</tr>' + 
 															'</table>');		
 															
@@ -761,7 +761,7 @@ ns1blankspace.messaging.conversation =
 															'</td></tr>' +
 															'<tr class="ns1blankspace">' +
 															'<td class="ns1blankspaceText">' +
-															'<input id="ns1blankspaceDetailsLastName" class="ns1blankspaceText">' +
+															'<input id="ns1blankspaceDetailsSurname" class="ns1blankspaceText">' +
 															'</td></tr>');	
 														
 
@@ -787,10 +787,14 @@ ns1blankspace.messaging.conversation =
 											
 											aHTML.push('<table class="ns1blankspaceMainColumn2Action">');
 												
-											aHTML.push('<tr><td  class="ns1blankspaceAction">' +
-															'<span id="ns1blankspaceParticipantsAddSearch">Search</span>' +
+											aHTML.push('<tr><td>' +
+															'<span id="ns1blankspaceParticipantsAddSearch" class="ns1blankspaceAction">Search</span>' +
 															'</td></tr>');
 														
+											aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.75em; padding-top:7px;">' +
+															'You must enter full names.  eg First Name "John"' +
+															'</td></tr>');
+																		
 											aHTML.push('</table>');					
 										
 											$('#ns1blankspaceParticipantsAddColumn1').html(aHTML.join(''))
@@ -811,7 +815,7 @@ ns1blankspace.messaging.conversation =
 												{
 													oSearchSet.surname = $('#ns1blankspaceDetailsSurname').val()
 												}
-												if ($('#ins1blankspaceDetailsEmail').val() != '')
+												if ($('#ns1blankspaceDetailsEmail').val() != '')
 												{
 													oSearchSet.email = $('#ns1blankspaceDetailsEmail').val()
 												}
@@ -867,17 +871,18 @@ ns1blankspace.messaging.conversation =
 										else
 										{
 											var aHTML = [];
-											var h = -1;
 											
+											ns1blankspace.status.message('');
+
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<table><tr><td class="ns1blankspaceNothing">No matching users.</td></tr></table>');
+												aHTML.push('<table class="ns1blankspaceColumn2"><tr><td class="ns1blankspaceNothing">No matching users.</td></tr></table>');
 
 												$('#ns1blankspaceParticipantsAddColumn2').html(aHTML.join(''));
 											}
 											else
 											{
-												aHTML.push('<table id="ns1blankspaceParticpantsAddSelect" class="ns1blankspaceContainer">');
+												aHTML.push('<table id="ns1blankspaceParticpantsAddSelect" class="ns1blankspaceColumn2">');
 												
 												$.each(oResponse.data.rows, function()
 												{	
@@ -896,11 +901,11 @@ ns1blankspace.messaging.conversation =
 
 												$('#ns1blankspaceParticipantsAddColumn2').html(aHTML.join(''));
 												
-												$('#ns1blankspaceParticpantsAddSelect > .ns1blankspaceRowSelect').button({
+												$('#ns1blankspaceParticpantsAddSelect .ns1blankspaceRowSelect').button({
 													text: false,
 													label: "Add",
 													icons: {
-														 primary: "ui-icon-check"
+														 primary: "ui-icon-plus"
 													}
 												})
 												.click(function() {
@@ -915,7 +920,7 @@ ns1blankspace.messaging.conversation =
 
 					select:		function (sXHTMLElementID)
 								{
-									var aSearch = sXHTMLElementId.split('-');
+									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sContext = aSearch[1];
 									
@@ -1218,7 +1223,7 @@ ns1blankspace.messaging.conversation =
 										var lProjectTask = aSearch[1];
 									}	
 										
-									ns1blankspace.show({selector: '#ns1blankspaceMainPostDetails'});	
+									//ns1blankspace.show({selector: '#ns1blankspaceMainPostDetails'});	
 										
 									var aHTML = [];
 									
@@ -1229,7 +1234,7 @@ ns1blankspace.messaging.conversation =
 															'</tr>' + 
 															'</table>');			
 										
-									$('#ns1blankspaceMainPostDetails').html(aHTML.join(''));
+									$('#ns1blankspaceMainPosts').html(aHTML.join(''));
 											
 									if (oResponse == undefined && iPost != undefined)
 									{
@@ -1308,6 +1313,8 @@ ns1blankspace.messaging.conversation =
 											tinyMCE.execCommand('mceAddControl', false, 'ns1blankspacePostMessage' + ns1blankspace.counter.editor);
 										}	
 										
+										$('#ns1blankspacePostSubject').focus();
+
 										if (oResponse != undefined)
 										{	
 											if (oResponse.data.rows.length != 0)
@@ -1319,7 +1326,7 @@ ns1blankspace.messaging.conversation =
 									}	
 								},	
 
-					send:		function ()
+					send:		function (oParam)
 								{
 									var sData = 'conversation=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 									sData += '&subject=' + ns1blankspace.util.fs($('#ns1blankspacePostSubject').val());
@@ -1331,7 +1338,7 @@ ns1blankspace.messaging.conversation =
 										url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_POST_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: function(data) {ns1blankspace.messaging.conversation.posts.show(oParam, data)}
+										success: function(data) {ns1blankspace.messaging.conversation.posts.show(oParam)}
 									});
 								}
 				},
@@ -1384,20 +1391,24 @@ ns1blankspace.messaging.conversation =
 									
 										var aHTML = [];
 										
+										aHTML.push('<table>');
+
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No comments.</td></tr></table>');
+											aHTML.push('<tr><td class="ns1blankspaceNothing">No comments.</td></tr></table>');
 										}
 										else
-										{		
-											aHTML.push('<table id="ns1blankspaceConversationComments" class="ns1blankspaceContainer">');
-												
+										{	
 											if (iPost)
 											{
 												aHTML.push('<tr><td style="padding-bottom:15px;">' +
-																oResponse.data.rows[0].postmessage + '</td></tr>');
+																(oResponse.data.rows[0].postmessage).formatXHTML() + '</td></tr>');
 											}
 
+											aHTML.push('</table>');
+
+											aHTML.push('<table id="ns1blankspaceConversationComments" class="ns1blankspaceContainer">');
+												
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 
 											if (iPost == undefined)

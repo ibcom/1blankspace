@@ -671,7 +671,7 @@ ns1blankspace.document =
 											success: function (data)
 											{
 												ns1blankspace.status.message('Saved');
-												if (bNew) {ns1blankspace.contactBusiness.search.send('-' + ns1blankspace.objectContext)}
+												if (bNew) {ns1blankspace.document.search.send('-' + ns1blankspace.objectContext)}
 											}		
 										});
 									
@@ -679,7 +679,7 @@ ns1blankspace.document =
 									else
 									{
 										ns1blankspace.status.message('Saved');
-										if (bNew) {ns1blankspace.contactBusiness.search.send('-' + ns1blankspace.objectContext)}
+										if (bNew) {ns1blankspace.document.search.send('-' + ns1blankspace.objectContext)}
 									}	
 								}
 				},

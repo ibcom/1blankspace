@@ -264,7 +264,7 @@ ns1blankspace.project =
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');
 									
-						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
 					}	
 					
