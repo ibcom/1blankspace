@@ -1681,7 +1681,7 @@ ns1blankspace.control =
 																{	
 																	ns1blankspace.space = ns1blankspace.user.space;
 																	ns1blankspace.spaceText = ns1blankspace.user.spaceText;
-																	ns1blankspace.financial.data == undefined;
+																	ns1blankspace.financial.data = undefined;
 																	ns1blankspace.financial.initStatus = undefined;
 																	$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
 																	ns1blankspace.app.refresh();
@@ -1755,7 +1755,7 @@ ns1blankspace.control =
 														{	
 															ns1blankspace.space = aID[1];
 															ns1blankspace.spaceText = $('#' + event.target.id).html();
-															ns1blankspace.financial.data == undefined;
+															ns1blankspace.financial.data = undefined;
 															ns1blankspace.financial.initStatus = undefined;
 															$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
 															ns1blankspace.app.refresh();

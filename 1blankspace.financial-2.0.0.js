@@ -38,7 +38,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 						var iStep = 0;
 						
 						if (oParam == undefined) {oParam = {}}
-							
+
 						if (oParam != undefined)
 						{
 							if (oParam.refresh != undefined) {bRefresh = oParam.refresh}
@@ -92,11 +92,15 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 										oSearch.rows = 100;
 										oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)});
 									}
+									else
+									{
+										ns1blankspace.financial.initData($.extend(true, oParam, {step: 2}));
+									}
 								}
 								else
 								{
 									ns1blankspace.financial.data.bankaccounts = oResponse.data.rows;
-									ns1blankspace.financial.initData($.extend(true, oParam, {step: 2}))
+									ns1blankspace.financial.initData($.extend(true, oParam, {step: 2}));
 								}
 							}
 							
@@ -114,11 +118,15 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 											success: function(data) {ns1blankspace.financial.initData(oParam, data)}
 										});
 									}
+									else
+									{
+										ns1blankspace.financial.initData($.extend(true, oParam, {step: 3}));
+									}
 								}
 								else
 								{
 									ns1blankspace.financial.data.settings = oResponse;
-									ns1blankspace.financial.initData($.extend(true, oParam, {step: 3}))
+									ns1blankspace.financial.initData($.extend(true, oParam, {step: 3}));
 								}
 							}
 							
@@ -136,6 +144,11 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 										oSearch.sort('title', 'asc')
 										oSearch.rows = 500;
 										oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)})	
+									}
+									else
+									{
+										ns1blankspace.financial.initStatus = 2;
+										ns1blankspace.status.message('&nbsp;');
 									}
 								}
 								else
