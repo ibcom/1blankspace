@@ -114,8 +114,8 @@ ns1blankspace.xhtml.logonNotes =
 ns1blankspace.xhtml.header =
 	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/1blankspace.aoe-2.0.0.png"></div>' +
 	'<div style="float:right; margin-right:3px;">' +
-	'<div id="ns1blankspaceSpaceText" style="width:300px;"></div>' +
-	'<div id="ns1blankspaceLogonName" style="width:300px;"></div></div>';
+	'<div id="ns1blankspaceSpaceText" style="width:450px;"></div>' +
+	'<div id="ns1blankspaceLogonName" style="width:450px;"></div></div>';
 
 ns1blankspace.themes = 
 [
