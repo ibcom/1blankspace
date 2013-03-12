@@ -1642,7 +1642,7 @@ ns1blankspace.control =
 												$(ns1blankspace.xhtml.container).attr('data-source', oElement.id);
 												$(ns1blankspace.xhtml.container).html('<table style="width: 250px;" class="ns1blankspaceViewControlContainer"><tr><td>' + ns1blankspace.xhtml.loadingSmall + '</tr><td></table>');
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-												$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left});
+												$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left + 150});
 
 												if (ns1blankspace.space == ns1blankspace.user.space)
 												{	
@@ -1656,7 +1656,7 @@ ns1blankspace.control =
 												}
 												else
 												{
-													aHTML.push('<table style="width: 250px;" class="ns1blankspaceViewControlContainer">' +
+													aHTML.push('<table style="width: 300px;" class="ns1blankspaceViewControlContainer">' +
 																	'<tr class="ns1blankspaceSpaceOptions">' +
 																	'<td id="ns1blankspaceControlSpaceSwitchBack" class="ns1blankspaceRowSelect">' +
 																	'Switch back to your space.' +
