@@ -1259,7 +1259,7 @@ ns1blankspace.control =
 											$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
 											$(ns1blankspace.xhtml.container).html("&nbsp;");
 											$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-											$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 70});
+											$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 220});
 											$(ns1blankspace.xhtml.container).html(this.layout());
 												
 											ns1blankspace.control.user.bind();
