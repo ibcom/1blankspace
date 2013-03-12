@@ -749,7 +749,7 @@ ns1blankspace.action =
 										$.ajax(
 										{
 											type: 'POST',
-											url: ns1blankspace.endpointURI('ACTION_MANAGE'),
+											url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
 											data: sData,
 											dataType: 'json',
 											success: function(data) {ns1blankspace.action.save.process(oParam, data);}
@@ -757,7 +757,7 @@ ns1blankspace.action =
 									}
 								},	
 
-					process: 	function ()
+					process: 	function (oParam, oResponse)
 								{
 
 									if (oResponse.status == 'OK')
