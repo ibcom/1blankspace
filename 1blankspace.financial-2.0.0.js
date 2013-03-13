@@ -1032,7 +1032,7 @@ ns1blankspace.financial.bankAccounts =
 					{
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-						oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes');
+						oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status');
 						oSearch.sort('title', 'asc');
 						oSearch.rows = ns1blankspace.option.defaultRows;
 						oSearch.getResults(function(data) {ns1blankspace.financial.bankAccounts.show(oParam, data)});
@@ -1044,7 +1044,7 @@ ns1blankspace.financial.bankAccounts =
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
 										'<td id="ns1blankspaceBankAccountsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-										'<td id="ns1blankspaceBankAccountsColumn2" class="ns1blankspaceColumn2" style="width: 175px;"></td>' +
+										'<td id="ns1blankspaceBankAccountsColumn2" class="ns1blankspaceColumn2" style="width: 1px;"></td>' +
 										'</tr>' +
 										'</table>');	
 
@@ -1062,11 +1062,12 @@ ns1blankspace.financial.bankAccounts =
 						}
 						else
 						{		
-							aHTML.push('<table class="ns1blankspace">' +
+							aHTML.push('<table id="ns1blankspaceMainBankAccounts" class="ns1blankspace">' +
 											'<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceHeaderCaption">Name</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Reconciled Amount</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Last Reconciled</td>' +
+											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 											'</tr>');	
 							
 							$(oResponse.data.rows).each(function() 
@@ -1088,45 +1089,10 @@ ns1blankspace.financial.bankAccounts =
 							rows: 100,
 							functionShowRow: ns1blankspace.financial.bankAccounts.row,
 							functionOpen: undefined,
-							functionNewPage: ''
+							functionNewPage: 'ns1blankspace.financial.bankAccounts.bind()'
 						   });
 						
-						var aHTML = [];
-						var h = -1;	
-						
-						aHTML[++h] = '<table class="ns1blankspaceColumn2" cellpadding=6>';
-											
-						aHTML[++h] = '<tr><td class="ns1blankspace" style="width:175px;">' +
-										'<a href="#" id="ns1blankspaceBankAccountReco">Reconcile & Import Transactions</a>' +
-										'</td></tr>';
-										
-						aHTML[++h] = '<tr><td class="ns1blankspace" style="width:175px;">' +
-										'<a href="#" id="ns1blankspaceBankAccountReceipt">Receipt an Invoice</a>' +
-										'</td></tr>';
-						/*			
-						aHTML[++h] = '<tr><td class="ns1blankspace" style="width:175px;">' +
-										'<a href="#" id="ns1blankspaceBankAccountDeposit">Bulk Deposit</a>' +
-										'</td></tr>';								
-						*/
-
-						aHTML[++h] = '</table>';					
-								
-						$('#ns1blankspaceBankAccountsColumn2').html(aHTML.join(''));
-						
-						$('#ns1blankspaceBankAccountReco').click(function()
-						{
-							ns1blankspace.financial.bankAccount.init();
-						});	
-						
-						$('#ns1blankspaceBankAccountReceipt').click(function()
-						{
-							ns1blankspace.financial.receipt.init();
-						});	
-						
-						$('#ans1blankspaceBankAccountDeposit').click(function()
-						{
-							alert("Depositing of the sweet sweet cash...")
-						});	
+						ns1blankspace.financial.bankAccounts.bind()
 					}
 				},
 
@@ -1134,16 +1100,39 @@ ns1blankspace.financial.bankAccounts =
 				{
 					var aHTML = [];
 					
+					var sClass = '';
+					if (oRow.status == 2) {sClass = ' ns1blanksapceSub'}
+
 					aHTML.push('<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceBalanceSheet_Title-" class="ns1blankspaceRow" title="' + oRow.notes + '">' +
+									'<td id="ns1blankspaceBalanceSheet_Title-" class="ns1blankspaceRow' + sClass + '" title="' + oRow.notes + '">' +
 									oRow.title + '</td>' +
-									'<td id="ns1blankspaceBalanceSheet_Balance-" class="ns1blankspaceRow" style="text-align:right;">' +
+									'<td id="ns1blankspaceBalanceSheet_Balance-" class="ns1blankspaceRow' + sClass + '" style="text-align:right;">' +
 									oRow.lastreconciledamount + '</td>' +
-									'<td id="ns1blankspaceBalanceSheet_Date-" class="ns1blankspaceRow" style="text-align:right;">' +
-									oRow.lastreconcileddate + '</td>' +					
+									'<td id="ns1blankspaceBalanceSheet_Date-" class="ns1blankspaceRow' + sClass + '" style="text-align:right;">' +
+									oRow.lastreconcileddate + '</td>' +
+									'<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+									'<span id="ns1blankspaceBankAccounts-' + oRow.id + '" class="ns1blankspaceRowSelect"></span>' +
+									'</td>' +				
 									'</tr>');
 
 					return aHTML.join('');
+				},
+
+	bind: 		function ()
+				{
+					$('#ns1blankspaceMainBankAccounts .ns1blankspaceRowSelect').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-play"
+						}
+					})
+					.click(function() {
+						ns1blankspace.financial.bankAccount.init({id: (this.id).split('-')[1]});
+					})
+					.css('width', '15px')
+					.css('height', '20px')
 				}
 }
 
