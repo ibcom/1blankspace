@@ -1172,8 +1172,8 @@ ns1blankspace.financial.accounts =
 
 						aHTML.push('<div id="ns1blankspaceAccountColumnCategory" style="width:100px; margin-top:3px; text-align:right;">');
 						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-0" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-0" style="width: 100px; margin-bottom:1px;">All</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-1" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-1" style="width: 100px; margin-bottom:1px;">Profit & Loss</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-2" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-2" style="width: 100px; margin-bottom:1px;">Balance Sheet</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-1" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-1" style="width: 100px; margin-bottom:1px;">Sales</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-2" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-2" style="width: 100px; margin-bottom:1px;">Purchases</label>');
 						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-3" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-3" style="width: 100px; margin-bottom:1px;">Assets</label>');
 						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-4" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-4" style="width: 100px; margin-bottom:1px;">Liability</label>');
 						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-5" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-5" style="width: 100px; margin-bottom:1px;">Equity</label>');

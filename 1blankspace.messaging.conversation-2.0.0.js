@@ -659,7 +659,7 @@ ns1blankspace.messaging.conversation =
 										{
 											type: 'GET',
 											url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_PARTICIPANT_SEARCH'),
-											data: 'conversation=' + ns1blankspace.objectContext,
+											data: 'includeme=1&conversation=' + ns1blankspace.objectContext,
 											dataType: 'json',
 											success: function(data){ns1blankspace.messaging.conversation.participants.show(oParam, data)}
 										});
