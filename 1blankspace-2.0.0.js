@@ -1244,17 +1244,22 @@ ns1blankspace.app =
 
 									if (sMethod === undefined)
 									{
+										var sMethod = ns1blankspace.objectMethod;
+
 										var sParentNamespace = ns1blankspace.objectParentName;
 										var sNamespace = ns1blankspace.objectName;
 
-										if (sParentNamespace)
-										{
-											var sMethod = (sParentNamespace).toUpperCase() + '_' + (sNamespace).toUpperCase();
-										}
-										else
-										{
-											var sMethod = (sNamespace).toUpperCase();
-										}
+										if (sMethod === undefined)
+										{	
+											if (sParentNamespace)
+											{
+												sMethod = (sParentNamespace).toUpperCase() + '_' + (sNamespace).toUpperCase();
+											}
+											else
+											{
+												sMethod = (sNamespace).toUpperCase();
+											}
+										}	
 									}	
 
 									if (oResponse === undefined && sMethod)

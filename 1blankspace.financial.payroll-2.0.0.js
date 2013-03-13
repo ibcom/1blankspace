@@ -24,6 +24,7 @@ ns1blankspace.financial.payroll =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Payroll';
+					ns1blankspace.objectMethod = 'FINANCIAL_PAYROLL_PAY_PERIOD';
 
 					if (!bInitialised)
 					{

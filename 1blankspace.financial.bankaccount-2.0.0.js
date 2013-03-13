@@ -759,7 +759,7 @@ ns1blankspace.financial.bankAccount =
 															aHTML.push('<table id="ns1blankspaceReconcileItems"><tr class="ns1blankspace">');
 
 															aHTML.push('<td class="ns1blankspaceNothing">There are no imported bank ' + (iType==1?'debit':'credit') +
-																	' transactions.<br /><br />If you haven\'t aready, you can either import transactions from a file or reconcile of a statement.' +
+																	' transactions.<br /><br />If you haven\'t aready, you can either import transactions from a file or reconcile from a statement.' +
 																	'<br /><br /></td>');
 																			
 															aHTML.push('</tr></table>');
