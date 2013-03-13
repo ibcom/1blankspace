@@ -45,6 +45,7 @@ ns1blankspace.messaging.imap =
 					ns1blankspace.messaging.emailLastPagination;
 					ns1blankspace.messaging.emailNewCount;
 					ns1blankspace.messaging.action = -1;
+					if (ns1blankspace.messaging.checking === undefined) {ns1blankspace.messaging.checking = false;} 
 
 					if (ns1blankspace.option.richTextEditing)
 					{
@@ -137,32 +138,38 @@ ns1blankspace.messaging.imap =
 
 	check:		function (oParam, oResponse)
 				{
-					if (oResponse == undefined)
-					{	
-						$.ajax(
-						{
-							type: 'POST',
-							url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_CACHE_CHECK'),
-							data: 'account=' + ns1blankspace.util.fs(ns1blankspace.messaging.imap.account),
-							dataType: 'json',
-							success: function(data) {ns1blankspace.messaging.imap.check(oParam, data)}
-						});
-					}
-					else
+					if (!ns1blankspace.messaging.checking)
 					{
-						if (oResponse.status == 'OK')
+						if (oResponse == undefined)
 						{	
-							ns1blankspace.messaging.emailNewCount = oResponse.newrows;
+							ns1blankspace.messaging.checking = true;
 
-							if (ns1blankspace.messaging.emailNewCount != undefined)
+							$.ajax(
 							{
-								$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_CACHE_CHECK'),
+								data: 'account=' + ns1blankspace.util.fs(ns1blankspace.messaging.imap.account),
+								dataType: 'json',
+								success: function(data) {ns1blankspace.messaging.imap.check(oParam, data)}
+							});
+						}
+						else
+						{
+							if (oResponse.status == 'OK')
+							{	
+								ns1blankspace.messaging.emailNewCount = oResponse.newrows;
+								ns1blankspace.messaging.checking = false;
+
+								if (ns1blankspace.messaging.emailNewCount != undefined)
 								{
-									label: 'Refresh (' + ns1blankspace.messaging.emailNewCount + ')'
-								});
+									$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
+									{
+										label: 'Refresh (' + ns1blankspace.messaging.emailNewCount + ')'
+									});
+								}	
 							}	
-						}	
-					}
+						}
+					}	
 				},			
 
 	home:		function (oParam, oResponse)

@@ -404,7 +404,11 @@ ns1blankspace.messaging.conversation =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						ns1blankspace.messaging.isConversationOwner = (ns1blankspace.user.id == ns1blankspace.objectContextData.owner)
 
-						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title);
+						$('#ns1blankspaceControlContext').html(
+								ns1blankspace.objectContextData.title + 
+								'<br /><span id="ns1blankspaceControlContext_post" class="ns1blankspaceSub">' +
+								ns1blankspace.objectContextData.sentdate + '</span>');
+
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
@@ -1038,7 +1042,7 @@ ns1blankspace.messaging.conversation =
 												var sSubject = this.subject;
 												if (sSubject == '') {sSubject = (this.message).substring(0, 50) + '...'}		
 																
-												aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_subject-' + this.id + '" class="ns1blankspaceRow">' +
+												aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_subject-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																		sSubject + '</td>');
 																		
 												aHTML.push('<td id="s1blankspaceMessagingConversationPosts_usertext-' + this.id + '" class="ns1blankspaceRow">' +
@@ -1049,14 +1053,19 @@ ns1blankspace.messaging.conversation =
 																
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
 																	'<span id="ns1blankspaceMessagingConversationPosts_comment-' + this.id + '" class="ns1blankspaceRowSelect ns1blankspaceRowAddComment"></span>' +
-																	'</td></tr>');
-													
+																	'</td></tr>');				
 											});
 												
 											aHTML.push('</table>');
 
 											$('#ns1blankspacePostsColumn1').html(aHTML.join(''));
 										
+											$('.ns1blankspaceRowSelect').click(function() {
+												ns1blankspace.show({selector: '#ns1blankspaceMainComments'});
+												var aXHTMLElementID = (this.id).split('-');
+												ns1blankspace.messaging.conversation.comments.show({post: aXHTMLElementID[1]});
+											})
+
 											$('.ns1blankspaceRowAddComment').button({
 												text: false,
 												label: "Comment",
@@ -1072,6 +1081,12 @@ ns1blankspace.messaging.conversation =
 										}
 									}	
 								},	
+
+					summary: 	function (oParam)
+								{
+
+
+								},			
 
 					comments:	function (oParam)
 								{
