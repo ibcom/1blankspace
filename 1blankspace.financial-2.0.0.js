@@ -315,7 +315,7 @@ ns1blankspace.financial.home = function ()
 						$('#ns1blankspaceControlSummary').click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-							ns1blankspace.financial.summary.show();
+							ns1blankspace.financial.summary();
 						});
 						
 						$('#ns1blankspaceControlBankAccount').click(function(event)
