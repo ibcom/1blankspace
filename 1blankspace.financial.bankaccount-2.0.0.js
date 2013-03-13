@@ -328,6 +328,9 @@ ns1blankspace.financial.bankAccount =
 											
 										if (oResponse.data.rows.length == 0)
 										{
+											aHTML.push('</table>');
+											
+											$('#ns1blankspaceBankAccountColumnReconcile1').html(aHTML.join(''));
 										}
 										else
 										{		
