@@ -368,9 +368,55 @@ ns1blankspace.financial.home = function ()
 ns1blankspace.financial.summary = function (oParam, oResponse)
 				{
 					if (ns1blankspace.financial.data == undefined) {ns1blankspace.financial.data = {}}
+							
+					var aHTML = [];
+					
+					aHTML.push('<table class="ns1blankspaceContainer">' +
+									'<tr class="ns1blankspaceContainer">' +
+									'<td id="ns1blankspaceSummaryColumn1"' +
+									' style="width:95px; text-align:right;"><div style="float:right; width:50px; height:50px; background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -250px -200px;"></div>' +
+									'</td>' +
+									'<td id="ns1blankspaceSummaryColumn2">' +
+									'</td>' +
+									'</tr>' +
+									'</table>');				
+					
+					$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
+					
+					var aHTML = [];
+				
+					aHTML.push('<table class="ns1blankspaceColumn2" style="margin-left:5px;">');
+					
+					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creditors</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryTotalSales" class="ns1blankspaceSummary">' +
+									'01 June 2012' +
+									'</td></tr>');
+					
+					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Debtors</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryTotalCostOfSales" class="ns1blankspaceSummary">' +
+									'01 June 2012' +
+									'</td></tr>');
+					
+					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">General Journals</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryGrossMargin" class="ns1blankspaceSummary">' +
+									'01 June 2012' +
+									'</td></tr>');
+					
+					aHTML.push('</table>');					
+					
+					$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''))
+					
+				}
+
+
+ns1blankspace.financial.summaryPL = function (oParam, oResponse)
+				{
+					if (ns1blankspace.financial.data == undefined) {ns1blankspace.financial.data = {}}
 						
 					if (oResponse == undefined)
 					{
+						$('#ns1blankspaceMainSummary').html(ns1blankspace.xhtml.loading);
+
 						$.ajax(
 						{
 							type: 'GET',
