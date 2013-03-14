@@ -102,18 +102,27 @@ ns1blankspace.setup.messaging =
 				},
 
 	search: 	{
-					send:			
-								function (sXHTMLElementID, iSource, sSearchText, sSearchContext)
+					send: 		function (sXHTMLElementID, oParam)
 								{
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
-										
-									if (iSource == undefined)
+									var iMinimumLength = 3;
+									var iSource = ns1blankspace.data.searchSource.text;
+									var sSearchText;
+									var iMaximumColumns = 1;
+									var iRows = 10;
+									
+									if (oParam != undefined)
 									{
-										iSource = ns1blankspace.data.searchSource.text;
-									}	
-										
+										if (oParam.source != undefined) {iSource = oParam.source}
+										if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+										if (oParam.rows != undefined) {iRows = oParam.rows}
+										if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+										if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+										if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
+									}
+																		
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
 										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
@@ -134,7 +143,7 @@ ns1blankspace.setup.messaging =
 										
 										if (sSearchText == undefined)
 										{
-											sSearchText = $('#ins1blankspaceViewControlSearch').val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -148,8 +157,7 @@ ns1blankspace.setup.messaging =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{	
-											ns1blankspace.container.position({xhtmlElementID: sElementID});
-											ns1blankspace.search.start(sElementID);
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
@@ -197,7 +205,7 @@ ns1blankspace.setup.messaging =
 											
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
-															this.username + '</td>');
+															this.email + '</td>');
 											
 											if (iColumn == iMaximumColumns)
 											{
@@ -479,12 +487,15 @@ ns1blankspace.setup.messaging =
 									
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&user=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsUser').attr("data-id"));
-										sData += '&email=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsEmail').val());
-										sData += '&title=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsEmail').val());
+										var sServer = ns1blankspace.util.fs($('#ns1blankspaceDetailsServer').val());
+										if (sServer == '') {sServer = 'imap.gmail.com'}
+
+										sData += '&user=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsUser').attr("data-id"));
+										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
+										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
 										sData += '&type=' + ns1blankspace.util.fs($('input[name="radioType"]:checked').val());
-										sData += '&accountname=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsAccountName').val());
-										sData += '&server=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsServer').val());
+										sData += '&accountname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAccountName').val());
+										sData += '&server=' + sServer;
 										sData += '&cachetype=1';
 										sData += '&sslport=993';
 										sData += '&authtype=0';
@@ -503,8 +514,9 @@ ns1blankspace.setup.messaging =
 										dataType: 'json',
 										success: function()
 										{
-												ns1blankspace.status.message('Saved');
-												ns1blankspace.setup.messaging.home();
+											ns1blankspace.inputDetected = false;
+											ns1blankspace.status.message('Saved');
+											ns1blankspace.setup.messaging.home();
 										}
 									});		
 								}
