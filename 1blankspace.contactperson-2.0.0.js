@@ -17,8 +17,9 @@ ns1blankspace.contactPerson =
 					ns1blankspace.objectMethod = 'CONTACT_PERSON'
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'People';
-					
+					ns1blankspace.viewName = 'People';	
+					ns1blankspace.data.contactBusiness = undefined;
+
 					if (oParam != undefined)
 					{
 						if (oParam.contactBusiness != undefined) {ns1blankspace.data.contactBusiness = oParam.contactBusiness}
@@ -290,7 +291,10 @@ ns1blankspace.contactPerson =
 										'Details</td></tr>');
 										
 						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">' +
-										'Address</td></tr>');				
+										'Address</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlBusiness" class="ns1blankspaceControl">' +
+										'Business</td></tr>');							
 					}
 					else
 					{
@@ -859,34 +863,39 @@ ns1blankspace.contactPerson =
 						{
 							$('#ns1blankspaceBusiness').attr('data-id', ns1blankspace.objectContextData.contactbusiness);
 							$('#ns1blankspaceBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
-						}
+
+							var aHTML = [];
 						
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspaceColumn2">');
-							
-						if (ns1blankspace.objectContextData.contactbusiness != '')
-						{	
-							aHTML.push('<tr><td><span id="ns1blankspaceBusinessView" class="ns1blankspaceAction">' +
-										'View</span></td></tr>');
-						}
-						
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceBusinessColumn2').html(aHTML.join(''));	
-						
-						$('#ns1blankspaceBusinessView').button(
-						{
-							label: 'View',
-							icons:
-							{
-								primary: "ui-icon-play"
+							aHTML.push('<table class="ns1blankspaceColumn2">');
+								
+							if (ns1blankspace.objectContextData.contactbusiness != '')
+							{	
+								aHTML.push('<tr><td><span id="ns1blankspaceBusinessView" class="ns1blankspaceAction">' +
+											'View</span></td></tr>');
 							}
-						})
-						.click(function()
+							
+							aHTML.push('</table>');					
+							
+							$('#ns1blankspaceBusinessColumn2').html(aHTML.join(''));	
+							
+							$('#ns1blankspaceBusinessView').button(
+							{
+								label: 'View',
+								icons:
+								{
+									primary: "ui-icon-play"
+								}
+							})
+							.click(function()
+							{
+								ns1blankspace.contactBusiness.init({id: ns1blankspace.objectContextData.contactbusiness});
+							});
+						}
+						else
 						{
-							ns1blankspace.contactBusiness.init({id: ns1blankspace.objectContextData.contactbusiness});
-						});
+							$('#ns1blankspaceBusiness').attr('data-id', ns1blankspace.data.contactBusiness);
+							$('#ns1blankspaceBusiness').val(ns1blankspace.data.contactBusinessText);
+						}					
 					}	
 				},
 
@@ -929,6 +938,15 @@ ns1blankspace.contactPerson =
 										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingCountry').val());
 									}
 									
+									if ($('#ns1blankspaceMainBusiness').html() != '')
+									{
+										sData += '&contactbusiness=' + ns1blankspace.util.fs($('#ns1blankspaceBusiness').attr('data-id'));
+									}
+									else if (ns1blankspace.objectContext == -1)
+									{
+										if (ns1blankspace.data.contactBusiness) {sData += '&contactbusiness=' + ns1blankspace.util.fs(ns1blankspace.data.contactBusiness)};
+									}		
+
 									$.ajax(
 									{
 										type: 'POST',

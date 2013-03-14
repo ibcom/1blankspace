@@ -1333,11 +1333,12 @@ ns1blankspace.contactBusiness =
 											label: "Add Person"
 										})
 										.click(function() {
-											ns1blankspace.contactPerson.init({
-												showHome: false,
+											ns1blankspace.contactPerson.init(
+											{
 												contactBusiness: ns1blankspace.objectContext,
-												contactBusinessText: ns1blankspace.contactBusinessText,
-												showNew: true});
+												contactBusinessText: ns1blankspace.objectContextData.tradename,
+												new: true
+											});
 										})
 										.css('width', '75px')
 										
