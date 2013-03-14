@@ -260,13 +260,13 @@ ns1blankspace.opportunity =
 											ns1blankspace.opportunity.search.send(event.target.id, {source: 1});
 										});
 										
-										ns1blankspace.pagination.bind(
+										ns1blankspace.render.bind(
 										{
 											columns: 'businessname-firstname-surname',
 											more: oResponse.moreid,
 											rows: 15,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: oResponse.opportunity.search.send
+											functionSearch: ns1blankspace.opportunity.search.send
 										});   
 										
 									}
@@ -574,9 +574,7 @@ ns1blankspace.opportunity =
 						}
 						else
 						{
-							var dDate = new Date();
-							
-							$('#ns1blankspaceDetailsDateReceived').val(dDate.format('d mmm yyyy'));
+							$('#ns1blankspaceDetailsDateReceived').val(Date.today().toString("dd MMM yyyy"));
 							$('#ns1blankspaceDetailsManagedBy').attr('data-id', ns1blankspace.user.id);
 							$('#ns1blankspaceDetailsManagedBy').val(ns1blankspace.user.logonname);
 							$('[name="radioStatus"][value="1"]').attr('checked', true);
