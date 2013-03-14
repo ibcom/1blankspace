@@ -156,10 +156,10 @@ ns1blankspace.messaging.conversation =
 				},
 
 	search: 	{
-					send:		function (sXHTMLElementId, oParam)
+					send:		function (sXHTMLElementID, oParam)
 								{
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
+									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
 									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;
@@ -211,8 +211,8 @@ ns1blankspace.messaging.conversation =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position(sElementId);
-											ns1blankspace.search.start(sElementId);
+											//ns1blankspace.container.position(sElementID);
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
@@ -231,6 +231,8 @@ ns1blankspace.messaging.conversation =
 									var aHTML = [];
 									var h = -1;
 									var	iMaximumColumns = 1;
+											
+									ns1blankspace.search.stop();
 											
 									if (oResponse.data.rows.length == 0)
 									{
@@ -406,8 +408,7 @@ ns1blankspace.messaging.conversation =
 
 						$('#ns1blankspaceControlContext').html(
 								ns1blankspace.objectContextData.title + 
-								'<br /><span id="ns1blankspaceControlContext_post" class="ns1blankspaceSub">' +
-								ns1blankspace.objectContextData.sentdate + '</span>');
+								'<br /><span id="ns1blankspaceControlContext_post" class="ns1blankspaceSub"></span>');
 
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
