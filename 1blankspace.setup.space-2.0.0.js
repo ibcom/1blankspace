@@ -17,6 +17,8 @@ ns1blankspace.setup.space =
 					ns1blankspace.viewName = 'My Space / Account';
 			
 					ns1blankspace.app.set(oParam);
+
+					$('#ns1blankspaceViewControlNew').button({disabled: true});
 				},
 
 	home:		function ()

@@ -247,7 +247,10 @@ ns1blankspace.setup.automation =
 					if (ns1blankspace.objectContext == -1)
 					{
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
-										'Details</td></tr>');		
+										'Details</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlResponse" class="ns1blankspaceControl">' +
+										'Response</td></tr>');					
 					}
 					else
 					{
