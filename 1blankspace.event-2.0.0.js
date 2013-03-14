@@ -527,6 +527,11 @@ ns1blankspace.event =
 					{
 						$('#ns1blankspaceMainDescription').attr('data-loading', '');
 						
+						for (edId in tinyMCE.editors) 
+									tinyMCE.editors[edId].destroy(true);
+								
+						ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
+
 						var aHTML = [];
 
 						aHTML.push('<table class="ns1blankspaceContainer">' +
@@ -543,7 +548,7 @@ ns1blankspace.event =
 						aHTML.push('<table class="ns1blankspaceMain">');
 								
 						aHTML.push('<tr><td class="ns1blankspaceMainTextMulti">' +
-										'<textarea id="ns1blankspaceDescription" class="ns1blankspaceTextMulti" rows="30" cols="50" ></textarea>' +
+										'<textarea id="ns1blankspaceDescription' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti" rows="30" cols="50" ></textarea>' +
 										'</td></tr>');
 										
 						aHTML.push('</table>');					
@@ -552,10 +557,10 @@ ns1blankspace.event =
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDescription').val((ns1blankspace.objectContextData.description).formatXHTML());
+							$('#ns1blankspaceDescription' + ns1blankspace.counter.editor).val((ns1blankspace.objectContextData.description).formatXHTML());
 						}
 					
-						tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceDescription');
+						tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceDescription' + ns1blankspace.counter.editor);
 					}	
 				},
 
@@ -716,9 +721,9 @@ ns1blankspace.event =
 												
 												aHTML.push('</table>');
 												
-												ns1blankspacePaginationList(
+												ns1blankspace.render.list(
 												{
-													xhtmlElementID: 's1blankspaceAttendeesColumn2',
+													xhtmlElementID: 'ns1blankspaceAttendeesColumn2',
 													xhtmlContext: 'EventAttendees',
 													xhtml: aHTML.join(''),
 													showMore: (oResponse.morerows == "true"),
@@ -779,7 +784,7 @@ ns1blankspace.event =
 									
 									if ($('#ns1blankspaceMainDescription').html() != '')
 									{
-										sData += '&description=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceMainDescriptionText').getContent());
+										sData += '&description=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceMainDescription' + ns1blankspace.counter.editor).getContent());
 									}
 									
 									$.ajax(

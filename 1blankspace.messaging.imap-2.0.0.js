@@ -2103,7 +2103,7 @@ ns1blankspace.messaging.imap =
 								label: "Blank"
 							})
 							.click(function() {
-								s1blankspace.messaging.imap.message.edit.show(oParam);
+								ns1blankspace.messaging.imap.message.edit.show(oParam);
 							})
 							.css('width', '75px')
 						
