@@ -4526,3 +4526,29 @@ ns1blankspace.show =
 						$(sSelector).html(ns1blankspace.xhtml.loading);
 					}	
 				}			
+
+ns1blankspace.structure =
+{
+	data: 	[],
+
+	init: 	function (oParam)
+			{
+				// Based on object get categories - grep
+				// Using categories get the elements including display order
+				// Store in ns1blankspace.structures .. .elements[] - this could be harded coded if want.
+				
+				// add to layout (side menu and divs)
+
+			},
+
+	show: 	function ()
+			{
+				//Go through .elements and convert to  INPUT html Elements.
+			},
+
+	save:   function ()
+			{
+				// if ns1blankspaceStructure[id].html != '' 
+				// return data to be added overall save request
+			}						
+}

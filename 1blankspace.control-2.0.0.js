@@ -117,6 +117,17 @@ ns1blankspace.xhtml.header =
 	'<div id="ns1blankspaceSpaceText" style="width:450px;"></div>' +
 	'<div id="ns1blankspaceLogonName" style="width:450px;"></div></div>';
 
+
+ns1blankspace.structure.data = 
+[
+	{
+		title: 'Extra'
+		object: 32,
+		category: 309,
+		elements: []
+	}
+]
+
 ns1blankspace.themes = 
 [
 	{
