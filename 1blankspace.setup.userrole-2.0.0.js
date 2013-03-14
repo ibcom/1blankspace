@@ -94,17 +94,26 @@ ns1blankspace.setup.userRole =
 				},
 
 	search: 	{
-					send: 		function (sXHTMLElementId, iSource, sSearchText, sSearchContext)
+					send: 		function (sXHTMLElementID, oParam)
 								{
-									
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
+									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
-										
-									if (iSource == undefined)
+									var iMinimumLength = 2;
+									var iSource = ns1blankspace.data.searchSource.text;
+									var sSearchText;
+									var iMaximumColumns = 1;
+									var iRows = 10;
+									
+									if (oParam != undefined)
 									{
-										iSource = ns1blankspace.data.searchSource.text;
-									}	
+										if (oParam.source != undefined) {iSource = oParam.source}
+										if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+										if (oParam.rows != undefined) {iRows = oParam.rows}
+										if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+										if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+										if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
+									}
 										
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
@@ -119,10 +128,7 @@ ns1blankspace.setup.userRole =
 										oSearch.getResults(function(data) {ns1blankspace.setup.userRole.show(data)});
 									}
 									else
-									{
-										var iMinimumLength = 3;
-										var iMaximumColumns = 1;
-										
+									{	
 										if (sSearchText == undefined)
 										{
 											sSearchText = $('#ns1blankspaceViewControlSearch').val();
@@ -139,8 +145,7 @@ ns1blankspace.setup.userRole =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{	
-											ns1blankspace.container.position(sElementId);
-											ns1blankspace.search.start(sElementId);
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_ROLE_SEARCH';
@@ -167,9 +172,10 @@ ns1blankspace.setup.userRole =
 									var h = -1;
 									var	iMaximumColumns = 1;
 										
+									ns1blankspace.search.stop();
+										
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspace.search.stop();
 										$(ns1blankspace.xhtml.container).hide();
 									}
 									else
@@ -200,7 +206,6 @@ ns1blankspace.setup.userRole =
 
 										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-										ns1blankspace.search.stop();
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{

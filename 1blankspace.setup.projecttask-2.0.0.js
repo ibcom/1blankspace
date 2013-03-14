@@ -107,6 +107,8 @@ ns1blankspace.setup.projectTask =
 					}
 					else
 					{
+						var aHTML = [];
+						
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">' +
@@ -115,7 +117,7 @@ ns1blankspace.setup.projectTask =
 						}
 						else
 						{
-								aHTML.push('<table><tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+							aHTML.push('<table><tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{

@@ -22,19 +22,25 @@ $.extend(true, ns1blankspace.setup,
 						oParam = {}
 					}
 
+					ns1blankspace.app.reset();
+
 					ns1blankspace.object = -1;
 					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectName = 'setup';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = ns1blankspace.setup.name;
+					ns1blankspace.viewName = oParam.viewName;
 								
-					ns1blankspace.app.reset();
-
 					oParam.showHome = bShowHome;
 
 					ns1blankspace.app.set(oParam);
 
+					$('#ns1blankspaceViewControlNew').unbind('click');
+					$('#ns1blankspaceViewControlNew').click(function()
+					{
+						ns1blankspace.setup.add();
+					});
+							
 					ns1blankspace.setup.home();
 				},
 
@@ -59,7 +65,7 @@ $.extend(true, ns1blankspace.setup,
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));
 	
-						ns1blankspace.status.message('Click value to edit.')
+						ns1blankspace.status.message('Click value to edit.');
 						
 						$.ajax(
 						{
@@ -273,6 +279,8 @@ $.extend(true, ns1blankspace.setup,
 
 	layout:		function ()
 				{
+					var aHTML = [];
+
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="divInterfaceViewportMain">&nbsp;</div>');
 						
 					$('#ns1blankspaceMain').html(aHTML.join(''));

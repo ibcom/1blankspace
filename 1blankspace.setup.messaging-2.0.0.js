@@ -138,9 +138,6 @@ ns1blankspace.setup.messaging =
 									}
 									else
 									{
-										var iMinimumLength = 3;
-										var iMaximumColumns = 1;
-										
 										if (sSearchText == undefined)
 										{
 											sSearchText = $('#ns1blankspaceViewControlSearch').val();
