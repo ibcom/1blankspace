@@ -1056,6 +1056,8 @@ ns1blankspace.app =
 
 					if (iID) {bShowHome = false}
 
+					ns1blankspace.structure.init();
+
 					if (sNamespace)
 					{
 						if (sParentNamespace)
@@ -4559,6 +4561,8 @@ ns1blankspace.structure =
 
 						oParam.categories = aCategories;
 
+						ns1blankspace.objectExtended = false;
+
 						if (aCategories.length != 0)
 						{	
 							var oSearch = new AdvancedSearch();
@@ -4577,6 +4581,7 @@ ns1blankspace.structure =
 					else
 					{
 						var oElements = oResponse.data.rows;
+						ns1blankspace.objectExtended = true;
 
 						$(ns1blankspace.structure.data).each(function(i, v)
 						{
@@ -4622,11 +4627,14 @@ ns1blankspace.structure =
 					}
 
 					var aHTMLTR = [];
+					var aHTMLDIV = [];
 
 					$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function()
 					{					
-						aHTMLTR.push('<tr><td id="ns1blankspaceControl' + this.category + '" class="ns1blankspaceControl">' +
-											this.category + '</td></tr>');
+						aHTMLTR.push('<tr><td id="ns1blankspaceControl-' + this.category + '" class="ns1blankspaceControl">' +
+											this.title + '</td></tr>');
+
+						aHTMLDIV.push('<div id="ns1blankspaceMain' + this.category + '" class="ns1blankspaceControlMain"></div>');
 					});
 
 					var aHTML = [];
@@ -4638,18 +4646,105 @@ ns1blankspace.structure =
 						aHTML.push('</table>');
 					}
 					
-					$('.ns1blankspaceControl :last').append(aHTML.push());	
-						
+					$('table.ns1blankspaceControl :last').append(aHTML.join(''));	
+					$('#ns1blankspaceMain').append(aHTMLDIV.join(''));
+
+					$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function()
+					{
+						$('#ns1blankspaceControl-' + this.category).click(function(event)
+						{
+							ns1blankspace.show({selector: '#ns1blankspaceMain' + (this.id).split('-')[1]});
+							ns1blankspace.structure.show({category: (this.id).split('-')[1]});
+						});
+					});	
 				},
 
-	show: 		function ()
+	show: 		function (oParam)
 				{
-					//Go through .elements and convert to  INPUT html Elements.
+					var iCategory;
+					var aHTML = [];
+
+					if (oParam != undefined)
+					{
+						if (oParam.category != undefined) {iCategory = oParam.category}
+					}
+
+					if (iCategory)
+					{
+						if ($('#ns1blankspaceMain' + iCategory).attr('data-loading') == '1')
+						{
+							$('#ns1blankspaceMain' + iCategory).attr('data-loading', '');
+
+							var oCategory = $.grep(ns1blankspace.structure.data, function (a) {return a.category == iCategory;})
+
+							if (oCategory.length != 0)
+							{
+								oCategory = oCategory[0];
+
+								aHTML.push('<table class="ns1blankspace" style="width:50%">');
+
+								$(oCategory.elements).each(function()
+								{	
+									var sCaption = this.caption;
+									if (sCaption == '') {sCaption = this.title}
+
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													sCaption +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceStructure-' + this.id + '" class="ns1blankspaceText">' +
+													'</td></tr>');
+								});
+
+								aHTML.push('</table>');		
+							}
+
+							$('#ns1blankspaceMain' + iCategory).html(aHTML.join(''));
+
+							if (ns1blankspace.objectContextData != undefined)
+							{
+								$(oCategory.elements).each(function()
+								{
+									$('#ns1blankspaceStructure-' + this.id).val(ns1blankspace.objectContextData['se' + this.id]);
+								});	
+							}	
+
+						}	
+					}
 				},
 
-	save:   	function ()
+	save:   	function (oParam)
 				{
-					// if ns1blankspaceStructure[id].html != '' 
-					// return data to be added overall save request
+					var iObject = ns1blankspace.object;
+		
+					if (oParam != undefined)
+					{
+						if (oParam.object != undefined) {iObject = oParam.object}
+					}
+
+					var sData = '';
+
+					$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function(i,v)
+					{				
+						if ($('#ns1blankspaceMain' + v.category).html() != '')
+						{
+							var oCategory = $.grep(ns1blankspace.structure.data, function (a) {return a.category == v.category;})
+
+							if (oCategory.length != 0)
+							{
+								oCategory = oCategory[0];
+
+								$(oCategory.elements).each(function(j,k)
+								{	
+									sData += '&se' + k.id + '=' + ns1blankspace.util.fs($('#ns1blankspaceStructure-' + k.id).val());
+								});	
+							}	
+						}		
+					});
+
+					return sData;
+
 				}						
 }

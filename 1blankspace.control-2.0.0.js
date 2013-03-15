@@ -180,6 +180,8 @@ ns1blankspace.views =
 		group: 1,
 		type: 1
 	},
+
+	},
 	{
 		title: "Businesses",
 		namespace: "contactBusiness",

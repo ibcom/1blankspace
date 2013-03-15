@@ -159,6 +159,9 @@ ns1blankspace.contactPerson =
 																 'customerstatus,customerstatustext,gender,gendertext,' +
 																 'streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
 																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,modifieddate');
+
+										if (ns1blankspace.objectExtended) {oSearch.addField(ns1blankspace.structure.elements())};
+
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.getResults(function(data) {ns1blankspace.contactPerson.show(oParam, data)});
 									}
@@ -946,6 +949,8 @@ ns1blankspace.contactPerson =
 									{
 										if (ns1blankspace.data.contactBusiness) {sData += '&contactbusiness=' + ns1blankspace.util.fs(ns1blankspace.data.contactBusiness)};
 									}		
+
+									sData += ns1blankspace.structure.save();
 
 									$.ajax(
 									{
