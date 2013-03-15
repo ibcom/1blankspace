@@ -388,18 +388,18 @@ ns1blankspace.financial.summary = function (oParam, oResponse)
 					aHTML.push('<table class="ns1blankspaceColumn2" style="margin-left:5px;">');
 					
 					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creditors</td></tr>' +
-									'<tr><td id="ns1blankspaceSummaryTotalSales" class="ns1blankspaceSummary">' +
-									'01 June 2012' +
+									'<tr><td class="ns1blankspaceSummary">' +
+									ns1blankspace.financial.data.settings.lockeddatecreditors +
 									'</td></tr>');
 					
 					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Debtors</td></tr>' +
-									'<tr><td id="ns1blankspaceSummaryTotalCostOfSales" class="ns1blankspaceSummary">' +
-									'01 June 2012' +
+									'<tr><td class="ns1blankspaceSummary">' +
+									ns1blankspace.financial.data.settings.lockeddatedebtors +
 									'</td></tr>');
 					
 					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">General Journals</td></tr>' +
-									'<tr><td id="ns1blankspaceSummaryGrossMargin" class="ns1blankspaceSummary">' +
-									'01 June 2012' +
+									'<tr><td class="ns1blankspaceSummary">' +
+									ns1blankspace.financial.data.settings.lockeddatejournals +
 									'</td></tr>');
 					
 					aHTML.push('</table>');					

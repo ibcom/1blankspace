@@ -4529,26 +4529,127 @@ ns1blankspace.show =
 
 ns1blankspace.structure =
 {
-	data: 	[],
+	data: 		[],
 
-	init: 	function (oParam)
-			{
-				// Based on object get categories - grep
-				// Using categories get the elements including display order
-				// Store in ns1blankspace.structures .. .elements[] - this could be harded coded if want.
-				
-				// add to layout (side menu and divs)
+	init: 		function (oParam, oResponse)
+				{
+					// Based on object get categories - grep
+					// Using categories get the elements including display order
+					// Store in ns1blankspace.structures .. .elements[] - this could be harded coded if want.
 
-			},
+					var iObject = ns1blankspace.object;
+					var aCategories = [];
 
-	show: 	function ()
-			{
-				//Go through .elements and convert to  INPUT html Elements.
-			},
+					if (oParam != undefined)
+					{
+						if (oParam.object != undefined) {iObject = oParam.object}	
+						if (oParam.categories != undefined) {aCategories = oParam.categories}	
+					}
+					else
+					{
+						oParam = {}
+					}
 
-	save:   function ()
-			{
-				// if ns1blankspaceStructure[id].html != '' 
-				// return data to be added overall save request
-			}						
+					if (oResponse == undefined)
+					{	
+						$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function()
+						{
+							aCategories.push(this.category);
+						})	
+
+						oParam.categories = aCategories;
+
+						if (aCategories.length != 0)
+						{	
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';		
+							oSearch.addField('structure,backgroundcolour,caption,category,categorytext,datatype,datatypetext,' +
+												'description,displayorder,hint,id,notes,notestype,notestypetext,' +
+												'reference,structure,structuretext,textcolour,title');
+							oSearch.rows = 100;
+							oSearch.addFilter('category', 'IN_LIST', aCategories.join(','))
+							oSearch.sort('category', 'asc');
+							oSearch.sort('displayorder', 'asc');
+							
+							oSearch.getResults(function(data) {ns1blankspace.structure.init(oParam, data)});
+						}	
+					}
+					else
+					{
+						var oElements = oResponse.data.rows;
+
+						$(ns1blankspace.structure.data).each(function(i, v)
+						{
+							this.elements = $.grep(oElements, function (a) {return a.category == v.category;});
+						});
+					}
+
+				},
+
+	elements: 	function (oParam)
+				{
+					//add to advanced search
+
+					var iObject = ns1blankspace.object;
+		
+					if (oParam != undefined)
+					{
+						if (oParam.object != undefined) {iObject = oParam.object}
+					}
+
+					var aElements = [];
+
+					$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function(i,v)
+					{
+						$(v.elements).each(function(j,k)
+						{
+							aElements.push('se' + k.id);
+						});
+					})	
+
+					return aElements.join(',');
+				},
+
+	layout: 	function (oParam)
+				{
+					// add to layout (side menu and divs)
+
+					var iObject = ns1blankspace.object;
+		
+					if (oParam != undefined)
+					{
+						if (oParam.object != undefined) {iObject = oParam.object}
+					}
+
+					var aHTMLTR = [];
+
+					$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function()
+					{					
+						aHTMLTR.push('<tr><td id="ns1blankspaceControl' + this.category + '" class="ns1blankspaceControl">' +
+											this.category + '</td></tr>');
+					});
+
+					var aHTML = [];
+
+					if (aHTMLTR.length > 0)
+					{	
+						aHTML.push('<table class="ns1blankspaceControl">');
+						aHTML.push(aHTMLTR.join(''));
+						aHTML.push('</table>');
+					}
+					
+					$('.ns1blankspaceControl :last').append(aHTML.push());	
+						
+				},
+
+	show: 		function ()
+				{
+					//Go through .elements and convert to  INPUT html Elements.
+				},
+
+	save:   	function ()
+				{
+					// if ns1blankspaceStructure[id].html != '' 
+					// return data to be added overall save request
+				}						
 }

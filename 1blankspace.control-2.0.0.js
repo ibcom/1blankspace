@@ -121,9 +121,15 @@ ns1blankspace.xhtml.header =
 ns1blankspace.structure.data = 
 [
 	{
-		title: 'Extra'
+		title: 'Extra',
 		object: 32,
-		category: 309,
+		category: 273,
+		elements: []
+	},
+	{
+		title: 'Extra2',
+		object: 32,
+		category: 274,
 		elements: []
 	}
 ]
