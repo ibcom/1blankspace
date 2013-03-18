@@ -27,6 +27,9 @@ ns1blankspace.setup.structure =
 							width : "100%",
 							theme : "advanced",
 
+							theme_advanced_path : false,
+							theme_advanced_statusbar_location : "bottom",
+
 				    		theme_advanced_buttons1 : "bold,italic,underline,link,unlink,bullist,blockquote,undo", 
 				    		theme_advanced_buttons2 : "", 
 				    		theme_advanced_buttons3 : "",
@@ -274,10 +277,10 @@ ns1blankspace.setup.structure =
 						aHTML.push('<tr><td>&nbsp;</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlCategory" class="ns1blankspaceControl">' +
-										'Category</td></tr>');
+										'Categories</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlElement" class="ns1blankspaceControl">' +
-										'Element</td></tr>');
+										'Elements</td></tr>');
 					}	
 					
 					aHTML.push('</table>');					
@@ -628,7 +631,7 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.view) 
 											{
-												$('#ns1blankspaceGroupingColumn > .ns1blankspaceRowRemove').button( {
+												$('#ns1blankspaceGroupingColumn .ns1blankspaceRowRemove').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-close"
@@ -643,7 +646,7 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.remove) 
 											{
-												$('#ns1blankspaceGroupingColumn > .ns1blankspaceRowOptionsView').button( {
+												$('#ns1blankspaceGroupingColumn .ns1blankspaceRowOptionsView').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-play"
@@ -888,8 +891,9 @@ ns1blankspace.setup.structure =
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																
-												aHTML.push('<td id="ns1blankspaceSetupStructureCategory_title-' + this.id + '" class="ns1blankspaceRow">' +
-																		this.title + '</td>');
+												aHTML.push('<td id="ns1blankspaceSetupStructureCategory_title-' + this.id + '" class="ns1blankspaceRow"' +
+																' title="' + this.id + '">' +
+																this.title + '</td>');
 																		
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 													
@@ -914,7 +918,7 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.view) 
 											{
-												$('#ns1blankspaceSetupStructureCategory > span.ns1blankspaceRowRemove').button( {
+												$('#ns1blankspaceSetupStructureCategory span.ns1blankspaceRowRemove').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-close"
@@ -929,7 +933,7 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.remove) 
 											{
-												$('#ns1blankspaceSetupStructureCategory > span.ns1blankspaceRowSelect').button( {
+												$('#ns1blankspaceSetupStructureCategory span.ns1blankspaceRowSelect').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-play"
@@ -1031,14 +1035,11 @@ ns1blankspace.setup.structure =
 										
 										if (sID != undefined)
 										{
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_CATEGORY_SEARCH'),
-												data: 'id=' + sID,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.structure.category.add(oParam, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_STRUCTURE_CATEGORY_SEARCH';
+											oSearch.addField( 'description,displayorder,title,type,typetext');
+											oSearch.addFilter('id', 'EQUAL_TO', sID);
+											oSearch.getResults(function(data) {ns1blankspace.setup.structure.category.add(oParam, data)});
 										}
 										else
 										{
@@ -1154,7 +1155,7 @@ ns1blankspace.setup.structure =
 
 											$('#ns1blankspaceSetupStructureElementColumnCategory').html(aHTML.join(''));
 								
-											$('#ns1blankspaceSetupStructureCategory > td.ns1blankspaceRowSelect').click(function(event)
+											$('#ns1blankspaceSetupStructureCategory td.ns1blankspaceRowSelect').click(function(event)
 											{
 												var sXHTMLElementId = event.target.id;
 												var aId = sXHTMLElementId.split('-');
@@ -1182,23 +1183,21 @@ ns1blankspace.setup.structure =
 										
 									if (oResponse == undefined)
 									{	
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_ELEMENT_SEARCH'),
-											data: 'category=' + ns1blankspace.util.fs(iCategory),
-											dataType: 'json',
-											success: function(data) {ns1blankspace.setup.structure.element.show(oParam, data)}
-										});
-
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';
+										oSearch.addField( 'backgroundcolour,caption,category,categorytext,datatype,datatypetext,' +
+															'description,displayorder,hint,id,notes,notestype,notestypetext,' +
+															'reference,structure,structuretext,textcolour,title');
+										oSearch.addFilter('category', 'EQUAL_TO', iCategory);
+										oSearch.getResults(function(data) {ns1blankspace.setup.structure.element.show(oParam, data)});
 									}
 									else
 									{
 										var aHTML = [];
 	
-										aHTML.push('<table style="margin-top:20px;">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 											
-										aHTML.push('<tr><td class="ins1blankspaceControlSub">' +
+										aHTML.push('<tr><td class="ns1blankspaceSub">' +
 														'No element selected.' +
 														'<br /><br/ >Click the gear icon to set up automation (issue creation) for an element.' +
 													'</td></tr>');
@@ -1215,8 +1214,8 @@ ns1blankspace.setup.structure =
 											
 											if (oActions.add)
 											{
-												aHTML.push('<tr><td class="ns1blankspaceAction">' +
-															'<span id="ns1blankspaceSetupStructureAdd">Add</span>' +
+												aHTML.push('<tr><td>' +
+															'<span class="ns1blankspaceAction" id="ns1blankspaceSetupStructureAdd">Add</span>' +
 															'</td></tr>');
 											}
 											
@@ -1229,7 +1228,7 @@ ns1blankspace.setup.structure =
 												label: "Add"
 											})
 											.click(function() {
-												 ns1blankspace.setup.structure.element.add(oParam);
+												 ns1blankspace.setup.structure.element.edit(oParam);
 											});
 										}	
 									
@@ -1243,7 +1242,7 @@ ns1blankspace.setup.structure =
 										}
 										else
 										{
-											aHTML.push('<table id="ns1blankspaceSetupStructureElementColumnElement" class="ns1blankspaceContainer">');
+											aHTML.push('<table id="ns1blankspaceSetupStructureElementColumnElement" class="ns1blankspaceColumn2">');
 										
 											$.each(oResponse.data.rows, function()
 											{
@@ -1252,7 +1251,7 @@ ns1blankspace.setup.structure =
 												aHTML.push('<td id="ns1blankspaceSetupStructureElement_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																		this.title + '</td>');				
 																		
-												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 												
 												if (oOptions.automation)
 												{	
@@ -1274,13 +1273,13 @@ ns1blankspace.setup.structure =
 												aHTML.push('</tr>');
 											});
 											
-											aHTML.push('/table>');
+											aHTML.push('</table>');
 
 											$('#ns1blankspaceSetupStructureElementColumnElement1').html(aHTML.join(''));
 											
 											if (oOptions.remove) 
 											{
-												$('#ns1blankspaceSetupStructureElementColumnElement > span.ns1blankspaceRowRemove').button( {
+												$('#ns1blankspaceSetupStructureElementColumnElement span.ns1blankspaceRowRemove').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-close"
@@ -1293,14 +1292,11 @@ ns1blankspace.setup.structure =
 												.css('height', '17px')
 											}
 											
-											if (oOptions.view) 
-											{
-												$('#ns1blankspaceSetupStructureElementColumnElement span.ns1blankspaceRowView').click(function() {
-													ns1blankspace.setup.structure.element.edit({xhtmlElementID: this.id})
-												})
-												.css('width', '15px')
-												.css('height', '17px')
-											}	
+											$('#ns1blankspaceSetupStructureElementColumnElement .ns1blankspaceRowSelect').click(function() {
+												ns1blankspace.setup.structure.element.edit({xhtmlElementID: this.id})
+											})
+											.css('width', '15px')
+											.css('height', '17px')
 											
 											if (oOptions.automation) 
 											{
@@ -1347,7 +1343,7 @@ ns1blankspace.setup.structure =
 									
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceContainer">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -1370,7 +1366,7 @@ ns1blankspace.setup.structure =
 														'</td></tr>');
 																		
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td id="ns1blankspaceCaption" class="ns1blankspace">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Category' +
 														'</td></tr>' +
 														'<tr class="ns1blankspaceRadio">' +
@@ -1380,17 +1376,14 @@ ns1blankspace.setup.structure =
 
 										if (ns1blankspace.setup.structure.data.categories == undefined)
 										{	
-											$.ajax(
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_STRUCTURE_CATEGORY_SEARCH';
+											oSearch.addField( 'title');
+											oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.objectContext);
+											oSearch.async = false;
+											oSearch.getResults(function(oResponse)
 											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_CATEGORY_SEARCH'),
-												data: 'structure=' + ns1blankspace.objectContext,
-												dataType: 'json',
-												async: false,
-												success: function(oResponse)
-												{
-													ns1blankspace.setup.structure.data.categories = oResponse.data.rows;
-												}
+												ns1blankspace.setup.structure.data.categories = oResponse.data.rows;
 											});
 										}			
 										
@@ -1439,7 +1432,7 @@ ns1blankspace.setup.structure =
 														'</td></tr>' +
 														'<tr class="ns1blankspaceText">' +
 														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceSetupStructureElementDisplayOrder" class="inputns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureElementDisplayOrder" class="ns1blankspaceText">' +
 														'</td></tr>');
 																			
 										aHTML.push('<tr class="ns1blankspaceText">' +
@@ -1457,12 +1450,11 @@ ns1blankspace.setup.structure =
 									
 										var aHTML = [];
 										
-										aHTML.push('<table style="font-size:0.875em;">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:70px;" id="ns1blankspaceSetupStructureElementSave">Save</span>' +
-														'</td></tr>');
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" id="ns1blankspaceSetupStructureElementSave">' +
+														'Save</span></td></tr>');
 														
 										aHTML.push('</table>');					
 										
@@ -1474,6 +1466,8 @@ ns1blankspace.setup.structure =
 										})
 										.click(function() 
 										{
+											ns1blankspace.status.working();
+
 											var sData = 'structure=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 											sData += '&id=' + ns1blankspace.util.fs(sID);
 											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementTitle').val());
@@ -1492,21 +1486,19 @@ ns1blankspace.setup.structure =
 												dataType: 'json',
 												success: function() {
 													$('#ns1blankspaceSetupStructureElement_title-' + sID).html($('#ns1blankspaceSetupStructureElementTitle').val());
-													$('#ns1blankspaceSetupStructureElementColumnElement2').html('Element has been saved.');
+													ns1blankspace.status.message('Element has been saved.');
 												}
 											});
 										});
 										
 										if (sID != undefined)
 										{
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_ELEMENT_SEARCH'),
-												data: 'id=' + sID,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.structure.element.edit(oParam, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';
+											oSearch.addField( 'backgroundcolour,caption,category,categorytext,datatype,datatypetext,description,displayorder,' +
+																	'hint,notes,notestype,notestypetext,reference,structure,structuretext,textcolour,title');
+											oSearch.addFilter('id', 'EQUAL_TO', sID);
+											oSearch.getResults(function(data) {ns1blankspace.setup.structure.element.edit(oParam, data)});
 										}
 										else
 										{
@@ -1521,7 +1513,7 @@ ns1blankspace.setup.structure =
 											var oObjectContext = oResponse.data.rows[0];
 											$('#ns1blankspaceSetupStructureElementTitle').val(oObjectContext.title);
 											
-											var sHTML = ns1blankspaceFormatXHTML(oObjectContext.description);
+											var sHTML = (oObjectContext.description).formatXHTML();
 											
 											tinyMCE.get('ns1blankspaceSetupStructureElementDescription' + ns1blankspace.counter.editor).setContent(sHTML)
 											
@@ -1531,7 +1523,7 @@ ns1blankspace.setup.structure =
 											$('#ns1blankspaceSetupSetupStructureElementBackgroundColour').val(oObjectContext.backgroundcolour)
 											$('#ns1blankspaceSetupSetupStructureElementDisplayOrder').val(oObjectContext.displayorder)	
 											$('#ns1blankspaceSetupSetupStructureElementTitle').focus();
-											ns1blankspace.setup.structure.element.options.show({structureElementID: oObjectContext.id});
+											//ns1blankspace.setup.structure.element.options.show({structureElementID: oObjectContext.id});
 										}
 									}
 								},
@@ -1654,12 +1646,12 @@ ns1blankspace.setup.structure =
 															.css('width', '15px')
 															.css('height', '20px');
 														
-														$('# ns1blankspaceElementOptions > td.ns1blankspaceElementOption').click(function(event)
+														$('# ns1blankspaceElementOptions td.ns1blankspaceElementOption').click(function(event)
 														{
 															ns1blankspace.setup.structure.element.options.edit.start(event.target.id);
 														});
 													
-														$('#ns1blankspaceElementOptions > .ns1blankspaceRowRemove').button(
+														$('#ns1blankspaceElementOptions .ns1blankspaceRowRemove').button(
 															{
 																text: false,
 																 icons: {
@@ -1925,7 +1917,7 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.remove) 
 											{
-												$('#ns1blankspaceSetupStructureAutomation > span.ns1blankspaceRowOptionsRemove').button( {
+												$('#ns1blankspaceSetupStructureAutomation span.ns1blankspaceRowOptionsRemove').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-close"
@@ -1940,7 +1932,7 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.view) 
 											{
-												$('#ns1blankspaceSetupStructureAutomation > span.ns1blankspaceRowOptionsView').button( {
+												$('#ns1blankspaceSetupStructureAutomation span.ns1blankspaceRowOptionsView').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-play"

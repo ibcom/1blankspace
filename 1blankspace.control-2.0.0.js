@@ -127,14 +127,14 @@ ns1blankspace.extend.structure =
 		elements: undefined
 	},
 	{
-		title: 'Extra2',
+		title: 'Extra 2',
 		object: 32,
 		category: 274,
 		elements: undefined,
 		show: undefined
 	},
 	{
-		title: 'bExtra2',
+		title: 'Extra',
 		object: 12,
 		category: 273,
 		elements: undefined
