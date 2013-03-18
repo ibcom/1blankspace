@@ -33,7 +33,7 @@ ns1blankspace.developer.membership =
 									
 						aHTML.push('<table class="ns1blankspaceMain">');
 						aHTML.push('<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ns1blankspace">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
 										'</tr>');

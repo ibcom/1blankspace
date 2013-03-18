@@ -78,6 +78,10 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.supportIssue',
 		source: '/jscripts/1blankspace.supportissue-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.file',
+		source: '/jscripts/1blankspace.setup.file-2.0.0.js'
 	}
 ]
 
@@ -185,6 +189,15 @@ ns1blankspace.views =
 		parentnamespace: "setup",
 		namespace: "automation",
 		endpoint: "SETUP_USER_AUTOMATION", 
+		show: true,
+		group: 1,
+		type: 1
+	},
+	{
+		title: "File Import",
+		parentnamespace: "setup",
+		namespace: "file",
+		endpoint: "SETUP_IMPORT_MANAGEA", 
 		show: true,
 		group: 1,
 		type: 1

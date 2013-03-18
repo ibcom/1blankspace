@@ -1026,6 +1026,16 @@ textarea.ns1blankspaceTextMultiSmall
 	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) 0px -260px;
 }
 
+#ns1blankspaceViewFile
+{
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) 0px -150px;
+}
+
+#ns1blankspaceViewFileLarge
+{
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) 0px -195px;
+}
+
 /* css for timepicker */
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-timepicker-div dl { text-align: left; }
