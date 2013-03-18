@@ -158,6 +158,9 @@ ns1blankspace.contactBusiness =
 															'streetaddress1,streetaddress2,streetsuburb,streetpostcode,streetstate,streetcountry' + 
 															',mailingaddress1,mailingaddress2,mailingsuburb,mailingpostcode,mailingstate,mailingcountry,' +
 															'notes,primarycontactperson,modifieddate');
+
+										if (ns1blankspace.objectExtended) {oSearch.addField(ns1blankspace.extend.elements())};
+										
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.rf = 'json';
 										oSearch.getResults(function(data) {ns1blankspace.contactBusiness.show(oParam, data)}) 
@@ -393,6 +396,8 @@ ns1blankspace.contactBusiness =
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
 						ns1blankspace.attachments.show();
 					});
+
+					ns1blankspace.extend.layout();
 				},
 
 	show: 		function (oParam, oResponse)
@@ -842,6 +847,8 @@ ns1blankspace.contactBusiness =
 										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingPostCode').val());
 										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingCountry').val());
 									}
+
+									sData += ns1blankspace.extend.save();
 									
 									$.ajax(
 									{

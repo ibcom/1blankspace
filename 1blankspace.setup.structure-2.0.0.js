@@ -45,8 +45,6 @@ ns1blankspace.setup.structure =
 							media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
 						});				
 					}
-					
-					if (bShowHome) {ns1blankspace.setup.structure.home()};	
 				},
 
 	bind: 		function ()
@@ -267,6 +265,8 @@ ns1blankspace.setup.structure =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
+
+						aHTML.push('<tr><td>&nbsp;</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlGrouping" class="ns1blankspaceControl">' +
 										'Grouping</td></tr>');
@@ -586,7 +586,7 @@ ns1blankspace.setup.structure =
 
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No brouping has been set up.</td></tr></table>');
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No grouping has been set up.</td></tr></table>');
 
 											$('#ns1blankspaceGroupingColumn1').html(aHTML.join(''));
 										}
@@ -823,14 +823,11 @@ ns1blankspace.setup.structure =
 										
 									if (oResponse == undefined)
 									{	
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_CATEGORY_SEARCH'),
-											data: 'structure=' + ns1blankspace.objectContext,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.setup.structure.category.show(oParam, data)}
-										});
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_STRUCTURE_CATEGORY_SEARCH';
+										oSearch.addField( 'description,displayorder,id,structure,structuretext,title,type,typetext');
+										oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.getResults(function(data) {ns1blankspace.setup.structure.category.show(oParam, data)}) 
 									}
 									else
 									{
@@ -986,16 +983,14 @@ ns1blankspace.setup.structure =
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceAction">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceSetupStructureCategorySave">Save</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceSetupStructureCategorySave">Save</span>' +
 														'</td></tr>');
 									
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceSetupStructureCategoryCancel">Cancel</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceSetupStructureCategoryCancel">Cancel</span>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');					
@@ -1019,7 +1014,7 @@ ns1blankspace.setup.structure =
 												data: sData,
 												dataType: 'json',
 												success: function() {
-													ns1blankspace.setup.structure.category();
+													ns1blankspace.setup.structure.category.show();
 												}
 											});
 										});
@@ -1031,7 +1026,7 @@ ns1blankspace.setup.structure =
 										.click(function() 
 										{
 											ns1blankspace.show({selector: '#ns1blankspaceMainCategory'});
-											ns1blankspace.setup.structure.category();
+											ns1blankspace.setup.structure.category.show();
 										});
 										
 										if (sID != undefined)

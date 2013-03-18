@@ -1044,6 +1044,7 @@ ns1blankspace.app =
 					var sNamespace = ns1blankspace.objectName;
 					var bNew;
 					var iID;
+					var bExtendInit = false;
 
 					if (oParam != undefined)
 					{
@@ -1052,123 +1053,130 @@ ns1blankspace.app =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 						if (oParam.new != undefined) {bNew = oParam.new}
 						if (oParam.id != undefined) {iID = oParam.id}
+						if (oParam.extendInit != undefined) {bExtendInit = oParam.extendInit}
 					}	
 
 					if (iID) {bShowHome = false}
 
-					ns1blankspace.structure.init();
+					if (!bExtendInit)
+					{	
+						ns1blankspace.extend.init(oParam);
+					}
+					else
+					{	
 
-					if (sNamespace)
-					{
-						if (sParentNamespace)
+						if (sNamespace)
 						{
-							var oNS = ns1blankspace[sParentNamespace][sNamespace];
-							var sNS = 'ns1blankspace["' + sParentNamespace + '"]["' + sNamespace + '"]';
-						}
-						else
-						{
-							var oNS = ns1blankspace[sNamespace];
-							var sNS = 'ns1blankspace["' + sNamespace + '"]';
-						}
-
-						if (bShowHome)
-						{
-							ns1blankspace.history.view({
-								newDestination: sNS + '.init({showHome: true});',
-								move: false
-								});	
-						}
-						
-						$('#ns1blankspaceViewControlViewContainer').button(
-						{
-							label: ns1blankspace.viewName
-						});
-						
-						$('#ns1blankspaceViewControlSearch').keyup(function(event)
-						{
-							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-					        ns1blankspace.timer.delayCurrent = setTimeout(sNS + '.search.send("ns1blankspaceViewControlSearch")', ns1blankspace.option.typingWait);
-						});
-						
-						$('#ns1blankspaceViewControlSearch').focusin(function(event)
-						{
-							ns1blankspace.search.advanced();
-						});
-						
-						$("#ns1blankspaceViewControlSearch").click(function()
-						{
-						    this.select();
-						});
-
-						$('#ns1blankspaceViewControlSearchOptions').click(function(event)
-						{
-							oNS.search.options.show();
-						});
-						
-						$('#ns1blankspaceViewControlNew').click(function(event)
-						{
-							oNS.init({new: true});
-						});
-						
-						$('#ns1blankspaceViewControlNew').button({disabled: false});
-
-						$('#ns1blankspaceViewControlNewOptions').click(function(event)
-						{
-							oNS.new.options();
-						});
-						
-						$('#ns1blankspaceViewControlAction').click(function(event)
-						{
-							oNS.save.send();
-						});
-						
-						$('#ns1blankspaceViewControlAction').button({disabled: true});
-						
-						$('#ns1blankspaceViewControlActionOptions').click(function(event)
-						{
-							ns1blankspace.app.options.show($.extend(true, oParam,
+							if (sParentNamespace)
 							{
-								element: this,
-								xhtml: undefined,
-								namespace: oNS,
-								namespaceText: sNS
-							}));
-						});
-						
-						$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
-							
-						$('#ns1blankspaceControl').html('');	
-
-						if (ns1blankspace.option.setFocus) {$('#ns1blankspaceViewControlSearch').focus()};
-
-						if (bNew) 
-						{
-							ns1blankspace.objectContextData = undefined
-							ns1blankspace.objectContext = -1;
-							$('#ns1blankspaceViewControlAction').button({disabled: false});
-							if (typeof(oNS.layout) === 'function') {oNS.layout()}
-							ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-							if (typeof(oNS.details) === 'function') {oNS.details()} else {oNS.home.show()}
-						}
-						else
-						{
-							if (iID)
-							{	
-								oNS.search.send('-' + iID);
+								var oNS = ns1blankspace[sParentNamespace][sNamespace];
+								var sNS = 'ns1blankspace["' + sParentNamespace + '"]["' + sNamespace + '"]';
 							}
 							else
-							{	
-								if (bShowHome) 
-								{
-									ns1blankspace.history.view({
-										newDestination: sNS + '.init({showHome: true});',
-										move: false
-										});	
+							{
+								var oNS = ns1blankspace[sNamespace];
+								var sNS = 'ns1blankspace["' + sNamespace + '"]';
+							}
 
-									if (typeof(oNS.home) === 'function') {oNS.home()} else {oNS.home.show()}
+							if (bShowHome)
+							{
+								ns1blankspace.history.view({
+									newDestination: sNS + '.init({showHome: true});',
+									move: false
+									});	
+							}
+							
+							$('#ns1blankspaceViewControlViewContainer').button(
+							{
+								label: ns1blankspace.viewName
+							});
+							
+							$('#ns1blankspaceViewControlSearch').keyup(function(event)
+							{
+								if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+						        ns1blankspace.timer.delayCurrent = setTimeout(sNS + '.search.send("ns1blankspaceViewControlSearch")', ns1blankspace.option.typingWait);
+							});
+							
+							$('#ns1blankspaceViewControlSearch').focusin(function(event)
+							{
+								ns1blankspace.search.advanced();
+							});
+							
+							$("#ns1blankspaceViewControlSearch").click(function()
+							{
+							    this.select();
+							});
+
+							$('#ns1blankspaceViewControlSearchOptions').click(function(event)
+							{
+								oNS.search.options.show();
+							});
+							
+							$('#ns1blankspaceViewControlNew').click(function(event)
+							{
+								oNS.init({new: true});
+							});
+							
+							$('#ns1blankspaceViewControlNew').button({disabled: false});
+
+							$('#ns1blankspaceViewControlNewOptions').click(function(event)
+							{
+								oNS.new.options();
+							});
+							
+							$('#ns1blankspaceViewControlAction').click(function(event)
+							{
+								oNS.save.send();
+							});
+							
+							$('#ns1blankspaceViewControlAction').button({disabled: true});
+							
+							$('#ns1blankspaceViewControlActionOptions').click(function(event)
+							{
+								ns1blankspace.app.options.show($.extend(true, oParam,
+								{
+									element: this,
+									xhtml: undefined,
+									namespace: oNS,
+									namespaceText: sNS
+								}));
+							});
+							
+							$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
+								
+							$('#ns1blankspaceControl').html('');	
+
+							if (ns1blankspace.option.setFocus) {$('#ns1blankspaceViewControlSearch').focus()};
+
+							if (bNew) 
+							{
+								ns1blankspace.objectContextData = undefined
+								ns1blankspace.objectContext = -1;
+								$('#ns1blankspaceViewControlAction').button({disabled: false});
+								if (typeof(oNS.layout) === 'function') {oNS.layout()}
+								ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+								if (typeof(oNS.details) === 'function') {oNS.details()} else {oNS.home.show()}
+							}
+							else
+							{
+								if (iID)
+								{	
+									oNS.search.send('-' + iID);
 								}
-							}		
-						}
+								else
+								{	
+									if (bShowHome) 
+									{
+										ns1blankspace.history.view({
+											newDestination: sNS + '.init({showHome: true});',
+											move: false
+											});	
+
+										if (typeof(oNS.home) === 'function') {oNS.home()} else {oNS.home.show()}
+									}
+								}		
+							}
+						}	
 					}	
 				},
 
@@ -2591,6 +2599,7 @@ ns1blankspace.search =
 					var sSearchText = '';
 					var sColumns;
 					var iColumn = 0;
+					var sMethodFilter;
 						
 					if (oParam != undefined)
 					{
@@ -2602,6 +2611,7 @@ ns1blankspace.search =
 						if (oParam.method != undefined) {sMethod = oParam.method}
 						if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
 						if (oParam.sColumns != undefined) {sColumns = oParam.columns}
+						if (oParam.methodFilter != undefined) {sMethodFilter = oParam.methodFilter}
 					}
 					
 					if (sXHTMLElementID != undefined)
@@ -2629,6 +2639,11 @@ ns1blankspace.search =
 						{
 							sXHTMLParentInputElementID = $('#' + sXHTMLInputElementID).attr("data-parent")
 							if (sXHTMLParentInputElementID != undefined) {$.extend(true, oParam, {xhtmlParentInputElementID: sXHTMLParentInputElementID})};	
+						}
+
+						if (sMethodFilter === undefined)
+						{
+							sMethodFilter = $('#' + sXHTMLInputElementID).attr("data-methodfilter");
 						}
 					}	
 					
@@ -2684,6 +2699,12 @@ ns1blankspace.search =
 										});	
 									}	
 									
+									if (sMethodFilter)
+									{
+										var aMethodFilter = sMethodFilter.split('-');
+										oSearch.addFilter(aMethodFilter[0], aMethodFilter[1], aMethodFilter[2]);
+									}	
+
 									if (sXHTMLParentInputElementID != undefined)
 									{
 										var sParentColumnID = $('#' + sXHTMLInputElementID).attr("data-parent-search-id")
@@ -4529,16 +4550,12 @@ ns1blankspace.show =
 					}	
 				}			
 
-ns1blankspace.structure =
+ns1blankspace.extend =
 {
-	data: 		[],
+	structure: 		[],
 
 	init: 		function (oParam, oResponse)
 				{
-					// Based on object get categories - grep
-					// Using categories get the elements including display order
-					// Store in ns1blankspace.structures .. .elements[] - this could be harded coded if want.
-
 					var iObject = ns1blankspace.object;
 					var aCategories = [];
 
@@ -4554,47 +4571,65 @@ ns1blankspace.structure =
 
 					if (oResponse == undefined)
 					{	
-						$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function()
+						ns1blankspace.objectExtended = false;
+
+						//$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()
+						$(ns1blankspace.extend.structure).each(function()
 						{
-							aCategories.push(this.category);
+							if (this.elements === undefined)
+							{	
+								aCategories.push(this.category);
+							}
+							else
+							{
+								ns1blankspace.objectExtended = true;
+							}	
 						})	
 
 						oParam.categories = aCategories;
 
-						ns1blankspace.objectExtended = false;
-
-						if (aCategories.length != 0)
+						if (aCategories.length == 0)
+						{
+							oParam.extendInit = true;
+							ns1blankspace.app.set(oParam)
+						}	
+						else
 						{	
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';		
 							oSearch.addField('structure,backgroundcolour,caption,category,categorytext,datatype,datatypetext,' +
 												'description,displayorder,hint,id,notes,notestype,notestypetext,' +
 												'reference,structure,structuretext,textcolour,title');
-							oSearch.rows = 100;
+							oSearch.rows = 1000;
 							oSearch.addFilter('category', 'IN_LIST', aCategories.join(','))
 							oSearch.sort('category', 'asc');
 							oSearch.sort('displayorder', 'asc');
+							oSearch.async = false;  //LOOK AT REMOVE THIS
 							
-							oSearch.getResults(function(data) {ns1blankspace.structure.init(oParam, data)});
+							oSearch.getResults(function(data) {ns1blankspace.extend.init(oParam, data)});
 						}	
 					}
 					else
 					{
 						var oElements = oResponse.data.rows;
-						ns1blankspace.objectExtended = true;
-
-						$(ns1blankspace.structure.data).each(function(i, v)
+					
+						$(ns1blankspace.extend.structure).each(function(i, v)
 						{
 							this.elements = $.grep(oElements, function (a) {return a.category == v.category;});
-						});
-					}
 
+							if (this.elements.length > 0)
+							{
+								ns1blankspace.objectExtended = true;
+							}	
+						});
+
+						oParam.extendInit = true;
+						ns1blankspace.app.set(oParam)
+					}
 				},
 
 	elements: 	function (oParam)
 				{
-					//add to advanced search
-
 					var iObject = ns1blankspace.object;
 		
 					if (oParam != undefined)
@@ -4604,10 +4639,14 @@ ns1blankspace.structure =
 
 					var aElements = [];
 
-					$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function(i,v)
+					$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function(i,v)
 					{
 						$(v.elements).each(function(j,k)
 						{
+							if (k.datatype == 2)
+							{	
+								aElements.push('se' + k.id + 'text');
+							}	
 							aElements.push('se' + k.id);
 						});
 					})	
@@ -4617,8 +4656,6 @@ ns1blankspace.structure =
 
 	layout: 	function (oParam)
 				{
-					// add to layout (side menu and divs)
-
 					var iObject = ns1blankspace.object;
 		
 					if (oParam != undefined)
@@ -4629,7 +4666,7 @@ ns1blankspace.structure =
 					var aHTMLTR = [];
 					var aHTMLDIV = [];
 
-					$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function()
+					$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()
 					{					
 						aHTMLTR.push('<tr><td id="ns1blankspaceControl-' + this.category + '" class="ns1blankspaceControl">' +
 											this.title + '</td></tr>');
@@ -4649,12 +4686,12 @@ ns1blankspace.structure =
 					$('table.ns1blankspaceControl :last').append(aHTML.join(''));	
 					$('#ns1blankspaceMain').append(aHTMLDIV.join(''));
 
-					$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function()
+					$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()
 					{
 						$('#ns1blankspaceControl-' + this.category).click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMain' + (this.id).split('-')[1]});
-							ns1blankspace.structure.show({category: (this.id).split('-')[1]});
+							ns1blankspace.extend.show({category: (this.id).split('-')[1]});
 						});
 					});	
 				},
@@ -4663,6 +4700,7 @@ ns1blankspace.structure =
 				{
 					var iCategory;
 					var aHTML = [];
+					var fShow;
 
 					if (oParam != undefined)
 					{
@@ -4675,42 +4713,77 @@ ns1blankspace.structure =
 						{
 							$('#ns1blankspaceMain' + iCategory).attr('data-loading', '');
 
-							var oCategory = $.grep(ns1blankspace.structure.data, function (a) {return a.category == iCategory;})
+							var oCategory = $.grep(ns1blankspace.extend.structure, function (a) {return a.category == iCategory;})
 
 							if (oCategory.length != 0)
 							{
 								oCategory = oCategory[0];
 
-								aHTML.push('<table class="ns1blankspace" style="width:50%">');
+								if (oCategory.show != undefined) {fShow = oCategory.show}
 
-								$(oCategory.elements).each(function()
+								if (fShow)
+								{
+									fShow();
+								}
+								else	
 								{	
-									var sCaption = this.caption;
-									if (sCaption == '') {sCaption = this.title}
+									aHTML.push('<table class="ns1blankspace" style="width:50%">');
 
-									aHTML.push('<tr class="ns1blankspaceCaption">' +
-													'<td class="ns1blankspaceCaption">' +
-													sCaption +
-													'</td></tr>' +
-													'<tr class="ns1blankspace">' +
-													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceStructure-' + this.id + '" class="ns1blankspaceText">' +
-													'</td></tr>');
-								});
+									$(oCategory.elements).each(function()
+									{	
+										var sCaption = this.caption;
+										if (sCaption == '') {sCaption = this.title}
 
-								aHTML.push('</table>');		
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														sCaption +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">');
+
+										if (this.datatype == 1)
+										{	
+											aHTML.push('<td class="ns1blankspaceText">' +
+												'<input id="ns1blankspaceStructure_' + this.id + '" class="ns1blankspaceText">');
+										}
+										else if (this.datatype == 2)
+										{
+											aHTML.push('<td class="ns1blankspaceSelect">' +
+												'<input id="ns1blankspaceStructure_' + this.id + '" class="ns1blankspaceSelect"' +
+												' data-method="SETUP_STRUCTURE_ELEMENT_OPTION_SEARCH"' +
+												' data-methodfilter="element-EQUAL_TO-' + this.id + '"' +
+												
+												'>');
+										}
+										else if (this.datatype == 3)
+										{
+											aHTML.push('<td class="ns1blankspaceTextMulti">' +
+												'<textarea rows="3" cols="35" id="ns1blankspaceStructure_' + this.id + '" class="ns1blankspaceTextMulti"></textarea>');
+										}
+											
+										aHTML.push('</td></tr>');
+									});
+
+									aHTML.push('</table>');
+
+									$('#ns1blankspaceMain' + iCategory).html(aHTML.join(''));
+								}	
 							}
-
-							$('#ns1blankspaceMain' + iCategory).html(aHTML.join(''));
 
 							if (ns1blankspace.objectContextData != undefined)
 							{
 								$(oCategory.elements).each(function()
 								{
-									$('#ns1blankspaceStructure-' + this.id).val(ns1blankspace.objectContextData['se' + this.id]);
+									if (this.datatype == 2)
+									{	
+										$('#ns1blankspaceStructure_' + this.id).val(ns1blankspace.objectContextData['se' + this.id + 'text']);
+										$('#ns1blankspaceStructure_' + this.id).attr('data-id', ns1blankspace.objectContextData['se' + this.id]);
+									}
+									else
+									{
+										$('#ns1blankspaceStructure_' + this.id).val(ns1blankspace.objectContextData['se' + this.id]);
+									}	
 								});	
 							}	
-
 						}	
 					}
 				},
@@ -4726,11 +4799,11 @@ ns1blankspace.structure =
 
 					var sData = '';
 
-					$($.grep(ns1blankspace.structure.data, function (a) {return a.object == iObject;})).each(function(i,v)
+					$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function(i,v)
 					{				
 						if ($('#ns1blankspaceMain' + v.category).html() != '')
 						{
-							var oCategory = $.grep(ns1blankspace.structure.data, function (a) {return a.category == v.category;})
+							var oCategory = $.grep(ns1blankspace.extend.structure, function (a) {return a.category == v.category;})
 
 							if (oCategory.length != 0)
 							{
@@ -4738,7 +4811,14 @@ ns1blankspace.structure =
 
 								$(oCategory.elements).each(function(j,k)
 								{	
-									sData += '&se' + k.id + '=' + ns1blankspace.util.fs($('#ns1blankspaceStructure-' + k.id).val());
+									if (this.datatype == 2)
+									{
+										sData += '&se' + k.id + '=' + ns1blankspace.util.fs($('#ns1blankspaceStructure_' + k.id).attr('data-id'));
+									}
+									else
+									{	
+										sData += '&se' + k.id + '=' + ns1blankspace.util.fs($('#ns1blankspaceStructure_' + k.id).val());
+									}	
 								});	
 							}	
 						}		

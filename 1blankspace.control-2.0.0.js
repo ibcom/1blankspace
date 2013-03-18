@@ -118,19 +118,26 @@ ns1blankspace.xhtml.header =
 	'<div id="ns1blankspaceLogonName" style="width:450px;"></div></div>';
 
 
-ns1blankspace.structure.data = 
+ns1blankspace.extend.structure = 
 [
 	{
 		title: 'Extra',
 		object: 32,
 		category: 273,
-		elements: []
+		elements: undefined
 	},
 	{
 		title: 'Extra2',
 		object: 32,
 		category: 274,
-		elements: []
+		elements: undefined,
+		show: undefined
+	},
+	{
+		title: 'bExtra2',
+		object: 12,
+		category: 273,
+		elements: undefined
 	}
 ]
 
@@ -179,8 +186,6 @@ ns1blankspace.views =
 		show: true,
 		group: 1,
 		type: 1
-	},
-
 	},
 	{
 		title: "Businesses",
