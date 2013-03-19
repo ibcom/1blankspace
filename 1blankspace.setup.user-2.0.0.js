@@ -54,6 +54,7 @@ ns1blankspace.setup.user =
 						$('#ns1blankspaceControlInternal').click(function(event)
 						{
 							ns1blankspace.show({refresh: true});
+							ns1blankspace.inputDetected = false;
 							ns1blankspace.setup.user.home();
 						});
 
@@ -392,7 +393,6 @@ ns1blankspace.setup.user =
 							sTmpClass = ' ns1blankspaceDisabled';
 						}
 						
-
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">User Name</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryUserName" class="ns1blankspaceSummary' + sTmpClass + '">' +
 										ns1blankspace.objectContextData.username +
@@ -828,13 +828,25 @@ ns1blankspace.setup.user =
 				},
 
 
-	network: 	function ()
-				{
-					var aHTML = [];
-					
-					if ($('#ns1blankspaceMainNetwork').attr('data-loading') == '1')
-					{
-						$('#ns1blankspaceMainNetwork').attr('data-loading', '');
+	network: 	function (oResponse)
+				{	
+					if (oResponse == undefined)
+					{	
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('NETWORK_USER_SEARCH'),
+							data: 'scope=3',
+							dataType: 'json',
+							success: function(data)
+							{
+								ns1blankspace.setup.user.network(data);
+							}
+						});
+					}	
+					else
+					{	
+						var aHTML = [];
 						
 						aHTML.push('<table class="ns1blankspaceContainer">');
 						aHTML.push('<tr class="ns1blankspaceContainer">' +
@@ -863,9 +875,9 @@ ns1blankspace.setup.user =
 						
 						$('#ns1blankspaceNetworkColumn1').html(aHTML.join(''));
 						
-						if (ns1blankspace.objectContextData != undefined)
+						if (oResponse.data.rows.length > 0)
 						{
-							$('[name="radioSwitch"][value="' + ns1blankspace.objectContextData.disabled + '"]').attr('checked', true);
+							$('[name="radioSwitch"][value="Y"]').attr('checked', true);
 						}
 						else
 						{
@@ -1007,8 +1019,21 @@ ns1blankspace.setup.user =
 													ns1blankspace.setup.user.access.show();
 												}	
 											}
+
+											ns1blankspace.inputDetected = false;
 										}	
-									});		
+									});
+
+									if ($('#ns1blankspaceMainNetwork').html() != '')
+									{
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('NETWORK_USER_MANAGE'),
+											data: 'canswitch=' + ns1blankspace.util.fs($('input[name="radioSwitch"]:checked').val()),
+											dataType: 'json'
+										});
+									};	
 								}
 				},
 
