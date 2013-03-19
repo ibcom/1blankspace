@@ -455,19 +455,22 @@ ns1blankspace.app =
 
 						$(document).ajaxComplete(function(oEvent, oXMLHTTPResponse, oAjaxSettings)
 						{
+							ns1blankspace.ajaxSettings = undefined;
+
 							if (oAjaxSettings.dataType == 'json')
 							{	
 								var oResponse = $.parseJSON(oXMLHTTPResponse.responseText);
+
 								if (oResponse.status == 'ER')
 								{
 									if (oResponse.error.errornotes == 'Not logged on')
 									{
-										ns1blankspace.lastData = '';
+										ns1blankspace.history.sendOnLogon = oAjaxSettings;
 										ns1blankspace.app.start();		
 									}	
 									else if ((oResponse.error.errornotes).toLowerCase().indexOf('undefined') != 0)
 									{
-										ns1blankspace.status.error('Speak to developer');
+										ns1blankspace.status.error('There is an error with this app.');
 									}	
 									else
 									{	
@@ -971,7 +974,12 @@ ns1blankspace.app =
 							min_move_y: 35,
 							preventDefaultEvents: true
 							});
-										
+							
+					if (ns1blankspace.history.sendOnLogon)
+					{
+						$.ajax(ns1blankspace.history.sendOnLogon);
+					}					
+
 					if (ns1blankspace.option.returnToLast) 
 					{
 						ns1blankspace.history.view({instruction: 8})
