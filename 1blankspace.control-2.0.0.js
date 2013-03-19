@@ -79,7 +79,7 @@ ns1blankspace.data.actionTypes =
 	emailReceived: {id: 9, title: 'Email Received'}
 };
 
-ns1blankspace.debug.enabled = true;
+ns1blankspace.debug.enabled = false;
 
 ns1blankspace.option.showBrowsing = false;
 ns1blankspace.option.messagingEmailShowCount = false;

@@ -247,27 +247,40 @@ function getResults(aoParm1, aoParm2) {
 
 	if (sXML == '') return false;
 	
+	sAjaxDataType = 'json';
+	sURL += '&rf=json';
+
 	if (this.rf.toLowerCase() == 'xml') {
 		sAjaxDataType = 'xml';
 		sURL += '&rf=xml';
 	}
-	if (this.rf.toLowerCase() == 'json') {
-		sAjaxDataType = 'json';
-		sURL += '&rf=json';
-	}	
+	
 	//this is dodgy - passing one of the variables via querystring, and not the xml,
 	//but problem is that the category is locked in before the xml is passed
 	if (this.categoryId != '') sURL += '&categoryid=' + this.categoryId;
 	
 	//contentType: 'text/xml',
-	$.ajax({
+	$.ajax(
+	{
 		type: 'POST',
 		async: this.async,
 		url: sURL,
 		data: sXML,
-		success: function(asData) { 
-				getResultsComplete(asData, fCallbackFunction)
-			},		
+		global: true,
+		success: function(asData, as1, as2)
+		{ 
+			if (sAjaxDataType === 'json')
+			{	
+				if (asData.status == 'OK')
+				{	
+					getResultsComplete(asData, fCallbackFunction);
+				}
+				else
+				{
+					//ns1blankspace.status.error(asData.error.errornotes);
+				}
+			}	
+		},	
 		dataType: sAjaxDataType
 	});
 

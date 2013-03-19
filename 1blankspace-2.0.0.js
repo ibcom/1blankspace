@@ -437,20 +437,49 @@ ns1blankspace.app =
 						ns1blankspace.user.networkGroups = '';
 						ns1blankspace.setupShow = false;
 
-						$(document).ajaxError(
-							function(oEvent, oXMLHTTPRequest, oAjaxOptions, oError) 
-								{
-									alert('Error: ' + oAjaxOptions.url + ' \nException: ' + oError + ' \nReturned: ' + oXMLHTTPRequest.responseText);
-								}
-						);	
-
 						$.ajaxSetup(
 						{
 							cache: false,
+							dataType: 'json',
+							global: true,
 							beforeSend: function (oRequest)
 										{
 					            			oRequest.setRequestHeader("X-HTTP-myds-rest-level", ns1blankspace.option.restLevel);
 					        			}
+						});
+
+						$(document).ajaxError(function(oEvent, oXMLHTTPRequest, oAjaxOptions, oError) 
+						{
+							alert('Error: ' + oAjaxOptions.url + ' \nException: ' + oError + ' \nReturned: ' + oXMLHTTPRequest.responseText);
+						});	
+
+						$(document).ajaxComplete(function(oEvent, oXMLHTTPResponse, oAjaxSettings)
+						{
+							if (oAjaxSettings.dataType == 'json')
+							{	
+								var oResponse = $.parseJSON(oXMLHTTPResponse.responseText);
+								if (oResponse.status == 'ER')
+								{
+									if (oResponse.error.errornotes == 'Not logged on')
+									{
+										ns1blankspace.lastData = '';
+										ns1blankspace.app.start();		
+									}	
+									else if ((oResponse.error.errornotes).toLowerCase().indexOf('undefined') != 0)
+									{
+										ns1blankspace.status.error('Speak to developer');
+									}	
+									else
+									{	
+										ns1blankspace.status.error(oResponse.error.errornotes);
+									}	
+
+								}
+							}
+							else if (oAjaxSettings.dataType == 'text')
+							{
+
+							}		
 						});
 
 						if (navigator.platform.indexOf('iPad') != -1 || navigator.platform.indexOf('iPhone') != -1) 
@@ -666,9 +695,16 @@ ns1blankspace.app =
 						url: ns1blankspace.util.endpointURI('CORE_GET_USER_NAME'),
 						dataType: 'json',
 						cache: false,
+						global: false,
 						success: function(data) 
 						{
 							$('#ns1blankspaceViewControl').html('&nbsp;');
+							$('#ns1blankspaceMain').html('');
+							$('#ns1blankspaceControl').html('');
+							$('#ns1blankspaceLogonName').html('&nbsp;')
+							$('#ns1blankspaceLogonName').unbind('click');
+							$('#ns1blankspaceSpaceText').html('&nbsp;')
+							$('#ns1blankspaceSpaceText').unbind('click');
 
 							if (data.status === 'ER')
 							{
@@ -1378,6 +1414,9 @@ ns1blankspace.logon =
 
 					aHTML.push('</td></tr></table>');
 					
+					$('#ns1blankspaceMain').html('');
+					$('#ns1blankspaceControl').html('');
+
 					ns1blankspace.container.show(
 										{
 											xhtmlElementID: 'ns1blankspaceViewControl',
@@ -1472,6 +1511,7 @@ ns1blankspace.logon =
 							if (oResponse.url === '#' || ns1blankspace.option.logonStayOnDocument)
 							{
 								//document.location.reload(false);
+								ns1blankspace.container.hide();
 								ns1blankspace.app.start();
 							}	
 							else
@@ -1718,11 +1758,24 @@ ns1blankspace.logOff = function ()
 						type: 'GET',
 						async: false,
 						url: ns1blankspace.util.endpointURI('CORE_LOGOFF'),
-						dataType: 'json'
+						dataType: 'json',
+						global: false,
+						success: function ()
+						{
+							if (!ns1blankspace.debug.enabled)
+							{
+								ns1blankspace.unloadWarning = false;
+								ns1blankspace.app.start();
+							}
+						}
 					})
 					
-					ns1blankspace.unloadWarning = false;
-					document.location.reload(false);
+					
+				}
+
+ns1blankspace.refresh = function ()
+				{
+					document.location.reload(true);
 				}
 
 ns1blankspace.history.control =
