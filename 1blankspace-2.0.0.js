@@ -468,7 +468,7 @@ ns1blankspace.app =
 										ns1blankspace.history.sendOnLogon = oAjaxSettings;
 										ns1blankspace.app.start({message: 'You need to logon again.'});		
 									}	
-									else if ((oResponse.error.errornotes).toLowerCase().indexOf('undefined') != 0)
+									else if ((oResponse.error.errornotes).toLowerCase().indexOf('undefined') != -1)
 									{
 										ns1blankspace.status.error('There is an error with this app.');
 									}	
@@ -476,12 +476,28 @@ ns1blankspace.app =
 									{	
 										ns1blankspace.status.error(oResponse.error.errornotes);
 									}	
-
 								}
 							}
 							else if (oAjaxSettings.dataType == 'text')
 							{
+								var aResponse = (oXMLHTTPResponse.responseText).split('|');
 
+								if (aResponse[0] == 'ER')
+								{
+									if (aResponse[1] == 'Not logged on')
+									{
+										ns1blankspace.history.sendOnLogon = oAjaxSettings;
+										ns1blankspace.app.start({message: 'You need to logon again.'});		
+									}	
+									else if ((aResponse[1]).toLowerCase().indexOf('undefined') != -1)
+									{
+										ns1blankspace.status.error('There is an error with this app.');
+									}	
+									else
+									{	
+										ns1blankspace.status.error(aResponse[1]);
+									}	
+								}
 							}		
 						});
 

@@ -273,6 +273,13 @@ ns1blankspace.setup.user =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlAccess" class="ns1blankspaceControl">' +
 										'Access</td></tr>');
+
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlNetwork" class="ns1blankspaceControl">' +
+										'Network</td></tr>');
 					}	
 
 					aHTML.push('</table>');					
@@ -284,7 +291,7 @@ ns1blankspace.setup.user =
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainMessaging" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainNetwork" class="ns1blankspaceControlMain"></div>');
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 						
@@ -306,10 +313,10 @@ ns1blankspace.setup.user =
 						ns1blankspace.setup.user.access.show();
 					});
 
-					$('#ns1blankspaceControlMessaging').click(function(event)
+					$('#ns1blankspaceControlNetwork').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainMessaging'});
-						ns1blankspace.setup.user.messaging();
+						ns1blankspace.show({selector: '#ns1blankspaceMainNetwork'});
+						ns1blankspace.setup.user.network();
 					});
 				},
 
@@ -820,15 +827,52 @@ ns1blankspace.setup.user =
 								}
 				},
 
-	xnew: 		function (oParam)
+
+	network: 	function ()
 				{
-					ns1blankspace.objectContextData = undefined
-					ns1blankspace.objectContext = -1;
-					interfaceSetupUserViewport();
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					ns1blankspaceMainViewportShow("#ns1blankspaceMainDetails");
-					ns1blankspace.setup.user.details();
-				},		
+					var aHTML = [];
+					
+					if ($('#ns1blankspaceMainNetwork').attr('data-loading') == '1')
+					{
+						$('#ns1blankspaceMainNetwork').attr('data-loading', '');
+						
+						aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceNetworkColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceNetworkColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>');
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMainNetwork').html(aHTML.join(''));
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Can switch into other space' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioSwitchN" name="radioSwitch" value="N"/>No<br />' +
+										'<input type="radio" id="radioSwitchY" name="radioSwitch" value="Y"/>Yes' +
+										'</td></tr>');
+
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceNetworkColumn1').html(aHTML.join(''));
+						
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							$('[name="radioSwitch"][value="' + ns1blankspace.objectContextData.disabled + '"]').attr('checked', true);
+						}
+						else
+						{
+							$('[name="radioSwitch"][value="N"]').attr('checked', true);
+						}
+					}	
+				},	
 
 	save: 		{
 					send: 		function (oResponse)
@@ -1042,7 +1086,7 @@ ns1blankspace.setup.user =
 									
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<table><tr><td valign="top">No external user access.</td></tr></table>');
+												aHTML.push('<table><tr><td class="ns1blankspaceSub">No external user access.</td></tr></table>');
 
 												$('#ns1blankspaceSetupUserExternalColumn1').html(aHTML.join(''));
 											}
@@ -1138,7 +1182,7 @@ ns1blankspace.setup.user =
 											$('#ns1blankspaceSetupUserExternalName').keyup(function()
 											{
 												if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.setup.user.external.search('ns1blankspaceSetupUserexternalname')", ns1blankspace.option.typingWait);
+										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.setup.user.external.search('ns1blankspaceSetupUserExternalName')", ns1blankspace.option.typingWait);
 											});	
 												
 											$('#ns1blankspaceSetupUserexternalname').live('blur', function() 
@@ -1314,8 +1358,10 @@ ns1blankspace.setup.user =
 									{	
 										sSearchText = $('#' + sXHTMLInputElementID).val();
 										
-										if (sSearchText.length > 3)
+										if (sSearchText.length > 2)
 										{
+											ns1blankspace.status.working();
+
 											$.ajax(
 											{
 												type: 'GET',
@@ -1328,32 +1374,41 @@ ns1blankspace.setup.user =
 									}
 									else
 									{	
-										aHTML.push('<table style="width: 350px;">');
-
-										$(oResponse.data.rows).each(function()
+										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<tr>' +
-													'<td id="ns1blankspaceNetworkUser-' + this.user + '" data-usertext="' + this.usertext + '" class="ns1blankspaceSearch ns1blankspaceNetworkUser">' +
-													this.firstname + ' ' + this.surname + ' (' + this.contactbusinesstext + ')' +
-													'</td></tr>');
-										});			
-														
-										aHTML.push('</table>');
-										
-										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-										$(ns1blankspace.xhtml.container).offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
-
-										$('.ns1blankspaceNetworkUser').click(function(event)
+											ns1blankspace.status.message('No users found');
+										}
+										else	
 										{
-											var aXHTMLElementID = (event.target.id).split('-');
-											iXHTMLElementContextID = aXHTMLElementID[1];
+											ns1blankspace.status.message('');
 
-											$('#' + sXHTMLInputElementID).val($('#' + event.target.id).attr("data-usertext"))
-											$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
-											$(ns1blankspace.xhtml.container).hide();
-										});
+											aHTML.push('<table class="ns1blankspaceSearchMedium" style="width: 350px;">');
+
+											$(oResponse.data.rows).each(function()
+											{
+												aHTML.push('<tr>' +
+														'<td id="ns1blankspaceNetworkUser-' + this.user + '" data-usertext="' + this.usertext + '" class="ns1blankspaceSearch ns1blankspaceNetworkUser">' +
+														this.firstname + ' ' + this.surname + ' (' + this.contactbusinesstext + ')' +
+														'</td></tr>');
+											});			
+															
+											aHTML.push('</table>');
+											
+											$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+
+											$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+											$(ns1blankspace.xhtml.container).offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height() + 8, left: $('#' + sXHTMLInputElementID).offset().left});
+
+											$('.ns1blankspaceNetworkUser').click(function(event)
+											{
+												var aXHTMLElementID = (event.target.id).split('-');
+												iXHTMLElementContextID = aXHTMLElementID[1];
+
+												$('#' + sXHTMLInputElementID).val($('#' + event.target.id).attr("data-usertext"))
+												$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
+												$(ns1blankspace.xhtml.container).hide();
+											});
+										}	
 									}	
 								}
 				}
