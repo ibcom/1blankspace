@@ -1471,7 +1471,8 @@ ns1blankspace.logon =
 						{	
 							if (oResponse.url === '#' || ns1blankspace.option.logonStayOnDocument)
 							{
-								document.location.reload(false);
+								//document.location.reload(false);
+								ns1blankspace.app.start();
 							}	
 							else
 							{
