@@ -2643,7 +2643,7 @@ ns1blankspace.search =
 
 						if (sMethodFilter === undefined)
 						{
-							sMethodFilter = $('#' + sXHTMLInputElementID).attr("data-methodfilter");
+							sMethodFilter = $('#' + sXHTMLInputElementID).attr("data-methodFilter");
 						}
 					}	
 					
@@ -2701,8 +2701,13 @@ ns1blankspace.search =
 									
 									if (sMethodFilter)
 									{
-										var aMethodFilter = sMethodFilter.split('-');
-										oSearch.addFilter(aMethodFilter[0], aMethodFilter[1], aMethodFilter[2]);
+										var aMethodFilters = sMethodFilter.split('|');
+
+										$.each(aMethodFilters, function(i) 
+										{
+											var aMethodFilter = this.split('-');
+											oSearch.addFilter(aMethodFilter[0], aMethodFilter[1], aMethodFilter[2]);
+										});	
 									}	
 
 									if (sXHTMLParentInputElementID != undefined)
@@ -4750,7 +4755,7 @@ ns1blankspace.extend =
 											aHTML.push('<td class="ns1blankspaceSelect">' +
 												'<input id="ns1blankspaceStructure_' + this.id + '" class="ns1blankspaceSelect"' +
 												' data-method="SETUP_STRUCTURE_ELEMENT_OPTION_SEARCH"' +
-												' data-methodfilter="element-EQUAL_TO-' + this.id + '"' +
+												' data-methodFilter="element-EQUAL_TO-' + this.id + '"' +
 												
 												'>');
 										}
