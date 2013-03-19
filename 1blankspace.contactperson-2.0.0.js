@@ -78,7 +78,7 @@ ns1blankspace.contactPerson =
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
-						oSearch.method = 'CONTACT_PERSON_SEARCHX';		
+						oSearch.method = 'CONTACT_PERSON_SEARCH';		
 						oSearch.addField('firstname,surname');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
