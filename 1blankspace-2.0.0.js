@@ -466,7 +466,7 @@ ns1blankspace.app =
 									if (oResponse.error.errornotes == 'Not logged on')
 									{
 										ns1blankspace.history.sendOnLogon = oAjaxSettings;
-										ns1blankspace.app.start();		
+										ns1blankspace.app.start({message: 'You need to logon again.'});		
 									}	
 									else if ((oResponse.error.errornotes).toLowerCase().indexOf('undefined') != 0)
 									{
@@ -690,7 +690,7 @@ ns1blankspace.app =
 					}	
 				},
 							
-	start: 		function ()
+	start: 		function (oParam)
 				{
 					$.ajax(
 					{
@@ -711,7 +711,7 @@ ns1blankspace.app =
 
 							if (data.status === 'ER')
 							{
-								ns1blankspace.logon.show();
+								ns1blankspace.logon.show(oParam);
 							}
 							else
 							{
@@ -1362,11 +1362,13 @@ ns1blankspace.logon =
 					var aHTML = [];
 					var h = -1;
 					var sXHTMLElementID = '#ns1blankspaceViewControl';
+					var sMessage = '';
 					
 					if (oParam != undefined)
 					{
 						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.message != undefined) {sMessage = oParam.message}
 					}	
 						
 					aHTML.push('<table id="ns1blankspaceLogonContainer" style="width:700px;">');
@@ -1408,6 +1410,12 @@ ns1blankspace.logon =
 					aHTML.push('<td id="ns1blankspaceLogonStatus" style="vertical-align:middle;">' +
 								'&nbsp;' +
 								'</td></tr>');
+
+					if (sMessage != '')
+					{
+						aHTML.push('<tr><td class="ns1blankspaceSub" colspan=2 style="padding-top: 15px;">' +
+									sMessage + '</td></tr>');
+					}	
 
 					aHTML.push('</table>');					
 					
@@ -1776,9 +1784,23 @@ ns1blankspace.logOff = function ()
 								ns1blankspace.app.start();
 							}
 						}
-					})
-					
-					
+					})	
+				}
+
+ns1blankspace.logOut = function ()
+				{
+					$.ajax(
+					{
+						type: 'GET',
+						async: false,
+						url: ns1blankspace.util.endpointURI('CORE_LOGOFF'),
+						dataType: 'json',
+						global: false,
+						success: function ()
+						{
+							ns1blankspace.status.message('Logged out.')
+						}
+					})		
 				}
 
 ns1blankspace.refresh = function ()

@@ -4,7 +4,7 @@
  * http://1blankspace.com/license
  * 01 FEB 2010
  */
-if (ns1blankspace === undefined) {ns1blankspace = {}}
+if (ns1blankspace === undefined) {var ns1blankspace = {}}
 if (ns1blankspace.data === undefined) {ns1blankspace.data = {}}
 
 ns1blankspace.data.searchComparison =
@@ -268,6 +268,7 @@ function getResults(aoParm1, aoParm2) {
 		async: this.async,
 		url: sURL,
 		data: sXML,
+		global: true,
 		success: function(asData) { 
 				getResultsComplete(asData, fCallbackFunction)
 			},		
