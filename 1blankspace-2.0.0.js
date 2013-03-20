@@ -4663,11 +4663,13 @@ ns1blankspace.extend =
 				{
 					var iObject = ns1blankspace.object;
 					var aCategories = [];
+					var bSetApp = true;
 
 					if (oParam != undefined)
 					{
 						if (oParam.object != undefined) {iObject = oParam.object}	
-						if (oParam.categories != undefined) {aCategories = oParam.categories}	
+						if (oParam.categories != undefined) {aCategories = oParam.categories}
+						if (oParam.setApp != undefined) {bSetApp = oParam.setApp}
 					}
 					else
 					{
@@ -4678,7 +4680,6 @@ ns1blankspace.extend =
 					{	
 						ns1blankspace.objectExtended = false;
 
-						//$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()
 						$(ns1blankspace.extend.structure).each(function()
 						{
 							if (this.elements === undefined)
@@ -4695,8 +4696,11 @@ ns1blankspace.extend =
 
 						if (aCategories.length == 0)
 						{
-							oParam.extendInit = true;
-							ns1blankspace.app.set(oParam)
+							if (bSetApp)
+							{	
+								oParam.extendInit = true;
+								ns1blankspace.app.set(oParam);
+							}	
 						}	
 						else
 						{	
@@ -4728,8 +4732,11 @@ ns1blankspace.extend =
 							}	
 						});
 
-						oParam.extendInit = true;
-						ns1blankspace.app.set(oParam)
+						if (bSetApp)
+						{	
+							oParam.extendInit = true;
+							ns1blankspace.app.set(oParam)
+						}	
 					}
 				},
 

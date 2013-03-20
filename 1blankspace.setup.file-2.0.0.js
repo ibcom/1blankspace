@@ -179,7 +179,7 @@ ns1blankspace.setup.file =
 										}
 										else
 										{	
-											ns1blankspace.setup.file.import.upload(oParam);
+											ns1blankspace.setup.file.import.upload.init(oParam);
 										}
 									});	
 								},
@@ -220,9 +220,26 @@ ns1blankspace.setup.file =
 														var sName;
 														var sCaption;
 
-														aHTML.push('<table class="ns1blankspaceColumn2">');
+														var oParameters = oResponse.data.parameters;
 
-														$.each(oResponse.data.parameters, function() 
+														oParam.setApp = false;
+														ns1blankspace.extend.init(oParam);
+
+														$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function(i,v)
+														{
+															$(v.elements).each(function(j,k)
+															{
+																if (k.datatype == 1)
+																{	
+																	var p = {};
+																	p.name = '.se' + k.id;
+																	p.datatype = 'text';
+																	oParameters.push(p);
+																}	
+															});
+														})
+
+														$.each(oParameters, function() 
 														{
 															if (this.datatype == 'text')
 															{	
@@ -231,6 +248,8 @@ ns1blankspace.setup.file =
 														});	
 
 														aParameters.sort()
+
+														aHTML.push('<table class="ns1blankspaceColumn2">');
 
 														$.each(aParameters, function(i,k) 
 														{
@@ -241,7 +260,7 @@ ns1blankspace.setup.file =
 
 															aHTML.push('<tr><td style="width:15px;" class="ns1blankspaceRow">' +
 																			'<input type="checkbox" id="ns1blankspaceTemplate_include_' + sName + '"' +
-																			' data-name="' + this.name + '"' +
+																			' data-name="' + sName + '"' +
 																			' class="ns1blankspaceTemplateInclude">' +
 																			'</td>');
 												
@@ -258,10 +277,15 @@ ns1blankspace.setup.file =
 
 														var aHTML = [];
 													
-														aHTML.push('<table class="ns1blankspaceColumn2">');
+														aHTML.push('<table class="ns1blankspaceColumn2" style="table-layout:fixed;">');
 																
 														aHTML.push('<tr><td><span id="ns1blankspaceTemplateCreateFile" class="ns1blankspaceAction">' +
-																		'Create File</span></td></tr>');
+																		'Create file</span></td></tr>');
+
+														aHTML.push('<tr><td><span id="ns1blankspaceTemplateShow" class="ns1blankspaceAction">' +
+																		'Show as list</span></td></tr>');
+
+														aHTML.push('<tr><td id="ns1blankspaceTemplateShowList" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
 
 														aHTML.push('</table>');					
 														
@@ -269,12 +293,23 @@ ns1blankspace.setup.file =
 														
 														$('#ns1blankspaceTemplateCreateFile').button(
 														{
-															text: "Create File"
+															text: "Create file"
 														})
 														.click(function()
 														{	
 															ns1blankspace.setup.file.import.template.create(oParam)
-														});
+														})
+														.css('width', '120px');
+
+														$('#ns1blankspaceTemplateShow').button(
+														{
+															text: "Show as list"
+														})
+														.click(function()
+														{	
+															ns1blankspace.setup.file.import.template.show(oParam)
+														})
+														.css('width', '120px');
 													}
 
 													//CORE_FILE_MANAGE
@@ -310,31 +345,109 @@ ns1blankspace.setup.file =
 															dataType: 'json',
 															success: function(data)
 															{
-																ns1blankspace.status.message('File created');
+																ns1blankspace.status.message('Template file created');
 																window.open(data.link);
 															}
 														});
 													}	
-												}
+												},
+
+									show: 	 	function(oParam)
+												{
+													if ($("input.ns1blankspaceTemplateInclude:checked").length == 0)
+													{
+														ns1blankspace.status.error('Need to select at least one field.')
+													}	
+													else
+													{
+														var aParameters = [];
+
+														$("input.ns1blankspaceTemplateInclude:checked").each(function()
+														{
+															aParameters.push($(this).attr('data-name'));
+														});
+																	
+														$('#ns1blankspaceTemplateShowList').html(aParameters.join(',<br />'));
+													}	
+												}			
 								},						
 
-					upload: 	function ()
-								{
-									//show upload button - like bank reco import
-									//SETUP_IMPORT_MANAGE
-								},
+					upload: 	{
+									init:		function (oParam, oResponse)
+												{
+													var iObjectContext = ns1blankspace.objectContext;
 
-					validate: 	function ()
-								{
-									//Check file against returnParameter
-									//CORE_ATTACHMENT_READ - first row
-								},
+													if (oParam != undefined)
+													{
+														if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+													}		
+														
+													if (oResponse == undefined)
+													{	
+														var aHTML = [];
+														
+														aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>');							
+														aHTML.push(ns1blankspace.attachments.upload.show(
+																		{	
+																			object: 28,
+																			objectContext: -1,
+																			label: ''
+																		}));
+														
+														aHTML.push('</td></tr></table>');
 
-					process: 	function ()
-								{
-									//CORE_ATTACHMENT_READ
-									//Go through each and do search & manage
-								}
+														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
+														$('#ns1blankspaceFileImportShowColumn2').html('');
+														
+														$('#ns1blankspaceUpload').button(
+														{
+															label: "Upload Data File"
+														})
+														.click(function()
+														{
+															if ($('#oFile0').val() == '')
+															{
+																ns1blankspace.status.error("Need to select a file.");
+															}
+															else
+															{
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI('SETUP_IMPORT_MANAGE'),
+																	success: function(data) {
+																		ns1blankspace.setup.file.import.upload.init(oParam, data);
+																	}
+																});
+															}
+														});
+													}
+													else
+													{
+														if (oResponse.status == 'OK')
+														{
+															$('#objectcontext').val(oResponse.id);	
+															ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.setup.file.import.upload.validate});
+														}	
+													}	
+												},
+								
+									validate: 	function (oParam, oResponse)
+												{
+													$('#ns1blankspaceFileImportShowColumn1').html('Validating file');
+													//Check file against returnParameter
+													//CORE_ATTACHMENT_READ - first row
+
+
+
+												},
+
+									process: 	function ()
+												{
+													//CORE_ATTACHMENT_READ
+													//Go through each and do search & manage
+												}
+								}			
 				},
 
 	export: 	{
