@@ -14,6 +14,7 @@ ns1blankspace.setup.file =
 					ns1blankspace.app.reset();
 					ns1blankspace.objectParentName = 'setup';
 					ns1blankspace.objectName = 'file';
+					ns1blankspace.object = 29;
 					//ns1blankspace.viewName = 'File Import & Export';
 					ns1blankspace.viewName = 'File Import';					
 					ns1blankspace.app.set(oParam);
@@ -38,8 +39,8 @@ ns1blankspace.setup.file =
 					aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 									'Quick Import</td></tr>');
 					
-					aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl">' +
-									'History</td></tr>');
+					//aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl">' +
+					//				'History</td></tr>');
 
 					aHTML.push('</table>');	
 
@@ -143,7 +144,7 @@ ns1blankspace.setup.file =
 									aHTML.push('<table>' +
 													'<tr>' +
 													'<td id="ns1blankspaceFileImportShowColumn1"></td>' +
-													'<td id="ns1blankspaceFileImportShowColumn2" style="width:250px;"></td>' +
+													'<td id="ns1blankspaceFileImportShowColumn2" style="width:300px;"></td>' +
 													'</tr>' +
 													'</table>');				
 									
@@ -310,11 +311,7 @@ ns1blankspace.setup.file =
 															ns1blankspace.setup.file.import.template.show(oParam)
 														})
 														.css('width', '120px');
-													}
-
-													//CORE_FILE_MANAGE
-													//Use returnParameters + structures linked to object
-													
+													}													
 												},
 
 									create: 	function(oParam)
@@ -389,7 +386,7 @@ ns1blankspace.setup.file =
 														aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>');							
 														aHTML.push(ns1blankspace.attachments.upload.show(
 																		{	
-																			object: 28,
+																			object: 29,
 																			objectContext: -1,
 																			label: ''
 																		}));
@@ -401,7 +398,7 @@ ns1blankspace.setup.file =
 														
 														$('#ns1blankspaceUpload').button(
 														{
-															label: "Upload Data File"
+															label: "Upload for checking"
 														})
 														.click(function()
 														{
@@ -425,28 +422,223 @@ ns1blankspace.setup.file =
 													else
 													{
 														if (oResponse.status == 'OK')
-														{
+														{	
+															ns1blankspace.objectContext = oResponse.id;
 															$('#objectcontext').val(oResponse.id);	
-															ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.setup.file.import.upload.validate});
+															ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.setup.file.import.upload.show});
 														}	
 													}	
 												},
 								
+									show: 	function (oParam, oResponse)
+												{
+													$('#ns1blankspaceFileImportShowColumn1').html(
+														'<table class="ns1blankspaceColumn2"><tr><td>' +
+															ns1blankspace.xhtml.loading + '</td></tr></table>');
+
+													if (oResponse == undefined)
+													{	
+														var oSearch = new AdvancedSearch();
+														oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+														oSearch.addField('type,filename,description,download,modifieddate,attachment');
+														oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
+														oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);		
+														oSearch.sort('id', 'desc');
+														oSearch.getResults(function(data) {ns1blankspace.setup.file.import.upload.show(oParam, data)});
+													}
+													else
+													{	
+														if (oResponse.data.rows.length != 0)
+														{	
+															ns1blankspace.setup.file.import.data.attachment = oResponse.data.rows[0].id;
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_READ'),
+																data: 'id=' + ns1blankspace.util.fs(oResponse.data.rows[0].id),
+																success: function(data)
+																{
+																	var aHTML = [];
+
+																	aHTML.push('<table class="ns1blankspaceColumn2">' +
+																					'<tr class="ns1blankspaceCaption">' +
+																					'<td class="ns1blankspaceHeaderCaption">Fields</td>' +
+																					'<td class="ns1blankspaceHeaderCaption">Sample Data</td>' +
+																					'</tr>');
+
+																	var oRow = data.data.rows[0];
+																	for (var key in oRow)
+																	{					
+																		if (key != 'dataerrors')
+																		{											
+																			aHTML.push('<tr><td id="ns1blankspaceTemplate_caption_' + key + '" class="ns1blankspaceRow">' +
+																						key + '</td>');
+
+																			aHTML.push('<td style="font-size:0.75em;" class="ns1blankspaceRow ns1blankspaceSub">' +
+																							oRow[key] + '</td></tr>');
+																		}																			   
+																	}
+
+																	aHTML.push('</table>');
+
+																	$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
+
+																	var aHTML = [];
+													
+																	aHTML.push('<table class="ns1blankspaceColumn2" style="table-layout:fixed;">');
+																			
+																	aHTML.push('<tr><td><span id="ns1blankspaceUploadShow" class="ns1blankspaceAction">' +
+																					'Check all data</span></td></tr>');
+
+																	aHTML.push('<tr><td style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																					'This will check all data and report any data errors.<br /><br />' +
+																					' You can then proceed to import the data into your space.' +
+																					'</td></tr>');
+
+																	aHTML.push('</table>');					
+																	
+																	$('#ns1blankspaceFileImportShowColumn2').html(aHTML.join(''));
+																	
+																	$('#ns1blankspaceUploadShow').button(
+																	{
+																		text: "Check all"
+																	})
+																	.click(function()
+																	{	
+																		ns1blankspace.setup.file.import.upload.validate(oParam)
+																	});
+																}
+															});
+														}	
+													}	
+
+												},
+
 									validate: 	function (oParam, oResponse)
 												{
-													$('#ns1blankspaceFileImportShowColumn1').html('Validating file');
-													//Check file against returnParameter
-													//CORE_ATTACHMENT_READ - first row
+													if (oResponse == undefined)
+													{	
+														ns1blankspace.status.working();
 
+														ns1blankspace.setup.file.import.data.rows = [];
 
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_READ'),
+															data: 'id=' + ns1blankspace.util.fs(ns1blankspace.setup.file.import.data.attachment),
+															success: function(data)
+															{
+																ns1blankspace.setup.file.import.upload.validate(oParam, data);
+															}
+														});
+													}
+													else
+													{
+														ns1blankspace.setup.file.import.data.rows =
+																	ns1blankspace.setup.file.import.data.rows.concat(oResponse.data.rows)
 
+														if (oResponse.morerows == 'true')
+														{
+															var sData =	'id=' + ns1blankspace.util.fs(oResponse.moreid) +
+																			'&startrow=' + parseInt(oResponse.rows) + parseInt(oResponse.startrow) + 
+																			'&rows=' + ns1blankspace.util.fs(oResponse.rows);
+															
+															$.ajax(
+															{
+																type: 'GET',
+																url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
+																data: sData,
+																dataType: 'json',
+																success: function(data){ns1blankspace.setup.file.import.upload.validate(oParam, data)}
+															});
+														}	
+														else
+														{
+															ns1blankspace.status.message(ns1blankspace.setup.file.import.data.rows.length + ' rows');
+
+															var aDataErrors = $.grep(ns1blankspace.setup.file.import.data.rows, function (a) {return a.dataerrors != '';});
+
+															if (aDataErrors.length == 0)
+															{
+																var aHTML = [];
+													
+																aHTML.push('<table class="ns1blankspaceColumn2">');
+																	
+																aHTML.push('<tr><td style="font-size:0.75em;" class="ns1blankspaceSub">' +
+																				'There are no data read errors.' +
+																				'</td></tr>');
+
+																aHTML.push('<tr><td style="padding-top:10px;""><span id="ns1blankspaceUploadImport" class="ns1blankspaceAction">' +
+																				'Import now</span></td></tr>');
+
+																aHTML.push('</table>');					
+																
+																$('#ns1blankspaceFileImportShowColumn2').html(aHTML.join(''));
+																
+																$('#ns1blankspaceUploadImport').button(
+																{
+																	text: "Import all data now"
+																})
+																.click(function()
+																{	
+																	ns1blankspace.setup.file.import.upload.process(oParam)
+																});
+															}
+															else
+															{
+																var aHTML = [];
+													
+																aHTML.push('<table class="ns1blankspaceColumn2">');
+																	
+																aHTML.push('<tr><td style="font-size:0.75em;" class="ns1blankspaceSub">' +
+																				'There are data read errors, which you need to fix before importing.' +
+																				'</td></tr>');
+
+																aHTML.push('</table>');					
+																
+																$('#ns1blankspaceFileImportShowColumn2').html(aHTML.join(''));
+
+																var aHTML = [];
+
+																aHTML.push('<table class="ns1blankspaceColumn2">'+
+																				'<tr class="ns1blankspaceCaption">' +
+																					'<td class="ns1blankspaceHeaderCaption">Errors</td>' +
+																					'</tr>');
+
+																$.each(aDataErrors, function(i,k) 
+																{
+																	var sKey = '';
+
+																	for (var key in k)
+																	{					
+																		if (key != 'dataerrors')
+																		{											
+																			sKey = k[key];
+																		}																			   
+																	}
+
+																	aHTML.push('<tr><td id="ns1blankspaceImportError_error_' + i + '" class="ns1blankspaceRow">' +
+																					k.dataerrors + '</td></tr>');
+
+																	//aHTML.push('<td style="width:75px; font-size:0.75em;" id="nns1blankspaceImportError_notes_' + sName + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																	//				aData.dataerrors + '</td></tr>');
+																});		
+
+																aHTML.push('</table>');
+
+																$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
+
+															}
+														}	
+													}	
 												},
 
 									process: 	function ()
 												{
-													//CORE_ATTACHMENT_READ
-													//Go through each and do search & manage
-												}
+													//_MANAGE
+												}			
 								}			
 				},
 
