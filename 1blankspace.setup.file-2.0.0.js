@@ -143,7 +143,7 @@ ns1blankspace.setup.file =
 									aHTML.push('<table>' +
 													'<tr>' +
 													'<td id="ns1blankspaceFileImportShowColumn1"></td>' +
-													'<td id="ns1blankspaceFileImportShowColumn2" style="width:120px;></td>' +
+													'<td id="ns1blankspaceFileImportShowColumn2" style="width:250px;"></td>' +
 													'</tr>' +
 													'</table>');				
 									
@@ -175,7 +175,7 @@ ns1blankspace.setup.file =
 
 										if (aID[1] == 1)
 										{	
-											ns1blankspace.setup.file.import.sample(oParam);
+											ns1blankspace.setup.file.import.template.init(oParam);
 										}
 										else
 										{	
@@ -184,73 +184,139 @@ ns1blankspace.setup.file =
 									});	
 								},
 
-					sample: 	function (oParam, oResponse)
-								{
-									var iObject = ns1blankspace.object;
+					template: 	{
+									init: 		function (oParam, oResponse)
+												{
+													var iObject = ns1blankspace.object;
 
-									if (oParam != undefined)
-									{
-										if (oParam.object != undefined) {iObject = oParam.object}
-									}		
+													if (oParam != undefined)
+													{
+														if (oParam.object != undefined) {iObject = oParam.object}
+													}		
 
-									if (iObject == 32)
-									{ 
-										ns1blankspace.setup.file.import.data.method = 'CONTACT_PERSON_SEARCH';
-										ns1blankspace.setup.file.import.data.objectName = 'contactperson';
-									}
+													if (iObject == 32)
+													{ 
+														ns1blankspace.setup.file.import.data.method = 'CONTACT_PERSON_SEARCH';
+														ns1blankspace.setup.file.import.data.objectName = 'contactperson';
+													}
 
-									if (iObject == 12)
-									{ 
-										ns1blankspace.setup.file.import.data.method = 'CONTACT_BUSINESS_SEARCH';
-										ns1blankspace.setup.file.import.data.objectName = 'contactbusiness';
-									}
+													if (iObject == 12)
+													{ 
+														ns1blankspace.setup.file.import.data.method = 'CONTACT_BUSINESS_SEARCH';
+														ns1blankspace.setup.file.import.data.objectName = 'contactbusiness';
+													}
 
-									if (oResponse == undefined)
-									{	
-										var oSearch = new AdvancedSearch();
-										oSearch.method = ns1blankspace.setup.file.import.data.method;
-										oSearch.returnParameters = ns1blankspace.setup.file.import.data.objectName;
-										oSearch.getResults(function(data) {ns1blankspace.setup.file.import.sample(oParam, data)});
-									}
-									else
-									{
-										var aHTML = [];
-										var aParameters = [];
-										var sName;
-										var sCaption;
+													if (oResponse == undefined)
+													{	
+														var oSearch = new AdvancedSearch();
+														oSearch.method = ns1blankspace.setup.file.import.data.method;
+														oSearch.returnParameters = ns1blankspace.setup.file.import.data.objectName;
+														oSearch.getResults(function(data) {ns1blankspace.setup.file.import.template.init(oParam, data)});
+													}
+													else
+													{
+														var aHTML = [];
+														var aParameters = [];
+														var sName;
+														var sCaption;
 
-										aHTML.push('<table class="ns1blankspaceColumn2">');
+														aHTML.push('<table class="ns1blankspaceColumn2">');
 
-										$.each(oResponse.data.parameters, function() 
-										{
-											aParameters.push((this.name).split(".")[1]);
-										});	
+														$.each(oResponse.data.parameters, function() 
+														{
+															if (this.datatype == 'text')
+															{	
+																aParameters.push(this.name);
+															}	
+														});	
 
-										aParameters.sort()
+														aParameters.sort()
 
-										$.each(aParameters, function() 
-										{
-											sName = this;
-											sCaption = sName;  //to be translated to more user friendly names
+														$.each(aParameters, function(i,k) 
+														{
+															var oParameter = $.grep(oResponse.data.parameters, function (a) { return a.name == k})[0];
 
-											aHTML.push('<tr><td style="width:15px;">' +
-															'<input type="checkbox" id="ns1blankspaceTemplate_include_' + sName + '"' +
-															' data-name="' + this.name + '"' +
-															' class="ns1blankspaceTemplateInclude">' +
-															'</td>');
-								
-											aHTML.push('<td style="width:200px;" id="ns1blankspaceTemplate_caption_' + sName + '" class="ns1blankspaceRow">' +
-															sCaption + '</td></tr>');
-										});		
+															sName = (k).split(".")[1]
+															sCaption = sName;  //to be translated to more user friendly names
 
-										aHTML.push('</table>');
+															aHTML.push('<tr><td style="width:15px;" class="ns1blankspaceRow">' +
+																			'<input type="checkbox" id="ns1blankspaceTemplate_include_' + sName + '"' +
+																			' data-name="' + this.name + '"' +
+																			' class="ns1blankspaceTemplateInclude">' +
+																			'</td>');
+												
+															aHTML.push('<td id="ns1blankspaceTemplate_caption_' + sName + '" class="ns1blankspaceRow">' +
+																			sCaption + '</td>');
 
-										$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
-									}
+															aHTML.push('<td style="width:50px; font-size:0.75em;" id="ns1blankspaceTemplate_caption_' + sName + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																			oParameter.datatype + '</td></tr>');
+														});		
 
-									//CORE_FILE_MANAGE
-									//Use returnParameters + structures linked to object
-								},
+														aHTML.push('</table>');
+
+														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
+
+														var aHTML = [];
+													
+														aHTML.push('<table class="ns1blankspaceColumn2">');
+																
+														aHTML.push('<tr><td><span id="ns1blankspaceTemplateCreateFile" class="ns1blankspaceAction">' +
+																		'Create File</span></td></tr>');
+
+														aHTML.push('</table>');					
+														
+														$('#ns1blankspaceFileImportShowColumn2').html(aHTML.join(''));
+														
+														$('#ns1blankspaceTemplateCreateFile').button(
+														{
+															text: "Create File"
+														})
+														.click(function()
+														{	
+															ns1blankspace.setup.file.import.template.create(oParam)
+														});
+													}
+
+													//CORE_FILE_MANAGE
+													//Use returnParameters + structures linked to object
+													
+												},
+
+									create: 	function(oParam)
+												{
+													if ($("input.ns1blankspaceTemplateInclude:checked").length == 0)
+													{
+														ns1blankspace.status.error('Need to select at least one field.')
+													}	
+													else
+													{
+														ns1blankspace.status.working();
+
+														var aParameters = [];
+
+														$("input.ns1blankspaceTemplateInclude:checked").each(function()
+														{
+															aParameters.push(this);
+														});
+																	
+														var sData = 'filedata=' + aParameters.join(',');
+														sData =+ '&filename=import_template.csv';
+														
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('CORE_FILE_MANAGE'),
+															data: sData,
+															dataType: 'json',
+															success: function(data)
+															{
+																ns1blankspace.status.message('File created');
+																window.open(data.link);
+															}
+														});
+													}	
+												}
+								},						
 
 					upload: 	function ()
 								{
