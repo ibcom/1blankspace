@@ -188,6 +188,9 @@ ns1blankspace.setup.file =
 					template: 	{
 									init: 		function (oParam, oResponse)
 												{
+													//Break and add .show:
+													// can then use .init() later in .upload.validate()
+													
 													var iObject = ns1blankspace.object;
 
 													if (oParam != undefined)
@@ -308,7 +311,7 @@ ns1blankspace.setup.file =
 														})
 														.click(function()
 														{	
-															ns1blankspace.setup.file.import.template.show(oParam)
+															ns1blankspace.setup.file.import.template.list(oParam)
 														})
 														.css('width', '120px');
 													}													
@@ -349,7 +352,7 @@ ns1blankspace.setup.file =
 													}	
 												},
 
-									show: 	 	function(oParam)
+									list: 	 	function(oParam)
 												{
 													if ($("input.ns1blankspaceTemplateInclude:checked").length == 0)
 													{
@@ -477,7 +480,9 @@ ns1blankspace.setup.file =
 																	for (var key in oRow)
 																	{					
 																		if (key != 'dataerrors')
-																		{											
+																		{		
+																			//Check that key is valid - like when creating template.
+
 																			aHTML.push('<tr><td id="ns1blankspaceTemplate_caption_' + key + '" class="ns1blankspaceRow">' +
 																						key + '</td>');
 
@@ -489,6 +494,7 @@ ns1blankspace.setup.file =
 																	aHTML.push('</table>');
 
 																	$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
+
 
 																	var aHTML = [];
 													
@@ -643,7 +649,7 @@ ns1blankspace.setup.file =
 
 									process: 	function ()
 												{
-													//_MANAGE
+													//Go through ns1blankspace.setup.file.import.data.rows and send _MANAGE
 												}			
 								}			
 				},
