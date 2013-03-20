@@ -57,6 +57,29 @@ $(function()
 	
 });
 
+ns1blankspace.extend.structure = 
+[
+	{
+		title: 'Extra',
+		object: 32,
+		category: 273,
+		elements: undefined
+	},
+	{
+		title: 'Extra 2',
+		object: 32,
+		category: 274,
+		elements: undefined,
+		show: undefined
+	},
+	{
+		title: 'Extra',
+		object: 12,
+		category: 273,
+		elements: undefined
+	}
+]
+
 ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" id="ns1blankspaceLoading" src="/jscripts/images/1blankspace.loading.square.20.gif">';
 ns1blankspace.xhtml.loadingSmall = '<img class="ns1blankspaceLoadingSmall" id="ns1blankspaceLoadingSmall" src="/jscripts/images/1blankspace.loading.square.10.gif">';
 ns1blankspace.xhtml.editorCSS = '';
