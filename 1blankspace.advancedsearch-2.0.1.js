@@ -150,9 +150,13 @@ function addOperator(asOperator) {
 
 function addField(asField) {
 	//can be comma delimited list
-	var aFields = asField.split(',');
 
-	for (var i = 0; i < aFields.length; i++) this.field.push(aFields[i]);
+	if (asField.length > 0)
+	{	
+		var aFields = asField.split(',');
+
+		for (var i = 0; i < aFields.length; i++) this.field.push(aFields[i]);
+	}		
 }
 
 function addSummaryField(asField) {

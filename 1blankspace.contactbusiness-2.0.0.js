@@ -159,7 +159,7 @@ ns1blankspace.contactBusiness =
 															',mailingaddress1,mailingaddress2,mailingsuburb,mailingpostcode,mailingstate,mailingcountry,' +
 															'notes,primarycontactperson,modifieddate');
 
-										if (ns1blankspace.objectExtended) {oSearch.addField(ns1blankspace.extend.elements())};
+										oSearch.addField(ns1blankspace.extend.elements());
 										
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.rf = 'json';
