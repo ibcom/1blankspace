@@ -70,6 +70,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 										type: 'GET',
 										url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_MANAGE&setdefault=1',
 										dataType: 'json',
+										global: false,
 										success: function(data) {ns1blankspace.financial.initData(oParam, data)}
 									});
 								}

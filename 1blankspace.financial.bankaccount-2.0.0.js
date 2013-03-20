@@ -2173,33 +2173,39 @@ ns1blankspace.financial.bankAccount =
 
 										$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
 										
-										$('#ns1blankspaceUpload').button(
+										$('input.ns1blankspaceUpload').change(function()
 										{
-											label: "Upload Bank File"
-										})
-										.click(function()
-										{
-											if ($('#oFile0').val() == '')
+											if ($(this).val() != '')
 											{
-												ns1blankspace.status.error("Need to select a file.");
-											}
-											else
-											{
-												var sData = 'processeddate=' + Date.today().toString("dd-MMM-yyyy");
-												sData += '&bankaccount=' + ns1blankspace.objectContext;
-												
-												$.ajax(
+												$('#ns1blankspaceUpload').button(
 												{
-													type: 'POST',
-													url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_MANAGE'),
-													data: sData,
-													dataType: 'json',
-													success: function(data) {
-														ns1blankspace.financial.bankAccount.import.add(oParam, data);
+													label: "Upload Bank File"
+												})
+												.click(function()
+												{
+													if ($('#oFile0').val() == '')
+													{
+														ns1blankspace.status.error("Need to select a file.");
+													}
+													else
+													{
+														var sData = 'processeddate=' + Date.today().toString("dd-MMM-yyyy");
+														sData += '&bankaccount=' + ns1blankspace.objectContext;
+														
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_MANAGE'),
+															data: sData,
+															dataType: 'json',
+															success: function(data) {
+																ns1blankspace.financial.bankAccount.import.add(oParam, data);
+															}
+														});
 													}
 												});
 											}
-										});
+										});	
 									}
 									else
 									{

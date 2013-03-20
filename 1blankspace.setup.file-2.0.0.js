@@ -23,7 +23,7 @@ ns1blankspace.setup.file =
 	home:		function ()
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
+					$('#ns1blankspaceViewControlAction').button({disabled: true});
 					$('#ns1blankspaceViewControlNew').button({disabled: true});
 					
 					var aHTML = [];
@@ -396,28 +396,34 @@ ns1blankspace.setup.file =
 														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
 														$('#ns1blankspaceFileImportShowColumn2').html('');
 														
-														$('#ns1blankspaceUpload').button(
+														$('input.ns1blankspaceUpload').change(function()
 														{
-															label: "Upload for checking"
-														})
-														.click(function()
-														{
-															if ($('#oFile0').val() == '')
+															if ($(this).val() != '')
 															{
-																ns1blankspace.status.error("Need to select a file.");
-															}
-															else
-															{
-																$.ajax(
+																$('#ns1blankspaceUpload').button(
 																{
-																	type: 'POST',
-																	url: ns1blankspace.util.endpointURI('SETUP_IMPORT_MANAGE'),
-																	success: function(data) {
-																		ns1blankspace.setup.file.import.upload.init(oParam, data);
+																	label: "Upload for checking"
+																})
+																.click(function()
+																{
+																	if ($('#oFile0').val() == '')
+																	{
+																		ns1blankspace.status.error("Need to select a file.");
+																	}
+																	else
+																	{
+																		$.ajax(
+																		{
+																			type: 'POST',
+																			url: ns1blankspace.util.endpointURI('SETUP_IMPORT_MANAGE'),
+																			success: function(data) {
+																				ns1blankspace.setup.file.import.upload.init(oParam, data);
+																			}
+																		});
 																	}
 																});
-															}
-														});
+															}	
+														})
 													}
 													else
 													{
