@@ -467,13 +467,14 @@ ns1blankspace.setup.file =
 																		var sClass = '';
 																		var bFieldErrors = false;
 																		ns1blankspace.setup.file.import.data.fields = [];
+																		ns1blankspace.setup.file.import.data.keyFields = [];
 
 																		var oRow = data.data.rows[0];
 
 																		for (var key in oRow)
 																		{					
 																			if (key != 'dataerrors')
-																			{		
+																			{														
 																				sClass = '';
 
 																				var aKey = $.grep(ns1blankspace.setup.file.data.fields, function (a) {return (a.name).split('.')[1] == key;});
@@ -694,35 +695,44 @@ ns1blankspace.setup.file =
 
 													if (iRow < ns1blankspace.setup.file.import.data.rows.length)
 													{	
-														var oRow = ns1blankspace.setup.file.import.data.rows[iRow]; 
-													
-														sData = '_=';
-
-														$.each(ns1blankspace.setup.file.import.data.fields, function(j,v)
+														var oRow = ns1blankspace.setup.file.import.data.rows[iRow];
+														
+														var oSearch = new AdvancedSearch();
+														oSearch.method = ns1blankspace.setup.file.import.data.method + '_SEARCH';
+														oSearch.addFilter(ns1blankspace.setup.file.import.data.fields[0], 'EQUAL_TO', oRow[ns1blankspace.setup.file.import.data.fields[0]])
+														oSearch.getResults(function(oResponse)
 														{
-															sData += '&' + v + '=' + ns1blankspace.util.fs(oRow[v]);
-														});
+															var oRow = ns1blankspace.setup.file.import.data.rows[iRow]; 
+															
+															sData = 'id=';
+															if (oResponse.data.rows.length != 0) {sData += oResponse.data.rows[0].id}
 
-														$.ajax(
-														{
-															type: 'POST',
-															url: ns1blankspace.util.endpointURI(ns1blankspace.setup.file.import.data.method + '_MANAGE'),
-															data: sData,
-															dataType: 'json',
-															global: false,
-															success: 	function(data)
-																		{
-																			if (data.status == 'ER')
+															$.each(ns1blankspace.setup.file.import.data.fields, function(j,v)
+															{	
+																sData += '&' + v + '=' + ns1blankspace.util.fs(oRow[v]);
+															});
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI(ns1blankspace.setup.file.import.data.method + '_MANAGE'),
+																data: sData,
+																dataType: 'json',
+																global: false,
+																success: 	function(data)
 																			{
-																				ns1blankspace.setup.file.import.data.errors.push(
+																				if (data.status == 'ER')
 																				{
-																					data: sData,
-																					error: data.error
-																				});
-																			}	
-																			oParam.row = iRow + 1;
-																			ns1blankspace.setup.file.import.upload.process(oParam, data)
-																		}
+																					ns1blankspace.setup.file.import.data.errors.push(
+																					{
+																						data: sData,
+																						error: data.error
+																					});
+																				}	
+																				oParam.row = iRow + 1;
+																				ns1blankspace.setup.file.import.upload.process(oParam, data)
+																			}
+															});
 														});
 													}
 													else
