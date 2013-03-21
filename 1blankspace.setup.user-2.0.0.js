@@ -863,7 +863,7 @@ ns1blankspace.setup.user =
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Can switch into other space' +
+										'Can switch into other spaces' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
