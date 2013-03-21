@@ -150,7 +150,6 @@ ns1blankspace.themes =
 		cssURI: 			'/jscripts/1blankspace.theme.wall-2.0.0.css',
 		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
 	}
-
 ]	
 
 ns1blankspace.views = 

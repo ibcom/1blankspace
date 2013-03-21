@@ -914,7 +914,7 @@ ns1blankspace.setup.website =
 												label: "Add"
 											})
 											.click(function() {
-												 ns1blankspace.setup.website.pages.add(oParam);
+												 ns1blankspace.setup.website.pages.edit(oParam);
 											})
 										}	
 									
