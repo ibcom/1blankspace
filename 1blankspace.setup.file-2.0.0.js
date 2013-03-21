@@ -466,6 +466,7 @@ ns1blankspace.setup.file =
 
 																		var sClass = '';
 																		var bFieldErrors = false;
+																		ns1blankspace.setup.file.import.data.fields = [];
 
 																		var oRow = data.data.rows[0];
 
@@ -482,6 +483,10 @@ ns1blankspace.setup.file =
 																					sClass = ' ns1blankspaceError';
 																					bFieldErrors = true;
 																				}
+																				else
+																				{
+																					ns1blankspace.setup.file.import.data.fields.push(key);
+																				}	
 
 																				aHTML.push('<tr><td id="ns1blankspaceTemplate_caption_' + key + '" class="ns1blankspaceRow' + sClass + '">' +
 																							key + '</td>');
@@ -657,9 +662,128 @@ ns1blankspace.setup.file =
 													}	
 												},
 
-									process: 	function ()
+									process: 	function (oParam)
 												{
-													//Go through ns1blankspace.setup.file.import.data.rows and send _MANAGE
+													var iObject;
+													var sData;
+													var iRow = 0;
+
+													if (oParam != undefined)
+													{
+														if (oParam.object != undefined) {iObject = oParam.object}
+														if (oParam.row != undefined) {iRow = oParam.row}
+													}	
+
+													if (iRow == 0)
+													{
+														ns1blankspace.status.working();
+														var aHTML = [];
+													
+														aHTML.push('<table class="ns1blankspaceColumn2">');
+															
+														aHTML.push('<tr><td style="font-size:0.75em;" class="ns1blankspaceSub">' +
+																		'Importing...' +
+																		'</td></tr>');
+
+														aHTML.push('</table>');					
+														
+														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
+
+														ns1blankspace.setup.file.import.data.errors = [];
+													}
+
+													if (iRow < ns1blankspace.setup.file.import.data.rows.length)
+													{	
+														var oRow = ns1blankspace.setup.file.import.data.rows[iRow]; 
+													
+														sData = '_=';
+
+														$.each(ns1blankspace.setup.file.import.data.fields, function(j,v)
+														{
+															sData += '&' + v + '=' + ns1blankspace.util.fs(oRow[v]);
+														});
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI(ns1blankspace.setup.file.import.data.method + '_MANAGE'),
+															data: sData,
+															dataType: 'json',
+															global: false,
+															success: 	function(data)
+																		{
+																			if (data.status == 'ER')
+																			{
+																				ns1blankspace.setup.file.import.data.errors.push(
+																				{
+																					data: sData,
+																					error: data.error
+																				});
+																			}	
+																			oParam.row = iRow + 1;
+																			ns1blankspace.setup.file.import.upload.process(oParam, data)
+																		}
+														});
+													}
+													else
+													{
+														ns1blankspace.status.message('Import completed');
+
+														var aHTML = [];
+													
+														aHTML.push('<table class="ns1blankspaceColumn2">');
+
+														aHTML.push('<tr><td style="font-size:0.875em;" class="ns1blankspaceSub">');
+
+														if (ns1blankspace.setup.file.import.data.errors.length == 0)
+														{	
+															aHTML.push('No errors during import.');																
+														}
+														else if (ns1blankspace.setup.file.import.data.errors.length == 0)
+														{
+															aHTML.push('There was one error during import');
+														}
+														else
+														{
+															aHTML.push('There were ' + ns1blankspace.setup.file.import.data.errors.length + ' errors during import.');
+														}
+
+														aHTML.push('</td></tr></table>');					
+																
+														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));	
+
+														if (ns1blankspace.setup.file.import.data.errors.length > 0)
+														{
+															var aHTML = [];
+
+															aHTML.push('<table class="ns1blankspaceColumn2">');
+
+															$.each(ns1blankspace.setup.file.import.data.errors, function(i,k) 
+															{
+																var aData = (this.data).split('&');
+																var aDataValues = [];
+
+																$.each(aData, function()
+																{
+																	var aValue = (this).split('=');
+																	if (aValue[0] != '_')
+																	{	
+																		aDataValues.push(decodeURIComponent(aValue[1]));
+																	}	
+																});
+
+																aHTML.push('<tr><td id="ns1blankspaceImportDataError_error_' + i + '" class="ns1blankspaceRow">' +
+																				aDataValues.join('<br />') + '</td>');
+
+																aHTML.push('<td style="font-size:0.75em;" id="nns1blankspaceImportError_notes_' + i + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																				this.error.errornotes + '</td></tr>');
+															});		
+
+															aHTML.push('</table>');
+
+															$('#ns1blankspaceFileImportShowColumn2').html(aHTML.join(''));
+														}	
+													}	
 												}			
 								}			
 				},
@@ -691,20 +815,20 @@ ns1blankspace.setup.file =
 
 									if (iObject == 32)
 									{ 
-										ns1blankspace.setup.file.import.data.method = 'CONTACT_PERSON_SEARCH';
+										ns1blankspace.setup.file.import.data.method = 'CONTACT_PERSON';
 										ns1blankspace.setup.file.import.data.objectName = 'contactperson';
 									}
 
 									if (iObject == 12)
 									{ 
-										ns1blankspace.setup.file.import.data.method = 'CONTACT_BUSINESS_SEARCH';
+										ns1blankspace.setup.file.import.data.method = 'CONTACT_BUSINESS';
 										ns1blankspace.setup.file.import.data.objectName = 'contactbusiness';
 									}
 
 									if (oResponse == undefined)
 									{	
 										var oSearch = new AdvancedSearch();
-										oSearch.method = ns1blankspace.setup.file.import.data.method;
+										oSearch.method = ns1blankspace.setup.file.import.data.method + '_SEARCH';
 										oSearch.returnParameters = ns1blankspace.setup.file.import.data.objectName;
 										oSearch.getResults(function(data) {ns1blankspace.setup.file.util.getFields(oParam, data)});
 									}
