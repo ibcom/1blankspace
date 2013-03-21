@@ -129,7 +129,7 @@ ns1blankspace.setup.networkGroup =
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_NETWORK_GROUP_SEARCH';
-										oSearch.addField('title,notes');
+										oSearch.addField('title,notes,modifieddate');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.networkGroup.show(data)});
 									}
@@ -328,14 +328,17 @@ ns1blankspace.setup.networkGroup =
 
 						aHTML.push('<table class="ns1blankspace">');
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">');
-						
 						if (ns1blankspace.objectContextData.notes == '')
 						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">');
 							aHTML.push(ns1blankspace.objectContextData.notes);
+							aHTML.push('</td></tr>');
 						}
 				
-						aHTML.push('</td></tr>');
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
+										Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+										'</td></tr>');
 
 						aHTML.push('</table>');					
 						
@@ -379,7 +382,7 @@ ns1blankspace.setup.networkGroup =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<textarea rows="10" cols="35" id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti"></textarea>' +
+										'<textarea rows="5" cols="35" id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMultiLarge"></textarea>' +
 										'</td></tr>');
 					
 						aHTML.push('</table>');					
@@ -395,20 +398,18 @@ ns1blankspace.setup.networkGroup =
 				},
 
 	users:		{
-					show:		function ()
+					show:		function (oResponse)
 								{
 									var aHTML = [];
 									
-									if ($('#ns1blankspaceMainUsers').attr('data-loading') == '1')
-									{
-										$('#ns1blankspaceMainUsers').attr('data-loading', '');
-
+									if (oResponse == undefined)
+									{	
 										aHTML.push('<table class="ns1blankspaceContainer">');
 
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceUsersColumn1" class="ns1blankspaceColumn1Flexible" ></td>' +
-														'<td id="ns1blankspaceUsersColumn2" class="ns1blankspaceColumn2" style="width: 100px"></td>' +
+														'<td id="ns1blankspaceUsersColumn2" class="ns1blankspaceColumn2" style="width: 200px"></td>' +
 														'</tr>' + 
 														'</table>');
 
@@ -436,12 +437,193 @@ ns1blankspace.setup.networkGroup =
 										})
 										.click(function() {
 											ns1blankspace.setup.networkGroup.users.add();
-										})
+										});
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_USER_NETWORK_GROUP_SEARCH';
+										oSearch.addField('usertext');
+										oSearch.addFilter('networkgroup', 'EQUAL_TO',  ns1blankspace.objectContext);
+										oSearch.getResults(function(data) {ns1blankspace.setup.networkGroup.users.show(data)});
+									}
+									else
+									{
+										var aHTML = [];
+											
+										if (oResponse.data.rows.length === 0)
+										{
+											aHTML.push('<table>');
+											aHTML.push('<tr>');
+											aHTML.push('<td class="ns1blankspaceNothing">No users.</td>');
+											aHTML.push('</tr>');
+											aHTML.push('</table>');
+											
+											$('#' + sXHTMLElementID).html(aHTML.join(''));
+											$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
+										}
+										else
+										{
+											aHTML.push('<table id="ns1blankspaceNetworkGroupUsers">');
 										
-									}	
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">User</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
+
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push(ns1blankspace.setup.networkGroup.users.row(this));
+											});
+									    	
+											aHTML.push('</table>');
+
+											ns1blankspace.render.page.show(
+											   {
+												xhtmlElementID: 'ns1blankspaceUsersColumn1',
+												xhtmlContext: 'NetworkGroupUsers',
+												xhtml: aHTML.join(''),
+												showMore: (oResponse.morerows === "true"),
+												more: oResponse.moreid,
+												rows: ns1blankspace.option.defaultRows,
+												functionShowRow: ns1blankspace.setup.networkGroup.users.row,
+												functionNewPage: 'ns1blankspace.setup.networkGroup.users.bind()',
+												type: 'json'
+											   }); 	
+												
+											ns1blankspace.setup.networkGroup.users.bind();
+										}
+									}
 								},
 
-					add:		function (oResponse)
+					row:		function (oRow)
+								{
+									var aHTML = [];
+									
+									aHTML.push('<tr>');
+									
+									aHTML.push('<td id="ns1blankspaceNetworkGroupUsers_user-' + oRow.id + '" class="ns1blankspaceRow">' +
+													oRow.usertext + '</a></td>');
+														
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+													'<span id="ns1blankspaceNetworkGroupUsers_remove-' + oRow.id + 
+													'" class="ns1blankspaceRowRemove">&nbsp;</span></td>');
+									
+									aHTML.push('</tr>');
+									
+									return aHTML.join('');
+								},
+
+					bind:		function ()
+								{
+									$('#ns1blankspaceNetworkGroupUsers .ns1blankspaceRowRemove').button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icon-close"
+										}
+									})
+									.click(function()
+									{
+										ns1blankspace.setup.networkGroup.users.remove(this.id)
+									})
+									.css('width', '15px')
+									.css('height', '20px');
+								},
+
+					remove: 	function (sXHTMLElementID)
+								{
+									var aSearch = sXHTMLElementID.split('-');
+									var sElementId = aSearch[0];
+									var sSearchContext = aSearch[1];
+									
+									var sData = 'id=' + ns1blankspace.util.fs(sSearchContext) + '&remove=1';
+												
+									$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('SETUP_USER_NETWORK_GROUP_MANAGE'),
+											data: sData,
+											dataType: 'json',
+											success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
+										});
+								},			
+
+					add: 		function (oParam)
+								{
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspaceMain">');
+									
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'User' +
+													'</td></tr>' +
+													'<tr class="ns1blankspaceSelect">' +
+													'<td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceSetupUserName" class="ns1blankspaceText">' +
+													'</td></tr>');
+
+									aHTML.push('<tr><td style="padding-bottom:10px;" class="ns1blankspaceNothing">You need to search by the surname<br />and enter at least 3 characters.</td></tr>');
+
+									aHTML.push('</table>');					
+										
+									$('#ns1blankspaceUsersColumn1').html(aHTML.join(''));
+										
+									$('#ns1blankspaceSetupUserName').keyup(function()
+									{
+										if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+								        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.setup.user.external.search('ns1blankspaceSetupUserName')", ns1blankspace.option.typingWait);
+									});	
+											
+									var aHTML = [];
+
+									aHTML.push('<table class="ns1blankspaceColumn2">');
+											
+									aHTML.push('<tr><td><span style="width:70px;" class="ns1blankspaceAction" id="ns1blankspaceSetupUserSave">' +
+														'Save</span></td></tr>');
+
+									aHTML.push('<tr><td><span style="width:70px;" class="ns1blankspaceAction" id="ns1blankspaceSetupUserCancel">' +
+														'Cancel</span></td></tr>');				
+									
+									aHTML.push('</table>');					
+									
+									$('#ns1blankspaceUsersColumn2').html(aHTML.join(''));
+
+									$('#ns1blankspaceSetupUserSave').button(
+									{
+										text: "Save"
+									})
+									.click(function() 
+									{
+										ns1blankspace.status.working();
+
+										var sData = 'networkgroup=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+										sData += '&user=' + ns1blankspace.util.fs($('#ns1blankspaceSetupUserName').attr("data-id"));
+									
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('SETUP_USER_NETWORK_GROUP_MANAGE'),
+											data: sData,
+											dataType: 'json',
+											success: function() {
+												ns1blankspace.setup.networkGroup.users.show(oParam);
+												ns1blankspace.status.message('User Added');
+											}
+										});
+									})
+									
+									$('#ns1blankspaceSetupUserCancel').button(
+									{
+										text: "Cancel"
+									})
+									.click(function() 
+									{
+										ns1blankspace.setup.networkGroup.users.show(oParam);
+									});
+								},
+
+					addBulk:	function (oResponse)
 								{
 									if (oResponse == undefined)
 									{
