@@ -67,7 +67,7 @@ ns1blankspace.setup.networkGroup =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table>' +
-											'<tr><td class="ns1blankspaceNothing">Click New to create a tdInterfaceNetworkGroupHomeMostLikely.</td></tr>' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create a network group.</td></tr>' +
 											'</table>');
 						}
 						else
