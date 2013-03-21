@@ -308,6 +308,10 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.setup.file',
 		source: '/jscripts/1blankspace.setup.file-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.developer.space',
+		source: '/jscripts/1blankspace.developer.space-2.0.0.js'
 	}
 ]
 

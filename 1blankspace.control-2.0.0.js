@@ -486,6 +486,24 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
+		title: "File Import",
+		parentnamespace: "setup",
+		namespace: "file",
+		endpoint: "SETUP_IMPORT_MANAGE", 
+		show: true,
+		group: 4,
+		type: 2
+	},
+	{
+		title: "Other Spaces",
+		parentnamespace: "developer",
+		namespace: "space",
+		endpoint: "ADMIN_SPACE_MANAGE", 
+		show: true,
+		group: 4,
+		type: 2
+	},
+	{
 		title: "Support",
 		namespace: "supportIssue",
 		endpoint: "SETUP", 
@@ -1157,6 +1175,24 @@ ns1blankspace.control =
 																				'<td class="ns1blankspaceViewControl">' +
 																				'<span id="ns1blankspaceViewControl_setup_space" class="ns1blankspaceViewControl">' +
 																				'My&nbsp;Space&nbsp;/&nbsp;Account</span></td></tr>');
+														}
+
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Other Spaces';})[0];
+														if (oViewport ? oViewport.show : false)
+														{
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_developer_space" class="ns1blankspaceViewControl">' +
+																				'Other&nbsp;Spaces</span></td></tr>');
+														}
+
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'File Import';})[0];
+														if (oViewport ? oViewport.show : false)
+														{
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_file" class="ns1blankspaceViewControl">' +
+																				'File&nbsp;Import</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Support';})[0];
