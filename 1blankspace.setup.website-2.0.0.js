@@ -533,7 +533,7 @@ ns1blankspace.setup.website =
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Email' +
+										'Email (optional)' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -1425,8 +1425,7 @@ ns1blankspace.setup.website =
 								}
 							})
 							.click(function() {
-								ns1blankspace.setup.website.forms({showHome: false});
-								ns1blankspace.setup.websiteForm.search.send(this.id, {source: 1})
+								ns1blankspace.setup.websiteForm.init({id: (this.id).split('-')[1]});
 							})
 							.css('width', '15px')
 							.css('height', '17px');

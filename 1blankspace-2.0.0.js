@@ -475,7 +475,7 @@ ns1blankspace.app =
 									{
 										ns1blankspace.history.sendOnLogon = oAjaxSettings;
 										ns1blankspace.app.start({message: 'You need to logon again.'});		
-									}	
+									}
 									else if ((oResponse.error.errornotes).toLowerCase().indexOf('undefined') != -1)
 									{
 										ns1blankspace.status.error('There is an error with this app.');
@@ -716,6 +716,7 @@ ns1blankspace.app =
 							
 	start: 		function (oParam)
 				{
+					if (oParam == undefined) {oParam = {}}
 					$.ajax(
 					{
 						type: 'GET',
@@ -735,6 +736,11 @@ ns1blankspace.app =
 
 							if (data.status === 'ER')
 							{
+								if (data.error.errornotes == 'No rights (No Access to method)')
+								{
+									oParam.message = 'You do not have any access rights to this space.';		
+								}
+
 								ns1blankspace.logon.show(oParam);
 							}
 							else
