@@ -952,9 +952,9 @@ ns1blankspace.setup.websiteForm =
 													
 													aHTML.push('<tr class="ns1blankspaceRow">');
 																		
-													aHTML.push('<td id="tns1blankspacedElementOption_title-" class="ns1blankspaceRow ns1blankspacedElementOption"></td>');
+													aHTML.push('<td id="ns1blankspaceElementOption_title-" class="ns1blankspaceRow ns1blankspacedElementOption"></td>');
 													
-													aHTML.push('<td id="ns1blankspacedElementOption_points-" class="ns1blankspaceRow ns1blankspacedElementOption" style="width:40px;">' +
+													aHTML.push('<td id="ns1blankspaceElementOption_points-" class="ns1blankspaceRow ns1blankspacedElementOption" style="width:40px;">' +
 																					'</td>');
 
 													aHTML.push('<td style="width:23px;text-align:right;" id="tdElementOption_remove-' + 
