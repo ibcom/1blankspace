@@ -597,7 +597,7 @@ ns1blankspace.action =
 						
 						var aHTML = [];
 							
-						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -627,9 +627,8 @@ ns1blankspace.action =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioBillingStatus3" name="radioBillingStatus" value="3"/>Not sure' +
-											'<br  /><input type="radio" id="radioBillingStatus2" name="radioBilling" value="2"/>Don\'t bill' +
-											'<br /><input type="radio" id="radioBillingStatus1" name="radioBillingStatus" value="1"/>Billable' +
-											
+											'<br  /><input type="radio" id="radioBillingStatus2" name="radioBillingStatus" value="2"/>Don\'t bill' +
+											'<br /><input type="radio" id="radioBillingStatus1" name="radioBillingStatus" value="1"/>Billable' +		
 											'<br /><input type="radio" id="radioBillingStatus4" name="radioBillingStatus" value="4"/>Approved for billing' +
 											'<br /><input type="radio" id="radioBillingStatus5" name="radioBillingStatus" value="5"/>Has been billed' +
 										'</td></tr>');
@@ -659,7 +658,7 @@ ns1blankspace.action =
 							$('#ns1blankspaceDetailsPerson').attr("data-id", ns1blankspace.objectContextData.contactperson);
 							$('#ns1blankspaceDetailsPerson').val(ns1blankspace.objectContextData.contactpersontext);
 
-							$('#ns1blankspaceDetailsDurationMinutes').val(ns1blankspace.objectContextData.totaltimeminutes);
+							$('#ns1blankspaceDetailsDurationMinutes').val(ns1blankspace.objectContextData.totaltimemin);
 						}
 						else
 						{
@@ -751,11 +750,11 @@ ns1blankspace.action =
 										{
 											if (ns1blankspace.objectContext != -1)
 											{
-												sData += 'id=' + ns1blankspace.objectContext;
+												var sData = 'id=' + ns1blankspace.objectContext;
 											}
 											else
 											{
-												sData += 'id=';
+												var sData = 'id=';
 											}
 											
 											if ($('#ns1blankspaceMainDetails').html() != '')
@@ -768,7 +767,8 @@ ns1blankspace.action =
 												sData += '&contactperson=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPerson').attr("data-id"));
 												sData += '&actionby=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsActionBy').attr("data-id"));
 												sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
-												
+												sData += '&billingstatus=' + ns1blankspace.util.fs($('input[name="radioBillingStatus"]:checked').val());
+												sData += '&totaltimemin=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDurationMinutes').val());		
 											}
 											
 											if ($('#ns1blankspaceMainDescription').html() != '')

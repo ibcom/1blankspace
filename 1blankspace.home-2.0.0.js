@@ -136,21 +136,18 @@ ns1blankspace.home =
 
 ns1blankspace.home.options = 
 {
-	show: 		function ()
+	show: 		function (oElement)
 				{
 					var aHTML = [];
 					
-					aHTML.push('<table id="ns1blankspaceHomeOptions" class="ns1blankspaceContainer">');
+					aHTML.push('<table id="ns1blankspaceHomeOptions" class="ns1blankspaceSearchMedium">');
 						
-					if (gbRoleBase)
-					{
-						aHTML.push('<tr><td id="ns1blankspaceHomeOptionsMyStartPage" class="ns1blankspace">' +
+					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsMyStartPage" class="ns1blankspaceRowSelect">' +
 											'<a href="/index.asp?Site=475&p=asms%2Fmystartpage.asp" target="_blank">' +
 											'My Start Page (Classic)</a></td></tr>');
 									
-						aHTML.push('<tr"><td id="ns1blankspaceHomeOptionsCalendar" class="ns1blankspace">' +
+					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsCalendar" class="ns1blankspaceRowSelect">' +
 											'Calendar</td></tr>');
-					};
 					
 					aHTML.push('</table>');
 						
@@ -164,7 +161,7 @@ ns1blankspace.home.options =
 						$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
 						$(ns1blankspace.xhtml.container).html("&nbsp;");
 						$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left });
+						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() + 7, left: $(oElement).offset().left });
 						$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 						ns1blankspace.home.options.bind();
 					}

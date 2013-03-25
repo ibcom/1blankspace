@@ -518,11 +518,13 @@ ns1blankspace.control =
 				{
 					var iStep = 1;
 					var aRoles = [];
+					var fPostInit;
 
 					if (oParam != undefined)
 					{
 						if (oParam.step != undefined) {iStep = oParam.step}
 						if (oParam.roles != undefined) {aRoles = oParam.roles}
+						if (oParam.postInit != undefined) {fPostInit = oParam.postInit}
 					}
 					else
 					{
@@ -603,7 +605,9 @@ ns1blankspace.control =
 								if (sData != '')
 								{
 									ns1blankspace.control.user.changeTheme({theme: sData});
-								}	
+								}
+
+								if (fPostInit) {fPostInit()}
 							}
 						})
 					}		
