@@ -1258,7 +1258,7 @@ ns1blankspace.setup.website =
 										if (oResponse.data.rows.length != 0)
 										{
 											var oObjectContext = oResponse.data.rows[0];
-											$('#ns1blankspaceSetupWebsitePageTitle').val(oObjectContext.documenttitle);
+											$('#ns1blankspaceSetupWebsitePageTitle').val(oObjectContext.documenttitle.formatXHTML());
 											$('#ns1blankspaceSetupWebsitePageURL').val(oObjectContext.documenturl);
 											
 											$('#ns1blankspaceEditText' + ns1blankspace.counter.editor).val((oObjectContext.documentcontent).formatXHTML());

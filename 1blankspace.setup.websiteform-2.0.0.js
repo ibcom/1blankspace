@@ -1030,8 +1030,8 @@ ns1blankspace.setup.websiteForm =
 																	var sData = 'id=' + aElement[1];
 
 																	sData += '&element=' + $('#ns1blankspaceElementOptions').attr('data-structureElement');
-																	sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceElementOption_title-' + aElement[1]).html());
-																	sData += '&points=' + ns1blankspace.util.fs($('#ns1blankspaceElementOption_points-' + aElement[1]).html());
+																	sData += '&title=' + ns1blankspace.util.fs($('#td_ns1blankspaceElementOption_title-' + aElement[1]).html());
+																	sData += '&points=' + ns1blankspace.util.fs($('#td_ns1blankspaceElementOption_points-' + aElement[1]).html());
 
 																	if (aElement[1] == '' && $('#' + sElementId).html() == '')
 																	{
@@ -1049,7 +1049,7 @@ ns1blankspace.setup.websiteForm =
 																			dataType: 'json',
 																			success: function(data) 
 																					{
-																						if (data.notes == 'ADDED')
+																						if (data.notes == 'saved')
 																						{
 																							$('#ns1blankspaceElementOption_title-').attr('id','ns1blankspaceElementOption_title-' + data.id);
 																							$('#ns1blankspaceElementOption_points-').attr('id','ns1blankspaceElementOption_points-' + data.id);
