@@ -50,7 +50,7 @@ ns1blankspace.action =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function (oParam)
+	home:		function (oResponse, oParam)
 				{
 					var bCalendar = false;
 					
