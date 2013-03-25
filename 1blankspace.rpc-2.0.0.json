@@ -313,7 +313,7 @@
 		{"title":"MESSAGING_CONVERSATION_POST_COMMENT_SEARCH", "advancedSearch":"true", "rpc":"false"},
 		{"title":"MESSAGING_CONVERSATION_POST_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_CONVERSATION_POST_SEARCH", "advancedSearch":"false", "rpc":"false"},
-		{"title":"MESSAGING_CONVERSATION_SEARCH", "advancedSearch":"false", "rpc":"false"},
+		{"title":"MESSAGING_CONVERSATION_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"MESSAGING_CONVERSATION_SUMMARY_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_EMAIL_ACCOUNT_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_EMAIL_ACTION_MANAGE", "advancedSearch":"false", "rpc":"false"},
