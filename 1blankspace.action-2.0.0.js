@@ -292,6 +292,10 @@ ns1blankspace.action =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
+						aHTML.push('</table>');					
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
 										'Description</td></tr>');
 
@@ -607,6 +611,29 @@ ns1blankspace.action =
 											'<br /><input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Completed' +
 										'</td></tr>');	
 
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Duration (Minutes)' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceDetailsDurationMinutes" class="ns1blankspaceText" style="width:120px;">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Billing' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioBillingStatus3" name="radioBillingStatus" value="3"/>Not sure' +
+											'<br  /><input type="radio" id="radioBillingStatus2" name="radioBilling" value="2"/>Don\'t bill' +
+											'<br /><input type="radio" id="radioBillingStatus1" name="radioBillingStatus" value="1"/>Billable' +
+											
+											'<br /><input type="radio" id="radioBillingStatus4" name="radioBillingStatus" value="4"/>Approved for billing' +
+											'<br /><input type="radio" id="radioBillingStatus5" name="radioBillingStatus" value="5"/>Has been billed' +
+										'</td></tr>');
+
 						aHTML.push('</table>');					
 							
 						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
@@ -624,16 +651,20 @@ ns1blankspace.action =
 							$('#ns1blankspaceDetailsActionBy').attr("data-id", ns1blankspace.objectContextData.actionby);
 							$('#ns1blankspaceDetailsActionBy').val(ns1blankspace.objectContextData.actionbytext);
 							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
+							$('[name="radioBillingStatus"][value="' + ns1blankspace.objectContextData.billingstatus + '"]').attr('checked', true);
 							
 							$('#ns1blankspaceDetailsBusiness').attr("data-id", ns1blankspace.objectContextData.contactbusiness);
 							$('#ns1blankspaceDetailsBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
 							
 							$('#ns1blankspaceDetailsPerson').attr("data-id", ns1blankspace.objectContextData.contactperson);
 							$('#ns1blankspaceDetailsPerson').val(ns1blankspace.objectContextData.contactpersontext);
+
+							$('#ns1blankspaceDetailsDurationMinutes').val(ns1blankspace.objectContextData.totaltimeminutes);
 						}
 						else
 						{
 							$('[name="radioStatus"][value="1"]').attr('checked', true);
+							$('[name="radioBillingStatus"][value="3"]').attr('checked', true);
 							
 							if (ns1blankspace.data.contactbusiness != undefined)
 							{$('#ns1blankspaceDetailsBusiness').attr("data-id", ns1blankspace.action.contactbusiness);}
