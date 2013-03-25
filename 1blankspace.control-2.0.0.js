@@ -88,6 +88,7 @@ ns1blankspace.option.helpURI = 'http://community.mydigitalstructure.com';
 ns1blankspace.option.taxVATCaption = 'GST';
 ns1blankspace.option.taxPayrollCaption = 'Employee';
 ns1blankspace.option.taxBusinessCaption = 'Business';
+ns1blankspace.option.postInit = undefined;
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}
@@ -518,7 +519,7 @@ ns1blankspace.control =
 				{
 					var iStep = 1;
 					var aRoles = [];
-					var fPostInit;
+					var fPostInit = ns1blankspace.option.postInit;
 
 					if (oParam != undefined)
 					{
