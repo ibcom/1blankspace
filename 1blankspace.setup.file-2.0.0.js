@@ -516,7 +516,7 @@ ns1blankspace.setup.file =
 																						' You will need to fix this and then re-upload the file.' +
 																						'</td></tr>');
 																		}
-																		else if (bFieldErrors)
+																		else if (bTooManyRows)
 																		{
 																			aHTML.push('<tr><td style="font-size:0.875em;" class="ns1blankspaceSub">' +
 																						'There is a 500 record limit per upload.<br /><br >Please split the file up into 500 record files.' +
@@ -566,8 +566,11 @@ ns1blankspace.setup.file =
 															url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_READ'),
 															data: 'id=' + ns1blankspace.util.fs(ns1blankspace.setup.file.import.data.attachment),
 															success: function(data)
-															{
-																ns1blankspace.setup.file.import.upload.validate(oParam, data);
+															{	
+																if (data.rowlimit == 'N')
+																{	
+																	ns1blankspace.setup.file.import.upload.validate(oParam, data);
+																}
 															}
 														});
 													}
