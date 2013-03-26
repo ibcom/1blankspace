@@ -1190,7 +1190,7 @@ ns1blankspace.setup.user =
 															'<input id="ns1blankspaceSetupUserExternalName" class="ns1blankspaceText">' +
 															'</td></tr>');
 
-											aHTML.push('<tr><td style="padding-bottom:10px;" class="ns1blankspaceNothing">You need to search by the surname<br />and enter at least 3 characters.</td></tr>');
+											aHTML.push('<tr><td style="padding-bottom:10px;" class="ns1blankspaceNothing">You need to enter all the surname for the search to work.</td></tr>');
 									
 											aHTML.push('<tr><td class="ns1blankspace">Access</td></tr>' +
 															'<tr><td class="ns1blankspaceRadio">' +

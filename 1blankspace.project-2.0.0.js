@@ -145,7 +145,7 @@ ns1blankspace.project =
 										
 										if (sSearchText == undefined)
 										{
-											sSearchText = $(ns1blankspace.xhtml.container).val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -246,6 +246,10 @@ ns1blankspace.project =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
+
+						aHTML.push('</table>');		
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
 										'Description</td></tr>');

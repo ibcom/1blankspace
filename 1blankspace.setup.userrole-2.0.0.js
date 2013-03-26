@@ -414,7 +414,7 @@ ns1blankspace.setup.userRole =
 									
 									if (ns1blankspace.objectContext != -1)
 									{
-										sData += '&id=' + ns1blankspace.util.endpointURI(ns1blankspace.objectContext);	
+										sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);	
 									}	
 									
 									if ($('#ns1blankspaceMainDetails').html() != '')

@@ -292,6 +292,10 @@ ns1blankspace.opportunity =
 						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">Summary</td></tr>');
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">Details</td></tr>');
+
+						aHTML.push('</table>');					
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlContact" class="ns1blankspaceControl">Contact</td></tr>');
 					

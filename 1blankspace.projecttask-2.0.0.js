@@ -69,17 +69,20 @@ ns1blankspace.projectTask =
 						else
 						{
 							aHTML.push('<table>');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption" colspan=2>MOST LIKELY</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
-														'" class="ns1blankspaceMostLikely">' +
+														'" class="ns1blankspaceMostLikely" style="width: 90px;">' +
 														this.reference +
 														'</td>');
-								
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+																		this.title + '</td>');
+
 								aHTML.push('</tr>');
 							});
 							
@@ -147,7 +150,7 @@ ns1blankspace.projectTask =
 										
 										if (sSearchText == undefined)
 										{
-											sSearchText = $(ns1blankspace.xhtml.container).val();
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
 										}	
 										
 										if (iSource == ns1blankspace.data.searchSource.browse)
@@ -164,14 +167,11 @@ ns1blankspace.projectTask =
 											ns1blankspace.container.position({xhtmlElementID: sElementID});
 											ns1blankspace.search.start(sElementID);
 											
-											$.ajax(
-											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('PROJECT_TASK_SEARCH'),
-												data: 'quicksearch=' + ns1blankspace.util.fs(sSearchText),
-												dataType: 'json',
-												success: function(data) {ns1blankspace.projectTask.search.process(oParam, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'PROJECT_TASK_SEARCH';
+											oSearch.addField('reference,title');
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.getResults(function(data) {ns1blankspace.projectTask.search.process(oParam, data)});
 										}
 									};	
 								},
@@ -200,7 +200,12 @@ ns1blankspace.projectTask =
 											}
 											
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'-' + this.id + '">' +
+															'reference-' + this.id + '">' +
+															this.reference +
+															'</td>');
+
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+															'title-' + this.id + '">' +
 															this.title +
 															'</td>');
 											
@@ -220,7 +225,7 @@ ns1blankspace.projectTask =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.project.task.search.send(event.target.id, {source: 1});
+											ns1blankspace.projectTask.search.send(event.target.id, {source: 1});
 										});
 									}
 
@@ -248,6 +253,10 @@ ns1blankspace.projectTask =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
+
+						aHTML.push('</table>');		
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlDescription" class="ns1blankspaceControl">' +
 										'Description</td></tr>');
