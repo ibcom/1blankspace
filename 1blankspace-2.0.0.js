@@ -1246,7 +1246,7 @@ ns1blankspace.app =
 											move: false
 											});	
 
-										if (typeof(oNS.home) === 'function') {oNS.home(undefined, oParam)} else {oNS.home.show(undefined, oParam)}
+										if (typeof(oNS.home) === 'function') {oNS.home()} else {oNS.home.show()}
 									}
 								}		
 							}
