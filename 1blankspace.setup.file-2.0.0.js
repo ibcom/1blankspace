@@ -210,7 +210,7 @@ ns1blankspace.setup.file =
 
 														$.each(ns1blankspace.setup.file.data.fields, function() 
 														{
-															if (this.datatype == 'text')
+															if (this.datatype == 'text' || this.datatype == 'date')
 															{	
 																aParameters.push(this.name);
 															}	
