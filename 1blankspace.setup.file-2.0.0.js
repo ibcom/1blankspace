@@ -164,10 +164,8 @@ ns1blankspace.setup.file =
 
 									aHTML.push('</div>');
 
-									//$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
-
 									$('#ns1blankspaceFileImportObject').after(aHTML.join(''));
-								
+
 									$('#ns1blankspaceFileImportTask').buttonset().css('font-size', '0.75em');
 
 									$('#ns1blankspaceFileImportTask :radio').click(function()
@@ -370,6 +368,10 @@ ns1blankspace.setup.file =
 														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
 														$('#ns1blankspaceFileImportShowColumn2').html('');
 														
+														$('#ns1blankspaceUpload').html('<div style="padding-left:3px; margin-top:8px; font-size:0.875em;" class="ns1blankspaceSub">' +
+																		'500 records maximum per file.' +
+																		'</div>');
+
 														$('input.ns1blankspaceUpload').change(function()
 														{
 															if ($(this).val() != '')
@@ -466,6 +468,8 @@ ns1blankspace.setup.file =
 
 																		var sClass = '';
 																		var bFieldErrors = false;
+																		var bTooManyRows = (data.rowlimit == 'Y');
+
 																		ns1blankspace.setup.file.import.data.fields = [];
 																		ns1blankspace.setup.file.import.data.keyFields = [];
 
@@ -510,6 +514,12 @@ ns1blankspace.setup.file =
 																			aHTML.push('<tr><td style="font-size:0.875em;" class="ns1blankspaceSub">' +
 																						'Some of the fields in the file have invalid names.  ' +
 																						' You will need to fix this and then re-upload the file.' +
+																						'</td></tr>');
+																		}
+																		else if (bFieldErrors)
+																		{
+																			aHTML.push('<tr><td style="font-size:0.875em;" class="ns1blankspaceSub">' +
+																						'There is a 500 record limit per upload.<br /><br >Please split the file up into 500 record files.' +
 																						'</td></tr>');
 																		}
 																		else
@@ -569,7 +579,7 @@ ns1blankspace.setup.file =
 														if (oResponse.morerows == 'true')
 														{
 															var sData =	'id=' + ns1blankspace.util.fs(oResponse.moreid) +
-																			'&startrow=' + parseInt(oResponse.rows) + parseInt(oResponse.startrow) + 
+																			'&startrow=' + (parseInt(oResponse.rows) + parseInt(oResponse.startrow)) + 
 																			'&rows=' + ns1blankspace.util.fs(oResponse.rows);
 															
 															$.ajax(
@@ -677,13 +687,12 @@ ns1blankspace.setup.file =
 
 													if (iRow == 0)
 													{
-														ns1blankspace.status.working();
+														ns1blankspace.status.working('Importing...');
 														var aHTML = [];
 													
 														aHTML.push('<table class="ns1blankspaceColumn2">');
 															
-														aHTML.push('<tr><td style="font-size:0.75em;" class="ns1blankspaceSub">' +
-																		'Importing...' +
+														aHTML.push('<tr><td id="ns1blankspaceImportStatus" style="font-size:2.75em;" class="ns1blankspaceSub">' +
 																		'</td></tr>');
 
 														aHTML.push('</table>');					
@@ -730,6 +739,7 @@ ns1blankspace.setup.file =
 																					});
 																				}	
 																				oParam.row = iRow + 1;
+																				$('#ns1blankspaceImportStatus').html(iRow);
 																				ns1blankspace.setup.file.import.upload.process(oParam, data)
 																			}
 															});
