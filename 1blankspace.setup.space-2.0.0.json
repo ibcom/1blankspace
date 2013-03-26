@@ -1,0 +1,60 @@
+{
+	"templates": 	{
+					"title": "Demo Space",
+
+					"memberships":
+					[
+						{"title": "Financials Only"}
+					],
+
+					"roles":
+					[
+						{
+							"title": "Bookkeeper",
+
+							"endpoints":
+							[
+								{"title": "FINANCIAL"},
+								{"title": "CONTACT"}
+							],
+							"methods": 
+							[
+								{"title": "SETUP_FINANCIAL_SETTINGS_SEARCH"},
+								{"title": "SETUP_FINANCIAL_ACCOUNT_SEARCH"}
+							]
+						}
+					],
+
+					"data":
+					[
+						{
+							"method": "CONTACT_BUSINESS_MANAGE",
+							"data": "&tradename=ABC Pty Ltd"
+						},
+						{
+							"method": "CONTACT_PERSON_MANAGE",
+							"data": "contactbusiness=[[id]]&firstname=Fred&surname=Smith"
+						},
+						{
+							"method": "PROJECT_MANAGE",
+							"data": "title=Project 1"
+						},
+						{
+							"method": "PROJECT_TASK_MANAGE",
+							"data": "project=[[id]]&title=Project Task 1"
+						},
+						{
+							"method": "DOCUMENT_MANAGE",
+							"data": "&title=Document 1"
+						},
+						{
+							"method": "EVENT_MANAGE",
+							"data": "&title=Event 1"
+						},
+						{
+							"method": "EVENT_MANAGE",
+							"data": "&title=Event 1"
+						}
+					]
+				}
+}	

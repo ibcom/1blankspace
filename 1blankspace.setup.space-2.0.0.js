@@ -36,14 +36,18 @@ ns1blankspace.setup.space =
 					var aHTML = [];
 
 					aHTML.push('<table>' +
-							'<tr><td><div id="ns1blankspaceViewSetupSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
-							'</table>');
+									'<tr><td><div id="ns1blankspaceViewSetupSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
+									'</table>');
 
 					aHTML.push('<table>');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">Subscriptions</td>' +
-									'</tr>');			
+									'</tr>');
+
+					aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlSetup" class="ns1blankspaceControl">Set up</td>' +
+									'</tr>');						
 						
 					if (ns1blankspace.option.advancedAccess)
 					{	
@@ -54,22 +58,37 @@ ns1blankspace.setup.space =
 								
 					aHTML.push('</table>');		
 					
-					$('#ns1blankspaceControl').html(aHTML.join(''));	
+					$('#ns1blankspaceControl').html(aHTML.join(''));
+
+					var aHTML = [];
+
+					aHTML.push('<div id="ns1blankspaceMainSubscription" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSetup" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>');
+					
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					$('#ns1blankspaceControlSubscriptions').click(function(event)
 					{
-						ns1blankspace.show({refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainSubscription', refresh: true});
 						ns1blankspace.setup.space.subscriptions();
+					});
+
+					$('#ns1blankspaceControlSetup').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainSetup', refresh: true});
+						ns1blankspace.setup.space.initialise.init();
 					});
 
 					$('#ns1blankspaceControlAccess').click(function(event)
 					{
-						ns1blankspace.show({refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAccess', refresh: true});
 						ns1blankspace.setup.space.access();
 					});
 					
 					$('#ns1blankspaceControlSubscriptions').addClass('ns1blankspaceHighlight');
 
+					ns1blankspace.show({selector: '#ns1blankspaceMainSubscription', refresh: true});
 					ns1blankspace.setup.space.subscriptions()
 				},
 
@@ -121,7 +140,7 @@ ns1blankspace.setup.space =
 											'</tr>' +
 											'</table>');	
 						
-							$('#ns1blankspaceMain').html(aHTML.join(''));
+							$('#ns1blankspaceMainSubscription').html(aHTML.join(''));
 						
 							var aHTML = [];
 							
@@ -155,7 +174,7 @@ ns1blankspace.setup.space =
 							
 							$('#ns1blankspaceSubscriptionColumn1').html(aHTML.join(''));
 
-							$('ns1blankspaceSetupSpaceSubscriptions > span.ns1blankspaceRowOptionsRemoveX').button(
+							$('ns1blankspaceSetupSpaceSubscriptions span.ns1blankspaceRowOptionsRemoveX').button(
 							{
 								text: false,
 								icons: {
@@ -187,8 +206,46 @@ ns1blankspace.setup.space =
 					}		
 				},
 
-	access:
-				function (oParam, oResponse)
+	initialise: {
+					data: 	{},
+
+					init: 	function (oParam)
+							{
+								var aHTML = [];
+							
+								aHTML.push('<table><tr>' +
+												'<td id="ns1blankspaceSetupSpaceColumn1" style="width:120px;"></td>' +
+												'<td id="ns1blankspaceSetupSpaceColumn2"></td>' +
+												'</tr></table>');				
+								
+								$('#ns1blankspaceMainSetup').html(aHTML.join(''));
+
+								if (ns1blankspace.setup.space.initialise.data.templates == undefined && ns1blankspace.option.setupSpaceTemplate)
+								{
+									$.ajax(
+									{
+										type: 'GET',
+										url: ns1blankspace.option.setupSpaceTemplate,
+										dataType: 'json',
+										global: false,
+										success: function(data)
+										{
+											ns1blankspace.setup.space.initialise.data.templates = data.templates
+										},
+										error: function ()
+										{
+											$('#ns1blankspaceSetupSpaceColumn1').html('<table><tr><td class="ns1blankspaceNothing">' +
+															'Can\'t find set up information.' +
+															'</td></tr></table>');
+
+										}
+									});
+								}	
+
+							}
+				},			
+
+	access: 	function (oParam, oResponse)
 				{
 					var iStep = 1;
 					var iID;
