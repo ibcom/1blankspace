@@ -324,27 +324,30 @@ ns1blankspace.setup.space =
 														var aMembershipsRequired = ns1blankspace.setup.space.initialise.data.template.memberships;
 														var aMembershipsExisting = oResponse.data.rows;
 														var aHTML = [];
-														var sClass;
 
 														aHTML.push('<table id="ns1blankspaceSetupSpaceInitialiseMemberships" class="ns1blankspaceColumn2">');
 												
 														$(aMembershipsRequired).each(function(i, v) 
 														{
-															sClass = '';
-
 															aHTML.push('<tr class="ns1blankspaceRow">');
 															
 															var aMembership = $.grep(aMembershipsExisting, function (a) { return a.title == v.title});
 
-															if (aMembership.length == 0) {sClass = ' ns1blankspaceError';}
-
-															aHTML.push('<td id="ns1blankspaceSetupSpaceInitialiseMemberships_title-' + i + '" class="ns1blankspaceRow' + sClass + '"' +
+															aHTML.push('<td id="ns1blankspaceSetupSpaceInitialiseMemberships_title-' + i + '" class="ns1blankspaceRow"' +
 																			'data-membership="' + this.title + '">' +
 																					this.title + '</td>');
 
-															aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
-																			'<span id="ns1blankspaceSetupSpaceInitialiseMemberships_options_add-' + this.id + '" class="ns1blankspaceRowAdd"></span></td>');				
-																											
+															if (aMembership.length == 0)
+															{
+																aHTML.push('<td style="width:350px;font-size:0.75em;" class="ns1blankspaceRow ns1blankspaceSub">' +
+																			'You don\'t have this membership.<br />You need to contact the supplier of this app.</td>');	
+															}
+															else
+															{
+																aHTML.push('<td style="width:350px;font-size:0.75em;" class="ns1blankspaceRow ns1blankspaceSub">' +
+																			'Exists</td>');
+															}		
+														
 															aHTML.push('</tr>');
 														});
 														
@@ -387,13 +390,13 @@ ns1blankspace.setup.space =
 
 															if (aRole.length == 0)
 															{
-																aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">' +
+																aHTML.push('<td style="width:350px;" class="ns1blankspaceRow">' +
 																			'<span id="ns1blankspaceSetupSpaceInitialiseRoles_options_add-' + i + '" class="ns1blankspaceRowAdd" data-title="' + this.title + '"></span></td>');	
 															}
 															else
 															{
-																aHTML.push('<td style="text-align:right;font-size:0.75em;" class="ns1blankspaceRow ns1blankspaceSub">' +
-																			'Exists</td>');
+																aHTML.push('<td style="width:350px;font-size:0.75em;" class="ns1blankspaceRow ns1blankspaceSub">' +
+																			'This role already exists.</td>');
 															}							
 																											
 															aHTML.push('</tr>');
