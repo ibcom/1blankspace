@@ -2103,7 +2103,17 @@ ns1blankspace.history.view =
 											}
 											else
 											{	
-												eval(sDestinationInstructions);
+												var aDestinationInstructions = sDestinationInstructions.split('.');
+
+												if (eval(aDestinationInstructions[0]) != undefined)
+												{	
+													eval(sDestinationInstructions);
+													//NEED TO CONVERT INSTUCTIONS TO USE NAMESPACE AND GET RID OF EVAL
+												}
+												else
+												{
+													ns1blankspace.home.show();
+												}
 											}	
 										}
 									}	
