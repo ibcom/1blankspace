@@ -80,13 +80,13 @@ ns1blankspace.setup.space =
 
 					$('#ns1blankspaceControlInitialise').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainInitialise', refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainInitialise'});
 						ns1blankspace.setup.space.initialise.init();
 					});
 
 					$('#ns1blankspaceControlAccess').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainAccess', refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAccess'});
 						ns1blankspace.setup.space.access();
 					});
 					
@@ -294,47 +294,157 @@ ns1blankspace.setup.space =
 										$('#ns1blankspaceInitaliseOption :radio').click(function()
 										{
 											var aID = (event.target.id).split('-');
-											ns1blankspace.setup.space.initialise[aID[1]](oParam);
+											ns1blankspace.setup.space.initialise[aID[1]].show(oParam);
 										});
 									}
 								},			
 
 					memberships:
-								function (oParam)
 								{
-									var aMemberships = ns1blankspace.setup.space.initialise.data.template.memberships;
-									var aHTML = [];
-									
-									aHTML.push('<table id="ns1blankspaceSetupSpaceInitialiseMemberships" class="ns1blankspace">');
-							
-									$(aMemberships).each(function(i) 
-									{
-										aHTML.push('<tr class="ns1blankspaceRow">');
-										
-										aHTML.push('<td id="ns1blankspaceSetupSpaceInitialiseMemberships_title-' + i + '" class="ns1blankspaceRow"' +
-														'data-membership="' + this.title + '">' +
-																this.title + '</td>');
+									show:		function (oParam, oResponse)
+												{
+													if (oResponse == undefined)
+													{
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_SEARCH'),
+															data: '',
+															dataType: 'json',
+															success: function(data){ns1blankspace.setup.space.initialise.memberships.show(oParam, data)}
+														});
+													}
+													else
+													{	
+														var aMembershipsRequired = ns1blankspace.setup.space.initialise.data.template.memberships;
+														var aMembershipsExisting = oResponse.data.rows;
+														var aHTML = [];
+														var sClass;
+
+														aHTML.push('<table id="ns1blankspaceSetupSpaceInitialiseMemberships" class="ns1blankspaceColumn2">');
+												
+														$(aMembershipsRequired).each(function(i, v) 
+														{
+															sClass = '';
+
+															aHTML.push('<tr class="ns1blankspaceRow">');
 															
-										aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
-														'<span id="ns1blankspaceSetupSpaceInitialiseMemberships_options_add-' + this.id + '" class="ns1blankspaceRowAdd"></span></td>');				
-																						
-										aHTML.push('</tr>');
-									});
-									
-									aHTML.push('</table>');
-								
-									$('#ns1blankspaceInitialiseColumn2').html(aHTML.join(''));
+															var aMembership = $.grep(aMembershipsExisting, function (a) { return a.title == v});
+
+															if (aMembership.length == 0) {sClass = ' ns1blankspaceError';}
+
+															aHTML.push('<td id="ns1blankspaceSetupSpaceInitialiseMemberships_title-' + i + '" class="ns1blankspaceRow' + sClass + '"' +
+																			'data-membership="' + this.title + '">' +
+																					this.title + '</td>');
+
+															aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+																			'<span id="ns1blankspaceSetupSpaceInitialiseMemberships_options_add-' + this.id + '" class="ns1blankspaceRowAdd"></span></td>');				
+																											
+															aHTML.push('</tr>');
+														});
+														
+														aHTML.push('</table>');
+													
+														$('#ns1blankspaceInitialiseColumn2').html(aHTML.join(''));
+													}
+												}		
 								},
 
-					roles: 		function (oParam)
-								{
-									$('#ns1blankspaceInitialiseColumn2').html('Roles');
+					roles: 		{
+									show:		function (oParam, oResponse)
+												{
+													if (oResponse == undefined)
+													{
+														var oSearch = new AdvancedSearch();
+														oSearch.method = 'SETUP_ROLE_SEARCH';
+														oSearch.addField('title');
+														oSearch.rows = 100;
+														oSearch.getResults(function(data){ns1blankspace.setup.space.initialise.roles.show(oParam, data)});
+													}
+													else
+													{	
+														var aRolesRequired = ns1blankspace.setup.space.initialise.data.template.roles;
+														var aRolesExisting = oResponse.data.rows;
+														var aHTML = [];
+
+														aHTML.push('<table id="ns1blankspaceSetupSpaceInitialiseRoles" class="ns1blankspaceColumn2">');
+												
+														$(aRolesRequired).each(function(i, v) 
+														{
+															aHTML.push('<tr class="ns1blankspaceRow">');
+															
+															var aRole = $.grep(aRolesExisting, function (a) { return a.title == v});
+
+															aHTML.push('<td id="ns1blankspaceSetupSpaceInitialiseRoles_title-' + i + '" class="ns1blankspaceRow">' +
+																					this.title + '</td>');
+
+															if (aRole.length == 0)
+															{
+																aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">' +
+																			'<span id="ns1blankspaceSetupSpaceInitialiseRoles_options_add-' + i + '" class="ns1blankspaceRowAdd" data-title="' + this.title + '"></span></td>');	
+															}
+															else
+															{
+																aHTML.push('<td style="text-align:right;font-size:0.75em;" class="ns1blankspaceRow ns1blankspaceSub">' +
+																			'Exists</td>');
+															}							
+																											
+															aHTML.push('</tr>');
+														});
+														
+														aHTML.push('</table>');
+													
+														$('#ns1blankspaceInitialiseColumn2').html(aHTML.join(''));
+
+														$('#ns1blankspaceSetupSpaceInitialiseRoles .ns1blankspaceRowAdd').button(
+														{
+															label: 'Add Role',
+															icons:
+															{
+																primary: "ui-icon-plus"
+															}
+														})
+														.click(function()
+														{
+															ns1blankspace.status.working();
+
+															var sTitle = $(this).attr('data-title');
+															var sXHTMLElementID = this.id;
+
+															var sData = 'title=' + ns1blankspace.util.fs(sTitle);
+															
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('SETUP_ROLE_MANAGE'),
+																data: sData,
+																dataType: 'json',
+																success: function (data)
+																{
+																	if (data.status == 'OK')
+																	{
+																		$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+																		s1blankspace.status.message('Role added');
+																	}
+																	else
+																	{
+
+																	}
+																}
+															});
+														})
+														.css('font-size', '0.75em')
+														.css('height', '20px');
+													}
+												}		
 								},
 
-					import: 	function (oParam)
-								{
-									$('#ns1blankspaceInitialiseColumn2').html('Data');
-								}						
+					import: 	{
+									show:		function (oParam)
+												{
+													$('#ns1blankspaceInitialiseColumn2').html('Data');
+												}
+								}									
 				},			
 
 	access: 	function (oParam, oResponse)

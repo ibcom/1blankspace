@@ -721,7 +721,7 @@ ns1blankspace.app =
 					$.ajax(
 					{
 						type: 'GET',
-						url: ns1blankspace.util.endpointURI('CORE_GET_USER_NAME'),
+						url: ns1blankspace.util.endpointURI('CORE_GET_USER_DETAILS'),
 						dataType: 'json',
 						cache: false,
 						global: false,
