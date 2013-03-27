@@ -236,8 +236,11 @@ ns1blankspace.setup.space =
 													'</td></tr></table>');
 											}
 										});
+									}
+									else
+									{
+										ns1blankspace.setup.space.initialise.show(oParam);
 									}	
-
 								},
 
 					show: 		function (oParam)
@@ -305,6 +308,8 @@ ns1blankspace.setup.space =
 												{
 													if (oResponse == undefined)
 													{
+														$('#ns1blankspaceInitialiseColumn2').html(ns1blankspace.xhtml.loading);
+
 														$.ajax(
 														{
 															type: 'POST',
@@ -329,7 +334,7 @@ ns1blankspace.setup.space =
 
 															aHTML.push('<tr class="ns1blankspaceRow">');
 															
-															var aMembership = $.grep(aMembershipsExisting, function (a) { return a.title == v});
+															var aMembership = $.grep(aMembershipsExisting, function (a) { return a.title == v.title});
 
 															if (aMembership.length == 0) {sClass = ' ns1blankspaceError';}
 
@@ -353,6 +358,8 @@ ns1blankspace.setup.space =
 					roles: 		{
 									show:		function (oParam, oResponse)
 												{
+													$('#ns1blankspaceInitialiseColumn2').html(ns1blankspace.xhtml.loading);
+
 													if (oResponse == undefined)
 													{
 														var oSearch = new AdvancedSearch();
@@ -373,7 +380,7 @@ ns1blankspace.setup.space =
 														{
 															aHTML.push('<tr class="ns1blankspaceRow">');
 															
-															var aRole = $.grep(aRolesExisting, function (a) { return a.title == v});
+															var aRole = $.grep(aRolesExisting, function (a) { return a.title == v.title});
 
 															aHTML.push('<td id="ns1blankspaceSetupSpaceInitialiseRoles_title-' + i + '" class="ns1blankspaceRow">' +
 																					this.title + '</td>');
@@ -406,37 +413,126 @@ ns1blankspace.setup.space =
 														})
 														.click(function()
 														{
-															ns1blankspace.status.working();
-
-															var sTitle = $(this).attr('data-title');
-															var sXHTMLElementID = this.id;
-
-															var sData = 'title=' + ns1blankspace.util.fs(sTitle);
-															
-															$.ajax(
-															{
-																type: 'POST',
-																url: ns1blankspace.util.endpointURI('SETUP_ROLE_MANAGE'),
-																data: sData,
-																dataType: 'json',
-																success: function (data)
-																{
-																	if (data.status == 'OK')
-																	{
-																		$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-																		s1blankspace.status.message('Role added');
-																	}
-																	else
-																	{
-
-																	}
-																}
-															});
+															ns1blankspace.setup.space.initialise.roles.add({xhtmlElementID: this.id})
 														})
 														.css('font-size', '0.75em')
 														.css('height', '20px');
 													}
-												}		
+												},
+
+									add: 		function(oParam, oResponse)
+												{
+													var iStep = 1;
+													var sXHTMLElementID;
+													var iRole;
+													var sRoleTitle;
+													var aRoleMethods;
+													var iRoleMethod = 0;
+
+													if (oParam == undefined) {oParam = {}}
+													if (oParam.step != undefined) {iStep = oParam.step}
+													if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+													if (oParam.role != undefined) {iRole = oParam.role}
+													if (oParam.roleTitle != undefined) {sRoleTitle = oParam.roleTitle}
+													if (oParam.roleMethods != undefined) {aRoleMethods = oParam.roleMethods}
+													if (oParam.roleMethod != undefined) {iRoleMethod = oParam.roleMethod}
+
+													if (iStep == 1)
+													{
+														ns1blankspace.status.working();
+
+														var sTitle = $('#' + sXHTMLElementID).attr('data-title');
+
+														var sData = 'title=' + ns1blankspace.util.fs(sTitle);
+														
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('SETUP_ROLE_MANAGE'),
+															data: sData,
+															dataType: 'json',
+															success: function (data)
+															{
+																if (data.status == 'OK')
+																{
+																	oParam.step = 2;
+																	oParam.role = data.id;
+																	oParam.roleTitle = sTitle;
+																	ns1blankspace.setup.space.initialise.roles.add(oParam);
+																}
+																else
+																{}
+															}
+														});
+													}
+
+													if (iStep == 2)
+													{
+														var aMethods = $.grep(ns1blankspace.setup.space.initialise.data.template.roles, function (a) { return a.title == sRoleTitle})[0].methods;
+														var aMethodTitles = [];
+
+														$(aMethods).each(function() 
+														{
+															aMethodTitles.push(this.title);
+														});
+
+														if (aMethodTitles.length == 0)
+														{
+															$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+															ns1blankspace.status.message('Role added');
+														}
+														else
+														{
+															var oSearch = new AdvancedSearch();
+															oSearch.method = 'SETUP_METHOD_SEARCH';
+															oSearch.addField('title,useavailable,addavailable,updateavailable,removeavailable');
+															oSearch.addFilter('title', 'IN_LIST', aMethodTitles.join(','))
+															oSearch.rows = 200;
+															oSearch.getResults(function(oResponse)
+															{
+																oParam.step = 3;
+																oParam.roleMethods = oResponse.data.rows;
+																ns1blankspace.setup.space.initialise.roles.add(oParam)
+															});
+														}
+													}	
+
+													if (iStep == 3)
+													{
+														if (iRoleMethod < aRoleMethods.length)
+														{
+															ns1blankspace.status.working('Adding method ' + (iRoleMethod + 1) + ' of ' + aRoleMethods.length);
+
+															var sData = 'role=' + ns1blankspace.util.fs(iRole);
+															sData += '&accessmethod=' + ns1blankspace.util.fs(aRoleMethods[iRoleMethod].id);
+															
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('SETUP_ROLE_METHOD_ACCESS_MANAGE'),
+																data: sData,
+																dataType: 'json',
+																success: function(data)
+																{
+																	if (data.status == "OK")
+																	{
+																		oParam.roleMethod = iRoleMethod + 1;
+																		ns1blankspace.setup.space.initialise.roles.add(oParam)
+																	}
+																	else
+																	{
+																		ns1blankspace.status.error(data.error.errornotes);
+																	}
+																}
+															});
+														}
+														else
+														{
+															$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+															ns1blankspace.status.message('Role added');
+														}	
+													}	
+												}				
 								},
 
 					import: 	{
