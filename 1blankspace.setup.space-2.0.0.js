@@ -265,7 +265,7 @@ ns1blankspace.setup.space =
 
 										var aHTML = [];
 
-										aHTML.push('<div id="ns1blankspaceInitaliseOption" style="width:120px; margin-bottom:10px;">');
+										aHTML.push('<div id="ns1blankspaceInitaliseOption" style="width:110px; margin-bottom:10px;">');
 
 										if (oTemplate.memberships.length != 0)
 										{	
@@ -544,7 +544,7 @@ ns1blankspace.setup.space =
 													aHTML.push('<table id="ns1blankspaceSetupSpaceInitialiseImport" class="ns1blankspaceColumn2">');
 											
 													aHTML.push('<tr>');
-													aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Import</td>');
+													aHTML.push('<td class="ns1blankspaceHeaderCaption">Items</td>');
 													aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' +
 																	'<span id="ns1blankspaceSetupSpaceInitialiseImport_options_add"></span></td>');
 
@@ -555,7 +555,7 @@ ns1blankspace.setup.space =
 														aHTML.push('<td id="ns1blankspaceSetupSpaceInitialiseImport_title-' + i + '" class="ns1blankspaceRow">' +
 																				this.title + '</td>');
 
-														aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow"' +
+														aHTML.push('<td style="width:250px;" class="ns1blankspaceRow ns1blankspaceSub"' +
 																		' id="ns1blankspaceSetupSpaceInitialiseImport_status-' + this.reference + '"></td>');	
 																									
 														aHTML.push('</tr>');
@@ -567,11 +567,7 @@ ns1blankspace.setup.space =
 
 													$('#ns1blankspaceSetupSpaceInitialiseImport_options_add').button(
 													{
-														label: 'Add Data',
-														icons:
-														{
-															primary: "ui-icon-plus"
-														}
+														label: 'Import',
 													})
 													.click(function()
 													{
@@ -594,7 +590,7 @@ ns1blankspace.setup.space =
 										
 													if (iDataIndex < ns1blankspace.setup.space.initialise.data.template.import.length)
 													{
-														ns1blankspace.status.message('Importing...');
+														//ns1blankspace.status.message('Importing...');
 
 														//var sReference = $('#' + sXHTMLElementID).attr('data-reference');
 
@@ -618,17 +614,21 @@ ns1blankspace.setup.space =
 															url: ns1blankspace.util.endpointURI(oImport.method),
 															data: sData,
 															dataType: 'json',
+															global: false,
 															success: function (data)
 															{
 																if (data.status == 'OK')
 																{
+																	$('#ns1blankspaceSetupSpaceInitialiseImport_status-' + oImport.reference).html('Done');
 																	oImport.response = data;
 																	oParam.step = 1;
 																	oParam.dataIndex = iDataIndex + 1;
 																	ns1blankspace.setup.space.initialise.import.add(oParam);
 																}
 																else
-																{}
+																{
+																	$('#ns1blankspaceSetupSpaceInitialiseImport_status-' + oImport.reference).html(data.error.errornotes);
+																}
 															}
 														});
 													}

@@ -43,7 +43,7 @@
 							"reference": "3",
 							"title": "Project",
 							"method": "PROJECT_MANAGE",
-							"data": "title=Project 1"
+							"data": "reference=Project 1"
 						},
 						{
 							"reference": "4",
@@ -55,7 +55,7 @@
 							"reference": "5",
 							"title": "Document",
 							"method": "DOCUMENT_MANAGE",
-							"data": "&title=Document 1"
+							"data": "title=Document 1"
 						}
 					]
 				}
