@@ -42,7 +42,7 @@ ns1blankspace.setup.space =
 					aHTML.push('<table class="ns1blankspaceControl">');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">Subscriptions</td>' +
+									'<td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">Memberships</td>' +
 									'</tr>');
 
 					aHTML.push('</table>');	
@@ -50,7 +50,7 @@ ns1blankspace.setup.space =
 					aHTML.push('<table class="ns1blankspaceControl">');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlInitialise" class="ns1blankspaceControl">Initialise</td>' +
+									'<td id="ns1blankspaceControlInitialise" class="ns1blankspaceControl">Initialise<br />This Space</td>' +
 									'</tr>');						
 						
 					if (ns1blankspace.option.advancedAccess)
@@ -211,67 +211,130 @@ ns1blankspace.setup.space =
 				},
 
 	initialise: {
-					data: 	{},
+					data: 		{},
 
-					init: 	function (oParam)
-							{
-								var aHTML = [];
-							
-								aHTML.push('<table><tr>' +
-												'<td id="ns1blankspaceSetupSpaceColumn1" style="width:120px;"></td>' +
-												'<td id="ns1blankspaceSetupSpaceColumn2"></td>' +
-												'</tr></table>');				
-								
-								$('#ns1blankspaceMainSetup').html(aHTML.join(''));
-
-								var aHTML = [];
-
-								aHTML.push('<div id="ns1blankspaceFileImportObject" style="width:120px; margin-bottom:10px;">');
-
-								aHTML.push('<input type="radio" id="ns1blankspaceFileImport-32" name="radioObject" />' +
-												'<label for="ns1blankspaceFileImport-32" style="width: 120px; margin-bottom:3px;">' +
-												'People</label>');
-								
-								aHTML.push('<input type="radio" id="ns1blankspaceFileImport-12" name="radioObject" />' +
-												'<label for="ns1blankspaceFileImport-12" style="width: 120px; margin-bottom:1px;">' +
-												'Businesses</label>');
-
-								aHTML.push('</div>');
-
-								$('#ns1blankspaceFileImportColumn1').html(aHTML.join(''));
-							
-								$('#ns1blankspaceFileImportObject').buttonset().css('font-size', '0.75em');
-								
-								$('#ns1blankspaceFileImportObject :radio').click(function()
+					init: 		function (oParam)
 								{
-									var aID = (event.target.id).split('-');
-									var oParam = {object: parseInt(aID[1])};
-									ns1blankspace.setup.file.import.init(oParam);
-								});
-
-								if (ns1blankspace.setup.space.initialise.data.templates == undefined && ns1blankspace.option.setupSpaceTemplate)
-								{
-									$.ajax(
+									if (ns1blankspace.setup.space.initialise.data.template == undefined && ns1blankspace.option.setupSpaceTemplate)
 									{
-										type: 'GET',
-										url: ns1blankspace.option.setupSpaceTemplate,
-										dataType: 'json',
-										global: false,
-										success: function(data)
+										$.ajax(
 										{
-											ns1blankspace.setup.space.initialise.data.templates = data.templates
-										},
-										error: function ()
-										{
-											$('#ns1blankspaceSetupSpaceColumn1').html('<table><tr><td class="ns1blankspaceNothing">' +
-															'Can\'t find set up information.' +
-															'</td></tr></table>');
+											type: 'GET',
+											url: ns1blankspace.option.setupSpaceTemplate,
+											dataType: 'json',
+											global: false,
+											success: function(data)
+											{
+												ns1blankspace.setup.space.initialise.data.template = data.template;
+												ns1blankspace.setup.space.initialise.show(oParam);
+											},
+											error: function ()
+											{
+												$('#ns1blankspaceInitialiseColumn1').html('<table><tr><td class="ns1blankspaceNothing">' +
+													'Can\'t find initialise information.' +
+													'<br />You need to contact the developer of this app.' +
+													'</td></tr></table>');
+											}
+										});
+									}	
 
-										}
+								},
+
+					show: 		function (oParam)
+								{
+									var aHTML = [];
+									var oTemplate = ns1blankspace.setup.space.initialise.data.template;
+
+									if (oTemplate.memberships.length == 0 && oTemplate.roles.length == 0)
+									{
+										aHTML.push('<table><tr><td class="ns1blankspaceNothing">' +
+													'Nothing to initialise.' +
+													'</td></tr></table>');
+									}
+									else
+									{
+										aHTML.push('<table><tr>' +
+														'<td id="ns1blankspaceInitialiseColumn1" style="width:120px;"></td>' +
+														'<td id="ns1blankspaceInitialiseColumn2"></td>' +
+														'</tr></table>');				
+										
+										$('#ns1blankspaceMainInitialise').html(aHTML.join(''));
+
+										var aHTML = [];
+
+										aHTML.push('<div id="ns1blankspaceInitaliseOption" style="width:120px; margin-bottom:10px;">');
+
+										if (oTemplate.memberships.length != 0)
+										{	
+											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-memberships" name="radioObject" />' +
+														'<label for="ns1blankspaceInitaliseOption-memberships" style="width: 110px; margin-bottom:3px;">' +
+														'Memberships</label>');
+										}		
+										
+										if (oTemplate.roles.length != 0)
+										{
+											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-roles" name="radioObject" />' +
+														'<label for="ns1blankspaceInitaliseOption-roles" style="width: 110px; margin-bottom:3px;">' +
+														'Roles</label>');
+										}	
+
+										if (false && oTemplate.data.length != 0)
+										{
+											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-import" name="radioObject" />' +
+														'<label for="ns1blankspaceInitaliseOption-import" style="width: 110px; margin-bottom:3px;">' +
+														'Data</label>');
+										}	
+
+										aHTML.push('</div>');
+
+										$('#ns1blankspaceInitialiseColumn1').html(aHTML.join(''));
+									
+										$('#ns1blankspaceInitaliseOption').buttonset().css('font-size', '0.625em');
+										
+										$('#ns1blankspaceInitaliseOption :radio').click(function()
+										{
+											var aID = (event.target.id).split('-');
+											ns1blankspace.setup.space.initialise[aID[1]](oParam);
+										});
+									}
+								},			
+
+					memberships:
+								function (oParam)
+								{
+									var aMemberships = ns1blankspace.setup.space.initialise.data.template.memberships;
+									var aHTML = [];
+									
+									aHTML.push('<table id="ns1blankspaceSetupSpaceInitialiseMemberships" class="ns1blankspace">');
+							
+									$(aMemberships).each(function(i) 
+									{
+										aHTML.push('<tr class="ns1blankspaceRow">');
+										
+										aHTML.push('<td id="ns1blankspaceSetupSpaceInitialiseMemberships_title-' + i + '" class="ns1blankspaceRow"' +
+														'data-membership="' + this.title + '">' +
+																this.title + '</td>');
+															
+										aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+														'<span id="ns1blankspaceSetupSpaceInitialiseMemberships_options_add-' + this.id + '" class="ns1blankspaceRowAdd"></span></td>');				
+																						
+										aHTML.push('</tr>');
 									});
-								}	
+									
+									aHTML.push('</table>');
+								
+									$('#ns1blankspaceInitialiseColumn2').html(aHTML.join(''));
+								},
 
-							}
+					roles: 		function (oParam)
+								{
+									$('#ns1blankspaceInitialiseColumn2').html('Roles');
+								},
+
+					import: 	function (oParam)
+								{
+									$('#ns1blankspaceInitialiseColumn2').html('Data');
+								}						
 				},			
 
 	access: 	function (oParam, oResponse)
