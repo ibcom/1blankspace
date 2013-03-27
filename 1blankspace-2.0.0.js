@@ -1537,7 +1537,7 @@ ns1blankspace.logon =
 				{		
 					if (oResponse.status === 'ER')
 					{
-						$('#ns1blankspaceLogonStatus').html('Logon Name or password is incorrect.');
+						$('#ns1blankspaceLogonStatus').html('Logon name or password is incorrect.');
 						$('#ns1blankspaceContainer').effect("shake", { times:2 }, 100);
 					}
 					else 
