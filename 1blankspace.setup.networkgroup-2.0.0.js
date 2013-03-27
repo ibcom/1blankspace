@@ -457,8 +457,7 @@ ns1blankspace.setup.networkGroup =
 											aHTML.push('</tr>');
 											aHTML.push('</table>');
 											
-											$('#' + sXHTMLElementID).html(aHTML.join(''));
-											$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
+											$('#ns1blankspaceUsersColumn1').html(aHTML.join(''));
 										}
 										else
 										{

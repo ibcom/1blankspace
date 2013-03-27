@@ -39,11 +39,15 @@ ns1blankspace.setup.space =
 									'<tr><td><div id="ns1blankspaceViewSetupSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
 									'</table>');
 
-					aHTML.push('<table>');
+					aHTML.push('<table class="ns1blankspaceControl">');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">Subscriptions</td>' +
 									'</tr>');
+
+					aHTML.push('</table>');	
+
+					aHTML.push('<table class="ns1blankspaceControl">');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlSetup" class="ns1blankspaceControl">Set up</td>' +
@@ -219,6 +223,31 @@ ns1blankspace.setup.space =
 												'</tr></table>');				
 								
 								$('#ns1blankspaceMainSetup').html(aHTML.join(''));
+
+								var aHTML = [];
+
+								aHTML.push('<div id="ns1blankspaceFileImportObject" style="width:120px; margin-bottom:10px;">');
+
+								aHTML.push('<input type="radio" id="ns1blankspaceFileImport-32" name="radioObject" />' +
+												'<label for="ns1blankspaceFileImport-32" style="width: 120px; margin-bottom:3px;">' +
+												'People</label>');
+								
+								aHTML.push('<input type="radio" id="ns1blankspaceFileImport-12" name="radioObject" />' +
+												'<label for="ns1blankspaceFileImport-12" style="width: 120px; margin-bottom:1px;">' +
+												'Businesses</label>');
+
+								aHTML.push('</div>');
+
+								$('#ns1blankspaceFileImportColumn1').html(aHTML.join(''));
+							
+								$('#ns1blankspaceFileImportObject').buttonset().css('font-size', '0.75em');
+								
+								$('#ns1blankspaceFileImportObject :radio').click(function()
+								{
+									var aID = (event.target.id).split('-');
+									var oParam = {object: parseInt(aID[1])};
+									ns1blankspace.setup.file.import.init(oParam);
+								});
 
 								if (ns1blankspace.setup.space.initialise.data.templates == undefined && ns1blankspace.option.setupSpaceTemplate)
 								{
