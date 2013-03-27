@@ -767,7 +767,7 @@ ns1blankspace.setup.user =
 					select:		function (oParam)
 								{
 									var sXHTMLElementID;
-									var iUser = ns1blankspace.objectContext.id;
+									var iUser = ns1blankspace.objectContext;
 									var iUserType = 1;
 
 									if (oParam != undefined)
