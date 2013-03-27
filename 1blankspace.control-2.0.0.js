@@ -1837,7 +1837,7 @@ ns1blankspace.control =
 											$(oResponse.data.rows).each(function()
 											{
 												aHTML.push('<tr>' +
-																'<td id="ns1blankspaceControlSpaceSwitch-' + this.id + '" class="ns1blankspace">' +
+																'<td id="ns1blankspaceControlSpaceSwitch-' + this.id + '" class="ns1blankspaceRowSelect">' +
 																this.space +
 																'</td></tr>');
 											});		
