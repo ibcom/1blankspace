@@ -605,7 +605,7 @@ ns1blankspace.setup.user =
 
 											aHTML.push('<tr>' +
 															'<td class="ns1blankspaceNothing" style="font-weight:600;">This user can access all functions within this space.</td></tr>' +
-															'<td class="ns1blankspaceNothing">If you select <em>restricted by role</em> and save, you can then allocate predefined <em>users roles</em> to them.</td></tr>');
+															'<td class="ns1blankspaceNothing">If you select <em>restricted by role</em> and save, you can then allocate predefined <em>user roles</em> to them.</td></tr>');
 
 											aHTML.push('</table>');
 

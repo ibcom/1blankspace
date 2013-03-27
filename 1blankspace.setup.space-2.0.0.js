@@ -50,7 +50,7 @@ ns1blankspace.setup.space =
 					aHTML.push('<table class="ns1blankspaceControl">');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlSetup" class="ns1blankspaceControl">Set up</td>' +
+									'<td id="ns1blankspaceControlInitialise" class="ns1blankspaceControl">Initialise</td>' +
 									'</tr>');						
 						
 					if (ns1blankspace.option.advancedAccess)
@@ -67,7 +67,7 @@ ns1blankspace.setup.space =
 					var aHTML = [];
 
 					aHTML.push('<div id="ns1blankspaceMainSubscription" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainSetup" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainInitialise" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
@@ -78,9 +78,9 @@ ns1blankspace.setup.space =
 						ns1blankspace.setup.space.subscriptions();
 					});
 
-					$('#ns1blankspaceControlSetup').click(function(event)
+					$('#ns1blankspaceControlInitialise').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainSetup', refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainInitialise', refresh: true});
 						ns1blankspace.setup.space.initialise.init();
 					});
 
