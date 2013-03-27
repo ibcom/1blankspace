@@ -281,7 +281,7 @@ ns1blankspace.setup.space =
 														'Roles</label>');
 										}	
 
-										if (false && oTemplate.data.length != 0)
+										if (oTemplate.import.length != 0)
 										{
 											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-import" name="radioObject" />' +
 														'<label for="ns1blankspaceInitaliseOption-import" style="width: 110px; margin-bottom:3px;">' +
@@ -538,8 +538,102 @@ ns1blankspace.setup.space =
 					import: 	{
 									show:		function (oParam)
 												{
-													$('#ns1blankspaceInitialiseColumn2').html('Data');
-												}
+													var aData = ns1blankspace.setup.space.initialise.data.template.import;
+													var aHTML = [];
+
+													aHTML.push('<table id="ns1blankspaceSetupSpaceInitialiseImport" class="ns1blankspaceColumn2">');
+											
+													aHTML.push('<tr>');
+													aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Import</td>');
+													aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' +
+																	'<span id="ns1blankspaceSetupSpaceInitialiseImport_options_add"></span></td>');
+
+													$(aData).each(function(i, v) 
+													{
+														aHTML.push('<tr class="ns1blankspaceRow">');
+														
+														aHTML.push('<td id="ns1blankspaceSetupSpaceInitialiseImport_title-' + i + '" class="ns1blankspaceRow">' +
+																				this.title + '</td>');
+
+														aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow"' +
+																		' id="ns1blankspaceSetupSpaceInitialiseImport_status-' + this.reference + '"></td>');	
+																									
+														aHTML.push('</tr>');
+													});
+													
+													aHTML.push('</table>');
+												
+													$('#ns1blankspaceInitialiseColumn2').html(aHTML.join(''));
+
+													$('#ns1blankspaceSetupSpaceInitialiseImport_options_add').button(
+													{
+														label: 'Add Data',
+														icons:
+														{
+															primary: "ui-icon-plus"
+														}
+													})
+													.click(function()
+													{
+														ns1blankspace.setup.space.initialise.import.add(oParam)
+													})
+													.css('font-size', '0.75em')
+													.css('height', '24px');
+												},
+
+									add: 		function(oParam, oResponse)
+												{
+													var iStep = 1;
+													var sXHTMLElementID;
+													var iDataIndex = 0;
+
+													if (oParam == undefined) {oParam = {}}
+													if (oParam.step != undefined) {iStep = oParam.step}
+													if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+													if (oParam.dataIndex != undefined) {iDataIndex = oParam.dataIndex}
+										
+													if (iDataIndex < ns1blankspace.setup.space.initialise.data.template.import.length)
+													{
+														ns1blankspace.status.message('Importing...');
+
+														//var sReference = $('#' + sXHTMLElementID).attr('data-reference');
+
+														var oImport = ns1blankspace.setup.space.initialise.data.template.import[iDataIndex];
+
+														var sData = oImport.data;
+														//Need to split and util.fs()
+														
+														var oImportAlready = $.grep(ns1blankspace.setup.space.initialise.data.template.import, function (a) {return a.response != undefined});
+
+														$(oImportAlready).each(function(i, v) 
+														{
+															sData = sData.replace('[[' + v.reference + '.id]]', v.response.id)
+														});
+
+														$('#ns1blankspaceSetupSpaceInitialiseImport_status-' + oImport.reference).html(ns1blankspace.xhtml.loadingSmall)
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI(oImport.method),
+															data: sData,
+															dataType: 'json',
+															success: function (data)
+															{
+																if (data.status == 'OK')
+																{
+																	oImport.response = data;
+																	oParam.step = 1;
+																	oParam.dataIndex = iDataIndex + 1;
+																	ns1blankspace.setup.space.initialise.import.add(oParam);
+																}
+																else
+																{}
+															}
+														});
+													}
+
+												}			
 								}									
 				},			
 
