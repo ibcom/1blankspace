@@ -220,7 +220,7 @@ ns1blankspace.setup.space =
 										$.ajax(
 										{
 											type: 'GET',
-											url: ns1blankspace.option.setupSpaceTemplate,
+											url: ns1blankspace.option.initialiseSpaceTemplate,
 											dataType: 'json',
 											global: false,
 											success: function(data)
