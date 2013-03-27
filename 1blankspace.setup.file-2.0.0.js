@@ -92,7 +92,7 @@ ns1blankspace.setup.file =
 
 										$('#ns1blankspaceFileImportColumn1').html(aHTML.join(''));
 									
-										$('#ns1blankspaceFileImportObject').buttonset().css('font-size', '0.75em');
+										$('#ns1blankspaceFileImportObject').buttonset().css('font-size', '0.625em');
 										
 										$('#ns1blankspaceFileImportObject :radio').click(function()
 										{
@@ -166,7 +166,7 @@ ns1blankspace.setup.file =
 
 									$('#ns1blankspaceFileImportObject').after(aHTML.join(''));
 
-									$('#ns1blankspaceFileImportTask').buttonset().css('font-size', '0.75em');
+									$('#ns1blankspaceFileImportTask').buttonset().css('font-size', '0.625em');
 
 									$('#ns1blankspaceFileImportTask :radio').click(function()
 									{
@@ -567,7 +567,11 @@ ns1blankspace.setup.file =
 															data: 'id=' + ns1blankspace.util.fs(ns1blankspace.setup.file.import.data.attachment),
 															success: function(data)
 															{	
-																if (data.rowlimit == 'N')
+																if (data.rowlimit == 'Y')
+																{
+																	ns1blankspace.status.error('More than 500 records')
+																}
+																else
 																{	
 																	ns1blankspace.setup.file.import.upload.validate(oParam, data);
 																}
@@ -742,7 +746,7 @@ ns1blankspace.setup.file =
 																					});
 																				}	
 																				oParam.row = iRow + 1;
-																				$('#ns1blankspaceImportStatus').html(iRow);
+																				$('#ns1blankspaceImportStatus').html(iRow + 1);
 																				ns1blankspace.setup.file.import.upload.process(oParam, data)
 																			}
 															});
