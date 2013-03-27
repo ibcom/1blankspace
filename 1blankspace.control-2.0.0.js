@@ -89,7 +89,7 @@ ns1blankspace.option.taxVATCaption = 'GST';
 ns1blankspace.option.taxPayrollCaption = 'Employee';
 ns1blankspace.option.taxBusinessCaption = 'Business';
 ns1blankspace.option.postInit = undefined;
-ns1blankspace.option.setupSpaceTemplate = '/jscripts/1blankspace.setup.space-2.0.0.json';;
+ns1blankspace.option.initialiseSpaceTemplate = '/jscripts/1blankspace.setup.space-2.0.0.json';;
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}

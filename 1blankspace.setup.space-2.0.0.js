@@ -215,7 +215,7 @@ ns1blankspace.setup.space =
 
 					init: 		function (oParam)
 								{
-									if (ns1blankspace.setup.space.initialise.data.template == undefined && ns1blankspace.option.setupSpaceTemplate)
+									if (ns1blankspace.setup.space.initialise.data.template == undefined && ns1blankspace.option.initialiseSpaceTemplate)
 									{
 										$.ajax(
 										{
