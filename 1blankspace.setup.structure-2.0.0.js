@@ -1157,7 +1157,8 @@ ns1blankspace.setup.structure =
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																
-												aHTML.push('<td id="ns1blankspaceSetupStructureCategory_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+												aHTML.push('<td id="ns1blankspaceSetupStructureCategory_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
+																' title="' + this.id + '">' +
 																this.title + '</td>');
 																		
 												aHTML.push('</tr>');
@@ -1169,10 +1170,10 @@ ns1blankspace.setup.structure =
 								
 											$('#ns1blankspaceSetupStructureCategory td.ns1blankspaceRowSelect').click(function(event)
 											{
-												var sXHTMLElementId = event.target.id;
-												var aId = sXHTMLElementId.split('-');
+												var sXHTMLElementID = event.target.id;
+												var aID = sXHTMLElementID.split('-');
 												
-												ns1blankspace.setup.structure.element.show({category: aId[1]});
+												ns1blankspace.setup.structure.element.show({category: aID[1]});
 											});
 										}
 									}	
@@ -1260,8 +1261,9 @@ ns1blankspace.setup.structure =
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																
-												aHTML.push('<td id="ns1blankspaceSetupStructureElement_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-																		this.title + '</td>');				
+												aHTML.push('<td id="ns1blankspaceSetupStructureElement_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
+																' title="' + this.id + '">' +
+																this.title + '</td>');				
 																		
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 												
@@ -2324,7 +2326,6 @@ ns1blankspace.setup.structure =
 									var aSearch = sXHTMLElementID.split('-');
 									
 									var sData = 'remove=1&id=' + aSearch[1];
-									sData += '&category=' + aSearch[2]
 												
 									$.ajax(
 									{

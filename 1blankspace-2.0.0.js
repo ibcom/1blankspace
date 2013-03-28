@@ -4682,87 +4682,118 @@ ns1blankspace.show =
 
 ns1blankspace.extend =
 {
-	structure: 		[],
-
 	init: 		function (oParam, oResponse)
 				{
 					var iObject = ns1blankspace.object;
 					var aCategories = [];
 					var bSetApp = true;
+					var iStep = 1;
 
 					if (oParam != undefined)
 					{
 						if (oParam.object != undefined) {iObject = oParam.object}	
 						if (oParam.categories != undefined) {aCategories = oParam.categories}
 						if (oParam.setApp != undefined) {bSetApp = oParam.setApp}
+						if (oParam.step != undefined) {iStep = oParam.step}
 					}
 					else
 					{
 						oParam = {}
 					}
 
-					if (oResponse == undefined)
-					{	
-						ns1blankspace.objectExtended = false;
-
-						$(ns1blankspace.extend.structure).each(function()
+					if (iStep == 1)
+					{
+						if (ns1blankspace.extend.structure != undefined)
 						{
-							if (this.elements === undefined)
+							oParam.step = 2;
+							ns1blankspace.extend.init(oParam)
+						}
+						else
+						{
+							if (oResponse == undefined)
 							{	
-								aCategories.push(this.category);
+								var oSearch = new AdvancedSearch();
+								oSearch.method = 'SETUP_STRUCTURE_OBJECT_LINK_SEARCH';
+								oSearch.addField('objecttext,categorytext,category,object');
+								oSearch.rows = 100;
+								oSearch.async = false;  //LOOK AT REMOVE THIS
+								oSearch.sort('object', 'asc');
+								oSearch.getResults(function(data) {ns1blankspace.extend.init(oParam, data)})
 							}
 							else
 							{
-								ns1blankspace.objectExtended = true;
+								ns1blankspace.extend.structure = oResponse.data.rows;
+								oParam.step = 2;
+								ns1blankspace.extend.init(oParam)
+							}
+						}		
+					}	
+
+					if (iStep == 2)
+					{	
+						if (oResponse == undefined)
+						{	
+							ns1blankspace.objectExtended = false;
+
+							$(ns1blankspace.extend.structure).each(function()
+							{
+								if (this.elements === undefined)
+								{	
+									aCategories.push(this.category);
+								}
+								else
+								{
+									ns1blankspace.objectExtended = true;
+								}	
+							})	
+
+							oParam.categories = aCategories;
+
+							if (aCategories.length == 0)
+							{
+								if (bSetApp)
+								{	
+									oParam.extendInit = true;
+									ns1blankspace.app.set(oParam);
+								}	
 							}	
-						})	
-
-						oParam.categories = aCategories;
-
-						if (aCategories.length == 0)
+							else
+							{	
+								var oSearch = new AdvancedSearch();
+								oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';		
+								oSearch.addField('structure,backgroundcolour,caption,category,categorytext,datatype,datatypetext,' +
+													'description,displayorder,hint,id,notes,notestype,notestypetext,' +
+													'reference,structure,structuretext,textcolour,title');
+								oSearch.rows = 1000;
+								oSearch.addFilter('category', 'IN_LIST', aCategories.join(','))
+								oSearch.sort('category', 'asc');
+								oSearch.sort('displayorder', 'asc');
+								oSearch.async = false;  //LOOK AT REMOVE THIS
+								
+								oSearch.getResults(function(data) {ns1blankspace.extend.init(oParam, data)});
+							}	
+						}
+						else
 						{
+							var oElements = oResponse.data.rows;
+						
+							$(ns1blankspace.extend.structure).each(function(i, v)
+							{
+								this.elements = $.grep(oElements, function (a) {return a.category == v.category;});
+
+								if (this.elements.length > 0)
+								{
+									ns1blankspace.objectExtended = true;
+								}	
+							});
+
 							if (bSetApp)
 							{	
 								oParam.extendInit = true;
-								ns1blankspace.app.set(oParam);
+								ns1blankspace.app.set(oParam)
 							}	
-						}	
-						else
-						{	
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';		
-							oSearch.addField('structure,backgroundcolour,caption,category,categorytext,datatype,datatypetext,' +
-												'description,displayorder,hint,id,notes,notestype,notestypetext,' +
-												'reference,structure,structuretext,textcolour,title');
-							oSearch.rows = 1000;
-							oSearch.addFilter('category', 'IN_LIST', aCategories.join(','))
-							oSearch.sort('category', 'asc');
-							oSearch.sort('displayorder', 'asc');
-							oSearch.async = false;  //LOOK AT REMOVE THIS
-							
-							oSearch.getResults(function(data) {ns1blankspace.extend.init(oParam, data)});
-						}	
-					}
-					else
-					{
-						var oElements = oResponse.data.rows;
-					
-						$(ns1blankspace.extend.structure).each(function(i, v)
-						{
-							this.elements = $.grep(oElements, function (a) {return a.category == v.category;});
-
-							if (this.elements.length > 0)
-							{
-								ns1blankspace.objectExtended = true;
-							}	
-						});
-
-						if (bSetApp)
-						{	
-							oParam.extendInit = true;
-							ns1blankspace.app.set(oParam)
-						}	
-					}
+						}
+					}	
 				},
 
 	elements: 	function (oParam)
@@ -4804,9 +4835,12 @@ ns1blankspace.extend =
 					var aHTMLDIV = [];
 
 					$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()
-					{					
+					{	
+						var sTitle = this.title;
+						if (sTitle == undefined) {sTitle = this.categorytext}
+
 						aHTMLTR.push('<tr><td id="ns1blankspaceControl-' + this.category + '" class="ns1blankspaceControl">' +
-											this.title + '</td></tr>');
+											sTitle + '</td></tr>');
 
 						aHTMLDIV.push('<div id="ns1blankspaceMain' + this.category + '" class="ns1blankspaceControlMain"></div>');
 					});
@@ -4877,10 +4911,15 @@ ns1blankspace.extend =
 														'</td></tr>' +
 														'<tr class="ns1blankspace">');
 
-										if (this.datatype == 1)
+										if (this.datatype == 4)
 										{	
 											aHTML.push('<td class="ns1blankspaceText">' +
 												'<input id="ns1blankspaceStructure_' + this.id + '" class="ns1blankspaceText">');
+										}
+										else if (this.datatype == 3)
+										{	
+											aHTML.push('<td class="ns1blankspaceDate">' +
+												'<input id="ns1blankspaceStructure_' + this.id + '" class="ns1blankspaceDate">');
 										}
 										else if (this.datatype == 2)
 										{
@@ -4891,7 +4930,7 @@ ns1blankspace.extend =
 												
 												'>');
 										}
-										else if (this.datatype == 3)
+										else if (this.datatype == 1)
 										{
 											aHTML.push('<td class="ns1blankspaceTextMulti">' +
 												'<textarea rows="3" cols="35" id="ns1blankspaceStructure_' + this.id + '" class="ns1blankspaceTextMulti"></textarea>');
@@ -4903,6 +4942,8 @@ ns1blankspace.extend =
 									aHTML.push('</table>');
 
 									$('#ns1blankspaceMain' + iCategory).html(aHTML.join(''));
+
+									$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy' });
 								}	
 							}
 

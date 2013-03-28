@@ -657,7 +657,7 @@
 		{"title":"SETUP_STRUCTURE_ELEMENT_OPTION_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_STRUCTURE_ELEMENT_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_STRUCTURE_MANAGE", "advancedSearch":"false", "rpc":"true"},
-		{"title":"SETUP_STRUCTURE_OBJECT_LINK_MANAGE", "advancedSearch":"false", "rpc":"false"},
+		{"title":"SETUP_STRUCTURE_OBJECT_LINK_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_STRUCTURE_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_STRUCTURE_STATUS_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_STRUCTURE_TYPE_SEARCH", "advancedSearch":"true", "rpc":"true"},
