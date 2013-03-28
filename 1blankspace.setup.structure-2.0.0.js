@@ -2225,8 +2225,8 @@ ns1blankspace.setup.structure =
 											
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<table><tr><td class="ns1blankspaceNothing">' +
-																'No categories.</td></tr></table>');
+												aHTML.push('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceNothing">' +
+																'No categories.<br /><br />Need at least one category to link to.</td></tr></table>');
 
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
