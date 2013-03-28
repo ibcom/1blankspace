@@ -593,20 +593,19 @@ ns1blankspace.setup.space =
 										
 													if (iDataIndex < ns1blankspace.setup.space.initialise.data.template.import.length)
 													{
-														//ns1blankspace.status.message('Importing...');
-
-														//var sReference = $('#' + sXHTMLElementID).attr('data-reference');
-
 														var oImport = ns1blankspace.setup.space.initialise.data.template.import[iDataIndex];
 
-														var sData = oImport.data;
+														var oData = oImport.data;
 														//Need to split and util.fs()
 														
 														var oImportAlready = $.grep(ns1blankspace.setup.space.initialise.data.template.import, function (a) {return a.response != undefined});
 
 														$(oImportAlready).each(function(i, v) 
 														{
-															sData = sData.replace('[[' + v.reference + '.id]]', v.response.id)
+															for (var key in oData)
+															{					
+																oData[key] = (oData[key]).replace('[[' + v.reference + '.id]]', v.response.id);
+															}	
 														});
 
 														$('#ns1blankspaceSetupSpaceInitialiseImport_status-' + oImport.reference).html(ns1blankspace.xhtml.loadingSmall)
@@ -615,7 +614,7 @@ ns1blankspace.setup.space =
 														{
 															type: 'POST',
 															url: ns1blankspace.util.endpointURI(oImport.method),
-															data: sData,
+															data: oData,
 															dataType: 'json',
 															global: false,
 															success: function (data)

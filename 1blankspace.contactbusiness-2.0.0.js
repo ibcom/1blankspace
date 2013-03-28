@@ -655,8 +655,8 @@ ns1blankspace.contactBusiness =
 							$('#ns1blankspaceDetailsPhone').val(ns1blankspace.objectContextData.phonenumber);
 							$('#ns1blankspaceDetailsWebAddress').val(ns1blankspace.objectContextData.webaddress);
 							$('#ns1blankspaceDetailsFax').val(ns1blankspace.objectContextData.fax);
-							$('#ns1blankspaceDetailsStatus').val(ns1blankspace.objectContextData.statustext);
-							$('#ns1blankspaceDetailsStatus').attr('data-id', ns1blankspace.objectContextData.status);
+							$('#ns1blankspaceDetailsStatus').val(ns1blankspace.objectContextData.customerstatustext);
+							$('#ns1blankspaceDetailsStatus').attr('data-id', ns1blankspace.objectContextData.customerstatus);
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.notes);
 						}
 						

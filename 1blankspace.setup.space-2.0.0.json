@@ -31,31 +31,31 @@
 							"reference": "1",
 							"title": "Business contact ABC Pty Ltd",
 							"method": "CONTACT_BUSINESS_MANAGE",
-							"data": "&tradename=ABC 2 Pty Ltd"
+							"data": {"tradename": "ABC 20 Pty Ltd"}
 						},
 						{
 							"reference": "2",
 							"title": "Person contact Fred Smith",
 							"method": "CONTACT_PERSON_MANAGE",
-							"data": "contactbusiness=[[1.id]]&firstname=Fred&surname=Smith"
+							"data": {"contactbusiness": "[[1.id]]", "firstname": "Fred", "surname": "Smith"}
 						},
 						{
 							"reference": "3",
 							"title": "Project",
 							"method": "PROJECT_MANAGE",
-							"data": "reference=Project 1"
+							"data": {"reference": "Project 1"}
 						},
 						{
 							"reference": "4",
 							"title": "Project Task",
 							"method": "PROJECT_TASK_MANAGE",
-							"data": "project=[[3.id]]&title=Project Task 1"
+							"data": {"project": "[[3.id]]", "title": "Project Task 1"}
 						},
 						{
 							"reference": "5",
 							"title": "Document",
 							"method": "DOCUMENT_MANAGE",
-							"data": "title=Document 1"
+							"data": {"title": "Document 1"}
 						}
 					]
 				}
