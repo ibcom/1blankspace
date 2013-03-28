@@ -541,27 +541,16 @@ ns1blankspace.control =
 							ns1blankspace.control.init(oParam)
 						}
 						else
-						{
-							if (oResponse == undefined)
-							{
-								var oSearch = new AdvancedSearch();
-								oSearch.method = 'SETUP_USER_ROLE_SEARCH';
-								oSearch.addField('role');
-								oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.user);
-								oSearch.getResults(function(data) {ns1blankspace.control.init(oParam, data)})
-							}
-							else
-							{
-								var aIDs = [];
+						{	
+							var aIDs = [];
 
-								$(oResponse.data.rows).each(function()
-								{
-									aIDs.push(this.role);	
-								})
+							$(ns1blankspace.user.roles).each(function()
+							{
+								aIDs.push(this.id);	
+							})
 
-								$.extend(true, oParam, {step: 2, roles: aIDs});
-								ns1blankspace.control.init(oParam);
-							}
+							$.extend(true, oParam, {step: 2, roles: aIDs});
+							ns1blankspace.control.init(oParam);	
 						}	
 					}
 

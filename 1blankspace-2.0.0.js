@@ -757,7 +757,7 @@ ns1blankspace.app =
 					var aHTML = [];
 
 					ns1blankspace.user.id = oResponse.user;
-					ns1blankspace.user.unrestricted = (oResponse.unrestrictedaccess = 'Y' || oResponse.unrestrictedaccess === undefined ? true : false);
+					ns1blankspace.user.unrestricted = (oResponse.unrestrictedaccess == 'Y' || oResponse.unrestrictedaccess === undefined ? true : false);
 					ns1blankspace.user.space = oResponse.space;
 					ns1blankspace.user.spaceText = oResponse.spacename
 					ns1blankspace.user.logonName = oResponse.userlogonname;
@@ -765,6 +765,7 @@ ns1blankspace.app =
 					ns1blankspace.user.contactBusiness = oResponse.contactbusiness;
 					ns1blankspace.user.email = oResponse.email;
 					ns1blankspace.user.systemAdmin = oResponse.systemadmin;
+					ns1blankspace.user.roles = oResponse.roles.rows;
 
 					ns1blankspace.spaceText = oResponse.spacename;
 					ns1blankspace.space = oResponse.space;
