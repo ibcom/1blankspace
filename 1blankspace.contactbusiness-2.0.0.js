@@ -17,7 +17,7 @@ ns1blankspace.contactBusiness =
 					ns1blankspace.objectMethod = 'CONTACT_BUSINESS'
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'Business';
+					ns1blankspace.viewName = 'Businesses';
 					
 					var bShowHome = true;
 					var bNew = false;
