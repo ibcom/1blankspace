@@ -1739,6 +1739,20 @@ ns1blankspace.financial.unallocated =
 
 ns1blankspace.financial.invoicing =
 {
+	data: 		{},
+
+	unsent: 	function ()
+				{
+					//look for where unsent = N
+					
+				},
+
+	create: 	{
+					//Get invocies old than their set frequency x 100
+					//Set .data.create = 
+					//Loop through and create invoices - alter data and then just send back in .ajax
+				},		
+
 	show: 		function (oParam, oResponse)
 				{
 					var iStep = 1;
