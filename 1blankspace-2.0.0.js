@@ -982,12 +982,12 @@ ns1blankspace.app =
 						ns1blankspace.control.spaces.show(this);
 					});
 					
-					if (ns1blankspace.option.showBrowsing)
-					{
-						$('#ns1blankspaceViewControlBrowse').html(ns1blankspaceViewportBrowse());
-					}
-					else
-					{
+					//if (ns1blankspace.option.showBrowsing)
+					//{
+						//$('#ns1blankspaceViewControlBrowse').html(ns1blankspaceViewportBrowse());
+					//}
+					//else
+					//{
 						$('#ns1blankspaceViewControlBrowse')
 							.css('height', '1px')
 							.css('border-width', '0px');
@@ -997,7 +997,7 @@ ns1blankspace.app =
 							
 						//$('#ns1blankspaceViewControl')
 						//	.css('top', '90px');
-					}
+					//}
 					
 					$("#ns1blankspaceHeader").touchwipe({
 							wipeLeft: function() {ns1blankspace.history.view({instruction: 3});},
