@@ -1741,16 +1741,38 @@ ns1blankspace.financial.invoicing =
 {
 	data: 		{},
 
-	unsent: 	function ()
+	unsent: 	function (oParam, oResponse)
 				{
-					//look for where unsent = N
-					
+					if (oResponse == undefined)
+					{	
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+						oSearch.addField('reference,sentdate,amount,contactbusinesstext.contactpersontext');
+						oSearch.addFilter('sent', 'EQUAL_TO', 'N');
+					}
+					else
+					{
+
+					}	
 				},
 
-	create: 	{
+	create: 	function (oParam, oResponse)
+				{
 					//Get invocies old than their set frequency x 100
 					//Set .data.create = 
 					//Loop through and create invoices - alter data and then just send back in .ajax
+
+					if (oResponse  == undefined)
+					{	
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+						oSearch.addField('reference,sentdate,amount,contactbusinesstext.contactpersontext');
+						oSearch.addFilter('sent', 'EQUAL_TO', 'N');
+					}
+					else
+					{
+
+					}
 				},		
 
 	show: 		function (oParam, oResponse)
