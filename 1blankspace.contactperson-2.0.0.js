@@ -1506,8 +1506,7 @@ ns1blankspace.contactPerson =
 																}
 													})
 													.click(function() {
-														ns1blankspace.contactPerson.init({showHome: false});
-														ns1blankspace.contactPerson.search.send(this.id)
+														ns1blankspace.contactPerson.init({id: this.id});
 													})
 													.css('width', '15px')
 													.css('height', '20px')

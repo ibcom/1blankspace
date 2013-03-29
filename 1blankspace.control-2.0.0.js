@@ -1713,6 +1713,7 @@ ns1blankspace.control =
 																	ns1blankspace.spaceText = ns1blankspace.user.spaceText;
 																	ns1blankspace.financial.data = undefined;
 																	ns1blankspace.financial.initStatus = undefined;
+																	ns1blankspace.extend.structure = undefined;
 																	$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
 																	ns1blankspace.app.refresh();
 																}
@@ -1787,6 +1788,7 @@ ns1blankspace.control =
 															ns1blankspace.spaceText = $('#' + event.target.id).html();
 															ns1blankspace.financial.data = undefined;
 															ns1blankspace.financial.initStatus = undefined;
+															ns1blankspace.extend.structure = undefined;
 															$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
 															ns1blankspace.app.refresh();
 														}	
