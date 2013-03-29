@@ -158,7 +158,7 @@ ns1blankspace.contactPerson =
 										oSearch.addField('firstname,surname,contactbusiness,contactbusinesstext,title,titletext,position,workphone,fax,mobile,email,' +
 																 'customerstatus,customerstatustext,gender,gendertext,' +
 																 'streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
-																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,modifieddate');
+																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,modifieddate,notes');
 
 										oSearch.addField(ns1blankspace.extend.elements());
 
@@ -674,6 +674,7 @@ ns1blankspace.contactPerson =
 							$('#ns1blankspaceDetailsMobile').val(ns1blankspace.objectContextData.mobile);
 							$('#ns1blankspaceDetailsFax').val(ns1blankspace.objectContextData.fax);
 							$('#ns1blankspaceDetailsEmail').val(ns1blankspace.objectContextData.email);
+							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.notes);
 						}
 						
 						$('#ns1blankspaceDetailsTitle').keyup(function(event)
