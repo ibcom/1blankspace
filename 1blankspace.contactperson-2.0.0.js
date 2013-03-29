@@ -450,7 +450,7 @@ ns1blankspace.contactPerson =
 					}	
 				},	
 		
-	summary: 	function ()
+	summary: 	function (oParam, oResponse)
 				{
 					var aHTML = [];
 					
@@ -462,67 +462,74 @@ ns1blankspace.contactPerson =
 					}
 					else
 					{
-						aHTML.push('<table class="ns1blankspaceMain">' +
-									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:300px;"></td>' +
-									'</tr>' +
-									'</table>');				
-						
-						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
-					
-						var aHTML = [];
-					
-						aHTML.push('<table class="ns1blankspace">');
-						
-						if (ns1blankspace.objectContextData.contactbusinesstext != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.contactbusinesstext +
-										'</td></tr>');
-						}
-
-						if (ns1blankspace.objectContextData.workphone != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryPhone" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.workphone +
-										'</td></tr>');
-						}
-
-						if (ns1blankspace.objectContextData.mobile != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Mobile</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryMobile" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.mobile +
-										'</td></tr>');
-						}				
-						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
-										Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
-										'</td></tr>');	
-								
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));	
-
-						if (ns1blankspace.objectContextData.email != '')
+						if (oResponse == undefined)
 						{	
+							aHTML.push('<table class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspaceRow">' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:300px;"></td>' +
+										'</tr>' +
+										'</table>');				
+							
+							$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
+						
 							var aHTML = [];
-					
+						
+							aHTML.push('<table class="ns1blankspace">');
+							
+							if (ns1blankspace.objectContextData.contactbusinesstext != '')
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.contactbusinesstext +
+											'</td></tr>');
+							}
+
+							if (ns1blankspace.objectContextData.workphone != '')
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryPhone" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.workphone +
+											'</td></tr>');
+							}
+
+							if (ns1blankspace.objectContextData.mobile != '')
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Mobile</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryMobile" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.mobile +
+											'</td></tr>');
+							}				
+							
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
+											Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+											'</td></tr>');	
+									
+							aHTML.push('</table>');					
+							
+							$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));	
+
+							var aHTML = [];
+						
 							aHTML.push('<table class="ns1blankspaceColumn2">');
 
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
-										ns1blankspace.objectContextData.email +
-										'</td></tr>');	
+							aHTML.push('<tr><td id="ns1blankspaceFavourite" class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
+											ns1blankspace.xhtml.loadingSmall +
+											'</td></tr>');	
 
-							aHTML.push('<tr><td><span id="ns1blankspaceContactPersonEmail" class="ns1blankspaceAction">' +
-										'Email</span></td></tr>');
+							if (ns1blankspace.objectContextData.email != '')
+							{	
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
+											ns1blankspace.objectContextData.email +
+											'</td></tr>');	
+
+								aHTML.push('<tr><td><span id="ns1blankspaceContactPersonEmail" class="ns1blankspaceAction">' +
+											'Email</span></td></tr>');	
+							}
 
 							aHTML.push('</table>');					
-						
+							
 							$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 
 							$('#ns1blankspaceContactPersonEmail').button(
@@ -544,7 +551,67 @@ ns1blankspace.contactPerson =
 									objectContext: ns1blankspace.objectContextData.id
 								});
 							});
-						}
+
+							var sData = 'object=' + ns1blankspace.object;
+							sData += '&objectContext=' + ns1blankspace.objectContext;
+							
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('CORE_FAVOURITE_SEARCH'),
+								data: sData,
+								dataType: 'json',
+								success: function (data)
+								{
+									ns1blankspace.contactPerson.summary(oParam, data);
+								}
+							});
+						}	
+						else
+						{
+							$('#ns1blankspaceFavourite').html('<span id="ns1blankspaceContactPersonFavourite" class="ns1blankspaceAction"></span>')
+
+							var sFavourite = 'Set as favourite';
+							var bFavourite = false;
+							var iFavouriteID;
+
+							if (oResponse.data.rows.length != 0)
+							{
+								sFavourite = 'Remove';
+								bFavourite = true;
+								iFavouriteID = oResponse.data.rows[0].id;
+							}
+
+							$('#ns1blankspaceContactPersonFavourite').button(
+							{
+								label: sFavourite,
+								icons:
+								{
+									primary: (bFavourite?"ui-icon-star":"")
+								}
+							})
+							.click(function()
+							{
+								var sData = 'object=' + ns1blankspace.object;
+								sData += '&objectContext=' + ns1blankspace.objectContext;
+								if (bFavourite)
+								{
+									sData += '&remove=1&id=' + ns1blankspace.util.fs(iFavouriteID);
+								}
+
+								$.ajax(
+								{
+									type: 'POST',
+									url: ns1blankspace.util.endpointURI('CORE_FAVOURITE_MANAGE'),
+									data: sData,
+									dataType: 'json',
+									success: function ()
+									{
+										ns1blankspace.contactPerson.summary();
+									}
+								});							
+							});
+						}	
 					}	
 				},
 
@@ -983,137 +1050,6 @@ ns1blankspace.contactPerson =
 								}
 				},				
 
-	user: 		{
-					show: 		function (oParam, oResponse)
-								{
-
-									var iObject = ns1blankspace.object;
-									var iObjectContext = ns1blankspace.objectContext;
-									
-									if (oParam != undefined)
-									{
-										if (oParam.object != undefined || iObject == '') {iObject = oParam.object}
-										if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
-									}
-
-									if (oResponse == undefined)
-									{
-										var sData = 'contactperson=' + iObjectContext;
-									
-										$.ajax(
-										{
-											type: 'POST',
-											url: '/ondemand/setup/?method=SETUP_USER_SEARCH',
-											dataType: 'json',
-											data: sData,
-											success: function(data) {this.show(oParam, data)}
-										});
-
-									}
-									else
-									{	
-										var aHTML = [];
-									
-										if (oResponse.data.rows.length == 0)
-										{
-											aHTML.push('<table class="ns1blankspace">');
-												
-											var sUserName = oResponse.username;
-											sUserName = sUserName.replace('@' + msOnDemandSiteId, '');
-											
-											aHTML.push('<tr>' +
-														'<td class="ns1blankspace">' +
-														'This person already has access as ' +
-														sUserName);
-														
-											if (oResponse.lastlogondatetime != '&nbsp;')
-											{	
-												aHTML.push(' and last logged on ' +
-														oResponse.lastlogondatetime +
-														'.</td></tr>');
-											}
-											else
-											{
-												aHTML.push('.</td></tr>');
-											}	
-														
-											aHTML.push('</table>');					
-										
-											$('#ns1blankspaceMainUser').html(aHTML.join(''));
-										}
-										else
-										{
-										
-											var aHTML = [];
-
-											aHTML.push('<table class="ns1blankspace">');
-													
-											aHTML.push('<tr>' +
-															'<td>' +
-															'<span id="ns1blankspaceUserRegister">Register As User Now</span>' +
-															'</td></tr>');
-															
-											aHTML.push('</table>');					
-											
-											$('#ns1blankspaceMainUser').html(aHTML.join(''));
-											
-											$('#ns1blankspaceUserRegister').button(
-											{
-												text: "Register As User Now"
-											})
-											.click(function() {
-												ns1blankspace.contactPerson.user.add();
-											});
-										}
-									}
-								},	
-
-					add: 		function (sResponse)
-								{
-									if (sResponse == undefined)
-									{
-										$('#ns1blankspaceUser').html(ns1blankspace.xhtml.loading);
-										
-										var sParam = 'method=REGISTER_ADD_USER';
-										sParam += '&site=' + msOnDemandSiteId;
-										
-										var sData = 'ContactPersonperson=' + ns1blankspace.objectContext;
-										//sData += '&ContactPersonbusiness=' + aResponse[4];
-										sData += '&uselogonsuffix=1&logonsuffix=' + encodeURIComponent('@' + msOnDemandSiteId);
-										sData += '&networkgroup=' + glNetworkGroupId; 
-										
-										$.ajax(
-										{
-											type: 'POST',
-											url: '/ondemand/register/?' + sParam,
-											data: sData,
-											dataType: 'json',
-											success: ns1blankspace.contactPerson.user.add
-										});
-									}		
-									else
-									{
-										var aHTML = [];
-
-										aHTML.push('<table class="ns1blankspace">');
-												
-										var sUserName = oResponse.username;
-										sUserName = sUserName.replace('@' + msOnDemandSiteId, '');
-											
-										aHTML.push('<tr><td>' +
-														'User set up as ' +
-														sUserName +
-														' with initial password of ' +
-														oResponse.initialpassword +
-														'.</td></tr>');
-														
-										aHTML.push('</table>');					
-										
-										$('#ns1blankspaceMainUser').html(aHTML.join(''));
-									}	
-								}
-				},				
-
 	groups: 	{ 
 					show: 		function (oParam, oResponse)
 								{
@@ -1448,7 +1384,7 @@ ns1blankspace.contactPerson =
 															aHTML.push('<table id="ns1blankspaceContactPersonGroup" class="ns1blankspace">');
 										
 															aHTML.push('<tr class="ns1blankspaceCaption">' + 
-																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementID[2] + '</td>' +
+																			'<td colspan=3 class="ns1blankspaceHeaderCaption">' + aXHTMLElementID[2] + '</td>' +
 																			'</tr>');
 															
 															$.each(oResponse.data.rows, function()
@@ -1506,7 +1442,7 @@ ns1blankspace.contactPerson =
 																}
 													})
 													.click(function() {
-														ns1blankspace.contactPerson.init({id: this.id});
+														ns1blankspace.contactPerson.init({id: (this.id).split('-')[1]});
 													})
 													.css('width', '15px')
 													.css('height', '20px')
@@ -1567,6 +1503,7 @@ ns1blankspace.contactPerson =
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">First Name</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Last Name</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function() {
