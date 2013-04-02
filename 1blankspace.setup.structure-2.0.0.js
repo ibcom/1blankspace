@@ -1333,7 +1333,7 @@ ns1blankspace.setup.structure =
 					edit:		function (oParam, oResponse)
 								{
 									var sID; 
-									var iDefaultCategory;
+									var iCategory;
 									
 									if (oResponse == undefined)
 									{
@@ -1342,6 +1342,7 @@ ns1blankspace.setup.structure =
 										if (oParam != undefined)
 										{
 											if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+											if (oParam.category != undefined) {iCategory = oParam.category}
 										}
 										
 										if (sXHTMLElementID != undefined)
@@ -1403,7 +1404,7 @@ ns1blankspace.setup.structure =
 										
 										$.each(ns1blankspace.setup.structure.data.categories, function()
 										{
-											if (iDefaultCategory == undefined) {iDefaultCategory = this.id}
+											if (iCategory == undefined) {iCategory = this.id}
 											aHTML.push('<input type="radio" id="radioCategory' + this.id + '" name="radioCategory" value="' + this.id + '"/>' +
 																this.title + '<br />');				
 										});
@@ -1501,6 +1502,7 @@ ns1blankspace.setup.structure =
 												success: function() {
 													$('#ns1blankspaceSetupStructureElement_title-' + sID).html($('#ns1blankspaceSetupStructureElementTitle').val());
 													ns1blankspace.status.message('Element has been saved.');
+													ns1blankspace.setup.structure.element.show(oParam);
 												}
 											});
 										});
@@ -1517,7 +1519,7 @@ ns1blankspace.setup.structure =
 										else
 										{
 											$('[name="radioDataType"][value="4"]').attr('checked', true);
-											$('[name="radioCategory"][value="' + iDefaultCategory + '"]').attr('checked', true);	
+											$('[name="radioCategory"][value="' + iCategory + '"]').attr('checked', true);	
 										}
 									}
 									else
