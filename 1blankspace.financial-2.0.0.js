@@ -52,7 +52,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							ns1blankspace.financial.initStatus = undefined;
 						}
 						
-						ns1blankspace.financial.initWhenDataInitalised(oParam);
+						//ns1blankspace.financial.initWhenDataInitalised(oParam);
 
 						if (ns1blankspace.financial.initStatus != 2 || bRefresh)
 						{
@@ -150,6 +150,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									{
 										ns1blankspace.financial.initStatus = 2;
 										ns1blankspace.status.message('&nbsp;');
+										ns1blankspace.financial.init({initialised: true});
 									}
 								}
 								else
@@ -174,9 +175,14 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 				
 										ns1blankspace.financial.initStatus = 2;
 										ns1blankspace.status.message('&nbsp;');
+										ns1blankspace.financial.init({initialised: true});
 									}	
 								}
 							}
+						}
+						else
+						{
+							ns1blankspace.financial.init({initialised: true});
 						}	
 					}
 
@@ -401,17 +407,17 @@ ns1blankspace.financial.summary = function (oParam, oResponse)
 					
 					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creditors</td></tr>' +
 									'<tr><td class="ns1blankspaceSummary">' +
-									ns1blankspace.financial.data.settings.lockeddatecreditors +
+									(ns1blankspace.financial.data.settings.lockeddatecreditors != ''?ns1blankspace.financial.data.settings.lockeddatedebtors:'Not locked')+
 									'</td></tr>');
 					
 					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Debtors</td></tr>' +
 									'<tr><td class="ns1blankspaceSummary">' +
-									ns1blankspace.financial.data.settings.lockeddatedebtors +
+									(ns1blankspace.financial.data.settings.lockeddatedebtors != ''?ns1blankspace.financial.data.settings.lockeddatedebtors:'Not locked') +
 									'</td></tr>');
 					
 					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">General Journals</td></tr>' +
 									'<tr><td class="ns1blankspaceSummary">' +
-									ns1blankspace.financial.data.settings.lockeddatejournals +
+									(ns1blankspace.financial.data.settings.lockeddatejournals != ''?ns1blankspace.financial.data.settings.lockeddatejournals:'Not locked') +
 									'</td></tr>');
 					
 					aHTML.push('</table>');					
