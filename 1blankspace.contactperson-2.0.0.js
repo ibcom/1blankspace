@@ -7,6 +7,8 @@
  
 ns1blankspace.contactPerson = 
 {
+	data: 		[],
+
 	init: 		function (oParam)
 				{
 					ns1blankspace.app.reset();
@@ -1117,6 +1119,8 @@ ns1blankspace.contactPerson =
 										
 										var aHTML = [];
 									
+										ns1blankspace.contactPerson.data.groups = [];
+
 										if (oResponse.data.rows.length == 0)
 										{
 											aHTML.push('<table>' +
@@ -1133,6 +1137,8 @@ ns1blankspace.contactPerson =
 											{	
 												if (this.grouptext != '')
 												{
+													ns1blankspace.contactPerson.data.groups.push(this.group);
+
 													aHTML.push('<tr class="ns1blankspaceRow">');
 																	
 													aHTML.push('<td id="ns1blankspaceGroups-title-' + this.id + '" class="ns1blankspaceRow">' +
@@ -1182,6 +1188,7 @@ ns1blankspace.contactPerson =
 											{
 												type: 'GET',
 												url: ns1blankspace.util.endpointURI('SETUP_CONTACT_PERSON_GROUP_SEARCH'),
+												data: 'rows=100',
 												dataType: 'json',
 												success: function(data){ns1blankspace.contactPerson.groups.add(oParam, data)}
 											});
@@ -1197,52 +1204,52 @@ ns1blankspace.contactPerson =
 
 											$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceContactPersonGroupsAdd')
 											
-											var aHTML = [];
+											var aHTMLTR = [];
+												
+											$.each(oResponse.data.rows, function(i, v)
+											{	
+												if ($.grep(ns1blankspace.contactPerson.data.groups, function (a) {return a == v.id;}).length == 0)
+												{
+
+													aHTMLTR.push('<tr class="ns1blankspaceRow">' +
+																'<td id="ns1blankspaceGroupsAdd-title-' + this.id + '" class="ns1blankspaceRowSelect ns1blankspaceGroupsAddRowSelect">' +
+																		this.title + '</td></tr>');
+												}	
+											});
 											
-											if (oResponse.data.rows.length == 0)
+											var aHTML = [];
+
+											if (aHTMLTR.length == 0)
 											{
 												aHTML.push('<table class="ns1blankspaceSearchMedium">' + 
 																'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' + 
 																'</table>');
-
-												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-											}
+											}	
 											else
 											{
 												aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.875em;">');
-												
-												$.each(oResponse.data.rows, function()
-												{	
-													aHTML.push('<tr class="ns1blankspaceRow">' +
-																	'<td id="ns1blankspaceGroupsAdd-title-' + this.id + '" class="ns1blankspaceRowSelect ns1blankspaceGroupsAddRowSelect">' +
-																			this.title + '</td>');
-													
-													aHTML.push('</tr>');
-												});
-												
+												aHTML.push(aHTMLTR.join(''));
 												aHTML.push('</table>');
+											}	
 
-												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-												
-												$('td.ns1blankspaceGroupsAddRowSelect').click(function(event)
-												{
-													ns1blankspace.contactPerson.groups.select(event.target.id);
-												});
-											}
+											$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+											$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+											
+											$('td.ns1blankspaceGroupsAddRowSelect').click(function(event)
+											{
+												ns1blankspace.contactPerson.groups.select(event.target.id);
+											});
 										}
 									}	
 								},
 	
-					select: 	function (sXHTMLElementId)
+					select: 	function (sXHTMLElementID)
 								{
-									var aSearch = sXHTMLElementId.split('-');
-									var sElementId = aSearch[0];
+									var aSearch = sXHTMLElementID.split('-');
 									var sSearchContext = aSearch[2];
 									
-									$('#' + sXHTMLElementId).fadeOut(500);
-									
+									$('#' + sXHTMLElementID).parent().fadeOut(100);
+
 									var sData = 'contactperson=' + ns1blankspace.objectContext +
 												'&group=' + sSearchContext;
 												
@@ -1252,7 +1259,14 @@ ns1blankspace.contactPerson =
 										url: ns1blankspace.util.endpointURI('CONTACT_PERSON_GROUP_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: function(data){ns1blankspace.contactPerson.groups.show()}
+										success: function(data)
+													{
+														ns1blankspace.contactPerson.groups.show();
+														if ($('#' + sXHTMLElementID).parent().siblings('tr:visible').length == 0)
+														{
+															ns1blankspace.container.hide();
+														}	
+													}
 									});
 										
 								},
