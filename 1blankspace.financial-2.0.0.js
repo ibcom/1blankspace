@@ -500,6 +500,7 @@ ns1blankspace.financial.debtors =
 						{
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_DEBTOR_SEARCH'),
+							global: false,
 							dataType: 'json',
 							success: function(data) {ns1blankspace.financial.debtors.show(oParam, data)}
 						});			
@@ -614,6 +615,7 @@ ns1blankspace.financial.creditors =
 						{
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_CREDITOR_SEARCH'),
+							global: false,
 							dataType: 'json',
 							success: function(data) {ns1blankspace.financial.creditors.show(oParam, data)}
 						});
