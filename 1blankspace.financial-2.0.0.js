@@ -150,7 +150,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									{
 										ns1blankspace.financial.initStatus = 2;
 										ns1blankspace.status.message('&nbsp;');
-										ns1blankspace.financial.init({initialised: true});
+										ns1blankspace.financial.initWhenDataInitalised(oParam);
 									}
 								}
 								else
@@ -175,14 +175,14 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 				
 										ns1blankspace.financial.initStatus = 2;
 										ns1blankspace.status.message('&nbsp;');
-										ns1blankspace.financial.init({initialised: true});
+										ns1blankspace.financial.initWhenDataInitalised(oParam);
 									}	
 								}
 							}
 						}
 						else
 						{
-							ns1blankspace.financial.init({initialised: true});
+							ns1blankspace.financial.initWhenDataInitalised(oParam);
 						}	
 					}
 
@@ -211,6 +211,7 @@ ns1blankspace.financial.initWhenDataInitalised = function (oParam)
 								if (oParam == undefined) {oParam = {}}
 								oParam.initialised = true;
 								ns1blankspace.timer.initWhenDataInitalisedParam = undefined;
+								oParam.step = undefined;
 								oNS.init(oParam)
 							}	
 						}
@@ -1749,40 +1750,6 @@ ns1blankspace.financial.invoicing =
 {
 	data: 		{},
 
-	unsent: 	function (oParam, oResponse)
-				{
-					if (oResponse == undefined)
-					{	
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-						oSearch.addField('reference,sentdate,amount,contactbusinesstext.contactpersontext');
-						oSearch.addFilter('sent', 'EQUAL_TO', 'N');
-					}
-					else
-					{
-
-					}	
-				},
-
-	create: 	function (oParam, oResponse)
-				{
-					//Get invocies old than their set frequency x 100
-					//Set .data.create = 
-					//Loop through and create invoices - alter data and then just send back in .ajax
-
-					if (oResponse  == undefined)
-					{	
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-						oSearch.addField('reference,sentdate,amount,contactbusinesstext.contactpersontext');
-						oSearch.addFilter('sent', 'EQUAL_TO', 'N');
-					}
-					else
-					{
-
-					}
-				},		
-
 	show: 		function (oParam, oResponse)
 				{
 					var iStep = 1;
@@ -1827,126 +1794,144 @@ ns1blankspace.financial.invoicing =
 						$('#ns1blankspaceInvoicingOption :radio').click(function()
 						{
 							var aID = (event.target.id).split('-');
-							$.extend(true, oParam, {step: 2, type: parseInt(aID[1])});
-							ns1blankspace.financial.unallocated.show(oParam);
+							
+							if (aID[1] == 1)
+							{	
+								ns1blankspace.financial.invoicing.unsent.show(oParam);
+							}
+							
+							if (aID[2] == 1)
+							{	
+								ns1blankspace.financial.invoicing.create.show(oParam);
+							}		
 						});
 					}
-					
-					if (iStep == 2)
-					{	
-						if (oResponse == undefined)
-						{
-							if (ns1blankspace.financial.unallocatedAccount == undefined)
-							{	
-								var oSearch = new AdvancedSearch();
-								oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-								oSearch.addField('title');
-								oSearch.addFilter('title', 'TEXT_IS_LIKE', 'Unallocated');
-								oSearch.async = false;
-								oSearch.rows = 1;
-								
-								oSearch.getResults(function(oResponse)
+				},
+
+	unsent: 	{
+					show:		function (oParam, oResponse)
 								{
-									if (oResponse.data.rows.length != 0)
-									{
-										ns1blankspace.financial.unallocatedAccount = oResponse.data.rows[0].id;
+									if (oResponse == undefined)
+									{	
+										$('#ns1blankspaceInvoicingColumn2').html(ns1blankspace.xhtml.loading);
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+										oSearch.addField('reference,amount,description,contactbusinesssenttotext,contactpersonsenttotext');
+										oSearch.addFilter('sent', 'EQUAL_TO', 'N');
+										oSearch.rows = 100;
+										oSearch.sort('reference', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.financial.invoicing.unsent.show(oParam, data)});
 									}
 									else
 									{
-										ns1blankspace.financial.unallocatedAccount = -1;
-									}	
-								});	
-							}
-								
-							if (ns1blankspace.financial.unallocatedAccount == -1)
-							{
-								$('#ns1blankspaceUnallocatedColumn1').html('<span class="ns1blankspaceNothing">No unallocated account set up.</span>');
-							}
-							else
-							{	
-								$('#ns1blankspaceUnallocatedColumn2').html(ns1blankspace.xhtml.loading);
-
-								var oSearch = new AdvancedSearch();
-
-								if (iType == 1)
-								{
-									oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-									oSearch.addField('reference,sentdate,invoice.lineitem.amount,invoice.lineitem.description,invoice.lineitem.id');
-									oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
-									oSearch.addFilter('invoice.sent', 'EQUAL_TO', 'N');
-
-									ns1blankspace.financial.unallocated.row = function (oRow)
-									{
 										var aHTML = [];
 										
-										aHTML.push('<tr class="ns1blankspaceRow">' +
-														'<td id="ns1blankspaceUnallocated_reference-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-														oRow["reference"] + '</td>'); 
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<span class="ns1blankspaceSub">No unsent invoices.</span>');
+										}
+										else
+										{
+											aHTML.push('<table id="ns1blankspaceInvoicingUnsent" class="ns1blankspaceColumn2">' +
+														'<tr class="ns1blankspaceHeaderCaption">' +
+														'<td class="ns1blankspaceHeaderCaption" style="width:100px;">Reference</td>' +
+														'<td class="ns1blankspaceHeaderCaption">Contact</td>' +
+														'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+														'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
+														'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
+														'</tr>');
 
-										aHTML.push('<td id="ns1blankspaceUnallocated_date-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-														oRow["sentdate"] + '</td>'); 
+											$(oResponse.data.rows).each(function() 
+											{
+												aHTML.push(ns1blankspace.financial.invoicing.unsent.row(this));
+											});
+											
+											aHTML.push('</table>');
+										}
+										
+										ns1blankspace.render.page.show(
+										{
+											type: 'JSON',
+											xhtmlElementID: 'ns1blankspaceInvoicingColumn2',
+											xhtmlContext: 'Invoicing',
+											xhtml: aHTML.join(''),
+											showMore: (oResponse.morerows == "true"),
+											more: oResponse.moreid,
+											rows: 100,
+											functionShowRow: ns1blankspace.financial.invoicing.unsent.row,
+											functionOpen: undefined,
+											functionNewPage: 'ns1blankspace.financial.invoicing.unsent.bind()'
+										}); 
 
-										aHTML.push('<td id="ns1blankspaceUnallocated_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-														oRow["invoice.lineitem.description"] + '</td>'); 
-
-										aHTML.push('<td id="ns1blankspaceUnallocated_amount-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:right;">' +
-														oRow["invoice.lineitem.amount"] + '</td>'); 
-
-										aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-										aHTML.push('<span id="ns1blankspaceReconcileItems_options_search-' + oRow["invoice.lineitem.id"] + '-1"' +
-														' class="ns1blankspaceUnallocatedEdit"></span></td>');
-										aHTML.push('</tr>');
-
-										return aHTML.join('');
+										ns1blankspace.financial.invoicing.unsent.bind();   	
 									}
-								}
-							}	
-						}
-						else
-						{
-							var aHTML = [];
-						
-							if (oResponse.data.rows.length == 0)
-							{
-								aHTML.push('<span class="ns1blankspaceSub">No unallocated items.</span>');
-							}
-							else
-							{
-								aHTML.push('<table class="ns1blankspaceColumn2" id="ns1blankspaceUnallocatedItems">' +
-											'<tr class="ns1blankspaceHeaderCaption">' +
-											'<td class="ns1blankspaceHeaderCaption" id="ns1blankspaceUnallocatedEditReference" style="width:100px;">Reference</td>' +
-											'<td class="ns1blankspaceHeaderCaption" id="ns1blankspaceUnallocatedEditDate" style="width:100px;">Date</td>' +
-											'<td class="ns1blankspaceHeaderCaption" id="ns1blankspaceUnallocatedEditDescription">Description</td>' +
-											'<td class="ns1blankspaceHeaderCaption" id="ns1blankspaceUnallocatedEditAmount" style="width:100px; text-align:right;">Amount</td>' +
-											'<td class="ns1blankspaceHeaderCaption" id="ns1blankspaceUnallocatedEditallocated" class="2"></td>' +
-											'</tr>');
+								},
 
-								$(oResponse.data.rows).each(function() 
+					row: 		function (oRow)	
 								{
-									aHTML.push(ns1blankspace.financial.unallocated.row(this));
-								});
-								
-								aHTML.push('</table>');
-							}
-							
-							ns1blankspace.render.page.show(
-							{
-								type: 'JSON',
-								xhtmlElementID: 'ns1blankspaceUnallocatedColumn2',
-								xhtmlContext: 'Unallocated',
-								xhtml: aHTML.join(''),
-								showMore: (oResponse.morerows == "true"),
-								more: oResponse.moreid,
-								rows: 100,
-								functionShowRow: ns1blankspace.financial.unallocated.row,
-								functionOpen: undefined,
-								functionNewPage: 'ns1blankspace.financial.unallocated.bind()'
-							}); 
+									var aHTML = [];
+									
+									aHTML.push('<tr class="ns1blankspaceRow">' +
+													'<td id="ns1blankspaceUnsent_reference-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+													oRow["reference"] + '</td>'); 
 
-							ns1blankspace.financial.unallocated.bind();   	
-						}
-					}	
-				}
+									var sContact = oRow['contactbusinesssenttotext'];
+									if (sContact == '') {sContact = oRow['contactpersonsenttotext']}
+								
+									aHTML.push('<td id="ns1blankspaceUnsent_contact-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+														sContact + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceUnsent_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+													oRow["description"] + '</td>'); 
+
+									aHTML.push('<td id="ns1blankspaceUnsent_amount-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:right;">' +
+													oRow["amount"] + '</td>'); 
+
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+									aHTML.push('<span id="ns1blankspaceUnsent_option-' + oRow['id'] + '-1"' +
+													' class="ns1blankspaceRowView"></span></td>');
+									aHTML.push('</tr>');
+
+									return aHTML.join('');
+								},
+
+					bind: 		function ()
+								{
+									$('#ns1blankspaceInvoicingUnsent .ns1blankspaceRowView').button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icon-play"
+										}
+									})
+									.click(function() {
+										ns1blankspace.financial.invoice.init({id: (this.id).split('-')[1]});
+									})
+									.css('width', '15px')
+									.css('height', '20px');
+								}								
+				},
+
+	create: 	function (oParam, oResponse)
+				{
+					//Get invocies old than their set frequency x 100
+					//Set .data.create = 
+					//Loop through and create invoices - alter data and then just send back in .ajax
+
+					if (oResponse  == undefined)
+					{	
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+						oSearch.addField('reference,sentdate,amount,contactbusinesstext.contactpersontext');
+						oSearch.addFilter('sent', 'EQUAL_TO', 'N');
+					}
+					else
+					{
+
+					}
+				}	
 }				
 
 ns1blankspace.financial.transactions =

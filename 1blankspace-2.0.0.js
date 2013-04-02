@@ -1812,8 +1812,6 @@ ns1blankspace.logOff = function ()
 						{
 							if (!ns1blankspace.debug.enabled)
 							{
-								ns1blankspace.unloadWarning = false;
-								//ns1blankspace.app.start();
 								ns1blankspace.refresh();
 							}
 						}
