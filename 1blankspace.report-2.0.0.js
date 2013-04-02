@@ -34,108 +34,50 @@ ns1blankspace.report =
 						if (oParam.all != undefined) {bAll = oParam.all}
 					}
 							
+					// Only add reports that they have access to ToDo
+					/*$(ns1blankspace.views).each(function(i, k)
+					{
+						var oMethods = $.grep(ns1blankspace.user.methods, function (a) {return (a.accessmethodtext).indexOf(k.endpoint) != -1;})	
+						if (oMethods.length == 0) {this.show = false};
+					});*/
+
 					ns1blankspace.report.reports =
 						[
 							{
 								name: "Businesses",
+								object: 12,
+								objectName: "contactbusiness",
 								method: "CONTACT_BUSINESS_SEARCH",
-								returnParameters: 'contactbusiness,contactbusiness.relationshipbusiness,contactbusiness.customerstatuschange,contactbusiness.relationshipotherbusiness,contactbusiness.contactperson',
+								returnParameters: 'contactbusiness,contactbusiness.contactperson',
 								functionSearch: ns1blankspace.contactBusiness.search.send,
 								scriptOpen: 'ns1blankspace.contactBusiness.init({showHome: false});ns1blankspace.contactBusiness.search.send(this.id)',
 							},
 							{
 								name: "People",
+								object: 32,
+								objectName: "contactperson",
 								method: "CONTACT_PERSON_SEARCH",
-								returnParameters: 'contactperson,contactperson.contactbusiness,contactperson.contactbusiness.audititemtype',
+								returnParameters: 'contactperson,contactperson.contactbusiness',
 								functionSearch: ns1blankspace.contactPerson.search.send,
-								scriptOpen: 'ns1blankspace.contactPerson.init({showHome: false});ns1blankspace.contactPerson.search.send(this.id)',
-								selectableParameters:
-								{
-									fields:
-									[
-										{name: "contactperson.surname", caption: "Surname"},
-										{name: "contactperson.firstname", caption: "First Name"},
-										{name: "contactperson.titletext", caption: "Title"},
-										{name: "contactperson.gendertext", caption: "Gender"},
-										{name: "contactperson.position", caption: "Position"},
-										{name: "contactperson.workphone", caption: "Work Phone"},
-										{name: "contactperson.fax", caption: "Fax"},
-										{name: "contactperson.mobile", caption: "Mobile"},
-										{name: "contactperson.email", caption: "Email"},
-										{name: "contactperson.streetaddress1", caption: "Street Address 1"},
-										{name: "contactperson.streetaddress2", caption: "Street Address 2"},
-										{name: "contactperson.streetsuburb", caption: "Street Suburb"},
-										{name: "contactperson.streetstate", caption: "Street State"},
-										{name: "contactperson.streetpostcode", caption: "Street Postcode"},
-										{name: "contactperson.streetcountry", caption: "Street Country"},
-										{name: "contactperson.mailingtitle", caption: "Mailing Name"},
-										{name: "contactperson.mailingaddress1", caption: "Mailing Address 1"},
-										{name: "contactperson.mailingaddress2", caption: "Mailing Address 2"},
-										{name: "contactperson.mailingsuburb", caption: "Mailing Suburb"},
-										{name: "contactperson.mailingstate", caption: "Mailing State"},
-										{name: "contactperson.mailingpostcode", caption: "Mailing Postcode"},
-										{name: "contactperson.mailingcountry", caption: "Mailing Country"},
-										{name: "contactperson.customerstatustext", caption: "Status"},
-										{name: "contactperson.primarycontactfortext", caption: "Primary Contact For"},
-										{name: "contactperson.contactbusiness.tradename", caption: "Business Trading Name"},
-										{name: "contactperson.contactbusiness.legalname", caption: "Business Legal Name"},
-										{name: "contactperson.contactbusiness.customerstatustext", caption: "Business Status"},
-										{name: "contactperson.contactbusiness.mailingaddress1", caption: "Business Mailing Address 1"},
-										{name: "contactperson.contactbusiness.mailingaddress2", caption: "Business Mailing Address 2"},
-										{name: "contactperson.contactbusiness.mailingsuburb", caption: "Business Mailing Suburb"},
-										{name: "contactperson.contactbusiness.mailingstate", caption: "Business Mailing State"},
-										{name: "contactperson.contactbusiness.mailingpostcode", caption: "Business Mailing Postcode"},
-										{name: "contactperson.contactbusiness.mailingcountry", caption: "Business Mailing Country"},
-										{name: "contactperson.contactbusiness.streetaddress1", caption: "Business Street Address 1"},
-										{name: "contactperson.contactbusiness.streetaddress2", caption: "Business Street Address 2"},
-										{name: "contactperson.contactbusiness.streetsuburb", caption: "Business Street Suburb"},
-										{name: "contactperson.contactbusiness.streetstate", caption: "Business Street State"},
-										{name: "contactperson.contactbusiness.streetpostcode", caption: "Business Street Postcode"},
-										{name: "contactperson.contactbusiness.streetcountry", caption: "Business Street Country"},
-										{name: "contactperson.contactbusiness.areatext", caption: "Business Area"}
-									]
-								}
+								scriptOpen: 'ns1blankspace.contactPerson.init({showHome: false});ns1blankspace.contactPerson.search.send(this.id)'
 							},
 							{
 								name: "Opportunities",
+								object: 35,
+								objectName: "opportunity",
 								method: "OPPORTUNITY_SEARCH",
-								returnParameters: 'opportunity.contactbusiness,opportunity.contactperson,opportunity.audititemtype,opportunity.processingstatushistory',
+								returnParameters: 'opportunity,opportunity.contactbusiness,opportunity.contactperson,',
 								functionSearch: ns1blankspace.opportunity.search.send,
-								scriptOpen: 'ns1blankspace.opportunity.init({showHome: false});ns1blankspace.opportunity.search.send(this.id)',
-								selectableParameters:
-								{
-									fields:
-									[
-										{name: "opportunity.lodgeddate"},
-										{name: "opportunity.managerusertext"},
-										{name: "opportunity.sourcetext"},
-										{name: "opportunity.sourcenote"},
-										{name: "opportunity.description"},
-										{name: "opportunity.amount"},
-										{name: "opportunity.statustext"},
-										{name: "opportunity.processingstatustext"},
-										{name: "opportunity.processingdate"},
-										{name: "opportunity.closedate"},
-										{name: "opportunity.contactbusiness.tradename"},
-										{name: "opportunity.contactbusiness.legalname"},
-										{name: "opportunity.contactperson.firstname"},
-										{name: "opportunity.contactperson.surname"},
-										{name: "opportunity.contactperson.firstname"},
-										{name: "opportunity.contactperson.phone"},
-										{name: "opportunity.contactperson.mobile"},
-										{name: "opportunity.contactperson.email"},
-										{name: "opportunity.contactperson.streetaddress1"},
-										{name: "opportunity.contactperson.streetaddress2"},
-										{name: "opportunity.contactperson.streetsuburb"},
-										{name: "opportunity.contactperson.streetstate"},
-										{name: "opportunity.contactperson.streetpostcode"},
-										{name: "opportunity.contactperson.mailingaddress1"},
-										{name: "opportunity.contactperson.mailingaddress2"},
-										{name: "opportunity.contactperson.mailingsuburb"},
-										{name: "opportunity.contactperson.mailingstate"},
-										{name: "opportunity.contactperson.mailingpostcode"}
-									]
-								}
+								scriptOpen: 'ns1blankspace.opportunity.init({showHome: false});ns1blankspace.opportunity.search.send(this.id)'
+							},
+							{
+								name: "Products",
+								object: 16,
+								objectName: "product",
+								method: "PRODUCT_SEARCH",
+								returnParameters: 'product',
+								functionSearch: ns1blankspace.product.search.send,
+								scriptOpen: 'ns1blankspace.product.init({showHome: false});ns1blankspace.product.search.send(this.id)'
 							}
 							
 						]		
@@ -168,11 +110,7 @@ ns1blankspace.report =
 							{name: "contactbusiness.reference", caption: "Reference"},
 							{name: "contactbusiness.areatext", caption: "Business Area"},
 							{name: "contactbusiness.primarycontactpersontext", caption: "Primary Contact"},
-							{name: "contactbusiness.businessgrouptext", caption: "Type"},
-							{name: "contactbusiness.relationshipbusiness.contactbusinesstext", caption: "Parent Group"},
-							{name: "contactbusiness.relationshipbusiness.othercontactbusinesstext", caption: "Parent Group Child"},
-							{name: "contactbusiness.customerstatuschange.tostatustext", caption: "Status History"},
-							{name: "contactbusiness.customerstatuschange.changedate", caption: "Status History Effective Date"},
+							{name: "contactbusiness.businessgrouptext", caption: "Group"},
 							{name: "contactbusiness.contactperson.firstname", caption: "Primary Contact First Name"},
 							{name: "contactbusiness.contactperson.surname", caption: "Primary Contact Surname"},
 							{name: "contactbusiness.contactperson.email", caption: "Primary Contact Email"},
@@ -183,7 +121,7 @@ ns1blankspace.report =
 							{name: "contactperson.contactbusinesstext", caption: "Business Name"},
 							{name: "contactperson.firstname", caption: "First Name"},
 							{name: "contactperson.position", caption: "Position"},
-							{name: "contactperson.workphone", caption: "Work Phone"},
+							{name: "contactperson.workphone", caption: "Phone"},
 							{name: "contactperson.fax", caption: "Fax"},
 							{name: "contactperson.mobile", caption: "Mobile"},
 							{name: "contactperson.email", caption: "Email"},
@@ -202,13 +140,10 @@ ns1blankspace.report =
 							{name: "contactperson.mailingstate", caption: "Mailing State"},
 							{name: "contactperson.mailingpostcode", caption: "Mailing Postcode"},
 							{name: "contactperson.mailingcountry", caption: "Mailing Country"},
-							{name: "contactperson.customerstatustext", caption: "Business Contact Status"},
-							{name: "contactperson.supplierstatustext", caption: "Auditor Status"},
-							{name: "contactperson.persongrouptext", caption: "Contact Person Type"},
+							{name: "contactperson.persongrouptext", caption: "Group"},
 							{name: "contactperson.primarycontactfortext", caption: "Primary Contact For"},
 							{name: "contactperson.contactbusiness.tradename", caption: "Business Trading Name"},
 							{name: "contactperson.contactbusiness.legalname", caption: "Business Legal Name"},
-							{name: "contactperson.contactbusiness.customerstatustext", caption: "Business Status"},
 							{name: "contactperson.contactbusiness.mailingaddress1", caption: "Business Mailing Address 1"},
 							{name: "contactperson.contactbusiness.mailingaddress2", caption: "Business Mailing Address 2"},
 							{name: "contactperson.contactbusiness.mailingsuburb", caption: "Business Mailing Suburb"},
@@ -221,32 +156,24 @@ ns1blankspace.report =
 							{name: "contactperson.contactbusiness.streetstate", caption: "Business Street State"},
 							{name: "contactperson.contactbusiness.streetpostcode", caption: "Business Street Postcode"},
 							{name: "contactperson.contactbusiness.streetcountry", caption: "Business Street Country"},
-							{name: "contactperson.contactbusiness.areatext", caption: "Business Area"},
-							{name: "contactperson.contactbusiness.audititemtype.itemtypetext", caption: "Business Standard"},
-							{name: "contactperson.sq2016", caption: "Auditor Internal Manager "},
-							{name: "contactperson.sq2015", caption: "Auditor Internal Manager Id"},
-							{name: "contactperson.audititemtype.itemtypecategorytext", caption: "Choose code type"},
-							{name: "contactperson.audititemtype.itemtypetext", caption: "Standard / Code"},
-							{name: "contactperson.audititemtype.startdate", caption: "Eligible From"},
-							{name: "contactperson.audititemtype.enddate", caption: "Expires On"},
-							{name: "contactperson.audititemtype.approveddate", caption: "Expires On"},
-							{name: "contactperson.audititemtype.reference", caption: "Registration Number"},
 									
-							{name: "opportunity.lodgeddate", caption: "Date Lodged"},
-							{name: "opportunity.managerusertext", caption: "SciQual Manager"},
+							{name: "opportunity.lodgeddate", caption: "Date Received"},
+							{name: "opportunity.managerusertext", caption: "Managed By"},
 							{name: "opportunity.sourcetext", caption: "Source of Contact"},
-							{name: "opportunity.sourcenote", caption: "Source of Contact - Other"},
 							{name: "opportunity.description", caption: "Description"},
-							{name: "opportunity.amount", caption: "Quoted Amount"},
 							{name: "opportunity.statustext", caption: "Quote Status"},
-							{name: "opportunity.processingstatustext", caption: "Processing Status"},
-							{name: "opportunity.processingdate", caption: "Quote Processing Date"},
-							{name: "opportunity.closedate", caption: "Date Closed"},
-							{name: "opportunity.audititemtype.itemtypetext", caption: "Standard / Code"},
-							{name: "opportunity.audititemtype.itemtypecategorytext", caption: "Please select a Standard / Code type"},
-							{name: "opportunity.processingstatushistory.newstatus", caption: "Processing Status History"},
-							{name: "opportunity.processingstatushistory.createddate", caption: "Processing Status History Effective Date"},
-							
+							{name: "opportunity.phone", caption: "Business Phone"},
+							{name: "opportunity.mobile", caption: "Mobile Phone"},
+							{name: "opportunity.email", caption: "Contact Email"},
+							{name: "opportunity.businessname", caption: "Business Name"},
+							{name: "opportunity.firstname", caption: "First Name"},
+							{name: "opportunity.surname", caption: "Surname"},
+							{name: "opportunity.mailingaddress1", caption: "Mailing Address 1"},
+							{name: "opportunity.mailingaddress2", caption: "Mailing Address 2"},
+							{name: "opportunity.mailingsuburb", caption: "Mailing Address Suburb"},
+							{name: "opportunity.mailingstate", caption: "Mailing State"},
+							{name: "opportunity.mailingpostcode", caption: "Mailing  Postcode"},
+							{name: "opportunity.mailingcountry", caption: "Mailing Country"},
 							{name: "opportunity.contactbusiness.tradename", caption: "Business Trading Name"},
 							{name: "opportunity.contactbusiness.legalname", caption: "Business Legal Name"},
 							{name: "opportunity.contactperson.firstname", caption: "Business Contact First Name"},
@@ -270,20 +197,16 @@ ns1blankspace.report =
 							{name: "opportunity.contactperson.mailingstate", caption: "Mailing Address State"},
 							{name: "opportunity.contactperson.mailingpostcode", caption: "Mailing Address Postcode"},
 
-							{name: "opportunity.phone", caption: "Business Phone"},
-							{name: "opportunity.mobile", caption: "Mobile Phone"},
-							{name: "opportunity.email", caption: "Contact Email"},
-							{name: "opportunity.businessname", caption: "Business Name"},
-							{name: "opportunity.firstname", caption: "First Name"},
-							{name: "opportunity.surname", caption: "Surname"},
-							{name: "opportunity.mailingaddress1", caption: "Mailing Address 1"},
-							{name: "opportunity.mailingaddress2", caption: "Mailing Address 2"},
-							{name: "opportunity.mailingsuburb", caption: "Mailing Address Suburb"},
-							{name: "opportunity.mailingstate", caption: "Mailing State"},
-							{name: "opportunity.mailingpostcode", caption: "Mailing  Postcode"},
-							{name: "opportunity.mailingcountry", caption: "Mailing Country"},
-							{name: "opportunity.sq1967", caption: "Business Legal Name"},
-							{name: "opportunity.sq1968", caption: "Street Address"}
+							{name: "product.reference", caption: "Reference"},
+							{name: "product.title", caption: "Title"},
+							{name: "product.typetext", caption: "Type"},
+							{name: "product.description", caption: "Description"},
+							{name: "product.categorytext", caption: "Category"},
+							{name: "product.statustext", caption: "Status"},
+							{name: "product.currentretailprice", caption: "Retail Price"},
+							{name: "product.financialaccounttext", caption: "Financial Account"},
+							{name: "product.unittypetext", caption: "Unit Type"},
+							{name: "product.units", caption: "Units"}
 						];
 
 					ns1blankspace.report.selectAttributes = 			
@@ -295,20 +218,39 @@ ns1blankspace.report =
 							},
 							{
 								name: "contactbusiness.primarycontactpersontext",
-								addClass: "ins1blankspaceSelectBusiness",
+								addClass: "ns1blankspaceSelectBusiness",
 								onDemandColumns: "tradename-space-customerstatustext"
 							},
 							{
 								name: "contactperson.contactbusinesstext",
 								addClass: "ns1blankspaceSelectBusiness",
 								onDemandColumns: "tradename-space-customerstatustext"
-							},
-							{
-								name: "contactperson.audititemtype.itemtypetext",
-								onDemandColumns: "code-space-openbracket-categorytext-closebracket"
-								
 							}
 						];
+
+					
+					// Now extend dictionary if applicable
+					if (ns1blankspace.objectExtended) {
+
+						$.each(ns1blankspace.report.reports, function() {
+							var iObject = this.object;
+							var sObjectname = this.objectName;
+
+							$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function(i,v)
+							{
+								$(v.elements).each(function(j,k)
+								{
+									var sCaption = (k.caption == "") ? k.title : k.caption;
+									if (k.datatype == 2) {	
+										ns1blankspace.report.dictionary.push({name: sObjectname + '.se' + k.id + 'text', caption: sCaption});
+									}	
+									else {
+										ns1blankspace.report.dictionary.push({name: sObjectname + '.se' + k.id, caption: sCaption});
+									}
+								});
+							})	
+						});
+					}
 
 					if (!bAll)
 					{
@@ -362,34 +304,32 @@ ns1blankspace.report =
 				{
 					
 					var aHTML = [];
-					var h = -1;
 								
-					aHTML[++h] = '<table>';
+					aHTML.push('<table>');
 
-					aHTML[++h] = '<tr><td><div id="ns1blankspaceViewReportLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>';
+					aHTML.push('<tr><td><div id="ns1blankspaceViewReportLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 
-					aHTML[++h] = '</table>';		
+					aHTML.push('</table>');		
 					
-					aHTML[++h] = '<table>';
+					aHTML.push('<table>');
 					
 					$.each(ns1blankspace.report.reports, function()
 					{
 						var sName = (this.name).replace(/ /g,'')
 						
-						aHTML[++h] = '<tr>' +
+						aHTML.push('<tr>' +
 										'<td id="ns1blankspaceControl' + sName + '" class="ns1blankspaceControl"' +
 												' data-method="' + this.method + '">' + this.name + '</td>' +
-										'</tr>';	
+										'</tr>');	
 					});
 					
-					aHTML[++h] = '</table>';		
+					aHTML.push('</table>');		
 					
 					$('#ns1blankspaceControl').html(aHTML.join(''));	
 					
 					var aHTML = [];
-					var h = -1;
 					
-					aHTML[++h] = '<div id="ns1blankspaceMainReport" class="ns1blankspaceMain"></div>';
+					aHTML.push('<div id="ns1blankspaceReport" class="ns1blankspaceMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -401,7 +341,7 @@ ns1blankspace.report =
 						
 						$('#ns1blankspaceControl' + sName).click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainReport'});
+							ns1blankspace.show({selector: '#ns1blankspaceReport'});
 							var sMethod = $(this).attr('data-method');
 							ns1blankspace.report.show($(this).data('param'));
 						});				
@@ -409,27 +349,26 @@ ns1blankspace.report =
 					
 					if (ns1blankspace.report.reports.length == 1)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainReport'});
+						ns1blankspace.show({selector: '#ns1blankspaceReport'});
 						var sMethod = ns1blankspace.report.reports[0].method;
 						ns1blankspace.report.show(ns1blankspace.report.reports[0]);
 						$('td.ns1blankspaceControl:first').addClass('ns1blankspaceHighlight')
 					}	
 					else
 					{	
-						ns1blankspace.show({selector: '#ns1blankspaceMainReport'});
+						ns1blankspace.show({selector: '#ns1blankspaceReport'});
 					
 						var aHTML = [];
-						var h = -1;
 									
-						aHTML[++h] = '<table id="tableInterfaceViewportMain" class="interfaceViewportMain">';
-						aHTML[++h] = '<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
+						aHTML.push('<table id="tableInterfaceViewportMain" class="interfaceViewportMain">');
+						aHTML.push('<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 										'<td class="ns1blankspaceSub">' +
 										'Select a search type from left.' + 
 										'</td>' +
-										'</tr>';
-						aHTML[++h] = '</table>';					
+										'</tr>');
+						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceMainReport').html(aHTML.join(''));
+						$('#ns1blankspaceReport').html(aHTML.join(''));
 					}	
 				},
 
@@ -472,7 +411,6 @@ ns1blankspace.report =
 	show:		function (oParam, oResponse)
 				{
 					var aHTML = [];
-					var h = -1;
 					var sCaption;
 					var sComparison;
 					var sComparisonValue;
@@ -490,9 +428,12 @@ ns1blankspace.report =
 					var sSearchFilter;
 					var bShowSort = true;
 					var bContainsContactPerson = false;
+					var aCategory = [];
 					
 					ns1blankspace.report.method = undefined;
 					ns1blankspace.report.endpoint = undefined;
+					ns1blankspace.report.object = undefined;
+					ns1blankspace.report.objectName = undefined;
 					ns1blankspace.report.returnParameters = undefined;
 					ns1blankspace.report.searchFunction = undefined;
 					ns1blankspace.report.scriptOpen = undefined;
@@ -505,6 +446,8 @@ ns1blankspace.report =
 					{
 						if (oParam.endPoint != undefined) {ns1blankspace.report.endpoint = oParam.endPoint}
 						if (oParam.method != undefined) {ns1blankspace.report.method = oParam.method}
+						if (oParam.object != undefined) {ns1blankspace.report.object = oParam.object}
+						if (oParam.objectName != undefined) {ns1blankspace.report.objectName = oParam.objectName}
 						if (oParam.returnParameters != undefined) {ns1blankspace.report.returnParameters = oParam.returnParameters}
 						if (oParam.jsonSearch != undefined) {sJSONSearch = oParam.jsonSearch}
 						if (oParam.functionSearch != undefined) {ns1blankspace.report.searchFunction = oParam.functionSearch}
@@ -525,32 +468,45 @@ ns1blankspace.report =
 						var aMethod = ns1blankspace.report.method.split('_');
 						ns1blankspace.report.endpoint = (aMethod[0]).toLowerCase();
 					}
+
+					/*if (ns1blankspace.objectExtended) {
+
+						 if (iCategoryId) {
+						 	aCategory.push(iCategoryId);
+						 }
+
+						$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == ns1blankspace.report.object;})).each(function(i, v) {
+							aCategory.push(v.category);
+						});
+						iCategoryId = aCategory.join(",");
+					}*/
 					
 					ns1blankspace.report.fixedParameters = oFixedParameters;
 					ns1blankspace.report.selectableParameters = oSelectableParameters;
 					
 					if (!bShowSelect)
 					{
-						aHTML[++h] = '<div id="ns1blankspaceMainReportHeader"></div>';
-						aHTML[++h] = '<div style="display:none;" id="ns1blankspaceMainReportResults"></div>';
-						aHTML[++h] = '<div style="display:none;" id="ns1blankspaceMainReportSend">No data.</div>';
-						$('#ns1blankspaceMainReport').html(aHTML.join(''));	
+						aHTML.push('<div id="ns1blankspaceReportHeader"></div>');
+						aHTML.push('<div style="display:none;" id="ns1blankspaceReportResults"></div>');
+						aHTML.push('<div style="display:none;" id="ns1blankspaceReportExport">No data to export.</div>');
+						//aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate">No data to update.</div>');
+						aHTML.push('<div style="display:none;" id="ns1blankspaceReportSend">No data to send.</div>');
+						$('#ns1blankspaceReport').html(aHTML.join(''));	
 							
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML[++h] = '<table id="tableInterfaceReportSearch" class="interfaceMain" style="font-size:0.875em;">';
+						aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">');
 
 						if (sSummary != undefined)
 						{
-							aHTML[++h] = '<tr><td style="color:#B8B8B8;padding:2px;">' +
+							aHTML.push('<tr><td style="color:#B8B8B8;padding:2px;">' +
 												sSummary +
-												'</td></tr>';
+												'</td></tr>');
 						}	
 						
-						aHTML[++h] = '</table>';
+						aHTML.push('</table>');
 							
-						$('#ns1blankspaceMainReportHeader').html(aHTML.join(''))	
+						$('#ns1blankspaceReportHeader').html(aHTML.join(''))	
 						
 						ns1blankspace.report.search.send(oParam);
 					}
@@ -558,11 +514,13 @@ ns1blankspace.report =
 					{
 						if (oResponse == undefined)
 						{
-							aHTML[++h] = '<div id="ns1blankspaceMainReportHeader">' + ns1blankspace.xhtml.loading + '</div>';
-							aHTML[++h] = '<div id="ns1blankspaceMainReportSearch"></div>';
-							aHTML[++h] = '<div style="display:none;" id="ns1blankspaceMainReportResults">No results.</div>';
-							aHTML[++h] = '<div style="display:none;" id="ns1blankspaceMainReportSend">No data.</div>';
-							$('#ns1blankspaceMainReport').html(aHTML.join(''));	
+							aHTML.push('<div id="ns1blankspaceReportHeader">' + ns1blankspace.xhtml.loading + '</div>');
+							aHTML.push('<div id="ns1blankspaceReportSearch"></div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportResults">No results.</div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportExport">No data to export.</div>');
+							//aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate">No data to update.</div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportSend">No data to send.</div>');
+							$('#ns1blankspaceReport').html(aHTML.join(''));	
 						}
 						
 						if (oResponse == undefined && sJSONSearch != undefined)
@@ -626,77 +584,49 @@ ns1blankspace.report =
 							{	aSelectAttributesList.push(this.name);	});
 							
 							var aHTML = [];
-							var h = -1;
 						
-							aHTML[++h] = '<table style="margin-bottom:0px;border-bottom-style:solid;border-width: 1px;border-color:#E8E8E8;" id="tableInterfaceReport" class="interfaceMain">';
-							aHTML[++h] = '<tr><td style="vertical-alignment:bottom;padding-top:10px;">' + 
-												'<span id="spanReportHeaderSearch">Search</span>' +
-												'<span style="color:#B8B8B8;">&nbsp;|&nbsp;</span>' + 
-												'<span id="spanReportHeaderResults" style="cursor: pointer;">Results</span>' + 
-												'<span style="color:#B8B8B8;">&nbsp;|&nbsp;</span>' + 
-												'<span id="spanReportHeaderSend" style="cursor: pointer;">Send</span>' + 
-										 '</td>';
-							aHTML[++h] = '<td style="text-align:right;font-size:0.75em;"><span id="spanInterfaceReportSearch">Search</span></td>';
-							aHTML[++h] = '<td style="text-align:right;font-size:0.75em;"><span id="spanInterfaceReportExport">&nbsp;</span></td></tr>';
-							aHTML[++h] = '</table>';
+							aHTML.push('<table style="margin-bottom:0px;border-bottom-style:solid;border-width: 1px;border-color:#E8E8E8;" class="ns1blankspace">');
+							aHTML.push('<tr><td id="ns1blankspaceReportHeaderOptions" style="vertical-alignment:bottom;padding-top:10px;">' + 
+												'<input id="radioReport-Search" name="radioOptions" type="radio" checked="checked"/><label for="radioReport-Search">Criteria</label>' +
+												'<input id="radioReport-Results" name="radioOptions" type="radio" /><label for="radioReport-Results">Results</label>' +
+												'<input id="radioReport-Export" name="radioOptions" type="radio" /><label for="radioReport-Export">Export</label>' +
+												'<input id="radioReport-Send" name="radioOptions" type="radio" /><label for="radioReport-Send">Send</label>' +
+											'</td>');
+							//					'<input id="radioReport-Update" name="radioOptions" type="radio" /><label for="radioReport-Update">Update</label>' +
+
+							aHTML.push('<td style="vertical-alignment:bottom;padding-top:10px;text-align:right;font-size:0.75em;"><span id="spanReportSearch">Search</span></td>');
+							aHTML.push('</table>'); 
 							
-							$('#ns1blankspaceMainReportHeader').html(aHTML.join(''))
-							
-							$('#spanReportHeaderSend').hide();
-							$('#spanReportHeaderSearch').addClass('Highlight')
-							
-							$('#spanReportHeaderSearch').click(function(event)
-							{
-								$('#ns1blankspaceMainReportSearch').show();
-								$('#ns1blankspaceMainReportResults').hide();
-								$('#ns1blankspaceMainReportSend').hide();
-								$('#spanReportHeaderSearch').css('cursor', 'auto');
-								$('#spanReportHeaderResults').css('cursor', 'pointer');
-								$('#spanReportHeaderSend').css('cursor', 'pointer');
-								$('#spanReportHeaderSearch').addClass('Highlight');
-								$('#spanReportHeaderResults').removeClass('Highlight');
-								$('#spanReportHeaderSend').removeClass('Highlight');
-								$('#spanInterfaceReportExport').button("destroy");
-								$('#spanInterfaceReportExport').html("&nbsp;");
-								$('#spanInterfaceReportExport').unbind("click");
+							$('#ns1blankspaceReportHeader').html(aHTML.join(''));
+
+							$('#ns1blankspaceReportHeaderOptions').buttonset().css('font-size', '0.75em');
+							$('#ns1blankspaceReportHeaderOptions :radio').click(function() {
+								
+								var sShowId = $(this).attr('id');
+
+								$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
+									
+									var sSuffix = $(this).attr('id').split('-')[1];
+
+									if ($(this).attr('id') === sShowId) {
+
+										$('#ns1blankspaceReport' + sSuffix).show();
+									}
+									else {
+										$('#ns1blankspaceReport' + sSuffix).hide();
+									}
+								});
 							});
-							
-							$('#spanReportHeaderResults').click(function(event)
-							{
-								$('#ns1blankspaceMainReportSearch').hide();
-								$('#ns1blankspaceMainReportResults').show();
-								$('#ns1blankspaceMainReportSend').hide();
-								$('#spanReportHeaderSearch').css('cursor', 'pointer');
-								$('#spanReportHeaderResults').css('cursor', 'auto');
-								$('#spanReportHeaderSend').css('cursor', 'pointer');
-								$('#spanReportHeaderSearch').removeClass('Highlight');
-								$('#spanReportHeaderResults').addClass('Highlight');
-								$('#spanReportHeaderSend').removeClass('Highlight');
-							});
-							
-							$('#spanReportHeaderSend').click(function(event)
-							{
-								$('#ns1blankspaceMainReportSearch').hide();
-								$('#ns1blankspaceMainReportResults').hide();
-								$('#ns1blankspaceMainReportSend').show();
-								$('#spanReportHeaderSearch').css('cursor', 'pointer');
-								$('#spanReportHeaderResults').css('cursor', 'pointer');
-								$('#spanReportHeaderSend').css('cursor', 'auto');
-								$('#spanReportHeaderSearch').removeClass('Highlight');
-								$('#spanReportHeaderResults').removeClass('Highlight');
-								$('#spanReportHeaderSend').addClass('Highlight');
-							});
-							
+
 							var aHTML = [];
-							var h = -1;
 							
-							aHTML[++h] = '<table id="tableInterfaceReportSearch" class="interfaceMain" style="font-size:0.875em;">';
+							aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">');
 
 							if (sSummary != undefined)
 							{
-								aHTML[++h] = '<tr><td colspan=4 style="color:#B8B8B8;padding:2px;">' +
+								aHTML.push('<tr><td colspan=4 style="color:#B8B8B8;padding:2px;">' +
 													sSummary +
-													'</td></tr>';
+													'</td></tr>');
 							}
 							
 							if (oFixedParameters.fields != undefined && bShowFixedParameters)
@@ -706,16 +636,16 @@ ns1blankspace.report =
 									sCaption = ns1blankspace.report.getCaption({name: this.name})
 									var sName = (this.name).replace(/\./g,'_')
 									
-									aHTML[++h] = '<tr><td colspan=2 style="color:#B8B8B8;padding:2px;">' +
+									aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:2px;">' +
 													sCaption +
 													'</td>' +
 													'<td colspan=2 style="color:#B8B8B8;padding:2px;"' +
-													' id="reportHeaderComparison' + sName + '"></td></tr>';
+													' id="reportHeaderComparison' + sName + '"></td></tr>');
 								});	
 							}
 							
-							aHTML[++h] = '<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Select</td>' +
-											'<td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Comparison</td></tr>';
+							aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Select</td>' +
+											'<td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Comparison</td></tr>');
 							
 							$.each(oResponse.data.parameters, function() 
 							{ 
@@ -733,9 +663,9 @@ ns1blankspace.report =
 
 									if (aSelectableParameters[iSelectableIndex].xhtmlBefore != undefined)
 									{
-										aHTML[++h] = '<tr><td colspan=4 class="interfaceMainReport">' +
+										aHTML.push('<tr><td colspan=4 class="ns1blankspaceReport">' +
 														aSelectableParameters[iSelectableIndex].xhtmlBefore +
-														'</td></tr>';
+														'</td></tr>');
 									}
 									
 									if (aSelectableParameters[iSelectableIndex].searchFilter != undefined)
@@ -749,7 +679,7 @@ ns1blankspace.report =
 								{
 									var sName = (this.name).replace(/\./g,'_');
 									var iSelectAttributes = $.inArray(this.name, aSelectAttributesList);
-									var sClass = 'interfaceMainReport';
+									var sClass = 'ns1blankspaceReport';
 									var sMoreAttributes = "";
 									ns1blankspace.report.allParameters.push({name: this.name, caption: sCaption})
 									var bSelect = false;
@@ -759,18 +689,23 @@ ns1blankspace.report =
 									
 									if (iSelectAttributes >= 0)
 									{	
-										if (ns1blankspace.report.selectAttributes[iSelectAttributes].addClass != undefined) {sMoreAttributes += ' data-selectClass="' + ns1blankspace.report.selectAttributes[iSelectAttributes].addClass + '"';	}
-										if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns != undefined) {sMoreAttributes += ' data-onDemandColumns="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns + '"';	}
-										if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupFilter != undefined) {sMoreAttributes += ' data-onDemandGroupFilter="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupFilter + '"';	}
-										if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupType != undefined) {sMoreAttributes += ' data-onDemandGroupType="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupType + '"';	}
-										if (sMoreAttributes != "") {sMoreAttributes += ' style="width:200px"';}
+										if (ns1blankspace.report.selectAttributes[iSelectAttributes].addClass != undefined) {
+												sMoreAttributes += ' data-selectClass="' + ns1blankspace.report.selectAttributes[iSelectAttributes].addClass + '"';	}
+										if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns != undefined) {
+												sMoreAttributes += ' data-columnms="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns + '"';	}
+										if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupFilter != undefined) {
+												sMoreAttributes += ' data-onDemandGroupFilter="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupFilter + '"';	}
+										if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupType != undefined) {
+												sMoreAttributes += ' data-onDemandGroupType="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupType + '"';	}
+										if (sMoreAttributes != "") {
+												sMoreAttributes += ' style="width:200px"';}
 									}
 									else
 									{	
 										if (iSelectableIndex != -1)
 										{
 											if (aSelectableParameters[iSelectableIndex].onDemandColumns != undefined) 
-											{	sMoreAttributes += ' data-onDemandColumns="' + aSelectableParameters[iSelectableIndex].onDemandColumns + '"'; }
+											{	sMoreAttributes += ' data-columns="' + aSelectableParameters[iSelectableIndex].onDemandColumns + '"'; }
 
 											if (aSelectableParameters[iSelectableIndex].onDemandClick != undefined) 
 											{	sMoreAttributes += ' data-onDemandClick="' + aSelectableParameters[iSelectableIndex].onDemandClick + '"'; }
@@ -790,33 +725,33 @@ ns1blankspace.report =
 										}
 									}
 								
-									aHTML[++h] = '<tr><td style="width:15px;" id="tdInterfaceMainReport_include_' + sName + '">' +
-												'<input type="checkbox" id="checkInterfaceMainReport_include-' + sName + '"' +
+									aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReport_include_' + sName + '">' +
+												'<input type="checkbox" id="ns1blankspaceReportCheck_include-' + sName + '"' +
 													' data-name="' + this.name + '"' +
-													' class="interfaceMainReportInclude">' +
-												'</td>';
+													' class="ns1blankspaceReportInclude">' +
+												'</td>');
 								
-									aHTML[++h] = '<td style="width:200px;" id="tdInterfaceMainReport_caption_' + sName + '" class="interfaceMainReport">' +
+									aHTML.push('<td style="width:200px;" id="ns1blankspaceReport_caption_' + sName + '" class="ns1blankspaceReport">' +
 												sCaption +
-												'</td>';
+												'</td>');
 									
-									aHTML[++h] = '<td style="width:200px;cursor: pointer;" id="tdInterfaceMainReport_comparison-' + sName + '-' + this.datatype + '"' +
+									aHTML.push('<td style="width:200px;cursor: pointer;" id="ns1blankspaceReport_comparison-' + sName + '-' + this.datatype + '"' +
 														' data-dataType="' + this.datatype + '"' +
 														' data-searchEndpoint="' + sSearchEndPoint + '"' +
 														' data-searchMethod="' + sSearchMethod + sSearchFilter + '"' +
-														' data-inputType="';
+														' data-inputType="');
 									if (bSelect)
-									{	aHTML[++h] =  "select"; }
+									{	aHTML.push( "select"); }
 									else
-									{	aHTML[++h] = this.inputtype; }
-									aHTML[++h] =  '"' +
+									{	aHTML.push(this.inputtype); }
+									aHTML.push( '"' +
 														' data-searchRelatedField="' + sSearchRelatedField + '"' +
 														sMoreAttributes + 
-														'  class="interfaceMainReportComparison"></td>';
+														'  class="ns1blankspaceReportComparison"></td>');
 														
-									aHTML[++h] = '<td id="tdInterfaceMainReport_input-' + sName + '-' + this.datatype + '" class="' + sClass + '"></td>';
+									aHTML.push('<td id="ns1blankspaceReport_input-' + sName + '-' + this.datatype + '" class="' + sClass + '"></td>');
 									
-									aHTML[++h] = '</tr>';
+									aHTML.push('</tr>');
 									
 								}
 								
@@ -824,41 +759,123 @@ ns1blankspace.report =
 								{
 									if (aSelectableParameters[iSelectableIndex].xhtmlAfter != undefined)
 									{
-										aHTML[++h] = '<tr><td colspan=4 class="interfaceMainReport">' +
+										aHTML.push('<tr><td colspan=4 class="ns1blankspaceReport">' +
 														aSelectableParameters[iSelectableIndex].xhtmlAfter +
-														'</td></tr>';
+														'</td></tr>');
 									}	
 								}
 							});
 
+							if (ns1blankspace.objectExtended) {
+
+
+								$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == ns1blankspace.report.object;})).each(function(i,v)
+								{
+									$(v.elements).each(function(j,k)
+									{
+										var sFieldName = ns1blankspace.report.objectName + '.se' + k.id;
+										sFieldName += (k.datatype == '2') ? 'text' : '';
+										sCaption = ns1blankspace.report.getCaption({name: sFieldName})
+										
+										var iSelectableIndex = $.inArray(sFieldName, aSelectableParameterList)
+										var sSearchFilter = '';
+										
+										if (iSelectableIndex != -1)	{
+											if (aSelectableParameters[iSelectableIndex].caption != undefined) 	{
+												sCaption = aSelectableParameters[iSelectableIndex].caption;
+											}
+										}	
+										
+										if (sCaption != undefined && (iSelectableIndex != -1 || aSelectableParameterList.length == 0))
+										{
+											var sName = sFieldName.replace(/\./g,'_');
+											var iSelectAttributes = $.inArray(sFieldName, aSelectAttributesList);
+											var sClass = 'ns1blankspaceReport';
+											var sMoreAttributes = "";
+											ns1blankspace.report.allParameters.push({name: sFieldName, caption: sCaption})
+											var bSelect = (k.datatype == "2");
+											var sSearchEndPoint = (bSelect) ? 'setup': ''
+											var sSearchMethod = (bSelect) ? 'SETUP_STRUCTURE_ELEMENT_OPTION_SEARCH': '';
+											var sSearchRelatedField = (bSelect) ? ns1blankspace.report.objectName + '.se' + k.id : '';
+											var sDataType = (k.datatype == "3") ? 'date' : 'text';
+											
+											
+											if (bSelect) {	
+												sMoreAttributes += ' data-methodFilter="id|EQUAL_TO|' + k.id + '"';	
+												if (sMoreAttributes != "") {
+														sMoreAttributes += ' style="width:200px"';}
+											}
+										
+											aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReport_include_' + sName + '">' +
+														'<input type="checkbox" id="ns1blankspaceReportCheck_include-' + sName + '"' +
+															' data-name="' + sFieldName + '"' +
+															' class="ns1blankspaceReportInclude">' +
+														'</td>');
+										
+											aHTML.push('<td style="width:200px;" id="ns1blankspaceReport_caption_' + sName + '" class="ns1blankspaceReport">' +
+														sCaption +
+														'</td>');
+											
+											aHTML.push('<td style="width:200px;cursor: pointer;" id="ns1blankspaceReport_comparison-' + sName + '-' + sDataType + '"' +
+																' data-dataType="' + sDataType + '"' +
+																' data-searchEndpoint="' + sSearchEndPoint + '"' +
+																' data-searchMethod="' + sSearchMethod + sSearchFilter + '"' +
+																' data-inputType="');
+											if (bSelect)
+											{	aHTML.push( "select"); }
+											else
+											{	aHTML.push('textbox'); }
+											aHTML.push( '"' +
+														' data-searchRelatedField="' + sSearchRelatedField + '"' +
+														sMoreAttributes + 
+														'  class="ns1blankspaceReportComparison"></td>');
+																
+											aHTML.push('<td id="ns1blankspaceReport_input-' + sName + '-' + sDataType + '" class="' + sClass + '"></td>');
+											
+											aHTML.push('</tr>');
+											
+										}
+										
+									});
+								});	
+
+							}
+
 							if (bShowSort)
 							{
-								aHTML[++h] = '<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Sort by</td>' +
+								aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Sort by</td>' +
 											 '<td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;" class="interfacemainSelect">' +
 											 '<input onDemandType="SELECT" id="inputInterfaceReportSort" class="inputInterfaceMainSelect"' + 
-											 'data-getSelectOptions="ns1blankspace.report.allParameters"></td></tr>';
+											 'data-getSelectOptions="ns1blankspace.report.allParameters"></td></tr>');
 							}
 							
-							aHTML[++h] = '</table>';			
+							aHTML.push('</table>');			
 							
-							$('#ns1blankspaceMainReportSearch').html(aHTML.join(''))
+							$('#ns1blankspaceReportSearch').html(aHTML.join(''))
 							
-							$('#spanInterfaceReportSearch').button(
+							$('#spanReportSearch').button(
 							{
 								label: "Search"
 							})
 							.click(function() 
 							{
+								$("#ns1blankspaceReportResults").html('No results.');
+								$("#ns1blankspaceReportExport").html('No data to export.');
+								//$("#ns1blankspaceReportUpdate").html('No data to update.');
+								$("#ns1blankspaceReportSend").html('No data to send.');
+								$("#radioReport-Search").removeAttr('checked');
+								$("#radioReport-Results").attr('checked', 'checked');
+								$("#ns1blankspaceReportHeaderOptions").buttonset('refresh');
 								ns1blankspace.report.search.send(oParam);
 							});	
 							
-							$('td.interfaceMainReportComparison').click(function(event)
+							$('td.ns1blankspaceReportComparison').click(function(event)
 							{
 								var sID = event.target.id
 								ns1blankspace.report.showComparison({xhtmlElementID: sID})
 							});
 							
-							$('td.interfaceMainReportComparison').mouseenter(function(event)
+							$('td.ns1blankspaceReportComparison').mouseenter(function(event)
 							{
 								if ($(this).text() == '')
 								{
@@ -868,7 +885,7 @@ ns1blankspace.report =
 								
 							});
 							
-							$('td.interfaceMainReportComparison').mouseleave(function(event)
+							$('td.ns1blankspaceReportComparison').mouseleave(function(event)
 							{
 								if ($(this).text() == 'Click to set comparison.')
 								{
@@ -900,14 +917,13 @@ ns1blankspace.report =
 						var aID = sXHTMLElementID.split('-');
 						
 						var aHTML = [];
-						var h = -1;
 					
-						aHTML[++h] = '<table class="ns1blankspaceSearchMedium">';
-						aHTML[++h] = (advancedSearchComparisonGet({dataType: aID[2], returnFormat: 'xhtml'})).join('');
-						aHTML[++h] = '</table>';		
+						aHTML.push('<table class="ns1blankspaceSearchMedium">');
+						aHTML.push((advancedSearchComparisonGet({dataType: aID[2], returnFormat: 'xhtml'})).join(''));
+						aHTML.push('</table>');		
 						
 						ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID})		
-						$('#ns1blankspace.xhtml.container').html(aHTML.join(''))	
+						$(ns1blankspace.xhtml.container).html(aHTML.join(''))	
 						
 						$('td.interfaceMainReportComparisonType').click(function(event)
 						{
@@ -930,7 +946,7 @@ ns1blankspace.report =
 							//$('#' + sXHTMLElementID).attr('data-inputType', sInputType);
 							$('#' + sXHTMLElementID).attr('data-inputCount', $('#' + sID).attr('data-inputcount'));
 							
-							$('#ns1blankspace.xhtml.container').hide();
+							$(ns1blankspace.xhtml.container).hide();
 							
 							var sXHTMLElementInputID  = sXHTMLElementID.replace('_comparison', '_input');
 							var iInputCount = $('#' + sID).attr('data-inputCount');
@@ -972,7 +988,6 @@ ns1blankspace.report =
 					var sDataType;
 					var sInputType;
 					var aHTML = [];
-					var h = -1;
 					var iInputCount = 0;
 					var sSearchEndpoint;
 					var sSearchMethod;
@@ -1019,7 +1034,7 @@ ns1blankspace.report =
 						
 								if (i > 1) 
 								{
-									aHTML[++h] = '<br />';
+									aHTML.push('<br />');
 								}
 								
 								var sThisElementId = sXHTMLInputElementID;
@@ -1031,12 +1046,12 @@ ns1blankspace.report =
 									
 									if (sDataType == 'text' || sDataType == 'numeric')
 									{
-										aHTML[++h] = '<input id="' + sThisElementId +  '" class="inputInterfaceMainText">';
+										aHTML.push('<input id="' + sThisElementId +  '" class="inputInterfaceMainText">');
 									}	
 									
 									if (sDataType == 'date')
 									{
-										aHTML[++h] = '<input id="' + sThisElementId + '" class="inputInterfaceMainDate">';
+										aHTML.push('<input id="' + sThisElementId + '" class="inputInterfaceMainDate">');
 									}	
 								}
 								
@@ -1048,45 +1063,45 @@ ns1blankspace.report =
 										sThisElementId = sThisElementId.replace(/-/g, '_');
 										sThisElementId = sThisElementId + '_' + i
 										if (false && sComparisonID.indexOf("IN_LIST") >= 0)
-										{	aHTML[++h] = '<select multiple="multiple" '; }
+										{	aHTML.push('<select multiple="multiple" '); }
 										else
-										{	aHTML[++h] = '<input '; }
+										{	aHTML.push('<input '); }
 										
-										aHTML[++h] = 'id="' + sThisElementId + '"';
-										aHTML[++h] = ' onDemandMethod="/ondemand/' + sSearchEndpoint + '/?method=' + sSearchMethod + '" ' +
-													'class="' ;
+										aHTML.push('id="' + sThisElementId + '"');
+										aHTML.push(' data-method="' + sSearchMethod + '" ' +
+													'class="') ;
 										if (sSelectClass != undefined)
-										{	aHTML[++h] = sSelectClass;	}
+										{	aHTML.push(sSelectClass);	}
 										else
-										{	aHTML[++h] = 'inputInterfaceMainSelect'}
+										{	aHTML.push('ns1blankspaceSelect')}
 										
 										if (sComparisonID.indexOf("IN_LIST") >= 0)
 										{
-											aHTML[++h] = ' inputInterfaceMainMultiSelect';
+											aHTML.push(' inputInterfaceMainMultiSelect');
 										}
-										aHTML[++h] = '"';
+										aHTML.push('"');
 										
 										if (sOnDemandColumns != undefined)
-										{	aHTML[++h] = ' onDemandColumns="' + sOnDemandColumns + '"'	}
+										{	aHTML.push(' onDemandColumns="' + sOnDemandColumns + '"')	}
 										
 										if (sOnDemandGroupFilter != undefined)
-										{	aHTML[++h] = ' onDemandGroupFilter="' + sOnDemandGroupFilter + '"'	}
+										{	aHTML.push(' onDemandGroupFilter="' + sOnDemandGroupFilter + '"')	}
 										
 										if (sOnDemandGroupType != undefined)
-										{	aHTML[++h] = ' onDemandGroupType="' + sOnDemandGroupType + '"'	}
+										{	aHTML.push(' onDemandGroupType="' + sOnDemandGroupType + '"')	}
 										
 										if (sOnDemandClick != undefined)
-										{	aHTML[++h] = ' onDemandClick="' + sOnDemandClick + '"'	}
+										{	aHTML.push(' onDemandClick="' + sOnDemandClick + '"')	}
 										
-										aHTML[++h] = '>';
+										aHTML.push('>');
 										if (false && sComparisonID.indexOf("IN_LIST") >= 0)
 										{
-											aHTML[++h] = '</select>';
+											aHTML.push('</select>');
 										}
 									}
 									else
 									{
-										aHTML[++h] = 'Report configuration error! Please contact Support.<br />No searchEndpoint and/or searchMethod defined.'
+										aHTML.push('Report configuration error! Please contact Support.<br />No searchEndpoint and/or searchMethod defined.');
 									}	
 								}	
 							}
@@ -1104,7 +1119,6 @@ ns1blankspace.report =
 								{ 
 									var sXHTMLElementID;
 									var aHTML = [];
-									var h = -1;
 									var sReturnFormat = 'json';
 									var iRows = ns1blankspace.option.defaultRows;
 									var sParameterList
@@ -1133,31 +1147,29 @@ ns1blankspace.report =
 										}	
 									}	
 									
-									if (bContainsContactPerson)
-									{
-										$('#spanReportHeaderSend').show();
-									}
-									
 									if (oResponse == undefined)
 									{
 										var oParameterList = [];
 										
-										if ($("input.interfaceMainReportInclude:checked").length == 0 && oSearchParameters == undefined)
+										if ($("input.ns1blankspaceReportInclude:checked").length == 0 && oSearchParameters == undefined)
 										{
 											alert('You need to pick at least one column.');
 										}
 										else
 										{
 										
-											$('#ns1blankspaceMainReportSearch').hide();
-											$('#spanReportHeaderSearch').removeClass('Highlight')
-											
-											$('#ns1blankspaceMainReportResults').show();
-											$('#ns1blankspaceMainReportResults').html(ns1blankspace.xhtml.loading);
-											$('#spanReportHeaderResults').addClass('Highlight')
-										
-											$('#spanReportHeaderSearch').css('cursor', 'pointer');
-											$('#spanReportHeaderResults').css('cursor', 'auto');
+											var sShowId = 'radioReport-Results';
+											$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
+												
+												var sSuffix = $(this).attr('id').split('-')[1];
+												if ($(this).attr('id') === sShowId) {
+													$('#ns1blankspaceReport' + sSuffix).show();
+												}
+												else {
+													$('#ns1blankspaceReport' + sSuffix).hide();
+												}
+											});
+											$('#ns1blankspaceReportResults').html(ns1blankspace.xhtml.loading);
 										
 											var oSearch = new AdvancedSearch();
 										
@@ -1174,7 +1186,7 @@ ns1blankspace.report =
 												}	
 											}
 											
-											$("input.interfaceMainReportInclude:checked").each(function() 
+											$("input.ns1blankspaceReportInclude:checked").each(function() 
 											{ 
 												var sID = this.id;
 												var aID = sID.split('-');
@@ -1220,7 +1232,7 @@ ns1blankspace.report =
 												});
 											}
 											
-											$('td.interfaceMainReportComparison[data-code]').each(function() 
+											$('td.ns1blankspaceReportComparison[data-code]').each(function() 
 											{ 
 												var sID = this.id
 												var aID = sID.split('-')
@@ -1249,13 +1261,13 @@ ns1blankspace.report =
 															var sValue = '';
 															if (sInputType == 'select')
 															{
-																if ($('#' + sThisInputID).attr('ondemandid') == undefined)
+																if ($('#' + sThisInputID).attr('data-id') == undefined)
 																{	// User has typed something so compare the text field
 																	sValue = $('#' + sThisInputID).val();
 																}
 																else	// User has selected an id - search on the id
 																{	
-																	sValue = $('#' + sThisInputID).attr('ondemandid'); 
+																	sValue = $('#' + sThisInputID).attr('data-id'); 
 																	sName = sSearchRelatedField.replace('_', '.');	
 																}
 															}
@@ -1316,10 +1328,10 @@ ns1blankspace.report =
 											
 											if ($('#inputInterfaceReportSort').val() != undefined)
 											{
-												if ($('#inputInterfaceReportSort').attr('OnDemandID') != undefined)
+												if ($('#inputInterfaceReportSort').attr('data-id') != undefined)
 												{	
 													//var aAllParameters = interfaceReportGetAllParameterList();
-													oSearch.sort(ns1blankspace.report.allParameters[$('#inputInterfaceReportSort').attr('OnDemandID')].name, 'asc');
+													oSearch.sort(ns1blankspace.report.allParameters[$('#inputInterfaceReportSort').attr('data-id')].name, 'asc');
 												}
 											}
 											
@@ -1335,29 +1347,30 @@ ns1blankspace.report =
 									else
 									{
 									
+										aHTML = [];
+
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML[++h] = '<table class="interfaceMain"">';
-											aHTML[++h] = '<tbody>'
-											aHTML[++h] = '<tr class="interfaceMainCaption">' +
-																'<td class="interfaceMainRowNothing">Nothing to show.</td></tr>' ;
+											aHTML.push('<table class="interfaceMain"">');
+											aHTML.push('<tbody>');
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+																'<td class="interfaceMainRowNothing">Nothing to show.</td></tr>') ;
 
-											$('#ns1blankspaceMainReportResults').html(aHTML.join(''));
+											$('#ns1blankspaceReportResults').html(aHTML.join(''));
 										}
 										else
 										{
-											aHTML[++h] = '<table class="interfaceMain"">';
-											aHTML[++h] = '<tbody>'
+											aHTML.push('<table class="interfaceMain"">');
 											var aColumns = [];
 											oParameter = sParameterList.split(',');
 											
-											aHTML[++h] = '<tr class="interfaceMainCaption">';
+											aHTML.push('<tr class="ns1blankspaceCaption">');
 											
 											$.each(oParameter, function()
 											{
 												if (this == sExtraIDColumnBefore)
 												{
-													aHTML[++h] = '<td class="interfaceMainCaption">' + sExtraIDColumnHeader + '</td>';
+													aHTML.push('<td class="ns1blankspaceCaption">' + sExtraIDColumnHeader + '</td>');
 												}
 												
 												var sName = this;
@@ -1370,8 +1383,6 @@ ns1blankspace.report =
 														{	sCaption = this.caption;	
 															return false;
 														}
-														else
-														{	return true;	}
 													});
 												}
 												
@@ -1383,34 +1394,53 @@ ns1blankspace.report =
 														{	sCaption = this.caption;	
 															return false;
 														}
-														else
-														{	return true;	}
 													});
 												}
 												
-												{	sCaption = ns1blankspace.report.getCaption({name: this})	}
+												sCaption = ns1blankspace.report.getCaption({name: this});
 												
 												if (sName != sIDColumn)
-												{	aHTML[++h] = '<td class="interfaceMainCaption">' + sCaption + '</td>';	}
+												{	aHTML.push('<td class="ns1blankspaceCaption">' + sCaption + '</td>');	}
 												
 												aColumns.push({name: sName, caption: sCaption});
 												
 											});
 											
-											aHTML[++h] = '<td class="interfaceMainCaption">&nbsp;</td>';
-											aHTML[++h] = '</tr>'
+											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
 
 											$.each(oResponse.data.rows, function(index) 
 											{ 
-												aHTML[++h] = ns1blankspace.report.search.row(this, oParam);
+												aHTML.push(ns1blankspace.report.search.row(this, oParam));
 											});
 											ns1blankspace.report.rowParameters = oParam;
 											
-											aHTML[++h] = '</tbody></table>';
+											aHTML.push('</table>');
 											
-											ns1blankspace.render.page(
+											$.extend(true, oParam, {moreId: $(oResponse).attr('moreid'),
+																			count: oResponse.summary[ns1blankspace.report.endpoint],
+																			response: oResponse,
+																			columns: aColumns
+																			});
+
+											//$('#radioReport-Update').unbind("click");
+											//$('#radioReport-Update').click(function() {
+											//	ns1blankspace.report.bulkUpdate.show(oParam);
+											//});
+											
+											$('#radioReport-Export').unbind("click");
+											$('#radioReport-Export').click(function() {
+												ns1blankspace.report.exportToCSV(oParam);
+											});	
+
+											$('#radioReport-Send').unbind("click");
+											$('#radioReport-Send').click(function() {
+												ns1blankspace.report.sendEMail.show(oParam);
+											});	
+
+											ns1blankspace.render.page.show(
 											   {
-												xhtmlElementID: 'ns1blankspaceMainReportResults',
+												xhtmlElementID: 'ns1blankspaceReportResults',
 												xhtmlContext: '',
 												xhtml: aHTML.join(''),
 												showMore: ($(oResponse).attr('morerows') == "true"),
@@ -1424,11 +1454,11 @@ ns1blankspace.report =
 												type: 'json'
 											   }); 	
 												
-											$('.interfaceMainRowOptionsSelect' + '').unbind('click');
+											$('.ns1blankspaceRowSelect' + '').unbind('click');
 												
 											if (ns1blankspace.report.scriptOpen != undefined)
 											{
-												$('.interfaceMainRowOptionsSelect' + '').button({
+												$('.ns1blankspaceRowSelect' + '').button({
 													text: false,
 													icons: {
 														primary: "ui-icon-play"
@@ -1442,187 +1472,12 @@ ns1blankspace.report =
 											}
 											
 											eval(ns1blankspace.report.scriptNewPage);
-											
-											$('#spanInterfaceReportExport').button(
-											{
-												label: "Export (csv)"
-											})
-											.click(function() 
-											{
-												ns1blankspace.report.exportToCSV({moreId: $(oResponse).attr('moreid'),
-																			count: eval('oResponse.summary.' + ns1blankspace.report.endpoint)
-																			});
-											});	
 
 											//functionSearch: ns1blankspaceActions,	
 											//functionOpen: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)',
 											//functionNewPage: 'ns1blankspaceAttachmentsShowBind()'	
 											//ns1blankspaceAttachmentsShowBind();	
 											
-											if (bContainsContactPerson)
-											{	// Show editor and template fields, buttons for preview & Sending
-												ns1blankspaceTinyMCEInit();
-												for (edId in tinyMCE.editors) 
-													tinyMCE.editors[edId].destroy(true);
-												
-												ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
-												$('#ns1blankspaceMainReportSend').attr('onDemandLoading', '');
-												
-												aHTML = [];
-												h = -1;
-												aHTML[++h] = '<table id="tableInterfaceMainReportSend" class="interfaceMain">';
-												aHTML[++h] = '<tr id="trInterfaceMainReportSendRow1" class="interfaceMain">' +
-																'<td id="tdInterfaceMainReportSendColumn1" class="interfaceMain">' +
-																'</td>' +
-																'<td id="tdInterfaceMainReportSendColumn2" class="interfaceMain">' +
-																'</td>' +
-																'</tr>';
-												aHTML[++h] = '</table>';					
-												
-												$('#ns1blankspaceMainReportSend').html(aHTML.join(''));
-												
-												var aHTML = [];
-												var h = -1;
-												var oMCEBookmark;
-											
-												aHTML[++h] = '<table id="tableInterfaceMainColumn1" class="interfaceMain">';
-												aHTML[++h] = '<tr id="trInterfaceMainDetailsReportDetails">';	
-												aHTML[++h] = '<td id="tdInterfaceMainDetailsReportSendDetail">';			
-												
-												aHTML[++h] = '<table id="tdInterfaceMainReportDetail" class="interfaceMain">';
-												aHTML[++h] = '<tr id="trInterfaceMainDetailsReportSendSubject" class="interfaceMain">';	
-												aHTML[++h] = '<td id="tdInterfaceMainDetailsReportSendSubject" class="interfaceMain">' +
-														'Subject' +
-														'</td></tr>' +
-														'<tr id="trInterfaceMainDetailsReportSendSubject" class="interfaceMainTextMulti">' +
-														'<td id="tdInterfaceMainDetailsReportSendSubject" class="interfaceMainTextMulti">' +
-														'<input onDemandType="TEXT" id="inputInterfaceMainDetailsReportSendSubject"  class="inputInterfaceMainText">' +
-														'</td></tr>';
-														
-												aHTML[++h] = '<tr id="trInterfaceMainDetailsReportSendText">';	
-												aHTML[++h] = '<td id="tdInterfaceMainReportSendTextValue" class="interfaceMainTextMulti" width="550px">' +
-																'<div rows="550" cols="400" onDemandType="TEXTMULTI" id="inputInterfaceMainReportSendText' +
-																	ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="inputInterfaceMainTextMulti"></textarea>' +
-																'</td>';
-												aHTML[++h] = '</td></tr></table>';					
-												aHTML[++h] = '</td>';					
-																
-												aHTML[++h] = '<td id="tdInterfaceMainReportSendEmail" class="interfaceMain">';
-
-												aHTML[++h] = '<table id="tdInterfaceMainReportOptions" class="interfaceMain">';
-												aHTML[++h] = '<tr><td id="tdInterfacemainReportSendButtons" class="interfaceMain" style="text-align:right;">' +
-															'<span id="spanInterfaceMainReportSendPreview">Preview</span>&nbsp;' +
-															'<span id="spanInterfaceMainReportSendEmail">Email</span>' +
-															'</td></tr>';		
-												aHTML[++h] = '<tr><td>&nbsp;</td></tr>';
-												
-												aHTML[++h] = '<tr><td id="tdInterfaceManReportSendInstructions" class="interfaceMain" style="text-align:right;">' +
-															'Click to insert fields..' +
-															'</td></tr>';		
-												aHTML[++h] = '<tr><td id="tdInterfaceMainReportMergeFields" class="interfaceMain" style="text-align:right;" colspan="2">';
-												$.each(aColumns, function()
-												{
-													aHTML[++h] = '<span id="spanInterfaceMainReportColumn_' + this.name.replace(/\./g,'-') + '" ' +
-																   'class="interfaceReportColumnSelect interfaceCalculated" ' +
-																   'title="' + this.caption.replace(/ /g,'~') + '" style="cursor: pointer;">' + this.caption + '</span>' +
-																'<br />';		
-												});
-														
-												aHTML[++h] = '</td></tr></table>';					
-												aHTML[++h] = '</td></tr></table>';					
-												
-												$('#tdInterfaceMainReportSendColumn1').html(aHTML.join(''));
-
-												
-												$('#spanInterfaceMainReportSendPreview').button({
-													text: false,
-													icons: {
-														primary: "ui-icon-document"}
-												})
-												.click(function()
-												{
-													//var sText = interfaceReportReplaceMailMerge();
-													var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
-																								   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + ns1blankspace.counter.editor)).getContent()});
-													var iObject;
-													if (oParam.method != undefined)
-													{
-														var aMethod = oParam.method.split('_');
-														var sEndPoint = aMethod[0];
-														if (sEndPoint == "CONTACT")
-														{
-															if (aMethod[1] == 'BUSINESS')
-															{	iObject = ns1blankspace.data.object.contactbusiness;	}
-															else if (aMethod[1] == "PERSON")
-															{	iObject = ns1blankspace.data.object.contactperson;	}
-														}
-														else if (sEndPoint == 'AUDIT')
-														{	
-															if (aMethod[1] == "ITEM")
-															{	iObject = ns1blankspace.objectAuditItemType;	}
-															else
-															{	iObject = ns1blankspace.objectAudit;	}
-														}
-														else if (sEndPoint == 'OPPORTUNITY')
-														{	iObject = ns1blankspace.data.object.opportunity;	}
-														else if (sEndPoint == "ISSUE")
-														{	iObject = ns1blankspace.objectIssue;	}
-														else
-														{	
-															alert('Report Error. Object cannot be determined.');
-															return false;
-														}
-													}
-													
-													var aReportParam = {row: oResponse.data.rows[0],
-																		moreID: oResponse.moreid,
-																		parameters: oParameter,
-																		object: iObject,
-																		text: sText
-																	   }
-													ns1blankspace.report.sendPreview(aReportParam);
-												})
-												.css('width', '30px')
-												.css('height', '30px');
-											
-												$('#spanInterfaceMainReportSendEmail').button({
-													text: false,
-													icons: {
-														primary: "ui-icon-mail-closed"}
-												})
-												.click(function()
-												{
-													var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
-																								   replace: tinyMCE.get(('inputInterfaceMainReportSendText' + ns1blankspace.counter.editor)).getContent()});
-													var sSubject = ns1blankspace.report.mergeFields({columns: aColumns, 
-																								   replace: $('#inputInterfaceMainDetailsReportSendSubject').val()});
-													ns1blankspace.report.sendEmail({moreID: oResponse.moreid,
-																			  parameters: oParameter,
-																			  text: sText,
-																			  subject: sSubject
-																			  });
-												})
-												.css('width', '30px')
-												.css('height', '30px');
-												
-												
-												$('.interfaceReportColumnSelect')
-												.hover( function()
-												{	
-													oMCEBookmark = tinyMCE.get('inputInterfaceMainReportSendText' + ns1blankspace.counter.editor).selection.getBookmark({type: 1, normalized: true});
-												})
-												.click( function()
-												{
-													ns1blankspaceMCEAddElement({xhtmlElementId: this.id,
-																				  editorId: 'inputInterfaceMainReportSendText' + ns1blankspace.counter.editor, 
-																				  mceBookmark: oMCEBookmark})
-												})
-												
-												tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainReportSendText' + ns1blankspace.counter.editor);
-												
-												//var sParam = 'method=DOCUMENT_GET_DOCUMENT&noformat=1&select=' + iDocument;
-
-											}
 										}
 									}	
 								},
@@ -1631,7 +1486,6 @@ ns1blankspace.report =
 					row:		function (oResponse, oParam)
 								{
 									var aHTML = [];
-									var h = -1;
 									var oFixedParameters = ns1blankspace.report.fixedParameters;
 									var aFixedName = [];
 									var	aFixedValue = [];
@@ -1669,7 +1523,7 @@ ns1blankspace.report =
 									if (sParameterList != '')
 									{	oParameters = sParameterList.split(',');	}
 									
-									aHTML[++h] = '<tr class="interfaceMainRow">';
+									aHTML.push('<tr class="interfaceMainRow">');
 
 									var sLastExtraID = '';
 									sIDColumn = "id";
@@ -1680,28 +1534,33 @@ ns1blankspace.report =
 									$.each(oParameters, function()
 									{
 										
-										var sValue = eval('oResponse["' + this + '"]');
+										var sValue = oResponse[this];
 										var sKey = this;
+										var sIdValue = oResponse[sIDColumn];
 										
-										if (sKey != sIDColumn)
-										{
-											aHTML[++h] = '<td class="interfaceMainRow ' + sKey.replace(/\./g,'_') + '" ' + 
-															 'id="' + sValue + '">' + 
-														  sValue + '</td>';
+										if (sKey != sIDColumn)	{
+											aHTML.push('<td class="interfaceMainRow ' + sKey.replace(/\./g,'_') + '" ' + 
+															 'id="' + sKey.replace(/\./g,'_') + '_' + sIdValue + '">' + 
+														  sValue + '</td>');
 											sOutput += '"' + sValue + '",';
 										}
 										else
 										{
-											if (sKey == sIDColumn)
-											{	
-												aLastHTML.push('<td class="interfaceMainRowOptionsSelect id" ' +
-															 'id="id-' + sValue + '"' +
+											if (sKey == sIDColumn)	{	
+												aLastHTML.push('<td class="ns1blankspaceRowSelect id" ' +
+															 'id="id-' + sIdValue + '"' +
 															 'data-extraid="' + sLastExtraID + '"></td>');
 											}
 										}
 									});
-									aHTML[++h] = aLastHTML.join('');
-									aHTML[++h] = '</tr>'; 
+
+									if (aLastHTML.length == 0) {
+										aLastHTML.push('<td class="ns1blankspaceRowSelect id" ' +
+													 'id="id-' + oResponse[sIDColumn] + '"</td>');
+
+									}
+									aHTML.push(aLastHTML.join(''));
+									aHTML.push('</tr>'); 
 									
 									if (bExport)
 									{	return sOutput.substr(0, sOutput.length - 1) + '%0D%0A';	}
@@ -1853,7 +1712,7 @@ ns1blankspace.report =
 					$.each(aFields, function()
 					{
 						var sField = this.replace(/\./g,'_');
-						if ($('#checkInterfaceMainReport_include-' + sField).attr('checked'))
+						if ($('#ns1blankspaceReportCheck_include-' + sField).attr('checked'))
 						{
 							bIncluded = true;
 							return false;
@@ -1884,24 +1743,41 @@ ns1blankspace.report =
 					if (sName != undefined)
 					{
 						sName = sName.replace(/\./g,'_');
-						sSearchMethod = $("#tdInterfaceMainReport_comparison-" + sName + '-text').attr('data-searchMethod');
+						sSearchMethod = $("#ns1blankspaceReport_comparison-" + sName + '-text').attr('data-searchMethod');
 						if (sAttribute != '')
 						{	sValue = $('#' + ns1blankspace.xhtml.divID).attr(sAttribute)	}
 						
-						$("#tdInterfaceMainReport_comparison-" + sName + '-text').attr('data-searchMethod', sSearchMethod + '&' + sParameter + '=' + sValue);
+						$("#ns1blankspaceReport_comparison-" + sName + '-text').attr('data-searchMethod', sSearchMethod + '&' + sParameter + '=' + sValue);
 						
 					}
 					
 				},
 
-	exportCSV:		function (oParam)
+	exportToCSV:		function (oParam)
 				{
 					var iMoreId;
+					var aHTML = [];
 					
+					var sShowId = 'radioReport-Export';
+					$('#ns1blankspaceReportExport').html('');
+					$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
+						
+						var sSuffix = $(this).attr('id').split('-')[1];
+						if ($(this).attr('id') === sShowId) {
+							$('#ns1blankspaceReport' + sSuffix).show();
+						}
+						else {
+							$('#ns1blankspaceReport' + sSuffix).hide();
+						}
+					});
+
 					if (oParam != undefined)
 					{
 						if (oParam.count != undefined && oParam.count != "0") 
 						{
+							
+							$('#ns1blankspaceReportExport').html(ns1blankspace.xhtml.loading);
+
 							iMoreId = oParam.moreId;
 							var sParam = '&method=CORE_MORE_FILE_MANAGE&more=' + iMoreId;
 							$.ajax({
@@ -1912,17 +1788,21 @@ ns1blankspace.report =
 								{
 									if (oResponse.link != '')
 									{
-										var aHTML = [];
-										var h = -1;
-										aHTML[++h] = '<table class="interfaceMain"">';
-										aHTML[++h] = '<tbody>'
-										aHTML[++h] = '<tr class="interfaceMainCaption">';
-										aHTML[++h] = '<td class="interfaceMainCaption">File created..   ' + oParam.count + ' rows.</td></tr>';
-										aHTML[++h] = '<tr class="interfaceMainCaption">';
-										aHTML[++h] = '<td class="interfaceMainCaption"><a href="' + oResponse.link;
-										aHTML[++h] = '" target="_blank">Click here</a> to download the file.</td></tr>';
-										aHTML[++h] = '</tbody></table>';
-										$('#ns1blankspaceMainReportResults').html(aHTML.join(''));
+										aHTML.push('<table class="interfaceMain"">');
+										aHTML.push('<tr class="ns1blankspaceCaption">');
+										aHTML.push('<td class="ns1blankspaceCaption">File created..   ' + oParam.count + ' rows.</td></tr>');
+										aHTML.push('<tr class="ns1blankspaceCaption">');
+										aHTML.push('<td class="ns1blankspaceCaption"><a href="' + oResponse.link);
+										aHTML.push('" target="_blank">Click here</a> to download the file.</td></tr>');
+										aHTML.push('</table>');
+										$('#ns1blankspaceReportExport').html(aHTML.join(''));
+									}
+									else {
+										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<tr class="ns1blankspaceCaption">');
+										aHTML.push('<td class="ns1blankspaceCaption">Error creating file. Please try again..</td></tr>');
+										aHTML.push('</table>');
+										$('#ns1blankspaceReportExport').html(aHTML.join(''));
 									}
 								}
 							});
@@ -1931,15 +1811,14 @@ ns1blankspace.report =
 					}
 					else
 					{
-						var aHTML = [];
-						var h = -1;
-						aHTML[++h] = '<table class="interfaceMain"">';
-						aHTML[++h] = '<tbody>'
-						aHTML[++h] = '<tr class="interfaceMainCaption">';
-						aHTML[++h] = '<td class="interfaceMainCaption">No results. File not created.</td></tr>';
-						aHTML[++h] = '</tbody></table>';
-						$('#ns1blankspaceMainReportResults').html(aHTML.join(''));
+						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<tr class="ns1blankspaceCaption">');
+						aHTML.push('<td class="ns1blankspaceCaption">No results. File not created.</td></tr>');
+						aHTML.push('</table>');
+						$('#ns1blankspaceReportExport').html(aHTML.join(''));
 					}
+
+
 				},
 
 	sendPreview:	function (oParam)
@@ -1962,7 +1841,7 @@ ns1blankspace.report =
 					}
 					else
 					{
-						ns1blankspace.status.error('Parameters not passed to interfaceReportSendPreview. <br /><br />Preview aborted.');
+						ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.sendPreview. <br /><br />Preview aborted.');
 						return false;
 					}
 					
@@ -1979,7 +1858,7 @@ ns1blankspace.report =
 					}
 					
 					sParam = "&more=" + iMoreId + 
-							 "&object=" + iObject + "&objectcontext=" + oRow.id +
+							 "&object=" + ns1blankspace.report.object + "&objectcontext=" + oRow.id +
 							 "&templatetext=" + ns1blankspace.util.fs(sText) + 
 							 "&tags=" + ns1blankspace.util.fs(sTags);
 
@@ -1987,7 +1866,7 @@ ns1blankspace.report =
 					{
 						type: 'POST',
 						cache: false,
-						url: "/ondemand/core/?method=CORE_MORE_APPLY_TEMPLATE",
+						url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
 						data: "rf=text" + sParam,
 						dataType: 'text',
 						async: false,
@@ -1995,76 +1874,505 @@ ns1blankspace.report =
 						{
 							if (data.substr(0,12) == "OK|RETURNED|")
 							{	
-								ns1blankspace.status.status(data.substring(12));	}
+								ns1blankspace.status.message(data.substring(12));	
+								// ToDo: Add preview page
+							}
 						}
 					});
 				},
 
-	sendEMail:	function (oParam)
-				{
-					var iMoreId;
-					var sText = "";
-					var sParam = "";
-					var oParameters = [];
-					var sTags = "";
-					var sEmail = "";
-					var sSubject = "";
-					
-					if (oParam != undefined)
-					{
-						if (oParam.moreID != undefined) {iMoreId = oParam.moreID}		
-						if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
-						if (oParam.text != undefined) {sText = oParam.text}		
-						if (oParam.subject != undefined) {sSubject = oParam.subject}		
-					}
-					else
-					{
-						ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.sendEmail. <br /><br />Preview aborted.');
-						return false;
-					}
-					
-					if (confirm("Are you sure you want to send an email to all of the Contacts in the report results?"))
-					{
-						sTags = oParameters.join('|');
-						
-						var oSearch = new AdvancedSearch();
-						oSearch.endPoint = "contact";
-						oSearch.method = "CONTACT_PERSON_SEARCH";
-						oSearch.addField("email");
-						oSearch.addFilter("id", "EQUAL_TO", gsUserPersonId);
-						oSearch.rf = "JSON";
-						oSearch.async = false;
-						oSearch.getResults(function(data)
-						{
-							if (data.data.rows.length > 0)
-							{	sEmail = data.data.rows[0].email;	}
-						});
-						
-						sParam = "&more=" + iMoreId + 
-								 "&title=" + ns1blankspace.util.fs(sSubject) +
-								 "&status=1" + 
-								 "&type=2" +
-								 '&scheduletype=9' +
-								 "&schedulemaximumcount=1" + 
-								 "&responseactionfrom=" + ns1blankspace.util.fs(sEmail) + 
-								 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-								 "&caption=" + ns1blankspace.util.fs(sTags);
+	sendEMail:	{
 
-						$.ajax(
+				show: 	function (oParam)
 						{
-							type: 'POST',
-							cache: false,
-							url: "/ondemand/setup/?method=SETUP_AUTOMATION_MANAGE",
-							data: "rf=text" + sParam,
-							dataType: 'text',
-							async: false,
-							success: function(data)
-							{
-								ns1blankspace.status.status("Email(s) sent");
+
+							var oResponse;
+							var bContainsContactPerson = false;
+							var aColumns = [];
+
+							if (oParam) {
+								if (oParam.response) {oResponse = oParam.response;}
+								if (oParam.containsContactPerson != undefined) {bContainsContactPerson = oParam.containsContactPerson;}
+								if (oParam.columns) {aColumns = oParam.columns;}
 							}
-						});
-					}
-					else
-					{	return false;	}
-				}
+
+							if (oResponse && $('#ns1blankspaceReportSendColumn1').html() == undefined) {
+								if (bContainsContactPerson)
+								{	// Show editor and template fields, buttons for preview & Sending
+									ns1blankspace.format.editor.init();
+									for (edId in tinyMCE.editors) 
+												tinyMCE.editors[edId].destroy(true);
+											
+									ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;	
+
+									aHTML = [];
+									aHTML.push('<table class="ns1blankspaceContainer"><tr>');
+									aHTML.push('<td id="ns1blankspaceReportSendColumn1"></td>' +
+											   '<td id="ns1blankspaceReportSendColumn2" style="width:100px;"></td>' +
+											   '</tr></table>');
+									
+									$('#ns1blankspaceReportSend').html(aHTML.join(''));
+									
+									var aHTML = [];
+									var oMCEBookmark;
+								
+									aHTML.push('<table class="ns1blankspaceContainer">');
+									aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row1">');
+									
+										aHTML.push('<table class="ns1blankspaceContainer"><tr>');
+										aHTML.push('<td id="ns1blankspaceReportSendSubject">');
+
+											aHTML.push('<table class="ns1blankspaceContainer">');
+											aHTML.push('<tr><td class="ns1blankspaceCaption">Subject</td></tr>' +
+													   '<tr><td class="ns1blankspaceText">' +
+													   		'<input onDemandType="TEXT" id="ns1blankspaceReportSendSubject" class="ns1blankspaceText">' +
+													   '</td></tr></table>');
+
+										aHTML.push('</td><td id="ns1blankspaceReportSendOptions" style="width:120px; text-align:right;">');
+											
+											aHTML.push('<span id="ns1blankspaceReportSendPreview">Preview</span>&nbsp;' +
+														'<span id="ns1blankspaceReportSendEmail">Email</span>');
+
+										aHTML.push('</tr></table>');	
+
+									aHTML.push('</td></tr>');			
+									aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row2">');
+										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<tr><td>' +
+													'<textarea rows="30" cols="50" id="ns1blankspaceReportSendText' +
+														ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
+													'</td></tr></table>');
+											
+									aHTML.push('</td></tr>');
+
+
+									$('#ns1blankspaceReportSendColumn1').html(aHTML.join(''));
+
+											
+									aHTML = [];
+
+									aHTML.push('<table>');
+									aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:0.75em;">' +
+												'Tags..</td></tr>');		
+									$.each(aColumns, function()
+									{
+										aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
+
+										aHTML.push('<span id="spanInterfaceFormatTag_' + (this.caption).replace(/ /g,'-') + '"' +
+												  		' class="interfaceFormatTags" ' +
+												   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>');
+
+										aHTML.push('</td></tr>');	
+
+									});
+											
+									aHTML.push('</table>');					
+									
+									$('#ns1blankspaceReportSendColumn2').html(aHTML.join(''));
+
+									
+									$('#ns1blankspaceReportSendPreview').button({
+										text: false,
+										icons: {
+											primary: "ui-icon-document"}
+									})
+									.click(function()
+									{
+										//var sText = interfaceReportReplaceMailMerge();
+										var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
+																					   replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()});
+										
+										var aReportParam = {row: oResponse.data.rows[0],
+															moreID: oResponse.moreid,
+															parameters: oParameter,
+															object: ns1blankspace.report.object,
+															text: sText
+														   }
+										ns1blankspace.report.sendPreview(aReportParam);
+									})
+									.css('width', '30px')
+									.css('height', '30px');
+								
+									$('#ns1blankspaceReportSendEmail').button({
+										text: false,
+										icons: {
+											primary: "ui-icon-mail-closed"}
+									})
+									.click(function()
+									{
+										var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
+																					   replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()});
+										var sSubject = ns1blankspace.report.mergeFields({columns: aColumns, 
+																					   replace: $('#ns1blankspaceReportSendSubject').val()});
+										ns1blankspace.report.sendEMail.send({moreID: oResponse.moreid,
+																  parameters: oParameter,
+																  text: sText,
+																  subject: sSubject
+																  });
+									})
+									.css('width', '30px')
+									.css('height', '30px');
+									
+									
+									$('.interfaceFormatTags')
+									.hover( function()
+									{	
+										var s = 1;
+										oMCEBookmark = tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).selection.getBookmark({type: 1, normalized: true});
+										s = 2;
+									})
+									.click( function()
+									{
+										ns1blankspace.format.editor.addTag({xhtmlElementID: this.id,
+																	  editorID: 'ns1blankspaceReportSendText' + ns1blankspace.counter.editor, 
+																	  mceBookmark: oMCEBookmark})
+									})
+									
+									tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceReportSendText' + ns1blankspace.counter.editor);
+									
+									//var sParam = 'method=DOCUMENT_GET_DOCUMENT&noformat=1&select=' + iDocument;
+
+								}
+								else {
+									
+									var sText = '';
+
+									if (oResponse) {
+										sText = 'To send bulk emails to people in a report, you must include at least fields from the Person record.';
+									}
+									else {
+										sText = 'No results to send.';
+									}
+
+									aHTML = [];
+									aHTML.push('<table class="ns1blankspaceContainer"><tr>');
+									aHTML.push('<td id="ns1blankspaceReportSend">' + sText + '</td>' +
+											   '</tr></table>');
+									
+									$('#ns1blankspaceReportSend').html(aHTML.join(''));
+								}
+							}
+
+							var sShowId = 'radioReport-Send';
+
+							$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
+								
+								var sSuffix = $(this).attr('id').split('-')[1];
+								if ($(this).attr('id') === sShowId) {
+									$('#ns1blankspaceReport' + sSuffix).show();
+								}
+								else {
+									$('#ns1blankspaceReport' + sSuffix).hide();
+								}
+							});
+						},
+
+				send: 	function(oParam) {
+
+							var iMoreId;
+							var sText = "";
+							var sParam = "";
+							var oParameters = [];
+							var sTags = "";
+							var sEmail = "";
+							var sSubject = "";
+							
+							if (oParam != undefined)
+							{
+								if (oParam.moreID != undefined) {iMoreId = oParam.moreID}		
+								if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
+								if (oParam.text != undefined) {sText = oParam.text}		
+								if (oParam.subject != undefined) {sSubject = oParam.subject}		
+							}
+							else
+							{
+								ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.sendEmail. <br /><br />Preview aborted.');
+								return false;
+							}
+							
+							if (confirm("Are you sure you want to send an email to all of the Contacts in the report results?"))
+							{
+								sTags = oParameters.join('|');
+								
+								var oSearch = new AdvancedSearch();
+								oSearch.endPoint = "contact";
+								oSearch.method = "CONTACT_PERSON_SEARCH";
+								oSearch.addField("email");2182
+								oSearch.addFilter("id", "EQUAL_TO", ns1blankspace.user.contactperson);
+								oSearch.rf = "JSON";
+								oSearch.async = false;
+								oSearch.getResults(function(data)
+								{
+									if (data.data.rows.length > 0)
+									{	sEmail = data.data.rows[0].email;	}
+								});
+								
+								sParam = "&more=" + iMoreId + 
+										 "&title=" + ns1blankspace.util.fs(sSubject) +
+										 "&status=1" + 
+										 "&type=2" +
+										 '&scheduletype=9' +
+										 "&schedulemaximumcount=1" + 
+										 "&responseactionfrom=" + ns1blankspace.util.fs(sEmail) + 
+										 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+										 "&caption=" + ns1blankspace.util.fs(sTags);
+
+								$.ajax(
+								{
+									type: 'POST',
+									cache: false,
+									url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
+									data: "rf=text" + sParam,
+									dataType: 'text',
+									async: false,
+									success: function(data)
+									{
+										ns1blankspace.status.message("Email(s) sent");
+									}
+								});
+							}
+							else
+							{	return false;	}
+						}
+				},
+
+	bulkUpdate:	{
+
+				show: 	function (oParam) {
+							
+							var oResponse;
+							var nCount;
+							var sMoreId;
+							var oParameters;
+							var sExtraIDColumnBefore;
+							var sIDColumn = 'id';
+
+							if (oParam) {
+								if (oParam.response) { oResponse = oParam.response; }
+								if (oParam.count) { nCount = oParam.count; }
+								if (oParam.parameterList) {oParameters = oParam.parameterList.split(','); }
+								if (oParam.moreId) {sMoreId = oParam.moreId; }
+								if (oParam.idColumn) {sIDColumn = oParam.idColumn; }
+								if (oParam.extraIDColumnBefore) {sExtraIDColumnBefore = oParam.extraIDColumnBefore; }
+							}
+
+
+							var aHTML = [];
+
+							if (oResponse && $('#ns1blankspaceReportUpdateColumn1').html() == undefined ) {
+
+								aHTML.push('<table class="ns1blankspace">');
+								aHTML.push('<tr><td id="ns1blankspaceReportUpdateColumn1"></td>' +
+										   '<td id="ns1blankspaceReportUpdateColumn2" style="width:200px;"></td>' +
+										   '</tr></table>');
+							
+								$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
+
+								aHTML = [];
+
+								aHTML.push('<table class="ns1blankspace">');
+								aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Include</td>' +
+												'<td colspan=1 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Update To</td></tr>');
+								
+								$.each(oParameters, function() {
+									
+									if (this == sExtraIDColumnBefore || this === sIDColumn) {}
+									else {		// We want this one
+
+										
+										var sName = this.replace(/\./g, '_');
+										var sCaption = $('#ns1blankspaceReport_caption_' + sName).html();
+										var sSearchRelatedField = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchRelatedField');
+										var sInputType = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-inputType');
+										var sSearchMethod = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchMethod');
+										var sSearchEndPoint = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchEndpoint');
+										var sDataType = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-dataType');
+										var sInputTypeTitle = (sInputType) ? sInputType.substr(0,1).toUpperCase() + sInputType.substr(1) : 'Text';
+										sInputTypeTitle = (sInputType === 'textbox') ? 'Text' : sInputTypeTitle;
+
+										// we can't bulk update anything except lookup fields against SETUP
+										if (sSearchMethod == "" || sSearchMethod.split('_')[0] === 'SETUP') {
+
+											aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReportUpdate_include_' + sName + '">' +
+														'<input type="checkbox" id="ns1blankspaceReportUpdateCheck_include-' + sName + '"' +
+															' data-name="' + this + '"' +
+															' class="ns1blankspaceReportUpdateInclude">' +
+														'</td>');
+										
+											aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_caption_' + sName + '" class="ns1blankspaceReport">' +
+														sCaption +
+														'</td>');
+											
+											aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_value-' + sName + '"' +
+																' class="ns1blankspace' + sInputTypeTitle  + '">');
+											aHTML.push('<input id="ns1blankspaceReportUpdate_input-' + sName + '"' +
+																' class="ns1blankspace' + sInputTypeTitle);
+											if (sDataType === "date") {
+												aHTML.push(' hasDatepicker');
+											}
+											aHTML.push('"');
+
+											if (sInputType === "select") {
+												aHTML.push(' data-method="' + sSearchMethod + '"');
+												aHTML.push(' data-searchRelatedField="' + sSearchRelatedField + '"');
+											}
+											aHTML.push('></td>');
+
+													//' data-dataType="' + this.datatype + '"' +
+													//' data-searchEndpoint="' + sSearchEndPoint + '"' +
+													//' data-searchMethod="' + sSearchMethod + sSearchFilter + '"' +
+													//' data-inputType="');
+
+											
+											aHTML.push('</tr>');
+										}
+									}
+
+								});
+										
+								//aHTML.push('</tr>');
+								aHTML.push('</table>');
+								$('#ns1blankspaceReportUpdateColumn1').html(aHTML.join(''));
+
+								aHTML = [];
+								aHTML.push('<table class="ns1blankspace"><tr>');
+								aHTML.push('<td id="ns1blankspaceReportUpdateProcess" style="font-size:0.75em;text-align:right;">&nbsp;</td></tr>');
+								aHTML.push('<tr><td id="ns1blankspaceReportUpdateProgress">&nbsp;</td></tr>');
+								aHTML.push('</table>');
+								$('#ns1blankspaceReportUpdateColumn2').html(aHTML.join(''));
+
+								$('#ns1blankspaceReportUpdateProcess').button({
+									label: "Update"
+								})
+								.click( function(oParam) { ns1blankspace.report.bulkUpdate.process(oParam);});
+
+
+							}
+							else if (oResponse == undefined) {
+								aHTML.push('<table class="ns1blankspace">');
+								aHTML.push('<tr class="ns1blankspaceCaption">');
+								aHTML.push('<td class="ns1blankspaceCaption">No results. No updates possible.</td></tr>');
+								aHTML.push('</table>');
+								$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
+							}
+
+							var sShowId = 'radioReport-Update';
+
+							$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
+								
+								var sSuffix = $(this).attr('id').split('-')[1];
+
+								if ($(this).attr('id') === sShowId) {
+
+									$('#ns1blankspaceReport' + sSuffix).show();
+								}
+								else {
+									$('#ns1blankspaceReport' + sSuffix).hide();
+								}
+							});
+
+						},
+
+				send: 	function (oParam)
+						{
+							var iMoreId;
+							var sErrorText;
+							
+							if (oParam != undefined)
+							{
+								if (oParam.count != undefined && oParam.count != "0") 
+								{
+									iMoreId = oParam.moreId;
+									$('td.ns1blankspaceRowSelect:visible').each(function() {
+										oParam.rowId = $(this).attr('id').substr(3);
+										ns1blankspace.report.bulkUpdate.process(oParam);
+									});
+
+
+									
+								}
+								else { sErrorText = "No results.";}
+							}
+							else { sErrorText = "Parameters not passed to Update.";}
+
+							if (sErrorText) {
+
+								var aHTML = [];
+								aHTML.push('<table class="interfaceMain">');
+								aHTML.push('<tr class="ns1blankspaceCaption">');
+								aHTML.push('<td class="ns1blankspaceCaption">' + sErrorText + ' Nothing updated.</td></tr>');
+								aHTML.push('</table>');
+								$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
+							}
+						},
+
+				process: function(oParam) {
+
+						var aData = [];
+						var aUpdateElements =[];
+						var sRowId;
+
+						if (oParam) {
+							sRowId = oParam.rowId;
+						}
+
+						if (sRowId) {
+							
+							aData.push('id=' + sRowId);
+
+							$('tr.ns1blankspaceUpdate').children().each(function() {
+
+								if ($(this).hasClass("ns1blankspaceUpdate")) {
+
+									var oElement = $(this).children()[0];
+									var aID = $(oElement).attr('id').split('-');
+									var sName = aID[1].replace(/_/g,'.');
+									sName = sName.replace(ns1blankspace.report.objectName + '.', '');
+
+									if ($(oElement).hasClass('ns1blankspaceSelect') && $(oElement).attr('data-id') != undefined) {
+										aData.push(sName.substr(0, sName.length - 4) + '=' + ns1blankspace.util.fs($(oElement).attr('data-id')));
+										aUpdateElements.push({id: $(oElement).attr('id'), value: $(oElement).val(), data_id: $(oElement).attr('data-id')});
+
+									}
+									else if ($(oElement).val() != '') {
+										aData.push(sName + '=' + ns1blankspace.util.fs($(oElement).val()));
+										aUpdateElements.push({id: $(oElement).attr('id'), value: $(oElement).val(), data_id: undefined});
+
+									}
+								}
+							});
+
+							if( aData.length > 0) {
+
+								$.ajax({
+									type: 'POST',
+									url: ns1blankspace.util.endpointURI(ns1blankspace.report.method.replace('_SEARCH', '_MANAGE')),
+									data: aData.join('&'),
+									async: false,
+									dataType: 'json',
+									success: function(oResponse) {
+
+										if (oResponse.status == 'OK') {
+
+											// We have to change the values on the visible rows
+											if ($('#id_' + sRowId).is(':visible')) {
+												$('#id_' + sRowId).button({
+													text: false,
+													 icons: {
+														 primary: "ui-icon-check"
+													}
+												})
+												.click(function() {});
+											}
+
+											//$('#ns1blankspaceReportResults').html(aHTML.join(''));
+										}
+									}
+								});
+							}
+						}
+
+						}
+		}
+
 }
