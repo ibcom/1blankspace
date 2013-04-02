@@ -1072,7 +1072,7 @@ ns1blankspace.contactPerson =
 										oSearch.method = 'CONTACT_PERSON_GROUP_SEARCH';
 										oSearch.addField('contactperson,contactpersontext,group,grouptext');
 										oSearch.addFilter('contactperson', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.rows = 100;
+										oSearch.rows = 200;
 										oSearch.sort('grouptext', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.contactPerson.groups.show(oParam, data)});
 									}
@@ -1188,7 +1188,7 @@ ns1blankspace.contactPerson =
 											{
 												type: 'GET',
 												url: ns1blankspace.util.endpointURI('SETUP_CONTACT_PERSON_GROUP_SEARCH'),
-												data: 'rows=100',
+												data: 'rows=200',
 												dataType: 'json',
 												success: function(data){ns1blankspace.contactPerson.groups.add(oParam, data)}
 											});
