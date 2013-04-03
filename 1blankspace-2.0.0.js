@@ -3048,6 +3048,18 @@ ns1blankspace.save =
 
 ns1blankspace.util =
 {
+	param: 		function(oParam, sParam)
+				{
+					var oReturn;
+
+					if (oParam != undefined) 
+					{ 
+						oReturn = oParam[sParam];
+					}	
+
+					return oReturn;
+				},
+
 	json: 		function (oJSON, sElement, iRow)
 				{
 					oJSON = (oJSON === undefined)?'':oJSON;

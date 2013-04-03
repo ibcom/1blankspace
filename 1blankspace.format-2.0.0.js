@@ -164,132 +164,135 @@ ns1blankspace.format.test = function()
 }
 
 ns1blankspace.format.render = function (oParam)
+{
+	var sXHTMLTemplate;
+	var sXHTMLRendered;
+	var iObject = ns1blankspace.object;
+	var iObjectContext = ns1blankspace.objectContext;
+	var aSourceMethods = [];
+	var oObjectData = ns1blankspace.objectContextData;
+
+	if (oParam != undefined)
+	{
+		if (oParam.xhtmlTemplate != undefined) {sXHTMLTemplate = oParam.xhtmlTemplate}
+		if (oParam.object != undefined) {iObject = oParam.object}
+		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+		if (oParam.objectData != undefined) {oObjectData = oParam.objectData}		
+	}
+
+	sXHTMLTemplate = (sXHTMLTemplate).replace(/\[\[/g,'<div class="template">');
+	sXHTMLTemplate = (sXHTMLTemplate).replace(/\]\]/g,'</div>');
+
+	var oXHTML = $(sXHTMLTemplate);
+	var aXHTML = [];
+
+	$(oXHTML).each(function()
+	{
+		$(this).find('div.template').each(function(i,e) 
+		{
+			var oTemplateTag = $.grep(ns1blankspace.format.tags, function (a) { return a.caption == $(e).html(); })
+
+			if (oTemplateTag[0])
+			{
+				$(e).html('');
+				$(e).attr('data-format-tag', oTemplateTag[0].caption);
+				$(e).attr('data-format-source', oTemplateTag[0].source);
+
+				var aSource = (oTemplateTag[0].source).split('.');
+				$(e).attr('data-format-source-group', aSource[0]); 
+
+				if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 1)
 				{
-					var sXHTMLTemplate;
-					var sXHTMLRendered;
-					var iObject;
-					var aSourceMethods = [];
+					var sSource = oTemplateTag[0].source;
 
-					if (oParam != undefined)
-					{
-						if (oParam.xhtmlTemplate != undefined) {sXHTMLTemplate = oParam.xhtmlTemplate}
-						if (oParam.object != undefined) {iObject = oParam.object}		
+					if (oObjectData[sSource])
+					{	
+						$(e).html(oObjectData[sSource]);
 					}
-
-					sXHTMLTemplate = (sXHTMLTemplate).replace(/\[\[/g,'<div class="template">');
-					sXHTMLTemplate = (sXHTMLTemplate).replace(/\]\]/g,'</div>');
-
-					var oXHTML = $(sXHTMLTemplate);
-					var aXHTML = [];
-
-					$(oXHTML).each(function()
+					else (oObjectData[oTemplateTag[0].source])
 					{
-						$(this).find('div.template').each(function(i,e) 
-						{
-							var oTemplateTag = $.grep(ns1blankspace.format.tags, function (a) { return a.caption == $(e).html(); })
+						var aSource = (sSource).split('.');
+						sSource = aSource[aSource.length-1];
 
-							if (oTemplateTag[0])
-							{
-								$(e).html('');
-								$(e).attr('data-format-tag', oTemplateTag[0].caption);
-								$(e).attr('data-format-source', oTemplateTag[0].source);
+						if (oObjectData[sSource])
+						{	
+							$(e).html(oObjectData[sSource]);
+						}
+					}	
+				}
 
-								var aSource = (oTemplateTag[0].source).split('.');
-								$(e).attr('data-format-source-group', aSource[0]); 
-
-								if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 1)
-								{
-									var sSource = oTemplateTag[0].source;
-
-									if (ns1blankspace.objectContextData[sSource])
-									{	
-										$(e).html(ns1blankspace.objectContextData[sSource]);
-									}
-									else (ns1blankspace.objectContextData[oTemplateTag[0].source])
-									{
-										var aSource = (sSource).split('.');
-										sSource = aSource[aSource.length-1];
-
-										if (ns1blankspace.objectContextData[sSource])
-										{	
-											$(e).html(ns1blankspace.objectContextData[sSource]);
-										}
-									}	
-								}
-
-								if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 2)
-								{
-									if ($.grep(aSourceMethods, function (a) { return a.method == oTemplateTag[0].method; }).length == 0)
-									{
-										aSourceMethods.push({method: oTemplateTag[0].method, group: aSource[0]});
-									}	
-								}
-							}			
-						});
-
-						aXHTML.push($(this).html())
-
-					});
-						
-					//TYPE = 2 - subtables - need to gather up
-					
-					$(aSourceMethods).each(function() 
+				if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 2)
+				{
+					if ($.grep(aSourceMethods, function (a) { return a.method == oTemplateTag[0].method; }).length == 0)
 					{
-						var oSearch = new AdvancedSearch();
-						oSearch.method = this.method;
-						oSearch.addField('*');
-						oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
-						oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
+						aSourceMethods.push({method: oTemplateTag[0].method, group: aSource[0]});
+					}	
+				}
+			}			
+		});
 
-						var oTmp = {group: this.group};
-						oSearch.getResults(function(data) {ns1blankspace.format.process(oTmp, data)});
-					});
+		aXHTML.push($(this).html())
 
-					return aXHTML.join('');
-				};
+	});
+		
+	//TYPE = 2 - subtables - need to gather up
+	
+	$(aSourceMethods).each(function() 
+	{
+		var oSearch = new AdvancedSearch();
+		oSearch.method = this.method;
+		oSearch.addField('*');
+		oSearch.addFilter('object', 'EQUAL_TO', iObject);
+		oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+
+		var oTmp = {group: this.group};
+		oSearch.getResults(function(data) {ns1blankspace.format.process(oTmp, data)});
+	});
+
+	return aXHTML.join('');
+};
 
 ns1blankspace.format.process = function (oParam, oResponse)
-				{
-					var aTR = [];
-					var sTRID = 'template-' + oParam.group;
+{
+	var aTR = [];
+	var sTRID = 'template-' + oParam.group;
 
-					$('[data-format-source-group="' + oParam.group + '"]').each(function(i) 
-					{
-						$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').clone()
+	$('[data-format-source-group="' + oParam.group + '"]').each(function(i) 
+	{
+		$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').clone()
 
+		var oTR = $(this).closest('tr');
+		var sTRXHTML = $(oTR).html();
+		$(oTR).addClass(sTRID);
 
-						var oTR = $(this).closest('tr');
-						var sTRXHTML = $(oTR).html();
-						$(oTR).addClass(sTRID);
+		$(sTRXHTML).each(function()
+		{
+			$(this).find('div.template').each(function(i,e) 
+			{
+				$(e).html($(e).attr('data-format-source'));
+			});
 
-						$(sTRXHTML).each(function()
-						{
-							$(this).find('div.template').each(function(i,e) 
-							{
-								$(e).html($(e).attr('data-format-source'));
-							});
+			aTR.push($(this).html());
+		});
+	});	
 
-							aTR.push($(this).html());
-						});
-					});	
+	sTRXHTML = aTR.join('');
 
-					sTRXHTML = aTR.join('');
+	$(oResponse.data.rows).each(function()
+	{	
+		var oRow = this;
 
-					$(oResponse.data.rows).each(function()
-					{	
-						var oRow = this;
+		$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').clone()
+		.find('[data-format-source]').each(function()
+			{
+				$(this).html(oRow[$(this).attr('data-format-source')]);
 
-						$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').clone()
-						.find('[data-format-source]').each(function()
-							{
-								$(this).html(oRow[$(this).attr('data-format-source')]);
+			}).end().appendTo($('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').parent());
+			
+	});
 
-							}).end().appendTo($('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').parent());
-							
-					});
-
-					$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').remove();
-				};
+	$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').remove();
+};
 
 ns1blankspace.format.editor = 
 {
