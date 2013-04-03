@@ -230,6 +230,15 @@ a:hover
 	color: black;
 }
 
+div.ns1blankspaceScale85
+{
+	-webkit-transform: scale(.85, .85);
+	transform: scale(.85, .85);
+	-ms-transform: scale(.85, .85);
+	-moz-transform: scale(.85, .85);
+	-o-transform: scale(.85, .85));
+}
+
 table.ns1blankspaceMessagingIMAPInbox
 {
 	font-size: 0.875em;

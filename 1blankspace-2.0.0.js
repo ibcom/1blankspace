@@ -3048,13 +3048,22 @@ ns1blankspace.save =
 
 ns1blankspace.util =
 {
-	param: 		function(oParam, sParam)
+	param: 		function(oParam, sParam, sSplit)
 				{
-					var oReturn;
+					var oReturn = {exists: false};
 
 					if (oParam != undefined) 
 					{ 
-						oReturn = oParam[sParam];
+						if (oParam.hasOwnProperty(sParam))
+						{
+							oReturn.value = oParam[sParam];
+							oReturn.exists = true;
+
+							if (sSplit !== undefined)
+							{
+								oReturn.values = oParam[sParam].split(sSplit);
+							}
+						}	
 					}	
 
 					return oReturn;

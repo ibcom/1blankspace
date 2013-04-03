@@ -1944,7 +1944,7 @@ ns1blankspace.financial.invoicing =
 
 									var aHTML = [];
 									
-									aHTML.push('<tr class="ns1blankspaceRow">' +
+									aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceUnsent_container-' + oRow["id"] + '">' +
 													'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspaceUnsent_selectContainer-' + oRow["id"] + '">' +
 													'<input type="checkbox" checked="checked" id="ns1blankspaceUnsent_select-' + oRow["id"] + '"'+ 
 													' title="' + oRow["reference"] + '" /></td>');
@@ -2104,7 +2104,43 @@ ns1blankspace.financial.invoicing =
 
 									showHide: 	function (oParam)
 												{
-													console.log(oParam)
+													var sXHTMLElementID;
+													var sID;
+
+													if (ns1blankspace.util.param(oParam, 'xhtmlElementID').exists)
+													{
+														sXHTMLElementID = ns1blankspace.util.param(oParam, 'xhtmlElementID').value
+														sID = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
+													}
+
+													if ($('#ns1blankspaceUnsent_container_preview-' + sID).length != 0)
+													{
+														$('#ns1blankspaceUnsent_container_preview-' + sID).remove();
+													}
+													else
+													{
+														var sHTML = 'No preview';
+
+														var oInvoice = $.grep(ns1blankspace.financial.invoicing.data.unsentEmail, function (a) {return a.id == sID;})[0];
+
+														if (oInvoice)
+														{
+
+															sHTML = ns1blankspace.format.render(
+															{
+																object: 5,
+																objectContext: oInvoice.id,
+																xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML,
+																objectData: oInvoice,
+																objectOtherData: oInvoice.items
+															});
+
+															//sHTML = oInvoice.xhtml;
+														}	
+
+														$('#ns1blankspaceUnsent_container-' + sID).after('<tr id="ns1blankspaceUnsent_container_preview-' + sID + '">' +
+																		'<td colspan=5><div style="background-color: #F3F3F3;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
+													}
 												}			
 								},				
 
@@ -2112,8 +2148,7 @@ ns1blankspace.financial.invoicing =
 								{		
 									if (iStep == 3)
 									{	
-										ns1blankspace.financial.invoicing.data.unsentEmail[iDataIndex].xhtml = 
-														ns1blankspace.format.render({object: 5, xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML})
+										
 
 										if (false)
 										{	
@@ -3219,12 +3254,12 @@ ns1blankspace.financial.util =
 								ns1blankspace.financial.invoiceTemplateDocumentID = oResponse.data.rows[0].id;
 							}
 
-							if (ns1blankspace.util.param(oParam,'onComplete')) {ns1blankspace.util.param(oParam,'onComplete')()}
+							if (ns1blankspace.util.param(oParam, 'onComplete').exists) {ns1blankspace.util.param(oParam, 'onComplete').value()}
 						});		
 					}
 					else
 					{
-						if (ns1blankspace.util.param(oParam,'onComplete')) {ns1blankspace.util.param(oParam,'onComplete')()}
+						if (ns1blankspace.util.param(oParam, 'onComplete').exists) {ns1blankspace.util.param(oParam, 'onComplete').value()}
 					}
 				},
 

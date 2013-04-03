@@ -171,13 +171,15 @@ ns1blankspace.format.render = function (oParam)
 	var iObjectContext = ns1blankspace.objectContext;
 	var aSourceMethods = [];
 	var oObjectData = ns1blankspace.objectContextData;
+	var oObjectOtherData;
 
 	if (oParam != undefined)
 	{
 		if (oParam.xhtmlTemplate != undefined) {sXHTMLTemplate = oParam.xhtmlTemplate}
 		if (oParam.object != undefined) {iObject = oParam.object}
 		if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-		if (oParam.objectData != undefined) {oObjectData = oParam.objectData}		
+		if (oParam.objectData != undefined) {oObjectData = oParam.objectData}
+		if (oParam.objectOtherData != undefined) {oObjectOtherData = oParam.objectOtherData}		
 	}
 
 	sXHTMLTemplate = (sXHTMLTemplate).replace(/\[\[/g,'<div class="template">');
@@ -236,30 +238,53 @@ ns1blankspace.format.render = function (oParam)
 	});
 		
 	//TYPE = 2 - subtables - need to gather up
-	
+
+	var sHTML;
+
 	$(aSourceMethods).each(function() 
 	{
-		var oSearch = new AdvancedSearch();
-		oSearch.method = this.method;
-		oSearch.addField('*');
-		oSearch.addFilter('object', 'EQUAL_TO', iObject);
-		oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+		if (oObjectOtherData === undefined)
+		{
+			sHTML = aXHTML.join('');
 
-		var oTmp = {group: this.group};
-		oSearch.getResults(function(data) {ns1blankspace.format.process(oTmp, data)});
+			var oSearch = new AdvancedSearch();
+			oSearch.method = this.method;
+			oSearch.addField('*');
+			oSearch.addFilter('object', 'EQUAL_TO', iObject);
+			oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+
+			var oTmp = {group: this.group};
+			oSearch.getResults(function(oResponse) {ns1blankspace.format.process(oTmp, oResponse.data.rows)});
+
+		}
+		else
+		{
+			oParam.group = this.group;
+			oParam.xhtml = aXHTML.join('');
+			sHTML = ns1blankspace.format.process(oParam, oObjectOtherData)
+		}
+
 	});
 
-	return aXHTML.join('');
+	return sHTML;
 };
 
 ns1blankspace.format.process = function (oParam, oResponse)
 {
+	var oXHTML = document;
+
+	if (ns1blankspace.util.param(oParam, 'xhtml').exists)
+	{
+		$(ns1blankspace.xhtml.container).html(ns1blankspace.util.param(oParam, 'xhtml').value)
+		oXHTML = $(ns1blankspace.xhtml.container);
+	}
+
 	var aTR = [];
 	var sTRID = 'template-' + oParam.group;
 
-	$('[data-format-source-group="' + oParam.group + '"]').each(function(i) 
+	$('[data-format-source-group="' + oParam.group + '"]', oXHTML).each(function(i) 
 	{
-		$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').clone()
+		$('[data-format-source-group="' + oParam.group + '"]:first', oXHTML).closest('tr').clone()
 
 		var oTR = $(this).closest('tr');
 		var sTRXHTML = $(oTR).html();
@@ -278,20 +303,39 @@ ns1blankspace.format.process = function (oParam, oResponse)
 
 	sTRXHTML = aTR.join('');
 
-	$(oResponse.data.rows).each(function()
+	$(oResponse).each(function()
 	{	
 		var oRow = this;
 
-		$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').clone()
-		.find('[data-format-source]').each(function()
-			{
-				$(this).html(oRow[$(this).attr('data-format-source')]);
+		var oTRClone = $('[data-format-source-group="' + oParam.group + '"]:first', oXHTML).closest('tr').clone();
 
-			}).end().appendTo($('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').parent());
+		oTRClone.find('[data-format-source]').each(function()
+			{
+				var sSource = $(this).attr('data-format-source');
+
+				if (oRow[sSource])
+				{	
+					$(this).html(oRow[sSource]);
+				}
+				else
+				{
+					var aSource = (sSource).split('.');
+					sSource = aSource[aSource.length-1];
+
+					if (oRow[sSource])
+					{	
+						$(this).html(oRow[sSource]);
+					}
+				}	
+			})
+
+		$('[data-format-source-group="' + oParam.group + '"]:first', oXHTML).closest('tr').parent().after(oTRClone);
 			
 	});
 
-	$('[data-format-source-group="' + oParam.group + '"]:first').closest('tr').remove();
+	$('[data-format-source-group="' + oParam.group + '"]:first', oXHTML).closest('tr').remove();
+
+	return oXHTML.html();
 };
 
 ns1blankspace.format.editor = 
