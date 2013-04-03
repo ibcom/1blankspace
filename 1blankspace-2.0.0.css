@@ -232,11 +232,11 @@ a:hover
 
 div.ns1blankspaceScale85
 {
-	-webkit-transform: scale(.85, .85);
-	transform: scale(.85, .85);
-	-ms-transform: scale(.85, .85);
-	-moz-transform: scale(.85, .85);
-	-o-transform: scale(.85, .85));
+	-webkit-transform: scale(.95, .95);
+	transform: scale(.95, .95);
+	-ms-transform: scale(.95, .95);
+	-moz-transform: scale(.95, .95);
+	-o-transform: scale(.95, .95));
 }
 
 table.ns1blankspaceMessagingIMAPInbox
