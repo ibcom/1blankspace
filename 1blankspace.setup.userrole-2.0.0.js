@@ -497,17 +497,25 @@ ns1blankspace.setup.userRole =
 					
 							aHTML.push('<table id="ns1blankspaceUserAccessEndpoints">');
 							
-							$(oResponse.data.rows).each(function()
+							if (oResponse.data.rows.length == 0)
 							{
-								aHTML.push('<tr class="ns1blankspaceRow">');
-								
-								aHTML.push('<td id="ns1blankspaceUserRoleEndpoint_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
-														' title="">' +
-														(this.title).toUpperCase() + '</td>');
+								aHTML.push('<tr><td class="ns1blankspaceNothing">' +
+												'No access to endpoints has been setup.<br /><br / >You need to subscribe to at least one membership.</td></tr>');
+							}
+							else
+							{		
+								$(oResponse.data.rows).each(function()
+								{
+									aHTML.push('<tr class="ns1blankspaceRow">');
+									
+									aHTML.push('<td id="ns1blankspaceUserRoleEndpoint_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
+															' title="">' +
+															(this.title).toUpperCase() + '</td>');
 
-								aHTML.push('</tr>');
+									aHTML.push('</tr>');
 
-							});
+								});
+							}	
 						
 							aHTML.push('</table>');
 								

@@ -1812,6 +1812,7 @@ ns1blankspace.logOff = function ()
 						{
 							if (!ns1blankspace.debug.enabled)
 							{
+								ns1blankspace.inputDetected = false;
 								ns1blankspace.refresh();
 							}
 						}

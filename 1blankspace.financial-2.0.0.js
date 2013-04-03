@@ -1771,8 +1771,9 @@ ns1blankspace.financial.invoicing =
 						
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceInvoicingColumn1" style="width:100px; font-size:0.75em;"></td>' +
+										'<td id="ns1blankspaceInvoicingColumn1" style="width:90px; font-size:0.75em;"></td>' +
 										'<td id="ns1blankspaceInvoicingColumn2"></td>' +
+										'<td id="ns1blankspaceInvoicingColumn3" style="width:150px;"></td>' +
 										'</tr>' +
 										'</table>');				
 						
@@ -1781,10 +1782,10 @@ ns1blankspace.financial.invoicing =
 						var aHTML = [];
 
 						aHTML.push('<div id="ns1blankspaceInvoicingOption" style="width:85px; margin-top:3px; text-align:right;">');
-						aHTML.push('<input type="radio" id="ns1blankspaceInvoicingOption-1" name="radioType" /><label for="ns1blankspaceInvoicingOption-1" style="width: 85px; margin-bottom:1px;">' +
-											'Unsent</label>');
 						aHTML.push('<input type="radio" id="ns1blankspaceInvoicingOption-2" name="radioType" /><label for="ns1blankspaceInvoicingOption-2" style="width: 85px; margin-bottom:1px;">' +
 											'Create</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceInvoicingOption-1" name="radioType" /><label for="ns1blankspaceInvoicingOption-1" style="width: 85px; margin-bottom:1px;">' +
+											'Send</label>');
 						aHTML.push('</div>');
 
 						$('#ns1blankspaceInvoicingColumn1').html(aHTML.join(''));
@@ -1800,7 +1801,7 @@ ns1blankspace.financial.invoicing =
 								ns1blankspace.financial.invoicing.unsent.show(oParam);
 							}
 							
-							if (aID[2] == 1)
+							if (aID[1] == 2)
 							{	
 								ns1blankspace.financial.invoicing.create.show(oParam);
 							}		
@@ -1829,13 +1830,45 @@ ns1blankspace.financial.invoicing =
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<span class="ns1blankspaceSub">No unsent invoices.</span>');
+											aHTML.push('<table id="ns1blankspaceInvoicingUnsent" class="ns1blankspaceColumn2">' +
+															'<tr><td class="ns1blankspaceSub">No unsent invoices.</td></tr></table>');
+
+											$('#ns1blankspaceInvoicingColumn3').html('');
 										}
 										else
 										{
-											aHTML.push('<table id="ns1blankspaceInvoicingUnsent" class="ns1blankspaceColumn2">' +
+											var aHTML = [];
+													
+											aHTML.push('<table class="ns1blankspaceColumn2">');
+													
+											aHTML.push('<tr><td><span id="ns1blankspaceFinancialUnsentEmail" class="ns1blankspaceAction">' +
+															'Email</span></td></tr>');
+
+											aHTML.push('<tr><td id="ns1blankspaceFinancialUnsentEmailStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
+
+											aHTML.push('</table>');					
+											
+											$('#ns1blankspaceInvoicingColumn3').html(aHTML.join(''));
+											
+											$('#ns1blankspaceFinancialUnsentEmail').button(
+											{
+												label: 'Email',
+												icons:
+												{
+													primary: "ui-icon-mail-closed"
+												}
+											})
+											.click(function()
+											{	
+												ns1blankspace.financial.invoicing.unsent.email.send(oParam)
+											})
+											.css('width', '90px');
+
+											var aHTML = [];
+
+											aHTML.push('<table id="ns1blankspaceInvoicingUnsent" class="ns1blankspaceColumn2" style="font-size:0.875em;">' +
 														'<tr class="ns1blankspaceHeaderCaption">' +
-														'<td class="ns1blankspaceHeaderCaption" style="width:100px;">Reference</td>' +
+														'<td class="ns1blankspaceHeaderCaption" style="width:10px;">&nbsp;</td>' +
 														'<td class="ns1blankspaceHeaderCaption">Contact</td>' +
 														'<td class="ns1blankspaceHeaderCaption">Description</td>' +
 														'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
@@ -1854,7 +1887,7 @@ ns1blankspace.financial.invoicing =
 										{
 											type: 'JSON',
 											xhtmlElementID: 'ns1blankspaceInvoicingColumn2',
-											xhtmlContext: 'Invoicing',
+											xhtmlContext: 'InvoicingUnsent',
 											xhtml: aHTML.join(''),
 											showMore: (oResponse.morerows == "true"),
 											more: oResponse.moreid,
@@ -1873,8 +1906,9 @@ ns1blankspace.financial.invoicing =
 									var aHTML = [];
 									
 									aHTML.push('<tr class="ns1blankspaceRow">' +
-													'<td id="ns1blankspaceUnsent_reference-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-													oRow["reference"] + '</td>'); 
+													'<td class="ns1blankspaceRow">' +
+													'<input type="checkbox" checked="checked" id="ns1blankspaceUnsent_select-' + oRow["id"] + '"'+ 
+													' title="' + oRow["reference"] + '" /></td>');
 
 									var sContact = oRow['contactbusinesssenttotext'];
 									if (sContact == '') {sContact = oRow['contactpersonsenttotext']}
@@ -1914,24 +1948,147 @@ ns1blankspace.financial.invoicing =
 								}								
 				},
 
-	create: 	function (oParam, oResponse)
-				{
-					//Get invocies old than their set frequency x 100
-					//Set .data.create = 
-					//Loop through and create invoices - alter data and then just send back in .ajax
+	create: 	{
+					show:		function (oParam, oResponse)
+								{
+									//Get invoices old than their set frequency x 100
+									//Set .data.create = 
+									//Loop through and create invoices - alter data and then just send back in .ajax
 
-					if (oResponse  == undefined)
-					{	
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-						oSearch.addField('reference,sentdate,amount,contactbusinesstext.contactpersontext');
-						oSearch.addFilter('sent', 'EQUAL_TO', 'N');
-					}
-					else
-					{
+									if (oResponse == undefined)
+									{	
+										$('#ns1blankspaceInvoicingColumn2').html(ns1blankspace.xhtml.loading);
 
-					}
-				}	
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+										oSearch.addField('reference,sentdate,amount,description,contactbusinesssenttotext,contactpersonsenttotext');
+										oSearch.addFilter('sentdate', 'GREATER_THAN_OR_EQUAL_TO', 'day', '-40');  //USE frequency when available
+										oSearch.addFilter('sent', 'EQUAL_TO', 'Y');
+										oSearch.rows = 100;
+										oSearch.sort('reference', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.financial.invoicing.create.show(oParam, data)});
+									}
+									else
+									{
+										var aHTML = [];
+										
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table id="ns1blankspaceInvoicingCreate" class="ns1blankspaceColumn2">' +
+															'<tr><td class="ns1blankspaceSub">No invoices to create.</td></tr></table>');
+
+											$('#ns1blankspaceInvoicingColumn3').html('');
+										}
+										else
+										{			
+											aHTML.push('<table class="ns1blankspaceColumn2">');
+													
+											aHTML.push('<tr><td><span id="ns1blankspaceFinancialCreateCopy" class="ns1blankspaceAction">' +
+															'Copy</span></td></tr>');
+
+											aHTML.push('<tr><td id="ns1blankspaceFinancialCreateCopyStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
+
+											aHTML.push('</table>');					
+											
+											$('#ns1blankspaceInvoicingColumn3').html(aHTML.join(''));
+											
+											$('#ns1blankspaceFinancialCreateCopy').button(
+											{
+												text: 'Copy',
+											})
+											.click(function()
+											{	
+												ns1blankspace.financial.invoicing.create.copy(oParam)
+											})
+											.css('width', '90px');
+
+											var aHTML = [];
+
+											aHTML.push('<table id="ns1blankspaceInvoicingCreate" class="ns1blankspaceColumn2" style="font-size:0.875em;">' +
+														'<tr class="ns1blankspaceHeaderCaption">' +
+														'<td class="ns1blankspaceHeaderCaption" style="width:10px;">&nbsp;</td>' +
+														'<td class="ns1blankspaceHeaderCaption" style="width:100px;">Last Sent</td>' +
+														'<td class="ns1blankspaceHeaderCaption">Contact</td>' +
+														'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+														'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
+														'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
+														'</tr>');
+
+											$(oResponse.data.rows).each(function() 
+											{
+												aHTML.push(ns1blankspace.financial.invoicing.create.row(this));
+											});
+											
+											aHTML.push('</table>');
+										}
+										
+										ns1blankspace.render.page.show(
+										{
+											type: 'JSON',
+											xhtmlElementID: 'ns1blankspaceInvoicingColumn2',
+											xhtmlContext: 'InvoicingCreate',
+											xhtml: aHTML.join(''),
+											showMore: (oResponse.morerows == "true"),
+											more: oResponse.moreid,
+											rows: 100,
+											functionShowRow: ns1blankspace.financial.invoicing.create.row,
+											functionOpen: undefined,
+											functionNewPage: 'ns1blankspace.financial.invoicing.unsent.bind()'
+										}); 
+
+										ns1blankspace.financial.invoicing.create.bind();   	
+									}
+								},
+
+					row: 		function (oRow)	
+								{
+									var aHTML = [];
+									
+									aHTML.push('<tr class="ns1blankspaceRow">' +
+													'<td class="ns1blankspaceRow">' +
+													'<input type="checkbox" checked="checked" id="ns1blankspaceUnsent_select-' + oRow["id"] + '"'+ 
+													' title="' + oRow["reference"] + '" /></td>');
+
+									aHTML.push('<td id="ns1blankspaceUnsent_sentdate-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+													oRow["sentdate"] + '</td>'); 
+
+									var sContact = oRow['contactbusinesssenttotext'];
+									if (sContact == '') {sContact = oRow['contactpersonsenttotext']}
+								
+									aHTML.push('<td id="ns1blankspaceUnsent_contact-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+														sContact + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceUnsent_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+													oRow["description"] + '</td>'); 
+
+									aHTML.push('<td id="ns1blankspaceUnsent_amount-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:right;">' +
+													oRow["amount"] + '</td>'); 
+
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+									aHTML.push('<span id="ns1blankspaceUnsent_option-' + oRow['id'] + '-1"' +
+													' class="ns1blankspaceRowView"></span></td>');
+									aHTML.push('</tr>');
+
+									return aHTML.join('');
+								},
+
+					bind: 		function ()
+								{
+									$('#ns1blankspaceInvoicingUnsent .ns1blankspaceRowView').button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icon-play"
+										}
+									})
+									.click(function() {
+										ns1blankspace.financial.invoice.init({id: (this.id).split('-')[1]});
+									})
+									.css('width', '15px')
+									.css('height', '20px');
+								}											
+				}
 }				
 
 ns1blankspace.financial.transactions =
