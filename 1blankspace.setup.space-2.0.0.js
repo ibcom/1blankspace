@@ -596,7 +596,6 @@ ns1blankspace.setup.space =
 														var oImport = ns1blankspace.setup.space.initialise.data.template.import[iDataIndex];
 
 														var oData = oImport.data;
-														//Need to split and util.fs()
 														
 														var oImportAlready = $.grep(ns1blankspace.setup.space.initialise.data.template.import, function (a) {return a.response != undefined});
 

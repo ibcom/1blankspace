@@ -1868,7 +1868,7 @@ ns1blankspace.financial.invoicing =
 
 											aHTML.push('<table id="ns1blankspaceInvoicingUnsent" class="ns1blankspaceColumn2" style="font-size:0.875em;">' +
 														'<tr class="ns1blankspaceHeaderCaption">' +
-														'<td class="ns1blankspaceHeaderCaption" style="width:10px;">&nbsp;</td>' +
+														'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspaceInvoicingUnsentSelectAll"></span></td>' +
 														'<td class="ns1blankspaceHeaderCaption">Contact</td>' +
 														'<td class="ns1blankspaceHeaderCaption">Description</td>' +
 														'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
@@ -1945,6 +1945,20 @@ ns1blankspace.financial.invoicing =
 									})
 									.css('width', '15px')
 									.css('height', '20px');
+
+									$('.ns1blankspaceInvoicingUnsentSelectAll').button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icon-check"
+										}
+									})
+									.click(function()
+									{	
+										$('#ns1blankspaceInvoicingUnsent input').each(function () {$(this).prop('checked', !($(this).prop('checked')))});
+									})
+									.css('width', '14px');			
 								}								
 				},
 
@@ -1958,10 +1972,16 @@ ns1blankspace.financial.invoicing =
 									if (oResponse == undefined)
 									{	
 										$('#ns1blankspaceInvoicingColumn2').html(ns1blankspace.xhtml.loading);
+										ns1blankspace.financial.invoicing.data.create = [];
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-										oSearch.addField('reference,sentdate,amount,description,contactbusinesssenttotext,contactpersonsenttotext');
+										oSearch.addField('area,reference,sentdate,amount,description' +
+															',contactbusinesssentto,contactbusinesssenttotext' +
+															',contactpersonsentto,contactpersonsenttotext' +
+															',contactbusinessdeliverto,contactpersondeliverto' +
+															',object,project,purchaseorder,sentdate');
+
 										oSearch.addFilter('sentdate', 'GREATER_THAN_OR_EQUAL_TO', 'day', '-40');  //USE frequency when available
 										oSearch.addFilter('sent', 'EQUAL_TO', 'Y');
 										oSearch.rows = 100;
@@ -1986,7 +2006,8 @@ ns1blankspace.financial.invoicing =
 											aHTML.push('<tr><td><span id="ns1blankspaceFinancialCreateCopy" class="ns1blankspaceAction">' +
 															'Copy</span></td></tr>');
 
-											aHTML.push('<tr><td id="ns1blankspaceFinancialCreateCopyStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
+											aHTML.push('<tr><td id="ns1blankspaceFinancialCreateCopyStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub">' +
+															'Selected invoices will be copied with todays date, ready for sending.</td></tr>');
 
 											aHTML.push('</table>');					
 											
@@ -1995,18 +2016,22 @@ ns1blankspace.financial.invoicing =
 											$('#ns1blankspaceFinancialCreateCopy').button(
 											{
 												text: 'Copy',
+												icons:
+												{
+													primary: "ui-icon-copy"
+												}
 											})
 											.click(function()
 											{	
 												ns1blankspace.financial.invoicing.create.copy(oParam)
 											})
-											.css('width', '90px');
+											.css('width', '80px');
 
 											var aHTML = [];
 
 											aHTML.push('<table id="ns1blankspaceInvoicingCreate" class="ns1blankspaceColumn2" style="font-size:0.875em;">' +
 														'<tr class="ns1blankspaceHeaderCaption">' +
-														'<td class="ns1blankspaceHeaderCaption" style="width:10px;">&nbsp;</td>' +
+														'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspaceInvoicingCreateSelectAll"></span></td>' +
 														'<td class="ns1blankspaceHeaderCaption" style="width:100px;">Last Sent</td>' +
 														'<td class="ns1blankspaceHeaderCaption">Contact</td>' +
 														'<td class="ns1blankspaceHeaderCaption">Description</td>' +
@@ -2033,39 +2058,41 @@ ns1blankspace.financial.invoicing =
 											rows: 100,
 											functionShowRow: ns1blankspace.financial.invoicing.create.row,
 											functionOpen: undefined,
-											functionNewPage: 'ns1blankspace.financial.invoicing.unsent.bind()'
+											functionNewPage: 'ns1blankspace.financial.invoicing.create.bind()'
 										}); 
 
-										ns1blankspace.financial.invoicing.create.bind();   	
+										ns1blankspace.financial.invoicing.create.bind();
 									}
 								},
 
 					row: 		function (oRow)	
 								{
+									ns1blankspace.financial.invoicing.data.create.push(oRow);
+
 									var aHTML = [];
 									
 									aHTML.push('<tr class="ns1blankspaceRow">' +
-													'<td class="ns1blankspaceRow">' +
-													'<input type="checkbox" checked="checked" id="ns1blankspaceUnsent_select-' + oRow["id"] + '"'+ 
+													'<td class="ns1blankspaceRow" id="ns1blankspaceCreate_selectContainer-' + oRow["id"] + '">' +
+													'<input type="checkbox" checked="checked" id="ns1blankspaceCreate_select-' + oRow["id"] + '"'+ 
 													' title="' + oRow["reference"] + '" /></td>');
 
-									aHTML.push('<td id="ns1blankspaceUnsent_sentdate-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+									aHTML.push('<td id="ns1blankspaceCreate_sentdate-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 													oRow["sentdate"] + '</td>'); 
 
 									var sContact = oRow['contactbusinesssenttotext'];
 									if (sContact == '') {sContact = oRow['contactpersonsenttotext']}
 								
-									aHTML.push('<td id="ns1blankspaceUnsent_contact-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+									aHTML.push('<td id="ns1blankspaceCreate_contact-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 														sContact + '</td>');
 
-									aHTML.push('<td id="ns1blankspaceUnsent_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+									aHTML.push('<td id="ns1blankspaceCreate_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 													oRow["description"] + '</td>'); 
 
-									aHTML.push('<td id="ns1blankspaceUnsent_amount-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:right;">' +
+									aHTML.push('<td id="ns1blankspaceCreate_amount-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:right;">' +
 													oRow["amount"] + '</td>'); 
 
 									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-									aHTML.push('<span id="ns1blankspaceUnsent_option-' + oRow['id'] + '-1"' +
+									aHTML.push('<span id="ns1blankspaceCreate_option-' + oRow['id'] + '-1"' +
 													' class="ns1blankspaceRowView"></span></td>');
 									aHTML.push('</tr>');
 
@@ -2074,7 +2101,7 @@ ns1blankspace.financial.invoicing =
 
 					bind: 		function ()
 								{
-									$('#ns1blankspaceInvoicingUnsent .ns1blankspaceRowView').button(
+									$('#ns1blankspaceInvoicingCreate .ns1blankspaceRowView').button(
 									{
 										text: false,
 										icons:
@@ -2087,7 +2114,96 @@ ns1blankspace.financial.invoicing =
 									})
 									.css('width', '15px')
 									.css('height', '20px');
-								}											
+
+									$('.ns1blankspaceInvoicingCreateSelectAll').button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icon-check"
+										}
+									})
+									.click(function()
+									{	
+										$('#ns1blankspaceInvoicingCreate input').each(function () {$(this).prop('checked', !($(this).prop('checked')))});
+									})
+									.css('width', '14px');			
+								},
+
+					copy: 		function (oParam)
+								{
+									var iStep = 1
+									var iDataIndex = 0;
+
+									if (oParam != undefined)
+									{	
+										if (oParam.step != undefined) {iStep = oParam.step}
+										if (oParam.dataIndex != undefined) {iDataIndex = oParam.dataIndex}
+									}
+									else
+									{
+										oParam = {}
+									}			
+
+									if (iStep == 1)
+									{	
+										ns1blankspace.financial.invoicing.data.createCopy = [];
+
+										$('#ns1blankspaceFinancialCreateCopyStatus').html('Copying ' + $('#ns1blankspaceInvoicingCreate input:checked').length + 
+											' invoices')
+
+										$($('#ns1blankspaceInvoicingCreate input:checked')).each(function() 
+										{
+											var iID = (this.id).split('-')[1]
+
+											var oData = $.grep(ns1blankspace.financial.invoicing.data.create, function (a) {return a.id == iID;})[0]
+
+											if (oData)
+											{
+												oData.sentdate = '';
+												oData.reference = '';
+												oData.source = oData.id;
+												oData.id = '';
+												ns1blankspace.financial.invoicing.data.createCopy.push(oData);
+											}
+										});
+
+										oParam.step = 2;
+										ns1blankspace.financial.invoicing.create.copy(oParam);
+									}			
+
+									if (iDataIndex < ns1blankspace.financial.invoicing.data.createCopy.length)
+									{
+										var oData = ns1blankspace.financial.invoicing.data.createCopy[iDataIndex];
+
+										$('#ns1blankspaceUnsent_selectContainer-' + oData.source).html(ns1blankspace.xhtml.loadingSmall)
+
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
+											data: oData,
+											dataType: 'json',
+											global: false,
+											success: function (data)
+											{
+												if (data.status == 'OK')
+												{
+													$('#ns1blankspaceCreate_selectContainer-' + oData.source).html('Copied');
+													oData.response = data;
+													oParam.dataIndex = iDataIndex + 1;
+													ns1blankspace.financial.invoicing.create.copy(oParam);
+												}
+												else
+												{
+													$('#ns1blankspaceUnsent_selectContainer-' + oData.source).html('Error');
+													$('#ns1blankspaceUnsent_selectContainer-' + oData.source).attr('title', data.error.errornotes);
+												}
+											}
+										});
+									}
+
+								}													
 				}
 }				
 
