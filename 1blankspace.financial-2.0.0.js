@@ -266,6 +266,10 @@ ns1blankspace.financial.home = function ()
 									'<td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">Bank Accounts</td>' +
 									'</tr>');	
 						
+						aHTML.push('</table>');		
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+						
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">Invoicing</td>' +
 									'</tr>');	
