@@ -335,7 +335,8 @@ ns1blankspace.format.process = function (oParam, oResponse)
 
 	$('[data-format-source-group="' + oParam.group + '"]:first', oXHTML).closest('tr').remove();
 
-	return oXHTML.html();
+	if (ns1blankspace.util.param(oParam, 'xhtml').exists)
+		{return oXHTML.html()};
 };
 
 ns1blankspace.format.editor = 
