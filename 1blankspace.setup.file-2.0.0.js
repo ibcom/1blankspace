@@ -70,7 +70,7 @@ ns1blankspace.setup.file =
 										var aHTML = [];
 							
 										aHTML.push('<table><tr>' +
-														'<td id="ns1blankspaceFileImportColumn1" style="width:120px;"></td>' +
+														'<td id="ns1blankspaceFileImportColumn1" style="width:100px;"></td>' +
 														'<td id="ns1blankspaceFileImportColumn2"></td>' +
 														'</tr></table>');				
 										
@@ -78,14 +78,14 @@ ns1blankspace.setup.file =
 											
 										var aHTML = [];
 
-										aHTML.push('<div id="ns1blankspaceFileImportObject" style="width:120px; margin-bottom:10px;">');
+										aHTML.push('<div id="ns1blankspaceFileImportObject" style="width:100px; margin-bottom:10px;">');
 
 										aHTML.push('<input type="radio" id="ns1blankspaceFileImport-32" name="radioObject" />' +
-														'<label for="ns1blankspaceFileImport-32" style="width: 120px; margin-bottom:3px;">' +
+														'<label for="ns1blankspaceFileImport-32" style="width: 100px; margin-bottom:3px;">' +
 														'People</label>');
 										
 										aHTML.push('<input type="radio" id="ns1blankspaceFileImport-12" name="radioObject" />' +
-														'<label for="ns1blankspaceFileImport-12" style="width: 120px; margin-bottom:1px;">' +
+														'<label for="ns1blankspaceFileImport-12" style="width: 100px; margin-bottom:1px;">' +
 														'Businesses</label>');
 
 										aHTML.push('</div>');
@@ -98,6 +98,8 @@ ns1blankspace.setup.file =
 										{
 											var aID = (event.target.id).split('-');
 											var oParam = {object: parseInt(aID[1])};
+
+											//ns1blankspace.extend.init({setApp: false, object: parseInt(aID[1]) });
 											ns1blankspace.setup.file.import.init(oParam);
 										});
 									}
@@ -152,14 +154,14 @@ ns1blankspace.setup.file =
 
 									var aHTML = [];
 
-									aHTML.push('<div id="ns1blankspaceFileImportTask" style="width:120px; text-align:right;">');
+									aHTML.push('<div id="ns1blankspaceFileImportTask" style="width:100px; text-align:right;">');
 
 									aHTML.push('<input type="radio" id="ns1blankspaceFileTask-1" name="radioType" />' +
-													'<label for="ns1blankspaceFileTask-1" style="width: 120px; margin-bottom:3px;">' +
+													'<label for="ns1blankspaceFileTask-1" style="width: 100px; margin-bottom:3px;">' +
 													'Create Template</label>');
 									
 									aHTML.push('<input type="radio" id="ns1blankspaceFileTask-2" name="radioType" />' +
-													'<label for="ns1blankspaceFileTask-2" style="width: 120px; margin-bottom:1px;">' +
+													'<label for="ns1blankspaceFileTask-2" style="width: 100px; margin-bottom:1px;">' +
 													'Upload Data File</label>');
 
 									aHTML.push('</div>');
@@ -226,6 +228,7 @@ ns1blankspace.setup.file =
 
 															sName = (k).split(".")[1]
 															sCaption = sName;  //to be translated to more user friendly names
+															if (oParameter.caption) {sCaption = oParameter.caption}
 
 															aHTML.push('<tr><td style="width:15px;" class="ns1blankspaceRow">' +
 																			'<input type="checkbox" id="ns1blankspaceTemplate_include_' + sName + '"' +
@@ -460,9 +463,10 @@ ns1blankspace.setup.file =
 																	{
 																		var aHTML = [];
 
-																		aHTML.push('<table class="ns1blankspaceColumn2">' +
+																		aHTML.push('<table class="ns1blankspaceColumn2" id="ns1blankspaceUploadFields">' +
 																						'<tr class="ns1blankspaceCaption">' +
-																						'<td class="ns1blankspaceHeaderCaption">Fields</td>' +
+																						'<td class="ns1blankspaceHeaderCaption" style="width:5px;">Key</td>' +
+																						'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 																						'<td class="ns1blankspaceHeaderCaption">Sample Data</td>' +
 																						'</tr>');
 
@@ -493,7 +497,12 @@ ns1blankspace.setup.file =
 																					ns1blankspace.setup.file.import.data.fields.push(key);
 																				}	
 
-																				aHTML.push('<tr><td id="ns1blankspaceTemplate_caption_' + key + '" class="ns1blankspaceRow' + sClass + '">' +
+																				aHTML.push('<tr>');
+
+																				aHTML.push('<td class="ns1blankspaceRow">' +
+																							'<input type="checkbox" id="ns1blankspaceTemplate_key-' + key + '" /></td>');
+
+																				aHTML.push('<td id="ns1blankspaceTemplate_caption_' + key + '" class="ns1blankspaceRow' + sClass + '">' +
 																							key + '</td>');
 
 																				aHTML.push('<td style="font-size:0.75em;" class="ns1blankspaceRow ns1blankspaceSub">' +
@@ -504,6 +513,8 @@ ns1blankspace.setup.file =
 																		aHTML.push('</table>');
 
 																		$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
+
+																		$('#ns1blankspaceUploadFields [type="checkbox"] :first').prop('checked', true)
 
 																		var aHTML = [];
 														
@@ -870,11 +881,24 @@ ns1blankspace.setup.file =
 										{
 											$(v.elements).each(function(j,k)
 											{
-												if (k.datatype == 1)
-												{	
+												if (k.datatype == 1 || k.datatype == 4 || k.datatype == 3)
+												{
 													var p = {};
+
 													p.name = '.se' + k.id;
-													p.datatype = 'text';
+													p.caption = 'se' + k.id + ' (' + k.title + ')';
+
+													if (k.datatype == 1 || k.datatype == 4)
+													{	
+														p.datatype = 'text';
+							
+													}	
+
+													if (k.datatype == 3)
+													{
+														p.datatype = 'date';			
+													}
+
 													ns1blankspace.setup.file.data.fields.push(p);
 												}	
 											});
