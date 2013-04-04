@@ -544,8 +544,7 @@ ns1blankspace.financial.debtors =
 												'<tr class="ns1blankspaceCaption">' +
 												'<td class="ns1blankspaceHeaderCaption">Debtor</td>' +
 												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount Owed</td>' +
-												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt Date</td>' +
-												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt $</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt</td>' +
 												'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 												'</tr>');
 								
@@ -587,8 +586,7 @@ ns1blankspace.financial.debtors =
 									'<td id="ns1blankspaceDebtors_Total-" class="ns1blankspaceRow" style="text-align:right;">' +
 									oRow.total + '</td>' +
 									'<td id="ns1blankspaceDebtors_LastReceiptDate-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
-									oRow.lastreceiptdate + '</td>' +				
-									'<td id="ns1blankspaceDebtors_LastReceiptAmount-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow.lastreceiptdate + ' / $' +
 									oRow.lastreceiptamount + '</td>' +
 									'<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 									'<span id="ns1blankspaceDebtors_contactBusiness-' + oRow.id + '" class="ns1blankspaceRowSelect"></span>' +
@@ -661,8 +659,7 @@ ns1blankspace.financial.creditors =
 												'<tr class="ns1blankspaceCaption">' +
 												'<td class="ns1blankspaceHeaderCaption">Creditor</td>' +
 												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount To Be Paid</td>' +
-												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Paid Date</td>' +
-												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Paid $</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Paid</td>' +
 												'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 												'</tr>');	
 								
@@ -703,8 +700,7 @@ ns1blankspace.financial.creditors =
 									'<td id="ns1blankspaceDebtors_Total-" class="ns1blankspaceRow" style="text-align:right;">' +
 									oRow.total + '</td>' +
 									'<td id="ns1blankspaceDebtors_LastPaymentDate-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
-									oRow.lastpaymentdate + '</td>' +				
-									'<td id="ns1blankspaceDebtors_LastPaymentAmount-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow.lastpaymentdate + ' / $' +
 									oRow.lastpaymentamount + '</td>' +	
 									'<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 									'<span id="ns1blankspaceDebtors_contactBusiness-' + oRow.id + '" class="ns1blankspaceRowSelect"></span>' +

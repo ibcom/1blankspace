@@ -454,7 +454,7 @@
 		{"title":"SETUP_CONTACT_PERSON_TYPE_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_CONTACT_PERSON_TYPE_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_CONTACT_PRICE_GROUP_MANAGE", "advancedSearch":"true", "rpc":"true"},
-		{"title":"SETUP_CONTACT_PRICE_GROUP_SEARCH", "advancedSearch":"false", "rpc":"true"},
+		{"title":"SETUP_CONTACT_PRICE_GROUP_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_CONTACT_RATING_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"SETUP_CONTACT_RELATIONSHIP_TYPE_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"SETUP_CONTACT_RELATIONSHIP_TYPE_SEARCH", "advancedSearch":"false", "rpc":"false"},

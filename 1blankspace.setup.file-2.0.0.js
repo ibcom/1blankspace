@@ -96,7 +96,7 @@ ns1blankspace.setup.file =
 										
 										$('#ns1blankspaceFileImportObject :radio').click(function()
 										{
-											var aID = (event.target.id).split('-');
+											var aID = (this.id).split('-');
 											var oParam = {object: parseInt(aID[1])};
 
 											//ns1blankspace.extend.init({setApp: false, object: parseInt(aID[1]) });
@@ -172,7 +172,7 @@ ns1blankspace.setup.file =
 
 									$('#ns1blankspaceFileImportTask :radio').click(function()
 									{
-										var aID = (event.target.id).split('-');
+										var aID = (this.id).split('-');
 
 										if (aID[1] == 1)
 										{	
