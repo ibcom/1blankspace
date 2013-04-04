@@ -4948,9 +4948,7 @@ ns1blankspace.extend =
 											aHTML.push('<td class="ns1blankspaceSelect">' +
 												'<input id="ns1blankspaceStructure_' + this.id + '" class="ns1blankspaceSelect"' +
 												' data-method="SETUP_STRUCTURE_ELEMENT_OPTION_SEARCH"' +
-												' data-methodFilter="element-EQUAL_TO-' + this.id + '"' +
-												
-												'>');
+												' data-methodFilter="element-EQUAL_TO-' + this.id + '">');
 										}
 										else if (this.datatype == 1)
 										{

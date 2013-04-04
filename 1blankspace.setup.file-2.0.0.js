@@ -212,7 +212,7 @@ ns1blankspace.setup.file =
 
 														$.each(ns1blankspace.setup.file.data.fields, function() 
 														{
-															if (this.datatype == 'text' || this.datatype == 'date')
+															if (this.inputtype == 'textbox')
 															{	
 																aParameters.push(this.name);
 															}	
@@ -230,7 +230,7 @@ ns1blankspace.setup.file =
 															sCaption = sName;  //to be translated to more user friendly names
 															if (oParameter.caption) {sCaption = oParameter.caption}
 
-															aHTML.push('<tr><td style="width:15px;" class="ns1blankspaceRow">' +
+															aHTML.push('<tr id="ns1blankspaceTemplate_container-' + sName + '"><td style="width:15px;" class="ns1blankspaceRow">' +
 																			'<input type="checkbox" id="ns1blankspaceTemplate_include_' + sName + '"' +
 																			' data-name="' + sName + '"' +
 																			' class="ns1blankspaceTemplateInclude">' +
@@ -239,13 +239,36 @@ ns1blankspace.setup.file =
 															aHTML.push('<td id="ns1blankspaceTemplate_caption_' + sName + '" class="ns1blankspaceRow">' +
 																			sCaption + '</td>');
 
-															aHTML.push('<td style="width:50px; font-size:0.75em;" id="ns1blankspaceTemplate_caption_' + sName + '" class="ns1blankspaceRow ns1blankspaceSub">' +
-																			oParameter.datatype + '</td></tr>');
+															if (oParameter.searchendpoint != 'SETUP' || (oParameter.searchmethod).indexOf('SETUP_USER') != -1)
+															{	
+																aHTML.push('<td style="width:50px; font-size:0.75em;" id="ns1blankspaceTemplate_caption_' + sName + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																			oParameter.datatype + '</td>');
+															}
+															else	
+															{
+																aHTML.push('<td style="width:50px; font-size:0.75em;" id="ns1blankspaceTemplateContainer_caption_' + sName + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																				'<span id="ns1blankspaceTemplate_caption-' + sName + '"' +
+																				' data-searchmethod="' + oParameter.searchmethod + '"' +
+																				(oParameter.searchmethodfilter?' data-searchmethodfilter="' + oParameter.searchmethodfilter + '"':'') +
+																				' class="ns1blankspaceRowOptions"></span></td>');
+															}
+															
+															aHTML.push('</tr>');
+
 														});		
 
 														aHTML.push('</table>');
 
 														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
+
+														$('.ns1blankspaceRowOptions').button(
+															{
+																label: 'Options'
+															})
+															.click(function() {
+																ns1blankspace.setup.file.import.template.options({xhtmlElementID: this.id});
+															})
+															.css('font-size', '0.625em')
 
 														var aHTML = [];
 													
@@ -284,6 +307,92 @@ ns1blankspace.setup.file =
 														.css('width', '120px');
 													}												
 												},
+
+									options: 	function (oParam, oResponse)
+												{
+													var sXHTMLElementID;
+													var sName;
+
+													if (ns1blankspace.util.param(oParam, 'xhtmlElementID').exists)
+													{
+														sXHTMLElementID = ns1blankspace.util.param(oParam, 'xhtmlElementID').value
+														sName = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
+													}
+
+													if ($('#ns1blankspaceTemplate_container_options-' + sName).length != 0)
+													{
+														$('#ns1blankspaceTemplate_container_options-' + sName).remove();
+													}
+													else
+													{
+														if (oResponse == undefined)
+														{
+															var sMethod = $('#' + sXHTMLElementID).attr('data-searchmethod');
+															var sMethodFilter = $('#' + sXHTMLElementID).attr('data-searchmethodfilter');
+
+															if (ns1blankspace.util.isMethodAdvancedSearch(sMethod))
+															{	
+																var oSearch = new AdvancedSearch();
+																oSearch.method = sMethod;
+																oSearch.addField('id,title');
+
+																if (sMethodFilter)
+																{
+																	var aMethodFilters = sMethodFilter.split('|');
+
+																	$.each(aMethodFilters, function(i) 
+																	{
+																		var aMethodFilter = this.split('-');
+																		oSearch.addFilter(aMethodFilter[0], aMethodFilter[1], aMethodFilter[2]);
+																	});	
+																}	
+
+																oSearch.getResults(function(data) {ns1blankspace.setup.file.import.template.options(oParam, data)});
+															}
+															else
+															{
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI(sMethod),
+																	dataType: 'json',
+																	success: function(data)
+																	{
+																		ns1blankspace.setup.file.import.template.options(oParam, data);
+																	}
+																});
+															}	
+														}
+														else
+														{
+															var sHTML = 'No options';
+
+															if (oResponse.data.rows.length > 0)
+															{	
+																var aHTML = [];
+
+																aHTML.push('<table id="ns1blankspaceSetupFileTemplateOptions" style="font-size:0.75em;">');
+
+																$(oResponse.data.rows).each(function() 
+																{
+																	aHTML.push('<tr><td style="width:15px; font-weight:bold;" id="ns1blankspaceSetupFileTemplateOptions-' + this.id + '" class="ns1blankspaceRow">' +
+																					this.id + '</td>');
+
+																	aHTML.push('<td id="ns1blankspaceSetupFileTemplateOptions_title-' + this.id + '" class="ns1blankspaceRow">' +
+																					this.title + '</td></tr>');
+																});
+																
+																aHTML.push('</table>');
+
+																sHTML = aHTML.join('')
+															}
+
+															$('#ns1blankspaceTemplate_container-' + sName).after('<tr id="ns1blankspaceTemplate_container_options-' + sName + '">' +
+																		'<td colspan=3><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
+														}
+
+													}
+												},		
 
 									create: 	function(oParam)
 												{
@@ -919,17 +1028,17 @@ ns1blankspace.setup.file =
 										{
 											$(v.elements).each(function(j,k)
 											{
-												if (k.datatype == 1 || k.datatype == 4 || k.datatype == 3)
-												{
+												//if (k.datatype == 1 || k.datatype == 4 || k.datatype == 3)
+												//{
 													var p = {};
 
 													p.name = '.se' + k.id;
 													p.caption = 'se' + k.id + ' (' + k.title + ')';
+													p.inputtype = 'textbox';
 
 													if (k.datatype == 1 || k.datatype == 4)
 													{	
 														p.datatype = 'text';
-							
 													}	
 
 													if (k.datatype == 3)
@@ -937,8 +1046,16 @@ ns1blankspace.setup.file =
 														p.datatype = 'date';			
 													}
 
+													if (k.datatype == 2)
+													{
+														p.datatype = 'select';
+														p.searchendpoint = 'SETUP';
+														p.searchmethod = 'SETUP_STRUCTURE_ELEMENT_OPTION_SEARCH';
+														p.searchmethodfilter = 'element-EQUAL_TO-' + k.id;
+													}
+
 													ns1blankspace.setup.file.data.fields.push(p);
-												}	
+												//}	
 											});
 										});
 
