@@ -735,6 +735,8 @@ ns1blankspace.setup.file =
 
 													if (iRow < ns1blankspace.setup.file.import.data.rows.length)
 													{	
+														ns1blankspace.setup.file.import.data.current = [];
+
 														var oRow = ns1blankspace.setup.file.import.data.rows[iRow];
 														
 														var oSearch = new AdvancedSearch();
@@ -744,42 +746,59 @@ ns1blankspace.setup.file =
 														{
 															oSearch.addField(this);
 															oSearch.addFilter(this, 'EQUAL_TO', oRow[this]);
+															ns1blankspace.setup.file.import.data.current.push(this + '=' + oRow[this]);
 														});	
 														
 														oSearch.getResults(function(oResponse)
 														{
 															var oRow = ns1blankspace.setup.file.import.data.rows[iRow]; 
 															
-															sData = 'id=';
-															if (oResponse.data.rows.length != 0) {sData += oResponse.data.rows[0].id}
-
-															$.each(ns1blankspace.setup.file.import.data.fields, function(j,v)
-															{	
-																sData += '&' + v + '=' + ns1blankspace.util.fs(oRow[v]);
-															});
-
-															$.ajax(
+															if (oResponse.data.rows.length <= 1)
 															{
-																type: 'POST',
-																url: ns1blankspace.util.endpointURI(ns1blankspace.setup.file.import.data.method + '_MANAGE'),
-																data: sData,
-																dataType: 'json',
-																global: false,
-																success: 	function(data)
-																			{
-																				if (data.status == 'ER')
+																sData = 'id=';
+
+																if (oResponse.data.rows.length == 1) {sData += oResponse.data.rows[0].id}
+
+																$.each(ns1blankspace.setup.file.import.data.fields, function(j,v)
+																{	
+																	sData += '&' + v + '=' + ns1blankspace.util.fs(oRow[v]);
+																});
+
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI(ns1blankspace.setup.file.import.data.method + '_MANAGE'),
+																	data: sData,
+																	dataType: 'json',
+																	global: false,
+																	success: 	function(data)
 																				{
-																					ns1blankspace.setup.file.import.data.errors.push(
+																					if (data.status == 'ER')
 																					{
-																						data: sData,
-																						error: data.error
-																					});
-																				}	
-																				oParam.row = iRow + 1;
-																				$('#ns1blankspaceImportStatus').html(iRow + 1);
-																				ns1blankspace.setup.file.import.upload.process(oParam, data)
-																			}
-															});
+																						ns1blankspace.setup.file.import.data.errors.push(
+																						{
+																							data: sData,
+																							error: data.error.errornotes
+																						});
+																					}	
+																					oParam.row = iRow + 1;
+																					$('#ns1blankspaceImportStatus').html(iRow + 1);
+																					ns1blankspace.setup.file.import.upload.process(oParam)
+																				}
+																});
+															}
+															else
+															{
+																ns1blankspace.setup.file.import.data.errors.push(
+																{
+																	data: ns1blankspace.setup.file.import.data.current.join('&'),
+																	error: 'More than one record based on keys (' + oResponse.data.rows.length + ')'
+																});
+
+																oParam.row = iRow + 1;
+																$('#ns1blankspaceImportStatus').html(iRow + 1);
+																ns1blankspace.setup.file.import.upload.process(oParam)
+															}	
 														});
 													}
 													else
@@ -833,7 +852,7 @@ ns1blankspace.setup.file =
 																				aDataValues.join('<br />') + '</td>');
 
 																aHTML.push('<td style="font-size:0.75em;" id="nns1blankspaceImportError_notes_' + i + '" class="ns1blankspaceRow ns1blankspaceSub">' +
-																				this.error.errornotes + '</td></tr>');
+																				this.error + '</td></tr>');
 															});		
 
 															aHTML.push('</table>');
