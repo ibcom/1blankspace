@@ -505,6 +505,15 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
+		title: "Structures",
+		parentnamespace: "setup",
+		namespace: "structure",
+		endpoint: "SETUP_STRUCTURE_MANAGE", 
+		show: true,
+		group: 4,
+		type: 2
+	},
+	{
 		title: "Support",
 		namespace: "supportIssue",
 		endpoint: "SETUP", 
@@ -922,7 +931,7 @@ ns1blankspace.control =
 																		'Journals</span></td></tr>');
 											}	
 	
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures';})[0];
+											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures' && a.type == 1;})[0];
 											if (oViewport ? oViewport.show : false)
 											{		
 												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
@@ -1188,6 +1197,15 @@ ns1blankspace.control =
 																				'<span id="ns1blankspaceViewControl_setup_file" class="ns1blankspaceViewControl">' +
 																				'File&nbsp;Import</span></td></tr>');
 														}
+
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures' && a.type == 2;})[0];
+														if (oViewport ? oViewport.show : false)
+														{		
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																					'<td class="ns1blankspaceViewControl">' +
+																					'<span id="ns1blankspaceViewControl_setup_structure" class="ns1blankspaceViewControl">' +
+																					'Structures</span></td></tr>');
+														}	
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Support';})[0];
 														if (oViewport ? oViewport.show : false)
