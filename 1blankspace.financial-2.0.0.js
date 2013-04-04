@@ -1816,6 +1816,8 @@ ns1blankspace.financial.invoicing =
 	unsent: 	{
 					init: 		function ()
 								{
+									$('#ns1blankspaceInvoicingColumn2').html(ns1blankspace.xhtml.loading);
+									$('#ns1blankspaceInvoicingColumn3').html('');
 									ns1blankspace.financial.util.initTemplate({onComplete: ns1blankspace.financial.invoicing.unsent.show})
 								},
 
@@ -1823,8 +1825,6 @@ ns1blankspace.financial.invoicing =
 								{
 									if (ns1blankspace.financial.invoiceTemplateXHTML == '')
 									{
-										$('#ns1blankspaceInvoicingColumn3').html('');
-
 										var aHTML = [];
 											
 										aHTML.push('<table id="ns1blankspaceInvoicingUnsent" class="ns1blankspaceColumn2">' +
@@ -2266,10 +2266,29 @@ ns1blankspace.financial.invoicing =
 															',contactbusinesssentto,contactbusinesssenttotext' +
 															',contactpersonsentto,contactpersonsenttotext' +
 															',contactbusinessdeliverto,contactpersondeliverto' +
-															',object,objectcontext,project,purchaseorder,sentdate');
+															',object,objectcontext,project,purchaseorder,sentdate,frequency');
 
-										oSearch.addFilter('sentdate', 'LESS_THAN_OR_EQUAL_TO', 'day', '-40');  //USE frequency when available
+										oSearch.addBracket('(');
+										oSearch.addFilter('sentdate', 'LESS_THAN_OR_EQUAL_TO', 'month', '-1');
+										oSearch.addFilter('frequency', 'EQUAL_TO', 4);
+										oSearch.addBracket(')');
+
+										oSearch.addOperator('or');
+
+										oSearch.addBracket('(');
+										oSearch.addFilter('sentdate', 'LESS_THAN_OR_EQUAL_TO', 'month', '-3');
+										oSearch.addFilter('frequency', 'EQUAL_TO', 5);
+										oSearch.addBracket(')');
+
+										oSearch.addOperator('or');
+
+										oSearch.addBracket('(');
+										oSearch.addFilter('sentdate', 'LESS_THAN_OR_EQUAL_TO', 'year', '-1');
+										oSearch.addFilter('frequency', 'EQUAL_TO', 7);
+										oSearch.addBracket(')');
+
 										oSearch.addFilter('sent', 'EQUAL_TO', 'Y');
+
 										oSearch.rows = 100;
 										oSearch.sort('reference', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.financial.invoicing.create.show(oParam, data)});
@@ -2362,8 +2381,12 @@ ns1blankspace.financial.invoicing =
 													'<input type="checkbox" checked="checked" id="ns1blankspaceCreate_select-' + oRow["id"] + '"'+ 
 													' title="' + oRow["reference"] + '" /></td>');
 
+									var sFrequency = 'Monthly';
+									if (oRow['frequency'] == 5) {sFrequency = 'Quarterly'}
+									if (oRow['frequency'] == 7) {sFrequency = 'Yearly'}
+
 									aHTML.push('<td id="ns1blankspaceCreate_sentdate-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-													oRow["sentdate"] + '</td>'); 
+													oRow["sentdate"] + '<br /><span class="ns1blankspaceSub">' + sFrequency + '</span></td>'); 
 
 									var sContact = oRow['contactbusinesssenttotext'];
 									if (sContact == '') {sContact = oRow['contactpersonsenttotext']}
@@ -2574,12 +2597,11 @@ ns1blankspace.financial.invoicing =
 												{	
 													$('#ns1blankspaceCreate_selectContainer-' + oData.source).html('Copied');
 
-													if (false) {
 													$.ajax(
 													{
 														type: 'POST',
 														url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
-														data: 'frequency=1&id=' + oData.source,
+														data: 'override_LockedSent=Y&override_LockedDate=Y&frequency=9&id=' + oData.source,
 														dataType: 'json',
 														global: false,
 														success: function (data)
@@ -2589,11 +2611,6 @@ ns1blankspace.financial.invoicing =
 															ns1blankspace.financial.invoicing.create.copy(oParam);
 														}
 													});
-													}
-
-													oParam.dataIndex = iDataIndex + 1;
-													oParam.step = 2;  // NEXT INVOICE
-													ns1blankspace.financial.invoicing.create.copy(oParam);
 												}
 											});
 										}

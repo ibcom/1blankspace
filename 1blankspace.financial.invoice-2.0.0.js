@@ -174,7 +174,7 @@ ns1blankspace.financial.invoice =
 										oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,' +
 																'projecttext,project,projecttext,areatext,' +
 																'object,objectcontext,' +
-																'area,reference,purchaseorder,sentdate,duedate,description,amount,tax,sent');
+																'area,reference,purchaseorder,sentdate,duedate,description,amount,tax,sent,frequency');
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										
@@ -530,11 +530,6 @@ ns1blankspace.financial.invoice =
 										{
 											aHTML.push('<table class="ns1blankspace">');
 											
-											if (ns1blankspace.objectContextData.sent == 'N')
-											{	
-												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:15px; color:#cc0000;">Invoice hasn\'t been sent.</td></tr>');			
-											}
-
 											if (ns1blankspace.objectContextData.contactbusinesssenttotext != '')
 											{
 
@@ -600,6 +595,11 @@ ns1blankspace.financial.invoice =
 												aHTML.push('<tr><td>' +
 																'<span id="ns1blankspaceSummaryEmail" class="ns1blankspaceAction" style="width:75px;">' +
 																'Email</span></td></tr>');
+											}
+
+											if (ns1blankspace.objectContextData.sent == 'N')
+											{	
+												aHTML.push('<tr><td style="padding-top:15px; color:#cc0000;">Not sent</td></tr>');			
 											}
 
 											aHTML.push('</table>');					
@@ -717,7 +717,7 @@ ns1blankspace.financial.invoice =
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Sent Date' +
+										'Date' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceDate">' +
@@ -773,8 +773,20 @@ ns1blankspace.financial.invoice =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti" rows="10" cols="35" ></textarea>' +
-										'</td></tr>');		
+										'<textarea id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti" rows="5" cols="35" style="height:150px;"></textarea>' +
+										'</td></tr>');	
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Create Copy' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioTracking9" name="radioTracking" value="9"/>Never' +
+										'<br /><input type="radio" id="radioFrequency4" name="radioFrequency" value="4"/>Next Month' +
+										'<br /><input type="radio" id="radioFrequency5" name="radioFrequency" value="5"/>In 3 Months' +
+										'<br /><input type="radio" id="radioFrequency7" name="radioFrequency" value="7"/>In 1 Year' +
+										'</td></tr>');					
 										
 						aHTML.push('</table>');					
 							
@@ -790,7 +802,7 @@ ns1blankspace.financial.invoice =
 							{
 								type: 'GET',
 								url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
-								data: 'sent=N&id=' + ns1blankspace.objectContext,
+								data: 'override_LockedSent=Y&sent=N&id=' + ns1blankspace.objectContext,
 								dataType: 'json',
 								success: function(oResponse) {ns1blankspace.financial.invoice.search.send('-' + ns1blankspace.objectContext)}
 							});
@@ -804,14 +816,16 @@ ns1blankspace.financial.invoice =
 							$('#ns1blankspaceDetailsSentToBusiness').val(ns1blankspace.objectContextData.contactbusinesssenttotext);
 							$('#ns1blankspaceDetailsSentToPerson').attr('data-id', ns1blankspace.objectContextData.contactpersonsentto);
 							$('#ns1blankspaceDetailsSentToPerson').val(ns1blankspace.objectContextData.contactpersonsenttotext);	
-							$('[name="radioSent"][value="' + ns1blankspace.objectContextData.sent + '"]').attr('checked', true);
+							$('[name="radioSent"][value="' + ns1blankspace.objectContextData.sent + '"]').prop('checked', true);
 							$('#ns1blankspaceDetailsSentDate').val(ns1blankspace.objectContextData.sentdate);
 							$('#ns1blankspaceDetailsDueDate').val(ns1blankspace.objectContextData.duedate);
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
+							$('[name="radioFrequency"][value="' + ns1blankspace.objectContextData.frequency + '"]').prop('checked', true);
 						}
 						else
 						{
-							$('[name="radioSent"][value="N"]').attr('checked', true);
+							$('[name="radioSent"][value="N"]').prop('checked', true);
+							$('[name="radioFrequency"][value="9"]').prop('checked', true);
 						}
 					}	
 				},
@@ -878,6 +892,7 @@ ns1blankspace.financial.invoice =
 											sData += '&contactbusinesssentto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSentToBusiness').attr("data-id"));
 											sData += '&contactpersonsentto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSentToPerson').attr("data-id"));
 											sData += '&sent=' + $('input[name="radioSent"]:checked').val();
+											sData += '&frequency=' + $('input[name="radioFrequency"]:checked').val();
 										}
 										
 										$.ajax(
