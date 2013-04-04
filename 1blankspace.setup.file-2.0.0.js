@@ -554,7 +554,20 @@ ns1blankspace.setup.file =
 																		})
 																		.click(function()
 																		{	
-																			ns1blankspace.setup.file.import.upload.validate(oParam)
+																			if ($('#ns1blankspaceUploadFields input:checked').length == 0)
+																			{
+																				ns1blankspace.status.error("Need at least one key");
+																			}
+																			else
+																			{
+																				ns1blankspace.setup.file.import.data.keys = [];
+																				$('#ns1blankspaceUploadFields input:checked').each(function()
+																				{
+																					ns1blankspace.setup.file.import.data.keys.push((this.id).split('-')[1]);
+																				})
+																				 				 
+																				ns1blankspace.setup.file.import.upload.validate(oParam);
+																			}	
 																		});
 																	}
 																});
@@ -726,7 +739,13 @@ ns1blankspace.setup.file =
 														
 														var oSearch = new AdvancedSearch();
 														oSearch.method = ns1blankspace.setup.file.import.data.method + '_SEARCH';
-														oSearch.addFilter(ns1blankspace.setup.file.import.data.fields[0], 'EQUAL_TO', oRow[ns1blankspace.setup.file.import.data.fields[0]])
+
+														$(ns1blankspace.setup.file.import.data.keys).each(function()
+														{
+															oSearch.addField(this);
+															oSearch.addFilter(this, 'EQUAL_TO', oRow[this]);
+														});	
+														
 														oSearch.getResults(function(oResponse)
 														{
 															var oRow = ns1blankspace.setup.file.import.data.rows[iRow]; 
