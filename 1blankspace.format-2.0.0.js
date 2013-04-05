@@ -158,7 +158,7 @@ ns1blankspace.format.tags =
 			{
 				object: 175,
 				type: 1,
-				caption: "Outstanding",
+				caption: "Outstanding Amount",
 				source: "total"
 			},
 			{
@@ -172,7 +172,37 @@ ns1blankspace.format.tags =
 				type: 1,
 				caption: "Last Receipt Amount",
 				source: "lastreceiptamount"
-			}						
+			},
+			{
+				object: 175,
+				type: 2,
+				caption: "Invoice Amount",
+				source: "invoice.amount"
+			},
+			{
+				object: 175,
+				type: 2,
+				caption: "Invoice Outstanding Amount",
+				source: "invoice.outstandingamount"
+			},
+			{
+				object: 175,
+				type: 2,
+				caption: 'Invoice Reference',
+				source: 'invoice.reference'
+			},
+			{
+				object: 175,
+				type: 2,
+				caption: 'Invoice Date',
+				source: 'invoice.sentdate'
+			},
+			{
+				object: 175,
+				type: 2,
+				caption: 'Invoice Date Due',
+				source: 'invoice.duedate'
+			}					
 		]		
 
 ns1blankspace.format.test = function()
@@ -208,81 +238,66 @@ ns1blankspace.format.render = function (oParam)
 	sXHTMLTemplate = (sXHTMLTemplate).replace(/\[\[/g,'<div class="template">');
 	sXHTMLTemplate = (sXHTMLTemplate).replace(/\]\]/g,'</div>');
 
-	var oXHTML; // = $(sXHTMLTemplate);
+	var oXHTML;
 
-	if (ns1blankspace.util.param(oParam, 'xhtmlTemplate').exists)
-	{
-		$(ns1blankspace.xhtml.container).html(ns1blankspace.util.param(oParam, 'xhtmlTemplate').value)
-		oXHTML = $(ns1blankspace.xhtml.container);
-	}
+	$(ns1blankspace.xhtml.container).html(sXHTMLTemplate)
+	oXHTML = $(ns1blankspace.xhtml.container);
 
 	var aXHTML = [];
 
-	$(oXHTML).each(function()
+	$('div.template', oXHTML).each(function(i,e) 
 	{
-		$(this).find('div.template').each(function(i,e) 
+		var oTemplateTag = $.grep(ns1blankspace.format.tags, function (a) { return a.caption == $(e).html() && a.object == iObject; })
+
+		if (oTemplateTag[0])
 		{
-			var oTemplateTag = $.grep(ns1blankspace.format.tags, function (a) { return a.caption == $(e).html() && a.object == iObject; })
+			$(e).html('');
+			$(e).attr('data-format-tag', oTemplateTag[0].caption);
+			$(e).attr('data-format-source', oTemplateTag[0].source);
 
-			if (oTemplateTag[0])
+			var aSource = (oTemplateTag[0].source).split('.');
+			$(e).attr('data-format-source-group', aSource[0]); 
+
+			if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 1)
 			{
-				$(e).html('');
-				$(e).attr('data-format-tag', oTemplateTag[0].caption);
-				$(e).attr('data-format-source', oTemplateTag[0].source);
+				var sSource = oTemplateTag[0].source;
 
-				var aSource = (oTemplateTag[0].source).split('.');
-				$(e).attr('data-format-source-group', aSource[0]); 
-
-				if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 1)
+				if (oObjectData[sSource])
+				{	
+					$(e).html(oObjectData[sSource]);
+				}
+				else
 				{
-					var sSource = oTemplateTag[0].source;
+					var aSource = (sSource).split('.');
+					sSource = aSource[aSource.length-1];
 
 					if (oObjectData[sSource])
 					{	
 						$(e).html(oObjectData[sSource]);
 					}
-					else //(oObjectData[oTemplateTag[0].source])
-					{
-						var aSource = (sSource).split('.');
-						sSource = aSource[aSource.length-1];
+				}	
+			}
 
-						if (oObjectData[sSource])
-						{	
-							$(e).html(oObjectData[sSource]);
-						}
-					}	
-				}
-
-				if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 2)
+			if (oTemplateTag[0].object == iObject && oTemplateTag[0].type == 2)
+			{
+				if ($.grep(aSourceMethods, function (a) { return a.method == oTemplateTag[0].method; }).length == 0)
 				{
-					if ($.grep(aSourceMethods, function (a) { return a.method == oTemplateTag[0].method; }).length == 0)
-					{
-						aSourceMethods.push({method: oTemplateTag[0].method, group: aSource[0]});
-					}	
-				}
-			}			
-		});
-
-		aXHTML.push($(this).html())
-
+					aSourceMethods.push({method: oTemplateTag[0].method, group: aSource[0]});
+				}	
+			}
+		}			
 	});
-		
+
 	//TYPE = 2 - subtables - need to gather up
 
-	var sHTML;
+	var sHTML = $(oXHTML).html();
 
-	if (aSourceMethods.length == 0)
+	if (aSourceMethods.length != 0)
 	{	
-		 sHTML = aXHTML.join('');
-	}
-	else
-	{
 		$(aSourceMethods).each(function() 
 		{
 			if (oObjectOtherData === undefined)
 			{
-				sHTML = aXHTML.join('');
-
 				var oSearch = new AdvancedSearch();
 				oSearch.method = this.method;
 				oSearch.addField('*');
@@ -296,7 +311,7 @@ ns1blankspace.format.render = function (oParam)
 			else
 			{
 				oParam.group = this.group;
-				oParam.xhtml = aXHTML.join('');
+				oParam.xhtml = sHTML;
 				sHTML = ns1blankspace.format.process(oParam, oObjectOtherData)
 			}
 		});
@@ -408,7 +423,7 @@ ns1blankspace.format.editor =
 							theme_advanced_buttons1_add_before : "forecolor,backcolor", 
 							theme_advanced_buttons1_add : "fontselect,fontsizeselect", 
 					 
-							theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak,visualchars", 
+							theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak", 
 							theme_advanced_buttons2_add_before: "cut,copy,paste,pasteword,separator,search,replace,separator", 
 							
 							theme_advanced_buttons3_add_before : "tablecontrols,separator", 

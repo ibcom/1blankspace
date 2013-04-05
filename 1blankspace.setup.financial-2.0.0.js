@@ -149,7 +149,7 @@ ns1blankspace.setup.financial =
 					$('#ns1blankspaceControlInvoicingTemplate').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainInvoicingTemplate'});
-						ns1blankspace.setup.financial.invoicingTemplate.show();
+						ns1blankspace.setup.financial.invoicingTemplate.init();
 					});
 
 					$('#ns1blankspaceControlTax').click(function(event)
@@ -1197,6 +1197,11 @@ ns1blankspace.setup.financial =
 
 	invoicingTemplate:
 				{
+					init: 		function ()
+								{
+									ns1blankspace.util.initTemplate({template: 'invoice', onComplete: ns1blankspace.setup.financial.invoicingTemplate.show})
+								},
+
 					show: 		function ()
 								{
 									var aHTML = [];
@@ -1270,56 +1275,9 @@ ns1blankspace.setup.financial =
 										
 										$('#ns1blankspaceInvoicingTemplateColumn1').html(aHTML.join(''));
 										
-										if (ns1blankspace.financial.invoiceTemplateXHTML == undefined)
-										{
-											var oSearch = new AdvancedSearch();
-											oSearch.method = 'DOCUMENT_SEARCH';
-											oSearch.addField('title,content');
-											oSearch.addFilter('type', 'EQUAL_TO', 11);
+										$('#ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).val(ns1blankspace.xhtml.templates.invoice);
 
-											oSearch.getResults(function(data)
-											{
-												var oResponse = data;
-
-												if (oResponse.data.rows.length == 0)
-												{
-													ns1blankspace.financial.invoiceTemplateXHTML = '';
-
-													if (ns1blankspace.financial.defaultInvoiceTemplateXHTML)
-													{
-														$.ajax(
-														{
-															type: 'GET',
-															url: ns1blankspace.financial.defaultInvoiceTemplateXHTML,
-															dataType: 'text',
-															async: false,
-															success: function(data)
-															{
-																ns1blankspace.financial.invoiceTemplateXHTML = data;
-															}	
-														});
-													}	
-												}
-												else
-												{
-													ns1blankspace.financial.invoiceTemplateXHTML = (oResponse.data.rows[0].content).formatXHTML();
-													ns1blankspace.financial.invoiceTemplateDocumentID = oResponse.data.rows[0].id;
-												}
-
-												$('#ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).val(ns1blankspace.financial.invoiceTemplateXHTML);
-
-												if (ns1blankspace.option.richTextEditing)
-												{
-													tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor);
-												}	
-											});		
-										}
-										else
-										{
-											$('#ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).val(ns1blankspace.financial.invoiceTemplateXHTML);
-
-											tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor);	
-										}
+										tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor);	
 									
 										$('.interfaceFormatTags')
 										.hover( function()
@@ -1342,10 +1300,10 @@ ns1blankspace.setup.financial =
 								{
 									ns1blankspace.status.working();
 
-									var sData = 'id=' + (ns1blankspace.financial.invoiceTemplateDocumentID ? ns1blankspace.financial.invoiceTemplateDocumentID : '');
+									var sData = 'id=' + (ns1blankspace.xhtml.templates.document['invoice']?ns1blankspace.xhtml.templates.document['invoice']:'');
 									sData += '&content=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).getContent());
 									sData += '&type=10';
-									sData += '&title=' + ns1blankspace.util.fs('Invoice Template');
+									sData += '&title=' + ns1blankspace.util.fs('INVOICE TEMPLATE');
 
 									$.ajax(
 									{
@@ -1356,8 +1314,8 @@ ns1blankspace.setup.financial =
 										success: function(data)
 											{
 												ns1blankspace.status.message('Saved');
-												ns1blankspace.financial.invoiceTemplateXHTML = tinyMCE.get('inputns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).getContent();
-												if(ns1blankspace.financial.invoiceTemplateDocumentID == undefined) {ns1blankspace.financial.invoiceTemplateDocumentID = data.id};
+												ns1blankspace.xhtml.templates['invoice'] = tinyMCE.get('ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).getContent();
+												if(ns1blankspace.xhtml.templates.document['invoice'] == undefined) {ns1blankspace.xhtml.templates.document['invoice'] = data.id};
 											}
 									});		
 

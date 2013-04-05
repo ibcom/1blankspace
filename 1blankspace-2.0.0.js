@@ -3286,7 +3286,70 @@ ns1blankspace.util =
 
 						return oUniqueData;
 					}		
-				}
+				},
+
+	initTemplate:  	
+				function (oParam)
+				{
+					var sTemplate = 'invoice';
+
+					if (ns1blankspace.util.param(oParam, 'template').exists) {sTemplate = ns1blankspace.util.param(oParam, 'template').value}
+
+					if (ns1blankspace.xhtml.templates[sTemplate] == undefined)
+					{
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'DOCUMENT_SEARCH';
+						oSearch.addField('title,content');
+						oSearch.addFilter('type', 'EQUAL_TO', 10);
+						oSearch.addFilter('title', 'EQUAL_TO', (sTemplate).toUpperCase() + ' TEMPLATE');
+
+						oSearch.getResults(function(oResponse)
+						{
+							if (oResponse.data.rows.length == 0)
+							{
+								if (ns1blankspace.xhtml.templates.source[sTemplate])
+								{
+									$.ajax(
+									{
+										type: 'GET',
+										url: ns1blankspace.xhtml.templates.source[sTemplate],
+										dataType: 'text',
+										success: function(data)
+										{
+											ns1blankspace.xhtml.templates[sTemplate] = data;
+											ns1blankspace.util.onComplete(oParam);
+										},
+										error: function(data)
+										{
+											ns1blankspace.xhtml.templates[sTemplate] = '';
+											ns1blankspace.util.onComplete(oParam);
+										}
+									});
+								}	
+							}
+							else
+							{
+								ns1blankspace.xhtml.templates[sTemplate] = (oResponse.data.rows[0].content).formatXHTML();
+								ns1blankspace.xhtml.templates.document[sTemplate] = oResponse.data.rows[0].id;
+								ns1blankspace.util.onComplete(oParam);
+							}
+						});		
+					}
+					else
+					{
+						ns1blankspace.util.onComplete(oParam);
+					}
+				},
+
+	onComplete: function (oParam)
+				{
+					if (ns1blankspace.util.param(oParam, 'onComplete').exists)
+					{
+						var fOnComplete = ns1blankspace.util.param(oParam, 'onComplete').value;
+						delete oParam.onComplete;
+						fOnComplete(oParam);
+					}
+				}									
 }
 
 ns1blankspace.debug = 

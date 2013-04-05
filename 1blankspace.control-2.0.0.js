@@ -93,7 +93,11 @@ if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}
 
 ns1blankspace.financial.summaryUseTemplate = false; 
-ns1blankspace.financial.defaultInvoiceTemplateXHTML = '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html';
+
+ns1blankspace.xhtml.templates = {source: {}, document: {}};
+
+ns1blankspace.xhtml.templates.source.invoice = '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html';
+ns1blankspace.xhtml.templates.source.statement = '/jscripts/1blankspace.setup.financial.statement-1.0.0.html';
 
 ns1blankspace.xhtml.logonNotes =
 	'<span style="font-weight:bold;">THIS IS AN UI BEING WORKED ON BY THE COMMUNITY.</span><br /><br />' +

@@ -449,6 +449,10 @@ ns1blankspace.financial.invoice =
 									{
 										if (oParam.useTemplate != undefined) {bUseTemplate = oParam.useTemplate}
 									}
+									else
+									{
+										oParam = {}
+									}
 
 									if (ns1blankspace.objectContextData == undefined)
 									{
@@ -458,34 +462,11 @@ ns1blankspace.financial.invoice =
 									}
 									else
 									{
-
-										if (ns1blankspace.financial.invoiceTemplateXHTML == undefined && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
-										{
-											$('#ns1blankspaceMainSummary').html(ns1blankspace.xhtml.loading);
-
-											var oSearch = new AdvancedSearch();
-											oSearch.method = 'DOCUMENT_SEARCH';
-											oSearch.addField('title,content');
-											oSearch.addFilter('type', 'EQUAL_TO', 10);
-
-											oSearch.getResults(function(data)
-											{
-												var oResponse = data;
-
-												if (oResponse.data.rows.length == 0)
-												{
-													ns1blankspace.financial.invoiceTemplateXHTML = '';
-												}
-												else
-												{
-													ns1blankspace.financial.invoiceTemplateXHTML = (oResponse.data.rows[0].content).formatXHTML();
-													ns1blankspace.financial.invoiceTemplateDocumentID = oResponse.data.rows[0].id;
-												}
-
-												ns1blankspace.financial.invoice.summary.default(oParam);
-
-											});		
-										}
+										if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
+										{	
+											oParam.onComplete = ns1blankspace.financial.invoice.summary.default;
+											ns1blankspace.util.initTemplate(oParam)
+										}	
 										else
 										{
 											ns1blankspace.financial.invoice.summary.default(oParam);
@@ -522,9 +503,9 @@ ns1blankspace.financial.invoice =
 				
 										var aHTML = [];
 									
-										if (ns1blankspace.financial.invoiceTemplateXHTML != '' && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
+										if (ns1blankspace.xhtml.templates['invoice'] != '' && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
 										{
-											aHTML.push(ns1blankspace.format.render({object: 5, xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML}));
+											aHTML.push(ns1blankspace.format.render({object: 5, xhtmlTemplate: ns1blankspace.xhtml.templates['invoice']}));
 										}
 										else
 										{
@@ -578,7 +559,7 @@ ns1blankspace.financial.invoice =
 
 										aHTML.push('<table class="ns1blankspaceColumn2">');
 														
-										if (ns1blankspace.financial.invoiceTemplateXHTML != '')
+										if (ns1blankspace.xhtml.templates['invoice'] != '')
 										{
 											if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
 											{

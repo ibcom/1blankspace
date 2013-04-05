@@ -716,7 +716,12 @@ ns1blankspace.financial.debtors =
 				},
 
 	preview: 	{
-					init:		function (oParam)
+					init: 		function ()
+								{
+									ns1blankspace.util.initTemplate({template: 'statement', onComplete: ns1blankspace.financial.debtors.preview.show})
+								},
+
+					show:		function (oParam)
 								{
 									var iStep = 1
 									var iDataIndex = 0;
@@ -761,7 +766,7 @@ ns1blankspace.financial.debtors =
 										});
 
 										oParam.step = 2;
-										ns1blankspace.financial.debtors.preview.init(oParam);
+										ns1blankspace.financial.debtors.preview.show(oParam);
 									}			
 
 									if (iStep == 2)
@@ -776,7 +781,7 @@ ns1blankspace.financial.debtors =
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-											oSearch.addField('invoice.reference,invoice.sentdate,invoice.amount');
+											oSearch.addField('invoice.reference,invoice.sentdate,invoice.amount,invoice.outstandingamount,invoice.duedate');
 
 											if ((oData.key).split('_')[0] == 'B')
 											{
@@ -813,13 +818,13 @@ ns1blankspace.financial.debtors =
 												.css('width', '15px')
 												.css('height', '20px');
 
-												ns1blankspace.financial.debtors.preview.init(oParam);
+												ns1blankspace.financial.debtors.preview.show(oParam);
 											});
 										}
 										else
 										{
 											$('#ns1blankspaceFinancialDebtorsPreviewStatus').fadeOut(3000);
-											if (ns1blankspace.util.param(oParam, 'onComplete').exists) {ns1blankspace.util.param(oParam, 'onComplete').value()}
+											ns1blankspace.util.onComplete(oParam);
 										}	
 									}						
 								},
@@ -847,14 +852,13 @@ ns1blankspace.financial.debtors =
 
 										if (oStatement)
 										{
-											var sTemplate = '<table><tbody><tr><td>[[Name]]</tr></td></tbody></table>';
-											//ns1blankspace.financial.data.statementTemplateXHTML
+											//ns1blankspace.xhtml.templates['statement'] = '<table><tbody><tr><td>[[Name]]</tr></td></tbody></table>'
 
 											sHTML = ns1blankspace.format.render(
 											{
 												object: 175,
 												objectContext: -1,
-												xhtmlTemplate: sTemplate,
+												xhtmlTemplate: ns1blankspace.xhtml.templates['statement'],
 												objectData: oStatement,
 												objectOtherData: oStatement.invoices
 											});
@@ -863,7 +867,7 @@ ns1blankspace.financial.debtors =
 										}	
 
 										$('#ns1blankspaceDebtors_container-' + sKey).after('<tr id="ns1blankspaceDebtors_container_preview-' + sKey + '">' +
-														'<td colspan=4><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
+														'<td colspan=5><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
 									}
 								}			
 				},
@@ -1008,7 +1012,7 @@ ns1blankspace.financial.debtors =
 									else
 									{
 										$('#ns1blankspaceFinancialDebtorsEmailStatus').fadeOut(3000);
-										if (ns1blankspace.util.param(oParam, 'onComplete').exists) {ns1blankspace.util.param(oParam, 'onComplete').value()}
+										ns1blankspace.util.onComplete(oParam);
 									}	
 								}																	
 				}
@@ -2216,12 +2220,12 @@ ns1blankspace.financial.invoicing =
 								{
 									$('#ns1blankspaceInvoicingColumn2').html(ns1blankspace.xhtml.loading);
 									$('#ns1blankspaceInvoicingColumn3').html('');
-									ns1blankspace.financial.util.initTemplate({onComplete: ns1blankspace.financial.invoicing.unsent.show})
+									ns1blankspace.util.initTemplate({template: 'invoice', onComplete: ns1blankspace.financial.invoicing.unsent.show})
 								},
 
 					show:		function (oParam, oResponse)
 								{
-									if (ns1blankspace.financial.invoiceTemplateXHTML == '')
+									if (ns1blankspace.xhtml.templates['invoice'] == '')
 									{
 										var aHTML = [];
 											
@@ -2517,7 +2521,7 @@ ns1blankspace.financial.invoicing =
 														else
 														{
 															$('#ns1blankspaceFinancialUnsentPreviewStatus').fadeOut(3000);
-															if (ns1blankspace.util.param(oParam, 'onComplete').exists) {ns1blankspace.util.param(oParam, 'onComplete').value()}
+															ns1blankspace.util.onComplete(oParam);
 														}	
 													}						
 												},
@@ -2549,7 +2553,7 @@ ns1blankspace.financial.invoicing =
 															{
 																object: 5,
 																objectContext: oInvoice.id,
-																xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML,
+																xhtmlTemplate: ns1blankspace.xhtml.templates['invoice'],
 																objectData: oInvoice,
 																objectOtherData: oInvoice.items
 															});
@@ -2592,7 +2596,7 @@ ns1blankspace.financial.invoicing =
 											{
 												object: 5,
 												objectContext: oInvoice.id,
-												xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML,
+												xhtmlTemplate: ns1blankspace.xhtml.templates['invoice'],
 												objectData: oInvoice,
 												objectOtherData: oInvoice.items
 											});
@@ -3729,37 +3733,6 @@ ns1blankspace.financial.save =
 
 ns1blankspace.financial.util =
 {
-	initTemplate:  	
-				function (oParam)
-				{
-					if (ns1blankspace.financial.invoiceTemplateXHTML == undefined)
-					{
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'DOCUMENT_SEARCH';
-						oSearch.addField('title,content');
-						oSearch.addFilter('type', 'EQUAL_TO', 10);
-
-						oSearch.getResults(function(oResponse)
-						{
-							if (oResponse.data.rows.length == 0)
-							{
-								ns1blankspace.financial.invoiceTemplateXHTML = '';
-							}
-							else
-							{
-								ns1blankspace.financial.invoiceTemplateXHTML = (oResponse.data.rows[0].content).formatXHTML();
-								ns1blankspace.financial.invoiceTemplateDocumentID = oResponse.data.rows[0].id;
-							}
-
-							if (ns1blankspace.util.param(oParam, 'onComplete').exists) {ns1blankspace.util.param(oParam, 'onComplete').value()}
-						});		
-					}
-					else
-					{
-						if (ns1blankspace.util.param(oParam, 'onComplete').exists) {ns1blankspace.util.param(oParam, 'onComplete').value()}
-					}
-				},
-
 	tax: 		{
 					codes: 		function (oParam)
 								{
