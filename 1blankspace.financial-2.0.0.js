@@ -650,7 +650,7 @@ ns1blankspace.financial.debtors =
 
 					ns1blankspace.financial.data.debtors.push(oRow);
 
-					var sLastReceipt = '&nsbp';
+					var sLastReceipt = '&nbsp;';
 					if (oRow.lastreceiptdate != '') {sLastReceipt = oRow.lastreceiptdate + ' / $' + oRow.lastreceiptamount}
 					var aHTML = [];
 
@@ -1087,7 +1087,7 @@ ns1blankspace.financial.creditors =
 
 	row:		function (oRow)
 				{
-					var sLastPayment = '&nsbp';
+					var sLastPayment = '&nbsp;';
 					if (oRow.lastpaymentdate != '') {sLastPayment = oRow.lastpaymentdate + ' / $' + oRow.lastpaymentamount}
 
 					var aHTML = [];
