@@ -192,7 +192,7 @@ ns1blankspace.format.render = function (oParam)
 	{
 		$(this).find('div.template').each(function(i,e) 
 		{
-			var oTemplateTag = $.grep(ns1blankspace.format.tags, function (a) { return a.caption == $(e).html(); })
+			var oTemplateTag = $.grep(ns1blankspace.format.tags, function (a) { return a.caption == $(e).html() && a.object == iObject; })
 
 			if (oTemplateTag[0])
 			{

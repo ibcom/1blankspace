@@ -849,11 +849,11 @@ ns1blankspace.financial.debtors =
 										{
 											sHTML = ns1blankspace.format.render(
 											{
-												object: 5,
-												objectContext: oInvoice.id,
-												xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML,
-												objectData: oInvoice,
-												objectOtherData: oInvoice.items
+												object: (oStatement.debtortype=='P'?32:12),
+												objectContext: oStatement.id,
+												xhtmlTemplate: ns1blankspace.financial.data.statementTemplateXHTML,
+												objectData: oStatement,
+												objectOtherData: oStatement.invoices
 											});
 
 											oStatement.xhtml = sHTML;
@@ -2303,13 +2303,13 @@ ns1blankspace.financial.invoicing =
 
 												var aHTML = [];
 
-												aHTML.push('<table id="ns1blankspaceInvoicingUnsent" class="ns1blankspaceColumn2" style="font-size:0.875em;">' +
+												aHTML.push('<table id="ns1blankspaceInvoicingUnsent" class="ns1blankspaceColumn2" style="font-size:0.875em; table-layout:fixed;">' +
 															'<tr class="ns1blankspaceHeaderCaption">' +
 															'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspaceInvoicingUnsentSelectAll"></span></td>' +
-															'<td class="ns1blankspaceHeaderCaption">Contact</td>' +
+															'<td class="ns1blankspaceHeaderCaption" style="width:100px;">Contact</td>' +
 															'<td class="ns1blankspaceHeaderCaption">Description</td>' +
-															'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
-															'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
+															'<td class="ns1blankspaceHeaderCaption" style="width:60px; text-align:right;">Amount</td>' +
+															'<td class="ns1blankspaceHeaderCaption" style="width:50px; text-align:right;">&nbsp;</td>' +
 															'</tr>');
 
 												$(oResponse.data.rows).each(function() 
@@ -2375,7 +2375,7 @@ ns1blankspace.financial.invoicing =
 									aHTML.push('<td id="ns1blankspaceUnsent_amount-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:right;">' +
 													oRow["amount"] + '</td>'); 
 
-									aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+									aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">');
 
 									aHTML.push('<span style="margin-right:5px;" id="ns1blankspaceUnsent_option_preview-' + oRow['id'] + '"' +
 													' class="ns1blankspaceRowPreview"></span>');

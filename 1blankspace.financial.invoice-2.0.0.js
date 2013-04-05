@@ -782,7 +782,7 @@ ns1blankspace.financial.invoice =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioTracking9" name="radioTracking" value="9"/>Never' +
+										'<input type="radio" id="radioFrequency9" name="radioFrequency" value="9"/>Never' +
 										'<br /><input type="radio" id="radioFrequency4" name="radioFrequency" value="4"/>Next Month' +
 										'<br /><input type="radio" id="radioFrequency5" name="radioFrequency" value="5"/>In 3 Months' +
 										'<br /><input type="radio" id="radioFrequency7" name="radioFrequency" value="7"/>In 1 Year' +
