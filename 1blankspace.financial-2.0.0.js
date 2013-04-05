@@ -650,6 +650,8 @@ ns1blankspace.financial.debtors =
 
 					ns1blankspace.financial.data.debtors.push(oRow);
 
+					var sLastReceipt = '&nsbp';
+					if (oRow.lastreceiptdate != '') {sLastReceipt = oRow.lastreceiptdate + ' / $' + oRow.lastreceiptamount}
 					var aHTML = [];
 
 					aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceDebtors_container-' + sKey + '">' +
@@ -661,8 +663,7 @@ ns1blankspace.financial.debtors =
 									'<td id="ns1blankspaceDebtors_total-" class="ns1blankspaceRow" style="text-align:right;">' +
 									oRow.total + '</td>' +
 									'<td id="ns1blankspaceDebtors_lastreceipt-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
-									oRow.lastreceiptdate + ' / $' +
-									oRow.lastreceiptamount + '</td>' +
+									sLastReceipt + '</td>' +
 									'<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
 									'<span style="margin-right:5px;" id="ns1blankspaceDebtors_option_preview-' + sKey + '"' +
 													' class="ns1blankspaceRowPreview"></span>' +
@@ -1086,6 +1087,9 @@ ns1blankspace.financial.creditors =
 
 	row:		function (oRow)
 				{
+					var sLastPayment = '&nsbp';
+					if (oRow.lastpaymentdate != '') {sLastPayment = oRow.lastpaymentdate + ' / $' + oRow.lastpaymentamount}
+
 					var aHTML = [];
 
 					aHTML.push('<tr class="ns1blankspaceRow">' +
@@ -1094,8 +1098,7 @@ ns1blankspace.financial.creditors =
 									'<td id="ns1blankspaceDebtors_Total-" class="ns1blankspaceRow" style="text-align:right;">' +
 									oRow.total + '</td>' +
 									'<td id="ns1blankspaceDebtors_LastPaymentDate-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
-									oRow.lastpaymentdate + ' / $' +
-									oRow.lastpaymentamount + '</td>' +	
+									sLastPayment + '</td>' +	
 									'<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 									'<span id="ns1blankspaceDebtors_contactBusiness-' + oRow.id + '" class="ns1blankspaceRowSelect"></span>' +
 									'</td>' +
