@@ -2576,9 +2576,25 @@ ns1blankspace.status =
 	error: 		function (sError)
 				{
 					if (sError === undefined) {sError = 'Error!'};
-					
-					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
-							'<div style="display:table-cell; vertical-align:bottom; padding:5px; height:25px; color:white; background-color:red;">' + sError + '</div></div>');
+
+					if (sError.length < 22)
+					{	
+						$('#ns1blankspaceViewControlActionStatus').html(
+							'<div style="margin:2px; padding: 4px; height:17px; color:white; background-color:red; width:10px; float:left; font-size:1.35em; text-align:center;">!</div>' +
+							'<div style="margin:2px; margin-left: 6px; padding-left: 7px; padding-top:10px; height:14px;">' + sError + '</div>');
+					}
+					else
+					{
+						$('#ns1blankspaceViewControlActionStatus').html(
+							'<div id="ns1blankspaceStatusError" style="margin:2px; padding: 4px; height:17px; color:white; background-color:red; width:10px; float:left; font-size:1.35em; text-align:center; cursor: pointer">!</div>' +
+							'<div style="margin:2px; margin-left: 6px; padding-left: 7px; padding-top:10px; height:14px;">An error has occured</div>');
+
+						$('#ns1blankspaceStatusError').click(function()
+						{
+							alert(sError);
+							console.log(sError);
+						});
+					}	
 				}
 }
 
@@ -3270,7 +3286,28 @@ ns1blankspace.util =
 
 						return oUniqueData;
 					}		
-				}				
+				}
+}
+
+ns1blankspace.debug = 
+{
+	enabled: 	false,
+
+	log: 		[],
+
+	message: 	function (sMessage)
+				{
+					if (ns1blankspace.debug.enabled)
+					{
+						ns1blankspace.debug.log.push({time: Date(), message: sMessage})
+						console.log(sMessage);
+					}
+				},
+
+	clear: 		function ()
+				{
+					ns1blankspace.debug.log = [];
+				}			
 }
 
 ns1blankspace.search.address =

@@ -503,10 +503,25 @@ ns1blankspace.financial.summaryPL = function (oParam, oResponse)
 
 ns1blankspace.financial.debtors =
 {
+	data: 		{},
+
 	show: 		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
+						ns1blankspace.financial.data.debtors = [];
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceDebtorsColumn1">' + ns1blankspace.xhtml.loading + '</td>' +
+										'<td id="ns1blankspaceDebtorsColumn2" style="width:120px;"></td>' +
+										'</tr>' +
+										'</table>');				
+						
+						$('#ns1blankspaceMainDebtors').html(aHTML.join(''));
+
 						$.ajax(
 						{
 							type: 'GET',
@@ -522,26 +537,27 @@ ns1blankspace.financial.debtors =
 						
 						if (oResponse.status == 'ER')
 						{
-							aHTML.push('<table><tbody>' +
+							aHTML.push('<table>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceNothing">No debtors.</td>' +
-										'</tr>' +
-										'</tbody></table>');
+										'<td class="ns1blankspaceNothing">No debtors</td>' +
+										'</tr></table>');
+
+							$('#ns1blankspaceDebtorsColumn1').html(aHTML.join(''));
 						}
 						else
 						{
 							if (oResponse.data.rows.length == 0 )
 							{
-								aHTML.push('<table><tbody>' +
+								aHTML.push('<table>' +
 												'<tr class="ns1blankspace">' +
-												'<td class="ns1blankspaceNothing">No debtors.</td>' +
-												'</tr>' +
-												'</tbody></table>');
+												'<td class="ns1blankspaceNothing">No debtors</td>' +
+												'</tr></tbody></table>');
 							}
 							else
 							{
-								aHTML.push('<table id="ns1blankspaceMainDebtors" class="ns1blankspace">' +
+								aHTML.push('<table id="ns1blankspaceFinancialDebtors" class="ns1blankspace">' +
 												'<tr class="ns1blankspaceCaption">' +
+												'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspaceDebtorsSelectAll"></span></td>' +
 												'<td class="ns1blankspaceHeaderCaption">Debtor</td>' +
 												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount Owed</td>' +
 												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt</td>' +
@@ -554,42 +570,103 @@ ns1blankspace.financial.debtors =
 								});
 								
 								aHTML.push('</table>');
+
+								ns1blankspace.render.page.show(
+							   	{
+									type: 'JSON',
+									xhtmlElementID: 'ns1blankspaceDebtorsColumn1',
+									xhtmlContext: 'Debtors',
+									xhtml: aHTML.join(''),
+									showMore: (oResponse.morerows == "true"),
+									more: oResponse.moreid,
+									rows: ns1blankspace.option.defaultRows,
+									functionShowRow: ns1blankspace.financial.debtors.row,
+									functionOpen: undefined,
+									functionNewPage: 'ns1blankspace.financial.debtors.bind()',
+							   	});
+
+								ns1blankspace.financial.debtors.bind();
+
+								var aHTML = [];
+														
+								aHTML.push('<table class="ns1blankspaceColumn2">');
+										
+								aHTML.push('<tr><td><span id="ns1blankspaceFinancialDebtorsPreview" class="ns1blankspaceAction">' +
+												'Statements</span></td></tr>');
+
+								aHTML.push('<tr><td id="ns1blankspaceFinancialDebtorsPreviewStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+											'Create statements for selected debtors</td></tr>');
+
+								aHTML.push('<tr><td><span id="ns1blankspaceFinancialDebtorsEmail" class="ns1blankspaceAction">' +
+												'Email</span></td></tr>');
+
+								aHTML.push('<tr><td id="ns1blankspaceFinancialDebtorsEmailStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
+
+								aHTML.push('</table>');					
+								
+								$('#ns1blankspaceDebtorsColumn2').html(aHTML.join(''));
+								
+								$('#ns1blankspaceFinancialDebtorsPreview').button(
+								{
+									label: 'Statements',
+									icons:
+									{
+										primary: "ui-icon-document"
+									}
+								})
+								.click(function()
+								{	
+									ns1blankspace.financial.debtors.preview.init(oParam)
+								})
+								.css('width', '115px');
+
+								$('#ns1blankspaceFinancialDebtorsEmail').button(
+								{
+									label: 'Email',
+									icons:
+									{
+										primary: "ui-icon-mail-open"
+									}
+								})
+								.click(function()
+								{	
+									oParam = {onComplete: ns1blankspace.financial.debtors.email.init};
+									ns1blankspace.financial.debtors.preview.init(oParam);
+								})
+								.css('width', '115px')
+								.css('text-align', 'left');	
 							}
-						}
-
-						ns1blankspace.render.page.show(
-					   	{
-							type: 'JSON',
-							xhtmlElementID: 'ns1blankspaceMainDebtors',
-							xhtmlContext: 'Debtors',
-							xhtml: aHTML.join(''),
-							showMore: (oResponse.morerows == "true"),
-							more: oResponse.moreid,
-							rows: ns1blankspace.option.defaultRows,
-							functionShowRow: ns1blankspace.financial.debtors.row,
-							functionOpen: undefined,
-							functionNewPage: 'ns1blankspace.financial.debtors.bind()',
-					   	});
-
-						ns1blankspace.financial.debtors.bind();
-							    	
+						}	    	
 					}
 				},
 
 	row: 		function (oRow)
 				{
+					var sKey = oRow.debtortype + '_' + oRow.id;
+					oRow.key = sKey;
+
+					oRow.contactperson = '';
+					if (oRow.debtortype == 'P') {oRow.contactperson == oRow.id} //FOR EMAILING LATER
+
+					ns1blankspace.financial.data.debtors.push(oRow);
+
 					var aHTML = [];
 
-					aHTML.push('<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceDebtors_Contact-" class="ns1blankspaceRow">' +
+					aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceDebtors_container-' + sKey + '">' +
+													'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspaceDebtors_selectContainer-' + sKey + '">' +
+													'<input type="checkbox" checked="checked" id="ns1blankspaceUnsent_select-' + sKey + '" /></td>');
+
+					aHTML.push('<td id="ns1blankspaceDebtors_contact-" class="ns1blankspaceRow">' +
 									oRow.debtorname + '</td>' +
-									'<td id="ns1blankspaceDebtors_Total-" class="ns1blankspaceRow" style="text-align:right;">' +
+									'<td id="ns1blankspaceDebtors_total-" class="ns1blankspaceRow" style="text-align:right;">' +
 									oRow.total + '</td>' +
-									'<td id="ns1blankspaceDebtors_LastReceiptDate-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									'<td id="ns1blankspaceDebtors_lastreceipt-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
 									oRow.lastreceiptdate + ' / $' +
 									oRow.lastreceiptamount + '</td>' +
-									'<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
-									'<span id="ns1blankspaceDebtors_contactBusiness-' + oRow.id + '" class="ns1blankspaceRowSelect"></span>' +
+									'<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
+									'<span style="margin-right:5px;" id="ns1blankspaceDebtors_option_preview-' + sKey + '"' +
+													' class="ns1blankspaceRowPreview"></span>' +
+									'<span id="ns1blankspaceDebtors_contact-' + sKey + '" class="ns1blankspaceRowSelect"></span>' +
 									'</td>' +			
 									'</tr>');
 					
@@ -606,13 +683,330 @@ ns1blankspace.financial.debtors =
 							primary: "ui-icon-play"
 						}
 					})
-					.click(function() {
-						ns1blankspace.contactBusiness.init({id: (this.id).split('-')[1]});
+					.click(function()
+					{
+						var sKey =(this.id).split('-')[1];
+
+						if (sKey.split('_')[0] == 'B')
+						{	
+							ns1blankspace.contactBusiness.init({id: sKey.split('_')[1]});
+						}
+						else
+						{
+							ns1blankspace.contactPerson.init({id: sKey.split('_')[1]});
+						}	
 					})
 					.css('width', '15px')
-					.css('height', '20px')
-				}			
-}
+					.css('height', '20px');
+
+					$('.ns1blankspaceDebtorsSelectAll').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-check"
+						}
+					})
+					.click(function()
+					{	
+						$('#ns1blankspaceFinancialDebtors input').each(function () {$(this).prop('checked', !($(this).prop('checked')))});
+					})
+					.css('width', '14px');		
+				},
+
+	preview: 	{
+					init:		function (oParam)
+								{
+									var iStep = 1
+									var iDataIndex = 0;
+									var iDataItemIndex = 0;
+
+									if (oParam != undefined)
+									{	
+										if (oParam.step != undefined) {iStep = oParam.step}
+										if (oParam.dataIndex != undefined) {iDataIndex = oParam.dataIndex}
+										if (oParam.dataItemIndex != undefined) {iDataItemIndex = oParam.dataItemIndex}
+									}
+									else
+									{
+										oParam = {}
+									}			
+
+									if (iStep == 1)
+									{	
+										ns1blankspace.financial.debtors.data.statements = [];
+
+										if ($('#ns1blankspaceFinancialDebtors input:checked').length > 0)
+										{	
+											$('#ns1blankspaceFinancialDebtorsPreviewStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
+														'<span id="ns1blankspaceFinancialDebtorsPreviewStatusIndex">1</span>/' + $('#ns1blankspaceFinancialDebtors input:checked').length + 
+														'</span>');
+										}
+										else
+										{
+											ns1blankspace.status.error('No debtors selected')
+										}	
+
+										$('#ns1blankspaceFinancialDebtors input:checked').each(function() 
+										{
+											var sKey = (this.id).split('-')[1];
+
+											var oData = $.grep(ns1blankspace.financial.data.debtors, function (a) {return a.key == sKey;})[0]
+
+											if (oData)
+											{
+												ns1blankspace.financial.debtors.data.statements.push(oData);
+											}
+										});
+
+										oParam.step = 2;
+										ns1blankspace.financial.debtors.preview.init(oParam);
+									}			
+
+									if (iStep == 2)
+									{
+										if (iDataIndex < ns1blankspace.financial.debtors.data.statements.length)
+										{	
+											$('#ns1blankspaceFinancialDebtorsPreviewStatusIndex').html(iDataIndex + 1);
+
+											var oData = ns1blankspace.financial.debtors.data.statements[iDataIndex];
+
+											$('#ns1blankspaceDebtors_option_preview-' + oData.key).html(ns1blankspace.xhtml.loadingSmall)
+
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+											oSearch.addField('reference,sentdate,amount');
+
+											if ((oData.key).split('_')[0] == 'B')
+											{
+												oSearch.addFilter('contactbusinesssentto', 'EQUAL_TO', (oData.key).split('_')[1]);
+											}
+											else
+											{
+												oSearch.addFilter('contactpersonsentto', 'EQUAL_TO', (oData.key).split('_')[1]);
+											}	
+											
+											oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
+
+											oSearch.sort('sentdate', 'asc');
+											oSearch.getResults(function(oResponse)
+											{
+												oParam.step = 2;
+												oParam.dataIndex = iDataIndex + 1;
+												ns1blankspace.financial.debtors.data.statements[iDataIndex].invoices = oResponse.data.rows;
+
+												$('#ns1blankspaceDebtors_option_preview-' + oData.key).html('');
+												$('#ns1blankspaceDebtors_option_preview-' + oData.key).addClass('ns1blankspaceRowPreviewDone');
+
+												$('#ns1blankspaceDebtors_option_preview-' + oData.key).button(
+												{
+													text: false,
+													icons:
+													{
+														primary: "ui-icon-document"
+													}
+												})
+												.click(function() {
+													ns1blankspace.financial.debtors.preview.showHide({xhtmlElementID: this.id});
+												})
+												.css('width', '15px')
+												.css('height', '20px');
+
+												ns1blankspace.financial.debtors.preview.init(oParam);
+											});
+										}
+										else
+										{
+											$('#ns1blankspaceFinancialDebtorsPreviewStatus').fadeOut(3000);
+											if (ns1blankspace.util.param(oParam, 'onComplete').exists) {ns1blankspace.util.param(oParam, 'onComplete').value()}
+										}	
+									}						
+								},
+
+					showHide: 	function (oParam)
+								{
+									var sXHTMLElementID;
+									var sKey;
+
+									if (ns1blankspace.util.param(oParam, 'xhtmlElementID').exists)
+									{
+										sXHTMLElementID = ns1blankspace.util.param(oParam, 'xhtmlElementID').value
+										sKey = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
+									}
+
+									if ($('#ns1blankspaceDebtors_container_preview-' + sKey).length != 0)
+									{
+										$('#ns1blankspaceDebtors_container_preview-' + sKey).remove();
+									}
+									else
+									{
+										var sHTML = 'No preview';
+
+										var oStatement = $.grep(ns1blankspace.financial.debtors.data.statements, function (a) {return a.key == sKey;})[0];
+
+										if (oStatement && false)
+										{
+											sHTML = ns1blankspace.format.render(
+											{
+												object: 5,
+												objectContext: oInvoice.id,
+												xhtmlTemplate: ns1blankspace.financial.invoiceTemplateXHTML,
+												objectData: oInvoice,
+												objectOtherData: oInvoice.items
+											});
+
+											oStatement.xhtml = sHTML;
+										}	
+
+										$('#ns1blankspaceDebtors_container-' + sKey).after('<tr id="ns1blankspaceDebtors_container_preview-' + sKey + '">' +
+														'<td colspan=5><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
+									}
+								}			
+				},
+
+	email: 		{
+					init: 		function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										var aIDs = [];
+
+										$($.grep(ns1blankspace.financial.debtors.data.statements, function (a) {return a.debtortype == 'B';})).each(function ()
+										{
+											aIDs.push(this.id);
+										});
+										
+										if (aIDs.length != 0)
+										{	
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'CONTACT_BUSINESS_SEARCH';
+											oSearch.addField('billtoperson,primarycontactperson');
+											oSearch.addFilter('id', 'IN_LIST', aIDs.join(','));
+											oSearch.getResults(function(data)
+											{
+												ns1blankspace.financial.debtors.email.init(oParam, data)
+											});
+										}
+										else
+										{
+											ns1blankspace.financial.debtors.email.send();
+										}		
+									}	
+									else
+									{
+										var iContactPerson;
+
+										$(oResponse.data.rows).each(function(i, v)
+										{
+											iContactPerson = this.billtoperson;
+											if (iContactPerson == '') {iContactPerson == this.primarycontactperson}
+
+											if (iContactPerson != '')
+											{
+												var oStatement = $.grep(ns1blankspace.financial.invoicing.data.statements, function (a) {return a.id == v.id;})[0];
+
+												if (oStatement)
+												{
+													oStatement.contactperson = iContactPerson;
+												}
+											}	
+										});
+
+										ns1blankspace.financial.debtors.email.send()
+									}	
+								},
+
+					send:		function (oParam)
+								{		
+									var iDataIndex = 0;
+
+									if (oParam != undefined)
+									{	
+										if (oParam.dataIndex != undefined) {iDataIndex = oParam.dataIndex}
+									}
+									else
+									{
+										oParam = {}
+									}			
+
+									$('#ns1blankspaceFinancialDebtorsEmailStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
+											'<span id="ns1blankspaceFinancialDebtorsPreviewStatusIndex">' + (iDataIndex + 1) + '</span>/' + ns1blankspace.financial.debtors.data.statements.length + 
+											'</span>');
+														
+									if (iDataIndex < ns1blankspace.financial.debtors.data.statements.length)
+									{
+										ns1blankspace.debug.message(ns1blankspace.financial.debtors.data.statements[iDataIndex]);
+
+										var sHTML = 'No preview';
+
+										var oStatement = ns1blankspace.financial.debtors.data.statements[iDataIndex];
+
+										if (oStatement)
+										{
+											if (oStatement.xhtml == undefined && false)  //TODO
+											{	
+												sHTML = ns1blankspace.format.render(
+												{
+													object: 5,
+													objectContext: oInvoice.id,
+													xhtmlTemplate: ns1blankspace.financial.statementTemplateXHTML,
+													objectData: oInvoice,
+													objectOtherData: oInvoice.items
+												});
+
+												oStatement.xhtml = sHTML;
+											}	
+										
+											if (oStatement.contactperson == '')
+											{
+												$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).html('No Email');
+											}	
+											else
+											{
+												var oData = 
+												{
+													subject: 'Statement',
+													message: oStatement.xhtml,
+													to: oStatement.contactperson,
+													object: (oStatement.debtortype=='P'?32:12),
+													objectContext: oStatement.id
+												}
+
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+													data: oData,
+													dataType: 'json',
+													global: false,
+													success: function (data)
+													{
+														if (data.status == 'OK')
+														{
+															$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).html('Emailed');
+															oStatement.response = data;
+															oParam.dataIndex = iDataIndex + 1;
+															oParam.step = 2;  // NEXT INVOICE
+															ns1blankspace.financial.debtors.email(oParam);
+														}
+														else
+														{
+															$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).html('Error');
+															$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).attr('title', data.error.errornotes);
+														}
+													}
+												});
+											}	
+										}
+									}
+									else
+									{
+										$('#ns1blankspaceFinancialDebtorsEmailStatus').fadeOut(3000);
+										if (ns1blankspace.util.param(oParam, 'onComplete').exists) {ns1blankspace.util.param(oParam, 'onComplete').value()}
+									}	
+								}																	
+				}
+}				
 
 ns1blankspace.financial.creditors =				
 {
@@ -2180,8 +2574,6 @@ ns1blankspace.financial.invoicing =
 														
 									if (iDataIndex < ns1blankspace.financial.invoicing.data.unsentEmail.length)
 									{
-										console.log(ns1blankspace.financial.invoicing.data.unsentEmail[iDataIndex])
-
 										var sHTML = 'No preview';
 
 										var oInvoice = ns1blankspace.financial.invoicing.data.unsentEmail[iDataIndex];
