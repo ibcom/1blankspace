@@ -776,7 +776,7 @@ ns1blankspace.financial.debtors =
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-											oSearch.addField('reference,sentdate,amount');
+											oSearch.addField('invoice.reference,invoice.sentdate,invoice.amount');
 
 											if ((oData.key).split('_')[0] == 'B')
 											{
@@ -845,13 +845,16 @@ ns1blankspace.financial.debtors =
 
 										var oStatement = $.grep(ns1blankspace.financial.debtors.data.statements, function (a) {return a.key == sKey;})[0];
 
-										if (oStatement && false)
+										if (oStatement)
 										{
+											var sTemplate = '<table><tbody><tr><td>[[Name]]</tr></td></tbody></table>';
+											//ns1blankspace.financial.data.statementTemplateXHTML
+
 											sHTML = ns1blankspace.format.render(
 											{
-												object: (oStatement.debtortype=='P'?32:12),
-												objectContext: oStatement.id,
-												xhtmlTemplate: ns1blankspace.financial.data.statementTemplateXHTML,
+												object: 175,
+												objectContext: -1,
+												xhtmlTemplate: sTemplate,
 												objectData: oStatement,
 												objectOtherData: oStatement.invoices
 											});
@@ -860,7 +863,7 @@ ns1blankspace.financial.debtors =
 										}	
 
 										$('#ns1blankspaceDebtors_container-' + sKey).after('<tr id="ns1blankspaceDebtors_container_preview-' + sKey + '">' +
-														'<td colspan=5><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
+														'<td colspan=4><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
 									}
 								}			
 				},
@@ -946,11 +949,13 @@ ns1blankspace.financial.debtors =
 										{
 											if (oStatement.xhtml == undefined && false)  //TODO
 											{	
+												var sTemplate = '<table><tr><td>[[Name]]</tr></td>';
+
 												sHTML = ns1blankspace.format.render(
 												{
 													object: 5,
 													objectContext: oInvoice.id,
-													xhtmlTemplate: ns1blankspace.financial.statementTemplateXHTML,
+													xhtmlTemplate: sTemplate,
 													objectData: oInvoice,
 													objectOtherData: oInvoice.items
 												});

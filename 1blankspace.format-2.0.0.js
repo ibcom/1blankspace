@@ -148,8 +148,31 @@ ns1blankspace.format.tags =
 				caption: "Item Currency",
 				method: "FINANCIAL_ITEM_SEARCH",
 				source: "lineitem.issuedcurrencytext"
+			},
+			{
+				object: 175,
+				type: 1,
+				caption: "Name",
+				source: "debtorname"
+			},
+			{
+				object: 175,
+				type: 1,
+				caption: "Outstanding",
+				source: "total"
+			},
+			{
+				object: 175,
+				type: 1,
+				caption: "Last Receipt Date",
+				source: "lastreceiptdate"
+			},
+			{
+				object: 175,
+				type: 1,
+				caption: "Last Receipt Amount",
+				source: "lastreceiptamount"
 			}						
-			
 		]		
 
 ns1blankspace.format.test = function()
@@ -185,7 +208,14 @@ ns1blankspace.format.render = function (oParam)
 	sXHTMLTemplate = (sXHTMLTemplate).replace(/\[\[/g,'<div class="template">');
 	sXHTMLTemplate = (sXHTMLTemplate).replace(/\]\]/g,'</div>');
 
-	var oXHTML = $(sXHTMLTemplate);
+	var oXHTML; // = $(sXHTMLTemplate);
+
+	if (ns1blankspace.util.param(oParam, 'xhtmlTemplate').exists)
+	{
+		$(ns1blankspace.xhtml.container).html(ns1blankspace.util.param(oParam, 'xhtmlTemplate').value)
+		oXHTML = $(ns1blankspace.xhtml.container);
+	}
+
 	var aXHTML = [];
 
 	$(oXHTML).each(function()
@@ -211,7 +241,7 @@ ns1blankspace.format.render = function (oParam)
 					{	
 						$(e).html(oObjectData[sSource]);
 					}
-					else (oObjectData[oTemplateTag[0].source])
+					else //(oObjectData[oTemplateTag[0].source])
 					{
 						var aSource = (sSource).split('.');
 						sSource = aSource[aSource.length-1];
@@ -241,30 +271,36 @@ ns1blankspace.format.render = function (oParam)
 
 	var sHTML;
 
-	$(aSourceMethods).each(function() 
+	if (aSourceMethods.length == 0)
+	{	
+		 sHTML = aXHTML.join('');
+	}
+	else
 	{
-		if (oObjectOtherData === undefined)
+		$(aSourceMethods).each(function() 
 		{
-			sHTML = aXHTML.join('');
+			if (oObjectOtherData === undefined)
+			{
+				sHTML = aXHTML.join('');
 
-			var oSearch = new AdvancedSearch();
-			oSearch.method = this.method;
-			oSearch.addField('*');
-			oSearch.addFilter('object', 'EQUAL_TO', iObject);
-			oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+				var oSearch = new AdvancedSearch();
+				oSearch.method = this.method;
+				oSearch.addField('*');
+				oSearch.addFilter('object', 'EQUAL_TO', iObject);
+				oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 
-			var oTmp = {group: this.group};
-			oSearch.getResults(function(oResponse) {ns1blankspace.format.process(oTmp, oResponse.data.rows)});
+				var oTmp = {group: this.group};
+				oSearch.getResults(function(oResponse) {ns1blankspace.format.process(oTmp, oResponse.data.rows)});
 
-		}
-		else
-		{
-			oParam.group = this.group;
-			oParam.xhtml = aXHTML.join('');
-			sHTML = ns1blankspace.format.process(oParam, oObjectOtherData)
-		}
-
-	});
+			}
+			else
+			{
+				oParam.group = this.group;
+				oParam.xhtml = aXHTML.join('');
+				sHTML = ns1blankspace.format.process(oParam, oObjectOtherData)
+			}
+		});
+	}	
 
 	return sHTML;
 };
