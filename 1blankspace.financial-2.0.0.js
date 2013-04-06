@@ -852,8 +852,6 @@ ns1blankspace.financial.debtors =
 
 										if (oStatement)
 										{
-											//ns1blankspace.xhtml.templates['statement'] = '<table><tbody><tr><td>[[Name]]</tr></td></tbody></table>'
-
 											sHTML = ns1blankspace.format.render(
 											{
 												object: 175,

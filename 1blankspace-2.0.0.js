@@ -3064,11 +3064,82 @@ ns1blankspace.save =
 
 ns1blankspace.util =
 {
+	setParam: 	function(oParam, sParam, sValue, oOption)
+				{
+					var bOnlyIfMissing = false;
+
+					if (ns1blankspace.util.param(oOption, 'onlyIfMissing').exists)
+					{
+						bOnlyIfMissing = ns1blankspace.util.param(oOption, 'onlyIfMissing').value
+					}
+
+					if (oParam === undefined) {oParam = {}}
+
+					if (oParam.hasOwnProperty(sParam))
+					{
+						if (!bOnlyIfMissing) {oParam[sParam] = sValue};
+					}
+					else
+					{
+						oParam[sParam] = sValue;
+					}
+						
+					return oParam
+				},	
+
+	getParam: 	function(oParam, sParam, oOption)
+				{
+					var sDefault;
+					var sSplit;
+					var iIndex;
+
+					var oReturn = {exists: false};
+
+					if (ns1blankspace.util.param(oOption, 'default').exists)
+					{
+						oReturn.value = ns1blankspace.util.param(oOption, 'default').value
+					}
+
+					if (ns1blankspace.util.param(oOption, 'split').exists)
+					{
+						sSplit = ns1blankspace.util.param(oOption, 'split').value
+					}
+
+					if (ns1blankspace.util.param(oOption, 'index').exists)
+					{
+						iIndex = ns1blankspace.util.param(oOption, 'index').value
+					}
+
+					if (oParam !== undefined) 
+					{ 
+						if (oParam.hasOwnProperty(sParam))
+						{
+							oReturn.value = oParam[sParam];
+							oReturn.exists = true;
+
+							if (sSplit !== undefined)
+							{
+								oReturn.values = oParam[sParam].split(sSplit);
+
+								if (iIndex !== undefined)
+								{
+									if (iIndex < oReturn.values.length)
+									{
+										oReturn.value = oReturn.values[iIndex];
+									}
+								}	
+							}
+						}	
+					}	
+
+					return oReturn;
+				},
+
 	param: 		function(oParam, sParam, sSplit)
 				{
 					var oReturn = {exists: false};
 
-					if (oParam != undefined) 
+					if (oParam !== undefined) 
 					{ 
 						if (oParam.hasOwnProperty(sParam))
 						{

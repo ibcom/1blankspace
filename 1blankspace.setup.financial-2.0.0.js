@@ -61,6 +61,9 @@ ns1blankspace.setup.financial =
 								
 					aHTML.push('<tr><td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">' +
 									'Bank Accounts</td></tr>');	
+
+					aHTML.push('<tr><td id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">' +
+									'Invoicing</td></tr>');
 					
 					aHTML.push('</table>');		
 					
@@ -76,11 +79,15 @@ ns1blankspace.setup.financial =
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
 					
-					aHTML.push('<tr><td id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">' +
-									'Invoicing</td></tr>');	
+					aHTML.push('<tr><td id="ns1blankspaceControlInvoiceTemplate" class="ns1blankspaceControl">' +
+									'Invoice<br />Template</td></tr>');
+
+					aHTML.push('</table>');		
 					
-					aHTML.push('<tr><td id="ns1blankspaceControlInvoicingTemplate" class="ns1blankspaceControl">' +
-									'Template</td></tr>');	
+					aHTML.push('<table class="ns1blankspaceControl">');
+					
+					aHTML.push('<tr><td id="ns1blankspaceControlStatementTemplate" class="ns1blankspaceControl">' +
+									'Statement<br />Template</td></tr>');	
 					
 					aHTML.push('</table>');
 
@@ -104,7 +111,8 @@ ns1blankspace.setup.financial =
 					aHTML.push('<div id="ns1blankspaceMainFinancialAccount" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainFinancialAccountDefault" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainInvoicing" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainInvoicingTemplate" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTemplate_invoice" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTemplate_statement" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainTax" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainPayroll" class="ns1blankspaceControlMain"></div>');
 
@@ -146,10 +154,16 @@ ns1blankspace.setup.financial =
 						ns1blankspace.setup.financial.invoicing();
 					});
 					
-					$('#ns1blankspaceControlInvoicingTemplate').click(function(event)
+					$('#ns1blankspaceControlInvoiceTemplate').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainInvoicingTemplate'});
-						ns1blankspace.setup.financial.invoicingTemplate.init();
+						ns1blankspace.show({selector: '#ns1blankspaceMainTemplate_invoice'});
+						ns1blankspace.setup.financial.template.init({template: 'invoice', object: 5});
+					});
+
+					$('#ns1blankspaceControlStatementTemplate').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainTemplate_statement'});
+						ns1blankspace.setup.financial.template.init({template: 'statement', object: 175});
 					});
 
 					$('#ns1blankspaceControlTax').click(function(event)
@@ -1195,20 +1209,27 @@ ns1blankspace.setup.financial =
 					}	
 				},
 
-	invoicingTemplate:
+	template:
 				{
-					init: 		function ()
+					init: 		function (oParam)
 								{
-									ns1blankspace.util.initTemplate({template: 'invoice', onComplete: ns1blankspace.setup.financial.invoicingTemplate.show})
+									oParam = ns1blankspace.util.setParam(oParam, 'template', 'invoice', {onlyIfMissing: true});
+									oParam = ns1blankspace.util.setParam(oParam, 'object', 5, {onlyIfMissing: true});
+									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.setup.financial.template.show);
+
+									ns1blankspace.util.initTemplate(oParam);
 								},
 
-					show: 		function ()
+					show: 		function (oParam)
 								{
+									var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {default: 'invoice'}).value;
+									var iObject = ns1blankspace.util.getParam(oParam, 'object', {default: 5}).value;
+
 									var aHTML = [];
 									
-									if ($('#ns1blankspaceMainInvoicingTemplate').attr('data-loading') == '1')
+									if ($('#ns1blankspaceMainTemplate_' + sTemplate).attr('data-loading') == '1')
 									{
-										$('#ns1blankspaceMainInvoicingTemplate').attr('data-loading', '');
+										$('#ns1blankspaceMainTemplate_' + sTemplate).attr('data-loading', '');
 												
 										for (edId in tinyMCE.editors) 
 													tinyMCE.editors[edId].destroy(true);
@@ -1217,12 +1238,12 @@ ns1blankspace.setup.financial =
 												
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceInvoicingTemplateColumn1" class="ns1blankspaceColumn1"></td>' +
-														'<td id="ns1blankspaceInvoicingTemplateColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+														'<td id="ns1blankspaceTemplateColumn1_' + sTemplate + '" class="ns1blankspaceColumn1"></td>' +
+														'<td id="ns1blankspaceTemplateColumn2_' + sTemplate + '" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
 														'</tr>' + 
 														'</table>');
 													
-										$('#ns1blankspaceMainInvoicingTemplate').html(aHTML.join(''));
+										$('#ns1blankspaceMainTemplate_' + sTemplate).html(aHTML.join(''));
 										
 										var aHTML = [];
 										
@@ -1232,7 +1253,7 @@ ns1blankspace.setup.financial =
 
 										$.each(ns1blankspace.format.tags, function()
 										{
-											if (this.object == 5 && this.type == 1)
+											if (this.object == iObject && this.type == 1)
 											{
 												aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
 
@@ -1246,7 +1267,7 @@ ns1blankspace.setup.financial =
 
 										$.each(ns1blankspace.format.tags, function()
 										{
-											if (this.object == 5 && this.type == 2)
+											if (this.object == iObject && this.type == 2)
 											{
 												aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
 
@@ -1260,50 +1281,54 @@ ns1blankspace.setup.financial =
 														
 										aHTML.push('</table>');			
 
-										$('#ns1blankspaceInvoicingTemplateColumn2').html(aHTML.join(''));
+										$('#ns1blankspaceTemplateColumn2_' + sTemplate).html(aHTML.join(''));
 
 										var aHTML = [];
 										
-										aHTML.push('<table id="ns1blankspaceColumn1" class="ns1blankspace">');
+										aHTML.push('<table id="ns1blankspaceColumn1" class="ns1blankspaceTemplateText_' + sTemplate + '" data-editorcount="' + ns1blankspace.counter.editor + '"">');
 												
 										aHTML.push('<tr><td>' +
-														'<textarea rows="30" cols="50" id="ns1blankspaceInvoicingTemplateText' +
-															ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
+														'<textarea rows="30" cols="50" id="ns1blankspaceTemplateText_' + sTemplate +
+															ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor +
+															'" class="ns1blankspaceTextMulti"></textarea>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');					
 										
-										$('#ns1blankspaceInvoicingTemplateColumn1').html(aHTML.join(''));
+										$('#ns1blankspaceTemplateColumn1_' + sTemplate).html(aHTML.join(''));
 										
-										$('#ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).val(ns1blankspace.xhtml.templates.invoice);
+										$('#ns1blankspaceTemplateText_' + sTemplate + ns1blankspace.counter.editor).val(ns1blankspace.xhtml.templates[sTemplate]);
 
-										tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor);	
+										tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceTemplateText_' + sTemplate + ns1blankspace.counter.editor);	
 									
 										$('.interfaceFormatTags')
 										.hover( function()
 										{	
-											oMCEBookmark = tinyMCE.get('ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).selection.getBookmark({type: 1, normalized: true});
+											oMCEBookmark = tinyMCE.get('ns1blankspaceTemplateText_' + sTemplate + ns1blankspace.counter.editor).selection.getBookmark({type: 1, normalized: true});
 										})
 										.click( function()
 										{
 											ns1blankspace.format.editor.addTag(
 											{
 												xhtmlElementID: this.id,
-												editorID: 'ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor, 
+												editorID: 'ns1blankspaceTemplateText_' + sTemplate + ns1blankspace.counter.editor, 
 												mceBookmark: oMCEBookmark
 											});
 										});
 									}
 								},	
 
-					save:		function ()
+					save:		function (oParam)
 								{
+									var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {default: 'invoice'}).value
+									var sCounter = $('table.ns1blankspaceTemplateText_' + sTemplate).attr('data-editorcount');
+
 									ns1blankspace.status.working();
 
-									var sData = 'id=' + (ns1blankspace.xhtml.templates.document['invoice']?ns1blankspace.xhtml.templates.document['invoice']:'');
-									sData += '&content=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).getContent());
+									var sData = 'id=' + (ns1blankspace.xhtml.templates.document[sTemplate]?ns1blankspace.xhtml.templates.document[sTemplate]:'');
+									sData += '&content=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceTemplateText_' + sTemplate + sCounter).getContent());
 									sData += '&type=10';
-									sData += '&title=' + ns1blankspace.util.fs('INVOICE TEMPLATE');
+									sData += '&title=' + ns1blankspace.util.fs(sTemplate.toUpperCase() + ' TEMPLATE');
 
 									$.ajax(
 									{
@@ -1313,12 +1338,13 @@ ns1blankspace.setup.financial =
 										dataType: 'json',
 										success: function(data)
 											{
-												ns1blankspace.status.message('Saved');
-												ns1blankspace.xhtml.templates['invoice'] = tinyMCE.get('ns1blankspaceInvoicingTemplateText' + ns1blankspace.counter.editor).getContent();
-												if(ns1blankspace.xhtml.templates.document['invoice'] == undefined) {ns1blankspace.xhtml.templates.document['invoice'] = data.id};
-											}
-									});		
+												var sCounter = $('table.ns1blankspaceTemplateText_' + sTemplate).attr('data-editorcount');
 
+												ns1blankspace.status.message('Saved');
+												ns1blankspace.xhtml.templates[sTemplate] = tinyMCE.get('ns1blankspaceTemplateText_' + sTemplate + sCounter).getContent();
+												if(ns1blankspace.xhtml.templates.document[sTemplate] == undefined) {ns1blankspace.xhtml.templates.document[sTemplate] = data.id};
+											}
+									});	
 								}	
 				},
 
@@ -1484,8 +1510,6 @@ ns1blankspace.setup.financial =
 									{
 										sData += '&payrollpayperiod=' + ns1blankspace.util.fs($('input[name="radioPeriodDefault"]:checked').val());
 									};
-									
-									// /ondemand/setup/setup.asp
 
 									$.ajax(
 									{
@@ -1497,8 +1521,8 @@ ns1blankspace.setup.financial =
 											{
 												ns1blankspace.status.message('Saved');
 
-												if ($('#ns1blankspaceMainInvoicingTemplate').html() != '') {ns1blankspace.setup.financial.invoicingTemplate.save()}
-
+												if ($('#ns1blankspaceMainTemplate_invoice').html() != '') {ns1blankspace.setup.financial.template.save({template: 'invoice'})}
+												if ($('#ns1blankspaceMainTemplate_statement').html() != '') {ns1blankspace.setup.financial.template.save({template: 'statement'})}
 											}
 									});		
 								}
