@@ -160,7 +160,8 @@ ns1blankspace.contactPerson =
 										oSearch.addField('firstname,surname,contactbusiness,contactbusinesstext,title,titletext,position,workphone,fax,mobile,email,' +
 																 'customerstatus,customerstatustext,gender,gendertext,' +
 																 'streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
-																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,modifieddate,notes');
+																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,modifieddate,notes,' +
+																 'dateofbirth,rating,ratingtext,numberofchildren,otherfamilydetails');
 
 										oSearch.addField(ns1blankspace.extend.elements());
 
@@ -311,6 +312,9 @@ ns1blankspace.contactPerson =
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">' +
 										'Address</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlPersonal" class="ns1blankspaceControl">' +
+										'Personal</td></tr>');
 					
 						aHTML.push('</table>');					
 					
@@ -342,6 +346,7 @@ ns1blankspace.contactPerson =
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAddress" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainPersonal" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainGroups" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainBusiness" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
@@ -360,6 +365,12 @@ ns1blankspace.contactPerson =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 						ns1blankspace.contactPerson.details();
+					});
+
+					$('#ns1blankspaceControlPersonal').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainPersonal'});
+						ns1blankspace.contactPerson.personal();
 					});
 					
 					$('#ns1blankspaceControlAddress').click(function(event)
@@ -478,12 +489,20 @@ ns1blankspace.contactPerson =
 							var aHTML = [];
 						
 							aHTML.push('<table class="ns1blankspace">');
-							
+
 							if (ns1blankspace.objectContextData.contactbusinesstext != '')
 							{
 								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
 											ns1blankspace.objectContextData.contactbusinesstext +
+											'</td></tr>');
+							}
+
+							if (ns1blankspace.objectContextData.ratingtext != '')
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Rating</td></tr>' +
+											'<tr><td class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.ratingtext +
 											'</td></tr>');
 							}
 
@@ -503,9 +522,11 @@ ns1blankspace.contactPerson =
 											'</td></tr>');
 							}				
 							
+							var oDate = new Date(ns1blankspace.objectContextData.modifieddate);
+
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
-											Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+											oDate.toString("dd MMM yyyy") +
 											'</td></tr>');	
 									
 							aHTML.push('</table>');					
@@ -727,6 +748,15 @@ ns1blankspace.contactPerson =
 										'<td class="ns1blankspaceTextMulti">' +
 										'<textarea rows="10" cols="35" id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti"></textarea>' +
 										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Rating</td></tr>' +
+										'<tr class="ns1blankspaceSelect">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceDetailsRating" class="ns1blankspaceSelect" style="width:250px;"' +
+											' data-method="SETUP_CONTACT_RATING_SEARCH">' +
+										'</td></tr>');
 						
 						aHTML.push('</table>');					
 							
@@ -744,6 +774,78 @@ ns1blankspace.contactPerson =
 							$('#ns1blankspaceDetailsFax').val(ns1blankspace.objectContextData.fax);
 							$('#ns1blankspaceDetailsEmail').val(ns1blankspace.objectContextData.email);
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.notes);
+							$('#ns1blankspaceDetailsRating').attr('data-id', ns1blankspace.objectContextData.rating);
+							$('#ns1blankspaceDetailsRating').val(ns1blankspace.objectContextData.ratingtext);
+						}
+						
+						$('#ns1blankspaceDetailsTitle').keyup(function(event)
+						{
+							$(ns1blankspace.xhtml.container).hide(200);
+							ns1blankspace.search.send(event.target.id);
+						});
+					}	
+				},
+
+	personal: 	function ()
+				{
+					var aHTML = [];
+					
+					if ($('#ns1blankspaceMainPersonal').attr('data-loading') == '1')
+					{
+						$('#ns1blankspaceMainPersonal').attr('data-loading', '');
+						
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspacePersonalColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspacePersonalColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
+						
+						$('#ns1blankspaceMainPersonal').html(aHTML.join(''));
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Date of Birth' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceDetailsDateOfBirth" class="ns1blankspaceDate">' +
+										'</td></tr>');			
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Number of Children' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsNumberOfChildren" class="ns1blankspaceText">' +
+										'</td></tr>');			
+										
+							
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Other Details' +
+										'</td></tr>' +
+										'<tr class="ns1blankspaceTextMulti">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="5" cols="35" id="ns1blankspaceDetailsOtherFamilyDetails" class="ns1blankspaceTextMultiSmall"></textarea>' +
+										'</td></tr>');
+							
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspacePersonalColumn1').html(aHTML.join(''));
+
+						$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy' });
+
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							$('#ns1blankspaceDetailsDateOfBirth').val(ns1blankspace.objectContextData.dateofbirth);
+							$('#ns1blankspaceDetailsNumberOfChildren').val(ns1blankspace.objectContextData.numberofchildren);
+							$('#ns1blankspaceDetailsOtherFamilyDetails').val(ns1blankspace.objectContextData.otherfamilydetails);
 						}
 						
 						$('#ns1blankspaceDetailsTitle').keyup(function(event)
@@ -997,6 +1099,7 @@ ns1blankspace.contactPerson =
 										sData += '&mobile=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsMobile').val());
 										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
 										sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
+										sData += '&rating=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsRating').attr('data-id'));
 									}
 									
 									if ($('#ns1blankspaceMainAddress').html() != '')
@@ -1012,6 +1115,13 @@ ns1blankspace.contactPerson =
 										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingPostCode').val());
 										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingCountry').val());
 									}
+
+									if ($('#ns1blankspaceMainPersonal').html() != '')
+									{
+										sData += '&dateofbirth=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDateOfBirth').val());
+										sData += '&numberofchildren=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsNumberOfChildren').val());
+										sData += '&otherfamilydetails=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsOtherFamilyDetails').val());
+									}	
 									
 									if ($('#ns1blankspaceMainBusiness').html() != '')
 									{
