@@ -1889,14 +1889,14 @@ ns1blankspace.control =
 											
 											$('#ns1blankspaceSpaceSearchResults').html(aHTML.join(''));
 
-											$('ns1blankspaceControlSpaceSwitchContainer td.ns1blankspace').click(function(event)
+											$('#ns1blankspaceControlSpaceSwitchContainer td.ns1blankspaceRowSelect').click(function(event)
 											{
 												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
 												var aID = (event.target.id).split('-')
 												$.ajax(
 												{
-													type: 'POST',
+													type: 'GET',
 													url: ns1blankspace.util.endpointURI('CORE_SPACE_MANAGE'),
 													data: 'switch=1&id=' + aID[1],
 													dataType: 'json',
@@ -1906,7 +1906,11 @@ ns1blankspace.control =
 														{	
 															ns1blankspace.space = aID[1];
 															ns1blankspace.spaceText = $('#' + event.target.id).html();
-															$('#ns1blankspaceViewControlSpaceText').html(ns1blankspace.spaceText);
+															ns1blankspace.financial.data = undefined;
+															ns1blankspace.financial.initStatus = undefined;
+															ns1blankspace.extend.structure = undefined;
+															$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
+															ns1blankspace.app.refresh();
 														}	
 													}
 												});	
