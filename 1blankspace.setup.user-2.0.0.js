@@ -599,93 +599,95 @@ ns1blankspace.setup.user =
 
 									if (ns1blankspace.objectContextData != undefined)
 									{
-										if (ns1blankspace.objectContextData.unrestrictedaccess == 'Y')
+										if (oResponse == undefined)
 										{
-											aHTML.push('<table class="ns1blankspaceColumn2">');
+											$('#ns1blankspaceRoles').html(ns1blankspace.xhtml.loadingSmall);
 
-											aHTML.push('<tr>' +
-															'<td class="ns1blankspaceNothing" style="font-weight:600;">This user can access all functions within this space.</td></tr>' +
-															'<td class="ns1blankspaceNothing">If you select <em>restricted by role</em> and save, you can then allocate predefined <em>user roles</em> to them.</td></tr>');
-
-											aHTML.push('</table>');
-
-											$('#ns1blankspaceAccessColumn2').html(aHTML.join(''));			
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_USER_ROLE_SEARCH';
+											oSearch.addField('roletext,role');
+											oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.objectContext)
+											oSearch.rows = 50;
+											oSearch.sort('roletext', 'asc');
+											oSearch.getResults(function(data) {ns1blankspace.setup.user.access.show(oParam, data)})	
 										}
 										else
 										{
-											if (oResponse == undefined)
-											{
-												$('#ns1blankspaceRoles').html(ns1blankspace.xhtml.loadingSmall);
+											var aHTML = [];
 
-												var oSearch = new AdvancedSearch();
-												oSearch.method = 'SETUP_USER_ROLE_SEARCH';
-												oSearch.addField('roletext,role');
-												oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.objectContext)
-												oSearch.rows = 50;
-												oSearch.sort('roletext', 'asc');
-												oSearch.getResults(function(data) {ns1blankspace.setup.user.access.show(oParam, data)})	
+											if (ns1blankspace.objectContextData.unrestrictedaccess == 'Y')
+											{
+												aHTML.push('<table class="ns1blankspaceColumn2">');
+
+												aHTML.push('<tr>' +
+																'<td class="ns1blankspaceNothing" style="font-weight:600;">This user can access all functions within this space.</td></tr>' +
+																'<tr><td class="ns1blankspaceNothing" style="padding-bottom:15px;">If you select <em>restricted by role</em>, the user will be restricted to any predefined <em>user roles</em> assigned to them.</td></tr>');	
 											}
-											else
-											{
-												var aHTML = [];
-											
-												aHTML.push('<table class="ns1blankspaceColumn2">' +
-																'<tr><td><span class="ns1blankspaceAction" id="ns1blankspaceUserAccessRolesAdd">' +
-																'Add Role</span></td></tr>' +
-																'</table>');					
-												
-												$('#ns1blankspaceAccessColumn2').html(aHTML.join(''));
-												
-												$('#ns1blankspaceUserAccessRolesAdd').button(
-												{
-													label: "Add Role"
-												})
-												.click(function() {
-													ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceUserAccessRolesAdd', leftOffset: -252, topOffset: -42});
-													ns1blankspace.setup.user.access.add(oParam);
-												})
-												.css('width', '75px')
-
-												var aHTML = [];
-												var h = -1;	
-														
-												aHTML.push('<table class="ns1blankspace">');
 										
-												if (oResponse.data.rows.length == 0)
+											aHTML.push('<table class="ns1blankspaceColumn2">' +
+															'<tr><td><span class="ns1blankspaceAction" id="ns1blankspaceUserAccessRolesAdd">' +
+															'Add Role</span></td></tr>' +
+															'</table>');					
+											
+											$('#ns1blankspaceAccessColumn2').html(aHTML.join(''));
+											
+											$('#ns1blankspaceUserAccessRolesAdd').button(
+											{
+												label: "Add Role"
+											})
+											.click(function() {
+												ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceUserAccessRolesAdd', leftOffset: -252, topOffset: -42});
+												ns1blankspace.setup.user.access.add(oParam);
+											})
+											.css('width', '75px')
+
+											var aHTML = [];
+											var h = -1;	
+													
+											aHTML.push('<table class="ns1blankspace">');
+									
+											if (oResponse.data.rows.length == 0)
+											{
+												if (ns1blankspace.objectContextData.unrestrictedaccess == 'N')
 												{
 													aHTML.push('<tr><td class="ns1blankspaceNothing">' +
-																	'This user has no roles and thus no functional access.</td></tr>');
+																'This user has no roles and thus no functional access.</td></tr>');
 												}
-
-												$(oResponse.data.rows).each(function()
+												else
 												{
-													aHTML.push('<tr id="ns1blankspaceUserRole" class="ns1blankspaceRow">');
-													
-													aHTML.push('<td id="ns1blankspaceUserRole_title-' + this.id + '" class="ns1blankspaceRow">' +
-																			this.roletext + '</td>');
-
-													aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
-																	'<span id="ns1blankspaceUserAccessRole_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
-																	'</td>');	
-
-													aHTML.push('</tr>');
-												});
-											
-												aHTML.push('</table>');
-													
-												$('#ns1blankspaceRoles').html(aHTML.join(''));
-
-												$('.ns1blankspaceRowRemove').button(
-												{
-													text: false,
-												 	icons: {primary: "ui-icon-close"}
-												})
-												.click(function() {
-													ns1blankspace.setup.user.access.remove(this.id)
-												})
-												.css('width', '15px')
-												.css('height', '20px')
+													aHTML.push('<tr><td class="ns1blankspaceNothing">' +
+																'This user has no roles assigned to them.</td></tr>');
+												}	
 											}
+
+											$(oResponse.data.rows).each(function()
+											{
+												aHTML.push('<tr id="ns1blankspaceUserRole" class="ns1blankspaceRow">');
+												
+												aHTML.push('<td id="ns1blankspaceUserRole_title-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.roletext + '</td>');
+
+												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+																'<span id="ns1blankspaceUserAccessRole_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
+																'</td>');	
+
+												aHTML.push('</tr>');
+											});
+										
+											aHTML.push('</table>');
+												
+											$('#ns1blankspaceRoles').html(aHTML.join(''));
+
+											$('.ns1blankspaceRowRemove').button(
+											{
+												text: false,
+											 	icons: {primary: "ui-icon-close"}
+											})
+											.click(function() {
+												ns1blankspace.setup.user.access.remove(this.id)
+											})
+											.css('width', '15px')
+											.css('height', '20px')
 										}
 									}
 								},
