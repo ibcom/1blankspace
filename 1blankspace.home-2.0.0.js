@@ -13,6 +13,12 @@ ns1blankspace.home =
 
 	show: 		function ()
 				{	
+					ns1blankspace.history.view(
+					{
+						newDestination: 'ns1blankspace.home.show();',
+						move: false
+					});
+
 					if (ns1blankspace.setupView)
 					{	
 						$('#ns1blankspaceViewControlSetup').attr('checked', false);
