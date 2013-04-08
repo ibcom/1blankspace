@@ -602,7 +602,7 @@ ns1blankspace.financial.invoice =
 													ns1blankspace.pdf.create({
 															xhtmlContent: $('#ns1blankspaceSummaryColumn1').html(),
 															filename: ns1blankspace.objectContextData.reference + '.pdf',
-															open: true
+															open: false
 														});
 												});
 											}		
