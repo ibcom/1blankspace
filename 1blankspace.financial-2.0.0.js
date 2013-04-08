@@ -1452,10 +1452,35 @@ ns1blankspace.financial.balanceSheet =
 								}
 							]	
 	
+							oParam = ns1blankspace.util.setParam(oParam, 'onLastChild', ns1blankspace.financial.balanceSheet.transactions);
 							ns1blankspace.format.tree.init(oParam);
 						}	
 					}	
-				}
+				},
+
+	transactions:	
+				function (oParam, oResponse)
+		 		{
+		 			var iFinancialAccount = ns1blankspace.util.getParam(oParam, 'id').value;
+		 			var oXHTMLElement = $('#' + ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value).parent();
+
+	 				if (ns1blankspace.container.show(
+	 				{
+	 					xhtmlElement: oXHTMLElement,
+	 					topOffset: 1,
+	 					leftOffset: 3,
+	 					xhtml: '<div id="ns1blankspaceFinancialTransactions" style="background-color:#F3F3F3; width: 395px; padding:4px; opacity: 0.95; font-size:0.75em;">' + ns1blankspace.xhtml.loadingSmall + '</div>',
+	 					setWidth: true
+	 				}))
+	 				{	
+		 				ns1blankspace.financial.transactions.show(
+		 				{
+		 					xhtmlElementID: 'ns1blankspaceFinancialTransactions',
+		 					financialAccount: iFinancialAccount,
+		 					setWidth: true
+		 				});
+		 			}	
+	 			}	
 }
 
 ns1blankspace.financial.bankAccounts =
@@ -3032,12 +3057,14 @@ ns1blankspace.financial.transactions =
 				{
 					var iObject = ns1blankspace.object;
 					var iObjectContext = ns1blankspace.objectContext;
+					var iFinancialAccount;
 					var sXHTMLElementID = 'ns1blankspaceMainTransaction';
 
 					if (oParam != undefined)
 					{
 						if (oParam.object != undefined) {iObject = oParam.object}
 						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+						if (oParam.financialAccount != undefined) {iFinancialAccount = oParam.financialAccount}
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 					}		
 						
@@ -3045,11 +3072,22 @@ ns1blankspace.financial.transactions =
 					{			
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
-						oSearch.addField('financialaccounttext,amount,date,description');
-						oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
-						oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
-						oSearch.sort('financialaccounttext', 'asc');
 						
+						if (iFinancialAccount)
+						{	
+							oSearch.addField('amount,date,description');
+							oSearch.addFilter('financialaccount', 'EQUAL_TO', iFinancialAccount);
+							oSearch.rows = 10;
+							oSearch.sort('date', 'desc');
+						}
+						else
+						{	
+							oSearch.addField('financialaccounttext,amount,date,description');
+							oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
+							oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
+							oSearch.sort('financialaccounttext', 'asc');
+						}
+		
 						oSearch.getResults(function(data) {ns1blankspace.financial.transactions.show(oParam, data)});
 					}
 					else
@@ -3069,9 +3107,14 @@ ns1blankspace.financial.transactions =
 						else
 						{
 							aHTML.push('<table class="ns1blankspace">' +
-											'<tr class="ns1blankspaceHeaderCaption">' +
-											'<td class="ns1blankspaceHeaderCaption" style="width:150px;">Account</td>' +
-											'<td class="ns1blankspaceHeaderCaption" style="width:125px;">Date</td>' +
+											'<tr class="ns1blankspaceHeaderCaption">');
+
+							if (iFinancialAccount == undefined)
+							{
+								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:150px;">Account</td>');
+							}
+
+							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
 											'<td class="ns1blankspaceHeaderCaption">Description</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
 											'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
@@ -3106,9 +3149,12 @@ ns1blankspace.financial.transactions =
 					var aHTML = [];
 					
 					aHTML.push('<tr class="ns1blankspaceRow">');
-												
-					aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + oRow.id + '" class="ns1blankspaceRow">' +
+						
+					if (oRow.financialaccounttext)
+					{							
+						aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + oRow.id + '" class="ns1blankspaceRow">' +
 											oRow.financialaccounttext + '</td>');
+					}	
 											
 					aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + oRow.id + '" class="ns1blankspaceRow">' +
 											oRow.date + '</td>');

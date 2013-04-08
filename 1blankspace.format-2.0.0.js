@@ -497,12 +497,15 @@ ns1blankspace.format.tree =
 					var sXHTMLElementID;
 					var oDataRoot;
 					var sXHTMLElementContext = '';
+					var fOnLastChild;
+					var sLastChildElementID;
 
 					if (oParam != undefined)
 					{
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 						if (oParam.dataRoot != undefined) {oDataRoot = oParam.dataRoot}
 						if (oParam.xhtmlElementContext != undefined) {sXHTMLElementContext = oParam.xhtmlElementContext}
+						if (oParam.onLastChild != undefined) {fOnLastChild = oParam.onLastChild}
 					}
 
 					if ($('#' + sXHTMLElementID + ' .ns1blankspaceTreeRoot').length == 0)
@@ -545,12 +548,19 @@ ns1blankspace.format.tree =
 							ns1blankspace.format.tree.branch(oParam);
 						});
 
-						$('#' + sXHTMLElementID).off('mouseup', '.ns1blankspaceLastChild');
-						$('#' + sXHTMLElementID).on('mouseup', '.ns1blankspaceLastChild', function(event)
-						{
-							oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
-							alert(oParam.xhtmlElementID);
-						});
+						if (fOnLastChild)
+						{	
+							$('#' + sXHTMLElementID).off('mouseup', '.ns1blankspaceLastChild');
+							$('#' + sXHTMLElementID).on('mouseup', '.ns1blankspaceLastChild', function(event)
+							{
+								sLastChildElementID = event.target.id;
+								fOnLastChild(
+								{
+									xhtmlElementID: sLastChildElementID,
+									id: $(this).attr('data-id')
+								});
+							});
+						}	
 
 						ns1blankspace.format.initStatus = 1;
 					}	
@@ -683,7 +693,7 @@ ns1blankspace.format.tree =
 
 								if (oDataBranchChild)
 								{
-									aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-tree-type="1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '">' +
+									aHTML.push('<tr id="' + sXHTMLElementID + '_' + i + '"><td id="' + sXHTMLElementID + '_' + i + '-1" data-tree-type="1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '">' +
 												this.title +
 												'<br /><span class="ns1blankspaceSub ns1blankspaceTreeSubContext">' +
 												'</td>' +
@@ -695,7 +705,7 @@ ns1blankspace.format.tree =
 								}
 								else
 								{
-									aHTML.push('<tr><td id="' + sXHTMLElementID + '_' + i + '-1" data-tree-type="1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '" >' +
+									aHTML.push('<tr id="' + sXHTMLElementID + '_' + i + '"><td id="' + sXHTMLElementID + '_' + i + '-1" data-tree-type="1" data-id="' + this.id + '" class="' + sParentClass + 'ns1blankspaceTreeColumn1' + sClass + '" >' +
 												this.title +
 												'<br /><span class="ns1blankspaceSub ns1blankspaceTreeSubContext">' +
 												'</td>' +
@@ -710,9 +720,6 @@ ns1blankspace.format.tree =
 							aHTML.push('</table>');
 
 							$('#' + sXHTMLElementID).next("td").html(aHTML.join(''));
-
-							//$('td.ns1blankspaceChild').click(function() {alert(this.id)});
-							//.unbind('click')
 						}	
 					}
 					else

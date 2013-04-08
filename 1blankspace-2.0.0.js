@@ -2629,6 +2629,8 @@ ns1blankspace.container =
 						if (oParam.functionBind != undefined) {sFunctionBind = oParam.functionBind}
 						if (oParam.offsetTop != undefined) {iOffsetTop = oParam.offsetTop}
 						if (oParam.offsetLeft != undefined) {iOffsetLeft = oParam.offsetLeft}
+						if (oParam.topOffset != undefined) {iOffsetTop = oParam.topOffset}
+						if (oParam.leftOffset != undefined) {iOffsetLeft = oParam.leftOffset}
 						if (oParam.forceShow != undefined) {bForceShow = oParam.forceShow}
 						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
 					}
@@ -2644,6 +2646,7 @@ ns1blankspace.container =
 						{
 							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+							return false;
 						}
 						else
 						{
@@ -2657,6 +2660,8 @@ ns1blankspace.container =
 
 							if (sFunctionBind != undefined)
 								{eval(sFunctionBind)}
+
+							return true;
 						}
 					}	
 				},
@@ -2680,6 +2685,8 @@ ns1blankspace.container =
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 						if (oParam.leftOffset != undefined) {iLeftOffset = oParam.leftOffset}
 						if (oParam.topOffset != undefined) {iTopOffset = oParam.topOffset}
+						if (oParam.offsetLeft != undefined) {iLeftOffset = oParam.offsetLeft}
+						if (oParam.offsetTop != undefined) {iTopOffset = oParam.offsetTop}
 						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
 					}
 					
