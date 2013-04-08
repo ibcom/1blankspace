@@ -674,7 +674,6 @@ ns1blankspace.financial.invoice =
 											{
 												subject: ns1blankspace.objectContextData.reference,
 												message: ns1blankspace.objectContextData.xhtml,
-												to: 'mark.byers@ibcom.biz',
 												id: ns1blankspace.objectContextData.contactpersonsentto,
 												object: 5,
 												objectContext: ns1blankspace.objectContext
