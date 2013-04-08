@@ -1237,6 +1237,11 @@ ns1blankspace.financial.profitLoss =
 							oParam.branchDetailName = 'total';
 							oParam.xhtmlElementID = 'ns1blankspacePLColumn2';
 							oParam.xhtmlElementContext = 'PL';
+							oParam.startDate = oResponse.startdate;
+							oParam.endDate = oResponse.enddate;
+
+							if ($('#ns1blankspacePLStartDate').val() == '') {$('#ns1blankspacePLStartDate').val(oResponse.startdate)}
+							if ($('#ns1blankspacePLEndDate').val() == '') {$('#ns1blankspacePLEndDate').val(oResponse.enddate)}
 
 							oParam.dataRoot =
 							[
@@ -1423,6 +1428,10 @@ ns1blankspace.financial.balanceSheet =
 							oParam.dataBranch = oResponse.data.rows;
 							oParam.xhtmlElementID = 'ns1blankspaceBSColumn2';
 							oParam.xhtmlElementContext = 'BS';
+							oParam.endDate = oResponse.enddate;
+							oParam.onLeaveClick = ns1blankspace.financial.balanceSheet.transactions;
+
+							if ($('#ns1blankspaceBSEndDate').val() == '') {$('#ns1blankspaceBSEndDate').val(oResponse.enddate)}
 
 							oParam.dataRoot =
 							[

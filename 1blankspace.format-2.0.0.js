@@ -530,26 +530,30 @@ ns1blankspace.format.tree =
 
 						ns1blankspace.format.tree.root(oParam);
 
-						//if (ns1blankspace.format.initStatus == undefined)
-						//{
-							$('#' + sXHTMLElementID).off('mouseup', '.ns1blankspaceParent');
-							$('#' + sXHTMLElementID).on('mouseup', '.ns1blankspaceParent', function(event)
-							{
-								oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
-								ns1blankspace.format.tree.branch(oParam);
-							});
+						$('#' + sXHTMLElementID).off('mouseup', '.ns1blankspaceParent');
+						$('#' + sXHTMLElementID).on('mouseup', '.ns1blankspaceParent', function(event)
+						{
+							oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
+							ns1blankspace.format.tree.branch(oParam);
+						});
 
-							$('#' + sXHTMLElementID).off('mouseup', '.ns1blankspaceRoot');
-							$('#' + sXHTMLElementID).on('mouseup', '.ns1blankspaceRoot', function(event)
-							{
-								oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
-								oParam.shaded = true;
-								ns1blankspace.format.tree.branch(oParam);
-							});
+						$('#' + sXHTMLElementID).off('mouseup', '.ns1blankspaceRoot');
+						$('#' + sXHTMLElementID).on('mouseup', '.ns1blankspaceRoot', function(event)
+						{
+							oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
+							oParam.shaded = true;
+							ns1blankspace.format.tree.branch(oParam);
+						});
 
-							ns1blankspace.format.initStatus = 1;
-						}	
-					//}
+						$('#' + sXHTMLElementID).off('mouseup', '.ns1blankspaceLastChild');
+						$('#' + sXHTMLElementID).on('mouseup', '.ns1blankspaceLastChild', function(event)
+						{
+							oParam.xhtmlElementID = (event.target.id ? event.target.id : event.target.parentElement.id);
+							alert(oParam.xhtmlElementID);
+						});
+
+						ns1blankspace.format.initStatus = 1;
+					}	
 				},
 				
 	root: 	function(oParam)
@@ -673,7 +677,7 @@ ns1blankspace.format.tree =
 								}
 
 								var oDataTreeHasChild = $.grep(oDataTree, function (a) {return parseInt(a.parentaccount) == parseInt(k.id);})[0]
-								if (oDataTreeHasChild) {sParentClass = 'ns1blankspaceParent ' } else {sParentClass = ''}
+								if (oDataTreeHasChild) {sParentClass = 'ns1blankspaceParent ' } else {sParentClass = 'ns1blankspaceLastChild '}
 
 								var oDataBranchChild = $.grep(oDataBranch, function (a) {return parseInt(a.financialaccount) == parseInt(k.id);})[0]
 
@@ -706,6 +710,9 @@ ns1blankspace.format.tree =
 							aHTML.push('</table>');
 
 							$('#' + sXHTMLElementID).next("td").html(aHTML.join(''));
+
+							//$('td.ns1blankspaceChild').click(function() {alert(this.id)});
+							//.unbind('click')
 						}	
 					}
 					else

@@ -1728,13 +1728,20 @@ ns1blankspace.control =
 
 												if (ns1blankspace.space == ns1blankspace.user.space)
 												{	
-													$.ajax(
-													{
-														type: 'GET',
-														url: ns1blankspace.util.endpointURI('CORE_SPACE_SEARCH'),
-														dataType: 'json',
-														success: function(data) {ns1blankspace.control.spaces.show(oElement, data)}
-													});
+													var oSearch = new AdvancedSearch();
+													oSearch.method = 'CORE_SPACE_SEARCH';
+													oSearch.addField('space,unrestrictedaccess');
+													oSearch.sort('space', 'asc');
+													oSearch.rows = 15;
+													oSearch.getResults(function(data) {ns1blankspace.control.spaces.show(oElement, data)});
+
+													//$.ajax(
+													//{
+													//	type: 'GET',
+													//	url: ns1blankspace.util.endpointURI('CORE_SPACE_SEARCH'),
+													//	dataType: 'json',
+													//	success: function(data) {ns1blankspace.control.spaces.show(oElement, data)}
+													//});
 												}
 												else
 												{

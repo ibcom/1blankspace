@@ -524,6 +524,11 @@ td.ns1blankspaceParent
 	color: #666666;
 }
 
+td.ns1blankspaceLastChild
+{
+	cursor: pointer;
+}
+
 td.ns1blankspaceRoot
 {
 	cursor: pointer;
