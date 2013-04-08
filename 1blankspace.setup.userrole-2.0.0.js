@@ -619,7 +619,7 @@ ns1blankspace.setup.userRole =
 
 							$('#ns1blankspaceUserAccessMethods td.ns1blankspaceRowSelect').click(function()
 							{
-								$.extend(true, oParam, {step: 4, xhtmlElementID: event.target.id});
+								$.extend(true, oParam, {step: 4, xhtmlElementID: this.id});
 								ns1blankspace.setup.userRole.access(oParam);
 							})
 						}
