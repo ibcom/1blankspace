@@ -1730,18 +1730,12 @@ ns1blankspace.control =
 												{	
 													var oSearch = new AdvancedSearch();
 													oSearch.method = 'CORE_SPACE_SEARCH';
-													oSearch.addField('space,unrestrictedaccess');
+													oSearch.addField('space,spacetext,unrestrictedaccess');
 													oSearch.sort('space', 'asc');
 													oSearch.rows = 15;
 													oSearch.getResults(function(data) {ns1blankspace.control.spaces.show(oElement, data)});
 
-													//$.ajax(
-													//{
-													//	type: 'GET',
-													//	url: ns1blankspace.util.endpointURI('CORE_SPACE_SEARCH'),
-													//	dataType: 'json',
-													//	success: function(data) {ns1blankspace.control.spaces.show(oElement, data)}
-													//});
+													//Add: space.role.RoleText to get roles
 												}
 												else
 												{
@@ -1812,7 +1806,7 @@ ns1blankspace.control =
 											{
 												aHTML.push('<tr>' +
 																'<td id="ns1blankspaceControlSpaceSwitch-' + this.id + '" class="ns1blankspaceRowSelect">' +
-																this.space +
+																this.spacetext +
 																'</td></tr>');
 											});			
 															
