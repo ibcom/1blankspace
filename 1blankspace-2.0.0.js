@@ -1812,8 +1812,10 @@ ns1blankspace.logOff = function ()
 						{
 							if (!ns1blankspace.debug.enabled)
 							{
-								ns1blankspace.inputDetected = false;
-								ns1blankspace.refresh();
+								//ns1blankspace.inputDetected = false;
+								//ns1blankspace.refresh();
+								ns1blankspace.app.init();
+								ns1blankspace.app.start();
 							}
 						}
 					})	
@@ -1837,7 +1839,7 @@ ns1blankspace.logOut = function ()
 
 ns1blankspace.refresh = function ()
 				{
-					document.location.reload(true);
+					document.location.reload(false);
 				}
 
 ns1blankspace.history.control =
