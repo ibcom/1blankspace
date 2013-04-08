@@ -1318,10 +1318,37 @@ ns1blankspace.financial.profitLoss =
 								});
 							}
 							
+							oParam = ns1blankspace.util.setParam(oParam, 'onLastChild', ns1blankspace.financial.profitLoss.transactions);
 							ns1blankspace.format.tree.init(oParam);
 						}	
 					}	
-				}
+				},
+
+	transactions:	
+				function (oParam, oResponse)
+		 		{
+		 			var iFinancialAccount = ns1blankspace.util.getParam(oParam, 'id').value;
+		 			var aXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {split: '-'}).values;
+		 			var sXHTMLElementID = aXHTMLElementID[0] + '-' + aXHTMLElementID[1];
+		 			var oXHTMLElement = $('#' + sXHTMLElementID);
+
+	 				if (ns1blankspace.container.show(
+	 				{
+	 					xhtmlElement: oXHTMLElement,
+	 					topOffset: 1,
+	 					leftOffset: 3,
+	 					xhtml: '<div id="ns1blankspaceFinancialTransactions" style="background-color:#F3F3F3; width:395px; padding:6px; opacity:0.95; font-size:0.75em; border-style:solid; border-width:4px; border-color:white ;">' + ns1blankspace.xhtml.loadingSmall + '</div>',
+	 					setWidth: true
+	 				}))
+	 				{	
+		 				ns1blankspace.financial.transactions.show(
+		 				{
+		 					xhtmlElementID: 'ns1blankspaceFinancialTransactions',
+		 					financialAccount: iFinancialAccount,
+		 					setWidth: true
+		 				});
+		 			}	
+	 			}			
 }
 
 ns1blankspace.financial.balanceSheet =
@@ -1462,14 +1489,16 @@ ns1blankspace.financial.balanceSheet =
 				function (oParam, oResponse)
 		 		{
 		 			var iFinancialAccount = ns1blankspace.util.getParam(oParam, 'id').value;
-		 			var oXHTMLElement = $('#' + ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value).parent();
+		 			var aXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {split: '-'}).values;
+		 			var sXHTMLElementID = aXHTMLElementID[0] + '-' + aXHTMLElementID[1];
+		 			var oXHTMLElement = $('#' + sXHTMLElementID);
 
 	 				if (ns1blankspace.container.show(
 	 				{
 	 					xhtmlElement: oXHTMLElement,
 	 					topOffset: 1,
 	 					leftOffset: 3,
-	 					xhtml: '<div id="ns1blankspaceFinancialTransactions" style="background-color:#F3F3F3; width: 395px; padding:4px; opacity: 0.95; font-size:0.75em;">' + ns1blankspace.xhtml.loadingSmall + '</div>',
+	 					xhtml: '<div id="ns1blankspaceFinancialTransactions" style="background-color:#F3F3F3; width:395px; padding:6px; opacity: 0.95; font-size:0.75em; border-style:solid; border-width:4px; border-color:white ;">' + ns1blankspace.xhtml.loadingSmall + '</div>',
 	 					setWidth: true
 	 				}))
 	 				{	
