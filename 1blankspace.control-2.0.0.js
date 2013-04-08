@@ -1865,14 +1865,13 @@ ns1blankspace.control =
 												sSearchText = $('#' + sXHTMLElementID).val();
 											}	
 											
-											$.ajax(
-											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('CORE_SPACE_SEARCH'),
-												data: 'rows=20&spacetext=' + ns1blankspace.util.fs(sSearchText),
-												dataType: 'json',
-												success: function(data) {ns1blankspace.control.spaces.process(sXHTMLElementID, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'CORE_SPACE_SEARCH';
+											oSearch.addField('space,spacetext,unrestrictedaccess');
+											oSearch.addFilter('spacetext', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.sort('space', 'asc');
+											oSearch.rows = 15;
+											oSearch.getResults(function(data) {ns1blankspace.control.spaces.process(sXHTMLElementID, data)});
 										}
 										else
 										{	
@@ -1882,7 +1881,7 @@ ns1blankspace.control =
 											{
 												aHTML.push('<tr>' +
 																'<td id="ns1blankspaceControlSpaceSwitch-' + this.id + '" class="ns1blankspaceRowSelect">' +
-																this.space +
+																this.spacetext +
 																'</td></tr>');
 											});		
 															
