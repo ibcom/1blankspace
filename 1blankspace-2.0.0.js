@@ -3385,6 +3385,7 @@ ns1blankspace.util =
 										type: 'GET',
 										url: ns1blankspace.xhtml.templates.source[sTemplate],
 										dataType: 'text',
+										global: false,
 										success: function(data)
 										{
 											ns1blankspace.xhtml.templates[sTemplate] = data;

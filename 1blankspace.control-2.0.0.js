@@ -590,9 +590,41 @@ ns1blankspace.control =
 							var oMethods = $.grep(ns1blankspace.user.methods, function (a) {return (a.accessmethodtext).indexOf(k.endpoint) != -1;})	
 							if (oMethods.length == 0) {this.show = false};
 						});
+
+						$.extend(true, oParam, {step: 4});
+						ns1blankspace.control.init(oParam)
 					}
 
 					else if (iStep == 4)
+					{
+						$.extend(true, oParam, {step: 5});
+
+						if (mydigitalstructureSiteId)
+						{
+							$.ajax(
+							{
+								type: 'GET',
+								url: '/site/' + mydigitalstructureSiteId + '/1blankspace.control.json',
+								dataType: 'json',
+								global: false,
+								success: function(data)
+								{
+									ns1blankspace.data.control = data.control;
+									ns1blankspace.control.init(oParam)
+								},
+								error: function(data)
+								{
+									ns1blankspace.control.init(oParam)
+								}
+							});
+						}
+						else
+						{
+							ns1blankspace.control.init(oParam)
+						}
+					}
+
+					else if (iStep == 5)
 					{
 						if (ns1blankspace.user.systemAdmin) {ns1blankspace.setupShow = true};
 
