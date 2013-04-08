@@ -1731,7 +1731,7 @@ ns1blankspace.control =
 													var oSearch = new AdvancedSearch();
 													oSearch.method = 'CORE_SPACE_SEARCH';
 													oSearch.addField('space,spacetext,unrestrictedaccess');
-													oSearch.sort('space', 'asc');
+													oSearch.sort('spacetext', 'asc');
 													oSearch.rows = 15;
 													oSearch.getResults(function(data) {ns1blankspace.control.spaces.show(oElement, data)});
 
@@ -1869,7 +1869,7 @@ ns1blankspace.control =
 											oSearch.method = 'CORE_SPACE_SEARCH';
 											oSearch.addField('space,spacetext,unrestrictedaccess');
 											oSearch.addFilter('spacetext', 'TEXT_IS_LIKE', sSearchText);
-											oSearch.sort('space', 'asc');
+											oSearch.sort('spacetext', 'asc');
 											oSearch.rows = 15;
 											oSearch.getResults(function(data) {ns1blankspace.control.spaces.process(sXHTMLElementID, data)});
 										}
