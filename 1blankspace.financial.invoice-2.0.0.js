@@ -634,6 +634,7 @@ ns1blankspace.financial.invoice =
 	email: 		{
 					init: 		function (oParam)
 								{
+									ns1blankspace.status.working('Emailing...');
 									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.send);
 									ns1blankspace.util.initTemplate(oParam);
 								},
