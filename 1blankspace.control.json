@@ -1,11 +1,13 @@
 {
 	"control":
 	[
-		"reports":
-		[
-			{
-				"name": "test"
-			}
-		]	
+		{
+			"reports":
+			[
+				{
+					"name": "test"
+				}
+			]
+		}	
 	]
 }
