@@ -673,9 +673,9 @@ ns1blankspace.financial.invoice =
 											{
 												subject: ns1blankspace.objectContextData.reference,
 												message: ns1blankspace.objectContextData.xhtml,
-												to: ns1blankspace.objectContextData.contactpersonsentto,
+												id: ns1blankspace.objectContextData.contactpersonsentto,
 												object: 5,
-												objectContext: ns1blankspace.objectcontext
+												objectContext: ns1blankspace.objectContext
 											}
 
 											$.ajax(
@@ -693,7 +693,7 @@ ns1blankspace.financial.invoice =
 														{
 															type: 'POST',
 															url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
-															data: 'sent=Y&id=' + ns1blankspace.objectcontext,
+															data: 'sent=Y&id=' + ns1blankspace.objectContext,
 															dataType: 'json',
 															global: false,
 															success: function (data)

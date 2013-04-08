@@ -975,7 +975,7 @@ ns1blankspace.financial.debtors =
 												{
 													subject: 'Statement',
 													message: oStatement.xhtml,
-													to: oStatement.contactperson,
+													id: oStatement.contactperson,
 													object: (oStatement.debtortype=='P'?32:12),
 													objectContext: oStatement.id
 												}
