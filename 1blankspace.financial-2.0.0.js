@@ -1610,7 +1610,7 @@ ns1blankspace.financial.accounts =
 						
 						$('#ns1blankspaceAccountColumnCategory :radio').click(function()
 						{
-							var aID = (event.target.id).split('-');
+							var aID = (this.id).split('-');
 							$.extend(true, oParam, {step: 2, type: parseInt(aID[1])});
 							ns1blankspace.financial.accounts.show(oParam);
 						});
@@ -1687,7 +1687,7 @@ ns1blankspace.financial.accounts =
 								.css("width", "100%");
 								
 								$('.ns1blankspaceFinancialAccountRowSelect').click(function() {
-										var aID = (event.target.id).split('-');
+										var aID = (this.id).split('-');
 										$.extend(true, oParam, {step: 3, financialAccount: parseInt(aID[1])});
 										ns1blankspace.financial.accounts.show(oParam);
 								});
@@ -1809,7 +1809,7 @@ ns1blankspace.financial.unallocated =
 						
 						$('#ns1blankspaceUnallocatedColumnType :radio').click(function()
 						{
-							var aID = (event.target.id).split('-');
+							var aID = (this.id).split('-');
 							$.extend(true, oParam, {step: 2, type: parseInt(aID[1])});
 							ns1blankspace.financial.unallocated.show(oParam);
 						});
@@ -2118,7 +2118,7 @@ ns1blankspace.financial.unallocated =
 
 							ns1blankspace.status.working();
 
-							var sID = event.target.id;
+							var sID = this.id;
 							var aID = sID.split('-');
 
 							var sData = 'id=' + ns1blankspace.util.fs(aID[1]);
@@ -2198,7 +2198,7 @@ ns1blankspace.financial.invoicing =
 						
 						$('#ns1blankspaceInvoicingOption :radio').click(function()
 						{
-							var aID = (event.target.id).split('-');
+							var aID = (this.id).split('-');
 							
 							if (aID[1] == 1)
 							{	
