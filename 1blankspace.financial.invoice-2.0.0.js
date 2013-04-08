@@ -647,7 +647,7 @@ ns1blankspace.financial.invoice =
 										oSearch.method = 'FINANCIAL_ITEM_SEARCH';
 										oSearch.addField('financialaccounttext,tax,issuedamount,amount,description,object');
 										oSearch.addFilter('object', 'EQUAL_TO', 5);
-										oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectcontext);
+										oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('id', 'asc');
 										oSearch.getResults(function(data)
 										{
@@ -660,10 +660,11 @@ ns1blankspace.financial.invoice =
 										{
 											object: 5,
 											xhtmlTemplate: ns1blankspace.xhtml.templates['invoice'],
+											objectData: ns1blankspace.objectContextData,
 											objectOtherData: oResponse.data.rows
 										});
 
-										if (ns1blankspace.objectContextData.xhtml = '')
+										if (ns1blankspace.objectContextData.xhtml == '')
 										{
 											ns1blankspace.status.error('Nothing to email');
 										}	
@@ -673,6 +674,7 @@ ns1blankspace.financial.invoice =
 											{
 												subject: ns1blankspace.objectContextData.reference,
 												message: ns1blankspace.objectContextData.xhtml,
+												to: 'mark.byers@ibcom.biz',
 												id: ns1blankspace.objectContextData.contactpersonsentto,
 												object: 5,
 												objectContext: ns1blankspace.objectContext
