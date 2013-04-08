@@ -1412,7 +1412,7 @@ ns1blankspace.financial.balanceSheet =
 							}
 						})
 						.click(function() {
-							ns1blankspace.financial.profitLoss.show(
+							ns1blankspace.financial.balanceSheet.show(
 							{
 								startDate: $('#ns1blankspaceBSStartDate').val(),
 								endDate: $('#ns1blankspaceBSEndDate').val()
