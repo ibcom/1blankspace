@@ -16,7 +16,7 @@ ns1blankspace.financial.init = function (oParam)
 
 						ns1blankspace.app.reset();
 
-						ns1blankspace.object = -1;
+						ns1blankspace.object = -2;
 						ns1blankspace.objectName = 'financial';
 						ns1blankspace.viewName = 'Financials';
 
@@ -996,7 +996,7 @@ ns1blankspace.financial.debtors =
 														if (data.status == 'OK')
 														{
 															$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).html('Emailed');
-															oStatement.response = data;
+															//oStatement.response = data;
 															oParam.dataIndex = iDataIndex + 1;
 															oParam.step = 2;  // NEXT INVOICE
 															ns1blankspace.financial.debtors.email(oParam);
@@ -2698,7 +2698,7 @@ ns1blankspace.financial.invoicing =
 															success: function (data)
 															{
 																$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('Emailed');
-																oInvoice.response = data;
+																//oInvoice.response = data;
 																oParam.dataIndex = iDataIndex + 1;
 																oParam.step = 2;  // NEXT INVOICE
 																ns1blankspace.financial.invoicing.unsent.email(oParam);
@@ -2985,7 +2985,7 @@ ns1blankspace.financial.invoicing =
 													{
 														$('#ns1blankspaceCreate_sentdate-' + oData.source).html('')
 														$('#ns1blankspaceCreate_view-' + oData.source).attr('data-id', data.id)
-														oData.response = data;
+														//oData.response = data;
 														oData.id = data.id;
 
 														oParam.step = 3;  // LINE ITEMS

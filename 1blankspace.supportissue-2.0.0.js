@@ -16,7 +16,7 @@ ns1blankspace.supportIssue =
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
 					}
 
-					ns1blankspace.object = -1;
+					ns1blankspace.object = -8;
 					ns1blankspace.objectName = 'supportIssue';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;

@@ -1861,7 +1861,7 @@ ns1blankspace.history.control =
 					
 					$.each(ns1blankspace.history.list, function(index, v) 
 					{ 
-						if (iObject)
+						if (iObject && v)
 						{	
 							if ((v.object === iObject) && (v.objectContext === iObjectContext))
 							{

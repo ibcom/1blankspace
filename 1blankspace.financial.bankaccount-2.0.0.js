@@ -22,7 +22,7 @@ ns1blankspace.financial.bankAccount =
 						if (oParam.id != undefined) {iID = oParam.id}
 					}
 
-					ns1blankspace.object = -1;
+					ns1blankspace.object = -3;
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectParentName = 'financial';
 					ns1blankspace.objectName = 'bankAccount';

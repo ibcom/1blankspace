@@ -24,7 +24,7 @@ $.extend(true, ns1blankspace.setup,
 
 					ns1blankspace.app.reset();
 
-					ns1blankspace.object = -1;
+					ns1blankspace.object = -7;
 					ns1blankspace.objectParentName = undefined;
 					ns1blankspace.objectName = 'setup';
 					ns1blankspace.objectContextData = undefined;

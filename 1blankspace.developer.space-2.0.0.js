@@ -13,7 +13,7 @@ ns1blankspace.developer.space =
 				{
 					ns1blankspace.app.reset();
 
-					ns1blankspace.object = -1;
+					ns1blankspace.object = -5;
 					ns1blankspace.objectParentName = 'developer';
 					ns1blankspace.objectName = 'space';
 					ns1blankspace.objectContextData = undefined;

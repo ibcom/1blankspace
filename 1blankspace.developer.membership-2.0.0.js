@@ -13,7 +13,7 @@ ns1blankspace.developer.membership =
 				{
 					ns1blankspace.app.reset();
 
-					ns1blankspace.object = -1;
+					ns1blankspace.object = -6;
 					ns1blankspace.objectParentName = 'developer';
 					ns1blankspace.objectName = 'membership';
 					ns1blankspace.objectContextData = undefined;
