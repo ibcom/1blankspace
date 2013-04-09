@@ -4,7 +4,7 @@
  * http://1blankspace.com/license
  * 01 FEB 2010
  */
- 
+
 ns1blankspace.financial.init = function (oParam)
 					{
 						var bInitialised = false;
@@ -1949,7 +1949,7 @@ ns1blankspace.financial.unallocated =
 								else if (iType == 2)
 								{
 									oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
-									oSearch.addField('reference,receivedate,receipt.lineitem.amount,receipt.lineitem.description,receipt.lineitem.id');
+									oSearch.addField('reference,receiveddate,receipt.lineitem.amount,receipt.lineitem.description,receipt.lineitem.id');
 									oSearch.addFilter('receipt.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)

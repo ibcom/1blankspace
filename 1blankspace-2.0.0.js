@@ -1859,19 +1859,22 @@ ns1blankspace.history.control =
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 					}
 					
-					$.each(ns1blankspace.history.list, function(index) 
+					$.each(ns1blankspace.history.list, function(index, v) 
 					{ 
-						if ((this.object === iObject) && (this.objectContext === iObjectContext))
-						{
-							if (sFunctionDefault != undefined)
+						if (iObject)
+						{	
+							if ((v.object === iObject) && (v.objectContext === iObjectContext))
 							{
-								sXHTMLElementID = this.xhtmlElementID
+								if (sFunctionDefault != undefined)
+								{
+									sXHTMLElementID = v.xhtmlElementID
+								}
+								else
+								{
+									ns1blankspace.history.list.splice(index,1)
+								}	
 							}
-							else
-							{
-								ns1blankspace.history.list.splice(index,1)
-							}	
-						}
+						}	
 					});
 					
 					if (sFunctionDefault === undefined)
