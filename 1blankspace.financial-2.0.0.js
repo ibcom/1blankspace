@@ -524,9 +524,8 @@ ns1blankspace.financial.debtors =
 
 						$.ajax(
 						{
-							type: 'GET',
+							type: 'POST',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_DEBTOR_SEARCH'),
-							global: false,
 							dataType: 'json',
 							success: function(data)
 							{
@@ -1028,9 +1027,8 @@ ns1blankspace.financial.creditors =
 					{				
 						$.ajax(
 						{
-							type: 'GET',
+							type: 'POST',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_CREDITOR_SEARCH'),
-							global: false,
 							dataType: 'json',
 							success: function(data) {ns1blankspace.financial.creditors.show(oParam, data)}
 						});
