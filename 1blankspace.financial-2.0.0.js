@@ -528,7 +528,10 @@ ns1blankspace.financial.debtors =
 							url: ns1blankspace.util.endpointURI('FINANCIAL_DEBTOR_SEARCH'),
 							global: false,
 							dataType: 'json',
-							success: function(data) {ns1blankspace.financial.debtors.show(oParam, data)}
+							success: function(data)
+							{
+								ns1blankspace.financial.debtors.show(oParam, data);
+							}
 						});			
 					}
 					else
@@ -793,6 +796,7 @@ ns1blankspace.financial.debtors =
 											}	
 											
 											oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
+											oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.today().toString("dd MMM yyyy"));
 
 											oSearch.sort('sentdate', 'asc');
 											oSearch.getResults(function(oResponse)
