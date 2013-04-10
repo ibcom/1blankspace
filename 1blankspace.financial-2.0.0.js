@@ -3490,7 +3490,7 @@ ns1blankspace.financial.item =
 						
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
-						aHTML.push('<tr><td style="padding-top:5px;" id="ns1blankspaceItemAddSearchResults"><span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all.</span></td></tr>');
+						aHTML.push('<tr><td style="padding-top:5px;" id="ns1blankspaceItemAddSearchResults"><span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all or<br />start typing part of the account title.</span></td></tr>');
 														
 						aHTML.push('</table>');		
 						
@@ -3527,17 +3527,20 @@ ns1blankspace.financial.item =
 							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
 					        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.item.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
 						});
-
-						$('#ns1blankspaceItemAccount2').keypress(function(e)
-						{
-						    if (e.which === 13)
-						    {
-						    	oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
-						        ns1blankspace.financial.item.edit(oParam);
-						    }
-						});
-							
+		
 						$('#ns1blankspaceItemAmount').focus();
+
+						var iFinancialAccountType = (iType==1?2:1);
+						var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
+						{ 
+							return (a.type == iFinancialAccountType && a.postable == 'Y')
+						});
+
+						if (oData.length < 21)
+						{	
+							oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
+							ns1blankspace.financial.item.edit(oParam, oData);
+						}	
 					}
 
 					if (iStep == 2)
