@@ -35,8 +35,8 @@ ns1blankspace.financial.reportSummary =
 		],
 	"payroll":
 		[
-			{code: "w1", total: false, title: "Total salary, wages & other payments"},
-			{code: "w2", total: false, title: "Amount withheld from payments shown at W1"}
+			{code: "w1", total: true, title: "Total salary, wages & other payments"},
+			{code: "w2", total: true, title: "Amount withheld from payments shown at W1"}
 		],
 	"instalments":
 		[
@@ -813,8 +813,8 @@ ns1blankspace.financial.tax =
 															
 													if (oRow.transactiondate)
 													{					
-														aHTML.push('<td id="ns1blankspaceReportItems_details-' + oRow.parentid + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceRowSelect11">' +
-																			oRow.transactiondate + '<br />' + oRow.description + '</td>');
+														aHTML.push('<td id="ns1blankspaceReportItems_details-' + oRow.parentid + '" class="ns1blankspaceRow">' +
+																			oRow.transactiondate + '<br /><span class="ns1blankspaceSub">' + oRow.description + '</span></td>');
 												
 													}
 													else if (oRow.reference)
@@ -862,6 +862,42 @@ ns1blankspace.financial.tax =
 									}
 									else
 									{
+										var aHTML = [];
+										var sField;
+											
+										aHTML.push('<table id="ns1blankspaceTaxReportType" class="ns1blankspace" style="width: 200px;">');
+										
+										$.each(ns1blankspace.financial.reportSummary["payroll"], function()
+										{
+											sField = (this.code).toUpperCase();
+											
+											aHTML.push('<tr><td colspan=2 id="ns1blankspaceReportType_title-' + sField + '" class="ns1blankspaceSub" style="font-size:0.75em;">' +
+															this.title + '</td></tr>');
+
+											aHTML.push('<tr class="ns1blankspaceRow">');
+															
+											if (this.total)
+											{		
+												aHTML.push('<td id="ns1blankspaceReportType_type-' + sField + '" class="ns1blankspaceRow" style="width:150px;">' +
+															sField + '</td>');
+
+												aHTML.push('<td id="ns1blankspaceReportType_amount-' + sField + '" class="ns1blankspaceRow" style="width:90px;text-align:right;">' +
+															'' + (ns1blankspace.objectContextData['' + this.code]).parseCurrency().formatMoney(0, ".", ",") + '</td>');
+											}
+											else
+											{
+												aHTML.push('<td id="ns1blankspaceReportType_type-' + sField + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceType" style="width:150px;">' +
+															sField + '</td>');
+
+												aHTML.push('<td id="ns1blankspaceReportType_amount-' + sField + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceType" style="width:90px;text-align:right;">' +
+															'' + (ns1blankspace.objectContextData['' + this.code]).parseCurrency().formatMoney(0, ".", ",") + '</td>');
+											}	
+																																												
+											aHTML.push('</tr>');
+										});
+
+										aHTML.push('</table>');
+
 										$('#ns1blankspaceMainPayroll').html(aHTML.join(''));
 									}				
 								}
