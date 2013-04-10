@@ -5,6 +5,50 @@
  * 01 FEB 2010
  */
 
+ns1blankspace.financial.reportSummary =
+{
+	"revenue":
+		[
+			{code: "g1", total: false, title: "Total sales income & other sales"},
+			{code: "g2", total: false, title: "Exports"},
+			{code: "g3", total: false, title: "Other GST-free sales"},
+			{code: "g4", total: false, title: "Input taxed sales"},
+			{code: "g5", total: true, title: "Total of GST-free and input taxed supplies"},
+			{code: "g6", total: true, title: "Total of taxable sales"},
+			{code: "g7", total: true, title: "Adjustments"},
+			{code: "g8", total: true, title: "Total of taxable sales after adjustments"},
+			{code: "g9", total: true, title: "GST Collected"}
+		],
+	"expense": 
+		[
+			{code: "g10", total: false, title: "Capital Acquisitions"},
+			{code: "g11", total: false, title: "Other acquisitions"},
+			{code: "g12", total: true, title: "Total of acquisitions"},
+			{code: "g13", total: false, title: "Acquisitions for making input taxed sales"},
+			{code: "g14", total: false, title: "Acquisitions with no GST in the price"},
+			{code: "g15", total: false, title: "Total of estimated private use of acquisitions + non income tax deductible acquisitions"},
+			{code: "g16", total: true, title: "Total of non-refundable acquisition"},
+			{code: "g17", total: true, title: "Total of refundable acquisitions"},
+			{code: "g18", total: true, title: "Adjustments"},
+			{code: "g19", total: true, title: "Total of refundable acquisitions after adjustments"},
+			{code: "g20", total: true, title: "GST Credits"}
+		],
+	"payroll":
+		[
+			{code: "w1", total: false, title: "Total salary, wages & other payments"},
+			{code: "w2", total: false, title: "Amount withheld from payments shown at W1"}
+		],
+	"instalments":
+		[
+			{code: "t1", total: false, title: "PAYG Instalment Income"},
+			{code: "t2", total: false, title: "Instalment Rate %"},
+			{code: "t3", total: false, title: "Varied % Rate"},
+			{code: "t7", total: false, title: "Nominated Value"},
+			{code: "t9", total: false, title: "Varied amount for period"},
+			{code: "t11", total: false, title: "Income Tax Instalment"}
+		]
+};
+
 ns1blankspace.financial.tax = 
 {
 	init: 		function (oParam)
@@ -535,7 +579,7 @@ ns1blankspace.financial.tax =
 										aHTML.push('<table class="ns1blankspaceContainer">');
 
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceTaxReportCategoryColumn" class="ns1blankspaceColumn1" style="width: 120px;padding-right:5px;font-size:0.875em;">' +
+														'<td id="ns1blankspaceTaxReportCategoryColumn" class="ns1blankspaceColumn1" style="width: 100px;padding-right:5px;font-size:0.875em;">' +
 														ns1blankspace.xhtml.loading + '</td>' +
 														'<td id="ns1blankspaceTaxReportTypeColumn" class="ns1blankspaceColumn2" style="width: 175px;padding-right:5px;"></td>' +
 														'<td id="ns1blankspaceTaxReportItemColumn" class="ns1blankspaceColumn2"></td>' +
@@ -547,11 +591,11 @@ ns1blankspace.financial.tax =
 													
 										var aHTML = [];
 										
-										aHTML.push('<div id="ns1blankspaceTaxCategoryColumn" style="width: 110px;margin-bottom:3px; font-size:0.75em;">');
+										aHTML.push('<div id="ns1blankspaceTaxCategoryColumn" style="width: 95px;margin-bottom:3px; font-size:0.75em;">');
 										aHTML.push('<input style="width: 115px;" type="radio" id="ns1blankspaceTaxCategoryColumn-revenue" name="radioCategory" checked="checked" />' +
-														'<label for="ns1blankspaceTaxCategoryColumn-revenue" style="width: 115px;">Sales (Collected)</label>');
+														'<label for="ns1blankspaceTaxCategoryColumn-revenue" style="width: 100px;">Sales (Collected)</label>');
 										aHTML.push('<input style="width: 115px;" type="radio" id="ns1blankspaceTaxCategoryColumn-expense" name="radioCategory" />' +
-														'<label for="ns1blankspaceTaxCategoryColumn-expense" style="width: 115px;">Purchases (Credits)</label>');
+														'<label for="ns1blankspaceTaxCategoryColumn-expense" style="width: 100px;">Purchases (Credits)</label>');
 										aHTML.push('</div>');
 
 										$('#ns1blankspaceTaxReportCategoryColumn').html(aHTML.join(''));			
@@ -572,48 +616,7 @@ ns1blankspace.financial.tax =
 								{	
 									var sCategory = "revenue";
 
-									ns1blankspace.financial.reportSummary = {
-										"revenue":
-											[
-												{code: "g1", total: false, title: "Total sales income & other sales"},
-												{code: "g2", total: false, title: "Exports"},
-												{code: "g3", total: false, title: "Other GST-free sales"},
-												{code: "g4", total: false, title: "Input taxed sales"},
-												{code: "g5", total: true, title: "Total of GST-free and input taxed supplies"},
-												{code: "g6", total: true, title: "Total of taxable sales"},
-												{code: "g7", total: true, title: "Adjustments"},
-												{code: "g8", total: true, title: "Total of taxable sales after adjustments"},
-												{code: "g9", total: true, title: "GST Collected"}
-											],
-										"expense": 
-											[
-												{code: "g10", total: false, title: "Capital Acquisitions"},
-												{code: "g11", total: true, title: "Other acquisitions"},
-												{code: "g12", total: true, title: "Total of acquisitions"},
-												{code: "g13", total: false, title: "Acquisitions for making input taxed sales"},
-												{code: "g14", total: false, title: "Acquisitions with no GST in the price"},
-												{code: "g15", total: false, title: "Total of estimated private use of acquisitions + non income tax deductible acquisitions"},
-												{code: "g16", total: true, title: "Total of non-refundable acquisition"},
-												{code: "g17", total: true, title: "Total of refundable acquisitions"},
-												{code: "g18", total: true, title: "Adjustments"},
-												{code: "g19", total: true, title: "Total of refundable acquisitions after adjustments"},
-												{code: "g20", total: true, title: "GST Credits"}
-											],
-										"payroll":
-											[
-												{code: "w1", total: false, title: "Total salary, wages & other payments"},
-												{code: "w2", total: false, title: "Amount withheld from payments shown at W1"}
-											],
-										"instalments":
-											[
-												{code: "t1", total: false, title: "PAYG Instalment Income"},
-												{code: "t2", total: false, title: "Instalment Rate %"},
-												{code: "t3", total: false, title: "Varied % Rate"},
-												{code: "t7", total: false, title: "Nominated Value"},
-												{code: "t9", total: false, title: "Varied amount for period"},
-												{code: "t11", total: false, title: "Income Tax Instalment"}
-											]
-									};
+									
 									
 									if (oParam != undefined)
 									{
@@ -625,7 +628,7 @@ ns1blankspace.financial.tax =
 									var aHTML = [];
 									var sField;
 										
-									aHTML.push('<table id="ns1blankspaceTaxReportType" class="ns1blankspace">');
+									aHTML.push('<table id="ns1blankspaceTaxReportType" class="ns1blankspace" style="border-left-style:solid; border-width:1px; border-color: #B8B8B8; padding-left:7px;">');
 									
 									$.each(ns1blankspace.financial.reportSummary[sCategory], function()
 									{
@@ -664,160 +667,184 @@ ns1blankspace.financial.tax =
 									$('.ns1blankspaceType').click(function()
 									{
 										var aID = (event.target.id).split('-');
-										ns1blankspace.financial.tax.vat.items({field: aID[1]});
+										ns1blankspace.financial.tax.vat.items.show({field: aID[1]});
 									});
 								},
 
-					items:		function (oParam, oResponse)
-								{
-									var iStep = 1;
-									var iType = 1;
-									var iSubType = 1;
-									var sField = 'G1';
-									
-									if (oParam != undefined)
-									{
-										if (oParam.step != undefined) {iStep = oParam.step}
-										if (oParam.type != undefined) {iType = oParam.type}
-										if (oParam.subType != undefined) {iSubType = oParam.subType}
-										if (oParam.field != undefined) {sField = oParam.field}
-									}
-									else
-									{
-										oParam = {};
-									}
-									
-									if (iStep == 1)
-									{
-										$.extend(true, oParam, {step: 2});
-										
-										var aHTML = [];
-										
-										aHTML.push('<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceTaxReportItemSubTypeColumn" class="ns1blankspaceColumn1" style="width:120px; padding-right:5px; font-size:0.75em;">' +
-													ns1blankspace.xhtml.loading + '</td>' +
-													'<td id="ns1blankspaceTaxReportItemsColumn" class="ns1blankspaceColumn2" style="width: 285px;padding-right:5px; font-size:0.875em;"></td>' +
-													'</tr>');
+					items:		{
+									show:		function (oParam, oResponse)
+												{
+													var iStep = 1;
+													var iType = 1;
+													var iSubType = 1;
+													var sField = 'G1';
+													
+													if (oParam != undefined)
+													{
+														if (oParam.step != undefined) {iStep = oParam.step}
+														if (oParam.type != undefined) {iType = oParam.type}
+														if (oParam.subType != undefined) {iSubType = oParam.subType}
+														if (oParam.field != undefined) {sField = oParam.field}
+													}
+													else
+													{
+														oParam = {};
+													}
+													
+													if (iStep == 1)
+													{
+														$.extend(true, oParam, {step: 2});
+														
+														var aHTML = [];
+														
+														aHTML.push('<tr class="ns1blankspaceContainer">' +
+																	'<td id="ns1blankspaceTaxReportItemSubTypeColumn" class="ns1blankspaceColumn1" style="width:120px; padding-right:5px; font-size:0.75em;">' +
+																	ns1blankspace.xhtml.loading + '</td>' +
+																	'<td id="ns1blankspaceTaxReportItemsColumn" class="ns1blankspaceColumn2" style="width: 285px;padding-right:5px; font-size:0.875em;"></td>' +
+																	'</tr>');
 
-										$('#ns1blankspaceTaxReportItemColumn').html(aHTML.join(''));
-												
-										var aHTML = [];
-
-										aHTML.push('<div id="ns1blankspaceTaxSubTypeColumn" style="width: 115px;margin-bottom:3px;">');
-									
-										aHTML.push('<input style="width: 115px;" type="radio" id="interfaceMainTaxSubTypeColumn-1" name="radioSubType" checked="checked" />' +
-														'<label for="interfaceMainTaxSubTypeColumn-1" style="width: 115px;">Standard</label>');
-									
-										aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-2" name="radioSubType" />' +
-														'<label for="interfaceMainTaxSubTypeColumn-2" style="width: 115px;">Credit Notes</label>');
-									
-										aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-3" name="radioSubType" />' +
-														'<label for="interfaceMainTaxSubTypeColumn-3" style="width: 115px;">General Jounals (+ve)</label>');
-									
-										aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-4" name="radioSubType" />' +
-														'<label for="interfaceMainTaxSubTypeColumn-4" style="width: 115px;">General Jounals (-ve)</label>');
-										
-										aHTML.push('</div>');
-
-										$('#ns1blankspaceTaxReportItemSubTypeColumn').html(aHTML.join(''));			
-										
-										$('#ns1blankspaceTaxSubTypeColumn').buttonset().css('font-size', '0.875em');
-											
-										$('#ns1blankspaceTaxSubTypeColumn :radio').click(function()
-										{
-											var aID = (event.target.id).split('-');
-											$.extend(true, oParam, {subType: aID[1], step: 2});
-											ns1blankspace.financial.tax.vat.items(oParam);	
-										});
-										
-										ns1blankspace.financial.tax.vat.items(oParam);
-									}
-									
-									if (iStep == 2)
-									{
-										oParam.step = 3;
-										
-										var sData = 'id=' + ns1blankspace.objectContext +
-													'&type=' + iType +
-													'&subtype=' + iSubType +
-													'&field=' + sField +
-													'&rows=200';
-										
-										$('#ns1blankspaceTaxReportItemsColumn').html(ns1blankspace.xhtml.loading);
-
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('FINANCIAL_TAX_REPORT_ITEM_SEARCH'),
-											data: sData,
-											dataType: 'json',
-											success: function(data) {
-												ns1blankspace.financial.tax.vat.items(oParam, data)
-											}
-										});
-									}
-									
-									if (iStep == 3)
-									{
-										var aHTML = [];
-
-										if (oResponse.data.rows.length == 0)
-										{
-											aHTML.push('<table class="ns1blankspace">' +
-															'<tr><td class="ns1blankspaceNothing">No items.</td></tr>' + 
-															'</table>');
-										}	
-										else
-										{	
-											aHTML.push('<table id="ns1blankspaceReportItems" class="ns1blankspace">' +
-													'<tr class="ns1blankspaceCaption">' +
-													'<td class="ns1blankspaceHeaderCaption">Details</td>' +
-													'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>' +
-													'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + ns1blankspace.option.taxVATCaption + '</td>' +
-													'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
-													'</tr>');
-
-											$.each(oResponse.data.rows, function()
-											{
-												aHTML.push('<tr class="ns1blankspaceRow">');
-											
-												if (iSubType == 1)
-												{					
-													aHTML.push('<td id="ns1blankspaceReportItems_details-' + this.parentid + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceRowSelect11">' +
-																		this.transactiondate + '<br />' + this.description + '</td>');
-											
-												}
-
-												if (iSubType == 2 || iSubType == 3 || iSubType == 4)
-												{					
-													aHTML.push('<td id="ns1blankspaceReportItems_reference-' + this.id + '" class="ns1blankspaceRow">' +
-																		this.reference + '</td>');
-											
-												}
-
-												aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">' +
-																		this.amount + '</td>');
-												
-												aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">' +
-																		this.tax + '</td>');
+														$('#ns1blankspaceTaxReportItemColumn').html(aHTML.join(''));
 																
-												aHTML.push('</tr>');
-											});
-											
-											aHTML.push('</table>');
-										}	
+														var aHTML = [];
 
-										$('#ns1blankspaceTaxReportItemsColumn').html(aHTML.join(''));
+														aHTML.push('<div id="ns1blankspaceTaxSubTypeColumn" style="width: 115px;margin-bottom:3px;">');
+													
+														aHTML.push('<input style="width: 115px;" type="radio" id="interfaceMainTaxSubTypeColumn-1" name="radioSubType" checked="checked" />' +
+																		'<label for="interfaceMainTaxSubTypeColumn-1" style="width: 115px;">Standard</label>');
+													
+														aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-2" name="radioSubType" />' +
+																		'<label for="interfaceMainTaxSubTypeColumn-2" style="width: 115px;">Credit Notes</label>');
+													
+														aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-3" name="radioSubType" />' +
+																		'<label for="interfaceMainTaxSubTypeColumn-3" style="width: 115px;">Jounals (+ve)</label>');
+													
+														aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-4" name="radioSubType" />' +
+																		'<label for="interfaceMainTaxSubTypeColumn-4" style="width: 115px;">Jounals (-ve)</label>');
+														
+														aHTML.push('</div>');
 
-										$('#ns1blankspaceReportItems .ns1blankspaceRowSelect11').click(function()
-										{
-											var aID = (event.target.id).split('-');
+														$('#ns1blankspaceTaxReportItemSubTypeColumn').html(aHTML.join(''));			
+														
+														$('#ns1blankspaceTaxSubTypeColumn').buttonset().css('font-size', '0.875em');
+															
+														$('#ns1blankspaceTaxSubTypeColumn :radio').click(function()
+														{
+															var aID = (event.target.id).split('-');
+															$.extend(true, oParam, {subType: aID[1], step: 2});
+															ns1blankspace.financial.tax.vat.items.show(oParam);	
+														});
+														
+														ns1blankspace.financial.tax.vat.items.show(oParam);
+													}
+													
+													if (iStep == 2)
+													{
+														oParam.step = 3;
+														
+														var sData = 'id=' + ns1blankspace.objectContext +
+																	'&type=' + iType +
+																	'&subtype=' + iSubType +
+																	'&field=' + sField +
+																	'&rows=15';
+														
+														$('#ns1blankspaceTaxReportItemsColumn').html(ns1blankspace.xhtml.loading);
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_TAX_REPORT_ITEM_SEARCH'),
+															data: sData,
+															dataType: 'json',
+															success: function(data) {
+																ns1blankspace.financial.tax.vat.items.show(oParam, data)
+															}
+														});
+													}
+													
+													if (iStep == 3)
+													{
+														var aHTML = [];
+
+														if (oResponse.data.rows.length == 0)
+														{
+															aHTML.push('<table class="ns1blankspace">' +
+																			'<tr><td class="ns1blankspaceNothing">No items.</td></tr>' + 
+																			'</table>');
+														}	
+														else
+														{	
+															aHTML.push('<table id="ns1blankspaceReportItems" class="ns1blankspace">' +
+																	'<tr class="ns1blankspaceCaption">' +
+																	'<td class="ns1blankspaceHeaderCaption">Details</td>' +
+																	'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>' +
+																	'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + ns1blankspace.option.taxVATCaption + '</td>' +
+																	'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
+																	'</tr>');
+
+															$.each(oResponse.data.rows, function()
+															{
+																aHTML.push(ns1blankspace.financial.tax.vat.items.row(this));
+															});
+															
+															aHTML.push('</table>');
+														}	
+
+														ns1blankspace.render.page.show(
+														{
+															type: 'JSON',
+															xhtmlElementID: 'ns1blankspaceTaxReportItemsColumn',
+															xhtmlContext: 'TaxItems',
+															xhtml: aHTML.join(''),
+															showMore: (oResponse.morerows == "true"),
+															more: oResponse.moreid,
+															rows: ns1blankspace.option.defaultRows,
+															functionShowRow: ns1blankspace.financial.tax.vat.items.row,
+															functionOpen: undefined,
+															functionNewPage: 'ns1blankspace.financial.tax.vat.items.bind()',
+														});
+													}	
+												},
+
+									row: 		function (oRow)
+												{
+													var aHTML = [];
+
+													aHTML.push('<tr class="ns1blankspaceRow">');
+															
+													if (oRow.transactiondate)
+													{					
+														aHTML.push('<td id="ns1blankspaceReportItems_details-' + oRow.parentid + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceRowSelect11">' +
+																			oRow.transactiondate + '<br />' + oRow.description + '</td>');
 												
-											ns1blankspace.financial.expense.init({showHome: false});
-											ns1blankspace.financial.expense.search.send('-' + aID[1]);	
-										});
-									}	
-								}
+													}
+													else if (oRow.reference)
+													{					
+														aHTML.push('<td id="ns1blankspaceReportItems_reference-' + oRow.id + '" class="ns1blankspaceRow">' +
+																			oRow.reference + '</td>');
+													}
+
+													aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">' +
+																			oRow.amount + '</td>');
+													
+													aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">' +
+																			oRow.tax + '</td>');
+																	
+													aHTML.push('</tr>');
+
+													return aHTML.join('')
+												},
+
+									bind: 		function ()
+												{
+													$('#ns1blankspaceReportItems .ns1blankspaceRowSelect11').click(function()
+													{
+														var aID = (this.id).split('-');
+															
+														ns1blankspace.financial.expense.init({showHome: false});
+														ns1blankspace.financial.expense.search.send('-' + aID[1]);	
+													});
+												}					
+								}				
 				},
 
 	payroll: 	{	
