@@ -378,7 +378,7 @@ ns1blankspace.financial.invoice =
 					$('#ns1blankspaceControlReceipts').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainReceipt', refresh: true});
-						ns1blankspace.financial.invoice.receipt.show();
+						ns1blankspace.financial.invoice.receipt.init();
 					});
 					
 					$('#ns1blankspaceControlGL').click(function(event)
@@ -889,6 +889,7 @@ ns1blankspace.financial.invoice =
 						{
 							$('[name="radioSent"][value="N"]').prop('checked', true);
 							$('[name="radioFrequency"][value="9"]').prop('checked', true);
+							$('#ns1blankspaceDetailsSentDate').val(Date.today().toString("dd MMM yyyy"));
 						}
 					}	
 				},
@@ -1012,6 +1013,20 @@ ns1blankspace.financial.invoice =
 												(oResponse.summary.sumamount).parseCurrency()).formatMoney(2, ".", ",") + '</span>');
 									}
 								},
+
+					init: 		function (oParam)
+								{
+									if (ns1blankspace.objectContextData.sent == 'N')
+									{
+										$('#ns1blankspaceMainReceipt').html('<table class="ns1blankspaceContainer">' +
+														'<tr><td class="ns1blankspaceNothing">You need to mark this invoice as sent before receipting it.</td></tr>' +
+														'</table>');
+									}	
+									else
+									{
+										ns1blankspace.financial.invoice.receipt.show(oParam);
+									}
+								},	
 
 					show: 		function (oParam, oResponse)
 								{

@@ -2811,6 +2811,8 @@ ns1blankspace.search =
 					{
 						if (oResponse === undefined)
 						{
+							ns1blankspace.status.working();
+
 							ns1blankspace.container.position({xhtmlElementID: sXHTMLInputElementID, topOffset: 10, setWidth: true});
 							
 							if (sColumns === undefined) {sColumns = 'title'};
@@ -2919,6 +2921,8 @@ ns1blankspace.search =
 						}	
 						else
 						{
+							ns1blankspace.status.message('');
+							
 							if (sColumns == undefined) {sColumns = 'title'}
 							var aColumns = sColumns.split('-');
 							var aHTML = [];
