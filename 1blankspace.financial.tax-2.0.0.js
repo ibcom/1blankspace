@@ -855,7 +855,7 @@ ns1blankspace.financial.tax =
 									if (ns1blankspace.objectContextData.includepayrolltax == 'N')
 									{
 										aHTML.push('<table class="ns1blankspaceContainer">');
-										aHTML.push('<tr><td class="ns1blankspaceNothing">Not set up.</td></tr>');
+										aHTML.push('<tr><td class="ns1blankspaceNothing">Not enabled for this report.</td></tr>');
 										aHTML.push('</table>');
 
 										$('#ns1blankspaceMainPayroll').html(aHTML.join(''));
