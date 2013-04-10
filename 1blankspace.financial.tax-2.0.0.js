@@ -257,8 +257,6 @@ ns1blankspace.financial.tax =
 						aHTML.push('<tr><td id="ns1blankspaceControlPayroll" class="ns1blankspaceControl">' +
 										ns1blankspace.option.taxPayrollCaption + '</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlBusiness" class="ns1blankspaceControl">' +
-										ns1blankspace.option.taxBusinessCaption + '</td></tr>');
 					}				
 					
 					aHTML.push('</table>');
@@ -495,16 +493,6 @@ ns1blankspace.financial.tax =
 										'<input type="radio" id="radioIncludePayrollY" name="radioIncludePayroll" value="Y"/>Yes' +
 										'<br /><input type="radio" id="radioIncludePayrollN" name="radioIncludePayroll" value="N"/>No' +
 										'</td></tr>');
-
-								aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										ns1blankspace.option.taxBusinessCaption +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioIncludeInstalmentY" name="radioIncludeInstalment" value="Y"/>Yes' +
-										'<br /><input type="radio" id="radioIncludeInstalmentN" name="radioIncludeInstalment" value="N"/>No' +
-										'</td></tr>');
 							}	
 																																		
 							aHTML.push('</table>');					
@@ -525,7 +513,6 @@ ns1blankspace.financial.tax =
 							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData['status'] + '"]').attr('checked', true);
 							$('[name="radioIncludeVAT"][value="' + ns1blankspace.objectContextData['includetax'] + '"]').attr('checked', true);
 							$('[name="radioIncludePayroll"][value="' + ns1blankspace.objectContextData['includepayrolltax'] + '"]').attr('checked', true);
-							$('[name="radioIncludeInstalment"][value="' + ns1blankspace.objectContextData['includeinstalment'] + '"]').attr('checked', true);
 						}
 					}
 				},		
@@ -852,27 +839,7 @@ ns1blankspace.financial.tax =
 									}				
 								}
 				},
-
-	business: 	{	
-					layout:		function ()
-								{
-									var aHTML = [];
-
-									if (ns1blankspace.objectContextData.includeinstalment == 'N')
-									{
-										aHTML.push('<table class="ns1blankspaceContainer">');
-										aHTML.push('<tr><td class="ns1blankspaceNothing">Not set up.</td></tr>');
-										aHTML.push('</table>');	
-
-										$('#ns1blankspaceMainBusiness').html(aHTML.join(''));
-									}
-									else
-									{
-										$('#ns1blankspaceMainBusiness').html(aHTML.join(''));
-									}				
-								}
-				},											
-
+		
 	save: 		{
 					send: 		function ()
 								{
@@ -895,7 +862,6 @@ ns1blankspace.financial.tax =
 											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
 											sData += '&includetax=' + ns1blankspace.util.fs($('input[name="radioIncludeVAT"]:checked').val());
 											sData += '&includepayrolltax=' + ns1blankspace.util.fs($('input[name="radioIncludePayroll"]:checked').val());
-											sData += '&includeinstalment=' + ns1blankspace.util.fs($('input[name="radioIncludeInstalment"]:checked').val());
 										}
 									}
 										
