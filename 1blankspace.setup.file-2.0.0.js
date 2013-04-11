@@ -50,14 +50,24 @@ ns1blankspace.setup.file =
 				},
 
 	import: 	{
-					data: 		{},
+					data: 		{
+									rules:
+									[
+										{
+											object: 32,
+											ignore: true,
+											name: 'persongroup'
+										},
+										{
+											object: 32,
+											ignore: true,
+											name: 'persongroupdescription'
+										}
+									]
+								},
 
 					init: 		function (oParam)
 								{
-									//build 2 columns with first holding the types - like unallocated accounts.
-									//1st column - choose object (holding method and unique fields)- default people
-									//2nd column - generate sample file or upload data file
-
 									var iObject;
 
 									if (oParam != undefined)
@@ -210,9 +220,19 @@ ns1blankspace.setup.file =
 														var sName;
 														var sCaption;
 
-														$.each(ns1blankspace.setup.file.data.fields, function() 
+														$.each(ns1blankspace.setup.file.data.fields, function(i, v) 
 														{
-															if (this.inputtype == 'textbox')
+															var bInclude = (this.inputtype == 'textbox');
+															sName = (v.name).split(".")[1];
+
+															var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.name == sName})[0];
+
+															if (oRule)
+															{
+																if (oRule.ignore) {bInclude = !oRule.ignore}
+															}	
+
+															if (bInclude)
 															{	
 																aParameters.push(this.name);
 															}	
@@ -398,7 +418,7 @@ ns1blankspace.setup.file =
 												{
 													if ($("input.ns1blankspaceTemplateInclude:checked").length == 0)
 													{
-														ns1blankspace.status.error('Need to select at least one field.')
+														ns1blankspace.status.error('Nothing selected')
 													}	
 													else
 													{
@@ -433,7 +453,7 @@ ns1blankspace.setup.file =
 												{
 													if ($("input.ns1blankspaceTemplateInclude:checked").length == 0)
 													{
-														ns1blankspace.status.error('Need to select at least one field.')
+														ns1blankspace.status.error('Nothing selected')
 													}	
 													else
 													{

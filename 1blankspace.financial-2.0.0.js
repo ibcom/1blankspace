@@ -3990,23 +3990,25 @@ ns1blankspace.financial.util =
 										
 										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
-										
+										if (false)
+										{
 										aHTML.push('<tr><td class="ns1blankspaceAction">' +
 														'<span id="ns1blankspaceCreditAdd">Add</span>' +
 														'</td></tr>');
-							
+										}
+
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceCreditColumn2').html(aHTML.join(''));
 									
+										
 										$('#ns1blankspaceCreditAdd').button(
 										{
 											label: "Add"
 										})
 										.click(function() {
 											 ns1blankspace.financial.util.credit.edit(oParam);
-										});										
-									
+										});						
 									}
 
 									var oSearch = new AdvancedSearch();
