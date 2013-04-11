@@ -898,7 +898,7 @@ ns1blankspace.financial.debtors =
 										}
 										else
 										{
-											ns1blankspace.financial.debtors.email.send();
+											ns1blankspace.financial.debtors.email.send({dataIndex: 0});
 										}		
 									}	
 									else
@@ -921,7 +921,7 @@ ns1blankspace.financial.debtors =
 											}	
 										});
 
-										ns1blankspace.financial.debtors.email.send()
+										ns1blankspace.financial.debtors.email.send({dataIndex: 0})
 									}	
 								},
 
@@ -2306,7 +2306,8 @@ ns1blankspace.financial.invoicing =
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-											oSearch.addField('reference,amount,description,contactbusinesssentto,contactbusinesssenttotext,contactpersonsentto,contactpersonsenttotext,invoice.contactpersonsentto.email,invoice.contactbusinesssentto.email');
+											oSearch.addField('reference,amount,description,contactbusinesssentto,contactbusinesssenttotext,contactpersonsentto,contactpersonsenttotext,' +
+																'invoice.contactpersonsentto.email,invoice.contactbusinesssentto.email');
 											oSearch.addFilter('sent', 'EQUAL_TO', 'N');
 											oSearch.rows = 100;
 											oSearch.sort('reference', 'asc');
@@ -2584,6 +2585,7 @@ ns1blankspace.financial.invoicing =
 														else
 														{
 															$('#ns1blankspaceFinancialUnsentPreviewStatus').fadeOut(3000);
+															delete oParam.dataIndex;
 															ns1blankspace.util.onComplete(oParam);
 														}	
 													}						
@@ -2650,6 +2652,7 @@ ns1blankspace.financial.invoicing =
 									if (iDataIndex < ns1blankspace.financial.invoicing.data.unsentEmail.length)
 									{
 										var sHTML = 'No preview';
+										var sTo;
 
 										var oInvoice = ns1blankspace.financial.invoicing.data.unsentEmail[iDataIndex];
 
@@ -2666,50 +2669,61 @@ ns1blankspace.financial.invoicing =
 
 											oInvoice.xhtml = sHTML;
 										
-											var oData = 
-											{
-												subject: oInvoice.reference,
- 												message: oInvoice.xhtml,
- 												to: oInvoice.contactpersonsentto,
- 												object: 5,
- 												objectContext: oInvoice.id
-											}
+											sTo = oInvoice['invoice.contactpersonsentto.email'];
+											if (sTo == '') {sTo = oInvoice['invoice.contactbusinesssentto.email']};
 
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
-												data: oData,
-												dataType: 'json',
-												global: false,
-												success: function (data)
+											if (sTo != '')
+											{	
+												var oData = 
 												{
-													if (data.status == 'OK')
-													{
-														$.ajax(
-														{
-															type: 'POST',
-															url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
-															data: 'sent=Y&id=' + oInvoice.id,
-															dataType: 'json',
-															global: false,
-															success: function (data)
-															{
-																$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('Emailed');
-																//oInvoice.response = data;
-																oParam.dataIndex = iDataIndex + 1;
-																oParam.step = 2;  // NEXT INVOICE
-																ns1blankspace.financial.invoicing.unsent.email(oParam);
-															}
-														});
-													}
-													else
-													{
-														$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('Error');
-														$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).attr('title', data.error.errornotes);
-													}
+													subject: oInvoice.reference,
+	 												message: oInvoice.xhtml,
+	 												to: sTo,
+	 												id: oInvoice.contactpersonsentto,
+	 												object: 5,
+	 												objectContext: oInvoice.id
 												}
-											});
+
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+													data: oData,
+													dataType: 'json',
+													global: false,
+													success: function (data)
+													{
+														if (data.status == 'OK')
+														{
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
+																data: 'sent=Y&id=' + oInvoice.id,
+																dataType: 'json',
+																global: false,
+																success: function (data)
+																{
+																	$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('Emailed');
+																	//oInvoice.response = data;
+																	oParam.dataIndex = iDataIndex + 1;
+																	oParam.step = 2;  // NEXT INVOICE
+																	ns1blankspace.financial.invoicing.unsent.email(oParam);
+																}
+															});
+														}
+														else
+														{
+															$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('Error');
+															$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).attr('title', data.error.errornotes);
+														}
+													}
+												});
+											}
+											else
+											{
+												$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('No email');
+											}	
 										}
 									}
 								}																			
