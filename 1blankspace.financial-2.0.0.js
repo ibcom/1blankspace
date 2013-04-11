@@ -527,6 +527,7 @@ ns1blankspace.financial.debtors =
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_DEBTOR_SEARCH'),
 							dataType: 'json',
+							global:, false,
 							success: function(data)
 							{
 								ns1blankspace.financial.debtors.show(oParam, data);
@@ -1032,6 +1033,7 @@ ns1blankspace.financial.creditors =
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_CREDITOR_SEARCH'),
 							dataType: 'json',
+							global:, false,
 							success: function(data) {ns1blankspace.financial.creditors.show(oParam, data)}
 						});
 					}
@@ -2725,6 +2727,9 @@ ns1blankspace.financial.invoicing =
 											else
 											{
 												$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('No email');
+												oParam.dataIndex = iDataIndex + 1;
+												oParam.step = 2;  // NEXT INVOICE
+												ns1blankspace.financial.invoicing.unsent.email(oParam);
 											}	
 										}
 									}
@@ -4015,15 +4020,14 @@ ns1blankspace.financial.util =
 
 										aHTML.push('</table>');					
 										
-										$('#ns1blankspaceCreditColumn2').html(aHTML.join(''));
+										$('#ns1blankspaceCreditColumn').html(aHTML.join(''));
 									
-										
 										$('#ns1blankspaceCreditAdd').button(
 										{
 											label: "Add"
 										})
 										.click(function() {
-											 ns1blankspace.financial.util.credit.edit(oParam);
+											 ns1blankspace.financial.credit.init();
 										});						
 									}
 
