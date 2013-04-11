@@ -66,7 +66,8 @@ ns1blankspace.setup.file =
 										{
 											object: 32,
 											include: true,
-											name: 'contactperson.contactbusinesstext'
+											name: 'contactperson.contactbusinesstext',
+											searchName: 'tradename'
 										}
 									]
 								},
@@ -619,7 +620,7 @@ ns1blankspace.setup.file =
 																			{														
 																				sClass = '';
 
-																				var aKey = $.grep(ns1blankspace.setup.file.data.fields, function (a) {return (a.name).split('.')[1] == key;});
+																				var aKey = $.grep(ns1blankspace.setup.file.data.fields, function (a) {return (a.name).split('.')[1] == key && a.include;});
 
 																				if (aKey.length == 0)
 																				{
@@ -786,7 +787,7 @@ ns1blankspace.setup.file =
 																})
 																.click(function()
 																{	
-																	ns1blankspace.setup.file.import.upload.process(oParam)
+																	ns1blankspace.setup.file.import.upload.initProcess(oParam)
 																});
 															}
 															else
@@ -836,6 +837,12 @@ ns1blankspace.setup.file =
 														}	
 													}	
 												},
+									
+									initProcess:
+										 		function ()
+												{
+													ns1blankspace.setup.file.util.resolveSelects({onComplete: ns1blankspace.setup.file.import.upload.process})
+												},			
 
 									process: 	function (oParam)
 												{
@@ -894,7 +901,10 @@ ns1blankspace.setup.file =
 
 																$.each(ns1blankspace.setup.file.import.data.fields, function(j,v)
 																{	
-																	sData += '&' + v + '=' + ns1blankspace.util.fs(oRow[v]);
+																	if (oRow[v] !== undefined)
+																	{	
+																		sData += '&' + v + '=' + ns1blankspace.util.fs(oRow[v]);
+																	}	
 																});
 
 																$.ajax(
@@ -1108,6 +1118,79 @@ ns1blankspace.setup.file =
 											fOnComplete(oParam)
 										}
 									}
-								}		
-				}												
+								},
+
+					resolveSelects: 
+								function (oParam)
+								{
+									var iResolveFieldsIndex = ns1blankspace.util.getParam(oParam, 'resolveFieldsIndex', {default: 0}).value;
+
+									if (iResolveFieldsIndex == 0)
+									{
+										ns1blankspace.setup.file.data.resolveFields = $.grep(ns1blankspace.setup.file.data.fields, function (a) {return a.inputtype == 'select' && a.include});
+										ns1blankspace.status.working('Preparing import')
+									}	
+
+									if (iResolveFieldsIndex < ns1blankspace.setup.file.data.resolveFields.length)
+									{
+										var oResolveField = ns1blankspace.setup.file.data.resolveFields[iResolveFieldsIndex];
+										var sName = (oResolveField.name).split(".")[1];
+										var sIDName = (oResolveField.searchrelatedfield).split(".")[1];
+										var sResolveName = (oResolveField.rule.searchName);
+										var aResolveText = [];
+
+										$(ns1blankspace.setup.file.import.data.fields).each(function(i,v)
+										{
+											if (v == sName) {ns1blankspace.setup.file.import.data.fields.splice(i,1,sIDName)}
+										});
+
+										$($.grep(ns1blankspace.setup.file.import.data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
+										{
+											aResolveText.push(k[sName]);
+										});
+
+										if (aResolveText.length > 0)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = oResolveField.searchmethod;
+											oSearch.addField(sResolveName);
+											oSearch.addFilter(sResolveName, 'IN_LIST', aResolveText.join(','));
+											oSearch.rows = aResolveText.length,
+											oSearch.getResults(function(oResponse)
+											{	
+												if (oResponse.status == 'OK')
+												{
+													if (oResponse.data.rows.length > 0)
+													{
+														$($.grep(ns1blankspace.setup.file.import.data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
+														{
+															var oRow = $.grep(oResponse.data.rows, function (a) {return a[sName] != k[sName]})[0];
+
+															if (oRow !== undefined)
+															{	
+																k[sIDName] = oRow['id'];
+															}
+														});
+													}
+												}	
+												
+												oParam = ns1blankspace.util.setParam(oParam, 'resolveFieldsIndex', iResolveFieldsIndex + 1);
+												ns1blankspace.setup.file.util.resolveSelects(oParam);
+													
+											});
+										}	
+										else
+										{
+											oParam = ns1blankspace.util.setParam(oParam, 'resolveFieldsIndex', iResolveFieldsIndex + 1);
+											ns1blankspace.setup.file.util.resolveSelects(oParam);
+										}
+
+									}
+									else
+									{
+										ns1blankspace.util.onComplete(oParam);
+									}
+								}				
+				}
+
 }
