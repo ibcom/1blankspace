@@ -2376,7 +2376,7 @@ ns1blankspace.financial.invoicing =
 
 												var aHTML = [];
 
-												aHTML.push('<table id="ns1blankspaceInvoicingUnsent" class="ns1blankspaceColumn2" style="font-size:0.875em; table-layout:fixed;">' +
+												aHTML.push('<table id="ns1blankspaceInvoicingUnsent" class="ns1blankspaceColumn2" style="font-size:0.875em;">' +
 															'<tr class="ns1blankspaceHeaderCaption">' +
 															'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspaceInvoicingUnsentSelectAll"></span></td>' +
 															'<td class="ns1blankspaceHeaderCaption" style="width:100px;">Contact</td>' +
