@@ -98,6 +98,16 @@ ns1blankspace.setup.file =
 											object: 32,
 											include: true,
 											name: 'contactperson.titletext'
+										},
+										{
+											object: 32,
+											include: true,
+											child: true,
+											name: '.grouptext',
+											datatype: 'numeric',
+											inputtype: 'select',
+											searchendpoint: 'SETUP',
+											searchmethod: 'SETUP_CONTACT_PERSON_GROUP_SEARCH'
 										}
 									]
 								},
@@ -1141,6 +1151,9 @@ ns1blankspace.setup.file =
 												v.include = bInclude;
 											}	
 										});	
+
+										ns1blankspace.setup.file.data.fields = 
+										ns1blankspace.setup.file.data.fields.concat($.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.child}));
 
 										if (fOnComplete)
 										{	
