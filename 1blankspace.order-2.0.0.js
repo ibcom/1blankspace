@@ -1755,8 +1755,7 @@ ns1blankspace.order =
 										var sID = this.id;
 										var aID = sID.split('-');
 											
-										ns1blankspace.financial.invoice.init({showHome: false});
-										ns1blankspace.financial.invoice.search.send('-' + aID[1]);
+										ns1blankspace.financial.invoice.init({id: aID[1]});
 									})
 									.css('width', '15px')
 									.css('height', '17px');
