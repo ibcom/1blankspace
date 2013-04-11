@@ -68,6 +68,36 @@ ns1blankspace.setup.file =
 											include: true,
 											name: 'contactperson.contactbusinesstext',
 											searchName: 'tradename'
+										},
+										{
+											object: 32,
+											include: true,
+											name: 'contactperson.customerstatustext'
+										},
+										{
+											object: 32,
+											include: true,
+											name: 'contactperson.gendertext'
+										},
+										{
+											object: 32,
+											include: true,
+											name: 'contactperson.ratingtext'
+										},
+										{
+											object: 32,
+											include: true,
+											name: 'contactperson.sourceofcontacttext'
+										},
+										{
+											object: 32,
+											include: true,
+											name: 'contactperson.supplierstatustext'
+										},
+										{
+											object: 32,
+											include: true,
+											name: 'contactperson.titletext'
 										}
 									]
 								},
@@ -1136,7 +1166,7 @@ ns1blankspace.setup.file =
 										var oResolveField = ns1blankspace.setup.file.data.resolveFields[iResolveFieldsIndex];
 										var sName = (oResolveField.name).split(".")[1];
 										var sIDName = (oResolveField.searchrelatedfield).split(".")[1];
-										var sResolveName = (oResolveField.rule.searchName);
+										var sResolveName = (oResolveField.rule.searchName !== undefined?oResolveField.rule.searchName:'title');
 										var aResolveText = [];
 
 										$(ns1blankspace.setup.file.import.data.fields).each(function(i,v)
@@ -1151,33 +1181,65 @@ ns1blankspace.setup.file =
 
 										if (aResolveText.length > 0)
 										{
-											var oSearch = new AdvancedSearch();
-											oSearch.method = oResolveField.searchmethod;
-											oSearch.addField(sResolveName);
-											oSearch.addFilter(sResolveName, 'IN_LIST', aResolveText.join(','));
-											oSearch.rows = aResolveText.length,
-											oSearch.getResults(function(oResponse)
-											{	
-												if (oResponse.status == 'OK')
-												{
-													if (oResponse.data.rows.length > 0)
+											if (ns1blankspace.util.isMethodAdvancedSearch(oResolveField.searchmethod))
+											{
+												var oSearch = new AdvancedSearch();
+												oSearch.method = oResolveField.searchmethod;
+												oSearch.addField(sResolveName);
+												oSearch.addFilter(sResolveName, 'IN_LIST', aResolveText.join(','));
+												oSearch.rows = aResolveText.length,
+												oSearch.getResults(function(oResponse)
+												{	
+													if (oResponse.status == 'OK')
 													{
-														$($.grep(ns1blankspace.setup.file.import.data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
+														if (oResponse.data.rows.length > 0)
 														{
-															var oRow = $.grep(oResponse.data.rows, function (a) {return a[sName] != k[sName]})[0];
+															$($.grep(ns1blankspace.setup.file.import.data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
+															{
+																var oRow = $.grep(oResponse.data.rows, function (a) {return a[sResolveName] == k[sName]})[0];
 
-															if (oRow !== undefined)
-															{	
-																k[sIDName] = oRow['id'];
-															}
-														});
-													}
-												}	
-												
-												oParam = ns1blankspace.util.setParam(oParam, 'resolveFieldsIndex', iResolveFieldsIndex + 1);
-												ns1blankspace.setup.file.util.resolveSelects(oParam);
+																if (oRow !== undefined)
+																{	
+																	k[sIDName] = oRow['id'];
+																}
+															});
+														}
+													}	
 													
-											});
+													oParam = ns1blankspace.util.setParam(oParam, 'resolveFieldsIndex', iResolveFieldsIndex + 1);
+													ns1blankspace.setup.file.util.resolveSelects(oParam);	
+												});
+											}
+											else
+											{
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI(oResolveField.searchmethod),
+													dataType: 'json',
+													success: function(oResponse)
+													{
+														if (oResponse.status == 'OK')
+														{
+															if (oResponse.data.rows.length > 0)
+															{
+																$($.grep(ns1blankspace.setup.file.import.data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
+																{
+																	var oRow = $.grep(oResponse.data.rows, function (a) {return a[sResolveName] == k[sName]})[0];
+
+																	if (oRow !== undefined)
+																	{	
+																		k[sIDName] = oRow['id'];
+																	}
+																});
+															}
+														}	
+														
+														oParam = ns1blankspace.util.setParam(oParam, 'resolveFieldsIndex', iResolveFieldsIndex + 1);
+														ns1blankspace.setup.file.util.resolveSelects(oParam);
+													}
+												});
+											}	
 										}	
 										else
 										{
