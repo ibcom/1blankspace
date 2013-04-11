@@ -201,8 +201,8 @@ ns1blankspace.financial.invoice =
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-											oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,projecttext,project,projecttext,areatext,' +
-																'area,reference,purchaseorder,sentdate,duedate,description,amount,tax,sent');
+											oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,' +
+																'reference,purchaseorder,sentdate,description,amount');
 											oSearch.rf = 'json';
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
@@ -230,7 +230,7 @@ ns1blankspace.financial.invoice =
 									}
 									else
 									{		
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:400px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{	
@@ -258,6 +258,16 @@ ns1blankspace.financial.invoice =
 											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
 															'searchContact-' + this.id + '">' +
 															sContact +
+															'</td>');
+
+											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
+															'searchContact-' + this.id + '">' +
+															this.sentdate +
+															'</td>');
+
+											aHTML.push('<td class="ns1blankspaceSearchSub" style="text-align:right;" id="' +
+															'searchContact-' + this.id + '">$' +
+															this.amount +
 															'</td>');
 
 											if (iColumn == iMaximumColumns)
@@ -464,6 +474,7 @@ ns1blankspace.financial.invoice =
 									{
 										if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
 										{	
+											$('#ns1blankspaceSummaryColumn1').html(ns1blankspace.xhtml.loading);
 											oParam.onComplete = ns1blankspace.financial.invoice.summary.default;
 											ns1blankspace.util.initTemplate(oParam);
 										}	
