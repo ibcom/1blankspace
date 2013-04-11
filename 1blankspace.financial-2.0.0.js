@@ -632,7 +632,7 @@ ns1blankspace.financial.debtors =
 								})
 								.click(function()
 								{	
-									oParam = {onComplete: ns1blankspace.financial.debtors.email.init};
+									oParam = {onCompleteWhenCan: ns1blankspace.financial.debtors.email.init};
 									ns1blankspace.financial.debtors.preview.init(oParam);
 								})
 								.css('width', '115px')
@@ -718,9 +718,11 @@ ns1blankspace.financial.debtors =
 				},
 
 	preview: 	{
-					init: 		function ()
+					init: 		function (oParam)
 								{
-									ns1blankspace.util.initTemplate({template: 'statement', onComplete: ns1blankspace.financial.debtors.preview.show})
+									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.debtors.preview.show);
+									oParam = ns1blankspace.util.setParam(oParam, 'template', 'statement');
+									ns1blankspace.util.initTemplate(oParam)
 								},
 
 					show:		function (oParam)

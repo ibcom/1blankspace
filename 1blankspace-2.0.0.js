@@ -2922,7 +2922,7 @@ ns1blankspace.search =
 						else
 						{
 							ns1blankspace.status.message('');
-							
+
 							if (sColumns == undefined) {sColumns = 'title'}
 							var aColumns = sColumns.split('-');
 							var aHTML = [];
@@ -3434,8 +3434,26 @@ ns1blankspace.util =
 					if (ns1blankspace.util.param(oParam, 'onComplete').exists)
 					{
 						var fOnComplete = ns1blankspace.util.param(oParam, 'onComplete').value;
-						delete oParam.onComplete;
+	
+						if (ns1blankspace.util.param(oParam, 'onCompleteWhenCan').exists)
+						{
+							oParam.onComplete = oParam.onCompleteWhenCan;
+							delete oParam.onCompleteWhenCan;
+						}	
+						else
+						{
+							delete oParam.onComplete;
+						}
+
 						fOnComplete(oParam);
+					}
+					else if (ns1blankspace.util.param(oParam, 'onCompleteWhenCan').exists)
+					{
+						var fOnCompleteWhenCan = ns1blankspace.util.param(oParam, 'onCompleteWhenCan').value;
+
+						delete oParam.onCompleteWhenCan;
+					
+						fOnCompleteWhenCan(oParam);
 					}
 				}									
 }
