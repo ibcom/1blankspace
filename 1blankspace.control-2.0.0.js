@@ -41,7 +41,7 @@ $(function()
 
 		if (aHash.length == 3)
 		{
-			sDestination = 'ns1blankspace' + sNS + '.init({showHome: false});ns1blankspace' + sNS + '.search.send("-' + aHash[2] + '")';
+			sDestination = 'ns1blankspace' + sNS + '.init({id:' + aHash[2] + '})';
 		}
 
 		ns1blankspace.history.view({

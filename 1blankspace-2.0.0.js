@@ -2565,6 +2565,11 @@ ns1blankspace.help =
 
 ns1blankspace.status =
 {
+	clear: 		function (sStatus)
+				{	
+					$('#ns1blankspaceViewControlActionStatus').html('&nbsp;');
+				},
+
 	message: 	function (sStatus)
 				{	
 					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +

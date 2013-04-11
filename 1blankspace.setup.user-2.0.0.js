@@ -237,7 +237,7 @@ ns1blankspace.setup.user =
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										ns1blankspace.search.stop();
 										
-										$('td.ns1blankspace').click(function(event)
+										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
@@ -378,8 +378,8 @@ ns1blankspace.setup.user =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:250px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -417,14 +417,14 @@ ns1blankspace.setup.user =
 
 						var aHTML = [];
 						
-						aHTML.push('<tableclass="ns1blankspaceColumn2" style="width:150px;">');
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
 						aHTML.push('<tr><td id="ns1blankspaceResetPasswordContainer"><span style="font-size:0.75em;" id="ns1blankspaceResetPassword">' +
 										'Reset Password</span></td></tr>');
 						
 						aHTML.push('</table>');								
 						
-						$('#tns1blankspaceSummaryColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
 						
 						$('#ns1blankspaceResetPassword').button(
 						{
@@ -432,6 +432,8 @@ ns1blankspace.setup.user =
 						})
 						.click(function()
 						{	
+							ns1blankspace.status.working();
+
 							$.ajax(
 							{
 								type: 'POST',
@@ -441,7 +443,8 @@ ns1blankspace.setup.user =
 								async: false,
 								success: function(data)
 											{
-												$('#ns1blankspaceResetPasswordContainer').html('New password is <strong>' + data.password + '</strong>.');
+												ns1blankspace.status.clear();
+												$('#ns1blankspaceResetPasswordContainer').html('New password is <strong>' + data.password + '</strong>');
 											}
 							});
 						})
@@ -527,7 +530,24 @@ ns1blankspace.setup.user =
 										'<td class="ns1blankspaceTextMulti">' +
 										'<textarea rows="10" cols="35" id="ns1blankspaceDetailsDisabledReason" class="ns1blankspaceTextMultiSmall"></textarea>' +
 										'</td></tr>');
-						}				
+						}
+						else
+						{								
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Alternate business contact' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceSetupUserBusiness" class="ns1blankspaceSelect"' +
+											' data-method="CONTACT_BUSINESS_SEARCH"' +
+											' data-columns="tradename">' +
+										'</td></tr>');	
+
+							aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.75em;">' +
+										'Defaults to internal contacts. Only change this if sure know why you are.' +
+										'</td></tr>');												
+						}			
 						
 						aHTML.push('</table>');					
 						
@@ -899,6 +919,10 @@ ns1blankspace.setup.user =
 									}
 									else
 									{
+										var iContactBusiness = ns1blankspace.user.contactBusiness;
+										if ($('#ns1blankspaceSetupUserBusiness').attr('data-id') != '')
+										{iContactBusiness = $('#ns1blankspaceSetupUserBusiness').attr('data-id')}
+
 										if (oResponse == undefined)
 										{	
 											if ($('#ns1blankspaceDetailsUserName').val() == '' ||
@@ -912,7 +936,7 @@ ns1blankspace.setup.user =
 												var oSearch = new AdvancedSearch();
 												oSearch.method = 'CONTACT_PERSON_SEARCH';
 												oSearch.addField('firstname');
-												oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.user.contactBusiness);
+												oSearch.addFilter('contactbusiness', 'EQUAL_TO', iContactBusiness);
 												oSearch.addFilter('firstname', 'EQUAL_TO', $('#ns1blankspaceDetailsFirstName').val());
 												oSearch.addFilter('surname', 'EQUAL_TO', $('#ns1blankspaceDetailsLastName').val());
 												oSearch.getResults(ns1blankspace.setup.user.save.send);
@@ -925,12 +949,12 @@ ns1blankspace.setup.user =
 												ns1blankspace.setup.user.save.process(
 												{
 													contactPerson: oResponse.data.rows[0].contactperson,
-													contactBusiness: ns1blankspace.user.contactBusiness
+													contactBusiness: iContactBusiness
 												});		
 											}
 											else
 											{
-												var sData = 'contactbusiness=' + ns1blankspace.user.contactBusiness;
+												var sData = 'contactbusiness=' + iContactBusiness;
 												sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFirstName').val());
 												sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsLastName').val());
 
