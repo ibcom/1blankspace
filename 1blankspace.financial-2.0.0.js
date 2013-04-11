@@ -527,7 +527,7 @@ ns1blankspace.financial.debtors =
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_DEBTOR_SEARCH'),
 							dataType: 'json',
-							global:, false,
+							global: false,
 							success: function(data)
 							{
 								ns1blankspace.financial.debtors.show(oParam, data);
@@ -1033,7 +1033,7 @@ ns1blankspace.financial.creditors =
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_CREDITOR_SEARCH'),
 							dataType: 'json',
-							global:, false,
+							global: false,
 							success: function(data) {ns1blankspace.financial.creditors.show(oParam, data)}
 						});
 					}
@@ -4020,7 +4020,7 @@ ns1blankspace.financial.util =
 
 										aHTML.push('</table>');					
 										
-										$('#ns1blankspaceCreditColumn').html(aHTML.join(''));
+										$('#ns1blankspaceCreditColumn2').html(aHTML.join(''));
 									
 										$('#ns1blankspaceCreditAdd').button(
 										{
