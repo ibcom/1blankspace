@@ -55,13 +55,18 @@ ns1blankspace.setup.file =
 									[
 										{
 											object: 32,
-											ignore: true,
-											name: 'persongroup'
+											include: false,
+											name: 'contactperson.persongroup'
 										},
 										{
 											object: 32,
-											ignore: true,
-											name: 'persongroupdescription'
+											include: false,
+											name: 'contactperson.persongroupdescription'
+										},
+										{
+											object: 32,
+											include: true,
+											name: 'contactperson.contactbusinesstext'
 										}
 									]
 								},
@@ -223,13 +228,13 @@ ns1blankspace.setup.file =
 														$.each(ns1blankspace.setup.file.data.fields, function(i, v) 
 														{
 															var bInclude = (this.inputtype == 'textbox');
-															sName = (v.name).split(".")[1];
+															sName = v.name;
 
 															var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.name == sName})[0];
 
-															if (oRule)
+															if (oRule !== undefined)
 															{
-																if (oRule.ignore) {bInclude = !oRule.ignore}
+																if (oRule.include !== undefined) {bInclude = oRule.include}
 															}	
 
 															if (bInclude)
@@ -827,7 +832,6 @@ ns1blankspace.setup.file =
 																aHTML.push('</table>');
 
 																$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
-
 															}
 														}	
 													}	
@@ -1078,6 +1082,25 @@ ns1blankspace.setup.file =
 												//}	
 											});
 										});
+
+										$.each(ns1blankspace.setup.file.data.fields, function(i, v) 
+										{
+											var bInclude = (this.inputtype == 'textbox');
+											sName = v.name;
+
+											var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.name == sName})[0];
+
+											if (oRule !== undefined)
+											{
+												v.rule = oRule;
+												if (oRule.include !== undefined) {bInclude = oRule.include}
+											}	
+
+											if (bInclude)
+											{	
+												v.include = bInclude;
+											}	
+										});	
 
 										if (fOnComplete)
 										{	
