@@ -2644,13 +2644,13 @@ ns1blankspace.financial.invoicing =
 									{
 										oParam = {}
 									}			
-
-									$('#ns1blankspaceFinancialUnsentEmailStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
-											'<span id="ns1blankspaceFinancialUnsentPreviewStatusIndex">' + (iDataIndex + 1) + '</span>/' + ns1blankspace.financial.invoicing.data.unsentEmail.length + 
-											'</span>');
-														
+						
 									if (iDataIndex < ns1blankspace.financial.invoicing.data.unsentEmail.length)
 									{
+										$('#ns1blankspaceFinancialUnsentEmailStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
+											'<span id="ns1blankspaceFinancialUnsentPreviewStatusIndex">' + (iDataIndex + 1) + '</span>/' + ns1blankspace.financial.invoicing.data.unsentEmail.length + 
+											'</span>');
+
 										var sHTML = 'No preview';
 										var sTo;
 
