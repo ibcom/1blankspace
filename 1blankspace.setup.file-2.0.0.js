@@ -103,9 +103,9 @@ ns1blankspace.setup.file =
 											object: 32,
 											include: true,
 											child: true,
-											name: '.grouptext',
+											name: '.group',
 											datatype: 'numeric',
-											inputtype: 'select',
+											inputtype: 'textbox',
 											searchendpoint: 'SETUP',
 											searchmethod: 'SETUP_CONTACT_PERSON_GROUP_SEARCH'
 										}
@@ -640,9 +640,8 @@ ns1blankspace.setup.file =
 
 																		aHTML.push('<table class="ns1blankspaceColumn2" id="ns1blankspaceUploadFields">' +
 																						'<tr class="ns1blankspaceCaption">' +
-																						'<td class="ns1blankspaceHeaderCaption" style="width:5px;">Key</td>' +
-																						'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
-																						'<td class="ns1blankspaceHeaderCaption">Sample Data</td>' +
+																						'<td class="ns1blankspaceHeaderCaption" style="width:5px;" colspan="2">Match Using</td>' +
+																						'<td class="ns1blankspaceHeaderCaption">Sample</td>' +
 																						'</tr>');
 
 																		var sClass = '';
@@ -881,10 +880,10 @@ ns1blankspace.setup.file =
 									initProcess:
 										 		function ()
 												{
-													ns1blankspace.setup.file.util.resolveSelects({onComplete: ns1blankspace.setup.file.import.upload.process})
-												},			
+													ns1blankspace.setup.file.util.resolveSelects({onComplete: ns1blankspace.setup.file.import.upload.resolve})
+												},	
 
-									process: 	function (oParam)
+									resolve: 	function (oParam)
 												{
 													var iObject;
 													var sData;
@@ -898,7 +897,7 @@ ns1blankspace.setup.file =
 
 													if (iRow == 0)
 													{
-														ns1blankspace.status.working('Importing...');
+														ns1blankspace.status.working('Resolving...');
 														var aHTML = [];
 													
 														aHTML.push('<table class="ns1blankspaceColumn2">');
@@ -933,25 +932,118 @@ ns1blankspace.setup.file =
 														{
 															var oRow = ns1blankspace.setup.file.import.data.rows[iRow]; 
 															
+															ns1blankspace.setup.file.import.data.rows[iRow].count = oResponse.data.rows.length;
+
 															if (oResponse.data.rows.length <= 1)
 															{
-																sData = 'id=';
-
-																if (oResponse.data.rows.length == 1) {sData += oResponse.data.rows[0].id}
-
-																$.each(ns1blankspace.setup.file.import.data.fields, function(j,v)
-																{	
-																	if (oRow[v] !== undefined)
-																	{	
-																		sData += '&' + v + '=' + ns1blankspace.util.fs(oRow[v]);
-																	}	
+																if (oResponse.data.rows.length == 1)
+																{
+																	ns1blankspace.setup.file.import.data.rows[iRow].id = oResponse.data.rows[0].id
+																}
+															}
+															else
+															{
+																ns1blankspace.setup.file.import.data.rows[iRow].error = true;
+																
+																ns1blankspace.setup.file.import.data.errors.push(
+																{
+																	data: ns1blankspace.setup.file.import.data.current.join('&'),
+																	error: 'More than one record based on keys (' + oResponse.data.rows.length + ')'
 																});
+															}	
+
+															oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
+															$('#ns1blankspaceImportStatus').html(iRow + 1);
+															ns1blankspace.setup.file.import.upload.resolve(oParam);
+
+														});
+													}
+													else
+													{
+														ns1blankspace.status.message('Resolve completed');
+
+														ns1blankspace.setup.file.import.data.nonKeyfields = [];
+
+														$(ns1blankspace.setup.file.import.data.fields).each(function(i,v)
+														{
+															var iLength = $.grep(ns1blankspace.setup.file.import.data.keys, function (a) {return a == v}).length
+															if (true)
+															{
+																var oField = $.grep(ns1blankspace.setup.file.data.fields, function (a) {return a.key == v})[0];
+																
+																ns1blankspace.setup.file.import.data.nonKeyfields.push(
+																{
+																	name: v,
+																	stage: (oField.child?2:1)
+																})
+															}	
+														});
+
+														ns1blankspace.setup.file.import.upload.process();
+													}	
+												},						
+
+									process: 	function (oParam)
+												{
+													var iObject;
+													var oData;
+													var iRow = 0;
+													var iStage = 1
+
+													if (oParam != undefined)
+													{
+														if (oParam.object != undefined) {iObject = oParam.object}
+														if (oParam.row != undefined) {iRow = oParam.row}
+														if (oParam.stage != undefined) {iStage = oParam.stage}
+													}	
+
+													if (iRow == 0)
+													{
+														ns1blankspace.status.working('Importing...');
+														var aHTML = [];
+													
+														aHTML.push('<table class="ns1blankspaceColumn2">');
+															
+														aHTML.push('<tr><td id="ns1blankspaceImportStatus" style="font-size:2.75em;" class="ns1blankspaceSub">' +
+																		'</td></tr>');
+
+														aHTML.push('</table>');					
+														
+														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
+
+														ns1blankspace.setup.file.import.data.errors = [];
+													}
+
+													if (iRow < ns1blankspace.setup.file.import.data.rows.length)
+													{	
+														ns1blankspace.setup.file.import.data.current = [];
+
+														var oRow = ns1blankspace.setup.file.import.data.rows[iRow];
+															
+														if (!oRow.error)
+														{
+															oData = {};
+
+															$.each(ns1blankspace.setup.file.import.data.nonKeyfields, function(j,v)
+															{	
+																if (v.stage == iStage)
+																{	
+																	if (oRow[v.name] !== undefined)
+																	{	
+																		oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
+																	}
+																}		
+															});
+
+															if (oData != {})
+															{
+																if (oRow.id !== undefined) {oData.id = oRow.id}
 
 																$.ajax(
 																{
 																	type: 'POST',
 																	url: ns1blankspace.util.endpointURI(ns1blankspace.setup.file.import.data.method + '_MANAGE'),
-																	data: sData,
+																	data: oData,
 																	dataType: 'json',
 																	global: false,
 																	success: 	function(data)
@@ -964,7 +1056,7 @@ ns1blankspace.setup.file =
 																							error: data.error.errornotes
 																						});
 																					}	
-																					oParam.row = iRow + 1;
+																					oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
 																					$('#ns1blankspaceImportStatus').html(iRow + 1);
 																					ns1blankspace.setup.file.import.upload.process(oParam)
 																				}
@@ -972,17 +1064,24 @@ ns1blankspace.setup.file =
 															}
 															else
 															{
-																ns1blankspace.setup.file.import.data.errors.push(
-																{
-																	data: ns1blankspace.setup.file.import.data.current.join('&'),
-																	error: 'More than one record based on keys (' + oResponse.data.rows.length + ')'
-																});
-
-																oParam.row = iRow + 1;
+																oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
 																$('#ns1blankspaceImportStatus').html(iRow + 1);
 																ns1blankspace.setup.file.import.upload.process(oParam)
 															}	
-														});
+														}
+														else
+														{
+															ns1blankspace.setup.file.import.data.errors.push(
+															{
+																data: ns1blankspace.setup.file.import.data.current.join('&'),
+																error: 'More than one record based on keys (' + oResponse.data.rows.length + ')'
+															});
+
+															oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
+															$('#ns1blankspaceImportStatus').html(iRow + 1);
+															ns1blankspace.setup.file.import.upload.process(oParam)
+														}	
+														
 													}
 													else
 													{
@@ -1133,6 +1232,9 @@ ns1blankspace.setup.file =
 											});
 										});
 
+										ns1blankspace.setup.file.data.fields = 
+										ns1blankspace.setup.file.data.fields.concat($.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.child}));
+
 										$.each(ns1blankspace.setup.file.data.fields, function(i, v) 
 										{
 											var bInclude = (this.inputtype == 'textbox');
@@ -1149,11 +1251,10 @@ ns1blankspace.setup.file =
 											if (bInclude)
 											{	
 												v.include = bInclude;
-											}	
-										});	
+											}
 
-										ns1blankspace.setup.file.data.fields = 
-										ns1blankspace.setup.file.data.fields.concat($.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.child}));
+											v.key = (v.name).split('.')[1];
+										});	
 
 										if (fOnComplete)
 										{	
