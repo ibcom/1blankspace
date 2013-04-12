@@ -754,6 +754,54 @@ ns1blankspace.app =
 
 	show: 		function (oResponse)	
 				{
+					var sHash = window.location.hash;
+					var sDestination;
+
+					var sNS;
+					// Pattern: #/contactBusiness/123/summary
+
+					if (sHash.substr(0, 2) == '#/')
+					{	
+						var aHash = sHash.split('/');
+
+						if (aHash.length > 1)
+						{	
+							ns1blankspace.option.returnToLast = true;
+							
+							sNS = aHash[1];
+							var aNS = sNS.split('.');
+
+							if (aNS.length == 1)
+							{
+								sNS = '["' + aNS[0] + '"]';
+							}
+							else
+							{
+								sNS = '["' + aNS[0] + '"]["' + aNS[1] + '"]';
+							}
+						}
+							
+						if (aHash.length == 2)
+						{		
+							sDestination = 'ns1blankspace' + sNS + '.init({showHome: true});';
+						}	
+
+						if (aHash.length == 3)
+						{
+							sDestination = 'ns1blankspace' + sNS + '.init({id:' + aHash[2] + '})';
+						}
+
+						ns1blankspace.history.view({
+											newDestination: sDestination,
+											move: false
+											});
+
+						if (aHash.length == 4)
+						{
+							ns1blankspace.history.control({functionDefault: 'ns1blankspace' + sNS + '.' + aHash[3] + '()'});
+						}
+					}	
+
 					var aHTML = [];
 
 					ns1blankspace.user.id = oResponse.user;
