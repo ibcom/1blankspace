@@ -1109,61 +1109,68 @@ ns1blankspace.setup.file =
 													}
 													else
 													{
-														ns1blankspace.status.message('Import completed');
-
-														var aHTML = [];
-													
-														aHTML.push('<table class="ns1blankspaceColumn2">');
-
-														aHTML.push('<tr><td style="font-size:0.875em;" class="ns1blankspaceSub">');
-
-														if (ns1blankspace.setup.file.import.data.errors.length == 0)
-														{	
-															aHTML.push('No errors during import.');																
-														}
-														else if (ns1blankspace.setup.file.import.data.errors.length == 0)
+														if ($.grep(ns1blankspace.setup.file.import.data.nonKeyFields, function (a) {return a.stage == (iStage + 1);}).length > 0)
 														{
-															aHTML.push('There was one error during import');
+															ns1blankspace.status.message((iStage + 1));
 														}
 														else
-														{
-															aHTML.push('There were ' + ns1blankspace.setup.file.import.data.errors.length + ' errors during import.');
-														}
+														{	
+															ns1blankspace.status.message('Import completed');
 
-														aHTML.push('</td></tr></table>');					
-																
-														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));	
-
-														if (ns1blankspace.setup.file.import.data.errors.length > 0)
-														{
 															var aHTML = [];
-
+														
 															aHTML.push('<table class="ns1blankspaceColumn2">');
 
-															$.each(ns1blankspace.setup.file.import.data.errors, function(i,k) 
+															aHTML.push('<tr><td style="font-size:0.875em;" class="ns1blankspaceSub">');
+
+															if (ns1blankspace.setup.file.import.data.errors.length == 0)
+															{	
+																aHTML.push('No errors during import.');																
+															}
+															else if (ns1blankspace.setup.file.import.data.errors.length == 0)
 															{
-																var aData = (this.data).split('&');
-																var aDataValues = [];
+																aHTML.push('There was one error during import');
+															}
+															else
+															{
+																aHTML.push('There were ' + ns1blankspace.setup.file.import.data.errors.length + ' errors during import.');
+															}
 
-																$.each(aData, function()
+															aHTML.push('</td></tr></table>');					
+																	
+															$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));	
+
+															if (ns1blankspace.setup.file.import.data.errors.length > 0)
+															{
+																var aHTML = [];
+
+																aHTML.push('<table class="ns1blankspaceColumn2">');
+
+																$.each(ns1blankspace.setup.file.import.data.errors, function(i,k) 
 																{
-																	var aValue = (this).split('=');
-																	if (aValue[0] != '_')
-																	{	
-																		aDataValues.push(decodeURIComponent(aValue[1]));
-																	}	
-																});
+																	var aData = (this.data).split('&');
+																	var aDataValues = [];
 
-																aHTML.push('<tr><td id="ns1blankspaceImportDataError_error_' + i + '" class="ns1blankspaceRow">' +
-																				aDataValues.join('<br />') + '</td>');
+																	$.each(aData, function()
+																	{
+																		var aValue = (this).split('=');
+																		if (aValue[0] != '_')
+																		{	
+																			aDataValues.push(decodeURIComponent(aValue[1]));
+																		}	
+																	});
 
-																aHTML.push('<td style="font-size:0.75em;" id="nns1blankspaceImportError_notes_' + i + '" class="ns1blankspaceRow ns1blankspaceSub">' +
-																				this.error + '</td></tr>');
-															});		
+																	aHTML.push('<tr><td id="ns1blankspaceImportDataError_error_' + i + '" class="ns1blankspaceRow">' +
+																					aDataValues.join('<br />') + '</td>');
 
-															aHTML.push('</table>');
+																	aHTML.push('<td style="font-size:0.75em;" id="nns1blankspaceImportError_notes_' + i + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																					this.error + '</td></tr>');
+																});		
 
-															$('#ns1blankspaceFileImportShowColumn2').html(aHTML.join(''));
+																aHTML.push('</table>');
+
+																$('#ns1blankspaceFileImportShowColumn2').html(aHTML.join(''));
+															}
 														}	
 													}	
 												}			
