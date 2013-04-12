@@ -962,16 +962,24 @@ ns1blankspace.setup.file =
 													{
 														ns1blankspace.status.message('Resolve completed');
 
-														ns1blankspace.setup.file.import.data.nonKeyfields = [];
+														ns1blankspace.setup.file.import.data.nonKeyFields = [];
+														ns1blankspace.setup.file.import.data.importFields = [];
 
 														$(ns1blankspace.setup.file.import.data.fields).each(function(i,v)
 														{
-															var iLength = $.grep(ns1blankspace.setup.file.import.data.keys, function (a) {return a == v}).length
-															if (true)
-															{
-																var oField = $.grep(ns1blankspace.setup.file.data.fields, function (a) {return a.key == v})[0];
+															var oField = $.grep(ns1blankspace.setup.file.data.fields, function (a) {return a.key == v})[0];
 																
-																ns1blankspace.setup.file.import.data.nonKeyfields.push(
+															ns1blankspace.setup.file.import.data.importFields.push(
+															{
+																name: v,
+																stage: (oField.child?2:1)
+															})
+
+															var iLength = $.grep(ns1blankspace.setup.file.import.data.keys, function (a) {return a == v}).length
+
+															if (iLength == 0 )
+															{
+																ns1blankspace.setup.file.import.data.nonKeyFields.push(
 																{
 																	name: v,
 																	stage: (oField.child?2:1)
@@ -1024,18 +1032,34 @@ ns1blankspace.setup.file =
 														{
 															oData = {};
 
-															$.each(ns1blankspace.setup.file.import.data.nonKeyfields, function(j,v)
+															if (iStage == 1 && oRow.id !== undefined)
 															{	
-																if (v.stage == iStage)
+																$.each(ns1blankspace.setup.file.import.data.nonKeyFields, function(j,v)
 																{	
-																	if (oRow[v.name] !== undefined)
+																	if (v.stage == iStage)
 																	{	
-																		oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
-																	}
-																}		
-															});
+																		if (oRow[v.name] !== undefined)
+																		{	
+																			oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
+																		}
+																	}		
+																});
+															}
+															else if (iStage == 1 && oRow.id === undefined)
+															{	
+																$.each(ns1blankspace.setup.file.import.data.importFields, function(j,v)
+																{	
+																	if (v.stage == iStage)
+																	{	
+																		if (oRow[v.name] !== undefined)
+																		{	
+																			oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
+																		}
+																	}		
+																});
+															}
 
-															if (oData != {})
+															if (!ns1blankspace.util.isEmpty(oData))
 															{
 																if (oRow.id !== undefined) {oData.id = oRow.id}
 

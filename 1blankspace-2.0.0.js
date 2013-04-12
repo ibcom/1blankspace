@@ -3508,7 +3508,17 @@ ns1blankspace.util =
 					
 						fOnCompleteWhenCan(oParam);
 					}
-				}									
+				},
+
+	isEmpty: 	function (oObject)
+				{
+			  		for (var key in oObject)
+			  		{
+			     		if (oObject.hasOwnProperty(key)) {return false;}
+			     	}
+			  		
+			   		return true;
+				}											
 }
 
 ns1blankspace.debug = 
