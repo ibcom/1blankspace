@@ -3853,23 +3853,16 @@ ns1blankspace.render =
 						if (oParam.more != undefined) {bMore = oParam.more}
 					}
 
-					aHTML.push('<table id="ns1blankspaceSearchHeader" class="ns1blankspaceSearchHeaderMedium">');
+					aHTML.push('<table id="ns1blankspaceSearchHeader" class="ns1blankspaceSearchHeaderMedium" style="border-spacing:2px;">');
 					aHTML.push('<tr>');
 					
 					if (bMore)
 					{
-						aHTML.push('<td style="width:5px; cursor:pointer;" class="ns1blankspaceRenderHeaderPage ns1blankspaceRenderHeaderPageSelected"' +
+						aHTML.push('<td style="width:5px; cursor:pointer; padding-top:5px;" class="ns1blankspaceRenderHeader ns1blankspaceRenderHeaderPage ns1blankspaceRenderHeaderPageSelected"' +
 											' id="ns1blankspaceRenderHeader-0" data-rowstart="0">1</td>');
-
-						//aHTML.push('<td class="ns1blankspaceSearchHeaderPage" style="width:15px;">' +
-						//				'<span id="ns1blankspaceSearchFooterPage-0" class="ns1blankspaceSearchHeaderPage">' +
-						//				'1</span></td>');
 
 						aHTML.push('<td style="cursor:pointer;" class="ns1blankspaceRenderHeaderMore' + 
 											'" id="ns1blankspaceRenderHeaderMore">more...</td>');
-										
-						//aHTML.push('<td class="ns1blankspaceSearchHeaderMore" style="padding-right:3px;padding-top:3px;">' +
-						//					'<span id="ns1blankspaceSearchHeaderMore"></span></td>');
 					}
 
 					aHTML.push('<td class="ns1blankspaceSearchHeaderClose" style="padding-left:5px;padding-right:3px;padding-top:3px;width:20px;text-align:right;">' +
@@ -3884,22 +3877,6 @@ ns1blankspace.render =
 
 					aHTML.push('</div>');
 
-					if (bMore && false)
-					{
-						aHTML.push('<table class="ns1blankspaceSearchFooterMedium">');
-						aHTML.push('<tr class="ns1blankspaceSearchFooter">');
-						
-						aHTML.push('<td class="ns1blankspaceSearchHeader">' +
-										'<span id="ns1blankspaceSearchFooterPage-0" class="ns1blankspaceSearchHeaderPage">' +
-										'1</span></td>');
-									
-						aHTML.push('<td class="ns1blankspaceSearchHeaderMore" style="padding-left:5px;padding-top:3px;">' +
-											'<span id="ns1blankspaceSearchHeaderMore">more...</span></td>');
-
-						aHTML.push('</tr>');
-						aHTML.push('</table>');
-					}	
-					
 					return aHTML.join('');
 				},
 
@@ -3916,35 +3893,31 @@ ns1blankspace.render =
 					
 					$('#ns1blankspaceSearchHeaderClose').button(
 					{
-								text: false,
-								icons: {
-									primary: "ui-icon-close"
-								}
-							})
-							.click(function() {
-								$(ns1blankspace.xhtml.container).slideUp(1000);
-								$(ns1blankspace.xhtml.container).html('&nbsp;');
-							})
-							.css('width', '15px')
-							.css('height', '18px')
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-close"
+						}
+					})
+					.click(function() {
+						$(ns1blankspace.xhtml.container).slideUp(1000);
+						$(ns1blankspace.xhtml.container).html('&nbsp;');
+					})
+					.css('width', '15px')
+					.css('height', '18px')
 						
 					$('#ns1blankspaceRenderHeaderMore')
 					.click(function() {
 						(oParam != undefined?oParam.more = iMore:oParam = {more: iMore})
 						fFunctionMore(oParam);
 					})
-					.css('height', '18px')
-					.css('font-size', '0.75em')
+					.css('font-size', '0.75em');
 						
-					$('span.ns1blankspaceSearchHeaderPage')
-					.button({label: '1'})
+					$('#ns1blankspaceRenderHeader-0')
 					.click(function(event)
 					{
 						ns1blankspace.render.showPage(this.id);
-					})
-					.css('height', '18px')
-					.css('width', '15px')
-					.css('font-size', '0.75em');
+					});
 				},
 
 	showMore:	function (oParam, oResponse)
@@ -3953,7 +3926,7 @@ ns1blankspace.render =
 					var sXHTMLElementID = '';
 					var iMore = -1;
 					var iStartRow = 10;
-					var iRows = 10;
+					var iRows = 2;
 					var iColumn = 0;
 					var iMaximumColumns = 1;
 					var sColumns = "title";
@@ -3980,11 +3953,11 @@ ns1blankspace.render =
 						if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
 					}
 					
-					$('#ns1blankspaceSearchFooterMoreStatus').html(ns1blankspace.xhtml.loadingSmall);
+					$('#ns1blankspaceRenderHeaderMore').html(ns1blankspace.xhtml.loadingSmall);
 					
 					if (iMore === -1)
 					{
-						alert('No more!')
+						ns1blankspace.status.error('No more!');
 					}
 					else
 					{
@@ -4019,11 +3992,13 @@ ns1blankspace.render =
 												
 								if (bMoreRows)
 								{				
-									$('#ns1blankspaceSearchHeaderMore').show();
+									$('#ns1blankspaceRenderHeaderMore').html('more...');
 								}
 								else
 								{
-									$('#ns1blankspaceSearchHeaderMore').hide();
+									$('#ns1blankspaceRenderHeaderMore').html('&nbsp;');
+									$('#ns1blankspaceRenderHeaderMore').unbind('click');
+									$('#ns1blankspaceRenderHeaderMore').css('cursor', 'auto');
 								}	
 								
 								oParam.startRow = iStartRow + iRows;	
@@ -4092,21 +4067,22 @@ ns1blankspace.render =
 								$('.ns1blankspaceSearchPage').hide();
 								$('.ns1blankspaceSearchPage:last').after(aHTML.join(''));
 								
-								$('td.interfaceSearch').click(function(event)
+								$('td.ns1blankspaceSearch').click(function(event)
 								{
 									$(ns1blankspace.xhtml.container).html('&nbsp;');
 									$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
 									fFunctionSearch(event.target.id, {source: 1});
 								});
 										
-								$('#ns1blankspaceSearchFooterPage').append(
-										' | <span id="ns1blankspaceSearchFooterPage-' + iStartRow + '" class="ns1blankspaceSearchFooterPage">' +
-											(parseInt(iStartRow/iRows) + 1) + '</span>');
-											
-								$('#ns1blankspaceSearchFooterMoreStatus').html('&nbsp;');			
+								$('td.ns1blankspaceRenderHeader').removeClass('ns1blankspaceRenderHeaderPageSelected');
+									
+								$('td.ns1blankspaceRenderHeader:last').after('<td style="width:5px; cursor:pointer; padding-top:5px;" class="ns1blankspaceRenderHeader ns1blankspaceRenderHeaderPage ns1blankspaceRenderHeaderPageSelected"' +
+											' id="ns1blankspaceRenderHeader-' + iStartRow + '" data-rowstart="0">' +
+											(parseInt(iStartRow/iRows) + 1) + '</td>');
+													
 							}
 						
-							$('.ns1blankspaceSearchFooterPage').click(function(event)
+							$('td.ns1blankspaceRenderHeader:last').click(function(event)
 							{
 								ns1blankspace.render.showPage(this.id);
 							});
@@ -4118,6 +4094,8 @@ ns1blankspace.render =
 				{
 					var aElement = sXHTMLElementID.split('-');
 					
+					$('td.ns1blankspaceRenderHeader').removeClass('ns1blankspaceRenderHeaderPageSelected');
+					$('#ns1blankspaceRenderHeader-' + aElement[1]).addClass('ns1blankspaceRenderHeaderPageSelected');
 					$('.ns1blankspaceSearchPage').hide();
 					$('#ns1blankspaceSearch-' + aElement[1]).show();
 				}
