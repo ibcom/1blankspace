@@ -1046,7 +1046,7 @@ ns1blankspace.setup.file =
 																	{	
 																		if (oRow[v.name] !== undefined)
 																		{	
-																			oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
+																			oData[v.name] = oRow[v.name];
 																		}
 																	}		
 																});
