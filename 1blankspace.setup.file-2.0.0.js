@@ -103,11 +103,13 @@ ns1blankspace.setup.file =
 											object: 32,
 											include: true,
 											child: true,
+											parentID: 'contactperson',
 											name: '.group',
 											datatype: 'numeric',
 											inputtype: 'textbox',
 											searchendpoint: 'SETUP',
-											searchmethod: 'SETUP_CONTACT_PERSON_GROUP_SEARCH'
+											searchmethod: 'SETUP_CONTACT_PERSON_GROUP_SEARCH',
+											method: 'CONTACT_PERSON_GROUP'
 										}
 									]
 								},
@@ -953,7 +955,6 @@ ns1blankspace.setup.file =
 															}	
 
 															oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
-															$('#ns1blankspaceImportStatus').html(iRow + 1);
 															ns1blankspace.setup.file.import.upload.resolve(oParam);
 
 														});
@@ -1005,9 +1006,10 @@ ns1blankspace.setup.file =
 														if (oParam.stage != undefined) {iStage = oParam.stage}
 													}	
 
-													if (iRow == 0)
+													if (iRow == 0 && iStage == 1)
 													{
 														ns1blankspace.status.working('Importing...');
+
 														var aHTML = [];
 													
 														aHTML.push('<table class="ns1blankspaceColumn2">');
@@ -1024,6 +1026,8 @@ ns1blankspace.setup.file =
 
 													if (iRow < ns1blankspace.setup.file.import.data.rows.length)
 													{	
+														$('#ns1blankspaceImportStatus').html(iRow + 1);
+
 														ns1blankspace.setup.file.import.data.current = [];
 
 														var oRow = ns1blankspace.setup.file.import.data.rows[iRow];
@@ -1034,6 +1038,8 @@ ns1blankspace.setup.file =
 
 															if (iStage == 1 && oRow.id !== undefined)
 															{	
+																oData.id = oRow.id;
+
 																$.each(ns1blankspace.setup.file.import.data.nonKeyFields, function(j,v)
 																{	
 																	if (v.stage == iStage)
@@ -1053,7 +1059,34 @@ ns1blankspace.setup.file =
 																	{	
 																		if (oRow[v.name] !== undefined)
 																		{	
-																			oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
+																			oData[v.name] = oRow[v.name];
+																		}
+																	}		
+																});
+															}
+
+															else if (iStage == 2 && oRow.id !== undefined)
+															{	
+																$.each(ns1blankspace.setup.file.import.data.importFields, function(j,v)
+																{	
+																	if (v.stage == iStage)
+																	{	
+																		if (oRow[v.name] !== undefined)
+																		{	
+																			oData[v.name] = oRow[v.name];
+
+																			var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.key == v.name})[0];
+
+																			if (oRule !== undefined)
+																			{
+																				if (oRule.parentID !== undefined) {oData[oRule.parentID] = oRow['id'];}
+																				ns1blankspace.setup.file.import.data.method = oRule.method;
+																			}
+
+																			if ((oRow[v.name]).substring(0,1) == '-')
+																			{
+																				oData['remove'] = 1;
+																			}	
 																		}
 																	}		
 																});
@@ -1061,8 +1094,6 @@ ns1blankspace.setup.file =
 
 															if (!ns1blankspace.util.isEmpty(oData))
 															{
-																if (oRow.id !== undefined) {oData.id = oRow.id}
-
 																$.ajax(
 																{
 																	type: 'POST',
@@ -1076,12 +1107,12 @@ ns1blankspace.setup.file =
 																					{
 																						ns1blankspace.setup.file.import.data.errors.push(
 																						{
-																							data: sData,
+																							data: oData,
 																							error: data.error.errornotes
 																						});
 																					}	
 																					oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
-																					$('#ns1blankspaceImportStatus').html(iRow + 1);
+																					
 																					ns1blankspace.setup.file.import.upload.process(oParam)
 																				}
 																});
@@ -1102,7 +1133,6 @@ ns1blankspace.setup.file =
 															});
 
 															oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
-															$('#ns1blankspaceImportStatus').html(iRow + 1);
 															ns1blankspace.setup.file.import.upload.process(oParam)
 														}	
 														
@@ -1114,7 +1144,6 @@ ns1blankspace.setup.file =
 															ns1blankspace.status.message('Importing Stage ' + (iStage + 1) + '...');
 															oParam = ns1blankspace.util.setParam(oParam, 'row', 0);
 															oParam = ns1blankspace.util.setParam(oParam, 'stage', (iStage + 1));
-															$('#ns1blankspaceImportStatus').html(iRow + 1);
 
 															ns1blankspace.setup.file.import.upload.process(oParam)
 														}
@@ -1138,7 +1167,8 @@ ns1blankspace.setup.file =
 															}
 															else
 															{
-																aHTML.push('There were ' + ns1blankspace.setup.file.import.data.errors.length + ' errors during import.');
+																aHTML.push('There was ' + ns1blankspace.setup.file.import.data.errors.length +
+																			' error' + (ns1blankspace.setup.file.import.data.errors.length == 1?'':'s') + ' during import.');
 															}
 
 															aHTML.push('</td></tr></table>');					
@@ -1153,18 +1183,14 @@ ns1blankspace.setup.file =
 
 																$.each(ns1blankspace.setup.file.import.data.errors, function(i,k) 
 																{
-																	var aData = (this.data).split('&');
+																	var oData = this.data;
 																	var aDataValues = [];
 
-																	$.each(aData, function()
-																	{
-																		var aValue = (this).split('=');
-																		if (aValue[0] != '_')
-																		{	
-																			aDataValues.push(decodeURIComponent(aValue[1]));
-																		}	
-																	});
-
+																	for (var key in oData)
+																	{																		
+																		aDataValues.push(oData[key]);
+																	}	
+																	
 																	aHTML.push('<tr><td id="ns1blankspaceImportDataError_error_' + i + '" class="ns1blankspaceRow">' +
 																					aDataValues.join('<br />') + '</td>');
 
