@@ -3846,14 +3846,16 @@ ns1blankspace.render =
 					
 					var sHTML = '';
 					var bMore = false;
+					var sWidth = 250;
 
 					if (oParam != undefined)
 					{
 						if (oParam.html != undefined) {sHTML = oParam.html}
 						if (oParam.more != undefined) {bMore = oParam.more}
+						if (oParam.width != undefined) {sWidth = oParam.width}
 					}
 
-					aHTML.push('<table id="ns1blankspaceSearchHeader" class="ns1blankspaceSearchHeaderMedium" style="border-spacing:2px;">');
+					aHTML.push('<table id="ns1blankspaceSearchHeader" class="ns1blankspaceSearchHeaderMedium" style="border-spacing:2px; width:' + sWidth + 'px;">');
 					aHTML.push('<tr>');
 					
 					if (bMore)
@@ -3937,6 +3939,7 @@ ns1blankspace.render =
 					var sIdAdditional = '';
 					var sBodyClass = 'ns1blankspaceSearchMedium';
 					var sIDSeperator = '-';
+					var sWidth = 250;
 					
 					if (oParam != undefined)
 					{
@@ -3951,6 +3954,7 @@ ns1blankspace.render =
 						if (oParam.idAdditional != undefined) {sIdAdditional = oParam.idAdditional}
 						if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
 						if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
+						if (oParam.width != undefined) {sWidth = oParam.width}
 					}
 					
 					$('#ns1blankspaceRenderHeaderMore').html(ns1blankspace.xhtml.loadingSmall);
@@ -3984,7 +3988,7 @@ ns1blankspace.render =
 							{
 								aHTML.push('<div id="ns1blankspaceSearch-' + iStartRow + '" class="ns1blankspaceSearchPage">');
 							
-								aHTML.push('<table class="' + sBodyClass + '">');
+								aHTML.push('<table class="' + sBodyClass + '" style="width:' + sWidth + 'px;">');
 										
 								var iStartRow = parseInt(oResponse.startrow);
 								var iRows = parseInt(oResponse.rows);

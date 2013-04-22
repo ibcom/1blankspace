@@ -147,7 +147,7 @@ ns1blankspace.financial.invoice =
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 2;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -210,6 +210,8 @@ ns1blankspace.financial.invoice =
 											oSearch.addOperator('or');
 											oSearch.addFilter('invoice.contactpersonsentto.surname', 'TEXT_IS_LIKE', sSearchText);
 											
+											oSearch.sort('reference', 'desc');
+
 											oSearch.getResults(function(data) {ns1blankspace.financial.invoice.search.process(oParam, data)});	
 										}
 									};	
@@ -255,17 +257,17 @@ ns1blankspace.financial.invoice =
 												sContact = this.contactpersonsenttotext;
 											}	
 											
-											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'searchContact-' + this.id + '">' +
 															sContact +
 															'</td>');
 
-											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'searchContact-' + this.id + '">' +
 															this.sentdate +
 															'</td>');
 
-											aHTML.push('<td class="ns1blankspaceSearchSub" style="text-align:right;" id="' +
+											aHTML.push('<td class="ns1blankspaceSearch" style="text-align:right;" id="' +
 															'searchContact-' + this.id + '">$' +
 															this.amount +
 															'</td>');
@@ -279,15 +281,35 @@ ns1blankspace.financial.invoice =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).html(
+											ns1blankspace.render.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true"),
+												width: 400
+											}) 
+										);		
+										
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										
+										ns1blankspace.search.stop();
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.financial.invoice.search.send(event.target.id, {source: 1});
+											ns1blankspace.contactPerson.search.send(event.target.id, {source: 1});
 										});
+										
+										ns1blankspace.render.bind(
+										{
+											columns: 'reference-contactbusinesssenttotext-sentdate-amount',
+											more: oResponse.moreid,
+											rows: 15,
+											width: 400,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.financial.invoice.search.send
+										});   				
 									}			
 								}
 				},				
