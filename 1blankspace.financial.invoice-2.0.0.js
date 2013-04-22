@@ -15,6 +15,10 @@ ns1blankspace.financial.invoice =
 					{
 						if (oParam.initialised != undefined) {bInitialised = oParam.initialised}	
 					}
+					else
+					{
+						oParam = {}
+					}
 				
 					ns1blankspace.app.reset();
 
@@ -28,9 +32,24 @@ ns1blankspace.financial.invoice =
 						ns1blankspace.financial.initData(oParam)
 					}
 					else
-					{		
+					{	
+						oParam.bind = ns1blankspace.financial.invoice.bind;
+						oParam.xhtml = '<table id="ns1blankspaceOptions" class="ns1blankspaceViewControlContainer">' +	
+													'<tr class="ns1blankspaceOptions">' +
+													'<td id="ns1blankspaceControlActionOptionsRemove" class="ns1blankspaceViewControl">' +
+													'Delete' +
+													'</td></tr></table>';
 						ns1blankspace.app.set(oParam);
 					}		
+				},
+
+	bind: 		function (oParam)
+				{
+					$('#ns1blankspaceControlActionOptionsRemove')
+					.click(function() 
+					{
+						ns1blankspace.app.options.remove(oParam)
+					});
 				},
 
 	refresh:	function (oResponse)
@@ -591,7 +610,11 @@ ns1blankspace.financial.invoice =
 										var aHTML = [];
 
 										aHTML.push('<table class="ns1blankspaceColumn2">');
-														
+											
+										aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceSummaryCopy" class="ns1blankspaceAction" style="width:75px;">' +
+														'Copy</span></td></tr>');
+																		
 										if (ns1blankspace.xhtml.templates['invoice'] != '')
 										{
 											if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
@@ -599,21 +622,17 @@ ns1blankspace.financial.invoice =
 												aHTML.push('<tr><td>' +
 																'<span id="ns1blankspaceSummaryCreatePDF" class="ns1blankspaceAction" style="width:75px;">' +
 																'PDF</span></td></tr>');
-
-												aHTML.push('<tr><td>' +
-																'<span id="ns1blankspaceSummaryEmail" class="ns1blankspaceAction" style="width:75px;">' +
-																'Email</span></td></tr>');
 											}
 											else
 											{				
 												aHTML.push('<tr><td>' +
 																'<span id="ns1blankspaceSummaryView" class="ns1blankspaceAction" style="width:75px;">' +
 																'View</span></td></tr>');
-
-												aHTML.push('<tr><td>' +
-																'<span id="ns1blankspaceSummaryEmail" class="ns1blankspaceAction" style="width:75px;">' +
-																'Email</span></td></tr>');
 											}
+
+											aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceSummaryEmail" class="ns1blankspaceAction" style="width:75px;">' +
+														'Email</span></td></tr>');
 
 											if (ns1blankspace.objectContextData.sent == 'N')
 											{	
@@ -658,6 +677,15 @@ ns1blankspace.financial.invoice =
 											.click(function(event)
 											{
 												ns1blankspace.financial.invoice.email.init();
+											});
+
+											$('#ns1blankspaceSummaryCopy').button(
+											{
+												label: 'Copy'
+											})
+											.click(function(event)
+											{
+												ns1blankspace.financial.invoice.copy();
 											});
 										}	
 									}	
@@ -937,37 +965,42 @@ ns1blankspace.financial.invoice =
 					ns1blankspace.financial.invoice.details();
 				},
 
-	remove: 	function (aParam, oResponse)
+	copy: 	function (aParam, oResponse)
 				{		
 					if (oResponse == undefined)
 					{
-						ns1blankspace.status.message(ns1blankspace.xhtml.loadingSmall);
+						ns1blankspace.status.working('Copying...');
+
+						var oData = 
+						{
+							id: ns1blankspace.objectContext,
+							sentdate: Date.today().toString("dd MMM yyyy"),
+							sent: 'N'
+						}
 
 						$.ajax(
 						{
 							type: 'POST',
-							url: ns1blankspace.util.endpointURI('SETUP_SITE_MANAGE'),
-							data: 'remove=1&id=' + ns1blankspace.objectContext,
+							url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_COPY'),
+							data: oData,
 							dataType: 'json',
-							success: function(data){ns1blankspace.financial.invoice.remove(aParam, data)}
+							success: function(data){ns1blankspace.financial.invoice.copy(aParam, data)}
 						});
 
 					}
-					else if (oResponse != undefined)
+					else
 					{
-						if (oResponse.notes == 'REMOVED')
+						if (oResponse.status == 'OK')
 						{
-							ns1blankspace.status.message("Removed");
+							ns1blankspace.status.message("Copied");
+							ns1blankspace.financial.invoice.search.send('-' + oResponse.id);
 						}
 						else
 						{
-							ns1blankspace.status.error('Cannot remove website!')
+							ns1blankspace.status.error('Cannot copy invoice')
 						}
 					}	
-					else
-					{
-						ns1blankspace.status.error('Cannot remove website!')
-					}	
+					
 				},
 
 	save:		{		

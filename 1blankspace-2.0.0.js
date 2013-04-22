@@ -1314,7 +1314,7 @@ ns1blankspace.app =
 									if (oParam != undefined)
 									{
 										if (oParam.element != undefined) {oElement = oParam.element}
-										if (oParam.xhtml != undefined) {sActionXHTML = oParam.xhtml}
+										if (oParam.xhtml != undefined) {sXHTML = oParam.xhtml}
 										if (oParam.bind != undefined) {fBind = oParam.bind}	
 									}		
 

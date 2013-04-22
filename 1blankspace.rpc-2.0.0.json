@@ -235,6 +235,7 @@
 		{"title":"FINANCIAL_GENERAL_JOURNAL_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"FINANCIAL_INVOICE_CREDIT_NOTE_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"FINANCIAL_INVOICE_CREDIT_NOTE_SEARCH", "advancedSearch":"false", "rpc":"true"},
+		{"title":"FINANCIAL_INVOICE_COPY", "advancedSearch":"false", "rpc":"true"},
 		{"title":"FINANCIAL_INVOICE_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"FINANCIAL_INVOICE_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"FINANCIAL_ITEM_COMPLETE", "advancedSearch":"false", "rpc":"true"},

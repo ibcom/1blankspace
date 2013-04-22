@@ -244,6 +244,11 @@ table.ns1blankspaceMessagingIMAPInbox
 	font-size: 0.875em;
 }
 
+table.ns1blankspaceOptions
+{
+	font-size: 0.875em;
+}
+
 table.ns1blankspaceViewControlContainer
 {
 	border-spacing: 5px 5px;
