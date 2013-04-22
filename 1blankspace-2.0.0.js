@@ -3186,6 +3186,8 @@ ns1blankspace.util =
 							oReturn.value = oParam[sParam];
 							oReturn.exists = true;
 
+							if (iIndex !== undefined && sSplit === undefined) {sSplit = '-'}
+
 							if (sSplit !== undefined)
 							{
 								oReturn.values = oParam[sParam].split(sSplit);
@@ -3853,13 +3855,25 @@ ns1blankspace.render =
 
 					aHTML.push('<table id="ns1blankspaceSearchHeader" class="ns1blankspaceSearchHeaderMedium">');
 					aHTML.push('<tr>');
-					aHTML.push('<td class="ns1blankspaceSearchHeaderClose">' +
-											'<span id="ns1blankspaceSearchHeaderClose"></span></td>');
+					
 					if (bMore)
 					{
-						aHTML.push('<td class="ns1blankspaceSearchHeaderMore">' +
-											'<span id="ns1blankspaceSearchHeaderMore"></span></td>');
+						aHTML.push('<td style="width:5px; cursor:pointer;" class="ns1blankspaceRenderHeaderPage ns1blankspaceRenderHeaderPageSelected"' +
+											' id="ns1blankspaceRenderHeader-0" data-rowstart="0">1</td>');
+
+						//aHTML.push('<td class="ns1blankspaceSearchHeaderPage" style="width:15px;">' +
+						//				'<span id="ns1blankspaceSearchFooterPage-0" class="ns1blankspaceSearchHeaderPage">' +
+						//				'1</span></td>');
+
+						aHTML.push('<td style="cursor:pointer;" class="ns1blankspaceRenderHeaderMore' + 
+											'" id="ns1blankspaceRenderHeaderMore">more...</td>');
+										
+						//aHTML.push('<td class="ns1blankspaceSearchHeaderMore" style="padding-right:3px;padding-top:3px;">' +
+						//					'<span id="ns1blankspaceSearchHeaderMore"></span></td>');
 					}
+
+					aHTML.push('<td class="ns1blankspaceSearchHeaderClose" style="padding-left:5px;padding-right:3px;padding-top:3px;width:20px;text-align:right;">' +
+											'<span id="ns1blankspaceSearchHeaderClose"></span></td>');
 					
 					aHTML.push('</tr>');
 					aHTML.push('</table>');
@@ -3870,15 +3884,18 @@ ns1blankspace.render =
 
 					aHTML.push('</div>');
 
-					if (bMore)
+					if (bMore && false)
 					{
 						aHTML.push('<table class="ns1blankspaceSearchFooterMedium">');
 						aHTML.push('<tr class="ns1blankspaceSearchFooter">');
 						
 						aHTML.push('<td class="ns1blankspaceSearchHeader">' +
-										'<span id="ns1blankspaceSearchFooterPage-0" class="ns1blankspaceSearchFooterPage">' +
+										'<span id="ns1blankspaceSearchFooterPage-0" class="ns1blankspaceSearchHeaderPage">' +
 										'1</span></td>');
-						
+									
+						aHTML.push('<td class="ns1blankspaceSearchHeaderMore" style="padding-left:5px;padding-top:3px;">' +
+											'<span id="ns1blankspaceSearchHeaderMore">more...</span></td>');
+
 						aHTML.push('</tr>');
 						aHTML.push('</table>');
 					}	
@@ -3897,7 +3914,8 @@ ns1blankspace.render =
 						if (oParam.more != undefined) {iMore = oParam.more}
 					}
 					
-					$('#ns1blankspaceSearchHeaderClose').button( {
+					$('#ns1blankspaceSearchHeaderClose').button(
+					{
 								text: false,
 								icons: {
 									primary: "ui-icon-close"
@@ -3908,25 +3926,25 @@ ns1blankspace.render =
 								$(ns1blankspace.xhtml.container).html('&nbsp;');
 							})
 							.css('width', '15px')
-							.css('height', '16px')
+							.css('height', '18px')
 						
-					$('#ns1blankspaceSearchHeaderMore').button( {
-								text: false,
-								icons: {
-									primary: "ui-icon-play"
-								}
-							})
-							.click(function() {
-								(oParam != undefined?oParam.more = iMore:oParam = {more: iMore})
-								fFunctionMore(oParam);
-							})
-							.css('width', '15px')
-							.css('height', '16px')
+					$('#ns1blankspaceRenderHeaderMore')
+					.click(function() {
+						(oParam != undefined?oParam.more = iMore:oParam = {more: iMore})
+						fFunctionMore(oParam);
+					})
+					.css('height', '18px')
+					.css('font-size', '0.75em')
 						
-					$('.ns1blankspaceSearchFooterPage').click(function(event)
+					$('span.ns1blankspaceSearchHeaderPage')
+					.button({label: '1'})
+					.click(function(event)
 					{
 						ns1blankspace.render.showPage(this.id);
-					});
+					})
+					.css('height', '18px')
+					.css('width', '15px')
+					.css('font-size', '0.75em');
 				},
 
 	showMore:	function (oParam, oResponse)

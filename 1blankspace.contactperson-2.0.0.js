@@ -1272,7 +1272,7 @@ ns1blankspace.contactPerson =
 												}
 											})
 											.click(function() {
-												ns1blankspace.contactPerson.groups.remove(this.id)
+												ns1blankspace.contactPerson.groups.remove({xhtmlElementID: this.id})
 											})
 											.css('width', '15px')
 											.css('height', '20px')
@@ -1380,11 +1380,12 @@ ns1blankspace.contactPerson =
 										
 								},
 
-					remove: 	function (sXHTMLElementID)
+					remove: 	function (oParam)
 								{
-									var aSearch = sXHTMLElementID.split('-');
-									var sSearchContext = aSearch[1];
-									var sData = 'remove=1&id=' + sSearchContext;
+									var iID = ns1blankspace.util.getParam(oParam, 'id').value;
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+									if (iID === undefined) {var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;}
+									var sData = 'remove=1&id=' + iID;
 												
 									$.ajax(
 									{
@@ -1547,8 +1548,11 @@ ns1blankspace.contactPerson =
 													aHTML.push('<td id="ns1blankspaceContactPersonGroup_surname-' + oRow.contactperson + '" class="ns1blankspaceRow">' +
 																			oRow["persongroup.contactperson.surname"]+ '</td>');
 															
-													aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
-																	'<span id="ns1blankspaceContactPersonGroup_view-' + oRow.contactperson + 
+													aHTML.push('<td style="width:45px;text-align:right;" class="ns1blankspaceRow">' +
+																	'<span id="ns1blankspaceContactPersonGroup_remove-' + oRow.id + 
+																	'" class="ns1blankspaceRow ns1blankspaceGroupsRemove">&nbsp;</span>' +
+																	'<span id="ns1blankspaceContactPersonGroup_view-' + oRow.id + 
+																	'-' + oRow.contactperson +
 																	'" class="ns1blankspaceRowView">&nbsp;</span></td>');
 																		
 													aHTML.push('</tr>');
@@ -1558,17 +1562,34 @@ ns1blankspace.contactPerson =
 
 									bind: 		function ()
 												{
-													$('#ns1blankspaceContactPersonGroup .ns1blankspaceRowView').button( {
-																text: false,
-																icons: {
-																	primary: "ui-icon-play"
-																}
+													$('#ns1blankspaceContactPersonGroup .ns1blankspaceRowView').button(
+													{
+														text: false,
+														icons:
+														{
+															primary: "ui-icon-play"
+														}
 													})
 													.click(function() {
-														ns1blankspace.contactPerson.init({id: (this.id).split('-')[1]});
+														ns1blankspace.contactPerson.init({id: (this.id).split('-')[2]});
 													})
 													.css('width', '15px')
-													.css('height', '20px')
+													.css('height', '20px');
+
+													$('#ns1blankspaceContactPersonGroup .ns1blankspaceGroupsRemove').button(
+													{
+														text: false,
+														icons:
+														{
+															 primary: "ui-icon-close"
+														}
+													})
+													.click(function()
+													{
+														ns1blankspace.contactPerson.groups.remove({xhtmlElementID: this.id})
+													})
+													.css('width', '15px')
+													.css('height', '20px');
 												}
 								}
 				},								
