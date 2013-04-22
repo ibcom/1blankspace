@@ -1111,7 +1111,12 @@ ns1blankspace.setup.file =
 													{
 														if ($.grep(ns1blankspace.setup.file.import.data.nonKeyFields, function (a) {return a.stage == (iStage + 1);}).length > 0)
 														{
-															ns1blankspace.status.message((iStage + 1));
+															ns1blankspace.status.message('Importing Stage ' + (iStage + 1) + '...');
+															oParam = ns1blankspace.util.setParam(oParam, 'row', 0);
+															oParam = ns1blankspace.util.setParam(oParam, 'stage', (iStage + 1));
+															$('#ns1blankspaceImportStatus').html(iRow + 1);
+
+															ns1blankspace.setup.file.import.upload.process(oParam)
 														}
 														else
 														{	

@@ -898,9 +898,9 @@ ns1blankspace.contactBusiness =
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceContactBusinessGroupsColumn1" class="ns1blankspaceColumn1Large">' +
+													'<td id="ns1blankspaceContactBusinessGroupsColumn1" class="ns1blankspaceColumn1Flexible">' +
 													ns1blankspace.xhtml.loading + '</td>' +
-													'<td id="ns1blankspaceContactBusinessGroupsColumn2" style="width: 100px;" class="ns1blankspaceColumn2Action"></td>' +
+													'<td id="ns1blankspaceContactBusinessGroupsColumn2" style="width: 150px;" class="ns1blankspaceColumn2Action"></td>' +
 													'</tr>' +
 													'</table>');				
 										
@@ -911,16 +911,15 @@ ns1blankspace.contactBusiness =
 										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
 										aHTML.push('<tr><td>' +
-														'<span id="ns1blankspaceContactBusinessGroupsAdd" class="ns1blankspaceAction">Add Group</span>' +
-														'</td></tr>');
-															
+														'<span id="ns1blankspaceContactBusinessGroupsAdd" class="ns1blankspaceAction">Add to group</span>' +
+														'</td></tr>');													
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceContactBusinessGroupsColumn2').html(aHTML.join(''));
 										
 										$('#ns1blankspaceContactBusinessGroupsAdd').button(
 										{
-											label: "Add Group"
+											label: "Add to group"
 										})
 										.click(function() {
 											ns1blankspace.container.position(
@@ -930,8 +929,7 @@ ns1blankspace.contactBusiness =
 												topOffset: -280
 											});
 											ns1blankspace.contactBusiness.groups.add(oParam);
-										})
-										.css('width', '75px')
+										});
 									
 										var oSearch = new AdvancedSearch();
 										oSearch.endPoint = 'contact';

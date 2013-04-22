@@ -1193,7 +1193,7 @@ ns1blankspace.contactPerson =
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
 													'<td id="ns1blankspaceContactPersonGroupsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-													'<td id="ns1blankspaceContactPersonGroupsColumn2" class="ns1blankspaceColumn2Action" style="width: 100px;">' + 
+													'<td id="ns1blankspaceContactPersonGroupsColumn2" class="ns1blankspaceColumn2Action" style="width: 150px;">' + 
 													ns1blankspace.xhtml.loading + '</td>' +
 													'</tr>' +
 													'</table>');				
@@ -1204,8 +1204,8 @@ ns1blankspace.contactPerson =
 										
 										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
-										aHTML.push('<tr><td class="ns1blankspaceAction">' +
-														'<span id="ns1blankspaceContactPersonGroupsAdd">Add Group</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" id="ns1blankspaceContactPersonGroupsAdd">Add to group</span>' +
 														'</td></tr>');
 															
 										aHTML.push('</table>');					
@@ -1214,7 +1214,7 @@ ns1blankspace.contactPerson =
 										
 										$('#ns1blankspaceContactPersonGroupsAdd').button(
 										{
-											label: "Add Group"
+											label: "Add to group"
 										})
 										.click(function() {
 											ns1blankspace.container.position(
@@ -1224,8 +1224,7 @@ ns1blankspace.contactPerson =
 												topOffset: -280
 											});
 											ns1blankspace.contactPerson.groups.add(oParam);
-										})
-										.css('width', '75px')
+										});
 										
 										var aHTML = [];
 									
