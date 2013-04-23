@@ -69,6 +69,187 @@ ns1blankspace.xhtml.header =
 	'<div id="ns1blankspaceSpaceText" style="width:450px;"></div>' +
 	'<div id="ns1blankspaceLogonName" style="width:450px;"></div></div>';
 
+ns1blankspace.scripts =
+ns1blankspace.scripts.concat(
+[
+	{
+		nameSpace: '1blankspace.home',
+		source: '/jscripts/1blankspace.home-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.format',
+		source: '/jscripts/1blankspace.format-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.contactPerson',
+		source: '/jscripts/1blankspace.contactperson-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.contactBusiness',
+		source: '/jscripts/1blankspace.contactbusiness-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.opportunity',
+		source: '/jscripts/1blankspace.opportunity-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.action',
+		source: '/jscripts/1blankspace.action-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.messaging.conversation',
+		source: '/jscripts/1blankspace.messaging.conversation-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.messaging.imap',
+		source: '/jscripts/1blankspace.messaging.imap-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.document',
+		source: '/jscripts/1blankspace.document-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.news',
+		source: '/jscripts/1blankspace.news-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.event',
+		source: '/jscripts/1blankspace.event-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.project',
+		source: '/jscripts/1blankspace.project-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.projectTask',
+		source: '/jscripts/1blankspace.projecttask-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.product',
+		source: '/jscripts/1blankspace.product-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.order',
+		source: '/jscripts/1blankspace.order-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.financial',
+		source: '/jscripts/1blankspace.financial-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.financial.bankAccount',
+		source: '/jscripts/1blankspace.financial.bankaccount-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.financial.invoice',
+		source: '/jscripts/1blankspace.financial.invoice-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.financial.expense',
+		source: '/jscripts/1blankspace.financial.expense-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.financial.receipt',
+		source: '/jscripts/1blankspace.financial.receipt-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.financial.payment',
+		source: '/jscripts/1blankspace.financial.payment-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.financial.credit',
+		source: '/jscripts/1blankspace.financial.credit-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.financial.journal',
+		source: '/jscripts/1blankspace.financial.journal-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.financial.tax',
+		source: '/jscripts/1blankspace.financial.tax-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.financial.payroll',
+		source: '/jscripts/1blankspace.financial.payroll-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.report',
+		source: '/jscripts/1blankspace.report-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup',
+		source: '/jscripts/1blankspace.setup-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.automation',
+		source: '/jscripts/1blankspace.setup.automation-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.financial',
+		source: '/jscripts/1blankspace.setup.financial-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.messaging',
+		source: '/jscripts/1blankspace.setup.messaging-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.networkGroup',
+		source: '/jscripts/1blankspace.setup.networkgroup-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.project',
+		source: '/jscripts/1blankspace.setup.project-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.projectTask',
+		source: '/jscripts/1blankspace.setup.projecttask-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.space',
+		source: '/jscripts/1blankspace.setup.space-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.structure',
+		source: '/jscripts/1blankspace.setup.structure-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.user',
+		source: '/jscripts/1blankspace.setup.user-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.userRole',
+		source: '/jscripts/1blankspace.setup.userRole-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.website',
+		source: '/jscripts/1blankspace.setup.website-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.websiteForm',
+		source: '/jscripts/1blankspace.setup.websiteForm-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.structure',
+		source: '/jscripts/1blankspace.structure-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.structureData',
+		source: '/jscripts/1blankspace.structuredata-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.supportIssue',
+		source: '/jscripts/1blankspace.supportissue-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.file',
+		source: '/jscripts/1blankspace.setup.file-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.developer.space',
+		source: '/jscripts/1blankspace.developer.space-2.0.0.js'
+	}
+])
+
 ns1blankspace.themes = 
 [
 	{
