@@ -35,10 +35,16 @@ ns1blankspace.financial.invoice =
 					{	
 						oParam.bind = ns1blankspace.financial.invoice.bind;
 						oParam.xhtml = '<table id="ns1blankspaceOptions" class="ns1blankspaceViewControlContainer">' +	
-													'<tr class="ns1blankspaceOptions">' +
-													'<td id="ns1blankspaceControlActionOptionsRemove" class="ns1blankspaceViewControl">' +
-													'Delete' +
-													'</td></tr></table>';
+											'<tr class="ns1blankspaceOptions">' +
+											'<td id="ns1blankspaceControlActionOptionsRemove" class="ns1blankspaceViewControl">' +
+											'Delete' +
+											'</td></tr>' +
+											'<tr class="ns1blankspaceOptions">' +
+											'<td id="ns1blankspaceControlActionOptionsCopy" class="ns1blankspaceViewControl">' +
+											'Copy' +
+											'</td></tr>' +
+											'</table>';
+
 						ns1blankspace.app.set(oParam);
 					}		
 				},
@@ -49,6 +55,12 @@ ns1blankspace.financial.invoice =
 					.click(function() 
 					{
 						ns1blankspace.app.options.remove(oParam)
+					});
+
+					$('#ns1blankspaceControlActionOptionsCopy')
+					.click(function() 
+					{
+						ns1blankspace.financial.invoice.copy(oParam)
 					});
 				},
 
@@ -610,10 +622,6 @@ ns1blankspace.financial.invoice =
 										var aHTML = [];
 
 										aHTML.push('<table class="ns1blankspaceColumn2">');
-											
-										aHTML.push('<tr><td>' +
-														'<span id="ns1blankspaceSummaryCopy" class="ns1blankspaceAction" style="width:75px;">' +
-														'Copy</span></td></tr>');
 																		
 										if (ns1blankspace.xhtml.templates['invoice'] != '')
 										{
@@ -677,15 +685,6 @@ ns1blankspace.financial.invoice =
 											.click(function(event)
 											{
 												ns1blankspace.financial.invoice.email.init();
-											});
-
-											$('#ns1blankspaceSummaryCopy').button(
-											{
-												label: 'Copy'
-											})
-											.click(function(event)
-											{
-												ns1blankspace.financial.invoice.copy();
 											});
 										}	
 									}	
