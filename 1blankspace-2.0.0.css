@@ -692,12 +692,12 @@ textarea.ns1blankspaceTextMultiSmall
 #ns1blankspaceContainer
 {
 	position: relative;
-	width: 900px;
+	width: 920px;
 	padding-top: 3px;
 	padding-left: 10px;
 	padding-right: 10px;	
-	min-height: 1000px;
-	overflow: auto;
+	min-height: 700px;
+	overflow: visible;
 	margin: auto;
 }
 
