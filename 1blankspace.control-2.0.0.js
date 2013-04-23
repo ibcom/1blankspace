@@ -1144,7 +1144,7 @@ ns1blankspace.control =
 										{
 											var sNS = '_' + this.namespace;
 											var oRoot = ns1blankspace;
-											if (this.rootnamepsace !== undefined) {oRoot = this.rootnamespace}
+											if (this.rootnamespace !== undefined) {oRoot = this.rootnamespace}
 											
 											if (this.parentnamespace)
 											{
