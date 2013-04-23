@@ -313,7 +313,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Email",
-		parentnamespace: "messaging",
+		parentNamespace: "messaging",
 		namespace: "imap",
 		endpoint: "MESSAGING_IMAP",
 		show: true,
@@ -322,7 +322,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Conversations",
-		parentnamespace: "messaging",
+		parentNamespace: "messaging",
 		namespace: "conversation",
 		endpoint: "MESSAGING_CONVERSATION",
 		show: true,
@@ -403,7 +403,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Bank Accounts",
-		parentnamespace: "financial",
+		parentNamespace: "financial",
 		namespace: "bankAccount",
 		endpoint: "FINANCIAL_BANK_ACCOUNT",
 		show: true,
@@ -412,7 +412,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Invoices",
-		parentnamespace: "financial",
+		parentNamespace: "financial",
 		namespace: "invoice",
 		endpoint: "FINANCIAL_INVOICE",
 		show: true,
@@ -421,7 +421,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Expenses",
-		parentnamespace: "financial",
+		parentNamespace: "financial",
 		namespace: "expense",
 		endpoint: "FINANCIAL_EXPENSE",
 		show: true,
@@ -430,7 +430,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Receipts",
-		parentnamespace: "financial",
+		parentNamespace: "financial",
 		namespace: "receipt",
 		endpoint: "FINANCIAL_RECEIPT",
 		show: true,
@@ -439,7 +439,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Payments",
-		parentnamespace: "financial",
+		parentNamespace: "financial",
 		namespace: "payment",
 		endpoint: "FINANCIAL_PAYMENT",
 		show: true,
@@ -448,7 +448,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Credits",
-		parentnamespace: "financial",
+		parentNamespace: "financial",
 		namespace: "credit",
 		endpoint: "FINANCIAL_CREDIT",
 		show: true,
@@ -457,7 +457,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Journals",
-		parentnamespace: "financial",
+		parentNamespace: "financial",
 		namespace: "journal",
 		endpoint: "FINANCIAL_GENERAL_JOURNAL",
 		show: true,
@@ -466,7 +466,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Payroll",
-		parentnamespace: "financial",
+		parentNamespace: "financial",
 		namespace: "payroll",
 		endpoint: "FINANCIAL_PAYROLL",
 		show: true,
@@ -483,7 +483,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Tax",
-		parentnamespace: "financial",
+		parentNamespace: "financial",
 		namespace: "tax",
 		endpoint: "FINANCIAL_TAX",
 		show: true,
@@ -500,7 +500,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Users",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "user",
 		endpoint: "SETUP_USER", 
 		show: true,
@@ -509,7 +509,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "User Roles",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "userRole",
 		endpoint: "SETUP_USER_ROLE", 
 		show: true,
@@ -518,7 +518,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Network Groups",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "networkGroup",
 		endpoint: "SETUP_NETWORK_GROUP", 
 		show: true,
@@ -527,7 +527,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Messaging",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "messaging",
 		endpoint: "SETUP_MESSAGING", 
 		show: true,
@@ -536,7 +536,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Websites & Webapps",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "website",
 		endpoint: "SETUP_SITE", 
 		show: true,
@@ -545,7 +545,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Structures",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "structure",
 		endpoint: "SETUP_STRUCTURE", 
 		show: true,
@@ -554,7 +554,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Automation",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "automation",
 		endpoint: "SETUP_AUTOMATION", 
 		show: true,
@@ -563,7 +563,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Financials",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "financial",
 		endpoint: "SETUP_FINANCIAL", 
 		show: true,
@@ -592,7 +592,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Project Templates",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "project",
 		endpoint: "PROJECT", 
 		show: true,
@@ -601,7 +601,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Project Template Tasks",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "projectTask",
 		endpoint: "PROJECT", 
 		show: true,
@@ -610,7 +610,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "My Account",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "space",
 		endpoint: "ADMIN", 
 		show: true,
@@ -619,7 +619,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "File Import",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "file",
 		endpoint: "SETUP_IMPORT_MANAGE", 
 		show: true,
@@ -628,7 +628,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Other Spaces",
-		parentnamespace: "developer",
+		parentNamespace: "developer",
 		namespace: "space",
 		endpoint: "ADMIN_SPACE_MANAGE", 
 		show: true,
@@ -637,7 +637,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Structures",
-		parentnamespace: "setup",
+		parentNamespace: "setup",
 		namespace: "structure",
 		endpoint: "SETUP_STRUCTURE_MANAGE", 
 		show: true,
@@ -1145,11 +1145,15 @@ ns1blankspace.control =
 											var sNS = '_' + this.namespace;
 											var oRoot = ns1blankspace;
 											if (this.rootnamespace !== undefined) {oRoot = this.rootnamespace}
-											
-											if (this.parentnamespace)
+											if (this.rootNamespace !== undefined) {oRoot = this.rootNamespace}
+
+											var sParent = this.parentNamespace;
+											if (sParent === undefined) {sParent = this.parentnamespace}
+
+											if (sParent)
 											{
-												sNS = '_' + this.parentnamespace + sNS;
-												$('#ns1blankspaceViewControl' + sNS).attr('data-parentnamespace', this.parentnamespace);
+												sNS = '_' + sParent + sNS;
+												$('#ns1blankspaceViewControl' + sNS).attr('data-parentnamespace', sParent);
 											}
 
 											$('#ns1blankspaceViewControl' + sNS).attr('data-namespace', this.namespace);
@@ -1412,11 +1416,13 @@ ns1blankspace.control =
 														$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
 														{
 															var sNS = '_' + this.namespace;
-															
-															if (this.parentnamespace)
+															var sParent = this.parentNamespace;
+															if (sParent === undefined) {sParent = this.parentnamespace}
+
+															if (sParent)
 															{
-																sNS = '_' + this.parentnamespace + sNS;
-																$('#ns1blankspaceViewControl' + sNS).attr('data-parentnamespace', this.parentnamespace);
+																sNS = '_' + sParent + sNS;
+																$('#ns1blankspaceViewControl' + sNS).attr('data-parentnamespace', sParent);
 															}
 
 															if (this.namesuffix)

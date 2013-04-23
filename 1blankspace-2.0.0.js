@@ -103,34 +103,6 @@ ns1blankspace.debug = {};
 
 ns1blankspace.selector = 'body';
 
-ns1blankspace.scriptsCore =
-[
-	{
-		nameSpace: 'jqueryui',
-		source: '/jscripts/jqueryui/jqueryui-1.8.12.min.js'
-	},
-	{
-		nameSpace: 'timepicker',
-		source: '/jscripts/jqueryui/jqueryui-timepicker.js'
-	},
-	{
-		nameSpace: 'cookies',
-		source: '/jscripts/jquery.cookie.js'
-	},
-	{
-		nameSpace: 'tinymce',
-		source: '/jscripts/tiny_mce-3.5.8/tiny_mce.js'
-	},
-	{
-		nameSpace: 'calendar',
-		source: '/jscripts/fullcalendar.min.js'
-	},
-	{
-		nameSpace: 'touch',
-		source: '/jscripts/jquery.touchwipe.1.1.1.min.js'
-	}
-]
-
 ns1blankspace.scripts =
 [
 	{
@@ -956,7 +928,8 @@ ns1blankspace.app =
 				{
 					var sParentNamespace = ns1blankspace.objectParentName;
 					var sNamespace = ns1blankspace.objectName;
-
+					var oRoot = ns1blankspace.util.getParam(oParam, 'rootnamespace', {default: ns1blankspace}).value
+							
 					if (oParam != undefined)
 					{
 						if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
@@ -967,11 +940,11 @@ ns1blankspace.app =
 					{
 						if (sParentNamespace)
 						{
-							var oNS = ns1blankspace[sParentNamespace][sNamespace];
+							var oNS = oRoot[sParentNamespace][sNamespace];
 						}
 						else
 						{
-							var oNS = ns1blankspace[sNamespace];
+							var oNS = oRoot[sNamespace];
 						}
 
 						if (oNS.init)
@@ -993,6 +966,8 @@ ns1blankspace.app =
 					var bNew;
 					var iID;
 					var bExtendInit = false;
+					var oRoot = ns1blankspace.util.getParam(oParam, 'rootNamespace', {default: ns1blankspace}).value
+					var sRoot = ns1blankspace.util.getParam(oParam, 'rootNameSpaceText', {default: 'ns1blankspace'}).value
 
 					if (oParam != undefined)
 					{
@@ -1017,13 +992,13 @@ ns1blankspace.app =
 						{
 							if (sParentNamespace)
 							{
-								var oNS = ns1blankspace[sParentNamespace][sNamespace];
-								var sNS = 'ns1blankspace["' + sParentNamespace + '"]["' + sNamespace + '"]';
+								var oNS = oRoot[sParentNamespace][sNamespace];
+								var sNS = sRoot + '["' + sParentNamespace + '"]["' + sNamespace + '"]';
 							}
 							else
 							{
-								var oNS = ns1blankspace[sNamespace];
-								var sNS = 'ns1blankspace["' + sNamespace + '"]';
+								var oNS = oRoot[sNamespace];
+								var sNS = sRoot + '["' + sNamespace + '"]';
 							}
 
 							if (bShowHome)
