@@ -1224,8 +1224,8 @@ ns1blankspace.setup.website =
 											content_css : sCSS,
 											
 											external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
-											external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
-											media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext
+											external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_IMAGE_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
+											media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_MEDIA_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext
 										});
 										
 										if (sID != undefined)
