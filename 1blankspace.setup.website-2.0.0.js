@@ -1118,12 +1118,7 @@ ns1blankspace.setup.website =
 										$('#ns1blankspacePagesColumn2').html(aHTML.join(''));
 										
 										$('#ns1blankspaceWebsitePageSave').button({
-											text: false,
-											label: "Save",
-											icons:
-											{
-												 primary: "ui-icon-check"
-											}
+											label: "Save"
 										})
 										.click(function() 
 										{
@@ -1155,21 +1150,18 @@ ns1blankspace.setup.website =
 													ns1blankspace.setup.website.pages.show();
 												}
 											});
-										});
+										})
+										.css('width', '65px');
 										
 										$('#ns1blankspaceWebsitePageCancel').button(
 										{
-											text: false,
-											label: "Cancel",
-											icons:
-											{
-												 primary: "ui-icon-close"
-											}
+											label: "Cancel"
 										})
 										.click(function() 
 										{
 											ns1blankspace.setup.website.pages.show();
-										});
+										})
+										.css('width', '65px');
 										
 										$('[name="radioDocumentType"]').click(function()
 										{
@@ -1193,12 +1185,12 @@ ns1blankspace.setup.website =
 											width : "100%",
 											theme : "advanced",
 
-											plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
+											plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
 											theme_advanced_buttons1_add_before : "forecolor,backcolor", 
 											theme_advanced_buttons1_add : "fontselect,fontsizeselect", 
 									 
-											theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak,visualchars", 
+											theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak", 
 											theme_advanced_buttons2_add_before: "cut,copy,paste,pasteword,separator,search,replace,separator", 
 											
 											theme_advanced_buttons3_add_before : "tablecontrols,separator", 
