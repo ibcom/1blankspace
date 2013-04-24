@@ -874,7 +874,7 @@ ns1blankspace.setup.website =
 										{
 											type: 'GET',
 											url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_SEARCH'),
-											data: 'site=' + iObjectContext,
+											data: 'rows=100&site=' + iObjectContext,
 											dataType: 'json',
 											success: function(data) {ns1blankspace.setup.website.pages.show(oParam, data)}
 										});
@@ -934,6 +934,7 @@ ns1blankspace.setup.website =
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">URL</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Sharing</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">ID</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
@@ -968,7 +969,10 @@ ns1blankspace.setup.website =
 													aHTML.push('<td id="ns1blankspaceWebsitePages_public-' + this.id + '" class="ns1blankspaceRow">' +
 																		'Private</td>');
 												}		
-																		
+																
+												aHTML.push('<td id="ns1blankspaceWebsitePages_id-' + this.id + '" class="ns1blankspaceRow" style="color:#A0A0A0;">' +
+																		this.id + '</td>');
+																								
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 												
 												aHTML.push('<span id="ns1blankspaceWebsitePage_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
