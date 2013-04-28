@@ -609,7 +609,7 @@ ns1blankspace.app =
 					ns1blankspace.user.contactBusiness = oResponse.contactbusiness;
 					ns1blankspace.user.email = oResponse.email;
 					ns1blankspace.user.systemAdmin = oResponse.systemadmin;
-					if (oResponse.roles) {ns1blankspace.user.roles = oResponse.roles.rows};
+					ns1blankspace.user.roles = oResponse.roles.rows;
 
 					ns1blankspace.spaceText = oResponse.spacename;
 					ns1blankspace.space = oResponse.space;
@@ -2606,6 +2606,7 @@ ns1blankspace.search =
 					var sColumns;
 					var iColumn = 0;
 					var sMethodFilter;
+					var bMultiSelect;
 						
 					if (oParam != undefined)
 					{
@@ -2618,6 +2619,7 @@ ns1blankspace.search =
 						if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
 						if (oParam.sColumns != undefined) {sColumns = oParam.columns}
 						if (oParam.methodFilter != undefined) {sMethodFilter = oParam.methodFilter}
+						if (oParam.multiSelect != undefined) {bMultiSelect = oParam.multiSelect; }
 					}
 					
 					if (sXHTMLElementID != undefined)
@@ -2650,6 +2652,11 @@ ns1blankspace.search =
 						if (sMethodFilter === undefined)
 						{
 							sMethodFilter = $('#' + sXHTMLInputElementID).attr("data-methodFilter");
+						}
+
+						if (bMultiSelect === undefined) {
+							bMultiSelect = ($('#' + sXHTMLInputElementID).attr("data-multiselect") === "true");
+							$.extend(true, oParam, {multiselect: bMultiSelect});
 						}
 					}	
 					
@@ -2859,7 +2866,12 @@ ns1blankspace.search =
 								{
 									$(ns1blankspace.xhtml.container).hide(200);
 									$.extend(true, oParam, {xhtmlElementID: event.target.id})
-									ns1blankspace.search.show(oParam);
+									if (bMultiSelect) {
+										ns1blankspace.search.multiSelect.add(oParam);
+									}
+									else {
+										ns1blankspace.search.show(oParam);
+									}
 								});
 							}	
 						}
@@ -2889,8 +2901,76 @@ ns1blankspace.search =
 					$(ns1blankspace.xhtml.container).show();
 					$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchAdvanced" style="padding:3px; padding-left: 4px; padding-right: 4px; color:#CCCCCC; font-size:0.625em; cursor:pointer;">advanced&nbsp;search</span>');
 					$('#ns1blankspaceSearchAdvanced').click(function() {ns1blankspace.report.init({all: false})});
-				}		
+				},		
 
+	multiSelect: 
+	{
+		add: 	function(oParam) {
+
+					var sXHTMLElementID = '';
+					var sInputElementId;
+					var sCellElementId;
+					var sTableElementId;
+					var aHTML = [];
+
+					if (oParam) {
+						if (oParam.xhtmlElementID) {sXHTMLElementID = oParam.xhtmlElementID;}
+					}
+
+					sInputElementId = sXHTMLElementID.split('-')[0];
+					sCellElementId = $('#' + sInputElementId).parent().attr('id');
+					sTableElementId = sCellElementId.replace(/-/g, '_');
+					sTableElementId = sTableElementId.replace('_input_', '_selectrows_');
+
+					if ($('#' + sTableElementId).html() === undefined) {
+						aHTML.push('<table id="' + sTableElementId + '" style="width:100%;">');
+
+					}
+
+					// Make sure the value hasn't already been selected and then Insert the row that's just been clicked 
+					if ($('#' + sInputElementId.replace('_input_', '_selectrows_') + '-' + sXHTMLElementID.split('-')[1]).html() === undefined) {
+						aHTML.push('<tr>' +
+									'<td id="' + sInputElementId.replace('_input_', '_selectrows_') + '-' + sXHTMLElementID.split('-')[1] + '"' +
+									   ' width="250px" class="ns1blankspaceMultiSelect">' +
+									$('#' + sXHTMLElementID).html() + 
+									'</td>' +
+									'<td class="ns1blankspaceMultiRemove">Delete</td>' +
+									'</tr>');
+					}
+					else { 
+						ns1blankspace.status.message("Value has already been selected.");
+						return;
+					}
+					
+
+					if ($('#' + sTableElementId).html() === undefined) {
+						// Let's insert the table into the td following the input element
+						aHTML.push('</table>');
+
+						$('#' + sCellElementId).html($('#' + sCellElementId).html() + aHTML.join(''));
+					}
+					else {
+						// Insert the row into the table 
+						$('#' + sTableElementId).append(aHTML.join(''));
+					}
+
+					// Now bind the remove button (we need to unbind all clicks first)
+					$('.ns1blankspaceMultiRemove').unbind('click');
+					$('.ns1blankspaceMultiRemove')
+					.button({
+							 text: false,
+							 icons: {
+								 primary: "ui-icon-close"
+							}
+					})
+					.css('height', '15px')
+					.css('width', '15px')
+					.click( function(event) {
+						// remove the row
+						$(this).parent().remove();
+					});
+		}
+	}
 }
 
 ns1blankspace.save =

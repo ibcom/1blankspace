@@ -78,7 +78,28 @@ ns1blankspace.report =
 								returnParameters: 'product',
 								functionSearch: ns1blankspace.product.search.send,
 								scriptOpen: 'ns1blankspace.product.init({showHome: false});ns1blankspace.product.search.send(this.id)'
-							}
+							},
+							{
+								name: "Invoices",
+								object: 5,
+								objectName: "product",
+								method: "FINANCIAL_INVOICE_SEARCH",
+								returnParameters: 'invoice',
+								functionSearch: ns1blankspace.financial.invoice.search.send,
+								scriptOpen: 'ns1blankspace.financial.invoice.init({showHome: false});ns1blankspace.financial.invoice.search.send(this.id)'
+							},
+							{
+								name: "Business Groups",
+								objectName: "businessgroup",
+								method: "CONTACT_BUSINESS_GROUP_SEARCH",
+								returnParameters: 'businessgroup'
+							},
+							{
+								name: "Person Groups",
+								objectName: "persongroup",
+								method: "CONTACT_PERSON_GROUP_SEARCH",
+								returnParameters: 'persongroup'
+							},
 							
 						]		
 
@@ -114,6 +135,11 @@ ns1blankspace.report =
 							{name: "contactbusiness.contactperson.firstname", caption: "Primary Contact First Name"},
 							{name: "contactbusiness.contactperson.surname", caption: "Primary Contact Surname"},
 							{name: "contactbusiness.contactperson.email", caption: "Primary Contact Email"},
+							{name: "contactbusiness.createdbytext", caption: "Created By"},
+							{name: "contactbusiness.createddate", caption: "Created Date"},
+							{name: "contactbusiness.modifiedbytext", caption: "Last Modified By"},
+							{name: "contactbusiness.modifieddate", caption: "Last Modified Date"},
+							
 							
 							{name: "contactperson.surname", caption: "Surname"},
 							{name: "contactperson.titletext", caption: "Title"},
@@ -156,6 +182,10 @@ ns1blankspace.report =
 							{name: "contactperson.contactbusiness.streetstate", caption: "Business Street State"},
 							{name: "contactperson.contactbusiness.streetpostcode", caption: "Business Street Postcode"},
 							{name: "contactperson.contactbusiness.streetcountry", caption: "Business Street Country"},
+							{name: "contactperson.createdbytext", caption: "Created By"},
+							{name: "contactperson.createddate", caption: "Created Date"},
+							{name: "contactperson.modifiedbytext", caption: "Last Modified By"},
+							{name: "contactperson.modifieddate", caption: "Last Modified Date"},
 									
 							{name: "opportunity.lodgeddate", caption: "Date Received"},
 							{name: "opportunity.managerusertext", caption: "Managed By"},
@@ -196,6 +226,10 @@ ns1blankspace.report =
 							{name: "opportunity.contactperson.mailingsuburb", caption: "Mailing Address Suburb"},
 							{name: "opportunity.contactperson.mailingstate", caption: "Mailing Address State"},
 							{name: "opportunity.contactperson.mailingpostcode", caption: "Mailing Address Postcode"},
+							{name: "opportunity.createdbytext", caption: "Created By"},
+							{name: "opportunity.createddate", caption: "Created Date"},
+							{name: "opportunity.modifiedbytext", caption: "Last Modified By"},
+							{name: "opportunity.modifieddate", caption: "Last Modified Date"},
 
 							{name: "product.reference", caption: "Reference"},
 							{name: "product.title", caption: "Title"},
@@ -206,26 +240,84 @@ ns1blankspace.report =
 							{name: "product.currentretailprice", caption: "Retail Price"},
 							{name: "product.financialaccounttext", caption: "Financial Account"},
 							{name: "product.unittypetext", caption: "Unit Type"},
-							{name: "product.units", caption: "Units"}
+							{name: "product.units", caption: "Units"},
+							{name: "product.createdbytext", caption: "Created By"},
+							{name: "product.createddate", caption: "Created Date"},
+							{name: "product.modifiedbytext", caption: "Last Modified By"},
+							{name: "product.modifieddate", caption: "Last Modified Date"},
+
+							{name: "invoice.reference", caption: "Invoice number"},
+							{name: "invoice.description", caption: "Description"},
+							{name: "invoice.contactbusinesssenttotext", caption: "Business"},
+							{name: "invoice.contactpersonsenttotext", caption: "Person"},
+							{name: "invoice.amount", caption: "Amount"},
+							{name: "invoice.sent", caption: "Sent?"},
+							{name: "invoice.sentdate", caption: "Sent Date"},
+							{name: "invoice.outstandingamount", caption: "Amount Outstanding"},
+							{name: "invoice.receiptamount", caption: "Amount Receipted"},
+							{name: "invoice.creditamount", caption: "Amount Credited"},
+							{name: "invoice.createdbytext", caption: "Created By"},
+							{name: "invoice.createddate", caption: "Created Date"},
+							{name: "invoice.modifiedbytext", caption: "Last Modified By"},
+							{name: "invoice.modifieddate", caption: "Last Modified Date"},
+
+							{name: "persongroup.contactpersontext", caption: "Contact Person"},
+							{name: "persongroup.grouptext", caption: "Group"},
+
+							{name: "businessgroup.contactbusinesstext", caption: "Contact Business"},
+							{name: "businessgroup.grouptext", caption: "Group"}
 						];
 
 					ns1blankspace.report.selectAttributes = 			
 						[
 							{
-								name: "contact.businesstext", 
-								addClass: "ns1blankspaceSelectBusiness",
-								onDemandColumns: "tradename-space-customerstatustext"
+								name: "persongroup.contactpersontext", 
+								onDemandColumns: "firstname-space-surname"
+							},
+							{
+								name: "businessgroup.contactbusinesstext", 
+								onDemandColumns: "tradename"
 							},
 							{
 								name: "contactbusiness.primarycontactpersontext",
-								addClass: "ns1blankspaceSelectBusiness",
-								onDemandColumns: "tradename-space-customerstatustext"
+								onDemandColumns: "tradename"
 							},
 							{
 								name: "contactperson.contactbusinesstext",
-								addClass: "ns1blankspaceSelectBusiness",
-								onDemandColumns: "tradename-space-customerstatustext"
-							}
+								onDemandColumns: "tradename"
+							},
+							{
+								name: "invoice.contactpersonsenttotext", 
+								onDemandColumns: "firstname-space-surname"
+							},
+							{
+								name: "invoice.contactbusinesssenttotext",
+								onDemandColumns: "tradename"
+							},
+							{
+								name: "contactbusiness.createdbytext",
+								onDemandColumns: "firstname-space-surname"
+							},
+							{
+								name: "contactperson.createdbytext",
+								onDemandColumns: "firstname-space-surname"
+							},
+							{
+								name: "opportunity.createdbytext",
+								onDemandColumns: "firstname-space-surname"
+							},
+							{
+								name: "opportunity.managedbytext",
+								onDemandColumns: "firstname-space-surname"
+							},
+							{
+								name: "products.createdbytext",
+								onDemandColumns: "firstname-space-surname"
+							},
+							{
+								name: "invoices.createdbytext",
+								onDemandColumns: "firstname-space-surname"
+							},
 						];
 
 					
@@ -249,6 +341,14 @@ ns1blankspace.report =
 									}
 								});
 							})	
+						});
+					}
+
+					// Now add other fields to reports above as defined in control file
+					if (ns1blankspace.data.control && ns1blankspace.data.control.report && ns1blankspace.data.control.report.dictionary) {
+
+						$.each(ns1blankspace.data.control.report.dictionary, function() {
+							ns1blankspace.report.dictionary.push({name: this.name, caption: this.caption});
 						});
 					}
 
@@ -461,6 +561,7 @@ ns1blankspace.report =
 						if (oParam.survey != undefined) {iSurveyId = oParam.survey}
 						if (oParam.category != undefined) {iCategoryId = oParam.category}
 						if (oParam.showSort != undefined) {bShowSort = oParam.showSort}
+						oParam.response = undefined;
 					}
 					
 					if (ns1blankspace.report.endpoint == undefined && ns1blankspace.report.method != undefined)
@@ -489,7 +590,7 @@ ns1blankspace.report =
 						aHTML.push('<div id="ns1blankspaceReportHeader"></div>');
 						aHTML.push('<div style="display:none;" id="ns1blankspaceReportResults"></div>');
 						aHTML.push('<div style="display:none;" id="ns1blankspaceReportExport">No data to export.</div>');
-						//aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate">No data to update.</div>');
+						aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate">No data to update.</div>');
 						aHTML.push('<div style="display:none;" id="ns1blankspaceReportSend">No data to send.</div>');
 						$('#ns1blankspaceReport').html(aHTML.join(''));	
 							
@@ -518,7 +619,7 @@ ns1blankspace.report =
 							aHTML.push('<div id="ns1blankspaceReportSearch"></div>');
 							aHTML.push('<div style="display:none;" id="ns1blankspaceReportResults">No results.</div>');
 							aHTML.push('<div style="display:none;" id="ns1blankspaceReportExport">No data to export.</div>');
-							//aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate">No data to update.</div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate">No data to update.</div>');
 							aHTML.push('<div style="display:none;" id="ns1blankspaceReportSend">No data to send.</div>');
 							$('#ns1blankspaceReport').html(aHTML.join(''));	
 						}
@@ -590,9 +691,9 @@ ns1blankspace.report =
 												'<input id="radioReport-Search" name="radioOptions" type="radio" checked="checked"/><label for="radioReport-Search">Criteria</label>' +
 												'<input id="radioReport-Results" name="radioOptions" type="radio" /><label for="radioReport-Results">Results</label>' +
 												'<input id="radioReport-Export" name="radioOptions" type="radio" /><label for="radioReport-Export">Export</label>' +
+												'<input id="radioReport-Update" name="radioOptions" type="radio" /><label for="radioReport-Update">Update</label>' +
 												'<input id="radioReport-Send" name="radioOptions" type="radio" /><label for="radioReport-Send">Send</label>' +
 											'</td>');
-							//					'<input id="radioReport-Update" name="radioOptions" type="radio" /><label for="radioReport-Update">Update</label>' +
 
 							aHTML.push('<td style="vertical-alignment:bottom;padding-top:10px;text-align:right;font-size:0.75em;"><span id="spanReportSearch">Search</span></td>');
 							aHTML.push('</table>'); 
@@ -689,14 +790,14 @@ ns1blankspace.report =
 									
 									if (iSelectAttributes >= 0)
 									{	
+										bSelect = true;
 										if (ns1blankspace.report.selectAttributes[iSelectAttributes].addClass != undefined) {
-												sMoreAttributes += ' data-selectClass="' + ns1blankspace.report.selectAttributes[iSelectAttributes].addClass + '"';	}
+												sMoreAttributes += ' data-selectClass="' + ns1blankspace.report.selectAttributes[iSelectAttributes].addClass + '"';	
+										}
 										if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns != undefined) {
-												sMoreAttributes += ' data-columnms="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns + '"';	}
-										if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupFilter != undefined) {
-												sMoreAttributes += ' data-onDemandGroupFilter="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupFilter + '"';	}
-										if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupType != undefined) {
-												sMoreAttributes += ' data-onDemandGroupType="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandGroupType + '"';	}
+												sMoreAttributes += ' data-columns="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns + '"';	
+										}
+
 										if (sMoreAttributes != "") {
 												sMoreAttributes += ' style="width:200px"';}
 									}
@@ -859,9 +960,10 @@ ns1blankspace.report =
 							})
 							.click(function() 
 							{
+								oParam.response = undefined;
 								$("#ns1blankspaceReportResults").html('No results.');
 								$("#ns1blankspaceReportExport").html('No data to export.');
-								//$("#ns1blankspaceReportUpdate").html('No data to update.');
+								$("#ns1blankspaceReportUpdate").html('No data to update.');
 								$("#ns1blankspaceReportSend").html('No data to send.');
 								$("#radioReport-Search").removeAttr('checked');
 								$("#radioReport-Results").attr('checked', 'checked');
@@ -954,9 +1056,7 @@ ns1blankspace.report =
 							var sSearchMethod = $('#' + sXHTMLElementID).attr('data-searchMethod');
 							var sInputType = $('#' + sXHTMLElementID).attr('data-inputType');
 							var sSelectClass = $('#' + sXHTMLElementID).attr('data-selectClass');
-							var sOnDemandColumns = $('#' + sXHTMLElementID).attr('data-onDemandColumns');
-							var sOnDemandGroupFilter = $('#' + sXHTMLElementID).attr('data-onDemandGroupFilter');
-							var sOnDemandGroupType = $('#' + sXHTMLElementID).attr('data-onDemandGroupType');
+							var sOnDemandColumns = $('#' + sXHTMLElementID).attr('data-columns');
 							var sOnDemandClick = $('#' + sXHTMLElementID).attr('data-onDemandClick');
 							var sSearchRelatedField = $('#' + sXHTMLElementID).attr('data-searchrelatedfield');
 								
@@ -970,8 +1070,6 @@ ns1blankspace.report =
 								searchMethod: sSearchMethod,
 								selectClass: sSelectClass,
 								onDemandColumns: sOnDemandColumns,
-								onDemandGroupFilter: sOnDemandGroupFilter,
-								onDemandGroupType: sOnDemandGroupType,
 								comparisonID: sID,
 								onDemandClick: sOnDemandClick,
 								searchrelatedfield: sSearchRelatedField
@@ -993,8 +1091,6 @@ ns1blankspace.report =
 					var sSearchMethod;
 					var sSelectClass;
 					var sOnDemandColumns;
-					var sOnDemandGroupFilter;
-					var sOnDemandGroupType;
 					var sFirstInputElementId;
 					var sComparisonID;
 					var sOnDemandClick;
@@ -1010,8 +1106,6 @@ ns1blankspace.report =
 						if (oParam.searchMethod != undefined) {sSearchMethod = oParam.searchMethod}
 						if (oParam.selectClass != undefined) {sSelectClass = oParam.selectClass}
 						if (oParam.onDemandColumns != undefined) {sOnDemandColumns = oParam.onDemandColumns}		
-						if (oParam.onDemandGroupFilter != undefined) {sOnDemandGroupFilter = oParam.onDemandGroupFilter}		
-						if (oParam.onDemandGroupType != undefined) {sOnDemandGroupType = oParam.onDemandGroupType}		
 						if (oParam.comparisonID != undefined) {sComparisonID = oParam.comparisonID}		
 						if (oParam.onDemandClick != undefined) {sOnDemandClick = oParam.onDemandClick}		
 						if (oParam.searchmethod != undefined) {sSearchMethod = oParam.searchmethod}		
@@ -1062,42 +1156,26 @@ ns1blankspace.report =
 										if (sSearchEndpoint == "") 	{sSearchEndpoint = sSearchMethod.substr(0, sSearchMethod.indexOf("_")) }
 										sThisElementId = sThisElementId.replace(/-/g, '_');
 										sThisElementId = sThisElementId + '_' + i
-										if (false && sComparisonID.indexOf("IN_LIST") >= 0)
-										{	aHTML.push('<select multiple="multiple" '); }
-										else
-										{	aHTML.push('<input '); }
 										
-										aHTML.push('id="' + sThisElementId + '"');
+										aHTML.push('<input id="' + sThisElementId + '"');
 										aHTML.push(' data-method="' + sSearchMethod + '" ' +
 													'class="') ;
+										
 										if (sSelectClass != undefined)
 										{	aHTML.push(sSelectClass);	}
 										else
 										{	aHTML.push('ns1blankspaceSelect')}
 										
-										if (sComparisonID.indexOf("IN_LIST") >= 0)
-										{
-											aHTML.push(' inputInterfaceMainMultiSelect');
-										}
 										aHTML.push('"');
 										
 										if (sOnDemandColumns != undefined)
-										{	aHTML.push(' onDemandColumns="' + sOnDemandColumns + '"')	}
+										{	aHTML.push(' data-columns="' + sOnDemandColumns + '"')	}
 										
-										if (sOnDemandGroupFilter != undefined)
-										{	aHTML.push(' onDemandGroupFilter="' + sOnDemandGroupFilter + '"')	}
-										
-										if (sOnDemandGroupType != undefined)
-										{	aHTML.push(' onDemandGroupType="' + sOnDemandGroupType + '"')	}
-										
-										if (sOnDemandClick != undefined)
-										{	aHTML.push(' onDemandClick="' + sOnDemandClick + '"')	}
-										
-										aHTML.push('>');
-										if (false && sComparisonID.indexOf("IN_LIST") >= 0)
+										if (sComparisonID.indexOf("IN_LIST") >= 0)
 										{
-											aHTML.push('</select>');
+											aHTML.push(' data-multiSelect="true"');
 										}
+										aHTML.push('>');
 									}
 									else
 									{
@@ -1186,6 +1264,8 @@ ns1blankspace.report =
 												}	
 											}
 											
+											// A crude way to determine if the report contains contactperson or contactpersontext
+											// so that we can produce mail merge emails
 											$("input.ns1blankspaceReportInclude:checked").each(function() 
 											{ 
 												var sID = this.id;
@@ -1194,12 +1274,8 @@ ns1blankspace.report =
 												
 												oParameterList.push(sName);
 												aFields.push(sName);
-												if (!bContainsContactPerson &&
-												    (sName.toLowerCase().substr(sName.length - 13, 13) == "contactperson" ||
-													 sName.toLowerCase().substr(sName.length - 17, 17) == "contactpersontext" ||
-													 sName.toLowerCase().indexOf(".contactperson.") != -1  ||
-													 ns1blankspace.report.method.toUpperCase() == "CONTACT_PERSON_SEARCH")
-													)
+
+												if (!bContainsContactPerson && sName.indexOf("contactperson") > -1 )
 												{	bContainsContactPerson = true;	}
 												
 											});	
@@ -1238,8 +1314,8 @@ ns1blankspace.report =
 												var aID = sID.split('-')
 												
 												var sInputID  = sID.replace('_comparison', '_input');
-												sInputID  = sInputID.replace('td', 'input');
 												sInputID = sInputID.replace(/-/g, '_');
+												var sMultiSelectID = sInputID.replace('_input_', '_selectrows_');
 												
 												var sName = aID[1].replace('_', '.');
 												var sComparison = $(this).attr('data-code');
@@ -1252,7 +1328,7 @@ ns1blankspace.report =
 													
 													if ( sInputType != "select" || 
 													    (sInputType == "select" && sComparison.indexOf("IN_LIST") < 0) ||
-													    (sInputType == "select" && sComparison.indexOf("IN_LIST") >= 0 && $('td.interfaceMultiple').length == 0)
+													    (sInputType == "select" && sComparison.indexOf("IN_LIST") >= 0 && $('#' + sMultiSelectID).html() === undefined)
 													   ) 
 													{
 														for (var i = 0; i < $('#' + sID).attr('data-inputCount'); i++)
@@ -1283,16 +1359,15 @@ ns1blankspace.report =
 													{
 														var aValueList = [];
 														
-														$('td.interfaceMultiple').each(function()
+														$('.ns1blankspaceMultiSelect').each(function()
 														{
-															var sElementId = this.id;
-															var aSearch = sElementId.split("-");
+															var aSearch = this.id.split("-");
 															aValueList.push(aSearch[aSearch.length - 1]);
 														});
 														
 														if (aValueList.length == 0)
 														{
-															alert("You must choose at least one value.");
+															alert("You must choose at least one value when using " + sComparison + ".");
 															return false;
 														}
 														else
@@ -1423,10 +1498,10 @@ ns1blankspace.report =
 																			columns: aColumns
 																			});
 
-											//$('#radioReport-Update').unbind("click");
-											//$('#radioReport-Update').click(function() {
-											//	ns1blankspace.report.bulkUpdate.show(oParam);
-											//});
+											$('#radioReport-Update').unbind("click");
+											$('#radioReport-Update').click(function() {
+												ns1blankspace.report.bulkUpdate.show(oParam);
+											});
 											
 											$('#radioReport-Export').unbind("click");
 											$('#radioReport-Export').click(function() {
@@ -2159,7 +2234,7 @@ ns1blankspace.report =
 
 							var aHTML = [];
 
-							if (oResponse && $('#ns1blankspaceReportUpdateColumn1').html() == undefined ) {
+							if (oResponse && oResponse.data.rows.length > 0 && $('#ns1blankspaceReportUpdateColumn1').html() == undefined ) {
 
 								aHTML.push('<table class="ns1blankspace">');
 								aHTML.push('<tr><td id="ns1blankspaceReportUpdateColumn1"></td>' +
@@ -2194,8 +2269,8 @@ ns1blankspace.report =
 										if (sSearchMethod == "" || sSearchMethod.split('_')[0] === 'SETUP') {
 
 											aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReportUpdate_include_' + sName + '">' +
-														'<input type="checkbox" id="ns1blankspaceReportUpdateCheck_include-' + sName + '"' +
-															' data-name="' + this + '"' +
+														'<input type="checkbox" id="ns1blankspaceReportUpdateCheck_include_' + sName + '"' +
+															' data-name="' + sName + '"' +
 															' class="ns1blankspaceReportUpdateInclude">' +
 														'</td>');
 										
@@ -2203,9 +2278,9 @@ ns1blankspace.report =
 														sCaption +
 														'</td>');
 											
-											aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_value-' + sName + '"' +
+											aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_value_' + sName + '"' +
 																' class="ns1blankspace' + sInputTypeTitle  + '">');
-											aHTML.push('<input id="ns1blankspaceReportUpdate_input-' + sName + '"' +
+											aHTML.push('<input id="ns1blankspaceReportUpdate_input_' + sName + '"' +
 																' class="ns1blankspace' + sInputTypeTitle);
 											if (sDataType === "date") {
 												aHTML.push(' hasDatepicker');
@@ -2244,7 +2319,10 @@ ns1blankspace.report =
 								$('#ns1blankspaceReportUpdateProcess').button({
 									label: "Update"
 								})
-								.click( function(oParam) { ns1blankspace.report.bulkUpdate.process(oParam);});
+								.click( function() { 
+									ns1blankspace.util.setParam(oParam, 'step', 1);
+									ns1blankspace.report.bulkUpdate.send(oParam);
+								});
 
 
 							}
@@ -2257,13 +2335,10 @@ ns1blankspace.report =
 							}
 
 							var sShowId = 'radioReport-Update';
-
 							$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
 								
 								var sSuffix = $(this).attr('id').split('-')[1];
-
 								if ($(this).attr('id') === sShowId) {
-
 									$('#ns1blankspaceReport' + sSuffix).show();
 								}
 								else {
@@ -2273,25 +2348,111 @@ ns1blankspace.report =
 
 						},
 
-				send: 	function (oParam)
-						{
+				send: 	function (oParam) {
+
+							var oResponse;
 							var iMoreId;
 							var sErrorText;
+							var iStep = 1;
+							var aUpdateColumns = [];
+							var bUpdateData = true;
 							
-							if (oParam != undefined)
-							{
-								if (oParam.count != undefined && oParam.count != "0") 
-								{
-									iMoreId = oParam.moreId;
-									$('td.ns1blankspaceRowSelect:visible').each(function() {
-										oParam.rowId = $(this).attr('id').substr(3);
-										ns1blankspace.report.bulkUpdate.process(oParam);
+							ns1blankspace.report.data = {};
+							ns1blankspace.report.data.rows = [];
+
+							if (oParam) {
+								oResponse = oParam.response;
+								if (oParam.updateColumns) {aUpdateColumns = oParam.updateColumns; }
+								if (oParam.step) {iStep = oParam.step; }
+							}
+
+							if ($("input.ns1blankspaceReportUpdateInclude:checked").length == 0) {
+								ns1blankspace.status.error('Please choose at least one column to update.');
+							}
+							else if (oResponse) {						
+								
+								var sTotal = oResponse.summary[ns1blankspace.report.endpoint];
+
+								if (iStep === 1) {
+
+									// Ask user 'Are you sure'
+									if (confirm("You are about to update " + sTotal + ' records. Are you sure you want to continue?')) {
+										
+										$('#ns1blankspaceReportUpdateProgress').html('<span id="ns1blankspaceReportUpdateProgressCount">0</span>&nbsp;of ' + sTotal + ' records updated');
+
+										// Determine the columns to be updated and the value to update them to
+										$("input.ns1blankspaceReportUpdateInclude:checked").each(function() {
+
+											var sInputXHMLElementId = $(this).attr('id').replace('Check_include_', '_input_');
+											
+											var sUpdateColumn = $('#' + sInputXHMLElementId).attr('data-searchrelatedfield');
+											if (sUpdateColumn === undefined) { 
+												sUpdateColumn = $(this).attr('data-name').replace(/_/g, '.');
+											}
+											sUpdateColumn = sUpdateColumn.substr(sUpdateColumn.indexOf('.') + 1);
+
+											var sUpdateValue = $('#' + sInputXHMLElementId).val();
+											if ($('#' + sInputXHMLElementId).attr('data-id')) {
+												sUpdateValue = $('#' + sInputXHMLElementId).attr('data-id');
+											}
+											
+											aUpdateColumns.push({name: sUpdateColumn, value: sUpdateValue});
+										});
+										
+										ns1blankspace.util.setParam(oParam, "updateColumns", aUpdateColumns);
+										ns1blankspace.util.setParam(oParam, "step", 2);
+									}
+									else { bUpdateData = false;}
+
+								}
+								else {
+									ns1blankspace.util.setParam(oParam, "step", 2);
+								}
+
+
+								// Loop through all the records and process
+								iMoreId = oResponse.moreid;
+								if (bUpdateData && oResponse.data.rows.length > 0) {
+
+									$.each(oResponse.data.rows, function() {
+
+										ns1blankspace.report.data.rows.push(this);
 									});
 
+									if (oResponse.morerows === 'true') {
 
-									
+										var nRemaining = parseInt(sTotal) - 20;
+										
+										$.ajax(
+										{
+											type: 'GET',
+											url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
+											data: 'id=' + iMoreId + '&startrow=20&rows=' + nRemaining,
+											dataType: 'json',
+											success: function(data) {
+
+												$.each(data.data.rows, function() {
+													ns1blankspace.report.data.rows.push(this);
+												});
+
+												$.each(ns1blankspace.report.data.rows, function() {
+													ns1blankspace.report.bulkUpdate.process(oParam, this);
+												});
+												oParam.step = undefined;
+												oParam.updateColumns = undefined;
+											}
+										}); 
+									}
+									else {
+										$.each(ns1blankspace.report.data.rows, function() {
+											ns1blankspace.report.bulkUpdate.process(oParam, this);
+										});
+										oParam.step = undefined;
+										oParam.updateColumns = undefined;
+									}
 								}
-								else { sErrorText = "No results.";}
+
+								
 							}
 							else { sErrorText = "Parameters not passed to Update.";}
 
@@ -2306,73 +2467,54 @@ ns1blankspace.report =
 							}
 						},
 
-				process: function(oParam) {
+				process: function(oParam, oRow) {
+
+						var sErrorText;
 
 						var aData = [];
-						var aUpdateElements =[];
+						var aUpdateColumns = [];
 						var sRowId;
 
 						if (oParam) {
-							sRowId = oParam.rowId;
+							if (oParam.updateColumns) {aUpdateColumns = oParam.updateColumns;}
 						}
 
-						if (sRowId) {
-							
-							aData.push('id=' + sRowId);
+						if (aUpdateColumns.length > 0) {
 
-							$('tr.ns1blankspaceUpdate').children().each(function() {
+							aData.push('id=' + oRow.id);
 
-								if ($(this).hasClass("ns1blankspaceUpdate")) {
+							$.each(aUpdateColumns, function() {
 
-									var oElement = $(this).children()[0];
-									var aID = $(oElement).attr('id').split('-');
-									var sName = aID[1].replace(/_/g,'.');
-									sName = sName.replace(ns1blankspace.report.objectName + '.', '');
+								aData.push(this.name + '=' + this.value);
+							});
 
-									if ($(oElement).hasClass('ns1blankspaceSelect') && $(oElement).attr('data-id') != undefined) {
-										aData.push(sName.substr(0, sName.length - 4) + '=' + ns1blankspace.util.fs($(oElement).attr('data-id')));
-										aUpdateElements.push({id: $(oElement).attr('id'), value: $(oElement).val(), data_id: $(oElement).attr('data-id')});
+							$.ajax({
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI(ns1blankspace.report.method.replace('_SEARCH', '_MANAGE')),
+								data: aData.join('&'),
+								async: false,
+								dataType: 'json',
+								success: function(oResponse, oParam) {
 
-									}
-									else if ($(oElement).val() != '') {
-										aData.push(sName + '=' + ns1blankspace.util.fs($(oElement).val()));
-										aUpdateElements.push({id: $(oElement).attr('id'), value: $(oElement).val(), data_id: undefined});
+									if (oResponse.status == 'OK') {
+
+										var sCount = $('#ns1blankspaceReportUpdateProgressCount').html();
+										var iUpdateCount = parseInt(sCount);
+
+										if (isNaN(iUpdateCount)) {
+											$('#ns1blankspaceReportUpdateProgressCount').html('0');
+										}
+										else {
+											$('#ns1blankspaceReportUpdateProgressCount').html(iUpdateCount + 1 + '');
+										}
 
 									}
 								}
 							});
-
-							if( aData.length > 0) {
-
-								$.ajax({
-									type: 'POST',
-									url: ns1blankspace.util.endpointURI(ns1blankspace.report.method.replace('_SEARCH', '_MANAGE')),
-									data: aData.join('&'),
-									async: false,
-									dataType: 'json',
-									success: function(oResponse) {
-
-										if (oResponse.status == 'OK') {
-
-											// We have to change the values on the visible rows
-											if ($('#id_' + sRowId).is(':visible')) {
-												$('#id_' + sRowId).button({
-													text: false,
-													 icons: {
-														 primary: "ui-icon-check"
-													}
-												})
-												.click(function() {});
-											}
-
-											//$('#ns1blankspaceReportResults').html(aHTML.join(''));
-										}
-									}
-								});
-							}
 						}
+						else { sErrorText = "Parameters not passed to Update.";}
 
-						}
+					}
 		}
 
 }
