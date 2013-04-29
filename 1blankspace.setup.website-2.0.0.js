@@ -939,7 +939,7 @@ ns1blankspace.setup.website =
 															'<td id="ns1blankspacePagesColumn1" class="ns1blankspaceColumn1Flexible" style="width:750px;"></td>' +
 															'<td id="ns1blankspacePagesColumn2" class="ns1blankspaceColumn2Action"></td>' +
 															'</tr>' + 
-															'</table>');	
+															'</table>');
 												
 											$('#ns1blankspaceMainPages').html(aHTML.join(''));
 
@@ -1087,62 +1087,67 @@ ns1blankspace.setup.website =
 										
 										aHTML.push('<table class="ns1blankspace">');
 												
-										aHTML.push('<tr class="ns1blankspace">' +
+										aHTML.push('<tr>' +
 														'<td class="ns1blankspaceCaption">' +
 														'Title' +
-														'</td></tr>' +
-														'<tr class="ns1blankspaceText">' +
+														'</td>' +
+														'<td class="ns1blankspaceCaption" style="width:200px;">' +
+														'URL</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceText">' +
 														'<td class="ns1blankspaceText">' +
 														'<input id="ns1blankspaceSetupWebsitePageTitle" class="ns1blankspaceText">' +
+														'</td><td class="ns1blankspaceText" style="width:200px;">' +
+														'<input id="ns1blankspaceSetupWebsitePageURL" class="ns1blankspaceText" style="width:200px;">' +
 														'</td></tr>');
 										
-										aHTML.push('<tr"><td class="ns1blankspace">');
-														
-											aHTML.push('<table class="ns1blankspace">');
-											
-											aHTML.push('<tr class="ns1blankspace">' +
-															'<td class="ns1blankspaceCaption">' +
-															'URL' +
-															'</td>' +
-															'<td class="ns1blankspaceCaption">' +
-															'Type' +
-															'</td>' +
-															'<td class="ns1blankspaceCaption">' +
-															'Format' +
-															'</td>' +
-															'<td class="ns1blankspaceCaption">' +
-															'Sharing' +
-															'</td></tr>');
-															
-											aHTML.push('<tr class="ns1blankspaceText">' +
-															'<td class="ns1blankspaceText" style="width:290px;">' +
-															'<input id="ns1blankspaceSetupWebsitePageURL" class="ns1blankspaceText" style="width:275px;">' +
-															'</td>');
-													
-											aHTML.push('<td class="ns1blankspaceRadio">' +
-															'<input type="radio" id="radioType9" name="radioType" value="9"/>Page' +
-															'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Home' +
-															'<br /><input type="radio" id="radioType3" name="radioType" value="3"/>Header' +
-															'</td>');
-															
-											aHTML.push('<td class="ns1blankspaceRadio">' +
-															'<input type="radio" id="radioDocumentType5" name="radioDocumentType" value="5"/>HTML' +
-															'<br /><input type="radio" id="radioDocumentType6" name="radioDocumentType" value="6"/>Text' +
-															'</td>');
-													
-											aHTML.push('<td class="ns1blankspaceText">' +
-															'<input type="radio" id="radioPublicY" name="radioPublic" value="Y"/>Public' +
-															'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
-															'</td></tr>');
+										aHTML.push('</table>');
+					
+										aHTML.push('<table class="ns1blankspace">');
 										
-											aHTML.push('</table>');
+										aHTML.push('<tr class="ns1blankspace">' +	
+														'<td class="ns1blankspaceCaption">' +
+														'Type' +
+														'</td>' +
+														'<td class="ns1blankspaceCaption">' +
+														'Format' +
+														'</td>' +
+														'<td class="ns1blankspaceCaption">' +
+														'Sharing' +
+														'</td>' +
+														'<td class="ns1blankspaceCaption" id="ns1blankspaceWebsitePageNetworkGroupsCaption">' +
+														'</td>' +
+														'</tr>');
+														
+										aHTML.push('<tr class="ns1blankspaceText">');
+														
+										aHTML.push('<td class="ns1blankspaceRadio" style="width:125px;">' +
+														'<input type="radio" id="radioType9" name="radioType" value="9"/>Page' +
+														'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Home' +
+														'<br /><input type="radio" id="radioType3" name="radioType" value="3"/>Header' +
+														'</td>');
+														
+										aHTML.push('<td class="ns1blankspaceRadio" style="width:125px;">' +
+														'<input type="radio" id="radioDocumentType5" name="radioDocumentType" value="5"/>HTML' +
+														'<br /><input type="radio" id="radioDocumentType6" name="radioDocumentType" value="6"/>Text' +
+														'</td>');
+												
+										aHTML.push('<td class="ns1blankspaceText" style="width:125px;">' +
+														'<input type="radio" id="radioPublicY" name="radioPublic" value="Y"/>Public' +
+														'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
+														'</td></tr>');
+
+										aHTML.push('<td class="ns1blankspaceText" id="ns1blankspaceWebsitePageNetworkGroups">&nbsp;' +
+														'</td></tr>');
+									
+										aHTML.push('</table>');
 											
-										aHTML.push('</td></tr>');
+										aHTML.push('<table>');
 										
 										ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
 										
 										aHTML.push('<tr class="ns1blankspaceTextMulti">' +
-														'<td class="ns1blankspaceTextMulti" style="padding-top:15px;">' +
+														'<td class="ns1blankspaceTextMulti">' +
 														'<textarea rows="10" cols="70" name="ns1blankspaceEditText" id="ns1blankspaceEditText' +
 														ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + '"' +
 														' class="ns1blankspaceTextMultiLarge tinymceAdvanced" style="width:610px"></textarea>' +
@@ -1228,6 +1233,11 @@ ns1blankspace.setup.website =
 											}
 										});
 										
+										$('[name="radioPublic"]').click(function()
+										{
+											ns1blankspace.setup.website.pages.networkGroups({id: sID});
+										});
+
 										var sCSS = ns1blankspace.objectContextData.cssuri;
 										if (sCSS == undefined) {sCSS = ns1blankspace.xhtml.editorCSS}
 
@@ -1324,6 +1334,26 @@ ns1blankspace.setup.website =
 										}
 									}		
 								},
+
+					networkGroups:
+								function (oParam)
+								{
+									$('#ns1blankspaceWebsitePageNetworkGroupsCaption').html(ns1blankspace.xhtml.loadingSmall)
+
+									var iID = ns1blankspace.util.getParam(oParam, 'id', {default: ''}).value;
+
+									var sRetrictionCaption = '';
+
+									if (iID != '')
+									{
+										if ($('input[name="radioPublic"]:checked').val() == 'N')
+										{
+											sRetrictionCaption = 'Restrict To'
+										}	
+									}
+
+									$('#ns1blankspaceWebsitePageNetworkGroupsCaption').html(sRetrictionCaption)
+								},		
 
 					remove:		function (oParam, oResponse)
 								{
