@@ -1115,8 +1115,9 @@ ns1blankspace.setup.website =
 														'<td class="ns1blankspaceCaption">' +
 														'Sharing' +
 														'</td>' +
-														'<td class="ns1blankspaceCaption" id="ns1blankspaceWebsitePageNetworkGroupsCaption">' +
-														'</td>' +
+														'<td class="ns1blankspaceCaption" id="ns1blankspaceWebsitePageNetworkGroupsCaption"></td>' +
+														'<td style="padding-right:10px; text-align:right;">' +
+														'<span class="ns1blankspaceAction" id="ns1blankspaceWebsitePageNetworkGroupsAdd"></span></td>' +
 														'</tr>');
 														
 										aHTML.push('<tr class="ns1blankspaceText">');
@@ -1135,7 +1136,7 @@ ns1blankspace.setup.website =
 										aHTML.push('<td class="ns1blankspaceText" style="width:125px;">' +
 														'<input type="radio" id="radioPublicY" name="radioPublic" value="Y"/>Public' +
 														'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
-														'</td></tr>');
+														'</td>');
 
 										aHTML.push('<td class="ns1blankspaceText" id="ns1blankspaceWebsitePageNetworkGroups">&nbsp;' +
 														'</td></tr>');
@@ -1324,6 +1325,8 @@ ns1blankspace.setup.website =
 											$('[name="radioType"][value="' + oObjectContext.location + '"]').attr('checked', true);
 											$('[name="radioDocumentType"][value="' + oObjectContext.documenttype + '"]').attr('checked', true);
 											$('[name="radioPublic"][value="' + oObjectContext.documentpublic + '"]').attr('checked', true);
+
+											ns1blankspace.setup.website.pages.networkGroups({id: sID});
 										}
 										else
 										{
@@ -1338,21 +1341,30 @@ ns1blankspace.setup.website =
 					networkGroups:
 								function (oParam)
 								{
-									$('#ns1blankspaceWebsitePageNetworkGroupsCaption').html(ns1blankspace.xhtml.loadingSmall)
-
 									var iID = ns1blankspace.util.getParam(oParam, 'id', {default: ''}).value;
 
 									var sRetrictionCaption = '';
+									
+									$('#ns1blankspaceWebsitePageNetworkGroupsAdd').html('');
+									$('#ns1blankspaceWebsitePageNetworkGroups').html('');
 
 									if (iID != '')
 									{
 										if ($('input[name="radioPublic"]:checked').val() == 'N')
 										{
-											sRetrictionCaption = 'Restrict To'
+											sRetrictionCaption = 'But share with'
+
+											ns1blankspace.setup.networkGroup.groups.show(
+											{
+												xhtmlElementContainerID: 'ns1blankspaceWebsitePageNetworkGroups',
+												xhtmlElementAddID: 'ns1blankspaceWebsitePageNetworkGroupsAdd'
+											});
+
 										}	
 									}
 
 									$('#ns1blankspaceWebsitePageNetworkGroupsCaption').html(sRetrictionCaption)
+									
 								},		
 
 					remove:		function (oParam, oResponse)
@@ -1494,9 +1506,11 @@ ns1blankspace.setup.website =
 
 							$('#ns1blankspaceFormsColumn1').html(aHTML.join(''));
 							
-							$('#ns1blankspaceSetupWebsiteForms .ns1blankspaceRowSelect').button( {
+							$('#ns1blankspaceSetupWebsiteForms .ns1blankspaceRowSelect').button(
+							{
 								text: false,
-								icons: {
+								icons:
+								{
 									primary: "ui-icon-play"
 								}
 							})

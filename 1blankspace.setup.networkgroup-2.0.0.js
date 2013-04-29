@@ -784,55 +784,51 @@ ns1blankspace.setup.networkGroup =
 				},				
 					
 	groups: 	{
-					show: 		function ()
-								{													
+					show: 		function (oParam, oResponse)
+								{											
 									var iObject = ns1blankspace.util.getParam(oParam, 'object', {default: ns1blankspace.object}).value;
 									var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {default: ns1blankspace.objectContext}).value;
+									var sXHTMLElementContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlElementContainerID', {default: 'ns1blankspaceNetworkGroups'}).value;
+									var sXHTMLElementAddID = ns1blankspace.util.getParam(oParam, 'xhtmlElementAddID').value;
 
 									if (oResponse == undefined)
-									{	
-										if (!bRefresh)
-										{	
-											var aHTML = [];
-
-											aHTML.push('<table class="ns1blankspaceContainer">');
-
-											aHTML.push('<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspaceNetworkGroupsColumn1" class="ns1blankspaceColumn1Flexible">' +
-															ns1blankspace.xhtml.loading + '</td>' +
-															'<td id="ns1blankspaceNetworkGroupsColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
-															'</tr>');
-
-											aHTML.push('</table>');					
-											
-											$('#ns1blankspaceMainNetworkGroups').html(aHTML.join(''));
-											
-											var aHTML = [];
-											
-											aHTML.push('<table class="ns1blankspaceColumn2">' +
-															'<tr><td class="ns1blankspaceAction">' +
-															'<span id="ns1blankspaceNetworkGroupsAdd">Add</span>' +
-															'</td></tr></table>');					
-											
-											$('#ns1blankspaceCreditColumn2').html(aHTML.join(''));
+									{		
+										$('#' + sXHTMLElementContainerID).html(ns1blankspace.xhtml.loadingSmall);
 										
-											$('#ns1blankspaceCreditAdd').button(
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceColumn2">' +
+														'<tr><td>' +
+														'<span class="ns1blankspaceAction" id="ns1blankspaceNetworkGroupsAdd">Add</span>' +
+														'</td></tr></table>');					
+										
+										$('#ns1blankspaceCreditColumn2').html(aHTML.join(''));
+									
+										if (sXHTMLElementAddID)
+										{	
+											$('#' + sXHTMLElementAddID).button(
 											{
-												label: "Add"
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-plus"
+												}
 											})
 											.click(function() {
-												 ns1blankspace.setup.networkgroup.groups();
-											});						
-										}
-
+												 ns1blankspace.setup.networkgroup.groups.edit();
+											})
+											.css('width', '18px')
+											.css('height', '18px');
+										}						
+									
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_NETWORK_GROUP_OBJECT_SEARCH';
-										oSearch.addField('creditdate,notes,amount,tax,type,typetext');
+										oSearch.addField('networkgrouptext');
 										oSearch.addFilter('object', 'EQUAL_TO', iObject);
 										oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
-										oSearch.sort('creditdate', 'desc');
+										oSearch.sort('networkgrouptext', 'desc');
 										
-										oSearch.getResults(function(data) {ns1blankspace.financial.util.credit.show(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.setup.networkGroup.groups.show(oParam, data)});
 									}
 									else
 									{
@@ -841,42 +837,23 @@ ns1blankspace.setup.networkGroup =
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No credit (notes).</td></tr></table>');
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No one.</td></tr></table>');
 
-											$('#ns1blankspaceCreditColumn1').html(aHTML.join(''));
+											$('#' + sXHTMLElementContainerID).html(aHTML.join(''));
 										}
 										else
 										{
-											aHTML.push('<table class="ns1blankspace">');
-
-											aHTML.push('<tr>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Date</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">Notes</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' +
-															ns1blankspace.option.taxVATCaption + '</td>');
-
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-											aHTML.push('</tr>');
+											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceNetworkgroupsObjectGroups">');
 
 											$.each(oResponse.data.rows, function()
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																			
-												aHTML.push('<td id="ns1blankspaceCredit_date-' + this.id + '" class="ns1blankspaceRow">' +
-																this['creditdate'] + '</td>');
+												aHTML.push('<td id="ns1blankspaceNetworkgroups_title-' + this.id + '" class="ns1blankspaceRow">' +
+																this.networkgrouptext + '</td>');
 												
-												aHTML.push('<td id="ns1blankspaceCredit_description-' + this.id + '" class="ns1blankspaceRow">' +
-																this["notes"] + '</td>');
-
-												aHTML.push('<td id="ns1blankspaceCredit_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-																this["amount"] + '</td>');
-
-												aHTML.push('<td id="ns1blankspaceCredit_tax-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
-																this["tax"] + '</td>');
-
-												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-												aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceCreditRemove"></span>');
+												aHTML.push('<td style="width:20px;text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<span id="ns1blankspaceNetworkgroup_remove-' + this.id + '" class="ns1blankspaceRemove"></span>');
 												aHTML.push('</td></tr>');
 											});
 											
@@ -884,30 +861,19 @@ ns1blankspace.setup.networkGroup =
 
 											$('#ns1blankspaceCreditColumn1').html(aHTML.join(''));
 											
-											$('.ns1blankspaceCreditRemove').button( {
+											$('#ns1blankspaceNetworkgroupsObjectGroups .ns1blankspaceRemove').button( {
 												text: false,
 												icons: {
 													primary: "ui-icon-close"
 												}
 											})
-											.click(function() {
-												oParam.xhtmlElementID = this.id;
-												ns1blankspace.financial.credit.remove(oParam);
+											.click(function()
+											{
+												oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
+												ns1blankspace.setup.networkgroup.groups.remove(oParam);
 											})
 											.css('width', '15px')
-											.css('height', '17px')
-									
-											$('.ns1blankspaceCreditView').button( {
-												text: false,
-												icons: {
-													primary: "ui-icon-play"
-												}
-											})
-											.click(function() {
-												//ns1blankspace.financial.util.credit.edit({xhtmlElementID: this.id})
-											})
-											.css('width', '15px')
-											.css('height', '17px')	
+											.css('height', '17px');
 										}
 									}
 								},
