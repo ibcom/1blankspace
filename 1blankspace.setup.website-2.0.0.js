@@ -1019,8 +1019,8 @@ ns1blankspace.setup.website =
 																		'Private</td>');
 												}		
 																
-												aHTML.push('<td id="ns1blankspaceWebsitePages_id-' + this.id + '" class="ns1blankspaceRow" style="color:#A0A0A0;">' +
-																		this.id + '</td>');
+												aHTML.push('<td id="ns1blankspaceWebsitePages_id-' + this.document + '" class="ns1blankspaceRow" style="color:#A0A0A0;">' +
+																		this.document + '</td>');
 																								
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 												
