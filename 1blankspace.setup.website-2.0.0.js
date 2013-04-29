@@ -936,8 +936,8 @@ ns1blankspace.setup.website =
 												
 											aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspacePagesColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-															'<td id="ns1blankspacePagesColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+															'<td id="ns1blankspacePagesColumn1" class="ns1blankspaceColumn1Flexible" style="width:750px;"></td>' +
+															'<td id="ns1blankspacePagesColumn2" class="ns1blankspaceColumn2Action"></td>' +
 															'</tr>' + 
 															'</table>');	
 												
@@ -1115,7 +1115,7 @@ ns1blankspace.setup.website =
 															'</td></tr>');
 															
 											aHTML.push('<tr class="ns1blankspaceText">' +
-															'<td class="ns1blankspaceText" style="width:325px;">' +
+															'<td class="ns1blankspaceText" style="width:290px;">' +
 															'<input id="ns1blankspaceSetupWebsitePageURL" class="ns1blankspaceText" style="width:275px;">' +
 															'</td>');
 													
@@ -1143,9 +1143,9 @@ ns1blankspace.setup.website =
 										
 										aHTML.push('<tr class="ns1blankspaceTextMulti">' +
 														'<td class="ns1blankspaceTextMulti" style="padding-top:15px;">' +
-														'<textarea rows="10" cols="60" name="ns1blankspaceEditText" id="ns1blankspaceEditText' +
+														'<textarea rows="10" cols="70" name="ns1blankspaceEditText" id="ns1blankspaceEditText' +
 														ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + '"' +
-														' class="ns1blankspaceTextMultiLarge tinymceAdvanced"></textarea>' +
+														' class="ns1blankspaceTextMultiLarge tinymceAdvanced" style="width:610px"></textarea>' +
 														'</td></tr>');
 										
 										aHTML.push('</table>');					
