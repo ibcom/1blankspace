@@ -616,7 +616,18 @@ ns1blankspace.setup.website =
 											'<span id="ns1blankspaceSetupWebsiteCSSContainer">' +
 											ns1blankspace.xhtml.loadingSmall + '</span>');
 						
-						aHTML.push('</td></tr>');				
+						aHTML.push('</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Default Template' +
+										'</td></tr>' +
+										'<tr class="ns1blankspaceRadio">' +
+										'<td id="ns1blankspaceDetailsCSSAttachment" class="ns1blankspaceRadio">' +
+											'<span id="ns1blankspaceSetupWebsiteTemplateContainer">' +
+											ns1blankspace.xhtml.loadingSmall + '</span>');
+						
+						aHTML.push('</td></tr>');					
 										
 						aHTML.push('</table>');					
 						
@@ -664,11 +675,13 @@ ns1blankspace.setup.website =
 							$('#ns1blankspaceLayoutColumns').val(ns1blankspace.objectContextData.columns);
 							$('[name="radioLayout"][value="' + ns1blankspace.objectContextData.layout + '"]').attr('checked', true);
 							ns1blankspace.setup.website.css.list(ns1blankspace.objectContextData.cssattachment);
+							ns1blankspace.setup.website.template(ns1blankspace.objectContextData.templatedocument);
 						}
 						else
 						{
 							$('[name="radioLayout"][value="3"]').attr('checked', true);
 							ns1blankspace.setup.website.css.list(-1);
+							ns1blankspace.setup.website.template(-1);
 						}
 					}	
 				},
@@ -744,6 +757,42 @@ ns1blankspace.setup.website =
 	
 				},	
 
+	template: 	function (iValue)
+				{
+					if (iValue == '') {iValue = -1}
+
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'DOCUMENT_SEARCH';
+					
+					oSearch.addField('title');
+					oSearch.addFilter('content', 'TEXT_IS_LIKE', 'TemplateField|166|4016')
+					oSearch.sort('title', 'asc');
+					
+					oSearch.getResults(function(oResponse)
+					{
+						var aHTML = [];
+
+						aHTML.push('<input type="radio" id="radioTemplateDocument-1" name="radioTemplateDocument" value="-1"/>' +
+													'None<br />');
+
+						if (oResponse.data.rows.length == 0)
+						{
+							aHTML.push('<div style="margin-top:15px;" class="ns1blankspaceSub">To create a template; create a new page and insert the "Content" dynamic tag.</div>');
+						}	
+						else
+						{	
+							$.each(oResponse.data.rows, function()
+							{
+								aHTML.push('<input type="radio" id="radioTemplateDocument' + this.id + '" name="radioTemplateDocument" value="' + this.id + '"/>' +
+													this.title + '<br />');				
+							});
+						}	
+						
+						$('#ns1blankspaceSetupWebsiteTemplateContainer').html(aHTML.join(''));
+						$('[name="radioTemplateDocument"][value="' + iValue + '"]').attr('checked', true);
+					});
+				},
+		
 	advanced:	function ()
 				{
 					if ($('#ns1blankspaceMainAdvanced').attr('data-loading') == '1')
@@ -1002,7 +1051,7 @@ ns1blankspace.setup.website =
 											$('#ns1blankspaceSetupWebsitePages span.ns1blankspaceRowSelect').button({
 												text: false,
 												icons: {
-													primary: "ui-icon-play"
+													primary: "ui-icon-pencil"
 												}
 											})
 											.click(function() {
@@ -1290,14 +1339,17 @@ ns1blankspace.setup.website =
 									
 									if (oResponse == undefined)
 									{	
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_MANAGE'),
-											data: 'remove=1&id=' + sID,
-											dataType: 'json',
-											success: function(data){ns1blankspace.setup.website.pages.remove(oParam, data)}
-										});
+										if (confirm('Continue with removing page from website?'))
+										{	
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_MANAGE'),
+												data: 'remove=1&id=' + sID,
+												dataType: 'json',
+												success: function(data){ns1blankspace.setup.website.pages.remove(oParam, data)}
+											});
+										}	
 									}	
 									else
 									{
@@ -1769,6 +1821,7 @@ ns1blankspace.setup.website =
 											sData += '&footerheight=' + ns1blankspace.util.fs($('#ns1blankspaceLayoutFooterHeight').val());
 											sData += '&columns=' + ns1blankspace.util.fs($('#ns1blankspaceLayoutColumns').val());
 											sData += '&layout=' + ns1blankspace.util.fs($('input[name="radioLayout"]:checked').val());
+											sData += '&templatedocument=' + ns1blankspace.util.fs($('input[name="radioTemplateDocument"]:checked').val());
 											sCSSAttachment = $('input[name="radioCSSAttachment"]:checked').val();
 											ns1blankspace.objectContextData.cssattachment = sCSSAttachment;
 											ns1blankspace.objectContextData.cssuri = undefined;
