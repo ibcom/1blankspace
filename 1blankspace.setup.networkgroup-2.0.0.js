@@ -871,7 +871,7 @@ ns1blankspace.setup.networkGroup =
 											
 											aHTML.push('</table>');
 
-											$('#ns1blankspaceCreditColumn1').html(aHTML.join(''));
+											$('#' + sXHTMLElementContainerID).html(aHTML.join(''));
 											
 											$('#ns1blankspaceNetworkgroupsObjectGroups .ns1blankspaceRemove').button( {
 												text: false,
@@ -882,7 +882,7 @@ ns1blankspace.setup.networkGroup =
 											.click(function()
 											{
 												oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
-												ns1blankspace.setup.networkgroup.groups.remove(oParam);
+												ns1blankspace.setup.networkGroup.groups.remove(oParam);
 											})
 											.css('width', '15px')
 											.css('height', '17px');
@@ -930,7 +930,6 @@ ns1blankspace.setup.networkGroup =
 											{	
 												if ($.grep(ns1blankspace.setup.networkGroup.groups.data.selected.push, function (a) {return a == v.id;}).length == 0)
 												{
-
 													aHTMLTR.push('<tr class="ns1blankspaceRow">' +
 																'<td id="ns1blankspaceGroupsAdd_title-' + this.id + '" class="ns1blankspaceRowSelect ns1blankspaceGroupsAddRowSelect">' +
 																		this.title + '</td></tr>');
@@ -988,6 +987,7 @@ ns1blankspace.setup.networkGroup =
 										dataType: 'json',
 										success: function(data)
 										{
+											ns1blankspace.status.message('Added');
 											ns1blankspace.setup.networkGroup.groups.show(oParam);
 											if ($('#' + sXHTMLElementID).parent().siblings('tr:visible').length == 0)
 											{

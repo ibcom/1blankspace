@@ -93,7 +93,7 @@ ns1blankspace.financial.bankAccount =
 							$('#ns1blankspaceMain').html(aHTML.join(''));
 
 							$('#ns1blankspaceMostLikely .ns1blankspaceMostLikely').click(function(event) {
-								var aID = (event.target.id).split('-');
+								var aID = (this.id).split('-');
 								ns1blankspace.financial.bankAccount.show({id: aID[1]});
 							});
 						}	
@@ -495,7 +495,7 @@ ns1blankspace.financial.bankAccount =
 										
 										$('#ns1blankspaceBankAccountColumnItemType :radio').click(function()
 										{
-											var aID = (event.target.id).split('-');
+											var aID = (this.id).split('-');
 											$.extend(true, oParam, {type: parseInt(aID[1]), reconciliation: parseInt(aID[2])});
 
 											if (iMode == 1)
@@ -976,7 +976,7 @@ ns1blankspace.financial.bankAccount =
 													
 													$('#ns1blankspaceReconcileItemEditOption :radio').click(function()
 													{
-														var aID = (event.target.id).split('-');
+														var aID = (this.id).split('-');
 														$.extend(true, oParam, {editAction: 1, source: parseInt(aID[1])});
 														ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 													});
@@ -1833,7 +1833,7 @@ ns1blankspace.financial.bankAccount =
 														
 														$('#ns1blankspaceReconcileItemLockedOption :radio').click(function()
 														{
-															var aID = (event.target.id).split('-');
+															var aID = (this.id).split('-');
 															$.extend(true, oParam, {source: parseInt(aID[1])});
 															ns1blankspace.financial.bankAccount.reconcile.items.locked(oParam);
 														});
@@ -2068,8 +2068,6 @@ ns1blankspace.financial.bankAccount =
 										{
 											aHTML.push('<table id="tableInterfaceFinancialHomeMostLikely">');
 											
-											aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountImportAdd">Add</span></td></tr>');
-
 											aHTML.push('<tr><td class="ns1blankspaceNothing">No existing imports.</td></tr>');
 
 											aHTML.push('</table>');
@@ -2106,7 +2104,7 @@ ns1blankspace.financial.bankAccount =
 										
 										$('.ns1blankspaceBankAccountImportRowSelect').click(function()
 										{
-											var aID = (event.target.id).split('-');
+											var aID = (this.id).split('-');
 											ns1blankspace.financial.bankAccount.import.items.show({fileSource: aID[1]});
 										});
 
@@ -2339,7 +2337,7 @@ ns1blankspace.financial.bankAccount =
 														 	icons: {primary: "ui-icon-close"}
 														})
 														.click(function() {
-															$.extend(true, oParam, {step: 5, xhtmlElementID: event.target.id});
+															$.extend(true, oParam, {step: 5, xhtmlElementID: this.id});
 															ns1blankspace.financial.bankAccount.import.items.remove({xhtmlElementID: this.id})
 														})
 														.css('width', '15px')

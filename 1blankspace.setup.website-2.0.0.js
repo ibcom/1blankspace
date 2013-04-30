@@ -1026,7 +1026,8 @@ ns1blankspace.setup.website =
 												
 												aHTML.push('<span id="ns1blankspaceWebsitePage_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
 											
-												aHTML.push('<span id="ns1blankspaceWebsitePage_options_select-' + this.id + '" class="ns1blankspaceRowSelect"></span>');
+												aHTML.push('<span id="ns1blankspaceWebsitePage_options_select-' + this.id +
+																	'-' + this.document + '" class="ns1blankspaceRowSelect"></span>');
 																	
 												aHTML.push('</td></tr>');
 											});
@@ -1081,6 +1082,7 @@ ns1blankspace.setup.website =
 										{
 											var aXHTMLElementID = sXHTMLElementID.split('-');
 											var sID = aXHTMLElementID[1];
+											var sDocumentID = aXHTMLElementID[2];
 										}	
 									
 										var aHTML = [];
@@ -1138,7 +1140,7 @@ ns1blankspace.setup.website =
 														'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
 														'</td>');
 
-										aHTML.push('<td class="ns1blankspaceText" id="ns1blankspaceWebsitePageNetworkGroups">&nbsp;' +
+										aHTML.push('<td colspan=2 class="ns1blankspaceText" id="ns1blankspaceWebsitePageNetworkGroups">&nbsp;' +
 														'</td></tr>');
 									
 										aHTML.push('</table>');
@@ -1236,7 +1238,7 @@ ns1blankspace.setup.website =
 										
 										$('[name="radioPublic"]').click(function()
 										{
-											ns1blankspace.setup.website.pages.networkGroups({id: sID});
+											ns1blankspace.setup.website.pages.networkGroups({id: sDocumentID});
 										});
 
 										var sCSS = ns1blankspace.objectContextData.cssuri;
@@ -1326,7 +1328,7 @@ ns1blankspace.setup.website =
 											$('[name="radioDocumentType"][value="' + oObjectContext.documenttype + '"]').attr('checked', true);
 											$('[name="radioPublic"][value="' + oObjectContext.documentpublic + '"]').attr('checked', true);
 
-											ns1blankspace.setup.website.pages.networkGroups({id: sID});
+											ns1blankspace.setup.website.pages.networkGroups({id: oObjectContext.document});
 										}
 										else
 										{
@@ -1359,7 +1361,7 @@ ns1blankspace.setup.website =
 												xhtmlElementContainerID: 'ns1blankspaceWebsitePageNetworkGroups',
 												xhtmlElementAddID: 'ns1blankspaceWebsitePageNetworkGroupsAdd',
 												object: 14,
-												objectcontext: iID
+												objectContext: iID
 											});
 										}	
 									}

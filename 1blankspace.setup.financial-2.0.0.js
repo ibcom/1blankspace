@@ -400,7 +400,7 @@ ns1blankspace.setup.financial =
 							.css('height', '17px');
 
 							$('#ns1blankspaceSetupFinancialBankAccount td.ns1blankspaceRowSelect').click(function() {
-								$.extend(true, oParam, {step: 2, xhtmlElementID: event.target.id});
+								$.extend(true, oParam, {step: 2, xhtmlElementID: this.id});
 								ns1blankspace.setup.financial.bankAccounts(oParam);
 							})
 						}	
@@ -689,7 +689,7 @@ ns1blankspace.setup.financial =
 
 												$('#ns1blankspaceAccountType td.ns1blankspaceRowSelect').click(function(event)
 												{
-													var sXHTMLElementId = event.target.id;
+													var sXHTMLElementId = this.id;
 													var aId = sXHTMLElementId.split('-');
 													
 													ns1blankspace.setup.financial.accounts.show({type: aId[1], parentAccount: aId[2], step: 2});
@@ -815,7 +815,7 @@ ns1blankspace.setup.financial =
 
 											$('#ns1blankspaceSetupFinancialFinancialAccount td.ns1blankspaceRowSelect').click(function()
 											{
-												$.extend(true, oParam, {step: 4, xhtmlElementID: event.target.id});
+												$.extend(true, oParam, {step: 4, xhtmlElementID: this.id});
 												ns1blankspace.setup.financial.accounts.show(oParam);
 											})
 										}
