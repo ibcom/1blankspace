@@ -21,6 +21,7 @@ ns1blankspace.financial.credit =
 					ns1blankspace.object = 69;
 					ns1blankspace.objectParentName = 'financial';
 					ns1blankspace.objectName = 'credit';
+					ns1blankspace.objectMethod = 'FINANCIAL_CREDIT_NOTE';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Credits';

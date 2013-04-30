@@ -44,6 +44,7 @@ ns1blankspace.financial.bankAccount =
 						}	
 										
 						ns1blankspace.app.set(oParam);
+						$('#ns1blankspaceViewControlNew').button({disabled: true});
 					}	
 				},
 
@@ -195,8 +196,8 @@ ns1blankspace.financial.bankAccount =
 					}
 					else
 					{
-						$('#ns1blankspaceViewControlAction').button({disabled: false});
-						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+						//$('#ns1blankspaceViewControlAction').button({disabled: false});
+						//$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 							
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title +
 							'<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceControlSubContext_date">' + ns1blankspace.objectContextData.lastreconcileddate + '</span>' +
@@ -319,7 +320,7 @@ ns1blankspace.financial.bankAccount =
 																
 										var aHTML = [];
 										
-										if (iMode == 1)
+										if (iMode == 1 && oResponse.data.rows.length == 0)
 										{	
 											aHTML.push('<table style="margin-bottom:7px;"><tr><td style="text-align:right;">' +
 															'<span id="ns1blankspaceBankAccountRecoAdd" class="ns1blankspaceAction">Add</span>' +
@@ -533,7 +534,7 @@ ns1blankspace.financial.bankAccount =
 											label: 'Lock',
 											icons:
 											{
-												primary: "ui-icon-lock"
+												primary: "ui-icon-locked"
 											}
 										})
 										.click(function()
@@ -607,8 +608,8 @@ ns1blankspace.financial.bankAccount =
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceRadio">' +
-														'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>In Progress' +
-														'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Completed' +
+														'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Open <span class="ns1blankspaceSub">(In Progress)</span>' +
+														'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Locked <span class="ns1blankspaceSub">(Completed)</span>' +
 														'</td></tr>');
 																																											
 										aHTML.push('</table>');					
@@ -1522,7 +1523,7 @@ ns1blankspace.financial.bankAccount =
 													
 													else if (iEditAction == 4) //MANUALLY ADD PAYMENT OR RECEIPT
 													{
-														if (oRespnse == undefined)
+														if (oResponse == undefined)
 														{
 															var aHTML = [];
 															

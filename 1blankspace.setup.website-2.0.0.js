@@ -1135,12 +1135,12 @@ ns1blankspace.setup.website =
 														'<br /><input type="radio" id="radioDocumentType6" name="radioDocumentType" value="6"/>Text' +
 														'</td>');
 												
-										aHTML.push('<td class="ns1blankspaceText" style="width:125px;">' +
+										aHTML.push('<td class="ns1blankspaceRadio" style="width:125px;">' +
 														'<input type="radio" id="radioPublicY" name="radioPublic" value="Y"/>Public' +
 														'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
 														'</td>');
 
-										aHTML.push('<td colspan=2 class="ns1blankspaceText" id="ns1blankspaceWebsitePageNetworkGroups">&nbsp;' +
+										aHTML.push('<td colspan=2 class="ns1blankspaceRadio" id="ns1blankspaceWebsitePageNetworkGroups">&nbsp;' +
 														'</td></tr>');
 									
 										aHTML.push('</table>');
