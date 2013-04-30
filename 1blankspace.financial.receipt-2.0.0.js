@@ -553,7 +553,7 @@ ns1blankspace.financial.receipt =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsReceivedFromBusiness" class="ns1blankspaceSelect"' +
+										'<input id="ns1blankspaceDetailsContactBusinessReceivedFrom" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_BUSINESS_SEARCH"' +
 											' data-columns="tradename">' +
 										'</td></tr>');	
@@ -564,10 +564,10 @@ ns1blankspace.financial.receipt =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsReceivedFromPerson" class="ns1blankspaceSelect"' +
+										'<input id="ns1blankspaceDetailsContactPersonReceivedFrom" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_PERSON_SEARCH"' +
-											' data-columns="surname"' +
-											' data-parent="ns1blankspaceDetailsReceivedFromBusiness"' +
+											' data-columns="firstname-space-surname"' +
+											' data-parent="ns1blankspaceDetailsContactBusinessReceivedFrom"' +
 											' data-parent-search-id="contactbusiness"' +
 											' data-parent-search-text="tradename">' +
 										'</td></tr>');							
@@ -698,21 +698,21 @@ ns1blankspace.financial.receipt =
 										url: ns1blankspace.util.endpointURI('FINANCIAL_RECEIPT_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: function(data) {ns1blankspace.financial.receipt.save.process(data)}
+										success: function(data) {ns1blankspace.financial.receipt.save.process(oParam, data)}
 									});
 								},
 
-					process:	function (oResponse)
+					process:	function (oParam, oResponse)
 								{
 									if (oResponse.status == 'OK')
 									{
 										ns1blankspace.status.message('Saved');
-										if (ns1blankspace.objectContext == -1) {var bNew = true}
+										oParam = ns1blankspace.util.setParam(oParam, 'new', (ns1blankspace.objectContext == -1));
 										ns1blankspace.objectContext = oResponse.id;	
 										
 										if ($('#ns1blankspaceMainDetails').html() != '')
 										{
-											ns1blankspace.financial.receipt.save.amount();
+											ns1blankspace.financial.receipt.save.amount(oParam);
 										}
 									}
 									else
@@ -727,12 +727,16 @@ ns1blankspace.financial.receipt =
 
 									var cAmount = $('#ns1blankspaceDetailsAmount').val();
 									if (cAmount == '') {cAmount = 0};
-									cAmount = (cAmount - ns1blankspace.objectContextData.amount)
 
 									var cTax = $('#ns1blankspaceDetailsTax').val();
 									if (cTax == '') {cTax = 0};
-									cTax = (cTax - ns1blankspace.objectContextData.tax)
-									
+
+									if (ns1blankspace.objectContextData)
+									{	
+										cAmount = (cAmount - ns1blankspace.objectContextData.amount);
+										cTax = (cTax - ns1blankspace.objectContextData.tax);
+									}
+
 									if ((cAmount == 0 && cTax == 0) || iAccount == undefined)
 									{
 										if (iAccount == undefined) {alert('No debitor account set up.')}
@@ -766,7 +770,15 @@ ns1blankspace.financial.receipt =
 													dataType: 'json',
 													success: function(oResponse)
 													{
-														ns1blankspace.financial.receipt.refresh();
+														if (ns1blankspace.util.getParam(oParam, 'new').value)
+														{
+															ns1blankspace.inputDetected = false;
+															ns1blankspace.financial.receipt.search.send('-' + ns1blankspace.objectContext, {source: 1});
+														}
+														else
+														{	
+															ns1blankspace.financial.receipt.refresh();
+														}	
 													}
 												});
 											}

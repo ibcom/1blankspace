@@ -548,7 +548,7 @@ ns1blankspace.financial.expense =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsPaidToBusiness" class="ns1blankspaceSelect"' +
+										'<input id="ns1blankspaceDetailsContactBusinessPaidTo" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_BUSINESS_SEARCH"' +
 											' data-columns="tradename">' +
 										'</td></tr>');	
@@ -559,10 +559,10 @@ ns1blankspace.financial.expense =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsPaidToPerson" class="ns1blankspaceSelect"' +
+										'<input id="ns1blankspaceDetailsContactPersonPaidTo" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_PERSON_SEARCH"' +
-											' data-columns="surname"' +
-											' data-parent="ns1blankspaceDetailsPaidToBusiness"' +
+											' data-columns="firstname-space-surname"' +
+											' data-parent="ns1blankspaceDetailsContactBusinessPaidTo"' +
 											' data-parent-search-id="contactbusiness"' +
 											' data-parent-search-text="tradename">' +
 										'</td></tr>');							
@@ -652,8 +652,8 @@ ns1blankspace.financial.expense =
 											sData += '&accrueddate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAccruedDate').val());
 											sData += '&paymentduedate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDueDate').val());
 											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
-											sData += '&contactbusinesspaidto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPaidToBusiness').attr("data-id"));
-											sData += '&contactpersonpaidto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPaidToPerson').attr("data-id"));
+											sData += '&contactbusinesspaidto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactBusinessPaidTo').attr("data-id"));
+											sData += '&contactpersonpaidto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactPersonPaidTo').attr("data-id"));
 										}
 										
 										$.ajax(
