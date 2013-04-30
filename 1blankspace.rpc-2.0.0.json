@@ -789,6 +789,8 @@
 		{"title":"TRANSPORT_MANIFEST_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"TRANSPORT_MOVEMENT_ITEM_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"TRANSPORT_MOVEMENT_SEARCH", "advancedSearch":"false", "rpc":"true"},
-		{"title":"TRANSPORT_STORE_SEARCH", "advancedSearch":"false", "rpc":"true"}
+		{"title":"TRANSPORT_STORE_SEARCH", "advancedSearch":"false", "rpc":"true"},
+		{"title":"SETUP_NETWORK_GROUP_OBJECT_MANAGE", "advancedSearch":"false", "rpc":"true"},
+		{"title":"SETUP_NETWORK_GROUP_OBJECT_SEARCH", "advancedSearch":"true", "rpc":"true"}
 	]
 }

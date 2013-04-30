@@ -1352,19 +1352,19 @@ ns1blankspace.setup.website =
 									{
 										if ($('input[name="radioPublic"]:checked').val() == 'N')
 										{
-											sRetrictionCaption = 'But share with'
+											sRetrictionCaption = 'Share with'
 
 											ns1blankspace.setup.networkGroup.groups.show(
 											{
 												xhtmlElementContainerID: 'ns1blankspaceWebsitePageNetworkGroups',
-												xhtmlElementAddID: 'ns1blankspaceWebsitePageNetworkGroupsAdd'
+												xhtmlElementAddID: 'ns1blankspaceWebsitePageNetworkGroupsAdd',
+												object: 14,
+												objectcontext: iID
 											});
-
 										}	
 									}
 
-									$('#ns1blankspaceWebsitePageNetworkGroupsCaption').html(sRetrictionCaption)
-									
+									$('#ns1blankspaceWebsitePageNetworkGroupsCaption').html(sRetrictionCaption)		
 								},		
 
 					remove:		function (oParam, oResponse)

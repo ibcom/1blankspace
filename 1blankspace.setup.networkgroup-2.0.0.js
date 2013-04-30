@@ -784,6 +784,8 @@ ns1blankspace.setup.networkGroup =
 				},				
 					
 	groups: 	{
+					data: 		{},
+
 					show: 		function (oParam, oResponse)
 								{											
 									var iObject = ns1blankspace.util.getParam(oParam, 'object', {default: ns1blankspace.object}).value;
@@ -815,7 +817,7 @@ ns1blankspace.setup.networkGroup =
 												}
 											})
 											.click(function() {
-												 ns1blankspace.setup.networkgroup.groups.edit();
+												 ns1blankspace.setup.networkGroup.groups.add(oParam);
 											})
 											.css('width', '18px')
 											.css('height', '18px');
@@ -832,9 +834,9 @@ ns1blankspace.setup.networkGroup =
 									}
 									else
 									{
-										var aHTML = [];
-										var h = -1;
-										
+										var aHTML = [];					
+										ns1blankspace.setup.networkGroup.groups.data.selected = [];
+
 										if (oResponse.data.rows.length == 0)
 										{
 											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No one.</td></tr></table>');
@@ -855,6 +857,9 @@ ns1blankspace.setup.networkGroup =
 												aHTML.push('<td style="width:20px;text-align:right;" class="ns1blankspaceRow">');
 												aHTML.push('<span id="ns1blankspaceNetworkgroup_remove-' + this.id + '" class="ns1blankspaceRemove"></span>');
 												aHTML.push('</td></tr>');
+
+												ns1blankspace.setup.networkGroup.groups.data.selected.push(this.id);
+
 											});
 											
 											aHTML.push('</table>');
@@ -878,14 +883,134 @@ ns1blankspace.setup.networkGroup =
 									}
 								},
 
-					edit: 		function ()
-								{
+					add: 		function (oParam, oResponse)
+								{		
+									var sXHTMLElementAddID = ns1blankspace.util.getParam(oParam, 'xhtmlElementAddID').value;
+										
+									if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementAddID)
+									{
+										$(ns1blankspace.xhtml.container).slideUp(500);
+										$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+									}
+									else
+									{
+										if (oResponse == undefined)
+										{
+											ns1blankspace.container.position(
+											{
+												xhtmlElementID: sXHTMLElementAddID,
+												topOffset: -19,
+												leftOffset: -252
+											});
 
+											$(ns1blankspace.xhtml.container).html(ns1blankspace.xhtml.loadingSmall);
+											$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_NETWORK_GROUP_SEARCH';
+											oSearch.addField('title');
+											oSearch.rows = 50;
+											oSearch.sort('title', 'asc');
+											oSearch.getResults(function(data) {ns1blankspace.setup.networkGroup.groups.add(oParam, data)});
+										}
+										else
+										{
+											$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementAddID)
+											
+											var aHTMLTR = [];
+												
+											$.each(oResponse.data.rows, function(i, v)
+											{	
+												if ($.grep(ns1blankspace.setup.networkGroup.groups.data.selected.push, function (a) {return a == v.id;}).length == 0)
+												{
+
+													aHTMLTR.push('<tr class="ns1blankspaceRow">' +
+																'<td id="ns1blankspaceGroupsAdd_title-' + this.id + '" class="ns1blankspaceRowSelect ns1blankspaceGroupsAddRowSelect">' +
+																		this.title + '</td></tr>');
+												}	
+											});
+											
+											var aHTML = [];
+
+											if (aHTMLTR.length == 0)
+											{
+												aHTML.push('<table class="ns1blankspaceSelectMedium">' + 
+																'<tr><td class="ns1blankspaceNothing">No groups.</td></tr>' + 
+																'</table>');
+											}	
+											else
+											{
+												aHTML.push('<table class="ns1blankspaceSelectMedium" style="font-size:0.875em;">');
+												aHTML.push(aHTMLTR.join(''));
+												aHTML.push('</table>');
+											}	
+
+											$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+											//$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+											
+											$('td.ns1blankspaceGroupsAddRowSelect').click(function(event)
+											{
+												ns1blankspace.setup.networkGroup.groups.select({xhtmlElementID: this.id});
+											});
+										}
+									}	
 								},
 
-					save: 		function ()
+					select: 	function (oParam)
 								{
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+									var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+									var iObject = ns1blankspace.util.getParam(oParam, 'object', {default: ns1blankspace.object}).value;
+									var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {default: ns1blankspace.objectContext}).value;
+									
+									$('#' + sXHTMLElementID).parent().fadeOut(100);
 
+									var oData = 
+									{
+										object: iObject,
+										objectcontext: iObjectContext,
+										networkgroup: sID
+									}	
+												
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('SETUP_NETWORK_GROUP_OBJECT_MANAGE'),
+										data: oData,
+										dataType: 'json',
+										success: function(data)
+										{
+											ns1blankspace.setup.networkGroup.groups.show(oParam);
+											if ($('#' + sXHTMLElementID).parent().siblings('tr:visible').length == 0)
+											{
+												ns1blankspace.container.hide();
+											}	
+										}
+									});
+										
+								},
+
+					remove: 	function (oParam)
+								{
+									var iID = ns1blankspace.util.getParam(oParam, 'id').value;
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+									if (iID === undefined) {var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;}
+
+									var oData = 
+									{
+										remove: 1,
+										id: iID
+									}	
+												
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('SETUP_NETWORK_GROUP_OBJECT_MANAGE'),
+										data: oData,
+										dataType: 'json',
+										success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
+									});
 								}					
+							
 				}		
 }				
