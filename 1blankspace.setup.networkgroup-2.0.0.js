@@ -786,16 +786,40 @@ ns1blankspace.setup.networkGroup =
 	groups: 	{
 					data: 		{},
 
+					init: 		function (oParam)
+								{
+									var sXHTMLElementAddID = ns1blankspace.util.getParam(oParam, 'xhtmlElementAddID').value;
+
+									if (sXHTMLElementAddID)
+									{	
+										$('#' + sXHTMLElementAddID).button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-plus"
+											}
+										})
+										.click(function() {
+											 ns1blankspace.setup.networkGroup.groups.add(oParam);
+										})
+										.css('width', '18px')
+										.css('height', '18px');
+									}
+
+									ns1blankspace.setup.networkGroup.groups.show(oParam)
+								},
+
 					show: 		function (oParam, oResponse)
 								{											
 									var iObject = ns1blankspace.util.getParam(oParam, 'object', {default: ns1blankspace.object}).value;
 									var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {default: ns1blankspace.objectContext}).value;
 									var sXHTMLElementContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlElementContainerID', {default: 'ns1blankspaceNetworkGroups'}).value;
-									var sXHTMLElementAddID = ns1blankspace.util.getParam(oParam, 'xhtmlElementAddID').value;
+									
 
 									if (oResponse == undefined)
 									{		
-										$('#' + sXHTMLElementContainerID).html(ns1blankspace.xhtml.loadingSmall);
+										$('#' + sXHTMLElementContainerID).html('<div style="float:right;">' + ns1blankspace.xhtml.loadingSmall + '</div>');
 										
 										var aHTML = [];
 										
@@ -805,23 +829,6 @@ ns1blankspace.setup.networkGroup =
 														'</td></tr></table>');					
 										
 										$('#ns1blankspaceCreditColumn2').html(aHTML.join(''));
-									
-										if (sXHTMLElementAddID)
-										{	
-											$('#' + sXHTMLElementAddID).button(
-											{
-												text: false,
-												icons:
-												{
-													primary: "ui-icon-plus"
-												}
-											})
-											.click(function() {
-												 ns1blankspace.setup.networkGroup.groups.add(oParam);
-											})
-											.css('width', '18px')
-											.css('height', '18px');
-										}						
 									
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_NETWORK_GROUP_OBJECT_SEARCH';
@@ -950,7 +957,8 @@ ns1blankspace.setup.networkGroup =
 											
 											$('td.ns1blankspaceGroupsAddRowSelect').click(function(event)
 											{
-												ns1blankspace.setup.networkGroup.groups.select({xhtmlElementID: this.id});
+												oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
+												ns1blankspace.setup.networkGroup.groups.select(oParam);
 											});
 										}
 									}	

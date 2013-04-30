@@ -1354,7 +1354,7 @@ ns1blankspace.setup.website =
 										{
 											sRetrictionCaption = 'Share with'
 
-											ns1blankspace.setup.networkGroup.groups.show(
+											ns1blankspace.setup.networkGroup.groups.init(
 											{
 												xhtmlElementContainerID: 'ns1blankspaceWebsitePageNetworkGroups',
 												xhtmlElementAddID: 'ns1blankspaceWebsitePageNetworkGroupsAdd',

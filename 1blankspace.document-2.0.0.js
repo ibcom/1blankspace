@@ -375,9 +375,11 @@ ns1blankspace.document =
 										'</td></tr>');
 						}		
 						
+						var oDate = new Date(ns1blankspace.objectContextData.modifieddate);
+
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
-										Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+										oDate.toString("dd MMM yyyy") +
 										'</td></tr>');	
 
 						aHTML.push('</table>');					
@@ -390,7 +392,14 @@ ns1blankspace.document =
 
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
 										(ns1blankspace.objectContextData.public=='Y'?'<span style="color:red;">Public</span>':'Private') +
-										'</td></tr>');	
+										'</td></tr>');
+
+						if (ns1blankspace.objectContextData.internal != 'N')
+						{	
+							aHTML.push('<tr><td class="ns1blankspaceSummary">' +
+										'<span style="color:red;">All internal users</span>' +
+										'</td></tr>');
+						}	
 
 						aHTML.push('</table>');					
 					
@@ -439,13 +448,12 @@ ns1blankspace.document =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Sharing' +
+										'Document Summary' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input type="radio" id="radioPublicY" name="radioPublic" value="Y"/>Public' +
-										'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>Private' +
-										'</td></tr>');	
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="10" cols="35" id="ns1blankspaceMainDetailsSummary" class="inputns1blankspaceMainTextMulti" style="width:100%;"></textarea>' +
+										'</td></tr>');
 
 						aHTML.push('</table>');					
 						
@@ -453,19 +461,42 @@ ns1blankspace.document =
 						
 						var aHTML = [];
 							
-						aHTML.push('<table class="ns1blankspaceMain">');
+						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Document Summary' +
+										'Share with internal users' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea rows="10" cols="35" id="ns1blankspaceMainDetailsSummary" class="inputns1blankspaceMainTextMulti"></textarea>' +
-										'</td></tr>');
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioInternalY" name="radioPublic" value="Y"/>Yes' +
+										'<br /><input type="radio" id="radioInternalN" name="radioPublic" value="N"/>No' +
+										'</td></tr>');	
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption" style="padding-top:10px;">' +
+										'Share with external users' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioPublicY" name="radioPublic" value="Y"/>Yes&nbsp;<span class="ns1blankspaceSub">(Public)</span>' +
+										'<br /><input type="radio" id="radioPublicN" name="radioPublic" value="N"/>No&nbsp;<span class="ns1blankspaceSub">(Private)</span>' +
+										'</td></tr>');	
 						
 						aHTML.push('</table>');					
 							
+						aHTML.push('<table class="ns1blankspace" style="margin-top:10px;">' +
+										'<tr>' + 
+										'<td class="ns1blankspaceCaption" id="ns1blankspaceDocumentNetworkGroupsCaption">Network Groups</td>' +
+										'<td style="padding-right:10px; text-align:right;">' +
+										'<span class="ns1blankspaceAction" id="ns1blankspaceDocumentNetworkGroupsAdd"></span></td>' +
+										'</tr>');
+
+						aHTML.push('<td colspan=2 class="ns1blankspaceText" id="ns1blankspaceDocumentNetworkGroups">&nbsp;' +
+										'</td></tr>');
+
+						aHTML.push('</table>');
+
 						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
@@ -474,7 +505,19 @@ ns1blankspace.document =
 							$('#ns1blankspaceDetailsURL').val(ns1blankspace.objectContextData.url);
 							$('#ns1blankspaceDetailsSummary').val(ns1blankspace.objectContextData.summary);
 							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
+							$('[name="radioInternal"][value="' + ns1blankspace.objectContextData.internal + '"]').attr('checked', true);
 						}
+
+						if (ns1blankspace.objectContext != -1)
+						{	
+							ns1blankspace.setup.networkGroup.groups.init(
+							{
+								xhtmlElementContainerID: 'ns1blankspaceDocumentNetworkGroups',
+								xhtmlElementAddID: 'ns1blankspaceDocumentNetworkGroupsAdd',
+								object: 14,
+								objectcontext: ns1blankspace.objectContext
+							});
+						}	
 					}	
 				},
 
@@ -632,6 +675,7 @@ ns1blankspace.document =
 										sData += '&url=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsURL').val());
 										sData += '&public=' + ns1blankspace.util.fs($('input[name="radioPublic"]:checked').val());
 										sData += '&summary=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSummary').val());
+										sData += '&internal=' + ns1blankspace.util.fs($('input[name="radioInternal"]:checked').val());
 									}
 									
 									if ($('#ns1blankspaceMainEdit').html() != '')
