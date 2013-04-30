@@ -497,18 +497,11 @@ ns1blankspace.financial.payment =
 
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 
-						if (ns1blankspace.objectContextData.paid == 'Y')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Paid Date</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date Paid</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryPaidDate" class="ns1blankspaceSummary">' +
 											ns1blankspace.objectContextData.paiddate + 
 											'</td></tr>');
-						}
-						else
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Has not been paid.</td></tr>'); 
-						}	
-
+						
 						aHTML.push('</table>');		
 
 						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
