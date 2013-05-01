@@ -371,12 +371,21 @@ ns1blankspace.app =
 							ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
 						});	
 						
-						$('.ns1blankspaceSelectAddress').live('focus', function() 
+						$('.ns1blankspaceSelectAddress').live('focusin', function() 
 						{
+							$('input.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
+
+							$(this).addClass('ns1blankspaceHighlight');
+							
 							ns1blankspace.xhtml.divID = this.id;
 							$(ns1blankspace.xhtml.container).html('');
 							$(ns1blankspace.xhtml.container).show();
-							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
+							$(ns1blankspace.xhtml.container).offset(
+							{ 
+								top: $('#' + ns1blankspace.xhtml.divID).offset().top,
+								left: $('#' + ns1blankspace.xhtml.divID).offset().left + $('#' + ns1blankspace.xhtml.divID).width() - 10
+							});
+							//$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
 							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSelectOptions" class="ns1blankspaceSelectOptions"></span>');
 							
 							$('#ns1blankspaceSelectOptions').button( {
@@ -392,7 +401,12 @@ ns1blankspace.app =
 							.css('height', '21px')
 						});
 						
-						$('.ns1blankspaceSelectAddress').live('blur', function() 
+						$('input.ns1blankspaceSelectAddress').live('keyup', function()
+						{
+							ns1blankspace.search.address.show(ns1blankspace.xhtml.divID, {source: 1, minimumLength: 3});	
+						});	
+						
+						$('.ns1blankspaceSelectAddress').live('keyup', function() 
 						{
 							$(ns1blankspace.xhtml.container).hide();
 						});
@@ -402,7 +416,7 @@ ns1blankspace.app =
 							ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 1, 3);	
 						});	
 						
-						$('.ns1blankspaceSelectContact').live('focus', function() 
+						$('.ns1blankspaceSelectContact').live('focusin', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
 							$(ns1blankspace.xhtml.container).html('');
@@ -423,7 +437,7 @@ ns1blankspace.app =
 							.css('height', '21px')
 						});
 						
-						$('.ns1blankspaceSelectContactEmail').live('focus', function() 
+						$('.ns1blankspaceSelectContactEmail').live('focusin', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
 							$(ns1blankspace.xhtml.container).html('');
@@ -3428,65 +3442,92 @@ ns1blankspace.search.address =
 	show:		function (sXHTMLElementID, oParam)
 				{
 					var aSearch = sXHTMLElementID.split('-');
-					var sElementId = aSearch[0];
-					var lElementSearchContext = aSearch[1];	
+					var bSelected = false;
+					var sSearchText = '';
+					var iMinimumLength = 1;
+					var iSource = ns1blankspace.data.searchSource.text;
 					
-					if (lElementSearchContext != undefined)
+					if (oParam) {
+						if (oParam.minimumLength) {iMinimumLength = oParam.minimumLength;}
+						if (oParam.source) {iSource = oParam.sourcel}
+						if (oParam.selected != undefined) {bSelected = oParam.selected;}
+					}
+
+					oParam = ns1blankspace.util.setParam(oParam, "xhtmlElementID", sXHTMLElementID);
+
+					if (bSelected)
 					{
-						$('#' + ns1blankspace.xhtml.divID).val(aSearch[2])
-						$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'State')).val(aSearch[3])
-						$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'PostCode')).val(aSearch[4])
+						$('#' + ns1blankspace.xhtml.divID).val($('#' + sXHTMLElementID).attr("data-suburb"));
+						$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'State')).val($('#' + sXHTMLElementID).attr("data-state"))
+						$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'PostCode')).val($('#' + sXHTMLElementID).attr("data-postcode"))
 						$(ns1blankspace.xhtml.container).hide();
 					}
 					else
 					{
-						ns1blankspace.container.position(sXHTMLElementID)
+						ns1blankspace.status.working();
+						ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID});
+						sSearchText = $('#' + ns1blankspace.xhtml.divID).val();
 
-						$.ajax(
+						if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
 						{
-							type: 'POST',
-							url: ns1blankspace.util.endpointURI('CORE_ADDRESS_SEARCH'),
-							data: 'suburblike=' + ns1blankspace.util.fs($('#' + ns1blankspace.xhtml.divID).val()),
-							dataType: 'json',
-							success: ns1blankspace.search.address.process
-						});
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('CORE_ADDRESS_SEARCH'),
+								data: 'suburblike=' + ns1blankspace.util.fs(sSearchText),
+								dataType: 'json',
+								success: function(data) {ns1blankspace.search.address.process(oParam, data);}
+							});
+						}
 					}
 				},
 
-	process:	function (oResponse)
+	process:	function (oParam, oResponse)
 				{
 					var iColumn = 0;
 					var aHTML = [];
 					var h = -1;
 					var	iMaximumColumns = 1;
+					var sXHTMLElementID;
 							
-					if (oResponse.data.rows.length === 0)
-					{
+					if (oParam) {
+						if (oParam.xhtmlElementID) {sXHTMLElementID = oParam.xhtmlElementID;}
+					}
+
+					ns1blankspace.status.message('');
+
+					if (oResponse.data.rows.length === 0) {
 						$(ns1blankspace.xhtml.container).hide();
 					}
-					else
-					{
-						aHTML.push('<table class="ns1blankspaceSearchLarge">');
+					else {
+						
+						aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:' +
+										$('#' + sXHTMLElementID).width() + 'px;">');
 
 						$.each(oResponse.data.rows, function()
 						{
 							aHTML.push('<tr class="ns1blankspaceSearch">');
 										
-							aHTML.push('<td class="ns1blankspaceSearch" id="ns1blankspaceAddressSearch' +
-													'-' + this.id +
-													'-' + this.suburb +
-													'-' + this.state +
-													'-' + this.postcode +
-													'">' +
-													this.suburb + '</td>');
+							aHTML.push('<td class="ns1blankspaceSearch"' +
+											' id="ns1blankspaceAddressSearchSuburb-' + this.suburb.replace(/ /g,'') + '-' + this.state + '-' + this.postcode + '"' +
+											' data-suburb="' + this.suburb + '"' + 
+											' data-state="' + this.state + '"' + 
+											' data-postcode="' + this.postcode + '"' + 
+											'>' + this.suburb + '</td>');
 													
-							aHTML.push('<td class="ns1blankspaceSub" id="ns1blankspaceAddressSearchState' +
-													'-' + this.id + '">' +
-													this.state + '</td>');
+							aHTML.push('<td class="ns1blankspaceSearch"' + 
+											' id="ns1blankspaceAddressSearchState' + this.suburb.replace(/ /g,'') + '-' + this.state + '-' + this.postcode + '"' +
+											' data-suburb="' + this.suburb + '"' + 
+											' data-state="' + this.state + '"' + 
+											' data-postcode="' + this.postcode + '"' + 
+											'>' + this.state + '</td>');
 							
-							aHTML.push('<td class="ns1blankspaceSub" id="ns1blankspaceAddressSearchPostCode' +
-													'-' + this.id + '">' +
-													this.postcode + '</td>');
+							aHTML.push('<td class="ns1blankspaceSearch"' +
+											' id="ns1blankspaceAddressSearchPostCode' + this.suburb.replace(/ /g,'') + '-' + this.state + '-' + this.postcode + '"' +
+											' data-suburb="' + this.suburb + '"' + 
+											' data-state="' + this.state + '"' + 
+											' data-postcode="' + this.postcode + '"' + 
+											'>' + this.postcode + '</td>');
 							
 							aHTML.push('</tr>');
 						});
@@ -3499,7 +3540,7 @@ ns1blankspace.search.address =
 						$('td.ns1blankspaceSearch').click(function(event)
 						{
 							$(ns1blankspace.xhtml.container).hide(200);
-							ns1blankspace.search.address.show(event.target.id);
+							ns1blankspace.search.address.show(event.target.id, {selected: true});
 						});
 					}				
 				}

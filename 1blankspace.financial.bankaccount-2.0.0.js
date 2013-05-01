@@ -480,13 +480,13 @@ ns1blankspace.financial.bankAccount =
 
 										if (iStatus == 1 & iMode == 1)
 										{	
-											aHTML.push('<div style="width: 70px; margin-left:5px; margin-right:2px; margin-bottom:5px;" id="ns1blankspaceBankAccountRecoEdit">' +
+											aHTML.push('<div style="width: 70px; margin-left:5px; margin-right:2px; margin-bottom:5px;" id="ns1blankspaceBankAccountRecoEdit-' + iReconciliation + '">' +
 															'Edit</div>');
 										}
 											
 										if (iMode == 1 && iStatus == 1 && parseInt((oResponse.outofbalance).parseCurrency()) == 0)
 										{	
-											aHTML.push('<div style="width: 70px; margin-left:5px; margin-right:2px; margin-bottom:5px;" id="ns1blankspaceBankAccountRecoLock">' +
+											aHTML.push('<div style="width: 70px; margin-left:5px; margin-right:2px; margin-bottom:5px;" id="ns1blankspaceBankAccountRecoLock-' + iReconciliation + '">' +
 															'Lock</div>');
 										}
 												
@@ -539,13 +539,27 @@ ns1blankspace.financial.bankAccount =
 										})
 										.click(function()
 										{
-											if ($('#ns1blankspaceBankAccountReco .ns1blankspaceRowShaded :first').length == 1)
-											{
-												//SET STATUS TO 2
-												//if (oParam === undefined) {var oParam = {}}
-												//$.extend(true, oParam, {xhtmlElementID: $('#ns1blankspaceBankAccountReco .ns1blankspaceRowShaded :first').attr('id')});
-											 	//ns1blankspace.financial.bankAccount.reconcile.edit(oParam);
+											ns1blankspace.status.working();
+												
+											var aID = (this.id).split('-');
+												
+											var oData = 
+											{	
+												id: aID[1],
+												status: 2
 											}	
+											
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_RECONCILIATION_MANAGE'),
+												data: oData,
+												dataType: 'json',
+												success: function() {
+													ns1blankspace.financial.bankAccount.reconcile.refresh();
+													ns1blankspace.status.message('Reconciliation locked.');
+												}
+											});
 										})
 										.css('font-size', '0.75em');
 									}
