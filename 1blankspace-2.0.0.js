@@ -2464,11 +2464,12 @@ ns1blankspace.status =
 						{
 							ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceViewControlActionStatus', topOffset: 2, setWidth: true});
 							$(ns1blankspace.xhtml.container).html('<div style="font-size: 0.75em; background-color: #F8F8F8; width: 100%; color: #888888; border-style:solid; border-width: 7px;border-color: #F8F8F8; opacity: 0.95;">' + sError + '</div>');
+							window.setTimeout('$(ns1blankspace.xhtml.container).fadeOut(4000)', 7000);
 						});
 
 						ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceViewControlActionStatus', topOffset: 2, setWidth: true});
 						$(ns1blankspace.xhtml.container).html('<div style="font-size: 0.75em; background-color: #F8F8F8; width: 100%; color: #888888; border-style:solid; border-width: 7px;border-color: #F8F8F8; opacity: 0.95;">' + sError + '</div>');
-						$(ns1blankspace.xhtml.container).fadeOut(8000);
+						window.setTimeout('$(ns1blankspace.xhtml.container).fadeOut(3000)', 5000);
 					}	
 				}
 }
