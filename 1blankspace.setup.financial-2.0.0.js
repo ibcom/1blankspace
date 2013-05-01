@@ -1494,7 +1494,7 @@ ns1blankspace.setup.financial =
 
 									if ($('#ns1blankspaceMainGeneral').html() != '')
 									{
-										sData += '&lockifincompletedtaxreport=' + ns1blankspace.util.fs($('input[name="radioTaxationMethod"]:checked').val());
+										sData += '&taxreportcalculationmethod=' + ns1blankspace.util.fs($('input[name="radioTaxationMethod"]:checked').val());
 										sData += '&endoffinancialyear=' + ns1blankspace.util.fs($('input[name="inputns1blankspaceGeneralAccountingYear"]:checked').val());
 									};
 									
