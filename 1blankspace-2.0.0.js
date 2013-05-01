@@ -2458,13 +2458,17 @@ ns1blankspace.status =
 					{
 						$('#ns1blankspaceViewControlActionStatus').html(
 							'<div id="ns1blankspaceStatusError" style="margin:2px; padding: 4px; height:17px; color:white; background-color:red; width:10px; float:left; font-size:1.35em; text-align:center; cursor: pointer">!</div>' +
-							'<div style="margin:2px; margin-left: 6px; padding-left: 7px; padding-top:10px; height:14px;">An error has occured</div>');
+							'<div style="margin:2px; margin-left: 6px; padding-left: 7px; padding-top:10px; height:14px;"></div>');
 
 						$('#ns1blankspaceStatusError').click(function()
 						{
-							alert(sError);
-							console.log(sError);
+							ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceViewControlActionStatus', topOffset: 2, setWidth: true});
+							$(ns1blankspace.xhtml.container).html('<div style="font-size: 0.75em; background-color: #F8F8F8; width: 100%; color: #888888; border-style:solid; border-width: 7px;border-color: #F8F8F8; opacity: 0.95;">' + sError + '</div>');
 						});
+
+						ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceViewControlActionStatus', topOffset: 2, setWidth: true});
+						$(ns1blankspace.xhtml.container).html('<div style="font-size: 0.75em; background-color: #F8F8F8; width: 100%; color: #888888; border-style:solid; border-width: 7px;border-color: #F8F8F8; opacity: 0.95;">' + sError + '</div>');
+						$(ns1blankspace.xhtml.container).fadeOut(8000);
 					}	
 				}
 }
@@ -3457,9 +3461,38 @@ ns1blankspace.search.address =
 
 					if (bSelected)
 					{
+						var sElementReplaceID;
+						var bUpdateHTML = false;
+
 						$('#' + ns1blankspace.xhtml.divID).val($('#' + sXHTMLElementID).attr("data-suburb"));
-						$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'State')).val($('#' + sXHTMLElementID).attr("data-state"))
-						$('#' + ns1blankspace.xhtml.divID.replace('Suburb', 'PostCode')).val($('#' + sXHTMLElementID).attr("data-postcode"))
+						$('#' + ns1blankspace.xhtml.divID).attr('data-id', sXHTMLElementID);
+
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-stateElementID')) {
+							sElementReplaceID = $('#' + ns1blankspace.xhtml.divID).attr('data-stateElementID');
+						}
+						else {
+							sElementReplaceID = ns1blankspace.xhtml.divID.replace('Suburb', 'State');
+						}
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-stateUpdateHTML') || $('#' + ns1blankspace.xhtml.divID).attr('data-stateUpdateHTML') == 'true') {
+							$('#' + sElementReplaceID).html($('#' + sXHTMLElementID).attr("data-state"));
+						}
+						else {
+							$('#' + sElementReplaceID).val($('#' + sXHTMLElementID).attr("data-state"));
+						}
+
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-postcodeElementID')) {
+							sElementReplaceID = $('#' + ns1blankspace.xhtml.divID).attr('data-postcodeElementID');
+						}
+						else {
+							sElementReplaceID = ns1blankspace.xhtml.divID.replace('Suburb', 'PostCode');
+						}
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-postcodeUpdateHTML') || $('#' + ns1blankspace.xhtml.divID).attr('data-postcodeUpdateHTML') == 'true') {
+							$('#' + sElementReplaceID).html($('#' + sXHTMLElementID).attr("data-postcode"));
+						}
+						else {
+							$('#' + sElementReplaceID).val($('#' + sXHTMLElementID).attr("data-postcode"));
+						}
+
 						$(ns1blankspace.xhtml.container).hide();
 					}
 					else
@@ -3509,21 +3542,30 @@ ns1blankspace.search.address =
 							aHTML.push('<tr class="ns1blankspaceSearch">');
 										
 							aHTML.push('<td class="ns1blankspaceSearch"' +
-											' id="ns1blankspaceAddressSearchSuburb-' + this.suburb.replace(/ /g,'') + '-' + this.state + '-' + this.postcode + '"' +
+											' id="ns1blankspaceAddressSearchSuburb-' + 
+												this.suburb.replace(/ /g,'') + '-' + 
+												this.state.replace(/ /g,'') + '-' + 
+												this.postcode.replace(/ /g,'') + '"' +
 											' data-suburb="' + this.suburb + '"' + 
 											' data-state="' + this.state + '"' + 
 											' data-postcode="' + this.postcode + '"' + 
 											'>' + this.suburb + '</td>');
 													
 							aHTML.push('<td class="ns1blankspaceSearch"' + 
-											' id="ns1blankspaceAddressSearchState' + this.suburb.replace(/ /g,'') + '-' + this.state + '-' + this.postcode + '"' +
+											' id="ns1blankspaceAddressSearchState' + 
+												this.suburb.replace(/ /g,'') + '-' + 
+												this.state.replace(/ /g,'') + '-' + 
+												this.postcode.replace(/ /g,'') + '"' +
 											' data-suburb="' + this.suburb + '"' + 
 											' data-state="' + this.state + '"' + 
 											' data-postcode="' + this.postcode + '"' + 
 											'>' + this.state + '</td>');
 							
 							aHTML.push('<td class="ns1blankspaceSearch"' +
-											' id="ns1blankspaceAddressSearchPostCode' + this.suburb.replace(/ /g,'') + '-' + this.state + '-' + this.postcode + '"' +
+											' id="ns1blankspaceAddressSearchPostCode' + 
+												this.suburb.replace(/ /g,'') + '-' + 
+												this.state.replace(/ /g,'') + '-' + 
+												this.postcode.replace(/ /g,'') + '"' +
 											' data-suburb="' + this.suburb + '"' + 
 											' data-state="' + this.state + '"' + 
 											' data-postcode="' + this.postcode + '"' + 
