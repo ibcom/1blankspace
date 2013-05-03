@@ -1380,16 +1380,20 @@ ns1blankspace.logon =
 
 	send: 		function ()
 				{
-					var sData = 'logon=' + ns1blankspace.util.fs($('#ns1blankspaceLogonLogonName').val()) +
-								'&password=' + ns1blankspace.util.fs($('#ns1blankspaceLogonPassword').val());
+					var oData = 
+					{
+						method: 'LOGON',
+						logon: $('#ns1blankspaceLogonLogonName').val(),
+						password: $('#ns1blankspaceLogonPassword').val()
+					}	
 
 					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
 					
 					$.ajax(
 					{
 						type: 'POST',
-						url: '/ondemand/logon/',
-						data: sData,
+						url: '/rpc/logon/',
+						data: oData,
 						dataType: 'json',
 						success: this.process
 					})
