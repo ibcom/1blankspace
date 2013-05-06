@@ -924,7 +924,7 @@ ns1blankspace.financial.bankAccount =
 
 														if (ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[sClass] === undefined)
 														{
-															ns1blankspace.status.working('First time initalise');
+															ns1blankspace.status.working('First time initialise');
 															ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled = {};
 															oParam = ns1blankspace.util.setParam(oParam, 'step', iStep + 1);
 															ns1blankspace.financial.bankAccount.reconcile.items.init(oParam);
