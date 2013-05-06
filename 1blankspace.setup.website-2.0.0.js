@@ -772,7 +772,7 @@ ns1blankspace.setup.website =
 					{
 						var aHTML = [];
 
-						aHTML.push('<input type="radio" id="radioTemplateDocument-1" name="radioTemplateDocument" value="-1"/>' +
+						aHTML.push('<input type="radio" id="radioTemplateDocument-1" name="radioTemplateDocument" value=""/>' +
 													'None<br />');
 
 						if (oResponse.data.rows.length == 0)
