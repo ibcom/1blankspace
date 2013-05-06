@@ -585,8 +585,8 @@ ns1blankspace.setup.website =
 						
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceLayoutColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspaceLayoutColumn2" class="ns1blankspaceColumn2"></td>' +
+										'<td id="ns1blankspaceLayoutColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceLayoutColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
 										'</tr>' + 
 										'</table>');					
 						
@@ -681,7 +681,7 @@ ns1blankspace.setup.website =
 						{
 							$('[name="radioLayout"][value="3"]').attr('checked', true);
 							ns1blankspace.setup.website.css.list(-1);
-							ns1blankspace.setup.website.template(-1);
+							ns1blankspace.setup.website.template('');
 						}
 					}	
 				},
@@ -759,8 +759,6 @@ ns1blankspace.setup.website =
 
 	template: 	function (iValue)
 				{
-					if (iValue == '') {iValue = -1}
-
 					var oSearch = new AdvancedSearch();
 					oSearch.method = 'DOCUMENT_SEARCH';
 					
@@ -772,7 +770,7 @@ ns1blankspace.setup.website =
 					{
 						var aHTML = [];
 
-						aHTML.push('<input type="radio" id="radioTemplateDocument-1" name="radioTemplateDocument" value=""/>' +
+						aHTML.push('<input type="radio" id="radioTemplateDocument" name="radioTemplateDocument" value=""/>' +
 													'None<br />');
 
 						if (oResponse.data.rows.length == 0)
