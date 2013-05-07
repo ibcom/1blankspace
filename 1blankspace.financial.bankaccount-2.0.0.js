@@ -782,7 +782,9 @@ ns1blankspace.financial.bankAccount =
 														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.show(oParam, data)});		
 													}
 													else
-													{				
+													{		
+														
+
 														var aHTML = [];
 													
 														if (oResponse.data.rows.length == 0)
@@ -797,16 +799,17 @@ ns1blankspace.financial.bankAccount =
 
 															$('#ns1blankspaceBankAccountReconcileItems').html(aHTML.join(''));	
 
+															var aHTML = [];
+
 															$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('<span class="ns1blankspaceAction" id="ns1blankspaceShowAll"></span>');
 
 															$('#ns1blankspaceShowAll').button({
-																label: 'Show All Unreconciled ' + (iType==1?'Payments':'Receipts'),
+																label: 'Show All Unreconciled ' + (iType==1?'Payments':'Receipts') + ' & Journals',
 															})
 															.click(function() {
 																$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('');
 																ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
-															})
-																
+															})								
 														}
 														else
 														{
@@ -1055,6 +1058,10 @@ ns1blankspace.financial.bankAccount =
 													if ($('#' + sXHTMLElementContainerID).html() == '')
 													{
 														var aHTML = [];
+
+														aHTML.push('<div class="ns1blankspaceHeaderCaption" style="width: 100%;margin-right:10px;margin-bottom:3px;">');
+														aHTML.push('<span style="font-size:1.25em;">THIS SPACE</span>');
+														aHTML.push('</div>');
 														
 														aHTML.push('<table class="ns1blankspaceContainer">' +
 																		'<tr class="ns1blankspaceContainer">' +
@@ -2433,7 +2440,7 @@ ns1blankspace.financial.bankAccount =
 															aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Status</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 															aHTML.push('</tr>');
 															
 															$(oResponse.data.rows).each(function()
@@ -2549,15 +2556,12 @@ ns1blankspace.financial.bankAccount =
 									{	
 										var aHTML = [];
 
-										aHTML.push('<table class="ns1blankspaceContainer">');
-
-										aHTML.push('<tr class="ns1blankspaceContainer">' +
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceMappingColumn1" class="ns1blankspaceColumn1Flexible">' +
 														ns1blankspace.xhtml.loading + '</td>' +
-														'<td id="ns1blankspaceMappingColumn2" class="ns1blankspaceColumn2" style="width:250px;"></td>' +
-														'</tr>');
-
-										aHTML.push('</table>');					
+														'<td id="ns1blankspaceMappingColumn2" class="ns1blankspaceColumn2" style="width:350px;"></td>' +
+														'</tr></table>');					
 										
 										$('#ns1blankspaceMainMapping').html(aHTML.join(''));
 										
@@ -2639,7 +2643,7 @@ ns1blankspace.financial.bankAccount =
 												sTo = '<span class="ns1blankspaceSub">Account to</span>';
 												sTo = sTo + '<br />' + this.maptofinancialaccounttext;
 											}
-											
+
 											aHTML.push('<td id="ns1blankspaceItem_to-' + this.id + '" class="ns1blankspaceRow">' +
 															sTo + '</td>');
 
@@ -2717,108 +2721,197 @@ ns1blankspace.financial.bankAccount =
 							{
 								var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
 								var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+								var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, default: ''}).value;
 
-								if (oResponse == undefined)
+								if (iStep == 1)
 								{
-									if (iStep == 1)
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceMappingEditColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceMappingEditColumn2" class="ns1blankspaceColumn2" style="width:50px;"></td>' +
+														'</tr></table>');
+
+									$('#ns1blankspaceMappingColumn2').html(aHTML.join(''));
+
+									var aHTML = [];
+
+									aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
+							
+									aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+													'Where Description' +
+													'</td></tr>' +
+													'<tr><td class="ns1blankspaceRadio">' +
+													'<input type="radio" id="radioMatch1" name="radioMatch" value="1"/>Exactly Matches' +
+													'<br /><input type="radio" id="radioMatch2" name="radioMatch" value="2"/>Contains' +
+													'</td></tr>');
+
+									aHTML.push('<tr><td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceFromMatchDescription" class="ns1blankspaceText">' +
+													'</td></tr>');
+
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'Set ' + ns1blankspace.option.taxVATCaption + ' Type' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td id="ns1blankspaceFinancialTaxCode" class="ns1blankspaceRadio">' +
+													ns1blankspace.xhtml.loadingSmall +
+													'</td></tr>');	
+
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'Account' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
+													'</td></tr>');
+									
+									aHTML.push('</table>');
+									
+									aHTML.push('<table class="ns1blankspaceColumn2">');
+									
+									aHTML.push('<tr><td style="padding-top:5px;" id="ns1blankspaceItemAddSearchResults"><span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all or<br />start typing part of the account title.</span></td></tr>');
+																	
+									aHTML.push('</table>');		
+									
+									$('#ns1blankspaceMappingEditColumn1').html(aHTML.join(''));
+				
+									ns1blankspace.financial.util.tax.codes(
 									{
-										var aHTML = [];
-										
-										aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
-								
-										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-														'Match' +
-														'</td></tr>' +
-														'<tr><td class="ns1blankspaceRadio">' +
-														'<input type="radio" id="radioMatch1" name="radioMatch" value="1"/>Exact' +
-														'<br /><input type="radio" id="radioMatch2" name="radioMatch" value="2"/>Contains' +
-														'</td></tr>');
+										xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
+										type: iType
+									});
 
-										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-														'Description' +
-														'</td></tr>' +
-														'<tr >' +
-														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceFromMatchDescription" class="ns1blankspaceText">' +
-														'</td></tr>');
+									$('[name="radioTaxCode"]').click(function()
+									{
+										ns1blankspace.financial.util.tax.calculate(
+										{
+											amountXHTMLElementID: 'ns1blankspaceItemAmount',
+											taxXHTMLElementID: 'ns1blankspaceItemTax'
+										});
+									});
 
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Set ' + ns1blankspace.option.taxVATCaption + ' Type' +
-														'</td></tr>' +
-														'<tr class="ns1blankspace">' +
-														'<td id="ns1blankspaceFinancialTaxCode" class="ns1blankspaceRadio">' +
-														ns1blankspace.xhtml.loadingSmall +
-														'</td></tr>');	
-
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Account' +
-														'</td></tr>' +
-														'<tr class="ns1blankspace">' +
-														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
-														'</td></tr>');
-										
-
-										aHTML.push('</table>');
-										
-										aHTML.push('<table class="ns1blankspaceColumn2">');
-										
-										aHTML.push('<tr><td style="padding-top:5px;" id="ns1blankspaceItemAddSearchResults"><span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all or<br />start typing part of the account title.</span></td></tr>');
-																		
-										aHTML.push('</table>');		
-										
-										$('#ns1blankspaceMappingColumn2').html(aHTML.join(''));
+									$('#ns1blankspaceItemAccount').keyup(function()
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
+										if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+								        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.bankAccount.mapping.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
+									});
 					
-										ns1blankspace.financial.util.tax.codes(
-										{
-											xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
-											id: 1,
-											type: iType
-										});
+									$('#ns1blankspaceItemAmount').focus();
 
-										$('#ns1blankspaceItemAmount').keyup(function()
+									var iFinancialAccountType = (iType==1?2:1);
+									var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
+									{ 
+										return (a.type == iFinancialAccountType && a.postable == 'Y')
+									});
+
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspaceColumn2">');
+											
+									aHTML.push('<tr><td><span id="ns1blankspaceMappingEditSave" class="ns1blankspaceAction">' +
+													'Save</span></td></tr>');
+
+									aHTML.push('<tr><td><span id="ns1blankspaceMappingEditCancel" class="ns1blankspaceAction">' +
+													'Cancel</span></td></tr>');
+													
+									aHTML.push('</table>');					
+									
+									$('#ns1blankspaceMappingEditColumn2').html(aHTML.join(''));
+									
+									$('#ns1blankspaceMappingEditSave').button(
+									{
+										text: "Save"
+									})
+									.click(function()
+									{
+										ns1blankspace.status.working();
+
+										var oData = 
 										{
-											ns1blankspace.financial.util.tax.calculate(
+											descriptionmatchtype: $('input[name="radioMatch"]:checked').val(),
+											mapfromdescription: $('#ns1blankspaceFromMatchDescription').val(),
+											maptofinancialaccount: $('#ns1blankspaceItemAccount').attr('data-id'),
+											taxtype: $('input[name="radioTaxCode"]:checked').val(),
+											id: sID
+										}
+											
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_MANAGE'),
+											data: oData,
+											dataType: 'json',
+											success: function(oResponse)
 											{
-												amountXHTMLElementID: 'ns1blankspaceItemAmount',
-												taxXHTMLElementID: 'ns1blankspaceItemTax'
-											});
+												ns1blankspace.status.message('Saved');
+												ns1blankspace.financial.bankAccount.mapping.show(oParam)
+											}
 										});
+									})
+									.css('width', '70px');
 
-										$('[name="radioTaxCode"]').click(function()
-										{
-											ns1blankspace.financial.util.tax.calculate(
-											{
-												amountXHTMLElementID: 'ns1blankspaceItemAmount',
-												taxXHTMLElementID: 'ns1blankspaceItemTax'
-											});
-										});
+									$('#ns1blankspaceMappingEditCancel').button(
+									{
+										text: "Cancel"
+									})
+									.click(function()
+									{
+										ns1blankspace.financial.bankAccount.mapping.show();
+									})
+									.css('width', '70px');
 
-										$('#ns1blankspaceItemAccount').keyup(function()
+									if (sID != '')
+									{
+										ns1blankspace.status.working();
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_SEARCH';
+										oSearch.addField('description,descriptionmatchtype,descriptionmatchtypetext,mapfrom,mapfromdescription,mapfromtext,' +
+														'maporder,maptodescription,maptofinancialaccount,maptofinancialaccounttext,' +
+														'matchtype,matchtypetext,project,projecttext,status,statustext,' +
+														'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+										oSearch.addFilter('id', 'EQUAL_TO', sID)
+									
+										oSearch.getResults(function(data)
 										{
 											oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
-											if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-									        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.item.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
+											ns1blankspace.financial.bankAccount.mapping.edit(oParam, data);
 										});
-						
-										$('#ns1blankspaceItemAmount').focus();
-
-										var iFinancialAccountType = (iType==1?2:1);
-										var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
-										{ 
-											return (a.type == iFinancialAccountType && a.postable == 'Y')
-										});
-
-										if (oData.length < 21)
-										{	
-											oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
-											ns1blankspace.financial.item.edit(oParam, oData);
-										}	
+									}
+									else
+									{
+										$('[name="radioMatch"][value="1"]').attr('checked', true);
+										$('[name="radioTaxCode"][value="1"]').attr('checked', true);
 									}
 
-									if (iStep == 2)
+									if (oData.length < 21)
+									{	
+										oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
+										ns1blankspace.financial.item.edit(oParam, oData);
+									}	
+								}
+
+								if (iStep == 2 && oResponse !== undefined)
+								{	
+									ns1blankspace.status.message('');
+
+									var oRow = oResponse.data.rows[0];
+
+									$('[name="radioMatch"][value="' + oRow.descriptionmatchtype + '"]').attr('checked', true);
+									$('#ns1blankspaceFromMatchDescription').val(oRow.mapfromdescription);
+									$('#ns1blankspaceItemAccount').val(oRow.maptofinancialaccounttext)
+									$('#ns1blankspaceItemAccount').attr('data-id', oRow.maptofinancialaccount);
+									$('[name="radioTaxCode"][value="' + oRow.taxtype + '"]').attr('checked', true);
+								}
+
+								if (iStep == 3)
+								{	
+									if (oResponse == undefined)
 									{	
 										ns1blankspace.status.working();
 
@@ -2841,80 +2934,47 @@ ns1blankspace.financial.bankAccount =
 											});
 										}	
 
-										oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
-										ns1blankspace.financial.item.edit(oParam, oData);
-									}
-								}
-								else
-								{
-									ns1blankspace.status.message('');
-
-									var aHTML = [];
-									
-									if (oResponse.length == 0)	
-									{
-										aHTML.push('<table class="ns1blankspace">' +
-														'<tr><td class="ns1blankspaceNothing">No accounts.</td></tr>' + 
-														'</table>');
-
-										$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''));		
+										ns1blankspace.financial.bankAccount.mapping.edit(oParam, oData);
 									}
 									else
-									{	
-										aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">');
-										
-										$.each(oResponse, function() 
-										{ 
-											aHTML.push('<tr class="ns1blankspaceRow">'+ 
-															'<td id="ns1blankspaceItem_title-' + this.id + '" class="ns1blankspaceRow">' +
-															this.title + '</td>' +
-															'<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
-															'<span id="ns1blankspaceItem_options_add-' + this.id + '" class="ns1blankspaceItemAdd"></span>' +
-															'</td></tr>');	
-										});
-										
-										aHTML.push('</table>');
+									{
+										ns1blankspace.status.message('');
 
-										$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''))
+										var aHTML = [];
 										
-										$('.ns1blankspaceItemAdd').button({
-											text: false,
-											icons: {
-												primary: "ui-icon-plus"
-											}
-										})
-										.click(function()
+										if (oResponse.length == 0)	
 										{
-											ns1blankspace.status.working();
+											aHTML.push('<table class="ns1blankspace">' +
+															'<tr><td class="ns1blankspaceNothing">No accounts.</td></tr>' + 
+															'</table>');
 
-											var sID = this.id;
-											var aID = sID.split('-');
-											var iAccount = aID[1];
+											$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''));		
+										}
+										else
+										{	
+											aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">');
 											
-											var oData = 
-											{
-												descriptionmatchtype: $('input[name="radioMatch"]:checked').val(),
-												mapfromdescription: $('#ns1blankspaceFromMatchDescription').val()
-											}
-												
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_MANAGE'),
-												data: oData,
-												dataType: 'json',
-												success: function(oResponse)
-												{
-													ns1blankspace.status.message('Added.');
-													ns1blankspace.financial.bankAccount.mapping.show(oParam)
-												}
+											$.each(oResponse, function() 
+											{ 
+												aHTML.push('<tr class="ns1blankspaceRow">'+ 
+																'<td id="ns1blankspaceMappingAccount_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																this.title +
+																'</td></tr>');	
 											});
-										})
-										.css('width', '18px')
-										.css('height', '18px')
-										.css('font-size', '0.875em;');
-									}
-								}	
-							}
+											
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''))
+											
+											$('.ns1blankspaceRowSelect').click(function()
+											{
+												$('#ns1blankspaceItemAccount').val($(this).html())
+												$('#ns1blankspaceItemAccount').attr('data-id',(this.id).split('-')[1]);
+												$('#ns1blankspaceItemAddSearchResults').html('');
+											});
+										}
+									}	
+								}
+							}	
 				}				
 }								

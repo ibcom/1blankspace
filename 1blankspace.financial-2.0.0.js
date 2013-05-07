@@ -3902,11 +3902,11 @@ ns1blankspace.financial.util =
 													'<br /><input type="radio" id="radioTaxCode5" name="radioTaxCode" value="5" data-rate="0"/>Excluded';
 									}
 
-									if (sXHTMLElementID)
+									if (sXHTMLElementID !== undefined)
 									{
 										$('#' + sXHTMLElementID).html(sHTML)
 
-										if (iID)
+										if (iID !== undefined)
 										{
 											$('[name="radioTaxCode"][value="' + iID + '"]').attr('checked', true);
 										}	
