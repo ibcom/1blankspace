@@ -396,8 +396,8 @@ ns1blankspace.document =
 
 						if (ns1blankspace.objectContextData.internal != 'N')
 						{	
-							aHTML.push('<tr><td class="ns1blankspaceSummary">' +
-										'<span style="color:red;">All internal users</span>' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' +
+										'All internal users' +
 										'</td></tr>');
 						}	
 
