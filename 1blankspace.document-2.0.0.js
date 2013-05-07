@@ -391,7 +391,7 @@ ns1blankspace.document =
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
-										(ns1blankspace.objectContextData.public=='Y'?'<span style="color:red;">Public</span>':'Private') +
+										(ns1blankspace.objectContextData.public=='Y'?'<span style="color:#CC0000;">Public</span>':'Private') +
 										'</td></tr>');
 
 						if (ns1blankspace.objectContextData.internal != 'N')
@@ -487,12 +487,13 @@ ns1blankspace.document =
 							
 						aHTML.push('<table class="ns1blankspace" style="margin-top:10px;">' +
 										'<tr>' + 
-										'<td class="ns1blankspaceCaption" id="ns1blankspaceDocumentNetworkGroupsCaption">Network Groups</td>' +
+										'<td class="ns1blankspaceCaption" id="ns1blankspaceDocumentNetworkGroupsCaption">Shared With</td>' +
 										'<td style="padding-right:10px; text-align:right;">' +
 										'<span class="ns1blankspaceAction" id="ns1blankspaceDocumentNetworkGroupsAdd"></span></td>' +
 										'</tr>');
 
-						aHTML.push('<td colspan=2 class="ns1blankspaceText" id="ns1blankspaceDocumentNetworkGroups">&nbsp;' +
+						aHTML.push('<td colspan=2 class="ns1blankspaceText" id="ns1blankspaceDocumentNetworkGroups">' +
+										'<table><tr><td class="ns1blankspaceNothing">No one.</td></tr></table> ' +
 										'</td></tr>');
 
 						aHTML.push('</table>');
@@ -506,6 +507,11 @@ ns1blankspace.document =
 							$('#ns1blankspaceDetailsSummary').val(ns1blankspace.objectContextData.summary);
 							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
 							$('[name="radioInternal"][value="' + ns1blankspace.objectContextData.internal + '"]').attr('checked', true);
+						}
+						else
+						{
+							$('[name="radioPublic"][value="N"]').attr('checked', true);
+							$('[name="radioInternal"][value="Y"]').attr('checked', true);
 						}
 
 						if (ns1blankspace.objectContext != -1)
