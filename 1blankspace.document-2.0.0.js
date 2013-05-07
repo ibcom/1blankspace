@@ -469,8 +469,8 @@ ns1blankspace.document =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioInternalY" name="radioPublic" value="Y"/>Yes' +
-										'<br /><input type="radio" id="radioInternalN" name="radioPublic" value="N"/>No' +
+										'<input type="radio" id="radioInternalY" name="radioInternal" value="Y"/>Yes' +
+										'<br /><input type="radio" id="radioInternalN" name="radioInternal" value="N"/>No' +
 										'</td></tr>');	
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +

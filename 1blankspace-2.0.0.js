@@ -3422,7 +3422,25 @@ ns1blankspace.util =
 			     	}
 			  		
 			   		return true;
-				}											
+				},
+
+	sortBy: 	function (prop)
+				{
+					//yourArray.sort(ns1blankspace.util.sortBy('firstname'))
+
+					return function(a,b)
+					{
+						if(a[prop] > b[prop])
+						{
+							return 1;
+						}
+						else if(a[prop] < b[prop])
+						{
+							return -1;
+						}
+						return 0;
+					}
+				}									
 }
 
 ns1blankspace.debug = 
