@@ -490,8 +490,7 @@ ns1blankspace.financial.bankAccount =
 															'Edit</div>');
 										}
 
-										//if (iMode == 1 && iStatus == 1 && parseInt((oResponse.outofbalance).parseCurrency()) == 0)
-										if(true)
+										if (iMode == 1 && iStatus == 1 && parseInt((oResponse.outofbalance).parseCurrency()) == 0)
 										{	
 											aHTML.push('<div style="width:20px; margin-left:5px; margin-right:2px; margin-bottom:10px; float:right;" class="ns1blankspaceBankAccountRecoLock" id="ns1blankspaceBankAccountRecoLock-' + iReconciliation + '">' +
 															'Lock</div>');
