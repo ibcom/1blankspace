@@ -323,7 +323,9 @@ ns1blankspace.setup.financial =
 							oSearch.getResults(function(data) {ns1blankspace.setup.financial.bankAccounts(oParam, data)});
 						}
 						else
-						{
+						{	
+							ns1blankspace.financial.data.bankaccounts = oResponse.data.rows;
+							
 							var aHTML = [];
 							
 							aHTML.push('<table class="ns1blankspaceContainer">' +
