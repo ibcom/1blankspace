@@ -326,7 +326,7 @@ ns1blankspace.financial.bankAccount =
 										else
 										{
 											aHTML.push('<table class="ns1blankspaceColumn2">' +
-														'<tr><td class="ns1blankspaceNothing">The last twelve reconciliations are shown for your information.</td></tr></table>')
+														'<tr><td class="ns1blankspaceNothing">The last twelve completed reconciliations are shown.</td></tr></table>')
 										}	
 
 										$('#ns1blankspaceBankAccountColumnReconcile2').html(aHTML.join(''));
