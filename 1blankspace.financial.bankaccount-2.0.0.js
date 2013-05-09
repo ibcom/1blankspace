@@ -521,7 +521,8 @@ ns1blankspace.financial.bankAccount =
 										$('#ns1blankspaceBankAccountColumnItemType :radio').click(function()
 										{
 											var aID = (this.id).split('-');
-											$.extend(true, oParam, {type: parseInt(aID[1]), reconciliation: parseInt(aID[2])});
+											oParam = ns1blankspace.util.setParam(oParam, 'type', parseInt(aID[1]));
+											oParam = ns1blankspace.util.setParam(oParam, 'reconciliation', parseInt(aID[2]));
 
 											if (iMode == 1)
 											{	
@@ -539,7 +540,10 @@ ns1blankspace.financial.bankAccount =
 										$('#ns1blankspaceBankAccountColumnItemMode :radio').click(function()
 										{
 											var aID = (this.id).split('-');
-											$.extend(true, oParam, {type: parseInt(aID[1]), reconciliation: parseInt(aID[2])});
+											iMode = parseInt(aID[1]);
+											
+											oParam = ns1blankspace.util.setParam(oParam, 'mode', iMode);
+											oParam = ns1blankspace.util.setParam(oParam, 'reconciliation', parseInt(aID[2]));
 
 											if (iMode == 1)
 											{	
@@ -1030,6 +1034,12 @@ ns1blankspace.financial.bankAccount =
 														{
 															var sType = (iType == 1?'payments':'receipts')
 															ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[sType] = oResponse.data.rows;
+
+															$.each(ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[sType], function (i, v)
+															{
+																v.type = (iType == 1?'payment':'receipt');
+															});
+
 															oParam = ns1blankspace.util.setParam(oParam, 'step', iStep + 1);
 															ns1blankspace.financial.bankAccount.reconcile.items.init(oParam);
 														}	
@@ -1056,6 +1066,11 @@ ns1blankspace.financial.bankAccount =
 															else
 															{	
 																ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled['journals'] = oResponse.data.rows;
+																$.each(ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled['journals'], function (i, v)
+																{
+																	v.type = 'journal';
+																});
+
 																oParam = ns1blankspace.util.setParam(oParam, 'step', iStep + 1);
 																ns1blankspace.financial.bankAccount.reconcile.items.init(oParam);
 															}
@@ -1085,9 +1100,9 @@ ns1blankspace.financial.bankAccount =
 													var iType = 1;
 													var iSource = 1;
 													var iEditAction = 1;
-													var dSearchDate;
-													var cSearchAmount;
-													var sSearchReference;
+													var dSearchDate = '';
+													var cSearchAmount = '';
+													var sSearchReference = '';
 													var iSearchSourceID;
 													var iStatus = 2;
 													var sXHTMLElementContainerID = 'ns1blankspaceBankAccountReconcileColumnItemEdit';
@@ -1284,6 +1299,7 @@ ns1blankspace.financial.bankAccount =
 																if (k.paiddate !== undefined) {k.date = k.paiddate}
 																if (k.receiveddate !== undefined) {k.date = k.receiveddate}
 																if (k['generaljournalitem.generaljournal.journaldate'] !== undefined) {k.date = k['generaljournalitem.generaljournal.journaldate']}
+																if (k['generaljournalitem.generaljournal.reference'] !== undefined) {k.reference = k['generaljournalitem.generaljournal.reference']}
 
 																if (k['creditamount'] !== undefined)
 																{
@@ -1333,6 +1349,8 @@ ns1blankspace.financial.bankAccount =
 																		sDescription += '<br />' + this.contactpersonreceivedfromtext
 																	}
 																}
+
+																k.dateSort = Date.parse(k.date);
 																			
 															});	
 
@@ -1355,8 +1373,6 @@ ns1blankspace.financial.bankAccount =
 
 															var aHTML = [];
 
-
-													
 															if (ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[sClass + '-searched'].length == 0)
 															{
 																if (iType == 1)
@@ -1389,7 +1405,7 @@ ns1blankspace.financial.bankAccount =
 															else
 															{
 
-																ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[sClass + '-searched'].sort(ns1blankspace.util.sortBy('date'));
+																ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[sClass + '-searched'].sort(ns1blankspace.util.sortBy('dateSort'));
 
 																aHTML.push('<table id="ns1blankspaceReconcileItemsEdit">');
 																
@@ -1407,7 +1423,7 @@ ns1blankspace.financial.bankAccount =
 																								' class="recoitem">' +
 																								this.amount + '</td>');																					
 																		
-																		var sDescription = this.description;
+																		var sDescription = this.description + ' (' + this.type + ')';
 
 																		aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceReconcileItems_reference-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
 																							' class="recoitem" title="' + this.reference + '">' +
@@ -1429,11 +1445,13 @@ ns1blankspace.financial.bankAccount =
 
 																$('#ns1blankspaceReconcileItemsEdit').html(aHTML.join(''));
 
-																$('#ns1blankspaceReconcileItemsEdit .ns1blankspaceReconcileItemsAdd').button( {
-																text: false,
-																icons: {
-																	primary: "ui-icon-check"
-																}
+																$('#ns1blankspaceReconcileItemsEdit .ns1blankspaceReconcileItemsAdd').button(
+																{
+																	text: false,
+																	icons:
+																	{
+																		primary: "ui-icon-check"
+																	}
 																})
 																.click(function() {
 																	oParam.editAction = 3;
