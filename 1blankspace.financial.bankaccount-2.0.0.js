@@ -541,7 +541,7 @@ ns1blankspace.financial.bankAccount =
 										{
 											var aID = (this.id).split('-');
 											iMode = parseInt(aID[1]);
-											
+
 											oParam = ns1blankspace.util.setParam(oParam, 'mode', iMode);
 											oParam = ns1blankspace.util.setParam(oParam, 'reconciliation', parseInt(aID[2]));
 
@@ -1059,6 +1059,8 @@ ns1blankspace.financial.bankAccount =
 																oSearch.addField('taxcategory,creditamount,debitamount,reconciliation,generaljournalitem.generaljournal.reference,generaljournalitem.generaljournal.description,generaljournalitem.generaljournal.journaldate');
 																oSearch.sort('generaljournalitem.generaljournal.journaldate', 'asc');
 																oSearch.addFilter('reconciliation', 'IS_NULL');
+																oSearch.addFilter('status', 'EQUAL_TO', 2);
+																oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.financial.data.settings.financialaccountcash);
 																oSearch.addFilter('generaljournalitem.generaljournal.journaldate', 'LESS_THAN_OR_EQUAL_TO', dReconciliationEndDate);
 																oSearch.rows = 200;
 																oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.init(oParam, data)});
