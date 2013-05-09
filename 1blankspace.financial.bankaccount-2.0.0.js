@@ -280,9 +280,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
 										oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance');
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-										//if (iMode == 1) {oSearch.addFilter('status', 'EQUAL_TO', 1)}
 										oSearch.addFilter('status', 'EQUAL_TO', iMode)
-
 										oSearch.sort('statementdate', 'desc');
 										oSearch.rows = 12;
 										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.show(oParam, data)});
@@ -307,18 +305,18 @@ ns1blankspace.financial.bankAccount =
 											aHTML.push('<table class="ns1blankspaceColumn2">' +
 														'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All current reconciliations are shown.' +
 														'<br /><br />To reconcile this bank account, select the appropriate reconcilation or if all are completed, press "Add" to add a new one.' +
-														'<br /><br />Once selected you can press "Edit" to change the reconcilation details,<br />ie bank statement balance amount.</td>');
+														'<br /><br />Once selected you can press "Edit" to change the reconcilation details,<br />ie bank statement amount.</td>');
 
 					
 											aHTML.push('<td style="font-size:0.75em;"><table cellpadding=6 style="background-color:#F3F3F3;padding:6px;" >' +
-															'<tr><td class="ns1blankspaceSub" colspan=2>You have a number of options when reconciling a bank account.</td></tr>' + 
+															'<tr><td class="ns1blankspaceSub" colspan=2 style="font-weight:bold;">You have a number of options when reconciling a bank account:</td></tr>' + 
 															'<tr><td class="ns1blankspaceCaption" style="width:15px;padding-bottom:10px;">1</td><td class="ns1blankspaceSub">' +
 															'Use a printed or PDF bank statement directly.  In this case you skip the bank transactions import step and go straight to reconcile.' +
 															' You can then add a reconciliation - selecting the date you want to balance up to.  You then search the system for matching payments or receipts that have already been entered or if not, add them as you go.' +
 															'</td></tr>' + 
 															'<tr><td class="ns1blankspaceCaption" style="width:15px;padding-top:10px;">2</td><td class="ns1blankspaceSub" style="padding-top:10px;">' +
 															'You export a file from your bank and then import it.' +
-															'  You can then add a reconciliation - selecting the date you want to balance up to.  The system will then help you then search the system for matching payments or receipts that have already been entered, based on these transactions or if not, add them as you go.' +
+															'  You can then add a reconciliation - selecting the date you want to balance up to.  The system will then help you then search the system for matching payments or receipts that have already been entered, based on imported bank transactions or if not, add them as you go.' +
 															'</td></tr></table></td></tr>');
 	
 											aHTML.push('</table>');
@@ -375,7 +373,8 @@ ns1blankspace.financial.bankAccount =
 										})
 										.css("width", "60px;");
 
-										$('#ns1blankspaceBankAccountReco .ns1blankspaceFinancialBankAccountReconcileContainer').click(function()
+										$('#ns1blankspaceBankAccountReco .ns1blankspaceFinancialBankAccountReconcileContainer')
+										.click(function()
 										{
 											$('#ns1blankspaceBankAccountReco td.ns1blankspaceRowShaded').removeClass('ns1blankspaceRowShaded');
 											$('td', $('#' + this.id).closest('tr')).addClass('ns1blankspaceRowShaded');
@@ -386,6 +385,7 @@ ns1blankspace.financial.bankAccount =
 
 											oParam.reconciliation = aID[1];
 											oParam.status = aID[2];
+											oParam.reconciliationEndDate = $(this).attr('data-date');
 
 											if (iMode == 1)
 											{	
@@ -410,7 +410,8 @@ ns1blankspace.financial.bankAccount =
 									aHTML.push('<td class="ns1blankspaceRow" id="ns1blankspaceFinancialBankAccountReconcileRow-' + oRow.id + '">');
 
 									aHTML.push('<div class="ns1blankspaceFinancialBankAccountReconcileContainer"' +
-													' style="cursor: pointer;" id="ns1blankspaceFinancialBankAccountReconcile-' + oRow.id + '-' + oRow.status + '">');
+													' style="cursor: pointer;" id="ns1blankspaceFinancialBankAccountReconcile-' + oRow.id + '-' + oRow.status + '"' +
+													' data-date="' + oRow.statementdate + '">');
 
 									aHTML.push('<table class="ns1blankspace">');
 
@@ -760,6 +761,7 @@ ns1blankspace.financial.bankAccount =
 													var oOptions = {view: true, remove: true, automation: true};
 													var oActions = {add: true};
 													var iReconciliation;
+													var dReconciliationEndDate;
 													var iType = 1;
 													var iStatus = 2;
 													
@@ -770,6 +772,7 @@ ns1blankspace.financial.bankAccount =
 														if (oParam.options != undefined) {oOptions = oParam.options}
 														if (oParam.actions != undefined) {oActions = oParam.actions}
 														if (oParam.reconciliation != undefined) {iReconciliation = oParam.reconciliation}
+														if (oParam.reconciliationEndDate != undefined) {dReconciliationEndDate = oParam.reconciliationEndDate}
 														if (oParam.type != undefined) {iType = oParam.type}
 														if (oParam.status != undefined) {iStatus = oParam.status}
 													}		
@@ -798,6 +801,7 @@ ns1blankspace.financial.bankAccount =
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 														oSearch.addFilter('status', 'EQUAL_TO', 1);
 														oSearch.addFilter('category', 'EQUAL_TO', (iType==1?2:1));
+														oSearch.addFilter('posteddate', 'LESS_THAN_OR_EQUAL_TO', dReconciliationEndDate);
 														oSearch.rows = ns1blankspace.option.defaultRows;
 														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.show(oParam, data)});		
 													}
@@ -978,6 +982,7 @@ ns1blankspace.financial.bankAccount =
 												{
 													var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 0}).value;
 													var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+													var dReconciliationEndDate = ns1blankspace.util.getParam(oParam, 'reconciliationEndDate').value;
 
 													if (iStep == 0)
 													{
@@ -1007,11 +1012,13 @@ ns1blankspace.financial.bankAccount =
 															{
 																oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 																oSearch.addField('reference,description,amount,paiddate,reconciliation,contactbusinesspaidtotext,contactpersonpaidtotext');
+																oSearch.addFilter('paiddate', 'LESS_THAN_OR_EQUAL_TO', dReconciliationEndDate);
 															}	
 															else
 															{
 																oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 																oSearch.addField('reference,description,amount,receiveddate,reconciliation,contactbusinessreceivedfromtext,contactpersonreceivedfromtext');
+																oSearch.addFilter('receiveddate', 'LESS_THAN_OR_EQUAL_TO', dReconciliationEndDate);
 															}
 														
 															oSearch.addFilter('reconciliation', 'IS_NULL');
@@ -1039,9 +1046,10 @@ ns1blankspace.financial.bankAccount =
 																var oSearch = new AdvancedSearch();
 															
 																oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_ITEM_SEARCH';
-																oSearch.addField('taxcategory,creditamount,debitamount,generaljournalitem.generaljournal.reference,generaljournalitem.generaljournal.description,generaljournalitem.generaljournal.journaldate');
+																oSearch.addField('taxcategory,creditamount,debitamount,reconciliation,generaljournalitem.generaljournal.reference,generaljournalitem.generaljournal.description,generaljournalitem.generaljournal.journaldate');
 																oSearch.sort('generaljournalitem.generaljournal.journaldate', 'asc');
 																oSearch.addFilter('reconciliation', 'IS_NULL');
+																oSearch.addFilter('generaljournalitem.generaljournal.journaldate', 'LESS_THAN_OR_EQUAL_TO', dReconciliationEndDate);
 																oSearch.rows = 200;
 																oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.init(oParam, data)});
 															}
