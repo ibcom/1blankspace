@@ -3440,7 +3440,15 @@ ns1blankspace.util =
 						}
 						return 0;
 					}
-				}									
+				},
+
+	remove:		function (array, property, value)
+				{
+					return $.grep(array, function (a)
+					{ 
+						return (a[property] != value)
+					});
+				}											
 }
 
 ns1blankspace.debug = 

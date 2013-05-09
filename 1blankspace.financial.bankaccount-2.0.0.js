@@ -131,12 +131,12 @@ ns1blankspace.financial.bankAccount =
 
 					aHTML.push('<table class="ns1blankspaceControl">');
 
-					aHTML.push('<tr>' +
-									'<td class="ns1blankspaceCaption">Reconcile</td>' +
-									'</tr>');
+					//aHTML.push('<tr>' +
+					//				'<td class="ns1blankspaceCaption">Reconcile</td>' +
+					//				'</tr>');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlReconcile" class="ns1blankspaceControl">Current</td>' +
+									'<td id="ns1blankspaceControlReconcile" class="ns1blankspaceControl">Reconcile</td>' +
 									'</tr>');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
@@ -1174,17 +1174,17 @@ ns1blankspace.financial.bankAccount =
 														aHTML.push('<div id="ns1blankspaceReconcileItemsEdit"></div>');
 														
 														$('#ns1blankspaceReconcileItemEdit1').html(aHTML.join(''));
+		
+														$('#ns1blankspaceReconcileItemEditOption').buttonset().css('font-size', '0.75em');
+														
+														$('#ns1blankspaceReconcileItemEditOption :radio').click(function()
+														{
+															var aID = (this.id).split('-');
+															$.extend(true, oParam, {editAction: 1, source: parseInt(aID[1])});
+															ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
+														});
 													}
-												
-													$('#ns1blankspaceReconcileItemEditOption').buttonset().css('font-size', '0.75em');
-													
-													$('#ns1blankspaceReconcileItemEditOption :radio').click(function()
-													{
-														var aID = (this.id).split('-');
-														$.extend(true, oParam, {editAction: 1, source: parseInt(aID[1])});
-														ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
-													});
-													
+
 													if (iEditAction == 1)  //SET UP SEARCH PAYMENT OR RECEIPT +++
 													{
 														var aHTML = [];
@@ -1246,7 +1246,9 @@ ns1blankspace.financial.bankAccount =
 																primary: "ui-icon-search"
 															}
 														})
-														.click(function() {
+														.click(function() 
+														{
+															oParam.editAction = 1;
 															oParam.searchDate = $('#ns1blankspaceItemsEditSearchDate').val();
 															oParam.searchAmount = $('#ns1blankspaceItemsEditSearchAmount').val();
 															oParam.searchReference = $('#ns1blankspaceItemsEditSearchReference').val();
@@ -1261,6 +1263,7 @@ ns1blankspace.financial.bankAccount =
 														})
 														.click(function()
 														{
+															oParam.editAction = 1;
 															oParam.searchDate = '';
 															oParam.searchAmount = '';
 															oParam.searchReference = '';
@@ -1437,7 +1440,7 @@ ns1blankspace.financial.bankAccount =
 																	if (iStatus == 1)
 																	{					
 																		aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-																		aHTML.push('<span id="ns1blankspaceReconcileItems_options_add-' + this.id + '-' + iType + '" class="ns1blankspaceReconcileItemsAdd"></span>');
+																		aHTML.push('<span id="ns1blankspaceReconcileItems_options_add-' + this.id + '-' + this.type + '" class="ns1blankspaceReconcileItemsAdd" title="Mark as reconciled"></span>');
 																		aHTML.push('</td>');
 																		aHTML.push('</tr>');
 																	}	
@@ -1474,21 +1477,23 @@ ns1blankspace.financial.bankAccount =
 																if (iType == 1)
 																{
 																	oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-																	oSearch.addField('reference,description,amount,paymentduedate,contactbusinesspaidtotext,contactpersonpaidtotext');
-																	if (dSearchDate) {oSearch.addFilter('paymentduedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
+																	oSearch.addField('reference,description,amount,paymentduedate,outstandingamount,contactbusinesspaidtotext,contactpersonpaidtotext');
+																	if (dSearchDate) {oSearch.addFilter('paymentduedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))}
 																	oSearch.sort('paymentduedate', 'asc');
 																}	
 																else
 																{
 																	oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-																	oSearch.addField('reference,description,amount,duedate,contactbusinesssenttotext,contactpersonsenttotext');
-																	if (dSearchDate) {oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
+																	oSearch.addField('reference,description,amount,duedate,outstandingamount,contactbusinesssenttotext,contactpersonsenttotext');
+																	if (dSearchDate) {oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))}
 																	oSearch.sort('duedate', 'asc');
 																}
 															
 																if (cSearchAmount) {oSearch.addFilter('amount', 'APPROX_EQUAL_TO', cSearchAmount)}
 																if (sSearchReference) {oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference)}
 
+																oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0)
+																
 																oSearch.rows = ns1blankspace.option.defaultRows;
 																oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam, data)});
 															}
@@ -1518,49 +1523,51 @@ ns1blankspace.financial.bankAccount =
 																			if (this.paymentduedate)
 																			{				
 																				aHTML.push('<td id="ns1blankspaceReconcileItems_date-' + this.id + '-1" class="recoitempayment">' +
-																									this.paymentduedate + ' / ' + this.reference + '</td>');
+																									this.paymentduedate + '</td>');
 																			}
 																			else if (this.duedate)
 																			{
 																				aHTML.push('<td id="tdRecoItems_date-' + this.id + '-2" class="recoitemreceipt">' +
-																									this.duedate + ' / ' + this.reference + '</td>');
+																									this.duedate + '</td>');
 																			}							
-																			else if (this.journaldate)
-																			{
-																				aHTML.push('<td id="ns1blankspaceReconcileItems_date-' + this.id + '-3" class="recoitemstatement">' +
-																									this.journaldate + '</td>');
-																			}
-																		
+																			
 																			aHTML.push('<td id="ns1blankspaceReconcileItems_amount-' + this.id + '" style="text-align:right;"' +
 																								' class="recoitem">' +
-																								this.amount + '</td>');
+																								this.outstandingamount + '</td>');
 																			
-																			var sDescription = this.description;
+																			var sDescription = '';
+
+																			if (this.description != '')
+																			{
+																				sDescription += this.description + '<br />';
+																			}	
 
 																			if (iType === 1)
 																			{
 																				if (this.contactbusinesspaidtotext !== '')
 																				{
-																					sDescription += '<br />' + this.contactbusinesspaidtotext
+																					sDescription += this.contactbusinesspaidtotext + '<br />';
 																				}
 
 																				if (this.contactpersonpaidtotext !== '')
 																				{
-																					sDescription += '<br />' + this.contactpersonpaidtotext
+																					sDescription += this.contactpersonpaidtotext + '<br />';
 																				}
 																			}
 																			else
 																			{
 																				if (this.contactbusinesssenttotext !== '')
 																				{
-																					sDescription += '<br />' + this.contactbusinesssenttotext
+																					sDescription += this.contactbusinesssenttotext + '<br />';
 																				}
 
 																				if (this.contactpersonsenttotext !== '')
 																				{
-																					sDescription += '<br />' + this.contactpersonsenttotext
+																					sDescription += this.contactpersonsenttotext + '<br />';
 																				}
 																			}
+
+																			sDescription += '$' + this.outstandingamount + ' / ' + this.reference;
 
 																			aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceReconcileItems_reference-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
 																								' class="recoitem" title="' + this.reference + '">' +
@@ -1602,145 +1609,65 @@ ns1blankspace.financial.bankAccount =
 																}		
 															}	
 														}
-
-														else if (iSource == 3)  //JOURNAL
-														{
-															if (oResponse == undefined)
-															{
-																var oSearch = new AdvancedSearch();
-															
-																oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_ITEM_SEARCH';
-																oSearch.addField('creditamount,debitamount,generaljournalitem.generaljournal.reference,generaljournalitem.generaljournal.description,generaljournalitem.generaljournal.journaldate');
-																//oSearch.addSummaryField('sum(generaljournal.generaljournalitem.creditamount) amount');
-																if (dSearchDate) {oSearch.addFilter('journaldate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
-																oSearch.sort('generaljournalitem.generaljournal.journaldate', 'asc');
-																oSearch.addFilter('reconciliation', 'IS_NULL');
-
-																oSearch.addFilter('taxcategory', 'EQUAL_TO', (iType==1?2:1));
-
-																if (cSearchAmount) {oSearch.addFilter('creditamount', 'APPROX_EQUAL_TO', cSearchAmount)}
-																if (sSearchReference) {oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference)}
-
-																oSearch.rows = ns1blankspace.option.defaultRows;
-																oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam, data)});
-															}
-															else
-															{
-																var aHTML = [];
-														
-																if (oResponse.data.rows.length == 0)
-																{
-																	aHTML.push('<table><tr class="ns1blankspace">' +
-																					'<td class="ns1blankspaceNothing">No general journals</td>' +
-																					'</tr></table>');
-
-																	$('#ns1blankspaceReconcileItemsEdit').html(aHTML.join(''));							
-																}
-																else
-																{
-																	aHTML.push('<table id="ns1blankspaceReconcileItemsEdit">');
-																	
-																	$.each(oResponse.data.rows, function()
-																	{
-																		aHTML.push(
-																			'<tr class="ns1blankspaceRow">' +
-																			'<td class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-																			'<table cellspacing=0 cellpadding=0><tr>');
-
-																		aHTML.push('<td id="ns1blankspaceReconcileItems_date-' + this.id + '-3" class="recoitemstatement">' +
-																								this['generaljournalitem.generaljournal.journaldate'] + '</td>');
-																		
-																		var cAmount = this.debitamount;
-
-																		if (iType == 1) {cAmount = this.creditamount};
-
-																		aHTML.push('<td id="ns1blankspaceReconcileItems_amount-' + this.id + '" style="text-align:right;"' +
-																							' class="recoitem">' +
-																							cAmount + '</td>');
-																		
-																		var sDescription = this['generaljournalitem.generaljournal.description'];
-
-																		aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceReconcileItems_reference-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
-																							' class="recoitem" title="' + this['generaljournalitem.generaljournal.reference'] + '">' +
-																							sDescription + '</td>');
-																						
-																		aHTML.push('</tr></table></td>');	
-																			
-																		if (iStatus == 1)
-																		{					
-																			aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-																			aHTML.push('<span id="ns1blankspaceReconcileItems_options_add-' + this.id + '-3"' +
-																							' data-amount="' + cAmount + '"' +
-																							' class="ns1blankspaceReconcileItemsAdd"></span>');
-																			aHTML.push('</td>');
-																			aHTML.push('</tr>');
-																		}	
-																	});
-																	
-																	aHTML.push('</table>');
-
-																	$('#ns1blankspaceReconcileItemsEdit').html(aHTML.join(''));
-
-																	$('#ns1blankspaceReconcileItemsEdit .ns1blankspaceReconcileItemsAdd').button( {
-																	text: false,
-																	icons: {
-																		primary: "ui-icon-check"
-																	}
-																	})
-																	.click(function() {
-																		oParam.editAction = 3;
-																		oParam.xhtmlElementID = this.id;
-																		oParam.object = 122;
-																		ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
-																	})
-																	.css('width', '15px')
-																	.css('height', '17px')
-																}		
-															}	
-														}
-													}
+													}	
 
 													else if (iEditAction == 3)  //MARK PAYMENT / RECEIPT / JOURNAL AS RECONCILED
 													{
 														ns1blankspace.status.working();
 
 														var aXHTMLElementID = sXHTMLElementID.split('-');
-														var sData = 'reconciliation=' + ns1blankspace.util.fs(iReconciliation);
+														var oData = {reconciliation: iReconciliation};
 
 														if (iObject === undefined)
 														{	
-															if (iType == 1) {sData += '&object=3'}
-															if (iType == 2) {sData += '&object=6'}
+															if (aXHTMLElementID[2] == 'payment') {iObject = 3}
+															if (aXHTMLElementID[2] == 'receipt') {iObject = 6}
+															if (aXHTMLElementID[2] == 'journal') {iObject = 122}
 														}
-														else
-														{
-															sData += '&object=' + ns1blankspace.util.fs(iObject);
-														}	
-
-														sData += '&objectcontext=' + aXHTMLElementID[1];	
+														
+														oData.object = iObject;
+														oData.objectcontext = aXHTMLElementID[1];	
 
 														$.ajax(
 														{
 															type: 'POST',
 															url: ns1blankspace.util.endpointURI('FINANCIAL_RECONCILIATION_ITEM_MANAGE'),
-															data: sData,
+															data: oData,
 															dataType: 'json',
 															success: function(data)
 															{
 																$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 
-																$.ajax(
+																if (iObject == 122)
 																{
-																	type: 'POST',
-																	url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
-																	data: 'status=2&id=' + iSearchSourceID,
-																	dataType: 'json',
-																	success: function(data)
+																	ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled['journals'] =
+																		ns1blankspace.util.remove(ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled['journals'], 'id', aXHTMLElementID[1]);
+																}	
+																else
+																{	
+																	ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[(iObject==3?'payments':'receipts')] = 
+																		ns1blankspace.util.remove(ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[(iObject==3?'payments':'receipts')], 'id', aXHTMLElementID[1]);
+																}	
+
+																if (iSearchSourceID !== undefined)
+																{	
+																	$.ajax(
 																	{
-																		$('#ns1blankspaceReconcileItems_options_search-' + iSearchSourceID).parent().parent().fadeOut(500);
-																		ns1blankspace.status.message('Reconciled');
-																	}
-																})
+																		type: 'POST',
+																		url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
+																		data: 'status=2&id=' + iSearchSourceID,
+																		dataType: 'json',
+																		success: function(data)
+																		{
+																			$('#ns1blankspaceReconcileItems_options_search-' + iSearchSourceID).parent().parent().fadeOut(500);
+																			ns1blankspace.status.message('Reconciled');
+																		}
+																	});
+																}
+																else
+																{
+																	ns1blankspace.status.message('Reconciled');
+																}	
 															}
 														});
 													}	
@@ -2044,7 +1971,7 @@ ns1blankspace.financial.bankAccount =
 														}
 
 														aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemLocked-3" value="3" name="radioLockedSource" /><label for="ns1blankspaceReconcileItemLocked-3" style="width: 80px;">' +
-																		'Journal</label>');
+																		'Journals</label>');
 
 														aHTML.push('</div>');
 													
@@ -2237,10 +2164,10 @@ ns1blankspace.financial.bankAccount =
 																				
 																aHTML.push('</tr></table></td>');	
 
-																if (false)
+																if (true) //reco status = 1
 																{					
 																	aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-																	aHTML.push('<span id="ns1blankspaceReconcileItems_options_remove-' + this.id + '-3"' +
+																	aHTML.push('<span id="ns1blankspaceReconcileItems_options_remove-' + this.id + '-' + iType + '"' +
 																					' data-amount="' + cAmount + '"' +
 																					' class="ns1blankspaceReconcileItemsRemove"></span>');
 																	aHTML.push('</td>');
@@ -2251,6 +2178,69 @@ ns1blankspace.financial.bankAccount =
 															aHTML.push('</table>');
 
 															$('#ns1blankspaceReconcileItemsLocked').html(aHTML.join(''));
+
+															$('.ns1blankspaceReconcileItemsRemove').button(
+															{
+																text: false,
+															 	icons: {primary: "ui-icon-close"}
+															})
+															.click(function()
+															{
+																var sXHTMLElementID = this.id;
+																var aXHTMLElementID = sXHTMLElementID.split('-');
+																var iSearchSourceID;
+																var iObject = 122;
+
+																if (aXHTMLElementID[2] == 1) {iObject = 3};
+																if (aXHTMLElementID[2] == 2) {iObject = 6};
+
+																ns1blankspace.status.working();
+
+																var oData =
+																{
+																	reconciliation: iReconciliation,
+																	remove: 1,
+																	object: iObject,
+																	objectcontext: aXHTMLElementID[1]
+																}
+
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI('FINANCIAL_RECONCILIATION_ITEM_MANAGE'),
+																	data: oData,
+																	dataType: 'json',
+																	success: function(data)
+																	{
+																		$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+
+																		ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled['debits'] = undefined;
+																		ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled['credits'] = undefined;
+
+																		if (iSearchSourceID !== undefined)
+																		{	
+																			$.ajax(
+																			{
+																				type: 'POST',
+																				url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
+																				data: 'status=2&id=' + iSearchSourceID,
+																				dataType: 'json',
+																				success: function(data)
+																				{
+																					$('#ns1blankspaceReconcileItems_options_search-' + iSearchSourceID).parent().parent().fadeOut(500);
+																					ns1blankspace.status.message('Reconciled');
+																				}
+																			});
+																		}
+																		else
+																		{
+																			ns1blankspace.status.message('Unreconciled');
+																		}	
+																	}
+																});
+															})
+															.css('width', '15px')
+															.css('height', '20px');
 														}	
 													}
 
