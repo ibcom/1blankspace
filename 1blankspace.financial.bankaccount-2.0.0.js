@@ -1928,6 +1928,7 @@ ns1blankspace.financial.bankAccount =
 												{
 													var iType = 1;
 													var iSource = 1;
+													var iStatus = 2;
 													var dSearchDate;
 													var cSearchAmount;
 													var sSearchReference;
@@ -1940,6 +1941,7 @@ ns1blankspace.financial.bankAccount =
 														if (oParam.searchDate != undefined) {dSearchDate = oParam.searchDate}
 														if (oParam.searchAmount != undefined) {cSearchAmount = oParam.searchAmount}
 														if (oParam.searchReference != undefined) {sSearchReference = oParam.searchReference}
+														if (oParam.status != undefined) {iStatus = oParam.status}
 													}		
 
 													if (oResponse === undefined)
@@ -2164,7 +2166,7 @@ ns1blankspace.financial.bankAccount =
 																				
 																aHTML.push('</tr></table></td>');	
 
-																if (true) //reco status = 1
+																if (iStatus == 1)
 																{					
 																	aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 																	aHTML.push('<span id="ns1blankspaceReconcileItems_options_remove-' + this.id + '-' + iType + '"' +
