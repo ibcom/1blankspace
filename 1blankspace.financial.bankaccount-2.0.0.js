@@ -813,7 +813,7 @@ ns1blankspace.financial.bankAccount =
 														var aHTML = [];
 															
 														aHTML.push('<div class="ns1blankspaceHeaderCaption" style="width: 150px;margin-right:10px;margin-bottom:3px;">');
-														aHTML.push('<span style="font-size:1.25em;">BANK</span>');
+														aHTML.push('<span style="font-size:1.25em;">FROM BANK</span>');
 														aHTML.push('</div>');
 
 														aHTML.push('<div id="ns1blankspaceBankAccountReconcileItems" style="width: 150px;margin-bottom:3px;"></div>');
@@ -2486,7 +2486,7 @@ ns1blankspace.financial.bankAccount =
 																		'Create payments & receipts</span></td></tr>');
 
 														aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																		'Create as payments and receipts within this space for confirmed bank transactions.<br /><br />If you have already created invoices, expenses, payments or receipts, then use the Reconcile option.</td></tr>');
+																		'Create payments and receipts within this space based on confirmed bank transactions.<br /><br />If you have already created invoices, expenses, payments or receipts, then use the Reconcile option.</td></tr>');
 
 														aHTML.push('</table>');					
 														

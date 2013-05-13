@@ -331,8 +331,7 @@ ns1blankspace.financial.payroll =
 						
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.paydate +
 							'<br /><span id="ns1blankspaceSub_startdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.startdate + '</span>' +
-							'<br /><span id="ns1blankspaceSub_frequency" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.frequencytext + '</span>' +
-							'<br /><span id="ns1blankspaceSub_status" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.statustext + '</span>');
+							'<br /><span id="ns1blankspaceSub_frequency" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.frequencytext + '</span>');
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						

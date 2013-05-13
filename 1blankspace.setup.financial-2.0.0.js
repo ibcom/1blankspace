@@ -1394,7 +1394,7 @@ ns1blankspace.setup.financial =
 							
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Value Added Tax Reporting Frequencies (eg GST)' +
+										'Value Added Tax Reporting Frequency (eg GST)' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
@@ -1406,7 +1406,7 @@ ns1blankspace.setup.financial =
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Payroll Tax Reporting Frequencies' +
+										'Payroll Tax Reporting Frequency' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
