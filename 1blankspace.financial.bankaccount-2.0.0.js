@@ -304,8 +304,7 @@ ns1blankspace.financial.bankAccount =
 										{	
 											aHTML.push('<table class="ns1blankspaceColumn2">' +
 														'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All current reconciliations are shown.' +
-														'<br /><br />To reconcile this bank account, select the appropriate reconcilation or if all are completed, press "Add" to add a new one.' +
-														'<br /><br />Once selected you can press "Edit" to change the reconcilation details,<br />ie bank statement amount.</td>');
+														'<br /><br />To reconcile this bank account, select the appropriate reconcilation or if all are completed, press "Add" to add a new one.');
 
 					
 											aHTML.push('<td style="font-size:0.75em;"><table cellpadding=6 style="background-color:#F3F3F3;padding:6px;" >' +
