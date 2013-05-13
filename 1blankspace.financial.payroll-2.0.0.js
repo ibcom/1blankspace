@@ -2295,9 +2295,11 @@ ns1blankspace.financial.payroll =
 												oRow["deductions"] +
 												'</td></tr>');								
 
+								var sCalcs = (oRow["calculations"]!=''?(oRow["calculations"]).replace(/\r\n/g, "<br />"):'None.');
+
 								aHTML.push('<tr><td colspan=2 class="ns1blankspaceCaption">Calculations</td></tr>' +
 												'<tr><td style="padding-left:3px;" colspan=2 class="ns1blankspaceNothing">' +
-												(oRow["calculations"]).replace(/\r\n/g, "<br />") +
+												sCalcs +
 												'</td></tr>');							
 							}
 								
