@@ -3452,7 +3452,16 @@ ns1blankspace.util =
 					{ 
 						return (a[property] != value)
 					});
-				}											
+				},
+
+	trimLast:	function (sValue, sChar)
+				{
+					if (sChar == undefined) {sChar = '/'}
+					if (sValue.charAt(sValue.length-1) == sChar)
+					{
+  						return sValue.slice(0, -1);
+  					}	
+  				}												
 }
 
 ns1blankspace.debug = 
@@ -3937,6 +3946,7 @@ ns1blankspace.render =
 					var sBodyClass = 'ns1blankspaceSearchMedium';
 					var sIDSeperator = '-';
 					var sWidth = 250;
+					var fFunctionRow = ns1blankspace.render.row;
 					
 					if (oParam != undefined)
 					{
@@ -3952,6 +3962,7 @@ ns1blankspace.render =
 						if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
 						if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
 						if (oParam.width != undefined) {sWidth = oParam.width}
+						if (oParam.functionRow != undefined) {fFunctionRow = oParam.functionRow}
 					}
 					
 					$('#ns1blankspaceRenderHeaderMore').html(ns1blankspace.xhtml.loadingSmall);
@@ -4006,59 +4017,7 @@ ns1blankspace.render =
 												
 								$.each(oResponse.data.rows, function()
 								{		
-									iColumn = iColumn + 1;
-									
-									if (iColumn === 1)
-									{
-										aHTML.push('<tr class="ns1blankspaceSearch">');
-									}
-									
-									var aIDColumns = sIDColumns.split("-");
-									
-									var sIDData = '';
-
-									for (var i = 0; i < aIDColumns.length; i++)
-									{
-										sIDData += '-' + this[aIDColumns[i]];
-									}
-									
-									var aColumns = sColumns.split("-");
-									
-									for (var i = 0; i < aColumns.length; i++)
-									{
-										sClass = 'ns1blankspaceSearch';
-
-										if (fFunctionClass != undefined)
-										{
-											sClass = sClass + fFunctionClass(oRow);
-										}	
-									
-										aHTML.push('<td class="' + sClass + '" id="' +
-															sXHTMLElementID + '-' + this.id + sIDData + sIdAdditional + '">');
-															
-										switch (aColumns[i])
-										{
-										case 'space':
-											aHTML.push(' ');
-											break;
-										case 'comma':
-											aHTML.push(',');
-											break;
-										case 'pipe':
-											aHTML.push('|');
-											break;
-										default:
-											aHTML.push(this[aColumns[i]]);
-										}
-										
-										aHTML.push('</td>');
-									}
-									
-									if (iColumn === iMaximumColumns)
-									{    
-										aHTML.push('</tr>');
-										iColumn = 0;
-									}	
+									aHTML.push(fFunctionRow(oParam, this));
 								});
 							
 								aHTML.push('</table>');
@@ -4091,6 +4050,66 @@ ns1blankspace.render =
 					}
 				},
 
+	row:		function (oParam, oRow)
+				{
+					var aHTML = [];
+					var sClass;
+
+					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+					var sIDColumns = ns1blankspace.util.getParam(oParam, 'idColumns', {default: ''}).value;
+					var sColumns = ns1blankspace.util.getParam(oParam, 'columns', {default: 'title'}).value;
+					var fFunctionClass = ns1blankspace.util.getParam(oParam, 'functionClass').value;
+					var sIdAdditional = ns1blankspace.util.getParam(oParam, 'idAdditional').value;
+
+					aHTML.push('<tr class="ns1blankspaceSearch">');
+					
+					var aIDColumns = sIDColumns.split("-");
+					
+					var sIDData = '';
+
+					for (var i = 0; i < aIDColumns.length; i++)
+					{
+						sIDData += '-' + oRow[aIDColumns[i]];
+					}
+					
+					var aColumns = sColumns.split("-");
+					
+					for (var i = 0; i < aColumns.length; i++)
+					{
+						sClass = 'ns1blankspaceSearch';
+
+						if (fFunctionClass != undefined)
+						{
+							sClass = sClass + fFunctionClass(oRow);
+						}	
+					
+						aHTML.push('<td class="' + sClass + '" id="' +
+											sXHTMLElementID + '-' + oRow.id + sIDData + sIdAdditional + '">');
+											
+						switch (aColumns[i])
+						{
+						case 'space':
+							aHTML.push(' ');
+							break;
+						case 'comma':
+							aHTML.push(',');
+							break;
+						case 'pipe':
+							aHTML.push('|');
+							break;
+						default:
+							aHTML.push(oRow[aColumns[i]]);
+						}
+						
+						aHTML.push('</td>');
+					}
+										
+					aHTML.push('</tr>');
+
+					return aHTML.join('');
+
+				},	
+
 	showPage:	function (sXHTMLElementID)
 				{
 					var aElement = sXHTMLElementID.split('-');
@@ -4101,6 +4120,247 @@ ns1blankspace.render =
 					$('#ns1blankspaceSearch-' + aElement[1]).show();
 				}
 }				
+
+ns1blankspace.render.page = 
+{
+	show: 		function (oParam)
+				{
+					var aHTML = [];
+					var h = -1;
+					var sXHTMLElementID;
+					
+					var sHTML = '';
+					var bMore = false;
+					var iMore;
+					var iStartRow = 0;
+					var iRows = 30;
+					var bShowList = true;
+					var sXHTMLContext = '';
+					var bHeaderRow = true;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.xhtml != undefined) {sHTML = oParam.xhtml}
+						if (oParam.showMore != undefined) {bMore = oParam.showMore}
+						if (oParam.more != undefined) {iMore = oParam.more}
+						if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
+						if (oParam.rows != undefined) {iRows = oParam.rows}
+						if (oParam.showList != undefined) {bShowList = oParam.showList}
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
+						if (oParam.headerRow != undefined) {bHeaderRow = oParam.headerRow}
+					}
+
+					if (bHeaderRow) {oParam.xhtmlFirstRow = $('tr:first', sHTML).html()};
+					
+					if (bMore)
+					{
+						aHTML.push('<table style="border-spacing:2px;" id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '"><tr>');
+						aHTML.push('<td style="width:5px; cursor:pointer;" class="ns1blankspaceRenderHeaderPage ns1blankspaceRenderHeaderPageSelected"' +
+											' id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-0" data-rowstart="0">1</td>');
+						aHTML.push('<td></td></tr></table>');
+					}
+						
+					aHTML.push('<div id="ns1blankspaceRenderPage_' + sXHTMLContext + '-0" class="ns1blankspaceRenderPage ns1blankspaceRenderPage_' + sXHTMLContext + '">');
+					aHTML.push(sHTML);
+					aHTML.push('</div>');
+
+					$('#' + sXHTMLElementID).html(aHTML.join(''));
+					if (bShowList) {$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed)};
+						
+					if (bMore)
+					{
+						var sHTML = '<td style="width:5px;cursor:pointer;" class="ns1blankspaceRenderHeaderMore' + 
+											'" id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' +
+											(iStartRow + iRows) + '" data-rowstart="' +
+											(iStartRow + iRows) + '">' + 'more...' + '</td>';
+										
+						$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).after(sHTML);
+					
+						$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow + iRows)).click(function(event)
+						{
+							var sID = event.target.id;
+							var sStart = $('#' + sID).attr('data-rowstart');
+							$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
+							if (oParam != undefined) {oParam.more = iMore;oParam.startRow = sStart} else {oParam = {more: iMore, startRow: sStart}};
+							ns1blankspace.render.page.showMore(oParam);
+						});
+					}
+					
+					$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-0').click(function(event)
+					{
+						ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
+					});
+				},
+
+	showMore:	function (oParam, oData)
+				{
+					
+					var sXHTMLElementID = '';
+					var iMore = -1;
+					var iStartRow = 10;
+					var iRows = 10;
+					var iColumn = 0;
+					var iMaximumColumns = 1;
+					var sColumns = "title";
+					var sIDColumns = '';
+					var sFunctionOpen;
+					var fFunctionClass;
+					var sFunctionNewPage;
+					var sClass;
+					var sIdAdditional = '';
+					var sIDSeperator = '-';
+					var sBodyClass = '';
+					var sXHTMLlFirstRow;
+					var sXHTMLContext = '';
+					var fFunctionShowRow;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.more != undefined) {iMore = oParam.more}
+						if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
+						if (oParam.rows != undefined) {iRows = oParam.rows}
+						if (oParam.xhtmlElementId != undefined) {sXHTMLElementID = oParam.xhtmlElementId}
+						if (oParam.columns != undefined) {sColumns = oParam.columns}
+						if (oParam.idColumns != undefined) {sIDColumns = oParam.idColumns}
+						if (oParam.functionOpen != undefined) {sFunctionOpen = oParam.functionOpen}
+						if (oParam.functionClass != undefined) {fFunctionClass = oParam.functionClass}
+						if (oParam.functionShowRow != undefined) {fFunctionShowRow = oParam.functionShowRow}
+						if (oParam.idAdditional != undefined) {sIdAdditional = oParam.idAdditional}
+						if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
+						if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
+						if (oParam.xhtmlFirstRow != undefined) {sXHTMLlFirstRow = oParam.xhtmlFirstRow}
+						if (oParam.functionNewPage != undefined) {sFunctionNewPage = oParam.functionNewPage}
+						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
+					}
+				
+					if (iMore === -1)
+					{
+						alert('No more!')
+					}
+					else
+					{
+						if (oData === undefined)
+						{
+							var sData =	'id=' + iMore +
+											'&startrow=' + iStartRow + 
+											'&rows=' + iRows;
+							
+							$.ajax(
+							{
+								type: 'GET',
+								url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
+								data: sData,
+								dataType: 'json',
+								success: function(data){ns1blankspace.render.page.showMore(oParam, data)}
+							});
+						}
+						else
+						{
+							var aHTML = [];
+						
+							if ($('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow).length === 0)
+							{
+								aHTML.push('<div id="ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow + 
+												'" class="ns1blankspaceRenderPage ns1blankspaceRenderPage_' + sXHTMLContext + '">');
+							
+								aHTML.push('<table class="' + sBodyClass + '">');
+								
+								if (sXHTMLlFirstRow != undefined)
+								{
+									aHTML.push(sXHTMLlFirstRow);
+								}
+					
+								var iStartRow = parseInt(oData.startrow)
+								var iRows = parseInt(oData.rows);
+								var bMoreRows = (oData.morerows === "true");
+												
+								oParam.startRow = iStartRow + iRows;	
+								
+								var oRows = oData.data.rows;
+						
+								$(oRows).each(function() 
+								{
+									aHTML.push(fFunctionShowRow(this));
+								});
+								
+								aHTML.push('</table>');
+								
+								aHTML.push('</div>');
+								
+								$('.ns1blankspaceRenderPage_' + sXHTMLContext).hide();
+								$('.ns1blankspaceRenderPage_' + sXHTMLContext + ':last').after(aHTML.join(''));
+								
+								//$('.ns1blankspaceRowSelect' + sXHTMLContext).unbind('click');
+								
+								if (sFunctionOpen != undefined)
+								{
+									$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow + ' .ns1blankspaceRowSelect').button({
+										text: false,
+										icons: {
+											primary: "ui-icon-play"
+										}
+									})
+									.click(function() {
+										eval(sFunctionOpen);
+									})
+									.css('width', '15px')
+									.css('height', '20px')
+								}
+								
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).html(((iStartRow)/iRows)+1);
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).removeClass('ns1blankspaceRenderHeaderMore');
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).addClass('ns1blankspaceRenderHeaderPage');
+
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).unbind('click');
+								
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).click(function(event)
+								{
+									ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
+								});
+							
+								$('.ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).addClass('ns1blankspaceRenderHeaderPageSelected');
+
+								if (bMoreRows)
+								{
+									var sHTML = '<td style="width:5px; cursor:pointer;" class="ns1blankspaceRenderHeaderMore' + 
+														'" id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' +
+														(iStartRow + iRows) + '" data-rowstart="' +
+														(iStartRow + iRows) + '">' + 'more...' + '</td>';
+													
+									$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).after(sHTML);
+
+									$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow + iRows)).click(function(event)
+									{
+										var sID = event.target.id;
+										var sStart = $('#' + sID).attr('data-rowstart');
+										$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
+										if (oParam != undefined) {oParam.more = iMore; oParam.startRow = sStart} else {oParam = {more: iMore, startRow: sStart}};
+										ns1blankspace.render.page.showMore(oParam);
+									});
+								}
+								
+								if (sFunctionNewPage != undefined)
+								{
+									eval(sFunctionNewPage);
+								}
+							}
+						}
+					}
+				},
+
+	showPage:	function (sXHTMLElementID, sXHTMLContext)
+				{
+					var aElement = sXHTMLElementID.split('-');
+					
+					$('.ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
+					$('#' + sXHTMLElementID).addClass('ns1blankspaceRenderHeaderPageSelected');
+
+					$('.ns1blankspaceRenderPage_' + sXHTMLContext).hide();
+					$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + aElement[1]).show();
+				}
+}
 
 ns1blankspace.actions =
 {
@@ -4585,247 +4845,6 @@ ns1blankspace.actions =
 						}
 					}
 				}				
-}
-
-ns1blankspace.render.page = 
-{
-	show: 		function (oParam)
-				{
-					var aHTML = [];
-					var h = -1;
-					var sXHTMLElementID;
-					
-					var sHTML = '';
-					var bMore = false;
-					var iMore;
-					var iStartRow = 0;
-					var iRows = 30;
-					var bShowList = true;
-					var sXHTMLContext = '';
-					var bHeaderRow = true;
-					
-					if (oParam != undefined)
-					{
-						if (oParam.xhtml != undefined) {sHTML = oParam.xhtml}
-						if (oParam.showMore != undefined) {bMore = oParam.showMore}
-						if (oParam.more != undefined) {iMore = oParam.more}
-						if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
-						if (oParam.rows != undefined) {iRows = oParam.rows}
-						if (oParam.showList != undefined) {bShowList = oParam.showList}
-						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
-						if (oParam.headerRow != undefined) {bHeaderRow = oParam.headerRow}
-					}
-
-					if (bHeaderRow) {oParam.xhtmlFirstRow = $('tr:first', sHTML).html()};
-					
-					if (bMore)
-					{
-						aHTML.push('<table style="border-spacing:2px;" id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '"><tr>');
-						aHTML.push('<td style="width:5px; cursor:pointer;" class="ns1blankspaceRenderHeaderPage ns1blankspaceRenderHeaderPageSelected"' +
-											' id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-0" data-rowstart="0">1</td>');
-						aHTML.push('<td></td></tr></table>');
-					}
-						
-					aHTML.push('<div id="ns1blankspaceRenderPage_' + sXHTMLContext + '-0" class="ns1blankspaceRenderPage ns1blankspaceRenderPage_' + sXHTMLContext + '">');
-					aHTML.push(sHTML);
-					aHTML.push('</div>');
-
-					$('#' + sXHTMLElementID).html(aHTML.join(''));
-					if (bShowList) {$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed)};
-						
-					if (bMore)
-					{
-						var sHTML = '<td style="width:5px;cursor:pointer;" class="ns1blankspaceRenderHeaderMore' + 
-											'" id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' +
-											(iStartRow + iRows) + '" data-rowstart="' +
-											(iStartRow + iRows) + '">' + 'more...' + '</td>';
-										
-						$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).after(sHTML);
-					
-						$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow + iRows)).click(function(event)
-						{
-							var sID = event.target.id;
-							var sStart = $('#' + sID).attr('data-rowstart');
-							$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
-							if (oParam != undefined) {oParam.more = iMore;oParam.startRow = sStart} else {oParam = {more: iMore, startRow: sStart}};
-							ns1blankspace.render.page.showMore(oParam);
-						});
-					}
-					
-					$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-0').click(function(event)
-					{
-						ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
-					});
-				},
-
-	showMore:	function (oParam, oData)
-				{
-					
-					var sXHTMLElementID = '';
-					var iMore = -1;
-					var iStartRow = 10;
-					var iRows = 10;
-					var iColumn = 0;
-					var iMaximumColumns = 1;
-					var sColumns = "title";
-					var sIDColumns = '';
-					var sFunctionOpen;
-					var fFunctionClass;
-					var sFunctionNewPage;
-					var sClass;
-					var sIdAdditional = '';
-					var sIDSeperator = '-';
-					var sBodyClass = '';
-					var sXHTMLlFirstRow;
-					var sXHTMLContext = '';
-					var fFunctionShowRow;
-					
-					if (oParam != undefined)
-					{
-						if (oParam.more != undefined) {iMore = oParam.more}
-						if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
-						if (oParam.rows != undefined) {iRows = oParam.rows}
-						if (oParam.xhtmlElementId != undefined) {sXHTMLElementID = oParam.xhtmlElementId}
-						if (oParam.columns != undefined) {sColumns = oParam.columns}
-						if (oParam.idColumns != undefined) {sIDColumns = oParam.idColumns}
-						if (oParam.functionOpen != undefined) {sFunctionOpen = oParam.functionOpen}
-						if (oParam.functionClass != undefined) {fFunctionClass = oParam.functionClass}
-						if (oParam.functionShowRow != undefined) {fFunctionShowRow = oParam.functionShowRow}
-						if (oParam.idAdditional != undefined) {sIdAdditional = oParam.idAdditional}
-						if (oParam.bodyClass != undefined) {sBodyClass = oParam.bodyClass}
-						if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
-						if (oParam.xhtmlFirstRow != undefined) {sXHTMLlFirstRow = oParam.xhtmlFirstRow}
-						if (oParam.functionNewPage != undefined) {sFunctionNewPage = oParam.functionNewPage}
-						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
-					}
-				
-					if (iMore === -1)
-					{
-						alert('No more!')
-					}
-					else
-					{
-						if (oData === undefined)
-						{
-							var sData =	'id=' + iMore +
-											'&startrow=' + iStartRow + 
-											'&rows=' + iRows;
-							
-							$.ajax(
-							{
-								type: 'GET',
-								url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
-								data: sData,
-								dataType: 'json',
-								success: function(data){ns1blankspace.render.page.showMore(oParam, data)}
-							});
-						}
-						else
-						{
-							var aHTML = [];
-						
-							if ($('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow).length === 0)
-							{
-								aHTML.push('<div id="ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow + 
-												'" class="ns1blankspaceRenderPage ns1blankspaceRenderPage_' + sXHTMLContext + '">');
-							
-								aHTML.push('<table class="' + sBodyClass + '">');
-								
-								if (sXHTMLlFirstRow != undefined)
-								{
-									aHTML.push(sXHTMLlFirstRow);
-								}
-					
-								var iStartRow = parseInt(oData.startrow)
-								var iRows = parseInt(oData.rows);
-								var bMoreRows = (oData.morerows === "true");
-												
-								oParam.startRow = iStartRow + iRows;	
-								
-								var oRows = oData.data.rows;
-						
-								$(oRows).each(function() 
-								{
-									aHTML.push(fFunctionShowRow(this));
-								});
-								
-								aHTML.push('</table>');
-								
-								aHTML.push('</div>');
-								
-								$('.ns1blankspaceRenderPage_' + sXHTMLContext).hide();
-								$('.ns1blankspaceRenderPage_' + sXHTMLContext + ':last').after(aHTML.join(''));
-								
-								//$('.ns1blankspaceRowSelect' + sXHTMLContext).unbind('click');
-								
-								if (sFunctionOpen != undefined)
-								{
-									$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow + ' .ns1blankspaceRowSelect').button({
-										text: false,
-										icons: {
-											primary: "ui-icon-play"
-										}
-									})
-									.click(function() {
-										eval(sFunctionOpen);
-									})
-									.css('width', '15px')
-									.css('height', '20px')
-								}
-								
-								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).html(((iStartRow)/iRows)+1);
-								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).removeClass('ns1blankspaceRenderHeaderMore');
-								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).addClass('ns1blankspaceRenderHeaderPage');
-
-								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).unbind('click');
-								
-								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + iStartRow).click(function(event)
-								{
-									ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
-								});
-							
-								$('.ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
-								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).addClass('ns1blankspaceRenderHeaderPageSelected');
-
-								if (bMoreRows)
-								{
-									var sHTML = '<td style="width:5px; cursor:pointer;" class="ns1blankspaceRenderHeaderMore' + 
-														'" id="ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' +
-														(iStartRow + iRows) + '" data-rowstart="' +
-														(iStartRow + iRows) + '">' + 'more...' + '</td>';
-													
-									$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).after(sHTML);
-
-									$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow + iRows)).click(function(event)
-									{
-										var sID = event.target.id;
-										var sStart = $('#' + sID).attr('data-rowstart');
-										$('#' + sID).html(ns1blankspace.xhtml.loadingSmall);
-										if (oParam != undefined) {oParam.more = iMore; oParam.startRow = sStart} else {oParam = {more: iMore, startRow: sStart}};
-										ns1blankspace.render.page.showMore(oParam);
-									});
-								}
-								
-								if (sFunctionNewPage != undefined)
-								{
-									eval(sFunctionNewPage);
-								}
-							}
-						}
-					}
-				},
-
-	showPage:	function (sXHTMLElementID, sXHTMLContext)
-				{
-					var aElement = sXHTMLElementID.split('-');
-					
-					$('.ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
-					$('#' + sXHTMLElementID).addClass('ns1blankspaceRenderHeaderPageSelected');
-
-					$('.ns1blankspaceRenderPage_' + sXHTMLContext).hide();
-					$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + aElement[1]).show();
-				}
 }
 
 ns1blankspace.pdf = 

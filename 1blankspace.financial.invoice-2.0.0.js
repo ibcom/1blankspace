@@ -329,7 +329,7 @@ ns1blankspace.financial.invoice =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.contactPerson.search.send(event.target.id, {source: 1});
+											ns1blankspace.financial.invoice.search.send(event.target.id, {source: 1});
 										});
 										
 										ns1blankspace.render.bind(

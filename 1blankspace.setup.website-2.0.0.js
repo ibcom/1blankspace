@@ -1730,7 +1730,7 @@ ns1blankspace.setup.website =
 										.click(function() 
 										{
 											var sData = 'site=' + ns1blankspace.objectContext;
-											sData += '&url=' + ns1blankspace.util.fs($('#ns1blankspaceSetupWebsiteURLURL').val());
+											sData += '&url=' + ns1blankspace.util.fs(ns1blankspace.util.trimLast($('#ns1blankspaceSetupWebsiteURLURL').val(), '/'));
 											sData += '&id=' + ns1blankspace.util.fs(sID);
 											
 											ns1blankspace.status.working();
