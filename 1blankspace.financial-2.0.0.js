@@ -998,7 +998,6 @@ ns1blankspace.financial.debtors =
 														if (data.status == 'OK')
 														{
 															$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).html('Emailed');
-															//oStatement.response = data;
 															oParam.dataIndex = iDataIndex + 1;
 															oParam.step = 2;  // NEXT INVOICE
 															ns1blankspace.financial.debtors.email(oParam);

@@ -802,10 +802,10 @@ ns1blankspace.financial.bankAccount =
 														oSearch.addField('description,amount,posteddate');
 														oSearch.sort('posteddate', 'desc');
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-														oSearch.addFilter('status', 'EQUAL_TO', 1);
+														oSearch.addFilter('status', 'EQUAL_TO', 3);
 														oSearch.addFilter('category', 'EQUAL_TO', (iType==1?2:1));
 														oSearch.addFilter('posteddate', 'LESS_THAN_OR_EQUAL_TO', dReconciliationEndDate);
-														oSearch.rows = ns1blankspace.option.defaultRows;
+														oSearch.rows = 200;
 														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.show(oParam, data)});		
 													}
 													else
@@ -816,27 +816,10 @@ ns1blankspace.financial.bankAccount =
 														aHTML.push('<span style="font-size:1.25em;">BANK</span>');
 														aHTML.push('</div>');
 
-														if (oResponse.data.rows.length != 0)
-														{
-															aHTML.push('<div style="width: 150px;margin-right:10px;margin-bottom:3px;">');
-															aHTML.push('<span id="ns1blankspaceItemsApplyMappings" class="ns1blankspaceAction">Apply Mappings</span>');
-															aHTML.push('</div>');
-														}	
-													
 														aHTML.push('<div id="ns1blankspaceBankAccountReconcileItems" style="width: 150px;margin-bottom:3px;"></div>');
 														
 														$('#ns1blankspaceBankAccountReconcileColumnItem').html(aHTML.join(''));
 														
-														$('#ns1blankspaceItemsApplyMappings').button(
-														{
-															label: 'Apply Mappings',
-														})
-														.click(function()
-														{
-															oParam = ns1blankspace.util.setParam(oParam, 'step', 0);
-															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam);
-														});
-
 														var aHTML = [];
 
 														$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('<span class="ns1blankspaceAction" id="ns1blankspaceShowAll"></span>');
@@ -2249,7 +2232,7 @@ ns1blankspace.financial.bankAccount =
 								}
 				},
 
-	import: 	{
+	import: 	{			
 					show:		function (oParam, oResponse)
 								{
 									if (oResponse == undefined)
@@ -2273,7 +2256,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.addField('startdate,enddate,processeddate');
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('processeddate', 'desc');
-										oSearch.rows = ns1blankspace.option.defaultRows;
+										oSearch.rows = 20;
 										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.show(oParam, data)});
 									}
 									else
@@ -2296,11 +2279,6 @@ ns1blankspace.financial.bankAccount =
 											
 											$(oResponse.data.rows).each(function(i) 
 											{
-												if (i==0)
-												{
-													//aHTML.push('<tr><td style="font-size:0.75em;"><span id="ns1blankspaceBankAccountImportAdd">Import</span></td></tr>');
-												}
-												
 												aHTML.push(ns1blankspace.financial.bankAccount.import.row(this));
 											});
 											
@@ -2468,6 +2446,8 @@ ns1blankspace.financial.bankAccount =
 								},
 
 					items:   	{
+									data: 		{},
+
 									show:		function(oParam, oResponse)
 												{
 													var iFileSource;
@@ -2479,7 +2459,58 @@ ns1blankspace.financial.bankAccount =
 
 													if (oResponse === undefined)
 													{	
-														$('#ns1blankspaceBankAccountImportColumn2').html(ns1blankspace.xhtml.loading);
+														ns1blankspace.financial.bankAccount.import.items.data = {};
+
+														var aHTML = [];
+
+														aHTML.push('<table class="ns1blankspaceContainer">' +
+																		'<tr class="ns1blankspaceContainer">' +
+																		'<td id="ns1blankspaceImportItemsColumn1">' + ns1blankspace.xhtml.loading + '</td>' +
+																		'<td id="ns1blankspaceImportItemsColumn2" style="width:120px;"></td>' +
+																		'</tr>' +
+																		'</table>');				
+														
+														$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
+
+														var aHTML = [];
+														
+														aHTML.push('<table class="ns1blankspaceColumn2">');
+																
+														aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportMappingsApply" class="ns1blankspaceAction">' +
+																		'Confirm & apply mappings</span></td></tr>');
+
+														aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																		'Confirm uploaded bank transactions and apply any configured mappings.</td></tr>');
+
+														aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportCreateItems" class="ns1blankspaceAction">' +
+																		'Create payments & receipts</span></td></tr>');
+
+														aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																		'Create as payments and receipts within this space for confirmed bank transactions.<br /><br />If you have already created invoices, expenses, payments or receipts, then use the Reconcile option.</td></tr>');
+
+														aHTML.push('</table>');					
+														
+														$('#ns1blankspaceImportItemsColumn2').html(aHTML.join(''));
+														
+														$('#ns1blankspaceBankAccountImportMappingsApply').button(
+														{
+															label: 'Confirm & apply mappings',
+														})
+														.click(function()
+														{	
+															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
+														}).
+														css('width', '100px');
+
+														$('#ns1blankspaceBankAccountImportCreateItems').button(
+														{
+															label: 'Create payments & receipts',
+														})
+														.click(function()
+														{	
+															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
+														}).
+														css('width', '100px');
 
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
@@ -2490,7 +2521,7 @@ ns1blankspace.financial.bankAccount =
 														oSearch.sort('posteddate', 'desc');
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 														if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
-														oSearch.rows = ns1blankspace.option.defaultRows;
+														oSearch.rows = 200;
 														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.items.show(oParam, data)});
 													}
 													else
@@ -2526,15 +2557,15 @@ ns1blankspace.financial.bankAccount =
 																aHTML.push('<td id="ns1blankspaceFinancialImportItem_Amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 																						 parseFloat(this["amount"]).toFixed(2) + '</td>');						
 																				
-																aHTML.push('<td class="ns1blankspaceRow">');
+																aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSub">');
 
-																if (this.status == 1)
+																if (this.status == 0)
 																{	
 																	aHTML.push('<span id="ns1blankspaceFinancialImportItem_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
 																}
 																else
 																{
-																	aHTML.push(this.statustext);
+																	aHTML.push((this.status==3?'Confirmed':this.statustext));
 																}
 
 																aHTML.push('</td>');					
@@ -2545,7 +2576,7 @@ ns1blankspace.financial.bankAccount =
 															
 														aHTML.push('</table>');
 													
-														$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
+														$('#ns1blankspaceImportItemsColumn1').html(aHTML.join(''));
 
 														$('#ns1blankspaceFinancialBankImportItems .ns1blankspaceRowRemove').button(
 														{
@@ -2925,6 +2956,7 @@ ns1blankspace.financial.bankAccount =
 											success: function(oResponse)
 											{
 												ns1blankspace.status.message('Saved');
+												delete ns1blankspace.financial.bankAccount.reconcile.items.data.mappings;
 												ns1blankspace.financial.bankAccount.mapping.show(oParam)
 											}
 										});
@@ -3055,12 +3087,12 @@ ns1blankspace.financial.bankAccount =
 
 					apply:	{
 
-								init: 		function (oParam)
+								init: 		function (oParam, oResponse)
 											{
 												var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
-												var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, default: ''}).value;
+												var iFileSource = ns1blankspace.util.getParam(oParam, 'fileSource').value;
 
-												if (iStep == 0)
+												if (iStep == 1)
 												{
 													if (ns1blankspace.financial.bankAccount.reconcile.items.data.mappings === undefined)
 													{
@@ -3078,32 +3110,161 @@ ns1blankspace.financial.bankAccount =
 														oSearch.getResults(function(oResponse)
 														{
 															ns1blankspace.status.message('');
-															oParam = ns1blankspace.util.setParam(oParam, 'step', 0);
+															oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
 															ns1blankspace.financial.bankAccount.reconcile.items.data.mappings = oResponse.data.rows;
-															ns1blankspace.financial.bankAccount.mapping.apply.process(oParam);
+															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam);
 														});
 													}
 													else
 													{
-														ns1blankspace.financial.bankAccount.mapping.apply.process(oParam);
+														oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
+														ns1blankspace.financial.bankAccount.mapping.apply.init(oParam);
 													}
 												}
+
+												if (iStep == 2)
+												{
+													oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
+													ns1blankspace.financial.bankAccount.reconcile.items.data.items = [];
+
+													var oSearch = new AdvancedSearch();
+													oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
+													oSearch.addField('amount,area,areatext,bankaccount,bankaccounttext,capital,category,categorytext,' +
+																		'contactbusiness,contactbusinesstext,contactperson,contactpersontext,description,' +
+																		'object,objectcontext,' +
+																		'externalid,financialaccount,financialaccounttext,posteddate,project,projecttext,' +
+																		'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+													oSearch.sort('posteddate', 'desc');
+													oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+													if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
+													oSearch.rows = 100;
+													oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.mapping.apply.init(oParam, data)});
+												}
+
+												if (iStep == 3)
+												{
+													ns1blankspace.financial.bankAccount.reconcile.items.data.items =
+																	ns1blankspace.financial.bankAccount.reconcile.items.data.items.concat(oResponse.data.rows)
+
+													if (oResponse.morerows == 'true')
+													{
+														var sData =	'id=' + ns1blankspace.util.fs(oResponse.moreid) +
+																		'&startrow=' + (parseInt(oResponse.rows) + parseInt(oResponse.startrow)) + 
+																		'&rows=' + ns1blankspace.util.fs(oResponse.rows);
+														
+														$.ajax(
+														{
+															type: 'GET',
+															url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
+															data: sData,
+															dataType: 'json',
+															success: function(data){ns1blankspace.financial.bankAccount.mapping.apply.init(oParam, data)}
+														});
+													}	
+													else
+													{
+														oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
+														ns1blankspace.financial.bankAccount.mapping.apply.process(oParam);
+													}	
+												}	
 											},
+
+								match: 		function (oItem, oMapping)
+											{
+												var bMatch = false;
+
+												if (oItem.status == 1)
+												{	
+													if (oMapping.descriptionmatchtype == 1)
+													{	
+														if ((oItem.description).toUpperCase() == (oMapping.mapfromdescription).toUpperCase()) {bMatch = true};
+													}	
+
+													if (oMapping.descriptionmatchtype == 2 && oMapping.mapfromdescription != '')
+													{	
+														if ((oItem.description).toUpperCase().indexOf((oMapping.mapfromdescription).toUpperCase()) != -1) {bMatch = true};
+													}
+												}	
+
+												return bMatch;
+											},			
 
 								process: 	function (oParam)
 											{
-												var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+												var iFileSourceID = ns1blankspace.util.getParam(oParam, 'fileSource').value;
+												var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 0}).value;
 												var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
 												var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, default: ''}).value;
+												var iIndex = ns1blankspace.util.getParam(oParam, 'index', {default: 0}).value;
 
-												if (ns1blankspace.financial.bankAccount.mapping.apply.process === undefined)
+												if (iStep == 0)
 												{
 													ns1blankspace.financial.bankAccount.mapping.apply.init(oParam);
-												}
-
+												}	
+												
 												if (iStep == 1)
 												{
+													ns1blankspace.status.working('Matching...')
 
+													$.each(ns1blankspace.financial.bankAccount.reconcile.items.data.items, function (i, v)
+													{
+														var aMatch = 
+														$.grep(ns1blankspace.financial.bankAccount.reconcile.items.data.mappings, function (a)
+														{
+															return ns1blankspace.financial.bankAccount.mapping.apply.match(v, a);
+														});  
+														
+														if (aMatch.length > 0)
+														{
+															oMatch = aMatch[0];
+															v.mapping = oMatch;
+														}
+													});
+
+													oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
+													ns1blankspace.financial.bankAccount.mapping.apply.process(oParam);
+												}
+
+												if (iStep == 2)
+												{	
+													if (iIndex < ns1blankspace.financial.bankAccount.reconcile.items.data.items.length)
+													{
+														ns1blankspace.status.working('Matching... (' + iIndex + '/' + ns1blankspace.financial.bankAccount.reconcile.items.data.items.length + ')');
+														
+														var oItem = ns1blankspace.financial.bankAccount.reconcile.items.data.items[iIndex];
+
+														var oData =
+														{
+															id: oItem.id,
+															status: 3
+														}
+
+														if (oItem.mapping != undefined)
+														{	
+															if (oItem.mapping.maptofinancialaccount != '') {oData.financialaccount = oItem.mapping.maptofinancialaccount}
+															if (oItem.mapping.maptodescription != '') {oData.description = oItem.mapping.maptodescription}
+															if (oItem.mapping.taxtype != '') {oData.taxtype = oItem.mapping.taxtype}
+														}		
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
+															data: oData,
+															dataType: 'json',
+															global: false,
+															success: 	function(data)
+																		{
+																			oParam = ns1blankspace.util.setParam(oParam, 'index', iIndex + 1);
+																			ns1blankspace.financial.bankAccount.mapping.apply.process(oParam)
+																		}
+														});
+													}
+													else
+													{
+														ns1blankspace.status.message('Confirmation complete');
+														ns1blankspace.financial.bankAccount.import.items.show(oParam);
+													}
 												}
 											}
 							}								

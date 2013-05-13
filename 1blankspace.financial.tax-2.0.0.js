@@ -370,7 +370,8 @@ ns1blankspace.financial.tax =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 								
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData['enddate'] +
-							'<br /><span id="ns1blankspaceControlContext_startdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData['taxstartdate'] + '</span>');
+							'<br /><span id="ns1blankspaceControlContext_startdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData['taxstartdate'] + '</span>' +
+							'<br /><span id="ns1blankspaceControlContext_status" class="ns1blankspaceSub">' + ns1blankspace.objectContextData['statustext'] + '</span>');
 							
 						ns1blankspace.history.view({
 							newDestination: 'ns1blankspace.financial.tax.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
@@ -384,12 +385,8 @@ ns1blankspace.financial.tax =
 	summary:	function (oParam, oResponse)
 				{
 					var aHTML = [];
-					var bUseTemplate = false;
 					
-					if (oParam)
-					{
-						if (oParam.useTemplate != undefined) {bUseTemplate = oParam.useTemplate}
-					}
+					var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
 
 					if (ns1blankspace.objectContextData == undefined)
 					{
@@ -399,61 +396,111 @@ ns1blankspace.financial.tax =
 					}
 					else
 					{
-						aHTML.push('<table class="ns1blankspaceMain">' +
-										'<tr class="ns1blankspaceRow">' +
-										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:250px;"></td>' +
-										'</tr>' +
-										'</table>');				
-		
-						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
-				
-						var aHTML = [];
-
-						var cTaxPayable = (ns1blankspace.objectContextData['g9']).parseCurrency();
-
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxVATCaption + ' on Sales (collected)</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryG9" class="ns1blankspaceSummary">$' +
-										cTaxPayable.formatMoney(0, ".", ",") +
-										'</td></tr>');
-
-						var cTaxCredit = (ns1blankspace.objectContextData['g20']).parseCurrency();
-
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxVATCaption + ' on Purchases (credits)</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">$' +
-										cTaxCredit.formatMoney(0, ".", ",")+
-										'</td></tr>');
-
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxVATCaption + ' Payable</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">$' +
-										(cTaxPayable - cTaxCredit).formatMoney(0, '.', ',') +
-										'</td></tr>');
-
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
-
-						var aHTML = [];
+						if (iStep == 1)
+						{	
+							aHTML.push('<table class="ns1blankspaceMain">' +
+											'<tr class="ns1blankspaceRow">' +
+											'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+											'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:250px;"></td>' +
+											'</tr>' +
+											'</table>');				
+			
+							$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 					
-						aHTML.push('<table class="ns1blankspaceColumn2">');
-						aHTML.push('<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSub" >' +
-										'This tax report was last updated on the ' + ns1blankspace.objectContextData['modifieddate'] + '.' +
-										'</td></tr>');
+							var aHTML = [];
 
-						aHTML.push('<tr><td style="padding-top:10px;">' +
-										'<span id="ns1blankspaceSummaryCalculate" class="ns1blankspaceAction" style="font-size:0.875em;">Recalculate</span>' +
-										'</td></tr>');
+							var cTaxPayable = (ns1blankspace.objectContextData['g9']).parseCurrency();
 
-						aHTML.push('</table>');					
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxVATCaption + ' on Sales (collected)</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryG9" class="ns1blankspaceSummary">$' +
+											cTaxPayable.formatMoney(0, ".", ",") +
+											'</td></tr>');
 
-						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+							var cTaxCredit = (ns1blankspace.objectContextData['g20']).parseCurrency();
 
-						$('#ns1blankspaceSummaryCalculate').button(
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxVATCaption + ' on Purchases (credits)</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">$' +
+											cTaxCredit.formatMoney(0, ".", ",")+
+											'</td></tr>');
+
+							var cTaxVATPayable = cTaxPayable - cTaxCredit;
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' + ns1blankspace.option.taxVATCaption + ' Payable</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryG20" class="ns1blankspaceSummary">$' +
+											(cTaxVATPayable).formatMoney(0, '.', ',') +
+											'</td></tr>');
+
+							var cTaxEmployeePayable = (ns1blankspace.objectContextData['w2']).parseCurrency();
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Employee Tax Payable</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryW2" class="ns1blankspaceSummary">$' +
+											cTaxEmployeePayable.formatMoney(0, ".", ",") +
+											'</td></tr>');
+
+							var cTaxPayable = cTaxVATPayable + cTaxEmployeePayable;
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Total Tax Payable</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryW2" class="ns1blankspaceSummary">$' +
+											cTaxPayable.formatMoney(0, ".", ",") +
+											'</td></tr>');
+
+							$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+							var aHTML = [];
+						
+							aHTML.push('<table class="ns1blankspaceColumn2">');
+							aHTML.push('<tr><td id="ns1blankspaceSummaryAmount" class="ns1blankspaceSub">' +
+											'This tax report was last updated on the ' + ns1blankspace.objectContextData['modifieddate'] + '.' +
+											'</td></tr>');
+
+							if (ns1blankspace.objectContextData['status'] == 1)
+							{	
+								aHTML.push('<tr><td style="padding-top:10px;">' +
+											'<span id="ns1blankspaceSummaryCalculate" class="ns1blankspaceAction" style="font-size:0.875em;">Recalculate</span>' +
+											'</td></tr>');
+							}	
+
+							aHTML.push('<tr><td id="ns1blankspaceSummaryLastReconciliation" class="ns1blankspaceSub" style="padding-top:15px;"></td></tr>');
+
+							aHTML.push('<tr><td id="ns1blankspaceSummaryLastPayroll" class="ns1blankspaceSub" style="padding-top:15px;"></td></tr>');
+
+							aHTML.push('</table>');					
+
+							$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+
+							$('#ns1blankspaceSummaryCalculate').button({})
+							.click(function() {
+								ns1blankspace.financial.tax.save.send()
+							});	
+
+							if (ns1blankspace.objectContextData['status'] == 1)
+							{	
+								ns1blankspace.financial.tax.summary({step: 2})
+							}	
+						}
+
+						if (iStep == 2)
 						{
-							
-						})
-						.click(function() {
-							ns1blankspace.financial.tax.save.send()
-						});		
-					}			
+							var oReconciliations = $.grep(ns1blankspace.financial.data.bankaccounts, function (a)
+							{ 
+								return (a.status == 1)
+							});
+
+							oReconciliations.sort(ns1blankspace.util.sortBy('lastreconcileddate'));
+
+							if (oReconciliations.length > 0)
+							{
+								if (oReconciliations[0].lastreconcileddate == '')
+								{
+									$('#ns1blankspaceSummaryLastReconciliation').html('At least one bank account has not been reconciled!');
+								}	
+								else
+								{
+									$('#ns1blankspaceSummaryLastReconciliation').html('Bank accounts reconciled up to ' + oReconciliations[0].lastreconcileddate + '.');
+								}
+							}	
+						}
+					}	
 				},
 
 	details:	function (oParam)
@@ -569,7 +616,7 @@ ns1blankspace.financial.tax =
 									if (ns1blankspace.objectContextData.includetax == 'N')
 									{
 										aHTML.push('<table class="ns1blankspaceContainer">' +
-														'<tr><td class="ns1blankspaceNothing">Not set up.</td></tr>' +
+														'<tr><td class="ns1blankspaceNothing">Not applicable.</td></tr>' +
 														'</table>');
 
 										$('#ns1blankspaceMainVAT').html(aHTML.join(''));
@@ -855,7 +902,7 @@ ns1blankspace.financial.tax =
 									if (ns1blankspace.objectContextData.includepayrolltax == 'N')
 									{
 										aHTML.push('<table class="ns1blankspaceContainer">');
-										aHTML.push('<tr><td class="ns1blankspaceNothing">Not enabled for this report.</td></tr>');
+										aHTML.push('<tr><td class="ns1blankspaceNothing">Not applicable.</td></tr>');
 										aHTML.push('</table>');
 
 										$('#ns1blankspaceMainPayroll').html(aHTML.join(''));

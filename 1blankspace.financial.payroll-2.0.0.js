@@ -330,6 +330,8 @@ ns1blankspace.financial.payroll =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.paydate +
+							'<br /><span id="ns1blankspaceSub_startdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.startdate + '</span>' +
+							'<br /><span id="ns1blankspaceSub_frequency" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.frequencytext + '</span>' +
 							'<br /><span id="ns1blankspaceSub_status" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.statustext + '</span>');
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
@@ -358,7 +360,7 @@ ns1blankspace.financial.payroll =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:150px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:200px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
