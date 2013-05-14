@@ -262,6 +262,1229 @@ ns1blankspace.financial.bankAccount =
 					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 				},
 
+	mapping: 	{
+					show:	function (oParam, oResponse)
+							{
+								var iObject = ns1blankspace.object;
+								var iObjectContext = ns1blankspace.objectContext;
+								var sNamespace;
+								var bRefresh = false;
+								
+								if (oParam != undefined)
+								{
+									if (oParam.object != undefined) {iObject = oParam.object}
+									if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+									if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
+									if (oParam.refresh != undefined) {bRefresh = oParam.refresh}		
+								}
+								else
+								{
+									oParam = {}
+								}	
+									
+								if (oResponse == undefined)
+								{	
+									if (!bRefresh)
+									{	
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceMappingColumn1" class="ns1blankspaceColumn1Flexible">' +
+														ns1blankspace.xhtml.loading + '</td>' +
+														'<td id="ns1blankspaceMappingColumn2" class="ns1blankspaceColumn2" style="width:350px;"></td>' +
+														'</tr></table>');					
+										
+										$('#ns1blankspaceMainMapping').html(aHTML.join(''));
+										
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceColumn2">');
+										
+										
+										aHTML.push('<tr><td class="ns1blankspaceAction">' +
+														'<span id="ns1blankspaceMappingAdd">Add</span>' +
+														'</td></tr>');
+							
+										
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceMappingColumn2').html(aHTML.join(''));
+									
+										$('#ns1blankspaceMappingAdd').button(
+										{
+											label: "Add"
+										})
+										.click(function() {
+											 ns1blankspace.financial.bankAccount.mapping.edit(oParam);
+										});										
+									
+									}
+
+									var oSearch = new AdvancedSearch();
+									oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_SEARCH';
+									oSearch.addField('description,descriptionmatchtype,descriptionmatchtypetext,mapfrom,mapfromdescription,mapfromtext,' +
+														'maporder,maptodescription,maptofinancialaccount,maptofinancialaccounttext,' +
+														'matchtype,matchtypetext,project,projecttext,status,statustext,' +
+														'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+									oSearch.sort('description', 'asc');
+									
+									oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.mapping.show(oParam, data)});
+								}
+								else
+								{
+									var aHTML = [];
+									
+									if (oResponse.data.rows.length == 0)
+									{
+										aHTML.push('<table><tr><td class="ns1blankspaceNothing">' +
+													'You can set up mappings to make it easier to create receipts' +
+													' and payments with in this space.' +
+													'<br /><br />' +
+													'ie. if the bank transaction description contains <i>fees</i>,' +
+													'then set the financial account as <i>Bank Charges</i>.' +
+													'</td></tr></table>');
+
+										$('#ns1blankspaceMappingColumn1').html(aHTML.join(''));
+									}
+									else
+									{
+										var sWhere;
+										var sTo;
+
+										aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFinancialBankAccountMappings" style="font-size:0.875em;">');
+
+										aHTML.push('<tr>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption">Where</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption">Set</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+										aHTML.push('</tr>');
+
+										$.each(oResponse.data.rows, function()
+										{
+											sWhere = '';
+											sTo = '';
+
+											if (this.mapfromdescription != '')
+											{	
+												sWhere += '<span class="ns1blankspaceSub">Description ' + (this.descriptionmatchtype==1?'exactly matches':'contains') + '</span>';
+												sWhere +=  ' ' + this.mapfromdescription;
+											}	
+
+											if (this.mapfromtext != '')
+											{	
+												sWhere += '<br /><span class="ns1blankspaceSub">Type is</span>';
+												sWhere += ' ' + this.mapfromtext;
+											}
+
+											aHTML.push('<tr class="ns1blankspaceRow">');
+																		
+											aHTML.push('<td id="ns1blankspaceMapping_where-' + this.id + '" class="ns1blankspaceRow">' +
+															sWhere + '</td>');
+											
+											if (this.maptofinancialaccounttext != '')
+											{
+												sTo += '<span class="ns1blankspaceSub">Account to</span>';
+												sTo += '<br />' + this.maptofinancialaccounttext;
+											}
+
+											if (this.taxtype != '')
+											{
+												sTo += '<br /><span class="ns1blankspaceSub">' + ns1blankspace.option.taxVATCaption + ' type to</span>';
+												sTo += '<br />' + (this.mapfrom==1?this.taxtyperevenuetext:this.taxtypeexpensetext);
+											}
+
+											aHTML.push('<td id="ns1blankspaceItem_to-' + this.id + '" class="ns1blankspaceRow">' +
+															sTo + '</td>');
+
+											aHTML.push('<td style="width:40px;text-align:right;" class="ns1blankspaceRow">');
+											aHTML.push('<span id="ns1blankspaceRowMapping_options_remove-' + this.id + '" class="ns1blankspaceRemove"></span>');
+											aHTML.push('<span id="ns1blankspaceRowMapping_options_edit-' + this.id + '" class="ns1blankspaceEdit"></span>');
+											aHTML.push('</td></tr>');
+										});
+										
+										aHTML.push('</table>');
+
+										$('#ns1blankspaceMappingColumn1').html(aHTML.join(''));
+										
+										$('#ns1blankspaceFinancialBankAccountMappings .ns1blankspaceRemove').button( {
+											text: false,
+											icons: {
+												primary: "ui-icon-close"
+											}
+										})
+										.click(function() {
+											oParam.xhtmlElementID = this.id;
+											ns1blankspace.financial.bankAccount.mapping.remove(oParam);
+										})
+										.css('width', '15px')
+										.css('height', '17px')
+								
+										$('#ns1blankspaceFinancialBankAccountMappings .ns1blankspaceEdit').button( {
+											text: false,
+											icons: {
+												primary: "ui-icon-pencil"
+											}
+										})
+										.click(function() {
+											ns1blankspace.financial.bankAccount.mapping.edit({xhtmlElementID: this.id})
+										})
+										.css('width', '15px')
+										.css('height', '17px')	
+									}
+								}	
+							},
+
+					remove:	function (oParam, oResponse)
+							{								
+								var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+								var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+								
+								if (oResponse == undefined)
+								{	
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_MANAGE'),
+										data: 'remove=1&id=' + sID,
+										dataType: 'json',
+										success: function(data)
+										{
+											ns1blankspace.financial.bankAccount.mapping.remove(oParam, data)
+										}
+									});
+								}	
+								else
+								{
+									if (oResponse.status == 'OK')
+									{
+										$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+									}
+									else
+									{
+										ns1blankspace.status.error(oResponse.error.errornotes);
+									}
+								}	
+							},
+
+					edit:	function (oParam, oResponse)
+							{
+								var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+								var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+								var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, default: ''}).value;
+
+								if (iStep == 1)
+								{
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceMappingEditColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceMappingEditColumn2" class="ns1blankspaceColumn2" style="width:50px;"></td>' +
+														'</tr></table>');
+
+									$('#ns1blankspaceMappingColumn2').html(aHTML.join(''));
+
+									var aHTML = [];
+
+									aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
+							
+									aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+													'Where Type Is' +
+													'</td></tr>' +
+													'<tr><td class="ns1blankspaceRadio">' +
+													'<input type="radio" id="radioType1" name="radioType" value="1"/>Credit' +
+													'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Debit' +
+													'</td></tr>');
+
+									aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+													'& Description' +
+													'</td></tr>' +
+													'<tr><td class="ns1blankspaceRadio">' +
+													'<input type="radio" id="radioMatch1" name="radioMatch" value="1"/>Exactly Matches' +
+													'<br /><input type="radio" id="radioMatch2" name="radioMatch" value="2"/>Contains' +
+													'</td></tr>');
+
+									aHTML.push('<tr><td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceFromMatchDescription" class="ns1blankspaceText">' +
+													'</td></tr>');
+
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'Set ' + ns1blankspace.option.taxVATCaption + ' Type' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td id="ns1blankspaceFinancialTaxCodeMapping" class="ns1blankspaceRadio">' +
+													ns1blankspace.xhtml.loadingSmall +
+													'</td></tr>');	
+
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'Account' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
+													'</td></tr>');
+									
+									aHTML.push('</table>');
+									
+									aHTML.push('<table class="ns1blankspaceColumn2">');
+									
+									aHTML.push('<tr><td style="padding-top:5px;" id="ns1blankspaceItemAddSearchResults"><span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all or<br />start typing part of the account title.</span></td></tr>');
+																	
+									aHTML.push('</table>');		
+									
+									$('#ns1blankspaceMappingEditColumn1').html(aHTML.join(''));
+				
+									ns1blankspace.financial.util.tax.codes(
+									{
+										xhtmlElementID: 'ns1blankspaceFinancialTaxCodeMapping',
+										xhtmlElementName: 'radioTaxCodeMapping',
+										type: iType
+									});
+
+									$('[name="radioType"]').click(function()
+									{
+										ns1blankspace.financial.util.tax.codes(
+										{
+											xhtmlElementID: 'ns1blankspaceFinancialTaxCodeMapping',
+											xhtmlElementName: 'radioTaxCodeMapping',
+											type: $('input[name="radioType"]:checked').val(),
+											id: 1
+										});
+									});
+
+									$('#ns1blankspaceItemAccount').keyup(function()
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
+										if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+								        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.bankAccount.mapping.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
+									});
+					
+									$('#ns1blankspaceItemAmount').focus();
+
+									var iFinancialAccountType = (iType==1?2:1);
+									var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
+									{ 
+										return (a.type == iFinancialAccountType && a.postable == 'Y')
+									});
+
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspaceColumn2">');
+											
+									aHTML.push('<tr><td><span id="ns1blankspaceMappingEditSave" class="ns1blankspaceAction">' +
+													'Save</span></td></tr>');
+
+									aHTML.push('<tr><td><span id="ns1blankspaceMappingEditCancel" class="ns1blankspaceAction">' +
+													'Cancel</span></td></tr>');
+													
+									aHTML.push('</table>');					
+									
+									$('#ns1blankspaceMappingEditColumn2').html(aHTML.join(''));
+									
+									$('#ns1blankspaceMappingEditSave').button(
+									{
+										text: "Save"
+									})
+									.click(function()
+									{
+										ns1blankspace.status.working();
+
+										var oData = 
+										{
+											mapfrom: $('input[name="radioType"]:checked').val(),
+											descriptionmatchtype: $('input[name="radioMatch"]:checked').val(),
+											mapfromdescription: $('#ns1blankspaceFromMatchDescription').val(),
+											maptofinancialaccount: $('#ns1blankspaceItemAccount').attr('data-id'),
+											taxtype: $('input[name="radioTaxCodeMapping"]:checked').val(),
+											id: sID
+										}
+											
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_MANAGE'),
+											data: oData,
+											dataType: 'json',
+											success: function(oResponse)
+											{
+												ns1blankspace.status.message('Saved');
+												delete ns1blankspace.financial.bankAccount.reconcile.items.data.mappings;
+												ns1blankspace.financial.bankAccount.mapping.show(oParam)
+											}
+										});
+									})
+									.css('width', '70px');
+
+									$('#ns1blankspaceMappingEditCancel').button(
+									{
+										text: "Cancel"
+									})
+									.click(function()
+									{
+										ns1blankspace.financial.bankAccount.mapping.show();
+									})
+									.css('width', '70px');
+
+									if (sID != '')
+									{
+										ns1blankspace.status.working();
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_SEARCH';
+										oSearch.addField('description,descriptionmatchtype,descriptionmatchtypetext,mapfrom,mapfromdescription,mapfromtext,' +
+														'maporder,maptodescription,maptofinancialaccount,maptofinancialaccounttext,' +
+														'matchtype,matchtypetext,project,projecttext,status,statustext,' +
+														'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+										oSearch.addFilter('id', 'EQUAL_TO', sID)
+									
+										oSearch.getResults(function(data)
+										{
+											oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
+											ns1blankspace.financial.bankAccount.mapping.edit(oParam, data);
+										});
+									}
+									else
+									{
+										$('[name="radioType"][value="1"]').attr('checked', true);
+										$('[name="radioMatch"][value="1"]').attr('checked', true);
+										$('[name="radioTaxCodeMapping"][value="1"]').attr('checked', true);
+									}
+
+									if (oData.length < 21)
+									{	
+										oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
+										ns1blankspace.financial.item.edit(oParam, oData);
+									}	
+								}
+
+								if (iStep == 2 && oResponse !== undefined)
+								{	
+									ns1blankspace.status.message('');
+
+									var oRow = oResponse.data.rows[0];
+
+									$('[name="radioType"][value="' + oRow.mapfrom + '"]').attr('checked', true);
+									$('[name="radioMatch"][value="' + oRow.descriptionmatchtype + '"]').attr('checked', true);
+									$('#ns1blankspaceFromMatchDescription').val(oRow.mapfromdescription);
+									$('#ns1blankspaceItemAccount').val(oRow.maptofinancialaccounttext)
+									$('#ns1blankspaceItemAccount').attr('data-id', oRow.maptofinancialaccount);
+									$('[name="radioTaxCodeMapping"][value="' + oRow.taxtype + '"]').attr('checked', true);
+								}
+
+								if (iStep == 3)
+								{	
+									if (oResponse == undefined)
+									{	
+										ns1blankspace.status.working();
+
+										var iFinancialAccountType = (iType==1?2:1);
+										var sSearch = $('#ns1blankspaceItemAccount').val()
+
+										if (sSearch == '')
+										{
+											var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
+											{ 
+												return (a.type == iFinancialAccountType && a.postable == 'Y')
+											});
+										}
+										else
+										{
+											sSearch = sSearch.toLowerCase();
+											var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
+											{
+												return (a.type == iFinancialAccountType && (a.title).toLowerCase().indexOf(sSearch) != -1 && a.postable == 'Y')
+											});
+										}	
+
+										ns1blankspace.financial.bankAccount.mapping.edit(oParam, oData);
+									}
+									else
+									{
+										ns1blankspace.status.message('');
+
+										var aHTML = [];
+										
+										if (oResponse.length == 0)	
+										{
+											aHTML.push('<table class="ns1blankspace">' +
+															'<tr><td class="ns1blankspaceNothing">No accounts.</td></tr>' + 
+															'</table>');
+
+											$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''));		
+										}
+										else
+										{	
+											aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">');
+											
+											$.each(oResponse, function() 
+											{ 
+												aHTML.push('<tr class="ns1blankspaceRow">'+ 
+																'<td id="ns1blankspaceMappingAccount_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																this.title +
+																'</td></tr>');	
+											});
+											
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''))
+											
+											$('.ns1blankspaceRowSelect').click(function()
+											{
+												$('#ns1blankspaceItemAccount').val($(this).html())
+												$('#ns1blankspaceItemAccount').attr('data-id',(this.id).split('-')[1]);
+												$('#ns1blankspaceItemAddSearchResults').html('');
+											});
+										}
+									}	
+								}
+							},
+
+					apply:	{
+
+								init: 		function (oParam, oResponse)
+											{
+												var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+												var iFileSource = ns1blankspace.util.getParam(oParam, 'fileSource').value;
+
+												if (iStep == 1)
+												{
+													if (ns1blankspace.financial.bankAccount.reconcile.items.data.mappings === undefined)
+													{
+														ns1blankspace.status.working('Getting mappings...');
+
+														var oSearch = new AdvancedSearch();
+														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_SEARCH';
+														oSearch.addField('description,descriptionmatchtype,descriptionmatchtypetext,mapfrom,mapfromdescription,mapfromtext,' +
+																		'maporder,maptodescription,maptofinancialaccount,maptofinancialaccounttext,' +
+																		'matchtype,matchtypetext,project,projecttext,status,statustext,' +
+																		'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+
+														oSearch.rows = 200;
+														
+														oSearch.getResults(function(oResponse)
+														{
+															ns1blankspace.status.message('');
+															oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
+															ns1blankspace.financial.bankAccount.reconcile.items.data.mappings = oResponse.data.rows;
+															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam);
+														});
+													}
+													else
+													{
+														oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
+														ns1blankspace.financial.bankAccount.mapping.apply.init(oParam);
+													}
+												}
+
+												if (iStep == 2)
+												{
+													oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
+													ns1blankspace.financial.bankAccount.reconcile.items.data.items = [];
+
+													var oSearch = new AdvancedSearch();
+													oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
+													oSearch.addField('amount,area,areatext,bankaccount,bankaccounttext,capital,category,categorytext,' +
+																		'contactbusiness,contactbusinesstext,contactperson,contactpersontext,description,' +
+																		'object,objectcontext,' +
+																		'externalid,financialaccount,financialaccounttext,posteddate,project,projecttext,' +
+																		'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+													oSearch.sort('posteddate', 'desc');
+													oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+													if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
+													oSearch.rows = 100;
+													oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.mapping.apply.init(oParam, data)});
+												}
+
+												if (iStep == 3)
+												{
+													ns1blankspace.financial.bankAccount.reconcile.items.data.items =
+																	ns1blankspace.financial.bankAccount.reconcile.items.data.items.concat(oResponse.data.rows)
+
+													if (oResponse.morerows == 'true')
+													{
+														var sData =	'id=' + ns1blankspace.util.fs(oResponse.moreid) +
+																		'&startrow=' + (parseInt(oResponse.rows) + parseInt(oResponse.startrow)) + 
+																		'&rows=' + ns1blankspace.util.fs(oResponse.rows);
+														
+														$.ajax(
+														{
+															type: 'GET',
+															url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
+															data: sData,
+															dataType: 'json',
+															success: function(data){ns1blankspace.financial.bankAccount.mapping.apply.init(oParam, data)}
+														});
+													}	
+													else
+													{
+														oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
+														ns1blankspace.financial.bankAccount.mapping.apply.process(oParam);
+													}	
+												}	
+											},
+
+								match: 		function (oItem, oMapping)
+											{
+												var bMatch = false;
+
+												if (oItem.status == 1 && (oItem.category == oMapping.mapfrom))
+												{	
+													if (oMapping.descriptionmatchtype == 1)
+													{	
+														if ((oItem.description).toUpperCase() == (oMapping.mapfromdescription).toUpperCase()) {bMatch = true};
+													}	
+
+													if (oMapping.descriptionmatchtype == 2 && oMapping.mapfromdescription != '')
+													{	
+														if ((oItem.description).toUpperCase().indexOf((oMapping.mapfromdescription).toUpperCase()) != -1) {bMatch = true};
+													}
+												}	
+
+												return bMatch;
+											},			
+
+								process: 	function (oParam)
+											{
+												var iFileSourceID = ns1blankspace.util.getParam(oParam, 'fileSource').value;
+												var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 0}).value;
+												var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+												var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, default: ''}).value;
+												var iIndex = ns1blankspace.util.getParam(oParam, 'index', {default: 0}).value;
+
+												if (iStep == 0)
+												{
+													ns1blankspace.financial.bankAccount.mapping.apply.init(oParam);
+												}	
+												
+												if (iStep == 1)
+												{
+													ns1blankspace.status.working('Matching...')
+
+													$.each(ns1blankspace.financial.bankAccount.reconcile.items.data.items, function (i, v)
+													{
+														var aMatch = 
+														$.grep(ns1blankspace.financial.bankAccount.reconcile.items.data.mappings, function (a)
+														{
+															return ns1blankspace.financial.bankAccount.mapping.apply.match(v, a);
+														});  
+														
+														if (aMatch.length > 0)
+														{
+															oMatch = aMatch[0];
+															v.mapping = oMatch;
+														}
+													});
+
+													oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
+													ns1blankspace.financial.bankAccount.mapping.apply.process(oParam);
+												}
+
+												if (iStep == 2)
+												{	
+													if (iIndex < ns1blankspace.financial.bankAccount.reconcile.items.data.items.length)
+													{
+														ns1blankspace.status.working('Matching... (' + iIndex + '/' + ns1blankspace.financial.bankAccount.reconcile.items.data.items.length + ')');
+														
+														var oItem = ns1blankspace.financial.bankAccount.reconcile.items.data.items[iIndex];
+
+														var oData =
+														{
+															id: oItem.id,
+															status: 3
+														}
+
+														if (oItem.mapping != undefined)
+														{	
+															if (oItem.mapping.maptofinancialaccount != '') {oData.financialaccount = oItem.mapping.maptofinancialaccount}
+															if (oItem.mapping.maptodescription != '') {oData.description = oItem.mapping.maptodescription}
+															if (oItem.mapping.taxtype != '') {oData.taxtype = oItem.mapping.taxtype}
+														}		
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
+															data: oData,
+															dataType: 'json',
+															global: false,
+															success: 	function(data)
+																		{
+																			oParam = ns1blankspace.util.setParam(oParam, 'index', iIndex + 1);
+																			ns1blankspace.financial.bankAccount.mapping.apply.process(oParam)
+																		}
+														});
+													}
+													else
+													{
+														ns1blankspace.status.message('Confirmation complete');
+														ns1blankspace.financial.bankAccount.import.items.show(oParam);
+													}
+												}
+											}
+							}								
+				},
+
+	import: 	{			
+					show:		function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+													'<tr class="ns1blankspaceContainer">' +
+													'<td id="ns1blankspaceBankAccountImportColumn1" style="width: 100px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
+													ns1blankspace.xhtml.loading +
+													'</td>' +
+													'<td id="ns1blankspaceBankAccountImportColumn2" class="ns1blankspaceColumn2">' +
+													'</td>' +
+													'</tr>' +
+													'</table>');				
+										
+										$('#ns1blankspaceMainImport').html(aHTML.join(''));
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_SEARCH';
+										oSearch.addField('startdate,enddate,processeddate');
+										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.sort('processeddate', 'desc');
+										oSearch.rows = 10;
+										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.show(oParam, data)});
+									}
+									else
+									{
+										var aHTML = [];
+										
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table id="tableInterfaceFinancialHomeMostLikely">');
+											
+											aHTML.push('<tr><td class="ns1blankspaceNothing">No existing imports.</td></tr>');
+
+											aHTML.push('</table>');
+											
+											$('#ns1blankspaceBankAccountImportColumn1').html(aHTML.join(''));	
+										}
+										else
+										{		
+											aHTML.push('<table class="ns1blankspace">');
+											
+											$(oResponse.data.rows).each(function(i) 
+											{
+												aHTML.push(ns1blankspace.financial.bankAccount.import.row(this));
+											});
+											
+											aHTML.push('</table>');
+											
+											$('#ns1blankspaceBankAccountImportColumn1').html(aHTML.join(''));
+										}
+											
+										$('#ns1blankspaceBankAccountImportAdd').button(
+										{
+											label: "Add"
+										})
+										.click(function() {
+											ns1blankspace.financial.bankAccount.import.add();
+										})
+										.css("width", "75px");
+										
+										$('.ns1blankspaceBankAccountImportRowSelect').click(function()
+										{
+											var aID = (this.id).split('-');
+											ns1blankspace.financial.bankAccount.import.items.show({fileSource: aID[1]});
+										});
+
+										ns1blankspace.financial.bankAccount.import.add();
+									}
+								},
+
+					row:		function (oRow)
+								{
+									var aHTML = [];
+
+									if (oRow.processeddate != '')
+									{
+										aHTML.push('<tr class="ns1blankspaceRow">');
+
+										aHTML.push('<td id="ns1blankspaceBankAccountImport_processeddate-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountImportRowSelect"' +
+																'">' + oRow.processeddate + '<br />');
+															
+										if (oRow.startdate != '')
+										{		
+											aHTML.push('<span class="ns1blankspaceSub" id="ns1blankspaceBankAccountImport_startdate-' + oRow.id + '">' +
+																oRow.startdate + '</span><br />');	
+										}
+
+										if (oRow.enddate != oRow.startdate)
+										{		
+											aHTML.push('<span class="ns1blankspaceSub" id="ns1blankspaceBankAccountImport_enddate-' + oRow.id + '">' +
+																oRow.enddate + '</span><br />');	
+										}
+									
+										aHTML.push('</tr>');
+									}
+										
+									return aHTML.join('');
+								},
+
+					add:		function (oParam, oResponse)
+								{
+									var iObjectContext = ns1blankspace.objectContext;
+									var oOptions = {view: true, remove: true, automation: true};
+									var oActions = {add: true};
+
+									if (oParam != undefined)
+									{
+										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+										if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
+										if (oParam.options != undefined) {oOptions = oParam.options}
+										if (oParam.actions != undefined) {oActions = oParam.actions}
+									}		
+										
+									if (oResponse == undefined)
+									{	
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>');							
+										aHTML.push(ns1blankspace.attachments.upload.show(
+														{	
+															object: 28,
+															objectContext: -1,
+															label: ''
+														}));
+										
+										aHTML.push('</td></tr></table>');
+
+										$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
+										
+										$('input.ns1blankspaceUpload').change(function()
+										{
+											if ($(this).val() != '')
+											{
+												$('#ns1blankspaceUpload').button(
+												{
+													label: "Upload Bank File"
+												})
+												.click(function()
+												{
+													if ($('#oFile0').val() == '')
+													{
+														ns1blankspace.status.error("Need to select a file.");
+													}
+													else
+													{
+														var sData = 'processeddate=' + Date.today().toString("dd-MMM-yyyy");
+														sData += '&bankaccount=' + ns1blankspace.objectContext;
+														
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_MANAGE'),
+															data: sData,
+															dataType: 'json',
+															success: function(data) {
+																ns1blankspace.financial.bankAccount.import.add(oParam, data);
+															}
+														});
+													}
+												});
+											}
+										});	
+									}
+									else
+									{
+										if (oResponse.status == 'OK')
+										{
+											$('#objectcontext').val(oResponse.id);	
+											ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.financial.bankAccount.import.process});
+										}	
+									}	
+								},
+
+					process:	function (oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+										oSearch.addField('type,filename,description,download,modifieddate');
+										oSearch.addFilter('object', 'EQUAL_TO', 28);
+										oSearch.addFilter('objectcontext', 'EQUAL_TO', $('#objectcontext').val());
+										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.process(data)});
+									}
+									else
+									{
+										if (oResponse.data.rows.length !=0)
+										{	
+											var sData = 'id=' + oResponse.data.rows[0].id;
+									
+											ns1blankspace.status.working();
+
+											$('#ns1blankspaceUploadStatus').html('Processing file transactions...');
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_PROCESS'),
+												data: sData,
+												dataType: 'json',
+												success: function(data) {
+													ns1blankspace.status.message('Transactions processed.')
+													ns1blankspace.financial.bankAccount.import.show();
+												}
+											});	
+										}
+									}	
+								},
+
+					items:   	{
+									data: 		{},
+
+									show:		function(oParam, oResponse)
+												{
+													var iFileSource;
+								
+													if (oParam != undefined)
+													{
+														if (oParam.fileSource != undefined) {iFileSource = oParam.fileSource}
+													}		
+
+													if (oResponse === undefined)
+													{	
+														ns1blankspace.financial.bankAccount.import.items.data = {};
+
+														var aHTML = [];
+
+														aHTML.push('<table class="ns1blankspaceContainer">' +
+																		'<tr class="ns1blankspaceContainer">' +
+																		'<td id="ns1blankspaceImportItemsColumn1">' + ns1blankspace.xhtml.loading + '</td>' +
+																		'<td id="ns1blankspaceImportItemsColumn2" style="width:100px;"></td>' +
+																		'</tr>' +
+																		'</table>');				
+														
+														$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
+
+														var aHTML = [];
+														
+														aHTML.push('<table class="ns1blankspaceColumn2">');
+																
+														aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportMappingsApply" class="ns1blankspaceAction">' +
+																		'Confirm & apply mappings</span></td></tr>');
+
+														aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																		'Confirm uploaded bank transactions and apply any configured mappings.</td></tr>');
+
+														if (false)
+														{	
+														aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportCreateItems" class="ns1blankspaceAction">' +
+																		'Create payments & receipts</span></td></tr>');
+
+														aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																		'Create payments and receipts within this space based on confirmed bank transactions.<br /><br />If you have already created invoices, expenses, payments or receipts, then use the Reconcile option.</td></tr>');
+														}
+
+														aHTML.push('</table>');					
+														
+														$('#ns1blankspaceImportItemsColumn2').html(aHTML.join(''));
+														
+														$('#ns1blankspaceBankAccountImportMappingsApply').button(
+														{
+															label: 'Confirm & apply mappings',
+														})
+														.click(function()
+														{	
+															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
+														}).
+														css('width', '100px');
+
+														$('#ns1blankspaceBankAccountImportCreateItems').button(
+														{
+															label: 'Create payments & receipts',
+														})
+														.click(function()
+														{	
+															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
+														}).
+														css('width', '100px');
+
+														var oSearch = new AdvancedSearch();
+														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
+														oSearch.addField('amount,area,areatext,bankaccount,bankaccounttext,capital,category,categorytext,' +
+																			'contactbusiness,contactbusinesstext,contactperson,contactpersontext,description,' +
+																			'externalid,financialaccount,financialaccounttext,posteddate,project,projecttext,' +
+																			'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+														oSearch.sort('posteddate', 'desc');
+														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+														if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
+														oSearch.rows = 200;
+														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.items.show(oParam, data)});
+													}
+													else
+													{
+														var aHTML = [];
+					
+														aHTML.push('<table id="ns1blankspaceFinancialBankImportItems" class="ns1blankspaceColumn2" style="font-size:0.875em;">');
+													
+														if (oResponse.data.rows.length == 0)
+														{
+															aHTML.push('<tr><td class="ns1blankspaceNothing">No transactions.</td></tr>');
+															aHTML.push('</table>');
+														}
+														else
+														{		
+															aHTML.push('<tr class="ns1blankspaceCaption">');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Status</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+															aHTML.push('</tr>');
+															
+															$(oResponse.data.rows).each(function()
+															{
+																aHTML.push(ns1blankspace.financial.bankAccount.import.items.row(this));
+															});	
+														}
+															
+														aHTML.push('</table>');
+													
+														$('#ns1blankspaceImportItemsColumn1').html(aHTML.join(''));
+
+														$('#ns1blankspaceFinancialBankImportItems .ns1blankspaceRowEdit').button(
+														{
+															text: false,
+														 	icons: {primary: "ui-icon-plus"}
+														})
+														.click(function()
+														{
+															ns1blankspace.financial.bankAccount.import.items.edit({xhtmlElementID: this.id})
+														})
+														.css('width', '15px')
+														.css('height', '20px');
+													}
+												},
+
+									row:		function (oRow)
+												{
+													var aHTML = [];
+
+													if (oRow.processeddate != '')
+													{
+														aHTML.push('<tr id="ns1blankspaceFinancialImportItem_container-' + oRow.id + '" class="ns1blankspaceRow">');
+
+														aHTML.push('<td id="ns1blankspaceFinancialImportItem_Date-' + oRow.id + '" class="ns1blankspaceRow">' +
+																						oRow.posteddate + '</td>');
+																							
+														aHTML.push('<td id="ns1blankspaceFinancialImportItem_Description-' + oRow.id + '" class="ns1blankspaceRow">' +
+																				oRow.description + '</td>');
+
+														aHTML.push('<td id="ns1blankspaceFinancialImportItem_Amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																				 parseFloat(Math.abs(oRow.amount)).toFixed(2) +
+																				 '<br /><span class="ns1blankspaceSub">' + oRow.categorytext + '</span></td>');						
+																		
+														aHTML.push('<td class="ns1blankspaceRow">');
+
+														aHTML.push((oRow.status==3?'Confirmed':oRow.statustext));
+
+														if (oRow.status == 3)
+														{	
+															if (oRow.financialaccounttext != '')
+															{
+																aHTML.push('<br /><span class="ns1blankspaceSub">Financial account is</span><br />' + oRow.financialaccounttext);
+															}
+
+															if (this.taxtype != '')
+															{
+																aHTML.push('<br /><span class="ns1blankspaceSub">' + ns1blankspace.option.taxVATCaption + ' is</span>' +
+																			'<br />' + (oRow.category==1?oRow.taxtyperevenuetext:oRow.taxtypeexpensetext));
+															}
+														}	
+
+														aHTML.push('</td>');
+
+														aHTML.push('<td class="ns1blankspaceRow">');
+
+														if (oRow.status == 3)
+														{	
+															aHTML.push('<span id="ns1blankspaceFinancialImportItem_options_edit-' + oRow.id + '-' + (oRow.amount>0?1:2) + '" class="ns1blankspaceRowEdit"' +
+																		' data-amount="' + Math.abs(oRow.amount) + '"' +
+																		' data-type="' + (oRow.amount<0?1:2) + '"' +
+																		' data-taxtype="' + oRow.taxtype + '"' +
+																		' data-financialaccount="' + oRow.financialaccount + '"' +
+																		' data-financialaccounttext="' + oRow.financialaccounttext + '"' +
+																		' data-description="' + oRow.description + '"' +
+																		'></span>');
+														}
+
+														aHTML.push('</td></tr>');
+													}
+														
+													return aHTML.join('');
+												},
+
+									edit: 		function (oParam)
+												{
+													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+													var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+													var iType = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 2}).value;
+													var cAmount = ns1blankspace.util.getData(oParam, 'data-amount').value;
+													var iTaxType = ns1blankspace.util.getData(oParam, 'data-taxtype').value;
+													var iFinancialAccount = ns1blankspace.util.getData(oParam, 'data-financialaccount').value;
+													var sFinancialAccountText = ns1blankspace.util.getData(oParam, 'data-financialaccounttext').value;
+													var sDescription = ns1blankspace.util.getData(oParam, 'data-description').value;
+
+													if ($('#ns1blankspaceFinancialImportItem_container_edit-' + sKey).length != 0)
+													{
+														$('#ns1blankspaceFinancialImportItem_container_edit-' + sKey).remove();
+													}
+													else
+													{
+														var aHTML = [];
+
+														aHTML.push('<table class="ns1blankspace" style="width:290px;">');							
+															
+														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+																		'Business' +
+																		'</td></tr>' +
+																		'<tr><td class="ns1blankspaceSelect">' +
+																		'<input id="ns1blankspaceItemsEditContactBusiness_' + sKey + '" class="ns1blankspaceSelect"' +
+																			' data-method="CONTACT_BUSINESS_SEARCH"' +
+																			' data-columns="tradename">' +
+																		'</td></tr>');
+																	
+														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+																		'Person' +
+																		'</td></tr>' +
+																		'<tr><td class="ns1blankspaceSelect">' +
+																		'<input id="ns1blankspaceItemsEditContactPerson_' + sKey + '" class="ns1blankspaceSelect"' +
+																			' data-method="CONTACT_PERSON_SEARCH"' +
+																			' data-columns="surname"' +
+																			' data-parent="ns1blankspaceItemsEditContactBusiness_' + sKey + '"' +
+																			' data-parent-search-id="contactbusiness"' +
+																			' data-parent-search-text="tradename">' +
+																		'</td></tr>');		
+																			
+														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+																		ns1blankspace.option.taxVATCaption + ' Type' +
+																		'</td></tr>' +
+																		'<tr><td id="ns1blankspaceFinancialTaxCode_' + sKey + '" class="ns1blankspaceRadio">' +
+																		ns1blankspace.xhtml.loadingSmall +
+																		'</td></tr>');	
+
+														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+																		ns1blankspace.option.taxVATCaption + ' Amount' +
+																		'</td></tr>' +
+																		'<tr><td class="ns1blankspaceText">' +
+																		'<input id="ns1blankspaceItemTax_' + sKey + '" class="ns1blankspaceText">' +
+																		'</td></tr>');
+	
+														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+																		'Description' +
+																		'</td></tr>' +
+																		'<tr><td class="ns1blankspaceTextMulti">' +
+																		'<textarea rows="2" cols="35" id="ns1blankspaceItemsEditDescription_' + sKey + '" class="ns1blankspaceTextMultiSmall"></textarea>' +
+																		'</td></tr>');
+														
+														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+																		'Financial Account' +
+																		'</td></tr>' +
+																		'<tr><td class="ns1blankspaceSelect">' +
+																		'<input id="ns1blankspaceFinancialAccount_' + sKey + '" class="ns1blankspaceSelect"' +
+																			' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+																			' data-columns="title">' +
+																		'</td></tr>');	
+
+														aHTML.push('</table>');	
+
+														$('#ns1blankspaceFinancialImportItem_container-' + sKey).after('<tr id="ns1blankspaceFinancialImportItem_container_edit-' + sKey + '">' +
+																		'<td colspan=5 class="ns1blankspaceRow"><div style="background-color: #F3F3F3; padding:5px; margin-bottom:15px;">' + aHTML.join('') + '</div></td></tr>');
+
+														$('#ns1blankspaceFinancialAccount_' + sKey).attr('data-id', iFinancialAccount);
+														$('#ns1blankspaceFinancialAccount_' + sKey).val(sFinancialAccountText);
+
+														$('#ns1blankspaceItemsEditDescription_' + sKey).val(sDescription);
+
+														$('#ns1blankspaceItemsEditContactBusiness-' + sKey).focus();
+
+														ns1blankspace.financial.util.tax.codes(
+														{
+															xhtmlElementID: 'ns1blankspaceFinancialTaxCode_' + sKey,
+															xhtmlElementName: 'radioTaxCode_' + sKey,
+															id: iTaxType,
+															type: iType,
+														});
+
+														ns1blankspace.financial.util.tax.calculate(
+														{
+															amount: cAmount,
+															taxXHTMLElementID: 'ns1blankspaceItemTax_' + sKey,
+															taxTypeXHTMLElementName: 'radioTaxCode_' + sKey
+														});
+
+														$('[name="radioTaxCode_' + sKey + '"]').click(function()
+														{
+															ns1blankspace.financial.util.tax.calculate(
+															{
+																amount: cAmount,
+																taxXHTMLElementID: 'ns1blankspaceItemTax_' + sKey
+															});
+														});
+													}
+												},
+
+									save: 		{
+													send: 		function()
+																{
+
+																},
+
+													process: 	function ()
+																{
+
+																}		
+												}							
+
+									remove: 	function (oParam)
+												{
+													var sID;
+													var sXHTMLElementID;
+
+													if (oParam != undefined)
+													{
+														if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+													}
+													
+													if (sXHTMLElementID != undefined)
+													{
+														var aXHTMLElementID = sXHTMLElementID.split('-');
+														var sID = aXHTMLElementID[1];
+													}	
+															
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
+														data: 'remove=1&id=' + sID,
+														dataType: 'json',
+														success: function(data)
+														{
+															if (data.status == 'OK')
+															{
+																$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+															}
+															else
+															{
+																ns1blankspace.status.error(oResponse.error.errornotes);
+															}
+														}
+													});
+												}			
+								}									
+				},			
+
 	reconcile: 	{
 					show: 		function (oParam, oResponse)
 								{
@@ -2230,1043 +3453,5 @@ ns1blankspace.financial.bankAccount =
 
 												}	
 								}
-				},
-
-	import: 	{			
-					show:		function (oParam, oResponse)
-								{
-									if (oResponse == undefined)
-									{
-										var aHTML = [];
-										
-										aHTML.push('<table class="ns1blankspaceContainer">' +
-													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceBankAccountImportColumn1" style="width: 100px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
-													ns1blankspace.xhtml.loading +
-													'</td>' +
-													'<td id="ns1blankspaceBankAccountImportColumn2" class="ns1blankspaceColumn2">' +
-													'</td>' +
-													'</tr>' +
-													'</table>');				
-										
-										$('#ns1blankspaceMainImport').html(aHTML.join(''));
-
-										var oSearch = new AdvancedSearch();
-										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_SEARCH';
-										oSearch.addField('startdate,enddate,processeddate');
-										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.sort('processeddate', 'desc');
-										oSearch.rows = 20;
-										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.show(oParam, data)});
-									}
-									else
-									{
-										var aHTML = [];
-										
-										if (oResponse.data.rows.length == 0)
-										{
-											aHTML.push('<table id="tableInterfaceFinancialHomeMostLikely">');
-											
-											aHTML.push('<tr><td class="ns1blankspaceNothing">No existing imports.</td></tr>');
-
-											aHTML.push('</table>');
-											
-											$('#ns1blankspaceBankAccountImportColumn1').html(aHTML.join(''));	
-										}
-										else
-										{		
-											aHTML.push('<table class="ns1blankspace">');
-											
-											$(oResponse.data.rows).each(function(i) 
-											{
-												aHTML.push(ns1blankspace.financial.bankAccount.import.row(this));
-											});
-											
-											aHTML.push('</table>');
-											
-											$('#ns1blankspaceBankAccountImportColumn1').html(aHTML.join(''));
-										}
-											
-										$('#ns1blankspaceBankAccountImportAdd').button(
-										{
-											label: "Add"
-										})
-										.click(function() {
-											ns1blankspace.financial.bankAccount.import.add();
-										})
-										.css("width", "75px");
-										
-										$('.ns1blankspaceBankAccountImportRowSelect').click(function()
-										{
-											var aID = (this.id).split('-');
-											ns1blankspace.financial.bankAccount.import.items.show({fileSource: aID[1]});
-										});
-
-										ns1blankspace.financial.bankAccount.import.add();
-									}
-								},
-
-					row:		function (oRow)
-								{
-									var aHTML = [];
-
-									if (oRow.processeddate != '')
-									{
-										aHTML.push('<tr class="ns1blankspaceRow">');
-
-										aHTML.push('<td id="ns1blankspaceBankAccountImport_processeddate-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountImportRowSelect"' +
-																'">' + oRow.processeddate + '<br />');
-															
-										if (oRow.startdate != '')
-										{		
-											aHTML.push('<span class="ns1blankspaceSub" id="ns1blankspaceBankAccountImport_startdate-' + oRow.id + '">' +
-																oRow.startdate + '</span><br />');	
-										}
-
-										if (oRow.enddate != oRow.startdate)
-										{		
-											aHTML.push('<span class="ns1blankspaceSub" id="ns1blankspaceBankAccountImport_enddate-' + oRow.id + '">' +
-																oRow.enddate + '</span><br />');	
-										}
-									
-										aHTML.push('</tr>');
-									}
-										
-									return aHTML.join('');
-								},
-
-					add:		function (oParam, oResponse)
-								{
-									var iObjectContext = ns1blankspace.objectContext;
-									var oOptions = {view: true, remove: true, automation: true};
-									var oActions = {add: true};
-
-									if (oParam != undefined)
-									{
-										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-										if (oParam.xhtmlElementId != undefined) {sXHTMLElementId = oParam.xhtmlElementId}
-										if (oParam.options != undefined) {oOptions = oParam.options}
-										if (oParam.actions != undefined) {oActions = oParam.actions}
-									}		
-										
-									if (oResponse == undefined)
-									{	
-										var aHTML = [];
-										
-										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>');							
-										aHTML.push(ns1blankspace.attachments.upload.show(
-														{	
-															object: 28,
-															objectContext: -1,
-															label: ''
-														}));
-										
-										aHTML.push('</td></tr></table>');
-
-										$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
-										
-										$('input.ns1blankspaceUpload').change(function()
-										{
-											if ($(this).val() != '')
-											{
-												$('#ns1blankspaceUpload').button(
-												{
-													label: "Upload Bank File"
-												})
-												.click(function()
-												{
-													if ($('#oFile0').val() == '')
-													{
-														ns1blankspace.status.error("Need to select a file.");
-													}
-													else
-													{
-														var sData = 'processeddate=' + Date.today().toString("dd-MMM-yyyy");
-														sData += '&bankaccount=' + ns1blankspace.objectContext;
-														
-														$.ajax(
-														{
-															type: 'POST',
-															url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_MANAGE'),
-															data: sData,
-															dataType: 'json',
-															success: function(data) {
-																ns1blankspace.financial.bankAccount.import.add(oParam, data);
-															}
-														});
-													}
-												});
-											}
-										});	
-									}
-									else
-									{
-										if (oResponse.status == 'OK')
-										{
-											$('#objectcontext').val(oResponse.id);	
-											ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.financial.bankAccount.import.process});
-										}	
-									}	
-								},
-
-					process:	function (oResponse)
-								{
-									if (oResponse == undefined)
-									{
-										var oSearch = new AdvancedSearch();
-										oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-										oSearch.addField('type,filename,description,download,modifieddate');
-										oSearch.addFilter('object', 'EQUAL_TO', 28);
-										oSearch.addFilter('objectcontext', 'EQUAL_TO', $('#objectcontext').val());
-										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.process(data)});
-									}
-									else
-									{
-										if (oResponse.data.rows.length !=0)
-										{	
-											var sData = 'id=' + oResponse.data.rows[0].id;
-									
-											ns1blankspace.status.working();
-
-											$('#ns1blankspaceUploadStatus').html('Processing file transactions...');
-
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_PROCESS'),
-												data: sData,
-												dataType: 'json',
-												success: function(data) {
-													ns1blankspace.status.message('Transactions processed.')
-													ns1blankspace.financial.bankAccount.import.show();
-												}
-											});	
-										}
-									}	
-								},
-
-					items:   	{
-									data: 		{},
-
-									show:		function(oParam, oResponse)
-												{
-													var iFileSource;
-								
-													if (oParam != undefined)
-													{
-														if (oParam.fileSource != undefined) {iFileSource = oParam.fileSource}
-													}		
-
-													if (oResponse === undefined)
-													{	
-														ns1blankspace.financial.bankAccount.import.items.data = {};
-
-														var aHTML = [];
-
-														aHTML.push('<table class="ns1blankspaceContainer">' +
-																		'<tr class="ns1blankspaceContainer">' +
-																		'<td id="ns1blankspaceImportItemsColumn1">' + ns1blankspace.xhtml.loading + '</td>' +
-																		'<td id="ns1blankspaceImportItemsColumn2" style="width:120px;"></td>' +
-																		'</tr>' +
-																		'</table>');				
-														
-														$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
-
-														var aHTML = [];
-														
-														aHTML.push('<table class="ns1blankspaceColumn2">');
-																
-														aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportMappingsApply" class="ns1blankspaceAction">' +
-																		'Confirm & apply mappings</span></td></tr>');
-
-														aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																		'Confirm uploaded bank transactions and apply any configured mappings.</td></tr>');
-
-														aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportCreateItems" class="ns1blankspaceAction">' +
-																		'Create payments & receipts</span></td></tr>');
-
-														aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																		'Create payments and receipts within this space based on confirmed bank transactions.<br /><br />If you have already created invoices, expenses, payments or receipts, then use the Reconcile option.</td></tr>');
-
-														aHTML.push('</table>');					
-														
-														$('#ns1blankspaceImportItemsColumn2').html(aHTML.join(''));
-														
-														$('#ns1blankspaceBankAccountImportMappingsApply').button(
-														{
-															label: 'Confirm & apply mappings',
-														})
-														.click(function()
-														{	
-															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
-														}).
-														css('width', '100px');
-
-														$('#ns1blankspaceBankAccountImportCreateItems').button(
-														{
-															label: 'Create payments & receipts',
-														})
-														.click(function()
-														{	
-															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
-														}).
-														css('width', '100px');
-
-														var oSearch = new AdvancedSearch();
-														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
-														oSearch.addField('amount,area,areatext,bankaccount,bankaccounttext,capital,category,categorytext,' +
-																			'contactbusiness,contactbusinesstext,contactperson,contactpersontext,description,' +
-																			'externalid,financialaccount,financialaccounttext,posteddate,project,projecttext,' +
-																			'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
-														oSearch.sort('posteddate', 'desc');
-														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-														if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
-														oSearch.rows = 200;
-														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.items.show(oParam, data)});
-													}
-													else
-													{
-														var aHTML = [];
-					
-														aHTML.push('<table id="ns1blankspaceFinancialBankImportItems" class="ns1blankspaceColumn2" style="font-size:0.875em;">');
-													
-														if (oResponse.data.rows.length == 0)
-														{
-															aHTML.push('<tr><td class="ns1blankspaceNothing">No transactions.</td></tr>');
-															aHTML.push('</table>');
-														}
-														else
-														{		
-															aHTML.push('<tr class="ns1blankspaceCaption">');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-															aHTML.push('</tr>');
-															
-															$(oResponse.data.rows).each(function()
-															{
-																aHTML.push('<tr class="ns1blankspaceRow">');
-																	
-																aHTML.push('<td id="ns1blankspaceFinancialImportItem_Date-' + this.id + '" class="ns1blankspaceRow">' +
-																						this["posteddate"] + '</td>');
-																							
-																aHTML.push('<td id="ns1blankspaceFinancialImportItem_Description-' + this.id + '" class="ns1blankspaceRow">' +
-																						this["description"] + '</td>');
-
-																aHTML.push('<td id="ns1blankspaceFinancialImportItem_Amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-																						 parseFloat(this["amount"]).toFixed(2) + '</td>');						
-																				
-																aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSub">');
-
-																if (this.status == 0)
-																{	
-																	aHTML.push('<span id="ns1blankspaceFinancialImportItem_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
-																}
-																else
-																{
-																	aHTML.push((this.status==3?'Confirmed':this.statustext));
-																}
-
-																aHTML.push('</td>');					
-																																			
-																aHTML.push('</tr>');
-															});	
-														}
-															
-														aHTML.push('</table>');
-													
-														$('#ns1blankspaceImportItemsColumn1').html(aHTML.join(''));
-
-														$('#ns1blankspaceFinancialBankImportItems .ns1blankspaceRowRemove').button(
-														{
-															text: false,
-														 	icons: {primary: "ui-icon-close"}
-														})
-														.click(function() {
-															$.extend(true, oParam, {step: 5, xhtmlElementID: this.id});
-															ns1blankspace.financial.bankAccount.import.items.remove({xhtmlElementID: this.id})
-														})
-														.css('width', '15px')
-														.css('height', '20px')
-
-													}
-												},
-
-									remove: 	function (oParam)
-												{
-													var sID;
-													var sXHTMLElementID;
-
-													if (oParam != undefined)
-													{
-														if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-													}
-													
-													if (sXHTMLElementID != undefined)
-													{
-														var aXHTMLElementID = sXHTMLElementID.split('-');
-														var sID = aXHTMLElementID[1];
-													}	
-															
-													$.ajax(
-													{
-														type: 'POST',
-														url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
-														data: 'remove=1&id=' + sID,
-														dataType: 'json',
-														success: function(data)
-														{
-															if (data.status == 'OK')
-															{
-																$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-															}
-															else
-															{
-																ns1blankspace.status.error(oResponse.error.errornotes);
-															}
-														}
-													});
-												}			
-								}									
-				},
-
-	mapping: 	{
-					show:	function (oParam, oResponse)
-							{
-								var iObject = ns1blankspace.object;
-								var iObjectContext = ns1blankspace.objectContext;
-								var sNamespace;
-								var bRefresh = false;
-								
-								if (oParam != undefined)
-								{
-									if (oParam.object != undefined) {iObject = oParam.object}
-									if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-									if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
-									if (oParam.refresh != undefined) {bRefresh = oParam.refresh}		
-								}
-								else
-								{
-									oParam = {}
-								}	
-									
-								if (oResponse == undefined)
-								{	
-									if (!bRefresh)
-									{	
-										var aHTML = [];
-
-										aHTML.push('<table class="ns1blankspaceContainer">' +
-														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceMappingColumn1" class="ns1blankspaceColumn1Flexible">' +
-														ns1blankspace.xhtml.loading + '</td>' +
-														'<td id="ns1blankspaceMappingColumn2" class="ns1blankspaceColumn2" style="width:350px;"></td>' +
-														'</tr></table>');					
-										
-										$('#ns1blankspaceMainMapping').html(aHTML.join(''));
-										
-										var aHTML = [];
-										
-										aHTML.push('<table class="ns1blankspaceColumn2">');
-										
-										
-										aHTML.push('<tr><td class="ns1blankspaceAction">' +
-														'<span id="ns1blankspaceMappingAdd">Add</span>' +
-														'</td></tr>');
-							
-										
-										aHTML.push('</table>');					
-										
-										$('#ns1blankspaceMappingColumn2').html(aHTML.join(''));
-									
-										$('#ns1blankspaceMappingAdd').button(
-										{
-											label: "Add"
-										})
-										.click(function() {
-											 ns1blankspace.financial.bankAccount.mapping.edit(oParam);
-										});										
-									
-									}
-
-									var oSearch = new AdvancedSearch();
-									oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_SEARCH';
-									oSearch.addField('description,descriptionmatchtype,descriptionmatchtypetext,mapfrom,mapfromdescription,mapfromtext,' +
-														'maporder,maptodescription,maptofinancialaccount,maptofinancialaccounttext,' +
-														'matchtype,matchtypetext,project,projecttext,status,statustext,' +
-														'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
-									oSearch.sort('description', 'asc');
-									
-									oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.mapping.show(oParam, data)});
-								}
-								else
-								{
-									var aHTML = [];
-									
-									if (oResponse.data.rows.length == 0)
-									{
-										aHTML.push('<table><tr><td class="ns1blankspaceNothing">' +
-													'You can set up mappings to make it easier to create receipts' +
-													' and payments with in this space.' +
-													'<br /><br />' +
-													'ie. if the bank transaction description contains <i>fees</i>,' +
-													'then set the financial account as <i>Bank Charges</i>.' +
-													'</td></tr></table>');
-
-										$('#ns1blankspaceMappingColumn1').html(aHTML.join(''));
-									}
-									else
-									{
-										var sWhere;
-										var sTo;
-
-										aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFinancialBankAccountMappings" style="font-size:0.875em;">');
-
-										aHTML.push('<tr>');
-										aHTML.push('<td class="ns1blankspaceHeaderCaption">Where</td>');
-										aHTML.push('<td class="ns1blankspaceHeaderCaption">Set</td>');
-										aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-										aHTML.push('</tr>');
-
-										$.each(oResponse.data.rows, function()
-										{
-											sWhere = '';
-											sTo = '';
-
-											if (this.mapfromdescription != '')
-											{	
-												sWhere = '<span class="ns1blankspaceSub">Description ' + (this.descriptionmatchtype==1?'exactly matches':'contains') + '</span>';
-												sWhere = sWhere + '<br />' + this.mapfromdescription;
-											}	
-
-											aHTML.push('<tr class="ns1blankspaceRow">');
-																		
-											aHTML.push('<td id="ns1blankspaceMapping_where-' + this.id + '" class="ns1blankspaceRow">' +
-															sWhere + '</td>');
-											
-											if (this.maptofinancialaccounttext != '')
-											{
-												sTo = '<span class="ns1blankspaceSub">Account to</span>';
-												sTo = sTo + '<br />' + this.maptofinancialaccounttext;
-											}
-
-											aHTML.push('<td id="ns1blankspaceItem_to-' + this.id + '" class="ns1blankspaceRow">' +
-															sTo + '</td>');
-
-											aHTML.push('<td style="width:40px;text-align:right;" class="ns1blankspaceRow">');
-											aHTML.push('<span id="ns1blankspaceRowMapping_options_remove-' + this.id + '" class="ns1blankspaceRemove"></span>');
-											aHTML.push('<span id="ns1blankspaceRowMapping_options_edit-' + this.id + '" class="ns1blankspaceEdit"></span>');
-											aHTML.push('</td></tr>');
-										});
-										
-										aHTML.push('</table>');
-
-										$('#ns1blankspaceMappingColumn1').html(aHTML.join(''));
-										
-										$('#ns1blankspaceFinancialBankAccountMappings .ns1blankspaceRemove').button( {
-											text: false,
-											icons: {
-												primary: "ui-icon-close"
-											}
-										})
-										.click(function() {
-											oParam.xhtmlElementID = this.id;
-											ns1blankspace.financial.bankAccount.mapping.remove(oParam);
-										})
-										.css('width', '15px')
-										.css('height', '17px')
-								
-										$('#ns1blankspaceFinancialBankAccountMappings .ns1blankspaceEdit').button( {
-											text: false,
-											icons: {
-												primary: "ui-icon-pencil"
-											}
-										})
-										.click(function() {
-											ns1blankspace.financial.bankAccount.mapping.edit({xhtmlElementID: this.id})
-										})
-										.css('width', '15px')
-										.css('height', '17px')	
-									}
-								}	
-							},
-
-					remove:	function (oParam, oResponse)
-							{								
-								var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-								var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-								
-								if (oResponse == undefined)
-								{	
-									$.ajax(
-									{
-										type: 'POST',
-										url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_MANAGE'),
-										data: 'remove=1&id=' + sID,
-										dataType: 'json',
-										success: function(data)
-										{
-											ns1blankspace.financial.bankAccount.mapping.remove(oParam, data)
-										}
-									});
-								}	
-								else
-								{
-									if (oResponse.status == 'OK')
-									{
-										$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-									}
-									else
-									{
-										ns1blankspace.status.error(oResponse.error.errornotes);
-									}
-								}	
-							},
-
-					edit:	function (oParam, oResponse)
-							{
-								var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
-								var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
-								var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, default: ''}).value;
-
-								if (iStep == 1)
-								{
-									var aHTML = [];
-									
-									aHTML.push('<table class="ns1blankspaceContainer">' +
-														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceMappingEditColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-														'<td id="ns1blankspaceMappingEditColumn2" class="ns1blankspaceColumn2" style="width:50px;"></td>' +
-														'</tr></table>');
-
-									$('#ns1blankspaceMappingColumn2').html(aHTML.join(''));
-
-									var aHTML = [];
-
-									aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
-							
-									aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-													'Where Description' +
-													'</td></tr>' +
-													'<tr><td class="ns1blankspaceRadio">' +
-													'<input type="radio" id="radioMatch1" name="radioMatch" value="1"/>Exactly Matches' +
-													'<br /><input type="radio" id="radioMatch2" name="radioMatch" value="2"/>Contains' +
-													'</td></tr>');
-
-									aHTML.push('<tr><td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceFromMatchDescription" class="ns1blankspaceText">' +
-													'</td></tr>');
-
-									aHTML.push('<tr class="ns1blankspaceCaption">' +
-													'<td class="ns1blankspaceCaption">' +
-													'Set ' + ns1blankspace.option.taxVATCaption + ' Type' +
-													'</td></tr>' +
-													'<tr class="ns1blankspace">' +
-													'<td id="ns1blankspaceFinancialTaxCode" class="ns1blankspaceRadio">' +
-													ns1blankspace.xhtml.loadingSmall +
-													'</td></tr>');	
-
-									aHTML.push('<tr class="ns1blankspaceCaption">' +
-													'<td class="ns1blankspaceCaption">' +
-													'Account' +
-													'</td></tr>' +
-													'<tr class="ns1blankspace">' +
-													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
-													'</td></tr>');
-									
-									aHTML.push('</table>');
-									
-									aHTML.push('<table class="ns1blankspaceColumn2">');
-									
-									aHTML.push('<tr><td style="padding-top:5px;" id="ns1blankspaceItemAddSearchResults"><span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all or<br />start typing part of the account title.</span></td></tr>');
-																	
-									aHTML.push('</table>');		
-									
-									$('#ns1blankspaceMappingEditColumn1').html(aHTML.join(''));
-				
-									ns1blankspace.financial.util.tax.codes(
-									{
-										xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
-										type: iType
-									});
-
-									$('[name="radioTaxCode"]').click(function()
-									{
-										ns1blankspace.financial.util.tax.calculate(
-										{
-											amountXHTMLElementID: 'ns1blankspaceItemAmount',
-											taxXHTMLElementID: 'ns1blankspaceItemTax'
-										});
-									});
-
-									$('#ns1blankspaceItemAccount').keyup(function()
-									{
-										oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
-										if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-								        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.bankAccount.mapping.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
-									});
-					
-									$('#ns1blankspaceItemAmount').focus();
-
-									var iFinancialAccountType = (iType==1?2:1);
-									var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
-									{ 
-										return (a.type == iFinancialAccountType && a.postable == 'Y')
-									});
-
-									var aHTML = [];
-									
-									aHTML.push('<table class="ns1blankspaceColumn2">');
-											
-									aHTML.push('<tr><td><span id="ns1blankspaceMappingEditSave" class="ns1blankspaceAction">' +
-													'Save</span></td></tr>');
-
-									aHTML.push('<tr><td><span id="ns1blankspaceMappingEditCancel" class="ns1blankspaceAction">' +
-													'Cancel</span></td></tr>');
-													
-									aHTML.push('</table>');					
-									
-									$('#ns1blankspaceMappingEditColumn2').html(aHTML.join(''));
-									
-									$('#ns1blankspaceMappingEditSave').button(
-									{
-										text: "Save"
-									})
-									.click(function()
-									{
-										ns1blankspace.status.working();
-
-										var oData = 
-										{
-											descriptionmatchtype: $('input[name="radioMatch"]:checked').val(),
-											mapfromdescription: $('#ns1blankspaceFromMatchDescription').val(),
-											maptofinancialaccount: $('#ns1blankspaceItemAccount').attr('data-id'),
-											taxtype: $('input[name="radioTaxCode"]:checked').val(),
-											id: sID
-										}
-											
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_MANAGE'),
-											data: oData,
-											dataType: 'json',
-											success: function(oResponse)
-											{
-												ns1blankspace.status.message('Saved');
-												delete ns1blankspace.financial.bankAccount.reconcile.items.data.mappings;
-												ns1blankspace.financial.bankAccount.mapping.show(oParam)
-											}
-										});
-									})
-									.css('width', '70px');
-
-									$('#ns1blankspaceMappingEditCancel').button(
-									{
-										text: "Cancel"
-									})
-									.click(function()
-									{
-										ns1blankspace.financial.bankAccount.mapping.show();
-									})
-									.css('width', '70px');
-
-									if (sID != '')
-									{
-										ns1blankspace.status.working();
-
-										var oSearch = new AdvancedSearch();
-										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_SEARCH';
-										oSearch.addField('description,descriptionmatchtype,descriptionmatchtypetext,mapfrom,mapfromdescription,mapfromtext,' +
-														'maporder,maptodescription,maptofinancialaccount,maptofinancialaccounttext,' +
-														'matchtype,matchtypetext,project,projecttext,status,statustext,' +
-														'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
-										oSearch.addFilter('id', 'EQUAL_TO', sID)
-									
-										oSearch.getResults(function(data)
-										{
-											oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
-											ns1blankspace.financial.bankAccount.mapping.edit(oParam, data);
-										});
-									}
-									else
-									{
-										$('[name="radioMatch"][value="1"]').attr('checked', true);
-										$('[name="radioTaxCode"][value="1"]').attr('checked', true);
-									}
-
-									if (oData.length < 21)
-									{	
-										oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
-										ns1blankspace.financial.item.edit(oParam, oData);
-									}	
-								}
-
-								if (iStep == 2 && oResponse !== undefined)
-								{	
-									ns1blankspace.status.message('');
-
-									var oRow = oResponse.data.rows[0];
-
-									$('[name="radioMatch"][value="' + oRow.descriptionmatchtype + '"]').attr('checked', true);
-									$('#ns1blankspaceFromMatchDescription').val(oRow.mapfromdescription);
-									$('#ns1blankspaceItemAccount').val(oRow.maptofinancialaccounttext)
-									$('#ns1blankspaceItemAccount').attr('data-id', oRow.maptofinancialaccount);
-									$('[name="radioTaxCode"][value="' + oRow.taxtype + '"]').attr('checked', true);
-								}
-
-								if (iStep == 3)
-								{	
-									if (oResponse == undefined)
-									{	
-										ns1blankspace.status.working();
-
-										var iFinancialAccountType = (iType==1?2:1);
-										var sSearch = $('#ns1blankspaceItemAccount').val()
-
-										if (sSearch == '')
-										{
-											var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
-											{ 
-												return (a.type == iFinancialAccountType && a.postable == 'Y')
-											});
-										}
-										else
-										{
-											sSearch = sSearch.toLowerCase();
-											var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
-											{
-												return (a.type == iFinancialAccountType && (a.title).toLowerCase().indexOf(sSearch) != -1 && a.postable == 'Y')
-											});
-										}	
-
-										ns1blankspace.financial.bankAccount.mapping.edit(oParam, oData);
-									}
-									else
-									{
-										ns1blankspace.status.message('');
-
-										var aHTML = [];
-										
-										if (oResponse.length == 0)	
-										{
-											aHTML.push('<table class="ns1blankspace">' +
-															'<tr><td class="ns1blankspaceNothing">No accounts.</td></tr>' + 
-															'</table>');
-
-											$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''));		
-										}
-										else
-										{	
-											aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">');
-											
-											$.each(oResponse, function() 
-											{ 
-												aHTML.push('<tr class="ns1blankspaceRow">'+ 
-																'<td id="ns1blankspaceMappingAccount_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-																this.title +
-																'</td></tr>');	
-											});
-											
-											aHTML.push('</table>');
-
-											$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''))
-											
-											$('.ns1blankspaceRowSelect').click(function()
-											{
-												$('#ns1blankspaceItemAccount').val($(this).html())
-												$('#ns1blankspaceItemAccount').attr('data-id',(this.id).split('-')[1]);
-												$('#ns1blankspaceItemAddSearchResults').html('');
-											});
-										}
-									}	
-								}
-							},
-
-					apply:	{
-
-								init: 		function (oParam, oResponse)
-											{
-												var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
-												var iFileSource = ns1blankspace.util.getParam(oParam, 'fileSource').value;
-
-												if (iStep == 1)
-												{
-													if (ns1blankspace.financial.bankAccount.reconcile.items.data.mappings === undefined)
-													{
-														ns1blankspace.status.working('Getting mappings...');
-
-														var oSearch = new AdvancedSearch();
-														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_SEARCH';
-														oSearch.addField('description,descriptionmatchtype,descriptionmatchtypetext,mapfrom,mapfromdescription,mapfromtext,' +
-																		'maporder,maptodescription,maptofinancialaccount,maptofinancialaccounttext,' +
-																		'matchtype,matchtypetext,project,projecttext,status,statustext,' +
-																		'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
-
-														oSearch.rows = 200;
-														
-														oSearch.getResults(function(oResponse)
-														{
-															ns1blankspace.status.message('');
-															oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
-															ns1blankspace.financial.bankAccount.reconcile.items.data.mappings = oResponse.data.rows;
-															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam);
-														});
-													}
-													else
-													{
-														oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
-														ns1blankspace.financial.bankAccount.mapping.apply.init(oParam);
-													}
-												}
-
-												if (iStep == 2)
-												{
-													oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
-													ns1blankspace.financial.bankAccount.reconcile.items.data.items = [];
-
-													var oSearch = new AdvancedSearch();
-													oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
-													oSearch.addField('amount,area,areatext,bankaccount,bankaccounttext,capital,category,categorytext,' +
-																		'contactbusiness,contactbusinesstext,contactperson,contactpersontext,description,' +
-																		'object,objectcontext,' +
-																		'externalid,financialaccount,financialaccounttext,posteddate,project,projecttext,' +
-																		'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
-													oSearch.sort('posteddate', 'desc');
-													oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-													if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
-													oSearch.rows = 100;
-													oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.mapping.apply.init(oParam, data)});
-												}
-
-												if (iStep == 3)
-												{
-													ns1blankspace.financial.bankAccount.reconcile.items.data.items =
-																	ns1blankspace.financial.bankAccount.reconcile.items.data.items.concat(oResponse.data.rows)
-
-													if (oResponse.morerows == 'true')
-													{
-														var sData =	'id=' + ns1blankspace.util.fs(oResponse.moreid) +
-																		'&startrow=' + (parseInt(oResponse.rows) + parseInt(oResponse.startrow)) + 
-																		'&rows=' + ns1blankspace.util.fs(oResponse.rows);
-														
-														$.ajax(
-														{
-															type: 'GET',
-															url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
-															data: sData,
-															dataType: 'json',
-															success: function(data){ns1blankspace.financial.bankAccount.mapping.apply.init(oParam, data)}
-														});
-													}	
-													else
-													{
-														oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
-														ns1blankspace.financial.bankAccount.mapping.apply.process(oParam);
-													}	
-												}	
-											},
-
-								match: 		function (oItem, oMapping)
-											{
-												var bMatch = false;
-
-												if (oItem.status == 1)
-												{	
-													if (oMapping.descriptionmatchtype == 1)
-													{	
-														if ((oItem.description).toUpperCase() == (oMapping.mapfromdescription).toUpperCase()) {bMatch = true};
-													}	
-
-													if (oMapping.descriptionmatchtype == 2 && oMapping.mapfromdescription != '')
-													{	
-														if ((oItem.description).toUpperCase().indexOf((oMapping.mapfromdescription).toUpperCase()) != -1) {bMatch = true};
-													}
-												}	
-
-												return bMatch;
-											},			
-
-								process: 	function (oParam)
-											{
-												var iFileSourceID = ns1blankspace.util.getParam(oParam, 'fileSource').value;
-												var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 0}).value;
-												var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
-												var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, default: ''}).value;
-												var iIndex = ns1blankspace.util.getParam(oParam, 'index', {default: 0}).value;
-
-												if (iStep == 0)
-												{
-													ns1blankspace.financial.bankAccount.mapping.apply.init(oParam);
-												}	
-												
-												if (iStep == 1)
-												{
-													ns1blankspace.status.working('Matching...')
-
-													$.each(ns1blankspace.financial.bankAccount.reconcile.items.data.items, function (i, v)
-													{
-														var aMatch = 
-														$.grep(ns1blankspace.financial.bankAccount.reconcile.items.data.mappings, function (a)
-														{
-															return ns1blankspace.financial.bankAccount.mapping.apply.match(v, a);
-														});  
-														
-														if (aMatch.length > 0)
-														{
-															oMatch = aMatch[0];
-															v.mapping = oMatch;
-														}
-													});
-
-													oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
-													ns1blankspace.financial.bankAccount.mapping.apply.process(oParam);
-												}
-
-												if (iStep == 2)
-												{	
-													if (iIndex < ns1blankspace.financial.bankAccount.reconcile.items.data.items.length)
-													{
-														ns1blankspace.status.working('Matching... (' + iIndex + '/' + ns1blankspace.financial.bankAccount.reconcile.items.data.items.length + ')');
-														
-														var oItem = ns1blankspace.financial.bankAccount.reconcile.items.data.items[iIndex];
-
-														var oData =
-														{
-															id: oItem.id,
-															status: 3
-														}
-
-														if (oItem.mapping != undefined)
-														{	
-															if (oItem.mapping.maptofinancialaccount != '') {oData.financialaccount = oItem.mapping.maptofinancialaccount}
-															if (oItem.mapping.maptodescription != '') {oData.description = oItem.mapping.maptodescription}
-															if (oItem.mapping.taxtype != '') {oData.taxtype = oItem.mapping.taxtype}
-														}		
-
-														$.ajax(
-														{
-															type: 'POST',
-															url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
-															data: oData,
-															dataType: 'json',
-															global: false,
-															success: 	function(data)
-																		{
-																			oParam = ns1blankspace.util.setParam(oParam, 'index', iIndex + 1);
-																			ns1blankspace.financial.bankAccount.mapping.apply.process(oParam)
-																		}
-														});
-													}
-													else
-													{
-														ns1blankspace.status.message('Confirmation complete');
-														ns1blankspace.financial.bankAccount.import.items.show(oParam);
-													}
-												}
-											}
-							}								
 				}				
 }								

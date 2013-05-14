@@ -3875,30 +3875,32 @@ ns1blankspace.financial.util =
 									var iType = 1;
 									var sXHTMLElementID;
 									var iID;
+									var sXHTMLElementName = 'radioTaxCode';
 								
 									if (oParam != undefined)
 									{
 										if (oParam.type != undefined) {iType = oParam.type}
 										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 										if (oParam.id != undefined) {iID = oParam.id}
+										if (oParam.xhtmlElementName != undefined) {sXHTMLElementName = oParam.xhtmlElementName}		
 									}
 
 									if (iType == 1)  //Sales
 									{	
-										var sHTML = '<input type="radio" id="radioTaxCode1" name="radioTaxCode" value="1" data-rate="10"/>Applies' +
-													'<br /><input type="radio" id="radioTaxCode2" name="radioTaxCode" value="2" data-rate="0"/>Export' +
-													'<br /><input type="radio" id="radioTaxCode3" name="radioTaxCode" value="3" data-rate="0"/>Free' +
-													'<br /><input type="radio" id="radioTaxCode4" name="radioTaxCode" value="4" data-rate="0"/>Input Taxed' +
-													'<br /><input type="radio" id="radioTaxCode5" name="radioTaxCode" value="5" data-rate="0"/>Excluded';
+										var sHTML = '<input type="radio" id="' + sXHTMLElementName + '1" name="' + sXHTMLElementName + '" value="1" data-rate="10"/>Applies' +
+													'<br /><input type="radio" id="' + sXHTMLElementName + '2" name="' + sXHTMLElementName + '" value="2" data-rate="0"/>Export' +
+													'<br /><input type="radio" id="' + sXHTMLElementName + '3" name="' + sXHTMLElementName + '" value="3" data-rate="0"/>Free' +
+													'<br /><input type="radio" id="' + sXHTMLElementName + '4" name="' + sXHTMLElementName + '" value="4" data-rate="0"/>Input Taxed' +
+													'<br /><input type="radio" id="' + sXHTMLElementName + '5" name="' + sXHTMLElementName + '" value="5" data-rate="0"/>Excluded';
 									}
 
 									if (iType == 2)  //Purchases
 									{	
-										var sHTML = '<input type="radio" id="radioTaxCode1" name="radioTaxCode" value="1" data-rate="10"/>Applies' +
-													'<br /><input type="radio" id="radioTaxCode2" name="radioTaxCode" value="2" data-rate="0"/>Input Taxed' +
-													'<br /><input type="radio" id="radioTaxCode3" name="radioTaxCode" value="3" data-rate="0"/>Free' +
-													'<br /><input type="radio" id="radioTaxCode4" name="radioTaxCode" value="4" data-rate="0"/>Entertainment' +
-													'<br /><input type="radio" id="radioTaxCode5" name="radioTaxCode" value="5" data-rate="0"/>Excluded';
+										var sHTML = '<input type="radio" id="' + sXHTMLElementName + '1" name="' + sXHTMLElementName + '" value="1" data-rate="10"/>Applies' +
+													'<br /><input type="radio" id="' + sXHTMLElementName + '2" name="' + sXHTMLElementName + '" value="2" data-rate="0"/>Input Taxed' +
+													'<br /><input type="radio" id="' + sXHTMLElementName + '3" name="' + sXHTMLElementName + '" value="3" data-rate="0"/>Free' +
+													'<br /><input type="radio" id="' + sXHTMLElementName + '4" name="' + sXHTMLElementName + '" value="4" data-rate="0"/>Entertainment' +
+													'<br /><input type="radio" id="' + sXHTMLElementName + '5" name="' + sXHTMLElementName + '" value="5" data-rate="0"/>Excluded';
 									}
 
 									if (sXHTMLElementID !== undefined)
@@ -3907,7 +3909,7 @@ ns1blankspace.financial.util =
 
 										if (iID !== undefined)
 										{
-											$('[name="radioTaxCode"][value="' + iID + '"]').attr('checked', true);
+											$('[name="' + sXHTMLElementName + '"][value="' + iID + '"]').attr('checked', true);
 										}	
 									}	
 									else
@@ -3932,7 +3934,8 @@ ns1blankspace.financial.util =
 										if (oParam.amountXHTMLElementID != undefined) {sAmountXHTMLElementID = oParam.amountXHTMLElementID}
 										if (oParam.tax != undefined) {cTax = oParam.tax}
 										if (oParam.taxXHTMLElementID != undefined) {sTaxXHTMLElementID = oParam.taxXHTMLElementID}
-										if (oParam.taxIncludedInAmount != undefined) {bTaxIncludedInAmount = oParam.taxIncludedInAmount}	
+										if (oParam.taxIncludedInAmount != undefined) {bTaxIncludedInAmount = oParam.taxIncludedInAmount}
+										if (oParam.taxTypeXHTMLElementName != undefined) {sRateXHTMLElementName = oParam.taxTypeXHTMLElementName}	
 									}
 
 									if (cRate === undefined)

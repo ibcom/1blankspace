@@ -336,7 +336,12 @@ ns1blankspace.app =
 								$(this).removeClass('ns1blankspaceWatermark');
 							}	
 						});		
-							
+						
+						$('input.ns1blankspaceSelect').live('focusout', function() 
+						{	
+							$(this).removeClass('ns1blankspaceHighlight');
+						});
+
 						$('input.ns1blankspaceSelect').live('focusin', function() 
 						{		
 							$('input.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
@@ -493,6 +498,7 @@ ns1blankspace.app =
 						$('input.ns1blankspaceText').live('focus', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
+							$(ns1blankspace.xhtml.container).hide();
 						});
 
 						$('input.ns1blankspaceText').live('keyup', function() 
@@ -508,6 +514,7 @@ ns1blankspace.app =
 						$('input.ns1blankspaceDate').live('focus', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
+							$(ns1blankspace.xhtml.container).hide();
 						});
 
 						$('input.ns1blankspaceDate').live('blur', function() 
@@ -518,6 +525,7 @@ ns1blankspace.app =
 						$('.ns1blankspaceTextMulti').live('focus', function()
 						{
 							$(this).addClass('ns1blankspaceHighlight');
+							$(ns1blankspace.xhtml.container).hide();
 						});
 
 						$('.ns1blankspaceTextMulti').live('blur', function() 
@@ -2893,10 +2901,12 @@ ns1blankspace.search =
 								{
 									$(ns1blankspace.xhtml.container).hide(200);
 									$.extend(true, oParam, {xhtmlElementID: event.target.id})
-									if (bMultiSelect) {
+									if (bMultiSelect)
+									{
 										ns1blankspace.search.multiSelect.add(oParam);
 									}
-									else {
+									else
+									{
 										ns1blankspace.search.show(oParam);
 									}
 								});
@@ -3111,6 +3121,31 @@ ns1blankspace.util =
 
 					return oReturn;
 				},
+
+	getData: 	function(oParam, sDataKey, oOption)
+				{
+					var sParam;
+				
+					var oReturn = {exists: false};
+
+					if (ns1blankspace.util.param(oOption, 'param').exists)
+					{
+						sParam = ns1blankspace.util.param(oOption, 'param').value;
+					}
+					else
+					{
+						sParam = 'xhtmlElementID';
+					}
+
+					if (ns1blankspace.util.param(oParam, sParam).exists)
+					{
+						var sXHTMLElementID = ns1blankspace.util.param(oParam, sParam).value;
+						oReturn.value = $('#' + sXHTMLElementID).attr(sDataKey);
+						oReturn.exists = true;
+					}
+					
+					return oReturn;
+				},			
 
 	param: 		function(oParam, sParam, sSplit)
 				{
