@@ -981,7 +981,7 @@ ns1blankspace.financial.bankAccount =
 										}
 										else
 										{		
-											aHTML.push('<table class="ns1blankspace">');
+											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceBankAccountImportSources">');
 											
 											$(oResponse.data.rows).each(function(i) 
 											{
@@ -993,17 +993,10 @@ ns1blankspace.financial.bankAccount =
 											$('#ns1blankspaceBankAccountImportColumn1').html(aHTML.join(''));
 										}
 											
-										$('#ns1blankspaceBankAccountImportAdd').button(
-										{
-											label: "Add"
-										})
-										.click(function() {
-											ns1blankspace.financial.bankAccount.import.add();
-										})
-										.css("width", "75px");
-										
 										$('.ns1blankspaceBankAccountImportRowSelect').click(function()
 										{
+											$('#ns1blankspaceBankAccountImportSources td.ns1blankspaceRowShaded').removeClass('ns1blankspaceRowShaded');
+											$('#' + this.id).addClass('ns1blankspaceRowShaded');
 											var aID = (this.id).split('-');
 											ns1blankspace.financial.bankAccount.import.items.show({fileSource: aID[1]});
 										});
@@ -1057,6 +1050,8 @@ ns1blankspace.financial.bankAccount =
 										
 									if (oResponse == undefined)
 									{	
+										$('#ns1blankspaceBankAccountImportSources td.ns1blankspaceRowShaded').removeClass('ns1blankspaceRowShaded');
+										
 										var aHTML = [];
 										
 										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>');							
@@ -1142,7 +1137,8 @@ ns1blankspace.financial.bankAccount =
 												url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_PROCESS'),
 												data: sData,
 												dataType: 'json',
-												success: function(data) {
+												success: function(data)
+												{
 													ns1blankspace.status.message('Transactions processed.')
 													ns1blankspace.financial.bankAccount.import.show();
 												}
@@ -1178,49 +1174,6 @@ ns1blankspace.financial.bankAccount =
 														
 														$('#ns1blankspaceBankAccountImportColumn2').html(aHTML.join(''));
 
-														var aHTML = [];
-														
-														aHTML.push('<table class="ns1blankspaceColumn2">');
-																
-														aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportMappingsApply" class="ns1blankspaceAction">' +
-																		'Confirm & apply mappings</span></td></tr>');
-
-														aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																		'Confirm uploaded bank transactions and apply any configured mappings.</td></tr>');
-
-														if (false)
-														{	
-														aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportCreateItems" class="ns1blankspaceAction">' +
-																		'Create payments & receipts</span></td></tr>');
-
-														aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																		'Create payments and receipts within this space based on confirmed bank transactions.<br /><br />If you have already created invoices, expenses, payments or receipts, then use the Reconcile option.</td></tr>');
-														}
-
-														aHTML.push('</table>');					
-														
-														$('#ns1blankspaceImportItemsColumn2').html(aHTML.join(''));
-														
-														$('#ns1blankspaceBankAccountImportMappingsApply').button(
-														{
-															label: 'Confirm & apply mappings',
-														})
-														.click(function()
-														{	
-															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
-														}).
-														css('width', '100px');
-
-														$('#ns1blankspaceBankAccountImportCreateItems').button(
-														{
-															label: 'Create payments & receipts',
-														})
-														.click(function()
-														{	
-															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
-														}).
-														css('width', '100px');
-
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
 														oSearch.addField('amount,area,areatext,bankaccount,bankaccounttext,capital,category,categorytext,' +
@@ -1246,6 +1199,8 @@ ns1blankspace.financial.bankAccount =
 														}
 														else
 														{		
+															var bNeedConfirm = false;
+
 															aHTML.push('<tr class="ns1blankspaceCaption">');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
@@ -1256,6 +1211,7 @@ ns1blankspace.financial.bankAccount =
 															
 															$(oResponse.data.rows).each(function()
 															{
+																if (this.status == 1) {bNeedConfirm = true}
 																aHTML.push(ns1blankspace.financial.bankAccount.import.items.row(this));
 															});	
 														}
@@ -1264,17 +1220,83 @@ ns1blankspace.financial.bankAccount =
 													
 														$('#ns1blankspaceImportItemsColumn1').html(aHTML.join(''));
 
-														$('#ns1blankspaceFinancialBankImportItems .ns1blankspaceRowEdit').button(
+														if (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1)
 														{
-															text: false,
-														 	icons: {primary: "ui-icon-plus"}
+															$('#ns1blankspaceFinancialBankImportItems .ns1blankspaceRowEdit').button(
+															{
+																text: false,
+															 	icons: {primary: "ui-icon-plus"}
+															})
+															.click(function()
+															{
+																ns1blankspace.financial.bankAccount.import.items.edit({xhtmlElementID: this.id})
+															})
+															.css('width', '15px')
+															.css('height', '20px');
+														}	
+
+														var aHTML = [];
+														
+														aHTML.push('<table class="ns1blankspaceColumn2">');
+																
+														if (bNeedConfirm)
+														{			
+															aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportMappingsApply" class="ns1blankspaceAction">' +
+																		'Confirm & apply mappings</span></td></tr>');
+
+															aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																		'Confirm uploaded bank transactions and apply any configured mappings.</td></tr>');
+														}	
+
+														else
+														{	
+															if (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1)
+															{	
+																aHTML.push('<tr><td style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																				'Use the "+" button to create payments and receipts within this space.<br /><br />If you have already created invoices, expenses, payments or receipts, then click Reconcile.</td></tr>');
+															}
+															else
+															{
+																aHTML.push('<tr><td style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																				'You can now reconcile these bank transactions by clicking Reconcile.</td></tr>');
+															}	
+
+															aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportNew" class="ns1blankspaceAction">' +
+																			'New Import</span></td></tr>');
+
+														}
+
+														aHTML.push('</table>');					
+														
+														$('#ns1blankspaceImportItemsColumn2').html(aHTML.join(''));
+
+														$('#ns1blankspaceBankAccountImportNew').button(
+														{
+															label: "New Import"
+														})
+														.click(function() {
+															ns1blankspace.financial.bankAccount.import.add();
+														});
+														
+														$('#ns1blankspaceBankAccountImportMappingsApply').button(
+														{
+															label: 'Confirm & apply mappings',
 														})
 														.click(function()
+														{	
+															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
+														}).
+														css('width', '100px');
+
+														$('#ns1blankspaceBankAccountImportCreateItems').button(
 														{
-															ns1blankspace.financial.bankAccount.import.items.edit({xhtmlElementID: this.id})
+															label: 'Create payments & receipts',
 														})
-														.css('width', '15px')
-														.css('height', '20px');
+														.click(function()
+														{	
+															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
+														}).
+														css('width', '100px');
 													}
 												},
 
