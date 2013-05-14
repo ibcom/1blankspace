@@ -373,9 +373,16 @@ ns1blankspace.app =
 							.css('height', '21px')
 						});
 							
-						$('input.ns1blankspaceSelect').live('keyup', function()
+						$('input.ns1blankspaceSelect').live('keyup', function(e)
 						{
-							ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});	
+							if (e.which === 13)
+					    	{
+								ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
+							}
+							else
+							{
+								ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});
+							}		
 						});	
 						
 						$('.ns1blankspaceSelectAddress').live('focusin', function() 
@@ -2705,8 +2712,6 @@ ns1blankspace.search =
 					{
 						if (oResponse === undefined)
 						{
-							ns1blankspace.status.working();
-
 							ns1blankspace.container.position({xhtmlElementID: sXHTMLInputElementID, topOffset: 10, setWidth: true});
 							
 							if (sColumns === undefined) {sColumns = 'title'};
@@ -2718,6 +2723,8 @@ ns1blankspace.search =
 						
 							if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
 							{
+								ns1blankspace.status.working();
+
 								var aColumns = sColumns.split('-');	
 
 								if (ns1blankspace.util.isMethodAdvancedSearch(sMethod))
@@ -2811,6 +2818,10 @@ ns1blankspace.search =
 										success: function(data){ns1blankspace.search.show(oParam, data)}
 									});
 								}	
+							}
+							else
+							{
+								ns1blankspace.status.message('At least ' + iMinimumLength + ' letters')
 							}
 						}	
 						else

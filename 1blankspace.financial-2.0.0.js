@@ -3699,6 +3699,7 @@ ns1blankspace.financial.save =
 					var iID;
 					var sMethod;
 					var sSuffix = '';
+					var bShowStatus = true;
 
 					if (oParam != undefined)
 					{
@@ -3711,9 +3712,10 @@ ns1blankspace.financial.save =
 						if (oParam.method != undefined) {sMethod = oParam.method}
 						if (oParam.id != undefined) {iID = oParam.id}
 						if (oParam.bankAccount != undefined) {iBankAccount = oParam.bankAccount}
+						if (oParam.showStatus != undefined) {bShowStatus = oParam.showStatus} 	
 					}
 
-					ns1blankspace.status.working();
+					if (bShowStatus) {ns1blankspace.status.working();}
 
 					if (iObject == 3)
 					{
@@ -3791,6 +3793,7 @@ ns1blankspace.financial.save =
 					var bComplete = true;
 					var bRefresh = false;
 					var fPostSave;
+					var bShowStatus = true;
 
 					if (oParam != undefined)
 					{
@@ -3801,7 +3804,8 @@ ns1blankspace.financial.save =
 						if (oParam.itemDescription != undefined) {sItemDescription = oParam.itemDescription}
 						if (oParam.complete != undefined) {bComplete = oParam.complete}
 						if (oParam.refresh != undefined) {bRefresh = oParam.refresh}
-						if (oParam.postSave != undefined) {fPostSave = oParam.postSave}		
+						if (oParam.postSave != undefined) {fPostSave = oParam.postSave}
+						if (oParam.showStatus != undefined) {bShowStatus = oParam.showStatus} 	
 					}
 
 					if (!iAccount)
@@ -3853,13 +3857,13 @@ ns1blankspace.financial.save =
 
 											if (fPostSave) {fPostSave(oParam, oResponse)}
 
-											ns1blankspace.status.message('Saved');
+											if (bShowStatus) {ns1blankspace.status.message('Saved')}
 										}
 									});
 								}
 								else
 								{
-									ns1blankspace.status.message('Saved');
+									if (bShowStatus) {ns1blankspace.status.message('Saved')}
 								}
 							}
 						});
