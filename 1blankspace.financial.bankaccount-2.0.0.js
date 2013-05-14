@@ -1654,10 +1654,11 @@ ns1blankspace.financial.bankAccount =
 										{	
 											aHTML.push('<table class="ns1blankspaceColumn2">' +
 														'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All current reconciliations are shown.' +
-														'<br /><br />To reconcile this bank account, select the appropriate reconcilation or if all are completed, press "Add" to add a new one.');
+														'<br /><br />To reconcile this bank account, select the appropriate reconcilation<br />or if all are completed, press "Add" to add a new one.');
 
-					
-											aHTML.push('<td style="font-size:0.75em;"><table cellpadding=6 style="background-color:#F3F3F3;padding:6px;" >' +
+											if (false)
+											{	
+												aHTML.push('<td style="font-size:0.75em;"><table cellpadding=6 style="background-color:#F3F3F3;padding:6px;" >' +
 															'<tr><td class="ns1blankspaceSub" colspan=2 style="font-weight:bold;">You have a number of options when reconciling a bank account:</td></tr>' + 
 															'<tr><td class="ns1blankspaceCaption" style="width:15px;padding-bottom:10px;">1</td><td class="ns1blankspaceSub">' +
 															'Use a printed or PDF bank statement directly.  In this case you skip the bank transactions import step and go straight to reconcile.' +
@@ -1667,6 +1668,7 @@ ns1blankspace.financial.bankAccount =
 															'You export a file from your bank and then import it.' +
 															'  You can then add a reconciliation - selecting the date you want to balance up to.  The system will then help you then search the system for matching payments or receipts that have already been entered, based on imported bank transactions or if not, add them as you go.' +
 															'</td></tr></table></td></tr>');
+											}
 	
 											aHTML.push('</table>');
 										}

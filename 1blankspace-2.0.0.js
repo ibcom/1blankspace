@@ -2649,6 +2649,7 @@ ns1blankspace.search =
 					var iColumn = 0;
 					var sMethodFilter;
 					var bMultiSelect;
+					var fOnComplete;
 						
 					if (oParam != undefined)
 					{
@@ -2700,6 +2701,11 @@ ns1blankspace.search =
 							bMultiSelect = ($('#' + sXHTMLInputElementID).attr("data-multiselect") === "true");
 							$.extend(true, oParam, {multiselect: bMultiSelect});
 						}
+
+						if (fOnComplete === undefined) {
+							fOnComplete = $('#' + sXHTMLInputElementID).attr("data-click");
+							$.extend(true, oParam, {onComplete: fOnComplete});
+						}
 					}	
 					
 					if (iXHTMLElementContextID != undefined)
@@ -2707,6 +2713,12 @@ ns1blankspace.search =
 						$('#' + sXHTMLInputElementID).val($('#' + sXHTMLElementID).html())
 						$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
 						$(ns1blankspace).hide();
+						
+						// ToDo: Remove eval by converting fOnComplete from string to function (how????)
+						if (fOnComplete != undefined) {
+							eval(fOnComplete);
+						}
+						
 					}
 					else
 					{
