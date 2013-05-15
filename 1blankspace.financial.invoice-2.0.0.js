@@ -205,7 +205,8 @@ ns1blankspace.financial.invoice =
 										oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,' +
 																'projecttext,project,projecttext,areatext,' +
 																'object,objectcontext,' +
-																'area,reference,purchaseorder,sentdate,duedate,description,amount,tax,sent,frequency');
+																'area,reference,purchaseorder,sentdate,duedate,description,amount,tax,sent,frequency,' +
+																'invoice.contactpersonsentto.email');
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										
@@ -644,7 +645,7 @@ ns1blankspace.financial.invoice =
 
 											if (ns1blankspace.objectContextData.sent == 'N')
 											{	
-												aHTML.push('<tr><td style="padding-top:15px; color:#cc0000;">Not sent</td></tr>');			
+												aHTML.push('<tr><td style="padding-top:15px;" class="ns1blankspaceSummaryCaption">Not sent</td></tr>');			
 											}
 
 											aHTML.push('</table>');					
@@ -701,76 +702,86 @@ ns1blankspace.financial.invoice =
 
 					send:		function (oParam, oResponse)
 								{
-									if (oResponse == undefined)
-									{
-										var oSearch = new AdvancedSearch();
-										oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-										oSearch.addField('financialaccounttext,tax,issuedamount,amount,description,object');
-										oSearch.addFilter('object', 'EQUAL_TO', 5);
-										oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.sort('id', 'asc');
-										oSearch.getResults(function(data)
-										{
-											ns1blankspace.financial.invoice.email.send(oParam, data);
-										});
-									}	
-									else
-									{
-										ns1blankspace.objectContextData.xhtml = ns1blankspace.format.render(
-										{
-											object: 5,
-											xhtmlTemplate: ns1blankspace.xhtml.templates['invoice'],
-											objectData: ns1blankspace.objectContextData,
-											objectOtherData: oResponse.data.rows
-										});
+									var sTo = ns1blankspace.objectContextData['invoice.contactpersonsentto.email'];
 
-										if (ns1blankspace.objectContextData.xhtml == '')
+									if (sTo == '')
+									{
+										ns1blankspace.status.error('No email address')
+									}
+									else
+									{	
+										if (oResponse == undefined)
 										{
-											ns1blankspace.status.error('Nothing to email');
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_ITEM_SEARCH';
+											oSearch.addField('financialaccounttext,tax,issuedamount,amount,description,object');
+											oSearch.addFilter('object', 'EQUAL_TO', 5);
+											oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
+											oSearch.sort('id', 'asc');
+											oSearch.getResults(function(data)
+											{
+												ns1blankspace.financial.invoice.email.send(oParam, data);
+											});
 										}	
 										else
 										{
-											var oData = 
+											ns1blankspace.objectContextData.xhtml = ns1blankspace.format.render(
 											{
-												subject: ns1blankspace.objectContextData.reference,
-												message: ns1blankspace.objectContextData.xhtml,
-												id: ns1blankspace.objectContextData.contactpersonsentto,
 												object: 5,
-												objectContext: ns1blankspace.objectContext
-											}
-
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
-												data: oData,
-												dataType: 'json',
-												global: false,
-												success: function (data)
-												{
-													if (data.status == 'OK')
-													{
-														$.ajax(
-														{
-															type: 'POST',
-															url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
-															data: 'sent=Y&id=' + ns1blankspace.objectContext,
-															dataType: 'json',
-															global: false,
-															success: function (data)
-															{
-																ns1blankspace.status.message('Emailed');
-															}
-														});
-													}
-													else
-													{
-														ns1blankspace.status.error('Could not send email')
-													}
-												}
+												xhtmlTemplate: ns1blankspace.xhtml.templates['invoice'],
+												objectData: ns1blankspace.objectContextData,
+												objectOtherData: oResponse.data.rows
 											});
+
+											if (ns1blankspace.objectContextData.xhtml == '')
+											{
+												ns1blankspace.status.error('Nothing to email');
+											}	
+											else
+											{
+												var oData = 
+												{
+													subject: ns1blankspace.objectContextData.reference,
+													message: ns1blankspace.objectContextData.xhtml,
+													id: ns1blankspace.objectContextData.contactpersonsentto,
+													to: sTo,
+													object: 5,
+													objectContext: ns1blankspace.objectContext
+												}
+
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+													data: oData,
+													dataType: 'json',
+													global: false,
+													success: function (data)
+													{
+														if (data.status == 'OK')
+														{
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
+																data: 'sent=Y&id=' + ns1blankspace.objectContext,
+																dataType: 'json',
+																global: false,
+																success: function (data)
+																{
+																	ns1blankspace.status.message('Emailed');
+																}
+															});
+														}
+														else
+														{
+															ns1blankspace.status.error('Could not send email')
+														}
+													}
+												});
+											}
 										}
-									}
+									}	
 								}		
 				},		
 

@@ -3202,7 +3202,7 @@ ns1blankspace.financial.bankAccount =
 																ns1blankspace.financial.util.tax.calculate(
 																{
 																	amountXHTMLElementID: 'ns1blankspaceItemAmount',
-																	taxXHTMLElementID: 'ns1blankspaceItemTax'
+																	taxXHTMLElementID: 'ns1blankspaceItemTax',
 																	taxTypeXHTMLElementName: 'radioItemTaxCode'
 																});
 															});

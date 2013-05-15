@@ -235,8 +235,8 @@ ns1blankspace.format.render = function (oParam)
 		if (oParam.objectOtherData != undefined) {oObjectOtherData = oParam.objectOtherData}		
 	}
 
-	sXHTMLTemplate = (sXHTMLTemplate).replace(/\[\[/g,'<div class="template">');
-	sXHTMLTemplate = (sXHTMLTemplate).replace(/\]\]/g,'</div>');
+	sXHTMLTemplate = (sXHTMLTemplate).replace(/\[\[/g,'<span class="template">');
+	sXHTMLTemplate = (sXHTMLTemplate).replace(/\]\]/g,'</span>');
 
 	var oXHTML;
 
@@ -245,7 +245,7 @@ ns1blankspace.format.render = function (oParam)
 
 	var aXHTML = [];
 
-	$('div.template', oXHTML).each(function(i,e) 
+	$('span.template', oXHTML).each(function(i,e) 
 	{
 		var oTemplateTag = $.grep(ns1blankspace.format.tags, function (a) { return a.caption == $(e).html() && a.object == iObject; })
 
@@ -343,7 +343,7 @@ ns1blankspace.format.process = function (oParam, oResponse)
 
 		$(sTRXHTML).each(function()
 		{
-			$(this).find('div.template').each(function(i,e) 
+			$(this).find('span.template').each(function(i,e) 
 			{
 				$(e).html($(e).attr('data-format-source'));
 			});
