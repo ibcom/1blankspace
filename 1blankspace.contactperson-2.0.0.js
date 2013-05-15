@@ -454,10 +454,11 @@ ns1blankspace.contactPerson =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.contactPerson.init({showHome: false});ns1blankspace.contactPerson.search.send("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.contactPerson.init({id: ' + ns1blankspace.objectContext + '")',
 							move: false
-							});
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.contactPerson.summary()'});
 					}	

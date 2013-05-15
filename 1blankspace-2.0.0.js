@@ -1014,7 +1014,7 @@ ns1blankspace.app =
 					var bShowHome = true;
 					var sParentNamespace = ns1blankspace.objectParentName;
 					var sNamespace = ns1blankspace.objectName;
-					var bNew;
+					var bNew = false;
 					var iID;
 					var bExtendInit = true;
 					var oRoot = ns1blankspace.util.getParam(oParam, 'rootNamespace', {default: ns1blankspace}).value
@@ -1043,22 +1043,14 @@ ns1blankspace.app =
 							if (sParentNamespace)
 							{
 								var oNS = oRoot[sParentNamespace][sNamespace];
-								var sNS = sRoot + '["' + sParentNamespace + '"]["' + sNamespace + '"]';
+								var sNS = sRoot + '.' + sParentNamespace + '.' + sNamespace;
 							}
 							else
 							{
 								var oNS = oRoot[sNamespace];
-								var sNS = sRoot + '["' + sNamespace + '"]';
+								var sNS = sRoot + '.' + sNamespace;
 							}
 
-							if (bShowHome)
-							{
-								ns1blankspace.history.view({
-									newDestination: sNS + '.init({showHome: true});',
-									move: false
-									});	
-							}
-							
 							$('#ns1blankspaceViewControlViewContainer').button(
 							{
 								label: ns1blankspace.viewName
@@ -1140,10 +1132,11 @@ ns1blankspace.app =
 								{	
 									if (bShowHome) 
 									{
-										ns1blankspace.history.view({
-											newDestination: sNS + '.init({showHome: true});',
+										ns1blankspace.history.view(
+										{
+											newDestination: sNS + '.init()',
 											move: false
-											});	
+										});	
 
 										if (typeof(oNS.home) === 'function') {oNS.home()} else {oNS.home.show()}
 									}
@@ -1766,7 +1759,7 @@ ns1blankspace.history.control =
 						{	
 							if ((v.object === iObject) && (v.objectContext === iObjectContext))
 							{
-								if (sFunctionDefault != undefined)
+								if (sFunctionDefault !== undefined)
 								{
 									sXHTMLElementID = v.xhtmlElementID
 								}
@@ -1792,7 +1785,7 @@ ns1blankspace.history.control =
 					{
 						if (sXHTMLElementID === undefined)
 						{
-							eval(sFunctionDefault);
+							ns1blankspace.util.execute(sFunctionDefault);
 						}
 						else
 						{
@@ -1986,45 +1979,46 @@ ns1blankspace.history.view =
 							
 							if (bMove)
 							{
-								if (ns1blankspace.timer.history === undefined)
-								{	
-									ns1blankspace.timer.history = window.setInterval('ns1blankspace.history.view({instruction: 0, move: true})', 100);
-								}
-								else
-								{	
+								//if (ns1blankspace.timer.history === undefined)
+								//{	
+								//	ns1blankspace.timer.history = window.setInterval('ns1blankspace.history.view({instruction: 0, move: true})', 100);
+								//}
+								//else
+								//{	
 									var aDestinationInstructions = sDestinationInstructions.split(';');
 									var aDestination = (aDestinationInstructions[0]).split('(');
+									var sDestinationNamespace = aDestination[0];
+									var sDestinationParam = (aDestination[1]).split(')')[0];
 
-									if (aDestination[0])
+									if (sDestinationNamespace)
 									{
 										window.clearInterval(ns1blankspace.timer.history);
 										
-										if (sDestinationInstructions != '' && sDestinationInstructions != undefined)
+										if ((sDestinationNamespace).indexOf('setup') != -1 && ns1blankspace.option.autoSetupSwitch)
 										{
-											if ((sDestinationInstructions).indexOf('setup') != -1 && ns1blankspace.option.autoSetupSwitch)
-											{
-												ns1blankspace.setupView = false;
-												$('#ns1blankspaceViewControlSetup').attr('checked', true);
-												$('#ns1blankspaceViewControlSetup').button('refresh');
-												ns1blankspace.setup.switch({viewScript: sDestinationInstructions});
+											ns1blankspace.setupView = false;
+											$('#ns1blankspaceViewControlSetup').attr('checked', true);
+											$('#ns1blankspaceViewControlSetup').button('refresh');
+											ns1blankspace.setup.switch({viewScript: sDestinationNamespace});
+										}
+										else
+										{	
+											//SEE if can find in the name space
+
+											if (aDestinationInstructions[0]) !== undefined)
+											{	
+												fDestinationNamespace = ns1blankspace.util.toFunction(sDestinationNamespace[0])
+												fDestination(sDestinationParam[1])
+												//eval(sDestinationInstructions);
+												//NEED TO CONVERT INSTUCTIONS TO USE NAMESPACE AND GET RID OF EVAL
 											}
 											else
-											{	
-												var aDestinationInstructions = sDestinationInstructions.split('.');
-
-												if (eval(aDestinationInstructions[0]) != undefined)
-												{	
-													eval(sDestinationInstructions);
-													//NEED TO CONVERT INSTUCTIONS TO USE NAMESPACE AND GET RID OF EVAL
-												}
-												else
-												{
-													ns1blankspace.home.show();
-												}
-											}	
+											{
+												ns1blankspace.home.show();
+											}
 										}
 									}	
-								}			
+								//}			
 							}	
 						}
 					}	
@@ -3547,6 +3541,8 @@ ns1blankspace.util =
   					else
   					{
 	  					if (oNS === undefined) {oNS = window}
+
+	  					sFunction = sFunction.split('(')[0];	
 
 	  					var aF = (sFunction).split(".");
 
