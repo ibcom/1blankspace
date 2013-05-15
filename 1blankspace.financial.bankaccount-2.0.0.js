@@ -947,7 +947,7 @@ ns1blankspace.financial.bankAccount =
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceBankAccountImportColumn1" style="width: 100px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
+													'<td id="ns1blankspaceBankAccountImportColumn1" style="width: 110px;padding-right:0px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
 													ns1blankspace.xhtml.loading +
 													'</td>' +
 													'<td id="ns1blankspaceBankAccountImportColumn2" class="ns1blankspaceColumn2">' +
@@ -1013,21 +1013,22 @@ ns1blankspace.financial.bankAccount =
 									{
 										aHTML.push('<tr class="ns1blankspaceRow">');
 
-										aHTML.push('<td id="ns1blankspaceBankAccountImport_processeddate-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountImportRowSelect"' +
-																'">' + oRow.processeddate + '<br />');
+										aHTML.push('<td id="ns1blankspaceBankAccountImport_processeddate-' + oRow.id + '"' +
+														' class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountImportRowSelect"' +
+														' style="text-align:right;">');
 															
 										if (oRow.startdate != '')
 										{		
-											aHTML.push('<span class="ns1blankspaceSub" id="ns1blankspaceBankAccountImport_startdate-' + oRow.id + '">' +
-																oRow.startdate + '</span><br />');	
+											aHTML.push(oRow.startdate + '<br />');	
 										}
 
 										if (oRow.enddate != oRow.startdate)
 										{		
-											aHTML.push('<span class="ns1blankspaceSub" id="ns1blankspaceBankAccountImport_enddate-' + oRow.id + '">' +
-																oRow.enddate + '</span><br />');	
+											aHTML.push(' to ' + oRow.enddate + '<br />');	
 										}
 									
+										aHTML.push('<span class="ns1blankspaceSub">' + oRow.processeddate + '</span></td>');
+
 										aHTML.push('</tr>');
 									}
 										
@@ -1674,10 +1675,10 @@ ns1blankspace.financial.bankAccount =
 											
 										if (iMode == 1)
 										{	
-											if (oResponse.data.rows.length != 0)
+											if (oResponse.data.rows.length == 0)
 											{
 												aHTML.push('<table class="ns1blankspaceColumn2">' +
-																'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All reconciliations are completed, ' +
+																'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All reconciliations are completed,<br />' +
 																'press "Add" to create the next one.');
 
 												aHTML.push('<td style="font-size:0.75em;"><table cellpadding=6 style="background-color:#F3F3F3;padding:6px;" >' +
@@ -1694,7 +1695,7 @@ ns1blankspace.financial.bankAccount =
 											else
 											{	
 												aHTML.push('<table class="ns1blankspaceColumn2">' +
-																'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All current reconciliations are shown.');
+																'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All current reconciliations are shown,<br />click Completed to see past reconcilations.');
 											}	
 
 											aHTML.push('</table>');
