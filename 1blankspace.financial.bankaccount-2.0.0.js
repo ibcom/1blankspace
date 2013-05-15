@@ -1051,7 +1051,7 @@ ns1blankspace.financial.bankAccount =
 									if (oResponse == undefined)
 									{	
 										$('#ns1blankspaceBankAccountImportSources td.ns1blankspaceRowShaded').removeClass('ns1blankspaceRowShaded');
-										
+
 										var aHTML = [];
 										
 										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>');							
@@ -1674,12 +1674,12 @@ ns1blankspace.financial.bankAccount =
 											
 										if (iMode == 1)
 										{	
-											aHTML.push('<table class="ns1blankspaceColumn2">' +
-														'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All current reconciliations are shown.' +
-														'<br /><br />To reconcile this bank account, select the appropriate reconcilation<br />or if all are completed, press "Add" to add a new one.');
+											if (oResponse.data.rows.length != 0)
+											{
+												aHTML.push('<table class="ns1blankspaceColumn2">' +
+																'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All reconciliations are completed, ' +
+																'press "Add" to create the next one.');
 
-											if (false)
-											{	
 												aHTML.push('<td style="font-size:0.75em;"><table cellpadding=6 style="background-color:#F3F3F3;padding:6px;" >' +
 															'<tr><td class="ns1blankspaceSub" colspan=2 style="font-weight:bold;">You have a number of options when reconciling a bank account:</td></tr>' + 
 															'<tr><td class="ns1blankspaceCaption" style="width:15px;padding-bottom:10px;">1</td><td class="ns1blankspaceSub">' +
@@ -1691,7 +1691,12 @@ ns1blankspace.financial.bankAccount =
 															'  You can then add a reconciliation - selecting the date you want to balance up to.  The system will then help you then search the system for matching payments or receipts that have already been entered, based on imported bank transactions or if not, add them as you go.' +
 															'</td></tr></table></td></tr>');
 											}
-	
+											else
+											{	
+												aHTML.push('<table class="ns1blankspaceColumn2">' +
+																'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All current reconciliations are shown.');
+											}	
+
 											aHTML.push('</table>');
 										}
 										else
