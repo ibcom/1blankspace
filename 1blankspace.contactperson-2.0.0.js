@@ -698,6 +698,15 @@ ns1blankspace.contactPerson =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
+										'Email' +
+										'</td></tr>' +
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsEmail" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Phone' +
 										'</td></tr>' +
 										'<tr class="ns1blankspaceText">' +
@@ -722,16 +731,7 @@ ns1blankspace.contactPerson =
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceDetailsFax" class="ns1blankspaceText">' +
 										'</td></tr>');
-										
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Email' +
-										'</td></tr>' +
-										'<tr class="ns1blankspaceText">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsEmail" class="ns1blankspaceText">' +
-										'</td></tr>');
-							
+											
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));

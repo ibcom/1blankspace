@@ -571,9 +571,21 @@ ns1blankspace.financial.invoice =
 										if (ns1blankspace.xhtml.templates['invoice'] != '' && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
 										{
 											aHTML.push(ns1blankspace.format.render({object: 5, xhtmlTemplate: ns1blankspace.xhtml.templates['invoice']}));
+											$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 										}
 										else
 										{
+											aHTML.push('<table class="ns1blankspace">' +
+														'<tr class="ns1blankspaceRow">' +
+														'<td id="ns1blankspaceSummaryColumn1A" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceSummaryColumn1B" class="ns1blankspaceColumn1Flexible"></td>' +
+														'</tr>' +
+														'</table>');
+
+											$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+											var aHTML = [];
+											
 											aHTML.push('<table class="ns1blankspace">');
 											
 											if (ns1blankspace.objectContextData.contactbusinesssenttotext != '')
@@ -605,20 +617,26 @@ ns1blankspace.financial.invoice =
 																ns1blankspace.objectContextData.duedate +
 																'</td></tr>');	
 											}
-											
+												
+											aHTML.push('</table>');			
+										
+											$('#ns1blankspaceSummaryColumn1A').html(aHTML.join(''));
+
+											var aHTML = [];
+
 											if (ns1blankspace.objectContextData.description != '')
 											{
+												aHTML.push('<table class="ns1blankspaceColumn2">');
 												aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
 																'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
 																ns1blankspace.objectContextData.description +
 																'</td></tr>');
+												aHTML.push('</table>');
 											}
 											
-											aHTML.push('</table>');					
+											$('#ns1blankspaceSummaryColumn1B').html(aHTML.join(''));				
 										
 										}
-
-										$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
 										var aHTML = [];
 
