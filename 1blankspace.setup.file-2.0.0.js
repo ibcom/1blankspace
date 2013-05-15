@@ -156,8 +156,6 @@ ns1blankspace.setup.file =
 										{
 											var aID = (this.id).split('-');
 											var oParam = {object: parseInt(aID[1])};
-
-											//ns1blankspace.extend.init({setApp: false, object: parseInt(aID[1]) });
 											ns1blankspace.setup.file.import.init(oParam);
 										});
 									}
@@ -1263,34 +1261,31 @@ ns1blankspace.setup.file =
 										{
 											$(v.elements).each(function(j,k)
 											{
-												//if (k.datatype == 1 || k.datatype == 4 || k.datatype == 3)
-												//{
-													var p = {};
+												var p = {};
 
-													p.name = '.se' + k.id;
-													p.caption = 'se' + k.id + ' (' + k.title + ')';
-													p.inputtype = 'textbox';
+												p.name = '.se' + k.id;
+												p.caption = 'se' + k.id + ' (' + k.title + ')';
+												p.inputtype = 'textbox';
 
-													if (k.datatype == 1 || k.datatype == 4)
-													{	
-														p.datatype = 'text';
-													}	
+												if (k.datatype == 1 || k.datatype == 4)
+												{	
+													p.datatype = 'text';
+												}	
 
-													if (k.datatype == 3)
-													{
-														p.datatype = 'date';			
-													}
+												if (k.datatype == 3)
+												{
+													p.datatype = 'date';			
+												}
 
-													if (k.datatype == 2)
-													{
-														p.datatype = 'select';
-														p.searchendpoint = 'SETUP';
-														p.searchmethod = 'SETUP_STRUCTURE_ELEMENT_OPTION_SEARCH';
-														p.searchmethodfilter = 'element-EQUAL_TO-' + k.id;
-													}
+												if (k.datatype == 2)
+												{
+													p.datatype = 'select';
+													p.searchendpoint = 'SETUP';
+													p.searchmethod = 'SETUP_STRUCTURE_ELEMENT_OPTION_SEARCH';
+													p.searchmethodfilter = 'element-EQUAL_TO-' + k.id;
+												}
 
-													ns1blankspace.setup.file.data.fields.push(p);
-												//}	
+												ns1blankspace.setup.file.data.fields.push(p);
 											});
 										});
 

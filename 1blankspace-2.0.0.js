@@ -122,15 +122,6 @@ window.onbeforeunload = function()
 $(function()
 {
 	ns1blankspace.app.init();
-
-	if (window.location.hash === '#PASSWORDEXPIRED')
-	{
-		ns1blankspace.logon.changePassword.show();
-	}
-	else
-	{
-		ns1blankspace.app.start();
-	}
 });
 
 ns1blankspace.app =
@@ -146,18 +137,22 @@ ns1blankspace.app =
 
 	init: 		function (oParam)
 				{
-					var bInitialise = true;
+					var bInitialise = false;
 
 					if (oParam != undefined)
 					{
 						if (oParam.initialise != undefined) {bInitialise = oParam.initialise}
+					}
+					else
+					{
+						oParam = {}
 					}
 
 					if ($('#ns1blankspaceContainer').length === 0)
 					{
 						$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
 											'<div id="ns1blankspaceHeader"></div>' +
-											'<div id="ns1blankspaceViewControl"></div>' +
+											'<div id="ns1blankspaceViewControl"><span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span></div>' +
 											'<div id="ns1blankspaceControl"></div>' +
 											'<div id="ns1blankspaceMain"></div>' +
 											'<div id="ns1blankspaceFooter"></div>' +
@@ -167,7 +162,7 @@ ns1blankspace.app =
 
 					if (!bInitialise)
 					{
-						$('#ns1blankspaceViewControl').html('<span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span>');
+						//$('#ns1blankspaceViewControl').html('');
 						window.setTimeout('ns1blankspace.app.init({initialise: true})', 100);
 					}
 					else
@@ -539,12 +534,22 @@ ns1blankspace.app =
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
+
+						if (window.location.hash === '#PASSWORDEXPIRED')
+						{
+							ns1blankspace.logon.changePassword.show();
+						}
+						else
+						{
+							ns1blankspace.app.start();
+						}
 					}	
 				},
 							
 	start: 		function (oParam)
 				{
 					if (oParam == undefined) {oParam = {}}
+
 					$.ajax(
 					{
 						type: 'GET',
@@ -573,330 +578,343 @@ ns1blankspace.app =
 							}
 							else
 							{
-								ns1blankspace.app.show(data);
+								oParam = ns1blankspace.util.setParam(oParam, 'user', data);
+								ns1blankspace.app.show(oParam);
 							}	
 						}
 					});
 				},
 
-	show: 		function (oResponse)	
+	show: 		function (oParam)	
 				{
-					var sHash = window.location.hash;
-					var sDestination;
+					var bInitialised = ns1blankspace.util.getParam(oParam, 'initialised', {default: false}).value;
 
-					var sNS;
-					// Pattern: #/contactBusiness/123/summary
-
-					if (sHash.substr(0, 2) == '#/')
+					if (!bInitialised)
 					{	
-						var aHash = sHash.split('/');
-
-						if (aHash.length > 1)
-						{	
-							ns1blankspace.option.returnToLast = true;
-							
-							sNS = aHash[1];
-							var aNS = sNS.split('.');
-
-							if (aNS.length == 1)
-							{
-								sNS = '["' + aNS[0] + '"]';
-							}
-							else
-							{
-								sNS = '["' + aNS[0] + '"]["' + aNS[1] + '"]';
-							}
-						}
-							
-						if (aHash.length == 2)
-						{		
-							sDestination = 'ns1blankspace' + sNS + '.init({showHome: true});';
-						}	
-
-						if (aHash.length == 3)
-						{
-							sDestination = 'ns1blankspace' + sNS + '.init({id:' + aHash[2] + '})';
-						}
-
-						ns1blankspace.history.view({
-											newDestination: sDestination,
-											move: false
-											});
-
-						if (aHash.length == 4)
-						{
-							ns1blankspace.history.control({functionDefault: 'ns1blankspace' + sNS + '.' + aHash[3] + '()'});
-						}
+						oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.app.show);
+						ns1blankspace.extend.init(oParam);
 					}	
-
-					var aHTML = [];
-
-					ns1blankspace.user.id = oResponse.user;
-					ns1blankspace.user.unrestricted = (oResponse.unrestrictedaccess == 'Y' || oResponse.unrestrictedaccess === undefined ? true : false);
-					ns1blankspace.user.space = oResponse.space;
-					ns1blankspace.user.spaceText = oResponse.spacename
-					ns1blankspace.user.logonName = oResponse.userlogonname;
-					ns1blankspace.user.contactPerson = oResponse.contactperson;
-					ns1blankspace.user.contactBusiness = oResponse.contactbusiness;
-					ns1blankspace.user.contactBusinessText = oResponse.contactbusinesstext;
-					ns1blankspace.user.commonName = oResponse.firstname + ' ' + oResponse.surname;
-					ns1blankspace.user.email = oResponse.email;
-					ns1blankspace.user.systemAdmin = oResponse.systemadmin;
-					ns1blankspace.user.roles = oResponse.roles.rows;
-
-					ns1blankspace.spaceText = oResponse.spacename;
-					ns1blankspace.space = oResponse.space;
-					
-					ns1blankspace.unloadWarning = true;
-
-					ns1blankspace.setupShow = ns1blankspace.user.systemAdmin;
-
-					ns1blankspace.control.init();
-											
-					$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
-					$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
-
-					aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
-									'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
-									'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
-									'</div>');
-									
-					aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
-									'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
-									'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
-									'<span id="ns1blankspaceViewControlForward">&nbsp;</span>' +
-									'</div>');				
-							
-					aHTML.push('<div id="ns1blankspaceViewControlViewContainer">' +
-									'<span id="ns1blankspaceViewControlView">&nbsp;</span>' +
-									'</div>');
-									
-					aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
-									'<input id="ns1blankspaceViewControlSearch">' +
-									'</div>');
-									
-					aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
-									
-					aHTML.push('<div id="ns1blankspaceViewControlNewContainer">' +
-									'<span id="ns1blankspaceViewControlNew">New</span>' +
-									'</div>');
-									
-					aHTML.push('<div id="ns1blankspaceViewControlActionContainer">' +
-									'<span id="ns1blankspaceViewControlAction" ></span>' +
-									'<span id="ns1blankspaceViewControlActionOptions">&nbsp;</span>' +
-									'</div>');
-					
-					aHTML.push('<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>');
-					
-					if (ns1blankspace.setupShow) 
-					{
-						aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
-										'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
-										'<label for="ns1blankspaceViewControlSetup">&nbsp;</label>' +
-										'</div>');
-					}				
-					
-					aHTML.push('<div id="ns1blankspaceViewControlHelpContainer">' + 
-									'<span id="ns1blankspaceViewControlHelp">&nbsp;</span>' +
-									'</div>');
-					
-					$('#ns1blankspaceViewControl').html(aHTML.join(''));
-
-					if (!ns1blankspace.setupShow) 
-					{
-						$('#ns1blankspaceViewControlActionStatus')
-							.css('width', '215px');
-					}	
-
-					$('#ns1blankspaceViewControlHome')
-						.button({
-								text: false,
-								icons: {
-									primary: "ui-icon-home"
-								}})
-						.click(function(event)
-						{
-							ns1blankspace.home.show();
-						})
-								
-						.next()
-							.button( {
-								text: false,
-								icons: {
-									primary: "ui-icon-triangle-1-s"
-								}
-							})
-							.click(function() {
-								ns1blankspace.home.options.show(this);
-							})
-							.css('width', '12px')
-							.css('margin-left', '2px')
-							.parent()
-								.buttonset();
-					
-					$('#ns1blankspaceViewControlBack')
-						.button({
-								text: false,
-								icons: {}
-								})
-						.click(function(event)
-						{
-							ns1blankspace.history.view({instruction: 2});
-						})
-						.css('width', '19px')
-						.next()
-							.button( {
-								text: false,
-								icons: {
-									primary: "ui-icon-arrowrefresh-1-e"
-								}
-							})
-							.click(function() {
-								ns1blankspace.history.view({instruction: 7});
-							})
-							.css('width', '25px')
-							.css('margin-left', '2px')
-						.next()
-							.button( {
-								text: false,
-								icons: {}
-							})
-							.click(function() {
-								ns1blankspace.history.view({instruction: 3});
-							})
-							.css('width', '19px')
-							.css('margin-left', '2px')
-							.parent()
-								.buttonset();
-					
-					$('#ns1blankspaceViewControlViewContainer')
-						.button(
-						{
-							icons: 
-							{
-								primary: "ui-icon-grip-dotted-vertical",
-								secondary: "ui-icon-triangle-1-s"
-							},
-							label: ns1blankspace.option.defaultView
-						})
-						.click(function() 
-						{
-							ns1blankspace.control.views.show(this);
-						})
-						.css('text-align', 'left');
-					
-					$('#ns1blankspaceViewControlNew')
-						.button({
-								label: "New"
-								})
-							
-						.next()
-							.button( {
-								text: false,
-								icons: {
-									primary: "ui-icon-triangle-1-s"
-								}
-							})
-							.css('width', '12px')
-							.parent()
-								.buttonset();
-					
-					$('#ns1blankspaceViewControlAction')
-						.button({
-								label: "Save"
-								})
-										
-						.next()
-							.button( {
-								text: false,
-								icons: {
-									primary: "ui-icon-triangle-1-s"
-								}
-							})
-							.css('width', '12px')
-							.css('margin-left', '2px')
-							.parent()
-								.buttonset();	
-														
-					$('#ns1blankspaceViewControlSetup')
-						.button({
-									text: false,
-									label: 'Set up your space.  Once finished click on this icon again.',
-									icons: {
-										primary: "ui-icon-gear"
-									}})
-						.css('font-size', '0.75em')			
-						.click(function() 
-						{
-							ns1blankspace.setup.switch();
-						});	
-					
-					$('#ns1blankspaceViewControlHelp')
-						.button({
-								text: false,
-								icons: {
-									primary: "ui-icon-help"
-								}})
-						.click(function() 
-						{
-							if (ns1blankspace.option.helpURI)
-							{	
-								window.open(ns1blankspace.option.helpURI);
-							}
-							else
-							{
-								window.alert('No help available.  May be search the internet?')
-							}	
-						});		
-					
-					$('#ns1blankspaceLogonName').click(function(event)
-					{
-						ns1blankspace.control.user.show(this);
-					});
-
-					$('#ns1blankspaceSpaceText').click(function(event)
-					{
-						ns1blankspace.control.spaces.show(this);
-					});
-					
-					//if (ns1blankspace.option.showBrowsing)
-					//{
-						//$('#ns1blankspaceViewControlBrowse').html(ns1blankspaceViewportBrowse());
-					//}
-					//else
-					//{
-						$('#ns1blankspaceViewControlBrowse')
-							.css('height', '1px')
-							.css('border-width', '0px');
-							
-						//$('#ns1blankspaceViewControl')
-						//	.css('top', '90px');
-							
-						//$('#ns1blankspaceViewControl')
-						//	.css('top', '90px');
-					//}
-					
-					$("#ns1blankspaceHeader").touchwipe({
-							wipeLeft: function() {ns1blankspace.history.view({instruction: 3});},
-							wipeRight: function() {ns1blankspace.history.view({instruction: 2});},
-							min_move_x: 35,
-							min_move_y: 35,
-							preventDefaultEvents: true
-							});
-							
-					if (ns1blankspace.history.sendOnLogon)
-					{
-						$.ajax(ns1blankspace.history.sendOnLogon);
-					}					
-
-					if (ns1blankspace.option.returnToLast) 
-					{
-						ns1blankspace.history.view({instruction: 8})
-					}
 					else
 					{
-						ns1blankspace.app.showWhenLoaded('home');
-					}	
+						var oResponse = ns1blankspace.util.getParam(oParam, 'user').value;
+
+						var sHash = window.location.hash;
+						var sDestination;
+
+						var sNS;
+						// Pattern: #/contactBusiness/123/summary
+
+						if (sHash.substr(0, 2) == '#/')
+						{	
+							var aHash = sHash.split('/');
+
+							if (aHash.length > 1)
+							{	
+								ns1blankspace.option.returnToLast = true;
+								
+								sNS = aHash[1];
+								var aNS = sNS.split('.');
+
+								if (aNS.length == 1)
+								{
+									sNS = '["' + aNS[0] + '"]';
+								}
+								else
+								{
+									sNS = '["' + aNS[0] + '"]["' + aNS[1] + '"]';
+								}
+							}
+								
+							if (aHash.length == 2)
+							{		
+								sDestination = 'ns1blankspace' + sNS + '.init({showHome: true});';
+							}	
+
+							if (aHash.length == 3)
+							{
+								sDestination = 'ns1blankspace' + sNS + '.init({id:' + aHash[2] + '})';
+							}
+
+							ns1blankspace.history.view({
+												newDestination: sDestination,
+												move: false
+												});
+
+							if (aHash.length == 4)
+							{
+								ns1blankspace.history.control({functionDefault: 'ns1blankspace' + sNS + '.' + aHash[3] + '()'});
+							}
+						}	
+
+						var aHTML = [];
+
+						ns1blankspace.user.id = oResponse.user;
+						ns1blankspace.user.unrestricted = (oResponse.unrestrictedaccess == 'Y' || oResponse.unrestrictedaccess === undefined ? true : false);
+						ns1blankspace.user.space = oResponse.space;
+						ns1blankspace.user.spaceText = oResponse.spacename
+						ns1blankspace.user.logonName = oResponse.userlogonname;
+						ns1blankspace.user.contactPerson = oResponse.contactperson;
+						ns1blankspace.user.contactBusiness = oResponse.contactbusiness;
+						ns1blankspace.user.contactBusinessText = oResponse.contactbusinesstext;
+						ns1blankspace.user.commonName = oResponse.firstname + ' ' + oResponse.surname;
+						ns1blankspace.user.email = oResponse.email;
+						ns1blankspace.user.systemAdmin = oResponse.systemadmin;
+						ns1blankspace.user.roles = oResponse.roles.rows;
+
+						ns1blankspace.spaceText = oResponse.spacename;
+						ns1blankspace.space = oResponse.space;
+						
+						ns1blankspace.unloadWarning = true;
+
+						ns1blankspace.setupShow = ns1blankspace.user.systemAdmin;
+
+						ns1blankspace.control.init();
+												
+						$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
+						$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
+
+						aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
+										'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
+										'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
+										'</div>');
+										
+						aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
+										'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
+										'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
+										'<span id="ns1blankspaceViewControlForward">&nbsp;</span>' +
+										'</div>');				
+								
+						aHTML.push('<div id="ns1blankspaceViewControlViewContainer">' +
+										'<span id="ns1blankspaceViewControlView">&nbsp;</span>' +
+										'</div>');
+										
+						aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
+										'<input id="ns1blankspaceViewControlSearch">' +
+										'</div>');
+										
+						aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
+										
+						aHTML.push('<div id="ns1blankspaceViewControlNewContainer">' +
+										'<span id="ns1blankspaceViewControlNew">New</span>' +
+										'</div>');
+										
+						aHTML.push('<div id="ns1blankspaceViewControlActionContainer">' +
+										'<span id="ns1blankspaceViewControlAction" ></span>' +
+										'<span id="ns1blankspaceViewControlActionOptions">&nbsp;</span>' +
+										'</div>');
+						
+						aHTML.push('<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>');
+						
+						if (ns1blankspace.setupShow) 
+						{
+							aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
+											'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
+											'<label for="ns1blankspaceViewControlSetup">&nbsp;</label>' +
+											'</div>');
+						}				
+						
+						aHTML.push('<div id="ns1blankspaceViewControlHelpContainer">' + 
+										'<span id="ns1blankspaceViewControlHelp">&nbsp;</span>' +
+										'</div>');
+						
+						$('#ns1blankspaceViewControl').html(aHTML.join(''));
+
+						if (!ns1blankspace.setupShow) 
+						{
+							$('#ns1blankspaceViewControlActionStatus')
+								.css('width', '215px');
+						}	
+
+						$('#ns1blankspaceViewControlHome')
+							.button({
+									text: false,
+									icons: {
+										primary: "ui-icon-home"
+									}})
+							.click(function(event)
+							{
+								ns1blankspace.home.show();
+							})
+									
+							.next()
+								.button( {
+									text: false,
+									icons: {
+										primary: "ui-icon-triangle-1-s"
+									}
+								})
+								.click(function() {
+									ns1blankspace.home.options.show(this);
+								})
+								.css('width', '12px')
+								.css('margin-left', '2px')
+								.parent()
+									.buttonset();
+						
+						$('#ns1blankspaceViewControlBack')
+							.button({
+									text: false,
+									icons: {}
+									})
+							.click(function(event)
+							{
+								ns1blankspace.history.view({instruction: 2});
+							})
+							.css('width', '19px')
+							.next()
+								.button( {
+									text: false,
+									icons: {
+										primary: "ui-icon-arrowrefresh-1-e"
+									}
+								})
+								.click(function() {
+									ns1blankspace.history.view({instruction: 7});
+								})
+								.css('width', '25px')
+								.css('margin-left', '2px')
+							.next()
+								.button( {
+									text: false,
+									icons: {}
+								})
+								.click(function() {
+									ns1blankspace.history.view({instruction: 3});
+								})
+								.css('width', '19px')
+								.css('margin-left', '2px')
+								.parent()
+									.buttonset();
+						
+						$('#ns1blankspaceViewControlViewContainer')
+							.button(
+							{
+								icons: 
+								{
+									primary: "ui-icon-grip-dotted-vertical",
+									secondary: "ui-icon-triangle-1-s"
+								},
+								label: ns1blankspace.option.defaultView
+							})
+							.click(function() 
+							{
+								ns1blankspace.control.views.show(this);
+							})
+							.css('text-align', 'left');
+						
+						$('#ns1blankspaceViewControlNew')
+							.button({
+									label: "New"
+									})
+								
+							.next()
+								.button( {
+									text: false,
+									icons: {
+										primary: "ui-icon-triangle-1-s"
+									}
+								})
+								.css('width', '12px')
+								.parent()
+									.buttonset();
+						
+						$('#ns1blankspaceViewControlAction')
+							.button({
+									label: "Save"
+									})
+											
+							.next()
+								.button( {
+									text: false,
+									icons: {
+										primary: "ui-icon-triangle-1-s"
+									}
+								})
+								.css('width', '12px')
+								.css('margin-left', '2px')
+								.parent()
+									.buttonset();	
+															
+						$('#ns1blankspaceViewControlSetup')
+							.button({
+										text: false,
+										label: 'Set up your space.  Once finished click on this icon again.',
+										icons: {
+											primary: "ui-icon-gear"
+										}})
+							.css('font-size', '0.75em')			
+							.click(function() 
+							{
+								ns1blankspace.setup.switch();
+							});	
+						
+						$('#ns1blankspaceViewControlHelp')
+							.button({
+									text: false,
+									icons: {
+										primary: "ui-icon-help"
+									}})
+							.click(function() 
+							{
+								if (ns1blankspace.option.helpURI)
+								{	
+									window.open(ns1blankspace.option.helpURI);
+								}
+								else
+								{
+									window.alert('No help available.  May be search the internet?')
+								}	
+							});		
+						
+						$('#ns1blankspaceLogonName').click(function(event)
+						{
+							ns1blankspace.control.user.show(this);
+						});
+
+						$('#ns1blankspaceSpaceText').click(function(event)
+						{
+							ns1blankspace.control.spaces.show(this);
+						});
+						
+						//if (ns1blankspace.option.showBrowsing)
+						//{
+							//$('#ns1blankspaceViewControlBrowse').html(ns1blankspaceViewportBrowse());
+						//}
+						//else
+						//{
+							$('#ns1blankspaceViewControlBrowse')
+								.css('height', '1px')
+								.css('border-width', '0px');
+								
+							//$('#ns1blankspaceViewControl')
+							//	.css('top', '90px');
+								
+							//$('#ns1blankspaceViewControl')
+							//	.css('top', '90px');
+						//}
+						
+						$("#ns1blankspaceHeader").touchwipe({
+								wipeLeft: function() {ns1blankspace.history.view({instruction: 3});},
+								wipeRight: function() {ns1blankspace.history.view({instruction: 2});},
+								min_move_x: 35,
+								min_move_y: 35,
+								preventDefaultEvents: true
+								});
+								
+						if (ns1blankspace.history.sendOnLogon)
+						{
+							$.ajax(ns1blankspace.history.sendOnLogon);
+						}					
+
+						if (ns1blankspace.option.returnToLast) 
+						{
+							ns1blankspace.history.view({instruction: 8})
+						}
+						else
+						{
+							ns1blankspace.app.showWhenLoaded('home');
+						}
+					}		
 				},
 
 	scriptLoaded:
@@ -998,7 +1016,7 @@ ns1blankspace.app =
 					var sNamespace = ns1blankspace.objectName;
 					var bNew;
 					var iID;
-					var bExtendInit = false;
+					var bExtendInit = true;
 					var oRoot = ns1blankspace.util.getParam(oParam, 'rootNamespace', {default: ns1blankspace}).value
 					var sRoot = ns1blankspace.util.getParam(oParam, 'rootNameSpaceText', {default: 'ns1blankspace'}).value
 
@@ -1020,7 +1038,6 @@ ns1blankspace.app =
 					}
 					else
 					{	
-
 						if (sNamespace)
 						{
 							if (sParentNamespace)
@@ -2703,7 +2720,7 @@ ns1blankspace.search =
 						}
 
 						if (fOnComplete === undefined) {
-							fOnComplete = $('#' + sXHTMLInputElementID).attr("data-click");
+							fOnComplete = ns1blankspace.util.toFunction($('#' + sXHTMLInputElementID).attr("data-click"));
 							$.extend(true, oParam, {onComplete: fOnComplete});
 						}
 					}	
@@ -2713,12 +2730,11 @@ ns1blankspace.search =
 						$('#' + sXHTMLInputElementID).val($('#' + sXHTMLElementID).html())
 						$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
 						$(ns1blankspace).hide();
-						
-						// ToDo: Remove eval by converting fOnComplete from string to function (how????)
-						if (fOnComplete != undefined) {
-							eval(fOnComplete);
+
+						if (fOnComplete != undefined)
+						{
+							fOnComplete();
 						}
-						
 					}
 					else
 					{
@@ -3519,7 +3535,38 @@ ns1blankspace.util =
 					{
   						return sValue.slice(0, -1);
   					}	
-  				}												
+  				},
+
+  	toFunction:
+  				function (sFunction, oNS)
+  				{
+  					if (sFunction === undefined || sFunction == '')
+  					{
+  						oNS = undefined;
+  					}
+  					else
+  					{
+	  					if (oNS === undefined) {oNS = window}
+
+	  					var aF = (sFunction).split(".");
+
+	  					$.each(aF, function(i,v)
+	  					{
+	  						oNS = oNS[this];	
+	  					});
+	  				}	
+
+  					return oNS;
+  				},
+
+  	execute:
+  				function (sFunction, oNS, oParam)
+  				{
+  					var fFunction = ns1blankspace.util.toFunction(sFunction, oNS);
+
+  					if (fFunction !== undefined) {fFunction(oParam);}
+  					
+  				}																	
 }
 
 ns1blankspace.debug = 
@@ -5053,6 +5100,8 @@ ns1blankspace.extend =
 					var aCategories = [];
 					var bSetApp = true;
 					var iStep = 1;
+					var bAsync = true;   //LOOK AT REMOVE THIS SO ALWAYS ASYNC
+					var fOnComplete;
 
 					if (oParam != undefined)
 					{
@@ -5060,6 +5109,8 @@ ns1blankspace.extend =
 						if (oParam.categories != undefined) {aCategories = oParam.categories}
 						if (oParam.setApp != undefined) {bSetApp = oParam.setApp}
 						if (oParam.step != undefined) {iStep = oParam.step}
+						if (oParam.bAsync != undefined) {bAsync = oParam.async}
+						if (oParam.onComplete != undefined) {fOnComplete = oParam.onComplete}	
 					}
 					else
 					{
@@ -5081,7 +5132,7 @@ ns1blankspace.extend =
 								oSearch.method = 'SETUP_STRUCTURE_OBJECT_LINK_SEARCH';
 								oSearch.addField('objecttext,categorytext,category,object');
 								oSearch.rows = 100;
-								oSearch.async = false;  //LOOK AT REMOVE THIS
+								oSearch.async = bAsync; 
 								oSearch.sort('object', 'asc');
 								oSearch.getResults(function(data) {ns1blankspace.extend.init(oParam, data)})
 							}
@@ -5116,7 +5167,12 @@ ns1blankspace.extend =
 
 							if (aCategories.length == 0)
 							{
-								if (bSetApp)
+								if (fOnComplete !== undefined)
+								{
+									oParam.initialised = true;
+									ns1blankspace.util.onComplete(oParam);
+								}	
+								else if (bSetApp)
 								{	
 									oParam.extendInit = true;
 									ns1blankspace.app.set(oParam);
@@ -5133,7 +5189,7 @@ ns1blankspace.extend =
 								oSearch.addFilter('category', 'IN_LIST', aCategories.join(','))
 								oSearch.sort('category', 'asc');
 								oSearch.sort('displayorder', 'asc');
-								oSearch.async = false;  //LOOK AT REMOVE THIS
+								oSearch.async = bAsync;
 								
 								oSearch.getResults(function(data) {ns1blankspace.extend.init(oParam, data)});
 							}	
@@ -5152,10 +5208,15 @@ ns1blankspace.extend =
 								}	
 							});
 
-							if (bSetApp)
+							if (fOnComplete !== undefined)
+							{
+								oParam.initialised = true;
+								ns1blankspace.util.onComplete(oParam);
+							}	
+							else if (bSetApp)
 							{	
 								oParam.extendInit = true;
-								ns1blankspace.app.set(oParam)
+								ns1blankspace.app.set(oParam);
 							}	
 						}
 					}	
