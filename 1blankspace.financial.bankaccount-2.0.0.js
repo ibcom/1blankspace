@@ -648,7 +648,7 @@ ns1blankspace.financial.bankAccount =
 									if (oData.length < 21)
 									{	
 										oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
-										ns1blankspace.financial.item.edit(oParam, oData);
+										ns1blankspace.financial.bankAccount.mapping.edit(oParam, oData);
 									}	
 								}
 
