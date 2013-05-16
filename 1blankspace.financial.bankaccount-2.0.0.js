@@ -282,7 +282,7 @@ ns1blankspace.financial.bankAccount =
 														'<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceMappingColumn1" class="ns1blankspaceColumn1Flexible">' +
 														ns1blankspace.xhtml.loading + '</td>' +
-														'<td id="ns1blankspaceMappingColumn2" class="ns1blankspaceColumn2" style="width:350px;"></td>' +
+														'<td id="ns1blankspaceMappingColumn2" class="ns1blankspaceColumn2" style="width:300px;"></td>' +
 														'</tr></table>');					
 										
 										$('#ns1blankspaceMainMapping').html(aHTML.join(''));
@@ -358,13 +358,13 @@ ns1blankspace.financial.bankAccount =
 											if (this.mapfromdescription != '')
 											{	
 												sWhere += '<span class="ns1blankspaceSub">Description ' + (this.descriptionmatchtype==1?'exactly matches':'contains') + '</span>';
-												sWhere +=  ' ' + this.mapfromdescription;
+												sWhere +=  '<br />' + this.mapfromdescription;
 											}	
 
 											if (this.mapfromtext != '')
 											{	
 												sWhere += '<br /><span class="ns1blankspaceSub">Type is</span>';
-												sWhere += ' ' + this.mapfromtext;
+												sWhere += '<br />' + this.mapfromtext;
 											}
 
 											aHTML.push('<tr class="ns1blankspaceRow">');
@@ -470,7 +470,7 @@ ns1blankspace.financial.bankAccount =
 									aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceMappingEditColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-														'<td id="ns1blankspaceMappingEditColumn2" class="ns1blankspaceColumn2" style="width:50px;"></td>' +
+														'<td id="ns1blankspaceMappingEditColumn2" class="ns1blankspaceColumn2" style="width:50px;font-size:0.875em;"></td>' +
 														'</tr></table>');
 
 									$('#ns1blankspaceMappingColumn2').html(aHTML.join(''));
