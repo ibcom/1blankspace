@@ -307,7 +307,7 @@ ns1blankspace.developer.space =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.developer.space.init({id:' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.developer.space.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 						

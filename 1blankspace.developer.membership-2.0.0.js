@@ -311,7 +311,7 @@ ns1blankspace.developer.membership =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.developer.membership.init({id:' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.developer.membership.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 						

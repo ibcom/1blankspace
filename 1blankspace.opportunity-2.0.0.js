@@ -382,7 +382,7 @@ ns1blankspace.opportunity =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.opportunity.init({id:' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspace.opportunity.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 						

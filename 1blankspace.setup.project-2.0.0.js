@@ -288,7 +288,7 @@ ns1blankspace.setup.project =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.setup.project.init({id:' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.setup.project.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 						

@@ -297,7 +297,7 @@ ns1blankspace.stuctureData =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.structureData.init({id:' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.structureData.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 						

@@ -375,7 +375,7 @@ ns1blankspace.event =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.event.init({id:' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.event.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 

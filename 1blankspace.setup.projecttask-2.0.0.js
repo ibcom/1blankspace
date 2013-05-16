@@ -380,7 +380,7 @@ ns1blankspace.setup.projectTask =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.setup.projectTask.init({id:' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.setup.projectTask.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 						

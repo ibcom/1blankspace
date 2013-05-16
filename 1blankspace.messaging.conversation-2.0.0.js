@@ -415,7 +415,7 @@ ns1blankspace.messaging.conversation =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.messaging.conversation.init({id:' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.messaging.conversation.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 							});
 						

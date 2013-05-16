@@ -303,7 +303,7 @@ ns1blankspace.setup.userRole =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.setup.userRole.init({id:' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.setup.userRole.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 						

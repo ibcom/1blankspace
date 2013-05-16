@@ -402,7 +402,7 @@ search: 		{
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.news.init({id:' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.news.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 						
