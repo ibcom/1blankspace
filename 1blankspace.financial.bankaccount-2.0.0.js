@@ -34,15 +34,7 @@ ns1blankspace.financial.bankAccount =
 						ns1blankspace.financial.initData(oParam)
 					}
 					else
-					{
-						if (bShowHome)
-						{
-							ns1blankspace.history.view({
-								newDestination: 'ns1blankspace.financial.bankAccount.init({showHome: true});',
-								move: false
-								})		
-						}	
-										
+					{				
 						ns1blankspace.app.set(oParam);
 						$('#ns1blankspaceViewControlNew').button({disabled: true});
 					}	
@@ -215,10 +207,11 @@ ns1blankspace.financial.bankAccount =
 							'<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceControlSubContext_date">' + ns1blankspace.objectContextData.lastreconcileddate + '</span>' +
 							'<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceControlSubContext_amount">$' + ns1blankspace.objectContextData.lastreconciledamount + '</span>');
 						
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.bankAccount.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.financial.bankAccount.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
-							})
+						})
 					
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.bankAccount.summary()'});
 					}		

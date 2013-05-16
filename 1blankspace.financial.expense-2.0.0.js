@@ -427,10 +427,11 @@ ns1blankspace.financial.expense =
 							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>' +
 							'<br /><span id="ns1blankspaceControlContext_outstanding" class="ns1blankspaceSub"></span>');
 							
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.expense.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.financial.expense.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
-							})
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.expense.summary()'});
 					}	

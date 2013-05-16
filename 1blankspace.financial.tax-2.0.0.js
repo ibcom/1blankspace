@@ -373,10 +373,11 @@ ns1blankspace.financial.tax =
 							'<br /><span id="ns1blankspaceControlContext_startdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData['taxstartdate'] + '</span>' +
 							'<br /><span id="ns1blankspaceControlContext_status" class="ns1blankspaceSub">' + ns1blankspace.objectContextData['statustext'] + '</span>');
 							
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.tax.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.financial.tax.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
-							})
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.tax.summary()'});
 					}	

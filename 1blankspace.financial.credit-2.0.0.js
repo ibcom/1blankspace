@@ -436,10 +436,11 @@ ns1blankspace.financial.credit =
 							
 						ns1blankspace.financial.credit.refresh();
 														
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.credit.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.financial.credit.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
-							})
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.credit.summary()'});
 					}	

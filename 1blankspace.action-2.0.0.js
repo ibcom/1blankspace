@@ -388,10 +388,11 @@ ns1blankspace.action =
 							$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.subject +
 								'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.duedate + '</span>');
 								
-							ns1blankspace.history.view({
+							ns1blankspace.history.view(
+							{
 								newDestination: 'ns1blankspace.action.init({id: ' + ns1blankspace.objectContext + '})',
 								move: false
-								})
+							});
 							
 							ns1blankspace.history.control({functionDefault: 'ns1blankspace.action.summary()'});		
 						}

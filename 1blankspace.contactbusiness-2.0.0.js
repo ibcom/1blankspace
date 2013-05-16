@@ -427,10 +427,11 @@ ns1blankspace.contactBusiness =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.contactBusiness.init({showHome: false});ns1blankspace.contactBusiness.search.send("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.contactBusiness.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
-							})
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.contactBusiness.summary()'})
 					}	

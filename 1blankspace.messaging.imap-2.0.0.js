@@ -181,11 +181,6 @@ ns1blankspace.messaging.imap =
 						if (oParam.autoShow != undefined) {bAutoShow = oParam.autoShow}
 					}	
 					
-					ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.messaging.imap.init({showHome: true});',
-							move: false
-							});	
-			
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					
 					if (ns1blankspace.messaging.imap.emailAccounts.length == 0)
@@ -2258,11 +2253,12 @@ ns1blankspace.messaging.imap =
 													}
 													else
 													{
-														ns1blankspace.history.view({
-																newDestination: 'ns1blankspace.messaging.imap.init({showHome: false});ns1blankspace.messaging.imap.search.send("-' + ns1blankspace.objectContext + '")',
-																move: false
-																});
-																
+														ns1blankspace.history.view(
+														{
+															newDestination: 'ns1blankspace.messaging.imap.init({id:' + ns1blankspace.objectContext + '})',
+															move: false
+														});
+															
 														if (bSetContext) {ns1blankspace.objectContextData = oResponse.data.rows[0]};
 														
 														if (oResponse.data.rows.length != 0)

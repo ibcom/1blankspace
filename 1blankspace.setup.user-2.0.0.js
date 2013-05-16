@@ -355,10 +355,11 @@ ns1blankspace.setup.user =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.setup.user.init({showHome: false});ns1blankspace.setup.user.search.send("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.setup.user.init({id:' + ns1blankspace.objectContext + '})',
 							move: false
-							})
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.setup.user.summary()'})
 					}		

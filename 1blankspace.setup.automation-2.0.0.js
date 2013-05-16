@@ -350,10 +350,11 @@ ns1blankspace.setup.automation =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.setup.automation.init({showHome: false});ns1blankspace.setup.automation.search.send("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.setup.automation.init({id:' + ns1blankspace.objectContext + '})',
 							move: false
-							});
+						});
 						
 						ns1blankspace.setup.automation.summary();
 					}	

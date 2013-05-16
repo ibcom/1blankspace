@@ -435,10 +435,11 @@ ns1blankspace.financial.journal =
 							'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.journaldate + '</span>' +
 							'<br /><span id="ns1blankspaceControlContext_balance" class="ns1blankspaceSub"></span>');
 							
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.journal.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.financial.journal.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
-							})
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.journal.summary()'});
 					}	

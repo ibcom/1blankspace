@@ -380,10 +380,11 @@ ns1blankspace.opportunity =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.opportunity.init({showHome: false});ns1blankspace.opportunity.search.send("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.opportunity.init({id:' + ns1blankspace.objectContext + '")',
 							move: false
-							})
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.opportunity.summary()'})
 					}	

@@ -1978,47 +1978,42 @@ ns1blankspace.history.view =
 							ns1blankspace.history.lastDestinationInstruction = sDestinationInstructions;
 							
 							if (bMove)
-							{
-								//if (ns1blankspace.timer.history === undefined)
-								//{	
-								//	ns1blankspace.timer.history = window.setInterval('ns1blankspace.history.view({instruction: 0, move: true})', 100);
-								//}
-								//else
-								//{	
-									var aDestinationInstructions = sDestinationInstructions.split(';');
-									var aDestination = (aDestinationInstructions[0]).split('(');
-									var sDestinationNamespace = aDestination[0];
-									var sDestinationParam = (aDestination[1]).split(')')[0];
+							{	
+								var aDestinationInstructions = sDestinationInstructions.split(';');
+								var aDestination = (aDestinationInstructions[0]).split('(');
+								var sDestinationNamespace = aDestination[0];
+								var sDestinationParam = (aDestination[1]).split(')')[0];
 
-									if (sDestinationNamespace)
+								if (sDestinationNamespace)
+								{									
+									if ((sDestinationNamespace).indexOf('setup') != -1 && ns1blankspace.option.autoSetupSwitch)
 									{
-										window.clearInterval(ns1blankspace.timer.history);
-										
-										if ((sDestinationNamespace).indexOf('setup') != -1 && ns1blankspace.option.autoSetupSwitch)
-										{
-											ns1blankspace.setupView = false;
-											$('#ns1blankspaceViewControlSetup').attr('checked', true);
-											$('#ns1blankspaceViewControlSetup').button('refresh');
-											ns1blankspace.setup.switch({viewScript: sDestinationNamespace});
-										}
-										else
+										ns1blankspace.setupView = false;
+										$('#ns1blankspaceViewControlSetup').attr('checked', true);
+										$('#ns1blankspaceViewControlSetup').button('refresh');
+										ns1blankspace.setup.switch({viewNamespace: sDestinationNamespace});
+									}
+									else
+									{	
+										if (sDestinationNamespace !== undefined)
 										{	
-											//SEE if can find in the name space
+											var fDestinationNamespace = ns1blankspace.util.toFunction(sDestinationNamespace)
 
-											if (aDestinationInstructions[0]) !== undefined)
-											{	
-												fDestinationNamespace = ns1blankspace.util.toFunction(sDestinationNamespace[0])
-												fDestination(sDestinationParam[1])
-												//eval(sDestinationInstructions);
-												//NEED TO CONVERT INSTUCTIONS TO USE NAMESPACE AND GET RID OF EVAL
+											if (sDestinationParam.substring(0,1) == "{")
+											{
+												fDestinationNamespace(ns1blankspace.util.toObject(sDestinationParam));
 											}
 											else
-											{
-												ns1blankspace.home.show();
-											}
+											{	
+												fDestinationNamespace(sDestinationParam);
+											}	
 										}
-									}	
-								//}			
+										else
+										{
+											ns1blankspace.home.show();
+										}
+									}
+								}		
 							}	
 						}
 					}	
@@ -2370,12 +2365,12 @@ ns1blankspace.setup =
 {
 	switch:		function (oParam)
 				{
-					var sViewScript;
+					var sViewNamespace;
 					var sXHTMLElementID;
 
 					if (oParam != undefined)
 					{
-						if (oParam.viewScript != undefined) {sViewScript = oParam.viewScript}
+						if (oParam.viewNamespace != undefined) {sViewNamespace = oParam.viewNamespace}
 						if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
 					}		
 
@@ -2404,9 +2399,9 @@ ns1blankspace.setup =
 							ns1blankspace.control.views.show(this);;
 						});
 
-						if (sViewScript)
+						if (sViewNamespace !== undefined && sViewNamespace != '')
 						{
-							eval(sViewScript);
+							ns1blankspace.util.toFunction(sViewNamespace)();
 						}
 						else
 						{
@@ -2429,9 +2424,9 @@ ns1blankspace.setup =
 							ns1blankspace.control.setup.views.show(this);;
 						});
 						
-						if (sViewScript)
+						if (sViewNamespace !== undefined && sViewNamespace != '')
 						{
-							eval(sViewScript);
+							ns1blankspace.util.toFunction(sViewNamespace)();
 						}
 						else
 						{
@@ -3562,7 +3557,36 @@ ns1blankspace.util =
 
   					if (fFunction !== undefined) {fFunction(oParam);}
   					
-  				}																	
+  				},
+
+  	toObject:
+  				function (sObject)
+  				{
+  					var oObject;
+
+  					if (sObject !== undefined && sObject != '')
+  					{
+  						oObject = {};
+
+  						sObject = sObject.replace('{', '');
+  						sObject = sObject.replace('}', '');
+
+	  					var aObject = sObject.split(',');	
+	  					var aValue;
+	  					var sValue;
+
+	  					$.each(aObject, function(i,v)
+	  					{
+	  						aValue = v.split(':');
+	  						sValue = (aValue[1]).replace(/"/g, '');
+	  						sValue = (sValue).replace(/'/g, '');
+							sValue = (sValue).trim();
+	  						oObject[aValue[0]] = sValue;	
+	  					});
+	  				}	
+
+  					return oObject;
+  				}																		
 }
 
 ns1blankspace.debug = 
@@ -4391,9 +4415,7 @@ ns1blankspace.render.page =
 								
 								$('.ns1blankspaceRenderPage_' + sXHTMLContext).hide();
 								$('.ns1blankspaceRenderPage_' + sXHTMLContext + ':last').after(aHTML.join(''));
-								
-								//$('.ns1blankspaceRowSelect' + sXHTMLContext).unbind('click');
-								
+																
 								if (sFunctionOpen != undefined)
 								{
 									$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow + ' .ns1blankspaceRowSelect').button({

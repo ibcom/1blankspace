@@ -21,14 +21,6 @@ ns1blankspace.supportIssue =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Support Issues';
-					
-					if (bShowHome)
-					{
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.supportIssue.init({showHome: true});',
-							move: false
-							});	
-					}	
 							
 					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
@@ -357,10 +349,11 @@ ns1blankspace.supportIssue =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.supportIssue.init({showHome: false});ns1blankspace.supportIssue.search.send("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.supportIssue.init({id:' + ns1blankspace.objectContext + '})',
 							move: false
-							});
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.supportIssue.summary()'});
 					}	

@@ -295,10 +295,11 @@ ns1blankspace.stuctureData =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.structureData.init({showHome: false});ns1blankspace.structureData.search.send("-' + ns1blankspace.objectContext + '")',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.structureData.init({id:' + ns1blankspace.objectContext + '})',
 							move: false
-							});
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.structureData.summary()'});
 					}	

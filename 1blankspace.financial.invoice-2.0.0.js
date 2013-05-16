@@ -494,10 +494,11 @@ ns1blankspace.financial.invoice =
 							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>' +
 							'<br /><span id="ns1blankspaceControlContext_outstanding" class="ns1blankspaceSub"></span>');
 							
-						ns1blankspace.history.view({
-							newDestination: 'ns1blankspace.financial.invoice.init({showHome: false, id: ' + ns1blankspace.objectContext + '})',
+						ns1blankspace.history.view(
+						{
+							newDestination: 'ns1blankspace.financial.invoice.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
-							})
+						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.invoice.summary.show()'});
 					}	
@@ -585,7 +586,7 @@ ns1blankspace.financial.invoice =
 											$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
 											var aHTML = [];
-											
+
 											aHTML.push('<table class="ns1blankspace">');
 											
 											if (ns1blankspace.objectContextData.contactbusinesssenttotext != '')

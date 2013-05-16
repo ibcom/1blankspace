@@ -456,7 +456,7 @@ ns1blankspace.contactPerson =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.contactPerson.init({id: ' + ns1blankspace.objectContext + '")',
+							newDestination: 'ns1blankspace.contactPerson.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 						
