@@ -1255,8 +1255,8 @@ ns1blankspace.financial.bankAccount =
 																				'You can now reconcile these bank transactions by clicking Reconcile.</td></tr>');
 															}	
 
-															aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportNew" class="ns1blankspaceAction">' +
-																			'New Import</span></td></tr>');
+															//aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportNew" class="ns1blankspaceAction">' +
+															//				'New Import</span></td></tr>');
 
 														}
 
@@ -1270,7 +1270,8 @@ ns1blankspace.financial.bankAccount =
 														})
 														.click(function() {
 															ns1blankspace.financial.bankAccount.import.add();
-														});
+														})
+														.css('width', '70px');
 														
 														$('#ns1blankspaceBankAccountImportMappingsApply').button(
 														{
@@ -1279,8 +1280,8 @@ ns1blankspace.financial.bankAccount =
 														.click(function()
 														{	
 															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
-														}).
-														css('width', '100px');
+														})
+														.css('width', '100px');
 
 														$('#ns1blankspaceBankAccountImportCreateItems').button(
 														{
@@ -1374,7 +1375,8 @@ ns1blankspace.financial.bankAccount =
 													var sFinancialAccountText = ns1blankspace.util.getData(oParam, 'data-financialaccounttext').value;
 													var sDescription = ns1blankspace.util.getData(oParam, 'data-description').value;
 													var dDate = ns1blankspace.util.getData(oParam, 'data-date').value;
-
+													var bSplit = ns1blankspace.util.getParam(oParam, 'split', {default: false}).value;
+												
 													if ($('#ns1blankspaceFinancialImportItem_container_edit-' + sKey).length != 0)
 													{
 														$('#ns1blankspaceFinancialImportItem_container_edit-' + sKey).remove();
@@ -1386,7 +1388,7 @@ ns1blankspace.financial.bankAccount =
 														aHTML.push('<table class="ns1blankspaceContainer">' +
 																			'<tr class="ns1blankspaceContainer">' +
 																			'<td id="ns1blankspaceImportEditColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-																			'<td id="ns1blankspaceImportEditColumn2" class="ns1blankspaceColumn2" style="width:50px;"></td>' +
+																			'<td id="ns1blankspaceImportEditColumn2" class="ns1blankspaceColumn2" style="width:150px;"></td>' +
 																			'</tr></table>');
 
 														$('#ns1blankspaceFinancialImportItem_container-' + sKey).after('<tr id="ns1blankspaceFinancialImportItem_container_edit-' + sKey + '">' +
@@ -1396,9 +1398,17 @@ ns1blankspace.financial.bankAccount =
 									
 														aHTML.push('<table>');
 																
-														aHTML.push('<tr><td id="ns1blankspaceImportEditSaveContainer"><span id="ns1blankspaceImportEditSave" class="ns1blankspaceAction">' +
+														aHTML.push('<tr><td id="ns1blankspaceImportEditSaveContainer" style="text-align:right;"><span id="ns1blankspaceImportEditSave" class="ns1blankspaceAction">' +
 																		'Save</span></td></tr>');
-					
+
+														if (iType == 1 && !bSplit)
+														{
+															aHTML.push('<tr><td id="ns1blankspaceImportEditSplitContainer" style="text-align:right;"><span id="ns1blankspaceImportEditSplit" class="ns1blankspaceAction">' +
+																		'Split</span></td></tr>');
+														}	
+						
+														aHTML.push('<tr><td id="ns1blankspaceImportEditAmountContainer"></td></tr>');
+
 														aHTML.push('</table>');					
 														
 														$('#ns1blankspaceImportEditColumn2').html(aHTML.join(''));
@@ -1431,9 +1441,51 @@ ns1blankspace.financial.bankAccount =
 														})
 														.css('width', '70px');
 
+														$('#ns1blankspaceImportEditSplit').button(
+														{
+															label: 'Split'
+														})
+														.click(function()
+														{	
+															$('#ns1blankspaceImportEditSplitContainer').html(ns1blankspace.xhtml.loadingSmall);
+
+															var oSearch = new AdvancedSearch();
+																	
+															oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
+															oSearch.addField('reference,amount,receiveddate,contactbusinessreceivedfromtext,contactpersonreceivedfromtext');
+															oSearch.addFilter('sourcebanktransaction', 'EQUAL_TO', sKey);
+															oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext)
+															oSearch.rows = 200;
+															oSearch.getResults(function(oResponse)
+															{
+																if (oResponse.data.rows.length == 0)
+																{
+																	var sHTML = 'There are no other receipts.'
+																}	
+																else if (oResponse.data.rows.length == 1)
+																{
+																	var sHTML = 'There is one other receipt.'
+																}	
+																else
+																{
+																	var sHTML = 'There are ' + oResponse.data.rows.length + ' other receipts.'
+																}	
+
+																$('#ns1blankspaceImportEditSplitContainer').html('<span class="ns1blankspaceSub">' + sHTML + '</span>');
+
+																$('#ns1blankspaceFinancialAccountContainer_' + sKey).after('<tr><td class="ns1blankspaceCaption">' +
+																		'Amount' +
+																		'</td></tr>' +
+																		'<tr><td class="ns1blankspaceText">' +
+																		'<input id="ns1blankspaceItemAmount_' + sKey + '" class="ns1blankspaceText">' +
+																		'</td></tr>');
+															});
+														})
+														.css('width', '70px');
+
 														var aHTML = [];
 
-														aHTML.push('<table class="ns1blankspace" style="width:290px;">');							
+														aHTML.push('<table class="ns1blankspace">');							
 															
 														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 																		'Business' +
@@ -1454,7 +1506,16 @@ ns1blankspace.financial.bankAccount =
 																			' data-parent="ns1blankspaceItemsEditContactBusiness_' + sKey + '"' +
 																			' data-parent-search-id="contactbusiness"' +
 																			' data-parent-search-text="tradename">' +
-																		'</td></tr>');		
+																		'</td></tr>');
+
+														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+																		'Financial Account' +
+																		'</td></tr>' +
+																		'<tr id="ns1blankspaceFinancialAccountContainer_' + sKey + '"><td class="ns1blankspaceSelect">' +
+																		'<input id="ns1blankspaceFinancialAccount_' + sKey + '" class="ns1blankspaceSelect"' +
+																			' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+																			' data-columns="title">' +
+																		'</td></tr>');							
 																			
 														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 																		ns1blankspace.option.taxVATCaption + ' Type' +
@@ -1476,15 +1537,6 @@ ns1blankspace.financial.bankAccount =
 																		'<tr><td class="ns1blankspaceTextMulti">' +
 																		'<textarea rows="2" cols="35" id="ns1blankspaceItemsEditDescription_' + sKey + '" class="ns1blankspaceTextMultiSmall"></textarea>' +
 																		'</td></tr>');
-														
-														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-																		'Financial Account' +
-																		'</td></tr>' +
-																		'<tr><td class="ns1blankspaceSelect">' +
-																		'<input id="ns1blankspaceFinancialAccount_' + sKey + '" class="ns1blankspaceSelect"' +
-																			' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
-																			' data-columns="title">' +
-																		'</td></tr>');	
 
 														aHTML.push('</table>');	
 
@@ -1520,7 +1572,7 @@ ns1blankspace.financial.bankAccount =
 																taxTypeXHTMLElementName: 'radioTaxCode_' + sKey
 															});
 														});
-													}
+													}	
 												},
 
 									save: 		{
@@ -1566,7 +1618,8 @@ ns1blankspace.financial.bankAccount =
 																		{
 																			reconciliation: ns1blankspace.financial.bankAccount.reconcile.current.data.id,
 																			object: iObject,
-																			objectContext: iObjectContext
+																			objectcontext: iObjectContext,
+																			sourcebanktransaction: iID
 																		};
 
 																		$.ajax(
@@ -3016,7 +3069,8 @@ ns1blankspace.financial.bankAccount =
 														}
 														
 														oData.object = iObject;
-														oData.objectcontext = aXHTMLElementID[1];	
+														oData.objectcontext = aXHTMLElementID[1];
+														oData.sourcebanktransaction = iSearchSourceID;	
 
 														$.ajax(
 														{
