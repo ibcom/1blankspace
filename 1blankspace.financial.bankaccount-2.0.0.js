@@ -1309,7 +1309,7 @@ ns1blankspace.financial.bankAccount =
 																				oRow.description + '</td>');
 
 														aHTML.push('<td id="ns1blankspaceFinancialImportItem_Amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-																				 parseFloat(Math.abs(oRow.amount)).toFixed(2) +
+																				 parseFloat(Math.abs((oRow.amount).parseCurrency())).formatMoney() +
 																				 '<br /><span class="ns1blankspaceSub">' + oRow.categorytext + '</span></td>');						
 																		
 														aHTML.push('<td class="ns1blankspaceRow" id="ns1blankspaceFinancialImportItem_status-' + oRow.id + '">');
@@ -1880,7 +1880,7 @@ ns1blankspace.financial.bankAccount =
 									{
 										var aHTML = [];
 
-										if (parseInt((oResponse.outofbalance).parseCurrency()) !== 0)
+										if (parseFloat((oResponse.outofbalance).parseCurrency()) !== 0)
 										{	
 											aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
 															'$' + (oResponse.outofbalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
@@ -1892,7 +1892,7 @@ ns1blankspace.financial.bankAccount =
 															'Edit</div>');
 										}
 
-										if (iMode == 1 && iStatus == 1 && parseInt((oResponse.outofbalance).parseCurrency()) == 0)
+										if (iMode == 1 && iStatus == 1 && parseFloat((oResponse.outofbalance).parseCurrency()) == 0)
 										{	
 											aHTML.push('<div style="width:20px; margin-left:5px; margin-right:2px; margin-bottom:10px; float:right;" class="ns1blankspaceBankAccountRecoLock" id="ns1blankspaceBankAccountRecoLock-' + iReconciliation + '">' +
 															'Lock</div>');
@@ -2003,7 +2003,7 @@ ns1blankspace.financial.bankAccount =
 												data: oData,
 												dataType: 'json',
 												success: function() {
-													ns1blankspace.financial.bankAccount.reconcile.show();
+													ns1blankspace.financial.bankAccount.init({id: ns1blankspace.objectContext});
 													ns1blankspace.status.message('Reconciliation locked.');
 												}
 											});
