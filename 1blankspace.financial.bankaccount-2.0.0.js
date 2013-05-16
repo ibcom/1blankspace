@@ -2157,7 +2157,7 @@ ns1blankspace.financial.bankAccount =
 											var sData = 'bankaccount=' + ns1blankspace.objectContext;
 											sData += '&id=' + ns1blankspace.util.fs(sID);
 											if ($('#ns1blankspaceReconcileEditStatementDate').val() != '') {sData += '&statementdate=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementDate').val())}
-											sData += '&statementbalance=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementBalance').val());
+											if ($('#ns1blankspaceReconcileEditStatementBalance').val() != '') {sData += '&statementbalance=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementBalance').val())}
 											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
 											
 											$.ajax(
