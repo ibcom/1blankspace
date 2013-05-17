@@ -3134,13 +3134,16 @@ ns1blankspace.util =
 
 							if (sSplit !== undefined)
 							{
-								oReturn.values = oParam[sParam].split(sSplit);
+								if (oParam[sParam] !== undefined)
+								{	
+									oReturn.values = oParam[sParam].split(sSplit);
 
-								if (iIndex !== undefined)
-								{
-									if (iIndex < oReturn.values.length)
+									if (iIndex !== undefined)
 									{
-										oReturn.value = oReturn.values[iIndex];
+										if (iIndex < oReturn.values.length)
+										{
+											oReturn.value = oReturn.values[iIndex];
+										}
 									}
 								}	
 							}
