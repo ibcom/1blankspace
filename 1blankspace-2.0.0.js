@@ -3176,7 +3176,32 @@ ns1blankspace.util =
 					}
 					
 					return oReturn;
-				},			
+				},
+
+	getRow: 	function(oResponse, sDataKey, oOption)
+				{
+					var oReturn;
+
+					if (oResponse.status == 'OK')
+					{
+						if (oResponse.data.rows !== undefined)
+						{	
+							iRow = ns1blankspace.util.getParam(oOption, 'row', {default: 0}).value;
+
+							if (iRow < oResponse.data.rows.length)
+							{
+								var oReturn = oResponse.data.rows[iRow];
+
+								if (ns1blankspace.util.param(oOption, 'attr').exists)
+								{
+									oReturn = oReturn[ns1blankspace.util.param(oOption, 'property').value]
+								}	
+							}	
+						}	
+					}
+
+					return oReturn;
+				},								
 
 	param: 		function(oParam, sParam, sSplit)
 				{
@@ -3589,7 +3614,45 @@ ns1blankspace.util =
 	  				}	
 
   					return oObject;
-  				}																		
+  				},
+
+  	getMethod: 
+  				function getM ()
+  				{
+  					var methods = [];
+					for (var m in ns1blankspace) {
+					    if (typeof ns1blankspace[m] == "function") {
+					        methods.push(m);
+					    }
+					}
+					console.log(methods.join(","));
+  				},
+
+  	about: 
+  				function (sNamespace)
+  				{
+  					if (sNamespace === undefined) {sNamespace = 'ns1blankspace'}
+  					var oNamespace = ns1blankspace.util.toFunction(sNamespace)
+
+  					var aMethods = [];
+
+					for (var m in oNamespace)
+					{
+					    if (typeof oNamespace[m] == "object")
+					    {
+					        aMethods.push({name: m});
+					    }
+					}
+
+					aMethods.sort(ns1blankspace.util.sortBy('name'))
+
+					$.each(aMethods, function()
+					{	
+						console.log(this.name + "\r\n");
+					});
+					
+					return aMethods
+  				}																						
 }
 
 ns1blankspace.debug = 

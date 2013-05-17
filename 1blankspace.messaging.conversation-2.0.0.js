@@ -18,7 +18,7 @@ ns1blankspace.messaging.conversation =
 						if (oParam.new != undefined) {bNew = oParam.new}	
 					}
 
-					if (bNew) {ns1blankspace.messaging.isConversationOwner = true}
+					if (bNew) {ns1blankspace.messaging.conversation.isConversationOwner = true}
 
 					ns1blankspace.app.reset();
 
@@ -302,8 +302,11 @@ ns1blankspace.messaging.conversation =
 						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
+						if (ns1blankspace.messaging.conversation.isConversationOwner)
+						{	
+							aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
+						}
 
 						aHTML.push('</table>');
 						
@@ -399,12 +402,12 @@ ns1blankspace.messaging.conversation =
 								
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 
-						ns1blankspace.messaging.isConversationOwner = false;
+						ns1blankspace.messaging.conversation.isConversationOwner = false;
 					}
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
-						ns1blankspace.messaging.isConversationOwner = (ns1blankspace.user.id == ns1blankspace.objectContextData.owner)
+						ns1blankspace.messaging.conversation.isConversationOwner = (ns1blankspace.user.id == ns1blankspace.objectContextData.owner)
 
 						$('#ns1blankspaceControlContext').html(
 								ns1blankspace.objectContextData.title + 
@@ -469,7 +472,7 @@ ns1blankspace.messaging.conversation =
 			
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
-						if (ns1blankspace.messaging.isConversationOwner)
+						if (ns1blankspace.messaging.conversation.isConversationOwner)
 						{
 							aHTML.push('<tr><td style="padding-top:10px;">' +
 										'<span id="ns1blankspaceConversationAddParticipant" class="ns1blankspaceAction">Add&nbsp;Participant</span>' +
@@ -493,7 +496,7 @@ ns1blankspace.messaging.conversation =
 
 						$('#ns1blankspaceConversationRemoveParticipant').button().click(function(event)
 						{
-							ns1blankspace.messaging.conversation.participants.remove();
+							ns1blankspace.messaging.conversation.participants.leave();
 						});
 					}	
 				},
@@ -519,7 +522,7 @@ ns1blankspace.messaging.conversation =
 						
 						aHTML.push('<table class="ns1blankspace">');
 							
-						if (ns1blankspace.messaging.isConversationOwner)
+						if (ns1blankspace.messaging.conversation.isConversationOwner)
 						{
 							aHTML.push('<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">' +
@@ -571,7 +574,7 @@ ns1blankspace.messaging.conversation =
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
-						if (ns1blankspace.messaging.isConversationOwner)
+						if (ns1blankspace.messaging.conversation.isConversationOwner)
 						{
 							var aHTML = [];
 						
@@ -623,7 +626,7 @@ ns1blankspace.messaging.conversation =
 													
 									$('#ns1blankspaceMainParticipants').html(aHTML.join(''));	
 									
-									if (ns1blankspace.messaging.isConversationOwner)
+									if (ns1blankspace.messaging.conversation.isConversationOwner)
 									{	
 										var aHTML = [];1;	
 										
@@ -701,7 +704,7 @@ ns1blankspace.messaging.conversation =
 
 											$('#ns1blankspaceParticipantsColumn1').html(aHTML.join(''));
 											
-											if (ns1blankspace.messaging.isConversationOwner)
+											if (ns1blankspace.messaging.conversation.isConversationOwner)
 											{
 												$('#ns1blankspaceConversationParticipants td.ns1blankspaceRowSelect').button(
 												{
@@ -924,7 +927,7 @@ ns1blankspace.messaging.conversation =
 									}
 								},
 
-					select:		function (sXHTMLElementID)
+					select:		function (oParam, sXHTMLElementID)
 								{
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
@@ -942,23 +945,65 @@ ns1blankspace.messaging.conversation =
 									});	
 								},
 									
-					remove:		function (sXHTMLElementID)
+					remove:		function (oParam)
 								{
-									var aSearch = sXHTMLElementID.split('-');
-									var sElementId = aSearch[0];
-									var sContext = aSearch[1];
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+									if (sXHTMLElementID !== undefined)
+									{	
+										var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 									
-									var sData = 'remove=1&user=' + sContext + '&conversation=' + ns1blankspace.objectContext;
-												
-									$.ajax(
+										var sData = 'remove=1&user=' + sID + '&conversation=' + ns1blankspace.objectContext;
+																					
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_PARTICIPANT_MANAGE'),
+											data: sData,
+											dataType: 'json',
+											success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
+										});	
+									}	
+								},
+
+					leave:		function (oParam)
+								{
+									var oSearch = new AdvancedSearch();
+										
+									oSearch.method = 'MESSAGING_CONVERSATION_PARTICIPANT_SEARCH';
+									oSearch.addField('user');
+									oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.user.id);
+									oSearch.addCustomOption('conversation', ns1blankspace.objectContext);
+									oSearch.rows = 1;
+									oSearch.getResults(function(oResponse)
 									{
-										type: 'POST',
-										url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_PARTICIPANT_MANAGE'),
-										data: sData,
-										dataType: 'json',
-										success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
-									});	
-								}
+										var iID = ns1blankspace.util.getRow(oResponse, {property: 'id'})
+
+										if (iID !== undefined)
+										{	
+											var oData = 
+											{
+												id: iID,
+												remove: 1,
+												user: ns1blankspace.user.id,
+												conversation:  ns1blankspace.objectContext
+											}	
+														
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_PARTICIPANT_MANAGE'),
+												data: oData,
+												dataType: 'json',
+												success: function(data)
+												{
+													ns1blankspace.status.message('Removed from conversation')
+													ns1blankspace.messaging.conversation.init();
+												}
+											});	
+										}	
+									});		
+								}			
 				},
 
 	posts: 		{
@@ -1068,10 +1113,12 @@ ns1blankspace.messaging.conversation =
 												ns1blankspace.messaging.conversation.comments.show({post: aXHTMLElementID[1]});
 											})
 
-											$('.ns1blankspaceRowAddComment').button({
+											$('.ns1blankspaceRowAddComment').button(
+											{
 												text: false,
 												label: "Comment",
-												icons: {
+												icons:
+												{
 													 primary: "ui-icon-comment"
 												}
 											})

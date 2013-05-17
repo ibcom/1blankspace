@@ -548,8 +548,8 @@ ns1blankspace.messaging.imap =
 									
 										$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 										$('#' + this.id).parent().find('td').removeClass('ns1blankspaceBold');
-										ns1blankspace.messaging.imap.read(this.id);
-										ns1blankspace.messaging.imap.search.show(this.id, {reply: true});
+										ns1blankspace.messaging.imap.inbox.markAsRead(this.id);
+										ns1blankspace.messaging.imap.show(this.id, {reply: true});
 									})
 									.css('width', '15px')
 									.css('height', '20px');
