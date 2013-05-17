@@ -3947,11 +3947,11 @@ ns1blankspace.financial.util =
 										cRate = parseFloat($('input[name="' + sRateXHTMLElementName + '"]:checked').attr("data-rate"))
 									}
 
-									if (cAmount === undefined)
+									if ($('#' + sAmountXHTMLElementID).length == 1)
 									{
 										cAmount = parseFloat($('#' + sAmountXHTMLElementID).val());
-									}
-
+									}	
+									
 									if (cRate == 0)
 									{
 										cTax = 0;

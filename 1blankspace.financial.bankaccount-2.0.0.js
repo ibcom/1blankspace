@@ -1315,7 +1315,11 @@ ns1blankspace.financial.bankAccount =
 																		
 														aHTML.push('<td class="ns1blankspaceRow" id="ns1blankspaceFinancialImportItem_status-' + oRow.id + '">');
 
-														aHTML.push((oRow.status==3?'Confirmed':oRow.statustext));
+														var sStatusText = oRow.statustext;
+														if (oRow.status==3) {sStatusText = 'Confirmed'};
+														if (oRow.status==4) {sStatusText = 'Transferred to financials'};
+
+														aHTML.push(sStatusText);
 
 														if (oRow.status == 3)
 														{	
@@ -1337,7 +1341,7 @@ ns1blankspace.financial.bankAccount =
 
 														if (oRow.status == 3)
 														{	
-															aHTML.push('<span id="ns1blankspaceFinancialImportItem_options_edit-' + oRow.id + '-' + (oRow.amount>0?1:2) + '" class="ns1blankspaceRowEdit"' +
+															aHTML.push('<span id="ns1blankspaceFinancialImportItem_options_edit-' + oRow.id + '-' + (oRow.amount<0?1:2) + '" class="ns1blankspaceRowEdit"' +
 																		' data-amount="' + Math.abs(oRow.amount) + '"' +
 																		' data-type="' + (oRow.amount<0?1:2) + '"' +
 																		' data-taxtype="' + oRow.taxtype + '"' +
@@ -1357,10 +1361,13 @@ ns1blankspace.financial.bankAccount =
 									refresh: 	function (oParam)
 												{
 													var iID = ns1blankspace.util.getParam(oParam, 'bankTransactionID').value;
-													var iType = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 2}).value;
+													var iItemStatus = ns1blankspace.util.getParam(oParam, 'itemStatus', {default: 4}).value;
 
 													$('#ns1blankspaceFinancialImportItem_options_edit_container-' + iID).html('');
-													$('#ns1blankspaceFinancialImportItem_status-' + iID).html('Transferred To Financials');
+													if (iItemStatus == 4)
+													{	
+														$('#ns1blankspaceFinancialImportItem_status-' + iID).html('Transferred to financials');
+													}	
 													$('#ns1blankspaceFinancialImportItem_container_edit-' + iID).remove();
 												},		
 
@@ -1396,18 +1403,18 @@ ns1blankspace.financial.bankAccount =
 
 														var aHTML = [];
 									
-														aHTML.push('<table>');
+														aHTML.push('<table style="margin-left:25px; width:100px;">');
 																
-														aHTML.push('<tr><td id="ns1blankspaceImportEditSaveContainer" style="text-align:right;"><span id="ns1blankspaceImportEditSave" class="ns1blankspaceAction">' +
+														aHTML.push('<tr><td id="ns1blankspaceImportEditSaveContainer"><span id="ns1blankspaceImportEditSave" class="ns1blankspaceAction">' +
 																		'Save</span></td></tr>');
 
-														if (iType == 1 && !bSplit)
+														if (iType == 2 && !bSplit)
 														{
-															aHTML.push('<tr><td id="ns1blankspaceImportEditSplitContainer" style="text-align:right;"><span id="ns1blankspaceImportEditSplit" class="ns1blankspaceAction">' +
+															aHTML.push('<tr><td id="ns1blankspaceImportEditSplitContainer" style="padding-top:10px;"><span id="ns1blankspaceImportEditSplit" class="ns1blankspaceAction">' +
 																		'Split</span></td></tr>');
 														}	
 						
-														aHTML.push('<tr><td id="ns1blankspaceImportEditAmountContainer"></td></tr>');
+														aHTML.push('<tr><td id="ns1blankspaceImportEditAmountContainer" style="padding-top:15px;"></td></tr>');
 
 														aHTML.push('</table>');					
 														
@@ -1415,31 +1422,50 @@ ns1blankspace.financial.bankAccount =
 														
 														$('#ns1blankspaceImportEditSave').button(
 														{
-															label: 'Create as ' + (iType==1?'receipt':'payment')
+															label: 'Create ' + (iType==1?'payment':'receipt')
 														})
 														.click(function()
 														{		
-															$('#ns1blankspaceImportEditSaveContainer').html(ns1blankspace.xhtml.loadingSmall);
-
 															var iObject = 3;
 															if (iType == 2) {iObject = 6}  //RECEIPT
-															
-															ns1blankspace.financial.save.send(
+
+															var cAmountReceipt = cAmount;
+															var cAmountAsReceipts = 0;
+
+															if ($('#ns1blankspaceItemAmount_' + sKey).length != 0)
 															{
-																bankTransactionID: sKey,
-																date: dDate,
-																amount: cAmount,
-																description: $('#ns1blankspaceItemsEditDescription_' + sKey).val(),
-																contactBusiness: $('#ns1blankspaceItemsEditContactBusiness_' + sKey).attr('data-id'),
-																contactPerson: $('#ns1blankspaceItemsEditContactPerson_' + sKey).attr('data-id'),
-																financialAccount: $('#ns1blankspaceFinancialAccount_' + sKey).attr('data-id'),
-																object: iObject,
-																bankAccount: ns1blankspace.objectContext,
-																postSave: ns1blankspace.financial.bankAccount.import.items.save.process,
-																showStatus: false
-															});
+																cAmountReceipt = parseFloat($('#ns1blankspaceItemAmount_' + sKey).val());
+																cAmountAsReceipts = parseFloat($('#ns1blankspaceItemAmount_' + sKey).attr('data-amountasreceipts'));
+															}
+															
+															var cAmountRemaining = cAmount - cAmountReceipt - cAmountAsReceipts;
+
+															if (cAmountRemaining < 0)
+															{
+																ns1blankspace.status.error('Amount is to large.')
+															}	
+															else
+															{	
+																$('#ns1blankspaceImportEditSaveContainer').html(ns1blankspace.xhtml.loadingSmall);
+
+																ns1blankspace.financial.save.send(
+																{
+																	bankTransactionID: sKey,
+																	date: dDate,
+																	amount: cAmountReceipt,
+																	description: $('#ns1blankspaceItemsEditDescription_' + sKey).val(),
+																	contactBusiness: $('#ns1blankspaceItemsEditContactBusiness_' + sKey).attr('data-id'),
+																	contactPerson: $('#ns1blankspaceItemsEditContactPerson_' + sKey).attr('data-id'),
+																	financialAccount: $('#ns1blankspaceFinancialAccount_' + sKey).attr('data-id'),
+																	object: iObject,
+																	bankAccount: ns1blankspace.objectContext,
+																	postSave: ns1blankspace.financial.bankAccount.import.items.save.process,
+																	showStatus: false,
+																	itemStatus: (cAmountRemaining==0?4:3)
+																});
+															}
 														})
-														.css('width', '70px');
+														.css('width', '110px');
 
 														$('#ns1blankspaceImportEditSplit').button(
 														{
@@ -1458,18 +1484,27 @@ ns1blankspace.financial.bankAccount =
 															oSearch.rows = 200;
 															oSearch.getResults(function(oResponse)
 															{
+																var cAmountAsReceipts = 0;
+
+																$.each(oResponse.data.rows, function ()
+																{
+																	cAmountAsReceipts += parseFloat((this.amount).parseCurrency())
+																});
+
 																if (oResponse.data.rows.length == 0)
 																{
-																	var sHTML = 'There are no other receipts.'
+																	var sHTML = 'There are no other receipts'
 																}	
 																else if (oResponse.data.rows.length == 1)
 																{
-																	var sHTML = 'There is one other receipt.'
+																	var sHTML = 'There is one other receipt'
 																}	
 																else
 																{
-																	var sHTML = 'There are ' + oResponse.data.rows.length + ' other receipts.'
+																	var sHTML = 'There are ' + oResponse.data.rows.length + ' other receipts'
 																}	
+
+																sHTML += ' associated with this bank transaction.'
 
 																$('#ns1blankspaceImportEditSplitContainer').html('<span class="ns1blankspaceSub">' + sHTML + '</span>');
 
@@ -1479,9 +1514,25 @@ ns1blankspace.financial.bankAccount =
 																		'<tr><td class="ns1blankspaceText">' +
 																		'<input id="ns1blankspaceItemAmount_' + sKey + '" class="ns1blankspaceText">' +
 																		'</td></tr>');
+
+																	$('#ns1blankspaceItemAmount_' + sKey).val(cAmount - cAmountAsReceipts);
+
+																	$('#ns1blankspaceItemAmount_' + sKey).attr('data-amountasreceipts', cAmountAsReceipts);
+
+																	$('#ns1blankspaceItemAmount_' + sKey).keyup(function()
+																	{
+																		ns1blankspace.financial.util.tax.calculate(
+																		{
+																			amountXHTMLElementID: 'ns1blankspaceItemAmount_' + sKey,
+																			amount: cAmount,
+																			taxXHTMLElementID: 'ns1blankspaceItemTax_' + sKey,
+																			taxTypeXHTMLElementName: 'radioTaxCode_' + sKey
+																		});
+																	});
+
 															});
 														})
-														.css('width', '70px');
+														.css('width', '110px');
 
 														var aHTML = [];
 
@@ -1558,6 +1609,7 @@ ns1blankspace.financial.bankAccount =
 
 														ns1blankspace.financial.util.tax.calculate(
 														{
+															amountXHTMLElementID: 'ns1blankspaceItemAmount_' + sKey,
 															amount: cAmount,
 															taxXHTMLElementID: 'ns1blankspaceItemTax_' + sKey,
 															taxTypeXHTMLElementName: 'radioTaxCode_' + sKey
@@ -1567,6 +1619,7 @@ ns1blankspace.financial.bankAccount =
 														{
 															ns1blankspace.financial.util.tax.calculate(
 															{
+																amountXHTMLElementID: 'ns1blankspaceItemAmount_' + sKey,
 																amount: cAmount,
 																taxXHTMLElementID: 'ns1blankspaceItemTax_' + sKey,
 																taxTypeXHTMLElementName: 'radioTaxCode_' + sKey
@@ -1581,11 +1634,12 @@ ns1blankspace.financial.bankAccount =
 																	var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
 																	var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext').value;
 																	var iID = ns1blankspace.util.getParam(oParam, 'bankTransactionID').value;
+																	var iItemStatus = ns1blankspace.util.getParam(oParam, 'itemStatus', {default: 4}).value;
 
 																	var oData =
 																	{
 																		id: iID,
-																		status: 4
+																		status: iItemStatus
 																	}
 																		
 																	if (iObject !== undefined) {oData.object = iObject}
