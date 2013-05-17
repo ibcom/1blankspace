@@ -3700,6 +3700,7 @@ ns1blankspace.financial.save =
 					var sMethod;
 					var sSuffix = '';
 					var bShowStatus = true;
+					var sDateField;
 
 					if (oParam != undefined)
 					{
@@ -3719,25 +3720,29 @@ ns1blankspace.financial.save =
 
 					if (iObject == 3)
 					{
+						sDateField = 'paiddate';
 						sSuffix = 'paidto';
 						sMethod = 'FINANCIAL_PAYMENT_MANAGE';
 					}
 
 					if (iObject == 6)
 					{
+						sDateField = 'receiveddate';
 						sSuffix = 'receivedfrom';
 						sMethod = 'FINANCIAL_RECEIPT_MANAGE';
 					}
 
 					if (iObject == 2)
 					{
+						sDateField = 'accrueddate';
 						sSuffix = 'paidto';
 						sMethod = 'FINANCIAL_EXPENSE_MANAGE';
 					}
 
 					if (iObject == 5)
 					{
-						sSuffix = 'receivedfrom';
+						sDateField = 'senddate';
+						sSuffix = 'sentto';
 						sMethod = 'FINANCIAL_INVOICE_MANAGE';
 					}
 
@@ -3746,7 +3751,7 @@ ns1blankspace.financial.save =
 					var sData = (iID == undefined) ? '' : 'id=' + iID;
 						
 					sData += '&reference=' + ns1blankspace.util.fs(sReference);
-					sData += '&paiddate=' + ns1blankspace.util.fs(sDate);
+					sData += '&' + sDateField + '=' + ns1blankspace.util.fs(sDate);
 					sData += '&description=' + ns1blankspace.util.fs(sDescription);
 					sData += '&contactbusiness' + sSuffix + '=' + ns1blankspace.util.fs(iContactBusiness);
 					sData += '&contactperson' + sSuffix + '=' + ns1blankspace.util.fs(iContactPerson);

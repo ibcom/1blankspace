@@ -1363,11 +1363,12 @@ ns1blankspace.financial.bankAccount =
 													var iID = ns1blankspace.util.getParam(oParam, 'bankTransactionID').value;
 													var iItemStatus = ns1blankspace.util.getParam(oParam, 'itemStatus', {default: 4}).value;
 
-													$('#ns1blankspaceFinancialImportItem_options_edit_container-' + iID).html('');
 													if (iItemStatus == 4)
 													{	
 														$('#ns1blankspaceFinancialImportItem_status-' + iID).html('Transferred to financials');
-													}	
+														$('#ns1blankspaceFinancialImportItem_options_edit_container-' + iID).html('');
+													}
+
 													$('#ns1blankspaceFinancialImportItem_container_edit-' + iID).remove();
 												},		
 
@@ -1515,7 +1516,7 @@ ns1blankspace.financial.bankAccount =
 																		'<input id="ns1blankspaceItemAmount_' + sKey + '" class="ns1blankspaceText">' +
 																		'</td></tr>');
 
-																	$('#ns1blankspaceItemAmount_' + sKey).val(cAmount - cAmountAsReceipts);
+																	$('#ns1blankspaceItemAmount_' + sKey).val((cAmount - cAmountAsReceipts).formatMoney());
 
 																	$('#ns1blankspaceItemAmount_' + sKey).attr('data-amountasreceipts', cAmountAsReceipts);
 
