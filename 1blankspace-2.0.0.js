@@ -3628,31 +3628,75 @@ ns1blankspace.util =
 					console.log(methods.join(","));
   				},
 
-  	about: 
-  				function (sNamespace)
-  				{
-  					if (sNamespace === undefined) {sNamespace = 'ns1blankspace'}
-  					var oNamespace = ns1blankspace.util.toFunction(sNamespace)
+  	about: 		{
+  					data: 		[],
 
-  					var aMethods = [];
+  					init: 		function ()
+  								{
+  									ns1blankspace.util.about.initPush();
+  									ns1blankspace.util.about.data.sort(ns1blankspace.util.sortBy('namePath'));
+  								},
 
-					for (var m in oNamespace)
-					{
-					    if (typeof oNamespace[m] == "object")
-					    {
-					        aMethods.push({name: m});
-					    }
-					}
+				  	initPush:
+				  				function (sNamespace, sType, sProperty)
+				  				{
+				  					if (sNamespace === undefined) {sNamespace = 'ns1blankspace'}
+				  					if (sType === undefined) {sType = 'object'}
+				  					if (sProperty === undefined) {sProperty = 'namespaces'}
 
-					aMethods.sort(ns1blankspace.util.sortBy('name'))
+				  					if (sNamespace.indexOf('.data') == -1)
+				  					{	
+					  					var oNamespace = ns1blankspace.util.toFunction(sNamespace)
 
-					$.each(aMethods, function()
-					{	
-						console.log(this.name + "\r\n");
-					});
-					
-					return aMethods
-  				}																						
+					  					var aNamespaces = [];
+
+										for (var m in oNamespace)
+										{
+											var iLevel = sNamespace.split('.').length;
+
+										    if (typeof oNamespace[m] == 'object')
+										    {
+										    	if (m != 'data' && m != 'views' && m != 'methods' && m != 'scripts' && m != 'tags' && m != 'reportSummary' && m != 'xhtml')
+										    	{	
+										        	ns1blankspace.util.about.data.push({name: m, namePath: sNamespace + '.' + m, type: 'namespace', level: iLevel});
+										        	aNamespaces.push({name: m, namePath: sNamespace + '.' + m});
+										        }	
+										    }
+
+										    if (typeof oNamespace[m] == 'function')
+										    {
+										        ns1blankspace.util.about.data.push({name: m, namePath: sNamespace + '.' + m, type: 'method', level: iLevel});
+										    }
+										}
+
+										$.each(aNamespaces, function(i,v)
+										{	
+											ns1blankspace.util.about.initPush(v.namePath, sType, sProperty)
+										});
+									}	
+				  				},
+
+				  	show: 		function ()
+  								{
+  									if (ns1blankspace.util.about.data.length == 0)
+  									{
+  										ns1blankspace.util.about.init();
+  									}
+
+  									var aTmp = ['1BLANKSPACE NAMESPACE'];
+
+  									aTmp.push($.grep(ns1blankspace.util.about.data, function(a) {return a.type == 'namespace'}).length + ' namespaces')
+  									aTmp.push($.grep(ns1blankspace.util.about.data, function(a) {return a.type == 'method'}).length + ' methods')
+
+  									$.each(ns1blankspace.util.about.data, function (i,v)
+  									{
+  										aTmp.push(v.namePath + (v.type=='namespace'?'/':''))
+  									});
+
+  									console.log(aTmp.join('\r\n'));
+  								},
+  											
+				 } 																									
 }
 
 ns1blankspace.debug = 
