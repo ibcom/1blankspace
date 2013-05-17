@@ -3342,6 +3342,7 @@ ns1blankspace.financial.item =
 
 							aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 							aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceItemRemove"></span>');
+							aHTML.push('<span id="ns1blankspaceRowItem_options_edit-' + this.id + '" class="ns1blankspaceItemEdit"></span>');
 							aHTML.push('</td></tr>');
 						});
 						
@@ -3362,10 +3363,10 @@ ns1blankspace.financial.item =
 						.css('width', '15px')
 						.css('height', '17px')
 				
-						$('.ins1blankspaceItemView').button( {
+						$('.ns1blankspaceItemEdit').button( {
 							text: false,
 							icons: {
-								primary: "ui-icon-play"
+								primary: "ui-icon-pencil"
 							}
 						})
 						.click(function() {
