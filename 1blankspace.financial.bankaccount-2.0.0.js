@@ -1318,11 +1318,11 @@ ns1blankspace.financial.bankAccount =
 														var sStatusText = oRow.statustext;
 														if (oRow.status==3) {sStatusText = 'Confirmed'};
 														if (oRow.status==4) {sStatusText = 'Transferred to financials'};
-														if (oRow.status==2) {sStatusText = 'Part transferred to financials'};
+														if (oRow.status==7) {sStatusText = 'Part transferred to financials'};
 
 														aHTML.push(sStatusText);
 
-														if (oRow.status == 3)
+														if (oRow.status == 3 || oRow.status == 7)
 														{	
 															if (oRow.financialaccounttext != '')
 															{
@@ -1340,7 +1340,7 @@ ns1blankspace.financial.bankAccount =
 
 														aHTML.push('<td class="ns1blankspaceRow" id="ns1blankspaceFinancialImportItem_options_edit_container-' + oRow.id + '">');
 
-														if (oRow.status == 3 || oRow.status == 2)
+														if (oRow.status == 3 || oRow.status == 7)
 														{	
 															aHTML.push('<span id="ns1blankspaceFinancialImportItem_options_edit-' + oRow.id + '" class="ns1blankspaceRowEdit"' +
 																		' data-amount="' + Math.abs(oRow.amount) + '"' +
@@ -1372,7 +1372,7 @@ ns1blankspace.financial.bankAccount =
 														$('#ns1blankspaceFinancialImportItem_status-' + iID).html('Transferred to financials');
 														$('#ns1blankspaceFinancialImportItem_options_edit_container-' + iID).html('');
 													}
-													else if (iItemStatus == 2)
+													else if (iItemStatus == 7)
 													{
 														$('#ns1blankspaceFinancialImportItem_status-' + iID).html('Part transferred to financials');
 													}	
@@ -1471,7 +1471,7 @@ ns1blankspace.financial.bankAccount =
 																	bankAccount: ns1blankspace.objectContext,
 																	postSave: ns1blankspace.financial.bankAccount.import.items.save.process,
 																	showStatus: false,
-																	itemStatus: (cAmountRemaining==0?4:2)
+																	itemStatus: (cAmountRemaining==0?4:7)
 																});
 															}
 														})
@@ -1544,7 +1544,7 @@ ns1blankspace.financial.bankAccount =
 														})
 														.css('width', '110px');
 
-														if (iStatus == 2) {$('#ns1blankspaceImportEditSplit').click()}
+														if (iStatus == 7) {$('#ns1blankspaceImportEditSplit').click()}
 
 														var aHTML = [];
 
