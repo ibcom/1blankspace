@@ -3656,7 +3656,7 @@ ns1blankspace.util =
 
 										    if (typeof oNamespace[m] == 'object')
 										    {
-										    	if (m != 'data' && m != 'views' && m != 'methods' && m != 'scripts' && m != 'tags' && m != 'reportSummary' && m != 'xhtml')
+										    	if (m != 'data' && m != 'views' && m != 'methods' && m != 'scripts' && m != 'tags' && m != 'reportSummary' && m != 'xhtml' && m != 'themes')
 										    	{	
 										        	ns1blankspace.util.about.data.push({name: m, namePath: sNamespace + '.' + m, type: 'namespace', level: iLevel});
 										        	aNamespaces.push({name: m, namePath: sNamespace + '.' + m});
@@ -3676,26 +3676,54 @@ ns1blankspace.util =
 									}	
 				  				},
 
-				  	show: 		function ()
+				  	toConsole: 	function (oParam) {ns1blankspace.util.about.show(oParam)},		
+
+				  	show: 		function (oParam)
   								{
+  									var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
+  									var iLevel = ns1blankspace.util.getParam(oParam, 'level').value;
+  									var sType = ns1blankspace.util.getParam(oParam, 'type').value;
+  									var bShowCode = ns1blankspace.util.getParam(oParam, 'showCode', {default: false}).value;
+
   									if (ns1blankspace.util.about.data.length == 0)
   									{
   										ns1blankspace.util.about.init();
   									}
 
-  									var aTmp = ['1BLANKSPACE NAMESPACE'];
+  									var aData = ns1blankspace.util.about.data;
 
-  									aTmp.push($.grep(ns1blankspace.util.about.data, function(a) {return a.type == 'namespace'}).length + ' namespaces')
-  									aTmp.push($.grep(ns1blankspace.util.about.data, function(a) {return a.type == 'method'}).length + ' methods')
+  									if (sNamespace !== undefined)
+  									{
+  										aData = $.grep(aData, function (a) {return (a.namePath.indexOf(sNamespace) != -1)})
+  									}
 
-  									$.each(ns1blankspace.util.about.data, function (i,v)
+  									if (iLevel !== undefined)
+  									{
+  										aData = $.grep(aData, function (a) {return (a.level <= iLevel)})
+  									}
+
+  									if (sType !== undefined)
+  									{
+  										aData = $.grep(aData, function (a) {return (a.type == sType)})
+  									}
+
+									var aTmp = ['1BLANKSPACE NAMESPACE'];
+
+  									aTmp.push($.grep(aData, function(a) {return a.type == 'namespace'}).length + ' namespaces')
+  									aTmp.push($.grep(aData, function(a) {return a.type == 'method'}).length + ' methods')
+
+  									$.each(aData, function (i,v)
   									{
   										aTmp.push(v.namePath + (v.type=='namespace'?'/':''))
+
+  										if (v.type == 'method' && bShowCode)
+  										{
+  											aTmp.push(ns1blankspace.util.toFunction(v.namePath).valueOf())
+  										}	
   									});
 
   									console.log(aTmp.join('\r\n'));
-  								},
-  											
+  								}			
 				 } 																									
 }
 
