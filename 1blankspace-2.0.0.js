@@ -3573,13 +3573,14 @@ ns1blankspace.util =
 	  					{
 	  						oNS = oNS[this];	
 	  					});
+		  					
 	  				}	
 
   					return oNS;
   				},
 
   	execute:
-  				function (sFunction, oNS, oParam)
+  				function (sFunction, oParam, oNS)
   				{
   					var fFunction = ns1blankspace.util.toFunction(sFunction, oNS);
 
@@ -3936,7 +3937,7 @@ ns1blankspace.search.email =
 					{
 						if (sSetXHTMLElementID === undefined) {sSetXHTMLElementID = sElementID}
 					
-						var lDataID = $('#' + sSetXHTMLElementId).attr("data-id")
+						var lDataID = $('#' + sSetXHTMLElementID).attr("data-id")
 						
 						if (lDataID === undefined) 
 						{
@@ -3947,7 +3948,7 @@ ns1blankspace.search.email =
 							lDataID += '-' + aSearch[1]
 						}	
 						
-						$('#' + sSetXHTMLElementId).attr("data-id", lOnDemandID)
+						$('#' + sSetXHTMLElementID).attr("data-id", lDataID)
 						
 						var sValue = $('#' + sSetXHTMLElementID).val()
 						
@@ -4036,7 +4037,7 @@ ns1blankspace.search.email =
 					}
 					else
 					{
-						aHTML.push('<table class="ns1blankspaceSearchLarge">');
+						aHTML.push('<table class="ns1blankspaceSearch">');
 							
 						$.each(oResponse.data.rows, function()
 						{	
@@ -4074,21 +4075,22 @@ ns1blankspace.search.email =
 				    	
 						aHTML.push('</table>');
 					
-						$(ns1blankspace.xhtml.container).html(ns1blankspace.render.init(
+						$(ns1blankspace.xhtml.container).html(
+							ns1blankspace.render.init(
 							{
 								html: aHTML.join(''),
 								more: (oResponse.morerows === 'true'),
-								headerClass: 'ns1blankspaceSearchHeaderLarge',
-								footerClass: 'ns1blankspaceSearchFooterLarge'
+								headerClass: 'ns1blankspaceSearchHeader',
+								footerClass: 'ns1blankspaceSearchFooter'
 							})	
 						);
 					
 						$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 						
-						$('td.interfaceSearch').click(function(event)
+						$('td.ns1blankspaceSearch').click(function(event)
 						{
 							$(ns1blankspace.xhtml.container).hide(200);
-							ns1blankspace.email.search.send(event.target.id, oParam);
+							ns1blankspace.search.email.show(event.target.id, oParam);
 						});
 						
 						ns1blankspace.render.bind(
@@ -4096,8 +4098,8 @@ ns1blankspace.search.email =
 							columns: 'firstname-surname-email-contactbusinesstext',
 							idColumns: 'firstname-surname-contactbusiness-contactbusinesstext-email',
 							more: oResponse.moreid, 
-							bodyClass: 'ns1blankspaceSearchLarge',
-							functionSearch: ns1blankspace.email.search.send,
+							bodyClass: 'ns1blankspaceSearch',
+							functionSearch: ns1blankspace.search.email.show,
 							xhtmlElementID: sElementID,
 							idSeperator: '---',
 							type: 'JSON'
