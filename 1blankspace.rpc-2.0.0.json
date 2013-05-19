@@ -328,8 +328,6 @@
 		{"title":"MESSAGING_EMAIL_CACHE_CHECK", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_EMAIL_CACHE_GET_DETAILS", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_EMAIL_CACHE_MANAGE", "advancedSearch":"false", "rpc":"false"},
-		{"title":"MESSAGING_EMAIL_CACHE_MANAGE", "advancedSearch":"false", "rpc":"false"},
-		{"title":"MESSAGING_EMAIL_CACHE_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"MESSAGING_EMAIL_CACHE_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"MESSAGING_EMAIL_CLEAR_TRASH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_EMAIL_DRAFT", "advancedSearch":"false", "rpc":"false"},
