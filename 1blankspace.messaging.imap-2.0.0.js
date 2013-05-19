@@ -127,7 +127,7 @@ ns1blankspace.messaging.imap =
 
 					if (iAction == 1)
 					{
-						ns1blankspace.messaging.imap.edit.show(oParam)
+						ns1blankspace.messaging.imap.message.edit.show(oParam)
 					}
 
 					if (sNamespace !== undefined)
@@ -1267,6 +1267,8 @@ ns1blankspace.messaging.imap =
 													var sMessage = '';
 													var sSubject = '';
 													var iSource = 1;
+													var iContactPersonTo;
+													var sEmailTo;
 													
 													if (oParam != undefined)
 													{
@@ -1283,7 +1285,9 @@ ns1blankspace.messaging.imap =
 														if (oParam.newEmail != undefined) {bNewEmail = oParam.newEmail}
 														if (oParam.message != undefined) {sMessage = oParam.message}
 														if (oParam.subject != undefined) {sSubject = oParam.subject}
+														if (oParam.contactPersonTo != undefined) {iContactPersonTo = oParam.contactPersonTo}
 														if (oParam.source != undefined) {iSource = oParam.source}
+														if (oParam.emailTo != undefined) {sEmailTo = oParam.emailTo}	
 													}
 
 													if (bNewEmail)
@@ -1354,21 +1358,21 @@ ns1blankspace.messaging.imap =
 																
 																aHTML.push('<table class="ns1blankspace">');				
 																			
-																aHTML.push('<tr><td id="ns1blankspaceRecipientTypeColumn1" style="width:30px;">');
+																aHTML.push('<tr><td id="ns1blankspaceRecipientTypeColumn1" style="width:32px;">');
 
 																aHTML.push('<div id="ns1blankspaceRecipientType" style="font-size:0.8745em;">');											
 																
 																aHTML.push('<input type="radio" id="ns1blankspaceRecipientType-To" name="radioRecipientType" checked="checked" />' +
 																				'<label for="ns1blankspaceRecipientType-To" style="width: 100%;  margin-bottom:1px;">' +
-																				'To</label>');
+																				'To <span id="ns1blankspaceRecipientTypeCount-To" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span></label>');
 
 																aHTML.push('<input type="radio" id="ns1blankspaceRecipientType-Cc" name="radioRecipientType" />' +
 																				'<label for="ns1blankspaceRecipientType-Cc" style="width: 100%; margin-bottom:1px;">' +
-																				'Cc</label>');
+																				'Cc <span id="ns1blankspaceRecipientTypeCount-Cc" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span></label>');
 
 																aHTML.push('<input type="radio" id="ns1blankspaceRecipientType-Bcc" name="radioRecipientType" />' +
 																				'<label for="ns1blankspaceRecipientType-Bcc" style="width: 100%;  margin-bottom:1px;">' +
-																				'Bcc</label>');
+																				'Bcc <span id="ns1blankspaceRecipientTypeCount-Bcc" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span></label>');
 																
 																aHTML.push('</div>');
 
@@ -1469,7 +1473,7 @@ ns1blankspace.messaging.imap =
 														aHTML.push('<table>');				
 																			
 															aHTML.push('<tr><td class="ns1blankspace" style="padding-left:0px; padding-right:6px;">' +
-																		'<input id="ns1blankspaceMessagingEditMessageSubject" class="ns1blankspaceText ns1blankspaceWatermark"' +
+																		'<input id="ns1blankspaceMessagingEditMessageSubject" class="ns1blankspaceText ns1blankspaceWatermark" style="font-size:0.75em;"' +
 																			' value="subject">' +
 																		'</td>');	
 															
@@ -1530,6 +1534,16 @@ ns1blankspace.messaging.imap =
 													
 														$('#ns1blankspaceSendMessageColumn1').html(aHTML.join(''));
 
+														if (sEmailTo !== undefined)
+														{	
+															$('#ns1blankspaceEditMessageTo').val(sEmailTo);
+														}
+														
+														if (iContactPersonTo !== undefined)
+														{	
+															$('#ns1blankspaceEditMessageTo').attr('data-id', iContactPersonTo)
+														}
+															
 														$('#ns1blankspaceRecipientType').buttonset().css('font-size', '0.75em');
 
 														$('#ns1blankspaceRecipientType :radio').click(function()
@@ -1621,7 +1635,7 @@ ns1blankspace.messaging.imap =
 																}
 																
 																var oDate = new Date.parse(ns1blankspace.objectContextData.date);
-																sDate = oDate.toString("ddd, dd MMM yyyy h:mm TT") 
+																sDate = oDate.toString("ddd, dd MMM yyyy h:mm tt") 
 														
 																aHTML.push('<tr><td><strong>Sent:</strong> ' + sDate + '</td></tr>');	
 																aHTML.push('<tr><td><strong>Subject:</strong> ' + ns1blankspace.objectContextData.subject + '</td></tr>');	
@@ -1772,7 +1786,7 @@ ns1blankspace.messaging.imap =
 																			ns1blankspace.messaging.action = oResponse.id;
 																		
 																			aHTML.push('<table style="width:287px;" class="ns1blankspaceViewControlContainer">');
-																			aHTML.push('<tr><td id="ns1blankspaceMessageEditAttachmentUpload" class="ns1blankspace">' +
+																			aHTML.push('<tr><td id="ns1blankspaceMessageEditAttachmentUpload" class="ns1blankspace" style="padding:3px; background-color:#ffffff;">' +
 																								ns1blankspace.attachments.upload.show(
 																								{
 																									object: 17,

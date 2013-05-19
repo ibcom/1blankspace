@@ -569,8 +569,8 @@ ns1blankspace.contactPerson =
 								ns1blankspace.messaging.imap.init(
 								{
 									action: 1,
-									email: ns1blankspace.objectContextData.email,
-									contactPerson: ns1blankspace.objectContextData.id,
+									emailTo: ns1blankspace.objectContextData.email,
+									contactPersonTo: ns1blankspace.objectContextData.id,
 									object: 32,
 									objectContext: ns1blankspace.objectContextData.id
 								});
