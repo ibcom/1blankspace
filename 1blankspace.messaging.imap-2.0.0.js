@@ -52,7 +52,7 @@ ns1blankspace.messaging.imap =
 						tinyMCE.init(
 						{
 							mode : "none",
-							height : "250px", 
+							height : "400px", 
 							width : "100%",
 							theme : "advanced",
 
@@ -1314,19 +1314,19 @@ ns1blankspace.messaging.imap =
 													})
 													.click(function() {
 													
-														if (oParam != undefined)
+														if (oParam === undefined)
 														{
 															oParam = {};
 														}
 
 														oParam.subject = $('#ns1blankspaceMessagingEditMessageSubject').val();
-														oParam.message = tinyMCE.get('ns1blankspaceMessagingEditMessageMessage').getContent();
-														oParam.contactPersonTo = $('#ns1blankspaceMessagingEditMessageContactTo').attr('data-id');
-														oParam.to = $('#ns1blankspaceMessagingEditMessageTo').val();
-														oParam.cc = $('#ns1blankspaceMessagingEditMessageCc').val();
-														oParam.bcc = $('#ns1blankspaceMessagingEditMessageBcc').val();
+														oParam.message = tinyMCE.get('ns1blankspaceMessagingEditMessageText').getContent();
+														oParam.contactPersonTo = $('#ns1blankspaceEditMessageTo').attr('data-id');
+														oParam.to = $('#ns1blankspaceEditMessageTo').val();
+														oParam.cc = $('#ns1blankspaceEditMessageCc').val();
+														oParam.bcc = $('#ns1blankspaceEditMessageBcc').val();
 														
-														ns1blankspace.messaging.imap.edit.Send(oParam);
+														ns1blankspace.messaging.imap.message.send(oParam);
 													});
 
 													$('#ns1blankspaceViewControlAction').button({disabled: false});
@@ -1365,7 +1365,7 @@ ns1blankspace.messaging.imap =
 
 																aHTML.push('</td><td id="ns1blankspaceRecipientTypeColumn2">');
 
-																aHTML.push('<div id="ns1blankspacens1blankspaceRecipientTypeTo" class="ns1blankspacens1blankspaceRecipientTypeContainer">');
+																aHTML.push('<div id="ns1blankspaceRecipientTypeContainer-To" class="ns1blankspaceRecipientTypeContainer">');
 
 																aHTML.push('<table cellpadding=0 class="ns1blankspace">');				
 																		
@@ -1386,13 +1386,13 @@ ns1blankspace.messaging.imap =
 
 																aHTML.push('</table></div>');
 
-																aHTML.push('<div id="ns1blankspacens1blankspaceRecipientTypeCc" style="display:none;" class="ns1blankspacens1blankspaceRecipientTypeContainer">');
+																aHTML.push('<div id="ns1blankspaceRecipientTypeContainer-Cc" style="display:none;" class="ns1blankspaceRecipientTypeContainer">');
 
-																aHTML.push('<table class="ns1blankspace">');	
+																aHTML.push('<table cellpadding=0 class="ns1blankspace">');	
 																
-																aHTML.push('<tr><td>' +
+																aHTML.push('<tr><td style="padding:0px;">' +
 																			'<input id="ns1blankspaceEditMessageCcContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark ns1blankspaceText"' +
-																				' data-setelementid="ns1blankspaceEditMessageCc" value="search for contact" style="width:250px;"');
+																				' data-setelementid="ns1blankspaceEditMessageCc" value="search for contact" style="width:250px; margin-bottom:1px; padding-top:3px; margin-top:0px;"');
 																			
 																if (iContactBusiness != undefined)
 																{
@@ -1401,19 +1401,19 @@ ns1blankspace.messaging.imap =
 
 																aHTML.push('></td></tr>');				
 
-																aHTML.push('<tr><td style="padding-top:0px;">' +
-																			'<textarea id="ns1blankspaceEditMessageCc" style="height:50px; width:249px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
+																aHTML.push('<tr><td style="padding:0px; padding-top:1px;">' +
+																			'<textarea id="ns1blankspaceEditMessageCc" style="height:65px; width:249px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
 																			'</td></tr>');
 
 																aHTML.push('</table></div>');
 
-																aHTML.push('<div id="ns1blankspacens1blankspaceRecipientTypeBcc" style="display:none;" class="ns1blankspacens1blankspaceRecipientTypeContainer">');
+																aHTML.push('<div id="ns1blankspaceRecipientTypeContainer-Bcc" style="display:none;" class="ns1blankspaceRecipientTypeContainer">');
 
-																aHTML.push('<table class="ns1blankspace">');
+																aHTML.push('<table cellpadding=0 class="ns1blankspace">');
 															
-																aHTML.push('<tr><td>' +
+																aHTML.push('<tr><td style="padding:0px;">' +
 																			'<input id="ns1blankspaceEditMessageBccContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark ns1blankspaceText"' +
-																				' data-setelementid="ns1blankspaceEditMessageBcc" value="search for contact" style="width:250px;"');
+																				' data-setelementid="ns1blankspaceEditMessageBcc" value="search for contact" style="width:250px; margin-bottom:1px; padding-top:3px; margin-top:0px;"');
 																			
 																if (iContactBusiness != undefined)
 																{
@@ -1422,8 +1422,8 @@ ns1blankspace.messaging.imap =
 
 																aHTML.push('></td></tr>');				
 
-																aHTML.push('<tr><td>' +
-																			'<textarea id="ns1blankspaceEditMessageBcc" style="height:50px; width:249px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
+																aHTML.push('<tr><td style="padding:0px; padding-top:1px;">' +
+																			'<textarea id="ns1blankspaceEditMessageBcc" style="height:65px; width:249px;" rows="3" cols="20" class="ns1blankspaceTextMulti"></textarea>' +
 																			'</td></tr>');
 															
 																aHTML.push('</table>');				
@@ -1443,7 +1443,7 @@ ns1blankspace.messaging.imap =
 															
 																aHTML.push('</td>');				
 
-																aHTML.push('<td style="height:90px" colspan=2 id="ns1blankspaceActionsEditEmailAttachments" class="ns1blankspaceBorder">' +
+																aHTML.push('<td style="height:90px" id="ns1blankspaceActionsEditEmailAttachments" class="ns1blankspaceBorder">' +
 																			'</td></tr>');
 															
 																aHTML.push('</table>');				
@@ -1500,7 +1500,7 @@ ns1blankspace.messaging.imap =
 
 																"Send": function() 
 																{
-																	ns1blankspace.messaging.edit.send({
+																	ns1blankspace.messaging.imap.message.send({
 																		subject: $('#ns1blankspaceMessagingSendMessageSubject').val(),
 																		message: $('#ns1blankspaceMessagingSendMessageMessage').val(),
 																		priority: ($('#ns1blankspaceMessagingSendMessageHighPriority').attr('checked')?3:2),
@@ -1513,49 +1513,25 @@ ns1blankspace.messaging.imap =
 													}	
 													else
 													{
-														if (tinyMCE.getInstanceById('ns1blankspaceMessagingMessageEdit'))
+														if (tinyMCE.getInstanceById('ns1blankspaceMessagingEditMessageText'))
 														{
-															tinyMCE.get('ns1blankspaceMessagingMessageEdit').remove();
-															$('#ns1blankspaceMessagingMessageEdit').remove();
+															tinyMCE.get('ns1blankspaceMessagingEditMessageText').remove();
+															$('#ns1blankspaceMessagingEditMessageText').remove();
 														}	
 													
 														$('#ns1blankspaceSendMessageColumn1').html(aHTML.join(''));
 
 														$('#ns1blankspaceRecipientType').buttonset().css('font-size', '0.75em');
-														
-														var aHTML = [];
 
-														aHTML.push('<table class="ns1blankspaceColumn2">');
-														
-														aHTML.push('<tr><td class="ns1blankspaceMainAction">' +
-																		'<span id="ns1blankspaceEditMessageSend">Send</span>' +
-																		'</td></tr>');
-																				
-														aHTML.push('</table>');					
-														
-														//$('#ns1blankspaceSendMessageColumn2').html(aHTML.join(''));
-													
-														$('#ns1blankspaceEditMessageSend').button(
+														$('#ns1blankspaceRecipientType :radio').click(function()
 														{
-															label: "Send"
-														})
-														.click(function() {
-														
-															if (oParam != undefined)
-															{
-																oParam = {};
-															}
+															$('div.ns1blankspaceRecipientTypeContainer').hide();
 
-															oParam.subject = $('#ns1blankspaceMessagingEditMessageSubject').val();
-															oParam.message = tinyMCE.get('ns1blankspaceMessagingEditMessageMessage').getContent();
-															oParam.contactPersonTo = $('#ns1blankspaceMessagingEditMessageContactTo').attr('data-id');
-															oParam.to = $('#ns1blankspaceMessagingEditMessageTo').val();
-															oParam.cc = $('#ns1blankspaceMessagingEditMessageCc').val();
-															oParam.bcc = $('#ns1blankspaceMessagingEditMessageBcc').val();
+															var aID = (this.id).split('-');
 															
-															ns1blankspace.messaging.imap.edit.Send(oParam);
+															$('#ns1blankspaceRecipientTypeContainer-' + aID[1]).show();
 														});
-
+													
 														$('#ns1blankspaceEditMessageAttach').button(
 														{
 															text: false,
@@ -1757,7 +1733,7 @@ ns1blankspace.messaging.imap =
 									attach: 	{
 													show:		function (oParam, oResponse)
 																{
-																	sXHTMLElementID = "ns1blankspaceEditMessageAttachCaption";
+																	sXHTMLElementID = "ns1blankspaceEditMessageAttach";
 																	
 																	if (!$('#ns1blankspaceEditMessageAttach').attr('checked'))
 																	{
@@ -1782,7 +1758,7 @@ ns1blankspace.messaging.imap =
 																		{															
 																			var aHTML = [];
 																			
-																			ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID})
+																			ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: 28, topOffset: -36})
 																		
 																			ns1blankspace.messaging.action = oResponse.id;
 																		
@@ -1824,9 +1800,9 @@ ns1blankspace.messaging.imap =
 																	}
 																	
 																	$(ns1blankspace.xhtml.container).hide();
-																	
-																	$('#ns1blankspaceMessaageEditAttach').attr('checked', false)
-																	$('#ns1blankspaceMessaageEditAttach').button("refresh");
+
+																	$('#ns1blankspaceEditMessageAttach').attr('checked', false)
+																	$('#ns1blankspaceEditMessageAttach').button("refresh");
 																	
 																	if (ns1blankspace.messaging.action != -1)
 																	{
@@ -1911,6 +1887,8 @@ ns1blankspace.messaging.imap =
 										if (oParam.functionPostSend != undefined) {fFunctionPostSend = oParam.functionPostSend}
 										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 									}	
+									
+									ns1blankspace.status.working('Sending...');
 									
 									//sData += 'object=' + oParam.object;
 									//sData += '&objectcontext=' + oParam.objectContext;

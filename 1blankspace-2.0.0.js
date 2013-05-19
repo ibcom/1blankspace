@@ -4037,7 +4037,7 @@ ns1blankspace.search.email =
 					}
 					else
 					{
-						aHTML.push('<table class="ns1blankspaceSearch">');
+						aHTML.push('<table class="ns1blankspaceSearchMedium">');
 							
 						$.each(oResponse.data.rows, function()
 						{	
