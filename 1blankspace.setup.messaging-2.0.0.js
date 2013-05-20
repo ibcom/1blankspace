@@ -22,6 +22,7 @@ ns1blankspace.setup.messaging =
 					ns1blankspace.objectParentName = 'setup';
 					ns1blankspace.objectName = 'messaging';
 					ns1blankspace.viewName = 'Messaging';
+					ns1blankspace.objectMethod = 'SETUP_MESSAGING_ACCOUNT';
 					
 					ns1blankspace.app.set(oParam);
 				},

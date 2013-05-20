@@ -193,7 +193,7 @@
 		{"title":"DOCUMENT_FOLDER_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"DOCUMENT_FOLDER_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"DOCUMENT_FOLDER_SEARCH", "advancedSearch":"true", "rpc":"true"},
-		{"title":"DOCUMENT_MANAGE", "advancedSearch":"false", "rpc":"false"},
+		{"title":"DOCUMENT_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"DOCUMENT_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"EVENT_ATTENDEE_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"EVENT_ATTENDEE_SEARCH", "advancedSearch":"false", "rpc":"false"},

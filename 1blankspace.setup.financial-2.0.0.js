@@ -61,10 +61,7 @@ ns1blankspace.setup.financial =
 								
 					aHTML.push('<tr><td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">' +
 									'Bank Accounts</td></tr>');	
-
-					aHTML.push('<tr><td id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">' +
-									'Invoicing</td></tr>');
-					
+		
 					aHTML.push('</table>');		
 					
 					aHTML.push('<table class="ns1blankspaceControl">');

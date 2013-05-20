@@ -71,6 +71,7 @@ $.extend(true, ns1blankspace.setup,
 						{
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI(ns1blankspace.setup.method + '_SEARCH'),
+							data: 'rows=200',
 							dataType: 'json',
 							success: function(data) {
 								ns1blankspace.setup.home(oParam, data)
@@ -90,7 +91,7 @@ $.extend(true, ns1blankspace.setup,
 						
 						if (oResponse.data.rows.length === 0)
 						{
-							aHTML.push('<tr><td class="ns1blankspaceNothing">Nothing to show.</td></tr>');
+							aHTML.push('<tr id="ns1blankspaceNothingToShow"><td class="ns1blankspaceNothing">Nothing to show.</td></tr>');
 
 							$('#ns1blankspaceSetup').html('Nothing to show.');
 						}
@@ -179,7 +180,7 @@ $.extend(true, ns1blankspace.setup,
 									if (sSearchContext != undefined)
 									{
 										ns1blankspace.setup.objectContext = aSearch[1];
-										var sParam = ns1blankspace.setup.method + '_SEARCH&id=' + ns1blankspace.setup.objectContext;
+										var sParam = ns1blankspace.setup.method + '_SEARCH&rows=200&id=' + ns1blankspace.setup.objectContext;
 										
 										$.ajax(
 										{
@@ -396,6 +397,7 @@ $.extend(true, ns1blankspace.setup,
 															ns1blankspace.status.message('Saved')
 															$('#ns1blankspaceViewControlNew').button({disabled: false});
 															$('#ns1blankspaceSetupAdd').button({disabled: false});
+															$('#ns1blankspaceNothingToShow').hide();
 														}
 											});
 										}

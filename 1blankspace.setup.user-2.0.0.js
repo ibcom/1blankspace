@@ -45,7 +45,7 @@ ns1blankspace.setup.user =
 									'Internal</td></tr>');			
 								
 						aHTML.push('<tr><td id="ns1blankspaceControlExternal" class="ns1blankspaceControl" style="padding-top:10px;">' +
-									'Other User<br />Access</td></tr>');	
+									'Switch in<br />access</td></tr>');	
 
 						aHTML.push('</table>');		
 						

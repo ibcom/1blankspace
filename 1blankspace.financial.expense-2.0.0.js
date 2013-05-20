@@ -103,7 +103,7 @@ ns1blankspace.financial.expense =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to create a expense.</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to create an expense.</td></tr>');
 							aHTML.push('</table>');
 						}
 						else
@@ -591,7 +591,7 @@ ns1blankspace.financial.expense =
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
 						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
-						
+
 						var aHTML = [];
 						
 						aHTML.push('<table class="ns1blankspace">');
@@ -624,6 +624,7 @@ ns1blankspace.financial.expense =
 						else
 						{
 							$('[name="radioPaid"][value="N"]').attr('checked', true);
+							$('#ns1blankspaceDetailsAccruedDate').val(Date.today().toString("dd MMM yyyy"));
 						}
 					}	
 				},
