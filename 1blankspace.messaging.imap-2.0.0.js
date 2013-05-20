@@ -139,10 +139,12 @@ ns1blankspace.messaging.imap =
 
 	check:		function (oParam, oResponse)
 				{
-					if (!ns1blankspace.messaging.checking)
-					{
-						if (oResponse == undefined)
-						{	
+					//ns1blankspace.messaging.checking = ns1blankspace.util.getParam(oParam, 'checking', {default: ns1blankspace.messaging.checking}).value;
+					
+					if (oResponse == undefined)
+					{	
+						if (!ns1blankspace.messaging.checking)
+						{
 							ns1blankspace.messaging.checking = true;
 
 							$.ajax(
@@ -153,24 +155,28 @@ ns1blankspace.messaging.imap =
 								dataType: 'json',
 								success: function(data) {ns1blankspace.messaging.imap.check(oParam, data)}
 							});
-						}
-						else
-						{
-							if (oResponse.status == 'OK')
-							{	
-								ns1blankspace.messaging.emailNewCount = oResponse.newrows;
-								ns1blankspace.messaging.checking = false;
+						}	
+					}
+					else
+					{
+						if (oResponse.status == 'OK')
+						{	
+							if (ns1blankspace.messaging.emailNewCount == undefined) {ns1blankspace.messaging.emailNewCount = 0}
+							ns1blankspace.messaging.emailNewCount += oResponse.newrows;
+							ns1blankspace.messaging.checking = false;
 
-								if (ns1blankspace.messaging.emailNewCount != undefined)
-								{
+							if (ns1blankspace.messaging.emailNewCount != undefined)
+							{
+								if (ns1blankspace.messaging.emailNewCount != 0)
+								{	
 									$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
 									{
 										label: 'Refresh (' + ns1blankspace.messaging.emailNewCount + ')'
 									});
 								}	
 							}	
-						}
-					}	
+						}	
+					}
 				},			
 
 	home:		function (oParam, oResponse)
@@ -335,10 +341,19 @@ ns1blankspace.messaging.imap =
 										ns1blankspace.messaging.imap.account = aXHTMLElementID[1];
 									}	
 									
-									if (bRefresh) {ns1blankspace.messaging.imap.check()}
+									if (bRefresh)
+									{
+										ns1blankspace.messaging.emailNewCount = 0;
+										oParam = ns1blankspace.util.setParam(oParam, 'refresh', false);
+										$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
+										{
+											label: 'Refresh'
+										});
+									}
 									
 									if (bRebuild)
 									{
+										ns1blankspace.messaging.emailNewCount = 0;
 										ns1blankspace.messaging.emailLastPagination = undefined;
 										ns1blankspace.messaging.emailLastPage = 1;
 										

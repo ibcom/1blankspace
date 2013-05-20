@@ -29,7 +29,7 @@ ns1blankspace.data.actionTypes =
 
 ns1blankspace.option.showBrowsing = false;
 ns1blankspace.option.messagingEmailShowCount = false;
-ns1blankspace.option.messagingCheckForNew = 30000;
+ns1blankspace.option.messagingCheckForNew = 60000;
 ns1blankspace.option.helpURI = 'http://community.mydigitalstructure.com';
 ns1blankspace.option.taxVATCaption = 'GST';
 ns1blankspace.option.taxPayrollCaption = 'Employee';
