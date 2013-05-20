@@ -963,6 +963,7 @@ ns1blankspace.app =
 					$('td.ns1blankspaceViewControlBrowse').unbind('click');
 					$('td.ns1blankspaceViewControlBrowseAll').unbind('click');
 					$('#ns1blankspaceViewControlActionStatus').text('');
+					$('#ns1blankspaceViewControlAction').button({label: "Save"});
 					if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
 					ns1blankspace.inputDetected = false;
 					ns1blankspace.xhtml.action = '';

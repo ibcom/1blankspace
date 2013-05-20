@@ -388,7 +388,10 @@ ns1blankspace.order =
 					if (ns1blankspace.objectContext == -1)
 					{
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
-										'Details</td></tr>');		
+										'Details</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">' +
+										'Address</td></tr>');						
 					}
 					else
 					{
@@ -397,9 +400,6 @@ ns1blankspace.order =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
-
-						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">' +
-										'Address</td></tr>');
 
 						aHTML.push('</table>');					
 
@@ -663,7 +663,7 @@ ns1blankspace.order =
 					}	
 				},
 
-	details:	function ns1blankspaceOrderDetails()
+	details:	function ()
 				{
 					var aHTML = [];
 
@@ -784,6 +784,7 @@ ns1blankspace.order =
 						else
 						{
 							$('[name="radioSource"][value="1"]').attr('checked', true);
+							$('#ns1blankspaceDetailsOrderDate').val(Date.today().toString("dd MMM yyyy"));
 						}
 					}	
 				},
@@ -1248,7 +1249,7 @@ ns1blankspace.order =
 																		this.title + '</td>');
 																		
 												aHTML.push('<td id="ns1blankspaceOrderItems_units2-' + this.id + '" class="ns1blankspaceRow">' +
-																'<input style="width:25px;" id="ns1blankspaceOrderItems__units-' + this.id + '" class="ns1blankspaceText"></td>');						
+																'<input style="width:25px;" id="ns1blankspaceOrderItems__units-' + this.id + '" class="ns1blankspaceText" value="1"></td>');						
 														
 												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' + 
 																'<span id="ns1blankspaceOrderItems_add-' + this.id + '" class="ns1blankspaceRowAdd"></span></td>');
