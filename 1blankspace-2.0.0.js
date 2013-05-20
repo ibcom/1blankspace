@@ -540,7 +540,8 @@ ns1blankspace.app =
 							ns1blankspace.logon.changePassword.show();
 						}
 						else
-						{
+						{	
+							if (ns1blankspace.control.extend !== undefined) {ns1blankspace.control.extend()}
 							ns1blankspace.app.start();
 						}
 					}	
