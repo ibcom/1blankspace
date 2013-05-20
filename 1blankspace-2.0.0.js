@@ -541,7 +541,6 @@ ns1blankspace.app =
 						}
 						else
 						{	
-							if (ns1blankspace.control.extend !== undefined) {ns1blankspace.control.extend()}
 							ns1blankspace.app.start();
 						}
 					}	
@@ -579,6 +578,7 @@ ns1blankspace.app =
 							}
 							else
 							{
+								if (ns1blankspace.control.extend !== undefined) {ns1blankspace.control.extend()}
 								oParam = ns1blankspace.util.setParam(oParam, 'user', data);
 								ns1blankspace.app.show(oParam);
 							}	
@@ -3729,7 +3729,7 @@ ns1blankspace.util =
   									});
 
   									console.log(aTmp.join('\r\n'));
-  								}			
+  								}
 				 } 																									
 }
 
