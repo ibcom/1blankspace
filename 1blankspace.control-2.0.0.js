@@ -595,7 +595,7 @@ ns1blankspace.views =
 		parentNamespace: "setup",
 		namespace: "project",
 		endpoint: "PROJECT", 
-		show: true,
+		show: false,
 		group: 3,
 		type: 2
 	},
@@ -604,7 +604,7 @@ ns1blankspace.views =
 		parentNamespace: "setup",
 		namespace: "projectTask",
 		endpoint: "PROJECT", 
-		show: true,
+		show: false,
 		group: 3,
 		type: 2
 	},
