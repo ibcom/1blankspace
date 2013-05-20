@@ -3551,11 +3551,7 @@ ns1blankspace.util =
 					if (sValue.charAt(sValue.length-1) == sChar)
 					{
   						return sValue.slice(0, -1);
-  					}
-  					else
-  					{
-  						return sValue;
-  					}
+  					}	
   				},
 
   	toFunction:
