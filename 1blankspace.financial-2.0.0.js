@@ -262,28 +262,16 @@ ns1blankspace.financial.home = function ()
 									'<td id="ns1blankspaceControlSummary" class="ns1blankspaceControl">Summary</td>' +
 									'</tr>');	
 						
-						aHTML.push('<tr class="interfaceViewportControl">' +
-									'<td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">Bank Accounts</td>' +
-									'</tr>');	
-						
 						aHTML.push('</table>');		
 
 						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">Invoicing</td>' +
-									'</tr>');	
-
-						aHTML.push('</table>');		
-
-						aHTML.push('<table class="ns1blankspaceControl">');
-
-						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlDebtors" class="ns1blankspaceControl">Debtors</td>' +
+									'<td id="ns1blankspaceControlDebtors" class="ns1blankspaceControl">Debtors<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">owed to you</span></td>' +
 									'</tr>');	
 						
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlCreditors" class="ns1blankspaceControl">Creditors</td>' +
+									'<td id="ns1blankspaceControlCreditors" class="ns1blankspaceControl" style="padding-top:7px;">Creditors<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">you owe</span></td>' +
 									'</tr>');	
 						
 						aHTML.push('</table>');		
@@ -302,6 +290,10 @@ ns1blankspace.financial.home = function ()
 						
 						aHTML.push('<table class="ns1blankspaceControl">');
 
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">Bank Accounts</td>' +
+									'</tr>');	
+						
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlAccounts" class="ns1blankspaceControl">Accounts</td>' +
 									'</tr>');
@@ -2249,7 +2241,7 @@ ns1blankspace.financial.invoicing =
 										'</tr>' +
 										'</table>');				
 						
-						$('#ns1blankspaceMainInvoicing').html(aHTML.join(''));
+						$('#ns1blankspaceMain').html(aHTML.join(''));
 							
 						var aHTML = [];
 

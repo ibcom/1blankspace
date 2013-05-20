@@ -102,7 +102,7 @@ ns1blankspace.financial.expense =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							HTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<table id="ns1blankspaceMostLikely">');
 							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to create a expense.</td></tr>');
 							aHTML.push('</table>');
 						}
