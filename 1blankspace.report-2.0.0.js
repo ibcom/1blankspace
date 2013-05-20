@@ -1510,7 +1510,7 @@ ns1blankspace.report =
 
 											$('#radioReport-Send').unbind("click");
 											$('#radioReport-Send').click(function() {
-												ns1blankspace.report.sendEMail.show(oParam);
+												ns1blankspace.report.sendTo.show(oParam);
 											});	
 
 											ns1blankspace.render.page.show(
@@ -1956,7 +1956,7 @@ ns1blankspace.report =
 					});
 				},
 
-	sendEMail:	{
+	sendTo:	{
 
 				show: 	function (oParam)
 						{
@@ -1995,7 +1995,7 @@ ns1blankspace.report =
 									aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row1">');
 									
 										aHTML.push('<table class="ns1blankspaceContainer"><tr>');
-										aHTML.push('<td id="ns1blankspaceReportSendSubject">');
+										aHTML.push('<td>');
 
 											aHTML.push('<table class="ns1blankspaceContainer">');
 											aHTML.push('<tr><td class="ns1blankspaceCaption">Subject</td></tr>' +
@@ -2005,7 +2005,8 @@ ns1blankspace.report =
 
 										aHTML.push('</td><td id="ns1blankspaceReportSendOptions" style="width:120px; text-align:right;">');
 											
-											aHTML.push('<span id="ns1blankspaceReportSendPreview">Preview</span>&nbsp;' +
+											aHTML.push('<span id="ns1blankspaceReportSendSMS">SMS</span>&nbsp;' +
+														'<span id="ns1blankspaceReportSendPreview">Preview</span>&nbsp;' +
 														'<span id="ns1blankspaceReportSendEmail">Email</span>');
 
 										aHTML.push('</tr></table>');	
@@ -2046,6 +2047,31 @@ ns1blankspace.report =
 									$('#ns1blankspaceReportSendColumn2').html(aHTML.join(''));
 
 									
+									$('#ns1blankspaceReportSendSMS').button({
+										text: false,
+										icons: {
+											primary: "ui-icon-comment"}
+									})
+									.click(function()
+									{
+										var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
+																					   replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()});
+										
+										var aReportParam = {preview: true,
+															subject: $('#ns1blankspaceReportSendSubject').val(),
+															row: oResponse.data.rows[0],
+															moreID: oResponse.moreid, 
+															parameters: oParameter,
+															object: ns1blankspace.report.object,
+															text: sText
+														   }
+										ns1blankspace.report.sendTo.sendSMS(aReportParam);
+									})
+									.css('width', '30px')
+									.css('height', '30px');
+
+
+
 									$('#ns1blankspaceReportSendPreview').button({
 										text: false,
 										icons: {
@@ -2053,17 +2079,18 @@ ns1blankspace.report =
 									})
 									.click(function()
 									{
-										//var sText = interfaceReportReplaceMailMerge();
 										var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
 																					   replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()});
 										
-										var aReportParam = {row: oResponse.data.rows[0],
-															moreID: oResponse.moreid,
+										var aReportParam = {preview: true,
+															subject: $('#ns1blankspaceReportSendSubject').val(),
+															row: oResponse.data.rows[0],
+															moreID: oResponse.moreid, 
 															parameters: oParameter,
 															object: ns1blankspace.report.object,
 															text: sText
 														   }
-										ns1blankspace.report.sendPreview(aReportParam);
+										ns1blankspace.report.sendTo.sendEmail(aReportParam);
 									})
 									.css('width', '30px')
 									.css('height', '30px');
@@ -2077,12 +2104,10 @@ ns1blankspace.report =
 									{
 										var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
 																					   replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()});
-										var sSubject = ns1blankspace.report.mergeFields({columns: aColumns, 
-																					   replace: $('#ns1blankspaceReportSendSubject').val()});
-										ns1blankspace.report.sendEMail.send({moreID: oResponse.moreid,
+										ns1blankspace.report.sendTo.sendEmail({moreID: oResponse.moreid,
 																  parameters: oParameter,
 																  text: sText,
-																  subject: sSubject
+																  subject: $('#ns1blankspaceReportSendSubject').val()
 																  });
 									})
 									.css('width', '30px')
@@ -2105,7 +2130,6 @@ ns1blankspace.report =
 									
 									tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceReportSendText' + ns1blankspace.counter.editor);
 									
-									//var sParam = 'method=DOCUMENT_GET_DOCUMENT&noformat=1&select=' + iDocument;
 
 								}
 								else {
@@ -2142,7 +2166,7 @@ ns1blankspace.report =
 							});
 						},
 
-				send: 	function(oParam) {
+				sendEmail: 	function(oParam) {
 
 							var iMoreId;
 							var sText = "";
@@ -2151,6 +2175,8 @@ ns1blankspace.report =
 							var sTags = "";
 							var sEmail = "";
 							var sSubject = "";
+							var oRow;
+							var bPreview = false;
 							
 							if (oParam != undefined)
 							{
@@ -2158,56 +2184,218 @@ ns1blankspace.report =
 								if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
 								if (oParam.text != undefined) {sText = oParam.text}		
 								if (oParam.subject != undefined) {sSubject = oParam.subject}		
+								if (oParam.row != undefined) {oRow = oParam.row}	
+								if (oParam.preview != undefined) {bPreview = oParam.preview}	
 							}
 							else
 							{
-								ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.sendEmail. <br /><br />Preview aborted.');
+								ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.sendTo.sendEmail. <br /><br />Preview aborted.');
 								return false;
 							}
 							
-							if (confirm("Are you sure you want to send an email to all of the Contacts in the report results?"))
-							{
-								sTags = oParameters.join('|');
-								
-								var oSearch = new AdvancedSearch();
-								oSearch.endPoint = "contact";
-								oSearch.method = "CONTACT_PERSON_SEARCH";
-								oSearch.addField("email");2182
-								oSearch.addFilter("id", "EQUAL_TO", ns1blankspace.user.contactperson);
-								oSearch.rf = "JSON";
-								oSearch.async = false;
-								oSearch.getResults(function(data)
-								{
-									if (data.data.rows.length > 0)
-									{	sEmail = data.data.rows[0].email;	}
+							if (bPreview) {
+								// We're sending the preview to the current user
+								$.each(oParameters, function() {
+									sTags = this + "|"  + sTags;
 								});
-								
-								sParam = "&more=" + iMoreId + 
-										 "&title=" + ns1blankspace.util.fs(sSubject) +
-										 "&status=1" + 
-										 "&type=2" +
-										 '&scheduletype=9' +
-										 "&schedulemaximumcount=1" + 
-										 "&responseactionfrom=" + ns1blankspace.util.fs(sEmail) + 
-										 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-										 "&caption=" + ns1blankspace.util.fs(sTags);
 
+								if (sTags.length > 0){	
+									sTags = sTags.substr(0, sTags.length - 1); 	
+								}
+							
+								sParam = "&more=" + ns1blankspace.util.fs(iMoreId) + 
+										 "&object=" + ns1blankspace.report.object + "&objectcontext=" + oRow.id +
+										 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+										 "&tags=" + ns1blankspace.util.fs(sTags);
+
+								// CORE_MORE_APPLY_TEMPLATE
 								$.ajax(
 								{
 									type: 'POST',
-									cache: false,
-									url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
+									url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
 									data: "rf=text" + sParam,
-									dataType: 'text',
-									async: false,
+									dataType: 'TEXT',
 									success: function(data)
 									{
-										ns1blankspace.status.message("Email(s) sent");
+										if (data.substr(0,2) === "OK") {	
+											
+											aData = data.split('|');
+											sText = aData[2];
+											sParam = "subject=" + ns1blankspace.util.fs(sSubject) +
+													"&message=" + ns1blankspace.util.fs(sText) + 
+													"&to=" + ns1blankspace.user.email ;
+													//ns1blankspace.util.endpointURI("MESSAGING_EMAIL_SEND")
+											$.ajax({
+												type: 'POST',
+												url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
+												data: sParam,
+												dataType: 'JSON',
+												success: function(oResponse) {
+													if (oResponse.status === 'OK') {
+														ns1blankspace.status.message('Email sent to ' + ns1blankspace.user.email);
+													}
+													else {
+														ns1blankspace.status.message('An error has occurred');
+													}
+												}
+											});
+											//ns1blankspace.status.message(data.substring(12));	
+											// ToDo: Add preview page
+										}
 									}
 								});
 							}
+							else {
+								// Time to send the email to all of the report results
+								if (confirm("Are you sure you want to send an email to all of the Contacts in the report results?"))
+								{
+									sTags = oParameters.join('|');
+									
+									sParam = "&more=" + iMoreId + 
+											 "&title=" + ns1blankspace.util.fs(sSubject) +
+											 "&status=1" + 
+											 "&type=2" +
+											 '&scheduletype=9' +
+											 "&schedulemaximumcount=1" + 
+											 "&responseactionfrom=" + ns1blankspace.util.fs(ns1blankspace.user.email) + 
+											 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+											 "&caption=" + ns1blankspace.util.fs(sTags);
+
+									$.ajax(
+									{
+										type: 'POST',
+										cache: false,
+										url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
+										data: "rf=text" + sParam,
+										dataType: 'text',
+										async: false,
+										success: function(data)
+										{
+											ns1blankspace.status.message("Email(s) sent");
+										}
+									});
+								}
+								else
+								{	return false;	}
+							}
+						},
+
+				sendSMS: 	function(oParam) {
+
+							var iMoreId;
+							var sText = "";
+							var sParam = "";
+							var oParameters = [];
+							var sTags = "";
+							var sEmail = "";
+							var sSubject = "";
+							var oRow;
+							var bPreview = false;
+							
+							if (oParam != undefined)
+							{
+								if (oParam.moreID != undefined) {iMoreId = oParam.moreID}		
+								if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
+								if (oParam.text != undefined) {sText = oParam.text}		
+								if (oParam.subject != undefined) {sSubject = oParam.subject}		
+								if (oParam.row != undefined) {oRow = oParam.row}	
+								if (oParam.preview != undefined) {bPreview = oParam.preview}	
+							}
 							else
-							{	return false;	}
+							{
+								ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.sendTo.sendSMS. <br /><br />Preview aborted.');
+								return false;
+							}
+							
+							if (1 === 1) {
+								ns1blankspace.status.message('Function not yet available.');
+								return;
+							}
+
+							if (bPreview) {
+								// We're sending the preview to the current user
+								$.each(oParameters, function() {
+									sTags = this + "|"  + sTags;
+								});
+
+								if (sTags.length > 0){	
+									sTags = sTags.substr(0, sTags.length - 1); 	
+								}
+							
+								sParam = "&more=" + ns1blankspace.util.fs(iMoreId) + 
+										 "&object=" + ns1blankspace.report.object + "&objectcontext=" + oRow.id +
+										 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+										 "&tags=" + ns1blankspace.util.fs(sTags);
+
+								
+								$.ajax(
+								{
+									type: 'POST',
+									url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
+									data: "rf=text" + sParam,
+									dataType: 'TEXT',
+									success: function(data)
+									{
+										if (data.substr(0,2) === "OK") {	
+											
+											aData = data.split('|');
+											sText = aData[2];
+											sParam = "subject=" + ns1blankspace.util.fs(sSubject) +
+													"&message=" + ns1blankspace.util.fs(sText) + 
+													"&to=" + ns1blankspace.user.email ;
+													
+											$.ajax({
+												type: 'POST',
+												url: '/ondemand/messaging/?method=MESSAGING_SMS_SEND',
+												data: sParam,
+												dataType: 'JSON',
+												success: function(oResponse) {
+													if (oResponse.status === 'OK') {
+														ns1blankspace.status.message('SMS sent to ' + ns1blankspace.user.email);
+													}
+													else {
+														ns1blankspace.status.message('An error has occurred');
+													}
+												}
+											});
+										
+										}
+									}
+								});
+							}
+							else {
+								// Time to send the email to all of the report results
+								if (confirm("Are you sure you want to send an SMS to all of the Contacts in the report results?"))
+								{
+									sTags = oParameters.join('|');
+									
+									sParam = "&more=" + iMoreId + 
+											 "&title=" + ns1blankspace.util.fs(sSubject) +
+											 "&status=1" + 
+											 "&type=2" +
+											 '&scheduletype=9' +
+											 "&schedulemaximumcount=1" + 
+											 "&responseactionfrom=" + ns1blankspace.util.fs(ns1blankspace.user.email) + 
+											 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+											 "&caption=" + ns1blankspace.util.fs(sTags);
+
+									$.ajax(
+									{
+										type: 'POST',
+										cache: false,
+										url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
+										data: "rf=text" + sParam,
+										dataType: 'text',
+										async: false,
+										success: function(data)
+										{
+											ns1blankspace.status.message("Email(s) sent");
+										}
+									});
+								}
+								else
+								{	return false;	}
+							}
 						}
 				},
 
