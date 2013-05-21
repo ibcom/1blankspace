@@ -442,7 +442,16 @@ ns1blankspace.setup.financial =
 										'<input id="ns1blankspaceBankAccountFinancialAccount" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
-										'</td></tr>');	
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Status' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Active' +
+										'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Non-Active' +
+										'</td></tr>');
 						
 						aHTML.push('</table>');					
 						
@@ -475,6 +484,7 @@ ns1blankspace.setup.financial =
 							var sData = 'id=' + ns1blankspace.util.fs(sID);
 							sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceBankAccountTitle').val());
 							sData += '&financialaccount=' + ns1blankspace.util.fs($('#ns1blankspaceBankAccountFinancialAccount').attr("data-id"));
+							sData += '&status=' + $('input[name="radioStatus"]:checked').val();
 
 							$.ajax(
 							{
@@ -513,6 +523,10 @@ ns1blankspace.setup.financial =
 									ns1blankspace.setup.financial.bankAccounts(oParam, data)
 									});
 						}
+						else
+						{
+							$('[name="radioStatus"][value="1"]').attr('checked', true);
+						}
 					}
 						
 					if (iStep == 3 && oResponse)
@@ -522,6 +536,7 @@ ns1blankspace.setup.financial =
 						$('#ns1blankspaceBankAccountTitle').focus();
 						$('#ns1blankspaceBankAccountFinancialAccount').val(oObjectContext.financialaccounttext)
 						$('#ns1blankspaceBankAccountFinancialAccount').attr('data-id', oObjectContext.financialaccount);
+						$('[name="radioStatus"][value="' + oObjectContext.status + '"]').attr('checked', true);
 
 						ns1blankspace.status.message('');
 					}

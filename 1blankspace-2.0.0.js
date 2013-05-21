@@ -2102,6 +2102,7 @@ ns1blankspace.attachments =
 						oSearch.addField('type,filename,description,download,modifieddate,attachment');
 						oSearch.addFilter('object', 'EQUAL_TO', iObject);
 						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+						oSearch.rows = ns1blankspace.option.defaultRows;
 						
 						if (iAttachmentType != undefined)
 						{
@@ -2188,7 +2189,7 @@ ns1blankspace.attachments =
 
 	bind:		function ()
 				{
-					$('#ns1blankspaceAttachments .ns1blankspaceAttachmentsRemove').button({
+					$('span.ns1blankspaceAttachmentsRemove:not("ui-button")').button({
 								text: false,
 								 icons: {
 									 primary: "ui-icon-close"
