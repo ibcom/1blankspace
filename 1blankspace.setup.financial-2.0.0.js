@@ -51,21 +51,31 @@ ns1blankspace.setup.financial =
 
 					aHTML.push('</table>');		
 						
-					aHTML.push('<table class="ns1blankspaceControl">');
+					aHTML.push('<table class="ns1blankspaceControl" style="padding-top:10px;">');
 					
 					aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
-									'Summary</td></tr>');	
-					
+									'Summary</td></tr>');
+	
 					aHTML.push('<tr><td id="ns1blankspaceControlGeneral" class="ns1blankspaceControl">' +
-									'General</td></tr>');	
-								
-					aHTML.push('<tr><td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">' +
-									'Bank Accounts</td></tr>');	
-		
+									'General</td></tr>');
+
+					aHTML.push('<tr><td id="ns1blankspaceControlTax" class="ns1blankspaceControl">' +
+									'Tax</td></tr>');	
+					
+					aHTML.push('<tr><td id="ns1blankspaceControlPayroll" class="ns1blankspaceControl">' +
+									'Payroll</td></tr>');	
+
 					aHTML.push('</table>');		
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
+								
+					aHTML.push('<tr><td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">' +
+									'Bank Accounts</td></tr>');	
+
+					aHTML.push('</table>');		
 					
+					aHTML.push('<table class="ns1blankspaceControl">');
+		
 					aHTML.push('<tr><td id="ns1blankspaceControlFinancialAccount" class="ns1blankspaceControl">' +
 									'Accounts</td></tr>');
 								
@@ -77,26 +87,12 @@ ns1blankspace.setup.financial =
 					aHTML.push('<table class="ns1blankspaceControl">');
 					
 					aHTML.push('<tr><td id="ns1blankspaceControlInvoiceTemplate" class="ns1blankspaceControl">' +
-									'Invoice<br />Template</td></tr>');
+									'Invoice<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">template</span></td></tr>');
 
-					aHTML.push('</table>');		
-					
-					aHTML.push('<table class="ns1blankspaceControl">');
-					
-					aHTML.push('<tr><td id="ns1blankspaceControlStatementTemplate" class="ns1blankspaceControl">' +
-									'Statement<br />Template</td></tr>');	
+					aHTML.push('<tr><td id="ns1blankspaceControlStatementTemplate" class="ns1blankspaceControl" style="padding-top:7px;">' +
+									'Statement<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">template</span></td></tr>');	
 					
 					aHTML.push('</table>');
-
-					aHTML.push('<table class="ns1blankspaceControl">');
-					
-					aHTML.push('<tr><td id="ns1blankspaceControlTax" class="ns1blankspaceControl">' +
-									'Tax</td></tr>');	
-					
-					aHTML.push('<tr><td id="ns1blankspaceControlPayroll" class="ns1blankspaceControl">' +
-									'Payroll</td></tr>');	
-					
-					aHTML.push('</table>');			
 
 					$('#ns1blankspaceControl').html(aHTML.join(''));	
 					
@@ -264,12 +260,16 @@ ns1blankspace.setup.financial =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Accounting Year' +
+										'Accounting Year <span class="ns1blankspaceSub" style="font-size:0.75em; vertical-align:middle; padding-left:3px;">eg 30 Jun</span>' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceGeneralAccountingYear" class="ns1blankspaceText">' +
-										'</td></tr>');
+										'</td></tr>' +
+										'</tr>');
+
+
+						
 																		
 						aHTML.push('</table>');					
 						
@@ -314,7 +314,7 @@ ns1blankspace.setup.financial =
 						{
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-							oSearch.addField('title,notes');
+							oSearch.addField('title,status,statustext,notes');
 							oSearch.sort('title', 'asc');
 							oSearch.rows = ns1blankspace.option.defaultRows;
 							oSearch.getResults(function(data) {ns1blankspace.setup.financial.bankAccounts(oParam, data)});
@@ -369,6 +369,9 @@ ns1blankspace.setup.financial =
 									aHTML.push('<td id="ns1blankspaceSetupFinancialBankAccount_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
 															' title="' + this.notes + '">' +
 															this.title + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceSetupFinancialBankAccount_status-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+															this.statustext + '</td>');
 														
 									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 									
@@ -516,7 +519,7 @@ ns1blankspace.setup.financial =
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-							oSearch.addField('title,financialaccount,financialaccounttext');
+							oSearch.addField('title,financialaccount,financialaccounttext,status');
 							oSearch.addFilter('id', 'EQUAL_TO', sID);
 							oSearch.getResults(function(data) {
 									$.extend(true, oParam, {step: 3});

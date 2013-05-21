@@ -566,6 +566,7 @@ ns1blankspace.app =
 							$('#ns1blankspaceLogonName').unbind('click');
 							$('#ns1blankspaceSpaceText').html('&nbsp;')
 							$('#ns1blankspaceSpaceText').unbind('click');
+							ns1blankspace.status.message('');
 
 							if (data.status === 'ER')
 							{
@@ -578,6 +579,7 @@ ns1blankspace.app =
 							}
 							else
 							{
+								ns1blankspace.financial.data = undefined;
 								if (ns1blankspace.control.extend !== undefined) {ns1blankspace.control.extend()}
 								oParam = ns1blankspace.util.setParam(oParam, 'user', data);
 								ns1blankspace.app.show(oParam);
@@ -2005,10 +2007,14 @@ ns1blankspace.history.view =
 											{
 												fDestinationNamespace(ns1blankspace.util.toObject(sDestinationParam));
 											}
-											else
+											else if (sDestinationParam != '')
 											{	
 												fDestinationNamespace(sDestinationParam);
-											}	
+											}
+											else
+											{	
+												fDestinationNamespace();
+											}
 										}
 										else
 										{
@@ -2395,7 +2401,7 @@ ns1blankspace.setup =
 								primary: "ui-icon-grip-dotted-vertical",
 								secondary: "ui-icon-triangle-1-s"
 							},
-							label: ns1blankspace.option.defaultView
+							label: 'Select...'
 						})
 						.click(function() 
 						{
@@ -2410,21 +2416,15 @@ ns1blankspace.setup =
 						{
 							ns1blankspace.control.setView.default();
 						}
-											
-						ns1blankspace.status.message('');
 					}
 					else
 					{
 						ns1blankspace.setupView = true;
 
 						$('#ns1blankspaceViewControlViewContainer')
-						.button(
-						{
-							label: ns1blankspace.option.defaultSetupView
-						})
 						.click(function() 
 						{
-							ns1blankspace.control.setup.views.show(this);;
+							ns1blankspace.control.setup.views.show(this);
 						});
 						
 						if (sViewNamespace !== undefined && sViewNamespace != '')
@@ -2435,8 +2435,6 @@ ns1blankspace.setup =
 						{
 							ns1blankspace.control.setView.setup();
 						}
-
-						ns1blankspace.status.message('');	
 					}		
 				}
 }				
