@@ -2350,6 +2350,7 @@ ns1blankspace.financial.bankAccount =
 														})
 														.click(function() {
 															$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('');
+															oParam = ns1blankspace.util.setParam(oParam, 'editAction', 1);
 															oParam = ns1blankspace.util.setParam(oParam, 'step', 0);
 															ns1blankspace.financial.bankAccount.reconcile.items.init(oParam);
 														})	
@@ -2937,7 +2938,7 @@ ns1blankspace.financial.bankAccount =
 																								' class="recoitem">' +
 																								this.amount + '</td>');																					
 																		
-																		var sDescription = this.description + ' (' + this.type + ')';
+																		var sDescription = this.description + (this.type=='journal'?'(' + this.type + ')':'');
 
 																		aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceReconcileItems_reference-' + this.id + '" style="font-size:0.75;color:#B8B8B8"' +
 																							' class="recoitem" title="' + this.reference + '">' +
