@@ -2321,7 +2321,7 @@ ns1blankspace.financial.bankAccount =
 														
 														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
 														oSearch.addField('description,amount,posteddate');
-														oSearch.sort('posteddate', 'desc');
+														oSearch.sort('posteddate', 'asc');
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 														oSearch.addFilter('status', 'EQUAL_TO', 3);
 														oSearch.addFilter('category', 'EQUAL_TO', (iType==1?2:1));
