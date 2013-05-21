@@ -1313,7 +1313,7 @@ ns1blankspace.financial.bankAccount =
 																				 parseFloat(Math.abs((oRow.amount).parseCurrency())).formatMoney() +
 																				 '<br /><span class="ns1blankspaceSub">' + oRow.categorytext + '</span></td>');						
 																		
-														aHTML.push('<td class="ns1blankspaceRow" id="ns1blankspaceFinancialImportItem_status-' + oRow.id + '">');
+														aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspaceFinancialImportItem_status-' + oRow.id + '">');
 
 														var sStatusText = oRow.statustext;
 														if (oRow.status==3) {sStatusText = 'Confirmed'};
@@ -2896,7 +2896,7 @@ ns1blankspace.financial.bankAccount =
 
 																	if (iSearchSourceID)
 																	{	
-																		sHTML += '<br / >that closely match this bank transaction.';
+																		sHTML += ' that closely match this bank transaction.';
 																		sHTML += '<br /><br />You can search for an existing expense<br / >or click Add';
 																	}	
 																}
@@ -2988,7 +2988,7 @@ ns1blankspace.financial.bankAccount =
 																{
 																	oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 																	oSearch.addField('reference,description,amount,paymentduedate,outstandingamount,contactbusinesspaidtotext,contactpersonpaidtotext');
-																	if (dSearchDate) {oSearch.addFilter('paymentduedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))}
+																	if (dSearchDate != '') {oSearch.addFilter('paymentduedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))}		
 																	oSearch.sort('paymentduedate', 'asc');
 																}	
 																else
@@ -2999,8 +2999,8 @@ ns1blankspace.financial.bankAccount =
 																	oSearch.sort('duedate', 'asc');
 																}
 															
-																if (cSearchAmount) {oSearch.addFilter('amount', 'APPROX_EQUAL_TO', cSearchAmount)}
-																if (sSearchReference) {oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference)}
+																if (cSearchAmount != '') {oSearch.addFilter('outstandingamount', 'GREATER_THAN_OR_EQUAL_TO', cSearchAmount)}
+																if (sSearchReference != '') {oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference)}
 
 																oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0)
 																
@@ -3286,16 +3286,16 @@ ns1blankspace.financial.bankAccount =
 
 															if (ns1blankspace.util.param(oParam, 'sourceXHTMLElementID').exists)
 															{	
-																$('#ns1blankspaceItemDescription').val(ns1blankspace.util.getData(oParam, 'data-description', {param: 'sourceXHTMLElementID'}));
-																$('#ns1blankspaceFinancialAccount').val(ns1blankspace.util.getData(oParam, 'data-financialaccounttext', {param: 'sourceXHTMLElementID'}));
-																$('#ns1blankspaceFinancialAccount').attr('data-id', ns1blankspace.util.getData(oParam, 'data-financialaccount', {param: 'sourceXHTMLElementID'}));
-																iTaxType = ns1blankspace.util.getData(oParam, 'data-taxtype', {param: 'sourceXHTMLElementID'});
-																iType = ns1blankspace.util.getData(oParam, 'data-type', {param: 'sourceXHTMLElementID'});
+																$('#ns1blankspaceItemDescription').val(ns1blankspace.util.getData(oParam, 'data-description', {param: 'sourceXHTMLElementID'}).value);
+																$('#ns1blankspaceFinancialAccount').val(ns1blankspace.util.getData(oParam, 'data-financialaccounttext', {param: 'sourceXHTMLElementID'}).value);
+																$('#ns1blankspaceFinancialAccount').attr('data-id', ns1blankspace.util.getData(oParam, 'data-financialaccount', {param: 'sourceXHTMLElementID'}).value);
+																iTaxType = ns1blankspace.util.getData(oParam, 'data-taxtype', {param: 'sourceXHTMLElementID'}).value;
+																iType = ns1blankspace.util.getData(oParam, 'data-type', {param: 'sourceXHTMLElementID'}).value;
 															}
 
 															ns1blankspace.financial.util.tax.codes(
 															{
-																xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
+																xhtmlElementID: 'ns1blankspaceItemTaxCode',
 																id: iTaxType,
 																type: iType,
 																xhtmlElementName: 'radioItemTaxCode'
