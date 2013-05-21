@@ -314,15 +314,13 @@ ns1blankspace.setup.financial =
 						{
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-							oSearch.addField('title,status,statustext,notes');
+							oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status,statustext');
 							oSearch.sort('title', 'asc');
 							oSearch.rows = ns1blankspace.option.defaultRows;
 							oSearch.getResults(function(data) {ns1blankspace.setup.financial.bankAccounts(oParam, data)});
 						}
 						else
 						{	
-							ns1blankspace.financial.data.bankaccounts = oResponse.data.rows;
-							
 							var aHTML = [];
 							
 							aHTML.push('<table class="ns1blankspaceContainer">' +
@@ -348,6 +346,8 @@ ns1blankspace.setup.financial =
 							})
 							.css('font-size', '0.75em');
 
+							ns1blankspace.financial.data.bankaccounts = [];
+
 							var aHTML = [];
 
 							if (oResponse.data.rows.length == 0)
@@ -364,6 +364,8 @@ ns1blankspace.setup.financial =
 						
 								$(oResponse.data.rows).each(function() 
 								{
+									if (this.status == 1) {ns1blankspace.financial.data.bankaccounts.push(this)}
+
 									aHTML.push('<tr class="ns1blankspaceRow">');
 									
 									aHTML.push('<td id="ns1blankspaceSetupFinancialBankAccount_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
@@ -495,7 +497,8 @@ ns1blankspace.setup.financial =
 								url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_BANK_ACCOUNT_MANAGE'),
 								data: sData,
 								dataType: 'json',
-								success: function() {
+								success: function()
+								{
 									$.extend(true, oParam, {step: 1});
 									ns1blankspace.setup.financial.bankAccounts(oParam);
 									ns1blankspace.status.message('Saved');
