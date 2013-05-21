@@ -785,7 +785,7 @@ ns1blankspace.financial.bankAccount =
 																		'object,objectcontext,' +
 																		'externalid,financialaccount,financialaccounttext,posteddate,project,projecttext,' +
 																		'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
-													oSearch.sort('posteddate', 'desc');
+													oSearch.sort('posteddate', 'asc');
 													oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 													if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
 													oSearch.rows = 100;
