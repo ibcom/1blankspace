@@ -1709,6 +1709,8 @@ ns1blankspace.financial.payroll =
 
 													$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
 
+													$('#ns1blankspacePayrollEmployeeDetailsPayRateStartDate').val(Date.today().toString("dd MMM yyyy"));
+
 													var aHTML = [];
 												
 													aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em">' +

@@ -83,6 +83,14 @@ a:hover
 	font-weight: 100;
 }
 
+.ns1blankspaceSubNote
+{
+	color: #999999;
+	font-weight: 100;
+	font-size: 0.75em;
+	vertical-align: middle;
+}
+
 .ns1blankspaceHeader
 {
 	color: #999999;

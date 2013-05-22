@@ -721,7 +721,7 @@ ns1blankspace.order =
 										'<td class="ns1blankspaceSelect">' +
 										'<input id="ns1blankspaceDetailsOrderByPerson" class="ns1blankspaceSelect"' +
 											' data-method="CONTACT_PERSON_SEARCH"' +
-											' data-columns="surname"' +
+											' data-columns="firstname-space-surname"' +
 											' data-parent="ns1blankspaceDetailsOrderByBusiness"' +
 											' data-parent-search-id="contactbusiness"' +
 											' data-parent-search-text="tradename">' +

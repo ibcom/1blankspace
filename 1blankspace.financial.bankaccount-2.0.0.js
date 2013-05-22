@@ -483,8 +483,8 @@ ns1blankspace.financial.bankAccount =
 													'Where Type Is' +
 													'</td></tr>' +
 													'<tr><td class="ns1blankspaceRadio">' +
-													'<input type="radio" id="radioType1" name="radioType" value="1"/>Credit' +
-													'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Debit' +
+													'<input type="radio" id="radioType1" name="radioType" value="1"/>Credit <span class="ns1blankspaceSubNote">(receipt)</span>' +
+													'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Debit <span class="ns1blankspaceSubNote">(payment)</span>' +
 													'</td></tr>');
 
 									aHTML.push('<tr><td class="ns1blankspaceCaption">' +
@@ -3214,7 +3214,18 @@ ns1blankspace.financial.bankAccount =
 																				' data-parent="ns1blankspaceItemContactBusiness"' +
 																				' data-parent-search-id="contactbusiness"' +
 																				' data-parent-search-text="tradename">' +
-																			'</td></tr>');		
+																			'</td></tr>');
+
+															aHTML.push('<tr class="ns1blankspaceCaption">' +
+																			'<td class="ns1blankspaceCaption">' +
+																			'Financial Account' +
+																			'</td></tr>' +
+																			'<tr class="ns1blankspace">' +
+																			'<td class="ns1blankspaceSelect">' +
+																			'<input id="ns1blankspaceItemFinancialAccount" class="ns1blankspaceSelect"' +
+																				' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+																				' data-columns="title">' +
+																			'</td></tr>');						
 
 															aHTML.push('<tr class="ns1blankspaceCaption">' +
 																			'<td class="ns1blankspaceCaption">' +
@@ -3261,17 +3272,6 @@ ns1blankspace.financial.bankAccount =
 																			'<textarea rows="3" cols="35" id="ns1blankspaceItemDescription" class="ns1blankspaceTextMultiSmall"></textarea>' +
 																			'</td></tr>');
 															
-															aHTML.push('<tr class="ns1blankspaceCaption">' +
-																			'<td class="ns1blankspaceCaption">' +
-																			'Financial Account' +
-																			'</td></tr>' +
-																			'<tr class="ns1blankspace">' +
-																			'<td class="ns1blankspaceSelect">' +
-																			'<input id="ns1blankspaceItemFinancialAccount" class="ns1blankspaceSelect"' +
-																				' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
-																				' data-columns="title">' +
-																			'</td></tr>');	
-
 															aHTML.push('</table>');					
 														
 															$('#ns1blankspaceReconcileItemsEdit').html(aHTML.join(''));
@@ -3292,6 +3292,9 @@ ns1blankspace.financial.bankAccount =
 																iTaxType = ns1blankspace.util.getData(oParam, 'data-taxtype', {param: 'sourceXHTMLElementID'}).value;
 																iType = ns1blankspace.util.getData(oParam, 'data-type', {param: 'sourceXHTMLElementID'}).value;
 															}
+
+															if (iType == undefined) {iType = 1}
+															if (iTaxType == 'undefined') {iTaxType = 1}
 
 															ns1blankspace.financial.util.tax.codes(
 															{
@@ -3319,6 +3322,13 @@ ns1blankspace.financial.bankAccount =
 																	taxXHTMLElementID: 'ns1blankspaceItemTax',
 																	taxTypeXHTMLElementName: 'radioItemTaxCode'
 																});
+															});
+
+															ns1blankspace.financial.util.tax.calculate(
+															{
+																amountXHTMLElementID: 'ns1blankspaceItemAmount',
+																taxXHTMLElementID: 'ns1blankspaceItemTax',
+																taxTypeXHTMLElementName: 'radioItemTaxCode'
 															});
 
 															var aHTML = [];

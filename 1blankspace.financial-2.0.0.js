@@ -51,8 +51,6 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							ns1blankspace.financial.data = {};
 							ns1blankspace.financial.initStatus = undefined;
 						}
-						
-						//ns1blankspace.financial.initWhenDataInitalised(oParam);
 
 						if (ns1blankspace.financial.initStatus != 2 || bRefresh)
 						{
