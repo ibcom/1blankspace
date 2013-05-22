@@ -481,7 +481,7 @@ ns1blankspace.setup.messaging =
 									
 									if (ns1blankspace.objectContext != -1)
 									{
-										sParam += '&id=' + ns1blankspace.objectContext	
+										sData += '&id=' + ns1blankspace.objectContext	
 									}	
 									
 									if ($('#ns1blankspaceMainDetails').html() != '')
@@ -501,7 +501,7 @@ ns1blankspace.setup.messaging =
 										
 										if ($('#ns1blankspaceDetailsAccountPassword').val() != '')
 										{
-											sData += '&accountpassword=' + ns1blankspace.util.fs($('#inputns1blankspaceMainDetailsAccountPassword').val());
+											sData += '&accountpassword=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAccountPassword').val());
 										}
 									};
 
