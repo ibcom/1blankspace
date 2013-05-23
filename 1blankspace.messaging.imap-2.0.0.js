@@ -1533,11 +1533,6 @@ ns1blankspace.messaging.imap =
 															
 														if (ns1blankspace.objectContextData != undefined)
 														{
-															if (ns1blankspace.option.richTextEditing)
-															{
-																tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingEditMessageText');
-															}	
-
 															ns1blankspace.messaging.imap.message.edit.contents(oParam);
 
 															if (bForward)
@@ -1579,7 +1574,7 @@ ns1blankspace.messaging.imap =
 																sTo = sFrom + '; ' + sTo;
 															}	
 													
-															$('#ns1blankspaceMessagingEditMessageTo').val(sTo)
+															$('#ns1blankspaceEditMessageTo').val(sTo)
 												
 															if (ns1blankspace.objectContextData.attachments != '' && bForward && ns1blankspace.messaging.action == -1)
 															{
@@ -1729,9 +1724,12 @@ ns1blankspace.messaging.imap =
 														aHTML.push('<tr><td><strong>Subject:</strong> ' + ns1blankspace.objectContextData.subject + '</td></tr>');	
 														aHTML.push('</table>');
 														
-														//$('#ns1blankspaceMessagingEditMessageText').val(aHTML.join('') + (ns1blankspace.objectContextData.message).formatXHTML());
+														$('#ns1blankspaceMessagingEditMessageText').val(aHTML.join('') + (ns1blankspace.objectContextData.message).formatXHTML());
 
-														tinyMCE.get('ns1blankspaceMessagingEditMessageText').setContent(aHTML.join('') + (ns1blankspace.objectContextData.message).formatXHTML());
+														if (ns1blankspace.option.richTextEditing)
+														{
+															tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingEditMessageText');
+														}
 													}	
 
 												},		
@@ -1894,7 +1892,7 @@ ns1blankspace.messaging.imap =
 										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 									}	
 									
-									ns1blankspace.status.working('Sending...');
+									//ns1blankspace.status.working('Sending...');
 
 									//sData += 'object=' + oParam.object;
 									//sData += '&objectcontext=' + oParam.objectContext;
@@ -1908,7 +1906,7 @@ ns1blankspace.messaging.imap =
 									
 									sData += (oParam.otherData == undefined ? '' : oParam.otherData)
 									
-									$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading);
+									$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading + ' Sending...');
 
 									$.ajax(
 									{
@@ -1918,44 +1916,12 @@ ns1blankspace.messaging.imap =
 										dataType: 'text',
 										success: function(data) 
 										{
-											ns1blankspace.status.message('Email sent');
-											$('#' + sXHTMLElementID).html('<span><br />Email has been sent.</span>');
-											$('#ns1blankspaceMessaging').html(''); //???
+											ns1blankspace.status.message('');
+											$('#' + sXHTMLElementID).html('<span class="ns1blankspaceSub"><br />Email has been sent.</span>');
 											if (fFunctionPostSend != undefined) {fFunctionPostSend()};
 										}
 									});
 
-								},						
-
-					edit2:		function ()
-								{
-									var aHTML = [];
-
-									if ($('#ns1blankspaceMainEdit').attr('data-loading') == '1')
-									{
-										$('#ns1blankspaceMainEdit').attr('data-loading', '');
-												
-										aHTML.push('<table id="ns1blankspaceMessagingMessageEditContainer" class="ns1blankspaceMain">');
-												
-										aHTML.push('<tr class="ns1blankspaceTextMulti">' +
-														'<td class="ns1blankspaceTextMulti">' +
-														'<textarea rows="30" cols="50" id="ns1blankspaceMessagingMessageEdit" class="ns1blankspaceTextMultiLarge"></textarea>' +
-														'</td></tr>');
-														
-										aHTML.push('</table>');					
-										
-										$('#ns1blankspaceMainEdit').html(aHTML.join(''));
-										
-										if (ns1blankspace.objectContextData != undefined)
-										{
-											$('#ns1blankspaceMessagingMessageEdit').val(unescape(ns1blankspace.objectContextData.message));
-										}
-									
-										if (ns1blankspace.option.richTextEditing)
-										{
-											tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingMessageEdit');
-										}	
-									}	
 								}
 				},
 
