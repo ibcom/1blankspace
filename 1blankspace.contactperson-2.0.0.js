@@ -1733,7 +1733,39 @@ ns1blankspace.contactPerson =
 	sms: 		{
 					show: 		function ()
 								{
+									var aHTML = [];
+										
+									aHTML.push('<table class="ns1blankspaceDropDown">');									
+								
+									aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
+														'<textarea id="ns1blankspaceSMSMessage" name="message" rows="15" cols="10"' +
+																' class="ns1blankspaceTextMulti"></textarea>' +
+														'</td></tr>');
+									
+									aHTML.push('<tr><td style="text-align:right;">' +
+													'<span id="ns1blankspaceSMSSend" class="ns1blankspaceAction">Send</span>' +
+													'</td></tr>');
+															
+									aHTML.push('</table>');
 
+									ns1blankspace.container.show(
+									{
+										xhtmlElementID: 'ns1blankspaceContactPersonSMS',
+										offsetLeft: -251,
+										offsetTop: 6,
+										xhtml: aHTML.join('')
+									});
+									
+									$('#ns1blankspaceSMSSend').button(
+									{
+										label: "Send"
+									})
+									.click(function() {
+										ns1blankspace.contactPerson.sms.send();
+									})
+									.css('width', '75px');
+
+									$('#ns1blankspaceSMSMessage').focus();
 								},
 
 					send: 		function ()
@@ -1741,7 +1773,7 @@ ns1blankspace.contactPerson =
 									var oData =
 									{
 										contactperson: ns1blankspace.objectContext,
-										message: $('#ns1blankspaceContactPersonSMSMesage').val()
+										message: $('#ns1blankspaceSMSMessage').val()
 									}
 
 									$.ajax(
@@ -1752,7 +1784,7 @@ ns1blankspace.contactPerson =
 										dataType: 'json',
 										success: function(data) 
 										{
-								
+											ns1blankspace.container.hide()
 										}
 									});
 								}			

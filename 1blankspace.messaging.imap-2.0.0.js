@@ -1594,8 +1594,8 @@ ns1blankspace.messaging.imap =
 																		success: function(data) 
 																		{
 																			var aReturn = data.split('|');
-																			ns1blankspace.messaging.action = aReturn[1];
-																			ns1blankspace.messaging.imap.edit.attachments();
+																			ns1blankspace.messaging.action = aReturn[2];
+																			ns1blankspace.messaging.imap.message.edit.attach.process();
 																		}
 																	});
 																}
