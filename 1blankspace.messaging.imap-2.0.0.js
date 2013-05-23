@@ -1649,6 +1649,13 @@ ns1blankspace.messaging.imap =
 															$('#ns1blankspaceMessagingEditMessageText').val(sMessage)
 														}
 													}
+													else
+													{
+														if (ns1blankspace.option.richTextEditing)
+														{
+															tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingEditMessageText');
+														}
+													}
 												},
 
 									contents: 	function (oParam)
