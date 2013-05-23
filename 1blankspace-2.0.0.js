@@ -559,7 +559,7 @@ ns1blankspace.app =
 						global: false,
 						success: function(data) 
 						{
-							$('#ns1blankspaceViewControl').html('&nbsp;');
+							//$('#ns1blankspaceViewControl').html('&nbsp;');
 							$('#ns1blankspaceMain').html('');
 							$('#ns1blankspaceControl').html('');
 							$('#ns1blankspaceLogonName').html('&nbsp;')
@@ -4484,6 +4484,7 @@ ns1blankspace.render.page =
 					var sXHTMLlFirstRow;
 					var sXHTMLContext = '';
 					var fFunctionShowRow;
+					var fFunctionOnNewPage;
 					
 					if (oParam != undefined)
 					{
@@ -4501,6 +4502,7 @@ ns1blankspace.render.page =
 						if (oParam.idSeperator != undefined) {sIDSeperator = oParam.idSeperator}
 						if (oParam.xhtmlFirstRow != undefined) {sXHTMLlFirstRow = oParam.xhtmlFirstRow}
 						if (oParam.functionNewPage != undefined) {sFunctionNewPage = oParam.functionNewPage}
+						if (oParam.functionOnNewPage != undefined) {fFunctionOnNewPage = oParam.functionOnNewPage}
 						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
 					}
 				
@@ -4609,7 +4611,11 @@ ns1blankspace.render.page =
 									});
 								}
 								
-								if (sFunctionNewPage != undefined)
+								if (fFunctionOnNewPage !== undefined)
+								{
+									fFunctionOnNewPage({xhtmlContainerID: 'ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow})
+								}	
+								else if (sFunctionNewPage != undefined)
 								{
 									eval(sFunctionNewPage);
 								}
