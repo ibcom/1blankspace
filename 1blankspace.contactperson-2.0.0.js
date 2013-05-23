@@ -481,7 +481,7 @@ ns1blankspace.contactPerson =
 							aHTML.push('<table class="ns1blankspaceMain">' +
 										'<tr class="ns1blankspaceRow">' +
 										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:300px;"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:247px;"></td>' +
 										'</tr>' +
 										'</table>');				
 							
@@ -530,7 +530,7 @@ ns1blankspace.contactPerson =
 						
 							aHTML.push('<table class="ns1blankspaceColumn2">');
 
-							aHTML.push('<tr><td id="ns1blankspaceFavourite" class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
+							aHTML.push('<tr><td id="ns1blankspaceFavourite" class="ns1blankspaceSummaryCaption">' +
 											ns1blankspace.xhtml.loadingSmall +
 											'</td></tr>');	
 
@@ -538,22 +538,25 @@ ns1blankspace.contactPerson =
 							{	
 								var aEmail = (ns1blankspace.objectContextData.email).split("@");
 
-								aHTML.push('<tr><td class="ns1blankspaceSub" style="padding-bottom:10px;">' +
-											aEmail[0] + '<br />@' + aEmail[1] +
-											'</td></tr>');	
+								
+								aHTML.push('<tr><td style="padding-top:15px; padding-bottom:5px;"><span id="ns1blankspaceContactPersonEmail" class="ns1blankspaceAction">' +
+											'Email</span></td></tr>');
 
-								aHTML.push('<tr><td><span id="ns1blankspaceContactPersonEmail" class="ns1blankspaceAction">' +
-											'Email</span></td></tr>');	
+									aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em;">' +
+											aEmail[0] + '<br />@' + aEmail[1] +
+											'</td></tr>');
 							}
 
 							if (ns1blankspace.objectContextData.mobile != '')
 							{
-								aHTML.push('<tr><td class="ns1blankspaceSub" style="padding-bottom:10px;">' +
+								
+
+								aHTML.push('<tr><td style="padding-top:16px; padding-bottom:5px;"><span id="ns1blankspaceContactPersonSMS" class="ns1blankspaceAction">' +
+											'SMS</span></td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em;">' +
 											ns1blankspace.objectContextData.mobile +
 											'</td></tr>');
-
-								aHTML.push('<tr><td><span id="ns1blankspaceContactPersonSMS" class="ns1blankspaceAction">' +
-											'SMS</span></td></tr>');
 							}	
 
 							aHTML.push('</table>');					
@@ -562,11 +565,7 @@ ns1blankspace.contactPerson =
 
 							$('#ns1blankspaceContactPersonEmail').button(
 							{
-								label: 'Send Email',
-								icons:
-								{
-									primary: "ui-icon-mail-closed"
-								}
+								label: 'Send Email'
 							})
 							.click(function()
 							{
@@ -579,28 +578,17 @@ ns1blankspace.contactPerson =
 									objectContext: ns1blankspace.objectContextData.id
 								});
 							})
-							.css('width', '50px');
+							.css('width', '100px');
 
 							$('#ns1blankspaceContactPersonSMS').button(
 							{
-								label: 'Send SMS',
-								icons:
-								{
-									primary: "ui-icon-mail-comment"
-								}
+								label: 'Send SMS'
 							})
 							.click(function()
 							{
-								ns1blankspace.messaging.imap.init(
-								{
-									action: 1,
-									emailTo: ns1blankspace.objectContextData.email,
-									contactPersonTo: ns1blankspace.objectContextData.id,
-									object: 32,
-									objectContext: ns1blankspace.objectContextData.id
-								});
+								ns1blankspace.contactPerson.sms.show();
 							})
-							.css('width', '50px');
+							.css('width', '100px');
 
 							var sData = 'object=' + ns1blankspace.object;
 							sData += '&objectContext=' + ns1blankspace.objectContext;
@@ -621,7 +609,7 @@ ns1blankspace.contactPerson =
 						{
 							$('#ns1blankspaceFavourite').html('<span id="ns1blankspaceContactPersonFavourite" class="ns1blankspaceAction"></span>')
 
-							var sFavourite = 'Set as favourite';
+							var sFavourite = 'Add';
 							var bFavourite = false;
 							var iFavouriteID;
 
@@ -637,7 +625,7 @@ ns1blankspace.contactPerson =
 								label: sFavourite,
 								icons:
 								{
-									primary: (bFavourite?"ui-icon-star":"")
+									primary: "ui-icon-star"
 								}
 							})
 							.click(function()
@@ -660,7 +648,9 @@ ns1blankspace.contactPerson =
 										ns1blankspace.contactPerson.summary();
 									}
 								});							
-							});
+							})
+							.css('width', '100px')
+							.css('text-align', 'left');
 						}	
 					}	
 				},
@@ -1738,5 +1728,33 @@ ns1blankspace.contactPerson =
 									.css('width', '15px')
 									.css('height', '20px')
 								}	
+				},
+
+	sms: 		{
+					show: 		function ()
+								{
+
+								},
+
+					send: 		function ()
+								{
+									var oData =
+									{
+										contactperson: ns1blankspace.objectContext,
+										message: $('#ns1blankspaceContactPersonSMSMesage').val()
+									}
+
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('MESSAGING_SMS_SEND'),
+										data: oData,
+										dataType: 'json',
+										success: function(data) 
+										{
+								
+										}
+									});
+								}			
 				}
 }														
