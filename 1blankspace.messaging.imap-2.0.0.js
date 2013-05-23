@@ -1505,7 +1505,7 @@ ns1blankspace.messaging.imap =
 													{
 														text: false,
 														icons:	{
-																	primary: "ui-icon-document"
+																	primary: "ui-icon-paperclip"
 																}
 													})
 													.click(function() {
@@ -2035,13 +2035,14 @@ ns1blankspace.messaging.imap =
 				{
 					var aHTML = [];
 					
-					var sXHTMLElementID = 'ns1blankspaceMain';
+					var sXHTMLElementID = 'ns1blankspaceMainEdit';
 
 					if (oParam != undefined)
 					{
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 					}	
 					
+					ns1blankspace.show({selector: '#' + sXHTMLElementID});
 					$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading);
 					//$('#tdns1blankspaceMessagingEmailViewport').html('');
 					
