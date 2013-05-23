@@ -283,7 +283,7 @@ ns1blankspace.messaging.imap =
 
 								if (ns1blankspace.messaging.imap.account != aID[1])
 								{
-									ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: event.target.id, source: 1, newOnly: false, repaginate:true});
+									ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: event.target.id, source: 1, newOnly: false, repaginate: true});
 								}	
 							});
 							
@@ -372,7 +372,7 @@ ns1blankspace.messaging.imap =
 										
 									if (ns1blankspace.messaging.imap.account != undefined && oResponse == undefined && bRefresh)
 									{	
-										ns1blankspace.status.working();
+										//ns1blankspace.status.working();
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
