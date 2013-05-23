@@ -1297,6 +1297,8 @@ ns1blankspace.logon =
 						if (oParam.message != undefined) {sMessage = oParam.message}
 					}	
 						
+					$('#ns1blankspaceViewControl').html('&nbsp;');
+						
 					aHTML.push('<table id="ns1blankspaceLogonContainer" style="width:700px;">');
 					
 					aHTML.push('<tr><td style="width:235px; padding-right:25px;">');

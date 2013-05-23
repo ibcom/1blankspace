@@ -988,6 +988,7 @@ ns1blankspace.messaging.imap =
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
+						ns1blankspace.objectContextData.sourcetypetext = 'EMAIL';
 												
 						if (bReply)
 						{
