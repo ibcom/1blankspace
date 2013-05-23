@@ -514,15 +514,7 @@ ns1blankspace.contactPerson =
 											ns1blankspace.objectContextData.workphone +
 											'</td></tr>');
 							}
-
-							if (ns1blankspace.objectContextData.mobile != '')
-							{
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Mobile</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryMobile" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.mobile +
-											'</td></tr>');
-							}				
-							
+	
 							var oDate = new Date(ns1blankspace.objectContextData.modifieddate);
 
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
@@ -544,13 +536,25 @@ ns1blankspace.contactPerson =
 
 							if (ns1blankspace.objectContextData.email != '')
 							{	
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
-											ns1blankspace.objectContextData.email +
+								var aEmail = (ns1blankspace.objectContextData.email).split("@");
+
+								aHTML.push('<tr><td class="ns1blankspaceSub" style="padding-bottom:10px;">' +
+											aEmail[0] + '<br />@' + aEmail[1] +
 											'</td></tr>');	
 
 								aHTML.push('<tr><td><span id="ns1blankspaceContactPersonEmail" class="ns1blankspaceAction">' +
 											'Email</span></td></tr>');	
 							}
+
+							if (ns1blankspace.objectContextData.mobile != '')
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSub" style="padding-bottom:10px;">' +
+											ns1blankspace.objectContextData.mobile +
+											'</td></tr>');
+
+								aHTML.push('<tr><td><span id="ns1blankspaceContactPersonSMS" class="ns1blankspaceAction">' +
+											'SMS</span></td></tr>');
+							}	
 
 							aHTML.push('</table>');					
 							
@@ -574,7 +578,29 @@ ns1blankspace.contactPerson =
 									object: 32,
 									objectContext: ns1blankspace.objectContextData.id
 								});
-							});
+							})
+							.css('width', '50px');
+
+							$('#ns1blankspaceContactPersonSMS').button(
+							{
+								label: 'Send SMS',
+								icons:
+								{
+									primary: "ui-icon-mail-comment"
+								}
+							})
+							.click(function()
+							{
+								ns1blankspace.messaging.imap.init(
+								{
+									action: 1,
+									emailTo: ns1blankspace.objectContextData.email,
+									contactPersonTo: ns1blankspace.objectContextData.id,
+									object: 32,
+									objectContext: ns1blankspace.objectContextData.id
+								});
+							})
+							.css('width', '50px');
 
 							var sData = 'object=' + ns1blankspace.object;
 							sData += '&objectContext=' + ns1blankspace.objectContext;
