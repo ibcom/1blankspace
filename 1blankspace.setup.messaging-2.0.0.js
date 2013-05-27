@@ -132,7 +132,7 @@ ns1blankspace.setup.messaging =
 									
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
-										oSearch.addField('email,type,typetext,authtype,authtypetext,accountname,server,sslport,title,user,usertext');
+										oSearch.addField('email,type,typetext,authtype,authtypetext,accountname,server,sslport,title,user,usertext,footer');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.messaging.show(data)});
 									
@@ -248,6 +248,13 @@ ns1blankspace.setup.messaging =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
+
+						aHTML.push('</table>');	
+						
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlFooter" class="ns1blankspaceControl">' +
+										'Footer</td></tr>');
 					}	
 					
 					aHTML.push('</table>');					
@@ -258,6 +265,7 @@ ns1blankspace.setup.messaging =
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainFooter" class="ns1blankspaceControlMain"></div>');
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
@@ -271,6 +279,12 @@ ns1blankspace.setup.messaging =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 						ns1blankspace.setup.messaging.details();
+					});
+
+					$('#ns1blankspaceControlFooter').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainFooter'});
+						ns1blankspace.setup.messaging.footer();
 					});
 				},
 
@@ -461,15 +475,31 @@ ns1blankspace.setup.messaging =
 					}	
 				},
 
-	new:		function ()
+	footer:		function ()
 				{
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.setup.messaging.layout();
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					$('#ns1blankspaceViewportControlAction').button({disabled: false});
-					$('#ns1blankspaceViewportControlActionOptions').button({disabled: true});
-					ns1blankspace.setup.messaging.details();	
+					var aHTML = [];
+
+					if ($('#ns1blankspaceMainFooter').attr('data-loading') == '1')
+					{
+						$('#ns1blankspaceMainFooter').attr('data-loading', '');
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
+										'<textarea rows="50" cols="50" id="ns1blankspaceFooterText" class="ns1blankspaceTextMulti"></textarea>' +
+										'</td></tr>');		
+								
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMainFooter').html(aHTML.join(''));
+							
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							$('#ns1blankspaceFooterText').val((ns1blankspace.objectContextData.footer).formatXHTML());
+						}
+					}	
 				},
 
 	save: 		{
@@ -504,6 +534,11 @@ ns1blankspace.setup.messaging =
 											sData += '&accountpassword=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAccountPassword').val());
 										}
 									};
+
+									if ($('#ns1blankspaceMainFooter').html() != '')
+									{
+										sData += '&footer=' + ns1blankspace.util.fs($('#ns1blankspaceFooterText').val());
+									}	
 
 									$.ajax(
 									{

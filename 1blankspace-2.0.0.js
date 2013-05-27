@@ -4409,6 +4409,7 @@ ns1blankspace.render.page =
 					var bShowList = true;
 					var sXHTMLContext = '';
 					var bHeaderRow = true;
+					var fFunctionOnNewPage;
 					
 					if (oParam != undefined)
 					{
@@ -4421,6 +4422,7 @@ ns1blankspace.render.page =
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 						if (oParam.xhtmlContext != undefined) {sXHTMLContext = oParam.xhtmlContext}
 						if (oParam.headerRow != undefined) {bHeaderRow = oParam.headerRow}
+						if (oParam.functionOnNewPage != undefined) {fFunctionOnNewPage = oParam.functionOnNewPage}
 					}
 
 					if (bHeaderRow) {oParam.xhtmlFirstRow = $('tr:first', sHTML).html()};
@@ -4463,6 +4465,11 @@ ns1blankspace.render.page =
 					{
 						ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
 					});
+
+					if (fFunctionOnNewPage !== undefined)
+					{
+						fFunctionOnNewPage({xhtmlContainerID: 'ns1blankspaceRenderPage_' + sXHTMLContext + '-0'})
+					}	
 				},
 
 	showMore:	function (oParam, oData)
