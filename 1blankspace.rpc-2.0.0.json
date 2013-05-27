@@ -434,6 +434,7 @@
 		{"title":"SETUP_AUDIT_TYPE_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"SETUP_AUDIT_ISSUE_TYPE_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_AUDIT_ISSUE_STATUS_SEARCH", "advancedSearch":"true", "rpc":"true"},
+		{"title":"SETUP_AUDIT_ISSUE_SINTYPE_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_AUTOMATION_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"SETUP_AUTOMATION_RUN", "advancedSearch":"false", "rpc":"false"},
 		{"title":"SETUP_AUTOMATION_SEARCH", "advancedSearch":"false", "rpc":"false"},

@@ -557,6 +557,8 @@ ns1blankspace.contactPerson =
 								aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em;">' +
 											ns1blankspace.objectContextData.mobile +
 											'</td></tr>');
+
+								aHTML.push('<tr><td id="ns1blankspaceSMSContainer"></td></tr>');
 							}	
 
 							aHTML.push('</table>');					
@@ -1735,27 +1737,23 @@ ns1blankspace.contactPerson =
 								{
 									var aHTML = [];
 										
-									aHTML.push('<table class="ns1blankspaceDropDown">');									
+									aHTML.push('<table>');									
 								
 									aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
-														'<textarea id="ns1blankspaceSMSMessage" name="message" rows="15" cols="10"' +
+														'<textarea id="ns1blankspaceSMSMessage" name="message" rows="15" cols="5" style="width:175px; height:150px;" ' +
 																' class="ns1blankspaceTextMulti"></textarea>' +
 														'</td></tr>');
 									
-									aHTML.push('<tr><td style="text-align:right;">' +
-													'<span id="ns1blankspaceSMSSend" class="ns1blankspaceAction">Send</span>' +
+									aHTML.push('<tr><td>' +
+													'<span id="ns1blankspaceSMSSend" class="ns1blankspaceAction">Send</span> ' +
+													'<span id="ns1blankspaceSMSCancel" class="ns1blankspaceAction">Send</span>' +
 													'</td></tr>');
 															
 									aHTML.push('</table>');
 
-									ns1blankspace.container.show(
-									{
-										xhtmlElementID: 'ns1blankspaceContactPersonSMS',
-										offsetLeft: -251,
-										offsetTop: 6,
-										xhtml: aHTML.join('')
-									});
 									
+									$('#ns1blankspaceSMSContainer').html(aHTML.join(''));
+	
 									$('#ns1blankspaceSMSSend').button(
 									{
 										label: "Send"
@@ -1763,13 +1761,24 @@ ns1blankspace.contactPerson =
 									.click(function() {
 										ns1blankspace.contactPerson.sms.send();
 									})
-									.css('width', '75px');
+
+									$('#ns1blankspaceSMSCancel').button(
+									{
+										label: "Cancel"
+									})
+									.click(function()
+									{
+										$('#ns1blankspaceSMSContainer').html('');
+									})
 
 									$('#ns1blankspaceSMSMessage').focus();
 								},
 
 					send: 		function ()
 								{
+									ns1blankspace.status.working('Sending SMS...');
+									$('#ns1blankspaceSMSContainer').hide();
+
 									var oData =
 									{
 										contactperson: ns1blankspace.objectContext,
@@ -1784,7 +1793,7 @@ ns1blankspace.contactPerson =
 										dataType: 'json',
 										success: function(data) 
 										{
-											ns1blankspace.container.hide()
+											ns1blankspace.status.working('SMS Sent');
 										}
 									});
 								}			
