@@ -656,7 +656,7 @@ ns1blankspace.messaging.imap =
 
 										var oData =
 										{
-											imapflags: '(\\SEEN)',
+											flags: '(\\SEEN)',
 											account: ns1blankspace.messaging.imap.account,
 											id: sSearchContext
 										}	
