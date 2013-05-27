@@ -162,7 +162,6 @@ ns1blankspace.app =
 
 					if (!bInitialise)
 					{
-						//$('#ns1blankspaceViewControl').html('');
 						window.setTimeout('ns1blankspace.app.init({initialise: true})', 100);
 					}
 					else
@@ -394,7 +393,7 @@ ns1blankspace.app =
 								top: $('#' + ns1blankspace.xhtml.divID).offset().top,
 								left: $('#' + ns1blankspace.xhtml.divID).offset().left + $('#' + ns1blankspace.xhtml.divID).width() - 10
 							});
-							//$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
+
 							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSelectOptions" class="ns1blankspaceSelectOptions"></span>');
 							
 							$('#ns1blankspaceSelectOptions').button( {
@@ -559,7 +558,6 @@ ns1blankspace.app =
 						global: false,
 						success: function(data) 
 						{
-							//$('#ns1blankspaceViewControl').html('&nbsp;');
 							$('#ns1blankspaceMain').html('');
 							$('#ns1blankspaceControl').html('');
 							$('#ns1blankspaceLogonName').html('&nbsp;')
@@ -581,6 +579,7 @@ ns1blankspace.app =
 							{
 								ns1blankspace.financial.data = undefined;
 								if (ns1blankspace.control.extend !== undefined) {ns1blankspace.control.extend()}
+								if (ns1blankspace.control.doLast !== undefined) {ns1blankspace.control.doLast()}
 								oParam = ns1blankspace.util.setParam(oParam, 'user', data);
 								ns1blankspace.app.show(oParam);
 							}	

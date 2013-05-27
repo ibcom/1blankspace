@@ -387,8 +387,6 @@ ns1blankspace.messaging.imap =
 										
 									if (ns1blankspace.messaging.imap.account != undefined && oResponse == undefined && bRefresh)
 									{	
-										//ns1blankspace.status.working();
-
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 										oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
@@ -456,13 +454,10 @@ ns1blankspace.messaging.imap =
 											more: oResponse.moreid,
 											rows: ns1blankspace.messaging.defaultRows,
 											functionShowRow: ns1blankspace.messaging.imap.inbox.row,
-											functionNewPage: 'ns1blankspace.messaging.imap.inbox.bind()',
 											functionOnNewPage: ns1blankspace.messaging.imap.inbox.bind,
 											headerRow: false,
 											bodyClass: 'ns1blankspaceMessagingIMAPInbox'
 										}); 	
-											
-										//ns1blankspace.messaging.imap.inbox.bind();
 									}
 								},
 

@@ -308,10 +308,6 @@ ns1blankspace.messaging.conversation =
 										'Details</td></tr>');
 						}
 
-						aHTML.push('</table>');
-						
-						aHTML.push('<table class="ns1blankspaceControl">');
-
 						aHTML.push('<tr><td id="ns1blankspaceControlParticipants" class="ns1blankspaceControl">' +
 										'Participants</td></tr>');
 
@@ -390,7 +386,6 @@ ns1blankspace.messaging.conversation =
 	show: 		function (oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspace.messaging.conversation.layout();
 					
 					var aHTML = [];
 					
@@ -409,12 +404,17 @@ ns1blankspace.messaging.conversation =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						ns1blankspace.messaging.conversation.isConversationOwner = (ns1blankspace.user.id == ns1blankspace.objectContextData.owner)
 
+						ns1blankspace.messaging.conversation.layout();
+
 						$('#ns1blankspaceControlContext').html(
 								ns1blankspace.objectContextData.title + 
 								'<br /><span id="ns1blankspaceControlContext_post" class="ns1blankspaceSub"></span>');
 
-						$('#ns1blankspaceViewControlAction').button({disabled: false});
-						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+						if (ns1blankspace.messaging.conversation.isConversationOwner)
+						{	
+							$('#ns1blankspaceViewControlAction').button({disabled: false});
+							$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
+						}	
 						
 						ns1blankspace.history.view(
 						{
@@ -694,9 +694,19 @@ ns1blankspace.messaging.conversation =
 																
 												aHTML.push('<td id="ns1blankspaceConversationParticipants_userlogonname-' + this.user + '" class="ns1blankspaceRow">' +
 																		this.userlogonname + '</td>');
-																		
-												aHTML.push('<td id="ns1blankspaceConversationParticipants-' + this.user + '" class="ns1blankspaceRow ns1blankspaceRowSelect">&nbsp;</td>');
-																		
+																
+												if ((ns1blankspace.messaging.conversation.isConversationOwner && this.user != ns1blankspace.user.id) ||
+														(!ns1blankspace.messaging.conversation.isConversationOwner && this.user == ns1blankspace.user.id))
+												{					
+													aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
+																	'<span id="ns1blankspaceConversationParticipants-' + this.id + '" class="ns1blankspaceRowDelete"></span>' +
+																	'</td></tr>');
+												}
+												else
+												{					
+													aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow"></td></tr>');
+												}
+
 												aHTML.push('</tr>');		
 											})
 											
@@ -704,22 +714,19 @@ ns1blankspace.messaging.conversation =
 
 											$('#ns1blankspaceParticipantsColumn1').html(aHTML.join(''));
 											
-											if (ns1blankspace.messaging.conversation.isConversationOwner)
+											$('#ns1blankspaceConversationParticipants span.ns1blankspaceRowDelete').button(
 											{
-												$('#ns1blankspaceConversationParticipants td.ns1blankspaceRowSelect').button(
+												text: false,
+												icons: 
 												{
-													text: false,
-													icons: 
-													{
-														 primary: "ui-icon-close"
-													}
-												})
-												.click(function() {
-													ns1blankspace.messaging.conversation.participants.remove(this.id)
-												})
-												.css('width', '15px')
-												.css('height', '20px');
-											}		
+													 primary: "ui-icon-close"
+												}
+											})
+											.click(function() {
+												ns1blankspace.messaging.conversation.participants.remove(this.id)
+											})
+											.css('width', '15px')
+											.css('height', '18px');				
 										}
 									}	
 								},	
@@ -1019,45 +1026,44 @@ ns1blankspace.messaging.conversation =
 										var aHTML = [];
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
-															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspacePostsColumn1" class="ns1blankspaceColumn1Flexible">' +
-															ns1blankspace.xhtml.loading + '</td>' +
-															'<td id="ns1blankspacePostsColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
-															'</tr>' + 
-															'</table>');	
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspacePostsColumn1" class="ns1blankspaceColumn1Flexible">' +
+														ns1blankspace.xhtml.loading + '</td>' +
+														'<td id="ns1blankspacePostsColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+														'</tr>' +
+														'</table>');	
 														
 										$('#ns1blankspaceMainPosts').html(aHTML.join(''));	
 									
-										var aHTML = [];
+										if (ns1blankspace.objectContextData.participantcan)
+										{
+											var aHTML = [];
 
-										aHTML.push('<table class="ns1blankspaceColumn2">');
-												
-										aHTML.push('<tr><td>' +
+											aHTML.push('<table class="ns1blankspaceColumn2">');
+													
+											aHTML.push('<tr><td>' +
 															'<span class="ns1blankspaceAction" id="ns1blankspacePostsAdd">Add</span>' +
 															'</td></tr>');
-														
-										aHTML.push('</table>');					
+															
+											aHTML.push('</table>');					
+											
+											$('#ns1blankspacePostsColumn2').html(aHTML.join(''));	
 										
-										$('#ns1blankspacePostsColumn2').html(aHTML.join(''));	
-									
-										$('#ns1blankspacePostsAdd').button(
-										{
-											label: "Add"
-										})
-										.click(function() {
-											ns1blankspace.messaging.conversation.posts.add(false);
-										})
+											$('#ns1blankspacePostsAdd').button(
+											{
+												label: "Add"
+											})
+											.click(function()
+											{
+												ns1blankspace.messaging.conversation.posts.add(false);
+											});
+										}	
 
-										var sData = 'includeme=1&dontencode=1&conversation=' + ns1blankspace.objectContext;
-										
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_POST_SEARCH'),
-											data: sData,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.messaging.conversation.posts.show(oParam, data)}
-										});
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'MESSAGING_CONVERSATION_POST_SEARCH';
+										oSearch.addField('subject,ownerusertext,createddate,modifieddate,lastcommentdate');
+										oSearch.sort('modifieddate', 'desc');
+										oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.posts.show(oParam, data)});
 									}
 									else
 									{
@@ -1074,62 +1080,108 @@ ns1blankspace.messaging.conversation =
 										else
 										{		
 											aHTML.push('<table id="ns1blankspaceMessagingConversationPosts" class="ns1blankspaceContainer">');
-												
-											aHTML.push('<tr class="ns1blankspaceCaption">');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">Subject</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">By</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-											aHTML.push('</tr>');
 											
 											$.each(oResponse.data.rows, function()
 											{
-												aHTML.push('<tr class="ns1blankspaceRow">');
-																
-												var sSubject = this.subject;
-												if (sSubject == '') {sSubject = (this.message).substring(0, 50) + '...'}		
-																
-												aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_subject-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-																		sSubject + '</td>');
-																		
-												aHTML.push('<td id="s1blankspaceMessagingConversationPosts_usertext-' + this.id + '" class="ns1blankspaceRow">' +
-																		this.usertext + '</td>');
-																		
-												aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_date-' + this.id + '" class="ns1blankspaceRow">' +
-																		this.datetime + '</td>');
-																
-												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
-																	'<span id="ns1blankspaceMessagingConversationPosts_comment-' + this.id + '" class="ns1blankspaceRowSelect ns1blankspaceRowAddComment"></span>' +
-																	'</td></tr>');				
+												aHTML.push(ns1blankspace.messaging.conversation.posts.row(this));
 											});
 												
 											aHTML.push('</table>');
-
-											$('#ns1blankspacePostsColumn1').html(aHTML.join(''));
-										
-											$('.ns1blankspaceRowSelect').click(function() {
-												ns1blankspace.show({selector: '#ns1blankspaceMainComments'});
-												var aXHTMLElementID = (this.id).split('-');
-												ns1blankspace.messaging.conversation.comments.show({post: aXHTMLElementID[1]});
-											})
-
-											$('.ns1blankspaceRowAddComment').button(
+											
+											ns1blankspace.render.page.show(
 											{
-												text: false,
-												label: "Comment",
-												icons:
-												{
-													 primary: "ui-icon-comment"
-												}
-											})
-											.click(function() {
-												ns1blankspace.messaging.conversation.posts.comments({xhtmlElementID: this.id});
-											})
-											.css('width', '15px')
-											.css('height', '20px')
+												xhtmlElementID: 'ns1blankspacePostsColumn1',
+												xhtmlContext: 'ConversationPosts',
+												xhtml: aHTML.join(''),
+												showMore: (oResponse.morerows == "true"),
+												more: oResponse.moreid,
+												rows: ns1blankspace.option.defaultRows,
+												functionShowRow: ns1blankspace.messaging.conversation.posts.row,
+												functionOnNewPage: ns1blankspace.messaging.conversation.posts.bind,
+												headerRow: false,
+												bodyClass: 'ns1blankspaceMessagingConversationPosts'
+											}); 	
+											
 										}
 									}	
-								},	
+								},
+
+					row:		function (oRow)
+								{
+									var aHTML = [];
+
+									aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceMessagingConversationPosts_container-' + oRow.id + '">');
+													
+									var sSubject = oRow.subject;
+									if (sSubject == '') {sSubject = '...'}		
+													
+									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_subject-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+															sSubject + '</td>');
+															
+									aHTML.push('<td id="s1blankspaceMessagingConversationPosts_usertext-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+															oRow.ownerusertext + '</td>');
+															
+									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_date-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+															oRow.modifieddate + '</td>');
+
+									aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">' +
+													'<div id="ns1blankspaceMessagingConversationPosts_comment_container-' + oRow.id + '">' +
+													'<span id="ns1blankspaceMessagingConversationPosts_comment_view-' + oRow.id + '" class="ns1blankspaceRowAddCommentView"></span>' +
+													'<span id="ns1blankspaceMessagingConversationPosts_comment_add-' + oRow.id + '">&nbsp;</span>' +
+													'</div>' +
+													'</td></tr>');
+
+									return aHTML.join('');						
+								},
+
+					bind: 		function (oParam)
+								{
+									var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID').value;
+
+									$('#' + sXHTMLContainerID + ' td.ns1blankspaceRowSelect').click(function()
+									{
+										ns1blankspace.show({selector: '#ns1blankspaceMainComments'});
+										var aXHTMLElementID = (this.id).split('-');
+										ns1blankspace.messaging.conversation.comments.show({post: aXHTMLElementID[1]});
+									})
+
+									$('#' + sXHTMLContainerID + ' span.ns1blankspaceRowAddCommentView')
+									.button(
+									{
+										text: false,
+										label: " Comments",
+										icons:
+										{
+											 primary: "ui-icon-comment"
+										}
+									})
+									.css('font-size', '0.625em')
+									.click(function()
+									{
+										ns1blankspace.show({selector: '#ns1blankspaceMainComments'});
+										var aXHTMLElementID = (this.id).split('-');
+										ns1blankspace.messaging.conversation.comments.show({post: aXHTMLElementID[1]});
+									})
+													
+									.next()
+										.button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-plus"
+											}
+										})
+										.css('width', '20px')
+										.css('margin-left', '2px')
+										.css('font-size', '0.625em')
+										.click(function() {
+											ns1blankspace.messaging.conversation.posts.comments({xhtmlElementID: this.id, step: 2});
+										})
+
+										.parent()
+											.buttonset();
+								},							
 
 					summary: 	function (oParam)
 								{
@@ -1137,131 +1189,160 @@ ns1blankspace.messaging.conversation =
 
 								},			
 
-					comments:	function (oParam)
-								{
-									var aHTML = [];
-									var h = -1;
-									var iStep = 1;
-									var sXHTMLElementID;
-									
-									if (oParam != undefined)
-									{
-										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-										if (oParam.step != undefined) {iStep = oParam.step}
-									}
-									
-									if (iStep == 1) 
-									{
-										aHTML.push('<table id="ns1blankspaceMessagingConversationComments" class="ns1blankspaceDropDown" style="width:75px;">');
-										
-										aHTML.push('<tr><td class="ns1blankspaceAction">' +
-														'<span id="ns1blankspaceMessagingConversationCommentsView">View</span>' +
-														'</td></tr>');
-														
-										aHTML.push('<tr><td class="ns1blankspaceAction">' +
-														'<span id="ns1blankspaceMessagingConversationCommentsAdd">Add</span>' +
-														'</td></tr>');				
-										
-										aHTML.push('</table>');					
-
-										ns1blankspace.container.show(
-										{
-											xhtmlElementID: sXHTMLElementID,
-											offsetLeft: -75,
-											offsetTop: 3,
-											xhtml: aHTML.join('')
-										});
-										
-										$('#ns1blankspaceMessagingConversationCommentsView').button(
-										{
-											label: "View"
-										})
-										.click(function() {
-											ns1blankspace.container.hide();
-											ns1blankspace.show({selector: '#ns1blankspaceMainComments'});
-											var aXHTMLElementID = sXHTMLElementID.split('-');
-											ns1blankspace.messaging.conversation.comments.show({post: aXHTMLElementID[1]});
-										})
-										.css('width', '75px');
-										
-										$('#ns1blankspaceMessagingConversationCommentsAdd').button(
-										{
-											label: "Add"
-										})
-										.click(function() {
-											ns1blankspace.messaging.conversation.posts.comments({xhtmlElementID: sXHTMLElementID, step: 2});
-										})
-										.css('width', '75px');
-									}
-
-									if (iStep == 2)
-									{
-										var aHTML = [];
-										var h = -1;
-															
-										aHTML.push('<table class="ns1blankspaceDropDown">');									
-									
-										aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
-															'<textarea id="ns1blankspaceCommentMessage" name="message" rows="15" cols="10"' +
-																	' class="ns1blankspaceTextMulti"></textarea>' +
-															'</td></tr>');
-										
-										aHTML.push('<tr><td style="text-align:right;">' +
-														'<span id="ns1blankspaceCommentSend" class="ns1blankspaceAction">Send</span>' +
-														'</td></tr>');
-																
-										aHTML.push('</table>');
-
-										ns1blankspace.container.show(
-										{
-											xhtmlElementID: sXHTMLElementID,
-											offsetLeft: -251,
-											offsetTop: 6,
-											xhtml: aHTML.join(''),
-											forceShow: true
-										});
-										
-										$('#ns1blankspaceCommentSend').button(
-										{
-											label: "Send"
-										})
-										.click(function() {
-											ns1blankspace.messaging.conversation.posts.comments({xhtmlElementID: sXHTMLElementID, step: 3});
-										})
-										.css('width', '75px');
-
-										$('#ns1blankspaceCommentMessage').focus();
-									}
-									
-									if (iStep == 3)
-									{
-										$('#ns1blankspaceCommentSend').html(ns1blankspace.xhtml.loadingSmall);
-										
-										var sData = 'message=' + ns1blankspace.util.fs($('#ns1blankspaceCommentMessage').val())
-										
-										var aXHTMLElementID = sXHTMLElementID.split('-');
-										sData += '&post=' + aXHTMLElementID[1];
-										
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_POST_COMMENT_MANAGE'),
-											data: sData,
-											dataType: 'json',
-											success: function(data)
+					comments:	{
+									showHide: 	function (oParam)
 												{
-													if (data.status == 'OK')
+													var sXHTMLElementID;
+													var sKey;
+
+													if (ns1blankspace.util.param(oParam, 'xhtmlElementID').exists)
 													{
-														ns1blankspace.container.hide();
+														sXHTMLElementID = ns1blankspace.util.param(oParam, 'xhtmlElementID').value
+														sKey = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
+													}
+
+													if ($('#ns1blankspaceDebtors_container_preview-' + sKey).length != 0)
+													{
+														$('#ns1blankspaceDebtors_container_preview-' + sKey).remove();
 													}
 													else
 													{
-														ns1blankspace.status.message('Comment could not be sent.');
-													}	
+														var sHTML = 'No preview';
+
+														var oStatement = $.grep(ns1blankspace.financial.debtors.data.statements, function (a) {return a.key == sKey;})[0];
+
+														if (oStatement)
+														{
+															sHTML = ns1blankspace.format.render(
+															{
+																object: 175,
+																objectContext: -1,
+																xhtmlTemplate: ns1blankspace.xhtml.templates['statement'],
+																objectData: oStatement,
+																objectOtherData: oStatement.invoices
+															});
+
+															oStatement.xhtml = sHTML;
+														}	
+
+														$('#ns1blankspaceDebtors_container-' + sKey).after('<tr id="ns1blankspaceDebtors_container_preview-' + sKey + '">' +
+																		'<td colspan=5><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
+													}
+
+													'onComplete' - new or send
+												},
+
+									search 		{
+													send: 		function (oParam)
+																{
+																},
+
+													process: 	function (oParam)
+																{
+																}
+												}				
+
+									new:		{
+
+													show:  		function (oParam)
+																{
+																	var aHTML = [];
+																	var h = -1;
+																	var iStep = 1;
+																	var sXHTMLElementID;
+																	
+																	if (oParam != undefined)
+																	{
+																		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+																		if (oParam.step != undefined) {iStep = oParam.step}
+																	}
+																	
+																	if (iStep == 2)
+																	{
+																		var aHTML = [];
+																		var h = -1;
+																							
+																		aHTML.push('<table class="ns1blankspaceDropDown">');									
+																	
+																		aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
+																							'<textarea id="ns1blankspaceCommentMessage" name="message" rows="15" cols="10"' +
+																									' class="ns1blankspaceTextMulti"></textarea>' +
+																							'</td></tr>');
+																		
+																		aHTML.push('<tr><td style="text-align:right;">' +
+																						'<span id="ns1blankspaceCommentSend" class="ns1blankspaceAction">Send</span>' +
+																						'</td></tr>');
+																								
+																		aHTML.push('</table>');
+
+																		ns1blankspace.container.show(
+																		{
+																			xhtmlElementID: sXHTMLElementID,
+																			offsetLeft: -251,
+																			offsetTop: 6,
+																			xhtml: aHTML.join(''),
+																			forceShow: true
+																		});
+																		
+																		$('#ns1blankspaceCommentSend').button(
+																		{
+																			label: "Send"
+																		})
+																		.click(function() {
+																			ns1blankspace.messaging.conversation.posts.comments({xhtmlElementID: sXHTMLElementID, step: 3});
+																		})
+																		.css('width', '75px');
+
+																		$('#ns1blankspaceCommentMessage').focus();
+																	}
+																},						
+
+													send:		function (oParam)
+																{
+																	var aHTML = [];
+																	var h = -1;
+																	var iStep = 1;
+																	var sXHTMLElementID;
+																	
+																	if (oParam != undefined)
+																	{
+																		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+																		if (oParam.step != undefined) {iStep = oParam.step}
+																	}
+																	
+
+																	
+																	if (iStep == 3)
+																	{
+																		$('#ns1blankspaceCommentSend').html(ns1blankspace.xhtml.loadingSmall);
+																		
+																		var sData = 'message=' + ns1blankspace.util.fs($('#ns1blankspaceCommentMessage').val())
+																		
+																		var aXHTMLElementID = sXHTMLElementID.split('-');
+																		sData += '&post=' + aXHTMLElementID[1];
+																		
+																		$.ajax(
+																		{
+																			type: 'POST',
+																			url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_POST_COMMENT_MANAGE'),
+																			data: sData,
+																			dataType: 'json',
+																			success: function(data)
+																				{
+																					if (data.status == 'OK')
+																					{
+																						ns1blankspace.container.hide();
+																					}
+																					else
+																					{
+																						ns1blankspace.status.message('Comment could not be sent.');
+																					}	
+																				}
+																		});	
+																	}
+																}
 												}
-										});	
-									}
-								},
+								},								
 
 					add:		function (oParam, oResponse)
 								{
