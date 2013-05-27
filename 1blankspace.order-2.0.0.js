@@ -1654,8 +1654,12 @@ ns1blankspace.order =
 												oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,' +
 																	'projecttext,project,areatext,area,' +
 																	'reference,purchaseorder,sentdate,duedate,description,amount,tax,sent');
+
 												oSearch.addFilter('object', 'EQUAL_TO', 51);
 												oSearch.addFilter('objectcontext', 'IN_LIST', aID.join(','));
+												oSearch.addOperator('or');
+												oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
+												oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 											
 												oSearch.getResults(function(data) {ns1blankspace.order.invoices.show(oParam, data)});
 											}	
