@@ -2181,7 +2181,8 @@ ns1blankspace.messaging.imap =
 										oSearch.addField('actionreference,actiontypetext,duedate,contactpersontext');
 										oSearch.rf = 'json';
 										oSearch.addFilter('actiontype', 'EQUAL_TO', iType);
-										oSearch.sort('modifieddate', 'desc');
+										oSearch.addFilter('actionby', 'EQUAL_TO', ns1blankspace.user.id);
+										oSearch.sort('duedate', 'desc');
 										oSearch.getResults(function(data) {ns1blankspace.messaging.imap.actions.show(oParam, data)}); 
 									}
 									else
@@ -2226,12 +2227,12 @@ ns1blankspace.messaging.imap =
 
 									aHTML.push('<tr>');
 
-									aHTML.push('<td id="ns1blankspaceAction_contactperson-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-													oRow.contactpersontext + '</td>');
-
-									aHTML.push('<td id="ns1blankspaceAction_subject-' + oRow.id + '" class="ns1blankspaceRow">' +
+									aHTML.push('<td id="ns1blankspaceAction_subject-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 													oRow.actionreference + '</td>');
-													
+
+									aHTML.push('<td id="ns1blankspaceAction_contactperson-' + oRow.id + '" class="ns1blankspaceRow">' +
+													oRow.contactpersontext + '</td>');
+				
 									aHTML.push('<td id="ns1blankspaceAction_date-' + oRow.id + '" class="ns1blankspaceRow">' +
 													oRow.duedate + '</td>');
 									
