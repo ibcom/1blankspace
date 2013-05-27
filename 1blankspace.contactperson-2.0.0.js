@@ -1793,7 +1793,7 @@ ns1blankspace.contactPerson =
 										dataType: 'json',
 										success: function(data) 
 										{
-											ns1blankspace.status.working('SMS Sent');
+											ns1blankspace.status.message('SMS Sent');
 										}
 									});
 								}			
