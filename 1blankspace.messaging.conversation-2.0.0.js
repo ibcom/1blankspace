@@ -1123,8 +1123,10 @@ ns1blankspace.messaging.conversation =
 									aHTML.push('<td id="s1blankspaceMessagingConversationPosts_usertext-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
 															oRow.ownerusertext + '</td>');
 															
+									var oDate = new Date(oRow.modifieddate);
+															
 									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_date-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
-															Date.parse(oRow.modifieddate).toString("dd MMM yyyy @ h:mm tt")  + '</td>');
+															oDate.toString("dd MMM yyyy @ h:mm tt")  + '</td>');
 
 									aHTML.push('<td style="width:80px; text-align:right;" class="ns1blankspaceRow">' +
 													'<div id="ns1blankspaceMessagingConversationPosts_comment_container-' + oRow.id + '">' +
@@ -1307,10 +1309,12 @@ ns1blankspace.messaging.conversation =
 
 																		$.each(oResponse.data.rows, function()
 																		{
+																			var oDate = new Date(this.modifieddate);
+
 																			aHTML.push('<tr><td class="ns1blankspaceRow">' +
 																							this.message +
 																							'<br /><span class="ns1blankspaceSubNote">' +
-																							this.modifiedusertext + ' / ' + Date.parse(this.modifieddate).toString("dddd, dd MMM yyyy @ h:mm tt") + '</span>');	
+																							this.modifiedusertext + ' / ' + oDate.toString("dddd, dd MMM yyyy @ h:mm tt") + '</span>');	
 																		});
 
 																		$('#ns1blankspaceCommentsColumn2List').html(aHTML.join(''));
