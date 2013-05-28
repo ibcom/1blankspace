@@ -1062,6 +1062,7 @@ ns1blankspace.messaging.conversation =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'MESSAGING_CONVERSATION_POST_SEARCH';
 										oSearch.addField('subject,message,ownerusertext,createddate,modifieddate,lastcommentdate');
+										oSearch.addFilter('conversation', 'EQUAL_TO', ns1blankspace.objectContext)
 										oSearch.sort('modifieddate', 'desc');
 										oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.posts.show(oParam, data)});
 									}
@@ -1116,14 +1117,14 @@ ns1blankspace.messaging.conversation =
 									var sSubject = oRow.subject;
 									if (sSubject == '') {sSubject = '...'}		
 													
-									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_subject-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_subject-' + oRow.id + '" class="ns1blankspaceRow">' +
 															sSubject + '</td>');
 															
 									aHTML.push('<td id="s1blankspaceMessagingConversationPosts_usertext-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
 															oRow.ownerusertext + '</td>');
 															
 									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_date-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
-															oRow.modifieddate + '</td>');
+															Date.parse(oRow.modifieddate).toString("dd MMM yyyy @ h:mm tt")  + '</td>');
 
 									aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">' +
 													'<div id="ns1blankspaceMessagingConversationPosts_comment_container-' + oRow.id + '">' +
@@ -1156,6 +1157,8 @@ ns1blankspace.messaging.conversation =
 											 primary: "ui-icon-comment"
 										}
 									})
+									.css('width', '20px')
+									.css('margin-left', '2px')
 									.css('font-size', '0.625em')
 									.click(function()
 									{
@@ -1187,9 +1190,6 @@ ns1blankspace.messaging.conversation =
 												onComplete: ns1blankspace.messaging.conversation.posts.comments.new.show
 											});
 										})
-
-										.parent()
-											.buttonset();
 								},								
 
 					comments:	{
@@ -1198,32 +1198,55 @@ ns1blankspace.messaging.conversation =
 													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 													var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
 													var sSource = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 0}).value;
-													var bRemove = false;
-
 													var bExists = ($('#ns1blankspaceMessagingConversationPostComments_container-' + sKey).length != 0);
-
-													var sAction = ns1blankspace.util.getData(oParam, 'data-action', {default: ''}).value
-
+													
+													var sAction = ns1blankspace.util.getParam(oParam, 'action').value;
+													if (sAction == undefined) {sAction = ns1blankspace.util.getData(oParam, 'data-action', {default: ''}).value}
 													if (sAction == '') {sAction = 'open'}
+
+													if (!bExists && $('#ns1blankspaceMessagingConversationPosts_comment_close-' + sKey).length == 0)
+													{
+														$('#ns1blankspaceMessagingConversationPosts_comment_view-' + sKey).before('<span id="ns1blankspaceMessagingConversationPosts_comment_close-' +
+																		sKey + '" data-action="close">&nbsp;</span>');
+
+														$('#ns1blankspaceMessagingConversationPosts_comment_close-' + sKey).button(
+														{
+															text: false,
+															label: 'close',
+															icons:
+															{
+																primary: "ui-icon-arrowthickstop-1-n"
+															}
+														})
+														.css('width', '20px')
+														.css('margin-left', '2px')
+														.css('font-size', '0.625em')
+														.click(function()
+														{
+															ns1blankspace.messaging.conversation.posts.comments.showHide(
+															{
+																xhtmlElementID: this.id
+															});
+														})
+													}	
 
 													if (sAction == 'close')
 													{
-														$('#' + sXHTMLElementID).attr('data-action', 'open');
 														$('#ns1blankspaceMessagingConversationPostComments_container-' + sKey).remove();
+														$('#ns1blankspaceMessagingConversationPosts_comment_close-' + sKey).remove()
 													}
 													else
 													{
-														$('#' + sXHTMLElementID).attr('data-action', 'close');
-
 														if (!bExists)
 														{	
 															var sMessage = ($('#ns1blankspaceMessagingConversationPosts_container-' + sKey).attr('data-message')).formatXHTML();
 
 															var sHTML = '<table class="ns1blankspaceContainer">' +
 																		'<tr class="ns1blankspaceContainer">' +
-																		'<td id="ns1blankspaceCommentsColumn1" class="ns1blankspaceColumn1Flexible" style="font-size:0.625em;">' + sMessage + '</td>' +
-																		'<td id="ns1blankspaceCommentsColumn2" class="ns1blankspaceColumn2" style="width:300px;">'
-																				+ ns1blankspace.xhtml.loadingSmall +'</td>' +
+																		'<td id="ns1blankspaceCommentsColumn1" class="ns1blankspaceColumn1Flexible" style="font-size:0.725em; background-color:white;">' + sMessage + '</td>' +
+																		'<td id="ns1blankspaceCommentsColumn2" class="ns1blankspaceColumn2" style="width:300px; padding-left:10px;">' +
+																				'<div id="ns1blankspaceCommentsColumn2Add"></div>' +
+																				'<div id="ns1blankspaceCommentsColumn2List" style="font-size:0.875em;"></div></td>' +
 																		'</tr></table>';
 
 															$('#ns1blankspaceMessagingConversationPosts_container-' + sKey).after('<tr id="ns1blankspaceMessagingConversationPostComments_container-' + sKey + '"' +
@@ -1238,7 +1261,9 @@ ns1blankspace.messaging.conversation =
 									search: 	{
 													send: 		function (oParam)
 																{
-																	var iPost = ns1blankspace.util.param(oParam, 'xhtmlElementID', {index: 1}).value
+																	$('#ns1blankspaceCommentsColumn2List').html(ns1blankspace.xhtml.loadingSmall);
+
+																	var iPost = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
 
 																	var oData = 
 																	{
@@ -1252,14 +1277,14 @@ ns1blankspace.messaging.conversation =
 																		oData.post = iPost;
 																	}
 																		
-																	$.ajax(
-																	{
-																		type: 'POST',
-																		url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_POST_COMMENT_SEARCH'),
-																		data: oData,
-																		dataType: 'json',
-																		success: function(data) {ns1blankspace.messaging.conversation.posts.comments.search.process(oParam, data)}
-																	});
+																	var oSearch = new AdvancedSearch();
+																	oSearch.method = 'MESSAGING_CONVERSATION_POST_COMMENT_SEARCH';
+																	oSearch.addField('message,modifiedusertext,modifieddate');
+																	oSearch.addFilter('post', 'EQUAL_TO', iPost);
+																	oSearch.addFilter('conversation', 'EQUAL_TO', ns1blankspace.objectContext)
+																	oSearch.rows = 100;
+																	oSearch.sort('modifieddate', 'desc');
+																	oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.posts.comments.search.process(oParam, data)});
 																},
 
 													process: 	function (oParam, oResponse)
@@ -1268,111 +1293,102 @@ ns1blankspace.messaging.conversation =
 																
 																	if (oResponse.data.rows.length == 0)
 																	{
-																		$('#ns1blankspaceCommentsColumn2').html('<table class="ns1blankspaceColumn2"><tr id="ns1blankspaceMessagingConversationPostCommentsList_container">' +
+																		$('#ns1blankspaceCommentsColumn2List').html('<table><tr id="ns1blankspaceMessagingConversationPostCommentsList_container">' +
 																							'<td class="ns1blankspaceNothing">No comments.</td></tr></table>');							
 																	}
+																	else
+																	{
+																		aHTML.push('<table>');
 
-																}
+																		if (oResponse.data.rows.length > 1)
+																		{	
+																			aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSubNote">' + oResponse.data.rows.length + ' comments.</td></tr>');
+																		}		
+
+																		$.each(oResponse.data.rows, function()
+																		{
+																			aHTML.push('<tr><td class="ns1blankspaceRow">' +
+																							this.message +
+																							'<br /><span class="ns1blankspaceSubNote">' +
+																							this.modifiedusertext + ' / ' + Date.parse(this.modifieddate).toString("dddd, dd MMM yyyy @ h:mm tt") + '</span>');	
+																		});
+
+																		$('#ns1blankspaceCommentsColumn2List').html(aHTML.join(''));
+																	}
+																}	
 												},			
 
 									new:		{
 
 													show:  		function (oParam)
 																{
+																	var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 																	var aHTML = [];
-																	var h = -1;
-																	var iStep = 1;
-																	var sXHTMLElementID;
-																	
-																	if (oParam != undefined)
-																	{
-																		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-																		if (oParam.step != undefined) {iStep = oParam.step}
-																	}
-																	
-																	if (iStep == 2)
-																	{
-																		var aHTML = [];
-																		var h = -1;
-																							
-																		aHTML.push('<table class="ns1blankspaceDropDown">');									
-																	
-																		aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
-																							'<textarea id="ns1blankspaceCommentMessage" name="message" rows="15" cols="10"' +
-																									' class="ns1blankspaceTextMulti"></textarea>' +
-																							'</td></tr>');
-																		
-																		aHTML.push('<tr><td style="text-align:right;">' +
-																						'<span id="ns1blankspaceCommentSend" class="ns1blankspaceAction">Send</span>' +
+
+																	aHTML.push('<table style="margin-bottom:10px;">');									
+																
+																	aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
+																						'<textarea id="ns1blankspaceCommentMessage" name="message" rows="15" cols="5" style="height:175px; font-size:0.875em;"' +
+																								' class="ns1blankspaceTextMulti"></textarea>' +
 																						'</td></tr>');
-																								
-																		aHTML.push('</table>');
+																	
+																	aHTML.push('<tr><td id="ns1blankspaceCommentSend_container">' +
+																					'<span id="ns1blankspaceCommentSend" class="ns1blankspaceAction">Send</span>' +
+																					'</td></tr>');
+																							
+																	aHTML.push('</table>');
 
-																		ns1blankspace.container.show(
-																		{
-																			xhtmlElementID: sXHTMLElementID,
-																			offsetLeft: -251,
-																			offsetTop: 6,
-																			xhtml: aHTML.join(''),
-																			forceShow: true
-																		});
-																		
-																		$('#ns1blankspaceCommentSend').button(
-																		{
-																			label: "Send"
-																		})
-																		.click(function() {
-																			ns1blankspace.messaging.conversation.posts.comments({xhtmlElementID: sXHTMLElementID, step: 3});
-																		})
-																		.css('width', '75px');
+																	$('#ns1blankspaceCommentsColumn2Add').html(aHTML.join(''));
 
-																		$('#ns1blankspaceCommentMessage').focus();
-																	}
+																	$('#ns1blankspaceCommentSend').button(
+																	{
+																		label: "Send"
+																	})
+																	.click(function() {
+																		ns1blankspace.messaging.conversation.posts.comments.new.send({xhtmlElementID: sXHTMLElementID, step: 3});
+																	})
+																	.css('font-size', '0.725em;');
+
+																	$('#ns1blankspaceCommentMessage').focus();
+																	
 																},						
 
 													send:		function (oParam)
 																{
 																	var aHTML = [];
-																	var h = -1;
-																	var iStep = 1;
+													
 																	var sXHTMLElementID;
 																	
-																	if (oParam != undefined)
-																	{
-																		if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-																		if (oParam.step != undefined) {iStep = oParam.step}
-																	}
+																	var iPost = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
 																	
-
-																	
-																	if (iStep == 3)
+																	$('#ns1blankspaceCommentSend_container').html(ns1blankspace.xhtml.loadingSmall);
+																		
+																	var oData =
 																	{
-																		$('#ns1blankspaceCommentSend').html(ns1blankspace.xhtml.loadingSmall);
+																		message: $('#ns1blankspaceCommentMessage').val(),
+																		post: iPost
+																	}	
 																		
-																		var sData = 'message=' + ns1blankspace.util.fs($('#ns1blankspaceCommentMessage').val())
-																		
-																		var aXHTMLElementID = sXHTMLElementID.split('-');
-																		sData += '&post=' + aXHTMLElementID[1];
-																		
-																		$.ajax(
+																	$.ajax(
+																	{
+																		type: 'POST',
+																		url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_POST_COMMENT_MANAGE'),
+																		data: oData,
+																		dataType: 'json',
+																		success: function(data)
 																		{
-																			type: 'POST',
-																			url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_POST_COMMENT_MANAGE'),
-																			data: sData,
-																			dataType: 'json',
-																			success: function(data)
-																				{
-																					if (data.status == 'OK')
-																					{
-																						ns1blankspace.container.hide();
-																					}
-																					else
-																					{
-																						ns1blankspace.status.message('Comment could not be sent.');
-																					}	
-																				}
-																		});	
-																	}
+																			if (data.status == 'OK')
+																			{
+																				ns1blankspace.status.message('Comment sent.');
+																				oParam = ns1blankspace.util.setParam(oParam, 'action', 'close')
+																				ns1blankspace.messaging.conversation.posts.comments.showHide(oParam)
+																			}
+																			else
+																			{
+																				ns1blankspace.status.message('Comment could not be sent.');
+																			}	
+																		}
+																	});	
 																}
 												}
 								},								
