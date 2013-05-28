@@ -654,7 +654,7 @@ ns1blankspace.setup.financial =
 										}
 										else
 										{
-											if (oResponse == undefined && ns1blankspace.financial.data.accounts == undefined)
+											if (oResponse == undefined && ns1blankspace.financial.data.accounts === undefined)
 											{
 												var oSearch = new AdvancedSearch();
 												oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
