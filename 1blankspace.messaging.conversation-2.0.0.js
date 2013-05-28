@@ -1117,18 +1117,17 @@ ns1blankspace.messaging.conversation =
 									var sSubject = oRow.subject;
 									if (sSubject == '') {sSubject = '...'}		
 													
-									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_subject-' + oRow.id + '" class="ns1blankspaceRow">' +
-															sSubject + '</td>');
+									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_subject-' + oRow.id + '" class="ns1blankspaceRow" style="padding-top:6px;">' +
+															sSubject);
 															
-									aHTML.push('<td id="s1blankspaceMessagingConversationPosts_usertext-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
-															oRow.ownerusertext + '</td>');
+									aHTML.push('<br /><div style="margin-top:3px;" class="ns1blankspaceRow ns1blankspaceSubNote">' +
+															oRow.ownerusertext + ', ');
 															
 									var oDate = new Date(oRow.modifieddate);
 															
-									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_date-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
-															oDate.toString("dd MMM yyyy @ h:mm tt")  + '</td>');
+									aHTML.push(oDate.toString("dd MMM yyyy @ h:mm tt")  + '</div></td>');
 
-									aHTML.push('<td style="width:80px; text-align:right;" class="ns1blankspaceRow">' +
+									aHTML.push('<td style="width:80px; text-align:right; vertical-align:bottom; padding-bottom:4px;" class="ns1blankspaceRow">' +
 													'<div id="ns1blankspaceMessagingConversationPosts_comment_container-' + oRow.id + '">' +
 													'<span id="ns1blankspaceMessagingConversationPosts_comment_view-' + oRow.id + '" class="ns1blankspaceRowAddCommentView"></span>' +
 													'<span id="ns1blankspaceMessagingConversationPosts_comment_add-' + oRow.id + '">&nbsp;</span>' +
@@ -1245,15 +1244,15 @@ ns1blankspace.messaging.conversation =
 
 															var sHTML = '<table class="ns1blankspaceContainer">' +
 																		'<tr class="ns1blankspaceContainer">' +
-																		'<td id="ns1blankspaceCommentsColumn1" class="ns1blankspaceColumn1Flexible" style="font-size:0.725em; background-color:white;">' + sMessage + '</td>' +
-																		'<td id="ns1blankspaceCommentsColumn2" class="ns1blankspaceColumn2" style="width:300px; padding-left:10px;">' +
-																				'<div id="ns1blankspaceCommentsColumn2Add"></div>' +
-																				'<div id="ns1blankspaceCommentsColumn2List" style="font-size:0.875em;"></div></td>' +
+																		'<td id="ns1blankspaceCommentsColumn1-' + sKey + '" class="ns1blankspaceColumn1Flexible" style="font-size:0.725em; background-color:white;">' + sMessage + '</td>' +
+																		'<td id="ns1blankspaceCommentsColumn2-' + sKey + '" class="ns1blankspaceColumn2" style="width:300px; padding-left:10px;">' +
+																				'<div id="ns1blankspaceCommentsColumn2Add-' + sKey + '"></div>' +
+																				'<div id="ns1blankspaceCommentsColumn2List-' + sKey + '" style="font-size:0.875em;"></div></td>' +
 																		'</tr></table>';
 
 															$('#ns1blankspaceMessagingConversationPosts_container-' + sKey).after('<tr id="ns1blankspaceMessagingConversationPostComments_container-' + sKey + '"' +
 																		' data-source="' + sSource + '">' +
-																		'<td colspan=4><div style="background-color: #F3F3F3; padding:5px; margin-bottom:12px;">' + sHTML + '</div></td></tr>');
+																		'<td colspan=2><div style="background-color: #F3F3F3; padding:5px; margin-bottom:12px;">' + sHTML + '</div></td></tr>');
 														}
 
 														ns1blankspace.util.onComplete(oParam);
@@ -1263,21 +1262,10 @@ ns1blankspace.messaging.conversation =
 									search: 	{
 													send: 		function (oParam)
 																{
-																	$('#ns1blankspaceCommentsColumn2List').html(ns1blankspace.xhtml.loadingSmall);
-
+																	var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
 																	var iPost = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
 
-																	var oData = 
-																	{
-																		rows: 200,
-																		includeme: 1,
-																		conversation: ns1blankspace.objectContext
-																	}	
-										
-																	if (iPost != undefined)
-																	{
-																		oData.post = iPost;
-																	}
+																	$('#ns1blankspaceCommentsColumn2List-' + sKey).html(ns1blankspace.xhtml.loadingSmall);
 																		
 																	var oSearch = new AdvancedSearch();
 																	oSearch.method = 'MESSAGING_CONVERSATION_POST_COMMENT_SEARCH';
@@ -1291,11 +1279,13 @@ ns1blankspace.messaging.conversation =
 
 													process: 	function (oParam, oResponse)
 																{
+																	var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
+
 																	var aHTML = [];
 																
 																	if (oResponse.data.rows.length == 0)
 																	{
-																		$('#ns1blankspaceCommentsColumn2List').html('<table><tr id="ns1blankspaceMessagingConversationPostCommentsList_container">' +
+																		$('#ns1blankspaceCommentsColumn2List-' + sKey).html('<table><tr id="ns1blankspaceMessagingConversationPostCommentsList_container">' +
 																							'<td class="ns1blankspaceNothing">No comments.</td></tr></table>');							
 																	}
 																	else
@@ -1314,10 +1304,10 @@ ns1blankspace.messaging.conversation =
 																			aHTML.push('<tr><td class="ns1blankspaceRow">' +
 																							this.message +
 																							'<br /><span class="ns1blankspaceSubNote">' +
-																							this.modifiedusertext + ' / ' + oDate.toString("dddd, dd MMM yyyy @ h:mm tt") + '</span>');	
+																							this.modifiedusertext + ', ' + oDate.toString("dddd, dd MMM yyyy @ h:mm tt") + '</span>');	
 																		});
 
-																		$('#ns1blankspaceCommentsColumn2List').html(aHTML.join(''));
+																		$('#ns1blankspaceCommentsColumn2List-' + sKey).html(aHTML.join(''));
 																	}
 																}	
 												},			
@@ -1327,24 +1317,25 @@ ns1blankspace.messaging.conversation =
 													show:  		function (oParam)
 																{
 																	var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+																	var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
 																	var aHTML = [];
 
 																	aHTML.push('<table style="margin-bottom:10px;">');									
 																
 																	aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
-																						'<textarea id="ns1blankspaceCommentMessage" name="message" rows="15" cols="5" style="height:175px; font-size:0.875em;"' +
+																						'<textarea id="ns1blankspaceCommentMessage-' + sKey + '" name="message" rows="15" cols="5" style="height:175px; font-size:0.875em;"' +
 																								' class="ns1blankspaceTextMulti"></textarea>' +
 																						'</td></tr>');
 																	
-																	aHTML.push('<tr><td id="ns1blankspaceCommentSend_container">' +
-																					'<span id="ns1blankspaceCommentSend" class="ns1blankspaceAction">Send</span>' +
+																	aHTML.push('<tr><td id="ns1blankspaceCommentSend_container-' + sKey + '">' +
+																					'<span id="ns1blankspaceCommentSend-' + sKey + '" class="ns1blankspaceAction">Send</span>' +
 																					'</td></tr>');
 																							
 																	aHTML.push('</table>');
 
-																	$('#ns1blankspaceCommentsColumn2Add').html(aHTML.join(''));
+																	$('#ns1blankspaceCommentsColumn2Add-' + sKey).html(aHTML.join(''));
 
-																	$('#ns1blankspaceCommentSend').button(
+																	$('#ns1blankspaceCommentSend-' + sKey).button(
 																	{
 																		label: "Send"
 																	})
@@ -1353,23 +1344,20 @@ ns1blankspace.messaging.conversation =
 																	})
 																	.css('font-size', '0.725em;');
 
-																	$('#ns1blankspaceCommentMessage').focus();
+																	$('#ns1blankspaceCommentMessage-' + sKey).focus();
 																	
 																},						
 
 													send:		function (oParam)
 																{
-																	var aHTML = [];
-													
-																	var sXHTMLElementID;
-																	
+																	var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
 																	var iPost = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
-																	
-																	$('#ns1blankspaceCommentSend_container').html(ns1blankspace.xhtml.loadingSmall);
+				
+																	$('#ns1blankspaceCommentSend_container-' + sKey).html(ns1blankspace.xhtml.loadingSmall);
 																		
 																	var oData =
 																	{
-																		message: $('#ns1blankspaceCommentMessage').val(),
+																		message: $('#ns1blankspaceCommentMessage-' + sKey).val(),
 																		post: iPost
 																	}	
 																		
