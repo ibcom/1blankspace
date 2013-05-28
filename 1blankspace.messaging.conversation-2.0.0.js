@@ -1111,8 +1111,7 @@ ns1blankspace.messaging.conversation =
 								{
 									var aHTML = [];
 
-									aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceMessagingConversationPosts_container-' + oRow.id + '"' +
-													' data-message="' + oRow.message + '">');
+									aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceMessagingConversationPosts_container-' + oRow.id + '">');
 													
 									var sSubject = oRow.subject;
 									if (sSubject == '') {sSubject = '...'}		
@@ -1125,9 +1124,13 @@ ns1blankspace.messaging.conversation =
 															
 									var oDate = new Date(oRow.modifieddate);
 															
-									aHTML.push(oDate.toString("dd MMM yyyy @ h:mm tt")  + '</div></td>');
+									aHTML.push(oDate.toString("dd MMM yyyy @ h:mm tt")  + '</div>');
 
-									aHTML.push('<td style="width:80px; text-align:right; vertical-align:bottom; padding-bottom:4px;" class="ns1blankspaceRow">' +
+									aHTML.push('<div id="ns1blankspaceMessagingConversationPosts_message-' + oRow.id + '" style="display:none; margin-top:3px;" class="ns1blankspaceRow ns1blankspaceSubNote">' +
+															(oRow.message).formatXHTML() + '</div>');
+
+
+									aHTML.push('</td><td style="width:80px; text-align:right; vertical-align:bottom; padding-bottom:4px;" class="ns1blankspaceRow">' +
 													'<div id="ns1blankspaceMessagingConversationPosts_comment_container-' + oRow.id + '">' +
 													'<span id="ns1blankspaceMessagingConversationPosts_comment_view-' + oRow.id + '" class="ns1blankspaceRowAddCommentView"></span>' +
 													'<span id="ns1blankspaceMessagingConversationPosts_comment_add-' + oRow.id + '">&nbsp;</span>' +
@@ -1240,7 +1243,7 @@ ns1blankspace.messaging.conversation =
 													{
 														if (!bExists)
 														{	
-															var sMessage = ($('#ns1blankspaceMessagingConversationPosts_container-' + sKey).attr('data-message')).formatXHTML();
+															var sMessage = $('#ns1blankspaceMessagingConversationPosts_message-' + sKey).html();
 
 															var sHTML = '<table class="ns1blankspaceContainer">' +
 																		'<tr class="ns1blankspaceContainer">' +
