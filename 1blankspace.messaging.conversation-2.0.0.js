@@ -1326,7 +1326,7 @@ ns1blankspace.messaging.conversation =
 																	aHTML.push('<table style="margin-bottom:10px;">');									
 																
 																	aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
-																						'<textarea id="ns1blankspaceCommentMessage-' + sKey + '" name="message" rows="15" cols="5" style="height:175px; font-size:0.875em;"' +
+																						'<textarea id="ns1blankspaceCommentMessage-' + sKey + '" name="message" rows="15" cols="5" style="height:175px; font-size:0.875em; width:100%;"' +
 																								' class="ns1blankspaceTextMulti"></textarea>' +
 																						'</td></tr>');
 																	
