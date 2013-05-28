@@ -365,19 +365,21 @@ ns1blankspace.projectTask =
 					{
 						aHTML.push('<table class="ns1blankspace">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:300px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+
+						var aHTML = [];
 
 						aHTML.push('<table class="ns1blankspace">');
 						
 						if (ns1blankspace.objectContextData.description != '')
 						{	
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
+										'<tr><td class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.description +
 										'</td></tr>');
 						}	
@@ -401,6 +403,36 @@ ns1blankspace.projectTask =
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
+						if (ns1blankspace.objectContextData.project != '')
+						{
+							aHTML.push('<tr><td style="padding-bottom:5px;"><span id="ns1blankspaceProjectView" class="ns1blankspaceAction">' +
+										'View Project</span></td></tr>');
+
+							aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em;">' +
+										ns1blankspace.objectContextData.projecttext +
+										'</td></tr>');
+						}	
+
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
+
+						$('#ns1blankspaceProjectView').button(
+						{
+							label: 'View Project'
+						})
+						.click(function()
+						{
+							ns1blankspace.project.init(
+							{
+								id: ns1blankspace.objectContextData.project,
+							});
+						});
 					}	
 				},
 

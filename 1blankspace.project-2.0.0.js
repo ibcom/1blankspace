@@ -257,13 +257,6 @@ ns1blankspace.project =
 						aHTML.push('</table>');		
 					
 						aHTML.push('<table class="ns1blankspaceControl">');
-
-						aHTML.push('<tr><td id="ns1blankspaceControlTasks" class="ns1blankspaceControl">' +
-										'Tasks</td></tr>');
-
-						aHTML.push('</table>');		
-					
-						aHTML.push('<table class="ns1blankspaceControl">');
 					
 						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
 										'Actions</td></tr>');

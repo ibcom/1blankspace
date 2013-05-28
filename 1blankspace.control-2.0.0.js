@@ -341,7 +341,7 @@ ns1blankspace.views =
 		title: "Project Tasks",
 		namespace: "projectTask",
 		endpoint: "PROJECT_TASK",
-		show: true,
+		show: false,
 		group: 2,
 		type: 1
 	},
