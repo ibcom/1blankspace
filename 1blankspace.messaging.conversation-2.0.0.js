@@ -1247,7 +1247,7 @@ ns1blankspace.messaging.conversation =
 
 															var sHTML = '<table class="ns1blankspaceContainer">' +
 																		'<tr class="ns1blankspaceContainer">' +
-																		'<td id="ns1blankspaceCommentsColumn1-' + sKey + '" class="ns1blankspaceColumn1Flexible" style="font-size:0.725em; background-color:white;">' + sMessage + '</td>' +
+																		'<td id="ns1blankspaceCommentsColumn1-' + sKey + '" class="ns1blankspaceColumn1Flexible" style="font-size:0.725em; background-color:white;padding-left:5px;">' + sMessage + '</td>' +
 																		'<td id="ns1blankspaceCommentsColumn2-' + sKey + '" class="ns1blankspaceColumn2" style="width:300px; padding-left:10px;">' +
 																				'<div id="ns1blankspaceCommentsColumn2Add-' + sKey + '"></div>' +
 																				'<div id="ns1blankspaceCommentsColumn2List-' + sKey + '" style="font-size:0.875em;"></div></td>' +
