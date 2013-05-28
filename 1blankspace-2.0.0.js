@@ -3628,6 +3628,13 @@ ns1blankspace.util =
   					return oObject;
   				},
 
+  	toBR: 		function (sValue)
+  				{
+					sValue = (sValue).replace(/\r\n/g, '<br />');
+
+  					return sValue;
+  				},		
+
   	getMethod: 
   				function getM ()
   				{
