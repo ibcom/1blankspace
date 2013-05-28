@@ -1301,10 +1301,10 @@ ns1blankspace.messaging.conversation =
 																		{
 																			var oDate = new Date(this.modifieddate);
 
-																			aHTML.push('<tr><td class="ns1blankspaceRow">' +
+																			aHTML.push('<tr><td class="ns1blankspaceRow" style="padding-top:6px;">' +
 																							this.message +
-																							'<br /><span class="ns1blankspaceSubNote">' +
-																							this.modifiedusertext + ', ' + oDate.toString("dddd, dd MMM yyyy @ h:mm tt") + '</span>');	
+																							'<br /><div class="ns1blankspaceSubNote" style="margin-top:3px;">' +
+																							this.modifiedusertext + ', ' + oDate.toString("dddd, dd MMM yyyy @ h:mm tt") + '</div>');	
 																		});
 
 																		$('#ns1blankspaceCommentsColumn2List-' + sKey).html(aHTML.join(''));
