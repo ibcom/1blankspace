@@ -659,7 +659,6 @@ ns1blankspace.setup.financial =
 												var oSearch = new AdvancedSearch();
 												oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
 												oSearch.addField('title,parentaccount,parentaccounttext,postable,type');
-												//oSearch.addFilter('parentaccount', 'EQUAL_TO', ns1blankspace.financial.rootAccount); //???
 												oSearch.rows = 200;
 												oSearch.sort('title', 'asc');
 												oSearch.getResults(function(data) {ns1blankspace.setup.financial.accounts.show(oParam, data)})	
@@ -859,6 +858,8 @@ ns1blankspace.setup.financial =
 											var sID = aXHTMLElementID[1];
 										}	
 									
+										var iTaxType = (iType==1?2:1)
+
 										var aHTML = [];
 										
 										aHTML.push('<table class="ns1blankspaceColumn2">');
@@ -893,7 +894,7 @@ ns1blankspace.setup.financial =
 															'<br /><input type="radio" id="radioPostableN" name="radioPostable" value="N"/>No (it is a header account)' +
 														'</td></tr>');
 
-										if (iType == 1)
+										if (iTaxType == 1)
 										{	
 											aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -905,6 +906,18 @@ ns1blankspace.setup.financial =
 														'<br /><input type="radio" id="radioCOSN" name="radioCOS" value="N"/>No' +
 														'</td></tr>');
 										}	
+
+										if (iTaxType == 1 || iTaxType == 2)
+										{
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
+															ns1blankspace.option.taxVATCaption + ' Type' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td id="ns1blankspaceFinancialTaxCode" class="ns1blankspaceRadio">' +
+															ns1blankspace.xhtml.loadingSmall +
+															'</td></tr>');
+										}
 
 										aHTML.push('</table>');					
 										
@@ -946,13 +959,15 @@ ns1blankspace.setup.financial =
 											sData += '&parentaccount=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountParentAccount').attr("data-id"));
 											sData += '&postable=' + ns1blankspace.util.fs($('input[name="radioPostable"]:checked').val());
 											sData += '&expensecostofsale=' + ns1blankspace.util.fs($('input[name="radioCOS"]:checked').val());
+											sData += '&taxtype=' + ns1blankspace.util.fs($('input[name="radioTaxCode"]:checked').val());
 
 											var oAdd =
 											{
 												"items": [], 
 												"title": $('#ns1blankspaceFinancialAccountTitle').val(),
 												"parentaccount": $('#ns1blankspaceFinancialAccountParentAccount').attr("data-id"),
-												"postable": $('input[name="radioPostable"]:checked').val()
+												"postable": $('input[name="radioPostable"]:checked').val(),
+												"taxtype": $('input[name="radioTaxCode"]:checked').val()
 											}
 														
 											$.ajax(
@@ -1056,6 +1071,16 @@ ns1blankspace.setup.financial =
 											$('#ns1blankspaceFinancialAccountParentAccount').attr('data-id', ns1blankspace.financial.currentAccount);
 											$('[name="radioPostable"][value="Y"]').attr('checked', true);
 											$('[name="radioCOS"][value="N"]').attr('checked', true);
+
+											if (iType == 1 || iType == 2)
+											{
+												ns1blankspace.financial.util.tax.codes(
+												{
+													xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
+													id: 1,
+													type: iType
+												});
+											}	
 										}
 									}
 									else if (iStep == 5)
@@ -1068,6 +1093,18 @@ ns1blankspace.setup.financial =
 											$('#ns1blankspaceFinancialAccountParentAccount').attr('data-id', oObjectContext.parentaccount);
 											$('[name="radioPostable"][value="' + oObjectContext.postable + '"]').attr('checked', true);
 											$('[name="radioCOS"][value="' + oObjectContext.expensecostofsale + '"]').attr('checked', true);
+
+											var iTaxType = (iType==1?2:1)
+
+											if (iTaxType == 1 || iTaxType == 2)
+											{
+												ns1blankspace.financial.util.tax.codes(
+												{
+													xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
+													id: oObjectContext.taxtype,
+													type: iTaxType
+												});
+											}	
 										}
 									}	
 								},
