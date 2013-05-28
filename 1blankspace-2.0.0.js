@@ -3174,7 +3174,12 @@ ns1blankspace.util =
 					{
 						var sXHTMLElementID = ns1blankspace.util.param(oParam, sParam).value;
 						oReturn.value = $('#' + sXHTMLElementID).attr(sDataKey);
-						oReturn.exists = true;
+						oReturn.exists = (oReturn.value !== undefined);
+					}
+
+					if (!oReturn.exists && ns1blankspace.util.param(oOption, 'default').exists)
+					{
+						oReturn.value = ns1blankspace.util.param(oOption, 'default').value
 					}
 					
 					return oReturn;

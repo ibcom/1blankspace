@@ -308,18 +308,18 @@ ns1blankspace.messaging.conversation =
 										'Details</td></tr>');
 						}
 
-						aHTML.push('<tr><td id="ns1blankspaceControlParticipants" class="ns1blankspaceControl">' +
-										'Participants</td></tr>');
-
 						aHTML.push('</table>');
 						
 						aHTML.push('<table class="ns1blankspaceControl">');
 
+						aHTML.push('<tr><td id="ns1blankspaceControlParticipants" class="ns1blankspaceControl">' +
+										'Participants</td></tr>');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlPosts" class="ns1blankspaceControl">' +
 										'Posts</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlComments" class="ns1blankspaceControl">' +
-										'Comments</td></tr>');
+						//aHTML.push('<tr><td id="ns1blankspaceControlComments" class="ns1blankspaceControl">' +
+						//				'Comments</td></tr>');
 
 						aHTML.push('</table>');
 						
@@ -1061,7 +1061,7 @@ ns1blankspace.messaging.conversation =
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'MESSAGING_CONVERSATION_POST_SEARCH';
-										oSearch.addField('subject,ownerusertext,createddate,modifieddate,lastcommentdate');
+										oSearch.addField('subject,message,ownerusertext,createddate,modifieddate,lastcommentdate');
 										oSearch.sort('modifieddate', 'desc');
 										oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.posts.show(oParam, data)});
 									}
@@ -1110,7 +1110,8 @@ ns1blankspace.messaging.conversation =
 								{
 									var aHTML = [];
 
-									aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceMessagingConversationPosts_container-' + oRow.id + '">');
+									aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceMessagingConversationPosts_container-' + oRow.id + '"' +
+													' data-message="' + oRow.message + '">');
 													
 									var sSubject = oRow.subject;
 									if (sSubject == '') {sSubject = '...'}		
@@ -1158,9 +1159,12 @@ ns1blankspace.messaging.conversation =
 									.css('font-size', '0.625em')
 									.click(function()
 									{
-										ns1blankspace.show({selector: '#ns1blankspaceMainComments'});
 										var aXHTMLElementID = (this.id).split('-');
-										ns1blankspace.messaging.conversation.comments.show({post: aXHTMLElementID[1]});
+										ns1blankspace.messaging.conversation.posts.comments.showHide(
+										{
+											xhtmlElementID: this.id,
+											onComplete: ns1blankspace.messaging.conversation.posts.comments.search.send
+										});
 									})
 													
 									.next()
@@ -1175,72 +1179,101 @@ ns1blankspace.messaging.conversation =
 										.css('width', '20px')
 										.css('margin-left', '2px')
 										.css('font-size', '0.625em')
-										.click(function() {
-											ns1blankspace.messaging.conversation.posts.comments({xhtmlElementID: this.id, step: 2});
+										.click(function()
+										{
+											ns1blankspace.messaging.conversation.posts.comments.showHide(
+											{
+												xhtmlElementID: this.id,
+												onComplete: ns1blankspace.messaging.conversation.posts.comments.new.show
+											});
 										})
 
 										.parent()
 											.buttonset();
-								},							
-
-					summary: 	function (oParam)
-								{
-
-
-								},			
+								},								
 
 					comments:	{
 									showHide: 	function (oParam)
 												{
-													var sXHTMLElementID;
-													var sKey;
+													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+													var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
+													var sSource = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 0}).value;
+													var bRemove = false;
 
-													if (ns1blankspace.util.param(oParam, 'xhtmlElementID').exists)
-													{
-														sXHTMLElementID = ns1blankspace.util.param(oParam, 'xhtmlElementID').value
-														sKey = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
-													}
+													var bExists = ($('#ns1blankspaceMessagingConversationPostComments_container-' + sKey).length != 0);
 
-													if ($('#ns1blankspaceDebtors_container_preview-' + sKey).length != 0)
+													var sAction = ns1blankspace.util.getData(oParam, 'data-action', {default: ''}).value
+
+													if (sAction == '') {sAction = 'open'}
+
+													if (sAction == 'close')
 													{
-														$('#ns1blankspaceDebtors_container_preview-' + sKey).remove();
+														$('#' + sXHTMLElementID).attr('data-action', 'open');
+														$('#ns1blankspaceMessagingConversationPostComments_container-' + sKey).remove();
 													}
 													else
 													{
-														var sHTML = 'No preview';
+														$('#' + sXHTMLElementID).attr('data-action', 'close');
 
-														var oStatement = $.grep(ns1blankspace.financial.debtors.data.statements, function (a) {return a.key == sKey;})[0];
+														if (!bExists)
+														{	
+															var sMessage = ($('#ns1blankspaceMessagingConversationPosts_container-' + sKey).attr('data-message')).formatXHTML();
 
-														if (oStatement)
-														{
-															sHTML = ns1blankspace.format.render(
-															{
-																object: 175,
-																objectContext: -1,
-																xhtmlTemplate: ns1blankspace.xhtml.templates['statement'],
-																objectData: oStatement,
-																objectOtherData: oStatement.invoices
-															});
+															var sHTML = '<table class="ns1blankspaceContainer">' +
+																		'<tr class="ns1blankspaceContainer">' +
+																		'<td id="ns1blankspaceCommentsColumn1" class="ns1blankspaceColumn1Flexible" style="font-size:0.625em;">' + sMessage + '</td>' +
+																		'<td id="ns1blankspaceCommentsColumn2" class="ns1blankspaceColumn2" style="width:300px;">'
+																				+ ns1blankspace.xhtml.loadingSmall +'</td>' +
+																		'</tr></table>';
 
-															oStatement.xhtml = sHTML;
-														}	
+															$('#ns1blankspaceMessagingConversationPosts_container-' + sKey).after('<tr id="ns1blankspaceMessagingConversationPostComments_container-' + sKey + '"' +
+																		' data-source="' + sSource + '">' +
+																		'<td colspan=4><div style="background-color: #F3F3F3; padding:5px; margin-bottom:12px;">' + sHTML + '</div></td></tr>');
+														}
 
-														$('#ns1blankspaceDebtors_container-' + sKey).after('<tr id="ns1blankspaceDebtors_container_preview-' + sKey + '">' +
-																		'<td colspan=5><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
+														ns1blankspace.util.onComplete(oParam);
 													}
-
-													'onComplete' - new or send
 												},
 
-									search 		{
+									search: 	{
 													send: 		function (oParam)
 																{
+																	var iPost = ns1blankspace.util.param(oParam, 'xhtmlElementID', {index: 1}).value
+
+																	var oData = 
+																	{
+																		rows: 200,
+																		includeme: 1,
+																		conversation: ns1blankspace.objectContext
+																	}	
+										
+																	if (iPost != undefined)
+																	{
+																		oData.post = iPost;
+																	}
+																		
+																	$.ajax(
+																	{
+																		type: 'POST',
+																		url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_POST_COMMENT_SEARCH'),
+																		data: oData,
+																		dataType: 'json',
+																		success: function(data) {ns1blankspace.messaging.conversation.posts.comments.search.process(oParam, data)}
+																	});
 																},
 
-													process: 	function (oParam)
+													process: 	function (oParam, oResponse)
 																{
+																	var aHTML = [];
+																
+																	if (oResponse.data.rows.length == 0)
+																	{
+																		$('#ns1blankspaceCommentsColumn2').html('<table class="ns1blankspaceColumn2"><tr id="ns1blankspaceMessagingConversationPostCommentsList_container">' +
+																							'<td class="ns1blankspaceNothing">No comments.</td></tr></table>');							
+																	}
+
 																}
-												}				
+												},			
 
 									new:		{
 
