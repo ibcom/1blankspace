@@ -1126,7 +1126,7 @@ ns1blankspace.messaging.conversation =
 									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_date-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
 															Date.parse(oRow.modifieddate).toString("dd MMM yyyy @ h:mm tt")  + '</td>');
 
-									aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">' +
+									aHTML.push('<td style="width:80px; text-align:right;" class="ns1blankspaceRow">' +
 													'<div id="ns1blankspaceMessagingConversationPosts_comment_container-' + oRow.id + '">' +
 													'<span id="ns1blankspaceMessagingConversationPosts_comment_view-' + oRow.id + '" class="ns1blankspaceRowAddCommentView"></span>' +
 													'<span id="ns1blankspaceMessagingConversationPosts_comment_add-' + oRow.id + '">&nbsp;</span>' +
