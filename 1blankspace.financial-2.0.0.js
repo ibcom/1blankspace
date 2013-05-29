@@ -3297,7 +3297,7 @@ ns1blankspace.financial.item =
 							aHTML.push('<td id="ns1blankspaceItem_tax-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
 											this.tax + '</td>');
 
-							aHTML.push('<td style="width:50px;text-align:right;" class="ns1blankspaceRow">');
+							aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 							aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceItemRemove"></span>');
 							aHTML.push('<span id="ns1blankspaceRowItem_options_edit-' + this.id + '" class="ns1blankspaceItemEdit"' +
 											' data-amount="' + this.amount + '"' +
@@ -3490,6 +3490,25 @@ ns1blankspace.financial.item =
 						
 						aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
 				
+						if (sNamespace === 'expense' || sNamespace === 'invoice')
+						{
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Account' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+							//aHTML.push('</table>');
+						
+							//aHTML.push('<table class="ns1blankspaceColumn2">');
+							
+							aHTML.push('<tr><td style="padding-bottom:5px;" id="ns1blankspaceItemAddSearchResults">' +
+											'<span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all<br />or just start typing.</span></td></tr>');
+						}	
+
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Amount' +
@@ -3525,26 +3544,7 @@ ns1blankspace.financial.item =
 										'<td class="ns1blankspaceTextMulti">' +
 										'<textarea id="ns1blankspaceItemDescription" class="ns1blankspaceTextMulti" style="height:50px; width:200px;" rows="3" cols="35" ></textarea>' +
 										'</td></tr>');		
-
-						if (sNamespace === 'expense' || sNamespace === 'invoice')
-						{
-							aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Account' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
-										'</td></tr>');
-
-							aHTML.push('</table>');
-						
-							aHTML.push('<table class="ns1blankspaceColumn2">');
-							
-							aHTML.push('<tr><td style="padding-top:5px;" id="ns1blankspaceItemAddSearchResults">' +
-											'<span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all or<br />start typing part of the account title.</span></td></tr>');
-						}	
-								
+		
 						aHTML.push('</table>');		
 						
 						$('#ns1blankspaceItemEditColumn1').html(aHTML.join(''));
@@ -3593,7 +3593,7 @@ ns1blankspace.financial.item =
 					        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.item.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
 						});
 		
-						$('#ns1blankspaceItemAmount').focus();
+						$('#ns1blankspaceItemAccount').focus();
 
 						var iFinancialAccountType = (iType==1?2:1);
 						var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
@@ -3656,7 +3656,7 @@ ns1blankspace.financial.item =
 						$.each(oResponse, function() 
 						{ 
 							aHTML.push('<tr class="ns1blankspaceRow">'+ 
-											'<td id="ns1blankspaceItem_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+											'<td id="ns1blankspaceItem_title-' + this.id + '-' + this.taxtype + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 											this.title + '</td></tr>');	
 						});
 						
@@ -3673,6 +3673,20 @@ ns1blankspace.financial.item =
 							$('#ns1blankspaceItemAccount').attr('data-id', aID[1]);
 							$('#ns1blankspaceItemAccount').val($(this).html());
 							$('#ns1blankspaceItemAddSearchResults').html('');
+
+							if (aID[2] != '')
+							{
+								$('[name="radioTaxCode"][value="' + aID[2] + '"]').attr('checked', true);
+
+								ns1blankspace.financial.util.tax.calculate(
+								{
+									amountXHTMLElementID: 'ns1blankspaceItemAmount',
+									taxXHTMLElementID: 'ns1blankspaceItemTax'
+								});
+
+								$('#ns1blankspaceItemAmount').focus();
+							}
+
 						})
 						.css('width', '18px')
 						.css('height', '18px')

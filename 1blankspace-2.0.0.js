@@ -593,6 +593,7 @@ ns1blankspace.app =
 
 					if (!bInitialised)
 					{	
+						$('#ns1blankspaceViewControl').html('<span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span>');
 						oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.app.show);
 						ns1blankspace.extend.init(oParam);
 					}	
