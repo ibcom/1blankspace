@@ -1420,7 +1420,8 @@ ns1blankspace.logon =
 					{
 						method: 'LOGON',
 						logon: $('#ns1blankspaceLogonLogonName').val(),
-						password: $('#ns1blankspaceLogonPassword').val()
+						password: $('#ns1blankspaceLogonPassword').val(),
+						passwordhash: ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val() + $('#ns1blankspaceLogonPassword').val()})
 					}	
 
 					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
@@ -3648,6 +3649,20 @@ ns1blankspace.util =
 					}
 					console.log(methods.join(","));
   				},
+
+  	hash: 		function(oParam)
+  				{
+  					var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+  					var sValue = ns1blankspace.util.getParam(oParam, 'value').value;
+
+  					if (sValue !== undefined)
+  					{	
+	  					if (iType == 1)
+	  					{
+	  						return hex_md5(sValue);
+	  					}
+	  				}	
+  				},				
 
   	about: 		{
   					data: 		[],

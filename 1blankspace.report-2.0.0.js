@@ -687,15 +687,16 @@ ns1blankspace.report =
 							var aHTML = [];
 						
 							aHTML.push('<table style="margin-bottom:0px;border-bottom-style:solid;border-width: 1px;border-color:#E8E8E8;" class="ns1blankspace">');
-							aHTML.push('<tr><td id="ns1blankspaceReportHeaderOptions" style="vertical-alignment:bottom;padding-top:10px;">' + 
-												'<input id="radioReport-Search" name="radioOptions" type="radio" checked="checked"/><label for="radioReport-Search">Criteria</label>' +
-												'<input id="radioReport-Results" name="radioOptions" type="radio" /><label for="radioReport-Results">Results</label>' +
-												'<input id="radioReport-Export" name="radioOptions" type="radio" /><label for="radioReport-Export">Export</label>' +
-												'<input id="radioReport-Update" name="radioOptions" type="radio" /><label for="radioReport-Update">Update</label>' +
-												'<input id="radioReport-Send" name="radioOptions" type="radio" /><label for="radioReport-Send">Send</label>' +
-											'</td>');
+							aHTML.push('<tr><td>' + 
+												'<div id="ns1blankspaceReportHeaderOptions">' + 
+												'<input id="radioReport-Search" name="radioOptions" type="radio" checked="checked"/><label style="font-size:0.875em;"  for="radioReport-Search">Filter</label>' +
+												'<input id="radioReport-Results" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Results">Results</label>' +
+												'<input id="radioReport-Update" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;"  for="radioReport-Update">Update</label>' +
+												'<input id="radioReport-Export" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;"  for="radioReport-Export">Export</label>' +
+												'<input id="radioReport-Send" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;"  for="radioReport-Send">Email</label>' +
+											'</div></td>');
 
-							aHTML.push('<td style="vertical-alignment:bottom;padding-top:10px;text-align:right;font-size:0.75em;"><span id="spanReportSearch">Search</span></td>');
+							aHTML.push('<td style="vertical-alignment:bottom;padding-top:10px;text-align:right;font-size:0.75em;">&nbsp;</td>');
 							aHTML.push('</table>'); 
 							
 							$('#ns1blankspaceReportHeader').html(aHTML.join(''));
@@ -737,16 +738,17 @@ ns1blankspace.report =
 									sCaption = ns1blankspace.report.getCaption({name: this.name})
 									var sName = (this.name).replace(/\./g,'_')
 									
-									aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:2px;">' +
+									aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:2px;" class="ns1blankspaceRow">' +
 													sCaption +
 													'</td>' +
 													'<td colspan=2 style="color:#B8B8B8;padding:2px;"' +
-													' id="reportHeaderComparison' + sName + '"></td></tr>');
+													' id="reportHeaderComparison' + sName + '" class="ns1blankspaceRow"></td></tr>');
 								});	
 							}
 							
-							aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Select</td>' +
-											'<td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Comparison</td></tr>');
+							aHTML.push('<tr><td colspan=2 style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Select</td>' +
+											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Comparison</td>' +
+											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;"><span id="spanReportSearch" class="ns1blankspaceAction">Search</span></td></tr>');
 							
 							$.each(oResponse.data.parameters, function() 
 							{ 
@@ -826,13 +828,13 @@ ns1blankspace.report =
 										}
 									}
 								
-									aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReport_include_' + sName + '">' +
+									aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReport_include_' + sName + '" class="ns1blankspaceRow">' +
 												'<input type="checkbox" id="ns1blankspaceReportCheck_include-' + sName + '"' +
 													' data-name="' + this.name + '"' +
 													' class="ns1blankspaceReportInclude">' +
 												'</td>');
 								
-									aHTML.push('<td style="width:200px;" id="ns1blankspaceReport_caption_' + sName + '" class="ns1blankspaceReport">' +
+									aHTML.push('<td style="width:200px;" id="ns1blankspaceReport_caption_' + sName + '" class="ns1blankspaceReport ns1blankspaceRow">' +
 												sCaption +
 												'</td>');
 									
@@ -848,9 +850,9 @@ ns1blankspace.report =
 									aHTML.push( '"' +
 														' data-searchRelatedField="' + sSearchRelatedField + '"' +
 														sMoreAttributes + 
-														'  class="ns1blankspaceReportComparison"></td>');
+														'  class="ns1blankspaceReportComparison ns1blankspaceRow"></td>');
 														
-									aHTML.push('<td id="ns1blankspaceReport_input-' + sName + '-' + this.datatype + '" class="' + sClass + '"></td>');
+									aHTML.push('<td id="ns1blankspaceReport_input-' + sName + '-' + this.datatype + '" class="' + sClass + ' ns1blankspaceRow"></td>');
 									
 									aHTML.push('</tr>');
 									
@@ -907,13 +909,13 @@ ns1blankspace.report =
 														sMoreAttributes += ' style="width:200px"';}
 											}
 										
-											aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReport_include_' + sName + '">' +
+											aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReport_include_' + sName + '" class="ns1blankspaceRow">' +
 														'<input type="checkbox" id="ns1blankspaceReportCheck_include-' + sName + '"' +
 															' data-name="' + sFieldName + '"' +
 															' class="ns1blankspaceReportInclude">' +
 														'</td>');
 										
-											aHTML.push('<td style="width:200px;" id="ns1blankspaceReport_caption_' + sName + '" class="ns1blankspaceReport">' +
+											aHTML.push('<td style="width:200px;" id="ns1blankspaceReport_caption_' + sName + '" class="ns1blankspaceReport ns1blankspaceRow">' +
 														sCaption +
 														'</td>');
 											
@@ -929,9 +931,9 @@ ns1blankspace.report =
 											aHTML.push( '"' +
 														' data-searchRelatedField="' + sSearchRelatedField + '"' +
 														sMoreAttributes + 
-														'  class="ns1blankspaceReportComparison"></td>');
+														'  class="ns1blankspaceReportComparison class="ns1blankspaceRow"></td>');
 																
-											aHTML.push('<td id="ns1blankspaceReport_input-' + sName + '-' + sDataType + '" class="' + sClass + '"></td>');
+											aHTML.push('<td id="ns1blankspaceReport_input-' + sName + '-' + sDataType + '" class="' + sClass + ' ns1blankspaceRow"></td>');
 											
 											aHTML.push('</tr>');
 											
@@ -1427,9 +1429,7 @@ ns1blankspace.report =
 										if (oResponse.data.rows.length == 0)
 										{
 											aHTML.push('<table class="interfaceMain"">');
-											aHTML.push('<tbody>');
-											aHTML.push('<tr class="ns1blankspaceCaption">' +
-																'<td class="interfaceMainRowNothing">Nothing to show.</td></tr>') ;
+											aHTML.push('<tr><td class="ns1blankspaceNothing" style="padding-top:10px;">Nothing to show.</td></tr></table>') ;
 
 											$('#ns1blankspaceReportResults').html(aHTML.join(''));
 										}
