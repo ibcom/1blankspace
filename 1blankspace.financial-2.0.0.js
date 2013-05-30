@@ -3327,12 +3327,13 @@ ns1blankspace.financial.item =
 							ns1blankspace.financial.item.remove(oParam);
 						})
 						.css('width', '15px')
-						.css('height', '17px')
+						.css('height', '17px');
 				
 						$('.ns1blankspaceItemEdit').button(
 						{
 							text: false,
-							icons: {
+							icons:
+							{
 								primary: "ui-icon-pencil"
 							}
 						})
@@ -3343,7 +3344,7 @@ ns1blankspace.financial.item =
 							ns1blankspace.financial.item.edit(oParam)
 						})
 						.css('width', '15px')
-						.css('height', '17px')	
+						.css('height', '17px');
 					}
 				}	
 			},
@@ -3436,15 +3437,12 @@ ns1blankspace.financial.item =
 
 						var aHTML = [];
 									
-						aHTML.push('<table class="ns1blankspaceColumn2a">');
-								
-						aHTML.push('<tr><td><span id="ns1blankspaceItemEditSave" class="ns1blankspaceAction">' +
-										'Save</span></td></tr>');
-
-						aHTML.push('<tr><td><span id="ns1blankspaceItemEditCancel" class="ns1blankspaceAction">' +
-										'Cancel</span></td></tr>');
-										
-						aHTML.push('</table>');					
+						aHTML.push('<table class="ns1blankspaceColumn2a">' +
+										'<tr><td><span id="ns1blankspaceItemEditSave" class="ns1blankspaceAction">' +
+										'Save</span></td></tr>' +
+										'<tr><td><span id="ns1blankspaceItemEditCancel" class="ns1blankspaceAction">' +
+										'Cancel</span></td></tr>' +
+										'</table>');					
 						
 						$('#ns1blankspaceItemEditColumn2').html(aHTML.join(''));
 						
@@ -3500,10 +3498,6 @@ ns1blankspace.financial.item =
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
 										'</td></tr>');
-
-							//aHTML.push('</table>');
-						
-							//aHTML.push('<table class="ns1blankspaceColumn2">');
 							
 							aHTML.push('<tr><td style="padding-bottom:5px;" id="ns1blankspaceItemAddSearchResults">' +
 											'<span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all<br />or just start typing.</span></td></tr>');
@@ -3687,10 +3681,7 @@ ns1blankspace.financial.item =
 								$('#ns1blankspaceItemAmount').focus();
 							}
 
-						})
-						.css('width', '18px')
-						.css('height', '18px')
-						.css('font-size', '0.875em;');
+						});
 					}
 				}	
 			},

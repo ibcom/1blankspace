@@ -978,7 +978,7 @@ ns1blankspace.order =
 									{
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'PRODUCT_ORDER_ITEM_SEARCH';
-										oSearch.addField('producttext,quantity,totalcost,totaltax');
+										oSearch.addField('product,producttext,quantity,totalcost,totaltax,invoicedescription');
 										oSearch.addFilter('order', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('producttext', 'desc');
 										oSearch.getResults(function(data){ns1blankspace.order.items.show(oParam, data)});
@@ -989,8 +989,8 @@ ns1blankspace.order =
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceItemsColumn1" class="ns1blankspaceColumn1"></td>' +
-														'<td id="ns1blankspaceItemsColumn2" class="ns1blankspaceColumn2"></td>' +
+														'<td id="ns1blankspaceItemsColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceItemsColumn2" class="ns1blankspaceColumn2" style="width:300px;"></td>' +
 														'</tr>' + 
 														'</table>');
 					
@@ -1002,8 +1002,8 @@ ns1blankspace.order =
 										
 										if (ns1blankspace.objectContextData.status == 2)
 										{
-											aHTML.push('<tr><td class="ns1blankspaceAction">' +
-														'<span id="ns1blankspaceOrderItemsAdd">Add</span>' +
+											aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceOrderItemsAdd" class="ns1blankspaceAction">Add</span>' +
 														'</td></tr>');
 										}
 										else
@@ -1021,10 +1021,10 @@ ns1blankspace.order =
 										{
 											label: "Add"
 										})
-										.click(function() {
-											ns1blankspace.order.items.add()
-										})
-										.css('width', '75px');
+										.click(function()
+										{
+											ns1blankspace.order.items.edit()
+										});
 										
 										var aHTML = [];
 	
@@ -1036,7 +1036,7 @@ ns1blankspace.order =
 										}
 										else
 										{
-											aHTML.push('<table id="tns1blankspaceOrderItems" class="ns1blankspaceContainer">');
+											aHTML.push('<table id="ns1blankspaceOrderItems" class="ns1blankspaceContainer">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Product</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Quantity</td>');
@@ -1061,10 +1061,9 @@ ns1blankspace.order =
 												rows: ns1blankspace.option.defaultRows,
 												functionShowRow: ns1blankspace.order.items.rows,
 												functionNewPage: 'ns1blankspace.order.items.bind()',
+												functionOnNewPage: ns1blankspace.order.items.bind,
 												type: 'json'
-											}); 
-
-											ns1blankspace.order.items.bind();
+											});
 										}
 									}	
 								},	
@@ -1076,7 +1075,14 @@ ns1blankspace.order =
 									aHTML.push('<tr class="ns1blankspaceRow">');
 									
 									aHTML.push('<td id="ns1blankspaceOrderItems_title-' + oRow.id + '" class="ns1blankspaceRow">' +
-															oRow.producttext + '</td>');	
+															oRow.producttext);
+
+									if (oRow.invoicedescription !== '')
+									{
+										aHTML.push('<br /><div class="ns1blankspaceSubNote">' + oRow.invoicedescription + '</span>');	
+									}	
+
+									aHTML.push('</td>');	
 															
 									aHTML.push('<td id="ns1blankspaceOrderItems_quantity-' + oRow.id + '" class="ns1blankspaceRow"' +
 															' style="text-align:right;">' +
@@ -1086,8 +1092,16 @@ ns1blankspace.order =
 															' style="text-align:right;">' +
 															oRow.totalcost + '</td>');					
 														
-									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');	
+									aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');	
 									aHTML.push('<span id="ns1blankspaceOrderItems_remove-' + oRow.id + '" class=" ns1blankspaceRow ns1blankspaceRowRemove"></span>');
+
+									aHTML.push('<span id="ns1blankspaceRowItem_options_edit-' + oRow.id + '" class="ns1blankspaceItemEdit"' +
+													' data-quantity="' + oRow.quantity + '"' +
+													' data-product="' + oRow.product + '"' +
+													' data-producttext="' + oRow.producttext + '"' +
+													' data-description="' + oRow.invoicedescription + '"' +
+													'></span>');
+
 									aHTML.push('</td>');
 																									
 									aHTML.push('</tr>');	
@@ -1095,15 +1109,18 @@ ns1blankspace.order =
 									return aHTML.join('');
 								},
 
-					bind:		function ()
+					bind:		function (oParam)
 								{
-									$('.ns1blankspaceRowView').button( {
-												text: false,
-												icons: {
-													primary: "ui-icons"
-												}
+									$('.ns1blankspaceRowView').button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icons"
+										}
 									})
-									.click(function() {
+									.click(function()
+									{
 										alert("View product");
 									})
 									.css('width', '15px')
@@ -1111,17 +1128,37 @@ ns1blankspace.order =
 									
 									if (ns1blankspace.objectContextData.status == 2)
 									{
-										$('.ns1blankspaceRowRemove').button( {
+										$('.ns1blankspaceRowRemove').button(
+										{
 											text: false,
-											 icons: {
-												 primary: "ui-icon-close"
+											icons:
+											{
+												primary: "ui-icon-close"
 											}
 										})
-										.click(function() {
+										.click(function()
+										{
 											ns1blankspace.order.items.remove({xhtmlElementID: this.id});
 										})
 										.css('width', '15px')
-										.css('height', '17px')
+										.css('height', '17px');
+
+										$('.ns1blankspaceItemEdit').button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-pencil"
+											}
+										})
+										.click(function()
+										{
+											oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
+											oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
+											ns1blankspace.order.items.edit(oParam);
+										})
+										.css('width', '15px')
+										.css('height', '17px');
 									}	
 								},
 
@@ -1139,6 +1176,8 @@ ns1blankspace.order =
 									
 									if (oResponse == undefined)
 									{	
+										ns1blankspace.status.working('Removing...');
+
 										$.ajax(
 										{
 											type: 'POST',
@@ -1152,6 +1191,7 @@ ns1blankspace.order =
 									{
 										if (oResponse.status == 'OK')
 										{
+											ns1blankspace.status.message('Removed');
 											$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 										}
 										else
@@ -1161,22 +1201,97 @@ ns1blankspace.order =
 									}	
 								},
 
-					add:		function (oParam, oResponse)
+					edit:		function (oParam, oResponse)
 								{
-									var iStep = 1;
-									
-									if (oParam != undefined)
-									{
-										if (oParam.step != undefined) {iStep = oParam.step}	
-									}
-									
+									var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+									var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+
 									if (oResponse == undefined)
 									{
 										if (iStep == 1)
 										{
 											var aHTML = [];
+
+											aHTML.push('<table class="ns1blankspaceContainer">');
+
+											aHTML.push('<tr class="ns1blankspaceContainer">' +
+															'<td id="ns1blankspaceItemEditColumn1"></td>' +
+															'<td id="ns1blankspaceItemEditColumn2" style="width:50px;"></td>' +
+															'</tr>');
+
+											aHTML.push('</table>');					
+											
+											$('#ns1blankspaceItemsColumn2').html(aHTML.join(''));
+
+											var aHTML = [];
+									
+											aHTML.push('<table class="ns1blankspaceColumn2a">' +
+															'<tr><td><span id="ns1blankspaceItemEditSave" class="ns1blankspaceAction">' +
+															'Save</span></td></tr>' +
+															'<tr><td><span id="ns1blankspaceItemEditCancel" class="ns1blankspaceAction">' +
+															'Cancel</span></td></tr>' +
+															'</table>');					
+											
+											$('#ns1blankspaceItemEditColumn2').html(aHTML.join(''));
+											
+											$('#ns1blankspaceItemEditSave').button(
+											{
+												text: "Save"
+											})
+											.click(function()
+											{
+												var iProduct = $('#ns1blankspaceItemsProductReference').attr('data-id');
+												var iQuantity = $('#ns1blankspaceItemsProductQuantity').val();
+												if (iQuantity == '') {iQuantity = 1};
+												
+												if (iProduct == undefined)
+												{
+													ns1blankspace.status.error('Need to select product');
+												}
+												else
+												{	
+													ns1blankspace.status.working('Saving');
+
+													var oData = 
+													{
+														order: ns1blankspace.objectContext,
+														product: iProduct,
+														quantity: iQuantity,
+														invoicedescription: $('#ns1blankspaceItemsProductDescription').val()
+													}	
 													
-											aHTML.push('<table class="ns1blankspaceColumn2">');
+													if (iID !== undefined) {oData.id = iID}
+
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('PRODUCT_ORDER_ITEM_MANAGE'),
+														data: oData,
+														dataType: 'json',
+														async: false,
+														success: function(oResponse)
+														{
+															ns1blankspace.status.message('Saved');
+															ns1blankspace.order.items.show();
+														}
+													});
+												}
+											})
+											.css('width', '65px');
+
+											$('#ns1blankspaceItemEditCancel').button(
+											{
+												text: "Cancel"
+											})
+											.click(function()
+											{
+												ns1blankspace.order.items.show()
+											})
+											.css('width', '65px');
+
+											var aHTML = [];
+													
+											aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
 
 											aHTML.push('<tr class="ns1blankspaceCaption">' +
 															'<td class="ns1blankspaceCaption">' +
@@ -1186,30 +1301,70 @@ ns1blankspace.order =
 															'<td class="ns1blankspaceText">' +
 															'<input id="ns1blankspaceItemsProductReference" class="ns1blankspaceText">' +
 															'</td></tr>');		
-											
-											aHTML.push('<tr><td style="font-size:0.75em;" title="Enter part of the title and click search.">' +
-															'<span id="ns1blankspaceItemsProductSearch">Search</span>' +
+																								
+											aHTML.push('<tr><td style="margin-top:15px;" id="ns1blankspaceItemsProductSearchResults">' +
+															'<span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all<br />or just start typing.</span>' +
 															'</td></tr>');
-																							
-											aHTML.push('<tr><td style="margin-top:15px;" id="ns1blankspaceItemsProductSearchResults"></td></tr>');
+
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
+															'Quantity' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceText">' +
+															'<input id="ns1blankspaceItemsProductQuantity" class="ns1blankspaceText">' +
+															'</td></tr>');
+
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
+															'Description' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceTextMulti">' +
+															'<textarea id="ns1blankspaceItemsProductDescription" class="ns1blankspaceTextMulti" style="height:70px; width:100%;" rows="3" cols="35" ></textarea>' +
+															'</td></tr>');	
 																			
 											aHTML.push('</table>');		
 											
-											$('#ns1blankspaceItemsColumn2').html(aHTML.join(''));
+											$('#ns1blankspaceItemEditColumn1').html(aHTML.join(''));
+
+											if (iID !== undefined)
+											{
+												$('#ns1blankspaceItemsProductReference').val(ns1blankspace.util.getData(oParam, 'data-producttext').value);
+												$('#ns1blankspaceItemsProductReference').attr('data-id', ns1blankspace.util.getData(oParam, 'data-product').value);
+												$('#ns1blankspaceItemsProductQuantity').val(ns1blankspace.util.getData(oParam, 'data-quantity').value);
+												$('#ns1blankspaceItemsProductDescription').val(ns1blankspace.util.getData(oParam, 'data-description').value);
+											}	
+
+											$('#ns1blankspaceItemsProductReference').keyup(function(e)
+											{
+												oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
+
+												if (e.which == 13)
+											    {
+											        ns1blankspace.order.items.edit(oParam);
+											    }
+											    else
+											    {
+													if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+										        	ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.order.items.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
+										        }	
+											});
 
 											$('#ns1blankspaceItemsProductSearch').button(
 											{
 												label: "Search"
 											})
-											.click(function() {
-												ns1blankspace.order.items.add($.extend(true, oParam, {step: 2}))
+											.click(function()
+											{
+												ns1blankspace.order.items.edit($.extend(true, oParam, {step: 2}))
 											})
 												
 											$('#ns1blankspaceItemsProductReference').keypress(function(e)
 											{
 											    if (e.which == 13)
 											    {
-											        ns1blankspace.order.items.add($.extend(true, oParam, {step: 2}))
+											        ns1blankspace.order.items.edit($.extend(true, oParam, {step: 2}))
 											    }
 											});
 						
@@ -1224,7 +1379,7 @@ ns1blankspace.order =
 											oSearch.addField('reference,title');
 											oSearch.addFilter('title', 'TEXT_IS_LIKE', $('#ns1blankspaceItemsProductReference').val());
 											oSearch.sort('title', 'asc');
-											oSearch.getResults(function(data){ns1blankspace.order.items.add($.extend(true, oParam, {step:3}), data)});
+											oSearch.getResults(function(data){ns1blankspace.order.items.edit($.extend(true, oParam, {step:3}), data)});
 										}
 									}
 									else
@@ -1245,15 +1400,9 @@ ns1blankspace.order =
 											{ 
 												aHTML.push('<tr class="ns1blankspaceRow">');	
 															
-												aHTML.push('<td id="ns1blankspaceOrderItems_title-' + this.id + '" class="ns1blankspaceRow">' +
+												aHTML.push('<td id="ns1blankspaceOrderItems_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																		this.title + '</td>');
-																		
-												aHTML.push('<td id="ns1blankspaceOrderItems_units2-' + this.id + '" class="ns1blankspaceRow">' +
-																'<input style="width:25px;" id="ns1blankspaceOrderItems__units-' + this.id + '" class="ns1blankspaceText" value="1"></td>');						
-														
-												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' + 
-																'<span id="ns1blankspaceOrderItems_add-' + this.id + '" class="ns1blankspaceRowAdd"></span></td>');
-												
+																														
 												aHTML.push('</tr>');
 											});
 											
@@ -1261,38 +1410,17 @@ ns1blankspace.order =
 
 											$('#ns1blankspaceItemsProductSearchResults').html(aHTML.join(''))
 											
-											$('#ns1blankspaceOrderItems span.ns1blankspaceRowAdd').button({
-												text: false,
-												icons: {
-													primary: "ui-icon-plus"
-												}
-											})
+											$('#ns1blankspaceOrderItems td.ns1blankspaceRowSelect')
 											.click(function()
 											{
 												var sID = this.id;
 												var aID = sID.split('-');
-												var iProduct = aID[1];
-												var iQuantity = $('#ns1blankspaceOrderItems__units-' + iProduct).val();
-												if (iQuantity == '') {iQuantity = 1};
-												
-												var sData = 'order=' + ns1blankspace.objectContext;
-												sData += '&product=' + iProduct;
-												sData += '&quantity=' + iQuantity;
-												
-												$.ajax(
-												{
-													type: 'POST',
-													url: ns1blankspace.util.endpointURI('PRODUCT_ORDER_ITEM_MANAGE'),
-													data: sData,
-													dataType: 'json',
-													async: false,
-													success: function(oResponse) {ns1blankspace.order.items.show()}
-												});
-											})
-											.css('width', '20px')
-											.css('height', '20px')
-											
-											$('input.ns1blankspaceText:first').focus();
+
+												$('#ns1blankspaceItemsProductReference').attr('data-id', aID[1]);
+												$('#ns1blankspaceItemsProductReference').val($(this).html());
+												$('#ns1blankspaceItemsProductSearchResults').html('');
+												$('#ns1blankspaceItemsProductQuantity').focus();
+											});
 										}
 									}	
 								}
