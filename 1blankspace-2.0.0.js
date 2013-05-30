@@ -3652,6 +3652,8 @@ ns1blankspace.util =
 
   	hash: 		function(oParam)
   				{
+  					//requires /jscripts/md5-min.js
+  					
   					var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
   					var sValue = ns1blankspace.util.getParam(oParam, 'value').value;
 
