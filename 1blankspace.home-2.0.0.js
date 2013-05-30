@@ -146,14 +146,14 @@ ns1blankspace.home.options =
 				{
 					var aHTML = [];
 					
-					aHTML.push('<table id="ns1blankspaceHomeOptions" class="ns1blankspaceSearchMedium">');
-						
-					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsMyStartPage" class="ns1blankspaceRowSelect">' +
-											'<a href="/index.asp?Site=475&p=asms%2Fmystartpage.asp" target="_blank">' +
-											'My Start Page (Classic)</a></td></tr>');
+					aHTML.push('<table id="ns1blankspaceHomeOptions" class="ns1blankspaceSearchMedium" style="width:100px;">');
 									
 					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsCalendar" class="ns1blankspaceRowSelect">' +
 											'Calendar</td></tr>');
+
+					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsMyStartPage" class="ns1blankspaceRowSelect">' +
+											'<a href="/index.asp?Site=475&p=asms%2Fmystartpage.asp" target="_blank">' +
+											'Classic</a></td></tr>');
 					
 					aHTML.push('</table>');
 						
@@ -177,6 +177,7 @@ ns1blankspace.home.options =
 				{
 					$('#ns1blankspaceHomeOptionsCalendar').click(function(event)
 					{
+						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						ns1blankspace.action.init({calendar: true});
 					});
 				}

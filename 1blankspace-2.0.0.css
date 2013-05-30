@@ -796,6 +796,13 @@ textarea.ns1blankspaceTextMultiSmall
 	background-color: transparent;
 }
 
+#ns1blankspaceMultiUseDialog
+{
+	position: absolute;
+	z-index: 99;
+	background-color: transparent;
+}
+
 #ns1blankspaceViewControlBrowse
 {
 	position: absolute;

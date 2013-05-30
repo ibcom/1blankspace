@@ -50,7 +50,7 @@ ns1blankspace.action =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function (oResponse, oParam)
+	home:		function (oParam, oResponse)
 				{
 					var bCalendar = false;
 					
@@ -1173,7 +1173,7 @@ ns1blankspace.action =
 															copiedEventObject.start = date;
 															copiedEventObject.allDay = allDay;
 															
-															ns1blankspace.action.container.show(
+															ns1blankspace.action.dialog.show(
 															{
 																startDate: date
 															});
@@ -1188,7 +1188,7 @@ ns1blankspace.action =
 										
 										select: 		function(startDate, endDate, allDay, jsEvent, view )
 														{
-															ns1blankspace.action.container.show(
+															ns1blankspace.action.dialog.show(
 															{
 																startDate: startDate,
 																endDate: endDate
@@ -1197,9 +1197,9 @@ ns1blankspace.action =
 												
 										eventClick: 	function(calEvent, jsEvent, view) 
 														{
-															if (calEvent.editable)
+															if (calEvent.editable ? calEvent.editable : true)
 															{
-																ns1blankspace.action.container.show(
+																ns1blankspace.action.dialog.show(
 																{
 																	actionID: calEvent.id,
 																});
@@ -1210,7 +1210,7 @@ ns1blankspace.action =
 														{
 														    if (allDay) 
 															{
-																alert('Clicked on the entire day: ' + date);
+																//alert('Clicked on the entire day: ' + date);
 															}
 															else
 															{
@@ -1247,7 +1247,10 @@ ns1blankspace.action =
 										
 										eventMouseover: function( event, jsEvent, view ) 
 														{
-															ns1blankspace.status.message(event.contactBusinessText);
+															if (event.contactBusinessText !== undefined)
+															{	
+																ns1blankspace.status.message(event.contactBusinessText);
+															}	
 														},
 										
 										eventMouseout: 	function( event, jsEvent, view ) 
@@ -1286,7 +1289,7 @@ ns1blankspace.action =
 														}
 									});	
 									
-									$.each(ns1blankspace.action.calendarUsers, function() 
+									$.each(ns1blankspace.action.data.calendarUsers, function() 
 									{ 
 										$('#' + sXHTMLElementID).fullCalendar('addEventSource', 
 										{
@@ -1402,43 +1405,35 @@ ns1blankspace.action =
 
 									if (iActionID != -1 && oResponse == undefined)
 									{
+										ns1blankspace.status.working();
+
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'ACTION_SEARCH';
-										oSearch.addField('*');
+										oSearch.addField('subject,description,actionby,contactperson,contactpersontext,contactbusiness,contactbusinesstext,date');
 										oSearch.addFilter('id', 'EQUAL_TO', iActionID);
-										oSearch.getResults(function(data) {ns1blankspace.action.container.show(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.action.dialog.show(oParam, data)});
 									}
 									else
 									{
+										ns1blankspace.status.message('');
+
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium">');
 										
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Subject</td></tr>');
+
 										aHTML.push('<tr><td class="ns1blankspace">' +
-															'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText');
-															
-										if (iActionID == -1)
-										{	
-											aHTML.push(' ns1blankspaceWatermark" value="Subject">');
-										}
-										else
-										{
-											aHTML.push('">');
-										}
-										
+															'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText">');
+
 										aHTML.push('</td></tr>');
 										
-										aHTML.push('<tr><td class="aHTML.push(">' +
-															'<textarea rows="5" cols="35" id="ns1blankspaceActionCalendarDescription" class="ns1blankspaceTextMultiSmall');
-
-										if (iActionID == -1)
-										{	
-											aHTML.push(' ns1blankspaceWatermark">Add more text here, if required.</textarea>');
-										}
-										else
-										{
-											aHTML.push('"></textarea>');
-										}
+										aHTML.push('<tr><td>' +
+															'<textarea rows="5" cols="35" id="ns1blankspaceActionCalendarDescription"' +
+															' class="ns1blankspaceTextMultiSmall"></textarea>');
+										
 
 										aHTML.push('</td></tr>');
 
@@ -1467,16 +1462,23 @@ ns1blankspace.action =
 															' data-parent-search-text="tradename">' +
 														'</td></tr>');		
 				
-										aHTML.push('<tr><td class="ns1blankspace">' +
-															'<input type="checkbox" id="ns1blankspaceActionCalendarHighPriority"/>&nbsp;High Priority?<td></tr>');
+										//aHTML.push('<tr><td class="ns1blankspace">' +
+										//					'<input type="checkbox" id="ns1blankspaceActionCalendarHighPriority"/>&nbsp;High Priority?<td></tr>');
 
 										aHTML.push('<tr><td>');
 										
-											aHTML.push('<table class="ns1blankspaceSearchMedium">');
+											aHTML.push('<table><tr>');
 											
-											aHTML.push('<tr><td style="text-align: right;">' +
-																'<span id="ns1blankspaceActionCalendarSave">Save</span>' +
-																'<span id="ns1blankspaceActionCalendarCancel">Cancel</span>' +
+											if (iActionID != -1)
+											{	
+												aHTML.push('<td style="text-align:left; padding-top:7px;">' +
+																'<span id="ns1blankspaceActionCalendarMore" class="ns1blankspaceAction">More</span>' +
+																'<td>');
+											}
+
+											aHTML.push('<td style="text-align:right; padding-top:7px;">' +
+																'<span id="ns1blankspaceActionCalendarSave" class="ns1blankspaceAction" style="margin-right:3px;">Save</span>' +
+																'<span id="ns1blankspaceActionCalendarCancel" class="ns1blankspaceAction">Cancel</span>' +
 																'<td></tr>');
 											
 											aHTML.push('</table>');						
@@ -1487,58 +1489,66 @@ ns1blankspace.action =
 										
 										var oElement = $('#ns1blankspaceMain')
 										
-										$('#ns1blankspaceDialog').html('');
-										$('#ns1blankspaceDialog').show();
-										$('#ns1blankspaceDialog').offset({ top: $(oElement).offset().top + $(oElement).height() + 5, left: $(oElement).offset().left });
-										$('#ns1blankspaceDialog').html(aHTML.join(''));
+										$('#ns1blankspaceMultiUseDialog').html('');
+										$('#ns1blankspaceMultiUseDialog').show();
+										$('#ns1blankspaceMultiUseDialog').offset({ top: $(oElement).offset().top - 2 , left: $(oElement).offset().left - 160 });
+										$('#ns1blankspaceMultiUseDialog').html(aHTML.join(''));
 										
 										$('#ns1blankspaceActionCalendarCancel').button(
-											{
-												text: false,
-												 icons: {
-													 primary: "ui-icon-close"
-												}
-											})
-											.click(function() {
-												$('#ns1blankspaceDialog').slideUp(500);
-												$('#ns1blankspaceDialog').html('');
-											})
-											.css('width', '20px')
-											.css('height', '20px')
+										{
+											label: 'Cancel'
+										})
+										.click(function()
+										{
+											$('#ns1blankspaceMultiUseDialog').slideUp(500);
+											$('#ns1blankspaceMultiUseDialog').html('');
+										});
+
+										$('#ns1blankspaceActionCalendarMore').button(
+										{
+											label: 'More'
+										})
+										.click(function()
+										{
+											$('#ns1blankspaceMultiUseDialog').slideUp(500);
+											$('#ns1blankspaceMultiUseDialog').html('');
+											ns1blankspace.action.init({id: iActionID})
+										});
 
 										$('#ns1blankspaceActionCalendarSave').button(
+										{
+											label: 'Save'
+										})
+										.click(function()
+										{
+											ns1blankspace.action.dialog.save(
 											{
-												text: false,
-												 icons: {
-													 primary: "ui-icon-check"
-												}
-											})
-											.click(function() {
-												ns1blankspace.action.container.save({
-														id: iActionID,
-														date: $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
-																	' ' + $.fullCalendar.formatDate(dStartDate, "HH:mm"),
-														endDate: $.fullCalendar.formatDate(dEndDate, "dd MMM yyyy") + 
-																	' ' + $.fullCalendar.formatDate(dEndDate, "HH:mm"),
-														subject: $('#inputActionCalendarAddSubject').val(),
-														description: $('#inputActionCalendarAddDescription').val(),
-														priority: ($('#inputActionCalendarAddHighPriority').attr('checked')?3:2),
-														calendarXHTMLElementID: 'divInterfaceMainCalendar'
-														});
-												
-												$('#ns1blankspaceDialog').slideUp(500);
-												$('#ns1blankspaceDialog').html('');
-
-											})
-											.css('width', '30px')
-											.css('height', '20px')
+												id: iActionID,
+												date: $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
+															' ' + $.fullCalendar.formatDate(dStartDate, "HH:mm"),
+												endDate: $.fullCalendar.formatDate(dEndDate, "dd MMM yyyy") + 
+															' ' + $.fullCalendar.formatDate(dEndDate, "HH:mm"),
+												subject: $('#ns1blankspaceActionCalendarSubject').val(),
+												description: $('#ns1blankspaceActionCalendarDescription').val(),
+												priority: ($('#ns1blankspaceActionCalendarHighPriority').attr('checked')?3:2),
+												calendarXHTMLElementID: 'ns1blankspaceMainCalendar'
+											});
+											
+											$('#ns1blankspaceMultiUseDialog').slideUp(500);
+											$('#ns1blankspaceMultiUseDialog').html('');
+										})
 										
 										if (oResponse != undefined)
 										{	
 											if (oResponse.data.rows.length != 0)
 											{	
-												$('#inputActionCalendarAddSubject').val(oResponse.data.rows[0].subject);
-												$('#inputActionCalendarAddDescription').val(oResponse.data.rows[0].description);
+												var oRow = oResponse.data.rows[0];
+												$('#ns1blankspaceActionCalendarSubject').val(oRow.subject);
+												$('#ns1blankspaceActionCalendarDescription').val(oRow.description);
+												$('#ns1blankspaceActionCalendarBusiness').attr('data-id', oRow.contactbusiness);
+												$('#ns1blankspaceActionCalendarBusiness').val(oRow.contactbusinesstext);
+												$('#ns1blankspaceActionCalendarPerson').attr('data-id', oRow.contactperson);
+												$('#ns1blankspaceActionCalendarPerson').val(oRow.contactpersontext);	
 											}	
 										}	
 									}
@@ -1549,12 +1559,12 @@ ns1blankspace.action =
 
 									if (oResponse == undefined)
 									{
-										var sData = '';
-										var iType = ns1blankspace.data.actionType.meeting;
+										var oData = {};
+										var iType = ns1blankspace.data.actionTypes.meeting.id;
 										var bAsync = true;
 										var iHours;
 										var sEndDate;
-										var iActionBy = ns1blankspace.action.user;
+										var iActionBy = ns1blankspace.user.id;
 										
 										if (oParam != undefined)
 										{
@@ -1565,38 +1575,39 @@ ns1blankspace.action =
 											if (oParam.actionBy != undefined) {iActionBy = oParam.actionBy}
 										}	
 										
-										sData += 'object=' + ns1blankspace.util.fs(oParam.object);
-										sData += '&objectcontext=' + ns1blankspace.util.fs(oParam.objectContext);
-										sData += '&subject=' + ns1blankspace.util.fs(oParam.subject);
-										sData += '&description=' + ns1blankspace.util.fs(oParam.description);
-										sData += '&priority=' + ns1blankspace.util.fs(oParam.description);
-										sData += '&status=' + ns1blankspace.util.fs(oParam.status);
-										sData += '&type=' + ns1blankspace.util.fs(iType);
-										sData += '&date=' + ns1blankspace.util.fs(oParam.date);
-										sData += '&actionby=' + ns1blankspace.util.fs(iActionBy);
-										sData += '&contactbusiness=' + ns1blankspace.util.fs(oParam.contactBusiness);
-										sData += '&contactperson=' + ns1blankspace.util.fs(oParam.contactPerson);
+										if (oParam.id != -1) {oData.id = oParam.id}
+										oData.object = oParam.object;
+										oData.objectcontext = oParam.objectContext;
+										oData.subject = oParam.subject;
+										oData.description = oParam.description;
+										oData.priority = oParam.priority;
+										oData.status = oParam.status;
+										oData.type = iType;
+										oData.date = oParam.date;
+										oData.actionby = iActionBy;
+										oData.contactbusiness = oParam.contactBusiness;
+										oData.contactperson = oParam.contactPerson;
 										
 										if (iHours != undefined)
 										{
-											sData += '&totaltimehours=' + ns1blankspace.util.fs(iHours);
+											oData.totaltimehours = iHours;
 										}
 										
 										if (sEndDate != undefined)
 										{
-											sData += '&enddate=' + ns1blankspace.util.fs(sEndDate);
+											oData.enddate = sEndDate;
 										}
 										
-										sData += (oParam.otherData == undefined ? '' : oParam.otherData)
+										//sData += (oParam.otherData == undefined ? '' : oParam.otherData)
 											  
 										$.ajax(
 										{
 											type: 'POST',
 											url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
-											data: sData,
+											data: oData,
 											dataType: 'json',
 											async: bAsync,
-											success: function(data) {ns1blankspace.action.container.save(oParam, data);}
+											success: function(data) {ns1blankspace.action.dialog.save(oParam, data);}
 										});
 									}
 									else	
@@ -1610,7 +1621,7 @@ ns1blankspace.action =
 											var dStartDate = new Date;
 											var dEndDate = dStartDate;
 											var sTitle = '';
-											var sXHTMLElementID;
+											var sXHTMLElementID = 'ns1blankspaceMainCalendar';
 											
 											if (oParam != undefined)
 											{
@@ -1656,9 +1667,9 @@ ns1blankspace.action =
 														
 									aHTML.push('</table>');						
 									
-									$('#ns1blankspaceDialog').html(aHTML.join(''));
+									$('#ns1blankspaceMultiUseDialog').html(aHTML.join(''));
 									
-									$('#ns1blankspaceDialog').dialog(
+									$('#ns1blankspaceMultiUseDialog').dialog(
 										{
 											width: 300,
 											resizable: false,
@@ -1672,7 +1683,7 @@ ns1blankspace.action =
 															},
 												"Add Note": function() 
 															{
-																ns1blankspace.action.container.save(
+																ns1blankspace.action.dialog.save(
 																{
 																	reference: '',
 																	description: $('#ns1blankspaceActionNoteDescription').val(),

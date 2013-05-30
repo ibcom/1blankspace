@@ -157,6 +157,7 @@ ns1blankspace.app =
 											'<div id="ns1blankspaceMain"></div>' +
 											'<div id="ns1blankspaceFooter"></div>' +
 											'<div id="ns1blankspaceMultiUseContainer"></div>' +
+											'<div id="ns1blankspaceMultiUseDialog"></div>' +
 											'</div>');
 					}		
 
@@ -960,7 +961,7 @@ ns1blankspace.app =
 					$('#ns1blankspaceViewControlAction').unbind('click');
 					$('#ns1blankspaceViewControlActionOptions').unbind('click');
 					$('#ns1blankspaceViewControlSetupOptions').unbind('click');
-					$('#nns1blankspaceViewControlHelp').unbind('click');
+					$('#ns1blankspaceViewControlHelp').unbind('click');
 					$('#ns1blankspaceViewControlHelpOptions').unbind('click');
 					$('td.ns1blankspaceViewControlBrowse').unbind('click');
 					$('td.ns1blankspaceViewControlBrowseAll').unbind('click');
@@ -1142,7 +1143,7 @@ ns1blankspace.app =
 											move: false
 										});	
 
-										if (typeof(oNS.home) === 'function') {oNS.home()} else {oNS.home.show()}
+										if (typeof(oNS.home) === 'function') {oNS.home(oParam)} else {oNS.home.show()}
 									}
 								}		
 							}

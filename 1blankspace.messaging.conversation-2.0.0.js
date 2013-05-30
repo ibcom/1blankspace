@@ -112,7 +112,7 @@ ns1blankspace.messaging.conversation =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
 						oSearch.addField('title');
-						oSearch.rows = 10;
+						oSearch.rows = 20;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(ns1blankspace.messaging.conversation.home);
 					}
@@ -308,12 +308,12 @@ ns1blankspace.messaging.conversation =
 										'Details</td></tr>');
 						}
 
+						aHTML.push('<tr><td id="ns1blankspaceControlParticipants" class="ns1blankspaceControl">' +
+										'Participants</td></tr>');
+
 						aHTML.push('</table>');
 						
 						aHTML.push('<table class="ns1blankspaceControl">');
-
-						aHTML.push('<tr><td id="ns1blankspaceControlParticipants" class="ns1blankspaceControl">' +
-										'Participants</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlPosts" class="ns1blankspaceControl">' +
 										'Posts</td></tr>');
@@ -1444,7 +1444,7 @@ ns1blankspace.messaging.conversation =
 
 										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
-										aHTML.push('<tr><td>' +
+										aHTML.push('<tr><td id="ns1blankspacePostDetailsSend_container">' +
 														'<span class="ns1blankspaceAction" id="ns1blankspacePostDetailsSend">Send</span>' +
 														'</td></tr>');
 																
@@ -1458,6 +1458,8 @@ ns1blankspace.messaging.conversation =
 										})
 										.click(function()
 										{
+											$('#ns1blankspacePostDetailsSend_container').html(ns1blankspace.xhtml.loadingSmall);
+
 											if ($('#oFile0').val() == '')
 											{
 												ns1blankspace.messaging.conversation.posts.send()
