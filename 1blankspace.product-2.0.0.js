@@ -668,9 +668,12 @@ ns1blankspace.product =
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'SETUP_PRODUCT_CATEGORY_SEARCH';
 							oSearch.addField('title');
-							oSearch.getResults(function(data) {
-									ns1blankspace.product.category(oParam, data)
-									});
+							oSearch.sort('title', 'ASC');
+							oSearch.rows = 100;
+							oSearch.getResults(function(data)
+							{
+								ns1blankspace.product.category(oParam, data)
+							});
 						}
 						else
 						{

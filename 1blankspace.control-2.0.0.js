@@ -575,7 +575,7 @@ ns1blankspace.views =
 		namespace: 'setup',
 		namesuffix: 'contactPersonGroup',
 		endpoint: "SETUP", 
-		show: false,
+		show: true,
 		group: 4,
 		type: 2,
 		param: {viewName: 'Person Groups', method: 'SETUP_CONTACT_PERSON_GROUP'}														
@@ -584,11 +584,21 @@ ns1blankspace.views =
 		title: 'Business Groups',
 		namespace: 'setup',
 		namesuffix: 'contactBusinessGroup',
-		endpoint: "SUPPORT", 
-		show: false,
+		endpoint: "SETUP", 
+		show: true,
 		group: 4,
 		type: 2,
 		param: {viewName: 'Business Groups', method: 'SETUP_CONTACT_BUSINESS_GROUP'}														
+	},
+	{
+		title: 'Product Categories',
+		namespace: 'setup',
+		namesuffix: 'productCategory',
+		endpoint: "SETUP", 
+		show: true,
+		group: 4,
+		type: 2,
+		param: {viewName: 'Product Categories', method: 'SETUP_PRODUCT_CATEGORY'}														
 	},
 	{
 		title: "Project Templates",
@@ -1287,7 +1297,7 @@ ns1blankspace.control =
 																				'Financials</span></td></tr>');
 														}
 
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Businesses';})[0];
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Business Groups';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
 															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
@@ -1296,13 +1306,22 @@ ns1blankspace.control =
 																				'Business&nbsp;Groups</span></td></tr>');
 														}
 
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'People';})[0];
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Person Groups';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
 															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
 																				'<td class="ns1blankspaceViewControl">' +
 																				'<span id="ns1blankspaceViewControl_setup_contactPersonGroup" class="ns1blankspaceViewControl">' +
 																				'Person&nbsp;Groups</span></td></tr>');
+														}
+
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Product Categories';})[0];
+														if (oViewport ? oViewport.show : false)
+														{
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_setup_productCategory" class="ns1blankspaceViewControl">' +
+																				'Product&nbsp;Categories</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Templates';})[0];

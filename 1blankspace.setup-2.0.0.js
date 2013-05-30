@@ -221,7 +221,7 @@ $.extend(true, ns1blankspace.setup,
 											{
 												type: 'GET',
 												url: ns1blankspace.util.endpointURI(ns1blankspace.setup.method + '_SEARCH'),
-												data: 'title=' + sSearchText,
+												data: 'rows=100&title=' + sSearchText,
 												dataType: 'json',
 												success: interfaceSetupSearchShow
 											});
