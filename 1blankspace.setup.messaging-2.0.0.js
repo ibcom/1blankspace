@@ -27,7 +27,7 @@ ns1blankspace.setup.messaging =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home: 		function (oResponse)
+	home: 		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -61,7 +61,7 @@ ns1blankspace.setup.messaging =
 						oSearch.addFilter('type', 'EQUAL_TO', 5);
 						oSearch.rows = 50;
 						oSearch.sort('email', 'asc');
-						oSearch.getResults(ns1blankspace.setup.messaging.home);
+						oSearch.getResults(function (data) {ns1blankspace.setup.messaging.home(oParam, data)});
 					}
 					else
 					{

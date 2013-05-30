@@ -28,7 +28,7 @@ ns1blankspace.setup.websiteForm =
 					});
 				},
 
-	home: 		function (oResponse)
+	home: 		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -60,7 +60,7 @@ ns1blankspace.setup.websiteForm =
 							url: ns1blankspace.util.endpointURI('SETUP_SITE_FORM_SEARCH'),
 							data: 'recent=1',
 							dataType: 'json',
-							success: ns1blankspace.setup.websiteForm.home
+							success: function (data) {ns1blankspace.setup.websiteForm.home(oParam, data)}
 						});
 					}
 					else

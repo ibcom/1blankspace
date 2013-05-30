@@ -60,7 +60,7 @@ ns1blankspace.financial.receipt =
 					}
 				},	
 
-	home: 		function (oResponse)
+	home: 		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -90,7 +90,7 @@ ns1blankspace.financial.receipt =
 						oSearch.addField('reference,description,contactbusinessreceivedfromtext,contactpersonreceivedfromtext,receiveddate,amount');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(ns1blankspace.financial.receipt.home);
+						oSearch.getResults(function (data) {ns1blankspace.financial.receipt.home(oParam, data)});
 					}
 					else
 					{

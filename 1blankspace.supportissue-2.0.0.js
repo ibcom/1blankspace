@@ -26,7 +26,7 @@ ns1blankspace.supportIssue =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home: 		function (oResponse)
+	home: 		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -58,7 +58,7 @@ ns1blankspace.supportIssue =
 							url: ns1blankspace.util.endpointURI('SUPPORT_ISSUE_SEARCH'),
 							data: 'byme=1&status=1,2,6&rows=30',
 							dataType: 'json',
-							success: ns1blankspace.supportIssue.home
+							success: function (data) {ns1blankspace.supportIssue.home(oParam, data)}
 						});
 					}
 					else

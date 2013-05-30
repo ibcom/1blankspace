@@ -23,7 +23,7 @@ ns1blankspace.developer.membership =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function (oResponse)
+	home:		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{	
@@ -53,7 +53,7 @@ ns1blankspace.developer.membership =
 							url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SEARCH'),
 							data: 'rows=100&me=1',
 							dataType: 'json',
-							success: ns1blankspace.developer.membership.home
+							success: function (data) {ns1blankspace.developer.membership.home(oParam, data)}
 						});		
 					}
 					else

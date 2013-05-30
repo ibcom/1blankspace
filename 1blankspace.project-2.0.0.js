@@ -19,7 +19,7 @@ ns1blankspace.project =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home: 		function (oResponse)
+	home: 		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -53,7 +53,7 @@ ns1blankspace.project =
 						oSearch.rf = 'json';
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(ns1blankspace.project.home);		
+						oSearch.getResults(function (data) {ns1blankspace.project.home(oParam, data)});		
 					}
 					else
 					{

@@ -27,7 +27,7 @@ ns1blankspace.stucture =
 					});
 				},
 
-	home:		function (oResponse)
+	home:		function (oParam, oResponse)
 				{
 
 					if (oResponse == undefined)
@@ -59,7 +59,7 @@ ns1blankspace.stucture =
 						oSearch.addField('title');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(ns1blankspace.structure.home)		
+						oSearch.getResults(function (data) {ns1blankspace.structure.home(oParam, data)})		
 					}
 					else
 					{

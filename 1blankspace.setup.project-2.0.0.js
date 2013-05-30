@@ -19,7 +19,7 @@ ns1blankspace.setup.project =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function (oResponse)
+	home:		function (oParam, oResponse)
 				{
 					if (oResponse === undefined)
 					{						
@@ -40,7 +40,7 @@ ns1blankspace.setup.project =
 						oSearch.addField('reference,description');
 						oSearch.rows = 10;
 						oSearch.addFilter('template', 'EQUAL_TO', 'Y');	
-						oSearch.getResults(ns1blankspace.setup.project.home);
+						oSearch.getResults(function (data) {ns1blankspace.setup.project.home(oParam, data)});
 					}
 					else
 					{

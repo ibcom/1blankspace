@@ -37,7 +37,7 @@ ns1blankspace.setup.financial =
 					}
 				},
 
-	home:		function (oResponse)
+	home:		function (oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					$('#ns1blankspaceViewControlAction').button({disabled: false});
@@ -170,8 +170,6 @@ ns1blankspace.setup.financial =
 						ns1blankspace.show({selector: '#ns1blankspaceMainPayroll'});
 						ns1blankspace.setup.financial.payroll();
 					});
-					
-					///ondemand/setup/setup.asp
 
 					$.ajax(
 					{

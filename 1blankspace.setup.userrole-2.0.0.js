@@ -21,7 +21,7 @@ ns1blankspace.setup.userRole =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home: 		function (oResponse)
+	home: 		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -52,7 +52,7 @@ ns1blankspace.setup.userRole =
 						oSearch.addField('title');
 						oSearch.rows = 50;
 						oSearch.sort('title', 'asc');
-						oSearch.getResults(ns1blankspace.setup.userRole.home);
+						oSearch.getResults(function (data) {ns1blankspace.setup.userRole.home(oParam, data)});
 					}
 					else
 					{

@@ -25,7 +25,7 @@ ns1blankspace.setup.automation =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function (oResponse)
+	home:		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -71,7 +71,7 @@ ns1blankspace.setup.automation =
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('SETUP_AUTOMATION_SEARCH'),
 							dataType: 'json',
-							success: ns1blankspace.setup.automation.home
+							success: function (data) {ns1blankspace.setup.automation.home(oParam, data)}
 						});
 					}
 					else

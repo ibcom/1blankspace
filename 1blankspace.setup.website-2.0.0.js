@@ -28,7 +28,7 @@ ns1blankspace.setup.website =
 					});
 				},
 
-	home:		function (oResponse)
+	home:		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -71,7 +71,7 @@ ns1blankspace.setup.website =
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('SETUP_SITE_SEARCH') + '&rows=50',
 							dataType: 'json',
-							success: ns1blankspace.setup.website.home
+							success: function (data) {ns1blankspace.setup.website.home(oParam, data)}
 						});
 						
 					}

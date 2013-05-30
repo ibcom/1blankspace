@@ -23,7 +23,7 @@ ns1blankspace.developer.space =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home:		function (oResponse)
+	home:		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{	
@@ -54,7 +54,7 @@ ns1blankspace.developer.space =
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('ADMIN_REGISTRATION_SEARCH'),
 							dataType: 'json',
-							success: ns1blankspace.developer.space.home
+							success: function (data) {ns1blankspace.developer.space.home(oParam, data)}
 						});
 					}
 					else

@@ -85,7 +85,7 @@ ns1blankspace.financial.credit =
 					}
 				},
 
-	home: 		function (oResponse)
+	home: 		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -115,7 +115,7 @@ ns1blankspace.financial.credit =
 						oSearch.addField('reference,contactbusinesstext,amount,notes,type,typetext,creditdate');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(ns1blankspace.financial.credit.home);
+						oSearch.getResults(function(data) {ns1blankspace.financial.credit.home(oParam, data)});
 					}
 					else
 					{

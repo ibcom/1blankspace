@@ -63,7 +63,7 @@ ns1blankspace.financial.expense =
 					}
 				},
 
-	home: 		function (oResponse)
+	home: 		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -94,7 +94,7 @@ ns1blankspace.financial.expense =
 						oSearch.addField('reference,description,amount,accrueddate,contactbusinesspaidtotext,contactpersonpaidtotext');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(ns1blankspace.financial.expense.home);
+						oSearch.getResults(function (data) {ns1blankspace.financial.expense.home(oParam, data)});
 					}
 					else
 					{

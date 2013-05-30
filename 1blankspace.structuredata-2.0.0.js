@@ -18,7 +18,7 @@ ns1blankspace.stuctureData =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home: 		function (oResponse)
+	home: 		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -51,7 +51,7 @@ ns1blankspace.stuctureData =
 						oSearch.addField('reference');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(ns1blankspace.structureData.home)
+						oSearch.getResults(function (data) {ns1blankspace.structureData.home(oParam, data)})
 					}
 					else
 					{
