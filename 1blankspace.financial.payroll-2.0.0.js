@@ -344,7 +344,7 @@ ns1blankspace.financial.payroll =
 						
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.startdate +
 							'<br /><span id="ns1blankspaceSub_frequency" class="ns1blankspaceSub">to</span> ' + ns1blankspace.objectContextData.paydate +
-							'<br /><span id="ns1blankspaceSub_frequency" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.frequencytext + '</span>');
+							'<br /><span id="ns1blankspaceSub_frequency" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.frequencytext + ' pay</span>');
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
@@ -2152,7 +2152,7 @@ ns1blankspace.financial.payroll =
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
-							oSearch.addField('grosssalary,payrecord.employee.contactpersontext');
+							oSearch.addField('reference,grosssalary,payrecord.employee.contactperson.firstname,payrecord.employee.contactperson.surname');
 							oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext)
 							oSearch.rows = 200;
 							oSearch.sort('payrecord.employee.contactpersontext', 'asc');
@@ -2163,9 +2163,8 @@ ns1blankspace.financial.payroll =
 							if (oResponse.data.rows.length == 0)
 							{
 								aHTML.push('<table><tr>' + 
-										'<td class="ns1blankspaceNothing">No pay runs.</td>' + 
-										'</tr>' +
-										'</table>');
+												'<td class="ns1blankspaceNothing">No pay runs.</td>' + 
+												'</tr></table>');
 							}
 							else
 							{
@@ -2177,7 +2176,20 @@ ns1blankspace.financial.payroll =
 									
 									aHTML.push('<td id="ns1blankspacePayrollPay_name-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
 															' data-employeeText="' + this["payrecord.employee.contactpersontext"] + '">' +
-															this["payrecord.employee.contactpersontext"] + '</td>');
+															this["payrecord.employee.contactperson.firstname"] + 
+															' ' + this["payrecord.employee.contactperson.surname"]);
+
+									if (this["reference"] != '')
+									{
+										aHTML.push('<br /><span class="ns1blankspaceSubNote">' + this["reference"] + '</span>');
+									}
+
+									if (this["grosssalary"] != '')
+									{
+										aHTML.push('<br /><span class="ns1blankspaceSubNote">$' + this["grosssalary"] + '</span>');
+									}
+									
+									aHTML.push('</td>');
 														
 									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 													'<span id="ns1blankspacePayrollPay_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
