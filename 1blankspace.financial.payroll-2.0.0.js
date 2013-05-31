@@ -1706,7 +1706,7 @@ ns1blankspace.financial.payroll =
 																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateEndDate" class="ns1blankspaceDate">' +
 																	'</td></tr>');
 
-													aHTML.push('<tr><td class="ns1blankspaceCaption">Rate ($)</td></tr>' +
+													aHTML.push('<tr><td class="ns1blankspaceCaption">Rate / Hour ($)</td></tr>' +
 																	'<tr><td>' +
 																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateAmount" class="ns1blankspaceText">' +
 																	'</td></tr>');				
@@ -1728,9 +1728,37 @@ ns1blankspace.financial.payroll =
 																	'<tr><td>' +
 																	'<span style="width:70px;" id="ns1blankspacePayrollEmployeeDetailsPayRate_options_cancel" class="ns1blankspaceAction">Cancel</span>' +
 																	'</td></tr>' +
-																	'</table>');	
+																	'</table>');
+
+													aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.75em; background-color:#F3F3F3; margin-top:15px; border:0px; padding-left:5px;">' +
+																	'<tr><td class="ns1blankspaceSub" style="padding-top:8px;">' +
+																	'Annual Wage' +
+																	'</td></tr>' +
+																	'<tr><td style="padding-right:13px;">' +
+																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateAnnualAmount" class="ns1blankspaceText">' +
+																	'</td></tr>' +
+																	'<tr><td class="ns1blankspaceSub" style="padding-top:5px;">' +
+																	'Hours per week' +
+																	'</td></tr>' +
+																	'<tr><td style="padding-right:13px;">' +
+																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateHoursPerWeek" class="ns1blankspaceText">' +
+																	'</td></tr>' +
+																	'</table>');			
 
 													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn2').html(aHTML.join(''));
+
+													$('#ns1blankspacePayrollEmployeeDetailsPayRateAnnualAmount, #ns1blankspacePayrollEmployeeDetailsPayRateHoursPerWeek').keyup(function ()
+													{
+														var cAnnual = $('#ns1blankspacePayrollEmployeeDetailsPayRateAnnualAmount').val();
+														var cHoursWeek = $('#ns1blankspacePayrollEmployeeDetailsPayRateHoursPerWeek').val();
+
+														if (cHoursWeek == '') {cHoursWeek = 0}
+
+														if (cHoursWeek != 0)
+														{
+															$('#ns1blankspacePayrollEmployeeDetailsPayRateAmount').val(ns1blankspace.util.toFixed(cAnnual / (52 * cHoursWeek)))
+														}	
+													});
 
 													$('#ns1blankspacePayrollEmployeeDetailsPayRate_options_save').button(
 													{
