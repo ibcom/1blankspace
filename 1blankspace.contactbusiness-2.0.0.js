@@ -1438,7 +1438,8 @@ ns1blankspace.contactBusiness =
 															oRow.email + '</td>');												
 																													
 									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-									aHTML.push('<span id="ns1blankspaceContactBusinessPeople_options_view-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceContactBusinessPeopleRowSelect"></span>');
+									aHTML.push('<span id="ns1blankspaceContactBusinessPeople_options_view-' + oRow.id +
+													'" class="ns1blankspaceRowSelect ns1blankspaceContactBusinessPeopleRowSelect"></span>');
 									aHTML.push('</td>');
 																							
 									aHTML.push('</tr>');	
