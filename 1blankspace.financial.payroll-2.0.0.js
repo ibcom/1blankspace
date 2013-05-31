@@ -2135,7 +2135,7 @@ ns1blankspace.financial.payroll =
 								})
 								.click(function()
 								{
-									$.extend(true, oParam, {step: 7, xhtmlElementID: ''});
+									$.extend(true, oParam, {step: 11, xhtmlElementID: ''});
 									ns1blankspace.financial.payroll.pays(oParam);
 								})
 							}
@@ -2188,9 +2188,11 @@ ns1blankspace.financial.payroll =
 									text: false,
 								 	icons: {primary: "ui-icon-close"}
 								})
-								.click(function() {
-									$.extend(true, oParam, {step: 5, xhtmlElementID: event.target.id});
-									ns1blankspace.financial.payroll.pays(this.id)
+								.click(function()
+								{
+									var aXHTMLElementID = (this.id).split('-');
+									$.extend(true, oParam, {step: 12, pay: aXHTMLElementID[1]});
+									ns1blankspace.financial.payroll.pays(oParam)
 								})
 								.css('width', '15px')
 								.css('height', '20px')
@@ -2404,7 +2406,8 @@ ns1blankspace.financial.payroll =
 									text: false,
 								 	icons: {primary: "ui-icon-close"}
 								})
-								.click(function() {
+								.click(function()
+								{
 									$.extend(true, oParam, {step: 6, xhtmlElementID: this.id});
 									ns1blankspace.financial.payroll.pays(oParam)
 								})
@@ -2805,7 +2808,8 @@ ns1blankspace.financial.payroll =
 									url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_RECORD_MANAGE'),
 									data: sData,
 									dataType: 'json',
-									success: function(data) {
+									success: function(data)
+									{
 										if (data.status == "OK")
 										{
 											ns1blankspace.status.message('Saved');
@@ -2818,8 +2822,34 @@ ns1blankspace.financial.payroll =
 										}
 									}
 								});
-							});
+							})
+							.css('height', '18px');
 						}
+					}
+
+					else if (iStep == 12)
+					{
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_RECORD_MANAGE'),
+							data: 'remove=1&id=' + iPay,
+							dataType: 'json',
+							success: function(data)
+							{
+								if (data.status == 'OK')
+								{
+									ns1blankspace.status.message('Removed');
+									oParam.step = 1;
+									oParam.pay = undefined;
+									ns1blankspace.financial.payroll.pays(oParam);
+								}
+								else
+								{
+									ns1blankspace.status.error(data.error.errornotes);
+								}
+							}
+						});
 					}		
 				}
 }
