@@ -3644,7 +3644,17 @@ ns1blankspace.util =
 					sValue = (sValue).replace(/\r\n/g, '<br />');
 
   					return sValue;
-  				},		
+  				},
+
+  	toFixed: 	function (sValue)
+				{
+					if (sValue == '' || sValue === undefined)
+					{	
+						sValue = 0;
+					}
+					
+					return parseFloat(sValue).toFixed(2);	
+				},			
 
   	getMethod: 
   				function getM ()

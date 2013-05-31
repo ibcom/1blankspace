@@ -7,6 +7,8 @@
 
 ns1blankspace.financial.payroll = 
 {
+	data: 		{context: 'pays'},
+
 	init: 		function (oParam)
 				{
 					var bInitialised = false;
@@ -39,12 +41,14 @@ ns1blankspace.financial.payroll =
 
 					$('#ns1blankspaceViewControlNew').click(function(event)
 					{
-						ns1blankspace.financial.payroll.new.show();
+						ns1blankspace.financial.payroll.home({new: true});
 					});
 				},
 
 	home:		function (oParam, oResponse)
 				{		
+					var bNew = ns1blankspace.util.getParam(oParam, 'new', {default: false}).value;
+
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
@@ -53,25 +57,25 @@ ns1blankspace.financial.payroll =
 
 						aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 							
-						aHTML.push('<tr>' +
-										'<td id="ns1blankspaceControlPayRuns" class="ns1blankspaceControl ns1blankspaceHighlight">Pay Runs</td>' +
-										'</tr>');			
+						aHTML.push('<tr><td id="ns1blankspaceControl-pays" class="ns1blankspaceControl">' +
+										'Pay Runs</td></tr>');			
 								
-						aHTML.push('<tr>' +
-										'<td id="ns1blankspaceControlEmployees" class="ns1blankspaceControl">Employees</td>' +
-										'</tr>');	
+						aHTML.push('<tr><td id="ns1blankspaceControl-employees" class="ns1blankspaceControl">' +
+										'Employees</td></tr>');	
 									
 						aHTML.push('</table>');		
 						
-						$('#ns1blankspaceControl').html(aHTML.join(''));	
+						$('#ns1blankspaceControl').html(aHTML.join(''));
+
+						$('#ns1blankspaceControl-' + ns1blankspace.financial.payroll.data.context).addClass('ns1blankspaceHighlight');
 						
-						$('#ns1blankspaceControlPayRuns').click(function(event)
+						$('#ns1blankspaceControl-pays').click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainPayRun', refresh: true});
 							ns1blankspace.financial.payroll.home();
 						});
 					
-						$('#ns1blankspaceControlEmployees').click(function(event)
+						$('#ns1blankspaceControl-employees').click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainEmployee', refresh: true});
 							ns1blankspace.financial.payroll.employees.show();
@@ -85,16 +89,25 @@ ns1blankspace.financial.payroll =
 
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 					
-						$('#ns1blankspaceMainPayRun').html(ns1blankspace.xhtml.loading);
+						if (bNew)
+						{
+							ns1blankspace.financial.payroll.new.show();
+						}	
+						else
+						{
+							ns1blankspace.financial.payroll.data.context = 'pays';
 
-						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-						
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
-						oSearch.addField('startdate,paydate,statustext');
-						oSearch.rows = 10;
-						oSearch.sort('paydate', 'desc');
-						oSearch.getResults(function(data){ns1blankspace.financial.payroll.home(oParam, data)});		
+							$('#ns1blankspaceMainPayRun').html(ns1blankspace.xhtml.loading);
+
+							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+							
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
+							oSearch.addField('startdate,paydate,statustext');
+							oSearch.rows = 10;
+							oSearch.sort('paydate', 'desc');
+							oSearch.getResults(function(data){ns1blankspace.financial.payroll.home(oParam, data)});
+						}	
 					}
 					else
 					{
@@ -329,8 +342,8 @@ ns1blankspace.financial.payroll =
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
-						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.paydate +
-							'<br /><span id="ns1blankspaceSub_startdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.startdate + '</span>' +
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.startdate +
+							'<br /><span id="ns1blankspaceSub_frequency" class="ns1blankspaceSub">to</span> ' + ns1blankspace.objectContextData.paydate +
 							'<br /><span id="ns1blankspaceSub_frequency" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.frequencytext + '</span>');
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
@@ -410,15 +423,8 @@ ns1blankspace.financial.payroll =
 						{
 						})
 						.click(function()
-							{
-								$.ajax(
-								{
-									type: 'POST',
-									url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_PERIOD_MANAGE'),
-									data: 'status=2&id=' + ns1blankspace.objectContext,
-									dataType: 'json',
-									success: function() {ns1blankspace.financial.payroll.search.send('-' + ns1blankspace.objectContext)}
-								});
+						{
+							ns1blankspace.financial.payroll.complete({step: 1});
 						});
 					}							
 				},
@@ -584,7 +590,7 @@ ns1blankspace.financial.payroll =
 									var aHTML = [];
 									var h = -1;
 
-									if ($('#ns1blankspaceControlPayRuns').hasClass('ns1blankspaceHighlight'))
+									if (ns1blankspace.financial.payroll.data.context == 'pays')
 									{
 										aHTML.push('<table><tr>' + 
 														'<td class="ns1blankspaceNothing">Just checking that you really want to create the next pay period.<br /><br />If you do, then please click Next.</td>' + 
@@ -794,6 +800,8 @@ ns1blankspace.financial.payroll =
 									//EMPLOYEES LIST
 									if (iStep == 1)	
 									{
+										ns1blankspace.financial.payroll.data.context = 'employees';
+
 										var aHTML = [];
 
 										aHTML.push('<table class="ns1blankspaceContainer">' +
@@ -2102,6 +2110,8 @@ ns1blankspace.financial.payroll =
 					//PAY RECORDS
 					if (iStep == 1)
 					{
+						ns1blankspace.financial.payroll.data.context = 'pays';
+
 						var aHTML = [];
 						
 						if (oResponse == undefined)
@@ -2230,7 +2240,7 @@ ns1blankspace.financial.payroll =
 							
 							var aHTML = [];
 							
-							if (ns1blankspace.objectContextData.status == "2") 
+							if (ns1blankspace.objectContextData.status == "3") 
 							{
 								aHTML.push('<div id="ns1blankspaceFinancialPayrollColumnItemType" style="width: 200px;margin-bottom:3px;">');
 								aHTML.push('<input style="width: 95px;" type="radio" id="ns1blankspaceFinancialPayrollColumnItemType-3" name="radioType" checked="checked" />' +
@@ -2333,11 +2343,27 @@ ns1blankspace.financial.payroll =
 							{
 								aHTML.push('<tr class="ns1blankspaceCaption">' +
 												'<td class="ns1blankspaceNothing">This pay has been completed.</td></tr>');
+
+								aHTML.push('<tr><td id="ns1blankspaceFinancialPayrollExpenses_container" style="padding-top:12px;">' +
+											'<span id="ns1blankspaceFinancialPayrollExpenses" class="ns1blankspaceAction">Expenses</span>' +
+											'</td></tr>');
 							}				
 															
 							aHTML.push('</table>');					
 							
 							$('#ns1blankspacePayrollPayRunColumn3').html(aHTML.join(''));						
+
+							$('#ns1blankspaceFinancialPayrollExpenses').button(
+							{
+								label: "Show Expenses"
+							})
+							.click(function()
+							{
+								$('#ns1blankspacePayrollPayRunColumn3').html(ns1blankspace.xhtml.loadingSmall);
+								$.extend(true, oParam, {step: 10, xhtmlElementID: ""});
+								ns1blankspace.financial.payroll.pays(oParam);
+							}).
+							css('width', '90px');
 
 							$('#ns1blankspaceFinancialPayrollAdd').button(
 							{
@@ -2381,11 +2407,11 @@ ns1blankspace.financial.payroll =
 								{
 									aHTML.push('<tr class="ns1blankspaceRow">');
 										
-									aHTML.push('<td id="ns1blankspaceFinancialPayPeriodItem_type-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSelect">' +
+									aHTML.push('<td id="ns1blankspaceFinancialPayPeriodItem_type-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSelect ns1blankspaceRowSelect">' +
 															this["typetext"] + '</td>');
 
 									var cHours = parseFloat(this["hours"]);
-									aHTML.push('<td id="ns1blankspaceFinancialPayPeriodItem_hours-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect" style="text-align:right;">' +
+									aHTML.push('<td id="ns1blankspaceFinancialPayPeriodItem_hours-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 															 cHours.toFixed(2) + '</td>');						
 													
 									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
@@ -2525,6 +2551,7 @@ ns1blankspace.financial.payroll =
 								success: function(data) {
 									if (data.status == "OK")
 									{
+										ns1blankspace.inputDetected = false;
 										$.extend(true, oParam, {step: 7});
 										ns1blankspace.financial.payroll.pays(oParam)
 									}
@@ -2568,7 +2595,7 @@ ns1blankspace.financial.payroll =
 						if (oResponse.data.rows.length != 0)
 						{
 							var oObjectContext = oResponse.data.rows[0];
-							$('#ns1blankspacePayrollItemHours').val(oObjectContext.hours);	
+							$('#ns1blankspacePayrollItemHours').val(ns1blankspace.util.toFixed(oObjectContext.hours));	
 							$('[name="radioItemType"][value="' + oObjectContext.type + '"]').attr('checked', true);
 							$('#ns1blankspacePayrollItemHours').focus();
 							$('#ns1blankspacePayrollItemHours').select();
@@ -2660,20 +2687,20 @@ ns1blankspace.financial.payroll =
 						{
 							var aHTML = [];
 					
-							aHTML.push('<table id="ns1blankspaceFinancialPayrollExpenses" class="ns1blankspace">');
+							aHTML.push('<table id="ns1blankspaceFinancialPayrollExpenses" class="ns1blankspaceColumn2">');
 						
 							if (oResponse.data.rows.length == 0)
 							{
 								aHTML.push('<tr class="ns1blankspaceCaption">' +
-												'<td class="ns1blankspaceNothing">No expenses.</td></tr>');
+												'<td class="ns1blankspaceSubNote">No expenses</td></tr>');
 								aHTML.push('</table>');
 							}
 							else
 							{		
 								aHTML.push('<tr class="ns1blankspaceCaption">');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">Expenses</td>');
 								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+		
 								aHTML.push('</tr>');
 								
 								$(oResponse.data.rows).each(function()
@@ -2681,37 +2708,30 @@ ns1blankspace.financial.payroll =
 									aHTML.push('<tr class="ns1blankspaceRow">');
 										
 									aHTML.push('<td id="ns1blankspaceFinancialPayPeriodExpenseItem_Description-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-															this["description"] + '</td>');
+															this["description"]);
 
-									aHTML.push('<td id="ns1blankspaceFinancialPayPeriodExpenseItem_Amount-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect" style="text-align:right;">' +
-															 parseFloat(this["amount"]).toFixed(2) + '</td>');						
-													
-									aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">');
-									aHTML.push('<span id="ns1blankspaceFinancialPayExpenseItem_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
-									aHTML.push('</td>');					
-																												
+									aHTML.push('<div id="ns1blankspaceFinancialPayPeriodExpenseItem_Amount-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceSub" style="text-align:right;">' +
+															 parseFloat(this["amount"]).toFixed(2) + '</div></td>');						
+																																
 									aHTML.push('</tr>');
 								});	
 							}
 								
 							aHTML.push('</table>');
 						
-							$('#ns1blankspaceFinancialPayrollColumnItem').html(aHTML.join(''));
+							$('#ns1blankspacePayrollPayRunColumn3').html(aHTML.join(''));
 
-							if (ns1blankspace.objectContextData.status == "1")
+							$('#ns1blankspaceFinancialPayrollExpenses .ns1blankspaceRowSelect').button(
 							{
-								$('#ns1blankspaceFinancialPayrollExpenses .ns1blankspaceRowRemove').button(
-								{
-									text: false,
-								 	icons: {primary: "ui-icon-close"}
-								})
-								.click(function() {
-									$.extend(true, oParam, {step: 5, xhtmlElementID: event.target.id});
-									ns1blankspace.financial.payroll.pays(this.id)
-								})
-								.css('width', '15px')
-								.css('height', '20px')
-							}
+								text: false,
+							 	icons: {primary: "ui-icon-close"}
+							})
+							.click(function() {
+								$.extend(true, oParam, {step: 5, xhtmlElementID: event.target.id});
+								ns1blankspace.financial.payroll.pays(this.id)
+							})
+							.css('width', '15px')
+							.css('height', '20px');
 						}
 					}
 
@@ -2851,5 +2871,49 @@ ns1blankspace.financial.payroll =
 							}
 						});
 					}		
-				}
+				},
+
+	complete: 	function(oParam, oResponse)
+				{
+					ns1blankspace.status.working('Completing...');
+
+					var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+
+					if (iStep == 1)
+					{	
+						if (ns1blankspace.financial.data.settings.payrollcreateexpenses == 'Y')
+						{
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_CREATE_EXPENSES'),
+								data: 'period=' + ns1blankspace.objectContext,
+								dataType: 'json',
+								success: function(data)
+								{
+									if (data.status == 'OK')
+									{	
+										ns1blankspace.financial.payroll.complete({step: 3})
+									}
+								}	
+							});
+						}
+						else
+						{
+							ns1blankspace.financial.payroll.complete({step: 3})
+						}
+					}
+
+					if (iStep == 3)
+					{
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_PERIOD_MANAGE'),
+							data: 'status=2&id=' + ns1blankspace.objectContext,
+							dataType: 'json',
+							success: function() {ns1blankspace.financial.payroll.search.send('-' + ns1blankspace.objectContext)}
+						});
+					}	
+				}		
 }
