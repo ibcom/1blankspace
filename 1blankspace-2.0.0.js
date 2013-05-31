@@ -2460,15 +2460,23 @@ ns1blankspace.help =
 
 ns1blankspace.status =
 {
-	clear: 		function (sStatus)
+	clear: 		function ()
 				{	
 					$('#ns1blankspaceViewControlActionStatus').html('&nbsp;');
 				},
 
-	message: 	function (sStatus)
+	message: 	function (sStatus, oParam)
 				{	
+					var bTimeout = ns1blankspace.util.getParam(oParam, 'timeout', {default: true}).value;
+					var iDuration = ns1blankspace.util.getParam(oParam, 'duration', {default: 6000}).value;
+
 					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
-							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
+							'<div id="ns1blankspaceViewControlActionStatusMessage" style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
+
+					if (bTimeout)
+					{
+						window.setTimeout('$("#ns1blankspaceViewControlActionStatusMessage").fadeOut(3000)', iDuration);
+					}	
 				},
 
 	working:	function (sStatus)
