@@ -463,7 +463,7 @@ ns1blankspace.report =
 						aHTML.push('<table id="tableInterfaceViewportMain" class="interfaceViewportMain">');
 						aHTML.push('<tr id="trInterfaceViewportMain" class="interfaceViewportMain">' +
 										'<td class="ns1blankspaceSub">' +
-										'Select a search type from left.' + 
+										'Select a search option.' + 
 										'</td>' +
 										'</tr>');
 						aHTML.push('</table>');					
@@ -617,10 +617,10 @@ ns1blankspace.report =
 						{
 							aHTML.push('<div id="ns1blankspaceReportHeader">' + ns1blankspace.xhtml.loading + '</div>');
 							aHTML.push('<div id="ns1blankspaceReportSearch"></div>');
-							aHTML.push('<div style="display:none;" id="ns1blankspaceReportResults">No results.</div>');
-							aHTML.push('<div style="display:none;" id="ns1blankspaceReportExport">No data to export.</div>');
-							aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate">No data to update.</div>');
-							aHTML.push('<div style="display:none;" id="ns1blankspaceReportSend">No data to send.</div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportResults"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to show</div></div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportExport"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to export</div></div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to update</div></div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportSend"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to email</div></div>');
 							$('#ns1blankspaceReport').html(aHTML.join(''));	
 						}
 						
@@ -689,7 +689,7 @@ ns1blankspace.report =
 							aHTML.push('<table style="margin-bottom:0px;border-bottom-style:solid;border-width: 1px;border-color:#E8E8E8;" class="ns1blankspace">');
 							aHTML.push('<tr><td>' + 
 												'<div id="ns1blankspaceReportHeaderOptions">' + 
-												'<input id="radioReport-Search" name="radioOptions" type="radio" checked="checked"/><label style="font-size:0.875em;"  for="radioReport-Search">Filter</label>' +
+												'<input id="radioReport-Search" name="radioOptions" type="radio" checked="checked"/><label style="font-size:0.875em;"  for="radioReport-Search">Select</label>' +
 												'<input id="radioReport-Results" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Results">Results</label>' +
 												'<input id="radioReport-Update" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;"  for="radioReport-Update">Update</label>' +
 												'<input id="radioReport-Export" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;"  for="radioReport-Export">Export</label>' +
@@ -746,7 +746,7 @@ ns1blankspace.report =
 								});	
 							}
 							
-							aHTML.push('<tr><td colspan=2 style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Select</td>' +
+							aHTML.push('<tr><td colspan=2 style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Include</td>' +
 											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Comparison</td>' +
 											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;"><span id="spanReportSearch" class="ns1blankspaceAction">Search</span></td></tr>');
 							
@@ -931,7 +931,7 @@ ns1blankspace.report =
 											aHTML.push( '"' +
 														' data-searchRelatedField="' + sSearchRelatedField + '"' +
 														sMoreAttributes + 
-														'  class="ns1blankspaceReportComparison class="ns1blankspaceRow"></td>');
+														'  class="ns1blankspaceReportComparison ns1blankspaceRow"></td>');
 																
 											aHTML.push('<td id="ns1blankspaceReport_input-' + sName + '-' + sDataType + '" class="' + sClass + ' ns1blankspaceRow"></td>');
 											
@@ -947,8 +947,8 @@ ns1blankspace.report =
 							if (bShowSort)
 							{
 								aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Sort by</td>' +
-											 '<td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;" class="interfacemainSelect">' +
-											 '<input onDemandType="SELECT" id="inputInterfaceReportSort" class="inputInterfaceMainSelect"' + 
+											 '<td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;" class="ns1blankspaceSelect">' +
+											 '<input id="ns1blankspaceReportSort" class="ns1blankspaceSelect"' + 
 											 'data-getSelectOptions="ns1blankspace.report.allParameters"></td></tr>');
 							}
 							
@@ -1403,12 +1403,12 @@ ns1blankspace.report =
 												{	oSearch.addOperator(this.operatorAfter) }
 											});
 											
-											if ($('#inputInterfaceReportSort').val() != undefined)
+											if ($('#ns1blankspaceReportSort').val() != undefined)
 											{
-												if ($('#inputInterfaceReportSort').attr('data-id') != undefined)
+												if ($('#ns1blankspaceReportSort').attr('data-id') != undefined)
 												{	
 													//var aAllParameters = interfaceReportGetAllParameterList();
-													oSearch.sort(ns1blankspace.report.allParameters[$('#inputInterfaceReportSort').attr('data-id')].name, 'asc');
+													oSearch.sort(ns1blankspace.report.allParameters[$('#ns1blankspaceReportSort').attr('data-id')].name, 'asc');
 												}
 											}
 											
@@ -1428,24 +1428,24 @@ ns1blankspace.report =
 
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table class="interfaceMain"">');
+											aHTML.push('<table>');
 											aHTML.push('<tr><td class="ns1blankspaceNothing" style="padding-top:10px;">Nothing to show.</td></tr></table>') ;
 
 											$('#ns1blankspaceReportResults').html(aHTML.join(''));
 										}
 										else
 										{
-											aHTML.push('<table class="interfaceMain"">');
+											aHTML.push('<table class="ns1blankspaceMain" style="font-size:0.925em;">');
 											var aColumns = [];
 											oParameter = sParameterList.split(',');
 											
-											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<tr class="ns1blankspaceHeaderCaption">');
 											
 											$.each(oParameter, function()
 											{
 												if (this == sExtraIDColumnBefore)
 												{
-													aHTML.push('<td class="ns1blankspaceCaption">' + sExtraIDColumnHeader + '</td>');
+													aHTML.push('<td class="ns1blankspaceHeaderCaption">' + sExtraIDColumnHeader + '</td>');
 												}
 												
 												var sName = this;
@@ -1475,13 +1475,13 @@ ns1blankspace.report =
 												sCaption = ns1blankspace.report.getCaption({name: this});
 												
 												if (sName != sIDColumn)
-												{	aHTML.push('<td class="ns1blankspaceCaption">' + sCaption + '</td>');	}
+												{	aHTML.push('<td class="ns1blankspaceHeaderCaption">' + sCaption + '</td>');	}
 												
 												aColumns.push({name: sName, caption: sCaption});
 												
 											});
 											
-											aHTML.push('<td class="ns1blankspaceCaption">&nbsp;</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 
 											$.each(oResponse.data.rows, function(index) 
@@ -1499,17 +1499,20 @@ ns1blankspace.report =
 																			});
 
 											$('#radioReport-Update').unbind("click");
-											$('#radioReport-Update').click(function() {
+											$('#radioReport-Update').click(function()
+											{
 												ns1blankspace.report.bulkUpdate.show(oParam);
 											});
 											
 											$('#radioReport-Export').unbind("click");
-											$('#radioReport-Export').click(function() {
+											$('#radioReport-Export').click(function()
+											{
 												ns1blankspace.report.exportToCSV(oParam);
 											});	
 
 											$('#radioReport-Send').unbind("click");
-											$('#radioReport-Send').click(function() {
+											$('#radioReport-Send').click(function()
+											{
 												ns1blankspace.report.sendTo.show(oParam);
 											});	
 
@@ -1533,13 +1536,16 @@ ns1blankspace.report =
 												
 											if (ns1blankspace.report.scriptOpen != undefined)
 											{
-												$('.ns1blankspaceRowSelect' + '').button({
+												$('.ns1blankspaceRowSelect' + '').button(
+												{
 													text: false,
-													icons: {
+													icons:
+													{
 														primary: "ui-icon-play"
 													}
 												})
-												.click(function() {
+												.click(function()
+												{
 													eval(ns1blankspace.report.scriptOpen);
 												})
 												.css('width', '15px')
@@ -1598,7 +1604,7 @@ ns1blankspace.report =
 									if (sParameterList != '')
 									{	oParameters = sParameterList.split(',');	}
 									
-									aHTML.push('<tr class="interfaceMainRow">');
+									aHTML.push('<tr class="ns1blankspaceRow">');
 
 									var sLastExtraID = '';
 									sIDColumn = "id";
@@ -1614,7 +1620,7 @@ ns1blankspace.report =
 										var sIdValue = oResponse[sIDColumn];
 										
 										if (sKey != sIDColumn)	{
-											aHTML.push('<td class="interfaceMainRow ' + sKey.replace(/\./g,'_') + '" ' + 
+											aHTML.push('<td class="ns1blankspaceRow ' + sKey.replace(/\./g,'_') + '" ' + 
 															 'id="' + sKey.replace(/\./g,'_') + '_' + sIdValue + '">' + 
 														  sValue + '</td>');
 											sOutput += '"' + sValue + '",';
@@ -1622,16 +1628,16 @@ ns1blankspace.report =
 										else
 										{
 											if (sKey == sIDColumn)	{	
-												aLastHTML.push('<td class="ns1blankspaceRowSelect id" ' +
+												aLastHTML.push('<td class="ns1blankspaceRow"><span class="ns1blankspaceRowSelect id" ' +
 															 'id="id-' + sIdValue + '"' +
-															 'data-extraid="' + sLastExtraID + '"></td>');
+															 'data-extraid="' + sLastExtraID + '"></span></td>');
 											}
 										}
 									});
 
 									if (aLastHTML.length == 0) {
-										aLastHTML.push('<td class="ns1blankspaceRowSelect id" ' +
-													 'id="id-' + oResponse[sIDColumn] + '"</td>');
+										aLastHTML.push('<td class="ns1blankspaceRow"><span class="ns1blankspaceRowSelect id" ' +
+													 'id="id-' + oResponse[sIDColumn] + '"</span></td>');
 
 									}
 									aHTML.push(aLastHTML.join(''));
@@ -1863,20 +1869,22 @@ ns1blankspace.report =
 								{
 									if (oResponse.link != '')
 									{
-										aHTML.push('<table class="interfaceMain"">');
-										aHTML.push('<tr class="ns1blankspaceCaption">');
-										aHTML.push('<td class="ns1blankspaceCaption">File created..   ' + oParam.count + ' rows.</td></tr>');
-										aHTML.push('<tr class="ns1blankspaceCaption">');
-										aHTML.push('<td class="ns1blankspaceCaption"><a href="' + oResponse.link);
-										aHTML.push('" target="_blank">Click here</a> to download the file.</td></tr>');
+										aHTML.push('<table style="margin: 10px;">');
+										aHTML.push('<tr>');
+										aHTML.push('<td class="ns1blankspaceSub">File created with ' + oParam.count + ' rows.</td></tr>');
+										aHTML.push('<tr>');
+										aHTML.push('<td><a href="' + oResponse.link);
+										aHTML.push('" target="_blank">Download the file</td></tr>');
 										aHTML.push('</table>');
+
 										$('#ns1blankspaceReportExport').html(aHTML.join(''));
 									}
 									else {
 										aHTML.push('<table class="ns1blankspace">');
-										aHTML.push('<tr class="ns1blankspaceCaption">');
-										aHTML.push('<td class="ns1blankspaceCaption">Error creating file. Please try again..</td></tr>');
+										aHTML.push('<tr>');
+										aHTML.push('<td class="ns1blankspaceSub">Error creating file</td></tr>');
 										aHTML.push('</table>');
+
 										$('#ns1blankspaceReportExport').html(aHTML.join(''));
 									}
 								}
@@ -1991,27 +1999,20 @@ ns1blankspace.report =
 									var aHTML = [];
 									var oMCEBookmark;
 								
-									aHTML.push('<table class="ns1blankspaceContainer">');
-									aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row1">');
-									
-										aHTML.push('<table class="ns1blankspaceContainer"><tr>');
-										aHTML.push('<td>');
+									aHTML.push('<table style="font-size:0.875em;">');
 
-											aHTML.push('<table class="ns1blankspaceContainer">');
-											aHTML.push('<tr><td class="ns1blankspaceCaption">Subject</td></tr>' +
-													   '<tr><td class="ns1blankspaceText">' +
-													   		'<input onDemandType="TEXT" id="ns1blankspaceReportSendSubject" class="ns1blankspaceText">' +
-													   '</td></tr></table>');
 
-										aHTML.push('</td><td id="ns1blankspaceReportSendOptions" style="width:120px; text-align:right;">');
-											
-											aHTML.push('<span id="ns1blankspaceReportSendSMS">SMS</span>&nbsp;' +
-														'<span id="ns1blankspaceReportSendPreview">Preview</span>&nbsp;' +
-														'<span id="ns1blankspaceReportSendEmail">Email</span>');
+									aHTML.push('<tr>' +
+											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
+											'<span id="ns1blankspaceReportSendPreview" class="ns1blankspaceAction">Preview</span>' +
+											' <span id="ns1blankspaceReportSendEmail" class="ns1blankspaceAction">Email</span>' +
+											'</td></tr>');
 
-										aHTML.push('</tr></table>');	
+									aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row1" style="padding-left:3px; padding-right:11px;">' +
+												'<input id="ns1blankspaceReportSendSubject" class="ns1blankspaceText">');
+	
+									aHTML.push('</td></tr>');
 
-									aHTML.push('</td></tr>');			
 									aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row2">');
 										aHTML.push('<table class="ns1blankspace">');
 										aHTML.push('<tr><td>' +
@@ -2021,9 +2022,7 @@ ns1blankspace.report =
 											
 									aHTML.push('</td></tr>');
 
-
 									$('#ns1blankspaceReportSendColumn1').html(aHTML.join(''));
-
 											
 									aHTML = [];
 
@@ -2067,15 +2066,13 @@ ns1blankspace.report =
 														   }
 										ns1blankspace.report.sendTo.sendSMS(aReportParam);
 									})
-									.css('width', '30px')
 									.css('height', '30px');
 
 
 
-									$('#ns1blankspaceReportSendPreview').button({
-										text: false,
-										icons: {
-											primary: "ui-icon-document"}
+									$('#ns1blankspaceReportSendPreview').button(
+									{
+										label: 'Preview'
 									})
 									.click(function()
 									{
@@ -2092,13 +2089,11 @@ ns1blankspace.report =
 														   }
 										ns1blankspace.report.sendTo.sendEmail(aReportParam);
 									})
-									.css('width', '30px')
-									.css('height', '30px');
+									.css('font-size', '0.75em');
 								
-									$('#ns1blankspaceReportSendEmail').button({
-										text: false,
-										icons: {
-											primary: "ui-icon-mail-closed"}
+									$('#ns1blankspaceReportSendEmail').button(
+									{
+										label: 'Send'
 									})
 									.click(function()
 									{
@@ -2110,9 +2105,7 @@ ns1blankspace.report =
 																  subject: $('#ns1blankspaceReportSendSubject').val()
 																  });
 									})
-									.css('width', '30px')
-									.css('height', '30px');
-									
+									.css('font-size', '0.75em');
 									
 									$('.interfaceFormatTags')
 									.hover( function()
@@ -2132,21 +2125,23 @@ ns1blankspace.report =
 									
 
 								}
-								else {
-									
+								else
+								{
 									var sText = '';
 
-									if (oResponse) {
-										sText = 'To send bulk emails to people in a report, you must include at least fields from the Person record.';
+									if (oResponse)
+									{
+										sText = 'To send bulk emails to people, you must include at least one field from the contact person.';
 									}
-									else {
+									else
+									{
 										sText = 'No results to send.';
 									}
 
 									aHTML = [];
-									aHTML.push('<table class="ns1blankspaceContainer"><tr>');
-									aHTML.push('<td id="ns1blankspaceReportSend">' + sText + '</td>' +
-											   '</tr></table>');
+									aHTML.push('<table style="margin:10px; width:350px;"><tr>');
+									aHTML.push('<td id="ns1blankspaceReportSend" class="ns1blankspaceSub">' + sText + '</td>' +
+											   	'</tr></table>');
 									
 									$('#ns1blankspaceReportSend').html(aHTML.join(''));
 								}
@@ -2154,19 +2149,21 @@ ns1blankspace.report =
 
 							var sShowId = 'radioReport-Send';
 
-							$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
-								
+							$('#ns1blankspaceReportHeaderOptions :radio').each(function()
+							{	
 								var sSuffix = $(this).attr('id').split('-')[1];
-								if ($(this).attr('id') === sShowId) {
+								if ($(this).attr('id') === sShowId)
+								{
 									$('#ns1blankspaceReport' + sSuffix).show();
 								}
-								else {
+								else
+								{
 									$('#ns1blankspaceReport' + sSuffix).hide();
 								}
 							});
 						},
 
-				sendEmail: 	function(oParam) {
+			sendEmail: 		function(oParam) {
 
 							var iMoreId;
 							var sText = "";
@@ -2401,140 +2398,151 @@ ns1blankspace.report =
 
 	bulkUpdate:	{
 
-				show: 	function (oParam) {
-							
-							var oResponse;
-							var nCount;
-							var sMoreId;
-							var oParameters;
-							var sExtraIDColumnBefore;
-							var sIDColumn = 'id';
+					show: 		function (oParam)
+								{
+									var oResponse;
+									var nCount;
+									var sMoreId;
+									var oParameters;
+									var sExtraIDColumnBefore;
+									var sIDColumn = 'id';
 
-							if (oParam) {
-								if (oParam.response) { oResponse = oParam.response; }
-								if (oParam.count) { nCount = oParam.count; }
-								if (oParam.parameterList) {oParameters = oParam.parameterList.split(','); }
-								if (oParam.moreId) {sMoreId = oParam.moreId; }
-								if (oParam.idColumn) {sIDColumn = oParam.idColumn; }
-								if (oParam.extraIDColumnBefore) {sExtraIDColumnBefore = oParam.extraIDColumnBefore; }
-							}
-
-
-							var aHTML = [];
-
-							if (oResponse && oResponse.data.rows.length > 0 && $('#ns1blankspaceReportUpdateColumn1').html() == undefined ) {
-
-								aHTML.push('<table class="ns1blankspace">');
-								aHTML.push('<tr><td id="ns1blankspaceReportUpdateColumn1"></td>' +
-										   '<td id="ns1blankspaceReportUpdateColumn2" style="width:200px;"></td>' +
-										   '</tr></table>');
-							
-								$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
-
-								aHTML = [];
-
-								aHTML.push('<table class="ns1blankspace">');
-								aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Include</td>' +
-												'<td colspan=1 style="color:#B8B8B8;padding:4px;background-color:#F8F8F8;">Update To</td></tr>');
-								
-								$.each(oParameters, function() {
-									
-									if (this == sExtraIDColumnBefore || this === sIDColumn) {}
-									else {		// We want this one
-
-										
-										var sName = this.replace(/\./g, '_');
-										var sCaption = $('#ns1blankspaceReport_caption_' + sName).html();
-										var sSearchRelatedField = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchRelatedField');
-										var sInputType = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-inputType');
-										var sSearchMethod = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchMethod');
-										var sSearchEndPoint = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchEndpoint');
-										var sDataType = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-dataType');
-										var sInputTypeTitle = (sInputType) ? sInputType.substr(0,1).toUpperCase() + sInputType.substr(1) : 'Text';
-										sInputTypeTitle = (sInputType === 'textbox') ? 'Text' : sInputTypeTitle;
-
-										// we can't bulk update anything except lookup fields against SETUP
-										if (sSearchMethod == "" || sSearchMethod.split('_')[0] === 'SETUP') {
-
-											aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReportUpdate_include_' + sName + '">' +
-														'<input type="checkbox" id="ns1blankspaceReportUpdateCheck_include_' + sName + '"' +
-															' data-name="' + sName + '"' +
-															' class="ns1blankspaceReportUpdateInclude">' +
-														'</td>');
-										
-											aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_caption_' + sName + '" class="ns1blankspaceReport">' +
-														sCaption +
-														'</td>');
-											
-											aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_value_' + sName + '"' +
-																' class="ns1blankspace' + sInputTypeTitle  + '">');
-											aHTML.push('<input id="ns1blankspaceReportUpdate_input_' + sName + '"' +
-																' class="ns1blankspace' + sInputTypeTitle);
-											if (sDataType === "date") {
-												aHTML.push(' hasDatepicker');
-											}
-											aHTML.push('"');
-
-											if (sInputType === "select") {
-												aHTML.push(' data-method="' + sSearchMethod + '"');
-												aHTML.push(' data-searchRelatedField="' + sSearchRelatedField + '"');
-											}
-											aHTML.push('></td>');
-
-													//' data-dataType="' + this.datatype + '"' +
-													//' data-searchEndpoint="' + sSearchEndPoint + '"' +
-													//' data-searchMethod="' + sSearchMethod + sSearchFilter + '"' +
-													//' data-inputType="');
-
-											
-											aHTML.push('</tr>');
-										}
+									if (oParam)
+									{
+										if (oParam.response) { oResponse = oParam.response; }
+										if (oParam.count) { nCount = oParam.count; }
+										if (oParam.parameterList) {oParameters = oParam.parameterList.split(','); }
+										if (oParam.moreId) {sMoreId = oParam.moreId; }
+										if (oParam.idColumn) {sIDColumn = oParam.idColumn; }
+										if (oParam.extraIDColumnBefore) {sExtraIDColumnBefore = oParam.extraIDColumnBefore; }
 									}
 
-								});
-										
-								//aHTML.push('</tr>');
-								aHTML.push('</table>');
-								$('#ns1blankspaceReportUpdateColumn1').html(aHTML.join(''));
+									var aHTML = [];
 
-								aHTML = [];
-								aHTML.push('<table class="ns1blankspace"><tr>');
-								aHTML.push('<td id="ns1blankspaceReportUpdateProcess" style="font-size:0.75em;text-align:right;">&nbsp;</td></tr>');
-								aHTML.push('<tr><td id="ns1blankspaceReportUpdateProgress">&nbsp;</td></tr>');
-								aHTML.push('</table>');
-								$('#ns1blankspaceReportUpdateColumn2').html(aHTML.join(''));
+									if (oResponse && oResponse.data.rows.length > 0 && $('#ns1blankspaceReportUpdateColumn1').html() == undefined )
+									{
+										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<tr><td id="ns1blankspaceReportUpdateColumn1"></td>' +
+												   '<td id="ns1blankspaceReportUpdateColumn2" style="width:200px;"></td>' +
+												   '</tr></table>');
+									
+									$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
 
-								$('#ns1blankspaceReportUpdateProcess').button({
-									label: "Update"
-								})
-								.click( function() { 
-									ns1blankspace.util.setParam(oParam, 'step', 1);
-									ns1blankspace.report.bulkUpdate.send(oParam);
-								});
+									aHTML = [];
 
-
-							}
-							else if (oResponse == undefined) {
-								aHTML.push('<table class="ns1blankspace">');
-								aHTML.push('<tr class="ns1blankspaceCaption">');
-								aHTML.push('<td class="ns1blankspaceCaption">No results. No updates possible.</td></tr>');
-								aHTML.push('</table>');
-								$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
-							}
-
-							var sShowId = 'radioReport-Update';
-							$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
+									aHTML.push('<table class="ns1blankspace">');
+									aHTML.push('<tr><td colspan=2 style="font-size:0.875em; color:#B8B8B8; padding:4px; background-color:#F8F8F8;">Include</td>' +
+												'<td colspan=1 style="font-size:0.875em; color:#B8B8B8; padding:4px; background-color:#F8F8F8;">Update To</td></tr>');
 								
-								var sSuffix = $(this).attr('id').split('-')[1];
-								if ($(this).attr('id') === sShowId) {
-									$('#ns1blankspaceReport' + sSuffix).show();
-								}
-								else {
-									$('#ns1blankspaceReport' + sSuffix).hide();
-								}
-							});
+									$.each(oParameters, function()
+									{
+										if (this == sExtraIDColumnBefore || this === sIDColumn) {}
+										else {		// We want this one
 
-						},
+											
+											var sName = this.replace(/\./g, '_');
+											var sCaption = $('#ns1blankspaceReport_caption_' + sName).html();
+											var sSearchRelatedField = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchRelatedField');
+											var sInputType = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-inputType');
+											var sSearchMethod = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchMethod');
+											var sSearchEndPoint = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchEndpoint');
+											var sDataType = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-dataType');
+											var sInputTypeTitle = (sInputType) ? sInputType.substr(0,1).toUpperCase() + sInputType.substr(1) : 'Text';
+											sInputTypeTitle = (sInputType === 'textbox') ? 'Text' : sInputTypeTitle;
+
+											// we can't bulk update anything except lookup fields against SETUP
+											if (sSearchMethod == "" || sSearchMethod.split('_')[0] === 'SETUP') {
+
+												aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReportUpdate_include_' + sName + '" class="ns1blankspaceRow">' +
+															'<input type="checkbox" id="ns1blankspaceReportUpdateCheck_include_' + sName + '"' +
+																' data-name="' + sName + '"' +
+																' class="ns1blankspaceReportUpdateInclude">' +
+															'</td>');
+											
+												aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_caption_' + sName + '" class="ns1blankspaceReport ns1blankspaceRow">' +
+															sCaption + '</td>');
+												
+												aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_value_' + sName + '"' +
+																	' class="ns1blankspaceRow ns1blankspace' + sInputTypeTitle  + '">');
+
+												aHTML.push('<input id="ns1blankspaceReportUpdate_input_' + sName + '"' +
+																	' class="ns1blankspaceRow ns1blankspace' + sInputTypeTitle);
+
+												if (sDataType === "date")
+												{
+													aHTML.push(' hasDatepicker');
+												}
+												aHTML.push('"');
+
+												if (sInputType === "select") {
+													aHTML.push(' data-method="' + sSearchMethod + '"');
+													aHTML.push(' data-searchRelatedField="' + sSearchRelatedField + '"');
+												}
+												aHTML.push('></td>');
+
+														//' data-dataType="' + this.datatype + '"' +
+														//' data-searchEndpoint="' + sSearchEndPoint + '"' +
+														//' data-searchMethod="' + sSearchMethod + sSearchFilter + '"' +
+														//' data-inputType="');
+
+												
+												aHTML.push('</tr>');
+											}
+										}
+
+									});
+										
+									//aHTML.push('</tr>');
+									aHTML.push('</table>');
+									$('#ns1blankspaceReportUpdateColumn1').html(aHTML.join(''));
+
+									aHTML = [];
+									aHTML.push('<table style="font-size:0.875em;"><tr>');
+									aHTML.push('<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
+												'<span id="ns1blankspaceReportUpdateProcess"></span></td></tr>');
+									aHTML.push('<tr><td id="ns1blankspaceReportUpdateProgress">&nbsp;</td></tr>');
+									aHTML.push('</table>');
+
+									$('#ns1blankspaceReportUpdateColumn2').html(aHTML.join(''));
+
+									$('#ns1blankspaceReportUpdateProcess').button(
+									{
+										label: 'Save'
+									})
+									.click(function()
+									{ 
+										ns1blankspace.util.setParam(oParam, 'step', 1);
+										ns1blankspace.report.bulkUpdate.send(oParam);
+									}).
+									css('font-size', '0.75em');
+								}
+
+								else if (oResponse == undefined)
+								{
+									aHTML.push('<table class="ns1blankspace">');
+									aHTML.push('<tr>');
+									aHTML.push('<td class="ns1blankspaceSub">No results. No updates possible.</td></tr>');
+									aHTML.push('</table>');
+
+									$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
+								}
+
+								var sShowId = 'radioReport-Update';
+
+								$('#ns1blankspaceReportHeaderOptions :radio').each(function()
+								{	
+									var sSuffix = $(this).attr('id').split('-')[1];
+
+									if ($(this).attr('id') === sShowId)
+									{
+										$('#ns1blankspaceReport' + sSuffix).show();
+									}
+									else
+									{
+										$('#ns1blankspaceReport' + sSuffix).hide();
+									}
+								});
+							},
 
 				send: 	function (oParam) {
 
