@@ -2735,11 +2735,7 @@ ns1blankspace.financial.payroll =
 						{
 							var aHTML = [];
 					
-<<<<<<< HEAD
 							aHTML.push('<table id="ns1blankspaceFinancialPayrollExpenses" class="ns1blankspaceColumn2" style="font-size:0.875em;">');
-=======
-							aHTML.push('<table id="ns1blankspaceFinancialPayrollExpenses" class="ns1blankspaceColumn2" style="font-size:0.75em;">');
->>>>>>> ccc454cf46f1d5c0d6110ee60c428e7c583cb0cc
 						
 							if (oResponse.data.rows.length == 0)
 							{
