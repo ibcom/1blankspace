@@ -1420,10 +1420,14 @@ ns1blankspace.logon =
 					{
 						method: 'LOGON',
 						logon: $('#ns1blankspaceLogonLogonName').val(),
-						password: $('#ns1blankspaceLogonPassword').val(),
-						passwordhash: ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val() + $('#ns1blankspaceLogonPassword').val()})
+						password: $('#ns1blankspaceLogonPassword').val()
 					}	
 
+					if (ns1blankspace.option.passwordhash)
+					{
+						oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val() + $('#ns1blankspaceLogonPassword').val()})
+					}
+					
 					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
 					
 					$.ajax(
