@@ -689,11 +689,12 @@ ns1blankspace.report =
 							aHTML.push('<table style="margin-bottom:0px;border-bottom-style:solid;border-width: 1px;border-color:#E8E8E8;" class="ns1blankspace">');
 							aHTML.push('<tr><td>' + 
 												'<div id="ns1blankspaceReportHeaderOptions">' + 
-												'<input id="radioReport-Search" name="radioOptions" type="radio" checked="checked"/><label style="font-size:0.875em;"  for="radioReport-Search">Select</label>' +
+												'<input id="radioReport-Search" name="radioOptions" type="radio" checked="checked"/><label style="font-size:0.875em;" for="radioReport-Search">Select</label>' +
 												'<input id="radioReport-Results" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Results">Results</label>' +
-												'<input id="radioReport-Update" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;"  for="radioReport-Update">Update</label>' +
-												'<input id="radioReport-Export" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;"  for="radioReport-Export">Export</label>' +
-												'<input id="radioReport-Send" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;"  for="radioReport-Send">Email</label>' +
+												'<input id="radioReport-Update" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Update">Update</label>' +
+												'<input id="radioReport-Export" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Export">Export</label>' +
+												'<input id="radioReport-Send" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Send">Email</label>' +
+												'<input id="radioReport-SMS" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-SMS">SMS</label>' +
 											'</div></td>');
 
 							aHTML.push('<td style="vertical-alignment:bottom;padding-top:10px;text-align:right;font-size:0.75em;">&nbsp;</td>');

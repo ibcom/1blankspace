@@ -1307,7 +1307,7 @@ ns1blankspace.messaging.conversation =
 																			aHTML.push('<tr><td class="ns1blankspaceRow" style="padding-top:6px;">' +
 																							ns1blankspace.util.toBR(this.message) +
 																							'<br /><div class="ns1blankspaceSub" style="margin-top:3px;">' +
-																							'<span style="font-weight:bold;">' + this.modifiedusertext + '</span><br />' + oDate.toString("dddd, dd MMM yyyy @ h:mm tt") + '</div>');	
+																							'<span>' + this.modifiedusertext + '</span><br />' + oDate.toString("dddd, dd MMM yyyy @ h:mm tt") + '</div>');	
 																		});
 
 																		$('#ns1blankspaceCommentsColumn2List-' + sKey).html(aHTML.join(''));
