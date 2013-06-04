@@ -25,6 +25,8 @@ ns1blankspace.report.selectAttributes = [];
 
 ns1blankspace.report = 
 {
+	data: 		{},
+
 	initData: 	function (oParam)
 				{
 					var bAll = true;
@@ -319,11 +321,10 @@ ns1blankspace.report =
 								onDemandColumns: "firstname-space-surname"
 							},
 						];
-
-					
+	
 					// Now extend dictionary if applicable
-					if (ns1blankspace.objectExtended) {
-
+					if (ns1blankspace.objectExtended)
+					{
 						$.each(ns1blankspace.report.reports, function() {
 							var iObject = this.object;
 							var sObjectname = this.objectName;
@@ -345,9 +346,10 @@ ns1blankspace.report =
 					}
 
 					// Now add other fields to reports above as defined in control file
-					if (ns1blankspace.data.control && ns1blankspace.data.control.report && ns1blankspace.data.control.report.dictionary) {
-
-						$.each(ns1blankspace.data.control.report.dictionary, function() {
+					if (ns1blankspace.data.control && ns1blankspace.data.control.report && ns1blankspace.data.control.report.dictionary)
+					{
+						$.each(ns1blankspace.data.control.report.dictionary, function()
+						{
 							ns1blankspace.report.dictionary.push({name: this.name, caption: this.caption});
 						});
 					}
@@ -523,8 +525,8 @@ ns1blankspace.report =
 					var bShowSelect = true;
 					var bShowFixedParameters = true;
 					var sSummary;
-					var iSurveyId;
-					var iCategoryId;
+					var iSurveyID;
+					var iCategoryID;
 					var sSearchFilter;
 					var bShowSort = true;
 					var bContainsContactPerson = false;
@@ -558,8 +560,8 @@ ns1blankspace.report =
 						if (oParam.showSelect != undefined) {bShowSelect = oParam.showSelect}
 						if (oParam.showFixedParameters != undefined) {bShowFixedParameters = oParam.showFixedParameters}
 						if (oParam.summary != undefined) {sSummary = oParam.summary}
-						if (oParam.survey != undefined) {iSurveyId = oParam.survey}
-						if (oParam.category != undefined) {iCategoryId = oParam.category}
+						if (oParam.survey != undefined) {iSurveyID = oParam.survey}
+						if (oParam.category != undefined) {iCategoryID = oParam.category}
 						if (oParam.showSort != undefined) {bShowSort = oParam.showSort}
 						oParam.response = undefined;
 					}
@@ -569,18 +571,6 @@ ns1blankspace.report =
 						var aMethod = ns1blankspace.report.method.split('_');
 						ns1blankspace.report.endpoint = (aMethod[0]).toLowerCase();
 					}
-
-					/*if (ns1blankspace.objectExtended) {
-
-						 if (iCategoryId) {
-						 	aCategory.push(iCategoryId);
-						 }
-
-						$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == ns1blankspace.report.object;})).each(function(i, v) {
-							aCategory.push(v.category);
-						});
-						iCategoryId = aCategory.join(",");
-					}*/
 					
 					ns1blankspace.report.fixedParameters = oFixedParameters;
 					ns1blankspace.report.selectableParameters = oSelectableParameters;
@@ -592,6 +582,7 @@ ns1blankspace.report =
 						aHTML.push('<div style="display:none;" id="ns1blankspaceReportExport">No data to export.</div>');
 						aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate">No data to update.</div>');
 						aHTML.push('<div style="display:none;" id="ns1blankspaceReportSend">No data to send.</div>');
+						aHTML.push('<div style="display:none;" id="ns1blankspaceReportSMS">No data to send.</div>');
 						$('#ns1blankspaceReport').html(aHTML.join(''));	
 							
 						var aHTML = [];
@@ -617,10 +608,11 @@ ns1blankspace.report =
 						{
 							aHTML.push('<div id="ns1blankspaceReportHeader">' + ns1blankspace.xhtml.loading + '</div>');
 							aHTML.push('<div id="ns1blankspaceReportSearch"></div>');
-							aHTML.push('<div style="display:none;" id="ns1blankspaceReportResults"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to show</div></div>');
-							aHTML.push('<div style="display:none;" id="ns1blankspaceReportExport"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to export</div></div>');
-							aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to update</div></div>');
-							aHTML.push('<div style="display:none;" id="ns1blankspaceReportSend"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to email</div></div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportResults" class="ns1blankspaceReportContainer"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to show</div></div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportExport" class="ns1blankspaceReportContainer"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to export</div></div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate" class="ns1blankspaceReportContainer"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to update</div></div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportSend" class="ns1blankspaceReportContainer"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to email</div></div>');
+							aHTML.push('<div style="display:none;" id="ns1blankspaceReportSMS" class="ns1blankspaceReportContainer"><div style="margin-top:10px; margin-left:5px;" class="ns1blankspaceSub">Nothing to SMS</div></div>');
 							$('#ns1blankspaceReport').html(aHTML.join(''));	
 						}
 						
@@ -637,10 +629,10 @@ ns1blankspace.report =
 							var oSearch = new AdvancedSearch();
 							oSearch.endPoint = ns1blankspace.report.endpoint;
 							oSearch.method = ns1blankspace.report.method;
-							if (iSurveyId != undefined)
-							{	oSearch.survey = iSurveyId;}
-							if (iCategoryId != undefined)
-							{	oSearch.categoryId = iCategoryId;}
+							if (iSurveyID != undefined)
+							{	oSearch.survey = iSurveyID;}
+							if (iCategoryID != undefined)
+							{	oSearch.categoryID = iCategoryID;}
 							oSearch.returnParameters = ns1blankspace.report.returnParameters;
 							oSearch.rf = 'json';
 							oSearch.getResults(function(data) {ns1blankspace.report.show(oParam, data)}) ;
@@ -661,7 +653,6 @@ ns1blankspace.report =
 										if (sCaption == undefined) { sCaption = this.name;	}
 									}
 									ns1blankspace.report.allParameters.push({name: this.name, caption: sCaption})
-									//this.name.toLowerCase().indexOf('contactperson') != -1 && 
 								});	
 							}
 							
@@ -669,18 +660,20 @@ ns1blankspace.report =
 							{
 								$.each(ns1blankspace.report.fixedParameters.fields, function()
 								{
-									ns1blankspace.report.allParameters.push({name: this.name});
+									ns1blankspace.report.allParameters.push({name: this.name}); //???
+
 									var sCaption = this.caption;
 									if (sCaption == undefined)
 									{	
 										sCaption = ns1blankspace.report.getCaption({name: this.name});
 										if (sCaption == undefined) { sCaption = this.name;	}
 									}
+
 									ns1blankspace.report.allParameters.push({name: this.name, caption: sCaption})
 								});
 							}
 							
-							var aSelectAttributesList = []
+							var aSelectAttributesList = [];
 							$.each(ns1blankspace.report.selectAttributes, function()
 							{	aSelectAttributesList.push(this.name);	});
 							
@@ -705,17 +698,18 @@ ns1blankspace.report =
 							$('#ns1blankspaceReportHeaderOptions').buttonset().css('font-size', '0.75em');
 							$('#ns1blankspaceReportHeaderOptions :radio').click(function() {
 								
-								var sShowId = $(this).attr('id');
+								var sShowID = $(this).attr('id');
 
-								$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
-									
+								$('#ns1blankspaceReportHeaderOptions :radio').each(function()
+								{	
 									var sSuffix = $(this).attr('id').split('-')[1];
 
-									if ($(this).attr('id') === sShowId) {
-
+									if ($(this).attr('id') === sShowID)
+									{
 										$('#ns1blankspaceReport' + sSuffix).show();
 									}
-									else {
+									else
+									{
 										$('#ns1blankspaceReport' + sSuffix).hide();
 									}
 								});
@@ -870,9 +864,8 @@ ns1blankspace.report =
 								}
 							});
 
-							if (ns1blankspace.objectExtended) {
-
-
+							if (ns1blankspace.objectExtended)
+							{
 								$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == ns1blankspace.report.object;})).each(function(i,v)
 								{
 									$(v.elements).each(function(j,k)
@@ -937,12 +930,9 @@ ns1blankspace.report =
 											aHTML.push('<td id="ns1blankspaceReport_input-' + sName + '-' + sDataType + '" class="' + sClass + ' ns1blankspaceRow"></td>');
 											
 											aHTML.push('</tr>');
-											
 										}
-										
 									});
 								});	
-
 							}
 
 							if (bShowSort)
@@ -967,10 +957,12 @@ ns1blankspace.report =
 								$("#ns1blankspaceReportResults").html('No results.');
 								$("#ns1blankspaceReportExport").html('No data to export.');
 								$("#ns1blankspaceReportUpdate").html('No data to update.');
-								$("#ns1blankspaceReportSend").html('No data to send.');
+								$("#ns1blankspaceReportSend").html('Nothing to email.');
+								$("#ns1blankspaceReportSMS").html('Nothing to SMS.');
 								$("#radioReport-Search").removeAttr('checked');
 								$("#radioReport-Results").attr('checked', 'checked');
 								$("#ns1blankspaceReportHeaderOptions").buttonset('refresh');
+
 								ns1blankspace.report.search.send(oParam);
 							});	
 							
@@ -987,7 +979,6 @@ ns1blankspace.report =
 									$(this).text('Click to set comparison.');
 									$(this).css('color', 'grey');
 								}
-								
 							});
 							
 							$('td.ns1blankspaceReportComparison').mouseleave(function(event)
@@ -997,8 +988,7 @@ ns1blankspace.report =
 									$(this).text('');
 									$(this).css('color', '');
 								}	
-							});
-							
+							});	
 						}
 						else
 						{
@@ -1094,7 +1084,7 @@ ns1blankspace.report =
 					var sSearchMethod;
 					var sSelectClass;
 					var sOnDemandColumns;
-					var sFirstInputElementId;
+					var sFirstInputElementID;
 					var sComparisonID;
 					var sOnDemandClick;
 					var sSearchRelatedField;
@@ -1134,21 +1124,22 @@ ns1blankspace.report =
 									aHTML.push('<br />');
 								}
 								
-								var sThisElementId = sXHTMLInputElementID;
+								var sThisElementID = sXHTMLInputElementID;
+
 								if (sInputType == 'textbox' || sInputType == 'textarea')
 								{
-									sThisElementId = sThisElementId.replace(/-/g, '_');
-									sThisElementId = sThisElementId + '_' + i
-									if (i == 1)	{	sFirstInputElementId = sThisElementId;}
+									sThisElementID = sThisElementID.replace(/-/g, '_');
+									sThisElementID = sThisElementID + '_' + i
+									if (i == 1)	{sFirstInputElementID = sThisElementID}
 									
 									if (sDataType == 'text' || sDataType == 'numeric')
 									{
-										aHTML.push('<input id="' + sThisElementId +  '" class="inputInterfaceMainText">');
+										aHTML.push('<input id="' + sThisElementID +  '" class="ns1blankspaceText">');
 									}	
 									
 									if (sDataType == 'date')
 									{
-										aHTML.push('<input id="' + sThisElementId + '" class="inputInterfaceMainDate">');
+										aHTML.push('<input id="' + sThisElementID + '" class="ns1blankspaceDate">');
 									}	
 								}
 								
@@ -1157,10 +1148,10 @@ ns1blankspace.report =
 									if (sSearchEndpoint != undefined && sSearchMethod != undefined)
 									{
 										if (sSearchEndpoint == "") 	{sSearchEndpoint = sSearchMethod.substr(0, sSearchMethod.indexOf("_")) }
-										sThisElementId = sThisElementId.replace(/-/g, '_');
-										sThisElementId = sThisElementId + '_' + i
+										sThisElementID = sThisElementID.replace(/-/g, '_');
+										sThisElementID = sThisElementID + '_' + i
 										
-										aHTML.push('<input id="' + sThisElementId + '"');
+										aHTML.push('<input id="' + sThisElementID + '"');
 										aHTML.push(' data-method="' + sSearchMethod + '" ' +
 													'class="') ;
 										
@@ -1188,9 +1179,8 @@ ns1blankspace.report =
 							}
 							
 							$('#' + sXHTMLElementID).html(aHTML.join(''));
-							$('input.inputInterfaceMainDate').datepicker({ dateFormat: 'dd M yy', changeYear: true });
-							$('#' + sFirstInputElementId).focus();
-							
+							$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy', changeYear: true });
+							$('#' + sFirstInputElementID).focus();
 						}	
 					}	
 				},
@@ -1234,16 +1224,16 @@ ns1blankspace.report =
 										
 										if ($("input.ns1blankspaceReportInclude:checked").length == 0 && oSearchParameters == undefined)
 										{
-											alert('You need to pick at least one column.');
+											ns1blankspace.status.error('Nothing selected');
 										}
 										else
 										{
-										
-											var sShowId = 'radioReport-Results';
+											var sShowID = 'radioReport-Results';
+
 											$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
 												
 												var sSuffix = $(this).attr('id').split('-')[1];
-												if ($(this).attr('id') === sShowId) {
+												if ($(this).attr('id') === sShowID) {
 													$('#ns1blankspaceReport' + sSuffix).show();
 												}
 												else {
@@ -1267,8 +1257,6 @@ ns1blankspace.report =
 												}	
 											}
 											
-											// A crude way to determine if the report contains contactperson or contactpersontext
-											// so that we can produce mail merge emails
 											$("input.ns1blankspaceReportInclude:checked").each(function() 
 											{ 
 												var sID = this.id;
@@ -1303,11 +1291,11 @@ ns1blankspace.report =
 													if (this.includeEval != undefined)
 													{
 														if (!eval(this.includeEval))
-														{	bInclude = false;	}
+														{bInclude = false}
 													}
 													
 													if (bInclude)
-													{	aFilters.push(this);	}
+													{aFilters.push(this)}
 												});
 											}
 											
@@ -1408,23 +1396,21 @@ ns1blankspace.report =
 											{
 												if ($('#ns1blankspaceReportSort').attr('data-id') != undefined)
 												{	
-													//var aAllParameters = interfaceReportGetAllParameterList();
 													oSearch.sort(ns1blankspace.report.allParameters[$('#ns1blankspaceReportSort').attr('data-id')].name, 'asc');
 												}
 											}
 											
 											oParam.containsContactPerson = bContainsContactPerson;
 											
-											oSearch.addSummaryField("count(*) " + ns1blankspace.report.endpoint);
+											//oSearch.addSummaryField("count(*) count" + ns1blankspace.report.endpoint);
+											oSearch.addSummaryField('count(*) count');
 											oSearch.rows = iRows;
 											oSearch.rf = sReturnFormat;
 											oSearch.getResults(function(data){ns1blankspace.report.search.send(oParam, data)}) ;	
 										}	
-											
 									}
 									else
 									{
-									
 										aHTML = [];
 
 										if (oResponse.data.rows.length == 0)
@@ -1437,6 +1423,7 @@ ns1blankspace.report =
 										else
 										{
 											aHTML.push('<table class="ns1blankspaceMain" style="font-size:0.925em;">');
+
 											var aColumns = [];
 											oParameter = sParameterList.split(',');
 											
@@ -1493,7 +1480,9 @@ ns1blankspace.report =
 											
 											aHTML.push('</table>');
 											
-											$.extend(true, oParam, {moreId: $(oResponse).attr('moreid'),
+											// count
+											
+											$.extend(true, oParam, {moreID: $(oResponse).attr('moreid'),
 																			count: oResponse.summary[ns1blankspace.report.endpoint],
 																			response: oResponse,
 																			columns: aColumns
@@ -1502,23 +1491,29 @@ ns1blankspace.report =
 											$('#radioReport-Update').unbind("click");
 											$('#radioReport-Update').click(function()
 											{
-												ns1blankspace.report.bulkUpdate.show(oParam);
+												ns1blankspace.report.update.show(oParam);
 											});
 											
 											$('#radioReport-Export').unbind("click");
 											$('#radioReport-Export').click(function()
 											{
-												ns1blankspace.report.exportToCSV(oParam);
+												ns1blankspace.report.export(oParam);
 											});	
 
 											$('#radioReport-Send').unbind("click");
 											$('#radioReport-Send').click(function()
 											{
-												ns1blankspace.report.sendTo.show(oParam);
+												ns1blankspace.report.email.show(oParam);
+											});
+
+											$('#radioReport-SMS').unbind("click");
+											$('#radioReport-SMS').click(function()
+											{
+												ns1blankspace.report.sms.show(oParam);
 											});	
 
 											ns1blankspace.render.page.show(
-											   {
+										   	{
 												xhtmlElementID: 'ns1blankspaceReportResults',
 												xhtmlContext: '',
 												xhtml: aHTML.join(''),
@@ -1531,7 +1526,7 @@ ns1blankspace.report =
 												functionOpen: ns1blankspace.report.scriptOpen,
 												functionNewPage: ns1blankspace.report.scriptNewPage,
 												type: 'json'
-											   }); 	
+										   	}); 	
 												
 											$('.ns1blankspaceRowSelect' + '').unbind('click');
 												
@@ -1553,17 +1548,10 @@ ns1blankspace.report =
 												.css('height', '20px')
 											}
 											
-											eval(ns1blankspace.report.scriptNewPage);
-
-											//functionSearch: ns1blankspaceActions,	
-											//functionOpen: 'interfaceActionMasterViewport({showHome: false});interfaceActionSearch(this.id)',
-											//functionNewPage: 'ns1blankspaceAttachmentsShowBind()'	
-											//ns1blankspaceAttachmentsShowBind();	
-											
+											eval(ns1blankspace.report.scriptNewPage);	
 										}
 									}	
 								},
-
 
 					row:		function (oResponse, oParam)
 								{
@@ -1603,7 +1591,7 @@ ns1blankspace.report =
 									}
 									
 									if (sParameterList != '')
-									{	oParameters = sParameterList.split(',');	}
+									{oParameters = sParameterList.split(',')}
 									
 									aHTML.push('<tr class="ns1blankspaceRow">');
 
@@ -1615,22 +1603,22 @@ ns1blankspace.report =
 									
 									$.each(oParameters, function()
 									{
-										
 										var sValue = oResponse[this];
 										var sKey = this;
-										var sIdValue = oResponse[sIDColumn];
+										var sIDValue = oResponse[sIDColumn];
 										
 										if (sKey != sIDColumn)	{
 											aHTML.push('<td class="ns1blankspaceRow ' + sKey.replace(/\./g,'_') + '" ' + 
-															 'id="' + sKey.replace(/\./g,'_') + '_' + sIdValue + '">' + 
+															 'id="' + sKey.replace(/\./g,'_') + '_' + sIDValue + '">' + 
 														  sValue + '</td>');
 											sOutput += '"' + sValue + '",';
 										}
 										else
 										{
-											if (sKey == sIDColumn)	{	
+											if (sKey == sIDColumn)
+											{	
 												aLastHTML.push('<td class="ns1blankspaceRow"><span class="ns1blankspaceRowSelect id" ' +
-															 'id="id-' + sIdValue + '"' +
+															 'id="id-' + sIDValue + '"' +
 															 'data-extraid="' + sLastExtraID + '"></span></td>');
 											}
 										}
@@ -1652,7 +1640,8 @@ ns1blankspace.report =
 								}
 				},
 
-	mergeFields:	function (oParam)
+	mergeFields:
+				function (oParam)
 				{
 					var sText = "";
 					var aColumns = [];
@@ -1759,24 +1748,24 @@ ns1blankspace.report =
 					}
 					else
 					{
-						var sLastPrimaryId = '';
-						var sLastId = '';
+						var sLastPrimaryID = '';
+						var sLastID = '';
 						var sHTML = '';
 						$.each(oResponse.data.rows, function(index) 
 						{ 
 							if (sCompareColumn != sIDColumn)
 							{
-								if (sLastPrimaryId == $(this).attr(sCompareColumn))
+								if (sLastPrimaryID == $(this).attr(sCompareColumn))
 								{
-									sHTML = $('td.' + (sSourceName).replace(/\./g,'_') + '[id=' + sLastPrimaryId + ']').html();
-									$('td.' + (sSourceName).replace(/\./g,'_') + '[id=' + sLastPrimaryId + ']').html(sHTML + '<br />' + $(this).attr(sName));
+									sHTML = $('td.' + (sSourceName).replace(/\./g,'_') + '[id=' + sLastPrimaryID + ']').html();
+									$('td.' + (sSourceName).replace(/\./g,'_') + '[id=' + sLastPrimaryID + ']').html(sHTML + '<br />' + $(this).attr(sName));
 								}
 								else
 								{
 									$('td.' + (sSourceName).replace(/\./g,'_') + '[id=' + $(this).attr(sCompareColumn) + ']').html($(this).attr(sName));
 								}
-								sLastPrimaryId = $(this).attr(sCompareColumn);
-								sLastId = this.id;
+								sLastPrimaryID = $(this).attr(sCompareColumn);
+								sLastID = this.id;
 							}
 							else
 							{
@@ -1786,7 +1775,8 @@ ns1blankspace.report =
 					}
 				},
 
-	fieldIncluded: 	function (sFieldList)
+	fieldIncluded: 
+				function (sFieldList)
 				{
 					var aFields = sFieldList.split('-');
 					var bIncluded = false;
@@ -1806,7 +1796,8 @@ ns1blankspace.report =
 					return bIncluded;
 				},
 
-	searchFilter:	function (oParam)
+	searchFilter:
+				function (oParam)
 				{
 
 					var sValue = $('#' + ns1blankspace.xhtml.divID).val();
@@ -1830,22 +1821,23 @@ ns1blankspace.report =
 						{	sValue = $('#' + ns1blankspace.xhtml.divID).attr(sAttribute)	}
 						
 						$("#ns1blankspaceReport_comparison-" + sName + '-text').attr('data-searchMethod', sSearchMethod + '&' + sParameter + '=' + sValue);
-						
 					}
-					
 				},
 
-	exportToCSV:		function (oParam)
+	export:		function (oParam)
 				{
-					var iMoreId;
+					var iMoreID;
 					var aHTML = [];
 					
-					var sShowId = 'radioReport-Export';
+					var sShowID = 'radioReport-Export';
+
 					$('#ns1blankspaceReportExport').html('');
-					$('#ns1blankspaceReportHeaderOptions :radio').each(function() {
-						
+	
+					$('#ns1blankspaceReportHeaderOptions :radio').each(function()
+					{	
 						var sSuffix = $(this).attr('id').split('-')[1];
-						if ($(this).attr('id') === sShowId) {
+						if ($(this).attr('id') === sShowID)
+						{
 							$('#ns1blankspaceReport' + sSuffix).show();
 						}
 						else {
@@ -1855,13 +1847,12 @@ ns1blankspace.report =
 
 					if (oParam != undefined)
 					{
-						if (oParam.count != undefined && oParam.count != "0") 
+						if (oParam.count != undefined && oParam.count != 0) 
 						{
-							
 							$('#ns1blankspaceReportExport').html(ns1blankspace.xhtml.loading);
 
-							iMoreId = oParam.moreId;
-							var sParam = '&method=CORE_MORE_FILE_MANAGE&more=' + iMoreId;
+							iMoreID = oParam.moreID;
+							var sParam = '&method=CORE_MORE_FILE_MANAGE&more=' + iMoreID;
 							$.ajax({
 								type: 'POST',
 								url: '/ondemand/core/?rf=json' + sParam,
@@ -1870,7 +1861,7 @@ ns1blankspace.report =
 								{
 									if (oResponse.link != '')
 									{
-										aHTML.push('<table style="margin: 10px;">');
+										aHTML.push('<table style="margin: 10px; font-size:0.875em;">');
 										aHTML.push('<tr>');
 										aHTML.push('<td class="ns1blankspaceSub">File created with ' + oParam.count + ' rows.</td></tr>');
 										aHTML.push('<tr>');
@@ -1889,8 +1880,7 @@ ns1blankspace.report =
 										$('#ns1blankspaceReportExport').html(aHTML.join(''));
 									}
 								}
-							});
-							
+							});		
 						}
 					}
 					else
@@ -1899,511 +1889,17 @@ ns1blankspace.report =
 						aHTML.push('<tr class="ns1blankspaceCaption">');
 						aHTML.push('<td class="ns1blankspaceCaption">No results. File not created.</td></tr>');
 						aHTML.push('</table>');
+
 						$('#ns1blankspaceReportExport').html(aHTML.join(''));
 					}
-
-
 				},
 
-	sendPreview:	function (oParam)
-				{
-					var oRow;
-					var iMoreId;
-					var sText = "";
-					var sParam = "";
-					var oParameters = [];
-					var sTags = "";
-					var iObject;
-					
-					if (oParam != undefined)
-					{
-						if (oParam.row != undefined) {oRow = oParam.row}
-						if (oParam.moreID != undefined) {iMoreId = oParam.moreID}		
-						if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
-						if (oParam.text != undefined) {sText = oParam.text}		
-						if (oParam.object != undefined) {iObject = oParam.object}		
-					}
-					else
-					{
-						ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.sendPreview. <br /><br />Preview aborted.');
-						return false;
-					}
-					
-					if (false && iObject == 32)
-					{	sTags = oParameters.join('|');	}
-					else
-					{
-						$.each(oParameters, function()
-						{
-							sTags = this + "|"  + sTags;
-						});
-						if (sTags.length > 0)
-						{	sTags = sTags.substr(0, sTags.length - 1); 	}
-					}
-					
-					sParam = "&more=" + iMoreId + 
-							 "&object=" + ns1blankspace.report.object + "&objectcontext=" + oRow.id +
-							 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-							 "&tags=" + ns1blankspace.util.fs(sTags);
-
-					$.ajax(
-					{
-						type: 'POST',
-						cache: false,
-						url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
-						data: "rf=text" + sParam,
-						dataType: 'text',
-						async: false,
-						success: function(data)
-						{
-							if (data.substr(0,12) == "OK|RETURNED|")
-							{	
-								ns1blankspace.status.message(data.substring(12));	
-								// ToDo: Add preview page
-							}
-						}
-					});
-				},
-
-	sendTo:	{
-
-				show: 	function (oParam)
-						{
-
-							var oResponse;
-							var bContainsContactPerson = false;
-							var aColumns = [];
-
-							if (oParam) {
-								if (oParam.response) {oResponse = oParam.response;}
-								if (oParam.containsContactPerson != undefined) {bContainsContactPerson = oParam.containsContactPerson;}
-								if (oParam.columns) {aColumns = oParam.columns;}
-							}
-
-							if (oResponse && $('#ns1blankspaceReportSendColumn1').html() == undefined) {
-								if (bContainsContactPerson)
-								{	// Show editor and template fields, buttons for preview & Sending
-									ns1blankspace.format.editor.init();
-									for (edId in tinyMCE.editors) 
-												tinyMCE.editors[edId].destroy(true);
-											
-									ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;	
-
-									aHTML = [];
-									aHTML.push('<table class="ns1blankspaceContainer"><tr>');
-									aHTML.push('<td id="ns1blankspaceReportSendColumn1"></td>' +
-											   '<td id="ns1blankspaceReportSendColumn2" style="width:100px;"></td>' +
-											   '</tr></table>');
-									
-									$('#ns1blankspaceReportSend').html(aHTML.join(''));
-									
-									var aHTML = [];
-									var oMCEBookmark;
-								
-									aHTML.push('<table style="font-size:0.875em;">');
-
-
-									aHTML.push('<tr>' +
-											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
-											'<span id="ns1blankspaceReportSendPreview" class="ns1blankspaceAction">Preview</span>' +
-											' <span id="ns1blankspaceReportSendEmail" class="ns1blankspaceAction">Email</span>' +
-											'</td></tr>');
-
-									aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row1" style="padding-left:3px; padding-right:11px;">' +
-												'<input id="ns1blankspaceReportSendSubject" class="ns1blankspaceText">');
-	
-									aHTML.push('</td></tr>');
-
-									aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row2">');
-										aHTML.push('<table class="ns1blankspace">');
-										aHTML.push('<tr><td>' +
-													'<textarea rows="30" cols="50" id="ns1blankspaceReportSendText' +
-														ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
-													'</td></tr></table>');
-											
-									aHTML.push('</td></tr>');
-
-									$('#ns1blankspaceReportSendColumn1').html(aHTML.join(''));
-											
-									aHTML = [];
-
-									aHTML.push('<table>');
-									aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:0.75em;">' +
-												'Tags..</td></tr>');		
-									$.each(aColumns, function()
-									{
-										aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
-
-										aHTML.push('<span id="spanInterfaceFormatTag_' + (this.caption).replace(/ /g,'-') + '"' +
-												  		' class="interfaceFormatTags" ' +
-												   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>');
-
-										aHTML.push('</td></tr>');	
-
-									});
-											
-									aHTML.push('</table>');					
-									
-									$('#ns1blankspaceReportSendColumn2').html(aHTML.join(''));
-
-									
-									$('#ns1blankspaceReportSendSMS').button({
-										text: false,
-										icons: {
-											primary: "ui-icon-comment"}
-									})
-									.click(function()
-									{
-										var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
-																					   replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()});
-										
-										var aReportParam = {preview: true,
-															subject: $('#ns1blankspaceReportSendSubject').val(),
-															row: oResponse.data.rows[0],
-															moreID: oResponse.moreid, 
-															parameters: oParameter,
-															object: ns1blankspace.report.object,
-															text: sText
-														   }
-										ns1blankspace.report.sendTo.sendSMS(aReportParam);
-									})
-									.css('height', '30px');
-
-
-
-									$('#ns1blankspaceReportSendPreview').button(
-									{
-										label: 'Preview'
-									})
-									.click(function()
-									{
-										var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
-																					   replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()});
-										
-										var aReportParam = {preview: true,
-															subject: $('#ns1blankspaceReportSendSubject').val(),
-															row: oResponse.data.rows[0],
-															moreID: oResponse.moreid, 
-															parameters: oParameter,
-															object: ns1blankspace.report.object,
-															text: sText
-														   }
-										ns1blankspace.report.sendTo.sendEmail(aReportParam);
-									})
-									.css('font-size', '0.75em');
-								
-									$('#ns1blankspaceReportSendEmail').button(
-									{
-										label: 'Send'
-									})
-									.click(function()
-									{
-										var sText = ns1blankspace.report.mergeFields({columns: aColumns, 
-																					   replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()});
-										ns1blankspace.report.sendTo.sendEmail({moreID: oResponse.moreid,
-																  parameters: oParameter,
-																  text: sText,
-																  subject: $('#ns1blankspaceReportSendSubject').val()
-																  });
-									})
-									.css('font-size', '0.75em');
-									
-									$('.interfaceFormatTags')
-									.hover( function()
-									{	
-										var s = 1;
-										oMCEBookmark = tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).selection.getBookmark({type: 1, normalized: true});
-										s = 2;
-									})
-									.click( function()
-									{
-										ns1blankspace.format.editor.addTag({xhtmlElementID: this.id,
-																	  editorID: 'ns1blankspaceReportSendText' + ns1blankspace.counter.editor, 
-																	  mceBookmark: oMCEBookmark})
-									})
-									
-									tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceReportSendText' + ns1blankspace.counter.editor);
-									
-
-								}
-								else
-								{
-									var sText = '';
-
-									if (oResponse)
-									{
-										sText = 'To send bulk emails to people, you must include at least one field from the contact person.';
-									}
-									else
-									{
-										sText = 'No results to send.';
-									}
-
-									aHTML = [];
-									aHTML.push('<table style="margin:10px; width:350px;"><tr>');
-									aHTML.push('<td id="ns1blankspaceReportSend" class="ns1blankspaceSub">' + sText + '</td>' +
-											   	'</tr></table>');
-									
-									$('#ns1blankspaceReportSend').html(aHTML.join(''));
-								}
-							}
-
-							var sShowId = 'radioReport-Send';
-
-							$('#ns1blankspaceReportHeaderOptions :radio').each(function()
-							{	
-								var sSuffix = $(this).attr('id').split('-')[1];
-								if ($(this).attr('id') === sShowId)
-								{
-									$('#ns1blankspaceReport' + sSuffix).show();
-								}
-								else
-								{
-									$('#ns1blankspaceReport' + sSuffix).hide();
-								}
-							});
-						},
-
-			sendEmail: 		function(oParam) {
-
-							var iMoreId;
-							var sText = "";
-							var sParam = "";
-							var oParameters = [];
-							var sTags = "";
-							var sEmail = "";
-							var sSubject = "";
-							var oRow;
-							var bPreview = false;
-							
-							if (oParam != undefined)
-							{
-								if (oParam.moreID != undefined) {iMoreId = oParam.moreID}		
-								if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
-								if (oParam.text != undefined) {sText = oParam.text}		
-								if (oParam.subject != undefined) {sSubject = oParam.subject}		
-								if (oParam.row != undefined) {oRow = oParam.row}	
-								if (oParam.preview != undefined) {bPreview = oParam.preview}	
-							}
-							else
-							{
-								ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.sendTo.sendEmail. <br /><br />Preview aborted.');
-								return false;
-							}
-							
-							if (bPreview) {
-								// We're sending the preview to the current user
-								$.each(oParameters, function() {
-									sTags = this + "|"  + sTags;
-								});
-
-								if (sTags.length > 0){	
-									sTags = sTags.substr(0, sTags.length - 1); 	
-								}
-							
-								sParam = "&more=" + ns1blankspace.util.fs(iMoreId) + 
-										 "&object=" + ns1blankspace.report.object + "&objectcontext=" + oRow.id +
-										 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-										 "&tags=" + ns1blankspace.util.fs(sTags);
-
-								// CORE_MORE_APPLY_TEMPLATE
-								$.ajax(
-								{
-									type: 'POST',
-									url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
-									data: "rf=text" + sParam,
-									dataType: 'TEXT',
-									success: function(data)
-									{
-										if (data.substr(0,2) === "OK") {	
-											
-											aData = data.split('|');
-											sText = aData[2];
-											sParam = "subject=" + ns1blankspace.util.fs(sSubject) +
-													"&message=" + ns1blankspace.util.fs(sText) + 
-													"&to=" + ns1blankspace.user.email ;
-													//ns1blankspace.util.endpointURI("MESSAGING_EMAIL_SEND")
-											$.ajax({
-												type: 'POST',
-												url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
-												data: sParam,
-												dataType: 'JSON',
-												success: function(oResponse) {
-													if (oResponse.status === 'OK') {
-														ns1blankspace.status.message('Email sent to ' + ns1blankspace.user.email);
-													}
-													else {
-														ns1blankspace.status.message('An error has occurred');
-													}
-												}
-											});
-											//ns1blankspace.status.message(data.substring(12));	
-											// ToDo: Add preview page
-										}
-									}
-								});
-							}
-							else {
-								// Time to send the email to all of the report results
-								if (confirm("Are you sure you want to send an email to all of the Contacts in the report results?"))
-								{
-									sTags = oParameters.join('|');
-									
-									sParam = "&more=" + iMoreId + 
-											 "&title=" + ns1blankspace.util.fs(sSubject) +
-											 "&status=1" + 
-											 "&type=2" +
-											 '&scheduletype=9' +
-											 "&schedulemaximumcount=1" + 
-											 "&responseactionfrom=" + ns1blankspace.util.fs(ns1blankspace.user.email) + 
-											 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-											 "&caption=" + ns1blankspace.util.fs(sTags);
-
-									$.ajax(
-									{
-										type: 'POST',
-										cache: false,
-										url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
-										data: "rf=text" + sParam,
-										dataType: 'text',
-										async: false,
-										success: function(data)
-										{
-											ns1blankspace.status.message("Email(s) sent");
-										}
-									});
-								}
-								else
-								{	return false;	}
-							}
-						},
-
-				sendSMS: 	function(oParam) {
-
-							var iMoreId;
-							var sText = "";
-							var sParam = "";
-							var oParameters = [];
-							var sTags = "";
-							var sEmail = "";
-							var sSubject = "";
-							var oRow;
-							var bPreview = false;
-							
-							if (oParam != undefined)
-							{
-								if (oParam.moreID != undefined) {iMoreId = oParam.moreID}		
-								if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
-								if (oParam.text != undefined) {sText = oParam.text}		
-								if (oParam.subject != undefined) {sSubject = oParam.subject}		
-								if (oParam.row != undefined) {oRow = oParam.row}	
-								if (oParam.preview != undefined) {bPreview = oParam.preview}	
-							}
-							else
-							{
-								ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.sendTo.sendSMS. <br /><br />Preview aborted.');
-								return false;
-							}
-							
-							if (1 === 1) {
-								ns1blankspace.status.message('Function not yet available.');
-								return;
-							}
-
-							if (bPreview) {
-								// We're sending the preview to the current user
-								$.each(oParameters, function() {
-									sTags = this + "|"  + sTags;
-								});
-
-								if (sTags.length > 0){	
-									sTags = sTags.substr(0, sTags.length - 1); 	
-								}
-							
-								sParam = "&more=" + ns1blankspace.util.fs(iMoreId) + 
-										 "&object=" + ns1blankspace.report.object + "&objectcontext=" + oRow.id +
-										 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-										 "&tags=" + ns1blankspace.util.fs(sTags);
-
-								
-								$.ajax(
-								{
-									type: 'POST',
-									url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
-									data: "rf=text" + sParam,
-									dataType: 'TEXT',
-									success: function(data)
-									{
-										if (data.substr(0,2) === "OK") {	
-											
-											aData = data.split('|');
-											sText = aData[2];
-											sParam = "subject=" + ns1blankspace.util.fs(sSubject) +
-													"&message=" + ns1blankspace.util.fs(sText) + 
-													"&to=" + ns1blankspace.user.email ;
-													
-											$.ajax({
-												type: 'POST',
-												url: '/ondemand/messaging/?method=MESSAGING_SMS_SEND',
-												data: sParam,
-												dataType: 'JSON',
-												success: function(oResponse) {
-													if (oResponse.status === 'OK') {
-														ns1blankspace.status.message('SMS sent to ' + ns1blankspace.user.email);
-													}
-													else {
-														ns1blankspace.status.message('An error has occurred');
-													}
-												}
-											});
-										
-										}
-									}
-								});
-							}
-							else {
-								// Time to send the email to all of the report results
-								if (confirm("Are you sure you want to send an SMS to all of the Contacts in the report results?"))
-								{
-									sTags = oParameters.join('|');
-									
-									sParam = "&more=" + iMoreId + 
-											 "&title=" + ns1blankspace.util.fs(sSubject) +
-											 "&status=1" + 
-											 "&type=2" +
-											 '&scheduletype=9' +
-											 "&schedulemaximumcount=1" + 
-											 "&responseactionfrom=" + ns1blankspace.util.fs(ns1blankspace.user.email) + 
-											 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-											 "&caption=" + ns1blankspace.util.fs(sTags);
-
-									$.ajax(
-									{
-										type: 'POST',
-										cache: false,
-										url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
-										data: "rf=text" + sParam,
-										dataType: 'text',
-										async: false,
-										success: function(data)
-										{
-											ns1blankspace.status.message("Email(s) sent");
-										}
-									});
-								}
-								else
-								{	return false;	}
-							}
-						}
-				},
-
-	bulkUpdate:	{
-
+	update:		{
 					show: 		function (oParam)
 								{
 									var oResponse;
 									var nCount;
-									var sMoreId;
+									var sMoreID;
 									var oParameters;
 									var sExtraIDColumnBefore;
 									var sIDColumn = 'id';
@@ -2413,7 +1909,7 @@ ns1blankspace.report =
 										if (oParam.response) { oResponse = oParam.response; }
 										if (oParam.count) { nCount = oParam.count; }
 										if (oParam.parameterList) {oParameters = oParam.parameterList.split(','); }
-										if (oParam.moreId) {sMoreId = oParam.moreId; }
+										if (oParam.moreID) {sMoreID = oParam.moreID; }
 										if (oParam.idColumn) {sIDColumn = oParam.idColumn; }
 										if (oParam.extraIDColumnBefore) {sExtraIDColumnBefore = oParam.extraIDColumnBefore; }
 									}
@@ -2427,291 +1923,834 @@ ns1blankspace.report =
 												   '<td id="ns1blankspaceReportUpdateColumn2" style="width:200px;"></td>' +
 												   '</tr></table>');
 									
-									$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
+										$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
 
-									aHTML = [];
+										aHTML = [];
 
-									aHTML.push('<table class="ns1blankspace">');
-									aHTML.push('<tr><td colspan=2 style="font-size:0.875em; color:#B8B8B8; padding:4px; background-color:#F8F8F8;">Include</td>' +
-												'<td colspan=1 style="font-size:0.875em; color:#B8B8B8; padding:4px; background-color:#F8F8F8;">Update To</td></tr>');
-								
-									$.each(oParameters, function()
-									{
-										if (this == sExtraIDColumnBefore || this === sIDColumn) {}
-										else {		// We want this one
-
-											
-											var sName = this.replace(/\./g, '_');
-											var sCaption = $('#ns1blankspaceReport_caption_' + sName).html();
-											var sSearchRelatedField = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchRelatedField');
-											var sInputType = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-inputType');
-											var sSearchMethod = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchMethod');
-											var sSearchEndPoint = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchEndpoint');
-											var sDataType = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-dataType');
-											var sInputTypeTitle = (sInputType) ? sInputType.substr(0,1).toUpperCase() + sInputType.substr(1) : 'Text';
-											sInputTypeTitle = (sInputType === 'textbox') ? 'Text' : sInputTypeTitle;
-
-											// we can't bulk update anything except lookup fields against SETUP
-											if (sSearchMethod == "" || sSearchMethod.split('_')[0] === 'SETUP') {
-
-												aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReportUpdate_include_' + sName + '" class="ns1blankspaceRow">' +
-															'<input type="checkbox" id="ns1blankspaceReportUpdateCheck_include_' + sName + '"' +
-																' data-name="' + sName + '"' +
-																' class="ns1blankspaceReportUpdateInclude">' +
-															'</td>');
-											
-												aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_caption_' + sName + '" class="ns1blankspaceReport ns1blankspaceRow">' +
-															sCaption + '</td>');
-												
-												aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_value_' + sName + '"' +
-																	' class="ns1blankspaceRow ns1blankspace' + sInputTypeTitle  + '">');
-
-												aHTML.push('<input id="ns1blankspaceReportUpdate_input_' + sName + '"' +
-																	' class="ns1blankspaceRow ns1blankspace' + sInputTypeTitle);
-
-												if (sDataType === "date")
-												{
-													aHTML.push(' hasDatepicker');
-												}
-												aHTML.push('"');
-
-												if (sInputType === "select") {
-													aHTML.push(' data-method="' + sSearchMethod + '"');
-													aHTML.push(' data-searchRelatedField="' + sSearchRelatedField + '"');
-												}
-												aHTML.push('></td>');
-
-														//' data-dataType="' + this.datatype + '"' +
-														//' data-searchEndpoint="' + sSearchEndPoint + '"' +
-														//' data-searchMethod="' + sSearchMethod + sSearchFilter + '"' +
-														//' data-inputType="');
+										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<tr><td colspan=2 style="font-size:0.875em; color:#B8B8B8; padding:4px; background-color:#F8F8F8;">Include</td>' +
+													'<td colspan=1 style="font-size:0.875em; color:#B8B8B8; padding:4px; background-color:#F8F8F8;">Update To</td></tr>');
+									
+										$.each(oParameters, function()
+										{
+											if (this == sExtraIDColumnBefore || this === sIDColumn) {}
+											else {		// We want this one
 
 												
-												aHTML.push('</tr>');
+												var sName = this.replace(/\./g, '_');
+												var sCaption = $('#ns1blankspaceReport_caption_' + sName).html();
+												var sSearchRelatedField = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchRelatedField');
+												var sInputType = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-inputType');
+												var sSearchMethod = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchMethod');
+												var sSearchEndPoint = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-searchEndpoint');
+												var sDataType = $('#ns1blankspaceReport_caption_' + sName).next().attr('data-dataType');
+												var sInputTypeTitle = (sInputType) ? sInputType.substr(0,1).toUpperCase() + sInputType.substr(1) : 'Text';
+												sInputTypeTitle = (sInputType === 'textbox') ? 'Text' : sInputTypeTitle;
+
+												// we can't bulk update anything except lookup fields against SETUP
+												if (sSearchMethod == "" || sSearchMethod.split('_')[0] === 'SETUP') {
+
+													aHTML.push('<tr><td style="width:15px;" id="ns1blankspaceReportUpdate_include_' + sName + '" class="ns1blankspaceRow">' +
+																'<input type="checkbox" id="ns1blankspaceReportUpdateCheck_include_' + sName + '"' +
+																	' data-name="' + sName + '"' +
+																	' class="ns1blankspaceReportUpdateInclude">' +
+																'</td>');
+												
+													aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_caption_' + sName + '" class="ns1blankspaceReport ns1blankspaceRow">' +
+																sCaption + '</td>');
+													
+													aHTML.push('<td style="width:200px;" id="ns1blankspaceReportUpdate_value_' + sName + '"' +
+																		' class="ns1blankspaceRow ns1blankspace' + sInputTypeTitle  + '">');
+
+													aHTML.push('<input id="ns1blankspaceReportUpdate_input_' + sName + '"' +
+																		' class="ns1blankspaceRow ns1blankspace' + sInputTypeTitle);
+
+													if (sDataType === "date")
+													{
+														aHTML.push(' hasDatepicker');
+													}
+													aHTML.push('"');
+
+													if (sInputType === "select") {
+														aHTML.push(' data-method="' + sSearchMethod + '"');
+														aHTML.push(' data-searchRelatedField="' + sSearchRelatedField + '"');
+													}
+													aHTML.push('></td>');
+
+															//' data-dataType="' + this.datatype + '"' +
+															//' data-searchEndpoint="' + sSearchEndPoint + '"' +
+															//' data-searchMethod="' + sSearchMethod + sSearchFilter + '"' +
+															//' data-inputType="');
+
+													
+													aHTML.push('</tr>');
+												}
 											}
+
+										});
+											
+										//aHTML.push('</tr>');
+										aHTML.push('</table>');
+										$('#ns1blankspaceReportUpdateColumn1').html(aHTML.join(''));
+
+										aHTML = [];
+										aHTML.push('<table style="font-size:0.875em;"><tr>');
+										aHTML.push('<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
+													'<span id="ns1blankspaceReportUpdateProcess"></span></td></tr>');
+										aHTML.push('<tr><td id="ns1blankspaceReportUpdateProgress">&nbsp;</td></tr>');
+										aHTML.push('</table>');
+
+										$('#ns1blankspaceReportUpdateColumn2').html(aHTML.join(''));
+
+										$('#ns1blankspaceReportUpdateProcess').button(
+										{
+											label: 'Save'
+										})
+										.click(function()
+										{ 
+											ns1blankspace.util.setParam(oParam, 'step', 1);
+											ns1blankspace.report.update.send(oParam);
+										}).
+										css('font-size', '0.75em');
+									}
+
+									else if (oResponse == undefined)
+									{
+										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<tr>');
+										aHTML.push('<td class="ns1blankspaceSub">No results. No updates possible.</td></tr>');
+										aHTML.push('</table>');
+
+										$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
+									}
+
+									var sShowID = 'radioReport-Update';
+
+									$('#ns1blankspaceReportHeaderOptions :radio').each(function()
+									{	
+										var sSuffix = $(this).attr('id').split('-')[1];
+
+										if ($(this).attr('id') === sShowID)
+										{
+											$('#ns1blankspaceReport' + sSuffix).show();
+										}
+										else
+										{
+											$('#ns1blankspaceReport' + sSuffix).hide();
+										}
+									});
+								},
+
+					send: 		function (oParam)
+								{
+									var oResponse;
+									var iMoreID;
+									var sErrorText;
+									var iStep = 1;
+									var aUpdateColumns = [];
+									var bUpdateData = true;
+									
+									ns1blankspace.report.data = {};
+									ns1blankspace.report.data.rows = [];
+
+									if (oParam) {
+										oResponse = oParam.response;
+										if (oParam.updateColumns) {aUpdateColumns = oParam.updateColumns; }
+										if (oParam.step) {iStep = oParam.step; }
+									}
+
+									if ($("input.ns1blankspaceReportUpdateInclude:checked").length == 0)
+									{
+										ns1blankspace.status.error('Please choose at least one column to update.');
+									}
+									else if (oResponse)
+									{						
+										var sTotal = oResponse.summary[ns1blankspace.report.endpoint];
+
+										if (iStep === 1) {
+
+											// Ask user 'Are you sure'
+											if (confirm("You are about to update " + sTotal + ' records. Are you sure you want to continue?')) {
+												
+												$('#ns1blankspaceReportUpdateProgress').html('<span id="ns1blankspaceReportUpdateProgressCount">0</span>&nbsp;of ' + sTotal + ' records updated');
+
+												// Determine the columns to be updated and the value to update them to
+												$("input.ns1blankspaceReportUpdateInclude:checked").each(function() {
+
+													var sInputXHMLElementID = $(this).attr('id').replace('Check_include_', '_input_');
+													
+													var sUpdateColumn = $('#' + sInputXHMLElementID).attr('data-searchrelatedfield');
+													if (sUpdateColumn === undefined) { 
+														sUpdateColumn = $(this).attr('data-name').replace(/_/g, '.');
+													}
+													sUpdateColumn = sUpdateColumn.substr(sUpdateColumn.indexOf('.') + 1);
+
+													var sUpdateValue = $('#' + sInputXHMLElementID).val();
+													if ($('#' + sInputXHMLElementID).attr('data-id')) {
+														sUpdateValue = $('#' + sInputXHMLElementID).attr('data-id');
+													}
+													
+													aUpdateColumns.push({name: sUpdateColumn, value: sUpdateValue});
+												});
+												
+												ns1blankspace.util.setParam(oParam, "updateColumns", aUpdateColumns);
+												ns1blankspace.util.setParam(oParam, "step", 2);
+											}
+											else { bUpdateData = false;}
+
+										}
+										else {
+											ns1blankspace.util.setParam(oParam, "step", 2);
 										}
 
-									});
-										
-									//aHTML.push('</tr>');
-									aHTML.push('</table>');
-									$('#ns1blankspaceReportUpdateColumn1').html(aHTML.join(''));
+										// Loop through all the records and process
+										iMoreID = oResponse.moreid;
+										if (bUpdateData && oResponse.data.rows.length > 0) {
 
-									aHTML = [];
-									aHTML.push('<table style="font-size:0.875em;"><tr>');
-									aHTML.push('<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
-												'<span id="ns1blankspaceReportUpdateProcess"></span></td></tr>');
-									aHTML.push('<tr><td id="ns1blankspaceReportUpdateProgress">&nbsp;</td></tr>');
-									aHTML.push('</table>');
+											$.each(oResponse.data.rows, function() {
 
-									$('#ns1blankspaceReportUpdateColumn2').html(aHTML.join(''));
+												ns1blankspace.report.data.rows.push(this);
+											});
 
-									$('#ns1blankspaceReportUpdateProcess').button(
-									{
-										label: 'Save'
-									})
-									.click(function()
-									{ 
-										ns1blankspace.util.setParam(oParam, 'step', 1);
-										ns1blankspace.report.bulkUpdate.send(oParam);
-									}).
-									css('font-size', '0.75em');
-								}
+											if (oResponse.morerows === 'true') {
 
-								else if (oResponse == undefined)
-								{
-									aHTML.push('<table class="ns1blankspace">');
-									aHTML.push('<tr>');
-									aHTML.push('<td class="ns1blankspaceSub">No results. No updates possible.</td></tr>');
-									aHTML.push('</table>');
+												var nRemaining = parseInt(sTotal) - 20;
+												
+												$.ajax(
+												{
+													type: 'GET',
+													url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
+													data: 'id=' + iMoreID + '&startrow=20&rows=' + nRemaining,
+													dataType: 'json',
+													success: function(data) {
 
-									$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
-								}
+														$.each(data.data.rows, function() {
+															ns1blankspace.report.data.rows.push(this);
+														});
 
-								var sShowId = 'radioReport-Update';
-
-								$('#ns1blankspaceReportHeaderOptions :radio').each(function()
-								{	
-									var sSuffix = $(this).attr('id').split('-')[1];
-
-									if ($(this).attr('id') === sShowId)
-									{
-										$('#ns1blankspaceReport' + sSuffix).show();
-									}
-									else
-									{
-										$('#ns1blankspaceReport' + sSuffix).hide();
-									}
-								});
-							},
-
-				send: 	function (oParam) {
-
-							var oResponse;
-							var iMoreId;
-							var sErrorText;
-							var iStep = 1;
-							var aUpdateColumns = [];
-							var bUpdateData = true;
-							
-							ns1blankspace.report.data = {};
-							ns1blankspace.report.data.rows = [];
-
-							if (oParam) {
-								oResponse = oParam.response;
-								if (oParam.updateColumns) {aUpdateColumns = oParam.updateColumns; }
-								if (oParam.step) {iStep = oParam.step; }
-							}
-
-							if ($("input.ns1blankspaceReportUpdateInclude:checked").length == 0) {
-								ns1blankspace.status.error('Please choose at least one column to update.');
-							}
-							else if (oResponse) {						
-								
-								var sTotal = oResponse.summary[ns1blankspace.report.endpoint];
-
-								if (iStep === 1) {
-
-									// Ask user 'Are you sure'
-									if (confirm("You are about to update " + sTotal + ' records. Are you sure you want to continue?')) {
-										
-										$('#ns1blankspaceReportUpdateProgress').html('<span id="ns1blankspaceReportUpdateProgressCount">0</span>&nbsp;of ' + sTotal + ' records updated');
-
-										// Determine the columns to be updated and the value to update them to
-										$("input.ns1blankspaceReportUpdateInclude:checked").each(function() {
-
-											var sInputXHMLElementId = $(this).attr('id').replace('Check_include_', '_input_');
-											
-											var sUpdateColumn = $('#' + sInputXHMLElementId).attr('data-searchrelatedfield');
-											if (sUpdateColumn === undefined) { 
-												sUpdateColumn = $(this).attr('data-name').replace(/_/g, '.');
+														$.each(ns1blankspace.report.data.rows, function() {
+															ns1blankspace.report.update.process(oParam, this);
+														});
+														oParam.step = undefined;
+														oParam.updateColumns = undefined;
+													}
+												}); 
 											}
-											sUpdateColumn = sUpdateColumn.substr(sUpdateColumn.indexOf('.') + 1);
-
-											var sUpdateValue = $('#' + sInputXHMLElementId).val();
-											if ($('#' + sInputXHMLElementId).attr('data-id')) {
-												sUpdateValue = $('#' + sInputXHMLElementId).attr('data-id');
-											}
-											
-											aUpdateColumns.push({name: sUpdateColumn, value: sUpdateValue});
-										});
-										
-										ns1blankspace.util.setParam(oParam, "updateColumns", aUpdateColumns);
-										ns1blankspace.util.setParam(oParam, "step", 2);
-									}
-									else { bUpdateData = false;}
-
-								}
-								else {
-									ns1blankspace.util.setParam(oParam, "step", 2);
-								}
-
-
-								// Loop through all the records and process
-								iMoreId = oResponse.moreid;
-								if (bUpdateData && oResponse.data.rows.length > 0) {
-
-									$.each(oResponse.data.rows, function() {
-
-										ns1blankspace.report.data.rows.push(this);
-									});
-
-									if (oResponse.morerows === 'true') {
-
-										var nRemaining = parseInt(sTotal) - 20;
-										
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
-											data: 'id=' + iMoreId + '&startrow=20&rows=' + nRemaining,
-											dataType: 'json',
-											success: function(data) {
-
-												$.each(data.data.rows, function() {
-													ns1blankspace.report.data.rows.push(this);
-												});
-
+											else {
 												$.each(ns1blankspace.report.data.rows, function() {
-													ns1blankspace.report.bulkUpdate.process(oParam, this);
+													ns1blankspace.report.update.process(oParam, this);
 												});
 												oParam.step = undefined;
 												oParam.updateColumns = undefined;
 											}
-										}); 
+										}
 									}
-									else {
-										$.each(ns1blankspace.report.data.rows, function() {
-											ns1blankspace.report.bulkUpdate.process(oParam, this);
+									else { sErrorText = "Parameters not passed to Update.";}
+
+									if (sErrorText) {
+
+										var aHTML = [];
+										aHTML.push('<table class="interfaceMain">');
+										aHTML.push('<tr class="ns1blankspaceCaption">');
+										aHTML.push('<td class="ns1blankspaceCaption">' + sErrorText + ' Nothing updated.</td></tr>');
+										aHTML.push('</table>');
+										$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
+									}
+								},
+
+					process: 	function(oParam, oRow)
+								{
+									var sErrorText;
+
+									var aData = [];
+									var aUpdateColumns = [];
+									var sRowID;
+
+									if (oParam)
+									{
+										if (oParam.updateColumns) {aUpdateColumns = oParam.updateColumns;}
+									}
+
+									if (aUpdateColumns.length > 0) {
+
+										aData.push('id=' + oRow.id);
+
+										$.each(aUpdateColumns, function() {
+
+											aData.push(this.name + '=' + this.value);
 										});
-										oParam.step = undefined;
-										oParam.updateColumns = undefined;
+
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI(ns1blankspace.report.method.replace('_SEARCH', '_MANAGE')),
+											data: aData.join('&'),
+											async: false,
+											dataType: 'json',
+											success: function(oResponse, oParam) {
+
+												if (oResponse.status == 'OK') {
+
+													var sCount = $('#ns1blankspaceReportUpdateProgressCount').html();
+													var iUpdateCount = parseInt(sCount);
+
+													if (isNaN(iUpdateCount)) {
+														$('#ns1blankspaceReportUpdateProgressCount').html('0');
+													}
+													else {
+														$('#ns1blankspaceReportUpdateProgressCount').html(iUpdateCount + 1 + '');
+													}
+
+												}
+											}
+										});
+									}
+									else
+									{
+										sErrorText = 'Parameters not passed to Update.';
 									}
 								}
+				},		
 
-								
-							}
-							else { sErrorText = "Parameters not passed to Update.";}
+	email:		{
+					show: 		function (oParam)
+								{
+									var oResponse;
+									var bContainsContactPerson = false;
+									var aColumns = [];
 
-							if (sErrorText) {
+									if (oParam)
+									{
+										if (oParam.response) {oResponse = oParam.response;}
+										if (oParam.containsContactPerson != undefined) {bContainsContactPerson = oParam.containsContactPerson;}
+										if (oParam.columns) {aColumns = oParam.columns;}
+									}
 
-								var aHTML = [];
-								aHTML.push('<table class="interfaceMain">');
-								aHTML.push('<tr class="ns1blankspaceCaption">');
-								aHTML.push('<td class="ns1blankspaceCaption">' + sErrorText + ' Nothing updated.</td></tr>');
-								aHTML.push('</table>');
-								$('#ns1blankspaceReportUpdate').html(aHTML.join(''));
-							}
-						},
+									if (oResponse && $('#ns1blankspaceReportSendColumn1').html() == undefined)
+									{
+										if (bContainsContactPerson)
+										{	
+											// Show editor and template fields, buttons for preview & Sending
+											ns1blankspace.format.editor.init();
+											for (edID in tinyMCE.editors) 
+														tinyMCE.editors[edID].destroy(true);
+													
+											ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;	
 
-				process: function(oParam, oRow) {
+											aHTML = [];
+											aHTML.push('<table class="ns1blankspaceContainer"><tr>');
+											aHTML.push('<td id="ns1blankspaceReportSendColumn1"></td>' +
+													   '<td id="ns1blankspaceReportSendColumn2" style="width:100px;"></td>' +
+													   '</tr></table>');
+											
+											$('#ns1blankspaceReportSend').html(aHTML.join(''));
+											
+											var aHTML = [];
+											var oMCEBookmark;
+										
+											aHTML.push('<table style="font-size:0.875em;">');
 
-						var sErrorText;
+											aHTML.push('<tr><td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
+															'<span id="ns1blankspaceReportSendPreview" class="ns1blankspaceAction">Preview</span>' +
+															' <span id="ns1blankspaceReportSendEmail" class="ns1blankspaceAction">Email</span>' +
+															'</td></tr>');
 
-						var aData = [];
-						var aUpdateColumns = [];
-						var sRowId;
+											aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row1" style="padding-left:3px; padding-right:11px;">' +
+														'<input id="ns1blankspaceReportSendSubject" class="ns1blankspaceText">');
+			
+											aHTML.push('</td></tr>');
 
-						if (oParam) {
-							if (oParam.updateColumns) {aUpdateColumns = oParam.updateColumns;}
-						}
+											aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row2">');
+												aHTML.push('<table class="ns1blankspace">');
+												aHTML.push('<tr><td>' +
+															'<textarea rows="30" cols="50" id="ns1blankspaceReportSendText' +
+																ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
+															'</td></tr></table>');
+													
+											aHTML.push('</td></tr>');
 
-						if (aUpdateColumns.length > 0) {
+											$('#ns1blankspaceReportSendColumn1').html(aHTML.join(''));
+													
+											aHTML = [];
 
-							aData.push('id=' + oRow.id);
+											aHTML.push('<table>');
+											aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:0.75em;">' +
+														'Tags..</td></tr>');
 
-							$.each(aUpdateColumns, function() {
+											$.each(aColumns, function()
+											{
+												aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
 
-								aData.push(this.name + '=' + this.value);
-							});
+												aHTML.push('<span id="spanInterfaceFormatTag_' + (this.caption).replace(/ /g,'-') + '"' +
+														  		' class="ns1blankspaceFormatTags" ' +
+														   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>');
 
-							$.ajax({
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI(ns1blankspace.report.method.replace('_SEARCH', '_MANAGE')),
-								data: aData.join('&'),
-								async: false,
-								dataType: 'json',
-								success: function(oResponse, oParam) {
+												aHTML.push('</td></tr>');
+											});
+													
+											aHTML.push('</table>');					
+											
+											$('#ns1blankspaceReportSendColumn2').html(aHTML.join(''));
+										
+											$('#ns1blankspaceReportSendPreview').button(
+											{
+												label: 'Preview'
+											})
+											.click(function()
+											{
+												var sText = ns1blankspace.report.mergeFields(
+												{
+													columns: aColumns, 
+													replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()
+												});
+												
+												var aReportParam = 
+												{
+													preview: true,
+													subject: $('#ns1blankspaceReportSendSubject').val(),
+													row: oResponse.data.rows[0],
+													moreID: oResponse.moreid, 
+													parameters: oParameter,
+													object: ns1blankspace.report.object,
+													text: sText
+												}
 
-									if (oResponse.status == 'OK') {
+												ns1blankspace.report.email.send(aReportParam);
+											})
+											.css('font-size', '0.75em');
+									
+											$('#ns1blankspaceReportSendEmail').button(
+											{
+												label: 'Send'
+											})
+											.click(function()
+											{
+												var sText = ns1blankspace.report.mergeFields(
+												{
+													columns: aColumns, 
+													replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()
+												});
 
-										var sCount = $('#ns1blankspaceReportUpdateProgressCount').html();
-										var iUpdateCount = parseInt(sCount);
-
-										if (isNaN(iUpdateCount)) {
-											$('#ns1blankspaceReportUpdateProgressCount').html('0');
+												ns1blankspace.report.email.send(
+												{
+													moreID: oResponse.moreid,
+													parameters: oParameter,
+													text: sText,
+													subject: $('#ns1blankspaceReportSendSubject').val()
+												});
+											})
+											.css('font-size', '0.75em');
+											
+											$('.ns1blankspaceFormatTags')
+											.hover( function()
+											{	
+												var s = 1;
+												oMCEBookmark = tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).selection.getBookmark({type: 1, normalized: true});
+												s = 2;
+											})
+											.click( function()
+											{
+												ns1blankspace.format.editor.addTag({xhtmlElementID: this.id,
+																			  editorID: 'ns1blankspaceReportSendText' + ns1blankspace.counter.editor, 
+																			  mceBookmark: oMCEBookmark})
+											})
+											
+											tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceReportSendText' + ns1blankspace.counter.editor);
 										}
-										else {
-											$('#ns1blankspaceReportUpdateProgressCount').html(iUpdateCount + 1 + '');
-										}
+										else
+										{
+											var sText = '';
 
+											if (oResponse)
+											{
+												sText = 'To send bulk emails to people, you must include at least one field from the contact person.';
+											}
+											else
+											{
+												sText = 'No results to send.';
+											}
+
+											aHTML = [];
+											aHTML.push('<table style="margin:10px; width:350px;"><tr>');
+											aHTML.push('<td id="ns1blankspaceReportSend" class="ns1blankspaceSub">' + sText + '</td>' +
+													   	'</tr></table>');
+											
+											$('#ns1blankspaceReportSend').html(aHTML.join(''));
+										}
+									}
+
+									var sShowID = 'radioReport-Send';
+
+									$('#ns1blankspaceReportHeaderOptions :radio').each(function()
+									{	
+										var sSuffix = $(this).attr('id').split('-')[1];
+										if ($(this).attr('id') === sShowID)
+										{
+											$('#ns1blankspaceReport' + sSuffix).show();
+										}
+										else
+										{
+											$('#ns1blankspaceReport' + sSuffix).hide();
+										}
+									});
+								},
+
+					preview:
+								function (oParam)
+								{
+									var oRow;
+									var iMoreID;
+									var sText = "";
+									var sParam = "";
+									var oParameters = [];
+									var sTags = "";
+									var iObject;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.row != undefined) {oRow = oParam.row}
+										if (oParam.moreID != undefined) {iMoreID = oParam.moreID}		
+										if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
+										if (oParam.text != undefined) {sText = oParam.text}		
+										if (oParam.object != undefined) {iObject = oParam.object}		
+									}
+									else
+									{
+										ns1blankspace.status.error('Preview aborted.');
+										return false;
+									}
+									
+									if (false && iObject == 32)
+									{
+										sTags = oParameters.join('|');
+									}
+									else
+									{
+										$.each(oParameters, function()
+										{
+											sTags = this + "|"  + sTags;
+										});
+
+										if (sTags.length > 0)
+										{
+											sTags = sTags.substr(0, sTags.length - 1); 
+										}
+									}
+									
+									sParam = "&more=" + iMoreID + 
+											 "&object=" + ns1blankspace.report.object + "&objectcontext=" + oRow.id +
+											 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+											 "&tags=" + ns1blankspace.util.fs(sTags);
+
+									$.ajax(
+									{
+										type: 'POST',
+										cache: false,
+										url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
+										data: "rf=text" + sParam,
+										dataType: 'text',
+										async: false,
+										success: function(data)
+										{
+											if (data.substr(0,12) == "OK|RETURNED|")
+											{	
+												ns1blankspace.status.message(data.substring(12));	
+												// ToDo: Add preview page
+											}
+										}
+									});
+								},
+
+					send: 		function(oParam)
+								{
+									var iMoreID;
+									var sText = "";
+									var sParam = "";
+									var oParameters = [];
+									var sTags = "";
+									var sEmail = "";
+									var sSubject = "";
+									var oRow;
+									var bPreview = false;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.moreID != undefined) {iMoreID = oParam.moreID}		
+										if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
+										if (oParam.text != undefined) {sText = oParam.text}		
+										if (oParam.subject != undefined) {sSubject = oParam.subject}		
+										if (oParam.row != undefined) {oRow = oParam.row}	
+										if (oParam.preview != undefined) {bPreview = oParam.preview}	
+									}
+									else
+									{
+										ns1blankspace.status.error('Can not preview');
+										return false;
+									}
+									
+									if (bPreview)
+									{
+										// We're sending the preview to the current user
+										$.each(oParameters, function()
+										{
+											sTags = this + "|"  + sTags;
+										});
+
+										if (sTags.length > 0)
+										{	
+											sTags = sTags.substr(0, sTags.length - 1); 	
+										}
+									
+										sParam = "&more=" + ns1blankspace.util.fs(iMoreID) + 
+												 	"&object=" + ns1blankspace.report.object + "&objectcontext=" + oRow.id +
+													"&templatetext=" + ns1blankspace.util.fs(sText) + 
+											 		"&tags=" + ns1blankspace.util.fs(sTags);
+
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
+											data: "rf=text" + sParam,
+											dataType: 'TEXT',
+											success: function(data)
+											{
+												if (data.substr(0,2) === "OK") {	
+													
+													aData = data.split('|');
+													sText = aData[2];
+													sParam = "subject=" + ns1blankspace.util.fs(sSubject) +
+															"&message=" + ns1blankspace.util.fs(sText) + 
+															"&to=" + ns1blankspace.user.email;
+
+															//ns1blankspace.util.endpointURI("MESSAGING_EMAIL_SEND")
+													$.ajax(
+													{
+														type: 'POST',
+														url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
+														data: sParam,
+														dataType: 'JSON',
+														success: function(oResponse) {
+															if (oResponse.status === 'OK') {
+																ns1blankspace.status.message('Email sent to ' + ns1blankspace.user.email);
+															}
+															else {
+																ns1blankspace.status.message('An error has occurred');
+															}
+														}
+													});
+													//ns1blankspace.status.message(data.substring(12));	
+													// ToDo: Add preview page
+												}
+											}
+										});
+									}
+									else
+									{
+										// Time to send the email to all of the report results
+										if (confirm("Are you sure you want to send an email to all of the Contacts in the report results?"))
+										{
+											sTags = oParameters.join('|');
+											
+											sParam = "&more=" + iMoreID + 
+													 "&title=" + ns1blankspace.util.fs(sSubject) +
+													 "&status=1" + 
+													 "&type=2" +
+													 '&scheduletype=9' +
+													 "&schedulemaximumcount=1" + 
+													 "&responseactionfrom=" + ns1blankspace.util.fs(ns1blankspace.user.email) + 
+													 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+													 "&caption=" + ns1blankspace.util.fs(sTags);
+
+											$.ajax(
+											{
+												type: 'POST',
+												cache: false,
+												url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
+												data: "rf=text" + sParam,
+												dataType: 'text',
+												async: false,
+												success: function(data)
+												{
+													ns1blankspace.status.message("Email(s) sent");
+												}
+											});
+										}
+										else
+										{	return false;	}
 									}
 								}
-							});
-						}
-						else { sErrorText = "Parameters not passed to Update.";}
+				},
+							
+	sms: 		{
+					show:  		function ()
+								{
+									$('div.ns1blankspaceReportContainer').hide();
+									$('#ns1blankspaceReportSMS').show();
 
-					}
-		}
+									var aHTML = [];
 
+									aHTML.push('<table class="ns1blankspaceContainer">' +
+													'<tr><td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; font-size:0.875em; vertical-align:middle;">' +
+													'Enter your message and then click Send.</td>' +
+													'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
+													'<span id="ns1blankspaceReportSMSSend" class="ns1blankspaceAction">Send</span>' +
+													'</td></tr>' +
+													'<tr>' +
+													'<td id="ns1blankspaceReportSMSColumn1"></td>' +
+											  		'<td id="ns1blankspaceReportSMSColumn2" style="width:200px;"></td>' +
+											   		'</tr></table>');
+									
+									$('#ns1blankspaceReportSMS').html(aHTML.join(''));
+
+									var aHTML = [];
+
+									aHTML.push('<table style="font-size:0.875em;">');
+
+									aHTML.push('<tr><td>' +
+													'<textarea rows="15" cols="50" id="ns1blankspaceReportSMSText"></textarea>' +
+													'</td></tr>');
+											
+									aHTML.push('</td></tr></table>');
+
+									$('#ns1blankspaceReportSMSColumn1').html(aHTML.join(''));
+
+									$('#ns1blankspaceReportSMSSend').button(
+									{
+										label: 'Send'
+									})
+									.click(function()
+									{
+										var sText = ns1blankspace.report.mergeFields(
+										{
+											columns: aColumns, 
+											replace: $('#ns1blankspaceReportSMSText').val()
+										});
+										
+										ns1blankspace.report.sms.send();
+									})
+									.css('font-size', '0.75em');
+
+								},
+
+					send:		function(oParam)
+								{
+									var iMoreID;
+									var sText = "";
+									var sParam = "";
+									var oParameters = [];
+									var sTags = "";
+									var sEmail = "";
+									var sSubject = "";
+									var oRow;
+									var bPreview = false;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.moreID != undefined) {iMoreID = oParam.moreID}		
+										if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
+										if (oParam.text != undefined) {sText = oParam.text}		
+										if (oParam.subject != undefined) {sSubject = oParam.subject}		
+										if (oParam.row != undefined) {oRow = oParam.row}	
+										if (oParam.preview != undefined) {bPreview = oParam.preview}	
+									}
+									else
+									{
+										ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.email.sendSMS. <br /><br />Preview aborted.');
+										return false;
+									}
+									
+									if (true)
+									{
+										ns1blankspace.status.message('Function not yet available.');
+										return;
+									}
+
+									if (bPreview)
+									{
+										// We're sending the preview to the current user
+										$.each(oParameters, function() {
+											sTags = this + "|"  + sTags;
+										});
+
+										if (sTags.length > 0){	
+											sTags = sTags.substr(0, sTags.length - 1); 	
+										}
+									
+										sParam = "&more=" + ns1blankspace.util.fs(iMoreID) + 
+												 "&object=" + ns1blankspace.report.object + "&objectcontext=" + oRow.id +
+												 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+												 "&tags=" + ns1blankspace.util.fs(sTags);
+
+										
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
+											data: "rf=text" + sParam,
+											dataType: 'TEXT',
+											success: function(data)
+											{
+												if (data.substr(0,2) === "OK") {	
+													
+													aData = data.split('|');
+													sText = aData[2];
+													sParam = "subject=" + ns1blankspace.util.fs(sSubject) +
+															"&message=" + ns1blankspace.util.fs(sText) + 
+															"&to=" + ns1blankspace.user.email ;
+															
+													$.ajax({
+														type: 'POST',
+														url: '/ondemand/messaging/?method=MESSAGING_SMS_SEND',
+														data: sParam,
+														dataType: 'JSON',
+														success: function(oResponse) {
+															if (oResponse.status === 'OK') {
+																ns1blankspace.status.message('SMS sent to ' + ns1blankspace.user.email);
+															}
+															else {
+																ns1blankspace.status.message('An error has occurred');
+															}
+														}
+													});
+												
+												}
+											}
+										});
+									}
+									else
+									{
+										// Time to send the email to all of the report results
+										if (confirm("Are you sure you want to send an SMS to all of the Contacts in the report results?"))
+										{
+											sTags = oParameters.join('|');
+											
+											sParam = "&more=" + iMoreID + 
+													 "&title=" + ns1blankspace.util.fs(sSubject) +
+													 "&status=1" + 
+													 "&type=2" +
+													 '&scheduletype=9' +
+													 "&schedulemaximumcount=1" + 
+													 "&responseactionfrom=" + ns1blankspace.util.fs(ns1blankspace.user.email) + 
+													 "&templatetext=" + ns1blankspace.util.fs(sText) + 
+													 "&caption=" + ns1blankspace.util.fs(sTags);
+
+											$.ajax(
+											{
+												type: 'POST',
+												cache: false,
+												url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
+												data: "rf=text" + sParam,
+												dataType: 'text',
+												async: false,
+												success: function(data)
+												{
+													ns1blankspace.status.message("Email(s) sent");
+												}
+											});
+										}
+										else
+										{	return false;	}
+									}
+								}
+				}
 }

@@ -921,7 +921,8 @@ ns1blankspace.setup.user =
 									else
 									{
 										var iContactBusiness = ns1blankspace.user.contactBusiness;
-										if ($('#ns1blankspaceSetupUserBusiness').attr('data-id') != '')
+										if ($('#ns1blankspaceSetupUserBusiness').attr('data-id') != ''
+												&& $('#ns1blankspaceSetupUserBusiness').attr('data-id') != undefined)
 										{iContactBusiness = $('#ns1blankspaceSetupUserBusiness').attr('data-id')}
 
 										if (oResponse == undefined)
@@ -949,7 +950,7 @@ ns1blankspace.setup.user =
 											{
 												ns1blankspace.setup.user.save.process(
 												{
-													contactPerson: oResponse.data.rows[0].contactperson,
+													contactPerson: oResponse.data.rows[0].id,
 													contactBusiness: iContactBusiness
 												});		
 											}
