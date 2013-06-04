@@ -542,6 +542,8 @@ ns1blankspace.financial.debtors =
 												'<tr class="ns1blankspace">' +
 												'<td class="ns1blankspaceNothing">No debtors</td>' +
 												'</tr></tbody></table>');
+
+								$('#ns1blankspaceDebtorsColumn1').html(aHTML.join(''));
 							}
 							else
 							{
@@ -3799,7 +3801,7 @@ ns1blankspace.financial.save =
 						if (oParam.method != undefined) {sMethod = oParam.method}
 						if (oParam.id != undefined) {iID = oParam.id}
 						if (oParam.bankAccount != undefined) {iBankAccount = oParam.bankAccount}
-						if (oParam.showStatus != undefined) {bShowStatus = oParam.showStatus} 	
+						if (oParam.showStatus != undefined) {bShowStatus = oParam.showStatus} 
 					}
 
 					if (bShowStatus) {ns1blankspace.status.working();}

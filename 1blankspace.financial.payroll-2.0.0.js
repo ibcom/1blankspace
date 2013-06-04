@@ -66,9 +66,7 @@ ns1blankspace.financial.payroll =
 						aHTML.push('</table>');		
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));
-
-						$('#ns1blankspaceControl-' + ns1blankspace.financial.payroll.data.context).addClass('ns1blankspaceHighlight');
-						
+	
 						$('#ns1blankspaceControl-pays').click(function(event)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainPayRun', refresh: true});
@@ -107,7 +105,9 @@ ns1blankspace.financial.payroll =
 							oSearch.rows = 10;
 							oSearch.sort('paydate', 'desc');
 							oSearch.getResults(function(data){ns1blankspace.financial.payroll.home(oParam, data)});
-						}	
+						}
+
+						$('#ns1blankspaceControl-' + ns1blankspace.financial.payroll.data.context).addClass('ns1blankspaceHighlight');
 					}
 					else
 					{
@@ -142,8 +142,9 @@ ns1blankspace.financial.payroll =
 					
 						$('#ns1blankspaceMainPayRun').html(aHTML.join(''));
 
-						$('.ns1blankspaceMostLikely').click(function(event) {
-							ns1blankspace.financial.payroll.search.send(event.target.id, {source: 1});
+						$('.ns1blankspaceMostLikely').click(function(event)
+						{
+							ns1blankspace.financial.payroll.search.send(this.id, {source: 1});
 						});
 					}	
 				},
@@ -257,7 +258,7 @@ ns1blankspace.financial.payroll =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.financial.payroll.search.send(event.target.id, {source: 1});
+											ns1blankspace.financial.payroll.search.send(this.id, {source: 1});
 										});
 									}		
 								}
@@ -883,10 +884,12 @@ ns1blankspace.financial.payroll =
 												functionNewPage: ''
 										   	}); 
 											
-											$('.employee').click(function() {
-												$('#ns1blankspacePayrollEmployees td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
-												$('#' + event.target.id).addClass('ns1blankspaceHighlight');
-												var aID = (event.target.id).split('-');
+											$('.employee').click(function()
+											{
+												$('#ns1blankspacePayrollEmployees td.ns1blankspaceRowShadedHighlight').removeClass('ns1blankspaceRowShadedHighlight');
+												$('#' + this.id).addClass('ns1blankspaceRowShadedHighlight');
+
+												var aID = (this.id).split('-');
 												$.extend(true, oParam, {step: 2, employee: parseInt(aID[1])});
 												ns1blankspace.financial.payroll.employees.show(oParam);
 											});	
@@ -954,14 +957,15 @@ ns1blankspace.financial.payroll =
 										
 											$('.ns1blankspacePayrollEmployeeDetails').click(function()
 											{
-												$('#ns1blankspacePayrollEmployeeDetails td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
-												$('#' + event.target.id).addClass('ns1blankspaceHighlight');
-												var aID = (event.target.id).split('-');
+												$('#ns1blankspacePayrollEmployeeDetails td.ns1blankspaceRowShadedHighlight').removeClass('ns1blankspaceRowShadedHighlight');
+												$('#' + this.id).addClass('ns1blankspaceRowShadedHighlight');
+
+												var aID = (this.id).split('-');
 												$.extend(true, oParam, {step: parseInt(aID[1]), stepAction: 1});
 												ns1blankspace.financial.payroll.employees.show(oParam);
 											});
 
-											$('#ns1blankspaceFinancialEmployee_details-11').addClass('ns1blankspaceHighlight');
+											$('#ns1blankspaceFinancialEmployee_details-11').addClass('ns1blankspaceRowShadedHighlight');
 											$.extend(true, oParam, {step: 11});
 											ns1blankspace.financial.payroll.employees.show(oParam);
 										}
@@ -1706,8 +1710,9 @@ ns1blankspace.financial.payroll =
 													.css('width', '15px')
 													.css('height', '17px');
 
-													$('.ns1blankspacePayrollEmployeeDetailsPayRate').click(function() {
-														$.extend(true, oParam, {stepAction: 2, xhtmlElementID: event.target.id});
+													$('.ns1blankspacePayrollEmployeeDetailsPayRate').click(function()
+													{
+														$.extend(true, oParam, {stepAction: 2, xhtmlElementID:this.id});
 														ns1blankspace.financial.payroll.employees.show(oParam);
 													})
 												}
@@ -2001,7 +2006,7 @@ ns1blankspace.financial.payroll =
 													.css('height', '17px');
 
 													$('#ns1blankspacePayrollEmployeeDetailsBankAccount td.ns1blankspaceRow').click(function() {
-														$.extend(true, oParam, {stepAction: 2, xhtmlElementID: event.target.id});
+														$.extend(true, oParam, {stepAction: 2, xhtmlElementID: this.id});
 														ns1blankspace.financial.payroll.employees.show(oParam);
 													})
 												}
@@ -2126,9 +2131,14 @@ ns1blankspace.financial.payroll =
 										aHTML.push('<tr class="ns1blankspaceRow">');
 												
 										aHTML.push('<td id="ns1blankspaceEmployee_contact-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect employee">' +
-																oRow["employee.contactperson.firstname"] + ' ' + oRow["employee.contactperson.surname"] + '</td>');
+																oRow["employee.contactperson.firstname"] + ' ' + oRow["employee.contactperson.surname"]);
+
+										if (oRow["statustext"] != '')
+										{
+											aHTML.push('<br /><span class="ns1blankspaceSub">' + oRow["statustext"]);
+										}
 									
-										aHTML.push('</tr>');
+										aHTML.push('</td></tr>');
 									}
 
 									return aHTML.join('');
@@ -2199,7 +2209,7 @@ ns1blankspace.financial.payroll =
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
-							oSearch.addField('reference,grosssalary,payrecord.employee.contactperson.firstname,payrecord.employee.contactperson.surname');
+							oSearch.addField('payrecord.employee.employeenumber,payrecord.employee.contactperson.firstname,payrecord.employee.contactperson.surname');
 							oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext)
 							oSearch.rows = 200;
 							oSearch.sort('payrecord.employee.contactpersontext', 'asc');
@@ -2226,21 +2236,19 @@ ns1blankspace.financial.payroll =
 															this["payrecord.employee.contactperson.firstname"] + 
 															' ' + this["payrecord.employee.contactperson.surname"]);
 
-									if (this["reference"] != '')
+									if (this["payrecord.employee.employeenumber"] != '...')
 									{
-										aHTML.push('<br /><span class="ns1blankspaceSubNote">' + this["reference"] + '</span>');
+										aHTML.push('<br /><span class="ns1blankspaceSub">' + this["payrecord.employee.employeenumber"]);
 									}
-
-									if (this["grosssalary"] != '')
-									{
-										aHTML.push('<br /><span class="ns1blankspaceSubNote">$' + this["grosssalary"] + '</span>');
-									}
-									
+	
 									aHTML.push('</td>');
-														
-									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+													
+									if (ns1blankspace.objectContextData.status == "1")
+									{					
+										aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 													'<span id="ns1blankspacePayrollPay_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
-													'</td>');					
+													'</td>');
+									}								
 																												
 									aHTML.push('</tr>');
 								});
@@ -2249,30 +2257,27 @@ ns1blankspace.financial.payroll =
 							}
 						
 							$('#ns1blankspacePayrollPayColumn1').html(aHTML.join(''));
-
-							if (ns1blankspace.objectContextData.status == "1")
+						
+							$('#ns1blankspacePayrollRuns .ns1blankspaceRowRemove').button(
 							{
-								$('#ns1blankspacePayrollRuns .ns1blankspaceRowRemove').button(
-								{
-									text: false,
-								 	icons: {primary: "ui-icon-close"}
-								})
-								.click(function()
-								{
-									var aXHTMLElementID = (this.id).split('-');
-									$.extend(true, oParam, {step: 12, pay: aXHTMLElementID[1]});
-									ns1blankspace.financial.payroll.pays(oParam)
-								})
-								.css('width', '15px')
-								.css('height', '20px')
-							}
-
+								text: false,
+							 	icons: {primary: "ui-icon-close"}
+							})
+							.click(function()
+							{
+								var aXHTMLElementID = (this.id).split('-');
+								$.extend(true, oParam, {step: 12, pay: aXHTMLElementID[1]});
+								ns1blankspace.financial.payroll.pays(oParam)
+							})
+							.css('width', '15px')
+							.css('height', '20px')
+						
 							$('#ns1blankspacePayrollRuns td.ns1blankspaceRowSelect').click(function()
 							{
-								$('#ns1blankspacePayrollRuns td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
-								$('#' + event.target.id).addClass('ns1blankspaceHighlight');
-								var aXHTMLElementID = (event.target.id).split('-');
-								var sData = $('#' + event.target.id).attr('data-employeeText');
+								$('#ns1blankspacePayrollRuns td.ns1blankspaceRowShadedHighlight').removeClass('ns1blankspaceRowShadedHighlight');
+								$('#' + this.id).parent().children().addClass('ns1blankspaceRowShadedHighlight');
+								var aXHTMLElementID = (this.id).split('-');
+								var sData = $('#' + this.id).attr('data-employeeText');
 								$.extend(true, oParam, {step: 2, pay: aXHTMLElementID[1], employeeText: sData});
 								ns1blankspace.financial.payroll.pays(oParam);
 							})
@@ -2307,7 +2312,7 @@ ns1blankspace.financial.payroll =
 
 							$('#ns1blankspaceFinancialPayrollColumnItemType :radio').click(function()
 							{
-								var aID = (event.target.id).split('-');
+								var aID = (this.id).split('-');
 								$.extend(true, oParam, {step: aID[1]});
 								ns1blankspace.financial.payroll.pays(oParam);
 							});
@@ -2488,8 +2493,9 @@ ns1blankspace.financial.payroll =
 								.css('width', '15px')
 								.css('height', '20px');
 
-								$('#ns1blankspaceFinancialPayrollItem td.ns1blankspaceRowSelect').click(function() {
-									$.extend(true, oParam, {step: 4, xhtmlElementID: event.target.id});
+								$('#ns1blankspaceFinancialPayrollItem td.ns1blankspaceRowSelect').click(function()
+								{
+									$.extend(true, oParam, {step: 4, xhtmlElementID: this.id});
 									ns1blankspace.financial.payroll.pays(oParam)
 								})
 								.css('width', '15px')

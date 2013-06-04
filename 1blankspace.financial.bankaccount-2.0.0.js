@@ -2019,8 +2019,8 @@ ns1blankspace.financial.bankAccount =
 
 										if (iMode == 1)
 										{	
-											aHTML.push('<div style="text-align:right; margin-left:5px; margin-right:3px; margin-bottom:10px;" id="ns1blankspaceBankAccountColumnItemMode">');											
-											aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceBankAccountColumnItemMode-1-' + iReconciliation + '" name="radioMode" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemMode-1-' + iReconciliation + '" style="width: 90px;">' +
+											aHTML.push('<div style="text-align:right; margin-left:5px; margin-right:3px; margin-bottom:16px;" id="ns1blankspaceBankAccountColumnItemMode">');											
+											aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceBankAccountColumnItemMode-1-' + iReconciliation + '" name="radioMode" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemMode-1-' + iReconciliation + '" style="width:90px; margin-bottom:2px;">' +
 															'Unreconciled</label>');
 											aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceBankAccountColumnItemMode-2-' + iReconciliation + '" name="radioMode" /><label for="ns1blankspaceBankAccountColumnItemMode-2-' + iReconciliation + '" style="width: 90px;">' +
 															'Reconciled</label>');
@@ -2028,7 +2028,7 @@ ns1blankspace.financial.bankAccount =
 										}	
 
 										aHTML.push('<div style="text-align:right; margin-left:5px; margin-right:3px; margin-bottom:5px;" id="ns1blankspaceBankAccountColumnItemType">');
-										aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" name="radioType" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" style="width: 90px;">' +
+										aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" name="radioType" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" style="width:90px; margin-bottom:2px;">' +
 														'Debits</label>');
 										aHTML.push('<input style="width: 100%;"  type="radio" id="ns1blankspaceBankAccountColumnItemType-2-' + iReconciliation + '" name="radioType" /><label for="ns1blankspaceBankAccountColumnItemType-2-' + iReconciliation + '" style="width: 90px;">' +
 														'Credits</label>');
@@ -2377,7 +2377,7 @@ ns1blankspace.financial.bankAccount =
 															{
 																aHTML.push(
 																	'<tr class="ns1blankspaceRow">' +
-																	'<td class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																	'<td class="ns1blankspaceRow">' +
 																	'<table cellspacing=0 cellpadding=0><tr>');
 																				
 																aHTML.push('<td id="ns1blankspaceReconcileItems_date-' + this.id + '" class="recoitemstatement">' +
@@ -2401,7 +2401,7 @@ ns1blankspace.financial.bankAccount =
 																					' data-searchDate="' + this.posteddate + '"' +
 																					' data-searchAmount="' + Math.abs((this.amount).parseCurrency()).toFixed(2) + '"' +
 																					' data-amount="' + Math.abs(this.amount) + '"' +
-																					' data-type="' + (this.amount<0?1:2) + '"' +
+																					' data-trantype="' + (this.amount<0?1:2) + '"' +
 																					' data-taxtype="' + this.taxtype + '"' +
 																					' data-financialaccount="' + this.financialaccount + '"' +
 																					' data-financialaccounttext="' + this.financialaccounttext + '"' +
@@ -3107,7 +3107,8 @@ ns1blankspace.financial.bankAccount =
 																		primary: "ui-icon-check"
 																	}
 																	})
-																	.click(function() {
+																	.click(function()
+																	{
 																		oParam.editAction = 5;
 																		oParam.xhtmlElementID = this.id;
 																		oParam.accruedAmount = $(this).attr('data-amount');
@@ -3125,6 +3126,8 @@ ns1blankspace.financial.bankAccount =
 													{
 														ns1blankspace.status.working();
 
+														delete oParam.editAction;
+
 														var aXHTMLElementID = sXHTMLElementID.split('-');
 														var oData = {reconciliation: iReconciliation};
 
@@ -3133,10 +3136,12 @@ ns1blankspace.financial.bankAccount =
 															if (aXHTMLElementID[2] == 'payment') {iObject = 3}
 															if (aXHTMLElementID[2] == 'receipt') {iObject = 6}
 															if (aXHTMLElementID[2] == 'journal') {iObject = 122}
+
+															iObjectContext = aXHTMLElementID[1];
 														}
 														
 														oData.object = iObject;
-														oData.objectcontext = aXHTMLElementID[1];
+														oData.objectcontext = iObjectContext;
 														oData.sourcebanktransaction = iSearchSourceID;	
 
 														$.ajax(
@@ -3282,7 +3287,7 @@ ns1blankspace.financial.bankAccount =
 															$('#ns1blankspaceItemAmount').val(cSearchAmount);
 
 															var iTaxType = 1;
-															var iType = 1;
+															var iTranType = 1;
 
 															if (ns1blankspace.util.param(oParam, 'sourceXHTMLElementID').exists)
 															{	
@@ -3290,17 +3295,17 @@ ns1blankspace.financial.bankAccount =
 																$('#ns1blankspaceFinancialAccount').val(ns1blankspace.util.getData(oParam, 'data-financialaccounttext', {param: 'sourceXHTMLElementID'}).value);
 																$('#ns1blankspaceFinancialAccount').attr('data-id', ns1blankspace.util.getData(oParam, 'data-financialaccount', {param: 'sourceXHTMLElementID'}).value);
 																iTaxType = ns1blankspace.util.getData(oParam, 'data-taxtype', {param: 'sourceXHTMLElementID'}).value;
-																iType = ns1blankspace.util.getData(oParam, 'data-type', {param: 'sourceXHTMLElementID'}).value;
+																iTranType = ns1blankspace.util.getData(oParam, 'data-trantype', {param: 'sourceXHTMLElementID'}).value;
 															}
 
-															if (iType == undefined) {iType = 1}
+															if (iTranType == undefined) {iTranType = 1}
 															if (iTaxType == 'undefined') {iTaxType = 1}
 
 															ns1blankspace.financial.util.tax.codes(
 															{
 																xhtmlElementID: 'ns1blankspaceItemTaxCode',
 																id: iTaxType,
-																type: iType,
+																type: iTranType,
 																xhtmlElementName: 'radioItemTaxCode'
 															});
 
@@ -3354,19 +3359,19 @@ ns1blankspace.financial.bankAccount =
 																if (iType == 2 && iSource == 1) {iObject = 6}  //RECEIPT
 																if (iType == 2 && iSource == 2) {iObject = 5}  //INVOICE
 
-																ns1blankspace.financial.save.send(
-																{
-																	date: $('#ns1blankspaceItemsEditDate').val(),
-																	description: $('#ns1blankspaceItemsEditDescription').val(),
-																	contactBusiness: $('#ns1blankspaceItemsEditContactBusiness').attr('data-id'),
-																	contactPerson: $('#ns1blankspaceItemsEditContactPerson').attr('data-id'),
-																	financialAccount: $('#ns1blankspaceFinancialAccount').attr('data-id'),
-																	object: iObject,
-																	bankAccount: ns1blankspace.objectContext,
-																	amount: $('#ns1blankspaceItemAmount').val(),
-																	postSave: ns1blankspace.financial.bankAccount.reconcile.items.edit
-																});
+																oParam = ns1blankspace.util.setParam(oParam, 'date', $('#ns1blankspaceItemDate').val());
+																oParam = ns1blankspace.util.setParam(oParam, 'description', $('#ns1blankspaceItemDescription').val());
+																oParam = ns1blankspace.util.setParam(oParam, 'contactBusiness', $('#ns1blankspaceItemContactBusiness').attr('data-id'));
+																oParam = ns1blankspace.util.setParam(oParam, 'contactPerson', $('#ns1blankspaceItemContactPerson').attr('data-id'));
+																oParam = ns1blankspace.util.setParam(oParam, 'account', $('#ns1blankspaceItemFinancialAccount').attr('data-id'));
+																oParam = ns1blankspace.util.setParam(oParam, 'amount', $('#ns1blankspaceItemAmount').val());
+																oParam = ns1blankspace.util.setParam(oParam, 'object', iObject);
+																oParam = ns1blankspace.util.setParam(oParam, 'bankAccount', ns1blankspace.objectContext);
+																oParam = ns1blankspace.util.setParam(oParam, 'postSave', ns1blankspace.financial.bankAccount.reconcile.items.edit);
+
+																ns1blankspace.financial.save.send(oParam);
 															})
+															.css('font-size', '0.875em');
 														}
 														else
 														{
@@ -3411,7 +3416,7 @@ ns1blankspace.financial.bankAccount =
 															var cAmount = cAccruedAmount;
 														}
 
-														if ((cAmount).parseCurrency() > (cAccruedAmount).parseCurrency())
+														if (cAccruedAmount !== undefined?(cAmount).parseCurrency() > (cAccruedAmount).parseCurrency():false)
 														{
 															ns1blankspace.status.error('Bank transaction amount is to large!')
 														}
@@ -3423,9 +3428,10 @@ ns1blankspace.financial.bankAccount =
 																if (oParam.date != undefined) {dDate = oParam.date}	
 															}
 																
-															var sData = 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
+															var sData = 'id=' + ns1blankspace.util.fs(iObjectContext);
 															sData += '&amount=' + ns1blankspace.util.fs(cAmount);
 															sData += '&receiptdate=' + ns1blankspace.util.fs(dDate);
+															sData += '&paiddate=' + ns1blankspace.util.fs(dDate);
 															sData += '&paymentmethod=3';
 															sData += '&bankaccount=' + ns1blankspace.objectContext;
 																	
@@ -3440,6 +3446,7 @@ ns1blankspace.financial.bankAccount =
 																	if (data.status == 'OK')
 																	{	
 																		oParam.xhtmlElementID = '-' + (iType==1?data.payment:data.receipt);
+																		oParam.objectContext = (iType==1?data.payment:data.receipt);
 																		oParam.editAction = 3;
 																		oParam.object = (iType==1?3:6)
 																		ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
@@ -3623,7 +3630,7 @@ ns1blankspace.financial.bankAccount =
 															oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_ITEM_SEARCH';
 															oSearch.addField('creditamount,debitamount,generaljournalitem.generaljournal.reference,generaljournalitem.generaljournal.description,generaljournalitem.generaljournal.journaldate');
 															
-															if (dSearchDate) {oSearch.addFilter('journaldate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
+															if (dSearchDate) {oSearch.addFilter('generaljournalitem.generaljournal.journaldate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-7).toString("dd-MMM-yyyy"))}
 															
 															if (cSearchAmount) {oSearch.addFilter((iType==1?'creditamount':'debitamount'), 'APPROX_EQUAL_TO', cSearchAmount)}
 															

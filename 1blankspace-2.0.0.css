@@ -573,6 +573,14 @@ td.ns1blankspaceRowShaded
 	background-color: #F3F3F3;
 }
 
+td.ns1blankspaceRowShadedHighlight
+{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	background-color: #F3F3F3;
+	font-weight: bold;
+}
+
 td.ns1blankspaceParent
 {
 	cursor: pointer;
