@@ -2585,16 +2585,27 @@ ns1blankspace.report =
 				},
 							
 	sms: 		{
-					show:  		function ()
+					show:  		function (oParam)
 								{
-									//ns1blankspace.report.data.count;
-
 									$('div.ns1blankspaceReportContainer').hide();
 									$('#ns1blankspaceReportSMS').show();
 
+									var bContainsContactPerson = ns1blankspace.util.getParam(oParam, 'containsContactPerson').value;
+
 									var aHTML = [];
 
-									aHTML.push('<table class="ns1blankspaceContainer">' +
+									if (!bContainsContactPerson)
+									{	
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+													'<tr><td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; font-size:0.875em; vertical-align:middle;">' +
+													'Your results don\'t contain any contact data.</td>' +
+											   		'</tr></table>');
+									
+										$('#ns1blankspaceReportSMS').html(aHTML.join(''));
+									}
+									else
+									{	
+										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr><td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; font-size:0.875em; vertical-align:middle;">' +
 													'Enter your message and then click Send.</td>' +
 													'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
@@ -2605,33 +2616,33 @@ ns1blankspace.report =
 											  		'<td id="ns1blankspaceReportSMSColumn2" style="width:200px;"></td>' +
 											   		'</tr></table>');
 									
-									$('#ns1blankspaceReportSMS').html(aHTML.join(''));
+										$('#ns1blankspaceReportSMS').html(aHTML.join(''));
 
-									var aHTML = [];
+										var aHTML = [];
 
-									aHTML.push('<table style="font-size:0.875em;">');
+										aHTML.push('<table style="font-size:0.875em;">');
 
-									aHTML.push('<tr><td>' +
-													'<textarea rows="15" cols="50" id="ns1blankspaceReportSMSText"></textarea>' +
-													'</td></tr>');
-											
-									aHTML.push('</td></tr></table>');
+										aHTML.push('<tr><td>' +
+														'<textarea rows="15" cols="50" id="ns1blankspaceReportSMSText"></textarea>' +
+														'</td></tr>');
+												
+										aHTML.push('</td></tr></table>');
 
-									$('#ns1blankspaceReportSMSColumn1').html(aHTML.join(''));
+										$('#ns1blankspaceReportSMSColumn1').html(aHTML.join(''));
 
-									$('#ns1blankspaceReportSMSSend').button(
-									{
-										label: 'Send'
-									})
-									.click(function()
-									{
-										ns1blankspace.report.sms.send(
+										$('#ns1blankspaceReportSMSSend').button(
 										{
-											text: $('#ns1blankspaceReportSMSText').val()
-										});
-									})
-									.css('font-size', '0.75em');
-
+											label: 'Send'
+										})
+										.click(function()
+										{
+											ns1blankspace.report.sms.send(
+											{
+												text: $('#ns1blankspaceReportSMSText').val()
+											});
+										})
+										.css('font-size', '0.75em');
+									}	
 								},
 
 					send:		function(oParam)

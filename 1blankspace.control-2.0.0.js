@@ -1133,7 +1133,9 @@ ns1blankspace.control =
 
 											aHTML.push('<tr class="ns1blankspaceViewControl">');
 
-											aHTML.push('<td class="ns1blankspaceViewControl" colspan=6 style="text-align: right; color: #999999; font-size:0.825em;"><span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">Search & Reporting</span></td>');
+											aHTML.push('<td class="ns1blankspaceViewControl" colspan=6 style="text-align: right; color: #999999; font-size:0.825em; padding-top:6px;">' +
+															'<span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
+															'Search, report, export, update, email & SMS</span></td>');
 
 											aHTML.push('</tr></table>');
 
