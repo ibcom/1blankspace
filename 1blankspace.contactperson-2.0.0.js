@@ -956,7 +956,7 @@ ns1blankspace.contactPerson =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressStreetAddress1" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +

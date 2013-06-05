@@ -652,7 +652,7 @@ ns1blankspace.contactBusiness =
 							$('#ns1blankspaceDetailsLegalName').val(ns1blankspace.objectContextData.legalname);
 							$('#ns1blankspaceDetailsIndustry').val(ns1blankspace.objectContextData.industrytext);
 							$('#ns1blankspaceDetailsIndustry').attr('data-id', ns1blankspace.objectContextData.industry);
-							$('#ns1blankspaceDetailsABN').val(ns1blankspace.objectContextData.position);
+							$('#ns1blankspaceDetailsABN').val(ns1blankspace.objectContextData.abn);
 							$('#ns1blankspaceDetailsPhone').val(ns1blankspace.objectContextData.phonenumber);
 							$('#ns1blankspaceDetailsWebAddress').val(ns1blankspace.objectContextData.webaddress);
 							$('#ns1blankspaceDetailsFax').val(ns1blankspace.objectContextData.fax);
@@ -749,7 +749,7 @@ ns1blankspace.contactBusiness =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressStreetAddress1" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
