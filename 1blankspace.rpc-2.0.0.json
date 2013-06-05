@@ -792,6 +792,11 @@
 		{"title":"TRANSPORT_MOVEMENT_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"TRANSPORT_STORE_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_NETWORK_GROUP_OBJECT_MANAGE", "advancedSearch":"false", "rpc":"true"},
-		{"title":"SETUP_NETWORK_GROUP_OBJECT_SEARCH", "advancedSearch":"true", "rpc":"true"}
+		{"title":"SETUP_NETWORK_GROUP_OBJECT_SEARCH", "advancedSearch":"true", "rpc":"true"},
+		{"title":"SITE_STATE_SEARCH", "advancedSearch":"true", "rpc":"true"},
+		{"title":"SETUP_AGRI_TRAINING_COURSE_STATUS_SEARCH", "advancedSearch":"true", "rpc":"true"},
+		{"title":"SETUP_AGRI_TRAINING_COURSE_ATTENDEE_STATUS_SEARCH", "advancedSearch":"true", "rpc":"true"},
+		{"title":"SETUP_AGRI_TRAINING_COURSE_ATTENDEE_PAYMENT_STATUS_SEARCH", "advancedSearch":"true", "rpc":"true"},
+		{"title":"AGRI_EDUCATION_TRAINING_PACKAGE_MANAGE", "advancedSearch":"true", "rpc":"true"}
 	]
 }
