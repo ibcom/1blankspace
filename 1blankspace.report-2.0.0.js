@@ -1480,13 +1480,16 @@ ns1blankspace.report =
 											
 											aHTML.push('</table>');
 											
-											// count
-											
-											$.extend(true, oParam, {moreID: $(oResponse).attr('moreid'),
-																			count: oResponse.summary[ns1blankspace.report.endpoint],
-																			response: oResponse,
-																			columns: aColumns
-																			});
+											ns1blankspace.report.data.count = oResponse.summary.count;
+											ns1blankspace.report.data.more = $(oResponse).attr('moreid');
+
+											$.extend(true, oParam,
+											{
+												moreID: $(oResponse).attr('moreid'),
+												count: oResponse.summary.count,
+												response: oResponse,
+												columns: aColumns
+											});
 
 											$('#radioReport-Update').unbind("click");
 											$('#radioReport-Update').click(function()
@@ -2584,6 +2587,8 @@ ns1blankspace.report =
 	sms: 		{
 					show:  		function ()
 								{
+									//ns1blankspace.report.data.count;
+
 									$('div.ns1blankspaceReportContainer').hide();
 									$('#ns1blankspaceReportSMS').show();
 
@@ -2620,13 +2625,10 @@ ns1blankspace.report =
 									})
 									.click(function()
 									{
-										var sText = ns1blankspace.report.mergeFields(
+										ns1blankspace.report.sms.send(
 										{
-											columns: aColumns, 
-											replace: $('#ns1blankspaceReportSMSText').val()
+											text: $('#ns1blankspaceReportSMSText').val()
 										});
-										
-										ns1blankspace.report.sms.send();
 									})
 									.css('font-size', '0.75em');
 
@@ -2634,122 +2636,34 @@ ns1blankspace.report =
 
 					send:		function(oParam)
 								{
-									var iMoreID;
-									var sText = "";
-									var sParam = "";
-									var oParameters = [];
-									var sTags = "";
-									var sEmail = "";
-									var sSubject = "";
-									var oRow;
-									var bPreview = false;
-									
-									if (oParam != undefined)
-									{
-										if (oParam.moreID != undefined) {iMoreID = oParam.moreID}		
-										if (oParam.parameters != undefined) {oParameters = oParam.parameters}		
-										if (oParam.text != undefined) {sText = oParam.text}		
-										if (oParam.subject != undefined) {sSubject = oParam.subject}		
-										if (oParam.row != undefined) {oRow = oParam.row}	
-										if (oParam.preview != undefined) {bPreview = oParam.preview}	
-									}
-									else
-									{
-										ns1blankspace.status.error('Parameters not passed to ns1blankspace.report.email.sendSMS. <br /><br />Preview aborted.');
-										return false;
-									}
-									
-									if (true)
-									{
-										ns1blankspace.status.message('Function not yet available.');
-										return;
-									}
+									var sText = ns1blankspace.util.getParam(oParam, 'text').value;
+								
+									if (confirm("Are you sure you want to send an SMS to all of the Contacts in the report results?"))
+									{										
+										var oData = 
+										{
+											more: ns1blankspace.report.data.more,
+											title: 'Send SMS',
+											status: 1, 
+											type: 3,
+											scheduletype: 9,
+											schedulemaximumcount: 1,
+											responseactionfrom: '',
+											templatetext: sText
+										}	
 
-									if (bPreview)
-									{
-										// We're sending the preview to the current user
-										$.each(oParameters, function() {
-											sTags = this + "|"  + sTags;
-										});
-
-										if (sTags.length > 0){	
-											sTags = sTags.substr(0, sTags.length - 1); 	
-										}
-									
-										sParam = "&more=" + ns1blankspace.util.fs(iMoreID) + 
-												 "&object=" + ns1blankspace.report.object + "&objectcontext=" + oRow.id +
-												 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-												 "&tags=" + ns1blankspace.util.fs(sTags);
-
-										
 										$.ajax(
 										{
 											type: 'POST',
-											url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
-											data: "rf=text" + sParam,
-											dataType: 'TEXT',
+											cache: false,
+											url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
+											data: oData,
+											dataType: 'json',
 											success: function(data)
 											{
-												if (data.substr(0,2) === "OK") {	
-													
-													aData = data.split('|');
-													sText = aData[2];
-													sParam = "subject=" + ns1blankspace.util.fs(sSubject) +
-															"&message=" + ns1blankspace.util.fs(sText) + 
-															"&to=" + ns1blankspace.user.email ;
-															
-													$.ajax({
-														type: 'POST',
-														url: '/ondemand/messaging/?method=MESSAGING_SMS_SEND',
-														data: sParam,
-														dataType: 'JSON',
-														success: function(oResponse) {
-															if (oResponse.status === 'OK') {
-																ns1blankspace.status.message('SMS sent to ' + ns1blankspace.user.email);
-															}
-															else {
-																ns1blankspace.status.message('An error has occurred');
-															}
-														}
-													});
-												
-												}
+												ns1blankspace.status.message("SMS(s) scheduled to be sent.");
 											}
 										});
-									}
-									else
-									{
-										// Time to send the email to all of the report results
-										if (confirm("Are you sure you want to send an SMS to all of the Contacts in the report results?"))
-										{
-											sTags = oParameters.join('|');
-											
-											sParam = "&more=" + iMoreID + 
-													 "&title=" + ns1blankspace.util.fs(sSubject) +
-													 "&status=1" + 
-													 "&type=2" +
-													 '&scheduletype=9' +
-													 "&schedulemaximumcount=1" + 
-													 "&responseactionfrom=" + ns1blankspace.util.fs(ns1blankspace.user.email) + 
-													 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-													 "&caption=" + ns1blankspace.util.fs(sTags);
-
-											$.ajax(
-											{
-												type: 'POST',
-												cache: false,
-												url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
-												data: "rf=text" + sParam,
-												dataType: 'text',
-												async: false,
-												success: function(data)
-												{
-													ns1blankspace.status.message("Email(s) sent");
-												}
-											});
-										}
-										else
-										{	return false;	}
 									}
 								}
 				}
