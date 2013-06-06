@@ -968,6 +968,7 @@ ns1blankspace.app =
 					$('#ns1blankspaceViewControlActionStatus').text('');
 					$('#ns1blankspaceViewControlAction').button({label: "Save"});
 					if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
+					ns1blankspace.util.app.option({titleSuffix: ''});
 					ns1blankspace.inputDetected = false;
 					ns1blankspace.xhtml.action = '';
 					ns1blankspace.object = undefined;
@@ -3686,7 +3687,23 @@ ns1blankspace.util =
 	  						return hex_md5(sValue);
 	  					}
 	  				}	
-  				},				
+  				},
+
+  	app:		{
+  					option: 	function (oParam)
+  								{
+  									if (ns1blankspace.option.appTitle == undefined)
+  									{
+  										ns1blankspace.option.appTitle = document.title;
+  									}
+
+  									var sTitleSuffix = ns1blankspace.util.getParam(oParam, 'titleSuffix', {default: ''}).value;
+  									var sTitle = ns1blankspace.util.getParam(oParam, 'title', {default: ns1blankspace.option.appTitle}).value +
+  													sTitleSuffix
+
+  									document.title = sTitle;
+  								}
+  				},						
 
   	about: 		{
   					data: 		[],

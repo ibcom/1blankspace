@@ -119,28 +119,10 @@ ns1blankspace.messaging.imap =
 					{
 						ns1blankspace.messaging.imap.new();
 					});
-
-					// 1 = Compose New
-
-					var iAction = ns1blankspace.util.getParam(oParam, 'action').value;
-					var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
-
-					if (iAction == 1)
-					{
-						ns1blankspace.messaging.imap.message.edit.show(oParam)
-					}
-
-					if (sNamespace !== undefined)
-					{
-						ns1blankspace.util.execute(sNamespace, oParam);
-					}	
-
 				},
 
 	check:		function (oParam, oResponse)
-				{
-					//ns1blankspace.messaging.checking = ns1blankspace.util.getParam(oParam, 'checking', {default: ns1blankspace.messaging.checking}).value;
-					
+				{					
 					if (oResponse == undefined)
 					{	
 						if (!ns1blankspace.messaging.checking)
@@ -173,7 +155,9 @@ ns1blankspace.messaging.imap =
 									{
 										label: 'Refresh (' + ns1blankspace.messaging.emailNewCount + ')'
 									});
-								}	
+								
+									ns1blankspace.util.app.option({titleSuffix: ' (' + ns1blankspace.messaging.emailNewCount + ')'})
+								}
 							}	
 						}	
 					}
@@ -190,6 +174,21 @@ ns1blankspace.messaging.imap =
 					
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					
+					// 1 = Compose New
+
+					var iAction = ns1blankspace.util.getParam(oParam, 'action').value;
+					var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
+
+					if (iAction == 1)
+					{
+						ns1blankspace.messaging.imap.message.edit.show(oParam)
+					}
+
+					if (sNamespace !== undefined)
+					{
+						ns1blankspace.util.execute(sNamespace, oParam);
+					}	
+
 					if (ns1blankspace.messaging.imap.emailAccounts.length == 0)
 					{
 						if (oResponse == undefined)
@@ -301,18 +300,21 @@ ns1blankspace.messaging.imap =
 									}	
 								}	
 							});
-							
-							ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
 
-							if (ns1blankspace.messaging.imap.account != undefined && bAutoShow)
-							{
-								$('#ns1blankspaceMessaging-' + ns1blankspace.messaging.imap.account).addClass('ns1blankspaceHighlight');
-								ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
-							}
-							else
-							{
-								$('#ns1blankspaceMainInbox').html('<span class="ns1blankspaceSub" style="font-size:0.875em;">Select an email inbox<br />or click <b>New</b> to send an email.</span>');
-							}
+							if (iAction != 1)
+							{	
+								ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
+
+								if (ns1blankspace.messaging.imap.account != undefined && bAutoShow)
+								{
+									$('#ns1blankspaceMessaging-' + ns1blankspace.messaging.imap.account).addClass('ns1blankspaceHighlight');
+									ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+								}
+								else
+								{
+									$('#ns1blankspaceMainInbox').html('<span class="ns1blankspaceSub" style="font-size:0.875em;">Select an email inbox<br />or click <b>New</b> to send an email.</span>');
+								}
+							}	
 						}
 					}	
 				},
@@ -364,6 +366,8 @@ ns1blankspace.messaging.imap =
 										{
 											label: 'Refresh'
 										});
+
+										ns1blankspace.util.app.option({titleSuffix: ''})
 									}
 									
 									if (bRebuild)
@@ -2042,8 +2046,26 @@ ns1blankspace.messaging.imap =
 						}
 					}	
 				},
-					
+				
 	new: 		function (oParam, oResponse)
+				{
+					var sXHTMLElementID = 'ns1blankspaceMainEdit';
+
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+					}
+					else
+					{
+						oParam = {}
+					}
+					
+					ns1blankspace.show({selector: '#' + sXHTMLElementID});
+					oParam.newEmail = true;
+					ns1blankspace.messaging.imap.message.edit.show(oParam);
+				},
+
+	drafts: 	function (oParam, oResponse)
 				{
 					var aHTML = [];
 					
