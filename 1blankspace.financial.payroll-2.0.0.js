@@ -613,7 +613,7 @@ ns1blankspace.financial.payroll =
 									if (ns1blankspace.financial.payroll.data.context == 'pays')
 									{
 										aHTML.push('<table><tr>' + 
-														'<td class="ns1blankspaceNothing">Just checking that you really want to create the next pay period.<br /><br />If you do, then please click Next.</td>' + 
+														'<td class="ns1blankspaceNothing">Click <b>Next</b> to create the pay period.</td>' + 
 														'</tr>' +
 														'</table>');
 									}
@@ -662,10 +662,10 @@ ns1blankspace.financial.payroll =
 										if ($('#ns1blankspaceControlEmployees').hasClass('ns1blankspaceHighlight')) {iType = 2};
 									}
 
-									ns1blankspace.status.working();
+									$('#ns1blankspaceNewColumn2').html(ns1blankspace.xhtml.loading);
 
 									//PAYS
-									if (iType == 1)
+									if (ns1blankspace.financial.payroll.data.context == 'pays')
 									{
 										$.ajax(
 										{
@@ -685,7 +685,7 @@ ns1blankspace.financial.payroll =
 									}
 
 									//EMPLOYEES
-									if (iType == 2)
+									if (ns1blankspace.financial.payroll.data.context == 'employees')
 									{
 										if (iID == undefined)
 										{	
