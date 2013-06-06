@@ -467,61 +467,68 @@ ns1blankspace.messaging.imap =
 
 					row:		function (oRow)
 								{
-									var aHTML = [];
-									
-									var sID = oRow.id;
-									
-									var sDate = '';
-									var sTime = '';
-
-									var oDate = Date.parse(oRow.date);
-
-									if (oDate != null)
-									{ 
-										var sDate = oDate.toString("d MMM yyyy");
-										var sTime = oDate.toString("h:mm tt");
-									}
-										
-									var sClass = '';
-									
-									if ((oRow.imapflags).indexOf('\\SEEN') == -1)
-									{
-										sClass = " ns1blankspaceNotSeen"
-									}
-									
-									aHTML.push('<tr id="ns1blankspaceMessagingInbox_id-' + sID + '" class="ns1blankspaceRow' + sClass + '" data-cached="' + oRow.detailscached + '">');
-									
-									aHTML.push('<td id="ns1blankspaceMessagingInbox_from-' + sID + 
-														'" style="cursor: pointer;" class="ns1blankspaceRow ns1blankspaceRowSelect' + sClass + '"' +
-														' title="' + oRow.from + '" style="padding-right:5px;" data-cached="' + oRow.detailscached + '">' +
-														oRow.fromname + '</td>');
-														
-									aHTML.push('<td id="ns1blankspaceMessagingInbox_subject-' + sID + 
-														'" style="cursor: pointer; padding-right:5px;" class="ns1blankspaceRow ns1blankspaceMainRowSelect' + sClass + '">' +
-														oRow.subject + '</td>');
-									
-									aHTML.push('<td id="ns1blankspaceMessagingInbox_date-' + sID + '" class="ns1blankspaceRow" style="width:85px; text-align:right;" >' +
-															sDate + '<br /><span class="ns1blankspaceSub">' + sTime + '</span></td>');
-									
-									aHTML.push('<td class="ns1blankspaceRow" style="width:70px;text-align:right;">');
-
-									aHTML.push('<span id="ns1blankspaceMessagingInbox_reply-' + sID + '" class="ns1blankspaceRowReply" data-cached="' + oRow.detailscached + '"></span>');
-									
 									if ((oRow.imapflags).indexOf('\\DELETED') == -1)
 									{
-										aHTML.push('<span id="ns1blankspaceMessagingInbox_remove-' + sID + '" class="ns1blankspaceRowRemove"></span>');
+										var aHTML = [];
+										
+										var sID = oRow.id;
+										
+										var sDate = '';
+										var sTime = '';
+
+										var oDate = Date.parse(oRow.date);
+
+										if (oDate != null)
+										{ 
+											var sDate = oDate.toString("d MMM yyyy");
+											var sTime = oDate.toString("h:mm tt");
+										}
+											
+										var sClass = '';
+										
+										if ((oRow.imapflags).indexOf('\\SEEN') == -1)
+										{
+											sClass = " ns1blankspaceNotSeen"
+										}
+										
+										aHTML.push('<tr id="ns1blankspaceMessagingInbox_id-' + sID + '" class="ns1blankspaceRow' + sClass + '" data-cached="' + oRow.detailscached + '">');
+										
+										aHTML.push('<td id="ns1blankspaceMessagingInbox_from-' + sID + 
+															'" style="cursor: pointer;" class="ns1blankspaceRow ns1blankspaceRowSelect' + sClass + '"' +
+															' title="' + oRow.from + '" style="padding-right:5px;" data-cached="' + oRow.detailscached + '">' +
+															oRow.fromname + '</td>');
+															
+										aHTML.push('<td id="ns1blankspaceMessagingInbox_subject-' + sID + 
+															'" style="cursor: pointer; padding-right:5px;" class="ns1blankspaceRow ns1blankspaceMainRowSelect' + sClass + '">' +
+															oRow.subject + '</td>');
+										
+										aHTML.push('<td id="ns1blankspaceMessagingInbox_date-' + sID + '" class="ns1blankspaceRow" style="width:85px; text-align:right;" >' +
+																sDate + '<br /><span class="ns1blankspaceSub">' + sTime + '</span></td>');
+										
+										aHTML.push('<td class="ns1blankspaceRow" style="width:70px;text-align:right;">');
+
+										aHTML.push('<span id="ns1blankspaceMessagingInbox_reply-' + sID + '" class="ns1blankspaceRowReply" data-cached="' + oRow.detailscached + '"></span>');
+										
+										if ((oRow.imapflags).indexOf('\\DELETED') == -1)
+										{
+											aHTML.push('<span id="ns1blankspaceMessagingInbox_remove-' + sID + '" class="ns1blankspaceRowRemove"></span>');
+										}
+										else
+										{
+											aHTML.push('<span style="width: 23px;" id="ns1blankspaceMessagingInbox_delete-' + sID +
+															'" class="ns1blankspaceRowRemoveDisabled"></span>');
+										}
+
+										aHTML.push('<span id="ns1blankspaceMessagingInbox_save-' + sID + '" class="ns1blankspaceRowSave"></span>');
+										
+										aHTML.push('</td></tr>');
+										
+										return aHTML.join('');
 									}
 									else
 									{
-										aHTML.push('<span style="width: 23px;" id="ns1blankspaceMessagingInbox_delete-' + sID +
-														'" class="ns1blankspaceRowRemoveDisabled"></span>');
+										return '';
 									}
-
-									aHTML.push('<span id="ns1blankspaceMessagingInbox_save-' + sID + '" class="ns1blankspaceRowSave"></span>');
-									
-									aHTML.push('</td></tr>');
-									
-									return aHTML.join('');
 								},
 
 					bind:		function (oParam)
