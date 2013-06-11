@@ -107,6 +107,7 @@ ns1blankspace.messaging.imap =
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActionsSent" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDrafts" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -269,6 +270,10 @@ ns1blankspace.messaging.imap =
 													'class="ns1blankspaceControl">' +
 													'Sent Emails</td></tr>');
 
+								aHTML.push('<tr><td id="ns1blankspaceMessaging-Drafts" ' +
+													'class="ns1blankspaceControl">' +
+													'Drafts</td></tr>');
+
 								aHTML.push('</table>');
 								
 								aHTML.push('<div id="ns1blankspaceMessagingMessageControlContainer"></div>');
@@ -290,6 +295,13 @@ ns1blankspace.messaging.imap =
 									ns1blankspace.show({selector: '#ns1blankspaceMainActionsSent'});
 									ns1blankspace.messaging.imap.actions.show({xhtmlElementID: 'ns1blankspaceMainActionsSent', type: 5});
 								}
+
+								else if (aID[1] == 'Drafts')
+								{	
+									ns1blankspace.show({selector: '#ns1blankspaceMainActionsSent'});
+									ns1blankspace.messaging.imap.actions.show({xhtmlElementID: 'ns1blankspaceMainActionsSent', type: 5});
+								}
+								
 								else
 								{	
 									ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
