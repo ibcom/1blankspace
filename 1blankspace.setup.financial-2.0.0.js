@@ -892,7 +892,7 @@ ns1blankspace.setup.financial =
 															'<br /><input type="radio" id="radioPostableN" name="radioPostable" value="N"/>No (it is a header account)' +
 														'</td></tr>');
 
-										if (iTaxType == 1)
+										if (iTaxType == 2)
 										{	
 											aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -956,8 +956,16 @@ ns1blankspace.setup.financial =
 											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTitle').val());
 											sData += '&parentaccount=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountParentAccount').attr("data-id"));
 											sData += '&postable=' + ns1blankspace.util.fs($('input[name="radioPostable"]:checked').val());
-											sData += '&expensecostofsale=' + ns1blankspace.util.fs($('input[name="radioCOS"]:checked').val());
-											sData += '&taxtype=' + ns1blankspace.util.fs($('input[name="radioTaxCode"]:checked').val());
+
+											if ($('input[name="radioCOS"]').length != 0)
+											{
+												sData += '&expensecostofsale=' + ns1blankspace.util.fs($('input[name="radioCOS"]:checked').val());
+											}	
+
+											if ($('input[name="radioTaxCode"]').length != 0)
+											{	
+												sData += '&taxtype=' + ns1blankspace.util.fs($('input[name="radioTaxCode"]:checked').val());
+											}
 
 											var oAdd =
 											{
