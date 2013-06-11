@@ -15,6 +15,10 @@ if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
 
 ns1blankspace.messaging.imap = 
 {
+	data: 		{
+					fromEmail: ''
+				},
+
 	init: 		function (oParam)
 				{
 					var bShowHome = true
@@ -112,6 +116,7 @@ ns1blankspace.messaging.imap =
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					ns1blankspace.messaging.imap.emailAccounts.length = 0;
+					ns1blankspace.messaging.imap.data.fromEmail = ns1blankspace.user.email;
 
 					ns1blankspace.app.set(oParam);
 
@@ -308,7 +313,8 @@ ns1blankspace.messaging.imap =
 									
 									if (ns1blankspace.messaging.imap.account != aID[1])
 									{
-										ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: event.target.id, source: 1, newOnly: false, repaginate: true});
+										ns1blankspace.messaging.imap.data.fromEmail = $(this).attr('title');
+										ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: this.id, source: 1, newOnly: false, repaginate: true});
 									}	
 								}	
 							});
@@ -1056,7 +1062,7 @@ ns1blankspace.messaging.imap =
 						if (sFrom != ns1blankspace.objectContextData.from) {sFrom += ' (' + ns1blankspace.objectContextData.from + ')'}
 
 						aHTML.push('<tr class="ns1blankspaceHeader">' +
-										'<td id="ns1blankspaceMessagingEmailFromEmail" class="ns1blankspaceSub" style="padding-bottom:10px;font-size:0.875em;">' +
+										'<td id="ns1blankspaceMessagingEmailFromEmail" style="padding-bottom:10px;font-size:0.875em;">' +
 										sFrom + '</td>');
 
 						var oDate = Date.parse(ns1blankspace.objectContextData.date);
@@ -1080,7 +1086,7 @@ ns1blankspace.messaging.imap =
 							aHTML.push('<table id="ns1blankspaceMessagingEmailToContainer" class="ns1blankspaceHeader" style="border-style: solid; border-width: 1px 0px 1px 0px ;border-color: #f3f3f3;">');
 							aHTML.push('<tr class="ns1blankspaceHeader">' +
 											'<td id="ns1blankspaceMessagingEmailToCaption" style="text-align:center; width:20px;background-color:#CCCCCC; color:#FFFFFF; padding:4px;">To</td>' +
-											'<td id="ns1blankspaceMessagingEmailTo" style="padding:4px;">');
+											'<td id="ns1blankspaceMessagingEmailTo" style="padding:4px;" class="ns1blankspaceSub">');
 											
 							var sTo = ns1blankspace.objectContextData.to;
 							var aTo = sTo.split('|')
@@ -1102,7 +1108,7 @@ ns1blankspace.messaging.imap =
 							aHTML.push('<table id="ns1blankspaceMessagingEmailCCContainer" class="ns1blankspaceHeader" style="border-style: solid; border-width: 1px 0px 1px 0px ;border-color: #f3f3f3;">');
 							aHTML.push('<tr class="ns1blankspaceHeader">' +
 											'<td id="ns1blankspaceMessagingEmailCCCaption" style="text-align:center; width:20px;background-color:#CCCCCC; color:#FFFFFF; padding:4px;">Cc</td>' +
-											'<td id="ns1blankspaceMessagingEmailCC" style="padding:4px;">');
+											'<td id="ns1blankspaceMessagingEmailCC" style="padding:4px;" class="ns1blankspaceSub">');
 											
 							var sCC = ns1blankspace.objectContextData.cc
 							var aCC = sCC.split('|')
@@ -1928,19 +1934,21 @@ ns1blankspace.messaging.imap =
 										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 									}	
 									
-									//ns1blankspace.status.working('Sending...');
-
+									var oData =
+									{
+										subject: (oParam.subject == undefined ? '' : oParam.subject),
+										message: (oParam.message == undefined ?' ' : oParam.message),
+										priority: (oParam.priority == undefined ? '' : oParam.priority),
+										id: (oParam.contactPersonTo == undefined ? '' : oParam.contactPersonTo),
+										to: (oParam.to==undefined ? '' : oParam.to),
+										cc: (oParam.cc==undefined ? '' : oParam.cc),
+										bcc: (oParam.bcc==undefined ? '' : oParam.bcc),
+										fromemail: ns1blankspace.messaging.imap.data.fromEmail
+									}	
+									
+									//sData += (oParam.otherData == undefined ? '' : oParam.otherData)					
 									//sData += 'object=' + oParam.object;
 									//sData += '&objectcontext=' + oParam.objectContext;
-									sData += 'subject=' + ns1blankspace.util.fs((oParam.subject == undefined ? '' : oParam.subject));
-									sData += '&message=' + ns1blankspace.util.fs((oParam.message == undefined ?' ' : oParam.message));
-									sData += '&priority=' + ns1blankspace.util.fs((oParam.priority == undefined ? '' : oParam.priority));
-									sData += '&id=' + ns1blankspace.util.fs((oParam.contactPersonTo == undefined ? '' : oParam.contactPersonTo));
-									sData += '&to=' + ns1blankspace.util.fs((oParam.to==undefined ? '' : oParam.to));
-									sData += '&cc=' + ns1blankspace.util.fs((oParam.cc==undefined ? '' : oParam.cc));
-									sData += '&bcc=' + ns1blankspace.util.fs((oParam.bcc==undefined ? '' : oParam.bcc));
-									
-									sData += (oParam.otherData == undefined ? '' : oParam.otherData)
 									
 									$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading + ' Sending...');
 
@@ -1948,7 +1956,7 @@ ns1blankspace.messaging.imap =
 									{
 										type: 'POST',
 										url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
-										data: sData,
+										data: oData,
 										dataType: 'text',
 										success: function(data) 
 										{

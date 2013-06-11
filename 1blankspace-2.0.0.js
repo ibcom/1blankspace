@@ -1798,7 +1798,7 @@ ns1blankspace.history.control =
 					{
 						if (sXHTMLElementID === undefined)
 						{
-							ns1blankspace.util.execute(sFunctionDefault);
+							ns1blankspace.util.execute(sFunctionDefault, oParam);
 						}
 						else
 						{
