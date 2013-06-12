@@ -875,9 +875,14 @@ ns1blankspace.contactPerson =
 					}	
 				},
 
-	address: 	function ()
+	address: 	function (oParam)
 				{
 					var aHTML = [];
+					var bTwoLineAddress = false;
+
+					if (oParam) {
+						if (oParam.twoLineAddress != undefined) {bTwoLineAddress = oParam.twoLineAddress}
+					}
 			
 					if ($('#ns1blankspaceMainAddress').attr('data-loading') == '1')
 					{
@@ -906,13 +911,20 @@ ns1blankspace.contactPerson =
 										'<input id="ns1blankspaceAddressStreetAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');
 										
+						if (bTwoLineAddress) {
+							aHTML.push('<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceText">' +
+											'<input id="ns1blankspaceAddressStreetAddress2" class="ns1blankspaceText">' +
+											'</td></tr>');
+						}
+
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Suburb' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressStreetSuburb" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetSuburb" class="ns1blankspaceText ns1blankspaceSelectAddress">' +
 										'</td></tr>');
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -942,6 +954,10 @@ ns1blankspace.contactPerson =
 										'<input id="ns1blankspaceAddressStreetCountry" class="ns1blankspaceText">' +
 										'</td></tr>');						
 						
+						aHTML.push('<tr><td>&nbsp;</td></tr>' +
+										'<tr><td id="ns1blankspaceAddressCopy" style="font-size:0.825em;">' +
+										'</td></tr>');
+
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceAddressColumn1').html(aHTML.join(''));
@@ -959,13 +975,20 @@ ns1blankspace.contactPerson =
 										'<input id="ns1blankspaceAddressMailingAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');
 										
+						if (bTwoLineAddress) {
+							aHTML.push('<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceText">' +
+											'<input id="ns1blankspaceAddressMailingAddress2" class="ns1blankspaceText">' +
+											'</td></tr>');
+						}
+						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Suburb' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressMailingSuburb" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressMailingSuburb" class="ns1blankspaceText ns1blankspaceSelectAddress">' +
 										'</td></tr>');
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -998,6 +1021,20 @@ ns1blankspace.contactPerson =
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceAddressColumn2').html(aHTML.join(''));
+
+						$('#ns1blankspaceAddressCopy').button({
+							label: 'Copy to Mailing Address'
+						})
+						.click(function() {
+
+							$('#ns1blankspaceAddressMailingAddress1').val($('#ns1blankspaceAddressStreetAddress1').val());
+							$('#ns1blankspaceAddressMailingAddress2').val($('#ns1blankspaceAddressStreetAddress2').val());
+							$('#ns1blankspaceAddressMailingSuburb').val($('#ns1blankspaceAddressStreetSuburb').val());
+							$('#ns1blankspaceAddressMailingState').val($('#ns1blankspaceAddressStreetState').val());
+							$('#ns1blankspaceAddressMailingPostCode').val($('#ns1blankspaceAddressStreetPostCode').val());
+							$('#ns1blankspaceAddressMailingCountry').val($('#ns1blankspaceAddressStreetCountry').val());
+
+						});
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
@@ -1011,6 +1048,11 @@ ns1blankspace.contactPerson =
 							$('#ns1blankspaceAddressMailingState').val(ns1blankspace.objectContextData.mailingstate);
 							$('#ns1blankspaceAddressMailingPostCode').val(ns1blankspace.objectContextData.mailingpostcode);
 							$('#ns1blankspaceAddressMailingCountry').val(ns1blankspace.objectContextData.mailingcountry);
+
+							if (bTwoLineAddress) {
+								$('#ns1blankspaceAddressStreetAddress2').val(ns1blankspace.objectContextData.streetaddress2);
+								$('#ns1blankspaceAddressMailingAddress2').val(ns1blankspace.objectContextData.mailingaddress2);
+							}
 						}
 					}	
 				},
