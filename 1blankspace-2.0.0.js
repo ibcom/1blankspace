@@ -2787,7 +2787,7 @@ ns1blankspace.search =
 									{	
 										$.each(aColumns, function(i) 
 										{
-											if (this != 'space' && this != 'comma' && this != 'pipe')
+											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column')
 											{	
 												if (i != 0)
 												{
