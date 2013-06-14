@@ -1949,13 +1949,14 @@ ns1blankspace.messaging.imap =
 									//sData += (oParam.otherData == undefined ? '' : oParam.otherData)					
 									//sData += 'object=' + oParam.object;
 									//sData += '&objectcontext=' + oParam.objectContext;
-									
+									//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
+
 									$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading + ' Sending...');
 
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+										url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
 										data: oData,
 										dataType: 'text',
 										success: function(data) 
