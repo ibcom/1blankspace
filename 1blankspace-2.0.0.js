@@ -3805,7 +3805,28 @@ ns1blankspace.util =
 
   									console.log(aTmp.join('\r\n'));
   								}
-				 } 																									
+				},
+
+	cleanURL: 	function (oParam)
+				{
+					var sURL = ns1blankspace.util.getParam(oParam, 'url').value;
+					var sSearchHost = ns1blankspace.util.getParam(oParam, 'searchHost', {default: 'secure.mydigitalspacelive.com'}).value;
+					var sNewHost = ns1blankspace.util.getParam(oParam, 'newHost', {default: window.location.host}).value;
+					var sProtocol = ns1blankspace.util.getParam(oParam, 'protocol').value;
+
+					if (sURL !== undefined)
+					{
+						sURL = sURL.replace(sSearchHost, sNewHost);
+					}
+
+					if (sProtocol !== undefined)
+					{
+						sURL = sURL.replace('http', sProtocol);
+						sURL = sURL.replace('https', sProtocol);
+					}
+
+					return sURL;
+				}	 																									
 }
 
 ns1blankspace.debug = 
