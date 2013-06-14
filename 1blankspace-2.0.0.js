@@ -1723,8 +1723,8 @@ ns1blankspace.logOff = function ()
 						{
 							if (!ns1blankspace.debug.enabled)
 							{
-								//ns1blankspace.inputDetected = false;
-								//ns1blankspace.refresh();
+								ns1blankspace.extend.structure = undefined;
+								ns1blankspace.financial.data = undefined;
 								ns1blankspace.app.init();
 								ns1blankspace.app.start();
 							}
