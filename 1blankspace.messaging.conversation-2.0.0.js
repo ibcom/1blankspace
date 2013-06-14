@@ -1127,7 +1127,7 @@ ns1blankspace.messaging.conversation =
 									aHTML.push(oDate.toString("dd MMM yyyy @ h:mm tt")  + '</div>');
 
 									aHTML.push('<div id="ns1blankspaceMessagingConversationPosts_message-' + oRow.id + '" style="display:none; margin-top:3px;" class="ns1blankspaceRow ns1blankspaceSubNote">' +
-															(oRow.message).formatXHTML() + '</div>');
+															ns1blankspace.util.cleanURL({text: (oRow.message).formatXHTML()}) + '</div>');
 
 
 									aHTML.push('</td><td style="width:80px; text-align:right; vertical-align:bottom; padding-bottom:4px;" class="ns1blankspaceRow">' +

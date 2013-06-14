@@ -3809,23 +3809,26 @@ ns1blankspace.util =
 
 	cleanURL: 	function (oParam)
 				{
-					var sURL = ns1blankspace.util.getParam(oParam, 'url').value;
-					var sSearchHost = ns1blankspace.util.getParam(oParam, 'searchHost', {default: 'secure.mydigitalspacelive.com'}).value;
+					var sText = ns1blankspace.util.getParam(oParam, 'text').value;
+					var oSearchHost = ns1blankspace.util.getParam(oParam, 'searchHost', {default: [{value: 'secure.mydigitalspacelive.com'}, {value: 'beta.mydigitalspacelive.com'}]}).value;
 					var sNewHost = ns1blankspace.util.getParam(oParam, 'newHost', {default: window.location.host}).value;
 					var sProtocol = ns1blankspace.util.getParam(oParam, 'protocol').value;
 
-					if (sURL !== undefined)
+					if (sText !== undefined)
 					{
-						sURL = sURL.replace(sSearchHost, sNewHost);
+						$.each(oSearchHost, function()
+						{
+							sText = sText.replace(RegExp(this.value, "gi"), sNewHost);
+						});
 					}
 
 					if (sProtocol !== undefined)
 					{
-						sURL = sURL.replace('http', sProtocol);
-						sURL = sURL.replace('https', sProtocol);
+						sText = sText.replace(RegExp('http', "gi"), sProtocol);
+						sText = sText.replace(RegExp('https', "gi"), sProtocol);
 					}
 
-					return sURL;
+					return sText;
 				}	 																									
 }
 
