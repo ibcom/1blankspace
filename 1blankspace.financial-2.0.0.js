@@ -4042,29 +4042,42 @@ ns1blankspace.financial.util =
 
 									if ($('#' + sAmountXHTMLElementID).length == 1)
 									{
-										cAmount = parseFloat($('#' + sAmountXHTMLElementID).val());
+										if ($('#' + sAmountXHTMLElementID).val() !== '')
+										{	
+											cAmount = parseFloat($('#' + sAmountXHTMLElementID).val());
+										}	
 									}	
 									
-									if (cRate == 0)
-									{
-										cTax = 0;
-									}
-									else
-									{
-										if (bTaxIncludedInAmount)
+									if (cAmount === undefined)
+									{	
+										if (sTaxXHTMLElementID !== undefined)
 										{
-											cTax = (cAmount - (cAmount / (1 + cRate / 100)));
-										}	
-										else
-										{
-											cTax = CurrencyDefault((cRate / 100) * cTax)
+											$('#' + sTaxXHTMLElementID).val('');
 										}
 									}
+									else
+									{	
+										if (cRate == 0)
+										{
+											cTax = 0;
+										}
+										else
+										{
+											if (bTaxIncludedInAmount)
+											{
+												cTax = (cAmount - (cAmount / (1 + cRate / 100)));
+											}	
+											else
+											{
+												cTax = CurrencyDefault((cRate / 100) * cAmount)
+											}
+										}
 
-									if (sTaxXHTMLElementID)
-									{
-										$('#' + sTaxXHTMLElementID).val((cTax).toFixed(2))
-									}
+										if (sTaxXHTMLElementID !== undefined && cTax !== undefined)
+										{
+											$('#' + sTaxXHTMLElementID).val((cTax).toFixed(2))
+										}
+									}	
 								}
 				},
 
