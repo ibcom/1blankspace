@@ -370,6 +370,8 @@ ns1blankspace.app =
 							
 						$('input.ns1blankspaceSelect').live('keyup', function(e)
 						{
+							if ($(this).val().length == 0) {$(this).attr('data-id', '')}
+
 							if (e.which === 13)
 					    	{
 								ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
@@ -2725,6 +2727,8 @@ ns1blankspace.search =
 							sMethodFilter = $('#' + sXHTMLInputElementID).attr("data-methodFilter");
 						}
 
+						if (sMethodFilter === undefined) {sMethodFilter = ''}
+
 						if (bMultiSelect === undefined) {
 							bMultiSelect = ($('#' + sXHTMLInputElementID).attr("data-multiselect") === "true");
 							$.extend(true, oParam, {multiselect: bMultiSelect});
@@ -2779,7 +2783,7 @@ ns1blankspace.search =
 										}	
 									});	
 
-									if (iSource === ns1blankspace.data.searchSource.text)
+									if (iSource === ns1blankspace.data.searchSource.text && sMethodFilter == '')
 									{	
 										$.each(aColumns, function(i) 
 										{
@@ -2795,14 +2799,26 @@ ns1blankspace.search =
 										});	
 									}	
 									
-									if (sMethodFilter)
+									var sMethodFilterValue;
+
+									if (sMethodFilter != '')
 									{
 										var aMethodFilters = sMethodFilter.split('|');
 
 										$.each(aMethodFilters, function(i) 
 										{
 											var aMethodFilter = this.split('-');
-											oSearch.addFilter(aMethodFilter[0], aMethodFilter[1], aMethodFilter[2]);
+
+											if (aMethodFilter.length == 2)
+											{
+												sMethodFilterValue = sSearchText;
+											}
+											else
+											{
+												sMethodFilterValue = aMethodFilter[2];
+											}
+											 
+											oSearch.addFilter(aMethodFilter[0], aMethodFilter[1], sMethodFilterValue);
 										});	
 									}	
 

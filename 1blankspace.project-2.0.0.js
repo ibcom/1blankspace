@@ -125,9 +125,9 @@ ns1blankspace.project =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'PROJECT_SEARCH';
 										
-										oSearch.addField('amount,business,businesstext,description,enddate,id,notes,' +
-															'paymentfrequency,paymentfrequencytext,percentagecomplete,person,persontext,' +
-															'projectmanageruser,projectmanagerusertext,reference,startdate,' +
+										oSearch.addField('amount,contactbusiness,contactbusinesstext,description,enddate,id,notes,' +
+															'paymentfrequency,paymentfrequencytext,percentagecomplete,contactperson,contactpersontext,' +
+															'projectmanager,projectmanagertext,reference,startdate,' +
 															'status,statustext,template,totaltime,type,typetext,modifieddate');
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
@@ -164,6 +164,7 @@ ns1blankspace.project =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PROJECT_SEARCH';
 											oSearch.addField('reference,description');
+											oSearch.rows = 15;
 											oSearch.rf = 'json';
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);		
 											oSearch.getResults(function(data) {ns1blankspace.project.search.process(oParam, data)});
@@ -195,7 +196,6 @@ ns1blankspace.project =
 												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
-											aHTML.push('<td class="ns1blankspaceContactType' + this.type + ' ns1blankspaceSearch">&nbsp;</td>')
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'-' + this.id + '">' +
 															this.reference +
@@ -210,10 +210,18 @@ ns1blankspace.project =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+										$(ns1blankspace.xhtml.container).html(
+											ns1blankspace.render.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true")
+											}) 
+										);		
+
+										//$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
-										ns1blankspaceSearchStop();
+										ns1blankspace.search.stop();
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
@@ -221,12 +229,21 @@ ns1blankspace.project =
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.project.search.send(event.target.id, {source: 1});
 										});
+
+										ns1blankspace.render.bind(
+										{
+											columns: 'reference',
+											more: oResponse.moreid,
+											rows: 15,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.project.search.send
+										});   
 									}	
 											
 								}
 				},
 								
-	layout: 	function n()
+	layout: 	function ()
 				{
 					var aHTML = [];
 
