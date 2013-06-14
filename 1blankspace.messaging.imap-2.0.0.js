@@ -961,7 +961,7 @@ ns1blankspace.messaging.imap =
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary', refresh: true});
 						ns1blankspace.messaging.imap.summary();
 					});
 
@@ -1133,15 +1133,17 @@ ns1blankspace.messaging.imap =
 						
 						aHTML.push(ns1blankspace.xhtml.loading);
 						
-						aHTML.push('<div class="ns1blankspaceMessageContainer"><iframe class="ns1blankspaceMessageContainer" name="ifMessage" ' +
+						aHTML.push('<div class="ns1blankspaceMessageContainer" id="ns1blankspaceMessageFrameContainer"><iframe class="ns1blankspaceMessageContainer" name="ifMessage" ' +
 											'id="ifMessage" frameborder="0" border="0" scrolling="no"></iframe></div>');
+										
+						//$('div.ns1blankspaceMessageContainer').remove();
 										
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData.detailscached == 'Y')
 						{
-							ns1blankspace.messaging.imap.message.contents.show();
 							ns1blankspace.messaging.imap.message.attachments();
+							ns1blankspace.messaging.imap.message.contents.show();
 						}
 						else
 						{						
@@ -1173,39 +1175,56 @@ ns1blankspace.messaging.imap =
 
 	message: 	{
 					contents: 	{
-									show:		function ()
+									show:		function (bShow)
 												{
-													var sHTML = ns1blankspace.objectContextData.message;
-													sHTML = (sHTML).formatXHTML();
-
-													while ($('#ifMessage').length == 0) {}
-
-													$('.ns1blankspaceLoading').remove()
-														
-													$('#ifMessage').contents().find('html').html(sHTML);
-													
-													if ($.browser.msie) {}
-													else
-													{	
-														var newHeight = $('#ifMessage',top.document).contents().find('html').height() + 100;
-													}
-
-													if ($.browser.msie)
+													if (bShow === undefined)
 													{
-														setTimeout("ns1blankspace.messaging.imap.message.contents.setHeight()", 100);
+														bShow = false;
+
+														if ($.browser.chrome || $.browser.safari || $.browser.webkit)
+														{
+															bShow = true
+														}
+													}
+
+													if (!bShow)
+													{
+														setTimeout("ns1blankspace.messaging.imap.message.contents.show(true)", 200);
 													}
 													else
 													{	
-														$('#ifMessage').height($('#ifMessage',top.document).contents().find('html').height())
-														$('#ifMessage').width($('#ifMessage',top.document).contents().find('html').width())
-													}
-													
+														var sHTML = ns1blankspace.objectContextData.message;
+														sHTML = (sHTML).formatXHTML();
+
+														while ($('#ifMessage').length == 0) {}
+
+														$('.ns1blankspaceLoading').remove()
+															
+														$('#ifMessage').contents().find('html').html(sHTML);
+														
+														if ($.browser.msie)
+														{
+															setTimeout("ns1blankspace.messaging.imap.message.contents.setHeight()", 100);
+														}
+														else
+														{	
+															$('#ifMessage').height($('#ifMessage', top.document).contents().find('html').height());
+															$('#ifMessage').width($('#ifMessage', top.document).contents().find('html').width());
+
+															$('#ns1blankspaceMessageFrameContainer').height($('#ifMessage', top.document).contents().find('html').height());
+															$('#ns1blankspaceMessageFrameContainer').width($('#ifMessage', top.document).contents().find('html').width());
+														}
+													}	
 												},
 
-									setHeight:	function ()
+									setHeight:	function (iframe)
 												{
-													$('#ifMessage').css('height', ($('#ifMessage').attr('scrollHeight') + 100) + 'px');
-													$('#ifMessage').css('width', ($('#ifMessage').attr('scrollWidth') + 100) + 'px');
+													iframe = document.getElementById('ifMessage');
+														
+												    if (iframe)
+												    {
+												        iframe.height = iframe.contentDocument.documentElement.scrollHeight;
+												    }
 												}
 								},				
 

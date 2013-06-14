@@ -1092,7 +1092,7 @@ textarea.ns1blankspaceTextMultiSmall
 }
 
 #ns1blankspaceViewDeveloperSpaceLarge
-{
+{ns1blankspaceMessageContainer
 	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -390px 0px;
 }
 
@@ -1138,8 +1138,12 @@ textarea.ns1blankspaceTextMultiSmall
 .ui-timepicker-rtl dl { text-align: right; }
 .ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
 
-div.ns1blankspaceMessageContainer {width: 500px;}  
+div.ns1blankspaceMessageContainer
+{
+	width: 500px;
+	vertical-align: top;
+}  
 
-iframe.ns1blankspaceMessageContainer {width: 900px; zoom: 1.00; -moz-transform: scale(0.85); -moz-transform-orgin: 0 0;
+iframe.ns1blankspaceMessageContainer {width: 900px; zoom: 1.00; -moz-transform: scale(0.85); -moz-transform-origin: 0 0;
          -o-transform: scale(0.85); -o-transform-origin: 0 0; -webkit-transform: scale(0.85); -webkit-transform-origin: 0 0;}
 
