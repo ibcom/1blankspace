@@ -421,33 +421,7 @@ ns1blankspace.app =
 						{
 							$(ns1blankspace.xhtml.container).hide();
 						});
-						
-						$('.ns1blankspaceSelectContact').live('keyup', function()
-						{
-							ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 1, 3);	
-						});	
-						
-						$('.ns1blankspaceSelectContact').live('focusin', function() 
-						{
-							ns1blankspace.xhtml.divID = this.id;
-							$(ns1blankspace.xhtml.container).html('');
-							$(ns1blankspace.xhtml.container).show();
-							$(ns1blankspace.xhtml.container).offset({ top: $(this).offset().top, left: $(this).offset().left + $(this).width() - 10});
-							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSelectOptions" class="ns1blankspaceSelectOptions"></span>');
 							
-							$('#ns1blankspaceSelectOptions').button( {
-								text: false,
-								icons: {
-									primary: "ui-icon-triangle-1-s"
-								}
-							})
-							.click(function() {
-								ns1blankspace.search.contact.show(ns1blankspace.xhtml.divID, 4);
-							})
-							.css('width', '14px')
-							.css('height', '21px')
-						});
-						
 						$('.ns1blankspaceSelectContactEmail').live('focusin', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
@@ -2729,12 +2703,14 @@ ns1blankspace.search =
 
 						if (sMethodFilter === undefined) {sMethodFilter = ''}
 
-						if (bMultiSelect === undefined) {
+						if (bMultiSelect === undefined)
+						{
 							bMultiSelect = ($('#' + sXHTMLInputElementID).attr("data-multiselect") === "true");
 							$.extend(true, oParam, {multiselect: bMultiSelect});
 						}
 
-						if (fOnComplete === undefined) {
+						if (fOnComplete === undefined)
+						{
 							fOnComplete = ns1blankspace.util.toFunction($('#' + sXHTMLInputElementID).attr("data-click"));
 							$.extend(true, oParam, {onComplete: fOnComplete});
 						}
@@ -2742,7 +2718,7 @@ ns1blankspace.search =
 					
 					if (iXHTMLElementContextID != undefined)
 					{
-						$('#' + sXHTMLInputElementID).val($('#' + sXHTMLElementID).html())
+						$('#' + sXHTMLInputElementID).val(($('#' + sXHTMLElementID).html()).formatXHTML());
 						$('#' + sXHTMLInputElementID).attr("data-id", iXHTMLElementContextID)
 						$(ns1blankspace).hide();
 
@@ -2807,6 +2783,11 @@ ns1blankspace.search =
 
 										$.each(aMethodFilters, function(i) 
 										{
+											if (i != 0)
+											{
+												oSearch.addOperator('or');
+											}
+
 											var aMethodFilter = this.split('-');
 
 											if (aMethodFilter.length == 2)
@@ -4020,7 +4001,6 @@ ns1blankspace.search.email =
 {
 	show: 		function (sXHTMLElementID, oParam)
 				{
-
 					var iSource = ns1blankspace.data.searchSource.text;
 					var iMinimumLength = 1;
 					var sMethod;
@@ -4043,14 +4023,14 @@ ns1blankspace.search.email =
 						if (oParam.setXHTMLElementID != undefined) {sSetXHTMLElementID = oParam.setXHTMLElementID}
 					}
 
-					var aSearch = sXHTMLElementID.split('---');
-					var sElementId = aSearch[0];
+					var aSearch = sXHTMLElementID.split('-');
+					var sElementID = aSearch[0];
 					var lElementSearchContext = aSearch[1];
 						
-					if (sElementId != '')
+					if (sElementID != '')
 					{
-						var sMethod = $('#' + sElementId).attr("data-method")
-						var sParentElementId = $('#' + sElementId).attr("data-parent")
+						var sMethod = $('#' + sElementID).attr("data-method")
+						var sParentElementID = $('#' + sElementID).attr("data-parent")
 					}	
 					
 					if (lElementSearchContext != undefined)
@@ -4070,28 +4050,29 @@ ns1blankspace.search.email =
 						
 						$('#' + sSetXHTMLElementID).attr("data-id", lDataID)
 						
-						var sValue = $('#' + sSetXHTMLElementID).val()
+						var sValue = $('#' + sSetXHTMLElementID).val();
 						
 						if (bEmailOnly) 
 						{
 							if (sValue === '') 
 							{
-								sValue = aSearch[6]
+								sValue = $('#' + sXHTMLElementID).parent().attr('data-email');
 							}
 							else
 							{
-								sValue += ';' + aSearch[6]
+								sValue += ';' + $('#' + sXHTMLElementID).parent().attr('data-email');
 							}		
 								
 							$('#' + sSetXHTMLElementID).val(sValue)	
 						}
 						else
 						{
-							$('#' + sSetXHTMLElementID).val(aSearch[2] + ' ' + aSearch[3])
+							$('#' + sSetXHTMLElementID).val($('#' + sXHTMLElementID).parent().attr('data-firstname') + ' ' + $('#' + sXHTMLElementID).parent().attr('data-surname'))
 						}	
 						
-						$('#' + sParentElementId).attr("data-id", aSearch[4])
-						$('#' + sParentElementId).val(aSearch[5])
+						$('#' + sParentElementID).attr("data-id", $('#' + sXHTMLElementID).parent().attr('data-contactbusiness'));
+						$('#' + sParentElementID).val($('#' + sXHTMLElementID).parent().attr('data-contactbusinesstext'));
+
 						$(ns1blankspace.xhtml.container).hide();
 					}
 					else
@@ -4102,7 +4083,7 @@ ns1blankspace.search.email =
 							
 						if (sSearchText === '' && iSource === ns1blankspace.data.searchSource.text)
 						{
-							sSearchText = $('#' + sElementId).val();
+							sSearchText = $('#' + sElementID).val();
 						}	
 						
 						if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
@@ -4133,11 +4114,8 @@ ns1blankspace.search.email =
 								oSearch.addFilter('email', 'IS_NOT_NULL', sParentSearchText);
 								oSearch.addFilter('email', 'TEXT_IS_LIKE', '@');
 							}	
-							
-							oSearch.rf = 'JSON';
-						
-							oSearch.getResults(function (data) {ns1blankspace.search.email.process(data, sElementId, oParam)}) 
-										
+													
+							oSearch.getResults(function (data) {ns1blankspace.search.email.process(data, sElementID, oParam)}) 								
 						}
 					};	
 				},
@@ -4149,7 +4127,7 @@ ns1blankspace.search.email =
 					var aHTML = [];
 					var h = -1;
 					var	iMaximumColumns = 1;
-					var sElementIDSuffix;
+					var sData;
 					
 					if (oResponse.data.rows.length === 0)
 					{
@@ -4161,32 +4139,27 @@ ns1blankspace.search.email =
 							
 						$.each(oResponse.data.rows, function()
 						{	
-							sElementIDSuffix = '---' + this.id +
-													'---' + this.firstname +
-													'---' + this.surname +
-													'---' + this.contactbusiness +
-													'---' + this.contactbusinesstext +
-													'---' + this.email;
+							sData = ' data-firstname="' + this.firstname + '"' +
+									' data-surname="' + this.surname + '"' +
+									' data-contactbusiness="' + this.contactbusiness + '"' +
+									' data-contactbusinesstext="'+ this.contactbusinesstext + '"' +
+									' data-email="' + this.email + '"';
 						
-							aHTML.push('<tr class="ns1blankspaceSearch">');
+							aHTML.push('<tr class="ns1blankspaceSearch"' + sData + '>');
 							
-							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID +
-													sElementIDSuffix +
+							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID + '-' + this.id +
 													'">' + this.firstname +
 													'</td>');
 													
-							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID +
-													sElementIDSuffix +
+							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID + '-' + this.id +
 													'">' + this.surname +
 													'</td>');
 																			
-							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID +
-													sElementIDSuffix +
+							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID + '-' + this.id +
 													'">' + this.email +
 													'</td>');
 													
-							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID +
-													sElementIDSuffix +
+							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID + '-' + this.id +
 													'">' + this.contactbusinesstext +
 													'</td>');
 													
@@ -4221,7 +4194,6 @@ ns1blankspace.search.email =
 							bodyClass: 'ns1blankspaceSearch',
 							functionSearch: ns1blankspace.search.email.show,
 							xhtmlElementID: sElementID,
-							idSeperator: '---',
 							type: 'JSON'
 						})	
 					}	
@@ -4292,7 +4264,8 @@ ns1blankspace.render =
 							primary: "ui-icon-close"
 						}
 					})
-					.click(function() {
+					.click(function()
+					{
 						$(ns1blankspace.xhtml.container).slideUp(1000);
 						$(ns1blankspace.xhtml.container).html('&nbsp;');
 					})
@@ -4300,7 +4273,8 @@ ns1blankspace.render =
 					.css('height', '18px')
 						
 					$('#ns1blankspaceRenderHeaderMore')
-					.click(function() {
+					.click(function()
+					{
 						(oParam != undefined?oParam.more = iMore:oParam = {more: iMore})
 						fFunctionMore(oParam);
 					})

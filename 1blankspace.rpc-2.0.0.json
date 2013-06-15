@@ -797,6 +797,8 @@
 		{"title":"SETUP_AGRI_TRAINING_COURSE_STATUS_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_AGRI_TRAINING_COURSE_ATTENDEE_STATUS_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_AGRI_TRAINING_COURSE_ATTENDEE_PAYMENT_STATUS_SEARCH", "advancedSearch":"true", "rpc":"true"},
-		{"title":"AGRI_EDUCATION_TRAINING_PACKAGE_MANAGE", "advancedSearch":"true", "rpc":"true"}
+		{"title":"AGRI_EDUCATION_TRAINING_PACKAGE_MANAGE", "advancedSearch":"true", "rpc":"true"},
+		{"title":"AGRI_TEMP_TRAINEE_PRODUCT_GROUP_MANAGE", "advancedSearch":"true", "rpc":"true"},
+		{"title":"AGRI_EDUCATION_TRAINING_COURSE_MANAGE", "advancedSearch":"true", "rpc":"true"}
 	]
 }
