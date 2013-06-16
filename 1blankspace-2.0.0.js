@@ -2821,13 +2821,13 @@ ns1blankspace.search =
 											oSearch.addFilter(sParentColumnText, 'TEXT_STARTS_WITH', sParentContextText);
 										}
 									}
-									
+									oSearch.rows = 100;
 									oSearch.sort(aColumns[0], 'asc');
 									oSearch.getResults(function(data){ns1blankspace.search.show(oParam, data)});
 								}
 								else
 								{
-									var sData = '=_';
+									var sData = 'rows=100';
 
 									if (iSource === ns1blankspace.data.searchSource.text)
 									{	
@@ -3918,7 +3918,7 @@ ns1blankspace.search.address =
 							{
 								type: 'POST',
 								url: ns1blankspace.util.endpointURI('CORE_ADDRESS_SEARCH'),
-								data: 'suburblike=' + ns1blankspace.util.fs(sSearchText),
+								data: 'rows=100&suburblike=' + ns1blankspace.util.fs(sSearchText),
 								dataType: 'json',
 								success: function(data) {ns1blankspace.search.address.process(oParam, data);}
 							});
@@ -4140,32 +4140,8 @@ ns1blankspace.search.email =
 						aHTML.push('<table class="ns1blankspaceSearchMedium">');
 							
 						$.each(oResponse.data.rows, function()
-						{	
-							sData = ' data-firstname="' + this.firstname + '"' +
-									' data-surname="' + this.surname + '"' +
-									' data-contactbusiness="' + this.contactbusiness + '"' +
-									' data-contactbusinesstext="'+ this.contactbusinesstext + '"' +
-									' data-email="' + this.email + '"';
-						
-							aHTML.push('<tr class="ns1blankspaceSearch"' + sData + '>');
-							
-							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID + '-' + this.id +
-													'">' + this.firstname +
-													'</td>');
-													
-							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID + '-' + this.id +
-													'">' + this.surname +
-													'</td>');
-																			
-							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID + '-' + this.id +
-													'">' + this.email +
-													'</td>');
-													
-							aHTML.push('<td class="ns1blankspaceSearch" id="' + sElementID + '-' + this.id +
-													'">' + this.contactbusinesstext +
-													'</td>');
-													
-							aHTML.push('</tr>');
+						{								
+							aHTML.push(ns1blankspace.search.email.row(oParam, this));
 						});
 				    	
 						aHTML.push('</table>');
@@ -4174,9 +4150,7 @@ ns1blankspace.search.email =
 							ns1blankspace.render.init(
 							{
 								html: aHTML.join(''),
-								more: (oResponse.morerows === 'true'),
-								headerClass: 'ns1blankspaceSearchHeader',
-								footerClass: 'ns1blankspaceSearchFooter'
+								more: (oResponse.morerows === 'true')
 							})	
 						);
 					
@@ -4187,20 +4161,54 @@ ns1blankspace.search.email =
 							$(ns1blankspace.xhtml.container).hide(200);
 							ns1blankspace.search.email.show(event.target.id, oParam);
 						});
-						
+
 						ns1blankspace.render.bind(
+						$.extend(oParam,
 						{
 							columns: 'firstname-surname-email-contactbusinesstext',
 							idColumns: 'firstname-surname-contactbusiness-contactbusinesstext-email',
 							more: oResponse.moreid, 
-							bodyClass: 'ns1blankspaceSearch',
 							functionSearch: ns1blankspace.search.email.show,
 							xhtmlElementID: sElementID,
-							type: 'JSON'
-						})	
+							type: 'JSON',
+							functionRow: ns1blankspace.search.email.row
+						}))	
 					}	
 							
-				}
+				},
+
+	row: 		function (oParam, oRow)
+				{
+					var sData = ' data-firstname="' + oRow.firstname + '"' +
+									' data-surname="' + oRow.surname + '"' +
+									' data-contactbusiness="' + oRow.contactbusiness + '"' +
+									' data-contactbusinesstext="'+ oRow.contactbusinesstext + '"' +
+									' data-email="' + oRow.email + '"';
+					
+					var aHTML = [];
+
+					aHTML.push('<tr class="ns1blankspaceSearch"' + sData + '>');
+					
+					aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+											'">' + oRow.firstname +
+											'</td>');
+											
+					aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+											'">' + oRow.surname +
+											'</td>');
+																	
+					aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+											'">' + oRow.email +
+											'</td>');
+											
+					aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+											'">' + oRow.contactbusinesstext +
+											'</td>');
+											
+					aHTML.push('</tr>');
+
+					return aHTML.join('');
+				}			
 }				
 
 ns1blankspace.render =
@@ -4295,7 +4303,7 @@ ns1blankspace.render =
 					var sXHTMLElementID = '';
 					var iMore = -1;
 					var iStartRow = 10;
-					var iRows = 2;
+					var iRows = 10;
 					var iColumn = 0;
 					var iMaximumColumns = 1;
 					var sColumns = "title";
@@ -4390,9 +4398,10 @@ ns1blankspace.render =
 								
 								$('td.ns1blankspaceSearch').click(function(event)
 								{
-									$(ns1blankspace.xhtml.container).html('&nbsp;');
-									$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-									fFunctionSearch(event.target.id, {source: 1});
+									//$(ns1blankspace.xhtml.container).html('&nbsp;');
+									//$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+									oParam.source = 1;
+									fFunctionSearch(event.target.id, oParam);
 								});
 										
 								$('td.ns1blankspaceRenderHeader').removeClass('ns1blankspaceRenderHeaderPageSelected');

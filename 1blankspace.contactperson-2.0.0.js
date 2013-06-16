@@ -133,7 +133,7 @@ ns1blankspace.contactPerson =
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 2;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -199,7 +199,19 @@ ns1blankspace.contactPerson =
 											}
 											else
 											{	
-												oSearch.addFilter('quicksearch', 'TEXT_IS_LIKE', sSearchText);
+												var aSearchText = sSearchText.split(' ');
+
+												if (aSearchText.length > 1)
+												{
+													oSearch.addFilter('firstname', 'TEXT_STARTS_WITH', aSearchText[0]);
+													oSearch.addFilter('surname', 'TEXT_STARTS_WITH', aSearchText[1]);
+												}
+												else
+												{
+													oSearch.addFilter('firstname', 'TEXT_IS_LIKE', sSearchText);
+													oSearch.addOperator('or');
+													oSearch.addFilter('surname', 'TEXT_IS_LIKE', sSearchText);
+												}	
 											}	
 											
 											oSearch.rows = 15;
@@ -866,12 +878,6 @@ ns1blankspace.contactPerson =
 							$('#ns1blankspaceDetailsNumberOfChildren').val(ns1blankspace.objectContextData.numberofchildren);
 							$('#ns1blankspaceDetailsOtherFamilyDetails').val(ns1blankspace.objectContextData.otherfamilydetails);
 						}
-						
-						$('#ns1blankspaceDetailsTitle').keyup(function(event)
-						{
-							$(ns1blankspace.xhtml.container).hide(200);
-							ns1blankspace.search.send(event.target.id);
-						});
 					}	
 				},
 

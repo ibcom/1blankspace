@@ -577,7 +577,8 @@ ns1blankspace.contactBusiness =
 										'</td></tr>' +
 										'<tr class="ns1blankspaceText">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsIndustry" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsIndustry" class="ns1blankspaceSelect"' +
+											' data-method="SETUP_CONTACT_INDUSTRY_SEARCH">' +
 										'</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspace">' +

@@ -231,40 +231,44 @@ ns1blankspace.messaging.imap =
 								
 								$.each(oResponse.data.rows, function(index)
 								{
-									ns1blankspace.messaging.imap.emailAccounts.push(
-									{
-										id: this.id,
-										footer: (this.footer).formatXHTML(),
-										email: this.email
-									})		
-									
-									if (index == 0) 
-									{
-										ns1blankspace.messaging.imap.account = this.id;
-									}
-									else
-									{
-										ns1blankspace.messaging.imap.account = undefined;
-									}
-									
-									var sDescription = this.email;
-									var aDescription = sDescription.split("@");
-										
-									if (aDescription.length > 0) {sDescription = aDescription[0]}	
-									
-									aHTML.push('<tr><td id="ns1blankspaceMessaging-' + this.id + '" ' +
-													'class="ns1blankspaceControl"' +
-													' title="' + this.email + '">' +
-													sDescription +
-													'</td></tr>');
-										
-									if (ns1blankspace.option.messagingEmailShowCount)
+									if (this.type == 5)
 									{	
-										aHTML.push('<tr><td id="ns1blankspaceMessagingCount-' + this.id + '" ' +
-														' class="ns1blankspaceControl ns1blankspaceSub">' +
-														this.count + ' emails<br />' +
-														'</td></tr>');		
-									}	
+										ns1blankspace.messaging.imap.emailAccounts.push(
+										{
+											id: this.id,
+											footer: (this.footer).formatXHTML(),
+											email: this.email
+										})		
+										
+										if (ns1blankspace.messaging.imap.data.defaultAccount === undefined) 
+										{
+											ns1blankspace.messaging.imap.account = this.id;
+											ns1blankspace.messaging.imap.data.defaultAccount = this.id;
+										}
+										else
+										{
+											ns1blankspace.messaging.imap.account = undefined;
+										}
+										
+										var sDescription = this.email;
+										var aDescription = sDescription.split("@");
+											
+										if (aDescription.length > 0) {sDescription = aDescription[0]}	
+										
+										aHTML.push('<tr><td id="ns1blankspaceMessaging-' + this.id + '" ' +
+														'class="ns1blankspaceControl"' +
+														' title="' + this.email + '">' +
+														sDescription +
+														'</td></tr>');
+											
+										if (ns1blankspace.option.messagingEmailShowCount)
+										{	
+											aHTML.push('<tr><td id="ns1blankspaceMessagingCount-' + this.id + '" ' +
+															' class="ns1blankspaceControl ns1blankspaceSub">' +
+															this.count + ' emails<br />' +
+															'</td></tr>');		
+										}
+									}		
 								});
 								
 								aHTML.push('</table>');
@@ -1672,22 +1676,22 @@ ns1blankspace.messaging.imap =
 															}			
 														}
 														
-														if (iSource == 2)
+														if (iSource == 2)  //???
 														{
-															var sFooter = '<br />';
+															var sFooter = '<br /><br />';
 															
 															$.each(ns1blankspace.messaging.imap.emailAccounts, function() 
 															{ 
 																if (this.id == ns1blankspace.messaging.imap.account)
 																{
-																	sFooter = this.footer + '<br />';
+																	sFooter += this.footer + '<br />';
 																}
 															});
 															
 															$('#ns1blankspaceMessagingEditMessageText').val(sFooter + sMessage)
 														}
 														
-														if (iSource == 3)
+														if (iSource == 3)  //????
 														{
 															$('#ns1blankspaceMessagingEditMessageSubject').val(sSubject)
 															$('#ns1blankspaceMessagingEditMessageSubject').removeClass('ns1blankspaceWatermark');
@@ -1696,6 +1700,18 @@ ns1blankspace.messaging.imap =
 													}
 													else
 													{
+														var sFooter = '<br /><br />';
+															
+														$.each(ns1blankspace.messaging.imap.emailAccounts, function() 
+														{ 
+															if (this.id == (ns1blankspace.messaging.imap.account != undefined?ns1blankspace.messaging.imap.account:ns1blankspace.messaging.imap.data.defaultAccount))
+															{
+																sFooter += this.footer;
+															}
+														});
+														
+														$('#ns1blankspaceMessagingEditMessageText').val(sFooter)
+
 														if (ns1blankspace.option.richTextEditing)
 														{
 															tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingEditMessageText');
@@ -1982,6 +1998,7 @@ ns1blankspace.messaging.imap =
 										{
 											ns1blankspace.status.message('');
 											$('#' + sXHTMLElementID).html('<span class="ns1blankspaceSub"><br />Email has been sent.</span>');
+											$('#ns1blankspaceMessagingMessageControlContainer').html('');
 											if (fFunctionPostSend != undefined) {fFunctionPostSend()};
 										}
 									});
