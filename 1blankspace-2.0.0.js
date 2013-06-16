@@ -1164,8 +1164,10 @@ ns1blankspace.app =
 																		.offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left })
 																		.html(sXHTML);
 										
-										if (fBind != undefined)
-											{fBind()}
+										if (fBind !== undefined)
+										{
+											fBind(oParam);
+										}
 										else
 										{
 											ns1blankspace.app.options.bind(oParam);
