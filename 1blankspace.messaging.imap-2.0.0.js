@@ -279,9 +279,9 @@ ns1blankspace.messaging.imap =
 													'class="ns1blankspaceControl">' +
 													'Sent Emails</td></tr>');
 
-								aHTML.push('<tr><td id="ns1blankspaceMessaging-Drafts" ' +
-													'class="ns1blankspaceControl">' +
-													'Drafts</td></tr>');
+								//aHTML.push('<tr><td id="ns1blankspaceMessaging-Drafts" ' +
+								//					'class="ns1blankspaceControl">' +
+								//					'Drafts</td></tr>');
 
 								aHTML.push('</table>');
 								
@@ -800,6 +800,7 @@ ns1blankspace.messaging.imap =
 									var sSearchText;
 									var iMaximumColumns = 1;
 									var iRows = 10;
+									var iAccount = (ns1blankspace.messaging.imap.account!=undefined?ns1blankspace.messaging.imap.account:ns1blankspace.messaging.imap.data.defaultAccount);
 									
 									if (oParam != undefined)
 									{
@@ -822,9 +823,8 @@ ns1blankspace.messaging.imap =
 										oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 										oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
 															'message,hasattachments,attachments,imapflags,detailscached');
-										oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.imap.account);
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.rows = ns1blankspace.messaging.defaultRows;
+										oSearch.rows = 1;
 										oSearch.getResults(function(data) {ns1blankspace.messaging.imap.show(oParam, data)});	
 									}
 									else
@@ -840,21 +840,20 @@ ns1blankspace.messaging.imap =
 											iMaximumColumns = 4;
 											sSearchText = aSearch[1];
 											if (sSearchText == '#') {sSearchText = '[0-9]'}
-											sElementId = 'ns1blankspaceViewControlBrowse';
+											sElementID = 'ns1blankspaceViewControlBrowse';
 										}
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position(sElementId);
-											ns1blankspace.search.start(sElementId);
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 											oSearch.addField('subject');
-											oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.imap.account);
-											oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-											oSearch.rows = ns1blankspace.messaging.defaultRows;
-											oSearch.getResults(function(data) {ns1blankspace.messaging.imap.process(oParam, data)});
+											oSearch.addFilter('account', 'EQUAL_TO', iAccount);
+											oSearch.addFilter('subject', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.rows = iRows;
+											oSearch.getResults(function(data) {ns1blankspace.messaging.imap.search.process(oParam, data)});
 										}
 									};	
 								},
@@ -895,7 +894,7 @@ ns1blankspace.messaging.imap =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.messaging.search.send(event.target.id, {source: 1});
+											ns1blankspace.messaging.imap.search.send(this.id);
 										});
 									}	
 								}

@@ -205,12 +205,12 @@ ns1blankspace.financial.expense =
 											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 											oSearch.addField('reference,accrueddate,amount,contactbusinesspaidtotext,expense.contactpersonpaidtotext');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
-											/*
+											
 											oSearch.addOperator('or');
 											oSearch.addFilter('expense.contactbusinesspaidto.tradename', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('expense.contactpersonpaidto.surname', 'TEXT_IS_LIKE', sSearchText);
-											*/
+											
 											oSearch.getResults(function(data) {ns1blankspace.financial.expense.search.process(oParam, data)});	
 										}
 									};	
