@@ -176,7 +176,7 @@ ns1blankspace.financial.expense =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 										oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,projecttext,project,projecttext,areatext,' +
-																'area,reference,accrueddate,description,amount,tax,object,objectcontext');
+																'area,reference,accrueddate,description,amount,tax,object,objectcontext,paymentduedate');
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										
@@ -617,7 +617,7 @@ ns1blankspace.financial.expense =
 							$('#ns1blankspaceDetailsContactPersonPaidTo').attr('data-id', ns1blankspace.objectContextData.contactpersonpaidto);
 							$('#ns1blankspaceDetailsContactPersonPaidTo').val(ns1blankspace.objectContextData.contactpersonpaidtotext);	
 							$('#ns1blankspaceDetailsAccruedDate').val(ns1blankspace.objectContextData.accrueddate);
-							$('#ns1blankspaceDetailsDueDate').val(ns1blankspace.objectContextData.duedate);
+							$('#ns1blankspaceDetailsDueDate').val(ns1blankspace.objectContextData.paymentduedate);
 							$('[name="radioPaid"][value="' + ns1blankspace.objectContextData.paid + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
 						}
