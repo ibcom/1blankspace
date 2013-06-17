@@ -2009,10 +2009,17 @@ ns1blankspace.messaging.imap =
 										dataType: 'text',
 										success: function(data) 
 										{
-											ns1blankspace.status.message('');
-											$('#' + sXHTMLElementID).html('<span class="ns1blankspaceSub"><br />Email has been sent.</span>');
+											ns1blankspace.status.message('Email has been sent');
 											$('#ns1blankspaceMessagingMessageControlContainer').html('');
-											if (fFunctionPostSend != undefined) {fFunctionPostSend()};
+											
+											if (fFunctionPostSend != undefined)
+											{
+												fFunctionPostSend()
+											}
+											else
+											{
+												ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
+											}
 										}
 									});
 
