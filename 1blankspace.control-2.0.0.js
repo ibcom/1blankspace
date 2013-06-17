@@ -898,7 +898,10 @@ ns1blankspace.control =
 												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +				
 																		'<td class="ns1blankspaceViewControl">' +
 																		'<span id="ns1blankspaceViewControl_action" class="ns1blankspaceViewControl">' +
-																		'Actions</span></td></tr>');
+																		'Actions</span>' +
+																		'<br /><div class="ns1blankspaceSubNote" style="margin-top:4px;">' + 
+																		'& calendar</div>' +
+																		'</td></tr>');
 											}			
 
 											if (aHTMLViewport.length > 0)

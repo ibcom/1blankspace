@@ -151,7 +151,8 @@ ns1blankspace.messaging.imap =
 						{	
 							ns1blankspace.status.clear();
 							if (ns1blankspace.messaging.emailNewCount == undefined) {ns1blankspace.messaging.emailNewCount = 0}
-							ns1blankspace.messaging.emailNewCount += oResponse.newrows;
+
+							if (oResponse.fullrefresh != 'Y') {ns1blankspace.messaging.emailNewCount += oResponse.newrows};
 							ns1blankspace.messaging.checking = false;
 
 							if (ns1blankspace.messaging.emailNewCount != undefined)
@@ -719,11 +720,11 @@ ns1blankspace.messaging.imap =
 													
 													$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
 																
-													ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset:-250, topOffset: 4});
+													ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset:-290, topOffset: 4});
 													
 													var aHTML = [];
 														
-													aHTML.push('<table id="ns1blankspaceMessageSaveContainer" class="ns1blankspaceDropDown" style="width:280px; margin-top:0px">' +
+													aHTML.push('<table id="ns1blankspaceMessageSaveContainer" class="ns1blankspaceDropDown" style="width:320px; margin-top:0px">' +
 																	'<tr><td id="ns1blankspaceMessageSaveContainerColumn1"></td>' +
 																	'<td id="ns1blankspaceMessageSaveContainerColumn2" style="width:75px;"></td></tr>' +
 																	'</table>');					
@@ -735,20 +736,46 @@ ns1blankspace.messaging.imap =
 													aHTML.push('<table>');
 													
 													aHTML.push('<tr><td class="ns1blankspaceAction">' +
-																	'<input type="checkbox" checked="checked" id="ns1blankspaceMessageSaveContacts" /> Create Contacts' +
+																	'<input type="checkbox" checked="checked" id="ns1blankspaceMessageSaveContacts" /> Create contacts' +
 																	'</td></tr>');
 
 													aHTML.push('<tr><td class="ns1blankspaceAction">' +
-																	'<input type="checkbox" checked="checked" id="ns1blankspaceMessageSaveAttachments" /> Attachments' +
+																	'<input type="checkbox" checked="checked" id="ns1blankspaceMessageSaveAttachments" /> Save attachments' +
 																	'</td></tr>');
 
 													aHTML.push('<tr><td class="ns1blankspaceAction">' +
-																	'<input type="checkbox" id="ns1blankspaceMessageSavePrivate" /> Private' +
+																	'<input type="checkbox" id="ns1blankspaceMessageSavePrivate" /> Set as private' +
 																	'</td></tr>');
+
+													aHTML.push('<tr class="ns1blankspace">' +
+																	'<td class="ns1blankspaceRadio">' +
+																	'<input type="checkbox" id="ns1blankspaceMessageSaveObject" />' +
+																	'<select id="ns1blankspaceMessageSaveObjectValue" style="width:138px;">' +
+																	'<option value="32" data-method="CONTACT_PERSON_SEARCH" data-columns="firstname,surname">Person</option>' +
+																	'<option value="12" data-method="CONTACT_BUSINESS_SEARCH">Business</option>' +
+																	'<option value="35" data-method="OPPORTUNITY_SEARCH">Opportunity</option>' +
+																	'<option value="1" data-method="PROJECT_SEARCH">Project</option>' +
+																	'<option value="43" data-method="PRODUCT_ORDER_SEARCH">Order</option>' +
+																	'<option value="5" data-method="FINANCIAL_INVOICE_SEARCH">Invoice</option>' +
+																	'<option value="2" data-method="FINANCIAL_EXPENSE_SEARCH">Expense</option>' +
+																	'</select>' +
+																	'</td></tr>');
+
+													aHTML.push('<tr><td style="padding-left:20px;">' +
+																	'<input id="ns1blankspaceMessageSaveObjectContext" style="padding:3px;">' +
+																	'</td></tr>');
+
+													aHTML.push('<tr><td style="padding-left:20px; padding-top:4px;" id="ns1blankspaceMessageSaveObjectContextSearch"></td></tr>');
 
 													aHTML.push('</table>');					
 												
 													$('#ns1blankspaceMessageSaveContainerColumn1').html(aHTML.join(''));
+
+													$('#ns1blankspaceMessageSaveObjectContext').keyup(function ()
+													{
+														if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+					       								ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.messaging.imap.inbox.save.search()', ns1blankspace.option.typingWait);
+													});
 
 													var aHTML = [];
 
@@ -765,8 +792,7 @@ ns1blankspace.messaging.imap =
 													aHTML.push('</table>');					
 												
 													$('#ns1blankspaceMessageSaveContainerColumn2').html(aHTML.join(''));
-
-													
+					
 													$('#ns1blankspaceMessageSave').button(
 													{
 														label: 'Save'
@@ -793,6 +819,87 @@ ns1blankspace.messaging.imap =
 													.css('width', '75px');
 												},
 
+									search: 	function (oParam, oResponse)
+												{
+													var iObject = $('#ns1blankspaceMessageSaveObjectValue :selected').val();
+													var sColumns = $('#ns1blankspaceMessageSaveObjectValue :selected').attr('data-columns');
+													if (sColumns === undefined) {sColumns = 'reference'}
+
+													if (oResponse === undefined)
+													{	
+														$('#ns1blankspaceMessageSaveObjectContextSearch').html(ns1blankspace.xhtml.loadingSmall);
+		
+														var sMethod = $('#ns1blankspaceMessageSaveObjectValue :selected').attr('data-method');
+														var sSearchText = $('#ns1blankspaceMessageSaveObjectContext').val();
+
+														var oSearch = new AdvancedSearch();
+														oSearch.method = sMethod;
+														oSearch.addField(sColumns);
+														
+														if (iObject == 32)
+														{	
+															var aSearchText = sSearchText.split(' ');
+
+															if (aSearchText.length > 1)
+															{
+																oSearch.addFilter('firstname', 'TEXT_STARTS_WITH', aSearchText[0]);
+																oSearch.addFilter('surname', 'TEXT_STARTS_WITH', aSearchText[1]);
+															}
+															else
+															{
+																oSearch.addFilter('firstname', 'TEXT_IS_LIKE', sSearchText);
+																oSearch.addOperator('or');
+																oSearch.addFilter('surname', 'TEXT_IS_LIKE', sSearchText);
+															}	
+														}
+														else
+														{
+															oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+														}	
+														
+														oSearch.rows = 15;
+														oSearch.rf = 'json';
+														oSearch.getResults(function(data) {ns1blankspace.messaging.imap.inbox.save.search(oParam, data)});
+													}
+													else
+													{
+														var aHTML = [];
+														
+														var aColumns = sColumns.split(',');
+
+														aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;" id="ns1blankspaceMessageSaveObjectContextSearchResults">');
+														
+														$.each(oResponse.data.rows, function(i, v) 
+														{ 
+															var sText = '';
+															$.each(aColumns, function(j, k)
+															{	
+																sText += v[k] + ' ';
+															});
+
+															aHTML.push('<tr><td id="ns1blankspaceItem_title-' + v.id +'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																			sText + '</td></tr>');	
+														});
+														
+														aHTML.push('</table>');
+
+														$('#ns1blankspaceMessageSaveObjectContextSearch').html(aHTML.join(''))
+														
+														$('#ns1blankspaceMessageSaveObjectContextSearchResults td.ns1blankspaceRowSelect')
+														.click(function()
+														{
+															var sID = this.id;
+															var aID = sID.split('-');
+
+															$('#ns1blankspaceMessageSaveObjectContext').attr('data-id', aID[1]);
+															$('#ns1blankspaceMessageSaveObjectContext').attr('data-object', iObject);
+															$('#ns1blankspaceMessageSaveObjectContext').val($(this).html());
+															$('#ns1blankspaceMessageSaveObjectContextSearch').html('');
+															$('#ns1blankspaceMessageSaveObject').prop('checked', true);
+														});
+													}
+												},		
+
 									send:		function (oParam)
 												{
 													var sCacheID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
@@ -806,6 +913,12 @@ ns1blankspace.messaging.imap =
 														autocreatecontacts: ($('#ns1blankspaceMessageSaveContacts').prop('checked')?'Y':'N'),
 														saveattachments: ($('#ns1blankspaceMessageSaveAttachments').prop('checked')?'Y':'N'),
 														private: ($('#ns1blankspaceMessageSavePrivate').prop('checked')?'Y':'N')
+													}
+
+													if ($('#ns1blankspaceMessageSaveObject').prop('checked'))
+													{
+														oData.object = $('#ns1blankspaceMessageSaveObjectContext').attr('data-object');
+														oData.objectContext = $('#ns1blankspaceMessageSaveObjectContext').attr('data-id');
 													}
 													
 													$.ajax(
