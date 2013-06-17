@@ -1999,7 +1999,9 @@ ns1blankspace.messaging.imap =
 									//sData += '&objectcontext=' + oParam.objectContext;
 									//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
 
-									$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading + ' Sending...');
+									ns1blankspace.messaging.imap.data.lastEmail = oData;
+									ns1blankspace.status.working('Sending...');
+									ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
 
 									$.ajax(
 									{
@@ -2011,14 +2013,11 @@ ns1blankspace.messaging.imap =
 										{
 											ns1blankspace.status.message('Email has been sent');
 											$('#ns1blankspaceMessagingMessageControlContainer').html('');
+											ns1blankspace.messaging.imap.data.lastEmail = {};
 											
 											if (fFunctionPostSend != undefined)
 											{
 												fFunctionPostSend()
-											}
-											else
-											{
-												ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
 											}
 										}
 									});
