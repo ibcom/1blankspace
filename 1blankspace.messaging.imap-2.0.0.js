@@ -432,7 +432,7 @@ ns1blankspace.messaging.imap =
 											
 										if (bRebuild)
 										{
-											ns1blankspace.status.working('Checking for new emails');
+											ns1blankspace.status.message('Checking for new emails...');
 											ns1blankspace.messaging.imap.check();
 
 											var aHTML = [];
@@ -1179,7 +1179,8 @@ ns1blankspace.messaging.imap =
 							$.each(aTo, function(i)
 							{	
 								var aEmail = this.split('|');
-								sTo += '<span title="' + aEmail[0] + '">' + aEmail[1] + '</span>; '
+								var aEmailTmp = aEmail[1].split('&gt;');
+								sTo += '<span title="' + aEmail[0] + '">' + aEmailTmp[0] + '</span>; '
 							});				
 											
 							aHTML.push(sTo);
@@ -1202,7 +1203,8 @@ ns1blankspace.messaging.imap =
 							$.each(aCC, function(i)
 							{
 								var aEmail = this.split('|');
-								sCC += '<span title="' + aEmail[0] + '">' + aEmail[1] + '</span>; '
+								var aEmailTmp = aEmail[1].split('&gt;')
+								sCC += '<span title="' + aEmail[0] + '">' + aEmailTmp[0] + '</span>; '
 							});				
 											
 							aHTML.push(sCC);
