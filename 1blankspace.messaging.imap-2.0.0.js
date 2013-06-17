@@ -1179,7 +1179,7 @@ ns1blankspace.messaging.imap =
 							$.each(aTo, function(i)
 							{	
 								var aEmail = this.split('|');
-								sTo += this + aEmail[1] + '; '}
+								sTo += '<span title="' + aEmail[0] + '">' + aEmail[1] + '</span>; '
 							});				
 											
 							aHTML.push(sTo);
@@ -1202,7 +1202,7 @@ ns1blankspace.messaging.imap =
 							$.each(aCC, function(i)
 							{
 								var aEmail = this.split('|');
-								sCC += this + aEmail[1] + '; '}
+								sCC += '<span title="' + aEmail[0] + '">' + aEmail[1] + '</span>; '
 							});				
 											
 							aHTML.push(sCC);
