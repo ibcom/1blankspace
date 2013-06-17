@@ -799,8 +799,6 @@ ns1blankspace.messaging.imap =
 													var sMessageID = ns1blankspace.util.getParam(oParam, 'messageID').value;
 													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 
-													//id: sCacheID,
-
 													var oData =
 													{
 														account: ns1blankspace.messaging.imap.account,
@@ -1175,12 +1173,13 @@ ns1blankspace.messaging.imap =
 											'<td id="ns1blankspaceMessagingEmailTo" style="padding:4px;" class="ns1blankspaceSub">');
 											
 							var sTo = ns1blankspace.objectContextData.to;
-							var aTo = sTo.split('|')
+							var aTo = sTo.split('#')
 							sTo = '';
 						
 							$.each(aTo, function(i)
 							{	
-								if (i % 2 !== 0) {sTo += this + '; ';}
+								var aEmail = this.split('|');
+								sTo += this + aEmail[1] + '; '}
 							});				
 											
 							aHTML.push(sTo);
@@ -1197,12 +1196,13 @@ ns1blankspace.messaging.imap =
 											'<td id="ns1blankspaceMessagingEmailCC" style="padding:4px;" class="ns1blankspaceSub">');
 											
 							var sCC = ns1blankspace.objectContextData.cc
-							var aCC = sCC.split('|')
+							var aCC = sCC.split('#')
 							sCC = '';
 						
 							$.each(aCC, function(i)
 							{
-								if (i % 2 !== 0) {sCC += this + '; ';}
+								var aEmail = this.split('|');
+								sCC += this + aEmail[1] + '; '}
 							});				
 											
 							aHTML.push(sCC);
