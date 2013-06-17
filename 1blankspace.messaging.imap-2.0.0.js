@@ -545,7 +545,7 @@ ns1blankspace.messaging.imap =
 															'" class="ns1blankspaceRowRemoveDisabled"></span>');
 										}
 
-										aHTML.push('<span id="ns1blankspaceMessagingInbox_save-' + sID + '" class="ns1blankspaceRowSave"></span>');
+										aHTML.push('<span id="ns1blankspaceMessagingInbox_save-' + sID + '" class="ns1blankspaceRowSave" data-messageid="' + oRow.messageid + '"></span>');
 										
 										aHTML.push('</td></tr>');
 										
@@ -633,7 +633,11 @@ ns1blankspace.messaging.imap =
 										}
 										else
 										{
-											ns1blankspace.messaging.imap.inbox.save.init({xhtmlElementID: this.id})
+											ns1blankspace.messaging.imap.inbox.save.show(
+											{
+												xhtmlElementID: this.id,
+												messageID: $(this).attr('data-messageid')
+											});
 										}	
 									})
 									.css('width', '15px')
@@ -646,7 +650,7 @@ ns1blankspace.messaging.imap =
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
 											
-									ns1blankspace.status.working('Removing...');
+									//ns1blankspace.status.working('Removing...');
 
 									$('#' + sXHTMLElementID).parent().parent().css('opacity', '0.5');
 									$('#' + sXHTMLElementID).parent().parent().children().removeClass('ns1blankspaceRowSelect');
@@ -708,34 +712,64 @@ ns1blankspace.messaging.imap =
 								},
 
 					save: 		{
-									init:		function (oParam)
+									show:		function (oParam)
 												{
 													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 													var sCacheID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 													
 													$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
 																
-													ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset:-87, topOffset: 4});
+													ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset:-250, topOffset: 4});
 													
 													var aHTML = [];
 														
-													aHTML.push('<table id="ns1blankspaceMessageSaveContainer" class="ns1blankspaceDropDown" style="width:100px; margin-top:0px">');
+													aHTML.push('<table id="ns1blankspaceMessageSaveContainer" class="ns1blankspaceDropDown" style="width:280px; margin-top:0px">' +
+																	'<tr><td id="ns1blankspaceMessageSaveContainerColumn1"></td>' +
+																	'<td id="ns1blankspaceMessageSaveContainerColumn2" style="width:75px;"></td></tr>' +
+																	'</table>');					
+												
+													$(ns1blankspace.xhtml.container).html(aHTML.join(''))
+
+													var aHTML = [];
+														
+													aHTML.push('<table>');
 													
 													aHTML.push('<tr><td class="ns1blankspaceAction">' +
-																	'<span id="ns1blankspaceMessageQuickSave" class="ns1blankspaceAction">Quick Save</span>' +
+																	'<input type="checkbox" checked="checked" id="ns1blankspaceMessageSaveContacts" /> Create Contacts' +
 																	'</td></tr>');
 
 													aHTML.push('<tr><td class="ns1blankspaceAction">' +
+																	'<input type="checkbox" checked="checked" id="ns1blankspaceMessageSaveAttachments" /> Attachments' +
+																	'</td></tr>');
+
+													aHTML.push('<tr><td class="ns1blankspaceAction">' +
+																	'<input type="checkbox" id="ns1blankspaceMessageSavePrivate" /> Private' +
+																	'</td></tr>');
+
+													aHTML.push('</table>');					
+												
+													$('#ns1blankspaceMessageSaveContainerColumn1').html(aHTML.join(''));
+
+													var aHTML = [];
+
+													aHTML.push('<table>');
+													
+													aHTML.push('<tr><td>' +
 																	'<span id="ns1blankspaceMessageSave" class="ns1blankspaceAction">Save</span>' +
+																	'</td></tr>');
+
+													aHTML.push('<tr><td style="padding-top:10px;">' +
+																	'<span id="ns1blankspaceMessageToDo" class="ns1blankspaceAction">Save as To Do</span>' +
 																	'</td></tr>');
 													
 													aHTML.push('</table>');					
 												
-													$(ns1blankspace.xhtml.container).html(aHTML.join(''))
+													$('#ns1blankspaceMessageSaveContainerColumn2').html(aHTML.join(''));
+
 													
-													$('#ns1blankspaceMessageQuickSave').button(
+													$('#ns1blankspaceMessageSave').button(
 													{
-														label: 'Quick Save'
+														label: 'Save'
 													})
 													.click(function()
 													{
@@ -745,45 +779,35 @@ ns1blankspace.messaging.imap =
 														
 													})
 													.css('width', '75px');
-
-													$('#ns1blankspaceMessageSave').button(
-													{
-														label: "Save"
-													})
-													.click(function()
-													{
-														ns1blankspace.messaging.imap.inbox.save.show(oParam);
-														
-													})
-													.css('width', '75px');
 												
 													$('#ns1blankspaceMessageToDo').button(
 													{
-														label: "To Do"
+														label: "Save as<br />To Do"
 													})
-													.click(function() {
-														oParam.step = 3
-														ns1blankspace.messaging.imap.save(oParam);
+													.click(function()
+													{
+														ns1blankspace.status.working('Saving as To Do...');
+														oParam.onComplete = ns1blankspace.messaging.imap.inbox.save.todo;
+														ns1blankspace.messaging.imap.inbox.save.send(oParam);
 													})
 													.css('width', '75px');
-												
 												},
 
-									show: 		function (oParam)
+									send:		function (oParam)
 												{
-													//OPTIONS FOR SAVE
-												},
+													var sCacheID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+													var sMessageID = ns1blankspace.util.getParam(oParam, 'messageID').value;
+													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 
-									todo: 		{
-													//UPDATE THE ACTION STATUS POST SEND:
-												},						
+													//id: sCacheID,
 
-									send:		function ()
-												{
 													var oData =
 													{
 														account: ns1blankspace.messaging.imap.account,
-														id: sCacheID
+														messageid: sMessageID,
+														autocreatecontacts: ($('#ns1blankspaceMessageSaveContacts').prop('checked')?'Y':'N'),
+														saveattachments: ($('#ns1blankspaceMessageSaveAttachments').prop('checked')?'Y':'N'),
+														private: ($('#ns1blankspaceMessageSavePrivate').prop('checked')?'Y':'N')
 													}
 													
 													$.ajax(
@@ -794,12 +818,57 @@ ns1blankspace.messaging.imap =
 														dataType: 'json',
 														success: function(data)
 														{
-															ns1blankspace.status.message('Saved')
-															$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-															$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+															if (data.status == 'OK')
+															{
+																if (ns1blankspace.util.getParam(oParam, 'onComplete').value === undefined)
+																{	
+																	ns1blankspace.status.message('Saved')
+																	$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+																	ns1blankspace.messaging.imap.inbox.remove(sXHTMLElementID);
+																	//$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+																}
+																else
+																{	
+																	oParam.action = data.action;
+																	ns1blankspace.util.onComplete(oParam);
+																}	
+															}	
 														}
 													});	
-												}
+												},
+
+									todo: 		function (oParam)
+												{
+													var iID = ns1blankspace.util.getParam(oParam, 'action').value;
+													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+													if (iID !== undefined)
+													{
+														var oData =
+														{
+															id: iID,
+															status: 2
+														}
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
+															data: oData,
+															dataType: 'json',
+															success: function(data)
+															{
+																if (data.status == 'OK')
+																{	
+																	ns1blankspace.status.message('Saved as To Do')
+																	$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+																	ns1blankspace.messaging.imap.inbox.remove(sXHTMLElementID);
+																	//$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+																}	
+															}
+														});
+													}
+												},				
 								}						
 				},
 
