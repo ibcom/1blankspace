@@ -161,10 +161,18 @@ ns1blankspace.messaging.imap =
 								{	
 									$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
 									{
-										label: 'Refresh (' + ns1blankspace.messaging.emailNewCount + ')'
+										label: 'Refresh (' + ns1blankspace.messaging.emailNewCount + ')',
+										disabled: false
 									});
 								
-									ns1blankspace.util.app.option({titleSuffix: ' (' + ns1blankspace.messaging.emailNewCount + ')'})
+									ns1blankspace.util.app.option({titleSuffix: ' (' + ns1blankspace.messaging.emailNewCount + ')'});
+								}
+								else
+								{
+									$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
+									{
+										disabled: true
+									});
 								}
 							}	
 						}	
@@ -388,7 +396,8 @@ ns1blankspace.messaging.imap =
 										oParam = ns1blankspace.util.setParam(oParam, 'refresh', false);
 										$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
 										{
-											label: 'Refresh'
+											label: 'Refresh',
+											disabled: true
 										});
 
 										ns1blankspace.util.app.option({titleSuffix: ''})
@@ -457,7 +466,8 @@ ns1blankspace.messaging.imap =
 
 											$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
 											{
-													label: 'Refresh'
+													label: 'Refresh',
+													disabled: true
 											})
 											.click(function(event)
 											{
