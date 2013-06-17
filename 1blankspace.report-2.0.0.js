@@ -21,7 +21,10 @@ ns1blankspace.report.returnParameters;
 ns1blankspace.report.reports = [];
 ns1blankspace.report.dictionary = [];
 ns1blankspace.report.selectAttributes = [];
-
+ns1blankspace.report.showUpdate = true;
+ns1blankspace.report.showExport = true;
+ns1blankspace.report.showEmail = true;
+ns1blankspace.report.showSMS = true;
 
 ns1blankspace.report = 
 {
@@ -36,6 +39,11 @@ ns1blankspace.report =
 						if (oParam.all != undefined) {bAll = oParam.all}
 					}
 							
+					ns1blankspace.report.showUpdate = true;
+					ns1blankspace.report.showExport = true;
+					ns1blankspace.report.showEmail = true;
+					ns1blankspace.report.showSMS = true;
+
 					// Only add reports that they have access to ToDo
 					/*$(ns1blankspace.views).each(function(i, k)
 					{
@@ -680,15 +688,22 @@ ns1blankspace.report =
 							var aHTML = [];
 						
 							aHTML.push('<table style="margin-bottom:0px;border-bottom-style:solid;border-width: 1px;border-color:#E8E8E8;" class="ns1blankspace">');
-							aHTML.push('<tr><td>' + 
-												'<div id="ns1blankspaceReportHeaderOptions">' + 
-												'<input id="radioReport-Search" name="radioOptions" type="radio" checked="checked"/><label style="font-size:0.875em;" for="radioReport-Search">Select</label>' +
-												'<input id="radioReport-Results" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Results">Results</label>' +
-												'<input id="radioReport-Update" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Update">Update</label>' +
-												'<input id="radioReport-Export" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Export">Export</label>' +
-												'<input id="radioReport-Send" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Send">Email</label>' +
-												'<input id="radioReport-SMS" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-SMS">SMS</label>' +
-											'</div></td>');
+							aHTML.push('<tr><td><div id="ns1blankspaceReportHeaderOptions">'); 
+							aHTML.push('<input id="radioReport-Search" name="radioOptions" type="radio" checked="checked"/><label style="font-size:0.875em;" for="radioReport-Search">Select</label>');
+							aHTML.push('<input id="radioReport-Results" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Results">Results</label>');								
+							if (ns1blankspace.report.showUpdate) {
+								aHTML.push('<input id="radioReport-Update" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Update">Update</label>');
+							}	
+							if (ns1blankspace.report.showExport) {
+								aHTML.push('<input id="radioReport-Export" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Export">Export</label>');
+							}
+							if (ns1blankspace.report.showEmail) {
+								aHTML.push('<input id="radioReport-Send" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-Send">Email</label>');
+							}
+							if (ns1blankspace.report.showSMS) {
+								aHTML.push('<input id="radioReport-SMS" name="radioOptions" type="radio" /><label style="margin-left:2px; font-size:0.875em;" for="radioReport-SMS">SMS</label>');
+							}
+							aHTML.push('</div></td>');
 
 							aHTML.push('<td style="vertical-alignment:bottom;padding-top:10px;text-align:right;font-size:0.75em;">&nbsp;</td>');
 							aHTML.push('</table>'); 
@@ -741,7 +756,11 @@ ns1blankspace.report =
 								});	
 							}
 							
-							aHTML.push('<tr><td colspan=2 style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Include</td>' +
+							aHTML.push('<tr><td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">' +
+												'<input type="checkbox" id="ns1blankspaceReportCheckAll"' +
+														' class="ns1blankspaceReportInclude">' +
+											'</td>' +
+											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Include</td>' +
 											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Comparison</td>' +
 											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;"><span id="spanReportSearch" class="ns1blankspaceAction">Search</span></td></tr>');
 							
@@ -989,6 +1008,16 @@ ns1blankspace.report =
 									$(this).css('color', '');
 								}	
 							});	
+
+							$('#ns1blankspaceReportCheckAll').click(function() {
+								if ($('#ns1blankspaceReportCheckAll').attr('checked')) {
+									$('input.ns1blankspaceReportInclude').prop('checked', true);
+								}
+								else {
+									$('input.ns1blankspaceReportInclude').prop('checked', false);
+								}
+							});
+
 						}
 						else
 						{
@@ -1179,7 +1208,7 @@ ns1blankspace.report =
 							}
 							
 							$('#' + sXHTMLElementID).html(aHTML.join(''));
-							$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy', changeYear: true });
+							$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy', changeYear: true});
 							$('#' + sFirstInputElementID).focus();
 						}	
 					}	
@@ -1222,6 +1251,7 @@ ns1blankspace.report =
 									{
 										var oParameterList = [];
 										
+										$('#ns1blankspaceReportCheckAll').prop('checked', false);	// We don't want to include this in the list of checked fields
 										if ($("input.ns1blankspaceReportInclude:checked").length == 0 && oSearchParameters == undefined)
 										{
 											ns1blankspace.status.error('Nothing selected');
