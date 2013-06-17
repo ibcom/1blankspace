@@ -708,7 +708,7 @@ ns1blankspace.messaging.imap =
 								},
 
 					save: 		{
-									itit:		function (oParam)
+									init:		function (oParam)
 												{
 													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 													var sCacheID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
@@ -1380,7 +1380,7 @@ ns1blankspace.messaging.imap =
 														}
 
 														oParam.subject = $('#ns1blankspaceMessagingEditMessageSubject').val();
-														oParam.message = tinyMCE.get('ns1blankspaceMessagingEditMessageText').getContent();
+														oParam.message = tinyMCE.get('ns1blankspaceMessagingEditMessageText' + ns1blankspace.counter.editor).getContent();
 														oParam.contactPersonTo = $('#ns1blankspaceEditMessageTo').attr('data-id');
 														oParam.to = $('#ns1blankspaceEditMessageTo').val();
 														oParam.cc = $('#ns1blankspaceEditMessageCc').val();
@@ -1536,18 +1536,17 @@ ns1blankspace.messaging.imap =
 													
 													aHTML.push('</td></tr>');
 													
+													for (edId in tinyMCE.editors) 
+													tinyMCE.editors[edId].destroy(true);
+
+													ns1blankspace.counter.editor++
+
 													aHTML.push('<tr><td class="ns1blankspace">' +
-																		'<textarea rows="10" cols="35" id="ns1blankspaceMessagingEditMessageText" class="ns1blankspaceTextMultiLarge"></textarea>' +
+																		'<textarea rows="10" cols="35" id="ns1blankspaceMessagingEditMessageText' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMultiLarge"></textarea>' +
 																		'</td></tr>');
 													
 													aHTML.push('</table>');						
 													
-													if (tinyMCE.getInstanceById('ns1blankspaceMessagingEditMessageText'))
-													{
-														tinyMCE.get('ns1blankspaceMessagingEditMessageText').remove();
-														$('#ns1blankspaceMessagingEditMessageText').remove();
-													}	
-												
 													$('#ns1blankspaceSendMessageColumn1').html(aHTML.join(''));
 
 													if (sEmailTo !== undefined)
@@ -1701,14 +1700,14 @@ ns1blankspace.messaging.imap =
 																}
 															});
 															
-															$('#ns1blankspaceMessagingEditMessageText').val(sFooter + sMessage)
+															$('#ns1blankspaceMessagingEditMessageText' + ns1blankspace.counter.editor).val(sFooter + sMessage)
 														}
 														
 														if (iSource == 3)  //????
 														{
 															$('#ns1blankspaceMessagingEditMessageSubject').val(sSubject)
 															$('#ns1blankspaceMessagingEditMessageSubject').removeClass('ns1blankspaceWatermark');
-															$('#ns1blankspaceMessagingEditMessageText').val(sMessage)
+															$('#ns1blankspaceMessagingEditMessageText' + ns1blankspace.counter.editor).val(sMessage)
 														}
 													}
 													else
@@ -1723,11 +1722,11 @@ ns1blankspace.messaging.imap =
 															}
 														});
 														
-														$('#ns1blankspaceMessagingEditMessageText').val(sFooter)
+														$('#ns1blankspaceMessagingEditMessageText' + ns1blankspace.counter.editor).val(sFooter)
 
 														if (ns1blankspace.option.richTextEditing)
 														{
-															tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingEditMessageText');
+															tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingEditMessageText' + ns1blankspace.counter.editor);
 														}
 													}
 												},
@@ -1736,7 +1735,7 @@ ns1blankspace.messaging.imap =
 												{
 													if (ns1blankspace.objectContextData.detailscached == 'N')
 													{
-														$('#ns1blankspaceMessagingEditMessageText').val('loading...');
+														$('#ns1blankspaceMessagingEditMessageText' + ns1blankspace.counter.editor).val('loading...');
 
 														$.ajax(
 														{
@@ -1814,11 +1813,11 @@ ns1blankspace.messaging.imap =
 														aHTML.push('<tr><td><strong>Subject:</strong> ' + ns1blankspace.objectContextData.subject + '</td></tr>');	
 														aHTML.push('</table>');
 														
-														$('#ns1blankspaceMessagingEditMessageText').val(aHTML.join('') + (ns1blankspace.objectContextData.message).formatXHTML());
+														$('#ns1blankspaceMessagingEditMessageText' + ns1blankspace.counter.editor).val(aHTML.join('') + (ns1blankspace.objectContextData.message).formatXHTML());
 
 														if (ns1blankspace.option.richTextEditing)
 														{
-															tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingEditMessageText');
+															tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessagingEditMessageText' + ns1blankspace.counter.editor);
 														}
 													}	
 
@@ -2013,7 +2012,7 @@ ns1blankspace.messaging.imap =
 										{
 											ns1blankspace.status.message('Email has been sent');
 											$('#ns1blankspaceMessagingMessageControlContainer').html('');
-											ns1blankspace.messaging.imap.data.lastEmail = {};
+											ns1blankspace.messaging.imap.data.lastEmail = undefined;
 											
 											if (fFunctionPostSend != undefined)
 											{
@@ -2021,7 +2020,6 @@ ns1blankspace.messaging.imap =
 											}
 										}
 									});
-
 								}
 				},
 
