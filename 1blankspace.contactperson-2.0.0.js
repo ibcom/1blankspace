@@ -543,7 +543,7 @@ ns1blankspace.contactPerson =
 							aHTML.push('<table class="ns1blankspaceColumn2">');
 
 							aHTML.push('<tr><td id="ns1blankspaceFavourite" class="ns1blankspaceSummaryCaption">' +
-											ns1blankspace.xhtml.loadingSmall +
+											ns1blankspace.xhtml.loadingSmall + 
 											'</td></tr>');	
 
 							if (ns1blankspace.objectContextData.email != '')
@@ -551,7 +551,7 @@ ns1blankspace.contactPerson =
 								var aEmail = (ns1blankspace.objectContextData.email).split("@");
 
 								
-								aHTML.push('<tr><td style="padding-top:15px; padding-bottom:5px;"><span id="ns1blankspaceContactPersonEmail" class="ns1blankspaceAction">' +
+								aHTML.push('<tr><td style="padding-top:12px; padding-bottom:5px;"><span id="ns1blankspaceContactPersonEmail" class="ns1blankspaceAction">' +
 											'Email</span></td></tr>');
 
 									aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em;">' +
@@ -579,7 +579,7 @@ ns1blankspace.contactPerson =
 
 							$('#ns1blankspaceContactPersonEmail').button(
 							{
-								label: 'Send Email'
+								label: 'Send email'
 							})
 							.click(function()
 							{
@@ -621,34 +621,48 @@ ns1blankspace.contactPerson =
 						}	
 						else
 						{
-							$('#ns1blankspaceFavourite').html('<span id="ns1blankspaceContactPersonFavourite" class="ns1blankspaceAction"></span>')
-
-							var sFavourite = 'Add';
 							var bFavourite = false;
 							var iFavouriteID;
+							var oButton =
+							{
+								text: true,
+								label: 'Mark as<br />favourite',
+							}
 
 							if (oResponse.data.rows.length != 0)
 							{
+								oButton =
+								{
+									text: true,
+									label: 'Favourite',
+									icons:
+									{
+									primary: "ui-icon-star"
+									}
+								}
+
 								sFavourite = 'Remove';
 								bFavourite = true;
 								iFavouriteID = oResponse.data.rows[0].id;
 							}
 
+							$('#ns1blankspaceFavourite').html('<input type="checkbox" ' + (bFavourite?'checked="checked" ':'') + 'id="ns1blankspaceContactPersonFavourite"/>' +
+									'<label for="ns1blankspaceContactPersonFavourite" style="font-size:0.75em; width:100px;">&nbsp;</label>');
+
 							$('#ns1blankspaceContactPersonFavourite').button(
-							{
-								label: sFavourite,
-								icons:
-								{
-									primary: "ui-icon-star"
-								}
-							})
+							oButton)
 							.click(function()
 							{
 								var sData = 'object=' + ns1blankspace.object;
 								sData += '&objectContext=' + ns1blankspace.objectContext;
 								if (bFavourite)
 								{
+									ns1blankspace.status.message('No longer a favourite');
 									sData += '&remove=1&id=' + ns1blankspace.util.fs(iFavouriteID);
+								}
+								else
+								{
+									ns1blankspace.status.message('Is now a favourite');
 								}
 
 								$.ajax(
@@ -663,8 +677,6 @@ ns1blankspace.contactPerson =
 									}
 								});							
 							})
-							.css('width', '100px')
-							.css('text-align', 'left');
 						}	
 					}	
 				},
