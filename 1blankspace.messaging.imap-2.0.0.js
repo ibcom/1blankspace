@@ -269,6 +269,7 @@ ns1blankspace.messaging.imap =
 														'class="ns1blankspaceControl"' +
 														' title="' + this.email + '">' +
 														sDescription +
+														'<br /><span class="ns1blankspaceSubNote">' + aDescription[1] + '</span>' + 
 														'</td></tr>');
 											
 										if (ns1blankspace.option.messagingEmailShowCount)
