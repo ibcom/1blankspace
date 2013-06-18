@@ -102,13 +102,13 @@ ns1blankspace.report =
 								name: "Business Groups",
 								objectName: "businessgroup",
 								method: "CONTACT_BUSINESS_GROUP_SEARCH",
-								returnParameters: 'businessgroup'
+								returnParameters: 'businessgroup,businessgroup.contactbusiness'
 							},
 							{
 								name: "Person Groups",
 								objectName: "persongroup",
 								method: "CONTACT_PERSON_GROUP_SEARCH",
-								returnParameters: 'persongroup'
+								returnParameters: 'persongroup,persongroup.contactperson,persongroup.contactperson.contactbusiness'
 							},
 							
 						]		
@@ -273,8 +273,13 @@ ns1blankspace.report =
 
 							{name: "persongroup.contactpersontext", caption: "Contact Person"},
 							{name: "persongroup.grouptext", caption: "Group"},
+							{name: "persongroup.contactperson.firstname", caption: "First Name"},
+							{name: "persongroup.contactperson.surname", caption: "Surname"},
+							{name: "persongroup.contactperson.email", caption: "Email"},
 
 							{name: "businessgroup.contactbusinesstext", caption: "Contact Business"},
+							{name: "businessgroup.contactbusiness.legalname", caption: "Legal Name"},
+							{name: "businessgroup.contactbusiness.abn", caption: "ABN"},
 							{name: "businessgroup.grouptext", caption: "Group"}
 						];
 
