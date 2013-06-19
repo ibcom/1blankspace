@@ -3836,7 +3836,7 @@ ns1blankspace.util =
 
 					if (sVariable in window)
 					{
-   						return sVariable;
+   						return window[sVariable];
 					}
 				}			
 
