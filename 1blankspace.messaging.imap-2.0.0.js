@@ -577,7 +577,6 @@ ns1blankspace.messaging.imap =
 									{
 										$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 										$('#' + this.id).parent().find('td').removeClass('ns1blankspaceNotSeen');
-										ns1blankspace.messaging.imap.inbox.markAsRead(this.id);
 										ns1blankspace.messaging.imap.search.send(this.id);
 									});
 										
@@ -622,7 +621,6 @@ ns1blankspace.messaging.imap =
 									{
 										$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 										$('#' + this.id).parent().find('td').removeClass('ns1blankspaceBold');
-										ns1blankspace.messaging.imap.inbox.markAsRead(this.id);
 										ns1blankspace.messaging.imap.search.send(this.id, {reply: true});
 									})
 									.css('width', '15px')
@@ -1296,7 +1294,7 @@ ns1blankspace.messaging.imap =
 											'<td id="ns1blankspaceMessagingEmailToCaption" style="text-align:center; width:20px;background-color:#CCCCCC; color:#FFFFFF; padding:4px;">To</td>' +
 											'<td id="ns1blankspaceMessagingEmailTo" style="padding:4px;" class="ns1blankspaceSub">');
 											
-							var sTo = ns1blankspace.objectContextData.to;
+							var sTo = (ns1blankspace.objectContextData.to).formatXHTML();
 							var aTo = sTo.split('#')
 							sTo = '';
 						
@@ -1320,7 +1318,7 @@ ns1blankspace.messaging.imap =
 											'<td id="ns1blankspaceMessagingEmailCCCaption" style="text-align:center; width:20px;background-color:#CCCCCC; color:#FFFFFF; padding:4px;">Cc</td>' +
 											'<td id="ns1blankspaceMessagingEmailCC" style="padding:4px;" class="ns1blankspaceSub">');
 											
-							var sCC = ns1blankspace.objectContextData.cc
+							var sCC = (ns1blankspace.objectContextData.cc).formatXHTML();
 							var aCC = sCC.split('#')
 							sCC = '';
 						
@@ -1378,7 +1376,9 @@ ns1blankspace.messaging.imap =
 											ns1blankspace.objectContextData = oResponse.data.rows[0];
 											ns1blankspace.messaging.imap.message.attachments();
 											ns1blankspace.messaging.imap.message.contents.show();
-										})	
+										});
+
+									ns1blankspace.messaging.imap.inbox.markAsRead('ns1blankspaceMessagingInbox_from-' + ns1blankspace.objectContext);		
 								}
 							});
 						}	
