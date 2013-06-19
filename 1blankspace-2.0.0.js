@@ -3828,7 +3828,18 @@ ns1blankspace.util =
 					}
 
 					return sText;
-				}	 																									
+				},
+
+	ifExists: 	function (oParam)
+				{
+					var sVariable = ns1blankspace.util.getParam(oParam, 'variable').value;
+
+					if (sVariable in window)
+					{
+   						return oVariable;
+					}
+				}			
+
 }
 
 ns1blankspace.debug = 
