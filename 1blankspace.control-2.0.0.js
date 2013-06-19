@@ -739,7 +739,7 @@ ns1blankspace.control =
 					{
 						$.extend(true, oParam, {step: 5});
 
-						if (mydigitalstructureSiteId)
+						if (mydigitalstructureSiteId !== undefined)
 						{
 							$.ajax(
 							{
