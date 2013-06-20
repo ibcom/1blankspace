@@ -1331,7 +1331,6 @@ search: 		{
 										{
 											if ($('input[name="radioEmailTo"]:checked').val() == '1')
 											{
-											
 												var sParam = '&remove=2';
 												var sData = 'news=' + ns1blankspace.objectContext;
 													
@@ -1348,25 +1347,25 @@ search: 		{
 											
 											if ($('input[name="radioEmailTo"]:checked').val() == '2')
 											{
-											
 												var sData = 'news=' + ns1blankspace.objectContext +
 															'&group=-1';
 													
 												$.ajax(
-													{
-														type: 'POST',
-														url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE'),
-														data: sData,
-														dataType: 'text',
-														success: function(data){ns1blankspace.news.groups()}
-													});
-													
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE'),
+													data: sData,
+													dataType: 'text',
+													success: function(data){ns1blankspace.news.groups()}
+												});		
 											}
+										}
 
-											if (bNew) {
-												ns1blankspace.news.search('-' + ns1blankspace.objectContext)
-											}
-										}	
+										if (bNew)
+										{
+											ns1blankspace.inputDetected = false;
+											ns1blankspace.news.search.send('-' + ns1blankspace.objectContext)
+										}
 										
 										// ToDo: These lines may be required if MANAGE method doesn't return JSON
 										//var aResponse = sResponse.split('|');
