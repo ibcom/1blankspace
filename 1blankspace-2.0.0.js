@@ -2781,27 +2781,38 @@ ns1blankspace.search =
 
 									if (sMethodFilter != '')
 									{
+										oSearch.addBracket('(');
+
 										var aMethodFilters = sMethodFilter.split('|');
 
-										$.each(aMethodFilters, function(i) 
+										var aFilterSearch = $.grep(aMethodFilters, function (a) {return a.split('-').length == 2;}
+
+										if (aFilterSearch.length > 0)
+										{	
+											oSearch.addBracket('(');
+
+											$.each(aFilterSearch), function(i) 
+											{
+												var aMethodFilter = this.split('-');
+											
+												if (i != 0)
+												{
+													oSearch.addOperator('or');
+												}
+												
+												oSearch.addFilter(aMethodFilter[0], aMethodFilter[1], sSearchText);
+											});
+
+											oSearch.addBracket(')');
+										}
+
+										var aFilterFixed = $.grep(aMethodFilters, function (a) {return a.split('-').length == 3;}
+				
+										$.each(aFilterFixed), function(i) 
 										{
-											if (i != 0)
-											{
-												oSearch.addOperator('or');
-											}
-
 											var aMethodFilter = this.split('-');
-
-											if (aMethodFilter.length == 2)
-											{
-												sMethodFilterValue = sSearchText;
-											}
-											else
-											{
-												sMethodFilterValue = aMethodFilter[2];
-											}
-											 
-											oSearch.addFilter(aMethodFilter[0], aMethodFilter[1], sMethodFilterValue);
+										
+											oSearch.addFilter(aMethodFilter[0], aMethodFilter[1], aMethodFilter[2]);
 										});	
 									}	
 
