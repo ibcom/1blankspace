@@ -1994,18 +1994,21 @@ ns1blankspace.history.view =
 										{	
 											var fDestinationNamespace = ns1blankspace.util.toFunction(sDestinationNamespace)
 
-											if (sDestinationParam.substring(0,1) == "{")
-											{
-												fDestinationNamespace(ns1blankspace.util.toObject(sDestinationParam));
-											}
-											else if (sDestinationParam != '')
+											if (fDestinationNamespace !== undefined)
 											{	
-												fDestinationNamespace(sDestinationParam);
-											}
-											else
-											{	
-												fDestinationNamespace();
-											}
+												if (sDestinationParam.substring(0,1) == "{")
+												{
+													fDestinationNamespace(ns1blankspace.util.toObject(sDestinationParam));
+												}
+												else if (sDestinationParam != '')
+												{	
+													fDestinationNamespace(sDestinationParam);
+												}
+												else
+												{	
+													fDestinationNamespace();
+												}
+											}	
 										}
 										else
 										{
@@ -2785,13 +2788,13 @@ ns1blankspace.search =
 
 										var aMethodFilters = sMethodFilter.split('|');
 
-										var aFilterSearch = $.grep(aMethodFilters, function (a) {return a.split('-').length == 2;}
+										var aFilterSearch = $.grep(aMethodFilters, function (a) {return a.split('-').length == 2;});
 
 										if (aFilterSearch.length > 0)
 										{	
 											oSearch.addBracket('(');
 
-											$.each(aFilterSearch), function(i) 
+											$.each(aFilterSearch, function(i) 
 											{
 												var aMethodFilter = this.split('-');
 											
@@ -2806,9 +2809,9 @@ ns1blankspace.search =
 											oSearch.addBracket(')');
 										}
 
-										var aFilterFixed = $.grep(aMethodFilters, function (a) {return a.split('-').length == 3;}
+										var aFilterFixed = $.grep(aMethodFilters, function (a) {return a.split('-').length == 3;});
 				
-										$.each(aFilterFixed), function(i) 
+										$.each(aFilterFixed, function(i) 
 										{
 											var aMethodFilter = this.split('-');
 										

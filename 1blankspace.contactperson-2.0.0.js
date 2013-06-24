@@ -807,8 +807,8 @@ ns1blankspace.contactPerson =
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDetailsFirstName').val(ns1blankspace.objectContextData.firstname);
-							$('#ns1blankspaceDetailsSurname').val(ns1blankspace.objectContextData.surname);
+							$('#ns1blankspaceDetailsFirstName').val((ns1blankspace.objectContextData.firstname).formatXHTML());
+							$('#ns1blankspaceDetailsSurname').val((ns1blankspace.objectContextData.surname).formatXHTML());
 							$('#ns1blankspaceDetailsTitle').attr('data-id', ns1blankspace.objectContextData.title);
 							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.titletext);
 							$('#ns1blankspaceDetailsPosition').val(ns1blankspace.objectContextData.position);
