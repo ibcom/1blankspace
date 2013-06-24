@@ -739,12 +739,19 @@ ns1blankspace.control =
 					{
 						$.extend(true, oParam, {step: 5});
 
-						if (ns1blankspace.util.ifExists({variable: 'mydigitalstructureSiteId'}) !== undefined)
+						var iSiteID = ns1blankspace.user.site;
+
+						if (iSiteID === undefined && ns1blankspace.util.ifExists({variable: 'mydigitalstructureSiteId'}) !== undefined)
+						{
+							iSiteID = mydigitalstructureSiteId;
+						}
+
+						if (iSiteID !== undefined)
 						{
 							$.ajax(
 							{
 								type: 'GET',
-								url: '/site/' + mydigitalstructureSiteId + '/1blankspace.control.json',
+								url: '/site/' + iSiteID + '/1blankspace.control.json',
 								dataType: 'json',
 								global: false,
 								success: function(data)

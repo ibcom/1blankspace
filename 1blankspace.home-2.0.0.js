@@ -67,13 +67,13 @@ ns1blankspace.home =
 							
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
-					this.bind();
+					ns1blankspace.home.bind();
 
 					var aHTML = [];
 					
 					aHTML.push('<table id="ns1blankspaceHomeContainer">');
 					aHTML.push('<tr><td id="ns1blankspaceHomeColumn1" class="ns1blankspaceColumn1Flexible"></td>');
-					aHTML.push('<td id="ns1blankspaceHomeColumn2" class="ns1blankspaceColumn2" style="width:300px;">');
+					aHTML.push('<td id="ns1blankspaceHomeColumn2" class="ns1blankspaceColumn2" style="width:100px;">');
 					aHTML.push('</td></tr></table>');	
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
@@ -208,7 +208,7 @@ ns1blankspace.home.actions =
 					
 					if (oResponse == undefined)
 					{						
-						var sData = 'diary=1&actionby=' + ns1blankspace.util.fs(ns1blankspace.user);
+						var sData = 'diary=1&actionby=' + ns1blankspace.util.fs(ns1blankspace.user.id);
 						sData += '&rows=10';
 						
 						if (bOverdue)
@@ -258,7 +258,7 @@ ns1blankspace.home.actions =
 							}
 							else
 							{
-								aHTML.push('<table id="s1blankspaceHomeActions' + iDay + '" class="ns1blankspace">');
+								aHTML.push('<table id="ns1blankspaceHomeActions' + iDay + '" class="ns1blankspace">');
 							}	
 							
 							aHTML.push('<tr class="ns1blankspaceCaption">');
@@ -310,8 +310,8 @@ ns1blankspace.home.actions =
 					aHTML.push('<td id="ns1blankspaceHomeActions_subject-' + oRow.id + '" class="ns1blankspaceRow">' +
 											oRow.subject + '</td>');
 						
-					var oDate = new Date.parse(ns1blankspace.objectContextData.actiondatetime);
-					sDate = oDate.toString("ddd, dd MMM yyyy h:mm TT");
+					var oDate = new Date(oRow.actiondatetime);
+					sDate = oDate.toString("ddd, dd MMM yyyy");
 							
 					if (bShowDate)
 					{
@@ -319,23 +319,23 @@ ns1blankspace.home.actions =
 											sDate + '</td>');
 					}
 					
-					if (oDate.getHours() != 0 || Date.getMinutes() != '0')
+					if (oDate.toString("h") != 0 || oDate.toString("m") != '0')
 					{
-						sDate = oDate.toString("h:mm TT");
+						sDate = oDate.toString("h:mm tt");
 					}
 					else
 					{
 						sDate = '&nbsp;';
 					}	
 											
-					aHTML.push('<td id="ns1blankspaceHomeActions_time-' + oRow.id + '" class="ns1blankspaceMainRow ns1blankspaceRowSelect">' +
+					aHTML.push('<td id="ns1blankspaceHomeActions_time-' + oRow.id + '" class="ns1blankspaceRow">' +
 											sDate + '</td>');
 											
-					aHTML.push('<td id="ns1blankspaceHomeActions_contact-' + oRow.contactperson + '" class="ns1blankspaceMainRow ns1blankspaceRowContact">' +
+					aHTML.push('<td id="ns1blankspaceHomeActions_contact-' + oRow.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowContact">' +
 											oRow.contactpersonfirstname + ' ' + 
 											oRow.contactpersonsurname + '</td>');
 					
-					aHTML.push('<td id="ns1blankspaceHomeActions-' + oRow.id + '" class="ns1blankspaceMainRow" style="width:65px;">');
+					aHTML.push('<td id="ns1blankspaceHomeActions-' + oRow.id + '" class="ns1blankspaceRow" style="width:65px;">');
 					
 					aHTML.push('<span id="ns1blankspaceHomeActions_cancel-' + oRow.id + '" class="ns1blankspaceRowCancel"></span>');
 					aHTML.push('<span id="ns1blankspaceHomeActions_complete-' + oRow.id + '" class="ns1blankspaceRowComplete"></span>');
@@ -348,13 +348,12 @@ ns1blankspace.home.actions =
 					
 	bind:		function ()	
 				{
-
-					$('#ns1blankspaceHomeActions td.ns1blankspaceRowContact').click(function() {
+					$('td.ns1blankspaceRowContact').click(function() {
 						ns1blankspace.contactPerson.init();
 						ns1blankspace.contactPerson.searchsend(this.id);
 					})
 
-					$('#ns1blankspaceHomeActions .ns1blankspaceMainRowOptionsSelect').button( {
+					$('span.ns1blankspaceRowSelect:not("ui-button")').button( {
 						text: false,
 						icons: {
 							primary: "ui-icon-play"
@@ -362,13 +361,13 @@ ns1blankspace.home.actions =
 					})
 					.click(function()
 					{
-						ns1blankspace.action.init();
-						ns1blankspace.action.searchsend(this.id)
+						ns1blankspace.action.init({id: (this.id).split('-')[1]});
 					})
 					.css('width', '15px')
 					.css('height', '18px');
 
-					$('#ns1blankspaceHomeActions .ns1blankspaceMainRowOptionsCancel').button({
+					$('span.ns1blankspaceRowCancel:not("ui-button")').button(
+					{
 						text: false,
 						label: "Cancel",
 						icons: {
@@ -382,7 +381,7 @@ ns1blankspace.home.actions =
 					.css('height', '18px')
 						
 						
-					$('#ns1blankspaceHomeActions .ns1blankspaceMainRowOptionsComplete').button({
+					$('span.ns1blankspaceRowComplete:not("ui-button")').button({
 						text: false,
 						label: "Complete",
 						icons: {
@@ -408,7 +407,7 @@ ns1blankspace.home.actions =
 						
 						if (aXHTMLElementID[1] != undefined)
 						{
-							sData += 'id=' + s1blankspace.util.fs(aXHTMLElementID[1]);
+							sData += 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
 							sData += '&status=' + ns1blankspace.util.fs(iStatus);
 							
 							$.ajax(

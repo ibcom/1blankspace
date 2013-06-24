@@ -34,7 +34,7 @@ ns1blankspace.action =
 					ns1blankspace.action.contactpersontext;
 					ns1blankspace.action.contactbusinesstext;
 					ns1blankspace.action.calendarUsers = [];
-					ns1blankspace.action.user = ns1blankspace.action.user;
+					ns1blankspace.action.user = ns1blankspace.user.id;
 					ns1blankspace.action.calendarParam = '';
 
 					if (oParam != undefined)
@@ -1164,6 +1164,7 @@ ns1blankspace.action =
 										selectable: true,
 										allDaySlot: false,				
 										selectHelper: true,
+										unselectCancel: '#ns1blankspaceActionDialogEdit *',
 										
 										drop: 	function(date, allDay) 
 														{ 
@@ -1202,6 +1203,9 @@ ns1blankspace.action =
 																ns1blankspace.action.dialog.show(
 																{
 																	actionID: calEvent.id,
+																	startDate: calEvent.start,
+																	endDate: calEvent.end,
+																	calEvent: calEvent
 																});
 															};		
 														},
@@ -1395,13 +1399,21 @@ ns1blankspace.action =
 									var iActionID = -1;
 									var dStartDate = new Date();
 									var dEndDate = dStartDate;
+									var oCalEvent;
 									
 									if (oParam != undefined)
 									{
 										if (oParam.actionID != undefined) {iActionID = oParam.actionID};
 										if (oParam.startDate != undefined) {dStartDate = oParam.startDate};
 										if (oParam.endDate != undefined) {dEndDate = oParam.endDate};
+										if (oParam.calEvent != undefined) {oCalEvent = oParam.calEvent};
 									}	
+
+									dStartDate = $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
+													' ' + $.fullCalendar.formatDate(dStartDate, "hh:mm TT")
+
+									dEndDate = $.fullCalendar.formatDate(dEndDate, "dd MMM yyyy") + 
+													' ' + $.fullCalendar.formatDate(dEndDate, "hh:mm TT")
 
 									if (iActionID != -1 && oResponse == undefined)
 									{
@@ -1419,22 +1431,20 @@ ns1blankspace.action =
 
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('<table id="ns1blankspaceActionDialogEdit" class="ns1blankspaceSearchMedium" style="margin-bottom:0px;">');
 										
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Subject</td></tr>');
-
-										aHTML.push('<tr><td class="ns1blankspace">' +
-															'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText">');
+														'Subject</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText">');
 
 										aHTML.push('</td></tr>');
 										
-										aHTML.push('<tr><td>' +
+										aHTML.push('<tr><td class="ns1blankspaceText">' +
 															'<textarea rows="5" cols="35" id="ns1blankspaceActionCalendarDescription"' +
 															' class="ns1blankspaceTextMultiSmall"></textarea>');
 										
-
 										aHTML.push('</td></tr>');
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -1460,39 +1470,58 @@ ns1blankspace.action =
 															' data-parent="ns1blankspaceActionCalendarBusiness"' +
 															' data-parent-search-id="contactbusiness"' +
 															' data-parent-search-text="tradename">' +
-														'</td></tr>');		
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Start</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceActionCalendarStart" class="ns1blankspaceDate">');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'End</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceActionCalendarEnd" class="ns1blankspaceDate">');
 				
 										//aHTML.push('<tr><td class="ns1blankspace">' +
 										//					'<input type="checkbox" id="ns1blankspaceActionCalendarHighPriority"/>&nbsp;High Priority?<td></tr>');
 
 										aHTML.push('<tr><td>');
-										
-											aHTML.push('<table><tr>');
-											
-											if (iActionID != -1)
-											{	
-												aHTML.push('<td style="text-align:left; padding-top:7px;">' +
-																'<span id="ns1blankspaceActionCalendarMore" class="ns1blankspaceAction">More</span>' +
-																'<td>');
-											}
 
-											aHTML.push('<td style="text-align:right; padding-top:7px;">' +
-																'<span id="ns1blankspaceActionCalendarSave" class="ns1blankspaceAction" style="margin-right:3px;">Save</span>' +
-																'<span id="ns1blankspaceActionCalendarCancel" class="ns1blankspaceAction">Cancel</span>' +
-																'<td></tr>');
-											
-											aHTML.push('</table>');						
-
-										aHTML.push('</td></tr>');	
-											
-										aHTML.push('</table>');		
+										aHTML.push('</table>');	
+									
+										aHTML.push('<table style="background-color:#E8E8E8;"><tr>');
 										
+										if (iActionID != -1)
+										{	
+											aHTML.push('<td style="text-align:left; padding:4px;">' +
+															'<span id="ns1blankspaceActionCalendarMore" class="ns1blankspaceAction">More</span>' +
+															'<td>');
+										}
+
+										aHTML.push('<td style="text-align:right; padding:4px;">' +
+															'<span id="ns1blankspaceActionCalendarSave" class="ns1blankspaceAction" style="margin-right:3px;">Save</span>' +
+															'<span id="ns1blankspaceActionCalendarCancel" class="ns1blankspaceAction">Cancel</span>' +
+															'<td></tr>');
+										
+										aHTML.push('</table>');						
+
+									
 										var oElement = $('#ns1blankspaceMain')
 										
 										$('#ns1blankspaceMultiUseDialog').html('');
 										$('#ns1blankspaceMultiUseDialog').show();
 										$('#ns1blankspaceMultiUseDialog').offset({ top: $(oElement).offset().top - 2 , left: $(oElement).offset().left - 160 });
 										$('#ns1blankspaceMultiUseDialog').html(aHTML.join(''));
+
+										$('input.ns1blankspaceDate').datetimepicker(
+										{ 
+											dateFormat: 'dd M yy',
+											timeFormat: 'h:mm TT',
+											stepMinute: 5,
+											ampm: true
+										});
 										
 										$('#ns1blankspaceActionCalendarCancel').button(
 										{
@@ -1524,14 +1553,17 @@ ns1blankspace.action =
 											ns1blankspace.action.dialog.save(
 											{
 												id: iActionID,
-												date: $.fullCalendar.formatDate(dStartDate, "dd MMM yyyy") + 
-															' ' + $.fullCalendar.formatDate(dStartDate, "HH:mm"),
-												endDate: $.fullCalendar.formatDate(dEndDate, "dd MMM yyyy") + 
-															' ' + $.fullCalendar.formatDate(dEndDate, "HH:mm"),
+												date: $('#ns1blankspaceActionCalendarStart').val(),
+												endDate: $('#ns1blankspaceActionCalendarEnd').val(),
 												subject: $('#ns1blankspaceActionCalendarSubject').val(),
 												description: $('#ns1blankspaceActionCalendarDescription').val(),
 												priority: ($('#ns1blankspaceActionCalendarHighPriority').attr('checked')?3:2),
-												calendarXHTMLElementID: 'ns1blankspaceMainCalendar'
+												calendarXHTMLElementID: 'ns1blankspaceMainCalendar',
+												contactPerson: $('#ns1blankspaceActionCalendarPerson').attr('data-id'),
+												contactPersonText: $('#ns1blankspaceActionCalendarPerson').val(),
+												contactBusiness: $('#ns1blankspaceActionCalendarBusiness').attr('data-id'),
+												contactBusinessText: $('#ns1blankspaceActionCalendarBusiness').val(),
+												calEvent: oCalEvent
 											});
 											
 											$('#ns1blankspaceMultiUseDialog').slideUp(500);
@@ -1548,33 +1580,43 @@ ns1blankspace.action =
 												$('#ns1blankspaceActionCalendarBusiness').attr('data-id', oRow.contactbusiness);
 												$('#ns1blankspaceActionCalendarBusiness').val(oRow.contactbusinesstext);
 												$('#ns1blankspaceActionCalendarPerson').attr('data-id', oRow.contactperson);
-												$('#ns1blankspaceActionCalendarPerson').val(oRow.contactpersontext);	
+												$('#ns1blankspaceActionCalendarPerson').val(oRow.contactpersontext);
+												$('#ns1blankspaceActionCalendarStart').val(dStartDate);
+												$('#ns1blankspaceActionCalendarEnd').val(dEndDate);
 											}	
-										}	
+										}
+										else
+										{
+											$('#ns1blankspaceActionCalendarStart').val(dStartDate);
+											$('#ns1blankspaceActionCalendarEnd').val(dEndDate);
+										}
 									}
 								},
 
 				save: 			function (oParam, oResponse)
-								{
-
+								{	
+									var oData = {};
+									var iType = ns1blankspace.data.actionTypes.meeting.id;
+									var bAsync = true;
+									var iHours;
+									var sEndDate;
+									var iActionBy = ns1blankspace.user.id;
+									var oCalEvent;
+									var sContactBusinessText = '';
+									
+									if (oParam != undefined)
+									{
+										if (oParam.type != undefined) {iType = oParam.type}
+										if (oParam.async != undefined) {bAsync = oParam.async}
+										if (oParam.hours != undefined) {iHours = oParam.hours}
+										if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+										if (oParam.actionBy != undefined) {iActionBy = oParam.actionBy}
+										if (oParam.calEvent != undefined) {oCalEvent = oParam.calEvent};
+										if (oParam.contactBusinessText != undefined) {sContactBusinessText = oParam.contactBusinessText};
+									}	
+										
 									if (oResponse == undefined)
 									{
-										var oData = {};
-										var iType = ns1blankspace.data.actionTypes.meeting.id;
-										var bAsync = true;
-										var iHours;
-										var sEndDate;
-										var iActionBy = ns1blankspace.user.id;
-										
-										if (oParam != undefined)
-										{
-											if (oParam.type != undefined) {iType = oParam.type}
-											if (oParam.async != undefined) {bAsync = oParam.async}
-											if (oParam.hours != undefined) {iHours = oParam.hours}
-											if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
-											if (oParam.actionBy != undefined) {iActionBy = oParam.actionBy}
-										}	
-										
 										if (oParam.id != -1) {oData.id = oParam.id}
 										oData.object = oParam.object;
 										oData.objectcontext = oParam.objectContext;
@@ -1597,9 +1639,7 @@ ns1blankspace.action =
 										{
 											oData.enddate = sEndDate;
 										}
-										
-										//sData += (oParam.otherData == undefined ? '' : oParam.otherData)
-											  
+																					  
 										$.ajax(
 										{
 											type: 'POST',
@@ -1633,14 +1673,25 @@ ns1blankspace.action =
 											
 											if (sXHTMLElementID != undefined)
 											{
-												$('#' + sXHTMLElementID).fullCalendar('renderEvent',
+												if (oCalEvent !== undefined)
 												{
-													id: 	iActionID,
-													title: 	sTitle,
-													start: 	sStartDate, 
-													end: 	sEndDate, 
-													allDay: false
-												});
+													oCalEvent.title = sTitle + ' - ' + sContactBusinessText;
+													oCalEvent.start = sStartDate;
+													oCalEvent.end = sEndDate;
+														
+													$('#' + sXHTMLElementID).fullCalendar('updateEvent', oCalEvent);
+												}	
+												else
+												{	
+													$('#' + sXHTMLElementID).fullCalendar('renderEvent',
+													{
+														id: 	iActionID,
+														title: 	sTitle + ' - ' + sContactBusinessText,
+														start: 	sStartDate, 
+														end: 	sEndDate, 
+														allDay: false
+													});
+												}	
 											}
 										}
 										else
