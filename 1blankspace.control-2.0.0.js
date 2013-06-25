@@ -45,8 +45,13 @@ ns1blankspace.financial.summaryUseTemplate = false;
 
 ns1blankspace.xhtml.templates = {source: {}, document: {}};
 
-ns1blankspace.xhtml.templates.source.invoice = '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html';
-ns1blankspace.xhtml.templates.source.statement = '/jscripts/1blankspace.setup.financial.statement-1.0.0.html';
+ns1blankspace.xhtml.templates.source =
+{
+	invoice: '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html',
+	statement: '/jscripts/1blankspace.setup.financial.statement-1.0.0.html',
+	payroll: '/jscripts/1blankspace.setup.financial.payroll-1.0.0.html',
+	payslip: '/jscripts/1blankspace.setup.financial.payslip-1.0.0.html',
+}	
 
 ns1blankspace.xhtml.logonNotes =
 	'<span style="font-weight:bold;">THIS IS AN UI BEING WORKED ON BY THE COMMUNITY.</span><br /><br />' +

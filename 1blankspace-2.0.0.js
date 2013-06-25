@@ -745,11 +745,20 @@ ns1blankspace.app =
 								.button( {
 									text: false,
 									icons: {
-										primary: "ui-icon-arrowrefresh-1-e"
+										primary: ".ui-icon-arrowthickstop-1-n"
 									}
 								})
-								.click(function() {
-									ns1blankspace.history.view({instruction: 7});
+								.click(function()
+								{
+									if (ns1blankspace.objectParentName !== undefined)
+									{
+										ns1blankspace[ns1blankspace.objectParentName][ns1blankspace.objectName].init();
+									}	
+									else
+									{
+										ns1blankspace[ns1blankspace.objectName].init();
+									}	
+									//ns1blankspace.history.view({instruction: 7});
 								})
 								.css('width', '25px')
 								.css('margin-left', '2px')
@@ -1951,7 +1960,7 @@ ns1blankspace.history.view =
 									.button( {
 										text: false,
 										icons: {
-											primary: "ui-icon-arrowrefresh-1-e"
+											primary: "ui-icon-arrowthickstop-1-n"
 										}
 									})
 								.next()
@@ -2784,8 +2793,6 @@ ns1blankspace.search =
 
 									if (sMethodFilter != '')
 									{
-										oSearch.addBracket('(');
-
 										var aMethodFilters = sMethodFilter.split('|');
 
 										var aFilterSearch = $.grep(aMethodFilters, function (a) {return a.split('-').length == 2;});
@@ -3484,10 +3491,10 @@ ns1blankspace.util =
 
 						oSearch.getResults(function(oResponse)
 						{
-							if (oResponse.data.rows.length == 0)
+							if (oResponse.data.rows.length == 0) 
 							{
-								if (ns1blankspace.xhtml.templates.source[sTemplate])
-								{
+								if (ns1blankspace.xhtml.templates.source[sTemplate] !== undefined)
+								{	
 									$.ajax(
 									{
 										type: 'GET',
@@ -3504,7 +3511,7 @@ ns1blankspace.util =
 											ns1blankspace.xhtml.templates[sTemplate] = '';
 											ns1blankspace.util.onComplete(oParam);
 										}
-									});
+									});	
 								}	
 							}
 							else

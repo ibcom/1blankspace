@@ -123,10 +123,6 @@ ns1blankspace.financial.bankAccount =
 
 					aHTML.push('<table class="ns1blankspaceControl">');
 
-					//aHTML.push('<tr>' +
-					//				'<td class="ns1blankspaceCaption">Reconcile</td>' +
-					//				'</tr>');
-
 					aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlReconcile" class="ns1blankspaceControl">Reconcile</td>' +
 									'</tr>');

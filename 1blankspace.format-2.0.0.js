@@ -202,7 +202,49 @@ ns1blankspace.format.tags =
 				type: 2,
 				caption: 'Invoice Date Due',
 				source: 'invoice.duedate'
-			}					
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'First Name',
+				source: 'employee.contactperson.firstname'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Last Name',
+				source: 'employee.contactperson.surname'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Gross Salary',
+				source: 'grosssalary'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Net Salary',
+				source: 'netsalary'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Tax',
+				source: 'pay.taxbeforerebate'
+			},	
+			{
+				object: 37,
+				type: 2,
+				caption: 'Pay Superannuation',
+				source: 'pay.superannuation'
+			},
+			{
+				object: 37,
+				type: 2,
+				caption: 'Pay Deductions',
+				source: 'pay.deducations'
+			}				
 		]		
 
 ns1blankspace.format.test = function()

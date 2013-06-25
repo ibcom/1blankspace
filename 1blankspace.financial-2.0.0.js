@@ -302,17 +302,17 @@ ns1blankspace.financial.home = function ()
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
 						var aHTML = [];
-						var h = -1;
 						
-						aHTML[++h] = '<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainBankAccount" class="ns1blankspaceControlMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainDebtors" class="ns1blankspaceControlMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainCreditors" class="ns1blankspaceControlMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainPL" class="ns1blankspaceControlMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainBS" class="ns1blankspaceControlMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainAccounts" class="ns1blankspaceControlMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainUnallocated" class="ns1blankspaceControlMain"></div>';
-						aHTML[++h] = '<div id="ns1blankspaceMainInvoicing" class="ns1blankspaceControlMain"></div>';
+						aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainBankAccount" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainDebtors" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainCreditors" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainPL" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainBS" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainAccounts" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainUnallocated" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainInvoicing" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainPayroll" class="ns1blankspaceControlMain"></div>');
 						
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
@@ -370,6 +370,12 @@ ns1blankspace.financial.home = function ()
 							ns1blankspace.financial.invoicing.show();
 						});	
 						
+						$('#ns1blankspaceControlPayroll').click(function(event)
+						{
+							ns1blankspace.show({selector: '#ns1blankspaceMainPayroll'});
+							ns1blankspace.financial.payrollSummary.show();
+						});	
+
 						$('#ns1blankspaceControlSummary').addClass('ns1blankspaceHighlight');
 
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.summary()'});
@@ -4230,4 +4236,4 @@ ns1blankspace.financial.util =
 								}	
 							}
 				}											
-}					
+}

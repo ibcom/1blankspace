@@ -385,9 +385,17 @@ ns1blankspace.action =
 							$('#ns1blankspaceViewControlAction').button({disabled: false});
 							$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 								
-							$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.subject +
-								'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.duedate + '</span>');
+							var oDate = Date.parse(ns1blankspace.objectContextData.duedatetime);
+														
+							if (oDate.getHours() != 0 && oDate.getMinutes() != 0)
+							{
+								var sHTML = '<br /><span id="ns1blankspaceControlContext_time" class="ns1blankspaceSub">' + 
+											oDate.toString("h:mm tt")  + '</span>';
+							}		
 								
+							$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.subject +
+								'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.duedate + '</span>' + sHTML);
+									
 							ns1blankspace.history.view(
 							{
 								newDestination: 'ns1blankspace.action.init({id: ' + ns1blankspace.objectContext + '})',
