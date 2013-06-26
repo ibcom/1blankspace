@@ -206,6 +206,12 @@ ns1blankspace.format.tags =
 			{
 				object: 37,
 				type: 1,
+				caption: 'Business Name',
+				source: 'contactbusinesstext'
+			},
+			{
+				object: 37,
+				type: 1,
 				caption: 'First Name',
 				source: 'employee.contactperson.firstname'
 			},
@@ -262,7 +268,79 @@ ns1blankspace.format.tags =
 				type: 2,
 				caption: 'Pay Deductions',
 				source: 'deductions'
-			}				
+			},			
+			{
+				object: 37,
+				type: 1,
+				caption: 'Pay Slip Business Name',
+				source: 'contactbusinesstext'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Pay Slip First Name',
+				source: 'payrecord.employee.contactperson.firstname'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Pay Slip Last Name',
+				source: 'payrecord.employee.contactperson.surname'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Pay Slip TFN',
+				source: 'payrecord.employee.taxfilenumber'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Pay Slip Gross Salary',
+				source: 'payrecord.grosssalary'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Pay Slip Net Salary',
+				source: 'payrecord.netsalary'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Pay Slip Tax Before Rebate',
+				source: 'payrecord.taxbeforerebate'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Pay Slip Superannuation',
+				source: 'payrecord.superannuation'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Pay Slip Start Date',
+				source: 'payrecord.payperiod.startdate'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Pay Slip Pay Date',
+				source: 'payrecord.payperiod.paydate'
+			},
+			{
+				object: 37,
+				type: 2,
+				caption: 'Pay Slip Item Type',
+				source: 'typetext'
+			},
+			{
+				object: 37,
+				type: 2,
+				caption: 'Pay Slip Item Hours',
+				source: 'hours'
+			}						
 		]		
 
 ns1blankspace.format.test = function()
