@@ -4197,7 +4197,7 @@ ns1blankspace.financial.payroll.pays.totals =
 																	{
 																		if (data.status == 'OK')
 																		{
-																			$('#ns1blankspacePayrollTotals_selectContainer-' + oSlip.id).html('Emailed');
+																			$('#ns1blankspacePayrollPayTotals_selectContainer-' + oSlip.id).html('Emailed');
 																			oParam.dataIndex = iDataIndex + 1;
 																			oParam.step = 2;
 																			ns1blankspace.financial.payroll.pays.totals.slips.email.send(oParam);
