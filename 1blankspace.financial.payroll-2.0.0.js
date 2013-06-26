@@ -3144,10 +3144,23 @@ ns1blankspace.financial.payroll.totals =
 					{
 						if (oParam.startDate != undefined) {sStartDate = oParam.startDate}
 						if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
-					}		
+					}
+					else
+					{
+						oParam = {}
+					}	
 
-					if (sStartDate === undefined) {sStartDate = Date.today().moveToMonth(6, -1).moveToFirstDayOfMonth().toString("dd MMM yyyy");}
-					if (sEndDate === undefined) {sEndDate = Date.today().toString("dd MMM yyyy")}	
+					if (sStartDate === undefined)
+					{
+						sStartDate = Date.today().moveToMonth(6, -1).moveToFirstDayOfMonth().toString("dd MMM yyyy");
+						oParam.startDate = sStartDate;
+					}
+
+					if (sEndDate === undefined)
+					{
+						sEndDate = Date.today().toString("dd MMM yyyy");
+						oParam.endDate = sEndDate;
+					}	
 
 					ns1blankspace.financial.payroll.data.context = 'totals';
 

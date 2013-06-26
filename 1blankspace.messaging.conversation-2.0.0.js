@@ -1061,7 +1061,7 @@ ns1blankspace.messaging.conversation =
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'MESSAGING_CONVERSATION_POST_SEARCH';
-										oSearch.addField('subject,message,ownerusertext,createddate,modifieddate,lastcommentdate');
+										oSearch.addField('subject,message,ownerusertext,createddate,modifieddate,lastcommentdate,createdusertext');
 										oSearch.addFilter('conversation', 'EQUAL_TO', ns1blankspace.objectContext)
 										oSearch.sort('modifieddate', 'desc');
 										oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.posts.show(oParam, data)});
@@ -1120,7 +1120,7 @@ ns1blankspace.messaging.conversation =
 															sSubject);
 															
 									aHTML.push('<br /><div style="margin-top:3px;" class="ns1blankspaceRow ns1blankspaceSubNote">' +
-															oRow.ownerusertext + ', ');
+															oRow.createdusertext + ', ');
 															
 									var oDate = new Date(oRow.modifieddate);
 															
