@@ -3907,7 +3907,7 @@ ns1blankspace.financial.payroll.pays.totals =
 											.click(function()
 											{	
 												oParam = {onCompleteWhenCan: ns1blankspace.financial.payroll.pays.totals.slips.email.init};
-												ns1blankspace.financial.payroll.totals.employees.preview.init(oParam);
+												ns1blankspace.financial.payroll.pays.totals.slips.preview.init(oParam);
 											})
 											.css('width', '100px')
 											.css('text-align', 'left');	
@@ -4151,14 +4151,14 @@ ns1blankspace.financial.payroll.pays.totals =
 														{
 															if (oSlip['payperiod.employee.contactperson.email'] == '')
 															{
-																$('#ns1blankspacePayrollPayTotals_selectContainer-' + oSummary.id).html('No Email');
+																$('#ns1blankspacePayrollPayTotals_selectContainer-' + oSlip.id).html('No Email');
 																oParam.dataIndex = iDataIndex + 1;
 																oParam.step = 2;
 																ns1blankspace.financial.payroll.pays.totals.slips.email.send(oParam);
 															}	
 															else
 															{
-																$('#ns1blankspacePayrollPayTotals_selectContainer-' + oSummary.id).html(ns1blankspace.xhtml.loadingSmall);
+																$('#ns1blankspacePayrollPayTotals_selectContainer-' + oSlip.id).html(ns1blankspace.xhtml.loadingSmall);
 
 																if (oSlip.xhtml === undefined)
 																{
@@ -4176,8 +4176,8 @@ ns1blankspace.financial.payroll.pays.totals =
 																{
 																	subject: ns1blankspace.user.contactBusinessText + ' Pay Slip - ' + ns1blankspace.objectContextData.paydate,
 																	message: oSlip.xhtml,
-																	id: oSummary['payperiod.employee.contactperson'],
-																	to: oSummary['payperiod.employee.contactperson.email'],
+																	id: oSlip['payperiod.employee.contactperson'],
+																	to: oSlip['payperiod.employee.contactperson.email'],
 																	object: 37,
 																	objectContext: ns1blankspace.objectContext
 																}
