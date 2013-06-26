@@ -3157,7 +3157,7 @@ ns1blankspace.financial.payroll.totals =
 
 						aHTML.push('<table class="ns1blankspaceMain" style="width:100%;">' +
 								'<tr>' +
-								'<td id="ns1blankspacePayrollTotalsColumn1" class="ns1blankspaceColumn1Divider" style="width:120px; font-size: 0.875em; padding-right:10px;"></td>' +
+								'<td id="ns1blankspacePayrollTotalsColumn1" class="ns1blankspaceColumn1Divider" style="width:100px; font-size: 0.875em; padding-right:10px;"></td>' +
 								'<td id="ns1blankspacePayrollTotalsColumn2" style="font-size: 0.925em; padding-left:10px;">' + ns1blankspace.xhtml.loading + '</td>' +
 								'</tr>' +
 								'</table>');	
@@ -3252,7 +3252,7 @@ ns1blankspace.financial.payroll.totals =
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
-							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Superannuation</td></tr>' +
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Super.</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
@@ -3276,7 +3276,7 @@ ns1blankspace.financial.payroll.totals =
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspacePayrollEmployeeTotalsColumn1">' + ns1blankspace.xhtml.loading + '</td>' +
-														'<td id="ns1blankspacePayrollEmployeeTotalsColumn2" style="width:105px;"></td>' +
+														'<td id="ns1blankspacePayrollEmployeeTotalsColumn2" style="width:95px;"></td>' +
 														'</tr></table>');				
 										
 										$('#ns1blankspacePayrollTotalsColumn2').html(aHTML.join(''));
@@ -3338,9 +3338,9 @@ ns1blankspace.financial.payroll.totals =
 
 											var aHTML = [];
 																	
-											aHTML.push('<table class="ns1blankspaceColumn2">');
+											aHTML.push('<table class="ns1blankspaceColumn2" style="margin-right:0px;">');
 													
-											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsPreview" class="ns1blankspaceAction" style="text-align:left;">' +
+											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsPreview" class="ns1blankspaceAction">' +
 															'Summary</span></td></tr>');
 
 											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsPreviewStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
@@ -3367,7 +3367,7 @@ ns1blankspace.financial.payroll.totals =
 											{	
 												ns1blankspace.financial.payroll.totals.employees.preview.init(oParam)
 											})
-											.css('width', '100px');
+											.css('width', '90px');
 
 											$('#ns1blankspacePayrollTotalsEmail').button(
 											{
@@ -3382,8 +3382,7 @@ ns1blankspace.financial.payroll.totals =
 												oParam = {onCompleteWhenCan: ns1blankspace.financial.payroll.totals.employees.email.init};
 												ns1blankspace.financial.payroll.totals.employees.preview.init(oParam);
 											})
-											.css('width', '100px')
-											.css('text-align', 'left');	
+											.css('width', '90px');
 										}	    	
 									}
 								},
@@ -3529,11 +3528,12 @@ ns1blankspace.financial.payroll.totals =
 
 																var oSearch = new AdvancedSearch();
 																oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
-																oSearch.addField('grosssalary,netsalary,deductions,superannuation,taxbeforerebate');
+																oSearch.addField('grosssalary,netsalary,deductions,superannuation,taxbeforerebate,payrecord.payperiod.paydate');
 																oSearch.addSummaryField('sum(grosssalary) grosssalary');
 																oSearch.addSummaryField('sum(netsalary) netsalary');
 																oSearch.addSummaryField('sum(superannuation) superannuation');
 																oSearch.addSummaryField('sum(taxbeforerebate) taxbeforerebate');
+																oSearch.addSummaryField('max(payrecord.payperiod.paydate) paydate');
 
 																oSearch.addFilter('employee', 'EQUAL_TO', oData.id);
 
@@ -3547,7 +3547,7 @@ ns1blankspace.financial.payroll.totals =
 																	oSearch.addFilter('payrecord.payperiod.paydate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)
 																}
 
-																//oSearch.sort('payrecord.payperiod.paydate', 'asc');
+																oSearch.sort('payrecord.payperiod.paydate', 'asc');
 
 																oSearch.getResults(function(oResponse)
 																{
@@ -3559,6 +3559,7 @@ ns1blankspace.financial.payroll.totals =
 																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].superannuation = (oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',');
 																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].taxbeforerebate = (oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',');
 																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].contactbusinesstext = ns1blankspace.user.contactBusinessText;
+																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].year = Date.parse(oResponse.summary.paydate).getFullYear();
 
 																	$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).html('');
 																	$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).addClass('ns1blankspaceRowPreviewDone');

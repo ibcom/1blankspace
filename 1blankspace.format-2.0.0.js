@@ -212,6 +212,12 @@ ns1blankspace.format.tags =
 			{
 				object: 37,
 				type: 1,
+				caption: 'Year',
+				source: 'year'
+			},
+			{
+				object: 37,
+				type: 1,
 				caption: 'First Name',
 				source: 'employee.contactperson.firstname'
 			},
@@ -268,7 +274,13 @@ ns1blankspace.format.tags =
 				type: 2,
 				caption: 'Pay Deductions',
 				source: 'deductions'
-			},			
+			},		
+			{
+				object: 37,
+				type: 2,
+				caption: 'Pay Date',
+				source: 'payrecord.payperiod.paydate'
+			},	
 			{
 				object: 37,
 				type: 1,
