@@ -3779,7 +3779,7 @@ ns1blankspace.financial.payroll.pays.totals =
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
-							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Superannuation</td></tr>' +
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Super.</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
