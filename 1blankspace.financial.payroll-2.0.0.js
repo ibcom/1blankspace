@@ -816,6 +816,7 @@ ns1blankspace.financial.payroll =
 									var iStep = 1;
 									var iStepAction = 1;
 									var iEmployee;
+									var iFilterEmployee;
 									var iID = '';
 									var sXHTMLElementID;
 
@@ -826,6 +827,7 @@ ns1blankspace.financial.payroll =
 										if (oParam.employee != undefined) {iEmployee = oParam.employee};
 										if (oParam.id != undefined) {iID = oParam.id};
 										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										if (oParam.filterEmployee != undefined) {iFilterEmployee = oParam.filterEmployee};
 									}
 									else
 									{
@@ -861,6 +863,12 @@ ns1blankspace.financial.payroll =
 											oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
 											oSearch.addField('contactpersontext,employmentstartdate,statustext,employee.contactperson.firstname,employee.contactperson.surname');
 											oSearch.addFilter('status', 'EQUAL_TO', '2')
+
+											if (iFilterEmployee !== undefined)
+											{
+												oSearch.addFilter('id', 'EQUAL_TO', iFilterEmployee);
+											}	
+
 											oSearch.rows = 50;
 											oSearch.sort('employee.contactperson.firstname', 'asc');
 											oSearch.getResults(function(data) {ns1blankspace.financial.payroll.employees.show(oParam, data)});
@@ -912,7 +920,15 @@ ns1blankspace.financial.payroll =
 												var aID = (this.id).split('-');
 												$.extend(true, oParam, {step: 2, employee: parseInt(aID[1])});
 												ns1blankspace.financial.payroll.employees.show(oParam);
-											});	
+											});
+
+											if (iFilterEmployee !== undefined)
+											{
+												$('#ns1blankspacePayrollEmployees td.ns1blankspaceRowShadedHighlight').removeClass('ns1blankspaceRowShadedHighlight');
+												$('#ns1blankspaceEmployee_contact-' + iFilterEmployee).addClass('ns1blankspaceRowShadedHighlight');
+												$.extend(true, oParam, {step: 2});
+												ns1blankspace.financial.payroll.employees.show(oParam);
+											}	
 										}
 									}
 									
@@ -3188,6 +3204,7 @@ ns1blankspace.financial.payroll.totals =
 						oSearch.addSummaryField('sum(grosssalary) grosssalary');
 						oSearch.addSummaryField('sum(netsalary) netsalary');
 						oSearch.addSummaryField('sum(superannuation) superannuation');
+						oSearch.addSummaryField('sum(taxbeforerebate) taxbeforerebate');
 
 						if (sStartDate !== undefined)
 						{
@@ -3210,23 +3227,27 @@ ns1blankspace.financial.payroll.totals =
 						var aHTML = [];
 
 						aHTML.push('<table class="ns1blankspace" style="width:100%;">' +
-							'<tr><td style="text-align:left;" class="ns1blankspaceCaption">Gross Wages</td></tr>' +
+							'<tr><td style="text-align:left;" class="ns1blankspaceCaption">Gross Salary</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
-							(oResponse.summary.grosssalary).parseCurrency().formatMoney(2, '.', ',') + 
+							(oResponse.summary.grosssalary).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
-							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Net Wages</td></tr>' +
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Net Salary</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
-							(oResponse.summary.netsalary).parseCurrency().formatMoney(2, '.', ',') + 
+							(oResponse.summary.netsalary).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
-							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Superanuation</td></tr>' +
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Tax</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
-							(oResponse.summary.superannuation).parseCurrency().formatMoney(2, '.', ',') + 
+							(oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',') + 
+							'</td></tr>' +
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Superannuation</td></tr>' +
+							'<tr><td style="text-align:left;">$' +
+							(oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
 							'</table>');
 
 						$('#ns1blankspacePayrollSummary').html(aHTML.join(''));
 
-						ns1blankspace.financial.payroll.totals.employees.show();
+						ns1blankspace.financial.payroll.totals.employees.show(oParam);
 					}	
 				},
 
@@ -3249,7 +3270,8 @@ ns1blankspace.financial.payroll.totals =
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
-										oSearch.addField('contactpersontext,employmentstartdate,statustext,employeenumber,employee.contactperson.firstname,employee.contactperson.surname');
+										oSearch.addField('employee.contactpersontext,employee.employmentstartdate,employee.statustext,employee.employeenumber,employee.taxfilenumber,' +
+															'employee.contactperson,employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email');
 										//oSearch.addFilter('status', 'EQUAL_TO', '2')
 										oSearch.rows = 50;
 										oSearch.sort('employee.contactperson.firstname', 'asc');
@@ -3369,14 +3391,13 @@ ns1blankspace.financial.payroll.totals =
 													oRow["employee.contactperson.surname"] + '</td>');
 
 									aHTML.push('<td id="ns1blankspacePayrollTotals_employeenumber" class="ns1blankspaceRow ns1blankspaceSub">' +
-													oRow["employeenumber"] + '</td>');
+													oRow["employee.employeenumber"] + '</td>');
 
 									aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
 													'<span style="margin-right:5px;" id="ns1blankspacePayrollTotals_option_preview-' + sKey + '"' +
 																	' class="ns1blankspaceRowPreview"></span>' +
-													'<span id="ns1blankspacePayrollTotals_contact-' + sKey + '" class="ns1blankspaceRowSelect"></span>' +
-													'</td>' +			
-													'</tr>');
+													'<span id="ns1blankspacePayrollTotals_contact-' + sKey + '" class="ns1blankspaceRowSelect"></span>' +				
+													'</td></tr>');
 									
 									return aHTML.join('');
 								},
@@ -3393,16 +3414,11 @@ ns1blankspace.financial.payroll.totals =
 									})
 									.click(function()
 									{
-										var sKey =(this.id).split('-')[1];
-
-										if (sKey.split('_')[0] == 'B')
-										{	
-											//ns1blankspace.contactBusiness.init({id: sKey.split('_')[1]});
-										}
-										else
-										{
-											//ns1blankspace.contactPerson.init({id: sKey.split('_')[1]});
-										}	
+										$('#ns1blankspaceViewControlNew').button({disabled: false});
+										ns1blankspace.show({selector: '#ns1blankspaceMainEmployee', refresh: true});
+										//$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+										//$('#ns1blankspaceControl-employees').addClass('ns1blankspaceHighlight');
+										ns1blankspace.financial.payroll.employees.show({filterEmployee: (this.id).split('-')[1]});	
 									})
 									.css('width', '15px')
 									.css('height', '20px');
@@ -3455,8 +3471,8 @@ ns1blankspace.financial.payroll.totals =
 
 														if ($('#ns1blankspacePayrollEmployeeTotals input:checked').length > 0)
 														{	
-															$('#ns1blankspaceFinancialPayrollEmployeeTotalsPreviewStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
-																		'<span id="ns1blankspacePayrollEmployeeTotalsPreviewStatusIndex">1</span>/' + $('#ns1blankspacePayrollEmployeeTotals input:checked').length + 
+															$('#ns1blankspacePayrollTotalsPreviewStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
+																		'<span id="ns1blankspacePayrollTotalsPreviewStatusIndex">1</span>/' + $('#ns1blankspacePayrollEmployeeTotals input:checked').length + 
 																		'</span>');
 														}
 														else
@@ -3484,65 +3500,76 @@ ns1blankspace.financial.payroll.totals =
 													{
 														if (iDataIndex < ns1blankspace.financial.payroll.data.summaries.length)
 														{	
-															$('#ns1blankspacePayrollEmployeeTotalsPreviewStatusIndex').html(iDataIndex + 1);
+															$('#ns1blankspacePayrollTotalsPreviewStatusIndex').html(iDataIndex + 1);
 
 															var oData = ns1blankspace.financial.payroll.data.summaries[iDataIndex];
 
-															$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).html(ns1blankspace.xhtml.loadingSmall)
-
-															var oSearch = new AdvancedSearch();
-															oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
-															oSearch.addField('grosssalary,netsalary,deductions,superannuation,taxbeforerebate');
-															oSearch.addSummaryField('sum(grosssalary) grosssalary');
-															oSearch.addSummaryField('sum(netsalary) netsalary');
-															oSearch.addSummaryField('sum(superannuation) superannuation');
-
-															oSearch.addFilter('employee', 'EQUAL_TO', oData.id);
-
-															if (sStartDate !== undefined)
-															{
-																oSearch.addFilter('payrecord.payperiod.paydate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)
-															}
-																
-															if (sEndDate != undefined)
-															{
-																oSearch.addFilter('payrecord.payperiod.paydate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)
-															}
-
-															//oSearch.sort('payrecord.payperiod.paydate', 'asc');
-
-															oSearch.getResults(function(oResponse)
+															if (oData.pay !== undefined)
 															{
 																oParam.step = 2;
 																oParam.dataIndex = iDataIndex + 1;
-																ns1blankspace.financial.payroll.data.summaries[iDataIndex].pay = oResponse.data.rows;
-																ns1blankspace.financial.payroll.data.summaries[iDataIndex].grosssalary = oResponse.summary.grosssalary;
-																ns1blankspace.financial.payroll.data.summaries[iDataIndex].netsalary = oResponse.summary.netsalary;
-																ns1blankspace.financial.payroll.data.summaries[iDataIndex].superannuation = oResponse.summary.superannuation;
-
-																$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).html('');
-																$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).addClass('ns1blankspaceRowPreviewDone');
-
-																$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).button(
-																{
-																	text: false,
-																	icons:
-																	{
-																		primary: "ui-icon-document"
-																	}
-																})
-																.click(function() {
-																	ns1blankspace.financial.payroll.totals.employees.preview.showHide({xhtmlElementID: this.id});
-																})
-																.css('width', '15px')
-																.css('height', '20px');
-
 																ns1blankspace.financial.payroll.totals.employees.preview.show(oParam);
-															});
+															}	
+															else
+															{
+																$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).html(ns1blankspace.xhtml.loadingSmall)
+
+																var oSearch = new AdvancedSearch();
+																oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
+																oSearch.addField('grosssalary,netsalary,deductions,superannuation,taxbeforerebate');
+																oSearch.addSummaryField('sum(grosssalary) grosssalary');
+																oSearch.addSummaryField('sum(netsalary) netsalary');
+																oSearch.addSummaryField('sum(superannuation) superannuation');
+																oSearch.addSummaryField('sum(taxbeforerebate) taxbeforerebate');
+
+																oSearch.addFilter('employee', 'EQUAL_TO', oData.id);
+
+																if (sStartDate !== undefined)
+																{
+																	oSearch.addFilter('payrecord.payperiod.paydate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)
+																}
+																	
+																if (sEndDate != undefined)
+																{
+																	oSearch.addFilter('payrecord.payperiod.paydate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)
+																}
+
+																//oSearch.sort('payrecord.payperiod.paydate', 'asc');
+
+																oSearch.getResults(function(oResponse)
+																{
+																	oParam.step = 2;
+																	oParam.dataIndex = iDataIndex + 1;
+																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].pay = oResponse.data.rows;
+																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].grosssalary = (oResponse.summary.grosssalary).parseCurrency().formatMoney(0, '.', ',');
+																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].netsalary = (oResponse.summary.netsalary).parseCurrency().formatMoney(0, '.', ',');
+																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].superannuation = (oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',');
+																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].taxbeforerebate = (oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',');
+
+																	$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).html('');
+																	$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).addClass('ns1blankspaceRowPreviewDone');
+
+																	$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).button(
+																	{
+																		text: false,
+																		icons:
+																		{
+																			primary: "ui-icon-document"
+																		}
+																	})
+																	.click(function() {
+																		ns1blankspace.financial.payroll.totals.employees.preview.showHide({xhtmlElementID: this.id});
+																	})
+																	.css('width', '15px')
+																	.css('height', '20px');
+
+																	ns1blankspace.financial.payroll.totals.employees.preview.show(oParam);
+																});
+															}					
 														}
 														else
 														{
-															$('#ns1blankspaceFinancialPayrollEmployeeTotalsPreviewStatus').fadeOut(3000);
+															$('#ns1blankspacePayrollTotalsPreviewStatus').fadeOut(3000);
 															ns1blankspace.util.onComplete(oParam);
 														}	
 													}						
@@ -3587,6 +3614,104 @@ ns1blankspace.financial.payroll.totals =
 																		'<td colspan=5><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85x">' + sHTML + '</div></td></tr>')
 													}
 												}			
-								}
+								},
+
+					email: 		{
+									init: 		function (oParam, oResponse)
+												{
+													ns1blankspace.financial.payroll.totals.employees.email.send({dataIndex: 0})
+												},
+
+									send:		function (oParam)
+												{		
+													var iDataIndex = 0;
+
+													if (oParam != undefined)
+													{	
+														if (oParam.dataIndex != undefined) {iDataIndex = oParam.dataIndex}
+													}
+													else
+													{
+														oParam = {}
+													}			
+																	
+													if (iDataIndex < ns1blankspace.financial.payroll.data.summaries.length)
+													{
+														$('#ns1blankspacePayrollTotalsEmailStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
+															'<span id="ns1blankspacePayrollTotalsEmailStatusIndex">' + (iDataIndex + 1) + '</span>/' + ns1blankspace.financial.payroll.data.summaries.length + 
+															'</span>');
+
+														ns1blankspace.debug.message(ns1blankspace.financial.payroll.data.summaries[iDataIndex]);
+
+														var oSummary = ns1blankspace.financial.payroll.data.summaries[iDataIndex];
+
+														if (oSummary !== undefined)
+														{
+															if (oSummary['employee.contactperson.email'] == '')
+															{
+																$('#ns1blankspacePayrollTotals_selectContainer-' + oSummary.id).html('No Email');
+																oParam.dataIndex = iDataIndex + 1;
+																oParam.step = 2;
+																ns1blankspace.financial.payroll.totals.employees.email.send(oParam);
+															}	
+															else
+															{
+																$('#ns1blankspacePayrollTotals_selectContainer-' + oSummary.id).html(ns1blankspace.xhtml.loadingSmall);
+
+																if (oSummary.xhtml === undefined)
+																{
+																	oSummary.xhtml = ns1blankspace.format.render(
+																	{
+																		object: 37,
+																		objectContext: -1,
+																		xhtmlTemplate: ns1blankspace.xhtml.templates['payroll'],
+																		objectData: oSummary,
+																		objectOtherData: oSummary.pay
+																	});
+																}	
+
+																var oData = 
+																{
+																	subject: ns1blankspace.user.contactBusinessText + ' Pay Summary',
+																	message: oSummary.xhtml,
+																	id: oSummary['employee.contactperson'],
+																	to: oSummary['employee.contactperson.email'],
+																	object: 37,
+																	objectContext: oSummary.id
+																}
+
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+																	data: oData,
+																	dataType: 'json',
+																	global: false,
+																	success: function (data)
+																	{
+																		if (data.status == 'OK')
+																		{
+																			$('#ns1blankspacePayrollTotals_selectContainer-' + oSummary.id).html('Emailed');
+																			oParam.dataIndex = iDataIndex + 1;
+																			oParam.step = 2;
+																			ns1blankspace.financial.payroll.totals.employees.email.send(oParam);
+																		}
+																		else
+																		{
+																			$('#ns1blankspacePayrollTotals_selectContainer-' + oSummary.id).html('Error');
+																			$('#ns1blankspacePayrollTotals_selectContainer-' + oSummary.id).attr('title', data.error.errornotes);
+																		}
+																	}
+																});
+															}	
+														}
+													}
+													else
+													{
+														$('#ns1blankspacePayrollTotalsEmailStatus').fadeOut(3000);
+														ns1blankspace.util.onComplete(oParam);
+													}	
+												}																	
+								}			
 				}
 }				

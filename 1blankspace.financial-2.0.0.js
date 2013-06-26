@@ -403,17 +403,17 @@ ns1blankspace.financial.summary = function (oParam, oResponse)
 				
 					aHTML.push('<table class="ns1blankspaceColumn2" style="margin-left:5px;">');
 					
-					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creditors</td></tr>' +
-									'<tr><td class="ns1blankspaceSummary">' +
-									(ns1blankspace.financial.data.settings.lockeddatecreditors != ''?ns1blankspace.financial.data.settings.lockeddatedebtors:'Not locked')+
-									'</td></tr>');
-					
 					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Debtors</td></tr>' +
 									'<tr><td class="ns1blankspaceSummary">' +
 									(ns1blankspace.financial.data.settings.lockeddatedebtors != ''?ns1blankspace.financial.data.settings.lockeddatedebtors:'Not locked') +
 									'</td></tr>');
+
+					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creditors</td></tr>' +
+									'<tr><td class="ns1blankspaceSummary">' +
+									(ns1blankspace.financial.data.settings.lockeddatecreditors != ''?ns1blankspace.financial.data.settings.lockeddatecreditors:'Not locked')+
+									'</td></tr>');
 					
-					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">General Journals</td></tr>' +
+					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Journals (General)</td></tr>' +
 									'<tr><td class="ns1blankspaceSummary">' +
 									(ns1blankspace.financial.data.settings.lockeddatejournals != ''?ns1blankspace.financial.data.settings.lockeddatejournals:'Not locked') +
 									'</td></tr>');

@@ -911,7 +911,7 @@ ns1blankspace.control =
 																		'<td class="ns1blankspaceViewControl">' +
 																		'<span id="ns1blankspaceViewControl_action" class="ns1blankspaceViewControl">' +
 																		'Actions</span>' +
-																		'<br /><div class="ns1blankspaceSubNote" style="margin-top:4px;">' + 
+																		'<br /><div class="ns1blankspaceSubNote" style="margin-top:2px;">' + 
 																		'& calendar</div>' +
 																		'</td></tr>');
 											}			
@@ -1019,7 +1019,8 @@ ns1blankspace.control =
 												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
 																		'<td class="ns1blankspaceViewControl">' +
 																		'<span id="ns1blankspaceViewControl_financial" class="ns1blankspaceViewControl">' +
-																		'Financials</span></td></tr>');
+																		'Financials</span><br /><div class="ns1blankspaceSubNote" style="margin-top:2px;">' + 
+																		'P&L, Debtors...</div></td></tr>');
 											}		
 
 											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Bank Accounts';})[0];

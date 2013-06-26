@@ -218,32 +218,50 @@ ns1blankspace.format.tags =
 			{
 				object: 37,
 				type: 1,
+				caption: 'TFN',
+				source: 'employee.taxfilenumber'
+			},
+			{
+				object: 37,
+				type: 1,
 				caption: 'Gross Salary',
-				source: 'grosssalary'
+				source: 'employee.grosssalary'
 			},
 			{
 				object: 37,
 				type: 1,
 				caption: 'Net Salary',
-				source: 'netsalary'
+				source: 'employee.netsalary'
 			},
 			{
 				object: 37,
 				type: 1,
-				caption: 'Tax',
-				source: 'pay.taxbeforerebate'
-			},	
+				caption: 'Tax Before Rebate',
+				source: 'employee.taxbeforerebate'
+			},
+			{
+				object: 37,
+				type: 2,
+				caption: 'Pay Gross Salary',
+				source: 'grosssalary'
+			},
+			{
+				object: 37,
+				type: 2,
+				caption: 'Pay Net Salary',
+				source: 'netsalary'
+			},
 			{
 				object: 37,
 				type: 2,
 				caption: 'Pay Superannuation',
-				source: 'pay.superannuation'
+				source: 'superannuation'
 			},
 			{
 				object: 37,
 				type: 2,
 				caption: 'Pay Deductions',
-				source: 'pay.deducations'
+				source: 'deductions'
 			}				
 		]		
 
