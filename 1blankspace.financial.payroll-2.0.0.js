@@ -4178,12 +4178,12 @@ ns1blankspace.financial.payroll.pays.totals =
 																{
 																	subject: ns1blankspace.user.contactBusinessText + ' Pay Slip - ' + ns1blankspace.objectContextData.paydate,
 																	message: oSlip.xhtml,
-																	id: oSlip['payperiod.employee.contactperson'],
-																	to: oSlip['payperiod.employee.contactperson.email'],
+																	id: oSlip['payrecord.employee.contactperson'],
+																	to: oSlip['payrecord.employee.contactperson.email'],
 																	object: 37,
 																	objectContext: ns1blankspace.objectContext
 																}
-																
+
 																//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
 
 																$.ajax(
