@@ -2616,18 +2616,21 @@ ns1blankspace.container =
 					
 					var oElement = $('#' + sXHTMLElementID)
 					
-					$(ns1blankspace.xhtml.container).html('')
-						.show()
-						.offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
+					if (oElement.length > 0)
+					{	
+						$(ns1blankspace.xhtml.container).html('')
+							.show()
+							.offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
 
-					if (bSetWidth)
-					{
-						$(ns1blankspace.xhtml.container).css('width', oElement.width());
-					}
-					else
-					{
-						$(ns1blankspace.xhtml.container).css('width', '');
-					}
+						if (bSetWidth)
+						{
+							$(ns1blankspace.xhtml.container).css('width', oElement.width());
+						}
+						else
+						{
+							$(ns1blankspace.xhtml.container).css('width', '');
+						}
+					}	
 				},
 
 	confirm:	function (oParam)

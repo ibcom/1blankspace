@@ -2910,7 +2910,7 @@ ns1blankspace.financial.bankAccount =
 																	if (iSearchSourceID)
 																	{	
 																		sHTML += ' that closely match this bank transaction.';
-																		sHTML += '<br /><br />You can search for an existing expense or';
+																		sHTML += '<br /><br />You can search for an existing expense or add a new one.';
 																	}	
 																}
 																else if (iType == 2)
@@ -2920,7 +2920,7 @@ ns1blankspace.financial.bankAccount =
 																	if (iSearchSourceID)
 																	{
 																		sHTML += '<br / >that match this bank transaction.';
-																		sHTML += '<br /><br />You can search for an existing invoice or';
+																		sHTML += '<br /><br />You can search for an existing invoice or add a new one.';
 																	}	
 																}	
 
@@ -2929,7 +2929,7 @@ ns1blankspace.financial.bankAccount =
 																				'</tr></table>');
 
 																aHTML.push('<table style="margin-top:8px;"><tr class="ns1blankspace" >' +
-																				'<td><span class="ns1blankspaceAction" id="ns1blankspaceCheckIfReconciled"></span></td>' +
+																				'<td><span class="ns1blankspaceAction" id="ns1blankspaceCheckIfReconciledX"></span></td>' +
 																				'</tr></table>');
 
 																$('#ns1blankspaceReconcileItemsEdit').html(aHTML.join(''));

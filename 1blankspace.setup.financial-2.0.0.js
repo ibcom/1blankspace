@@ -94,6 +94,9 @@ ns1blankspace.setup.financial =
 
 					aHTML.push('<tr><td id="ns1blankspaceControlPaySlipTemplate" class="ns1blankspaceControl" style="padding-top:7px;">' +
 									'Pay Slip<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">template</span></td></tr>');
+
+					aHTML.push('<tr><td id="ns1blankspaceControlPaySummaryTemplate" class="ns1blankspaceControl" style="padding-top:7px;">' +
+									'Pay Summary<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">template</span></td></tr>');
 					
 					aHTML.push('</table>');
 
@@ -110,6 +113,7 @@ ns1blankspace.setup.financial =
 					aHTML.push('<div id="ns1blankspaceMainTemplate_invoice" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainTemplate_statement" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainTemplate_payslip" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainTemplate_payroll" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainTax" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainPayroll" class="ns1blankspaceControlMain"></div>');
 
@@ -167,6 +171,12 @@ ns1blankspace.setup.financial =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainTemplate_payslip'});
 						ns1blankspace.setup.financial.template.init({template: 'payslip', object: 371});
+					});
+
+					$('#ns1blankspaceControlPaySummaryTemplate').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainTemplate_payroll'});
+						ns1blankspace.setup.financial.template.init({template: 'payroll', object: 37});
 					});
 
 					$('#ns1blankspaceControlTax').click(function(event)
@@ -1645,6 +1655,7 @@ ns1blankspace.setup.financial =
 												if ($('#ns1blankspaceMainTemplate_invoice').html() != '') {ns1blankspace.setup.financial.template.save({template: 'invoice'})}
 												if ($('#ns1blankspaceMainTemplate_statement').html() != '') {ns1blankspace.setup.financial.template.save({template: 'statement'})}
 												if ($('#ns1blankspaceMainTemplate_payslip').html() != '') {ns1blankspace.setup.financial.template.save({template: 'payslip'})}
+												if ($('#ns1blankspaceMainTemplate_payroll').html() != '') {ns1blankspace.setup.financial.template.save({template: 'payroll'})}	
 											}
 									});		
 								}
