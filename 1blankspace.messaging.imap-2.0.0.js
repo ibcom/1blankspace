@@ -443,7 +443,7 @@ ns1blankspace.messaging.imap =
 											
 										if (bRebuild)
 										{
-											ns1blankspace.status.message('Checking for new emails...');
+											ns1blankspace.status.message('Checking for new emails...', {timeout: false});
 											ns1blankspace.messaging.imap.check();
 
 											var aHTML = [];
