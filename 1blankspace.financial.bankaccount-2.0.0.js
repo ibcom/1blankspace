@@ -404,7 +404,7 @@ ns1blankspace.financial.bankAccount =
 											ns1blankspace.financial.bankAccount.mapping.remove(oParam);
 										})
 										.css('width', '15px')
-										.css('height', '17px')
+										.css('height', '17px');
 								
 										$('#ns1blankspaceFinancialBankAccountMappings .ns1blankspaceEdit').button( {
 											text: false,
@@ -1288,6 +1288,19 @@ ns1blankspace.financial.bankAccount =
 															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
 														}).
 														css('width', '100px');
+
+														$('#ns1blankspaceFinancialBankImportItems .ns1blankspaceRemove').button( {
+															text: false,
+															icons: {
+																primary: "ui-icon-close"
+															}
+														})
+														.click(function() {
+															oParam.xhtmlElementID = this.id;
+															ns1blankspace.financial.bankAccount.import.items.remove(oParam);
+														})
+														.css('width', '15px')
+														.css('height', '17px');
 													}
 												},
 
@@ -1330,8 +1343,8 @@ ns1blankspace.financial.bankAccount =
 																aHTML.push('<br /><span class="ns1blankspaceSub">' + ns1blankspace.option.taxVATCaption + ' is</span>' +
 																			'<br />' + (oRow.category==1?oRow.taxtyperevenuetext:oRow.taxtypeexpensetext));
 															}
-														}	
-
+														}
+														
 														aHTML.push('</td>');
 
 														aHTML.push('<td class="ns1blankspaceRow" id="ns1blankspaceFinancialImportItem_options_edit_container-' + oRow.id + '">');
@@ -1348,6 +1361,10 @@ ns1blankspace.financial.bankAccount =
 																		' data-date="' + oRow.posteddate + '"' +
 																		' data-status="' + oRow.status + '"' +
 																		'></span>');
+														}
+														else if (oRow.status == 1)
+														{
+															aHTML.push('<span id="nns1blankspaceFinancialImportItem_options_remove-' + oRow.id + '" class="ns1blankspaceRemove"></span>');
 														}
 
 														aHTML.push('</td></tr>');
@@ -1726,9 +1743,9 @@ ns1blankspace.financial.bankAccount =
 														url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
 														data: 'remove=1&id=' + sID,
 														dataType: 'json',
-														success: function(data)
+														success: function(oResponse)
 														{
-															if (data.status == 'OK')
+															if (oResponse.status == 'OK')
 															{
 																$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 															}
