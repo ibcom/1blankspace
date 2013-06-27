@@ -299,7 +299,7 @@ ns1blankspace.messaging.conversation =
 					}
 					else
 					{
-						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl">' +
 										'Summary</td></tr>');
 
 						if (ns1blankspace.messaging.conversation.isConversationOwner)
@@ -315,7 +315,7 @@ ns1blankspace.messaging.conversation =
 						
 						aHTML.push('<table class="ns1blankspaceControl">');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlPosts" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlPosts" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Posts</td></tr>');
 
 						//aHTML.push('<tr><td id="ns1blankspaceControlComments" class="ns1blankspaceControl">' +
@@ -422,7 +422,7 @@ ns1blankspace.messaging.conversation =
 							move: false
 							});
 						
-						ns1blankspace.history.control({functionDefault: 'ns1blankspace.messaging.conversation.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.messaging.conversation.posts.show()'});
 					}	
 				},	
 		
