@@ -162,7 +162,7 @@ ns1blankspace.messaging.imap =
 								{	
 									$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
 									{
-										label: 'Refresh (' + ns1blankspace.messaging.emailNewCount + ')',
+										label: 'Show New Emails (' + ns1blankspace.messaging.emailNewCount + ')',
 										disabled: false
 									});
 								
@@ -172,6 +172,7 @@ ns1blankspace.messaging.imap =
 								{
 									$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
 									{
+										label: 'No New Emails',
 										disabled: true
 									});
 								}
@@ -399,7 +400,7 @@ ns1blankspace.messaging.imap =
 										oParam = ns1blankspace.util.setParam(oParam, 'refresh', false);
 										$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
 										{
-											label: 'Refresh',
+											label: 'No New Emails',
 											disabled: true
 										});
 
@@ -439,7 +440,7 @@ ns1blankspace.messaging.imap =
 									}
 									else
 									{
-										ns1blankspace.status.message('Refreshed @ ' + Date.now().toString("h:mm tt"));
+										//ns1blankspace.status.message('Refreshed @ ' + Date.now().toString("h:mm tt"));
 
 										ns1blankspace.messaging.emailCount = oResponse.summary.cachecount;
 											
@@ -469,7 +470,7 @@ ns1blankspace.messaging.imap =
 
 											$('#ns1blankspaceMessagingIMAPInboxRefresh').button(
 											{
-													label: 'Refresh',
+													label: 'No New Emails',
 													disabled: true
 											})
 											.click(function(event)

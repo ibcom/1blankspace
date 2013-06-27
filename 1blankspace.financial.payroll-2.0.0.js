@@ -4117,7 +4117,7 @@ ns1blankspace.financial.payroll.pays.totals =
 														{
 															sHTML = ns1blankspace.format.render(
 															{
-																object: 37,
+																object: 371,
 																objectContext: -1,
 																xhtmlTemplate: ns1blankspace.xhtml.templates['payslip'],
 																objectData: oSlip,
@@ -4179,7 +4179,7 @@ ns1blankspace.financial.payroll.pays.totals =
 																{
 																	oSlip.xhtml = ns1blankspace.format.render(
 																	{
-																		object: 37,
+																		object: 371,
 																		objectContext: -1,
 																		xhtmlTemplate: ns1blankspace.xhtml.templates['payslip'],
 																		objectData: oSlip,
