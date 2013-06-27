@@ -2073,10 +2073,12 @@ ns1blankspace.setup.website =
 									data: 'id=' + ns1blankspace.objectContext,
 									dataType: 'json',
 									success: function(oResponse)
-												{
-													$('#ns1blankspaceScripts').attr('data-loading', '1');
-													ns1blankspace.objectContextData.headerscript = (oResponse.data.rows[0]).headerscript;
-												}
+									{
+										$('#ns1blankspaceMainScripts').attr('data-loading', '1');
+										ns1blankspace.objectContextData.headerscript = (oResponse.data.rows[0]).headerscript;
+										$('#ns1blankspaceMainLayout').attr('data-loading', '1');
+										ns1blankspace.objectContextData.layout = 3;
+									}
 								});
 								
 							}
