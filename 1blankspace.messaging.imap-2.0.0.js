@@ -149,7 +149,8 @@ ns1blankspace.messaging.imap =
 					{
 						if (oResponse.status == 'OK')
 						{	
-							ns1blankspace.status.clear();
+							ns1blankspace.status.clear({duration: 2000});
+
 							if (ns1blankspace.messaging.emailNewCount == undefined) {ns1blankspace.messaging.emailNewCount = 0}
 
 							if (oResponse.fullrefresh != 'Y') {ns1blankspace.messaging.emailNewCount += oResponse.newrows};
@@ -234,7 +235,8 @@ ns1blankspace.messaging.imap =
 							aHTML.push('</table>');		
 							
 							ns1blankspace.messaging.imap.emailAccounts.length = 0;
-							
+							ns1blankspace.messaging.imap.account = ns1blankspace.messaging.imap.data.defaultAccount;
+
 							if (oResponse.data.rows.length != 0)
 							{
 								aHTML.push('<table style="padding-top:0px; padding-bottom:5px;" id="ns1blankspaceMessagingIMAPAccounts" class="ns1blankspaceControl">');
@@ -257,7 +259,7 @@ ns1blankspace.messaging.imap =
 										}
 										else
 										{
-											ns1blankspace.messaging.imap.account = undefined;
+											//ns1blankspace.messaging.imap.account = undefined;
 										}
 										
 										var sDescription = this.email;

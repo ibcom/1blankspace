@@ -2459,9 +2459,18 @@ ns1blankspace.help =
 
 ns1blankspace.status =
 {
-	clear: 		function ()
+	clear: 		function (oParam)
 				{	
-					$('#ns1blankspaceViewControlActionStatus').html('&nbsp;');
+					var iDuration = ns1blankspace.util.getParam(oParam, 'duration').value;
+
+					if (iDuration === undefined)
+					{	
+						$('#ns1blankspaceViewControlActionStatus').html('&nbsp;');
+					}
+					else
+					{
+						window.setTimeout('$("#ns1blankspaceViewControlActionStatusMessage").fadeOut(3000)', iDuration);
+					}	
 				},
 
 	message: 	function (sStatus, oParam)
