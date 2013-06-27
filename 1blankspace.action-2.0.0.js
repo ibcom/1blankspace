@@ -376,9 +376,10 @@ ns1blankspace.action =
 						if (iMessageActionID != undefined)
 						{
 							ns1blankspace.messaging.imap.nit({autoShow: false});
-							ns1blankspace.messaging.imap.search.send({
+							ns1blankspace.messaging.imap.search.send(
+							{
 								xhtmlElementID: '-' + iMessageActionID
-								})	
+							});	
 						}
 						else
 						{
@@ -386,10 +387,12 @@ ns1blankspace.action =
 							$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 								
 							var oDate = Date.parse(ns1blankspace.objectContextData.duedatetime);
+								
+							var sHTML = '';
 														
 							if (oDate.getHours() != 0 && oDate.getMinutes() != 0)
 							{
-								var sHTML = '<br /><span id="ns1blankspaceControlContext_time" class="ns1blankspaceSub">' + 
+								sHTML = '<br /><span id="ns1blankspaceControlContext_time" class="ns1blankspaceSub">' + 
 											oDate.toString("h:mm tt")  + '</span>';
 							}		
 								
@@ -962,9 +965,9 @@ ns1blankspace.action =
 												aHTML.push('<td class="ns1blankspaceHeaderCaption">Time</td>');
 												aHTML.push('<td class="ns1blankspaceHeaderCaption">Subject</td>');
 												aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
-
 										}
-										aHTML[++h] = '</tr>';
+
+										aHTML.push('</tr>');
 
 										$.each(oResponse.data.rows, function()
 										{

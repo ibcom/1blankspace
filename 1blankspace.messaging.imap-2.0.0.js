@@ -307,7 +307,7 @@ ns1blankspace.messaging.imap =
 						
 							$('td.ns1blankspaceControl').click(function(event)
 							{
-								var sID = event.target.id
+								var sID = this.id
 								var aID = sID.split('-');
 
 								if (aID[1] == 'Sent')

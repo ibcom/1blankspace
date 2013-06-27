@@ -4692,7 +4692,7 @@ ns1blankspace.render.page =
 						
 								$(oRows).each(function() 
 								{
-									aHTML.push(fFunctionShowRow(this));
+									aHTML.push(fFunctionShowRow(this, oParam));
 								});
 								
 								aHTML.push('</table>');
@@ -4779,7 +4779,7 @@ ns1blankspace.actions =
 {
 	show: 		function (oParam)
 				{
-					var sXHTMLElementID = 'ns1blankspaceMainActions';
+					var sXHTMLElementContainerID = 'ns1blankspaceMainActions';
 					var iObject = ns1blankspace.object;
 					var iObjectContext = ns1blankspace.objectContext;
 					var bShowAdd = true;
@@ -4798,7 +4798,7 @@ ns1blankspace.actions =
 						if (oParam.showAdd != undefined) {bShowAdd = oParam.showAdd}
 						if (oParam.actionType != undefined ) {iType = oParam.actionType}
 						if (oParam.type != undefined ) {iType = oParam.type}
-						if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.xhtmlElementContainerID != undefined ) {sXHTMLElementContainerID = oParam.xhtmlElementContainerID}
 						if (oParam.actions != undefined) {oActions = oParam.actions}
 						if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
 						if (oParam.contactPerson != undefined) {iContactPerson = oParam.contactPerson}
@@ -4824,7 +4824,7 @@ ns1blankspace.actions =
 									'</td></tr>' +
 									'</table>');					
 							
-						$('#' + sXHTMLElementID).html(aHTML.join(''));
+						$('#' + sXHTMLElementContainerID).html(aHTML.join(''));
 						
 						var aHTML = [];
 						var h = -1;	
@@ -4843,7 +4843,8 @@ ns1blankspace.actions =
 						{
 							label: "Add"
 						})
-						.click(function() {
+						.click(function()
+						{
 							ns1blankspace.actions.edit(oParam);
 						});
 					}
@@ -4909,72 +4910,89 @@ ns1blankspace.actions =
 
 						$.each(oResponse.data.rows, function()
 						{	
-							aHTML.push('<tr>');
-
-							aHTML.push('<td id="ns1blankspaceAction_subject-' + this.id + '" class="ns1blankspaceRow">' +
-											this.subject + '</td>');
-
-							aHTML.push('<td id="ns1blankspaceAction_date-' + this.id + '" class="ns1blankspaceRow">' +
-											this.duedate + '</td>');
-
-							aHTML.push('<td id="ns1blankspaceAction_type-' + this.id + '" class="ns1blankspaceRow">' +
-											this.actiontypetext + '</td>');
-							
-							if (bShowDescription)
-							{
-								aHTML.push('<td id="ns1blankspaceAction_description-' + this.id + '" class="ns1blankspaceRow">' +
-												this.description + '</td>');
-							}					
-							
-							aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' + 			
-											'<span id="ns1blankspaceAction_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
-											'<span id="ns1blankspaceAction_options_select-' + this.id + '" class="ns1blankspaceRowSelect"></span>' +	
-											'</td>');
-
-							aHTML.push('</tr>');
+							aHTML.push(ns1blankspace.actions.row(this, oParam));
 						});
 				    	
 						aHTML.push('</table>');
 						
 						ns1blankspace.render.page.show(
-						   {
+						{
 							xhtmlElementID: sXHTMLElementID,
 							xhtmlContext: 'Action',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows === 'true'),
-							columns: 'subject-actiondate',
 							more: oResponse.moreid,
 							rows: ns1blankspace.option.defaultRows,
-							functionSearch: ns1blankspace.action.search.send,
-							functionOpen: "ns1blankspace.action.init({showHome: false});ns1blankspace.action.search.show(this.id)"
-						   }); 
-						
-						$('#ns1blankspaceActions .ns1blankspaceRowRemove').button({
-							text: false,
-							icons:
-							{
-								primary: "ui-icon-close"
-							}
-						})
-						.click(function() {
-							ns1blankspace.actions.remove({xhtmlElementID: this.id});
-						})
-						.css('width', '15px')
-						.css('height', '17px');
-						
-						$('#ns1blankspaceActions span.ns1blankspaceRowSelect').button({
-							text: false,
-							icons:
-							{
-								primary: "ui-icon-play"
-							}
-						})
-						.click(function() {
-							ns1blankspace.action.init({id: (this.id).split('-')[1]})
-						})
-						.css('width', '15px')
-						.css('height', '17px');
+							functionShowRow: ns1blankspace.actions.row,
+							functionOnNewPage: ns1blankspace.actions.bind,
+						}); 
 					}
+				},
+
+	bind: 		function (oParam)
+				{
+					var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {default: 'ns1blankspaceRenderPage_Action-0'}).value;
+
+					$('#' + sXHTMLContainerID + ' .ns1blankspaceRowRemove').button({
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-close"
+						}
+					})
+					.click(function()
+					{
+						ns1blankspace.actions.remove({xhtmlElementID: this.id});
+					})
+					.css('width', '15px')
+					.css('height', '17px');
+					
+					$('#' + sXHTMLContainerID + ' span.ns1blankspaceRowSelect').button({
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-play"
+						}
+					})
+					.click(function()
+					{
+						ns1blankspace.action.init({id: (this.id).split('-')[1]})
+					})
+					.css('width', '15px')
+					.css('height', '17px');
+				},	
+
+	row: 		function (oRow, oParam)
+				{
+					var bShowDescription = ns1blankspace.util.getParam(oParam, 'showDescription', {default: false}).value;
+
+					var aHTML = [];
+
+					aHTML.push('<tr>');
+
+					aHTML.push('<td id="ns1blankspaceAction_subject-' + oRow.id + '" class="ns1blankspaceRow">' +
+									oRow.subject + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAction_date-' + oRow.id + '" class="ns1blankspaceRow">' +
+									oRow.duedate + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAction_type-' + oRow.id + '" class="ns1blankspaceRow">' +
+									oRow.actiontypetext + '</td>');
+					
+					if (bShowDescription)
+					{
+						aHTML.push('<td id="ns1blankspaceAction_description-' + oRow.id + '" class="ns1blankspaceRow">' +
+										oRow.description + '</td>');
+					}					
+					
+					aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' + 			
+									'<span id="ns1blankspaceAction_options_remove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>' +
+									'<span id="ns1blankspaceAction_options_select-' + oRow.id + '" class="ns1blankspaceRowSelect"></span>' +	
+									'</td>');
+
+					aHTML.push('</tr>');
+
+					return aHTML.join('');
 				},
 
 	remove:		function (oParam, oResponse)
@@ -5073,8 +5091,9 @@ ns1blankspace.actions =
 						{
 							label: 'Cancel',
 						})
-						.click(function() {
-							ns1blankspace.actions.show();
+						.click(function()
+						{
+							ns1blankspace.actions.show(oParam);
 						})
 						.css('width', '75px');
 
@@ -5250,7 +5269,7 @@ ns1blankspace.actions =
 						if (oResponse.status === 'OK')
 						{
 							ns1blankspace.status.message('Action saved');
-							fPostSave();
+							fPostSave(oParam);
 						}
 						else
 						{
