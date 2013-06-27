@@ -2196,6 +2196,7 @@ ns1blankspace.messaging.imap =
 									//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
 
 									ns1blankspace.messaging.imap.data.lastEmail = oData;
+									$('#ns1blankspaceViewControlAction').button({disabled: true});
 									ns1blankspace.status.working('Sending...');
 									ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
 
@@ -2210,6 +2211,7 @@ ns1blankspace.messaging.imap =
 											ns1blankspace.status.message('Email has been sent');
 											$('#ns1blankspaceMessagingMessageControlContainer').html('');
 											ns1blankspace.messaging.imap.data.lastEmail = undefined;
+											$('#ns1blankspaceMainEdit').html('');
 											
 											if (fFunctionPostSend != undefined)
 											{
