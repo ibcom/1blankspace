@@ -21,7 +21,12 @@ Number.prototype.formatMoney = function(c, d, t)
 	var n = this, c = isNaN(c = Math.abs(c)) ? 2 : c, d = d === undefined ? "." : d, t = t === undefined ? "," : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
    	return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
- 
+
+String.prototype.repeat = function(num)
+{
+    return new Array(num + 1).join(this);
+}
+
 String.prototype.formatXHTML = function(bDirection)
 {
 	var sValue = this;
@@ -3578,6 +3583,12 @@ ns1blankspace.util =
 			   		return true;
 				},
 
+	isDate: 	function(sValue)
+				{
+					var toClass = {}.toString;
+					return (toClass.call(sValue) == '[object Date]')
+				},		
+
 	sortBy: 	function (prop)
 				{
 					//yourArray.sort(ns1blankspace.util.sortBy('firstname'))
@@ -3695,7 +3706,58 @@ ns1blankspace.util =
 					}
 					
 					return parseFloat(sValue).toFixed(2);	
-				},			
+				},
+
+	format: 	function(oParam)
+				{
+					var sValue = ns1blankspace.util.getParam(oParam, 'value').value;
+					var iLength = ns1blankspace.util.getParam(oParam, 'length').value;
+					var sFill = ns1blankspace.util.getParam(oParam, 'fill').value;
+					var sFillLeft = ns1blankspace.util.getParam(oParam, 'fillLeft').value;
+					var sDefault = ns1blankspace.util.getParam(oParam, 'default').value;
+					var sDateFormat = ns1blankspace.util.getParam(oParam, 'dateFormat').value;
+
+					if (sValue === undefined) {sValue = sDefault}
+
+					if (sValue !== undefined)
+					{
+						if (sDateFormat !== undefined)
+						{
+							if (!ns1blankspace.util.isDate(sValue)) {sValue = Date.parse(sValue)}
+
+							if (sValue !== null)
+							{	
+								sValue = sValue.toString(sDateFormat);
+							}	
+						}	
+
+						if (iLength !== undefined)
+						{	
+							if (sValue.length > iLength)
+							{
+								sValue = sValue.substr(0, iLength);
+							}
+							else if (sValue.length < iLength)
+							{
+								if (sFill !== undefined)
+								{	
+									sValue += sFill.repeat(iLength - sValue.length)
+								}	
+
+								if (sFillLeft !== undefined)
+								{	
+									sValue = sFillLeft.repeat(iLength - sValue.length) + sValue
+								}
+							}	
+						}
+					}
+					else if (sFill !== undefined && iLength !== undefined)
+					{
+						sValue = sFill.repeat(iLength)
+					}
+
+					return sValue;
+				},								
 
   	getMethod: 
   				function getM ()

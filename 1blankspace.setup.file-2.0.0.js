@@ -1213,9 +1213,124 @@ ns1blankspace.setup.file =
 									//holding method
 								},
 
-					process: 	function ()
+					process: 	function (oParam)
 								{
-									//Similar logic to report namespace
+									var sFormatName = ns1blankspace.util.getParam(oParam, 'name').value;
+									var oSummary = ns1blankspace.util.getParam(oParam, 'summary', {default: {}}).value;
+									var oItems = ns1blankspace.util.getParam(oParam, 'items', {default: {}}).value;
+
+									if (sFormatName !== undefined)
+									{
+										var oFormat = $.grep(ns1blankspace.setup.file.export.formats, function (a) {return a.name == sFormatName});
+									}
+
+									var aFile = [];
+
+									if (oFormat.length > 0)
+									{
+										oFormat = oFormat[0];
+
+										$.each(oFormat.header, function(i, k)
+										{
+											$.each(k.fields, function (j, v)
+											{
+												if (v.value !== undefined)
+												{
+													aFile.push(v.value);
+												}	
+												else if (v.field !== undefined)
+												{
+													if (oSummary[v.field] !== undefined)
+													{
+														v.value = oSummary[v.field];
+														aFile.push(ns1blankspace.util.format(v));
+													}	
+												}
+												else if (v.param !== undefined)
+												{
+													v.value = ns1blankspace.util.getParam(oParam, v.param).value;
+													aFile.push(ns1blankspace.util.format(v));
+												}
+												else
+												{
+													aFile.push(ns1blankspace.util.format(v));
+												}	
+
+											});
+
+											aFile.push('\r\n');
+										});
+
+										if (oFormat.item !== undefined)
+										{
+											$.each(oItems, function (i, oItem)
+											{
+												$.each(oFormat.item.fields, function (j, v)
+												{
+													if (v.value !== undefined)
+													{
+														aFile.push(v.value);
+													}	
+													else if (v.field !== undefined)
+													{
+														if (oItem[v.field] !== undefined)
+														{
+															v.value = oSummary[v.field];
+															aFile.push(ns1blankspace.util.format(v));
+														}	
+													}
+													else if (v.param !== undefined)
+													{
+														v.value = ns1blankspace.util.getParam(oParam, v.param).value;
+														aFile.push(ns1blankspace.util.format(v));
+													}
+													else
+													{
+														aFile.push(ns1blankspace.util.format(v));
+													}	
+												});
+		
+												aFile.push('\r\n');
+											});		
+										}
+
+										$.each(oFormat.footer, function(i, k)
+										{
+											$.each(k.fields, function (j, v)
+											{
+												if (v.value !== undefined)
+												{
+													aFile.push(v.value);
+												}	
+												else if (v.field !== undefined)
+												{
+													if (oSummary[v.field] !== undefined)
+													{
+														v.value = oSummary[v.field];
+														aFile.push(ns1blankspace.util.format(v));
+													}	
+												}
+												else if (v.param !== undefined)
+												{
+													v.value = ns1blankspace.util.getParam(oParam, v.param).value;
+													aFile.push(ns1blankspace.util.format(v));
+												}
+												else
+												{
+													aFile.push(ns1blankspace.util.format(v));
+												}	
+
+											});
+
+											if (i != oFormat.footer.length - 1)
+											{	
+												aFile.push('\r\n');
+											}	
+										});
+
+									}
+
+									return aFile.join('');
 								}
 				},
 
@@ -1423,7 +1538,235 @@ ns1blankspace.setup.file =
 									{
 										ns1blankspace.util.onComplete(oParam);
 									}
-								}				
+								}
 				}
 
 }
+
+ns1blankspace.setup.file.export.formats =
+[
+	{
+		name: 'ABA File',
+		header:
+		[
+			{
+				line: 1,
+				fields:
+				[
+					{
+						value: '628',
+					},
+					{
+						value: 'IDENTREGISTER1',
+					},
+					{
+						param: 'abn',
+						length: 11,
+						fill: ' '
+					},
+					{
+						param: 'fileMode',
+						length: 1,
+						default: 'T'
+					},
+					{
+						param: 'endDate',
+						length: 8,
+						default: Date.today(),
+						dateFormat: 'ddMMyyyy'
+					},
+					{
+						value: 'EAPFEMPA008.0',
+					},
+					{
+						repeat: ' ',
+						length: (628 - 51 + 1)
+					}
+				]
+			},
+			{
+				line: 2,
+				fields:
+				[
+					{
+						value: '628',
+					},
+					{
+						value: 'IDENTREGISTER2',
+					},
+					{
+						param: 'contactBusinessText',
+						length: (217 - 18 + 1),
+						fill: ' '
+					},
+					{
+						param: 'contactPersonText',
+						length: (255 - 218 + 1),
+						fill: ' '
+					},
+					{
+						param: 'phone',
+						length: (270 - 256 + 1),
+						fill: ' '
+					},
+					{
+						param: 'fax',
+						length: (285 - 271 + 1),
+						fill: ' '
+					},
+					{
+						value: '1',
+						length: (301 - 286 + 1),
+						fill: '0'
+					},
+					{
+						length: (628 - 302 + 1),
+						fill: ' '
+					}
+				]	
+			},
+			{
+				line: 3,
+				fields:
+				[
+					{
+						value: '628',
+					},
+					{
+						value: 'IDENTREGISTER3',
+					},
+					{
+						param: 'streetAddress1',
+						length: (55 - 18 + 1),
+						fill: ' '
+					},
+					{
+						param: 'streetAddress2',
+						length: (93 - 56 + 1),
+						fill: ' '
+					},
+					{
+						param: 'streetSuburb',
+						length: (120 - 94 + 1),
+						fill: ' '
+					},
+					{
+						param: 'streetState',
+						length: (127 - 124 + 1),
+						fill: ' '
+					},
+					{
+						param: 'streetPostCode',
+						length: (55 - 18 + 1),
+						fill: ' '
+					},
+					{
+						length: (147 - 128 + 1),
+						fill: ' '
+					},
+					{
+						param: 'mailingAddress1',
+						length: (185 - 148 + 1),
+						fill: ' '
+					},
+					{
+						param: 'mailingAddress2',
+						length: (223 - 186 + 1),
+						fill: ' '
+					},
+					{
+						param: 'mailingSuburb',
+						length: (250 - 224 + 1),
+						fill: ' '
+					},
+					{
+						param: 'mailingState',
+						length: (253 - 251 + 1),
+						fill: ' '
+					},
+					{
+						param: 'mailingPostCode',
+						length: (257 - 254 + 1),
+						fill: ' '
+					},
+					{
+						length: (277 - 258 + 1),
+						fill: ' '
+					},
+					{
+						param: 'email',
+						length: (353 - 278 + 1),
+						fill: ' '
+					},
+					{
+						length: (628 - 354 + 1),
+						fill: ' '
+					}
+				]
+			}		
+		],
+		item:
+		[
+			{
+				fields:
+				[
+					{
+						value: '628',
+					},
+					{
+						value: 'DINB',
+					},
+					{
+						value: 'S',
+					},
+					{
+						field: 'tfn',
+						length: (17 - 9 + 1),
+						fill: ' '
+					},
+					{
+						param: 'dateofbirth',
+						length: 8,
+						dateFormat: 'ddMMyyyy'
+					},
+					{
+						field: 'surname',
+						length: (55 - 26 + 1),
+						fill: ' '
+					},
+					{
+						repeat: ' ',
+						length: (628 - 51 + 1)
+					}
+				]
+			}
+		],
+
+		footer:
+		[
+			{
+				line: 1,
+				fields:
+				[
+					{
+						value: '628',
+					},
+					{
+						value: 'FILE-TOTAL',
+					},
+					{
+						param: 'totalRows',
+						length: (21 - 14 + 1),
+						fillLeft: '0'
+					},
+					{
+						repeat: ' ',
+						length: (628 - 22 + 1)
+					}
+				]
+			}
+		]
+	}
+]
+
+
