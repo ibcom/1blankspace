@@ -3719,7 +3719,7 @@ ns1blankspace.util =
 
 					if (sValue === undefined) {sValue = sDefault}
 
-					if (sValue !== undefined)
+					if (sValue !== undefined && sValue !== null)
 					{
 						if (sDateFormat !== undefined)
 						{
@@ -3728,7 +3728,11 @@ ns1blankspace.util =
 							if (sValue !== null)
 							{	
 								sValue = sValue.toString(sDateFormat);
-							}	
+							}
+							else
+							{
+								sValue = '';
+							}
 						}	
 
 						if (iLength !== undefined)

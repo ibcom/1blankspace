@@ -1265,7 +1265,7 @@ ns1blankspace.setup.file =
 										{
 											$.each(oItems, function (i, oItem)
 											{
-												$.each(oFormat.item.fields, function (j, v)
+												$.each(oFormat.item[0].fields, function (j, v)
 												{
 													if (v.value !== undefined)
 													{

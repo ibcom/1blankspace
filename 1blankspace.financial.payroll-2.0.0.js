@@ -93,7 +93,7 @@ ns1blankspace.financial.payroll =
 						$('#ns1blankspaceControl-totals').click(function(event)
 						{
 							$('#ns1blankspaceViewControlNew').button({disabled: true});
-							ns1blankspace.show({selector: '#ns1blankspaceMainTotals', refresh: true});
+							ns1blankspace.show({selector: '#ns1blankspaceMainTotals'});
 							ns1blankspace.financial.payroll.totals.show();
 						});
 						
@@ -3378,16 +3378,21 @@ ns1blankspace.financial.payroll.totals =
 																	
 											aHTML.push('<table class="ns1blankspaceColumn2" style="margin-right:0px;">');
 													
-											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsPreview" class="ns1blankspaceAction">' +
+											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsPreview" class="ns1blankspaceAction" style="text-align:left;">' +
 															'Summary</span></td></tr>');
 
 											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsPreviewStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
 														'Create summaries for selected employees</td></tr>');
 
-											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsEmail" class="ns1blankspaceAction">' +
+											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsEmail" class="ns1blankspaceAction" style="text-align:left;">' +
 															'Email</span></td></tr>');
 
 											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsEmailStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
+
+											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsFile" class="ns1blankspaceAction" style="text-align:left;">' +
+															'File</span></td></tr>');
+
+											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsFileStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
 
 											aHTML.push('</table>');					
 											
@@ -3418,6 +3423,21 @@ ns1blankspace.financial.payroll.totals =
 											.click(function()
 											{	
 												oParam = {onCompleteWhenCan: ns1blankspace.financial.payroll.totals.employees.email.init};
+												ns1blankspace.financial.payroll.totals.employees.preview.init(oParam);
+											})
+											.css('width', '90px');
+
+											$('#ns1blankspacePayrollTotalsFile').button(
+											{
+												label: 'Create File',
+												icons:
+												{
+													primary: "ui-icon-disk"
+												}
+											})
+											.click(function()
+											{	
+												oParam = {onCompleteWhenCan: ns1blankspace.financial.payroll.totals.employees.file.create};
 												ns1blankspace.financial.payroll.totals.employees.preview.init(oParam);
 											})
 											.css('width', '90px');
@@ -3767,7 +3787,67 @@ ns1blankspace.financial.payroll.totals =
 														ns1blankspace.util.onComplete(oParam);
 													}	
 												}																	
-								}			
+								},
+
+					file: 		{
+									create: 	function (oParam, oResponse)
+												{
+													if (ns1blankspace.financial.payroll.data.summaries.length == 0)
+													{
+														ns1blankspace.status.error('No employees selected');
+													}	
+													else
+													{	
+														ns1blankspace.status.working('Creating file...');
+
+														var oItems = [];
+
+														$.each(ns1blankspace.financial.payroll.data.summaries, function()
+														{
+															var oItem = this;
+															delete oItem.pay;
+															oItems.push(oItem);
+														});
+
+														var oParam =
+														{
+															name: 'ABA File',
+															fileMode: 'T',
+															abn: '',
+															endDate: '',
+															contactBusinessText: '',
+															phone: '',
+															fax: '',
+															email: '',
+															streetAddress1: '',
+															streetAddress2: '',
+															streetSuburb: '',
+															streetState: '',
+															streetPostCode: '',
+															mailingAddress1: '',
+															mailingAddress2: '',
+															mailingSuburb: '',
+															mailingState: '',
+															mailingPostCode: '',
+															totalRows: oItems.length,
+															items: oItems
+														}
+
+														var sFile = ns1blankspace.setup.file.export.process(oParam);
+
+													
+														
+														$('#ns1blankspacePayrollTotalsColumn2').html('<table class="ns1blankspace">' +
+																		'<tr>' +
+																		'<td class="ns1blankspaceTextMulti">' +
+																		'<textarea id="ns1blankspaceFileContents" class="ns1blankspaceTextMulti" rows="10" cols="35" style="width:100%; height:350px; font-family:Courier New; font-size:0.865em;">' +
+																			sFile + '</textarea>' +
+																		'</td></tr></table>');					
+
+														ns1blankspace.status.message('File created.');
+													}	
+												},
+								}						
 				}
 }
 
