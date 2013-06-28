@@ -3809,6 +3809,16 @@ ns1blankspace.financial.payroll.totals =
 															oItems.push(oItem);
 														});
 
+														$('#ns1blankspacePayrollTotalsColumn2').html('<table class="ns1blankspace">' +
+															'<tr>' +
+															'<td class="ns1blankspaceTextMulti">' +
+															'<textarea id="ns1blankspaceFileContents" class="ns1blankspaceTextMulti" rows="10" cols="35" style="width:100%; height:250px; font-family:Courier New; font-size:0.865em;">' +
+																'</textarea>' +
+															'</td></tr>' +
+															'<tr>' +
+															'<td class="ns1blankspaceTextMulti" id="ns1blankspaceFileDownload">' +
+															'</td></tr></table>');		
+
 														var oParam =
 														{
 															name: 'ABA File',
@@ -3830,21 +3840,14 @@ ns1blankspace.financial.payroll.totals =
 															mailingState: '',
 															mailingPostCode: '',
 															totalRows: oItems.length,
-															items: oItems
+															items: oItems,
+															saveToFile: true,
+															xhtmlElementID: 'ns1blankspaceFileDownload'
 														}
 
 														var sFile = ns1blankspace.setup.file.export.process(oParam);
 
-													
-														
-														$('#ns1blankspacePayrollTotalsColumn2').html('<table class="ns1blankspace">' +
-																		'<tr>' +
-																		'<td class="ns1blankspaceTextMulti">' +
-																		'<textarea id="ns1blankspaceFileContents" class="ns1blankspaceTextMulti" rows="10" cols="35" style="width:100%; height:350px; font-family:Courier New; font-size:0.865em;">' +
-																			sFile + '</textarea>' +
-																		'</td></tr></table>');					
-
-														ns1blankspace.status.message('File created.');
+														$('#ns1blankspaceFileContents').val(sFile);
 													}	
 												},
 								}						

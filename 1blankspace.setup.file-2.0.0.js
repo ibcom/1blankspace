@@ -1218,6 +1218,7 @@ ns1blankspace.setup.file =
 									var sFormatName = ns1blankspace.util.getParam(oParam, 'name').value;
 									var oSummary = ns1blankspace.util.getParam(oParam, 'summary', {default: {}}).value;
 									var oItems = ns1blankspace.util.getParam(oParam, 'items', {default: {}}).value;
+									var bSaveToFile = ns1blankspace.util.getParam(oParam, 'saveToFile', {default: false}).value;
 
 									if (sFormatName !== undefined)
 									{
@@ -1330,8 +1331,50 @@ ns1blankspace.setup.file =
 
 									}
 
+									if (bSaveToFile)
+									{
+										oParam.data = aFile.join('');
+										ns1blankspace.setup.file.export.saveToFile(oParam);
+									}
+
 									return aFile.join('');
-								}
+								},
+
+					saveToFile: function(oParam)
+								{
+									var sData = ns1blankspace.util.getParam(oParam, 'data').value;
+									var sFileName = ns1blankspace.util.getParam(oParam, 'data', {default: 'export.csv'}).value;
+									var bOpen = ns1blankspace.util.getParam(oParam, 'open', {default: false}).value;
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+									var oData =
+									{
+										filedata: sData,
+										filename: sFileName
+									}
+
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('CORE_FILE_MANAGE'),
+										data: sData,
+										dataType: 'json',
+										success: function(data)
+										{
+											ns1blankspace.status.message('File created');
+											
+											if (bOpen)
+											{
+												window.open(data.link);
+											}
+
+											if (sXHTMLElementID !== undefined)
+											{
+												$('#' + sXHTMLElementID).html('<a target="_blank" href="' + data.link + '"">Download the file</a>')
+											}	
+										}
+									});	
+								} 			
 				},
 
 	util: 		{
