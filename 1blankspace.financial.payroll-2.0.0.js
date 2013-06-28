@@ -954,7 +954,20 @@ ns1blankspace.financial.payroll =
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
-											oSearch.addField('*');
+											oSearch.addField('area,areatext,contactbusiness,contactbusinesstext,contactperson,contactpersontext,employeenumber,employmentenddate,employmentstartdate,' +
+																'notes,project,projecttext,status,statustext,allowance,allowancedescription,allowanceincludeinsuper,' +
+																'allowancetaxable,deducthelp,deduction,deductiondescription,endtime,financialsupplementdebt,' +
+																'foreignresident,highestlevel,highestleveltext,leaveloadingrate,medicare,medicaretext,' +
+																'payfrequency,payfrequencytext,rebates,specialtaxrate,standardhours,starttime,' +
+																'taxadjustment,taxadjustmentdescription,taxfilenumber,taxfilenumberdeclaration,' +
+																'taxfreethreshold,contact1,contact1phone,contact2,contact2phone,emergencynotes,posttaxsuperamount,' +
+																'posttaxsupercontactbusiness,posttaxsupercontactbusinesstext,posttaxsuperfundname,posttaxsupermembernumber,' +
+																'posttaxsupertype,posttaxsupertypetext,pretaxsuperamount,pretaxsupercontactbusiness,pretaxsupercontactbusinesstext,' +
+																'pretaxsuperfundname,pretaxsupermembernumber,pretaxsupertype,pretaxsupertypetext,' +
+																'supercontactbusiness,supercontactbusinesstext,superannuationrate,superfundname,supermembernumber,' +
+																'annualleaveentitlement,longserviceentitlement,sickleaveentitlement,' +
+																'internalrelationships,jobdetails,kpi,responsibilities,tasks,copyreceived,expirydate,' +
+																'inductionprogram,medicalreport,medicalreportdate,programdate,registrationnumber,workerscompform,workhoursform');
 											oSearch.addFilter('id', 'EQUAL_TO', iEmployee);
 											oSearch.getResults(function(data) {ns1blankspace.financial.payroll.employees.show(oParam, data)});
 										}
@@ -1063,8 +1076,8 @@ ns1blankspace.financial.payroll =
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
-											$('[name="radioStatus"][value="' + ns1blankspace.financial.employee["employee.status"] + '"]').attr('checked', true);
-											$('#ns1blankspaceDetailsNotes').val(ns1blankspace.financial.employee["employee.notes"]);
+											$('[name="radioStatus"][value="' + ns1blankspace.financial.employee["status"] + '"]').attr('checked', true);
+											$('#ns1blankspaceDetailsNotes').val(ns1blankspace.financial.employee["notes"]);
 										}
 										else
 										{
@@ -1200,24 +1213,35 @@ ns1blankspace.financial.payroll =
 														'<input id="ns1blankspaceDetailsTaxNumber" class="ns1blankspaceText">' +
 														'</td></tr>');	
 
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Tax Threshold' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceRadio">' +
+														'<input type="radio" id="radioTaxFreeThresholdY" name="radioTaxFreeThreshold" value="Y"/>Yes' +
+														'<br /><input type="radio" id="radioTaxFreeThresholdN" name="radioTaxFreeThreshold" value="N"/>No' +
+														'</td></tr>');
+
 										aHTML.push('</table>');					
 											
 										$('#ns1blankspacePayrollEmployeeDetails12Column1').html(aHTML.join(''));
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
-											$('[name="radioMedicare"][value="' + ns1blankspace.financial.employee["employee.medicare"] + '"]').attr('checked', true);
-											$('[name="radioFrequency"][value="' + ns1blankspace.financial.employee["employee.payfrequency"] + '"]').attr('checked', true);
-											$('#ns1blankspaceDetailsAllowance').val(ns1blankspace.financial.employee["employee.allowance"]);
-											$('#ns1blankspaceDetailsAllowanceDescription').val(ns1blankspace.financial.employee["employee.allowancedescription"]);
-											$('#ns1blankspaceDetailsDeduction').val(ns1blankspace.financial.employee["employee.deduction"]);
-											$('#ns1blankspaceDetailsDeductionDescription').val(ns1blankspace.financial.employee["employee.deductiondescription"]);
-											$('#ns1blankspaceDetailsTaxNumber').val(ns1blankspace.financial.employee["employee.taxfilenumber"]);
+											$('[name="radioMedicare"][value="' + ns1blankspace.financial.employee["medicare"] + '"]').attr('checked', true);
+											$('[name="radioFrequency"][value="' + ns1blankspace.financial.employee["payfrequency"] + '"]').attr('checked', true);
+											$('#ns1blankspaceDetailsAllowance').val(ns1blankspace.financial.employee["allowance"]);
+											$('#ns1blankspaceDetailsAllowanceDescription').val(ns1blankspace.financial.employee["allowancedescription"]);
+											$('#ns1blankspaceDetailsDeduction').val(ns1blankspace.financial.employee["deduction"]);
+											$('#ns1blankspaceDetailsDeductionDescription').val(ns1blankspace.financial.employee["deductiondescription"]);
+											$('#ns1blankspaceDetailsTaxNumber').val(ns1blankspace.financial.employee["taxfilenumber"]);
+											$('[name="radioTaxFreeThreshold"][value="' + ns1blankspace.financial.employee["taxfreethreshold"] + '"]').attr('checked', true);
 										}
 										else
 										{
 											$('[name="radioFrequency"][value="1"]').attr('checked', true);
 											$('[name="radioMedicare"][value="1"]').attr('checked', true);
+											$('[name="radioTaxFreeThreshold"][value="N"]').attr('checked', true);
 										}
 
 										var aHTML = [];
@@ -1244,6 +1268,7 @@ ns1blankspace.financial.payroll =
 											sData += '&deduction=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDeduction').val());
 											sData += '&deductiondescription=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDeductionDescription').val());
 											sData += '&taxfilenumber=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTaxNumber').val());
+											sData += '&taxfreethreshold=' + ns1blankspace.util.fs($('input[name="radioTaxFreeThreshold"]:checked').val());
 
 											$.ajax(
 											{
@@ -1331,10 +1356,10 @@ ns1blankspace.financial.payroll =
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
-											$('[name="radioSuperContributionType"][value="' + ns1blankspace.financial.employee["employee.pretaxsupertype"] + '"]').attr('checked', true);
-											$('#ns1blankspaceDetailsFundName').val(ns1blankspace.financial.employee["employee.superfundname"]);
-											$('#ns1blankspaceDetailsFundMemberNumber').val(ns1blankspace.financial.employee["employee.supermembernumber"]);
-											$('#ns1blankspaceDetailsEmployerSuperannuationRate').val(ns1blankspace.financial.employee["employee.superannuationrate"]);
+											$('[name="radioSuperContributionType"][value="' + ns1blankspace.financial.employee["pretaxsupertype"] + '"]').attr('checked', true);
+											$('#ns1blankspaceDetailsFundName').val(ns1blankspace.financial.employee["superfundname"]);
+											$('#ns1blankspaceDetailsFundMemberNumber').val(ns1blankspace.financial.employee["supermembernumber"]);
+											$('#ns1blankspaceDetailsEmployerSuperannuationRate').val(ns1blankspace.financial.employee["superannuationrate"]);
 										}
 										else
 										{
@@ -1459,11 +1484,11 @@ ns1blankspace.financial.payroll =
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
-											$('#ns1blankspaceDetailsJobDescription').val(ns1blankspace.financial.employee["employee.jobdetails"]);
-											$('#ns1blankspaceDetailsInternalRelationships').val(ns1blankspace.financial.employee["employee.internalrelationships"]);
-											$('#ns1blankspaceDetailsKPI').val(ns1blankspace.financial.employee["employee.kpi"]);
-											$('#ns1blankspaceDetailsResponsibilities').val(ns1blankspace.financial.employee["employee.responsibilities"]);
-											$('#ns1blankspaceDetailsTasks').val(ns1blankspace.financial.employee["employee.tasks"]);
+											$('#ns1blankspaceDetailsJobDescription').val(ns1blankspace.financial.employee["jobdetails"]);
+											$('#ns1blankspaceDetailsInternalRelationships').val(ns1blankspace.financial.employee["internalrelationships"]);
+											$('#ns1blankspaceDetailsKPI').val(ns1blankspace.financial.employee["kpi"]);
+											$('#ns1blankspaceDetailsResponsibilities').val(ns1blankspace.financial.employee["responsibilities"]);
+											$('#ns1blankspaceDetailsTasks').val(ns1blankspace.financial.employee["tasks"]);
 										}
 
 										var aHTML = [];
@@ -1560,8 +1585,8 @@ ns1blankspace.financial.payroll =
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
-											$('#ns1blankspaceDetailsInductionDate').val(ns1blankspace.financial.employee["employee.programdate"]);
-											$('[name="radioWorkersCompensation"][value="' + ns1blankspace.financial.employee["employee.workerscompform"] + '"]').attr('checked', true);
+											$('#ns1blankspaceDetailsInductionDate').val(ns1blankspace.financial.employee["programdate"]);
+											$('[name="radioWorkersCompensation"][value="' + ns1blankspace.financial.employee["workerscompform"] + '"]').attr('checked', true);
 										}
 										else
 										{

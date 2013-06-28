@@ -121,7 +121,6 @@ ns1blankspace.financial.invoice =
 
 						$('#ns1blankspaceControlInvoicing').click(function(event)
 						{
-							//ns1blankspace.show({selector: '#ns1blankspaceMainInvoicing'});
 							ns1blankspace.financial.invoicing.show();
 						});	
 													
