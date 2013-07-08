@@ -72,6 +72,9 @@ ns1blankspace.setup.financial =
 					aHTML.push('<tr><td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">' +
 									'Bank Accounts</td></tr>');	
 
+					aHTML.push('<tr><td id="ns1blankspaceControlPaymentAccount" class="ns1blankspaceControl">' +
+									'Payments</td></tr>');	
+
 					aHTML.push('</table>');		
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
@@ -86,17 +89,20 @@ ns1blankspace.setup.financial =
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
 					
+					aHTML.push('<tr><td class="ns1blankspaceSub">' +
+									'Templates</span></td></tr>');
+
 					aHTML.push('<tr><td id="ns1blankspaceControlInvoiceTemplate" class="ns1blankspaceControl">' +
-									'Invoice<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">template</span></td></tr>');
+									'Invoice</td></tr>');
 
-					aHTML.push('<tr><td id="ns1blankspaceControlStatementTemplate" class="ns1blankspaceControl" style="padding-top:7px;">' +
-									'Statement<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">template</span></td></tr>');
+					aHTML.push('<tr><td id="ns1blankspaceControlStatementTemplate" class="ns1blankspaceControl">' +
+									'Statement</td></tr>');
 
-					aHTML.push('<tr><td id="ns1blankspaceControlPaySlipTemplate" class="ns1blankspaceControl" style="padding-top:7px;">' +
-									'Pay Slip<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">template</span></td></tr>');
+					aHTML.push('<tr><td id="ns1blankspaceControlPaySlipTemplate" class="ns1blankspaceControl">' +
+									'Pay Slip</td></tr>');
 
-					aHTML.push('<tr><td id="ns1blankspaceControlPaySummaryTemplate" class="ns1blankspaceControl" style="padding-top:7px;">' +
-									'Pay Summary<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">template</span></td></tr>');
+					aHTML.push('<tr><td id="ns1blankspaceControlPaySummaryTemplate" class="ns1blankspaceControl">' +
+									'Pay Summary</td></tr>');
 					
 					aHTML.push('</table>');
 
@@ -107,6 +113,7 @@ ns1blankspace.setup.financial =
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainGeneral" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainBankAccount" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainPaymentAccount" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainFinancialAccount" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainFinancialAccountDefault" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainInvoicing" class="ns1blankspaceControlMain"></div>');
@@ -135,6 +142,12 @@ ns1blankspace.setup.financial =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainBankAccount'});
 						ns1blankspace.setup.financial.bankAccounts();
+					});
+
+					$('#ns1blankspaceControlPaymentAccount').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainPaymentAccount'});
+						ns1blankspace.setup.financial.paymentAccounts();
 					});
 					
 					$('#ns1blankspaceControlFinancialAccount').click(function(event)
@@ -583,6 +596,324 @@ ns1blankspace.setup.financial =
 									$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 									$.extend(true, oParam, {step: 1});
 									ins1blankspace.setup.financial.bankAccounts(oParam);
+									ns1blankspace.status.message('Saved');
+								}
+								else
+								{
+									ns1blankspace.status.error(data.error.errornotes);
+								}
+							}
+						});
+					}		
+				},
+
+	paymentAccounts:
+				function (oParam, oResponse)
+				{
+					var iStep = 1;
+					var sID; 
+					var sXHTMLElementID;
+						
+					if (oParam != undefined)
+					{
+						if (oParam.step != undefined) {iStep = oParam.step}
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+					}
+					else
+					{
+						oParam = {step: 1};
+					}
+					
+					if (sXHTMLElementID != undefined)
+					{
+						var aXHTMLElementID = sXHTMLElementID.split('-');
+						var sID = aXHTMLElementID[1];
+					}	
+
+					if (iStep == 1)
+					{
+						
+						if (oResponse == undefined)
+						{
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_SEARCH';
+							oSearch.addField('title,provider,providertext,status,statustext,takepayment,makepayment,urlcancel,urlsuccess,provideraccountkey,' +
+												'apikey,apilogon');
+							oSearch.sort('title', 'asc');
+							oSearch.rows = ns1blankspace.option.defaultRows;
+							oSearch.getResults(function(data) {ns1blankspace.setup.financial.paymentAccounts(oParam, data)});
+						}
+						else
+						{	
+							var aHTML = [];
+							
+							aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspacePaymentAccountColumn1" class="ns1blankspaceColumn1Flexible" style="width: 300px;">' +
+										ns1blankspace.xhtml.loading + '</td>' +
+										'<td id="ns1blankspacePaymentAccountColumn2" class="ns1blankspaceColumn2">' +
+										'<table class="ns1blankspaceColumn2"><tr><td>' +
+										'<span id="ns1blankspacePaymentAccountAdd" class="ns1blankspaceAction">Add</span></td>' +
+										'</td></tr></table>' +
+										'</tr>' + 
+										'</table>');
+
+							$('#ns1blankspaceMainPaymentAccount').html(aHTML.join(''));
+						
+							$('#ns1blankspacePaymentAccountAdd').button(
+							{
+								text: "Add"
+							})
+							.click(function() {
+								$.extend(true, oParam, {step: 2, xhtmlElementID: ""});
+								ns1blankspace.setup.financial.paymentAccounts(oParam);
+							})
+							.css('font-size', '0.75em');
+
+							ns1blankspace.financial.data.paymentaccounts = [];
+
+							var aHTML = [];
+
+							if (oResponse.data.rows.length == 0)
+							{
+								aHTML.push('<table><tr><td class="ns1blankspaceNothing">No payment accounts have been set up.</td></tr></table>');
+
+								$('#ns1blankspacePaymentAccountColumn1').html(aHTML.join(''));
+							}
+							else
+							{			
+								var aHTML = [];
+
+								aHTML.push('<table id="ns1blankspaceSetupFinancialPaymentAccount" class="ns1blankspace">');
+						
+								$(oResponse.data.rows).each(function() 
+								{
+									if (this.status == 1) {ns1blankspace.financial.data.paymentaccounts.push(this)}
+
+									aHTML.push('<tr class="ns1blankspaceRow">');
+									
+									aHTML.push('<td id="ns1blankspaceSetupFinancialPaymentAccount_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
+															' title="' + this.providertext + '" style="width:150px;">' +
+															this.title + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceSetupFinancialPaymentAccount_status-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSubNote" style="font-size:0.75em;">' +
+															this.providertext + '<br />' + this.statustext + '</td>');
+														
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+									
+									aHTML.push('<span id="ns1blankspacePaymentAccount_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+										
+									aHTML.push('</td>');				
+																					
+									aHTML.push('</tr>');
+								});
+								
+								aHTML.push('</table>');
+							}
+							
+							$('#ns1blankspacePaymentAccountColumn1').html(aHTML.join(''));
+
+							$('#ns1blankspaceSetupFinancialPaymentAccount span.ns1blankspaceRowRemove').button(
+							{
+								text: false,
+								icons: {
+									primary: "ui-icon-close"
+								}
+							})
+							.click(function() {
+								$.extend(true, oParam, {step: 4, xhtmlElementID: this.id});
+								ns1blankspace.setup.financial.paymentAccounts(oParam);
+							})
+							.css('width', '15px')
+							.css('height', '17px');
+
+							$('#ns1blankspaceSetupFinancialPaymentAccount td.ns1blankspaceRowSelect').click(function() {
+								$.extend(true, oParam, {step: 2, xhtmlElementID: this.id});
+								ns1blankspace.setup.financial.paymentAccounts(oParam);
+							})
+						}	
+					}
+
+					if (iStep == 2)
+					{	
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspacePaymentAccountEditColumn1" class="ns1blankspaceColumn1" style="width:300px;padding-right:15px;">' +
+										ns1blankspace.xhtml.loading + '</td>' +
+										'<td id="ns1blankspacePaymentAccountEditColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');
+
+						$('#ns1blankspacePaymentAccountColumn2').html(aHTML.join(''));
+
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+									
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Title' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspacePaymentAccountTitle" class="ns1blankspaceText">' +
+										'</td></tr>');	
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Type' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioPaymentAccountProvider1" name="radioPaymentAccountProvider" value="1"/>eWay' +
+										'<br /><input type="radio" id="radioPaymentAccountProvider7" name="radioPaymentAccountProvider" value="7"/>PayPal' +
+										'<br /><input type="radio" id="radioPaymentAccountProvider3" name="radioPaymentAccountProvider" value="3"/>ABA Direct Entry File' +
+										'<br /><input type="radio" id="radioPaymentAccountProvider4" name="radioPaymentAccountProvider" value="4"/>IP Payments' +
+										'<br /><input type="radio" id="radioPaymentAccountProvider5" name="radioPaymentAccountProvider" value="5"/>EziDebit' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Status' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioPaymentAccountStatus1" name="radioPaymentAccountStatus" value="1"/>Testing' +
+										'<br /><input type="radio" id="radioPaymentAccountStatus1" name="radioPaymentAccountStatus" value="2"/>Active' +
+										'<br /><input type="radio" id="radioPaymentAccountStatus2" name="radioPaymentAccountStatus" value="3"/>Non-Active' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Use to make payments' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioPaymentAccountMakePaymentY" name="radioPaymentAccountMakePayment" value="Y"/>Yes' +
+										'<br /><input type="radio" id="radioPaymentAccountMakePaymentN" name="radioPaymentAccountMakePayment" value="N"/>No' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Use to collect payments' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioPaymentAccountTakePaymentY" name="radioPaymentAccountTakePayment" value="Y"/>Yes' +
+										'<br /><input type="radio" id="radioPaymentAccountTakePaymentN" name="radioPaymentAccountTakePayment" value="N"/>No' +
+										'</td></tr>');
+						
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspacePaymentAccountEditColumn1').html(aHTML.join(''));
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+												
+						aHTML.push('<tr><td>' +
+										'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspacePaymentAccountEditSave">Save</span>' +
+										'</td></tr>');
+					
+						aHTML.push('<tr><td>' +
+										'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspacePaymentAccountEditCancel">Cancel</span>' +
+										'</td></tr>');
+										
+						aHTML.push('</table>');		
+												
+						$('#ns1blankspacePaymentAccountEditColumn2').html(aHTML.join(''));
+						
+						$('#ns1blankspacePaymentAccountEditSave').button(
+						{
+							text: "Save"
+						})
+						.click(function() 
+						{
+							ns1blankspace.status.working();
+
+							var oData = 
+							{
+								id: sID,
+								title: $('#ns1blankspacePaymentAccountTitle').val(),
+								provider: $('input[name="radioPaymentAccountProvider"]:checked').val(),
+								status: $('input[name="radioPaymentAccountStatus"]:checked').val(),
+								makepayment: $('input[name="radioPaymentAccountMakePayment"]:checked').val(),
+								takepayment: $('input[name="radioPaymentAccountTakePayment"]:checked').val()
+							}	
+
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_MANAGE'),
+								data: oData,
+								dataType: 'json',
+								success: function()
+								{
+									$.extend(true, oParam, {step: 1});
+									ns1blankspace.setup.financial.paymentAccounts(oParam);
+									ns1blankspace.status.message('Saved');
+								}
+							});
+						})
+						
+						$('#ns1blankspacePaymentAccountEditCancel').button(
+						{
+							text: "Cancel"
+						})
+						.click(function() 
+						{
+							$.extend(true, oParam, {step: 1});
+							ns1blankspace.setup.financial.paymentAccounts(oParam);
+						})
+
+						if (sID != undefined)
+						{
+							ns1blankspace.status.working();
+
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_SEARCH';
+							oSearch.addField('title,provider,providertext,status,statustext,takepayment,makepayment,urlcancel,urlsuccess,provideraccountkey,' +
+												'apikey,apilogon');
+							oSearch.addFilter('id', 'EQUAL_TO', sID);
+							oSearch.getResults(function(data) {
+									$.extend(true, oParam, {step: 3});
+									ns1blankspace.setup.financial.paymentAccounts(oParam, data)
+									});
+						}
+						else
+						{
+							$('[name="radioPaymentAccountStatus"][value="1"]').attr('checked', true);
+							$('[name="radioPaymentAccountMakePayment"][value="N"]').attr('checked', true);
+							$('[name="radioPaymentAccountTakePayment"][value="N"]').attr('checked', true);	
+						}
+					}
+						
+					if (iStep == 3 && oResponse)
+					{
+						var oObjectContext = oResponse.data.rows[0];
+						$('#ns1blankspacePaymentAccountTitle').val(oObjectContext.title);
+						$('#ns1blankspacePaymentAccountTitle').focus();
+						$('[name="radioPaymentAccountProvider"][value="' + oObjectContext.provider + '"]').attr('checked', true);
+						$('[name="radioPaymentAccountStatus"][value="' + oObjectContext.status + '"]').attr('checked', true);
+						$('[name="radioPaymentAccountMakePayment"][value="' + oObjectContext.makepayment + '"]').attr('checked', true);
+						$('[name="radioPaymentAccountTakePayment"][value="' + oObjectContext.takepayment + '"]').attr('checked', true);
+
+						ns1blankspace.status.message('');
+					}
+
+					if (iStep == 4)
+					{									
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_MANAGE'),
+							data: 'remove=1&id=' + ns1blankspace.util.fs(sID),
+							dataType: 'json',
+							success: function(data)
+							{
+								if (data.status == 'OK')
+								{
+									$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+									$.extend(true, oParam, {step: 1});
+									ins1blankspace.setup.financial.paymentAccounts(oParam);
 									ns1blankspace.status.message('Saved');
 								}
 								else

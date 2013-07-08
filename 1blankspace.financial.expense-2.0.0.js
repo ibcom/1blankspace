@@ -1060,7 +1060,7 @@ ns1blankspace.financial.expense.outstanding =
 
 						$('#ns1blankspaceExpenseOutstandingColumn1').html(ns1blankspace.xhtml.loading);
 
-						ns1blankspace.financial.expense.outstanding.data.outstanding = [];
+						ns1blankspace.financial.expense.outstanding.data.expenses = [];
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
@@ -1178,7 +1178,7 @@ ns1blankspace.financial.expense.outstanding =
 					var sContact = oRow['contactbusinesspaidtotext'];
 					if (sContact == '') {sContact = oRow['contactpersonpaidtotext']}
 
-					ns1blankspace.financial.expense.outstanding.data.outstanding.push(oRow);
+					ns1blankspace.financial.expense.outstanding.data.expenses.push(oRow);
 
 					aHTML.push('<tr class="ns1blankspaceRow">' +
 									'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspaceExpenseOutstanding_selectContainer-' + oRow["id"] + '">' +
@@ -1217,7 +1217,7 @@ ns1blankspace.financial.expense.outstanding =
 						}
 					})
 					.click(function() {
-						ns1blankspace.financial.invoice.init({id: (this.id).split('-')[1]});
+						ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]});
 					})
 					.css('width', '15px')
 					.css('height', '20px');
@@ -1256,34 +1256,47 @@ ns1blankspace.financial.expense.outstanding =
 
 					if (iStep == 1)
 					{	
-						ns1blankspace.financial.invoicing.data.unsentEmail = [];
+						ns1blankspace.financial.expense.outstanding.data.toBePaid = [];
 
 						if ($('#ns1blankspaceInvoicingUnsent input:checked').length > 0)
 						{	
-							$('#ns1blankspaceFinancialUnsentPreviewStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
-										'<span id="ns1blankspaceFinancialUnsentPreviewStatusIndex">1</span>/' + $('#ns1blankspaceInvoicingUnsent input:checked').length + 
+							$('#ns1blankspaceFinancialOutstandingFileStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
+										'<span id="ns1blankspaceFinancialOutstandingFileStatus">1</span>/' + $('#ns1blankspaceExpenseOutstanding input:checked').length + 
 										'</span>');
 						}
 						else
 						{
-							ns1blankspace.status.error('No invoices selected')
+							ns1blankspace.status.error('No expenses selected')
 						}	
 
-						$('#ns1blankspaceInvoicingUnsent input:checked').each(function() 
+						$('#ns1blankspaceExpenseOutstanding input:checked').each(function() 
 						{
 							var iID = (this.id).split('-')[1]
 
-							var oData = $.grep(ns1blankspace.financial.invoicing.data.unsent, function (a) {return a.id == iID;})[0]
+							var oData = $.grep(ns1blankspace.financial.expense.outstanding.data.expenses, function (a) {return a.id == iID;})[0]
 
 							if (oData)
 							{
-								ns1blankspace.financial.invoicing.data.unsentEmail.push(oData);
+								ns1blankspace.financial.expense.outstanding.data.toBePaid.push(oData);
 							}
 						});
 
 						oParam.step = 2;
-						ns1blankspace.financial.invoicing.unsent.preview.init(oParam);
+						ns1blankspace.financial.expense.outstanding.file(oParam);
 					}			
+
+					if (iStep == 2)
+					{
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_TRANSFER_MANAGE'),
+							data: sData,
+							dataType: 'json',
+							success: function(data) {ns1blankspace.financial.expense.save.send(oParam, data)}
+						});
+					}	
+ns1blankspace.financial.expense.outstanding.data.toBePaid
 
 					if (iStep == 2)
 					{
