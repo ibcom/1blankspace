@@ -3710,13 +3710,15 @@ ns1blankspace.util =
 
 	format: 	function(oParam)
 				{
-					var sValue = ns1blankspace.util.getParam(oParam, 'value').value;
+					var sValue = ns1blankspace.util.getParam(oParam, 'text').value;
 					var iLength = ns1blankspace.util.getParam(oParam, 'length').value;
 					var sFill = ns1blankspace.util.getParam(oParam, 'fill').value;
 					var sFillLeft = ns1blankspace.util.getParam(oParam, 'fillLeft').value;
 					var sDefault = ns1blankspace.util.getParam(oParam, 'default').value;
 					var sDateFormat = ns1blankspace.util.getParam(oParam, 'dateFormat').value;
-
+					var iAmountDecimalPlaces = ns1blankspace.util.getParam(oParam, 'amountDecimalPlaces').value;
+					var bUpper = ns1blankspace.util.getParam(oParam, 'upper', {default: false}).value;
+	
 					if (sValue === undefined) {sValue = sDefault}
 
 					if (sValue !== undefined && sValue !== null)
@@ -3733,7 +3735,12 @@ ns1blankspace.util =
 							{
 								sValue = '';
 							}
-						}	
+						}
+
+						if (iAmountDecimalPlaces !== undefined)
+						{
+							sValue = (sValue).parseCurrency().toFixed(iAmountDecimalPlaces)
+						}
 
 						if (iLength !== undefined)
 						{	
@@ -3759,6 +3766,8 @@ ns1blankspace.util =
 					{
 						sValue = sFill.repeat(iLength)
 					}
+
+					if (bUpper) {sValue = sValue.toUpperCase()}
 
 					return sValue;
 				},								

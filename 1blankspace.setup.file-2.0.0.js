@@ -1237,19 +1237,20 @@ ns1blankspace.setup.file =
 											{
 												if (v.value !== undefined)
 												{
-													aFile.push(v.value);
+													v.text = v.value;
+													aFile.push(ns1blankspace.util.format(v));
 												}	
 												else if (v.field !== undefined)
 												{
 													if (oSummary[v.field] !== undefined)
 													{
-														v.value = oSummary[v.field];
+														v.text = oSummary[v.field];
 														aFile.push(ns1blankspace.util.format(v));
 													}	
 												}
 												else if (v.param !== undefined)
 												{
-													v.value = ns1blankspace.util.getParam(oParam, v.param).value;
+													v.text = ns1blankspace.util.getParam(oParam, v.param).value;
 													aFile.push(ns1blankspace.util.format(v));
 												}
 												else
@@ -1268,21 +1269,29 @@ ns1blankspace.setup.file =
 											{
 												$.each(oFormat.item[0].fields, function (j, v)
 												{
+													delete v.text;
+
 													if (v.value !== undefined)
 													{
-														aFile.push(v.value);
+														v.text = v.value;
+														aFile.push(ns1blankspace.util.format(v));
 													}	
 													else if (v.field !== undefined)
 													{
 														if (oItem[v.field] !== undefined)
 														{
-															v.value = oSummary[v.field];
+															v.text = oItem[v.field];
 															aFile.push(ns1blankspace.util.format(v));
 														}	
 													}
 													else if (v.param !== undefined)
 													{
-														v.value = ns1blankspace.util.getParam(oParam, v.param).value;
+														v.text = ns1blankspace.util.getParam(oParam, v.param).value;
+														aFile.push(ns1blankspace.util.format(v));
+													}
+													else if (v.calculate !== undefined)
+													{
+														v.text = v.calculate(oItem, oParam);
 														aFile.push(ns1blankspace.util.format(v));
 													}
 													else
@@ -1370,7 +1379,7 @@ ns1blankspace.setup.file =
 
 											if (sXHTMLElementID !== undefined)
 											{
-												$('#' + sXHTMLElementID).html('<a target="_blank" href="' + data.link + '"">Download the file</a>')
+												$('#' + sXHTMLElementID).html('<a target="_blank" href="' + data.link + '"">Download</a>')
 											}	
 										}
 									});	
@@ -1589,7 +1598,7 @@ ns1blankspace.setup.file =
 ns1blankspace.setup.file.export.formats =
 [
 	{
-		name: 'ABA File',
+		name: 'Payment Summary - AU',
 		header:
 		[
 			{
@@ -1622,7 +1631,7 @@ ns1blankspace.setup.file.export.formats =
 						value: 'EAPFEMPA008.0',
 					},
 					{
-						repeat: ' ',
+						fill: ' ',
 						length: (628 - 51 + 1)
 					}
 				]
@@ -1640,7 +1649,8 @@ ns1blankspace.setup.file.export.formats =
 					{
 						param: 'contactBusinessText',
 						length: (217 - 18 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						param: 'contactPersonText',
@@ -1681,27 +1691,32 @@ ns1blankspace.setup.file.export.formats =
 					{
 						param: 'streetAddress1',
 						length: (55 - 18 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						param: 'streetAddress2',
 						length: (93 - 56 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						param: 'streetSuburb',
 						length: (120 - 94 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						param: 'streetState',
 						length: (127 - 124 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						param: 'streetPostCode',
 						length: (55 - 18 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						length: (147 - 128 + 1),
@@ -1710,27 +1725,32 @@ ns1blankspace.setup.file.export.formats =
 					{
 						param: 'mailingAddress1',
 						length: (185 - 148 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						param: 'mailingAddress2',
 						length: (223 - 186 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						param: 'mailingSuburb',
 						length: (250 - 224 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						param: 'mailingState',
 						length: (253 - 251 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						param: 'mailingPostCode',
 						length: (257 - 254 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						length: (277 - 258 + 1),
@@ -1746,7 +1766,119 @@ ns1blankspace.setup.file.export.formats =
 						fill: ' '
 					}
 				]
-			}		
+			},
+			{
+				line: 4,
+				fields:
+				[
+					{
+						value: '628',
+					},
+					{
+						value: 'IDENTITY',
+					},
+					{
+						param: 'abn',
+						length: 11,
+						fill: ' '
+					},
+					{
+						value: '001',
+					},
+					{
+						param: 'year',
+						length: 4,
+						dateFormat: 'yyyy'
+					},
+					{
+						param: 'legalName',
+						length: (229 - 30 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						param: 'tradeName',
+						length: (429 - 230 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						param: 'streetAddress1',
+						length: (467 - 430 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						length: (505 - 468 + 1),
+						fill: ' '
+					},
+					{
+						param: 'streetSuburb',
+						length: (532 - 506 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						param: 'streetState',
+						length: (535 - 533 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						param: 'streetPostCode',
+						length: (539 - 536 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						length: (559 - 540 + 1),
+						fill: ' '
+					},
+					{
+						param: 'contactName',
+						length: (597 - 560 + 1),
+						fill: ' '
+					},
+					{
+						param: 'phone',
+						length: (612 - 598 + 1),
+						fill: ' '
+					},
+					{
+						param: 'fax',
+						length: (627 - 613 + 1),
+						fill: ' '
+					},
+					{
+						length: (628 - 628 + 1),
+						fill: ' '
+					}
+				]
+			},
+			{
+				line: 5,
+				fields:
+				[
+					{
+						value: '628',
+					},
+					{
+						value: 'SOFTWARE',
+					},
+					{
+						value: 'IBCOM MYDIGITALSTUCTURE',
+						length: (91 - 12 + 1),
+						fill: ' '
+					},
+					{
+						value: 'N',
+					},
+					{
+						length: (628 - 93 + 1),
+						fill: ' '
+					}
+				]
+			}			
 		],
 		item:
 		[
@@ -1763,23 +1895,172 @@ ns1blankspace.setup.file.export.formats =
 						value: 'S',
 					},
 					{
-						field: 'tfn',
+						field: 'employee.taxfilenumber',
 						length: (17 - 9 + 1),
-						fill: ' '
+						fill: ' ',
+						remove: ' '
 					},
 					{
-						param: 'dateofbirth',
+						field: 'employee.contactperson.dateofbirth',
 						length: 8,
 						dateFormat: 'ddMMyyyy'
 					},
 					{
-						field: 'surname',
+						field: 'employee.contactperson.surname',
 						length: (55 - 26 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
-						repeat: ' ',
-						length: (628 - 51 + 1)
+						field: 'employee.contactperson.firstname',
+						length: (70 - 56 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						fill: ' ',
+						length: (85 - 71 + 1)
+					},
+					{
+						field: 'employee.contactperson.streetaddress1',
+						length: (123 - 86 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						field: 'employee.contactperson.streetaddress2',
+						length: (161 - 124 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						field: 'employee.contactperson.streetsuburb',
+						length: (188 - 162 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						field: 'employee.contactperson.streetstate',
+						length: (191 - 189 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						field: 'employee.contactperson.streetpostcode',
+						length: (195 - 192 + 1),
+						fill: ' ',
+						upper: true
+					},
+					{
+						fill: ' ',
+						length: (215 - 196 + 1)
+					},
+					{
+						calculate: function (v, p)
+						{
+							if (v['employee.employmentstartdate'] > p['startDate']) {return v['employee.employmentstartdate']} else {return p['startDate']}
+						},
+						length: 8,
+						dateFormat: 'ddMMyyyy'
+					},
+					{
+						calculate: function (v, p)
+						{
+							if (v['employee.employmentenddate'] < p['endDate']) {return v['employee.employmentenddate']} else {return p['endDate']}
+						},
+						length: 8,
+						dateFormat: 'ddMMyyyy'
+					},
+					{
+						field: 'taxbeforerebate',
+						length: 8,
+						fillLeft: '0',
+						amountDecimalPlaces: 0
+					},
+					{
+						field: 'grosssalary',
+						length: 8,
+						fillLeft: '0',
+						amountDecimalPlaces: 0
+					},
+					{
+						field: 'allowances',
+						length: 8,
+						fillLeft: '0',
+						amountDecimalPlaces: 0
+					},
+					{
+						value: '0',
+						length: (263 - 256 + 1),
+						fillLeft: '0'
+					},
+					{
+						value: '0',
+						length: (271 - 264 + 1),
+						fillLeft: '0'
+					},
+					{
+						value: '0',
+						length: (279 - 272 + 1),
+						fillLeft: '0'
+					},
+					{
+						value: '0',
+						length: (287 - 280 + 1),
+						fillLeft: '0'
+					},
+					{
+						value: '0',
+						length: (295 - 288 + 1),
+						fillLeft: '0'
+					},
+					{
+						value: '0',
+						length: (303 - 296 + 1),
+						fillLeft: '0'
+					},
+					{
+						value: '0',
+						length: (311 - 304 + 1),
+						fillLeft: '0'
+					},
+					{
+						value: 'O',
+					},
+					{
+						value: '0',
+						length: (320 - 313 + 1),
+						fillLeft: '0'
+					},
+					{
+						calculate: function (v)
+						{
+							if (v.allowances > 0) {return 'R'} else {return ' '}
+						}
+					},
+					{
+						value: '0',
+						length: (329 - 322 + 1),
+						fillLeft: '0'
+					},
+					{
+						value: '0',
+						length: (337 - 330 + 1),
+						fillLeft: '0'
+					},
+					{
+						value: '0',
+						length: (345 - 338 + 1),
+						fillLeft: '0'
+					},
+					{
+						value: '0',
+						length: (353 - 346 + 1),
+						fillLeft: '0'
+					},
+					{
+						fill: ' ',
+						length: (628 - 354 + 1)
 					}
 				]
 			}
@@ -1803,7 +2084,7 @@ ns1blankspace.setup.file.export.formats =
 						fillLeft: '0'
 					},
 					{
-						repeat: ' ',
+						fill: ' ',
 						length: (628 - 22 + 1)
 					}
 				]

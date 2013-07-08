@@ -634,7 +634,7 @@ ns1blankspace.messaging.imap =
 										label: "Save",
 										icons:
 										{
-											 primary: "ui-icon-check"
+											 primary: "ui-icon-triangle-1-s"
 										}
 									})
 									.click(function() {

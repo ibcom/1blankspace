@@ -3322,7 +3322,9 @@ ns1blankspace.financial.payroll.totals =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
 										oSearch.addField('employee.contactpersontext,employee.employmentstartdate,employee.statustext,employee.employeenumber,employee.taxfilenumber,' +
-															'employee.contactperson,employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email');
+															'employee.contactperson,employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,' +
+															'employee.contactperson.streetaddress1,employee.contactperson.streetaddress2,employee.contactperson.streetsuburb,' +
+															'employee.contactperson.streetstate,employee.contactperson.streetpostcode');
 										//oSearch.addFilter('status', 'EQUAL_TO', '2')
 										oSearch.rows = 50;
 										oSearch.sort('employee.contactperson.firstname', 'asc');
@@ -3392,6 +3394,9 @@ ns1blankspace.financial.payroll.totals =
 											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsFile" class="ns1blankspaceAction" style="text-align:left;">' +
 															'File</span></td></tr>');
 
+											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsFileTest" class="ns1blankspaceAction" style="text-align:left;">' +
+															'Test File</span></td></tr>');
+
 											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsFileStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
 
 											aHTML.push('</table>');					
@@ -3429,7 +3434,7 @@ ns1blankspace.financial.payroll.totals =
 
 											$('#ns1blankspacePayrollTotalsFile').button(
 											{
-												label: 'Create File',
+												label: 'File',
 												icons:
 												{
 													primary: "ui-icon-disk"
@@ -3437,7 +3442,24 @@ ns1blankspace.financial.payroll.totals =
 											})
 											.click(function()
 											{	
-												oParam = {onCompleteWhenCan: ns1blankspace.financial.payroll.totals.employees.file.create};
+												oParam = {onCompleteWhenCan: ns1blankspace.financial.payroll.totals.employees.file.init};
+												oParam.fileMode = 'P';
+												ns1blankspace.financial.payroll.totals.employees.preview.init(oParam);
+											})
+											.css('width', '90px');
+
+											$('#ns1blankspacePayrollTotalsFileTest').button(
+											{
+												label: 'Test File',
+												icons:
+												{
+													primary: "ui-icon-disk"
+												}
+											})
+											.click(function()
+											{	
+												oParam.fileMode = 'T';
+												oParam = {onCompleteWhenCan: ns1blankspace.financial.payroll.totals.employees.file.init};
 												ns1blankspace.financial.payroll.totals.employees.preview.init(oParam);
 											})
 											.css('width', '90px');
@@ -3591,6 +3613,7 @@ ns1blankspace.financial.payroll.totals =
 																oSearch.addSummaryField('sum(netsalary) netsalary');
 																oSearch.addSummaryField('sum(superannuation) superannuation');
 																oSearch.addSummaryField('sum(taxbeforerebate) taxbeforerebate');
+																oSearch.addSummaryField('sum(allowances) allowances');
 																oSearch.addSummaryField('max(payrecord.payperiod.paydate) paydate');
 
 																oSearch.addFilter('employee', 'EQUAL_TO', oData.id);
@@ -3616,6 +3639,7 @@ ns1blankspace.financial.payroll.totals =
 																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].netsalary = (oResponse.summary.netsalary).parseCurrency().formatMoney(0, '.', ',');
 																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].superannuation = (oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',');
 																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].taxbeforerebate = (oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',');
+																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].allowances = (oResponse.summary.allowances).parseCurrency().formatMoney(0, '.', ',');
 																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].contactbusinesstext = ns1blankspace.user.contactBusinessText;
 																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].year = Date.parse(oResponse.summary.paydate).getFullYear();
 
@@ -3790,6 +3814,51 @@ ns1blankspace.financial.payroll.totals =
 								},
 
 					file: 		{
+									init: 		function (oParam, oResponse)
+												{
+													if (oParam === undefined) {oParam = {fileMode: 'T'}}
+
+
+													var oSearch = new AdvancedSearch();
+													oSearch.method = 'CONTACT_BUSINESS_SEARCH';		
+													oSearch.addField('tradename,legalname,abn,phonenumber,faxnumber,email,streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,' +
+																			'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode');
+													oSearch.rows = 1;
+													oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.user.contactBusiness)
+													
+													oSearch.getResults(function(oResponse)
+													{
+														if (oResponse.status == 'OK')
+														{	
+															var oRow =  oResponse.data.rows[0];
+
+															oParam.name = 'Payment Summary - AU';
+															oParam.saveToFile = true;
+															oParam.xhtmlElementID = 'ns1blankspaceFileDownload';
+
+															oParam.abn = oRow.abn;
+															oParam.startDate = $('#ns1blankspacePayrollStartDate').val();
+															oParam.endDate = $('#ns1blankspacePayrollEndDate').val();
+															oParam.contactBusinessText = (oRow.tradname==''?oRow.legalname:oRow.tradename);
+															oParam.phone = oRow.phonenumber;
+															oParam.fax = oRow.faxnumber;
+															oParam.email = oRow.email;
+															oParam.streetAddress1 = oRow.streetaddress1;
+															oParam.streetAddress2 = oRow.streetaddress2;
+															oParam.streetSuburb = oRow.streetsuburb;
+															oParam.streetState = oRow.streetstate;
+															oParam.streetPostCode = oRow.streetpostcode;
+															oParam.mailingAddress1 = oRow.mailingaddress1;
+															oParam.mailingAddress2 = oRow.mailingaddress2;
+															oParam.mailingSuburb = oRow.mailingsuburb;
+															oParam.mailingState = oRow.mailingstate;
+															oParam.mailingPostCode = oRow.mailingpostcode;
+																
+															ns1blankspace.financial.payroll.totals.employees.file.create(oParam);
+														}	
+													});	
+												},
+
 									create: 	function (oParam, oResponse)
 												{
 													if (ns1blankspace.financial.payroll.data.summaries.length == 0)
@@ -3812,42 +3881,19 @@ ns1blankspace.financial.payroll.totals =
 														$('#ns1blankspacePayrollTotalsColumn2').html('<table class="ns1blankspace">' +
 															'<tr>' +
 															'<td class="ns1blankspaceTextMulti">' +
-															'<textarea id="ns1blankspaceFileContents" class="ns1blankspaceTextMulti" rows="10" cols="35" style="width:100%; height:250px; font-family:Courier New; font-size:0.865em;">' +
-																'</textarea>' +
+															'<div id="ns1blankspaceFileContents" class="ns1blankspaceTextMulti" style="background-color:#F3F3F3; width:100%; font-family:Courier New; font-size:0.865em; white-space:pre; overflow:auto;">' +
+																'</div>' +
 															'</td></tr>' +
 															'<tr>' +
-															'<td class="ns1blankspaceTextMulti" id="ns1blankspaceFileDownload">' +
+															'<td class="ns1blankspaceTextMulti" id="ns1blankspaceFileDownload" style="padding-top:8px;"' +
 															'</td></tr></table>');		
 
-														var oParam =
-														{
-															name: 'ABA File',
-															fileMode: 'T',
-															abn: '',
-															endDate: '',
-															contactBusinessText: '',
-															phone: '',
-															fax: '',
-															email: '',
-															streetAddress1: '',
-															streetAddress2: '',
-															streetSuburb: '',
-															streetState: '',
-															streetPostCode: '',
-															mailingAddress1: '',
-															mailingAddress2: '',
-															mailingSuburb: '',
-															mailingState: '',
-															mailingPostCode: '',
-															totalRows: oItems.length,
-															items: oItems,
-															saveToFile: true,
-															xhtmlElementID: 'ns1blankspaceFileDownload'
-														}
+														oParam.totalRows = oItems.length;
+														oParam.items = oItems;
 
 														var sFile = ns1blankspace.setup.file.export.process(oParam);
 
-														$('#ns1blankspaceFileContents').val(sFile);
+														$('#ns1blankspaceFileContents').html(sFile);
 													}	
 												},
 								}						

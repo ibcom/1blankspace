@@ -57,7 +57,7 @@ ns1blankspace.setup.messaging =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
-						oSearch.addField('email');
+						oSearch.addField('email,usertext');
 						oSearch.addFilter('type', 'EQUAL_TO', 5);
 						oSearch.rows = 50;
 						oSearch.sort('email', 'asc');
@@ -83,8 +83,13 @@ ns1blankspace.setup.messaging =
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
-														'" class="ns1blankspaceMostLikely">' +
+														'" class="ns1blankspaceMostLikely" style="width:100px; padding-right:15px;">' +
 														this.email +
+														'</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_usertext-' + this.id + 
+														'" class="ns1blankspaceSubNote">' +
+														this.usertext +
 														'</td>');
 								
 								aHTML.push('</tr>');
