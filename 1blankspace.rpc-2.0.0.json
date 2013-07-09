@@ -514,7 +514,7 @@
 		{"title":"SETUP_FINANCIAL_EXPENSE_TAX_TYPE_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_PROVIDER_SEARCH", "advancedSearch":"false", "rpc":"true"},
-		{"title":"SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_SEARCH", "advancedSearch":"true", "rpc":"true"},
+		{"title":"SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_STATUS_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_FINANCIAL_GENERAL_JOURNAL_ITEM_TAX_CATEGORY_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_FINANCIAL_GENERAL_JOURNAL_STATUS_SEARCH", "advancedSearch":"false", "rpc":"true"},

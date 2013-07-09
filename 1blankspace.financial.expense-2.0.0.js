@@ -94,7 +94,7 @@ ns1blankspace.financial.expense =
 
 						$('#ns1blankspaceControlOutstanding').click(function(event)
 						{
-							ns1blankspace.financial.expense.outstanding.show();
+							ns1blankspace.financial.expense.outstanding.init();
 						});			
 						
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
@@ -1043,6 +1043,36 @@ ns1blankspace.financial.expense.outstanding =
 {
 	data: 		{},
 
+	init: 		function (oParam, oResponse)
+				{
+					if (oResponse === undefined)
+					{	
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_SEARCH';
+						oSearch.addField('title,provider,providertext,status,statustext,takepayment,makepayment,urlcancel,urlsuccess,provideraccountkey,' +
+											'apikey,apilogon');
+						oSearch.addFilter('provider', 'EQUAL_TO', 3);
+						oSearch.addFilter('makepayment', 'EQUAL_TO', 'Y');
+						oSearch.addFilter('status', 'EQUAL_TO', 2);
+						oSearch.rows = 100;
+						oSearch.getResults(function(data) {ns1blankspace.financial.expense.outstanding.init(oParam, data)});
+					}	
+					else
+					{
+						if (oParam === undefined) {oParam = {}}
+
+						if (oResponse.status == 'OK')
+						{
+							if (oResponse.data.rows.length > 0)
+							{
+								oParam.paymentAccount = oResponse.data.rows[0].id;
+							}							
+						}	
+
+						ns1blankspace.financial.expense.outstanding.show(oParam)
+					}	
+				},
+
 	show:		function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
@@ -1064,7 +1094,7 @@ ns1blankspace.financial.expense.outstanding =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-						oSearch.addField('reference,amount,description,contactbusinesspaidto,contactbusinesspaidtotext,contactpersonpaidto,contactpersonpaidtotext');
+						oSearch.addField('reference,amount,outstandingamount,description,contactbusinesspaidto,contactbusinesspaidtotext,contactpersonpaidto,contactpersonpaidtotext');
 						oSearch.addFilter('PayStatus', 'EQUAL_TO', 1);
 						oSearch.addFilter('outstandingamount', 'GREATER_THAN', 0);
 						oSearch.rows = 100;
@@ -1084,53 +1114,49 @@ ns1blankspace.financial.expense.outstanding =
 						}
 						else
 						{
-							var aHTML = [];
-									
-							aHTML.push('<table class="ns1blankspaceColumn2">');
-									
-							aHTML.push('<tr><td><span id="ns1blankspaceFinancialOutstandingFile" class="ns1blankspaceAction">' +
-											'Create file</span></td></tr>');
+							var iPaymentAccount = ns1blankspace.util.getParam(oParam, 'paymentAccount').value;
 
-							aHTML.push('<tr><td id="ns1blankspaceFinancialOutstandingFileStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-											'Create a bank file for payments</td></tr>');
-
-							aHTML.push('<tr><td><span id="ns1blankspaceFinancialOutstandingMark" class="ns1blankspaceAction">' +
-											'Mark as paid</span></td></tr>');
-
-							aHTML.push('<tr><td id="ns1blankspaceFinancialOutstandingMarkStatus" style="padding-top:5px; font-size:0.75em;" class="ns1blankspaceSub">' +
-											'Create payments for selected expenses</td></tr>');
-
-							aHTML.push('</table>');					
-							
-							$('#ns1blankspaceExpenseOutstandingColumn2').html(aHTML.join(''));
-											
-							$('#ns1blankspaceFinancialOutstandingFile').button(
+							if (iPaymentAccount === undefined)
 							{
-								label: 'Create file',
-								icons:
-								{
-									primary: "ui-icon-document"
-								}
-							})
-							.click(function()
-							{	
-								ns1blankspace.financial.expense.outstanding.file.init(oParam)
-							})
-							.css('width', '130px');
+								aHTML.push('<table class="ns1blankspaceColumn2">' +
+											'<tr><td class="ns1blankspaceNothing">If you set up a ABA Direct Entry File payments account you can make bulk payments.</td></tr>' +
+											'</table>');
 
-							$('#ns1blankspaceFinancialOutstandingMark').button(
+								$('#ns1blankspaceExpenseOutstandingColumn2').html(aHTML.join(''));
+							}
+							else
 							{
-								label: 'Mark as paid',
-								icons:
+								var aHTML = [];
+										
+								aHTML.push('<table class="ns1blankspaceColumn2">');
+										
+								aHTML.push('<tr><td><span id="ns1blankspaceFinancialOutstandingFile-' + iPaymentAccount + '" class="ns1blankspaceAction ns1blankspaceFinancialOutstandingFile">' +
+												'Create file</span></td></tr>');
+
+								aHTML.push('<tr><td id="ns1blankspaceFinancialOutstandingFileStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+												'Create a bank file for payments</td></tr>');
+
+								aHTML.push('<tr><td id="ns1blankspaceFinancialOutstandingMark_container-' + iPaymentAccount + '"></td></tr>');
+
+								aHTML.push('</table>');					
+								
+								$('#ns1blankspaceExpenseOutstandingColumn2').html(aHTML.join(''));
+												
+								$('span.ns1blankspaceFinancialOutstandingFile').button(
 								{
-									primary: "ui-icon-check"
-								}
-							})
-							.click(function()
-							{	
-								ns1blankspace.financial.expense.outstanding.pay.init(oParam)
-							})
-							.css('width', '130px');
+									label: 'Create file',
+									icons:
+									{
+										primary: "ui-icon-document"
+									}
+								})
+								.click(function()
+								{	
+									oParam.step = 1;
+									ns1blankspace.financial.expense.outstanding.file(oParam)
+								})
+								.css('width', '130px');
+							}	
 
 							var aHTML = [];
 
@@ -1192,14 +1218,14 @@ ns1blankspace.financial.expense.outstanding =
 									oRow["description"] + '</td>'); 
 
 					aHTML.push('<td id="ns1blankspaceExpenseOutstanding_amount-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:right;">' +
-									oRow["amount"] + '</td>'); 
+									oRow["outstandingamount"] + '</td>'); 
 
 					aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">');
 
-					aHTML.push('<span style="margin-right:5px;" id="ns1blankspaceExpenseOutstanding_option_payment-' + oRow['id'] + '"' +
-									' class="ns1blankspaceRowPayment"></span>');
+					aHTML.push('<span style="margin-right:5px;" id="ns1blankspaceExpenseOutstanding_option_preview-' + oRow['id'] + '"' +
+									' class="ns1blankspaceRowPreview"></span>');
 
-					aHTML.push('<span id="ns1blankspaceUnsent_option-' + oRow['id'] + '-1"' +
+					aHTML.push('<span id="ns1blankspaceExpenseOutstanding_option-' + oRow['id'] + '-1"' +
 									' class="ns1blankspaceRowView"></span></td>');
 					aHTML.push('</tr>');
 
@@ -1239,29 +1265,26 @@ ns1blankspace.financial.expense.outstanding =
 
 	file: 		function (oParam)
 				{
-					var iStep = 1
-					var iDataIndex = 0;
-					var iDataItemIndex = 0;
+					var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+					var iDataIndex = ns1blankspace.util.getParam(oParam, 'dataIndex', {default: 0}).value;
+					var iDataItemIndex = ns1blankspace.util.getParam(oParam, 'dataItemIndex', {default: 0}).value;
+					var iPaymentAccount = ns1blankspace.util.getParam(oParam, 'paymentAccount').value;
+					var iFundsTransfer = ns1blankspace.util.getParam(oParam, 'fundsTransfer').value;
 
-					if (oParam != undefined)
+					if (oParam === undefined)
 					{	
-						if (oParam.step != undefined) {iStep = oParam.step}
-						if (oParam.dataIndex != undefined) {iDataIndex = oParam.dataIndex}
-						if (oParam.dataItemIndex != undefined) {iDataItemIndex = oParam.dataItemIndex}
-					}
-					else
-					{
 						oParam = {}
 					}			
 
 					if (iStep == 1)
 					{	
+						ns1blankspace.status.working('Creating file...');
 						ns1blankspace.financial.expense.outstanding.data.toBePaid = [];
 
-						if ($('#ns1blankspaceInvoicingUnsent input:checked').length > 0)
+						if ($('#ns1blankspaceExpenseOutstanding input:checked').length > 0)
 						{	
 							$('#ns1blankspaceFinancialOutstandingFileStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
-										'<span id="ns1blankspaceFinancialOutstandingFileStatus">1</span>/' + $('#ns1blankspaceExpenseOutstanding input:checked').length + 
+										'<span id="ns1blankspaceFinancialOutstandingFileStatusIndex">1</span>/' + $('#ns1blankspaceExpenseOutstanding input:checked').length + 
 										'</span>');
 						}
 						else
@@ -1287,43 +1310,50 @@ ns1blankspace.financial.expense.outstanding =
 
 					if (iStep == 2)
 					{
+						var oData =
+						{
+							fundstransferaccount: iPaymentAccount
+						}
+						
 						$.ajax(
 						{
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_TRANSFER_MANAGE'),
-							data: sData,
+							data: oData,
 							dataType: 'json',
-							success: function(data) {ns1blankspace.financial.expense.save.send(oParam, data)}
+							success: function(data)
+							{
+								oParam.fundsTransfer = data.id;
+								oParam.step = 3;
+								ns1blankspace.financial.expense.outstanding.file(oParam, data)
+							}
 						});
 					}	
-ns1blankspace.financial.expense.outstanding.data.toBePaid
 
-					if (iStep == 2)
+					if (iStep == 3)
 					{
-						if (iDataIndex < ns1blankspace.financial.invoicing.data.unsentEmail.length)
+						if (iDataIndex < ns1blankspace.financial.expense.outstanding.data.toBePaid.length)
 						{	
-							$('#ns1blankspaceFinancialUnsentPreviewStatusIndex').html(iDataIndex + 1);
+							$('#ns1blankspaceFinancialOutstandingFileStatusIndex').html(iDataIndex + 1);
 
-							var oData = ns1blankspace.financial.invoicing.data.unsentEmail[iDataIndex];
+							var oData = ns1blankspace.financial.expense.outstanding.data.toBePaid[iDataIndex];
 
-							$('#ns1blankspaceUnsent_option_preview-' + oData.id).html(ns1blankspace.xhtml.loadingSmall)
+							$('#ns1blankspaceExpenseOutstanding_option_preview-' + oData.id).html(ns1blankspace.xhtml.loadingSmall)
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-							oSearch.addField('financialaccounttext,tax,issuedamount,amount,description,object');
-							oSearch.addFilter('object', 'EQUAL_TO', 5);
+							oSearch.addField('financialaccounttext,tax,issuedamount,amount,expenseoutstandingamount,description,object');
+							oSearch.addFilter('object', 'EQUAL_TO', 2);
 							oSearch.addFilter('objectcontext', 'EQUAL_TO', oData.id);
+							oSearch.addFilter('expenseoutstandingamount', 'GREATER_THAN', 0);
+
 							oSearch.sort('id', 'asc');
 							oSearch.getResults(function(oResponse)
 							{
-								oParam.step = 2;
-								oParam.dataIndex = iDataIndex + 1;
-								ns1blankspace.financial.invoicing.data.unsentEmail[iDataIndex].items = oResponse.data.rows;
+								$('#ns1blankspaceExpenseOutstanding_option_preview-' + oData.id).html('');
+								$('#ns1blankspaceExpenseOutstanding_option_preview-' + oData.id).addClass('ns1blankspaceRowPreviewDone');
 
-								$('#ns1blankspaceUnsent_option_preview-' + oData.id).html('');
-								$('#ns1blankspaceUnsent_option_preview-' + oData.id).addClass('ns1blankspaceRowPreviewDone');
-
-								$('#ns1blankspaceUnsent_option_preview-' + oData.id).button(
+								$('#TODOns1blankspaceExpenseOutstanding_option_preview-' + oData.id).button(
 								{
 									text: false,
 									icons:
@@ -1332,197 +1362,125 @@ ns1blankspace.financial.expense.outstanding.data.toBePaid
 									}
 								})
 								.click(function() {
-									ns1blankspace.financial.invoicing.unsent.preview.showHide({xhtmlElementID: this.id});
+									ns1blankspace.financial.expense.outstanding.file.showHide({xhtmlElementID: this.id});
 								})
 								.css('width', '15px')
 								.css('height', '20px');
 
-								ns1blankspace.financial.invoicing.unsent.preview.init(oParam);
+								ns1blankspace.financial.expense.outstanding.data.toBePaid[iDataIndex].items = oResponse.data.rows;
+
+								oParam.dataIndex = iDataIndex + 1;
+								ns1blankspace.financial.expense.outstanding.file(oParam);
 							});
 						}
 						else
 						{
-							$('#ns1blankspaceFinancialUnsentPreviewStatus').fadeOut(3000);
 							delete oParam.dataIndex;
-							ns1blankspace.util.onComplete(oParam);
-						}	
-					}						
-				},				
-
-	pay: 		function (oParam)
-				{
-					var iStep = 1
-					var iDataIndex = 0;
-					var iDataItemIndex = 0;
-
-					if (oParam != undefined)
-					{	
-						if (oParam.step != undefined) {iStep = oParam.step}
-						if (oParam.dataIndex != undefined) {iDataIndex = oParam.dataIndex}
-						if (oParam.dataItemIndex != undefined) {iDataItemIndex = oParam.dataItemIndex}
-					}
-					else
-					{
-						oParam = {}
-					}			
-
-					if (iStep == 1)
-					{	
-						ns1blankspace.financial.invoicing.data.createCopy = [];
-
-						if ($('#ns1blankspaceInvoicingCreate input:checked').length > 0)
-						{	
-							$('#ns1blankspaceFinancialCreateCopyStatus').html('<span id="ns1blankspaceImportStatus" style="font-size:2.25em;" class="ns1blankspaceSub">' +
-										'<span id="ns1blankspaceFinancialCreateCopyStatusIndex">1</span>/' + $('#ns1blankspaceInvoicingCreate input:checked').length + 
-										'</span>');
-						}
-						else
-						{
-							ns1blankspace.status.error('No invoices selected')
-						}	
-
-						$($('#ns1blankspaceInvoicingCreate input:checked')).each(function() 
-						{
-							var iID = (this.id).split('-')[1]
-
-							var oData = $.grep(ns1blankspace.financial.invoicing.data.create, function (a) {return a.id == iID;})[0]
-
-							if (oData)
-							{
-								oData.sentdate = Date.today().toString("dd-MMM-yyyy");
-								oData.sent = 'N';
-								oData.source = oData.id;
-								delete oData.reference;
-								delete oData.id;
-								delete oData.amount;
-								delete oData.contactbusinesssenttotext;
-								delete oData.contactpersonsenttotext;
-
-								ns1blankspace.financial.invoicing.data.createCopy.push(oData);
-							}
-						});
-
-						oParam.step = 2;
-						ns1blankspace.financial.invoicing.create.copy(oParam);
-					}			
-
-					if (iStep == 2)
-					{
-						if (iDataIndex < ns1blankspace.financial.invoicing.data.createCopy.length)
-						{	
-							$('#ns1blankspaceFinancialCreateCopyStatusIndex').html(iDataIndex + 1);
-
-							var oData = ns1blankspace.financial.invoicing.data.createCopy[iDataIndex];
-
-							$('#ns1blankspaceCreate_selectContainer-' + oData.source).html(ns1blankspace.xhtml.loadingSmall)
-
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
-								data: oData,
-								dataType: 'json',
-								global: false,
-								success: function (data)
-								{
-									if (data.status == 'OK')
-									{
-										$('#ns1blankspaceCreate_sentdate-' + oData.source).html('')
-										$('#ns1blankspaceCreate_view-' + oData.source).attr('data-id', data.id)
-										//oData.response = data;
-										oData.id = data.id;
-
-										oParam.step = 3;  // LINE ITEMS
-										ns1blankspace.financial.invoicing.create.copy(oParam);
-									}
-									else
-									{
-										$('#ns1blankspaceCreate_selectContainer-' + oData.source).html('Error');
-										$('#ns1blankspaceCreate_selectContainer-' + oData.source).attr('title', data.error.errornotes);
-									}
-								}
-							});
-						}
-						else
-						{
-							$('#ns1blankspaceFinancialCreateCopyStatus').fadeOut(3000);
-						}
-					}
-
-					if (iStep == 3 && (iDataIndex < ns1blankspace.financial.invoicing.data.createCopy.length))
-					{
-						var oData = ns1blankspace.financial.invoicing.data.createCopy[iDataIndex];
-
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-						oSearch.addField('financialaccounttext,tax,issuedamount,amount,description,object');
-						oSearch.addFilter('object', 'EQUAL_TO', 5);
-						oSearch.addFilter('objectcontext', 'EQUAL_TO', oData.source);
-						oSearch.sort('id', 'asc');
-						oSearch.getResults(function(oResponse)
-						{
 							oParam.step = 4;
-							oParam.dataItemIndex = 0;
-							ns1blankspace.financial.invoicing.data.createCopyItems = oResponse.data.rows;
-							ns1blankspace.financial.invoicing.create.copy(oParam);
-						});
-					}		
+							ns1blankspace.financial.expense.outstanding.file(oParam);
+						}	
+					}
 
 					if (iStep == 4)
 					{
-						var oData = ns1blankspace.financial.invoicing.data.createCopy[iDataIndex]
+						var aItems = [];
 
-						if (iDataItemIndex < ns1blankspace.financial.invoicing.data.createCopyItems.length)
+						$.each(ns1blankspace.financial.expense.outstanding.data.toBePaid, function (i, v)
 						{
-							var oDataItem = ns1blankspace.financial.invoicing.data.createCopyItems[iDataItemIndex];
-
-							oDataItem.objectContext = oData.id;
-							delete oDataItem.id;
-
-							$.ajax(
+							$.each(v.items, function (j, k)
 							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
-								data: oDataItem,
-								dataType: 'json',
-								success: function(oResponse)
-								{
-									oParam.dataItemIndex = iDataItemIndex + 1;
-									ns1blankspace.financial.invoicing.create.copy(oParam);
-								}
+								aItems.push(k.id);
 							});
-						}
-						else
+						});
+
+						var oData =
 						{
-							var sData = 'object=5&objectcontext=' + oData.id;
-
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
-								data: sData,
-								dataType: 'json',
-								success: function(oResponse)
-								{	
-									$('#ns1blankspaceCreate_selectContainer-' + oData.source).html('Copied');
-
-									$.ajax(
-									{
-										type: 'POST',
-										url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
-										data: 'override_LockedSent=Y&override_LockedDate=Y&frequency=9&id=' + oData.source,
-										dataType: 'json',
-										global: false,
-										success: function (data)
-										{
-											oParam.dataIndex = iDataIndex + 1;
-											oParam.step = 2;  // NEXT INVOICE
-											ns1blankspace.financial.invoicing.create.copy(oParam);
-										}
-									});
-								}
-							});
+							transfer: iFundsTransfer,
+							lineitem: aItems.join(',')
 						}
+						
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_TRANSFER_EXPENSE_MANAGE'),
+							data: oData,
+							dataType: 'json',
+							success: function(data)
+							{
+								oParam.step = 5;
+								ns1blankspace.financial.expense.outstanding.file(oParam);
+							}	
+						});
 					}
-				}													
+
+					if (iStep == 5)
+					{
+						var oData =
+						{
+							id: iFundsTransfer,
+						}
+						
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_TRANSFER_CREATE_FILE'),
+							data: oData,
+							dataType: 'json',
+							success: function(data)
+							{	
+								ns1blankspace.status.message('File created');
+								$('#ns1blankspaceFinancialOutstandingFileStatus').html('<a target="_blank" href="/download/' + data.attachmentlink + '"">Download</a>');
+
+								$('#ns1blankspaceFinancialOutstandingMark_container-' + iPaymentAccount).html(
+									'<span id="ns1blankspaceFinancialOutstandingMark-' + iPaymentAccount + '" class="ns1blankspaceAction ns1blankspaceFinancialOutstandingMark">' +
+												'Mark as paid</span><br />' + 
+												'<div style="padding-top:5px; font-size:0.75em;" class="ns1blankspaceSub">' +
+												'Create payments for the expenses in the file.</div>');
+
+								$('span.ns1blankspaceFinancialOutstandingMark').button(
+								{
+									label: 'Mark as paid',
+									icons:
+									{
+										primary: "ui-icon-check"
+									}
+								})
+								.click(function()
+								{	
+									if (confirm('Have you downloaded the file? Cancel to do it now.'))
+									{
+										oParam.step = 6;
+										ns1blankspace.financial.expense.outstanding.file(oParam)
+									}
+								})
+								.css('width', '130px');
+							}	
+						});
+					}
+
+					if (iStep == 6)
+					{
+						ns1blankspace.status.working('Creating payments...');
+
+						var oData =
+						{
+							id: iFundsTransfer,
+						}
+						
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_TRANSFER_CREATE_PAYMENTS'),
+							data: oData,
+							dataType: 'json',
+							success: function(data)
+							{	
+								
+
+								ns1blankspace.status.message(data.count + ' payment' + (data.count=1?'':'s') + ' created');
+								ns1blankspace.financial.expense.outstanding.init();
+							}	
+						});
+					}	
+				}												
 }				

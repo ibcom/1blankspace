@@ -69,18 +69,17 @@ ns1blankspace.setup.financial =
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
 								
+					aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 1px; border-color: #D0D0D0;">' +
+									'ACCOUNTS</td></tr>');
+												
 					aHTML.push('<tr><td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">' +
-									'Bank Accounts</td></tr>');	
+									'Bank</td></tr>');	
 
 					aHTML.push('<tr><td id="ns1blankspaceControlPaymentAccount" class="ns1blankspaceControl">' +
 									'Payments</td></tr>');	
-
-					aHTML.push('</table>');		
-					
-					aHTML.push('<table class="ns1blankspaceControl">');
 		
 					aHTML.push('<tr><td id="ns1blankspaceControlFinancialAccount" class="ns1blankspaceControl">' +
-									'Accounts</td></tr>');
+									'Financial<br /><div class="ns1blankspaceSubNote">(COA)</div></td></tr>');
 								
 					aHTML.push('<tr><td id="ns1blankspaceControlFinancialAccountDefault" class="ns1blankspaceControl">' +
 									'Defaults</td></tr>');	
@@ -89,8 +88,8 @@ ns1blankspace.setup.financial =
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
 					
-					aHTML.push('<tr><td class="ns1blankspaceSub">' +
-									'Templates</span></td></tr>');
+					aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 1px; border-color: #D0D0D0;">' +
+									'TEMPLATES</td></tr>');
 
 					aHTML.push('<tr><td id="ns1blankspaceControlInvoiceTemplate" class="ns1blankspaceControl">' +
 									'Invoice</td></tr>');
@@ -631,8 +630,7 @@ ns1blankspace.setup.financial =
 					}	
 
 					if (iStep == 1)
-					{
-						
+					{			
 						if (oResponse == undefined)
 						{
 							var oSearch = new AdvancedSearch();
@@ -800,6 +798,21 @@ ns1blankspace.setup.financial =
 										'<input type="radio" id="radioPaymentAccountTakePaymentY" name="radioPaymentAccountTakePayment" value="Y"/>Yes' +
 										'<br /><input type="radio" id="radioPaymentAccountTakePaymentN" name="radioPaymentAccountTakePayment" value="N"/>No' +
 										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Bank Account' +
+										'</td></tr>' +
+										'<tr class="ns1blankspaceRadio">' +
+										'<td id="ns1blankspacePaymentAccountBankAccount" class="ns1blankspaceRadio">');
+						
+						$.each(ns1blankspace.financial.data.bankaccounts, function()
+						{
+							aHTML.push('<input type="radio" id="radioPaymentAccountBankAccount' + this.id + '" name="radioPaymentAccountBankAccount" value="' + this.id + '"/>' +
+												this.title + '<br />');				
+						});
+						
+						aHTML.push('</td></tr>');	
 						
 						aHTML.push('</table>');					
 						
@@ -836,7 +849,8 @@ ns1blankspace.setup.financial =
 								provider: $('input[name="radioPaymentAccountProvider"]:checked').val(),
 								status: $('input[name="radioPaymentAccountStatus"]:checked').val(),
 								makepayment: $('input[name="radioPaymentAccountMakePayment"]:checked').val(),
-								takepayment: $('input[name="radioPaymentAccountTakePayment"]:checked').val()
+								takepayment: $('input[name="radioPaymentAccountTakePayment"]:checked').val(),
+								bankaccount: $('input[name="radioPaymentAccountBankAccount"]:checked').val()
 							}	
 
 							$.ajax(
@@ -868,15 +882,28 @@ ns1blankspace.setup.financial =
 						{
 							ns1blankspace.status.working();
 
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_SEARCH';
-							oSearch.addField('title,provider,providertext,status,statustext,takepayment,makepayment,urlcancel,urlsuccess,provideraccountkey,' +
-												'apikey,apilogon');
-							oSearch.addFilter('id', 'EQUAL_TO', sID);
-							oSearch.getResults(function(data) {
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_SEARCH'),
+								data: 'id=' + sID,
+								dataType: 'json',
+								success: function(data)
+								{
 									$.extend(true, oParam, {step: 3});
 									ns1blankspace.setup.financial.paymentAccounts(oParam, data)
-									});
+								}
+							});
+
+							//var oSearch = new AdvancedSearch();
+							//oSearch.method = 'SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_SEARCH';
+							//oSearch.addField('title,provider,providertext,status,statustext,takepayment,makepayment,urlcancel,urlsuccess,provideraccountkey,' +
+							//					'apikey,apilogon');
+							//oSearch.addFilter('id', 'EQUAL_TO', sID);
+							//oSearch.getResults(function(data) {
+							//		$.extend(true, oParam, {step: 3});
+							//		ns1blankspace.setup.financial.paymentAccounts(oParam, data)
+							//		});
 						}
 						else
 						{
@@ -895,6 +922,7 @@ ns1blankspace.setup.financial =
 						$('[name="radioPaymentAccountStatus"][value="' + oObjectContext.status + '"]').attr('checked', true);
 						$('[name="radioPaymentAccountMakePayment"][value="' + oObjectContext.makepayment + '"]').attr('checked', true);
 						$('[name="radioPaymentAccountTakePayment"][value="' + oObjectContext.takepayment + '"]').attr('checked', true);
+						$('[name="radioPaymentAccountBankAccount"][value="' + oObjectContext.bankaccount + '"]').attr('checked', true);
 
 						ns1blankspace.status.message('');
 					}
@@ -913,7 +941,7 @@ ns1blankspace.setup.financial =
 								{
 									$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 									$.extend(true, oParam, {step: 1});
-									ins1blankspace.setup.financial.paymentAccounts(oParam);
+									ns1blankspace.setup.financial.paymentAccounts(oParam);
 									ns1blankspace.status.message('Saved');
 								}
 								else
