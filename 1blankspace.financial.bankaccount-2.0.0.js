@@ -3522,7 +3522,7 @@ ns1blankspace.financial.bankAccount =
 
 													var oData = 
 													{
-														mapfrom: (iType==1?2:1),
+														mapfrom: (ns1blankspace.util.getParam(oParam, 'type').value==1?2:1),
 														descriptionmatchtype: 1,
 														mapfromdescription: ns1blankspace.util.getParam(oParam, 'description').value,
 														maptofinancialaccount: ns1blankspace.util.getParam(oParam, 'account').value,
