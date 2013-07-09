@@ -3893,6 +3893,7 @@ ns1blankspace.financial.save =
 					var bRefresh = false;
 					var fPostSave;
 					var bShowStatus = true;
+					var iTaxType;
 
 					if (oParam != undefined)
 					{
@@ -3904,7 +3905,8 @@ ns1blankspace.financial.save =
 						if (oParam.complete != undefined) {bComplete = oParam.complete}
 						if (oParam.refresh != undefined) {bRefresh = oParam.refresh}
 						if (oParam.postSave != undefined) {fPostSave = oParam.postSave}
-						if (oParam.showStatus != undefined) {bShowStatus = oParam.showStatus} 	
+						if (oParam.showStatus != undefined) {bShowStatus = oParam.showStatus} 
+						if (oParam.taxType != undefined) {iTaxType = oParam.taxType} 	
 					}
 
 					if (!iAccount)
@@ -3921,12 +3923,16 @@ ns1blankspace.financial.save =
 					}
 					else
 					{
-						var sData = 'object=' + ns1blankspace.util.fs(iObject);
-						sData += '&objectcontext=' + ns1blankspace.util.fs(iObjectContext);
-						sData += '&financialaccount=' + ns1blankspace.util.fs(iAccount);
-						sData += '&amount=' + ns1blankspace.util.fs(cAmount);
-						sData += '&description=' + ns1blankspace.util.fs(sItemDescription);
-						
+						var oData = 
+						{
+							object: iObject,
+							objectcontext: iObjectContext,
+							financialaccount: iAccount,
+							amount: cAmount,
+							description: sItemDescription,
+							taxtype: iTaxType
+						}	
+
 						$.ajax(
 						{
 							type: 'POST',
