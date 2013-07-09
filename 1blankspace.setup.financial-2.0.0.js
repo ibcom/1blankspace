@@ -812,7 +812,52 @@ ns1blankspace.setup.financial =
 												this.title + '<br />');				
 						});
 						
-						aHTML.push('</td></tr>');	
+						aHTML.push('</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Success URL' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspacePaymentAccountURLSuccess" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Cancel URL' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspacePaymentAccountURLCancel" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'API Logon' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspacePaymentAccountAPILogon" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'API Password' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input type="password" id="ns1blankspacePaymentAccountAPIPassword" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'API Key' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspacePaymentAccountAPIKey" class="ns1blankspaceText">' +
+										'</td></tr>');
 						
 						aHTML.push('</table>');					
 						
@@ -850,7 +895,12 @@ ns1blankspace.setup.financial =
 								status: $('input[name="radioPaymentAccountStatus"]:checked').val(),
 								makepayment: $('input[name="radioPaymentAccountMakePayment"]:checked').val(),
 								takepayment: $('input[name="radioPaymentAccountTakePayment"]:checked').val(),
-								bankaccount: $('input[name="radioPaymentAccountBankAccount"]:checked').val()
+								bankaccount: $('input[name="radioPaymentAccountBankAccount"]:checked').val(),
+								urlsuccess: $('#ns1blankspacePaymentAccountURLSuccess').val(),
+								urlcancel: $('#ns1blankspacePaymentAccountURLCancel').val(),
+								apilogon: $('#ns1blankspacePaymentAccountAPILogon').val(),
+								apipassword: $('#ns1blankspacePaymentAccountAPIPassword').val(),
+								apikey: $('#ns1blankspacePaymentAccountAPIKey').val()
 							}	
 
 							$.ajax(
@@ -923,6 +973,11 @@ ns1blankspace.setup.financial =
 						$('[name="radioPaymentAccountMakePayment"][value="' + oObjectContext.makepayment + '"]').attr('checked', true);
 						$('[name="radioPaymentAccountTakePayment"][value="' + oObjectContext.takepayment + '"]').attr('checked', true);
 						$('[name="radioPaymentAccountBankAccount"][value="' + oObjectContext.bankaccount + '"]').attr('checked', true);
+						$('#ns1blankspacePaymentAccountURLSuccess').val(oObjectContext.urlsuccess);
+						$('#ns1blankspacePaymentAccountURLCancel').val(oObjectContext.urlcancel);
+						$('#ns1blankspacePaymentAccountAPILogon').val(oObjectContext.apilogon);
+						$('#ns1blankspacePaymentAccountAPIPassword').val(oObjectContext.apipassword);
+						$('#ns1blankspacePaymentAccountAPIKey').val(oObjectContext.apikey);
 
 						ns1blankspace.status.message('');
 					}
