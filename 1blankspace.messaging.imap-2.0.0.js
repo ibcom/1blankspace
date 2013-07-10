@@ -1209,26 +1209,39 @@ ns1blankspace.messaging.imap =
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainSummary', refresh: true});
-						ns1blankspace.messaging.imap.summary();
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						//ns1blankspace.messaging.imap.summary();
 					});
 
 					$('#ns1blankspaceControlReply').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
-						ns1blankspace.messaging.imap.message.edit.show({reply: true});
+
+						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != ns1blankspace.objectContext)
+						{	
+							ns1blankspace.messaging.imap.message.edit.show({reply: true});
+						}
+							
 					});
 					
 					$('#ns1blankspaceControlReplyAll').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
-						ns1blankspace.messaging.imap.message.edit.show({replyAll: true});
+
+						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != ns1blankspace.objectContext)
+						{	
+							ns1blankspace.messaging.imap.message.edit.show({replyAll: true});
+						}
 					});
 
 					$('#ns1blankspaceControlForward').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
-						ns1blankspace.messaging.imap.message.edit.show({forward: true});
+
+						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != ns1blankspace.objectContext)
+						{	
+							ns1blankspace.messaging.imap.message.edit.show({forward: true});
+						}
 					});
 					
 					$('#ns1blankspaceControlActions').click(function(event)
@@ -1594,6 +1607,8 @@ ns1blankspace.messaging.imap =
 														});
 													}
 													
+													$('#ns1blankspaceMainEdit').attr('data-objectcontext', ns1blankspace.objectContext);
+
 													var aHTML = [];
 																	
 													aHTML.push('<table id="ns1blankspaceMessagingSendMessageContainer">' +
