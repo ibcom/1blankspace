@@ -701,7 +701,8 @@ ns1blankspace.messaging.imap =
 										
 									if ($('#' + sXHTMLElementID).parent().hasClass('ns1blankspaceNotSeen'))	
 									{			
-										$('#' + sXHTMLElementID).parent().removeClass('ns1blankspaceNotSeen')
+										$('#' + sXHTMLElementID).parent().removeClass('ns1blankspaceNotSeen');
+										$('#' + sXHTMLElementID).parent().children().removeClass('ns1blankspaceNotSeen')
 
 										var oData =
 										{
@@ -737,11 +738,61 @@ ns1blankspace.messaging.imap =
 													var aHTML = [];
 														
 													aHTML.push('<table id="ns1blankspaceMessageSaveContainer" class="ns1blankspaceDropDown" style="width:320px; margin-top:0px">' +
+																	'<tr><td style="text-align:right; padding-bottom:10px; border-bottom-style:solid; border-width: 1px; border-color:#D0D0D0;" colspan=2 id="ns1blankspaceMessageContainerColumn1">' +
+																	'<div style="margin-right:4px;" id="ns1blankspaceMessageMarkAsRead" class="ns1blankspaceAction">Mark as Read</div>' +
+																	'<div style="margin-right:4px;" id="ns1blankspaceMessageReplyAll" class="ns1blankspaceAction">Reply All</div>' +
+																	'<div style="margin-right:4px;" id="ns1blankspaceMessageForward" class="ns1blankspaceAction">Forward</div>' +
+																	'</td></tr>' +
 																	'<tr><td id="ns1blankspaceMessageSaveContainerColumn1"></td>' +
 																	'<td id="ns1blankspaceMessageSaveContainerColumn2" style="width:75px;"></td></tr>' +
 																	'</table>');					
 												
 													$(ns1blankspace.xhtml.container).html(aHTML.join(''))
+
+													$('#ns1blankspaceMessageMarkAsRead').button(
+													{
+														label: 'Mark as read'
+													})
+													.click(function()
+													{
+														ns1blankspace.app.options.hide();
+														sXHTMLElementID = sXHTMLElementID.replace('_save', '_from');
+														ns1blankspace.messaging.imap.inbox.markAsRead(sXHTMLElementID);
+													});
+
+													$('#ns1blankspaceMessageReplyAll').button(
+													{
+														label: 'All',
+														icons:
+														{
+															 primary: "ui-icon-arrowreturnthick-1-w"
+														}
+													})
+													.click(function()
+													{
+														ns1blankspace.app.options.hide();
+														$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+														$('#' + sXHTMLElementID).parent().find('td').removeClass('ns1blankspaceBold');
+														ns1blankspace.messaging.imap.search.send(sXHTMLElementID, {replyAll: true});
+														
+													});
+
+													$('#ns1blankspaceMessageForward').button(
+													{
+														text: false,
+														label: 'Forward',
+														icons:
+														{
+															 primary: "ui-icon-arrow-1-e"
+														}
+													})
+													.click(function()
+													{
+														ns1blankspace.app.options.hide();
+														$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+														$('#' + sXHTMLElementID).parent().find('td').removeClass('ns1blankspaceBold');
+														ns1blankspace.messaging.imap.search.send(sXHTMLElementID, {forward: true});
+													});
 
 													var aHTML = [];
 														
@@ -1110,18 +1161,15 @@ ns1blankspace.messaging.imap =
 				{
 					var aHTML = [];
 					
-					var bReply = false;
-					
-					if (oParam != undefined)
-					{
-						if (oParam.reply != undefined) {bReply = oParam.reply}
-					}	
-					
+					var bReply = ns1blankspace.util.getParam(oParam, 'reply', {default: false}).value;
+					var bReplyAll = ns1blankspace.util.getParam(oParam, 'replyAll', {default: false}).value;
+					var bForward = ns1blankspace.util.getParam(oParam, 'forward', {default: false}).value;
+						
 					$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 
 					aHTML.push('<table class="ns1blankspaceControl" style="padding-top:5px; margin-top:13px; border-top-style:solid; border-top-width: 1px; border-top-color:#D0D0D0;">');
 					
-					if (bReply) 
+					if (bReply || bReplyAll || bForward) 
 					{
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlSummary" class="ns1blankspaceControl" style="padding-top:15px;">' +
@@ -1137,28 +1185,19 @@ ns1blankspace.messaging.imap =
 					}
 					
 					
-					if (bReply) 
-					{
-						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlReply" class="ns1blankspaceControl ns1blankspaceHighlight">' +
+					aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlReply" class="ns1blankspaceControl' + (bReply?' ns1blankspaceHighlight':'') + '">' +
 									'Reply</td>' +
 									'</tr>');
-					}
-					else
-					{
-						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlReply" class="ns1blankspaceControl">' +
-									'Reply</td>' +
-									'</tr>');
-					}
+	
 					
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlReplyAll" class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlReplyAll" class="ns1blankspaceControl' + (bReplyAll?' ns1blankspaceHighlight':'') + '">' +
 									'Reply All</td>' +
 									'</tr>');	
 					
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlForward" class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlForward" class="ns1blankspaceControl' + (bForward?' ns1blankspaceHighlight':'') + '">' +
 									'Forward</td>' +
 									'</tr>');
 												
@@ -1207,15 +1246,12 @@ ns1blankspace.messaging.imap =
 
 	show: 		function (oParam, oResponse)
 				{
-					var bReply = false;
+					var bReply = ns1blankspace.util.getParam(oParam, 'reply', {default: false}).value;
+					var bReplyAll = ns1blankspace.util.getParam(oParam, 'replyAll', {default: false}).value;
+					var bForward = ns1blankspace.util.getParam(oParam, 'forward', {default: false}).value;
 					var aHTML = [];
 					var sHTML = '';
-					
-					if (oParam != undefined)
-					{
-						if (oParam.reply != undefined) {bReply = oParam.reply}
-					}	
-					
+				
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					
 					ns1blankspace.messaging.imap.layout(oParam);
@@ -1233,7 +1269,7 @@ ns1blankspace.messaging.imap =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						ns1blankspace.objectContextData.sourcetypetext = 'EMAIL';
 												
-						if (bReply)
+						if (bReply || bReplyAll || bForward)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
 							ns1blankspace.messaging.imap.message.edit.show(oParam)
@@ -1390,6 +1426,12 @@ ns1blankspace.messaging.imap =
 
 	message: 	{
 					contents: 	{
+									clear: 		function()
+												{
+													$('#ns1blankspaceMainEdit').html('');
+													$('#ns1blankspaceViewControlAction').button({disabled: true});
+												},
+
 									show:		function (bShow)
 												{
 													if (bShow === undefined)
@@ -2179,47 +2221,61 @@ ns1blankspace.messaging.imap =
 										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 									}	
 									
-									var oData =
+									if ($('#ns1blankspaceMainEdit:visible').length == 0)
 									{
-										subject: (oParam.subject == undefined ? '' : oParam.subject),
-										message: (oParam.message == undefined ?' ' : oParam.message),
-										priority: (oParam.priority == undefined ? '' : oParam.priority),
-										id: (oParam.contactPersonTo == undefined ? '' : oParam.contactPersonTo),
-										to: (oParam.to==undefined ? '' : oParam.to),
-										cc: (oParam.cc==undefined ? '' : oParam.cc),
-										bcc: (oParam.bcc==undefined ? '' : oParam.bcc),
-										fromemail: ns1blankspace.messaging.imap.data.fromEmail
-									}	
-									
-									//sData += (oParam.otherData == undefined ? '' : oParam.otherData)					
-									//sData += 'object=' + oParam.object;
-									//sData += '&objectcontext=' + oParam.objectContext;
-									//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
+										ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
+										$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+										var sContext = 'Reply';
+										if (ns1blankspace.util.getParam(oParam, 'replyAll', {default: false}).value) {sContext = 'ReplyAll'}
+										if (ns1blankspace.util.getParam(oParam, 'forward', {default: false}).value) {sContext = 'Forward'}
+										$('#ns1blankspaceControl' + sContext).addClass('ns1blankspaceHighlight');
 
-									ns1blankspace.messaging.imap.data.lastEmail = oData;
-									$('#ns1blankspaceViewControlAction').button({disabled: true});
-									ns1blankspace.status.working('Sending...');
-									ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
-
-									$.ajax(
+										ns1blankspace.status.error('Check & press Send')
+									}
+									else
 									{
-										type: 'POST',
-										url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
-										data: oData,
-										dataType: 'text',
-										success: function(data) 
+										var oData =
 										{
-											ns1blankspace.status.message('Email has been sent');
-											$('#ns1blankspaceMessagingMessageControlContainer').html('');
-											ns1blankspace.messaging.imap.data.lastEmail = undefined;
-											$('#ns1blankspaceMainEdit').html('');
-											
-											if (fFunctionPostSend != undefined)
+											subject: (oParam.subject == undefined ? '' : oParam.subject),
+											message: (oParam.message == undefined ?' ' : oParam.message),
+											priority: (oParam.priority == undefined ? '' : oParam.priority),
+											id: (oParam.contactPersonTo == undefined ? '' : oParam.contactPersonTo),
+											to: (oParam.to==undefined ? '' : oParam.to),
+											cc: (oParam.cc==undefined ? '' : oParam.cc),
+											bcc: (oParam.bcc==undefined ? '' : oParam.bcc),
+											fromemail: ns1blankspace.messaging.imap.data.fromEmail
+										}	
+										
+										//sData += (oParam.otherData == undefined ? '' : oParam.otherData)					
+										//sData += 'object=' + oParam.object;
+										//sData += '&objectcontext=' + oParam.objectContext;
+										//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
+
+										ns1blankspace.messaging.imap.data.lastEmail = oData;
+										$('#ns1blankspaceViewControlAction').button({disabled: true});
+										ns1blankspace.status.working('Sending...');
+										ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
+
+										$.ajax(
+										{
+											type: 'POST',
+											url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
+											data: oData,
+											dataType: 'text',
+											success: function(data) 
 											{
-												fFunctionPostSend()
+												ns1blankspace.status.message('Email has been sent');
+												$('#ns1blankspaceMessagingMessageControlContainer').html('');
+												ns1blankspace.messaging.imap.data.lastEmail = undefined;
+												$('#ns1blankspaceMainEdit').html('');
+												
+												if (fFunctionPostSend != undefined)
+												{
+													fFunctionPostSend()
+												}
 											}
-										}
-									});
+										});
+									}	
 								}
 				},
 

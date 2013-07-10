@@ -83,7 +83,7 @@ ns1blankspace.setup.messaging =
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
-														'" class="ns1blankspaceMostLikely" style="width:100px; padding-right:15px;">' +
+														'" class="ns1blankspaceMostLikely" style="width:250px; padding-right:15px;">' +
 														this.email +
 														'</td>');
 
