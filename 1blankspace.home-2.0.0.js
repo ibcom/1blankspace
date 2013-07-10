@@ -208,30 +208,33 @@ ns1blankspace.home.actions =
 					
 					if (oResponse == undefined)
 					{						
-						var sData = 'diary=1&actionby=' + ns1blankspace.util.fs(ns1blankspace.user.id);
-						sData += '&rows=10';
-						
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ACTION_SEARCH';
+						oSearch.addField('contactperson,actionby,actionbytext,actionreference,actiontype,actiontypetext,billingstatus,' +
+											'billingstatustext,completed,completedtime,contactbusiness,contactbusinesstext,contactperson,' +
+											'contactpersontext,date,description,duedate,duedatetime,object,objectcontext,objecttext,' +
+											'priority,prioritytext,status,statustext,subject,text,totaltimehrs,totaltimemin');
+						oSearch.addFilter('actionby', 'EQUAL_TO', ns1blankspace.user.id);
+						oSearch.addFilter('status', 'NOT_EQUAL_TO', 1);
+
 						if (bOverdue)
 						{
-							sData += '&past=1&status=2-4';
+							oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', 'hour', '0', 'start_of_today');
 						}
 						else if (bFuture)
 						{
-							sData += '&future=1&status=2-4';
+							oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', 'hour', '0', 'start_of_today');
 						}
 						else
 						{
-							sData += '&day=' + iDay;
+							oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', 'day', iDay, 'start_of_today');
+							oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', 'day', iDay, 'end_of_today');
 						}	
-						
-						$.ajax(
-						{
-							type: 'POST',
-							url: '/ondemand/action/?method=ACTION_SEARCH',
-							data: sData,
-							dataType: 'json',
-							success: function(data) {ns1blankspace.home.actions.show(oParam, data)}
-						});
+
+						oSearch.rows = 20
+						oSearch.sort('duedate', 'asc');
+						oSearch.getResults(function(data) {ns1blankspace.home.actions.show(oParam, data)});
+
 					}
 					else
 					{
@@ -290,8 +293,8 @@ ns1blankspace.home.actions =
 								xhtml: aHTML.join(''),
 								showMore: (oResponse.morerows == 'true'),
 								more: oResponse.moreid,
-								rows: 10,
-								functionShowRow: ns1blankspace.home.actions.row(this, (bOverdue || bFuture)),
+								rows: 20,
+								functionShowRow: ns1blankspace.home.actions.row,
 								functionNewPage: 'ns1blankspace.home.actions.bind()',
 								type: 'json'
 							}); 	
@@ -301,16 +304,17 @@ ns1blankspace.home.actions =
 					}
 				},
 
-	row:		function (oRow, bShowDate)
+	row:		function (oRow, oParam)
 				{
 					var aHTML = [];
-		
+					var bShowDate = true;
+
 					aHTML.push('<tr class="ns1blankspaceRow">');
 								
 					aHTML.push('<td id="ns1blankspaceHomeActions_subject-' + oRow.id + '" class="ns1blankspaceRow">' +
 											oRow.subject + '</td>');
 						
-					var oDate = new Date(oRow.actiondatetime);
+					var oDate = new Date(oRow.date);
 					sDate = oDate.toString("ddd, dd MMM yyyy");
 							
 					if (bShowDate)
@@ -332,8 +336,7 @@ ns1blankspace.home.actions =
 											sDate + '</td>');
 											
 					aHTML.push('<td id="ns1blankspaceHomeActions_contact-' + oRow.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowContact">' +
-											oRow.contactpersonfirstname + ' ' + 
-											oRow.contactpersonsurname + '</td>');
+											oRow.contactpersontext + '</td>');
 					
 					aHTML.push('<td id="ns1blankspaceHomeActions-' + oRow.id + '" class="ns1blankspaceRow" style="width:65px;">');
 					

@@ -66,7 +66,7 @@ ns1blankspace.action =
 					aHTML.push('<tr><td><div id="ns1blankspaceViewActionLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 	
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlNext10" class="ns1blankspaceControl">Next 10</td>' +
+									'<td id="ns1blankspaceControlNext10" class="ns1blankspaceControl">Coming Up</td>' +
 									'</tr>');		
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
@@ -186,7 +186,7 @@ ns1blankspace.action =
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'ACTION_SEARCH';
-											oSearch.addField('subject');
+											oSearch.addField('subject,date,contactbusinesstext,contactpersontext');
 											
 											oSearch.addFilter('subject', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
@@ -232,13 +232,15 @@ ns1blankspace.action =
 														this.subject +
 														'</td>');
 
-											if (this.contactbusinesssenttotext != '')
+											sContact = '';
+
+											if (this.contactbusinesstext != '')
 											{
-												sContact = this.contactbusinesssenttotext;
+												sContact = this.contactbusinesstext;
 											}
 											else
 											{
-												sContact = this.contactpersonsenttotext;
+												sContact = this.contactpersontext;
 											}	
 											
 											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
@@ -390,7 +392,7 @@ ns1blankspace.action =
 								
 							var sHTML = '';
 														
-							if (oDate.getHours() != 0 && oDate.getMinutes() != 0)
+							if (oDate.getHours() != 0 || oDate.getMinutes() != 0)
 							{
 								sHTML = '<br /><span id="ns1blankspaceControlContext_time" class="ns1blankspaceSub">' + 
 											oDate.toString("h:mm tt")  + '</span>';
@@ -463,7 +465,7 @@ ns1blankspace.action =
 											oDate.toString("ddd, dd MMM yyyy") +
 											'</td></tr>');
 						
-							if (oDate.getHours() != 0 && oDate.getMinutes() != 0)
+							if (oDate.getHours() != 0 || oDate.getMinutes() != 0)
 							{
 								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Time</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryTime" class="ns1blankspaceSummary">' +
@@ -674,6 +676,8 @@ ns1blankspace.action =
 						}
 						else
 						{
+							$('#ns1blankspaceDetailsDate').val(Date.today().toString("dd MMM yyyy"));
+
 							$('[name="radioStatus"][value="1"]').attr('checked', true);
 							$('[name="radioBillingStatus"][value="3"]').attr('checked', true);
 							
@@ -688,6 +692,9 @@ ns1blankspace.action =
 							
 							if (ns1blankspace.data.contactpersontext != undefined)
 							{$('#ns1blankspaceDetailsPerson').val(ns1blankspace.action.contactpersontext);}
+
+							$('#ns1blankspaceDetailsActionBy').attr("data-id", ns1blankspace.user.id);
+							$('#ns1blankspaceDetailsActionBy').val(ns1blankspace.user.logonName);
 						}
 					}	
 				},
@@ -1785,7 +1792,8 @@ ns1blankspace.action =
 						oSearch.addFilter('status', 'NOT_EQUAL_TO', 1);
 						oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', 'hour', '0', 'start_of_today');
 
-						oSearch.rows = 10
+						oSearch.rows = 20
+						oSearch.sort('duedate', 'asc');
 						oSearch.getResults(function(data) {ns1blankspace.action.next10(oParam, data)});
 					}
 					else
