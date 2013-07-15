@@ -916,14 +916,6 @@ ns1blankspace.app =
 					{
 						$('#ns1blankspaceViewControlBrowse').remove();
 					}
-					
-					$("#ns1blankspaceHeader").touchwipe({
-							wipeLeft: function() {ns1blankspace.history.view({instruction: 3});},
-							wipeRight: function() {ns1blankspace.history.view({instruction: 2});},
-							min_move_x: 35,
-							min_move_y: 35,
-							preventDefaultEvents: true
-							});
 							
 					if (ns1blankspace.history.sendOnLogon)
 					{
