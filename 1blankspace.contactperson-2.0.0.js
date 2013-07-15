@@ -74,7 +74,7 @@ ns1blankspace.contactPerson =
 						$('#ns1blankspaceControlFavourites').click(function(event)
 						{
 							ns1blankspace.show({refresh: true});
-							ns1blankspace.contactPerson.favourites.show({xhtmlElementID: "divInterfaceMain"});
+							ns1blankspace.contactPerson.favourites.show({xhtmlElementID: "ns1blankspaceMain"});
 						});
 						
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);

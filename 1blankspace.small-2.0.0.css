@@ -7,8 +7,8 @@ body
 {
 	font-size: 100%;
 	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
-	margin: 0px;
-	margin-top: 0px;
+	margin: 2px;
+	margin-top: 3px;
 	background-color: transparent;
 }
 
@@ -196,25 +196,6 @@ a:hover
 	background-position: -96px -224px;;
 }
 
-.ns1blankspaceViewImage
-{
-	background-repeat: no-repeat;
-	float: left;
-	height: 50px;
-	width: 50px;
-	border-bottom-style: solid;
-	border-width: 8px;
-	border-color: white;
-}
-
-.ns1blankspaceViewImageLarge
-{
-	background-repeat: no-repeat;
-	float: right;
-	height: 65px;
-	width: 65px;
-}
-
 .ns1blankspaceTicked, .ticked
 {
 	height: 13px;
@@ -273,7 +254,7 @@ table.ns1blankspaceMessagingIMAPInbox
 
 table.ns1blankspaceViewControlContainer
 {
-	border-spacing: 5px 5px;
+	border-spacing: 4px 4px;
 
 	background-color: #F8F8F8;
 	width: 175px;
@@ -284,7 +265,7 @@ table.ns1blankspaceViewControlContainer
 	padding-left: 5px;
 	
 	border-style: solid;
-	border-width: 3px;
+	border-width: 1px;
 	border-color: #E8E8E8;
 	
 	margin-top:8px;
@@ -382,7 +363,7 @@ table.ns1blankspaceMostLikely
 
 table.ns1blankspaceControl
 {
-	padding-top: 20px;
+	padding-top: 10px;
 	padding-right: 0px;
 }
 
@@ -674,8 +655,8 @@ input.ns1blankspaceSelect, input.ins1blankspaceSelectContact, input.ns1blankspac
 
 textarea.ns1blankspaceTextMulti
 {
-	height: 250px;
-	width: 250px;
+	height: 150px;
+	width: 100%;
 	font-size: 0.875em;
 	border-style: solid;
 	border-width: 1px;
@@ -746,7 +727,15 @@ textarea.ns1blankspaceTextMultiSmall
 	position: absolute;
 	top: 0px;
 	left: 105px;	
-	width: 150px;
+	width: 166px;
+}
+
+#ns1blankspaceViewControlUser
+{
+	position: absolute;
+	top: 0px;
+	left: 280px;	
+	width: 30px;
 }
 
 #ns1blankspaceContainer
@@ -776,24 +765,23 @@ textarea.ns1blankspaceTextMultiSmall
 #ns1blankspaceControl
 {
 	position: absolute;
-	width: 150px;
+	width: 32px;
 	left: 0px;
-	top: 70px;
-	margin-top: 20px;
+	top: 102px;
+	margin-top: 0px;
 	border-right-style:solid;
-	border-width: 1px;
+	border-width: 0px;
 	border-color: #B8B8B8;
-	padding-right: 20px;
+	padding-right: 2px;
 	text-align: right;
 }
 
 #ns1blankspaceMain
 {
 	position: absolute;
-	width: 725px;
-	left: 185px;
+	left: 43px;
 	top: 70px;
-	margin-top: 20px;
+	margin-top: 0px;
 }
 
 #ns1blankspaceFooter
@@ -841,12 +829,11 @@ textarea.ns1blankspaceTextMultiSmall
 {
 	position: absolute;
 	top: 0px;
-	left: 200px;
 	width: 150px;
 	padding-top: 0px;
 	padding-left: 3px;
 	margin-top: 1px;
-	font-size: 1.25em;
+	font-size: 1em;
 	height: 23px;
 }
 
@@ -861,10 +848,18 @@ textarea.ns1blankspaceTextMultiSmall
 	padding-top: 5px;
 }
 
-#ns1blankspaceViewControlNewContainer
+#ns1blankspaceViewControlContextContainer
 {
 	position: absolute;
 	top: 35px;
+	left: 0px;
+	width: 100%;
+}
+
+#ns1blankspaceViewControlNew
+{
+	position: absolute;
+	top: 70px;
 	left: 0px;	
 }
 
@@ -879,285 +874,85 @@ textarea.ns1blankspaceTextMultiSmall
 {
 	position: absolute;
 	top: 35px;
-	left: 105px;
+	left: 180px;
 	padding-top: 0px;
 	padding-left: 2px;
 	height: 25px;
 	color: #A0A0A0;
-	width:170px;
+	width: 70px;
 	padding-bottom: 4px;
 	border-bottom-style:solid;
-	border-width: 2px;
+	border-width: 0px;
 	border-color: #f3f3f3;
+	z-index: 99;
 }
 
-#ns1blankspaceViewControlSetupContainer
+#ns1blankspaceViewControlActionStatusMessage
 {
-	position: absolute;
-	top: 0px;
-	left: 838px;
+	background-color: #FFFFFF;
+	opacity: 0.95;
+	width: 130px;
+	text-align: right;
 }
 
-#ns1blankspaceViewControlHelpContainer
+#ns1blankspaceViewControlContextImage
 {
 	position: absolute;
-	top: 0px;
-	left: 870px;
+	top: 35px;
+	padding-top: 5px;
+	padding-left: 4px;
+	width: 35px;
+}
+
+#ns1blankspaceViewControlContext
+{
+	position: absolute;
+	top: 35px;
+	left: 35px;
+	height: 35px;
+	font-weight: bold;
+	margin-left: 10px;
+	margin-bottom: 2px;
+	vertical-align: middle;
+	padding-top: 5px;
+	font-size: 1.5em;
+	color: #999999;
+}
+
+.ns1blankspaceViewImage
+{
+	background-repeat: no-repeat;
+	float: left;
+	height: 25px;
+	width: 25px;
+	border-bottom-style: solid;
+	border-width: 2px;
+	border-color: white;
+}
+
+.ns1blankspaceViewImageLarge
+{
+	background-repeat: no-repeat;
+	float: right;
+	height: 50px;
+	width: 50px;
 }
 
 #ns1blankspaceViewContact
 {
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -50px -100px;
+	background: url(/jscripts/images/1blankspace.icons.25-2.0.0.png) -25px -50px;
 }
 
 #ns1blankspaceViewContactLarge
 {
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px -130px;
-}
-
-#ns1blankspaceViewOpportunityLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -195px 0px;
-}
-
-#ns1blankspaceViewProject
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) 0px -100px;
-}
-
-#ns1blankspaceViewProjectLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) 0px -130px;
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -50px -100px;
 }
 
 #ns1blankspaceViewAction
 {
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) 0px 0px;
+	background: url(/jscripts/images/1blankspace.icons.25-2.0.0.png) 0px 0px;
 }
 
-#ns1blankspaceViewActionLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) 0px 0px;
-}
-
-#ns1blankspaceViewDocument
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -200px -100px;
-}
-
-#ns1blankspaceViewDocumentLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -260px -130px;
-}
-
-#ns1blankspaceViewNews
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -50px -150px;
-}
-
-#ns1blankspaceViewNewsLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px -195px;
-}
-
-#ns1blankspaceViewEvent
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -150px -200px;
-}
-
-#ns1blankspaceViewEventLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -195px -260px;
-}
-
-#ns1blankspaceViewProduct
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -150px -150px;
-}
-
-#ns1blankspaceViewProductLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -195px -195px;
-}
-
-#ns1blankspaceViewOrder
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -200px -150px;
-}
-
-#ns1blankspaceViewOrderLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -260px -195px;
-}
-
-#ns1blankspaceViewFinancial
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -100px -50px;
-}
-
-#ns1blankspaceViewFinancialLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -130px -65px;
-}
-
-#ns1blankspaceViewHelp
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -50px -200px;
-}
-
-#ns1blankspaceViewHelpLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px -260px;
-}
-
-#ns1blankspaceViewSetup
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -50px -200px;
-}
-
-#ns1blankspaceViewSetupLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px -260px;
-}
-
-#ns1blankspaceViewSetupWebsite
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -100px -150px;
-}
-
-#ns1blankspaceViewSetupWebsiteLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -130px -195px;
-}
-
-#ns1blankspaceViewSetupUser
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -300px -50px;
-}
-
-#ns1blankspaceViewSetupUserLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -390px -65px;
-}
-
-#ns1blankspaceViewMessagingEmail
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -100px -130px;
-}
-
-#ns1blankspaceViewMessagingEmailLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -130px -130px;
-}
-
-#ns1blankspaceViewReport
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -100px -200px;
-}
-
-#ns1blankspaceViewReportLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -130px -260px;
-}
-
-#ns1blankspaceViewMessagingConversation
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -150px -100px;
-}
-
-#ns1blankspaceViewMessagingConversationLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -195px -130px;
-}
-
-#ns1blankspaceViewAutomation
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -250px 0px;
-}
-
-#ns1blankspaceViewAutomationLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -325px -65px;
-}
-
-#ns1blankspaceViewDeveloper
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -250px 0px;
-}
-
-#ns1blankspaceViewDeveloperLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -65px -260px;
-}
-
-#ns1blankspaceViewDeveloperSpace
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -250px 0px;
-}
-
-#ns1blankspaceViewDeveloperSpaceLarge
-{ns1blankspaceMessageContainer
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -390px 0px;
-}
-
-#ns1blankspaceViewDeveloperBilling
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -250px 0px;
-}
-
-#ns1blankspaceViewDeveloperBillingLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -390px -130px;
-}
-
-#ns1blankspaceViewSetupSpace
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) 0px -200px;
-}
-
-#ns1blankspaceViewSetupSpaceLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) 0px -260px;
-}
-
-#ns1blankspaceViewFile
-{
-	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) 0px -150px;
-}
-
-#ns1blankspaceViewFileLarge
-{
-	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) 0px -195px;
-}
-
-table.ns1blankspaceViewControlBrowse
-{
-	font-size: 0.875em;
-	border-bottom-style:solid;
-	border-width: 1px;
-	border-color: #B8B8B8;	
-}
-
-td.ns1blankspaceViewControlBrowse
-{
-	border-right-style:solid;
-	border-width: 1px;
-	border-color: #888888;	
-	cursor: pointer;
-	color: #888888;
-	text-align: center;
-	width: 20px;
-	background-color: #F8F8F8;
-}
-
-td.ns1blankspaceViewControlBrowseAll
-{
-	cursor: pointer;
-	color: #888888;
-	text-align: center;
-	width: 20px;
-	background-color: #F8F8F8;
-}
 
 /* css for timepicker */
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }

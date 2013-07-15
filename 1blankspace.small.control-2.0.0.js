@@ -89,14 +89,12 @@ ns1blankspace.xhtml.viewContainer =
 	'<div id="ns1blankspaceViewControlSearchContainer">' +
 		'</div>' +				
 	'<div id="ns1blankspaceViewControlSearchStatus"></div>' +				
-	'<div id="ns1blankspaceViewControlNewContainer">' +
-		'<span id="ns1blankspaceViewControlNew"></span></div>' +			
-	'<div id="ns1blankspaceViewControlActionContainer">' +
-		'<span id="ns1blankspaceViewControlAction" ></span>' +
-		'<span id="ns1blankspaceViewControlActionOptions">&nbsp;</span></div>' +
-	'<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>';
+	'<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>' +
+	'<div id="ns1blankspaceViewControlUser">&nbsp;</div>' +
+	'<div id="ns1blankspaceViewControlContextImage" ></div>' +
+	'<div id="ns1blankspaceViewControlContext">&nbsp;</div>' +
+	'<div id="ns1blankspaceViewControlNew"></div>';
 	
-	//'<input id="ns1blankspaceViewControlSearch">						
 ns1blankspace.scripts =
 ns1blankspace.scripts.concat(
 [
@@ -360,34 +358,6 @@ ns1blankspace.app.bind =
 						ns1blankspace.home.show();
 					});
 
-					$('#ns1blankspaceViewControlNew').button(
-					{
-						text: false,
-						icons:
-						{
-							primary: "ui-icon-plus"
-						}
-					})
-					.click(function(event)
-					{
-						//ns1blankspace.home.show();
-					})
-					.css('height', '26px');
-
-					$('#ns1blankspaceViewControlAction').button(
-					{
-						text: false,
-						icons:
-						{
-							primary: "ui-icon-disk"
-						}
-					})
-					.click(function(event)
-					{
-						//ns1blankspace.home.show();
-					})
-					.css('height', '26px');
-
 					$('#ns1blankspaceViewControlBack').button(
 					{
 						text: false,
@@ -422,7 +392,18 @@ ns1blankspace.app.bind =
 						}	
 					});
 
-					$('#ns1blankspaceViewControlActionOptions').button(
+					$('#ns1blankspaceViewControlNew').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-plus"
+						}
+					})
+					.css('width', '26px')
+					.css('height', '26px');	
+
+					$('#REMOVEns1blankspaceViewControlActionOptions').button(
 					{
 						text: false,
 						icons:
@@ -434,7 +415,34 @@ ns1blankspace.app.bind =
 					{
 						ns1blankspace.history.view({instruction: 2});
 					})
-					.css('height', '26px');				
+					.css('height', '26px');
+
+					$('#ns1blankspaceViewControlUser').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: 'ui-icon-power'
+						}
+					})
+					.click(function(event)
+					{
+						ns1blankspace.control.user.show(this);
+					});
+
+					if (ns1blankspace.history.sendOnLogon)
+					{
+						$.ajax(ns1blankspace.history.sendOnLogon);
+					}					
+
+					if (ns1blankspace.option.returnToLast) 
+					{
+						ns1blankspace.history.view({instruction: 8})
+					}
+					else
+					{
+						ns1blankspace.app.showWhenLoaded('home');
+					}	
 				}				
 	
 ns1blankspace.control.user =
@@ -451,7 +459,7 @@ ns1blankspace.control.user =
 						$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
 						$(ns1blankspace.xhtml.container).html("&nbsp;");
 						$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 220});
+						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left - 147});
 						$(ns1blankspace.xhtml.container).html(this.layout());
 							
 						ns1blankspace.control.user.bind();
@@ -462,7 +470,7 @@ ns1blankspace.control.user =
 				{
 					var aHTML = [];
 
-					aHTML.push('<table style="width: 232px; font-size: 0.875em;" id="ns1blankspaceControlUser" class="ns1blankspaceViewControlContainer">');
+					aHTML.push('<table style="width: 180px; font-size: 0.875em;" id="ns1blankspaceControlUser" class="ns1blankspaceViewControlContainer">');
 						
 					aHTML.push('<tr><td id="ns1blankspaceUserLogOff" class="ns1blankspaceViewControl">' +
 									'Log Off</td></tr>');

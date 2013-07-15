@@ -19,16 +19,8 @@ ns1blankspace.home =
 						move: false
 					});
 
-					if (ns1blankspace.setupView)
-					{	
-						$('#ns1blankspaceViewControlSetup').attr('checked', false);
-						$('#ns1blankspaceViewControlSetup').button('refresh');
-						ns1blankspace.setup.switch({viewScript: 'ns1blankspace.home.show()'});
-					}	
-
-					$('#ns1blankspaceViewControlAction').button({disabled: true});
-					$('#ns1blankspaceViewControlNew').button({disabled: true});
-					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
+					$('#ns1blankspaceViewControlContext').html('');
+					$('#ns1blankspaceViewControlContextImage').html('<div id="ns1blankspaceViewAction" class="ns1blankspaceViewImage"></div>');
 
 					$('#ns1blankspaceViewControlViewContainer').button(
 						{
@@ -36,107 +28,44 @@ ns1blankspace.home =
 						});
 
 					var aHTML = [];
-					
-					aHTML.push('<table id="ns1blankspaceHomeContainer">');
-					
-					aHTML.push('<tr><td><div id="ns1blankspaceViewActionLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
-						
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlActionToday" class="ns1blankspaceControl ns1blankspaceControlHome">' +
-										'Today</td>' +
-									'</tr>');
-
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlActionTomorrow" class="ns1blankspaceControl ns1blankspaceControlHome">' +
-										'Tomorrow</td>' +
-									'</tr>');
-					
-					aHTML.push('<tr><td>&nbsp;</td></tr>');
-						
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlActionFuture" class="ns1blankspaceControl ns1blankspaceControlHome">' +
-										'Future</td>' +
-									'</tr>');
-					
-					aHTML.push('<tr id="trns1blankspaceViewportControl1" class="ns1blankspaceViewportControl">' +
-									'<td id="ns1blankspaceControlActionOverdue" class="ns1blankspaceControl ns1blankspaceControlHome">' +
-										'Overdue</td>' +
-									'</tr>');
 									
-					aHTML.push('</table>');					
-							
+					aHTML.push('<div id="ns1blankspaceControlActionFuture"></div>');		
+						
 					$('#ns1blankspaceControl').html(aHTML.join(''));
-					
-					ns1blankspace.home.bind();
 
-					var aHTML = [];
-					
-					aHTML.push('<table id="ns1blankspaceHomeContainer">');
-					aHTML.push('<tr><td id="ns1blankspaceHomeColumn1" class="ns1blankspaceColumn1Flexible"></td>');
-					aHTML.push('<td id="ns1blankspaceHomeColumn2" class="ns1blankspaceColumn2" style="width:100px;">');
-					aHTML.push('</td></tr></table>');	
+					$('#ns1blankspaceViewControlContext').html('Coming up');
 
-					$('#ns1blankspaceMain').html(aHTML.join(''));
-
-					$('#ns1blankspaceHomeColumn2').html(ns1blankspace.xhtml.homeNotes);
-
-					if (ns1blankspace.xhtml.defaultElementID != '')
+					ns1blankspace.home.actions.show(
 					{
-						$('#' + ns1blankspace.xhtml.defaultElementID).addClass('ns1blankspaceHighlight');
-						$('#' + ns1blankspace.xhtml.defaultElementID).click();
-					};
+						future: true
+					});
+
+					ns1blankspace.home.bind();
 				},
 
 	bind: 		function ()
 				{
-					
-					$('#ns1blankspaceControlActionToday').click(function(event)
+					$('#ns1blankspaceControlActionFuture')
+					.button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-grip-dotted-horizontal"
+						}
+					})
+					.click(function(event)
 					{
 						$('#ns1blankspaceHomeColumn1').html(ns1blankspace.xhtml.loading);
 						ns1blankspace.xhtml.defaultElementID = this.id;
 						
-						ns1blankspace.home.actions.show({
-							show: false,
-							xhtmlElementID: 'ns1blankspaceHomeColumn1',
-							day: 0
-							})
-					});
-
-					$('#ns1blankspaceControlActionTomorrow').click(function(event)
-					{
-						$('#ns1blankspaceHomeColumn1').html(ns1blankspace.xhtml.loading);
-						ns1blankspace.xhtml.defaultElementID = this.id;
-						
-						ns1blankspace.home.actions.show({
-							show: false,
-							xhtmlElementID: 'ns1blankspaceHomeColumn1',
-							day: 1
-							})
-					});
-					
-					$('#ns1blankspaceControlActionFuture').click(function(event)
-					{
-						$('#ns1blankspaceHomeColumn1').html(ns1blankspace.xhtml.loading);
-						ns1blankspace.xhtml.defaultElementID = this.id;
-						
-						ns1blankspace.home.actions.show({
-							show: false,
-							xhtmlElementID: 'ns1blankspaceHomeColumn1',
+						ns1blankspace.home.actions.show(
+						{
 							future: true
-							})
-					});
-
-					$('#ns1blankspaceControlActionOverdue').click(function(event)
-					{
-						$('#ns1blankspaceHomeColumn1').html(ns1blankspace.xhtml.loading);
-						ns1blankspace.xhtml.defaultElementID = this.id;
-						
-						ns1blankspace.home.actions.show({
-							show: false,
-							xhtmlElementID: 'ns1blankspaceHomeColumn1',
-							overdue: true
-							})
-					});
+						});
+					})
+					.css('width', '26px')
+					.css('height', '26px');
 				}
 }	
 
@@ -144,42 +73,10 @@ ns1blankspace.home.options =
 {
 	show: 		function (oElement)
 				{
-					var aHTML = [];
-					
-					aHTML.push('<table id="ns1blankspaceHomeOptions" class="ns1blankspaceSearchMedium" style="width:100px;">');
-									
-					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsCalendar" class="ns1blankspaceRowSelect">' +
-											'Calendar</td></tr>');
-
-					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsMyStartPage" class="ns1blankspaceRowSelect">' +
-											'<a href="/index.asp?Site=475&p=asms%2Fmystartpage.asp" target="_blank">' +
-											'Classic</a></td></tr>');
-					
-					aHTML.push('</table>');
-						
-					if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
-					{
-						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-					}
-					else
-					{	
-						$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
-						$(ns1blankspace.xhtml.container).html("&nbsp;");
-						$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() + 7, left: $(oElement).offset().left });
-						$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-						ns1blankspace.home.options.bind();
-					}
 				},
 
 	bind:		function ()
 				{
-					$('#ns1blankspaceHomeOptionsCalendar').click(function(event)
-					{
-						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-						ns1blankspace.action.init({calendar: true});
-					});
 				}
 }				
 
@@ -187,8 +84,7 @@ ns1blankspace.home.actions =
 {
 	show: 		function (oParam, oResponse)
 				{					
-					var bShow = false;
-					var sXHTMLElementID = 'ns1blankspaceHomeColumn1';
+					var sXHTMLElementID = 'ns1blankspaceMain';
 					var iDay = 0;
 					var sLabel = 'Actions';
 					var bOverdue = false;
@@ -196,7 +92,6 @@ ns1blankspace.home.actions =
 					
 					if (oParam != undefined)
 					{
-						if (oParam.show != undefined) {bShow = oParam.show}
 						if (oParam.overdue != undefined) {bOverdue = oParam.overdue}
 						if (oParam.future != undefined) {bFuture = oParam.future}
 						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
@@ -207,7 +102,10 @@ ns1blankspace.home.actions =
 					var aHTML = [];
 					
 					if (oResponse == undefined)
-					{						
+					{			
+
+						$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading);
+
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ACTION_SEARCH';
 						oSearch.addField('contactperson,actionby,actionbytext,actionreference,actiontype,actiontypetext,billingstatus,' +
@@ -241,28 +139,14 @@ ns1blankspace.home.actions =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table class="ns1blankspaceHomeActions">');
-							aHTML.push('<tr><td class="ns1blankspaceNothing">No ' + sLabel + '</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceNothing">Nothing.</td></tr>');
 							aHTML.push('</table>');
 
-							$('#' + sXHTMLElementID).html(aHTML.join(''));
-							if (bShow) {$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeedOptions)}	
+							$('#' + sXHTMLElementID).html(aHTML.join(''));	
 						}
 						else
 						{
-							if (bShow)
-							{
-								aHTML.push('<table id="ns1blankspaceHomeActions" class="ns1blankspace">');
-
-								aHTML.push('<tr><td class="ns1blankspaceCaption">' + sLabel + '</td>' + 
-												'<td id="ns1blankspaceHomeTodayActions" class="ns1blankspaceHomeOptionClose">Close</td>' +
-												'</tr></table>');
-								
-								aHTML.push('<table id="ns1blankspaceHomeActions" class="ns1blankspace">');
-							}
-							else
-							{
-								aHTML.push('<table id="ns1blankspaceHomeActions' + iDay + '" class="ns1blankspace">');
-							}	
+							aHTML.push('<table id="ns1blankspaceHomeActions' + iDay + '" class="ns1blankspace">');	
 							
 							aHTML.push('<tr class="ns1blankspaceCaption">');
 							aHTML.push('<td class="ns1blankspaceHeaderCaption">Subject</td>');
