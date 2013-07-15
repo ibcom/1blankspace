@@ -559,7 +559,8 @@ ns1blankspace.action =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceSelect">' +
 										'<input id="ns1blankspaceDetailsType" class="ns1blankspaceSelect"' +
-												' data-method="SETUP_ACTION_TYPE_SEARCH">' +
+												' data-method="SETUP_ACTION_TYPE_SEARCH"' +
+												' data-cache="true">' +
 										'</td></tr>');		
 												
 						aHTML.push('<tr class="ns1blankspaceCaption">' +

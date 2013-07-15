@@ -103,7 +103,7 @@ ns1blankspace.option = {};
 ns1blankspace.timer = {};
 ns1blankspace.counter = {};
 ns1blankspace.user = {};
-ns1blankspace.data = {};
+ns1blankspace.data = {search: []};
 ns1blankspace.debug = {};
 
 ns1blankspace.selector = 'body';
@@ -158,6 +158,7 @@ ns1blankspace.app =
 						$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
 											'<div id="ns1blankspaceHeader"></div>' +
 											'<div id="ns1blankspaceViewControl"><span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span></div>' +
+											'<div id="ns1blankspaceViewControlBrowse"></div>' +
 											'<div id="ns1blankspaceControl"></div>' +
 											'<div id="ns1blankspaceMain"></div>' +
 											'<div id="ns1blankspaceFooter"></div>' +
@@ -540,6 +541,7 @@ ns1blankspace.app =
 						global: false,
 						success: function(data) 
 						{
+							$('#ns1blankspaceViewControlBrowse').html('');
 							$('#ns1blankspaceMain').html('');
 							$('#ns1blankspaceControl').html('');
 							$('#ns1blankspaceLogonName').html('&nbsp;')
@@ -568,6 +570,25 @@ ns1blankspace.app =
 						}
 					});
 				},
+
+	browse: 	function ()
+				{
+					var aBrowse = ('#abcdefghijklmnopqrstuvwxyz').toUpperCase().split('');
+
+					var aHTML = [];
+					
+					aHTML.push('<table id="ns1blankspaceViewControlBrowse" class="ns1blankspaceViewControlBrowse">');
+					aHTML.push('<tr class="ns1blankspaceViewControlBrowse">');
+						
+					$.each(aBrowse, function ()
+					{
+						aHTML.push('<td id="ns1blankspaceViewControlBrowse-' + this + '" class="ns1blankspaceViewControlBrowse">' + this + '</td>');
+					});
+									
+					aHTML.push('<td id="ns1blankspaceViewControlBrowse-" class="ns1blankspaceViewControlBrowseAll">ALL</td></tr></table>');			
+
+					return aHTML.join('');
+				},		
 
 	show: 		function (oParam)	
 				{
@@ -658,49 +679,56 @@ ns1blankspace.app =
 						$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
 						$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
 
-						aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
-										'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
-										'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
-										'</div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
-										'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
-										'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
-										'<span id="ns1blankspaceViewControlForward">&nbsp;</span>' +
-										'</div>');				
-								
-						aHTML.push('<div id="ns1blankspaceViewControlViewContainer">' +
-										'<span id="ns1blankspaceViewControlView">&nbsp;</span>' +
-										'</div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
-										'<input id="ns1blankspaceViewControlSearch">' +
-										'</div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlNewContainer">' +
-										'<span id="ns1blankspaceViewControlNew">New</span>' +
-										'</div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlActionContainer">' +
-										'<span id="ns1blankspaceViewControlAction" ></span>' +
-										'<span id="ns1blankspaceViewControlActionOptions">&nbsp;</span>' +
-										'</div>');
-						
-						aHTML.push('<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>');
-						
-						if (ns1blankspace.setupShow) 
+						if (ns1blankspace.xhtml.viewContainer !== undefined)
 						{
-							aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
-											'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
-											'<label for="ns1blankspaceViewControlSetup">&nbsp;</label>' +
+							aHTML.push(ns1blankspace.xhtml.viewContainer);
+						}	
+						else
+						{	
+							aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
+											'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
+											'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
 											'</div>');
-						}				
-						
-						aHTML.push('<div id="ns1blankspaceViewControlHelpContainer">' + 
-										'<span id="ns1blankspaceViewControlHelp">&nbsp;</span>' +
-										'</div>');
+											
+							aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
+											'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
+											'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
+											'<span id="ns1blankspaceViewControlForward">&nbsp;</span>' +
+											'</div>');				
+									
+							aHTML.push('<div id="ns1blankspaceViewControlViewContainer">' +
+											'<span id="ns1blankspaceViewControlView">&nbsp;</span>' +
+											'</div>');
+											
+							aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
+											'<input id="ns1blankspaceViewControlSearch">' +
+											'</div>');
+											
+							aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
+											
+							aHTML.push('<div id="ns1blankspaceViewControlNewContainer">' +
+											'<span id="ns1blankspaceViewControlNew">New</span>' +
+											'</div>');
+											
+							aHTML.push('<div id="ns1blankspaceViewControlActionContainer">' +
+											'<span id="ns1blankspaceViewControlAction" ></span>' +
+											'<span id="ns1blankspaceViewControlActionOptions">&nbsp;</span>' +
+											'</div>');
+							
+							aHTML.push('<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>');
+							
+							if (ns1blankspace.setupShow) 
+							{
+								aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
+												'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
+												'<label for="ns1blankspaceViewControlSetup">&nbsp;</label>' +
+												'</div>');
+							}				
+							
+							aHTML.push('<div id="ns1blankspaceViewControlHelpContainer">' + 
+											'<span id="ns1blankspaceViewControlHelp">&nbsp;</span>' +
+											'</div>');
+						}	
 						
 						$('#ns1blankspaceViewControl').html(aHTML.join(''));
 
@@ -708,207 +736,208 @@ ns1blankspace.app =
 						{
 							$('#ns1blankspaceViewControlActionStatus')
 								.css('width', '215px');
-						}	
+						}
 
-						$('#ns1blankspaceViewControlHome')
-							.button({
-									text: false,
-									icons: {
-										primary: "ui-icon-home"
-									}})
-							.click(function(event)
-							{
-								ns1blankspace.home.show();
-							})
-									
-							.next()
-								.button( {
-									text: false,
-									icons: {
-										primary: "ui-icon-triangle-1-s"
-									}
-								})
-								.click(function() {
-									ns1blankspace.home.options.show(this);
-								})
-								.css('width', '12px')
-								.css('margin-left', '2px')
-								.parent()
-									.buttonset();
-						
-						$('#ns1blankspaceViewControlBack')
-							.button({
-									text: false,
-									icons: {}
-									})
-							.click(function(event)
-							{
-								ns1blankspace.history.view({instruction: 2});
-							})
-							.css('width', '19px')
-							.next()
-								.button( {
-									text: false,
-									icons: {
-										primary: ".ui-icon-arrowthickstop-1-n"
-									}
-								})
-								.click(function()
-								{
-									if (ns1blankspace.objectParentName !== undefined)
-									{
-										ns1blankspace[ns1blankspace.objectParentName][ns1blankspace.objectName].init();
-									}	
-									else
-									{
-										ns1blankspace[ns1blankspace.objectName].init();
-									}	
-									//ns1blankspace.history.view({instruction: 7});
-								})
-								.css('width', '25px')
-								.css('margin-left', '2px')
-							.next()
-								.button( {
-									text: false,
-									icons: {}
-								})
-								.click(function() {
-									ns1blankspace.history.view({instruction: 3});
-								})
-								.css('width', '19px')
-								.css('margin-left', '2px')
-								.parent()
-									.buttonset();
-						
-						$('#ns1blankspaceViewControlViewContainer')
-							.button(
-							{
-								icons: 
-								{
-									primary: "ui-icon-grip-dotted-vertical",
-									secondary: "ui-icon-triangle-1-s"
-								},
-								label: ns1blankspace.option.defaultView
-							})
-							.click(function() 
-							{
-								ns1blankspace.control.views.show(this);
-							})
-							.css('text-align', 'left');
-						
-						$('#ns1blankspaceViewControlNew')
-							.button({
-									label: "New"
-									})
+						ns1blankspace.app.bind(oParam);
+					}	
+				},
+					
+	bind: 		function (oParam)	
+				{					
+					$('#ns1blankspaceViewControlHome')
+						.button({
+								text: false,
+								icons: {
+									primary: "ui-icon-home"
+								}})
+						.click(function(event)
+						{
+							ns1blankspace.home.show();
+						})
 								
-							.next()
-								.button( {
-									text: false,
-									icons: {
-										primary: "ui-icon-triangle-1-s"
-									}
-								})
-								.css('width', '12px')
-								.parent()
-									.buttonset();
-						
-						$('#ns1blankspaceViewControlAction')
-							.button({
-									label: "Save"
-									})
-											
-							.next()
-								.button( {
-									text: false,
-									icons: {
-										primary: "ui-icon-triangle-1-s"
-									}
-								})
-								.css('width', '12px')
-								.css('margin-left', '2px')
-								.parent()
-									.buttonset();	
-															
-						$('#ns1blankspaceViewControlSetup')
-							.button({
-										text: false,
-										label: 'Set up your space.  Once finished click on this icon again.',
-										icons: {
-											primary: "ui-icon-gear"
-										}})
-							.css('font-size', '0.75em')			
-							.click(function() 
-							{
-								ns1blankspace.setup.switch();
-							});	
-						
-						$('#ns1blankspaceViewControlHelp')
-							.button({
-									text: false,
-									icons: {
-										primary: "ui-icon-help"
-									}})
-							.click(function() 
-							{
-								if (ns1blankspace.option.helpURI)
-								{	
-									window.open(ns1blankspace.option.helpURI);
+						.next()
+							.button( {
+								text: false,
+								icons: {
+									primary: "ui-icon-triangle-1-s"
 								}
+							})
+							.click(function() {
+								ns1blankspace.home.options.show(this);
+							})
+							.css('width', '12px')
+							.css('margin-left', '2px')
+							.parent()
+								.buttonset();
+					
+					$('#ns1blankspaceViewControlBack')
+						.button({
+								text: false,
+								icons: {}
+								})
+						.click(function(event)
+						{
+							ns1blankspace.history.view({instruction: 2});
+						})
+						.css('width', '19px')
+						.next()
+							.button( {
+								text: false,
+								icons:
+								{
+									primary: "ui-icon-arrowthickstop-1-n"
+								}
+							})
+							.click(function()
+							{
+								if (ns1blankspace.objectParentName !== undefined)
+								{
+									ns1blankspace[ns1blankspace.objectParentName][ns1blankspace.objectName].init();
+								}	
 								else
 								{
-									window.alert('No help available.  May be search the internet?')
+									ns1blankspace[ns1blankspace.objectName].init();
 								}	
-							});		
-						
-						$('#ns1blankspaceLogonName').click(function(event)
+							})
+							.css('width', '25px')
+							.css('margin-left', '2px')
+						.next()
+							.button( {
+								text: false,
+								icons: {}
+							})
+							.click(function() {
+								ns1blankspace.history.view({instruction: 3});
+							})
+							.css('width', '19px')
+							.css('margin-left', '2px')
+							.parent()
+								.buttonset();
+					
+					$('#ns1blankspaceViewControlViewContainer')
+						.button(
 						{
-							ns1blankspace.control.user.show(this);
-						});
+							icons: 
+							{
+								primary: "ui-icon-grip-dotted-vertical",
+								secondary: "ui-icon-triangle-1-s"
+							},
+							label: ns1blankspace.option.defaultView
+						})
+						.click(function() 
+						{
+							ns1blankspace.control.views.show(this);
+						})
+						.css('text-align', 'left');
+					
+					$('#ns1blankspaceViewControlNew')
+						.button({
+								label: "New"
+								})
+							
+						.next()
+							.button( {
+								text: false,
+								icons: {
+									primary: "ui-icon-triangle-1-s"
+								}
+							})
+							.css('width', '12px')
+							.parent()
+								.buttonset();
+					
+					$('#ns1blankspaceViewControlAction')
+						.button({
+								label: "Save"
+								})
+										
+						.next()
+							.button( {
+								text: false,
+								icons: {
+									primary: "ui-icon-triangle-1-s"
+								}
+							})
+							.css('width', '12px')
+							.css('margin-left', '2px')
+							.parent()
+								.buttonset();	
+														
+					$('#ns1blankspaceViewControlSetup')
+						.button({
+									text: false,
+									label: 'Set up your space.  Once finished click on this icon again.',
+									icons: {
+										primary: "ui-icon-gear"
+									}})
+						.css('font-size', '0.75em')			
+						.click(function() 
+						{
+							ns1blankspace.setup.switch();
+						});	
+					
+					$('#ns1blankspaceViewControlHelp')
+						.button({
+								text: false,
+								icons: {
+									primary: "ui-icon-help"
+								}})
+						.click(function() 
+						{
+							if (ns1blankspace.option.helpURI)
+							{	
+								window.open(ns1blankspace.option.helpURI);
+							}
+							else
+							{
+								window.alert('No help available.  May be search the internet?')
+							}	
+						});		
+					
+					$('#ns1blankspaceLogonName').click(function(event)
+					{
+						ns1blankspace.control.user.show(this);
+					});
 
-						$('#ns1blankspaceSpaceText').click(function(event)
-						{
-							ns1blankspace.control.spaces.show(this);
-						});
-						
-						//if (ns1blankspace.option.showBrowsing)
-						//{
-							//$('#ns1blankspaceViewControlBrowse').html(ns1blankspaceViewportBrowse());
-						//}
-						//else
-						//{
-							$('#ns1blankspaceViewControlBrowse')
-								.css('height', '1px')
-								.css('border-width', '0px');
-								
-							//$('#ns1blankspaceViewControl')
-							//	.css('top', '90px');
-								
-							//$('#ns1blankspaceViewControl')
-							//	.css('top', '90px');
-						//}
-						
-						$("#ns1blankspaceHeader").touchwipe({
-								wipeLeft: function() {ns1blankspace.history.view({instruction: 3});},
-								wipeRight: function() {ns1blankspace.history.view({instruction: 2});},
-								min_move_x: 35,
-								min_move_y: 35,
-								preventDefaultEvents: true
-								});
-								
-						if (ns1blankspace.history.sendOnLogon)
-						{
-							$.ajax(ns1blankspace.history.sendOnLogon);
-						}					
+					$('#ns1blankspaceSpaceText').click(function(event)
+					{
+						ns1blankspace.control.spaces.show(this);
+					});
+					
+					if (ns1blankspace.option.showBrowsing)
+					{
+						$('#ns1blankspaceViewControlBrowse').html(ns1blankspace.app.browse());
+						$('#ns1blankspaceControl')
+							.css('top', '90px');
+						$('#ns1blankspaceMain')
+							.css('top', '90px');
+					}
+					else
+					{
+						$('#ns1blankspaceViewControlBrowse').remove();
+					}
+					
+					$("#ns1blankspaceHeader").touchwipe({
+							wipeLeft: function() {ns1blankspace.history.view({instruction: 3});},
+							wipeRight: function() {ns1blankspace.history.view({instruction: 2});},
+							min_move_x: 35,
+							min_move_y: 35,
+							preventDefaultEvents: true
+							});
+							
+					if (ns1blankspace.history.sendOnLogon)
+					{
+						$.ajax(ns1blankspace.history.sendOnLogon);
+					}					
 
-						if (ns1blankspace.option.returnToLast) 
-						{
-							ns1blankspace.history.view({instruction: 8})
-						}
-						else
-						{
-							ns1blankspace.app.showWhenLoaded('home');
-						}
-					}		
+					if (ns1blankspace.option.returnToLast) 
+					{
+						ns1blankspace.history.view({instruction: 8})
+					}
+					else
+					{
+						ns1blankspace.app.showWhenLoaded('home');
+					}	
 				},
 
 	scriptLoaded:
@@ -1056,6 +1085,11 @@ ns1blankspace.app =
 							{
 								if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
 						        ns1blankspace.timer.delayCurrent = setTimeout(sNS + '.search.send("ns1blankspaceViewControlSearch")', ns1blankspace.option.typingWait);
+							});
+
+							$('td.ns1blankspaceViewControlBrowse, td.ns1blankspaceViewControlBrowseAll').click(function()
+							{
+								oNS.search.send(this.id, {source: ns1blankspace.data.searchSource.browse});
 							});
 							
 							$('#ns1blankspaceViewControlSearch').focusin(function(event)
@@ -1293,7 +1327,7 @@ ns1blankspace.logon =
 						
 					$('#ns1blankspaceViewControl').html('&nbsp;');
 						
-					aHTML.push('<table id="ns1blankspaceLogonContainer" style="width:700px;">');
+					aHTML.push('<table id="ns1blankspaceLogonContainer">');
 					
 					aHTML.push('<tr><td style="width:235px; padding-right:25px;">');
 
@@ -1348,6 +1382,12 @@ ns1blankspace.logon =
 						aHTML.push('<table class="ns1blankspace"><tr><td>' +
 										ns1blankspace.xhtml.logonNotes +
 										'</td></tr></table>');
+					}
+
+					if (ns1blankspace.xhtml.logonNotesFooter)
+					{	
+						aHTML.push('</td></tr><tr><td style="padding:8px; padding-top:15px;" class="ns1blankspaceLogonNotesFooter">' +
+									ns1blankspace.xhtml.logonNotesFooter);
 					}				
 
 					aHTML.push('</td></tr></table>');
@@ -1938,9 +1978,9 @@ ns1blankspace.history.view =
 								})
 							}		
 								
-							$('#ns1blankspaceViewControlBack').button("destroy");	
-							$('#ns1blankspaceViewControlRefresh').button("destroy");	
-							$('#ns1blankspaceViewControlForward').button("destroy");	
+							//$('#ns1blankspaceViewControlBack').button("destroy");	
+							//$('#ns1blankspaceViewControlRefresh').button("destroy");	
+							//$('#ns1blankspaceViewControlForward').button("destroy");	
 							
 							var bBack = true;
 							var bForward = true;
@@ -2658,7 +2698,7 @@ ns1blankspace.container =
 							title: sTitle,
 							buttons: 
 							{
-								"Ok": function() 
+								"OK": function() 
 								{
 									$(this).dialog("close");
 								}
@@ -2669,7 +2709,130 @@ ns1blankspace.container =
 
 ns1blankspace.search =
 {
-	show: 	function (oParam, oResponse)
+	cache: 		{
+					exists: 	function (oParam)
+								{
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+									var sMethod = ns1blankspace.util.getParam(oParam, 'method').value;
+									return ($.grep(ns1blankspace.data.search, function (a) {return a.method == sMethod && a.xhtmlElementID == sXHTMLElementID;}).length == 1);
+								},
+
+					search: 	function (oParam)
+								{
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+									var sMethod = ns1blankspace.util.getParam(oParam, 'method').value;
+									var sSearchText = ns1blankspace.util.getParam(oParam, 'searchText').value;
+
+									var aCache = $.grep(ns1blankspace.data.search, function (a) {return a.method == sMethod && a.xhtmlElementID == sXHTMLElementID;});
+
+									if (aCache.length > 0)
+									{	
+										if (sSearchText == '')
+										{
+											var aCacheSearch = aCache[0].rows;
+										}
+										else
+										{
+											var aCacheSearch = $.grep(aCache[0].rows, function(a) {return ns1blankspace.search.cache.filter(a, oParam)});
+										}
+
+										return aCacheSearch;
+									}	
+								},
+
+					filter:		function (a, oParam)
+								{
+									var sColumns = ns1blankspace.util.getParam(oParam, 'columns').value;
+									var sFixedFilter = ns1blankspace.util.getParam(oParam, 'fixedFilter').value;
+									var sSearchText = ns1blankspace.util.getParam(oParam, 'searchText').value;
+									var sFilterFunction = ns1blankspace.util.getParam(oParam, 'filterFunction', {default: ''}).value;
+
+									var aFilter = [];
+
+									if (sFixedFilter == '')
+									{	
+										var aColumns = sColumns.split('-');	
+
+										$.each(aColumns, function(i) 
+										{
+											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column')
+											{	
+												if (i != 0)
+												{
+													oFilter.push(' || ');
+												}
+
+												aFilter.push('(a["' + this + '"].toLowerCase().indexOf((sSearchText).toLowerCase()) !== -1)');
+											}	
+										});
+									}
+									else
+									{
+										var aFixedFilters = sFixedFilter.split('|');
+
+										var aFilterSearch = $.grep(aFixedFilters, function (a) {return a.split('-').length == 2;});
+
+										if (aFilterSearch.length > 0)
+										{	
+											aFilter.push('(');
+
+											$.each(aFilterSearch, function(i) 
+											{
+												var aMethodFilter = this.split('-');
+											
+												if (i != 0)
+												{
+													oFilter.push(' || ');
+												}
+												
+												aFilter.push('(a["' + aMethodFilter[0] + '"].toLowerCase().indexOf((sSearchText).toLowerCase()) !== -1)');
+											});
+
+											aFilter.push(')');
+										}
+
+										var aFilterFixed = $.grep(aFixedFilters, function (a) {return a.split('-').length == 3;});
+				
+										$.each(aFilterFixed, function(i) 
+										{
+											if (aFilter.length > 0) {aFilter.push(' && ')}
+											
+											var aFixedFilter = this.split('-');
+										
+											var sFilter = '== ' + aFixedFilter[2];
+
+											if (aFixedFilter[1] == 'NOT_EQUAL_TO') {sFilter = ' != ' + aFixedFilter[2]}
+											if (aFixedFilter[1] == 'GREATER_THAN') {sFilter = ' > ' + aFixedFilter[2]}
+											if (aFixedFilter[1] == 'GREATER_THAN_OR_EQUAL_TO') {sFilter = ' >= ' + aFixedFilter[2]}
+											if (aFixedFilter[1] == 'LESS_THAN') {sFilter = ' < ' + aFixedFilter[2];}
+											if (aFixedFilter[1] == 'LESS_THAN_OR_EQUAL_TO') {sFilter = ' <= ' + aFixedFilter[2]}
+											if (aFixedFilter[1] == 'TEXT_IS_LIKE') {sFilter = '.toLowerCase().indexOf((' + aFixedFilter[2] + ').toLowerCase()))'}
+											
+											aFilter.push('(a["' + aFixedFilter[0] + '"]' + sFilter + ')');
+										});	
+									}	
+
+									aFilter.push(sFilterFunction);
+
+									return eval(aFilter.join(''));	
+								},
+
+					add: 		function (oParam)
+								{
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+									var sMethod = ns1blankspace.util.getParam(oParam, 'method').value;
+									var oRows = ns1blankspace.util.getParam(oParam, 'rows').value;
+
+									ns1blankspace.data.search.push(
+									{
+										xhtmlElementID: sXHTMLElementID,
+										method: sMethod,
+										rows: oRows
+									});
+								}
+				},
+
+	show: 		function (oParam, oResponse)
 				{
 					var sXHTMLElementID;
 					var sXHTMLInputElementID;
@@ -2697,7 +2860,7 @@ ns1blankspace.search =
 						if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
 						if (oParam.sColumns != undefined) {sColumns = oParam.columns}
 						if (oParam.methodFilter != undefined) {sMethodFilter = oParam.methodFilter}
-						if (oParam.multiSelect != undefined) {bMultiSelect = oParam.multiSelect; }
+						if (oParam.multiSelect != undefined) {bMultiSelect = oParam.multiSelect}
 					}
 					
 					if (sXHTMLElementID != undefined)
@@ -2708,6 +2871,8 @@ ns1blankspace.search =
 					
 						$.extend(true, oParam, {xhtmlInputElementID: sXHTMLInputElementID});
 					
+						var bCache = ($('#' + sXHTMLInputElementID).attr("data-cache") == "true")
+
 						if (sMethod === undefined)
 						{
 							sMethod = $('#' + sXHTMLInputElementID).attr("onDemandMethod");
@@ -2760,18 +2925,33 @@ ns1blankspace.search =
 					}
 					else
 					{
-						if (oResponse === undefined)
+						if (sColumns === undefined) {sColumns = 'title'};
+
+						if (sSearchText === '' && iSource === ns1blankspace.data.searchSource.text)
 						{
-							ns1blankspace.container.position({xhtmlElementID: sXHTMLInputElementID, topOffset: 10, setWidth: true});
-							
-							if (sColumns === undefined) {sColumns = 'title'};
-							
+							sSearchText = $('#' + sXHTMLInputElementID).val();
+						}
+
+						ns1blankspace.container.position({xhtmlElementID: sXHTMLInputElementID, topOffset: 10, setWidth: true});
+
+						if (bCache && oResponse === undefined)
+						{
+							oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns, fixedFilter: sMethodFilter});
+
+							if (oResponse !== undefined)
+							{
+								oResponse = {data: {rows: oResponse}}
+							}	
+						}
+
+						if (oResponse === undefined)
+						{							
 							if (sSearchText === '' && iSource === ns1blankspace.data.searchSource.text)
 							{
 								sSearchText = $('#' + sXHTMLInputElementID).val();
 							}	
 						
-							if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
+							if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all || bCache)
 							{
 								ns1blankspace.status.working();
 
@@ -2790,7 +2970,7 @@ ns1blankspace.search =
 										}	
 									});	
 
-									if (iSource === ns1blankspace.data.searchSource.text && sMethodFilter == '')
+									if (!bCache && iSource === ns1blankspace.data.searchSource.text && sMethodFilter == '')
 									{	
 										$.each(aColumns, function(i) 
 										{
@@ -2806,15 +2986,13 @@ ns1blankspace.search =
 										});	
 									}	
 									
-									var sMethodFilterValue;
-
 									if (sMethodFilter != '')
 									{
 										var aMethodFilters = sMethodFilter.split('|');
 
 										var aFilterSearch = $.grep(aMethodFilters, function (a) {return a.split('-').length == 2;});
 
-										if (aFilterSearch.length > 0)
+										if (!bCache && aFilterSearch.length > 0)
 										{	
 											oSearch.addBracket('(');
 
@@ -2907,6 +3085,12 @@ ns1blankspace.search =
 							if (sColumns == undefined) {sColumns = 'title'}
 							var aColumns = sColumns.split('-');
 							var aHTML = [];
+
+							if (bCache && !ns1blankspace.search.cache.exists({method: sMethod}))
+							{
+								ns1blankspace.search.cache.add({method: sMethod, rows: oResponse.data.rows});
+								oResponse.data = {rows: ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns, fixedFilter: sMethodFilter})}
+							}
 							
 							if (oResponse.data.rows.length === 0)
 							{

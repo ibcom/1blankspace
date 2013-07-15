@@ -1205,9 +1205,9 @@ ns1blankspace.control =
 											});
 										});
 									}
-					},
+				},
 					
-	setup:			{
+	setup:		{
 						views: 		{
 										show:		function ()
 													{
@@ -1542,7 +1542,7 @@ ns1blankspace.control =
 														'<td id="ns1blankspaceControlUserChangePassword" class="ns1blankspaceViewControl">' +
 														'Change My Password</td></tr>');		
 													
-										aHTML.push('<tr">' +
+										aHTML.push('<tr>' +
 														'<td id="ns1blankspaceControlUserCreateSecureKey" class="ns1blankspaceViewControl">' +
 														'Secure Access Token</td></tr>');					
 														

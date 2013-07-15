@@ -8,7 +8,7 @@ body
 	font-size: 100%;
 	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
 	margin: 0px;
-	margin-top: 10px;
+	margin-top: 0px;
 	background-color: transparent;
 }
 
@@ -396,17 +396,22 @@ table.ns1blankspaceColumn2
 	margin-right: 15px;
 }
 
-#ns1blankspaceLogonContainer
-{
-	width: 700px;
-}
-
 table.ns1blankspaceColumn1
 {
 	border-right-style:solid;
 	border-width: 1px;
 	border-color: #B8B8B8;
 	padding-right: 10px;
+}
+
+#ns1blankspaceLogonContainer
+{
+	width: 100%;
+}
+
+td.ns1blankspaceLogonNotesFooter
+{
+	font-size: 0.75em;
 }
 
 td.ns1blankspaceColumn1Divider
@@ -733,27 +738,24 @@ textarea.ns1blankspaceTextMultiSmall
 {
 	position: absolute;
 	top: 0px;
-	left: 52px;	
+	left: 35px;	
 }
 
 #ns1blankspaceViewControlViewContainer
 {
 	position: absolute;
 	top: 0px;
-	left: 135px;	
-	width: 216px;
+	left: 105px;	
+	width: 150px;
 }
 
 #ns1blankspaceContainer
 {
 	position: relative;
-	width: 920px;
-	padding-top: 3px;
-	padding-left: 10px;
-	padding-right: 10px;	
-	min-height: 700px;
-	overflow: visible;
-	margin: auto;
+	width: 100%;
+	padding-top: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
 #ns1blankspaceHeader
@@ -766,9 +768,9 @@ textarea.ns1blankspaceTextMultiSmall
 #ns1blankspaceViewControl
 {
 	position: absolute;
-	width: 900px;
-	top: 50px;
-	font-size: 0.67em;
+	width: 100%;
+	top: 0px;
+	font-size: 0.75em;
 }
 
 #ns1blankspaceControl
@@ -838,8 +840,9 @@ textarea.ns1blankspaceTextMultiSmall
 #ns1blankspaceViewControlSearch
 {
 	position: absolute;
-	left: 360px;
-	width: 130px;
+	top: 0px;
+	left: 200px;
+	width: 150px;
 	padding-top: 0px;
 	padding-left: 3px;
 	margin-top: 1px;
@@ -861,22 +864,22 @@ textarea.ns1blankspaceTextMultiSmall
 #ns1blankspaceViewControlNewContainer
 {
 	position: absolute;
-	top: 0px;
-	left: 504px;	
+	top: 35px;
+	left: 0px;	
 }
 
 #ns1blankspaceViewControlActionContainer
 {
 	position: absolute;
-	top: 0px;
-	left: 567px;
+	top: 35px;
+	left: 35px;
 }
 
 #ns1blankspaceViewControlActionStatus
 {
 	position: absolute;
-	top: 0px;
-	left: 648px;
+	top: 35px;
+	left: 105px;
 	padding-top: 0px;
 	padding-left: 2px;
 	height: 25px;
