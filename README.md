@@ -8,3 +8,16 @@ You can fork the repo to create your own app or generate a pull request for any 
 <a href="http://mydigitalstructure.com/1blankspace" target="_blank">1blankspace namespace documentation</a>.
 
 Scripts are highly dependent on jQuery and jQueryUI/themeroller.
+
+Dependencies:
+
+<link rel=stylesheet href="/jscripts/fullcalendar-1.5.4/fullcalendar.css">
+<script src="/jscripts/jquery-1.8.3.min.js"></script>
+<script src="/jscripts/jquery-ui-1.9.2/jquery-ui-1.9.2.min.js"></script>
+<script src="/jscripts/jquery-ui-timepicker-addon.js"></script>
+<script src="/jscripts/jquery.cookie.js"></script>
+<script src="/jscripts/tiny_mce-3.5.8/tiny_mce.js"></script>
+<script src="/jscripts/fullcalendar-1.5.4/fullcalendar.min.js"></script>
+<script src="/jscripts/jquery.touchwipe.1.1.1.min.js"></script>
+<script src="/jscripts/date.js"></script>
+<script src="/jscripts/md5-min.js"></script>
