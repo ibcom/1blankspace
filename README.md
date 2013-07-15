@@ -12,7 +12,7 @@ Scripts are highly dependent on jQuery and jQueryUI/themeroller.
 Dependencies:
 
 <pre>
-link rel=stylesheet href="/jscripts/fullcalendar-1.5.4/fullcalendar.css">
+link rel=stylesheet href="/jscripts/fullcalendar-1.5.4/fullcalendar.css"
 script src="/jscripts/jquery-1.8.3.min.js"
 script src="/jscripts/jquery-ui-1.9.2/jquery-ui-1.9.2.min.js"
 script src="/jscripts/jquery-ui-timepicker-addon.js
