@@ -19,7 +19,6 @@ script src="/jscripts/jquery-ui-timepicker-addon.js
 script src="/jscripts/jquery.cookie.js"
 script src="/jscripts/tiny_mce-3.5.8/tiny_mce.js"
 script src="/jscripts/fullcalendar-1.5.4/fullcalendar.min.js"
-script src="/jscripts/jquery.touchwipe.1.1.1.min.js"
 script src="/jscripts/date.js"
 script src="/jscripts/md5-min.js"
 </pre>
