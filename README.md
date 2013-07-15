@@ -23,3 +23,19 @@ script src="/jscripts/jquery.touchwipe.1.1.1.min.js"
 script src="/jscripts/date.js"
 script src="/jscripts/md5-min.js"
 </pre>
+
+For medium to large form factor use dependencies + 
+
+<pre>
+link rel=stylesheet href="/jscripts/1blankspace-2.0.0.css"
+script src="/jscripts/1blankspace-2.0.0.js"
+script src="/jscripts/1blankspace.control-2.0.0.js"
+</pre>
+
+For small form factor use dependencies + 
+
+<pre>
+link rel=stylesheet href="/jscripts/1blankspace.small-2.0.0.css"
+script src="/jscripts/1blankspace-2.0.0.js"
+script src="/jscripts/1blankspace.small.control-2.0.0.js"
+</pre>
