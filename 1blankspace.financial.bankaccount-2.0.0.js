@@ -507,6 +507,31 @@ ns1blankspace.financial.bankAccount =
 
 									aHTML.push('<tr class="ns1blankspaceCaption">' +
 													'<td class="ns1blankspaceCaption">' +
+													'Business' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceDetailsContactBusinessSentTo" class="ns1blankspaceSelect"' +
+														' data-method="CONTACT_BUSINESS_SEARCH"' +
+														' data-columns="tradename">' +
+													'</td></tr>');	
+							
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'Person' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceDetailsContactPersonSentTo" class="ns1blankspaceSelect"' +
+														' data-method="CONTACT_PERSON_SEARCH"' +
+														' data-columns="firstname-space-surname"' +
+														' data-parent="ns1blankspaceDetailsContactBusinessSentTo"' +
+														' data-parent-search-id="contactbusiness"' +
+														' data-parent-search-text="tradename">' +
+													'</td></tr>');
+
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
 													'Account' +
 													'</td></tr>' +
 													'<tr class="ns1blankspace">' +
@@ -625,6 +650,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_SEARCH';
 										oSearch.addField('description,descriptionmatchtype,descriptionmatchtypetext,mapfrom,mapfromdescription,mapfromtext,' +
 														'maporder,maptodescription,maptofinancialaccount,maptofinancialaccounttext,' +
+														'maptocontactbusiness,maptocontactbusinesstext,maptocontactperson,maptocontactpersontext,' +
 														'matchtype,matchtypetext,project,projecttext,status,statustext,' +
 														'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
 										oSearch.addFilter('id', 'EQUAL_TO', sID)

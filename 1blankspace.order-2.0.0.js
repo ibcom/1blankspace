@@ -24,6 +24,7 @@ ns1blankspace.order =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Orders';
+					ns1blankspace.objectMethod = 'PRODUCT_ORDER';
 									
 					ns1blankspace.app.set(oParam);
 				},

@@ -821,7 +821,7 @@ ns1blankspace.contactPerson =
 										'Rating</td></tr>' +
 										'<tr class="ns1blankspaceSelect">' +
 										'<td class="ns1blankspaceSelect">' +
-										'<input id="ns1blankspaceDetailsRating" class="ns1blankspaceSelect" style="width:250px;"' +
+										'<input id="ns1blankspaceDetailsRating" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_CONTACT_RATING_SEARCH">' +
 										'</td></tr>');
 															
