@@ -619,26 +619,16 @@ ns1blankspace.app =
 								ns1blankspace.option.returnToLast = true;
 								
 								sNS = aHash[1];
-								var aNS = sNS.split('.');
-
-								if (aNS.length == 1)
-								{
-									sNS = '["' + aNS[0] + '"]';
-								}
-								else
-								{
-									sNS = '["' + aNS[0] + '"]["' + aNS[1] + '"]';
-								}
 							}
 								
 							if (aHash.length == 2)
 							{		
-								sDestination = 'ns1blankspace' + sNS + '.init({showHome: true});';
+								sDestination = 'ns1blankspace.' + sNS + '.init({showHome: true});';
 							}	
 
 							if (aHash.length == 3)
 							{
-								sDestination = 'ns1blankspace' + sNS + '.init({id:' + aHash[2] + '})';
+								sDestination = 'ns1blankspace.' + sNS + '.init({id:' + aHash[2] + '})';
 							}
 
 							ns1blankspace.history.view({
@@ -646,9 +636,11 @@ ns1blankspace.app =
 												move: false
 												});
 
-							if (aHash.length == 4)
+							if (aHash.length > 3)
 							{
-								ns1blankspace.history.control({functionDefault: 'ns1blankspace' + sNS + '.' + aHash[3] + '()'});
+								var sParam = '';
+								if (aHash.length > 4) {sParam = '{id: ' + aHash[4] + '}'}
+								ns1blankspace.history.control({functionDefault: 'ns1blankspace.' + sNS + '.' + aHash[3] + '(' + sParam + ')'});
 							}
 						}	
 
