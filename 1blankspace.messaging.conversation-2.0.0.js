@@ -1683,7 +1683,11 @@ ns1blankspace.messaging.conversation =
 											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 											sData += '&sharing=' + $('input[name="radioSharing"]:checked').val();
 											sData += '&participantcan=' + $('input[name="radioParticipantCan"]:checked').val();
-											sData += '&alerturl=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAlertURL').val());
+
+											var sAlert = $('#ns1blankspaceDetailsAlertURL').val();
+											if (sAlert == '' && ns1blankspace.objectContext == -1) {sAlert = window.location.protocol + '//' + window.location.host + '/#/messaging.conversation/[[CONVERSATION_ID]]'}
+
+											sData += '&alerturl=' + ns1blankspace.util.fs(sAlert);
 										}
 										
 										$.ajax(
