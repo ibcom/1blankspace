@@ -1683,7 +1683,7 @@ ns1blankspace.messaging.conversation =
 											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 											sData += '&sharing=' + $('input[name="radioSharing"]:checked').val();
 											sData += '&participantcan=' + $('input[name="radioParticipantCan"]:checked').val();
-											sData += '&alerturl=' + ns1blankspace.util.fs($('#ns1blankspaceMainDetailsAlertURL').val());
+											sData += '&alerturl=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAlertURL').val());
 										}
 										
 										$.ajax(

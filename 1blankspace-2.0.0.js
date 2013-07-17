@@ -4137,7 +4137,7 @@ ns1blankspace.debug =
 					if (ns1blankspace.debug.enabled)
 					{
 						ns1blankspace.debug.log.push({time: Date(), message: sMessage})
-						console.log(sMessage);
+						window.console && console.log(sMessage);
 					}
 				},
 
