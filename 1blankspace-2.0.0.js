@@ -608,7 +608,7 @@ ns1blankspace.app =
 						var sDestination;
 
 						var sNS;
-						// Pattern: #/contactBusiness/123/summary
+						// Pattern: #/contactBusiness/123/summary/123
 
 						if (sHash.substr(0, 2) == '#/')
 						{	
@@ -631,17 +631,24 @@ ns1blankspace.app =
 								sDestination = 'ns1blankspace.' + sNS + '.init({id:' + aHash[2] + '})';
 							}
 
-							ns1blankspace.history.view({
-												newDestination: sDestination,
-												move: false
-												});
-
 							if (aHash.length > 3)
 							{
-								var sParam = '';
-								if (aHash.length > 4) {sParam = '{id: ' + aHash[4] + '}'}
-								ns1blankspace.history.control({functionDefault: 'ns1blankspace.' + sNS + '.' + aHash[3] + '(' + sParam + ')'});
+								var sDefaultParam = '';
+								if (aHash.length > 4) {sDefaultParam = '{id: ' + aHash[4] + '}'}
+
+								var sDefault = 'ns1blankspace.' + sNS + '.' + aHash[3];
+
+								sDestination = 'ns1blankspace.' + sNS + '.init({id: ' + aHash[2] + ', default: "' + sDefault + '", defaultParam: "' + sDefaultParam + '"})';
+
+								//ns1blankspace.history.control({functionDefault: 'ns1blankspace.' + sNS + '.' + aHash[3] + '(' + sParam + ')'});
+								//ns1blankspace.objectDefault = 'ns1blankspace.' + sNS + '.' + aHash[3] + '(' + sParam + ')';
 							}
+
+							ns1blankspace.history.view(
+							{
+								newDestination: sDestination,
+								move: false
+							});
 						}	
 
 						var aHTML = [];
@@ -1140,7 +1147,7 @@ ns1blankspace.app =
 							{
 								if (iID)
 								{	
-									oNS.search.send('-' + iID);
+									oNS.search.send('-' + iID, oParam);
 								}
 								else
 								{	
@@ -1778,6 +1785,9 @@ ns1blankspace.history.control =
 					var sXHTMLElementID;
 					var sFunctionDefault;
 					
+					//var fFunctionDefault = ns1blankspace.util.getParam(oParam, 'default');
+					//var oFunctionDefaultParam = ns1blankspace.util.getParam(oParam, 'defaultParam');
+
 					if (oParam != undefined)
 					{
 						if (oParam.object != undefined) {iObject = oParam.object}
@@ -1818,13 +1828,35 @@ ns1blankspace.history.control =
 					{
 						if (sXHTMLElementID === undefined)
 						{
-							ns1blankspace.util.execute(sFunctionDefault, oParam);
+							var aFunctionDefault = (sFunctionDefault).split('(');
+							var sFunctionDefaultNamespace = aFunctionDefault[0];
+							var sFunctionDefaultParam = (aFunctionDefault[1]).split(')')[0];
+
+							var fFunctionDefaultNamespace = ns1blankspace.util.toFunction(sFunctionDefaultNamespace)
+
+							if (fFunctionDefaultNamespace !== undefined)
+							{	
+								if (sFunctionDefaultParam.substring(0,1) == "{")
+								{
+									fFunctionDefaultNamespace(ns1blankspace.util.toObject(sFunctionDefaultParam));
+								}
+								else if (sFunctionDefaultParam != '')
+								{	
+									fFunctionDefaultNamespace(sFunctionDefaultParam);
+								}
+								else
+								{	
+									fFunctionDefaultNamespace();
+								}
+							}	
+
+							//ns1blankspace.util.execute(sFunctionDefault, oParam);
 						}
 						else
 						{
-							$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight')
-							$('#' + sXHTMLElementID).addClass('ns1blankspaceHighlight')
-							$('#' + sXHTMLElementID).click()
+							$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+							$('#' + sXHTMLElementID).addClass('ns1blankspaceHighlight');
+							$('#' + sXHTMLElementID).click();
 						}
 					}
 				}
@@ -3849,10 +3881,13 @@ ns1blankspace.util =
 	  					$.each(aObject, function(i,v)
 	  					{
 	  						aValue = v.split(':');
-	  						sValue = (aValue[1]).replace(/"/g, '');
+	  						var sProperty = (aValue[0]).trim();
+	  						aValue.splice(0, 1);
+	  						sValue = aValue.join(':');
+	  						sValue = (sValue).replace(/"/g, '');
 	  						sValue = (sValue).replace(/'/g, '');
 							sValue = (sValue).trim();
-	  						oObject[aValue[0]] = sValue;	
+	  						oObject[sProperty] = sValue;	
 	  					});
 	  				}	
 

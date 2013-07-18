@@ -422,7 +422,16 @@ ns1blankspace.messaging.conversation =
 							move: false
 							});
 						
-						ns1blankspace.history.control({functionDefault: 'ns1blankspace.messaging.conversation.posts.show()'});
+						var sFunctionDefault = 'ns1blankspace.messaging.conversation.posts.show()';
+						var sDefault = ns1blankspace.util.getParam(oParam, 'default').value;
+						var sDefaultParam = ns1blankspace.util.getParam(oParam, 'defaultParam', {default: ''}).value;
+
+						if (sDefault !== undefined)
+						{
+							sFunctionDefault = sDefault + '(' + sDefaultParam + ')';
+						}
+
+						ns1blankspace.history.control({functionDefault: sFunctionDefault});
 					}	
 				},	
 		
@@ -1016,13 +1025,12 @@ ns1blankspace.messaging.conversation =
 	posts: 		{
 					show: 		function (oParam, oResponse)
 								{
-									if (oParam != undefined)
-									{
-										if (oParam.label != undefined) {sLabel = oParam.label}
-									}
+									var iID = ns1blankspace.util.getParam(oParam, 'id').value;
 
 									if (oResponse == undefined)
 									{
+										ns1blankspace.show({selector: '#ns1blankspaceMainPosts'});
+
 										var aHTML = [];
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
@@ -1062,7 +1070,13 @@ ns1blankspace.messaging.conversation =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'MESSAGING_CONVERSATION_POST_SEARCH';
 										oSearch.addField('subject,message,ownerusertext,createddate,modifieddate,lastcommentdate,createdusertext');
-										oSearch.addFilter('conversation', 'EQUAL_TO', ns1blankspace.objectContext)
+										oSearch.addFilter('conversation', 'EQUAL_TO', ns1blankspace.objectContext);
+
+										if (iID !== undefined)
+										{
+											oSearch.addFilter('id', 'EQUAL_TO', iID);
+										}
+
 										oSearch.sort('modifieddate', 'desc');
 										oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.posts.show(oParam, data)});
 									}
@@ -1101,7 +1115,17 @@ ns1blankspace.messaging.conversation =
 												functionOnNewPage: ns1blankspace.messaging.conversation.posts.bind,
 												headerRow: false,
 												bodyClass: 'ns1blankspaceMessagingConversationPosts'
-											}); 	
+											}); 
+
+											if (iID !== undefined)
+											{
+												ns1blankspace.messaging.conversation.posts.comments.showHide(
+												{
+													xhtmlElementID: 'ns1blankspaceMessagingConversationPosts_comment_view-' + iID,
+													onComplete: ns1blankspace.messaging.conversation.posts.comments.search.send,
+													new: true
+												});
+											}	
 											
 										}
 									}	
@@ -1265,8 +1289,8 @@ ns1blankspace.messaging.conversation =
 									search: 	{
 													send: 		function (oParam)
 																{
-																	var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
-																	var iPost = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
+																	var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+																	var iPost = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 
 																	$('#ns1blankspaceCommentsColumn2List-' + sKey).html(ns1blankspace.xhtml.loadingSmall);
 																		
@@ -1282,7 +1306,8 @@ ns1blankspace.messaging.conversation =
 
 													process: 	function (oParam, oResponse)
 																{
-																	var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
+																	var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+																	var bNew = ns1blankspace.util.getParam(oParam, 'new', {default: false}).value;
 
 																	var aHTML = [];
 																
@@ -1312,6 +1337,11 @@ ns1blankspace.messaging.conversation =
 
 																		$('#ns1blankspaceCommentsColumn2List-' + sKey).html(aHTML.join(''));
 																	}
+
+																	if (bNew)
+																	{
+																		ns1blankspace.messaging.conversation.posts.comments.new.show(oParam);
+																	}	
 																}	
 												},			
 
