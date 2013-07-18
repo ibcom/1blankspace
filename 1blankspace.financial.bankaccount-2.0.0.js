@@ -312,10 +312,11 @@ ns1blankspace.financial.bankAccount =
 									oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_SEARCH';
 									oSearch.addField('description,descriptionmatchtype,descriptionmatchtypetext,mapfrom,mapfromdescription,mapfromtext,' +
 														'maporder,maptodescription,maptofinancialaccount,maptofinancialaccounttext,' +
+														'maptocontactbusiness,maptocontactbusinesstext,maptocontactperson,maptocontactpersontext,' +
 														'matchtype,matchtypetext,project,projecttext,status,statustext,' +
 														'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
 									oSearch.sort('description', 'asc');
-									
+									oSearch.rows = 100;
 									oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.mapping.show(oParam, data)});
 								}
 								else
@@ -373,6 +374,18 @@ ns1blankspace.financial.bankAccount =
 											{
 												sTo += '<span class="ns1blankspaceSub">Account to</span>';
 												sTo += '<br />' + this.maptofinancialaccounttext;
+											}
+
+											if (this.maptocontactbusinesstext != '')
+											{
+												sTo += '<br /><span class="ns1blankspaceSub">Business to</span>';
+												sTo += '<br />' + this.maptocontactbusinesstext;
+											}
+
+											if (this.maptocontactpersontext != '')
+											{
+												sTo += '<br /><span class="ns1blankspaceSub">Person to</span>';
+												sTo += '<br />' + this.maptocontactpersontext;
 											}
 
 											if (this.taxtype != '')
@@ -511,7 +524,7 @@ ns1blankspace.financial.bankAccount =
 													'</td></tr>' +
 													'<tr class="ns1blankspace">' +
 													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceDetailsContactBusinessSentTo" class="ns1blankspaceSelect"' +
+													'<input id="ns1blankspaceContactBusinessMapTo" class="ns1blankspaceSelect"' +
 														' data-method="CONTACT_BUSINESS_SEARCH"' +
 														' data-columns="tradename">' +
 													'</td></tr>');	
@@ -522,10 +535,10 @@ ns1blankspace.financial.bankAccount =
 													'</td></tr>' +
 													'<tr class="ns1blankspace">' +
 													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceDetailsContactPersonSentTo" class="ns1blankspaceSelect"' +
+													'<input id="ns1blankspaceContactPersonMapTo" class="ns1blankspaceSelect"' +
 														' data-method="CONTACT_PERSON_SEARCH"' +
 														' data-columns="firstname-space-surname"' +
-														' data-parent="ns1blankspaceDetailsContactBusinessSentTo"' +
+														' data-parent="ns1blankspaceContactBusinessMapTo"' +
 														' data-parent-search-id="contactbusiness"' +
 														' data-parent-search-text="tradename">' +
 													'</td></tr>');
@@ -613,6 +626,8 @@ ns1blankspace.financial.bankAccount =
 											mapfromdescription: $('#ns1blankspaceFromMatchDescription').val(),
 											maptofinancialaccount: $('#ns1blankspaceItemAccount').attr('data-id'),
 											taxtype: $('input[name="radioTaxCodeMapping"]:checked').val(),
+											maptocontactbusiness: $('#ns1blankspaceContactBusinessMapTo').attr('data-id'),
+											maptocontactperson: $('#ns1blankspaceContactPersonMapTo').attr('data-id'),
 											id: sID
 										}
 											
@@ -689,6 +704,10 @@ ns1blankspace.financial.bankAccount =
 									$('#ns1blankspaceItemAccount').val(oRow.maptofinancialaccounttext)
 									$('#ns1blankspaceItemAccount').attr('data-id', oRow.maptofinancialaccount);
 									$('[name="radioTaxCodeMapping"][value="' + oRow.taxtype + '"]').attr('checked', true);
+									$('#ns1blankspaceContactBusinessMapTo').val(oRow.maptocontactbusinesstext)
+									$('#ns1blankspaceContactBusinessMapTo').attr('data-id', oRow.maptocontactbusiness);
+									$('#ns1blankspaceContactPersonMapTo').val(oRow.maptocontactpersontext)
+									$('#ns1blankspaceContactPersonMapTo').attr('data-id', oRow.maptocontactperson);
 								}
 
 								if (iStep == 3)
@@ -775,6 +794,7 @@ ns1blankspace.financial.bankAccount =
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_MAPPING_SEARCH';
 														oSearch.addField('description,descriptionmatchtype,descriptionmatchtypetext,mapfrom,mapfromdescription,mapfromtext,' +
+																		'maptocontactbusiness,maptocontactperson,' +
 																		'maporder,maptodescription,maptofinancialaccount,maptofinancialaccounttext,' +
 																		'matchtype,matchtypetext,project,projecttext,status,statustext,' +
 																		'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
@@ -918,6 +938,8 @@ ns1blankspace.financial.bankAccount =
 															if (oItem.mapping.maptofinancialaccount != '') {oData.financialaccount = oItem.mapping.maptofinancialaccount}
 															if (oItem.mapping.maptodescription != '') {oData.description = oItem.mapping.maptodescription}
 															if (oItem.mapping.taxtype != '') {oData.taxtype = oItem.mapping.taxtype}
+															if (oItem.mapping.maptocontactbusiness != '') {oData.contactbusiness = oItem.mapping.maptocontactbusiness}
+															if (oItem.mapping.maptocontactperson != '') {oData.contactperson = oItem.mapping.maptocontactperson}	
 														}		
 
 														$.ajax(
@@ -2375,8 +2397,8 @@ ns1blankspace.financial.bankAccount =
 														var oSearch = new AdvancedSearch();
 														
 														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
-														oSearch.addField('description,amount,posteddate');
-														oSearch.sort('posteddate', 'asc');
+														oSearch.addField('description,amount,posteddate,taxtype,financialaccount,financialaccounttext,' +
+																			'contactbusiness,contactbusinesstext,contactperson,contactpersontext');
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 														oSearch.addFilter('status', 'EQUAL_TO', 3);
 														oSearch.addFilter('category', 'EQUAL_TO', (iType==1?2:1));
@@ -2443,6 +2465,10 @@ ns1blankspace.financial.bankAccount =
 																					' data-financialaccounttext="' + this.financialaccounttext + '"' +
 																					' data-description="' + this.description + '"' +
 																					' data-date="' + this.posteddate + '"' +
+																					' data-contactbusiness="' + this.contactbusiness + '"' +
+																					' data-contactbusinesstext="' + this.contactbusinesstext + '"' +
+																					' data-contactperson="' + this.contactperson + '"' +
+																					' data-contactpersontext="' + this.contactpersontext + '"' +
 																					' class="ns1blankspaceReconcileItemsMatch">' +
 																	'<table cellspacing=0 cellpadding=0><tr>');
 																				
@@ -3360,6 +3386,10 @@ ns1blankspace.financial.bankAccount =
 																$('#ns1blankspaceItemDescription').val(ns1blankspace.util.getData(oParam, 'data-description', {param: 'sourceXHTMLElementID'}).value);
 																$('#ns1blankspaceFinancialAccount').val(ns1blankspace.util.getData(oParam, 'data-financialaccounttext', {param: 'sourceXHTMLElementID'}).value);
 																$('#ns1blankspaceFinancialAccount').attr('data-id', ns1blankspace.util.getData(oParam, 'data-financialaccount', {param: 'sourceXHTMLElementID'}).value);
+																$('#ns1blankspaceItemContactBusiness').val(ns1blankspace.util.getData(oParam, 'data-contactbusinesstext', {param: 'sourceXHTMLElementID'}).value);
+																$('#ns1blankspaceItemContactBusiness').attr('data-id', ns1blankspace.util.getData(oParam, 'data-contactbusiness', {param: 'sourceXHTMLElementID'}).value);
+																$('#ns1blankspaceItemContactPerson').val(ns1blankspace.util.getData(oParam, 'data-contactpersontext', {param: 'sourceXHTMLElementID'}).value);
+																$('#ns1blankspaceItemContactPerson').attr('data-id', ns1blankspace.util.getData(oParam, 'data-contactperson', {param: 'sourceXHTMLElementID'}).value);
 																iTaxType = ns1blankspace.util.getData(oParam, 'data-taxtype', {param: 'sourceXHTMLElementID'}).value;
 																iTranType = ns1blankspace.util.getData(oParam, 'data-trantype', {param: 'sourceXHTMLElementID'}).value;
 															}
