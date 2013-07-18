@@ -1715,7 +1715,11 @@ ns1blankspace.messaging.conversation =
 											sData += '&participantcan=' + $('input[name="radioParticipantCan"]:checked').val();
 
 											var sAlert = $('#ns1blankspaceDetailsAlertURL').val();
-											if (sAlert == '' && ns1blankspace.objectContext == -1) {sAlert = window.location.protocol + '//' + window.location.host + '/#/messaging.conversation/[[CONVERSATION_ID]]'}
+											if (sAlert == '' && ns1blankspace.objectContext == -1)
+											{
+												sAlert = window.location.protocol + '//' + window.location.host +
+															'/#/messaging.conversation/[[CONVERSATION_ID]]/posts.show/[[POST_ID]]'
+											}
 
 											sData += '&alerturl=' + ns1blankspace.util.fs(sAlert);
 										}
