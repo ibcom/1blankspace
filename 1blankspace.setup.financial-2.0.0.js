@@ -69,7 +69,7 @@ ns1blankspace.setup.financial =
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
 								
-					aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 1px; border-color: #D0D0D0;">' +
+					aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 0px; border-color: #D0D0D0;">' +
 									'ACCOUNTS</td></tr>');
 												
 					aHTML.push('<tr><td id="ns1blankspaceControlBankAccount" class="ns1blankspaceControl">' +
@@ -88,7 +88,7 @@ ns1blankspace.setup.financial =
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
 					
-					aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 1px; border-color: #D0D0D0;">' +
+					aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 0px; border-color: #D0D0D0;">' +
 									'TEMPLATES</td></tr>');
 
 					aHTML.push('<tr><td id="ns1blankspaceControlInvoiceTemplate" class="ns1blankspaceControl">' +

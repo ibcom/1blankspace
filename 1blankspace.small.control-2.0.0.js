@@ -119,133 +119,133 @@ ns1blankspace.themes =
 ]	
 
 ns1blankspace.control.init = 
-				function (oParam, oResponse)
+function (oParam, oResponse)
+{
+	var iStep = 1;
+	var aRoles = [];
+	var fPostInit = ns1blankspace.option.postInit;
+
+	if (oParam != undefined)
+	{
+		if (oParam.step != undefined) {iStep = oParam.step}
+		if (oParam.roles != undefined) {aRoles = oParam.roles}
+		if (oParam.postInit != undefined) {fPostInit = oParam.postInit}
+	}
+	else
+	{
+		oParam = {};
+	}
+		
+	if (iStep == 1)
+	{
+		if (ns1blankspace.user.unrestricted)
+		{
+			$.extend(true, oParam, {step: 4});
+			ns1blankspace.control.init(oParam)
+		}
+		else
+		{	
+			var aIDs = [];
+
+			$(ns1blankspace.user.roles).each(function()
+			{
+				aIDs.push(this.id);	
+			})
+
+			$.extend(true, oParam, {step: 2, roles: aIDs});
+			ns1blankspace.control.init(oParam);	
+		}	
+	}
+
+	else if (iStep == 2)
+	{
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
+			oSearch.addField('accessmethodtext,canadd,canremove,canupdate,canuse');
+			oSearch.addFilter('role', 'IN_LIST', aRoles.join(','));
+			oSearch.getResults(function(data) {ns1blankspace.control.init(oParam, data)})
+		}
+		else
+		{
+			ns1blankspace.user.methods = oResponse.data.rows;
+			$.extend(true, oParam, {step: 3});
+			ns1blankspace.control.init(oParam);
+		}
+	}
+
+	else if (iStep == 3)
+	{
+		$(ns1blankspace.views).each(function(i, k)
+		{
+			var oMethods = $.grep(ns1blankspace.user.methods, function (a) {return (a.accessmethodtext).indexOf(k.endpoint) != -1;})	
+			if (oMethods.length == 0) {this.show = false};
+		});
+
+		$.extend(true, oParam, {step: 4});
+		ns1blankspace.control.init(oParam)
+	}
+
+	else if (iStep == 4)
+	{
+		$.extend(true, oParam, {step: 5});
+
+		var iSiteID = ns1blankspace.user.site;
+
+		if (iSiteID === undefined && ns1blankspace.util.ifExists({variable: 'mydigitalstructureSiteId'}) !== undefined)
+		{
+			iSiteID = mydigitalstructureSiteId;
+		}
+
+		if (iSiteID !== undefined)
+		{
+			$.ajax(
+			{
+				type: 'GET',
+				url: '/site/' + iSiteID + '/1blankspace.control.json',
+				dataType: 'json',
+				global: false,
+				success: function(data)
 				{
-					var iStep = 1;
-					var aRoles = [];
-					var fPostInit = ns1blankspace.option.postInit;
-
-					if (oParam != undefined)
-					{
-						if (oParam.step != undefined) {iStep = oParam.step}
-						if (oParam.roles != undefined) {aRoles = oParam.roles}
-						if (oParam.postInit != undefined) {fPostInit = oParam.postInit}
-					}
-					else
-					{
-						oParam = {};
-					}
-						
-					if (iStep == 1)
-					{
-						if (ns1blankspace.user.unrestricted)
-						{
-							$.extend(true, oParam, {step: 4});
-							ns1blankspace.control.init(oParam)
-						}
-						else
-						{	
-							var aIDs = [];
-
-							$(ns1blankspace.user.roles).each(function()
-							{
-								aIDs.push(this.id);	
-							})
-
-							$.extend(true, oParam, {step: 2, roles: aIDs});
-							ns1blankspace.control.init(oParam);	
-						}	
-					}
-
-					else if (iStep == 2)
-					{
-						if (oResponse == undefined)
-						{
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-							oSearch.addField('accessmethodtext,canadd,canremove,canupdate,canuse');
-							oSearch.addFilter('role', 'IN_LIST', aRoles.join(','));
-							oSearch.getResults(function(data) {ns1blankspace.control.init(oParam, data)})
-						}
-						else
-						{
-							ns1blankspace.user.methods = oResponse.data.rows;
-							$.extend(true, oParam, {step: 3});
-							ns1blankspace.control.init(oParam);
-						}
-					}
-
-					else if (iStep == 3)
-					{
-						$(ns1blankspace.views).each(function(i, k)
-						{
-							var oMethods = $.grep(ns1blankspace.user.methods, function (a) {return (a.accessmethodtext).indexOf(k.endpoint) != -1;})	
-							if (oMethods.length == 0) {this.show = false};
-						});
-
-						$.extend(true, oParam, {step: 4});
-						ns1blankspace.control.init(oParam)
-					}
-
-					else if (iStep == 4)
-					{
-						$.extend(true, oParam, {step: 5});
-
-						var iSiteID = ns1blankspace.user.site;
-
-						if (iSiteID === undefined && ns1blankspace.util.ifExists({variable: 'mydigitalstructureSiteId'}) !== undefined)
-						{
-							iSiteID = mydigitalstructureSiteId;
-						}
-
-						if (iSiteID !== undefined)
-						{
-							$.ajax(
-							{
-								type: 'GET',
-								url: '/site/' + iSiteID + '/1blankspace.control.json',
-								dataType: 'json',
-								global: false,
-								success: function(data)
-								{
-									ns1blankspace.data.control = data.control;
-									ns1blankspace.control.init(oParam)
-								},
-								error: function(data)
-								{
-									ns1blankspace.control.init(oParam)
-								}
-							});
-						}
-						else
-						{
-							ns1blankspace.control.init(oParam)
-						}
-					}
-
-					else if (iStep == 5)
-					{
-						if (ns1blankspace.user.systemAdmin) {ns1blankspace.setupShow = true};
-
-						$.ajax(
-						{
-							type: 'GET',
-							url: '/ondemand/core/?method=CORE_PROFILE_SEARCH&type=1&rf=TEXT&id=455',
-							dataType: 'text',
-							async: true,
-							success: function(data) {
-								sData = data.replace('OK|RETURNED|', '')
-								if (sData != '')
-								{
-									//ns1blankspace.control.user.changeTheme({theme: sData});
-								}
-
-								if (fPostInit) {fPostInit()}
-							}
-						})
-					}		
+					ns1blankspace.data.control = data.control;
+					ns1blankspace.control.init(oParam)
+				},
+				error: function(data)
+				{
+					ns1blankspace.control.init(oParam)
 				}
-	
+			});
+		}
+		else
+		{
+			ns1blankspace.control.init(oParam)
+		}
+	}
+
+	else if (iStep == 5)
+	{
+		if (ns1blankspace.user.systemAdmin) {ns1blankspace.setupShow = true};
+
+		$.ajax(
+		{
+			type: 'GET',
+			url: '/ondemand/core/?method=CORE_PROFILE_SEARCH&type=1&rf=TEXT&id=455',
+			dataType: 'text',
+			async: true,
+			success: function(data) {
+				sData = data.replace('OK|RETURNED|', '')
+				if (sData != '')
+				{
+					//ns1blankspace.control.user.changeTheme({theme: sData});
+				}
+
+				if (fPostInit) {fPostInit()}
+			}
+		})
+	}		
+}
+
 ns1blankspace.views = 
 [
 	{
@@ -328,122 +328,144 @@ ns1blankspace.control.views =
 }
 
 ns1blankspace.app.bind =
-				function ()
-				{
-					$('#ns1blankspaceViewControlViewContainer').button(	
-					{
-						icons: 
-						{
-							primary: "ui-icon-grip-dotted-vertical",
-							secondary: "ui-icon-triangle-1-s"
-						},
-						label: ns1blankspace.option.defaultView
-					})
-					.click(function() 
-					{
-						ns1blankspace.control.views.show(this);
-					})
-					.css('text-align', 'left');
+function ()
+{
+	$('#ns1blankspaceViewControlViewContainer').button(	
+	{
+		icons: 
+		{
+			primary: "ui-icon-grip-dotted-vertical",
+			secondary: "ui-icon-triangle-1-s"
+		},
+		label: ns1blankspace.option.defaultView
+	})
+	.click(function() 
+	{
+		ns1blankspace.control.views.show(this);
+	})
+	.css('text-align', 'left');
 
-					$('#ns1blankspaceViewControlHome').button(
-					{
-						text: false,
-						icons:
-						{
-							primary: "ui-icon-home"
-						}
-					})
-					.click(function(event)
+	$('#ns1blankspaceViewControlHome').button(
+	{
+		text: false,
+		icons:
+		{
+			primary: "ui-icon-home"
+		}
+	})
+	.click(function(event)
+	{
+		ns1blankspace.home.show();
+	});
+
+	$('#ns1blankspaceViewControlBack').button(
+	{
+		text: false,
+		icons:
+		{
+			primary: 'ui-icon-triangle-1-w'
+		}
+	})
+	.click(function(event)
+	{
+		ns1blankspace.history.view({instruction: 2});
+	})
+	.css('margin-right', '2px');
+
+	$('#ns1blankspaceViewControlRefresh').button(
+	{
+		text: false,
+		icons:
+		{
+			primary: 'ui-icon-arrowthickstop-1-n'
+		}
+	})
+	.click(function()
+	{
+		if (ns1blankspace.objectParentName !== undefined)
+		{
+			ns1blankspace[ns1blankspace.objectParentName][ns1blankspace.objectName].init();
+		}	
+		else
+		{
+			ns1blankspace[ns1blankspace.objectName].init();
+		}	
+	});
+
+	$('#ns1blankspaceViewControlNew').button(
+	{
+		text: false,
+		icons:
+		{
+			primary: "ui-icon-plus"
+		}
+	})
+	.css('width', '26px')
+	.css('height', '26px');	
+
+	$('#REMOVEns1blankspaceViewControlActionOptions').button(
+	{
+		text: false,
+		icons:
+		{
+			primary: 'ui-icon-triangle-1-s'
+		}
+	})
+	.click(function(event)
+	{
+		ns1blankspace.history.view({instruction: 2});
+	})
+	.css('height', '26px');
+
+	$('#ns1blankspaceViewControlUser').button(
+	{
+		text: false,
+		icons:
+		{
+			primary: 'ui-icon-power'
+		}
+	})
+	.click(function(event)
+	{
+		ns1blankspace.control.user.show(this);
+	});
+
+	if (ns1blankspace.history.sendOnLogon)
+	{
+		$.ajax(ns1blankspace.history.sendOnLogon);
+	}					
+
+	if (ns1blankspace.option.returnToLast) 
+	{
+		ns1blankspace.history.view({instruction: 8})
+	}
+	else
+	{
+		ns1blankspace.app.showWhenLoaded('home');
+	}	
+}
+
+
+ns1blankspace.control.setView =
+{
+	default: 		function ()
 					{
 						ns1blankspace.home.show();
-					});
+					},
 
-					$('#ns1blankspaceViewControlBack').button(
+	setup:			function ()
 					{
-						text: false,
-						icons:
-						{
-							primary: 'ui-icon-triangle-1-w'
+						if (ns1blankspace.util.toFunction('ns1blankspace.setup.website.init') !== undefined)
+						{	
+							ns1blankspace.setup.website.init();
 						}
-					})
-					.click(function(event)
-					{
-						ns1blankspace.history.view({instruction: 2});
-					})
-					.css('margin-right', '2px');
-
-					$('#ns1blankspaceViewControlRefresh').button(
-					{
-						text: false,
-						icons:
-						{
-							primary: 'ui-icon-arrowthickstop-1-n'
-						}
-					})
-					.click(function()
-					{
-						if (ns1blankspace.objectParentName !== undefined)
-						{
-							ns1blankspace[ns1blankspace.objectParentName][ns1blankspace.objectName].init();
-						}	
 						else
 						{
-							ns1blankspace[ns1blankspace.objectName].init();
+							ns1blankspace.setupView = false;
+							ns1blankspace.control.setView.default();
 						}	
-					});
-
-					$('#ns1blankspaceViewControlNew').button(
-					{
-						text: false,
-						icons:
-						{
-							primary: "ui-icon-plus"
-						}
-					})
-					.css('width', '26px')
-					.css('height', '26px');	
-
-					$('#REMOVEns1blankspaceViewControlActionOptions').button(
-					{
-						text: false,
-						icons:
-						{
-							primary: 'ui-icon-triangle-1-s'
-						}
-					})
-					.click(function(event)
-					{
-						ns1blankspace.history.view({instruction: 2});
-					})
-					.css('height', '26px');
-
-					$('#ns1blankspaceViewControlUser').button(
-					{
-						text: false,
-						icons:
-						{
-							primary: 'ui-icon-power'
-						}
-					})
-					.click(function(event)
-					{
-						ns1blankspace.control.user.show(this);
-					});
-
-					if (ns1blankspace.history.sendOnLogon)
-					{
-						$.ajax(ns1blankspace.history.sendOnLogon);
-					}					
-
-					if (ns1blankspace.option.returnToLast) 
-					{
-						ns1blankspace.history.view({instruction: 8})
 					}
-					else
-					{
-						ns1blankspace.app.showWhenLoaded('home');
-					}	
-				}				
+}												
 	
 ns1blankspace.control.user =
 {
@@ -475,8 +497,8 @@ ns1blankspace.control.user =
 					aHTML.push('<tr><td id="ns1blankspaceUserLogOff" class="ns1blankspaceViewControl">' +
 									'Log Off</td></tr>');
 			
-					aHTML.push('<tr><td id="ns1blankspaceControlUserChangePassword" class="ns1blankspaceViewControl">' +
-									'Change My Password</td></tr>');		
+					//aHTML.push('<tr><td id="ns1blankspaceControlUserChangePassword" class="ns1blankspaceViewControl">' +
+					//				'Change My Password</td></tr>');		
 
 					aHTML.push('</table>');
 					

@@ -802,13 +802,21 @@ ns1blankspace.control =
 	setView:	{
 					default: 		function ()
 									{
-										ns1blankspace.contactPerson.init({showHome: true});		
+										ns1blankspace.home.show();
 									},
 
 					setup:			function ()
 									{
-										ns1blankspace.setup.website.init();
-									},
+										if (ns1blankspace.util.toFunction('ns1blankspace.setup.website.init') !== undefined)
+										{	
+											ns1blankspace.setup.website.init();
+										}
+										else
+										{
+											ns1blankspace.setupView = false;
+											ns1blankspace.control.setView.default();
+										}	
+									}
 				},					
 
 	views:		{					

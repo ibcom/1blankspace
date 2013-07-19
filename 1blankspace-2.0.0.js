@@ -2472,9 +2472,11 @@ ns1blankspace.setup =
 							ns1blankspace.control.views.show(this);;
 						});
 
-						if (sViewNamespace !== undefined && sViewNamespace != '')
+						var fViewNamespace = ns1blankspace.util.toFunction(sViewNamespace);
+
+						if (fViewNamespace !== undefined)
 						{
-							ns1blankspace.util.toFunction(sViewNamespace)();
+							fViewNamespace();
 						}
 						else
 						{
@@ -2491,9 +2493,11 @@ ns1blankspace.setup =
 							ns1blankspace.control.setup.views.show(this);
 						});
 						
-						if (sViewNamespace !== undefined && sViewNamespace != '')
+						var fViewNamespace = ns1blankspace.util.toFunction(sViewNamespace)
+
+						if (fViewNamespace !== undefined)
 						{
-							ns1blankspace.util.toFunction(sViewNamespace)();
+							fViewNamespace();
 						}
 						else
 						{
@@ -3845,7 +3849,7 @@ ns1blankspace.util =
 
 	  					$.each(aF, function(i,v)
 	  					{
-	  						oNS = oNS[this];	
+	  						if(oNS !== undefined) {oNS = oNS[this]};	
 	  					});
 		  					
 	  				}	

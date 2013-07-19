@@ -306,12 +306,12 @@ ns1blankspace.contactPerson =
 						text: false,
 						icons:
 						{
-							primary: "ui-icon-disk"
+							primary: "ui-icon-check"
 						}
 					})
 					.click(function(event)
 					{
-						//ns1blankspace.home.show();
+						ns1blankspace.contactPerson.save.send();
 					})
 					.css('width', '26px')
 					.css('height', '26px');
@@ -326,6 +326,7 @@ ns1blankspace.contactPerson =
 					})
 					.click(function(event)
 					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
 						ns1blankspace.contactPerson.summary();
 					})
 					.css('width', '26px')
@@ -341,7 +342,8 @@ ns1blankspace.contactPerson =
 					})
 					.click(function(event)
 					{
-						ns1blankspace.home.show();
+						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+						ns1blankspace.contactPerson.details();
 					})
 					.css('width', '26px')
 					.css('height', '26px');
@@ -629,7 +631,12 @@ ns1blankspace.contactPerson =
 
 							$('#ns1blankspaceContactPersonSMS').button(
 							{
-								label: 'Send SMS'
+								text: false,
+								label: 'Send SMS',
+								icons:
+								{
+									primary: "ui-icon ui-icon-mail-comment"
+								}
 							})
 							.click(function()
 							{
