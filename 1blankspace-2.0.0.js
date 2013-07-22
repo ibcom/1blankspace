@@ -116,6 +116,21 @@ ns1blankspace.scripts =
 	}
 ]
 
+ns1blankspace.option.formFactor = 
+{
+	is: function (oParam)
+	{
+		var sSize = ns1blankspace.util.getParam(oParam, 'size').value;
+		var bNot = ns1blankspace.util.getParam(oParam, 'not', {default: false}).value
+		return ((this.size.value == this.size.options[sSize]) && !bNot ? ns1blankspace.util.getParam(oParam, 'data').value : ns1blankspace.util.getParam(oParam, 'default').value)
+	},
+
+	size:
+	{
+		value: 2, options: {large: 1, medium: 2, small: 3}
+	}
+}
+
 window.onbeforeunload = function() 
 {
 	if (ns1blankspace.unloadWarning)
@@ -195,7 +210,7 @@ ns1blankspace.app =
 						ns1blankspace.option.richTextEditing = true;
 						ns1blankspace.option.setupURI = '/ondemand/setup/';
 						ns1blankspace.option.dateFormat = 'dd M yy';
-
+									
 						ns1blankspace.timer.messaging = 0;
 						ns1blankspace.timer.delay;
 
@@ -2121,12 +2136,14 @@ ns1blankspace.attachments =
 									
 						aHTML.push('<table>' +
 									'<tr>' +
-									'<td id="ns1blankspaceAttachmentsColumn1" class="ns1blankspaceColumn1Flexixble">' +
-									ns1blankspace.xhtml.loading +
-									'</td>' +
-									'<td id="ns1blankspaceAttachmentsColumn2" class="ns1blankspaceColumn2" style="width:100px;">' +
-									'</td></tr>' +
-									'</table>');					
+									'<td id="ns1blankspaceAttachmentsColumn1" class="ns1blankspaceColumn1Flexible">' +
+									ns1blankspace.xhtml.loading + '</td>' +
+									ns1blankspace.option.formFactor.not(
+									{
+										size: 'small',
+										data: '<td id="ns1blankspaceAttachmentsColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td></tr>',
+										default: ''
+									}) + '</table>');					
 							
 						$('#' + sXHTMLElementID).html(aHTML.join(''));
 						

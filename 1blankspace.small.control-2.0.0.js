@@ -16,6 +16,7 @@ ns1blankspace.option.returnToLast = true;
 ns1blankspace.option.restLevel = 0;
 ns1blankspace.option.autoSetupSwitch = true;
 ns1blankspace.option.passwordhash = true;
+ns1blankspace.option.formFactor.size.value = ns1blankspace.option.formFactor.size.options.small;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];

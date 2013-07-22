@@ -295,7 +295,9 @@ ns1blankspace.contactPerson =
 					{
 						aHTML.push(
 							'<div id="ns1blankspaceControlSummary" style="margin-bottom:2px;"></div>' +
-							'<div id="ns1blankspaceControlEdit" style="margin-bottom:2px;"></div>' +
+							'<div id="ns1blankspaceControlDetails" style="margin-bottom:2px;"></div>' +
+							'<div id="ns1blankspaceControlActions" style="margin-bottom:2px;"></div>' +
+							'<div id="ns1blankspaceControlAttachments" style="margin-bottom:2px;"></div>' +
 							'<div id="ns1blankspaceControlSummaryActions"></div>');
 					}	
 
@@ -332,7 +334,7 @@ ns1blankspace.contactPerson =
 					.css('width', '26px')
 					.css('height', '26px');
 
-					$('#ns1blankspaceControlEdit').button(
+					$('#ns1blankspaceControlDetails').button(
 					{
 						text: false,
 						icons:
@@ -348,143 +350,63 @@ ns1blankspace.contactPerson =
 					.css('width', '26px')
 					.css('height', '26px');
 
-					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
-					
-					aHTML.push('<table class="ns1blankspaceControl">');
-					
-					if (ns1blankspace.objectContext == -1)
+					$('#ns1blankspaceControlActions').button(
 					{
-						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl ns1blankspaceHighlight">' +
-										'Details</td></tr>');
-										
-						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">' +
-										'Address</td></tr>');
-
-						aHTML.push('<tr><td id="ns1blankspaceControlBusiness" class="ns1blankspaceControl">' +
-										'Business</td></tr>');							
-					}
-					else
+						text: false,
+						icons:
+						{
+							primary: 'ui-icon-clipboard'
+						}
+					})
+					.click(function(event)
 					{
-						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
-										'Summary</td></tr>');
-									
-						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
-										'Details</td></tr>');
-									
-						aHTML.push('<tr><td id="ns1blankspaceControlAddress" class="ns1blankspaceControl">' +
-										'Address</td></tr>');
-
-						aHTML.push('<tr><td id="ns1blankspaceControlPersonal" class="ns1blankspaceControl">' +
-										'Personal</td></tr>');
-					
-						aHTML.push('</table>');					
-					
-						aHTML.push('<table class="ns1blankspaceControl">');
-					
-						aHTML.push('<tr><td id="ns1blankspaceControlGroups" class="ns1blankspaceControl">' +
-										'Groups</td></tr>');
-											
-						aHTML.push('<tr><td id="ns1blankspaceControlBusiness" class="ns1blankspaceControl">' +
-										'Business</td></tr>');
-									
-						aHTML.push('</table>');		
-					
-						aHTML.push('<table class="ns1blankspaceControl">');
-					
-						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
-										'Actions</td></tr>');
-									
-						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
-										'Attachments</td></tr>');
-					}
-							
-					aHTML.push('</table>');					
-						
-					//$('#ns1blankspaceControl').html(aHTML.join(''));
-					
-					var aHTML = [];
-
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainAddress" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainPersonal" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainGroups" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainBusiness" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainUser" class="ns1blankspaceControlMain"></div>');
-					
-					$('#ns1blankspaceMain').html(aHTML.join(''));
-					
-					$('#ns1blankspaceControlSummary').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.contactPerson.summary();
-					});
-					
-					$('#ns1blankspaceControlDetails').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-						ns1blankspace.contactPerson.details();
-					});
-
-					$('#ns1blankspaceControlPersonal').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainPersonal'});
-						ns1blankspace.contactPerson.personal();
-					});
-					
-					$('#ns1blankspaceControlAddress').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainAddress'});
-						ns1blankspace.contactPerson.address();
-					});
-					
-					$('#ns1blankspaceControlUser').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainUser', refresh: true});
-						ns1blankspace.contactPerson.user();
-					});
-					
-					$('#ns1blankspaceControlGroups').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainGroups', refresh: true});
-						ns1blankspace.contactPerson.groups.show();
-					});
-					
-					$('#ns1blankspaceControlBusiness').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainBusiness' , refresh: true});
-						ns1blankspace.contactPerson.business();
-					});
-					
-					$('#ns1blankspaceControlActions').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainActions', refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMain'});
 						
 						if ($('#ns1blankspaceDetailsFirstName').val() != undefined)
 						{
 							ns1blankspace.contactPersonText = $('#ns1blankspaceDetailsFirstName').val() + ' ' + $('#ins1blankspaceDetailsSurname').val();
 						}
 						
-						ns1blankspace.actions.show({
-											xhtmlElementID: 'ns1blankspaceMainActions',
-											contactPerson: ns1blankspace.objectContext, 
-											contactPersonText: ns1blankspace.data.contactPersonText,
-											contactBusiness: ns1blankspace.data.contactBusiness, 
-											contactBusinessText: ns1blankspace.data.contactBusinessText,
-											object: '',
-											objectContext: ''
-											});
-					});
-					
-					$('#ns1blankspaceControlAttachments').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
-						ns1blankspace.attachments.show();
-					});	
+						ns1blankspace.actions.show(
+						{
+							xhtmlElementContainerID: 'ns1blankspaceMain',
+							contactPerson: ns1blankspace.objectContext, 
+							contactPersonText: ns1blankspace.data.contactPersonText,
+							contactBusiness: ns1blankspace.data.contactBusiness, 
+							contactBusinessText: ns1blankspace.data.contactBusinessText,
+							object: '',
+							objectContext: ''
+						});
+					})
+					.css('width', '26px')
+					.css('height', '26px');
 
-					ns1blankspace.extend.layout();			
+					$('#ns1blankspaceControlAttachments').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: 'ui-icon-paperclip'
+						}
+					})
+					.click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMain'});
+						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMain'});
+					})
+					.css('width', '26px')
+					.css('height', '26px');
+	
+					var aHTML = [];
+
+					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSMS" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					
+					$('#ns1blankspaceMain').html(aHTML.join(''));
+					
+					//ns1blankspace.extend.layout();			
 				},
 
 	show: 		function (oParam, oResponse)
@@ -635,7 +557,7 @@ ns1blankspace.contactPerson =
 								label: 'Send SMS',
 								icons:
 								{
-									primary: "ui-icon ui-icon-mail-comment"
+									primary: "ui-icon-comment"
 								}
 							})
 							.click(function()
@@ -1393,7 +1315,7 @@ ns1blankspace.contactPerson =
 									aHTML.push('</table>');
 
 									
-									$('#ns1blankspaceSMSContainer').html(aHTML.join(''));
+									$('#ns1blankspaceMain').html(aHTML.join(''));
 	
 									$('#ns1blankspaceSMSSend').button(
 									{
