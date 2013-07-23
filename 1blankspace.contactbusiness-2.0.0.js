@@ -675,9 +675,10 @@ ns1blankspace.contactBusiness =
 	address: 	function (oParam)
 				{
 					var aHTML = [];
-					var bTwoLineAddress = false;
+					var bTwoLineAddress = true;
 
-					if (oParam) {
+					if (oParam)
+					{
 						if (oParam.twoLineAddress != undefined) {bTwoLineAddress = oParam.twoLineAddress}
 					}
 			
@@ -707,7 +708,8 @@ ns1blankspace.contactBusiness =
 										'<input id="ns1blankspaceAddressStreetAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');
 										
-						if (bTwoLineAddress) {
+						if (bTwoLineAddress)
+						{
 							aHTML.push('<tr class="ns1blankspace">' +
 											'<td class="ns1blankspaceText">' +
 											'<input id="ns1blankspaceAddressStreetAddress2" class="ns1blankspaceText">' +
@@ -748,7 +750,11 @@ ns1blankspace.contactBusiness =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetCountry" class="ns1blankspaceText">' +
-										'</td></tr>');						
+										'</td></tr>');
+
+						aHTML.push('<tr><td>&nbsp;</td></tr>' +
+										'<tr><td id="ns1blankspaceAddressCopy" style="font-size:0.825em;">' +
+										'</td></tr>');									
 						
 						aHTML.push('</table>');					
 						
@@ -767,7 +773,8 @@ ns1blankspace.contactBusiness =
 										'<input id="ns1blankspaceAddressMailingAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');
 										
-						if (bTwoLineAddress) {
+						if (bTwoLineAddress)
+						{
 							aHTML.push('<tr class="ns1blankspace">' +
 											'<td class="ns1blankspaceText">' +
 											'<input id="ns1blankspaceAddressMailingAddress2" class="ns1blankspaceText">' +
@@ -810,10 +817,6 @@ ns1blankspace.contactBusiness =
 										'<input id="ns1blankspaceAddressMailingCountry" class="ns1blankspaceText">' +
 										'</td></tr>');						
 						
-						aHTML.push('<tr><td>&nbsp;</td></tr>' +
-										'<tr><td id="ns1blankspaceAddressCopy" style="font-size:0.825em;">' +
-										'</td></tr>');
-
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceAddressColumn2').html(aHTML.join(''));
