@@ -88,8 +88,7 @@ ns1blankspace.xhtml.viewContainer =
 	'<div id="ns1blankspaceViewControlViewContainer">' +
 		'<span id="ns1blankspaceViewControlView">&nbsp;</span></div>' +				
 	'<div id="ns1blankspaceViewControlSearchContainer">' +
-		'</div>' +				
-	'<div id="ns1blankspaceViewControlSearchStatus"></div>' +				
+		'</div>' +							
 	'<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>' +
 	'<div id="ns1blankspaceViewControlUser">&nbsp;</div>' +
 	'<div id="ns1blankspaceViewControlContextImage" ></div>' +
@@ -568,7 +567,8 @@ ns1blankspace.control.user =
 							 primary: "ui-icon-close"
 						}
 					})
-					.click(function() {
+					.click(function()
+					{
 						$('#' + sXHTMLElementID).slideUp(500);
 						$('#' + sXHTMLElementID).html('');
 						$('#' + sXHTMLElementID).attr('data-initiator', '');
@@ -577,6 +577,342 @@ ns1blankspace.control.user =
 					.css('height', '20px')
 					
 					ns1blankspace.logon.changePassword.show({xhtmlElementID: 'ns1blankspaceLogonName'});
+				}
+}
+
+ns1blankspace.attachments = 
+{
+	show: 		function (oParam)
+				{
+					var sXHTMLElementID = 'ns1blankspaceMainAttachments';
+					var iObject = ns1blankspace.object;
+					var iObjectContext = ns1blankspace.objectContext;
+					var iAttachmentType;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.object != undefined) {iObject = oParam.object}
+						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+						if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
+						if (oParam.showAdd != undefined) {bShowAdd = oParam.showAdd}
+						if (oParam.attachmentType != undefined ) {iAttachmentType = oParam.attachmentType}
+						if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
+					}
+					
+					$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loading);
+					
+					if (iObjectContext != -1)
+					{	
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+						oSearch.addField('type,filename,description,download,modifieddate,attachment');
+						oSearch.addFilter('object', 'EQUAL_TO', iObject);
+						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+						oSearch.rows = ns1blankspace.option.defaultRows;
+						
+						if (iAttachmentType != undefined)
+						{
+							oSearch.addFilter('type', 'EQUAL_TO', iAttachmentType);
+						}
+						
+						oSearch.sort('filename', 'asc');
+						oSearch.getResults(function(data) {ns1blankspace.attachments.process(data, sXHTMLElementID)});
+					}
+
+				},
+
+	process: 	function (oResponse, sXHTMLElementID)
+				{	
+					var aHTML = [];
+						
+					if (oResponse.data.rows.length === 0)
+					{						
+						$('#' + sXHTMLElementID).html('<div class="ns1blankspaceNothing">No attachments.</div>');
+					}
+					else
+					{
+						aHTML.push('<table id="ns1blankspaceAttachments">');
+					
+						$.each(oResponse.data.rows, function()
+						{
+							aHTML.push(ns1blankspace.attachments.row(this));
+						});
+				    	
+						aHTML.push('</table>');
+
+						ns1blankspace.render.page.show(
+						{
+						   	headerRow: false,
+							xhtmlElementID: sXHTMLElementID,
+							xhtmlContext: 'Attachment',
+							xhtml: aHTML.join(''),
+							showMore: (oResponse.morerows === "true"),
+							columns: 'subject-actiondate',
+							more: oResponse.moreid,
+							rows: ns1blankspace.option.defaultRows,
+							functionSearch: ns1blankspace.attachments.show,
+							functionShowRow: ns1blankspace.attachments.row,
+							functionOnNewPage: ns1blankspace.attachments.bind,
+							type: 'json'
+						}); 	
+							
+						ns1blankspace.attachments.bind();
+					}
+				},
+				
+	row:		function (oRow)
+				{
+					var aHTML = [];
+					
+					aHTML.push('<tr class="ns1blankspaceAttachments">');
+					
+					aHTML.push('<td id="ns1blankspaceAttachment_filename-' + oRow.id + '" class="ns1blankspaceRow">' +
+										'<a href="' + oRow.download + '">' + oRow.filename + '</a><br />');
+										
+					aHTML.push('<div class="ns1blankspaceSub">' + oRow.modifieddate + '</div></td>');
+					
+					aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+									'<span id="ns1blankspaceAttachment_options_remove-' + oRow.attachment + 
+									'" class="ns1blankspaceAttachmentsRemove">&nbsp;</span></td>');
+					
+					aHTML.push('</tr>');
+					
+					return aHTML.join('');
+				},
+
+	bind:		function ()
+				{
+					$('span.ns1blankspaceAttachmentsRemove:not("ui-button")').button({
+								text: false,
+								 icons: {
+									 primary: "ui-icon-close"
+						}
+					})
+					.click(function() {
+						ns1blankspace.attachments.remove(this.id)
+					})
+					.css('width', '15px')
+					.css('height', '20px')	
+				},
+
+	remove: 	function (sXHTMLElementID)
+				{
+					var aSearch = sXHTMLElementID.split('-');
+					var sElementId = aSearch[0];
+					var sSearchContext = aSearch[1];
+					
+					var sData = 'id=' + ns1blankspace.util.fs(sSearchContext) + '&remove=1';
+								
+					$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_MANAGE'),
+							data: sData,
+							dataType: 'json',
+							success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
+						});
+				}
+}
+
+ns1blankspace.actions =
+{
+	show: 		function (oParam)
+				{
+					var sXHTMLElementContainerID = 'ns1blankspaceMainActions';
+					var iObject = ns1blankspace.object;
+					var iObjectContext = ns1blankspace.objectContext;
+					var iType;
+					var iContactBusiness;
+					var iContactPerson;
+					var sContactBusinessText;
+					var sContactPersonText;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.object != undefined) {iObject = oParam.object}
+						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+						if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
+						if (oParam.actionType != undefined ) {iType = oParam.actionType}
+						if (oParam.type != undefined ) {iType = oParam.type}
+						if (oParam.xhtmlElementContainerID != undefined ) {sXHTMLElementContainerID = oParam.xhtmlElementContainerID}
+						if (oParam.contactBusiness != undefined) {iContactBusiness = oParam.contactBusiness}
+						if (oParam.contactPerson != undefined) {iContactPerson = oParam.contactPerson}
+						if (oParam.contactBusinessText != undefined) {sContactBusinessText = oParam.contactBusinessText}
+						if (oParam.contactPersonText != undefined) {sContactPersonText = oParam.contactPersonText}
+					}	
+					else
+					{
+						oParam = {};
+					}
+					
+					$('#' + sXHTMLElementContainerID).html(ns1blankspace.xhtml.loading);
+					
+					var aHTML = [];
+					
+					aHTML.push('<table id="tablens1blankspaceActionsColumn2" class="ns1blankspaceColumn2">');
+					
+					aHTML.push('<tr><td class="ns1blankspaceAction">' +
+									'<span id="ns1blankspaceActionsAdd">Add</span>' +
+									'</td></tr>');
+											
+					aHTML.push('</table>');					
+					
+					$('#ns1blankspaceActionsColumn2').html(aHTML.join(''));
+					
+					$('#ns1blankspaceActionsAdd').button(
+					{
+						label: "Add"
+					})
+					.click(function()
+					{
+						ns1blankspace.actions.edit(oParam);
+					});
+									
+					if (iObjectContext != -1)
+					{
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ACTION_SEARCH';
+						oSearch.addField('subject,duedate,actiontype,actiontypetext');
+
+						if (iType) {oSearch.addFilter('actiontype', 'EQUAL_TO', iType)};
+
+						if (iObject != undefined && iObject != '') {oSearch.addFilter('object', 'EQUAL_TO', iObject)};
+						if (iObjectContext != undefined && iObjectContext != '') {oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext)};
+						
+						if (iContactBusiness) {oSearch.addFilter('contactbusiness', 'EQUAL_TO', iContactBusiness)};
+						if (iContactPerson) {oSearch.addFilter('contactperson', 'EQUAL_TO', iContactPerson)};
+
+						oSearch.sort('modifieddate', 'desc')
+						oSearch.getResults(function(data) {ns1blankspace.actions.process(oParam, data)});
+					}
+				},
+
+	process: 	function (oParam, oResponse)
+				{	
+					var aHTML = [];
+					var bShowDescription = false;
+					var sXHTMLElementID = 'ns1blankspaceMainActions';
+					
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.showDescription != undefined ) {bShowDescription = oParam.showDescription}
+					}	
+
+					if (oResponse.data.rows.length === 0)
+					{						
+						$('#' + sXHTMLElementID).html('<div class="ns1blankspaceNothing">No actions.</div>');
+					}
+					else
+					{
+						aHTML.push('<table id="ns1blankspaceActions" class="ns1blankspace">');
+
+						$.each(oResponse.data.rows, function()
+						{	
+							aHTML.push(ns1blankspace.actions.row(this, oParam));
+						});
+				    	
+						aHTML.push('</table>');
+						
+						ns1blankspace.render.page.show(
+						{
+							headerRow: false,
+							xhtmlElementID: sXHTMLElementID,
+							xhtmlContext: 'Action',
+							xhtml: aHTML.join(''),
+							showMore: (oResponse.morerows === 'true'),
+							more: oResponse.moreid,
+							rows: ns1blankspace.option.defaultRows,
+							functionShowRow: ns1blankspace.actions.row,
+							functionOnNewPage: ns1blankspace.actions.bind,
+						}); 
+					}
+				},
+
+	bind: 		function (oParam)
+				{
+					var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {default: 'ns1blankspaceRenderPage_Action-0'}).value;
+
+					$('#' + sXHTMLContainerID + ' .ns1blankspaceRowRemove').button({
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-close"
+						}
+					})
+					.click(function()
+					{
+						ns1blankspace.actions.remove({xhtmlElementID: this.id});
+					})
+					.css('width', '15px')
+					.css('height', '17px');
+					
+					$('#' + sXHTMLContainerID + ' td.ns1blankspaceRowSelect').click(function()
+					{
+						ns1blankspace.action.init({id: (this.id).split('-')[1]})
+					});
+				},	
+
+	row: 		function (oRow, oParam)
+				{
+					var bShowDescription = ns1blankspace.util.getParam(oParam, 'showDescription', {default: false}).value;
+
+					var aHTML = [];
+
+					aHTML.push('<tr>');
+
+					aHTML.push('<td id="ns1blankspaceAction_subject-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+									oRow.subject + '');
+
+					aHTML.push('<div class="ns1blankspaceSub">' + oRow.duedate + '</div>');
+
+					aHTML.push('<div class="ns1blankspaceSub">' + oRow.actiontypetext + '</div></td>');
+					
+					if (bShowDescription)
+					{
+						aHTML.push('<td id="ns1blankspaceAction_description-' + oRow.id + '" class="ns1blankspaceRow">' +
+										oRow.description + '</td>');
+					}					
+					
+					aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' + 			
+									'<span id="ns1blankspaceAction_options_remove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>' +	
+									'</td>');
+
+					aHTML.push('</tr>');
+
+					return aHTML.join('');
+				},
+
+	remove:		function (oParam, oResponse)
+				{
+					var sXHTMLElementID;
+
+					if (oParam != undefined)
+					{
+						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+					}
+					
+					var aXHTMLElementID = sXHTMLElementID.split('-');
+					var sID = aXHTMLElementID[1];
+					
+					if (oResponse === undefined)
+					{	
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
+							data: 'remove=1&id=' + sID,
+							dataType: 'json',
+							success: function(data){ns1blankspace.actions.remove(oParam, data)}
+						});
+					}	
+					else
+					{
+						if (oResponse.status === 'OK')
+						{
+							$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+						}	
+					}	
 					
 				}
 }

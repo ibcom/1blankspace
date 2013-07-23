@@ -896,9 +896,10 @@ ns1blankspace.contactPerson =
 	address: 	function (oParam)
 				{
 					var aHTML = [];
-					var bTwoLineAddress = false;
+					var bTwoLineAddress = true;
 
-					if (oParam) {
+					if (oParam)
+					{
 						if (oParam.twoLineAddress != undefined) {bTwoLineAddress = oParam.twoLineAddress}
 					}
 			
@@ -929,7 +930,8 @@ ns1blankspace.contactPerson =
 										'<input id="ns1blankspaceAddressStreetAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');
 										
-						if (bTwoLineAddress) {
+						if (bTwoLineAddress)
+						{
 							aHTML.push('<tr class="ns1blankspace">' +
 											'<td class="ns1blankspaceText">' +
 											'<input id="ns1blankspaceAddressStreetAddress2" class="ns1blankspaceText">' +
@@ -993,7 +995,8 @@ ns1blankspace.contactPerson =
 										'<input id="ns1blankspaceAddressMailingAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');
 										
-						if (bTwoLineAddress) {
+						if (bTwoLineAddress)
+						{
 							aHTML.push('<tr class="ns1blankspace">' +
 											'<td class="ns1blankspaceText">' +
 											'<input id="ns1blankspaceAddressMailingAddress2" class="ns1blankspaceText">' +

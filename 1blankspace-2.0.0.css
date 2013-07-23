@@ -427,7 +427,7 @@ td.ns1blankspaceTreeColumn1
 	margin-right: 5px;
 }
 
-td.ns1blankspaceNothing
+td.ns1blankspaceNothing, div.ns1blankspaceNothing
 {
 	font-size: 0.875em;
 	color: #888888;

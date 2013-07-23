@@ -413,7 +413,7 @@ td.ns1blankspaceTreeColumn1
 	margin-right: 5px;
 }
 
-td.ns1blankspaceNothing
+td.ns1blankspaceNothing, div.ns1blankspaceNothing
 {
 	font-size: 0.875em;
 	color: #888888;
@@ -810,9 +810,9 @@ textarea.ns1blankspaceTextMultiSmall
 #ns1blankspaceViewControlBrowse
 {
 	position: absolute;
-	width: 900px;
-	left: 5px;
-	top: 42px;
+	width: 0px;
+	left: 0px;
+	top: 0px;
 }
 
 #ns1blankspaceLogonName

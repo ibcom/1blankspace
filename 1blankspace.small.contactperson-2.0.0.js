@@ -355,13 +355,13 @@ ns1blankspace.contactPerson =
 						text: false,
 						icons:
 						{
-							primary: 'ui-icon-clipboard'
+							primary: 'ui-icon-clock'
 						}
 					})
 					.click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMain'});
-						
+						ns1blankspace.show({selector: '#ns1blankspaceMainActions'});
+
 						if ($('#ns1blankspaceDetailsFirstName').val() != undefined)
 						{
 							ns1blankspace.contactPersonText = $('#ns1blankspaceDetailsFirstName').val() + ' ' + $('#ins1blankspaceDetailsSurname').val();
@@ -369,7 +369,7 @@ ns1blankspace.contactPerson =
 						
 						ns1blankspace.actions.show(
 						{
-							xhtmlElementContainerID: 'ns1blankspaceMain',
+							xhtmlElementContainerID: 'ns1blankspaceMainActions',
 							contactPerson: ns1blankspace.objectContext, 
 							contactPersonText: ns1blankspace.data.contactPersonText,
 							contactBusiness: ns1blankspace.data.contactBusiness, 
@@ -391,8 +391,8 @@ ns1blankspace.contactPerson =
 					})
 					.click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMain'});
-						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMain'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments'});
+						ns1blankspace.attachments.show();
 					})
 					.css('width', '26px')
 					.css('height', '26px');
@@ -403,10 +403,9 @@ ns1blankspace.contactPerson =
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainSMS" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
-					$('#ns1blankspaceMain').html(aHTML.join(''));
-					
-					//ns1blankspace.extend.layout();			
+					$('#ns1blankspaceMain').html(aHTML.join(''));			
 				},
 
 	show: 		function (oParam, oResponse)
@@ -482,11 +481,12 @@ ns1blankspace.contactPerson =
 											'</td></tr>');
 							}
 
-							if (ns1blankspace.objectContextData.ratingtext != '')
-							{
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Rating</td></tr>' +
-											'<tr><td class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.ratingtext +
+							if (ns1blankspace.objectContextData.mobile != '')
+							{	
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Mobile</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryMobile" class="ns1blankspaceSummary">' +
+											'<a href="callto:' + ns1blankspace.objectContextData.mobile + '">' +
+											ns1blankspace.objectContextData.mobile + '</a>' +
 											'</td></tr>');
 							}
 
@@ -494,10 +494,36 @@ ns1blankspace.contactPerson =
 							{
 								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryPhone" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.workphone +
+											'<a href="callto:' + ns1blankspace.objectContextData.workphone + '">' +
+											ns1blankspace.objectContextData.workphone + '</a>' +
 											'</td></tr>');
 							}
-	
+
+							var aAddress = [];
+
+							if (ns1blankspace.objectContextData.streetaddress1 != '') {aAddress.push(ns1blankspace.objectContextData.streetaddress1)}
+							if (ns1blankspace.objectContextData.streetaddress2 != '') {aAddress.push(ns1blankspace.objectContextData.streetaddress2)}
+							if (ns1blankspace.objectContextData.streetsuburb != '') {aAddress.push(ns1blankspace.objectContextData.streetsuburb)}
+							if (ns1blankspace.objectContextData.streetpostcode != '') {aAddress.push(ns1blankspace.objectContextData.streetpostcode)}
+							if (ns1blankspace.objectContextData.streetcountry != '') {aAddress.push(ns1blankspace.objectContextData.streetcountry)}
+
+							if (aAddress.length != 0)
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Address</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryAddress" class="ns1blankspaceSummary">' +
+											aAddress.join('<br />') +
+											'</td></tr>');
+							}
+
+							if (ns1blankspace.objectContextData.email != '')
+							{	
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Email</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
+											'<a href="mailto:' + ns1blankspace.objectContextData.email + '">' +
+											ns1blankspace.objectContextData.email + '</a>' +
+											'</td></tr>');
+							}
+
 							var oDate = new Date(ns1blankspace.objectContextData.modifieddate);
 
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
@@ -515,7 +541,7 @@ ns1blankspace.contactPerson =
 											ns1blankspace.xhtml.loadingSmall + 
 											'</div>');	
 
-							if (ns1blankspace.objectContextData.email != '')
+							if (false && ns1blankspace.objectContextData.email != '')
 							{									
 								aHTML.push('<div id="ns1blankspaceContactPersonEmail" style="margin-bottom:2px;"></div>');
 							}
@@ -523,8 +549,6 @@ ns1blankspace.contactPerson =
 							if (ns1blankspace.objectContextData.mobile != '')
 							{
 								aHTML.push('<div id="ns1blankspaceContactPersonSMS" style="margin-bottom:2px;"></div>');
-
-								//aHTML.push('<tr><td id="ns1blankspaceSMSContainer"></td></tr>');
 							}				
 							
 							$('#ns1blankspaceControlSummaryActions').html(aHTML.join(''));	
@@ -754,140 +778,23 @@ ns1blankspace.contactPerson =
 											' data-method="SETUP_CONTACT_RATING_SEARCH">' +
 										'</td></tr>');
 															
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
-						
-						if (ns1blankspace.objectContextData != undefined)
-						{
-							$('#ns1blankspaceDetailsFirstName').val((ns1blankspace.objectContextData.firstname).formatXHTML());
-							$('#ns1blankspaceDetailsSurname').val((ns1blankspace.objectContextData.surname).formatXHTML());
-							$('#ns1blankspaceDetailsTitle').attr('data-id', ns1blankspace.objectContextData.title);
-							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.titletext);
-							$('#ns1blankspaceDetailsPosition').val(ns1blankspace.objectContextData.position);
-							$('#ns1blankspaceDetailsPhone').val(ns1blankspace.objectContextData.workphone);
-							$('#ns1blankspaceDetailsMobile').val(ns1blankspace.objectContextData.mobile);
-							$('#ns1blankspaceDetailsFax').val(ns1blankspace.objectContextData.fax);
-							$('#ns1blankspaceDetailsEmail').val(ns1blankspace.objectContextData.email);
-							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.notes);
-							$('#ns1blankspaceDetailsRating').attr('data-id', ns1blankspace.objectContextData.rating);
-							$('#ns1blankspaceDetailsRating').val(ns1blankspace.objectContextData.ratingtext);
-						}
-						
-						$('#ns1blankspaceDetailsTitle').keyup(function(event)
-						{
-							$(ns1blankspace.xhtml.container).hide(200);
-							ns1blankspace.search.send(event.target.id);
-						});
-					}	
-				},
+						aHTML.push('</table>');
 
-	personal: 	function ()
-				{
-					var aHTML = [];
-					
-					if ($('#ns1blankspaceMainPersonal').attr('data-loading') == '1')
-					{
-						$('#ns1blankspaceMainPersonal').attr('data-loading', '');
-						
-						aHTML.push('<table class="ns1blankspaceContainer">' +
-										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspacePersonalColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspacePersonalColumn2" class="ns1blankspaceColumn2"></td>' +
-										'</tr>' + 
-										'</table>');					
-						
-						$('#ns1blankspaceMainPersonal').html(aHTML.join(''));
-						
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspace">');
-						
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Date of Birth' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceDetailsDateOfBirth" class="ns1blankspaceDate">' +
-										'</td></tr>');			
-
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Number of Children' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsNumberOfChildren" class="ns1blankspaceText">' +
-										'</td></tr>');			
-										
-							
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Other Details' +
-										'</td></tr>' +
-										'<tr class="ns1blankspaceTextMulti">' +
-										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea rows="5" cols="35" id="ns1blankspaceDetailsOtherFamilyDetails" class="ns1blankspaceTextMultiSmall"></textarea>' +
-										'</td></tr>');
-							
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspacePersonalColumn1').html(aHTML.join(''));
-
-						$('input.ns1blankspaceDate').datepicker({ dateFormat: 'dd M yy' });
-
-						if (ns1blankspace.objectContextData != undefined)
-						{
-							$('#ns1blankspaceDetailsDateOfBirth').val(ns1blankspace.objectContextData.dateofbirth);
-							$('#ns1blankspaceDetailsNumberOfChildren').val(ns1blankspace.objectContextData.numberofchildren);
-							$('#ns1blankspaceDetailsOtherFamilyDetails').val(ns1blankspace.objectContextData.otherfamilydetails);
-						}
-					}	
-				},
-
-	address: 	function (oParam)
-				{
-					var aHTML = [];
-					var bTwoLineAddress = false;
-
-					if (oParam) {
-						if (oParam.twoLineAddress != undefined) {bTwoLineAddress = oParam.twoLineAddress}
-					}
-			
-					if ($('#ns1blankspaceMainAddress').attr('data-loading') == '1')
-					{
-						$('#ns1blankspaceMainAddress').attr('data-loading', '');
-							
-						aHTML.push('<table class="ns1blankspaceContainer">' +
-										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceAddressColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspaceAddressColumn2" class="ns1blankspaceColumn2"></td>' +
-										'</tr>' +
-										'</table>');					
-						
-						$('#ns1blankspaceMainAddress').html(aHTML.join(''));
-						
-						var aHTML = [];
-					
-		
 						aHTML.push('<table class="ns1blankspace">');
 				
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Street' +
+										'Street Address' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetAddress1" class="ns1blankspaceText">' +
 										'</td></tr>');
-										
-						if (bTwoLineAddress) {
-							aHTML.push('<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceText">' +
-											'<input id="ns1blankspaceAddressStreetAddress2" class="ns1blankspaceText">' +
-											'</td></tr>');
-						}
+														
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceAddressStreetAddress2" class="ns1blankspaceText">' +
+										'</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -931,180 +838,35 @@ ns1blankspace.contactPerson =
 
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceAddressColumn1').html(aHTML.join(''));
-
-						var aHTML = [];
-					
-						aHTML.push('<table class="ns1blankspace">');
-								
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Mailing' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressMailingAddress1" class="ns1blankspaceText">' +
-										'</td></tr>');
-										
-						if (bTwoLineAddress) {
-							aHTML.push('<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceText">' +
-											'<input id="ns1blankspaceAddressMailingAddress2" class="ns1blankspaceText">' +
-											'</td></tr>');
-						}
-						
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Suburb' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressMailingSuburb" class="ns1blankspaceText ns1blankspaceSelectAddress">' +
-										'</td></tr>');
-										
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'State' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressMailingState" class="ns1blankspaceText">' +
-										'</td></tr>');
-										
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Post Code' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressMailingPostCode" class="ns1blankspaceText">' +
-										'</td></tr>');				
-										
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Country' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceAddressMailingCountry" class="ns1blankspaceText">' +
-										'</td></tr>');						
-						
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceAddressColumn2').html(aHTML.join(''));
-
-						$('#ns1blankspaceAddressCopy').button({
-							label: 'Copy to Mailing Address'
-						})
-						.click(function() {
-
-							$('#ns1blankspaceAddressMailingAddress1').val($('#ns1blankspaceAddressStreetAddress1').val());
-							$('#ns1blankspaceAddressMailingAddress2').val($('#ns1blankspaceAddressStreetAddress2').val());
-							$('#ns1blankspaceAddressMailingSuburb').val($('#ns1blankspaceAddressStreetSuburb').val());
-							$('#ns1blankspaceAddressMailingState').val($('#ns1blankspaceAddressStreetState').val());
-							$('#ns1blankspaceAddressMailingPostCode').val($('#ns1blankspaceAddressStreetPostCode').val());
-							$('#ns1blankspaceAddressMailingCountry').val($('#ns1blankspaceAddressStreetCountry').val());
-
-						});
+						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
+							$('#ns1blankspaceDetailsFirstName').val((ns1blankspace.objectContextData.firstname).formatXHTML());
+							$('#ns1blankspaceDetailsSurname').val((ns1blankspace.objectContextData.surname).formatXHTML());
+							$('#ns1blankspaceDetailsTitle').attr('data-id', ns1blankspace.objectContextData.title);
+							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.titletext);
+							$('#ns1blankspaceDetailsPosition').val(ns1blankspace.objectContextData.position);
+							$('#ns1blankspaceDetailsPhone').val(ns1blankspace.objectContextData.workphone);
+							$('#ns1blankspaceDetailsMobile').val(ns1blankspace.objectContextData.mobile);
+							$('#ns1blankspaceDetailsFax').val(ns1blankspace.objectContextData.fax);
+							$('#ns1blankspaceDetailsEmail').val(ns1blankspace.objectContextData.email);
+							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.notes);
+							$('#ns1blankspaceDetailsRating').attr('data-id', ns1blankspace.objectContextData.rating);
+							$('#ns1blankspaceDetailsRating').val(ns1blankspace.objectContextData.ratingtext);
 							$('#ns1blankspaceAddressStreetAddress1').val(ns1blankspace.objectContextData.streetaddress1);
+							$('#ns1blankspaceAddressStreetAddress2').val(ns1blankspace.objectContextData.streetaddress2);
 							$('#ns1blankspaceAddressStreetSuburb').val(ns1blankspace.objectContextData.streetsuburb);
 							$('#ns1blankspaceAddressStreetState').val(ns1blankspace.objectContextData.streetstate);
 							$('#ns1blankspaceAddressStreetPostCode').val(ns1blankspace.objectContextData.streetpostcode);
 							$('#ns1blankspaceAddressStreetCountry').val(ns1blankspace.objectContextData.streetcountry);
-							$('#ns1blankspaceAddressMailingAddress1').val(ns1blankspace.objectContextData.mailingaddress1);
-							$('#ns1blankspaceAddressMailingSuburb').val(ns1blankspace.objectContextData.mailingsuburb);
-							$('#ns1blankspaceAddressMailingState').val(ns1blankspace.objectContextData.mailingstate);
-							$('#ns1blankspaceAddressMailingPostCode').val(ns1blankspace.objectContextData.mailingpostcode);
-							$('#ns1blankspaceAddressMailingCountry').val(ns1blankspace.objectContextData.mailingcountry);
-
-							if (bTwoLineAddress) {
-								$('#ns1blankspaceAddressStreetAddress2').val(ns1blankspace.objectContextData.streetaddress2);
-								$('#ns1blankspaceAddressMailingAddress2').val(ns1blankspace.objectContextData.mailingaddress2);
-							}
 						}
-					}	
-				},
-
-	business: 	function ()
-				{
-					var aHTML = [];
-					
-					if ($('#ns1blankspaceMainBusiness').attr('data-loading') == '1')
-					{
-						$('#ns1blankspaceMainBusiness').attr('data-loading', '');
 						
-						aHTML.push('<table class="ns1blankspaceContainer">' +
-										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceBusinessColumn1" class="ns1blankspaceColumn1Large"></td>' +
-										'<td id="ns1blankspaceBusinessColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
-										'</tr>' +
-										'</table>');				
-						
-						$('#ns1blankspaceMainBusiness').html(aHTML.join(''));
-						
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspace">');
-						
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Trading Name' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceSelect">' +
-										'<input id="ns1blankspaceBusiness" class="ns1blankspaceSelect"' +
-											' data-method="CONTACT_BUSINESS_SEARCH"' +
-											' data-columns="tradename">' +
-										'</td></tr>');
-										
-						aHTML.push('<tr class="ns1blankspace">' +
-										'<td id="ns1blankspaceBusinessSummary" class="ns1blankspace">' +
-										'</td></tr>');
-										
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceBusinessColumn1').html(aHTML.join(''));
-					
-						if (ns1blankspace.objectContextData != undefined)
+						$('#ns1blankspaceDetailsTitle').keyup(function(event)
 						{
-							$('#ns1blankspaceBusiness').attr('data-id', ns1blankspace.objectContextData.contactbusiness);
-							$('#ns1blankspaceBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
-
-							var aHTML = [];
-						
-							aHTML.push('<table class="ns1blankspaceColumn2">');
-								
-							if (ns1blankspace.objectContextData.contactbusiness != '')
-							{	
-								aHTML.push('<tr><td><span id="ns1blankspaceBusinessView" class="ns1blankspaceAction">' +
-											'View</span></td></tr>');
-							}
-							
-							aHTML.push('</table>');					
-							
-							$('#ns1blankspaceBusinessColumn2').html(aHTML.join(''));	
-							
-							$('#ns1blankspaceBusinessView').button(
-							{
-								label: 'View',
-								icons:
-								{
-									primary: "ui-icon-play"
-								}
-							})
-							.click(function()
-							{
-								ns1blankspace.contactBusiness.init({id: ns1blankspace.objectContextData.contactbusiness});
-							});
-						}
-						else
-						{
-							$('#ns1blankspaceBusiness').attr('data-id', ns1blankspace.data.contactBusiness);
-							$('#ns1blankspaceBusiness').val(ns1blankspace.data.contactBusinessText);
-						}					
+							$(ns1blankspace.xhtml.container).hide(200);
+							ns1blankspace.search.send(event.target.id);
+						});
 					}	
 				},
 
@@ -1113,64 +875,40 @@ ns1blankspace.contactPerson =
 								{
 									ns1blankspace.status.working();
 									
-									var sData = 'id=';
+									var oData = {}
 									
 									if (ns1blankspace.objectContext != -1)
 									{
-										sData += ns1blankspace.objectContext;
+										oData.id = ns1blankspace.objectContext;
 									} 
 									
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&firstname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFirstName').val());
-										sData += '&surname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSurname').val());
-										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').attr('data-id'));
-										sData += '&jobtitle=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPosition').val());
-										sData += '&phone=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPhone').val());
-										sData += '&fax=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFax').val());
-										sData += '&mobile=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsMobile').val());
-										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
-										sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
-										sData += '&rating=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsRating').attr('data-id'));
+										$.extend(oData,
+										{
+											firstname: $('#ns1blankspaceDetailsFirstName').val(),
+											surname: $('#ns1blankspaceDetailsSurname').val(),
+											title: $('#ns1blankspaceDetailsTitle').attr('data-id'),
+											jobtitle: $('#ns1blankspaceDetailsPosition').val(),
+											phone: $('#ns1blankspaceDetailsPhone').val(),
+											fax: $('#ns1blankspaceDetailsFax').val(),
+											mobile: $('#ns1blankspaceDetailsMobile').val(),
+											email: $('#ns1blankspaceDetailsEmail').val(),
+											notes: $('#ns1blankspaceDetailsDescription').val(),
+											rating: $('#ns1blankspaceDetailsRating').attr('data-id'),
+											streetaddress1: $('#ns1blankspaceAddressStreetAddress1').val(),
+											streetsuburb: $('#ns1blankspaceAddressStreetSuburb').val(),
+											streetstate: $('#ns1blankspaceAddressStreetState').val(),
+											streetpostcode: $('#ns1blankspaceAddressStreetPostCode').val(),
+											streetcountry: $('#ns1blankspaceAddressStreetCountry').val()
+										});
 									}
-									
-									if ($('#ns1blankspaceMainAddress').html() != '')
-									{
-										sData += '&streetaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetAddress1').val());
-										sData += '&streetsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetSuburb').val());
-										sData += '&streetstate=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetState').val());
-										sData += '&streetpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetPostCode').val());
-										sData += '&streetcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressStreetCountry').val());
-										sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingAddress1').val());
-										sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingSuburb').val());
-										sData += '&mailingstate=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingState').val());
-										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingPostCode').val());
-										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingCountry').val());
-									}
-
-									if ($('#ns1blankspaceMainPersonal').html() != '')
-									{
-										sData += '&dateofbirth=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDateOfBirth').val());
-										sData += '&numberofchildren=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsNumberOfChildren').val());
-										sData += '&otherfamilydetails=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsOtherFamilyDetails').val());
-									}	
-									
-									if ($('#ns1blankspaceMainBusiness').html() != '')
-									{
-										sData += '&contactbusiness=' + ns1blankspace.util.fs($('#ns1blankspaceBusiness').attr('data-id'));
-									}
-									else if (ns1blankspace.objectContext == -1)
-									{
-										if (ns1blankspace.data.contactBusiness) {sData += '&contactbusiness=' + ns1blankspace.util.fs(ns1blankspace.data.contactBusiness)};
-									}		
-
-									sData += ns1blankspace.extend.save();
-
+										
 									$.ajax(
 									{
 										type: 'POST',
 										url: ns1blankspace.util.endpointURI('CONTACT_PERSON_MANAGE'),
-										data: sData,
+										data: oData,
 										dataType: 'json',
 										success: this.process
 									});
@@ -1214,8 +952,6 @@ ns1blankspace.contactPerson =
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
 													'<td id="ns1blankspaceContactPersonFavouriteColumn1" class="ns1blankspaceColumn1Flexible">' +
-													'</td>' +
-													'<td id="ns1blankspaceContactPersonFavouriteColumn2" class="ns1blankspaceColumn1Large" style="width:200px;">' +
 													'</td>' +
 													'</tr>' +
 													'</table>');				
@@ -1298,9 +1034,16 @@ ns1blankspace.contactPerson =
 	sms: 		{
 					show: 		function ()
 								{
+									ns1blankspace.show({selector: '#ns1blankspaceMainSMS'});
+
 									var aHTML = [];
 										
-									aHTML.push('<table>');									
+									aHTML.push('<table>');
+
+									aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Send SMS</td></tr>' +
+											'<tr><td class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.mobile + 
+											'</td></tr>');								
 								
 									aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
 														'<textarea id="ns1blankspaceSMSMessage" name="message" rows="15" cols="5" style="width:175px; height:150px;" ' +
@@ -1309,13 +1052,11 @@ ns1blankspace.contactPerson =
 									
 									aHTML.push('<tr><td>' +
 													'<span id="ns1blankspaceSMSSend" class="ns1blankspaceAction">Send</span> ' +
-													'<span id="ns1blankspaceSMSCancel" class="ns1blankspaceAction">Send</span>' +
 													'</td></tr>');
 															
 									aHTML.push('</table>');
-
-									
-									$('#ns1blankspaceMain').html(aHTML.join(''));
+		
+									$('#ns1blankspaceMainSMS').html(aHTML.join(''));
 	
 									$('#ns1blankspaceSMSSend').button(
 									{
@@ -1339,14 +1080,13 @@ ns1blankspace.contactPerson =
 
 					send: 		function ()
 								{
-									ns1blankspace.status.working('Sending SMS...');
-									$('#ns1blankspaceSMSContainer').hide();
-
 									var oData =
 									{
 										contactperson: ns1blankspace.objectContext,
 										message: $('#ns1blankspaceSMSMessage').val()
 									}
+
+									$('#ns1blankspaceMainSMS').html(ns1blankspace.xhtml.loading);
 
 									$.ajax(
 									{
@@ -1356,7 +1096,7 @@ ns1blankspace.contactPerson =
 										dataType: 'json',
 										success: function(data) 
 										{
-											ns1blankspace.status.message('SMS Sent');
+											$('#ns1blankspaceMainSMS').html('SMS Sent');
 										}
 									});
 								}			

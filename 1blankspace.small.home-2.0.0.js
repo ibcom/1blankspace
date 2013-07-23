@@ -42,7 +42,9 @@ ns1blankspace.home =
 						future: true
 					});
 
-					ns1blankspace.home.bind();
+					$('#ns1blankspaceViewControlNew').button({disabled: true});
+
+					//ns1blankspace.home.bind();
 				},
 
 	bind: 		function ()
@@ -149,19 +151,6 @@ ns1blankspace.home.actions =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceHomeActions' + iDay + '" class="ns1blankspace">');	
-							
-							aHTML.push('<tr class="ns1blankspaceCaption">');
-							aHTML.push('<td class="ns1blankspaceHeaderCaption">Subject</td>');
-							
-							if (bOverdue || bFuture)
-							{
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
-							}
-							
-							aHTML.push('<td class="ns1blankspaceHeaderCaption">Time</td>');
-							aHTML.push('<td class="ns1blankspaceHeaderCaption">Contact</td>');
-							aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-							aHTML.push('</tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
@@ -169,11 +158,10 @@ ns1blankspace.home.actions =
 							});
 							
 							aHTML.push('</table>');
-
-							if (bShow) {$('#' + sXHTMLElementId).show(ns1blankspace.option.showSpeedOptions)}	
 							
 							ns1blankspace.render.page.show(
 							{
+								headerRow: false,
 								xhtmlElementID: sXHTMLElementID,
 								xhtmlContext: 'HomeTodayAction',
 								xhtml: aHTML.join(''),
@@ -181,11 +169,9 @@ ns1blankspace.home.actions =
 								more: oResponse.moreid,
 								rows: 20,
 								functionShowRow: ns1blankspace.home.actions.row,
-								functionNewPage: 'ns1blankspace.home.actions.bind()',
+								functionOnNewPage: ns1blankspace.home.actions.bind,
 								type: 'json'
 							}); 	
-							
-							ns1blankspace.home.actions.bind();
 						}
 					}
 				},
@@ -197,38 +183,29 @@ ns1blankspace.home.actions =
 
 					aHTML.push('<tr class="ns1blankspaceRow">');
 								
-					aHTML.push('<td id="ns1blankspaceHomeActions_subject-' + oRow.id + '" class="ns1blankspaceRow">' +
-											oRow.subject + '</td>');
+					aHTML.push('<td id="ns1blankspaceHomeActions_subject-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+											oRow.subject);
 						
 					var oDate = new Date(oRow.date);
 					sDate = oDate.toString("ddd, dd MMM yyyy");
 							
 					if (bShowDate)
 					{
-						aHTML.push('<td id="ns1blankspaceHomeActions_date-' + oRow.id + '" class="ns1blankspaceRow">' +
-											sDate + '</td>');
+						aHTML.push('<div class="ns1blankspaceSub">' + sDate + '</div>');
 					}
 					
 					if (oDate.toString("h") != 0 || oDate.toString("m") != '0')
 					{
 						sDate = oDate.toString("h:mm tt");
+
+						aHTML.push('<div class="ns1blankspaceSub">' + sDate + '</div>');
 					}
-					else
-					{
-						sDate = '&nbsp;';
-					}	
-											
-					aHTML.push('<td id="ns1blankspaceHomeActions_time-' + oRow.id + '" class="ns1blankspaceRow">' +
-											sDate + '</td>');
-											
-					aHTML.push('<td id="ns1blankspaceHomeActions_contact-' + oRow.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowContact">' +
-											oRow.contactpersontext + '</td>');
+														
+					aHTML.push('<div class="ns1blankspaceSub">' + oRow.contactpersontext + '</div>');
 					
-					aHTML.push('<td id="ns1blankspaceHomeActions-' + oRow.id + '" class="ns1blankspaceRow" style="width:65px;">');
+					aHTML.push('<td id="ns1blankspaceHomeActions-' + oRow.id + '" class="ns1blankspaceRow" style="width:30px;">');
 					
-					aHTML.push('<span id="ns1blankspaceHomeActions_cancel-' + oRow.id + '" class="ns1blankspaceRowCancel"></span>');
 					aHTML.push('<span id="ns1blankspaceHomeActions_complete-' + oRow.id + '" class="ns1blankspaceRowComplete"></span>');
-					aHTML.push('<span id="ns1blankspaceHomeActions-' + oRow.id + '" class="ns1blankspaceRowSelect"></span>');
 					
 					aHTML.push('</td></tr>');
 					
@@ -237,43 +214,16 @@ ns1blankspace.home.actions =
 					
 	bind:		function ()	
 				{
-					$('td.ns1blankspaceRowContact').click(function() {
-						ns1blankspace.contactPerson.init();
-						ns1blankspace.contactPerson.searchsend(this.id);
-					})
-
-					$('span.ns1blankspaceRowSelect:not("ui-button")').button( {
-						text: false,
-						icons: {
-							primary: "ui-icon-play"
-						}
-					})
-					.click(function()
+					$('td.ns1blankspaceRowSelect').click(function()
 					{
 						ns1blankspace.action.init({id: (this.id).split('-')[1]});
-					})
-					.css('width', '15px')
-					.css('height', '18px');
+					});
 
-					$('span.ns1blankspaceRowCancel:not("ui-button")').button(
-					{
-						text: false,
-						label: "Cancel",
-						icons: {
-							 primary: "ui-icon-close"
-						}
-					})
-					.click(function() {
-						ns1blankspace.home.actions.status(this.id, 3)
-					})
-					.css('width', '15px')
-					.css('height', '18px')
-						
-						
 					$('span.ns1blankspaceRowComplete:not("ui-button")').button({
 						text: false,
 						label: "Complete",
-						icons: {
+						icons:
+						{
 							 primary: "ui-icon-check"
 						}
 					})
