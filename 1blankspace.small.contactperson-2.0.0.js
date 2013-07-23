@@ -508,8 +508,10 @@ ns1blankspace.contactPerson =
 							{
 								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Address</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryAddress" class="ns1blankspaceSummary">' +
+											'<a href="comgooglemaps://?q=' +
+											aAddress.join(',+').replace(/ /g, '+') + '">' +
 											aAddress.join('<br />') +
-											'</td></tr>');
+											'</a></td></tr>');
 							}
 
 							if (ns1blankspace.objectContextData.email != '')
