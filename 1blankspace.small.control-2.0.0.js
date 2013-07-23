@@ -76,11 +76,6 @@ ns1blankspace.xhtml.logonNotesFooter =
 	'<br /><br /><hr />' +
 	'<br /><a href="https://developer.1blankspace.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
 
-ns1blankspace.xhtml.header2 =
-	'<div id="ns1blankspaceLogo" style="width:300px;"><img src="/jscripts/images/1blankspace.aoe-2.0.0.png"></div>' +
-	'<div id="ns1blankspaceSpaceText" style="width:300px;"></div>' +
-	'<div id="ns1blankspaceLogonName" style="width:300px;"></div>';
-
 ns1blankspace.xhtml.header = '';
 
 ns1blankspace.xhtml.viewContainer =
@@ -108,6 +103,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.home',
 		source: '/jscripts/1blankspace.small.home-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.contactBusiness',
+		source: '/jscripts/1blankspace.small.contactbusiness-2.0.0.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -258,6 +257,14 @@ ns1blankspace.control.init = function (oParam, oResponse)
 
 ns1blankspace.views = 
 [
+	{
+		title: "Businesses",
+		namespace: "contactBusiness",
+		endpoint: "CONTACT_BUSINESS",
+		show: true,
+		group: 1,
+		type: 1
+	},
 	{
 		title: "People",
 		namespace: "contactPerson",

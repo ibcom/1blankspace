@@ -5,28 +5,24 @@
  * 01 FEB 2010
  */
  
-ns1blankspace.contactPerson = 
+ns1blankspace.contactBusiness = 
 {
-	data: 		{},
-
-	init: 		function (oParam)
+		init: 	function (oParam)
 				{
 					ns1blankspace.app.reset();
 
-					ns1blankspace.object = 32;	
-					ns1blankspace.objectName = 'contactPerson';
+					ns1blankspace.object = 12;
+					ns1blankspace.objectName = 'contactBusiness';
 					ns1blankspace.objectParentName = undefined;
-					ns1blankspace.objectMethod = 'CONTACT_PERSON'
+					ns1blankspace.objectMethod = 'CONTACT_BUSINESS'
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
-					ns1blankspace.viewName = 'People';	
-					ns1blankspace.data.contactBusiness = ns1blankspace.util.getParam(oParam, 'contactBusiness');
-					ns1blankspace.data.contactBusinessText = ns1blankspace.util.getParam(oParam, 'contactBusinessText');
+					ns1blankspace.viewName = 'Businesses';
 
 					$('#ns1blankspaceViewControlContext').html('<input id="ns1blankspaceViewControlSearch">');
 					$('#ns1blankspaceViewControlContextImage').html('<div id="ns1blankspaceViewContact" class="ns1blankspaceViewImage"></div>');
-
-					ns1blankspace.app.set(oParam);					
+					
+					ns1blankspace.app.set(oParam);
 				},
 
 	home: 		function (oParam, oResponse)
@@ -35,16 +31,17 @@ ns1blankspace.contactPerson =
 					{
 						var aHTML = [];
 									
-						aHTML.push('<table class="ns1blankspaceMain">' +
-										'<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
-										ns1blankspace.xhtml.loading +
-										'</td></tr>' +
-										'</table>');					
+						aHTML.push('<table class="ns1blankspaceMain">');
+						aHTML.push('<tr class="ns1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										ns1blankspace.xhtml.loading + 
+										'</td>' +
+										'</tr>');
+						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
-						$('#ns1blankspaceControl').html('<span id="ns1blankspaceControlFavourites"></span>');
+												$('#ns1blankspaceControl').html('<span id="ns1blankspaceControlFavourites"></span>');
 
 						$('#ns1blankspaceControlFavourites').button(
 						{
@@ -57,7 +54,7 @@ ns1blankspace.contactPerson =
 						.click(function(event)
 						{
 							ns1blankspace.show({refresh: true});
-							ns1blankspace.contactPerson.favourites.show({xhtmlElementID: "ns1blankspaceMain"});
+							ns1blankspace.contactBusiness.favourites.show({xhtmlElementID: "ns1blankspaceMain"});
 						})
 						.css('width', '26px')
 						.css('height', '26px');
@@ -65,12 +62,12 @@ ns1blankspace.contactPerson =
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
-						oSearch.method = 'CONTACT_PERSON_SEARCH';		
-						oSearch.addField('firstname,surname');
+						oSearch.method = 'CONTACT_BUSINESS_SEARCH';		
+						oSearch.addField('tradename,legalname');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						
-						oSearch.getResults(function(data) {ns1blankspace.contactPerson.home(oParam, data)});	
+						oSearch.getResults(function(data) {ns1blankspace.contactBusiness.home(oParam, data)});	
 					}
 					else
 					{
@@ -78,21 +75,21 @@ ns1blankspace.contactPerson =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<div class="ns1blankspaceNothing">No people.</div>');
+							aHTML.push('<div class="ns1blankspaceNothing">No businesses.</td></tr></table>');
 						}
 						else
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<table>');
 
 							$.each(oResponse.data.rows, function()
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
-												'" class="ns1blankspaceMostLikely">' +
-												this.firstname + ' ' +
-												this.surname +
-												'</td>');
+														'" class="ns1blankspaceMostLikely">' +
+														this.tradename + ' ' +
+														this.legalname +
+														'</td>');
 								
 								aHTML.push('</tr>');
 							});
@@ -104,7 +101,7 @@ ns1blankspace.contactPerson =
 					
 						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							ns1blankspace.contactPerson.search.send(event.target.id, {source: 1});
+							ns1blankspace.contactBusiness.search.send(event.target.id, {source: 1});
 						});
 					}
 				},
@@ -112,10 +109,11 @@ ns1blankspace.contactPerson =
 	search: 	{
 					send: 		function (sXHTMLElementId, oParam)
 								{
+									
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 2;
+									var iMinimumLength = 3;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -132,26 +130,31 @@ ns1blankspace.contactPerson =
 									}
 									
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
-									{
+									{							
 										$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
-										
+
 										ns1blankspace.objectContext = sSearchContext;
 										
 										var oSearch = new AdvancedSearch();
-										oSearch.method = 'CONTACT_PERSON_SEARCH';
-										oSearch.addField('firstname,surname,contactbusiness,contactbusinesstext,title,titletext,position,workphone,fax,mobile,email,' +
-																 'customerstatus,customerstatustext,gender,gendertext,' +
-																 'streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
-																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,modifieddate,notes,' +
-																 'dateofbirth,rating,ratingtext,numberofchildren,otherfamilydetails');
+										oSearch.endPoint = 'contact';
+										oSearch.method = 'CONTACT_BUSINESS_SEARCH';
+										oSearch.addField( 'reference,tradename,legalname,phonenumber,faxnumber,industry,industrytext,' +
+															'createddate,abn,customerstatus,customerstatustext' + 
+															',webaddress,area,areatext,' +
+															'streetaddress1,streetaddress2,streetsuburb,streetpostcode,streetstate,streetcountry' + 
+															',mailingaddress1,mailingaddress2,mailingsuburb,mailingpostcode,mailingstate,mailingcountry,' +
+															'notes,primarycontactperson,modifieddate');
 
 										oSearch.addField(ns1blankspace.extend.elements());
-
+										
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
-										oSearch.getResults(function(data) {ns1blankspace.contactPerson.show(oParam, data)});
+										oSearch.rf = 'json';
+										oSearch.getResults(function(data) {ns1blankspace.contactBusiness.show(oParam, data)}) 
+										
 									}
 									else
 									{
+									
 										if (sSearchText == undefined)
 										{
 											sSearchText = $('#ns1blankspaceViewControlSearch').val();
@@ -172,8 +175,8 @@ ns1blankspace.contactPerson =
 											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
-											oSearch.method = 'CONTACT_PERSON_SEARCH';
-											oSearch.addField('firstname,surname');
+											oSearch.method = 'CONTACT_BUSINESS_SEARCH';
+											oSearch.addField('tradename,legalname');
 											
 											if (iSource == ns1blankspace.data.searchSource.browse)
 											{
@@ -181,34 +184,22 @@ ns1blankspace.contactPerson =
 											}
 											else
 											{	
-												var aSearchText = sSearchText.split(' ');
-
-												if (aSearchText.length > 1)
-												{
-													oSearch.addFilter('firstname', 'TEXT_STARTS_WITH', aSearchText[0]);
-													oSearch.addFilter('surname', 'TEXT_STARTS_WITH', aSearchText[1]);
-												}
-												else
-												{
-													oSearch.addFilter('firstname', 'TEXT_IS_LIKE', sSearchText);
-													oSearch.addOperator('or');
-													oSearch.addFilter('surname', 'TEXT_IS_LIKE', sSearchText);
-												}	
+												oSearch.addFilter('quicksearch', 'TEXT_IS_LIKE', sSearchText);
 											}	
 											
-											oSearch.rows = 15;
-											oSearch.rf = 'json';
-											oSearch.getResults(function(data) {ns1blankspace.contactPerson.search.process(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.contactBusiness.search.process(oParam, data)});
 										}
-									};	
+									}
 								},
 
+	
 					process: 	function (oParam, oResponse)
 								{
+
 									var iColumn = 0;
 									var aHTML = [];
 									var	iMaximumColumns = 1;
-										
+									
 									if (oResponse.data.rows.length == 0)
 									{
 										ns1blankspace.search.stop();
@@ -227,14 +218,14 @@ ns1blankspace.contactPerson =
 												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
 											
-											aHTML.push('<td class="ns1blankspaceSearch" id="contactperson' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="contactbusiness' +
 															'-' + this.id + '">' +
-															this.firstname + 
+															this.tradename + 
 															'</td>');
 											
-											aHTML.push('<td class="ns1blankspaceSearch" id="contactperson' +
+											aHTML.push('<td class="ns1blankspaceSearch" id="contactbusiness' +
 															'-' + this.id + '">' +
-															this.surname + '</td>');
+															this.legalname + '</td>');
 															
 											if (iColumn == iMaximumColumns)
 											{
@@ -261,24 +252,25 @@ ns1blankspace.contactPerson =
 										{
 											$(ns1blankspace.xhtml.container).html('&nbsp;');
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.contactPerson.search.send(event.target.id, {source: 1});
+											ns1blankspace.contactBusiness.search.send(event.target.id, {source: 1});
 										});
 										
 										ns1blankspace.render.bind(
 										{
-											columns: 'firstname-surname',
+											columns: 'tradename-legalname',
 											more: oResponse.moreid,
 											rows: 15,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: ns1blankspace.contactPerson.search.send
+											functionSearch: ns1blankspace.contactBusiness.search.send
 										});   
 										
 									}	
-								}
+								},
 				},						
 
-	layout: 	function ()
+	layout:		function ()
 				{
+					
 					var aHTML = [];
 
 					aHTML.push('<div id="ns1blankspaceControlSave" style="margin-bottom:2px;"></div>');
@@ -305,7 +297,7 @@ ns1blankspace.contactPerson =
 					})
 					.click(function(event)
 					{
-						ns1blankspace.contactPerson.save.send();
+						ns1blankspace.contactBusiness.save.send();
 					})
 					.css('width', '26px')
 					.css('height', '26px');
@@ -321,7 +313,7 @@ ns1blankspace.contactPerson =
 					.click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.contactPerson.summary();
+						ns1blankspace.contactBusiness.summary();
 					})
 					.css('width', '26px')
 					.css('height', '26px');
@@ -337,7 +329,7 @@ ns1blankspace.contactPerson =
 					.click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-						ns1blankspace.contactPerson.details();
+						ns1blankspace.contactBusiness.details();
 					})
 					.css('width', '26px')
 					.css('height', '26px');
@@ -353,19 +345,11 @@ ns1blankspace.contactPerson =
 					.click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainActions'});
-
-						if ($('#ns1blankspaceDetailsFirstName').val() != undefined)
-						{
-							ns1blankspace.contactPersonText = $('#ns1blankspaceDetailsFirstName').val() + ' ' + $('#ins1blankspaceDetailsSurname').val();
-						}
 						
 						ns1blankspace.actions.show(
 						{
 							xhtmlElementContainerID: 'ns1blankspaceMainActions',
-							contactPerson: ns1blankspace.objectContext, 
-							contactPersonText: ns1blankspace.data.contactPersonText,
-							contactBusiness: ns1blankspace.data.contactBusiness, 
-							contactBusinessText: ns1blankspace.data.contactBusinessText,
+							contactBusiness: ns1blankspace.objectContext, 
 							object: '',
 							objectContext: ''
 						});
@@ -393,17 +377,18 @@ ns1blankspace.contactPerson =
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainSMS" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainPeople" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
-					$('#ns1blankspaceMain').html(aHTML.join(''));			
+					$('#ns1blankspaceMain').html(aHTML.join(''));
 				},
 
 	show: 		function (oParam, oResponse)
 				{
+
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-					ns1blankspace.contactPerson.layout();
+					ns1blankspace.contactBusiness.layout();
 					
 					var aHTML = [];
 					
@@ -411,7 +396,7 @@ ns1blankspace.contactPerson =
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find contact person.</td></tr></table>');
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find contact business.</td></tr></table>');
 								
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
@@ -420,252 +405,108 @@ ns1blankspace.contactPerson =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
 						ns1blankspace.data.contactBusiness = ns1blankspace.objectContextData.contactbusiness;
-						ns1blankspace.data.contactBusinessText = ns1blankspace.objectContextData.contactbusinesstext
-						ns1blankspace.data.contactPersonText = ns1blankspace.objectContextData.firstname + ' ' + ns1blankspace.objectContextData.surname;
+						ns1blankspace.data.contactBusinessText = ns1blankspace.objectContextData.contactbusinesstext;
 						
-						$('#ns1blankspaceViewControlContext').html(ns1blankspace.objectContextData.firstname + 
-								' ' + ns1blankspace.objectContextData.surname);
+						$('#ns1blankspaceViewControlContext').html(ns1blankspace.objectContextData.tradename);
 
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.contactPerson.init({id: ' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.contactBusiness.init({id: ' + ns1blankspace.objectContext + '})',
 							move: false
 						});
 						
-						ns1blankspace.history.control({functionDefault: 'ns1blankspace.contactPerson.summary()'});
+						ns1blankspace.history.control({functionDefault: 'ns1blankspace.contactBusiness.summary()'})
 					}	
-				},	
+				},		
 		
-	summary: 	function (oParam, oResponse)
+	summary: 	function ()
 				{
 					var aHTML = [];
 					
 					if (ns1blankspace.objectContextData == undefined)
 					{
-						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this contact.</td></tr></table>');
+						aHTML.push('<table><tr><td valign="top">Sorry can\'t find this business.</td></tr></table>');
 								
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}
 					else
 					{
-						if (oResponse == undefined)
-						{	
-							aHTML.push('<table class="ns1blankspaceMain">' +
-										'<tr class="ns1blankspaceRow">' +
-										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-										'</tr>' +
-										'</table>');				
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'</tr>' +
+									'</table>');				
+						
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
+					
+						var aHTML = [];
+					
+						aHTML.push('<table class="ns1blankspace">');
+						
+						if (ns1blankspace.objectContextData.phonenumber != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryPhone" class="ns1blankspaceSummary">' +
+										'<a href="callto:' + ns1blankspace.objectContextData.phonenumber + '">' +
+										ns1blankspace.objectContextData.phonenumber + '</a>' +
+										'</td></tr>');
+						}
+												
+						var aAddress = [];
+
+						if (ns1blankspace.objectContextData.streetaddress1 != '') {aAddress.push(ns1blankspace.objectContextData.streetaddress1)}
+						if (ns1blankspace.objectContextData.streetaddress2 != '') {aAddress.push(ns1blankspace.objectContextData.streetaddress2)}
+						if (ns1blankspace.objectContextData.streetsuburb != '') {aAddress.push(ns1blankspace.objectContextData.streetsuburb)}
+						if (ns1blankspace.objectContextData.streetpostcode != '') {aAddress.push(ns1blankspace.objectContextData.streetpostcode)}
+						if (ns1blankspace.objectContextData.streetcountry != '') {aAddress.push(ns1blankspace.objectContextData.streetcountry)}
+
+						if (aAddress.length != 0)
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Address</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryAddress" class="ns1blankspaceSummary">' +
+										'<a href="comgooglemaps://?q=' +
+										aAddress.join(',+').replace(/ /g, '+') + '">' +
+										aAddress.join('<br />') +
+										'</a></td></tr>');
+						}				
 							
-							$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
-						
-							var aHTML = [];
-						
-							aHTML.push('<table class="ns1blankspace">');
-
-							if (ns1blankspace.objectContextData.contactbusinesstext != '')
-							{
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.contactbusinesstext +
-											'</td></tr>');
-							}
-
-							if (ns1blankspace.objectContextData.mobile != '')
-							{	
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Mobile</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryMobile" class="ns1blankspaceSummary">' +
-											'<a href="callto:' + ns1blankspace.objectContextData.mobile + '">' +
-											ns1blankspace.objectContextData.mobile + '</a>' +
-											'</td></tr>');
-							}
-
-							if (ns1blankspace.objectContextData.workphone != '')
-							{
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryPhone" class="ns1blankspaceSummary">' +
-											'<a href="callto:' + ns1blankspace.objectContextData.workphone + '">' +
-											ns1blankspace.objectContextData.workphone + '</a>' +
-											'</td></tr>');
-							}
-
-							var aAddress = [];
-
-							if (ns1blankspace.objectContextData.streetaddress1 != '') {aAddress.push(ns1blankspace.objectContextData.streetaddress1)}
-							if (ns1blankspace.objectContextData.streetaddress2 != '') {aAddress.push(ns1blankspace.objectContextData.streetaddress2)}
-							if (ns1blankspace.objectContextData.streetsuburb != '') {aAddress.push(ns1blankspace.objectContextData.streetsuburb)}
-							if (ns1blankspace.objectContextData.streetpostcode != '') {aAddress.push(ns1blankspace.objectContextData.streetpostcode)}
-							if (ns1blankspace.objectContextData.streetcountry != '') {aAddress.push(ns1blankspace.objectContextData.streetcountry)}
-
-							if (aAddress.length != 0)
-							{
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Address</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryAddress" class="ns1blankspaceSummary">' +
-											'<a href="comgooglemaps://?q=' +
-											aAddress.join(',+').replace(/ /g, '+') + '">' +
-											aAddress.join('<br />') +
-											'</a></td></tr>');
-							}
-
-							if (ns1blankspace.objectContextData.email != '')
-							{	
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Email</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryEmail" class="ns1blankspaceSummary">' +
-											'<a href="mailto:' + ns1blankspace.objectContextData.email + '">' +
-											ns1blankspace.objectContextData.email + '</a>' +
-											'</td></tr>');
-							}
-
-							var oDate = new Date(ns1blankspace.objectContextData.modifieddate);
-
+						if (ns1blankspace.objectContextData.notes != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Notes</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryNotes" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.notes +
+										'</td></tr>');
+						}				
+								
+						if (ns1blankspace.objectContextData.modifieddate != '') {
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
-											oDate.toString("dd MMM yyyy") +
-											'</td></tr>');	
-									
-							aHTML.push('</table>');					
-							
-							$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));	
-
-							var aHTML = [];
+											Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+											'</td></tr>');
+						}
+													
+						aHTML.push('</table>');					
 						
-							aHTML.push('<div id="ns1blankspaceFavourite" style="margin-bottom:2px; width:26px;>' +
-											ns1blankspace.xhtml.loadingSmall + 
-											'</div>');	
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
-							if (false && ns1blankspace.objectContextData.email != '')
-							{									
-								aHTML.push('<div id="ns1blankspaceContactPersonEmail" style="margin-bottom:2px;"></div>');
-							}
+						if (ns1blankspace.objectContextData.webaddress != '')
+						{	
+							var aHTML = [];
+					
+							aHTML.push('<table class="ns1blankspaceColumn2">');
 
-							if (ns1blankspace.objectContextData.mobile != '')
-							{
-								aHTML.push('<div id="ns1blankspaceContactPersonSMS" style="margin-bottom:2px;"></div>');
-							}				
-							
-							$('#ns1blankspaceControlSummaryOptions').html(aHTML.join(''));	
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
+										'<a href="' + ns1blankspace.objectContextData.webaddress + '" target="_blank">' + 
+										ns1blankspace.objectContextData.webaddress + '</a>' +
+										'</td></tr>');	
 
-							$('#ns1blankspaceContactPersonEmail').button(
-							{
-								text: false,
-								icons:
-								{
-									primary: "ui-icon ui-icon-mail-closed"
-								}
-							})
-							.click(function()
-							{
-								ns1blankspace.messaging.imap.init(
-								{
-									action: 1,
-									emailTo: ns1blankspace.objectContextData.email,
-									contactPersonTo: ns1blankspace.objectContextData.id,
-									object: 32,
-									objectContext: ns1blankspace.objectContextData.id
-								});
-							})
-							.css('width', '26px')
-							.css('height', '26px');
-
-							$('#ns1blankspaceContactPersonSMS').button(
-							{
-								text: false,
-								label: 'Send SMS',
-								icons:
-								{
-									primary: "ui-icon-comment"
-								}
-							})
-							.click(function()
-							{
-								ns1blankspace.contactPerson.sms.show();
-							})
-							.css('width', '26px')
-							.css('height', '26px');
-
-							var sData = 'object=' + ns1blankspace.object;
-							sData += '&objectContext=' + ns1blankspace.objectContext;
-							
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('CORE_FAVOURITE_SEARCH'),
-								data: sData,
-								dataType: 'json',
-								success: function (data)
-								{
-									ns1blankspace.contactPerson.summary(oParam, data);
-								}
-							});
-						}	
-						else
-						{
-							var bFavourite = false;
-							var iFavouriteID;
-							var oButton =
-							{
-								text: false,
-								label: 'Favourite',
-								icons:
-								{
-									primary: "ui-icon-star"
-								}
-							}
-
-							if (oResponse.data.rows.length != 0)
-							{
-								oButton =
-								{
-									text: false,
-									label: 'Favourite',
-									icons:
-									{
-										primary: "ui-icon-star"
-									}
-								}
-
-								sFavourite = 'Remove';
-								bFavourite = true;
-								iFavouriteID = oResponse.data.rows[0].id;
-							}
-
-							$('#ns1blankspaceFavourite').html('<input type="checkbox" ' + (bFavourite?'checked="checked" ':'') + 'id="ns1blankspaceContactPersonFavourite"/>' +
-									'<label for="ns1blankspaceContactPersonFavourite" style="font-size:0.75em;"></label>');
-
-							$('#ns1blankspaceContactPersonFavourite').button(
-							oButton)
-							.click(function()
-							{
-								var sData = 'object=' + ns1blankspace.object;
-								sData += '&objectContext=' + ns1blankspace.objectContext;
-								if (bFavourite)
-								{
-									ns1blankspace.status.message('No longer a favourite');
-									sData += '&remove=1&id=' + ns1blankspace.util.fs(iFavouriteID);
-								}
-								else
-								{
-									ns1blankspace.status.message('Is now a favourite');
-								}
-
-								$.ajax(
-								{
-									type: 'POST',
-									url: ns1blankspace.util.endpointURI('CORE_FAVOURITE_MANAGE'),
-									data: sData,
-									dataType: 'json',
-									success: function ()
-									{
-										ns1blankspace.contactPerson.summary();
-									}
-								});							
-							})
-							.css('width', '26px')
-							.css('height', '26px')
-							.css('margin-botton', '2px;');
-						}	
+							aHTML.push('</table>');					
+						
+							$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
+						} 
 					}	
 				},
 
@@ -677,54 +518,33 @@ ns1blankspace.contactPerson =
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
 						
-						var aHTML = [];
-						
 						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'First Name' +
+										'Legal Name' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsFirstName" class="ns1blankspaceText">' +
-										'</td></tr>');			
-
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Surname' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsSurname" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsLegalName" class="ns1blankspaceText">' +
 										'</td></tr>');			
 										
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Title' +
+										'Trading Name' +
 										'</td></tr>' +
 										'<tr class="ns1blankspaceSelect">' +
 										'<td class="ns1blankspaceSelect">' +
-										'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceSelect"' +
-											' data-method="SETUP_CONTACT_TITLE_SEARCH">' +
+										'<input id="ns1blankspaceDetailsTradeName" class="ns1blankspaceText">' +
 										'</td></tr>');							
 										
 						aHTML.push('<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Position' +
+										'ABN' +
 										'</td></tr>' +
 										'<tr class="ns1blankspaceText">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsPosition" class="ns1blankspaceText">' +
-										'</td></tr>');
-
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Email' +
-										'</td></tr>' +
-										'<tr class="ns1blankspaceText">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsEmail" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsABN" class="ns1blankspaceText">' +
 										'</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -738,22 +558,32 @@ ns1blankspace.contactPerson =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Mobile' +
-										'</td></tr>' +
-										'<tr class="ns1blankspaceText">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsMobile" class="ns1blankspaceText">' +
-										'</td></tr>');
-
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
 										'Fax' +
 										'</td></tr>' +
 										'<tr class="ns1blankspaceText">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceDetailsFax" class="ns1blankspaceText">' +
 										'</td></tr>');
-											
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Web Address' +
+										'</td></tr>' +
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsWebAddress" class="ns1blankspaceText">' +
+										'</td></tr>');
+										
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Status' +
+										'</td></tr>' +
+										'<tr class="ns1blankspaceText">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsStatus" class="ns1blankspaceSelect"' + 
+										  'data-method="SETUP_CONTACT_STATUS_SEARCH">' +
+										'</td></tr>');
+						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Description / Notes' +
@@ -762,20 +592,20 @@ ns1blankspace.contactPerson =
 										'<td class="ns1blankspaceTextMulti">' +
 										'<textarea rows="10" cols="35" id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti"></textarea>' +
 										'</td></tr>');
-															
-						aHTML.push('</table>');
+						
+						aHTML.push('</table>');	
 
 						aHTML.push('<table class="ns1blankspace">');
-				
+								
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Street Address' +
+										'Address' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetAddress1" class="ns1blankspaceText">' +
-										'</td></tr>');
-														
+										'</td></tr>');									
+						
 						aHTML.push('<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetAddress2" class="ns1blankspaceText">' +
@@ -815,27 +645,25 @@ ns1blankspace.contactPerson =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceAddressStreetCountry" class="ns1blankspaceText">' +
-										'</td></tr>');						
-						
-						aHTML.push('<tr><td>&nbsp;</td></tr>' +
-										'<tr><td id="ns1blankspaceAddressCopy" style="font-size:0.825em;">' +
 										'</td></tr>');
 
-						aHTML.push('</table>');					
-						
+						aHTML.push('</table>');									
+							
 						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
-						
+
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDetailsFirstName').val((ns1blankspace.objectContextData.firstname).formatXHTML());
-							$('#ns1blankspaceDetailsSurname').val((ns1blankspace.objectContextData.surname).formatXHTML());
-							$('#ns1blankspaceDetailsTitle').attr('data-id', ns1blankspace.objectContextData.title);
-							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.titletext);
-							$('#ns1blankspaceDetailsPosition').val(ns1blankspace.objectContextData.position);
-							$('#ns1blankspaceDetailsPhone').val(ns1blankspace.objectContextData.workphone);
-							$('#ns1blankspaceDetailsMobile').val(ns1blankspace.objectContextData.mobile);
+							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsTradeName').val(ns1blankspace.objectContextData.tradename);
+							$('#ns1blankspaceDetailsLegalName').val(ns1blankspace.objectContextData.legalname);
+							$('#ns1blankspaceDetailsIndustry').val(ns1blankspace.objectContextData.industrytext);
+							$('#ns1blankspaceDetailsIndustry').attr('data-id', ns1blankspace.objectContextData.industry);
+							$('#ns1blankspaceDetailsABN').val(ns1blankspace.objectContextData.abn);
+							$('#ns1blankspaceDetailsPhone').val(ns1blankspace.objectContextData.phonenumber);
+							$('#ns1blankspaceDetailsWebAddress').val(ns1blankspace.objectContextData.webaddress);
 							$('#ns1blankspaceDetailsFax').val(ns1blankspace.objectContextData.fax);
-							$('#ns1blankspaceDetailsEmail').val(ns1blankspace.objectContextData.email);
+							$('#ns1blankspaceDetailsStatus').val(ns1blankspace.objectContextData.customerstatustext);
+							$('#ns1blankspaceDetailsStatus').attr('data-id', ns1blankspace.objectContextData.customerstatus);
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.notes);
 							$('#ns1blankspaceAddressStreetAddress1').val(ns1blankspace.objectContextData.streetaddress1);
 							$('#ns1blankspaceAddressStreetAddress2').val(ns1blankspace.objectContextData.streetaddress2);
@@ -857,7 +685,7 @@ ns1blankspace.contactPerson =
 					send: 		function ()
 								{
 									ns1blankspace.status.working();
-									
+
 									var oData = {}
 									
 									if (ns1blankspace.objectContext != -1)
@@ -869,14 +697,12 @@ ns1blankspace.contactPerson =
 									{
 										$.extend(oData,
 										{
-											firstname: $('#ns1blankspaceDetailsFirstName').val(),
-											surname: $('#ns1blankspaceDetailsSurname').val(),
-											title: $('#ns1blankspaceDetailsTitle').attr('data-id'),
-											jobtitle: $('#ns1blankspaceDetailsPosition').val(),
-											phone: $('#ns1blankspaceDetailsPhone').val(),
-											fax: $('#ns1blankspaceDetailsFax').val(),
-											mobile: $('#ns1blankspaceDetailsMobile').val(),
-											email: $('#ns1blankspaceDetailsEmail').val(),
+											legalname: $('#ns1blankspaceDetailsLegalName').val(),
+											tradename: $('#ns1blankspaceDetailsTradeName').attr('data-id'),
+											abn: $('#ns1blankspaceDetailsABN').val(),
+											phonenumber: $('#ns1blankspaceDetailsPhone').val(),
+											faxnumber: $('#ns1blankspaceDetailsFax').val(),
+											webaddress: $('#ns1blankspaceDetailsWebAddress').val(),
 											notes: $('#ns1blankspaceDetailsDescription').val(),
 											streetaddress1: $('#ns1blankspaceAddressStreetAddress1').val(),
 											streetsuburb: $('#ns1blankspaceAddressStreetSuburb').val(),
@@ -885,19 +711,20 @@ ns1blankspace.contactPerson =
 											streetcountry: $('#ns1blankspaceAddressStreetCountry').val()
 										});
 									}
-										
+									
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.endpointURI('CONTACT_PERSON_MANAGE'),
+										url: ns1blankspace.util.endpointURI('CONTACT_BUSINESS_MANAGE'),
 										data: oData,
 										dataType: 'json',
 										success: this.process
 									});
+										
 								},
 
 					process: 	function (oResponse)
-								{	
+								{
 									if (oResponse.status == 'OK')
 									{
 										ns1blankspace.status.message('Saved');
@@ -905,16 +732,145 @@ ns1blankspace.contactPerson =
 										ns1blankspace.objectContext = oResponse.id;	
 										ns1blankspace.inputDetected = false;
 										
-										if (bNew) {ns1blankspace.contactPerson.search.send('-' + ns1blankspace.objectContext)}
+										if (bNew) {ns1blankspace.contactBusiness.search.send('-' + ns1blankspace.objectContext)}
 									}
 									else
 									{
 										ns1blankspace.status.error(oResponse.error.errornotes);
 									}
 								}
-				},				
+				},
 
+	people: 	{
+
+					show:		function (oParam, oResponse)
+								{
 									
+									var sXHTMLElementID = 'ns1blankspaceMainPeople';
+									var sLabel = "people";
+									var iOption = 1;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.label != undefined) {sLabel = oParam.label}
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+									}
+
+									if (oResponse == undefined)
+									{
+										$('#ns1blankspaceMainPeople').html(ns1blankspace.xhtml.loading);
+
+										var oSearch = new AdvancedSearch();
+										oSearch.endPoint = 'contact';
+										oSearch.method = 'CONTACT_PERSON_SEARCH';
+										
+										oSearch.addField('firstname,surname,position,workphone,fax,mobile,email');
+										oSearch.async = false;
+										oSearch.rf = 'json';
+										oSearch.rows = ns1blankspace.option.defaultRows;
+										oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.sort('modifieddate', 'desc');
+										
+										oSearch.getResults(function(data) {ns1blankspace.contactBusiness.people.show(oParam, data)});
+									}
+									else
+									{
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+													'<tr class="ns1blankspaceContainer">' +
+													'<td id="ns1blankspaceContactBusinessPeopleColumn1" class="ns1blankspaceColumn1Large">' +
+													ns1blankspace.xhtml.loading +
+													'</td>' +
+													'</tr>' +
+													'</table>');				
+										
+										$('#' + sXHTMLElementID).html(aHTML.join(''));
+											
+										var aHTML = [];
+										
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<div class="ns1blankspaceNothing">No people.</div>');
+
+											$('#ns1blankspaceContactBusinessPeopleColumn1').html(aHTML.join(''));		
+										}
+										else
+										{		
+											aHTML.push('<table border="0" cellspacing="0" cellpadding="0" class="ns1blankspace">');
+											
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push(ns1blankspace.contactBusiness.people.row(this));
+											});
+											
+											aHTML.push('</table>');
+											
+											ns1blankspace.render.page.show(
+											{
+												headerRow: false,
+												xhtmlElementID: 'ns1blankspaceContactBusinessPeopleColumn1',
+												xhtmlContext: 'ContactBusinessPeople',
+												xhtml: aHTML.join(''),
+												showMore: (oResponse.morerows == "true"),
+												more: oResponse.moreid,
+												rows: ns1blankspace.option.defaultRows,
+												functionShowRow: ns1blankspace.contactBusiness.people.row,
+												functionOnNewPage: ns1blankspace.contactBusiness.people.bind,
+												type: 'json'
+											}); 	
+										}
+									}	
+								},
+
+					remove: 	function (sXHTMLElementID)
+								{
+									var aSearch = sXHTMLElementID.split('-');
+									var sSearchContext = aSearch[1];
+									var sData = 'remove=1&id=' + sSearchContext;
+											
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('CONTACT_PERSON_MANAGE'),
+										data: sData,
+										dataType: 'json',
+										success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
+									});
+										
+								},					
+
+					row: 	function (oRow)
+								{
+									var aHTML = [];
+									
+									aHTML.push('<tr class="ns1blankspaceRow">');
+															
+									aHTML.push('<td id="ns1blankspaceContactBusinessPeople_firstname-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+															oRow.firstname + ' ' + oRow.surname + '<br />');
+
+									aHTML.push('<div id="ns1blankspaceContactBusinessPeople_mobile-' + oRow.id + '" class="ns1blankspaceSub">' +
+															oRow.mobile + '</div>');	
+
+									aHTML.push('<div id="ns1blankspaceContactBusinessPeople_email-' + oRow.id + '" class="ns1blankspaceSub">' +
+															oRow.email + '</div>');													
+																							
+									aHTML.push('</td></tr>');	
+									
+									return aHTML.join('');
+								},
+
+					bind: 		function ()
+								{
+									$('.ns1blankspaceRowSelect').click(function()
+									{
+										ns1blankspace.contactPerson.init({id: (this.id).split('-')[1]});
+										
+									});									
+								}
+
+				},
+
 	favourites: {
 					show: 		function (oParam, oResponse)
 								{
@@ -933,22 +889,22 @@ ns1blankspace.contactPerson =
 										
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceContactPersonFavouriteColumn1" class="ns1blankspaceColumn1Flexible">' +
+													'<td id="ns1blankspaceContactBusinessFavouriteColumn1" class="ns1blankspaceColumn1Flexible">' +
 													'</td>' +
 													'</tr>' +
 													'</table>');				
 										
 										$('#ns1blankspaceMain').html(aHTML.join(''));
 
-										$('#ns1blankspaceContactPersonFavouriteColumn1').html(ns1blankspace.xhtml.loading);
+										$('#ns1blankspaceContactBusinessFavouriteColumn1').html(ns1blankspace.xhtml.loading);
 										
 										var oSearch = new AdvancedSearch();
-										oSearch.method = 'CONTACT_PERSON_SEARCH';
-										oSearch.addField('firstname,surname');
+										oSearch.method = 'CONTACT_BUSINESS_SEARCH';
+										oSearch.addField('tradename');
 										oSearch.addFilter('', 'IS_FAVOURITE', '');
 										oSearch.rows = 20;
-										oSearch.sort('firstname', 'asc');
-										oSearch.getResults(function(data) {ns1blankspace.contactPerson.favourites.show(oParam, data)});	
+										oSearch.sort('tradename', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.contactBusiness.favourites.show(oParam, data)});	
 									}
 									else
 									{
@@ -956,16 +912,17 @@ ns1blankspace.contactPerson =
 										
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table><tr><td class="ns1blankspaceNothing">' +
-															'No favourite.</td></tr></table>');
+											aHTML.push('<table><tr>' +
+																'<td class="ns1blankspaceNothing">No favourites.</td></tr>' +
+																'</table>');
 										}
 										else
 										{		
 											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFavourites">');
-											
-											$.each(oResponse.data.rows, function() {
-											
-												aHTML.push(ns1blankspace.contactPerson.favourites.row(this));
+												
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push(ns1blankspace.contactBusiness.favourites.row(this));
 											});
 											
 											aHTML.push('</table>');
@@ -973,18 +930,17 @@ ns1blankspace.contactPerson =
 										
 										ns1blankspace.render.page.show(
 										{
-											xhtmlElementID: 'ns1blankspaceContactPersonFavouriteColumn1',
-											xhtmlContext: 'ContactFavourites',
+											headerRow: false,
+											xhtmlElementID: 'ns1blankspaceContactBusinessFavouriteColumn1',
+											xhtmlContext: 'ContactBusinessFavourites',
 											xhtml: aHTML.join(''),
 											showMore: (oResponse.morerows == "true"),
 											more: oResponse.moreid,
 											rows: ns1blankspace.option.defaultRows,
-											functionShowRow: ns1blankspace.contactPerson.favourites.row,
-											functionNewPage: 'ns1blankspace.contactPerson.favourites.bind()',
+											functionShowRow: ns1blankspace.contactBusiness.favourites.row,
+											functionOnNewPage: ns1blankspace.contactBusiness.favourites.bind,
 											type: 'json'
 										}); 	
-										
-										ns1blankspace.contactPerson.favourites.bind();
 									}	
 								},	
 
@@ -992,12 +948,11 @@ ns1blankspace.contactPerson =
 								{
 									var aHTML = [];
 								
-									aHTML.push('<tr class="ns1blankspaceRow">');
+									aHTML.push('<tr class="ns1blankspace">');
 															
-									aHTML.push('<td id="ns1blankspaceFavourites_firstname-' + oRow.id + '" class="ns1blankspaceRowSelect">' +
-															oRow.firstname + ' ' +
-															oRow.surname + '</td>');
-									
+									aHTML.push('<td id="tradename-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+															oRow.tradename + '</td>');
+																								
 									aHTML.push('</tr>');
 												
 									return aHTML.join('');
@@ -1005,82 +960,11 @@ ns1blankspace.contactPerson =
 
 					bind: 		function ()
 								{
-									$('#ns1blankspaceFavourites .ns1blankspaceRowSelect').click(function()
+									$('ns1blankspaceFavourites .ns1blankspaceRowView').click(function()
 									{
-										ns1blankspace.contactPerson.init({showHome: false});
-										ns1blankspace.contactPerson.search.send(this.id);
+										ns1blankspace.contactBusiness.init({id: (this.id).split('-')[1]});
 									});
 								}	
-				},
-
-	sms: 		{
-					show: 		function ()
-								{
-									ns1blankspace.show({selector: '#ns1blankspaceMainSMS'});
-
-									var aHTML = [];
-										
-									aHTML.push('<table>');
-
-									aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Send SMS</td></tr>' +
-											'<tr><td class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.mobile + 
-											'</td></tr>');								
-								
-									aHTML.push('<tr><td class="ns1blankspaceTextMulti">' +
-														'<textarea id="ns1blankspaceSMSMessage" name="message" rows="15" cols="5" style="width:175px; height:150px;" ' +
-																' class="ns1blankspaceTextMulti"></textarea>' +
-														'</td></tr>');
-									
-									aHTML.push('<tr><td>' +
-													'<span id="ns1blankspaceSMSSend" class="ns1blankspaceAction">Send</span> ' +
-													'</td></tr>');
-															
-									aHTML.push('</table>');
-		
-									$('#ns1blankspaceMainSMS').html(aHTML.join(''));
-	
-									$('#ns1blankspaceSMSSend').button(
-									{
-										label: "Send"
-									})
-									.click(function() {
-										ns1blankspace.contactPerson.sms.send();
-									})
-
-									$('#ns1blankspaceSMSCancel').button(
-									{
-										label: "Cancel"
-									})
-									.click(function()
-									{
-										$('#ns1blankspaceSMSContainer').html('');
-									})
-
-									$('#ns1blankspaceSMSMessage').focus();
-								},
-
-					send: 		function ()
-								{
-									var oData =
-									{
-										contactperson: ns1blankspace.objectContext,
-										message: $('#ns1blankspaceSMSMessage').val()
-									}
-
-									$('#ns1blankspaceMainSMS').html(ns1blankspace.xhtml.loading);
-
-									$.ajax(
-									{
-										type: 'POST',
-										url: ns1blankspace.util.endpointURI('MESSAGING_SMS_SEND'),
-										data: oData,
-										dataType: 'json',
-										success: function(data) 
-										{
-											$('#ns1blankspaceMainSMS').html('SMS Sent');
-										}
-									});
-								}			
 				}
-}														
+			
+}													

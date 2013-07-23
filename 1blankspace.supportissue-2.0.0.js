@@ -326,7 +326,7 @@ ns1blankspace.supportIssue =
 					});
 				},
 
-	show:		function ns1blankspaceSupportIssueShow(oParam, oResponse)
+	show:		function (oParam, oResponse)
 				{
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					ns1blankspace.supportIssue.layout();
@@ -359,7 +359,7 @@ ns1blankspace.supportIssue =
 					}	
 				},	
 
-	summary:	function ns1blankspaceSupportIssueSummary()
+	summary:	function ()
 				{
 					var aHTML = [];
 					
