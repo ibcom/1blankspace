@@ -18,7 +18,13 @@ ns1blankspace.option.autoSetupSwitch = true;
 ns1blankspace.option.passwordhash = true;
 ns1blankspace.option.formFactor.size.value = ns1blankspace.option.formFactor.size.options.small;
 
-ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
+ns1blankspace.data.object = 
+{
+	person: 32,
+	business: 12,
+	opportunity: 35
+};
+
 ns1blankspace.data.attachmentTypes = [];
 ns1blankspace.data.networkGroups;
 ns1blankspace.data.actionTypes =
@@ -88,6 +94,7 @@ ns1blankspace.xhtml.viewContainer =
 	'<div id="ns1blankspaceViewControlViewContainer">' +
 		'<span id="ns1blankspaceViewControlView">&nbsp;</span></div>' +				
 	'<div id="ns1blankspaceViewControlSearchContainer">' +
+	'<div id="ns1blankspaceViewControlSearchStatus"></div>' +
 		'</div>' +							
 	'<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>' +
 	'<div id="ns1blankspaceViewControlUser">&nbsp;</div>' +
@@ -105,6 +112,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.contactPerson',
 		source: '/jscripts/1blankspace.small.contactperson-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.messaging.conversation',
+		source: '/jscripts/1blankspace.small.messaging.conversation-2.0.0.js'
 	}
 ])
 
@@ -118,8 +129,7 @@ ns1blankspace.themes =
 	}
 ]	
 
-ns1blankspace.control.init = 
-function (oParam, oResponse)
+ns1blankspace.control.init = function (oParam, oResponse)
 {
 	var iStep = 1;
 	var aRoles = [];
@@ -255,6 +265,15 @@ ns1blankspace.views =
 		show: true,
 		group: 1,
 		type: 1
+	},
+	{
+		title: "Conversations",
+		parentNamespace: "messaging",
+		namespace: "conversation",
+		endpoint: "MESSAGING_CONVERSATION",
+		show: true,
+		group: 1,
+		type: 1
 	}
 ]
 
@@ -266,15 +285,19 @@ ns1blankspace.control.views =
 
 					if (ns1blankspace.xhtml.viewControl == undefined)
 					{
+						aHTML.push('<table class="ns1blankspaceViewControlContainer">');
+
 						$($.grep(ns1blankspace.views, function (a) {return a.show})).each(function()
-						{
-							aHTML.push('<table class="ns1blankspaceViewControlContainer">');
-							aHTML.push('<tr class="ns1blankspaceViewControl">');
+						{	
 							aHTML.push('<tr class="ns1blankspaceViewControl">' +
 											'<td class="ns1blankspaceViewControl">' +
-											'<span id="ns1blankspaceViewControl_contactPerson" class="ns1blankspaceViewControl">' + 
+											'<span id="ns1blankspaceViewControl_' +
+											(this.parentNamespace != undefined ? this.parentNamespace + '_' : '') +
+											this.namespace + '" class="ns1blankspaceViewControl">' + 
 											this.title + '</span></td></tr>');
 						});
+
+						aHTML.push('</table>');
 
 						ns1blankspace.xhtml.viewControl = aHTML.join('');
 					}
@@ -327,8 +350,7 @@ ns1blankspace.control.views =
 				}
 }
 
-ns1blankspace.app.bind =
-function ()
+ns1blankspace.app.bind = function ()
 {
 	$('#ns1blankspaceViewControlViewContainer').button(	
 	{

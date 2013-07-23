@@ -22,6 +22,7 @@ ns1blankspace.contactPerson =
 					ns1blankspace.viewName = 'People';	
 					ns1blankspace.data.contactBusiness = undefined;
 
+					$('#ns1blankspaceViewControlContext').html('<input id="ns1blankspaceViewControlSearch">');
 					$('#ns1blankspaceViewControlContextImage').html('<div id="ns1blankspaceViewContact" class="ns1blankspaceViewImage"></div>');
 
 					if (oParam != undefined)
@@ -37,8 +38,6 @@ ns1blankspace.contactPerson =
 				{
 					if (oResponse == undefined)
 					{
-						$('#ns1blankspaceViewControlContext').html('<input id="ns1blankspaceViewControlSearch">');
-
 						var aHTML = [];
 									
 						aHTML.push('<table class="ns1blankspaceMain">' +
@@ -84,9 +83,7 @@ ns1blankspace.contactPerson =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">' +
-											'<tr><td class="ns1blankspaceNothing">Click + to create a person contact.</td></tr>' +
-											'</table>');
+							aHTML.push('<div class="ns1blankspaceNothing">No people.</div>');
 						}
 						else
 						{
@@ -298,7 +295,7 @@ ns1blankspace.contactPerson =
 							'<div id="ns1blankspaceControlDetails" style="margin-bottom:2px;"></div>' +
 							'<div id="ns1blankspaceControlActions" style="margin-bottom:2px;"></div>' +
 							'<div id="ns1blankspaceControlAttachments" style="margin-bottom:2px;"></div>' +
-							'<div id="ns1blankspaceControlSummaryActions"></div>');
+							'<div id="ns1blankspaceControlSummaryOptions"></div>');
 					}	
 
 					$('#ns1blankspaceControl').html(aHTML.join(''));
@@ -551,7 +548,7 @@ ns1blankspace.contactPerson =
 								aHTML.push('<div id="ns1blankspaceContactPersonSMS" style="margin-bottom:2px;"></div>');
 							}				
 							
-							$('#ns1blankspaceControlSummaryActions').html(aHTML.join(''));	
+							$('#ns1blankspaceControlSummaryOptions').html(aHTML.join(''));	
 
 							$('#ns1blankspaceContactPersonEmail').button(
 							{

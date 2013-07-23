@@ -841,8 +841,8 @@ textarea.ns1blankspaceTextMultiSmall
 #ns1blankspaceViewControlSearchStatus
 {
 	position: absolute;
-	top: 5px;
-	left: 0px;
+	top: 40px;
+	left: 160px;
 	width: 35px;
 	height: 20px;
 	z-index: 1;
@@ -947,6 +947,11 @@ textarea.ns1blankspaceTextMultiSmall
 #ns1blankspaceViewContactLarge
 {
 	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -50px -100px;
+}
+
+#ns1blankspaceViewMessagingConversation
+{
+	background: url(/jscripts/images/1blankspace.icons.25-2.0.0.png) -75px -50px;
 }
 
 #ns1blankspaceViewAction
