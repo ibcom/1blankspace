@@ -345,6 +345,10 @@ ns1blankspace.supportIssue =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
 					}	
@@ -499,7 +503,7 @@ ns1blankspace.supportIssue =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsSubject" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceText">' +
 										'</td></tr>');	
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -582,11 +586,11 @@ ns1blankspace.supportIssue =
 
 						aHTML.push('</table>');					
 
-						$('#tdns1blankspaceMainDetailsColumn2').html(aHTML.join(''));
+						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDetailsSubject').val(ns1blankspace.objectContextData.subject);
+							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.title);
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
 							$('#ns1blankspaceDetailsName').val(ns1blankspace.objectContextData.name);
 							$('#ns1blankspaceDetailsEmail').val(ns1blankspace.objectContextData.email);
@@ -635,7 +639,7 @@ ns1blankspace.supportIssue =
 
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&subject=' + ns1blankspace.util.fs($('#ns1blankspaceMainDetailsSubject').val());
+										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
 										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 										sData += '&name=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsName').val());
 										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
