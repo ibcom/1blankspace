@@ -148,15 +148,24 @@ ns1blankspace.home.options =
 				{
 					var aHTML = [];
 					
-					aHTML.push('<table id="ns1blankspaceHomeOptions" class="ns1blankspaceSearchMedium" style="width:100px;">');
+					aHTML.push('<table id="ns1blankspaceHomeOptions" class="ns1blankspaceViewControlContainer" style="width:190px;">');
 									
 					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsCalendar" class="ns1blankspaceRowSelect">' +
 											'Calendar</td></tr>');
 
+					var sLink = window.location.href + '#/' +
+									(ns1blankspace.objectParentName !== undefined ? ns1blankspace.objectParentName + '.' : '') +
+									ns1blankspace.objectName +
+									(ns1blankspace.objectContext !== undefined && ns1blankspace.objectContext !== -1 ? '/' + ns1blankspace.objectContext : '');
+
+					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsNewWindow" class="ns1blankspaceRowSelect">' +
+									'<a href="' + sLink + '" target="_blank">' +
+											'Open In New Window</a></td></tr>');
+
 					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsMyStartPage" class="ns1blankspaceRowSelect">' +
 											'<a href="/index.asp?Site=475&p=asms%2Fmystartpage.asp" target="_blank">' +
 											'Classic</a></td></tr>');
-					
+
 					aHTML.push('</table>');
 						
 					if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
@@ -169,7 +178,7 @@ ns1blankspace.home.options =
 						$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
 						$(ns1blankspace.xhtml.container).html("&nbsp;");
 						$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() + 7, left: $(oElement).offset().left });
+						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() + 0, left: $(oElement).offset().left });
 						$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 						ns1blankspace.home.options.bind();
 					}
@@ -178,6 +187,12 @@ ns1blankspace.home.options =
 	bind:		function ()
 				{
 					$('#ns1blankspaceHomeOptionsCalendar').click(function(event)
+					{
+						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+						ns1blankspace.action.init({calendar: true});
+					});
+
+					$('#ns1blankspaceHomeOptionsNewWindow').click(function(event)
 					{
 						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						ns1blankspace.action.init({calendar: true});
