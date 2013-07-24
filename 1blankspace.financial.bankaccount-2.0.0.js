@@ -59,9 +59,19 @@ ns1blankspace.financial.bankAccount =
 
 							aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 	
+							aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControlTransfer" class="ns1blankspaceControl" style="padding-top:15px;">Transfer</td>' +
+										'</tr>');
+
 							aHTML.push('</table>');		
 							
-							$('#ns1blankspaceControl').html(aHTML.join(''));	
+							$('#ns1blankspaceControl').html(aHTML.join(''));
+
+							$('#ns1blankspaceControlTransfer').click(function(event)
+							{
+								ns1blankspace.show({selector: '#ns1blankspaceMain'});
+								ns1blankspace.financial.bankAccount.transfer.show({xhtmlElementID: 'ns1blankspaceMain'});
+							});	
 
 							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 							
@@ -3923,5 +3933,269 @@ ns1blankspace.financial.bankAccount =
 
 												}	
 								}
-				}				
+				},
+
+	transfer: 	{
+					show: 		function(oParam, oResponse)
+								{
+									var aHTML = [];
+											
+									aHTML.push('<table class="ns1blankspace">' +
+													'<tr>' +
+													'<td id="ns1blankspaceTransferColumn1" style="width:250px;"></td>' +
+													'<td id="ns1blankspaceTransferColumn2" style="width:100px;"></td>' +
+													'<td id="ns1blankspaceTransferColumn3" class="ns1blankspaceSub" style="font-size:0.75em;">Bank transfers are saved as journals.</td>' +
+													'</tr>' +
+													'</table>');			
+								
+									$('#ns1blankspaceMain').html(aHTML.join(''));
+
+									var aHTML = [];
+						
+									aHTML.push('<table class="ns1blankspace">');
+												
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'Date' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceDate">' +
+													'<input id="ns1blankspaceBankAccountTransferDate" class="ns1blankspaceDate">' +
+													'</td></tr>');	
+
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'Amount' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceBankAccountTransferAmount" class="ns1blankspaceText">' +
+													'</td></tr>');
+
+									aHTML.push('<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceCaption">' +
+														'From Bank Account' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceRadio">' +
+														'<td id="ns1blankspaceBankAccountTransferFrom" class="ns1blankspaceRadio">');
+									
+									var iDefaultBankAccountFrom;
+									
+									$.each(ns1blankspace.financial.data.bankaccounts, function()
+									{
+										if (this.financialaccount !== '')
+										{	
+											if (iDefaultBankAccountFrom == undefined) {iDefaultBankAccountFrom = this.id}
+											aHTML.push('<input type="radio" id="radioBankAccountFrom' + this.id + '" name="radioBankAccountFrom" value="' + this.id + '"/>' +
+															this.title + '<br />');	
+										}								
+									});
+	
+									aHTML.push('</td></tr>');
+
+
+									aHTML.push('<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceCaption">' +
+														'To Bank Account' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceRadio">' +
+														'<td id="ns1blankspaceBankAccountTransferTo" class="ns1blankspaceRadio">');
+									
+									var iDefaultBankAccountTo;
+									
+									$.each(ns1blankspace.financial.data.bankaccounts, function()
+									{
+										if (this.financialaccount !== '')
+										{	
+											if (iDefaultBankAccountTo == undefined) {iDefaultBankAccountTo = this.id}
+											aHTML.push('<input type="radio" id="radioBankAccountTo' + this.id + '" name="radioBankAccountTo" value="' + this.id + '"/>' +
+															this.title + '<br />');
+										}									
+									});
+									
+									aHTML.push('</td></tr>');	
+									
+									
+									aHTML.push('</table>');					
+						
+									$('#ns1blankspaceTransferColumn1').html(aHTML.join(''));
+
+									$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+
+									$('#ns1blankspaceBankAccountTransferDate').val(Date.today().toString("dd MMM yyyy"));
+									$('[name="radioBankAccountFrom"][value="' + iDefaultBankAccountFrom + '"]').attr('checked', true);
+									$('[name="radioBankAccountTo"][value="' + iDefaultBankAccountTo + '"]').attr('checked', true);
+
+									var aHTML = [];
+						
+									aHTML.push('<table class="ns1blankspaceColumn2">');
+															
+									aHTML.push('<tr><td>' +
+													'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceBankAccountTransferSave">Save</span>' +
+													'</td></tr>');
+								
+									aHTML.push('<tr><td>' +
+													'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceBankAccountTransferCancel">Cancel</span>' +
+													'</td></tr>');
+													
+									aHTML.push('</table>');		
+															
+									$('#ns1blankspaceTransferColumn2').html(aHTML.join(''));
+						
+									$('#ns1blankspaceBankAccountTransferSave').button(
+									{
+										text: "Save"
+									})
+									.click(function() 
+									{
+										$('#ns1blankspaceTransferColumn2').html(ns1blankspace.xhtml.loadingSmall);
+										ns1blankspace.financial.bankAccount.transfer.save.send();
+									});
+									
+									$('#ns1blankspaceBankAccountTransferCancel').button(
+									{
+										text: "Cancel"
+									})
+									.click(function() 
+									{
+										ns1blankspace.financial.bankAccount.home()
+									})
+								},
+								
+					save: 		{
+									send: 		function(oParam)
+												{
+													oParam =
+													{
+														bankAccountFrom: $('input[name="radioBankAccountFrom"]:checked').val(),
+														bankAccountTo: $('input[name="radioBankAccountTo"]:checked').val(),
+														amount: $('#ns1blankspaceBankAccountTransferAmount').val()
+													}
+
+													if (oParam.bankAccountFrom == oParam.bankAccountTo)
+													{
+														ns1blankspace.status.error('Same bank account');
+													}
+													else if (oParam.amount == '')
+													{
+														ns1blankspace.status.error('No amount')
+													}
+													else
+													{
+														oParam.financialAccountFrom = ($.grep(ns1blankspace.financial.data.bankaccounts, function (a) { return a.id == oParam.bankAccountFrom;}))[0].financialaccount;
+														oParam.financialAccountTo = ($.grep(ns1blankspace.financial.data.bankaccounts, function (a) { return a.id == oParam.bankAccountTo;}))[0].financialaccount;
+
+														var oData =
+														{
+															journaldate: $('#ns1blankspaceBankAccountTransferDate').val(),
+															description: 'Transfer between Bank Accounts'
+														}
+														
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_GENERAL_JOURNAL_MANAGE'),
+															data: oData,
+															dataType: 'json',
+															success: function(data) {ns1blankspace.financial.bankAccount.transfer.save.process(oParam, data)}
+														});
+													}
+												},
+
+									process: 	function(oParam, oResponse)
+												{
+													if (oResponse.status == 'OK')
+													{
+														oParam.id = oResponse.id;
+														ns1blankspace.financial.bankAccount.transfer.save.item(oParam);
+													}
+													else
+													{
+														ns1blankspace.status.error(oResponse.error.errornotes);
+													}
+												},
+
+									item: 		function(oParam)
+												{
+													var iJournalID = ns1blankspace.util.getParam(oParam, 'id').value;
+													var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+													var cAmount = ns1blankspace.util.getParam(oParam, 'amount').value;
+
+													var oData =
+													{
+														generaljournal: iJournalID,
+														taxcategory: 2,
+														taxtype: 5
+													}	
+
+													if (iType == 1)
+													{	
+														oData.financialaccount = ns1blankspace.util.getParam(oParam, 'financialAccountFrom').value;
+														oData.creditamount = cAmount;
+														oData.credittax = 0;
+													}
+													else
+													{
+														oData.financialaccount = ns1blankspace.util.getParam(oParam, 'financialAccountTo').value;
+														oData.debitamount = cAmount;
+														oData.debittax = 0;
+													}	
+																
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('FINANCIAL_GENERAL_JOURNAL_ITEM_MANAGE'),
+														data: oData,
+														dataType: 'json',
+														success: function(oResponse)
+														{
+															if (iType == 1)
+															{
+																oParam.type = 2;
+																ns1blankspace.financial.bankAccount.transfer.save.item(oParam)
+															}
+															else
+															{	
+																ns1blankspace.financial.bankAccount.transfer.save.finalise(oParam)
+															}	
+														}
+													});
+												},
+
+									finalise: 	function(oParam)
+												{
+													var iJournalID = ns1blankspace.util.getParam(oParam, 'id').value;
+
+													var oData =
+													{
+														id: iJournalID,
+														status: 2
+													}
+													
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('FINANCIAL_GENERAL_JOURNAL_MANAGE'),
+														data: oData,
+														dataType: 'json',
+														success: function(data)
+														{
+															ns1blankspace.status.message('Saved');
+															$('#ns1blankspaceTransferColumn2').html('');
+															$('#ns1blankspaceTransferColumn3').html('');
+															$('#ns1blankspaceTransferColumn1').html('<div class="ns1blankspaceAction" id="ns1blankspaceBankAccountTransferView">View</div>');
+
+															$('#ns1blankspaceBankAccountTransferView').button(
+															{
+																label: "View Journal"
+															})
+															.click(function() 
+															{
+																ns1blankspace.financial.journal.init({id: iJournalID});
+															});
+														}
+													});
+												}								
+								}
+				}									
 }								

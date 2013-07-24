@@ -534,7 +534,7 @@ ns1blankspace.setup.financial =
 									ns1blankspace.status.message('Saved');
 								}
 							});
-						})
+						});
 						
 						$('#ns1blankspaceBankAccountEditCancel').button(
 						{
@@ -544,7 +544,7 @@ ns1blankspace.setup.financial =
 						{
 							$.extend(true, oParam, {step: 1});
 							ns1blankspace.setup.financial.bankAccounts(oParam);
-						})
+						});
 
 						if (sID != undefined)
 						{

@@ -1102,7 +1102,7 @@ ns1blankspace.financial.journal =
 
 											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceItemDescription').val());
 
-											sData += '&taxtcategory=' + $('input[name="radioTaxCategory"]:checked').val();
+											sData += '&taxcategory=' + $('input[name="radioTaxCategory"]:checked').val();
 											sData += '&taxtype=' + $('input[name="radioTaxCode"]:checked').val();
 												
 											$.ajax(
