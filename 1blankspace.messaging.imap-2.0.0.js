@@ -166,7 +166,7 @@ ns1blankspace.messaging.imap =
 										disabled: false
 									});
 								
-									ns1blankspace.util.app.option({titleSuffix: ' (' + ns1blankspace.messaging.emailNewCount + ')'});
+									ns1blankspace.util.app.option({titlePrefix: '(' + ns1blankspace.messaging.emailNewCount + ') '});
 								}
 								else
 								{

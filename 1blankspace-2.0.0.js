@@ -3717,7 +3717,8 @@ ns1blankspace.util =
   									}
 
   									var sTitleSuffix = ns1blankspace.util.getParam(oParam, 'titleSuffix', {default: ''}).value;
-  									var sTitle = ns1blankspace.util.getParam(oParam, 'title', {default: ns1blankspace.option.appTitle}).value +
+  									var sTitlePrefix = ns1blankspace.util.getParam(oParam, 'titlePrefix', {default: ''}).value;
+  									var sTitle = sTitlePrefix + ns1blankspace.util.getParam(oParam, 'title', {default: ns1blankspace.option.appTitle}).value +
   													sTitleSuffix
 
   									document.title = sTitle;
