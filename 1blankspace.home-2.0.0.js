@@ -162,9 +162,12 @@ ns1blankspace.home.options =
 									'<a href="' + sLink + '" target="_blank">' +
 											'Open In New Window</a></td></tr>');
 
-					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsMyStartPage" class="ns1blankspaceRowSelect">' +
+					if (ns1blankspace.option.classic)
+					{	
+						aHTML.push('<tr><td id="ns1blankspaceHomeOptionsMyStartPage" class="ns1blankspaceRowSelect">' +
 											'<a href="/index.asp?Site=475&p=asms%2Fmystartpage.asp" target="_blank">' +
 											'Classic</a></td></tr>');
+					}	
 
 					aHTML.push('</table>');
 						
