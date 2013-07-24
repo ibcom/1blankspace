@@ -657,9 +657,6 @@ ns1blankspace.app =
 								var sDefault = 'ns1blankspace.' + sNS + '.' + aHash[3];
 
 								sDestination = 'ns1blankspace.' + sNS + '.init({id: ' + aHash[2] + ', default: "' + sDefault + '", defaultParam: "' + sDefaultParam + '"})';
-
-								//ns1blankspace.history.control({functionDefault: 'ns1blankspace.' + sNS + '.' + aHash[3] + '(' + sParam + ')'});
-								//ns1blankspace.objectDefault = 'ns1blankspace.' + sNS + '.' + aHash[3] + '(' + sParam + ')';
 							}
 
 							ns1blankspace.history.view(
@@ -667,6 +664,8 @@ ns1blankspace.app =
 								newDestination: sDestination,
 								move: false
 							});
+
+							window.location.hash = '';
 						}	
 
 						var aHTML = [];

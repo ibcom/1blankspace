@@ -439,7 +439,7 @@ ns1blankspace.contactBusiness =
 					}	
 				},		
 		
-	summary: 	function ()
+	summary: 	function (oParam, oResponse)
 				{
 					var aHTML = [];
 					
@@ -451,77 +451,166 @@ ns1blankspace.contactBusiness =
 					}
 					else
 					{
-						aHTML.push('<table class="ns1blankspaceMain">' +
-									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" style="width:300px;"></td>' +
-									'</tr>' +
-									'</table>');				
+						if (oResponse == undefined)
+						{
+							aHTML.push('<table class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspaceRow">' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" style="width:300px;"></td>' +
+										'</tr>' +
+										'</table>');				
+							
+							$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 						
-						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
-					
-						var aHTML = [];
-					
-						aHTML.push('<table class="ns1blankspace">');
+							var aHTML = [];
 						
-						if (ns1blankspace.objectContextData.phonenumber != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryPhone" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.phonenumber +
-										'</td></tr>');
-						}
-
-						if (ns1blankspace.objectContextData.streetsuburb != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Location</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryLocation" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.streetsuburb + ' ' + ns1blankspace.objectContextData.streetstate +
-										'</td></tr>');
-						}				
-										
-						if (ns1blankspace.objectContextData.customerstatus != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Status</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryStatus" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.customerstatustext +
-										'</td></tr>');
-						}				
-								
-						if (ns1blankspace.objectContextData.notes != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Notes</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryNotes" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.notes +
-										'</td></tr>');
-						}				
-								
-						if (ns1blankspace.objectContextData.modifieddate != '') {
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
-											Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+							aHTML.push('<table class="ns1blankspace">');
+							
+							if (ns1blankspace.objectContextData.phonenumber != '')
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Phone</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryPhone" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.phonenumber +
 											'</td></tr>');
-						}
-													
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+							}
 
-						if (ns1blankspace.objectContextData.webaddress != '')
-						{	
+							if (ns1blankspace.objectContextData.streetsuburb != '')
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Location</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryLocation" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.streetsuburb + ' ' + ns1blankspace.objectContextData.streetstate +
+											'</td></tr>');
+							}				
+											
+							if (ns1blankspace.objectContextData.customerstatus != '')
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Status</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryStatus" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.customerstatustext +
+											'</td></tr>');
+							}				
+								
+							if (ns1blankspace.objectContextData.notes != '')
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Notes</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryNotes" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.notes +
+											'</td></tr>');
+							}				
+									
+							if (ns1blankspace.objectContextData.modifieddate != '') {
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
+												'<tr><td id="ns1blankspaceSummaryLastUpdated" class="ns1blankspaceSummary">' +
+												Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
+												'</td></tr>');
+							}
+														
+							aHTML.push('</table>');					
+							
+							$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
 							var aHTML = [];
 					
 							aHTML.push('<table class="ns1blankspaceColumn2">');
 
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
-										'<a href="' + ns1blankspace.objectContextData.webaddress + '" target="_blank">' + 
-										ns1blankspace.objectContextData.webaddress + '</a>' +
+							aHTML.push('<tr><td id="ns1blankspaceFavourite" class="ns1blankspaceSummaryCaption">' +
+										ns1blankspace.xhtml.loadingSmall + 
 										'</td></tr>');	
 
+							if (ns1blankspace.objectContextData.webaddress != '')
+							{	
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
+											'<a href="' + ns1blankspace.objectContextData.webaddress + '" target="_blank">' + 
+											ns1blankspace.objectContextData.webaddress + '</a>' +
+											'</td></tr>');	
+							}
+
 							aHTML.push('</table>');					
-						
+							
 							$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
-						} 
+
+							var oData = 
+							{
+								object: ns1blankspace.object,
+								objectContext: ns1blankspace.objectContext
+							}	
+							
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('CORE_FAVOURITE_SEARCH'),
+								data: oData,
+								dataType: 'json',
+								success: function (data)
+								{
+									ns1blankspace.contactBusiness.summary(oParam, data);
+								}
+							});
+
+						}
+						else
+						{
+							var bFavourite = false;
+							var iFavouriteID;
+							var oButton =
+							{
+								text: true,
+								label: 'Mark as<br />favourite',
+							}
+
+							if (oResponse.data.rows.length != 0)
+							{
+								oButton =
+								{
+									text: true,
+									label: 'Favourite',
+									icons:
+									{
+									primary: "ui-icon-star"
+									}
+								}
+
+								sFavourite = 'Remove';
+								bFavourite = true;
+								iFavouriteID = oResponse.data.rows[0].id;
+							}
+
+							$('#ns1blankspaceFavourite').html('<input type="checkbox" ' + (bFavourite?'checked="checked" ':'') + 'id="ns1blankspaceContactBusinessFavourite"/>' +
+									'<label for="ns1blankspaceContactBusinessFavourite" style="font-size:0.75em; width:100px;">&nbsp;</label>');
+
+							$('#ns1blankspaceContactBusinessFavourite').button(oButton)
+							.click(function()
+							{
+								var oData = 
+								{
+									object: ns1blankspace.object,
+									objectContext: ns1blankspace.objectContext
+								}	
+
+								if (bFavourite)
+								{
+									ns1blankspace.status.message('No longer a favourite');
+									oData.remove = 1;
+									oData.id = iFavouriteID;
+								}
+								else
+								{
+									ns1blankspace.status.message('Is now a favourite');
+								}
+
+								$.ajax(
+								{
+									type: 'POST',
+									url: ns1blankspace.util.endpointURI('CORE_FAVOURITE_MANAGE'),
+									data: oData,
+									dataType: 'json',
+									success: function ()
+									{
+										ns1blankspace.contactBusiness.summary();
+									}
+								});							
+							})
+						}	
 					}	
 				},
 
@@ -1579,10 +1668,11 @@ ns1blankspace.contactBusiness =
 											
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Trading Name</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
-											$.each(oResponse.data.rows, function() {
-											
+											$.each(oResponse.data.rows, function()
+											{
 												aHTML.push(ns1blankspace.contactBusiness.favourites.row(this));
 											});
 											
@@ -1598,11 +1688,9 @@ ns1blankspace.contactBusiness =
 											more: oResponse.moreid,
 											rows: ns1blankspace.option.defaultRows,
 											functionShowRow: ns1blankspace.contactBusiness.favourites.row,
-											functionNewPage: 'ns1blankspace.contactBusiness.favourites.bind()',
+											functionOnNewPage: ns1blankspace.contactBusiness.favourites.bind,
 											type: 'json'
-										}); 	
-										
-										ns1blankspace.contactBusiness.favourites.bind();
+										}); 
 									}	
 								},	
 
@@ -1626,18 +1714,20 @@ ns1blankspace.contactBusiness =
 
 					bind: 		function ()
 								{
-									$('ns1blankspaceFavourites .ns1blankspaceRowView').button( {
-												text: false,
-												icons: {
-													primary: "ui-icon-play"
-												}
+									$('#ns1blankspaceFavourites .ns1blankspaceRowView').button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icon-play"
+										}
 									})
-									.click(function() {
-										ns1blankspace.contactBusiness.init({showHome: false});
-										ns1blankspace.contactBusiness.search.send(this.id)
+									.click(function()
+									{
+										ns1blankspace.contactBusiness.init({id: (this.id).split('-')[1]});
 									})
 									.css('width', '15px')
-									.css('height', '20px')
+									.css('height', '20px');
 								}	
 				}
 			

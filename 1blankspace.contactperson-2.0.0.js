@@ -651,8 +651,7 @@ ns1blankspace.contactPerson =
 							$('#ns1blankspaceFavourite').html('<input type="checkbox" ' + (bFavourite?'checked="checked" ':'') + 'id="ns1blankspaceContactPersonFavourite"/>' +
 									'<label for="ns1blankspaceContactPersonFavourite" style="font-size:0.75em; width:100px;">&nbsp;</label>');
 
-							$('#ns1blankspaceContactPersonFavourite').button(
-							oButton)
+							$('#ns1blankspaceContactPersonFavourite').button(oButton)
 							.click(function()
 							{
 								var sData = 'object=' + ns1blankspace.object;
