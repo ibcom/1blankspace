@@ -153,7 +153,7 @@ ns1blankspace.home.options =
 					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsCalendar" class="ns1blankspaceRowSelect">' +
 											'Calendar</td></tr>');
 
-					var sLink = window.location.href + '#/' +
+					var sLink = window.location.protocol + '//' + window.location.host + '/#/' +
 									(ns1blankspace.objectParentName !== undefined ? ns1blankspace.objectParentName + '.' : '') +
 									ns1blankspace.objectName +
 									(ns1blankspace.objectContext !== undefined && ns1blankspace.objectContext !== -1 ? '/' + ns1blankspace.objectContext : '');
