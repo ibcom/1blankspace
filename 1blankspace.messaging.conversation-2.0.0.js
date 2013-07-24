@@ -188,6 +188,9 @@ ns1blankspace.messaging.conversation =
 										oSearch.addField('alertemailfrom,alertemailmessage,alerturl,allowsmsalerts,commentcount,description,emailalertdefault,' +
 															'includemessageinemailalert,lastcommentdate,owner,ownertext,lastcommentuser,lastcommentusertext,' +
 															'lastpostedday,object,objectcontext,participantcan,participantcantext,postcount,sharing,sharingtext,title');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext)
 										oSearch.rows = 10;
 										oSearch.sort('modifieddate', 'asc');

@@ -175,6 +175,9 @@ ns1blankspace.financial.payment =
 										oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,' +
 																'contactpersonpaidto,projecttext,project,areatext,' +
 																'area,reference,paiddate,description,amount,tax');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										

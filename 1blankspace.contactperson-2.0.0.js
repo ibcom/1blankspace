@@ -160,8 +160,10 @@ ns1blankspace.contactPerson =
 										oSearch.addField('firstname,surname,contactbusiness,contactbusinesstext,title,titletext,position,workphone,fax,mobile,email,' +
 																 'customerstatus,customerstatustext,gender,gendertext,' +
 																 'streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
-																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,modifieddate,notes,' +
+																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,notes,' +
 																 'dateofbirth,rating,ratingtext,numberofchildren,otherfamilydetails');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
 
 										oSearch.addField(ns1blankspace.extend.elements());
 

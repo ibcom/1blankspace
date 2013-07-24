@@ -135,6 +135,9 @@ ns1blankspace.document =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'DOCUMENT_SEARCH';
 										oSearch.addField('title,summary,keywords,url,status,statustext,public,website,websitetext,style,internal,content,type,typetext,modifieddate');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.document.show(oParam, data)});
 									}

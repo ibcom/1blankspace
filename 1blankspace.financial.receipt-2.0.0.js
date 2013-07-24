@@ -175,6 +175,9 @@ ns1blankspace.financial.receipt =
 																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
 																'projecttext,project,areatext,area,' +
 																'reference,paymentmethodtext,paymentmethod,receiveddate,description,amount,tax');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										

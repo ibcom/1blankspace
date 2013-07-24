@@ -187,6 +187,9 @@ ns1blankspace.financial.expense =
 										oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 										oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,projecttext,project,projecttext,areatext,' +
 																'area,reference,accrueddate,description,amount,tax,object,objectcontext,paymentduedate');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										

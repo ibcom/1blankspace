@@ -213,6 +213,9 @@ ns1blankspace.financial.journal =
 										oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_SEARCH';
 										oSearch.addField('area,areatext,description,id,journaldate,object,objecttext,objectcontext,' +
 															'project,projecttext,reference,status,statustext');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										

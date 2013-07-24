@@ -129,6 +129,9 @@ ns1blankspace.project =
 															'paymentfrequency,paymentfrequencytext,percentagecomplete,contactperson,contactpersontext,' +
 															'projectmanager,projectmanagertext,reference,startdate,' +
 															'status,statustext,template,totaltime,type,typetext,modifieddate');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.getResults(function(data){ns1blankspace.project.show(oParam, data)});	

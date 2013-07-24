@@ -212,6 +212,7 @@ ns1blankspace.app =
 						ns1blankspace.option.richTextEditing = true;
 						ns1blankspace.option.setupURI = '/ondemand/setup/';
 						ns1blankspace.option.dateFormat = 'dd M yy';
+						ns1blankspace.option.auditFields = 'createddate,createduser,createdusertext,modifieddate,modifieduser,modifiedusertext';
 									
 						ns1blankspace.timer.messaging = 0;
 						ns1blankspace.timer.delay;
@@ -1190,6 +1191,7 @@ ns1blankspace.app =
 									var oElement;
 									var sXHTML;
 									var fBind = ns1blankspace.viewOptionsBind;
+									var aXHTMLAudit = [];
 
 									if (oParam != undefined)
 									{
@@ -1205,6 +1207,39 @@ ns1blankspace.app =
 													'<td id="ns1blankspaceControlActionOptionsRemove" class="ns1blankspaceViewControl">' +
 													'Delete' +
 													'</td></tr></table>';
+									}	
+
+									if (ns1blankspace.objectContextData.createddate !== undefined)
+									{
+										aXHTMLAudit.push('<tr><td class="ns1blankspaceSummaryCaption">Created</td></tr>' +
+															'<tr><td class="ns1blankspaceSummary">' +
+															ns1blankspace.objectContextData.createddate + '</td></tr>');
+									}
+
+									if (ns1blankspace.objectContextData.createdusertext !== undefined)
+									{
+										aXHTMLAudit.push('<tr><td class="ns1blankspaceSummaryCaption">Created By</td></tr>' +
+															'<tr><td class="ns1blankspaceSummary">' +
+															ns1blankspace.objectContextData.createdusertext + '</td></tr>');
+									}
+
+									if (ns1blankspace.objectContextData.modifieddate !== undefined)
+									{
+										aXHTMLAudit.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
+															'<tr><td class="ns1blankspaceSummary">' +
+															ns1blankspace.objectContextData.modifieddate + '</td></tr>');
+									}
+
+									if (ns1blankspace.objectContextData.modifiedusertext !== undefined)
+									{
+										aXHTMLAudit.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated By</td></tr>' +
+															'<tr><td class="ns1blankspaceSummary">' +
+															ns1blankspace.objectContextData.modifiedusertext + '</td></tr>');
+									}
+
+									if (aXHTMLAudit.length != 0)
+									{
+										sXHTML += '<table class="ns1blankspaceViewControlContainer" style="font-size:0.75em;">' + aXHTMLAudit.join('') + '</table>';
 									}	
 
 									if ($(ns1blankspace.xhtml.container).attr('data-initiator') === oElement.id)

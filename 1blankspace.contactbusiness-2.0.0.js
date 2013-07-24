@@ -159,6 +159,8 @@ ns1blankspace.contactBusiness =
 															',mailingaddress1,mailingaddress2,mailingsuburb,mailingpostcode,mailingstate,mailingcountry,' +
 															'notes,primarycontactperson,modifieddate');
 
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.addField(ns1blankspace.extend.elements());
 										
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);

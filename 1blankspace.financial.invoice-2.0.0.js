@@ -217,6 +217,9 @@ ns1blankspace.financial.invoice =
 																'object,objectcontext,' +
 																'area,reference,purchaseorder,sentdate,duedate,description,amount,tax,sent,frequency,' +
 																'invoice.contactpersonsentto.email');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										

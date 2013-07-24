@@ -150,6 +150,8 @@ ns1blankspace.opportunity =
 																	'processingdate,description,startdate,' +
 																	'mailingaddress1,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,' +
 																	'email,mobile,phone,createddate,createdusertext');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
 																	
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.rf = 'json';

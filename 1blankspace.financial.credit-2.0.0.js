@@ -203,6 +203,9 @@ ns1blankspace.financial.credit =
 															'creditdate,financialaccount,financialaccounttext,notes,' +
 															'object,objectcontext,objecttext,project,projecttext,reason,reasontext,' +
 															'reference,store,storetext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										

@@ -187,6 +187,9 @@ search: 		{
 										oSearch.method = 'NEWS_SEARCH';
 										oSearch.addField('emailtemplate,enddate,fromemail,format,greeting,greetingtext,formattext,headerlink,headerlinktext,' +
 															'mobile,newsbody,public,startdate,subject,summary,tracking,trackingtext,unsubscribegroupsonly,unsubscribetext');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.getResults(function(data) {ns1blankspace.news.show(oParam, data)});
 									}

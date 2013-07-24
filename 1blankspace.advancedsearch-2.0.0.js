@@ -137,7 +137,8 @@ function addBracket(asBracket) {
 	else this.bracketCount --;
 }
 
-function addOperator(asOperator) {
+function addOperator(asOperator)
+{
 	if ((asOperator != 'and') && (asOperator != 'or')) {
 		alert('Operator parameter must be either (and) or (or)');
 		return false;
@@ -147,13 +148,17 @@ function addOperator(asOperator) {
 	this.addFilter(asOperator);
 }
 
-function addField(asField) {
+function addField(asField)
+{
 	//can be comma delimited list
 
-	if (asField.length > 0)
+	if (asField !== undefined)
 	{	
-		var aFields = asField.split(',');
-		for (var i = 0; i < aFields.length; i++) this.field.push(aFields[i]);
+		if (asField.length > 0)
+		{	
+			var aFields = asField.split(',');
+			for (var i = 0; i < aFields.length; i++) this.field.push(aFields[i]);
+		}
 	}		
 }
 

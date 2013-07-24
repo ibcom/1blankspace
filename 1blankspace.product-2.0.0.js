@@ -133,6 +133,9 @@ ns1blankspace.product =
 										oSearch.method = 'PRODUCT_SEARCH';
 										oSearch.addField('reference,title,trackinventory,status,statustext,description,financialaccountincome,financialaccountincometext,' +
 															'unittype,unittypetext,units,category,categorytext,currentretailprice,type,minimumstocklevel');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+										
 										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.getResults(function(data){ns1blankspace.product.show(oParam, data)});
