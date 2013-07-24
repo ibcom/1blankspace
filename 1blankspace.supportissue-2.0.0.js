@@ -9,12 +9,7 @@ ns1blankspace.supportIssue =
 {
 	init: 		function (oParam)
 				{
-					var bShowHome = true
-					
-					if (oParam != undefined)
-					{
-						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-					}
+					ns1blankspace.app.reset();
 
 					ns1blankspace.object = -8;
 					ns1blankspace.objectName = 'supportIssue';
@@ -22,7 +17,6 @@ ns1blankspace.supportIssue =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Support Issues';
 							
-					ns1blankspace.app.reset();
 					ns1blankspace.app.set(oParam);
 				},
 
@@ -36,7 +30,7 @@ ns1blankspace.supportIssue =
 									
 						aHTML.push('<table class="ns1blankspaceMain">');
 						aHTML.push('<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
 										'</tr>');
@@ -60,6 +54,15 @@ ns1blankspace.supportIssue =
 							dataType: 'json',
 							success: function (data) {ns1blankspace.supportIssue.home(oParam, data)}
 						});
+
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'CONTACT_PERSON_SEARCH';		
+						oSearch.addField('firstname,surname');
+						oSearch.rows = 10;
+						oSearch.sort('modifieddate', 'desc');
+						
+						oSearch.getResults(function(data) {ns1blankspace.contactPerson.home(oParam, data)});
+
 					}
 					else
 					{
@@ -103,7 +106,6 @@ ns1blankspace.supportIssue =
 	search: 	{
 					send: 		function (sXHTMLElementID, oParam)
 								{
-
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];

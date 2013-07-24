@@ -1496,7 +1496,11 @@ ns1blankspace.messaging.conversation =
 											}
 											else
 											{
-												ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.messaging.conversation.posts.show});
+												$('#message').val(tinyMCE.get('ns1blankspacePostMessage' + ns1blankspace.counter.editor).getContent());
+												ns1blankspace.attachments.upload.process(
+												{
+													functionPostUpdate: ns1blankspace.messaging.conversation.posts.show,
+												});
 											}	
 										})
 										
@@ -1515,7 +1519,7 @@ ns1blankspace.messaging.conversation =
 									
 										aHTML.push('<tr class="ns1blankspaceTextMulti">' +
 															'<td class="ns1blankspaceMainTextMulti">' +
-															'<textarea name="message" rows="25" cols="50" id="ns1blankspacePostMessage' +
+															'<textarea rows="25" cols="50" id="ns1blankspacePostMessage' +
 															ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +	
 															'</td></tr>');
 									
@@ -1524,8 +1528,10 @@ ns1blankspace.messaging.conversation =
 										$('#ns1blankspacePostDetailsColumn1').html(
 											ns1blankspace.attachments.upload.show(
 												{
+													url: '/ondemand/attach/progress/',
 													xhtml: aHTML.join(''),
-													label: ''
+													label: '',
+													inputs: ['message']
 												})
 										);
 										

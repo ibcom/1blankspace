@@ -665,7 +665,7 @@ ns1blankspace.views =
 		title: "Support",
 		namespace: "supportIssue",
 		endpoint: "SETUP", 
-		show: false,
+		show: true,
 		group: 4,
 		type: 2
 	}
@@ -1397,6 +1397,15 @@ ns1blankspace.control =
 																				'My&nbsp;Space&nbsp;/&nbsp;Account</span></td></tr>');
 														}
 
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Support';})[0];
+														if (oViewport ? oViewport.show : false)
+														{
+															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																				'<td class="ns1blankspaceViewControl">' +
+																				'<span id="ns1blankspaceViewControl_supportIssue" class="ns1blankspaceViewControl">' +
+																				'Support&nbsp;Issues</span></td></tr>');
+														}
+
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Other Spaces';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
@@ -1423,15 +1432,6 @@ ns1blankspace.control =
 																					'<span id="ns1blankspaceViewControl_setup_structure" class="ns1blankspaceViewControl">' +
 																					'Structures</span></td></tr>');
 														}	
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Support';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_supportIssue" class="ns1blankspaceViewControl">' +
-																				'Support&nbsp;Issues</span></td></tr>');
-														}
 
 														if (aHTMLViewport.length > 0)
 														{
@@ -2329,6 +2329,8 @@ ns1blankspace.attachments =
 									var bShowUpload = true;
 									var sXHTML = '';
 									var sHelpNotes;
+									var aInputs = [];
+									var sURL = '/ondemand/attach/';
 									
 									if (oParam != undefined)
 									{
@@ -2341,11 +2343,13 @@ ns1blankspace.attachments =
 										if (oParam.showUpload != undefined) {bShowUpload = oParam.showUpload}
 										if (oParam.xhtml != undefined) {sXHTML = oParam.xhtml}
 										if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
+										if (oParam.inputs != undefined) {aInputs = oParam.inputs}
+										if (oParam.url != undefined) {sURL = oParam.url}
 									}	
 
 									$('[name="ns1blankspaceFileUpload"]').remove();
 
-									aHTML.push('<form name="ns1blankspaceFileUpload" action="/ondemand/attach/" ' +
+									aHTML.push('<form name="ns1blankspaceFileUpload" action="' + sURL + '" ' +
 													'enctype="multipart/form-data" method="POST" target="ns1blankspaceUploadProxy" accept-charset="utf-8">' +
 													'<input type="hidden" name="maxfiles" id="maxfiles" value="' + iMaxFiles + '">' +
 													'<input type="hidden" name="object" id="object" value="' + iObject + '">' +
@@ -2355,6 +2359,11 @@ ns1blankspace.attachments =
 									{
 										aHTML.push('<input type="hidden" name="filetype' + i + '" id="filetype' + i + '" value="' + iAttachmentType + '">');
 									}
+
+									$.each(aInputs, function ()
+									{	
+										aHTML.push('<input type="hidden" name="' + this + '" id="' + this + '" value="">');
+									});
 
 									aHTML.push(sXHTML);
 									
@@ -2409,23 +2418,26 @@ ns1blankspace.attachments =
 										if (ns1blankspace.param.functionPostUpdate != undefined) {fFunctionPostUpdate = ns1blankspace.param.functionPostUpdate}
 									}
 									
-									if (oFrame.readyState) 
-									{
-										//IE
-										sCurrentState = oFrame.readyState;
-									}
-									else 
-									{
-										//FF
-										if (oFrame.contentDocument.body.innerHTML === 'OK') 
+									if (oFrame !== null)
+									{	
+										if (oFrame.readyState) 
 										{
-											sCurrentState = 'complete';
+											//IE
+											sCurrentState = oFrame.readyState;
 										}
 										else 
 										{
-											sCurrentState = oFrame.contentDocument.body.innerHTML;
+											//FF
+											if (oFrame.contentDocument.body.innerHTML === 'OK') 
+											{
+												sCurrentState = 'complete';
+											}
+											else 
+											{
+												sCurrentState = oFrame.contentDocument.body.innerHTML;
+											}
 										}
-									}
+									}	
 								 
 									if (sCurrentState === 'complete') 
 									{
