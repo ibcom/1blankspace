@@ -260,7 +260,7 @@ ns1blankspace.messaging.imap =
 										}
 										else
 										{
-											//ns1blankspace.messaging.imap.account = undefined;
+											ns1blankspace.messaging.imap.account = undefined;
 										}
 										
 										var sDescription = this.email;

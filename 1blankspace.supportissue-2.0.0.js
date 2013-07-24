@@ -59,10 +59,10 @@ ns1blankspace.supportIssue =
 						
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 
+						var aHTML = [];
+
 						if (ns1blankspace.option.helpURI !== undefined)
 						{ 
-							var aHTML = [];
-							
 							aHTML.push('<table class="ns1blankspaceColumn2">');
 							
 							aHTML.push('<tr><td style="font-size:0.875em; width:110px;" >' +
@@ -71,6 +71,11 @@ ns1blankspace.supportIssue =
 										'</td></tr>');	
 														
 							aHTML.push('</td></tr></table>');
+						}
+
+						if (ns1blankspace.option.helpNotes !== undefined)
+						{ 
+							aHTML.push(ns1blankspace.option.helpNotes);	
 						}						
 
 						$('#ns1blankspaceHomeAction').html(aHTML.join(''));	
