@@ -2065,6 +2065,7 @@ ns1blankspace.setup.financial =
 										success: function()
 											{
 												ns1blankspace.status.message('Saved');
+												ns1blankspace.financial.data = undefined;
 
 												if ($('#ns1blankspaceMainTemplate_invoice').html() != '') {ns1blankspace.setup.financial.template.save({template: 'invoice'})}
 												if ($('#ns1blankspaceMainTemplate_statement').html() != '') {ns1blankspace.setup.financial.template.save({template: 'statement'})}

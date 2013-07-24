@@ -3417,12 +3417,13 @@ ns1blankspace.financial.item =
 
 	edit:	function (oParam, oResponse)
 			{
-				var iType = 1;
 				var iFinancialAccountType;
-							
+
+				var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;		
 				var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
 				var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
 				var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+				var bShowAccount = ns1blankspace.util.getParam(oParam, 'showAccount', {default: (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1)}).value;
 				
 				if (sNamespace === 'expense' || sNamespace === 'payment') {iType = 2}
 
@@ -3496,7 +3497,7 @@ ns1blankspace.financial.item =
 						
 						aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
 				
-						if (sNamespace === 'expense' || sNamespace === 'invoice')
+						if (bShowAccount || sNamespace === 'expense' || sNamespace === 'invoice')
 						{
 							aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +

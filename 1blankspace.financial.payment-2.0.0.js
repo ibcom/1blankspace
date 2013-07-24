@@ -574,7 +574,22 @@ ns1blankspace.financial.payment =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceDate">' +
 										'<input id="ns1blankspaceDetailsPaidDate" class="ns1blankspaceDate">' +
-										'</td></tr>');										
+										'</td></tr>');
+
+						if (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1)
+						{	
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Account' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
+										'</td></tr>');
+							
+							aHTML.push('<tr><td style="padding-bottom:5px;" id="ns1blankspaceItemAddSearchResults">' +
+											'<span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all or just start typing.<br />If left it bank, it will default to the creditors account.</span></td></tr>');																			
+						}
 								
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -633,6 +648,12 @@ ns1blankspace.financial.payment =
 								amountXHTMLElementID: 'ns1blankspaceDetailsAmount',
 								taxXHTMLElementID: 'ns1blankspaceDetailsTax'
 							});
+						});
+
+						$('#ns1blankspaceItemAccount').keyup(function()
+						{
+							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+					        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.item.edit({step: 2, type: 2})', ns1blankspace.option.typingWait);
 						});
 						
 						var aHTML = [];
@@ -719,7 +740,8 @@ ns1blankspace.financial.payment =
 
 					amount:		function (oParam)
 								{
-									var iAccount = ns1blankspace.financial.data.settings.financialaccountcreditor;
+									var iAccount = $('#ns1blankspaceItemAccount').attr('data-id');
+									if (iAccount === undefined) {iAccount = ns1blankspace.financial.data.settings.financialaccountcreditor};
 
 									var cAmount = $('#ns1blankspaceDetailsAmount').val();
 									if (cAmount == '') {cAmount = 0};
