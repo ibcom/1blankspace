@@ -7,6 +7,17 @@
  
 ns1blankspace.supportIssue = 
 {
+	data: 		{
+					mode:
+					{
+						options:
+						{
+							byMe: 1,
+							forMe: 2
+						}
+					}
+				},
+
 	init: 		function (oParam)
 				{
 					ns1blankspace.app.reset();
@@ -16,6 +27,10 @@ ns1blankspace.supportIssue =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Support Issues';
+					if (ns1blankspace.supportIssue.data.mode.value === undefined)
+					{
+						ns1blankspace.supportIssue.data.mode.value = ns1blankspace.util.getParam(oParam, 'mode', {default: 1}).value;
+					}	
 							
 					ns1blankspace.app.set(oParam);
 				},
@@ -25,6 +40,11 @@ ns1blankspace.supportIssue =
 					if (oResponse == undefined)
 					{
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+
+						if (false && ns1blankspace.supportIssue.data.mode.value === undefined)
+						{
+							ns1blankspace.supportIssue.data.mode.value = ns1blankspace.util.getParam(oParam, 'mode', {default: 1}).value;
+						}	
 
 						var aHTML = [];
 									
@@ -40,28 +60,44 @@ ns1blankspace.supportIssue =
 
 						var aHTML = [];
 									
-						aHTML.push('<table>' +
-							'<tr><td><div id="ns1blankspaceViewHelpLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
-							'</table>');	
-						
-						$('#ns1blankspaceControl').html(aHTML.join(''));	
+						aHTML.push('<table><tr><td><div id="ns1blankspaceViewHelpLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 
-						$.ajax(
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControl-1" class="ns1blankspaceControl" style="padding-top:15px;">' +
+										'By Me</td></tr>');			
+								
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControl-2" class="ns1blankspaceControl">' +
+										'For Me</td></tr>');	
+
+						aHTML.push('</table>');	
+						
+						$('#ns1blankspaceControl').html(aHTML.join(''));
+
+						$('td.ns1blankspaceControl').click(function(event)
 						{
-							type: 'GET',
-							url: ns1blankspace.util.endpointURI('SUPPORT_ISSUE_SEARCH'),
-							data: 'byme=1&status=1,2,6&rows=30',
-							dataType: 'json',
-							success: function (data) {ns1blankspace.supportIssue.home(oParam, data)}
+							ns1blankspace.supportIssue.data.mode.value = (this.id).split('-')[1];
+							ns1blankspace.supportIssue.home();
 						});
 
+						$('#ns1blankspaceControl-' + ns1blankspace.supportIssue.data.mode.value).addClass("ns1blankspaceHighlight");
+
 						var oSearch = new AdvancedSearch();
-						oSearch.method = 'CONTACT_PERSON_SEARCH';		
-						oSearch.addField('firstname,surname');
+						oSearch.method = 'SUPPORT_ISSUE_SEARCH';		
+						oSearch.addField('completeddate,contactbusiness,contactbusinesstext,contactperson,contactpersontext,' +
+										'description,email,lodgeddate,name,phone,processingtype,processingtypetext,reference,' +
+										'severity,severitytext,solution,status,statustext,technicalnotes,title,' +
+										'totaltime,type,typetext,user,usercontactemail,usertext');
+						
+						if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
+						{
+							oSearch.addCustomOption('showmyloggedissues', 'Y');
+						}	
+
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						
-						oSearch.getResults(function(data) {ns1blankspace.contactPerson.home(oParam, data)});
+						oSearch.getResults(function(data) {ns1blankspace.supportIssue.home(oParam, data)});
 
 					}
 					else
@@ -77,16 +113,23 @@ ns1blankspace.supportIssue =
 						else
 						{
 							aHTML.push('<table>');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td colspan=4 class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_Reference-' + this.id + '" class="ns1blankspaceMostLikely" style="width:50px;">' +
+														this.reference + '</td>');
 								
-								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
-														'" class="ns1blankspaceMostLikely">' +
-														this.email +
-														'</td>');
+								aHTML.push('<td id="ns1blankspaceMostLikely_Date-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:75px;" style="padding-left:10px;">' +
+														this.lodgeddate + '</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_User-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:75px;" style="padding-left:10px;">' +
+														this.usertext + '</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikelySub" style="padding-left:10px;">' +
+														this.title + '</td>');
 								
 								aHTML.push('</tr>');
 							});
@@ -131,14 +174,23 @@ ns1blankspace.supportIssue =
 
 										ns1blankspace.objectContext = sSearchContext;
 
-										$.ajax(
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SUPPORT_ISSUE_SEARCH';		
+										oSearch.addField('completeddate,contactbusiness,contactbusinesstext,contactperson,contactpersontext,' +
+														'description,email,lodgeddate,name,phone,processingtype,processingtypetext,reference,' +
+														'severity,severitytext,solution,status,statustext,technicalnotes,title,' +
+														'totaltime,type,typetext,user,usercontactemail,usertext');
+
+										oSearch.addField(ns1blankspace.option.auditFields);
+
+										if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
 										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SUPPORT_ISSUE_SEARCH'),
-											data: 'byme=1&id=' + ns1blankspace.util.fs(sSearchContext),
-											dataType: 'json',
-											success: function(data) {ns1blankspace.supportIssue.show(oParam, data)}
-										});
+											oSearch.addCustomOption('showmyloggedissues', 'Y');
+										}
+
+										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
+										
+										oSearch.getResults(function(data) {ns1blankspace.supportIssue.show(oParam, data)});
 									}
 									else
 									{
@@ -293,7 +345,7 @@ ns1blankspace.supportIssue =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspaceAttachments" class="ns1blankspaceControl">' +
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
 										'Attachments</td></tr>');
 					}	
 					
@@ -353,7 +405,7 @@ ns1blankspace.supportIssue =
 						
 						ns1blankspace.history.view(
 						{
-							newDestination: 'ns1blankspace.supportIssue.init({id: ' + ns1blankspace.objectContext + '})',
+							newDestination: 'ns1blankspace.supportIssue.init({id: ' + ns1blankspace.objectContext + ', mode: ' + ns1blankspace.supportIssue.data.mode.value + '})',
 							move: false
 						});
 						
@@ -393,7 +445,7 @@ ns1blankspace.supportIssue =
 
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Subject</td></tr>' +
 											'<tr><td id="ns1blankspaceSummarySubject" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.subject +
+											ns1blankspace.objectContextData.title +
 											'</td></tr>');	
 
 							if (ns1blankspace.objectContextData.solution != '')
@@ -422,6 +474,8 @@ ns1blankspace.supportIssue =
 
 	details: 	function ()
 				{
+					var aHTML = [];
+
 					if ($('#ns1blankspaceMainDetails').attr('data-loading') == '1')
 					{
 						$('#ns1blankspaceMainDetails').attr('data-loading', '');
@@ -453,8 +507,7 @@ ns1blankspace.supportIssue =
 										'Send To' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceRadio">' +
-										'<input id="ns1blankspaceDetailsUser" class="ns1blankspaceText">' +
+										'<td id="ns1blankspaceDetailsUser" class="ns1blankspaceRadio">' +
 										ns1blankspace.xhtml.loadingSmall +
 										'</td></tr>');	
 
@@ -643,7 +696,6 @@ ns1blankspace.supportIssue =
 						{
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('SUPPORT_ISSUE_USER_SEARCH'),
-							data: sParam,
 							dataType: 'json',
 							async: false,
 							success: function(data){ns1blankspace.supportIssue.getUsers(oParam, data)}
