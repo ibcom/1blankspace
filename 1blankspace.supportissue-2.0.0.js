@@ -53,10 +53,27 @@ ns1blankspace.supportIssue =
 										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
+										'<td id="ns1blankspaceHomeAction" style="width:150px;"></td>' +
 										'</tr>');
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceMain').html(aHTML.join(''));
+
+						if (ns1blankspace.option.helpURI !== undefined)
+						{ 
+							var aHTML = [];
+							
+							aHTML.push('<table class="ns1blankspaceColumn2">');
+							
+							aHTML.push('<tr><td style="font-size:0.875em; width:110px;" >' +
+										'<a href="' + ns1blankspace.option.helpURI + '" target="_blank"' +
+										'>Get help from the Community</a>' +
+										'</td></tr>');	
+														
+							aHTML.push('</td></tr></table>');
+						}						
+
+						$('#ns1blankspaceHomeAction').html(aHTML.join(''));	
 
 						var aHTML = [];
 									
@@ -565,7 +582,7 @@ ns1blankspace.supportIssue =
 										'Type' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceMainRadio">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioType1" name="radioType" value="1"/>Help Required' +
 										'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Suggestion' +
 										'<br /><input type="radio" id="radioType3" name="radioType" value="3"/>General Comment' +
@@ -575,7 +592,7 @@ ns1blankspace.supportIssue =
 										'Severity' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceMainRadio">' +
+										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioSeverity0" name="radioSeverity" value="0"/>Critical' +
 										'<br /><input type="radio" id="radioSeverity1" name="radioSeverity" value="1"/>Urgent' +
 										'<br /><input type="radio" id="radioSeverity2" name="radioSeverity" value="2"/>Routine' +
@@ -748,7 +765,6 @@ ns1blankspace.supportIssue =
 						{
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('CORE_GET_USER_DETAILS'),
-							data: sParam,
 							dataType: 'json',
 							success: function(data){ns1blankspace.supportIssue.getContact(oParam, data)}
 						});

@@ -660,14 +660,6 @@ ns1blankspace.views =
 		show: true,
 		group: 4,
 		type: 2
-	},
-	{
-		title: "Support",
-		namespace: "supportIssue",
-		endpoint: "SETUP", 
-		show: true,
-		group: 4,
-		type: 2
 	}
 ]
 
@@ -1395,15 +1387,6 @@ ns1blankspace.control =
 																				'<td class="ns1blankspaceViewControl">' +
 																				'<span id="ns1blankspaceViewControl_setup_space" class="ns1blankspaceViewControl">' +
 																				'My&nbsp;Space&nbsp;/&nbsp;Account</span></td></tr>');
-														}
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Support';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_supportIssue" class="ns1blankspaceViewControl">' +
-																				'Support&nbsp;Issues</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Other Spaces';})[0];

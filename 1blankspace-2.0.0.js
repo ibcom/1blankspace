@@ -901,14 +901,7 @@ ns1blankspace.app =
 								}})
 						.click(function() 
 						{
-							if (ns1blankspace.option.helpURI)
-							{	
-								window.open(ns1blankspace.option.helpURI);
-							}
-							else
-							{
-								window.alert('No help available.  May be search the internet?')
-							}	
+							ns1blankspace.supportIssue.init();
 						});		
 					
 					$('#ns1blankspaceLogonName').click(function(event)
@@ -989,7 +982,6 @@ ns1blankspace.app =
 					$('#ns1blankspaceViewControlAction').unbind('click');
 					$('#ns1blankspaceViewControlActionOptions').unbind('click');
 					$('#ns1blankspaceViewControlSetupOptions').unbind('click');
-					$('#ns1blankspaceViewControlHelp').unbind('click');
 					$('#ns1blankspaceViewControlHelpOptions').unbind('click');
 					$('td.ns1blankspaceViewControlBrowse').unbind('click');
 					$('td.ns1blankspaceViewControlBrowseAll').unbind('click');
