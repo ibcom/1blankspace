@@ -67,7 +67,7 @@ ns1blankspace.supportIssue =
 							
 							aHTML.push('<tr><td style="font-size:0.875em; width:110px;" >' +
 										'<a href="' + ns1blankspace.option.helpURI + '" target="_blank"' +
-										'>Get help from the Community</a>' +
+										'>Get help from the community</a>' +
 										'</td></tr>');	
 														
 							aHTML.push('</td></tr></table>');
