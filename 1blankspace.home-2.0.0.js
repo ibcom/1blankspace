@@ -194,12 +194,6 @@ ns1blankspace.home.options =
 						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						ns1blankspace.action.init({calendar: true});
 					});
-
-					$('#ns1blankspaceHomeOptionsNewWindow').click(function(event)
-					{
-						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-						ns1blankspace.action.init({calendar: true});
-					});
 				}
 }				
 
