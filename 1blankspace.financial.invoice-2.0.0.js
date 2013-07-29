@@ -113,7 +113,11 @@ ns1blankspace.financial.invoice =
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td style="padding-top:15px;" id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">Bulk<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">Create & Send</span></td>' +
-									'</tr>');	
+									'</tr>');
+
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlOutstanding" class="ns1blankspaceControl">outstanding<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">Unpaid invoices</span></td>' +
+									'</tr>');
 
 						aHTML.push('</table>');		
 						
@@ -122,6 +126,11 @@ ns1blankspace.financial.invoice =
 						$('#ns1blankspaceControlInvoicing').click(function(event)
 						{
 							ns1blankspace.financial.invoicing.show();
+						});
+
+						$('#ns1blankspaceControlOutstanding').click(function(event)
+						{
+							ns1blankspace.financial.invoice.outstanding.show();
 						});	
 													
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
@@ -1500,3 +1509,138 @@ ns1blankspace.financial.invoice =
 				}
 }								
 
+ns1blankspace.financial.invoice.outstanding =
+{
+	show: 		function (oParam, oResponse)
+				{
+					var sStartDate;
+					var sEndDate;
+
+					if (oParam != undefined)
+					{
+						if (oParam.startDate != undefined) {sStartDate = oParam.startDate}
+						if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+					}		
+
+					if (oResponse == undefined)
+					{
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceMain" style="width:100%;">' +
+								'<tr>' +
+								'<td id="ns1blankspaceBSColumn1" class="ns1blankspaceColumn1Divider" style="width:100px; font-size: 0.875em; padding-right:10px;"></td>' +
+								'<td id="ns1blankspaceBSColumn2" style="font-size: 0.925em; padding-left:10px;">' + ns1blankspace.xhtml.loading + '</td>' +
+								'</tr>' +
+								'</table>');	
+
+						$('#ns1blankspaceMainBS').html(aHTML.join(''));	
+
+						var aHTML = [];
+						
+						aHTML.push('<table>');
+						
+						aHTML.push('<tr>' +
+										'<tr><td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceBSStartDate" class="ns1blankspaceDate">' +
+										'</td></tr>');
+							
+						aHTML.push('<tr>' +
+										'<td class="ns1blankspaceCaption" style="padding-top:0px;">' +
+										'To' +
+										'</td></tr>' +
+										'<tr><td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceBSEndDate" class="ns1blankspaceDate">' +
+										'</td></tr>');
+														
+						aHTML.push('<tr><td style="padding-top:5px;">' +
+										'<span class="ns1blankspaceAction" style="width:95px;" id="ns1blankspaceBSRefresh">Refresh</span>' +
+										'</td></tr>');
+						
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceBSColumn1').html(aHTML.join(''));
+
+						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+
+						$('#ns1blankspaceBSRefresh').button(
+						{
+							label: 'Refresh',
+							icons: {
+								primary: "ui-icon-arrowrefresh-1-e"
+							}
+						})
+						.click(function() {
+							ns1blankspace.financial.balanceSheet.show(
+							{
+								startDate: $('#ns1blankspaceBSStartDate').val(),
+								endDate: $('#ns1blankspaceBSEndDate').val()
+							})
+						});
+
+						var sData = 'rows=500'
+
+						if (sStartDate != undefined)
+						{
+							sData += '&startdate=' + ns1blankspace.util.fs(sStartDate);
+							$('#ns1blankspaceBSStartDate').val(sStartDate);
+						}
+							
+						if (sEndDate != undefined)
+						{
+							sData += '&enddate=' + ns1blankspace.util.fs(sEndDate);
+							$('#ns1blankspaceBSEndDate').val(sEndDate);
+						}
+							
+						$.ajax(
+						{
+							type: 'GET',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_BALANCE_SHEET_SEARCH'),
+							data: sData,
+							dataType: 'json',
+							success: function(data) {ns1blankspace.financial.balanceSheet.show(oParam, data)}
+						});
+					}
+					else
+					{
+						if (oResponse.morerows == "true")
+						{
+							alert("There is an issue with this report");
+						}
+						else
+						{
+							var oParam = {};
+							oParam.dataTree = ns1blankspace.financial.data.accounts;
+							oParam.dataBranch = oResponse.data.rows;
+							oParam.xhtmlElementID = 'ns1blankspaceBSColumn2';
+							oParam.xhtmlElementContext = 'BS';
+							oParam.endDate = oResponse.enddate;
+							oParam.onLeaveClick = ns1blankspace.financial.balanceSheet.transactions;
+
+							if ($('#ns1blankspaceBSEndDate').val() == '') {$('#ns1blankspaceBSEndDate').val(oResponse.enddate)}
+
+							oParam.dataRoot =
+							[
+								{
+									title: 'Assets',
+									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 3})[0]['id'],
+									xhtml: '<span class="ns1blankspaceHeaderLarge">Assets</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.assettotal).formatMoney(2, '.', ',') + '</span>'
+								},
+								{
+									title: 'Liability',
+									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 4})[0]['id'],
+									xhtml: '<span class="ns1blankspaceHeaderLarge">Liability</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.liabilitytotal).formatMoney(2, '.', ',') + '</span>'
+								},
+								{
+									title: 'Equity',
+									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 5})[0]['id'],
+									xhtml: '<span class="ns1blankspaceHeaderLarge">Equity</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.equitytotal).formatMoney(2, '.', ',') + '</span>'
+								}
+							]	
+	
+							oParam = ns1blankspace.util.setParam(oParam, 'onLastChild', ns1blankspace.financial.balanceSheet.transactions);
+							ns1blankspace.format.tree.init(oParam);
+						}	
+					}	
+				}
+	}
+				
