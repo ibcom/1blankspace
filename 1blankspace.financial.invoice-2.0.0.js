@@ -115,10 +115,6 @@ ns1blankspace.financial.invoice =
 									'<td style="padding-top:15px;" id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">Bulk<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">Create & Send</span></td>' +
 									'</tr>');
 
-						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlOutstanding" class="ns1blankspaceControl">outstanding<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">Unpaid invoices</span></td>' +
-									'</tr>');
-
 						aHTML.push('</table>');		
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));
@@ -127,11 +123,6 @@ ns1blankspace.financial.invoice =
 						{
 							ns1blankspace.financial.invoicing.show();
 						});
-
-						$('#ns1blankspaceControlOutstanding').click(function(event)
-						{
-							ns1blankspace.financial.invoice.outstanding.show();
-						});	
 													
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
@@ -1508,97 +1499,3 @@ ns1blankspace.financial.invoice =
 								}
 				}
 }								
-
-ns1blankspace.financial.invoice.outstanding =
-{
-	show: 		function (oParam, oResponse)
-				{
-					var sStartDate;
-					var sEndDate;
-
-					if (oParam != undefined)
-					{
-						if (oParam.startDate != undefined) {sStartDate = oParam.startDate}
-						if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
-					}		
-
-					if (oResponse == undefined)
-					{
-						var aHTML = [];
-
-						aHTML.push('<table class="ns1blankspaceMain" style="width:100%;">' +
-								'<tr>' +
-								'<td id="ns1blankspaceOutstandingColumn1" class="ns1blankspaceColumn1Divider" style="width:100px; font-size: 0.875em; padding-right:10px;"></td>' +
-								'<td id="ns1blankspaceOutstandingColumn2" style="font-size: 0.925em; padding-left:10px;">' + ns1blankspace.xhtml.loading + '</td>' +
-								'</tr>' +
-								'</table>');	
-
-						$('#ns1blankspaceMain').html(aHTML.join(''));	
-
-						var aHTML = [];
-						
-						aHTML.push('<table>');
-						
-						aHTML.push('<tr>' +
-										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceOutstandingStartDate" class="ns1blankspaceDate">' +
-										'</td></tr>');
-							
-						aHTML.push('<tr>' +
-										'<td class="ns1blankspaceCaption" style="padding-top:0px;">' +
-										'To' +
-										'</td></tr>' +
-										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceOutstandingEndDate" class="ns1blankspaceDate">' +
-										'</td></tr>');
-														
-						aHTML.push('<tr><td style="padding-top:5px;">' +
-										'<span class="ns1blankspaceAction" style="width:95px;" id="ns1blankspaceOutstandingRefresh">Refresh</span>' +
-										'</td></tr>');
-						
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceOutstandingColumn1').html(aHTML.join(''));
-
-						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
-
-						$('#ns1blankspaceOutstandingRefresh').button(
-						{
-							label: 'Refresh',
-							icons: {
-								primary: "ui-icon-arrowrefresh-1-e"
-							}
-						})
-						.click(function() {
-							ns1blankspace.financial.invoice.outstanding.show(
-							{
-								startDate: $('#ns1blankspaceOutstandingStartDate').val(),
-								endDate: $('#ns1blankspaceOutstandingEndDate').val()
-							})
-						});
-	
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-						oSearch.addField('sentdate,amount,tax');
-						oSearch.rf = 'json';
-						oSearch.addFilter('outstanding', 'NOT_EQUAL_TO', 0);
-
-						if (sStartDate != undefined)
-						{
-							oSearch.addFilter('startdate', 'GREATER_THAN_EQUAL_TO', sStartDate);
-						}
-							
-						if (sEndDate != undefined)
-						{
-							oSearch.addFilter('enddate', 'LESS_THAN_EQUAL_TO', sEndDate);
-						}
-
-						oSearch.getResults(function(data) {ns1blankspace.financial.invoice.outstanding.show(data)});
-					}
-					else
-					{
-						
-					}	
-				}
-	}
-				
