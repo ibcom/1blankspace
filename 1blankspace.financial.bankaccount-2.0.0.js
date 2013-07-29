@@ -257,6 +257,38 @@ ns1blankspace.financial.bankAccount =
 					}								
 
 					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+					var aHTML = [];
+				
+					aHTML.push('<table class="ns1blankspaceColumn2">');
+
+					if (ns1blankspace.objectContextData.accountname != '')
+					{
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Name</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryAccountName" class="ns1blankspaceSummary">' +
+									ns1blankspace.objectContextData.accountname +
+									'</td></tr>');
+					}
+						
+					if (ns1blankspace.objectContextData.bsb != '')
+					{
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">BSB</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryBSB" class="ns1blankspaceSummary">' +
+									ns1blankspace.objectContextData.bsb +
+									'</td></tr>');
+					}
+
+					if (ns1blankspace.objectContextData.accountnumber != '')
+					{
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Number</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryAccountNumber" class="ns1blankspaceSummary">' +
+									ns1blankspace.objectContextData.accountnumber +
+									'</td></tr>');
+					}
+
+					aHTML.push('</table>');
+
+					$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 				},
 
 	mapping: 	{

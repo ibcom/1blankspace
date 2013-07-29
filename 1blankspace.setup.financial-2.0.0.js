@@ -344,7 +344,7 @@ ns1blankspace.setup.financial =
 						{
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-							oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status,statustext');
+							oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status,statustext,accountname,bsb,accountnumber');
 							oSearch.sort('title', 'asc');
 							oSearch.rows = ns1blankspace.option.defaultRows;
 							oSearch.getResults(function(data) {ns1blankspace.setup.financial.bankAccounts(oParam, data)});
@@ -466,6 +466,33 @@ ns1blankspace.setup.financial =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceBankAccountTitle" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Account Name' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceBankAccountName" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'BSB' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceBankAccountBSB" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Account Number' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceBankAccountNumber" class="ns1blankspaceText">' +
 										'</td></tr>');	
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -516,16 +543,22 @@ ns1blankspace.setup.financial =
 						{
 							ns1blankspace.status.working();
 
-							var sData = 'id=' + ns1blankspace.util.fs(sID);
-							sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceBankAccountTitle').val());
-							sData += '&financialaccount=' + ns1blankspace.util.fs($('#ns1blankspaceBankAccountFinancialAccount').attr("data-id"));
-							sData += '&status=' + $('input[name="radioStatus"]:checked').val();
+							var oData = 
+							{
+								id: sID,
+								title: $('#ns1blankspaceBankAccountTitle').val(),
+								accountname: $('#ns1blankspaceBankAccountName').val(),
+								bsb: $('#ns1blankspaceBankAccountBSB').val(),
+								accountnumber: $('#ns1blankspaceBankAccountNumber').val(),
+								financialaccount: $('#ns1blankspaceBankAccountFinancialAccount').attr("data-id"),
+								status: $('input[name="radioStatus"]:checked').val()
+							}	
 
 							$.ajax(
 							{
 								type: 'POST',
 								url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_BANK_ACCOUNT_MANAGE'),
-								data: sData,
+								data: oData,
 								dataType: 'json',
 								success: function()
 								{
@@ -552,7 +585,7 @@ ns1blankspace.setup.financial =
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-							oSearch.addField('title,financialaccount,financialaccounttext,status');
+							oSearch.addField('title,financialaccount,financialaccounttext,status,accountname,bsb,accountnumber');
 							oSearch.addFilter('id', 'EQUAL_TO', sID);
 							oSearch.getResults(function(data) {
 									$.extend(true, oParam, {step: 3});
@@ -569,6 +602,9 @@ ns1blankspace.setup.financial =
 					{
 						var oObjectContext = oResponse.data.rows[0];
 						$('#ns1blankspaceBankAccountTitle').val(oObjectContext.title);
+						$('#ns1blankspaceBankAccountName').val(oObjectContext.accountname);
+						$('#ns1blankspaceBankAccountBSB').val(oObjectContext.bsb);
+						$('#ns1blankspaceBankAccountNumber').val(oObjectContext.accountnumber);
 						$('#ns1blankspaceBankAccountTitle').focus();
 						$('#ns1blankspaceBankAccountFinancialAccount').val(oObjectContext.financialaccounttext)
 						$('#ns1blankspaceBankAccountFinancialAccount').attr('data-id', oObjectContext.financialaccount);
