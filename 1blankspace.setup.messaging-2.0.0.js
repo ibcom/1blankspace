@@ -137,7 +137,7 @@ ns1blankspace.setup.messaging =
 									
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
-										oSearch.addField('email,type,typetext,authtype,authtypetext,accountname,server,sslport,title,user,usertext,footer');
+										oSearch.addField('email,type,typetext,authtype,authtypetext,accountname,server,port,sslport,title,user,usertext,footer');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.messaging.show(data)});
 									
@@ -441,7 +441,28 @@ ns1blankspace.setup.messaging =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceDetailsServer" class="ns1blankspaceText">' +
-										'</td></tr>');	
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Port' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsPort" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'SSL Port' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsSSLPort" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceSubNote">' +
+										'Leave blank and default ports will be used.</td></tr>');
 														
 						aHTML.push('</table>');					
 						
@@ -472,6 +493,8 @@ ns1blankspace.setup.messaging =
 							$('[name="radioType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsAccountName').val(ns1blankspace.objectContextData.accountname);
 							$('#ns1blankspaceDetailsServer').val(ns1blankspace.objectContextData.server);
+							$('#ns1blankspaceDetailsPort').val(ns1blankspace.objectContextData.port);
+							$('#ns1blankspaceDetailsSSLPort').val(ns1blankspace.objectContextData.sslport);
 						}
 						else
 						{
@@ -524,6 +547,10 @@ ns1blankspace.setup.messaging =
 										var sServer = ns1blankspace.util.fs($('#ns1blankspaceDetailsServer').val());
 										if (sServer == '') {sServer = 'imap.gmail.com'}
 
+										var sSSLPort = $('#ns1blankspaceDetailsSSLPort').val();
+										var sPort = $('#ns1blankspaceDetailsPort').val();
+										if (sSSLPort == '' && sPort == '') {sSSLPort = '993'}	
+
 										sData += '&user=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsUser').attr("data-id"));
 										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
 										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
@@ -531,7 +558,8 @@ ns1blankspace.setup.messaging =
 										sData += '&accountname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAccountName').val());
 										sData += '&server=' + sServer;
 										sData += '&cachetype=1';
-										sData += '&sslport=993';
+										sData += '&sslport=' + sSSLPort;
+										sData += '&port=' + sPort;
 										sData += '&authtype=0';
 										
 										if ($('#ns1blankspaceDetailsAccountPassword').val() != '')
