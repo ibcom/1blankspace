@@ -563,8 +563,6 @@ ns1blankspace.contactPerson =
 
 							if (ns1blankspace.objectContextData.mobile != '')
 							{
-								
-
 								aHTML.push('<tr><td style="padding-top:16px; padding-bottom:5px;"><span id="ns1blankspaceContactPersonSMS" class="ns1blankspaceAction">' +
 											'SMS</span></td></tr>');
 
