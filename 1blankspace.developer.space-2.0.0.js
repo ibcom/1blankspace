@@ -53,6 +53,7 @@ ns1blankspace.developer.space =
 						{
 							type: 'GET',
 							url: ns1blankspace.util.endpointURI('ADMIN_REGISTRATION_SEARCH'),
+							data: 'me=1',
 							dataType: 'json',
 							success: function (data) {ns1blankspace.developer.space.home(oParam, data)}
 						});
