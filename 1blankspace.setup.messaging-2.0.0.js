@@ -462,7 +462,7 @@ ns1blankspace.setup.messaging =
 										'</td></tr>');
 
 						aHTML.push('<tr><td class="ns1blankspaceSubNote">' +
-										'Leave blank and default ports will be used.</td></tr>');
+										'If you leave server, port or SSL port blank; defaults will be used.</td></tr>');
 														
 						aHTML.push('</table>');					
 						
