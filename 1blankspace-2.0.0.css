@@ -295,6 +295,28 @@ table.ns1blankspaceViewControlContainer
 	opacity: 0.98;
 }
 
+table.ns1blankspaceViewControlSearchFilterContainer
+{
+	font-size: 0.875em;
+	color: #888888;
+	border-spacing: 3px 3px;
+
+	background-color: #E8E8E8;
+	width: 175px;
+
+	
+	border-style: solid;
+	border-width: 6px;
+	border-color: #E8E8E8;
+	
+	margin-top:8px;
+	margin-bottom:1px;
+	margin-right:1px;
+	margin-left:1px;
+
+	opacity: 0.98;
+}
+
 table.ns1blankspaceDropDown
 {
 	border-spacing: 5px 5px;

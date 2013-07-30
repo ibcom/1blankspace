@@ -301,7 +301,20 @@ ns1blankspace.views =
 		endpoint: "CONTACT_PERSON",
 		show: true,
 		group: 1,
-		type: 1
+		type: 1,
+		xsearch:
+		{
+			filters:
+			[
+				{
+					caption: "Suburb",
+					name: "streetsuburb",
+					type: 'Text',
+					comparison: 'IS_LIKE',
+					fixed: false
+				}
+			]	
+		}
 	},
 	{
 		title: "Businesses",

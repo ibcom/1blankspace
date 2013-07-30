@@ -530,7 +530,7 @@ ns1blankspace.financial.debtors =
 						aHTML.push('</div></td></tr>');
 
 						aHTML.push('<tr><td class="ns1blankspaceDate" style="padding-bottom:15px;">' +
-										'<input id="ns1blankspaceDebtorsEndDate" class="ns1blankspaceDate ns1blankspaceWatermark" style="width:113px; font-size:0.725em;" value="As at">' +
+										'<input id="ns1blankspaceDebtorsEndDate" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em;" value="As at">' +
 										'</td></tr>');
 								
 						aHTML.push('<tr><td><span id="ns1blankspaceFinancialDebtorsPreview" class="ns1blankspaceAction">' +
@@ -563,10 +563,8 @@ ns1blankspace.financial.debtors =
 
 						$('#ns1blankspaceDebtorsEndDate').change(function()
 						{
-							ns1blankspace.financial.debtors.show(
-							{
-								endDate: $('#ns1blankspaceDebtorsEndDate').val()
-							})
+							oParam = ns1blankspace.util.setParam(oParam, 'endDate', $('#ns1blankspaceDebtorsEndDate').val());
+							ns1blankspace.financial.debtors.show(oParam)
 						});
 
 						$('#ns1blankspaceFinancialDebtorsPreview').button(

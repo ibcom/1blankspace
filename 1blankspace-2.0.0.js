@@ -235,7 +235,8 @@ ns1blankspace.app =
 						ns1blankspace.xhtml.action = '';
 						ns1blankspace.xhtml.home = '';
 						ns1blankspace.xhtml.divID = '';
-						ns1blankspace.xhtml.container = '#ns1blankspaceMultiUseContainer'
+						ns1blankspace.xhtml.container = '#ns1blankspaceMultiUseContainer';
+						ns1blankspace.xhtml.searchContainer = '#ns1blankspaceViewControlSearchResultsContainer';
 
 						ns1blankspace.user.commonName = '';
 						ns1blankspace.user.email = '';
@@ -2912,7 +2913,7 @@ ns1blankspace.search =
 					var sElementID = 'ns1blankspaceViewControlSearch';
 					$('#' + sElementStatusID).show();
 					$('#' + sElementStatusID).html(ns1blankspace.xhtml.loadingSmall);
-					ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: 10});
+					//ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: 10});
 				},
 
 	stop:		function ()
@@ -2925,10 +2926,40 @@ ns1blankspace.search =
 	advanced: 	function ()
 				{
 					var sElementID = 'ns1blankspaceViewControlSearch';
-					ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: -38, leftOffset: 49});
+					ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: 10});
 					$(ns1blankspace.xhtml.container).show();
-					$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchAdvanced" style="padding:3px; padding-left: 4px; padding-right: 4px; color:#CCCCCC; font-size:0.625em; cursor:pointer;">advanced&nbsp;search</span>');
-					$('#ns1blankspaceSearchAdvanced').click(function() {ns1blankspace.report.init({all: false})});
+					
+					$(ns1blankspace.xhtml.container).html(
+						'<div id="ns1blankspaceViewControlSearchFilterContainer"></div>' +
+						'<div id="ns1blankspaceViewControlSearchResultsContainer"></div>');
+
+					var oView = $.grep(ns1blankspace.views, function (a) {return a.title == ns1blankspace.viewName;})[0];
+
+					if (oView !== undefined)
+					{	
+						if (oView.search !== undefined)
+						{	
+							var aHTML = []
+
+							aHTML.push('<table class="ns1blankspaceViewControlSearchFilterContainer">');
+
+							$.each(oView.search.filters, function (i, v)
+							{
+								aHTML.push('<tr><td class="ns1blankspaceCaption">' + v.caption + '</td></tr>');
+								aHTML.push('<tr><td style="padding-right:7px;"><input style="margin:0px;" class="ns1blankspace' + v.type + '"' +
+												' data-comparison="' + v.comparison + '"' +
+												' data-name="'+ v.name + '"></td></tr>');
+							});
+
+							aHTML.push('</table>');
+
+							$('#ns1blankspaceViewControlSearchFilterContainer')
+								.html(aHTML.join(''));
+						}		
+					}
+
+					//$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchAdvanced" style="padding:3px; padding-left: 4px; padding-right: 4px; color:#CCCCCC; font-size:0.625em; cursor:pointer;">advanced&nbsp;search</span>');
+					//$('#ns1blankspaceSearchAdvanced').click(function() {ns1blankspace.report.init({all: false})});
 				},		
 
 	multiSelect: 

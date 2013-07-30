@@ -188,7 +188,7 @@ ns1blankspace.contactPerson =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position({xhtmlElementID: sElementId});
+											//ns1blankspace.container.position({xhtmlElementID: sElementId});
 											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
@@ -265,7 +265,10 @@ ns1blankspace.contactPerson =
 								    	
 										aHTML.push('</table>');
 										
-										$(ns1blankspace.xhtml.container).html(
+										
+
+										//$(ns1blankspace.xhtml.container).html(
+										$(ns1blankspace.xhtml.searchContainer).html(
 											ns1blankspace.render.init(
 											{
 												html: aHTML.join(''),
@@ -273,7 +276,7 @@ ns1blankspace.contactPerson =
 											}) 
 										);		
 										
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										//$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 										
 										ns1blankspace.search.stop();
 										
