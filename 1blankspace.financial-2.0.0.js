@@ -597,7 +597,7 @@ ns1blankspace.financial.debtors =
 						.css('width', '115px')
 						.css('text-align', 'left');
 
-						var oData = {reportby: iType}
+						var oData = {reportby: iType, rows: 50}
 
 						if (sEndDate !== undefined)
 						{
