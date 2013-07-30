@@ -500,6 +500,9 @@ ns1blankspace.financial.debtors =
 
 	show: 		function (oParam, oResponse)
 				{
+					var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
+
 					if (oResponse == undefined)
 					{
 						ns1blankspace.financial.data.debtors = [];
@@ -515,11 +518,101 @@ ns1blankspace.financial.debtors =
 						
 						$('#ns1blankspaceMainDebtors').html(aHTML.join(''));
 
+						var aHTML = [];
+														
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+							
+						aHTML.push('<tr><td><div id="ns1blankspaceDebtorsType">');											
+						aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceDebtorsType-1" name="radioType" checked="checked" /><label for="ns1blankspaceDebtorsType-1" style="margin-bottom:2px; font-size:0.875em; width:115px;">' +
+										'Last Receipt</label>');
+						aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceDebtorsType-4" name="radioType" /><label for="ns1blankspaceDebtorsType-4" style="font-size:0.875em; width:115px;">' +
+										'30, 60, 90</label>');
+						aHTML.push('</div></td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceDate" style="padding-bottom:15px;">' +
+										'<input id="ns1blankspaceDebtorsEndDate" class="ns1blankspaceDate ns1blankspaceWatermark" style="width:115px;" value="As at">' +
+										'</td></tr>');
+								
+						aHTML.push('<tr><td><span id="ns1blankspaceFinancialDebtorsPreview" class="ns1blankspaceAction">' +
+										'Statements</span></td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceFinancialDebtorsPreviewStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+									'Create statements for selected debtors</td></tr>');
+
+						aHTML.push('<tr><td><span id="ns1blankspaceFinancialDebtorsEmail" class="ns1blankspaceAction">' +
+										'Email</span></td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceFinancialDebtorsEmailStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
+
+						aHTML.push('</table>');
+
+						$('#ns1blankspaceDebtorsColumn2').html(aHTML.join(''));
+
+						$('#ns1blankspaceDebtorsType-' + iType).attr('checked', true);	
+
+						$('#ns1blankspaceDebtorsType').buttonset().css('font-size', '0.75em');
+								
+						$('#ns1blankspaceDebtorsType :radio').click(function()
+						{
+							var aID = (this.id).split('-');
+							oParam = ns1blankspace.util.setParam(oParam, 'type', parseInt(aID[1]));
+							ns1blankspace.financial.debtors.show(oParam);
+						});
+
+							$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+
+						$('#ns1blankspaceDebtorsEndDate').change(function()
+						{
+							ns1blankspace.financial.debtors.show(
+							{
+								endDate: $('#ns1blankspaceDebtorsEndDate').val()
+							})
+						});
+
+						$('#ns1blankspaceFinancialDebtorsPreview').button(
+						{
+							label: 'Statements',
+							icons:
+							{
+								primary: "ui-icon-document"
+							}
+						})
+						.click(function()
+						{	
+							ns1blankspace.financial.debtors.preview.init(oParam)
+						})
+						.css('width', '115px');
+
+						$('#ns1blankspaceFinancialDebtorsEmail').button(
+						{
+							label: 'Email',
+							icons:
+							{
+								primary: "ui-icon-mail-open"
+							}
+						})
+						.click(function()
+						{	
+							oParam = {onCompleteWhenCan: ns1blankspace.financial.debtors.email.init};
+							ns1blankspace.financial.debtors.preview.init(oParam);
+						})
+						.css('width', '115px')
+						.css('text-align', 'left');
+
+						var oData = {reportby: iType}
+
+						if (sEndDate !== undefined)
+						{
+							oData.enddate = sEndDate;
+							$('#ns1blankspaceDebtorsEndDate').removeClass('ns1blankspaceWatermark').val(sEndDate);
+						}	
+
 						$.ajax(
 						{
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_DEBTOR_SEARCH'),
 							dataType: 'json',
+							data: oData,
 							global: false,
 							success: function(data)
 							{
@@ -553,18 +646,38 @@ ns1blankspace.financial.debtors =
 							}
 							else
 							{
-								aHTML.push('<table id="ns1blankspaceFinancialDebtors" class="ns1blankspace">' +
+								aHTML.push('<table id="ns1blankspaceFinancialDebtors" class="ns1blankspace" style="font-size:0.925em;">' +
 												'<tr class="ns1blankspaceCaption">' +
 												'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspaceDebtorsSelectAll"></span></td>' +
 												'<td class="ns1blankspaceHeaderCaption">Debtor</td>' +
-												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount Owed</td>' +
-												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt</td>' +
-												'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount Owed</td>')
+
+								if (iType == 1)
+								{	
+									aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">Last Receipt</td>');
+								}
+								else
+								{
+									aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+													(oResponse['91Description']).replace(' or ', '<br />or&nbsp;') +
+													'<br /><span style="font-size:0.625em;">(91&nbsp;+)</span></td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+													oResponse['61-90Description'] +
+													'<br /><span style="font-size:0.625em;">(61&nbsp;to&nbsp;90)</span></td>' +
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+													oResponse['31-60Description'] +
+													'<br /><span style="font-size:0.625em;">(31&nbsp;to&nbsp;60)</span></td>' +	
+												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+													oResponse.CurrentDescription +
+													'<br /><span style="font-size:0.625em;">(0&nbsp;to&nbsp;30)</span></td>');	
+								}				
+
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 												'</tr>');
 								
 								$(oResponse.data.rows).each(function() 
 								{
-									aHTML.push(ns1blankspace.financial.debtors.row(this));
+									aHTML.push(ns1blankspace.financial.debtors.row(this, oParam));
 								});
 								
 								aHTML.push('</table>');
@@ -580,66 +693,16 @@ ns1blankspace.financial.debtors =
 									rows: ns1blankspace.option.defaultRows,
 									functionShowRow: ns1blankspace.financial.debtors.row,
 									functionOpen: undefined,
-									functionNewPage: 'ns1blankspace.financial.debtors.bind()',
+									functionOnNewPage: ns1blankspace.financial.debtors.bind,
 							   	});
-
-								ns1blankspace.financial.debtors.bind();
-
-								var aHTML = [];
-														
-								aHTML.push('<table class="ns1blankspaceColumn2">');
-										
-								aHTML.push('<tr><td><span id="ns1blankspaceFinancialDebtorsPreview" class="ns1blankspaceAction">' +
-												'Statements</span></td></tr>');
-
-								aHTML.push('<tr><td id="ns1blankspaceFinancialDebtorsPreviewStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-											'Create statements for selected debtors</td></tr>');
-
-								aHTML.push('<tr><td><span id="ns1blankspaceFinancialDebtorsEmail" class="ns1blankspaceAction">' +
-												'Email</span></td></tr>');
-
-								aHTML.push('<tr><td id="ns1blankspaceFinancialDebtorsEmailStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
-
-								aHTML.push('</table>');					
-								
-								$('#ns1blankspaceDebtorsColumn2').html(aHTML.join(''));
-								
-								$('#ns1blankspaceFinancialDebtorsPreview').button(
-								{
-									label: 'Statements',
-									icons:
-									{
-										primary: "ui-icon-document"
-									}
-								})
-								.click(function()
-								{	
-									ns1blankspace.financial.debtors.preview.init(oParam)
-								})
-								.css('width', '115px');
-
-								$('#ns1blankspaceFinancialDebtorsEmail').button(
-								{
-									label: 'Email',
-									icons:
-									{
-										primary: "ui-icon-mail-open"
-									}
-								})
-								.click(function()
-								{	
-									oParam = {onCompleteWhenCan: ns1blankspace.financial.debtors.email.init};
-									ns1blankspace.financial.debtors.preview.init(oParam);
-								})
-								.css('width', '115px')
-								.css('text-align', 'left');	
 							}
 						}	    	
 					}
 				},
 
-	row: 		function (oRow)
+	row: 		function (oRow, oParam)
 				{
+					var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
 					var sKey = oRow.debtortype + '_' + oRow.id;
 					oRow.key = sKey;
 
@@ -649,7 +712,7 @@ ns1blankspace.financial.debtors =
 					ns1blankspace.financial.data.debtors.push(oRow);
 
 					var sLastReceipt = '&nbsp;';
-					if (oRow.lastreceiptdate != '') {sLastReceipt = oRow.lastreceiptdate + ' / $' + oRow.lastreceiptamount}
+					if (oRow.lastreceiptdate != '') {sLastReceipt = oRow.lastreceiptdate + '<br />$' + oRow.lastreceiptamount}
 					var aHTML = [];
 
 					aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceDebtors_container-' + sKey + '">' +
@@ -659,10 +722,26 @@ ns1blankspace.financial.debtors =
 					aHTML.push('<td id="ns1blankspaceDebtors_contact-" class="ns1blankspaceRow">' +
 									oRow.debtorname + '</td>' +
 									'<td id="ns1blankspaceDebtors_total-" class="ns1blankspaceRow" style="text-align:right;">' +
-									oRow.total + '</td>' +
-									'<td id="ns1blankspaceDebtors_lastreceipt-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
-									sLastReceipt + '</td>' +
-									'<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
+									oRow.total + '</td>');
+
+					if (iType == 1)
+					{	
+						aHTML.push('<td id="ns1blankspaceDebtors_lastreceipt-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									sLastReceipt + '</td>');
+					}
+					else
+					{
+						aHTML.push(	'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow['91'] + '</td>' +
+									'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow['61-90'] + '</td>' +
+									'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow['31-60'] + '</td>' +
+									'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow.current + '</td>');
+					}
+
+					aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
 									'<span style="margin-right:5px;" id="ns1blankspaceDebtors_option_preview-' + sKey + '"' +
 													' class="ns1blankspaceRowPreview"></span>' +
 									'<span id="ns1blankspaceDebtors_contact-' + sKey + '" class="ns1blankspaceRowSelect"></span>' +
@@ -1056,7 +1135,7 @@ ns1blankspace.financial.creditors =
 							}
 							else
 							{
-								aHTML.push('<table id="ns1blankspaceMainCreditors" class="ns1blankspace">' +
+								aHTML.push('<table id="ns1blankspaceMainCreditors" class="ns1blankspace" style="font-size:0.925em;">' +
 												'<tbody>' +
 												'<tr class="ns1blankspaceCaption">' +
 												'<td class="ns1blankspaceHeaderCaption">Creditor</td>' +

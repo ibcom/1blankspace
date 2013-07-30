@@ -222,7 +222,7 @@
 		{"title":"FINANCIAL_CREDIT_NOTE_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"FINANCIAL_CREDIT_NOTE_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"FINANCIAL_CREDITOR_SEARCH", "advancedSearch":"false", "rpc":"false"},
-		{"title":"FINANCIAL_DEBTOR_SEARCH", "advancedSearch":"false", "rpc":"false"},
+		{"title":"FINANCIAL_DEBTOR_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"FINANCIAL_EMPLOYEE_PAYROLL_BANK_ACCOUNT_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"FINANCIAL_EMPLOYEE_PAYROLL_BANK_ACCOUNT_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"FINANCIAL_EXPENSE_CREDIT_NOTE_MANAGE", "advancedSearch":"false", "rpc":"true"},
