@@ -530,7 +530,7 @@ ns1blankspace.financial.debtors =
 						aHTML.push('</div></td></tr>');
 
 						aHTML.push('<tr><td class="ns1blankspaceDate" style="padding-bottom:15px;">' +
-										'<input id="ns1blankspaceDebtorsEndDate" class="ns1blankspaceDate ns1blankspaceWatermark" style="width:115px;" value="As at">' +
+										'<input id="ns1blankspaceDebtorsEndDate" class="ns1blankspaceDate ns1blankspaceWatermark" style="width:113px; font-size:0.725em;" value="As at">' +
 										'</td></tr>');
 								
 						aHTML.push('<tr><td><span id="ns1blankspaceFinancialDebtorsPreview" class="ns1blankspaceAction">' +
@@ -795,6 +795,7 @@ ns1blankspace.financial.debtors =
 	preview: 	{
 					init: 		function (oParam)
 								{
+									$('#ns1blankspaceFinancialDebtorsPreviewStatus').html(ns1blankspace.xhtml.loadingSmall);
 									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.debtors.preview.show);
 									oParam = ns1blankspace.util.setParam(oParam, 'template', 'statement');
 									ns1blankspace.util.initTemplate(oParam)
@@ -829,7 +830,8 @@ ns1blankspace.financial.debtors =
 										}
 										else
 										{
-											ns1blankspace.status.error('No debtors selected')
+											ns1blankspace.status.error('No debtors selected');
+											$('#ns1blankspaceFinancialDebtorsPreviewStatus').html('');
 										}	
 
 										$('#ns1blankspaceFinancialDebtors input:checked').each(function() 
@@ -945,7 +947,7 @@ ns1blankspace.financial.debtors =
 										}	
 
 										$('#ns1blankspaceDebtors_container-' + sKey).after('<tr id="ns1blankspaceDebtors_container_preview-' + sKey + '">' +
-														'<td colspan=5><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
+														'<td colspan=8><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
 									}
 								}			
 				},
