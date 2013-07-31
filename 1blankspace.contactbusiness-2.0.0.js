@@ -127,7 +127,7 @@ ns1blankspace.contactBusiness =
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -170,7 +170,6 @@ ns1blankspace.contactBusiness =
 									}
 									else
 									{
-									
 										if (sSearchText == undefined)
 										{
 											sSearchText = $('#ns1blankspaceViewControlSearch').val();
@@ -187,7 +186,6 @@ ns1blankspace.contactBusiness =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position({xhtmlElementID: sElementId});
 											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
@@ -202,6 +200,8 @@ ns1blankspace.contactBusiness =
 											{	
 												oSearch.addFilter('quicksearch', 'TEXT_IS_LIKE', sSearchText);
 											}	
+
+											ns1blankspace.search.advanced.addFilters(oSearch);
 											
 											oSearch.getResults(function(data) {ns1blankspace.contactBusiness.search.process(oParam, data)});
 										}
@@ -211,7 +211,6 @@ ns1blankspace.contactBusiness =
 	
 					process: 	function (oParam, oResponse)
 								{
-
 									var iColumn = 0;
 									var aHTML = [];
 									var	iMaximumColumns = 1;
@@ -219,7 +218,7 @@ ns1blankspace.contactBusiness =
 									if (oResponse.data.rows.length == 0)
 									{
 										ns1blankspace.search.stop();
-										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
 									}
 									else
 									{	
@@ -252,11 +251,12 @@ ns1blankspace.contactBusiness =
 								    	
 										aHTML.push('</table>');
 										
-										$(ns1blankspace.xhtml.container).html(
+										$(ns1blankspace.xhtml.searchContainer).html(
 											ns1blankspace.render.init(
 											{
 												html: aHTML.join(''),
-												more: (oResponse.morerows == "true")
+												more: (oResponse.morerows == "true"),
+												header: false
 											}) 
 										);		
 										
@@ -266,8 +266,8 @@ ns1blankspace.contactBusiness =
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.contactBusiness.search.send(event.target.id, {source: 1});
 										});
 										
@@ -404,8 +404,8 @@ ns1blankspace.contactBusiness =
 
 	show: 		function (oParam, oResponse)
 				{
+					ns1blankspace.app.clean();
 
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					ns1blankspace.contactBusiness.layout();
 					
 					var aHTML = [];

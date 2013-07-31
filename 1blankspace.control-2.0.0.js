@@ -302,19 +302,25 @@ ns1blankspace.views =
 		show: true,
 		group: 1,
 		type: 1,
-		xsearch:
+		search:
 		{
 			filters:
 			[
 				{
-					caption: "Suburb",
-					name: "streetsuburb",
+					caption: "Email",
+					name: "email",
 					type: 'Text',
-					comparison: 'IS_LIKE',
+					comparison: 'TEXT_IS_LIKE',
+					fixed: false
+				},
+				{
+					caption: "Mobile",
+					name: "mobile",
+					type: 'Text',
+					comparison: 'TEXT_IS_LIKE',
 					fixed: false
 				}
 			],
-			caption: 'Enter name',
 			advanced: true	
 		}
 	},
@@ -324,7 +330,11 @@ ns1blankspace.views =
 		endpoint: "CONTACT_BUSINESS",
 		show: true,
 		group: 1,
-		type: 1
+		type: 1,
+		search:
+		{
+			advanced: true
+		}
 	},
 	{
 		title: "Opportunities",
@@ -332,7 +342,11 @@ ns1blankspace.views =
 		endpoint: "OPPORTUNITY",
 		show: true,
 		group: 1,
-		type: 1
+		type: 1,
+		search:
+		{
+			advanced: true
+		}
 	},
 	{
 		title: "Email",
@@ -406,7 +420,11 @@ ns1blankspace.views =
 		endpoint: "PRODUCT",
 		show: true,
 		group: 4,
-		type: 1
+		type: 1,
+		search:
+		{
+			advanced: true
+		}
 	},
 	{
 		title: "Orders",
@@ -440,7 +458,21 @@ ns1blankspace.views =
 		endpoint: "FINANCIAL_INVOICE",
 		show: true,
 		group: 5,
-		type: 1
+		type: 1,
+		search:
+		{
+			advanced: true,
+			filters:
+			[
+				{
+					caption: "Amount",
+					name: "amount",
+					type: 'Text',
+					comparison: 'EQUAL_TO',
+					fixed: false
+				}
+			],
+		}
 	},
 	{
 		title: "Expenses",

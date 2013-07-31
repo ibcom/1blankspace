@@ -244,7 +244,7 @@ ns1blankspace.order =
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -262,7 +262,6 @@ ns1blankspace.order =
 									
 									if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
 									{
-									
 										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
 										
 										ns1blankspace.objectContext = sSearchContext;
@@ -305,8 +304,10 @@ ns1blankspace.order =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PRODUCT_ORDER_SEARCH';
 											oSearch.addField('reference,orderbybusinesstext,orderbypersontext');
-											oSearch.rf = 'json';
-											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);		
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+
+											ns1blankspace.search.advanced.addFilters(oSearch);
+
 											oSearch.getResults(function(data) {ns1blankspace.order.search.process(oParam, data)});
 										}
 									};	
@@ -318,9 +319,11 @@ ns1blankspace.order =
 									var	iMaximumColumns = 1;
 									var aHTML = [];
 
+									ns1blankspace.search.stop();
+
 									if (oResponse.data.rows.length == 0)
 									{
-										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
 									}
 									else
 									{
@@ -363,18 +366,30 @@ ns1blankspace.order =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.searchContainer).html(
+											ns1blankspace.render.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true"),
+												header: false
+											}) 
+										);	
 
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.order.search.send(event.target.id, {source: 1});
 										});
-									}
 
-									ns1blankspace.search.stop();		
+										ns1blankspace.render.bind(
+										{
+											columns: 'reference',
+											more: oResponse.moreid,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.order.search.send
+										});   
+									}			
 								}
 				},
 
@@ -488,7 +503,7 @@ ns1blankspace.order =
 
 	show:		function (oParam, oResponse)
 				{
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.app.clean();
 					ns1blankspace.order.layout();
 					
 					var aHTML = [];

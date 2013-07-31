@@ -161,7 +161,7 @@ search: 		{
 								{						
 									var aSearch = sXHTMLElementID.split('-');
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -211,13 +211,15 @@ search: 		{
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position({xhtmlElementID: sElementId});
 											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'NEWS_SEARCH';
 											oSearch.addField('subject,startdate');
 											oSearch.addFilter('subject', 'TEXT_LIKE', sSearchText);
+
+											ns1blankspace.search.advanced.addFilters(oSearch);
+
 											oSearch.sort('subject', 'desc');
 											oSearch.getResults(function(data) {ns1blankspace.news.search.process(oParam, data)});
 										}
@@ -226,15 +228,15 @@ search: 		{
 
 				process:		function (oParam, oResponse)
 								{
-
 									var iColumn = 0;
 									var aHTML = [];
 									var	iMaximumColumns = 1;
 										
+									ns1blankspace.search.stop();
+										
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspace.search.stop();
-										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
 									}
 									else
 									{	
@@ -263,22 +265,19 @@ search: 		{
 								    	
 										aHTML.push('</table>');
 										
-										$(ns1blankspace.xhtml.container).html(
+										$(ns1blankspace.xhtml.searchContainer).html(
 											ns1blankspace.render.init(
 											{
 												html: aHTML.join(''),
-												more: (oResponse.morerows == "true")
+												more: (oResponse.morerows == "true"),
+												header: false
 											}) 
 										);		
-										
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-										
-										ns1blankspace.search.stop();
-										
+																	
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.news.search(event.target.id, {source: 1});
 										});
 										
@@ -290,7 +289,6 @@ search: 		{
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
 											functionSearch: ns1blankspace.news.search.send
 										});   
-										
 									}	
 								}
 				},
@@ -382,7 +380,7 @@ search: 		{
 
 	show: 		function (oParam, oResponse)
 				{
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.app.clean();
 					ns1blankspace.news.layout();
 					
 					var aHTML = [];

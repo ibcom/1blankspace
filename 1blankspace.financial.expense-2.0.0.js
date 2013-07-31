@@ -161,7 +161,7 @@ ns1blankspace.financial.expense =
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -217,12 +217,16 @@ ns1blankspace.financial.expense =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 											oSearch.addField('reference,accrueddate,amount,contactbusinesspaidtotext,expense.contactpersonpaidtotext');
-											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 											
+											oSearch.addBracket('(');
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('expense.contactbusinesspaidto.tradename', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('expense.contactpersonpaidto.surname', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addBracket(')');
+
+											ns1blankspace.search.advanced.addFilters(oSearch);
 											
 											oSearch.getResults(function(data) {ns1blankspace.financial.expense.search.process(oParam, data)});	
 										}
@@ -240,7 +244,7 @@ ns1blankspace.financial.expense =
 										
 									if (oResponse.data.rows.length == 0)
 									{
-										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
 									}
 									else
 									{		
@@ -283,15 +287,29 @@ ns1blankspace.financial.expense =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.searchContainer).html(
+											ns1blankspace.render.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true"),
+												header: false
+											}) 
+										);
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.financial.expense.search.send(event.target.id, {source: 1});
 										});
+
+										ns1blankspace.render.bind(
+										{
+											columns: 'reference',
+											more: oResponse.moreid,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.financial.expense.search.send
+										});  
 									}		
 								}
 				},				
@@ -412,7 +430,7 @@ ns1blankspace.financial.expense =
 
 	show:		function (oParam, oResponse)
 				{
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.app.clean();
 					ns1blankspace.financial.expense.layout();
 					
 					var aHTML = [];

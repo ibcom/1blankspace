@@ -236,6 +236,7 @@ ns1blankspace.app =
 						ns1blankspace.xhtml.home = '';
 						ns1blankspace.xhtml.divID = '';
 						ns1blankspace.xhtml.container = '#ns1blankspaceMultiUseContainer';
+						ns1blankspace.xhtml.dropDownContainer = '#ns1blankspaceMultiUseDialog';
 						ns1blankspace.xhtml.searchContainer = '#ns1blankspaceViewControlSearchResultsContainer';
 
 						ns1blankspace.user.commonName = '';
@@ -501,7 +502,7 @@ ns1blankspace.app =
 						$('input.ns1blankspaceText').live('focus', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
-							$(ns1blankspace.xhtml.container).hide();
+							if (!$(this).attr('data-nohide') == 'true') {$(ns1blankspace.xhtml.container).hide()};
 						});
 
 						$('input.ns1blankspaceText').live('keyup', function() 
@@ -971,8 +972,11 @@ ns1blankspace.app =
 				},		
 
 	reset:		function ()
-				{				
-					$(ns1blankspace.xhtml.container).hide(500);
+				{	
+					$(ns1blankspace.xhtml.container).html('');			
+					$(ns1blankspace.xhtml.container).hide();
+					$(ns1blankspace.xhtml.dropDownContainer).html('');
+					$(ns1blankspace.xhtml.dropDownContainer).hide();
 					$('#ns1blankspaceViewControlSearch').unbind('keyup');
 					$('#ns1blankspaceViewControlSearch').unbind('click');
 					$('#ns1blankspaceViewControlSearch').unbind('click');
@@ -1000,6 +1004,12 @@ ns1blankspace.app =
 					ns1blankspace.viewName = undefined;
 					ns1blankspace.viewOptionsBind = undefined;
 				},
+
+	clean:		function()
+				{	
+					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions);
+				},			
 
 	refresh: 	function (oParam)
 				{
@@ -1095,7 +1105,7 @@ ns1blankspace.app =
 							
 							$('#ns1blankspaceViewControlSearch').focusin(function(event)
 							{
-								ns1blankspace.search.advanced();
+								ns1blankspace.search.advanced.show();
 							});
 							
 							$("#ns1blankspaceViewControlSearch").click(function()
@@ -2369,6 +2379,7 @@ ns1blankspace.container =
 					var iLeftOffset = 0;
 					var iTopOffset = 7;
 					var bSetWidth = false;
+					var sXHTMLElementContainerID = ns1blankspace.xhtml.container;
 					
 					if (oParam != undefined)
 					{
@@ -2378,23 +2389,24 @@ ns1blankspace.container =
 						if (oParam.offsetLeft != undefined) {iLeftOffset = oParam.offsetLeft}
 						if (oParam.offsetTop != undefined) {iTopOffset = oParam.offsetTop}
 						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
+						if (oParam.xhtmlElementContainerID != undefined) {sXHTMLElementContainerID = '#' + oParam.xhtmlElementContainerID}
 					}
 					
 					var oElement = $('#' + sXHTMLElementID)
 					
 					if (oElement.length > 0)
 					{	
-						$(ns1blankspace.xhtml.container).html('')
+						$(sXHTMLElementContainerID).html('')
 							.show()
 							.offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
 
 						if (bSetWidth)
 						{
-							$(ns1blankspace.xhtml.container).css('width', oElement.width());
+							$(sXHTMLElementContainerID).css('width', oElement.width());
 						}
 						else
 						{
-							$(ns1blankspace.xhtml.container).css('width', '');
+							$(sXHTMLElementContainerID).css('width', '');
 						}
 					}	
 				},
@@ -2430,6 +2442,8 @@ ns1blankspace.container =
 
 ns1blankspace.search =
 {
+	data: 		{},
+
 	cache: 		{
 					exists: 	function (oParam)
 								{
@@ -2923,43 +2937,187 @@ ns1blankspace.search =
 					$('#' + sElementID).html('');
 				},
 
-	advanced: 	function ()
-				{
-					var sElementID = 'ns1blankspaceViewControlSearch';
-					ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: 10});
-					$(ns1blankspace.xhtml.container).show();
-					
-					$(ns1blankspace.xhtml.container).html(
-						'<div id="ns1blankspaceViewControlSearchFilterContainer"></div>' +
-						'<div id="ns1blankspaceViewControlSearchResultsContainer"></div>');
+	advanced: 	{
+					show:		function ()
+								{
+									$('#ns1blankspaceMultiUseDialog').show();
+										
+									if ($('#ns1blankspaceViewControlSearchHeaderContainer').length == 0)
+									{		
+										var sElementID = 'ns1blankspaceViewControlSearch';
+										ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: 10, xhtmlElementContainerID: 'ns1blankspaceMultiUseDialog'});
 
-					var oView = $.grep(ns1blankspace.views, function (a) {return a.title == ns1blankspace.viewName;})[0];
+										$('#ns1blankspaceMultiUseDialog').html(
+											'<div id="ns1blankspaceViewControlSearchHeaderContainer"></div>' +
+											'<div id="ns1blankspaceViewControlSearchFilterContainer" style="display:none; width:250px;"></div>' +
+											'<div id="ns1blankspaceViewControlSearchResultsContainer" style="margin-top:4px;"></div>');
 
-					if (oView !== undefined)
-					{	
-						if (oView.search !== undefined)
-						{	
-							var aHTML = []
+										var oView = $.grep(ns1blankspace.views, function (a) {return a.title == ns1blankspace.viewName;})[0];
 
-							aHTML.push('<table class="ns1blankspaceViewControlSearchFilterContainer">');
+										var sCaption;
+										var aHTMLHeader = [];
 
-							$.each(oView.search.filters, function (i, v)
-							{
-								aHTML.push('<tr><td class="ns1blankspaceCaption">' + v.caption + '</td></tr>');
-								aHTML.push('<tr><td style="padding-right:7px;"><input style="margin:0px;" class="ns1blankspace' + v.type + '"' +
-												' data-comparison="' + v.comparison + '"' +
-												' data-name="'+ v.name + '"></td></tr>');
-							});
+										aHTMLHeader.push('<table style="width:138px; background-color: #F3F3F3; opacity:0.80;">');
+										aHTMLHeader.push('<tr><td style="padding-left:1px;padding-right:3px;padding-top:0px; vertical-align:middle;">');
+										aHTMLHeader.push('<span id="ns1blankspaceViewControlSearchHeaderClose"></span>');
 
-							aHTML.push('</table>');
+										if (oView !== undefined)
+										{	
+											if (oView.search !== undefined)
+											{	
+												ns1blankspace.search.data.viewControl = oView.search;
 
-							$('#ns1blankspaceViewControlSearchFilterContainer')
-								.html(aHTML.join(''));
-						}		
-					}
+												if (oView.search.filters === undefined) {oView.search.filters = []}
+												if (oView.search.filters.length != 0)
+												{	
+													aHTMLHeader.push('<span id="ns1blankspaceViewControlSearchHeaderFilters"></span>');
+													aHTMLHeader.push('<span id="ns1blankspaceViewControlSearchHeaderSearch"></span>');
+												}
+													
+												if (oView.search.advanced)
+												{	
+													aHTMLHeader.push('<span id="ns1blankspaceViewControlSearchHeaderAdvanced"></span>');
+												}
 
-					//$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSearchAdvanced" style="padding:3px; padding-left: 4px; padding-right: 4px; color:#CCCCCC; font-size:0.625em; cursor:pointer;">advanced&nbsp;search</span>');
-					//$('#ns1blankspaceSearchAdvanced').click(function() {ns1blankspace.report.init({all: false})});
+												if (oView.search.caption)
+												{	
+													sCaption = oView.search.caption;
+												}
+
+												var aHTMLFilter = [];
+
+												aHTMLFilter.push('<table class="ns1blankspaceViewControlSearchFilterContainer" style="width:250px;">');
+
+												$.each(oView.search.filters, function (i, v)
+												{
+													if (!v.fixed)
+													{
+														aHTMLFilter.push('<tr><td class="ns1blankspaceCaption" style="font-weight:400;">' + v.caption + '</td>');
+														aHTMLFilter.push('<td style="padding-right:7px;"><input style="margin:0px;" nohide="true" id="ns1blankspaceViewControlSearchFilter_' + v.name + '"' +
+																	' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter"' +
+																	' data-comparison="' + v.comparison + '"' +
+																	(v.type == 'Select'?' data-method="' + v.method + '"':'') +
+																	' data-name="'+ v.name + '"></td></tr>');
+													}	
+												});
+
+												aHTMLFilter.push('</table>');
+
+												$('#ns1blankspaceViewControlSearchFilterContainer')
+													.html(aHTMLFilter.join(''));
+
+												$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+											}		
+										}
+
+										if (sCaption !== undefined)
+										{
+											aHTMLHeader.push('<span style="padding-left:3px; padding-top:3px;" class="ns1blankspaceSubNote">' + sCaption + '<span>');
+										}	
+
+										aHTMLHeader.push('</td></tr></table>');
+
+										$('#ns1blankspaceViewControlSearchHeaderContainer')
+											.html(aHTMLHeader.join(''));	
+
+
+										$('#ns1blankspaceViewControlSearchHeaderClose').button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-close"
+											}
+										})
+										.click(function()
+										{
+											$('#ns1blankspaceMultiUseDialog').hide();
+										})
+										.css('width', '18px')
+										.css('height', '20px');
+
+										$('#ns1blankspaceViewControlSearchHeaderAdvanced').button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-extlink"
+											}
+										})
+										.click(function()
+										{
+											ns1blankspace.report.init({all: false});
+										})
+										.css('width', '18px')
+										.css('height', '20px')
+										.css('margin-left', '1px')
+
+										$('#ns1blankspaceViewControlSearchHeaderFilters').button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-arrowthickstop-1-s"
+											}
+										})
+										.click(function()
+										{
+											$('#ns1blankspaceViewControlSearchFilterContainer').show();
+										})
+										.css('width', '18px')
+										.css('height', '20px')
+										.css('margin-left', '1px');
+
+										$('#ns1blankspaceViewControlSearchHeaderSearch').button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-search"
+											}
+										})
+										.click(function()
+										{
+											$('#ns1blankspaceViewControlSearch').keyup();
+										})
+										.css('width', '18px')
+										.css('height', '20px')
+										.css('margin-left', '1px');
+									}
+								},
+
+					setFilters:	function ()
+								{
+									$.each(ns1blankspace.search.data.viewControl.filters, function ()
+									{
+										var sXHTMLElementID = 'ns1blankspaceViewControlSearchFilter_' + this.name;
+
+										if (this.type == 'Select')
+										{	
+											this.value = $('#' + sXHTMLElementID).attr('data-id');
+										}
+										else
+										{	
+											this.value = $('#' + sXHTMLElementID).val();
+										}									
+									});
+								},
+
+					addFilters: function (oSearch)
+								{
+									if (ns1blankspace.search.data.viewControl !== undefined)
+									{
+										ns1blankspace.search.advanced.setFilters();
+
+										$.each(ns1blankspace.search.data.viewControl.filters, function()
+										{
+											if (this.value != undefined && this.value != '')
+											{	
+												oSearch.addFilter(this.name, this.comparison, this.value);
+											}	
+										})
+									}
+								}									
 				},		
 
 	multiSelect: 
@@ -4277,32 +4435,40 @@ ns1blankspace.render =
 					
 					var sHTML = '';
 					var bMore = false;
-					var sWidth = 250;
+					var sWidth = 251;
+					var bHeader = true;
 
 					if (oParam != undefined)
 					{
 						if (oParam.html != undefined) {sHTML = oParam.html}
 						if (oParam.more != undefined) {bMore = oParam.more}
 						if (oParam.width != undefined) {sWidth = oParam.width}
+						if (oParam.header != undefined) {bHeader = oParam.header}
 					}
 
-					aHTML.push('<table id="ns1blankspaceSearchHeader" class="ns1blankspaceSearchHeaderMedium" style="border-spacing:2px; width:' + sWidth + 'px;">');
-					aHTML.push('<tr>');
-					
-					if (bMore)
+					if (bMore || bHeader)
 					{
-						aHTML.push('<td style="width:5px; cursor:pointer; padding-top:5px;" class="ns1blankspaceRenderHeader ns1blankspaceRenderHeaderPage ns1blankspaceRenderHeaderPageSelected"' +
-											' id="ns1blankspaceRenderHeader-0" data-rowstart="0">1</td>');
+						aHTML.push('<table id="ns1blankspaceSearchHeader" class="ns1blankspaceSearchHeaderMedium" style="border-spacing:2px; width:' + sWidth + 'px;">');
+						aHTML.push('<tr>');
+						
+						if (bMore)
+						{
+							aHTML.push('<td style="width:5px; cursor:pointer; padding-top:5px;" class="ns1blankspaceRenderHeader ns1blankspaceRenderHeaderPage ns1blankspaceRenderHeaderPageSelected"' +
+												' id="ns1blankspaceRenderHeader-0" data-rowstart="0">1</td>');
 
-						aHTML.push('<td style="cursor:pointer;" class="ns1blankspaceRenderHeaderMore' + 
-											'" id="ns1blankspaceRenderHeaderMore">more...</td>');
-					}
+							aHTML.push('<td style="cursor:pointer;" class="ns1blankspaceRenderHeaderMore' + 
+												'" id="ns1blankspaceRenderHeaderMore">more...</td>');
+						}
 
-					aHTML.push('<td class="ns1blankspaceSearchHeaderClose" style="padding-left:5px;padding-right:3px;padding-top:3px;width:20px;text-align:right;">' +
-											'<span id="ns1blankspaceSearchHeaderClose"></span></td>');
-					
-					aHTML.push('</tr>');
-					aHTML.push('</table>');
+						if (bHeader)
+						{
+							aHTML.push('<td class="ns1blankspaceSearchHeaderClose" style="padding-left:5px;padding-right:3px;padding-top:3px;width:20px;text-align:right;">' +
+												'<span id="ns1blankspaceSearchHeaderClose"></span></td>');
+						}
+
+						aHTML.push('</tr>');
+						aHTML.push('</table>');
+					}	
 						
 					aHTML.push('<div id="ns1blankspaceSearch-0" class="ns1blankspaceSearchPage">');
 								
@@ -4338,7 +4504,7 @@ ns1blankspace.render =
 						$(ns1blankspace.xhtml.container).html('&nbsp;');
 					})
 					.css('width', '15px')
-					.css('height', '18px')
+					.css('height', '18px');
 						
 					$('#ns1blankspaceRenderHeaderMore')
 					.click(function()

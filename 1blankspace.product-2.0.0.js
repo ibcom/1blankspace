@@ -107,7 +107,7 @@ ns1blankspace.product =
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -135,8 +135,7 @@ ns1blankspace.product =
 															'unittype,unittypetext,units,category,categorytext,currentretailprice,type,minimumstocklevel');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
-										
-										oSearch.rf = 'json';
+				
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
 										oSearch.getResults(function(data){ns1blankspace.product.show(oParam, data)});
 									}
@@ -170,10 +169,14 @@ ns1blankspace.product =
 											}
 											else
 											{	
+												oSearch.addBracket('(');
 												oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 												oSearch.addOperator('or');
 												oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
+												oSearch.addBracket(')');
 											}	
+
+											ns1blankspace.search.advanced.addFilters(oSearch);
 										
 											oSearch.getResults(function(data){ns1blankspace.product.search.process(oParam, data)});
 										}
@@ -220,18 +223,31 @@ ns1blankspace.product =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.searchContainer).html(
+											ns1blankspace.render.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true"),
+												header: false
+											}) 
+										);
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.product.search.send(event.target.id, {source: 1});
 										});
+									
+										ns1blankspace.render.bind(
+										{
+											columns: 'reference-title',
+											more: oResponse.moreid,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.product.search.send
+										}); 
 									}
-
-									ns1blankspace.search.stop();			
+		
 								}
 				},				
 
@@ -339,7 +355,7 @@ ns1blankspace.product =
 
 	show:		function (oParam, oResponse)
 				{
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.app.clean();
 					ns1blankspace.product.layout();
 					
 					var aHTML = [];
@@ -348,7 +364,7 @@ ns1blankspace.product =
 					{
 						ns1blankspace.objectContextData = undefined;
 						
-						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this messaging IMAP account.</td></tr></table>');
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find this product.</td></tr></table>');
 								
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 					}

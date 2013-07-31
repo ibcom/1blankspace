@@ -131,7 +131,7 @@ ns1blankspace.action =
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementId = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -160,7 +160,6 @@ ns1blankspace.action =
 															'completed,completedtime,contactbusiness,contactbusinesstext,contactperson,' +
 															'contactpersontext,date,description,duedate,duedatetime,object,objectcontext,' +
 															'objecttext,priority,private,prioritytext,status,statustext,subject,text,totaltimehrs,totaltimemin');
-										oSearch.rf = 'json';
 										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);	
 										oSearch.getResults(function(data) {ns1blankspace.action.show(oParam, data)});
 									}
@@ -188,11 +187,15 @@ ns1blankspace.action =
 											oSearch.method = 'ACTION_SEARCH';
 											oSearch.addField('subject,date,contactbusinesstext,contactpersontext');
 											
+											oSearch.addBracket('(');
 											oSearch.addFilter('subject', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('action.contactperson.surname', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('action.contactperson.firstname', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addBracket(')');
+
+											ns1blankspace.search.advanced.addFilters(oSearch);
 
 											oSearch.sort('subject', 'asc');
 
@@ -257,15 +260,29 @@ ns1blankspace.action =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.searchContainer).html(
+											ns1blankspace.render.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true"),
+												header: false
+											}) 
+										);
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.action.search.send(event.target.id, {source: 1});
 										});
+
+										ns1blankspace.render.bind(
+										{
+											columns: 'subject',
+											more: oResponse.moreid,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.project.search.send
+										}); 
 									}			
 								}
 				},				

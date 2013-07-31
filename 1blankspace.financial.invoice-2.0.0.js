@@ -188,7 +188,7 @@ ns1blankspace.financial.invoice =
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 2;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -248,12 +248,16 @@ ns1blankspace.financial.invoice =
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 											oSearch.addField('contactbusinesssenttotext,contactbusinesssentto,contactpersonsenttotext,contactpersonsentto,' +
 																'reference,purchaseorder,sentdate,description,amount');
-											oSearch.rf = 'json';
+											
+											oSearch.addBracket('(');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('invoice.contactbusinesssentto.tradename', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('invoice.contactpersonsentto.surname', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addBracket(')');
+
+											ns1blankspace.search.advanced.addFilters(oSearch);
 											
 											oSearch.sort('reference', 'desc');
 
@@ -273,7 +277,7 @@ ns1blankspace.financial.invoice =
 										
 									if (oResponse.data.rows.length == 0)
 									{
-										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
 									}
 									else
 									{		
@@ -326,23 +330,20 @@ ns1blankspace.financial.invoice =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(
+										$(ns1blankspace.xhtml.searchContainer).html(
 											ns1blankspace.render.init(
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
-												width: 400
+												width: 400,
+												header: false
 											}) 
 										);		
 										
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-										
-										ns1blankspace.search.stop();
-										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.financial.invoice.search.send(event.target.id, {source: 1});
 										});
 										

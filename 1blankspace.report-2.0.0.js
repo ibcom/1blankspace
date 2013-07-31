@@ -369,7 +369,7 @@ ns1blankspace.report =
 
 					if (!bAll)
 					{
-						var sMethod = ns1blankspace.objectMethod = 'CONTACT_PERSON';
+						var sMethod = ns1blankspace.objectMethod;;
 						var sParentNamespace = ns1blankspace.objectParentName;
 						var sNamespace = ns1blankspace.objectName;
 
