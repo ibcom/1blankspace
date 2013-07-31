@@ -27,7 +27,7 @@ ns1blankspace.setup.user =
 									
 						aHTML.push('<table class="ns1blankspaceMain">');
 						aHTML.push('<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
 										'</tr>');
@@ -317,7 +317,7 @@ ns1blankspace.setup.user =
 					$('#ns1blankspaceControlNetwork').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainNetwork'});
-						ns1blankspace.setup.user.network();
+						ns1blankspace.setup.user.network.show();
 					});
 				},
 
@@ -851,62 +851,110 @@ ns1blankspace.setup.user =
 				},
 
 
-	network: 	function (oResponse)
-				{	
-					if (oResponse == undefined)
-					{	
-						$.ajax(
-						{
-							type: 'POST',
-							url: ns1blankspace.util.endpointURI('NETWORK_USER_SEARCH'),
-							data: 'scope=3',
-							dataType: 'json',
-							success: function(data)
-							{
-								ns1blankspace.setup.user.network(data);
-							}
-						});
-					}	
-					else
-					{	
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspaceContainer">');
-						aHTML.push('<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceNetworkColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspaceNetworkColumn2" class="ns1blankspaceColumn2"></td>' +
-										'</tr>');
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceMainNetwork').html(aHTML.join(''));
-						
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspace">');
-						
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Can switch into other spaces' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioSwitchN" name="radioSwitch" value="N"/>No<br />' +
-										'<input type="radio" id="radioSwitchY" name="radioSwitch" value="Y"/>Yes' +
-										'</td></tr>');
+	network: 	{
+					show:		function (oResponse)
+								{	
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspaceContainer">');
+									aHTML.push('<tr class="ns1blankspaceContainer">' +
+													'<td id="ns1blankspaceNetworkColumn1" class="ns1blankspaceColumn1"></td>' +
+													'<td id="ns1blankspaceNetworkColumn2" class="ns1blankspaceColumn2"></td>' +
+													'</tr>');
+									aHTML.push('</table>');					
+									
+									$('#ns1blankspaceMainNetwork').html(aHTML.join(''));
+									
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspace">');
+									
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'Can switch into other spaces' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceRadio">' +
+													'<input type="radio" id="radioSwitchN" name="radioSwitch" value="N"/>No<br />' +
+													'<input type="radio" id="radioSwitchY" name="radioSwitch" value="Y"/>Yes' +
+													'</td></tr>');
 
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceNetworkColumn1').html(aHTML.join(''));
-						
-						if (oResponse.data.rows.length > 0)
-						{
-							$('[name="radioSwitch"][value="Y"]').attr('checked', true);
-						}
-						else
-						{
-							$('[name="radioSwitch"][value="N"]').attr('checked', true);
-						}
-					}	
+
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'Can participate in conversations' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceRadio" id="ns1blankspaceUserConversations" data-id="">' +
+													'<input type="radio" id="radioConversationsN" name="radioConversations" value="N"/>No<br />' +
+													'<input type="radio" id="radioConversationsY" name="radioConversations" value="Y"/>Yes' +
+													'</td></tr>');
+
+									aHTML.push('</table>');					
+									
+									$('#ns1blankspaceNetworkColumn1').html(aHTML.join(''));
+
+									ns1blankspace.setup.user.network.spaces();
+									ns1blankspace.setup.user.network.conversations();
+								},	
+
+					spaces:		function (oResponse)
+								{	
+									if (oResponse == undefined)
+									{	
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('NETWORK_USER_SEARCH'),
+											data: 'scope=3',
+											dataType: 'json',
+											success: function(data)
+											{
+												ns1blankspace.setup.user.network.spaces(data);
+											}
+										});
+									}	
+									else
+									{	
+										if (oResponse.data.rows.length > 0)
+										{
+											$('[name="radioSwitch"][value="Y"]').attr('checked', true);
+											
+										}
+										else
+										{
+											$('[name="radioSwitch"][value="N"]').attr('checked', true);
+										}
+									}
+								},
+
+					conversations:
+								function (oResponse)
+								{	
+									if (oResponse == undefined)
+									{	
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
+										oSearch.addField('user');
+										oSearch.addFilter('type', 'EQUAL_TO', 4);
+										oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.rows = 1;
+										oSearch.getResults(function (data) {ns1blankspace.setup.user.network.conversations(data)});
+									}	
+									else
+									{	
+										if (oResponse.data.rows.length > 0)
+										{
+											$('[name="radioConversations"][value="Y"]').attr('checked', true);
+											$('#ns1blankspaceUserConversations').attr('data-id', oResponse.data.rows[0].id)
+										}
+										else
+										{
+											$('[name="radioConversations"][value="N"]').attr('checked', true);
+											$('#ns1blankspaceUserConversations').attr('data-id', '');
+										}
+									}
+								}										
 				},	
 
 	save: 		{
@@ -1037,7 +1085,7 @@ ns1blankspace.setup.user =
 											ns1blankspace.objectContext = data.id;	
 											if (bNew)
 											{
-												ns1blankspace.status.message('Initial password is ' + data.password);
+												ns1blankspace.status.message('Initial password is ' + data.password, {timeout: false});
 												ns1blankspace.setup.user.search.send('-' + ns1blankspace.objectContext);
 											}
 											else
@@ -1061,6 +1109,44 @@ ns1blankspace.setup.user =
 											data: 'canswitch=' + ns1blankspace.util.fs($('input[name="radioSwitch"]:checked').val()),
 											dataType: 'json'
 										});
+
+										var iID = $('#ns1blankspaceUserConversations').attr('data-id');
+										var bCan = ($('input[name="radioConversations"]:checked').val() == 'Y');
+										var oData;
+
+										if (bCan && iID != '') {}
+										else
+										{
+											if (bCan && iID == '')
+											{
+												var oData =
+												{
+													user: ns1blankspace.objectContext,
+													type: 4,
+													accountname: ns1blankspace.objectContextData.username,
+													title: ns1blankspace.objectContextData.username,
+												}
+											}
+											else if (!bCan && iID != '')
+											{
+												var oData =
+												{
+													id: iID,
+													remove: 1
+												}
+											}
+
+											if (oData !== undefined)
+											{
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('SETUP_MESSAGING_ACCOUNT_MANAGE'),
+													data: oData,
+													dataType: 'json'
+												});
+											}	
+										}
 									};	
 								}
 				},

@@ -13,6 +13,7 @@ ns1blankspace.home =
 
 	show: 		function ()
 				{	
+					ns1blankspace.object = -1;
 					ns1blankspace.objectName = 'home';
 
 					ns1blankspace.history.view(

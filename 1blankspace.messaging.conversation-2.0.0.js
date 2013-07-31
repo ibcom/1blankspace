@@ -859,7 +859,7 @@ ns1blankspace.messaging.conversation =
 										}
 										else
 										{
-											var sData = 'rf=json';
+											var sData = 'rf=json&scope=1';
 										
 											if (oSearch.firstName != undefined) 
 											{
@@ -932,11 +932,13 @@ ns1blankspace.messaging.conversation =
 												$('#ns1blankspaceParticpantsAddSelect .ns1blankspaceRowSelect').button({
 													text: false,
 													label: "Add",
-													icons: {
+													icons:
+													{
 														 primary: "ui-icon-plus"
 													}
 												})
-												.click(function() {
+												.click(function()
+												{
 													ns1blankspace.messaging.conversation.participants.select(this.id);
 												})
 												.css('width', '15px')
@@ -946,7 +948,7 @@ ns1blankspace.messaging.conversation =
 									}
 								},
 
-					select:		function (oParam, sXHTMLElementID)
+					select:		function (sXHTMLElementID)
 								{
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];

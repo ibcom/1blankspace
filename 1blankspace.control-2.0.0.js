@@ -313,7 +313,9 @@ ns1blankspace.views =
 					comparison: 'IS_LIKE',
 					fixed: false
 				}
-			]	
+			],
+			caption: 'Enter name',
+			advanced: true	
 		}
 	},
 	{
