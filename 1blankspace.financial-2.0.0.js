@@ -3677,16 +3677,19 @@ ns1blankspace.financial.item =
 		
 						$('#ns1blankspaceItemAccount').focus();
 
-						var iFinancialAccountType = (iType==1?2:1);
-						var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
-						{ 
-							return (a.type == iFinancialAccountType && a.postable == 'Y')
-						});
+						if (iID === undefined)
+						{
+							var iFinancialAccountType = (iType==1?2:1);
+							var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
+							{ 
+								return (a.type == iFinancialAccountType && a.postable == 'Y')
+							});
 
-						if (oData.length < 21)
-						{	
-							oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
-							ns1blankspace.financial.item.edit(oParam, oData);
+							if (oData.length < 21)
+							{	
+								oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
+								ns1blankspace.financial.item.edit(oParam, oData);
+							}	
 						}	
 					}
 
