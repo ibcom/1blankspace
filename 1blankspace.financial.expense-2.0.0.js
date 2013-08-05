@@ -216,7 +216,7 @@ ns1blankspace.financial.expense =
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-											oSearch.addField('reference,accrueddate,amount,contactbusinesspaidtotext,expense.contactpersonpaidtotext');
+											oSearch.addField('reference,accrueddate,amount,contactbusinesspaidtotext,contactpersonpaidtotext');
 											
 											oSearch.addBracket('(');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);

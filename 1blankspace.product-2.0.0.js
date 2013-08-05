@@ -111,7 +111,6 @@ ns1blankspace.product =
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
-									var iRows = 10;
 									
 									if (oParam != undefined)
 									{
@@ -189,9 +188,11 @@ ns1blankspace.product =
 									var	iMaximumColumns = 1;
 									var aHTML = [];
 
+									ns1blankspace.search.stop();
+
 									if (oResponse.data.rows.length == 0)
 									{
-										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
 									}
 									else
 									{	

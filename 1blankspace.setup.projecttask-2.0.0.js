@@ -146,11 +146,10 @@ ns1blankspace.setup.projectTask =
 								{	
 									var aSearch = sXHTMLElementID.split('-');
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
-									var iRows = 10;
 									var sQuickSearchType = '';
 									
 									if (oParam != undefined)
@@ -195,23 +194,17 @@ ns1blankspace.setup.projectTask =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position(sElementId);
+											ns1blankspace.search.start();
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PROJECT_TASK_SEARCH';
 											oSearch.addField('reference,description');
-											oSearch.addFilter('title', 'EQUAL_TO', sSearchText);
+											oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
+
+											ns1blankspace.search.advanced.addFilters(oSearch);
+
 											oSearch.sort('title', 'asc');
 											oSearch.getResults(function(data) {ns1blankspace.setup.projectTask.process(oParam, data)});
-
-											$.ajax(
-											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('PROJECT_TASK_SEARCH'),
-												data: 'quicksearch' + sQuickSearchType + '=' + sSearchText,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.projectTask.process(oParam, data)}
-											});
 										}
 									};	
 								},
@@ -220,12 +213,13 @@ ns1blankspace.setup.projectTask =
 								{
 									var iColumn = 0;
 									var aHTML = [];
-									var h = -1;
 									var	iMaximumColumns = 1;
+
+									ns1blankspace.search.stop();
 											
 									if (oResponse.data.rows.length == 0)
 									{
-										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
 									}
 									else
 									{
@@ -242,15 +236,29 @@ ns1blankspace.setup.projectTask =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.searchContainer).html(
+											ns1blankspace.render.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true"),
+												header: false
+											}) 
+										);
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.setup.projectTask.search.send(event.target.id, {source: 1});
 										});
+
+										ns1blankspace.render.bind(
+										{
+											columns: 'reference',
+											more: oResponse.moreid,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.setup.projectTask.search.send
+										});   
 									}		
 								}
 				},
@@ -354,7 +362,7 @@ ns1blankspace.setup.projectTask =
 
 	show:		function (oParam, oResponse)
 				{
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.app.clean();
 					ns1blankspace.setup.projectTask.layout();
 					
 					var aHTML = [];

@@ -165,7 +165,6 @@ search: 		{
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
-									var iRows = 10;
 									
 									if (oParam != undefined)
 									{
@@ -216,7 +215,7 @@ search: 		{
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'NEWS_SEARCH';
 											oSearch.addField('subject,startdate');
-											oSearch.addFilter('subject', 'TEXT_LIKE', sSearchText);
+											oSearch.addFilter('subject', 'TEXT_IS_LIKE', sSearchText);
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
@@ -278,7 +277,7 @@ search: 		{
 										{
 											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
 											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.news.search(event.target.id, {source: 1});
+											ns1blankspace.news.search.send(event.target.id, {source: 1});
 										});
 										
 										ns1blankspace.render.bind(

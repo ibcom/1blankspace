@@ -120,7 +120,6 @@ ns1blankspace.opportunity =
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
-									var iRows = 10;
 									
 									if (oParam != undefined)
 									{

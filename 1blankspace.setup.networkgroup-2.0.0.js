@@ -105,11 +105,10 @@ ns1blankspace.setup.networkGroup =
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
-									var iRows = 10;
 									
 									if (oParam != undefined)
 									{
@@ -157,6 +156,9 @@ ns1blankspace.setup.networkGroup =
 											oSearch.method = 'SETUP_NETWORK_GROUP_SEARCH';
 											oSearch.addField('title');
 											oSearch.addFilter('title', 'TEXT_IS_LIKE',  sSearchText);
+
+											ns1blankspace.search.advanced.addFilters(oSearch);
+
 											oSearch.getResults(function(data) {ns1blankspace.setup.networkGroup.search.process(data)});
 										}
 									};	
@@ -172,7 +174,7 @@ ns1blankspace.setup.networkGroup =
 										
 									if (oResponse.data.rows.length == 0)
 									{
-										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
 									}
 									else
 									{
@@ -200,15 +202,29 @@ ns1blankspace.setup.networkGroup =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										$(ns1blankspace.xhtml.searchContainer).html(
+											ns1blankspace.render.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true"),
+												header: false
+											}) 
+										);	
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.setup.networkGroup.search.send(event.target.id, {source: 1});
 										});
+
+										ns1blankspace.render.bind(
+										{
+											columns: 'title',
+											more: oResponse.moreid,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.setup.networkGroup.search.send
+										});   
 									}
 								}
 				},				
@@ -275,7 +291,7 @@ ns1blankspace.setup.networkGroup =
 
 	show:		function (oResponse)
 				{
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.app.clean();
 					ns1blankspace.setup.networkGroup.layout();
 					
 					var aHTML = [];

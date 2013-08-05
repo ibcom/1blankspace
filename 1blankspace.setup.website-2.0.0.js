@@ -120,7 +120,7 @@ ns1blankspace.setup.website =
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
@@ -169,7 +169,6 @@ ns1blankspace.setup.website =
 										
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position({xhtmlElementID: sElementID});
 											ns1blankspace.search.start();
 											
 											$.ajax(
@@ -180,23 +179,21 @@ ns1blankspace.setup.website =
 												dataType: 'json',
 												success: function(data) {ns1blankspace.setup.website.search.process(oParam, data)}
 											});
-											
 										}
 									};	
 								},
 
 					process:	function (oParam, oResponse)
 								{
-
 									var iColumn = 0;
 									var aHTML = [];
-									
 									var	iMaximumColumns = 1;
+
+									ns1blankspace.search.stop();
 									
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspace.search.stop();
-										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
 									}
 									else
 									{
@@ -224,14 +221,12 @@ ns1blankspace.setup.website =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-										ns1blankspace.search.stop();
+										$(ns1blankspace.xhtml.searchContainer).html(aHTML.join(''));
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions);
 											ns1blankspace.setup.website.search.send(event.target.id, {source: 1});
 										});
 									}			
@@ -376,7 +371,7 @@ ns1blankspace.setup.website =
 
 	show: 		function (oParam, oResponse)
 				{
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.app.clean();
 					ns1blankspace.setup.website.layout();
 					
 					var aHTML = [];

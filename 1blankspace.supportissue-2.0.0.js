@@ -174,11 +174,10 @@ ns1blankspace.supportIssue =
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
 									var sSearchContext = aSearch[1];
-									var iMinimumLength = 3;
+									var iMinimumLength = 0;
 									var iSource = ns1blankspace.data.searchSource.text;
 									var sSearchText;
 									var iMaximumColumns = 1;
-									var iRows = 10;
 
 									if (oParam != undefined)
 									{
@@ -232,24 +231,27 @@ ns1blankspace.supportIssue =
 
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
-											ns1blankspace.container.position({xhtmlElementID: sElementID});
-											ns1blankspace.search.start(sElementID);
+											ns1blankspace.search.start();
 
-											var sData = 'subject=' + sSearchText;
-
-											if (iSource == ns1blankspace.data.searchSource.text)
-											{
-												sParam += '&byme=1&status=1,2,6';
-											}
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SUPPORT_ISSUE_SEARCH';		
+											oSearch.addField('completeddate,contactbusiness,contactbusinesstext,contactperson,contactpersontext,' +
+															'description,email,lodgeddate,name,phone,processingtype,processingtypetext,reference,' +
+															'severity,severitytext,solution,status,statustext,technicalnotes,title,' +
+															'totaltime,type,typetext,user,usercontactemail,usertext');
 											
-											$.ajax(
+											if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
 											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('SUPPORT_ISSUE_SEARCH'),
-												data: sData,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.supportIssue.search.show(oParam, data)}
-											});
+												oSearch.addCustomOption('showmyloggedissues', 'Y');
+											}	
+
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+
+											ns1blankspace.search.advanced.addFilters(oSearch);
+
+											oSearch.sort('reference', 'desc');
+											
+											oSearch.getResults(function(data) {ns1blankspace.supportIssue.search.show(oParam, data)});
 										}
 									};	
 								},
@@ -258,13 +260,13 @@ ns1blankspace.supportIssue =
 								{
 									var iColumn = 0;
 									var aHTML = [];
-									
 									var	iMaximumColumns = 1;
+
+									ns1blankspace.search.stop();
 
 									if (oResponse.data.rows.length == 0)
 									{
-										ns1blankspace.search.stop();
-										$(ns1blankspace.xhtml.container).hide();
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
 									}
 									else
 									{	
@@ -302,33 +304,28 @@ ns1blankspace.supportIssue =
 								    	
 										aHTML.push('</table>');
 
-										$(ns1blankspace.xhtml.container).html(
-											ns1blankspace.pagination(
+										$(ns1blankspace.xhtml.searchContainer).html(
+											ns1blankspace.render.init(
 											{
 												html: aHTML.join(''),
-												more: (oResponse.morerows == "true")
-											})
-										);		
-
-										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-
-										ns1blankspace.search.stop();
+												more: (oResponse.morerows == "true"),
+												header: false
+											}) 
+										);			
 
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
-											$(ns1blankspace.xhtml.container).html('&nbsp;');
-											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.supportIssue.search.send(event.target.id, {source: 1});
 										});
 
-										ns1blankspace.pagination.bind(
+										ns1blankspace.render.bind(
 										{
-											columns: 'firstname-surname',
-											more: $(oRoot).attr('moreid'),
-											rows: 15,
-											startRow: parseInt($(oRoot).attr('startrow')) + parseInt($(oRoot).attr('rows')),
-											functionSearch: ns1blankspace.supportIssues.search.show,
-											functionClass: ns1blankspace.supportIssues.search.class
+											columns: 'reference',
+											more: oResponse.moreid,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.supportIssue.search.send
 										});   
 									}	
 								},
@@ -408,7 +405,7 @@ ns1blankspace.supportIssue =
 
 	show:		function (oParam, oResponse)
 				{
-					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+					ns1blankspace.app.clean();
 					ns1blankspace.supportIssue.layout();
 					
 					var aHTML = [];
