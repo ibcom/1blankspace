@@ -240,7 +240,7 @@ ns1blankspace.messaging.imap =
 
 							if (oResponse.data.rows.length != 0)
 							{
-								aHTML.push('<table style="padding-top:0px; padding-bottom:5px;" id="ns1blankspaceMessagingIMAPAccounts" class="ns1blankspaceControl">');
+								aHTML.push('<table style="padding-top:0px; padding-bottom:5px; border-left-width:10px; border-left-style:solid; border-left-color:transparent;" id="ns1blankspaceMessagingIMAPAccounts" class="ns1blankspaceControl">');
 								
 								$.each(oResponse.data.rows, function(index)
 								{
@@ -328,7 +328,9 @@ ns1blankspace.messaging.imap =
 								else
 								{	
 									ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
-									
+									$('.ns1blankspaceMarker').removeClass('ns1blankspaceMarker');
+									$(this).addClass('ns1blankspaceMarker');
+
 									if (ns1blankspace.messaging.imap.account != aID[1])
 									{
 										ns1blankspace.messaging.imap.data.fromEmail = $(this).attr('title');
@@ -631,7 +633,7 @@ ns1blankspace.messaging.imap =
 										
 									$('#' + sXHTMLContainerID + ' span.ns1blankspaceRowSave').button({
 										text: false,
-										label: "Save",
+										label: "Save, Reply All, Forward",
 										icons:
 										{
 											 primary: "ui-icon-triangle-1-s"
@@ -1176,6 +1178,8 @@ ns1blankspace.messaging.imap =
 					$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 
 					aHTML.push('<table class="ns1blankspaceControl" style="padding-top:5px; margin-top:13px; border-top-style:solid; border-top-width: 1px; border-top-color:#D0D0D0;">');
+
+					var bSelect = !(bReply || bReplyAll || bForward)
 					
 					if (bReply || bReplyAll || bForward) 
 					{
@@ -1192,22 +1196,29 @@ ns1blankspace.messaging.imap =
 									'</tr>');
 					}
 					
-					
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlReply" class="ns1blankspaceControl' + (bReply?' ns1blankspaceHighlight':'') + '">' +
+					if (bReply || bSelect)
+					{	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlReply" class="ns1blankspaceControl ns1blankspaceMessageSelect' + (bReply?' ns1blankspaceHighlight':'') + '">' +
 									'Reply</td>' +
 									'</tr>');
+					}	
 	
-					
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlReplyAll" class="ns1blankspaceControl' + (bReplyAll?' ns1blankspaceHighlight':'') + '">' +
+					if (bReplyAll || bSelect)
+					{	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlReplyAll" class="ns1blankspaceControl ns1blankspaceMessageSelect' + (bReplyAll?' ns1blankspaceHighlight':'') + '">' +
 									'Reply All</td>' +
 									'</tr>');	
-					
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlForward" class="ns1blankspaceControl' + (bForward?' ns1blankspaceHighlight':'') + '">' +
+					}
+
+					if (bForward || bSelect)
+					{	
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlForward" class="ns1blankspaceControl ns1blankspaceMessageSelect' + (bForward?' ns1blankspaceHighlightt':'') + '">' +
 									'Forward</td>' +
 									'</tr>');
+					}	
 												
 					aHTML.push('</table>');					
 								
@@ -1614,6 +1625,8 @@ ns1blankspace.messaging.imap =
 														});
 													}
 													
+													$('td.ns1blankspaceMessageSelect').not('td.ns1blankspaceHighlight').remove();
+
 													$('#ns1blankspaceMainEdit').attr('data-objectcontext', ns1blankspace.objectContext);
 
 													var aHTML = [];
@@ -1641,7 +1654,7 @@ ns1blankspace.messaging.imap =
 															oParam = {};
 														}
 
-														oParam.subject = $('#ns1blankspaceMessagingEditMessageSubject').val();
+														oParam.subject = $('#ns1blankspaceMessagingEditMessageSubject').not('.ns1blankspaceWatermark').val();
 														oParam.message = tinyMCE.get('ns1blankspaceMessagingEditMessageText' + ns1blankspace.counter.editor).getContent();
 														oParam.contactPersonTo = $('#ns1blankspaceEditMessageTo').attr('data-id');
 														oParam.to = $('#ns1blankspaceEditMessageTo').val();
@@ -1870,7 +1883,12 @@ ns1blankspace.messaging.imap =
 															
 															$('#ns1blankspaceMessagingEditMessageSubject').removeClass('ns1blankspaceWatermark');
 															
-															if (!bForward)
+															if (bForward)
+															{
+																ns1blankspace.objectContextData.to = '';
+																$('#ns1blankspaceEditMessageTo').val('');
+															}
+															else	
 															{
 																if (ns1blankspace.objectContextData.from != '')
 																{
@@ -1878,20 +1896,24 @@ ns1blankspace.messaging.imap =
 																}
 													
 																if (ns1blankspace.objectContextData.to != '' && bReplyAll)
-																{			
+																{		
+																	var aToDetails;
+																	var sToEmail;	
+
 																	sTo = ns1blankspace.objectContextData.to;
-																	var aTo = sTo.split('|');
+																	var aTo = sTo.split('#');
 																	sTo = '';
 																
 																	$.each(aTo, function(i)
 																	{
-																		if (i % 2 !== 0) 
-																		{
-																			if (this != ns1blankspace.user.email && this != sFrom)
-																			{	
-																				sTo += this + '; ';
-																			}
-																		}		
+																		aToDetails = (this).split('|');
+																		sToEmail = aToDetails[1];
+																		
+																		if (sToEmail != ns1blankspace.user.email && sToEmail != sFrom)
+																		{	
+																			sTo += sToEmail + '; ';
+																		}
+																				
 																	});	
 																}
 													
@@ -2273,30 +2295,37 @@ ns1blankspace.messaging.imap =
 										//sData += '&objectcontext=' + oParam.objectContext;
 										//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
 
-										ns1blankspace.messaging.imap.data.lastEmail = oData;
-										$('#ns1blankspaceViewControlAction').button({disabled: true});
-										ns1blankspace.status.working('Sending...');
-										ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
-
-										$.ajax(
+										if (oData.to == '')
 										{
-											type: 'POST',
-											url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
-											data: oData,
-											dataType: 'text',
-											success: function(data) 
+											ns1blankspace.status.error('No one to send to');
+										}	
+										else
+										{	
+											ns1blankspace.messaging.imap.data.lastEmail = oData;
+											$('#ns1blankspaceViewControlAction').button({disabled: true});
+											ns1blankspace.status.working('Sending...');
+											ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
+
+											$.ajax(
 											{
-												ns1blankspace.status.message('Email has been sent');
-												$('#ns1blankspaceMessagingMessageControlContainer').html('');
-												ns1blankspace.messaging.imap.data.lastEmail = undefined;
-												$('#ns1blankspaceMainEdit').html('');
-												
-												if (fFunctionPostSend != undefined)
+												type: 'POST',
+												url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
+												data: oData,
+												dataType: 'text',
+												success: function(data) 
 												{
-													fFunctionPostSend()
+													ns1blankspace.status.message('Email has been sent');
+													$('#ns1blankspaceMessagingMessageControlContainer').html('');
+													ns1blankspace.messaging.imap.data.lastEmail = undefined;
+													$('#ns1blankspaceMainEdit').html('');
+													
+													if (fFunctionPostSend != undefined)
+													{
+														fFunctionPostSend()
+													}
 												}
-											}
-										});
+											});
+										}	
 									}	
 								}
 				},
