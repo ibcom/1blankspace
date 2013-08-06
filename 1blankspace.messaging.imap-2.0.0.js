@@ -270,7 +270,7 @@ ns1blankspace.messaging.imap =
 										
 										aHTML.push('<tr><td id="ns1blankspaceMessaging-' + this.id + '" ' +
 														'class="ns1blankspaceControl"' +
-														' title="' + this.email + '">' +
+														' title="' + this.email + '"><div style="float:left; position:relative; top:3px;"></div>' +
 														sDescription +
 														'<br /><span class="ns1blankspaceSubNote">' + aDescription[1] + '</span>' + 
 														'</td></tr>');
@@ -328,8 +328,8 @@ ns1blankspace.messaging.imap =
 								else
 								{	
 									ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
-									$('.ns1blankspaceMarker').removeClass('ns1blankspaceMarker');
-									$(this).addClass('ns1blankspaceMarker');
+									$('.ns1blankspaceInboxMarker').removeClass('ns1blankspaceInboxMarker ui-icon ui-icon-mail-closed');
+									$(this).children('div').addClass('ns1blankspaceInboxMarker ui-icon ui-icon-mail-closed');
 
 									if (ns1blankspace.messaging.imap.account != aID[1])
 									{
