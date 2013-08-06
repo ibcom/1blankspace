@@ -1215,7 +1215,7 @@ ns1blankspace.messaging.imap =
 					if (bForward || bSelect)
 					{	
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlForward" class="ns1blankspaceControl ns1blankspaceMessageSelect' + (bForward?' ns1blankspaceHighlightt':'') + '">' +
+									'<td id="ns1blankspaceControlForward" class="ns1blankspaceControl ns1blankspaceMessageSelect' + (bForward?' ns1blankspaceHighlight':'') + '">' +
 									'Forward</td>' +
 									'</tr>');
 					}	
@@ -1236,18 +1236,31 @@ ns1blankspace.messaging.imap =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
 
-						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != ns1blankspace.objectContext)
+						var bShow = true;
+
+						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != undefined)
+						{
+							bShow = confirm('Currently editing a message.  Replace with this message instead?')
+						}	
+
+						if (bShow)
 						{	
 							ns1blankspace.messaging.imap.message.edit.show({reply: true});
-						}
-							
+						}	
 					});
 					
 					$('#ns1blankspaceControlReplyAll').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
 
-						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != ns1blankspace.objectContext)
+						var bShow = true;
+
+						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != undefined)
+						{
+							bShow = confirm('Currently editing a message.  Replace with this message instead?')
+						}	
+
+						if (bShow)
 						{	
 							ns1blankspace.messaging.imap.message.edit.show({replyAll: true});
 						}
@@ -1257,7 +1270,14 @@ ns1blankspace.messaging.imap =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
 
-						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != ns1blankspace.objectContext)
+						var bShow = true;
+
+						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != undefined)
+						{
+							bShow = confirm('Currently editing a message.  Replace with this message instead?')
+						}	
+
+						if (bShow)
 						{	
 							ns1blankspace.messaging.imap.message.edit.show({forward: true});
 						}
@@ -2318,6 +2338,7 @@ ns1blankspace.messaging.imap =
 													$('#ns1blankspaceMessagingMessageControlContainer').html('');
 													ns1blankspace.messaging.imap.data.lastEmail = undefined;
 													$('#ns1blankspaceMainEdit').html('');
+													$('#ns1blankspaceMainEdit').attr('data-objectcontext', undefined); 
 													
 													if (fFunctionPostSend != undefined)
 													{
