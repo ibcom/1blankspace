@@ -1240,7 +1240,7 @@ ns1blankspace.messaging.imap =
 
 						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != undefined)
 						{
-							bShow = confirm('Currently editing a message.  Replace with this message instead?')
+							bShow = confirm('You are currently editing a message.  Do you want to replace it with this message instead?')
 						}	
 
 						if (bShow)
@@ -1257,7 +1257,7 @@ ns1blankspace.messaging.imap =
 
 						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != undefined)
 						{
-							bShow = confirm('Currently editing a message.  Replace with this message instead?')
+							bShow = confirm('You are currently editing a message.  Do you want to replace it with this message instead?')
 						}	
 
 						if (bShow)
@@ -1274,7 +1274,7 @@ ns1blankspace.messaging.imap =
 
 						if ($('#ns1blankspaceMainEdit').attr('data-objectcontext') != undefined)
 						{
-							bShow = confirm('Currently editing a message.  Replace with this message instead?')
+							bShow = confirm('You are currently editing a message.  Do you want to replace it with this message instead?')
 						}	
 
 						if (bShow)
