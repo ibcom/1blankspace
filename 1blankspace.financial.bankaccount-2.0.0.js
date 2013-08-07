@@ -3544,7 +3544,7 @@ ns1blankspace.financial.bankAccount =
 															}
 															else
 															{	
-																oParam.xhtmlElementID = '-' + (oResponse.id);
+																oParam.xhtmlElementID = '-' + (oParam.objectContext);
 																oParam.editAction = 5;
 																ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 															}	
