@@ -519,8 +519,13 @@ ns1blankspace.contactBusiness =
 
 							if (ns1blankspace.objectContextData.webaddress != '')
 							{	
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-bottom:10px;">' +
-											'<a href="' + ns1blankspace.objectContextData.webaddress + '" target="_blank">' + 
+								if ((ns1blankspace.objectContextData.webaddress).indexOf('http') == -1)
+								{
+									ns1blankspace.objectContextData.webaddressURI = 'http://' + ns1blankspace.objectContextData.webaddress;
+								}
+
+								aHTML.push('<tr><td class="ns1blankspaceSummary" style="padding-bottom:10px;">' +
+											'<a href="' + ns1blankspace.objectContextData.webaddressURI + '" target="_blank">' + 
 											ns1blankspace.objectContextData.webaddress + '</a>' +
 											'</td></tr>');	
 							}
