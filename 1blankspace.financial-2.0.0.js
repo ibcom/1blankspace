@@ -4020,7 +4020,7 @@ ns1blankspace.financial.save =
 						{
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
-							data: sData,
+							data: oData,
 							dataType: 'json',
 							success: function(oResponse)
 							{
