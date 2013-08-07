@@ -2756,9 +2756,9 @@ ns1blankspace.financial.bankAccount =
 													{
 														var aHTML = [];
 
-														aHTML.push('<div class="ns1blankspaceHeaderCaption" style="width: 100%;margin-right:10px;margin-bottom:3px;">');
-														aHTML.push('<span style="font-size:1.25em;">THIS SPACE</span>');
-														aHTML.push('</div>');
+														//aHTML.push('<div class="ns1blankspaceHeaderCaption" style="width: 100%;margin-right:10px;margin-bottom:3px;">');
+														//aHTML.push('<span style="font-size:1.25em;">THIS SPACE</span>');
+														//aHTML.push('</div>');
 														
 														aHTML.push('<table class="ns1blankspaceContainer">' +
 																		'<tr class="ns1blankspaceContainer">' +
@@ -2881,7 +2881,8 @@ ns1blankspace.financial.bankAccount =
 															ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 														})
 
-														$('#ns1blankspaceItemsEditClearSearch').button( {
+														$('#ns1blankspaceItemsEditClearSearch').button(
+														{
 															label: 'Clear',
 															icons: {
 																primary: "ui-icon-close"
@@ -3119,14 +3120,22 @@ ns1blankspace.financial.bankAccount =
 																{
 																	oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 																	oSearch.addField('reference,description,amount,paymentduedate,outstandingamount,contactbusinesspaidtotext,contactpersonpaidtotext');
-																	if (dSearchDate != '') {oSearch.addFilter('paymentduedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))}		
+																	if (dSearchDate != '')
+																	{
+																		oSearch.addFilter('paymentduedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))
+																		oSearch.addFilter('paymentduedate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-30).toString("dd-MMM-yyyy"))
+																	}		
 																	oSearch.sort('paymentduedate', 'asc');
 																}	
 																else
 																{
 																	oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 																	oSearch.addField('reference,description,amount,duedate,outstandingamount,contactbusinesssenttotext,contactpersonsenttotext');
-																	if (dSearchDate) {oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))}
+																	if (dSearchDate)
+																	{
+																		oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))
+																		oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-30).toString("dd-MMM-yyyy"))
+																	}
 																	oSearch.sort('duedate', 'asc');
 																}
 															
