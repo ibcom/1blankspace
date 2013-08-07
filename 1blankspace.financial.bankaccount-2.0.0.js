@@ -3506,6 +3506,8 @@ ns1blankspace.financial.bankAccount =
 															})
 															.click(function()
 															{
+																delete oParam.outstandingAmount;
+																
 																if (iType == 1 && iSource == 1) {iObject = 3}  //PAYMENT
 																if (iType == 1 && iSource == 2) {iObject = 2}  //EXPENSE
 																if (iType == 2 && iSource == 1) {iObject = 6}  //RECEIPT
