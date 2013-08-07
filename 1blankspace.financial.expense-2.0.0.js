@@ -186,7 +186,7 @@ ns1blankspace.financial.expense =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 										oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,projecttext,project,projecttext,areatext,' +
-																'area,reference,accrueddate,description,amount,tax,object,objectcontext,paymentduedate');
+																'area,reference,accrueddate,description,amount,tax,object,objectcontext,paymentduedate,payeereference');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
 										
@@ -531,6 +531,14 @@ ns1blankspace.financial.expense =
 											ns1blankspace.objectContextData.description +
 											'</td></tr>');
 						}
+
+						if (ns1blankspace.objectContextData.payeereference != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Supplier Reference</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.payeereference +
+											'</td></tr>');
+						}
 						
 						aHTML.push('</table>');		
 
@@ -648,8 +656,17 @@ ns1blankspace.financial.expense =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti" rows="10" cols="35" ></textarea>' +
-										'</td></tr>');			
+										'<textarea id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti" rows="10" cols="35" style="height:150px;"></textarea>' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Supplier Reference' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsPayeeReference" class="ns1blankspaceText" style="width:250px;">' +
+										'</td></tr>');		
 										
 						aHTML.push('</table>');					
 							
@@ -666,6 +683,7 @@ ns1blankspace.financial.expense =
 							$('#ns1blankspaceDetailsDueDate').val(ns1blankspace.objectContextData.paymentduedate);
 							$('[name="radioPaid"][value="' + ns1blankspace.objectContextData.paid + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
+							$('#ns1blankspaceDetailsPayeeReference').val(ns1blankspace.objectContextData.payeereference);
 						}
 						else
 						{
@@ -702,6 +720,7 @@ ns1blankspace.financial.expense =
 											sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 											sData += '&contactbusinesspaidto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactBusinessPaidTo').attr("data-id"));
 											sData += '&contactpersonpaidto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactPersonPaidTo').attr("data-id"));
+											sData += '&payeereference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPayeeReference').val());
 										}
 										
 										$.ajax(
