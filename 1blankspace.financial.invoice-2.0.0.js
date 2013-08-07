@@ -351,7 +351,6 @@ ns1blankspace.financial.invoice =
 										{
 											columns: 'reference-contactbusinesssenttotext-sentdate-amount',
 											more: oResponse.moreid,
-											rows: 15,
 											width: 400,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
 											functionSearch: ns1blankspace.financial.invoice.search.send

@@ -224,9 +224,13 @@ ns1blankspace.financial.expense =
 											oSearch.addFilter('expense.contactbusinesspaidto.tradename', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('expense.contactpersonpaidto.surname', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addOperator('or');
+											oSearch.addFilter('expense.contactpersonpaidto.firstname', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addBracket(')');
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
+
+											oSearch.sort('accrueddate', 'DESC');
 											
 											oSearch.getResults(function(data) {ns1blankspace.financial.expense.search.process(oParam, data)});	
 										}
@@ -248,7 +252,7 @@ ns1blankspace.financial.expense =
 									}
 									else
 									{		
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:400px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{	
@@ -262,6 +266,16 @@ ns1blankspace.financial.expense =
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'search-' + this.id + '">' +
 															this.reference +
+															'</td>');
+
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+															'search-' + this.id + '">' +
+															this.accrueddate +
+															'</td>');
+
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+															'search-' + this.id + '">' +
+															this.amount +
 															'</td>');
 
 											if (this.contactbusinesspaidtotext != '')
@@ -305,8 +319,9 @@ ns1blankspace.financial.expense =
 
 										ns1blankspace.render.bind(
 										{
-											columns: 'reference',
+											columns: 'reference-accrueddate-amount',
 											more: oResponse.moreid,
+											width: 400,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
 											functionSearch: ns1blankspace.financial.expense.search.send
 										});  
@@ -540,7 +555,7 @@ ns1blankspace.financial.expense =
 
 						aHTML.push('</table>');		
 
-						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+						//$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
 					}	
 				},
 
