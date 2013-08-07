@@ -397,7 +397,7 @@ ns1blankspace.financial.expense =
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.financial.expense.summary.show();
+						ns1blankspace.financial.expense.summary();
 					});
 
 					$('#ns1blankspaceControlDetails').click(function(event)
