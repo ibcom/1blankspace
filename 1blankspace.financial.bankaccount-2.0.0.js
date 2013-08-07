@@ -3567,9 +3567,15 @@ ns1blankspace.financial.bankAccount =
 														if (iSearchSourceID)
 														{
 															var oSearchSource = $('#ns1blankspaceReconcileItems_options_search-' + iSearchSourceID);
-															//var dDate = oSearchSource.attr('data-searchDate');  
-															//NEED TO KNOW LOCKED ENDDATE
-															var dDate = Date.today().toString("dd-MMM-yyyy");
+															var dDate = oSearchSource.attr('data-searchDate');  
+
+															var dLast = Date.parse(ns1blankspace.financial.data.settings['lockeddate' + (iType==1?'creditors':'debtors')]);
+															var dSet = Date.parse(dDate);
+
+															if (dSet.compareTo(dLast) != 1)
+															{	
+																dDate = dLast.add({days: 1});
+															}	
 															var cAmount = oSearchSource.attr('data-searchAmount');
 														}
 														else
