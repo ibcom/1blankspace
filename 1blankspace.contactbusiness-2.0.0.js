@@ -513,7 +513,7 @@ ns1blankspace.contactBusiness =
 					
 							aHTML.push('<table class="ns1blankspaceColumn2">');
 
-							aHTML.push('<tr><td id="ns1blankspaceFavourite" class="ns1blankspaceSummaryCaption">' +
+							aHTML.push('<tr><td id="ns1blankspaceFavourite" class="ns1blankspaceSummaryCaption" style="padding-bottom:15px;">' +
 										ns1blankspace.xhtml.loadingSmall + 
 										'</td></tr>');	
 
