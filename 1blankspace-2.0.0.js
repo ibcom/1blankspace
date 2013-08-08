@@ -4120,6 +4120,19 @@ ns1blankspace.search.address =
 							$('#' + sElementReplaceID).val($('#' + sXHTMLElementID).attr("data-postcode"));
 						}
 
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-countryElementID')) {
+							sElementReplaceID = $('#' + ns1blankspace.xhtml.divID).attr('data-countryElementID');
+						}
+						else {
+							sElementReplaceID = ns1blankspace.xhtml.divID.replace('Suburb', 'Country');
+						}
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-countryUpdateHTML') || $('#' + ns1blankspace.xhtml.divID).attr('data-countryUpdateHTML') == 'true') {
+							$('#' + sElementReplaceID).html('Australia');
+						}
+						else {
+							$('#' + sElementReplaceID).val('Australia');
+						}
+
 						$(ns1blankspace.xhtml.container).hide();
 					}
 					else

@@ -753,11 +753,21 @@ ns1blankspace.report =
 									sCaption = ns1blankspace.report.getCaption({name: this.name})
 									var sName = (this.name).replace(/\./g,'_')
 									
-									aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:2px;" class="ns1blankspaceRow">' +
-													sCaption +
-													'</td>' +
-													'<td colspan=2 style="color:#B8B8B8;padding:2px;"' +
-													' id="reportHeaderComparison' + sName + '" class="ns1blankspaceRow"></td></tr>');
+									if (this.group === undefined) {
+										aHTML.push('<tr><td colspan=2 style="color:#B8B8B8;padding:2px;" class="ns1blankspaceRow">' +
+														sCaption +
+														'</td>' +
+														'<td colspan=2 style="color:#B8B8B8;padding:2px;"' +
+														' id="reportHeaderComparison' + sName + '" class="ns1blankspaceRow"></td></tr>');
+									}
+									else {
+										aHTML.push('<tr><td colspan=4 style="color:#B8B8B8;padding:2px;" class="ns1blankspaceRow">' +
+														'&nbsp;' +
+														'</td>' +
+													'<tr><td colspan=4 style="color:#B8B8B8;padding:2px;" class="ns1blankspaceRow">' +
+														this.group +
+														'</td>');
+									}
 								});	
 							}
 							
@@ -766,7 +776,8 @@ ns1blankspace.report =
 														' class="ns1blankspaceReportInclude">' +
 											'</td>' +
 											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Include</td>' +
-											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Comparison</td>' +
+											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">Comparison' + 
+												'<span style="font-size:0.75em;"><br />(Hover to see options)</span></td>' +
 											'<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;"><span id="spanReportSearch" class="ns1blankspaceAction">Search</span></td></tr>');
 							
 							$.each(oResponse.data.parameters, function() 
