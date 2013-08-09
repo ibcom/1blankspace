@@ -3126,6 +3126,19 @@ ns1blankspace.financial.bankAccount =
 																		oSearch.addFilter('paymentduedate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-30).toString("dd-MMM-yyyy"))
 																	}		
 																	oSearch.sort('paymentduedate', 'asc');
+
+																	if (sSearchReference != '')
+																	{
+																		oSearch.addBracket('(');
+																		oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference);
+																		oSearch.addOperator('or');
+																		oSearch.addFilter('expense.contactbusinesspaidto.tradename', 'TEXT_IS_LIKE', sSearchReference);
+																		oSearch.addOperator('or');
+																		oSearch.addFilter('expense.contactpersonpaidto.surname', 'TEXT_IS_LIKE', sSearchReference);
+																		oSearch.addOperator('or');
+																		oSearch.addFilter('expense.contactpersonpaidto.firstname', 'TEXT_IS_LIKE', sSearchReference);
+																		oSearch.addBracket(')');
+																	}
 																}	
 																else
 																{
@@ -3137,10 +3150,22 @@ ns1blankspace.financial.bankAccount =
 																		oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-30).toString("dd-MMM-yyyy"))
 																	}
 																	oSearch.sort('duedate', 'asc');
+
+																	if (sSearchReference != '')
+																	{
+																		oSearch.addBracket('(');
+																		oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference);
+																		oSearch.addOperator('or');
+																		oSearch.addFilter('invoice.contactbusinesssentto.tradename', 'TEXT_IS_LIKE', sSearchReference);
+																		oSearch.addOperator('or');
+																		oSearch.addFilter('invoice.contactpersonsentto.surname', 'TEXT_IS_LIKE', sSearchReference);
+																		oSearch.addOperator('or');
+																		oSearch.addFilter('invoice.contactpersonsentto.firstname', 'TEXT_IS_LIKE', sSearchReference);
+																		oSearch.addBracket(')');
+																	}
 																}
 															
 																if (cSearchAmount != '') {oSearch.addFilter('outstandingamount', 'GREATER_THAN_OR_EQUAL_TO', cSearchAmount)}
-																if (sSearchReference != '') {oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference)}
 
 																oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0)
 																
@@ -3507,7 +3532,7 @@ ns1blankspace.financial.bankAccount =
 															.click(function()
 															{
 																delete oParam.outstandingAmount;
-																
+
 																if (iType == 1 && iSource == 1) {iObject = 3}  //PAYMENT
 																if (iType == 1 && iSource == 2) {iObject = 2}  //EXPENSE
 																if (iType == 2 && iSource == 1) {iObject = 6}  //RECEIPT
