@@ -2102,6 +2102,8 @@ ns1blankspace.financial.bankAccount =
 
 									if (oResponse == undefined)
 									{
+										ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled = {};
+
 										$('div.ns1blankspaceControlContext_reco_summary').html('');
 										$('#ns1blankspaceControlContext_reco_summary-' + iReconciliation).html(ns1blankspace.xhtml.loadingSmall);
 										
@@ -2681,7 +2683,7 @@ ns1blankspace.financial.bankAccount =
 																oSearch.sort('generaljournalitem.generaljournal.journaldate', 'asc');
 																oSearch.addFilter('reconciliation', 'IS_NULL');
 																oSearch.addFilter('status', 'EQUAL_TO', 2);
-																oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.financial.data.settings.financialaccountcash);
+																oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.objectContextData.financialaccount);
 																oSearch.addFilter('generaljournalitem.generaljournal.journaldate', 'LESS_THAN_OR_EQUAL_TO', dReconciliationEndDate);
 																oSearch.rows = 200;
 																oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.init(oParam, data)});
