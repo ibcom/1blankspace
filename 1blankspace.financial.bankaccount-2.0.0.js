@@ -3298,6 +3298,7 @@ ns1blankspace.financial.bankAccount =
 
 														var aXHTMLElementID = sXHTMLElementID.split('-');
 														var oData = {reconciliation: iReconciliation};
+														var bAllUsed = ns1blankspace.util.getParam(oParam, 'allused', {default: true}).value;
 
 														if (iObject === undefined)
 														{	
@@ -3333,7 +3334,7 @@ ns1blankspace.financial.bankAccount =
 																		ns1blankspace.util.remove(ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[(iObject==3?'payments':'receipts')], 'id', aXHTMLElementID[1]);
 																}	
 
-																if (iSearchSourceID !== undefined)
+																if (iSearchSourceID !== undefined && bAllUsed)
 																{	
 																	$.ajax(
 																	{
@@ -3613,46 +3614,49 @@ ns1blankspace.financial.bankAccount =
 
 														if (cOutstandingAmount !== undefined?(cAmount).parseCurrency() > (cOutstandingAmount).parseCurrency():false)
 														{
-															ns1blankspace.status.error('Bank transaction amount is to large!')
+															//ns1blankspace.status.error('Bank transaction amount is to large!');
+															oParam.allused = false;
 														}
 														else
 														{
-															if (oParam != undefined)
-															{
-																if (oParam.amount != undefined) {cAmount = oParam.amount}
-																if (oParam.date != undefined) {dDate = oParam.date}	
-															}
+															oParam.allused = true;
+														}
+
+														if (oParam != undefined)
+														{
+															if (oParam.amount != undefined) {cAmount = oParam.amount}
+															if (oParam.date != undefined) {dDate = oParam.date}	
+														}
+															
+														var sData = 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
+														sData += '&amount=' + ns1blankspace.util.fs(cAmount);
+														sData += '&receiptdate=' + ns1blankspace.util.fs(dDate);
+														sData += '&paiddate=' + ns1blankspace.util.fs(dDate);
+														sData += '&paymentmethod=3';
+														sData += '&bankaccount=' + ns1blankspace.objectContext;
 																
-															var sData = 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
-															sData += '&amount=' + ns1blankspace.util.fs(cAmount);
-															sData += '&receiptdate=' + ns1blankspace.util.fs(dDate);
-															sData += '&paiddate=' + ns1blankspace.util.fs(dDate);
-															sData += '&paymentmethod=3';
-															sData += '&bankaccount=' + ns1blankspace.objectContext;
-																	
-															$.ajax(
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI((iType==1?'FINANCIAL_AUTO_PAYMENT':'FINANCIAL_AUTO_RECEIPT')),
+															data: sData,
+															dataType: 'json',
+															success: function(data)
 															{
-																type: 'POST',
-																url: ns1blankspace.util.endpointURI((iType==1?'FINANCIAL_AUTO_PAYMENT':'FINANCIAL_AUTO_RECEIPT')),
-																data: sData,
-																dataType: 'json',
-																success: function(data)
-																{
-																	if (data.status == 'OK')
-																	{	
-																		oParam.xhtmlElementID = '-' + (iType==1?data.payment:data.receipt);
-																		oParam.objectContext = (iType==1?data.payment:data.receipt);
-																		oParam.editAction = 3;
-																		oParam.object = (iType==1?3:6)
-																		ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
-																	}
-																	else
-																	{
-																		ns1blankspace.status.error(data.error.errornotes);
-																	}	
+																if (data.status == 'OK')
+																{	
+																	oParam.xhtmlElementID = '-' + (iType==1?data.payment:data.receipt);
+																	oParam.objectContext = (iType==1?data.payment:data.receipt);
+																	oParam.editAction = 3;
+																	oParam.object = (iType==1?3:6)
+																	ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 																}
-															});
-														}	
+																else
+																{
+																	ns1blankspace.status.error(data.error.errornotes);
+																}	
+															}
+														});
 													}	
 												},
 
