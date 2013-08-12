@@ -2943,11 +2943,12 @@ ns1blankspace.financial.bankAccount =
 														if (iSource == 1) //SHOW PAYMENT/RECEIPT & JOURNALS
 														{	
 															var iTaxCategory = (iType==1?2:1);
+															var sJournalType = (iType==1?'credit':'debit');
 															var sClass = (iType == 1?'debits':'credits')
 															var sType = (iType == 1?'payments':'receipts')
 
 															var oJournals = $.grep(ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled.journals,
-																				function (a) {return a.taxcategory == iTaxCategory;});
+																				function (a) {return a[sJournalType + 'amount'] != 0;});
 
 															ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[sClass] =
 																	ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled[sType].concat(oJournals);
