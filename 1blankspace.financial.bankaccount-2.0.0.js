@@ -2120,10 +2120,26 @@ ns1blankspace.financial.bankAccount =
 									{
 										var aHTML = [];
 
+										aHTML.push('<div style="margin-top: 4px; margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
+															'- $' + (oResponse.PreviousBalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
+
+										var cReceipts = (oResponse.Receipts).parseCurrency() + (oResponse.CreditGeneralJournals).parseCurrency();
+
+										aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
+															'+ $' + (cReceipts).formatMoney(2, ".", ",")  + '</div>')	
+
+										var cPayments = (oResponse.Payments).parseCurrency() + (oResponse.DebitGeneralJournals).parseCurrency();
+
+										aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
+															'- $' + (cPayments).formatMoney(2, ".", ",")  + '</div>');
+
+										aHTML.push('<div style="margin-right:3px; margin-bottom:1px; font-size:0.875em;" class="ns1blankspaceSub">' +
+															'= $' + (oResponse.outofbalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
+
 										if (parseFloat((oResponse.outofbalance).parseCurrency()) !== 0)
 										{	
 											aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
-															'$' + (oResponse.outofbalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
+															'out of balance</div>')
 										}	
 	
 										if (iStatus == 1 & iMode == 1)
