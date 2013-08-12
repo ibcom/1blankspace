@@ -2528,7 +2528,7 @@ ns1blankspace.financial.bankAccount =
 																	'<td class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceReconcileItemsMatch" id="ns1blankspaceReconcileItems_options_search-' + this.id + '"' +
 																					' data-searchDate="' + this.posteddate + '"' +
 																					' data-searchAmount="' + Math.abs((this.amount).parseCurrency()).toFixed(2) + '"' +
-																					' data-amount="' + Math.abs((this.amount).parseCurrency()).toFixed(2)) + '"' +
+																					' data-amount="' + Math.abs((this.amount).parseCurrency()).toFixed(2) + '"' +
 																					' data-trantype="' + (this.amount<0?1:2) + '"' +
 																					' data-taxtype="' + this.taxtype + '"' +
 																					' data-financialaccount="' + this.financialaccount + '"' +
@@ -3671,7 +3671,7 @@ ns1blankspace.financial.bankAccount =
 														var aXHTMLElementID = sXHTMLElementID.split('-');
 														
 														if (cOutstandingAmount !== undefined) {cOutstandingAmount = cOutstandingAmount.parseCurrency()}
-															
+
 														if (iSearchSourceID)
 														{
 															var oSearchSource = $('#ns1blankspaceReconcileItems_options_search-' + iSearchSourceID);
