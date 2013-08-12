@@ -206,15 +206,12 @@ ns1blankspace.financial.payment =
 											oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,' +
 																'reference,paiddate,amount');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
-											/*
-											oSearch.addBracket('(');
+											
 											oSearch.addOperator('or');
 											oSearch.addFilter('payment.contactbusinesspaidto.tradename', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('payment.contactpersonpaidto.surname', 'TEXT_IS_LIKE', sSearchText);
-											oSearch.addBracket(')');
-											*/
-
+											
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
 											oSearch.getResults(function(data) {ns1blankspace.financial.payment.search.process(oParam, data)});	
@@ -237,7 +234,7 @@ ns1blankspace.financial.payment =
 									}
 									else
 									{		
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:400px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{	
@@ -252,6 +249,16 @@ ns1blankspace.financial.payment =
 															'search-' + this.id + '">' +
 															this.reference +
 															'</td>');
+
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + this.id + '">' +
+													this.paiddate +
+													'</td>');
+
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + this.id + '" style="text-align:right;">' +
+													this.amount +
+													'</td>');
 
 											if (this.contactbusinesspaidtotext != '')
 											{
@@ -296,6 +303,7 @@ ns1blankspace.financial.payment =
 										{
 											columns: 'reference',
 											more: oResponse.moreid,
+											width: 400,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
 											functionSearch: ns1blankspace.financial.payment.search.send
 										}); 

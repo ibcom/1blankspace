@@ -207,14 +207,11 @@ ns1blankspace.financial.receipt =
 																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
 																'reference,receiveddate,description,amount');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
-											/*
-											oSearch.addBracket('(');
+											
 											oSearch.addOperator('or');
 											oSearch.addFilter('receipt.contactbusinessreceivedfrom.tradename', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('receipt.contactpersonreceivedfrom.surname', 'TEXT_IS_LIKE', sSearchText);
-											oSearch.addBracket(')');
-											*/
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
@@ -238,7 +235,7 @@ ns1blankspace.financial.receipt =
 									}
 									else
 									{		
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:400px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{	
@@ -248,11 +245,21 @@ ns1blankspace.financial.receipt =
 											{
 												aHTML.push('<tr class="ns1blankspaceSearch">');
 											}
-										
-												aHTML.push('<td class="ns1blankspaceSearch" id="' +
-														'search-' + this.id + '">' +
-														this.reference +
-														'</td>');
+									
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + this.id + '">' +
+													this.reference +
+													'</td>');
+
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + this.id + '">' +
+													this.receiveddate +
+													'</td>');
+
+											aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + this.id + '" style="text-align:right;">' +
+													this.amount +
+													'</td>');
 
 											if (this.contactbusinessreceivedfromtext != '')
 											{
@@ -297,6 +304,7 @@ ns1blankspace.financial.receipt =
 										{
 											columns: 'reference',
 											more: oResponse.moreid,
+											width: 400,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
 											functionSearch: ns1blankspace.financial.receipt.search.send
 										});   
