@@ -2619,7 +2619,7 @@ ns1blankspace.financial.bankAccount =
 
 														$.each(oResponse.data.rows, function ()
 														{
-															cAllocated += parseFloat(this.amount);
+															cAllocated += (this.amount).parseCurrency();
 														});
 
 														$('#' + sSourceXHTMLElementID).attr('data-allocatedAmount', cAllocated);
