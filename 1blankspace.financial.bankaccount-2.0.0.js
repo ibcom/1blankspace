@@ -2150,7 +2150,7 @@ ns1blankspace.financial.bankAccount =
 										else
 										{
 											aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
-															'in balance</div>')
+															'balanced</div>')
 										}
 
 										if (iStatus == 1 & iMode == 1)
