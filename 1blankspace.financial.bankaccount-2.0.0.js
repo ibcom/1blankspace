@@ -2484,9 +2484,20 @@ ns1blankspace.financial.bankAccount =
 														
 														$('#ns1blankspaceBankAccountReconcileColumnItem').html(aHTML.join(''));
 														
-														var aHTML = [];
+														$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('<span class="ns1blankspaceAction" id="ns1blankspaceShowAll"></span>');
 
-													
+														$('#ns1blankspaceShowAll').button({
+															label: 'Show All Unreconciled ' + (iType==1?'Payments':'Receipts') + ' & Journals',
+														})
+														.click(function() {
+															$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('');
+															oParam = ns1blankspace.util.setParam(oParam, 'editAction', 1);
+															oParam = ns1blankspace.util.setParam(oParam, 'step', 0);
+															ns1blankspace.financial.bankAccount.reconcile.items.init(oParam);
+														});	
+
+														var aHTML = [];	
+
 														if (oResponse.data.rows.length == 0)
 														{
 															aHTML.push('<table id="ns1blankspaceReconcileItems"><tr class="ns1blankspace">');
@@ -2499,21 +2510,11 @@ ns1blankspace.financial.bankAccount =
 
 															$('#ns1blankspaceBankAccountReconcileItems').html(aHTML.join(''));
 
-															$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('<span class="ns1blankspaceAction" id="ns1blankspaceShowAll"></span>');
-
-															$('#ns1blankspaceShowAll').button({
-																label: 'Show All Unreconciled ' + (iType==1?'Payments':'Receipts') + ' & Journals',
-															})
-															.click(function() {
-																$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('');
-																oParam = ns1blankspace.util.setParam(oParam, 'editAction', 1);
-																oParam = ns1blankspace.util.setParam(oParam, 'step', 0);
-																ns1blankspace.financial.bankAccount.reconcile.items.init(oParam);
-															});					
+																			
 														}
 														else
 														{
-															$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('<span class="ns1blankspaceSub">Select a bank transaction.</span>');
+															//$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('<span class="ns1blankspaceSub">Select a bank transaction.</span>');
 
 															aHTML.push('<table id="ns1blankspaceReconcileItems">');
 															
