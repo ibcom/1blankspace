@@ -2155,6 +2155,9 @@ ns1blankspace.financial.bankAccount =
 
 										if (iStatus == 1 & iMode == 1)
 										{	
+											aHTML.push('<div style="width: 20px; margin-left:5px; margin-right:2px; margin-bottom:10px; float:right;" class="ns1blankspaceBankAccountRecoRefresh" id="ns1blankspaceBankAccountRecoRefresh-' + iReconciliation + '">' +
+															'Refresh</div>');
+
 											aHTML.push('<div style="width: 20px; margin-left:5px; margin-right:2px; margin-bottom:10px; float:right;" class="ns1blankspaceBankAccountRecoEdit" id="ns1blankspaceBankAccountRecoEdit-' + iReconciliation + '">' +
 															'Edit</div>');
 										}
@@ -2240,6 +2243,20 @@ ns1blankspace.financial.bankAccount =
 												$.extend(true, oParam, {xhtmlElementID: $('#ns1blankspaceBankAccountReco .ns1blankspaceRowShaded :first').attr('id')});
 											 	ns1blankspace.financial.bankAccount.reconcile.edit(oParam);
 											}	
+										})
+										.css('font-size', '0.75em');
+
+										$('div.ns1blankspaceBankAccountRecoRefresh').button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-arrowrefresh-1-e"
+											}
+										})
+										.click(function()
+										{
+											 ns1blankspace.financial.bankAccount.reconcile.refresh(oParam);	
 										})
 										.css('font-size', '0.75em');
 
@@ -2339,6 +2356,24 @@ ns1blankspace.financial.bankAccount =
 														'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Open <span class="ns1blankspaceSub">(In Progress)</span>' +
 														'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Locked <span class="ns1blankspaceSub">(Completed)</span>' +
 														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Previous Bank Statement Balance' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceReconcileEditPreviousStatementBalance" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Reference' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceReconcileEditStatementNotes" class="ns1blankspaceText">' +
+														'</td></tr>');					
 																																											
 										aHTML.push('</table>');					
 										
@@ -2372,6 +2407,8 @@ ns1blankspace.financial.bankAccount =
 											sData += '&id=' + ns1blankspace.util.fs(sID);
 											if ($('#ns1blankspaceReconcileEditStatementDate').val() != '') {sData += '&statementdate=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementDate').val())}
 											if ($('#ns1blankspaceReconcileEditStatementBalance').val() != '') {sData += '&statementbalance=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementBalance').val())}
+											if ($('#ns1blankspaceReconcileEditPreviousStatementBalance').val() != '') {sData += '&previousbalance=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditPreviousStatementBalance').val())}
+											sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementNotes').val());
 											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
 											
 											$.ajax(
@@ -2402,7 +2439,7 @@ ns1blankspace.financial.bankAccount =
 										{
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
-											oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance');
+											oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance,notes');
 											oSearch.addFilter('id', 'EQUAL_TO', sID);
 											oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.edit(oParam, data)});
 										}
@@ -2418,6 +2455,8 @@ ns1blankspace.financial.bankAccount =
 											var oObjectContext = oResponse.data.rows[0];
 											$('#ns1blankspaceReconcileEditStatementDate').val(oObjectContext.statementdate);
 											$('#ns1blankspaceReconcileEditStatementBalance').val(oObjectContext.statementbalance);
+											$('#ns1blankspaceReconcileEditPreviousStatementBalance').val(oObjectContext.previousbalance);
+											$('#ns1blankspaceReconcileEditStatementNotes').val(oObjectContext.notes);
 											$('[name="radioStatus"][value="' + oObjectContext.status + '"]').attr('checked', true);
 										}
 									}
