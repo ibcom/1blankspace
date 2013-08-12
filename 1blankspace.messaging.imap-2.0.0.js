@@ -519,7 +519,7 @@ ns1blankspace.messaging.imap =
 										var sDate = '';
 										var sTime = '';
 
-										var oDate = Date.parse(oRow.date);
+										var oDate = Date.parseExact(oRow.date, "d MMM yyyy H:mm:ss");
 
 										if (oDate != null)
 										{ 
