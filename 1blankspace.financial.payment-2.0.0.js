@@ -214,6 +214,8 @@ ns1blankspace.financial.payment =
 											
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
+											oSearch.sort('paiddate', 'desc');
+
 											oSearch.getResults(function(data) {ns1blankspace.financial.payment.search.process(oParam, data)});	
 										}
 									}	

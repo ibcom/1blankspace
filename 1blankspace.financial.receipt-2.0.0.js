@@ -215,6 +215,8 @@ ns1blankspace.financial.receipt =
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
+											oSearch.sort('receiveddate', 'desc');
+
 											oSearch.getResults(function(data) {ns1blankspace.financial.receipt.search.process(oParam, data)});	
 										}
 									};	
