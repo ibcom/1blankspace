@@ -2348,7 +2348,16 @@ ns1blankspace.financial.bankAccount =
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
 														'<input id="ns1blankspaceReconcileEditStatementBalance" class="ns1blankspaceText">' +
-														'</td></tr>');			
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Reference' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceReconcileEditStatementNotes" class="ns1blankspaceText">' +
+														'</td></tr>');						
 															
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -2368,16 +2377,7 @@ ns1blankspace.financial.bankAccount =
 														'<td class="ns1blankspaceText">' +
 														'<input id="ns1blankspaceReconcileEditPreviousStatementBalance" class="ns1blankspaceText">' +
 														'</td></tr>');
-
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Reference' +
-														'</td></tr>' +
-														'<tr class="ns1blankspace">' +
-														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceReconcileEditStatementNotes" class="ns1blankspaceText">' +
-														'</td></tr>');					
-																																											
+																															
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceBankAccountColumnReconcileEdit1').html(aHTML.join(''));
@@ -2647,8 +2647,9 @@ ns1blankspace.financial.bankAccount =
 																		
 														oSearch.method = (iType==1?'FINANCIAL_PAYMENT_SEARCH':'FINANCIAL_RECEIPT_SEARCH');
 														oSearch.addField('amount');
+
 														oSearch.addFilter('sourcebanktransaction', 'EQUAL_TO', iTransactionID);
-														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext)
+														//oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext)
 														oSearch.rows = 200;
 														oSearch.getResults(function(data)
 														{
