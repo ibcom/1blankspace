@@ -3672,7 +3672,7 @@ ns1blankspace.financial.bankAccount =
 														
 														if (cOutstandingAmount !== undefined) {cOutstandingAmount = cOutstandingAmount.parseCurrency()}
 
-														if (iSearchSourceID)
+														if (iSearchSourceID !== undefined)
 														{
 															var oSearchSource = $('#ns1blankspaceReconcileItems_options_search-' + iSearchSourceID);
 															var dDate = oSearchSource.attr('data-searchDate');  
@@ -3713,11 +3713,11 @@ ns1blankspace.financial.bankAccount =
 															oParam.allused = true;
 														}
 
-														if (oParam != undefined)
-														{
-															if (oParam.amount != undefined) {cAmount = oParam.amount}
-															if (oParam.date != undefined) {dDate = oParam.date}	
-														}
+														//if (oParam != undefined)
+														//{
+														//	if (oParam.amount != undefined) {cAmount = oParam.amount}
+														//	if (oParam.date != undefined) {dDate = oParam.date}	
+														//}
 															
 														var sData = 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
 														sData += '&amount=' + ns1blankspace.util.fs(cAmount);
