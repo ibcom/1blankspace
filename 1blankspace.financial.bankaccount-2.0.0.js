@@ -2145,9 +2145,14 @@ ns1blankspace.financial.bankAccount =
 										if (parseFloat((oResponse.outofbalance).parseCurrency()) !== 0)
 										{	
 											aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
-															'out of balance</div>')
-										}	
-	
+															'out of balance</div>');
+										}
+										else
+										{
+											aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
+															'in balance</div>')
+										}
+
 										if (iStatus == 1 & iMode == 1)
 										{	
 											aHTML.push('<div style="width: 20px; margin-left:5px; margin-right:2px; margin-bottom:10px; float:right;" class="ns1blankspaceBankAccountRecoEdit" id="ns1blankspaceBankAccountRecoEdit-' + iReconciliation + '">' +
