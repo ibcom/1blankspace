@@ -2120,8 +2120,11 @@ ns1blankspace.financial.bankAccount =
 									{
 										var aHTML = [];
 
-										aHTML.push('<div style="margin-top: 4px; margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
-															'- $' + (oResponse.PreviousBalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
+										aHTML.push('<div style="font-style:italic; margin-top: 4px; margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
+															'minus</div>')
+
+										aHTML.push('<div style=" margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub" title="Previous balance">' +
+															'$' + (oResponse.PreviousBalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
 
 										var cReceipts = (oResponse.Receipts).parseCurrency() + (oResponse.DebitGeneralJournals).parseCurrency();
 
@@ -2133,8 +2136,11 @@ ns1blankspace.financial.bankAccount =
 										aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
 															'- $' + (cPayments).formatMoney(2, ".", ",")  + '</div>');
 
+										aHTML.push('<div style="font-style:italic; margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
+															'equals</div>')
+
 										aHTML.push('<div style="margin-right:3px; margin-bottom:1px; font-size:0.875em;" class="ns1blankspaceSub">' +
-															'= $' + (oResponse.outofbalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
+															'$' + (oResponse.outofbalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
 
 										if (parseFloat((oResponse.outofbalance).parseCurrency()) !== 0)
 										{	
