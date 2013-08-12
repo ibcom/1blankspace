@@ -470,6 +470,13 @@ ns1blankspace.views =
 					type: 'Text',
 					comparison: 'EQUAL_TO',
 					fixed: false
+				},
+				{
+					caption: "Date",
+					name: "sentdate",
+					type: 'Date',
+					comparison: 'EQUAL_TO',
+					fixed: false
 				}
 			],
 		}
@@ -481,7 +488,28 @@ ns1blankspace.views =
 		endpoint: "FINANCIAL_EXPENSE",
 		show: true,
 		group: 5,
-		type: 1
+		type: 1,
+		search:
+		{
+			advanced: true,
+			filters:
+			[
+				{
+					caption: "Amount",
+					name: "amount",
+					type: 'Text',
+					comparison: 'EQUAL_TO',
+					fixed: false
+				},
+				{
+					caption: "Date",
+					name: "accrueddate",
+					type: 'Date',
+					comparison: 'EQUAL_TO',
+					fixed: false
+				}
+			],
+		}
 	},
 	{
 		title: "Receipts",
@@ -490,7 +518,28 @@ ns1blankspace.views =
 		endpoint: "FINANCIAL_RECEIPT",
 		show: true,
 		group: 5,
-		type: 1
+		type: 1,
+		search:
+		{
+			advanced: true,
+			filters:
+			[
+				{
+					caption: "Amount",
+					name: "amount",
+					type: 'Text',
+					comparison: 'EQUAL_TO',
+					fixed: false
+				},
+				{
+					caption: "Date",
+					name: "receiveddate",
+					type: 'Date',
+					comparison: 'EQUAL_TO',
+					fixed: false
+				}
+			],
+		}
 	},
 	{
 		title: "Payments",
@@ -499,7 +548,28 @@ ns1blankspace.views =
 		endpoint: "FINANCIAL_PAYMENT",
 		show: true,
 		group: 5,
-		type: 1
+		type: 1,
+		search:
+		{
+			advanced: true,
+			filters:
+			[
+				{
+					caption: "Amount",
+					name: "amount",
+					type: 'Text',
+					comparison: 'EQUAL_TO',
+					fixed: false
+				},
+				{
+					caption: "Date",
+					name: "paiddate",
+					type: 'Date',
+					comparison: 'EQUAL_TO',
+					fixed: false
+				}
+			],
+		}
 	},
 	{
 		title: "Credits",

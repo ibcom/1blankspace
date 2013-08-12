@@ -206,12 +206,14 @@ ns1blankspace.financial.receipt =
 											oSearch.addField('contactbusinessreceivedfromtext,contactbusinessreceivedfrom,' +
 																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
 																'reference,receiveddate,description,amount');
+
+											oSearch.addBracket('(');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
-											
 											oSearch.addOperator('or');
 											oSearch.addFilter('receipt.contactbusinessreceivedfrom.tradename', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('receipt.contactpersonreceivedfrom.surname', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addBracket(')');
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
 

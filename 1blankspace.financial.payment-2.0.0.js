@@ -205,12 +205,14 @@ ns1blankspace.financial.payment =
 											oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 											oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,' +
 																'reference,paiddate,amount');
+
+											oSearch.addBracket('(');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
-											
 											oSearch.addOperator('or');
 											oSearch.addFilter('payment.contactbusinesspaidto.tradename', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('payment.contactpersonpaidto.surname', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addBracket(')');
 											
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
