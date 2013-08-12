@@ -3639,7 +3639,8 @@ ns1blankspace.financial.bankAccount =
 															if (dSet.compareTo(dLast) != 1)
 															{	
 																dDate = dLast.add({days: 1});
-															}	
+															}
+
 															var cAmount = oSearchSource.attr('data-searchAmount');
 														}
 														else
@@ -3652,6 +3653,7 @@ ns1blankspace.financial.bankAccount =
 														{
 															//ns1blankspace.status.error('Bank transaction amount is to large!');
 															oParam.allused = false;
+															cAmount = cOutstandingAmount;
 														}
 														else
 														{
