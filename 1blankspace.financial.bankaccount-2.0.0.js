@@ -2924,7 +2924,7 @@ ns1blankspace.financial.bankAccount =
 															oParam.searchDate = '';
 															oParam.searchAmount = '';
 															oParam.searchReference = '';
-															ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
+															//ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
 														})
 
 														$('#ns1blankspaceItemsEditAdd').button(
