@@ -864,7 +864,7 @@ ns1blankspace.financial.receipt =
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
-										oSearch.addField('invoicetext,appliesdate,amount,tax');
+										oSearch.addField('invoice,invoicetext,appliesdate,amount,tax');
 										oSearch.addFilter('receipt', 'EQUAL_TO', iObjectContext);
 										oSearch.sort('appliesdate', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.financial.receipt.invoice.show(oParam, data)});
@@ -914,7 +914,9 @@ ns1blankspace.financial.receipt =
 												{	
 													aHTML.push('<span id="ns1blankspaceInvoice_options_remove-' + this.id + '" class="ns1blankspaceInvoiceRemove"></span>');
 												};	
-													
+
+												aHTML.push('<span id="ns1blankspaceInvoice_options_view-' + this.invoice + '" class="ns1blankspaceInvoiceView"></span>');
+												
 												aHTML.push('</td></tr>');
 											});
 											
@@ -936,23 +938,36 @@ ns1blankspace.financial.receipt =
 												.css('width', '15px')
 												.css('height', '17px')
 											}
-									
-											if (oOptions.view) 
-											{
-												$('.ns1blankspaceInvoiceView').button( {
-													text: false,
-													icons: {
-														primary: "ui-icon-play"
-													}
-												})
-												.click(function() {
-													ns1blankspace.financial.receipt.invoice.edit({xhtmlElementID: this.id})
-												})
-												.css('width', '15px')
-												.css('height', '17px')
-											}	
+										
+											$('span.ns1blankspaceInvoiceView').button( {
+												text: false,
+												icons: {
+													primary: "ui-icon-play"
+												}
+											})
+											.click(function() {
+												ns1blankspace.financial.invoice.init({id: (this.id).split('-')[1]})
+											})
+											.css('width', '15px')
+											.css('height', '17px')	
 										}
 									}	
+								},
+				
+					remove: 	function (oParam)
+								{
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+									var sData = 'remove=1&id=' + ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+												
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('FINANCIAL_RECEIPT_INVOICE_MANAGE'),
+										data: sData,
+										dataType: 'json',
+										success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
+									});
+										
 								}
-				}				
+				}									
 }				

@@ -403,7 +403,7 @@ ns1blankspace.financial.payment =
 					$('#ns1blankspaceControlExpenses').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainExpense', refresh: true});
-						ns1blankspace.financial.payment.expense();
+						ns1blankspace.financial.payment.expense.show();
 					});
 					
 					$('#ns1blankspaceControlGL').click(function(event)
@@ -821,147 +821,170 @@ ns1blankspace.financial.payment =
 								}
 				},
 
-	expense: 	function (oParam, oResponse)
-				{
-					var iObjectContext = ns1blankspace.objectContext;
-					var oOptions = {view: true, remove: true};
-					var oActions = {add: true};
-					
-					if (oParam != undefined)
-					{
-						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-						if (oParam.options != undefined) {oOptions = oParam.options}
-						if (oParam.actions != undefined) {oActions = oParam.actions}
-					}		
-						
-					if (oResponse == undefined)
-					{	
-						var aHTML = [];
-
-						aHTML.push('<table class="ns1blankspaceContainer">');
-						aHTML.push('<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceExpenseColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-										'<td id="ns1blankspaceExpenseColumn2" class="ns1blankspaceColumn2" style="width: 200px;></td>' +
-										'</tr>');
-						aHTML.push('</table>');					
+	expense: 	{
+					show:		function (oParam, oResponse)
+								{
+									var iObjectContext = ns1blankspace.objectContext;
+									var oOptions = {view: true, remove: true};
+									var oActions = {add: true};
+									
+									if (oParam != undefined)
+									{
+										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+										if (oParam.options != undefined) {oOptions = oParam.options}
+										if (oParam.actions != undefined) {oActions = oParam.actions}
+									}		
 										
-						$('#ns1blankspaceMainExpense').html(aHTML.join(''));
-						
-						if (oActions != undefined)
-						{
-							var aHTML = [];
-															
-							aHTML.push('<table class="ns1blankspaceColumn2">');
-							
-							if (oActions.add)
-							{
-								aHTML.push('<tr><td class="ns1blankspaceAction">' +
-											'<span id="ns1blankspaceExpenseAdd">Add</span>' +
-											'</td></tr>');
-							}
-							
-							aHTML.push('</table>');					
-							
-							$('#ns1blankspaceExpenseColumn2').html(aHTML.join(''));
-						
-							$('#ns1blankspaceExpenseAdd').button(
-							{
-								label: "Add"
-							})
-							.click(function() {
-								 ns1blankspace.financial.payment.expense.edit(oParam);
-							})
-						}
-						
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
-						oSearch.addField('expensetext,appliesdate,amount,tax');
-						oSearch.addFilter('payment', 'EQUAL_TO', iObjectContext);
-						oSearch.sort('appliesdate', 'asc');
-						oSearch.getResults(function(data) {ns1blankspace.financial.payment.expense(oParam, data)});
-					}
-					else
-					{
-						var aHTML = [];
-									
-						if (oResponse.data.rows.length == 0)
-						{
-							aHTML.push('<table class="ns1blankspace">' +
-											'<tr><td class="ns1blankspaceNothing">No expenses.</td></tr>' + 
-											'</table>');
+									if (oResponse == undefined)
+									{	
+										var aHTML = [];
 
-							$('#ns1blankspaceExpenseColumn1').html(aHTML.join(''));
-						}
-						else
-						{
-							aHTML.push('<table class="ns1blankspace">');
-							aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
-							aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
-							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
-							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Tax</td>');
-							aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-							aHTML.push('</tr>');
-							
-							$.each(oResponse.data.rows, function()
-							{
-								aHTML.push('<tr class="ns1blankspaceRow">');
+										aHTML.push('<table class="ns1blankspaceContainer">');
+										aHTML.push('<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceExpenseColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceExpenseColumn2" class="ns1blankspaceColumn2" style="width: 200px;></td>' +
+														'</tr>');
+										aHTML.push('</table>');					
+														
+										$('#ns1blankspaceMainExpense').html(aHTML.join(''));
+										
+										if (oActions != undefined)
+										{
+											var aHTML = [];
 																			
-								aHTML.push('<td id="ns1blankspaceReceipt_reference-' + this.id + '" class="ns1blankspaceRow">' +
-												this.expensetext + '</td>');
+											aHTML.push('<table class="ns1blankspaceColumn2">');
+											
+											if (oActions.add)
+											{
+												aHTML.push('<tr><td class="ns1blankspaceAction">' +
+															'<span id="ns1blankspaceExpenseAdd">Add</span>' +
+															'</td></tr>');
+											}
+											
+											aHTML.push('</table>');					
+											
+											$('#ns1blankspaceExpenseColumn2').html(aHTML.join(''));
+										
+											$('#ns1blankspaceExpenseAdd').button(
+											{
+												label: "Add"
+											})
+											.click(function() {
+												 ns1blankspace.financial.payment.expense.edit(oParam);
+											})
+										}
+										
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
+										oSearch.addField('expense,expensetext,appliesdate,amount,tax');
+										oSearch.addFilter('payment', 'EQUAL_TO', iObjectContext);
+										oSearch.sort('appliesdate', 'asc');
+										oSearch.rows = 100;
+										oSearch.getResults(function(data) {ns1blankspace.financial.payment.expense.show(oParam, data)});
+									}
+									else
+									{
+										var aHTML = [];
+													
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table class="ns1blankspace">' +
+															'<tr><td class="ns1blankspaceNothing">No expenses.</td></tr>' + 
+															'</table>');
+
+											$('#ns1blankspaceExpenseColumn1').html(aHTML.join(''));
+										}
+										else
+										{
+											aHTML.push('<table class="ns1blankspace">');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Tax</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
+											
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push('<tr class="ns1blankspaceRow">');
 																							
-								aHTML.push('<td id="ns1blankspaceReceipt_date-' + this.id + '" class="ns1blankspaceRow">' +
-												this.appliesdate + '</td>');
+												aHTML.push('<td id="ns1blankspaceReceipt_reference-' + this.id + '" class="ns1blankspaceRow">' +
+																this.expensetext + '</td>');
+																											
+												aHTML.push('<td id="ns1blankspaceReceipt_date-' + this.id + '" class="ns1blankspaceRow">' +
+																this.appliesdate + '</td>');
 
-								aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-												this.amount + '</td>');
+												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																this.amount + '</td>');
 
-								aHTML.push('<td id="ns1blankspaceReceipt_tax-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-												this.tax + '</td>');
+												aHTML.push('<td id="ns1blankspaceReceipt_tax-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																this.tax + '</td>');
 
-								aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+													
+												if (oOptions.remove)
+												{	
+													aHTML.push('<span id="ns1blankspaceExpense_options_remove-' + this.id + '" class="ns1blankspaceExpenseRemove"></span>');
+												};
+
+												aHTML.push('<span id="ns1blankspaceExpense_options_view-' + this.expense + '" class="ns1blankspaceExpenseView"></span>');
+													
+												aHTML.push('</td></tr>');
+											});
+											
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceExpenseColumn1').html(aHTML.join(''));
+											
+											if (oOptions.remove) 
+											{
+												$('.ns1blankspaceExpenseRemove').button(
+												{
+													text: false,
+													icons:
+													{
+														primary: "ui-icon-close"
+													}
+												})
+												.click(function() {
+													ns1blankspace.financial.payment.expense.remove({xhtmlElementID: this.id});
+												})
+												.css('width', '15px')
+												.css('height', '17px')
+											}
 									
-								if (oOptions.remove)
-								{	
-									aHTML.push('<span id="ns1blankspaceExpense_options_remove-' + this.id + '" class="ns1blankspaceExpenseRemove"></span>');
-								};	
-									
-								aHTML.push('</td></tr>');
-							});
-							
-							aHTML.push('</table>');
+											$('span.ns1blankspaceExpenseView').button(
+											{
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-play"
+												}
+											})
+											.click(function()
+											{
+												ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]})
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+										}
+									}	
+								},
 
-							$('#ns1blankspaceExpenseColumn1').html(aHTML.join(''));
-							
-							if (oOptions.remove) 
-							{
-								$('.ns1blankspaceExpenseRemove').button( {
-									text: false,
-									icons: {
-										primary: "ui-icon-close"
-									}
-								})
-								.click(function() {
-									ns1blankspace.financial.payment.expense.remove({xhtmlElementID: this.id});
-								})
-								.css('width', '15px')
-								.css('height', '17px')
-							}
-					
-							if (oOptions.view) 
-							{
-								$('.ns1blankspaceExpenseView').button( {
-									text: false,
-									icons: {
-										primary: "ui-icon-play"
-									}
-								})
-								.click(function() {
-									ns1blankspace.financial.payment.expense.edit({xhtmlElementID: this.id})
-								})
-								.css('width', '15px')
-								.css('height', '17px')
-							}	
-						}
-					}	
-				}	
+					remove: 	function (oParam)
+								{
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+									var sData = 'remove=1&id=' + ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+												
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('FINANCIAL_PAYMENT_EXPENSE_MANAGE'),
+										data: sData,
+										dataType: 'json',
+										success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
+									});
+										
+								}
+				}														
 }

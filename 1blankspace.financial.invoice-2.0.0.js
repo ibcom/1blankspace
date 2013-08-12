@@ -1262,6 +1262,26 @@ ns1blankspace.financial.invoice =
 									}	
 								},
 
+					remove: 	function (oParam)
+								{
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+									var sData = 'remove=1&id=' + ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+												
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('FINANCIAL_RECEIPT_INVOICE_MANAGE'),
+										data: sData,
+										dataType: 'json',
+										success: function(data)
+										{
+											ns1blankspace.financial.invoice.receipt.show();
+											ns1blankspace.financial.invoice.refresh();
+										}
+									});
+										
+								},						
+
 					edit:		function (oParam, oResponse)
 								{
 									var iStep = 1;
