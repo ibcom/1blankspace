@@ -2092,17 +2092,19 @@ ns1blankspace.financial.bankAccount =
 									var iReconciliation;
 									var iStatus = 2;
 									var iMode = 1;
+									var bReset = true;
 									
 									if (oParam != undefined)
 									{
 										if (oParam.reconciliation != undefined) {iReconciliation = oParam.reconciliation}
 										if (oParam.status != undefined) {iStatus = oParam.status}
 										if (oParam.mode != undefined) {iMode = oParam.mode}
+										if (oParam.reset != undefined) {bReset = oParam.reset}
 									}		
 
 									if (oResponse == undefined)
 									{
-										ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled = {};
+										if (bReset) {ns1blankspace.financial.bankAccount.reconcile.items.data.unreconciled = {}};
 
 										$('div.ns1blankspaceControlContext_reco_summary').html('');
 										$('#ns1blankspaceControlContext_reco_summary-' + iReconciliation).html(ns1blankspace.xhtml.loadingSmall);
@@ -2256,7 +2258,8 @@ ns1blankspace.financial.bankAccount =
 										})
 										.click(function()
 										{
-											 ns1blankspace.financial.bankAccount.reconcile.refresh(oParam);	
+											oParam.reset = false;
+											ns1blankspace.financial.bankAccount.reconcile.refresh(oParam);	
 										})
 										.css('font-size', '0.75em');
 
