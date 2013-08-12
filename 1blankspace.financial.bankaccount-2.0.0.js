@@ -210,9 +210,10 @@ ns1blankspace.financial.bankAccount =
 					}
 					else
 					{							
-						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title +
-							'<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceControlSubContext_date">' + ns1blankspace.objectContextData.lastreconcileddate + '</span>' +
-							'<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceControlSubContext_amount">$' + ns1blankspace.objectContextData.lastreconciledamount + '</span>');
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title);
+
+							//'<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceControlSubContext_date">' + ns1blankspace.objectContextData.lastreconcileddate + '</span>' +
+							//'<br /><span class="ns1blankspaceSubContext" id="ns1blankspaceControlSubContext_amount">$' + ns1blankspace.objectContextData.lastreconciledamount + '</span>');
 						
 						ns1blankspace.history.view(
 						{
@@ -241,26 +242,26 @@ ns1blankspace.financial.bankAccount =
 				
 					if (ns1blankspace.objectContextData.lastreconcileddate == '')
 					{
-						aHTML.push('<table class="ns1blankspace">' +
+						aHTML.push('<table class="ns1blankspaceColumn2">' +
 									'<tr><td class="ns1blankspaceSub">' +
 									'This bank account has never been reconciled.' +
 									'</td></tr></table>');
 					}
 					else
 					{	
-						aHTML.push('<table class="ns1blankspace">' +
+						aHTML.push('<table class="ns1blankspaceColumn2">' +
 									'<tr><td class="ns1blankspaceSub">' +
-									'This bank account was last reconciled on the ' +
-									 ns1blankspace.objectContextData.lastreconcileddate + ', with an account balance of $' +
+									'Last reconciled on the ' +
+									 ns1blankspace.objectContextData.lastreconcileddate + ',<br />with an account balance of $' +
 									 ns1blankspace.objectContextData.lastreconciledamount +
 									'.</td></tr></table>');
 					}								
 
-					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+					$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
 
 					var aHTML = [];
 				
-					aHTML.push('<table class="ns1blankspaceColumn2">');
+					aHTML.push('<table class="ns1blankspace">');
 
 					if (ns1blankspace.objectContextData.accountname != '')
 					{
@@ -288,7 +289,7 @@ ns1blankspace.financial.bankAccount =
 
 					aHTML.push('</table>');
 
-					$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
+					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));	
 				},
 
 	mapping: 	{
