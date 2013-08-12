@@ -1340,7 +1340,7 @@ search: 		{
 														url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE') + sParam,
 														data: sData,
 														dataType: 'text',
-														success: function(data){ns1blankspace.news.groups()}
+														success: function(data){ns1blankspace.news.groups.show()}
 													});
 												
 											}
@@ -1356,7 +1356,7 @@ search: 		{
 													url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE'),
 													data: sData,
 													dataType: 'text',
-													success: function(data){ns1blankspace.news.groups()}
+													success: function(data){ns1blankspace.news.groups.show()}
 												});		
 											}
 										}

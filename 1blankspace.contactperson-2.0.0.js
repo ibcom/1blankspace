@@ -157,7 +157,7 @@ ns1blankspace.contactPerson =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'CONTACT_PERSON_SEARCH';
 										oSearch.addField('firstname,surname,contactbusiness,contactbusinesstext,title,titletext,position,workphone,fax,mobile,email,' +
-																 'customerstatus,customerstatustext,gender,gendertext,' +
+																 'customerstatus,customerstatustext,gender,gendertext,sendnews,' +
 																 'streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry,' +
 																 'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode,mailingcountry,notes,' +
 																 'dateofbirth,rating,ratingtext,numberofchildren,otherfamilydetails');
@@ -795,6 +795,16 @@ ns1blankspace.contactPerson =
 										'<input id="ns1blankspaceDetailsRating" class="ns1blankspaceSelect" style="width:250px;"' +
 											' data-method="SETUP_CONTACT_RATING_SEARCH">' +
 										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Send News' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioSendNewsY" name="radioSendNews" value="Y"/>Yes' +
+										'<br /><input type="radio" id="radioSendNewsN" name="radioSendNews" value="N"/>No' +
+										'</td></tr>');
 						
 						aHTML.push('</table>');					
 							
@@ -814,7 +824,12 @@ ns1blankspace.contactPerson =
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.notes);
 							$('#ns1blankspaceDetailsRating').attr('data-id', ns1blankspace.objectContextData.rating);
 							$('#ns1blankspaceDetailsRating').val(ns1blankspace.objectContextData.ratingtext);
+							$('[name="radioSendNews"][value="' + ns1blankspace.objectContextData.sendnews + '"]').attr('checked', true);
 						}
+						else
+						{
+							$('[name="radioSendNews"][value="Y"]').attr('checked', true);
+						}	
 						
 						$('#ns1blankspaceDetailsTitle').keyup(function(event)
 						{
@@ -1177,6 +1192,7 @@ ns1blankspace.contactPerson =
 										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
 										sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 										sData += '&rating=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsRating').attr('data-id'));
+										sData += '&sendnews=' + $('input[name="radioSendNews"]:checked').val();
 									}
 									
 									if ($('#ns1blankspaceMainAddress').html() != '')
