@@ -3697,7 +3697,8 @@ ns1blankspace.financial.bankAccount =
 														}
 														else
 														{
-															var dDate = Date.today().toString("dd-MMM-yyyy");
+															var dDate = ns1blankspace.util.getParam(oParam, 'reconciliationEndDate').value;
+															if (dDate == undefined) {dDate = Date.today().toString("dd-MMM-yyyy")};
 															var cAmount = cOutstandingAmount;
 														}
 
