@@ -963,7 +963,7 @@ ns1blankspace.financial.payment =
 											})
 											.click(function()
 											{
-												ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]})
+												ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]});
 											})
 											.css('width', '15px')
 											.css('height', '17px');

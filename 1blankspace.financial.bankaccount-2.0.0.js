@@ -3208,7 +3208,7 @@ ns1blankspace.financial.bankAccount =
 																	if (dSearchDate != '')
 																	{
 																		oSearch.addFilter('paymentduedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))
-																		oSearch.addFilter('paymentduedate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-30).toString("dd-MMM-yyyy"))
+																		//oSearch.addFilter('paymentduedate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-30).toString("dd-MMM-yyyy"))
 																	}		
 																	oSearch.sort('paymentduedate', 'asc');
 
@@ -3232,7 +3232,7 @@ ns1blankspace.financial.bankAccount =
 																	if (dSearchDate)
 																	{
 																		oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))
-																		oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-30).toString("dd-MMM-yyyy"))
+																		//oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-30).toString("dd-MMM-yyyy"))
 																	}
 																	oSearch.sort('duedate', 'asc');
 
