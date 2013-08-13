@@ -1613,8 +1613,9 @@ ns1blankspace.report =
 									var sExtraIDColumnValue;
 									var bExport = false;
 									var sOutput = '';
-									var sParameterList = '';
+									var sParameterList;
 									var oParameters = [];
+									var oRowParameters = ns1blankspace.report.rowParameters;
 
 									if (oParam == undefined) {oParam = ns1blankspace.report.rowParameters }
 									
@@ -1622,9 +1623,17 @@ ns1blankspace.report =
 									if (oParam != undefined)
 									{
 										if (oParam.fixedParameters != undefined) {oFixedParameters = oParam.fixedParameters}
+										if (oFixedParameters === undefined && oRowParameters) {oFixedParameters = oRowParameters.fixedParameters}
+
 										if (oParam.extraIDColumnBefore != undefined) {sExtraIDColumnBefore = oParam.extraIDColumnBefore}
+										if (sExtraIDColumnBefore === undefined && oRowParameters) {sExtraIDColumnBefore = oRowParameters.extraIDColumnBefore}
+
 										if (oParam.extraIDColumnValue != undefined) {sExtraIDColumnValue = oParam.extraIDColumnValue}
+										if (sExtraIDColumnValue === undefined && oRowParameters) {sExtraIDColumnValue = oRowParameters.extraIDColumnValue}
+
 										if (oParam.parameterList != undefined) {sParameterList = oParam.parameterList}
+										if (sParameterList === undefined && oRowParameters) {sParameterList = oRowParameters.parameterList} 
+										if (sParameterList === undefined) {sParameterList = ''}
 									}	
 									
 									if (oFixedParameters.fields != undefined)
@@ -1648,6 +1657,8 @@ ns1blankspace.report =
 									sIDColumn = "id";
 									if (oParam != undefined) 
 									{	if (oParam.idColumn != undefined) {sIDColumn = oParam.idColumn}	}
+									if (sIDColumn === undefined) {sIDColumn = oRowParameters.idColumn}
+
 									var aLastHTML = [];
 									
 									$.each(oParameters, function()
