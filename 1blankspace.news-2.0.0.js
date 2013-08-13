@@ -37,7 +37,7 @@ ns1blankspace.news =
 							theme_advanced_path : false,
 							theme_advanced_statusbar_location : "bottom",
 							
-							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,dynamicTags,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
+							plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
 
 							theme_advanced_buttons1_add_before : "forecolor,backcolor", 
 							theme_advanced_buttons1_add : "fontselect,fontsizeselect", 
@@ -46,7 +46,7 @@ ns1blankspace.news =
 							theme_advanced_buttons2_add_before: "cut,copy,paste,pasteword,separator,search,replace,separator", 
 							
 							theme_advanced_buttons3_add_before : "tablecontrols,separator", 
-							theme_advanced_buttons3_add : "emotions,iespell,fullscreen,print,dynamicTags,media,selectall,advhr",
+							theme_advanced_buttons3_add : "emotions,iespell,fullscreen,print,templateFields,media,selectall,advhr",
 					 
 							plugin_insertdate_dateFormat : "%d-%m-%y", 
 							plugin_insertdate_timeFormat : "%H:%M:%S", 
@@ -70,6 +70,8 @@ ns1blankspace.news =
 							visual : true, 
 							gecko_spellcheck : true,
 							TemplateLinkType : "32",
+							object : "32",
+							dynamic_tags_object : "32",
 							content_css : ns1blankspace.xhtml.editorCSS,
 							
 							external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
