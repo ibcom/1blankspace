@@ -865,7 +865,7 @@ ns1blankspace.opportunity =
 				{	
 					send: 		function (oParam)
 								{
-									var sData = '_=';
+									var oData = {};
 									var iStep = 1;
 
 									if (!oParam) {oParam = {}}
@@ -895,35 +895,34 @@ ns1blankspace.opportunity =
 											if ($('#ns1blankspaceContactBusinessName').val() != '')
 											{		
 												bContinue = true;									
-												sData += '&tradename=' + ns1blankspace.util.fs($('#ns1blankspaceContactBusinessName').val());
-												sData += '&mailingaddress1=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingAddress1').val());
-												sData += '&mailingsuburb=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingSuburb').val());
-												sData += '&mailingstate=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingState').val());
-												sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingPostCode').val());
-												sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceContactMailingCountry').val());
-												sData += '&phonenumber=' + ns1blankspace.util.fs($('#ns1blankspaceContactPhone').val());
-												sData += '&faxnumber=' + ns1blankspace.util.fs($('#ns1blankspaceContactFax').val());
+												oData.tradename = $('#ns1blankspaceContactBusinessName').val();
+												oData.mailingaddress1 = $('#ns1blankspaceContactMailingAddress1').val();
+												oData.mailingstate = $('#ns1blankspaceContactMailingState').val();
+												oData.mailingpostcode = $('#ns1blankspaceContactMailingPostCode').val();
+												oData.mailingcountry = $('#ns1blankspaceContactMailingCountry').val();
+												oData.phonenumber = $('#ns1blankspaceContactPhone').val();
+												oData.faxnumber = $('#ns1blankspaceContactFax').val();
 											}
 										}	
 										else if (ns1blankspace.objectContextData.businessname != '')
 										{
 											bContinue = true;
-											sData += '&tradename=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.businessname);
-											sData += '&mailingaddress1=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingaddress1);
-											sData += '&mailingsuburb=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingsuburb);
-											sData += '&mailingstate=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingstate);
-											sData += '&mailingpostcode=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingpostcode);
-											sData += '&mailingcountry=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.mailingcountry);
-											sData += '&phonenumber=' + ns1blankspacens1blankspace.util.fs(ns1blankspace.objectContextData.phone);
+											oData.tradename = ns1blankspace.objectContextData.businessname;
+											oData.mailingaddress1 = ns1blankspace.objectContextData.mailingaddress1;
+											oData.mailingsuburb = ns1blankspace.objectContextData.mailingsuburb;
+											oData.mailingstate = ns1blankspace.objectContextData.mailingstate;
+											oData.mailingpostcode = ns1blankspace.objectContextData.mailingpostcode;
+											oData.mailingcountry = ns1blankspace.objectContextData.mailingcountry;
+											oData.phonenumber = ns1blankspace.objectContextData.phone;
 										}
 											
 										if (bContinue)
 										{	
-											sData += '&customerstatus=1';
+											oData.customerstatus = 1;
 											
 											if (ns1blankspace.objectContextData.requestbycontactbusiness != '')	
 											{
-												sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.requestbycontactbusiness);
+												oData.id = ns1blankspace.objectContextData.requestbycontactbusiness;
 												oParam.successMessage = 'Updated';
 											}
 											else
@@ -937,7 +936,7 @@ ns1blankspace.opportunity =
 											{
 												type: 'POST',
 												url: ns1blankspace.util.endpointURI('CONTACT_BUSINESS_MANAGE'),
-												data: sData,
+												data: oData,
 												dataType: 'json',
 												success: function(data)
 												{ 
