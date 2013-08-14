@@ -323,6 +323,13 @@ search: 		{
 						aHTML.push('<table class="ns1blankspaceControl">');
 									
 						aHTML.push('<tr><td id="ns1blankspaceControlEdit" class="ns1blankspaceControl">Edit</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
+										'Attachments</td></tr>');
+
+						aHTML.push('</table>');		
+					
+						aHTML.push('<table class="ns1blankspaceControl">');
 					
 						aHTML.push('<tr><td id="ns1blankspaceControlGroups" class="ns1blankspaceControl">Send To</td></tr>');
 											
@@ -342,6 +349,7 @@ search: 		{
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainEdit" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainGroups" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainTracking" class="ns1blankspaceControlMain"></div>');
 					
@@ -364,6 +372,12 @@ search: 		{
 						ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
 						ns1blankspace.news.edit();
 					});
+
+					$('#ns1blankspaceControlAttachments').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show();
+					});	
 
 					$('#ns1blankspaceControlGroups').click(function(event)
 					{
@@ -439,7 +453,7 @@ search: 		{
 						if (sTmp == '&nbsp;')
 						{sTmp = 'Not set.'}
 						else
-						{sTmp = Date.parse(ns1blankspace.objectContextData.startdate).toString("dd MMM yyyy")}
+						{sTmp = Date.parseExact(ns1blankspace.objectContextData.startdate, "d MMM yyyy H:mm:ss").toString("dd MMM yyyy")}
 					
 						aHTML.push('<table class="ns1blankspace">');
 						
@@ -586,13 +600,23 @@ search: 		{
 						{
 							$('#ns1blankspaceDetailsSubject').val(ns1blankspace.objectContextData.subject);
 							
-							var sTmp = ns1blankspace.objectContextData.startdate;
-							if (sTmp == '&nbsp;') {sTmp = ''};
-							$('#ns1blankspaceDetailsStartDate').val(sTmp);
+							var sDate = '';
+							var oDate = Date.parseExact(ns1blankspace.objectContextData.startdate, "d MMM yyyy H:mm:ss");
+							if (oDate != null)
+							{
+								sDate = oDate.toString("dd MMM yyyy");
+							}
+
+							$('#ns1blankspaceDetailsStartDate').val(sDate);
 							
-							var sTmp = ns1blankspace.objectContextData.enddate;
-							if (sTmp == '&nbsp;') {sTmp = ''};
-							$('#ns1blankspaceDetailsEndDate').val(sTmp);
+							var sDate = '';
+							var oDate = Date.parseExact(ns1blankspace.objectContextData.enddate, "d MMM yyyy H:mm:ss");
+							if (oDate != null)
+							{
+								sDate = oDate.toString("dd MMM yyyy");
+							}
+
+							$('#ns1blankspaceDetailsEndDate').val(sDate);
 							
 							$('#ns1blankspaceDetailsFromEmail').val(ns1blankspace.objectContextData.fromemail);
 							$('#ns1blankspaceDetailsSummary').val(ns1blankspace.objectContextData.summary);
@@ -1003,6 +1027,7 @@ search: 		{
 											{
 												type: 'GET',
 												url: ns1blankspace.util.endpointURI('SETUP_CONTACT_PERSON_GROUP_SEARCH'),
+												data: 'rows=100',
 												dataType: 'json',
 												success: function(data){ns1blankspace.news.groups.add(oParam, data)}
 											});
@@ -1326,21 +1351,27 @@ search: 		{
 									if (oResponse.status == 'OK')
 									{
 										ns1blankspace.status.message('Saved');
-										if (ns1blankspace.objectContext == -1) {var bNew = true}
-										ns1blankspace.objectContext = oResponse.id;	
+										if (ns1blankspace.objectContext == -1)
+										{
+											var bNew = true;
+											ns1blankspace.objectContext = oResponse.id;
+										}	
 											
 										if ($('#ns1blankspaceMainGroups').html() != '')
 										{
 											if ($('input[name="radioEmailTo"]:checked').val() == '1')
 											{
-												var sParam = '&remove=2';
-												var sData = 'news=' + ns1blankspace.objectContext;
+												var oData = 
+												{
+													remove: 2,
+													news: ns1blankspace.objectContext
+												}	
 													
 												$.ajax(
 													{
 														type: 'POST',
-														url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE') + sParam,
-														data: sData,
+														url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE'),
+														data: oData,
 														dataType: 'text',
 														success: function(data){ns1blankspace.news.groups.show()}
 													});
@@ -1349,14 +1380,17 @@ search: 		{
 											
 											if ($('input[name="radioEmailTo"]:checked').val() == '2')
 											{
-												var sData = 'news=' + ns1blankspace.objectContext +
-															'&group=-1';
+												var oData = 
+												{
+													group: -1,
+													news: ns1blankspace.objectContext
+												}	
 													
 												$.ajax(
 												{
 													type: 'POST',
 													url: ns1blankspace.util.endpointURI('NEWS_PERSON_GROUP_MANAGE'),
-													data: sData,
+													data: oData,
 													dataType: 'text',
 													success: function(data){ns1blankspace.news.groups.show()}
 												});		
@@ -1368,13 +1402,6 @@ search: 		{
 											ns1blankspace.inputDetected = false;
 											ns1blankspace.news.search.send('-' + ns1blankspace.objectContext)
 										}
-										
-										// ToDo: These lines may be required if MANAGE method doesn't return JSON
-										//var aResponse = sResponse.split('|');
-										//if (aResponse.length == 4)	
-										//{ns1blankspace.objectContext = aResponse[3]};
-										//ns1blankspace.inputDetected = false;
-										//ns1blankspace.news.search('-' + ns1blankspace.objectContext, {source: 1});
 									}
 									else
 									{
