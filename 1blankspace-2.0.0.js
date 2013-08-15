@@ -229,7 +229,7 @@ ns1blankspace.app =
 
 						ns1blankspace.okToSave = true;
 
-						ns1blankspace.counter.editor = 0;
+						if (ns1blankspace.counter.editor === undefined) {ns1blankspace.counter.editor = 0};
 
 						ns1blankspace.xhtml.masterControl = '';
 						ns1blankspace.xhtml.action = '';
