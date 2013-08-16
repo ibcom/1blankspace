@@ -300,7 +300,7 @@ ns1blankspace.home.actions =
 
 							$.each(oResponse.data.rows, function()
 							{
-								aHTML.push(ns1blankspace.home.actions.row(this, (bOverdue || bFuture)));
+								aHTML.push(ns1blankspace.home.actions.row(this, oParam));
 							});
 							
 							aHTML.push('</table>');
