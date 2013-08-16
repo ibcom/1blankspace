@@ -328,7 +328,8 @@ ns1blankspace.home.actions =
 	row:		function (oRow, oParam)
 				{
 					var aHTML = [];
-					var bShowDate = true;
+					var bOverdue = ns1blankspace.util.getParam(oParam, 'overdue', {default: false}).value;
+					var bFuture = ns1blankspace.util.getParam(oParam, 'future', {default: false}).value;
 
 					aHTML.push('<tr class="ns1blankspaceRow">');
 								
@@ -338,7 +339,7 @@ ns1blankspace.home.actions =
 					var oDate = new Date(oRow.date);
 					sDate = oDate.toString("ddd, dd MMM yyyy");
 							
-					if (bShowDate)
+					if (bOverdue || bFuture)
 					{
 						aHTML.push('<td id="ns1blankspaceHomeActions_date-' + oRow.id + '" class="ns1blankspaceRow">' +
 											sDate + '</td>');
