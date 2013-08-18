@@ -11,6 +11,7 @@ ns1blankspace.report.endpoint;
 ns1blankspace.report.method;
 ns1blankspace.report.searchFunction;
 ns1blankspace.report.scriptOpen;
+ns1blankspace.report.windowOpen;
 ns1blankspace.report.scriptNewPage;
 ns1blankspace.report.fixedParameters;
 ns1blankspace.report.selectableParameters;
@@ -60,7 +61,9 @@ ns1blankspace.report =
 								method: "CONTACT_BUSINESS_SEARCH",
 								returnParameters: 'contactbusiness,contactbusiness.contactperson',
 								functionSearch: ns1blankspace.contactBusiness.search.send,
+								scriptNewPage: 'ns1blankspace.report.search.bind()',
 								scriptOpen: 'ns1blankspace.contactBusiness.init({showHome: false});ns1blankspace.contactBusiness.search.send(this.id)',
+								windowOpen: 'var aID = this.id.split("-"); window.open("/#/contactBusiness/" + aID[1]);'
 							},
 							{
 								name: "People",
@@ -69,7 +72,9 @@ ns1blankspace.report =
 								method: "CONTACT_PERSON_SEARCH",
 								returnParameters: 'contactperson,contactperson.contactbusiness',
 								functionSearch: ns1blankspace.contactPerson.search.send,
-								scriptOpen: 'ns1blankspace.contactPerson.init({showHome: false});ns1blankspace.contactPerson.search.send(this.id)'
+								scriptNewPage: 'ns1blankspace.report.search.bind()',
+								scriptOpen: 'ns1blankspace.contactPerson.init({showHome: false});ns1blankspace.contactPerson.search.send(this.id)',
+								windowOpen: 'var aID = this.id.split("-"); window.open("/#/contactPerson/" + aID[1]);'								
 							},
 							{
 								name: "Opportunities",
@@ -78,7 +83,8 @@ ns1blankspace.report =
 								method: "OPPORTUNITY_SEARCH",
 								returnParameters: 'opportunity,opportunity.contactbusiness,opportunity.contactperson,',
 								functionSearch: ns1blankspace.opportunity.search.send,
-								scriptOpen: 'ns1blankspace.opportunity.init({showHome: false});ns1blankspace.opportunity.search.send(this.id)'
+								scriptOpen: 'ns1blankspace.opportunity.init({showHome: false});ns1blankspace.opportunity.search.send(this.id)',
+								windowOpen: 'var aID = this.id.split("-"); window.open("/#/opportunity/" + aID[1]);'
 							},
 							{
 								name: "Products",
@@ -87,7 +93,9 @@ ns1blankspace.report =
 								method: "PRODUCT_SEARCH",
 								returnParameters: 'product',
 								functionSearch: ns1blankspace.product.search.send,
-								scriptOpen: 'ns1blankspace.product.init({showHome: false});ns1blankspace.product.search.send(this.id)'
+								scriptNewPage: 'ns1blankspace.report.search.bind()',
+								scriptOpen: 'ns1blankspace.product.init({showHome: false});ns1blankspace.product.search.send(this.id)',
+								windowOpen: 'var aID = this.id.split("-"); window.open("/#/product/" + aID[1]);'
 							},
 							{
 								name: "Invoices",
@@ -96,7 +104,9 @@ ns1blankspace.report =
 								method: "FINANCIAL_INVOICE_SEARCH",
 								returnParameters: 'invoice',
 								functionSearch: ns1blankspace.financial.invoice.search.send,
-								scriptOpen: 'ns1blankspace.financial.invoice.init({showHome: false});ns1blankspace.financial.invoice.search.send(this.id)'
+								scriptNewPage: 'ns1blankspace.report.search.bind()',
+								scriptOpen: 'ns1blankspace.financial.invoice.init({showHome: false});ns1blankspace.financial.invoice.search.send(this.id)',
+								windowOpen: 'var aID = this.id.split("-"); window.open("/#/financial.invoice/" + aID[1]);'
 							},
 							{
 								name: "Business Groups",
@@ -161,6 +171,7 @@ ns1blankspace.report =
 							{name: "contactperson.fax", caption: "Fax"},
 							{name: "contactperson.mobile", caption: "Mobile"},
 							{name: "contactperson.email", caption: "Email"},
+							{name: "contactperson.sendnews", caption: "Send News"},
 							{name: "contactperson.streetaddresscombined", caption: "Street Address"},
 							{name: "contactperson.streetaddress1", caption: "Street Address 1"},
 							{name: "contactperson.streetaddress2", caption: "Street Address 2"},
@@ -567,6 +578,7 @@ ns1blankspace.report =
 						if (oParam.jsonSearch != undefined) {sJSONSearch = oParam.jsonSearch}
 						if (oParam.functionSearch != undefined) {ns1blankspace.report.searchFunction = oParam.functionSearch}
 						if (oParam.scriptOpen != undefined) {ns1blankspace.report.scriptOpen = oParam.scriptOpen}
+						if (oParam.windowOpen != undefined) {ns1blankspace.report.windowOpen = oParam.windowOpen}
 						if (oParam.scriptNewPage != undefined) {ns1blankspace.report.scriptNewPage = oParam.scriptNewPage}
 						if (oParam.selectableParameters != undefined) {oSelectableParameters = oParam.selectableParameters}
 						if (oParam.fixedParameters != undefined) {oFixedParameters = oParam.fixedParameters}
@@ -1578,6 +1590,7 @@ ns1blankspace.report =
 										   	}); 	
 												
 											$('.ns1blankspaceRowSelect' + '').unbind('click');
+											$('.ns1blankspaceRowSelectWin' + '').unbind('click');
 												
 											if (ns1blankspace.report.scriptOpen != undefined)
 											{
@@ -1596,12 +1609,31 @@ ns1blankspace.report =
 												.css('width', '15px')
 												.css('height', '20px')
 											}
-											
+											//ns1blankspace.report.search.bind();
 											eval(ns1blankspace.report.scriptNewPage);	
 										}
 									}	
 								},
-
+					bind: 		function()
+								{
+									if (ns1blankspace.report.windowOpen != undefined)
+									{
+										$('.ns1blankspaceRowSelectWin' + '').button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-newwin"
+											}
+										})
+										.click(function()
+										{
+											eval(ns1blankspace.report.windowOpen);
+										})
+										.css('width', '15px')
+										.css('height', '20px')
+									}								
+								},
 					row:		function (oResponse, oParam)
 								{
 									var aHTML = [];
@@ -1677,16 +1709,19 @@ ns1blankspace.report =
 										{
 											if (sKey == sIDColumn)
 											{	
-												aLastHTML.push('<td class="ns1blankspaceRow"><span class="ns1blankspaceRowSelect id" ' +
-															 'id="id-' + sIDValue + '"' +
-															 'data-extraid="' + sLastExtraID + '"></span></td>');
+												aLastHTML.push('<td class="ns1blankspaceRow">' + 
+																'<span class="ns1blankspaceRowSelect id" id="id-' + sIDValue + '" data-extraid="' + sLastExtraID + '"></span>' +
+																'<span class="ns1blankspaceRowSelectWin id" id="wid-' + sIDValue + '" data-extraid="' + sLastExtraID + '"></span>' +
+															 '</td>');
 											}
 										}
 									});
 
 									if (aLastHTML.length == 0) {
-										aLastHTML.push('<td class="ns1blankspaceRow"><span class="ns1blankspaceRowSelect id" ' +
-													 'id="id-' + oResponse[sIDColumn] + '"</span></td>');
+										aLastHTML.push('<td class="ns1blankspaceRow">' + 
+														'<span class="ns1blankspaceRowSelect id" id="id-' + oResponse[sIDColumn] + '"></span>' + 
+														'<span class="ns1blankspaceRowSelectWin id" id="wid-' + oResponse[sIDColumn] + '"></span>' +
+													 '</td>');
 
 									}
 									aHTML.push(aLastHTML.join(''));
