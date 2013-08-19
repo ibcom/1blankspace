@@ -250,11 +250,14 @@ ns1blankspace.financial.bankAccount =
 					else
 					{	
 						aHTML.push('<table class="ns1blankspaceColumn2">' +
-									'<tr><td class="ns1blankspaceSub">' +
-									'Last reconciled on the ' +
-									 ns1blankspace.objectContextData.lastreconcileddate + ',<br />with an account balance of $' +
-									 ns1blankspace.objectContextData.lastreconciledamount +
-									'.</td></tr></table>');
+									'<tr><td class="ns1blankspaceSummaryCaption">Last reconciled</td></tr>' +
+									'<tr><td class="ns1blankspaceSummary">' +
+									ns1blankspace.objectContextData.lastreconcileddate +
+									'</td></tr>' + 
+									'<tr><td class="ns1blankspaceSummaryCaption">with balance of</td></tr>' +
+									'<tr><td class="ns1blankspaceSummary">$' +
+									ns1blankspace.objectContextData.lastreconciledamount +
+									'</td></tr></table>');
 					}								
 
 					$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
@@ -1944,7 +1947,7 @@ ns1blankspace.financial.bankAccount =
 									{
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
-										oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance');
+										oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance,notes');
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.addFilter('status', 'EQUAL_TO', iMode)
 										oSearch.sort('statementdate', 'desc');
@@ -2105,20 +2108,32 @@ ns1blankspace.financial.bankAccount =
 									if (oRow.status == 2)
 									{			
 										aHTML.push('<td id="ns1blankspaceFinancialBankAccountReconcile_title-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceBankAccountReconcileRowSelect"' +
-														' style="text-align:right;">' +
-														'<span id="ns1blankspaceFinancialBankAccountReconcile_date-' +
-														oRow.id  + '" class="ns1blankspaceSub">' + oRow.statementdate + '</span><br />');
+														' style="text-align:right;">');
 
-										aHTML.push('<span id="ns1blankspaceFinancialBankAccountReconcile_balance-' + '-' + oRow.id + '" class="ns1blankspaceSub">$' +
+										if (oRow.notes != '...')
+										{	
+											aHTML.push('<div style="margin-bottom:8px;" id="ns1blankspaceFinancialBankAccountReconcile_notes-' + '-' + oRow.id + '" class="ns1blankspaceSub">' +
+									 					oRow.notes + '</div>');
+										}
+
+										aHTML.push('<span id="ns1blankspaceFinancialBankAccountReconcile_date-' +
+														oRow.id  + '" class="ns1blankspaceSub">' + oRow.statementdate + '</span><br />' +
+														'<span id="ns1blankspaceFinancialBankAccountReconcile_balance-' + '-' + oRow.id + '" class="ns1blankspaceSub">$' +
 									 					oRow.statementbalance + '</span>');
 									}
 									else
 									{
 										aHTML.push('<td id="ns1blankspaceFinancialBankAccountReconcile_title-' + oRow.id + '" class="ns1blankspaceRowSelect ns1blankspaceBankAccountReconcileRowSelect"' +
 															' style="text-align:right; color:black;"' +
-															'>' + oRow.statementdate + '<br />');
+															'>');
 
-										aHTML.push('<span id="ns1blankspaceFinancialBankAccountReconcile_balance-' + oRow.id + '">$' +
+										if (oRow.notes != '...')
+										{	
+											aHTML.push('<div style="margin-bottom:8px;" id="ns1blankspaceFinancialBankAccountReconcile_notes-' + '-' + oRow.id + '" class="ns1blankspaceSub">' +
+									 					oRow.notes + '</div>');
+										}
+
+										aHTML.push(oRow.statementdate + '<br /><span id="ns1blankspaceFinancialBankAccountReconcile_balance-' + oRow.id + '">$' +
 									 					oRow.statementbalance + '</span>');
 									}						
 									
