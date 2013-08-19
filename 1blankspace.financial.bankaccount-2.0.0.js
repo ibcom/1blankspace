@@ -1492,6 +1492,7 @@ ns1blankspace.financial.bankAccount =
 														var aHTML = [];
 
 														aHTML.push('<div id="ns1blankspaceImportEditStatus-1" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Uploaded</div>');
+														aHTML.push('<div id="ns1blankspaceImportEditStatus-3" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Confirmed</div>');
 														aHTML.push('<div id="ns1blankspaceImportEditStatus-2" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Matched</div>');
 
 														$(ns1blankspace.xhtml.container).html(aHTML.join(''));
