@@ -981,8 +981,8 @@ ns1blankspace.financial.bankAccount =
 															if (oItem.mapping.maptofinancialaccount != '') {oData.financialaccount = oItem.mapping.maptofinancialaccount}
 															if (oItem.mapping.maptodescription != '') {oData.description = oItem.mapping.maptodescription}
 															if (oItem.mapping.taxtype != '') {oData.taxtype = oItem.mapping.taxtype}
-															if (oItem.mapping.maptocontactbusiness != '') {oData.contactbusiness = oItem.mapping.maptocontactbusiness}
-															if (oItem.mapping.maptocontactperson != '') {oData.contactperson = oItem.mapping.maptocontactperson}	
+															if (oItem.mapping.maptocontactbusiness != '' && oItem.mapping.maptocontactbusiness != 0) {oData.contactbusiness = oItem.mapping.maptocontactbusiness}
+															if (oItem.mapping.maptocontactperson != '' && oItem.mapping.maptocontactperson != 0) {oData.contactperson = oItem.mapping.maptocontactperson}	
 														}		
 
 														$.ajax(
