@@ -1329,8 +1329,9 @@ ns1blankspace.setup.structure =
 														primary: "ui-icon-gear"
 													}
 												})
-												.click(function() {
-													ns1blankspace.setup.structure.element.automation({xhtmlElementID: this.id})
+												.click(function()
+												{
+													ns1blankspace.setup.structure.automation.show({xhtmlElementID: this.id})
 												})
 												.css('width', '15px')
 												.css('height', '17px')
@@ -1853,14 +1854,16 @@ ns1blankspace.setup.structure =
 										
 									if (oResponse == undefined)
 									{	
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_AUTOMATION_SEARCH'),
-											data: 'element=' + iElementID,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.setup.structure.automation.show(oParam, data)}
-										});
+										//category,categorytext,
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_STRUCTURE_AUTOMATION_SEARCH';
+										oSearch.addField('element,structure,backgroundcolour,daystocomplete,element,elementtext,' +
+															'maximumpoints,minimumpoints,notes,severity,severitytext,status,statustext,structure,structuretext,' +
+															'textcolour,title,type,typetext');
+										oSearch.sort('title', 'asc');
+										oSearch.addFilter('element', 'EQUAL_TO', iElementID);
+										oSearch.rows = 100;
+										oSearch.getResults(function(data) {ns1blankspace.setup.structure.automation.show(oParam, data)});
 									}
 									else
 									{
@@ -1885,7 +1888,8 @@ ns1blankspace.setup.structure =
 											{
 												label: "Add"
 											})
-											.click(function() {
+											.click(function()
+											{
 												 ns1blankspace.setup.structure.automation.add({element: iElementID});
 											})
 											
@@ -1895,15 +1899,17 @@ ns1blankspace.setup.structure =
 
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No automation set up.</td></tr></table>');
+											aHTML.push('<table class="ns1blankspaceColumn2"><tr><td class="ns1blankspaceNothing">No automation set up.</td></tr></table>');
 
 											$('#ns1blankspaceSetupStructureElementColumnElement2').html(aHTML.join(''));
 										}
 										else
 										{
-											aHTML.push('<table id="ns1blankspaceSetupStructureAutomation" class="ns1blankspaceContainer">');
+											aHTML.push('<table id="ns1blankspaceSetupStructureAutomation" class="ns1blankspaceColumn2">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Automation</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Min.</td>')
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Max.</td>')
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
@@ -1913,6 +1919,12 @@ ns1blankspace.setup.structure =
 																
 												aHTML.push('<td id="ns1blankspaceSetupStructureAutomation_title-' + this.id + '" class="ns1blankspaceRow">' +
 																		this.title + '</td>');
+
+												aHTML.push('<td id="ns1blankspaceSetupStructureAutomation_minimumpoints-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.minimumpoints + '</td>');
+
+												aHTML.push('<td id="ns1blankspaceSetupStructureAutomation_maximumpoints-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.maximumpoints + '</td>');
 																		
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 													
@@ -1937,7 +1949,7 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.remove) 
 											{
-												$('#ns1blankspaceSetupStructureAutomation span.ns1blankspaceRowOptionsRemove').button( {
+												$('#ns1blankspaceSetupStructureAutomation span.ns1blankspaceRowRemove').button( {
 													text: false,
 													icons: {
 														primary: "ui-icon-close"
@@ -1952,14 +1964,16 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.view) 
 											{
-												$('#ns1blankspaceSetupStructureAutomation span.ns1blankspaceRowOptionsView').button( {
+												$('#ns1blankspaceSetupStructureAutomation span.ns1blankspaceRowView').button(
+												{
 													text: false,
 													icons: {
 														primary: "ui-icon-play"
 													}
 												})
-												.click(function() {
-													ns1blankspace.setup.structure.automation.add({xhtmlElementID: this.id, element: iElementID})
+												.click(function()
+												{
+													ns1blankspace.setup.structure.automation.edit({xhtmlElementID: this.id, element: iElementID})
 												})
 												.css('width', '15px')
 												.css('height', '17px');
@@ -1968,7 +1982,7 @@ ns1blankspace.setup.structure =
 									}	
 								},
 
-					add:		function (oParam, oResponse)
+					edit:		function (oParam, oResponse)
 								{
 									var sID; 
 									var iElementID;
@@ -1991,7 +2005,7 @@ ns1blankspace.setup.structure =
 									
 										var aHTML = [];
 
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
 										aHTML.push('<tr class="ns1blankspaceCaption">');
 										aHTML.push('<td class="ns1blankspaceHeaderCaption">Automation</td>');
@@ -2003,25 +2017,42 @@ ns1blankspace.setup.structure =
 														'</td></tr>' +
 														'<tr class="ns1blankspaceText">' +
 														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceSetupStructureAutomationTitle" class="inputns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureAutomationTitle" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Minimum Points' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureAutomationMinimumPoints" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Maximum Points' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureAutomationMaximumPoints" class="ns1blankspaceText">' +
 														'</td></tr>');
 										
 										aHTML.push('</table>');					
 										
-										$('#tns1blankspaceSetupStructureElementColumnElement2').html(aHTML.join(''));
+										$('#ns1blankspaceSetupStructureElementColumnElement2').html(aHTML.join(''));
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:70px;" id="ns1blankspaceSetupStructureAutomationSave">Save</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" id="ns1blankspaceSetupStructureAutomationSave">Save</span>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');					
 										
-										$('#ts1blankspaceSetupStructureElementColumnElement3').html(aHTML.join(''));
+										$('#ns1blankspaceSetupStructureElementColumnElement3').html(aHTML.join(''));
 										
 										$('#ns1blankspaceSetupStructureAutomationSave').button(
 										{
@@ -2029,33 +2060,39 @@ ns1blankspace.setup.structure =
 										})
 										.click(function() 
 										{
-											var sData = 'structure=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-											sData += '&element=' + ns1blankspace.util.fs(iElementID);
-											sData += '&id=' + ns1blankspace.util.fs(sID);
-											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureAutomationTitle').val());
+											var oData =
+											{
+												id: sID,
+												structure: ns1blankspace.objectContext,
+												element: iElementID,
+												title: $('#ns1blankspaceSetupStructureAutomationTitle').val(),
+												minimumpoints: $('#ns1blankspaceSetupStructureAutomationMinimumPoints').val(),
+												maximumpoints: $('#ns1blankspaceSetupStructureAutomationMaximumPoints').val(),
+											}	
 											
 											$.ajax(
 											{
 												type: 'POST',
 												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_AUTOMATION_MANAGE'),
-												data: sData,
+												data: oData,
 												dataType: 'json',
-												success: function() {
-													ns1blankspace.setup.structure.automation.automation.show({element: iElementID});
+												success: function()
+												{
+													ns1blankspace.setup.structure.automation.show({element: iElementID});
 												}
 											});
 										});
 										
 										if (sID != undefined)
 										{
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_AUTOMATION_SEARCH'),
-												data: 'id=' + sID,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.structure.automation.add(oParam, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_STRUCTURE_AUTOMATION_SEARCH';
+											oSearch.addField('element,structure,backgroundcolour,daystocomplete,element,elementtext,' +
+																'maximumpoints,minimumpoints,notes,severity,severitytext,status,statustext,structure,structuretext,' +
+																'textcolour,title,type,typetext');
+											oSearch.addFilter('id', 'EQUAL_TO', sID);
+											oSearch.rows = 1;
+											oSearch.getResults(function(data) {ns1blankspace.setup.structure.automation.edit(oParam, data)});
 										}
 										else
 										{
@@ -2067,7 +2104,11 @@ ns1blankspace.setup.structure =
 										if (oResponse.data.rows.length != 0)
 										{
 											var oObjectContext = oResponse.data.rows[0];
+
 											$('#ns1blankspaceSetupStructureAutomationTitle').val(oObjectContext.title)
+											$('#ns1blankspaceSetupStructureAutomationMinimumPoints').val(oObjectContext.minimumpoints)
+											$('#ns1blankspaceSetupStructureAutomationMaximumPoints').val(oObjectContext.maximumpoints)
+
 											$('#ns1blankspaceSetupStructureAutomationTitle').focus();
 										}
 									}		

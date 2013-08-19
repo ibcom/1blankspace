@@ -3547,7 +3547,9 @@ ns1blankspace.financial.bankAccount =
 																else
 																{
 																	ns1blankspace.status.message('Reconciled');
-																}	
+																}
+
+																ns1blankspace.financial.bankAccount.reconcile.items.show()	
 															}
 														});
 													}	
