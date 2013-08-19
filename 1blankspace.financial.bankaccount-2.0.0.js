@@ -3648,7 +3648,7 @@ ns1blankspace.financial.bankAccount =
 															$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
 
 															var iTaxType = 1;
-															var iTranType = 1;
+															var iTranType = (iType==1?2:1);
 
 															if (ns1blankspace.util.param(oParam, 'sourceXHTMLElementID').exists)
 															{	
@@ -3662,7 +3662,7 @@ ns1blankspace.financial.bankAccount =
 																$('#ns1blankspaceItemContactPerson').val(ns1blankspace.util.getData(oParam, 'data-contactpersontext', {param: 'sourceXHTMLElementID'}).value);
 																$('#ns1blankspaceItemContactPerson').attr('data-id', ns1blankspace.util.getData(oParam, 'data-contactperson', {param: 'sourceXHTMLElementID'}).value);
 																iTaxType = ns1blankspace.util.getData(oParam, 'data-taxtype', {param: 'sourceXHTMLElementID'}).value;
-																iTranType = ns1blankspace.util.getData(oParam, 'data-trantype', {param: 'sourceXHTMLElementID'}).value;
+																//iTranType = ns1blankspace.util.getData(oParam, 'data-trantype', {param: 'sourceXHTMLElementID'}).value;
 															}
 															else
 															{

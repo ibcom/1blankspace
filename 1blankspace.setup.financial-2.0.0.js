@@ -344,7 +344,7 @@ ns1blankspace.setup.financial =
 						{
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-							oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status,statustext,accountname,bsb,accountnumber');
+							oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status,statustext,accountname,bsb,accountnumber,financialaccount');
 							oSearch.sort('title', 'asc');
 							oSearch.rows = ns1blankspace.option.defaultRows;
 							oSearch.getResults(function(data) {ns1blankspace.setup.financial.bankAccounts(oParam, data)});
