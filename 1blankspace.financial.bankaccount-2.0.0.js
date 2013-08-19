@@ -4123,9 +4123,10 @@ ns1blankspace.financial.bankAccount =
 																if (iSource == 3)  //JOURNAL
 																{	
 																	dDate = this['generaljournalitem.generaljournal.journaldate'];
+																	
 																	cAmount = this.debitamount;
+																	if (iType == 2) {cAmount = this.creditamount};
 
-																	if (iType == 1) {cAmount = this.creditamount};
 																	var sDescription = this['generaljournalitem.generaljournal.description'];
 																}
 
