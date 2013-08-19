@@ -4072,7 +4072,7 @@ ns1blankspace.financial.bankAccount =
 															
 															if (cSearchAmount) {oSearch.addFilter((iType==1?'creditamount':'debitamount'), 'APPROX_EQUAL_TO', cSearchAmount)}
 															
-															oSearch.addFilter('taxcategory', 'EQUAL_TO', (iType==1?2:1));
+															oSearch.addFilter('taxcategory', 'EQUAL_TO', (iType==1?1:2));
 
 															oSearch.sort('generaljournalitem.generaljournal.journaldate', 'asc');
 														}	
@@ -4123,9 +4123,9 @@ ns1blankspace.financial.bankAccount =
 																if (iSource == 3)  //JOURNAL
 																{	
 																	dDate = this['generaljournalitem.generaljournal.journaldate'];
-																	
+
 																	cAmount = this.debitamount;
-																	if (iType == 2) {cAmount = this.creditamount};
+																	if (iType == 1) {cAmount = this.creditamount};
 
 																	var sDescription = this['generaljournalitem.generaljournal.description'];
 																}
