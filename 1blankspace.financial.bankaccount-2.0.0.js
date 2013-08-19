@@ -1136,7 +1136,9 @@ ns1blankspace.financial.bankAccount =
 
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>');							
+										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td class="ns1blankspaceSubNote">Select an existing import to view and confirm transactions, or choose a file to upload.</td></tr>');		
+
+										aHTML.push('<tr><td>');							
 										aHTML.push(ns1blankspace.attachments.upload.show(
 														{	
 															object: 28,
@@ -1207,7 +1209,8 @@ ns1blankspace.financial.bankAccount =
 									{
 										if (oResponse.data.rows.length !=0)
 										{	
-											var sData = 'id=' + oResponse.data.rows[0].id;
+											var iID = oResponse.data.rows[0].id;
+											var sData = 'id=' + iID;
 									
 											ns1blankspace.status.working();
 
@@ -1426,6 +1429,7 @@ ns1blankspace.financial.bankAccount =
 														aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSub ns1blankspaceRowSelect ns1blankspaceFinancialImportItemStatus" id="ns1blankspaceFinancialImportItem_status-' + oRow.id + '">');
 
 														var sStatusText = oRow.statustext;
+														if (oRow.status==1) {sStatusText = 'Unconfirmed'};
 														if (oRow.status==3) {sStatusText = 'Confirmed'};
 														if (oRow.status==4) {sStatusText = 'Transferred to financials'};
 														if (oRow.status==7) {sStatusText = 'Part transferred to financials'};
@@ -1491,7 +1495,7 @@ ns1blankspace.financial.bankAccount =
 
 														var aHTML = [];
 
-														aHTML.push('<div id="ns1blankspaceImportEditStatus-1" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Uploaded</div>');
+														aHTML.push('<div id="ns1blankspaceImportEditStatus-1" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Unconfirmed</div>');
 														aHTML.push('<div id="ns1blankspaceImportEditStatus-3" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Confirmed</div>');
 														aHTML.push('<div id="ns1blankspaceImportEditStatus-2" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Matched</div>');
 
@@ -4075,6 +4079,7 @@ ns1blankspace.financial.bankAccount =
 
 														if (sSearchReference) {oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference)}
 														oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
+														oSearch.rows = 200;
 
 														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.locked(oParam, data)});
 													}
