@@ -551,7 +551,7 @@
 		{"title":"SETUP_ISSUE_SOURCE_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_ISSUE_STATUS_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"SETUP_ISSUE_TYPE_CATEGORY_MANAGE", "advancedSearch":"false", "rpc":"true"},
-		{"title":"SETUP_ISSUE_TYPE_CATEGORY_SEARCH", "advancedSearch":"false", "rpc":"true"},
+		{"title":"SETUP_ISSUE_TYPE_CATEGORY_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_ISSUE_TYPE_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_ISSUE_TYPE_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_MEDIA_ALERT_TYPE_SEARCH", "advancedSearch":"false", "rpc":"true"},

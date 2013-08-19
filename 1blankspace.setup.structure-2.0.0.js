@@ -1854,12 +1854,11 @@ ns1blankspace.setup.structure =
 										
 									if (oResponse == undefined)
 									{	
-										//category,categorytext,
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_STRUCTURE_AUTOMATION_SEARCH';
 										oSearch.addField('element,structure,backgroundcolour,daystocomplete,element,elementtext,' +
 															'maximumpoints,minimumpoints,notes,severity,severitytext,status,statustext,structure,structuretext,' +
-															'textcolour,title,type,typetext');
+															'textcolour,title,type,typetext,category,categorytext');
 										oSearch.sort('title', 'asc');
 										oSearch.addFilter('element', 'EQUAL_TO', iElementID);
 										oSearch.rows = 100;
@@ -1917,7 +1916,7 @@ ns1blankspace.setup.structure =
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																
-												aHTML.push('<td id="ns1blankspaceSetupStructureAutomation_title-' + this.id + '" class="ns1blankspaceRow">' +
+												aHTML.push('<td id="ns1blankspaceSetupStructureAutomation_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																		this.title + '</td>');
 
 												aHTML.push('<td id="ns1blankspaceSetupStructureAutomation_minimumpoints-' + this.id + '" class="ns1blankspaceRow">' +
@@ -1926,18 +1925,13 @@ ns1blankspace.setup.structure =
 												aHTML.push('<td id="ns1blankspaceSetupStructureAutomation_maximumpoints-' + this.id + '" class="ns1blankspaceRow">' +
 																		this.maximumpoints + '</td>');
 																		
-												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 													
 												if (oOptions.remove)
 												{	
 													aHTML.push('<span id="ns1blankspaceSetupStructureCategoryoptions_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
 												};	
-													
-												if (oOptions.view)
-												{	
-													aHTML.push('<span id="ns1blankspaceSetupStructureCategory_options_view-' + this.id + '" class="ns1blankspaceRowView"></span>');
-												};	
-													
+		
 												aHTML.push('</td>');
 																
 												aHTML.push('</tr>');
@@ -1964,13 +1958,7 @@ ns1blankspace.setup.structure =
 											
 											if (oOptions.view) 
 											{
-												$('#ns1blankspaceSetupStructureAutomation span.ns1blankspaceRowView').button(
-												{
-													text: false,
-													icons: {
-														primary: "ui-icon-play"
-													}
-												})
+												$('#ns1blankspaceSetupStructureAutomation td.ns1blankspaceRowSelect')
 												.click(function()
 												{
 													ns1blankspace.setup.structure.automation.edit({xhtmlElementID: this.id, element: iElementID})
@@ -2008,7 +1996,7 @@ ns1blankspace.setup.structure =
 										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
 										aHTML.push('<tr class="ns1blankspaceCaption">');
-										aHTML.push('<td class="ns1blankspaceHeaderCaption">Automation</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption">Automation (Issue creation)</td>');
 										aHTML.push('</tr>');
 													
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -2036,6 +2024,67 @@ ns1blankspace.setup.structure =
 														'<tr class="ns1blankspaceText">' +
 														'<td class="ns1blankspaceText">' +
 														'<input id="ns1blankspaceSetupStructureAutomationMaximumPoints" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Background Colour' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureAutomationBackgroundColour" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Text Colour' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureAutomationTextColour" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Severity' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceRadio">' +
+														'<input type="radio" id="radioSeverity1" name="radioSeverity" value="1"/>Critical' +
+														'<br /><input type="radio" id="radioSeverity2" name="radioSeverity" value="2"/>High' +
+														'<br /><input type="radio" id="radioSeverity3" name="radioSeverity" value="3"/>Medium' +
+														'<br /><input type="radio" id="radioSeverity4" name="radioSeverity" value="4"/>Low' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Category' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureAutomationCategory" class="ns1blankspaceSelect"' +
+															' data-method="SETUP_ISSUE_TYPE_CATEGORY_SEARCH">' +
+														'</td></tr>');	
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Type' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureAutomationType" class="ns1blankspaceSelect"' +
+															' data-method="SETUP_ISSUE_TYPE_SEARCH"' +
+															' data-parent="ns1blankspaceSetupStructureAutomationCategory"' +
+															' data-parent-search-id="category">' +
+														'</td></tr>');	
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Notes' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceTextMulti">' +
+														'<textarea rows="5" cols="35" id="ns1blankspaceSetupStructureAutomationNotes" class="ns1blankspaceTextMulti"></textarea>' +
 														'</td></tr>');
 										
 										aHTML.push('</table>');					
@@ -2068,6 +2117,12 @@ ns1blankspace.setup.structure =
 												title: $('#ns1blankspaceSetupStructureAutomationTitle').val(),
 												minimumpoints: $('#ns1blankspaceSetupStructureAutomationMinimumPoints').val(),
 												maximumpoints: $('#ns1blankspaceSetupStructureAutomationMaximumPoints').val(),
+												backgroundcolour: $('#ns1blankspaceSetupStructureAutomationBackgroundColour').val(),
+												textcolour: $('#ns1blankspaceSetupStructureAutomationTextColour').val(),
+												notes: $('#ns1blankspaceSetupStructureAutomationNotes').val(),
+												severity: $('[name="radioSeverity"]:checked').val(),
+												category: $('#ns1blankspaceSetupStructureAutomationCategory').attr('data-id'),
+												type: $('#ns1blankspaceSetupStructureAutomationType').attr('data-id')
 											}	
 											
 											$.ajax(
@@ -2089,14 +2144,14 @@ ns1blankspace.setup.structure =
 											oSearch.method = 'SETUP_STRUCTURE_AUTOMATION_SEARCH';
 											oSearch.addField('element,structure,backgroundcolour,daystocomplete,element,elementtext,' +
 																'maximumpoints,minimumpoints,notes,severity,severitytext,status,statustext,structure,structuretext,' +
-																'textcolour,title,type,typetext');
+																'textcolour,title,type,typetext,category,categorytext');
 											oSearch.addFilter('id', 'EQUAL_TO', sID);
 											oSearch.rows = 1;
 											oSearch.getResults(function(data) {ns1blankspace.setup.structure.automation.edit(oParam, data)});
 										}
 										else
 										{
-											$('[name="radioDataType"][value="4"]').attr('checked', true);	
+											$('[name="radioSeverity"][value="1"]').attr('checked', true);	
 										}
 									}
 									else
@@ -2105,9 +2160,17 @@ ns1blankspace.setup.structure =
 										{
 											var oObjectContext = oResponse.data.rows[0];
 
-											$('#ns1blankspaceSetupStructureAutomationTitle').val(oObjectContext.title)
-											$('#ns1blankspaceSetupStructureAutomationMinimumPoints').val(oObjectContext.minimumpoints)
-											$('#ns1blankspaceSetupStructureAutomationMaximumPoints').val(oObjectContext.maximumpoints)
+											$('#ns1blankspaceSetupStructureAutomationTitle').val(oObjectContext.title);
+											$('#ns1blankspaceSetupStructureAutomationMinimumPoints').val(oObjectContext.minimumpoints);
+											$('#ns1blankspaceSetupStructureAutomationMaximumPoints').val(oObjectContext.maximumpoints);
+											$('#ns1blankspaceSetupStructureAutomationBackgroundColour').val(oObjectContext.backgroundcolour);
+											$('#ns1blankspaceSetupStructureAutomationTextColour').val(oObjectContext.textcolour);
+											$('#ns1blankspaceSetupStructureAutomationNotes').val(oObjectContext.notes);
+											$('[name="radioSeverity"][value="' + oObjectContext.severity + '"]').attr('checked', true);
+											$('#ns1blankspaceSetupStructureAutomationCategory').val(oObjectContext.categorytext);
+											$('#ns1blankspaceSetupStructureAutomationCategory').attr('data-id', oObjectContext.category);
+											$('#ns1blankspaceSetupStructureAutomationType').val(oObjectContext.typetext);
+											$('#ns1blankspaceSetupStructureAutomationType').attr('data-id', oObjectContext.type);
 
 											$('#ns1blankspaceSetupStructureAutomationTitle').focus();
 										}
