@@ -1108,7 +1108,7 @@ ns1blankspace.financial.bankAccount =
 											aHTML.push(' to ' + oRow.enddate + '<br />');	
 										}
 									
-										aHTML.push('<span class="ns1blankspaceSub">' + oRow.processeddate + '</span></td>');
+										//aHTML.push('<span class="ns1blankspaceSub">' + oRow.processeddate + '</span></td>');
 
 										aHTML.push('</tr>');
 									}
