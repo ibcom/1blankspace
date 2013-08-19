@@ -1889,7 +1889,7 @@ ns1blankspace.setup.structure =
 											})
 											.click(function()
 											{
-												 ns1blankspace.setup.structure.automation.add({element: iElementID});
+												 ns1blankspace.setup.structure.automation.edit({element: iElementID});
 											})
 											
 										}	
