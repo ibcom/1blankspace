@@ -1315,8 +1315,15 @@ ns1blankspace.financial.bankAccount =
 															})
 															.css('width', '15px')
 															.css('height', '20px');
-														}	
+														}
 
+														$('td.ns1blankspaceFinancialImportItemStatus')
+														.click(function()
+														{
+															oParam.xhtmlElementID = this.id;
+															ns1blankspace.financial.bankAccount.import.items.status(oParam);
+														})
+														
 														var aHTML = [];
 														
 														aHTML.push('<table class="ns1blankspaceColumn2">');
@@ -1381,13 +1388,15 @@ ns1blankspace.financial.bankAccount =
 														}).
 														css('width', '100px');
 
-														$('#ns1blankspaceFinancialBankImportItems .ns1blankspaceRemove').button( {
+														$('#ns1blankspaceFinancialBankImportItems .ns1blankspaceRemove').button(
+														{
 															text: false,
 															icons: {
 																primary: "ui-icon-close"
 															}
 														})
-														.click(function() {
+														.click(function()
+														{
 															oParam.xhtmlElementID = this.id;
 															ns1blankspace.financial.bankAccount.import.items.remove(oParam);
 														})
@@ -1414,7 +1423,7 @@ ns1blankspace.financial.bankAccount =
 																				 parseFloat(Math.abs((oRow.amount).parseCurrency())).formatMoney() +
 																				 '<br /><span class="ns1blankspaceSub">' + oRow.categorytext + '</span></td>');						
 																		
-														aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspaceFinancialImportItem_status-' + oRow.id + '">');
+														aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSub ns1blankspaceRowSelect ns1blankspaceFinancialImportItemStatus" id="ns1blankspaceFinancialImportItem_status-' + oRow.id + '">');
 
 														var sStatusText = oRow.statustext;
 														if (oRow.status==3) {sStatusText = 'Confirmed'};
@@ -1465,6 +1474,69 @@ ns1blankspace.financial.bankAccount =
 													return aHTML.join('');
 												},
 
+									status: 	function(oParam, oResponse)
+												{
+													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+													var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+													
+													if ($(ns1blankspace.xhtml.container).attr('data-source') == sXHTMLElementID)
+													{
+														$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+														$(ns1blankspace.xhtml.container).attr('data-source', '');
+													}
+													else
+													{	
+														$(ns1blankspace.xhtml.container).attr('data-source', sXHTMLElementID);
+														ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: 0, topOffset: 5})
+
+														var aHTML = [];
+
+														aHTML.push('<div id="ns1blankspaceImportEditStatus-1" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Uploaded</div>');
+														aHTML.push('<div id="ns1blankspaceImportEditStatus-2" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Matched</div>');
+
+														$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+														$(ns1blankspace.xhtml.container).show();
+
+														$('div.ns1blankspaceImportEditStatus').button().click(function(event)
+														{
+															$(ns1blankspace.xhtml.container).attr('data-source', '');
+															$(ns1blankspace.xhtml.container).hide();
+
+															ns1blankspace.status.working();
+
+															var sID = this.id;
+															var aID = sID.split('-');
+
+															var oData =
+															{
+																id: iID,
+																status: (this.id).split('-')[1]
+															}	
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
+																data: oData,
+																dataType: 'json',
+																success: function(data)
+																{
+																	if (data.status == 'OK')
+																	{
+																		ns1blankspace.status.message('Updated');
+																		ns1blankspace.financial.bankAccount.import.items.show(oParam);
+																	}
+																	else
+																	{
+																		ns1blankspace.status.error(data.error.errornotes);
+																	}
+																}
+															});
+
+														});
+													}		
+												},		
+			
 									refresh: 	function (oParam)
 												{
 													var iID = ns1blankspace.util.getParam(oParam, 'bankTransactionID').value;
