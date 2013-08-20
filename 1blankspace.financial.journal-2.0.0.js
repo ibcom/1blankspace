@@ -24,6 +24,7 @@ ns1blankspace.financial.journal =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Journals';
+					ns1blankspace.objectMethod = 'FINANCIAL_GENERAL_JOURNAL';
 
 					if (!bInitialised)
 					{
@@ -680,8 +681,13 @@ ns1blankspace.financial.journal =
 									if (oResponse.status == 'OK')
 									{
 										ns1blankspace.status.message('Saved');
-										if (ns1blankspace.objectContext == -1) {var bNew = true}
-										ns1blankspace.objectContext = oResponse.id;	
+
+										if (ns1blankspace.objectContext == -1)
+										{
+											ns1blankspace.objectContext = oResponse.id;
+											ns1blankspace.inputDetected = false;
+											ns1blankspace.financial.journal.search.send('-' + ns1blankspace.objectContext, {source: 1});
+										}
 									}
 									else
 									{
