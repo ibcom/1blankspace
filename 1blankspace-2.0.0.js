@@ -381,13 +381,15 @@ ns1blankspace.app =
 									
 							$(ns1blankspace.xhtml.container).html('<span id="ns1blankspaceSelectOptions" class="ns1blankspaceSelectOptions"></span>');
 							
-							$('#ns1blankspaceSelectOptions').button({
+							$('#ns1blankspaceSelectOptions').button(
+							{
 								text: false,
 								icons: {
 									primary: "ui-icon-triangle-1-s"
 								}
 							})
-							.click(function() {
+							.click(function()
+							{
 								ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
 							})
 							.css('width', '14px')
@@ -404,7 +406,13 @@ ns1blankspace.app =
 							}
 							else
 							{
-								ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 1});
+								if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+							
+								var sFunction = "ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID," +
+													"source: 1," +
+													"minimumLength: 1});"
+							
+								ns1blankspace.timer.delayCurrent = setTimeout(sFunction, ns1blankspace.option.typingWait);
 							}		
 						});	
 						
