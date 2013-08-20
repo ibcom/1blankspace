@@ -404,7 +404,7 @@ ns1blankspace.app =
 							}
 							else
 							{
-								ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 3});
+								ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 1, minimumLength: 1});
 							}		
 						});	
 						

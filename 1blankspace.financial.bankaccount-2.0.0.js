@@ -3503,6 +3503,7 @@ ns1blankspace.financial.bankAccount =
 																		oParam.outstandingAmount = $(this).attr('data-outstandingamount');
 																		oParam.object = undefined;
 																		ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
+																		$(this).parent().html('');
 																	})
 																	.css('width', '15px')
 																	.css('height', '17px')
@@ -3564,7 +3565,7 @@ ns1blankspace.financial.bankAccount =
 																	ns1blankspace.status.message('Reconciled');
 																}
 
-																ns1blankspace.financial.bankAccount.reconcile.items.show()	
+																//ns1blankspace.financial.bankAccount.reconcile.items.show(oParam);
 															}
 														});
 													}	
