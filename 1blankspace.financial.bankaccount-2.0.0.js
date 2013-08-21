@@ -2427,7 +2427,7 @@ ns1blankspace.financial.bankAccount =
 												
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Bank Statement Date' +
+														'Closing Balance Date' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
@@ -2436,7 +2436,7 @@ ns1blankspace.financial.bankAccount =
 													
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Bank Statement Balance' +
+														'Closing Balance' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
@@ -2445,7 +2445,7 @@ ns1blankspace.financial.bankAccount =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Reference' +
+														'Reference <span class="ns1blankspaceSubNote">(ie Statement Number)</span<' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
@@ -2464,7 +2464,7 @@ ns1blankspace.financial.bankAccount =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Previous Bank Statement Balance' +
+														'Opening Balance <span class="ns1blankspaceSubNote">(set automatically, if left blank)</span>' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
