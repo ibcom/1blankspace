@@ -318,7 +318,7 @@ ns1blankspace.financial.tax =
 										ns1blankspace.option.taxVATCaption + '</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlPayroll" class="ns1blankspaceControl">' +
-										ns1blankspace.option.taxPayrollCaption + '</td></tr>');
+										ns1blankspace.option.taxPayrollCaption + '<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">wages</span></td></tr>');
 
 					}				
 					
@@ -388,8 +388,8 @@ ns1blankspace.financial.tax =
 						
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 								
-						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData['enddate'] +
-							'<br /><span id="ns1blankspaceControlContext_startdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData['taxstartdate'] + '</span>' +
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData['taxstartdate'] +
+							'<br />to ' + ns1blankspace.objectContextData['enddate'] +
 							'<br /><span id="ns1blankspaceControlContext_status" class="ns1blankspaceSub">' + ns1blankspace.objectContextData['statustext'] + '</span>');
 							
 						ns1blankspace.history.view(
@@ -460,7 +460,7 @@ ns1blankspace.financial.tax =
 							var cTaxPayable = cTaxVATPayable + cTaxEmployeePayable;
 
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Total Tax Payable</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryW2" class="ns1blankspaceSummary">$' +
+											'<tr><td id="ns1blankspaceSummaryW2" class="ns1blankspaceSummary" style="font-weight:bold;">$' +
 											cTaxPayable.formatMoney(0, ".", ",") +
 											'</td></tr>');
 

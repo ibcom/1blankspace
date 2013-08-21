@@ -2221,15 +2221,15 @@ ns1blankspace.financial.bankAccount =
 										aHTML.push('<div style=" margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub" title="Previous balance">' +
 															'$' + (oResponse.PreviousBalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
 
+										var cReceipts = (oResponse.Receipts).parseCurrency() + (oResponse.DebitGeneralJournals).parseCurrency();
+
+										aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub" title="Receipts, credits">' +
+															'+ $' + (cReceipts).formatMoney(2, ".", ",")  + '</div>');
+
 										var cPayments = (oResponse.Payments).parseCurrency() + (oResponse.CreditGeneralJournals).parseCurrency();
 
 										aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub" title="Payments, debits">' +
 															'- $' + (cPayments).formatMoney(2, ".", ",")  + '</div>');
-
-										var cReceipts = (oResponse.Receipts).parseCurrency() + (oResponse.DebitGeneralJournals).parseCurrency();
-
-										aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub" title="Receipts, credits">' +
-															'+ $' + (cReceipts).formatMoney(2, ".", ",")  + '</div>')	
 
 										aHTML.push('<div style="font-style:italic; margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
 															'equals</div>')
@@ -2445,7 +2445,7 @@ ns1blankspace.financial.bankAccount =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Reference <span class="ns1blankspaceSubNote">(ie Statement Number)</span<' +
+														'Reference<br /><span class="ns1blankspaceSubNote">(ie Statement Number)</span<' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
@@ -2464,7 +2464,7 @@ ns1blankspace.financial.bankAccount =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Opening Balance <span class="ns1blankspaceSubNote">(set automatically, if left blank)</span>' +
+														'Opening Balance<br /><span class="ns1blankspaceSubNote">(set automatically, if left blank)</span>' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
