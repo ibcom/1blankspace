@@ -3343,7 +3343,7 @@ ns1blankspace.financial.bankAccount =
 																	oSearch.addField('reference,description,amount,paymentduedate,outstandingamount,contactbusinesspaidtotext,contactpersonpaidtotext');
 																	if (dSearchDate != '')
 																	{
-																		oSearch.addFilter('paymentduedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))
+																		oSearch.addFilter('paymentduedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(30).toString("dd-MMM-yyyy"))
 																		oSearch.addFilter('paymentduedate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-365).toString("dd-MMM-yyyy"))
 																	}		
 																	oSearch.sort('paymentduedate', 'asc');
@@ -3367,7 +3367,7 @@ ns1blankspace.financial.bankAccount =
 																	oSearch.addField('reference,description,amount,duedate,outstandingamount,contactbusinesssenttotext,contactpersonsenttotext');
 																	if (dSearchDate)
 																	{
-																		oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(7).toString("dd-MMM-yyyy"))
+																		oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(30).toString("dd-MMM-yyyy"))
 																		oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', Date.parse(dSearchDate).addDays(-365).toString("dd-MMM-yyyy"))
 																	}
 																	oSearch.sort('duedate', 'asc');
@@ -4284,7 +4284,7 @@ ns1blankspace.financial.bankAccount =
 
 									aHTML.push('<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceCaption">' +
-														'From Bank Account' +
+														'From' +
 														'</td></tr>' +
 														'<tr class="ns1blankspaceRadio">' +
 														'<td id="ns1blankspaceBankAccountTransferFrom" class="ns1blankspaceRadio">');
@@ -4306,7 +4306,7 @@ ns1blankspace.financial.bankAccount =
 
 									aHTML.push('<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceCaption">' +
-														'To Bank Account' +
+														'To' +
 														'</td></tr>' +
 														'<tr class="ns1blankspaceRadio">' +
 														'<td id="ns1blankspaceBankAccountTransferTo" class="ns1blankspaceRadio">');
