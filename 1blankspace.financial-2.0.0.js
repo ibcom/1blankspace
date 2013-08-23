@@ -873,7 +873,7 @@ ns1blankspace.financial.debtors =
 											
 											oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
 											oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.today().toString("dd MMM yyyy"));
-											oSearch.rows = 100;
+											oSearch.rows = 200;
 											oSearch.sort('sentdate', 'asc');
 											oSearch.getResults(function(oResponse)
 											{
