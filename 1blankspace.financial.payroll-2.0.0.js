@@ -3343,7 +3343,7 @@ ns1blankspace.financial.payroll.totals =
 															'employee.contactperson,employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,' +
 															'employee.contactperson.streetaddress1,employee.contactperson.streetaddress2,employee.contactperson.streetsuburb,' +
 															'employee.contactperson.streetstate,employee.contactperson.streetpostcode');
-										//oSearch.addFilter('status', 'EQUAL_TO', '2')
+										//oSearch.addFilter('status', 'EQUAL_TO', '2') - use termination date
 										oSearch.rows = 50;
 										oSearch.sort('employee.contactperson.firstname', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.financial.payroll.totals.employees.show(oParam, data)});
@@ -3646,6 +3646,7 @@ ns1blankspace.financial.payroll.totals =
 																	oSearch.addFilter('payrecord.payperiod.paydate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)
 																}
 
+																oSearch.rows = 200;
 																oSearch.sort('payrecord.payperiod.paydate', 'asc');
 
 																oSearch.getResults(function(oResponse)
