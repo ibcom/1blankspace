@@ -1352,7 +1352,7 @@ ns1blankspace.setup.file =
 					saveToFile: function(oParam)
 								{
 									var sData = ns1blankspace.util.getParam(oParam, 'data').value;
-									var sFileName = ns1blankspace.util.getParam(oParam, 'data', {default: 'export.csv'}).value;
+									var sFileName = ns1blankspace.util.getParam(oParam, 'fileName', {default: 'export.csv'}).value;
 									var bOpen = ns1blankspace.util.getParam(oParam, 'open', {default: false}).value;
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 

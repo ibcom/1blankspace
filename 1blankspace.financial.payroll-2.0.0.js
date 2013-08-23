@@ -3837,7 +3837,6 @@ ns1blankspace.financial.payroll.totals =
 												{
 													if (oParam === undefined) {oParam = {fileMode: 'T'}}
 
-
 													var oSearch = new AdvancedSearch();
 													oSearch.method = 'CONTACT_BUSINESS_SEARCH';		
 													oSearch.addField('tradename,legalname,abn,phonenumber,faxnumber,email,streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,' +
@@ -3909,6 +3908,7 @@ ns1blankspace.financial.payroll.totals =
 
 														oParam.totalRows = oItems.length;
 														oParam.items = oItems;
+														oParam.fileName = 'empdupe.a01';
 
 														var sFile = ns1blankspace.setup.file.export.process(oParam);
 
