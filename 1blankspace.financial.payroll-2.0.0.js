@@ -3402,7 +3402,7 @@ ns1blankspace.financial.payroll.totals =
 															'Summary</span></td></tr>');
 
 											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsPreviewStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-														'Create summaries for selected employees</td></tr>');
+															'Create summaries for selected employees</td></tr>');
 
 											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsEmail" class="ns1blankspaceAction" style="text-align:left;">' +
 															'Email</span></td></tr>');
@@ -3653,32 +3653,43 @@ ns1blankspace.financial.payroll.totals =
 																{
 																	oParam.step = 2;
 																	oParam.dataIndex = iDataIndex + 1;
-																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].pay = oResponse.data.rows;
-																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].grosssalary = (oResponse.summary.grosssalary).parseCurrency().formatMoney(0, '.', ',');
-																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].netsalary = (oResponse.summary.netsalary).parseCurrency().formatMoney(0, '.', ',');
-																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].superannuation = (oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',');
-																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].taxbeforerebate = (oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',');
-																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].allowances = (oResponse.summary.allowances).parseCurrency().formatMoney(0, '.', ',');
-																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].contactbusinesstext = ns1blankspace.user.contactBusinessText;
-																	ns1blankspace.financial.payroll.data.summaries[iDataIndex].year = Date.parse(oResponse.summary.paydate).getFullYear();
 
-																	$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).html('');
-																	$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).addClass('ns1blankspaceRowPreviewDone');
+																	if (oResponse.data.rows.length != 0)
+																	{	
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].pay = oResponse.data.rows;
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].grosssalary = (oResponse.summary.grosssalary).parseCurrency().formatMoney(0, '.', ',');
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].netsalary = (oResponse.summary.netsalary).parseCurrency().formatMoney(0, '.', ',');
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].superannuation = (oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',');
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].taxbeforerebate = (oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',');
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].allowances = (oResponse.summary.allowances).parseCurrency().formatMoney(0, '.', ',');
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].contactbusinesstext = ns1blankspace.user.contactBusinessText;
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].year = Date.parse(oResponse.summary.paydate).getFullYear();
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].startdate = sStartDate;
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].enddate = sEndDate;
 
-																	$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).button(
-																	{
-																		text: false,
-																		icons:
+																		$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).html('');
+																		
+																		$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).button(
 																		{
-																			primary: "ui-icon-document"
-																		}
-																	})
-																	.click(function() {
-																		ns1blankspace.financial.payroll.totals.employees.preview.showHide({xhtmlElementID: this.id});
-																	})
-																	.css('width', '15px')
-																	.css('height', '20px');
+																			text: false,
+																			icons:
+																			{
+																				primary: "ui-icon-document"
+																			}
+																		})
+																		.click(function()
+																		{
+																			ns1blankspace.financial.payroll.totals.employees.preview.showHide({xhtmlElementID: this.id});
+																		})
+																		.css('width', '15px')
+																		.css('height', '20px');
+																	}
+																	else
+																	{
+																		$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).html('<span class="ns1blankspaceSubNote">None</span>');
+																	}	
 
+																	$('#ns1blankspacePayrollTotals_option_preview-' + oData.id).addClass('ns1blankspaceRowPreviewDone');
 																	ns1blankspace.financial.payroll.totals.employees.preview.show(oParam);
 																});
 															}					
@@ -3727,7 +3738,7 @@ ns1blankspace.financial.payroll.totals =
 														}	
 
 														$('#ns1blankspacePayrollTotals_container-' + sKey).after('<tr id="ns1blankspacePayrollTotals_container_preview-' + sKey + '">' +
-																		'<td colspan=5><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>')
+																'<td colspan=5><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>');
 													}
 												}			
 								},

@@ -253,6 +253,48 @@ ns1blankspace.format.tags =
 			},
 			{
 				object: 37,
+				type: 1,
+				caption: 'Start Date',
+				source: 'startdate'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'End Date',
+				source: 'enddate'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Street Address 1',
+				source: 'employee.contactperson.streetaddress1'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Street Address 2',
+				source: 'employee.contactperson.streetaddress2'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Street Postcode',
+				source: 'employee.contactperson.streetpostcode'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Street Suburb',
+				source: 'employee.contactperson.streetsuburb'
+			},
+			{
+				object: 37,
+				type: 1,
+				caption: 'Email',
+				source: 'employee.contactperson.email'
+			},
+			{
+				object: 37,
 				type: 2,
 				caption: 'Pay Gross Salary',
 				source: 'grosssalary'
@@ -280,7 +322,7 @@ ns1blankspace.format.tags =
 				type: 2,
 				caption: 'Pay Date',
 				source: 'payrecord.payperiod.paydate'
-			},	
+			},
 			{
 				object: 371,
 				type: 1,
