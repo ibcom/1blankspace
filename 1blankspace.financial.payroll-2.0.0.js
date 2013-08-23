@@ -3288,7 +3288,7 @@ ns1blankspace.financial.payroll.totals =
 						}
 
 						oSearch.sort('payrecord.employee.contactperson', 'asc');
-						oSearch.rows = 20;
+						oSearch.rows = 200;
 						oSearch.getResults(function(data) {ns1blankspace.financial.payroll.totals.show(oParam, data)});	
 					}
 					else

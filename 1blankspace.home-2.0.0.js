@@ -201,6 +201,12 @@ ns1blankspace.home.options =
 						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						$(ns1blankspace.xhtml.container).hide();
 					});
+
+					$('#ns1blankspaceHomeOptionsMyStartPage').click(function(event)
+					{
+						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+						$(ns1blankspace.xhtml.container).hide();
+					});
 				}
 }				
 
