@@ -985,7 +985,7 @@ ns1blankspace.setup.website =
 											{	
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																
-												aHTML.push('<td id="ns1blankspaceWebsitePages_title-' + this.id + '" class="ns1blankspaceRow">' +
+												aHTML.push('<td id="ns1blankspaceWebsitePages_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																		this.documenttitle + '</td>');
 																		
 												aHTML.push('<td id="ns1blankspaceWebsitePages_url-' + this.id + '" class="ns1blankspaceRow">' +
@@ -1016,12 +1016,9 @@ ns1blankspace.setup.website =
 												aHTML.push('<td id="ns1blankspaceWebsitePages_id-' + this.document + '" class="ns1blankspaceRow" style="color:#A0A0A0;">' +
 																		this.document + '</td>');
 																								
-												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
 												
 												aHTML.push('<span id="ns1blankspaceWebsitePage_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
-											
-												aHTML.push('<span id="ns1blankspaceWebsitePage_options_select-' + this.id +
-																	'-' + this.document + '" class="ns1blankspaceRowSelect"></span>');
 																	
 												aHTML.push('</td></tr>');
 											});
@@ -1043,17 +1040,11 @@ ns1blankspace.setup.website =
 											.css('height', '17px');
 											
 											
-											$('#ns1blankspaceSetupWebsitePages span.ns1blankspaceRowSelect').button({
-												text: false,
-												icons: {
-													primary: "ui-icon-pencil"
-												}
-											})
-											.click(function() {
+											$('#ns1blankspaceSetupWebsitePages td.ns1blankspaceRowSelect')
+											.click(function()
+											{
 												ns1blankspace.setup.website.pages.edit({xhtmlElementID: this.id})
-											})
-											.css('width', '15px')
-											.css('height', '17px');
+											});
 										}
 									}	
 								},
@@ -1139,7 +1130,7 @@ ns1blankspace.setup.website =
 									
 										aHTML.push('</table>');
 											
-										aHTML.push('<table>');
+										aHTML.push('<table style="margin-top:5px;">');
 										
 										ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
 										
@@ -1147,10 +1138,20 @@ ns1blankspace.setup.website =
 														'<td class="ns1blankspaceTextMulti">' +
 														'<textarea rows="10" cols="70" name="ns1blankspaceEditText" id="ns1blankspaceEditText' +
 														ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + '"' +
-														' class="ns1blankspaceTextMultiLarge tinymceAdvanced" style="width:610px"></textarea>' +
+														' class="ns1blankspaceTextMultiLarge tinymceAdvanced" style="width:610px; font-size:0.75em; height:500px;"></textarea>' +
 														'</td></tr>');
 										
-										aHTML.push('</table>');					
+										aHTML.push('</table>');	
+
+										aHTML.push('<table style="margin-top:10px; margin-bottom:15px;">');
+
+										aHTML.push('<tr><td class="ns1blankspaceRadio"><input type="checkbox" id="ns1blankspaceWebsitePageIgnoreLayout" />' +
+														'Ignore Site Layout</td>');
+
+										aHTML.push('<td class="ns1blankspaceRadio"><input type="checkbox" id="ns1blankspaceWebsitePageIgnoreHead" />' +
+														'Ignore Site Header</td></tr>');
+
+										aHTML.push('</table>');				
 										
 										$('#ns1blankspacePagesColumn1').html(aHTML.join(''));
 
@@ -1172,7 +1173,8 @@ ns1blankspace.setup.website =
 										
 										$('#ns1blankspacePagesColumn2').html(aHTML.join(''));
 										
-										$('#ns1blankspaceWebsitePageSave').button({
+										$('#ns1blankspaceWebsitePageSave').button(
+										{
 											label: "Save"
 										})
 										.click(function() 
@@ -1183,6 +1185,8 @@ ns1blankspace.setup.website =
 											sData += '&documenttype=' + ns1blankspace.util.fs($('input[name="radioDocumentType"]:checked').val());
 											sData += '&documentpublic=' + ns1blankspace.util.fs($('input[name="radioPublic"]:checked').val());
 											sData += '&location=' + ns1blankspace.util.fs($('input[name="radioType"]:checked').val());
+											sData += '&documentignorewebsitelayout=' + ($('#ns1blankspaceWebsitePageIgnoreLayout:checked').length==0?'N':'Y');
+											sData += '&documentignorewebsiteheadertags=' + ($('#ns1blankspaceWebsitePageIgnoreHead:checked').length==0?'N':'Y');
 											
 											if (parseInt($('input[name="radioDocumentType"]:checked').val()) == 5)
 											{
@@ -1201,7 +1205,8 @@ ns1blankspace.setup.website =
 												url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_MANAGE'),
 												data: sData,
 												dataType: 'json',
-												success: function() {
+												success: function()
+												{
 													ns1blankspace.setup.website.pages.show();
 												}
 											});
@@ -1321,6 +1326,9 @@ ns1blankspace.setup.website =
 											$('[name="radioType"][value="' + oObjectContext.location + '"]').attr('checked', true);
 											$('[name="radioDocumentType"][value="' + oObjectContext.documenttype + '"]').attr('checked', true);
 											$('[name="radioPublic"][value="' + oObjectContext.documentpublic + '"]').attr('checked', true);
+
+											$('#ns1blankspaceWebsitePageIgnoreLayout').attr('checked', (oObjectContext.documentignorewebsitelayout == 'Y'));
+											$('#ns1blankspaceWebsitePageIgnoreHead').attr('checked', (oObjectContext.documentignorewebsiteheadertags == 'Y'));
 
 											ns1blankspace.setup.website.pages.networkGroups({id: oObjectContext.document});
 										}
