@@ -688,7 +688,7 @@ ns1blankspace.financial.debtors =
 									xhtml: aHTML.join(''),
 									showMore: (oResponse.morerows == "true"),
 									more: oResponse.moreid,
-									rows: ns1blankspace.option.defaultRows,
+									rows: 50,
 									functionShowRow: ns1blankspace.financial.debtors.row,
 									functionOpen: undefined,
 									functionOnNewPage: ns1blankspace.financial.debtors.bind,
@@ -1105,6 +1105,7 @@ ns1blankspace.financial.creditors =
 						{
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('FINANCIAL_CREDITOR_SEARCH'),
+							data: 'rows=50',
 							dataType: 'json',
 							global: false,
 							success: function(data) {ns1blankspace.financial.creditors.show(oParam, data)}
@@ -1161,7 +1162,7 @@ ns1blankspace.financial.creditors =
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
-							rows: ns1blankspace.option.defaultRows,
+							rows: 50,
 							functionShowRow: ns1blankspace.financial.creditors.row,
 							functionOpen: undefined,
 							functionNewPage: 'ns1blankspace.financial.creditors.bind()',
