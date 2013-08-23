@@ -1366,7 +1366,7 @@ ns1blankspace.setup.file =
 									{
 										type: 'POST',
 										url: ns1blankspace.util.endpointURI('CORE_FILE_MANAGE'),
-										data: sData,
+										data: oData,
 										dataType: 'json',
 										success: function(data)
 										{

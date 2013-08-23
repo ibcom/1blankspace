@@ -4051,8 +4051,18 @@ ns1blankspace.util =
 					{
    						return window[sVariable];
 					}
-				}			
+				},
 
+	toWords: 	function (oParam)
+				{
+					var sNumber = ns1blankspace.util.getParam(oParam, 'number').value;
+					var bUpper = ns1blankspace.util.getParam(oParam, 'upper', {default: false}).value;
+
+					var sWords = toWords(sNumber);
+					if (bUpper) {sWords = (sWords).toUpperCase()}
+
+					return sWords;
+				}
 }
 
 ns1blankspace.debug = 
