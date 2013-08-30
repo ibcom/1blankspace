@@ -1057,7 +1057,7 @@ ns1blankspace.setup.file =
 																	{	
 																		if (oRow[v.name] !== undefined)
 																		{	
-																			oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
+																			oData[v.name] = oRow[v.name];
 																		}
 																	}		
 																});
@@ -1070,7 +1070,7 @@ ns1blankspace.setup.file =
 																	{	
 																		if (oRow[v.name] !== undefined)
 																		{	
-																			oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
+																			oData[v.name] = (oRow[v.name]).formatXHTML();
 																		}
 																	}		
 																});
@@ -1084,7 +1084,7 @@ ns1blankspace.setup.file =
 																	{	
 																		if (oRow[v.name] !== undefined)
 																		{	
-																			oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
+																			oData[v.name] = (oRow[v.name]).formatXHTML();
 
 																			var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.key == v.name && a.object == ns1blankspace.setup.file.import.data.object})[0];
 
@@ -1122,6 +1122,8 @@ ns1blankspace.setup.file =
 																							error: data.error.errornotes
 																						});
 																					}	
+
+																					oRow.id = data.id;
 																					oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
 																					
 																					ns1blankspace.setup.file.import.upload.process(oParam)
@@ -1140,7 +1142,7 @@ ns1blankspace.setup.file =
 															ns1blankspace.setup.file.import.data.errors.push(
 															{
 																data: ns1blankspace.setup.file.import.data.current.join('&'),
-																error: 'More than one record based on keys (' + oResponse.data.rows.length + ')'
+																error: 'More than one record based on keys'
 															});
 
 															oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
