@@ -110,6 +110,18 @@ ns1blankspace.setup.file =
 											searchendpoint: 'SETUP',
 											searchmethod: 'SETUP_CONTACT_PERSON_GROUP_SEARCH',
 											method: 'CONTACT_PERSON_GROUP'
+										},
+										{
+											object: 12,
+											include: true,
+											child: true,
+											parentID: 'contactbusiness',
+											name: '.group',
+											datatype: 'numeric',
+											inputtype: 'textbox',
+											searchendpoint: 'SETUP',
+											searchmethod: 'SETUP_CONTACT_BUSINESS_GROUP_SEARCH',
+											method: 'CONTACT_BUSINESS_GROUP'
 										}
 									]
 								},
@@ -165,7 +177,8 @@ ns1blankspace.setup.file =
 							
 										aHTML.push('<table><tr>' +
 														'<td class="ns1blankspaceRow" style="width:15px;"><span id="ns1blankspaceFileImportObjectBack">Back</span></td>' +
-														'<td class="ns1blankspaceRow" style="font-size: 1.1em;font-weight: bold;color: #666666; vertical-align:middle;">People</td>' +
+														'<td class="ns1blankspaceRow" style="font-size: 1.1em;font-weight: bold;color: #666666; vertical-align:middle;">' +
+														(iObject==32?'People':'Businesses') + '</td>' +
 														'</tr></table>')
 
 										$('#ns1blankspaceFileImportObject').html(aHTML.join(''));
@@ -271,7 +284,7 @@ ns1blankspace.setup.file =
 															var bInclude = (this.inputtype == 'textbox');
 															sName = v.name;
 
-															var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.name == sName})[0];
+															var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.name == sName && a.object == ns1blankspace.setup.file.import.data.object})[0];
 
 															if (oRule !== undefined)
 															{
@@ -1044,7 +1057,7 @@ ns1blankspace.setup.file =
 																	{	
 																		if (oRow[v.name] !== undefined)
 																		{	
-																			oData[v.name] = oRow[v.name];
+																			oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
 																		}
 																	}		
 																});
@@ -1057,7 +1070,7 @@ ns1blankspace.setup.file =
 																	{	
 																		if (oRow[v.name] !== undefined)
 																		{	
-																			oData[v.name] = oRow[v.name];
+																			oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
 																		}
 																	}		
 																});
@@ -1071,9 +1084,9 @@ ns1blankspace.setup.file =
 																	{	
 																		if (oRow[v.name] !== undefined)
 																		{	
-																			oData[v.name] = oRow[v.name];
+																			oData[v.name] = ns1blankspace.util.fs(oRow[v.name]);
 
-																			var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.key == v.name})[0];
+																			var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.key == v.name && a.object == ns1blankspace.setup.file.import.data.object})[0];
 
 																			if (oRule !== undefined)
 																			{
@@ -1398,6 +1411,8 @@ ns1blankspace.setup.file =
 										if (oParam.onComplete != undefined) {fOnComplete = oParam.onComplete}
 									}		
 
+									ns1blankspace.setup.file.import.data.object = iObject;
+
 									if (iObject == 32)
 									{ 
 										ns1blankspace.setup.file.import.data.method = 'CONTACT_PERSON';
@@ -1457,14 +1472,14 @@ ns1blankspace.setup.file =
 										});
 
 										ns1blankspace.setup.file.data.fields = 
-										ns1blankspace.setup.file.data.fields.concat($.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.child}));
+										ns1blankspace.setup.file.data.fields.concat($.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.child && a.object == ns1blankspace.setup.file.import.data.object}));
 
 										$.each(ns1blankspace.setup.file.data.fields, function(i, v) 
 										{
 											var bInclude = (this.inputtype == 'textbox');
 											sName = v.name;
 
-											var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.name == sName})[0];
+											var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.name == sName && a.object == ns1blankspace.setup.file.import.data.object})[0];
 
 											if (oRule !== undefined)
 											{
