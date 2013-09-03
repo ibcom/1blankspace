@@ -1,0 +1,30 @@
+[
+	{
+		title: "Test 1",
+		onError:
+		flightPlan: 
+		[
+			{
+				title: "ogon'
+				method: ns1blankspace.logon(
+						{
+							logonName: 'test@test',
+							logonPassword: 'test'
+						})
+			},
+			{
+				title: "New Contact",
+				invoke: function ()
+				{
+					ns1blankspace.contactPerson.init({new: true});
+					$('#ns1blankspaceDetailsFirstName').val('John');
+					$('#ns1blankspaceDetailsSurname').val('Smith');
+					ns1blankspace.contactPerson.save();
+				},	
+				expect: {status: 'OK'},
+				onError:
+			}
+		]
+	}
+
+]
