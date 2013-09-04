@@ -781,10 +781,12 @@ ns1blankspace.financial.invoice =
 													objectContext: ns1blankspace.objectContext
 												}
 
+												//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
+
 												$.ajax(
 												{
 													type: 'POST',
-													url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+													url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
 													data: oData,
 													dataType: 'json',
 													global: false,
