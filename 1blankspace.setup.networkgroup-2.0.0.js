@@ -766,31 +766,37 @@ ns1blankspace.setup.networkGroup =
 								{
 									ns1blankspace.status.working();
 									
-									var sData = '_=1';
+									var oData = {};
 									
 									if (ns1blankspace.objectContext != -1)
 									{
-										sParam += '&id=' + ns1blankspace.objectContext;
+										oData.id = ns1blankspace.objectContext;
 									}	
 									
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&title=' + ns1blankspace.util.fs($('#inputInterfaceMainDetailsTitle').val());
-										sData += '&contactsynchronisation=' + ns1blankspace.util.fs($('input[name="radioContactSync"]:checked').val());
+										oData.title = $('#ns1blankspaceDetailsTitle').val();
+										oData.notes = $('#ns1blankspaceDetailsDescription').val();
+										//oData.contactsynchronisation = $('input[name="radioContactSync"]:checked').val();
 									};
 
 									$.ajax(
 									{
 										type: 'POST',
 										url: ns1blankspace.util.endpointURI('SETUP_NETWORK_GROUP_MANAGE'),
-										data: sData,
+										data: oData,
 										dataType: 'json',
 										success: function(data) 
 													{ 
-														var aReturn = data.split('|');
-														ns1blankspace.objectContext = oResponse.id;
-														ns1blankspace.status.message('Saved.');
-														
+														ns1blankspace.status.message('Saved');
+
+														if (ns1blankspace.objectContext == -1)
+														{	
+															ns1blankspace.objectContext = data.id;
+															ns1blankspace.inputDetected = false;
+															ns1blankspace.setup.networkGroup.search.send('-' + ns1blankspace.objectContext);
+														}
+															
 														if ($('input[name="radioContactSync"]:checked').val() == 'Y')
 														{
 															//interfaceSetupNetworkGroupMembersAddSyncProcess(gsParentWebMasterLogonName);
