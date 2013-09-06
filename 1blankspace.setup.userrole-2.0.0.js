@@ -500,7 +500,7 @@ ns1blankspace.setup.userRole =
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'SETUP_ENDPOINT_SEARCH';
 							oSearch.addField('title');
-							oSearch.rows = 50;
+							oSearch.rows = 200;
 							oSearch.sort('title', 'asc');
 							oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access(oParam, data)})	
 						}
@@ -553,7 +553,7 @@ ns1blankspace.setup.userRole =
 							oSearch.method = 'SETUP_METHOD_SEARCH';
 							oSearch.addField('title,useavailable,addavailable,updateavailable,removeavailable');
 							oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
-							oSearch.rows = 50;
+							oSearch.rows = 200;
 							oSearch.sort('title', 'asc');
 							oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access(oParam, data)})	
 						}
@@ -594,7 +594,7 @@ ns1blankspace.setup.userRole =
 							oSearch.method = 'SETUP_METHOD_SEARCH';
 							oSearch.addField('title,useavailable,addavailable,updateavailable,removeavailable');
 							oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
-							oSearch.rows = 50;
+							oSearch.rows = 200;
 							oSearch.sort('title', 'asc');
 							oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access(oParam, data)})	
 						}
