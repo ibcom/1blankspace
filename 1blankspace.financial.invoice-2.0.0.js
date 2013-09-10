@@ -692,8 +692,13 @@ ns1blankspace.financial.invoice =
 												})
 												.click(function(event)
 												{
+													var sHTML = $('#ns1blankspaceSummaryColumn1').html();
+
+													sHTML = sHTML.replace(/app.alt-enter.com/g,'[[host]]');
+													sHTML = sHTML.replace(/https/g,'http');
+
 													ns1blankspace.pdf.create({
-															xhtmlContent: $('#ns1blankspaceSummaryColumn1').html(),
+															xhtmlContent: sHTML,
 															filename: ns1blankspace.objectContextData.reference + '.pdf',
 															open: false
 														});
