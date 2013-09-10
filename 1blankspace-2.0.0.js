@@ -5279,18 +5279,21 @@ ns1blankspace.extend =
 
 					var aElements = [];
 
-					$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function(i,v)
-					{
-						$(v.elements).each(function(j,k)
+					if (ns1blankspace.extend.structure !== undefined)
+					{	
+						$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function(i,v)
 						{
-							if (k.datatype == 2)
-							{	
-								aElements.push('se' + k.id + 'text');
-							}	
-							aElements.push('se' + k.id);
-						});
-					})	
-
+							$(v.elements).each(function(j,k)
+							{
+								if (k.datatype == 2)
+								{	
+									aElements.push('se' + k.id + 'text');
+								}	
+								aElements.push('se' + k.id);
+							});
+						});	
+					}
+					
 					return aElements.join(',');
 				},
 
