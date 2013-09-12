@@ -2998,15 +2998,7 @@ ns1blankspace.search =
 
 												$.each(oView.search.filters, function (i, v)
 												{
-													if (!v.fixed)
-													{
-														aHTMLFilter.push('<tr><td class="ns1blankspaceCaption" style="font-weight:400;">' + v.caption + '</td>');
-														aHTMLFilter.push('<td style="padding-right:7px;"><input style="margin:0px;" nohide="true" id="ns1blankspaceViewControlSearchFilter_' + v.name + '"' +
-																	' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter"' +
-																	' data-comparison="' + v.comparison + '"' +
-																	(v.type == 'Select'?' data-method="' + v.method + '"':'') +
-																	' data-name="'+ v.name + '"></td></tr>');
-													}	
+													aHTMLFilter.push(ns1blankspace.search.advanced.showFields(i, v) );
 												});
 
 												aHTMLFilter.push('</table>');
@@ -3094,20 +3086,84 @@ ns1blankspace.search =
 									}
 								},
 
+					showFields: function(i, v)
+								{
+										var sName = v.name;
+										sName = sName.replace(/\./g, "_");
+										var aHTMLFilter = [];
+
+										if (!v.fixed)
+										{
+											aHTMLFilter.push('<tr><td class="ns1blankspaceCaption" style="font-weight:400;">' + 
+																v.caption + ((v.comparison === "BETWEEN") ? " From": "") + '</td>');
+											
+											if (v.type === "Check") {
+												
+												aHTMLFilter.push('<td style="padding-right:7px;vertical-align:middle;">' + 
+																 '<input type="checkbox" style="margin:0px;"' + 
+																 ' nohide="true"' + 
+																 ' id="ns1blankspaceViewControlSearchFilter_' + sName + '"' +
+															' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter"' +
+															' data-comparison="' + v.comparison + '"' +
+															' data-name="'+ v.name + '"></td></tr>');
+
+											}
+											else {
+												
+												aHTMLFilter.push('<td style="padding-right:7px;">' + 
+																 '<input style="margin:0px;"' + 
+																 ' nohide="true"' + 
+																 ' id="ns1blankspaceViewControlSearchFilter_' + sName + '"' +
+															' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter"' +
+															' data-comparison="' + v.comparison + '"' +
+															(v.type == 'Select'?' data-method="' + v.method + '"':'') +
+															((v.type == 'Select' && v.methodColumns) ? ' data-columns="' + v.methodColumns + '"': '') +
+															((v.type == 'Select' && v.methodFilter) ? ' data-methodFilter="' + v.methodFilter + '"': '') +
+															' data-name="'+ v.name + '"></td></tr>');
+											}
+
+											if (v.comparison == "BETWEEN" && v.type === 'Date') {
+
+												aHTMLFilter.push('<tr><td class="ns1blankspaceCaption" style="font-weight:400;">' + 
+																	v.caption + ((v.comparison === "BETWEEN") ? " To": "") + '</td>');
+												aHTMLFilter.push('<td style="padding-right:7px;">' + 
+																 '<input style="margin:0px;"' + 
+																 ' nohide="true"' + 
+																 ' id="ns1blankspaceViewControlSearchFilter_' + sName + '_value2"' +
+															' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter">' +
+															'</td></tr>');
+
+											}
+										}	
+
+										return aHTMLFilter.join('');
+
+								},
+
 					setFilters:	function ()
 								{
+									var dToday = new Date();
+
 									$.each(ns1blankspace.search.data.viewControl.filters, function ()
 									{
-										var sXHTMLElementID = 'ns1blankspaceViewControlSearchFilter_' + this.name;
+										var sXHTMLElementID = 'ns1blankspaceViewControlSearchFilter_' + this.name.replace(/\./g, '_');
 
 										if (this.type == 'Select')
 										{	
 											this.value = $('#' + sXHTMLElementID).attr('data-id');
 										}
-										else
+										else if (this.type === 'Text' || (this.type === 'Date' && this.comparison != 'BETWEEN'))
 										{	
 											this.value = $('#' + sXHTMLElementID).val();
-										}									
+										}	
+										else if (this.type === 'Date' && this.comparison === 'BETWEEN')
+										{
+											this.value = $('#' + sXHTMLElementID).val();
+											this.value2 = $('#' + sXHTMLElementID + '_value2').val();
+											if (this.value2 === '') {
+												this.value2 = dToday.toString('dd MMM yyyy');
+											}
+										}
 									});
 								},
 
@@ -3119,11 +3175,22 @@ ns1blankspace.search =
 
 										$.each(ns1blankspace.search.data.viewControl.filters, function()
 										{
+											var sXHTMLElementID = 'ns1blankspaceViewControlSearchFilter_' + this.name.replace(/\./g, '_');
+	
 											if (this.value != undefined && this.value != '')
 											{	
-												oSearch.addFilter(this.name, this.comparison, this.value);
+												if (this.value2 && this.value2 != '') {
+													oSearch.addFilter(this.name, this.comparison, this.value, this.value2);
+												}
+												else {
+													// If a checkbox, only filter if checked
+													if (this.type != 'Check' || (this.type === 'Check' && $('#' + sXHTMLElementID).attr('checked') === 'checked'))
+													 {
+															oSearch.addFilter(this.name, this.comparison, this.value);
+													 }	
+												}
 											}	
-										})
+										});
 									}
 								}									
 				},		
