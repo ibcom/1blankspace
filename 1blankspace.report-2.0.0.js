@@ -567,6 +567,7 @@ ns1blankspace.report =
 					ns1blankspace.report.rowParameters = undefined;
 					ns1blankspace.report.selectableParameters = undefined;
 					ns1blankspace.report.allParameters = [];
+					ns1blankspace.report.customExportFormat = undefined;
 
 					if (oParam != undefined)
 					{
@@ -582,6 +583,7 @@ ns1blankspace.report =
 						if (oParam.scriptNewPage != undefined) {ns1blankspace.report.scriptNewPage = oParam.scriptNewPage}
 						if (oParam.selectableParameters != undefined) {oSelectableParameters = oParam.selectableParameters}
 						if (oParam.fixedParameters != undefined) {oFixedParameters = oParam.fixedParameters}
+						if (oParam.customExportFormat != undefined) {ns1blankspace.report.customExportFormat = oParam.customExportFormat}
 						if (oParam.showSelect != undefined) {bShowSelect = oParam.showSelect}
 						if (oParam.showFixedParameters != undefined) {bShowFixedParameters = oParam.showFixedParameters}
 						if (oParam.summary != undefined) {sSummary = oParam.summary}
@@ -820,7 +822,9 @@ ns1blankspace.report =
 
 								}	
 								
-								if (sCaption != undefined && (iSelectableIndex != -1 || aSelectableParameterList.length == 0))
+								if (sCaption != undefined && (iSelectableIndex != -1 || 
+									(aSelectableParameterList.length == 0 && 
+										(oFixedParameters.fields == undefined || (oFixedParameters.fields && oFixedParameters.fields.length == 0)))))
 								{
 									var sName = (this.name).replace(/\./g,'_');
 									var iSelectAttributes = $.inArray(this.name, aSelectAttributesList);
@@ -1326,7 +1330,7 @@ ns1blankspace.report =
 
 												if (!bContainsContactPerson && sName.indexOf("contactperson") > -1 )
 												{	bContainsContactPerson = true;	}
-												
+
 											});	
 											
 											if (sIDColumn != undefined && $.inArray(sIDColumn, aFields) == -1)
@@ -1923,6 +1927,7 @@ ns1blankspace.report =
 				{
 					var iMoreID;
 					var aHTML = [];
+					var oExportParameters;
 					
 					var sShowID = 'radioReport-Export';
 
@@ -1942,40 +1947,168 @@ ns1blankspace.report =
 
 					if (oParam != undefined)
 					{
+						if (oParam.customExportFormat != undefined) {oExportParameters = oParam.customExportFormat}
+
 						if (oParam.count != undefined && oParam.count != 0) 
 						{
 							$('#ns1blankspaceReportExport').html(ns1blankspace.xhtml.loading);
 
-							iMoreID = oParam.moreID;
-							var sParam = '&method=CORE_MORE_FILE_MANAGE&more=' + iMoreID;
-							$.ajax({
-								type: 'POST',
-								url: '/ondemand/core/?rf=json' + sParam,
-								dataType: 'json',
-								success: function(oResponse)
-								{
-									if (oResponse.link != '')
-									{
-										aHTML.push('<table style="margin: 10px; font-size:0.875em;">');
-										aHTML.push('<tr>');
-										aHTML.push('<td class="ns1blankspaceSub">File created with ' + oParam.count + ' rows.</td></tr>');
-										aHTML.push('<tr>');
-										aHTML.push('<td><a href="' + oResponse.link);
-										aHTML.push('" target="_blank">Download the file</td></tr>');
-										aHTML.push('</table>');
+							if (oExportParameters === undefined) {
 
-										$('#ns1blankspaceReportExport').html(aHTML.join(''));
+								iMoreID = oParam.moreID;
+								var sParam = '&method=CORE_MORE_FILE_MANAGE&more=' + iMoreID;
+								$.ajax({
+									type: 'POST',
+									url: '/ondemand/core/?rf=json' + sParam,
+									dataType: 'json',
+									success: function(oResponse)
+									{
+										if (oResponse.link != '')
+										{
+											aHTML.push('<table style="margin: 10px; font-size:0.875em;">');
+											aHTML.push('<tr>');
+											aHTML.push('<td class="ns1blankspaceSub">File created with ' + oParam.count + ' rows.</td></tr>');
+											aHTML.push('<tr>');
+											aHTML.push('<td><a href="' + oResponse.link);
+											aHTML.push('" target="_blank">Download the file</td></tr>');
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceReportExport').html(aHTML.join(''));
+										}
+										else {
+											aHTML.push('<table class="ns1blankspace">');
+											aHTML.push('<tr>');
+											aHTML.push('<td class="ns1blankspaceSub">Error creating file</td></tr>');
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceReportExport').html(aHTML.join(''));
+										}
+									}
+								});		
+							}
+							else {
+								// This report is being exported with a custom export format - either auto-generated or pre-defined
+								var oFormat = {};
+								var oHeader = [];
+								var oItem = [];
+								var oFooter = [];
+
+								// First, determine if this report has a pre-defined format
+								if (ns1blankspace.setup.file.export.formats) {
+									
+									oFormat = $.grep(ns1blankspace.setup.file.export.formats, function(x) {return x.name === oParam.name});
+									if (oFormat.length > 0) {
+										if (oFormat[0].header) {oHeader = oFormat[0].header}
+										if (oFormat[0].item) {oItem = oFormat[0].item}
+										if (oFormat[0].footer) {oFooter = oFormat[0].footer};
 									}
 									else {
-										aHTML.push('<table class="ns1blankspace">');
-										aHTML.push('<tr>');
-										aHTML.push('<td class="ns1blankspaceSub">Error creating file</td></tr>');
-										aHTML.push('</table>');
-
-										$('#ns1blankspaceReportExport').html(aHTML.join(''));
+										// Check that auto-generated format doesn't already exist - (prefix - 'REPORT_') and delete
+										ns1blankspace.setup.file.export.formats = $.grep(ns1blankspace.setup.file.export.formats, function(x) {
+												return x.name != 'REPORT_' + oParam.name;
+											});
 									}
 								}
-							});		
+
+								// If captionsAsHeaders, push the report captions into the format
+								if (oExportParameters.headers &&
+									oExportParameters.headers.captionsAsHeaders != undefined && 
+									oExportParameters.headers.captionsAsHeaders) {
+
+									var oFields = [];
+									var sDelimiter = (oExportParameters.headers.delimiter) ? oExportParameters.headers.delimiter : '';
+									var sSurroundWith = (oExportParameters.headers.surroundWith) ? oExportParameters.headers.surroundWith : '';
+									var iColumn = 0;
+									$.each(oParam.columns, function() {
+										
+										iColumn++;
+										if (this.caption) {
+											oFields.push({value: sSurroundWith + 
+														 this.caption + 
+														 ((iColumn === oParam.columns.length) ? sSurroundWith : sSurroundWith + sDelimiter)});
+										}
+									});
+									oHeader = [{line: 1, fields: oFields}];
+								}
+
+								if (oItem.length > 0) {
+									
+									// Export has been defined. Remove the columns that haven't been included in the report
+									if (oItem[0].fields) {
+										
+										var oReportItem = $.grep(oItem[0].fields, function(x) {
+																		return $.grep(oParam.columns, function(y) {
+																					return y.name == x.mapField || x.mapField === undefined})
+																	.length > 0});
+										oItem[0].fields = oReportItem;
+									}
+
+								}
+								else {
+
+									var sDelimiter = (oExportParameters.items.delimiter) ? oExportParameters.items.delimiter : '';
+									var oFields = [];
+									var sSurroundWith = (oExportParameters.items.delimiter) ? oExportParameters.items.surroundWith : '';
+									var iColumn = 0;
+									$.each(oParam.columns, function() {
+										
+										iColumn++;
+										if (this.name) {
+											oFields.push({value: sSurroundWith}); 
+											oFields.push({field: this.name}); 
+											oFields.push({value: ((iColumn === oParam.columns.length) ? sSurroundWith : sSurroundWith + sDelimiter)});
+										}
+									});
+									oItem = [{fields: oFields}];
+								}
+
+								// No need to auto-define footer - there isn't a pre-defined format to use. So now add back auto-generated report
+								ns1blankspace.setup.file.export.formats.push({name: 'REPORT_' + oParam.name, header: oHeader, item: oItem, footer: oFooter});
+
+								// Now we need to get the entire data set using core_search_more
+								var sParam = 'id=' + oParam.moreID + '&startrow=1&rows=' + oParam.count;
+								$.ajax({
+									type: 'GET',
+									url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
+									data: sParam,
+									rows: oParam.count,
+									success: function(oResponse) {
+
+										var oExportParam = {};
+
+										if (oResponse.status === 'OK') {
+
+											ns1blankspace.status.working('Creating file...');
+
+											aHTML.push('<table style="margin: 10px; font-size:0.875em;">');
+											aHTML.push('<tr>');
+											aHTML.push('<td class="ns1blankspaceTextMulti">' +
+															'<div id="ns1blankspaceFileContents" class="ns1blankspaceTextMulti" style="background-color:#F3F3F3; width:100%; font-family:Courier New; font-size:0.865em; white-space:pre; overflow:auto;">' +
+																'</div>' +
+															'</td></tr>' +
+															'<tr>' +
+															'<td class="ns1blankspaceTextMulti" id="ns1blankspaceFileDownload" style="padding-top:8px;"' +
+															'</td></tr></table>');
+
+											oExportParam.totalRows = oParam.count;
+											oExportParam.name = 'REPORT_' + oParam.name;
+											oExportParam.items = oResponse.data.rows;
+											oExportParam.saveToFile = true;
+											oExportParam.fileName = oParam.name.replace(/ /g,'') + '_Report.csv';
+											oExportParam.xhtmlElementID = 'ns1blankspaceFileDownload';
+
+											$('#ns1blankspaceReportExport').html(aHTML.join(''));
+											
+											var sFile = ns1blankspace.setup.file.export.process(oExportParam);
+
+											//$('#ns1blankspaceFileContents').html(sFile);
+
+										}
+									}
+								});
+
+
+							}
 						}
 					}
 					else

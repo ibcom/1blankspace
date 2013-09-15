@@ -3940,6 +3940,8 @@ ns1blankspace.util =
 
 					if (bUpper) {sValue = sValue.toUpperCase()}
 
+					if (sValue) {sValue = sValue.formatXHTML()}
+						
 					return sValue;
 				},								
 
