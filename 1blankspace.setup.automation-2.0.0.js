@@ -746,7 +746,7 @@ ns1blankspace.setup.automation =
 					}	
 				},
 
-	new: 		function ()
+	new2: 		function ()
 				{
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.objectContextData = undefined;

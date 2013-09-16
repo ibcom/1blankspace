@@ -406,7 +406,7 @@ ns1blankspace.financial.tax =
 				{
 					var aHTML = [];
 					
-					var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+					var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 1}).value;
 
 					if (ns1blankspace.objectContextData == undefined)
 					{

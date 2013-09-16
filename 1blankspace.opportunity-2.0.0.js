@@ -27,7 +27,7 @@ ns1blankspace.opportunity =
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
 						if (oParam.showNew != undefined) {bNew = oParam.showNew}
-						if (bNew) {ns1blankspace.opportunity.new()};
+						if (bNew) {ns1blankspace.opportunity["new"]()};
 					}	
 
 					ns1blankspace.app.set(oParam);
@@ -766,7 +766,7 @@ ns1blankspace.opportunity =
 					}	
 				},
 
-	new: 		function ()
+	new2: 		function ()
 				{
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;

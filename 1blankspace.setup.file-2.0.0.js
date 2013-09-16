@@ -46,10 +46,10 @@ ns1blankspace.setup.file =
 
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 
-					ns1blankspace.setup.file.import.init();
+					ns1blankspace.setup.file["import"].init();
 				},
 
-	import: 	{
+	"import": 	{
 					data: 		{
 									rules:
 									[
@@ -168,7 +168,7 @@ ns1blankspace.setup.file =
 										{
 											var aID = (this.id).split('-');
 											var oParam = {object: parseInt(aID[1])};
-											ns1blankspace.setup.file.import.init(oParam);
+											ns1blankspace.setup.file["import"].init(oParam);
 										});
 									}
 									else
@@ -192,12 +192,12 @@ ns1blankspace.setup.file =
 											}
 										})
 										.click(function() {
-											ns1blankspace.setup.file.import.init({object: undefined});
+											ns1blankspace.setup.file["import"].init({object: undefined});
 										})
 										.css('width', '15px')
 										.css('height', '17px');
 
-										ns1blankspace.setup.file.import.show(oParam);
+										ns1blankspace.setup.file["import"].show(oParam);
 									}	
 								},
 								
@@ -245,11 +245,11 @@ ns1blankspace.setup.file =
 
 										if (aID[1] == 1)
 										{	
-											ns1blankspace.setup.file.import.template.init(oParam);
+											ns1blankspace.setup.file["import"].template.init(oParam);
 										}
 										else
 										{	
-											ns1blankspace.setup.file.import.upload.init(oParam);
+											ns1blankspace.setup.file["import"].upload.init(oParam);
 										}
 									});	
 								},		
@@ -269,7 +269,7 @@ ns1blankspace.setup.file =
 															'<table class="ns1blankspaceColumn2"><tr><td>' +
 															ns1blankspace.xhtml.loading + '</td></tr></table>');
 
-														oParam.onComplete = ns1blankspace.setup.file.import.template.init;
+														oParam.onComplete = ns1blankspace.setup.file["import"].template.init;
 														ns1blankspace.setup.file.util.getFields(oParam);
 													}
 													else
@@ -284,7 +284,7 @@ ns1blankspace.setup.file =
 															var bInclude = (this.inputtype == 'textbox');
 															sName = v.name;
 
-															var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.name == sName && a.object == ns1blankspace.setup.file.import.data.object})[0];
+															var oRule = $.grep(ns1blankspace.setup.file["import"].data.rules, function (a) {return a.name == sName && a.object == ns1blankspace.setup.file["import"].data.object})[0];
 
 															if (oRule !== undefined)
 															{
@@ -345,7 +345,7 @@ ns1blankspace.setup.file =
 																label: 'Options'
 															})
 															.click(function() {
-																ns1blankspace.setup.file.import.template.options({xhtmlElementID: this.id});
+																ns1blankspace.setup.file["import"].template.options({xhtmlElementID: this.id});
 															})
 															.css('font-size', '0.625em')
 
@@ -371,7 +371,7 @@ ns1blankspace.setup.file =
 														})
 														.click(function()
 														{	
-															ns1blankspace.setup.file.import.template.create(oParam)
+															ns1blankspace.setup.file["import"].template.create(oParam)
 														})
 														.css('width', '120px');
 
@@ -381,7 +381,7 @@ ns1blankspace.setup.file =
 														})
 														.click(function()
 														{	
-															ns1blankspace.setup.file.import.template.list(oParam)
+															ns1blankspace.setup.file["import"].template.list(oParam)
 														})
 														.css('width', '120px');
 													}												
@@ -426,7 +426,7 @@ ns1blankspace.setup.file =
 																	});	
 																}	
 
-																oSearch.getResults(function(data) {ns1blankspace.setup.file.import.template.options(oParam, data)});
+																oSearch.getResults(function(data) {ns1blankspace.setup.file["import"].template.options(oParam, data)});
 															}
 															else
 															{
@@ -437,7 +437,7 @@ ns1blankspace.setup.file =
 																	dataType: 'json',
 																	success: function(data)
 																	{
-																		ns1blankspace.setup.file.import.template.options(oParam, data);
+																		ns1blankspace.setup.file["import"].template.options(oParam, data);
 																	}
 																});
 															}	
@@ -540,7 +540,7 @@ ns1blankspace.setup.file =
 														if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
 													}
 
-													ns1blankspace.setup.file.import.data.object = oParam.object;	
+													ns1blankspace.setup.file["import"].data.object = oParam.object;	
 														
 													if (oResponse == undefined)
 													{	
@@ -584,7 +584,7 @@ ns1blankspace.setup.file =
 																			type: 'POST',
 																			url: ns1blankspace.util.endpointURI('SETUP_IMPORT_MANAGE'),
 																			success: function(data) {
-																				ns1blankspace.setup.file.import.upload.init(oParam, data);
+																				ns1blankspace.setup.file["import"].upload.init(oParam, data);
 																			}
 																		});
 																	}
@@ -598,7 +598,7 @@ ns1blankspace.setup.file =
 														{	
 															ns1blankspace.objectContext = oResponse.id;
 															$('#objectcontext').val(oResponse.id);	
-															ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.setup.file.import.upload.show});
+															ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.setup.file["import"].upload.show});
 														}	
 													}	
 												},
@@ -614,14 +614,14 @@ ns1blankspace.setup.file =
 													if (oParam == undefined)
 													{
 														oParam = {};
-														oParam.object = ns1blankspace.setup.file.import.data.object;
+														oParam.object = ns1blankspace.setup.file["import"].data.object;
 													}
 
 													if (oParam.initialised != undefined) {bInitialised = oParam.initialised}
 
 													if (!bInitialised)
 													{	
-														oParam.onComplete = ns1blankspace.setup.file.import.upload.show;
+														oParam.onComplete = ns1blankspace.setup.file["import"].upload.show;
 														ns1blankspace.setup.file.util.getFields(oParam);
 													}
 													else
@@ -634,13 +634,13 @@ ns1blankspace.setup.file =
 															oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
 															oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);		
 															oSearch.sort('id', 'desc');
-															oSearch.getResults(function(data) {ns1blankspace.setup.file.import.upload.show(oParam, data)});
+															oSearch.getResults(function(data) {ns1blankspace.setup.file["import"].upload.show(oParam, data)});
 														}
 														else
 														{	
 															if (oResponse.data.rows.length != 0)
 															{	
-																ns1blankspace.setup.file.import.data.attachment = oResponse.data.rows[0].id;
+																ns1blankspace.setup.file["import"].data.attachment = oResponse.data.rows[0].id;
 
 																$.ajax(
 																{
@@ -661,8 +661,8 @@ ns1blankspace.setup.file =
 																		var bFieldErrors = false;
 																		var bTooManyRows = (data.rowlimit == 'Y');
 
-																		ns1blankspace.setup.file.import.data.fields = [];
-																		ns1blankspace.setup.file.import.data.keyFields = [];
+																		ns1blankspace.setup.file["import"].data.fields = [];
+																		ns1blankspace.setup.file["import"].data.keyFields = [];
 
 																		var oRow = data.data.rows[0];
 
@@ -681,7 +681,7 @@ ns1blankspace.setup.file =
 																				}
 																				else
 																				{
-																					ns1blankspace.setup.file.import.data.fields.push(key);
+																					ns1blankspace.setup.file["import"].data.fields.push(key);
 																				}	
 
 																				aHTML.push('<tr>');
@@ -747,13 +747,13 @@ ns1blankspace.setup.file =
 																			}
 																			else
 																			{
-																				ns1blankspace.setup.file.import.data.keys = [];
+																				ns1blankspace.setup.file["import"].data.keys = [];
 																				$('#ns1blankspaceUploadFields input:checked').each(function()
 																				{
-																					ns1blankspace.setup.file.import.data.keys.push((this.id).split('-')[1]);
+																					ns1blankspace.setup.file["import"].data.keys.push((this.id).split('-')[1]);
 																				})
 																				 				 
-																				ns1blankspace.setup.file.import.upload.validate(oParam);
+																				ns1blankspace.setup.file["import"].upload.validate(oParam);
 																			}	
 																		});
 																	}
@@ -769,13 +769,13 @@ ns1blankspace.setup.file =
 													{	
 														ns1blankspace.status.working();
 
-														ns1blankspace.setup.file.import.data.rows = [];
+														ns1blankspace.setup.file["import"].data.rows = [];
 
 														$.ajax(
 														{
 															type: 'POST',
 															url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_READ'),
-															data: 'id=' + ns1blankspace.util.fs(ns1blankspace.setup.file.import.data.attachment),
+															data: 'id=' + ns1blankspace.util.fs(ns1blankspace.setup.file["import"].data.attachment),
 															success: function(data)
 															{	
 																if (data.rowlimit == 'Y')
@@ -784,15 +784,15 @@ ns1blankspace.setup.file =
 																}
 																else
 																{	
-																	ns1blankspace.setup.file.import.upload.validate(oParam, data);
+																	ns1blankspace.setup.file["import"].upload.validate(oParam, data);
 																}
 															}
 														});
 													}
 													else
 													{
-														ns1blankspace.setup.file.import.data.rows =
-																	ns1blankspace.setup.file.import.data.rows.concat(oResponse.data.rows)
+														ns1blankspace.setup.file["import"].data.rows =
+																	ns1blankspace.setup.file["import"].data.rows.concat(oResponse.data.rows)
 
 														if (oResponse.morerows == 'true')
 														{
@@ -806,14 +806,14 @@ ns1blankspace.setup.file =
 																url: ns1blankspace.util.endpointURI('CORE_SEARCH_MORE'),
 																data: sData,
 																dataType: 'json',
-																success: function(data){ns1blankspace.setup.file.import.upload.validate(oParam, data)}
+																success: function(data){ns1blankspace.setup.file["import"].upload.validate(oParam, data)}
 															});
 														}	
 														else
 														{
-															ns1blankspace.status.message(ns1blankspace.setup.file.import.data.rows.length + ' rows');
+															ns1blankspace.status.message(ns1blankspace.setup.file["import"].data.rows.length + ' rows');
 
-															var aDataErrors = $.grep(ns1blankspace.setup.file.import.data.rows, function (a) {return a.dataerrors != '';});
+															var aDataErrors = $.grep(ns1blankspace.setup.file["import"].data.rows, function (a) {return a.dataerrors != '';});
 
 															if (aDataErrors.length == 0)
 															{
@@ -839,7 +839,7 @@ ns1blankspace.setup.file =
 																})
 																.click(function()
 																{	
-																	ns1blankspace.setup.file.import.upload.initProcess(oParam)
+																	ns1blankspace.setup.file["import"].upload.initProcess(oParam)
 																});
 															}
 															else
@@ -893,7 +893,7 @@ ns1blankspace.setup.file =
 									initProcess:
 										 		function ()
 												{
-													ns1blankspace.setup.file.util.resolveSelects({onComplete: ns1blankspace.setup.file.import.upload.resolve})
+													ns1blankspace.setup.file.util.resolveSelects({onComplete: ns1blankspace.setup.file["import"].upload.resolve})
 												},	
 
 									resolve: 	function (oParam)
@@ -922,51 +922,51 @@ ns1blankspace.setup.file =
 														
 														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
 
-														ns1blankspace.setup.file.import.data.errors = [];
+														ns1blankspace.setup.file["import"].data.errors = [];
 													}
 
-													if (iRow < ns1blankspace.setup.file.import.data.rows.length)
+													if (iRow < ns1blankspace.setup.file["import"].data.rows.length)
 													{	
-														ns1blankspace.setup.file.import.data.current = [];
+														ns1blankspace.setup.file["import"].data.current = [];
 
-														var oRow = ns1blankspace.setup.file.import.data.rows[iRow];
+														var oRow = ns1blankspace.setup.file["import"].data.rows[iRow];
 														
 														var oSearch = new AdvancedSearch();
-														oSearch.method = ns1blankspace.setup.file.import.data.method + '_SEARCH';
+														oSearch.method = ns1blankspace.setup.file["import"].data.method + '_SEARCH';
 
-														$(ns1blankspace.setup.file.import.data.keys).each(function()
+														$(ns1blankspace.setup.file["import"].data.keys).each(function()
 														{
 															oSearch.addField(this);
 															oSearch.addFilter(this, 'EQUAL_TO', oRow[this]);
-															ns1blankspace.setup.file.import.data.current.push(this + '=' + oRow[this]);
+															ns1blankspace.setup.file["import"].data.current.push(this + '=' + oRow[this]);
 														});	
 														
 														oSearch.getResults(function(oResponse)
 														{
-															var oRow = ns1blankspace.setup.file.import.data.rows[iRow]; 
+															var oRow = ns1blankspace.setup.file["import"].data.rows[iRow]; 
 															
-															ns1blankspace.setup.file.import.data.rows[iRow].count = oResponse.data.rows.length;
+															ns1blankspace.setup.file["import"].data.rows[iRow].count = oResponse.data.rows.length;
 
 															if (oResponse.data.rows.length <= 1)
 															{
 																if (oResponse.data.rows.length == 1)
 																{
-																	ns1blankspace.setup.file.import.data.rows[iRow].id = oResponse.data.rows[0].id
+																	ns1blankspace.setup.file["import"].data.rows[iRow].id = oResponse.data.rows[0].id
 																}
 															}
 															else
 															{
-																ns1blankspace.setup.file.import.data.rows[iRow].error = true;
+																ns1blankspace.setup.file["import"].data.rows[iRow].error = true;
 																
-																ns1blankspace.setup.file.import.data.errors.push(
+																ns1blankspace.setup.file["import"].data.errors.push(
 																{
-																	data: ns1blankspace.setup.file.import.data.current.join('&'),
+																	data: ns1blankspace.setup.file["import"].data.current.join('&'),
 																	error: 'More than one record based on keys (' + oResponse.data.rows.length + ')'
 																});
 															}	
 
 															oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
-															ns1blankspace.setup.file.import.upload.resolve(oParam);
+															ns1blankspace.setup.file["import"].upload.resolve(oParam);
 
 														});
 													}
@@ -974,24 +974,24 @@ ns1blankspace.setup.file =
 													{
 														ns1blankspace.status.message('Resolve completed');
 
-														ns1blankspace.setup.file.import.data.nonKeyFields = [];
-														ns1blankspace.setup.file.import.data.importFields = [];
+														ns1blankspace.setup.file["import"].data.nonKeyFields = [];
+														ns1blankspace.setup.file["import"].data.importFields = [];
 
-														$(ns1blankspace.setup.file.import.data.fields).each(function(i,v)
+														$(ns1blankspace.setup.file["import"].data.fields).each(function(i,v)
 														{
 															var oField = $.grep(ns1blankspace.setup.file.data.fields, function (a) {return a.key == v})[0];
 																
-															ns1blankspace.setup.file.import.data.importFields.push(
+															ns1blankspace.setup.file["import"].data.importFields.push(
 															{
 																name: v,
 																stage: (oField.child?2:1)
 															})
 
-															var iLength = $.grep(ns1blankspace.setup.file.import.data.keys, function (a) {return a == v}).length
+															var iLength = $.grep(ns1blankspace.setup.file["import"].data.keys, function (a) {return a == v}).length
 
 															if (iLength == 0 )
 															{
-																ns1blankspace.setup.file.import.data.nonKeyFields.push(
+																ns1blankspace.setup.file["import"].data.nonKeyFields.push(
 																{
 																	name: v,
 																	stage: (oField.child?2:1)
@@ -999,7 +999,7 @@ ns1blankspace.setup.file =
 															}	
 														});
 
-														ns1blankspace.setup.file.import.upload.process();
+														ns1blankspace.setup.file["import"].upload.process();
 													}	
 												},						
 
@@ -1032,16 +1032,16 @@ ns1blankspace.setup.file =
 														
 														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
 
-														ns1blankspace.setup.file.import.data.errors = [];
+														ns1blankspace.setup.file["import"].data.errors = [];
 													}
 
-													if (iRow < ns1blankspace.setup.file.import.data.rows.length)
+													if (iRow < ns1blankspace.setup.file["import"].data.rows.length)
 													{	
 														$('#ns1blankspaceImportStatus').html(iRow + 1);
 
-														ns1blankspace.setup.file.import.data.current = [];
+														ns1blankspace.setup.file["import"].data.current = [];
 
-														var oRow = ns1blankspace.setup.file.import.data.rows[iRow];
+														var oRow = ns1blankspace.setup.file["import"].data.rows[iRow];
 															
 														if (!oRow.error)
 														{
@@ -1051,7 +1051,7 @@ ns1blankspace.setup.file =
 															{	
 																oData.id = oRow.id;
 
-																$.each(ns1blankspace.setup.file.import.data.nonKeyFields, function(j,v)
+																$.each(ns1blankspace.setup.file["import"].data.nonKeyFields, function(j,v)
 																{	
 																	if (v.stage == iStage)
 																	{	
@@ -1064,7 +1064,7 @@ ns1blankspace.setup.file =
 															}
 															else if (iStage == 1 && oRow.id === undefined)
 															{	
-																$.each(ns1blankspace.setup.file.import.data.importFields, function(j,v)
+																$.each(ns1blankspace.setup.file["import"].data.importFields, function(j,v)
 																{	
 																	if (v.stage == iStage)
 																	{	
@@ -1078,7 +1078,7 @@ ns1blankspace.setup.file =
 
 															else if (iStage == 2 && oRow.id !== undefined)
 															{	
-																$.each(ns1blankspace.setup.file.import.data.importFields, function(j,v)
+																$.each(ns1blankspace.setup.file["import"].data.importFields, function(j,v)
 																{	
 																	if (v.stage == iStage)
 																	{	
@@ -1086,12 +1086,12 @@ ns1blankspace.setup.file =
 																		{	
 																			oData[v.name] = (oRow[v.name]).formatXHTML();
 
-																			var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.key == v.name && a.object == ns1blankspace.setup.file.import.data.object})[0];
+																			var oRule = $.grep(ns1blankspace.setup.file["import"].data.rules, function (a) {return a.key == v.name && a.object == ns1blankspace.setup.file["import"].data.object})[0];
 
 																			if (oRule !== undefined)
 																			{
 																				if (oRule.parentID !== undefined) {oData[oRule.parentID] = oRow['id'];}
-																				ns1blankspace.setup.file.import.data.method = oRule.method;
+																				ns1blankspace.setup.file["import"].data.method = oRule.method;
 																			}
 
 																			if ((oRow[v.name]).substring(0,1) == '-')
@@ -1108,7 +1108,7 @@ ns1blankspace.setup.file =
 																$.ajax(
 																{
 																	type: 'POST',
-																	url: ns1blankspace.util.endpointURI(ns1blankspace.setup.file.import.data.method + '_MANAGE'),
+																	url: ns1blankspace.util.endpointURI(ns1blankspace.setup.file["import"].data.method + '_MANAGE'),
 																	data: oData,
 																	dataType: 'json',
 																	global: false,
@@ -1116,7 +1116,7 @@ ns1blankspace.setup.file =
 																				{
 																					if (data.status == 'ER')
 																					{
-																						ns1blankspace.setup.file.import.data.errors.push(
+																						ns1blankspace.setup.file["import"].data.errors.push(
 																						{
 																							data: oData,
 																							error: data.error.errornotes
@@ -1126,7 +1126,7 @@ ns1blankspace.setup.file =
 																					oRow.id = data.id;
 																					oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
 																					
-																					ns1blankspace.setup.file.import.upload.process(oParam)
+																					ns1blankspace.setup.file["import"].upload.process(oParam)
 																				}
 																});
 															}
@@ -1134,31 +1134,31 @@ ns1blankspace.setup.file =
 															{
 																oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
 																$('#ns1blankspaceImportStatus').html(iRow + 1);
-																ns1blankspace.setup.file.import.upload.process(oParam)
+																ns1blankspace.setup.file["import"].upload.process(oParam)
 															}	
 														}
 														else
 														{
-															ns1blankspace.setup.file.import.data.errors.push(
+															ns1blankspace.setup.file["import"].data.errors.push(
 															{
-																data: ns1blankspace.setup.file.import.data.current.join('&'),
+																data: ns1blankspace.setup.file["import"].data.current.join('&'),
 																error: 'More than one record based on keys'
 															});
 
 															oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
-															ns1blankspace.setup.file.import.upload.process(oParam)
+															ns1blankspace.setup.file["import"].upload.process(oParam)
 														}	
 														
 													}
 													else
 													{
-														if ($.grep(ns1blankspace.setup.file.import.data.nonKeyFields, function (a) {return a.stage == (iStage + 1);}).length > 0)
+														if ($.grep(ns1blankspace.setup.file["import"].data.nonKeyFields, function (a) {return a.stage == (iStage + 1);}).length > 0)
 														{
 															ns1blankspace.status.message('Importing Stage ' + (iStage + 1) + '...');
 															oParam = ns1blankspace.util.setParam(oParam, 'row', 0);
 															oParam = ns1blankspace.util.setParam(oParam, 'stage', (iStage + 1));
 
-															ns1blankspace.setup.file.import.upload.process(oParam)
+															ns1blankspace.setup.file["import"].upload.process(oParam)
 														}
 														else
 														{	
@@ -1170,31 +1170,31 @@ ns1blankspace.setup.file =
 
 															aHTML.push('<tr><td style="font-size:0.875em;" class="ns1blankspaceSub">');
 
-															if (ns1blankspace.setup.file.import.data.errors.length == 0)
+															if (ns1blankspace.setup.file["import"].data.errors.length == 0)
 															{	
 																aHTML.push('No errors during import.');																
 															}
-															else if (ns1blankspace.setup.file.import.data.errors.length == 0)
+															else if (ns1blankspace.setup.file["import"].data.errors.length == 0)
 															{
 																aHTML.push('There was one error during import');
 															}
 															else
 															{
-																aHTML.push('There was ' + ns1blankspace.setup.file.import.data.errors.length +
-																			' error' + (ns1blankspace.setup.file.import.data.errors.length == 1?'':'s') + ' during import.');
+																aHTML.push('There was ' + ns1blankspace.setup.file["import"].data.errors.length +
+																			' error' + (ns1blankspace.setup.file["import"].data.errors.length == 1?'':'s') + ' during import.');
 															}
 
 															aHTML.push('</td></tr></table>');					
 																	
 															$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));	
 
-															if (ns1blankspace.setup.file.import.data.errors.length > 0)
+															if (ns1blankspace.setup.file["import"].data.errors.length > 0)
 															{
 																var aHTML = [];
 
 																aHTML.push('<table class="ns1blankspaceColumn2">');
 
-																$.each(ns1blankspace.setup.file.import.data.errors, function(i,k) 
+																$.each(ns1blankspace.setup.file["import"].data.errors, function(i,k) 
 																{
 																	var oData = this.data;
 																	var aDataValues = [];
@@ -1221,7 +1221,7 @@ ns1blankspace.setup.file =
 								}			
 				},
 
-	export: 	{
+	"export": 	{
 					show: 		function ()
 								{
 									//choose object
@@ -1231,13 +1231,13 @@ ns1blankspace.setup.file =
 					process: 	function (oParam)
 								{
 									var sFormatName = ns1blankspace.util.getParam(oParam, 'name').value;
-									var oSummary = ns1blankspace.util.getParam(oParam, 'summary', {default: {}}).value;
-									var oItems = ns1blankspace.util.getParam(oParam, 'items', {default: {}}).value;
-									var bSaveToFile = ns1blankspace.util.getParam(oParam, 'saveToFile', {default: false}).value;
+									var oSummary = ns1blankspace.util.getParam(oParam, 'summary', {"default": {}}).value;
+									var oItems = ns1blankspace.util.getParam(oParam, 'items', {"default": {}}).value;
+									var bSaveToFile = ns1blankspace.util.getParam(oParam, 'saveToFile', {"default": false}).value;
 
 									if (sFormatName !== undefined)
 									{
-										var oFormat = $.grep(ns1blankspace.setup.file.export.formats, function (a) {return a.name == sFormatName});
+										var oFormat = $.grep(ns1blankspace.setup.file["export"].formats, function (a) {return a.name == sFormatName});
 									}
 
 									var aFile = [];
@@ -1358,7 +1358,7 @@ ns1blankspace.setup.file =
 									if (bSaveToFile)
 									{
 										oParam.data = aFile.join('');
-										ns1blankspace.setup.file.export.saveToFile(oParam);
+										ns1blankspace.setup.file["export"].saveToFile(oParam);
 									}
 
 									return aFile.join('');
@@ -1367,8 +1367,8 @@ ns1blankspace.setup.file =
 					saveToFile: function(oParam)
 								{
 									var sData = ns1blankspace.util.getParam(oParam, 'data').value;
-									var sFileName = ns1blankspace.util.getParam(oParam, 'fileName', {default: 'export.csv'}).value;
-									var bOpen = ns1blankspace.util.getParam(oParam, 'open', {default: false}).value;
+									var sFileName = ns1blankspace.util.getParam(oParam, 'fileName', {"default": 'export.csv'}).value;
+									var bOpen = ns1blankspace.util.getParam(oParam, 'open', {"default": false}).value;
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 
 									var oData =
@@ -1413,25 +1413,25 @@ ns1blankspace.setup.file =
 										if (oParam.onComplete != undefined) {fOnComplete = oParam.onComplete}
 									}		
 
-									ns1blankspace.setup.file.import.data.object = iObject;
+									ns1blankspace.setup.file["import"].data.object = iObject;
 
 									if (iObject == 32)
 									{ 
-										ns1blankspace.setup.file.import.data.method = 'CONTACT_PERSON';
-										ns1blankspace.setup.file.import.data.objectName = 'contactperson';
+										ns1blankspace.setup.file["import"].data.method = 'CONTACT_PERSON';
+										ns1blankspace.setup.file["import"].data.objectName = 'contactperson';
 									}
 
 									if (iObject == 12)
 									{ 
-										ns1blankspace.setup.file.import.data.method = 'CONTACT_BUSINESS';
-										ns1blankspace.setup.file.import.data.objectName = 'contactbusiness';
+										ns1blankspace.setup.file["import"].data.method = 'CONTACT_BUSINESS';
+										ns1blankspace.setup.file["import"].data.objectName = 'contactbusiness';
 									}
 
 									if (oResponse == undefined)
 									{	
 										var oSearch = new AdvancedSearch();
-										oSearch.method = ns1blankspace.setup.file.import.data.method + '_SEARCH';
-										oSearch.returnParameters = ns1blankspace.setup.file.import.data.objectName;
+										oSearch.method = ns1blankspace.setup.file["import"].data.method + '_SEARCH';
+										oSearch.returnParameters = ns1blankspace.setup.file["import"].data.objectName;
 										oSearch.getResults(function(data) {ns1blankspace.setup.file.util.getFields(oParam, data)});
 									}
 									else
@@ -1474,14 +1474,14 @@ ns1blankspace.setup.file =
 										});
 
 										ns1blankspace.setup.file.data.fields = 
-										ns1blankspace.setup.file.data.fields.concat($.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.child && a.object == ns1blankspace.setup.file.import.data.object}));
+										ns1blankspace.setup.file.data.fields.concat($.grep(ns1blankspace.setup.file["import"].data.rules, function (a) {return a.child && a.object == ns1blankspace.setup.file["import"].data.object}));
 
 										$.each(ns1blankspace.setup.file.data.fields, function(i, v) 
 										{
 											var bInclude = (this.inputtype == 'textbox');
 											sName = v.name;
 
-											var oRule = $.grep(ns1blankspace.setup.file.import.data.rules, function (a) {return a.name == sName && a.object == ns1blankspace.setup.file.import.data.object})[0];
+											var oRule = $.grep(ns1blankspace.setup.file["import"].data.rules, function (a) {return a.name == sName && a.object == ns1blankspace.setup.file["import"].data.object})[0];
 
 											if (oRule !== undefined)
 											{
@@ -1508,7 +1508,7 @@ ns1blankspace.setup.file =
 					resolveSelects: 
 								function (oParam)
 								{
-									var iResolveFieldsIndex = ns1blankspace.util.getParam(oParam, 'resolveFieldsIndex', {default: 0}).value;
+									var iResolveFieldsIndex = ns1blankspace.util.getParam(oParam, 'resolveFieldsIndex', {"default": 0}).value;
 
 									if (iResolveFieldsIndex == 0)
 									{
@@ -1524,12 +1524,12 @@ ns1blankspace.setup.file =
 										var sResolveName = (oResolveField.rule.searchName !== undefined?oResolveField.rule.searchName:'title');
 										var aResolveText = [];
 
-										$(ns1blankspace.setup.file.import.data.fields).each(function(i,v)
+										$(ns1blankspace.setup.file["import"].data.fields).each(function(i,v)
 										{
-											if (v == sName) {ns1blankspace.setup.file.import.data.fields.splice(i,1,sIDName)}
+											if (v == sName) {ns1blankspace.setup.file["import"].data.fields.splice(i,1,sIDName)}
 										});
 
-										$($.grep(ns1blankspace.setup.file.import.data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
+										$($.grep(ns1blankspace.setup.file["import"].data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
 										{
 											aResolveText.push(k[sName]);
 										});
@@ -1549,7 +1549,7 @@ ns1blankspace.setup.file =
 													{
 														if (oResponse.data.rows.length > 0)
 														{
-															$($.grep(ns1blankspace.setup.file.import.data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
+															$($.grep(ns1blankspace.setup.file["import"].data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
 															{
 																var oRow = $.grep(oResponse.data.rows, function (a) {return a[sResolveName] == k[sName]})[0];
 
@@ -1578,7 +1578,7 @@ ns1blankspace.setup.file =
 														{
 															if (oResponse.data.rows.length > 0)
 															{
-																$($.grep(ns1blankspace.setup.file.import.data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
+																$($.grep(ns1blankspace.setup.file["import"].data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
 																{
 																	var oRow = $.grep(oResponse.data.rows, function (a) {return a[sResolveName] == k[sName]})[0];
 
@@ -1612,7 +1612,7 @@ ns1blankspace.setup.file =
 
 }
 
-ns1blankspace.setup.file.export.formats =
+ns1blankspace.setup.file["export"].formats =
 [
 	{
 		name: 'Payment Summary - AU',
@@ -1636,12 +1636,12 @@ ns1blankspace.setup.file.export.formats =
 					{
 						param: 'fileMode',
 						length: 1,
-						default: 'T'
+						"default": 'T'
 					},
 					{
 						param: 'endDate',
 						length: 8,
-						default: Date.today(),
+						"default": Date.today(),
 						dateFormat: 'ddMMyyyy'
 					},
 					{

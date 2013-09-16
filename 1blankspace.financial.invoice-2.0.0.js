@@ -543,17 +543,17 @@ ns1blankspace.financial.invoice =
 										if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
 										{	
 											$('#ns1blankspaceSummaryColumn1').html(ns1blankspace.xhtml.loading);
-											oParam.onComplete = ns1blankspace.financial.invoice.summary.default;
+											oParam.onComplete = ns1blankspace.financial.invoice.summary["default"];
 											ns1blankspace.util.initTemplate(oParam);
 										}	
 										else
 										{
-											ns1blankspace.financial.invoice.summary.default(oParam);
+											ns1blankspace.financial.invoice.summary["default"](oParam);
 										}
 									}	
 								},
 
-					default:	function (oParam)
+					"default":	function (oParam)
 								{
 									var aHTML = [];
 									var bUseTemplate = false;
@@ -1004,7 +1004,7 @@ ns1blankspace.financial.invoice =
 					}	
 				},
 
-	new:		function (oParam)
+	new2:		function (oParam)
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;

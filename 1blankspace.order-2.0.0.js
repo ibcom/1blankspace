@@ -1218,7 +1218,7 @@ ns1blankspace.order =
 
 					edit:		function (oParam, oResponse)
 								{
-									var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+									var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 1}).value;
 									var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 
 									if (oResponse == undefined)
@@ -1441,7 +1441,7 @@ ns1blankspace.order =
 								}
 				},
 
-	new:		function ()
+	new2:		function ()
 				{
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;

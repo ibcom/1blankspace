@@ -746,6 +746,7 @@ ns1blankspace.format.tree =
 							$('#' + sXHTMLElementID).on('mouseup', '.ns1blankspaceLastChild', function(event)
 							{
 								sLastChildElementID = event.target.id;
+								
 								fOnLastChild(
 								{
 									xhtmlElementID: sLastChildElementID,
@@ -781,10 +782,10 @@ ns1blankspace.format.tree =
 
 							aHTML.push('<table>' +
 											'<tr><td id="ns1blankspace' + sXHTMLElementContext + '_' + i + '-1" data-title="' + (this.title?this.title:'') + '" data-id="' + (this.id?this.id:'') + '" class="' +
-											(this.class ? this.class : 'ns1blankspaceRoot') + '" style="width:150px;">' +
+											(this["class"] ? this["class"] : 'ns1blankspaceRoot') + '" style="width:150px;">' +
 											(this.xhtml ? this.xhtml : this.title) +
 											'</td>' +
-											'<td id="ns1blankspace' + sXHTMLElementContext + '_' + i + '-2" data-parent-id="' + (this.id?this.id:'') + '"class="' + (this.class ? this.class : 'ns1blankspaceChild') + '"></td></tr>' +
+											'<td id="ns1blankspace' + sXHTMLElementContext + '_' + i + '-2" data-parent-id="' + (this.id?this.id:'') + '"class="' + (this["class"] ? this["class"] : 'ns1blankspaceChild') + '"></td></tr>' +
 											'</table>');
 
 							$('#' + sXHTMLElementID + ' #ns1blankspaceRow' + sXHTMLElementContext + '-' + i).html(aHTML.join(''))

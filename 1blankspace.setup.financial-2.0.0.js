@@ -1803,8 +1803,8 @@ ns1blankspace.setup.financial =
 
 					show: 		function (oParam)
 								{
-									var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {default: 'invoice'}).value;
-									var iObject = ns1blankspace.util.getParam(oParam, 'object', {default: 5}).value;
+									var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {"default": 'invoice'}).value;
+									var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": 5}).value;
 
 									var aHTML = [];
 									
@@ -1901,7 +1901,7 @@ ns1blankspace.setup.financial =
 
 					save:		function (oParam)
 								{
-									var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {default: 'invoice'}).value
+									var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {"default": 'invoice'}).value
 									var sCounter = $('table.ns1blankspaceTemplateText_' + sTemplate).attr('data-editorcount');
 
 									ns1blankspace.status.working();

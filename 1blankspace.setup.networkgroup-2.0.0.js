@@ -835,9 +835,9 @@ ns1blankspace.setup.networkGroup =
 
 					show: 		function (oParam, oResponse)
 								{											
-									var iObject = ns1blankspace.util.getParam(oParam, 'object', {default: ns1blankspace.object}).value;
-									var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {default: ns1blankspace.objectContext}).value;
-									var sXHTMLElementContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlElementContainerID', {default: 'ns1blankspaceNetworkGroups'}).value;
+									var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": ns1blankspace.object}).value;
+									var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {"default": ns1blankspace.objectContext}).value;
+									var sXHTMLElementContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlElementContainerID', {"default": 'ns1blankspaceNetworkGroups'}).value;
 									
 
 									if (oResponse == undefined)
@@ -990,8 +990,8 @@ ns1blankspace.setup.networkGroup =
 								{
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 									var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-									var iObject = ns1blankspace.util.getParam(oParam, 'object', {default: ns1blankspace.object}).value;
-									var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {default: ns1blankspace.objectContext}).value;
+									var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": ns1blankspace.object}).value;
+									var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {"default": ns1blankspace.objectContext}).value;
 									
 									$('#' + sXHTMLElementID).parent().fadeOut(100);
 

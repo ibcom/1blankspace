@@ -264,7 +264,7 @@ ns1blankspace.themes =
 		title: 				'Standard',
 		cssURI: 			'', 
 		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.aoe-2.0.0.png">',
-		default: 			true
+		"default": 			true
 	},
 	{
 		title: 				'Helping Hand',
@@ -911,7 +911,7 @@ ns1blankspace.control =
 				},
 
 	setView:	{
-					default: 		function ()
+					"default": 		function ()
 									{
 										ns1blankspace.home.show();
 									},
@@ -925,7 +925,7 @@ ns1blankspace.control =
 										else
 										{
 											ns1blankspace.setupView = false;
-											ns1blankspace.control.setView.default();
+											ns1blankspace.control.setView["default"]();
 										}	
 									}
 				},					
@@ -2608,7 +2608,7 @@ ns1blankspace.actions =
 										size: 'small',
 										not: true,
 										data: '<td id="ns1blankspaceActionsColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td></tr>',
-										default: ''
+										"default": ''
 									}) + '</table>');					
 							
 						$('#' + sXHTMLElementContainerID).html(aHTML.join(''));
@@ -2718,7 +2718,7 @@ ns1blankspace.actions =
 
 	bind: 		function (oParam)
 				{
-					var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {default: 'ns1blankspaceRenderPage_Action-0'}).value;
+					var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {"default": 'ns1blankspaceRenderPage_Action-0'}).value;
 
 					$('#' + sXHTMLContainerID + ' .ns1blankspaceRowRemove').button({
 						text: false,
@@ -2751,7 +2751,7 @@ ns1blankspace.actions =
 
 	row: 		function (oRow, oParam)
 				{
-					var bShowDescription = ns1blankspace.util.getParam(oParam, 'showDescription', {default: false}).value;
+					var bShowDescription = ns1blankspace.util.getParam(oParam, 'showDescription', {"default": false}).value;
 
 					var aHTML = [];
 

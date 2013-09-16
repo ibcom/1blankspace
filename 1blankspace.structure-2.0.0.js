@@ -667,7 +667,7 @@ ns1blankspace.stucture =
 					
 				},
 
-	new:		function ()
+	"new":		function ()
 				{
 					alert('You need to be system administrator to add a strucuture.  If you are a system adminstrator then click the setup gear toolbar icon.');
 				}

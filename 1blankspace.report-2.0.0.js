@@ -1562,7 +1562,7 @@ ns1blankspace.report =
 											$('#radioReport-Export').unbind("click");
 											$('#radioReport-Export').click(function()
 											{
-												ns1blankspace.report.export(oParam);
+												ns1blankspace.report["export"](oParam);
 											});	
 
 											$('#radioReport-Send').unbind("click");
@@ -1923,7 +1923,7 @@ ns1blankspace.report =
 					}
 				},
 
-	export:		function (oParam)
+	"export":	function (oParam)
 				{
 					var iMoreID;
 					var aHTML = [];
@@ -1994,17 +1994,19 @@ ns1blankspace.report =
 								var oFooter = [];
 
 								// First, determine if this report has a pre-defined format
-								if (ns1blankspace.setup.file.export.formats) {
-									
-									oFormat = $.grep(ns1blankspace.setup.file.export.formats, function(x) {return x.name === oParam.name});
-									if (oFormat.length > 0) {
+								if (ns1blankspace.setup.file["export"].formats)
+								{	
+									oFormat = $.grep(ns1blankspace.setup.file["export"].formats, function(x) {return x.name === oParam.name});
+									if (oFormat.length > 0)
+									{
 										if (oFormat[0].header) {oHeader = oFormat[0].header}
 										if (oFormat[0].item) {oItem = oFormat[0].item}
 										if (oFormat[0].footer) {oFooter = oFormat[0].footer};
 									}
-									else {
+									else
+									{
 										// Check that auto-generated format doesn't already exist - (prefix - 'REPORT_') and delete
-										ns1blankspace.setup.file.export.formats = $.grep(ns1blankspace.setup.file.export.formats, function(x) {
+										ns1blankspace.setup.file["export"].formats = $.grep(ns1blankspace.setup.file["export"].formats, function(x) {
 												return x.name != 'REPORT_' + oParam.name;
 											});
 									}
@@ -2013,8 +2015,8 @@ ns1blankspace.report =
 								// If captionsAsHeaders, push the report captions into the format
 								if (oExportParameters.headers &&
 									oExportParameters.headers.captionsAsHeaders != undefined && 
-									oExportParameters.headers.captionsAsHeaders) {
-
+									oExportParameters.headers.captionsAsHeaders)
+								{
 									var oFields = [];
 									var sDelimiter = (oExportParameters.headers.delimiter) ? oExportParameters.headers.delimiter : '';
 									var sSurroundWith = (oExportParameters.headers.surroundWith) ? oExportParameters.headers.surroundWith : '';
@@ -2022,7 +2024,8 @@ ns1blankspace.report =
 									$.each(oParam.columns, function() {
 										
 										iColumn++;
-										if (this.caption) {
+										if (this.caption)
+										{
 											oFields.push({value: sSurroundWith + 
 														 this.caption + 
 														 ((iColumn === oParam.columns.length) ? sSurroundWith : sSurroundWith + sDelimiter)});
@@ -2031,8 +2034,8 @@ ns1blankspace.report =
 									oHeader = [{line: 1, fields: oFields}];
 								}
 
-								if (oItem.length > 0) {
-									
+								if (oItem.length > 0)
+								{
 									// Export has been defined. Remove the columns that haven't been included in the report
 									if (oItem[0].fields) {
 										
@@ -2063,7 +2066,7 @@ ns1blankspace.report =
 								}
 
 								// No need to auto-define footer - there isn't a pre-defined format to use. So now add back auto-generated report
-								ns1blankspace.setup.file.export.formats.push({name: 'REPORT_' + oParam.name, header: oHeader, item: oItem, footer: oFooter});
+								ns1blankspace.setup.file["export"].formats.push({name: 'REPORT_' + oParam.name, header: oHeader, item: oItem, footer: oFooter});
 
 								// Now we need to get the entire data set using core_search_more
 								var sParam = 'id=' + oParam.moreID + '&startrow=1&rows=' + oParam.count;
@@ -2099,7 +2102,7 @@ ns1blankspace.report =
 
 											$('#ns1blankspaceReportExport').html(aHTML.join(''));
 											
-											var sFile = ns1blankspace.setup.file.export.process(oExportParam);
+											var sFile = ns1blankspace.setup.file["export"].process(oExportParam);
 
 											//$('#ns1blankspaceFileContents').html(sFile);
 

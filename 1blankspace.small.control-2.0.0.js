@@ -860,7 +860,7 @@ ns1blankspace.actions =
 
 	bind: 		function (oParam)
 				{
-					var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {default: 'ns1blankspaceRenderPage_Action-0'}).value;
+					var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {"default": 'ns1blankspaceRenderPage_Action-0'}).value;
 
 					$('#' + sXHTMLContainerID + ' .ns1blankspaceRowRemove').button({
 						text: false,
@@ -884,7 +884,7 @@ ns1blankspace.actions =
 
 	row: 		function (oRow, oParam)
 				{
-					var bShowDescription = ns1blankspace.util.getParam(oParam, 'showDescription', {default: false}).value;
+					var bShowDescription = ns1blankspace.util.getParam(oParam, 'showDescription', {"default": false}).value;
 
 					var aHTML = [];
 

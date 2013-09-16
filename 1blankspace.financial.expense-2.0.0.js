@@ -693,7 +693,7 @@ ns1blankspace.financial.expense =
 					}	
 				},
 
-	new:		function (oParam)
+	new2:		function (oParam)
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;
@@ -1340,9 +1340,9 @@ ns1blankspace.financial.expense.outstanding =
 
 	file: 		function (oParam)
 				{
-					var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
-					var iDataIndex = ns1blankspace.util.getParam(oParam, 'dataIndex', {default: 0}).value;
-					var iDataItemIndex = ns1blankspace.util.getParam(oParam, 'dataItemIndex', {default: 0}).value;
+					var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 1}).value;
+					var iDataIndex = ns1blankspace.util.getParam(oParam, 'dataIndex', {"default": 0}).value;
+					var iDataItemIndex = ns1blankspace.util.getParam(oParam, 'dataItemIndex', {"default": 0}).value;
 					var iPaymentAccount = ns1blankspace.util.getParam(oParam, 'paymentAccount').value;
 					var iFundsTransfer = ns1blankspace.util.getParam(oParam, 'fundsTransfer').value;
 

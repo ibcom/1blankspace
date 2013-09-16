@@ -281,7 +281,7 @@ ns1blankspace.setup.space =
 														'Roles</label>');
 										}	
 
-										if (oTemplate.import.length != 0)
+										if (oTemplate["import"].length != 0)
 										{
 											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-import" name="radioObject" />' +
 														'<label for="ns1blankspaceInitaliseOption-import" style="width: 110px; margin-bottom:3px;">' +
@@ -538,10 +538,10 @@ ns1blankspace.setup.space =
 												}				
 								},
 
-					import: 	{
+					"import": 	{
 									show:		function (oParam)
 												{
-													var aData = ns1blankspace.setup.space.initialise.data.template.import;
+													var aData = ns1blankspace.setup.space.initialise.data.template["import"];
 													var aHTML = [];
 
 													aHTML.push('<table id="ns1blankspaceSetupSpaceInitialiseImport" class="ns1blankspaceColumn2">');
@@ -574,7 +574,7 @@ ns1blankspace.setup.space =
 													})
 													.click(function()
 													{
-														ns1blankspace.setup.space.initialise.import.add(oParam)
+														ns1blankspace.setup.space.initialise["import"].add(oParam)
 													})
 													.css('font-size', '0.75em')
 													.css('height', '24px');
@@ -591,13 +591,13 @@ ns1blankspace.setup.space =
 													if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 													if (oParam.dataIndex != undefined) {iDataIndex = oParam.dataIndex}
 										
-													if (iDataIndex < ns1blankspace.setup.space.initialise.data.template.import.length)
+													if (iDataIndex < ns1blankspace.setup.space.initialise.data.template["import"].length)
 													{
-														var oImport = ns1blankspace.setup.space.initialise.data.template.import[iDataIndex];
+														var oImport = ns1blankspace.setup.space.initialise.data.template["import"][iDataIndex];
 
 														var oData = oImport.data;
 														
-														var oImportAlready = $.grep(ns1blankspace.setup.space.initialise.data.template.import, function (a) {return a.response != undefined});
+														var oImportAlready = $.grep(ns1blankspace.setup.space.initialise.data.template["import"], function (a) {return a.response != undefined});
 
 														$(oImportAlready).each(function(i, v) 
 														{
@@ -624,7 +624,7 @@ ns1blankspace.setup.space =
 																	oImport.response = data;
 																	oParam.step = 1;
 																	oParam.dataIndex = iDataIndex + 1;
-																	ns1blankspace.setup.space.initialise.import.add(oParam);
+																	ns1blankspace.setup.space.initialise["import"].add(oParam);
 																}
 																else
 																{

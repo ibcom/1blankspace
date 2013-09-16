@@ -1345,7 +1345,7 @@ ns1blankspace.setup.website =
 					networkGroups:
 								function (oParam)
 								{
-									var iID = ns1blankspace.util.getParam(oParam, 'id', {default: ''}).value;
+									var iID = ns1blankspace.util.getParam(oParam, 'id', {"default": ''}).value;
 
 									var sRetrictionCaption = '';
 									
@@ -1466,7 +1466,7 @@ ns1blankspace.setup.website =
 							.click(function()
 							{
 								ns1blankspace.setup.websiteForm.init({showHome: false, site: ns1blankspace.objectContext});
-								ns1blankspace.setup.websiteForm.new();
+								ns1blankspace.setup.websiteForm["new"]();
 							})
 						}	
 					
@@ -1827,7 +1827,7 @@ ns1blankspace.setup.website =
 								}
 				},
 
-	new:		function (oParam)
+	new2:		function (oParam)
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;

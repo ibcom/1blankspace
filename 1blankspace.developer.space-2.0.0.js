@@ -779,7 +779,7 @@ ns1blankspace.developer.space =
 					}	
 				},
 
-	new:		function (aParam)
+	"new":		function (aParam)
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;

@@ -833,7 +833,7 @@ ns1blankspace.stuctureData =
 								}
 				},				
 
-	new:		function ns1blankspaceStructureDataNew(oParam)
+	new2:		function (oParam)
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;

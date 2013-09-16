@@ -164,7 +164,7 @@ ns1blankspace.financial.bankAccount =
 					$('#ns1blankspaceControlImport').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainImport'});
-						ns1blankspace.financial.bankAccount.import.init();
+						ns1blankspace.financial.bankAccount["import"].init();
 					});
 
 					$('#ns1blankspaceControlMapping').click(function(event)
@@ -515,9 +515,9 @@ ns1blankspace.financial.bankAccount =
 
 					edit:	function (oParam, oResponse)
 							{
-								var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
-								var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
-								var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, default: ''}).value;
+								var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 1}).value;
+								var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
+								var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, "default": ''}).value;
 
 								if (iStep == 1)
 								{
@@ -828,7 +828,7 @@ ns1blankspace.financial.bankAccount =
 
 								init: 		function (oParam, oResponse)
 											{
-												var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+												var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 1}).value;
 												var iFileSource = ns1blankspace.util.getParam(oParam, 'fileSource').value;
 
 												if (iStep == 1)
@@ -932,10 +932,10 @@ ns1blankspace.financial.bankAccount =
 								process: 	function (oParam)
 											{
 												var iFileSourceID = ns1blankspace.util.getParam(oParam, 'fileSource').value;
-												var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 0}).value;
-												var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
-												var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, default: ''}).value;
-												var iIndex = ns1blankspace.util.getParam(oParam, 'index', {default: 0}).value;
+												var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 0}).value;
+												var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
+												var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, "default": ''}).value;
+												var iIndex = ns1blankspace.util.getParam(oParam, 'index', {"default": 0}).value;
 
 												if (iStep == 0)
 												{
@@ -1005,19 +1005,19 @@ ns1blankspace.financial.bankAccount =
 													else
 													{
 														ns1blankspace.status.message('Confirmation complete');
-														ns1blankspace.financial.bankAccount.import.items.show(oParam);
+														ns1blankspace.financial.bankAccount["import"].items.show(oParam);
 													}
 												}
 											}
 							}								
 				},
 
-	import: 	{		
+	"import": 	{		
 					init: 		function (oParam)
 								{
 									ns1blankspace.financial.bankAccount.reconcile.current.refresh(
 									{
-										onComplete: ns1blankspace.financial.bankAccount.import.show
+										onComplete: ns1blankspace.financial.bankAccount["import"].show
 									});
 								},
 
@@ -1047,7 +1047,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('processeddate', 'desc');
 										oSearch.rows = 10;
-										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.show(oParam, data)});
+										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount["import"].show(oParam, data)});
 									}
 									else
 									{
@@ -1069,7 +1069,7 @@ ns1blankspace.financial.bankAccount =
 											
 											$(oResponse.data.rows).each(function(i) 
 											{
-												aHTML.push(ns1blankspace.financial.bankAccount.import.row(this));
+												aHTML.push(ns1blankspace.financial.bankAccount["import"].row(this));
 											});
 											
 											aHTML.push('</table>');
@@ -1082,10 +1082,10 @@ ns1blankspace.financial.bankAccount =
 											$('#ns1blankspaceBankAccountImportSources td.ns1blankspaceRowShaded').removeClass('ns1blankspaceRowShaded');
 											$('#' + this.id).addClass('ns1blankspaceRowShaded');
 											var aID = (this.id).split('-');
-											ns1blankspace.financial.bankAccount.import.items.show({fileSource: aID[1]});
+											ns1blankspace.financial.bankAccount["import"].items.show({fileSource: aID[1]});
 										});
 
-										ns1blankspace.financial.bankAccount.import.add();
+										ns1blankspace.financial.bankAccount["import"].add();
 									}
 								},
 
@@ -1179,7 +1179,7 @@ ns1blankspace.financial.bankAccount =
 															data: sData,
 															dataType: 'json',
 															success: function(data) {
-																ns1blankspace.financial.bankAccount.import.add(oParam, data);
+																ns1blankspace.financial.bankAccount["import"].add(oParam, data);
 															}
 														});
 													}
@@ -1192,7 +1192,7 @@ ns1blankspace.financial.bankAccount =
 										if (oResponse.status == 'OK')
 										{
 											$('#objectcontext').val(oResponse.id);	
-											ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.financial.bankAccount.import.process});
+											ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.financial.bankAccount["import"].process});
 										}	
 									}	
 								},
@@ -1206,7 +1206,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.addField('type,filename,description,download,modifieddate');
 										oSearch.addFilter('object', 'EQUAL_TO', 28);
 										oSearch.addFilter('objectcontext', 'EQUAL_TO', $('#objectcontext').val());
-										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.process(data)});
+										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount["import"].process(data)});
 									}
 									else
 									{
@@ -1228,7 +1228,7 @@ ns1blankspace.financial.bankAccount =
 												success: function(data)
 												{
 													ns1blankspace.status.message('Transactions processed.')
-													ns1blankspace.financial.bankAccount.import.show();
+													ns1blankspace.financial.bankAccount["import"].show();
 												}
 											});	
 										}
@@ -1249,7 +1249,7 @@ ns1blankspace.financial.bankAccount =
 
 													if (oResponse === undefined)
 													{	
-														ns1blankspace.financial.bankAccount.import.items.data = {};
+														ns1blankspace.financial.bankAccount["import"].items.data = {};
 
 														var aHTML = [];
 
@@ -1272,7 +1272,7 @@ ns1blankspace.financial.bankAccount =
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 														if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
 														oSearch.rows = 200;
-														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.items.show(oParam, data)});
+														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount["import"].items.show(oParam, data)});
 													}
 													else
 													{
@@ -1300,7 +1300,7 @@ ns1blankspace.financial.bankAccount =
 															$(oResponse.data.rows).each(function()
 															{
 																if (this.status == 1) {bNeedConfirm = true}
-																aHTML.push(ns1blankspace.financial.bankAccount.import.items.row(this));
+																aHTML.push(ns1blankspace.financial.bankAccount["import"].items.row(this));
 															});	
 														}
 															
@@ -1317,7 +1317,7 @@ ns1blankspace.financial.bankAccount =
 															})
 															.click(function()
 															{
-																ns1blankspace.financial.bankAccount.import.items.edit({xhtmlElementID: this.id})
+																ns1blankspace.financial.bankAccount["import"].items.edit({xhtmlElementID: this.id})
 															})
 															.css('width', '15px')
 															.css('height', '20px');
@@ -1327,7 +1327,7 @@ ns1blankspace.financial.bankAccount =
 														.click(function()
 														{
 															oParam.xhtmlElementID = this.id;
-															ns1blankspace.financial.bankAccount.import.items.status(oParam);
+															ns1blankspace.financial.bankAccount["import"].items.status(oParam);
 														})
 														
 														var aHTML = [];
@@ -1370,7 +1370,7 @@ ns1blankspace.financial.bankAccount =
 															label: "New Import"
 														})
 														.click(function() {
-															ns1blankspace.financial.bankAccount.import.add();
+															ns1blankspace.financial.bankAccount["import"].add();
 														})
 														.css('width', '70px');
 														
@@ -1404,7 +1404,7 @@ ns1blankspace.financial.bankAccount =
 														.click(function()
 														{
 															oParam.xhtmlElementID = this.id;
-															ns1blankspace.financial.bankAccount.import.items.remove(oParam);
+															ns1blankspace.financial.bankAccount["import"].items.remove(oParam);
 														})
 														.css('width', '15px')
 														.css('height', '17px');
@@ -1532,7 +1532,7 @@ ns1blankspace.financial.bankAccount =
 																	if (data.status == 'OK')
 																	{
 																		ns1blankspace.status.message('Updated');
-																		ns1blankspace.financial.bankAccount.import.items.show(oParam);
+																		ns1blankspace.financial.bankAccount["import"].items.show(oParam);
 																	}
 																	else
 																	{
@@ -1548,7 +1548,7 @@ ns1blankspace.financial.bankAccount =
 									refresh: 	function (oParam)
 												{
 													var iID = ns1blankspace.util.getParam(oParam, 'bankTransactionID').value;
-													var iItemStatus = ns1blankspace.util.getParam(oParam, 'itemStatus', {default: 4}).value;
+													var iItemStatus = ns1blankspace.util.getParam(oParam, 'itemStatus', {"default": 4}).value;
 
 													$('#ns1blankspaceFinancialImportItem_options_edit-' + iID).attr('data-status', iItemStatus)
 
@@ -1576,7 +1576,7 @@ ns1blankspace.financial.bankAccount =
 													var sFinancialAccountText = ns1blankspace.util.getData(oParam, 'data-financialaccounttext').value;
 													var sDescription = ns1blankspace.util.getData(oParam, 'data-description').value;
 													var dDate = ns1blankspace.util.getData(oParam, 'data-date').value;
-													var bSplit = ns1blankspace.util.getParam(oParam, 'split', {default: false}).value;
+													var bSplit = ns1blankspace.util.getParam(oParam, 'split', {"default": false}).value;
 													var iStatus = ns1blankspace.util.getData(oParam, 'data-status').value;
 
 													if ($('#ns1blankspaceFinancialImportItem_container_edit-' + sKey).length != 0)
@@ -1654,7 +1654,7 @@ ns1blankspace.financial.bankAccount =
 																	financialAccount: $('#ns1blankspaceFinancialAccount_' + sKey).attr('data-id'),
 																	object: iObject,
 																	bankAccount: ns1blankspace.objectContext,
-																	postSave: ns1blankspace.financial.bankAccount.import.items.save.process,
+																	postSave: ns1blankspace.financial.bankAccount["import"].items.save.process,
 																	showStatus: false,
 																	itemStatus: (cAmountRemaining==0?4:7)
 																});
@@ -1831,7 +1831,7 @@ ns1blankspace.financial.bankAccount =
 																	var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
 																	var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext').value;
 																	var iID = ns1blankspace.util.getParam(oParam, 'bankTransactionID').value;
-																	var iItemStatus = ns1blankspace.util.getParam(oParam, 'itemStatus', {default: 4}).value;
+																	var iItemStatus = ns1blankspace.util.getParam(oParam, 'itemStatus', {"default": 4}).value;
 
 																	var oData =
 																	{
@@ -1851,7 +1851,7 @@ ns1blankspace.financial.bankAccount =
 																		global: false,
 																		success: 	function(data)
 																					{
-																						ns1blankspace.financial.bankAccount.import.items.save.reconcile(oParam)
+																						ns1blankspace.financial.bankAccount["import"].items.save.reconcile(oParam)
 																					}
 																	});
 																},
@@ -1881,13 +1881,13 @@ ns1blankspace.financial.bankAccount =
 																			dataType: 'json',
 																			success: function(data)
 																			{
-																				ns1blankspace.financial.bankAccount.import.items.refresh(oParam);
+																				ns1blankspace.financial.bankAccount["import"].items.refresh(oParam);
 																			}
 																		});
 																	}
 																	else
 																	{
-																		ns1blankspace.financial.bankAccount.import.items.refresh(oParam);
+																		ns1blankspace.financial.bankAccount["import"].items.refresh(oParam);
 																	}
 																},
 
@@ -2732,7 +2732,7 @@ ns1blankspace.financial.bankAccount =
 													var sSourceXHTMLElementID = ns1blankspace.util.getParam(oParam, 'sourceXHTMLElementID').value;
 													var iTransactionID = ns1blankspace.util.getParam(oParam, 'sourceXHTMLElementID', {index: 1}).value;
 													var iType = ns1blankspace.util.getParam(oParam, 'type').value;
-													var cAmount = parseFloat(ns1blankspace.util.getData(oParam, 'data-amount', {param: 'sourceXHTMLElementID', default: 0}).value);
+													var cAmount = parseFloat(ns1blankspace.util.getData(oParam, 'data-amount', {param: 'sourceXHTMLElementID', "default": 0}).value);
 
 													if (oResponse == undefined)
 													{
@@ -2820,8 +2820,8 @@ ns1blankspace.financial.bankAccount =
 
 									init: 		function(oParam, oResponse)
 												{
-													var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 0}).value;
-													var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+													var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 0}).value;
+													var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
 													var dReconciliationEndDate = ns1blankspace.util.getParam(oParam, 'reconciliationEndDate').value;
 
 													if (iStep == 0)
@@ -3520,7 +3520,7 @@ ns1blankspace.financial.bankAccount =
 
 														var aXHTMLElementID = sXHTMLElementID.split('-');
 														var oData = {reconciliation: iReconciliation};
-														var bAllUsed = ns1blankspace.util.getParam(oParam, 'allused', {default: true}).value;
+														var bAllUsed = ns1blankspace.util.getParam(oParam, 'allused', {"default": true}).value;
 
 														if (iObject === undefined)
 														{	
@@ -4428,7 +4428,7 @@ ns1blankspace.financial.bankAccount =
 									item: 		function(oParam)
 												{
 													var iJournalID = ns1blankspace.util.getParam(oParam, 'id').value;
-													var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+													var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
 													var cAmount = ns1blankspace.util.getParam(oParam, 'amount').value;
 
 													var oData =

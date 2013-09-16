@@ -121,7 +121,7 @@ ns1blankspace.option.formFactor =
 	is: function (oParam)
 	{
 		var sSize = ns1blankspace.util.getParam(oParam, 'size').value;
-		var bNot = ns1blankspace.util.getParam(oParam, 'not', {default: false}).value
+		var bNot = ns1blankspace.util.getParam(oParam, 'not', {"default": false}).value
 		return (this.not(bNot, this.size.value == this.size.options[sSize]) ? ns1blankspace.util.getParam(oParam, 'data').value : ns1blankspace.util.getParam(oParam, 'default').value)
 	},
 
@@ -620,7 +620,7 @@ ns1blankspace.app =
 
 	show: 		function (oParam)	
 				{
-					var bInitialised = ns1blankspace.util.getParam(oParam, 'initialised', {default: false}).value;
+					var bInitialised = ns1blankspace.util.getParam(oParam, 'initialised', {"default": false}).value;
 
 					if (!bInitialised)
 					{	
@@ -899,7 +899,7 @@ ns1blankspace.app =
 						.css('font-size', '0.75em')			
 						.click(function() 
 						{
-							ns1blankspace.setup.switch();
+							ns1blankspace.setup["switch"]();
 						});	
 					
 					$('#ns1blankspaceViewControlHelp')
@@ -1023,7 +1023,7 @@ ns1blankspace.app =
 				{
 					var sParentNamespace = ns1blankspace.objectParentName;
 					var sNamespace = ns1blankspace.objectName;
-					var oRoot = ns1blankspace.util.getParam(oParam, 'rootnamespace', {default: ns1blankspace}).value
+					var oRoot = ns1blankspace.util.getParam(oParam, 'rootnamespace', {"default": ns1blankspace}).value
 							
 					if (oParam != undefined)
 					{
@@ -1061,15 +1061,15 @@ ns1blankspace.app =
 					var bNew = false;
 					var iID;
 					var bExtendInit = true;
-					var oRoot = ns1blankspace.util.getParam(oParam, 'rootNamespace', {default: ns1blankspace}).value
-					var sRoot = ns1blankspace.util.getParam(oParam, 'rootNameSpaceText', {default: 'ns1blankspace'}).value
+					var oRoot = ns1blankspace.util.getParam(oParam, 'rootNamespace', {"default": ns1blankspace}).value
+					var sRoot = ns1blankspace.util.getParam(oParam, 'rootNameSpaceText', {"default": 'ns1blankspace'}).value
 
 					if (oParam != undefined)
 					{
 						if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
 						if (oParam.parentNamespace != undefined) {sParentNamespace = oParam.parentNamespace}
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}	
-						if (oParam.new != undefined) {bNew = oParam.new}
+						if (oParam["new"] != undefined) {bNew = oParam["new"]}
 						if (oParam.id != undefined) {iID = oParam.id}
 						if (oParam.extendInit != undefined) {bExtendInit = oParam.extendInit}
 					}	
@@ -1128,14 +1128,14 @@ ns1blankspace.app =
 							
 							$('#ns1blankspaceViewControlNew').click(function(event)
 							{
-								oNS.init({new: true});
+								oNS.init({"new": true});
 							});
 							
 							$('#ns1blankspaceViewControlNew').button({disabled: false});
 
 							$('#ns1blankspaceViewControlNewOptions').click(function(event)
 							{
-								oNS.new.options();
+								oNS["new"].options();
 							});
 							
 							$('#ns1blankspaceViewControlAction').click(function(event)
@@ -2118,7 +2118,7 @@ ns1blankspace.history.view =
 										ns1blankspace.setupView = false;
 										$('#ns1blankspaceViewControlSetup').attr('checked', true);
 										$('#ns1blankspaceViewControlSetup').button('refresh');
-										ns1blankspace.setup.switch({viewNamespace: sDestinationNamespace});
+										ns1blankspace.setup["switch"]({viewNamespace: sDestinationNamespace});
 									}
 									else
 									{	
@@ -2155,7 +2155,7 @@ ns1blankspace.history.view =
 
 ns1blankspace.setup = 
 {
-	switch:		function (oParam)
+	"switch":		function (oParam)
 				{
 					var sViewNamespace;
 					var sXHTMLElementID;
@@ -2199,7 +2199,7 @@ ns1blankspace.setup =
 						}
 						else
 						{
-							ns1blankspace.control.setView.default();
+							ns1blankspace.control.setView["default"]();
 						}
 					}
 					else
@@ -2259,8 +2259,8 @@ ns1blankspace.status =
 
 	message: 	function (sStatus, oParam)
 				{	
-					var bTimeout = ns1blankspace.util.getParam(oParam, 'timeout', {default: true}).value;
-					var iDuration = ns1blankspace.util.getParam(oParam, 'duration', {default: 6000}).value;
+					var bTimeout = ns1blankspace.util.getParam(oParam, 'timeout', {"default": true}).value;
+					var iDuration = ns1blankspace.util.getParam(oParam, 'duration', {"default": 6000}).value;
 
 					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
 							'<div id="ns1blankspaceViewControlActionStatusMessage" style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
@@ -2488,7 +2488,7 @@ ns1blankspace.search =
 									var sColumns = ns1blankspace.util.getParam(oParam, 'columns').value;
 									var sFixedFilter = ns1blankspace.util.getParam(oParam, 'fixedFilter').value;
 									var sSearchText = ns1blankspace.util.getParam(oParam, 'searchText').value;
-									var sFilterFunction = ns1blankspace.util.getParam(oParam, 'filterFunction', {default: ''}).value;
+									var sFilterFunction = ns1blankspace.util.getParam(oParam, 'filterFunction', {"default": ''}).value;
 
 									var aFilter = [];
 
@@ -3418,7 +3418,7 @@ ns1blankspace.util =
 					{
 						if (oResponse.data.rows !== undefined)
 						{	
-							iRow = ns1blankspace.util.getParam(oOption, 'row', {default: 0}).value;
+							iRow = ns1blankspace.util.getParam(oOption, 'row', {"default": 0}).value;
 
 							if (iRow < oResponse.data.rows.length)
 							{
@@ -3888,7 +3888,7 @@ ns1blankspace.util =
 					var sDefault = ns1blankspace.util.getParam(oParam, 'default').value;
 					var sDateFormat = ns1blankspace.util.getParam(oParam, 'dateFormat').value;
 					var iAmountDecimalPlaces = ns1blankspace.util.getParam(oParam, 'amountDecimalPlaces').value;
-					var bUpper = ns1blankspace.util.getParam(oParam, 'upper', {default: false}).value;
+					var bUpper = ns1blankspace.util.getParam(oParam, 'upper', {"default": false}).value;
 	
 					if (sValue === undefined) {sValue = sDefault}
 
@@ -3961,7 +3961,7 @@ ns1blankspace.util =
   				{
   					//requires /jscripts/md5-min.js
   					
-  					var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+  					var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
   					var sValue = ns1blankspace.util.getParam(oParam, 'value').value;
 
   					if (sValue !== undefined)
@@ -3981,9 +3981,9 @@ ns1blankspace.util =
   										ns1blankspace.option.appTitle = document.title;
   									}
 
-  									var sTitleSuffix = ns1blankspace.util.getParam(oParam, 'titleSuffix', {default: ''}).value;
-  									var sTitlePrefix = ns1blankspace.util.getParam(oParam, 'titlePrefix', {default: ''}).value;
-  									var sTitle = sTitlePrefix + ns1blankspace.util.getParam(oParam, 'title', {default: ns1blankspace.option.appTitle}).value +
+  									var sTitleSuffix = ns1blankspace.util.getParam(oParam, 'titleSuffix', {"default": ''}).value;
+  									var sTitlePrefix = ns1blankspace.util.getParam(oParam, 'titlePrefix', {"default": ''}).value;
+  									var sTitle = sTitlePrefix + ns1blankspace.util.getParam(oParam, 'title', {"default": ns1blankspace.option.appTitle}).value +
   													sTitleSuffix
 
   									document.title = sTitle;
@@ -4045,7 +4045,7 @@ ns1blankspace.util =
   									var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
   									var iLevel = ns1blankspace.util.getParam(oParam, 'level').value;
   									var sType = ns1blankspace.util.getParam(oParam, 'type').value;
-  									var bShowCode = ns1blankspace.util.getParam(oParam, 'showCode', {default: false}).value;
+  									var bShowCode = ns1blankspace.util.getParam(oParam, 'showCode', {"default": false}).value;
 
   									if (ns1blankspace.util.about.data.length == 0)
   									{
@@ -4091,8 +4091,8 @@ ns1blankspace.util =
 	cleanURL: 	function (oParam)
 				{
 					var sText = ns1blankspace.util.getParam(oParam, 'text').value;
-					var oSearchHost = ns1blankspace.util.getParam(oParam, 'searchHost', {default: [{value: 'secure.mydigitalspacelive.com'}, {value: 'beta.mydigitalspacelive.com'}]}).value;
-					var sNewHost = ns1blankspace.util.getParam(oParam, 'newHost', {default: window.location.host}).value;
+					var oSearchHost = ns1blankspace.util.getParam(oParam, 'searchHost', {"default": [{value: 'secure.mydigitalspacelive.com'}, {value: 'beta.mydigitalspacelive.com'}]}).value;
+					var sNewHost = ns1blankspace.util.getParam(oParam, 'newHost', {"default": window.location.host}).value;
 					var sProtocol = ns1blankspace.util.getParam(oParam, 'protocol').value;
 
 					if (sText !== undefined)
@@ -4125,7 +4125,7 @@ ns1blankspace.util =
 	toWords: 	function (oParam)
 				{
 					var sNumber = ns1blankspace.util.getParam(oParam, 'number').value;
-					var bUpper = ns1blankspace.util.getParam(oParam, 'upper', {default: false}).value;
+					var bUpper = ns1blankspace.util.getParam(oParam, 'upper', {"default": false}).value;
 
 					var sWords = toWords(sNumber);
 					if (bUpper) {sWords = (sWords).toUpperCase()}
@@ -4750,8 +4750,8 @@ ns1blankspace.render =
 					var sClass;
 
 					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-					var sIDColumns = ns1blankspace.util.getParam(oParam, 'idColumns', {default: ''}).value;
-					var sColumns = ns1blankspace.util.getParam(oParam, 'columns', {default: 'title'}).value;
+					var sIDColumns = ns1blankspace.util.getParam(oParam, 'idColumns', {"default": ''}).value;
+					var sColumns = ns1blankspace.util.getParam(oParam, 'columns', {"default": 'title'}).value;
 					var fFunctionClass = ns1blankspace.util.getParam(oParam, 'functionClass').value;
 					var sIdAdditional = ns1blankspace.util.getParam(oParam, 'idAdditional').value;
 

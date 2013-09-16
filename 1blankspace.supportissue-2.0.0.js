@@ -29,7 +29,7 @@ ns1blankspace.supportIssue =
 					ns1blankspace.viewName = 'Support Issues';
 					if (ns1blankspace.supportIssue.data.mode.value === undefined)
 					{
-						ns1blankspace.supportIssue.data.mode.value = ns1blankspace.util.getParam(oParam, 'mode', {default: 1}).value;
+						ns1blankspace.supportIssue.data.mode.value = ns1blankspace.util.getParam(oParam, 'mode', {"default": 1}).value;
 					}	
 							
 					ns1blankspace.app.set(oParam);
@@ -43,7 +43,7 @@ ns1blankspace.supportIssue =
 
 						if (false && ns1blankspace.supportIssue.data.mode.value === undefined)
 						{
-							ns1blankspace.supportIssue.data.mode.value = ns1blankspace.util.getParam(oParam, 'mode', {default: 1}).value;
+							ns1blankspace.supportIssue.data.mode.value = ns1blankspace.util.getParam(oParam, 'mode', {"default": 1}).value;
 						}	
 
 						var aHTML = [];
@@ -330,7 +330,7 @@ ns1blankspace.supportIssue =
 									}	
 								},
 
-					class:		function ()
+					"class":		function ()
 								{
 									var sClass = '';
 									
@@ -631,7 +631,7 @@ ns1blankspace.supportIssue =
 					}	
 				},
 
-	new:		function ()
+	new2:		function ()
 				{
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;

@@ -378,7 +378,7 @@ ns1blankspace.messaging.conversation =
 						
 						var sFunctionDefault = 'ns1blankspace.messaging.conversation.posts.show()';
 						var sDefault = ns1blankspace.util.getParam(oParam, 'default').value;
-						var sDefaultParam = ns1blankspace.util.getParam(oParam, 'defaultParam', {default: ''}).value;
+						var sDefaultParam = ns1blankspace.util.getParam(oParam, 'defaultParam', {"default": ''}).value;
 
 						if (sDefault !== undefined)
 						{
@@ -775,7 +775,7 @@ ns1blankspace.messaging.conversation =
 													var bExists = ($('#ns1blankspaceMessagingConversationPostComments_container-' + sKey).length != 0);
 													
 													var sAction = ns1blankspace.util.getParam(oParam, 'action').value;
-													if (sAction == undefined) {sAction = ns1blankspace.util.getData(oParam, 'data-action', {default: ''}).value}
+													if (sAction == undefined) {sAction = ns1blankspace.util.getData(oParam, 'data-action', {"default": ''}).value}
 													if (sAction == '') {sAction = 'open'}
 
 													if (!bExists && $('#ns1blankspaceMessagingConversationPosts_comment_close-' + sKey).length == 0)
@@ -853,7 +853,7 @@ ns1blankspace.messaging.conversation =
 													process: 	function (oParam, oResponse)
 																{
 																	var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-																	var bNew = ns1blankspace.util.getParam(oParam, 'new', {default: false}).value;
+																	var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
 
 																	var aHTML = [];
 																

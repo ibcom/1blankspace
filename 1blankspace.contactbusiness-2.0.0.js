@@ -26,7 +26,7 @@ ns1blankspace.contactBusiness =
 					{
 						if (oParam.showHome != undefined) {bShowHome = oParam.showHome}
 						if (oParam.showNew != undefined) {bNew = oParam.showNew}
-						if (bNew) {ns1blankspace.contactBusiness.new()};
+						if (bNew) {ns1blankspace.contactBusiness["new"]()};
 					}	
 
 					ns1blankspace.app.set(oParam);
@@ -1486,7 +1486,7 @@ ns1blankspace.contactBusiness =
 											{
 												contactBusiness: ns1blankspace.objectContext,
 												contactBusinessText: ns1blankspace.objectContextData.tradename,
-												new: true
+												"new": true
 											});
 										})
 										.css('width', '75px')

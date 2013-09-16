@@ -41,13 +41,13 @@ ns1blankspace.financial.payroll =
 
 					$('#ns1blankspaceViewControlNew').click(function(event)
 					{
-						ns1blankspace.financial.payroll.home({new: true});
+						ns1blankspace.financial.payroll.home({"new": true});
 					});
 				},
 
 	home:		function (oParam, oResponse)
 				{		
-					var bNew = ns1blankspace.util.getParam(oParam, 'new', {default: false}).value;
+					var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
 
 					if (oResponse == undefined)
 					{
@@ -108,7 +108,7 @@ ns1blankspace.financial.payroll =
 					
 						if (bNew)
 						{
-							ns1blankspace.financial.payroll.new.show();
+							ns1blankspace.financial.payroll["new"].show();
 						}	
 						else
 						{
@@ -611,7 +611,7 @@ ns1blankspace.financial.payroll =
 								}
 				},				
 
-	new: 		{
+	"new": 		{
 					show: 		function ()
 								{
 									var aHTML = [];
@@ -646,7 +646,7 @@ ns1blankspace.financial.payroll =
 									})
 									.click(function() 
 									{
-										ns1blankspace.financial.payroll.new.save();
+										ns1blankspace.financial.payroll["new"].save();
 									});
 
 									$('#ns1blankspacePayrollNew_options_cancel').button(
@@ -756,14 +756,14 @@ ns1blankspace.financial.payroll =
 													oSearch.addFilter('firstname', 'EQUAL_TO', $('#ns1blankspaceDetailsFirstName').val());
 													oSearch.addFilter('surname', 'EQUAL_TO', $('#ns1blankspaceDetailsLastName').val());
 
-													oSearch.getResults(function(data) {ns1blankspace.financial.payroll.new.save(oParam, data)});
+													oSearch.getResults(function(data) {ns1blankspace.financial.payroll["new"].save(oParam, data)});
 												}
 											}
 											else	
 											{
 												if (oResponse.data.rows.length > 0)
 												{
-													ns1blankspace.financial.payroll.new.process(
+													ns1blankspace.financial.payroll["new"].process(
 													{
 														contactPerson: oResponse.data.rows[0].contactperson,
 														contactBusiness: ns1blankspace.user.contactBusiness
@@ -785,7 +785,7 @@ ns1blankspace.financial.payroll =
 														{
 															if (data.status == 'OK')
 															{
-																ns1blankspace.financial.payroll.new.process(
+																ns1blankspace.financial.payroll["new"].process(
 																{
 																	contactPerson: data.id,
 																	contactBusiness: ns1blankspace.user.contactBusiness
@@ -3029,7 +3029,7 @@ ns1blankspace.financial.payroll =
 				{
 					ns1blankspace.status.working('Completing...');
 
-					var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+					var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 1}).value;
 
 					if (iStep == 1)
 					{	
@@ -3921,7 +3921,7 @@ ns1blankspace.financial.payroll.totals =
 														oParam.items = oItems;
 														oParam.fileName = 'empdupe.a01';
 
-														var sFile = ns1blankspace.setup.file.export.process(oParam);
+														var sFile = ns1blankspace.setup.file["export"].process(oParam);
 
 														$('#ns1blankspaceFileContents').html(sFile);
 													}	

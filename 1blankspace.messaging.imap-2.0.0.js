@@ -123,7 +123,7 @@ ns1blankspace.messaging.imap =
 					$('#ns1blankspaceViewControlNew').unbind('click');
 					$('#ns1blankspaceViewControlNew').click(function(event)
 					{
-						ns1blankspace.messaging.imap.new();
+						ns1blankspace.messaging.imap["new"]();
 					});
 				},
 
@@ -576,7 +576,7 @@ ns1blankspace.messaging.imap =
 
 					bind:		function (oParam)
 								{
-									var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {default: 'ns1blankspaceRenderPage_IMAPInbox-0'}).value;
+									var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {"default": 'ns1blankspaceRenderPage_IMAPInbox-0'}).value;
 
 									$('#' + sXHTMLContainerID + ' td.ns1blankspaceRowSelect').click(function()
 									{
@@ -1171,9 +1171,9 @@ ns1blankspace.messaging.imap =
 				{
 					var aHTML = [];
 					
-					var bReply = ns1blankspace.util.getParam(oParam, 'reply', {default: false}).value;
-					var bReplyAll = ns1blankspace.util.getParam(oParam, 'replyAll', {default: false}).value;
-					var bForward = ns1blankspace.util.getParam(oParam, 'forward', {default: false}).value;
+					var bReply = ns1blankspace.util.getParam(oParam, 'reply', {"default": false}).value;
+					var bReplyAll = ns1blankspace.util.getParam(oParam, 'replyAll', {"default": false}).value;
+					var bForward = ns1blankspace.util.getParam(oParam, 'forward', {"default": false}).value;
 						
 					$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 
@@ -1298,9 +1298,9 @@ ns1blankspace.messaging.imap =
 
 	show: 		function (oParam, oResponse)
 				{
-					var bReply = ns1blankspace.util.getParam(oParam, 'reply', {default: false}).value;
-					var bReplyAll = ns1blankspace.util.getParam(oParam, 'replyAll', {default: false}).value;
-					var bForward = ns1blankspace.util.getParam(oParam, 'forward', {default: false}).value;
+					var bReply = ns1blankspace.util.getParam(oParam, 'reply', {"default": false}).value;
+					var bReplyAll = ns1blankspace.util.getParam(oParam, 'replyAll', {"default": false}).value;
+					var bForward = ns1blankspace.util.getParam(oParam, 'forward', {"default": false}).value;
 					var aHTML = [];
 					var sHTML = '';
 				
@@ -2290,8 +2290,8 @@ ns1blankspace.messaging.imap =
 										ns1blankspace.show({selector: '#ns1blankspaceMainEdit'});
 										$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 										var sContext = 'Reply';
-										if (ns1blankspace.util.getParam(oParam, 'replyAll', {default: false}).value) {sContext = 'ReplyAll'}
-										if (ns1blankspace.util.getParam(oParam, 'forward', {default: false}).value) {sContext = 'Forward'}
+										if (ns1blankspace.util.getParam(oParam, 'replyAll', {"default": false}).value) {sContext = 'ReplyAll'}
+										if (ns1blankspace.util.getParam(oParam, 'forward', {"default": false}).value) {sContext = 'Forward'}
 										$('#ns1blankspaceControl' + sContext).addClass('ns1blankspaceHighlight');
 
 										ns1blankspace.status.error('Check & press Send')
@@ -2456,7 +2456,7 @@ ns1blankspace.messaging.imap =
 					}	
 				},
 				
-	new: 		function (oParam, oResponse)
+	"new": 		function (oParam, oResponse)
 				{
 					var sXHTMLElementID = 'ns1blankspaceMainEdit';
 
@@ -2501,7 +2501,7 @@ ns1blankspace.messaging.imap =
 							type: 'GET',
 							url: '/ondemand/messaging/?' + sParam,
 							dataType: 'json',
-							success: function(data) {ns1blankspace.messaging.imap.new(oParam, data)}
+							success: function(data) {ns1blankspace.messaging.imap["new"](oParam, data)}
 						});
 					}	
 					else	

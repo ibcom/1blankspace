@@ -115,7 +115,7 @@ ns1blankspace.action =
 
 				},
 
-	new:		function (oParam)
+	"new":		function (oParam)
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;

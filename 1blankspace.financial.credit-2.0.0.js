@@ -688,7 +688,7 @@ ns1blankspace.financial.credit =
 					}	
 				},
 
-	new:		function (oParam)
+	new2:		function (oParam)
 				{
 					ns1blankspace.objectContextData = undefined
 					ns1blankspace.objectContext = -1;

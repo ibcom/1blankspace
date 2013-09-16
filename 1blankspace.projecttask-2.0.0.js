@@ -575,7 +575,7 @@ ns1blankspace.projectTask =
 					}	
 				},
 
-	new:		function ()
+	new2:		function ()
 				{
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;

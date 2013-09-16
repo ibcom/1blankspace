@@ -500,7 +500,7 @@ ns1blankspace.financial.debtors =
 
 	show: 		function (oParam, oResponse)
 				{
-					var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+					var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
 					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
 
 					if (oResponse == undefined)
@@ -700,7 +700,7 @@ ns1blankspace.financial.debtors =
 
 	row: 		function (oRow, oParam)
 				{
-					var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;
+					var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
 					var sKey = oRow.debtortype + '_' + oRow.id;
 					oRow.key = sKey;
 
@@ -1340,7 +1340,7 @@ ns1blankspace.financial.profitLoss =
 								{
 									xhtml: '<span class="ns1blankspaceHeaderLarge">Gross&nbsp;Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.grossmargin).formatMoney(2, '.', ',') + '</span>' +
 												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.grossmarginpercentage).formatMoney(2, '.', ',') + '%</span>',
-									class: 'ns1blankspaceRowShaded'
+									"class": 'ns1blankspaceRowShaded'
 								},
 								{
 									title: 'Expenses',
@@ -1357,7 +1357,7 @@ ns1blankspace.financial.profitLoss =
 								{
 									xhtml: '<span class="ns1blankspaceHeaderLarge">Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.netmargin).formatMoney(2, '.', ',') + '</span>' +
 												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.netmarginpercentage).formatMoney(2, '.', ',') + '%</span>',
-									class: 'ns1blankspaceRowShaded'
+									"class": 'ns1blankspaceRowShaded'
 								});
 							}
 							else
@@ -1366,7 +1366,7 @@ ns1blankspace.financial.profitLoss =
 								{
 									xhtml: '<span class="ns1blankspaceHeaderLarge">Net&nbsp;Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;"> ' + (oResponse.operatingmargin).formatMoney(2, '.', ',') + '</span>' +
 												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.operatingmarginpercentage).formatMoney(2, '.', ',') + '%</span>',
-									class: 'ns1blankspaceRowShaded'
+									"class": 'ns1blankspaceRowShaded'
 								});
 
 								
@@ -1376,7 +1376,7 @@ ns1blankspace.financial.profitLoss =
 									{
 										xhtml: '<span class="ns1blankspaceHeaderLarge">Other&nbsp;Income</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.totalotherincome).formatMoney(2, '.', ',') + '</span>' +
 													'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.totalotherincomepercentage).formatMoney(2, '.', ',') + '%</span>',
-										class: 'ns1blankspaceRowShaded'
+										"class": 'ns1blankspaceRowShaded'
 									});
 								}
 									
@@ -1386,7 +1386,7 @@ ns1blankspace.financial.profitLoss =
 									{
 										xhtml: '<span class="ns1blankspaceHeaderLarge">Other&nbsp;Expenses</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.totalotherexpenses).formatMoney(2, '.', ',') + '</span>' +
 													'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.totalotherexpensespercentage).formatMoney(2, '.', ',') + '%</span>',
-										class: 'ns1blankspaceRowShaded'
+										"class": 'ns1blankspaceRowShaded'
 									});
 								}	
 
@@ -1394,7 +1394,7 @@ ns1blankspace.financial.profitLoss =
 								{
 									xhtml: '<span class="ns1blankspaceHeaderLarge">Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.netmargin).formatMoney(2, '.', ',') + '</span>' +
 												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.netmarginpercentage).formatMoney(2, '.', ',') + '%</span>',
-									class: 'ns1blankspaceRowShaded'
+									"class": 'ns1blankspaceRowShaded'
 								});
 							}
 							
@@ -3499,11 +3499,11 @@ ns1blankspace.financial.item =
 			{
 				var iFinancialAccountType;
 
-				var iType = ns1blankspace.util.getParam(oParam, 'type', {default: 1}).value;		
-				var iStep = ns1blankspace.util.getParam(oParam, 'step', {default: 1}).value;
+				var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;		
+				var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 1}).value;
 				var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
 				var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-				var bShowAccount = ns1blankspace.util.getParam(oParam, 'showAccount', {default: (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1)}).value;
+				var bShowAccount = ns1blankspace.util.getParam(oParam, 'showAccount', {"default": (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1)}).value;
 				
 				if (sNamespace === 'expense' || sNamespace === 'payment') {iType = 2}
 

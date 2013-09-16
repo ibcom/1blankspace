@@ -26,7 +26,7 @@ ns1blankspace.home =
 					{	
 						$('#ns1blankspaceViewControlSetup').attr('checked', false);
 						$('#ns1blankspaceViewControlSetup').button('refresh');
-						ns1blankspace.setup.switch({viewScript: 'ns1blankspace.home.show()'});
+						ns1blankspace.setup["switch"]({viewScript: 'ns1blankspace.home.show()'});
 					}	
 
 					$('#ns1blankspaceViewControlAction').button({disabled: true});
@@ -334,8 +334,8 @@ ns1blankspace.home.actions =
 	row:		function (oRow, oParam)
 				{
 					var aHTML = [];
-					var bOverdue = ns1blankspace.util.getParam(oParam, 'overdue', {default: false}).value;
-					var bFuture = ns1blankspace.util.getParam(oParam, 'future', {default: false}).value;
+					var bOverdue = ns1blankspace.util.getParam(oParam, 'overdue', {"default": false}).value;
+					var bFuture = ns1blankspace.util.getParam(oParam, 'future', {"default": false}).value;
 
 					aHTML.push('<tr class="ns1blankspaceRow">');
 								
