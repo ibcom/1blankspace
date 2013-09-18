@@ -585,7 +585,7 @@ ns1blankspace.app =
 									oParam.message = 'You do not have any access rights to this space.';		
 								}
 
-								ns1blankspace.logonToken = data.LogonToken;
+								ns1blankspace.logonKey = data.LogonToken;
 								ns1blankspace.logon.show(oParam);
 							}
 							else
@@ -1372,6 +1372,8 @@ ns1blankspace.logon =
 					var sXHTMLElementID = '#ns1blankspaceViewControl';
 					var sMessage = '';
 					
+					ns1blankspace.logonInitialised = false;
+
 					if (oParam != undefined)
 					{
 						if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
@@ -1412,16 +1414,16 @@ ns1blankspace.logon =
 									'<input id="ns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password">' +
 									'</td></tr>');
 
-					aHTML.push('<tr class="ns1blankspaceLogonTokenContainer" style="display:none;">' +
+					aHTML.push('<tr class="ns1blankspacePasswordCodeContainer" style="display:none;">' +
 									'<td class="ns1blankspaceLogonCaption">' +
 									'Code</td>');
 
 					aHTML.push('<td class="ns1blankspaceLogonSub" style="padding-right:2px;">' +
-									'<span id="ns1blankspacePasswordTokenSend" style="cursor: pointer;">&nbsp;</span>' +
+									'<span id="ns1blankspacePasswordCodeSend" style="cursor: pointer;">resend</span>' +
 									'</td></tr>');
 
-					aHTML.push('<tr class="ns1blankspaceLogonTokenContainer" style="display:none;"><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
-									'<input id="ns1blankspaceLogonPasswordToken" class="ns1blankspaceLogon" type="password">' +
+					aHTML.push('<tr class="ns1blankspacePasswordCodeContainer" style="display:none;"><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
+									'<input id="ns1blankspaceLogonPasswordCode" class="ns1blankspaceLogon" type="password">' +
 									'</td></tr>');
 
 					aHTML.push('<tr>' +
@@ -1511,75 +1513,89 @@ ns1blankspace.logon =
 					{
 						ns1blankspace.logon.getPassword.show();
 					});
+
+					$('#ns1blankspacePasswordCodeSend').click(function()
+					{
+						ns1blankspace.logonInitialised = false;
+						ns1blankspace.logon.init();
+					});
 				},
 
 	init: 		function ()
 				{
-					var oData = 
+					if (ns1blankspace.logonInitialised)
 					{
-						method: 'LOGON_GET_USER_AUTHENTIFICATION_LEVEL',
-						logon: $('#ns1blankspaceLogonLogonName').val()
+						ns1blankspace.logon.send();
 					}	
-
-					oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val()
-							  + $('#ns1blankspaceLogonPassword').val()})
-					
-					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
-					
-					$.ajax(
+					else
 					{
-						type: 'POST',
-						url: '/rpc/logon/',
-						data: oData,
-						global: false,
-						dataType: 'json',
-						success: function (data)
+						var oData = 
 						{
-							ns1blankspace.authenticationLevel = data.authentificationlevel;
-
-							if (ns1blankspace.authenticationLevel == '3')
-							{	
-								$('#ns1blankspaceLogonMessage').html('A logon code is being sent to you...')
-
-								var oData = 
-								{
-									method: 'LOGON_SEND_PIN',
-									logon: $('#ns1blankspaceLogonLogonName').val()
-								}	
-
-								oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val()
-							 							 + $('#ns1blankspaceLogonPassword').val() + ns1blankspace.logonToken});
-
-								$.ajax(
-								{
-									type: 'POST',
-									url: '/rpc/logon/',
-									data: oData,
-									global: false,
-									dataType: 'json',
-									success: function (data)
-									{
-										if (data.status == 'OK')
-										{	
-											$('tr.ns1blankspaceLogonTokenContainer').show();
-											$('#ns1blankspaceLogonPasswordToken').focus();
-											$('#ns1blankspaceLogonStatus').html('');
-											$('#ns1blankspaceLogonMessage').html('Please enter the code sent to you via ' + (data.AuthentificationDelivery==1?'email':'SMS') + ', and then press Logon again.');
-										}
-										else
-										{
-											$('#ns1blankspaceLogonStatus').html('There is an issue with your user account (' + data.error.errornotes + ').');
-											$('#ns1blankspaceContainer').effect("shake", { times:2 }, 100);
-										}	
-									}
-								});		
-							}
-							else
-							{	
-								ns1blankspace.logon.send();
-							}	
+							method: 'LOGON_GET_USER_AUTHENTICATION_LEVEL',
+							logon: $('#ns1blankspaceLogonLogonName').val()
 						}	
-					})
+
+						oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val()
+								  + $('#ns1blankspaceLogonPassword').val()})
+						
+						$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
+						
+						$.ajax(
+						{
+							type: 'POST',
+							url: '/rpc/logon/',
+							data: oData,
+							global: false,
+							dataType: 'json',
+							success: function (data)
+							{
+								ns1blankspace.authenticationLevel = data.AuthenticationLevel;
+
+								if (ns1blankspace.authenticationLevel == '3')
+								{	
+									$('#ns1blankspaceLogonMessage').html('A logon code is being sent to you via ' + (data.AuthenticationDelivery==1?'email':'SMS') + '.')
+
+									var oData = 
+									{
+										method: 'LOGON_SEND_PASSWORD_CODE',
+										logon: $('#ns1blankspaceLogonLogonName').val()
+									}	
+
+									oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val()
+								 							 + $('#ns1blankspaceLogonPassword').val() + ns1blankspace.logonKey});
+
+									$.ajax(
+									{
+										type: 'POST',
+										url: '/rpc/logon/',
+										data: oData,
+										global: false,
+										dataType: 'json',
+										success: function (data)
+										{
+											if (data.status == 'OK')
+											{	
+												$('tr.ns1blankspacePasswordCodeContainer').show();
+												$('#ns1blankspaceLogonPasswordCode').focus();
+												$('#ns1blankspaceLogonStatus').html('');
+												$('#ns1blankspaceLogonMessage').html('Please enter the code sent to you via ' + (data.AuthenticationDelivery==1?'email':'SMS') + ', and then press Logon again.');
+												ns1blankspace.logonInitialised = true;
+											}
+											else
+											{
+												$('#ns1blankspaceLogonStatus').html('There is an issue with your user account (' + data.error.errornotes + ').');
+												$('#ns1blankspaceContainer').effect("shake", { times:2 }, 100);
+											}	
+										}
+									});		
+								}
+								else
+								{	
+									ns1blankspace.logon.send();
+								}
+							}	
+						});	
+					}
 				},
 
 	send: 		function (oParam)
@@ -1600,12 +1616,12 @@ ns1blankspace.logon =
 					else if (iAuthenticationLevel == 2)
 					{
 						oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val()
-							  + $('#ns1blankspaceLogonPassword').val() + ns1blankspace.logonToken})
+							  + $('#ns1blankspaceLogonPassword').val() + ns1blankspace.logonKey})
 					}
 					else if (iAuthenticationLevel == 3)
 					{
 						oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val()
-							  + $('#ns1blankspaceLogonPassword').val() + ns1blankspace.logonToken + $('#ns1blankspaceLogonPasswordToken').val()})
+							  + $('#ns1blankspaceLogonPassword').val() + ns1blankspace.logonKey + $('#ns1blankspaceLogonPasswordCode').val()})
 					}
 					
 					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
